@@ -17,7 +17,8 @@ public final class UnitMoveStartedEvent extends AbstractStoppableEvent {
 
     private final Path path;
 
-    public UnitMoveStartedEvent(final Model model, final Unit unit, final Path path) {
+    public UnitMoveStartedEvent(final Model model, final Unit unit,
+            final Path path) {
         super(model);
 
         this.unit = Preconditions.checkNotNull(unit);
@@ -38,8 +39,8 @@ public final class UnitMoveStartedEvent extends AbstractStoppableEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("unit", unit).add("stopped", isStopped())
-                .toString();
+        return MoreObjects.toStringHelper(this).add("unit", unit)
+                .add("stopped", isStopped()).toString();
     }
 
     /**

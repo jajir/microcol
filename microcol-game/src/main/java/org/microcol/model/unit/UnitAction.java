@@ -6,8 +6,8 @@ import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitActionPo;
 
 /**
- * Unit could be send to perform some activity that is longer than one turn. This
- * state will be stored in untit's activity. There are actions:
+ * Unit could be send to perform some activity that is longer than one turn.
+ * This state will be stored in untit's activity. There are actions:
  * <ul>
  * <li>Fortify</li>
  * <li>Wait one turn</li>
@@ -50,10 +50,8 @@ public interface UnitAction {
     /**
      * This should be called when player start turn.
      *
-     * @param model
-     *            required model
-     * @param unit
-     *            required unit
+     * @param model required model
+     * @param unit  required unit
      */
     default void startTurn(final Model model, final AbstractUnit unit) {
         // by default it do nothing.

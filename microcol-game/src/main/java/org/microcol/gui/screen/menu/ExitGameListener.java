@@ -22,7 +22,8 @@ public final class ExitGameListener {
     private final GameController gameController;
 
     @Inject
-    ExitGameListener(final EventBus eventBus, final GameController gameController) {
+    ExitGameListener(final EventBus eventBus,
+            final GameController gameController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameController = Preconditions.checkNotNull(gameController);
     }

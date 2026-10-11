@@ -20,8 +20,8 @@ final class AnimationFight implements Animation {
     /**
      * Contains mapping of speed to step size.
      */
-    private static final Map<Integer, Integer> SPEED_ANIMATION_STEPS = ImmutableMap.of(0, 200, 1,
-            150, 2, 100, 3, 60, 4, 40);
+    private static final Map<Integer, Integer> SPEED_ANIMATION_STEPS = ImmutableMap
+            .of(0, 200, 1, 150, 2, 100, 3, 60, 4, 40);
 
     private int step;
 
@@ -36,17 +36,14 @@ final class AnimationFight implements Animation {
     /**
      * Default constructor.
      *
-     * @param attackerLocation
-     *            required location of attacking unit
-     * @param defenderLocation
-     *            required location of defending unit
-     * @param imageProvider
-     *            required image provider
-     * @param animationSpeed
-     *            require animation speed from preferences
+     * @param attackerLocation required location of attacking unit
+     * @param defenderLocation required location of defending unit
+     * @param imageProvider    required image provider
+     * @param animationSpeed   require animation speed from preferences
      */
-    AnimationFight(final Location attackerLocation, final Location defenderLocation,
-            final ImageProvider imageProvider, final int animationSpeed) {
+    AnimationFight(final Location attackerLocation,
+            final Location defenderLocation, final ImageProvider imageProvider,
+            final int animationSpeed) {
         this.attackerLocation = Preconditions.checkNotNull(attackerLocation);
         this.defenderLocation = Preconditions.checkNotNull(defenderLocation);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -68,15 +65,18 @@ final class AnimationFight implements Animation {
         final Point aPoint = area.convertToCanvasPoint(attackerLocation);
         final Point dPoint = area.convertToCanvasPoint(defenderLocation);
         final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
-        if (area.isVisibleCanvasPoint(aPoint) || area.isVisibleCanvasPoint(dPoint)) {
-            graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS),
+        if (area.isVisibleCanvasPoint(aPoint)
+                || area.isVisibleCanvasPoint(dPoint)) {
+            graphics.drawImage(
+                    imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS),
                     middle.getX(), middle.getY());
         }
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("attackerLocation", attackerLocation)
+        return MoreObjects.toStringHelper(getClass())
+                .add("attackerLocation", attackerLocation)
                 .add("defenderLocation", defenderLocation).toString();
     }
 
@@ -85,7 +85,8 @@ final class AnimationFight implements Animation {
         if (hasNextStep()) {
             final Point aPoint = area.convertToCanvasPoint(attackerLocation);
             final Point dPoint = area.convertToCanvasPoint(defenderLocation);
-            return area.isVisibleCanvasPoint(aPoint) || area.isVisibleCanvasPoint(dPoint);
+            return area.isVisibleCanvasPoint(aPoint)
+                    || area.isVisibleCanvasPoint(dPoint);
         }
         return false;
     }

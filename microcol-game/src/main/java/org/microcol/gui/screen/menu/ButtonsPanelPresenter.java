@@ -44,10 +44,12 @@ public final class ButtonsPanelPresenter {
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final ApplicationController applicationController,
-            final PersistingService persistingService, final GamePreferences gamePreferences,
-            final PersistingTool persistingTool, final GameController gameController,
-            final CampaignManager campaignManager, final SecretOption secretOption,
-            final EventBus eventBus) {
+            final PersistingService persistingService,
+            final GamePreferences gamePreferences,
+            final PersistingTool persistingTool,
+            final GameController gameController,
+            final CampaignManager campaignManager,
+            final SecretOption secretOption, final EventBus eventBus) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingService = Preconditions.checkNotNull(persistingService);
@@ -58,11 +60,13 @@ public final class ButtonsPanelPresenter {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonLoad().setOnAction(this::onLoadWasPressed);
-        view.getButtonPlayCampaign()
-                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
-        view.getButtonExitMicroCol().setOnAction(event -> eventBus.post(new QuitGameEvent()));
+        view.getButtonPlayCampaign().setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
+        view.getButtonExitMicroCol()
+                .setOnAction(event -> eventBus.post(new QuitGameEvent()));
         view.getButtonSetting().setOnAction(this::onSetting);
-        view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
+        view.getButtonStartFreeGame()
+                .setOnAction(e -> applicationController.startNewFreeGame());
         refresh();
     }
 
@@ -83,8 +87,9 @@ public final class ButtonsPanelPresenter {
     }
 
     public void refresh() {
-        view.setContinueEnabled(gamePreferences.getGameInProgressSaveFile().isPresent()
-                && persistingTool.getAutoSaveFile().exists());
+        view.setContinueEnabled(
+                gamePreferences.getGameInProgressSaveFile().isPresent()
+                        && persistingTool.getAutoSaveFile().exists());
         final Campaign defaultCampain = campaignManager.getDefaultCampain();
         view.setFreeGameEnabled(defaultCampain.isFinished());
     }

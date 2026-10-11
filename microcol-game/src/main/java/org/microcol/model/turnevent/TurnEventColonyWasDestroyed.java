@@ -11,14 +11,12 @@ public class TurnEventColonyWasDestroyed extends AbstractTurnEvent {
     /**
      * Default constructor. Just set properties.
      *
-     * @param messageKey
-     *            required message key
-     * @param args
-     *            optional arguments for message
-     * @param player
-     *            required player
+     * @param messageKey required message key
+     * @param args       optional arguments for message
+     * @param player     required player
      */
-    TurnEventColonyWasDestroyed(final String playerName, final String colonyName) {
+    TurnEventColonyWasDestroyed(final String playerName,
+            final String colonyName) {
         super(playerName);
         this.colonyName = Preconditions.checkNotNull(colonyName);
     }
@@ -37,7 +35,8 @@ public class TurnEventColonyWasDestroyed extends AbstractTurnEvent {
     }
 
     public static TurnEventColonyWasDestroyed tryLoad(final TurnEventPo po) {
-        if (TurnEventColonyWasDestroyed.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventColonyWasDestroyed.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             final String colonyName = po.getColonyName();
             return new TurnEventColonyWasDestroyed(playerName, colonyName);

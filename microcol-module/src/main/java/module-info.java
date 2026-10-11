@@ -7,10 +7,10 @@ module microcol.game {
     requires java.prefs;
     requires java.desktop;
     requires java.sql;
-    
+
     requires jdk.unsupported;
     requires java.management;
-    
+
 //    requires gson;
 //    requires jsr305; // javax.annotation;
 //    requires javax.inject;
@@ -18,7 +18,7 @@ module microcol.game {
 //    requires cssfx;
 
     exports org.microcol;
-    
+
 /**
     opens org.microcol.gui to com.google.guice, com.google.common;
     opens org.microcol.gui.buttonpanel to com.google.guice, com.google.common;
@@ -47,5 +47,5 @@ module microcol.game {
     opens org.microcol.model.campaign.po to com.google.guice;
     opens org.microcol.model.campaign.store to com.google.guice, gson;
     */
-    
+
 }

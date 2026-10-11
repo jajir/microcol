@@ -40,7 +40,8 @@ public class AnimationManagerTest {
     }
 
     @Test
-    public void validate_animation_with_1_step_which_canBePainted() throws Exception {
+    public void validate_animation_with_1_step_which_canBePainted()
+            throws Exception {
         when(part1.hasNextStep()).thenReturn(true, true, false);
         when(part1.canBePainted(area)).thenReturn(false);
         am.addAnimation(part1);
@@ -64,7 +65,8 @@ public class AnimationManagerTest {
     }
 
     @Test
-    public void test_addAnimationPart_verify_than_null_is_not_allowed() throws Exception {
+    public void test_addAnimationPart_verify_than_null_is_not_allowed()
+            throws Exception {
         AnimationManager am = new AnimationManager(eventBus);
 
         assertThrows(NullPointerException.class, () -> {

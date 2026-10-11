@@ -12,22 +12,23 @@ public final class ContinentTool {
     /**
      * Find top 3 continents with biggest military forces in cities owned by
      * enemy player.
-     * 
-     * @param model
-     *            required model
-     * @param enemyPlayer
-     *            required enemy player
+     *
+     * @param model       required model
+     * @param enemyPlayer required enemy player
      * @return continents
      */
-    public Continents findContinents(final Model model, final Player enemyPlayer) {
+    public Continents findContinents(final Model model,
+            final Player enemyPlayer) {
         final WorldMap map = model.getMap();
         final Continents continents = new Continents();
         for (int x = 1; x <= model.getMap().getMaxLocationX(); x++) {
             for (int y = 1; y <= model.getMap().getMaxLocationY(); y++) {
                 final Location loc = Location.of(x, y);
                 final TerrainType terrainType = map.getTerrainTypeAt(loc);
-                if (!terrainType.isSea() && !continents.getForLocation(loc).isPresent()) {
-                    final Continent continent = createContinent(loc, model, enemyPlayer);
+                if (!terrainType.isSea()
+                        && !continents.getForLocation(loc).isPresent()) {
+                    final Continent continent = createContinent(loc, model,
+                            enemyPlayer);
                     continents.add(continent);
                 }
             }
@@ -42,7 +43,8 @@ public final class ContinentTool {
         return out;
     }
 
-    private void tryToAdd(final Location location, final WorldMap map, final Continent continent) {
+    private void tryToAdd(final Location location, final WorldMap map,
+            final Continent continent) {
         Direction.getVectors().forEach(direction -> {
             final Location loc = location.add(direction);
             if (map.isValid(loc)) {

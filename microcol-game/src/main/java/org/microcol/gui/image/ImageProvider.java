@@ -62,9 +62,11 @@ public final class ImageProvider {
     private final TerrainImageProvider terrainImageProvider;
 
     @Inject
-    public ImageProvider(final ImageCache imageCache, final ImageLoaderImpl imageLoaderImpl) {
+    public ImageProvider(final ImageCache imageCache,
+            final ImageLoaderImpl imageLoaderImpl) {
         this.imageCache = Preconditions.checkNotNull(imageCache);
-        this.unitImageProvider = Preconditions.checkNotNull(new UnitImageProvider(imageCache));
+        this.unitImageProvider = Preconditions
+                .checkNotNull(new UnitImageProvider(imageCache));
         this.terrainImageProvider = new TerrainImageProvider(imageCache);
         this.goodsImageProvider = new GoodsImageProvider(imageCache);
         Preconditions.checkNotNull(imageLoaderImpl);
@@ -73,7 +75,7 @@ public final class ImageProvider {
 
     /**
      * See {@link ImageCache#getImageNames()}.
-     * 
+     *
      * @return list of images names.
      */
     public List<String> getImageNames() {
@@ -83,9 +85,8 @@ public final class ImageProvider {
     /**
      * Load image for name. If image is not in cache it try to load it from
      * image store.
-     * 
-     * @param name
-     *            required image name
+     *
+     * @param name required image name
      * @return loaded image
      */
     public Image getImage(final String name) {
@@ -95,11 +96,11 @@ public final class ImageProvider {
     /**
      * For given construction type find image.
      *
-     * @param constructionType
-     *            required construction type.
+     * @param constructionType required construction type.
      * @return construction image or empty optional
      */
-    public Optional<Image> getConstructionImage(final ConstructionType constructionType) {
+    public Optional<Image> getConstructionImage(
+            final ConstructionType constructionType) {
         final String key = "building_" + constructionType.name();
         if (imageCache.containsImage(key)) {
             return Optional.of(imageCache.getImage(key));
@@ -112,9 +113,8 @@ public final class ImageProvider {
      * Simplify loading image from resource. Path should look like: <code>
      * org/microcol/images/unit-60x60.gif
      * </code>. Class suppose that all images are in directory <i>images</i>.
-     * 
-     * @param rawPath
-     *            path at classpath where is stored image
+     *
+     * @param rawPath path at classpath where is stored image
      * @return return {@link javafx.scene.image.Image} object
      */
     public static Image getRawImage(final String rawPath) {
@@ -130,11 +130,9 @@ public final class ImageProvider {
 
     /**
      * Allow to register new type of image.
-     * 
-     * @param name
-     *            required unique image name
-     * @param image
-     *            required image object
+     *
+     * @param name  required unique image name
+     * @param image required image object
      */
     public void registerImage(final String name, final Image image) {
         imageCache.registerImage(name, image);
@@ -143,21 +141,19 @@ public final class ImageProvider {
     /**
      * Allow to register image under new name. Image will be accessible under
      * both names. Image is physically still just one.
-     * 
-     * @param newImageName
-     *            required new image name
-     * @param imageName
-     *            required old image name
+     *
+     * @param newImageName required new image name
+     * @param imageName    required old image name
      */
-    public void registerImage(final String newImageName, final String imageName) {
+    public void registerImage(final String newImageName,
+            final String imageName) {
         imageCache.registerImage(newImageName, imageName);
     }
 
     /**
      * For specific terrain type find corresponding image.
-     * 
-     * @param terrain
-     *            required terrain type
+     *
+     * @param terrain required terrain type
      * @return image representing terrain image
      */
     public Image getTerrainImage(final TerrainType terrain) {
@@ -171,8 +167,7 @@ public final class ImageProvider {
      * For example for drawing units to buy in Europe.
      * </p>
      *
-     * @param unitType
-     *            required unit type
+     * @param unitType required unit type
      * @return image representing ship image
      */
     public Image getUnitImage(final UnitType unitType) {
@@ -182,10 +177,8 @@ public final class ImageProvider {
     /**
      * For specific unit instance and orientation return appropriate image.
      *
-     * @param unit
-     *            required unit
-     * @param orientation
-     *            required orientation of unit
+     * @param unit        required unit
+     * @param orientation required orientation of unit
      * @return unit image instance
      */
     public Image getUnitImage(final Unit unit, final Direction orientation) {
@@ -194,9 +187,8 @@ public final class ImageProvider {
 
     /**
      * For specific unit find corresponding image.
-     * 
-     * @param unit
-     *            required unit
+     *
+     * @param unit required unit
      * @return image representing ship image
      */
     public Image getUnitImage(final Unit unit) {
@@ -209,9 +201,8 @@ public final class ImageProvider {
 
     /**
      * For specific good type find corresponding image.
-     * 
-     * @param goodsType
-     *            required good type
+     *
+     * @param goodsType required good type
      * @return image representing good type
      */
     public Image getGoodsTypeImage(final GoodsType goodsType) {
@@ -220,9 +211,8 @@ public final class ImageProvider {
 
     /**
      * For specific good amount find corresponding image.
-     * 
-     * @param goods
-     *            required good amount
+     *
+     * @param goods required good amount
      * @return image representing good type
      */
     public Image getGoodsTypeImage(final Goods goods) {

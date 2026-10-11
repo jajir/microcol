@@ -11,8 +11,8 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
     private final Unit defender;
     private final Unit destroyed;
 
-    public UnitAttackedEvent(final Model model, final Unit attacker, final Unit defender,
-            final Unit destroyed) {
+    public UnitAttackedEvent(final Model model, final Unit attacker,
+            final Unit defender, final Unit destroyed) {
         super(model);
 
         this.attacker = Preconditions.checkNotNull(attacker);
@@ -34,7 +34,8 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("attacker", attacker).add("defender", defender)
-                .add("destroyed", destroyed).toString();
+        return MoreObjects.toStringHelper(this).add("attacker", attacker)
+                .add("defender", defender).add("destroyed", destroyed)
+                .toString();
     }
 }

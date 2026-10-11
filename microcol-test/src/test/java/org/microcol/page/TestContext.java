@@ -23,40 +23,43 @@ public class TestContext {
 
     private FxRobot robot;
 
-    public TestContext(final MicroColApplication microCol, final Stage primaryStage) {
-	this.microCol = Preconditions.checkNotNull(microCol);
-	this.primaryStage = Preconditions.checkNotNull(primaryStage);
+    public TestContext(final MicroColApplication microCol,
+            final Stage primaryStage) {
+        this.microCol = Preconditions.checkNotNull(microCol);
+        this.primaryStage = Preconditions.checkNotNull(primaryStage);
     }
 
     public MicroColApplication getMicroCol() {
-	return microCol;
+        return microCol;
     }
 
     public Stage getPrimaryStage() {
-	return primaryStage;
+        return primaryStage;
     }
 
     public <T> T getClassFromGuice(final Class<T> clazz) {
-	final T t = getMicroCol().getInjector().getInstance(clazz);
-	return Preconditions.checkNotNull(t);
+        final T t = getMicroCol().getInjector().getInstance(clazz);
+        return Preconditions.checkNotNull(t);
     }
 
     public Model getModel() {
-	final GameModelController gameModelController = getClassFromGuice(GameModelController.class);
-	return gameModelController.getModel();
+        final GameModelController gameModelController = getClassFromGuice(
+                GameModelController.class);
+        return gameModelController.getModel();
     }
 
     public Area getArea() {
-	final GamePanelPainter gamePanelView = getClassFromGuice(GamePanelPainter.class);
-	return gamePanelView.getArea();
+        final GamePanelPainter gamePanelView = getClassFromGuice(
+                GamePanelPainter.class);
+        return gamePanelView.getArea();
     }
 
     public FxRobot getRobot() {
-	return robot;
+        return robot;
     }
 
     public void setRobot(FxRobot robot) {
-	this.robot = Preconditions.checkNotNull(robot);
+        this.robot = Preconditions.checkNotNull(robot);
     }
 
 }

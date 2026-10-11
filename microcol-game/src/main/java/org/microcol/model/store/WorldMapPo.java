@@ -137,8 +137,7 @@ public final class WorldMapPo extends AbstractMapStore {
     }
 
     /**
-     * @param seed
-     *            the seed to set
+     * @param seed the seed to set
      */
     public void setSeed(Integer seed) {
         this.seed = seed;
@@ -152,8 +151,7 @@ public final class WorldMapPo extends AbstractMapStore {
     }
 
     /**
-     * @param visibility
-     *            the visibility to set
+     * @param visibility the visibility to set
      */
     public void setVisibility(VisibilityPo visibility) {
         this.visibility = visibility;

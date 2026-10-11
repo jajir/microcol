@@ -13,9 +13,8 @@ public class TerrainTypeTest {
 
     /**
      * It just print out production matrix
-     * 
-     * @throws Exception
-     *             Could throws any exception
+     *
+     * @throws Exception Could throws any exception
      */
     @Test
     public void test_production_matrix() throws Exception {
@@ -24,7 +23,8 @@ public class TerrainTypeTest {
 
     @Test
     public void test_duplicated_terrainType_code() throws Exception {
-        Set<String> codes = TerrainType.TERRAINS.stream().map(terrainType -> terrainType.getCode())
+        Set<String> codes = TerrainType.TERRAINS.stream()
+                .map(terrainType -> terrainType.getCode())
                 .collect(Collectors.toSet());
 
         assertEquals(NUMBER_OF_TERRAINS, codes.size());

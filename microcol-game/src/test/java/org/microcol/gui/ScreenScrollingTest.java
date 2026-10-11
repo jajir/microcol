@@ -17,7 +17,8 @@ public class ScreenScrollingTest {
 
     private final PathPlanning pathPlanning = mock(PathPlanning.class);
 
-    private final List<Point> stepsToDo = Lists.newArrayList(Point.of(11, 11), Point.of(12, 12));
+    private final List<Point> stepsToDo = Lists.newArrayList(Point.of(11, 11),
+            Point.of(12, 12));
 
     @Test
     public void test_constructor_pathPlanningIsNull() throws Exception {
@@ -28,11 +29,11 @@ public class ScreenScrollingTest {
 
     @Test
     public void test_constructor() throws Exception {
-        when(pathPlanning.getPathLimitSteps(Point.of(10, 10), Point.of(15, 15), 10))
-                .thenReturn(stepsToDo);
+        when(pathPlanning.getPathLimitSteps(Point.of(10, 10), Point.of(15, 15),
+                10)).thenReturn(stepsToDo);
 
-        final ScreenScrolling ret = new ScreenScrolling(pathPlanning, Point.of(10, 10),
-                Point.of(15, 15));
+        final ScreenScrolling ret = new ScreenScrolling(pathPlanning,
+                Point.of(10, 10), Point.of(15, 15));
 
         // Verify sequence of processing points.
         assertTrue(ret.isNextPointAvailable());

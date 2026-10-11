@@ -20,47 +20,51 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
 
-    private final Logger logger = LoggerFactory.getLogger(TC_03_F03_declare_independence_test.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(TC_03_F03_declare_independence_test.class);
 
-    private final static File testFileName = new File("src/test/scenarios/F03-independence.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F03-independence.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass(), testFileName);
+        initialize(primaryStage, getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_03_declare_independence() throws Exception {
-	// open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	// declare independence
-	final DialogMessagePage dialogMessagePage = gamePage.declareIndependence();
+        // declare independence
+        final DialogMessagePage dialogMessagePage = gamePage
+                .declareIndependence();
 
-	// close first dialog
-	dialogMessagePage.close();
+        // close first dialog
+        dialogMessagePage.close();
 
-	// close second dialog
-	dialogMessagePage.close();
+        // close second dialog
+        dialogMessagePage.close();
 
-	gamePage = GamePage.of(getContext());
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
-	gamePage.nextTurnAndCloseDialogs();
+        gamePage = GamePage.of(getContext());
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
 
-	assertThatThereAreKingsUnitAtMap();
+        assertThatThereAreKingsUnitAtMap();
     }
 
     private void assertThatThereAreKingsUnitAtMap() {
-	final long count = getModel().getAllUnits().stream().filter(unit -> unit.getOwner().getName().contains("King"))
-		.filter(unit -> unit.isAtPlaceLocation()).count();
-	logger.info("Number of enemy ships at map: " + count);
-	assertTrue(count >= 3);
+        final long count = getModel().getAllUnits().stream()
+                .filter(unit -> unit.getOwner().getName().contains("King"))
+                .filter(unit -> unit.isAtPlaceLocation()).count();
+        logger.info("Number of enemy ships at map: " + count);
+        assertTrue(count >= 3);
     }
 
 }

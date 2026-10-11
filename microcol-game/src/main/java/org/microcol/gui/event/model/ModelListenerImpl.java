@@ -46,8 +46,10 @@ final class ModelListenerImpl implements ModelListener {
 
     private final EventBus eventBus;
 
-    ModelListenerImpl(final GameModelController gameModelController, final EventBus eventBus) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    ModelListenerImpl(final GameModelController gameModelController,
+            final EventBus eventBus) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
@@ -70,7 +72,8 @@ final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
+    public void onUnitMovedStepFinished(
+            final UnitMovedStepFinishedEvent event) {
         if (event.canPlayerSeeMove(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
@@ -78,7 +81,8 @@ final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
-        if (event.getUnit().getOwner().equals(gameModelController.getHumanPlayer())) {
+        if (event.getUnit().getOwner()
+                .equals(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
     }
@@ -99,8 +103,8 @@ final class ModelListenerImpl implements ModelListener {
         final Optional<Player> human = event.getModel().getPlayers().stream()
                 .filter(player -> player.isHuman()).findAny();
         if (human.isPresent()) {
-            onGoldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(),
-                    human.get().getGold(), human.get().getGold()));
+            onGoldWasChanged(new GoldWasChangedEvent(event.getModel(),
+                    human.get(), human.get().getGold(), human.get().getGold()));
         }
     }
 
@@ -158,14 +162,16 @@ final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    public void onIndependenceWasDeclared(
+            final IndependenceWasDeclaredEvent event) {
         if (event.getWhoDecalareIt().isHuman()) {
             eventBus.post(event);
         }
     }
 
     @Override
-    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(
+            final BeforeDeclaringIndependenceEvent event) {
         // Front-end doesn't care about this event.
     }
 
@@ -185,12 +191,14 @@ final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+    public void onUnitMovedToConstruction(
+            final UnitMovedToConstructionEvent event) {
         eventBus.post(event);
     }
 
     @Override
-    public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
+    public void onUnitMovedToColonyField(
+            final UnitMovedToColonyFieldEvent event) {
         eventBus.post(event);
     }
 
@@ -205,7 +213,8 @@ final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onUnitArraviedToColonies(final UnitArrivedToColoniesEvent event) {
+    public void onUnitArraviedToColonies(
+            final UnitArrivedToColoniesEvent event) {
         eventBus.post(event);
     }
 

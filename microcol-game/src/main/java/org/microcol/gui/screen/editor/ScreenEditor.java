@@ -25,8 +25,8 @@ public class ScreenEditor implements GameScreen {
     private final ModelService modelService;
 
     @Inject
-    ScreenEditor(final EditorRightPanel rightPanel, final ModelService modelService,
-            final EditorPanel editorPanel) {
+    ScreenEditor(final EditorRightPanel rightPanel,
+            final ModelService modelService, final EditorPanel editorPanel) {
         this.editorPanel = Preconditions.checkNotNull(editorPanel);
         this.modelService = Preconditions.checkNotNull(modelService);
 

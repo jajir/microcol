@@ -36,8 +36,8 @@ class TilePainter {
     }
 
     void setTerrain(final Terrain terrain, final Location location) {
-        paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(), Point.ZERO, location,
-                terrain, false);
+        paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(),
+                Point.ZERO, location, terrain, false);
     }
 
     void paintUnit(final List<Unit> units) {
@@ -46,7 +46,8 @@ class TilePainter {
     }
 
     void paintColony(final Colony colony) {
-        paintService.paintColony(canvas.getGraphicsContext2D(), Point.ZERO, colony, true);
+        paintService.paintColony(canvas.getGraphicsContext2D(), Point.ZERO,
+                colony, true);
     }
 
     void setImage(final Image image) {

@@ -23,22 +23,25 @@ public final class TurnEventStore {
 
     private final ChainOfCommandStrategy<TurnEventPo, TurnEvent> turnEventResolver = new ChainOfCommandStrategy<>(
             Lists.newArrayList(TurnEventColonyWasDestroyed::tryLoad,
-                    TurnEventColonyWasLost::tryLoad, TurnEventFaminePlagueColony::tryLoad,
-                    TurnEventFamineWillPlagueColony::tryLoad, TurnEventGoodsWasThrownAway::tryLoad,
-                    TurnEventNewUnitInColony::tryLoad, TurnEventNewUnitInEurope::tryLoad,
-                    TurnEventShipComeToEuropePort::tryLoad, TurnEventShipComeToHighSeas::tryLoad));
+                    TurnEventColonyWasLost::tryLoad,
+                    TurnEventFaminePlagueColony::tryLoad,
+                    TurnEventFamineWillPlagueColony::tryLoad,
+                    TurnEventGoodsWasThrownAway::tryLoad,
+                    TurnEventNewUnitInColony::tryLoad,
+                    TurnEventNewUnitInEurope::tryLoad,
+                    TurnEventShipComeToEuropePort::tryLoad,
+                    TurnEventShipComeToHighSeas::tryLoad));
 
     /**
      * Constructor that create event from persistent model.
      *
-     * @param modelPo
-     *            required persistent model
-     * @param playerStore
-     *            required players store
+     * @param modelPo     required persistent model
+     * @param playerStore required players store
      */
-    public TurnEventStore(final ModelPo modelPo, final PlayerStore playerStore) {
-        modelPo.getTurnEvents()
-                .forEach(turnEventPo -> turnEvents.add(turnEventResolver.apply(turnEventPo)));
+    public TurnEventStore(final ModelPo modelPo,
+            final PlayerStore playerStore) {
+        modelPo.getTurnEvents().forEach(turnEventPo -> turnEvents
+                .add(turnEventResolver.apply(turnEventPo)));
     }
 
     /**
@@ -57,21 +60,19 @@ public final class TurnEventStore {
      * Get list of turn events but event are not localized. In other words event
      * can't shown to human player.
      *
-     * @param player
-     *            required player
+     * @param player required player
      * @return list of turn event for given player
      */
     public List<TurnEvent> getForPlayer(final Player player) {
-        return turnEvents.stream()
-                .filter(turnEvent -> turnEvent.getPlayerName().equals(player.getName()))
+        return turnEvents.stream().filter(
+                turnEvent -> turnEvent.getPlayerName().equals(player.getName()))
                 .collect(ImmutableList.toImmutableList());
     }
 
     /**
      * Allows to add new turn event object.
      *
-     * @param turnEvent
-     *            required turn event object.
+     * @param turnEvent required turn event object.
      */
     public void add(final TurnEvent turnEvent) {
         Preconditions.checkNotNull(turnEvent, "Turn event is null");
@@ -81,8 +82,7 @@ public final class TurnEventStore {
     /**
      * Get list of turn events for specific player.
      *
-     * @param player
-     *            required player
+     * @param player required player
      * @return list of event messages for given player
      */
     public List<TurnEvent> getLocalizedMessages(final Player player) {
@@ -93,11 +93,11 @@ public final class TurnEventStore {
      * Clear event for given player. Should be called when player press 'Next
      * turn'.
      *
-     * @param player
-     *            required payer whose turn event will be deleted
+     * @param player required payer whose turn event will be deleted
      */
     public void clearTurnEventsForPlayer(final Player player) {
-        turnEvents.removeIf(event -> event.getPlayerName().equals(player.getName()));
+        turnEvents.removeIf(
+                event -> event.getPlayerName().equals(player.getName()));
     }
 
 }

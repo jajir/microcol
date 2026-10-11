@@ -24,8 +24,8 @@ public class WorldMapPoTest {
     private final static String LINE_3 = "row-0004:-,-,t,-,-";
     private final static String LINE_4 = "row-0005:-,-,-,-,t";
 
-    private final static Set<Location> TREE_LOCATIONS = Sets.newHashSet(Location.of(2, 2),
-            Location.of(3, 4), Location.of(5, 5));
+    private final static Set<Location> TREE_LOCATIONS = Sets.newHashSet(
+            Location.of(2, 2), Location.of(3, 4), Location.of(5, 5));
 
     private WorldMapPo worldMapPo;
 
@@ -46,7 +46,8 @@ public class WorldMapPoTest {
 
     @Test
     public void test_getTreeSet() throws Exception {
-        worldMapPo.setTrees(new String[] { LINE_C, LINE_0, LINE_1, LINE_2, LINE_3, LINE_4 });
+        worldMapPo.setTrees(new String[] { LINE_C, LINE_0, LINE_1, LINE_2,
+                LINE_3, LINE_4 });
 
         Set<Location> ret = worldMapPo.getTreeSet();
 

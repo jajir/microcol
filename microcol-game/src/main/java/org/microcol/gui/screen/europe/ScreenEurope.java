@@ -24,16 +24,17 @@ public class ScreenEurope implements GameScreen, Repaintable {
     private final ContentWithStatusBar contentWithStatusBar;
 
     private final EuropePanel europePanel;
-    
+
     @Inject
     ScreenEurope(final EuropePanel europePanel, final CenteredPage centeredPage,
             final @Named("Europe") StatusBar statusBar,
             final ContentWithStatusBar contentWithStatusBar,
             final EuropeBackground europeBackground) {
-        this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
+        this.contentWithStatusBar = Preconditions
+                .checkNotNull(contentWithStatusBar);
         this.europePanel = Preconditions.checkNotNull(europePanel);
         statusBar.setShowEventsFromSource(Source.EUROPE);
-        
+
         centeredPage.getContent().getStylesheets().add(STYLE_SHEET_EUROPE);
         centeredPage.setBackground(europeBackground);
         centeredPage.setMainPanel(europePanel);

@@ -32,14 +32,17 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
      */
     private final static int CONSTRUCTION_X = 15;
     private final static int CONSTRUCTION_Y = 0;
-    private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X, CONSTRUCTION_Y);
+    private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X,
+            CONSTRUCTION_Y);
 
     private final VBox mainVbox = new VBox();
     private final Colony colony;
 
-    PanelConstructionCarpenter(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n, final Construction construction,
-            final ColonyProductionStats colonyStats, final Model model, final Colony colony) {
+    PanelConstructionCarpenter(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n,
+            final Construction construction,
+            final ColonyProductionStats colonyStats, final Model model,
+            final Colony colony) {
         super(eventBus, i18n, imageProvider, construction, colonyStats, model);
         this.colony = Preconditions.checkNotNull(colony);
         getMainPane().getStyleClass().add("constructionPaneCarpenter");
@@ -48,7 +51,8 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
         mainVbox.getStyleClass().add("description");
     }
 
-    private void onMouseClicked(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseClicked(
+            @SuppressWarnings("unused") final MouseEvent event) {
         getEventBus().post(new ShowBuildingQueueEvent());
     }
 
@@ -61,24 +65,26 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
     }
 
     private void paintQueue() {
-        final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colony.getColonyBuildingQueue()
-                .getActuallyBuildingStat();
+        final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colony
+                .getColonyBuildingQueue().getActuallyBuildingStat();
         mainVbox.getChildren().clear();
         if (oStats.isPresent()) {
             final BuildingStatus<ColonyBuildingItem> stats = oStats.get();
             mainVbox.getChildren().add(label("Building " + getName(stats)));
             if (stats.getTurnsToComplete().isPresent()) {
-                mainVbox.getChildren()
-                        .add(label("Turns to complete " + stats.getTurnsToComplete().get()));
+                mainVbox.getChildren().add(label("Turns to complete "
+                        + stats.getTurnsToComplete().get()));
             } else {
                 mainVbox.getChildren().add(label("Not will be completed."));
             }
             mainVbox.getChildren()
-                    .add(label("Hammers, there are (" + stats.getHammers().getAlreadyHave() + " + "
+                    .add(label("Hammers, there are ("
+                            + stats.getHammers().getAlreadyHave() + " + "
                             + stats.getHammers().getBuildPerTurn() + ") of "
                             + stats.getHammers().getRequired()));
             mainVbox.getChildren()
-                    .add(label("Tools, there are (" + stats.getTools().getAlreadyHave() + " + "
+                    .add(label("Tools, there are ("
+                            + stats.getTools().getAlreadyHave() + " + "
                             + stats.getTools().getBuildPerTurn() + ") of "
                             + stats.getTools().getRequired()));
         } else {
@@ -90,13 +96,15 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
         if (status.getItem() instanceof ColonyBuildingItemConstruction) {
             final ColonyBuildingItemConstruction cbi = (ColonyBuildingItemConstruction) status
                     .getItem();
-            return getI18n().get(ConstructionTypeName.getNameForType(cbi.getConstructionType()));
+            return getI18n().get(ConstructionTypeName
+                    .getNameForType(cbi.getConstructionType()));
         } else if (status.getItem() instanceof ColonyBuildingItemUnit) {
-            final ColonyBuildingItemUnit cbi = (ColonyBuildingItemUnit) status.getItem();
+            final ColonyBuildingItemUnit cbi = (ColonyBuildingItemUnit) status
+                    .getItem();
             return getI18n().get(UnitTypes.getUnitName(cbi.getUnitType()));
         } else {
-            throw new IllegalStateException(
-                    String.format("Unexpected statu stype %s", status.getItem()));
+            throw new IllegalStateException(String
+                    .format("Unexpected statu stype %s", status.getItem()));
         }
     }
 

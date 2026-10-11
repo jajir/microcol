@@ -12,14 +12,16 @@ import javafx.scene.layout.Pane;
 
 public final class PanelPortPierUnit extends HBox {
 
-    public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider) {
+    public PanelPortPierUnit(final Unit unit,
+            final ImageProvider imageProvider) {
         final Image image = imageProvider.getUnitImage(unit);
         final ImageView imageIcon = new ImageView(image);
         final Pane paneImage = new Pane(imageIcon);
         paneImage.getStyleClass().add("unit-icon");
         paneImage.setOnDragDetected(e -> {
-            ClipboardWritter.make(imageIcon.startDragAndDrop(TransferMode.MOVE)).addImage(image)
-                    .addTransferFromEuropePortPier().addUnit(unit).build();
+            ClipboardWritter.make(imageIcon.startDragAndDrop(TransferMode.MOVE))
+                    .addImage(image).addTransferFromEuropePortPier()
+                    .addUnit(unit).build();
             e.consume();
         });
         getChildren().addAll(paneImage);

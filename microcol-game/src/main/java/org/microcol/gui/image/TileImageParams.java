@@ -40,12 +40,12 @@ class TileImageParams {
         private int tileWidth;
 
         TileImageParams build() {
-            return new TileImageParams(tileWidthCount, tileHeightCount, tileBorderWidth, tileWidth);
+            return new TileImageParams(tileWidthCount, tileHeightCount,
+                    tileBorderWidth, tileWidth);
         }
 
         /**
-         * @param tileWidthCount
-         *            the tileWidthCount to set
+         * @param tileWidthCount the tileWidthCount to set
          */
         public TileImageParamsBuilder setTileWidthCount(int tileWidthCount) {
             this.tileWidthCount = tileWidthCount;
@@ -53,8 +53,7 @@ class TileImageParams {
         }
 
         /**
-         * @param tileHeightCount
-         *            the tileHeightCount to set
+         * @param tileHeightCount the tileHeightCount to set
          */
         public TileImageParamsBuilder setTileHeightCount(int tileHeightCount) {
             this.tileHeightCount = tileHeightCount;
@@ -62,8 +61,7 @@ class TileImageParams {
         }
 
         /**
-         * @param tileBorderWidth
-         *            the backgroundImageTileBorderInPx to set
+         * @param tileBorderWidth the backgroundImageTileBorderInPx to set
          */
         public TileImageParamsBuilder setTileBorderWidth(int tileBorderWidth) {
             this.tileBorderWidth = tileBorderWidth;
@@ -71,8 +69,7 @@ class TileImageParams {
         }
 
         /**
-         * @param tileWidth
-         *            the tileWidth to set
+         * @param tileWidth the tileWidth to set
          */
         public TileImageParamsBuilder setTileWidth(int tileWidth) {
             this.tileWidth = tileWidth;
@@ -84,11 +81,14 @@ class TileImageParams {
         return new TileImageParamsBuilder();
     }
 
-    TileImageParams(final int tileWidthCount, final int tileHeightCount, final int tileBorderWidth,
-            final int tileWidth) {
-        Preconditions.checkArgument(tileWidthCount != 0, "Parameter tileWidthCount can't be 0");
-        Preconditions.checkArgument(tileHeightCount != 0, "Parameter tileHeightCount can't be 0");
-        Preconditions.checkArgument(tileWidth != 0, "Parameter tileWidth can't be 0");
+    TileImageParams(final int tileWidthCount, final int tileHeightCount,
+            final int tileBorderWidth, final int tileWidth) {
+        Preconditions.checkArgument(tileWidthCount != 0,
+                "Parameter tileWidthCount can't be 0");
+        Preconditions.checkArgument(tileHeightCount != 0,
+                "Parameter tileHeightCount can't be 0");
+        Preconditions.checkArgument(tileWidth != 0,
+                "Parameter tileWidth can't be 0");
         this.tileWidthCount = tileWidthCount;
         this.tileHeightCount = tileHeightCount;
         this.tileBorderWidth = tileBorderWidth;
@@ -98,8 +98,10 @@ class TileImageParams {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(TileImageParams.class)
-                .add("tileWidthCount", tileWidthCount).add("tileHeightCount", tileHeightCount)
-                .add("tileBorderWidth", tileBorderWidth).add("tileWidth", tileWidth).toString();
+                .add("tileWidthCount", tileWidthCount)
+                .add("tileHeightCount", tileHeightCount)
+                .add("tileBorderWidth", tileBorderWidth)
+                .add("tileWidth", tileWidth).toString();
     }
 
     /**
@@ -132,7 +134,7 @@ class TileImageParams {
 
     /**
      * Total with of tiles with border in background image;
-     * 
+     *
      * @return
      */
     public int getTileWidthIncludingBorder() {
@@ -141,7 +143,7 @@ class TileImageParams {
 
     /**
      * Expected background image width in pixels.
-     * 
+     *
      * @return
      */
     public int getExpectedImageWidth() {
@@ -150,7 +152,7 @@ class TileImageParams {
 
     /**
      * Expected background image height in pixels.
-     * 
+     *
      * @return
      */
     public int getExpectedImageHeight() {

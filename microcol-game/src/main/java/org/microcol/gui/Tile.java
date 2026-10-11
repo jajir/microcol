@@ -18,7 +18,8 @@ public class Tile {
     /**
      * Define center point of tile.
      */
-    public static final Point TILE_SIZE = Point.of(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+    public static final Point TILE_SIZE = Point.of(TILE_WIDTH_IN_PX,
+            TILE_WIDTH_IN_PX);
 
     /**
      * Define center point of tile.
@@ -32,9 +33,10 @@ public class Tile {
     }
 
     public static Tile ofLocation(final Location location) {
-        return new Tile(
-                Point.of(location.getX() - Location.MAP_MIN_X, location.getY() - Location.MAP_MIN_Y)
-                        .multiply(TILE_WIDTH_IN_PX));
+        return new Tile(Point
+                .of(location.getX() - Location.MAP_MIN_X,
+                        location.getY() - Location.MAP_MIN_Y)
+                .multiply(TILE_WIDTH_IN_PX));
     }
 
     private Tile(final Point topLeftCorner) {
@@ -54,7 +56,8 @@ public class Tile {
     }
 
     public boolean isIn(final Point point) {
-        return topLeftCorner.getX() <= point.getX() && getBottomRightCorner().getX() >= point.getX()
+        return topLeftCorner.getX() <= point.getX()
+                && getBottomRightCorner().getX() >= point.getX()
                 && topLeftCorner.getY() <= point.getY()
                 && getBottomRightCorner().getY() >= point.getY();
     }
@@ -87,24 +90,26 @@ public class Tile {
 
     /**
      * Get tile position as location
-     * 
+     *
      * @return location
      */
     public Location toLocation() {
-        final Point p = topLeftCorner.divide(TILE_WIDTH_IN_PX).add(Location.MAP_MIN_X,
-                Location.MAP_MIN_Y);
+        final Point p = topLeftCorner.divide(TILE_WIDTH_IN_PX)
+                .add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
         return Location.of(p.getX(), p.getY());
     }
 
     /**
      * This count location of bottom right corner.
-     * 
+     *
      * @return return bottom right corner of location when this point belongs
      */
     public Location toLocationCeilUp() {
-        final Point p = Point
-                .of((int) Math.ceil(topLeftCorner.getX() / (float) TILE_WIDTH_IN_PX),
-                        (int) Math.ceil(topLeftCorner.getY() / (float) TILE_WIDTH_IN_PX))
+        final Point p = Point.of(
+                (int) Math
+                        .ceil(topLeftCorner.getX() / (float) TILE_WIDTH_IN_PX),
+                (int) Math
+                        .ceil(topLeftCorner.getY() / (float) TILE_WIDTH_IN_PX))
                 .add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
         return Location.of(p.getX(), p.getY());
     }

@@ -27,9 +27,11 @@ public final class TurnReportPanel implements GameScreen {
     private final TeService teService;
 
     @Inject
-    TurnReportPanel(final I18n i18n, final GameModelController gameModelController,
+    TurnReportPanel(final I18n i18n,
+            final GameModelController gameModelController,
             final TurnReportView turnReportView, final TeService teService) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.turnReportView = Preconditions.checkNotNull(turnReportView);
         this.teService = Preconditions.checkNotNull(teService);
@@ -40,12 +42,13 @@ public final class TurnReportPanel implements GameScreen {
     @Override
     public void beforeShow() {
         turnEventsPanel.getChildren().clear();
-        if (gameModelController.getModel()
-                .isTurnEventsMessagesEmpty(gameModelController.getHumanPlayer())) {
-            turnEventsPanel.getChildren().add(new Label(i18n.get(Loc.turnReport_noEvents)));
+        if (gameModelController.getModel().isTurnEventsMessagesEmpty(
+                gameModelController.getHumanPlayer())) {
+            turnEventsPanel.getChildren()
+                    .add(new Label(i18n.get(Loc.turnReport_noEvents)));
         } else {
-            teService.getMessages().forEach(
-                    turnEvent -> turnEventsPanel.getChildren().add(new TurnEventPanel(turnEvent)));
+            teService.getMessages().forEach(turnEvent -> turnEventsPanel
+                    .getChildren().add(new TurnEventPanel(turnEvent)));
         }
     }
 

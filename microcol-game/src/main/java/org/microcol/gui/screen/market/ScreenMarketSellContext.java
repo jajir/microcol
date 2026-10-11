@@ -14,8 +14,10 @@ public class ScreenMarketSellContext {
     private final Goods maxPossibleGoodsToBuy;
     private final CargoSlot sourceCargoSlot;
 
-    public ScreenMarketSellContext(final Goods maxPossibleGoodsToBuy, final CargoSlot sourceCargoSlot) {
-        this.maxPossibleGoodsToBuy = Preconditions.checkNotNull(maxPossibleGoodsToBuy);
+    public ScreenMarketSellContext(final Goods maxPossibleGoodsToBuy,
+            final CargoSlot sourceCargoSlot) {
+        this.maxPossibleGoodsToBuy = Preconditions
+                .checkNotNull(maxPossibleGoodsToBuy);
         this.sourceCargoSlot = Preconditions.checkNotNull(sourceCargoSlot);
     }
 

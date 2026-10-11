@@ -20,8 +20,8 @@ public class ScreenGoals implements GameScreen {
 
     private final GoalsView goalsView;
 
-    public static final String STYLE_SHEET_GOALS = ScreenMenu.class.getResource("/gui/Goals.css")
-            .toExternalForm();
+    public static final String STYLE_SHEET_GOALS = ScreenMenu.class
+            .getResource("/gui/Goals.css").toExternalForm();
 
     @Inject
     ScreenGoals(final GoalsPanel goalsPanel, final GoalsView goalsView) {

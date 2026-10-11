@@ -30,7 +30,8 @@ import javafx.scene.control.Button;
 @Singleton
 public class ButtonsGamePanel extends AbstractButtonsPanel {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanel.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ButtonsGamePanel.class);
 
     public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
@@ -75,54 +76,68 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
     private final Button buttonDeclareIndependence;
 
     @Inject
-    ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus, final I18n i18n) {
+    ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
+            final I18n i18n) {
         super(imageProvider, eventBus, Source.GAME, i18n);
 
-        buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER, Buttons.buttonCenter);
+        buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER,
+                Buttons.buttonCenter);
         buttonCenter.setOnAction(event -> eventBus.post(new CenterViewEvent()));
         buttonCenter.setId(BUTTON_CENTER_ID);
-        buttonHelp = makeButon(ImageLoaderButtons.BUTTON_HELP, Buttons.buttonHelp);
+        buttonHelp = makeButon(ImageLoaderButtons.BUTTON_HELP,
+                Buttons.buttonHelp);
         buttonHelp.setOnAction(event -> eventBus.post(new ShowHelpEvent()));
         buttonHelp.setId(BUTTON_HELP_ID);
         buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
                 Buttons.buttonStatistics);
-        buttonStatistics
-                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
+        buttonStatistics.setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
-        buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT, Buttons.buttonExit);
+        buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT,
+                Buttons.buttonExit);
         buttonExit.setOnAction(event -> eventBus.post(new ExitGameEvent()));
         buttonExit.setId(BUTTON_EXIT_ID);
-        buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS, Buttons.buttonGoals);
-        buttonGoals.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.GOALS)));
+        buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS,
+                Buttons.buttonGoals);
+        buttonGoals.setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.GOALS)));
         buttonGoals.setId(BUTTON_GOALS_ID);
         buttonTurnReport = makeButon(ImageLoaderButtons.BUTTON_TURN_REPORT,
                 Buttons.buttonTurnReport);
-        buttonTurnReport
-                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT)));
+        buttonTurnReport.setOnAction(event -> eventBus
+                .post(new ShowScreenEvent(Screen.TURN_REPORT)));
         buttonTurnReport.setId(BUTTON_TURN_REPORT_ID);
-        buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE, Buttons.buttonEurope);
-        buttonEurope.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
+        buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE,
+                Buttons.buttonEurope);
+        buttonEurope.setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
         buttonEurope.setId(BUTTON_EUROPE_ID);
-        buttonNextTurn = makeButon(ImageLoaderButtons.BUTTON_NEXT_TURN, Buttons.buttonNextTurn);
+        buttonNextTurn = makeButon(ImageLoaderButtons.BUTTON_NEXT_TURN,
+                Buttons.buttonNextTurn);
         buttonNextTurn.setId(BUTTON_NEXT_TURN_ID);
         buttonNextTurn.setOnAction(event -> {
             buttonNextTurn.setDisable(true);
             eventBus.post(new NextTurnEvent());
         });
-        buttonMove = makeButon(ImageLoaderButtons.BUTTON_MOVE, Buttons.buttonMove);
+        buttonMove = makeButon(ImageLoaderButtons.BUTTON_MOVE,
+                Buttons.buttonMove);
         buttonMove.setOnAction(event -> eventBus.post(new StartMoveEvent()));
         buttonMove.setId(BUTTON_MOVE_ID);
-        buttonPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD, Buttons.buttonPlowField);
-        buttonPlowField.setOnAction(event -> eventBus.post(new PlowFieldEvent()));
+        buttonPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
+                Buttons.buttonPlowField);
+        buttonPlowField
+                .setOnAction(event -> eventBus.post(new PlowFieldEvent()));
         buttonPlowField.setId(BUTTON_PLOW_FIELD_ID);
         buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
                 Buttons.buttonBuildColony);
-        buttonBuildColony.setOnAction(event -> eventBus.post(new BuildColonyEvent()));
+        buttonBuildColony
+                .setOnAction(event -> eventBus.post(new BuildColonyEvent()));
         buttonBuildColony.setId(BUTTON_BUILD_COLONY_ID);
-        buttonDeclareIndependence = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
+        buttonDeclareIndependence = makeButon(
+                ImageLoaderButtons.BUTTON_PLOW_FIELD,
                 Buttons.buttonDeclareIndependence);
-        buttonDeclareIndependence
-                .setOnAction(event -> eventBus.post(new DeclareIndependenceEvent()));
+        buttonDeclareIndependence.setOnAction(
+                event -> eventBus.post(new DeclareIndependenceEvent()));
         buttonDeclareIndependence.setId(BUTTON_DECLARE_INDEPENDENCE_ID);
 
         getButtonPanel().getChildren().add(buttonBuildColony);

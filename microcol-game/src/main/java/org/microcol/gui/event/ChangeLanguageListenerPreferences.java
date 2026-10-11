@@ -13,7 +13,8 @@ public final class ChangeLanguageListenerPreferences {
     private final GamePreferences gamePreferences;
 
     @Inject
-    public ChangeLanguageListenerPreferences(final GamePreferences gamePreferences) {
+    public ChangeLanguageListenerPreferences(
+            final GamePreferences gamePreferences) {
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
     }
 

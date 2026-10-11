@@ -22,8 +22,7 @@ public class ShowScreenEvent {
 
     /**
      * @return the context
-     * @param <T>
-     *            type of even screen context
+     * @param <T> type of even screen context
      */
     @SuppressWarnings("unchecked")
     public <T> T getContext() {

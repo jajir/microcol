@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-
 import com.google.common.collect.Lists;
 
 public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
@@ -28,7 +27,7 @@ public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
     @Test
     public void testPlaceAtMap() throws Exception {
         makeColonist(model, 23, placeLocation, owner, 1);
-        
+
         assertTrue(unit.isAtPlaceLocation());
     }
 

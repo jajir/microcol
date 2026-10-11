@@ -14,7 +14,8 @@ public final class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
     HiddenCoastMapGenerator(final ImageProvider imageProvider,
             final GameModelController gameModelController) {
         super(imageProvider);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
     }
 
     @Override

@@ -27,14 +27,18 @@ public class ColonyBuildingQueueTest_queue {
     }
 
     @Test
-    public void test_that_getBuildigItemsConstruction_is_builded_correctly() throws Exception {
-        when(colony.isContainsConstructionByType(ConstructionType.FUR_TRADING_POST))
-                .thenReturn(true);
+    public void test_that_getBuildigItemsConstruction_is_builded_correctly()
+            throws Exception {
+        when(colony.isContainsConstructionByType(
+                ConstructionType.FUR_TRADING_POST)).thenReturn(true);
 
-        final List<ColonyBuildingItemConstruction> list = queue.getBuildigItemsConstruction();
-        assertFalse(getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
+        final List<ColonyBuildingItemConstruction> list = queue
+                .getBuildigItemsConstruction();
+        assertFalse(
+                getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
                 "Building should not be in list because is already builded.");
-        assertTrue(getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
+        assertTrue(
+                getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
                 "Building should be in list because is already builded.");
         assertFalse(getByType(list, ConstructionType.FUR_FACTORY).isPresent(),
                 "Building should not be in list because required building is not builded.");
@@ -43,7 +47,8 @@ public class ColonyBuildingQueueTest_queue {
     private Optional<ColonyBuildingItemConstruction> getByType(
             final List<ColonyBuildingItemConstruction> list,
             final ConstructionType constructionType) {
-        return list.stream().filter(item -> item.getConstructionType().equals(constructionType))
+        return list.stream().filter(
+                item -> item.getConstructionType().equals(constructionType))
                 .findFirst();
     }
 

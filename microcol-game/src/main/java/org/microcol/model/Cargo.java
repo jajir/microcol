@@ -18,12 +18,13 @@ public class Cargo {
     public Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
         this.owner = Preconditions.checkNotNull(owner);
 
-        final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
+        final ImmutableList.Builder<CargoSlot> builder = ImmutableList
+                .builder();
         for (int i = 0; i < capacity; i++) {
             final CargoSlotPo cargoSlotPo = cargoPo.getSlotAt(i);
             if (cargoSlotPo != null && cargoSlotPo.containsGood()) {
-                builder.add(new CargoSlot(this,
-                        new Goods(cargoSlotPo.getGoodsType(), cargoSlotPo.getAmount())));
+                builder.add(new CargoSlot(this, new Goods(
+                        cargoSlotPo.getGoodsType(), cargoSlotPo.getAmount())));
             } else {
                 builder.add(new CargoSlot(this));
             }
@@ -34,7 +35,8 @@ public class Cargo {
     Cargo(final Unit owner, final int capacity) {
         this.owner = Preconditions.checkNotNull(owner);
 
-        final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
+        final ImmutableList.Builder<CargoSlot> builder = ImmutableList
+                .builder();
         for (int i = 0; i < capacity; i++) {
             builder.add(new CargoSlot(this));
         }
@@ -50,7 +52,8 @@ public class Cargo {
     }
 
     public Optional<CargoSlot> getEmptyCargoSlot() {
-        return slots.stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny();
+        return slots.stream().filter(cargoSlot -> cargoSlot.isEmpty())
+                .findAny();
     }
 
     public boolean isFull() {
@@ -58,7 +61,8 @@ public class Cargo {
     }
 
     public boolean isEmpty() {
-        return !slots.stream().filter(slot -> !slot.isEmpty()).findAny().isPresent();
+        return !slots.stream().filter(slot -> !slot.isEmpty()).findAny()
+                .isPresent();
     }
 
     Unit getOwner() {

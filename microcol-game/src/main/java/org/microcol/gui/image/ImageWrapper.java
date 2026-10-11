@@ -45,7 +45,8 @@ final class ImageWrapper {
         PixelReader pixelReaderB = wrapper.get().getPixelReader();
 
         // process from source to destination pixel by pixel
-        WritableImage writableImage = new WritableImage(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+        WritableImage writableImage = new WritableImage(TILE_WIDTH_IN_PX,
+                TILE_WIDTH_IN_PX);
         PixelWriter pixelWriter = writableImage.getPixelWriter();
 
         for (int y = 0; y < TILE_WIDTH_IN_PX; y++) {
@@ -88,7 +89,8 @@ final class ImageWrapper {
      */
     private interface Tranform {
 
-        void apply(PixelWriter pixelWriter, PixelReader pixelReader, int x, int y);
+        void apply(PixelWriter pixelWriter, PixelReader pixelReader, int x,
+                int y);
 
     }
 

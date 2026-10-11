@@ -14,7 +14,8 @@ import com.google.inject.name.Named;
  */
 public final class ScrollingManager {
 
-    private final Logger logger = LoggerFactory.getLogger(ScrollingManager.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(ScrollingManager.class);
 
     private final WasdController wasdController;
 
@@ -27,7 +28,8 @@ public final class ScrollingManager {
     private final AnimationLatch latch = new AnimationLatch();
 
     @Inject
-    public ScrollingManager(final EventBus eventBus, final WasdController wasdController,
+    public ScrollingManager(final EventBus eventBus,
+            final WasdController wasdController,
             final @Named("game") VisibleAreaService visibleArea) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.wasdController = Preconditions.checkNotNull(wasdController);

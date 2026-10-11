@@ -23,15 +23,16 @@ class PanelOutsideColonyUnitFactory {
     private final PaintService paintService;
 
     @Inject
-    PanelOutsideColonyUnitFactory(final ImageProvider imageProvider, final EventBus eventBus,
-            final PaintService paintService) {
+    PanelOutsideColonyUnitFactory(final ImageProvider imageProvider,
+            final EventBus eventBus, final PaintService paintService) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
     }
 
     PanelOutsideColonyUnit make(final Unit unit, final Colony colony) {
-        return new PanelOutsideColonyUnit(imageProvider, eventBus, paintService, colony, unit);
+        return new PanelOutsideColonyUnit(imageProvider, eventBus, paintService,
+                colony, unit);
     }
 
 }

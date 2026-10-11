@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableMap;
  * </p>
  */
 public final class UnitType {
-    
+
     /**
      * Default production of all goods in default case.
      */
@@ -72,12 +72,12 @@ public final class UnitType {
      * There is no unit that could be attacked.
      */
     private static final Predicate<UnitType> UNIT_TYPE_CANT_ATTACK = unitType -> false;
-    
+
     /**
      * When unit is in colony that this define number of food ate per turn.
      */
     private final static int ATE_FOOD_PER_TURN = 2;
-  
+
     private final String name;
     private final List<TerrainType> moveableTerrains;
     private final int speed;
@@ -107,123 +107,93 @@ public final class UnitType {
      * it's <code>true</code> when unit could plow field.
      */
     private final boolean canPlowField;
-    
+
     /**
      * it's <code>true</code> when unit could build road.
      */
     private final boolean canBuildRoad;
-    
+
     /**
      * it's <code>true</code> when unit could cut down trees.
      */
     private final boolean canCutTrees;
-    
+
     /**
      * How many tools is required to build unit.
      */
     private final Integer requiredTools;
-    
+
     /**
      * How many hammers is required to build unit.
      */
     private final Integer requiredHammers;
 
-    public static final UnitType COLONIST = UnitType.make()
-            .setName("COLONIST")
-            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
-            .setSpeed(1)
+    public static final UnitType COLONIST = UnitType.make().setName("COLONIST")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
             .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
-            .setCargoCapacity(0)
-            .setStorable(true)
+            .setCargoCapacity(0).setStorable(true)
             .setEuropePrice(DEFAULT_FREE_COLONIST_EUROPE_PRICE)
-            .setCanBuildRoad(true)
-            .setCanCutTrees(true)
-            .setCanPlowField(true)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
             .build();
 
     public static final UnitType EXPERT_ORE_MINER = UnitType.make()
             .setName("EXPERT_ORE_MINER")
-            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
-            .setSpeed(1)
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
             .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
-            .setCargoCapacity(0)
-            .setStorable(true)
+            .setCargoCapacity(0).setStorable(true)
             .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
-            .setExpertise(GoodsType.ORE, 2.0F)
-            .setCanBuildRoad(true)
-            .setCanCutTrees(true)
-            .setCanPlowField(true)
-            .build();
+            .setExpertise(GoodsType.ORE, 2.0F).setCanBuildRoad(true)
+            .setCanCutTrees(true).setCanPlowField(true).build();
 
-    public static final UnitType WAGON = UnitType.make()
-            .setName("WAGON")
-            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
-            .setSpeed(1)
+    public static final UnitType WAGON = UnitType.make().setName("WAGON")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
             .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
-            .setCargoCapacity(2)
-            .setStorable(false)
-            .setEuropePrice(0)
-            .setCanBuildRoad(false)
-            .setCanCutTrees(false)
-            .setCanPlowField(false)
-            .setRequiredTools(40)
-            .setRequiredHammers(0)
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(0)
+            .setCanBuildRoad(false).setCanCutTrees(false).setCanPlowField(false)
+            .setRequiredTools(40).setRequiredHammers(0)
             .setCanByBuildInColony((model, colony) -> {
-                return colony.wasConstructionBuilded(ConstructionType.LUMBER_MILL);
-            })
-            .build();
+                return colony
+                        .wasConstructionBuilded(ConstructionType.LUMBER_MILL);
+            }).build();
 
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
             .setName("MASTER_BLACKSMITH")
-            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
-            .setSpeed(1)
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
             .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
-            .setCargoCapacity(0)
-            .setStorable(true)
+            .setCargoCapacity(0).setStorable(true)
             .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
-            .setExpertise(GoodsType.TOOLS, 2.0F)
-            .setCanBuildRoad(true)
-            .setCanCutTrees(true)
-            .setCanPlowField(true)
-            .build();
+            .setExpertise(GoodsType.TOOLS, 2.0F).setCanBuildRoad(true)
+            .setCanCutTrees(true).setCanPlowField(true).build();
 
-    public static final UnitType FRIGATE = UnitType.make()
-            .setName("FRIGATE")
+    public static final UnitType FRIGATE = UnitType.make().setName("FRIGATE")
             .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
             .setSpeed(DEFAULT_FRIGATE_SPEED)
             .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
-            .setCargoCapacity(1)
-            .setStorable(false)
-            .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE)
-            .setRequiredTools(100)
-            .setRequiredHammers(100)
-            .setCanByBuildInColony((model, colony) -> {
+            .setCargoCapacity(1).setStorable(false)
+            .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE).setRequiredTools(100)
+            .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
                 return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
-            })
-            .build();
+            }).build();
 
-    public static final UnitType GALLEON = UnitType.make()
-            .setName("GALLEON")
+    public static final UnitType GALLEON = UnitType.make().setName("GALLEON")
             .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
             .setSpeed(DEFAULT_GALLEON_SPEED)
             .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
-            .setCargoCapacity(DEFAULT_GALLEON_CARGO_CAPACITY)
-            .setStorable(false)
-            .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE)
-            .setRequiredTools(100)
-            .setRequiredHammers(100)
-            .setCanByBuildInColony((model, colony) -> {
+            .setCargoCapacity(DEFAULT_GALLEON_CARGO_CAPACITY).setStorable(false)
+            .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE).setRequiredTools(100)
+            .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
                 return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
-            })
-            .build();
+            }).build();
 
     /**
      * List of all available unit types.
      */
-    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON, WAGON);
+    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST,
+            FRIGATE, GALLEON, WAGON);
 
-    private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES.stream()
-            .collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));
+    private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES
+            .stream().collect(ImmutableMap.toImmutableMap(UnitType::name,
+                    Function.identity()));
 
     /**
      * Unit type builder.
@@ -245,24 +215,24 @@ public final class UnitType {
         private Integer requiredTools = null;
         private Integer requiredHammers = null;
         private BiFunction<Model, Colony, Boolean> canByBuildInColony = null;
-        
+
         /**
          * Method that build final unit type and return it.
          *
          * @return Return final unit type definition.
          */
         UnitType build() {
-            return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter,
-                    cargoCapacity, storable, europePrice, expertInProducing,
-                    expertProductionModifier, canPlowField, canBuildRoad, canCutTrees,
-                    requiredTools, requiredHammers, canByBuildInColony);
+            return new UnitType(name, moveableTerrains, speed,
+                    attackableUnitTypeFilter, cargoCapacity, storable,
+                    europePrice, expertInProducing, expertProductionModifier,
+                    canPlowField, canBuildRoad, canCutTrees, requiredTools,
+                    requiredHammers, canByBuildInColony);
         }
 
         /**
          * Allows to set unit type's name.
          *
-         * @param unitTypeName
-         *            required unit types's name
+         * @param unitTypeName required unit types's name
          * @return return unit type builder object
          */
         UnitTypeBuilder setName(final String unitTypeName) {
@@ -273,11 +243,11 @@ public final class UnitType {
         /**
          * Allows to set list of terrain types on which unit could move.
          *
-         * @param moveableTerrainList
-         *            required list of terrain types
+         * @param moveableTerrainList required list of terrain types
          * @return return unit type builder object
          */
-        UnitTypeBuilder setMoveableTerrains(final List<TerrainType> moveableTerrainList) {
+        UnitTypeBuilder setMoveableTerrains(
+                final List<TerrainType> moveableTerrainList) {
             this.moveableTerrains = moveableTerrainList;
             return this;
         }
@@ -285,8 +255,7 @@ public final class UnitType {
         /**
          * Allows to set unit type speed.
          *
-         * @param newSpeed
-         *            required speed
+         * @param newSpeed required speed
          * @return return unit type builder object
          */
         UnitTypeBuilder setSpeed(final int newSpeed) {
@@ -297,8 +266,7 @@ public final class UnitType {
         /**
          * Allows to filter to find attackable unit types.
          *
-         * @param filter
-         *            required filter definition
+         * @param filter required filter definition
          * @return return unit type builder object
          */
         UnitTypeBuilder setAttackableUnitTypeFilter(
@@ -310,8 +278,7 @@ public final class UnitType {
         /**
          * Allows to set cargo capacity.
          *
-         * @param newCargoCapacity
-         *            required cargo capacity.
+         * @param newCargoCapacity required cargo capacity.
          * @return return unit type builder object
          */
         UnitTypeBuilder setCargoCapacity(final int newCargoCapacity) {
@@ -322,8 +289,8 @@ public final class UnitType {
         /**
          * Allows to set if unit could be stored in cargo.
          *
-         * @param defaultStorable
-         *            required information if unit could be place to store.
+         * @param defaultStorable required information if unit could be place to
+         *                        store.
          * @return return unit type builder object
          */
         UnitTypeBuilder setStorable(final boolean defaultStorable) {
@@ -334,8 +301,7 @@ public final class UnitType {
         /**
          * Allows to set price in Europe.
          *
-         * @param defaultEuropePrice
-         *            required price in Europe
+         * @param defaultEuropePrice required price in Europe
          * @return return unit type builder object
          */
         UnitTypeBuilder setEuropePrice(final int defaultEuropePrice) {
@@ -347,10 +313,10 @@ public final class UnitType {
          * Allows to set if unit type define expert unit and if there is any
          * production modifiers.
          *
-         * @param newExpertInProducing
-         *            Required if unit is expert in production
-         * @param newExpertProductionModifier
-         *            Required if there is some production modifiers.
+         * @param newExpertInProducing        Required if unit is expert in
+         *                                    production
+         * @param newExpertProductionModifier Required if there is some
+         *                                    production modifiers.
          * @return return unit type builder object
          */
         UnitTypeBuilder setExpertise(final GoodsType newExpertInProducing,
@@ -361,8 +327,7 @@ public final class UnitType {
         }
 
         /**
-         * @param canPlowField
-         *            the canPlowField to set
+         * @param canPlowField the canPlowField to set
          */
         UnitTypeBuilder setCanPlowField(final boolean canPlowField) {
             this.canPlowField = canPlowField;
@@ -370,8 +335,7 @@ public final class UnitType {
         }
 
         /**
-         * @param canBuildRoad
-         *            the canBuildRoad to set
+         * @param canBuildRoad the canBuildRoad to set
          */
         UnitTypeBuilder setCanBuildRoad(final boolean canBuildRoad) {
             this.canBuildRoad = canBuildRoad;
@@ -379,8 +343,7 @@ public final class UnitType {
         }
 
         /**
-         * @param canCutTrees
-         *            the canCutTrees to set
+         * @param canCutTrees the canCutTrees to set
          */
         UnitTypeBuilder setCanCutTrees(final boolean canCutTrees) {
             this.canCutTrees = canCutTrees;
@@ -388,8 +351,7 @@ public final class UnitType {
         }
 
         /**
-         * @param requiredTools
-         *            the requiredTools to set
+         * @param requiredTools the requiredTools to set
          */
         UnitTypeBuilder setRequiredTools(final Integer requiredTools) {
             this.requiredTools = requiredTools;
@@ -397,8 +359,7 @@ public final class UnitType {
         }
 
         /**
-         * @param requiredHammers
-         *            the requiredHammers to set
+         * @param requiredHammers the requiredHammers to set
          */
         UnitTypeBuilder setRequiredHammers(final Integer requiredHammers) {
             this.requiredHammers = requiredHammers;
@@ -408,7 +369,8 @@ public final class UnitType {
         /**
          * @param canByBuildInColony the canByBuildInColony to set
          */
-        UnitTypeBuilder setCanByBuildInColony(BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+        UnitTypeBuilder setCanByBuildInColony(
+                BiFunction<Model, Colony, Boolean> canByBuildInColony) {
             this.canByBuildInColony = canByBuildInColony;
             return this;
         }
@@ -418,49 +380,43 @@ public final class UnitType {
     /**
      * Unit type constructor. Should be called just from this class.
      *
-     * @param name
-     *            required name
-     * @param moveableTerrains
-     *            required list of terrain that unit could move on
-     * @param speed
-     *            required default speed
-     * @param attackableUnitTypeFilter
-     *            required function that could select attackable unit type
-     * @param cargoCapacity
-     *            required default cargo capacity
-     * @param storable
-     *            required if unit could be placed in cargo
-     * @param europePrice
-     *            required default price in Europe port
-     * @param expertInProducing
-     *            required unit's expertise
-     * @param expertProductionModifier
-     *            required production modifiers
-     * @param canPlowField
-     *            required if unit could plow field
-     * @param canBuildRoad
-     *            required if unit could build road
-     * @param canCutTrees
-     *            required if unit could cut down trees
-     * @param requiredTools
-     *            optional number of tools required to build unit
-     * @param requiredHammers
-     *            optional number of hammers required to build unit
-     * @param canByBuildInColony
-     *            optional function defining rules which have to be met to be
-     *            able to build unit in colony. When it's <code>null</code> than
-     *            it's never possible to build unit in colony.
+     * @param name                     required name
+     * @param moveableTerrains         required list of terrain that unit could
+     *                                 move on
+     * @param speed                    required default speed
+     * @param attackableUnitTypeFilter required function that could select
+     *                                 attackable unit type
+     * @param cargoCapacity            required default cargo capacity
+     * @param storable                 required if unit could be placed in cargo
+     * @param europePrice              required default price in Europe port
+     * @param expertInProducing        required unit's expertise
+     * @param expertProductionModifier required production modifiers
+     * @param canPlowField             required if unit could plow field
+     * @param canBuildRoad             required if unit could build road
+     * @param canCutTrees              required if unit could cut down trees
+     * @param requiredTools            optional number of tools required to
+     *                                 build unit
+     * @param requiredHammers          optional number of hammers required to
+     *                                 build unit
+     * @param canByBuildInColony       optional function defining rules which
+     *                                 have to be met to be able to build unit
+     *                                 in colony. When it's <code>null</code>
+     *                                 than it's never possible to build unit in
+     *                                 colony.
      */
-    UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
-            final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity,
-            final boolean storable, final int europePrice, final GoodsType expertInProducing,
+    UnitType(final String name, final List<TerrainType> moveableTerrains,
+            final int speed, final Predicate<UnitType> attackableUnitTypeFilter,
+            final int cargoCapacity, final boolean storable,
+            final int europePrice, final GoodsType expertInProducing,
             final float expertProductionModifier, final boolean canPlowField,
-            final boolean canBuildRoad, final boolean canCutTrees, final Integer requiredTools,
-            final Integer requiredHammers, final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+            final boolean canBuildRoad, final boolean canCutTrees,
+            final Integer requiredTools, final Integer requiredHammers,
+            final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
         this.name = Preconditions.checkNotNull(name);
         this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
         this.speed = speed;
-        this.attackableUnitTypeFilter = Preconditions.checkNotNull(attackableUnitTypeFilter);
+        this.attackableUnitTypeFilter = Preconditions
+                .checkNotNull(attackableUnitTypeFilter);
         this.cargoCapacity = cargoCapacity;
         this.storable = storable;
         this.europePrice = europePrice;
@@ -495,16 +451,15 @@ public final class UnitType {
     /**
      * Same function as in enum type. It convert string type to class.
      *
-     * @param unitTypeName
-     *            required unit type as string
+     * @param unitTypeName required unit type as string
      * @return Return corresponding class
-     * @throws IllegalArgumentException
-     *             Exception is thrown when give string doesn't match any class.
+     * @throws IllegalArgumentException Exception is thrown when give string
+     *                                  doesn't match any class.
      */
     public static UnitType valueOf(final String unitTypeName) {
         if (UNIT_TYPES_BY_NAME.get(unitTypeName) == null) {
-            throw new IllegalArgumentException(
-                    String.format("There is no such UnitType (%s)", unitTypeName));
+            throw new IllegalArgumentException(String
+                    .format("There is no such UnitType (%s)", unitTypeName));
         } else {
             return UNIT_TYPES_BY_NAME.get(unitTypeName);
         }
@@ -528,7 +483,7 @@ public final class UnitType {
     public List<TerrainType> getMoveableTerrains() {
         return moveableTerrains;
     }
-    
+
     /**
      * How many food eat unit when is located in colony per turn.
      *
@@ -592,8 +547,7 @@ public final class UnitType {
     /**
      * Return information whether unit could move at given terrain.
      *
-     * @param terrain
-     *            required terrain
+     * @param terrain required terrain
      * @return Return <code>true</code> when unit type coud move at given
      *         terrain otherwise return <code>false</code>.
      */
@@ -625,8 +579,7 @@ public final class UnitType {
     /**
      * How much more of given goods type could unit produce.
      *
-     * @param goodsType
-     *            required good type
+     * @param goodsType required good type
      * @return goods type related production modifier
      */
     public float getProductionModifier(final GoodsType goodsType) {
@@ -659,9 +612,10 @@ public final class UnitType {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("name", name()).add("speed", speed)
-                .add("canAttack", canAttack()).add("cargoCapacity", cargoCapacity)
-                .add("storable", storable).toString();
+        return MoreObjects.toStringHelper(this).add("name", name())
+                .add("speed", speed).add("canAttack", canAttack())
+                .add("cargoCapacity", cargoCapacity).add("storable", storable)
+                .toString();
     }
 
     /**
@@ -707,7 +661,7 @@ public final class UnitType {
     public Integer getRequiredHammers() {
         return requiredHammers;
     }
-    
+
     /**
      * Get information if unit could be build in colony lumber mill.
      *
@@ -728,5 +682,5 @@ public final class UnitType {
             return canByBuildInColony;
         }
     }
- 
+
 }

@@ -21,8 +21,7 @@ public class Area {
     }
 
     /**
-     * @param visibleArea
-     *            required visible area on screen
+     * @param visibleArea required visible area on screen
      */
     public Area(final VisibleAreaService visibleArea) {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
@@ -32,8 +31,7 @@ public class Area {
      * Verify it location is visible at screen and should be drawn. It count
      * with unit size [1,1].
      *
-     * @param location
-     *            required location of unit
+     * @param location required location of unit
      * @return return <code>true</code> when unit is visible otherwise return
      *         <code>false</code>
      */
@@ -48,20 +46,19 @@ public class Area {
      * <p>
      * Method doesn't validate if point is on screen or outside of screen.
      * </p>
-     * 
-     * @param location
-     *            required on map location
+     *
+     * @param location required on map location
      * @return point coordinates that could be directly used to draw on canvas
      */
     public Point convertToCanvasPoint(final Location location) {
-        return Tile.ofLocation(location).getTopLeftCorner().substract(visibleArea.getTopLeft());
+        return Tile.ofLocation(location).getTopLeftCorner()
+                .substract(visibleArea.getTopLeft());
     }
 
     /**
      * Convert from on-screen area coordinates to map coordinates.
-     * 
-     * @param point
-     *            required on-screen point
+     *
+     * @param point required on-screen point
      * @return return map location
      */
     public Location convertToLocation(final Point point) {
@@ -75,26 +72,28 @@ public class Area {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Area.class).add("visibleArea", visibleArea).toString();
+        return MoreObjects.toStringHelper(Area.class)
+                .add("visibleArea", visibleArea).toString();
     }
 
     /**
      * When user want to see in center of screen given location than this method
      * compute top left point of requested screen.
-     * 
-     * @param location
-     *            required location that will in center of view
+     *
+     * @param location required location that will in center of view
      * @return position of top left corner of view
      */
     Point getCenterToLocation(final Location location) {
         /**
          * Adjust new point that visible are is still on map.
          */
-        return visibleArea.computeNewTopLeftConnerOfCanvas(getCanvasTopLeftForLocation(location));
+        return visibleArea.computeNewTopLeftConnerOfCanvas(
+                getCanvasTopLeftForLocation(location));
     }
 
     Point getCanvasTopLeftForLocation(final Location location) {
-        final Point newScreenCenterPoint = Tile.ofLocation(location).getTopLeftCorner();
+        final Point newScreenCenterPoint = Tile.ofLocation(location)
+                .getTopLeftCorner();
         /**
          * Put new point in the center of screen.
          */

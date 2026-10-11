@@ -24,15 +24,21 @@ public class WorldMapIsValidLocationTest extends AbstractMapTest {
                 /*
                  * Invalid locations
                  */
-                arguments(Location.of(0, 0), false), arguments(Location.of(0, 5), false),
-                arguments(Location.of(5, 0), false), arguments(Location.of(11, 5), false),
-                arguments(Location.of(5, 11), false), arguments(Location.of(11, 11), false),
-                arguments(Location.of(-1, -1), false), arguments(Location.of(-5, -5), false),
+                arguments(Location.of(0, 0), false),
+                arguments(Location.of(0, 5), false),
+                arguments(Location.of(5, 0), false),
+                arguments(Location.of(11, 5), false),
+                arguments(Location.of(5, 11), false),
+                arguments(Location.of(11, 11), false),
+                arguments(Location.of(-1, -1), false),
+                arguments(Location.of(-5, -5), false),
                 /*
                  * Valid locations
                  */
-                arguments(Location.of(1, 1), true), arguments(Location.of(10, 1), true),
-                arguments(Location.of(10, 10), true), arguments(Location.of(1, 10), true),
+                arguments(Location.of(1, 1), true),
+                arguments(Location.of(10, 1), true),
+                arguments(Location.of(10, 10), true),
+                arguments(Location.of(1, 10), true),
                 arguments(Location.of(5, 5), true));
     }
 
@@ -41,15 +47,18 @@ public class WorldMapIsValidLocationTest extends AbstractMapTest {
     public void test_isValid(final Location location, final boolean isValid) {
         if (isValid) {
             assertTrue(map.isValid(location), String.format(
-                    "Location '%s' should be valid but was evaluated as invalid", location));
+                    "Location '%s' should be valid but was evaluated as invalid",
+                    location));
         } else {
             assertFalse(map.isValid(location), String.format(
-                    "Location '%s' should be invalid but was evaluated as valid", location));
+                    "Location '%s' should be invalid but was evaluated as valid",
+                    location));
         }
     }
 
     @Test
     void test_isValid_null() throws Exception {
-        assertThrows(NullPointerException.class, () -> map.isValid((Location) null));
+        assertThrows(NullPointerException.class,
+                () -> map.isValid((Location) null));
     }
 }

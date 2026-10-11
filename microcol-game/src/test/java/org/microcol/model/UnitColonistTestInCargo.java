@@ -26,14 +26,17 @@ public class UnitColonistTestInCargo extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port() throws Exception {
+    public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port()
+            throws Exception {
         when(placeCargoSlot.isOwnerAtEuropePort()).thenReturn(false);
 
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            unit.placeToEuropePortPier();
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    unit.placeToEuropePortPier();
+                });
 
-        assertEquals("Holding unit is not at europe port, cant be placed to port pier.",
+        assertEquals(
+                "Holding unit is not at europe port, cant be placed to port pier.",
                 exception.getMessage());
     }
 

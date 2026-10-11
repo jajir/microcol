@@ -32,7 +32,8 @@ import com.google.inject.Inject;
  */
 public class GameModelController {
 
-    private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
+    private final static Logger logger = LoggerFactory
+            .getLogger(GameModelController.class);
 
     private final SelectedTileManager selectedTileManager;
 
@@ -44,17 +45,19 @@ public class GameModelController {
 
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
-            final ArtifitialPlayersManager artifitialPlayersManager, final EventBus eventBus) {
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.artifitialPlayersManager = Preconditions.checkNotNull(artifitialPlayersManager);
+            final ArtifitialPlayersManager artifitialPlayersManager,
+            final EventBus eventBus) {
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
+        this.artifitialPlayersManager = Preconditions
+                .checkNotNull(artifitialPlayersManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     /**
      * It start new game from model and prepare King AI and players AI.
-     * 
-     * @param newModel
-     *            required game model
+     *
+     * @param newModel required game model
      */
     void setAndStartModel(final GameModel newModel) {
         tryToStopGame();
@@ -73,10 +76,9 @@ public class GameModelController {
      * <p>
      * This should be main model access method.
      * </p>
-     * 
+     *
      * @return Return currently running model.
-     * @throws IllegalStateException
-     *             when there is no running model
+     * @throws IllegalStateException when there is no running model
      */
     public Model getModel() {
         Preconditions.checkState(gameModel != null, "Model is not ready");
@@ -86,7 +88,7 @@ public class GameModelController {
     public WorldMap getMap() {
         return gameModel.getModel().getMap();
     }
-    
+
     public Location getMapSize() {
         return getMap().getMapSize();
     }
@@ -104,7 +106,8 @@ public class GameModelController {
     }
 
     public Goods getMaxBuyableGoods(final GoodsType goodsType) {
-        final GoodsTrade goodsTrade = getModel().getEurope().getGoodsTradeForType(goodsType);
+        final GoodsTrade goodsTrade = getModel().getEurope()
+                .getGoodsTradeForType(goodsType);
         return goodsTrade.getAvailableAmountFor(getHumanPlayer().getGold());
     }
 
@@ -114,12 +117,13 @@ public class GameModelController {
 
     /**
      * Get human player, even if human player if is not on turn.
-     * 
+     *
      * @return return human player
      */
     public Player getHumanPlayer() {
-        return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
-                .orElseThrow(() -> new IllegalStateException("There is no human player"));
+        return getModel().getPlayers().stream().filter(Player::isHuman)
+                .findFirst().orElseThrow(() -> new IllegalStateException(
+                        "There is no human player"));
     }
 
     private void tryToStopGame() {
@@ -141,8 +145,8 @@ public class GameModelController {
             /**
              * If it's necessary than move.
              */
-            final Optional<List<Location>> locations = attacker.getPath(defender.getLocation(),
-                    true);
+            final Optional<List<Location>> locations = attacker
+                    .getPath(defender.getLocation(), true);
             if (locations.isPresent() && !locations.get().isEmpty()) {
                 getModel().moveUnit(attacker, Path.of(locations.get()));
             }
@@ -150,7 +154,8 @@ public class GameModelController {
         }).start();
     }
 
-    public void disembark(final UnitWithCargo movingUnit, final Location targetLocation) {
+    public void disembark(final UnitWithCargo movingUnit,
+            final Location targetLocation) {
         new Thread(() -> {
             movingUnit.getCargo().getSlots().stream()
                     .filter(cargoSlot -> cargoSlot.isLoadedUnit())

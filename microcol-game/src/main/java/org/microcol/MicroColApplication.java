@@ -48,7 +48,8 @@ public final class MicroColApplication extends Application {
     }
 
     private void setDevelopmentMode() {
-        final GamePreferences gamePreferences = injector.getInstance(GamePreferences.class);
+        final GamePreferences gamePreferences = injector
+                .getInstance(GamePreferences.class);
         if (gamePreferences.isDevelopment()) {
             logger.info("Appliaction started in development mode.");
             CSSFX.start();
@@ -61,17 +62,18 @@ public final class MicroColApplication extends Application {
      * Initialize guice, connect guice to primary stage and show first
      * application screen.
      *
-     * @param primaryStage
-     *            required primary stage
+     * @param primaryStage required primary stage
      */
     private void initializeMicrocol(final Stage primaryStage) {
         try {
             injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                    new MicroColModule(), new ModuleImages(), new ExternalModule(primaryStage),
-                    new CampaignModule(), overridenModule);
+                    new MicroColModule(), new ModuleImages(),
+                    new ExternalModule(primaryStage), new CampaignModule(),
+                    overridenModule);
             setDevelopmentMode();
-            
-            final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
+
+            final MainStageBuilder mainStageBuilder = injector
+                    .getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector
                     .getInstance(ApplicationController.class);

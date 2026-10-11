@@ -12,14 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class LocationCreationTest {
 
     static Stream<Arguments> dataProvider() {
-        return Stream.of(
-                arguments(0, 0),
-                arguments(1, 1),
-                arguments(2, 3),
-                arguments(-2, 3),
-                arguments(2, -3),
-                arguments(-2, -3)
-            );
+        return Stream.of(arguments(0, 0), arguments(1, 1), arguments(2, 3),
+                arguments(-2, 3), arguments(2, -3), arguments(-2, -3));
     }
 
     @ParameterizedTest(name = "{index}: fileName = {0}, location = {1}")

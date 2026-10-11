@@ -21,10 +21,12 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
     private final ButtonsPanelView buttonsPanelView;
 
     @Inject
-    ScreenMenu(final ButtonsPanelView buttonsPanelView, final MenuHolderPanel menuHolderPanel) {
+    ScreenMenu(final ButtonsPanelView buttonsPanelView,
+            final MenuHolderPanel menuHolderPanel) {
         this.buttonsPanelView = Preconditions.checkNotNull(buttonsPanelView);
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
-        menuHolderPanel.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
+        menuHolderPanel.getContent().getStylesheets()
+                .add(STYLE_SHEET_GAME_MENU);
         menuHolderPanel.setMenuPanel(buttonsPanelView);
     }
 

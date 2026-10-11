@@ -10,8 +10,7 @@ public final class VolumeChangeEvent {
     /**
      * Default constructor.
      *
-     * @param volume
-     *            chosen volume
+     * @param volume chosen volume
      */
     public VolumeChangeEvent(final int volume) {
         this.volume = volume;
@@ -19,7 +18,7 @@ public final class VolumeChangeEvent {
 
     /**
      * Get volume chosen by player.
-     * 
+     *
      * @return actual volume level
      */
     public int getVolume() {

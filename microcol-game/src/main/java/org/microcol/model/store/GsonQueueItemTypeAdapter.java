@@ -13,7 +13,8 @@ import com.google.gson.stream.JsonWriter;
 public final class GsonQueueItemTypeAdapter extends TypeAdapter<QueueItemType> {
 
     @Override
-    public void write(final JsonWriter out, final QueueItemType value) throws IOException {
+    public void write(final JsonWriter out, final QueueItemType value)
+            throws IOException {
         if (value == null) {
             out.nullValue();
             return;

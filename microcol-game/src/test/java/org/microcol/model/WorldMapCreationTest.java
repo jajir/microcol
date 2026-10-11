@@ -20,7 +20,8 @@ public class WorldMapCreationTest {
 
     @ParameterizedTest(name = "{index}: maxX = {0}, maxY = {1}, seed = {2}")
     @MethodSource("dataProvider")
-    public void testCreation(final int maxX, final int maxY, final Integer seed) {
+    public void testCreation(final int maxX, final int maxY,
+            final Integer seed) {
         WorldMapPo mapPo = new WorldMapPo();
         mapPo.setMaxX(maxX);
         mapPo.setMaxY(maxY);

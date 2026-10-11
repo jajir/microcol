@@ -6,15 +6,15 @@ package org.microcol.page;
 public class ScreenMarketBuy extends AbstractScreenMarket {
 
     public static ScreenMarketBuy of(final TestContext context) {
-	return new ScreenMarketBuy(context);
+        return new ScreenMarketBuy(context);
     }
 
     private ScreenMarketBuy(final TestContext context) {
-	super(context);
+        super(context);
     }
 
     public void clickOnBuy() {
-	clickOnButtonWithId("buttonYes");
+        clickOnButtonWithId("buttonYes");
     }
 
 }

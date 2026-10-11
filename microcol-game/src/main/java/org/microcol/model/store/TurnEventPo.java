@@ -20,8 +20,7 @@ public final class TurnEventPo {
     }
 
     /**
-     * @param playerName
-     *            the playerName to set
+     * @param playerName the playerName to set
      */
     public void setPlayerName(String playerName) {
         this.playerName = playerName;

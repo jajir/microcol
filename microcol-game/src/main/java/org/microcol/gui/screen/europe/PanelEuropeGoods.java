@@ -36,9 +36,11 @@ import javafx.scene.layout.Region;
 /**
  * Show list of all available goods.
  */
-public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguage, Repaintable {
+public final class PanelEuropeGoods
+        implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
-    private final Logger logger = LoggerFactory.getLogger(PanelEuropeGoods.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(PanelEuropeGoods.class);
 
     private final HBox mainPanel;
 
@@ -54,21 +56,24 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
 
     @Inject
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
-            final GameModelController gameModelController, final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
-            final I18n i18n) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
+            final GameModelController gameModelController,
+            final ImageProvider imageProvider,
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final EventBus eventBus, final I18n i18n) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.europeDialogCallback = Preconditions
+                .checkNotNull(europeDialogCallback);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         mainPanel = new HBox();
         GoodsType.BUYABLE_GOOD_TYPES.forEach(goodsType -> {
-            final PanelGood panelGood = new PanelGood(goodsType, imageProvider, gameModelController,
-                    dialogNotEnoughGold, eventBus, i18n);
+            final PanelGood panelGood = new PanelGood(goodsType, imageProvider,
+                    gameModelController, dialogNotEnoughGold, eventBus, i18n);
             panelGoods.add(panelGood);
             mainPanel.getChildren().add(panelGood.getContent());
         });
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
-                this::isItGoods);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                mainPanel, this::isItGoods);
         mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
         mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
         mainPanel.setOnDragOver(this::onDragOver);
@@ -99,8 +104,9 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on panel goods.");
         final Dragboard db = event.getDragboard();
-        final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
-                .filterFrom(transferFrom -> From.VALUE_FROM_UNIT == transferFrom);
+        final ClipboardEval eval = ClipboardEval
+                .make(gameModelController.getModel(), db).filterFrom(
+                        transferFrom -> From.VALUE_FROM_UNIT == transferFrom);
         final boolean specialOperatonWasSelected = event.getTransferMode()
                 .equals(TransferMode.LINK);
         if (eval.getCargoSlot().isPresent() && eval.getGoods().isPresent()) {
@@ -109,10 +115,12 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
             if (specialOperatonWasSelected) {
                 // request showing screen with market sell
                 eventBus.post(new ShowScreenEvent(Screen.MARKET_SELL,
-                        new ScreenMarketSellContext(goodsToSell, sourceCargoSlot)));
+                        new ScreenMarketSellContext(goodsToSell,
+                                sourceCargoSlot)));
                 return;
             } else {
-                gameModelController.getModel().sellGoods(sourceCargoSlot, goodsToSell);
+                gameModelController.getModel().sellGoods(sourceCargoSlot,
+                        goodsToSell);
                 europeDialogCallback.repaint();
             }
         }

@@ -12,8 +12,7 @@ public final class GameStoppedEvent extends AbstractModelEvent {
     /**
      * Constructor just set model.
      *
-     * @param model
-     *            required game model
+     * @param model required game model
      */
     public GameStoppedEvent(final Model model) {
         super(model);

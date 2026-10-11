@@ -28,16 +28,20 @@ public class CalendarSeasonTest {
 
     @ParameterizedTest(name = "{index}: startYear = {0}, endYear = {1}")
     @MethodSource("dataProvider")
-    public void testCreation(final int currentYear, final Calendar.Season season,
-            final int turnNo) {
+    public void testCreation(final int currentYear,
+            final Calendar.Season season, final int turnNo) {
         final Calendar calendar = new Calendar(START_YEAR, END_YEAR, turnNo);
-        assertEquals(START_YEAR, calendar.getStartYear(), "Test of startYear failed:");
-        assertEquals(END_YEAR, calendar.getEndYear(), "Test of endYear failed:");
+        assertEquals(START_YEAR, calendar.getStartYear(),
+                "Test of startYear failed:");
+        assertEquals(END_YEAR, calendar.getEndYear(),
+                "Test of endYear failed:");
         assertFalse(calendar.isFinished(), "Test of isFinished() failed:");
 
-        assertEquals(currentYear, calendar.getCurrentYear(), "Test of currentYear failed:");
+        assertEquals(currentYear, calendar.getCurrentYear(),
+                "Test of currentYear failed:");
         if (season == null) {
-            assertFalse(calendar.getCurrentSeason().isPresent(), "Test of currentSeason failed:");
+            assertFalse(calendar.getCurrentSeason().isPresent(),
+                    "Test of currentSeason failed:");
         } else {
             assertEquals(season, calendar.getCurrentSeason().get(),
                     "Test of currentSeason failed:");

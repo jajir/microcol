@@ -43,45 +43,51 @@ public class UnitFactory {
             }));
 
     private Unit makeFreeColonist(final UnitCreateRequest request) {
-        final UnitFreeColonist out = new UnitFreeColonist(request.getModel(), request.getUnitId(),
-                request.getPlaceBuilder(), request.getOwner(), request.getAvailableMoves(),
-                request.getAction(), request.getTools(), request.isHoldingGuns(),
-                request.isMounted());
+        final UnitFreeColonist out = new UnitFreeColonist(request.getModel(),
+                request.getUnitId(), request.getPlaceBuilder(),
+                request.getOwner(), request.getAvailableMoves(),
+                request.getAction(), request.getTools(),
+                request.isHoldingGuns(), request.isMounted());
         return out;
     }
 
     private Unit makeGalleon(final UnitCreateRequest request) {
-        final UnitGalleon out = new UnitGalleon(request.getCargoBuilder(), request.getModel(),
-                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+        final UnitGalleon out = new UnitGalleon(request.getCargoBuilder(),
+                request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
                 request.getAvailableMoves(), request.getAction());
         return out;
     }
 
     private Unit makeFrigate(final UnitCreateRequest request) {
-        final UnitFrigate out = new UnitFrigate(request.getCargoBuilder(), request.getModel(),
-                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+        final UnitFrigate out = new UnitFrigate(request.getCargoBuilder(),
+                request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
                 request.getAvailableMoves(), request.getAction());
         return out;
     }
 
     private Unit makeWagon(final UnitCreateRequest request) {
-        final UnitWagon out = new UnitWagon(request.getCargoBuilder(), request.getModel(),
-                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+        final UnitWagon out = new UnitWagon(request.getCargoBuilder(),
+                request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
                 request.getAvailableMoves(), request.getAction());
         return out;
     }
 
-    public Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
+    public Unit createUnit(final Model model, final ModelPo modelPo,
+            final UnitPo unitPo) {
 
-        final Function<Unit, Place> placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo,
-                model);
+        final Function<Unit, Place> placeBuilderModelPo = new PlaceBuilderPo(
+                unitPo, modelPo, model);
 
         final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model,
                 placeBuilderModelPo, unitPo.getId(), unitPo.getType(),
                 model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()),
-                UnitActionConverter.convert(unitPo.getAction()), unitPo.getAvailableMoves());
-        unitCreateRequest.setCargoBuilder(
-                unit -> new Cargo(unit, unit.getType().getCargoCapacity(), unitPo.getCargo()));
+                UnitActionConverter.convert(unitPo.getAction()),
+                unitPo.getAvailableMoves());
+        unitCreateRequest.setCargoBuilder(unit -> new Cargo(unit,
+                unit.getType().getCargoCapacity(), unitPo.getCargo()));
         unitCreateRequest.setHoldingGuns(unitPo.isHoldingGuns());
         unitCreateRequest.setMounted(unitPo.isMounted());
         unitCreateRequest.setTools(unitPo.getTools());

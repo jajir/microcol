@@ -54,8 +54,8 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private final VBox mainPanel;
 
-    PanelColonyGood(final Image image, final GoodsType goodsType, final EventBus eventBus,
-            final I18n i18n) {
+    PanelColonyGood(final Image image, final GoodsType goodsType,
+            final EventBus eventBus, final I18n i18n) {
         this.goodsType = Preconditions.checkNotNull(goodsType);
         this.image = Preconditions.checkNotNull(image);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -78,26 +78,32 @@ public final class PanelColonyGood implements JavaFxComponent {
         mainPanel.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)) + i18n.get(ColonyMsg.goods),
+                i18n.get(GoodsTypeName.getNameForGoodsType(goodsType))
+                        + i18n.get(ColonyMsg.goods),
                 Source.COLONY));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 
     private void onDragDetected(final MouseEvent event) {
         Preconditions.checkNotNull(colony.getWarehouse());
-        final Goods couldBemoved = colony.getWarehouse().getTransferableGoods(goodsType,
-                CargoSlot.MAX_CARGO_SLOT_CAPACITY);
+        final Goods couldBemoved = colony.getWarehouse().getTransferableGoods(
+                goodsType, CargoSlot.MAX_CARGO_SLOT_CAPACITY);
         if (couldBemoved.isNotZero()) {
-            Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
-            ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
-                    .addGoods(couldBemoved).build();
+            Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE,
+                    TransferMode.LINK);
+            ClipboardWritter.make(db).addImage(image)
+                    .addTransferFromColonyWarehouse().addGoods(couldBemoved)
+                    .build();
         }
-        eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), Source.COLONY));
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(Loc.adjustAmountOfGoods), Source.COLONY));
         event.consume();
     }
 

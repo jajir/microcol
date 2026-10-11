@@ -13,7 +13,8 @@ import javafx.scene.layout.VBox;
  * Component brings together content panel and status bar. Status bar is placed
  * below content.
  */
-public class ContentWithStatusBar implements JavaFxComponent, UpdatableLanguage {
+public class ContentWithStatusBar
+        implements JavaFxComponent, UpdatableLanguage {
 
     private StatusBar statusBar;
 

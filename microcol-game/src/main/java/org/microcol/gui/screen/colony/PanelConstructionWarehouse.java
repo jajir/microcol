@@ -17,7 +17,8 @@ class PanelConstructionWarehouse extends AbstractPanelConstruction {
     private final static String CSS_ID = "id_warehouse";
     private final static int CANVAS_WIDTH = 846;
     private final static int CANVAS_HEIGHT = ImageLoaderBuilding.CONSTRUCTION_WIDTH;
-    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH, CANVAS_HEIGHT);
+    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH,
+            CANVAS_HEIGHT);
 
     public PanelConstructionWarehouse(final EventBus eventBus, final I18n i18n,
             final ImageProvider imageProvider, final Construction construction,

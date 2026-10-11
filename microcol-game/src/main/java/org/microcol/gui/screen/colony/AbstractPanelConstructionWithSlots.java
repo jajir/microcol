@@ -35,16 +35,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 
-abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruction {
+abstract class AbstractPanelConstructionWithSlots
+        extends AbstractPanelConstruction {
 
-    private final Logger logger = LoggerFactory.getLogger(AbstractPanelConstructionWithSlots.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(AbstractPanelConstructionWithSlots.class);
 
     private final static int CANVAS_WIDTH = 100;
     private final static int CANVAS_HEIGHT = 135;
-    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH, CANVAS_HEIGHT);
+    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH,
+            CANVAS_HEIGHT);
 
     private final static int GOOD_ICON_WIDTH = 30;
-    
+
     /*
      * Goods icon.
      */
@@ -55,21 +58,26 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
      * Slot size and position definition.
      */
     private final static int SLOT_POSITION_SLOT_GAP = -14;
-    private final static int SLOT_POSITION_WIDTH = TILE_WIDTH_IN_PX + SLOT_POSITION_SLOT_GAP;
-    private final static Point SLOT_SIZE = Point.of(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+    private final static int SLOT_POSITION_WIDTH = TILE_WIDTH_IN_PX
+            + SLOT_POSITION_SLOT_GAP;
+    private final static Point SLOT_SIZE = Point.of(TILE_WIDTH_IN_PX,
+            TILE_WIDTH_IN_PX);
     private final static int SLOT_POSITION_X_START = -10;
     private final static int SLOT_POSITION_Y = 60;
     private final static Point[] SLOT_POSITIONS = new Point[] {
             Point.of(SLOT_POSITION_X_START, SLOT_POSITION_Y),
-            Point.of(SLOT_POSITION_X_START + SLOT_POSITION_WIDTH, SLOT_POSITION_Y),
-            Point.of(SLOT_POSITION_X_START + 2 * SLOT_POSITION_WIDTH, SLOT_POSITION_Y) };
+            Point.of(SLOT_POSITION_X_START + SLOT_POSITION_WIDTH,
+                    SLOT_POSITION_Y),
+            Point.of(SLOT_POSITION_X_START + 2 * SLOT_POSITION_WIDTH,
+                    SLOT_POSITION_Y) };
 
     private final ColonyProductionStats colonyStats;
     private final Map<Rectangle, ConstructionSlot> slots = new HashMap<>();
     private final Model model;
 
-    public AbstractPanelConstructionWithSlots(final EventBus eventBus, final I18n i18n,
-            final ImageProvider imageProvider, final Construction construction,
+    public AbstractPanelConstructionWithSlots(final EventBus eventBus,
+            final I18n i18n, final ImageProvider imageProvider,
+            final Construction construction,
             final ColonyProductionStats colonyStats, final Model model) {
         super(eventBus, i18n, imageProvider, construction, CANVAS_SIZE);
         this.colonyStats = Preconditions.checkNotNull(colonyStats);
@@ -83,9 +91,12 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
         final AtomicInteger cx = new AtomicInteger(0);
         getConstruction().getConstructionSlots().forEach(constructionSlot -> {
             final Point topLeftCorner = SLOT_POSITIONS[cx.get()];
-            slots.put(Rectangle.ofPointAndSize(topLeftCorner, SLOT_SIZE), constructionSlot);
+            slots.put(Rectangle.ofPointAndSize(topLeftCorner, SLOT_SIZE),
+                    constructionSlot);
             if (!constructionSlot.isEmpty()) {
-                gc.drawImage(getImageProvider().getUnitImage(constructionSlot.getUnit()),
+                gc.drawImage(
+                        getImageProvider()
+                                .getUnitImage(constructionSlot.getUnit()),
                         topLeftCorner.getX(), topLeftCorner.getY());
             }
             cx.incrementAndGet();
@@ -95,8 +106,8 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
     void paintProduction(final GraphicsContext gc) {
         if (getConstruction().getType().getProductionPerTurn().isPresent()) {
 
-            final GoodsProductionStats goodsStats = colonyStats
-                    .getStatsByType(getConstruction().getProducedGoodsType().get());
+            final GoodsProductionStats goodsStats = colonyStats.getStatsByType(
+                    getConstruction().getProducedGoodsType().get());
 
             if (isThereTextToPaint(goodsStats)) {
                 paintProductionIcon(gc);
@@ -106,13 +117,15 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
             box.getStyleClass().add("production");
 
             if (goodsStats.getNetProduction() != 0) {
-                final Label label = new Label("+" + goodsStats.getNetProduction());
+                final Label label = new Label(
+                        "+" + goodsStats.getNetProduction());
                 label.getStyleClass().add("diffPositive");
                 box.getChildren().add(label);
             }
 
             if (goodsStats.getBlockedProduction() != 0) {
-                final Label label = new Label("-" + goodsStats.getBlockedProduction());
+                final Label label = new Label(
+                        "-" + goodsStats.getBlockedProduction());
                 label.getStyleClass().add("diffNegative");
                 box.getChildren().add(label);
             }
@@ -122,13 +135,15 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
     }
 
     private void paintProductionIcon(final GraphicsContext gc) {
-        final Goods produced = getConstruction().getType().getProductionPerTurn().get();
-        gc.drawImage(getImageProvider().getGoodsTypeImage(produced.getType()), GOODS_ICON_X,
-                GOODS_ICON_Y, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+        final Goods produced = getConstruction().getType()
+                .getProductionPerTurn().get();
+        gc.drawImage(getImageProvider().getGoodsTypeImage(produced.getType()),
+                GOODS_ICON_X, GOODS_ICON_Y, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
     }
 
     private boolean isThereTextToPaint(final GoodsProductionStats goodsStats) {
-        return goodsStats.getNetProduction() != 0 || goodsStats.getBlockedProduction() != 0;
+        return goodsStats.getNetProduction() != 0
+                || goodsStats.getBlockedProduction() != 0;
     }
 
     private void onDragDropped(final DragEvent event) {
@@ -137,12 +152,14 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
         final Optional<ConstructionSlot> loc = findConstructionSlot(point);
         if (loc.isPresent() && loc.get().isEmpty()) {
             final ConstructionSlot slot = loc.get();
-            ClipboardEval.make(model, event.getDragboard()).tryReadUnit((unit, transferFrom) -> {
-                unit.placeToColonyStructureSlot(slot);
-                event.setDropCompleted(true);
-            });
+            ClipboardEval.make(model, event.getDragboard())
+                    .tryReadUnit((unit, transferFrom) -> {
+                        unit.placeToColonyStructureSlot(slot);
+                        event.setDropCompleted(true);
+                    });
         } else {
-            final Optional<ConstructionSlot> oSlot = getConstruction().getFirstEmptySlot();
+            final Optional<ConstructionSlot> oSlot = getConstruction()
+                    .getFirstEmptySlot();
             if (oSlot.isPresent()) {
                 ClipboardEval.make(model, event.getDragboard())
                         .tryReadUnit((unit, transferFrom) -> {
@@ -161,9 +178,10 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
         if (loc.isPresent() && !loc.get().isEmpty()) {
             final Unit unit = loc.get().getUnit();
             final Image image = getImageProvider().getUnitImage(unit);
-            final Dragboard db = getCanvas().startDragAndDrop(TransferMode.MOVE);
-            ClipboardWritter.make(db).addImage(image).addTransferFromConstructionSlot()
-                    .addUnit(unit).build();
+            final Dragboard db = getCanvas()
+                    .startDragAndDrop(TransferMode.MOVE);
+            ClipboardWritter.make(db).addImage(image)
+                    .addTransferFromConstructionSlot().addUnit(unit).build();
         }
         event.consume();
     }
@@ -182,7 +200,8 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
     }
 
     private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
-        return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
+        return slots.entrySet().stream()
+                .filter(entry -> entry.getKey().isIn(point))
                 .map(entry -> entry.getValue()).findAny();
     }
 

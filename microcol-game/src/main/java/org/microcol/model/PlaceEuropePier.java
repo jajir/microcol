@@ -25,8 +25,8 @@ public class PlaceEuropePier extends AbstractPlace {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceEuropePier.class).add("unit id", getUnit().getId())
-                .toString();
+        return MoreObjects.toStringHelper(PlaceEuropePier.class)
+                .add("unit id", getUnit().getId()).toString();
     }
 
     @Override

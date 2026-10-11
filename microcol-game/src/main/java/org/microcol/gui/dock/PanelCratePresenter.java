@@ -33,8 +33,9 @@ public final class PanelCratePresenter implements JavaFxComponent {
 
     private final PanelCrateView view;
 
-    PanelCratePresenter(final PanelDockBehavior panelDockBehavior, final I18n i18n,
-            final EventBus eventBus, final Source source, final PanelCrateView view) {
+    PanelCratePresenter(final PanelDockBehavior panelDockBehavior,
+            final I18n i18n, final EventBus eventBus, final Source source,
+            final PanelCrateView view) {
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -97,15 +98,18 @@ public final class PanelCratePresenter implements JavaFxComponent {
              */
         } else {
             if (cargoSlot.getGoods().isPresent()) {
-                eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), source));
+                eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(Loc.adjustAmountOfGoods), source));
             }
-            panelDockBehavior.onDragDetected(cargoSlot, event, view.getContent());
+            panelDockBehavior.onDragDetected(cargoSlot, event,
+                    view.getContent());
         }
         event.consume();
     }
 
     private boolean isCorrectObject(final Dragboard db) {
-        return cargoSlot != null && panelDockBehavior.isCorrectObject(cargoSlot, db);
+        return cargoSlot != null
+                && panelDockBehavior.isCorrectObject(cargoSlot, db);
     }
 
     @Override

@@ -10,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
  * Paint three horizontal stripes of different color and size. Stripes fill
  * whole screen width. Top and bottom stripes fill screen horizontally. Like
  * this:
- * 
+ *
  * <pre>
  * ---------------------------------------------------
  *                top stripe
@@ -20,8 +20,8 @@ import javafx.scene.canvas.GraphicsContext;
  * ---------------------------------------------------
  *                center stripe
  * ---------------------------------------------------
- * 
- * 
+ *
+ *
  * ---------------------------------------------------
  *                bottom stripe
  * ---------------------------------------------------
@@ -56,7 +56,8 @@ public class ThreeStripesPainter {
         // paint bottom
         final StripePainter sp3 = new StripePainter(gc, canvasSize.getX(),
                 pref.getBottomStripe().getColor());
-        sp3.setStartAtY(canvasCenter.getY() + pref.getBottomStripe().getShift());
+        sp3.setStartAtY(
+                canvasCenter.getY() + pref.getBottomStripe().getShift());
         sp3.setHeight(canvasSize.getY());
         sp3.paintStripe();
     }

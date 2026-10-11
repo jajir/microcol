@@ -24,7 +24,8 @@ public class SettingVersionView implements JavaFxComponent, UpdatableLanguage {
     private final Label label;
 
     @Inject
-    public SettingVersionView(final I18n i18n, final ApplicationInfo applicationInfo) {
+    public SettingVersionView(final I18n i18n,
+            final ApplicationInfo applicationInfo) {
         this.applicationInfo = Preconditions.checkNotNull(applicationInfo);
 
         label = new Label();
@@ -41,7 +42,8 @@ public class SettingVersionView implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public void updateLanguage(I18n i18n) {
-        label.setText(i18n.get(GameMenu.settingVersion) + applicationInfo.getBuildVersion());
+        label.setText(i18n.get(GameMenu.settingVersion)
+                + applicationInfo.getBuildVersion());
     }
 
 }

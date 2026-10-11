@@ -21,7 +21,8 @@ public final class TurnStartedListener {
     private final PersistingTool persistingTool;
 
     @Inject
-    TurnStartedListener(final GamePreferences gamePreferences, final GameController gameController,
+    TurnStartedListener(final GamePreferences gamePreferences,
+            final GameController gameController,
             final PersistingTool persistingTool) {
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.gameController = Preconditions.checkNotNull(gameController);

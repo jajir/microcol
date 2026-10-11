@@ -17,7 +17,8 @@ public final class UnitMoveFinishedEvent extends AbstractModelEvent {
 
     private final Path path;
 
-    public UnitMoveFinishedEvent(final Model model, final Unit unit, final Path path) {
+    public UnitMoveFinishedEvent(final Model model, final Unit unit,
+            final Path path) {
         super(model);
 
         this.unit = Preconditions.checkNotNull(unit);

@@ -14,9 +14,11 @@ class PanelConstructionSimpleFactory implements PanelConstructionFactory {
     }
 
     @Override
-    public PanelConstructionSimple make(final PanelConstructionContext context) {
-        PanelConstructionSimple out = new PanelConstructionSimple(context.getEventBus(),
-                context.getI18n(), context.getImageProvider(), context.getConstruction());
+    public PanelConstructionSimple make(
+            final PanelConstructionContext context) {
+        PanelConstructionSimple out = new PanelConstructionSimple(
+                context.getEventBus(), context.getI18n(),
+                context.getImageProvider(), context.getConstruction());
         out.setCssId(cssId);
         return out;
     }

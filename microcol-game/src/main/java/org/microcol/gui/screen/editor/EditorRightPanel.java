@@ -33,14 +33,16 @@ public class EditorRightPanel implements JavaFxComponent {
     EditorRightPanel(final MouseOperationManager mouseOperationManager) {
         buttonTree.setOnAction(e -> mouseOperationManager.setTreeOperation());
         buttonField.setOnAction(e -> mouseOperationManager.setFieldOperation());
-        buttonHill.setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.HILL));
-        buttonGrass
-                .setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.GRASSLAND));
-        buttonOcean.setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.OCEAN));
-        buttonMountain
-                .setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.MOUNTAIN));
-        buttonHighSeas
-                .setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.HIGH_SEA));
+        buttonHill.setOnAction(e -> mouseOperationManager
+                .setterrainOperation(TerrainType.HILL));
+        buttonGrass.setOnAction(e -> mouseOperationManager
+                .setterrainOperation(TerrainType.GRASSLAND));
+        buttonOcean.setOnAction(e -> mouseOperationManager
+                .setterrainOperation(TerrainType.OCEAN));
+        buttonMountain.setOnAction(e -> mouseOperationManager
+                .setterrainOperation(TerrainType.MOUNTAIN));
+        buttonHighSeas.setOnAction(e -> mouseOperationManager
+                .setterrainOperation(TerrainType.HIGH_SEA));
 
         mainPanel.getStyleClass().add("right");
         mainPanel.getChildren().add(buttonTree);

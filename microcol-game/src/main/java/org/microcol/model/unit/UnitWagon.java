@@ -15,10 +15,11 @@ import org.microcol.model.UnitType;
  */
 public final class UnitWagon extends UnitWithCargo {
 
-    public UnitWagon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-            Function<Unit, Place> placeBuilder, Player owner, int availableMoves,
-            final UnitAction unitAction) {
-        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves, unitAction);
+    public UnitWagon(Function<Unit, Cargo> cargoBuilder, Model model,
+            Integer id, Function<Unit, Place> placeBuilder, Player owner,
+            int availableMoves, final UnitAction unitAction) {
+        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves,
+                unitAction);
     }
 
     @Override

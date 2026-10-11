@@ -43,15 +43,16 @@ class PanelQueueBuildingQueue extends TitledPanel {
                     @Override
                     public ListCell<ColonyBuildingItemProgress<?>> call(
                             ListView<ColonyBuildingItemProgress<?>> param) {
-                        return new QueueListCell(queueController, imageProvider);
+                        return new QueueListCell(queueController,
+                                imageProvider);
                     }
 
                 });
 
         getContentPane().getChildren().add(list);
 
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
-                this::isItValid);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                this, this::isItValid);
         setOnDragEntered(backgroundHighlighter::onDragEntered);
         setOnDragExited(backgroundHighlighter::onDragExited);
         setOnDragOver(this::onDragOver);
@@ -87,13 +88,14 @@ class PanelQueueBuildingQueue extends TitledPanel {
         final From from = parser.getFrom().get();
         if (from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION) {
             parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE);
-            queueController.addAtEnd(
-                    ConstructionType.valueOf(parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)));
+            queueController.addAtEnd(ConstructionType
+                    .valueOf(parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)));
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE_UNIT) {
-            queueController.addAtEnd(UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)));
+            queueController.addAtEnd(
+                    UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)));
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();

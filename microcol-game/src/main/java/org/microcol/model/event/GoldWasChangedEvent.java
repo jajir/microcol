@@ -11,8 +11,8 @@ public final class GoldWasChangedEvent extends AbstractModelEvent {
     private final int oldValue;
     private final int newValue;
 
-    public GoldWasChangedEvent(final Model model, final Player player, final int oldValue,
-            final int newValue) {
+    public GoldWasChangedEvent(final Model model, final Player player,
+            final int oldValue, final int newValue) {
         super(model);
         this.player = player;
         this.oldValue = oldValue;
@@ -33,8 +33,8 @@ public final class GoldWasChangedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("player", player).add("oldValue", oldValue)
-                .add("newValue", newValue).toString();
+        return MoreObjects.toStringHelper(this).add("player", player)
+                .add("oldValue", oldValue).add("newValue", newValue).toString();
     }
 
 }

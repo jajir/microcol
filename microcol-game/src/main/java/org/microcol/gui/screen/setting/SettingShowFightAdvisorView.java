@@ -14,18 +14,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 @Singleton
-public class SettingShowFightAdvisorView implements JavaFxComponent, UpdatableLanguage {
+public class SettingShowFightAdvisorView
+        implements JavaFxComponent, UpdatableLanguage {
 
     private final HBox mainPanel;
 
     private final CheckBox checkBox;
 
     @Inject
-    public SettingShowFightAdvisorView(final PreferencesProperties preferencesProperties,
+    public SettingShowFightAdvisorView(
+            final PreferencesProperties preferencesProperties,
             final I18n i18n) {
 
         checkBox = new CheckBox();
-        checkBox.setSelected(preferencesProperties.getShowFightAdvisorProperty().get());
+        checkBox.setSelected(
+                preferencesProperties.getShowFightAdvisorProperty().get());
         preferencesProperties.getShowFightAdvisorProperty()
                 .bindBidirectional(checkBox.selectedProperty());
 

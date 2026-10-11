@@ -11,12 +11,12 @@ public class CursorServiceNoOpp implements CursorService {
 
     @Override
     public void setMoveCursor(final Node node) {
-	// do nothing
+        // do nothing
     }
 
     @Override
     public void setDefaultCursor(final Node node) {
-	// do nothing
+        // do nothing
     }
 
 }

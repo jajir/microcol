@@ -20,18 +20,22 @@ public final class GameOverEvaluator {
 
     private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions;
 
-    public GameOverEvaluator(final List<Function<Model, GameOverResult>> gameOverEvaluators) {
-        Preconditions.checkNotNull(gameOverEvaluators, "Game over evaluators are null.");
+    public GameOverEvaluator(
+            final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+        Preconditions.checkNotNull(gameOverEvaluators,
+                "Game over evaluators are null.");
         Preconditions.checkArgument(!gameOverEvaluators.isEmpty(),
                 "Game over evaluators are empty.");
-        this.conditions = new ChainOfCommandOptionalStrategy<>(gameOverEvaluators);
+        this.conditions = new ChainOfCommandOptionalStrategy<>(
+                gameOverEvaluators);
     }
 
     public Optional<GameOverResult> evaluate(final Model model) {
         return conditions.apply(model);
     }
 
-    public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_CALENDAR = (model) -> {
+    public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_CALENDAR = (
+            model) -> {
         if (model.getCalendar().isFinished()) {
             return new GameOverResult(REASON_TIME_IS_UP);
         } else {
@@ -41,7 +45,8 @@ public final class GameOverEvaluator {
 
     public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES = (
             model) -> {
-        if (model.getCalendar().getNumberOfPlayedTurns() > TURNS_WHEN_COLONY_LOST_IS_NOT_COUNTED) {
+        if (model.getCalendar()
+                .getNumberOfPlayedTurns() > TURNS_WHEN_COLONY_LOST_IS_NOT_COUNTED) {
             for (final Player player : model.getPlayerStore().getPlayers()) {
                 if (player.isHuman() && model.getColonies(player).isEmpty()) {
                     return new GameOverResult(REASON_NO_COLONIES);
@@ -53,7 +58,8 @@ public final class GameOverEvaluator {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("hashcode", hashCode()).toString();
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode())
+                .toString();
     }
 
 }

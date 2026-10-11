@@ -25,7 +25,8 @@ public final class ButtonsBarYesNo implements JavaFxComponent {
         this(i18n.get(Loc.ok), i18n.get(Dialog.cancel));
     }
 
-    public ButtonsBarYesNo(final String buttonYesLabel, final String buttonNoLabel) {
+    public ButtonsBarYesNo(final String buttonYesLabel,
+            final String buttonNoLabel) {
         buttonYes = new Button(buttonYesLabel);
         buttonYes.requestFocus();
         buttonYes.setId("buttonYes");

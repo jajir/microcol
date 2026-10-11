@@ -16,10 +16,8 @@ public class ActionWasStartedEvent extends AbstractModelEvent {
     /**
      * Default constructor.
      *
-     * @param model
-     *            required game model
-     * @param unit
-     *            required unit that started action
+     * @param model required game model
+     * @param unit  required unit that started action
      */
     public ActionWasStartedEvent(final Model model, final Unit unit) {
         super(model);

@@ -35,17 +35,20 @@ public final class UnitsPanel {
     private final VBox box;
 
     @Inject
-    public UnitsPanel(final ImageProvider imageProvider, final EventBus eventBus,
+    public UnitsPanel(final ImageProvider imageProvider,
+            final EventBus eventBus,
             final LocalizationHelper localizationHelper, final I18n i18n,
             final SelectedUnitManager selectedUnitManager) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.localizationHelper = Preconditions
+                .checkNotNull(localizationHelper);
         this.i18n = Preconditions.checkNotNull(i18n);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
         box = new VBox();
         box.setOnMouseEntered(e -> {
-            eventBus.post(
-                    new StatusBarMessageEvent(i18n.get(Loc.unitsPanel_description), Source.GAME));
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Loc.unitsPanel_description), Source.GAME));
         });
         box.getStyleClass().add("scroll-pane");
     }
@@ -56,10 +59,11 @@ public final class UnitsPanel {
 
     public void setUnits(final Player humanPlayer, final List<Unit> units) {
         for (final Unit unit : units) {
-            final boolean selected = selectedUnitManager.getSelectedUnit().isPresent()
+            final boolean selected = selectedUnitManager.getSelectedUnit()
+                    .isPresent()
                     && selectedUnitManager.getSelectedUnit().get().equals(unit);
-            final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n, localizationHelper,
-                    humanPlayer, unit, selected);
+            final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n,
+                    localizationHelper, humanPlayer, unit, selected);
             box.getChildren().add(unitPanel.getBox());
             unitPanel.setOnMouseClicked(event -> {
                 selectedUnitManager.setSelectedUnit(unit);

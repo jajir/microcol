@@ -19,8 +19,7 @@ public final class ColonyFieldPo {
     }
 
     /**
-     * @param direction
-     *            the direction to set
+     * @param direction the direction to set
      */
     public void setDirection(Location direction) {
         this.direction = direction;
@@ -34,8 +33,7 @@ public final class ColonyFieldPo {
     }
 
     /**
-     * @param workerId
-     *            the workerId to set
+     * @param workerId the workerId to set
      */
     public void setWorkerId(Integer workerId) {
         this.workerId = workerId;
@@ -49,8 +47,7 @@ public final class ColonyFieldPo {
     }
 
     /**
-     * @param producedGoodsType
-     *            the producedGoodsType to set
+     * @param producedGoodsType the producedGoodsType to set
      */
     public void setProducedGoodsType(GoodsType producedGoodsType) {
         this.producedGoodsType = producedGoodsType;

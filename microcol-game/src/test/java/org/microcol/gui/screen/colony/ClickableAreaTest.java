@@ -41,8 +41,8 @@ public class ClickableAreaTest {
 
     @ParameterizedTest(name = "{index}: location = {0}, isVisible= {1}")
     @MethodSource("dataProvider_for_isLocationVisible")
-    public void test_isLocationVisible(final Point point, final Optional<Location> oLocation)
-            throws Exception {
+    public void test_isLocationVisible(final Point point,
+            final Optional<Location> oLocation) throws Exception {
         Optional<Direction> oRet = clickableArea.getDirection(point);
 
         assertEquals(oLocation, oRet);

@@ -17,7 +17,8 @@ public class ScreenCampaignPresenter {
     private final EventBus eventBus;
 
     @Inject
-    ScreenCampaignPresenter(final ScreenCampaign screenCampaign, final EventBus eventBus) {
+    ScreenCampaignPresenter(final ScreenCampaign screenCampaign,
+            final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenCampaign.getContent().setOnKeyPressed(this::onKeyPressed);
     }

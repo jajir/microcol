@@ -29,13 +29,15 @@ public final class SelectedTileManager {
     }
 
     @Subscribe
-    private void onGameStopped(@SuppressWarnings("unused") final GameStoppedEvent event) {
+    private void onGameStopped(
+            @SuppressWarnings("unused") final GameStoppedEvent event) {
         selectedTile = null;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("selectedTile", selectedTile).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("selectedTile", selectedTile).toString();
     }
 
     public Optional<Location> getSelectedTile() {
@@ -53,7 +55,8 @@ public final class SelectedTileManager {
     private void setForcelySelectedTile(final Location newlySelectedTile,
             final ScrollToFocusedTile scrollToFocusedTile) {
         Preconditions.checkNotNull(newlySelectedTile);
-        eventBus.post(new TileWasSelectedEvent(newlySelectedTile, scrollToFocusedTile));
+        eventBus.post(new TileWasSelectedEvent(newlySelectedTile,
+                scrollToFocusedTile));
         this.selectedTile = newlySelectedTile;
     }
 

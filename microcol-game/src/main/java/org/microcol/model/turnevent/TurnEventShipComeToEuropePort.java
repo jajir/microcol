@@ -17,7 +17,8 @@ public class TurnEventShipComeToEuropePort extends AbstractTurnEvent {
     }
 
     public static TurnEventShipComeToEuropePort tryLoad(final TurnEventPo po) {
-        if (TurnEventShipComeToEuropePort.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventShipComeToEuropePort.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             return new TurnEventShipComeToEuropePort(playerName);
         }

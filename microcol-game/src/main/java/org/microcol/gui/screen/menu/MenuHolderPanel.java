@@ -22,8 +22,8 @@ public final class MenuHolderPanel implements JavaFxComponent, ScreenLifeCycle {
     private final GameMenuBackground background;
 
     @Inject
-    MenuHolderPanel(final GameMenuBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPages) {
+    MenuHolderPanel(final GameMenuBackground background,
+            final TitledPage titledPage, final CenteredPage centeredPages) {
         this.background = Preconditions.checkNotNull(background);
         this.centeredPage = Preconditions.checkNotNull(centeredPages);
         this.titledPage = Preconditions.checkNotNull(titledPage);

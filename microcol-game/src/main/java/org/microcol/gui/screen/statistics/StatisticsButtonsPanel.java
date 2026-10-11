@@ -20,11 +20,12 @@ public class StatisticsButtonsPanel extends AbstractButtonsPanel {
     private final Button buttonClose;
 
     @Inject
-    StatisticsButtonsPanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n) {
+    StatisticsButtonsPanel(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT, Stats.buttonCancel);
+        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
+                Stats.buttonCancel);
         buttonClose.setId(CLOSE_BUTTON_ID);
 
         getButtonPanel().getChildren().add(buttonClose);

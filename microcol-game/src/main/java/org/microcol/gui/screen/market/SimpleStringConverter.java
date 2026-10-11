@@ -13,7 +13,8 @@ public class SimpleStringConverter extends StringConverter<Double> {
 
     private final Function<Double, String> convertorToString;
 
-    public SimpleStringConverter(final Function<Double, String> convertorToString) {
+    public SimpleStringConverter(
+            final Function<Double, String> convertorToString) {
         this.convertorToString = Preconditions.checkNotNull(convertorToString);
     }
 
@@ -26,5 +27,5 @@ public class SimpleStringConverter extends StringConverter<Double> {
     public Double fromString(final String string) {
         return null;
     }
-    
+
 }

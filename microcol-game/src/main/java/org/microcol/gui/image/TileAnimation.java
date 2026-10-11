@@ -9,8 +9,10 @@ class TileAnimation {
 
     private final long tickWhenIsDone;
 
-    static TileAnimation makeForSeconds(final long currentGameTick, final int durationInSeconds) {
-        return new TileAnimation(currentGameTick + durationInSeconds * AnimationScheduler.FPS);
+    static TileAnimation makeForSeconds(final long currentGameTick,
+            final int durationInSeconds) {
+        return new TileAnimation(
+                currentGameTick + durationInSeconds * AnimationScheduler.FPS);
     }
 
     TileAnimation(final long tickWhenIsDone) {

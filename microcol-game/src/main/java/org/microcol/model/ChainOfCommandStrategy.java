@@ -17,10 +17,8 @@ import com.google.common.base.Preconditions;
  * create extra class T encapsulating all input parameters.
  * </p>
  *
- * @param <T>
- *            function input parameter
- * @param <R>
- *            returned object
+ * @param <T> function input parameter
+ * @param <R> returned object
  */
 public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 
@@ -29,8 +27,7 @@ public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
     /**
      * Constructor initialize chain of commands.
      *
-     * @param filters
-     *            required list of commands
+     * @param filters required list of commands
      */
     public ChainOfCommandStrategy(final List<Function<T, R>> filters) {
         this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
@@ -40,8 +37,7 @@ public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
      * Go through all filters first non-null return value is returned otherwise
      * empty is returned.
      *
-     * @param t
-     *            required filter input
+     * @param t required filter input
      * @return optional result of empty
      */
     @Override
@@ -53,8 +49,8 @@ public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
                 return result;
             }
         }
-        throw new IllegalArgumentException(
-                String.format("Unable to process chain of command input (%s)", t));
+        throw new IllegalArgumentException(String
+                .format("Unable to process chain of command input (%s)", t));
     }
 
 }

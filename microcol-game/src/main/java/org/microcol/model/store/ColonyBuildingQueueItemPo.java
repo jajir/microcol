@@ -23,8 +23,7 @@ public class ColonyBuildingQueueItemPo {
     }
 
     /**
-     * @param type
-     *            the type to set
+     * @param type the type to set
      */
     public void setType(QueueItemType type) {
         this.type = type;
@@ -38,8 +37,7 @@ public class ColonyBuildingQueueItemPo {
     }
 
     /**
-     * @param id
-     *            the id to set
+     * @param id the id to set
      */
     public void setId(int id) {
         this.id = id;
@@ -53,8 +51,7 @@ public class ColonyBuildingQueueItemPo {
     }
 
     /**
-     * @param buildHammers
-     *            the buildHammers to set
+     * @param buildHammers the buildHammers to set
      */
     public void setBuildHammers(int buildHammers) {
         this.buildHammers = buildHammers;
@@ -68,8 +65,7 @@ public class ColonyBuildingQueueItemPo {
     }
 
     /**
-     * @param unitType
-     *            the unitType to set
+     * @param unitType the unitType to set
      */
     public void setUnitType(UnitType unitType) {
         this.unitType = unitType;
@@ -83,8 +79,7 @@ public class ColonyBuildingQueueItemPo {
     }
 
     /**
-     * @param constructionType
-     *            the constructionType to set
+     * @param constructionType the constructionType to set
      */
     public void setConstructionType(ConstructionType constructionType) {
         this.constructionType = constructionType;

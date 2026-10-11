@@ -58,8 +58,8 @@ public abstract class AbstractUnit implements Unit {
     private UnitAction unitAction;
 
     public AbstractUnit(final Model model, final Integer id,
-            final Function<Unit, Place> placeBuilder, final Player owner, final int actionPoints,
-            final UnitAction unitAction) {
+            final Function<Unit, Place> placeBuilder, final Player owner,
+            final int actionPoints, final UnitAction unitAction) {
         Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
         this.owner = Preconditions.checkNotNull(owner);
         this.id = Preconditions.checkNotNull(id, "Id is null");
@@ -129,12 +129,12 @@ public abstract class AbstractUnit implements Unit {
      * Allows to set action points. It could be called just at this class. It's
      * not exposed.
      *
-     * @param newActionPoints
-     *            required new amount of action points
+     * @param newActionPoints required new amount of action points
      */
     public void setActionPoints(final int newActionPoints) {
         Preconditions.checkArgument(newActionPoints <= getSpeed(),
-                "Unit %s can't have more action point than is it's speed.", this);
+                "Unit %s can't have more action point than is it's speed.",
+                this);
         this.actionPoints = newActionPoints;
     }
 
@@ -166,8 +166,7 @@ public abstract class AbstractUnit implements Unit {
      * Verify if it's possible to move at give location. Method doesn't verify
      * if unit have enough action point is if location is reachable.
      *
-     * @param location
-     *            required map location.
+     * @param location required map location.
      * @return Return <code>true</code> when unit could move at given location
      *         otherwise return <code>false</code>.
      */
@@ -180,23 +179,23 @@ public abstract class AbstractUnit implements Unit {
      * Get info if unit could move to target location. Method doesn't verify if
      * target location could be reached in current move.
      *
-     * @param location
-     *            required target location
-     * @param ignoreEnemies
-     *            when it's <code>true</code> than enemy unit at target location
-     *            will be ignored
+     * @param location      required target location
+     * @param ignoreEnemies when it's <code>true</code> than enemy unit at
+     *                      target location will be ignored
      * @return return <code>true</code> when unit could move to target location
      *         otherwise return <code>false</code>
      */
     @Override
-    public boolean isPossibleToMoveAt(final Location location, final boolean ignoreEnemies) {
+    public boolean isPossibleToMoveAt(final Location location,
+            final boolean ignoreEnemies) {
         Preconditions.checkNotNull(location);
 
         if (!model.getMap().isValid(location)) {
             return false;
         }
 
-        if (!getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
+        if (!getType()
+                .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             if (isPossibleToGoToPort(location)) {
                 return true;
             }
@@ -259,7 +258,8 @@ public abstract class AbstractUnit implements Unit {
              * Prepare new set of border location for next iteration.
              */
             openSet.clear();
-            openSet.addAll(candidateSet.stream().filter(location -> isPossibleToMoveAt(location))
+            openSet.addAll(candidateSet.stream()
+                    .filter(location -> isPossibleToMoveAt(location))
                     .collect(Collectors.toSet()));
         }
 
@@ -277,12 +277,12 @@ public abstract class AbstractUnit implements Unit {
      * action because no further move in given turn not will be possible. For
      * example when ship disembark units that ship could move in next turn.
      *
-     * @param location
-     *            required location
+     * @param location required location
      * @return Return if it's possible make final action at given location.
      */
     private boolean isPossibleToMakeFinalActionAt(final Location location) {
-        return (canHoldCargo() && ((UnitWithCargo) this).isPossibleToDisembarkAt(location, true))
+        return (canHoldCargo() && ((UnitWithCargo) this)
+                .isPossibleToDisembarkAt(location, true))
                 || isPossibleToEmbarkAt(location);
     }
 
@@ -297,7 +297,8 @@ public abstract class AbstractUnit implements Unit {
         while (maxMoves > 0) {
             final Integer valToCheck = maxMoves;
             List<Location> toCheck = movePrice.entrySet().stream()
-                    .filter(entry -> entry.getValue() == valToCheck).map(entry -> entry.getKey())
+                    .filter(entry -> entry.getValue() == valToCheck)
+                    .map(entry -> entry.getKey())
                     .collect(ImmutableList.toImmutableList());
             maxMoves--;
             final Integer valToAdd = maxMoves;
@@ -319,18 +320,19 @@ public abstract class AbstractUnit implements Unit {
     /**
      * Verify that unit can move at target location and there is colony without
      * units to defend it.
-     * 
-     * @param targetLocation
-     *            required location where should be captured colony
+     *
+     * @param targetLocation required location where should be captured colony
      * @return Return <code>true</code> when target location contains enemy
      *         colony without military units to defend it.
      */
     @Override
     public boolean isPossibleToCaptureColonyAt(final Location targetLocation) {
-        if (getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))
+        if (getType().canMoveAtTerrain(
+                model.getMap().getTerrainTypeAt(targetLocation))
                 && model.getColonyAt(targetLocation).isPresent()) {
             final Colony c = model.getColonyAt(targetLocation).get();
-            if (!c.getOwner().equals(owner) && !isPossibleToAttackAt(targetLocation)) {
+            if (!c.getOwner().equals(owner)
+                    && !isPossibleToAttackAt(targetLocation)) {
                 return true;
             }
         }
@@ -339,7 +341,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean canUnitDisembarkAt(final Location targeLocation) {
-        return getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targeLocation));
+        return getType().canMoveAtTerrain(
+                model.getMap().getTerrainTypeAt(targeLocation));
     }
 
     @Override
@@ -348,13 +351,17 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
-    public Optional<UnitWithCargo> getFirstUnitToEmbarkAt(final Location targetLocation) {
-        if (isStorable() && getLocation().isNeighbor(targetLocation) && actionPoints > 0
+    public Optional<UnitWithCargo> getFirstUnitToEmbarkAt(
+            final Location targetLocation) {
+        if (isStorable() && getLocation().isNeighbor(targetLocation)
+                && actionPoints > 0
                 && !model.getColonyAt(targetLocation).isPresent()) {
             final List<Unit> units = model.getUnitsAt(targetLocation);
             return units.stream().filter(unit -> unit.canHoldCargo())
-                    .map(unit -> (UnitWithCargo) unit).filter(unit -> unit.getOwner().equals(owner))
-                    .filter(unit -> unit.isAtLeastOneCargoSlotEmpty()).findFirst();
+                    .map(unit -> (UnitWithCargo) unit)
+                    .filter(unit -> unit.getOwner().equals(owner))
+                    .filter(unit -> unit.isAtLeastOneCargoSlotEmpty())
+                    .findFirst();
         } else {
             return Optional.empty();
         }
@@ -365,9 +372,12 @@ public abstract class AbstractUnit implements Unit {
         if (model.getUnitsAt(targetLocation).isEmpty()) {
             return false;
         } else {
-            if (getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
-                List<Unit> units = model.getEnemyUnitsAt(owner, targetLocation).stream()
-                        .filter(unit -> getType().getAttackableUnitType().contains(unit.getType()))
+            if (getType().canMoveAtTerrain(
+                    model.getMap().getTerrainTypeAt(targetLocation))) {
+                List<Unit> units = model.getEnemyUnitsAt(owner, targetLocation)
+                        .stream()
+                        .filter(unit -> getType().getAttackableUnitType()
+                                .contains(unit.getType()))
                         .collect(ImmutableList.toImmutableList());
                 if (isSameOwner(units)) {
                     return false;
@@ -382,16 +392,16 @@ public abstract class AbstractUnit implements Unit {
 
     /**
      * Verify that all units belongs to same owner.
-     * 
-     * @param units
-     *            required {@link List} of units
+     *
+     * @param units required {@link List} of units
      * @return return <code>true</code> when there is not unit in list belonging
      *         to different owner otherwise return <code>false</code>
      */
     @Override
     public boolean isSameOwner(final List<Unit> units) {
         Preconditions.checkNotNull(units);
-        return !units.stream().filter(unit -> !getOwner().equals(unit.getOwner())).findFirst()
+        return !units.stream()
+                .filter(unit -> !getOwner().equals(unit.getOwner())).findFirst()
                 .isPresent();
     }
 
@@ -407,8 +417,9 @@ public abstract class AbstractUnit implements Unit {
         return getLocation().getNeighbors().stream()
                 .flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
                 .filter(unit -> unit != this && unit.canHoldCargo())
-                .map(unit -> (UnitWithCargo) unit).filter(unit -> unit.getCargo().getSlots()
-                        .stream().filter(slot -> slot.isEmpty()).findAny().isPresent())
+                .map(unit -> (UnitWithCargo) unit)
+                .filter(unit -> unit.getCargo().getSlots().stream()
+                        .filter(slot -> slot.isEmpty()).findAny().isPresent())
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -424,16 +435,16 @@ public abstract class AbstractUnit implements Unit {
             final boolean excludeDestination) {
         verifyThatUnitIsAtMap();
 
-        PathFinder finder = new PathFinder(this, getLocation(), destination, excludeDestination);
+        PathFinder finder = new PathFinder(this, getLocation(), destination,
+                excludeDestination);
 
         return Optional.ofNullable(finder.find());
     }
 
     /**
      * Move one step to adjacent tile.
-     * 
-     * @param moveTo
-     *            required location when unit should be moved
+     *
+     * @param moveTo required location when unit should be moved
      */
     @Override
     public void moveOneStep(final Location moveTo) {
@@ -444,18 +455,22 @@ public abstract class AbstractUnit implements Unit {
 
         Preconditions.checkNotNull(moveTo);
         Preconditions.checkArgument(getLocation().isNeighbor(moveTo),
-                "Location (%s) must be neighbor to current location (%s).", moveTo, getLocation());
-        Preconditions.checkArgument(model.getMap().isValid(moveTo), "Location (%s) must be valid.",
-                moveTo);
+                "Location (%s) must be neighbor to current location (%s).",
+                moveTo, getLocation());
+        Preconditions.checkArgument(model.getMap().isValid(moveTo),
+                "Location (%s) must be valid.", moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
         Preconditions.checkState(actionPoints > 0,
                 "There is not enough available action points (%s)", this);
-        Preconditions.checkState(UnitActionType.noAction.equals(getAction().getType()),
-                "Unit can't move because already doing something else. Unit %s", this);
+        Preconditions.checkState(
+                UnitActionType.noAction.equals(getAction().getType()),
+                "Unit can't move because already doing something else. Unit %s",
+                this);
 
         actionPoints--;
-        final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
+        final TerrainType targetTerrain = model.getMap()
+                .getTerrainTypeAt(moveTo);
         if (targetTerrain == TerrainType.HIGH_SEA) {
             placeToHighSeas(true);
             model.fireUnitMovedToHighSeas(this);
@@ -473,9 +488,8 @@ public abstract class AbstractUnit implements Unit {
 
     /**
      * Find direction where unit is pointed based on location where is moving.
-     * 
-     * @param moveTo
-     *            required location where is unit moving
+     *
+     * @param moveTo required location where is unit moving
      * @return direction where unit will face
      */
     protected Direction findOrintationForMove(final Location moveTo) {
@@ -488,9 +502,8 @@ public abstract class AbstractUnit implements Unit {
 
     /**
      * When unit moves or attack than unit could capture colony.
-     * 
-     * @param newLocation
-     *            required new location
+     *
+     * @param newLocation required new location
      */
     private void tryToCaptureColony(final Location newLocation) {
         final Optional<Colony> oColony = model.getColonyAt(newLocation);
@@ -516,16 +529,17 @@ public abstract class AbstractUnit implements Unit {
      * <li>Perform attack.</li>
      * </ul>
      *
-     * @param attackAt
-     *            Required attacked location.
+     * @param attackAt Required attacked location.
      */
     @Override
     public void attack(final Location attackAt) {
         canAttackValidation(attackAt);
         Preconditions.checkState(!getAttackableUnitsAt(attackAt).isEmpty(),
-                "There is not attackable unit on target location (%s).", attackAt);
+                "There is not attackable unit on target location (%s).",
+                attackAt);
         Preconditions.checkState(getLocation().isNeighbor(attackAt),
-                "Attacked location '%s' should be neighbor of attacking unit '%s'", attackAt, this);
+                "Attacked location '%s' should be neighbor of attacking unit '%s'",
+                attackAt, this);
 
         actionPoints = 0;
         final Unit defender = getAttackableUnitsAt(attackAt).get(0);
@@ -551,35 +565,38 @@ public abstract class AbstractUnit implements Unit {
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
 
-        Preconditions.checkState(getType().canAttack(), "This unit type (%s) cannot attack.", this);
+        Preconditions.checkState(getType().canAttack(),
+                "This unit type (%s) cannot attack.", this);
         Preconditions.checkNotNull(attackAt);
         Preconditions.checkArgument(
-                getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(attackAt)),
-                "Target location (%s) is not moveable for this unit (%s)", attackAt, this);
+                getType().canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(attackAt)),
+                "Target location (%s) is not moveable for this unit (%s)",
+                attackAt, this);
         Preconditions.checkArgument(this.getLocation().isNeighbor(attackAt),
-                "Unit location (%s) is not neighbor to target location (%s).", this.getLocation(),
-                attackAt);
-        Preconditions.checkState(actionPoints > 0, "Unit (%s) cannot attack this turn.", this);
+                "Unit location (%s) is not neighbor to target location (%s).",
+                this.getLocation(), attackAt);
+        Preconditions.checkState(actionPoints > 0,
+                "Unit (%s) cannot attack this turn.", this);
     }
 
     /**
      * Get list of units that could be attacked by this unit at some location.
-     * 
-     * @param at
-     *            required examined location
+     *
+     * @param at required examined location
      * @return Return list of units that could be attacked.
      */
     private List<Unit> getAttackableUnitsAt(final Location at) {
         return owner.getEnemyUnitsAt(at).stream()
-                .filter(unit -> getType().getAttackableUnitType().contains(unit.getType()))
+                .filter(unit -> getType().getAttackableUnitType()
+                        .contains(unit.getType()))
                 .collect(ImmutableList.toImmutableList());
     }
 
     /**
      * Allows to change unit owner.
-     * 
-     * @param player
-     *            required player will be new unit's owner
+     *
+     * @param player required player will be new unit's owner
      */
     @Override
     public void takeOver(final Player player) {
@@ -628,14 +645,14 @@ public abstract class AbstractUnit implements Unit {
 
     /**
      * This unit will be moved to given place cargo slot.
-     * 
-     * @param placeCargoSlot
-     *            required place cargo slot
+     *
+     * @param placeCargoSlot required place cargo slot
      */
     @Override
     public void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
         Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
-        Preconditions.checkArgument(owner.equals(placeCargoSlot.getCargoSlotOwner()),
+        Preconditions.checkArgument(
+                owner.equals(placeCargoSlot.getCargoSlotOwner()),
                 "Cargo slot belongs to different player %s than unit %s",
                 placeCargoSlot.getCargoSlotOwner(), owner);
         // remove from previous place
@@ -667,20 +684,24 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
-    public void placeToLocation(final Location target, final Direction orientation) {
+    public void placeToLocation(final Location target,
+            final Direction orientation) {
         if (place instanceof PlaceLocation) {
             place.destroy();
-            place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
+            place = new PlaceLocation(this, Preconditions.checkNotNull(target),
+                    orientation);
         } else {
             place.destroy();
-            place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
+            place = new PlaceLocation(this, Preconditions.checkNotNull(target),
+                    orientation);
             model.fireUnitMovedToLocation(this);
         }
     }
 
     @Override
     public void placeToHighSeas(final boolean isTravelToEurope) {
-        Preconditions.checkArgument(getType().isShip(), "Only ships could be placed to high sea.");
+        Preconditions.checkArgument(getType().isShip(),
+                "Only ships could be placed to high sea.");
         Preconditions.checkArgument(isAtPlaceLocation() || isAtEuropePort(),
                 "Unit %s have to at map or in Europe port.", this);
         final int requiredTurns = countRequiredTurnsToSail(isTravelToEurope);
@@ -696,9 +717,8 @@ public abstract class AbstractUnit implements Unit {
      * Count turn required to travel to Europe. When player send ship from west
      * part of map than travel took more time. It's like send ships to Europe at
      * west direction.
-     * 
-     * @param isTravelToEurope
-     *            required if ship travel to Europe or back.
+     *
+     * @param isTravelToEurope required if ship travel to Europe or back.
      * @return required number turns
      */
     private int countRequiredTurnsToSail(final boolean isTravelToEurope) {
@@ -724,10 +744,13 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
-    public void placeToColonyStructureSlot(final ConstructionSlot structureSlot) {
+    public void placeToColonyStructureSlot(
+            final ConstructionSlot structureSlot) {
         Preconditions.checkNotNull(structureSlot);
-        Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
-        Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+        Preconditions.checkState(!isAtEuropePort(),
+                "Unit can't skip from europe port to map");
+        Preconditions.checkState(!isAtEuropePier(),
+                "Unit can't skip from europe port pier to map");
         Preconditions.checkState(structureSlot.isEmpty(),
                 "Unit can't be placed to non empty colony structure");
         Preconditions.checkState(structureSlot.isValid(),
@@ -745,8 +768,10 @@ public abstract class AbstractUnit implements Unit {
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(colonyField);
-        Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
-        Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+        Preconditions.checkState(!isAtEuropePort(),
+                "Unit can't skip from europe port to map");
+        Preconditions.checkState(!isAtEuropePier(),
+                "Unit can't skip from europe port pier to map");
         Preconditions.checkState(colonyField.isEmpty(),
                 "Unit can't be placed to non empty colony field");
         Preconditions.checkState(colonyField.isValid(),
@@ -760,7 +785,8 @@ public abstract class AbstractUnit implements Unit {
         colonyField.setPlaceColonyField((PlaceColonyField) place);
     }
 
-    private boolean isAlreadyInSameColony(final Colony colonyWhereWillBeUnitPlaced) {
+    private boolean isAlreadyInSameColony(
+            final Colony colonyWhereWillBeUnitPlaced) {
         final Optional<Colony> oColony = getColony();
         if (oColony.isPresent()) {
             final Colony colony = oColony.get();
@@ -773,7 +799,7 @@ public abstract class AbstractUnit implements Unit {
 
     /**
      * If it's possible return colony where is unit placed.
-     * 
+     *
      * @return
      */
     private Optional<Colony> getColony() {
@@ -789,19 +815,21 @@ public abstract class AbstractUnit implements Unit {
     /**
      * This method place unit to map. It's not about moving unit. MEthod doesn't
      * verify if unit can go to target location.
-     * 
-     * @param location
-     *            Required location where is unit placed.
+     *
+     * @param location Required location where is unit placed.
      */
     @Override
     public void placeToMap(final Location location) {
         Preconditions.checkNotNull(location);
-        Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
-        Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+        Preconditions.checkState(!isAtEuropePort(),
+                "Unit can't skip from europe port to map");
+        Preconditions.checkState(!isAtEuropePier(),
+                "Unit can't skip from europe port pier to map");
         Preconditions.checkState(
-                getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
-                "Unit '%s' can't be placed at '%s' because can't move on terrain '%s'", this,
-                location, model.getMap().getTerrainTypeAt(location));
+                getType().canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(location)),
+                "Unit '%s' can't be placed at '%s' because can't move on terrain '%s'",
+                this, location, model.getMap().getTerrainTypeAt(location));
 
         placeToLocation(location, getDefaultOrintation());
     }
@@ -812,25 +840,33 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(actionPoints > 0,
                 "Unit (%s) need for unload at least one action point", this);
         Preconditions.checkState(isAtCargoSlot(),
-                "This unit (%s) can't be unload, it's not in cargo slot.", this);
-        final TerrainType terrainType = model.getMap().getTerrainTypeAt(targetLocation);
-        Preconditions.checkState(getType().getMoveableTerrains().contains(terrainType),
-                "This unit (%s) can't move at target terrain %s.", this, terrainType);
-        final Location startLocation = getPlaceCargoSlot().getOwnerUnit().getLocation();
+                "This unit (%s) can't be unload, it's not in cargo slot.",
+                this);
+        final TerrainType terrainType = model.getMap()
+                .getTerrainTypeAt(targetLocation);
+        Preconditions.checkState(
+                getType().getMoveableTerrains().contains(terrainType),
+                "This unit (%s) can't move at target terrain %s.", this,
+                terrainType);
+        final Location startLocation = getPlaceCargoSlot().getOwnerUnit()
+                .getLocation();
         Preconditions.checkState(startLocation.isNeighbor(targetLocation),
-                "Start location '%s' have to neighbour of target location '%s'", startLocation,
-                targetLocation);
+                "Start location '%s' have to neighbour of target location '%s'",
+                startLocation, targetLocation);
         Preconditions.checkArgument(model.getColonyAt(targetLocation).isEmpty(),
                 "Target location %s can't be colony.", targetLocation);
 
         final Direction orientation = findOrintationForMove(targetLocation);
-        final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
+        final Path path = Path
+                .of(Lists.newArrayList(startLocation, targetLocation));
         if (model.fireUnitMoveStarted(this, path)) {
-            model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
+            model.fireUnitMovedStepStarted(this, startLocation, targetLocation,
+                    orientation);
             this.actionPoints = 0;
             placeToLocation(targetLocation, orientation);
             owner.revealMapForUnit(this);
-            model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
+            model.fireUnitMovedStepFinished(this, startLocation,
+                    targetLocation);
             model.fireUnitMovedFinished(this, path);
         }
     }
@@ -838,42 +874,49 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void embarkFromLocation(final CargoSlot cargoSlot) {
         Preconditions.checkNotNull(cargoSlot);
-        Preconditions.checkArgument(cargoSlot.isEmpty(), "Cargo slot (%s) is already loaded.",
-                cargoSlot);
-        Preconditions.checkState(isAtPlaceLocation(), "Unit have to be at map, it's at '%s'",
-                place);
+        Preconditions.checkArgument(cargoSlot.isEmpty(),
+                "Cargo slot (%s) is already loaded.", cargoSlot);
+        Preconditions.checkState(isAtPlaceLocation(),
+                "Unit have to be at map, it's at '%s'", place);
         Preconditions.checkState(cargoSlot.getOwnerUnit().isAtPlaceLocation(),
                 "Unit '%s' where other unit would like to embark have to be at map",
                 cargoSlot.getOwnerUnit());
         Preconditions.checkArgument(owner.equals(cargoSlot.getOwnerPlayer()),
                 "Cargo slot belongs to different player %s than unit %s",
                 cargoSlot.getOwnerPlayer(), owner);
-        final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(this, cargoSlot);
+        final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(this,
+                cargoSlot);
         final Location startLocation = getLocation();
-        final Location targetLocation = placeCargoSlot.getCargoSlot().getOwnerUnit().getLocation();
+        final Location targetLocation = placeCargoSlot.getCargoSlot()
+                .getOwnerUnit().getLocation();
         Preconditions.checkArgument(startLocation.isNeighbor(targetLocation),
                 "Start location %s and target locations %s have to be neighbours",
                 cargoSlot.getOwnerPlayer(), owner);
 
         final Direction orientation = findOrintationForMove(targetLocation);
-        final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
+        final Path path = Path
+                .of(Lists.newArrayList(startLocation, targetLocation));
 
         if (model.fireUnitMoveStarted(this, path)) {
-            model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
+            model.fireUnitMovedStepStarted(this, startLocation, targetLocation,
+                    orientation);
 
             placeToCargoSlot(placeCargoSlot);
             cargoSlot.store(placeCargoSlot);
 
-            model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
+            model.fireUnitMovedStepFinished(this, startLocation,
+                    targetLocation);
             model.fireUnitMovedFinished(this, path);
         }
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", id).add("type", getType())
-                .add("owner", owner).add("place", place == null ? place : place.toString())
-                .add("availableMoves", actionPoints).add("unitAction", unitAction).toString();
+        return MoreObjects.toStringHelper(this).add("id", id)
+                .add("type", getType()).add("owner", owner)
+                .add("place", place == null ? place : place.toString())
+                .add("availableMoves", actionPoints)
+                .add("unitAction", unitAction).toString();
     }
 
     public UnitPo save() {
@@ -894,7 +937,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public PlaceCargoSlot getPlaceCargoSlot() {
-        Preconditions.checkState(isAtCargoSlot(), "Unit have to be in cargo slot");
+        Preconditions.checkState(isAtCargoSlot(),
+                "Unit have to be in cargo slot");
         return (PlaceCargoSlot) place;
     }
 
@@ -907,7 +951,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public PlaceColonyField getPlaceColonyField() {
-        Preconditions.checkState(isAtPlaceColonyField(), "Unit have to be in colony field");
+        Preconditions.checkState(isAtPlaceColonyField(),
+                "Unit have to be in colony field");
         return (PlaceColonyField) place;
     }
 
@@ -932,9 +977,12 @@ public abstract class AbstractUnit implements Unit {
      */
 
     private void setAction(final UnitAction unitAction) {
-        this.unitAction = Preconditions.checkNotNull(unitAction, "Unit action is null");
-        Preconditions.checkState(getSupportedActions().contains(unitAction.getType()),
-                "Unsupported type '%s' for this unit '%s", unitAction.getType(), this);
+        this.unitAction = Preconditions.checkNotNull(unitAction,
+                "Unit action is null");
+        Preconditions.checkState(
+                getSupportedActions().contains(unitAction.getType()),
+                "Unsupported type '%s' for this unit '%s", unitAction.getType(),
+                this);
     }
 
     /**
@@ -948,7 +996,8 @@ public abstract class AbstractUnit implements Unit {
     public void setActionType(final UnitActionType actionType) {
         Preconditions.checkNotNull(actionType, "Unit action is null");
         Preconditions.checkState(getSupportedActions().contains(actionType),
-                "Unsupported type '%s' for this unit '%s", unitAction.getType(), this);
+                "Unsupported type '%s' for this unit '%s", unitAction.getType(),
+                this);
         setAction(actionType.make());
         actionPoints = 0;
         model.fireActionWasStarted(this);
@@ -966,9 +1015,10 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean canPlowFiled() {
-        if (getSupportedActions().contains(UnitActionType.plowField) && actionPoints > 0
-                && isAtPlaceLocation()) {
-            final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(getLocation());
+        if (getSupportedActions().contains(UnitActionType.plowField)
+                && actionPoints > 0 && isAtPlaceLocation()) {
+            final TerrainType targetTerrain = model.getMap()
+                    .getTerrainTypeAt(getLocation());
             return TerrainType.GRASSLAND.equals(targetTerrain)
                     || TerrainType.PRAIRIE.equals(targetTerrain)
                     || TerrainType.SAVANNAH.equals(targetTerrain);

@@ -28,7 +28,8 @@ class UnitDraggablePanel {
 
     UnitDraggablePanel(final ColonyBuildingItemUnit colonyBuildingItemUnit,
             final ImageProvider imageProvider) {
-        this.colonyBuildingItemUnit = Preconditions.checkNotNull(colonyBuildingItemUnit);
+        this.colonyBuildingItemUnit = Preconditions
+                .checkNotNull(colonyBuildingItemUnit);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         final Label label = new Label(colonyBuildingItemUnit.getName());
         mainPanel = new HBox();
@@ -40,7 +41,8 @@ class UnitDraggablePanel {
         final Image image = imageProvider.getUnitImage(UnitType.COLONIST);
         final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE);
         ClipboardWritter.make(db).addImage(image)
-                .fromBuildingQueueUnit(colonyBuildingItemUnit.getUnitType()).build();
+                .fromBuildingQueueUnit(colonyBuildingItemUnit.getUnitType())
+                .build();
         mouseEvent.consume();
     }
 

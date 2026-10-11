@@ -10,9 +10,10 @@ final class ColonyNames {
 
     private final static String LEXICON = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private final static List<String> dutchNames = Lists.newArrayList("New Amsterdam", "Delft",
-            "Haarlem", "Leiden", "Rotterdam", "Utrecht", "Eindhoven", "Tilburg", "Groningen",
-            "Almere Stad", "Breda");
+    private final static List<String> dutchNames = Lists.newArrayList(
+            "New Amsterdam", "Delft", "Haarlem", "Leiden", "Rotterdam",
+            "Utrecht", "Eindhoven", "Tilburg", "Groningen", "Almere Stad",
+            "Breda");
 
     private final Random rand = new Random();
 
@@ -39,9 +40,11 @@ final class ColonyNames {
         return colonyName;
     }
 
-    private boolean isColonyNameAvailable(final Player player, final String colonyName) {
+    private boolean isColonyNameAvailable(final Player player,
+            final String colonyName) {
         return !model.getColonies(player).stream()
-                .filter(colony -> colonyName.equals(colony.getName())).findAny().isPresent();
+                .filter(colony -> colonyName.equals(colony.getName())).findAny()
+                .isPresent();
     }
 
     private String randomColonyName() {

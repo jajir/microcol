@@ -11,8 +11,7 @@ public enum Goals implements MessageKeyResource {
     /*
      * goals texts.
      */
-    title,
-    notYetDone,
+    title, notYetDone,
 
     /*
      * Rest of resources.

@@ -33,39 +33,57 @@ class PublicationTest {
 
     @BeforeEach
     void prepare() throws Exception {
-        repository = Path.of(System.getProperty("microcol.root", "..")).toAbsolutePath().normalize();
-        assets = Files.createDirectories(temporary.resolve("assets with spaces"));
+        repository = Path.of(System.getProperty("microcol.root", ".."))
+                .toAbsolutePath().normalize();
+        assets = Files
+                .createDirectories(temporary.resolve("assets with spaces"));
         state = Files.createDirectories(temporary.resolve("github"));
         commands = Files.createDirectories(temporary.resolve("commands"));
         Files.writeString(state.resolve("main"), SHA);
         createAssets(BUILD);
-        final String java = Path.of(System.getProperty("java.home"), "bin", "java").toString();
-        // A JVM helper makes the fake CLI portable without adding a scripting runtime.
+        final String java = Path
+                .of(System.getProperty("java.home"), "bin", "java").toString();
+        // A JVM helper makes the fake CLI portable without adding a scripting
+        // runtime.
         final Path gh = commands.resolve("gh");
-        final String classpath = System.getProperty("surefire.test.class.path", System.getProperty("java.class.path"));
-        Files.writeString(gh, "#!/bin/sh\nexec " + shell(java) + " -cp " + shell(classpath)
-                + " org.microcol.build.PublicationFakeGh \"$@\"\n");
+        final String classpath = System.getProperty("surefire.test.class.path",
+                System.getProperty("java.class.path"));
+        Files.writeString(gh,
+                "#!/bin/sh\nexec " + shell(java) + " -cp " + shell(classpath)
+                        + " org.microcol.build.PublicationFakeGh \"$@\"\n");
         assertTrue(gh.toFile().setExecutable(true));
     }
 
     @Test
-    void completePublicationResolvesDraftByIdAndPromotesManifestLast() throws Exception {
+    void completePublicationResolvesDraftByIdAndPromotesManifestLast()
+            throws Exception {
         final Result result = publish(BUILD);
         assertEquals(0, result.code, result.output);
-        assertEquals("false", Files.readString(release(BUILD).resolve("draft")));
+        assertEquals("false",
+                Files.readString(release(BUILD).resolve("draft")));
         assertEquals(10, names(release(BUILD).resolve("files")).size());
-        assertFalse(names(release(BUILD).resolve("files")).stream().anyMatch(name -> name.endsWith(".sha256")));
-        assertEquals(Files.readString(file(BUILD, "manifest.tsv")), Files.readString(file("dev", "manifest.tsv")));
+        assertFalse(names(release(BUILD).resolve("files")).stream()
+                .anyMatch(name -> name.endsWith(".sha256")));
+        assertEquals(Files.readString(file(BUILD, "manifest.tsv")),
+                Files.readString(file("dev", "manifest.tsv")));
         final List<String> events = Files.readAllLines(state.resolve("events"));
-        assertTrue(events.stream().anyMatch(line -> line.startsWith("release\tview\t" + BUILD)), "Draft lookup must use the draft-aware CLI.");
-        assertTrue(events.stream().anyMatch(line -> line.matches("api\\trepos/jajir/microcol/releases/[0-9]+")));
-        final List<String> uploads = events.stream().filter(line -> line.startsWith("release\tupload\t")).collect(Collectors.toList());
-        assertTrue(uploads.get(uploads.size() - 1).startsWith("release\tupload\tdev\t"));
+        assertTrue(
+                events.stream().anyMatch(
+                        line -> line.startsWith("release\tview\t" + BUILD)),
+                "Draft lookup must use the draft-aware CLI.");
+        assertTrue(events.stream().anyMatch(line -> line
+                .matches("api\\trepos/jajir/microcol/releases/[0-9]+")));
+        final List<String> uploads = events.stream()
+                .filter(line -> line.startsWith("release\tupload\t"))
+                .collect(Collectors.toList());
+        assertTrue(uploads.get(uploads.size() - 1)
+                .startsWith("release\tupload\tdev\t"));
         assertTrue(uploads.get(uploads.size() - 1).contains("/manifest.tsv\t"));
     }
 
     @Test
-    void incompleteAssetsAndWrongSidecarFailBeforeAnyNetworkAccess() throws Exception {
+    void incompleteAssetsAndWrongSidecarFailBeforeAnyNetworkAccess()
+            throws Exception {
         final Path missing = assets.resolve("MicroCol-Dev-linux.tar.gz");
         Files.delete(missing);
         assertFalse(publish(BUILD).code == 0);
@@ -73,12 +91,14 @@ class PublicationTest {
         Files.writeString(missing, "restored with different content");
         final Result result = publish(BUILD);
         assertFalse(result.code == 0);
-        assertTrue(result.output.contains("Checksum sidecar does not match"), result.output);
+        assertTrue(result.output.contains("Checksum sidecar does not match"),
+                result.output);
         assertFalse(Files.exists(state.resolve("events")));
     }
 
     @Test
-    void interruptedDraftUploadNeverPublishesChannelAndRetryRepairsIt() throws Exception {
+    void interruptedDraftUploadNeverPublishesChannelAndRetryRepairsIt()
+            throws Exception {
         Files.writeString(state.resolve("fail-upload"), "yes");
         assertFalse(publish(BUILD).code == 0);
         assertEquals("true", Files.readString(release(BUILD).resolve("draft")));
@@ -87,23 +107,29 @@ class PublicationTest {
         final Result retry = publish(BUILD);
         assertEquals(0, retry.code, retry.output);
         assertTrue(Files.isRegularFile(file("dev", "manifest.tsv")));
-        assertEquals(1, Files.readAllLines(state.resolve("events")).stream()
-                .filter(line -> line.startsWith("release\tcreate\t" + BUILD + "\t")).count());
+        assertEquals(1,
+                Files.readAllLines(state.resolve("events")).stream()
+                        .filter(line -> line
+                                .startsWith("release\tcreate\t" + BUILD + "\t"))
+                        .count());
     }
 
     @Test
-    void omittedRemoteDigestUsesDownloadAndCorruptUploadedBytesBlockPublication() throws Exception {
+    void omittedRemoteDigestUsesDownloadAndCorruptUploadedBytesBlockPublication()
+            throws Exception {
         Files.writeString(state.resolve("omit-digests"), "yes");
         Files.writeString(state.resolve("corrupt-upload"), "yes");
         final Result bad = publish(BUILD);
         assertFalse(bad.code == 0);
-        assertTrue(bad.output.contains("Remote release checksum mismatch"), bad.output);
+        assertTrue(bad.output.contains("Remote release checksum mismatch"),
+                bad.output);
         assertFalse(Files.exists(release("dev")));
         Files.delete(state.resolve("corrupt-upload"));
         final Result good = publish(BUILD);
         assertEquals(0, good.code, good.output);
         assertTrue(Files.readAllLines(state.resolve("events")).stream()
-                .anyMatch(line -> line.startsWith("release\tdownload\t" + BUILD + "\t--pattern\t")));
+                .anyMatch(line -> line.startsWith(
+                        "release\tdownload\t" + BUILD + "\t--pattern\t")));
     }
 
     @Test
@@ -111,7 +137,8 @@ class PublicationTest {
         Files.writeString(state.resolve("main"), "b".repeat(40));
         final Result result = publish(BUILD);
         assertEquals(0, result.code, result.output);
-        assertEquals("false", Files.readString(release(BUILD).resolve("draft")));
+        assertEquals("false",
+                Files.readString(release(BUILD).resolve("draft")));
         assertFalse(Files.exists(release("dev")));
     }
 
@@ -128,7 +155,8 @@ class PublicationTest {
     }
 
     @Test
-    void mainAdvancingDuringBootstrapUploadLeavesManifestUntouched() throws Exception {
+    void mainAdvancingDuringBootstrapUploadLeavesManifestUntouched()
+            throws Exception {
         Files.writeString(state.resolve("advance-main"), "yes");
         final Result result = publish(BUILD);
         assertEquals(0, result.code, result.output);
@@ -136,42 +164,52 @@ class PublicationTest {
     }
 
     @Test
-    void rerunReusesPublishedBytesAndDoesNotOverwriteImmutableAssets() throws Exception {
+    void rerunReusesPublishedBytesAndDoesNotOverwriteImmutableAssets()
+            throws Exception {
         assertEquals(0, publish(BUILD).code);
-        final Map<String, String> before = checksums(release(BUILD).resolve("files"));
+        final Map<String, String> before = checksums(
+                release(BUILD).resolve("files"));
         final String name = "MicroCol-macos-arm64-" + BUILD + ".zip";
-        Files.writeString(assets.resolve(name), "a rebuild with different timestamps");
+        Files.writeString(assets.resolve(name),
+                "a rebuild with different timestamps");
         sidecar(name);
         Files.writeString(state.resolve("events"), "");
         final Result result = publish(BUILD);
         assertEquals(0, result.code, result.output);
         assertEquals(before, checksums(release(BUILD).resolve("files")));
         assertFalse(Files.readAllLines(state.resolve("events")).stream()
-                .anyMatch(line -> line.startsWith("release\tupload\t" + BUILD + "\t")));
+                .anyMatch(line -> line
+                        .startsWith("release\tupload\t" + BUILD + "\t")));
     }
 
     @Test
     void corruptExistingPublishedArchiveCannotBePromoted() throws Exception {
         assertEquals(0, publish(BUILD).code);
-        Files.writeString(file(BUILD, "MicroCol-macos-arm64-" + BUILD + ".zip"), "corrupted archive");
+        Files.writeString(file(BUILD, "MicroCol-macos-arm64-" + BUILD + ".zip"),
+                "corrupted archive");
         Files.delete(file("dev", "manifest.tsv"));
         final Result result = publish(BUILD);
         assertFalse(result.code == 0);
-        assertTrue(result.output.contains("Existing release manifest checksums"), result.output);
+        assertTrue(
+                result.output.contains("Existing release manifest checksums"),
+                result.output);
         assertFalse(Files.exists(file("dev", "manifest.tsv")));
     }
 
     @Test
-    void malformedPublishedManifestAndAuthenticationFailureDoNotLookLikeMissingRelease() throws Exception {
+    void malformedPublishedManifestAndAuthenticationFailureDoNotLookLikeMissingRelease()
+            throws Exception {
         Files.writeString(state.resolve("fail-api"), "yes");
         Result result = publish(BUILD);
         assertFalse(result.code == 0);
-        assertTrue(result.output.contains("authentication failed"), result.output);
+        assertTrue(result.output.contains("authentication failed"),
+                result.output);
         assertFalse(Files.exists(release(BUILD)));
         Files.delete(state.resolve("fail-api"));
         assertEquals(0, publish(BUILD).code);
         final Path manifest = file(BUILD, "manifest.tsv");
-        Files.writeString(manifest, Files.readString(manifest).replace("asset\tmacos-x86_64\t", "asset\tmacos-arm64\t"));
+        Files.writeString(manifest, Files.readString(manifest)
+                .replace("asset\tmacos-x86_64\t", "asset\tmacos-arm64\t"));
         result = publish(BUILD);
         assertFalse(result.code == 0);
         assertTrue(result.output.contains("Duplicate platform"), result.output);
@@ -179,9 +217,13 @@ class PublicationTest {
 
     private Result publish(final String build) throws Exception {
         final Path log = temporary.resolve("publisher.log");
-        final ProcessBuilder builder = new ProcessBuilder("/bin/bash", repository.resolve("scripts/distribution/publish.sh").toString(),
-                assets.toString(), build, SHA, "--repository", "jajir/microcol");
-        builder.environment().put("PATH", commands + File.pathSeparator + System.getenv("PATH"));
+        final ProcessBuilder builder = new ProcessBuilder("/bin/bash",
+                repository.resolve("scripts/distribution/publish.sh")
+                        .toString(),
+                assets.toString(), build, SHA, "--repository",
+                "jajir/microcol");
+        builder.environment().put("PATH",
+                commands + File.pathSeparator + System.getenv("PATH"));
         builder.environment().put("PUBLICATION_FAKE_STATE", state.toString());
         builder.environment().remove("GH_TOKEN");
         builder.environment().remove("GITHUB_TOKEN");
@@ -190,20 +232,26 @@ class PublicationTest {
         final Process process = builder.start();
         if (!process.waitFor(90, TimeUnit.SECONDS)) {
             process.destroyForcibly().waitFor();
-            throw new AssertionError("Publisher did not exit: " + Files.readString(log));
+            throw new AssertionError(
+                    "Publisher did not exit: " + Files.readString(log));
         }
         return new Result(process.exitValue(), Files.readString(log));
     }
 
     private void createAssets(final String build) throws Exception {
-        final List<String> names = new ArrayList<>(Arrays.asList("MicroCol-Dev-macos.zip", "MicroCol-Dev-linux.tar.gz"));
-        for (String platform : Arrays.asList("macos-arm64", "macos-x86_64", "linux-x86_64")) {
+        final List<String> names = new ArrayList<>(Arrays
+                .asList("MicroCol-Dev-macos.zip", "MicroCol-Dev-linux.tar.gz"));
+        for (String platform : Arrays.asList("macos-arm64", "macos-x86_64",
+                "linux-x86_64")) {
             final String stem = "MicroCol-" + platform + "-" + build;
-            names.add(stem + (platform.equals("linux-x86_64") ? ".tar.gz" : ".zip"));
-            names.add(stem + (platform.equals("linux-x86_64") ? ".deb" : ".dmg"));
+            names.add(stem
+                    + (platform.equals("linux-x86_64") ? ".tar.gz" : ".zip"));
+            names.add(
+                    stem + (platform.equals("linux-x86_64") ? ".deb" : ".dmg"));
         }
         for (String name : names) {
-            Files.writeString(assets.resolve(name), "fixture bytes for " + name);
+            Files.writeString(assets.resolve(name),
+                    "fixture bytes for " + name);
             sidecar(name);
         }
     }
@@ -218,7 +266,8 @@ class PublicationTest {
     }
 
     private void sidecar(final String name) throws Exception {
-        Files.writeString(assets.resolve(name + ".sha256"), PublicationFakeGh.checksum(assets.resolve(name)) + "\n");
+        Files.writeString(assets.resolve(name + ".sha256"),
+                PublicationFakeGh.checksum(assets.resolve(name)) + "\n");
     }
 
     private Path release(final String tag) {
@@ -231,14 +280,17 @@ class PublicationTest {
 
     private static List<String> names(final Path directory) throws Exception {
         try (Stream<Path> files = Files.list(directory)) {
-            return files.map(path -> path.getFileName().toString()).sorted().collect(Collectors.toList());
+            return files.map(path -> path.getFileName().toString()).sorted()
+                    .collect(Collectors.toList());
         }
     }
 
-    private static Map<String, String> checksums(final Path directory) throws Exception {
+    private static Map<String, String> checksums(final Path directory)
+            throws Exception {
         final Map<String, String> result = new java.util.TreeMap<>();
         for (String name : names(directory)) {
-            result.put(name, PublicationFakeGh.checksum(directory.resolve(name)));
+            result.put(name,
+                    PublicationFakeGh.checksum(directory.resolve(name)));
         }
         return result;
     }

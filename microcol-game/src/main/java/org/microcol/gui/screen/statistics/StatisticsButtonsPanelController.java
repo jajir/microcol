@@ -11,10 +11,11 @@ import com.google.inject.Singleton;
 public class StatisticsButtonsPanelController {
 
     @Inject
-    public StatisticsButtonsPanelController(final StatisticsButtonsPanel statisticsButtonsPanel,
+    public StatisticsButtonsPanelController(
+            final StatisticsButtonsPanel statisticsButtonsPanel,
             final EventBus eventBus) {
-        statisticsButtonsPanel.getButtonClose()
-                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
+        statisticsButtonsPanel.getButtonClose().setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
     }
 
 }

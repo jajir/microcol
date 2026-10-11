@@ -33,13 +33,14 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     public KingRobotPlayer(final Model model, final PlayerKing playerKing,
             final AnimationManager animationManager) {
         super(model, playerKing, animationManager);
-        this.whosKingThisPlayerIs = Preconditions.checkNotNull(playerKing.getWhosKingThisPlayerIs());
+        this.whosKingThisPlayerIs = Preconditions
+                .checkNotNull(playerKing.getWhosKingThisPlayerIs());
     }
 
     private boolean isKinngCoquered() {
         if (isRefWasSend()) {
-            final int miltaryStreng = getPlayer().getPlayerStatistics().getMilitaryStrength()
-                    .getMilitaryStrength();
+            final int miltaryStreng = getPlayer().getPlayerStatistics()
+                    .getMilitaryStrength().getMilitaryStrength();
             return miltaryStreng < KINGS_MILITARY_STREGTH_GAME_OVER;
         }
         return false;
@@ -58,7 +59,8 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
             setRefWasSend(true);
         }
         if (isKinngCoquered()) {
-            getPlayer().getExtraData().put("kingWasConquered", Boolean.TRUE.toString());
+            getPlayer().getExtraData().put("kingWasConquered",
+                    Boolean.TRUE.toString());
         }
     }
 
@@ -84,8 +86,8 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
                 if (isPossibleToDisembark(unitWithCargo)) {
                     disembarkUnit(unitWithCargo);
                 } else {
-                    tryToReachSomeContinent(unitWithCargo,
-                            continents.getContinentsToAttack(whosKingThisPlayerIs));
+                    tryToReachSomeContinent(unitWithCargo, continents
+                            .getContinentsToAttack(whosKingThisPlayerIs));
                     if (isPossibleToDisembark(unitWithCargo)) {
                         disembarkUnit(unitWithCargo);
                     }
@@ -94,15 +96,19 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
         }
     }
 
-    private void performSeekAndDestroy(final Unit unit, final Continents continents) {
-        final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit)
-                .getClosesEnemyCityToAttack(unit.getLocation(), whosKingThisPlayerIs);
+    private void performSeekAndDestroy(final Unit unit,
+            final Continents continents) {
+        final Optional<Location> oLoc = continents
+                .getContinentWhereIsUnitPlaced(unit).getClosesEnemyCityToAttack(
+                        unit.getLocation(), whosKingThisPlayerIs);
         if (oLoc.isPresent()) {
-            final Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
+            final Optional<List<Location>> oPath = unit.getPath(oLoc.get(),
+                    true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
                 getModel().moveUnitAsFarAsPossible(unit, Path.of(oPath.get()));
             } else {
-                simpleUnitBehavior.tryToCaptureColony(getModel(), unit, oLoc.get());
+                simpleUnitBehavior.tryToCaptureColony(getModel(), unit,
+                        oLoc.get());
             }
         }
         simpleUnitBehavior.tryToFight(unit);
@@ -119,9 +125,11 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private Optional<List<Location>> findFasterPathToContinent(final Unit ship,
             final Continent continent) {
-        return continent.getLocations().stream().map(loc -> ship.getPath(loc, true))
+        return continent.getLocations().stream()
+                .map(loc -> ship.getPath(loc, true))
                 .filter(oPath -> oPath.isPresent()).map(oPath -> oPath.get())
-                .sorted((list1, list2) -> list1.size() - list2.size()).findFirst();
+                .sorted((list1, list2) -> list1.size() - list2.size())
+                .findFirst();
     }
 
     private void disembarkUnit(final UnitWithCargo ship) {
@@ -130,7 +138,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
             if (slot.isLoadedUnit()) {
                 final Unit unit = slot.getUnit().get();
                 unit.disembarkToLocation(location);
-//                slot.disembark(location);
+                // slot.disembark(location);
             }
         });
     }
@@ -162,29 +170,31 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private int getKingsMilitaryStrength() {
         return (int) Math.min(
-                (whosKingThisPlayerIs.getPlayerStatistics().getMilitaryStrength()
-                        .getMilitaryStrength() * KINGS_MILITARY_STREGTH_COEFICIENT),
+                (whosKingThisPlayerIs.getPlayerStatistics()
+                        .getMilitaryStrength().getMilitaryStrength()
+                        * KINGS_MILITARY_STREGTH_COEFICIENT),
                 KINGS_MILITARY_STREGTH_CAP);
     }
 
     /**
      * Royal Expedition Forces was send to colonies after declaring
      * independence.
-     * 
+     *
      * @return the refWasSend
      */
     public boolean isRefWasSend() {
-        return Boolean.valueOf((String) getPlayer().getExtraData().get("refWasSend"));
+        return Boolean
+                .valueOf((String) getPlayer().getExtraData().get("refWasSend"));
     }
 
     /**
      * Royal Expedition Forces was send to colonies after declaring
      * independence.
-     * 
-     * @param refWasSend
-     *            the refWasSend to set
+     *
+     * @param refWasSend the refWasSend to set
      */
     public void setRefWasSend(final boolean refWasSend) {
-        getPlayer().getExtraData().put("refWasSend", String.valueOf(refWasSend));
+        getPlayer().getExtraData().put("refWasSend",
+                String.valueOf(refWasSend));
     }
 }

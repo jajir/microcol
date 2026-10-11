@@ -39,65 +39,83 @@ public class ColonyConstructorTest {
     public void test_constructor_default_buildings() throws Exception {
         final Colony colony = makeColony(col -> {
             return ConstructionType.NEW_COLONY_CONSTRUCTIONS.stream()
-                    .map(type -> Construction.build(model, col, type)).collect(Collectors.toList());
+                    .map(type -> Construction.build(model, col, type))
+                    .collect(Collectors.toList());
         });
 
         assertNotNull(colony);
         assertNotNull(colony.getConstructionByType(ConstructionType.TOWN_HALL));
-        assertNotNull(colony.getConstructionByType(ConstructionType.CARPENTERS_STAND));
+        assertNotNull(colony
+                .getConstructionByType(ConstructionType.CARPENTERS_STAND));
         assertFalse(colony.isContainsConstructionByType(ConstructionType.DOCK));
-        assertFalse(colony.isContainsConstructionByType(ConstructionType.DRYDOCK));
+        assertFalse(
+                colony.isContainsConstructionByType(ConstructionType.DRYDOCK));
     }
 
     @Test
-    public void test_constructor_constructionConsistency_sameConstructions() throws Exception {
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            makeColony(col -> {
-                List<Construction> list = new ArrayList<>();
-                list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
-                list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
-                return list;
-            });
-        });
+    public void test_constructor_constructionConsistency_sameConstructions()
+            throws Exception {
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    makeColony(col -> {
+                        List<Construction> list = new ArrayList<>();
+                        list.add(Construction.build(model, col,
+                                ConstructionType.BLACKSMITHS_SHOP));
+                        list.add(Construction.build(model, col,
+                                ConstructionType.BLACKSMITHS_SHOP));
+                        return list;
+                    });
+                });
 
-        assertEquals("Construction type 'BLACKSMITHS_SHOP' is duplicated", exception.getMessage());
+        assertEquals("Construction type 'BLACKSMITHS_SHOP' is duplicated",
+                exception.getMessage());
     }
 
     @Test
-    public void test_constructor_constructionConsistency_sameConstructionsType() throws Exception {
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            makeColony(col -> {
-                List<Construction> list = new ArrayList<>();
-                list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
-                list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_HOUSE));
-                return list;
-            });
-        });
+    public void test_constructor_constructionConsistency_sameConstructionsType()
+            throws Exception {
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    makeColony(col -> {
+                        List<Construction> list = new ArrayList<>();
+                        list.add(Construction.build(model, col,
+                                ConstructionType.BLACKSMITHS_SHOP));
+                        list.add(Construction.build(model, col,
+                                ConstructionType.BLACKSMITHS_HOUSE));
+                        return list;
+                    });
+                });
 
-        assertEquals("Good type type 'TOOLS' is prodecen in more than one building",
+        assertEquals(
+                "Good type type 'TOOLS' is prodecen in more than one building",
                 exception.getMessage());
     }
 
     @Test
     public void test_constructor_constructionConsistency_sameConstructionsType_nonProducing()
             throws Exception {
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            makeColony(col -> {
-                List<Construction> list = new ArrayList<>();
-                list.add(Construction.build(model, col, ConstructionType.DOCK));
-                list.add(Construction.build(model, col, ConstructionType.DRYDOCK));
-                return list;
-            });
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    makeColony(col -> {
+                        List<Construction> list = new ArrayList<>();
+                        list.add(Construction.build(model, col,
+                                ConstructionType.DOCK));
+                        list.add(Construction.build(model, col,
+                                ConstructionType.DRYDOCK));
+                        return list;
+                    });
+                });
 
         assertEquals(
                 "There is building type 'ConstructionType{name=DOCK}' and it's upgrade 'Construction{name=DRYDOCK}'",
                 exception.getMessage());
     }
 
-    private Colony makeColony(final Function<Colony, List<Construction>> constructionsBuilder) {
-        return new Colony(model, "Prague", owner, Location.of(2, 2), constructionsBuilder,
-                new HashMap<String, Integer>(), new ArrayList<>());
+    private Colony makeColony(
+            final Function<Colony, List<Construction>> constructionsBuilder) {
+        return new Colony(model, "Prague", owner, Location.of(2, 2),
+                constructionsBuilder, new HashMap<String, Integer>(),
+                new ArrayList<>());
     }
 
 }

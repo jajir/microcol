@@ -13,7 +13,8 @@ public class ScreenMenuPresenter {
     private final SecretOption secretOption;
 
     @Inject
-    ScreenMenuPresenter(final ScreenMenu screenMenu, final SecretOption secretOption) {
+    ScreenMenuPresenter(final ScreenMenu screenMenu,
+            final SecretOption secretOption) {
         this.secretOption = Preconditions.checkNotNull(secretOption);
         screenMenu.getContent().setOnKeyPressed(this::onKeyPressed);
         screenMenu.getContent().setOnKeyReleased(this::onKeyReleased);

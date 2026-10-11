@@ -25,12 +25,13 @@ public class IdManagerTest {
 
     @Test
     public void test_constructor_invalid_value() throws Exception {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     new IdManager(-1);
                 });
 
-        assertEquals("lastUsedId have to by equals or greater than 0.", exception.getMessage());
+        assertEquals("lastUsedId have to by equals or greater than 0.",
+                exception.getMessage());
     }
 
     @Test
@@ -44,7 +45,8 @@ public class IdManagerTest {
 
     @Test
     public void test_makeFromModelPo_4_units() throws Exception {
-        when(modelPo.getUnits()).thenReturn(Lists.newArrayList(unit, unit, unit));
+        when(modelPo.getUnits())
+                .thenReturn(Lists.newArrayList(unit, unit, unit));
         when(unit.getId()).thenReturn(0, 1, 3);
         IdManager idm = IdManager.makeFromModelPo(modelPo);
 

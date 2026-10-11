@@ -20,7 +20,8 @@ public class ImageCacheTest {
     }
 
     @Test
-    public void test_two_getImage_returns_same_image_instance() throws Exception {
+    public void test_two_getImage_returns_same_image_instance()
+            throws Exception {
         ImageCache imageProvider = new ImageCache(new StreamReader());
         Image i1 = imageProvider.getImage("cursor-goto.png");
         Image i2 = imageProvider.getImage("cursor-goto.png");

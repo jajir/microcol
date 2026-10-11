@@ -6,7 +6,8 @@ import org.microcol.i18n.I18n;
 
 public class DialogUnitCantFightWarning extends AbstractWarningDialog {
 
-    public DialogUnitCantFightWarning(final ViewUtil viewUtil, final I18n i18n) {
+    public DialogUnitCantFightWarning(final ViewUtil viewUtil,
+            final I18n i18n) {
         super(viewUtil, i18n, Dialog.unitCantFightWarning_caption);
         showAndWait();
     }

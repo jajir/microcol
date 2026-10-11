@@ -22,9 +22,11 @@ public final class ScrollToSelectedUnit {
 
     @Subscribe
     private void onTileWasSelected(final TileWasSelectedEvent event) {
-        if (ScrollToFocusedTile.smoothScroll.equals(event.getScrollToFocusedTile())) {
+        if (ScrollToFocusedTile.smoothScroll
+                .equals(event.getScrollToFocusedTile())) {
             gamePanelView.planScrollingAnimationToLocation(event.getLocation());
-        } else if (ScrollToFocusedTile.skip.equals(event.getScrollToFocusedTile())) {
+        } else if (ScrollToFocusedTile.skip
+                .equals(event.getScrollToFocusedTile())) {
             gamePanelView.skipCenterViewAtLocation(event.getLocation());
         }
         // Enum value ScrollToFocusedTile.skip is skipped.

@@ -44,26 +44,34 @@ public final class MapManager {
     MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
             final IceCoastMapGenerator iceCoastMapGenerator,
             final HiddenCoastMapGenerator hiddenCoastMapGenerator,
-            final GameModelController gameModelController, final ImageProvider imageProvider) {
-        this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
-        this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
-        this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
+            final GameModelController gameModelController,
+            final ImageProvider imageProvider) {
+        this.grassCoastMapGenerator = Preconditions
+                .checkNotNull(grassCoastMapGenerator);
+        this.iceCoastMapGenerator = Preconditions
+                .checkNotNull(iceCoastMapGenerator);
+        this.hiddenCoastMapGenerator = Preconditions
+                .checkNotNull(hiddenCoastMapGenerator);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
     }
 
     @Subscribe
-    private void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
+    private void onUnitMovedStepFinished(
+            final UnitMovedStepFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator
+                    .setMap(gameModelController.getModel().getMap());
         }
     }
-    
-    
+
     @Subscribe
-    private void onShipArriveToColonies(final UnitArrivedToColoniesEvent event) {
+    private void onShipArriveToColonies(
+            final UnitArrivedToColoniesEvent event) {
         if (event.getShip().getOwner().isHuman()) {
-            hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator
+                    .setMap(gameModelController.getModel().getMap());
         }
     }
 
@@ -86,9 +94,10 @@ public final class MapManager {
         }
     }
 
-    public Image getTerrainImage(final TerrainType terrainType, final Location location,
-            final long gameTick) {
-        final Image image = imageRandomProvider.getTerrainImage(terrainType, location, gameTick);
+    public Image getTerrainImage(final TerrainType terrainType,
+            final Location location, final long gameTick) {
+        final Image image = imageRandomProvider.getTerrainImage(terrainType,
+                location, gameTick);
         if (image == null) {
             return imageProvider.getTerrainImage(terrainType);
         } else {
@@ -99,12 +108,12 @@ public final class MapManager {
     /**
      * When game perform tick this should be called. It update tile animation
      * event on non visible part of map.
-     * 
-     * @param currentGameTick
-     *            required current game tick
+     *
+     * @param currentGameTick required current game tick
      */
     public void gameTickUpdate(final long currentGameTick) {
-        imageRandomProvider.updateRipples(gameModelController.getMap(), currentGameTick);
+        imageRandomProvider.updateRipples(gameModelController.getMap(),
+                currentGameTick);
     }
 
     public Image getTreeImage(final Location location) {

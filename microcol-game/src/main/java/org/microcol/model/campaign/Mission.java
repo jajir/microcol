@@ -13,7 +13,7 @@ interface Mission<G extends MissionGoals> {
 
     /**
      * Save state of mission goals to map. Map could be easily stored in file.
-     * 
+     *
      * @return map
      */
     Map<String, String> saveGoals();

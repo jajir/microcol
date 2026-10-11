@@ -30,8 +30,7 @@ final class UnitMoveNavigator {
      * For given unit get last used direction and if it's not there choose new
      * random one.
      *
-     * @param unit
-     *            required unit
+     * @param unit required unit
      * @return direction of move
      */
     Location getLastVector(final Unit unit) {
@@ -50,19 +49,21 @@ final class UnitMoveNavigator {
     /**
      * Choose another random direction different from previous one.
      *
-     * @param unit
-     *            required unit
+     * @param unit required unit
      */
     void resetDirection(final Unit unit) {
         if (lastDirections.containsKey(unit)) {
             final Direction lastDirection = lastDirections.get(unit);
-            final List<Direction> directions = new ArrayList<>(Direction.getAll());
+            final List<Direction> directions = new ArrayList<>(
+                    Direction.getAll());
             directions.remove(lastDirection);
             Preconditions.checkState(directions.size() == 7,
-                    "Directions size should be 7. Invalid last direction (%s)", lastDirection);
+                    "Directions size should be 7. Invalid last direction (%s)",
+                    lastDirection);
             lastDirections.put(unit, getNextRandomDirection(directions));
         } else {
-            lastDirections.put(unit, getNextRandomDirection(Direction.getAll()));
+            lastDirections.put(unit,
+                    getNextRandomDirection(Direction.getAll()));
         }
     }
 

@@ -26,7 +26,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceMap() != null) {
-                    return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation(),
+                    return new PlaceLocation(unit,
+                            unitPo.getPlaceMap().getLocation(),
                             unitPo.getPlaceMap().getOrientation());
                 }
                 return null;
@@ -37,7 +38,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceHighSeas() != null) {
-                    return new PlaceHighSea(unit, unitPo.getPlaceHighSeas().isTravelToEurope(),
+                    return new PlaceHighSea(unit,
+                            unitPo.getPlaceHighSeas().isTravelToEurope(),
                             unitPo.getPlaceHighSeas().getRemainigTurns());
                 }
                 return null;
@@ -50,7 +52,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final Model model = context.getModel();
                 if (unitPo.getPlaceEuropePort() != null) {
                     if (unitPo.getType().isShip()) {
-                        return new PlaceEuropePort(unit, model.getEurope().getPort());
+                        return new PlaceEuropePort(unit,
+                                model.getEurope().getPort());
                     } else {
                         return new PlaceEuropePier(unit);
                     }
@@ -66,13 +69,15 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final ModelPo modelPo = context.getModelPo();
                 if (unitPo.getPlaceColonyField() != null) {
                     for (final ColonyPo colonyPo : modelPo.getColonies()) {
-                        final PlaceColonyField out = tryToFindColonyField(colonyPo, unit, model);
+                        final PlaceColonyField out = tryToFindColonyField(
+                                colonyPo, unit, model);
                         if (out != null) {
                             return out;
                         }
                     }
                     throw new IllegalArgumentException(String.format(
-                            "It's not possible to define place unit (%s) to colony field", unitPo));
+                            "It's not possible to define place unit (%s) to colony field",
+                            unitPo));
                 }
                 return null;
             }, (context) -> {
@@ -85,8 +90,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final ModelPo modelPo = context.getModelPo();
                 if (unitPo.getPlaceConstructionSlot() != null) {
                     for (final ColonyPo colonyPo : modelPo.getColonies()) {
-                        final PlaceConstructionSlot out = tryToFindConstructionSlot(colonyPo, unit,
-                                model);
+                        final PlaceConstructionSlot out = tryToFindConstructionSlot(
+                                colonyPo, unit, model);
                         if (out != null) {
                             return out;
                         }
@@ -114,17 +119,21 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
             // place it to correct slot
             final Integer idUnitInCargo = unitPo.getId();
             final Integer slotIndex = getSlotId(idUnitInCargo);
-            final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+            final UnitPo holdingUnitPo = modelPo
+                    .getUnitWithUnitInCargo(idUnitInCargo);
             final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
-            final CargoSlot cargoSlot = holdingUnit.getCargo().getSlotByIndex(slotIndex);
-            final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit, cargoSlot);
+            final CargoSlot cargoSlot = holdingUnit.getCargo()
+                    .getSlotByIndex(slotIndex);
+            final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
+                    cargoSlot);
             cargoSlot.store(placeCargoSlot);
             return placeCargoSlot;
         }
         return null;
     }
 
-    public PlaceBuilderPo(final UnitPo unitPo, final ModelPo modelPo, final Model model) {
+    public PlaceBuilderPo(final UnitPo unitPo, final ModelPo modelPo,
+            final Model model) {
         this.unitPo = Preconditions.checkNotNull(unitPo);
         this.modelPo = Preconditions.checkNotNull(modelPo);
         this.model = Preconditions.checkNotNull(model);
@@ -139,12 +148,14 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
             }
             index++;
         }
-        throw new MicroColException(String.format("unable to find slot for (%s)", idUnitInCargo));
+        throw new MicroColException(
+                String.format("unable to find slot for (%s)", idUnitInCargo));
     }
 
     private UnitWithCargo getHoldingUnit(final UnitPo holdingUnitPo) {
         Unit holdingUnit = null;
-        final Optional<Unit> oHoldingUnit = model.tryGetUnitById(holdingUnitPo.getId());
+        final Optional<Unit> oHoldingUnit = model
+                .tryGetUnitById(holdingUnitPo.getId());
         if (oHoldingUnit.isPresent()) {
             holdingUnit = oHoldingUnit.get();
         } else {
@@ -158,28 +169,33 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.microcol.model.PlaceBuilder#build(org.microcol.model.Unit)
      */
     @Override
     public Place apply(final Unit unit) {
-        return placeBuilders.apply(new PlaceBuilderContext(unit, unitPo, modelPo, model));
+        return placeBuilders
+                .apply(new PlaceBuilderContext(unit, unitPo, modelPo, model));
     }
 
-    private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo,
-            final Unit unit, final Model model) {
-        for (final ConstructionPo constructionPo : colonyPo.getConstructions()) {
+    private PlaceConstructionSlot tryToFindConstructionSlot(
+            final ColonyPo colonyPo, final Unit unit, final Model model) {
+        for (final ConstructionPo constructionPo : colonyPo
+                .getConstructions()) {
             int slotId = 0;
             for (final ConstructionSlotPo slotPo : constructionPo.getSlots()) {
-                if (slotPo.getWorkerId() != null && unit.getId() == slotPo.getWorkerId()) {
-                    final Optional<Colony> oColony = model.getColonyAt(colonyPo.getLocation());
-                    Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
+                if (slotPo.getWorkerId() != null
+                        && unit.getId() == slotPo.getWorkerId()) {
+                    final Optional<Colony> oColony = model
+                            .getColonyAt(colonyPo.getLocation());
+                    Preconditions.checkState(oColony.isPresent(),
+                            "Colony at (%s) is not in model",
                             colonyPo.getLocation());
                     final Colony colony = oColony.get();
                     final Construction construction = colony
                             .getConstructionByType(constructionPo.getType());
-                    final PlaceConstructionSlot out = new PlaceConstructionSlot(unit,
-                            construction.getSlotAt(slotId));
+                    final PlaceConstructionSlot out = new PlaceConstructionSlot(
+                            unit, construction.getSlotAt(slotId));
                     construction.getSlotAt(slotId).set(out);
                     return out;
                 }
@@ -189,17 +205,21 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
         return null;
     }
 
-    private PlaceColonyField tryToFindColonyField(final ColonyPo colonyPo, final Unit unit,
-            final Model model) {
+    private PlaceColonyField tryToFindColonyField(final ColonyPo colonyPo,
+            final Unit unit, final Model model) {
         for (final ColonyFieldPo constructionPo : colonyPo.getColonyFields()) {
             if (constructionPo.getWorkerId() != null
                     && unit.getId() == constructionPo.getWorkerId()) {
-                final Optional<Colony> oColony = model.getColonyAt(colonyPo.getLocation());
-                Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
+                final Optional<Colony> oColony = model
+                        .getColonyAt(colonyPo.getLocation());
+                Preconditions.checkState(oColony.isPresent(),
+                        "Colony at (%s) is not in model",
                         colonyPo.getLocation());
                 final Colony colony = oColony.get();
-                final Direction direction = Direction.valueOf(constructionPo.getDirection());
-                final ColonyField colonyField = colony.getColonyFieldInDirection(direction);
+                final Direction direction = Direction
+                        .valueOf(constructionPo.getDirection());
+                final ColonyField colonyField = colony
+                        .getColonyFieldInDirection(direction);
                 PlaceColonyField out = new PlaceColonyField(unit, colonyField,
                         constructionPo.getProducedGoodsType());
                 colonyField.setPlaceColonyField(out);

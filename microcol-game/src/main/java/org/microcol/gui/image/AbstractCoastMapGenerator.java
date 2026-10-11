@@ -19,7 +19,7 @@ import javafx.scene.image.Image;
  * On each tiles there are defined directions. Direction describes tiles around
  * computed tiles. Directions are:
  * </p>
- * 
+ *
  * <pre>
  * NW  N  NE
  *  \  |  /
@@ -35,7 +35,7 @@ import javafx.scene.image.Image;
  * Boundary on tile have to start at some point and end somewhere. This
  * connection point are defined in a following way:
  * </p>
- * 
+ *
  * <pre>
  * 0     1            2    3
  *   +---+------------+---+
@@ -57,11 +57,11 @@ import javafx.scene.image.Image;
  * column and rows. Size of each row and column is defined by game tile size.
  * Each row contains each terrain type:
  * </p>
- * 
+ *
  * <ul>
  * <li>well - it's one see tile in the middle of land.</li>
  * <li>U-shape
- * 
+ *
  * <pre>
  *   +---+------------+---+
  *   |   |            |   |
@@ -76,10 +76,10 @@ import javafx.scene.image.Image;
  *   |                    |
  *   +--------------------+
  * </pre>
- * 
+ *
  * </li>
  * <li>L-shape
- * 
+ *
  * <pre>
  *   +----------------+---+
  *   |                |   |
@@ -94,10 +94,10 @@ import javafx.scene.image.Image;
  *   |                    |
  *   +--------------------+
  * </pre>
- * 
+ *
  * </li>
  * <li>I-shape
- * 
+ *
  * <pre>
  *   +--------------------+
  *   |\                   |
@@ -112,10 +112,10 @@ import javafx.scene.image.Image;
  *   |                    |
  *   +--------------------+
  * </pre>
- * 
+ *
  * </li>
  * <li>II-shape
- * 
+ *
  * <pre>
  *   +--------------------+
  *   |\                   |
@@ -130,16 +130,16 @@ import javafx.scene.image.Image;
  *   |/                   |
  *   +--------------------+
  * </pre>
- * 
+ *
  * This images could be made by combining of two I-shape images.</li>
- * 
+ *
  * </ul>
  * <p>
  * Coast it crossing from one environment to another one. Example is sea and
  * green land, another example is arctic and sea. Coats is crossing from some
  * mass to void. So the sea is void and land is mass.
  * </p>
- * 
+ *
  */
 public abstract class AbstractCoastMapGenerator {
 
@@ -192,10 +192,12 @@ public abstract class AbstractCoastMapGenerator {
     }
 
     private String getTileCode(final Location location) {
-        Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)", location);
+        Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)",
+                location);
         final ChainOfCommandOptionalStrategy<Neighbors, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
-                Lists.newArrayList(this::isItMass, this::isItWell, this::isItOpenVoid,
-                        this::isItUShape, this::isItLShape, this::isItIShape, this::isItIIShape));
+                Lists.newArrayList(this::isItMass, this::isItWell,
+                        this::isItOpenVoid, this::isItUShape, this::isItLShape,
+                        this::isItIShape, this::isItIIShape));
         /*
          * Null can be returned, for example when analyzing arctic borders at
          * land border tile.
@@ -381,8 +383,8 @@ public abstract class AbstractCoastMapGenerator {
     }
 
     private void preconditionItsVoid(final InfoHolder infoHolder) {
-        Preconditions.checkArgument(isVoid(infoHolder), "Invalid location '%s' it is not void",
-                infoHolder.loc());
+        Preconditions.checkArgument(isVoid(infoHolder),
+                "Invalid location '%s' it is not void", infoHolder.loc());
     }
 
     /**

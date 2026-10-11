@@ -20,7 +20,8 @@ public class ShowQueueDialogListener {
     }
 
     @Subscribe
-    private void on(@SuppressWarnings("unused") final ShowBuildingQueueEvent event) {
+    private void on(
+            @SuppressWarnings("unused") final ShowBuildingQueueEvent event) {
         queueDialog.showColony();
     }
 

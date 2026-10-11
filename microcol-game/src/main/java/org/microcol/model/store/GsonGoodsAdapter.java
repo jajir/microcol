@@ -16,7 +16,8 @@ import com.google.gson.stream.JsonWriter;
 public final class GsonGoodsAdapter extends TypeAdapter<Goods> {
 
     @Override
-    public void write(final JsonWriter out, final Goods value) throws IOException {
+    public void write(final JsonWriter out, final Goods value)
+            throws IOException {
         if (value == null) {
             out.nullValue();
             return;

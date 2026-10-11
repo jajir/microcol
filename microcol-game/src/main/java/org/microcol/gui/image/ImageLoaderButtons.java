@@ -40,8 +40,9 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
     private final static String IMAGE_PREFIX = "button_";
 
     ImageLoaderButtons() {
-        super(TileImageParams.makeBuilder().setTileWidthCount(4).setTileHeightCount(4)
-                .setTileWidth(50).build(), IMAGE_NAME, IMAGE_PREFIX);
+        super(TileImageParams.makeBuilder().setTileWidthCount(4)
+                .setTileHeightCount(4).setTileWidth(50).build(), IMAGE_NAME,
+                IMAGE_PREFIX);
 
     }
 

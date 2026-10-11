@@ -28,8 +28,7 @@ public enum UnitActionType {
     /**
      * Private constructor. Just set fields.
      *
-     * @param sign
-     *            required sign string. That string will be shown at frontend.
+     * @param sign required sign string. That string will be shown at frontend.
      */
     UnitActionType(final String sign) {
         this.sign = Preconditions.checkNotNull(sign);

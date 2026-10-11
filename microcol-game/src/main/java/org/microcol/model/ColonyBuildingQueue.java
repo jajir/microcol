@@ -66,23 +66,26 @@ public class ColonyBuildingQueue {
     public Optional<BuildingStatus<ColonyBuildingItem>> getActuallyBuildingStat() {
         if (getActualyBuilding().isPresent()) {
             final ColonyBuildingItem pok = getActualyBuilding().get().getItem();
-            final int alreadyHaveHammers = colony.getWarehouse().getGoods(GoodsType.HAMMERS)
-                    .getAmount();
-            final int productionHammers = colony.getGoodsStats().getStatsByType(GoodsType.HAMMERS)
-                    .getNetProduction();
-            final int alreadyHaveTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
-                    .getAmount();
-            final int productionTools = colony.getGoodsStats().getStatsByType(GoodsType.TOOLS)
-                    .getNetProduction();
-            return Optional.of(new BuildingStatus<ColonyBuildingItem>(pok, alreadyHaveHammers,
-                    productionHammers, alreadyHaveTools, productionTools));
+            final int alreadyHaveHammers = colony.getWarehouse()
+                    .getGoods(GoodsType.HAMMERS).getAmount();
+            final int productionHammers = colony.getGoodsStats()
+                    .getStatsByType(GoodsType.HAMMERS).getNetProduction();
+            final int alreadyHaveTools = colony.getWarehouse()
+                    .getGoods(GoodsType.TOOLS).getAmount();
+            final int productionTools = colony.getGoodsStats()
+                    .getStatsByType(GoodsType.TOOLS).getNetProduction();
+            return Optional.of(new BuildingStatus<ColonyBuildingItem>(pok,
+                    alreadyHaveHammers, productionHammers, alreadyHaveTools,
+                    productionTools));
         } else {
             return Optional.empty();
         }
     }
 
-    public Optional<ColonyBuildingItemProgress<?>> getItemById(final int itemId) {
-        return buildingQueue.stream().filter(item -> item.getId() == itemId).findAny();
+    public Optional<ColonyBuildingItemProgress<?>> getItemById(
+            final int itemId) {
+        return buildingQueue.stream().filter(item -> item.getId() == itemId)
+                .findAny();
     }
 
     public List<ColonyBuildingItemProgress<?>> getBuildingQueue() {
@@ -97,7 +100,8 @@ public class ColonyBuildingQueue {
         buildingQueue.add(index, movingItem);
     }
 
-    public void moveItemAtTheEnd(final ColonyBuildingItemProgress<?> movingItem) {
+    public void moveItemAtTheEnd(
+            final ColonyBuildingItemProgress<?> movingItem) {
         logger.debug("Moving item '%s' at the end of the queue.", movingItem);
         buildingQueue.remove(movingItem);
         buildingQueue.add(movingItem);
@@ -105,7 +109,8 @@ public class ColonyBuildingQueue {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("ColonyName", colony.getName())
+        return MoreObjects.toStringHelper(getClass())
+                .add("ColonyName", colony.getName())
                 .add("actualyIsBuilding", getActualyBuilding()).toString();
     }
 
@@ -126,7 +131,8 @@ public class ColonyBuildingQueue {
      * @return Return list building items.
      */
     public List<ColonyBuildingItemConstruction> getBuildigItemsConstruction() {
-        return ConstructionType.ALL.stream().filter(type -> canConstructionBeBuild(type))
+        return ConstructionType.ALL.stream()
+                .filter(type -> canConstructionBeBuild(type))
                 .map(type -> new ColonyBuildingItemConstruction(type))
                 .collect(ImmutableList.toImmutableList());
     }
@@ -138,16 +144,19 @@ public class ColonyBuildingQueue {
 
     private boolean canConstructionBeBuild(final ConstructionType type) {
         final boolean isAlreadyBuilded = type.getUpgradeChain().stream()
-                .filter(t -> colony.isContainsConstructionByType(t)).findAny().isPresent();
+                .filter(t -> colony.isContainsConstructionByType(t)).findAny()
+                .isPresent();
         if (isAlreadyBuilded) {
             return false;
         } else {
-            final Optional<ColonyBuildingItemProgressConstruction> oItem = getItemByType(type);
+            final Optional<ColonyBuildingItemProgressConstruction> oItem = getItemByType(
+                    type);
             if (oItem.isPresent()) {
                 return false;
             } else {
                 if (type.getUpgradeFrom().isPresent()) {
-                    return colony.isContainsConstructionByType(type.getUpgradeFrom().get());
+                    return colony.isContainsConstructionByType(
+                            type.getUpgradeFrom().get());
                 } else {
                     return true;
                 }
@@ -158,8 +167,7 @@ public class ColonyBuildingQueue {
     /**
      * Add new construction to building queue.
      *
-     * @param constructionType
-     *            required construction type
+     * @param constructionType required construction type
      * @return Return <code>null</code> when it wasn't possible to add
      *         construction to queue otherwise return newly created item.
      */
@@ -171,7 +179,8 @@ public class ColonyBuildingQueue {
             return null;
         } else {
             final ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
-                    new ColonyBuildingItemConstruction(constructionType), getNextId());
+                    new ColonyBuildingItemConstruction(constructionType),
+                    getNextId());
             buildingQueue.add(item);
             return item;
         }
@@ -186,11 +195,13 @@ public class ColonyBuildingQueue {
 
     public ColonyBuildingItemProgressConstruction addBeforeItem(
             final ConstructionType constructionType, final int beforeId) {
-        final ColonyBuildingItemProgressConstruction item = addAtEnd(constructionType);
+        final ColonyBuildingItemProgressConstruction item = addAtEnd(
+                constructionType);
         if (item == null) {
             return null;
         } else {
-            final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(beforeId);
+            final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(
+                    beforeId);
             moveItemBefore(item, oBeforeItem.get());
             return item;
         }
@@ -199,7 +210,8 @@ public class ColonyBuildingQueue {
     public ColonyBuildingItemProgressUnit addBeforeItem(final UnitType unitType,
             final int beforeId) {
         final ColonyBuildingItemProgressUnit item = addAtEnd(unitType);
-        final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(beforeId);
+        final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(
+                beforeId);
         moveItemBefore(item, oBeforeItem.get());
         return item;
     }
@@ -209,23 +221,26 @@ public class ColonyBuildingQueue {
     }
 
     private int getNextId() {
-        return buildingQueue.stream().mapToInt(item -> item.getId()).max().orElse(INITIAL_ID) + 1;
+        return buildingQueue.stream().mapToInt(item -> item.getId()).max()
+                .orElse(INITIAL_ID) + 1;
     }
 
     private Optional<ColonyBuildingItemProgressConstruction> getItemByType(
             final ConstructionType constructionType) {
-        return buildingQueue.stream()
-                .filter(item -> item instanceof ColonyBuildingItemProgressConstruction)
+        return buildingQueue.stream().filter(
+                item -> item instanceof ColonyBuildingItemProgressConstruction)
                 .map(item -> (ColonyBuildingItemProgressConstruction) item)
-                .filter(item -> item.getItem().getConstructionType().equals(constructionType))
+                .filter(item -> item.getItem().getConstructionType()
+                        .equals(constructionType))
                 .findFirst();
     }
 
     List<ColonyBuildingQueueItemPo> save() {
         final List<ColonyBuildingQueueItemPo> out = new ArrayList<>();
-        buildingQueue.stream().filter(item -> item.isVisible())
-                .filter(item -> item instanceof ColonyBuildingItemProgressConstruction)
-                .map(item -> (ColonyBuildingItemProgressConstruction) item).forEach(item -> {
+        buildingQueue.stream().filter(item -> item.isVisible()).filter(
+                item -> item instanceof ColonyBuildingItemProgressConstruction)
+                .map(item -> (ColonyBuildingItemProgressConstruction) item)
+                .forEach(item -> {
                     final ColonyBuildingQueueItemPo itemPo = new ColonyBuildingQueueItemPo();
                     itemPo.setType(QueueItemType.CONSTRUCTION);
                     itemPo.setConstructionType(item.getConstructionType());
@@ -235,7 +250,8 @@ public class ColonyBuildingQueue {
                 });
         buildingQueue.stream().filter(item -> item.isVisible())
                 .filter(item -> item instanceof ColonyBuildingItemProgressUnit)
-                .map(item -> (ColonyBuildingItemProgressUnit) item).forEach(item -> {
+                .map(item -> (ColonyBuildingItemProgressUnit) item)
+                .forEach(item -> {
                     final ColonyBuildingQueueItemPo itemPo = new ColonyBuildingQueueItemPo();
                     itemPo.setType(QueueItemType.UNIT);
                     itemPo.setUnitType(item.getUnitType());
@@ -248,26 +264,30 @@ public class ColonyBuildingQueue {
 
     void startTurn() {
         if (getActualyBuilding().isPresent()) {
-            final int wasDone = colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount();
-            final ColonyBuildingItemProgress<?> item = getActualyBuilding().get();
+            final int wasDone = colony.getWarehouse()
+                    .getGoods(GoodsType.HAMMERS).getAmount();
+            final ColonyBuildingItemProgress<?> item = getActualyBuilding()
+                    .get();
             colony.getWarehouse().setGoodsToZero(GoodsType.HAMMERS);
             item.addHammers(wasDone);
             if (item.isHammersProvided()) {
                 // check if there is enough tools
-                if (colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount() >= item
-                        .getRequiredTools()) {
-                    colony.getWarehouse()
-                            .removeGoods(Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
+                if (colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                        .getAmount() >= item.getRequiredTools()) {
+                    colony.getWarehouse().removeGoods(
+                            Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
                     if (item.getItem() instanceof ColonyBuildingItemUnit) {
-                        final ColonyBuildingItemUnit i = (ColonyBuildingItemUnit) item.getItem();
+                        final ColonyBuildingItemUnit i = (ColonyBuildingItemUnit) item
+                                .getItem();
                         createUnit(i.getUnitType());
-                    } else if (item.getItem() instanceof ColonyBuildingItemConstruction) {
+                    } else if (item
+                            .getItem() instanceof ColonyBuildingItemConstruction) {
                         final ColonyBuildingItemConstruction i = (ColonyBuildingItemConstruction) item
                                 .getItem();
                         colony.createConstruction(i.getConstructionType());
                     } else {
-                        throw new IllegalArgumentException(
-                                String.format("Unknown class '%s'.", item.getItem()));
+                        throw new IllegalArgumentException(String
+                                .format("Unknown class '%s'.", item.getItem()));
                     }
                     // remove actually builded item
                     buildingQueue.remove(0);
@@ -281,11 +301,12 @@ public class ColonyBuildingQueue {
     private void createUnit(final UnitType unitType) {
         final Function<Unit, Cargo> cargoBuilder = unit -> new Cargo(unit,
                 unitType.getCargoCapacity());
-        final Function<Unit, Place> placeBuilder = unit -> new PlaceLocation(unit,
-                colony.getLocation(), unit.getDefaultOrintation());
+        final Function<Unit, Place> placeBuilder = unit -> new PlaceLocation(
+                unit, colony.getLocation(), unit.getDefaultOrintation());
 
-        model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder, unitType,
-                colony.getOwner(), unitType.getSpeed(), new UnitActionNoAction());
+        model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder,
+                unitType, colony.getOwner(), unitType.getSpeed(),
+                new UnitActionNoAction());
     }
 
 }

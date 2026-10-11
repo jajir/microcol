@@ -60,7 +60,8 @@ class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLanguage {
                 if (PathPlanningService.ANIMATION_SPEED_MIN_VALUE == value) {
                     return i18n.get(Preferences.animationSpeed_slow);
                 }
-                if (PathPlanningService.ANIMATION_SPEED_MAX_VALUE - 1 == value) {
+                if (PathPlanningService.ANIMATION_SPEED_MAX_VALUE
+                        - 1 == value) {
                     return i18n.get(Preferences.animationSpeed_fast);
                 }
                 return null;

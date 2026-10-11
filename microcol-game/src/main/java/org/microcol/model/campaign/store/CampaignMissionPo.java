@@ -10,8 +10,8 @@ public class CampaignMissionPo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(CampaignMissionPo.class).add("name", name)
-                .add("wasFinished", wasFinished).toString();
+        return MoreObjects.toStringHelper(CampaignMissionPo.class)
+                .add("name", name).add("wasFinished", wasFinished).toString();
     }
 
     public String getName() {

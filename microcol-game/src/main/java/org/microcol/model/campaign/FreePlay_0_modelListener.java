@@ -20,7 +20,8 @@ final class FreePlay_0_modelListener extends ModelListenerAdapter {
     }
 
     @Override
-    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    public void onIndependenceWasDeclared(
+            final IndependenceWasDeclaredEvent event) {
         mission.onIndependenceWasDeclared();
     }
 

@@ -31,7 +31,8 @@ class AnimationClouds {
     @Inject
     AnimationClouds(final @Named("game") VisibleAreaService visibleAreaService,
             final ImageProvider imageProvider) {
-        this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
+        this.visibleAreaService = Preconditions
+                .checkNotNull(visibleAreaService);
         cloudImage = imageProvider.getImage("cloud-1.png");
     }
 
@@ -48,7 +49,8 @@ class AnimationClouds {
                 Math.sin(angle) * position);
         if (isCloudOnMap(cloudTopLeftCorner)) {
             if (isCloudVisible(cloudTopLeftCorner)) {
-                Point point = cloudTopLeftCorner.substract(visibleAreaService.getTopLeft());
+                Point point = cloudTopLeftCorner
+                        .substract(visibleAreaService.getTopLeft());
                 g.drawImage(cloudImage, point.getX(), point.getY());
             }
         } else {
@@ -63,9 +65,8 @@ class AnimationClouds {
 
     /**
      * Verify that image in on map.
-     * 
-     * @param cloudTopLeftCorner
-     *            required top left of cloud.
+     *
+     * @param cloudTopLeftCorner required top left of cloud.
      * @return Return <code>true</code> when at least one corner is at map
      *         otherwise return <code>false</code>.
      */
@@ -75,13 +76,16 @@ class AnimationClouds {
         if (visibleAreaService.isMapPointValid(cloudTopLeftCorner)) {
             return true;
         }
-        if (visibleAreaService.isMapPointValid(cloudTopLeftCorner.add(width, 0))) {
+        if (visibleAreaService
+                .isMapPointValid(cloudTopLeftCorner.add(width, 0))) {
             return true;
         }
-        if (visibleAreaService.isMapPointValid(cloudTopLeftCorner.add(0, height))) {
+        if (visibleAreaService
+                .isMapPointValid(cloudTopLeftCorner.add(0, height))) {
             return true;
         }
-        if (visibleAreaService.isMapPointValid(cloudTopLeftCorner.add(width, height))) {
+        if (visibleAreaService
+                .isMapPointValid(cloudTopLeftCorner.add(width, height))) {
             return true;
         }
         return false;
@@ -90,8 +94,7 @@ class AnimationClouds {
     /**
      * Verify that image is visible on canvas.
      *
-     * @param cloudTopLeftCorner
-     *            required top left corner of canvas
+     * @param cloudTopLeftCorner required top left corner of canvas
      * @return <true> when cloud is visible on canvas otherwise return
      *         <code>false</code>
      */
@@ -101,13 +104,16 @@ class AnimationClouds {
         if (visibleAreaService.isVisibleMapPoint(cloudTopLeftCorner)) {
             return true;
         }
-        if (visibleAreaService.isVisibleMapPoint(cloudTopLeftCorner.add(width, 0))) {
+        if (visibleAreaService
+                .isVisibleMapPoint(cloudTopLeftCorner.add(width, 0))) {
             return true;
         }
-        if (visibleAreaService.isVisibleMapPoint(cloudTopLeftCorner.add(0, height))) {
+        if (visibleAreaService
+                .isVisibleMapPoint(cloudTopLeftCorner.add(0, height))) {
             return true;
         }
-        if (visibleAreaService.isVisibleMapPoint(cloudTopLeftCorner.add(width, height))) {
+        if (visibleAreaService
+                .isVisibleMapPoint(cloudTopLeftCorner.add(width, height))) {
             return true;
         }
         return false;

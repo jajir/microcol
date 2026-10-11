@@ -11,7 +11,8 @@ import com.google.common.collect.Lists;
 
 final class Default_2_mission extends AbstractMission<Default_2_goals> {
 
-    Default_2_mission(final MissionCreationContext context, final Default_2_goals goals) {
+    Default_2_mission(final MissionCreationContext context,
+            final Default_2_goals goals) {
         super(context, goals);
     }
 
@@ -20,8 +21,10 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
         return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
                 GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
-                            .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
-                        fireEvent(new EventFinishMission(Missions.default_m2_done1,
+                            .equals(context.getEvent().getGameOverResult()
+                                    .getGameOverReason())) {
+                        fireEvent(new EventFinishMission(
+                                Missions.default_m2_done1,
                                 Missions.default_m2_done2));
                         return "ok";
                     }
@@ -53,7 +56,8 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
 
     public void onIndependenceWasDeclared() {
         if (!getGoals().getGoalDeclareIndependence().isFinished()) {
-            fireEvent(new EventShowMessages(Missions.default_m2_declareIndependence_done,
+            fireEvent(new EventShowMessages(
+                    Missions.default_m2_declareIndependence_done,
                     Missions.default_m2_portIsClosed));
             getGoals().getGoalDeclareIndependence().setFinished(true);
         }

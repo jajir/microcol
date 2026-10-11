@@ -22,9 +22,8 @@ public final class MouseOverTileManager {
 
     /**
      * Default constructor
-     * 
-     * @param eventBus
-     *            required event bus that allows to fire new event
+     *
+     * @param eventBus required event bus that allows to fire new event
      */
     @Inject
     public MouseOverTileManager(final EventBus eventBus) {
@@ -34,8 +33,8 @@ public final class MouseOverTileManager {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("mouseOverTile", mouseOverTile)
-                .toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("mouseOverTile", mouseOverTile).toString();
     }
 
     public Optional<Location> getMouseOverTile() {

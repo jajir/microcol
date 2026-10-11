@@ -82,8 +82,8 @@ public class PlayerTest {
 
     @BeforeEach
     private void beforeEach() {
-        player = new PlayerHuman("Czech", false, 10000, model, false, new HashMap<>(),
-                new HashSet<>());
+        player = new PlayerHuman("Czech", false, 10000, model, false,
+                new HashMap<>(), new HashSet<>());
     }
 
     @AfterEach

@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Connect unit and high see between each other.
- * 
+ *
  */
 public class PlaceHighSea extends AbstractPlace {
 
@@ -24,7 +24,8 @@ public class PlaceHighSea extends AbstractPlace {
      */
     private int remainigTurns;
 
-    public PlaceHighSea(final Unit unit, final boolean isTravelToEurope, final int requiredTurns) {
+    public PlaceHighSea(final Unit unit, final boolean isTravelToEurope,
+            final int requiredTurns) {
         super(unit);
         Preconditions.checkArgument(unit.getType().isShip(),
                 "Only ships could be placed to high sea.");
@@ -59,9 +60,10 @@ public class PlaceHighSea extends AbstractPlace {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceHighSea.class).add("unit id", getUnit().getId())
-                .add("isTravelToEurope", isTravelToEurope).add("remainigTurns", remainigTurns)
-                .toString();
+        return MoreObjects.toStringHelper(PlaceHighSea.class)
+                .add("unit id", getUnit().getId())
+                .add("isTravelToEurope", isTravelToEurope)
+                .add("remainigTurns", remainigTurns).toString();
     }
 
     @Override

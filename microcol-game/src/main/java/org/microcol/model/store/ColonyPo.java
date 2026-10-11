@@ -8,7 +8,6 @@ import java.util.Map;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
-
 public final class ColonyPo {
 
     private String name;
@@ -20,7 +19,7 @@ public final class ColonyPo {
     private List<ColonyFieldPo> colonyFields = new ArrayList<>();
 
     private List<ConstructionPo> constructions = new ArrayList<>();
-    
+
     private List<ColonyBuildingQueueItemPo> buildingQueue = new ArrayList<>();
 
     private Map<String, Integer> colonyWarehouse = new HashMap<>();
@@ -41,8 +40,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param name
-     *            the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -56,8 +54,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param ownerName
-     *            the ownerName to set
+     * @param ownerName the ownerName to set
      */
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
@@ -71,8 +68,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param location
-     *            the location to set
+     * @param location the location to set
      */
     public void setLocation(Location location) {
         this.location = location;
@@ -86,8 +82,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param colonyFields
-     *            the colonyFields to set
+     * @param colonyFields the colonyFields to set
      */
     public void setColonyFields(final List<ColonyFieldPo> colonyFields) {
         this.colonyFields = colonyFields;
@@ -101,8 +96,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param constructions
-     *            the constructions to set
+     * @param constructions the constructions to set
      */
     public void setConstructions(List<ConstructionPo> constructions) {
         this.constructions = constructions;
@@ -116,8 +110,7 @@ public final class ColonyPo {
     }
 
     /**
-     * @param colonyWarehouse
-     *            the colonyWarehouse to set
+     * @param colonyWarehouse the colonyWarehouse to set
      */
     public void setColonyWarehouse(final Map<String, Integer> colonyWarehouse) {
         this.colonyWarehouse = colonyWarehouse;
@@ -133,7 +126,8 @@ public final class ColonyPo {
     /**
      * @param buildingQueue the buildingQueue to set
      */
-    public void setBuildingQueue(List<ColonyBuildingQueueItemPo> buildingQueue) {
+    public void setBuildingQueue(
+            List<ColonyBuildingQueueItemPo> buildingQueue) {
         this.buildingQueue = buildingQueue;
     }
 

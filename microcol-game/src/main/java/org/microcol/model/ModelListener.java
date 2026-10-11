@@ -41,9 +41,8 @@ public interface ModelListener {
     /**
      * When player start turn this event is fired. It could notify UI that human
      * player is on turn.
-     * 
-     * @param event
-     *            required event
+     *
+     * @param event required event
      */
     void onTurnStarted(TurnStartedEvent event);
 
@@ -53,8 +52,7 @@ public interface ModelListener {
      * Turn is finished by calling model.endTurn().
      * </p>
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onTurnFinished(TurnFinishedEvent event);
 
@@ -65,40 +63,35 @@ public interface ModelListener {
     /**
      * It's called when unit move to high seas.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 
     /**
      * It's called when ship arrive to colonies from Europe.
-     * 
-     * @param event
-     *            required event object
+     *
+     * @param event required event object
      */
     void onUnitArraviedToColonies(UnitArrivedToColoniesEvent event);
 
     /**
      * It's called when unit move to colony field.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onUnitMovedToColonyField(UnitMovedToColonyFieldEvent event);
 
     /**
      * It's called when unit move to construction slot in colony.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onUnitMovedToConstruction(UnitMovedToConstructionEvent event);
 
     /**
      * It's called when unit move to map location.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onUnitMovedToLocation(UnitMovedToLocationEvent event);
 
@@ -109,24 +102,21 @@ public interface ModelListener {
      * be treated as one piece. For example move should be treated as one action
      * even when it's composed from single one step moves.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onActionStarted(ActionStartedEvent event);
 
     /**
      * It's called when some action ended.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onActionEnded(ActionEndedEvent event);
 
     /**
      * It's called move is finished. No other move step event could come.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onUnitMoveFinished(UnitMoveFinishedEvent event);
 
@@ -143,8 +133,7 @@ public interface ModelListener {
     /**
      * Event is raised when game is stopped. This is last event send by model.
      *
-     * @param event
-     *            required event object
+     * @param event required event object
      */
     void onGameStopped(GameStoppedEvent event);
 
@@ -161,16 +150,14 @@ public interface ModelListener {
     /**
      * Event is raised when new unit is born in colony.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     void onNewUnitWasBorn(NewUnitWasBornEvent event);
 
     /**
      * Event is raised when unit starts same action like plow field.
-     * 
-     * @param event
-     *            required event
+     *
+     * @param event required event
      */
     void onActionWasStarted(ActionWasStartedEvent event);
 }

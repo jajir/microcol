@@ -20,7 +20,8 @@ import com.google.inject.Inject;
  */
 public final class ApplicationController {
 
-    private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(ApplicationController.class);
 
     private final GameController gameController;
 
@@ -32,7 +33,8 @@ public final class ApplicationController {
 
     @Inject
     public ApplicationController(final GameController gameController,
-            final MusicController musicController, final GamePreferences gamePreferences, final EventBus eventBus) {
+            final MusicController musicController,
+            final GamePreferences gamePreferences, final EventBus eventBus) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
@@ -52,10 +54,9 @@ public final class ApplicationController {
      */
     public void startNewFreeGame() {
         logger.debug("Start new default game.");
-        gameController.startCampaignMission(CampaignNames.freePlay, FreePlay_missionNames.freePlay);
+        gameController.startCampaignMission(CampaignNames.freePlay,
+                FreePlay_missionNames.freePlay);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
-    
-    
 
 }

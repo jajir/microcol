@@ -40,38 +40,47 @@ public abstract class AbstractMicroColTest {
 
     private final static String DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS = "src/test/scenarios/";
 
-    private final Logger logger = LoggerFactory.getLogger(AbstractMicroColTest.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(AbstractMicroColTest.class);
 
     private TestContext context;
 
     AbstractMicroColTest(final String directoryWithTestScenarios) {
-	/*
-	 * Each test gets writable copies of the fixture settings. Running the game
-	 * must not change source fixtures or the player's personal configuration.
-	 */
-	final Path settings = Path.of(Preconditions.checkNotNull(directoryWithTestScenarios), ".microcol");
-	try {
-	    final Path homes = Files.createDirectories(Path.of("target", "test-homes"));
-	    final Path home = Files.createTempDirectory(homes, getClass().getSimpleName() + "-");
-	    final Path targetSettings = Files.createDirectories(home.resolve(".microcol"));
-	    try (Stream<Path> files = Files.list(settings)) {
-		for (Path file : (Iterable<Path>) files::iterator) {
-		    Files.copy(file, targetSettings.resolve(file.getFileName()));
-		}
-	    }
-	    System.setProperty("user.home", home.toAbsolutePath().toString());
-	} catch (IOException e) {
-	    throw new UncheckedIOException("Unable to prepare isolated test settings", e);
-	}
+        /*
+         * Each test gets writable copies of the fixture settings. Running the
+         * game must not change source fixtures or the player's personal
+         * configuration.
+         */
+        final Path settings = Path.of(
+                Preconditions.checkNotNull(directoryWithTestScenarios),
+                ".microcol");
+        try {
+            final Path homes = Files
+                    .createDirectories(Path.of("target", "test-homes"));
+            final Path home = Files.createTempDirectory(homes,
+                    getClass().getSimpleName() + "-");
+            final Path targetSettings = Files
+                    .createDirectories(home.resolve(".microcol"));
+            try (Stream<Path> files = Files.list(settings)) {
+                for (Path file : (Iterable<Path>) files::iterator) {
+                    Files.copy(file,
+                            targetSettings.resolve(file.getFileName()));
+                }
+            }
+            System.setProperty("user.home", home.toAbsolutePath().toString());
+        } catch (IOException e) {
+            throw new UncheckedIOException(
+                    "Unable to prepare isolated test settings", e);
+        }
     }
 
     AbstractMicroColTest() {
-	this(DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS);
+        this(DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS);
     }
 
     @BeforeEach
     void beforeEach(final FxRobot robot) {
-	getContext().setRobot(robot);
+        getContext().setRobot(robot);
     }
 
     /**
@@ -80,20 +89,24 @@ public abstract class AbstractMicroColTest {
      * MicroCol will by started in development mode and with fake file loading
      * service.
      * </p>
-     * 
+     *
      * @param primaryStage       required primary stage
      * @param clazz              required class of junit test
      * @param microcolFileToLoad required file which will be loaded in game
      * @throws Exception
      */
-    protected void initialize(final Stage primaryStage, final Class<?> clazz, final File microcolFileToLoad)
-	    throws Exception {
-	initialize(primaryStage, clazz, binder -> {
-	    binder.bind(CursorService.class).toInstance(new CursorServiceNoOpp());
-	    FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	    Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(microcolFileToLoad);
-	    binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
-	});
+    protected void initialize(final Stage primaryStage, final Class<?> clazz,
+            final File microcolFileToLoad) throws Exception {
+        initialize(primaryStage, clazz, binder -> {
+            binder.bind(CursorService.class)
+                    .toInstance(new CursorServiceNoOpp());
+            FileSelectingService fileSelectingService = Mockito
+                    .mock(FileSelectingService.class);
+            Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class)))
+                    .thenReturn(microcolFileToLoad);
+            binder.bind(FileSelectingService.class)
+                    .toInstance(fileSelectingService);
+        });
     }
 
     /**
@@ -102,20 +115,22 @@ public abstract class AbstractMicroColTest {
      * MicroCol will by started in development mode and with fake file loading
      * service.
      * </p>
-     * 
+     *
      * @param primaryStage    required primary stage
      * @param clazz           required class of junit test
      * @param overridenModule guice module where should be overridden MicroCol
      *                        services
      * @throws Exception
      */
-    protected void initialize(final Stage primaryStage, final Class<?> clazz, final Module overridenModule)
-	    throws Exception {
-	logger.info("Starting MicroCol UI test " + clazz.getName());
-	System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT, Boolean.TRUE.toString());
-	final MicroColApplication microCol = new MicroColApplication(overridenModule);
-	microCol.start(primaryStage);
-	context = new TestContext(microCol, primaryStage);
+    protected void initialize(final Stage primaryStage, final Class<?> clazz,
+            final Module overridenModule) throws Exception {
+        logger.info("Starting MicroCol UI test " + clazz.getName());
+        System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT,
+                Boolean.TRUE.toString());
+        final MicroColApplication microCol = new MicroColApplication(
+                overridenModule);
+        microCol.start(primaryStage);
+        context = new TestContext(microCol, primaryStage);
     }
 
     /**
@@ -124,45 +139,52 @@ public abstract class AbstractMicroColTest {
      * @param binder required guice binder
      */
     protected void bind(final Binder binder) {
-	// by default do nothing
+        // by default do nothing
     }
 
     public MicroColApplication getMicroCol() {
-	return context.getMicroCol();
+        return context.getMicroCol();
     }
 
     public Stage getPrimaryStage() {
-	return context.getPrimaryStage();
+        return context.getPrimaryStage();
     }
 
     public TestContext getContext() {
-	return context;
+        return context;
     }
 
     public NodeFinder getNodeFinder() {
-	return FxAssert.assertContext().getNodeFinder();
+        return FxAssert.assertContext().getNodeFinder();
     }
 
     public Model getModel() {
-	return getContext().getModel();
+        return getContext().getModel();
     }
 
     public Player getHumanPlayer() {
-	return getModel().getPlayers().stream().filter(player -> player.isHuman()).findAny()
-		.orElseThrow(() -> new IllegalStateException("There is no human player in game model."));
+        return getModel().getPlayers().stream()
+                .filter(player -> player.isHuman()).findAny()
+                .orElseThrow(() -> new IllegalStateException(
+                        "There is no human player in game model."));
     }
 
-    public void verifyNumberOfGoodsInShip(final UnitWithCargo ship, final int cargoSlotIndex,
-	    final Goods expectedGoods) {
-	final CargoSlot cargoSlot = ship.getCargo().getSlotByIndex(cargoSlotIndex);
+    public void verifyNumberOfGoodsInShip(final UnitWithCargo ship,
+            final int cargoSlotIndex, final Goods expectedGoods) {
+        final CargoSlot cargoSlot = ship.getCargo()
+                .getSlotByIndex(cargoSlotIndex);
 
-	if (expectedGoods.isZero()) {
-	    assertFalse(cargoSlot.getGoods().isPresent(), "Cargo slot should be empty");
-	} else {
-	    assertTrue(cargoSlot.getGoods().isPresent(), "Cargo slot should not be empty");
-	    assertEquals(expectedGoods.getType(), cargoSlot.getGoods().get().getType());
-	    assertEquals(expectedGoods.getAmount(), cargoSlot.getGoods().get().getAmount());
-	}
+        if (expectedGoods.isZero()) {
+            assertFalse(cargoSlot.getGoods().isPresent(),
+                    "Cargo slot should be empty");
+        } else {
+            assertTrue(cargoSlot.getGoods().isPresent(),
+                    "Cargo slot should not be empty");
+            assertEquals(expectedGoods.getType(),
+                    cargoSlot.getGoods().get().getType());
+            assertEquals(expectedGoods.getAmount(),
+                    cargoSlot.getGoods().get().getAmount());
+        }
     }
 
 }

@@ -12,7 +12,8 @@ public final class TurnStartedEvent extends AbstractModelEvent {
 
     private final boolean isFreshStart;
 
-    public TurnStartedEvent(final Model model, final Player player, final boolean isFreshStart) {
+    public TurnStartedEvent(final Model model, final Player player,
+            final boolean isFreshStart) {
         super(model);
 
         this.player = Preconditions.checkNotNull(player);

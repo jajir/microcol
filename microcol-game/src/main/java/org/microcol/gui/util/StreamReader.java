@@ -18,9 +18,8 @@ public class StreamReader {
 
     /**
      * Open stream from class path. It's compatible with java module.
-     * 
-     * @param fileName
-     *            required file name relative to class path.
+     *
+     * @param fileName required file name relative to class path.
      * @return return input stream
      */
     public InputStream openStream(final String fileName) {
@@ -35,9 +34,9 @@ public class StreamReader {
         };
         final InputStream stream = AccessController.doPrivileged(pa);
         if (stream == null) {
-            throw new MicroColException(
-                    String.format("Unabble to load file %s from class path in module %s", fileName,
-                            module.getName()));
+            throw new MicroColException(String.format(
+                    "Unabble to load file %s from class path in module %s",
+                    fileName, module.getName()));
         }
         return stream;
     }
@@ -46,7 +45,8 @@ public class StreamReader {
         if (bundleName.contains("://")) {
             return null;
         }
-        StringBuilder sb = new StringBuilder(bundleName.length() + 1 + suffix.length());
+        StringBuilder sb = new StringBuilder(
+                bundleName.length() + 1 + suffix.length());
         sb.append(bundleName.replace('.', '/')).append('.').append(suffix);
         return sb.toString();
     }

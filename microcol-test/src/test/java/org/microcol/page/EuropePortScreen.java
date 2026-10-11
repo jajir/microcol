@@ -19,90 +19,107 @@ import javafx.scene.layout.VBox;
  */
 public class EuropePortScreen extends AbstractScreen {
 
-    private final Logger logger = LoggerFactory.getLogger(EuropePortScreen.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(EuropePortScreen.class);
 
     private final PageComponentPanelDock pageComponentPanelDock;
 
     public static EuropePortScreen of(final TestContext context) {
-	return new EuropePortScreen(context);
+        return new EuropePortScreen(context);
     }
 
     private EuropePortScreen(final TestContext context) {
-	super(context);
-	pageComponentPanelDock = PageComponentPanelDock.of(context);
-	verifyEuropePortName();
+        super(context);
+        pageComponentPanelDock = PageComponentPanelDock.of(context);
+        verifyEuropePortName();
     }
 
     private void verifyEuropePortName() {
-	final String expectedNamePart = "Europe";
-	final String cssClass = ".label-title";
-	final List<Labeled> list = getListOfNodes(cssClass);
-	final Labeled labeled = list.get(0);
-	logger.info("Colony name: " + labeled.getText());
-	assertTrue(labeled.getText().contains(expectedNamePart),
-		String.format("Text '%s' should appear in Europe port name '%s'", expectedNamePart, labeled.getText()));
+        final String expectedNamePart = "Europe";
+        final String cssClass = ".label-title";
+        final List<Labeled> list = getListOfNodes(cssClass);
+        final Labeled labeled = list.get(0);
+        logger.info("Colony name: " + labeled.getText());
+        assertTrue(labeled.getText().contains(expectedNamePart),
+                String.format(
+                        "Text '%s' should appear in Europe port name '%s'",
+                        expectedNamePart, labeled.getText()));
     }
 
     public void assertGold(final int expectedAmountOfGold) {
-	final Labeled labeledGold = getLabeledById("labelGold");
-	String gold = labeledGold.getText();
-	gold = gold.substring(gold.lastIndexOf(" ") + 1);
-	final int realGold = Integer.valueOf(gold);
-	assertEquals(expectedAmountOfGold, realGold,
-		String.format("Expected gold was '%s' but really is '%s'", expectedAmountOfGold, realGold));
+        final Labeled labeledGold = getLabeledById("labelGold");
+        String gold = labeledGold.getText();
+        gold = gold.substring(gold.lastIndexOf(" ") + 1);
+        final int realGold = Integer.valueOf(gold);
+        assertEquals(expectedAmountOfGold, realGold,
+                String.format("Expected gold was '%s' but really is '%s'",
+                        expectedAmountOfGold, realGold));
     }
 
     public BuyUnitScreen openBuyUnitScreen() {
-	final Button buttonNextTurn = getButtonById(EuropeButtonsPanel.BUY_BUTTON_ID);
-	getRobot().clickOn(buttonNextTurn);
-	WaitForAsyncUtils.waitForFxEvents();
-	return BuyUnitScreen.of(getContext());
+        final Button buttonNextTurn = getButtonById(
+                EuropeButtonsPanel.BUY_BUTTON_ID);
+        getRobot().clickOn(buttonNextTurn);
+        WaitForAsyncUtils.waitForFxEvents();
+        return BuyUnitScreen.of(getContext());
     }
 
     public EuropePortScreen selectUnitFromPort(final int unitIndex) {
-	pageComponentPanelDock.selectUnitFromPort(unitIndex);
-	return this;
+        pageComponentPanelDock.selectUnitFromPort(unitIndex);
+        return this;
     }
 
-    public void verifyNumberOfShipsInPort(final int expectedNumberOfShipsInPort) {
-	pageComponentPanelDock.verifyNumberOfShipsInPort(expectedNumberOfShipsInPort);
+    public void verifyNumberOfShipsInPort(
+            final int expectedNumberOfShipsInPort) {
+        pageComponentPanelDock
+                .verifyNumberOfShipsInPort(expectedNumberOfShipsInPort);
     }
 
-    public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(final int indexOfGoods,
-	    final int indexOfCargoSlot) {
-	getRobot().press(getGoodsAmountModifiers());
-	buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
-	getRobot().release(getGoodsAmountModifiers());
-	WaitForAsyncUtils.waitForFxEvents();
-	return ScreenMarketBuy.of(getContext());
+    public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(
+            final int indexOfGoods, final int indexOfCargoSlot) {
+        getRobot().press(getGoodsAmountModifiers());
+        buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
+        getRobot().release(getGoodsAmountModifiers());
+        WaitForAsyncUtils.waitForFxEvents();
+        return ScreenMarketBuy.of(getContext());
     }
 
-    public void buyGoodsAndMoveItToCargoSlot(final int indexOfGoods, final int indexOfCargoSlot) {
-	getRobot().drag(getListOfGoodsToBuy().get(indexOfGoods), MouseButton.PRIMARY)
-		.dropTo(pageComponentPanelDock.getListOfCrates().get(indexOfCargoSlot)).release(MouseButton.PRIMARY);
+    public void buyGoodsAndMoveItToCargoSlot(final int indexOfGoods,
+            final int indexOfCargoSlot) {
+        getRobot()
+                .drag(getListOfGoodsToBuy().get(indexOfGoods),
+                        MouseButton.PRIMARY)
+                .dropTo(pageComponentPanelDock.getListOfCrates()
+                        .get(indexOfCargoSlot))
+                .release(MouseButton.PRIMARY);
     }
 
-    public ScreenMarketSell sellGoodsWithPressedControl(final int indexOfCargoSlot, final int indexOfGoods) {
-	getRobot().press(getGoodsAmountModifiers());
-	sellGoods(indexOfCargoSlot, indexOfGoods);
-	getRobot().release(getGoodsAmountModifiers());
-	WaitForAsyncUtils.waitForFxEvents();
-	return ScreenMarketSell.of(getContext());
+    public ScreenMarketSell sellGoodsWithPressedControl(
+            final int indexOfCargoSlot, final int indexOfGoods) {
+        getRobot().press(getGoodsAmountModifiers());
+        sellGoods(indexOfCargoSlot, indexOfGoods);
+        getRobot().release(getGoodsAmountModifiers());
+        WaitForAsyncUtils.waitForFxEvents();
+        return ScreenMarketSell.of(getContext());
     }
 
     public void sellGoods(final int indexOfCargoSlot, final int indexOfGoods) {
-	getRobot().drag(pageComponentPanelDock.getListOfCrates().get(indexOfCargoSlot), MouseButton.PRIMARY)
-		.dropTo(getListOfGoodsToBuy().get(indexOfGoods)).release(MouseButton.PRIMARY);
+        getRobot()
+                .drag(pageComponentPanelDock.getListOfCrates()
+                        .get(indexOfCargoSlot), MouseButton.PRIMARY)
+                .dropTo(getListOfGoodsToBuy().get(indexOfGoods))
+                .release(MouseButton.PRIMARY);
     }
 
     public List<VBox> getListOfGoodsToBuy() {
-	return getListOfNodes(".panelGoods");
+        return getListOfNodes(".panelGoods");
     }
 
     public GamePage close() {
-	final Button buttonNextTurn = getButtonById(EuropeButtonsPanel.CLOSE_BUTTON_ID);
-	getRobot().clickOn(buttonNextTurn);
-	return GamePage.of(getContext());
+        final Button buttonNextTurn = getButtonById(
+                EuropeButtonsPanel.CLOSE_BUTTON_ID);
+        getRobot().clickOn(buttonNextTurn);
+        return GamePage.of(getContext());
     }
 
 }

@@ -28,22 +28,27 @@ public final class GameModelDao {
     private final MissionFactoryManager missionFactoryManager;
 
     @Inject
-    GameModelDao(final GameModelPoDao gameModelPoDao, final CampaignManager campaignManager,
+    GameModelDao(final GameModelPoDao gameModelPoDao,
+            final CampaignManager campaignManager,
             final MissionFactoryManager missionFactoryManager) {
         this.gameModelPoDao = Preconditions.checkNotNull(gameModelPoDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
-        this.missionFactoryManager = Preconditions.checkNotNull(missionFactoryManager);
+        this.missionFactoryManager = Preconditions
+                .checkNotNull(missionFactoryManager);
     }
 
     public GameModel loadFromFile(final File file, final EventBus eventBus) {
         return makeFromModelPo(gameModelPoDao.loadFromFile(file), eventBus);
     }
 
-    public GameModel loadFromClassPath(final String fileName, final EventBus eventBus) {
-        return makeFromModelPo(gameModelPoDao.loadFromClassPath(fileName), eventBus);
+    public GameModel loadFromClassPath(final String fileName,
+            final EventBus eventBus) {
+        return makeFromModelPo(gameModelPoDao.loadFromClassPath(fileName),
+                eventBus);
     }
 
-    private GameModel makeFromModelPo(final GameModelPo gameModelPo, final EventBus eventBus) {
+    private GameModel makeFromModelPo(final GameModelPo gameModelPo,
+            final EventBus eventBus) {
         final ExternalGameOver makeGameOver = new ExternalGameOver(
                 MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE);
         final List<Function<Model, GameOverResult>> evaluators = MissionImpl
@@ -56,10 +61,11 @@ public final class GameModelDao {
         final CampaignMission campaignMission = campaign
                 .getMisssionByName(gameModelPo.getMissionName());
 
-        final MissionCreationContext context = new MissionCreationContext(eventBus, model,
-                gameModelPo, campaignManager, campaignMission, makeGameOver);
-        final Mission<?> mission = missionFactoryManager.make(campaignMission.getMissionName(),
-                context);
+        final MissionCreationContext context = new MissionCreationContext(
+                eventBus, model, gameModelPo, campaignManager, campaignMission,
+                makeGameOver);
+        final Mission<?> mission = missionFactoryManager
+                .make(campaignMission.getMissionName(), context);
         return new GameModel(campaign, campaignMission, mission, model);
     }
 
@@ -69,7 +75,8 @@ public final class GameModelDao {
         } else if (CampaignNames.freePlay.toString().equals(name)) {
             return CampaignNames.freePlay;
         }
-        throw new MicroColException(String.format("Unabble to resolve campaign '%s'", name));
+        throw new MicroColException(
+                String.format("Unabble to resolve campaign '%s'", name));
     }
 
     public void saveToFile(final String fileName, final GameModel gameMode) {

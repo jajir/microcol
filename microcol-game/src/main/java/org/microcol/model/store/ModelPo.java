@@ -22,16 +22,20 @@ public class ModelPo {
     private EuropePo europe = new EuropePo();
 
     private Location focusedField;
-    
+
     private StatisticsPo statistics = new StatisticsPo();
-    
+
     private GameManagerPo gameManager = new GameManagerPo();
 
     public UnitPo getUnitWithUnitInCargo(final Integer idUnitInCargo) {
-        Preconditions.checkState(idUnitInCargo != null, "IdUnitInCargo is null");
-        return units.stream().filter(unit -> unit.getCargo().containsUnitInCargo(idUnitInCargo))
-                .findAny().orElseThrow(() -> new IllegalStateException(String.format(
-                        "Unable to find unit containing unit '%s' in cargo", idUnitInCargo)));
+        Preconditions.checkState(idUnitInCargo != null,
+                "IdUnitInCargo is null");
+        return units.stream().filter(
+                unit -> unit.getCargo().containsUnitInCargo(idUnitInCargo))
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException(String.format(
+                        "Unable to find unit containing unit '%s' in cargo",
+                        idUnitInCargo)));
     }
 
     public List<UnitPo> getUnits() {
@@ -66,8 +70,7 @@ public class ModelPo {
     }
 
     /**
-     * @param calendar
-     *            the calendar to set
+     * @param calendar the calendar to set
      */
     public void setCalendar(CalendarPo calendar) {
         this.calendar = calendar;
@@ -81,8 +84,7 @@ public class ModelPo {
     }
 
     /**
-     * @param europe
-     *            the europe to set
+     * @param europe the europe to set
      */
     public void setEurope(EuropePo europe) {
         this.europe = europe;
@@ -96,8 +98,7 @@ public class ModelPo {
     }
 
     /**
-     * @param focusedField
-     *            the focusedField to set
+     * @param focusedField the focusedField to set
      */
     public void setFocusedField(Location focusedField) {
         this.focusedField = focusedField;

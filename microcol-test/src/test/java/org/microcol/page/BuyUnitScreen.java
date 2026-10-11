@@ -21,33 +21,41 @@ public class BuyUnitScreen extends AbstractScreen {
     private final Logger logger = LoggerFactory.getLogger(BuyUnitScreen.class);
 
     public static BuyUnitScreen of(final TestContext context) {
-	return new BuyUnitScreen(context);
+        return new BuyUnitScreen(context);
     }
 
     private BuyUnitScreen(final TestContext context) {
-	super(context);
+        super(context);
     }
 
     public EuropePortScreen buyUnitByName(final String unitNameToBuy) {
-	final List<BuyUnitPanel> buyUnitPanels = getListOfNodes(".unitPanel");
-	final BuyUnitPanel buyUnitPanel = buyUnitPanels.stream().filter(node -> {
-	    final String label = getNodeFinder().from(node).lookup(".name").queryLabeled().getText();
-	    logger.debug("Comparing given unit name '{}' with found '{}'", unitNameToBuy, label);
-	    return unitNameToBuy.equals(label);
-	}).findFirst().orElseThrow(() -> new IllegalArgumentException(
-		String.format("There is no unit to buy with label '%s'", unitNameToBuy)));
-	final Button button = getNodeFinder().from(buyUnitPanel).lookup(".buttonBuy").queryButton();
-	getRobot().clickOn(button, MouseButton.PRIMARY);
-	WaitForAsyncUtils.waitForFxEvents();
-	return EuropePortScreen.of(getContext());
+        final List<BuyUnitPanel> buyUnitPanels = getListOfNodes(".unitPanel");
+        final BuyUnitPanel buyUnitPanel = buyUnitPanels.stream()
+                .filter(node -> {
+                    final String label = getNodeFinder().from(node)
+                            .lookup(".name").queryLabeled().getText();
+                    logger.debug(
+                            "Comparing given unit name '{}' with found '{}'",
+                            unitNameToBuy, label);
+                    return unitNameToBuy.equals(label);
+                }).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("There is no unit to buy with label '%s'",
+                                unitNameToBuy)));
+        final Button button = getNodeFinder().from(buyUnitPanel)
+                .lookup(".buttonBuy").queryButton();
+        getRobot().clickOn(button, MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return EuropePortScreen.of(getContext());
     }
 
     public EuropePortScreen close() {
-	final Button buttonNextTurn = getButtonById(EuropeButtonsPanel.CLOSE_BUTTON_ID);
-	assertNotNull(buttonNextTurn);
-	getRobot().clickOn(buttonNextTurn);
-	WaitForAsyncUtils.waitForFxEvents();
-	return EuropePortScreen.of(getContext());
+        final Button buttonNextTurn = getButtonById(
+                EuropeButtonsPanel.CLOSE_BUTTON_ID);
+        assertNotNull(buttonNextTurn);
+        getRobot().clickOn(buttonNextTurn);
+        WaitForAsyncUtils.waitForFxEvents();
+        return EuropePortScreen.of(getContext());
     }
 
 }

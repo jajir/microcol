@@ -23,9 +23,11 @@ public class ScreenTurnReport implements GameScreen {
             .getResource("/gui/TurnReport.css").toExternalForm();
 
     @Inject
-    ScreenTurnReport(final TurnReportPanel turnReportPanel, final TurnReportView turnReportView) {
+    ScreenTurnReport(final TurnReportPanel turnReportPanel,
+            final TurnReportView turnReportView) {
         this.turnReportView = Preconditions.checkNotNull(turnReportView);
-        turnReportView.getContent().getStylesheets().add(STYLE_SHEET_TURN_REPORT);
+        turnReportView.getContent().getStylesheets()
+                .add(STYLE_SHEET_TURN_REPORT);
         this.turnReportPanel = Preconditions.checkNotNull(turnReportPanel);
         turnReportView.setMenuPanel(turnReportPanel);
     }

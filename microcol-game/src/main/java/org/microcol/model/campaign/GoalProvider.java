@@ -56,8 +56,7 @@ final class GoalProvider {
         }
 
         /**
-         * @param alreadyWasSold
-         *            the alreadyWasSold to set
+         * @param alreadyWasSold the alreadyWasSold to set
          */
         public void setWasSold(int alreadyWasSold) {
             this.alreadyWasSold = alreadyWasSold;

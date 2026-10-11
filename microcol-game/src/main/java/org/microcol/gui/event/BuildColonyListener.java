@@ -22,12 +22,15 @@ public final class BuildColonyListener {
     @Inject
     public BuildColonyListener(final GameModelController gameModelController,
             final SelectedUnitManager selectedUnitManager) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
     }
 
     @Subscribe
-    private void onBuildColony(@SuppressWarnings("unused") final BuildColonyEvent event) {
+    private void onBuildColony(
+            @SuppressWarnings("unused") final BuildColonyEvent event) {
         final Player player = gameModelController.getHumanPlayer();
         final Unit unit = selectedUnitManager.getSelectedUnit()
                 .orElseThrow(() -> new IllegalStateException(

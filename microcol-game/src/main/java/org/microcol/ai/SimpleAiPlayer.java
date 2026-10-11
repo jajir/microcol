@@ -49,7 +49,8 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
-            final Location newLocation = lastLocation.add(unitDirections.getLastVector(unit));
+            final Location newLocation = lastLocation
+                    .add(unitDirections.getLastVector(unit));
             if (canMoveAt(unit, newLocation)) {
                 locations.add(newLocation);
                 lastLocation = newLocation;
@@ -66,19 +67,18 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
      * Ships are blocked to go to high-seas
      * </p>
      * .
-     * 
-     * @param unit
-     *            required unit
-     * @param location
-     *            required location
+     *
+     * @param unit     required unit
+     * @param location required location
      * @return return <code>true</code> when unit can move to given location
      */
     private boolean canMoveAt(final Unit unit, final Location location) {
-        return unit.isPossibleToMoveAt(location)
-                && !getModel().getMap().getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
+        return unit.isPossibleToMoveAt(location) && !getModel().getMap()
+                .getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
     }
 
-    private boolean isPossibleToAttack(final Unit unit, final Location lastLocation) {
+    private boolean isPossibleToAttack(final Unit unit,
+            final Location lastLocation) {
         if (unit.getType().canAttack()) {
             for (final Location location : lastLocation.getNeighbors()) {
                 if (unit.isPossibleToAttackAt(location)) {
@@ -90,10 +90,11 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     }
 
     private void tryToEmbark(final Unit unit) {
-        if (unit.isStorable() && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
+        if (unit.isStorable() && unit.isAtPlaceLocation()
+                && unit.getActionPoints() > 0) {
             unit.getNeighborUnitsWithFreeSlot().stream()
-                    .flatMap(u -> u.getCargo().getSlots().stream()).filter(slot -> slot.isEmpty())
-                    .findAny().get().store(unit);
+                    .flatMap(u -> u.getCargo().getSlots().stream())
+                    .filter(slot -> slot.isEmpty()).findAny().get().store(unit);
         }
     }
 

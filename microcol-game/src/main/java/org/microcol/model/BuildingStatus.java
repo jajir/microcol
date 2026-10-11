@@ -7,8 +7,7 @@ import com.google.common.base.Preconditions;
 /**
  * Class help to draw building progress.
  *
- * @param <I>
- *            building item construction or unit
+ * @param <I> building item construction or unit
  */
 public class BuildingStatus<I extends ColonyBuildingItem> {
 
@@ -18,11 +17,14 @@ public class BuildingStatus<I extends ColonyBuildingItem> {
 
     private final Stat tools;
 
-    BuildingStatus(final I item, final int hammersAlreadyHave, final int hammersProduction,
-            final int toolsAlreadyHave, final int toolsProduction) {
+    BuildingStatus(final I item, final int hammersAlreadyHave,
+            final int hammersProduction, final int toolsAlreadyHave,
+            final int toolsProduction) {
         this.item = Preconditions.checkNotNull(item);
-        hammers = new Stat(hammersAlreadyHave, hammersProduction, item.getRequiredHammers());
-        tools = new Stat(toolsAlreadyHave, toolsProduction, item.getRequiredTools());
+        hammers = new Stat(hammersAlreadyHave, hammersProduction,
+                item.getRequiredHammers());
+        tools = new Stat(toolsAlreadyHave, toolsProduction,
+                item.getRequiredTools());
     }
 
     public String getName() {
@@ -30,9 +32,10 @@ public class BuildingStatus<I extends ColonyBuildingItem> {
     }
 
     public Optional<Integer> getTurnsToComplete() {
-        if (hammers.getTurnsToComplete().isPresent() && tools.getTurnsToComplete().isPresent()) {
-            return Optional.of(
-                    Math.max(hammers.getTurnsToComplete().get(), tools.getTurnsToComplete().get()));
+        if (hammers.getTurnsToComplete().isPresent()
+                && tools.getTurnsToComplete().isPresent()) {
+            return Optional.of(Math.max(hammers.getTurnsToComplete().get(),
+                    tools.getTurnsToComplete().get()));
         } else {
             return Optional.empty();
         }
@@ -47,7 +50,8 @@ public class BuildingStatus<I extends ColonyBuildingItem> {
         private final int alreadyHave;
         private final int buildPerTurn;
 
-        Stat(final int alreadyHave, final int buildPerTurn, final int required) {
+        Stat(final int alreadyHave, final int buildPerTurn,
+                final int required) {
             this.alreadyHave = alreadyHave;
             this.buildPerTurn = buildPerTurn;
             this.required = required;

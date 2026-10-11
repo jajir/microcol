@@ -26,13 +26,14 @@ public class ImageStripePainter {
         for (int cx = 0; cx < widthToPaint; cx += paintedImageWidth) {
 
             // left part of stripe
-            final int leftEdgeImageStart = center.getX() - pref.getCenterGap() / 2
-                    - paintedImageWidth;
+            final int leftEdgeImageStart = center.getX()
+                    - pref.getCenterGap() / 2 - paintedImageWidth;
             final int leftX = leftEdgeImageStart - cx;
             gc.drawImage(pref.getImage(), leftX, y);
 
             // right part of stripe
-            final int rightEdgeImageStart = center.getX() + pref.getCenterGap() / 2;
+            final int rightEdgeImageStart = center.getX()
+                    + pref.getCenterGap() / 2;
             final int rightX = rightEdgeImageStart + cx;
             gc.drawImage(pref.getImage(), rightX, y);
         }
@@ -47,8 +48,8 @@ public class ImageStripePainter {
 
         for (int cx = 0; cx < widthToPaint; cx += paintedImageWidth) {
             // left part of stripe
-            final int leftEdgeImageStart = center.getX() - pref.getCenterGap() / 2
-                    - paintedImageWidth;
+            final int leftEdgeImageStart = center.getX()
+                    - pref.getCenterGap() / 2 - paintedImageWidth;
             final int leftX = leftEdgeImageStart - cx;
             gc.drawImage(pref.getImage(), leftX, y);
 
@@ -64,11 +65,12 @@ public class ImageStripePainter {
 
         for (int cx = 0; cx < widthToPaint; cx += paintedImageWidth) {
             // right part of stripe
-            final int rightEdgeImageStart = center.getX() + pref.getCenterGap() / 2;
+            final int rightEdgeImageStart = center.getX()
+                    + pref.getCenterGap() / 2;
             final int rightX = rightEdgeImageStart + cx;
             gc.drawImage(pref.getImage(), rightX, y);
         }
 
     }
-    
+
 }

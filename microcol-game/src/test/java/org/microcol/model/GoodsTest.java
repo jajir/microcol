@@ -41,15 +41,17 @@ public class GoodsTest {
 
     @Test
     void verify_of_minus_10_corns() throws Exception {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
                 () -> Goods.of(GoodsType.CORN, -10));
 
-        assertEquals("Amount (-10) can't be less than zero", exception.getMessage());
+        assertEquals("Amount (-10) can't be less than zero",
+                exception.getMessage());
     }
 
     static Stream<Arguments> substractData() {
-        return Stream.of(arguments(0, 0, 0), arguments(1, 1, 0), arguments(37, 17, 20),
-                arguments(100, 100, 0));
+        return Stream.of(arguments(0, 0, 0), arguments(1, 1, 0),
+                arguments(37, 17, 20), arguments(100, 100, 0));
     }
 
     @ParameterizedTest(name = "{index}: Corn {0} minus {1} = {2}")
@@ -67,8 +69,8 @@ public class GoodsTest {
         final Goods corn1 = Goods.of(GoodsType.CORN, 34);
         final Goods corn2 = Goods.of(GoodsType.TOBACCO, 5);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> corn1.substract(corn2));
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> corn1.substract(corn2));
 
         assertEquals(
                 "Substracted goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
@@ -76,8 +78,8 @@ public class GoodsTest {
     }
 
     static Stream<Arguments> addData() {
-        return Stream.of(arguments(0, 0, 0), arguments(1, 1, 2), arguments(37, 17, 54),
-                arguments(100, 100, 200));
+        return Stream.of(arguments(0, 0, 0), arguments(1, 1, 2),
+                arguments(37, 17, 54), arguments(100, 100, 200));
     }
 
     @ParameterizedTest(name = "{index}: Corn {0} plus {1} = {2}")
@@ -95,8 +97,8 @@ public class GoodsTest {
         final Goods corn1 = Goods.of(GoodsType.CORN, 34);
         final Goods corn2 = Goods.of(GoodsType.TOBACCO, 5);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> corn1.add(corn2));
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> corn1.add(corn2));
 
         assertEquals(
                 "Added goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
@@ -106,10 +108,14 @@ public class GoodsTest {
     @Test
     void verify_equals() throws Exception {
         assertFalse(Goods.of(GoodsType.CORN, 34).equals(null));
-        assertFalse(Goods.of(GoodsType.CORN, 34).equals(Goods.of(GoodsType.TOBACCO, 5)));
-        assertFalse(Goods.of(GoodsType.CORN, 34).equals(Goods.of(GoodsType.CORN, 5)));
-        assertTrue(Goods.of(GoodsType.CORN, 34).equals(Goods.of(GoodsType.CORN, 34)));
-        assertTrue(Goods.of(GoodsType.CORN, 0).equals(Goods.of(GoodsType.CORN, 0)));
+        assertFalse(Goods.of(GoodsType.CORN, 34)
+                .equals(Goods.of(GoodsType.TOBACCO, 5)));
+        assertFalse(Goods.of(GoodsType.CORN, 34)
+                .equals(Goods.of(GoodsType.CORN, 5)));
+        assertTrue(Goods.of(GoodsType.CORN, 34)
+                .equals(Goods.of(GoodsType.CORN, 34)));
+        assertTrue(Goods.of(GoodsType.CORN, 0)
+                .equals(Goods.of(GoodsType.CORN, 0)));
     }
 
 }

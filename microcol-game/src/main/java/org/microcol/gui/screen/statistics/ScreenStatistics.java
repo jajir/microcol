@@ -24,9 +24,11 @@ public class ScreenStatistics implements GameScreen {
             .getResource("/gui/Statistics.css").toExternalForm();
 
     @Inject
-    ScreenStatistics(final StatisticsPanel statisticsPanel, final StatisticsView statisticsView) {
+    ScreenStatistics(final StatisticsPanel statisticsPanel,
+            final StatisticsView statisticsView) {
         this.statisticsView = Preconditions.checkNotNull(statisticsView);
-        statisticsView.getContent().getStylesheets().add(STYLE_SHEET_STATISTICS);
+        statisticsView.getContent().getStylesheets()
+                .add(STYLE_SHEET_STATISTICS);
         this.statisticsPanel = Preconditions.checkNotNull(statisticsPanel);
         statisticsView.setMenuPanel(statisticsPanel);
     }

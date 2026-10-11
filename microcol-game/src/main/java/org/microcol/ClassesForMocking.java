@@ -20,7 +20,8 @@ class ClassesForMocking extends AbstractModule {
     @Override
     protected void configure() {
         bind(FileSelectingService.class).in(Singleton.class);
-        bind(CursorService.class).to(CursorServiceImpl.class).in(Singleton.class);
+        bind(CursorService.class).to(CursorServiceImpl.class)
+                .in(Singleton.class);
     }
 
 }

@@ -35,9 +35,9 @@ public class ColonyWasCapturedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(ColonyWasCapturedEvent.class).add("model", getModel())
-                .add("capturingUnit", capturingUnit).add("capturedColony", capturedColony)
-                .toString();
+        return MoreObjects.toStringHelper(ColonyWasCapturedEvent.class)
+                .add("model", getModel()).add("capturingUnit", capturingUnit)
+                .add("capturedColony", capturedColony).toString();
     }
 
 }

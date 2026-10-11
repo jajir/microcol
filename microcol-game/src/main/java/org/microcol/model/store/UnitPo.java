@@ -42,13 +42,15 @@ public class UnitPo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(UnitPo.class).add("id", id).add("type", type)
-                .add("ownerId", ownerId).add("availableMoves", availableMoves)
-                .add("placeMap", placeMap).add("placeEuropePort", placeEuropePort)
-                .add("placeHighSeas", placeHighSeas).add("placeCargoSlot", placeCargoSlot)
+        return MoreObjects.toStringHelper(UnitPo.class).add("id", id)
+                .add("type", type).add("ownerId", ownerId)
+                .add("availableMoves", availableMoves).add("placeMap", placeMap)
+                .add("placeEuropePort", placeEuropePort)
+                .add("placeHighSeas", placeHighSeas)
+                .add("placeCargoSlot", placeCargoSlot)
                 .add("placeConstructionSlot", placeConstructionSlot)
-                .add("placeColonyField", placeColonyField).add("cargo", cargo).add("action", action)
-                .toString();
+                .add("placeColonyField", placeColonyField).add("cargo", cargo)
+                .add("action", action).toString();
     }
 
     public Integer getId() {
@@ -123,10 +125,10 @@ public class UnitPo {
     }
 
     /**
-     * @param placeConstructionSlotPo
-     *            the placeConstructionSlotPo to set
+     * @param placeConstructionSlotPo the placeConstructionSlotPo to set
      */
-    public void setPlaceConstructionSlot(PlaceConstructionSlotPo placeConstructionSlotPo) {
+    public void setPlaceConstructionSlot(
+            PlaceConstructionSlotPo placeConstructionSlotPo) {
         this.placeConstructionSlot = placeConstructionSlotPo;
     }
 
@@ -138,8 +140,7 @@ public class UnitPo {
     }
 
     /**
-     * @param placeColonyFieldPo
-     *            the placeColonyFieldPo to set
+     * @param placeColonyFieldPo the placeColonyFieldPo to set
      */
     public void setPlaceColonyField(PlaceColonyFieldPo placeColonyFieldPo) {
         this.placeColonyField = placeColonyFieldPo;
@@ -153,8 +154,7 @@ public class UnitPo {
     }
 
     /**
-     * @param placeCargoSlot
-     *            the placeCargoSlot to set
+     * @param placeCargoSlot the placeCargoSlot to set
      */
     public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
         this.placeCargoSlot = placeCargoSlot;
@@ -176,8 +176,7 @@ public class UnitPo {
     }
 
     /**
-     * @param tools
-     *            the tools to set
+     * @param tools the tools to set
      */
     public void setTools(int tools) {
         this.tools = tools;
@@ -191,8 +190,7 @@ public class UnitPo {
     }
 
     /**
-     * @param holdingGuns
-     *            the holdingGuns to set
+     * @param holdingGuns the holdingGuns to set
      */
     public void setHoldingGuns(boolean holdingGuns) {
         this.holdingGuns = holdingGuns;
@@ -206,8 +204,7 @@ public class UnitPo {
     }
 
     /**
-     * @param mounted
-     *            the mounted to set
+     * @param mounted the mounted to set
      */
     public void setMounted(boolean mounted) {
         this.mounted = mounted;

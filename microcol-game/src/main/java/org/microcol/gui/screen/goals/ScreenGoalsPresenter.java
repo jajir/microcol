@@ -17,7 +17,8 @@ public class ScreenGoalsPresenter {
     private final EventBus eventBus;
 
     @Inject
-    ScreenGoalsPresenter(final ScreenGoals screenTurnReport, final EventBus eventBus) {
+    ScreenGoalsPresenter(final ScreenGoals screenTurnReport,
+            final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenTurnReport.getContent().setOnKeyPressed(this::onKeyPressed);
     }

@@ -8,7 +8,8 @@ import com.google.common.io.Files;
 
 public abstract class AbstractPreferencesTest {
 
-    protected final static File SETTING_FILE = new File(Files.createTempDir(), "setting.txt");
+    protected final static File SETTING_FILE = new File(Files.createTempDir(),
+            "setting.txt");
 
     protected Setting createSetting() {
         final Setting out = new Setting();

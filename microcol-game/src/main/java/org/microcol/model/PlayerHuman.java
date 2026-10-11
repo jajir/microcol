@@ -8,9 +8,11 @@ import java.util.Set;
  */
 public class PlayerHuman extends Player {
 
-    protected PlayerHuman(final String name, final boolean computer, final int initialGold,
-            final Model model, final boolean declaredIndependence,
+    protected PlayerHuman(final String name, final boolean computer,
+            final int initialGold, final Model model,
+            final boolean declaredIndependence,
             final Map<String, Object> extraData, Set<Location> visible) {
-        super(name, computer, initialGold, model, declaredIndependence, extraData, visible);
+        super(name, computer, initialGold, model, declaredIndependence,
+                extraData, visible);
     }
 }

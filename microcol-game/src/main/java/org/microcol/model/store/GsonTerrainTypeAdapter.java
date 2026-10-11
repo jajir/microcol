@@ -14,7 +14,8 @@ import com.google.gson.stream.JsonWriter;
 public final class GsonTerrainTypeAdapter extends TypeAdapter<TerrainType> {
 
     @Override
-    public void write(final JsonWriter out, final TerrainType value) throws IOException {
+    public void write(final JsonWriter out, final TerrainType value)
+            throws IOException {
         out.value(value.name());
     }
 

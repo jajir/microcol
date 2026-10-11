@@ -19,9 +19,12 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
-/** Inspect archives independently of the launcher before extracting any members. */
+/**
+ * Inspect archives independently of the launcher before extracting any members.
+ */
 final class ArchiveSupport {
-    private ArchiveSupport() { }
+    private ArchiveSupport() {
+    }
 
     static List<Member> inspect(Path archive) throws IOException {
         List<Member> members = new ArrayList<>();
@@ -33,23 +36,30 @@ final class ArchiveSupport {
                     int mode = entry.getUnixMode();
                     int type = mode & 0170000;
                     require(type == 0100000 || type == 0040000,
-                            "ZIP entry has no regular Unix file/directory type: " + entry.getName());
-                    require(!entry.isUnixSymlink() && zip.canReadEntryData(entry),
+                            "ZIP entry has no regular Unix file/directory type: "
+                                    + entry.getName());
+                    require(!entry.isUnixSymlink()
+                            && zip.canReadEntryData(entry),
                             "Unsupported ZIP entry: " + entry.getName());
                     require(entry.isDirectory() == (type == 0040000),
                             "Inconsistent ZIP entry type: " + entry.getName());
-                    members.add(new Member(entry.getName(), mode, entry.isDirectory()));
+                    members.add(new Member(entry.getName(), mode,
+                            entry.isDirectory()));
                 }
             }
         } else {
             try (TarArchiveInputStream tar = tar(archive)) {
                 TarArchiveEntry entry;
                 while ((entry = tar.getNextEntry()) != null) {
-                    // Commons Compress also classifies a TAR hard link as a file.
-                    require((entry.isFile() || entry.isDirectory()) && !entry.isLink() && !entry.isSymbolicLink(),
+                    // Commons Compress also classifies a TAR hard link as a
+                    // file.
+                    require((entry.isFile() || entry.isDirectory())
+                            && !entry.isLink() && !entry.isSymbolicLink(),
                             "Unsupported TAR entry: " + entry.getName());
-                    require(!entry.isSparse() && tar.canReadEntryData(entry), "Unsupported TAR encoding: " + entry.getName());
-                    members.add(new Member(entry.getName(), entry.getMode(), entry.isDirectory()));
+                    require(!entry.isSparse() && tar.canReadEntryData(entry),
+                            "Unsupported TAR encoding: " + entry.getName());
+                    members.add(new Member(entry.getName(), entry.getMode(),
+                            entry.isDirectory()));
                 }
             }
         }
@@ -58,12 +68,17 @@ final class ArchiveSupport {
         Set<String> files = new HashSet<>();
         for (Member member : members) {
             String name = member.name;
-            require(!name.isEmpty() && !name.startsWith("/") && !name.contains("\\")
-                    && !name.matches("^[A-Za-z]:.*") && !name.contains("//")
-                    && name.chars().noneMatch(c -> c < 32 || c == 127), "Unsafe archive path: " + name);
-            String canonical = name.endsWith("/") ? name.substring(0, name.length() - 1) : name;
+            require(!name.isEmpty() && !name.startsWith("/")
+                    && !name.contains("\\") && !name.matches("^[A-Za-z]:.*")
+                    && !name.contains("//")
+                    && name.chars().noneMatch(c -> c < 32 || c == 127),
+                    "Unsafe archive path: " + name);
+            String canonical = name.endsWith("/")
+                    ? name.substring(0, name.length() - 1)
+                    : name;
             for (String component : canonical.split("/")) {
-                require(!component.isEmpty() && !component.equals(".") && !component.equals(".."),
+                require(!component.isEmpty() && !component.equals(".")
+                        && !component.equals(".."),
                         "Unsafe archive path: " + name);
             }
             require(names.add(canonical), "Duplicate archive member: " + name);
@@ -74,7 +89,8 @@ final class ArchiveSupport {
         for (String name : names) {
             int slash = name.indexOf('/');
             while (slash >= 0) {
-                require(!files.contains(name.substring(0, slash)), "File is also an archive parent: " + name);
+                require(!files.contains(name.substring(0, slash)),
+                        "File is also an archive parent: " + name);
                 slash = name.indexOf('/', slash + 1);
             }
         }
@@ -86,9 +102,12 @@ final class ArchiveSupport {
         for (Member member : members) {
             roots.add(member.name.split("/", 2)[0]);
         }
-        require(roots.size() == 1, "Game archive must have exactly one application directory: " + roots);
+        require(roots.size() == 1,
+                "Game archive must have exactly one application directory: "
+                        + roots);
         String root = roots.iterator().next();
-        require(members.stream().anyMatch(m -> m.name.startsWith(root + "/")), "Archive root is not a directory");
+        require(members.stream().anyMatch(m -> m.name.startsWith(root + "/")),
+                "Archive root is not a directory");
         return root;
     }
 
@@ -102,7 +121,8 @@ final class ArchiveSupport {
     }
 
     static void extract(Path archive, Path destination) throws IOException {
-        // Validate the complete archive before creating even its first output file.
+        // Validate the complete archive before creating even its first output
+        // file.
         inspect(archive);
         Files.createDirectories(destination);
         if (archive.toString().endsWith(".zip")) {
@@ -111,7 +131,9 @@ final class ArchiveSupport {
                 while (entries.hasMoreElements()) {
                     ZipArchiveEntry entry = entries.nextElement();
                     try (InputStream data = zip.getInputStream(entry)) {
-                        extractMember(destination, new Member(entry.getName(), entry.getUnixMode(), entry.isDirectory()), data);
+                        extractMember(destination, new Member(entry.getName(),
+                                entry.getUnixMode(), entry.isDirectory()),
+                                data);
                     }
                 }
             }
@@ -119,15 +141,18 @@ final class ArchiveSupport {
             try (TarArchiveInputStream tar = tar(archive)) {
                 TarArchiveEntry entry;
                 while ((entry = tar.getNextEntry()) != null) {
-                    extractMember(destination, new Member(entry.getName(), entry.getMode(), entry.isDirectory()), tar);
+                    extractMember(destination, new Member(entry.getName(),
+                            entry.getMode(), entry.isDirectory()), tar);
                 }
             }
         }
     }
 
-    private static void extractMember(Path destination, Member member, InputStream data) throws IOException {
+    private static void extractMember(Path destination, Member member,
+            InputStream data) throws IOException {
         Path output = destination.resolve(member.name).normalize();
-        require(output.startsWith(destination.normalize()), "Archive path escaped extraction root");
+        require(output.startsWith(destination.normalize()),
+                "Archive path escaped extraction root");
         if (member.directory) {
             Files.createDirectories(output);
         } else {
@@ -140,7 +165,8 @@ final class ArchiveSupport {
     }
 
     private static Set<PosixFilePermission> permissions(int mode) {
-        Set<PosixFilePermission> permissions = EnumSet.noneOf(PosixFilePermission.class);
+        Set<PosixFilePermission> permissions = EnumSet
+                .noneOf(PosixFilePermission.class);
         PosixFilePermission[] flags = PosixFilePermission.values();
         for (int index = 0; index < flags.length; index++) {
             if ((mode & (1 << (8 - index))) != 0) {
@@ -151,10 +177,12 @@ final class ArchiveSupport {
     }
 
     private static TarArchiveInputStream tar(Path path) throws IOException {
-        return new TarArchiveInputStream(GzipCompressorInputStream.builder().setPath(path).get());
+        return new TarArchiveInputStream(
+                GzipCompressorInputStream.builder().setPath(path).get());
     }
 
-    private static void require(boolean condition, String message) throws IOException {
+    private static void require(boolean condition, String message)
+            throws IOException {
         if (!condition) {
             throw new IOException(message);
         }

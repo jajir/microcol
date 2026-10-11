@@ -27,7 +27,8 @@ public final class GamePanelMouseListener {
 
     private final static double DEFAULT_SCROLL_SPEED_DIVIDER = 2.25;
 
-    private final Logger logger = LoggerFactory.getLogger(GamePanelMouseListener.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(GamePanelMouseListener.class);
 
     private final GameModelController gameModelController;
 
@@ -52,34 +53,44 @@ public final class GamePanelMouseListener {
     @Inject
     public GamePanelMouseListener(final GamePanelPainter gamePanelPainter,
             final GameModelController gameModelController,
-            final SelectedTileManager selectedTileManager, final EventBus eventBus,
-            final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
+            final SelectedTileManager selectedTileManager,
+            final EventBus eventBus,
+            final MouseOverTileManager mouseOverTileManager,
+            final ModeController modeController,
             final GamePanelController gamePanelController,
             final @Named("game") VisibleAreaService visibleArea,
             final GamePanelComponent gamePanelComponent,
             final GamePanelPresenter gamePanelPresenter) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+        this.mouseOverTileManager = Preconditions
+                .checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
-        this.gamePanelController = Preconditions.checkNotNull(gamePanelController);
+        this.gamePanelController = Preconditions
+                .checkNotNull(gamePanelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
-        this.gamePanelPresenter = Preconditions.checkNotNull(gamePanelPresenter);
+        this.gamePanelPresenter = Preconditions
+                .checkNotNull(gamePanelPresenter);
 
         gamePanelComponent.getCanvas().setOnMousePressed(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
+            if (gamePanelController.isMouseEnabled()
+                    && !gamePanelController.isUnitMoving()) {
                 onMousePressed(e);
             }
         });
         gamePanelComponent.getCanvas().setOnMouseReleased(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
+            if (gamePanelController.isMouseEnabled()
+                    && !gamePanelController.isUnitMoving()) {
                 onMouseReleased();
             }
         });
         gamePanelComponent.getCanvas().setOnMouseMoved(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
+            if (gamePanelController.isMouseEnabled()
+                    && !gamePanelController.isUnitMoving()) {
                 onMouseMoved(e);
             }
             lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
@@ -94,14 +105,16 @@ public final class GamePanelMouseListener {
     }
 
     private void onScroll(final ScrollEvent event) {
-        visibleArea.addDeltaToTopLeftPoint(Point.of(-event.getDeltaX(), -event.getDeltaY())
-                .divide(DEFAULT_SCROLL_SPEED_DIVIDER));
+        visibleArea.addDeltaToTopLeftPoint(
+                Point.of(-event.getDeltaX(), -event.getDeltaY())
+                        .divide(DEFAULT_SCROLL_SPEED_DIVIDER));
     }
 
     private boolean tryToSwitchToMoveMode(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
         final List<Unit> availableUnits = gameModelController.getModel()
-                .getMoveableUnitAtOwnedBy(currentLocation, gameModelController.getHumanPlayer());
+                .getMoveableUnitAtOwnedBy(currentLocation,
+                        gameModelController.getHumanPlayer());
         if (availableUnits.isEmpty()) {
             return false;
         } else {
@@ -112,7 +125,8 @@ public final class GamePanelMouseListener {
 
     private void onMousePressed(final MouseEvent e) {
         final Point pressedAt = Point.of(e.getX(), e.getY());
-        final Location location = gamePanelView.getArea().convertToLocation(pressedAt);
+        final Location location = gamePanelView.getArea()
+                .convertToLocation(pressedAt);
         if (gameModelController.getModel().getMap().isValid(location)) {
             logger.debug("location of mouse: " + location);
             if (modeController.isMoveMode()) {
@@ -123,7 +137,8 @@ public final class GamePanelMouseListener {
                         selectedTileManager.setSelectedTile(location,
                                 ScrollToFocusedTile.smoothScroll);
                     } else {
-                        selectedTileManager.setSelectedTile(location, ScrollToFocusedTile.no);
+                        selectedTileManager.setSelectedTile(location,
+                                ScrollToFocusedTile.no);
                     }
                     if (!tryToSwitchToMoveMode(location)) {
                         gamePanelPresenter.tryToOpenColonyDetail(location);
@@ -137,7 +152,8 @@ public final class GamePanelMouseListener {
 
     private void onMouseReleased() {
         if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
-            final Location loc = gamePanelView.getArea().convertToLocation(lastMousePosition.get());
+            final Location loc = gamePanelView.getArea()
+                    .convertToLocation(lastMousePosition.get());
             gamePanelPresenter.switchToNormalMode(loc);
         }
 
@@ -147,12 +163,15 @@ public final class GamePanelMouseListener {
         if (lastMousePosition.isPresent()) {
             if (e.isSecondaryButtonDown()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Point delta = lastMousePosition.get().substract(currentPosition);
+                final Point delta = lastMousePosition.get()
+                        .substract(currentPosition);
                 visibleArea.addDeltaToTopLeftPoint(delta);
             }
-            if (modeController.isMoveMode() && !gamePanelController.isUnitMoving()) {
+            if (modeController.isMoveMode()
+                    && !gamePanelController.isUnitMoving()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
+                final Location loc = gamePanelView.getArea()
+                        .convertToLocation(currentPosition);
                 mouseOverTileManager.setMouseOverTile(loc);
             }
         }
@@ -160,7 +179,8 @@ public final class GamePanelMouseListener {
 
     private void onMouseMoved(final MouseEvent e) {
         final Point currentPosition = Point.of(e.getX(), e.getY());
-        final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
+        final Location loc = gamePanelView.getArea()
+                .convertToLocation(currentPosition);
         mouseOverTileManager.setMouseOverTile(loc);
     }
 

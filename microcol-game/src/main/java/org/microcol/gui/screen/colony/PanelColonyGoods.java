@@ -48,20 +48,24 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
-            final ImageProvider imageProvider, final ChooseGoodsDialog chooseGoods,
-            final EventBus eventBus, final I18n i18n) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+            final ImageProvider imageProvider,
+            final ChooseGoodsDialog chooseGoods, final EventBus eventBus,
+            final I18n i18n) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
-        panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream().map(goodsType -> {
-            final PanelColonyGood out = new PanelColonyGood(
-                    imageProvider.getGoodsTypeImage(goodsType), goodsType, eventBus, i18n);
-            mainPanel.getChildren().add(out.getContent());
-            return out;
-        }).collect(ImmutableList.toImmutableList());
+        panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream()
+                .map(goodsType -> {
+                    final PanelColonyGood out = new PanelColonyGood(
+                            imageProvider.getGoodsTypeImage(goodsType),
+                            goodsType, eventBus, i18n);
+                    mainPanel.getChildren().add(out.getContent());
+                    return out;
+                }).collect(ImmutableList.toImmutableList());
 
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
-                this::isItGoods);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                mainPanel, this::isItGoods);
 
         mainPanel.getStyleClass().add("panel-colony-goods");
         mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
@@ -73,7 +77,8 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     public void setColony(final Colony colony) {
         colonyWarehouse = Preconditions.checkNotNull(colony).getWarehouse();
-        panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.setColony(colony));
+        panelColonyGoods
+                .forEach(panelColonyGood -> panelColonyGood.setColony(colony));
     }
 
     void repaint() {
@@ -116,7 +121,8 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     private boolean isItGoods(final Dragboard db) {
-        return ClipboardEval.make(gameModelController.getModel(), db).getGoods().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db).getGoods()
+                .isPresent();
     }
 
     @Override

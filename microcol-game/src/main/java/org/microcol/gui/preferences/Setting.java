@@ -29,15 +29,16 @@ public class Setting {
     private boolean showGrid;
 
     private boolean showFightAdvisor;
-    
+
     private String version;
 
     private String gameInProgressSaveFile;
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mainFramePosition, mainFrameState, locale, volume, animationSpeed,
-                showGrid, showFightAdvisor, version, gameInProgressSaveFile);
+        return Objects.hashCode(mainFramePosition, mainFrameState, locale,
+                volume, animationSpeed, showGrid, showFightAdvisor, version,
+                gameInProgressSaveFile);
     }
 
     @Override
@@ -57,17 +58,22 @@ public class Setting {
                 && Objects.equal(this.showGrid, other.showGrid)
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
                 && Objects.equal(this.version, other.version)
-                && Objects.equal(this.gameInProgressSaveFile, other.gameInProgressSaveFile);
+                && Objects.equal(this.gameInProgressSaveFile,
+                        other.gameInProgressSaveFile);
 
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Setting.class).add("mainFramePosition", mainFramePosition)
-                .add("mainFrameState", mainFrameState).add("locale", locale).add("volume", volume)
-                .add("animationSpeed", animationSpeed).add("showGrid", showGrid)
-                .add("showFightAdvisor", showFightAdvisor).add("version", version)
-                .add("gameInProgressSaveFile", gameInProgressSaveFile).toString();
+        return MoreObjects.toStringHelper(Setting.class)
+                .add("mainFramePosition", mainFramePosition)
+                .add("mainFrameState", mainFrameState).add("locale", locale)
+                .add("volume", volume).add("animationSpeed", animationSpeed)
+                .add("showGrid", showGrid)
+                .add("showFightAdvisor", showFightAdvisor)
+                .add("version", version)
+                .add("gameInProgressSaveFile", gameInProgressSaveFile)
+                .toString();
     }
 
     public Rectangle getMainFramePosition() {

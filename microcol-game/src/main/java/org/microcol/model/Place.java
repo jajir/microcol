@@ -10,14 +10,14 @@ public interface Place {
 
     /**
      * Return unit which place is described by this instance;
-     * 
+     *
      * @return described unit
      */
     Unit getUnit();
 
     /**
      * Get name of place type.
-     * 
+     *
      * @return place type name
      */
     String getName();
@@ -37,9 +37,8 @@ public interface Place {
 
     /**
      * Save place internal state to {@link PlacePo} object that could be stored.
-     * 
-     * @param unitPo
-     *            required unit persistent object where will be place stored
+     *
+     * @param unitPo required unit persistent object where will be place stored
      * @return return saved state to object
      */
     PlacePo save(UnitPo unitPo);

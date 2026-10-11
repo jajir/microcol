@@ -24,7 +24,8 @@ public final class TurnFinishedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("player", player).toString();
+        return MoreObjects.toStringHelper(this).add("player", player)
+                .toString();
     }
 
 }

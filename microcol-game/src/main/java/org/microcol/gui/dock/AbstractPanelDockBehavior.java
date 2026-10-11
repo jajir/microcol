@@ -27,27 +27,34 @@ import javafx.scene.input.TransferMode;
  */
 public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 
-    final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
+    final Logger logger = LoggerFactory
+            .getLogger(PanelColonyDockBehaviour.class);
 
     private final GameModelController gameModelController;
     private final ImageProvider imageProvider;
 
-    public AbstractPanelDockBehavior(final GameModelController gameModelController,
+    public AbstractPanelDockBehavior(
+            final GameModelController gameModelController,
             final ImageProvider imageProvider) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
     }
 
     @Override
-    public void onDragDropped(final CargoSlot targetCargoSlot, final DragEvent event) {
+    public void onDragDropped(final CargoSlot targetCargoSlot,
+            final DragEvent event) {
         logger.debug("Object was dropped on ship cargo slot.");
         final Dragboard db = event.getDragboard();
-        final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
+        final ClipboardEval eval = ClipboardEval
+                .make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip());
         if (eval.getGoods().isPresent()) {
-            consumeGoods(targetCargoSlot, event.getTransferMode().equals(TransferMode.LINK), eval);
+            consumeGoods(targetCargoSlot,
+                    event.getTransferMode().equals(TransferMode.LINK), eval);
         } else if (eval.getUnit().isPresent()) {
-            consumeUnit(targetCargoSlot, eval.getUnit().get(), eval.getFrom().get());
+            consumeUnit(targetCargoSlot, eval.getUnit().get(),
+                    eval.getFrom().get());
         }
         event.acceptTransferModes(TransferMode.ANY);
         event.setDropCompleted(true);
@@ -56,46 +63,52 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 
     /**
      * When user drop goods to some slot this method store goods.
-     * 
-     * @param targetCargoSlot
-     *            required target cargo slot where will be goods stored
-     * @param clipboardEval
-     *            required clipboard evaluator
-     * @param specialOperatonWasSelected
-     *            it's <code>true</code> when user want special drag &amp; drop
-     *            operation like buy goods
+     *
+     * @param targetCargoSlot            required target cargo slot where will
+     *                                   be goods stored
+     * @param clipboardEval              required clipboard evaluator
+     * @param specialOperatonWasSelected it's <code>true</code> when user want
+     *                                   special drag &amp; drop operation like
+     *                                   buy goods
      */
-    public abstract void consumeGoods(CargoSlot targetCargoSlot, boolean specialOperatonWasSelected,
-            ClipboardEval clipboardEval);
+    public abstract void consumeGoods(CargoSlot targetCargoSlot,
+            boolean specialOperatonWasSelected, ClipboardEval clipboardEval);
 
     /**
      * Method is called when unit is stored in new cargo store and UI have to
      * repainted.
-     * 
-     * @param targetCargoSlot
-     *            required target cargo slot where will be unit stored
-     * @param unit
-     *            transfered unit
-     * @param transferFrom
-     *            required place from is goods transfered
+     *
+     * @param targetCargoSlot required target cargo slot where will be unit
+     *                        stored
+     * @param unit            transfered unit
+     * @param transferFrom    required place from is goods transfered
      */
-    public abstract void consumeUnit(CargoSlot targetCargoSlot, Unit unit, From transferFrom);
+    public abstract void consumeUnit(CargoSlot targetCargoSlot, Unit unit,
+            From transferFrom);
 
     @Override
-    public void onDragDetected(final CargoSlot cargoSlot, final MouseEvent event, final Node node) {
+    public void onDragDetected(final CargoSlot cargoSlot,
+            final MouseEvent event, final Node node) {
         if (cargoSlot != null) {
             if (cargoSlot.getUnit().isPresent()) {
-                final Image cargoImage = imageProvider.getUnitImage(cargoSlot.getUnit().get());
-                ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK))
+                final Image cargoImage = imageProvider
+                        .getUnitImage(cargoSlot.getUnit().get());
+                ClipboardWritter
+                        .make(node.startDragAndDrop(TransferMode.MOVE,
+                                TransferMode.LINK))
                         .addImage(cargoImage)
-                        .addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
+                        .addTransferFromUnit(cargoSlot.getOwnerUnit(),
+                                cargoSlot)
                         .addUnit(cargoSlot.getUnit().get()).build();
             } else if (cargoSlot.getGoods().isPresent()) {
-                final Image cargoImage = imageProvider
-                        .getGoodsTypeImage(cargoSlot.getGoods().get().getType());
-                ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK))
+                final Image cargoImage = imageProvider.getGoodsTypeImage(
+                        cargoSlot.getGoods().get().getType());
+                ClipboardWritter
+                        .make(node.startDragAndDrop(TransferMode.MOVE,
+                                TransferMode.LINK))
                         .addImage(cargoImage)
-                        .addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
+                        .addTransferFromUnit(cargoSlot.getOwnerUnit(),
+                                cargoSlot)
                         .addGoods(cargoSlot.getGoods().get()).build();
             }
         }
@@ -103,15 +116,19 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
     }
 
     @Override
-    public boolean isCorrectObject(final CargoSlot cargoSlot, final Dragboard db) {
+    public boolean isCorrectObject(final CargoSlot cargoSlot,
+            final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterUnit(unit -> !unit.getType().isShip() && cargoSlot.isEmpty())
-                .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods)).isNotEmpty();
+                .filterUnit(
+                        unit -> !unit.getType().isShip() && cargoSlot.isEmpty())
+                .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods))
+                .isNotEmpty();
     }
 
-    protected Goods chooseGoods(final ChooseGoodsDialog chooseGoods, 
-            final boolean specialOperatonWasSelected, final Goods maxPossibleGoods) {
+    protected Goods chooseGoods(final ChooseGoodsDialog chooseGoods,
+            final boolean specialOperatonWasSelected,
+            final Goods maxPossibleGoods) {
         if (specialOperatonWasSelected) {
             chooseGoods.init(maxPossibleGoods);
             return chooseGoods.getActualValue();

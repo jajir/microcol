@@ -41,13 +41,18 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     @Inject
     public ColonyPanel(final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
-            final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-            final ColonyButtonsPanel colonyButtonsPanel, final PanelDockColony panelDockColony, final PanelColonyName panelColonyName) {
+            final PanelOutsideColony panelOutsideColony,
+            final PanelColonyGoods panelColonyGoods,
+            final ColonyButtonsPanel colonyButtonsPanel,
+            final PanelDockColony panelDockColony,
+            final PanelColonyName panelColonyName) {
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
-        this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
+        this.colonyStructures = Preconditions
+                .checkNotNull(panelColonyStructures);
         this.panelDock = Preconditions.checkNotNull(panelDockColony);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
-        this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
+        this.panelOutsideColony = Preconditions
+                .checkNotNull(panelOutsideColony);
         this.panelColonyName = Preconditions.checkNotNull(panelColonyName);
 
         mainPanel = new StackPane();
@@ -68,7 +73,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     @SuppressWarnings("unused")
     @Subscribe
-    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+    private void onUnitMovedToConstruction(
+            final UnitMovedToConstructionEvent event) {
         repaint();
     }
 
@@ -86,9 +92,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     /**
      * Method should show given colony.
-     * 
-     * @param colony
-     *            required colony to show
+     *
+     * @param colony required colony to show
      */
     void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);

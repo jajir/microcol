@@ -22,13 +22,14 @@ public final class EuropePort {
         return model.getAllUnits().stream()
                 .filter(unit -> unit.isAtEuropePort())
                 .filter(unit -> unit.getOwner().equals(player))
-                .filter(unit -> ((PlaceEuropePort) unit.getPlace()).getEuropePort().equals(this))
-                .map(unit -> (UnitWithCargo) unit)
-                .collect(Collectors.toList());
+                .filter(unit -> ((PlaceEuropePort) unit.getPlace())
+                        .getEuropePort().equals(this))
+                .map(unit -> (UnitWithCargo) unit).collect(Collectors.toList());
     }
 
     public void placeShipToPort(final Unit unit) {
-        Preconditions.checkArgument(unit.getType().isShip(), "it's not correct unit type");
+        Preconditions.checkArgument(unit.getType().isShip(),
+                "it's not correct unit type");
         unit.placeToEuropePort(this);
     }
 

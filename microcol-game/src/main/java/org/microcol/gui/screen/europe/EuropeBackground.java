@@ -36,33 +36,43 @@ public class EuropeBackground extends AbstractBackground {
     private final ImageStripePainter rightImageStripePainter;
 
     @Inject
-    public EuropeBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
-        imageLeft = Preconditions.checkNotNull(imageProvider.getImage(IMG_LEFT));
-        imageRight = Preconditions.checkNotNull(imageProvider.getImage(IMG_RIGHT));
-        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
+    public EuropeBackground(final ImageProvider imageProvider,
+            final ColorScheme colorScheme) {
+        imageLeft = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_LEFT));
+        imageRight = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_RIGHT));
+        imageCenter = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_CENTER));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-280, colorScheme.getColor(GuiColors.SKY_1)))
-                .setCenterStripe(StripeDef.of(30, colorScheme.getColor(GuiColors.SEA_1)))
-                .setBottomStripe(StripeDef.of(290, colorScheme.getColor(GuiColors.DIRT_1)))
-                .setCenterStripeHeight(460)
-                .make();
+                .setTopStripe(StripeDef.of(-280,
+                        colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(
+                        StripeDef.of(30, colorScheme.getColor(GuiColors.SEA_1)))
+                .setBottomStripe(StripeDef.of(290,
+                        colorScheme.getColor(GuiColors.DIRT_1)))
+                .setCenterStripeHeight(460).make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
-        final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
-        leftImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageLeft)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-312).make());
-        rightImageStripePainter = new ImageStripePainter(
-                ImageStripePref.build().setImage(imageRight)
-                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-312).make());
+        final Point centerImageSize = Point.of(imageCenter.getWidth(),
+                imageCenter.getHeight());
+        leftImageStripePainter = new ImageStripePainter(ImageStripePref.build()
+                .setImage(imageLeft).setCenterGap(centerImageSize.getX() - 10)
+                .setVerticalShift(-312).make());
+        rightImageStripePainter = new ImageStripePainter(ImageStripePref.build()
+                .setImage(imageRight).setCenterGap(centerImageSize.getX() - 10)
+                .setVerticalShift(-312).make());
     }
 
     @Override
     public void paint(final GraphicsContext gc) {
-        final Point canvasSize = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
+        final Point canvasSize = Point.of(getCanvas().getWidth(),
+                getCanvas().getHeight());
         if (canvasSize.getX() > 10000 || canvasSize.getY() > 10000) {
             return;
         }
-        final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
+        final Point centerImageSize = Point.of(imageCenter.getWidth(),
+                imageCenter.getHeight());
         paintBackground(gc, canvasSize, Color.WHITE);
         threeStripesPainter.paint(gc, canvasSize);
         leftImageStripePainter.paintLeft(gc, canvasSize);

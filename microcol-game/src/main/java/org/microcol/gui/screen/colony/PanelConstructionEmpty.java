@@ -13,7 +13,8 @@ import com.google.common.eventbus.EventBus;
 class PanelConstructionEmpty extends AbstractPanelConstruction {
 
     public PanelConstructionEmpty(final EventBus eventBus, final I18n i18n,
-            final ImageProvider imageProvider, final Construction construction) {
+            final ImageProvider imageProvider,
+            final Construction construction) {
         super(eventBus, i18n, imageProvider, construction, Point.ZERO);
     }
 

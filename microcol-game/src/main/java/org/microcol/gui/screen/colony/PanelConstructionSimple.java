@@ -15,10 +15,12 @@ class PanelConstructionSimple extends AbstractPanelConstruction {
 
     private final static int CANVAS_WIDTH = ImageLoaderBuilding.CONSTRUCTION_WIDTH;
     private final static int CANVAS_HEIGHT = ImageLoaderBuilding.CONSTRUCTION_WIDTH;
-    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH, CANVAS_HEIGHT);
+    private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH,
+            CANVAS_HEIGHT);
 
     public PanelConstructionSimple(final EventBus eventBus, final I18n i18n,
-            final ImageProvider imageProvider, final Construction construction) {
+            final ImageProvider imageProvider,
+            final Construction construction) {
         super(eventBus, i18n, imageProvider, construction, CANVAS_SIZE);
         getMainPane().getStyleClass().add("constructionPaneSimple");
     }

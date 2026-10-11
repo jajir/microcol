@@ -59,8 +59,7 @@ public final class GoodsProductionStats {
     }
 
     /**
-     * @param rowProduction
-     *            the rowProduction to set
+     * @param rowProduction the rowProduction to set
      */
     public void setRowProduction(final int rowProduction) {
         this.rowProduction = rowProduction;
@@ -69,7 +68,7 @@ public final class GoodsProductionStats {
     /**
      * Net turn production. it's row production minus consumed goods. Could be
      * less than 0, because missing goods is taken from warehouse.
-     * 
+     *
      * @return the netProduction
      */
     public int getNetProduction() {
@@ -84,8 +83,7 @@ public final class GoodsProductionStats {
     }
 
     /**
-     * @param consumed
-     *            the consumed to set
+     * @param consumed the consumed to set
      */
     public void addConsumed(int consumed) {
         this.consumed += consumed;
@@ -99,8 +97,7 @@ public final class GoodsProductionStats {
     }
 
     /**
-     * @param blockedProduction
-     *            the blockedProduction to set
+     * @param blockedProduction the blockedProduction to set
      */
     public void setBlockedProduction(int blockedProduction) {
         this.blockedProduction = blockedProduction;
@@ -114,8 +111,7 @@ public final class GoodsProductionStats {
     }
 
     /**
-     * @param inWarehouseBefore
-     *            the inWarehouseBefore to set
+     * @param inWarehouseBefore the inWarehouseBefore to set
      */
     public void setInWarehouseBefore(int inWarehouseBefore) {
         this.inWarehouseBefore = inWarehouseBefore;

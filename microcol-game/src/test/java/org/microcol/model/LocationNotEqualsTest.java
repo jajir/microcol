@@ -12,8 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class LocationNotEqualsTest {
 
     static Stream<Arguments> dataProvider() {
-        return Stream.of(
-                arguments(Location.of(2, 3), null),
+        return Stream.of(arguments(Location.of(2, 3), null),
                 arguments(Location.of(2, 3), 10),
                 arguments(Location.of(2, 3), "test"),
                 arguments(Location.of(2, 3), Location.of(3, 2)),

@@ -30,12 +30,16 @@ public class PlaceBuilderPoTest {
         when(unitPo.getPlaceHighSeas()).thenReturn(null);
         when(unitPo.getPlaceEuropePort()).thenReturn(null);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            placeBuilder.apply(unit);
-        });
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
+                    placeBuilder.apply(unit);
+                });
 
-        assertTrue(exception.getMessage().contains("Unable to process chain of command input"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage()
+                        .contains("Unable to process chain of command input"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test

@@ -17,7 +17,8 @@ public class TurnEventNewUnitInEurope extends AbstractTurnEvent {
     }
 
     public static TurnEventNewUnitInEurope tryLoad(final TurnEventPo po) {
-        if (TurnEventNewUnitInEurope.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventNewUnitInEurope.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             return new TurnEventNewUnitInEurope(playerName);
         }

@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Generate unique id's for units. It should be accessed in a way:
- * 
+ *
  * <pre>
  * int myId = idManager.nextId();
  * </pre>
@@ -24,7 +24,8 @@ public class IdManager {
     }
 
     public static IdManager makeFromModelPo(final ModelPo modelPo) {
-        final OptionalInt optInt = modelPo.getUnits().stream().mapToInt(unit -> unit.getId()).max();
+        final OptionalInt optInt = modelPo.getUnits().stream()
+                .mapToInt(unit -> unit.getId()).max();
         if (optInt.isPresent()) {
             return new IdManager(optInt.getAsInt() + 1);
         } else {

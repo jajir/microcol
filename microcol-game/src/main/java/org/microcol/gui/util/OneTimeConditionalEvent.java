@@ -24,12 +24,12 @@ public final class OneTimeConditionalEvent<T> {
 
     /**
      * Reset both conditions and wait again that they both pass.
-     * 
-     * @param onConditionsPassed
-     *            required consumer that is called when conditions pass both
-     *            again
+     *
+     * @param onConditionsPassed required consumer that is called when
+     *                           conditions pass both again
      */
-    public void setOnResetConditionsPassed(final Consumer<T> onConditionsPassed) {
+    public void setOnResetConditionsPassed(
+            final Consumer<T> onConditionsPassed) {
         Preconditions.checkState(this.onConditionsPassed == null,
                 "There is previous unprocessed event.");
         Preconditions.checkNotNull(onConditionsPassed);
@@ -41,14 +41,15 @@ public final class OneTimeConditionalEvent<T> {
     /**
      * Call consumer when both conditions are passed. Conditions could already
      * be passes. In such case is consumer called immediately.
-     * 
-     * @param onConditionsPassed
-     *            required condition to pass
+     *
+     * @param onConditionsPassed required condition to pass
      */
     public void setOnConditionsPassed(final Consumer<T> onConditionsPassed) {
         Preconditions.checkState(this.onConditionsPassed == null,
-                "There is previous unprocessed event '%s'.", this.onConditionsPassed);
-        Preconditions.checkNotNull(onConditionsPassed, "onConditionPassed consumer is null");
+                "There is previous unprocessed event '%s'.",
+                this.onConditionsPassed);
+        Preconditions.checkNotNull(onConditionsPassed,
+                "onConditionPassed consumer is null");
         executeIfNecessary(onConditionsPassed);
     }
 
@@ -77,8 +78,8 @@ public final class OneTimeConditionalEvent<T> {
 
     @Override
     public String toString() {
-        final ToStringHelper toStringHelper = MoreObjects.toStringHelper(getClass())
-                .add("isEnabled", isEventSet());
+        final ToStringHelper toStringHelper = MoreObjects
+                .toStringHelper(getClass()).add("isEnabled", isEventSet());
         toStringHelper.add("condition1", condition1);
         toStringHelper.add("condition2", condition2);
         return toStringHelper.toString();

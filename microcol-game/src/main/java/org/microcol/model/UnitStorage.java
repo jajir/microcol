@@ -40,7 +40,8 @@ public final class UnitStorage {
 
     void addUnit(final Unit unit) {
         Preconditions.checkNotNull(unit);
-        Preconditions.checkArgument(!units.contains(unit), "unit %s was already added.", unit);
+        Preconditions.checkArgument(!units.contains(unit),
+                "unit %s was already added.", unit);
         Preconditions.checkArgument(!tryGetUnitById(unit.getId()).isPresent(),
                 "Unit with id %s was already added.", unit, unit.getId());
         units.add(unit);
@@ -49,13 +50,15 @@ public final class UnitStorage {
     }
 
     Unit createUnit(final Function<Unit, Cargo> cargoBuilder, final Model model,
-            final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
-            final int availableMoves, final UnitAction unitAction) {
+            final Function<Unit, Place> placeBuilder, final UnitType unitType,
+            final Player owner, final int availableMoves,
+            final UnitAction unitAction) {
 
-        final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model, placeBuilder,
-                idManager.nextId(), unitType, owner, unitAction, availableMoves);
+        final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model,
+                placeBuilder, idManager.nextId(), unitType, owner, unitAction,
+                availableMoves);
         unitCreateRequest.setCargoBuilder(cargoBuilder);
-        
+
         final Unit unit = unitFactory.createUnit(unitCreateRequest);
         units.add(unit);
         return unit;
@@ -68,9 +71,9 @@ public final class UnitStorage {
                 Player owner = owners.get(unit.getLocation());
                 if (owner != null) {
                     if (!owner.equals(unit.getOwner())) {
-                        throw new IllegalArgumentException(
-                                String.format("There is an enemy unit at the same location (%s).",
-                                        unit.getLocation()));
+                        throw new IllegalArgumentException(String.format(
+                                "There is an enemy unit at the same location (%s).",
+                                unit.getLocation()));
                     }
                 } else {
                     owners.put(unit.getLocation(), unit.getOwner());
@@ -81,15 +84,15 @@ public final class UnitStorage {
 
     /**
      * Verify that all units are just one time in all unit list.
-     * 
-     * @param units
-     *            required list of units.
+     *
+     * @param units required list of units.
      */
     private void checkDuplicities(final List<Unit> units) {
         final Set<Unit> tmp = new HashSet<>();
         units.forEach(unit -> {
             if (tmp.contains(unit)) {
-                throw new IllegalStateException("Unit was registered twice, unit: " + unit);
+                throw new IllegalStateException(
+                        "Unit was registered twice, unit: " + unit);
             } else {
                 tmp.add(unit);
             }
@@ -101,9 +104,10 @@ public final class UnitStorage {
     }
 
     Map<Location, List<Unit>> getUnitsAt() {
-        return Multimaps.asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
-                .collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation,
-                        Function.identity())));
+        return Multimaps
+                .asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
+                        .collect(ImmutableListMultimap.toImmutableListMultimap(
+                                Unit::getLocation, Function.identity())));
     }
 
     List<Unit> getUnitsAt(final Location location) {
@@ -114,7 +118,8 @@ public final class UnitStorage {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
+    List<Unit> getUnitsOwnedBy(final Player player,
+            final boolean includeStored) {
         Preconditions.checkNotNull(player);
 
         return units.stream().filter(unit -> unit.getOwner().equals(player))
@@ -125,9 +130,11 @@ public final class UnitStorage {
     Map<Location, List<Unit>> getUnitsAt(final Player player) {
         Preconditions.checkNotNull(player);
 
-        return Multimaps.asMap(units.stream().filter(unit -> unit.getOwner().equals(player))
-                .filter(unit -> unit.isAtPlaceLocation()).collect(ImmutableListMultimap
-                        .toImmutableListMultimap(Unit::getLocation, Function.identity())));
+        return Multimaps.asMap(
+                units.stream().filter(unit -> unit.getOwner().equals(player))
+                        .filter(unit -> unit.isAtPlaceLocation())
+                        .collect(ImmutableListMultimap.toImmutableListMultimap(
+                                Unit::getLocation, Function.identity())));
     }
 
     List<Unit> getUnitsAt(final Player player, final Location location) {
@@ -151,9 +158,11 @@ public final class UnitStorage {
     Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
         Preconditions.checkNotNull(player);
 
-        return Multimaps.asMap(units.stream().filter(unit -> !unit.getOwner().equals(player))
-                .filter(unit -> unit.isAtPlaceLocation()).collect(ImmutableListMultimap
-                        .toImmutableListMultimap(Unit::getLocation, Function.identity())));
+        return Multimaps.asMap(
+                units.stream().filter(unit -> !unit.getOwner().equals(player))
+                        .filter(unit -> unit.isAtPlaceLocation())
+                        .collect(ImmutableListMultimap.toImmutableListMultimap(
+                                Unit::getLocation, Function.identity())));
     }
 
     List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
@@ -179,17 +188,21 @@ public final class UnitStorage {
     }
 
     Unit getUnitById(int id) {
-        return tryGetUnitById(id).orElseThrow(
-                () -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
+        return tryGetUnitById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "There is no unit with id '" + id + "'."));
     }
 
     Optional<Unit> tryGetUnitById(final int id) {
         return units.stream().filter(unit -> unit.getId() == id).findAny();
     }
 
-    Optional<Unit> getNextUnitForPlayer(final Player currentPlayer, final Unit currentUnit) {
-        final List<Unit> list = units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
-                .filter(unit -> unit.isAtPlaceLocation() && unit.getActionPoints() > 0)
+    Optional<Unit> getNextUnitForPlayer(final Player currentPlayer,
+            final Unit currentUnit) {
+        final List<Unit> list = units.stream()
+                .filter(unit -> currentPlayer.equals(unit.getOwner()))
+                .filter(unit -> unit.isAtPlaceLocation()
+                        && unit.getActionPoints() > 0)
                 .collect(Collectors.toList());
         if (list.size() == 0) {
             return Optional.empty();
@@ -209,16 +222,16 @@ public final class UnitStorage {
     /**
      * Find first unit that could be selected.
      *
-     * @param currentPlayer
-     *            required player for whom will be unit selected
+     * @param currentPlayer required player for whom will be unit selected
      * @return Optional object with unit
      */
     Optional<Unit> getFirstSelectableUnit(final Player currentPlayer) {
         Preconditions.checkNotNull(currentPlayer, "Player is null");
 
-        return units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
-                .filter(unit -> unit.isAtPlaceLocation()).filter(unit -> unit.getActionPoints() > 0)
-                .findFirst();
+        return units.stream()
+                .filter(unit -> currentPlayer.equals(unit.getOwner()))
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getActionPoints() > 0).findFirst();
     }
 
     /**
@@ -226,20 +239,20 @@ public final class UnitStorage {
      * than such unit is returned. If there is not unit that could move than
      * first unit is returned.
      *
-     * @param currentPlayer
-     *            required player for whom will be unit selected
-     * @param location
-     *            required location where should be selected unit
+     * @param currentPlayer required player for whom will be unit selected
+     * @param location      required location where should be selected unit
      * @return Optional object with unit
      */
-    Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer, final Location location) {
+    Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer,
+            final Location location) {
         Preconditions.checkNotNull(currentPlayer, "Player is null");
         Preconditions.checkNotNull(location, "Location is null");
 
         final List<Unit> playersUnitAtLocation = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location)).collect(Collectors.toList());
+                .filter(unit -> unit.getLocation().equals(location))
+                .collect(Collectors.toList());
 
         final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()
                 .filter(unit -> unit.getActionPoints() > 0).findFirst();

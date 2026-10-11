@@ -1,4 +1,4 @@
-	package org.microcol.test;
+package org.microcol.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,38 +29,39 @@ public class TC_16_F12_arriving_to_colony_test extends AbstractMicroColTest {
     private final static Location SHIP_LOCATION = Location.of(25, 16);
     private final static Location FAR_LOCATION = Location.of(31, 15);
 
-    private final static File testFileName = new File("src/test/scenarios/F12-arriving-to-colony.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F12-arriving-to-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, this.getClass(), testFileName);
+        initialize(primaryStage, this.getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_01_embark_disembark() throws Exception {
-	// Open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        // Open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	// Verify that ship is at correct location.
-	assertEquals(1, getModel().getUnitsAt(SHIP_LOCATION).size());
+        // Verify that ship is at correct location.
+        assertEquals(1, getModel().getUnitsAt(SHIP_LOCATION).size());
 
-	// Move ship to far location.
-	gamePage.moveMouseAtLocation(SHIP_LOCATION);
-	gamePage.dragMouseAtLocation(FAR_LOCATION);
+        // Move ship to far location.
+        gamePage.moveMouseAtLocation(SHIP_LOCATION);
+        gamePage.dragMouseAtLocation(FAR_LOCATION);
 
-	// Verify that ship is at far location.
-	assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
+        // Verify that ship is at far location.
+        assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
 
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
+        // Perform next turn and ignore turn events dialog.
+        gamePage.nextTurnAndCloseDialogs();
 
-	// Move ship to far location.
-	gamePage.moveMouseAtLocation(FAR_LOCATION);
-	gamePage.dragMouseAtLocationAndClosePossibleDialog(COLONY_LOCATION);
-	
-	// Verify that ship doesn't moved.
-	assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
+        // Move ship to far location.
+        gamePage.moveMouseAtLocation(FAR_LOCATION);
+        gamePage.dragMouseAtLocationAndClosePossibleDialog(COLONY_LOCATION);
+
+        // Verify that ship doesn't moved.
+        assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
     }
 
 }

@@ -25,9 +25,11 @@ final class MoveModeController {
             final ModeController modeController,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final CursorService cursorService) {
-        this.gamePanelComponent = Preconditions.checkNotNull(gamePanelComponent);
+        this.gamePanelComponent = Preconditions
+                .checkNotNull(gamePanelComponent);
         this.modeController = Preconditions.checkNotNull(modeController);
-        this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
+        this.oneTurnMoveHighlighter = Preconditions
+                .checkNotNull(oneTurnMoveHighlighter);
         this.cursorService = Preconditions.checkNotNull(cursorService);
     }
 

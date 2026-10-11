@@ -9,7 +9,8 @@ import org.microcol.model.Location;
 
 public class CanvasInMapCoordinatesTest {
 
-    private final VisibleAreaService visibleArea = mock(VisibleAreaService.class);
+    private final VisibleAreaService visibleArea = mock(
+            VisibleAreaService.class);
     private CanvasInMapCoordinates mapping;
     private final static Location MAP_SIZE = Location.of(80, 40);
 
@@ -21,7 +22,8 @@ public class CanvasInMapCoordinatesTest {
 
     @Test
     void test_make_missing_visibleAreaService() throws Exception {
-        assertThrows(NullPointerException.class, () -> CanvasInMapCoordinates.make(null, MAP_SIZE));
+        assertThrows(NullPointerException.class,
+                () -> CanvasInMapCoordinates.make(null, MAP_SIZE));
     }
 
     @Test

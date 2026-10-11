@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 
 /**
  * Communicate between GUI and sound and music playing.
- * 
+ *
  */
 @Listener
 public final class MusicController {
@@ -19,7 +19,8 @@ public final class MusicController {
     private final GamePreferences gamePreferences;
 
     @Inject
-    public MusicController(final MusicPlayer musicPlayer, final GamePreferences gamePreferences) {
+    public MusicController(final MusicPlayer musicPlayer,
+            final GamePreferences gamePreferences) {
         this.musicPlayer = Preconditions.checkNotNull(musicPlayer);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
     }
@@ -33,8 +34,8 @@ public final class MusicController {
 
     public void start(final int defaultVolume) {
         if (gamePreferences.isSoundEnabled()) {
-            new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume))
-                    .start();
+            new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav",
+                    defaultVolume)).start();
         }
     }
 

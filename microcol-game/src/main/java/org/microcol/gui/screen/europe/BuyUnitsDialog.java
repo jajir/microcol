@@ -33,11 +33,14 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
 
     @Inject
     public BuyUnitsDialog(final ViewUtil viewUtil, final I18n i18n,
-            final ImageProvider imageProvider, final GameModelController gameModelController,
-            final LocalizationHelper localizationHelper, final EuropeCallback europeDialogCallback,
+            final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final LocalizationHelper localizationHelper,
+            final EuropeCallback europeDialogCallback,
             final DialogNotEnoughGold dialogNotEnoughGold) {
         super(viewUtil, i18n);
-        this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
+        this.europeDialogCallback = Preconditions
+                .checkNotNull(europeDialogCallback);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
         labelCaption = new Label();
@@ -50,13 +53,17 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
 
         AtomicInteger column = new AtomicInteger(0);
         AtomicInteger row = new AtomicInteger(0);
-        UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0)
+        UnitType.UNIT_TYPES.stream()
+                .filter(unitType -> unitType.getEuropePrice() > 0)
                 .forEach(unitType -> {
-                    final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, imageProvider,
-                            gameModelController, localizationHelper, i18n, this,
+                    final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType,
+                            imageProvider, gameModelController,
+                            localizationHelper, i18n, this,
                             dialogNotEnoughGold);
-                    GridPane.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
-                    gridWithUnits.add(buyUnitPanel, column.intValue(), row.intValue());
+                    GridPane.setMargin(buyUnitPanel,
+                            new Insets(10, 10, 10, 10));
+                    gridWithUnits.add(buyUnitPanel, column.intValue(),
+                            row.intValue());
                     column.incrementAndGet();
                     if (column.intValue() > MAX_UNITS_IN_ROW) {
                         column.set(0);
@@ -69,7 +76,8 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
             close();
         });
 
-        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar.getContent());
+        root.getChildren().addAll(labelCaption, gridWithUnits,
+                buttonBar.getContent());
     }
 
     @Override

@@ -27,7 +27,8 @@ public class TurnEventNewUnitInColony extends AbstractTurnEvent {
     }
 
     public static TurnEventNewUnitInColony tryLoad(final TurnEventPo po) {
-        if (TurnEventNewUnitInColony.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventNewUnitInColony.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             final String colonyName = po.getColonyName();
             return new TurnEventNewUnitInColony(playerName, colonyName);

@@ -20,7 +20,8 @@ public class CampaignsPo {
 
     public Optional<CampaignPo> getCampaignByName(final String campaignName) {
         Preconditions.checkNotNull(campaignName);
-        return getCampaigns().stream().filter(campaign -> campaignName.equals(campaign.getName()))
+        return getCampaigns().stream()
+                .filter(campaign -> campaignName.equals(campaign.getName()))
                 .findFirst();
     }
 
@@ -30,7 +31,8 @@ public class CampaignsPo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(CampaignsPo.class).add("campaigns", campaigns).toString();
+        return MoreObjects.toStringHelper(CampaignsPo.class)
+                .add("campaigns", campaigns).toString();
     }
 
 }

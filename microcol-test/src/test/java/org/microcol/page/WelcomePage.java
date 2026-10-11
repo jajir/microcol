@@ -8,36 +8,36 @@ import org.testfx.util.WaitForAsyncUtils;
 public class WelcomePage extends AbstractMenuScreen {
 
     public static WelcomePage of(final TestContext context) {
-	return new WelcomePage(context);
+        return new WelcomePage(context);
     }
 
     WelcomePage(final TestContext context) {
-	super(context);
-	WaitForAsyncUtils.waitForFxEvents();
-	verifyMainScreen();
+        super(context);
+        WaitForAsyncUtils.waitForFxEvents();
+        verifyMainScreen();
     }
 
     public SettingPage openSetting() {
-	verifyMainScreen();
-	clickOnButtonWithId(ButtonsPanelView.BUTTON_SETTING_ID);
-	return SettingPage.of(getContext());
+        verifyMainScreen();
+        clickOnButtonWithId(ButtonsPanelView.BUTTON_SETTING_ID);
+        return SettingPage.of(getContext());
     }
 
     public WelcomePage verifyMainScreen() {
-	verifyMainTitle(realTitle -> {
-	    assertEquals("MicroCol", realTitle);
-	});
-	return this;
+        verifyMainTitle(realTitle -> {
+            assertEquals("MicroCol", realTitle);
+        });
+        return this;
     }
 
     public GamePage loadGame() {
-	clickOnButtonWithId(ButtonsPanelView.BUTTON_LOAD_ID);
-	return GamePage.of(getContext());
+        clickOnButtonWithId(ButtonsPanelView.BUTTON_LOAD_ID);
+        return GamePage.of(getContext());
     }
 
     public GamePage startFreeGame() {
-	clickOnButtonWithId(ButtonsPanelView.BUTTON_START_FREE_GAME_ID);
-	return GamePage.of(getContext());
+        clickOnButtonWithId(ButtonsPanelView.BUTTON_START_FREE_GAME_ID);
+        return GamePage.of(getContext());
     }
 
 }

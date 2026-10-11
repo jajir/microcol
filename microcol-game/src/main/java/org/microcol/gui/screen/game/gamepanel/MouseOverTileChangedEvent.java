@@ -13,7 +13,8 @@ public final class MouseOverTileChangedEvent {
     private final Location mouseOverTileLocaton;
 
     public MouseOverTileChangedEvent(final Location mouseOverTileLocaton) {
-        this.mouseOverTileLocaton = Preconditions.checkNotNull(mouseOverTileLocaton);
+        this.mouseOverTileLocaton = Preconditions
+                .checkNotNull(mouseOverTileLocaton);
     }
 
     public Location getMouseOverTileLocaton() {

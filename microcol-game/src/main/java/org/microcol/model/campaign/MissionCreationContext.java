@@ -27,8 +27,10 @@ final class MissionCreationContext {
     private final ExternalGameOver externalGameOver;
 
     MissionCreationContext(final EventBus eventBus, final Model model,
-            final GameModelPo gameModelPo, final CampaignManager campaignManager,
-            final CampaignMission campaignMission, final ExternalGameOver externalGameOver) {
+            final GameModelPo gameModelPo,
+            final CampaignManager campaignManager,
+            final CampaignMission campaignMission,
+            final ExternalGameOver externalGameOver) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.model = Preconditions.checkNotNull(model);
         this.gameModelPo = Preconditions.checkNotNull(gameModelPo);

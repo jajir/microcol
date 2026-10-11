@@ -72,8 +72,7 @@ public interface Unit {
     /**
      * Embark from location to given cargo slot.
      *
-     * @param cargoSlot
-     *            required cargo slot where will be this unit placed
+     * @param cargoSlot required cargo slot where will be this unit placed
      */
     void embarkFromLocation(CargoSlot cargoSlot);
 
@@ -97,9 +96,8 @@ public interface Unit {
 
     /**
      * Allows to change unit owner.
-     * 
-     * @param player
-     *            required player will be new unit's owner
+     *
+     * @param player required player will be new unit's owner
      */
     public void takeOver(Player player);
 
@@ -127,7 +125,8 @@ public interface Unit {
 
     void moveOneStep(Location moveTo);
 
-    void placeToColonyField(ColonyField colonyField, GoodsType producedGoodsType);
+    void placeToColonyField(ColonyField colonyField,
+            GoodsType producedGoodsType);
 
     void placeToColonyStructureSlot(ConstructionSlot structureSlot);
 
@@ -143,7 +142,8 @@ public interface Unit {
 
     Optional<List<Location>> getPath(Location destination);
 
-    Optional<List<Location>> getPath(Location destination, boolean excludeDestination);
+    Optional<List<Location>> getPath(Location destination,
+            boolean excludeDestination);
 
     void attack(Location attackAt);
 

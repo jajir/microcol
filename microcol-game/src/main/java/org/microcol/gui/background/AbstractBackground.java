@@ -15,15 +15,18 @@ import javafx.scene.paint.Color;
 /**
  * Abstract component for drawing background image.
  */
-public abstract class AbstractBackground implements JavaFxComponent, Repaintable {
+public abstract class AbstractBackground
+        implements JavaFxComponent, Repaintable {
 
     private final CanvasComponent canvasComponent;
 
     @Inject
     public AbstractBackground() {
         canvasComponent = new CanvasComponent();
-        canvasComponent.getContent().widthProperty().addListener((old, v1, v2) -> repaint());
-        canvasComponent.getContent().heightProperty().addListener((old, v1, v2) -> repaint());
+        canvasComponent.getContent().widthProperty()
+                .addListener((old, v1, v2) -> repaint());
+        canvasComponent.getContent().heightProperty()
+                .addListener((old, v1, v2) -> repaint());
     }
 
     @Override
@@ -35,11 +38,11 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
     /**
      * Method should be overridden. By default just draw white background.
      *
-     * @param gc
-     *            required 2D graphics context
+     * @param gc required 2D graphics context
      */
     public void paint(final GraphicsContext gc) {
-        final Point canvas = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
+        final Point canvas = Point.of(getCanvas().getWidth(),
+                getCanvas().getHeight());
         paintBackground(gc, canvas, Color.WHITE);
     }
 
@@ -58,15 +61,12 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
     /**
      * Paint background of some area with solid color.
      *
-     * @param gc
-     *            required
-     * @param areaSize
-     *            required area size
-     * @param color
-     *            required color
+     * @param gc       required
+     * @param areaSize required area size
+     * @param color    required color
      */
-    protected void paintBackground(final GraphicsContext gc, final Point areaSize,
-            final Color color) {
+    protected void paintBackground(final GraphicsContext gc,
+            final Point areaSize, final Color color) {
         gc.setFill(color);
         gc.fillRect(0, 0, areaSize.getX(), areaSize.getY());
     }

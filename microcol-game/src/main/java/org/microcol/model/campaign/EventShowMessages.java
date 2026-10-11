@@ -9,7 +9,8 @@ import org.microcol.i18n.MessageKeyResource;
 public class EventShowMessages extends AbstractEventWithMessages {
 
     @SuppressWarnings("unchecked")
-    <T extends Enum<T> & MessageKeyResource> EventShowMessages(final T... messageKeys) {
+    <T extends Enum<T> & MessageKeyResource> EventShowMessages(
+            final T... messageKeys) {
         super(messageKeys);
     }
 

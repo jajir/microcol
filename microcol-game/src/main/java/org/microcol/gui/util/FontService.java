@@ -56,29 +56,28 @@ public final class FontService {
      * When font is loaded than could be used even in .css files.
      * </p>
      *
-     * @param relativePath
-     *            required path for font definition file
+     * @param relativePath required path for font definition file
      */
     private void load(final String relativePath, final double size) {
         final String path = FONT_DIRECTORY + relativePath;
         final URL fontURL = MainStageBuilder.class.getResource(path);
         if (fontURL == null) {
-            throw new MicroColException(String.format("Unable to find font at '%s'", path));
+            throw new MicroColException(
+                    String.format("Unable to find font at '%s'", path));
         }
-        addFont(relativePath, size, Font.loadFont(fontURL.toExternalForm(), size));
+        addFont(relativePath, size,
+                Font.loadFont(fontURL.toExternalForm(), size));
     }
 
     /**
      * Add specific font instance under some font family name and size.
      *
-     * @param name
-     *            required font family name
-     * @param size
-     *            required font size
-     * @param font
-     *            required font instance
+     * @param name required font family name
+     * @param size required font size
+     * @param font required font instance
      */
-    private void addFont(final String name, final double size, final Font font) {
+    private void addFont(final String name, final double size,
+            final Font font) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(size);
         Preconditions.checkNotNull(font);
@@ -88,10 +87,8 @@ public final class FontService {
     /**
      * Get font identification string. This string is used as key for font map.
      *
-     * @param name
-     *            required font family name
-     * @param size
-     *            required font size
+     * @param name required font family name
+     * @param size required font size
      * @return font code
      */
     private String getCode(final String name, final double size) {
@@ -103,24 +100,21 @@ public final class FontService {
     /**
      * For specific requirements return font instance.
      *
-     * @param name
-     *            required font family name
-     * @param size
-     *            required font size
+     * @param name required font family name
+     * @param size required font size
      * @return font instance
      */
     public Font getFont(final String name, final double size) {
         final Font out = fonts.get(getCode(name, size));
-        Preconditions.checkState(out != null, "Unable to find font '%s' with size '%s'", name,
-                size);
+        Preconditions.checkState(out != null,
+                "Unable to find font '%s' with size '%s'", name, size);
         return out;
     }
 
     /**
      * Most of game UI should be painted with this font.
      *
-     * @param size
-     *            required font size
+     * @param size required font size
      * @return font instance
      */
     public Font getDefault(final double size) {

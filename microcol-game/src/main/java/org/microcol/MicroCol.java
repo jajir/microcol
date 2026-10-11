@@ -16,13 +16,13 @@ import javafx.application.Application;
  */
 public final class MicroCol {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MicroCol.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(MicroCol.class);
 
     /**
      * Main static method.
      *
-     * @param args
-     *            list of command line parameters.
+     * @param args list of command line parameters.
      */
     public static void main(final String[] args) {
         if (isClean()) {
@@ -32,7 +32,9 @@ public final class MicroCol {
             if (isOSX()) {
                 System.setProperty("com.apple.macos.useScreenMenuBar", "true");
                 // set application name for oracle JDK
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
+                System.setProperty(
+                        "com.apple.mrj.application.apple.menu.about.name",
+                        "MicroCol");
                 // set application name for openJDK
                 System.setProperty("apple.awt.application.name", "MicroCol");
             }
@@ -47,7 +49,8 @@ public final class MicroCol {
      *         false.
      */
     private static boolean isClean() {
-        return Boolean.getBoolean(GamePreferences.SYSTEM_PROPERTY_CLEAN_SETTINGS);
+        return Boolean
+                .getBoolean(GamePreferences.SYSTEM_PROPERTY_CLEAN_SETTINGS);
     }
 
     /**
@@ -59,8 +62,7 @@ public final class MicroCol {
         /**
          * Allows to execute some functionality throwing exception.
          *
-         * @throws BackingStoreException
-         *             backing store exception
+         * @throws BackingStoreException backing store exception
          */
         void consume() throws BackingStoreException;
     }
@@ -68,8 +70,7 @@ public final class MicroCol {
     /**
      * Allows to hide exception in called code and don't fail application.
      *
-     * @param consumer
-     *            required exception wrapper
+     * @param consumer required exception wrapper
      */
     private static void exec(final ExceptionWrapper consumer) {
         try {
@@ -85,12 +86,14 @@ public final class MicroCol {
     private static void cleanAll() {
         LOGGER.info("Cleaning all game setting");
         exec(() -> {
-            final Preferences gamePref = Preferences.userNodeForPackage(GamePreferences.class);
+            final Preferences gamePref = Preferences
+                    .userNodeForPackage(GamePreferences.class);
             gamePref.removeNode();
             gamePref.flush();
         });
         exec(() -> {
-            final Preferences campaignPref = Preferences.userNodeForPackage(CampaignManager.class);
+            final Preferences campaignPref = Preferences
+                    .userNodeForPackage(CampaignManager.class);
             campaignPref.removeNode();
             campaignPref.flush();
         });

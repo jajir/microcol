@@ -16,20 +16,25 @@ class ResourceBundlesManager {
 
     private final ResourceBundleProvider resourceBundleProvider;
 
-    ResourceBundlesManager(final ResourceBundleProvider resourceBundleProvider) {
-        this.resourceBundleProvider = Preconditions.checkNotNull(resourceBundleProvider);
+    ResourceBundlesManager(
+            final ResourceBundleProvider resourceBundleProvider) {
+        this.resourceBundleProvider = Preconditions
+                .checkNotNull(resourceBundleProvider);
     }
 
-    Optional<ResourceBundle> getCachedBundle(final String baseName, final Locale locale) {
-        return Optional.ofNullable(resourceBundlesCache.get(createCacheKey(baseName, locale)));
+    Optional<ResourceBundle> getCachedBundle(final String baseName,
+            final Locale locale) {
+        return Optional.ofNullable(
+                resourceBundlesCache.get(createCacheKey(baseName, locale)));
     }
 
     ResourceBundle init(final String baseName, final Locale locale) {
-        final ResourceBundle out = resourceBundleProvider.getBundle(baseName, locale);
+        final ResourceBundle out = resourceBundleProvider.getBundle(baseName,
+                locale);
         if (out == null) {
             throw new NullPointerException(String.format(
-                    "Resource bundle for base name '%s' and locale '%s' can't be found.", baseName,
-                    locale));
+                    "Resource bundle for base name '%s' and locale '%s' can't be found.",
+                    baseName, locale));
         }
         resourceBundlesCache.put(createCacheKey(baseName, locale), out);
         return out;

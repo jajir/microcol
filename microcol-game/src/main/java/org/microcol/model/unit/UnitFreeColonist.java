@@ -36,9 +36,9 @@ public final class UnitFreeColonist extends CanMount {
     private boolean mounted;
 
     public UnitFreeColonist(final Model model, final Integer id,
-            final Function<Unit, Place> placeBuilder, final Player owner, final int availableMoves,
-            final UnitAction unitAction, final int tools, final boolean holdingGuns,
-            final boolean mounted) {
+            final Function<Unit, Place> placeBuilder, final Player owner,
+            final int availableMoves, final UnitAction unitAction,
+            final int tools, final boolean holdingGuns, final boolean mounted) {
         super(model, id, placeBuilder, owner, availableMoves, unitAction);
         this.tools = tools;
         this.holdingGuns = holdingGuns;
@@ -62,7 +62,8 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     @Override
-    public void placeToColonyStructureSlot(final ConstructionSlot structureSlot) {
+    public void placeToColonyStructureSlot(
+            final ConstructionSlot structureSlot) {
         unequipAll();
         super.placeToColonyStructureSlot(structureSlot);
     }
@@ -112,46 +113,54 @@ public final class UnitFreeColonist extends CanMount {
 
     public void equipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount();
+        final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE)
+                .getAmount();
         Preconditions.checkState(horses >= REQUIRED_HORSES_FOR_MOUNTED_UNIT,
-                "In colony (%s) is not enought horses to mount unit on them", colony);
+                "In colony (%s) is not enought horses to mount unit on them",
+                colony);
         if (isHoldingTools()) {
             unequipWithTools();
         }
-        colony.getWarehouse()
-                .removeGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
+        colony.getWarehouse().removeGoods(
+                Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = true;
     }
 
     public void unequipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getWarehouse().addGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
+        colony.getWarehouse().addGoods(
+                Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = false;
     }
 
     public void equipWithMuskets() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET).getAmount();
+        final int muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET)
+                .getAmount();
         Preconditions.checkState(muskets >= REQUIRED_MUSKETS_FOR_ARMED_UNIT,
-                "In colony (%s) is not enought muskets to arm unit with them", colony);
+                "In colony (%s) is not enought muskets to arm unit with them",
+                colony);
         if (isHoldingTools()) {
             unequipWithTools();
         }
-        colony.getWarehouse()
-                .removeGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
+        colony.getWarehouse().removeGoods(
+                Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = true;
     }
 
     public void unequipWithMuskets() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getWarehouse().addGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
+        colony.getWarehouse().addGoods(
+                Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = false;
     }
 
     public void equipWithTools() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int totalTools = colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount();
-        Preconditions.checkState(totalTools > 0, "In colony (%s) is not ane tools", colony);
+        final int totalTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                .getAmount();
+        Preconditions.checkState(totalTools > 0,
+                "In colony (%s) is not ane tools", colony);
         if (isHoldingGuns()) {
             unequipWithMuskets();
         }
@@ -159,7 +168,8 @@ public final class UnitFreeColonist extends CanMount {
             unequipWithHorses();
         }
         final int removeTools = Math.min(totalTools, MAXIMAL_NUMBER_OF_TOOLS);
-        colony.getWarehouse().removeGoods(Goods.of(GoodsType.TOOLS, removeTools));
+        colony.getWarehouse()
+                .removeGoods(Goods.of(GoodsType.TOOLS, removeTools));
         tools = removeTools;
     }
 
@@ -171,11 +181,12 @@ public final class UnitFreeColonist extends CanMount {
 
     private Colony verifyThatUnitIsOutsideColony() {
         final Optional<Colony> oColony = getModel().getColonyAt(getLocation());
-        Preconditions.checkState(oColony.isPresent(), "Unit at (%s) is not outside colony",
-                getLocation());
+        Preconditions.checkState(oColony.isPresent(),
+                "Unit at (%s) is not outside colony", getLocation());
         final Colony colony = oColony.get();
         Preconditions.checkState(getOwner().equals(colony.getOwner()),
-                "Colony at (%s) doesn't belong to same owner as unit (%s)", getLocation(), this);
+                "Colony at (%s) doesn't belong to same owner as unit (%s)",
+                getLocation(), this);
         return colony;
     }
 
@@ -191,8 +202,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @param tools
-     *            the tools to set
+     * @param tools the tools to set
      */
     public void setTools(int tools) {
         this.tools = tools;
@@ -206,8 +216,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @param holdingGuns
-     *            the holdingGuns to set
+     * @param holdingGuns the holdingGuns to set
      */
     public void setHoldingGuns(boolean holdingGuns) {
         this.holdingGuns = holdingGuns;
@@ -221,8 +230,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @param mounted
-     *            the mounted to set
+     * @param mounted the mounted to set
      */
     public void setMounted(boolean mounted) {
         this.mounted = mounted;

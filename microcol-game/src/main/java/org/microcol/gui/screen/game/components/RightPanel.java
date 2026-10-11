@@ -16,9 +16,11 @@ public class RightPanel implements JavaFxComponent, UpdatableLanguage {
     private final RightPanelPresenter rightPanelPresenter;
 
     @Inject
-    RightPanel(final RightPanelView rightPanelView, final RightPanelPresenter rightPanelPresenter) {
+    RightPanel(final RightPanelView rightPanelView,
+            final RightPanelPresenter rightPanelPresenter) {
         this.rightPanelView = Preconditions.checkNotNull(rightPanelView);
-        this.rightPanelPresenter = Preconditions.checkNotNull(rightPanelPresenter);
+        this.rightPanelPresenter = Preconditions
+                .checkNotNull(rightPanelPresenter);
 
     }
 

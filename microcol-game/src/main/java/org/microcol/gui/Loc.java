@@ -9,48 +9,22 @@ import org.microcol.model.Calendar.Season;
  */
 public enum Loc implements MessageKeyResource {
 
-    ok, 
-    gameTitle,
-    statusBar_tile_notExplored,
-    statusBar_tile_start,
-    statusBar_tile_withUnit,
-    statusBar_tile_unitCount,
-    statusBar_era,
-    statusBar_era_description,
-    statusBar_gold,
-    statusBar_gold_description,
-    statusBar_status_description,
-    statusBar_season_spring,
-    statusBar_season_summer,
-    statusBar_season_autumn,
-    statusBar_season_winter,
-    unitsPanel_description,
-    unitsPanel_unexplored,
-    unitsPanel_units,
-    unitsPanel_availableMoves,
-    unitsPanel_owner,
-    unitsPanel_currentUser,
-    unitsPanel_with,
-    unitsPanel_empty,
-    rightPanel_description,
-    turnReport_title,
-    turnReport_caption,
-    turnReport_noEvents,
-    no_2_7p,
-    no_3_7p,
-    no_4_7p,
-    no_5_7p,
-    and,
-    withColony,
-    adjustAmountOfGoods,
-    moveCost,
-    ;
+    ok, gameTitle, statusBar_tile_notExplored, statusBar_tile_start,
+    statusBar_tile_withUnit, statusBar_tile_unitCount, statusBar_era,
+    statusBar_era_description, statusBar_gold, statusBar_gold_description,
+    statusBar_status_description, statusBar_season_spring,
+    statusBar_season_summer, statusBar_season_autumn, statusBar_season_winter,
+    unitsPanel_description, unitsPanel_unexplored, unitsPanel_units,
+    unitsPanel_availableMoves, unitsPanel_owner, unitsPanel_currentUser,
+    unitsPanel_with, unitsPanel_empty, rightPanel_description, turnReport_title,
+    turnReport_caption, turnReport_noEvents, no_2_7p, no_3_7p, no_4_7p, no_5_7p,
+    and, withColony, adjustAmountOfGoods, moveCost,;
 
     private final static String SEASON_PREFIX = "statusBar_season_";
-    
+
     public static Loc getTerrainDescription(final Season season) {
-        final String key = SEASON_PREFIX+season.getKey();
+        final String key = SEASON_PREFIX + season.getKey();
         return valueOf(key);
     }
-    
+
 }

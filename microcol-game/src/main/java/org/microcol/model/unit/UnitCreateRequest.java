@@ -38,8 +38,9 @@ public class UnitCreateRequest {
 
     private boolean mounted;
 
-    public UnitCreateRequest(final Model model, final Function<Unit, Place> placeBuilder,
-            final Integer unitId, final UnitType unitType, final Player owner,
+    public UnitCreateRequest(final Model model,
+            final Function<Unit, Place> placeBuilder, final Integer unitId,
+            final UnitType unitType, final Player owner,
             final UnitAction action, final int availableMoves) {
         this.model = Preconditions.checkNotNull(model);
         this.modelPo = Preconditions.checkNotNull(placeBuilder);
@@ -72,8 +73,7 @@ public class UnitCreateRequest {
     }
 
     /**
-     * @param tools
-     *            the tools to set
+     * @param tools the tools to set
      */
     public void setTools(int tools) {
         this.tools = tools;
@@ -87,8 +87,7 @@ public class UnitCreateRequest {
     }
 
     /**
-     * @param holdingGuns
-     *            the holdingGuns to set
+     * @param holdingGuns the holdingGuns to set
      */
     public void setHoldingGuns(boolean holdingGuns) {
         this.holdingGuns = holdingGuns;
@@ -102,8 +101,7 @@ public class UnitCreateRequest {
     }
 
     /**
-     * @param mounted
-     *            the mounted to set
+     * @param mounted the mounted to set
      */
     public void setMounted(boolean mounted) {
         this.mounted = mounted;

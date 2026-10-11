@@ -20,10 +20,12 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
     private final SettingButtonsView settingButtons;
 
     @Inject
-    ScreenSetting(final SettingButtonsView settingButtons, final MenuHolderPanel menuHolderPanel) {
+    ScreenSetting(final SettingButtonsView settingButtons,
+            final MenuHolderPanel menuHolderPanel) {
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         this.settingButtons = Preconditions.checkNotNull(settingButtons);
-        menuHolderPanel.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
+        menuHolderPanel.getContent().getStylesheets()
+                .add(STYLE_SHEET_GAME_MENU);
         menuHolderPanel.setMenuPanel(settingButtons);
     }
 

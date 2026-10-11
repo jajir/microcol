@@ -15,8 +15,7 @@ public final class NotEnoughtGoldException extends MicroColException {
     /**
      * Default constructor.
      *
-     * @param message
-     *            optional exception message
+     * @param message optional exception message
      */
     public NotEnoughtGoldException(final String message) {
         super(message);

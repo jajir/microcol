@@ -7,13 +7,15 @@ public class ColonyBuildingItemConstruction extends ColonyBuildingItem {
 
     private final ConstructionType constructionType;
 
-    public ColonyBuildingItemConstruction(final ConstructionType constructionType) {
+    public ColonyBuildingItemConstruction(
+            final ConstructionType constructionType) {
         this.constructionType = Preconditions.checkNotNull(constructionType);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("constructionType", constructionType)
+        return MoreObjects.toStringHelper(getClass())
+                .add("constructionType", constructionType)
                 .add("requiredTools", getRequiredTools())
                 .add("requiredHammers", getRequiredHammers()).toString();
     }

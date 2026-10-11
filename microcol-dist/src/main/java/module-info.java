@@ -11,7 +11,7 @@ module microcol.dist {
     //sun/misc/Unsafe
     requires jdk.unsupported;
     requires java.management;
-    
+
 //    requires gson;
 //    requires jsr305; // javax.annotation;
 //    requires javax.inject;
@@ -20,7 +20,7 @@ module microcol.dist {
     requires microcol.game;
 
     exports org.microcol.start;
-    
+
 /**
     opens org.microcol.gui to com.google.guice, com.google.common;
     opens org.microcol.gui.buttonpanel to com.google.guice, com.google.common;
@@ -49,5 +49,5 @@ module microcol.dist {
     opens org.microcol.model.campaign.po to com.google.guice;
     opens org.microcol.model.campaign.store to com.google.guice, gson;
     */
-    
+
 }

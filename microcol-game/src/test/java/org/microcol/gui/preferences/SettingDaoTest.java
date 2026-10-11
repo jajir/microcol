@@ -28,7 +28,8 @@ public class SettingDaoTest extends AbstractPreferencesTest {
 
         printOutStoredSetting();
 
-        final Optional<Setting> oSettingLoaded = settingDao.loadFromFile(SETTING_FILE);
+        final Optional<Setting> oSettingLoaded = settingDao
+                .loadFromFile(SETTING_FILE);
 
         assertTrue(oSettingLoaded.isPresent());
         assertEquals(settingOriginal, oSettingLoaded.get());
@@ -41,7 +42,8 @@ public class SettingDaoTest extends AbstractPreferencesTest {
 
         printOutStoredSetting();
 
-        final Optional<Setting> oSettingLoaded = settingDao.loadFromFile(SETTING_FILE);
+        final Optional<Setting> oSettingLoaded = settingDao
+                .loadFromFile(SETTING_FILE);
 
         assertTrue(oSettingLoaded.isPresent());
         assertEquals(settingOriginal, oSettingLoaded.get());

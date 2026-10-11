@@ -26,8 +26,7 @@ public class ImageStripePref {
         }
 
         /**
-         * @param image
-         *            the image to set
+         * @param image the image to set
          * @return image stripe builder
          */
         public ImageStripeBuilder setImage(Image image) {
@@ -36,8 +35,7 @@ public class ImageStripePref {
         }
 
         /**
-         * @param centerGap
-         *            the centerGap to set
+         * @param centerGap the centerGap to set
          * @return image stripe builder
          */
         public ImageStripeBuilder setCenterGap(int centerGap) {
@@ -46,8 +44,7 @@ public class ImageStripePref {
         }
 
         /**
-         * @param verticalShift
-         *            the verticalShift to set
+         * @param verticalShift the verticalShift to set
          * @return image stripe builder
          */
         public ImageStripeBuilder setVerticalShift(int verticalShift) {
@@ -61,7 +58,8 @@ public class ImageStripePref {
         return new ImageStripeBuilder();
     }
 
-    private ImageStripePref(final Image image, final int centerGap, final int verticalShift) {
+    private ImageStripePref(final Image image, final int centerGap,
+            final int verticalShift) {
         this.image = Preconditions.checkNotNull(image);
         this.centerGap = centerGap;
         this.verticalShift = verticalShift;

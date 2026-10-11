@@ -26,9 +26,11 @@ public final class ColonyProductionStats {
         return out;
     }
 
-    public void forEach(final BiConsumer<GoodsType, GoodsProductionStats> consumer) {
+    public void forEach(
+            final BiConsumer<GoodsType, GoodsProductionStats> consumer) {
         Preconditions.checkNotNull(consumer, "Consumer can't null");
-        for (final Entry<GoodsType, GoodsProductionStats> entry : typeStats.entrySet()) {
+        for (final Entry<GoodsType, GoodsProductionStats> entry : typeStats
+                .entrySet()) {
             final GoodsType goodsType = entry.getKey();
             final GoodsProductionStats stats = entry.getValue();
             consumer.accept(goodsType, stats);
@@ -38,8 +40,8 @@ public final class ColonyProductionStats {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this.getClass()).add("storedTypes", typeStats.size())
-                .toString();
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("storedTypes", typeStats.size()).toString();
     }
 
 }

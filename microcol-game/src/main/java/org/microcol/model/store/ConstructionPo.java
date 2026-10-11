@@ -26,8 +26,7 @@ public final class ConstructionPo {
     }
 
     /**
-     * @param type
-     *            the type to set
+     * @param type the type to set
      */
     public void setType(ConstructionType type) {
         this.type = type;
@@ -41,8 +40,7 @@ public final class ConstructionPo {
     }
 
     /**
-     * @param slots
-     *            the slots to set
+     * @param slots the slots to set
      */
     public void setSlots(List<ConstructionSlotPo> slots) {
         this.slots = slots;

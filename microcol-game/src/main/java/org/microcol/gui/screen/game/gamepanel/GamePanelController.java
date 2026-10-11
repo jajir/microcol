@@ -10,7 +10,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
- * 
+ *
  */
 @Listener
 public final class GamePanelController {
@@ -49,13 +49,13 @@ public final class GamePanelController {
     /**
      * If Game panel is enabled. For example when animation is in progress than
      * mouse should be disabled.
-     * 
+     *
      * @return the mouseEnabled
      */
     public boolean isMouseEnabled() {
         return humanIsOnTurn;
     }
-    
+
     public boolean isUnitMoving() {
         return unitIsMoving;
     }

@@ -34,14 +34,10 @@ public final class GameModel {
     /**
      * Default constructor.
      *
-     * @param campaign
-     *            required campaign
-     * @param campaignMission
-     *            required campaign mission
-     * @param mission
-     *            required mission
-     * @param model
-     *            required game model
+     * @param campaign        required campaign
+     * @param campaignMission required campaign mission
+     * @param mission         required mission
+     * @param model           required game model
      */
     GameModel(final Campaign campaign, final CampaignMission campaignMission,
             final Mission<?> mission, final Model model) {
@@ -75,8 +71,7 @@ public final class GameModel {
     /**
      * Allows to add model listener to react on game model events.
      *
-     * @param listener
-     *            required model event listener
+     * @param listener required model event listener
      */
     public void addListener(final ModelListener listener) {
         model.addListener(listener);

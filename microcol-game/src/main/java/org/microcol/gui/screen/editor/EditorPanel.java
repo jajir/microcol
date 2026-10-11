@@ -23,7 +23,8 @@ import javafx.scene.layout.Region;
 @Singleton
 class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
 
-    private final Logger logger = LoggerFactory.getLogger(GamePanelComponent.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(GamePanelComponent.class);
 
     private final CanvasComponent canvasComponent = new CanvasComponent();
 
@@ -34,18 +35,23 @@ class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
     @Inject
     EditorPanel(final @Named("editor") VisibleAreaService visibleAreaService,
             final EditorPaintingService editorPaintingService) {
-        this.editorPaintingService = Preconditions.checkNotNull(editorPaintingService);
+        this.editorPaintingService = Preconditions
+                .checkNotNull(editorPaintingService);
 
-        canvasComponent.widthProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
-                visibleAreaService.setCanvasWidth(newValue.intValue());
-            }
-        });
-        canvasComponent.heightProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
-                visibleAreaService.setCanvasHeight(newValue.intValue());
-            }
-        });
+        canvasComponent.widthProperty()
+                .addListener((obj, oldValue, newValue) -> {
+                    if (newValue
+                            .intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
+                        visibleAreaService.setCanvasWidth(newValue.intValue());
+                    }
+                });
+        canvasComponent.heightProperty()
+                .addListener((obj, oldValue, newValue) -> {
+                    if (newValue
+                            .intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
+                        visibleAreaService.setCanvasHeight(newValue.intValue());
+                    }
+                });
 
         /**
          * Following class main define animation loop.

@@ -33,19 +33,15 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
 
     /**
      * Default constructor.
-     * 
-     * @param viewUtil
-     *            required utility class for showing dialog
-     * @param i18n
-     *            required localization tool
-     * @param messageKey
-     *            required message key
-     * @param <T>
-     *            required enumeration class extended from base message resource
-     *            class
+     *
+     * @param viewUtil   required utility class for showing dialog
+     * @param i18n       required localization tool
+     * @param messageKey required message key
+     * @param <T>        required enumeration class extended from base message
+     *                   resource class
      */
-    public <T extends Enum<T> & MessageKeyResource> AbstractWarningDialog(final ViewUtil viewUtil,
-            final I18n i18n, final T messageKey) {
+    public <T extends Enum<T> & MessageKeyResource> AbstractWarningDialog(
+            final ViewUtil viewUtil, final I18n i18n, final T messageKey) {
         this(viewUtil, i18n);
         final String dialogCaption = i18n.get(messageKey);
         setTitle(dialogCaption);

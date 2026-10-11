@@ -13,17 +13,18 @@ import org.microcol.model.UnitType;
 
 public final class UnitGalleon extends Ship {
 
-    public UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-            Function<Unit, Place> placeBuilder, Player owner, int availableMoves,
-            final UnitAction unitAction) {
-        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves, unitAction);
+    public UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model,
+            Integer id, Function<Unit, Place> placeBuilder, Player owner,
+            int availableMoves, final UnitAction unitAction) {
+        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves,
+                unitAction);
     }
 
     @Override
     public UnitType getType() {
         return UnitType.GALLEON;
     }
-    
+
     @Override
     protected Direction findOrintationForMove(Location moveTo) {
         final Location vector = moveTo.sub(getLocation());

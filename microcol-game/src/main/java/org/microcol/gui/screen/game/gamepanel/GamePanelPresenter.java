@@ -36,7 +36,8 @@ import com.google.inject.name.Named;
 @Listener
 public final class GamePanelPresenter {
 
-    private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(GamePanelPresenter.class);
 
     private final GamePreferences gamePreferences;
 
@@ -69,31 +70,41 @@ public final class GamePanelPresenter {
     @Inject
     public GamePanelPresenter(final GamePanelPainter gamePanelPainter,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
-            final GameModelController gameModelController, final GamePreferences gamePreferences,
-            final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
-            final EventBus eventBus, final ModeController modeController,
+            final GameModelController gameModelController,
+            final GamePreferences gamePreferences,
+            final SelectedTileManager selectedTileManager,
+            final ViewUtil viewUtil, final EventBus eventBus,
+            final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
             final @Named("game") VisibleAreaService visibleArea,
-            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final UnitUtil unitUtil,
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final UnitUtil unitUtil,
             final MoveModeController moveModeController) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
-        this.dialogColonyWasCaptured = Preconditions.checkNotNull(dialogColonyWasCaptured);
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+        this.dialogColonyWasCaptured = Preconditions
+                .checkNotNull(dialogColonyWasCaptured);
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.modeController = Preconditions.checkNotNull(modeController);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
-        this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
+        this.oneTurnMoveHighlighter = Preconditions
+                .checkNotNull(oneTurnMoveHighlighter);
         this.unitUtil = Preconditions.checkNotNull(unitUtil);
-        this.moveModeController = Preconditions.checkNotNull(moveModeController);
+        this.moveModeController = Preconditions
+                .checkNotNull(moveModeController);
     }
 
     @Subscribe
-    private void onStartMove(@SuppressWarnings("unused") final StartMoveEvent event) {
+    private void onStartMove(
+            @SuppressWarnings("unused") final StartMoveEvent event) {
         swithToMoveMode();
     }
 
@@ -134,7 +145,8 @@ public final class GamePanelPresenter {
     }
 
     private void swithToMoveMode() {
-        Preconditions.checkArgument(selectedTileManager.getSelectedTile().isPresent(),
+        Preconditions.checkArgument(
+                selectedTileManager.getSelectedTile().isPresent(),
                 "to move mode could be switched just when some tile is selected.");
         final List<Unit> units = gameModelController.getHumanPlayer()
                 .getUnitsAt(selectedTileManager.getSelectedTile().get());
@@ -158,16 +170,16 @@ public final class GamePanelPresenter {
 
     /**
      * This is called when user ends action mode.
-     * 
-     * @param moveToLocation
-     *            required target location
+     *
+     * @param moveToLocation required target location
      */
     public void switchToNormalMode(final Location moveToLocation) {
         Preconditions.checkArgument(modeController.isMoveMode(),
                 "switch to move mode was called from move mode");
-        final Location moveFromLocation = selectedTileManager.getSelectedTile().get();
-        logger.debug(
-                "Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
+        final Location moveFromLocation = selectedTileManager.getSelectedTile()
+                .get();
+        logger.debug("Switching to normal mode, from " + moveFromLocation
+                + " to " + moveToLocation);
         final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
 
         if (moveFromLocation.equals(moveToLocation)) {
@@ -181,8 +193,8 @@ public final class GamePanelPresenter {
             // embark
             final Optional<UnitWithCargo> oEmbartAtUnit = movingUnit
                     .getFirstUnitToEmbarkAt(moveToLocation);
-            final Optional<CargoSlot> oCargoSlot = oEmbartAtUnit.get().getCargo()
-                    .getEmptyCargoSlot();
+            final Optional<CargoSlot> oCargoSlot = oEmbartAtUnit.get()
+                    .getCargo().getEmptyCargoSlot();
             if (oCargoSlot.isPresent()) {
                 gameModelController.embark(oCargoSlot.get(), movingUnit);
             }
@@ -192,7 +204,8 @@ public final class GamePanelPresenter {
 
         if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
             // try to disembark
-            gameModelController.disembark((UnitWithCargo) movingUnit, moveToLocation);
+            gameModelController.disembark((UnitWithCargo) movingUnit,
+                    moveToLocation);
             disableMoveMode(movingUnit);
             return;
         }
@@ -214,7 +227,8 @@ public final class GamePanelPresenter {
             }
         } else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
             if (movingUnit.getPath(moveToLocation).isPresent()) {
-                final List<Location> path = movingUnit.getPath(moveToLocation).get();
+                final List<Location> path = movingUnit.getPath(moveToLocation)
+                        .get();
                 if (!path.isEmpty()) {
                     gameModelController.performMove(movingUnit, path);
                 }
@@ -242,12 +256,14 @@ public final class GamePanelPresenter {
 
     private void fight(final Unit movingUnit, final Location moveToLocation) {
         if (!movingUnit.getType().canAttack()) {
-            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
+            selectedTileManager.setSelectedTile(moveToLocation,
+                    ScrollToFocusedTile.smoothScroll);
             disableMoveMode(movingUnit);
             new DialogUnitCantFightWarning(viewUtil, i18n);
             return;
         }
-        final Unit targetUnit = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
+        final Unit targetUnit = gameModelController.getModel()
+                .getUnitsAt(moveToLocation).get(0);
         if (gamePreferences.isShowFightAdvisor()) {
             if (gamePanelView.performFightDialog(movingUnit, targetUnit)) {
                 // User choose to fight

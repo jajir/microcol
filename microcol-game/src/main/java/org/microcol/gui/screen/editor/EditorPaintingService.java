@@ -32,7 +32,8 @@ public class EditorPaintingService {
             final @Named("editor") VisibleAreaService visibleAreaService,
             final ImageProvider imageProvider) {
         this.modelService = Preconditions.checkNotNull(modelService);
-        this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
+        this.visibleAreaService = Preconditions
+                .checkNotNull(visibleAreaService);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
     }
 
@@ -45,24 +46,33 @@ public class EditorPaintingService {
 
     private void paintTerrain(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord) {
-        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight().getX(); i++) {
-            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight().getY(); j++) {
+        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
+                .getX(); i++) {
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
+                    .getY(); j++) {
                 final Location location = Location.of(i, j);
                 final Point point = area.convertToCanvasPoint(location);
                 final TerrainType terrainType = getTerrainType(location);
                 final Image img = imageProvider.getTerrainImage(terrainType);
-                graphics.drawImage(img, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX,
-                        point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
+                graphics.drawImage(img, 0, 0, Tile.TILE_WIDTH_IN_PX,
+                        Tile.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+                        Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
                 if (modelService.hasTrees(location)) {
-                    graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TREE_1),
+                    graphics.drawImage(
+                            imageProvider
+                                    .getImage(ImageLoaderTerrain.IMG_TREE_1),
                             point.getX(), point.getY());
                 }
                 if (modelService.hasField(location)) {
-                    graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_FIELD),
+                    graphics.drawImage(
+                            imageProvider
+                                    .getImage(ImageLoaderTerrain.IMG_FIELD),
                             point.getX(), point.getY());
                 }
                 if (modelService.hasColony(location)) {
-                    graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN),
+                    graphics.drawImage(
+                            imageProvider
+                                    .getImage(ImageLoaderTerrain.IMG_TILE_TOWN),
                             point.getX(), point.getY());
                 }
             }

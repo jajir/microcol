@@ -50,9 +50,12 @@ public class CanvasAreaTest {
     }
 
     @Test
-    void test_setCanvasWidth_canvas_200_map_600_previousCanvasPosition_20() throws Exception {
-        canvasArea.setCanvasWidth(40, VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
-        canvasArea.setTopLeft(Point.of(20, 100), VisibleAreaService.MAX_CANVAS_SIZE);
+    void test_setCanvasWidth_canvas_200_map_600_previousCanvasPosition_20()
+            throws Exception {
+        canvasArea.setCanvasWidth(40,
+                VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
+        canvasArea.setTopLeft(Point.of(20, 100),
+                VisibleAreaService.MAX_CANVAS_SIZE);
         assertEquals(Point.of(20, 100), canvasArea.getTopLeft());
         canvasArea.setCanvasWidth(200, 600);
 
@@ -78,32 +81,32 @@ public class CanvasAreaTest {
 
     @Test
     void test_computeNewTopLeftConnerOfCanvas_at__10__10() throws Exception {
-        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(Point.of(-10, -10),
-                Point.of(1600, 1200));
+        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(
+                Point.of(-10, -10), Point.of(1600, 1200));
 
         assertEquals(Point.of(0, 0), ret);
     }
 
     @Test
     void test_computeNewTopLeftConnerOfCanvas_at_10_10() throws Exception {
-        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(Point.of(10, 10),
-                Point.of(1600, 1200));
+        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(
+                Point.of(10, 10), Point.of(1600, 1200));
 
         assertEquals(Point.of(10, 10), ret);
     }
 
     @Test
     void test_computeNewTopLeftConnerOfCanvas_at_800_600() throws Exception {
-        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(Point.of(800, 600),
-                Point.of(1600, 1200));
+        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(
+                Point.of(800, 600), Point.of(1600, 1200));
 
         assertEquals(Point.of(800, 600), ret);
     }
 
     @Test
     void test_computeNewTopLeftConnerOfCanvas_at_810_610() throws Exception {
-        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(Point.of(810, 610),
-                Point.of(1600, 1200));
+        final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(
+                Point.of(810, 610), Point.of(1600, 1200));
 
         assertEquals(Point.of(800, 600), ret);
     }
@@ -117,9 +120,12 @@ public class CanvasAreaTest {
     @BeforeEach
     private void beforeEach() {
         canvasArea = new CanvasArea();
-        canvasArea.setCanvasWidth(800, VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
-        canvasArea.setCanvasHeight(600, VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
-        canvasArea.setTopLeft(Point.of(100, 100), VisibleAreaService.MAX_CANVAS_SIZE);
+        canvasArea.setCanvasWidth(800,
+                VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
+        canvasArea.setCanvasHeight(600,
+                VisibleAreaService.MAX_CANVAS_SIDE_LENGTH);
+        canvasArea.setTopLeft(Point.of(100, 100),
+                VisibleAreaService.MAX_CANVAS_SIZE);
     }
 
     @AfterEach

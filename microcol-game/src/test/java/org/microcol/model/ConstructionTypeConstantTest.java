@@ -32,8 +32,10 @@ public class ConstructionTypeConstantTest {
     }
 
     @Test
-    public void test_requiredFrom_isCorrect_FUR_TRADERS_HOUSE() throws Exception {
-        final Optional<ConstructionType> oType = FUR_TRADERS_HOUSE.getUpgradeFrom();
+    public void test_requiredFrom_isCorrect_FUR_TRADERS_HOUSE()
+            throws Exception {
+        final Optional<ConstructionType> oType = FUR_TRADERS_HOUSE
+                .getUpgradeFrom();
         assertTrue(oType.isPresent());
         assertEquals(FUR_TRADING_POST, oType.get());
     }
@@ -71,7 +73,8 @@ public class ConstructionTypeConstantTest {
     }
 
     @Test
-    public void test_CARPENTERS_SHOP_production_source_values() throws Exception {
+    public void test_CARPENTERS_SHOP_production_source_values()
+            throws Exception {
         assertTrue(CARPENTERS_SHOP.getConsumptionPerTurn().isPresent());
         assertTrue(CARPENTERS_SHOP.getProductionPerTurn().isPresent());
         assertEquals(1, CARPENTERS_SHOP.getProductionRatio());

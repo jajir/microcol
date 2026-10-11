@@ -36,8 +36,8 @@ public class ColorScheme {
     public Color getColor(final String colorName) {
         Preconditions.checkNotNull(colorName, "Color name is null");
         final String value = colors.get(colorName);
-        Preconditions.checkNotNull(value,
-                String.format("There is no color definition for '%s'", colorName));
+        Preconditions.checkNotNull(value, String
+                .format("There is no color definition for '%s'", colorName));
         return Color.web(value);
     }
 

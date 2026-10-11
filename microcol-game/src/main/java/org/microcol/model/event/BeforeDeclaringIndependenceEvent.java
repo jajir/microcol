@@ -10,7 +10,8 @@ public class BeforeDeclaringIndependenceEvent extends AbstractStoppableEvent {
 
     private final Player whoDecalareIt;
 
-    public BeforeDeclaringIndependenceEvent(final Model model, final Player whoDecalareIt) {
+    public BeforeDeclaringIndependenceEvent(final Model model,
+            final Player whoDecalareIt) {
         super(model);
         this.whoDecalareIt = Preconditions.checkNotNull(whoDecalareIt);
     }
@@ -24,7 +25,7 @@ public class BeforeDeclaringIndependenceEvent extends AbstractStoppableEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("whoDecalareIt", whoDecalareIt)
-                .toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("whoDecalareIt", whoDecalareIt).toString();
     }
 }

@@ -41,12 +41,16 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
     private List<GameScreen> screens = new ArrayList<>();
 
     @Inject
-    public MainPanelView(final ScreenGame screenGame, final ScreenMenu screenMenu,
-            final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
-            final ScreenSetting screenSetting, final ScreenColony screenColony,
-            final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
-            final ScreenStatistics screenStatistics, final ScreenTurnReport screenTurnReport,
-            final ScreenGoals screenGoals, final ScreenEditor screenEditor, final I18n i18n) {
+    public MainPanelView(final ScreenGame screenGame,
+            final ScreenMenu screenMenu, final ScreenCampaign screenCampaign,
+            final ScreenEurope screenEurope, final ScreenSetting screenSetting,
+            final ScreenColony screenColony,
+            final ScreenMarketBuy screenMarketBuy,
+            final ScreenMarketSell screenMarketSell,
+            final ScreenStatistics screenStatistics,
+            final ScreenTurnReport screenTurnReport,
+            final ScreenGoals screenGoals, final ScreenEditor screenEditor,
+            final I18n i18n) {
         mainBox = new VBox();
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));

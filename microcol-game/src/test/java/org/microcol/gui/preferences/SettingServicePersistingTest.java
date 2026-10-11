@@ -25,7 +25,8 @@ public class SettingServicePersistingTest {
 
     @Test
     public void verify_that_default_setting_is_used() throws Exception {
-        when(persistingTool.getRootSaveDirectory()).thenReturn(Files.createTempDir());
+        when(persistingTool.getRootSaveDirectory())
+                .thenReturn(Files.createTempDir());
 
         assertEquals(GamePreferences.DEFAULT_ANIMATION_SPEED,
                 settingService.load().getAnimationSpeed());

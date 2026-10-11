@@ -7,9 +7,11 @@ import org.microcol.gui.dialog.Dialog;
 
 import com.google.common.collect.Lists;
 
-public final class FreePlay_0_mission extends AbstractMission<MissionGoalsEmpty> {
+public final class FreePlay_0_mission
+        extends AbstractMission<MissionGoalsEmpty> {
 
-    FreePlay_0_mission(final MissionCreationContext context, final MissionGoalsEmpty goals) {
+    FreePlay_0_mission(final MissionCreationContext context,
+            final MissionGoalsEmpty goals) {
         super(context, goals);
     }
 
@@ -19,7 +21,8 @@ public final class FreePlay_0_mission extends AbstractMission<MissionGoalsEmpty>
     }
 
     public void onIndependenceWasDeclared() {
-        fireEvent(new EventShowMessages(Dialog.independenceWasDeclared_caption));
+        fireEvent(
+                new EventShowMessages(Dialog.independenceWasDeclared_caption));
     }
 
 }

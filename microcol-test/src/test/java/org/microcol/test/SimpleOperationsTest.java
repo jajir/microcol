@@ -28,82 +28,86 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
     private final static String BUTTON_SETTING_ID_NOT_EXISTING = "#buttonSetting-notExisting";
 
     private final static File verifyLoadingUnloading = new File(
-	    "src/test/scenarios/simple_operation_test.microcol");
+            "src/test/scenarios/simple_operation_test.microcol");
 
     @Start
     void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass(),verifyLoadingUnloading);
+        initialize(primaryStage, getClass(), verifyLoadingUnloading);
     }
 
     @Tag("ci")
     @Test
     public void verify_that_test_files_exists() {
-	assertTrue(verifyLoadingUnloading.exists(),
-		String.format("File '%s' doesn't exists", verifyLoadingUnloading.getAbsoluteFile()));
-	assertTrue(verifyLoadingUnloading.isFile(),
-		String.format("File '%s' is directory", verifyLoadingUnloading.getAbsoluteFile()));
+        assertTrue(verifyLoadingUnloading.exists(),
+                String.format("File '%s' doesn't exists",
+                        verifyLoadingUnloading.getAbsoluteFile()));
+        assertTrue(verifyLoadingUnloading.isFile(),
+                String.format("File '%s' is directory",
+                        verifyLoadingUnloading.getAbsoluteFile()));
     }
 
     @Test
     @Tag("ci")
-    public void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
-	Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
-	    FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
-		return true;
-	    });
-	});
+    public void verify_exception_is_throws_when_object_isnt_exists()
+            throws Exception {
+        Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
+            FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
+                return true;
+            });
+        });
     }
 
     @Test
     @Tag("ci")
     public void verify_setting_page_is_available() throws Exception {
-	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
+        SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
-	settingPage.goBack().verifyMainScreen();
+        settingPage.goBack().verifyMainScreen();
     }
 
     @Test
     @Tag("ci")
-    public void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
-	assertNotNull(robot);
-	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
+    public void verify_language_is_changed_immediatelly(final FxRobot robot)
+            throws Exception {
+        assertNotNull(robot);
+        SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
-	// verify that english is selected
-	Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, false);
-	Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, true);
+        // verify that english is selected
+        Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, false);
+        Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, true);
 
-	// select czech
-	settingPage.setCzechLanguage();
+        // select czech
+        settingPage.setCzechLanguage();
 
-	// verify czech title
-	settingPage.verifyThatMainTitleContains("Nastaven");
-	Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, true);
-	Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, false);
+        // verify czech title
+        settingPage.verifyThatMainTitleContains("Nastaven");
+        Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, true);
+        Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, false);
 
-	// select english
-	settingPage.setEnglishLanguage();
+        // select english
+        settingPage.setEnglishLanguage();
 
-	// verify english
-	Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, false);
-	Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, true);
+        // verify english
+        Asserts.verifyRadioButton(SettingLanguageView.RB_CZECH_ID, false);
+        Asserts.verifyRadioButton(SettingLanguageView.RB_ENGLISH_ID, true);
 
-	// back to main screen
-	settingPage.goBack().verifyMainScreen();
+        // back to main screen
+        settingPage.goBack().verifyMainScreen();
     }
 
     /**
      * Just such very simple test could run at CI. More complicated test fail in
      * headless mode.
-     * 
+     *
      * @throws Exception
      */
     @Test
     @Tag("ci")
     public void verify_moving_with_unit() throws Exception {
-	final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	gamePage.moveMouseAtLocation(Location.of(22, 12));
-	gamePage.dragMouseAtLocation(Location.of(24, 11));
+        gamePage.moveMouseAtLocation(Location.of(22, 12));
+        gamePage.dragMouseAtLocation(Location.of(24, 11));
     }
 
 }

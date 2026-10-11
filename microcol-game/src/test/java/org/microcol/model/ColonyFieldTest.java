@@ -31,14 +31,16 @@ public class ColonyFieldTest {
 
     private final ColonyWarehouse warehouse = mock(ColonyWarehouse.class);
 
-    private final PlaceColonyField placeColonyField = mock(PlaceColonyField.class);
+    private final PlaceColonyField placeColonyField = mock(
+            PlaceColonyField.class);
 
     private ColonyField field;
 
     @Test
     void test_countTurnProduction_warehouse_isNull() throws Exception {
 
-        assertThrows(NullPointerException.class, () -> field.countTurnProduction(null));
+        assertThrows(NullPointerException.class,
+                () -> field.countTurnProduction(null));
 
         verify(placeColonyField, never()).getProducedGoodsType();
         verify(model, never()).getMap();
@@ -48,15 +50,18 @@ public class ColonyFieldTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void test_countTurnProduction_all_production_could_be_stored() throws Exception {
+    void test_countTurnProduction_all_production_could_be_stored()
+            throws Exception {
         mockTurnProduction(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN)).thenReturn(Goods.of(GoodsType.CORN, 0));
+        when(warehouse.getGoods(GoodsType.CORN))
+                .thenReturn(Goods.of(GoodsType.CORN, 0));
         when(warehouse.getStorageCapacity(GoodsType.CORN))
                 .thenReturn(Goods.of(GoodsType.CORN, 100));
 
         field.countTurnProduction(warehouse);
 
-        final ArgumentCaptor<Goods> acGoods = ArgumentCaptor.forClass(Goods.class);
+        final ArgumentCaptor<Goods> acGoods = ArgumentCaptor
+                .forClass(Goods.class);
         final ArgumentCaptor<Consumer<Goods>> acConsumerGoods = ArgumentCaptor
                 .forClass(Consumer.class);
         verify(warehouse, times(1)).addGoodsWithThrowingAway(acGoods.capture(),
@@ -67,22 +72,26 @@ public class ColonyFieldTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void test_countTurnProduction_part_of_production_could_be_stored() throws Exception {
+    void test_countTurnProduction_part_of_production_could_be_stored()
+            throws Exception {
         mockTurnProduction(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN)).thenReturn(Goods.of(GoodsType.CORN, 98));
+        when(warehouse.getGoods(GoodsType.CORN))
+                .thenReturn(Goods.of(GoodsType.CORN, 98));
         when(warehouse.getStorageCapacity(GoodsType.CORN))
                 .thenReturn(Goods.of(GoodsType.CORN, 100));
 
         field.countTurnProduction(warehouse);
 
-        final ArgumentCaptor<Goods> acGoods = ArgumentCaptor.forClass(Goods.class);
+        final ArgumentCaptor<Goods> acGoods = ArgumentCaptor
+                .forClass(Goods.class);
         final ArgumentCaptor<Consumer<Goods>> acConsumerGoods = ArgumentCaptor
                 .forClass(Consumer.class);
         verify(warehouse, times(1)).addGoodsWithThrowingAway(acGoods.capture(),
                 acConsumerGoods.capture());
         assertEquals(Goods.of(GoodsType.CORN, 5), acGoods.getValue());
 
-        final ArgumentCaptor<TurnEvent> acTurnEvent = ArgumentCaptor.forClass(TurnEvent.class);
+        final ArgumentCaptor<TurnEvent> acTurnEvent = ArgumentCaptor
+                .forClass(TurnEvent.class);
         /*
          * Following code is not called because method addGoodsWithThrowingAway
          * is mocked.
@@ -91,9 +100,11 @@ public class ColonyFieldTest {
     }
 
     @Test
-    void test_countTurnProduction_produce_nothing_couldBeStored() throws Exception {
+    void test_countTurnProduction_produce_nothing_couldBeStored()
+            throws Exception {
         mockTurnProduction_old(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN)).thenReturn(Goods.of(GoodsType.CORN, 100));
+        when(warehouse.getGoods(GoodsType.CORN))
+                .thenReturn(Goods.of(GoodsType.CORN, 100));
         when(warehouse.getStorageCapacity(GoodsType.CORN))
                 .thenReturn(Goods.of(GoodsType.CORN, 100));
         when(colony.getOwner()).thenReturn(player);
@@ -107,7 +118,8 @@ public class ColonyFieldTest {
     @Test
     void test_countTurnProduction_warehouse_is_overloded() throws Exception {
         mockTurnProduction_old(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN)).thenReturn(Goods.of(GoodsType.CORN, 150));
+        when(warehouse.getGoods(GoodsType.CORN))
+                .thenReturn(Goods.of(GoodsType.CORN, 150));
         when(warehouse.getStorageCapacity(GoodsType.CORN))
                 .thenReturn(Goods.of(GoodsType.CORN, 100));
         when(colony.getOwner()).thenReturn(player);
@@ -129,20 +141,24 @@ public class ColonyFieldTest {
         assertEquals(10, ret.get().getAmount());
     }
 
-    private void mockTurnProduction(final GoodsType goodsType, final int amount) {
+    private void mockTurnProduction(final GoodsType goodsType,
+            final int amount) {
         field.setPlaceColonyField(placeColonyField);
         when(placeColonyField.getProducedGoodsType()).thenReturn(goodsType);
         when(model.getMap()).thenReturn(map);
         when(colony.getLocation()).thenReturn(colonyLocation);
-        when(map.getTerrainAt(colonyLocation.add(direction.getVector()))).thenReturn(terrain);
+        when(map.getTerrainAt(colonyLocation.add(direction.getVector())))
+                .thenReturn(terrain);
         when(terrain.canProduceAmmount(goodsType)).thenReturn(amount);
     }
 
-    private void mockTurnProduction_old(final GoodsType goodsType, final int amount) {
+    private void mockTurnProduction_old(final GoodsType goodsType,
+            final int amount) {
         when(placeColonyField.getProducedGoodsType()).thenReturn(goodsType);
         when(model.getMap()).thenReturn(map);
         when(colony.getLocation()).thenReturn(colonyLocation);
-        when(map.getTerrainAt(colonyLocation.add(direction.getVector()))).thenReturn(terrain);
+        when(map.getTerrainAt(colonyLocation.add(direction.getVector())))
+                .thenReturn(terrain);
         when(terrain.canProduceAmmount(goodsType)).thenReturn(amount);
     }
 

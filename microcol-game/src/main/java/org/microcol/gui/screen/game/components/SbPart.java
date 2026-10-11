@@ -15,8 +15,7 @@ abstract class SbPart {
     /**
      * Add this part to given string builder.
      *
-     * @param buff
-     *            required string builder
+     * @param buff required string builder
      */
     abstract void writeTo(final StringBuilder buff);
 

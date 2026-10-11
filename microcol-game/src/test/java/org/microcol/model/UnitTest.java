@@ -23,10 +23,10 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
 
     private final Unit u2 = mock(Unit.class);
 
-    private final  Player player = mock(Player.class);
+    private final Player player = mock(Player.class);
 
     private final PlaceLocation placeLocation = mock(PlaceLocation.class);
-    
+
     @Test
     public void test_isSameOwner_emptyList() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
@@ -80,7 +80,8 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_isSameOwner_twoUnit_secondIsDifferentOwner() throws Exception {
+    public void test_isSameOwner_twoUnit_secondIsDifferentOwner()
+            throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
 
         assertNotNull(unit);
@@ -95,17 +96,19 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
 
     @Test
     public void test_placeToCargoSlot_place_is_required() throws Exception {
-        assertThrows(NullPointerException.class, () -> unit.placeToCargoSlot(null));
+        assertThrows(NullPointerException.class,
+                () -> unit.placeToCargoSlot(null));
     }
 
     @Test
-    public void test_placeToCargoSlot_is_already_in_cargoSlot() throws Exception {
+    public void test_placeToCargoSlot_is_already_in_cargoSlot()
+            throws Exception {
         final PlaceCargoSlot placeSlot1 = mock(PlaceCargoSlot.class);
         final PlaceCargoSlot placeSlot2 = mock(PlaceCargoSlot.class);
         when(placeSlot1.getCargoSlotOwner()).thenReturn(owner);
         when(placeSlot2.getCargoSlotOwner()).thenReturn(owner);
         makeColonist(model, 4, placeSlot1, owner, 10);
-        
+
         unit.placeToCargoSlot(placeSlot2);
 
         assertTrue(unit.isAtCargoSlot());
@@ -114,15 +117,18 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_placeToCargoSlot_unit_have_different_owner_than_cargo_slot() throws Exception {
+    public void test_placeToCargoSlot_unit_have_different_owner_than_cargo_slot()
+            throws Exception {
         final PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
         makeColonist(model, 4, placeLocation, owner, 10);
         when(placeCargoSlot.getCargoSlotOwner()).thenReturn(player);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
                 () -> unit.placeToCargoSlot(placeCargoSlot));
 
-        assertTrue(exception.getMessage().contains("Cargo slot belongs to different player"));
+        assertTrue(exception.getMessage()
+                .contains("Cargo slot belongs to different player"));
     }
 
     @Test

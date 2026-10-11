@@ -19,8 +19,8 @@ abstract class AbstractTiledImageLoader implements ImageLoader {
 
     private final String imagePrefix;
 
-    AbstractTiledImageLoader(final TileImageParams params, final String imageName,
-            final String imagePrefix) {
+    AbstractTiledImageLoader(final TileImageParams params,
+            final String imageName, final String imagePrefix) {
         this.params = Preconditions.checkNotNull(params);
         this.imageName = Preconditions.checkNotNull(imageName);
         this.imagePrefix = Preconditions.checkNotNull(imagePrefix);
@@ -29,11 +29,11 @@ abstract class AbstractTiledImageLoader implements ImageLoader {
     /**
      * Load main big image. Verify it's size. And split it into smaller tiles.
      * This tiles will be available under names:
-     * 
+     *
      * <pre>
      * imagePrefix + xPosition + "_" + yPosition
      * </pre>
-     * 
+     *
      * For example <i>building_5_0</i> or <i>building_3_4</i>
      * <p>
      * This method should be overridden and called.
@@ -42,11 +42,14 @@ abstract class AbstractTiledImageLoader implements ImageLoader {
     @Override
     public void preload(final ImageCache imageCache) {
         final Image img = imageCache.getRawImage(imageName);
-        Preconditions.checkState(img.getWidth() == params.getExpectedImageWidth(),
-                "Image width is %s but expected is %s.", String.valueOf(img.getWidth()),
-                params.getExpectedImageWidth());
-        Preconditions.checkState(img.getHeight() == params.getExpectedImageHeight(),
-                "Image height is %s but expected is %s.", String.valueOf(img.getHeight()),
+        Preconditions.checkState(
+                img.getWidth() == params.getExpectedImageWidth(),
+                "Image width is %s but expected is %s.",
+                String.valueOf(img.getWidth()), params.getExpectedImageWidth());
+        Preconditions.checkState(
+                img.getHeight() == params.getExpectedImageHeight(),
+                "Image height is %s but expected is %s.",
+                String.valueOf(img.getHeight()),
                 params.getExpectedImageHeight());
         imageCache.registerImage(imageName, img);
 
@@ -56,8 +59,8 @@ abstract class AbstractTiledImageLoader implements ImageLoader {
                 final PixelReader reader = img.getPixelReader();
                 final WritableImage tile = new WritableImage(reader,
                         x * params.getTileWidthIncludingBorder(),
-                        y * params.getTileWidthIncludingBorder(), params.getTileWidth(),
-                        params.getTileWidth());
+                        y * params.getTileWidthIncludingBorder(),
+                        params.getTileWidth(), params.getTileWidth());
                 imageCache.registerImage(name, tile);
             }
         }

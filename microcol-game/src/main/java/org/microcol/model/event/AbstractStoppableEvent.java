@@ -2,7 +2,8 @@ package org.microcol.model.event;
 
 import org.microcol.model.Model;
 
-abstract class AbstractStoppableEvent extends AbstractModelEvent implements StoppableEvent {
+abstract class AbstractStoppableEvent extends AbstractModelEvent
+        implements StoppableEvent {
 
     private boolean stopped = false;
 

@@ -12,8 +12,7 @@ public final class ConstructionSlotPo {
     }
 
     /**
-     * @param workerId
-     *            the workerId to set
+     * @param workerId the workerId to set
      */
     public void setWorkerId(Integer workerId) {
         this.workerId = workerId;

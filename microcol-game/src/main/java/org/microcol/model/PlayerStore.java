@@ -36,15 +36,18 @@ public final class PlayerStore {
          */
         final PlayerStore out = new PlayerStore();
         modelPo.getGameManager().getPlayers().stream()
-                .filter(player -> player.getWhosKingThisPlayerIs() == null).forEach(playerPo -> {
+                .filter(player -> player.getWhosKingThisPlayerIs() == null)
+                .forEach(playerPo -> {
                     out.players.add(Player.make(playerPo, model, out));
                 });
         modelPo.getGameManager().getPlayers().stream()
-                .filter(player -> player.getWhosKingThisPlayerIs() != null).forEach(playerPo -> {
+                .filter(player -> player.getWhosKingThisPlayerIs() != null)
+                .forEach(playerPo -> {
                     out.players.add(Player.make(playerPo, model, out));
                 });
         out.checkPlayersDuplicities();
-        Preconditions.checkArgument(!out.players.isEmpty(), "There must be at least one player.");
+        Preconditions.checkArgument(!out.players.isEmpty(),
+                "There must be at least one player.");
         return out;
     }
 
@@ -52,8 +55,8 @@ public final class PlayerStore {
         Set<String> names = new HashSet<>();
         players.forEach(player -> {
             if (!names.add(player.getName())) {
-                throw new IllegalArgumentException(
-                        String.format("Duplicate player name (%s).", player.getName()));
+                throw new IllegalArgumentException(String.format(
+                        "Duplicate player name (%s).", player.getName()));
             }
         });
     }
@@ -63,18 +66,22 @@ public final class PlayerStore {
     }
 
     public Player getPlayerByName(final String playerName) {
-        return players.stream().filter(player -> player.getName().equals(playerName)).findAny()
-                .orElseThrow(() -> new MicroColException(
-                        String.format("There is no such player (%s)", playerName)));
+        return players.stream()
+                .filter(player -> player.getName().equals(playerName)).findAny()
+                .orElseThrow(() -> new MicroColException(String
+                        .format("There is no such player (%s)", playerName)));
     }
 
     public Optional<PlayerKing> getKingForPlayer(final Player subduedPlayer) {
-        return players.stream().filter(player -> player.isKing()).map(player -> (PlayerKing) player)
-                .filter(king -> king.getWhosKingThisPlayerIs().equals(subduedPlayer)).findAny();
+        return players.stream().filter(player -> player.isKing())
+                .map(player -> (PlayerKing) player).filter(king -> king
+                        .getWhosKingThisPlayerIs().equals(subduedPlayer))
+                .findAny();
     }
 
     int getKingsTaxForPlayer(final Player subduedPlayer) {
-        return getKingForPlayer(subduedPlayer).map(PlayerKing::getKingsTaxPercentage)
+        return getKingForPlayer(subduedPlayer)
+                .map(PlayerKing::getKingsTaxPercentage)
                 .orElse(DEFAULT_KINGS_TAX_PERCENTAGE);
     }
 

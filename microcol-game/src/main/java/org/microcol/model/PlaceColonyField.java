@@ -22,10 +22,10 @@ public class PlaceColonyField extends AbstractPlace {
     public PlaceColonyField(final Unit unit, final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         super(unit);
-        Preconditions.checkNotNull(colonyField, "Colonu field is null, for unit id %s",
-                unit.getId());
-        Preconditions.checkNotNull(producedGoodsType, "Produced goods type is null, for unit id %s",
-                unit.getId());
+        Preconditions.checkNotNull(colonyField,
+                "Colonu field is null, for unit id %s", unit.getId());
+        Preconditions.checkNotNull(producedGoodsType,
+                "Produced goods type is null, for unit id %s", unit.getId());
         this.colonyField = Preconditions.checkNotNull(colonyField);
         setProducedGoodsType(producedGoodsType);
     }
@@ -47,9 +47,10 @@ public class PlaceColonyField extends AbstractPlace {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceColonyField.class).add("unitId", getUnit().getId())
-                .add("unitType", getUnit().getType()).add("colonyName", colonyField.getColonyName())
-                .toString();
+        return MoreObjects.toStringHelper(PlaceColonyField.class)
+                .add("unitId", getUnit().getId())
+                .add("unitType", getUnit().getType())
+                .add("colonyName", colonyField.getColonyName()).toString();
     }
 
     Colony getColony() {
@@ -63,8 +64,8 @@ public class PlaceColonyField extends AbstractPlace {
     public void setProducedGoodsType(final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(producedGoodsType);
         Preconditions.checkArgument(colonyField.canProduce(producedGoodsType),
-                "Given good (%s) can't be produced at (%s)", producedGoodsType.name(),
-                colonyField.getTerrainType().name());
+                "Given good (%s) can't be produced at (%s)",
+                producedGoodsType.name(), colonyField.getTerrainType().name());
 
         this.producedGoodsType = producedGoodsType;
     }

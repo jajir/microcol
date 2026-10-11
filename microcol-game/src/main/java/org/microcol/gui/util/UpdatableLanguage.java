@@ -14,8 +14,7 @@ public interface UpdatableLanguage {
      * Method should set correct localization to all content. Method should be
      * called manually from outside.
      *
-     * @param i18n
-     *            required internationalization service
+     * @param i18n required internationalization service
      */
     void updateLanguage(I18n i18n);
 
@@ -23,12 +22,11 @@ public interface UpdatableLanguage {
      * Helper method that allows to update language on given method if support
      * it.
      *
-     * @param component
-     *            required component
-     * @param i18n
-     *            required internationalization service
+     * @param component required component
+     * @param i18n      required internationalization service
      */
-    default void tryToUpdateComponent(final JavaFxComponent component, final I18n i18n) {
+    default void tryToUpdateComponent(final JavaFxComponent component,
+            final I18n i18n) {
         Preconditions.checkNotNull(component);
         if (component instanceof UpdatableLanguage) {
             ((UpdatableLanguage) component).updateLanguage(i18n);

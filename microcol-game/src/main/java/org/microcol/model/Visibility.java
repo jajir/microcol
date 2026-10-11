@@ -27,16 +27,16 @@ public final class Visibility {
 
     /**
      * Method reveals map visible for given unit.
-     * 
-     * @param unit
-     *            required unit. Unit have to be on map.
+     *
+     * @param unit required unit. Unit have to be on map.
      */
     void makeVisibleMapForUnit(final Unit unit) {
         Preconditions.checkNotNull(unit, "Unit is null");
         visible.addAll(unit.getVisibleLocations());
     }
 
-    void store(final VisibilityPo visibilityPo, final int maxX, final int maxY) {
+    void store(final VisibilityPo visibilityPo, final int maxX,
+            final int maxY) {
         visibilityPo.setVisibility(visible, maxX, maxY);
     }
 

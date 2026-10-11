@@ -23,7 +23,8 @@ public final class GameOverResult {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("gameOverReason", gameOverReason).toString();
+        return MoreObjects.toStringHelper(this)
+                .add("gameOverReason", gameOverReason).toString();
     }
 
 }

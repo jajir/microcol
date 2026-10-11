@@ -42,7 +42,8 @@ public final class MissionImpl<G extends MissionGoals> implements Mission<G> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("missionName", missionName).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("missionName", missionName).toString();
     }
 
     /**

@@ -28,8 +28,7 @@ public final class ChangeLanguageListenerFileChooser {
      * string should be localized and change with language. Proper setting of
      * this strings is done here.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     @Subscribe
     @SuppressWarnings("ucd")

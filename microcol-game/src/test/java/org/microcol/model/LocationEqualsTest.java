@@ -24,7 +24,9 @@ public class LocationEqualsTest {
     @MethodSource("dataProvider")
 
     public void testEquals(final Location location1, final Location location2) {
-        assertTrue(location1.equals(location2), "Test of location1 and location2 failed.");
-        assertTrue(location2.equals(location1), "Test of location2 and location1 failed.");
+        assertTrue(location1.equals(location2),
+                "Test of location1 and location2 failed.");
+        assertTrue(location2.equals(location1),
+                "Test of location2 and location1 failed.");
     }
 }

@@ -20,7 +20,7 @@ public final class PlayerPo {
     private VisibilityPo visible;
 
     private int kingsTaxPercentage;
-    
+
     /**
      * @return the name
      */
@@ -29,8 +29,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param name
-     *            the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -44,8 +43,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param computer
-     *            the computer to set
+     * @param computer the computer to set
      */
     public void setComputer(boolean computer) {
         this.computer = computer;
@@ -59,8 +57,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param gold
-     *            the gold to set
+     * @param gold the gold to set
      */
     public void setGold(int gold) {
         this.gold = gold;
@@ -74,8 +71,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param declaredIndependence
-     *            the declaredIndependence to set
+     * @param declaredIndependence the declaredIndependence to set
      */
     public void setDeclaredIndependence(boolean declaredIndependence) {
         this.declaredIndependence = declaredIndependence;
@@ -89,8 +85,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param whosKingThisPlayerIs
-     *            the whosKingThisPlayerIs to set
+     * @param whosKingThisPlayerIs the whosKingThisPlayerIs to set
      */
     public void setWhosKingThisPlayerIs(String whosKingThisPlayerIs) {
         this.whosKingThisPlayerIs = whosKingThisPlayerIs;
@@ -104,8 +99,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param extraData
-     *            the extraData to set
+     * @param extraData the extraData to set
      */
     public void setExtraData(Map<String, Object> extraData) {
         this.extraData = extraData;
@@ -119,8 +113,7 @@ public final class PlayerPo {
     }
 
     /**
-     * @param visibility
-     *            the visibility to set
+     * @param visibility the visibility to set
      */
     public void setVisible(VisibilityPo visibility) {
         this.visible = visibility;

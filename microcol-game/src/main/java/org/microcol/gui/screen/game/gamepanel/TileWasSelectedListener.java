@@ -18,7 +18,8 @@ public final class TileWasSelectedListener {
 
     @Inject
     TileWasSelectedListener(final GameModelController gameModelController) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
     }
 
     @Subscribe

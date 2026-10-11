@@ -21,6 +21,7 @@ public final class RoundStartedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("calendar", calendar).toString();
+        return MoreObjects.toStringHelper(this).add("calendar", calendar)
+                .toString();
     }
 }

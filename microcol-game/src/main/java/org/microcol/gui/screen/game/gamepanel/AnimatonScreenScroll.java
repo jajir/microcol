@@ -24,8 +24,8 @@ final class AnimatonScreenScroll {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("screenScrolling", screenScrolling)
-                .toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("screenScrolling", screenScrolling).toString();
     }
 
 }

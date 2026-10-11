@@ -12,8 +12,7 @@ public final class IceCoastMapGenerator extends AbstractCoastMapGenerator {
     /**
      * Default constructor.
      *
-     * @param imageProvider
-     *            required image provider
+     * @param imageProvider required image provider
      */
     @Inject
     IceCoastMapGenerator(final ImageProvider imageProvider) {
@@ -33,7 +32,8 @@ public final class IceCoastMapGenerator extends AbstractCoastMapGenerator {
     @Override
     public boolean isMass(final InfoHolder infoHolder) {
         final TerrainType terrainType = infoHolder.tt();
-        return TerrainType.TUNDRA.equals(terrainType) || TerrainType.ARCTIC.equals(terrainType);
+        return TerrainType.TUNDRA.equals(terrainType)
+                || TerrainType.ARCTIC.equals(terrainType);
     }
 
     @Override

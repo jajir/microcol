@@ -16,8 +16,10 @@ class MouseOperationTerrain implements MouseOperation {
     }
 
     @Override
-    public void execute(final MouseOperationContext context, final Location location) {
-        final Map<Location, TerrainType> map = context.getModelPo().getMap().getTerrainMap();
+    public void execute(final MouseOperationContext context,
+            final Location location) {
+        final Map<Location, TerrainType> map = context.getModelPo().getMap()
+                .getTerrainMap();
         map.put(location, terrainType);
         context.getModelPo().getMap().setTerrainType(map);
     }

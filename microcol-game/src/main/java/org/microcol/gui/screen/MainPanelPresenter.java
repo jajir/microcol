@@ -46,10 +46,13 @@ public final class MainPanelPresenter {
     @Inject
     public MainPanelPresenter(final MainPanelView view, final I18n i18n,
             final ScreenGame screenGame, final ScreenMenu screenMenu,
-            final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
-            final ScreenSetting screenSetting, final ScreenColony screenColony,
-            final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
-            final ScreenStatistics screenStatistics, final ScreenTurnReport screenTurnReport,
+            final ScreenCampaign screenCampaign,
+            final ScreenEurope screenEurope, final ScreenSetting screenSetting,
+            final ScreenColony screenColony,
+            final ScreenMarketBuy screenMarketBuy,
+            final ScreenMarketSell screenMarketSell,
+            final ScreenStatistics screenStatistics,
+            final ScreenTurnReport screenTurnReport,
             final ScreenEditor screenEditor, final ScreenGoals screenGoals) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);

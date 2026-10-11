@@ -39,12 +39,14 @@ public class PanelColonyName implements JavaFxComponent {
         label.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(i18n.get(ColonyMsg.colonyName, colonyName),
-                Source.COLONY));
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(ColonyMsg.colonyName, colonyName), Source.COLONY));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 

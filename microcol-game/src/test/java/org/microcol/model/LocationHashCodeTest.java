@@ -12,8 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class LocationHashCodeTest {
 
     static Stream<Arguments> dataProvider() {
-        return Stream.of(
-                arguments(Location.of(0, 0), 0),
+        return Stream.of(arguments(Location.of(0, 0), 0),
                 arguments(Location.of(1, 0), 1),
                 arguments(Location.of(-1, 0), -1),
                 arguments(Location.of(0, 1), 65536),

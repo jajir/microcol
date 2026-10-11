@@ -33,8 +33,8 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     private final VBox mainPanel;
     private final HBox buttonPanel;
 
-    protected AbstractButtonsPanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final Source source, final I18n i18n) {
+    protected AbstractButtonsPanel(final ImageProvider imageProvider,
+            final EventBus eventBus, final Source source, final I18n i18n) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.source = Preconditions.checkNotNull(source);
@@ -51,10 +51,10 @@ public class AbstractButtonsPanel implements JavaFxComponent {
         VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }
 
-    protected <T extends Enum<T> & MessageKeyResource> Button makeButon(final String imgName,
-            final T buttonsKey) {
-        final ButtonImage<T> buttonImage = new ButtonImage<T>(eventBus, source, i18n, buttonsKey,
-                imageProvider.getImage(imgName));
+    protected <T extends Enum<T> & MessageKeyResource> Button makeButon(
+            final String imgName, final T buttonsKey) {
+        final ButtonImage<T> buttonImage = new ButtonImage<T>(eventBus, source,
+                i18n, buttonsKey, imageProvider.getImage(imgName));
         return buttonImage.getContent();
     }
 
@@ -64,8 +64,8 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     }
 
     protected boolean isContaining(final Node node) {
-        return buttonPanel.getChildren().stream().filter(n -> n.equals(node)).findFirst()
-                .isPresent();
+        return buttonPanel.getChildren().stream().filter(n -> n.equals(node))
+                .findFirst().isPresent();
     }
 
     protected void remove(final Node node) {

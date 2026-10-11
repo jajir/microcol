@@ -30,15 +30,17 @@ class PanelQueueUnits extends TitledPanel {
 
     @Inject
     public PanelQueueUnits(final ColonyDialogCallback colonyDialogCallback,
-            final ImageProvider imageProvider, final QueueController queueController) {
+            final ImageProvider imageProvider,
+            final QueueController queueController) {
         super("Jednotky");
-        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+        this.colonyDialogCallback = Preconditions
+                .checkNotNull(colonyDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.queueController = Preconditions.checkNotNull(queueController);
         queuePanel = new VBox();
         getContentPane().getChildren().add(queuePanel);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
-                this::isItValid);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                this, this::isItValid);
         setOnDragEntered(backgroundHighlighter::onDragEntered);
         setOnDragExited(backgroundHighlighter::onDragExited);
         setOnDragOver(this::onDragOver);
@@ -49,15 +51,17 @@ class PanelQueueUnits extends TitledPanel {
         final Colony colony = colonyDialogCallback.getColony();
         queuePanel.getChildren().clear();
         queuePanel.getChildren().add(new Label("Jednotky, co muzu stavet"));
-        colony.getColonyBuildingQueue().getBuildigItemsUnit().forEach(colonyBuildingItem -> {
-            final UnitDraggablePanel panel = new UnitDraggablePanel(colonyBuildingItem,
-                    imageProvider);
-            queuePanel.getChildren().add(panel.getPanel());
-        });
+        colony.getColonyBuildingQueue().getBuildigItemsUnit()
+                .forEach(colonyBuildingItem -> {
+                    final UnitDraggablePanel panel = new UnitDraggablePanel(
+                            colonyBuildingItem, imageProvider);
+                    queuePanel.getChildren().add(panel.getPanel());
+                });
     }
 
     private void onDragDropped(final DragEvent event) {
-        final ClipboardParser parser = ClipboardParser.make(event.getDragboard());
+        final ClipboardParser parser = ClipboardParser
+                .make(event.getDragboard());
         if (parser.getFrom().get() == From.VALUE_FROM_BUILDING_QUEUE) {
             int removingItemId = parser.getInt(ClipboardConst.KEY_INDEX);
             queueController.removeItemById(removingItemId);
@@ -77,7 +81,8 @@ class PanelQueueUnits extends TitledPanel {
 
     private boolean isItValid(final Dragboard db) {
         return ClipboardParser.make(db).getFrom()
-                .filter(from -> from == From.VALUE_FROM_BUILDING_QUEUE).isPresent();
+                .filter(from -> from == From.VALUE_FROM_BUILDING_QUEUE)
+                .isPresent();
     }
 
 }

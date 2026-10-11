@@ -22,10 +22,11 @@ public abstract class MissionGoals {
 
     @SuppressWarnings("unchecked")
     public <G extends MissionGoal> G getByClass(final Class<?> clazz) {
-        Optional<MissionGoal> oGoal = goals.stream().filter(goal -> goal.getClass().equals(clazz))
-                .findFirst();
+        Optional<MissionGoal> oGoal = goals.stream()
+                .filter(goal -> goal.getClass().equals(clazz)).findFirst();
         return (G) oGoal.orElseThrow(() -> new InvalidParameterException(
-                String.format("There is goal defined by class '%s'", clazz.getName())));
+                String.format("There is goal defined by class '%s'",
+                        clazz.getName())));
     }
 
     void save(final Map<String, String> data) {
@@ -33,7 +34,8 @@ public abstract class MissionGoals {
     }
 
     boolean isAllGoalsDone() {
-        return !goals.stream().filter(goal -> !goal.isFinished()).findAny().isPresent();
+        return !goals.stream().filter(goal -> !goal.isFinished()).findAny()
+                .isPresent();
     }
 
 }

@@ -20,26 +20,32 @@ public class CanvasInMapCoordinates {
      */
     private final Location bottomRight;
 
-    public static CanvasInMapCoordinates make(final VisibleAreaService visibleArea,
-            final Location mapSize) {
-        final Location lTopLeft = Tile.of(visibleArea.getTopLeft()).toLocation();
-        final Location lBottomRight = Tile.of(visibleArea.getBottomRight()).toLocation();
-        final Location topLeft = Location.of(Math.max(Location.MAP_MIN_X, lTopLeft.getX()),
+    public static CanvasInMapCoordinates make(
+            final VisibleAreaService visibleArea, final Location mapSize) {
+        final Location lTopLeft = Tile.of(visibleArea.getTopLeft())
+                .toLocation();
+        final Location lBottomRight = Tile.of(visibleArea.getBottomRight())
+                .toLocation();
+        final Location topLeft = Location.of(
+                Math.max(Location.MAP_MIN_X, lTopLeft.getX()),
                 Math.max(Location.MAP_MIN_Y, lTopLeft.getY()));
-        final Location bottomRight = Location.of(Math.min(lBottomRight.getX(), mapSize.getX()),
+        final Location bottomRight = Location.of(
+                Math.min(lBottomRight.getX(), mapSize.getX()),
                 Math.min(lBottomRight.getY(), mapSize.getY()));
         return new CanvasInMapCoordinates(topLeft, bottomRight);
     }
 
-    private CanvasInMapCoordinates(final Location topLeft, final Location bottomRight) {
+    private CanvasInMapCoordinates(final Location topLeft,
+            final Location bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(CanvasInMapCoordinates.class).add("topLeft", topLeft)
-                .add("bottomRight", bottomRight).toString();
+        return MoreObjects.toStringHelper(CanvasInMapCoordinates.class)
+                .add("topLeft", topLeft).add("bottomRight", bottomRight)
+                .toString();
     }
 
     public Location getTopLeft() {

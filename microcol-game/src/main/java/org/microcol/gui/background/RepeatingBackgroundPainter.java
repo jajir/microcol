@@ -21,8 +21,10 @@ public class RepeatingBackgroundPainter {
 
     public void paint(final GraphicsContext gc, final Point canvasSize) {
         final Point canvasCenter = canvasSize.divide(2);
-        final Point imageSize = Point.of(backgroundImage.getWidth(), backgroundImage.getHeight());
-        for (int y = canvasCenter.getY(); y < canvasSize.getY(); y += imageSize.getY()) {
+        final Point imageSize = Point.of(backgroundImage.getWidth(),
+                backgroundImage.getHeight());
+        for (int y = canvasCenter.getY(); y < canvasSize.getY(); y += imageSize
+                .getY()) {
             paintRow(gc, y, canvasSize, imageSize);
         }
         for (int y = canvasCenter.getY(); y > 0; y -= imageSize.getY()) {
@@ -30,10 +32,11 @@ public class RepeatingBackgroundPainter {
         }
     }
 
-    private void paintRow(final GraphicsContext gc, final int y, final Point canvasSize,
-            final Point imageSize) {
+    private void paintRow(final GraphicsContext gc, final int y,
+            final Point canvasSize, final Point imageSize) {
         final Point canvasCenter = canvasSize.divide(2);
-        for (int x = canvasCenter.getX(); x < canvasSize.getX(); x += imageSize.getX()) {
+        for (int x = canvasCenter.getX(); x < canvasSize.getX(); x += imageSize
+                .getX()) {
             gc.drawImage(backgroundImage, x, y);
         }
         for (int x = canvasCenter.getX(); x > 0; x -= imageSize.getX()) {

@@ -29,7 +29,8 @@ import com.google.inject.Inject;
  */
 public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
-    final Logger logger = LoggerFactory.getLogger(PanelEuropeDockBehavior.class);
+    final Logger logger = LoggerFactory
+            .getLogger(PanelEuropeDockBehavior.class);
 
     private final EuropeCallback europeDialogCallback;
     private final GameModelController gameModelController;
@@ -39,13 +40,18 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
     @Inject
     PanelEuropeDockBehavior(final EuropeCallback europeDialogCallback,
-            final GameModelController gameModelController, final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold,
-            final ChooseGoodsDialog chooseGoodsDialog, final EventBus eventBus) {
+            final ChooseGoodsDialog chooseGoodsDialog,
+            final EventBus eventBus) {
         super(gameModelController, imageProvider);
-        this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+        this.europeDialogCallback = Preconditions
+                .checkNotNull(europeDialogCallback);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.dialogNotEnoughGold = Preconditions
+                .checkNotNull(dialogNotEnoughGold);
         this.chooseGoodsDialog = Preconditions.checkNotNull(chooseGoodsDialog);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
@@ -58,21 +64,25 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
     @Override
     public void consumeGoods(final CargoSlot targetCargoSlot,
-            final boolean specialOperatonWasSelected, final ClipboardEval eval) {
-        logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
+            final boolean specialOperatonWasSelected,
+            final ClipboardEval eval) {
+        logger.debug("wasShiftPressed "
+                + europeDialogCallback.getPropertyShiftWasPressed().get());
 
         final Goods goods = eval.getGoods().get();
         if (goods.isZero()) {
             return;
         }
 
-        final Goods maxPossibleGoods = targetCargoSlot.maxPossibleGoodsToMoveHere(goods);
+        final Goods maxPossibleGoods = targetCargoSlot
+                .maxPossibleGoodsToMoveHere(goods);
         final From transferFrom = eval.getFrom().get();
 
         if (From.VALUE_FROM_EUROPE_SHOP == transferFrom) {
             if (specialOperatonWasSelected) {
                 eventBus.post(new ShowScreenEvent(Screen.MARKET_BUY,
-                        new ScreenMarketBuyContext(maxPossibleGoods, targetCargoSlot)));
+                        new ScreenMarketBuyContext(maxPossibleGoods,
+                                targetCargoSlot)));
                 return;
             } else {
                 try {
@@ -86,8 +96,8 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
             // transfer between cargo slots
             if (specialOperatonWasSelected) {
                 chooseGoodsDialog.init(goods);
-                targetCargoSlot.storeFromCargoSlot(chooseGoodsDialog.getActualValue(),
-                        sourceCargoSlot);
+                targetCargoSlot.storeFromCargoSlot(
+                        chooseGoodsDialog.getActualValue(), sourceCargoSlot);
             } else {
                 targetCargoSlot.storeFromCargoSlot(goods, sourceCargoSlot);
             }

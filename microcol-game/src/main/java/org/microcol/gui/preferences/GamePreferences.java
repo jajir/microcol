@@ -69,7 +69,7 @@ public class GamePreferences {
 
     /**
      * Determine if application runs on Apple system.
-     * 
+     *
      * @return return <code>true</code> when it's Apple system otherwise return
      *         <code>false</code>
      */
@@ -79,11 +79,13 @@ public class GamePreferences {
     }
 
     public boolean isDevelopment() {
-        return Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_DEVELOPMENT, "false"));
+        return Boolean.valueOf(
+                System.getProperty(SYSTEM_PROPERTY_DEVELOPMENT, "false"));
     }
 
     public boolean isSoundEnabled() {
-        return Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_SOUND_ENABLED, "true"));
+        return Boolean.valueOf(
+                System.getProperty(SYSTEM_PROPERTY_SOUND_ENABLED, "true"));
     }
 
     public void setMainFramePosition(final Rectangle bounds) {
@@ -129,7 +131,8 @@ public class GamePreferences {
     }
 
     public void setShowFightAdvisor(final boolean showFightAdvisor) {
-        settingService.update(setting -> setting.setShowFightAdvisor(showFightAdvisor));
+        settingService.update(
+                setting -> setting.setShowFightAdvisor(showFightAdvisor));
     }
 
     public boolean isShowFightAdvisor() {
@@ -138,7 +141,8 @@ public class GamePreferences {
 
     public void setAnimationSpeed(final int animationSpeed) {
         PathPlanningService.checkSpeed(animationSpeed);
-        settingService.update(setting -> setting.setAnimationSpeed(animationSpeed));
+        settingService
+                .update(setting -> setting.setAnimationSpeed(animationSpeed));
     }
 
     public int getAnimationSpeed() {
@@ -154,11 +158,13 @@ public class GamePreferences {
     }
 
     public void setGameInProgressSaveFile(final String gameInProgressSaveFile) {
-        settingService.update(setting -> setting.setGameInProgressSaveFile(gameInProgressSaveFile));
+        settingService.update(setting -> setting
+                .setGameInProgressSaveFile(gameInProgressSaveFile));
     }
 
     public Optional<String> getGameInProgressSaveFile() {
-        return Optional.ofNullable(settingService.load().getGameInProgressSaveFile());
+        return Optional
+                .ofNullable(settingService.load().getGameInProgressSaveFile());
     }
 
 }

@@ -15,8 +15,8 @@ public enum ScrollToFocusedTile {
     skip,
 
     /**
-     * Screen will smoothly scroll to put selected location to the center of
-     * the screen.
+     * Screen will smoothly scroll to put selected location to the center of the
+     * screen.
      */
     smoothScroll,
 }

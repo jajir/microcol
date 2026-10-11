@@ -47,31 +47,40 @@ public final class GameModelPoDao {
 
     public GameModelPoDao() {
         gson = new GsonBuilder()
-                .registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
-                .registerTypeAdapter(GoodsType.class, new GsonGoodsTypeAdapter())
-                .registerTypeAdapter(QueueItemType.class, new GsonQueueItemTypeAdapter())
-                .registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
-                .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
+                .registerTypeAdapter(ConstructionType.class,
+                        new GsonConstructionTypeAdapter())
+                .registerTypeAdapter(GoodsType.class,
+                        new GsonGoodsTypeAdapter())
+                .registerTypeAdapter(QueueItemType.class,
+                        new GsonQueueItemTypeAdapter())
+                .registerTypeAdapter(TerrainType.class,
+                        new GsonTerrainTypeAdapter())
+                .registerTypeAdapter(UnitActionPo.class,
+                        new UnitActionPoAdapter())
                 .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
-                .registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
-                .registerTypeAdapter(Goods.class, new GsonGoodsAdapter()).setPrettyPrinting()
-                .create();
+                .registerTypeAdapter(Direction.class,
+                        new GsonDirectionTypeAdapter())
+                .registerTypeAdapter(Goods.class, new GsonGoodsAdapter())
+                .setPrettyPrinting().create();
     }
 
     /**
      * Load predefined model of scenario stored on class path.
-     * 
-     * @param fileName
-     *            required file name on class path
+     *
+     * @param fileName required file name on class path
      * @return loaded model persistent object
      */
     public GameModelPo loadFromClassPath(final String fileName) {
         logger.debug("Starting to read from class path ({})", fileName);
-        try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
-            Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-            final GameModelPo loaded = gson
-                    .fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), GameModelPo.class);
-            Preconditions.checkNotNull(loaded, "Unable to load data from class path %s", fileName);
+        try (final InputStream is = WorldMap.class
+                .getResourceAsStream(fileName)) {
+            Preconditions.checkArgument(is != null,
+                    "input stream for file (%s) is null", fileName);
+            final GameModelPo loaded = gson.fromJson(
+                    new InputStreamReader(is, StandardCharsets.UTF_8),
+                    GameModelPo.class);
+            Preconditions.checkNotNull(loaded,
+                    "Unable to load data from class path %s", fileName);
             return loaded;
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
@@ -80,9 +89,8 @@ public final class GameModelPoDao {
 
     /**
      * Load model or scenario stored on class path.
-     * 
-     * @param file
-     *            required file object
+     *
+     * @param file required file object
      * @return loaded model persistent object
      */
     public GameModelPo loadFromFile(final File file) {
@@ -90,20 +98,23 @@ public final class GameModelPoDao {
         Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.",
                 file.getAbsolutePath());
         Preconditions.checkArgument(file.isFile());
-        logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
+        logger.debug("Starting to read from class path ({})",
+                file.getAbsolutePath());
         try (final FileInputStream fis = new FileInputStream(file)) {
             Preconditions.checkArgument(fis != null, "input stream is null");
             final GameModelPo loaded = gson.fromJson(
-                    new InputStreamReader(fis, StandardCharsets.UTF_8), GameModelPo.class);
-            Preconditions.checkNotNull(loaded, "Unable to load data from file %s",
-                    file.getAbsolutePath());
+                    new InputStreamReader(fis, StandardCharsets.UTF_8),
+                    GameModelPo.class);
+            Preconditions.checkNotNull(loaded,
+                    "Unable to load data from file %s", file.getAbsolutePath());
             return loaded;
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }
     }
 
-    public void saveToFile(final String fileName, final GameModelPo gameModelPo) {
+    public void saveToFile(final String fileName,
+            final GameModelPo gameModelPo) {
         final String str = gson.toJson(gameModelPo);
         if (logger.isTraceEnabled()) {
             logger.trace(str);

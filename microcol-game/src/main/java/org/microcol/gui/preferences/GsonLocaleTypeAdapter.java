@@ -16,7 +16,8 @@ final class GsonLocaleTypeAdapter extends TypeAdapter<Locale> {
     private static final String LOCALE_COUNTRY = "country";
 
     @Override
-    public void write(final JsonWriter out, final Locale locale) throws IOException {
+    public void write(final JsonWriter out, final Locale locale)
+            throws IOException {
         if (locale == null) {
             out.nullValue();
         } else {

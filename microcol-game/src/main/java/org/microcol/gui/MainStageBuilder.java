@@ -39,7 +39,8 @@ public final class MainStageBuilder {
 
     @Inject
     public MainStageBuilder(final MainPanelView mainPanelView,
-            final GamePreferences gamePreferences, final EventBus eventBus, final I18n i18n) {
+            final GamePreferences gamePreferences, final EventBus eventBus,
+            final I18n i18n) {
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -48,9 +49,8 @@ public final class MainStageBuilder {
 
     /**
      * Pass primary stage to builder.
-     * 
-     * @param primaryStage
-     *            required primary stage
+     *
+     * @param primaryStage required primary stage
      */
     public void buildPrimaryStage(final Stage primaryStage) {
         primaryStage.setTitle(i18n.get(Loc.gameTitle));
@@ -67,16 +67,20 @@ public final class MainStageBuilder {
             rectangle.y = newValue.intValue();
             gamePreferences.setMainFramePosition(rectangle);
         });
-        primaryStage.widthProperty().addListener((object, oldValue, newValue) -> {
-            final Rectangle rectangle = gamePreferences.getMainFramePosition();
-            rectangle.width = newValue.intValue();
-            gamePreferences.setMainFramePosition(rectangle);
-        });
-        primaryStage.heightProperty().addListener((object, oldValue, newValue) -> {
-            final Rectangle rectangle = gamePreferences.getMainFramePosition();
-            rectangle.height = newValue.intValue();
-            gamePreferences.setMainFramePosition(rectangle);
-        });
+        primaryStage.widthProperty()
+                .addListener((object, oldValue, newValue) -> {
+                    final Rectangle rectangle = gamePreferences
+                            .getMainFramePosition();
+                    rectangle.width = newValue.intValue();
+                    gamePreferences.setMainFramePosition(rectangle);
+                });
+        primaryStage.heightProperty()
+                .addListener((object, oldValue, newValue) -> {
+                    final Rectangle rectangle = gamePreferences
+                            .getMainFramePosition();
+                    rectangle.height = newValue.intValue();
+                    gamePreferences.setMainFramePosition(rectangle);
+                });
         final Rectangle rectangle = gamePreferences.getMainFramePosition();
         if (isOnScreen(rectangle)) {
             primaryStage.setX(rectangle.getX());
@@ -101,21 +105,25 @@ public final class MainStageBuilder {
     /**
      * Compute if given rectangle is whole on player's screen.
      *
-     * @param rectangle
-     *            required rectangle
+     * @param rectangle required rectangle
      * @return Return <code>true</code> when whole rectangle is on screen
      *         otherwise return <code>false</code>.
      */
     private boolean isOnScreen(final Rectangle rectangle) {
-        final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        return isPointOnScreen(rectangle.getMinX(), rectangle.getMinY(), primaryScreenBounds)
-                && isPointOnScreen(rectangle.getMaxX(), rectangle.getMaxY(), primaryScreenBounds);
+        final Rectangle2D primaryScreenBounds = Screen.getPrimary()
+                .getVisualBounds();
+        return isPointOnScreen(rectangle.getMinX(), rectangle.getMinY(),
+                primaryScreenBounds)
+                && isPointOnScreen(rectangle.getMaxX(), rectangle.getMaxY(),
+                        primaryScreenBounds);
     }
 
     private boolean isPointOnScreen(final double x, final double y,
             final Rectangle2D primaryScreenBounds) {
-        return x >= primaryScreenBounds.getMinX() && x <= primaryScreenBounds.getMaxX()
-                && y >= primaryScreenBounds.getMinY() && y <= primaryScreenBounds.getMaxY();
+        return x >= primaryScreenBounds.getMinX()
+                && x <= primaryScreenBounds.getMaxX()
+                && y >= primaryScreenBounds.getMinY()
+                && y <= primaryScreenBounds.getMaxY();
     }
 
 }

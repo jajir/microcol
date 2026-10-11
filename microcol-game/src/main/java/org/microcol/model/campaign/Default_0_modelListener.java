@@ -22,7 +22,8 @@ final class Default_0_modelListener extends ModelListenerAdapter {
     }
 
     @Override
-    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(
+            final BeforeDeclaringIndependenceEvent event) {
         mission.onBeforeDeclaringIndependence(event);
     }
 

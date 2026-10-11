@@ -12,25 +12,26 @@ public final class PlaceMapPo extends PlacePo {
     private Direction orientation;
 
     public Location getLocation() {
-	return location;
+        return location;
     }
 
     public void setLocation(Location location) {
-	this.location = location;
+        this.location = location;
     }
 
     @Override
     public String toString() {
-	return MoreObjects.toStringHelper(this.getClass()).add("location", location)
-		.add("orientation", orientation).toString();
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("location", location).add("orientation", orientation)
+                .toString();
     }
 
     public Direction getOrientation() {
-	return orientation;
+        return orientation;
     }
 
     public void setOrientation(Direction orientation) {
-	this.orientation = orientation;
+        this.orientation = orientation;
     }
 
 }

@@ -14,22 +14,23 @@ import javafx.scene.input.MouseButton;
 public class DialogMessagePage extends AbstractScreen {
 
     public static DialogMessagePage of(final TestContext context) {
-	return new DialogMessagePage(context);
+        return new DialogMessagePage(context);
 
     }
 
     private DialogMessagePage(final TestContext context) {
-	super(context);
-	assertNotNull(getButtonOk());
+        super(context);
+        assertNotNull(getButtonOk());
     }
 
     public void close() {
-	getRobot().clickOn(getButtonOk(), MouseButton.PRIMARY);
-	WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn(getButtonOk(), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public Button getButtonOk() {
-	return getNodeFinder().lookup("#" + ButtonBarOk.BUTTON_OK_ID).queryAs(Button.class);
+        return getNodeFinder().lookup("#" + ButtonBarOk.BUTTON_OK_ID)
+                .queryAs(Button.class);
     }
 
 }

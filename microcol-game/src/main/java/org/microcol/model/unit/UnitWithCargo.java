@@ -23,8 +23,9 @@ public abstract class UnitWithCargo extends AbstractUnit {
 
     private final Cargo cargo;
 
-    public UnitWithCargo(final Function<Unit, Cargo> cargoBuilder, final Model model,
-            final Integer id, final Function<Unit, Place> placeBuilder, final Player owner,
+    public UnitWithCargo(final Function<Unit, Cargo> cargoBuilder,
+            final Model model, final Integer id,
+            final Function<Unit, Place> placeBuilder, final Player owner,
             final int actionPoints, final UnitAction unitAction) {
         super(model, id, placeBuilder, owner, actionPoints, unitAction);
         Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
@@ -45,13 +46,14 @@ public abstract class UnitWithCargo extends AbstractUnit {
 
     /**
      * Return true when given unit have free cargo slot for unit.
-     * 
+     *
      * @return return <code>true</code> when at least one cargo slot is empty
      *         and could be loaded otherwise return <code>false</code>
      */
     public boolean isAtLeastOneCargoSlotEmpty() {
-        return getType().getCargoCapacity() > 0 && getCargo().getSlots().stream()
-                .filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
+        return getType().getCargoCapacity() > 0 && getCargo().getSlots()
+                .stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny()
+                .isPresent();
     }
 
     /**
@@ -62,28 +64,29 @@ public abstract class UnitWithCargo extends AbstractUnit {
      * <li>There should be at least one cargo that could disembark.</li>
      * <li>There should not be colony at location.</li>
      * </ul>
-     * 
-     * @param targetLocation
-     *            required target location
-     * @param inCurrentTurn
-     *            required if it should be done in current turn
+     *
+     * @param targetLocation required target location
+     * @param inCurrentTurn  required if it should be done in current turn
      * @return Return <code>true</code> when unit could disembark at given
      *         location otherwise return <code>false</code>.
      */
-    public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
+    public boolean isPossibleToDisembarkAt(final Location targetLocation,
+            boolean inCurrentTurn) {
         Preconditions.checkNotNull(targetLocation);
-        Preconditions.checkState(isAtPlaceLocation(), "Unit %s should by at map.", this);
+        Preconditions.checkState(isAtPlaceLocation(),
+                "Unit %s should by at map.", this);
         return getLocation().isNeighbor(targetLocation)
                 && getType().getCargoCapacity() > 0
                 && model.getColonyAt(targetLocation).isEmpty()
                 && model.getColonyAt(getLocation()).isEmpty()
-                && getCargo().getSlots().stream().filter(
-                        cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
+                && getCargo().getSlots().stream()
+                        .filter(cargoSlot -> canCargoDisembark(cargoSlot,
+                                targetLocation, inCurrentTurn))
                         .findAny().isPresent();
     }
 
-    private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation,
-            boolean inCurrentTurn) {
+    private boolean canCargoDisembark(final CargoSlot slot,
+            final Location moveToLocation, boolean inCurrentTurn) {
         if (slot.isEmpty() || slot.isLoadedGood()) {
             return false;
         } else {

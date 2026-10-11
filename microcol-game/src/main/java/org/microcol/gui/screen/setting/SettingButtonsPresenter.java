@@ -16,7 +16,8 @@ public class SettingButtonsPresenter {
     public SettingButtonsPresenter(final SettingButtonsView settingButtonsView,
             final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        settingButtonsView.getButtonBack().setOnAction(this::onBackButtonPressed);
+        settingButtonsView.getButtonBack()
+                .setOnAction(this::onBackButtonPressed);
     }
 
     @SuppressWarnings("unused")

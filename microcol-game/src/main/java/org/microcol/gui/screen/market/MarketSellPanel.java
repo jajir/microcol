@@ -67,13 +67,15 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
             final GameModelController gameModelController) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
 
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("mainPanel");
 
         slider = new Slider();
-        slider.setLabelFormatter(new SimpleStringConverter(this::converToString));
+        slider.setLabelFormatter(
+                new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
         slider.setSnapToTicks(false);
         slider.setMajorTickUnit(10);
@@ -96,8 +98,9 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
         final Row row3 = new Row(labelKingTax, labelKingTaxValue);
         final Row row4 = new Row(labelTotal, labelTotalValue);
 
-        mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(), row2.getContent(),
-                row3.getContent(), row4.getContent(), buttonsBar.getContent());
+        mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(),
+                row2.getContent(), row3.getContent(), row4.getContent(),
+                buttonsBar.getContent());
     }
 
     private int getKingsTaxPercentage() {
@@ -111,13 +114,16 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
     @SuppressWarnings("unused")
     private void onUserClickSell(final ActionEvent event) {
-        final CargoSlot sourceCargoSlot = screenMarketContext.getSourceCargoSlot();
-        gameModelController.getModel().sellGoods(sourceCargoSlot, getActualValue());
+        final CargoSlot sourceCargoSlot = screenMarketContext
+                .getSourceCargoSlot();
+        gameModelController.getModel().sellGoods(sourceCargoSlot,
+                getActualValue());
         eventBus.post(new ShowScreenEvent(Screen.EUROPE));
     }
 
     void init(final ScreenMarketSellContext screenMarketContext) {
-        this.screenMarketContext = Preconditions.checkNotNull(screenMarketContext);
+        this.screenMarketContext = Preconditions
+                .checkNotNull(screenMarketContext);
         actualValue = screenMarketContext.getMaxPossibleGoodsToBuy();
         slider.setMax(actualValue.getAmount());
         slider.setValue(actualValue.getAmount());
@@ -131,11 +137,14 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void updateSelectedAmount() {
-        labelPricePerPiece
-                .setText(i18n.get(Market.pricePerPiece, getPricePerPiece(), getPriceWithoutTax()));
-        labelPricePerPieceValue.setText(i18n.get(Market.price, getPricePerPiece()));
-        labelSelected.setText(i18n.get(Market.selectedSell, actualValue.getAmount()));
-        labelSelectedValue.setText(i18n.get(Market.price, getPriceWithoutTax()));
+        labelPricePerPiece.setText(i18n.get(Market.pricePerPiece,
+                getPricePerPiece(), getPriceWithoutTax()));
+        labelPricePerPieceValue
+                .setText(i18n.get(Market.price, getPricePerPiece()));
+        labelSelected.setText(
+                i18n.get(Market.selectedSell, actualValue.getAmount()));
+        labelSelectedValue
+                .setText(i18n.get(Market.price, getPriceWithoutTax()));
         labelKingTax.setText(i18n.get(Market.tax, getKingsTaxPercentage()));
         labelKingTaxValue.setText(i18n.get(Market.price, getKingsTaxValue()));
         labelTotal.setText(i18n.get(Market.totalSell));
@@ -143,7 +152,8 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private int getPricePerPiece() {
-        return gameModelController.getEuropeGoodsTradeForType(getActualValue().getType())
+        return gameModelController
+                .getEuropeGoodsTradeForType(getActualValue().getType())
                 .getBuyPrice();
     }
 
@@ -172,7 +182,8 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
         int v = value.intValue();
         if (MIN_VALUE == value) {
             return i18n.get(ChooseGoods.zero);
-        } else if (screenMarketContext.getAmountOfMaxPossibleGoodsToBuy() == value) {
+        } else if (screenMarketContext
+                .getAmountOfMaxPossibleGoodsToBuy() == value) {
             return i18n.get(ChooseGoods.everything);
         } else if (v % 10 == 0) {
             return String.valueOf(v);

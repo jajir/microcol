@@ -9,9 +9,9 @@ public final class TurnPlayerStatisticsPo {
     private int econonyScore;
 
     private int militaryScore;
-    
+
     private int gold;
-    
+
     private int score;
 
     /**
@@ -22,8 +22,7 @@ public final class TurnPlayerStatisticsPo {
     }
 
     /**
-     * @param player
-     *            the player to set
+     * @param player the player to set
      */
     public void setPlayer(String player) {
         this.player = player;
@@ -37,8 +36,7 @@ public final class TurnPlayerStatisticsPo {
     }
 
     /**
-     * @param turnNo
-     *            the turnNo to set
+     * @param turnNo the turnNo to set
      */
     public void setTurnNo(int turnNo) {
         this.turnNo = turnNo;
@@ -52,8 +50,7 @@ public final class TurnPlayerStatisticsPo {
     }
 
     /**
-     * @param econonyScore
-     *            the econonyScore to set
+     * @param econonyScore the econonyScore to set
      */
     public void setEcononyScore(int econonyScore) {
         this.econonyScore = econonyScore;
@@ -67,8 +64,7 @@ public final class TurnPlayerStatisticsPo {
     }
 
     /**
-     * @param militaryScore
-     *            the militaryScore to set
+     * @param militaryScore the militaryScore to set
      */
     public void setMilitaryScore(int militaryScore) {
         this.militaryScore = militaryScore;

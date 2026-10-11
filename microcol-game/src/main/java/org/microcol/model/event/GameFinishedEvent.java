@@ -14,7 +14,8 @@ public final class GameFinishedEvent extends AbstractModelEvent {
 
     private final GameOverResult gameOverResult;
 
-    public GameFinishedEvent(final Model model, final GameOverResult gameOverResult) {
+    public GameFinishedEvent(final Model model,
+            final GameOverResult gameOverResult) {
         super(model);
         this.gameOverResult = Preconditions.checkNotNull(gameOverResult);
     }

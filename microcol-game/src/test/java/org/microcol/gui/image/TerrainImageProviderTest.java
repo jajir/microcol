@@ -16,7 +16,7 @@ public class TerrainImageProviderTest {
     /**
      * Verify that get image for null terrain type throws null pointer
      * exception.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -24,7 +24,8 @@ public class TerrainImageProviderTest {
         when(imageCache.getImage(anyString())).thenReturn(image);
         TerrainImageProvider provider = new TerrainImageProvider(imageCache);
 
-        assertThrows(NullPointerException.class, () -> provider.getTerrainImage(null));
+        assertThrows(NullPointerException.class,
+                () -> provider.getTerrainImage(null));
     }
 
 }

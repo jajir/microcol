@@ -20,8 +20,7 @@ public final class Goods {
     /**
      * Make Goods object with zero goods.
      *
-     * @param goodsType
-     *            required goods type
+     * @param goodsType required goods type
      * @return 0 goods of given type
      */
     public static Goods of(final GoodsType goodsType) {
@@ -30,21 +29,23 @@ public final class Goods {
 
     public Goods(final GoodsType goodsType, final int initialAmount) {
         this.goodsType = Preconditions.checkNotNull(goodsType);
-        Preconditions.checkArgument(initialAmount >= 0, "Amount (%s) can't be less than zero",
-                initialAmount);
+        Preconditions.checkArgument(initialAmount >= 0,
+                "Amount (%s) can't be less than zero", initialAmount);
         amount = initialAmount;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Goods.class).add("GoodsType", goodsType.name())
-                .add("amount", amount).toString();
+        return MoreObjects.toStringHelper(Goods.class)
+                .add("GoodsType", goodsType.name()).add("amount", amount)
+                .toString();
     }
 
     public Goods add(final Goods goods) {
         Preconditions.checkNotNull(goods);
         Preconditions.checkArgument(goodsType.equals(goods.getType()),
-                "Added goods have differet type (%s) from current one (%s)", goods, this);
+                "Added goods have differet type (%s) from current one (%s)",
+                goods, this);
         return new Goods(goodsType, amount + goods.getAmount());
     }
 
@@ -76,19 +77,22 @@ public final class Goods {
     public Goods substract(final Goods goods) {
         Preconditions.checkNotNull(goods);
         Preconditions.checkArgument(goodsType.equals(goods.getType()),
-                "Substracted goods have differet type (%s) from current one (%s)", goods, this);
+                "Substracted goods have differet type (%s) from current one (%s)",
+                goods, this);
         return new Goods(goodsType, amount - goods.getAmount());
     }
 
     public boolean isGreaterThan(final Goods goods) {
         Preconditions.checkArgument(goodsType.equals(goods.getType()),
-                "Substracted goods have differet type (%s) from current one (%s)", goods, this);
+                "Substracted goods have differet type (%s) from current one (%s)",
+                goods, this);
         return amount > goods.amount;
     }
 
     public boolean isGreaterOrEqualsThan(final Goods goods) {
         Preconditions.checkArgument(goodsType.equals(goods.getType()),
-                "Substracted goods have differet type (%s) from current one (%s)", goods, this);
+                "Substracted goods have differet type (%s) from current one (%s)",
+                goods, this);
         return amount >= goods.amount;
     }
 
@@ -99,8 +103,7 @@ public final class Goods {
     /**
      * Create copy of goods goods with given amount of goods.
      *
-     * @param amount
-     *            required new amount of goods
+     * @param amount required new amount of goods
      * @return copy with new amounts of goods
      */
     public Goods setAmount(final int amount) {
@@ -125,7 +128,8 @@ public final class Goods {
             return false;
         }
         final Goods other = (Goods) obj;
-        return Objects.equal(goodsType, other.goodsType) && amount == other.amount;
+        return Objects.equal(goodsType, other.goodsType)
+                && amount == other.amount;
     }
 
 }

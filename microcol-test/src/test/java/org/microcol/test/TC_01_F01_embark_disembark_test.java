@@ -23,86 +23,91 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
     private final static Location SHORE_LAND_LOCATION = Location.of(24, 12);
     private final static Location SHORE_SEE_LOCATION = Location.of(24, 11);
 
-    private final static File testFileName = new File("src/test/scenarios/F01-embark-disembark.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F01-embark-disembark.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, this.getClass(), testFileName);
+        initialize(primaryStage, this.getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_01_embark_disembark() throws Exception {
-	// open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	// verify that there in colony are 3 units
-	assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // verify that there in colony are 3 units
+        assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
 
-	// go at main game panel
-	ColonyScreen colonyScreen = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
+        // go at main game panel
+        ColonyScreen colonyScreen = gamePage.openColonyAt(COLONY_LOCATION,
+                "Delft");
 
-	// Verify that there is just one ship in port
-	colonyScreen.verifyNumberOfShipsInPort(1);
+        // Verify that there is just one ship in port
+        colonyScreen.verifyNumberOfShipsInPort(1);
 
-	// drag first units to crate 0
-	colonyScreen.dragUnitFromPierToShipCargoSlot(0, 0);
+        // drag first units to crate 0
+        colonyScreen.dragUnitFromPierToShipCargoSlot(0, 0);
 
-	// drag second units to crate 1
-	colonyScreen.dragUnitFromPierToShipCargoSlot(0, 1);
+        // drag second units to crate 1
+        colonyScreen.dragUnitFromPierToShipCargoSlot(0, 1);
 
-	// return back to main game screen.
-	gamePage = colonyScreen.close();
+        // return back to main game screen.
+        gamePage = colonyScreen.close();
 
-	// verify that just on unit is in colony
-	assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // verify that just on unit is in colony
+        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
 
-	// move ship few tiles to the right
-	gamePage.moveMouseAtLocation(COLONY_LOCATION);
-	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
+        // move ship few tiles to the right
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
-	// press next turn.
-	gamePage.nextTurnAndCloseDialogs();
+        // press next turn.
+        gamePage.nextTurnAndCloseDialogs();
 
-	// verify that there are no ship
-	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        // verify that there are no ship
+        assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
-	// Verify that ship have occupied two cargo slots.
-	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(2);
+        // Verify that ship have occupied two cargo slots.
+        gamePage.getShipAt(SHORE_SEE_LOCATION)
+                .verifyNumberOfOccupiedCargoSlots(2);
 
-	// disembark units
-	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
-	gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
-	// Disembarking animates each unit separately.
-	gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
+        // disembark units
+        gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
+        gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
+        // Disembarking animates each unit separately.
+        gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
 
-	// verify that units are at expected location.
-	assertEquals(2, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        // verify that units are at expected location.
+        assertEquals(2, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
-	// press next turn.
-	gamePage.nextTurnAndCloseDialogs();
+        // press next turn.
+        gamePage.nextTurnAndCloseDialogs();
 
-	// Verify that ship have all cargo slots empty.
-	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(0);
+        // Verify that ship have all cargo slots empty.
+        gamePage.getShipAt(SHORE_SEE_LOCATION)
+                .verifyNumberOfOccupiedCargoSlots(0);
 
-	// embark units
-	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
-	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
-	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
-	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
+        // embark units
+        gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
+        gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
+        gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
+        gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
-	// Verify that ship have occupied two cargo slots.
-	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(2);
-	
-	// Verify that there are no units at continent.
-	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        // Verify that ship have occupied two cargo slots.
+        gamePage.getShipAt(SHORE_SEE_LOCATION)
+                .verifyNumberOfOccupiedCargoSlots(2);
 
-	// Go back to town with ship.
-	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
-	gamePage.dragMouseAtLocation(COLONY_LOCATION);
+        // Verify that there are no units at continent.
+        assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
-	// Verify that just one unit is in colony.
-	assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // Go back to town with ship.
+        gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
+        gamePage.dragMouseAtLocation(COLONY_LOCATION);
+
+        // Verify that just one unit is in colony.
+        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
     }
 
 }

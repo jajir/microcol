@@ -23,8 +23,9 @@ class UnitImageRequest {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("unitType", getUnitType())
-                .add("orientation", orientation).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("unitType", getUnitType()).add("orientation", orientation)
+                .toString();
     }
 
     /**

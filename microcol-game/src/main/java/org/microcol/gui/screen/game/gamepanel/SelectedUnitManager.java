@@ -32,7 +32,8 @@ import com.google.inject.Inject;
 @Listener
 public final class SelectedUnitManager {
 
-    private final Logger logger = LoggerFactory.getLogger(SelectedUnitManager.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(SelectedUnitManager.class);
 
     private final GameModelController gameModelController;
 
@@ -44,9 +45,12 @@ public final class SelectedUnitManager {
 
     @Inject
     public SelectedUnitManager(final GameModelController gameModelController,
-            final SelectedTileManager selectedTileManager, final EventBus eventBus) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+            final SelectedTileManager selectedTileManager,
+            final EventBus eventBus) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
@@ -57,7 +61,8 @@ public final class SelectedUnitManager {
 
     @Subscribe
     private void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
-        if (!getSelectedUnit().isPresent() && selectedTileManager.getSelectedTile().isPresent()
+        if (!getSelectedUnit().isPresent()
+                && selectedTileManager.getSelectedTile().isPresent()
                 && selectedTileManager.getSelectedTile().get()
                         .equals(event.getUnit().getLocation())) {
             evaluateLocation(event.getUnit().getLocation());
@@ -65,7 +70,8 @@ public final class SelectedUnitManager {
     }
 
     @Subscribe
-    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+    private void onUnitMovedToConstruction(
+            final UnitMovedToConstructionEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
             evaluateLocation(selectedTileManager.getSelectedTile().get());
@@ -114,21 +120,24 @@ public final class SelectedUnitManager {
                 if (selectedUnit != null && !selectedUnit.isAtPlaceLocation()) {
                     // verify that selected unit found colony and it's not at
                     // map
-                    evaluateLocation(selectedTileManager.getSelectedTile().get());
+                    evaluateLocation(
+                            selectedTileManager.getSelectedTile().get());
                 }
             }
         }
     }
 
     @Subscribe
-    private void onGameStopped(@SuppressWarnings("unused") final GameStoppedEvent event) {
+    private void onGameStopped(
+            @SuppressWarnings("unused") final GameStoppedEvent event) {
         selectedUnit = null;
     }
 
     @Subscribe
     private void onNewUnitWasBorn(final NewUnitWasBornEvent event) {
         if (selectedTileManager.getSelectedTile().isPresent()) {
-            if (event.getLocation().equals(selectedTileManager.getSelectedTile().get())) {
+            if (event.getLocation()
+                    .equals(selectedTileManager.getSelectedTile().get())) {
                 if (selectedUnit == null) {
                     forcelySetSelectedUnit(event.getUnit());
                 }
@@ -158,7 +167,8 @@ public final class SelectedUnitManager {
     private void forcelySetSelectedUnit(final Unit unit) {
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
-        eventBus.post(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
+        eventBus.post(
+                new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
         logger.debug("Selected unit is now: {}", selectedUnit);
     }
 
@@ -168,8 +178,8 @@ public final class SelectedUnitManager {
 
     private void evaluateLocation(final Location location) {
         if (selectedUnit == null) {
-            selectedUnit(
-                    gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null));
+            selectedUnit(gameModelController.getModel()
+                    .getFirstSelectableUnitAt(location).orElse(null));
         } else {
             if (selectedUnit.isAtPlaceLocation()) {
                 /*
@@ -177,27 +187,30 @@ public final class SelectedUnitManager {
                  * nothing
                  */
                 if (!selectedUnit.getLocation().equals(location)) {
-                    selectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
-                            .orElse(null));
+                    selectedUnit(gameModelController.getModel()
+                            .getFirstSelectableUnitAt(location).orElse(null));
                 }
             } else {
-                selectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
-                        .orElse(null));
+                selectedUnit(gameModelController.getModel()
+                        .getFirstSelectableUnitAt(location).orElse(null));
             }
         }
         logger.debug("Selected unit at {} is now: {}", location, selectedUnit);
     }
 
     @Subscribe
-    private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
+    private void onSelectNextUnit(
+            final SelectNextUnitEvent selectNextUnitEvent) {
         Preconditions.checkNotNull(selectNextUnitEvent);
         if (selectedUnit == null) {
-            selectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
+            selectedUnit(gameModelController.getModel().getFirstSelectableUnit()
+                    .orElse(null));
         } else {
-            if (gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
-                    .isPresent()) {
+            if (gameModelController.getModel()
+                    .getNextUnitForCurrentPlayer(selectedUnit).isPresent()) {
                 selectedUnit(gameModelController.getModel()
-                        .getNextUnitForCurrentPlayer(selectedUnit).orElse(null));
+                        .getNextUnitForCurrentPlayer(selectedUnit)
+                        .orElse(null));
             }
         }
         if (selectedUnit != null) {
@@ -212,7 +225,8 @@ public final class SelectedUnitManager {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("selectedUnit", selectedUnit).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("selectedUnit", selectedUnit).toString();
     }
 
 }

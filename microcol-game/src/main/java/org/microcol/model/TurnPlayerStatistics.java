@@ -27,7 +27,8 @@ public final class TurnPlayerStatistics {
         this.turnNo = turnNo;
     }
 
-    public static TurnPlayerStatistics make(TurnPlayerStatisticsPo turnPlayerStatisticsPo,
+    public static TurnPlayerStatistics make(
+            TurnPlayerStatisticsPo turnPlayerStatisticsPo,
             final PlayerStore playerStore) {
         final TurnPlayerStatistics out = new TurnPlayerStatistics(
                 playerStore.getPlayerByName(turnPlayerStatisticsPo.getPlayer()),
@@ -52,9 +53,11 @@ public final class TurnPlayerStatistics {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("turnNo", turnNo).add("playerNames", player.getName())
-                .add("gold", gold).add("militaryScore", militaryScore)
-                .add("econonyScore", econonyScore).add("score", score).toString();
+        return MoreObjects.toStringHelper(getClass()).add("turnNo", turnNo)
+                .add("playerNames", player.getName()).add("gold", gold)
+                .add("militaryScore", militaryScore)
+                .add("econonyScore", econonyScore).add("score", score)
+                .toString();
     }
 
     /**
@@ -65,8 +68,7 @@ public final class TurnPlayerStatistics {
     }
 
     /**
-     * @param econonyScore
-     *            the econonyScore to set
+     * @param econonyScore the econonyScore to set
      */
     public void setEcononyScore(int econonyScore) {
         this.econonyScore = econonyScore;
@@ -80,8 +82,7 @@ public final class TurnPlayerStatistics {
     }
 
     /**
-     * @param militaryScore
-     *            the militaryScore to set
+     * @param militaryScore the militaryScore to set
      */
     public void setMilitaryScore(int militaryScore) {
         this.militaryScore = militaryScore;
@@ -109,8 +110,7 @@ public final class TurnPlayerStatistics {
     }
 
     /**
-     * @param gold
-     *            the gold to set
+     * @param gold the gold to set
      */
     public void setGold(int gold) {
         this.gold = gold;
@@ -124,8 +124,7 @@ public final class TurnPlayerStatistics {
     }
 
     /**
-     * @param score
-     *            the score to set
+     * @param score the score to set
      */
     public void setScore(int score) {
         this.score = score;

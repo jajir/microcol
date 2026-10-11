@@ -27,12 +27,15 @@ public class WorldMap {
         final WorldMapPo worldMapPo = gamePo.getMap();
         this.maxX = worldMapPo.getMaxX();
         this.maxY = worldMapPo.getMaxY();
-        Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
-        Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+        Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.",
+                maxY);
+        Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.",
+                maxX);
         this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
         this.trees = worldMapPo.getTreeSet();
         this.fields = worldMapPo.getFieldSet();
-        this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(), "Seed value is null");
+        this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(),
+                "Seed value is null");
         verifyThatMapIsComplete();
     }
 
@@ -47,7 +50,7 @@ public class WorldMap {
 
     /**
      * Get max X location.
-     * 
+     *
      * @return max X location
      */
     public int getMaxLocationX() {
@@ -56,7 +59,7 @@ public class WorldMap {
 
     /**
      * Get max Y location.
-     * 
+     *
      * @return max Y location
      */
     public int getMaxLocationY() {
@@ -66,7 +69,7 @@ public class WorldMap {
     /**
      * Return map size. Valid map location will be from 1 up to getMapSize()
      * Including x and y values of {@link #getMapSize()}
-     * 
+     *
      * @return return map size
      */
     public Location getMapSize() {
@@ -74,8 +77,8 @@ public class WorldMap {
     }
 
     public TerrainType getTerrainTypeAt(final Location location) {
-        Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.",
-                location);
+        Preconditions.checkArgument(isValid(location),
+                "Location (%s) is not part of this map.", location);
 
         TerrainType terrain = terrainMap.get(location);
 
@@ -83,8 +86,8 @@ public class WorldMap {
     }
 
     public Terrain getTerrainAt(final Location location) {
-        Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.",
-                location);
+        Preconditions.checkArgument(isValid(location),
+                "Location (%s) is not part of this map.", location);
         final Terrain out = new Terrain(location, getTerrainTypeAt(location));
         out.setHasTrees(trees.contains(location));
         out.setHasField(fields.contains(location));
@@ -94,20 +97,22 @@ public class WorldMap {
     public boolean isValid(final Location location) {
         Preconditions.checkNotNull(location);
 
-        return location.getX() >= 1 && location.getX() <= getMaxLocationX() && location.getY() >= 1
-                && location.getY() <= getMaxLocationY();
+        return location.getX() >= 1 && location.getX() <= getMaxLocationX()
+                && location.getY() >= 1 && location.getY() <= getMaxLocationY();
     }
 
     public boolean isValid(final Path path) {
         Preconditions.checkNotNull(path);
 
-        return !path.getLocations().stream().anyMatch(location -> !isValid(location));
+        return !path.getLocations().stream()
+                .anyMatch(location -> !isValid(location));
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("maxX", maxX).add("maxY", maxY)
-                .add("landmass", terrainMap.keySet().size()).toString();
+        return MoreObjects.toStringHelper(this).add("maxX", maxX)
+                .add("maxY", maxY).add("landmass", terrainMap.keySet().size())
+                .toString();
     }
 
     void save(final ModelPo gamePo) {
@@ -122,7 +127,8 @@ public class WorldMap {
 
     public void plowFiled(final Location at) {
         Preconditions.checkArgument(getTerrainTypeAt(at).isCanHaveField(),
-                "Terrain '%s' at '%s' can have field.", getTerrainTypeAt(at), at);
+                "Terrain '%s' at '%s' can have field.", getTerrainTypeAt(at),
+                at);
         fields.add(at);
     }
 
@@ -131,7 +137,7 @@ public class WorldMap {
      * way. Numbers will look random but still two instances of map will be
      * same. All map location should have generated random number. This number
      * helps to determine which type of tree to show.
-     * 
+     *
      * @return return map constant pseudo random seed number
      */
     public Integer getSeed() {

@@ -11,10 +11,12 @@ import com.google.gson.stream.JsonWriter;
 /**
  * Allows to read and write construction type from json.
  */
-public final class GsonConstructionTypeAdapter extends TypeAdapter<ConstructionType> {
+public final class GsonConstructionTypeAdapter
+        extends TypeAdapter<ConstructionType> {
 
     @Override
-    public void write(final JsonWriter out, final ConstructionType value) throws IOException {
+    public void write(final JsonWriter out, final ConstructionType value)
+            throws IOException {
         if (value == null) {
             out.nullValue();
         } else {

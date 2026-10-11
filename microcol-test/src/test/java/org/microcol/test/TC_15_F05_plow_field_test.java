@@ -23,52 +23,53 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_15_F05_plow_field_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/F05-moving-goods.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F05-moving-goods.microcol");
 
     private final static Location COLONY_LOCATION = Location.of(22, 12);
     private final static Location NEAR_COLONY = Location.of(23, 12);
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass(), testFileName);
+        initialize(primaryStage, getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_05_plow_field_test() throws Exception {
-	// open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	// Select first unit. It should be free colonist.
-	gamePage.getRightPanelUnit(1).selectUnit();
+        // Select first unit. It should be free colonist.
+        gamePage.getRightPanelUnit(1).selectUnit();
 
-	// Move free colonist to close location.
-	gamePage.moveMouseAtLocation(COLONY_LOCATION);
-	gamePage.dragMouseAtLocation(NEAR_COLONY);
+        // Move free colonist to close location.
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(NEAR_COLONY);
 
-	// Press 'tab' to select units in colony.
-	gamePage.pressTab();
+        // Press 'tab' to select units in colony.
+        gamePage.pressTab();
 
-	// Select second unit. It should be free colonist.
-	gamePage.getRightPanelUnit(1).selectUnit();
+        // Select second unit. It should be free colonist.
+        gamePage.getRightPanelUnit(1).selectUnit();
 
-	// Move free colonist to close location.
-	gamePage.moveMouseAtLocation(COLONY_LOCATION);
-	gamePage.dragMouseAtLocation(NEAR_COLONY);
+        // Move free colonist to close location.
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(NEAR_COLONY);
 
-	// Start new turn and close all dialogs.
-	gamePage.nextTurnAndCloseDialogs();
+        // Start new turn and close all dialogs.
+        gamePage.nextTurnAndCloseDialogs();
 
-	// Select tile with moved units and select first.
-	gamePage.selectTile(NEAR_COLONY);
+        // Select tile with moved units and select first.
+        gamePage.selectTile(NEAR_COLONY);
 
-	// Press 'p' to plow field.
-	gamePage.pressP();
+        // Press 'p' to plow field.
+        gamePage.pressP();
 
-	// Verify that selected unit have '0' action points.
-	final RightPanelUnit rpu = gamePage.getRightPanelUnit(1);
-	assertTrue(rpu.isSelected());
-	rpu.assertFreeActionPoints(0);
+        // Verify that selected unit have '0' action points.
+        final RightPanelUnit rpu = gamePage.getRightPanelUnit(1);
+        assertTrue(rpu.isSelected());
+        rpu.assertFreeActionPoints(0);
     }
 
 }

@@ -17,7 +17,8 @@ public class ScreenSettingPresenter {
     private final EventBus eventBus;
 
     @Inject
-    ScreenSettingPresenter(final ScreenSetting screenSetting, final EventBus eventBus) {
+    ScreenSettingPresenter(final ScreenSetting screenSetting,
+            final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenSetting.getContent().setOnKeyPressed(this::onKeyPressed);
     }

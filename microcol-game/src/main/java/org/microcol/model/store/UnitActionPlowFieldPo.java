@@ -4,18 +4,18 @@ import org.microcol.model.unit.UnitActionType;
 
 public final class UnitActionPlowFieldPo implements UnitActionPo {
 
-	private int remainingTurns;
+    private int remainingTurns;
 
-	@Override
-	public UnitActionType getType() {
-		return UnitActionType.plowField;
-	}
+    @Override
+    public UnitActionType getType() {
+        return UnitActionType.plowField;
+    }
 
-	public int getRemainingTurns() {
-		return remainingTurns;
-	}
+    public int getRemainingTurns() {
+        return remainingTurns;
+    }
 
-	public void setRemainingTurns(int remainingTurns) {
-		this.remainingTurns = remainingTurns;
-	}
+    public void setRemainingTurns(int remainingTurns) {
+        this.remainingTurns = remainingTurns;
+    }
 }

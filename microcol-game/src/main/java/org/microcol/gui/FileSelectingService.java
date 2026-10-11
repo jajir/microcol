@@ -22,24 +22,29 @@ public class FileSelectingService extends AbstractMessageWindow {
         this.i18n = Preconditions.checkNotNull(i18n);
     }
 
-    public File saveFile(final File saveDirectory, final String defaultFileName) {
-        final FileChooser fileChooser = prepareFileChooser(saveDirectory, Dialog.saveGame_title);
+    public File saveFile(final File saveDirectory,
+            final String defaultFileName) {
+        final FileChooser fileChooser = prepareFileChooser(saveDirectory,
+                Dialog.saveGame_title);
         fileChooser.setInitialFileName(defaultFileName);
         return fileChooser.showSaveDialog(getViewUtil().getPrimaryStage());
     }
 
     public File loadFile(final File saveDirectory) {
-        final FileChooser fileChooser = prepareFileChooser(saveDirectory, Dialog.loadGame_title);
+        final FileChooser fileChooser = prepareFileChooser(saveDirectory,
+                Dialog.loadGame_title);
         return fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
     }
 
-    private FileChooser prepareFileChooser(final File saveDirectory, final Dialog caption) {
+    private FileChooser prepareFileChooser(final File saveDirectory,
+            final Dialog caption) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(i18n.get(caption));
         fileChooser.setInitialDirectory(saveDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                "MicroCol data files", "*.microcol"));
         fileChooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("MicroCol data files", "*.microcol"));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.*"));
+                .add(new FileChooser.ExtensionFilter("All Images", "*.*"));
         return fileChooser;
     }
 

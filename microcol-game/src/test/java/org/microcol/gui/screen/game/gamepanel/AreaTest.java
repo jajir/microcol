@@ -22,16 +22,19 @@ import org.microcol.model.Location;
  */
 public class AreaTest {
 
-    private final VisibleAreaService visibleArea = mock(VisibleAreaService.class);
+    private final VisibleAreaService visibleArea = mock(
+            VisibleAreaService.class);
 
     @Test
     public void test_isLocationVisible() throws Exception {
         final Area area = makeArea(222, 222, 800, 600);
         final Location loc = Location.of(12, 4);
         final Tile tile = Tile.ofLocation(loc);
-        when(visibleArea.isVisibleMapPoint(tile.getTopLeftCorner())).thenReturn(true);
-        when(visibleArea.isVisibleMapPoint(tile.getBottomRightCorner())).thenReturn(true);
-        
+        when(visibleArea.isVisibleMapPoint(tile.getTopLeftCorner()))
+                .thenReturn(true);
+        when(visibleArea.isVisibleMapPoint(tile.getBottomRightCorner()))
+                .thenReturn(true);
+
         assertTrue(area.isLocationVisible(loc));
     }
 
@@ -58,8 +61,8 @@ public class AreaTest {
 
     @ParameterizedTest(name = "{index}: locatin = {0} is converted to point = {1}")
     @MethodSource("dataProvider_for_convertToPoint")
-    public void test_convertToPoint(final Location loc, final Point expectedPoint)
-            throws Exception {
+    public void test_convertToPoint(final Location loc,
+            final Point expectedPoint) throws Exception {
         final Area area = makeArea(222, 222, 800, 600);
 
         final Point ret = area.convertToCanvasPoint(loc);
@@ -67,8 +70,9 @@ public class AreaTest {
         assertEquals(expectedPoint, ret);
     }
 
-    private Area makeArea(final int viewTopLeftCornerX, final int viewTopLeftCornerY,
-            final int viewWidth, final int viewHeight) {
+    private Area makeArea(final int viewTopLeftCornerX,
+            final int viewTopLeftCornerY, final int viewWidth,
+            final int viewHeight) {
         final Point topLeft = Point.of(viewTopLeftCornerX, viewTopLeftCornerY);
         final Point bottomRight = topLeft.add(viewWidth, viewHeight);
 

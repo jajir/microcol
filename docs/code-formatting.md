@@ -40,4 +40,39 @@ obou XML souborů je
 `016e59100b8e4a51856eab46e71f646b8de06801f66495f31863f6e90784bd86`.
 Místní instalace obsahuje rozšíření `redhat.java` 1.56.0, jehož schéma podporuje
 obě použité volby `java.format.settings.*`. Interaktivní uložení ve VS Code
-nebylo součástí tohoto ověření. Přenos nepřeformátoval existující Java soubory.
+nebylo součástí tohoto ověření. Samotný přenos nepřeformátoval existující Java
+soubory; následné výslovně zadané formátování je popsáno níže.
+
+## Plošné formátování 11. října 2026
+
+Formátovačem prošlo všech **802 verzovaných souborů `*.java`**, včetně testů
+a `package-info.java`; 650 se změnilo a 152 už odpovídalo profilu. Rozsah byl
+určen příkazem `git ls-files '*.java'`, bez generovaných souborů v `target/`.
+
+| Modul | Zkontrolované Java soubory | Změněné |
+| --- | --- | --- |
+| microcol-game | 745 | 594 |
+| microcol-test | 42 | 42 |
+| microcol-build-tests | 11 | 11 |
+| microcol-dist | 2 | 2 |
+| microcol-module | 2 | 1 |
+
+Použit byl již nainstalovaný Eclipse JDT Core **3.47.0.v20260828-1141**
+z `redhat.java` 1.56.0, všech 394 voleb profilu `mujSunFormatter` a zdrojová
+úroveň Java 11 podle Maven konfigurace. Jednorázový běh přes
+`ToolFactory.createCodeFormatter` zahrnoval komentáře; odstranil také koncové
+mezery na řádcích. Profil XML ani závislosti projektu se nezměnily.
+
+Kontrola všech souborů porovnala před a po úpravě přesnou posloupnost Java
+tokenů včetně literálů. Odpovídal také obsah komentářů po odstranění jejich
+formátovacího odsazení a zalomení. Opakování stejného formátování a odstranění
+koncových mezer už výsledek nezmění. Scénáře TC zachovaly své identifikátory,
+`@Start`, fixtures, pořadí anglických kroků i aserce; TC18 byl zkontrolován
+také ručně. Jde o změnu formátu, nikoli pravidel nebo očekávání testů.
+
+Lokálně na macOS/JDK 17 prošlo **603 herních testů**, bez selhání, chyb
+a vynechání, příkazem `mvn -B -ntp -pl microcol-game -am test`. Úplnou
+funkční sadu a nativní distribuce ověřuje povinný workflow publikované revize
+podle [funkčního kontraktu](functional-tests.md#spousteni-a-ochrana-publikace).
+Formátovač zůstává editorovou a jednorázově použitou pomůckou; tento úkol
+nezavedl nový automatický formatter do Maven/CI.

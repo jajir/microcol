@@ -17,7 +17,8 @@ public class ScreenStatisticsPresenter {
     private final EventBus eventBus;
 
     @Inject
-    ScreenStatisticsPresenter(final ScreenStatistics screenStatistics, final EventBus eventBus) {
+    ScreenStatisticsPresenter(final ScreenStatistics screenStatistics,
+            final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenStatistics.getContent().setOnKeyPressed(this::onKeyPressed);
     }

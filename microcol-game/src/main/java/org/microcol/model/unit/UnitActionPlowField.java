@@ -40,8 +40,7 @@ public final class UnitActionPlowField implements UnitAction {
     /**
      * Allows to set how many turns more will be action executed.
      *
-     * @param remainingTurns
-     *            remaining number of turn
+     * @param remainingTurns remaining number of turn
      */
     public void setRemainingTurns(final int remainingTurns) {
         this.remainingTurns = remainingTurns;
@@ -66,8 +65,8 @@ public final class UnitActionPlowField implements UnitAction {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("remainingTurns", remainingTurns)
-                .toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("remainingTurns", remainingTurns).toString();
     }
 
 }

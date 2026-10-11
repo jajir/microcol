@@ -19,52 +19,56 @@ import javafx.scene.input.MouseButton;
 public class ScreenTurnReport extends AbstractScreen {
 
     public static ScreenTurnReport of(final TestContext context) {
-	return new ScreenTurnReport(context);
+        return new ScreenTurnReport(context);
 
     }
 
     private ScreenTurnReport(final TestContext context) {
-	super(context);
-	assertNotNull(getButtonOk());
+        super(context);
+        assertNotNull(getButtonOk());
     }
 
     public void close() {
-	getRobot().clickOn(getButtonOk(), MouseButton.PRIMARY);
-	WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn(getButtonOk(), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public Button getButtonOk() {
-	return getNodeFinder().lookup("#closeButtonId").queryAs(Button.class);
+        return getNodeFinder().lookup("#closeButtonId").queryAs(Button.class);
     }
 
     public void verifyNumberOfEvents(final int expectedNumberOfEvents) {
-	assertEquals(expectedNumberOfEvents, getEventPanels().size(),
-		String.format("Number of events '%s' is different from expected number of events '%s'",
-			getEventPanels().size(), expectedNumberOfEvents));
+        assertEquals(expectedNumberOfEvents, getEventPanels().size(),
+                String.format(
+                        "Number of events '%s' is different from expected number of events '%s'",
+                        getEventPanels().size(), expectedNumberOfEvents));
     }
 
     private List<TurnEventPanel> getEventPanels() {
-	final String cssClass = ".turn-event";
-	final Set<TurnEventPanel> panels = getNodeFinder().lookup(cssClass).queryAll();
-	return new ArrayList<TurnEventPanel>(panels);
+        final String cssClass = ".turn-event";
+        final Set<TurnEventPanel> panels = getNodeFinder().lookup(cssClass)
+                .queryAll();
+        return new ArrayList<TurnEventPanel>(panels);
     }
 
-    public void verifyThatAtLeastOneEventMessageContains(final String expectedMessagePart) {
-	final List<String> messages = new ArrayList<>();
-	for (final TurnEventPanel eventPane : getEventPanels()) {
-	    final Label label = (Label) eventPane.getChildren().get(1);
-	    final String strLabel = label.getText();
-	    messages.add(strLabel);
-	    if (strLabel.contains(expectedMessagePart)) {
-		return;
-	    }
-	}
-	final StringBuilder out = new StringBuilder();
-	messages.forEach(msg -> {
-	    out.append(msg);
-	    out.append(", ");
-	});
-	fail(String.format("No turn event contains text '%s'. Messages was: %s", expectedMessagePart, out.toString()));
+    public void verifyThatAtLeastOneEventMessageContains(
+            final String expectedMessagePart) {
+        final List<String> messages = new ArrayList<>();
+        for (final TurnEventPanel eventPane : getEventPanels()) {
+            final Label label = (Label) eventPane.getChildren().get(1);
+            final String strLabel = label.getText();
+            messages.add(strLabel);
+            if (strLabel.contains(expectedMessagePart)) {
+                return;
+            }
+        }
+        final StringBuilder out = new StringBuilder();
+        messages.forEach(msg -> {
+            out.append(msg);
+            out.append(", ");
+        });
+        fail(String.format("No turn event contains text '%s'. Messages was: %s",
+                expectedMessagePart, out.toString()));
     }
 
 }

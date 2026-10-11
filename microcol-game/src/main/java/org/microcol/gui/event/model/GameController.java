@@ -30,16 +30,19 @@ public final class GameController {
     private final EventBus eventBus;
 
     @Inject
-    GameController(final GameModelController gameModelController, final GameModelDao gameModelDao,
+    GameController(final GameModelController gameModelController,
+            final GameModelDao gameModelDao,
             final CampaignManager campaignManager, final EventBus eventBus) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.gameModelDao = Preconditions.checkNotNull(gameModelDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     public void writeModelToFile(final File targetFile) {
-        gameModelDao.saveToFile(targetFile.getAbsolutePath(), gameModelController.getGameModel());
+        gameModelDao.saveToFile(targetFile.getAbsolutePath(),
+                gameModelController.getGameModel());
     }
 
     public void loadModelFromFile(final File sourceFile) {
@@ -48,12 +51,14 @@ public final class GameController {
 
     public void startCampaignMission(final CampaignName campaignName,
             final MissionName missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(campaignName);
+        final Campaign campaign = campaignManager
+                .getCampaignByName(campaignName);
         startCampaignMission(campaign.getMisssionByMissionName(missionName));
     }
 
     private void startCampaignMission(final CampaignMission campaignMission) {
-        startMission(gameModelDao.loadFromClassPath(campaignMission.getClassPathFile(), eventBus));
+        startMission(gameModelDao.loadFromClassPath(
+                campaignMission.getClassPathFile(), eventBus));
     }
 
     private void startMission(final GameModel gameMode) {
@@ -61,7 +66,8 @@ public final class GameController {
     }
 
     public boolean isDefaultCampaignFinished() {
-        final Campaign campaign = campaignManager.getCampaignByName(CampaignNames.defaultCampaign);
+        final Campaign campaign = campaignManager
+                .getCampaignByName(CampaignNames.defaultCampaign);
         return campaign.isFinished();
     }
 

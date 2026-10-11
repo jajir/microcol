@@ -25,15 +25,18 @@ public class Construction {
 
     private final Colony colony;
 
-    Construction(final Model model, final Colony colony, final ConstructionType type,
+    Construction(final Model model, final Colony colony,
+            final ConstructionType type,
             final Function<Construction, List<ConstructionSlot>> constructionsSlotBuilder) {
         this.model = Preconditions.checkNotNull(model);
         this.colony = Preconditions.checkNotNull(colony);
         this.type = Preconditions.checkNotNull(type);
-        this.workingSlots = Preconditions.checkNotNull(constructionsSlotBuilder.apply(this));
+        this.workingSlots = Preconditions
+                .checkNotNull(constructionsSlotBuilder.apply(this));
     }
 
-    static Construction build(final Model model, final Colony colony, final ConstructionType type) {
+    static Construction build(final Model model, final Colony colony,
+            final ConstructionType type) {
         return new Construction(model, colony, type, construction -> {
             final List<ConstructionSlot> list = new ArrayList<>();
             for (int i = 0; i < type.getSlotsForWorkers(); i++) {
@@ -83,20 +86,24 @@ public class Construction {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Construction.class).add("name", type.name()).toString();
+        return MoreObjects.toStringHelper(Construction.class)
+                .add("name", type.name()).toString();
     }
 
-    public PlaceConstructionSlot placeWorker(final int position, final Unit unit) {
+    public PlaceConstructionSlot placeWorker(final int position,
+            final Unit unit) {
         Preconditions.checkNotNull(unit);
         ConstructionSlot constructionSlot = getSlotAt(position);
-        final PlaceConstructionSlot placeConstructionSlot = new PlaceConstructionSlot(unit,
-                constructionSlot);
+        final PlaceConstructionSlot placeConstructionSlot = new PlaceConstructionSlot(
+                unit, constructionSlot);
         place(position, placeConstructionSlot);
         return placeConstructionSlot;
     }
 
-    void place(final int position, final PlaceConstructionSlot placeConstruction) {
-        Preconditions.checkArgument(position >= 0, "Position index have to bigger that 0.");
+    void place(final int position,
+            final PlaceConstructionSlot placeConstruction) {
+        Preconditions.checkArgument(position >= 0,
+                "Position index have to bigger that 0.");
         Preconditions.checkArgument(position < type.getSlotsForWorkers(),
                 "Maximum number of slots for workers is (%s), you try to put worker at (%s).",
                 type.getSlotsForWorkers(), position);
@@ -119,7 +126,8 @@ public class Construction {
 
     List<ConstructionSlot> getOrderedSlots() {
         return workingSlots.stream()
-                .sorted(Comparator.comparing(sort -> -sort.getProductionModifier()))
+                .sorted(Comparator
+                        .comparing(sort -> -sort.getProductionModifier()))
                 .collect(Collectors.toList());
     }
 
@@ -130,9 +138,11 @@ public class Construction {
      * @return construction production statistics per turn
      */
     ConstructionTurnProduction getProduction() {
-        Preconditions.checkArgument(getType().getProductionPerTurn().isPresent(),
+        Preconditions.checkArgument(
+                getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
-        Preconditions.checkArgument(!getType().getConsumptionPerTurn().isPresent(),
+        Preconditions.checkArgument(
+                !getType().getConsumptionPerTurn().isPresent(),
                 "This construction consume something. Construction: %s", this);
         ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
@@ -146,21 +156,23 @@ public class Construction {
      * Return production definition for constructions that consume some sources.
      * For example Blacksmith.
      *
-     * @param sourceGoods
-     *            required source goods. How many goods could be consumed during
-     *            production.
+     * @param sourceGoods required source goods. How many goods could be
+     *                    consumed during production.
      * @return construction production statistics per turn
      */
     ConstructionTurnProduction getProduction(final Goods sourceGoods) {
         Preconditions.checkNotNull(sourceGoods);
-        Preconditions.checkArgument(getType().getProductionPerTurn().isPresent(),
+        Preconditions.checkArgument(
+                getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
-        Preconditions.checkArgument(getType().getConsumptionPerTurn().isPresent(),
+        Preconditions.checkArgument(
+                getType().getConsumptionPerTurn().isPresent(),
                 "This construction doesn't consume anything.");
         Goods remaining = sourceGoods;
         ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
-            final ConstructionTurnProduction tmp = slot.getProduction(remaining);
+            final ConstructionTurnProduction tmp = slot
+                    .getProduction(remaining);
             out = out.add(tmp);
             remaining = remaining.substract(tmp.getConsumedGoods().get());
         }
@@ -171,29 +183,32 @@ public class Construction {
      * Method should be called once per turn. It produce resources in
      * construction.
      *
-     * @param colony
-     *            required colony where is warehouse and construction placed
-     * @param warehouse
-     *            required colony warehouse
+     * @param colony    required colony where is warehouse and construction
+     *                  placed
+     * @param warehouse required colony warehouse
      */
-    public void countTurnProduction(final Colony colony, final ColonyWarehouse warehouse) {
+    public void countTurnProduction(final Colony colony,
+            final ColonyWarehouse warehouse) {
         getType().getProductionPerTurn().ifPresent(producedGoodsType -> {
             if (getType().getConsumptionPerTurn().isPresent()) {
-                final Goods consumedGoods = getType().getConsumptionPerTurn().get();
+                final Goods consumedGoods = getType().getConsumptionPerTurn()
+                        .get();
                 final ConstructionTurnProduction prod = getProduction(
                         warehouse.getGoods(consumedGoods.getType()));
                 warehouse.removeGoods(prod.getConsumedGoods().get());
-                warehouse.addGoodsWithThrowingAway(prod.getProducedGoods().get(),
-                        thrownAwayGoods -> {
-                            model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(
-                                    colony.getOwner(), thrownAwayGoods, colony));
+                warehouse.addGoodsWithThrowingAway(
+                        prod.getProducedGoods().get(), thrownAwayGoods -> {
+                            model.addTurnEvent(TurnEventProvider
+                                    .getGoodsWasThrowsAway(colony.getOwner(),
+                                            thrownAwayGoods, colony));
                         });
             } else {
                 final ConstructionTurnProduction prod = getProduction();
-                warehouse.addGoodsWithThrowingAway(prod.getProducedGoods().get(),
-                        thrownAwayGoods -> {
-                            model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(
-                                    colony.getOwner(), thrownAwayGoods, colony));
+                warehouse.addGoodsWithThrowingAway(
+                        prod.getProducedGoods().get(), thrownAwayGoods -> {
+                            model.addTurnEvent(TurnEventProvider
+                                    .getGoodsWasThrowsAway(colony.getOwner(),
+                                            thrownAwayGoods, colony));
                         });
             }
 

@@ -8,22 +8,10 @@ import org.microcol.model.TerrainType;
  */
 enum TerrainTypes implements MessageKeyResource {
 
-    OCEAN_name,
-    OCEAN_description,
-    GRASSLAND_name,
-    GRASSLAND_description,
-    TUNDRA_name,
-    TUNDRA_description,
-    ARCTIC_name,
-    ARCTIC_description,
-    HIGH_SEA_name,
-    HIGH_SEA_description,
-    PRAIRIE_name,
-    PRAIRIE_description,
-    MOUNTAIN_name,
-    MOUNTAIN_description,
-    HILL_name,
-    HILL_description,;
+    OCEAN_name, OCEAN_description, GRASSLAND_name, GRASSLAND_description,
+    TUNDRA_name, TUNDRA_description, ARCTIC_name, ARCTIC_description,
+    HIGH_SEA_name, HIGH_SEA_description, PRAIRIE_name, PRAIRIE_description,
+    MOUNTAIN_name, MOUNTAIN_description, HILL_name, HILL_description,;
 
     private static final String TERRAIN_SUFFIX_NAME = "_name";
     private static final String TERRAIN_SUFFIX_DESCRIPTION = "_description";

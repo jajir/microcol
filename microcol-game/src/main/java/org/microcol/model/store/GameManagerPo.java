@@ -20,8 +20,7 @@ public final class GameManagerPo {
     }
 
     /**
-     * @param players
-     *            the players to set
+     * @param players the players to set
      */
     public void setPlayers(List<PlayerPo> players) {
         this.players = players;
@@ -35,8 +34,7 @@ public final class GameManagerPo {
     }
 
     /**
-     * @param gameStarted
-     *            the gameStarted to set
+     * @param gameStarted the gameStarted to set
      */
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
@@ -50,8 +48,7 @@ public final class GameManagerPo {
     }
 
     /**
-     * @param currentPlayer
-     *            the currentPlayer to set
+     * @param currentPlayer the currentPlayer to set
      */
     public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;

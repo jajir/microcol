@@ -15,8 +15,8 @@ import com.google.common.base.Preconditions;
  */
 final class ConstructionTurnProduction {
 
-    static final ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(null,
-            null, null);
+    static final ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(
+            null, null, null);
 
     private final Goods consumedGoods;
 
@@ -24,8 +24,8 @@ final class ConstructionTurnProduction {
 
     private final Goods blockedGoods;
 
-    ConstructionTurnProduction(final Goods consumedGoods, final Goods producedGoods,
-            final Goods blockedGoods) {
+    ConstructionTurnProduction(final Goods consumedGoods,
+            final Goods producedGoods, final Goods blockedGoods) {
         this.consumedGoods = consumedGoods;
         this.producedGoods = producedGoods;
         this.blockedGoods = blockedGoods;
@@ -37,7 +37,8 @@ final class ConstructionTurnProduction {
             Preconditions.checkArgument(getProducedGoods().isPresent(),
                     "When blocked goods is present then produced goods have to be present");
             Preconditions.checkArgument(
-                    getBlockedGoods().get().getType().equals(getProducedGoods().get().getType()),
+                    getBlockedGoods().get().getType()
+                            .equals(getProducedGoods().get().getType()),
                     "Blocked and produced goods type are not same.");
         }
         if (getConsumedGoods().isPresent()) {
@@ -48,14 +49,19 @@ final class ConstructionTurnProduction {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this.getClass()).add("consumedGoods", consumedGoods)
-                .add("producedGoods", producedGoods).add("blockedGoods", blockedGoods).toString();
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("consumedGoods", consumedGoods)
+                .add("producedGoods", producedGoods)
+                .add("blockedGoods", blockedGoods).toString();
     }
 
-    public ConstructionTurnProduction add(final ConstructionTurnProduction prod) {
+    public ConstructionTurnProduction add(
+            final ConstructionTurnProduction prod) {
         Preconditions.checkNotNull(prod);
-        return new ConstructionTurnProduction(add(consumedGoods, prod.consumedGoods),
-                add(producedGoods, prod.producedGoods), add(blockedGoods, prod.blockedGoods));
+        return new ConstructionTurnProduction(
+                add(consumedGoods, prod.consumedGoods),
+                add(producedGoods, prod.producedGoods),
+                add(blockedGoods, prod.blockedGoods));
     }
 
     private Goods add(final Goods a, final Goods b) {

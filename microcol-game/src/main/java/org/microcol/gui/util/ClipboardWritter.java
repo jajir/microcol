@@ -51,7 +51,8 @@ public final class ClipboardWritter implements ClipboardConst {
         return this;
     }
 
-    public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
+    public ClipboardWritter addTransferFromUnit(final Unit unit,
+            final CargoSlot cargoSlot) {
         addFrom(From.VALUE_FROM_UNIT);
         addKeyValue(KEY_SOURCE_UNIT_ID, unit.getId());
         addKeyValue(KEY_CARGO_SLOT_INDEX, cargoSlot.getIndex());
@@ -78,7 +79,8 @@ public final class ClipboardWritter implements ClipboardConst {
         return this;
     }
 
-    public ClipboardWritter addTransferFromColonyField(final Location fieldDirection) {
+    public ClipboardWritter addTransferFromColonyField(
+            final Location fieldDirection) {
         addFrom(From.VALUE_FROM_COLONY_FIELD);
         addKeyValue(KEY_X, fieldDirection.getX());
         addKeyValue(KEY_Y, fieldDirection.getY());
@@ -96,7 +98,8 @@ public final class ClipboardWritter implements ClipboardConst {
         return this;
     }
 
-    public ClipboardWritter fromBuildingQueue(final ConstructionType constructionType) {
+    public ClipboardWritter fromBuildingQueue(
+            final ConstructionType constructionType) {
         addFrom(From.VALUE_FROM_BUILDING_QUEUE);
         addKeyValue(KEY_CONSTRUCTION_TYPE, constructionType.name());
         return this;
@@ -108,7 +111,8 @@ public final class ClipboardWritter implements ClipboardConst {
         return this;
     }
 
-    public ClipboardWritter fromBuildingQueueConstruction(final ConstructionType constructionType) {
+    public ClipboardWritter fromBuildingQueueConstruction(
+            final ConstructionType constructionType) {
         addFrom(From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION);
         addKeyValue(KEY_CONSTRUCTION_TYPE, constructionType.name());
         return this;

@@ -24,38 +24,39 @@ public class TC_17_F13_new_unit_in_colony_test extends AbstractMicroColTest {
     private final static Location COLONY_LOCATION = Location.of(24, 16);
     private final static Location NEAR_LOCATION = Location.of(23, 16);
 
-    private final static File testFileName = new File("src/test/scenarios/F13-new-unit-in-colony.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F13-new-unit-in-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, this.getClass(), testFileName);
+        initialize(primaryStage, this.getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_01_new_unit_in_colony() throws Exception {
-	// Open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        // Open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	// Verify that tile with colony is selected.
-	gamePage.verifyThatSelectedTileIs(COLONY_LOCATION);
+        // Verify that tile with colony is selected.
+        gamePage.verifyThatSelectedTileIs(COLONY_LOCATION);
 
-	// Verify there is not unit in colony.
-	assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // Verify there is not unit in colony.
+        assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
 
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
+        // Perform next turn and ignore turn events dialog.
+        gamePage.nextTurnAndCloseDialogs();
 
-	// Verify new unit in colony.
-	assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // Verify new unit in colony.
+        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
 
-	// Move ship to far location.
-	gamePage.moveMouseAtLocation(COLONY_LOCATION);
-	gamePage.dragMouseAtLocation(NEAR_LOCATION);
+        // Move ship to far location.
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(NEAR_LOCATION);
 
-	// Verify that unit move to new place.
-	assertEquals(1, getModel().getUnitsAt(NEAR_LOCATION).size());
-	assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
+        // Verify that unit move to new place.
+        assertEquals(1, getModel().getUnitsAt(NEAR_LOCATION).size());
+        assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
     }
 
 }

@@ -4,13 +4,7 @@ import org.microcol.i18n.MessageKeyResource;
 
 public enum Stats implements MessageKeyResource {
 
-    titleGold,
-    titleMilitary,
-    titleWealth,
-    titleScore,
-    titleIndex,
-    buttonCancel,
-    statistics_year,
-    ;
+    titleGold, titleMilitary, titleWealth, titleScore, titleIndex, buttonCancel,
+    statistics_year,;
 
 }

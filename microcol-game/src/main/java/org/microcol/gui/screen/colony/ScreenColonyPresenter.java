@@ -15,17 +15,20 @@ import javafx.scene.input.KeyEvent;
 
 public class ScreenColonyPresenter implements ColonyDialogCallback {
 
-    private final static Logger logger = LoggerFactory.getLogger(ScreenColonyPresenter.class);
+    private final static Logger logger = LoggerFactory
+            .getLogger(ScreenColonyPresenter.class);
 
     private final ColonyPanel colonyPanel;
 
     private final EventBus eventBus;
 
     @Inject
-    public ScreenColonyPresenter(final ColonyPanel colonyPanel, final EventBus eventBus) {
+    public ScreenColonyPresenter(final ColonyPanel colonyPanel,
+            final EventBus eventBus) {
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        colonyPanel.getContent().addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        colonyPanel.getContent().addEventFilter(KeyEvent.KEY_PRESSED,
+                this::onKeyPressed);
     }
 
     private void onKeyPressed(final KeyEvent event) {

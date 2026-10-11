@@ -8,7 +8,7 @@ import javafx.beans.property.BooleanProperty;
 public interface EuropeCallback {
 
     void repaint();
-    
+
     void close();
 
     void repaintAfterGoodMoving();

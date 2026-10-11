@@ -26,7 +26,8 @@ public class SbPartUnits extends SbPart {
             buff.append(name);
         } else {
             buff.append(getUnitsNumber(count));
-            final String name = getI18n().get(UnitTypes.getUnitName7pl(unitType));
+            final String name = getI18n()
+                    .get(UnitTypes.getUnitName7pl(unitType));
             buff.append(" ");
             buff.append(name);
         }

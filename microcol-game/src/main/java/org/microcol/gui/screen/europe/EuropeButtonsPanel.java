@@ -25,15 +25,18 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     private final Button buttonBuyUnit;
 
     @Inject
-    EuropeButtonsPanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n) {
+    EuropeButtonsPanel(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT, Europe.buttonClose);
-        buttonClose.setOnAction(evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
+        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
+                Europe.buttonClose);
+        buttonClose.setOnAction(
+                evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
         buttonClose.setId(CLOSE_BUTTON_ID);
-        
-        buttonBuyUnit = makeButon(ImageLoaderButtons.BUTTON_BUY, Europe.buttonBuyUnit);
+
+        buttonBuyUnit = makeButon(ImageLoaderButtons.BUTTON_BUY,
+                Europe.buttonBuyUnit);
         buttonBuyUnit.setId(BUY_BUTTON_ID);
 
         getButtonPanel().getChildren().add(buttonBuyUnit);

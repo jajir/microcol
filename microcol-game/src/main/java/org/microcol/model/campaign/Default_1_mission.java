@@ -20,7 +20,8 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
 
     final static Integer TARGET_NUMBER_OF_MILITARY_UNITS = 15;
 
-    Default_1_mission(final MissionCreationContext context, final Default_1_goals goals) {
+    Default_1_mission(final MissionCreationContext context,
+            final Default_1_goals goals) {
         super(context, goals);
     }
 
@@ -29,8 +30,10 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
         return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
                 GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
-                            .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
-                        fireEvent(new EventFinishMission(Missions.default_m1_done));
+                            .equals(context.getEvent().getGameOverResult()
+                                    .getGameOverReason())) {
+                        fireEvent(new EventFinishMission(
+                                Missions.default_m1_done));
                         return "ok";
                     }
                     return null;
@@ -44,15 +47,19 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
         }
     }
 
-    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(
+            final BeforeDeclaringIndependenceEvent event) {
         event.stopEventExecution();
-        fireEvent(new EventShowMessages(Missions.default_m0_cantDeclareIndependence));
+        fireEvent(new EventShowMessages(
+                Missions.default_m0_cantDeclareIndependence));
     }
 
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         if (!getGoals().getGoalNumberOfColonies().isFinished()) {
-            if (playerHaveMoreOrEqualColonies(event.getModel(), TARGET_NUMBER_OF_COLONIES)) {
-                fireEvent(new EventShowMessages(Missions.default_m1_foundColonies_done,
+            if (playerHaveMoreOrEqualColonies(event.getModel(),
+                    TARGET_NUMBER_OF_COLONIES)) {
+                fireEvent(new EventShowMessages(
+                        Missions.default_m1_foundColonies_done,
                         Missions.default_m1_get5000));
                 getGoals().getGoalNumberOfColonies().setFinished(true);
             }
@@ -66,8 +73,10 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
     public void onTurnStarted(final TurnStartedEvent event) {
         super.onTurnStarted();
         if (!getGoals().getGoalMilitaryPower().isFinished()) {
-            if (getNumberOfMilitaryUnits(event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
-                fireEvent(new EventShowMessages(Missions.default_m1_makeArmy_done));
+            if (getNumberOfMilitaryUnits(
+                    event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
+                fireEvent(new EventShowMessages(
+                        Missions.default_m1_makeArmy_done));
                 getGoals().getGoalMilitaryPower().setFinished(true);
             }
         }
@@ -78,8 +87,9 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
         if (!getGoals().getGoalAmountOfGold().isFinished()) {
             final int golds = getHumanPlayer(model).getGold();
             if (golds >= TARGET_NUMBER_OF_GOLD) {
-                fireEvent(new EventShowMessages(Missions.default_m1_get5000_done,
-                        Missions.default_m1_makeArmy));
+                fireEvent(
+                        new EventShowMessages(Missions.default_m1_get5000_done,
+                                Missions.default_m1_makeArmy));
                 getGoals().getGoalAmountOfGold().setFinished(true);
             }
         }

@@ -16,17 +16,19 @@ final class SimpleUnitBehavior {
         if (unit.getType().canAttack() && unit.isAtPlaceLocation()
                 && unit.getActionPoints() > 0) {
             /*
-             * Following filter stops executing when first location return from tryToAttack
-             * true.
+             * Following filter stops executing when first location return from
+             * tryToAttack true.
              */
             unit.getLocation().getNeighbors().stream()
-                    .filter(location -> tryToAttack(unit, location)).findFirst();
+                    .filter(location -> tryToAttack(unit, location))
+                    .findFirst();
         }
     }
 
     private boolean tryToAttack(final Unit unit, final Location location) {
         if (unit.isPossibleToAttackAt(location)) {
-            final List<Unit> enemies = unit.getOwner().getEnemyUnitsAt(location);
+            final List<Unit> enemies = unit.getOwner()
+                    .getEnemyUnitsAt(location);
             if (!enemies.isEmpty()) {
                 unit.attack(enemies.get(0).getLocation());
                 return true;
@@ -35,13 +37,16 @@ final class SimpleUnitBehavior {
         return false;
     }
 
-    void tryToCaptureColony(final Model model, final Unit unit, final Location location) {
+    void tryToCaptureColony(final Model model, final Unit unit,
+            final Location location) {
         Preconditions.checkState(unit.getLocation().isNeighbor(location),
-                String.format("Unit '%s' sould try to conquer city in neighbor and city is at '%s'",
+                String.format(
+                        "Unit '%s' sould try to conquer city in neighbor and city is at '%s'",
                         unit, location));
         if (!unit.isPossibleToAttackAt(location)) {
             final Optional<Colony> oColony = model.getColonyAt(location);
-            Preconditions.checkState(oColony.isPresent(), "Colony wasn't fount at '%s'", location);
+            Preconditions.checkState(oColony.isPresent(),
+                    "Colony wasn't fount at '%s'", location);
             final Colony colony = oColony.get();
             colony.captureColony(unit);
         }

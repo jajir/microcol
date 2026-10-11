@@ -29,14 +29,16 @@ public class StatusBarMessageServiceTest {
 
     private StatusBarMessageService service;
 
-    private final I18n i18n = I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
+    private final I18n i18n = I18n.builder()
+            .setVerifyThatAllEnumKeysAreDefined(true)
             .setStreamReader(new StreamReader())
             .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
             .setDefaultLocale(new Locale("cs", "CZ")).build();
 
     private final GamePreferences gamePreferences = mock(GamePreferences.class);
 
-    private final LocalizationHelper localizationHelper = new LocalizationHelper(i18n);
+    private final LocalizationHelper localizationHelper = new LocalizationHelper(
+            i18n);
 
     private final Player player = mock(Player.class);
 
@@ -63,12 +65,13 @@ public class StatusBarMessageServiceTest {
     }
 
     @Test
-    public void verify_message_that_location_was_not_discovered() throws Exception {
+    public void verify_message_that_location_was_not_discovered()
+            throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(false);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit1), Optional.empty());
 
         assertEquals("Tato oblast je neprozkoumaná.", ret);
     }
@@ -78,8 +81,8 @@ public class StatusBarMessageServiceTest {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                new ArrayList<>(), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, new ArrayList<>(), Optional.empty());
 
         assertEquals("Zde je Oceán.", ret);
     }
@@ -90,8 +93,8 @@ public class StatusBarMessageServiceTest {
         when(player.isVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit1), Optional.empty());
 
         assertEquals("Zde je Oceán s galeonou.", ret);
     }
@@ -103,8 +106,9 @@ public class StatusBarMessageServiceTest {
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1, unit2), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit1, unit2),
+                Optional.empty());
 
         assertEquals("Zde je Oceán s dvěmi galeonami.", ret);
     }
@@ -119,8 +123,10 @@ public class StatusBarMessageServiceTest {
         when(unit4.getType()).thenReturn(UnitType.GALLEON);
         when(unit5.getType()).thenReturn(UnitType.GALLEON);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1, unit2, unit3, unit4, unit5), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN,
+                Lists.newArrayList(unit1, unit2, unit3, unit4, unit5),
+                Optional.empty());
 
         assertEquals("Zde je Oceán s pěti galeonami.", ret);
     }
@@ -136,14 +142,17 @@ public class StatusBarMessageServiceTest {
         when(unit5.getType()).thenReturn(UnitType.GALLEON);
         when(unit6.getType()).thenReturn(UnitType.GALLEON);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1, unit2, unit3, unit4, unit5, unit6), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN,
+                Lists.newArrayList(unit1, unit2, unit3, unit4, unit5, unit6),
+                Optional.empty());
 
         assertEquals("Zde je Oceán s 6. galeonami.", ret);
     }
 
     @Test
-    public void verify_colonist_two_galleons_one_frigate__of_same_type() throws Exception {
+    public void verify_colonist_two_galleons_one_frigate__of_same_type()
+            throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.COLONIST);
@@ -151,22 +160,28 @@ public class StatusBarMessageServiceTest {
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
         when(unit4.getType()).thenReturn(UnitType.FRIGATE);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit1, unit2, unit3, unit4), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN,
+                Lists.newArrayList(unit1, unit2, unit3, unit4),
+                Optional.empty());
 
-        assertEquals("Zde je Oceán s dvěmi galeonami, svobodným kolonistou a frigatou.", ret);
+        assertEquals(
+                "Zde je Oceán s dvěmi galeonami, svobodným kolonistou a frigatou.",
+                ret);
     }
 
     @Test
-    public void verify_two_galleons_one_frigate__of_same_type() throws Exception {
+    public void verify_two_galleons_one_frigate__of_same_type()
+            throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
         when(unit4.getType()).thenReturn(UnitType.FRIGATE);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit2, unit3, unit4), Optional.empty());
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit2, unit3, unit4),
+                Optional.empty());
 
         assertEquals("Zde je Oceán s dvěmi galeonami a frigatou.", ret);
     }
@@ -177,14 +192,15 @@ public class StatusBarMessageServiceTest {
         when(player.isVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                new ArrayList<>(), Optional.of(colony));
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, new ArrayList<>(), Optional.of(colony));
 
         assertEquals("Zde je Oceán s kolonií Kuchařovice.", ret);
     }
 
     @Test
-    public void verify_coloy_two_galleons_one_frigate__of_same_type() throws Exception {
+    public void verify_coloy_two_galleons_one_frigate__of_same_type()
+            throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
@@ -192,15 +208,19 @@ public class StatusBarMessageServiceTest {
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
         when(unit4.getType()).thenReturn(UnitType.FRIGATE);
 
-        final String ret = service.getStatusMessage(where, player, TerrainType.OCEAN,
-                Lists.newArrayList(unit2, unit3, unit4), Optional.of(colony));
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit2, unit3, unit4),
+                Optional.of(colony));
 
-        assertEquals("Zde je Oceán s kolonií Kuchařovice, dvěmi galeonami a frigatou.", ret);
+        assertEquals(
+                "Zde je Oceán s kolonií Kuchařovice, dvěmi galeonami a frigatou.",
+                ret);
     }
-    
+
     @BeforeEach
     private void startup() {
-        service = new StatusBarMessageService(i18n, gamePreferences, localizationHelper);
+        service = new StatusBarMessageService(i18n, gamePreferences,
+                localizationHelper);
     }
 
     @AfterEach

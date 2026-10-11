@@ -22,9 +22,9 @@ public class ConstructionSlot {
     }
 
     public void set(PlaceConstructionSlot placeConstruction) {
-        Preconditions.checkState(isEmpty(),
-                String.format("Can't insert placeConstruction (%s) slot (%s) is not empty.",
-                        placeConstruction, this));
+        Preconditions.checkState(isEmpty(), String.format(
+                "Can't insert placeConstruction (%s) slot (%s) is not empty.",
+                placeConstruction, this));
         this.placeConstruction = placeConstruction;
         model.fireUnitMovedToConstruction(placeConstruction.getUnit());
     }
@@ -68,8 +68,10 @@ public class ConstructionSlot {
             return 0;
         } else {
             if (getConstructionType().getProductionPerTurn().isPresent()) {
-                final Goods productionPerTurn = getConstructionType().getProductionPerTurn().get();
-                return getUnit().getType().getProductionModifier(productionPerTurn.getType());
+                final Goods productionPerTurn = getConstructionType()
+                        .getProductionPerTurn().get();
+                return getUnit().getType()
+                        .getProductionModifier(productionPerTurn.getType());
             } else {
                 return 0;
             }
@@ -80,8 +82,7 @@ public class ConstructionSlot {
      * Provide information how much could be produced / consumed from given
      * source goods.
      *
-     * @param sourceGoods
-     *            optional source goods
+     * @param sourceGoods optional source goods
      * @return how much could be produced and consumed per turn
      */
     public ConstructionTurnProduction getProduction(final Goods sourceGoods) {
@@ -95,7 +96,8 @@ public class ConstructionSlot {
                 "Source goods is required, but it's null.");
 
         if (isEmpty()) {
-            return new ConstructionTurnProduction(type.getConsumptionPerTurn().get().getEmpty(),
+            return new ConstructionTurnProduction(
+                    type.getConsumptionPerTurn().get().getEmpty(),
                     type.getProductionPerTurn().get().getEmpty(), null);
         } else {
             // construction consume goods
@@ -104,17 +106,22 @@ public class ConstructionSlot {
             final Goods consumed = type.getConsumptionPerTurn().get();
             if (sourceGoods.isGreaterOrEqualsThan(consumed)) {
                 // There is enough source to produce all goods.
-                return new ConstructionTurnProduction(consumed, turnProduction, null);
+                return new ConstructionTurnProduction(consumed, turnProduction,
+                        null);
             } else {
                 // There is not enough source to produce everything.
-                final Goods partialProduction = Goods.of(turnProduction.getType(),
-                        (int) (sourceGoods.getAmount() * type.getProductionRatio()));
-                final Goods finalProduction = partialProduction.multiply(getProductionModifier());
-                final Goods wastedProduction = turnProduction.substract(finalProduction);
+                final Goods partialProduction = Goods.of(
+                        turnProduction.getType(), (int) (sourceGoods.getAmount()
+                                * type.getProductionRatio()));
+                final Goods finalProduction = partialProduction
+                        .multiply(getProductionModifier());
+                final Goods wastedProduction = turnProduction
+                        .substract(finalProduction);
                 final Goods partialConsumed = Goods.of(consumed.getType(),
-                        partialProduction.divide(type.getProductionRatio()).getAmount());
-                return new ConstructionTurnProduction(partialConsumed, finalProduction,
-                        wastedProduction);
+                        partialProduction.divide(type.getProductionRatio())
+                                .getAmount());
+                return new ConstructionTurnProduction(partialConsumed,
+                        finalProduction, wastedProduction);
             }
         }
     }
@@ -122,7 +129,7 @@ public class ConstructionSlot {
     /**
      * Return production of slot per turn. Work just in case when production
      * doesn't consume any other goods.
-     * 
+     *
      * @return Return production for slot which do not consume any goods.
      */
     public ConstructionTurnProduction getProduction() {
@@ -136,7 +143,7 @@ public class ConstructionSlot {
                 turnProduction.multiply(getProductionModifier()), null);
 
     }
-    
+
     private ConstructionType getConstructionType() {
         return construction.getType();
     }

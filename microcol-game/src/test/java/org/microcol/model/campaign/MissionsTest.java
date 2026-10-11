@@ -17,7 +17,8 @@ public class MissionsTest {
         final I18n i18n = I18n.builder().setStreamReader(new StreamReader())
                 .setDefaultLocale(Locale.forLanguageTag(language)).build();
 
-        assertFalse(i18n.get(Missions.default_m2_declareIndependence_done).isBlank());
+        assertFalse(i18n.get(Missions.default_m2_declareIndependence_done)
+                .isBlank());
         assertFalse(i18n.get(Missions.default_m2_portIsClosed).isBlank());
     }
 }

@@ -12,17 +12,20 @@ import com.google.inject.Inject;
 @Listener
 public class NextTurnListener {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(NextTurnListener.class);
+    private final Logger LOGGER = LoggerFactory
+            .getLogger(NextTurnListener.class);
 
     private final GameModelController gameModelController;
 
     @Inject
     NextTurnListener(final GameModelController gameModelController) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
     }
 
     @Subscribe
-    private void onNextTurn(@SuppressWarnings("unused") final NextTurnEvent event) {
+    private void onNextTurn(
+            @SuppressWarnings("unused") final NextTurnEvent event) {
         LOGGER.debug("Next turn button was pressed");
         gameModelController.nextTurn();
     }

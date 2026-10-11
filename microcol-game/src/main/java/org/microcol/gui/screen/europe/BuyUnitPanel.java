@@ -15,16 +15,21 @@ import javafx.scene.layout.VBox;
 
 public final class BuyUnitPanel extends VBox {
 
-    public BuyUnitPanel(final UnitType unitType, final ImageProvider imageProvider,
+    public BuyUnitPanel(final UnitType unitType,
+            final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final I18n i18n,
-            final BuyUnitsDialog buyUnitsDialog, final DialogNotEnoughGold dialogNotEnoughGold) {
+            final BuyUnitsDialog buyUnitsDialog,
+            final DialogNotEnoughGold dialogNotEnoughGold) {
         getStyleClass().add("unitPanel");
-        final ImageView image = new ImageView(imageProvider.getUnitImage(unitType));
-        final Label labelName = new Label(localizationHelper.getUnitName(unitType));
+        final ImageView image = new ImageView(
+                imageProvider.getUnitImage(unitType));
+        final Label labelName = new Label(
+                localizationHelper.getUnitName(unitType));
         labelName.getStyleClass().add("name");
         final Button buttonBuy = new Button(
-                i18n.get(Europe.buyUnitDialog_buttonBuyUnit) + " " + unitType.getEuropePrice());
+                i18n.get(Europe.buyUnitDialog_buttonBuyUnit) + " "
+                        + unitType.getEuropePrice());
         buttonBuy.getStyleClass().add("buttonBuy");
         buttonBuy.setOnAction(event -> {
             try {

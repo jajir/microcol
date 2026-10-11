@@ -12,11 +12,9 @@ class ScaleLinear {
 
     /**
      * Initialize minimal and max values.
-     * 
-     * @param minValue
-     *            required minimal value
-     * @param maxValue
-     *            required maximal value
+     *
+     * @param minValue required minimal value
+     * @param maxValue required maximal value
      */
     public ScaleLinear(final int minValue, final int maxValue) {
         this.minValue = minValue;

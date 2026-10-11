@@ -13,8 +13,9 @@ import com.google.common.collect.ImmutableList;
 
 public abstract class CanMount extends AbstractUnit {
 
-    public CanMount(final Model model, final Integer id, final Function<Unit, Place> placeBuilder,
-            final Player owner, final int actionPoints, final UnitAction unitAction) {
+    public CanMount(final Model model, final Integer id,
+            final Function<Unit, Place> placeBuilder, final Player owner,
+            final int actionPoints, final UnitAction unitAction) {
         super(model, id, placeBuilder, owner, actionPoints, unitAction);
     }
 
@@ -24,7 +25,8 @@ public abstract class CanMount extends AbstractUnit {
     }
 
     protected List<UnitActionType> getSupportedActions() {
-        return ImmutableList.of(UnitActionType.plowField, UnitActionType.noAction);
+        return ImmutableList.of(UnitActionType.plowField,
+                UnitActionType.noAction);
     }
 
 }

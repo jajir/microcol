@@ -15,8 +15,9 @@ class PanelConstructionBasicFactory implements PanelConstructionFactory {
 
     @Override
     public PanelConstructionBasic make(final PanelConstructionContext context) {
-        final PanelConstructionBasic out = new PanelConstructionBasic(context.getImageProvider(),
-                context.getEventBus(), context.getI18n(), context.getConstruction(),
+        final PanelConstructionBasic out = new PanelConstructionBasic(
+                context.getImageProvider(), context.getEventBus(),
+                context.getI18n(), context.getConstruction(),
                 context.getColonyStats(), context.getModel());
         out.setCssId(cssId);
         return out;

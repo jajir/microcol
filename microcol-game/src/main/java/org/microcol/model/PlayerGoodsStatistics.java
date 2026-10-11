@@ -20,7 +20,8 @@ public final class PlayerGoodsStatistics {
      * @return economy value of players
      */
     public int getEconomyValue() {
-        return goods.entrySet().stream().mapToInt(entry -> entry.getValue()).sum();
+        return goods.entrySet().stream().mapToInt(entry -> entry.getValue())
+                .sum();
     }
 
     public int getGoods(final GoodsType goodsType) {

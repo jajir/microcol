@@ -18,21 +18,27 @@ final class Neighbors {
     /**
      * Constructor.
      *
-     * @param location
-     *            required place location
-     * @param terrainMapUtil
-     *            required coast map generator
+     * @param location       required place location
+     * @param terrainMapUtil required coast map generator
      */
     Neighbors(final Location location, final TerrainMapUtil terrainMapUtil) {
         center = new InfoHolder(location, terrainMapUtil);
-        north = new InfoHolder(location.add(Direction.north.getVector()), terrainMapUtil);
-        northEast = new InfoHolder(location.add(Direction.northEast.getVector()), terrainMapUtil);
-        east = new InfoHolder(location.add(Direction.east.getVector()), terrainMapUtil);
-        southEast = new InfoHolder(location.add(Direction.southEast.getVector()), terrainMapUtil);
-        south = new InfoHolder(location.add(Direction.south.getVector()), terrainMapUtil);
-        southWest = new InfoHolder(location.add(Direction.southWest.getVector()), terrainMapUtil);
-        west = new InfoHolder(location.add(Direction.west.getVector()), terrainMapUtil);
-        nortWest = new InfoHolder(location.add(Direction.northWest.getVector()), terrainMapUtil);
+        north = new InfoHolder(location.add(Direction.north.getVector()),
+                terrainMapUtil);
+        northEast = new InfoHolder(
+                location.add(Direction.northEast.getVector()), terrainMapUtil);
+        east = new InfoHolder(location.add(Direction.east.getVector()),
+                terrainMapUtil);
+        southEast = new InfoHolder(
+                location.add(Direction.southEast.getVector()), terrainMapUtil);
+        south = new InfoHolder(location.add(Direction.south.getVector()),
+                terrainMapUtil);
+        southWest = new InfoHolder(
+                location.add(Direction.southWest.getVector()), terrainMapUtil);
+        west = new InfoHolder(location.add(Direction.west.getVector()),
+                terrainMapUtil);
+        nortWest = new InfoHolder(location.add(Direction.northWest.getVector()),
+                terrainMapUtil);
     }
 
     /**

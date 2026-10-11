@@ -20,10 +20,12 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_noConsumption() throws Exception {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
                 () -> construction.getProduction());
 
-        assertTrue(exception.getMessage().contains("This construction consume something."));
+        assertTrue(exception.getMessage()
+                .contains("This construction consume something."));
     }
 
     @Test
@@ -33,29 +35,36 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot2.getProduction(source)).thenReturn(empty());
         when(slot3.getProduction(source)).thenReturn(empty());
 
-        final ConstructionTurnProduction ret = construction.getProduction(source);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
         assertEquals(Goods.of(GoodsType.ORE, 0), ret.getConsumedGoods().get());
-        assertEquals(Goods.of(GoodsType.TOOLS, 0), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0),
+                ret.getProducedGoods().get());
     }
 
     @Test
     public void test_getProduction_1_worker() throws Exception {
-        when(slot1.getProduction(Goods.of(GoodsType.ORE, 73))).thenReturn(empty());
-        when(slot2.getProduction(Goods.of(GoodsType.ORE, 73))).thenReturn(full());
-        when(slot3.getProduction(Goods.of(GoodsType.ORE, 68))).thenReturn(empty());
+        when(slot1.getProduction(Goods.of(GoodsType.ORE, 73)))
+                .thenReturn(empty());
+        when(slot2.getProduction(Goods.of(GoodsType.ORE, 73)))
+                .thenReturn(full());
+        when(slot3.getProduction(Goods.of(GoodsType.ORE, 68)))
+                .thenReturn(empty());
 
         final Goods source = Goods.of(GoodsType.ORE, 73);
-        final ConstructionTurnProduction ret = construction.getProduction(source);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
         assertEquals(Goods.of(GoodsType.ORE, 5), ret.getConsumedGoods().get());
-        assertEquals(Goods.of(GoodsType.TOOLS, 5), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 5),
+                ret.getProducedGoods().get());
     }
 
     @Test
@@ -65,13 +74,15 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot2.getProduction(source)).thenReturn(empty());
         when(slot3.getProduction(source)).thenReturn(part());
 
-        final ConstructionTurnProduction ret = construction.getProduction(source);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertTrue(ret.getBlockedGoods().isPresent());
         assertEquals(Goods.of(GoodsType.ORE, 2), ret.getConsumedGoods().get());
-        assertEquals(Goods.of(GoodsType.TOOLS, 2), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 2),
+                ret.getProducedGoods().get());
         assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getBlockedGoods().get());
     }
 
@@ -79,23 +90,28 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
      * Each slot produce 5 tools from 5 ore. Two slots are occupied. Workers in
      * slot could produce 10 tools from 10 ore. But there are just 7 ore so just
      * 7 tools are produced and production of 3 tools is blocked by missing ore.
-     * 
+     *
      * @throws Exception generic exception in test
      */
     @Test
     public void test_getProduction_2_worker_limitedSource() throws Exception {
-        when(slot1.getProduction(Goods.of(GoodsType.ORE, 7))).thenReturn(empty());
-        when(slot2.getProduction(Goods.of(GoodsType.ORE, 7))).thenReturn(full());
-        when(slot3.getProduction(Goods.of(GoodsType.ORE, 2))).thenReturn(part());
+        when(slot1.getProduction(Goods.of(GoodsType.ORE, 7)))
+                .thenReturn(empty());
+        when(slot2.getProduction(Goods.of(GoodsType.ORE, 7)))
+                .thenReturn(full());
+        when(slot3.getProduction(Goods.of(GoodsType.ORE, 2)))
+                .thenReturn(part());
 
         final Goods source = Goods.of(GoodsType.ORE, 7);
-        final ConstructionTurnProduction ret = construction.getProduction(source);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertTrue(ret.getBlockedGoods().isPresent());
         assertEquals(Goods.of(GoodsType.ORE, 7), ret.getConsumedGoods().get());
-        assertEquals(Goods.of(GoodsType.TOOLS, 7), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 7),
+                ret.getProducedGoods().get());
         assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getBlockedGoods().get());
     }
 
@@ -116,7 +132,8 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
 
     @BeforeEach
     public void beforeEach() {
-        construction = new Construction(model, colony, ConstructionType.BLACKSMITHS_SHOP,
+        construction = new Construction(model, colony,
+                ConstructionType.BLACKSMITHS_SHOP,
                 construction -> Lists.newArrayList(slot1, slot2, slot3));
     }
 

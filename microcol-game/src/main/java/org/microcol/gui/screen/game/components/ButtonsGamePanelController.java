@@ -27,7 +27,8 @@ import com.google.inject.Singleton;
 @Listener
 public class ButtonsGamePanelController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanelController.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ButtonsGamePanelController.class);
 
     private final GameModelController gameModelController;
 
@@ -40,8 +41,10 @@ public class ButtonsGamePanelController {
             final GameModelController gameModelController,
             final SelectedUnitManager selectedUnitManager) {
         this.view = Preconditions.checkNotNull(buttonGamePanel);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
     }
 
     @SuppressWarnings("unused")
@@ -88,7 +91,8 @@ public class ButtonsGamePanelController {
     }
 
     @Subscribe
-    private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
+    private void onSelectedUnitWasChanged(
+            final SelectedUnitWasChangedEvent event) {
         LOGGER.debug("Selected unit was changed " + event.getSelectedUnit());
         if (event.getSelectedUnit().isPresent()) {
             final Unit unit = event.getSelectedUnit().get();
@@ -102,7 +106,8 @@ public class ButtonsGamePanelController {
     }
 
     @Subscribe
-    private void onActionWasStarted(@SuppressWarnings("unused") final ActionWasStartedEvent event) {
+    private void onActionWasStarted(
+            @SuppressWarnings("unused") final ActionWasStartedEvent event) {
         selectedUnitManager.getSelectedUnit()
                 .ifPresent(selectedUnit -> evaluatePlowField(selectedUnit));
     }
@@ -125,8 +130,8 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateDeclareIndependenceButton() {
-        view.setVisibleButtonDeclareIndependence(
-                gameModelController.getHumanPlayer().isPossibleToDecalareIndependence());
+        view.setVisibleButtonDeclareIndependence(gameModelController
+                .getHumanPlayer().isPossibleToDecalareIndependence());
     }
 
     private void evaluatePlowField(final Unit unit) {
@@ -142,12 +147,14 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonPlowField(false);
             return;
         }
-        final Terrain terrain = getModel().getMap().getTerrainAt(unit.getLocation());
+        final Terrain terrain = getModel().getMap()
+                .getTerrainAt(unit.getLocation());
         view.setVisibleButtonPlowField(!terrain.isHasField());
     }
 
     private void evaluateBuildColony(final Unit unit) {
-        view.setVisibleButtonBuildColony(gameModelController.getModel().canUnitBuildColony(unit));
+        view.setVisibleButtonBuildColony(
+                gameModelController.getModel().canUnitBuildColony(unit));
     }
 
     private Model getModel() {

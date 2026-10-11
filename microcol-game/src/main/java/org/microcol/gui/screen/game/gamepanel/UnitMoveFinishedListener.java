@@ -18,21 +18,25 @@ public final class UnitMoveFinishedListener {
     private final SelectedUnitManager selectedUnitManager;
 
     @Inject
-    public UnitMoveFinishedListener(final SelectedTileManager selectedTileManager,
+    public UnitMoveFinishedListener(
+            final SelectedTileManager selectedTileManager,
             final SelectedUnitManager selectedUnitManager) {
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
     }
 
     @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            selectedTileManager.setSelectedTile(event.getTargetLocation(), ScrollToFocusedTile.no);
+            selectedTileManager.setSelectedTile(event.getTargetLocation(),
+                    ScrollToFocusedTile.no);
             if (event.getUnit().isAtPlaceLocation()) {
                 selectedUnitManager.setSelectedUnit(event.getUnit());
             } else if (event.getUnit().isAtCargoSlot()) {
-                selectedUnitManager
-                        .setSelectedUnit(event.getUnit().getPlaceCargoSlot().getOwnerUnit());
+                selectedUnitManager.setSelectedUnit(
+                        event.getUnit().getPlaceCargoSlot().getOwnerUnit());
             }
         }
 

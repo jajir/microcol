@@ -13,7 +13,8 @@ public final class IndependenceWasDeclaredEvent extends AbstractModelEvent {
 
     private final Player whoDecalareIt;
 
-    public IndependenceWasDeclaredEvent(final Model model, final Player whoDecalareIt) {
+    public IndependenceWasDeclaredEvent(final Model model,
+            final Player whoDecalareIt) {
         super(model);
         this.whoDecalareIt = Preconditions.checkNotNull(whoDecalareIt);
     }
@@ -27,8 +28,8 @@ public final class IndependenceWasDeclaredEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("whoDecalareIt", whoDecalareIt)
-                .toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("whoDecalareIt", whoDecalareIt).toString();
     }
 
 }

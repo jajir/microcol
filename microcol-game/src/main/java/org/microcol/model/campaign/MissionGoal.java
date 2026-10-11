@@ -21,7 +21,8 @@ public abstract class MissionGoal {
      */
     private boolean finished;
 
-    MissionGoal(final String name, final Missions descriptionKey, final Map<String, String> data) {
+    MissionGoal(final String name, final Missions descriptionKey,
+            final Map<String, String> data) {
         this.name = Preconditions.checkNotNull(name);
         this.descriptionKey = Preconditions.checkNotNull(descriptionKey);
         finished = Boolean.valueOf(data.get(name));
@@ -50,8 +51,7 @@ public abstract class MissionGoal {
     }
 
     /**
-     * @param finished
-     *            the finished to set
+     * @param finished the finished to set
      */
     public void setFinished(boolean finished) {
         this.finished = finished;

@@ -68,7 +68,7 @@ final class ListenerManager {
 
         listeners.remove(listener);
     }
-    
+
     void removeAllListeners() {
         logger.info("Removed all listeners.");
 
@@ -102,8 +102,10 @@ final class ListenerManager {
         executeInSameThread(listener -> listener.onRoundStarted(event));
     }
 
-    void fireTurnStarted(final Model model, final Player player, final boolean isFreshStart) {
-        final TurnStartedEvent event = new TurnStartedEvent(model, player, isFreshStart);
+    void fireTurnStarted(final Model model, final Player player,
+            final boolean isFreshStart) {
+        final TurnStartedEvent event = new TurnStartedEvent(model, player,
+                isFreshStart);
 
         logger.info("Turn started: {}.", event);
 
@@ -118,23 +120,26 @@ final class ListenerManager {
         executeInSameThread(listener -> listener.onTurnFinished(event));
     }
 
-    void fireUnitMovedStepStarted(final Model model, final Unit unit, final Location start,
-            final Location end, final Direction orientation) {
-	final UnitMovedStepStartedEvent event = new UnitMovedStepStartedEvent(model, unit, start,
-		end, orientation);
+    void fireUnitMovedStepStarted(final Model model, final Unit unit,
+            final Location start, final Location end,
+            final Direction orientation) {
+        final UnitMovedStepStartedEvent event = new UnitMovedStepStartedEvent(
+                model, unit, start, end, orientation);
 
         logger.info("Unit moved step started: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitMovedStepStarted(event));
     }
 
-    void fireUnitMovedStepFinished(final Model model, final Unit unit, final Location start,
-            final Location end) {
-        final UnitMovedStepFinishedEvent event = new UnitMovedStepFinishedEvent(model, unit, start, end);
+    void fireUnitMovedStepFinished(final Model model, final Unit unit,
+            final Location start, final Location end) {
+        final UnitMovedStepFinishedEvent event = new UnitMovedStepFinishedEvent(
+                model, unit, start, end);
 
         logger.info("Unit moved step finished: {}.", event);
 
-        executeInSameThread(listener -> listener.onUnitMovedStepFinished(event));
+        executeInSameThread(
+                listener -> listener.onUnitMovedStepFinished(event));
     }
 
     void fireActionStarted(final Model model) {
@@ -153,8 +158,10 @@ final class ListenerManager {
         executeInSameThread(listener -> listener.onActionEnded(event));
     }
 
-    void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {
-        final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit, path);
+    void fireUnitMovedFinished(final Model model, final Unit unit,
+            final Path path) {
+        final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model,
+                unit, path);
 
         logger.info("Unit moved: {}.", event);
 
@@ -162,7 +169,8 @@ final class ListenerManager {
     }
 
     void fireUnitMovedToHighSeas(final Model model, final Unit unit) {
-        final UnitMovedToHighSeasEvent event = new UnitMovedToHighSeasEvent(model, unit);
+        final UnitMovedToHighSeasEvent event = new UnitMovedToHighSeasEvent(
+                model, unit);
 
         logger.info("Unit moved to high seas: {}.", event);
 
@@ -170,23 +178,28 @@ final class ListenerManager {
     }
 
     void fireUnitArrivedToColonies(final Model model, final Ship ship) {
-        final UnitArrivedToColoniesEvent event = new UnitArrivedToColoniesEvent(model, ship);
+        final UnitArrivedToColoniesEvent event = new UnitArrivedToColoniesEvent(
+                model, ship);
 
         logger.info("Unit arrived to colonies: {}.", event);
 
-        executeInSameThread(listener -> listener.onUnitArraviedToColonies(event));
+        executeInSameThread(
+                listener -> listener.onUnitArraviedToColonies(event));
     }
 
     void fireUnitMovedToConstruction(final Model model, final Unit unit) {
-        final UnitMovedToConstructionEvent event = new UnitMovedToConstructionEvent(model, unit);
+        final UnitMovedToConstructionEvent event = new UnitMovedToConstructionEvent(
+                model, unit);
 
         logger.info("Unit moved to colony construction slot: {}.", event);
 
-        executeInSameThread(listener -> listener.onUnitMovedToConstruction(event));
+        executeInSameThread(
+                listener -> listener.onUnitMovedToConstruction(event));
     }
 
     void fireUnitMovedToLocation(final Model model, final Unit unit) {
-        final UnitMovedToLocationEvent event = new UnitMovedToLocationEvent(model, unit);
+        final UnitMovedToLocationEvent event = new UnitMovedToLocationEvent(
+                model, unit);
 
         logger.info("Unit moved to location: {}.", event);
 
@@ -194,11 +207,13 @@ final class ListenerManager {
     }
 
     void fireUnitMovedToColonyField(final Model model, final Unit unit) {
-        final UnitMovedToColonyFieldEvent event = new UnitMovedToColonyFieldEvent(model, unit);
+        final UnitMovedToColonyFieldEvent event = new UnitMovedToColonyFieldEvent(
+                model, unit);
 
         logger.info("Unit moved to colony field: {}.", event);
 
-        executeInSameThread(listener -> listener.onUnitMovedToColonyField(event));
+        executeInSameThread(
+                listener -> listener.onUnitMovedToColonyField(event));
     }
 
     boolean fireBeforeEndTurn(final Model model) {
@@ -214,18 +229,17 @@ final class ListenerManager {
 
     /**
      *
-     * @param model
-     *            required model
-     * @param unit
-     *            required moved unit
-     * @param path
-     *            required path which unit will move
+     * @param model required model
+     * @param unit  required moved unit
+     * @param path  required path which unit will move
      * @return When return <code>true</code> than event processing should
      *         continue otherwise return <code>false</code> and event processing
      *         should be stopped.
      */
-    boolean fireUnitMoveStarted(final Model model, final Unit unit, final Path path) {
-        final UnitMoveStartedEvent event = new UnitMoveStartedEvent(model, unit, path);
+    boolean fireUnitMoveStarted(final Model model, final Unit unit,
+            final Path path) {
+        final UnitMoveStartedEvent event = new UnitMoveStartedEvent(model, unit,
+                path);
 
         logger.info("Unit move started: {}.", event);
 
@@ -235,35 +249,41 @@ final class ListenerManager {
         });
     }
 
-    void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender,
-            final Unit destroyed) {
-        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker, defender, destroyed);
+    void fireUnitAttacked(final Model model, final Unit attacker,
+            final Unit defender, final Unit destroyed) {
+        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
+                defender, destroyed);
 
         logger.info("Unit attacked: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitAttacked(event));
     }
 
-    void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {
-        final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit, slot);
+    void fireUnitEmbarked(final Model model, final Unit unit,
+            final CargoSlot slot) {
+        final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit,
+                slot);
 
         logger.info("Unit embarked: {}.", event);
 
         listeners.forEach(listener -> listener.onUnitEmbarked(event));
     }
 
-    void fireIndependenceWasDeclared(final Model model, final Player whoDecalareIt) {
-        final IndependenceWasDeclaredEvent event = new IndependenceWasDeclaredEvent(model,
-                whoDecalareIt);
+    void fireIndependenceWasDeclared(final Model model,
+            final Player whoDecalareIt) {
+        final IndependenceWasDeclaredEvent event = new IndependenceWasDeclaredEvent(
+                model, whoDecalareIt);
 
         logger.info("Independence was declared: {}.", event);
 
-        listeners.forEach(listener -> listener.onIndependenceWasDeclared(event));
+        listeners
+                .forEach(listener -> listener.onIndependenceWasDeclared(event));
     }
 
-    boolean fireBeforeDeclaringIndependence(final Model model, final Player whoDecalareIt) {
-        final BeforeDeclaringIndependenceEvent event = new BeforeDeclaringIndependenceEvent(model,
-                whoDecalareIt);
+    boolean fireBeforeDeclaringIndependence(final Model model,
+            final Player whoDecalareIt) {
+        final BeforeDeclaringIndependenceEvent event = new BeforeDeclaringIndependenceEvent(
+                model, whoDecalareIt);
 
         logger.info("Before declaring independence: {}.", event);
 
@@ -273,10 +293,10 @@ final class ListenerManager {
         });
     }
 
-    void fireGoldWasChanged(final Model model, final Player player, final int oldValue,
-            final int newValue) {
-        final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue,
-                newValue);
+    void fireGoldWasChanged(final Model model, final Player player,
+            final int oldValue, final int newValue) {
+        final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player,
+                oldValue, newValue);
 
         logger.info("Gold amount changed: {}.", event);
 
@@ -284,7 +304,8 @@ final class ListenerManager {
     }
 
     void fireGoodsWasSoldInEurope(final Model model, final Goods goods) {
-        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goods);
+        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(
+                model, goods);
 
         logger.info("Goods was sold in Europe: {}.", event);
 
@@ -292,7 +313,8 @@ final class ListenerManager {
     }
 
     void fireColonyWasFounded(final Model model, final Colony foundedColony) {
-        final ColonyWasFoundEvent event = new ColonyWasFoundEvent(model, foundedColony);
+        final ColonyWasFoundEvent event = new ColonyWasFoundEvent(model,
+                foundedColony);
 
         logger.info("Colony was founded: {}.", event);
 
@@ -301,16 +323,18 @@ final class ListenerManager {
 
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
             final Colony capturedColony) {
-        final ColonyWasCapturedEvent event = new ColonyWasCapturedEvent(model, capturingUnit,
-                capturedColony);
+        final ColonyWasCapturedEvent event = new ColonyWasCapturedEvent(model,
+                capturingUnit, capturedColony);
 
         logger.info("Colony was captured: {}.", event);
 
         listeners.forEach(listener -> listener.onColonyWasCaptured(event));
     }
 
-    void fireGameFinished(final Model model, final GameOverResult gameOverResult) {
-        final GameFinishedEvent event = new GameFinishedEvent(model, gameOverResult);
+    void fireGameFinished(final Model model,
+            final GameOverResult gameOverResult) {
+        final GameFinishedEvent event = new GameFinishedEvent(model,
+                gameOverResult);
 
         logger.info("Game finished: {}.", event);
 
@@ -326,7 +350,8 @@ final class ListenerManager {
     }
 
     void fireActionWasStarted(final Model model, final Unit unit) {
-        final ActionWasStartedEvent event = new ActionWasStartedEvent(model, unit);
+        final ActionWasStartedEvent event = new ActionWasStartedEvent(model,
+                unit);
 
         logger.info("Action was started: {}.", event);
 
@@ -344,18 +369,20 @@ final class ListenerManager {
 
     /**
      * Allows to trigger stoppable event.
-     * 
-     * @param action
-     *            required function that return <code>true</code> or
-     *            <code>false</code>. When any function return <code>true</code>
-     *            than action processing will be stopped. When no function
-     *            return <code>true</code> than action is normally executed.
+     *
+     * @param action required function that return <code>true</code> or
+     *               <code>false</code>. When any function return
+     *               <code>true</code> than action processing will be stopped.
+     *               When no function return <code>true</code> than action is
+     *               normally executed.
      * @return Return <code>true</code> when action should be executed. When
      *         method return <code>false</code> than action should not be
      *         executed.
      */
-    private boolean evaluateInSameThread(Function<ModelListener, Boolean> action) {
-        return !listeners.stream().filter(listener -> action.apply(listener)).findAny().isPresent();
+    private boolean evaluateInSameThread(
+            Function<ModelListener, Boolean> action) {
+        return !listeners.stream().filter(listener -> action.apply(listener))
+                .findAny().isPresent();
     }
 
 }

@@ -9,7 +9,8 @@ final class PathFindingNode {
     private int cost;
     private final int distance;
 
-    PathFindingNode(final PathFindingNode parent, final Location location, final int distance) {
+    PathFindingNode(final PathFindingNode parent, final Location location,
+            final int distance) {
         this.parent = parent;
         this.location = Preconditions.checkNotNull(location);
         this.cost = calculateCost();

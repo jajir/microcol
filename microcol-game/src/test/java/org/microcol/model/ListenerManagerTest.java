@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class ListenerManagerTest {
-    
+
     @Test
     public void testAddListenerNull() {
         final ListenerManager listenerManager = new ListenerManager();
@@ -23,5 +23,5 @@ public class ListenerManagerTest {
             listenerManager.removeListener(null);
         });
     }
-    
+
 }

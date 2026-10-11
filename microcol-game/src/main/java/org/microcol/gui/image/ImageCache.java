@@ -36,7 +36,7 @@ public class ImageCache {
 
     /**
      * Return list of all registered image names.
-     * 
+     *
      * @return Return list of all image names.
      */
     public List<String> getImageNames() {
@@ -46,9 +46,8 @@ public class ImageCache {
     /**
      * Load image for name. If image is not in cache it try to load it from
      * image store.
-     * 
-     * @param name
-     *            required image name
+     *
+     * @param name required image name
      * @return loaded image
      */
     public Image getImage(final String name) {
@@ -56,7 +55,8 @@ public class ImageCache {
         if (img == null) {
             img = getRawImage(name);
             if (img == null) {
-                throw new IllegalStateException(String.format("cant't lod image %s", name));
+                throw new IllegalStateException(
+                        String.format("cant't lod image %s", name));
             }
             images.put(name, img);
         }
@@ -67,9 +67,8 @@ public class ImageCache {
      * Simplify loading image from resource. Path should look like: <code>
      * org/microcol/images/unit-60x60.gif
      * </code>. Class suppose that all images are in directory <i>images</i>.
-     * 
-     * @param rawPath
-     *            path at classpath where is stored image
+     *
+     * @param rawPath path at classpath where is stored image
      * @return return {@link javafx.scene.image.Image} object
      */
     public Image getRawImage(final String rawPath) {
@@ -79,18 +78,16 @@ public class ImageCache {
 
     /**
      * Allow to register new type of image.
-     * 
-     * @param name
-     *            required unique image name
-     * @param image
-     *            required image object
+     *
+     * @param name  required unique image name
+     * @param image required image object
      */
     public void registerImage(final String name, final Image image) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(image);
         if (images.containsKey(name)) {
-            throw new IllegalArgumentException(
-                    String.format("Image with name '%s' was already registerd", name));
+            throw new IllegalArgumentException(String.format(
+                    "Image with name '%s' was already registerd", name));
         } else {
             images.put(name, image);
         }
@@ -99,13 +96,12 @@ public class ImageCache {
     /**
      * Allow to register image under new name. Image will be accessible under
      * both names. Image is physically still just one.
-     * 
-     * @param newImageName
-     *            required new image name
-     * @param imageName
-     *            required old image name
+     *
+     * @param newImageName required new image name
+     * @param imageName    required old image name
      */
-    public void registerImage(final String newImageName, final String imageName) {
+    public void registerImage(final String newImageName,
+            final String imageName) {
         Preconditions.checkNotNull(newImageName);
         final Image image = getImage(imageName);
         registerImage(newImageName, image);

@@ -11,10 +11,9 @@ interface PanelConstructionFactory {
      * Method always return some panel. All buildings have panel representing
      * it.
      * </p>
-     * 
-     * @param context
-     *            required panel construction context. Object hold information
-     *            about colony and game model
+     *
+     * @param context required panel construction context. Object hold
+     *                information about colony and game model
      * @return panel describing given construction
      */
     AbstractPanelConstruction make(PanelConstructionContext context);

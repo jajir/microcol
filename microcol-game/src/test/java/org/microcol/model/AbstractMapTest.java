@@ -28,20 +28,24 @@ import com.google.gson.GsonBuilder;
 public abstract class AbstractMapTest {
 
     private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
+            .registerTypeAdapter(ConstructionType.class,
+                    new GsonConstructionTypeAdapter())
             .registerTypeAdapter(GoodsType.class, new GsonGoodsTypeAdapter())
-            .registerTypeAdapter(QueueItemType.class, new GsonQueueItemTypeAdapter())
-            .registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
+            .registerTypeAdapter(QueueItemType.class,
+                    new GsonQueueItemTypeAdapter())
+            .registerTypeAdapter(TerrainType.class,
+                    new GsonTerrainTypeAdapter())
             .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
             .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
-            .registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
-            .registerTypeAdapter(Goods.class, new GsonGoodsAdapter()).setPrettyPrinting().create();
+            .registerTypeAdapter(Direction.class,
+                    new GsonDirectionTypeAdapter())
+            .registerTypeAdapter(Goods.class, new GsonGoodsAdapter())
+            .setPrettyPrinting().create();
 
     /**
      * Load predefined world map stored on class path.
      *
-     * @param fileName
-     *            required file name on class path
+     * @param fileName required file name on class path
      * @return loaded world map
      */
     protected WorldMap loadPredefinedWorldMap(final String fileName) {
@@ -50,15 +54,18 @@ public abstract class AbstractMapTest {
 
     /**
      * Load predefined model of scenario stored on class path.
-     * 
-     * @param fileName
-     *            required file name on class path
+     *
+     * @param fileName required file name on class path
      * @return loaded model persistent object
      */
     private ModelPo loadFromClassPath(final String fileName) {
-        try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
-            Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-            return gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), ModelPo.class);
+        try (final InputStream is = WorldMap.class
+                .getResourceAsStream(fileName)) {
+            Preconditions.checkArgument(is != null,
+                    "input stream for file (%s) is null", fileName);
+            return gson.fromJson(
+                    new InputStreamReader(is, StandardCharsets.UTF_8),
+                    ModelPo.class);
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }

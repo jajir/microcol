@@ -33,7 +33,8 @@ public final class ImageRandomProvider {
 
     private final WorldMapRandoms mapRandoms;
 
-    public ImageRandomProvider(final ImageProvider imageProvider, final WorldMap worldMap) {
+    public ImageRandomProvider(final ImageProvider imageProvider,
+            final WorldMap worldMap) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(worldMap);
         mapRandoms = new WorldMapRandoms(worldMap);
@@ -48,33 +49,34 @@ public final class ImageRandomProvider {
      * Each game tick this should be called. It check that all tile animation
      * are running. When it's necessary it starts another tile animation;
      *
-     * @param worldMap
-     *            required world map
-     * @param currentGameTick
-     *            required current game tick
+     * @param worldMap        required world map
+     * @param currentGameTick required current game tick
      */
-    public void updateRipples(final WorldMap worldMap, final long currentGameTick) {
+    public void updateRipples(final WorldMap worldMap,
+            final long currentGameTick) {
         forEachLocation(worldMap,
-                (map, location) -> updateRippleAtLocation(worldMap, location, currentGameTick));
+                (map, location) -> updateRippleAtLocation(worldMap, location,
+                        currentGameTick));
     }
 
-    private void initRippleAtLocation(final WorldMap worldMap, final Location location) {
+    private void initRippleAtLocation(final WorldMap worldMap,
+            final Location location) {
         if (TerrainType.OCEAN.equals(worldMap.getTerrainTypeAt(location))) {
             if (random.nextInt(INITIAL_PROBABILITY_OR_RIPPLE) == 0) {
-                tileAnimations.put(location,
-                        TileAnimation.makeForSeconds(0, random.nextInt(INITIAL_RIPPLE_TTL_IN_SEC)));
+                tileAnimations.put(location, TileAnimation.makeForSeconds(0,
+                        random.nextInt(INITIAL_RIPPLE_TTL_IN_SEC)));
             }
         }
     }
 
-    private void updateRippleAtLocation(final WorldMap worldMap, final Location location,
-            final long currentGameTick) {
+    private void updateRippleAtLocation(final WorldMap worldMap,
+            final Location location, final long currentGameTick) {
         if (TerrainType.OCEAN.equals(worldMap.getTerrainTypeAt(location))) {
             final TileAnimation anim = tileAnimations.get(location);
             if (anim == null) {
                 if (random.nextInt(PROBABILITY_OR_RIPPLE) == 0) {
-                    tileAnimations.put(location,
-                            TileAnimation.makeForSeconds(currentGameTick, 10 + random.nextInt(12)));
+                    tileAnimations.put(location, TileAnimation.makeForSeconds(
+                            currentGameTick, 10 + random.nextInt(12)));
                 }
             } else {
                 if (anim.isDone(currentGameTick)) {
@@ -94,57 +96,74 @@ public final class ImageRandomProvider {
         }
     }
 
-    public Image getTerrainImage(final TerrainType terrainType, final Location location,
-            final long currentGameTick) {
+    public Image getTerrainImage(final TerrainType terrainType,
+            final Location location, final long currentGameTick) {
         if (TerrainType.OCEAN.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
             if (rnd % 63 == 0) {
-                return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_WHALE);
+                return imageProvider
+                        .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_WHALE);
             } else {
                 final TileAnimation anim = tileAnimations.get(location);
                 if (anim != null) {
                     if (anim.isDone(currentGameTick)) {
                         tileAnimations.remove(location);
                     } else {
-                        return imageProvider
-                                .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_RIPPLE);
+                        return imageProvider.getImage(
+                                ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_RIPPLE);
                     }
                 }
-                return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1);
+                return imageProvider
+                        .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1);
             }
 
         }
         if (TerrainType.MOUNTAIN.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
-            return rnd % 2 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_MOUNTAIN_2)
-                    : imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_MOUNTAIN_1);
+            return rnd % 2 == 0
+                    ? imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_MOUNTAIN_2)
+                    : imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_MOUNTAIN_1);
         }
         if (TerrainType.HILL.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
-            return rnd % 2 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HILL_1)
-                    : imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HILL_2);
+            return rnd % 2 == 0
+                    ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HILL_1)
+                    : imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_HILL_2);
         }
         if (TerrainType.PRAIRIE.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
-            return rnd % 2 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_PRAIRIE_1)
-                    : imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_PRAIRIE_2);
+            return rnd % 2 == 0
+                    ? imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_PRAIRIE_1)
+                    : imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_PRAIRIE_2);
         }
         if (TerrainType.ARCTIC.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
-            return rnd % 2 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_2)
-                    : imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_1);
+            return rnd % 2 == 0
+                    ? imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_2)
+                    : imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_1);
         }
         if (TerrainType.TUNDRA.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);
-            return rnd % 7 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_2)
-                    : imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_1);
+            return rnd % 7 == 0
+                    ? imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_2)
+                    : imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_1);
         }
         return null;
     }
 
     public Image getTreeImage(final Location location) {
         final Integer rnd = mapRandoms.getRandomAt(location);
-        return rnd % 3 == 0 ? imageProvider.getImage(ImageLoaderTerrain.IMG_TREE_2)
+        return rnd % 3 == 0
+                ? imageProvider.getImage(ImageLoaderTerrain.IMG_TREE_2)
                 : imageProvider.getImage(ImageLoaderTerrain.IMG_TREE_1);
     }
 

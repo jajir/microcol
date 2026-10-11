@@ -43,12 +43,15 @@ public final class GoalsPanel implements GameScreen {
 
     @Inject
     GoalsPanel(final I18n i18n, final EventBus eventBus,
-            final GameModelController gameModelController, final ImageProvider imageProvider) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+            final GameModelController gameModelController,
+            final ImageProvider imageProvider) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.imageKingsSeal = imageProvider.getImage(KING_SEAL_IMAGE_NAME);
-        this.imageKingsSealShadow = imageProvider.getImage(KING_SEAL_SHADOW_IMAGE_NAME);
+        this.imageKingsSealShadow = imageProvider
+                .getImage(KING_SEAL_SHADOW_IMAGE_NAME);
 
         mainPanel.getStyleClass().add("goals-main-panel");
         mainPanel.getChildren().addAll(goalsPanel);
@@ -56,7 +59,8 @@ public final class GoalsPanel implements GameScreen {
 
     public void repaint() {
         goalsPanel.getChildren().clear();
-        final MissionGoals goals = gameModelController.getGameModel().getMissionGoals();
+        final MissionGoals goals = gameModelController.getGameModel()
+                .getMissionGoals();
         goals.getGoals().forEach(this::makeRow);
     }
 

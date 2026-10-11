@@ -42,8 +42,7 @@ public final class Location {
     /**
      * Return distance between two locations. It use Euclidean distance.
      *
-     * @param location
-     *            required location
+     * @param location required location
      * @return distance between two locations
      */
     public int getDistance(final Location location) {
@@ -63,8 +62,7 @@ public final class Location {
      * integers.
      * </p>
      *
-     * @param location
-     *            required location
+     * @param location required location
      * @return distance between two locations
      */
     public int getDistanceManhattan(final Location location) {
@@ -122,7 +120,8 @@ public final class Location {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString();
+        return MoreObjects.toStringHelper(this).add("x", x).add("y", y)
+                .toString();
     }
 
     public boolean isDirection() {

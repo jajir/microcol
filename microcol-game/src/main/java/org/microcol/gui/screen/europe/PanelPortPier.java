@@ -34,7 +34,8 @@ import javafx.scene.layout.Pane;
  * Panels shows list of people already recruited. People from this panel could
  * be immediately embark.
  */
-public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, Repaintable {
+public final class PanelPortPier
+        implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
     private final Logger logger = LoggerFactory.getLogger(PanelPortPier.class);
 
@@ -52,17 +53,19 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
-            final EuropeCallback europeDialogCallback, final ImageProvider imageProvider,
-            final EventBus eventBus, final I18n i18n) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+            final EuropeCallback europeDialogCallback,
+            final ImageProvider imageProvider, final EventBus eventBus,
+            final I18n i18n) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         panelUnits = new HBox();
         panelUnits.getStyleClass().add("panel-port-pier");
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(panelUnits,
-                this::isItCorrectObject);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                panelUnits, this::isItCorrectObject);
         panelUnits.setOnDragEntered(backgroundHighlighter::onDragEntered);
         panelUnits.setOnDragExited(backgroundHighlighter::onDragExited);
         panelUnits.setOnDragOver(this::onDragOver);
@@ -72,11 +75,14 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
         panelUnits.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(i18n.get(Europe.statusBarPier), Source.EUROPE));
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(i18n.get(Europe.statusBarPier),
+                Source.EUROPE));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
@@ -84,8 +90,9 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
     public void repaint() {
         panelUnits.getChildren().clear();
         gameModelController.getModel().getEurope().getPier()
-                .getUnits(gameModelController.getHumanPlayer()).forEach(unit -> panelUnits
-                        .getChildren().add(new PanelPortPierUnit(unit, imageProvider)));
+                .getUnits(gameModelController.getHumanPlayer())
+                .forEach(unit -> panelUnits.getChildren()
+                        .add(new PanelPortPierUnit(unit, imageProvider)));
     }
 
     @Override
@@ -103,7 +110,8 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on ship cargo slot.");
         final Optional<Unit> oUnit = ClipboardEval
-                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
         if (oUnit.isPresent()) {
             oUnit.get().placeToEuropePortPier();
             europeDialog.repaintAfterGoodMoving();

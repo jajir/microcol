@@ -72,14 +72,17 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
             final DialogNotEnoughGold dialogNotEnoughGold) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.dialogNotEnoughGold = Preconditions
+                .checkNotNull(dialogNotEnoughGold);
 
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("mainPanel");
 
         slider = new Slider();
-        slider.setLabelFormatter(new SimpleStringConverter(this::converToString));
+        slider.setLabelFormatter(
+                new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
         slider.setSnapToTicks(false);
         slider.setMajorTickUnit(10);
@@ -102,8 +105,9 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         final Row row3 = new Row(labelKingTax, labelKingTaxValue);
         final Row row4 = new Row(labelTotal, labelTotalValue);
 
-        mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(), row2.getContent(),
-                row3.getContent(), row4.getContent(), buttonsBar.getContent());
+        mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(),
+                row2.getContent(), row3.getContent(), row4.getContent(),
+                buttonsBar.getContent());
     }
 
     private int getKingsTaxPercentage() {
@@ -117,7 +121,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     @SuppressWarnings("unused")
     private void onUserClickBuy(final ActionEvent event) {
-        final CargoSlot targetCargoSlot = screenMarketContext.getTargetCargoSlot();
+        final CargoSlot targetCargoSlot = screenMarketContext
+                .getTargetCargoSlot();
         try {
             targetCargoSlot.buyAndStoreFromEuropePort(getActualValue());
         } catch (NotEnoughtGoldException e) {
@@ -127,7 +132,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     void init(final ScreenMarketBuyContext screenMarketContext) {
-        this.screenMarketContext = Preconditions.checkNotNull(screenMarketContext);
+        this.screenMarketContext = Preconditions
+                .checkNotNull(screenMarketContext);
         actualValue = screenMarketContext.getMaxPossibleGoodsToBuy();
         slider.setMax(actualValue.getAmount());
         slider.setValue(actualValue.getAmount());
@@ -141,11 +147,14 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void updateSelectedAmount() {
-        labelPricePerPiece
-                .setText(i18n.get(Market.pricePerPiece, getPricePerPiece(), getPriceWithoutTax()));
-        labelPricePerPieceValue.setText(i18n.get(Market.price, getPricePerPiece()));
-        labelSelected.setText(i18n.get(Market.selected, actualValue.getAmount()));
-        labelSelectedValue.setText(i18n.get(Market.price, getPriceWithoutTax()));
+        labelPricePerPiece.setText(i18n.get(Market.pricePerPiece,
+                getPricePerPiece(), getPriceWithoutTax()));
+        labelPricePerPieceValue
+                .setText(i18n.get(Market.price, getPricePerPiece()));
+        labelSelected
+                .setText(i18n.get(Market.selected, actualValue.getAmount()));
+        labelSelectedValue
+                .setText(i18n.get(Market.price, getPriceWithoutTax()));
         labelKingTax.setText(i18n.get(Market.tax, getKingsTaxPercentage()));
         labelKingTaxValue.setText(i18n.get(Market.price, getKingsTaxValue()));
         labelTotal.setText(i18n.get(Market.total));
@@ -153,7 +162,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private int getPricePerPiece() {
-        return gameModelController.getEuropeGoodsTradeForType(getActualValue().getType())
+        return gameModelController
+                .getEuropeGoodsTradeForType(getActualValue().getType())
                 .getBuyPrice();
     }
 
@@ -182,7 +192,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         int v = value.intValue();
         if (MIN_VALUE == value) {
             return i18n.get(ChooseGoods.zero);
-        } else if (screenMarketContext.getAmountOfMaxPossibleGoodsToBuy() == value) {
+        } else if (screenMarketContext
+                .getAmountOfMaxPossibleGoodsToBuy() == value) {
             return i18n.get(ChooseGoods.everything);
         } else if (v % 10 == 0) {
             return String.valueOf(v);

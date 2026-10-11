@@ -45,7 +45,7 @@ public final class FpsCounter {
 
     /**
      * Return actual FPS.
-     * 
+     *
      * @return fps value
      */
     public int getFps() {

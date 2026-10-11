@@ -31,17 +31,19 @@ public class PersistingTool {
 
     /**
      * Get base directory where could be file saves.
-     * 
+     *
      * @return return root directory
      */
     public File getRootSaveDirectory() {
-        final File userDir = new File(System.getProperty(SYSTEM_PROPERTY_USER_HOME));
+        final File userDir = new File(
+                System.getProperty(SYSTEM_PROPERTY_USER_HOME));
         Preconditions.checkState(userDir.exists());
         Preconditions.checkState(userDir.isDirectory());
 
         final File out = userDir.toPath().resolve(SAVE_DIRECTORY).toFile();
         if (!out.exists()) {
-            logger.info("creating microCol save directory at '{}'", out.getAbsolutePath());
+            logger.info("creating microCol save directory at '{}'",
+                    out.getAbsolutePath());
             Preconditions.checkState(out.mkdir(), "Unable to create file (%s)",
                     out.getAbsolutePath());
         }
@@ -52,22 +54,24 @@ public class PersistingTool {
     }
 
     public File getAutoSaveFile() {
-        return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME).toFile();
+        return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME)
+                .toFile();
     }
 
     /**
      * Provide file name that should store current model state.
      *
-     * @param model
-     *            required model
+     * @param model required model
      * @return suggested file name
      */
     public String getSuggestedSaveFileName(final Model model) {
         Preconditions.checkNotNull(model);
-        return prepareFileName(model.getCurrentPlayer().getName(), model.getCalendar());
+        return prepareFileName(model.getCurrentPlayer().getName(),
+                model.getCalendar());
     }
 
-    private String prepareFileName(final String playerName, final Calendar calendar) {
+    private String prepareFileName(final String playerName,
+            final Calendar calendar) {
         final StringBuilder buff = new StringBuilder();
 
         buff.append(playerName);

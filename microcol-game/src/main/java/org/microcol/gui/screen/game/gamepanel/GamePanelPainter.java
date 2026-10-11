@@ -62,29 +62,40 @@ public final class GamePanelPainter {
     public GamePanelPainter(final GameModelController gameModelController,
             final PathPlanning pathPlanning, final ImageProvider imageProvider,
             final SelectedTileManager selectedTileManager,
-            final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport,
-            final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
-            final AnimationManager animationManager, final ScrollingManager scrollingManager,
-            final ModeController modeController, final ExcludePainting excludePainting,
-            final DialogFight dialogFigth, final @Named("game") VisibleAreaService visibleArea,
+            final SelectedUnitManager selectedUnitManager,
+            final MoveModeSupport moveModeSupport,
+            final GamePreferences gamePreferences,
+            final MouseOverTileManager mouseOverTileManager,
+            final AnimationManager animationManager,
+            final ScrollingManager scrollingManager,
+            final ModeController modeController,
+            final ExcludePainting excludePainting,
+            final DialogFight dialogFigth,
+            final @Named("game") VisibleAreaService visibleArea,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final AnimationClouds animationClouds, final GamePaintService gamePaintService,
+            final AnimationClouds animationClouds,
+            final GamePaintService gamePaintService,
             final MapManager mapManager) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
         this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+        this.mouseOverTileManager = Preconditions
+                .checkNotNull(mouseOverTileManager);
         this.animationManager = Preconditions.checkNotNull(animationManager);
         this.scrollingManager = Preconditions.checkNotNull(scrollingManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.excludePainting = Preconditions.checkNotNull(excludePainting);
         this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
         this.visibleAreaService = Preconditions.checkNotNull(visibleArea);
-        this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
+        this.oneTurnMoveHighlighter = Preconditions
+                .checkNotNull(oneTurnMoveHighlighter);
         this.animationClouds = Preconditions.checkNotNull(animationClouds);
         this.gamePaintService = Preconditions.checkNotNull(gamePaintService);
         this.mapManager = Preconditions.checkNotNull(mapManager);
@@ -94,13 +105,15 @@ public final class GamePanelPainter {
     void skipCenterViewAtLocation(final Location location) {
         visibleAreaService.setOnCanvasReady(ok -> {
             final Area area = getArea();
-            visibleAreaService.setTopLeftPosionOfCanvas(area.getCanvasTopLeftForLocation(location));
+            visibleAreaService.setTopLeftPosionOfCanvas(
+                    area.getCanvasTopLeftForLocation(location));
         });
     }
 
     void planScrollingAnimationToLocation(final Location location) {
         visibleAreaService.setOnCanvasReady(state -> {
-            planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
+            planScrollingAnimationToPoint(
+                    getArea().getCenterToLocation(location));
         });
     }
 
@@ -114,31 +127,30 @@ public final class GamePanelPainter {
              */
             Preconditions.checkState(visibleAreaService.isReady(),
                     "screen scroll is called before canvas initialization was finished.");
-            scrollingManager.addAnimation(
-                    new AnimatonScreenScroll(new ScreenScrolling(pathPlanning, from, to)));
+            scrollingManager.addAnimation(new AnimatonScreenScroll(
+                    new ScreenScrolling(pathPlanning, from, to)));
         }
     }
 
     /**
      * Paint everything.
-     * 
-     * @param g
-     *            required graphics context
-     * @param gameTick
-     *            required long representing how many game ticks was already
-     *            done. It allows to time animations.
+     *
+     * @param g        required graphics context
+     * @param gameTick required long representing how many game ticks was
+     *                 already done. It allows to time animations.
      */
     void paint(final GraphicsContext g, final long currentGameTick) {
         final Area area = getArea();
         final CanvasInMapCoordinates canvasInMapCoordinates = CanvasInMapCoordinates
                 .make(visibleAreaService, gameModelController.getMapSize());
-        gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter, canvasInMapCoordinates,
-                currentGameTick);
+        gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter,
+                canvasInMapCoordinates, currentGameTick);
         gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
-        gamePaintService.paintSelectedTile(g, area, selectedTileManager.getSelectedTile());
+        gamePaintService.paintSelectedTile(g, area,
+                selectedTileManager.getSelectedTile());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
-        gamePaintService.paintUnits(g, gameModelController.getModel(), area, excludePainting,
-                selectedUnitManager.getSelectedUnit());
+        gamePaintService.paintUnits(g, gameModelController.getModel(), area,
+                excludePainting, selectedUnitManager.getSelectedUnit());
         paintSteps(g, area);
         paintAnimation(g, area);
         animationClouds.paint(g);
@@ -153,7 +165,8 @@ public final class GamePanelPainter {
         }
     }
 
-    private void paintAnimation(final GraphicsContext graphics, final Area area) {
+    private void paintAnimation(final GraphicsContext graphics,
+            final Area area) {
         if (animationManager.hasNextStep(area)) {
             animationManager.paint(graphics, area);
         }
@@ -162,37 +175,41 @@ public final class GamePanelPainter {
 
     /**
      * When move mode is enabled mouse cursor is followed by highlighted path.
-     * 
-     * @param graphics
-     *            required {@link GraphicsContext}
-     * @param area
-     *            required displayed area
+     *
+     * @param graphics required {@link GraphicsContext}
+     * @param area     required displayed area
      */
     private void paintSteps(final GraphicsContext graphics, final Area area) {
-        if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
-            final Unit selectedUnit = selectedUnitManager.getSelectedUnit().get();
+        if (modeController.isMoveMode()
+                && mouseOverTileManager.getMouseOverTile().isPresent()) {
+            final Unit selectedUnit = selectedUnitManager.getSelectedUnit()
+                    .get();
             if (!selectedUnit.isAtPlaceLocation()) {
                 return;
             }
             gamePaintService.paintCursor(graphics, area,
                     mouseOverTileManager.getMouseOverTile().get());
-            final StepCounter stepCounter = new StepCounter(5, selectedUnit.getActionPoints());
+            final StepCounter stepCounter = new StepCounter(5,
+                    selectedUnit.getActionPoints());
             /**
              * Here could be check if particular step in on screen, but draw few
              * images outside screen is not big deal.
              */
-            moveModeSupport.getMoveLocations().stream().map(area::convertToCanvasPoint)
-                    .forEach(point -> gamePaintService.paintStep(graphics, point, stepCounter,
-                            moveModeSupport.getMoveMode()));
+            moveModeSupport.getMoveLocations().stream()
+                    .map(area::convertToCanvasPoint)
+                    .forEach(point -> gamePaintService.paintStep(graphics,
+                            point, stepCounter, moveModeSupport.getMoveMode()));
         }
     }
 
     void addFightAnimation(final Unit attacker, final Unit defender) {
         animationManager.addAnimation(new AnimationFight(attacker.getLocation(),
-                defender.getLocation(), imageProvider, gamePreferences.getAnimationSpeed()));
+                defender.getLocation(), imageProvider,
+                gamePreferences.getAnimationSpeed()));
     }
 
-    boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
+    boolean performFightDialog(final Unit unitAttacker,
+            final Unit unitDefender) {
         dialogFigth.showAndWait(unitAttacker, unitDefender);
         return dialogFigth.isUserChooseFight();
     }

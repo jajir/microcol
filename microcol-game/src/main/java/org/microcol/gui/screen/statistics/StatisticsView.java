@@ -29,13 +29,15 @@ public final class StatisticsView implements JavaFxComponent, ScreenLifeCycle {
     private GameScreen mainPanel;
 
     @Inject
-    StatisticsView(final StatisticsBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPages, final StatisticsButtonsPanel statisticsButtonsPanel) {
+    StatisticsView(final StatisticsBackground background,
+            final TitledPage titledPage, final CenteredPage centeredPages,
+            final StatisticsButtonsPanel statisticsButtonsPanel) {
         this.background = Preconditions.checkNotNull(background);
         this.centeredPage = Preconditions.checkNotNull(centeredPages);
         this.titledPage = Preconditions.checkNotNull(titledPage);
 
-        final ButtonedPage buttonedPage = new ButtonedPage(statisticsButtonsPanel);
+        final ButtonedPage buttonedPage = new ButtonedPage(
+                statisticsButtonsPanel);
         buttonedPage.setContent(titledPage);
 
         centeredPages.setBackground(background);

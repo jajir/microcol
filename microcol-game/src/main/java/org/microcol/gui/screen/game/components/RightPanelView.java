@@ -59,13 +59,17 @@ public final class RightPanelView implements JavaFxComponent {
 
     @Inject
     public RightPanelView(final ImageProvider imageProvider, final I18n i18n,
-            final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper,
-            final GameModelController gameModelController, final TilePainter tilePainter) {
+            final UnitsPanel unitsPanel,
+            final LocalizationHelper localizationHelper,
+            final GameModelController gameModelController,
+            final TilePainter tilePainter) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.localizationHelper = Preconditions
+                .checkNotNull(localizationHelper);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.tilePainter = Preconditions.checkNotNull(tilePainter);
 
         gridPane = new GridPane();
@@ -90,12 +94,13 @@ public final class RightPanelView implements JavaFxComponent {
 
         // Y=3
 
-        final ScrollPane scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
+        final ScrollPane scrollPaneGamePanel = new ScrollPane(
+                unitsPanel.getNode());
         RowConstraints scrollPaneRow = new RowConstraints();
         scrollPaneRow.setVgrow(Priority.ALWAYS);
         scrollPaneRow.fillHeightProperty().set(true);
-        gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(),
-                new RowConstraints(), scrollPaneRow);
+        gridPane.getRowConstraints().addAll(new RowConstraints(),
+                new RowConstraints(), new RowConstraints(), scrollPaneRow);
         gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
 
         // Y=4
@@ -123,11 +128,13 @@ public final class RightPanelView implements JavaFxComponent {
             if (isDiscovered(location)) {
                 final Terrain terrain = getTerrainAt(location);
                 tilePainter.setTerrain(terrain, location);
-                sb.append(localizationHelper.getTerrainName(terrain.getTerrainType()));
+                sb.append(localizationHelper
+                        .getTerrainName(terrain.getTerrainType()));
                 sb.append("");
                 sb.append("\n");
                 sb.append(i18n.get(Loc.moveCost) + terrain.getMoveCost());
-                final Optional<Colony> oColony = getModel().getColonyAt(location);
+                final Optional<Colony> oColony = getModel()
+                        .getColonyAt(location);
                 if (oColony.isPresent()) {
                     tilePainter.paintColony(oColony.get());
                 }
@@ -144,7 +151,8 @@ public final class RightPanelView implements JavaFxComponent {
                             getModel().getUnitsAt(location));
                 }
             } else {
-                tilePainter.setImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN));
+                tilePainter.setImage(imageProvider
+                        .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN));
                 sb.append(i18n.get(Loc.unitsPanel_unexplored));
             }
             tileName.setText(sb.toString());
@@ -172,8 +180,7 @@ public final class RightPanelView implements JavaFxComponent {
     /**
      * If user already explored selected tile.
      *
-     * @param location
-     *            required location
+     * @param location required location
      * @return return <code>true</code> when selected location was already
      *         discovered otherwise return <code>false</code>.
      */

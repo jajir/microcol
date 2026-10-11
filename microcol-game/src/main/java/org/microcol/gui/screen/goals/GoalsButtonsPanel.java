@@ -20,11 +20,12 @@ public class GoalsButtonsPanel extends AbstractButtonsPanel {
     private final Button buttonClose;
 
     @Inject
-    GoalsButtonsPanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n) {
+    GoalsButtonsPanel(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT, Goals.buttonBack);
+        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
+                Goals.buttonBack);
         buttonClose.setId(CLOSE_BUTTON_ID);
 
         getButtonPanel().getChildren().add(buttonClose);

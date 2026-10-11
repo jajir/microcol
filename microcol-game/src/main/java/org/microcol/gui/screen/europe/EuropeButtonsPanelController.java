@@ -15,13 +15,16 @@ public class EuropeButtonsPanelController {
     private final BuyUnitsDialog buyUnitsDialog;
 
     @Inject
-    public EuropeButtonsPanelController(final EuropeButtonsPanel europeButtonsPanel,
+    public EuropeButtonsPanelController(
+            final EuropeButtonsPanel europeButtonsPanel,
             final BuyUnitsDialog buyUnitsDialog) {
         this.buyUnitsDialog = Preconditions.checkNotNull(buyUnitsDialog);
-        europeButtonsPanel.getButtonBuyUnit().setOnAction(this::onBuyUnitAction);
+        europeButtonsPanel.getButtonBuyUnit()
+                .setOnAction(this::onBuyUnitAction);
     }
 
-    private void onBuyUnitAction(@SuppressWarnings("unused") final ActionEvent event) {
+    private void onBuyUnitAction(
+            @SuppressWarnings("unused") final ActionEvent event) {
         buyUnitsDialog.showAndWait();
     }
 

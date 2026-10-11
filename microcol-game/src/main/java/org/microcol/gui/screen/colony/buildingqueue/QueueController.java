@@ -23,13 +23,15 @@ public class QueueController {
 
     @Inject
     public QueueController(final ColonyDialogCallback colonyDialogCallback) {
-        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+        this.colonyDialogCallback = Preconditions
+                .checkNotNull(colonyDialogCallback);
         this.observableList = FXCollections.observableArrayList();
     }
 
     void repaint() {
         final Colony colony = colonyDialogCallback.getColony();
-        observableList.setAll(colony.getColonyBuildingQueue().getBuildingQueue());
+        observableList
+                .setAll(colony.getColonyBuildingQueue().getBuildingQueue());
     }
 
     /**
@@ -40,18 +42,19 @@ public class QueueController {
     }
 
     void removeItemById(final int itemId) {
-        final ColonyBuildingItemProgress<?> itemToRemove = getColonyQueue().getItemById(itemId)
-                .get();
+        final ColonyBuildingItemProgress<?> itemToRemove = getColonyQueue()
+                .getItemById(itemId).get();
         getColonyQueue().removeItem(itemToRemove);
         observableList.remove(itemToRemove);
     }
 
-    void addBeforeItem(final ConstructionType constructionType, final int beforeId) {
+    void addBeforeItem(final ConstructionType constructionType,
+            final int beforeId) {
         final ColonyBuildingItemProgressConstruction item = getColonyQueue()
                 .addBeforeItem(constructionType, beforeId);
         if (item != null) {
-            final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue().getItemById(beforeId)
-                    .get();
+            final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue()
+                    .getItemById(beforeId).get();
             observableList.remove(item);
             final int index = observableList.indexOf(beforeItem);
             observableList.add(index, item);
@@ -59,20 +62,20 @@ public class QueueController {
     }
 
     void addBeforeItem(final UnitType unitType, final int beforeId) {
-        final ColonyBuildingItemProgressUnit item = getColonyQueue().addBeforeItem(unitType,
-                beforeId);
-        final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue().getItemById(beforeId)
-                .get();
+        final ColonyBuildingItemProgressUnit item = getColonyQueue()
+                .addBeforeItem(unitType, beforeId);
+        final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue()
+                .getItemById(beforeId).get();
         observableList.remove(item);
         final int index = observableList.indexOf(beforeItem);
         observableList.add(index, item);
     }
 
     void moveItem(final int movingItemId, final int beforeItemId) {
-        final ColonyBuildingItemProgress<?> movingItem = getColonyQueue().getItemById(movingItemId)
-                .get();
-        final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue().getItemById(beforeItemId)
-                .get();
+        final ColonyBuildingItemProgress<?> movingItem = getColonyQueue()
+                .getItemById(movingItemId).get();
+        final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue()
+                .getItemById(beforeItemId).get();
         observableList.remove(movingItem);
         final int index = observableList.indexOf(beforeItem);
         observableList.add(index, movingItem);
@@ -80,8 +83,8 @@ public class QueueController {
     }
 
     void moveItemAtTheEnd(final int movingItemId) {
-        final ColonyBuildingItemProgress<?> movingItem = getColonyQueue().getItemById(movingItemId)
-                .get();
+        final ColonyBuildingItemProgress<?> movingItem = getColonyQueue()
+                .getItemById(movingItemId).get();
         observableList.remove(movingItem);
         observableList.add(movingItem);
         getColonyQueue().moveItemAtTheEnd(movingItem);

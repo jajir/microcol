@@ -7,7 +7,8 @@ import org.microcol.model.Location;
 
 public abstract class AbstractMapStore {
 
-    protected void iterate(final String[] rows, final BiConsumer<Location, String> consumer) {
+    protected void iterate(final String[] rows,
+            final BiConsumer<Location, String> consumer) {
         for (int y = 1; y < rows.length; y++) {
             final String row = rows[y].substring("row-0001:".length());
             final String[] parts = row.split(",");
@@ -19,7 +20,8 @@ public abstract class AbstractMapStore {
         }
     }
 
-    protected String[] generateString(final Function<Location, String> charProducer, final int maxX,
+    protected String[] generateString(
+            final Function<Location, String> charProducer, final int maxX,
             final int maxY) {
         final String[] out = new String[maxY + 1];
         final StringBuilder buff1 = new StringBuilder();

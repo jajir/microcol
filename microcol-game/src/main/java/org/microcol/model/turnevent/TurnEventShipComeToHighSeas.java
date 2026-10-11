@@ -18,7 +18,8 @@ public class TurnEventShipComeToHighSeas extends AbstractTurnEvent {
     }
 
     public static TurnEventShipComeToHighSeas tryLoad(final TurnEventPo po) {
-        if (TurnEventShipComeToHighSeas.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventShipComeToHighSeas.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             return new TurnEventShipComeToHighSeas(playerName);
         }

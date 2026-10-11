@@ -63,7 +63,7 @@ public class ContinentTest {
     protected Player enemyPlayer = mock(Player.class);
 
     protected Colony enemyColony = mock(Colony.class);
-    
+
     @Test
     public void test_verify_that_cities_are_at_continent() throws Exception {
         assertTrue(continent.contains(CITY_1));
@@ -71,16 +71,20 @@ public class ContinentTest {
     }
 
     @Test
-    public void test_findClosestCityToAttack_location_in_not_atContinent() throws Exception {
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(1, 1), enemyPlayer);
+    public void test_findClosestCityToAttack_location_in_not_atContinent()
+            throws Exception {
+        final Optional<Location> oLoc = continent
+                .getClosesEnemyCityToAttack(Location.of(1, 1), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
     }
 
     @Test
-    public void test_findClosestCityToAttack_no_enemy_cities() throws Exception {
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+    public void test_findClosestCityToAttack_no_enemy_cities()
+            throws Exception {
+        final Optional<Location> oLoc = continent
+                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
@@ -88,9 +92,11 @@ public class ContinentTest {
 
     @Test
     public void test_findClosestCityToAttack_one_city() throws Exception {
-        when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_1, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+        final Optional<Location> oLoc = continent
+                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -99,10 +105,13 @@ public class ContinentTest {
 
     @Test
     public void test_findClosestCityToAttack_one_city_23_14() throws Exception {
-        when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
-        when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_1, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_2, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(23, 14), enemyPlayer);
+        final Optional<Location> oLoc = continent
+                .getClosesEnemyCityToAttack(Location.of(23, 14), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -111,22 +120,27 @@ public class ContinentTest {
 
     @Test
     public void test_findClosestCityToAttack_one_city_22_13() throws Exception {
-        when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
-        when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_1, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_2, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+        final Optional<Location> oLoc = continent
+                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
         assertEquals(CITY_1, oLoc.get());
     }
-    
+
     @Test
     void test_getMilitaryImportance() throws Exception {
-        when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
-        when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_1, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_2, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
         when(enemyColony.getMilitaryForce()).thenReturn(7, 4);
-        
+
         assertEquals(11, continent.getMilitaryImportance(enemyPlayer));
     }
 

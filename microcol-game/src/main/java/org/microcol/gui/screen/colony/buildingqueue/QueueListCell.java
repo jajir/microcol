@@ -30,13 +30,15 @@ class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
 
     private final QueueController queueController;
 
-    QueueListCell(final QueueController queueController, final ImageProvider imageProvider) {
+    QueueListCell(final QueueController queueController,
+            final ImageProvider imageProvider) {
         this.queueController = Preconditions.checkNotNull(queueController);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
     }
 
     @Override
-    protected void updateItem(final ColonyBuildingItemProgress<?> item, final boolean empty) {
+    protected void updateItem(final ColonyBuildingItemProgress<?> item,
+            final boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setGraphic(null);
@@ -58,8 +60,8 @@ class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
                     onDragDetected(event, box, constructionItem);
                 });
             }
-            final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
-                    this::isItValid);
+            final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                    this, this::isItValid);
             box.setOnDragEntered(backgroundHighlighter::onDragEntered);
             box.setOnDragExited(backgroundHighlighter::onDragExited);
             box.setOnDragOver(this::onDragOver);
@@ -74,20 +76,24 @@ class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
         }
     }
 
-    private void onDragDropped(final DragEvent event, final ColonyBuildingItemProgress<?> item) {
-        final ClipboardParser parser = ClipboardParser.make(event.getDragboard());
+    private void onDragDropped(final DragEvent event,
+            final ColonyBuildingItemProgress<?> item) {
+        final ClipboardParser parser = ClipboardParser
+                .make(event.getDragboard());
         final From from = parser.getFrom().get();
         if (from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION) {
             parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE);
             queueController.addBeforeItem(
-                    ConstructionType.valueOf(parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)),
+                    ConstructionType.valueOf(
+                            parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)),
                     item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE_UNIT) {
             queueController.addBeforeItem(
-                    UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)), item.getId());
+                    UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)),
+                    item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
@@ -105,7 +111,8 @@ class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
             final ColonyBuildingItemProgressConstruction item) {
         final Image image = imageProvider.getUnitImage(UnitType.COLONIST);
         final Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
-        ClipboardWritter.make(db).addImage(image).fromBuildingQueue(item.getConstructionType())
+        ClipboardWritter.make(db).addImage(image)
+                .fromBuildingQueue(item.getConstructionType())
                 .addKeyValue(ClipboardConst.KEY_INDEX, item.getId()).build();
         mouseEvent.consume();
     }
@@ -114,15 +121,16 @@ class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
             final ColonyBuildingItemProgressUnit item) {
         final Image image = imageProvider.getUnitImage(UnitType.COLONIST);
         final Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
-        ClipboardWritter.make(db).addImage(image).fromBuildingQueue(item.getUnitType())
+        ClipboardWritter.make(db).addImage(image)
+                .fromBuildingQueue(item.getUnitType())
                 .addKeyValue(ClipboardConst.KEY_INDEX, item.getId()).build();
         mouseEvent.consume();
     }
 
     private boolean isItValid(final Dragboard db) {
         final ClipboardParser parser = ClipboardParser.make(db);
-        return parser.getFrom()
-                .filter(from -> from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION
+        return parser.getFrom().filter(
+                from -> from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION
                         || from == From.VALUE_FROM_BUILDING_QUEUE_UNIT
                         || from == From.VALUE_FROM_BUILDING_QUEUE)
                 .isPresent();

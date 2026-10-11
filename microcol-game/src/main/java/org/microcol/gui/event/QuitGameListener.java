@@ -16,7 +16,8 @@ import com.google.inject.Inject;
 @Listener
 public final class QuitGameListener {
 
-    private final Logger logger = LoggerFactory.getLogger(QuitGameListener.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(QuitGameListener.class);
 
     private final MusicController musicController;
 
@@ -26,7 +27,8 @@ public final class QuitGameListener {
     }
 
     @Subscribe
-    private void onQuitGame(@SuppressWarnings("unused") final QuitGameEvent event) {
+    private void onQuitGame(
+            @SuppressWarnings("unused") final QuitGameEvent event) {
         logger.info("Shutting down MicroCol");
         musicController.stop();
         System.exit(0);

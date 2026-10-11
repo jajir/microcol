@@ -7,7 +7,9 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * Enumeration represents direction in which unit could move. Each direction is
- * defined as vector. All non-zero length on axes X and Y have length 1. Direction vectors are counted at:
+ * defined as vector. All non-zero length on axes X and Y have length 1.
+ * Direction vectors are counted at:
+ *
  * <pre>
  *[-1,-1]   North
  *            |
@@ -21,7 +23,7 @@ import com.google.common.collect.ImmutableList;
  *            |
  *            |           [1,1]
  * </pre>
- * 
+ *
  */
 public enum Direction {
 
@@ -41,13 +43,13 @@ public enum Direction {
 
     northWest(Location.of(-1, -1));
 
-    private final static List<Direction> ALL = ImmutableList.copyOf(Direction.values());
+    private final static List<Direction> ALL = ImmutableList
+            .copyOf(Direction.values());
 
     /**
      * Based on given vector it return direction.
      *
-     * @param vector
-     *            required vector
+     * @param vector required vector
      * @return found direction
      */
     public static Direction valueOf(final Location vector) {
@@ -57,8 +59,8 @@ public enum Direction {
                 return dir;
             }
         }
-        throw new IllegalArgumentException(
-                String.format("It's no posible to find direction for vector '%s'.", vector));
+        throw new IllegalArgumentException(String.format(
+                "It's no posible to find direction for vector '%s'.", vector));
     }
 
     private final Location vector;
@@ -82,7 +84,8 @@ public enum Direction {
      * @return immutable list of locations
      */
     public static List<Location> getVectors() {
-        return ALL.stream().map(Direction::getVector).collect(ImmutableList.toImmutableList());
+        return ALL.stream().map(Direction::getVector)
+                .collect(ImmutableList.toImmutableList());
     }
 
     public Location getVector() {

@@ -47,7 +47,8 @@ class ApplicationInfoTest {
     @Test
     void testRealCIBuildId() {
         final Properties props = createProps("0.7.0", "dev-42-0123456789ab");
-        assertEquals("0.7.0 (dev-42-0123456789ab)", ApplicationInfo.formatBuildVersion(props));
+        assertEquals("0.7.0 (dev-42-0123456789ab)",
+                ApplicationInfo.formatBuildVersion(props));
     }
 
 }

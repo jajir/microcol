@@ -39,36 +39,49 @@ class ColonyBackground extends AbstractBackground {
     private final ImageStripePainter bottomImageStripePainter;
 
     @Inject
-    public ColonyBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
-        imageTop1 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP1));
-        imageTop2 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP2));
-        imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
-        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
+    public ColonyBackground(final ImageProvider imageProvider,
+            final ColorScheme colorScheme) {
+        imageTop1 = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_TOP1));
+        imageTop2 = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_TOP2));
+        imageBottom = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_BOTTOM));
+        imageCenter = Preconditions
+                .checkNotNull(imageProvider.getImage(IMG_CENTER));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-290, colorScheme.getColor(GuiColors.SKY_1)))
-                .setCenterStripe(StripeDef.of(80, colorScheme.getColor(GuiColors.GRASS_1)))
-                .setBottomStripe(StripeDef.of(300, colorScheme.getColor(GuiColors.GRASS_1)))
-                .setCenterStripeHeight(420)
-                .make();
+                .setTopStripe(StripeDef.of(-290,
+                        colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(StripeDef.of(80,
+                        colorScheme.getColor(GuiColors.GRASS_1)))
+                .setBottomStripe(StripeDef.of(300,
+                        colorScheme.getColor(GuiColors.GRASS_1)))
+                .setCenterStripeHeight(420).make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
-        final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
-        top1ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop1)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-305).make());
-        top2ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop2)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-298).make());
+        final Point centerImageSize = Point.of(imageCenter.getWidth(),
+                imageCenter.getHeight());
+        top1ImageStripePainter = new ImageStripePainter(ImageStripePref.build()
+                .setImage(imageTop1).setCenterGap(centerImageSize.getX() - 10)
+                .setVerticalShift(-305).make());
+        top2ImageStripePainter = new ImageStripePainter(ImageStripePref.build()
+                .setImage(imageTop2).setCenterGap(centerImageSize.getX() - 10)
+                .setVerticalShift(-298).make());
         bottomImageStripePainter = new ImageStripePainter(
                 ImageStripePref.build().setImage(imageBottom)
-                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(265).make());
+                        .setCenterGap(centerImageSize.getX() - 10)
+                        .setVerticalShift(265).make());
     }
 
     @Override
     public void paint(final GraphicsContext gc) {
-        final Point canvasSize = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
+        final Point canvasSize = Point.of(getCanvas().getWidth(),
+                getCanvas().getHeight());
         if (canvasSize.getX() > 10000 || canvasSize.getY() > 10000) {
             return;
         }
-        final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
+        final Point centerImageSize = Point.of(imageCenter.getWidth(),
+                imageCenter.getHeight());
         paintBackground(gc, canvasSize, Color.WHITE);
         threeStripesPainter.paint(gc, canvasSize);
         top1ImageStripePainter.paintLeft(gc, canvasSize);

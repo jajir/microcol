@@ -41,9 +41,10 @@ public class ImageProviderTestUtil {
 
     public void saveAllChachedImagesToTmp() throws Exception {
 
-        final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                new ModuleImages());
-        final ImageProvider mapImageStore = injector.getInstance(ImageProvider.class);
+        final Injector injector = Guice.createInjector(
+                com.google.inject.Stage.PRODUCTION, new ModuleImages());
+        final ImageProvider mapImageStore = injector
+                .getInstance(ImageProvider.class);
 
         for (final String key : mapImageStore.getImageNames()) {
             final Image image = mapImageStore.getImage(key);

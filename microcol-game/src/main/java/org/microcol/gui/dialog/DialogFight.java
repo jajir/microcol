@@ -43,24 +43,21 @@ public final class DialogFight extends AbstractMessageWindow {
 
     /**
      * Constructor when parentFrame is not available.
-     * 
-     * @param i18n
-     *            required localization helper class
-     * @param viewUtil
-     *            required show dialog utilities
-     * @param imageProvider
-     *            required image provider
-     * @param localizationHelper
-     *            required localization helper
-     * @param preferencesProperties
-     *            required game preferences
+     *
+     * @param i18n                  required localization helper class
+     * @param viewUtil              required show dialog utilities
+     * @param imageProvider         required image provider
+     * @param localizationHelper    required localization helper
+     * @param preferencesProperties required game preferences
      */
     @Inject
-    public DialogFight(final I18n i18n, final ViewUtil viewUtil, final ImageProvider imageProvider,
+    public DialogFight(final I18n i18n, final ViewUtil viewUtil,
+            final ImageProvider imageProvider,
             final LocalizationHelper localizationHelper,
             final PreferencesProperties preferencesProperties) {
         super(viewUtil, i18n);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.localizationHelper = Preconditions
+                .checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         setTitle(i18n.get(Dialog.fight_title));
 
@@ -72,7 +69,8 @@ public final class DialogFight extends AbstractMessageWindow {
         columnMiddle.setHalignment(HPos.CENTER);
         final ColumnConstraints columnRight = new ColumnConstraints();
         columnRight.setHalignment(HPos.RIGHT);
-        root.getColumnConstraints().addAll(columnLeft, columnMiddle, columnRight);
+        root.getColumnConstraints().addAll(columnLeft, columnMiddle,
+                columnRight);
         root.setHgap(10);
         root.setVgap(10);
         root.setPadding(new Insets(25, 25, 25, 25));
@@ -110,7 +108,8 @@ public final class DialogFight extends AbstractMessageWindow {
 
         // Y=3
         // checkbox with question
-        final CheckBox checkBoxShowNextTime = new CheckBox(i18n.get(Dialog.fight_hideOption));
+        final CheckBox checkBoxShowNextTime = new CheckBox(
+                i18n.get(Dialog.fight_hideOption));
         checkBoxShowNextTime.setWrapText(true);
         checkBoxShowNextTime.setTextAlignment(TextAlignment.JUSTIFY);
         // following force dialog to split message into several lines.
@@ -119,31 +118,34 @@ public final class DialogFight extends AbstractMessageWindow {
 
         // Y=10
         // Cancel and OK buttons
-        final Button buttonCancel = new Button(i18n.get(Dialog.fight_buttonCancel));
-        buttonCancel.setOnAction(
-                e -> onClickCancel(checkBoxShowNextTime.isSelected(), preferencesProperties));
+        final Button buttonCancel = new Button(
+                i18n.get(Dialog.fight_buttonCancel));
+        buttonCancel.setOnAction(e -> onClickCancel(
+                checkBoxShowNextTime.isSelected(), preferencesProperties));
         root.add(buttonCancel, 0, 10);
 
-        final Button buttonFight = new Button(i18n.get(Dialog.fight_buttonFight));
+        final Button buttonFight = new Button(
+                i18n.get(Dialog.fight_buttonFight));
         buttonFight.requestFocus();
-        buttonFight.setOnAction(
-                e -> onClickFight(checkBoxShowNextTime.isSelected(), preferencesProperties));
+        buttonFight.setOnAction(e -> onClickFight(
+                checkBoxShowNextTime.isSelected(), preferencesProperties));
         root.add(buttonFight, 2, 10);
     }
 
     /**
-     * 
-     * @param unitAttacker
-     *            required attacking unit
-     * @param unitDefender
-     *            required defending unit
+     *
+     * @param unitAttacker required attacking unit
+     * @param unitDefender required defending unit
      * @return return <code>true</code> when user choose to fight.
      */
-    public boolean showAndWait(final Unit unitAttacker, final Unit unitDefender) {
-        defenderLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
+    public boolean showAndWait(final Unit unitAttacker,
+            final Unit unitDefender) {
+        defenderLabelName.setText(
+                localizationHelper.getUnitName(unitDefender.getType()));
         defenderImageView.setImage(imageProvider.getUnitImage(unitDefender));
 
-        attackerLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
+        attackerLabelName.setText(
+                localizationHelper.getUnitName(unitDefender.getType()));
         attackerImageView.setImage(imageProvider.getUnitImage(unitDefender));
 
         showAndWait();

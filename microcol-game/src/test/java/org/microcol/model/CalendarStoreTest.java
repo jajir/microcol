@@ -7,10 +7,9 @@ import org.microcol.model.store.CalendarPo;
 
 public class CalendarStoreTest {
 
-
     @Test
     public void test_save() throws Exception {
-	final Calendar cal = new Calendar(100, 999, 0);
+        final Calendar cal = new Calendar(100, 999, 0);
         CalendarPo data = cal.save();
 
         assertEquals(100, data.getStartYear());
@@ -19,18 +18,18 @@ public class CalendarStoreTest {
 
     @Test
     public void test_make() throws Exception {
-	final Calendar cal = new Calendar(100, 999, 0);
+        final Calendar cal = new Calendar(100, 999, 0);
         Calendar tst = Calendar.make(cal.save());
 
         assertEquals(100, tst.getStartYear());
         assertEquals(999, tst.getEndYear());
         assertEquals(100, tst.getCurrentYear());
     }
-    
+
     @Test
     public void testCreation() throws Exception {
-	final Calendar cal = new Calendar(1630, 1800, 0);
-	
+        final Calendar cal = new Calendar(1630, 1800, 0);
+
         assertEquals(1630, cal.getStartYear());
         assertEquals(1800, cal.getEndYear());
         assertEquals(1630, cal.getCurrentYear());

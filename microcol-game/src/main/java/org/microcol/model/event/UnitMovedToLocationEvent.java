@@ -19,10 +19,8 @@ public final class UnitMovedToLocationEvent extends AbstractModelEvent {
     /**
      * Default constructor.
      *
-     * @param model
-     *            required model
-     * @param unit
-     *            required moving unit
+     * @param model required model
+     * @param unit  required moving unit
      */
     public UnitMovedToLocationEvent(final Model model, final Unit unit) {
         super(model);

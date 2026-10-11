@@ -17,9 +17,8 @@ public class TerrainMapUtil {
     /**
      * Even when location is out of map it will say correct terrain type. For
      * locations outside of map it will return closest terrain type at map.
-     * 
-     * @param location
-     *            required location that will be examined
+     *
+     * @param location required location that will be examined
      * @return terrain type at given location
      */
     TerrainType getTerrainTypeAt(final Location location) {
@@ -39,5 +38,5 @@ public class TerrainMapUtil {
         }
         return map.getTerrainTypeAt(shifted);
     }
-    
+
 }

@@ -10,8 +10,7 @@ import org.microcol.model.campaign.store.CampaignPo;
 public interface Campaign {
 
     /**
-     * @param <C>
-     *            class providing campaign name
+     * @param <C> class providing campaign name
      *
      * @return the name
      */
@@ -39,8 +38,7 @@ public interface Campaign {
      * Return if user could start given mission. Mission could be started when
      * was already finished or when is next after already finished mission.
      *
-     * @param mission
-     *            required mission that belongs to this campaign
+     * @param mission required mission that belongs to this campaign
      * @return return <code>true</code> when mission could be played by user
      *         otherwise return <code>false</code>.
      */

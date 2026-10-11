@@ -24,13 +24,12 @@ public final class StatusBarMessageEvent {
 
     /**
      * Text in parameter will be in status bar.
-     * 
-     * @param statusMessage
-     *            optional status message
-     * @param source
-     *            required source where event was raised
+     *
+     * @param statusMessage optional status message
+     * @param source        required source where event was raised
      */
-    public StatusBarMessageEvent(final String statusMessage, final Source source) {
+    public StatusBarMessageEvent(final String statusMessage,
+            final Source source) {
         this.statusMessage = statusMessage;
         this.source = Preconditions.checkNotNull(source);
     }
@@ -42,9 +41,8 @@ public final class StatusBarMessageEvent {
      * that case JLabel is not shown and consequently no events on components
      * are fired.
      * </p>
-     * 
-     * @param source
-     *            required source where event was raised
+     *
+     * @param source required source where event was raised
      */
     public StatusBarMessageEvent(final Source source) {
         this(EMPTY_MESSAGE, source);
@@ -53,7 +51,8 @@ public final class StatusBarMessageEvent {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(StatusBarMessageEvent.class)
-                .add("statusMesssage", statusMessage).add("source", source).toString();
+                .add("statusMesssage", statusMessage).add("source", source)
+                .toString();
     }
 
     public String getStatusMessage() {

@@ -32,8 +32,8 @@ public class TileTest {
 
     static Stream<Arguments> dataProvider() {
         return Stream.of(arguments(Point.of(12, 12), Location.of(1, 1)),
-                arguments(Point.of(TILE_WIDTH_IN_PX / 2, TILE_WIDTH_IN_PX * 3 / 2),
-                        Location.of(1, 2)),
+                arguments(Point.of(TILE_WIDTH_IN_PX / 2,
+                        TILE_WIDTH_IN_PX * 3 / 2), Location.of(1, 2)),
                 arguments(Point.of(0, 0), Location.of(1, 1)),
                 arguments(Point.of(1000, -6), Location.of(23, 0)),
                 arguments(Point.of(-55, -55), Location.of(-1, -1)));
@@ -41,8 +41,8 @@ public class TileTest {
 
     @ParameterizedTest(name = "{index}: point = {0} will be converted to location = {1}")
     @MethodSource("dataProvider")
-    public void test_toLocation(final Point point, final Location expectedLocation)
-            throws Exception {
+    public void test_toLocation(final Point point,
+            final Location expectedLocation) throws Exception {
         final Tile tile = Tile.of(point);
 
         assertEquals(expectedLocation, tile.toLocation());

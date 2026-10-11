@@ -21,10 +21,12 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
      */
     private final static int CONSTRUCTION_X = 15;
     private final static int CONSTRUCTION_Y = 0;
-    private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X, CONSTRUCTION_Y);
+    private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X,
+            CONSTRUCTION_Y);
 
-    PanelConstructionBasic(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n, final Construction construction,
+    PanelConstructionBasic(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n,
+            final Construction construction,
             final ColonyProductionStats colonyStats, final Model model) {
         super(eventBus, i18n, imageProvider, construction, colonyStats, model);
         getMainPane().getStyleClass().add("constructionPane");

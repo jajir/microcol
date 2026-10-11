@@ -9,7 +9,7 @@ import com.google.inject.Inject;
  * objects</li>
  * <li>move - some unit is selected and is about to move</li>
  * </ul>
- * 
+ *
  */
 public final class ModeController {
 

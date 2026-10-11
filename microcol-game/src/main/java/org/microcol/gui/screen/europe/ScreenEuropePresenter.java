@@ -17,18 +17,20 @@ import javafx.scene.input.KeyEvent;
 @Singleton
 public class ScreenEuropePresenter implements EuropeCallback {
 
-    private final static Logger logger = LoggerFactory.getLogger(ScreenEuropePresenter.class);
+    private final static Logger logger = LoggerFactory
+            .getLogger(ScreenEuropePresenter.class);
 
     private final EventBus eventBus;
 
     private final EuropePanel europePanel;
 
     @Inject
-    ScreenEuropePresenter(final ScreenEurope europeMenuPanel, final EventBus eventBus,
-            final EuropePanel europePanel) {
+    ScreenEuropePresenter(final ScreenEurope europeMenuPanel,
+            final EventBus eventBus, final EuropePanel europePanel) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.europePanel = Preconditions.checkNotNull(europePanel);
-        europeMenuPanel.getContent().addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        europeMenuPanel.getContent().addEventFilter(KeyEvent.KEY_PRESSED,
+                this::onKeyPressed);
     }
 
     private void onKeyPressed(final KeyEvent event) {

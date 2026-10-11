@@ -16,7 +16,8 @@ import javafx.util.Duration;
  */
 public class AnimationScheduler {
 
-    private final Logger logger = LoggerFactory.getLogger(AnimationScheduler.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(AnimationScheduler.class);
 
     /**
      * Default game Frame Per Second value.

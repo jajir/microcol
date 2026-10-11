@@ -31,12 +31,14 @@ public final class ShowTurnEvensOnTurnStartedEvent {
     ShowTurnEvensOnTurnStartedEvent(final EventBus eventBus,
             final GameModelController gameModelController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
     }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
-        if (!isEventsEmpty() && event.isFreshStart() && isCorrectPlayer(event)) {
+        if (!isEventsEmpty() && event.isFreshStart()
+                && isCorrectPlayer(event)) {
             logger.debug("Turn started and turn event dialog will be shown.");
             eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
         }
@@ -47,7 +49,7 @@ public final class ShowTurnEvensOnTurnStartedEvent {
     }
 
     private boolean isEventsEmpty() {
-        return gameModelController.getModel()
-                .isTurnEventsMessagesEmpty(gameModelController.getHumanPlayer());
+        return gameModelController.getModel().isTurnEventsMessagesEmpty(
+                gameModelController.getHumanPlayer());
     }
 }

@@ -24,13 +24,14 @@ public class TerrainTest {
         final Terrain t = new Terrain(Location.of(1, 1), TerrainType.ARCTIC);
         assertFalse(t.isHasTrees());
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     t.setHasTrees(true);
                 });
 
         assertTrue(exception.getMessage().contains("can't have trees."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
 }

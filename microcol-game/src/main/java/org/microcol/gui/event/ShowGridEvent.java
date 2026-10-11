@@ -20,8 +20,8 @@ public final class ShowGridEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(ShowGridEvent.class).add("isGridShown", isGridShown)
-                .toString();
+        return MoreObjects.toStringHelper(ShowGridEvent.class)
+                .add("isGridShown", isGridShown).toString();
     }
 
 }

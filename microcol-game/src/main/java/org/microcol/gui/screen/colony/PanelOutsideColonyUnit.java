@@ -45,8 +45,9 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
 
     private final Canvas canvas;
 
-    PanelOutsideColonyUnit(final ImageProvider imageProvider, final EventBus eventBus,
-            final PaintService paintService, final Colony colony, final Unit unit) {
+    PanelOutsideColonyUnit(final ImageProvider imageProvider,
+            final EventBus eventBus, final PaintService paintService,
+            final Colony colony, final Unit unit) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.colony = Preconditions.checkNotNull(colony);
@@ -59,8 +60,8 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         mainPane.setOnDragDetected(mouseEvent -> {
             final Image image = imageProvider.getUnitImage(unit);
             final Dragboard db = mainPane.startDragAndDrop(TransferMode.MOVE);
-            ClipboardWritter.make(db).addImage(image).addTransferFromOutsideColony().addUnit(unit)
-                    .build();
+            ClipboardWritter.make(db).addImage(image)
+                    .addTransferFromOutsideColony().addUnit(unit).build();
             mouseEvent.consume();
         });
         mainPane.setOnContextMenuRequested(this::onContextMenuRequested);
@@ -81,9 +82,11 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET).getAmount();
+                final int muskets = colony.getWarehouse()
+                        .getGoods(GoodsType.MUSKET).getAmount();
                 if (UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT <= muskets) {
-                    final MenuItem menuItem = new MenuItem("Equip with muskets");
+                    final MenuItem menuItem = new MenuItem(
+                            "Equip with muskets");
                     menuItem.setOnAction(evt -> {
                         fc.equipWithMuskets();
                         eventBus.post(new RepaintColonyEvent());
@@ -99,7 +102,8 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount();
+                final int horses = colony.getWarehouse()
+                        .getGoods(GoodsType.HORSE).getAmount();
                 if (UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT <= horses) {
                     final MenuItem menuItem = new MenuItem("Mount horses");
                     menuItem.setOnAction(evt -> {
@@ -118,7 +122,8 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int tools = colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount();
+                final int tools = colony.getWarehouse()
+                        .getGoods(GoodsType.TOOLS).getAmount();
                 if (tools > 0) {
                     final MenuItem menuItem = new MenuItem("Equip with tools");
                     menuItem.setOnAction(evt -> {

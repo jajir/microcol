@@ -27,10 +27,12 @@ abstract class AbstractMission<G extends MissionGoals> {
     AbstractMission(final MissionCreationContext context, final G goals) {
         this.eventBus = Preconditions.checkNotNull(context.getEventBus());
         this.model = Preconditions.checkNotNull(context.getModel());
-        this.externalGameOver = Preconditions.checkNotNull(context.getExternalGameOver());
+        this.externalGameOver = Preconditions
+                .checkNotNull(context.getExternalGameOver());
         this.goals = Preconditions.checkNotNull(goals);
-        gameOverEvaluator = new GameOverEvaluator(eventBus, this::prepareProcessors,
-                context.getCampaignMission(), context.getCampaignManager());
+        gameOverEvaluator = new GameOverEvaluator(eventBus,
+                this::prepareProcessors, context.getCampaignMission(),
+                context.getCampaignManager());
     }
 
     protected void fireEvent(final Object event) {
@@ -81,16 +83,20 @@ abstract class AbstractMission<G extends MissionGoals> {
     }
 
     protected boolean isFirstTurn(final Model model) {
-        return model.getCalendar().getCurrentYear() == model.getCalendar().getStartYear();
+        return model.getCalendar().getCurrentYear() == model.getCalendar()
+                .getStartYear();
     }
 
     protected Player getHumanPlayer(final Model model) {
         return model.getPlayers().stream().filter(p -> p.isHuman()).findAny()
-                .orElseThrow(() -> new MicroColException("There is no human player."));
+                .orElseThrow(() -> new MicroColException(
+                        "There is no human player."));
     }
 
-    protected boolean playerHaveMoreOrEqualColonies(final Model model, final int numberOfColonies) {
-        return model.getColonies(getHumanPlayer(model)).size() >= numberOfColonies;
+    protected boolean playerHaveMoreOrEqualColonies(final Model model,
+            final int numberOfColonies) {
+        return model.getColonies(getHumanPlayer(model))
+                .size() >= numberOfColonies;
     }
 
     protected int getNumberOfMilitaryUnits(final Model model) {

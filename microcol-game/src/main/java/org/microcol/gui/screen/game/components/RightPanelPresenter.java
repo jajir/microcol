@@ -20,7 +20,8 @@ import com.google.inject.Inject;
 @Listener
 public final class RightPanelPresenter {
 
-    private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(RightPanelPresenter.class);
 
     private final GameModelController gameModelController;
 
@@ -29,29 +30,33 @@ public final class RightPanelPresenter {
     private TileWasSelectedEvent lastFocusedTileEvent;
 
     @Inject
-    RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-            final I18n i18n, final EventBus eventBus) {
+    RightPanelPresenter(final RightPanelView display,
+            final GameModelController gameModelController, final I18n i18n,
+            final EventBus eventBus) {
         this.display = Preconditions.checkNotNull(display);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
 
         display.getContent().setOnMouseEntered(e -> {
-            eventBus.post(
-                    new StatusBarMessageEvent(i18n.get(Loc.rightPanel_description), Source.GAME));
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Loc.rightPanel_description), Source.GAME));
         });
 
     }
-    
+
     @SuppressWarnings("unused")
     @Subscribe
     private void onRefreshRightPanelEvent(final RefreshRightPanelEvent event) {
-        display.refreshView(lastFocusedTileEvent.getLocation());        
+        display.refreshView(lastFocusedTileEvent.getLocation());
     }
 
     @Subscribe
-    private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
+    private void onSelectedUnitWasChanged(
+            final SelectedUnitWasChangedEvent event) {
         if (lastFocusedTileEvent == null) {
             if (event.getSelectedUnit().isPresent()) {
-                display.refreshView(event.getSelectedUnit().get().getLocation());
+                display.refreshView(
+                        event.getSelectedUnit().get().getLocation());
             } else {
                 display.cleanView();
             }
@@ -74,9 +79,11 @@ public final class RightPanelPresenter {
     @SuppressWarnings("unused")
     public void updateLanguage(final I18n i18n) {
         if (gameModelController.isGameModelReady()) {
-            display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
+            display.setOnMovePlayer(
+                    gameModelController.getModel().getCurrentPlayer());
         }
-        if (lastFocusedTileEvent != null && gameModelController.isGameModelReady()) {
+        if (lastFocusedTileEvent != null
+                && gameModelController.isGameModelReady()) {
             display.refreshView(lastFocusedTileEvent);
         }
     }

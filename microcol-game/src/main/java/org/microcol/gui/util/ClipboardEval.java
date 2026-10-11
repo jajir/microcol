@@ -45,8 +45,7 @@ public class ClipboardEval extends ClipboardParser {
     /**
      * Filter transfered unit.
      *
-     * @param filter
-     *            required predicated
+     * @param filter required predicated
      * @return return parsing result
      */
     public ClipboardEval filterUnit(final Predicate<Unit> filter) {
@@ -61,9 +60,8 @@ public class ClipboardEval extends ClipboardParser {
     /**
      * Filter transfered goods.
      *
-     * @param filter
-     *            required predicated, if it's <code>true</code> good will be
-     *            keep otherwise will be removed.
+     * @param filter required predicated, if it's <code>true</code> good will be
+     *               keep otherwise will be removed.
      * @return return parsing result
      */
     public ClipboardEval filterGoods(final Predicate<Goods> filter) {
@@ -86,16 +84,19 @@ public class ClipboardEval extends ClipboardParser {
         if (getFrom().isPresent()) {
             final Optional<Unit> oFromUnit = getUnit(model, KEY_SOURCE_UNIT_ID);
             if (oFromUnit.isPresent()) {
-                final UnitWithCargo unitWithCargo = (UnitWithCargo) oFromUnit.get();
+                final UnitWithCargo unitWithCargo = (UnitWithCargo) oFromUnit
+                        .get();
                 final int slotIndex = getInt(KEY_CARGO_SLOT_INDEX);
-                return Optional.of(unitWithCargo.getCargo().getSlotByIndex(slotIndex));
+                return Optional
+                        .of(unitWithCargo.getCargo().getSlotByIndex(slotIndex));
             }
         }
         return Optional.empty();
     }
 
     public boolean isEmpty() {
-        return (get(KEY_GOODS) == null && get(KEY_UNIT_ID) == null) || !getFrom().isPresent();
+        return (get(KEY_GOODS) == null && get(KEY_UNIT_ID) == null)
+                || !getFrom().isPresent();
     }
 
     public boolean isNotEmpty() {

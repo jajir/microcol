@@ -34,7 +34,8 @@ public class ClipboardParser implements ClipboardConst {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("map", map).toString();
+        return MoreObjects.toStringHelper(getClass()).add("map", map)
+                .toString();
     }
 
     protected ClipboardParser(final @Nullable String originalString) {
@@ -43,8 +44,10 @@ public class ClipboardParser implements ClipboardConst {
             this.map = Maps.newHashMap();
         } else {
             this.originalString = Preconditions.checkNotNull(originalString);
-            this.map = new HashMap<>(Splitter.on(RECORD_SEPARATOR).trimResults().omitEmptyStrings()
-                    .withKeyValueSeparator(Splitter.on(SEPARATOR).limit(2).trimResults())
+            this.map = new HashMap<>(Splitter.on(RECORD_SEPARATOR).trimResults()
+                    .omitEmptyStrings()
+                    .withKeyValueSeparator(
+                            Splitter.on(SEPARATOR).limit(2).trimResults())
                     .split(originalString));
         }
     }
@@ -80,7 +83,8 @@ public class ClipboardParser implements ClipboardConst {
         return getUnit(model, KEY_UNIT_ID);
     }
 
-    protected Optional<Unit> getUnit(final Model model, final String unitIdKey) {
+    protected Optional<Unit> getUnit(final Model model,
+            final String unitIdKey) {
         Preconditions.checkNotNull(model);
         Preconditions.checkNotNull(unitIdKey);
         if (get(unitIdKey) == null) {
@@ -96,7 +100,8 @@ public class ClipboardParser implements ClipboardConst {
         try {
             return Integer.valueOf(val);
         } catch (NumberFormatException e) {
-            throw new MicroColException(String.format("Can't convert '%s' to int", val), e);
+            throw new MicroColException(
+                    String.format("Can't convert '%s' to int", val), e);
         }
     }
 

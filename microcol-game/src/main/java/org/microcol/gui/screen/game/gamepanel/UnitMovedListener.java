@@ -17,7 +17,8 @@ import com.google.inject.Inject;
 @Listener
 public final class UnitMovedListener {
 
-    private final Logger logger = LoggerFactory.getLogger(UnitMovedListener.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(UnitMovedListener.class);
 
     private final PaintService paintService;
 
@@ -28,20 +29,23 @@ public final class UnitMovedListener {
     private final AnimationManager animationManager;
 
     @Inject
-    public UnitMovedListener(final PaintService paintService, final ExcludePainting excludePainting,
+    public UnitMovedListener(final PaintService paintService,
+            final ExcludePainting excludePainting,
             final PathPlanningService pathPlanningService,
             final AnimationManager animationManager) {
         this.paintService = Preconditions.checkNotNull(paintService);
         this.excludePainting = Preconditions.checkNotNull(excludePainting);
-        this.pathPlanningService = Preconditions.checkNotNull(pathPlanningService);
+        this.pathPlanningService = Preconditions
+                .checkNotNull(pathPlanningService);
         this.animationManager = Preconditions.checkNotNull(animationManager);
     }
 
     @Subscribe
     private void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
         animationManager.addAnimation(
-                new AnimationWalk(pathPlanningService, event.getStart(), event.getEnd(),
-                        event.getUnit(), paintService, excludePainting, event.getOrientation()),
+                new AnimationWalk(pathPlanningService, event.getStart(),
+                        event.getEnd(), event.getUnit(), paintService,
+                        excludePainting, event.getOrientation()),
                 animation -> excludePainting.includeUnit(event.getUnit()));
         /*
          * Hold thread until animation is fully drawn.

@@ -18,7 +18,7 @@ import com.google.common.base.Preconditions;
  * <p>
  * Following examples shows case when bigger map with smaller canvas
  * </p>
- * 
+ *
  * <pre>
  * +------------------------------------------------------+
  * |                                                      |
@@ -41,7 +41,7 @@ import com.google.common.base.Preconditions;
  * <p>
  * This class work just with {@link Point} class.
  * </p>
- * 
+ *
  */
 public class VisibleAreaService {
 
@@ -54,7 +54,8 @@ public class VisibleAreaService {
      * It helps consider if canvas size is reasonable. When canvas side length
      * is bigger than this it's not correct size.
      */
-    final static Point MAX_CANVAS_SIZE = Point.of(MAX_CANVAS_SIDE_LENGTH, MAX_CANVAS_SIDE_LENGTH);
+    final static Point MAX_CANVAS_SIZE = Point.of(MAX_CANVAS_SIDE_LENGTH,
+            MAX_CANVAS_SIDE_LENGTH);
 
     /**
      * Holds information about canvas size and position relative to world map in
@@ -82,16 +83,16 @@ public class VisibleAreaService {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(VisibleAreaService.class).add("canvasArea", canvasArea)
-                .add("maxMapSize", maxMapSize).toString();
+        return MoreObjects.toStringHelper(VisibleAreaService.class)
+                .add("canvasArea", canvasArea).add("maxMapSize", maxMapSize)
+                .toString();
     }
 
     /**
      * When world map size change than this should be called because it will
      * prevent user scroll outside of map.
      *
-     * @param worldSize
-     *            required world map size
+     * @param worldSize required world map size
      */
     public void setMapSize(final Location worldSize) {
         Preconditions.checkNotNull(worldSize);
@@ -131,7 +132,7 @@ public class VisibleAreaService {
 
     /**
      * Provide position of canvas relative to map coordinates in points.
-     * 
+     *
      * @return canvas top left corner position
      */
     public Point getTopLeft() {
@@ -146,12 +147,13 @@ public class VisibleAreaService {
      * Help to scroll screen to some place. It normalize top left screen corner.
      * Prevent screen to scroll outside of visible area.
      *
-     * @param newTopLeftCanvasCorner
-     *            required position of new top left screen corner
+     * @param newTopLeftCanvasCorner required position of new top left screen
+     *                               corner
      * @return normalized top left screen corner
      */
     Point computeNewTopLeftConnerOfCanvas(final Point newTopLeftCanvasCorner) {
-        return canvasArea.computeNewTopLeftConnerOfCanvas(newTopLeftCanvasCorner, getMapSize());
+        return canvasArea.computeNewTopLeftConnerOfCanvas(
+                newTopLeftCanvasCorner, getMapSize());
     }
 
     public void addDeltaToTopLeftPoint(final Point delta) {
@@ -160,8 +162,7 @@ public class VisibleAreaService {
     }
 
     /**
-     * @param onCanvasReady
-     *            the onCanvasReady to set
+     * @param onCanvasReady the onCanvasReady to set
      */
     public void setOnCanvasReady(final Consumer<String> onCanvasReady) {
         onVisibleAreaIsReady.setOnConditionsPassed(onCanvasReady);
@@ -176,41 +177,40 @@ public class VisibleAreaService {
 
     /**
      * Verify that given point is in canvas. Point is in map coordinates.
-     * 
-     * @param point
-     *            required point in map coordinates
+     *
+     * @param point required point in map coordinates
      * @return return <code>true</code> when point is inside area otherwise
      *         return <code>false</code>
      */
     boolean isVisibleMapPoint(final Point point) {
-        final Rectangle canvas = Rectangle.ofPointAndSize(canvasArea.getTopLeft(),
-                canvasArea.getCanvasSize());
+        final Rectangle canvas = Rectangle.ofPointAndSize(
+                canvasArea.getTopLeft(), canvasArea.getCanvasSize());
         return canvas.isIn(point);
     }
 
     /**
      * Verify that given canvas point is visible.
-     * 
-     * @param point
-     *            required point in canvas (on screen) coordinates
+     *
+     * @param point required point in canvas (on screen) coordinates
      * @return return <code>true</code> when point is inside area otherwise
      *         return <code>false</code>
      */
     boolean isVisibleCanvasPoint(final Point point) {
-        final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO, canvasArea.getCanvasSize());
+        final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO,
+                canvasArea.getCanvasSize());
         return canvas.isIn(point);
     }
 
     /**
      * Verify that given point is valid point on map.
      *
-     * @param point
-     *            required point
+     * @param point required point
      * @return return <code>true</code> when point is on map otherwise return
      *         <code>false</code>.
      */
     boolean isMapPointValid(final Point point) {
-        final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO, getMapSize());
+        final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO,
+                getMapSize());
         return canvas.isIn(point);
     }
 

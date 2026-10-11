@@ -40,17 +40,18 @@ public class PathPlanningService {
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
     }
 
-    public List<Point> getPathLimitSpeed(final Point tileFrom, final Point tileTo) {
+    public List<Point> getPathLimitSpeed(final Point tileFrom,
+            final Point tileTo) {
         return pathPlanning.getPathLimitSpeed(tileFrom, tileTo,
                 gamePreferences.getAnimationSpeed());
 
     }
 
     public static void checkSpeed(final int speed) {
-        Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low",
-                speed);
-        Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high",
-                speed);
+        Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE,
+                "speed '%s' is to low", speed);
+        Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE,
+                "speed '%s' is to high", speed);
     }
 
 }

@@ -23,7 +23,8 @@ final class ClickableArea {
 
     ClickableArea() {
         areas = new HashMap<>();
-        final List<Location> locs = Lists.newArrayList(Location.CENTER.getNeighbors());
+        final List<Location> locs = Lists
+                .newArrayList(Location.CENTER.getNeighbors());
         locs.forEach(this::addDirection);
     }
 
@@ -33,14 +34,16 @@ final class ClickableArea {
     }
 
     Optional<Direction> getDirection(final Point point) {
-        return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
-                .map(entry -> entry.getValue()).map(location -> Direction.valueOf(location))
-                .findAny();
+        return areas.entrySet().stream()
+                .filter(entry -> entry.getKey().isIn(point))
+                .map(entry -> entry.getValue())
+                .map(location -> Direction.valueOf(location)).findAny();
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(ClickableArea.class).add("areas", areas).toString();
+        return MoreObjects.toStringHelper(ClickableArea.class)
+                .add("areas", areas).toString();
     }
 
 }

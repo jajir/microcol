@@ -17,8 +17,8 @@ public final class CargoSlotPo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(CargoPo.class).add("unitId", unitId).add("amount", amount)
-                .add("goodsType", goodsType).toString();
+        return MoreObjects.toStringHelper(CargoPo.class).add("unitId", unitId)
+                .add("amount", amount).add("goodsType", goodsType).toString();
     }
 
     public boolean containsGood() {
@@ -33,8 +33,7 @@ public final class CargoSlotPo {
     }
 
     /**
-     * @param unitId
-     *            the unitId to set
+     * @param unitId the unitId to set
      */
     public void setUnitId(Integer unitId) {
         this.unitId = unitId;
@@ -48,8 +47,7 @@ public final class CargoSlotPo {
     }
 
     /**
-     * @param amount
-     *            the amount to set
+     * @param amount the amount to set
      */
     public void setAmount(Integer amount) {
         this.amount = amount;
@@ -63,8 +61,7 @@ public final class CargoSlotPo {
     }
 
     /**
-     * @param goodsType
-     *            the goodsType to set
+     * @param goodsType the goodsType to set
      */
     public void setGoodsType(GoodsType goodsType) {
         this.goodsType = goodsType;

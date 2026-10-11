@@ -33,18 +33,26 @@ public class TeService {
             final TeProcessorFaminePlagueColony teProcessorFaminePlagueColony,
             final TeProcessorShipComeToEuropePort teProcessorShipComeToEuropePort,
             final TeProcessorShipComeToHighSeas teProcessorShipComeToHighSeas) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
 
         this.turnEventResolver = new ChainOfCommandStrategy<>(
-                Lists.newArrayList(Preconditions.checkNotNull(teProcessorGoodsWasThrownAway),
+                Lists.newArrayList(
+                        Preconditions
+                                .checkNotNull(teProcessorGoodsWasThrownAway),
                         Preconditions.checkNotNull(teProcessorNewUnitInColony),
                         Preconditions.checkNotNull(teProcessorNewUnitInEurope),
-                        Preconditions.checkNotNull(teProcessorColonyWasDestroyed),
+                        Preconditions
+                                .checkNotNull(teProcessorColonyWasDestroyed),
                         Preconditions.checkNotNull(teProcessorColonyWasLost),
-                        Preconditions.checkNotNull(teProcessorFamineWillPlagueColony),
-                        Preconditions.checkNotNull(teProcessorFaminePlagueColony),
-                        Preconditions.checkNotNull(teProcessorShipComeToEuropePort),
-                        Preconditions.checkNotNull(teProcessorShipComeToHighSeas)));
+                        Preconditions.checkNotNull(
+                                teProcessorFamineWillPlagueColony),
+                        Preconditions
+                                .checkNotNull(teProcessorFaminePlagueColony),
+                        Preconditions
+                                .checkNotNull(teProcessorShipComeToEuropePort),
+                        Preconditions
+                                .checkNotNull(teProcessorShipComeToHighSeas)));
     }
 
     private Model getModel() {
@@ -53,8 +61,10 @@ public class TeService {
 
     public List<TeItemSimple> getMessages() {
         final List<TurnEvent> turnEvents = getModel()
-                .getTurnEventsLocalizedMessages(gameModelController.getHumanPlayer());
-        return turnEvents.stream().map(turnEvent -> turnEventResolver.apply(turnEvent))
+                .getTurnEventsLocalizedMessages(
+                        gameModelController.getHumanPlayer());
+        return turnEvents.stream()
+                .map(turnEvent -> turnEventResolver.apply(turnEvent))
                 .collect(ImmutableList.toImmutableList());
     }
 

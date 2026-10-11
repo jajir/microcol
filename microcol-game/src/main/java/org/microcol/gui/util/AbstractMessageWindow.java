@@ -50,21 +50,26 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
          * By default are dialogs centered on main screen.
          * </p>
          */
-        if (Double.isNaN(stageDialog.getWidth()) || Double.isNaN(stageDialog.getHeight())) {
+        if (Double.isNaN(stageDialog.getWidth())
+                || Double.isNaN(stageDialog.getHeight())) {
             placeStageAt(stageDialog, OFFSCREEN_X, OFFSCREEN_Y);
             stageDialog.show();
             stageDialog.hide();
         }
-        centerStage(stageDialog, stageDialog.getWidth(), stageDialog.getHeight());
+        centerStage(stageDialog, stageDialog.getWidth(),
+                stageDialog.getHeight());
         stageDialog.showAndWait();
     }
 
-    private void centerStage(final Stage stage, final double width, final double height) {
-        placeStageAt(stage, getViewUtil().getPrimaryStageCenterXPosition() - width / 2,
+    private void centerStage(final Stage stage, final double width,
+            final double height) {
+        placeStageAt(stage,
+                getViewUtil().getPrimaryStageCenterXPosition() - width / 2,
                 getViewUtil().getPrimaryStageCenterYPosition() - height / 2);
     }
 
-    private void placeStageAt(final Stage stage, final double x, final double y) {
+    private void placeStageAt(final Stage stage, final double x,
+            final double y) {
         stage.setX(x);
         stage.setY(y);
     }

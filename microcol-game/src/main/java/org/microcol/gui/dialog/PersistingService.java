@@ -26,7 +26,8 @@ public class PersistingService {
 
     public static final String SAVE_FILE_EXTENSION = "microcol";
 
-    private final Logger logger = LoggerFactory.getLogger(PersistingService.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(PersistingService.class);
 
     private final FileSelectingService fileSelectingService;
 
@@ -37,16 +38,19 @@ public class PersistingService {
     private final EventBus eventBus;
 
     @Inject
-    public PersistingService(final GameController gameController, final EventBus eventBus,
-            final PersistingTool persistingTool, final FileSelectingService fileSelectingService) {
+    public PersistingService(final GameController gameController,
+            final EventBus eventBus, final PersistingTool persistingTool,
+            final FileSelectingService fileSelectingService) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.fileSelectingService = Preconditions.checkNotNull(fileSelectingService);
+        this.fileSelectingService = Preconditions
+                .checkNotNull(fileSelectingService);
     }
 
     public void saveModel(final Model model) {
-        final File saveFile = fileSelectingService.saveFile(persistingTool.getRootSaveDirectory(),
+        final File saveFile = fileSelectingService.saveFile(
+                persistingTool.getRootSaveDirectory(),
                 persistingTool.getSuggestedSaveFileName(model));
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
@@ -57,12 +61,13 @@ public class PersistingService {
 
     /**
      * Show file dialog to player and allows him to choose file to load.
-     * 
-     * @param isSecretOptionEnabled
-     *            it's <code>true</code> when player press secret option
+     *
+     * @param isSecretOptionEnabled it's <code>true</code> when player press
+     *                              secret option
      */
     public void loadFromSavedGames(boolean isSecretOptionEnabled) {
-        final File saveFile = fileSelectingService.loadFile(persistingTool.getRootSaveDirectory());
+        final File saveFile = fileSelectingService
+                .loadFile(persistingTool.getRootSaveDirectory());
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
         } else {
@@ -90,21 +95,21 @@ public class PersistingService {
     /**
      * Add correct file extension to file.
      *
-     * @param targetFile
-     *            required file
+     * @param targetFile required file
      * @return corrected file
      */
     private File correctFileNameExtension(final File targetFile) {
         Preconditions.checkNotNull(targetFile);
         final Path path = targetFile.toPath();
         final String fileName = getFileName(path);
-        if (fileName.toLowerCase(Locale.getDefault()).endsWith(SAVE_FILE_EXTENSION)) {
+        if (fileName.toLowerCase(Locale.getDefault())
+                .endsWith(SAVE_FILE_EXTENSION)) {
             return targetFile;
         } else {
             final Path parent = path.getParent();
             if (parent == null) {
-                throw new MicroColException(
-                        String.format("Unable to determine paret path of '%s'", path));
+                throw new MicroColException(String.format(
+                        "Unable to determine paret path of '%s'", path));
             }
             Path out = parent.resolve(fileName + "." + SAVE_FILE_EXTENSION);
             return out.toFile();
@@ -115,8 +120,8 @@ public class PersistingService {
         Preconditions.checkNotNull(path);
         final Path fileName = path.getFileName();
         if (fileName == null) {
-            throw new MicroColException(
-                    String.format("Unable to get file name from path '%s' ", path));
+            throw new MicroColException(String
+                    .format("Unable to get file name from path '%s' ", path));
         } else {
             return fileName.toString();
         }

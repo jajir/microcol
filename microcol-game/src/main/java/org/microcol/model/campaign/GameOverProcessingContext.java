@@ -14,7 +14,8 @@ final class GameOverProcessingContext {
 
     private final EventBus eventBus;
 
-    GameOverProcessingContext(final GameFinishedEvent event, final EventBus eventBus) {
+    GameOverProcessingContext(final GameFinishedEvent event,
+            final EventBus eventBus) {
         this.event = Preconditions.checkNotNull(event);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }

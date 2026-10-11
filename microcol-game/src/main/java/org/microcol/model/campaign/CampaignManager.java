@@ -21,10 +21,11 @@ public final class CampaignManager {
 
     private final CampaignsDao campaignsDao;
 
-    CampaignManager(final List<Campaign> campaigns, final CampaignsDao campaignsDao) {
+    CampaignManager(final List<Campaign> campaigns,
+            final CampaignsDao campaignsDao) {
         this.campaignsDao = Preconditions.checkNotNull(campaignsDao);
-        this.campaigns = Preconditions.checkNotNull(campaigns).stream()
-                .collect(Collectors.toMap(c -> c.getName(), Function.identity()));
+        this.campaigns = Preconditions.checkNotNull(campaigns).stream().collect(
+                Collectors.toMap(c -> c.getName(), Function.identity()));
         loadMissionStateFromPreferences();
     }
 
@@ -48,10 +49,8 @@ public final class CampaignManager {
     /**
      * Get campaign by it's name.
      *
-     * @param name
-     *            required campaign name
-     * @param <C>
-     *            class providing campaign name
+     * @param name required campaign name
+     * @param <C>  class providing campaign name
      * @return campaign object
      */
     public <C extends CampaignName> Campaign getCampaignByName(final C name) {

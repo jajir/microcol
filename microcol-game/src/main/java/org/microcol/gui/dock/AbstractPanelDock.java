@@ -23,7 +23,8 @@ import javafx.scene.layout.Region;
  * Class mix together presenter and view.
  * </p>
  */
-public abstract class AbstractPanelDock implements JavaFxComponent, UpdatableLanguage, Repaintable {
+public abstract class AbstractPanelDock
+        implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
     private final PanelDockCratesPresenter panelDockCratesPresenter;
 
@@ -35,7 +36,8 @@ public abstract class AbstractPanelDock implements JavaFxComponent, UpdatableLan
             final PanelDockBehavior panelDockBehavior,
             final AbstractPanelDockProvider abstractDockProvider) {
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
-        this.panelDockCratesPresenter = abstractDockProvider.createPanelDockCratesPresenter();
+        this.panelDockCratesPresenter = abstractDockProvider
+                .createPanelDockCratesPresenter();
         this.view = new PanelDockView(imageProvider, panelDockCratesPresenter);
         view.setOnSelectedUnitWasChanged(this::onShipUnitWasSelected);
     }

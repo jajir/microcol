@@ -7,6 +7,7 @@ import org.microcol.gui.util.UpdatableLanguage;
  * All screen should implement this interface. Merge features that screen should
  * support.
  */
-public interface GameScreen extends ScreenLifeCycle, JavaFxComponent, UpdatableLanguage {
+public interface GameScreen
+        extends ScreenLifeCycle, JavaFxComponent, UpdatableLanguage {
 
 }

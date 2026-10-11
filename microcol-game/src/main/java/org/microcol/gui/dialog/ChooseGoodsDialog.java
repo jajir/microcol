@@ -51,7 +51,8 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
         slider = new Slider();
-        slider.setLabelFormatter(new SimpleStringConverter(this::converToString));
+        slider.setLabelFormatter(
+                new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
         slider.setSnapToTicks(false);
         slider.setMajorTickUnit(10);
@@ -70,7 +71,8 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         });
         buttonsBar.getButtonOk().requestFocus();
 
-        root.getChildren().addAll(labelCaption, boxActualValue, slider, buttonsBar.getContent());
+        root.getChildren().addAll(labelCaption, boxActualValue, slider,
+                buttonsBar.getContent());
     }
 
     public void init(final Goods maximalGoodsToTransfer) {

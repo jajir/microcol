@@ -45,7 +45,8 @@ public class PanelDockView implements JavaFxComponent {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
         toggleGroup = new ToggleGroup();
-        toggleGroup.selectedToggleProperty().addListener(this::onToggleGroupWasChanged);
+        toggleGroup.selectedToggleProperty()
+                .addListener(this::onToggleGroupWasChanged);
 
         panelShips = new HBox();
         panelShips.getStyleClass().add("ships");
@@ -55,7 +56,8 @@ public class PanelDockView implements JavaFxComponent {
     }
 
     @SuppressWarnings("unused")
-    private void onToggleGroupWasChanged(final ObservableValue<? extends Toggle> object,
+    private void onToggleGroupWasChanged(
+            final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
         if (onSelectedUnitWasChanged != null) {
             if (toggleGroup.getSelectedToggle() == null) {
@@ -83,8 +85,9 @@ public class PanelDockView implements JavaFxComponent {
 
     void addShip(final UnitWithCargo ship) {
         final ToggleButton toggleButtonShip = new ToggleButton();
-        final BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(ship),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+        final BackgroundImage myBI = new BackgroundImage(
+                imageProvider.getUnitImage(ship), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 BackgroundSize.DEFAULT);
         toggleButtonShip.getStyleClass().add(SHIP_IN_PORT_STYLE);
         toggleButtonShip.setBackground(new Background(myBI));
@@ -105,7 +108,8 @@ public class PanelDockView implements JavaFxComponent {
         } else {
             // select first
             if (panelShips.getChildren().size() > 0) {
-                final ToggleButton button = (ToggleButton) panelShips.getChildren().get(0);
+                final ToggleButton button = (ToggleButton) panelShips
+                        .getChildren().get(0);
                 button.setSelected(true);
             }
         }
@@ -115,7 +119,8 @@ public class PanelDockView implements JavaFxComponent {
         if (toggleGroup.getSelectedToggle() == null) {
             return Optional.empty();
         }
-        return Optional.of((UnitWithCargo) toggleGroup.getSelectedToggle().getUserData());
+        return Optional.of(
+                (UnitWithCargo) toggleGroup.getSelectedToggle().getUserData());
     }
 
     /**
@@ -126,10 +131,12 @@ public class PanelDockView implements JavaFxComponent {
             final ToggleButton butt = (ToggleButton) event.getSource();
             final Unit unit = (Unit) butt.getUserData();
             Preconditions.checkNotNull(unit);
-            Preconditions.checkArgument(unit.getType().isShip(), "Unit (%s) have to be ship.");
+            Preconditions.checkArgument(unit.getType().isShip(),
+                    "Unit (%s) have to be ship.");
             ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
-                    .addImage(butt.getBackground().getImages().get(0).getImage()).addUnit(unit)
-                    .build();
+                    .addImage(
+                            butt.getBackground().getImages().get(0).getImage())
+                    .addUnit(unit).build();
             event.consume();
         }
     }

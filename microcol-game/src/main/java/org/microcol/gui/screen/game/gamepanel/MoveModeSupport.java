@@ -28,7 +28,8 @@ import com.google.inject.Inject;
 @Listener
 public final class MoveModeSupport {
 
-    private final Logger logger = LoggerFactory.getLogger(MoveModeSupport.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(MoveModeSupport.class);
 
     private final SelectedTileManager selectedTileManager;
 
@@ -50,7 +51,8 @@ public final class MoveModeSupport {
      */
     enum MoveMode {
 
-        MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
+        MOVE(ImageProvider.IMG_ICON_STEPS_25x25,
+                ImageProvider.IMG_ICON_STEPS_TURN_25x25),
 
         ANCHOR(ImageProvider.IMG_ICON_STEPS_ANCHOR_25x25,
                 ImageProvider.IMG_ICON_STEPS_ANCHOR_TURN_25x25),
@@ -94,11 +96,14 @@ public final class MoveModeSupport {
     @Inject
     public MoveModeSupport(final SelectedTileManager selectedTileManager,
             final MouseOverTileManager mouseOverTileManager,
-            final SelectedUnitManager selectedUnitManager, final ModeController modeController,
-            final UnitUtil unitUtil) {
-        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+            final SelectedUnitManager selectedUnitManager,
+            final ModeController modeController, final UnitUtil unitUtil) {
+        this.selectedTileManager = Preconditions
+                .checkNotNull(selectedTileManager);
+        this.mouseOverTileManager = Preconditions
+                .checkNotNull(mouseOverTileManager);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.unitUtil = Preconditions.checkNotNull(unitUtil);
         moveLocations = new ArrayList<>();
@@ -111,7 +116,8 @@ public final class MoveModeSupport {
     }
 
     @Subscribe
-    private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
+    private void onMouseOverTileChanged(
+            final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
         Preconditions.checkNotNull(mouseOverTileChangedEvent);
         logger.debug("Recounting path: " + mouseOverTileChangedEvent);
         if (modeController.isMoveMode()) {
@@ -123,7 +129,8 @@ public final class MoveModeSupport {
 
     private void recountPath() {
         if (mouseOverTileManager.getMouseOverTile().isPresent()) {
-            final Location target = mouseOverTileManager.getMouseOverTile().get();
+            final Location target = mouseOverTileManager.getMouseOverTile()
+                    .get();
             if (selectedTileManager.getSelectedTile().get().equals(target)) {
                 /**
                  * Pointing with mouse to unit which should move.
@@ -142,8 +149,9 @@ public final class MoveModeSupport {
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
             // fights
-            moveLocations = Lists.newArrayList(
-                    movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
+            moveLocations = Lists
+                    .newArrayList(movingUnit.getPath(moveToLocation, true)
+                            .orElse(Collections.emptyList()));
             moveLocations.add(moveToLocation);
             moveMode = MoveMode.FIGHT;
         } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
@@ -151,7 +159,8 @@ public final class MoveModeSupport {
             moveLocations = movingUnit.getPath(moveToLocation)
                     .orElse(Lists.newArrayList(moveToLocation));
             moveMode = MoveMode.ANCHOR;
-        } else if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
+        } else if (unitUtil.isPossibleToDisembarkAt(movingUnit,
+                moveToLocation)) {
             moveLocations = movingUnit.getPath(moveToLocation)
                     .orElse(Lists.newArrayList(moveToLocation));
             moveMode = MoveMode.ANCHOR;

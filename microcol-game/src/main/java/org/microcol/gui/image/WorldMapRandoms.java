@@ -28,8 +28,7 @@ public final class WorldMapRandoms {
     /**
      * Constructor from world map.
      *
-     * @param map
-     *            required world map
+     * @param map required world map
      */
     public WorldMapRandoms(final WorldMap map) {
         Preconditions.checkNotNull(map);
@@ -47,8 +46,7 @@ public final class WorldMapRandoms {
      * For each place at map return unique pseudo random number. This number is
      * same for map and location.
      *
-     * @param location
-     *            required location
+     * @param location required location
      * @return unique pseudo random number
      */
     public Integer getRandomAt(final Location location) {

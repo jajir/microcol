@@ -16,7 +16,8 @@ public final class PlaceEuropePortPo extends PlacePo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this.getClass()).add("isOnPier", isOnPier).toString();
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("isOnPier", isOnPier).toString();
     }
 
 }

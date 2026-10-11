@@ -18,8 +18,8 @@ public final class ChangeLanguageEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(ChangeLanguageEvent.class).add("language", language)
-                .toString();
+        return MoreObjects.toStringHelper(ChangeLanguageEvent.class)
+                .add("language", language).toString();
     }
 
     public Language getLanguage() {

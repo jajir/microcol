@@ -19,16 +19,16 @@ public abstract class AbstractUnitFreeColonistTest {
 
     protected Cargo cargo = mock(Cargo.class);
 
-    protected void makeColonist(final Model model, final int id, final Place place,
-            final Player owner, final int availableMoves) {
-        unit = new UnitFreeColonist(model, id, unit -> place, owner, availableMoves,
-                new UnitActionNoAction(), 0, false, false);
+    protected void makeColonist(final Model model, final int id,
+            final Place place, final Player owner, final int availableMoves) {
+        unit = new UnitFreeColonist(model, id, unit -> place, owner,
+                availableMoves, new UnitActionNoAction(), 0, false, false);
     }
 
-    protected UnitFrigate makeFrigate(final Model model, final int id, final Place place,
-            final Player owner, final int availableMoves) {
-        return new UnitFrigate(unit -> cargo, model, id, unit -> place, owner, availableMoves,
-                new UnitActionNoAction());
+    protected UnitFrigate makeFrigate(final Model model, final int id,
+            final Place place, final Player owner, final int availableMoves) {
+        return new UnitFrigate(unit -> cargo, model, id, unit -> place, owner,
+                availableMoves, new UnitActionNoAction());
     }
 
     @AfterEach

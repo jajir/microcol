@@ -13,14 +13,15 @@ import javafx.scene.layout.Region;
 /**
  * Screen with market in Europe. It allows to buy various goods.
  */
-public abstract class AbstractScreenMarket extends AbstractScreenMenu implements GameScreen {
+public abstract class AbstractScreenMarket extends AbstractScreenMenu
+        implements GameScreen {
 
     private final MarketView marketView;
 
     private final I18n i18n;
 
-    public static final String STYLE_SHEET_MARKET = ScreenMenu.class.getResource("/gui/Market.css")
-            .toExternalForm();
+    public static final String STYLE_SHEET_MARKET = ScreenMenu.class
+            .getResource("/gui/Market.css").toExternalForm();
 
     @Inject
     AbstractScreenMarket(final I18n i18n, final MarketView marketView) {

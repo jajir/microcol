@@ -8,7 +8,8 @@ import org.microcol.i18n.MessageKeyResource;
 public class EventFinishMission extends AbstractEventWithMessages {
 
     @SuppressWarnings("unchecked")
-    <T extends Enum<T> & MessageKeyResource> EventFinishMission(final T... messageKeys) {
+    <T extends Enum<T> & MessageKeyResource> EventFinishMission(
+            final T... messageKeys) {
         super(messageKeys);
     }
 

@@ -19,8 +19,7 @@ public final class UnitActionConverter {
     private UnitActionConverter() {
     }
 
-    private static ChainOfCommandStrategy<UnitActionPo, UnitAction>
-            convertor = new ChainOfCommandStrategy<>(
+    private static ChainOfCommandStrategy<UnitActionPo, UnitAction> convertor = new ChainOfCommandStrategy<>(
             ImmutableList.of(po -> {
                 if (UnitActionType.noAction.equals(po.getType())) {
                     return new UnitActionNoAction();
@@ -29,7 +28,8 @@ public final class UnitActionConverter {
             }, po -> {
                 if (UnitActionType.plowField.equals(po.getType())) {
                     final UnitActionPlowField out = new UnitActionPlowField();
-                    out.setRemainingTurns(((UnitActionPlowFieldPo) po).getRemainingTurns());
+                    out.setRemainingTurns(
+                            ((UnitActionPlowFieldPo) po).getRemainingTurns());
                     return out;
                 }
                 return null;
@@ -38,8 +38,7 @@ public final class UnitActionConverter {
     /**
      * Convert persistent object to correct model object.
      *
-     * @param unitActionPo
-     *            required persistent object
+     * @param unitActionPo required persistent object
      * @return model object
      */
     public static UnitAction convert(final UnitActionPo unitActionPo) {

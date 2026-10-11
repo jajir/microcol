@@ -23,7 +23,8 @@ public final class ColonyField {
 
     private PlaceColonyField placeColonyField;
 
-    ColonyField(final Model model, final Direction direction, final Colony colony) {
+    ColonyField(final Model model, final Direction direction,
+            final Colony colony) {
         this.model = Preconditions.checkNotNull(model);
         this.direction = Preconditions.checkNotNull(direction);
         this.colony = Preconditions.checkNotNull(colony);
@@ -61,7 +62,7 @@ public final class ColonyField {
 
     /**
      * World map colony field location
-     * 
+     *
      * @return location where is colony field at map
      */
     public Location getLocation() {
@@ -78,8 +79,9 @@ public final class ColonyField {
 
     @Override
     public String toString() {
-        final ToStringHelper toStringHelper = MoreObjects.toStringHelper(ColonyField.class)
-                .add("direction", direction).add("colonyLocation", colony.getLocation())
+        final ToStringHelper toStringHelper = MoreObjects
+                .toStringHelper(ColonyField.class).add("direction", direction)
+                .add("colonyLocation", colony.getLocation())
                 .add("colonyName", getColonyName());
         if (getUnit().isPresent()) {
             toStringHelper.addValue("isEmpty");
@@ -99,7 +101,7 @@ public final class ColonyField {
 
     /**
      * Get turn production. It's empty when no unit is assigned here.
-     * 
+     *
      * @return production at this colony field per turn
      */
     public Optional<Goods> getProduction() {
@@ -107,14 +109,15 @@ public final class ColonyField {
             return Optional.empty();
         } else {
             final GoodsType producing = placeColonyField.getProducedGoodsType();
-            return Optional.of(Goods.of(producing, getTerrain().canProduceAmmount(producing)));
+            return Optional.of(Goods.of(producing,
+                    getTerrain().canProduceAmmount(producing)));
         }
     }
 
     /**
      * Get unit producing some raw source. When there is no unit empty is
      * returned.
-     * 
+     *
      * @return optional unit
      */
     public Optional<Unit> getUnit() {
@@ -130,24 +133,26 @@ public final class ColonyField {
     }
 
     public void setProducedGoodsType(final GoodsType producedGoodsType) {
-        Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
+        Preconditions.checkNotNull(placeColonyField,
+                "There in no unit placed at field");
         placeColonyField.setProducedGoodsType(producedGoodsType);
     }
 
     /**
      * Method should be called once per turn. It produce resources on field.
      *
-     * @param colonyWarehouse
-     *            required colony warehouse
+     * @param colonyWarehouse required colony warehouse
      */
     public void countTurnProduction(final ColonyWarehouse colonyWarehouse) {
         Preconditions.checkNotNull(colonyWarehouse);
         if (getProduction().isPresent()) {
             final Goods production = getProduction().get();
-            colonyWarehouse.addGoodsWithThrowingAway(production, thrownAwayGoods -> {
-                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(colony.getOwner(),
-                        thrownAwayGoods, colony));
-            });
+            colonyWarehouse.addGoodsWithThrowingAway(production,
+                    thrownAwayGoods -> {
+                        model.addTurnEvent(TurnEventProvider
+                                .getGoodsWasThrowsAway(colony.getOwner(),
+                                        thrownAwayGoods, colony));
+                    });
         }
     }
 

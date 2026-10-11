@@ -56,9 +56,10 @@ public final class ImageLoaderTerrain extends AbstractTiledImageLoader {
     public final static String IMAGE_PREFIX = "type_";
 
     ImageLoaderTerrain() {
-        super(TileImageParams.makeBuilder().setTileWidthCount(12).setTileHeightCount(8)
-                .setTileBorderWidth(9).setTileWidth(TILE_WIDTH_IN_PX).build(),
-                BACKGROUND_IMAGE_NAME, IMAGE_PREFIX);
+        super(TileImageParams.makeBuilder().setTileWidthCount(12)
+                .setTileHeightCount(8).setTileBorderWidth(9)
+                .setTileWidth(TILE_WIDTH_IN_PX).build(), BACKGROUND_IMAGE_NAME,
+                IMAGE_PREFIX);
     }
 
     @Override

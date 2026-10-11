@@ -31,11 +31,12 @@ class UnitPanel {
     private final VBox box = new VBox();
 
     UnitPanel(final ImageProvider imageProvider, final I18n i18n,
-            final LocalizationHelper localizationHelper, final Player humanPlayer, final Unit unit,
-            final boolean selected) {
+            final LocalizationHelper localizationHelper,
+            final Player humanPlayer, final Unit unit, final boolean selected) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.i18n = Preconditions.checkNotNull(i18n);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.localizationHelper = Preconditions
+                .checkNotNull(localizationHelper);
 
         box.getStyleClass().add("unitPanel");
         box.getChildren().add(makeUnitImage(humanPlayer, unit));
@@ -58,22 +59,25 @@ class UnitPanel {
         return box;
     }
 
-    private Region makeUnitDescription(final Player humanPlayer, final Unit unit) {
+    private Region makeUnitDescription(final Player humanPlayer,
+            final Unit unit) {
         final VBox box = new VBox();
 
-        final Label labelUnitType = new Label(localizationHelper.getUnitName(unit.getType()));
+        final Label labelUnitType = new Label(
+                localizationHelper.getUnitName(unit.getType()));
         labelUnitType.getStyleClass().add("unitType");
         box.getChildren().add(labelUnitType);
 
         if (isUnitOwnedBy(unit, humanPlayer)) {
             final Label labelMoves = new Label(
-                    i18n.get(Loc.unitsPanel_availableMoves) + " " + unit.getActionPoints());
+                    i18n.get(Loc.unitsPanel_availableMoves) + " "
+                            + unit.getActionPoints());
             labelMoves.getStyleClass().add("unitMoves");
             box.getChildren().add(labelMoves);
         }
 
-        final Label labelOwner = new Label(
-                i18n.get(Loc.unitsPanel_owner) + " " + unit.getOwner().getName());
+        final Label labelOwner = new Label(i18n.get(Loc.unitsPanel_owner) + " "
+                + unit.getOwner().getName());
         labelOwner.getStyleClass().add("unitOwner");
         box.getChildren().add(labelOwner);
         return box;
@@ -85,9 +89,11 @@ class UnitPanel {
 
     private ImageView getImageViewForCargoSlot(final CargoSlot cargoSlot) {
         if (cargoSlot.isLoadedUnit()) {
-            return new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get()));
+            return new ImageView(
+                    imageProvider.getUnitImage(cargoSlot.getUnit().get()));
         } else {
-            return new ImageView(imageProvider.getGoodsTypeImage(cargoSlot.getGoods().get()));
+            return new ImageView(imageProvider
+                    .getGoodsTypeImage(cargoSlot.getGoods().get()));
         }
     }
 
@@ -98,9 +104,11 @@ class UnitPanel {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_with)));
-            unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
+            unit.getCargo().getSlots().stream()
+                    .filter(cargoSlot -> !cargoSlot.isEmpty())
                     .forEach(cargoSlot -> {
-                        final ImageView imageView = getImageViewForCargoSlot(cargoSlot);
+                        final ImageView imageView = getImageViewForCargoSlot(
+                                cargoSlot);
                         imageView.setFitHeight(15);
                         imageView.setFitWidth(15);
                         box.getChildren().add(imageView);

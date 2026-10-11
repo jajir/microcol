@@ -15,10 +15,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 final class BuildTestSupport {
-    static final Path ROOT = Paths.get(System.getProperty("microcol.root", "..")).toAbsolutePath().normalize();
-    static final Path OUTPUT = Paths.get(System.getProperty("microcol.test.output", "target")).toAbsolutePath();
+    static final Path ROOT = Paths
+            .get(System.getProperty("microcol.root", "..")).toAbsolutePath()
+            .normalize();
+    static final Path OUTPUT = Paths
+            .get(System.getProperty("microcol.test.output", "target"))
+            .toAbsolutePath();
 
-    private BuildTestSupport() { }
+    private BuildTestSupport() {
+    }
 
     static String sha256(Path path) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -36,15 +41,18 @@ final class BuildTestSupport {
         return hex.toString();
     }
 
-    static Result run(Path cwd, Map<String, String> environment, Duration timeout,
-            Path output, String... command) throws Exception {
-        ProcessBuilder builder = new ProcessBuilder(command).directory(cwd.toFile())
-                .redirectErrorStream(true).redirectOutput(output.toFile());
+    static Result run(Path cwd, Map<String, String> environment,
+            Duration timeout, Path output, String... command) throws Exception {
+        ProcessBuilder builder = new ProcessBuilder(command)
+                .directory(cwd.toFile()).redirectErrorStream(true)
+                .redirectOutput(output.toFile());
         builder.environment().putAll(environment);
         Process process = builder.start();
         try {
             if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS)) {
-                throw new AssertionError("Timed out: " + String.join(" ", command) + "\n" + Files.readString(output));
+                throw new AssertionError(
+                        "Timed out: " + String.join(" ", command) + "\n"
+                                + Files.readString(output));
             }
             return new Result(process.exitValue(), Files.readString(output));
         } finally {
@@ -52,9 +60,13 @@ final class BuildTestSupport {
         }
     }
 
-    /** No broad pkill: only this process and descendants observed while it is owned. */
+    /**
+     * No broad pkill: only this process and descendants observed while it is
+     * owned.
+     */
     static void stopOwnedProcess(Process process) throws InterruptedException {
-        List<ProcessHandle> children = process.descendants().collect(Collectors.toCollection(ArrayList::new));
+        List<ProcessHandle> children = process.descendants()
+                .collect(Collectors.toCollection(ArrayList::new));
         Collections.reverse(children);
         children.forEach(ProcessHandle::destroy);
         if (process.isAlive()) {
@@ -64,12 +76,15 @@ final class BuildTestSupport {
                 process.waitFor(3, TimeUnit.SECONDS);
             }
         }
-        children.stream().filter(ProcessHandle::isAlive).forEach(ProcessHandle::destroyForcibly);
+        children.stream().filter(ProcessHandle::isAlive)
+                .forEach(ProcessHandle::destroyForcibly);
     }
 
     static void executable(Path path, String content) throws IOException {
         Files.writeString(path, content);
-        Files.setPosixFilePermissions(path, java.nio.file.attribute.PosixFilePermissions.fromString("rwxr-xr-x"));
+        Files.setPosixFilePermissions(path,
+                java.nio.file.attribute.PosixFilePermissions
+                        .fromString("rwxr-xr-x"));
     }
 
     static final class Result {

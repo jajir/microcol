@@ -52,40 +52,45 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
     /**
      * Allows t set css construction id. It allows to place construction at
      * specific place.
-     * 
-     * @param id
-     *            required css id
+     *
+     * @param id required css id
      */
     void setCssId(final String id) {
         getMainPane().setId(id);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(getConstructionName(), Source.COLONY));
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(getConstructionName(),
+                Source.COLONY));
     }
 
     /**
      * Get localized construction name.
-     * 
+     *
      * @return
      */
     private String getConstructionName() {
-        return i18n.get(ConstructionTypeName.getNameForType(construction.getType()));
+        return i18n.get(
+                ConstructionTypeName.getNameForType(construction.getType()));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 
     void paintConstruction(final Point point) {
-        paintConstruction(canvas.getGraphicsContext2D(), getConstruction(), point);
+        paintConstruction(canvas.getGraphicsContext2D(), getConstruction(),
+                point);
     }
 
-    private void paintConstruction(final GraphicsContext gc, final Construction construction,
-            final Point point) {
-        final Image image = imageProvider.getConstructionImage(construction.getType())
-                .orElseThrow(() -> new MicroColException(
-                        String.format("Unable to find image for %s", construction)));
+    private void paintConstruction(final GraphicsContext gc,
+            final Construction construction, final Point point) {
+        final Image image = imageProvider
+                .getConstructionImage(construction.getType())
+                .orElseThrow(() -> new MicroColException(String
+                        .format("Unable to find image for %s", construction)));
         gc.drawImage(image, point.getX(), point.getY());
     }
 

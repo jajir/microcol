@@ -19,7 +19,8 @@ final class UnitMovedOutsideColonyEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("unit", unit).add("colony", colony).toString();
+        return MoreObjects.toStringHelper(this).add("unit", unit)
+                .add("colony", colony).toString();
     }
 
     /**

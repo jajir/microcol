@@ -31,21 +31,25 @@ class PanelQueueConstructions extends TitledPanel {
     private final VBox queuePanel;
 
     @Inject
-    public PanelQueueConstructions(final ColonyDialogCallback colonyDialogCallback,
-            final ImageProvider imageProvider, final QueueController queueController) {
+    public PanelQueueConstructions(
+            final ColonyDialogCallback colonyDialogCallback,
+            final ImageProvider imageProvider,
+            final QueueController queueController) {
         super("Budovy");
-        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+        this.colonyDialogCallback = Preconditions
+                .checkNotNull(colonyDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.queueController = Preconditions.checkNotNull(queueController);
         queuePanel = new VBox();
         getContentPane().getChildren().add(queuePanel);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
-                this::isItValid);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                this, this::isItValid);
         setOnDragEntered(backgroundHighlighter::onDragEntered);
         setOnDragExited(backgroundHighlighter::onDragExited);
         setOnDragOver(this::onDragOver);
         setOnDragDropped(this::onDragDropped);
-        queueController.getObservableList().addListener(this::onListChangeEvent);
+        queueController.getObservableList()
+                .addListener(this::onListChangeEvent);
     }
 
     private void onListChangeEvent(
@@ -66,7 +70,8 @@ class PanelQueueConstructions extends TitledPanel {
     }
 
     private void onDragDropped(final DragEvent event) {
-        final ClipboardParser parser = ClipboardParser.make(event.getDragboard());
+        final ClipboardParser parser = ClipboardParser
+                .make(event.getDragboard());
         if (parser.getFrom().get() == From.VALUE_FROM_BUILDING_QUEUE) {
             int removingItemId = parser.getInt(ClipboardConst.KEY_INDEX);
             queueController.removeItemById(removingItemId);
@@ -86,7 +91,8 @@ class PanelQueueConstructions extends TitledPanel {
 
     private boolean isItValid(final Dragboard db) {
         return ClipboardParser.make(db).getFrom()
-                .filter(from -> from == From.VALUE_FROM_BUILDING_QUEUE).isPresent();
+                .filter(from -> from == From.VALUE_FROM_BUILDING_QUEUE)
+                .isPresent();
     }
 
 }

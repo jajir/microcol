@@ -8,7 +8,8 @@ public class TurnEventFamineWillPlagueColony extends AbstractTurnEvent {
 
     private final String colonyName;
 
-    TurnEventFamineWillPlagueColony(final String playerName, final String colonyName) {
+    TurnEventFamineWillPlagueColony(final String playerName,
+            final String colonyName) {
         super(playerName);
         this.colonyName = Preconditions.checkNotNull(colonyName);
     }
@@ -26,8 +27,10 @@ public class TurnEventFamineWillPlagueColony extends AbstractTurnEvent {
         return out;
     }
 
-    public static TurnEventFamineWillPlagueColony tryLoad(final TurnEventPo po) {
-        if (TurnEventFamineWillPlagueColony.class.getSimpleName().equals(po.getType())) {
+    public static TurnEventFamineWillPlagueColony tryLoad(
+            final TurnEventPo po) {
+        if (TurnEventFamineWillPlagueColony.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             final String colonyName = po.getColonyName();
             return new TurnEventFamineWillPlagueColony(playerName, colonyName);

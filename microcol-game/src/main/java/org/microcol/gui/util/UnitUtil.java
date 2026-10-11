@@ -9,7 +9,8 @@ import org.microcol.model.unit.UnitWithCargo;
  */
 public class UnitUtil {
 
-    public boolean isPossibleToDisembarkAt(final Unit unit, final Location targetLocation) {
+    public boolean isPossibleToDisembarkAt(final Unit unit,
+            final Location targetLocation) {
         if (unit.canHoldCargo()) {
             final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
             return unitWithCargo.isPossibleToDisembarkAt(targetLocation, true);

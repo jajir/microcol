@@ -31,15 +31,15 @@ public class SettingDao {
 
     @Inject
     SettingDao() {
-        gson = new GsonBuilder().registerTypeAdapter(Locale.class, new GsonLocaleTypeAdapter())
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Locale.class, new GsonLocaleTypeAdapter())
                 .setPrettyPrinting().create();
     }
 
     /**
      * Load setting object from given file.
-     * 
-     * @param file
-     *            required file with setting
+     *
+     * @param file required file with setting
      * @return optional setting object
      */
     Optional<Setting> loadFromFile(final File file) {
@@ -47,16 +47,19 @@ public class SettingDao {
         Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.",
                 file.getAbsolutePath());
         Preconditions.checkArgument(file.isFile());
-        logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
+        logger.debug("Starting to read from class path ({})",
+                file.getAbsolutePath());
         try (final FileInputStream fis = new FileInputStream(file)) {
-            return Optional.ofNullable(gson
-                    .fromJson(new InputStreamReader(fis, StandardCharsets.UTF_8), Setting.class));
+            return Optional.ofNullable(gson.fromJson(
+                    new InputStreamReader(fis, StandardCharsets.UTF_8),
+                    Setting.class));
         } catch (JsonSyntaxException e) {
-            logger.warn(String.format("File '%s' was not loaded.", file.getAbsolutePath()));
+            logger.warn(String.format("File '%s' was not loaded.",
+                    file.getAbsolutePath()));
             return Optional.empty();
         } catch (IOException e) {
-            throw new MicroColException(e.getMessage()
-                    + String.format("File '%s' was not loaded.", file.getAbsolutePath(), e));
+            throw new MicroColException(e.getMessage() + String.format(
+                    "File '%s' was not loaded.", file.getAbsolutePath(), e));
         }
     }
 

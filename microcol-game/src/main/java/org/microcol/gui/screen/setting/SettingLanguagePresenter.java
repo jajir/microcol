@@ -10,8 +10,8 @@ import com.google.inject.Inject;
 public class SettingLanguagePresenter {
 
     @Inject
-    SettingLanguagePresenter(final SettingLanguageView settingLanguageView, final EventBus eventBus,
-            final I18n i18n) {
+    SettingLanguagePresenter(final SettingLanguageView settingLanguageView,
+            final EventBus eventBus, final I18n i18n) {
         settingLanguageView.getRbCzech().setOnAction(actionEvent -> {
             i18n.setLocale(Language.cz.getLocale());
             eventBus.post(new ChangeLanguageEvent(Language.cz));

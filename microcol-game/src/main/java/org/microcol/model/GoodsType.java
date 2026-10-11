@@ -10,69 +10,71 @@ import com.google.common.collect.ImmutableList;
 
 public final class GoodsType {
 
-    public final static GoodsType CORN = GoodsTypeBuilder.make().setName("CORN").setCanBeBought(true)
-            .build();
-
-    public final static GoodsType SUGAR = GoodsTypeBuilder.make().setName("SUGAR")
+    public final static GoodsType CORN = GoodsTypeBuilder.make().setName("CORN")
             .setCanBeBought(true).build();
 
-    public final static GoodsType TOBACCO = GoodsTypeBuilder.make().setName("TOBACCO")
+    public final static GoodsType SUGAR = GoodsTypeBuilder.make()
+            .setName("SUGAR").setCanBeBought(true).build();
+
+    public final static GoodsType TOBACCO = GoodsTypeBuilder.make()
+            .setName("TOBACCO").setCanBeBought(true).build();
+
+    public final static GoodsType COTTON = GoodsTypeBuilder.make()
+            .setName("COTTON").setCanBeBought(true).build();
+
+    public final static GoodsType FUR = GoodsTypeBuilder.make().setName("FUR")
             .setCanBeBought(true).build();
 
-    public final static GoodsType COTTON = GoodsTypeBuilder.make().setName("COTTON")
+    public final static GoodsType LUMBER = GoodsTypeBuilder.make()
+            .setName("LUMBER").setCanBeBought(true).build();
+
+    public final static GoodsType ORE = GoodsTypeBuilder.make().setName("ORE")
             .setCanBeBought(true).build();
 
-    public final static GoodsType FUR = GoodsTypeBuilder.make().setName("FUR").setCanBeBought(true)
-            .build();
+    public final static GoodsType SILVER = GoodsTypeBuilder.make()
+            .setName("SILVER").setCanBeBought(true).build();
 
-    public final static GoodsType LUMBER = GoodsTypeBuilder.make().setName("LUMBER")
+    public final static GoodsType HORSE = GoodsTypeBuilder.make()
+            .setName("HORSE").setCanBeBought(true).build();
+
+    public final static GoodsType RUM = GoodsTypeBuilder.make().setName("RUM")
             .setCanBeBought(true).build();
 
-    public final static GoodsType ORE = GoodsTypeBuilder.make().setName("ORE").setCanBeBought(true)
-            .build();
+    public final static GoodsType CIGARS = GoodsTypeBuilder.make()
+            .setName("CIGARS").setCanBeBought(true).build();
 
-    public final static GoodsType SILVER = GoodsTypeBuilder.make().setName("SILVER")
+    public final static GoodsType SILK = GoodsTypeBuilder.make().setName("SILK")
             .setCanBeBought(true).build();
 
-    public final static GoodsType HORSE = GoodsTypeBuilder.make().setName("HORSE")
+    public final static GoodsType COAT = GoodsTypeBuilder.make().setName("COAT")
             .setCanBeBought(true).build();
 
-    public final static GoodsType RUM = GoodsTypeBuilder.make().setName("RUM").setCanBeBought(true)
-            .build();
+    public final static GoodsType GOODS = GoodsTypeBuilder.make()
+            .setName("GOODS").setCanBeBought(true).build();
 
-    public final static GoodsType CIGARS = GoodsTypeBuilder.make().setName("CIGARS")
-            .setCanBeBought(true).build();
+    public final static GoodsType TOOLS = GoodsTypeBuilder.make()
+            .setName("TOOLS").setCanBeBought(true).build();
 
-    public final static GoodsType SILK = GoodsTypeBuilder.make().setName("SILK").setCanBeBought(true)
-            .build();
+    public final static GoodsType MUSKET = GoodsTypeBuilder.make()
+            .setName("MUSKET").setCanBeBought(true).build();
 
-    public final static GoodsType COAT = GoodsTypeBuilder.make().setName("COAT").setCanBeBought(true)
-            .build();
+    public final static GoodsType HAMMERS = GoodsTypeBuilder.make()
+            .setName("HAMMERS").setCanBeBought(false).build();
 
-    public final static GoodsType GOODS = GoodsTypeBuilder.make().setName("GOODS")
-            .setCanBeBought(true).build();
+    public final static GoodsType CROSS = GoodsTypeBuilder.make()
+            .setName("CROSS").setCanBeBought(false).build();
 
-    public final static GoodsType TOOLS = GoodsTypeBuilder.make().setName("TOOLS")
-            .setCanBeBought(true).build();
-
-    public final static GoodsType MUSKET = GoodsTypeBuilder.make().setName("MUSKET")
-            .setCanBeBought(true).build();
-
-    public final static GoodsType HAMMERS = GoodsTypeBuilder.make().setName("HAMMERS")
+    public final static GoodsType BELL = GoodsTypeBuilder.make().setName("BELL")
             .setCanBeBought(false).build();
 
-    public final static GoodsType CROSS = GoodsTypeBuilder.make().setName("CROSS")
-            .setCanBeBought(false).build();
-
-    public final static GoodsType BELL = GoodsTypeBuilder.make().setName("BELL").setCanBeBought(false)
-            .build();
-
-    public final static List<GoodsType> GOOD_TYPES = ImmutableList.<GoodsType>of(CORN, SUGAR, TOBACCO,
-            COTTON, FUR, LUMBER, ORE, SILVER, HORSE, RUM, CIGARS, SILK, COAT, GOODS, TOOLS, MUSKET,
-            HAMMERS, CROSS, BELL);
+    public final static List<GoodsType> GOOD_TYPES = ImmutableList
+            .<GoodsType>of(CORN, SUGAR, TOBACCO, COTTON, FUR, LUMBER, ORE,
+                    SILVER, HORSE, RUM, CIGARS, SILK, COAT, GOODS, TOOLS,
+                    MUSKET, HAMMERS, CROSS, BELL);
 
     public final static List<GoodsType> BUYABLE_GOOD_TYPES = GOOD_TYPES.stream()
-            .filter(goodsType -> goodsType.isCanBeBought()).collect(Collectors.toList());
+            .filter(goodsType -> goodsType.isCanBeBought())
+            .collect(Collectors.toList());
 
     private static class GoodsTypeBuilder {
 
@@ -111,16 +113,19 @@ public final class GoodsType {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(GoodsType.class).add("name", name()).toString();
+        return MoreObjects.toStringHelper(GoodsType.class).add("name", name())
+                .toString();
     }
 
     public static GoodsType valueOf(final String strName) {
         final Optional<GoodsType> oGoodsType = GOOD_TYPES.stream()
-                .filter(goodsType -> goodsType.name().equals(strName)).findFirst();
+                .filter(goodsType -> goodsType.name().equals(strName))
+                .findFirst();
         if (oGoodsType.isPresent()) {
             return oGoodsType.get();
         } else {
-            throw new IllegalArgumentException("There is no such type '" + strName + "'");
+            throw new IllegalArgumentException(
+                    "There is no such type '" + strName + "'");
         }
     }
 

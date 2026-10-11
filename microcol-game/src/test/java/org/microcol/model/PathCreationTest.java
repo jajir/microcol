@@ -17,14 +17,17 @@ public class PathCreationTest {
         return Stream.of(
 
                 arguments(Arrays.asList(Location.of(2, 3))),
-                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(3, 4),
-                        Location.of(3, 5), Location.of(4, 5))),
+                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3),
+                        Location.of(3, 4), Location.of(3, 5),
+                        Location.of(4, 5))),
                 // circle
-                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(3, 4),
-                        Location.of(2, 4), Location.of(2, 3))),
+                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3),
+                        Location.of(3, 4), Location.of(2, 4),
+                        Location.of(2, 3))),
                 // back
-                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(4, 3),
-                        Location.of(3, 3), Location.of(2, 3))));
+                arguments(Arrays.asList(Location.of(2, 3), Location.of(3, 3),
+                        Location.of(4, 3), Location.of(3, 3),
+                        Location.of(2, 3))));
 
     }
 
@@ -33,7 +36,9 @@ public class PathCreationTest {
     public void testCreation(final List<Location> locations) {
         final Path path = Path.of(locations);
 
-        assertEquals(locations, path.getLocations(), "Test of locations failed:");
-        assertEquals(locations.get(0), path.getStart(), "Test of start failed:");
+        assertEquals(locations, path.getLocations(),
+                "Test of locations failed:");
+        assertEquals(locations.get(0), path.getStart(),
+                "Test of start failed:");
     }
 }

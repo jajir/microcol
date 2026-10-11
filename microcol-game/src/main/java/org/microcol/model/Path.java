@@ -15,7 +15,8 @@ public class Path {
 
     private Path(final List<Location> locations) {
         Preconditions.checkNotNull(locations);
-        Preconditions.checkArgument(locations.size() > 0, "Path cannot be empty.");
+        Preconditions.checkArgument(locations.size() > 0,
+                "Path cannot be empty.");
         checkNeighbors(locations);
 
         this.locations = ImmutableList.copyOf(locations);
@@ -27,7 +28,8 @@ public class Path {
             final Location nextLocation = locations.get(i);
             // Possible NPE is not problem here.
             Preconditions.checkArgument(prevLocation.isNeighbor(nextLocation),
-                    "Locations are not neighbors: (%s - %s)", prevLocation, nextLocation);
+                    "Locations are not neighbors: (%s - %s)", prevLocation,
+                    nextLocation);
         }
     }
 
@@ -45,7 +47,7 @@ public class Path {
 
     /**
      * Get last location.
-     * 
+     *
      * @return return target location.
      */
     public Location getTarget() {
@@ -63,12 +65,14 @@ public class Path {
         Preconditions.checkArgument(!locations.contains(null),
                 "Locations (%s) contain null element.", locations);
 
-        return locations.stream().anyMatch(location -> this.locations.contains(location));
+        return locations.stream()
+                .anyMatch(location -> this.locations.contains(location));
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("locations", locations).toString();
+        return MoreObjects.toStringHelper(this).add("locations", locations)
+                .toString();
     }
 
     public static Path of(final List<Location> locations) {

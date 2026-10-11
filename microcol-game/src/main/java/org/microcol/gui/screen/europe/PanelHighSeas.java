@@ -56,12 +56,14 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     private T onMouseEnteredKey;
 
     @Inject
-    public PanelHighSeas(final EuropeCallback europeDialog, final ImageProvider imageProvider,
-            final GameModelController gameModelController, final EventBus eventBus,
-            final I18n i18n) {
+    public PanelHighSeas(final EuropeCallback europeDialog,
+            final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final EventBus eventBus, final I18n i18n) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -81,13 +83,16 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         titledPanel.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
         if (onMouseEnteredKey != null) {
-            eventBus.post(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey), Source.EUROPE));
+            eventBus.post(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey),
+                    Source.EUROPE));
         }
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
@@ -111,7 +116,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     private boolean isItCorrectObject(final Dragboard db) {
         if (!isShownShipsTravelingToEurope && db.hasString()) {
             return ClipboardEval.make(gameModelController.getModel(), db)
-                    .filterUnit(unit -> unit.getType().isShip()).getUnit().isPresent();
+                    .filterUnit(unit -> unit.getType().isShip()).getUnit()
+                    .isPresent();
         } else {
             return false;
         }
@@ -119,7 +125,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private void onDragDropped(final DragEvent event) {
         final Optional<Unit> oUnit = ClipboardEval
-                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
             Preconditions.checkState(unit.getType().isShip(),
@@ -137,16 +144,17 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                 .getUnitsTravelingTo(gameModelController.getHumanPlayer(),
                         isShownShipsTravelingToEurope)
                 .forEach(unit -> {
-                    shipsContainer.getChildren()
-                            .add(new ImageView(imageProvider.getUnitImage(unit)));
+                    shipsContainer.getChildren().add(
+                            new ImageView(imageProvider.getUnitImage(unit)));
                 });
     }
 
     /**
-     * @param isShownShipsTravelingToEurope
-     *            the isShownShipsTravelingToEurope to set
+     * @param isShownShipsTravelingToEurope the isShownShipsTravelingToEurope to
+     *                                      set
      */
-    public void setShownShipsTravelingToEurope(final boolean isShownShipsTravelingToEurope) {
+    public void setShownShipsTravelingToEurope(
+            final boolean isShownShipsTravelingToEurope) {
         this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
     }
 
@@ -161,16 +169,14 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     }
 
     /**
-     * @param titleKey
-     *            the titleKey to set
+     * @param titleKey the titleKey to set
      */
     public void setTitleKey(T titleKey) {
         this.titleKey = Preconditions.checkNotNull(titleKey);
     }
 
     /**
-     * @param onMouseOverKey
-     *            the onMouseOverKey to set
+     * @param onMouseOverKey the onMouseOverKey to set
      */
     public void setOnMouseEnteredKey(T onMouseOverKey) {
         this.onMouseEnteredKey = Preconditions.checkNotNull(onMouseOverKey);

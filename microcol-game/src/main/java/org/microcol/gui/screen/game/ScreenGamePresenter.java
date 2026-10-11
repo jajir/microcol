@@ -30,7 +30,8 @@ import javafx.scene.input.KeyEvent;
 @Singleton
 public class ScreenGamePresenter {
 
-    private final Logger logger = LoggerFactory.getLogger(ScreenGamePresenter.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(ScreenGamePresenter.class);
 
     private final SelectedUnitManager selectedUnitManager;
 
@@ -50,21 +51,29 @@ public class ScreenGamePresenter {
 
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
-            final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
+            final MouseOverTileManager mouseOverTileManager,
+            final ModeController modeController,
             final SelectedUnitManager selectedUnitManager,
-            final PersistingService persistingService, final GamePanelPresenter gamePanelPresenter,
-            final GameModelController gameModelController, final WasdController wasdController) {
+            final PersistingService persistingService,
+            final GamePanelPresenter gamePanelPresenter,
+            final GameModelController gameModelController,
+            final WasdController wasdController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+        this.mouseOverTileManager = Preconditions
+                .checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
-        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-        this.gamePanelPresenter = Preconditions.checkNotNull(gamePanelPresenter);
+        this.selectedUnitManager = Preconditions
+                .checkNotNull(selectedUnitManager);
+        this.gamePanelPresenter = Preconditions
+                .checkNotNull(gamePanelPresenter);
         this.persistingService = Preconditions.checkNotNull(persistingService);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.wasdController = Preconditions.checkNotNull(wasdController);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
-        screenGame.setOnTabPressed(event -> eventBus.post(new SelectNextUnitEvent()));
+        screenGame.setOnTabPressed(
+                event -> eventBus.post(new SelectNextUnitEvent()));
     }
 
     private void onKeyPressed(final KeyEvent event) {
@@ -119,8 +128,9 @@ public class ScreenGamePresenter {
 
         gamePanelPresenter.quitFromMoveMode();
 
-        logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
-                + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
+        logger.debug("Pressed key: '" + event.getCode().getName()
+                + "' has code '" + event.getCharacter() + "', modifiers '"
+                + event.getCode().isModifierKey() + "'");
     }
 
     private void onKeyMWasPressed() {
@@ -156,7 +166,8 @@ public class ScreenGamePresenter {
 
     private void onKeyPressed_enter() {
         if (modeController.isMoveMode()) {
-            gamePanelPresenter.switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
+            gamePanelPresenter.switchToNormalMode(
+                    mouseOverTileManager.getMouseOverTile().get());
         }
     }
 

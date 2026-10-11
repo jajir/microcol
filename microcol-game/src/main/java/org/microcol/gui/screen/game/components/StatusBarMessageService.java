@@ -35,15 +35,18 @@ public class StatusBarMessageService {
     private final LocalizationHelper localizationHelper;
 
     @Inject
-    StatusBarMessageService(final I18n i18n, final GamePreferences gamePreferences,
+    StatusBarMessageService(final I18n i18n,
+            final GamePreferences gamePreferences,
             final LocalizationHelper localizationHelper) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.localizationHelper = Preconditions
+                .checkNotNull(localizationHelper);
     }
 
     public String getStatusMessage(final Location where, final Player player,
-            final TerrainType terrain, final List<Unit> units, final Optional<Colony> oColony) {
+            final TerrainType terrain, final List<Unit> units,
+            final Optional<Colony> oColony) {
         final StringBuilder buff = new StringBuilder();
         if (gamePreferences.isDevelopment()) {
             buff.append("[");
@@ -85,15 +88,18 @@ public class StatusBarMessageService {
         return buff.toString();
     }
 
-    private void addPartColony(final List<SbPart> parts, final Optional<Colony> oColony) {
+    private void addPartColony(final List<SbPart> parts,
+            final Optional<Colony> oColony) {
         if (oColony.isPresent()) {
             parts.add(new SbPartColony(i18n, oColony.get().getName()));
         }
     }
 
-    private void addPartUnits(final List<SbPart> parts, final List<Unit> units) {
-        final Map<UnitType, Long> groupedUnits = units.stream().map(unit -> unit.getType())
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    private void addPartUnits(final List<SbPart> parts,
+            final List<Unit> units) {
+        final Map<UnitType, Long> groupedUnits = units.stream()
+                .map(unit -> unit.getType()).collect(Collectors.groupingBy(
+                        Function.identity(), Collectors.counting()));
         for (Map.Entry<UnitType, Long> entry : groupedUnits.entrySet()) {
             final UnitType unitType = entry.getKey();
             final long count = entry.getValue();

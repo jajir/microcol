@@ -29,15 +29,17 @@ public final class TurnReportView implements JavaFxComponent, ScreenLifeCycle {
     private GameScreen mainPanel;
 
     @Inject
-    TurnReportView(final TurnReportBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPage, final TurnReportButtonsPanel turnReportButtonsPanel) {
+    TurnReportView(final TurnReportBackground background,
+            final TitledPage titledPage, final CenteredPage centeredPage,
+            final TurnReportButtonsPanel turnReportButtonsPanel) {
         this.background = Preconditions.checkNotNull(background);
         this.centeredPage = Preconditions.checkNotNull(centeredPage);
         this.titledPage = Preconditions.checkNotNull(titledPage);
 
-        final ButtonedPage buttonedPage = new ButtonedPage(turnReportButtonsPanel);
+        final ButtonedPage buttonedPage = new ButtonedPage(
+                turnReportButtonsPanel);
         buttonedPage.setContent(titledPage);
-        
+
         centeredPage.setBackground(background);
         centeredPage.setMainPanel(buttonedPage);
     }

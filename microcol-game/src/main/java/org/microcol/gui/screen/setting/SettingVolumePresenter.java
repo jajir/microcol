@@ -9,7 +9,8 @@ public class SettingVolumePresenter {
     @Inject
     SettingVolumePresenter(final SettingVolumeView view,
             final PreferencesProperties preferencesProperties) {
-        view.getVolumeValueProperty().bindBidirectional(preferencesProperties.getVolumeProperty());
+        view.getVolumeValueProperty()
+                .bindBidirectional(preferencesProperties.getVolumeProperty());
     }
 
 }

@@ -16,22 +16,22 @@ import com.google.common.base.Preconditions;
 
 /**
  * Internationalization service. Class should be initialized via builder:
- * 
+ *
  * <pre>
  * I18n i18n = I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
  *         .setVerifyThatAllKeysInResourceBundleHaveConstant(true).build();
  * </pre>
- * 
+ *
  * For configuration option look at documentation below. There should be
- * 
+ *
  * <pre>
  * public enum Keys implements MessageKeyResource {
  *     greeting;
  * }
  * </pre>
- * 
+ *
  * Than it should be used in a way:
- * 
+ *
  * <pre>
  * I18n.getMessage(Key.greeting);
  * </pre>
@@ -61,7 +61,8 @@ public class I18n {
 
         private Locale defaultLocale;
 
-        public Builder setVerifyThatAllEnumKeysAreDefined(boolean verifyThatAllEnumKeysAreDefined) {
+        public Builder setVerifyThatAllEnumKeysAreDefined(
+                boolean verifyThatAllEnumKeysAreDefined) {
             this.verifyThatAllEnumKeysAreDefined = verifyThatAllEnumKeysAreDefined;
             return this;
         }
@@ -73,7 +74,8 @@ public class I18n {
         }
 
         public Builder setDefaultLocale(final Locale defaultLocale) {
-            Objects.requireNonNull(defaultLocale, "Default locale can't be null");
+            Objects.requireNonNull(defaultLocale,
+                    "Default locale can't be null");
             this.defaultLocale = defaultLocale;
             return this;
         }
@@ -86,16 +88,18 @@ public class I18n {
 
         public I18n build() {
             return new I18n(verifyThatAllEnumKeysAreDefined,
-                    verifyThatAllKeysInResourceBundleHaveConstant, streamReader, defaultLocale);
+                    verifyThatAllKeysInResourceBundleHaveConstant, streamReader,
+                    defaultLocale);
         }
 
     }
 
     private I18n(final boolean verifyThatAllEnumKeysAreDefined,
-            final boolean verifyThatAllKeyDefinitionsHaveConstant, final StreamReader streamReader,
-            final Locale defaultLocale) {
-        Preconditions.checkNotNull(streamReader,"Stream reader is null.");
-        final ResourceBundleProvider impl = new ResourceBundleProviderXmlImpl(streamReader);
+            final boolean verifyThatAllKeyDefinitionsHaveConstant,
+            final StreamReader streamReader, final Locale defaultLocale) {
+        Preconditions.checkNotNull(streamReader, "Stream reader is null.");
+        final ResourceBundleProvider impl = new ResourceBundleProviderXmlImpl(
+                streamReader);
         resourceBundlesManager = new ResourceBundlesManager(impl);
         this.verifyThatAllEnumKeysAreDefined = verifyThatAllEnumKeysAreDefined;
         this.verifyThatAllKeysInResourceBundleHaveConstant = verifyThatAllKeyDefinitionsHaveConstant;
@@ -104,8 +108,8 @@ public class I18n {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(I18n.class).add("currentLocale", currentLocale)
-                .toString();
+        return MoreObjects.toStringHelper(I18n.class)
+                .add("currentLocale", currentLocale).toString();
     }
 
     public static Builder builder() {
@@ -133,51 +137,60 @@ public class I18n {
         }
     }
 
-    private <T extends Enum<T> & MessageKeyResource> String getRawMessage(final T messageKeyEnum) {
-        Objects.requireNonNull(messageKeyEnum, "Message key enum can't be null");
+    private <T extends Enum<T> & MessageKeyResource> String getRawMessage(
+            final T messageKeyEnum) {
+        Objects.requireNonNull(messageKeyEnum,
+                "Message key enum can't be null");
         final String messageKey = messageKeyEnum.toString();
         return getRourceBundle(messageKeyEnum).getString(messageKey);
     }
 
     private <T extends Enum<T> & MessageKeyResource> ResourceBundle getRourceBundle(
             final T messageKeyResource) {
-        final String baseName = messageKeyResource.getClass().getCanonicalName();
+        final String baseName = messageKeyResource.getClass()
+                .getCanonicalName();
         return resourceBundlesManager.getCachedBundle(baseName, currentLocale)
                 .orElseGet(() -> initResourceBundle(messageKeyResource));
     }
 
     private <T extends Enum<T> & MessageKeyResource> ResourceBundle initResourceBundle(
             final T messageKeyResource) {
-        final String baseName = messageKeyResource.getClass().getCanonicalName();
-        final ResourceBundle resourceBundle = resourceBundlesManager.init(baseName, currentLocale);
+        final String baseName = messageKeyResource.getClass()
+                .getCanonicalName();
+        final ResourceBundle resourceBundle = resourceBundlesManager
+                .init(baseName, currentLocale);
         if (verifyThatAllEnumKeysAreDefined) {
             verifyThatAllEnumKeysAreDefined(messageKeyResource, resourceBundle);
         }
         if (verifyThatAllKeysInResourceBundleHaveConstant) {
-            verifyThatAllKeysInResourceBundleHaveConstant(messageKeyResource, resourceBundle);
+            verifyThatAllKeysInResourceBundleHaveConstant(messageKeyResource,
+                    resourceBundle);
         }
         return resourceBundle;
     }
 
-    private <T extends Enum<T> & MessageKeyResource> String getMessage(final T messageKeyEnum,
-            final Object... arguments) {
+    private <T extends Enum<T> & MessageKeyResource> String getMessage(
+            final T messageKeyEnum, final Object... arguments) {
         return String.format(getRawMessage(messageKeyEnum), arguments);
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String get(final T messageKeyEnum,
-            final Object... arguments) {
+    public <T extends Enum<T> & MessageKeyResource> String get(
+            final T messageKeyEnum, final Object... arguments) {
         return getMessage(messageKeyEnum, arguments);
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String get(final T messageKeyEnum) {
+    public <T extends Enum<T> & MessageKeyResource> String get(
+            final T messageKeyEnum) {
         return getMessage(messageKeyEnum);
     }
 
-    private <T extends Enum<T>> void verifyThatAllEnumKeysAreDefined(final T messageKeyEnum,
-            final ResourceBundle resourceBundle) {
-        Objects.requireNonNull(messageKeyEnum, "Message key enum can't be null");
+    private <T extends Enum<T>> void verifyThatAllEnumKeysAreDefined(
+            final T messageKeyEnum, final ResourceBundle resourceBundle) {
+        Objects.requireNonNull(messageKeyEnum,
+                "Message key enum can't be null");
         Objects.requireNonNull(resourceBundle, "resource bundle can't be null");
-        final T[] constants = messageKeyEnum.getDeclaringClass().getEnumConstants();
+        final T[] constants = messageKeyEnum.getDeclaringClass()
+                .getEnumConstants();
         for (final T key : constants) {
             final String name = key.name();
             resourceBundle.getString(name);
@@ -186,11 +199,13 @@ public class I18n {
 
     private <T extends Enum<T>> void verifyThatAllKeysInResourceBundleHaveConstant(
             final T messageKeyEnum, final ResourceBundle resourceBundle) {
-        Objects.requireNonNull(messageKeyEnum, "Message key enum can't be null");
+        Objects.requireNonNull(messageKeyEnum,
+                "Message key enum can't be null");
         Objects.requireNonNull(resourceBundle, "resource bundle can't be null");
-        final T[] constants = messageKeyEnum.getDeclaringClass().getEnumConstants();
-        final Set<String> enumKeys = Arrays.asList(constants).stream().map(key -> key.name())
-                .collect(Collectors.toSet());
+        final T[] constants = messageKeyEnum.getDeclaringClass()
+                .getEnumConstants();
+        final Set<String> enumKeys = Arrays.asList(constants).stream()
+                .map(key -> key.name()).collect(Collectors.toSet());
         Collections.list(resourceBundle.getKeys()).forEach(key -> {
             if (!enumKeys.contains(key)) {
                 throw new IllegalStateException(String.format(

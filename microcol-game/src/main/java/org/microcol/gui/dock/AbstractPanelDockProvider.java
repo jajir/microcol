@@ -16,8 +16,8 @@ public abstract class AbstractPanelDockProvider {
     private final Source source;
 
     public AbstractPanelDockProvider(final ImageProvider imageProvider,
-            final PanelDockBehavior panelDockBehavior, final I18n i18n, final EventBus eventBus,
-            final Source source) {
+            final PanelDockBehavior panelDockBehavior, final I18n i18n,
+            final EventBus eventBus, final Source source) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -27,7 +27,8 @@ public abstract class AbstractPanelDockProvider {
 
     PanelCratePresenter createPanelDockCrate() {
         PanelCrateView panelDockCrateView = new PanelCrateView(imageProvider);
-        return new PanelCratePresenter(panelDockBehavior, i18n, eventBus, source, panelDockCrateView);
+        return new PanelCratePresenter(panelDockBehavior, i18n, eventBus,
+                source, panelDockCrateView);
     }
 
     PanelDockCratesPresenter createPanelDockCratesPresenter() {

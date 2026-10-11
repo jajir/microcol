@@ -16,7 +16,8 @@ abstract class AbstractEventWithMessages {
     private List<MessageKeyResource> keys = new ArrayList<>();
 
     @SuppressWarnings("unchecked")
-    <T extends Enum<T> & MessageKeyResource> AbstractEventWithMessages(final T... messageKeys) {
+    <T extends Enum<T> & MessageKeyResource> AbstractEventWithMessages(
+            final T... messageKeys) {
         Preconditions.checkNotNull(messageKeys);
         for (final MessageKeyResource messageKey : messageKeys) {
             keys.add(messageKey);

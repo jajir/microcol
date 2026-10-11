@@ -62,21 +62,23 @@ public class PanelCrateView implements JavaFxComponent {
         if (cargoSlot.isLoadedGood()) {
             final Goods goodaAmount = cargoSlot.getGoods().get();
             labelAmount.setText(String.valueOf(goodaAmount.getAmount()));
-            cargoImage.setImage(imageProvider.getGoodsTypeImage(goodaAmount.getType()));
+            cargoImage.setImage(
+                    imageProvider.getGoodsTypeImage(goodaAmount.getType()));
         } else if (cargoSlot.isLoadedUnit()) {
             final Unit cargoUnit = cargoSlot.getUnit().get();
             labelAmount.setText("");
             cargoImage.setImage(imageProvider.getUnitImage(cargoUnit));
         } else {
-            throw new IllegalArgumentException(
-                    String.format("Given cargo slot %s doesn't contains anything", cargoSlot));
+            throw new IllegalArgumentException(String.format(
+                    "Given cargo slot %s doesn't contains anything",
+                    cargoSlot));
         }
     }
 
     public void setBackgroundHighlighted() {
         background = mainPane.getBackground();
-        mainPane.setBackground(
-                new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        mainPane.setBackground(new Background(new BackgroundFill(Color.WHITE,
+                CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     public void setBackgroundNormal() {
@@ -88,7 +90,8 @@ public class PanelCrateView implements JavaFxComponent {
      * Show closed cargo slot.
      */
     public void closeSlot() {
-        crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
+        crateImage.setImage(
+                imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
         emptyCargo();
     }
 
@@ -104,7 +107,8 @@ public class PanelCrateView implements JavaFxComponent {
      * Open as empty cargo.
      */
     public void openSlot() {
-        crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
+        crateImage
+                .setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
         if (!mainPane.getChildren().contains(cargoImage)) {
             mainPane.getChildren().add(cargoImage);
         }

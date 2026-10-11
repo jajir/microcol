@@ -14,8 +14,7 @@ public final class CalendarPo {
     }
 
     /**
-     * @param startYear
-     *            the startYear to set
+     * @param startYear the startYear to set
      */
     public void setStartYear(int startYear) {
         this.startYear = startYear;
@@ -29,8 +28,7 @@ public final class CalendarPo {
     }
 
     /**
-     * @param endYear
-     *            the endYear to set
+     * @param endYear the endYear to set
      */
     public void setEndYear(int endYear) {
         this.endYear = endYear;
@@ -44,8 +42,7 @@ public final class CalendarPo {
     }
 
     /**
-     * @param numberOfPlayedTurns
-     *            the numberOfPlayedTurns to set
+     * @param numberOfPlayedTurns the numberOfPlayedTurns to set
      */
     public void setNumberOfPlayedTurns(int numberOfPlayedTurns) {
         this.numberOfPlayedTurns = numberOfPlayedTurns;

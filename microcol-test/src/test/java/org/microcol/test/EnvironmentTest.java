@@ -16,7 +16,7 @@ public class EnvironmentTest {
     @Tag("ci")
     @Test
     void test_this_test_always_shoudl_be_in_reports() throws Exception {
-	assertTrue(true);
+        assertTrue(true);
     }
 
 }

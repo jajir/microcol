@@ -33,9 +33,10 @@ public class GameModelPoDaoTest {
 
     @Test
     public void test_loadFromClassPath_curruped_file() {
-        final JsonSyntaxException exception = assertThrows(JsonSyntaxException.class, () -> {
-            dao.loadFromClassPath("/maps/test-currupted-file.microcol");
-        });
+        final JsonSyntaxException exception = assertThrows(
+                JsonSyntaxException.class, () -> {
+                    dao.loadFromClassPath("/maps/test-currupted-file.microcol");
+                });
 
         assertEquals(
                 "com.google.gson.stream.MalformedJsonException: Expected name at line 189 column 9 path $.model.units[9].action",

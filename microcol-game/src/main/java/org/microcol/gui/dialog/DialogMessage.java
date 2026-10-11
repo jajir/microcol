@@ -7,8 +7,9 @@ import org.microcol.i18n.I18n;
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
+
 /**
- * Class is used for showing  
+ * Class is used for showing
  */
 public final class DialogMessage extends AbstractWarningDialog {
 

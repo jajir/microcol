@@ -13,7 +13,7 @@ import com.google.inject.Inject;
  */
 @Listener
 public final class UnitAttackedEventListener {
-    
+
     private final GamePanelPainter gamePanelView;
 
     @Inject
@@ -23,7 +23,8 @@ public final class UnitAttackedEventListener {
 
     @Subscribe
     private void onUnitAttacked(final UnitAttackedEvent event) {
-        gamePanelView.addFightAnimation(event.getAttacker(), event.getDefender());
+        gamePanelView.addFightAnimation(event.getAttacker(),
+                event.getDefender());
     }
 
 }

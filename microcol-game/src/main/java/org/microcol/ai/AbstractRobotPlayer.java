@@ -19,7 +19,8 @@ import com.google.common.base.Preconditions;
  */
 public abstract class AbstractRobotPlayer {
 
-    private final Logger logger = LoggerFactory.getLogger(AbstractRobotPlayer.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(AbstractRobotPlayer.class);
 
     private final Model model;
 
@@ -48,8 +49,7 @@ public abstract class AbstractRobotPlayer {
     /**
      * It's called when turn started.
      *
-     * @param event
-     *            required event
+     * @param event required event
      */
     private void onTurnStarted(final TurnStartedEvent event) {
         if (event.getPlayer().equals(player)) {
@@ -90,7 +90,8 @@ public abstract class AbstractRobotPlayer {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this.getClass()).add("model", model)
-                .add("animationLock", animationLock).add("running", running).toString();
+                .add("animationLock", animationLock).add("running", running)
+                .toString();
     }
 
     abstract void moveUnit(final Unit unit);
@@ -124,7 +125,9 @@ public abstract class AbstractRobotPlayer {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper("AbstractRobotPlayer.TurnStartedEventListener")
+            return MoreObjects
+                    .toStringHelper(
+                            "AbstractRobotPlayer.TurnStartedEventListener")
                     .toString();
         }
 

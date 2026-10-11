@@ -8,9 +8,8 @@ interface AbstractMissionFactory {
 
     /**
      * From mission creation context create mission instance.
-     * 
-     * @param context
-     *            required mission creating context
+     *
+     * @param context required mission creating context
      * @return Return newly created mission instance.
      */
     Mission<?> make(MissionCreationContext context);

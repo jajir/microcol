@@ -26,71 +26,74 @@ public abstract class AbstractScreen {
     private final TestContext context;
 
     AbstractScreen(final TestContext context) {
-	this.context = Preconditions.checkNotNull(context);
+        this.context = Preconditions.checkNotNull(context);
     }
 
     protected TestContext getContext() {
-	return context;
+        return context;
     }
 
     protected MicroColApplication getMicroCol() {
-	return context.getMicroCol();
+        return context.getMicroCol();
     }
 
     protected Stage getPrimaryStage() {
-	return context.getPrimaryStage();
+        return context.getPrimaryStage();
     }
 
     protected FxRobot getRobot() {
-	return context.getRobot();
+        return context.getRobot();
     }
 
     protected KeyCode[] getGoodsAmountModifiers() {
-	// JavaFX LINK uses Control on macOS and Control+Shift on Linux/Windows.
-	return System.getProperty("os.name").startsWith("Mac") ? new KeyCode[] { KeyCode.CONTROL }
-		: new KeyCode[] { KeyCode.CONTROL, KeyCode.SHIFT };
+        // JavaFX LINK uses Control on macOS and Control+Shift on Linux/Windows.
+        return System.getProperty("os.name").startsWith("Mac")
+                ? new KeyCode[] { KeyCode.CONTROL }
+                : new KeyCode[] { KeyCode.CONTROL, KeyCode.SHIFT };
     }
 
     protected Model getModel() {
-	return context.getModel();
+        return context.getModel();
     }
 
     protected NodeFinder getNodeFinder() {
-	return FxAssert.assertContext().getNodeFinder();
+        return FxAssert.assertContext().getNodeFinder();
     }
 
     protected void clickOnButtonWithId(final String buttonId) {
-	final String id = "#" + buttonId;
-	getRobot().clickOn(id);
-	WaitForAsyncUtils.waitForFxEvents();
+        final String id = "#" + buttonId;
+        getRobot().clickOn(id);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     protected Labeled getLabeledById(final String cssId) {
-	final String id = "#" + cssId;
-	final Labeled label = getNodeFinder().lookup(id).queryLabeled();
-	assertNotNull(label, String.format("unable to find labeled by id '%s'", cssId));
-	return label;
+        final String id = "#" + cssId;
+        final Labeled label = getNodeFinder().lookup(id).queryLabeled();
+        assertNotNull(label,
+                String.format("unable to find labeled by id '%s'", cssId));
+        return label;
     }
 
     protected Button getButtonById(final String cssId) {
-	final String id = "#" + cssId;
-	final Button label = getNodeFinder().lookup(id).queryButton();
-	assertNotNull(label, String.format("unable to find button by id '%s'", cssId));
-	return label;
+        final String id = "#" + cssId;
+        final Button label = getNodeFinder().lookup(id).queryButton();
+        assertNotNull(label,
+                String.format("unable to find button by id '%s'", cssId));
+        return label;
     }
 
     protected boolean isButtonBackVisible() {
-	return isCssIdVisible("closeButtonId");
+        return isCssIdVisible("closeButtonId");
     }
 
     protected boolean isCssIdVisible(final String cssId) {
-	final String id = "#" + cssId;
-	return getNodeFinder().lookup(id).tryQuery().isPresent();
+        final String id = "#" + cssId;
+        return getNodeFinder().lookup(id).tryQuery().isPresent();
     }
 
     protected <T extends Node> List<T> getListOfNodes(final String cssClass) {
-	final Set<T> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
-	return new ArrayList<T>(cratesSet);
+        final Set<T> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
+        return new ArrayList<T>(cratesSet);
     }
 
 }

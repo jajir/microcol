@@ -23,7 +23,8 @@ public class ScreenCampaign extends AbstractScreenMenu implements GameScreen {
     ScreenCampaign(final CampaignView campaignMenuPanelView,
             final MenuHolderPanel menuPanel) {
         this.menuHolderPanel = Preconditions.checkNotNull(menuPanel);
-        this.campaignMenuPanelView = Preconditions.checkNotNull(campaignMenuPanelView);
+        this.campaignMenuPanelView = Preconditions
+                .checkNotNull(campaignMenuPanelView);
         menuPanel.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
         menuPanel.setMenuPanel(campaignMenuPanelView);
     }

@@ -17,11 +17,13 @@ public final class GameFinishedListener {
 
     @Inject
     GameFinishedListener(final ButtonsPanelPresenter gameMenuPanelPresenter) {
-        this.gameMenuPanelPresenter = Preconditions.checkNotNull(gameMenuPanelPresenter);
+        this.gameMenuPanelPresenter = Preconditions
+                .checkNotNull(gameMenuPanelPresenter);
     }
 
     @Subscribe
-    private void onGameFinished(@SuppressWarnings("unused") final GameFinishedEvent event) {
+    private void onGameFinished(
+            @SuppressWarnings("unused") final GameFinishedEvent event) {
         gameMenuPanelPresenter.refresh();
     }
 }

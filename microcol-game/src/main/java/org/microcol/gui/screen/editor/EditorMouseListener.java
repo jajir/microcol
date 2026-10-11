@@ -28,9 +28,12 @@ public class EditorMouseListener {
     @Inject
     EditorMouseListener(final EditorPanel editorPanel,
             final @Named("editor") VisibleAreaService visibleAreaService,
-            final MouseOperationManager mouseOperationManager, final ModelService modelService) {
-        this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
-        this.mouseOperationManager = Preconditions.checkNotNull(mouseOperationManager);
+            final MouseOperationManager mouseOperationManager,
+            final ModelService modelService) {
+        this.visibleAreaService = Preconditions
+                .checkNotNull(visibleAreaService);
+        this.mouseOperationManager = Preconditions
+                .checkNotNull(mouseOperationManager);
         this.modelService = Preconditions.checkNotNull(modelService);
         editorPanel.getCanvas().setOnMouseDragged(this::onMouseDragged);
         editorPanel.getCanvas().setOnMouseMoved(this::onMouseMoved);
@@ -40,7 +43,8 @@ public class EditorMouseListener {
     private final void onMouseDragged(final MouseEvent event) {
         if (event.isSecondaryButtonDown()) {
             if (previousPosition != null) {
-                final Point currentPosition = Point.of(event.getX(), event.getY());
+                final Point currentPosition = Point.of(event.getX(),
+                        event.getY());
                 final Point delta = previousPosition.substract(currentPosition);
                 visibleAreaService.addDeltaToTopLeftPoint(delta);
             }
@@ -57,9 +61,10 @@ public class EditorMouseListener {
             final Point pressedAt = Point.of(event.getX(), event.getY());
             final Area area = new Area(visibleAreaService);
             final Location location = area.convertToLocation(pressedAt);
-            final MouseOperationContext context = new MouseOperationContext(modelService);
-            mouseOperationManager.getMouseOperation()
-                    .ifPresent(operation -> operation.execute(context, location));
+            final MouseOperationContext context = new MouseOperationContext(
+                    modelService);
+            mouseOperationManager.getMouseOperation().ifPresent(
+                    operation -> operation.execute(context, location));
             modelService.initCache();
         }
     }

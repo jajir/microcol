@@ -63,13 +63,16 @@ final class StatisticsPanel implements GameScreen {
 
     @Inject
     StatisticsPanel(final I18n i18n, final EventBus eventBus,
-            final GameModelController gameModelController, final StatisticsView statisticsView) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+            final GameModelController gameModelController,
+            final StatisticsView statisticsView) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.statisticsView = Preconditions.checkNotNull(statisticsView);
 
-        toggleGroup.selectedToggleProperty().addListener(this::onToggleGroupWasChanged);
+        toggleGroup.selectedToggleProperty()
+                .addListener(this::onToggleGroupWasChanged);
 
         tb1.getStyleClass().clear();
         tb1.setToggleGroup(toggleGroup);
@@ -107,12 +110,14 @@ final class StatisticsPanel implements GameScreen {
     }
 
     @SuppressWarnings("unused")
-    private void onToggleGroupWasChanged(final ObservableValue<? extends Toggle> object,
+    private void onToggleGroupWasChanged(
+            final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
         if (newValue == null) {
             return;
         }
-        final List<TurnPlayerStatistics> stats = gameModelController.getModel().getStatistics()
+        final List<TurnPlayerStatistics> stats = gameModelController.getModel()
+                .getStatistics()
                 .getStatsForPlayer(gameModelController.getHumanPlayer());
         final Calendar calendar = gameModelController.getModel().getCalendar();
         chartPanel.getChildren().clear();
@@ -121,7 +126,8 @@ final class StatisticsPanel implements GameScreen {
             chartPanel.getChildren().add(createChartGold(stats, calendar));
         } else if (KEY_MILITARY.equals(newValue.getUserData())) {
             setTitle(Stats.titleMilitary);
-            chartPanel.getChildren().add(createChartMilitaryPower(stats, calendar));
+            chartPanel.getChildren()
+                    .add(createChartMilitaryPower(stats, calendar));
         } else if (KEY_WEALTH.equals(newValue.getUserData())) {
             setTitle(Stats.titleWealth);
             chartPanel.getChildren().add(createChartWealth(stats, calendar));
@@ -129,7 +135,8 @@ final class StatisticsPanel implements GameScreen {
             setTitle(Stats.titleScore);
             chartPanel.getChildren().add(createChartScore(stats, calendar));
         } else {
-            throw new MicroColException("Unknown user data: " + newValue.getUserData());
+            throw new MicroColException(
+                    "Unknown user data: " + newValue.getUserData());
         }
     }
 
@@ -137,41 +144,48 @@ final class StatisticsPanel implements GameScreen {
         statisticsView.setTitle(i18n.get(key));
     }
 
-    private Node createChartScore(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Stats.titleScore);
-        lineChart.getData()
-                .add(initSerie(stats, stat -> stat.getScore(), Stats.titleScore, calendar));
+    private Node createChartScore(final List<TurnPlayerStatistics> stats,
+            final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar,
+                Stats.titleScore);
+        lineChart.getData().add(initSerie(stats, stat -> stat.getScore(),
+                Stats.titleScore, calendar));
         return lineChart;
     }
 
     private Node createChartWealth(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Stats.titleWealth);
-        lineChart.getData()
-                .add(initSerie(stats, stat -> stat.getEcononyScore(), Stats.titleWealth, calendar));
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar,
+                Stats.titleWealth);
+        lineChart.getData().add(initSerie(stats, stat -> stat.getEcononyScore(),
+                Stats.titleWealth, calendar));
 
         return lineChart;
     }
 
-    private Node createChartGold(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Stats.titleGold);
-        lineChart.getData()
-                .add(initSerie(stats, stat -> stat.getGold(), Stats.titleGold, calendar));
-
-        return lineChart;
-    }
-
-    private Node createChartMilitaryPower(final List<TurnPlayerStatistics> stats,
+    private Node createChartGold(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Stats.titleMilitary);
-        lineChart.getData().add(
-                initSerie(stats, stat -> stat.getMilitaryScore(), Stats.titleMilitary, calendar));
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar,
+                Stats.titleGold);
+        lineChart.getData().add(initSerie(stats, stat -> stat.getGold(),
+                Stats.titleGold, calendar));
 
         return lineChart;
     }
 
-    private final LineChart<Number, Number> makeLineChart(final Calendar calendar,
-            final Stats yAxisMessageKey) {
+    private Node createChartMilitaryPower(
+            final List<TurnPlayerStatistics> stats, final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar,
+                Stats.titleMilitary);
+        lineChart.getData()
+                .add(initSerie(stats, stat -> stat.getMilitaryScore(),
+                        Stats.titleMilitary, calendar));
+
+        return lineChart;
+    }
+
+    private final LineChart<Number, Number> makeLineChart(
+            final Calendar calendar, final Stats yAxisMessageKey) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
 
@@ -181,19 +195,23 @@ final class StatisticsPanel implements GameScreen {
         xAxis.setLabel(i18n.get(Stats.statistics_year));
         yAxis.setLabel(i18n.get(yAxisMessageKey));
 
-        final LineChart<Number, Number> out = new LineChart<Number, Number>(xAxis, yAxis);
+        final LineChart<Number, Number> out = new LineChart<Number, Number>(
+                xAxis, yAxis);
         out.setLegendVisible(false);
 
         return out;
     }
 
-    private XYChart.Series<Number, Number> initSerie(final List<TurnPlayerStatistics> stats,
-            final Function<TurnPlayerStatistics, Integer> statFunction, final Stats messageKey,
-            final Calendar calendar) {
+    private XYChart.Series<Number, Number> initSerie(
+            final List<TurnPlayerStatistics> stats,
+            final Function<TurnPlayerStatistics, Integer> statFunction,
+            final Stats messageKey, final Calendar calendar) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(i18n.get(messageKey));
-        stats.forEach(stat -> series.getData().add(new XYChart.Data<Number, Number>(
-                calendar.getYearForTurnNo(stat.getTurnNo()), statFunction.apply(stat))));
+        stats.forEach(stat -> series.getData()
+                .add(new XYChart.Data<Number, Number>(
+                        calendar.getYearForTurnNo(stat.getTurnNo()),
+                        statFunction.apply(stat))));
         return series;
     }
 

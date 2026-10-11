@@ -14,26 +14,28 @@ import javafx.scene.layout.StackPane;
 public class PageComponentPanelDock extends AbstractPageComponent {
 
     public static PageComponentPanelDock of(final TestContext context) {
-	return new PageComponentPanelDock(context);
+        return new PageComponentPanelDock(context);
     }
 
     private PageComponentPanelDock(TestContext context) {
-	super(context);
+        super(context);
     }
 
     public void selectUnitFromPort(final int unitIndex) {
-	getRobot().clickOn(getUnitsInPort().get(unitIndex));
-	WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn(getUnitsInPort().get(unitIndex));
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public List<ToggleButton> getUnitsInPort() {
-	return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
+        return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
     }
 
-    public void verifyNumberOfShipsInPort(final int expectedNumberOfShipsInPort) {
-	assertEquals(expectedNumberOfShipsInPort, getUnitsInPort().size(),
-		String.format("Expected numeber of ships is '%s' but really there is '%s' ships.",
-			expectedNumberOfShipsInPort, getUnitsInPort().size()));
+    public void verifyNumberOfShipsInPort(
+            final int expectedNumberOfShipsInPort) {
+        assertEquals(expectedNumberOfShipsInPort, getUnitsInPort().size(),
+                String.format(
+                        "Expected numeber of ships is '%s' but really there is '%s' ships.",
+                        expectedNumberOfShipsInPort, getUnitsInPort().size()));
     }
 
     /**
@@ -42,7 +44,7 @@ public class PageComponentPanelDock extends AbstractPageComponent {
      * @return list of crates
      */
     public List<StackPane> getListOfCrates() {
-	return getListOfNodes("." + PanelCrateView.CRATE_CLASS);
+        return getListOfNodes("." + PanelCrateView.CRATE_CLASS);
     }
 
 }

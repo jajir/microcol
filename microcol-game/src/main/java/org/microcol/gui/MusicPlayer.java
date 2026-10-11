@@ -23,7 +23,7 @@ import com.google.inject.Singleton;
 
 /**
  * Responsible for playing music.
- * 
+ *
  */
 @Singleton
 public final class MusicPlayer {
@@ -55,17 +55,16 @@ public final class MusicPlayer {
 
     /**
      * Start play background music.
-     * 
-     * @param filename
-     *            the name of the file that is going to be played
-     * @param defaultVolume
-     *            required default volume
+     *
+     * @param filename      the name of the file that is going to be played
+     * @param defaultVolume required default volume
      */
     void playSound(final String filename, final int defaultVolume) {
         final AudioInputStream audioStream = getAudioInputStream(filename);
         final AudioFormat audioFormat = audioStream.getFormat();
 
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class,
+                audioFormat);
         try {
             sourceLine = (SourceDataLine) AudioSystem.getLine(info);
             sourceLine.open(audioFormat);
@@ -111,7 +110,8 @@ public final class MusicPlayer {
     public void setVolume(final int volume) {
         final FloatControl volumeControll = (FloatControl) sourceLine
                 .getControl(FloatControl.Type.MASTER_GAIN);
-        float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());
+        float step = 100F
+                / (volumeControll.getMaximum() - volumeControll.getMinimum());
         volumeControll.setValue(volumeControll.getMinimum() + volume / step);
     }
 

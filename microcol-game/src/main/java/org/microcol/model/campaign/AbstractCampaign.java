@@ -36,23 +36,26 @@ abstract class AbstractCampaign implements Campaign {
     }
 
     @Override
-    public CampaignMission getMisssionByMissionName(final MissionName missionName) {
+    public CampaignMission getMisssionByMissionName(
+            final MissionName missionName) {
         Preconditions.checkNotNull(missionName);
         final Optional<CampaignMission> oMission = missions.stream()
-                .filter(mission -> mission.getMissionName().equals(missionName)).findAny();
+                .filter(mission -> mission.getMissionName().equals(missionName))
+                .findAny();
         return oMission.orElseThrow(() -> new IllegalArgumentException(
-                String.format("There is no mission for missio name '%s'", missionName)));
+                String.format("There is no mission for missio name '%s'",
+                        missionName)));
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(AbstractCampaign.class).add("name", name)
-                .add("missions", missions).toString();
+        return MoreObjects.toStringHelper(AbstractCampaign.class)
+                .add("name", name).add("missions", missions).toString();
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.microcol.model.campaign.Campaign#getName()
      */
     @SuppressWarnings("unchecked")
@@ -63,12 +66,13 @@ abstract class AbstractCampaign implements Campaign {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.microcol.model.campaign.Campaign#getMissions()
      */
     @Override
     public List<CampaignMission> getMissions() {
-        return missions.stream().sorted(Comparator.comparing(CampaignMission::getOrderNo))
+        return missions.stream()
+                .sorted(Comparator.comparing(CampaignMission::getOrderNo))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -79,7 +83,8 @@ abstract class AbstractCampaign implements Campaign {
 
     @Override
     public boolean isFinished() {
-        return !missions.stream().filter(mission -> !mission.isFinished()).findAny().isPresent();
+        return !missions.stream().filter(mission -> !mission.isFinished())
+                .findAny().isPresent();
     }
 
     @Override
@@ -96,8 +101,8 @@ abstract class AbstractCampaign implements Campaign {
             }
             isPreviousFinished = m.isFinished();
         }
-        throw new IllegalStateException(
-                String.format("Campaign '%s' doesn't contains mission '%s'", name, mission));
+        throw new IllegalStateException(String.format(
+                "Campaign '%s' doesn't contains mission '%s'", name, mission));
     }
 
     @Override
@@ -116,7 +121,8 @@ abstract class AbstractCampaign implements Campaign {
     @Override
     public void load(final CampaignPo campaignPo) {
         missions.forEach(mission -> {
-            final Optional<CampaignMissionPo> oPo = campaignPo.getMissionByName(mission.getName());
+            final Optional<CampaignMissionPo> oPo = campaignPo
+                    .getMissionByName(mission.getName());
             if (oPo.isPresent()) {
                 mission.setFinished(oPo.get().isWasFinished());
             } else {

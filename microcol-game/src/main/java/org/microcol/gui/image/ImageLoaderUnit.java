@@ -27,36 +27,43 @@ public final class ImageLoaderUnit implements ImageLoader {
 
     @Override
     public void preload(final ImageCache imageCache) {
-        imageCache.registerImage(IMG_UNIT_SHIP_GALEON_EAST, imageCache.getImage("type_4_5"));
-        registerLeftVariant(imageCache, IMG_UNIT_SHIP_GALEON_EAST, IMG_UNIT_SHIP_GALEON_WEST);
+        imageCache.registerImage(IMG_UNIT_SHIP_GALEON_EAST,
+                imageCache.getImage("type_4_5"));
+        registerLeftVariant(imageCache, IMG_UNIT_SHIP_GALEON_EAST,
+                IMG_UNIT_SHIP_GALEON_WEST);
 
-        imageCache.registerImage(IMG_UNIT_SHIP_FRIGATE, imageCache.getImage("type_5_5"));
-        registerLeftVariant(imageCache, IMG_UNIT_SHIP_FRIGATE, IMG_UNIT_SHIP_FRIGATE_LEFT);
+        imageCache.registerImage(IMG_UNIT_SHIP_FRIGATE,
+                imageCache.getImage("type_5_5"));
+        registerLeftVariant(imageCache, IMG_UNIT_SHIP_FRIGATE,
+                IMG_UNIT_SHIP_FRIGATE_LEFT);
 
-        imageCache.registerImage(IMG_UNIT_FREE_COLONIST, imageCache.getImage("type_2_4"));
-        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MOUNTED, imageCache.getImage("type_0_6"));
-        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_TOOLS, imageCache.getImage("type_2_6"));
-        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MUSKETS, imageCache.getImage("type_6_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST,
+                imageCache.getImage("type_2_4"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MOUNTED,
+                imageCache.getImage("type_0_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_TOOLS,
+                imageCache.getImage("type_2_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MUSKETS,
+                imageCache.getImage("type_6_6"));
         imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS,
                 imageCache.getImage("type_5_6"));
 
-        imageCache.registerImage(IMG_UNIT_WAGON, imageCache.getImage("type_1_6"));
+        imageCache.registerImage(IMG_UNIT_WAGON,
+                imageCache.getImage("type_1_6"));
 
     }
 
     /**
      * For given image register flip variant. Flip is done by vertical axe.
      *
-     * @param imageCache
-     *            required image provider
-     * @param originalKey
-     *            required original image
-     * @param newKey
-     *            flip image will be stored under this key
+     * @param imageCache  required image provider
+     * @param originalKey required original image
+     * @param newKey      flip image will be stored under this key
      */
-    private void registerLeftVariant(final ImageCache imageCache, final String originalKey,
-            final String newKey) {
-        final ImageWrapper imageWrapper = ImageWrapper.of(imageCache.getImage(originalKey));
+    private void registerLeftVariant(final ImageCache imageCache,
+            final String originalKey, final String newKey) {
+        final ImageWrapper imageWrapper = ImageWrapper
+                .of(imageCache.getImage(originalKey));
         imageCache.registerImage(newKey,
                 imageWrapper.getImageTranspose().getImageRotareRight().get());
     }

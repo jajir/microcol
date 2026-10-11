@@ -11,8 +11,8 @@ public class SettingAnimationSpeedPresenter {
     @Inject
     SettingAnimationSpeedPresenter(final SettingAnimationSpeedView view,
             final PreferencesProperties preferencesProperties) {
-        view.getAnimationSpeedValueProperty()
-                .bindBidirectional(preferencesProperties.getAnimationSpeedProperty());
+        view.getAnimationSpeedValueProperty().bindBidirectional(
+                preferencesProperties.getAnimationSpeedProperty());
     }
 
 }

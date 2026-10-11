@@ -48,13 +48,16 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private final I18n i18n;
 
-    public PanelGood(final GoodsType goodsType, final ImageProvider imageProvider,
+    public PanelGood(final GoodsType goodsType,
+            final ImageProvider imageProvider,
             final GameModelController gameModelController,
-            final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
-            final I18n i18n) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final EventBus eventBus, final I18n i18n) {
         this.goodsType = Preconditions.checkNotNull(goodsType);
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.dialogNotEnoughGold = Preconditions
+                .checkNotNull(dialogNotEnoughGold);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(imageProvider.getGoodsTypeImage(goodsType));
@@ -68,28 +71,32 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
         mainPanel.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
         final GoodsTrade goodsTrade = getGoodsTrade();
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(Europe.goodsToSell, i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)),
+                i18n.get(Europe.goodsToSell,
+                        i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)),
                         goodsTrade.getSellPrice(), goodsTrade.getBuyPrice()),
                 Source.EUROPE));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
     private void onDragDetected(final MouseEvent event) {
-        final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
+        final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE,
+                TransferMode.LINK);
         final Goods goods = gameModelController.getMaxBuyableGoods(goodsType);
         if (goods.isZero()) {
             dialogNotEnoughGold.showAndWait();
         } else {
-            eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods),
-                    Source.EUROPE));
-            ClipboardWritter.make(db).addImage(imageView.getImage()).addTransferFromEuropeShop()
-                    .addGoods(goods).build();
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Loc.adjustAmountOfGoods), Source.EUROPE));
+            ClipboardWritter.make(db).addImage(imageView.getImage())
+                    .addTransferFromEuropeShop().addGoods(goods).build();
         }
         event.consume();
     }
@@ -97,11 +104,13 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
     @Override
     public void repaint() {
         final GoodsTrade goodsTrade = getGoodsTrade();
-        labelPrice.setText(goodsTrade.getSellPrice() + "/" + goodsTrade.getBuyPrice());
+        labelPrice.setText(
+                goodsTrade.getSellPrice() + "/" + goodsTrade.getBuyPrice());
     }
 
     private GoodsTrade getGoodsTrade() {
-        return gameModelController.getModel().getEurope().getGoodsTradeForType(goodsType);
+        return gameModelController.getModel().getEurope()
+                .getGoodsTradeForType(goodsType);
     }
 
     @Override

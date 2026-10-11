@@ -26,7 +26,8 @@ final class GameOverEvaluator {
 
     protected GameOverEvaluator(final EventBus eventBus,
             final Supplier<List<Function<GameOverProcessingContext, String>>> processorsSupplier,
-            final CampaignMission campaignMission, final CampaignManager campaignManager) {
+            final CampaignMission campaignMission,
+            final CampaignManager campaignManager) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         cocs = new ChainOfCommandStrategy<>(processorsSupplier.get());
         this.campaignMission = Preconditions.checkNotNull(campaignMission);
@@ -34,7 +35,8 @@ final class GameOverEvaluator {
     }
 
     public void onGameFinished(final GameFinishedEvent event) {
-        final String out = cocs.apply(new GameOverProcessingContext(event, eventBus));
+        final String out = cocs
+                .apply(new GameOverProcessingContext(event, eventBus));
         if (out != null) {
             campaignMission.setFinished(true);
             campaignManager.saveMissionState();

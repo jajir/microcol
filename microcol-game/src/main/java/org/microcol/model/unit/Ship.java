@@ -21,10 +21,12 @@ public abstract class Ship extends UnitWithCargo {
 
     private final Random random = new Random();
 
-    public Ship(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id,
-            final Function<Unit, Place> placeBuilder, final Player owner, final int actionPoints,
+    public Ship(final Function<Unit, Cargo> cargoBuilder, final Model model,
+            final Integer id, final Function<Unit, Place> placeBuilder,
+            final Player owner, final int actionPoints,
             final UnitAction unitAction) {
-        super(cargoBuilder, model, id, placeBuilder, owner, actionPoints, unitAction);
+        super(cargoBuilder, model, id, placeBuilder, owner, actionPoints,
+                unitAction);
     }
 
     @Override
@@ -42,19 +44,21 @@ public abstract class Ship extends UnitWithCargo {
             if (placeHighSea.getRemainigTurns() <= 0) {
                 if (placeHighSea.isTravelToEurope()) {
                     model.getEurope().getPort().placeShipToPort(this);
-                    model.getTurnEventStore()
-                            .add(TurnEventProvider.getShipComeEuropePort(getOwner()));
+                    model.getTurnEventStore().add(TurnEventProvider
+                            .getShipComeEuropePort(getOwner()));
                 } else {
                     /*
                      * Ships always come from east side of map.
                      */
                     final List<Location> locations = model.getHighSea()
-                            .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-                    placeToLocation(locations.get(random.nextInt(locations.size())),
+                            .getSuitablePlaceForShipCommingFromEurope(
+                                    getOwner(), true);
+                    placeToLocation(
+                            locations.get(random.nextInt(locations.size())),
                             Direction.west);
                     getOwner().revealMapForUnit(this);
-                    model.getTurnEventStore()
-                            .add(TurnEventProvider.getShipComeToHighSeas(getOwner()));
+                    model.getTurnEventStore().add(TurnEventProvider
+                            .getShipComeToHighSeas(getOwner()));
                     model.fireUnitArrivedToColonies(this);
                 }
             }

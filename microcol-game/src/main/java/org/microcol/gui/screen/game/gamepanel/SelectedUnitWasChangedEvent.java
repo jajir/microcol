@@ -19,19 +19,19 @@ public final class SelectedUnitWasChangedEvent {
     /**
      * Default constructor.
      *
-     * @param previousUnit
-     *            optional previous unit
-     * @param selectedUnit
-     *            optional selected unit
+     * @param previousUnit optional previous unit
+     * @param selectedUnit optional selected unit
      */
-    SelectedUnitWasChangedEvent(final Unit previousUnit, final Unit selectedUnit) {
+    SelectedUnitWasChangedEvent(final Unit previousUnit,
+            final Unit selectedUnit) {
         this.previousUnit = previousUnit;
         this.selectedUnit = selectedUnit;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("previousUnit", previousUnit)
+        return MoreObjects.toStringHelper(getClass())
+                .add("previousUnit", previousUnit)
                 .add("selectedUnit", selectedUnit).toString();
     }
 

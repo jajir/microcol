@@ -27,8 +27,8 @@ class XmlResourceBundle extends ResourceBundle {
 
     @Override
     public Enumeration<String> getKeys() {
-        final List<String> keys = props.keySet().stream().map(obj -> (String) obj)
-                .collect(Collectors.toList());
+        final List<String> keys = props.keySet().stream()
+                .map(obj -> (String) obj).collect(Collectors.toList());
         return new Enumeration<String>() {
 
             private int index = 0;

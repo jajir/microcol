@@ -22,40 +22,46 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
     public void test_moveOneStep_inHarbor() throws Exception {
         makeColonist(model, 23, placeEuropePier, owner, 10);
 
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            unit.moveOneStep(Location.of(7, 5));
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    unit.moveOneStep(Location.of(7, 5));
+                });
 
         assertTrue(exception.getMessage().contains("Unit have to be at map."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
     public void test_moveOneStep_gameIsNotRunning() throws Exception {
         makeColonist(model, 23, placeLocation, owner, 10);
 
-        doThrow(new IllegalStateException("Example")).when(model).checkGameRunning();
+        doThrow(new IllegalStateException("Example")).when(model)
+                .checkGameRunning();
 
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            unit.moveOneStep(Location.of(7, 5));
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    unit.moveOneStep(Location.of(7, 5));
+                });
 
-        assertTrue(exception.getMessage().contains("Example"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(exception.getMessage().contains("Example"), String.format(
+                "Invalid exception message '%s'.", exception.getMessage()));
     }
 
     @Test
     public void test_moveOneStep_invalid_currentPlayer() throws Exception {
         makeColonist(model, 23, placeLocation, owner, 10);
 
-        doThrow(new IllegalStateException("Example")).when(model).checkCurrentPlayer(owner);
+        doThrow(new IllegalStateException("Example")).when(model)
+                .checkCurrentPlayer(owner);
 
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            unit.moveOneStep(Location.of(7, 5));
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    unit.moveOneStep(Location.of(7, 5));
+                });
 
-        assertTrue(exception.getMessage().contains("Example"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(exception.getMessage().contains("Example"), String.format(
+                "Invalid exception message '%s'.", exception.getMessage()));
     }
 
     @Test
@@ -72,13 +78,16 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         makeColonist(model, 23, placeLocation, owner, 10);
         when(placeLocation.getLocation()).thenReturn(Location.of(10, 10));
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     unit.moveOneStep(Location.of(10, 10));
                 });
 
-        assertTrue(exception.getMessage().contains("must be neighbor to current location "),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage()
+                        .contains("must be neighbor to current location "),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
@@ -89,13 +98,14 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(Location.of(7, 5))).thenReturn(false);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     unit.moveOneStep(Location.of(7, 5));
                 });
 
         assertTrue(exception.getMessage().contains("must be valid."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
@@ -106,15 +116,18 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(placeLocation.getLocation()).thenReturn(unitLoc);
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
-        when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.HIGH_SEA);
+        when(worldMap.getTerrainTypeAt(moveAt))
+                .thenReturn(TerrainType.HIGH_SEA);
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     unit.moveOneStep(moveAt);
                 });
 
-        assertTrue(exception.getMessage().contains("It's not possible to move at"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage().contains("It's not possible to move at"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
@@ -125,35 +138,45 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(placeLocation.getLocation()).thenReturn(unitLoc);
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
-        when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(moveAt)).thenReturn(Lists.newArrayList(unit));
+        when(worldMap.getTerrainTypeAt(moveAt))
+                .thenReturn(TerrainType.GRASSLAND);
+        when(owner.getEnemyUnitsAt(moveAt))
+                .thenReturn(Lists.newArrayList(unit));
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     unit.moveOneStep(moveAt);
                 });
 
-        assertTrue(exception.getMessage().contains("It's not possible to move at"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage().contains("It's not possible to move at"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
-    public void test_moveOneStep_moveTo_notEnough_availableMoves() throws Exception {
+    public void test_moveOneStep_moveTo_notEnough_availableMoves()
+            throws Exception {
         makeColonist(model, 23, placeLocation, owner, 0);
         final Location moveAt = Location.of(7, 5);
 
         when(placeLocation.getLocation()).thenReturn(unitLoc);
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
-        when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
+        when(worldMap.getTerrainTypeAt(moveAt))
+                .thenReturn(TerrainType.GRASSLAND);
         when(owner.getEnemyUnitsAt(moveAt)).thenReturn(new ArrayList<>());
 
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            unit.moveOneStep(moveAt);
-        });
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    unit.moveOneStep(moveAt);
+                });
 
-        assertTrue(exception.getMessage().contains("There is not enough available action points"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage().contains(
+                        "There is not enough available action points"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
@@ -164,7 +187,8 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(placeLocation.getLocation()).thenReturn(unitLoc);
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
-        when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
+        when(worldMap.getTerrainTypeAt(moveAt))
+                .thenReturn(TerrainType.GRASSLAND);
         when(owner.getEnemyUnitsAt(moveAt)).thenReturn(new ArrayList<>());
 
         // Tested action
@@ -176,8 +200,10 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         verify(placeLocation, times(1)).destroy();
 
         // Verify that events was fired.
-        verify(model, times(1)).fireUnitMovedStepStarted(unit, unitLoc, moveAt, null);
-        verify(model, times(1)).fireUnitMovedStepFinished(unit, unitLoc, moveAt);
+        verify(model, times(1)).fireUnitMovedStepStarted(unit, unitLoc, moveAt,
+                null);
+        verify(model, times(1)).fireUnitMovedStepFinished(unit, unitLoc,
+                moveAt);
     }
 
 }

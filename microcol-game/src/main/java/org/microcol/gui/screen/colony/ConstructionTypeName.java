@@ -19,8 +19,7 @@ enum ConstructionTypeName implements MessageKeyResource {
     ironWorks(ConstructionType.IRON_WORKS),
     blacksmithShop(ConstructionType.BLACKSMITHS_SHOP),
     blacksmithHouse(ConstructionType.BLACKSMITHS_HOUSE),
-    fortress(ConstructionType.FORTRESS),
-    fort(ConstructionType.FORT),
+    fortress(ConstructionType.FORTRESS), fort(ConstructionType.FORT),
     stockade(ConstructionType.STOCKADE),
     cigarFactory(ConstructionType.CIGAR_FACTORY),
     tobacconistShop(ConstructionType.TOBACCONISTS_SHOP),
@@ -34,23 +33,17 @@ enum ConstructionTypeName implements MessageKeyResource {
     furFactory(ConstructionType.FUR_FACTORY),
     furTradersHouse(ConstructionType.FUR_TRADERS_HOUSE),
     furTradingPost(ConstructionType.FUR_TRADING_POST),
-    arsenal(ConstructionType.ARSENAL),
-    magazine(ConstructionType.MAGAZINE),
-    armory(ConstructionType.ARMORY),
-    shipyard(ConstructionType.SHIPYARD),
-    drydock(ConstructionType.DRYDOCK),
-    dock(ConstructionType.DOCK),
-    university(ConstructionType.UNIVERSITY),
-    college(ConstructionType.COLLEGE),
+    arsenal(ConstructionType.ARSENAL), magazine(ConstructionType.MAGAZINE),
+    armory(ConstructionType.ARMORY), shipyard(ConstructionType.SHIPYARD),
+    drydock(ConstructionType.DRYDOCK), dock(ConstructionType.DOCK),
+    university(ConstructionType.UNIVERSITY), college(ConstructionType.COLLEGE),
     schoolhouse(ConstructionType.SCHOOLHOUSE),
     warehouseExpansion(ConstructionType.WAREHOUSE_EXPANSION),
     warehouse(ConstructionType.WAREHOUSE),
     warehouseBasic(ConstructionType.WAREHOUSE_BASIC),
     largeStables(ConstructionType.LARGE_STABLES),
-    stables(ConstructionType.STABLES),
-    cathedral(ConstructionType.CATHEDRAL),
-    church(ConstructionType.CHURCH),
-    chapel(ConstructionType.CHAPEL),
+    stables(ConstructionType.STABLES), cathedral(ConstructionType.CATHEDRAL),
+    church(ConstructionType.CHURCH), chapel(ConstructionType.CHAPEL),
     newspaper(ConstructionType.NEWSPAPER),
     printingPress(ConstructionType.PRINTING_PRESS),
     customHouse(ConstructionType.CUSTOM_HOUSE);
@@ -61,8 +54,10 @@ enum ConstructionTypeName implements MessageKeyResource {
         this.goodsType = Preconditions.checkNotNull(goodsType);
     }
 
-    public static ConstructionTypeName getNameForType(final ConstructionType goodsType) {
-        return Arrays.stream(values()).filter(gtName -> gtName.goodsType == goodsType).findFirst()
+    public static ConstructionTypeName getNameForType(
+            final ConstructionType goodsType) {
+        return Arrays.stream(values())
+                .filter(gtName -> gtName.goodsType == goodsType).findFirst()
                 .orElseThrow((() -> new IllegalArgumentException()));
     }
 

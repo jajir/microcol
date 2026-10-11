@@ -17,10 +17,12 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_consumption() throws Exception {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
                 () -> construction.getProduction(Goods.of(GoodsType.ORE)));
 
-        assertEquals("This construction doesn't consume anything.", exception.getMessage());
+        assertEquals("This construction doesn't consume anything.",
+                exception.getMessage());
     }
 
     @Test
@@ -34,7 +36,8 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.CROSS, 0),
+                ret.getProducedGoods().get());
     }
 
     @Test
@@ -48,7 +51,8 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 5), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.CROSS, 5),
+                ret.getProducedGoods().get());
     }
 
     @Test
@@ -62,15 +66,18 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 10), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.CROSS, 10),
+                ret.getProducedGoods().get());
     }
 
     private ConstructionTurnProduction empty() {
-        return new ConstructionTurnProduction(null, Goods.of(GoodsType.CROSS, 0), null);
+        return new ConstructionTurnProduction(null,
+                Goods.of(GoodsType.CROSS, 0), null);
     }
 
     private ConstructionTurnProduction full() {
-        return new ConstructionTurnProduction(null, Goods.of(GoodsType.CROSS, 5), null);
+        return new ConstructionTurnProduction(null,
+                Goods.of(GoodsType.CROSS, 5), null);
     }
 
     @BeforeEach

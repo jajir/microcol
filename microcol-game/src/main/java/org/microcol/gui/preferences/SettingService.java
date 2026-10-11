@@ -37,7 +37,8 @@ public class SettingService {
     private final PersistingTool persistingTool;
 
     @Inject
-    SettingService(final SettingDao settingDao, final PersistingTool persistingTool) {
+    SettingService(final SettingDao settingDao,
+            final PersistingTool persistingTool) {
         this.settingDao = Preconditions.checkNotNull(settingDao);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
     }
@@ -60,7 +61,8 @@ public class SettingService {
          * backup-000 and so on and move there content of setting directory and
          * final create new settings.
          */
-        final File backupDir = makeBackupDirectory(persistingTool.getRootSaveDirectory());
+        final File backupDir = makeBackupDirectory(
+                persistingTool.getRootSaveDirectory());
         moveDataTobackupDir(persistingTool.getRootSaveDirectory(), backupDir);
         return simpleLoad();
     }
@@ -70,14 +72,15 @@ public class SettingService {
         if (!settingFile.exists()) {
             save(getDefaultSetting());
         }
-        
+
         Optional<Setting> oSetting = settingDao.loadFromFile(getSettingFile());
         if (oSetting.isEmpty()) {
             save(getDefaultSetting());
             oSetting = settingDao.loadFromFile(getSettingFile());
             if (oSetting.isEmpty()) {
-                throw new MicroColException(String.format("Unable to load setting from '%s'",
-                        settingFile.getAbsolutePath()));
+                throw new MicroColException(
+                        String.format("Unable to load setting from '%s'",
+                                settingFile.getAbsolutePath()));
             } else {
                 return oSetting.get();
             }
@@ -88,19 +91,22 @@ public class SettingService {
 
     private void moveDataTobackupDir(final File homeDir, final File backupDir) {
         Preconditions.checkNotNull(homeDir);
-        Preconditions.checkArgument(homeDir.exists(), "directory %s with saves doesn't exists",
+        Preconditions.checkArgument(homeDir.exists(),
+                "directory %s with saves doesn't exists",
                 homeDir.getAbsolutePath());
         Preconditions.checkArgument(homeDir.isDirectory());
         Preconditions.checkNotNull(backupDir);
-        Preconditions.checkArgument(backupDir.exists(), "backupDir %s doesn't exists",
-                backupDir.getAbsolutePath());
+        Preconditions.checkArgument(backupDir.exists(),
+                "backupDir %s doesn't exists", backupDir.getAbsolutePath());
         Preconditions.checkArgument(backupDir.isDirectory());
         try {
             final Path homePath = Path.of(homeDir.getAbsolutePath());
             final Path backupPath = Path.of(backupDir.getAbsolutePath());
             final List<String> filesToMove = Files.list(homePath)
-                    .filter(path -> !path.getFileName().toString().startsWith(BACKUP_DIR))
-                    .map(path -> path.getFileName().toString()).collect(Collectors.toList());
+                    .filter(path -> !path.getFileName().toString()
+                            .startsWith(BACKUP_DIR))
+                    .map(path -> path.getFileName().toString())
+                    .collect(Collectors.toList());
             filesToMove.forEach(path -> {
                 final File from = homePath.resolve(path).toFile();
                 final File to = backupPath.resolve(path).toFile();
@@ -117,15 +123,17 @@ public class SettingService {
 
     private File makeBackupDirectory(final File homeDir) {
         Preconditions.checkNotNull(homeDir);
-        Preconditions.checkArgument(homeDir.exists(), "directory %s with saves doesn't exists",
+        Preconditions.checkArgument(homeDir.exists(),
+                "directory %s with saves doesn't exists",
                 homeDir.getAbsolutePath());
         Preconditions.checkArgument(homeDir.isDirectory());
         try {
             final Path homePath = Path.of(homeDir.getAbsolutePath());
-            int backups = (int) Files.list(homePath)
-                    .filter(path -> path.getFileName().toString().startsWith(BACKUP_DIR)).count();
+            int backups = (int) Files.list(homePath).filter(path -> path
+                    .getFileName().toString().startsWith(BACKUP_DIR)).count();
             final File backup = homePath
-                    .resolve(BACKUP_DIR + Strings.padStart(String.valueOf(backups), 4, '0'))
+                    .resolve(BACKUP_DIR
+                            + Strings.padStart(String.valueOf(backups), 4, '0'))
                     .toFile();
             backup.mkdir();
             return backup;

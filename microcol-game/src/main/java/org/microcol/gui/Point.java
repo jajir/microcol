@@ -57,7 +57,8 @@ public final class Point {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString();
+        return MoreObjects.toStringHelper(this).add("x", x).add("y", y)
+                .toString();
     }
 
     public static Point of(final int x, final int y) {
@@ -99,8 +100,7 @@ public final class Point {
     /**
      * Divide point by some factor and round down.
      *
-     * @param factor
-     *            required this number will divide coordinates
+     * @param factor required this number will divide coordinates
      * @return divided point by factor
      */
     public Point divide(final double factor) {

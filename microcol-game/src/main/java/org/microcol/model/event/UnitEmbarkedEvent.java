@@ -11,7 +11,8 @@ public final class UnitEmbarkedEvent extends AbstractModelEvent {
     private final Unit unit;
     private final CargoSlot slot;
 
-    public UnitEmbarkedEvent(final Model model, final Unit unit, final CargoSlot slot) {
+    public UnitEmbarkedEvent(final Model model, final Unit unit,
+            final CargoSlot slot) {
         super(model);
 
         this.unit = Preconditions.checkNotNull(unit);
@@ -28,6 +29,7 @@ public final class UnitEmbarkedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("unit", unit).add("slot", slot).toString();
+        return MoreObjects.toStringHelper(this).add("unit", unit)
+                .add("slot", slot).toString();
     }
 }

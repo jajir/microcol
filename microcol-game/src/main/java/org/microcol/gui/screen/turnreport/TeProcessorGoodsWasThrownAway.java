@@ -32,13 +32,15 @@ import com.google.inject.Inject;
 public class TeProcessorGoodsWasThrownAway extends AbstractTeProcessor
         implements Function<TurnEvent, TeItemSimple> {
 
-    final static List<GoodsType> masculine = ImmutableList.of(TOBACCO, HORSE, RUM, CIGARS, COAT,
-            CROSS, BELL);
+    final static List<GoodsType> masculine = ImmutableList.of(TOBACCO, HORSE,
+            RUM, CIGARS, COAT, CROSS, BELL);
 
-    final static List<GoodsType> feminine = ImmutableList.of(SUGAR, COTTON, ORE, GOODS, MUSKET);
+    final static List<GoodsType> feminine = ImmutableList.of(SUGAR, COTTON, ORE,
+            GOODS, MUSKET);
 
-//    final static List<GoodsType> neuter = ImmutableList.of(CORN, FUR, LUMBER, SILVER, COTTON, TOOLS,
-//            HAMMERS);
+    // final static List<GoodsType> neuter = ImmutableList.of(CORN, FUR, LUMBER,
+    // SILVER, COTTON, TOOLS,
+    // HAMMERS);
 
     @Inject
     TeProcessorGoodsWasThrownAway(final I18n i18n) {
@@ -49,24 +51,29 @@ public class TeProcessorGoodsWasThrownAway extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventGoodsWasThrownAway) {
             final TurnEventGoodsWasThrownAway te = (TurnEventGoodsWasThrownAway) turnEvent;
-            return new TeItemSimple(getMessage(te.getGoods(), te.getColonyName()));
+            return new TeItemSimple(
+                    getMessage(te.getGoods(), te.getColonyName()));
         }
         return null;
     }
 
     private String getMessage(final Goods goods, final String colonyName) {
-        final String goodsName = getI18n().get(GoodsTypeName.getKey(goods.getType(), 2, false));
+        final String goodsName = getI18n()
+                .get(GoodsTypeName.getKey(goods.getType(), 2, false));
         if (goods.getAmount() == 1) {
             if (masculine.contains(goods.getType())) {
-                return getI18n().get(TurnEvents.goodsWasThrowsAway2, colonyName, goodsName);
+                return getI18n().get(TurnEvents.goodsWasThrowsAway2, colonyName,
+                        goodsName);
             } else if (feminine.contains(goods.getType())) {
-                return getI18n().get(TurnEvents.goodsWasThrowsAway3, colonyName, goodsName);
+                return getI18n().get(TurnEvents.goodsWasThrowsAway3, colonyName,
+                        goodsName);
             } else {
-                return getI18n().get(TurnEvents.goodsWasThrowsAway4, colonyName, goodsName);
+                return getI18n().get(TurnEvents.goodsWasThrowsAway4, colonyName,
+                        goodsName);
             }
         } else {
-            return getI18n().get(TurnEvents.goodsWasThrowsAway1, colonyName, goods.getAmount(),
-                    goodsName);
+            return getI18n().get(TurnEvents.goodsWasThrowsAway1, colonyName,
+                    goods.getAmount(), goodsName);
         }
     }
 

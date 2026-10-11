@@ -67,7 +67,8 @@ public class CargoSlot {
     }
 
     public void empty() {
-        Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
+        Preconditions.checkState(!isEmpty(),
+                "Cargo slot (%s) is already empty.", this);
         cargoUnit = null;
         cargoGoods = null;
     }
@@ -75,7 +76,7 @@ public class CargoSlot {
     /**
      * Get index that allows to identify this cargo slot. Index is unique in one
      * ship.
-     * 
+     *
      * @return return unique cargo slot index
      */
     public int getIndex() {
@@ -84,7 +85,7 @@ public class CargoSlot {
 
     /**
      * Get unit where this cargo slot belongs.
-     * 
+     *
      * @return return owner unit
      */
     public Unit getOwnerUnit() {
@@ -101,13 +102,15 @@ public class CargoSlot {
 
     public void removeCargo(final Goods goods) {
         Preconditions.checkNotNull(goods);
-        Preconditions.checkArgument(isLoadedGood(), "Cargo slot (%s) doesn't contains any good.",
-                this);
-        Preconditions.checkArgument(cargoGoods.getType().equals(goods.getType()),
-                "Cargo (%s) doesn't contains same type as was transfered (%s).", this,
-                goods.getType());
+        Preconditions.checkArgument(isLoadedGood(),
+                "Cargo slot (%s) doesn't contains any good.", this);
+        Preconditions.checkArgument(
+                cargoGoods.getType().equals(goods.getType()),
+                "Cargo (%s) doesn't contains same type as was transfered (%s).",
+                this, goods.getType());
         Preconditions.checkArgument(cargoGoods.getAmount() >= goods.getAmount(),
-                "Can't remove more amount (%s) than is stored (%s).", goods.getAmount(), this);
+                "Can't remove more amount (%s) than is stored (%s).",
+                goods.getAmount(), this);
         cargoGoods = cargoGoods.substract(goods);
         if (cargoGoods.getAmount() == 0) {
             cargoGoods = null;
@@ -122,14 +125,16 @@ public class CargoSlot {
      * This simply put some other unit to cargo store. It should not be used for
      * unit at map.
      *
-     * @param unit
-     *            required unit
+     * @param unit required unit
      */
     public void store(final Unit unit) {
         Preconditions.checkNotNull(unit);
-        Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
-        Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
-                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+        Preconditions.checkState(isEmpty(),
+                "Cargo slot (%s) is already loaded.", this);
+        Preconditions.checkState(
+                getOwnerUnit().getOwner().equals(unit.getOwner()),
+                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(),
+                unit.getOwner());
 
         final PlaceCargoSlot tmp = new PlaceCargoSlot(unit, this);
         unit.placeToCargoSlot(tmp);
@@ -140,24 +145,25 @@ public class CargoSlot {
      * This simply put some other unit to cargo store. It should not be used for
      * unit at map.
      *
-     * @param placeCargoSlot
-     *            required place describing relation to unit
+     * @param placeCargoSlot required place describing relation to unit
      */
     public void store(final PlaceCargoSlot placeCargoSlot) {
         Preconditions.checkNotNull(placeCargoSlot);
-        Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+        Preconditions.checkState(isEmpty(),
+                "Cargo slot (%s) is already loaded.", this);
         final Unit unit = placeCargoSlot.getUnit();
-        Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
-                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+        Preconditions.checkState(
+                getOwnerUnit().getOwner().equals(unit.getOwner()),
+                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(),
+                unit.getOwner());
 
         cargoUnit = placeCargoSlot;
     }
 
     /**
      * Transfer goods form Europe port.
-     * 
-     * @param goods
-     *            required good amount will
+     *
+     * @param goods required good amount will
      * @return how much of goods was transferred
      */
     public Goods buyAndStoreFromEuropePort(final Goods goods) {
@@ -165,7 +171,8 @@ public class CargoSlot {
         verifyThatItCouldStored(goods);
         if (getGoods().isPresent()) {
             final Goods storedGoods = getGoods().get();
-            final Goods maxGoods = storedGoods.setAmount(MAX_CARGO_SLOT_CAPACITY);
+            final Goods maxGoods = storedGoods
+                    .setAmount(MAX_CARGO_SLOT_CAPACITY);
             final Goods freeGoods = maxGoods.substract(storedGoods);
             if (freeGoods.isZero()) {
                 // no space to store
@@ -191,13 +198,17 @@ public class CargoSlot {
 
     void sellAndEmpty(final Goods goods) {
         Preconditions.checkNotNull(goods);
-        Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
-        Preconditions.checkState(getGoods().isPresent(), "Cargo slot (%s) doesn't contains goods.",
-                this);
-        Preconditions.checkArgument(getGoods().get().getType().equals(goods.getType()),
+        Preconditions.checkState(!isEmpty(),
+                "Cargo slot (%s) is already empty.", this);
+        Preconditions.checkState(getGoods().isPresent(),
+                "Cargo slot (%s) doesn't contains goods.", this);
+        Preconditions.checkArgument(
+                getGoods().get().getType().equals(goods.getType()),
                 "Cargo slot (%s) doesn't contains correct goods type.", this);
-        Preconditions.checkArgument(getGoods().get().isGreaterOrEqualsThan(goods),
-                "Attempt to sell more goods %s than is stored in %s", goods, this);
+        Preconditions.checkArgument(
+                getGoods().get().isGreaterOrEqualsThan(goods),
+                "Attempt to sell more goods %s than is stored in %s", goods,
+                this);
 
         getOwnerPlayer().sellGoods(goods);
         cargoGoods = cargoGoods.substract(goods);
@@ -208,28 +219,32 @@ public class CargoSlot {
 
     /**
      * Store goods from source cargo slot to this one.
-     * 
-     * @param transferredGoods
-     *            required good amount
-     * @param sourceCargoSlot
-     *            required source cargo slot
+     *
+     * @param transferredGoods required good amount
+     * @param sourceCargoSlot  required source cargo slot
      * @return really transfered goods
      */
-    public Goods storeFromCargoSlot(final Goods transferredGoods, final CargoSlot sourceCargoSlot) {
+    public Goods storeFromCargoSlot(final Goods transferredGoods,
+            final CargoSlot sourceCargoSlot) {
         verifyThatItCouldStored(transferredGoods);
-        Preconditions.checkNotNull(sourceCargoSlot, "source cargo slot is null");
-        Preconditions.checkArgument(getOwnerPlayer().equals(sourceCargoSlot.getOwnerPlayer()),
+        Preconditions.checkNotNull(sourceCargoSlot,
+                "source cargo slot is null");
+        Preconditions.checkArgument(
+                getOwnerPlayer().equals(sourceCargoSlot.getOwnerPlayer()),
                 "Source cargo slot and target cargo slots doesn't belongs to same user (%s) (%s).",
                 getOwnerPlayer(), sourceCargoSlot.getOwnerPlayer());
         Preconditions.checkArgument(sourceCargoSlot.getGoods().isPresent(),
-                "Source cargo slot doesn't contains any good,(%s)", sourceCargoSlot);
+                "Source cargo slot doesn't contains any good,(%s)",
+                sourceCargoSlot);
 
         final Goods sourceGoods = sourceCargoSlot.getGoods().get();
-        Preconditions.checkArgument(sourceGoods.getType().equals(transferredGoods.getType()),
+        Preconditions.checkArgument(
+                sourceGoods.getType().equals(transferredGoods.getType()),
                 "Source cargo slot contains diffrent good than was transfered. Source cargo slot=(%s), Transfered=(%s)",
                 sourceCargoSlot, transferredGoods);
 
-        final Goods toTransfer = maxPossibleGoodsToMoveHere(sourceGoods, transferredGoods);
+        final Goods toTransfer = maxPossibleGoodsToMoveHere(sourceGoods,
+                transferredGoods);
         sourceCargoSlot.removeCargo(toTransfer);
         addGoods(toTransfer);
         return toTransfer;
@@ -237,13 +252,12 @@ public class CargoSlot {
 
     /**
      * Store goods warehouse to this one.
-     * 
-     * @param transferredGoods
-     *            required good amount
-     * @param colony
-     *            required colony containing source warehouse
+     *
+     * @param transferredGoods required good amount
+     * @param colony           required colony containing source warehouse
      */
-    public void storeFromColonyWarehouse(final Goods transferredGoods, final Colony colony) {
+    public void storeFromColonyWarehouse(final Goods transferredGoods,
+            final Colony colony) {
         verifyThatItCouldStored(transferredGoods);
         Preconditions.checkNotNull(colony, "colony is null");
         Preconditions.checkArgument(getOwnerPlayer().equals(colony.getOwner()),
@@ -251,21 +265,22 @@ public class CargoSlot {
                 getOwnerPlayer(), colony.getOwner());
 
         final ColonyWarehouse warehouse = colony.getWarehouse();
-        final Goods warehouseGoods = warehouse.getGoods(transferredGoods.getType());
+        final Goods warehouseGoods = warehouse
+                .getGoods(transferredGoods.getType());
 
-        final Goods toTransfer = maxPossibleGoodsToMoveHere(warehouseGoods, transferredGoods);
+        final Goods toTransfer = maxPossibleGoodsToMoveHere(warehouseGoods,
+                transferredGoods);
         warehouse.removeGoods(toTransfer);
         addGoods(toTransfer);
     }
 
     /**
      * Get maximum of goods that could be stored to this cargo slot.
-     * 
-     * @param availableSourceGoods
-     *            required maximum number of units in source, source could be
-     *            Europe port, warehouse or ship cargo slot
-     * @param transferredGoods
-     *            required maximum transferred goods
+     *
+     * @param availableSourceGoods required maximum number of units in source,
+     *                             source could be Europe port, warehouse or
+     *                             ship cargo slot
+     * @param transferredGoods     required maximum transferred goods
      * @return amount of transfered goods
      */
     public Goods maxPossibleGoodsToMoveHere(final Goods availableSourceGoods,
@@ -279,9 +294,8 @@ public class CargoSlot {
 
     /**
      * Get info how many goods could be moved here from available goods.
-     * 
-     * @param transferredGoods
-     *            required transferred goods
+     *
+     * @param transferredGoods required transferred goods
      * @return how much goods could be stored here
      */
     public Goods maxPossibleGoodsToMoveHere(final Goods transferredGoods) {
@@ -294,18 +308,19 @@ public class CargoSlot {
 
     /**
      * Validate that goods amount could be stored to this cargo slot
-     * 
-     * @param transferredGoods
-     *            required transferred goods amount
+     *
+     * @param transferredGoods required transferred goods amount
      */
     private void verifyThatItCouldStored(final Goods transferredGoods) {
         Preconditions.checkNotNull(transferredGoods);
         if (isLoadedUnit()) {
-            throw new IllegalArgumentException("Attempt to move cargo to slot occupied with unit.");
+            throw new IllegalArgumentException(
+                    "Attempt to move cargo to slot occupied with unit.");
         }
         if (isLoadedGood()) {
             Preconditions.checkArgument(
-                    getGoods().get().getType().equals(transferredGoods.getType()),
+                    getGoods().get().getType()
+                            .equals(transferredGoods.getType()),
                     "Tranfered cargo is diffrent type this is stored in slot. Stored=(%s), transfered=(%s)",
                     getGoods().get(), cargoGoods);
         }
@@ -313,7 +328,7 @@ public class CargoSlot {
 
     /**
      * Return how many of goods could be maximally stored to this cargo slot.
-     * 
+     *
      * @return return available space for goods
      */
     public int getAvailableCapacity() {

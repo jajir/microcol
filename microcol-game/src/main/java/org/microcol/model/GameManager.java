@@ -16,14 +16,16 @@ import com.google.common.base.Strings;
  */
 final class GameManager {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(GameManager.class);
 
     private final GameOverEvaluator gameOverEvaluator;
     private final Model model;
     private boolean started;
     private Player currentPlayer;
 
-    GameManager(final Model model, final List<Function<Model, GameOverResult>> gameOverEvaluators,
+    GameManager(final Model model,
+            final List<Function<Model, GameOverResult>> gameOverEvaluators,
             final boolean alreadyStarted, final Player currentPlayer) {
         gameOverEvaluator = new GameOverEvaluator(gameOverEvaluators);
         this.started = alreadyStarted;
@@ -34,11 +36,13 @@ final class GameManager {
     public static GameManager make(final Model model, final ModelPo modelPo,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,
             final PlayerStore playerStore) {
-        return new GameManager(model, gameOverEvaluators, modelPo.getGameManager().isGameStarted(),
+        return new GameManager(model, gameOverEvaluators,
+                modelPo.getGameManager().isGameStarted(),
                 findPlayer(modelPo, playerStore));
     }
 
-    private static Player findPlayer(final ModelPo modelPo, final PlayerStore playerStore) {
+    private static Player findPlayer(final ModelPo modelPo,
+            final PlayerStore playerStore) {
         final String playerName = modelPo.getGameManager().getCurrentPlayer();
         if (Strings.isNullOrEmpty(playerName)) {
             return null;
@@ -69,8 +73,9 @@ final class GameManager {
         Preconditions.checkNotNull(player);
 
         if (!player.equals(currentPlayer)) {
-            throw new IllegalStateException(String
-                    .format("This player (%s) is not current player (%s).", player, currentPlayer));
+            throw new IllegalStateException(String.format(
+                    "This player (%s) is not current player (%s).", player,
+                    currentPlayer));
         }
     }
 
@@ -96,7 +101,8 @@ final class GameManager {
      * When game is loaded from file this should start it.
      */
     void continueGame() {
-        Preconditions.checkState(started, "Game can't continue because wasn't started.");
+        Preconditions.checkState(started,
+                "Game can't continue because wasn't started.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         model.fireGameStarted();
         model.fireRoundStarted();
@@ -114,7 +120,8 @@ final class GameManager {
      */
     void endTurn() {
         checkGameRunning();
-        LOGGER.debug("End turn was called, current player is {}", currentPlayer);
+        LOGGER.debug("End turn was called, current player is {}",
+                currentPlayer);
         model.fireTurnFinished(currentPlayer);
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
         final int index = model.getPlayers().indexOf(currentPlayer);
@@ -124,7 +131,8 @@ final class GameManager {
             model.fireTurnStarted(currentPlayer, true);
         } else {
             model.getCalendar().endRound();
-            final Optional<GameOverResult> oGameOverResult = gameOverEvaluator.evaluate(model);
+            final Optional<GameOverResult> oGameOverResult = gameOverEvaluator
+                    .evaluate(model);
             if (oGameOverResult.isPresent()) {
                 model.fireGameFinished(oGameOverResult.get());
                 // TODO here should be following code, but IU can't live with

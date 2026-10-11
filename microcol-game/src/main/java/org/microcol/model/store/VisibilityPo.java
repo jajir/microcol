@@ -20,14 +20,14 @@ public final class VisibilityPo extends AbstractMapStore {
     }
 
     /**
-     * @param visible
-     *            the visible to set
+     * @param visible the visible to set
      */
     public void setVisible(String[] visible) {
         this.visible = visible;
     }
 
-    public void setVisibility(final Set<Location> vis, final int maxX, final int maxY) {
+    public void setVisibility(final Set<Location> vis, final int maxX,
+            final int maxY) {
         visible = generateString(loc -> {
             final boolean isVisible = vis.contains(loc);
             if (isVisible) {

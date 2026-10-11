@@ -12,14 +12,17 @@ import org.microcol.model.Location;
 
 public class AreaBasicTest {
 
-    private final VisibleAreaService visibleArea = mock(VisibleAreaService.class);
+    private final VisibleAreaService visibleArea = mock(
+            VisibleAreaService.class);
 
     private Area area;
 
     @Test
     public void test_convertToLocation() throws Exception {
-        assertEquals(Location.of(2, 2), area.convertToLocation(Point.of(23, 23)));
-        assertEquals(Location.of(8, 8), area.convertToLocation(Point.of(300, 300)));
+        assertEquals(Location.of(2, 2),
+                area.convertToLocation(Point.of(23, 23)));
+        assertEquals(Location.of(8, 8),
+                area.convertToLocation(Point.of(300, 300)));
     }
 
     @BeforeEach

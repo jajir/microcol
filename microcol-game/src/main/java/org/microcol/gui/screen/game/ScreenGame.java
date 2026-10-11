@@ -40,11 +40,13 @@ public class ScreenGame implements GameScreen {
     private final StackPane mainPanel;
 
     @Inject
-    ScreenGame(final @Named("GamePanel") StatusBar statusBar, final RightPanel rightPanel,
-            final ButtonsGamePanel buttonGamePanel, final GamePanelComponent gamePanelComponents) {
+    ScreenGame(final @Named("GamePanel") StatusBar statusBar,
+            final RightPanel rightPanel, final ButtonsGamePanel buttonGamePanel,
+            final GamePanelComponent gamePanelComponents) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
-        this.gamePanelComponents = Preconditions.checkNotNull(gamePanelComponents);
+        this.gamePanelComponents = Preconditions
+                .checkNotNull(gamePanelComponents);
         this.statusBar.setShowEventsFromSource(Source.GAME);
 
         final HBox hBox = new HBox();
@@ -69,9 +71,8 @@ public class ScreenGame implements GameScreen {
      * There is problem to catch pressed tabulator with usual event. It's
      * because components handle tabulator to move focus.
      * </p>
-     * 
-     * @param tabEventHandler
-     *            required tabulator event handler
+     *
+     * @param tabEventHandler required tabulator event handler
      */
     void setOnTabPressed(final Consumer<KeyEvent> tabEventHandler) {
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -84,8 +85,7 @@ public class ScreenGame implements GameScreen {
     /**
      * it's called when key is pressed on game screen.
      *
-     * @param eventHandler
-     *            required key event handler
+     * @param eventHandler required key event handler
      */
     void setOnKeyPressed(EventHandler<? super KeyEvent> eventHandler) {
         mainPanel.setOnKeyPressed(eventHandler);
@@ -94,8 +94,7 @@ public class ScreenGame implements GameScreen {
     /**
      * it's called when key is release on game screen.
      *
-     * @param eventHandler
-     *            required key event handler
+     * @param eventHandler required key event handler
      */
     void setOnKeyReleased(EventHandler<? super KeyEvent> eventHandler) {
         mainPanel.setOnKeyReleased(eventHandler);

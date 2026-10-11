@@ -15,7 +15,8 @@ public final class BeforeEndTurnEvent extends AbstractStoppableEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("stopped", isStopped()).toString();
+        return MoreObjects.toStringHelper(this).add("stopped", isStopped())
+                .toString();
     }
 
 }

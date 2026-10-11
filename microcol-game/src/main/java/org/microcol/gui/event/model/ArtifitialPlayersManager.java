@@ -33,11 +33,14 @@ public final class ArtifitialPlayersManager {
         players = new ArrayList<>();
         model.getPlayers().stream().filter(player -> player.isKing())
                 .map(player -> (PlayerKing) player).forEach(player -> {
-                    players.add(new KingRobotPlayer(model, player, animationManager));
+                    players.add(new KingRobotPlayer(model, player,
+                            animationManager));
                 });
-        model.getPlayers().stream().filter(player -> isOpponent(player)).forEach(player -> {
-            players.add(new SimpleAiPlayer(model, player, animationManager));
-        });
+        model.getPlayers().stream().filter(player -> isOpponent(player))
+                .forEach(player -> {
+                    players.add(new SimpleAiPlayer(model, player,
+                            animationManager));
+                });
     }
 
     private boolean isOpponent(final Player player) {

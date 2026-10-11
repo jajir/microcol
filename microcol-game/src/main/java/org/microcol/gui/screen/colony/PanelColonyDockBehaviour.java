@@ -29,11 +29,13 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     @Inject
     PanelColonyDockBehaviour(final EventBus eventBus,
             final ColonyDialogCallback colonyDialogCallback,
-            final GameModelController gameModelController, final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final ImageProvider imageProvider,
             final ChooseGoodsDialog chooseGoods) {
         super(gameModelController, imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+        this.colonyDialogCallback = Preconditions
+                .checkNotNull(colonyDialogCallback);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
     }
 
@@ -45,9 +47,11 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
     @Override
     public void consumeGoods(final CargoSlot targetCargoSlot,
-            final boolean specialOperatonWasSelected, final ClipboardEval eval) {
+            final boolean specialOperatonWasSelected,
+            final ClipboardEval eval) {
         Goods transferedGoods = eval.getGoods().get();
-        transferedGoods = chooseGoods(transferedGoods, specialOperatonWasSelected, targetCargoSlot);
+        transferedGoods = chooseGoods(transferedGoods,
+                specialOperatonWasSelected, targetCargoSlot);
         if (transferedGoods.isZero()) {
             return;
         }
@@ -56,7 +60,8 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
             targetCargoSlot.storeFromColonyWarehouse(transferedGoods,
                     colonyDialogCallback.getColony());
         } else if (From.VALUE_FROM_UNIT == transferFrom) {
-            targetCargoSlot.storeFromCargoSlot(transferedGoods, eval.getCargoSlot().get());
+            targetCargoSlot.storeFromCargoSlot(transferedGoods,
+                    eval.getCargoSlot().get());
         } else {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
@@ -64,7 +69,8 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
         eventBus.post(new RepaintColonyEvent());
     }
 
-    private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
+    private Goods chooseGoods(final Goods goods,
+            final boolean specialOperatonWasSelected,
             final CargoSlot targetCargoSlot) {
         return chooseGoods(chooseGoods, specialOperatonWasSelected,
                 targetCargoSlot.maxPossibleGoodsToMoveHere(goods));

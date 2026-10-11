@@ -22,11 +22,11 @@ import javafx.scene.layout.BackgroundSize;
 /**
  * One button from top on screen buttons.
  *
- * @param <T>
- *            message key that will shown in status bar when mouse is over
+ * @param <T> message key that will shown in status bar when mouse is over
  *            button
  */
-class ButtonImage<T extends Enum<T> & MessageKeyResource> implements JavaFxComponent {
+class ButtonImage<T extends Enum<T> & MessageKeyResource>
+        implements JavaFxComponent {
 
     private final Source source;
     private final EventBus eventBus;
@@ -34,8 +34,8 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource> implements JavaFxCompo
     private final Button button = new Button();
     private final T buttonKey;
 
-    protected ButtonImage(final EventBus eventBus, final Source source, final I18n i18n,
-            final T buttonKey, final Image image) {
+    protected ButtonImage(final EventBus eventBus, final Source source,
+            final I18n i18n, final T buttonKey, final Image image) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.source = Preconditions.checkNotNull(source);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -43,7 +43,8 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource> implements JavaFxCompo
 
         final BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.RIGHT, 0.5, true, Side.TOP, 0.5, true),
+                new BackgroundPosition(Side.RIGHT, 0.5, true, Side.TOP, 0.5,
+                        true),
                 BackgroundSize.DEFAULT);
 
         button.setBackground(new Background(backgroundImage));
@@ -51,11 +52,13 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource> implements JavaFxCompo
         button.setOnMouseExited(this::onMouseExited);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(i18n.get(buttonKey), source));
     }
 
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(source));
     }
 

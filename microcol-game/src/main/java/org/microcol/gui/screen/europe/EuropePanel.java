@@ -23,7 +23,8 @@ import javafx.scene.layout.StackPane;
  * Panel with Europe port.
  */
 @Singleton
-public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Repaintable {
+public final class EuropePanel
+        implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
     private final StackPane mainPanel;
 
@@ -44,9 +45,12 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
     @Inject
     public EuropePanel(final GameModelController gameModelController,
             final PanelHighSeas<Europe> shipsTravelingToNewWorld,
-            final PanelHighSeas<Europe> shipsTravelingToEurope, final PanelPortPier panelPortPier,
-            final PanelEuropeGoods panelEuropeGoods, final EuropeButtonsPanel europeButtonsPanel,
-            final EventBus eventBus, final I18n i18n, final PanelDockEurope panelDockEurope) {
+            final PanelHighSeas<Europe> shipsTravelingToEurope,
+            final PanelPortPier panelPortPier,
+            final PanelEuropeGoods panelEuropeGoods,
+            final EuropeButtonsPanel europeButtonsPanel,
+            final EventBus eventBus, final I18n i18n,
+            final PanelDockEurope panelDockEurope) {
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(gameModelController);
         this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
@@ -55,23 +59,28 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         labelTitle = new Label();
         labelTitle.getStyleClass().add("label-title");
 
-        this.shipsTravelingToEurope = Preconditions.checkNotNull(shipsTravelingToEurope);
+        this.shipsTravelingToEurope = Preconditions
+                .checkNotNull(shipsTravelingToEurope);
         this.shipsTravelingToEurope.setShownShipsTravelingToEurope(true);
         this.shipsTravelingToEurope.setTitleKey(Europe.shipsTravelingToEurope);
-        this.shipsTravelingToEurope.setOnMouseEnteredKey(Europe.statusBarShipsToEurope);
+        this.shipsTravelingToEurope
+                .setOnMouseEnteredKey(Europe.statusBarShipsToEurope);
         this.shipsTravelingToEurope.addStyle("to-europe");
-        this.shipsTravelingToNewWorld = Preconditions.checkNotNull(shipsTravelingToNewWorld);
+        this.shipsTravelingToNewWorld = Preconditions
+                .checkNotNull(shipsTravelingToNewWorld);
         this.shipsTravelingToNewWorld.setShownShipsTravelingToEurope(false);
-        this.shipsTravelingToNewWorld.setTitleKey(Europe.shipsTravelingToNewWorld);
-        this.shipsTravelingToNewWorld.setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
+        this.shipsTravelingToNewWorld
+                .setTitleKey(Europe.shipsTravelingToNewWorld);
+        this.shipsTravelingToNewWorld
+                .setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
         europeDock.getContent().setOnMouseEntered(e -> {
-            eventBus.post(
-                    new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));
         });
-        europeDock.getContent()
-                .setOnMouseExited(event -> eventBus.post(new StatusBarMessageEvent(Source.EUROPE)));
+        europeDock.getContent().setOnMouseExited(event -> eventBus
+                .post(new StatusBarMessageEvent(Source.EUROPE)));
 
         this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
 

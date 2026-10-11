@@ -29,7 +29,8 @@ import javafx.scene.layout.Region;
 @Singleton
 final class PanelOutsideColony implements JavaFxComponent {
 
-    private final Logger logger = LoggerFactory.getLogger(PanelOutsideColony.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(PanelOutsideColony.class);
 
     private final HBox panelUnits;
 
@@ -47,19 +48,22 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     @Inject
     public PanelOutsideColony(final GameModelController gameModelController,
-            final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony,
+            final ColonyDialogCallback colonyDialog,
+            final DialogDestroyColony dialogDestroyColony,
             final EventBus eventBus,
             final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
-        this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
+        this.dialogDestroyColony = Preconditions
+                .checkNotNull(dialogDestroyColony);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.panelOutsideColonyUnitFactory = Preconditions
                 .checkNotNull(panelOutsideColonyUnitFactory);
         panelUnits = new HBox();
 
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(panelUnits,
-                this::isItUnit);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                panelUnits, this::isItUnit);
         panelUnits.setOnDragEntered(backgroundHighlighter::onDragEntered);
         panelUnits.setOnDragExited(backgroundHighlighter::onDragExited);
         panelUnits.setOnDragDropped(this::onDragDropped);
@@ -74,8 +78,8 @@ final class PanelOutsideColony implements JavaFxComponent {
     void repaint() {
         panelUnits.getChildren().clear();
         colony.getUnitsOutSideColony().forEach(unit -> {
-            final PanelOutsideColonyUnit paneImage = panelOutsideColonyUnitFactory.make(unit,
-                    colony);
+            final PanelOutsideColonyUnit paneImage = panelOutsideColonyUnitFactory
+                    .make(unit, colony);
             panelUnits.getChildren().add(paneImage.getContent());
         });
     }
@@ -88,19 +92,22 @@ final class PanelOutsideColony implements JavaFxComponent {
     }
 
     private boolean isItUnit(final Dragboard db) {
-        return ClipboardEval.make(gameModelController.getModel(), db).getUnit().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db).getUnit()
+                .isPresent();
     }
 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on panel outside colony.");
         final Optional<Unit> oUnit = ClipboardEval
-                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
             if (colony.isLastUnitIncolony(unit)) {
                 if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
                     unit.placeToMap(colony.getLocation());
-                    eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
+                    eventBus.post(
+                            new UnitMovedOutsideColonyEvent(unit, colony));
                     colonyDialog.close();
                 }
             } else {

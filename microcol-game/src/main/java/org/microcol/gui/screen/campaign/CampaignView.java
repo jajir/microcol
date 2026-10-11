@@ -19,8 +19,8 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public final class CampaignView
-        implements CampaignPresenter.Display, JavaFxComponent, UpdatableLanguage {
+public final class CampaignView implements CampaignPresenter.Display,
+        JavaFxComponent, UpdatableLanguage {
 
     private final CampaignManager campaignManager;
 
@@ -46,10 +46,11 @@ public final class CampaignView
         box.getChildren().clear();
         final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
-            final Button missionButton = new Button(
-                    i18n.get(GameMenu.get(campaign.getName(), mission.getName())));
+            final Button missionButton = new Button(i18n
+                    .get(GameMenu.get(campaign.getName(), mission.getName())));
             missionButton.setDisable(!campaign.isMissionEnabled(mission));
-            missionButton.setOnAction(event -> onSelectedMission(mission.getName()));
+            missionButton
+                    .setOnAction(event -> onSelectedMission(mission.getName()));
             box.getChildren().add(missionButton);
         });
         box.getChildren().add(buttonBack);
@@ -73,8 +74,7 @@ public final class CampaignView
     }
 
     /**
-     * @param onSelectedMission
-     *            the onSelectedMission to set
+     * @param onSelectedMission the onSelectedMission to set
      */
     @Override
     public void setOnSelectedMission(final Consumer<String> onSelectedMission) {

@@ -54,14 +54,16 @@ public class CalendarTest {
 
     @Test()
     public void testEndRoundException() {
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            final Calendar calendar = createCalendar(1590, 1591);
+        final IllegalStateException exception = assertThrows(
+                IllegalStateException.class, () -> {
+                    final Calendar calendar = createCalendar(1590, 1591);
 
-            calendar.endRound();
-            calendar.endRound();
-        });
+                    calendar.endRound();
+                    calendar.endRound();
+                });
 
-        assertEquals("End year (1591) already reached.", exception.getMessage());
+        assertEquals("End year (1591) already reached.",
+                exception.getMessage());
     }
 
     private Calendar createCalendar(final int startYear, final int endYear) {

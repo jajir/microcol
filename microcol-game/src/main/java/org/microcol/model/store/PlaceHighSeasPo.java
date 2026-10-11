@@ -26,7 +26,8 @@ public final class PlaceHighSeasPo extends PlacePo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this.getClass()).add("isTravelToEurope", isTravelToEurope)
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("isTravelToEurope", isTravelToEurope)
                 .add("remainigTurns", remainigTurns).toString();
     }
 

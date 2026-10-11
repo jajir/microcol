@@ -17,7 +17,8 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public final class AnimationManager implements AnimationLock {
 
-    private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(AnimationManager.class);
 
     private final EventBus eventBus;
 
@@ -40,7 +41,8 @@ public final class AnimationManager implements AnimationLock {
     }
 
     private void performStep() {
-        Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
+        Preconditions.checkState(runningPart != null,
+                "Actually running animation was lost.");
         runningPart.getAnimation().nextStep();
         if (!runningPart.getAnimation().hasNextStep()) {
             runningPart.runOnAnimationIsDone();
@@ -52,7 +54,8 @@ public final class AnimationManager implements AnimationLock {
     }
 
     void paint(final GraphicsContext graphics, final Area area) {
-        Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
+        Preconditions.checkState(runningPart != null,
+                "Actually running animation was lost.");
         runningPart.getAnimation().paint(graphics, area);
         performStep();
     }
@@ -60,17 +63,16 @@ public final class AnimationManager implements AnimationLock {
     /**
      * Schedule animation to be shown. Also allow to lock calling thread with
      * method {@link #waitWhileRunning()}.
-     * 
-     * @param animation
-     *            required animation object
-     * @param onAnimationIsDone
-     *            optional operation that will be executed when animation is
-     *            none
+     *
+     * @param animation         required animation object
+     * @param onAnimationIsDone optional operation that will be executed when
+     *                          animation is none
      */
-    void addAnimation(final Animation animation, final Consumer<Animation> onAnimationIsDone) {
+    void addAnimation(final Animation animation,
+            final Consumer<Animation> onAnimationIsDone) {
         Preconditions.checkNotNull(animation);
-        Preconditions.checkState(runningPart == null, "There is still runnign animation '%s'",
-                runningPart);
+        Preconditions.checkState(runningPart == null,
+                "There is still runnign animation '%s'", runningPart);
         runningPart = new AnimationHolder(animation, onAnimationIsDone);
         logger.debug("Adding animation {}", animation);
         eventBus.post(new AnimationStartedEvent());

@@ -20,8 +20,8 @@ final class PathFinder {
     private final Location destination;
     private final boolean excludeDestination;
 
-    PathFinder(final Unit unit, final Location start, final Location destination,
-            final boolean excludeDestination) {
+    PathFinder(final Unit unit, final Location start,
+            final Location destination, final boolean excludeDestination) {
         this.unit = Preconditions.checkNotNull(unit);
         this.start = Preconditions.checkNotNull(start);
         this.destination = Preconditions.checkNotNull(destination);
@@ -35,19 +35,22 @@ final class PathFinder {
         long startTime = System.currentTimeMillis();
 
         if (!excludeDestination && !unit.isPossibleToMoveAt(destination)) {
-            logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
+            logger.debug("Path finding finished in {} ms.",
+                    System.currentTimeMillis() - startTime);
 
             return null;
         }
 
         final List<PathFindingNode> openList = new ArrayList<>();
-        openList.add(new PathFindingNode(null, start, start.getDistanceManhattan(destination)));
+        openList.add(new PathFindingNode(null, start,
+                start.getDistanceManhattan(destination)));
         final Set<Location> closedSet = new HashSet<>();
         PathFindingNode current = null;
 
         while (!openList.isEmpty()) {
             current = findLowest(openList);
-            if (excludeDestination && current.getLocation().isNeighbor(destination)
+            if (excludeDestination
+                    && current.getLocation().isNeighbor(destination)
                     || current.getLocation().equals(destination)) {
                 logger.debug("Path finding finished in {} ms.",
                         System.currentTimeMillis() - startTime);
@@ -56,11 +59,14 @@ final class PathFinder {
             }
             openList.remove(current);
             closedSet.add(current.getLocation());
-            final List<Location> neighbors = current.getLocation().getNeighbors();
+            final List<Location> neighbors = current.getLocation()
+                    .getNeighbors();
             for (final Location neighbor : neighbors) {
-                if (!closedSet.contains(neighbor) && unit.isPossibleToMoveAt(neighbor)) {
+                if (!closedSet.contains(neighbor)
+                        && unit.isPossibleToMoveAt(neighbor)) {
                     final PathFindingNode oldNode = get(openList, neighbor);
-                    final PathFindingNode newNode = new PathFindingNode(current, neighbor,
+                    final PathFindingNode newNode = new PathFindingNode(current,
+                            neighbor,
                             neighbor.getDistanceManhattan(destination));
                     if (oldNode == null) {
                         openList.add(newNode);
@@ -73,12 +79,14 @@ final class PathFinder {
             }
         }
 
-        logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
+        logger.debug("Path finding finished in {} ms.",
+                System.currentTimeMillis() - startTime);
 
         return null;
     }
 
-    private PathFindingNode findLowest(final Collection<PathFindingNode> nodes) {
+    private PathFindingNode findLowest(
+            final Collection<PathFindingNode> nodes) {
         PathFindingNode lowestNode = null;
         for (final PathFindingNode node : nodes) {
             if (lowestNode == null || node.getScore() < lowestNode.getScore()) {
@@ -89,7 +97,8 @@ final class PathFinder {
         return lowestNode;
     }
 
-    private PathFindingNode get(final Collection<PathFindingNode> nodes, final Location location) {
+    private PathFindingNode get(final Collection<PathFindingNode> nodes,
+            final Location location) {
         for (final PathFindingNode node : nodes) {
             if (node.getLocation().equals(location)) {
                 return node;

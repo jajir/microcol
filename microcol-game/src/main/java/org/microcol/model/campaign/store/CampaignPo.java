@@ -16,8 +16,10 @@ public class CampaignPo {
 
     private List<CampaignMissionPo> missions;
 
-    public Optional<CampaignMissionPo> getMissionByName(final String missionName) {
-        return getMissions().stream().filter(mission -> missionName.equals(mission.getName()))
+    public Optional<CampaignMissionPo> getMissionByName(
+            final String missionName) {
+        return getMissions().stream()
+                .filter(mission -> missionName.equals(mission.getName()))
                 .findFirst();
     }
 

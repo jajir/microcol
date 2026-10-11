@@ -18,7 +18,8 @@ final class AnimationLatch {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("latch", latch).toString();
+        return MoreObjects.toStringHelper(getClass()).add("latch", latch)
+                .toString();
     }
 
     /**

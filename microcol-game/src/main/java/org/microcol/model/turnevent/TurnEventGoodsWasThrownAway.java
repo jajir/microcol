@@ -11,8 +11,8 @@ public class TurnEventGoodsWasThrownAway extends AbstractTurnEvent {
 
     private final Goods goods;
 
-    TurnEventGoodsWasThrownAway(final String playerName, final String colonyName,
-            final Goods goods) {
+    TurnEventGoodsWasThrownAway(final String playerName,
+            final String colonyName, final Goods goods) {
         super(playerName);
         this.colonyName = Preconditions.checkNotNull(colonyName);
         this.goods = Preconditions.checkNotNull(goods);
@@ -37,11 +37,13 @@ public class TurnEventGoodsWasThrownAway extends AbstractTurnEvent {
     }
 
     public static TurnEventGoodsWasThrownAway tryLoad(final TurnEventPo po) {
-        if (TurnEventGoodsWasThrownAway.class.getSimpleName().equals(po.getType())) {
+        if (TurnEventGoodsWasThrownAway.class.getSimpleName()
+                .equals(po.getType())) {
             final String playerName = po.getPlayerName();
             final String colonyName = po.getColonyName();
             final Goods goods = po.getGoods();
-            return new TurnEventGoodsWasThrownAway(playerName, colonyName, goods);
+            return new TurnEventGoodsWasThrownAway(playerName, colonyName,
+                    goods);
         }
         return null;
     }

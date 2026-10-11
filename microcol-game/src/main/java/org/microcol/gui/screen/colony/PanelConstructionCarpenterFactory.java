@@ -14,10 +14,12 @@ class PanelConstructionCarpenterFactory implements PanelConstructionFactory {
     }
 
     @Override
-    public PanelConstructionCarpenter make(final PanelConstructionContext context) {
+    public PanelConstructionCarpenter make(
+            final PanelConstructionContext context) {
         final PanelConstructionCarpenter out = new PanelConstructionCarpenter(
-                context.getImageProvider(), context.getEventBus(), context.getI18n(),
-                context.getConstruction(), context.getColonyStats(), context.getModel(),
+                context.getImageProvider(), context.getEventBus(),
+                context.getI18n(), context.getConstruction(),
+                context.getColonyStats(), context.getModel(),
                 context.getColony());
         out.setCssId(cssId);
         return out;

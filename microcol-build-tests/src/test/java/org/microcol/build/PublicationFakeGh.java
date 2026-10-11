@@ -40,12 +40,16 @@ public final class PublicationFakeGh {
             if (!Files.isDirectory(release)) {
                 fail("release not found");
             }
-            System.out.println("{\"databaseId\":" + Files.readString(release.resolve("id")) + "}");
+            System.out.println("{\"databaseId\":"
+                    + Files.readString(release.resolve("id")) + "}");
         } else if (operation.equals("create")) {
             Files.createDirectories(release.resolve("files"));
-            Files.writeString(release.resolve("draft"), Boolean.toString(args.contains("--draft")));
-            try (Stream<Path> releases = Files.list(state.resolve("releases"))) {
-                Files.writeString(release.resolve("id"), Long.toString(100 + releases.count()));
+            Files.writeString(release.resolve("draft"),
+                    Boolean.toString(args.contains("--draft")));
+            try (Stream<Path> releases = Files
+                    .list(state.resolve("releases"))) {
+                Files.writeString(release.resolve("id"),
+                        Long.toString(100 + releases.count()));
             }
         } else if (operation.equals("upload")) {
             if (Files.exists(state.resolve("fail-upload"))) {
@@ -58,14 +62,22 @@ public final class PublicationFakeGh {
                 }
                 if (!value.startsWith("--")) {
                     final Path file = Path.of(value);
-                    Files.copy(file, release.resolve("files").resolve(file.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(file,
+                            release.resolve("files")
+                                    .resolve(file.getFileName()),
+                            StandardCopyOption.REPLACE_EXISTING);
                 }
             }
-            if (tag.equals("dev") && Files.exists(state.resolve("advance-main"))) {
+            if (tag.equals("dev")
+                    && Files.exists(state.resolve("advance-main"))) {
                 Files.writeString(state.resolve("main"), "b".repeat(40));
             }
-            if (Files.exists(state.resolve("corrupt-upload")) && !tag.equals("dev")) {
-                Files.writeString(release.resolve("files").resolve("MicroCol-Dev-macos.zip"), "damaged in transit");
+            if (Files.exists(state.resolve("corrupt-upload"))
+                    && !tag.equals("dev")) {
+                Files.writeString(
+                        release.resolve("files")
+                                .resolve("MicroCol-Dev-macos.zip"),
+                        "damaged in transit");
             }
         } else if (operation.equals("edit")) {
             if (args.contains("--draft=false")) {
@@ -74,12 +86,15 @@ public final class PublicationFakeGh {
         } else if (operation.equals("download")) {
             if (args.contains("--pattern")) {
                 final String name = value(args, "--pattern");
-                Files.copy(release.resolve("files").resolve(name), Path.of(value(args, "--output")), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(release.resolve("files").resolve(name),
+                        Path.of(value(args, "--output")),
+                        StandardCopyOption.REPLACE_EXISTING);
             } else {
                 final Path destination = Path.of(value(args, "--dir"));
                 Files.createDirectories(destination);
                 for (Path file : files(release.resolve("files"))) {
-                    Files.copy(file, destination.resolve(file.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(file, destination.resolve(file.getFileName()),
+                            StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         } else {
@@ -92,15 +107,19 @@ public final class PublicationFakeGh {
             fail("gh: authentication failed (HTTP 403)");
         }
         if (path.endsWith("git/ref/heads/main")) {
-            System.out.println("{\"object\":{\"sha\":" + quote(Files.readString(state.resolve("main"))) + "}}");
+            System.out.println("{\"object\":{\"sha\":"
+                    + quote(Files.readString(state.resolve("main"))) + "}}");
             return;
         }
         final String tagMarker = "/releases/tags/";
         if (path.contains(tagMarker)) {
-            final String tag = path.substring(path.indexOf(tagMarker) + tagMarker.length());
+            final String tag = path
+                    .substring(path.indexOf(tagMarker) + tagMarker.length());
             final Path release = state.resolve("releases").resolve(tag);
-            // This deliberately models the API behavior that broke the first real publication.
-            if (!Files.isDirectory(release) || Files.readString(release.resolve("draft")).equals("true")) {
+            // This deliberately models the API behavior that broke the first
+            // real publication.
+            if (!Files.isDirectory(release) || Files
+                    .readString(release.resolve("draft")).equals("true")) {
                 fail("gh: Not Found (HTTP 404)");
             }
             describe(release);
@@ -119,16 +138,21 @@ public final class PublicationFakeGh {
     private static void describe(final Path release) throws Exception {
         final List<String> assets = new ArrayList<>();
         for (Path file : files(release.resolve("files"))) {
-            final String digest = Files.exists(state.resolve("omit-digests")) ? "null" : quote("sha256:" + checksum(file));
-            assets.add("{\"name\":" + quote(file.getFileName().toString()) + ",\"digest\":" + digest + "}");
+            final String digest = Files.exists(state.resolve("omit-digests"))
+                    ? "null"
+                    : quote("sha256:" + checksum(file));
+            assets.add("{\"name\":" + quote(file.getFileName().toString())
+                    + ",\"digest\":" + digest + "}");
         }
-        System.out.println("{\"id\":" + Files.readString(release.resolve("id")) + ",\"tag_name\":"
-                + quote(release.getFileName().toString()) + ",\"draft\":" + Files.readString(release.resolve("draft"))
+        System.out.println("{\"id\":" + Files.readString(release.resolve("id"))
+                + ",\"tag_name\":" + quote(release.getFileName().toString())
+                + ",\"draft\":" + Files.readString(release.resolve("draft"))
                 + ",\"assets\":[" + String.join(",", assets) + "]}");
     }
 
     static String checksum(final Path path) throws Exception {
-        final byte[] digest = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path));
+        final byte[] digest = MessageDigest.getInstance("SHA-256")
+                .digest(Files.readAllBytes(path));
         final StringBuilder result = new StringBuilder();
         for (byte value : digest) {
             result.append(String.format("%02x", value & 0xff));
@@ -138,7 +162,8 @@ public final class PublicationFakeGh {
 
     private static List<Path> files(final Path directory) throws IOException {
         try (Stream<Path> files = Files.list(directory)) {
-            return files.sorted(Comparator.comparing(Path::toString)).collect(Collectors.toList());
+            return files.sorted(Comparator.comparing(Path::toString))
+                    .collect(Collectors.toList());
         }
     }
 
@@ -147,12 +172,14 @@ public final class PublicationFakeGh {
     }
 
     private static String quote(final String value) {
-        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"")
+                .replace("\n", "\\n") + "\"";
     }
 
     private static void log(final String line) throws IOException {
-        Files.writeString(state.resolve("events"), line + "\n", StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        Files.writeString(state.resolve("events"), line + "\n",
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND);
     }
 
     private static void fail(final String message) {

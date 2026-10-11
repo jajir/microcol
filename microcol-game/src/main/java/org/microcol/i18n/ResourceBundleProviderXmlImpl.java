@@ -18,7 +18,8 @@ class ResourceBundleProviderXmlImpl implements ResourceBundleProviderXml {
     }
 
     @Override
-    public ResourceBundle getBundle(final String baseName, final Locale locale) {
+    public ResourceBundle getBundle(final String baseName,
+            final Locale locale) {
         Module module = this.getClass().getModule();
         String bundleName = toBundleName(baseName, locale);
         try {
@@ -29,17 +30,19 @@ class ResourceBundleProviderXmlImpl implements ResourceBundleProviderXml {
     }
 
     private String toBundleName(String baseName, Locale locale) {
-        return ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_DEFAULT)
+        return ResourceBundle.Control
+                .getControl(ResourceBundle.Control.FORMAT_DEFAULT)
                 .toBundleName(baseName, locale);
     }
 
-    private ResourceBundle loadPropertyResourceBundle(Module module, String bundleName)
-            throws IOException {
-        final String resourceName = streamReader.toResourceName(bundleName, "xml");
+    private ResourceBundle loadPropertyResourceBundle(Module module,
+            String bundleName) throws IOException {
+        final String resourceName = streamReader.toResourceName(bundleName,
+                "xml");
         if (resourceName == null) {
-            throw new MicroColException(
-                    String.format("Unabble to load xml resource bundle %s in module %s",
-                            resourceName, module.getName()));
+            throw new MicroColException(String.format(
+                    "Unabble to load xml resource bundle %s in module %s",
+                    resourceName, module.getName()));
         }
 
         return new XmlResourceBundle(streamReader.openStream(resourceName));

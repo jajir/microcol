@@ -10,7 +10,8 @@ final class AnimationHolder {
 
     private final Consumer<Animation> onAnimationIsDone;
 
-    AnimationHolder(final Animation animation, final Consumer<Animation> onAnimationIsDone) {
+    AnimationHolder(final Animation animation,
+            final Consumer<Animation> onAnimationIsDone) {
         this.animation = animation;
         this.onAnimationIsDone = onAnimationIsDone;
     }
@@ -30,7 +31,8 @@ final class AnimationHolder {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("animation", animation)
+        return MoreObjects.toStringHelper(getClass())
+                .add("animation", animation)
                 .add("onAnimationIsDone", onAnimationIsDone).toString();
     }
 

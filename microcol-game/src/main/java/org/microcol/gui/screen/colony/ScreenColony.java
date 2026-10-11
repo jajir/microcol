@@ -26,10 +26,13 @@ public class ScreenColony implements GameScreen {
     private final ColonyPanel colonyPanel;
 
     @Inject
-    ScreenColony(final ColonyPanel colonyPanel, final @Named("Colony") StatusBar statusBar,
-            final CenteredPage centeredPage, final ContentWithStatusBar contentWithStatusBar,
+    ScreenColony(final ColonyPanel colonyPanel,
+            final @Named("Colony") StatusBar statusBar,
+            final CenteredPage centeredPage,
+            final ContentWithStatusBar contentWithStatusBar,
             final ColonyBackground colonyBackground) {
-        this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
+        this.contentWithStatusBar = Preconditions
+                .checkNotNull(contentWithStatusBar);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
         statusBar.setShowEventsFromSource(Source.COLONY);
 
@@ -43,8 +46,7 @@ public class ScreenColony implements GameScreen {
     /**
      * Show given colony.
      *
-     * @param colony
-     *            required colony object
+     * @param colony required colony object
      */
     public void setColony(final Colony colony) {
         colonyPanel.showColony(colony);

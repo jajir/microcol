@@ -14,7 +14,8 @@ public class PlaceConstructionSlot extends AbstractPlace {
 
     private final ConstructionSlot constructionSlot;
 
-    public PlaceConstructionSlot(final Unit unit, final ConstructionSlot constructionSlot) {
+    public PlaceConstructionSlot(final Unit unit,
+            final ConstructionSlot constructionSlot) {
         super(unit);
         this.constructionSlot = Preconditions.checkNotNull(constructionSlot);
     }
@@ -45,8 +46,8 @@ public class PlaceConstructionSlot extends AbstractPlace {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(PlaceConstructionSlot.class)
-                .add("unit id", getUnit().getId()).add("constructionSlot", constructionSlot)
-                .toString();
+                .add("unit id", getUnit().getId())
+                .add("constructionSlot", constructionSlot).toString();
     }
 
     @Override

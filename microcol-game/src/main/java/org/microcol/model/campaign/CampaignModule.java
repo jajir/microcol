@@ -15,15 +15,16 @@ public final class CampaignModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(GameModelDao.class).in(Singleton.class);
-        bind(MissionFactoryManager.class).to(MissionFactoryManagerImpl.class).in(Singleton.class);
+        bind(MissionFactoryManager.class).to(MissionFactoryManagerImpl.class)
+                .in(Singleton.class);
     }
 
     @Provides
     @Singleton
     @SuppressWarnings("ucd")
     CampaignManager getCampaignManager(final CampaignsDao campaignsDao) {
-        return new CampaignManager(
-                Lists.newArrayList(new FreePlay_campaign(), new Default_campaign()), campaignsDao);
+        return new CampaignManager(Lists.newArrayList(new FreePlay_campaign(),
+                new Default_campaign()), campaignsDao);
     }
 
 }

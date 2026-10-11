@@ -31,8 +31,10 @@ public class SettingServiceTest extends AbstractPreferencesTest {
     @org.junit.jupiter.api.Test
     public void verify_that_update_save_changes() throws Exception {
         final Setting setting = createSetting();
-        when(persistingTool.getRootSaveDirectory()).thenReturn(Files.createTempDir());
-        when(settingDao.loadFromFile(any(File.class))).thenReturn(Optional.of(setting));
+        when(persistingTool.getRootSaveDirectory())
+                .thenReturn(Files.createTempDir());
+        when(settingDao.loadFromFile(any(File.class)))
+                .thenReturn(Optional.of(setting));
         settingService.update(set -> {
             set.setAnimationSpeed(231);
         });

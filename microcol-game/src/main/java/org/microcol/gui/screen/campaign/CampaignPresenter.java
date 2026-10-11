@@ -42,15 +42,17 @@ public final class CampaignPresenter {
             final EventBus eventBus, final GameController gameController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameController = Preconditions.checkNotNull(gameController);
-        display.getButtonBack()
-                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.MENU)));
+        display.getButtonBack().setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.MENU)));
         display.setOnSelectedMission(this::onSelectedMission);
     }
 
     private void onSelectedMission(final String missionName) {
         logger.debug("Mission {} was selected to play.", missionName);
-        final Default_missionNames name = Default_missionNames.valueOf(missionName);
-        gameController.startCampaignMission(CampaignNames.defaultCampaign, name);
+        final Default_missionNames name = Default_missionNames
+                .valueOf(missionName);
+        gameController.startCampaignMission(CampaignNames.defaultCampaign,
+                name);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 

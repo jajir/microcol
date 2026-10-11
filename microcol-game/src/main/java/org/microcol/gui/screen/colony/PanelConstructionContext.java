@@ -24,9 +24,10 @@ class PanelConstructionContext {
     private final Model model;
     private final Colony colony;
 
-    PanelConstructionContext(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n, final Construction construction,
-            final Colony colony, final Model model) {
+    PanelConstructionContext(final ImageProvider imageProvider,
+            final EventBus eventBus, final I18n i18n,
+            final Construction construction, final Colony colony,
+            final Model model) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);

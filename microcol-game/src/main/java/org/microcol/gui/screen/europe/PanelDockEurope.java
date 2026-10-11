@@ -20,7 +20,8 @@ class PanelDockEurope extends AbstractPanelDock {
     }
 
     void repaintCurrectShipsCrates() {
-        getSelectedShip().ifPresent(unit -> getPanelDockCratesPresenter().setCratesForShip(unit));
+        getSelectedShip().ifPresent(
+                unit -> getPanelDockCratesPresenter().setCratesForShip(unit));
     }
 
 }

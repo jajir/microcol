@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
  * <p>
  * Centered page should be set:
  * </p>
- * 
+ *
  * <pre>
  * centeredPage.setBackground(colonyBackground);
  * centeredPage.setMainPanel(colonyPanel);
@@ -26,7 +26,7 @@ import javafx.scene.layout.VBox;
  * <p>
  * And finally just use centered page
  * </p>
- * 
+ *
  * <pre>
  * someOtherPanel.getChildren().add(centeredPage.getContent());
  * </pre>
@@ -55,7 +55,8 @@ public class CenteredPage implements JavaFxComponent, UpdatableLanguage {
         outerBox.getChildren().add(inner);
 
         mainParentPanel = new StackPane();
-        mainParentPanel.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
+        mainParentPanel
+                .setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
         mainParentPanel.getChildren().add(outerBox);
     }
 

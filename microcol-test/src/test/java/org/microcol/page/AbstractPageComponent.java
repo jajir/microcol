@@ -6,7 +6,7 @@ package org.microcol.page;
 public class AbstractPageComponent extends AbstractScreen {
 
     protected AbstractPageComponent(TestContext context) {
-	super(context);
+        super(context);
     }
 
 }

@@ -26,7 +26,8 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
     private final Label labelCaption;
 
     @Inject
-    public RecruiteUnitsDialog(final ViewUtil viewUtil, final ImageProvider imageProvider,
+    public RecruiteUnitsDialog(final ViewUtil viewUtil,
+            final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper,
             final DialogNotEnoughGold dialogNotEnoughGold, final I18n i18n) {
@@ -41,10 +42,12 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
         final HBox gridWithUnits = new HBox();
 
-        UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0)
+        UnitType.UNIT_TYPES.stream()
+                .filter(unitType -> unitType.getEuropePrice() > 0)
                 .forEach(unitType -> {
-                    final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType,
-                            imageProvider, gameModelController, localizationHelper, i18n, this,
+                    final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(
+                            unitType, imageProvider, gameModelController,
+                            localizationHelper, i18n, this,
                             dialogNotEnoughGold);
                     HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
                     gridWithUnits.getChildren().add(buyUnitPanel);
@@ -55,7 +58,8 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
             close();
         });
 
-        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar.getContent());
+        root.getChildren().addAll(labelCaption, gridWithUnits,
+                buttonBar.getContent());
     }
 
     @Override

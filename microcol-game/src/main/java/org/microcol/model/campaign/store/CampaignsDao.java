@@ -36,8 +36,8 @@ public class CampaignsDao {
 
     @Inject
     CampaignsDao(final PersistingTool persistingTool) {
-        this.saveDir = Preconditions
-                .checkNotNull(persistingTool.getRootSaveDirectory().getAbsolutePath());
+        this.saveDir = Preconditions.checkNotNull(
+                persistingTool.getRootSaveDirectory().getAbsolutePath());
     }
 
     public void save(final CampaignsPo campaignsPo) {
@@ -56,10 +56,12 @@ public class CampaignsDao {
     public CampaignsPo load() {
         if (getFile().exists()) {
             Preconditions.checkArgument(getFile().isFile());
-            logger.debug("Starting to read from class path ({})", getFile().getAbsolutePath());
+            logger.debug("Starting to read from class path ({})",
+                    getFile().getAbsolutePath());
             try (final FileInputStream fis = new FileInputStream(getFile())) {
                 Preconditions.checkNotNull(fis, "File input stream is null");
-                return gson.fromJson(new InputStreamReader(fis, StandardCharsets.UTF_8),
+                return gson.fromJson(
+                        new InputStreamReader(fis, StandardCharsets.UTF_8),
                         CampaignsPo.class);
             } catch (IOException e) {
                 throw new MicroColException(e.getMessage(), e);
@@ -70,8 +72,8 @@ public class CampaignsDao {
     }
 
     private File getFile() {
-        return new File(
-                saveDir + File.separator + ".campaigns." + PersistingService.SAVE_FILE_EXTENSION);
+        return new File(saveDir + File.separator + ".campaigns."
+                + PersistingService.SAVE_FILE_EXTENSION);
     }
 
 }

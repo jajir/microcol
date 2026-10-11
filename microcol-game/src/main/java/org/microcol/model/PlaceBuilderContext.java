@@ -12,8 +12,8 @@ final class PlaceBuilderContext {
     private final ModelPo modelPo;
     private final Model model;
 
-    PlaceBuilderContext(final Unit unit, final UnitPo unitPo, final ModelPo modelPo,
-            final Model model) {
+    PlaceBuilderContext(final Unit unit, final UnitPo unitPo,
+            final ModelPo modelPo, final Model model) {
         this.unit = Preconditions.checkNotNull(unit);
         this.unitPo = Preconditions.checkNotNull(unitPo);
         this.modelPo = Preconditions.checkNotNull(modelPo);

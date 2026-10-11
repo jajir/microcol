@@ -12,13 +12,16 @@ public final class CargoPo {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(CargoPo.class).add("slots", slots).toString();
+        return MoreObjects.toStringHelper(CargoPo.class).add("slots", slots)
+                .toString();
     }
 
     public boolean containsUnitInCargo(final Integer idUnitInCargo) {
-        Preconditions.checkState(idUnitInCargo != null, "IdUnitInCargo is null");
-        return slots.stream().filter(slot -> idUnitInCargo.equals(slot.getUnitId())).findAny()
-                .isPresent();
+        Preconditions.checkState(idUnitInCargo != null,
+                "IdUnitInCargo is null");
+        return slots.stream()
+                .filter(slot -> idUnitInCargo.equals(slot.getUnitId()))
+                .findAny().isPresent();
     }
 
     public CargoSlotPo getSlotAt(final int index) {
@@ -36,8 +39,7 @@ public final class CargoPo {
     }
 
     /**
-     * @param slots
-     *            the slots to set
+     * @param slots the slots to set
      */
     public void setSlots(List<CargoSlotPo> slots) {
         this.slots = slots;

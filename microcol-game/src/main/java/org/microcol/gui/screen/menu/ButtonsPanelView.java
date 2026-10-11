@@ -13,18 +13,19 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguage {
-    
+public final class ButtonsPanelView
+        implements JavaFxComponent, UpdatableLanguage {
+
     public static final String BUTTON_SETTING_ID = "buttonSetting";
-    
+
     public static final String BUTTON_CONTINUE_ID = "buttonContinue";
-    
+
     public static final String BUTTON_LOAD_ID = "buttonLoad";
-    
+
     public static final String BUTTON_PLAY_CAMPAIGN_ID = "buttonCampaign";
-    
+
     public static final String BUTTON_START_FREE_GAME_ID = "buttonStartFreeGame";
-    
+
     public static final String BUTTON_EXIT_ID = "buttonExit";
 
     private final Button buttonContinue = new Button();

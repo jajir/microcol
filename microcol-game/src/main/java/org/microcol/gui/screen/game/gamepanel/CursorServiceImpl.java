@@ -23,20 +23,28 @@ public class CursorServiceImpl implements CursorService {
 
     @Inject
     CursorServiceImpl(final ImageProvider imageProvider) {
-        gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
-                1);
+        gotoModeCursor = new ImageCursor(
+                imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
     }
 
-    /* (non-Javadoc)
-     * @see org.microcol.gui.gamepanel.CursorService2#setMoveCursor(javafx.scene.Node)
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.microcol.gui.gamepanel.CursorService2#setMoveCursor(javafx.scene.
+     * Node)
      */
     @Override
     public void setMoveCursor(final Node node) {
         Preconditions.checkNotNull(node).setCursor(gotoModeCursor);
     }
 
-    /* (non-Javadoc)
-     * @see org.microcol.gui.gamepanel.CursorService2#setDefaultCursor(javafx.scene.Node)
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.microcol.gui.gamepanel.CursorService2#setDefaultCursor(javafx.scene.
+     * Node)
      */
     @Override
     public void setDefaultCursor(final Node node) {

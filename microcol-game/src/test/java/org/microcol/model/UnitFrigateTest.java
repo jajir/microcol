@@ -42,7 +42,8 @@ public class UnitFrigateTest {
     private final Cargo cargo = mock(Cargo.class);
 
     @Test
-    public void test_verifyThatUnitCouldBePlacedIntoHighseas() throws Exception {
+    public void test_verifyThatUnitCouldBePlacedIntoHighseas()
+            throws Exception {
         when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
         when(model.getMap()).thenReturn(map);
         when(map.getMaxLocationX()).thenReturn(40);
@@ -76,8 +77,8 @@ public class UnitFrigateTest {
         when(cargoProvider.apply((Unit) any())).thenReturn(cargo);
         when(placeBuilder.apply((Unit) any())).thenReturn(placeMap);
 
-        unit = new UnitFrigate(cargoProvider, model, id, placeBuilder, owner, availableMoves,
-                unitAction);
+        unit = new UnitFrigate(cargoProvider, model, id, placeBuilder, owner,
+                availableMoves, unitAction);
     }
 
     @AfterEach

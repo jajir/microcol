@@ -17,7 +17,8 @@ public class ScreenMarketPresenter {
     private final EventBus eventBus;
 
     @Inject
-    ScreenMarketPresenter(final ScreenMarketBuy screenMarket, final EventBus eventBus) {
+    ScreenMarketPresenter(final ScreenMarketBuy screenMarket,
+            final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenMarket.getContent().setOnKeyPressed(this::onKeyPressed);
     }

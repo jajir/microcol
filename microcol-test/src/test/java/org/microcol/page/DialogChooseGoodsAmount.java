@@ -6,15 +6,15 @@ package org.microcol.page;
 public class DialogChooseGoodsAmount extends AbstractScreenMarket {
 
     public static DialogChooseGoodsAmount of(final TestContext context) {
-	return new DialogChooseGoodsAmount(context);
+        return new DialogChooseGoodsAmount(context);
     }
 
     private DialogChooseGoodsAmount(final TestContext context) {
-	super(context);
+        super(context);
     }
 
     public void clickOnOk() {
-	clickOnButtonWithId("buttonOk");
+        clickOnButtonWithId("buttonOk");
     }
 
 }

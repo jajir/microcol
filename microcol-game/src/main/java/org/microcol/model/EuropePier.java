@@ -19,14 +19,16 @@ public final class EuropePier {
     }
 
     public List<Unit> getUnits(final Player player) {
-        return model.getAllUnits().stream().filter(unit -> unit.isAtEuropePier())
-                .filter(unit -> unit.getOwner().equals(player)).collect(Collectors.toList());
+        return model.getAllUnits().stream()
+                .filter(unit -> unit.isAtEuropePier())
+                .filter(unit -> unit.getOwner().equals(player))
+                .collect(Collectors.toList());
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("hashcode", hashCode()).add("model", model)
-                .toString();
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode())
+                .add("model", model).toString();
     }
 
 }

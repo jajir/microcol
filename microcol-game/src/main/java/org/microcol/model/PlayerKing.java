@@ -19,12 +19,15 @@ public class PlayerKing extends Player {
      */
     private final Player whosKingThisPlayerIs;
 
-    PlayerKing(final String name, final boolean computer, final int initialGold, final Model model,
-            final boolean declaredIndependence, final Player whosKingThisPlayerIs,
+    PlayerKing(final String name, final boolean computer, final int initialGold,
+            final Model model, final boolean declaredIndependence,
+            final Player whosKingThisPlayerIs,
             final Map<String, Object> extraData, Set<Location> visible,
             final int kingsTaxPercentage) {
-        super(name, computer, initialGold, model, declaredIndependence, extraData, visible);
-        this.whosKingThisPlayerIs = Preconditions.checkNotNull(whosKingThisPlayerIs);
+        super(name, computer, initialGold, model, declaredIndependence,
+                extraData, visible);
+        this.whosKingThisPlayerIs = Preconditions
+                .checkNotNull(whosKingThisPlayerIs);
         this.kingsTaxPercentage = kingsTaxPercentage;
     }
 

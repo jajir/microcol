@@ -11,8 +11,9 @@ public class ThreeStripesPref {
     private final StripeDef centerStripe;
     private final int centerStripeHeight;
 
-    private ThreeStripesPref(final StripeDef topStripe, final StripeDef bottomStripe,
-            final StripeDef centerStripe, final int centerStripeHeight) {
+    private ThreeStripesPref(final StripeDef topStripe,
+            final StripeDef bottomStripe, final StripeDef centerStripe,
+            final int centerStripeHeight) {
         this.topStripe = Preconditions.checkNotNull(topStripe);
         this.bottomStripe = Preconditions.checkNotNull(bottomStripe);
         this.centerStripe = Preconditions.checkNotNull(centerStripe);
@@ -31,14 +32,13 @@ public class ThreeStripesPref {
         private int centerStripeHeight;
 
         public ThreeStripesPref make() {
-            final ThreeStripesPref pref = new ThreeStripesPref(topStripe, bottomStripe,
-                    centerStripe, centerStripeHeight);
+            final ThreeStripesPref pref = new ThreeStripesPref(topStripe,
+                    bottomStripe, centerStripe, centerStripeHeight);
             return pref;
         }
 
         /**
-         * @param topStripe
-         *            the topStripe to set
+         * @param topStripe the topStripe to set
          * @return builder itself
          */
         public ThreeStripesPrefBuilder setTopStripe(StripeDef topStripe) {
@@ -47,8 +47,7 @@ public class ThreeStripesPref {
         }
 
         /**
-         * @param bottomStripe
-         *            the bottomStripe to set
+         * @param bottomStripe the bottomStripe to set
          * @return builder itself
          */
         public ThreeStripesPrefBuilder setBottomStripe(StripeDef bottomStripe) {
@@ -57,8 +56,7 @@ public class ThreeStripesPref {
         }
 
         /**
-         * @param centerStripe
-         *            the centerStripe to set
+         * @param centerStripe the centerStripe to set
          * @return builder itself
          */
         public ThreeStripesPrefBuilder setCenterStripe(StripeDef centerStripe) {
@@ -67,11 +65,11 @@ public class ThreeStripesPref {
         }
 
         /**
-         * @param centerStripeHeight
-         *            the centerStripeHeight to set
+         * @param centerStripeHeight the centerStripeHeight to set
          * @return builder itself
          */
-        public ThreeStripesPrefBuilder setCenterStripeHeight(int centerStripeHeight) {
+        public ThreeStripesPrefBuilder setCenterStripeHeight(
+                int centerStripeHeight) {
             this.centerStripeHeight = centerStripeHeight;
             return this;
         }

@@ -21,7 +21,8 @@ class SettingShowGridView implements JavaFxComponent, UpdatableLanguage {
     private final CheckBox checkBox;
 
     @Inject
-    SettingShowGridView(final GamePreferences gamePreferences, final I18n i18n) {
+    SettingShowGridView(final GamePreferences gamePreferences,
+            final I18n i18n) {
 
         checkBox = new CheckBox();
         checkBox.setSelected(gamePreferences.isGridShown());

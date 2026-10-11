@@ -22,7 +22,8 @@ public final class PanelDockCratesPresenter implements JavaFxComponent {
 
     private final List<PanelCratePresenter> dockCrates = new ArrayList<>();
 
-    PanelDockCratesPresenter(final AbstractPanelDockProvider abstractPanelDockProvider) {
+    PanelDockCratesPresenter(
+            final AbstractPanelDockProvider abstractPanelDockProvider) {
         for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
             dockCrates.add(abstractPanelDockProvider.createPanelDockCrate());
         }

@@ -15,14 +15,14 @@ public class RectangleTest {
 
     static Stream<Arguments> dataProvider() {
         return Stream.of(
-                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 0, 0,
-                        Boolean.FALSE),
-                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 100, 100,
-                        Boolean.FALSE),
-                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 10, 10,
-                        Boolean.TRUE),
-                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 20, 20,
-                        Boolean.TRUE));
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10),
+                        Point.of(20, 20)), 0, 0, Boolean.FALSE),
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10),
+                        Point.of(20, 20)), 100, 100, Boolean.FALSE),
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10),
+                        Point.of(20, 20)), 10, 10, Boolean.TRUE),
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10),
+                        Point.of(20, 20)), 20, 20, Boolean.TRUE));
     }
 
     @ParameterizedTest(name = "{index}: Reactangle={0}, Point (x = {1}, y = {2}) should be inside {3} rectangle")

@@ -21,7 +21,8 @@ class StripePainter {
 
     private int height;
 
-    StripePainter(final GraphicsContext gc, final int canvasWidth, final Color color) {
+    StripePainter(final GraphicsContext gc, final int canvasWidth,
+            final Color color) {
         this.gc = Preconditions.checkNotNull(gc);
         this.canvasWidth = Preconditions.checkNotNull(canvasWidth);
         this.color = Preconditions.checkNotNull(color);
@@ -33,16 +34,14 @@ class StripePainter {
     }
 
     /**
-     * @param startAtY
-     *            the startAtY to set
+     * @param startAtY the startAtY to set
      */
     void setStartAtY(int startAtY) {
         this.startAtY = startAtY;
     }
 
     /**
-     * @param height
-     *            the height to set
+     * @param height the height to set
      */
     void setHeight(int height) {
         this.height = height;

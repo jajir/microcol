@@ -18,13 +18,15 @@ public class BuildingStatusTest {
         assertEquals(100, stats.getTools().getRequired());
         assertEquals(12, stats.getTools().getAlreadyHave());
         assertEquals(3, stats.getTools().getBuildPerTurn());
-        assertEquals(Integer.valueOf(30), stats.getTools().getTurnsToComplete().get());
+        assertEquals(Integer.valueOf(30),
+                stats.getTools().getTurnsToComplete().get());
 
         assertEquals(200, stats.getHammers().getRequired());
         assertEquals(50, stats.getHammers().getAlreadyHave());
         assertEquals(10, stats.getHammers().getBuildPerTurn());
-        assertEquals(Integer.valueOf(15), stats.getHammers().getTurnsToComplete().get());
-                
+        assertEquals(Integer.valueOf(15),
+                stats.getHammers().getTurnsToComplete().get());
+
         assertEquals(Integer.valueOf(30), stats.getTurnsToComplete().get());
     }
 
@@ -42,12 +44,14 @@ public class BuildingStatusTest {
         assertEquals(200, stats.getHammers().getRequired());
         assertEquals(50, stats.getHammers().getAlreadyHave());
         assertEquals(10, stats.getHammers().getBuildPerTurn());
-        assertEquals(Integer.valueOf(15), stats.getHammers().getTurnsToComplete().get());
-                
+        assertEquals(Integer.valueOf(15),
+                stats.getHammers().getTurnsToComplete().get());
+
         assertFalse(stats.getTurnsToComplete().isPresent());
     }
 
-    private void recordMock(final int requiredHammers, final int requiredTools) {
+    private void recordMock(final int requiredHammers,
+            final int requiredTools) {
         when(item.getRequiredHammers()).thenReturn(requiredHammers);
         when(item.getRequiredTools()).thenReturn(requiredTools);
     }

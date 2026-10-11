@@ -13,8 +13,7 @@ public abstract class AbstractTurnEvent implements TurnEvent {
     /**
      * Constructor setting basic fields.
      *
-     * @param playerName
-     *            required player name for whom was event generated
+     * @param playerName required player name for whom was event generated
      */
     AbstractTurnEvent(final String playerName) {
         this.playerName = Preconditions.checkNotNull(playerName);
@@ -22,7 +21,8 @@ public abstract class AbstractTurnEvent implements TurnEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("playerName", playerName).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("playerName", playerName).toString();
     }
 
     @Override

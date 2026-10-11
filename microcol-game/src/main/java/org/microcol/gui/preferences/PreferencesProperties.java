@@ -23,8 +23,10 @@ public class PreferencesProperties {
     private final SimpleBooleanProperty showFightAdvisorProperty;
 
     @Inject
-    PreferencesProperties(final GamePreferences gamePreferences, final EventBus eventBus) {
-        animationSpeedProperty = new SimpleIntegerProperty(gamePreferences.getAnimationSpeed());
+    PreferencesProperties(final GamePreferences gamePreferences,
+            final EventBus eventBus) {
+        animationSpeedProperty = new SimpleIntegerProperty(
+                gamePreferences.getAnimationSpeed());
         animationSpeedProperty.addListener((object, old, newValue) -> {
             gamePreferences.setAnimationSpeed(newValue.intValue());
         });

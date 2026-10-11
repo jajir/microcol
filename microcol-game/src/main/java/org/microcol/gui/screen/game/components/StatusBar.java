@@ -15,12 +15,13 @@ public class StatusBar implements JavaFxComponent, UpdatableLanguage {
     private final StatusBarPresenter statusBarPresenter;
 
     private final StatusBarView statusBarView;
-    
+
     @Inject
     public StatusBar(final StatusBarView statusBarView,
             final StatusBarPresenter statusBarPresenter) {
         this.statusBarView = Preconditions.checkNotNull(statusBarView);
-        this.statusBarPresenter = Preconditions.checkNotNull(statusBarPresenter);
+        this.statusBarPresenter = Preconditions
+                .checkNotNull(statusBarPresenter);
         statusBarPresenter.setStatusBarView(statusBarView);
     }
 
@@ -35,8 +36,7 @@ public class StatusBar implements JavaFxComponent, UpdatableLanguage {
     }
 
     /**
-     * @param showEventsFromSource
-     *            the showEventsFromSource to set
+     * @param showEventsFromSource the showEventsFromSource to set
      */
     public void setShowEventsFromSource(final Source showEventsFromSource) {
         statusBarPresenter.setShowEventsFromSource(showEventsFromSource);

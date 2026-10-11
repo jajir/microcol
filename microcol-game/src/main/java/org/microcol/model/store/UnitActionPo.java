@@ -4,6 +4,6 @@ import org.microcol.model.unit.UnitActionType;
 
 public interface UnitActionPo {
 
-	UnitActionType getType();
+    UnitActionType getType();
 
 }

@@ -33,8 +33,7 @@ public final class CampaignMission {
     }
 
     /**
-     * @param isFinished
-     *            the isFinished to set
+     * @param isFinished the isFinished to set
      */
     public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
@@ -42,8 +41,10 @@ public final class CampaignMission {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("name", missionName.getName())
-                .add("isFinished", isFinished).add("orderNo", orderNo).toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("name", missionName.getName())
+                .add("isFinished", isFinished).add("orderNo", orderNo)
+                .toString();
     }
 
     public String getClassPathFile() {

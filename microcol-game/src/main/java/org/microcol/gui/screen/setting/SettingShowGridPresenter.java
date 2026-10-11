@@ -10,8 +10,9 @@ public class SettingShowGridPresenter {
     @Inject
     SettingShowGridPresenter(final SettingShowGridView settingShowGridView,
             final EventBus eventBus) {
-        settingShowGridView.getCheckBox().setOnAction(ectionEvent -> eventBus
-                .post(new ShowGridEvent(settingShowGridView.getCheckBox().isSelected())));
+        settingShowGridView.getCheckBox()
+                .setOnAction(ectionEvent -> eventBus.post(new ShowGridEvent(
+                        settingShowGridView.getCheckBox().isSelected())));
     }
 
 }

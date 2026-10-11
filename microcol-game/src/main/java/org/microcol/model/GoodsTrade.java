@@ -20,7 +20,8 @@ public final class GoodsTrade {
      */
     private int buyPrice;
 
-    GoodsTrade(final GoodsType goodsType, final int sellPrice, final int buyPrice) {
+    GoodsTrade(final GoodsType goodsType, final int sellPrice,
+            final int buyPrice) {
         this.goodsType = Preconditions.checkNotNull(goodsType);
         this.sellPrice = sellPrice;
         this.buyPrice = buyPrice;
@@ -28,14 +29,13 @@ public final class GoodsTrade {
 
     /**
      * Return how much units of given goods could be bought for given gold.
-     * 
-     * @param availableGold
-     *            required gold
+     *
+     * @param availableGold required gold
      * @return Return goods amount which could be bought
      */
     public Goods getAvailableAmountFor(final int availableGold) {
-        return new Goods(goodsType,
-                Math.min(availableGold / buyPrice, CargoSlot.MAX_CARGO_SLOT_CAPACITY));
+        return new Goods(goodsType, Math.min(availableGold / buyPrice,
+                CargoSlot.MAX_CARGO_SLOT_CAPACITY));
     }
 
     public int getSellPrice() {
@@ -60,8 +60,9 @@ public final class GoodsTrade {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("buyPrice", buyPrice).add("goodsType", goodsType)
-                .add("sellPrice", sellPrice).toString();
+        return MoreObjects.toStringHelper(this).add("buyPrice", buyPrice)
+                .add("goodsType", goodsType).add("sellPrice", sellPrice)
+                .toString();
     }
 
 }

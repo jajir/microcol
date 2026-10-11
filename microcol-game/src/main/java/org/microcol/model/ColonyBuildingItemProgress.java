@@ -49,8 +49,7 @@ public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
     }
 
     /**
-     * @param buildHammers
-     *            the buildHammers to set
+     * @param buildHammers the buildHammers to set
      */
     public void setBuildHammers(int buildHammers) {
         this.buildHammers = buildHammers;
@@ -64,8 +63,7 @@ public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
     }
 
     /**
-     * @param visible
-     *            the visible to set
+     * @param visible the visible to set
      */
     public void setVisible(boolean visible) {
         this.visible = visible;

@@ -16,8 +16,7 @@ abstract class AbstractModelEvent {
     /**
      * Default constructor.
      *
-     * @param model
-     *            required game model
+     * @param model required game model
      */
     AbstractModelEvent(final Model model) {
         this.model = Preconditions.checkNotNull(model);
@@ -34,7 +33,8 @@ abstract class AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("model", model).toString();
+        return MoreObjects.toStringHelper(getClass()).add("model", model)
+                .toString();
     }
 
 }

@@ -41,14 +41,14 @@ class ModelService {
     ModelService(final GameModelPoDao gameModelPoDao,
             final @Named("editor") VisibleAreaService visibleAreaService) {
         this.gameModelPoDao = Preconditions.checkNotNull(gameModelPoDao);
-        this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
+        this.visibleAreaService = Preconditions
+                .checkNotNull(visibleAreaService);
     }
 
     /**
      * Load game model from given file.
-     * 
-     * @param file
-     *            required file
+     *
+     * @param file required file
      */
     void load(final File file) {
         this.file = Preconditions.checkNotNull(file);
@@ -61,7 +61,8 @@ class ModelService {
         mapCache = getMap().getTerrainMap();
         treesCache = getMap().getTreeSet();
         fieldsCache = getMap().getFieldSet();
-        colonyCache = getModelPo().getColonies().stream().map(colonyPo -> colonyPo.getLocation())
+        colonyCache = getModelPo().getColonies().stream()
+                .map(colonyPo -> colonyPo.getLocation())
                 .collect(Collectors.toSet());
     }
 

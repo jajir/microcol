@@ -30,8 +30,9 @@ public class PlaceEuropePort extends AbstractPlace {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceEuropePort.class).add("unit id", getUnit().getId())
-                .add("europePort", europePort).toString();
+        return MoreObjects.toStringHelper(PlaceEuropePort.class)
+                .add("unit id", getUnit().getId()).add("europePort", europePort)
+                .toString();
     }
 
     @Override

@@ -28,8 +28,10 @@ public final class DialogColonyWasCaptured extends AbstractWarningDialog {
 
     public void showAndWait(final ColonyWasCapturedEvent event) {
         getContext().getChildren().clear();
-        getContext().getChildren().add(new Label(i18n.get(Dialog.colonyWasCaptured_text1)
-                + event.getCapturedColony().getName() + i18n.get(Dialog.colonyWasCaptured_text2)));
+        getContext().getChildren()
+                .add(new Label(i18n.get(Dialog.colonyWasCaptured_text1)
+                        + event.getCapturedColony().getName()
+                        + i18n.get(Dialog.colonyWasCaptured_text2)));
         super.showAndWait();
     }
 

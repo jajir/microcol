@@ -27,35 +27,42 @@ public class PathTest {
 
     @Test
     public void testCreationEmpty() {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
                     Path.of(new ArrayList<>());
                 });
 
         assertTrue(exception.getMessage().contains("Path cannot be empty."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
     public void testCreationInvalidSame() {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
-                    Path.of(Arrays.asList(Location.of(2, 3), Location.of(2, 3)));
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
+                    Path.of(Arrays.asList(Location.of(2, 3),
+                            Location.of(2, 3)));
                 });
 
-        assertTrue(exception.getMessage().contains("Locations are not neighbors:"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage().contains("Locations are not neighbors:"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
     public void testCreationInvalidAdjacent() {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
-                    Path.of(Arrays.asList(Location.of(2, 3), Location.of(4, 3)));
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
+                    Path.of(Arrays.asList(Location.of(2, 3),
+                            Location.of(4, 3)));
                 });
 
-        assertTrue(exception.getMessage().contains("Locations are not neighbors:"),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(
+                exception.getMessage().contains("Locations are not neighbors:"),
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 
     @Test
@@ -69,12 +76,13 @@ public class PathTest {
 
     @Test
     public void testContains() {
-        final List<Location> locations = Arrays.asList(Location.of(2, 3), Location.of(3, 3),
-                Location.of(3, 4));
+        final List<Location> locations = Arrays.asList(Location.of(2, 3),
+                Location.of(3, 3), Location.of(3, 4));
         final Path path = Path.of(locations);
 
         for (Location location : locations) {
-            assertTrue(path.contains(location), String.format("%s not found.", location));
+            assertTrue(path.contains(location),
+                    String.format("%s not found.", location));
         }
     }
 
@@ -90,10 +98,10 @@ public class PathTest {
 
     @Test
     public void testContainsAny() {
-        final Path path = Path
-                .of(Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(3, 4)));
-        final List<Location> locations = Arrays.asList(Location.of(1, 1), Location.of(2, 2),
-                Location.of(3, 3));
+        final Path path = Path.of(Arrays.asList(Location.of(2, 3),
+                Location.of(3, 3), Location.of(3, 4)));
+        final List<Location> locations = Arrays.asList(Location.of(1, 1),
+                Location.of(2, 2), Location.of(3, 3));
 
         assertTrue(path.containsAny(locations));
     }
@@ -111,12 +119,14 @@ public class PathTest {
     public void testContainsAnyNullInside() {
         final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> {
-                    path.containsAny(Arrays.asList(Location.of(2, 3), null, Location.of(3, 2)));
+        final IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, () -> {
+                    path.containsAny(Arrays.asList(Location.of(2, 3), null,
+                            Location.of(3, 2)));
                 });
 
         assertTrue(exception.getMessage().contains("contain null element."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+                String.format("Invalid exception message '%s'.",
+                        exception.getMessage()));
     }
 }

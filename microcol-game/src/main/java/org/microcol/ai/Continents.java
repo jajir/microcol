@@ -23,21 +23,24 @@ public final class Continents {
     }
 
     public Optional<Continent> getForLocation(final Location location) {
-        return continents.stream().filter(continent -> continent.contains(location)).findAny();
+        return continents.stream()
+                .filter(continent -> continent.contains(location)).findAny();
     }
 
     List<Continent> getContinentsToAttack(final Player enemyPlayer) {
-        return continents.stream().filter(continents -> continents.getMilitaryImportance(enemyPlayer) > 0)
-                .sorted(Comparator
-                        .comparingInt(continent -> continent.getMilitaryImportance(enemyPlayer)))
+        return continents.stream().filter(
+                continents -> continents.getMilitaryImportance(enemyPlayer) > 0)
+                .sorted(Comparator.comparingInt(continent -> continent
+                        .getMilitaryImportance(enemyPlayer)))
                 .limit(3).collect(ImmutableList.toImmutableList());
     }
 
     Continent getContinentWhereIsUnitPlaced(final Unit unit) {
         Preconditions.checkNotNull(unit);
-        return continents.stream().filter(continent -> continent.contains(unit)).findFirst()
-                .orElseThrow(() -> new MicroColException(
-                        String.format("Unable to find continent for unit (%s)", unit)));
+        return continents.stream().filter(continent -> continent.contains(unit))
+                .findFirst()
+                .orElseThrow(() -> new MicroColException(String.format(
+                        "Unable to find continent for unit (%s)", unit)));
     }
 
     public List<Continent> getNonBorderContinents() {
@@ -47,8 +50,8 @@ public final class Continents {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Continents.class).add("continents", continents)
-                .toString();
+        return MoreObjects.toStringHelper(Continents.class)
+                .add("continents", continents).toString();
     }
 
     /**

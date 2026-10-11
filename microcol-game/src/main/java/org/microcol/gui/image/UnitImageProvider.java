@@ -37,24 +37,31 @@ public class UnitImageProvider {
         Preconditions.checkNotNull(imageCache);
 
         unitImageMap = ImmutableMap.<UnitType, Image>builder()
-                .put(UnitType.GALLEON, imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
-                .put(UnitType.FRIGATE, imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
-                .put(UnitType.COLONIST, imageCache.getImage(IMG_UNIT_FREE_COLONIST)).build();
+                .put(UnitType.GALLEON,
+                        imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
+                .put(UnitType.FRIGATE,
+                        imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
+                .put(UnitType.COLONIST,
+                        imageCache.getImage(IMG_UNIT_FREE_COLONIST))
+                .build();
 
         unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
                 Lists.newArrayList(request -> {
                     if (UnitType.GALLEON == request.getUnitType()) {
                         if (Direction.west == request.getOrientation()) {
-                            return imageCache.getImage(ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_WEST);
+                            return imageCache.getImage(
+                                    ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_WEST);
                         } else if (Direction.east == request.getOrientation()) {
-                            return imageCache.getImage(ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_EAST);
+                            return imageCache.getImage(
+                                    ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_EAST);
                         }
                     }
                     return null;
                 }, request -> {
                     if (UnitType.COLONIST == request.getUnitType()) {
                         if (request.getUnit() instanceof UnitFreeColonist) {
-                            final UnitFreeColonist fc = (UnitFreeColonist) request.getUnit();
+                            final UnitFreeColonist fc = (UnitFreeColonist) request
+                                    .getUnit();
                             if (fc.isMounted()) {
                                 if (fc.isHoldingGuns()) {
                                     return imageCache.getImage(
@@ -68,11 +75,11 @@ public class UnitImageProvider {
                                     return imageCache.getImage(
                                             ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MUSKETS);
                                 } else if (fc.isHoldingTools()) {
-                                    return imageCache
-                                            .getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_TOOLS);
+                                    return imageCache.getImage(
+                                            ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_TOOLS);
                                 } else {
-                                    return imageCache
-                                            .getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST);
+                                    return imageCache.getImage(
+                                            ImageLoaderUnit.IMG_UNIT_FREE_COLONIST);
                                 }
                             }
                         } else {
@@ -96,8 +103,7 @@ public class UnitImageProvider {
      * For example for drawing units to buy in Europe.
      * </p>
      *
-     * @param unitType
-     *            required unit type
+     * @param unitType required unit type
      * @return image representing ship image
      */
     Image getUnitImage(final UnitType unitType) {
@@ -107,10 +113,8 @@ public class UnitImageProvider {
     /**
      * For specific unit instance and orientation return appropriate image.
      *
-     * @param unit
-     *            required unit
-     * @param orientation
-     *            required orientation of unit
+     * @param unit        required unit
+     * @param orientation required orientation of unit
      * @return unit image instance
      */
     Image getUnitImage(final Unit unit, final Direction orientation) {

@@ -8,7 +8,8 @@ public class ColonyBuildingItemUnit extends ColonyBuildingItem {
     private final UnitType unitType;
 
     public ColonyBuildingItemUnit(final UnitType unitType) {
-        Preconditions.checkArgument(unitType.canBeBuildInColony(), "Unit can't be build in colony");
+        Preconditions.checkArgument(unitType.canBeBuildInColony(),
+                "Unit can't be build in colony");
         this.unitType = Preconditions.checkNotNull(unitType);
     }
 

@@ -41,7 +41,8 @@ public class Terrain {
             .newArrayList(prod -> {
                 if (prod.getTerrain().isHasTrees()) {
                     if (GoodsType.CORN.equals(prod.getGoodsType())) {
-                        return prod.modify(prod.getProduction() / FOOD_TREE_FACTOR);
+                        return prod.modify(
+                                prod.getProduction() / FOOD_TREE_FACTOR);
                     }
                     if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
                         return prod.modify(TREE_NOMINAL_PRODUCTION);
@@ -54,10 +55,12 @@ public class Terrain {
             }, prod -> {
                 if (prod.getTerrain().isHasField()) {
                     if (GoodsType.CORN.equals(prod.getGoodsType())) {
-                        return prod.modify(prod.getProduction() * FOOD_FIELD_FACTOR);
+                        return prod.modify(
+                                prod.getProduction() * FOOD_FIELD_FACTOR);
                     }
                     if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
-                        return prod.modify(prod.getProduction() / TREE_AT_FIELD_FACTOR);
+                        return prod.modify(
+                                prod.getProduction() / TREE_AT_FIELD_FACTOR);
                     }
                     if (GoodsType.FUR.equals(prod.getGoodsType())) {
                         return prod.modify(FURS_AT_FIELD_NOMINAL_PRODUCTION);
@@ -69,10 +72,8 @@ public class Terrain {
     /**
      * Default constructor.
      *
-     * @param location
-     *            required location at map
-     * @param terrainType
-     *            required terrain type
+     * @param location    required location at map
+     * @param terrainType required terrain type
      */
     public Terrain(final Location location, final TerrainType terrainType) {
         this.location = Preconditions.checkNotNull(location);
@@ -111,20 +112,19 @@ public class Terrain {
     /**
      * Allows to set or remove trees at terrain.
      *
-     * @param hasTrees
-     *            parameter if there are trees or not
+     * @param hasTrees parameter if there are trees or not
      */
     public void setHasTrees(final boolean hasTrees) {
         Preconditions.checkArgument(terrainType.isCanHaveTree() || !hasTrees,
-                "this terrain type (%s) at (%s) can't have trees.", terrainType, location);
+                "this terrain type (%s) at (%s) can't have trees.", terrainType,
+                location);
         this.hasTrees = hasTrees;
     }
 
     /**
      * Get information how much goods could be produced at this terrain.
      *
-     * @param producedGoodsType
-     *            required good type
+     * @param producedGoodsType required good type
      * @return return number how much could be produces here
      */
     public int canProduceAmmount(final GoodsType producedGoodsType) {
@@ -134,14 +134,16 @@ public class Terrain {
     /**
      * Return object holding production of some specific goods at this location.
      *
-     * @param producedGoodsType
-     *            required goods type
+     * @param producedGoodsType required goods type
      * @return production at this specific terrain
      */
-    public TerrainProduction getTerrainProduction(final GoodsType producedGoodsType) {
+    public TerrainProduction getTerrainProduction(
+            final GoodsType producedGoodsType) {
         if (terrainType.getBaseProduction(producedGoodsType).isPresent()) {
-            TerrainProduction prod = new TerrainProduction(this, producedGoodsType,
-                    terrainType.getBaseProduction(producedGoodsType).get().getBase());
+            TerrainProduction prod = new TerrainProduction(this,
+                    producedGoodsType,
+                    terrainType.getBaseProduction(producedGoodsType).get()
+                            .getBase());
             for (final Function<TerrainProduction, TerrainProduction> pm : PRODUCTION_MODIFIERS) {
                 prod = pm.apply(prod);
             }
@@ -158,14 +160,17 @@ public class Terrain {
      */
     public List<TerrainProduction> getProduction() {
         // NOTE Just good types produced on field could be filtered.
-        return GoodsType.GOOD_TYPES.stream().map(goodsType -> getTerrainProduction(goodsType))
-                .filter(prod -> prod.getProduction() > 0).collect(ImmutableList.toImmutableList());
+        return GoodsType.GOOD_TYPES.stream()
+                .map(goodsType -> getTerrainProduction(goodsType))
+                .filter(prod -> prod.getProduction() > 0)
+                .collect(ImmutableList.toImmutableList());
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Terrain.class).add("terrain", terrainType.name())
-                .add("hasTrees", hasTrees).toString();
+        return MoreObjects.toStringHelper(Terrain.class)
+                .add("terrain", terrainType.name()).add("hasTrees", hasTrees)
+                .toString();
     }
 
     /**
@@ -190,12 +195,12 @@ public class Terrain {
     /**
      * Allows to set if at terrain is field.
      *
-     * @param hasField
-     *            if there is field
+     * @param hasField if there is field
      */
     public void setHasField(final boolean hasField) {
         Preconditions.checkArgument(terrainType.isCanHaveField() || !hasField,
-                "this terrain type (%s) at (%s) can't have field.", terrainType, location);
+                "this terrain type (%s) at (%s) can't have field.", terrainType,
+                location);
         this.hasField = hasField;
     }
 

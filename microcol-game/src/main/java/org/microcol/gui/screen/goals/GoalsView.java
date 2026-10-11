@@ -30,15 +30,16 @@ public final class GoalsView implements JavaFxComponent, ScreenLifeCycle {
     private GameScreen mainPanel;
 
     @Inject
-    GoalsView(final TurnReportBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPages, final GoalsButtonsPanel goalsButtonsPanel) {
+    GoalsView(final TurnReportBackground background,
+            final TitledPage titledPage, final CenteredPage centeredPages,
+            final GoalsButtonsPanel goalsButtonsPanel) {
         this.background = Preconditions.checkNotNull(background);
         this.centeredPage = Preconditions.checkNotNull(centeredPages);
         this.titledPage = Preconditions.checkNotNull(titledPage);
 
         final ButtonedPage buttonedPage = new ButtonedPage(goalsButtonsPanel);
         buttonedPage.setContent(titledPage);
-        
+
         centeredPages.setBackground(background);
         centeredPages.setMainPanel(buttonedPage);
     }

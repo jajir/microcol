@@ -178,15 +178,16 @@ public final class MicroColModule extends AbstractModule {
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
 
         bind(CampaignView.class).in(Singleton.class);
-        bind(CampaignPresenter.Display.class).to(CampaignView.class).in(Singleton.class);
+        bind(CampaignPresenter.Display.class).to(CampaignView.class)
+                .in(Singleton.class);
         bind(CampaignPresenter.class).asEagerSingleton();
 
-        bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class)
-                .asEagerSingleton();
-        bind(StatusBar.class).annotatedWith(Names.named("Europe")).to(StatusBar.class)
-                .asEagerSingleton();
-        bind(StatusBar.class).annotatedWith(Names.named("Colony")).to(StatusBar.class)
-                .asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("GamePanel"))
+                .to(StatusBar.class).asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("Europe"))
+                .to(StatusBar.class).asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("Colony"))
+                .to(StatusBar.class).asEagerSingleton();
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
@@ -202,7 +203,8 @@ public final class MicroColModule extends AbstractModule {
          * Colony dialog
          */
         bind(ColonyPanel.class).in(Singleton.class);
-        bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class).in(Singleton.class);
+        bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class)
+                .in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
         bind(QueueDialog.class).in(Singleton.class);
         bind(QueueController.class).in(Singleton.class);
@@ -211,7 +213,8 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Europe dialog
          */
-        bind(EuropeCallback.class).to(ScreenEuropePresenter.class).in(Singleton.class);
+        bind(EuropeCallback.class).to(ScreenEuropePresenter.class)
+                .in(Singleton.class);
         bind(ScreenEuropePresenter.class).asEagerSingleton();
         bind(EuropeButtonsPanelController.class).asEagerSingleton();
         bind(PanelHighSeas.class);
@@ -298,7 +301,8 @@ public final class MicroColModule extends AbstractModule {
                 final T instance = provision.provision();
                 if (instance.getClass().isAnnotationPresent(Listener.class)) {
                     eventBus.register(instance);
-                    LOGGER.debug("Registering listener class '{}'", instance.getClass().getName());
+                    LOGGER.debug("Registering listener class '{}'",
+                            instance.getClass().getName());
                 }
             }
         });
@@ -307,7 +311,8 @@ public final class MicroColModule extends AbstractModule {
     @Provides
     @Singleton
     @SuppressWarnings("ucd")
-    I18n makeI18n(final GamePreferences gamePreferences, final StreamReader streamReader) {
+    I18n makeI18n(final GamePreferences gamePreferences,
+            final StreamReader streamReader) {
         return I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
                 .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
                 .setStreamReader(streamReader)

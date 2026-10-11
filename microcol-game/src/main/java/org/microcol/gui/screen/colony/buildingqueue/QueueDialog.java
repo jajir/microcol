@@ -24,7 +24,8 @@ public class QueueDialog extends AbstractMessageWindow {
     private final PanelQueueUnits panelQueueUnits;
 
     @Inject
-    QueueDialog(final ViewUtil viewUtil, final I18n i18n, final EventBus eventBus,
+    QueueDialog(final ViewUtil viewUtil, final I18n i18n,
+            final EventBus eventBus,
             final ColonyDialogCallback colonyDialogCallback,
             final PanelQueueBuildingQueue panelQueueBuildingQueue,
             final PanelQueueConstructions panelQueueConstructions,
@@ -33,14 +34,16 @@ public class QueueDialog extends AbstractMessageWindow {
         setTitle(i18n.get(Dialog.buildingQueueDialog_caption));
 
         Preconditions.checkNotNull(colonyDialogCallback);
-        this.panelQueueBuildingQueue = Preconditions.checkNotNull(panelQueueBuildingQueue);
+        this.panelQueueBuildingQueue = Preconditions
+                .checkNotNull(panelQueueBuildingQueue);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.panelQueueConstructions = Preconditions.checkNotNull(panelQueueConstructions);
+        this.panelQueueConstructions = Preconditions
+                .checkNotNull(panelQueueConstructions);
         this.panelQueueUnits = Preconditions.checkNotNull(panelQueueUnits);
 
         final HBox panelWithQueues = new HBox();
-        panelWithQueues.getChildren().addAll(panelQueueUnits, panelQueueBuildingQueue,
-                panelQueueConstructions);
+        panelWithQueues.getChildren().addAll(panelQueueUnits,
+                panelQueueBuildingQueue, panelQueueConstructions);
 
         final Button buttonOk = new Button(i18n.get(Dialog.ok));
         buttonOk.setOnAction(e -> {

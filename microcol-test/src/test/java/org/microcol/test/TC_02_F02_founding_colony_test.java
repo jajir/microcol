@@ -23,57 +23,59 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/F02-founding-colony.microcol");
+    private final static File testFileName = new File(
+            "src/test/scenarios/F02-founding-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass(), testFileName);
+        initialize(primaryStage, getClass(), testFileName);
     }
 
     @Test
     @Tag("local")
     void TC_02_embark_disembark(final FxRobot robot) throws Exception {
-	// open MicroCol and load defined game
-	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
-	WaitForAsyncUtils.waitForFxEvents();
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
 
-	// Verify that location is visible at screen
-	gamePage.verifyThatTileIsVisible(Location.of(19, 11));
+        // Verify that location is visible at screen
+        gamePage.verifyThatTileIsVisible(Location.of(19, 11));
 
-	// verify that there are two units
-	gamePage.verifyNumberOfUnitInRightPanel(2);
+        // verify that there are two units
+        gamePage.verifyNumberOfUnitInRightPanel(2);
 
-	// verify that both units have 1 free action point
-	gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
-	gamePage.getRightPanelUnit(1).assertFreeActionPoints(1);
+        // verify that both units have 1 free action point
+        gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
+        gamePage.getRightPanelUnit(1).assertFreeActionPoints(1);
 
-	// found colony by pressing key 'b'
-	robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
-	WaitForAsyncUtils.waitForFxEvents();
+        // found colony by pressing key 'b'
+        robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
+        WaitForAsyncUtils.waitForFxEvents();
 
-	// verify that option build colony is not here
-	gamePage.verifyThatBuildColonyButtonIsHidden();
+        // verify that option build colony is not here
+        gamePage.verifyThatBuildColonyButtonIsHidden();
 
-	// verify that one unit was moved into city
-	gamePage.verifyNumberOfUnitInRightPanel(1);
-	gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
+        // verify that one unit was moved into city
+        gamePage.verifyNumberOfUnitInRightPanel(1);
+        gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
 
-	// open colony and verify city name
-	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(19, 11), "Leiden");
+        // open colony and verify city name
+        final ColonyScreen colonyScreen = gamePage
+                .openColonyAt(Location.of(19, 11), "Leiden");
 
-	// verify that on filed is exactly one unit, the one that founded colony
-	colonyScreen.verifyNumberOfUnitsOnFields(1);
+        // verify that on filed is exactly one unit, the one that founded colony
+        colonyScreen.verifyNumberOfUnitsOnFields(1);
 
-	// verify that action net production is.
-	colonyScreen.verifyThatProductionIs(GoodsType.CORN, 2);
+        // verify that action net production is.
+        colonyScreen.verifyThatProductionIs(GoodsType.CORN, 2);
 
-	colonyScreen.verifyNumberOfUnitsAtPier(1);
+        colonyScreen.verifyNumberOfUnitsAtPier(1);
 
-	int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
+        int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
 
-	// unit will placed at field with production 4 or 3 randomly.
-	assertTrue(cornProduction >= 3 && cornProduction <= 4,
-		String.format("Unexpected corn production '%s'", cornProduction));
+        // unit will placed at field with production 4 or 3 randomly.
+        assertTrue(cornProduction >= 3 && cornProduction <= 4, String
+                .format("Unexpected corn production '%s'", cornProduction));
     }
 
 }

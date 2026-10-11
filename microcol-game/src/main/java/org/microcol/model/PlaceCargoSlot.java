@@ -17,10 +17,8 @@ public class PlaceCargoSlot extends AbstractPlace {
     /**
      * Default constructor.
      *
-     * @param unitToCargo
-     *            required unti stored int cargo slot
-     * @param cargoSlot
-     *            required cargo slot where is unti stored
+     * @param unitToCargo required unti stored int cargo slot
+     * @param cargoSlot   required cargo slot where is unti stored
      */
     PlaceCargoSlot(final Unit unitToCargo, final CargoSlot cargoSlot) {
         super(unitToCargo);
@@ -76,8 +74,10 @@ public class PlaceCargoSlot extends AbstractPlace {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceCargoSlot.class).add("unit id", getUnit().getId())
-                .add("ownerName", cargoSlot.getOwnerPlayer().getName()).toString();
+        return MoreObjects.toStringHelper(PlaceCargoSlot.class)
+                .add("unit id", getUnit().getId())
+                .add("ownerName", cargoSlot.getOwnerPlayer().getName())
+                .toString();
     }
 
     @Override

@@ -15,11 +15,11 @@ final class ExternalModule extends AbstractModule {
     /**
      * Default constructor called from guice.
      *
-     * @param primaryStage
-     *            required primary stage
+     * @param primaryStage required primary stage
      */
     ExternalModule(final Stage primaryStage) {
-        this.primaryStage = Preconditions.checkNotNull(primaryStage, "Primary stage is null.");
+        this.primaryStage = Preconditions.checkNotNull(primaryStage,
+                "Primary stage is null.");
     }
 
     @Override

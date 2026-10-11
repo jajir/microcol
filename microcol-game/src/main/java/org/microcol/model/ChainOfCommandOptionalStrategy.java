@@ -14,20 +14,18 @@ import com.google.common.base.Preconditions;
  * When input is not processed than Optional empty object is returned.
  * </p>
  *
- * @param <T>
- *            function input parameter
- * @param <R>
- *            returned object
+ * @param <T> function input parameter
+ * @param <R> returned object
  */
-public final class ChainOfCommandOptionalStrategy<T, R> implements Function<T, Optional<R>> {
+public final class ChainOfCommandOptionalStrategy<T, R>
+        implements Function<T, Optional<R>> {
 
     private final List<Function<T, R>> filters;
 
     /**
      * Constructor from list of functions.
      *
-     * @param filters
-     *            required list of filters
+     * @param filters required list of filters
      */
     public ChainOfCommandOptionalStrategy(final List<Function<T, R>> filters) {
         this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
@@ -41,8 +39,7 @@ public final class ChainOfCommandOptionalStrategy<T, R> implements Function<T, O
      * Go through all filters first non-null return value is returned otherwise
      * empty is returned.
      *
-     * @param t
-     *            required filter input
+     * @param t required filter input
      * @return optional result of empty
      */
     @Override

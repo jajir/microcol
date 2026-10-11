@@ -57,12 +57,14 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
+    public void onUnitMovedStepFinished(
+            final UnitMovedStepFinishedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+    public void onUnitMovedToConstruction(
+            final UnitMovedToConstructionEvent event) {
         // Do nothing.
     }
 
@@ -72,7 +74,8 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
+    public void onUnitMovedToColonyField(
+            final UnitMovedToColonyFieldEvent event) {
         // Do nothing.
     }
 
@@ -142,12 +145,14 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    public void onIndependenceWasDeclared(
+            final IndependenceWasDeclaredEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(
+            final BeforeDeclaringIndependenceEvent event) {
         // Do nothing.
     }
 
@@ -157,7 +162,8 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onUnitArraviedToColonies(final UnitArrivedToColoniesEvent event) {
+    public void onUnitArraviedToColonies(
+            final UnitArrivedToColoniesEvent event) {
         // Do nothing.
     }
 

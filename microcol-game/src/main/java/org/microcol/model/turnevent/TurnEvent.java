@@ -11,7 +11,7 @@ public interface TurnEvent {
      * @return the player name
      */
     String getPlayerName();
-    
+
     TurnEventPo save();
 
 }

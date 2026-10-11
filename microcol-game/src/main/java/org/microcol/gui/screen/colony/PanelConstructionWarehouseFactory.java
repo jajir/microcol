@@ -18,9 +18,11 @@ class PanelConstructionWarehouseFactory implements PanelConstructionFactory {
     }
 
     @Override
-    public PanelConstructionWarehouse make(final PanelConstructionContext context) {
-        return new PanelConstructionWarehouse(context.getEventBus(), context.getI18n(),
-                context.getImageProvider(), context.getConstruction(), panelColonyGoods);
+    public PanelConstructionWarehouse make(
+            final PanelConstructionContext context) {
+        return new PanelConstructionWarehouse(context.getEventBus(),
+                context.getI18n(), context.getImageProvider(),
+                context.getConstruction(), panelColonyGoods);
     }
 
 }
