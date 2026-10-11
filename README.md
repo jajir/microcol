@@ -4,9 +4,9 @@ Master - [![Master Build Status](https://travis-ci.org/jajir/microcol.svg?branch
 
 Colonisation remake
 
-[Current documentation](https://jajir.github.io/microcol/docs/) is maintained in
+[Current documentation](https://jajir.github.io/microcol/) is maintained in
 [`docs/`](docs/index.md) and published automatically from `develop`.
-The [existing Maven website](https://jajir.github.io/microcol/) and its
-`microcol-site` source module remain in place as a development reference.
+The [`microcol-site`](microcol-site/) source module remains in the repository as
+a development reference; it is excluded from website publication.
 See [modules and build outputs](docs/modules.md) and
 [writing and publishing documentation](docs/publishing.md).

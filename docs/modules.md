@@ -98,9 +98,9 @@ under `src/site/`; PlantUML reads `src/site/plantuml/**/*.txt` and also writes t
 configuration.
 
 Keep `microcol-site` in its existing location. Its documentation remains a useful
-design and development reference even where it is outdated. The existing Maven
-website stays at the project root; current Markdown documentation is published
-alongside it under `/microcol/docs/`.
+design and development reference even where it is outdated. GitHub Actions
+publishes only the Markdown documentation from `docs/` at `/microcol/`;
+`microcol-site` and previously generated Maven pages are excluded from publication.
 
 The legacy GitHub site plugin is bound to `site-deploy`; `mvn site` alone does not
 invoke it. These Maven website sources and report plugins are separate from the

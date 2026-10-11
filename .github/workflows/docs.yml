@@ -37,25 +37,7 @@ jobs:
         env:
           DOCS_REVISION: ${{ github.sha }}
         run: python -m mkdocs build --strict
-      - name: Check out the existing Maven website
-        uses: actions/checkout@v6
-        with:
-          # Preserve the existing website at its original URLs.
-          ref: e80be63deb0a7c4c81306a1434ca27a0934e5f56
-          path: target/maven-site
-          persist-credentials: false
-      - name: Keep the Maven website at the project root
-        run: |
-          git -C target/maven-site archive HEAD | tar -x -C target/docs-site
-          python - <<'PY'
-          from pathlib import Path
-          page = Path('target/docs-site/index.html')
-          html = page.read_text(encoding='utf-8')
-          marker = '<li class="nav-header">Development</li>'
-          assert html.count(marker) == 1, 'Expected Maven navigation entry missing'
-          link = '<li><a href="docs/index.html">Current documentation</a></li>'
-          page.write_text(html.replace(marker, marker + '\n' + link), encoding='utf-8')
-          PY
+      # MkDocs builds docs/ directly at the Pages root; microcol-site is excluded.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

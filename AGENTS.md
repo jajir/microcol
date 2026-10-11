@@ -19,9 +19,10 @@ workflow publishes pushed `develop` changes; do not duplicate new pages in the
 legacy Maven site or use its old publishing commands.
 
 Preserve `microcol-site` in place as a useful design and development reference,
-even where its content is outdated. Keep the existing Maven website at the project
-root and publish `docs/` under `/microcol/docs/`. Do not remove or relocate the
-module or move its website into an archive unless the user requests it.
+even where its content is outdated. Publish only `docs/` at the project website
+root, `/microcol/`, through GitHub Actions. Exclude `microcol-site` and previously
+generated Maven pages from publication. Do not remove or relocate the source
+module unless the user requests it.
 
 # Graphics
 
