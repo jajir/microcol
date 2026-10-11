@@ -1,14 +1,16 @@
 # Codex and a local Qwen worker
 
-Status as of **2026-10-10: direct `codex exec` ready for bounded tasks; first
-Microcol pilot accepted**. Astra supervises a separate Codex CLI process using
-local Qwen, runs tests and reviews the changes. No custom runner or MCP server
-was developed. The accepted pilot test changes have now been incorporated into
-`develop`, the branch selected for ongoing development at that time. Development
+Status as of **2026-10-11: direct `codex exec` ready for bounded tasks; Qwen is
+the default for suitable development assignments**. Astra supervises a separate
+Codex CLI process using local Qwen, runs tests and reviews the changes. The test
+pilot and subsequent implementation and packaging tasks below establish a
+working path, with main-agent corrections needed on some tasks. No custom runner
+service or MCP server was developed. The accepted pilot test changes were
+incorporated into `develop`, the branch selected for development at that time. Development
 now uses `main`; follow the current [branch workflow](../../AGENTS.md) when
 selecting a baseline and accepting new worker changes. The isolated worktree and
-artifacts retain the original evidence. One successful task is evidence of a
-working path, not broad reliability or measured savings.
+artifacts retain the original evidence. These bounded tasks do not establish
+broad reliability or measured savings.
 
 The arrangement is **cloud Astra as the main agent and local Qwen3.5-9B Q4_K_M
 on the 16 GB Mac mini**. Preserve the main agent's model and highest supported
@@ -31,6 +33,39 @@ The user decides game behavior and priorities. Astra owns task scope, context,
 architecture and acceptance. The child edits its assigned worktree; the caller
 owns Maven/test execution and its evidence. Instructions do not trigger automatic
 installation, configuration changes or a cloud fallback when the worker fails.
+
+## Default development workflow — 2026-10-11
+
+User and main agent agree player goal, rules, edge cases, cancellation/failure
+behavior, and observable acceptance criteria before implementation. Main agent
+decomposes larger features into small complete tasks and prefers local Qwen for
+suitable implementation, behavior tests, bug fixes, repetitive refactoring, and
+documentation/configuration edits within agreed interfaces. No extra user
+approval per suitable task.
+
+Main agent keeps architecture, unresolved game rules, scope, actual test
+execution/evidence, review, integration and publication. Directly handle
+trivial edits when delegation costs more; explain other skipped/degraded
+delegations briefly.
+
+Send compact English task contracts and relevant code only; do not include full
+chat history or duplicate implementation in parallel. Qwen edits its isolated
+worktree and does not delegate, commit or push. One worker at a time; preserve
+existing limits and unload before Maven.
+
+Broader features are sequences of bounded jobs, not proof that current 8k
+worker can own whole features. Expand assignments from accepted evidence.
+Execution of the legacy TestFX suite is not yet verified; bounded UI changes
+need an explicit caller verification plan.
+
+For each result report what Qwen did, main-agent repairs, actual checks and
+pending checks. Record attempts/time/available usage; no measured savings
+percentage yet.
+
+If the runtime is unavailable, report the limitation and continue directly when
+useful; do not install anything or silently switch to a cloud worker. The main
+agent completes accepted tasks through the authorized `main` publication
+workflow. This is a delegation policy, not an unattended background service.
 
 ## Host and repository snapshot
 
@@ -169,7 +204,7 @@ Use the installed Homebrew Codex CLI as the worker and the caller's existing
 shell tools to supervise it. MCP and a custom in-session subagent are not needed
 for this route. No persistent user Codex configuration has been changed.
 
-### Operating profile — one accepted pilot
+### Operating profile — bounded assignments
 
 | Setting | Current choice and limit |
 | --- | --- |
@@ -223,10 +258,12 @@ already caused swapping on this machine. Keep task size and memory use bounded.
    intended tests and exact counts, exit codes, failures and skips. Send concrete
    failures back only within the repair limit. The worker must report its tests
    as pending caller verification, not claim they passed.
-6. Astra reviews behavior and test meaning. Transfer accepted changes only when
-   applying them is within the assigned task, after checking the main checkout's
-   current state. An integration pilot may stay isolated. Record repairs and
-   uncertainty; do not automatically commit, merge or push a worker result.
+6. Astra reviews behavior and test meaning, checks the main checkout's current
+   state, and integrates accepted changes within the assigned scope. The worker
+   does not commit, merge or push its result. The main agent records repairs and
+   uncertainty, then completes the authorized checks, commit, push to `main` and
+   publication verification from [AGENTS.md](../../AGENTS.md). An explicitly
+   isolated pilot may stay isolated when that is the agreed scope.
 
 Example invocation, after setting `worker_tree` and `worker_job` to the prepared
 absolute paths and creating the job's `codex-home` directory. These variables are
@@ -301,6 +338,29 @@ were brought into `main`. Evidence, the worker's original output and the recorde
 repairs are in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-build-identity/`.
 This task required main-agent corrections and establishes no savings percentage.
 
+### Workflow documentation check — 2026-10-11
+
+A fresh availability check found Codex CLI 0.142.3, Ollama 0.40.2 and the
+configured alias on this Mac. Job `2026-10-11-qwen-default-workflow` used the
+verified alias digest above and an actual 8192-token context. The caller stopped
+its single attempt at the 180-second deadline (181.20 seconds including cleanup,
+process exit -15). Qwen produced the requested policy text but appended it at
+the wrong location and returned no final report. The main agent accepted the
+text only, moved and wrapped it, clarified verification/fallback wording, and
+updated the root routing rule and older status/publication wording. There were
+no worker repair rounds; this was a partial result requiring caller completion.
+
+Samples recorded swap usage from 4553.75 to 4894.62 MiB and pressure levels 1
+and 2 during this desktop workload; these observations do not isolate the model's
+memory cost. After cleanup, Ollama reported no loaded models. Complete per-run
+usage and loading/generation timing were unavailable. The main agent's final
+checks passed six documentation hook tests and a strict MkDocs build; game tests
+were not run locally for these documentation-only changes. Logs, the original
+diff, runtime samples and acceptance evidence are retained under
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-qwen-default-workflow/`.
+This check verifies the handoff path and the need for review, not unattended
+reliability or measured Codex-budget savings.
+
 ### Earlier native feasibility evidence — 2026-10-10
 
 Before the implementation pilot, CLI 0.142.3 used the base model in a read-only
@@ -363,8 +423,10 @@ At a positive buy price of 12, available gold of 0, 11, 12, 1199, 1200 and 1201
 should purchase 0, 0, 1, 99, 100 and 100 units respectively, using the current
 100-unit slot capacity. The three baseline cases cover 10000, 120 and 131. Expected values follow the
 assigned whole-unit affordability and capacity rules, independently of calling the
-implementation under test. The pilot changed tests only. GUI work should wait for a demonstrated TestFX
-execution method on this Mac.
+implementation under test. The pilot changed tests only. Bounded UI changes may
+be delegated when the caller has a credible way to verify the affected journey
+and failure states; execution of the legacy TestFX suite on this Mac remains
+unverified and must not be claimed as coverage.
 
 Caller verification from the assigned worktree root (baseline already passed):
 

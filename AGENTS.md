@@ -66,9 +66,20 @@ or a new player study.
 
 # Local worker
 
-When a local worker is configured and available, the main agent uses the
-[local-worker skill](.agents/skills/local-worker/SKILL.md) for suitable bounded
-implementation and test tasks, and owns their specification and acceptance.
-Delegated local workers complete their assigned scope without further delegation.
-Check [operational status](docs/ai/local-qwen.md) before use; an unavailable worker
-does not trigger setup. Keep setup details and operating values in that document.
+Prefer local Qwen for the maximum suitable development work once the user and
+main agent agree the use case and acceptance criteria. The main agent decomposes
+larger features into bounded assignments and uses the
+[local-worker skill](.agents/skills/local-worker/SKILL.md) for implementation,
+test authoring, bug fixes, repetitive refactoring, and documentation or
+configuration changes within agreed interfaces. No separate user approval is
+needed for each assignment. Do trivial edits directly when delegation and review
+would cost more; briefly explain other work retained by the main agent.
+
+The main agent owns requirements, architecture, actual verification, review,
+integration and the authorized completion workflow above. Do not duplicate the
+worker's implementation in parallel. Workers complete their assigned scope
+without further delegation, commits or pushes. Follow the
+[default workflow and operational status](docs/ai/local-qwen.md) for task
+contracts, limits and evidence; an unavailable worker does not trigger setup or
+a silent cloud fallback. Keep operating values and measured results there, and
+do not claim token savings without measurements.
