@@ -37,6 +37,13 @@ root, `/microcol/`, through GitHub Actions. Exclude `microcol-site` and previous
 generated Maven pages from publication. Do not remove or relocate the source
 module unless the user requests it.
 
+# Code formatting
+
+Use the shared [Java formatter](docs/code-formatting.md) and its
+`.vscode/eclipse-formatter.xml` profile for Java code. Keep formatting changes
+scoped to files touched by the task; preserve the functional tests' readable
+scenario structure and stable IDs.
+
 # Graphics
 
 Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for

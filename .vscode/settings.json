@@ -1,0 +1,11 @@
+{
+    "java.format.settings.url": "./.vscode/eclipse-formatter.xml",
+    "java.format.settings.profile": "mujSunFormatter",
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    }
+}
