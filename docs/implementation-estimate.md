@@ -2,6 +2,13 @@
 
 Estimate date: 2026-10-02. Based on the [rules gap analysis](gap-analysis.md) at documentation commit [`f619e71c`](https://github.com/jajir/microcol/commit/f619e71cba9c7e7380c098e9b9cad20b59af01ed).
 
+Planning note, **2026-10-11**: this is a historical scope estimate, not a current
+remaining-work total. Native packaging, verification, development publication
+and launcher updates have since progressed; see [development delivery](development-builds.md#verification)
+for the dated evidence. Use the [implementation plan](implementation-plan.md)
+to select deliverables, then recalibrate remaining effort against completed work
+and measured tasks. The figures below have not been recomputed.
+
 Completing the gameplay scope remains estimated at **about 2,400 hours**. Development-process setup and upkeep, UI automation, graphics polish, human UX testing and desktop release work add **about 1,600 hours**. Publishing the Linux and macOS versions on Steam adds a further **360 likely hours**. The first-release estimate is now **4,344 person-hours before reserve**, or **about 5,400 hours for planning with a 25% reserve**.
 
 This supersedes the earlier 3,000-hour gameplay-only and 5,000-hour generic desktop-release budgets. Linux and macOS are confirmed Steam targets. For comparison, the existing generic Windows/macOS/Linux packaging allowance is retained; Windows was a previous working assumption, and a Windows Steam release is not added here. Explicitly removing Windows would require revising the shared platform packages, rather than subtracting a complete independent port. The estimate still assumes polish of the existing visual style and one architecture per OS; Intel versus Apple Silicon, or both, remains a Mac scope decision. Post-release maintenance is separate.

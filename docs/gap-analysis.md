@@ -600,6 +600,10 @@ An intentional departure from the manual should remain a `Differs` entry with a 
 
 ## Implementation order
 
+For deliverable work packages, playable milestones, UX/art dependencies and
+ready-to-refine task briefs, use the [implementation plan](implementation-plan.md).
+This page remains the authoritative rule catalogue and decision register.
+
 All listed rules remain in the requested release target. The order below reduces dependency rework; it is not a proposal to release with the remaining gaps.
 
 | Order | Work package | Dependencies and completion evidence |
