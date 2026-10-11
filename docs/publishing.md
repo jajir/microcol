@@ -61,6 +61,11 @@ Markdown moves from the repository to the website. Missing repository targets
 fail the build; MkDocs checks documentation and asset links and heading anchors.
 Do not suppress a link failure merely to make publication pass.
 
+The same unittest discovery also checks the [use-case catalogue](use-cases.md):
+unique UC IDs, coverage of every rule in the gap analysis, recognized status
+and question IDs, and agreement with the stated case total. These are document
+consistency checks, not gameplay acceptance tests.
+
 ## Automatic publication
 
 [The documentation workflow](../.github/workflows/docs.yml) runs:

@@ -11,6 +11,12 @@ Testy chrání konkrétní ověřené cesty; nejsou důkazem úplnosti pravidel 
 manuálu ani zárukou, že ve hře nemůže být jiná chyba. Chybějící pravidla nadále
 eviduje [analýza rozdílů](gap-analysis.md).
 
+[Katalog use cases](use-cases.md) propojuje pravidla s hráčskými kroky a vede
+jejich přejímku. Před změnou vybrat dotčené UC a pravidla, přiřadit konkrétní
+TC/metody a po ověření aktualizovat jejich evidenci. UC nenahrazuje ID TC
+ani zde předepsanou strukturu testů; jediný dílčí scénář neuzavírá všechny
+varianty celého UC.
+
 ## Co vyžaduje každá změna
 
 | Druh změny | Povinné pokrytí |

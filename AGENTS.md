@@ -84,6 +84,8 @@ or a new player study.
 
 Follow [the functional test contract](docs/functional-tests.md) for every behavior
 change and every change to graphics, CSS, layout, controls or shared UI helpers.
+Select affected [use cases](docs/use-cases.md), preserve their stable IDs, and
+update implementation and verification evidence alongside the change.
 Map changed behavior to named `TC_...` scenarios in `microcol-test`; add or update
 the scenario and relevant rule tests in the same change. Preserve the existing
 fixture, `@Start`, linear commented player steps, page objects and explicit

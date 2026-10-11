@@ -1,0 +1,436 @@
+# Use cases a přejímka pravidel hry
+
+Toto je pracovní seznam toho, co musí hráč dokázat v běžné partii MicroCol,
+abychom mohli přijmout implementaci pravidel a přesunout hlavní pozornost na
+grafiku a ladění UX. Každé **UC** má stabilní ID, výchozí situaci, kroky,
+očekávané výsledky a vlastní záznam implementace a ověření.
+
+**Založeno 11. října 2026 podle [manuálu](Sid_Meiers_Colonization_manual.pdf).**
+Pravidla, jejich přesné hodnoty, stránky a rozbor zdrojového kódu zůstávají v
+[analýze rozdílů](gap-analysis.md). Tato stránka je autoritativní pro hráčské
+scénáře a jejich přejímku; [implementační plán](implementation-plan.md) určuje
+pracovní balíky a pořadí. UC není nová třída ani nový Java balíček.
+
+## Jak seznam používat
+
+1. Vybrat jedno UC nebo malou navazující skupinu; projít odkazovaná pravidla
+   a otázky Q v rozboru. Do zadání převzít **všechny varianty**, ne pouze název.
+2. Určit vlastníka podle [mapy balíčků](architecture.md): pravidlo v modelu,
+   volba robota v AI, ovládání v GUI, uložený stav v persistenci. Funkce musí
+   být dostupná v běžné volné hře, nikoli jen v demonstrační misi.
+3. Připojit konkrétní existující nebo nový scénář TC, fixture a modelové testy.
+   Jeden UC může potřebovat více TC; jeden TC může dokládat části více UC.
+   ID **UC**, pravidel a **TC** se vzájemně nenahrazují ani nepřečíslovávají.
+4. Implementovat, zkontrolovat a spustit testy podle
+   [funkčního kontraktu](functional-tests.md). Zachovat lineární anglické
+   kroky, @Start, page objects a výslovné aserce současných TC.
+5. Ve stejném commitu upravit sloupec **Evidence** a dotčené položky rozboru.
+   Po publikaci připojit skutečný běh CI a distribuční build. Neúspěšný či
+   přeskočený test ponechat otevřený.
+
+### Stav a evidence
+
+V každém řádku jsou dvě nezávislé hodnoty. Zápis **? / N** je výchozí stav,
+nikoli tvrzení, že daná funkce neexistuje.
+
+| Pole | Hodnoty |
+| --- | --- |
+| I — implementace celého UC | **?** aktuálně neposouzeno; **0** chybí; **R** rozpracováno nebo část neodpovídá; **H** implementováno včetně všech variant. I=H vyžaduje odkaz na implementační commit a kontrolu všech souvisejících pravidel. |
+| V — ověření celého UC | **N** neběželo v úplném rozsahu; **B** část kritérií blokuje nerozhodnutá otázka; **F** poslední ověření selhalo; **P** všechny varianty prošly na uvedené revizi. |
+| TC / důkaz | Konkrétní testy a jejich metody, fixture/seed, datum, commit, příkaz nebo CI report, počet vybraných/prošlých/chybných/přeskočených testů; případný zbylý blokátor. Pro ruční krok reprodukovatelný postup a pozorovaný výsledek. |
+
+Příklad formátu budoucího záznamu: **R / F; TC: odkaz na třídu#metodu;
+revize: SHA; běh: URL; vybráno/prošlo/chyby/přeskočeno: 3/2/1/0;
+zbývá: odmítnutí akce bez nástrojů**. Jde o vzor, nikoli provedený test.
+Částečný úspěch lze takto zapsat, ale celé UC se neoznačí jako hotové.
+
+**Výchozí stav:** žádné UC zde není přijato jako kompletně ověřené.
+Rozbor z 2. října posoudil původních 228 pravidel: 20 statických shod,
+30 částečných, 40 odlišných, 134 chybějících a 4 nejasná. To je orientace pro
+implementaci, ne výsledek nových scénářů. Doplnění rozboru z 11. října jsou
+označena zvlášť. Existující testy dále chrání své dosavadní aserce.
+
+Otázky [Q-01 až Q-11](gap-analysis.md#open-questions-and-decisions) se řeší
+tam, s datem, zdrojem a konkrétním rozhodnutím. **B(Q-…)** blokuje přijetí
+celého UC, nikoli práci na jeho již jasných částech. Zvolené aproximace musí
+zůstat označené jako rozhodnutí projektu. Odchylku neskrývat změnou očekávání
+tak, aby odpovídalo současnému kódu.
+
+### Společné podmínky všech scénářů
+
+Aktérem je lidský hráč; u soupeřových akcí je výslovně uvedena AI. Test si
+připraví vlastní reprodukovatelnou pozici, vlastníky, datum, obtížnost, zásoby
+a jednotky. Akce hráče prochází skutečným UI, výsledek ověřuje i stav modelu.
+Samotná přítomnost ikony či otevření okna nestačí.
+
+- Pro každou volbu s potvrzením prověřit přijetí, zrušení a nesplněnou
+  podmínku. Zrušená či zamítnutá transakce nic neodebere. Výslovná herní
+  volba s následky, například protest proti dani, provede právě své popsané
+  následky. Automatický tahový děj nemá umělou možnost zrušení.
+- U množství ověřit nulu, hranici −1 / hranici / hranici +1 a vyčerpání zdroje,
+  kde mají herní smysl. Kontrolovat obě strany převodu a provedení právě jednou.
+- Náhodné výsledky vyvolat řízeným seedem nebo testovým zdrojem náhody;
+  ověřit možné větve i vstupy výpočtu. Jedno vítězství nedokazuje pravděpodobnost.
+- Stav, který trvá více tahů, uložit uprostřed děje, načíst a dokončit.
+  Nesmí se ztratit postup ani zopakovat odměna. Kontrolovat také další tah.
+- Člověk a AI podléhají stejným pravidlům; zvláštní výjimky národů a královské
+  armády jsou výslovné. Očekávání se nečte z konstant testované implementace.
+- Informace potřebná pro rozhodnutí a vysvětlení výsledku musí být čitelně
+  dostupná už nyní. Výtvarné provedení, animace a podrobný UX polish následují
+  po funkční přejímce; nesmí měnit očekávané herní výsledky.
+
+## Začátek hry a tahy
+
+Zdroj: tištěné strany 2, 7–10 / PDF 8, 13–16;
+[pravidla nastavení a tahů](gap-analysis.md#setup-and-turn-sequence).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-001 — Začít běžnou partii<br>SETUP-001 | Z čistého profilu otevřít Novou hru; zvolit náhodný Nový svět, Ameriku a vlastní parametry mapy. Jednou nastavení zrušit. | Vstup nevyžaduje dokončení kampaně. Každá volba vytvoří hratelnou volnou partii; vlastní velikost pevnin, vlhkost a klima ovlivní mapu. Stejný testový seed a nastavení reprodukují svět. Zrušení vrátí menu bez rozehrané partie. | ? / N; — |
+| UC-002 — Zvolit národ a obtížnost<br>SETUP-002, SETUP-003 | Zahájit hru pro Anglii, Francii, Španělsko a Nizozemsko na každé z pěti obtížností; zadat vlastní jméno. | Matice 4 × 5 startů má správnou příslušnost, soupeře a samostatné jméno. Obtížnost mění schválené parametry, není jen popisek; národ i obtížnost přežijí uložení. | ? / B(Q-01); — |
+| UC-003 — Uplatnit národní výhodu<br>SETUP-004, SETUP-005, SETUP-006, SETUP-007 | V jinak stejných pozicích vyvolat imigraci, kontakt s domorodci, útok na jejich sídlo a stejný objem obchodu. | Anglie získává více přistěhovalců; Francie vyvolává menší nepřátelství; Španělsko má +50 % k útoku na domorodé sídlo, nikoli libovolný cíl; nizozemské ceny kolísají méně. Zkontrolovat každou výhodu i nepříslušný národ. | ? / B(Q-01); — |
+| UC-004 — Vyplout a postupovat kalendářem<br>SETUP-008, SETUP-009 | Pro všechny národy prohlédnout počáteční expedici; dokončit několik celých kol včetně načtení uprostřed. | Výchozí referenční rok je 1500; nizozemská obchodní loď a ostatní počáteční sestavy odpovídají rozhodnutí Q-02. Datum postupuje jednou za celé kolo podle přijatého kalendáře, ne po každém hráči. | ? / B(Q-02); — |
+| UC-005 — Dokončit tah ve správném pořadí<br>TURN-001, TURN-002 | Připravit v jednom kole evropskou událost, výrobu, hlad a aktivní jednotky; postupně skončit tahy včetně tahu bez pohyblivé jednotky. | Domorodci → Anglie → Francie → Španělsko → Nizozemsko, nezávisle na pořadí v uloženém souboru. U národa nejprve Evropa, potom kolonie, pak pohyb/boj a správa. Každý děj právě jednou; správu lze provádět i před potvrzením konce tahu. | ? / N; — |
+
+## Mapa a průzkum
+
+Zdroj: strany 14–22 / PDF 20–28, karta PDF 135;
+[mapa a referenční hodnoty](gap-analysis.md#map-terrain-and-exploration).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-006 — Odkrýt neznámý svět<br>MAP-007, MAP-008 | Začít s expedicí, pohybovat se, opustit objevenou oblast a načíst uloženou hru. | Na začátku známe pouze okolí expedice, nikoli skryté soupeře. Objevený terén zůstává známý. Oddělit znalost terénu od aktuální znalosti cizích jednotek; přijmout přesný dosah dohledu. | ? / B(Q-11); — |
+| UC-007 — Použít všechny druhy terénu<br>MAP-001, MAP-002, MAP-003 | Na referenční mapě bez bonusů projít a obhospodařit každý terén a dovolenou lesní variantu; uložit a načíst. | Každá buňka terén × les × komodita z karty má správnou základní produkci, cenu vstupu a obranu. Zahrnout tundru s lesem, jezera, oceán a námořní cesty. Sporné buňky rozhodnout podle Q-10, nikoli přepsat podle aktuálních konstant. | ? / B(Q-10); — |
+| UC-008 — Využít řeky a zvláštní zdroje<br>MAP-004, MAP-005 | Porovnat shodná pole bez řeky, s malou/velkou řekou a postupně se všemi typy zvláštního zdroje; pohybovat se podél řeky. | Řeka zlepší příslušnou produkci a cestování po jejím toku; velká má větší efekt. Každý zdroj zvýhodní správné komodity, včetně zvěře, oázy, loviště a ryb. Směr spojení, velikost řeky a zdroj se uloží. | ? / B(Q-10, Q-11); — |
+| UC-009 — Vyčerpat ložisko<br>MAP-006 | Opakovaně těžit stříbrné, rudné a smíšené ložisko; kontrolní jednotka na obdobném poli pěstuje plodinu. | Konečná zásoba se těžbou vyčerpá a její bonus zmizí, základní terén zůstane. Jiná činnost ložisko nespotřebuje. Po načtení se zásoba neobnoví; velikost zásoby a rychlost čerpání jsou rozhodnutí Q-10. | ? / B(Q-10); — |
+| UC-010 — Prozkoumat zvěst o ztraceném městě<br>MAP-009 | Vstoupit do značky obyčejným a zkušeným průzkumníkem; řízeně vyvolat přínos, prázdný nález a nebezpečí. | Zpráva a změna světa odpovídají výsledku, značka se spotřebuje jednou. Odbornost ovlivní průzkum; načtení nevydá druhou odměnu. Konkrétní odměny, rizika a pohřebiště navazují na Q-09/Q-11. | ? / B(Q-09, Q-11); — |
+
+## Pohyb a rozkazy
+
+Zdroj: strany 25–27 / PDF 31–33;
+[pohyb](gap-analysis.md#movement-and-persistent-orders).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-011 — Přesunout jednotku o pole<br>MOVE-001, MOVE-002 | Vyzkoušet osm směrů s pěší jednotkou i lodí, okraje mapy a přístav. | Pěší zůstává na souši bez přepravy; loď na vodě nebo v pobřežním sídle. Nelze překročit sever/jih ani proplout pobřežní kolonií do vnitrozemské. Neplatný krok nezmění místo ani pohyb. | ? / N; — |
+| UC-012 — Zaplatit pohyb podle terénu<br>MOVE-003, MAP-002 | Projít trasu přes rovinu, les, kopce, hory, řeku a silnici s různým zbytkem pohybu. | Provedený krok, plán cesty i zvýrazněný dosah používají stejné ceny. Vyčerpaná jednotka nepokračuje. Variantu ceny vyšší než celý tahový příděl určí Q-11. | ? / B(Q-11); — |
+| UC-013 — Dojít na vzdálené místo<br>MOVE-004 | Zadat bod vzdálený alespoň tři tahy a pojmenovaný přátelský cíl; v polovině uložit, načíst, jednou rozkaz zrušit. | Jednotka pokračuje do cíle, nepřekročí pohyb a nenabízí nedosažitelné přátelské cíle. Zrušení vrátí ruční řízení. Obsazení nebo zablokování trasy nesmí způsobit nelegální krok či nekonečný tah. | ? / B(Q-11); — |
+| UC-014 — Počkat nebo vynechat pohyb<br>MOVE-005 | Se třemi aktivními jednotkami použít Čekat a Vynechat tah. | Čekající se znovu aktivuje po ostatních; vynechaná až v dalším tahu. Ani jedna volba nevytvoří trvalý rozkaz; opakované čekání nesmí ztratit jednotku z pořadí. | ? / N; — |
+| UC-015 — Držet hlídku a opevnit jednotku<br>MOVE-006, MOVE-007, MOVE-008 | Vydat hlídku a opevnění, ukončit tah, přiblížit cizí jednotku, potom jednotky ručně aktivovat. | Hlídka běžně nepřekáží aktivací, cizí soused ji probudí. Opevnění dává +50 % až příští tah. Aktivace zruší rozkaz a dovolí další platnou akci; u skupiny se změní jen vybraná jednotka. Automatické nalodění viz UC-025. | ? / N; — |
+| UC-016 — Zrušit práci nebo rozpustit jednotku<br>MOVE-008, MOVE-009 | Aktivovat jednotku během orby, cesty a obchodní trasy; samostatně rozpustit vlastní jednotku, včetně nosiče s nákladem. | Rozkaz opravdu skončí, zachovají se jen dokončené účinky podle Q-11. Rozpuštěná jednotka zmizí ze světa, výběru i uložené hry. Dopad na cestující a náklad musí mít předem zapsané pravidlo; cizí jednotku rozpustit nelze. | ? / B(Q-11); — |
+
+## Vybavení a úpravy krajiny
+
+Zdroj: strany 26–27, 46, 65 / PDF 32–33, 52, 71; karta PDF 133;
+[vybavení a pionýři](gap-analysis.md#equipment-and-pioneers).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-017 — Vybavit kolonistu v kolonii<br>UNIT-001, PION-001 | Vlastnímu kolonistovi dát koně, muškety a nástroje ze skladu; vyzkoušet i vojáka → dragouna a průzkumníka → dragouna. | Koně/muškety po 50, mez 49/50; nástroje: 0/1/19 odmítnout, 20/99/100/101 vybaví 20/99/100/100. Sklad klesne přesně, druhé vybavení se neztratí. Identita a dovednost kolonisty zůstávají. | ? / N; — |
+| UC-018 — Změnit vybavení na evropském molu<br>UNIT-002 | Na molu koupit/prodat koně a muškety, koupit nástroje a prodat jejich zbytek; opakovat bez dostatku zlata. | Koně/muškety po 50, nákup nástrojů 100, prodej skutečného zbytku. Souhlasí nabídka ceny, pokladna a výbava; neúspěch nic neodebere. Daň/zaokrouhlení nákupu se řídí stejným rozhodnutím jako UC-057. | ? / B(Q-10); — |
+| UC-019 — Dokončit orbu<br>PION-002 | Pionýr s 20/40/100 nástroji začne orat vhodné holé pole; kontrolně nevybavený kolonista, les, nevhodný a už zoraný terén. | Platný rozkaz přetrvá potřebné tahy, dokončí pole a spotřebuje 20 nástrojů právě jednou. Neplatné varianty odmítne. Po práci a načtení se změní správné výnosy. Délka a přerušení jsou Q-11; současné TC18/TC15 dokazují jen zahájení, ne celý UC. | ? / B(Q-11); částečné testy viz níže |
+| UC-020 — Vykácet les<br>PION-003 | Pionýr vykácí les, dokončí práci, poté na témže poli vyrábět a případně orat. | Spotřebuje 20 nástrojů, přidělí dřevo podle přijatého množství/cíle, les trvale odstraní. Pole již neposkytuje dřevo/kožešiny z lesa; zemědělské výnosy se upraví. Opakované kácení ani načtení nedá další dřevo. | ? / B(Q-10, Q-11); — |
+| UC-021 — Postavit silnici a využít zkušeného pionýra<br>PION-004, PION-005, PION-006 | Postavit silnici; porovnat pohyb a výnos rudy, kožešin, dřeva a horského stříbra. Všechny tři práce opakovat běžným a zkušeným pionýrem. | Silnice stojí 20 nástrojů jednou, uloží se a zrychlí cestu. Stříbro získá silniční bonus jen s ložiskem. Zkušený pionýr dokončí každou práci dříve při stejné spotřebě nástrojů. Přesné časy/bonusy Q-10/Q-11. | ? / B(Q-10, Q-11); — |
+
+## Lodě, náklad a obchodní trasy
+
+Zdroj: strany 26, 28–29, 42–43, 59–65 / PDF 32, 34–35, 48–49, 65–71,
+doplněk PDF 3, karta PDF 132;
+[přeprava](gap-analysis.md#transport-ships-and-atlantic-travel) a
+[trasy](gap-analysis.md#automated-trade-routes).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-022 — Provozovat všech šest lodí<br>UNIT-003, UNIT-004 | Získat každou loď dovoleným nákupem, stavbou nebo událostí, pohybovat se a zaplnit náklad. | Pohyb/prostory: karavela 4/2, obchodní loď 5/4, galeona 6/6, korzár 8/2, fregata 6/4, man-o-war 6/6. Platí i po načtení; královské/intervenční lodě se neobjeví jako obyčejný předrevoluční nákup. Sílu ověřuje UC-073. | ? / N; — |
+| UC-023 — Přesunout celé i částečné zboží<br>CARGO-001, CARGO-009 | Přesouvat sklad ↔ loď, sklad ↔ vůz a nosič ↔ nosič; z 60 kusů zvolit 17. Prověřit prázdný i částečně plný prostor a evropský nákup. | Prostor obsahuje nejvýše 100 kusů jediného druhu. Přesun zachovává součet, respektuje zdroj i volno, nedovolí směs ani přetečení na modelovém vstupu. Meze 99/100/101; obsloužit vůz také přes kolonijní UI. | ? / N; — |
+| UC-024 — Naložit jednotky a poklad<br>CARGO-002, CARGO-003, CARGO-004, CARGO-005 | Ze sousední souše nalodit obyčejného/vybaveného kolonistu, dělostřelectvo a poklad; zkusit plnou/cizí/vzdálenou loď a vůz. | Kolonista s výbavou i dělo potřebují jeden prostor; poklad šest volných prostorů. Vůz veze pouze zboží; loď ani vůz není běžný cestující. Odmítnutí nic neodebere, vyložení či zničení uvolní celou rezervaci. | ? / N; — |
+| UC-025 — Automaticky nalodit a selektivně vylodit<br>CARGO-006, CARGO-007, CARGO-008 | Vyplout s čekajícími lidmi v Evropě i hlídkami v kolonii; změnit pořadí a odmítnout nalodění. Připlout do pobřežního sídla a zvlášť na volné pobřeží. | Nalodí se jen oprávnění lidé podle pořadí a volných prostorů; lze posunout emigranta dopředu i vyřadit. V sídle cestující automaticky vystoupí; při landfall lze vybrat jednotlivé lidi a jiné nechat na palubě. Zrušení vylodění zachová náklad. | ? / N; — |
+| UC-026 — Rychle naložit, vyložit a odhodit náklad<br>CARGO-010, CARGO-016 | S více druhy zásob použít rychlé naložení, opakované vyložení a odhození vybraného zboží na moři. | Nakládání vybere nejhodnotnější dostupné zboží kromě koní, nástrojů a zbraní. Vykládání zpracuje prostor za prostorem; odhození nepřidá zlato ani nezmění jiné prostory. Pořadí částečných zásob a rozsah odhození rozhodnout v Q-11. | ? / B(Q-11); — |
+| UC-027 — Přeplout Atlantik a vrátit se<br>CARGO-011, CARGO-012, CARGO-013, CARGO-015 | Na obou stranách mapy vstoupit do námořní cesty, pohybovat se podél ní, potom ven; s cestujícími a zbožím absolvovat zpáteční plavbu. | Samotný vstup do cesty nespustí přejezd, až pohyb ven. Plavba trvá 1–4 tahy podle přijatých faktorů; návrat vede na zaznamenané výchozí pole. Náklad i výbava zůstávají. Uložení uprostřed a obsazený návratový bod mají definovaný výsledek. | ? / B(Q-11); — |
+| UC-028 — Obrátit loď během plavby<br>CARGO-014 | Obrátit oba směry cesty před příjezdem a po načtení pokračovat. | Změní se cíl a správně zbývající čas podle Q-11, nikoli náklad nebo vlastník. Loď nepřijede dvakrát a nevyskytuje se současně na mapě i v Evropě. | ? / B(Q-11); — |
+| UC-029 — Zadat a projet obchodní trasu<br>ROUTE-001, ROUTE-002, ROUTE-003 | Vytvořit pojmenovanou pozemní/námořní trasu, až čtyři zastávky a šest nakládaných i šest vykládaných druhů na každé. Přiřadit loď/vůz a první zastávku. | Nabídka cílů respektuje dosažitelnost a typ dopravy, povolená námořní trasa zahrne Evropu. Vyloží a pak naloží podle zásob/kapacity; evropská transakce účtuje peníze. Proběhnou dva okruhy s načtením uprostřed; pěší jednotku přiřadit nelze. | ? / B(Q-11); — |
+| UC-030 — Změnit a zrušit trasu<br>ROUTE-004, MOVE-008 | Za běhu upravit zastávky/náklad, zrušit rozkaz jednoho nosiče a smazat přiřazenou trasu. | Změny se promítnou v určeném okamžiku, ostatní nosiče nerozbije zrušení jednoho. Po smazání nezůstanou visící odkazy ani nekonečný tah; hráč dostane zpět řízení. Nedostupná/ztracená zastávka má rozhodnutou obsluhu. | ? / B(Q-11); — |
+
+## Kolonie, obyvatelé a výroba
+
+Zdroj: strany 33–58 / PDF 39–64, karty PDF 133–135;
+[kolonie](gap-analysis.md#colony-workforce-food-and-storage) a
+[produkce](gap-analysis.md#production-and-professions).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-031 — Založit a pojmenovat kolonii<br>COL-001, COL-011, COL-012, BUILD-016 | Založit kolonii běžným kolonistou na různých pozemních terénech; změnit navržené jméno. Zkusit hory, moře a domorodého konvertitu. | Platný zakladatel pracuje uvnitř své kolonie a otevře se její obrazovka. Automatické počáteční budovy odpovídají tučným řádkům karty PDF 134. Střed bez dalšího pracovníka vyrábí jídlo a druhou místní komoditu, respektuje zdroje kromě Prime Timber. Neplatné založení je odmítnuto; rozestupy rozhodnout v Q-10. | ? / B(Q-10); — |
+| UC-032 — Rozdělit pracovníky na pole a do dílen<br>COL-002, COL-003, COL-004 | Obsazovat osm okolních polí a dílnu, měnit komoditu a přesouvat lidi; přidat sousední kolonii se sdíleným polem. | Na jednom poli jeden člověk a jedna komodita, i mezi koloniemi. V běžné výrobní budově nejvýše tři lidé; čtvrtý odmítnut. Přesun nezdvojí pracovníka ani výnos. Samostatná školní omezení platí podle UC-050. | ? / N; — |
+| UC-033 — Vybrat práci podle výnosu<br>PROD-011 | Pro stejného pracovníka porovnat současné pole, dvě volná s rozdílným výnosem a ještě lepší obsazené/sdílené pole. Zvolit práci i z pracovníka uvnitř, projít nabídku venkovních i vnitřních zaměstnání. | Nabídka ukáže současný/nejlepší dostupný výnos; u pracovníka uvnitř nejlepší. Vlastní odbornost je označena. Volba venkovní práce u pracovníka uvnitř jej umístí na nejproduktivnější dostupné pole; pouhá změna plodiny již obhospodařovaného pole jej automaticky nestěhuje. Zohlední jeho schopnosti, nedovolí obsazené pole; zrušení ponechá práci. Shodu více nejlepších polí lze rozhodnout bez změny výnosu. | ? / N; — |
+| UC-034 — Nakrmit kolonii a rozšířit populaci<br>COL-005, COL-006, COL-009 | Produkovat jídlo s lidmi uvnitř a posádkou venku; po spotřebě připravit 199/200/201 jídla, zvlášť dovézt zásobu přes hranici. | Každý pracovník uvnitř spotřebuje 2 jídla za tah; vnější posádka se takto neúčtuje. Za 200 přebytku vznikne svobodný kolonista a 200 se odečte. Potraviny se nesmějí oříznout na 199 před vyhodnocením narození. Více porodů a okamžik po dovozu rozhodnout v Q-10. | ? / B(Q-10); — |
+| UC-035 — Přežít nedostatek jídla<br>COL-007 | Nedostatek výroby nejprve pokrýt skladem; pak vyvolat přesnou nulu a zápornou bilanci, opakovat do posledního obyvatele. | Pokrytý deficit ani nula nikoho nezabije. Při nepokrytém nedostatku zemře jeden kolonista za tah, přijde zpráva a zůstanou platná pracovní místa/vlastnictví. Výběr oběti, pořadí dějů a poslední obyvatel mají přijatý výklad Q-10. | ? / B(Q-10); — |
+| UC-036 — Uložit zásoby a řešit přetečení<br>COL-008, COL-010 | Pro každý nepotravinový druh ověřit kapacitu bez skladu, se skladem a rozšířením; do 99/100 zásob vyložit 100 kusů. | Kapacity jsou 100/200/300. Při nadměrném vyložení hráč rozhodne; zrušení zachová loď i sklad, potvrzení provede jen schválené množství. Oddělit přetečení výroby, transfer a zvláštní pravidlo jídla; ukázat příslušné zprávy. | ? / B(Q-10); — |
+| UC-037 — Vyrobit zboží ze surovin<br>PROD-001, PROD-002, PROD-003, PROD-006 | Provést všech sedm řetězců; s volným kolonistou dát dost materiálu, potom nedostatek. Zvlášť expert kovář s 3 novými a 3 skladovanými rudami. | Dřevo→kladiva, ruda→nástroje, tabák→doutníky, bavlna→látka, cukr→rum, kožešiny→kabáty, nástroje→muškety. Základní svobodný pracovník dává 3, expert z příkladu 6 nástrojů za 6 rud; s pouhými 3 rudami nejvýše 3. Nejprve se využije aktuální těžba, pak sklad, nic nevznikne bez vstupů. | ? / N; — |
+| UC-038 — Zaměstnat všechny druhy pracovníků<br>PROD-004, PROD-005 | Každou profesi z karty PDF 133 přidělit na specializovanou i jinou práci; porovnat zločince, sluhu a svobodného kolonistu. | Obyčejná dílna s dostatkem vstupů dává 1/2/3; venkovní práci nepenalizovat odvozením z této řady. Každý expert má svůj účinek, mimo odbornost pracuje jako svobodný. Profese i práce přežijí uložení; číselné bonusy, které manuál neuvádí, řeší Q-10. | ? / B(Q-10); — |
+| UC-039 — Zaměstnat domorodého konvertitu<br>PROD-007, NAT-021 | Nového konvertitu poslat na pole a do výroby; druhého nechat nezařazeného, dalšího zaměstnat před vypršením lhůty. | Na poli pracuje, výrobní práci odmítne; nezaměstnaný do osmi tahů odejde ke kmeni podle rozhodnutého okamžiku kontroly. Zaměstnání včas jej zachová. Načtení neresetuje věk konverze; kolonii založit nesmí. | ? / B(Q-09, Q-10); — |
+| UC-040 — Produkovat kříže<br>PROD-008, PROD-009 | Porovnat kolonii bez kazatele, po kostelu a katedrále, pak s běžným a odborným kazatelem. | Každá kolonie automaticky dává jeden kříž za tah. Budovy i kazatelé zvyšují výstup, efekt experta je rozlišený. Zobrazený výstup souhlasí s národním přírůstkem pro imigraci; nepřičítá se dvakrát. Přesné násobky Q-10. | ? / B(Q-10); — |
+| UC-041 — Chovat koně<br>PROD-010 | Nechat ve skladu počáteční koně a jídlo, sledovat několik tahů se stájí i bez ní, nulovou zásobu a plný sklad. | Koně se množí podle přijatého pravidla, stáj urychlí chov; respektují se zdroje a kapacita. Počet, prahy a spotřeba jídla musí být stanoveny v Q-10, nikoli převzaty z náhodného chování současného kódu. | ? / B(Q-10); — |
+
+## Stavba a účinky budov
+
+Zdroj: strany 48–58 / PDF 54–64 a úplná karta PDF 134;
+[budovy včetně číselné matice](gap-analysis.md#construction-upgrades-and-building-effects).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-042 — Zpřístupnit správný stavební projekt<br>BUILD-001, BUILD-016 | Pro každý řádek stavební karty připravit populaci těsně pod minimem a na minimu, s předchůdcem i bez něj; vybrat projekt také modelovým vstupem. | Správná cena kladiv/nástrojů, populace a předchůdce; počáteční budovy se neplatí znovu. Zvlášť kostel 52/0/3 a pevnost Fort 120/100/4. Nestačí jen správná konstanta: provedení musí podmínky vynutit. | ? / B(Q-10); — |
+| UC-043 — Dokončit projekt a změnit rozestavěný<br>BUILD-002, BUILD-003, BUILD-019 | Nasbírat kladiva, změnit projekt, dokončit kladiva s chybějícím posledním nástrojem, dovézt jej a ukončit tah. | Změna zachová dosavadní kladiva; bez nástrojů se nestaví a hráč dostane vysvětlení. Po dodání se jednou spotřebují zdroje a dokončí právě aktuální projekt. Načtení nerozmnoží budovu ani nevrátí zaplacené nástroje. | ? / N; — |
+| UC-044 — Zaplatit urychlenou stavbu<br>BUILD-004 | Otevřít nabídku dostavby rozpracovaného projektu; zrušit, přijmout s přesnou částkou, zkusit o jedno zlato méně. | Nabídka a skutečná cena souhlasí; pouze přijatá dostupná koupě dostaví aktuální projekt jednou. Změna projektu během nabídky nesmí koupit něco jiného. Cenový vzorec vyžaduje rozhodnutí Q-10. | ? / B(Q-10); — |
+| UC-045 — Vylepšit výrobní řetězec<br>BUILD-005, BUILD-006, BUILD-007, BUILD-008, BUILD-009, BUILD-017, BUILD-018 | Se stejnými pracovníky postupně postavit pilu, kovárnu/železárnu, všechny čtyři luxusní řetězce a zbrojní řetězec. Porovnat dostatek a nedostatek vstupů. | Pila zdvojnásobí kladiva i potřebu dřeva; kožešinový dům→stanice→továrna jde správným směrem. Magazine zdvojnásobí muškety, Arsenal spotřebuje poloviční nástroje na stejný výstup. Šest továren vyžaduje Smitha. Každý upgrade má skutečný účinek a neobejde suroviny. Neudané výkony Q-10. | ? / B(Q-10); — |
+| UC-046 — Lovit ryby, opravovat a stavět lodě/děla<br>BUILD-010, BUILD-011, BUILD-012 | Před/po doku přiřadit rybáře na moře i jezero; s drydock/shipyard opravovat a stavět lodě; se zbrojnicí stavět dělo. | Dok zpřístupní rybolov, drydock opravy, shipyard konstrukci oprávněných lodí v pobřežní kolonii. Dok ani drydock sám stavbu lodí neodemkne. Dělo vyžaduje armory nebo vyšší stupeň. Časy opravy viz Q-08. | ? / B(Q-08); — |
+| UC-047 — Posílit tisk a obranu kolonie<br>BUILD-013, BUILD-015 | Porovnat produkci zvonů po tiskárně/novinách; z kolonie s palisádou a třemi obyvateli odebrat pracovníka, potom jen přerozdělit práci. | Tiskárna násobí existující zvony o +50 %, noviny o +100 %, netvoří náhradního producenta. Obranná stavba nedovolí dobrovolně snížit populaci pod tři; přesun mezi pracemi ano. Zaokrouhlení a nucené ztráty obyvatel rozhodnout v Q-03/Q-10. | ? / B(Q-03, Q-10); — |
+| UC-048 — Automaticky vyvážet přes celnici<br>BUILD-014, TRADE-009 | Se Stuyvesantem postavit celnici, vybrat druhy exportu a dodat/vyrobit zboží; jeden druh ponechat. Opakovat po načtení i za revoluce. | Před otcem stavba není dostupná. Každý tah se prodají oprávněné vybrané zásoby za správný výnos, ostatní zůstanou; uloží se výběr. Běžný přístav při revoluci zůstává uzavřen; příjem za revoluce testuje UC-081. | ? / B(Q-10); — |
+| UC-049 — Ověřit celou číselnou konfiguraci budov<br>BUILD-016, BUILD-001 | Spustit nezávislou parametrizovanou kontrolu všech řádků karty PDF 134 a praktické hraniční stavby z UC-042. | Zahrnout i nulové náklady, populace, automatické budovy, oba sklady, stáje, školy, tisk, celnici a všechny předchůdce. Report jmenuje každý řádek; několik vybraných budov ani shoda dvou stejných konstant není úplná kontrola. | ? / B(Q-10); — |
+
+## Vzdělávání
+
+Zdroj: strany 33–34, 56 / PDF 39–40, 62 a karta PDF 133;
+[vzdělávání a matice profesí](gap-analysis.md#education-and-skill-acquisition).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-050 — Vyučovat odpovídající odbornost<br>EDU-001, EDU-002 | Do školy/koleje/univerzity dát způsobilé učitele a žáky; vyzkoušet každou profesi, přeplnění a příliš nízký stupeň školy. | Limity učitelů 1/2/3 a minimální stupeň podle každého řádku karty. Po přijaté délce získá žák odbornost bez spotřeby materiálu. Učitel nezmizí, pokrok se uloží, upgrade neztratí platné obsazení. | ? / B(Q-10); — |
+| UC-051 — Postoupit od zločince k odborníkovi<br>EDU-003 | Učit postupně zločince, sluhu a svobodného kolonistu, kontrolovat stav po každém dokončeném úseku. | Zločinec→sluha→svobodný→odborník, bez přeskočení stupně. Identita/vlastník přetrvají; nová produktivita a skórovací třída odpovídají novému stavu. | ? / B(Q-10); — |
+| UC-052 — Zrušit odbornost a naučit jinou<br>EDU-004, EDU-005 | Specialistovi zrušit odbornost, učit jinou; samostatný svobodný pracovník dlouhodobě vykonává stejnou práci. | Zrušení vytvoří svobodného kolonistu při zachování identity a platné práce. Nové učení funguje; zkušenost z práce se připisuje správné profesi. Délka/pravděpodobnost a změna zaměstnání mají výklad Q-10. | ? / B(Q-10); — |
+| UC-053 — Rozlišit evropské a domorodé dovednosti<br>EDU-006, NAT-015 | Sestavit všechny profese označené hvězdičkou na kartě a schválený seznam dovedností nedostupných v Evropě; zkusit oba způsoby získání. | Hvězdička znamená možnost domorodé výuky, sama neznamená zákaz evropské. Zločinec se u domorodců neučí, sluha/svobodný ano; již odborný návštěvník nepřepíše schopnost. Souhlas/odmítnutí viz UC-063. | ? / B(Q-09, Q-10); — |
+
+## Imigrace a evropský obchod
+
+Zdroj: strany 35–36, 59–66 / PDF 41–42, 65–72;
+[imigrace](gap-analysis.md#immigration-and-european-hiring) a
+[evropský trh](gap-analysis.md#trade-and-the-european-market).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-054 — Přilákat přistěhovalce kříži<br>IMM-001, IMM-002 | Ve dvou koloniích vyrábět kříže a dosáhnout imigračního prahu; sledovat tři kandidáty a náboženský přehled. | Přírůstky tvoří jeden národní součet, po prahu přijde kandidát na molo a jeho místo v nabídce se ihned doplní. Po načtení zůstane součet i nabídka, událost se neopakuje. Více křížů má odpovídající účinek; růst prahu Q-10. | ? / B(Q-01, Q-10); — |
+| UC-055 — Zaplatit nábor, výcvik a nákup jednotky<br>IMM-003, IMM-004, IMM-007 | Vybrat jednoho ze tří kandidátů, samostatně vyškolit odborníka a opakovaně koupit loď/dělo; zkusit nedostatek peněz a zrušení. | Nábor doplní pool, výcvik jej nevyčerpá; dorazí správný člověk/jednotka. Evropsky nedostupné profese nejsou v nabídce. Každá zaplacená transakce účtuje zobrazenou cenu jednou; poptávka zdražuje další loď/dělo a cena se uloží. | ? / B(Q-10); — |
+| UC-056 — Koupit a prodat přesné množství<br>TRADE-001, TRADE-002 | S odlišnou nákupní/prodejní cenou koupit/prodat 1, 37, 99 a 100 kusů; opakovat s částečně obsazeným prostorem. | Evropa má dost nabídky/poptávky, ale platí kapacita a rozpočet hráče. Nákup používá ask, prodej bid; množství, náklad a peníze přesně souhlasí. Zrušený dialog nemá transakci. | ? / N; — |
+| UC-057 — Vidět správnou cenu a daň<br>TRADE-003, TRADE-004, TRADE-005 | Prodat při nulové i nenulové dani včetně zlomkového výsledku; nakoupit s přesně zobrazeným dostupným zlatem. | Čistý výnos v nabídce = přírůstek pokladny; nákup odpovídá kotované ask ceně a přijatému výkladu zdanění nákupu. Jeden zaokrouhlovací postup pro UI/model; částka o jedno zlato nižší nákup odmítne bez změny. | ? / B(Q-10); — |
+| UC-058 — Pohnout cenami a zkontrolovat účetnictví<br>TRADE-006, TRADE-007, TRADE-008 | Prodávat stejnou komoditu opakovaně, potom neobchodovat; přidat prodej jiného národa. Otevřít ekonomický přehled. | Výprodej cenu snižuje, útlum ji může zvýšit podle přijatého modelu. Trhy jsou národní a ovlivňují se i cizím obchodem. Report pro druh/národ správně oddělí nakoupené/prodané množství a výdaje/příjmy; historie přežije načtení. | ? / B(Q-01, Q-10); — |
+| UC-059 — Přijmout daň nebo protestovat<br>GOV-001, GOV-002, GOV-003 | Od výchozí nulové daně vyvolat královské zvýšení; přijmout nebo odmítnout. Potom zkusit obchod bojkotovaným druhem a splatit dluh. | Přijetí uloží novou sazbu a použije ji v dalších obchodech bez protestních škod. Protest zničí vybrané zboží, zvýší odpor a zablokuje nákup i prodej daného druhu. Dostatečná platba obnoví právě jeho obchod, nedostatečná nic nezmění. Fugger ruší existující bojkoty podle UC-097; další protest může vytvořit nový. | ? / B(Q-03, Q-10); — |
+
+## Domorodé národy
+
+Zdroj: strany 19, 33–34, 67–77 / PDF 25, 39–40, 73–83;
+[domorodé národy a vztahy](gap-analysis.md#native-nations-settlements-and-relations).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-060 — Rozpoznat národ a získat půdu<br>NAT-001, NAT-002, NAT-003 | Navštívit všech osm národů, hlavní i obyčejné sídlo; založit/pracovat/upravovat pole na hranici domorodé půdy před a po odkoupení. | Arawakové/Cherokee/Irokézové mají vesnice, Tupi/Sioux/Apache tábory, Aztékové/Inkové města. Hlavní sídlo je rozlišeno, silnější a bohatší; bojovníci mají domov. Nárok sahá jedno pole kolem táborů/vesnic, dvě kolem měst. Neodkoupená půda je viditelná a její užívání zhoršuje vztahy; zakoupení se uloží. | ? / B(Q-09); — |
+| UC-061 — Vyvolat a uklidnit napětí<br>NAT-004, NAT-005, NAT-006, NAT-007, NAT-008 | Samostatně měnit populaci, zástavbu, blízkost, zbraně, vojáky a cizí mise; zaútočit/vymáhat tribut, potom obchodovat, darovat a nechat klidné tahy. | Lokální alarm a hněv celého kmene jsou odlišné a vedené vůči každému Evropanovi. Útok na hlavní sídlo a pohřebiště má odpovídající dopad; dar uklidňuje více než obchod, hlavní sídlo zesiluje účinek. Zobrazení odděluje náladu, rychlost změny a vliv jiného národa. Domorodá AI při nepřátelství útočí a při uklidnění reaguje. | ? / B(Q-07, Q-09); — |
+| UC-062 — Navštívit náčelníka<br>NAT-009, NAT-010 | Vstoupit průzkumníkem do přátelského a nepřátelského sídla; porovnat zkušeného a obyčejného, vyvolat řízené větve. | Dostupné akce odpovídají roli. Návštěva odhalí poptávané zboží a vyučovanou dovednost; podle výsledku informaci, dar nebo smrt. Nálada/odbornost ovlivní výsledek; zrušení návštěvy není útok ani obchod. | ? / B(Q-09); — |
+| UC-063 — Naučit se od domorodců<br>NAT-015, EDU-006 | Do přátelského sídla poslat svobodného, sluhu, zločince, vybaveného pionýra a již odborného kolonistu; nabízené učení přijmout i odmítnout. | Svobodný/sluha získá nabízenou dovednost za přijatých podmínek, zločinec není přijat a odborník nezíská další specializaci. Nabídka a výsledek souhlasí, odmítnutí nezmění schopnost. Uloží se případný průběh i výsledek. | ? / B(Q-09); — |
+| UC-064 — Obchodovat se sídlem<br>NAT-011, NAT-012, NAT-013, NAT-014 | Před/po pozemním kontaktu přivézt plný vůz i loď. Prodat, smlouvat, odmítnout nebo darovat; pak koupit jedno ze tří nabízených zboží. | Bez předchozího pozemního představení odmítnout první obchod lodí i vozem. Prázdný či nepoptávaný náklad nestačí; poptávka odpovídá místním zdrojům. Každá dohoda zachová zboží a zlato obou stran, kapacitu a rozpočet; dar nepřidá zlato. Nepřátelské sídlo odmítá, neklidné odmítá lodě; stejný druh po sobě nekupuje kromě mušket. Lodní obchod je méně výnosný než vozový. | ? / B(Q-09); — |
+| UC-065 — Vyžádat tribut a dobýt sídlo<br>NAT-016, NAT-007 | Vojákem, dragounem a průzkumníkem žádat zlato; těmito rolemi a dělem zaútočit. Zkusit nezpůsobilou roli a řízené výsledky. | Platí oprávnění, změna zlata a hněvu; útok spustí skutečný boj. Dobytí může dát poklad s transportem podle UC-024, s Cortesem platí UC-086. Poklad ani odstranění sídla se po načtení neopakuje. | ? / B(Q-08, Q-09); — |
+| UC-066 — Vyslat misionáře a založit misi<br>NAT-017, NAT-018, NAT-021 | Vysvětit kolonistu v Evropě a kolonii s/bez kostela, získat experta; založit misi a vyvolat konverzní událost. | Bez kostela/katedrály kolonie nevysvěcuje. Mise má vlastníka a odborný stav, snižuje místní alarm vůči sobě a může jej zvyšovat vůči rivalům. Expert je účinnější. Konverze dodržuje rozhodnutý spouštěč/pravděpodobnost, ne automaticky domyšlený každotáhový příchod. | ? / B(Q-09); — |
+| UC-067 — Vypudit cizí misi nebo podnítit válku<br>NAT-019, NAT-020 | Napadnout pověst cizí mise a vyvolat obě rozhodnutí domorodců; samostatně objednat útok na vybraného Evropana. | Při úspěšné denunciaci zemře cizí misionář a jeho mise zanikne; při neúspěchu zemře příchozí a cizí mise zůstane. Postoje ke stranám ovlivní šanci. Cena války reaguje na postoje a počet misí. Platba jen při dohodě, domorodá AI skutečně sleduje zvolený cíl; odmítnutí nic neodebere. | ? / B(Q-09); — |
+
+## Evropští soupeři a diplomacie
+
+Zdroj: strany 78–82 / PDF 84–88;
+[evropská diplomacie](gap-analysis.md#european-diplomacy-and-rivalry).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-068 — Hrát proti fungujícímu soupeři<br>DIP-001 | Ze startovní flotily nechat každého evropského soupeře rozvíjet partii s řízeným seedem; sledovat zásoby a právoplatnost akcí. | AI přistane, založí kolonii, uživí/vyrábí, přepravuje a reaguje na soupeře, dovede smysluplně bojovat. Nezískává nezdokumentované suroviny ani tahy. Před testem stanovit měřitelné cíle a limit tahů podle obtížnosti; nepožadovat shodné tahy s původní AI. | ? / B(Q-01); — |
+| UC-069 — Vyhlásit válku, vyjednat mír a alianci<br>DIP-002, DIP-003, DIP-004, DIP-008 | Z míru napadnout jednotku/kolonii/loď; zvlášť korzárem. Vyvolat sousedský kontakt a návštěvu starosty průzkumníkem; vyjednat tribut, mír a alianci. | Běžný útok mění bilaterální vztah na válku, korzár má zvláštní režim. Mír přeruší nepřátelství AI, porušení smlouvy je obnoví; aliance může cílit Evropana i domorodý národ. Vliv evropské královské války před/po Franklinovi má zaznamenaný výklad. | ? / B(Q-09); — |
+| UC-070 — Přijmout žoldnéře<br>DIP-005, GOV-018 | Vyvolat nabídku před revolucí i v ní; přijmout celý oddíl, odmítnout a zkusit nedostatek zlata. | Souhlas zaplatí celou nabídnutou skupinu veteránů a dodá ji jednou; odmítnutí nevylučuje budoucí nabídku. Manuál říká přibližně 5 000 zlata, nikoli přesný univerzální spouštěč. Prahy, ceny a pravděpodobnosti stanovit v Q-04. | ? / B(Q-04); — |
+| UC-071 — Obchodovat s rivaly a porovnat mocnosti<br>DIP-006, DIP-007, GOV-012 | Přivézt loď/vůz do cizí kolonie bez/s de Wittem a za míru/války; nabídnout vlastní náklad k výměně nebo prodeji rivalovi a otevřít poradce. | Obchod se zpřístupní pouze s otcem a mírem; dohoda změní obě zásoby/peníze bez dobytí. Přehledy respektují znalost světa; de Witt zpřístupní populaci, počet/průměrnou velikost kolonií, vojenskou/námořní/obchodní sílu. Ochotný intervenční spojenec nabízí výhodnější ceny a zboží podle rozhodnutých parametrů. | ? / B(Q-04, Q-09); — |
+
+## Boj a dobývání
+
+Zdroj: strany 30–32, 79–81, 87–89 / PDF 36–38, 85–87, 93–95,
+karty PDF 132 a 135;
+[boj a úplná matice sil](gap-analysis.md#land-combat-naval-combat-and-capture).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-072 — Zahájit povolený útok<br>COMBAT-001, COMBAT-002, COMBAT-003 | Vstoupit na sousední nepřátelské pole každou bojovou/nebojovou rolí; zkusit vzdálený nebo neplatný terén a po bitvě další akci. | Platný útok spustí boj; neozbrojený pěší, vůz, poklad a nákladní loď neútočí. Přeživší útočník vyčerpá pohyb. Manuál zakazuje další pohyb účastníka bitvy; přesný dopad na přeživšího obránce v pořadí tahů vyjasnit v Q-08. | ? / B(Q-08); — |
+| UC-073 — Spočítat skutečnou bojovou sílu<br>COMBAT-004, COMBAT-005, COMBAT-006, COMBAT-007, COMBAT-009, COMBAT-010 | Pro každou pozemní, domorodou a námořní roli z PDF 132 spočítat základ; postupně přidat terén, útok, opevnění, přepad a bombardování. | Základní útok má +50 %; opevnění +50 %, palisáda/fort/fortress +100/+150/+200 %. Platí celá terénní matice a výjimka proti domorodcům; jejich přepad a rebelský přepad proti královským mimo kolonii. Bombardování +50 % jen pro oprávněné jednotky/cíl. Síly veteránů 3 a 4,5 již obsahují +50 %, nesčítat podruhé. Výsledný výpočet používá i resolver, nejen dialog. | ? / B(Q-08); — |
+| UC-074 — Povýšit vojáka a poškodit dělo<br>COMBAT-008, COMBAT-011 | Vyhrát/prohrát běžným vojákem, získat veterána také výukou/nákupem; prohrát plným dělem a bránit proti domorodému nájezdu. | Řízená výhra může dát veteránství, síla a uložený stav souhlasí. Dělo 7/5 se po porážce změní na poškozené 5/3. Obrana opevněné kolonie proti nájezdu má +75 % pro dělo; otevřený terén má rozhodnutý postih. | ? / B(Q-08); — |
+| UC-075 — Dobýt celou kolonii<br>COMBAT-012, COMBAT-013 | Napadnout kolonii s armádou, pak jen s civilisty; obsadit i kolonii s osmi pracujícími poli a loděmi. | Vojenská obrana musí padnout, bez ní stále proběhne civilní obrana. Až úspěšný vstup změní kolonii i všechny obyvatele na vítěze, práce zůstanou platné. Žádný pracovník neustrne u starého vlastníka; porážka převzetí neprovede. Další tah a načtení zachovají konzistenci. | ? / B(Q-08); — |
+| UC-076 — Vybojovat námořní střet a blokádu<br>COMBAT-014, COMBAT-015 | Bojovat loděmi s nákladem, řízeně vyvolat potopení, poškození a ukořistění; proplouvat kolem hlídky a přístavní blokády. | Potopená loď a náklad mají přijatý osud, poškozená míří do nejbližší vhodné opravny včetně Evropy. Ukořistění respektuje kapacitu; oprava vede k návratu do služby. Hlídka může neodhalit, zpomalit či zastavit, nevytvoří trvalý neplatný stav. | ? / B(Q-08); — |
+| UC-077 — Bránit pobřeží pevností<br>COMBAT-016 | Proplout kolem palisády, fortu a fortress, s dělostřelectvem i bez, potom mimo sousedství. | Sousední moře ostřelují jen oprávněné pevnosti; vyšší stupeň a děla zvyšují sílu. Palisáda nebo nesousední pole nepřebírá tento účinek. Zohlední se vztahy, výsledek a pokračování plavby podle Q-08. | ? / B(Q-08); — |
+
+## Politika a válka za nezávislost
+
+Zdroj: strany 83–89 / PDF 89–95;
+[vláda a revoluce](gap-analysis.md#government-taxation-and-independence).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-078 — Zvýšit podporu a změnit produktivitu<br>GOV-004, GOV-005, GOV-006 | Vyrábět zvony, přidávat/přesouvat obyvatele; připravit 49/50/99/100 % místní podpory a Tory počty kolem prahu obtížnosti. | Místní a národní podpora se počítají správně a zobrazí se odděleně. Při 50 % produkce +1, při 100 % další +1. Tory postih −1 začne při dosažení 10 na Discoverer a 6 na Viceroy; mezilehlé úrovně, kombinace, zaokrouhlení a význam přesných 50 % ve zobrazení potřebují rozhodnutí. | ? / B(Q-01, Q-03, Q-07); — |
+| UC-079 — Získat otce zakladatele<br>GOV-007, SUPPORT-002 | Po první kolonii vyrábět zvony, projít postupem výběru/příchodu otců všech pěti kategorií a otevřít Kongres. | Členství, aktuální postup a účinky přetrvají. Jednorázová odměna se nevydá znovu po načtení; cizí národ ji nedostane. Přesný výběr kandidátů a prahy jsou Q-03; všech 25 účinků má samostatné UC-086–110. | ? / B(Q-03); — |
+| UC-080 — Vyhlásit nezávislost a mobilizovat<br>GOV-008, GOV-009 | S národní podporou 49/50 %, před rokem 1800, vyhlásit nezávislost; vyzkoušet i rok před 1700 a méně než tři kolonie. Připravit různé místní podpory. | Pod 50 % zamítnuto, od 50 % dovoleno; potvrzený čin je nevratný a neopakuje se. Veteráni se mobilizují podle místní podpory, pod 50 % žádní; přesné počty rozhodnout. Hranici roku 1800 svázat s ukončením partie, ne obejít jiným UI. | ? / B(Q-03); — |
+| UC-081 — Pokračovat v hospodářství bez domovského přístavu<br>GOV-011, GOV-012, TRADE-009 | Po vyhlášení zkusit Evropu, nábor, nákup i plavbu již rozjeté lodi; provozovat celnici a zahraniční obchod. | Domovský přístav a běžné evropské příkazy jsou uzavřené i v modelu. Celnice dál prodává za 50 % normálního příjmu, de Wittův obchod zůstává pod svými podmínkami. Stav lodi na Atlantiku, daňové pořadí a zaokrouhlení mají rozhodnutí; nelze obejít zákaz načtením. | ? / B(Q-05, Q-10, Q-11); — |
+| UC-082 — Čelit královské armádě<br>GOV-014, GOV-015, COMBAT-007, COMBAT-009, SUPPORT-002 | Před revolucí sledovat růst REF, po ní nechat přepravit pěchotu, jízdu, děla a válečné lodě a zaútočit na kolonii i v krajině. | Kongres ukazuje skutečné síly včetně rezerv. Král používá přijaté složení/růst a legální přepravu; bombardování +50 % v útoku na kolonii, v terénu možnost rebelského přepadu. Zničené síly se svévolně neobnoví po načtení. | ? / B(Q-04, Q-08); — |
+| UC-083 — Získat zahraniční intervenci<br>GOV-016, GOV-017 | Po deklaraci ukončit tah, zjistit cílové zvony, vyrobit těsně pod/na/nad cílem a přijmout spojeneckou flotilu. | Cíl je oznámen jednou následující tah. Dosažení přivede lodě man-o-war a vojsko pod hráčovu kontrolu do vlastního přístavu; bombardování +50 % proti Tory koloniím. Událost i stav se uloží, dodávka se neduplikuje; cíl/složení a případ bez přístavu rozhodnout. | ? / B(Q-04, Q-08); — |
+| UC-084 — Změnit politiku okupované kolonie<br>GOV-010, GOV-013 | Za revoluce bojovat o kolonii s 60% rebely, nechat ji obsadit králem, produkovat zvony a znovu dobýt. | Rebelské straně při útoku odpovídá +60 %, královské +40 %; nejde o trvalý bonus všude na mapě. Zvony pod korunou posilují Tory, po osvobození znovu správnou stranu. Stav populace a podpory se neztratí. | ? / B(Q-03, Q-08); — |
+| UC-085 — Vyhodnotit vítězství a všechny porážky revoluce<br>GOV-019, GOV-020, GOV-021, GOV-022 | Nezávisle připravit vlastnictví všech kolonií, posledního pobřežního města a 89/90/91 % obsazené populace; měnit zbytek REF v Evropě i Americe. | Výhra vyžaduje vlastní kontrolu všech kolonií a společný zbytek REF pod přijatou mezí „velmi málo“, ne nutně nulovou evropskou rezervu. Prohra nastane při všech králem držených koloniích, všech pobřežních nebo nejméně 90 % populace. Jmenovatel a souběh výsledků musí být rozhodnuté; konec nastane jednou. | ? / B(Q-04); — |
+
+## Všech 25 otců zakladatelů
+
+Zdroj: strany 90–94 / PDF 96–100;
+[účinky otců](gap-analysis.md#founding-father-effects).
+Pro **každý** řádek připravit stav bez otce, získat jej cestou UC-079,
+porovnat správného i cizího vlastníka, uložit/načíst a zkontrolovat další tah.
+Jednorázový účinek se nesmí opakovat. Trvalý účinek ověřit na existujících
+i později získaných příslušných jednotkách/koloniích, pokud pravidlo neříká jinak.
+
+| UC a pravidlo | Akce / změněná situace | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-086 — Hernan Cortes<br>FATHER-001 | Dobýt běžné i hlavní domorodé sídlo. | Poklad vznikne vždy a je větší než bez otce při jinak stejných podmínkách; přesné zvýšení Q-05. | ? / B(Q-05); — |
+| UC-087 — Francis Drake<br>FATHER-002 | Zaútočit a bránit se korzárem, kontrolně jinou lodí. | Korzáři mají +50 % bojové síly v obou rolích; jiná loď tento bonus nemá. | ? / B(Q-08); — |
+| UC-088 — John Paul Jones<br>FATHER-003 | Přijmout otce a opakovaně načíst. | Hráč získá právě jednu bezplatnou fregatu se správnými parametry; pokladna neklesne. | ? / N; — |
+| UC-089 — Paul Revere<br>FATHER-004 | Napadnout kolonii s/bez stálé obrany a s/bez dostatku mušket. | Nechráněná kolonie automaticky vyzbrojí pracovníka z vlastního skladu, pouze jsou-li zbraně. Spotřebuje správné vybavení; prohra stále umožní dobytí. | ? / B(Q-08); — |
+| UC-090 — George Washington<br>FATHER-005 | Vyhrát/prohrát neveteránským vojákem i dragounem ze zločince/sluhy/svobodného/odborníka, zvlášť veteránem. | Každý způsobilý vítěz postoupí ve statusu; konkrétní cílové stupně jsou Q-05. Prohra ani již veterán tímto účinkem další stupeň nezíská. | ? / B(Q-05); — |
+| UC-091 — Simon Bolivar<br>FATHER-006 | Porovnat všechny kolonie s nízkou/vysokou podporou a později založenou kolonii. | Uplatní se zvýšení o 20 podle rozhodnutí procenta/procentní body a rozsahu, nikdy nad maximum. Přesný výklad a nové kolonie Q-05. | ? / B(Q-05); — |
+| UC-092 — Benjamin Franklin<br>FATHER-007 | Vyvolat evropskou válku a jednat s každým rivalem. | Královská válka nevynutí koloniální vztah, vyjednávání je levnější a soupeři nabídnou mír za cenu; nejde o automatický bezplatný mír. | ? / B(Q-05, Q-09); — |
+| UC-093 — Thomas Jefferson<br>FATHER-008 | Zaměstnat obyčejného i odborného státníka s/bez tisku. | Státníci produkují o 50 % více zvonů; kombinace a zaokrouhlení odpovídají rozhodnutí. | ? / B(Q-05); — |
+| UC-094 — Thomas Paine<br>FATHER-009 | Po získání otce změnit daňovou sazbu. | Procentní bonus zvonů všech kolonií sleduje aktuální sazbu daně, ne sazbu při příchodu otce. | ? / B(Q-05); — |
+| UC-095 — Pocahontas<br>FATHER-010 | Získat při vysokém napětí a zopakovat stejnou provokaci. | Napětí se jednorázově uklidní na content; následný přírůstek místního alarmu je poloviční. Neodvozovat automaticky půlení každého přímého hněvu kmene. | ? / B(Q-05, Q-09); — |
+| UC-096 — Adam Smith<br>FATHER-011 | Vybrat každou ze šesti továren před/po příchodu. | Odemkne příslušné projekty, zachová předchůdce/populaci/zdroje a žádnou továrnu sám nepostaví. | ? / N; — |
+| UC-097 — Jakob Fugger<br>FATHER-012 | Získat při více bojkotovaných druzích a později znovu protestovat. | Existující bojkoty/dluhy zmizí bez platby; pozdější nový bojkot může vzniknout. | ? / N; — |
+| UC-098 — Peter Minuit<br>FATHER-013 | Založit/pracovat na dříve placené domorodé půdě. | Platba za půdu není nutná, peníze zůstanou. Neznamená to obecnou imunitu proti domorodému hněvu z jiných příčin. | ? / N; — |
+| UC-099 — Peter Stuyvesant<br>FATHER-014 | Vybrat stavbu celnice před/po příchodu. | Odemkne celnici, ostatní podmínky a zaplacení stavby trvají; export má vlastní kontrolu UC-048. | ? / N; — |
+| UC-100 — Jan de Witt<br>FATHER-015 | Otevřít zahraniční přehled a obchodovat s mírovou/válečnou kolonií. | Zpřístupní podrobnější srovnání i obchod jako dva samostatné účinky. Válečný stav obchod nadále zakazuje. | ? / B(Q-09); — |
+| UC-101 — Jean de Brebeuf<br>FATHER-016 | Použít starého i nového neodborného misionáře pro misi, denunciaci a podnícení války. | Všechny příslušné schopnosti mají odbornou účinnost; noví misionáři nezůstanou bez efektu. Parametry a kombinace Q-05/Q-09. | ? / B(Q-05, Q-09); — |
+| UC-102 — William Brewster<br>FATHER-017 | Dosáhnout náboženské imigrace a opakovaně doplňovat kandidáty. | Hráč zvolí ze tří; budoucí imigrace nepřivádí zločince ani sluhy. Dříve přistálí lidé se tím nemažou. | ? / B(Q-05); — |
+| UC-103 — Bartolome de Las Casas<br>FATHER-018 | Získat otce s existujícími konvertity a potom získat nového konvertitu. | Právě existující se jednorázově stanou svobodnými kolonisty. Pozdější konvertita se tímto minulým účinkem automaticky nepřemění. | ? / N; — |
+| UC-104 — William Penn<br>FATHER-019 | Vyrábět kříže v různě vybavených koloniích. | Celková produkce křížů vzroste o 50 % ve všech koloniích; vyřešit kombinace a zaokrouhlení. | ? / B(Q-05); — |
+| UC-105 — Juan de Sepulveda<br>FATHER-020 | Opakovat příslušnou konverzní událost s kontrolovanou náhodou. | Pravděpodobnost příchodu konvertity se zvýší právě u oprávněného spouštěče; konkrétní spouštěč a faktor nejprve rozhodnout. | ? / B(Q-05, Q-09); — |
+| UC-106 — Francisco de Coronado<br>FATHER-021 | Získat otce při skrytých existujících koloniích, potom založit další cizí kolonii. | Jednou odhalí tehdejší kolonie a jejich bezprostřední okolí; nezavede trvalé odhalování budoucích kolonií ani bez podkladu všech domorodých sídel. | ? / N; — |
+| UC-107 — Henry Hudson<br>FATHER-022 | Porovnat obyčejného/odborného lovce kožešin a výrobce kabátů. | Výnos lovců kožešin se zdvojnásobí; nejde o samostatné zdvojnásobení výroby kabátů. Kombinace ostatních bonusů Q-05. | ? / B(Q-05); — |
+| UC-108 — Sieur de La Salle<br>FATHER-023 | Založit kolonii a zvýšit populaci 2→3; prověřit starší kolonii a lepší opevnění. | Nová kolonie dostane při třech obyvatelích palisádu jednou; lepší obrana se nesníží. Rozsah pro kolonie existující před příchodem otce rozhodnout. | ? / B(Q-05); — |
+| UC-109 — Ferdinand Magellan<br>FATHER-024 | Pohybovat se každým typem lodi a plout do Evropy z obou okrajů mapy. | Všechny vlastní lodě získají +1 pohyb; západní cesta do Evropy je výrazně kratší podle přijatého výkladu. Dva různé účinky se ověří samostatně. | ? / B(Q-05, Q-11); — |
+| UC-110 — Hernando de Soto<br>FATHER-025 | Projít všemi typy jednotek střed a okraj mapy. | Dosah vidění je dvě pole; jednotka, která už viděla dvě, nedostane automaticky třetí. Odhalí se správná oblast bez překročení mapy. | ? / N; — |
+
+## Konec hry, uložení a informace
+
+Zdroj: strany 11–12, 16–22, 34–35, 41–42, 65, 68, 79–80, 85–89 /
+PDF 17–18, 22–28, 40–41, 47–48, 71, 74, 85–86, 91–95;
+[konec a skóre](gap-analysis.md#end-conditions-and-scoring),
+[persistence a informace](gap-analysis.md#supporting-persistence-and-information).
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-111 — Ukončit nebo opustit partii<br>END-001, END-002, END-003, END-004 | Vybrat Exit/Retire a obě volby jednou zrušit; překročit 1800 s/bez války, 1850 ve válce; ztratit poslední kolonii před/od 1600. | Exit nepočítá skóre, Retire ano, zrušení zachová partii. Bez revoluce rok 1800 uzavře skóre, další hraní jej nemění. Platí revoluční limit a ztráta poslední kolonie od 1600. Rozpor „1850 za všech okolností“ a pokračování po 1800 rozhodnout v Q-06. Konec ani zápis výsledku se neopakuje. | ? / B(Q-06); — |
+| UC-112 — Spočítat skóre a zapsat Hall of Fame<br>SCORE-001, SCORE-002, SCORE-003, SCORE-004, SCORE-005, SCORE-006, SCORE-007, SCORE-008, SCORE-009 | Ukončit známou pozici se všemi bodovanými složkami; nezávisle vyzkoušet pořadí nezávislosti, data kolem 1780 a obtížnosti. Odehrát více výsledků a restartovat aplikaci. | Populace: zločinec/sluha 1, svobodný 2, odborník 4; otec 5; každých celých 1 000 zlata 1; procento podpory 1; zničené sídlo −(obtížnost+1). Bonusy 100/50/25 %, zvon po intervenci 1, časný bonus a obtížnost podle Q-06. Konvertity/čtvrté místo/pořadí bonusů rozhodnout. Přehled ukáže rozpad, Hall of Fame se zobrazí i bez kvalifikace a uchová správné pořadí po restartu. | ? / B(Q-06); — |
+| UC-113 — Uložit a obnovit rozpracovanou partii<br>SUPPORT-001 | Ručně uložit, odejít a pokračovat; zapnout/vypnout autosave a překročit tah i desetiletí. Opakovat během cesty, práce, učení, náboru, trasy a revoluce. | Obnoví se svět, aktuální hráč/fáze, zásoby, vztahy, události, jednorázové efekty a průběžný pokrok. Automatická obnova nabízí poslední tah a desetiletí, nikoli jen dvě libovolné generace. Manuál prohazuje jejich pořadí v menu; rozvržení řeší Q-07. Chyba čtení/zápisu nesmí potichu přepsat platnou pozici. | ? / B(Q-07); — |
+| UC-114 — Zjistit stav a dostupné příkazy<br>SUPPORT-002, SUPPORT-003, SUPPORT-004 | Prohlédnout mapu, vybranou jednotku, kolonii, Evropu, poradce a nápovědu před/po změně stavu; přepnout informační možnosti. | Datum, zlato, pohyb, vlastník, příkaz, terén, zásoby a dostupné akce souhlasí s modelem. Průzkum/přiblížení/přesun pohledu nemění svět. Nápověda odpovídá pravidlům. Cizí viditelná loď ukáže obsazené prostory bez odhalení přesného skrytého nákladu. Poradci mají všechna pole níže a respektují znalost světa. Automatické otevření po příjezdu, hlášení, bojový rozbor a původní prezentace se rozhodnou v Q-07; důležité výsledky zůstanou dostupné. | ? / B(Q-07); — |
+
+## Souvislé průchody běžnou hrou
+
+Tyto UC prověřují propojení systémů a jsou součástí přejímky. Neopisují nová
+pravidla: odkazují na již uvedená UC a relevantní průřezová pravidla.
+Pro celý průchod určit výchozí seed, data mezikontrol a očekávané výsledky
+před spuštěním. U dlouhé partie lze kombinovat uložené kontrolní body s jedním
+nepřerušeným průchodem; pouhé přepnutí závěrečného příznaku není dohrání.
+
+| UC a pravidla | Příprava a kroky | Očekávání a povinné varianty | Evidence I / V; TC |
+| --- | --- | --- | --- |
+| UC-115 — Expedice se uživí a začne obchodovat<br>SETUP-001, TURN-002, SUPPORT-001 | Nový profil → nastavení → průzkum → vylodění → kolonie → práce/jídlo → výrobek → přeprava → prodej → nábor → návrat. | Kroky UC-001–058 jsou propojené v běžné hře bez kampaně a ručního doplňování surovin. Kontrolovat bilance, vlastnictví, čas a zprávy v mezikrocích, uložit a pokračovat. Minimálně jedna úplná cesta pro každý národ a všechny starty 4 × 5 z UC-002. | ? / B(Q-01, Q-02, Q-10, Q-11); — |
+| UC-116 — Dvě kolonie vytvoří výrobní síť<br>ROUTE-003, PROD-002, BUILD-002, EDU-001, SUPPORT-001 | Z prvního města zásobovat druhé vozem/lodí, vzdělat pracovníka, vylepšit výrobu a automatizovat obchod. Vyvolat nedostatek a obnovit dodávku. | UC-029–055 fungují společně: zdroje nevznikají zdarma, sklad/práce/budovy/škola se neobejdou; nedostatek pozdrží závislý děj a další dodávka jej obnoví. Dva okruhy před/po načtení dají dohledatelnou bilanci. | ? / B(Q-10, Q-11); — |
+| UC-117 — Diplomacie má důsledky v ekonomice a válce<br>NAT-008, DIP-003, DIP-006, COMBAT-013, SUPPORT-001 | Navázat kontakt, koupit půdu, učit se a obchodovat; vyvolat konflikt, dobýt kolonii, vyjednat mír a obnovit povolený obchod. | UC-060–077 propojují vztahy s AI, zásobami a vlastnictvím. Ztracená kolonie nezůstane v původní trase/výběru jako vlastní; mír skutečně ovlivní chování. Načtení nezruší smlouvu ani nepřepíše vlastníky. | ? / B(Q-08, Q-09, Q-11); — |
+| UC-118 — Získat nezávislost a konečné skóre<br>GOV-008, GOV-019, SCORE-009, SUPPORT-001 | Běžnou partií dosáhnout podpory, vyhlásit nezávislost, přijmout intervenci, porazit REF a otevřít výsledky; pokračovat z uloženého mezibodu. | UC-078–114 tvoří dosažitelný řetězec bez úprav modelu testem za běhu. Evropa se uzavře, náhradní obchod funguje, intervence i vítězství nastanou jednou, konečný výsledek odpovídá odehrané historii. Krátké řízené scénáře zvlášť pokryjí všechny prohry a časové konce. | ? / B(Q-03, Q-04, Q-06, Q-08); — |
+| UC-119 — Zachovat pravidla při změně vzhledu<br>TURN-002, SUPPORT-001 | Po každé změně ovládání/grafiky provést stejné dotčené TC na stejných fixtures; při sdíleném ovládání celou funkční sadu. Zahrnout změny jazyka/nastavení během správy. | Stejné kroky mají stejné herní výsledky, zásoby a tahy. Bez zvuku jsou výsledky srozumitelné. Změna nastavení neporuší běžící hru ani načtení; selektory se opravují v page objects, aserce se neoslabují. Výtvarnou kvalitu hodnotit samostatně. | ? / F; TC08/TC09 na fb3a9734, částečný běh popsaný níže |
+
+## Povinné matice a obsah přehledů
+
+Jedno zaškrtnuté UC se vztahuje na všechny jeho varianty. Následující přehled
+brání tomu, aby například jedna otestovaná loď zastoupila celý vozový park.
+Číselná očekávání čerpat z uvedených referenčních matic a zaznamenaných
+rozhodnutí, nikoli z hodnot načtených z testované aplikace.
+
+| Matice | Požadovaný rozsah / vazba |
+| --- | --- |
+| Nastavení | 4 národy × 5 obtížností; náhodná, americká a upravená mapa, UC-001–004. Efekty obtížnosti navíc u souvisejících pravidel. |
+| Terén | Každý řádek a lesní/holá varianta, všechny produkční buňky, pohyb i obrana karty PDF 135; zvlášť řeky, zdroje a úpravy, UC-007–009/012/021/073. |
+| Jednotky | Všechny bojové role, šest lodí, příslušné pohyby/prostory/síly/oprávnění z PDF 132; poškozené dělo a role během revoluce, UC-022/024/072–077/082–083. |
+| Profese | Všech 22 dovedností z PDF 133: účinek, práce mimo specializaci, stupeň školy, domorodá výuka, dostupnost v Evropě; UC-038/050–055 a role průzkumníka/pionýra/misionáře/vojáka v jejich UC. |
+| Budovy | Každý řádek PDF 134: kladiva, nástroje, populace, předchůdce, zakladatel, skutečný účinek; UC-031/042–050. Rozpor populace novin mezi prózou a kartou ponechat v Q-10. |
+| Zakladatelé | Všech 25 účinků UC-086–110; před/po získání, vlastní/cizí hráč, uložení, jednorázovost a kombinace. |
+| Výroba a obchod | Sedm řetězců, 0–3 výrobní pracovníci, nedostatek/přesná zásoba/přebytek; porod 199/200/201, hlad kolem nuly, kapacity 100/200/300; bid/ask, daň, částečné množství a zrušení. |
+| Ukončení | Každá samostatná výhra/prohra, 1600/1780/1800/1850 a obě strany hranic; všechny složky skóre, pořadí a obtížnost podle rozhodnutí; UC-085/111–112. |
+
+UC-114 navíc kontroluje tyto údaje, jejich soulad s modelem a oprávnění k zobrazení:
+
+| Přehled | Povinné informace |
+| --- | --- |
+| Práce | Počty všech typů kolonistů a po výběru jejich umístění. |
+| Náboženství | Produkce a nasbírané kříže, postup k dalšímu přistěhovalci. |
+| Kolonie | Populace, produkce/spotřeba a zásoby, rozpracovaná stavba, očekávaný přírůstek či nedostatek. |
+| Ekonomika | Nakoupená/prodaná množství a výdaje/příjmy podle komodity a národa; neslévat nákup s prodejem. |
+| Domorodci | Známé národy, jejich vztahy a dostupné informace o osadách; neodhalovat neobjevené údaje. |
+| Zahraniční vztahy | Válka/mír a příslušné vztahy; s de Wittem navíc srovnání populace, kolonií a vojenské, námořní a obchodní síly. |
+| Námořnictvo | Vlastní lodě, náklad, poloha a cíl cesty; u cizí lodě pouze dovolená informace o obsazenosti. |
+| Kongres | Národní podpora, přítomní otcové, postup dalšího získání a skutečná REF včetně rezerv. |
+| Zprávy a konec | Hlad/narození, chybějící vstupy a nástroje, dokončení projektu, připlutí, diplomacie a revoluční události; konečný výsledek a skóre. Přesné přepínače automatických oken řeší Q-07. |
+
+## Vazba na současné testy
+
+Při založení katalogu nebyly přepsány ani přečíslovány testy. Existující
+[TC18](../microcol-test/src/test/java/org/microcol/test/TC_18_F01_plow_field_test.java)
+a [TC15](../microcol-test/src/test/java/org/microcol/test/TC_15_F05_plow_field_test.java)
+jsou **část UC-019**: ověřují zahájení orby a pohyb/zobrazení, nikoli spotřebu
+nástrojů, konec práce a všechny zákazy. Při implementaci manuálu je nutné
+upravit i fixture a doplnit očekávání; ponechaný zelený test se starým pravidlem
+nemůže potvrdit nové UC.
+
+Podobně [CargoSlotTest](../microcol-game/src/test/java/org/microcol/model/CargoSlotTest.java)
+pomáhá UC-023/024, ale sám neprovede přepravu přes obrazovky celé hry.
+U ostatních UC se konkrétní TC doplní po přečtení jejich skutečných asercí.
+Prázdná vazba není důkaz neexistence implementace, nýbrž dosud nepřiřazeného
+úplného přejímacího důkazu.
+
+Historický běh na revizi
+[fb3a9734](https://github.com/jajir/microcol/commit/fb3a9734149a8e95c8b940cfd6a479e2c04a2fe7)
+z 11. října měl 603 úspěšných herních testů a ve funkční sadě 27 vybraných,
+25 úspěšných, 2 chyby, 0 přeskočených. TC08 a TC09 skončily chybou načtení
+nastavení; [běh CI](https://github.com/jajir/microcol/actions/runs/38164271083)
+nepublikoval novou distribuci. Je to otevřená regrese související s UC-119,
+nikoli důkaz neimplementovaných pravidel těchto scénářů. Pozdější úspěšný běh
+sám bez reprodukce a opravy nevysvětluje příčinu této chyby.
+
+### Kontrola samotného katalogu — 11. října 2026
+
+Lokálně prošlo všech 8 dokumentačních kontrol a přísné sestavení MkDocs.
+Kontrola vazeb našla 119 jedinečných UC a pokrytí všech 230 katalogových
+pravidel; tabulky byly zkontrolovány ve webovém náhledu. Jde o ověření
+dokumentace. Herní scénáře popsané touto stránkou tím nebyly provedeny.
+Výklad manuálu a akceptační kritéria připravil hlavní agent s nezávislou
+kontrolou ekonomických a bojových/politických částí; krátká kontrola vazeb
+využívá stávající dokumentační unittest běh.
+
+## Kdy můžeme pravidla považovat za dokončená
+
+Přejímka vyžaduje současně následující podmínky:
+
+1. **Všech 119 UC má I=H a V=P** včetně všech vyjmenovaných variant a matic,
+   s dohledatelnými testy a aktuálními výsledky. Nově nalezené pravidlo přidá
+   UC nebo variantu; stabilní ID zůstávají a počet není neměnným cílem.
+2. Každé pravidlo katalogu je pokryto; žádná otevřená Q nebrání posouzení
+   výsledku. Všechny schválené interpretace/odchylky jsou výslovně zaznamenané.
+   Přesná shoda s nedokumentovanou vnitřní implementací původní hry se netvrdí.
+3. Modelové kontroly ověří výpočty a meze, TC skutečné hráčské akce. Souvislé
+   průchody UC-115–118 proběhnou v běžné nové hře, včetně uložení a obnovení.
+4. Celá povinná funkční sada i relevantní modelové testy projdou bez skipů
+   a bez známé otevřené regrese. Přehled evidence uvádí datum, commit, počty
+   a odkazy; historický zelený report nenahrazuje kontrolu změněného chování.
+5. Ověřená distribuce je skutečně publikovaná a lze na ní zopakovat přijaté
+   hráčské cesty. Zelené sestavení dokumentace samo nestačí.
+
+Potom můžeme označit **pravidla podle manuálu a přijatých rozhodnutí za
+funkčně přijatá** a věnovat hlavní práci grafice a UX. To není záruka absence
+všech budoucích chyb. Stejné scénáře zůstanou regresní ochranou při výměně
+obrázků, rozmístění či ovládání.
+
+Mimo tuto přejímku jsou původní DOS instalace/hardware, shoda jednotlivých
+kláves, ilustrací, rozložení oken a textu epitafu, historická příloha
+PDF 101–131 a dokončení volitelné kampaně. Dostupnost herních informací,
+příkazů a srozumitelného výsledku do přejímky naopak patří.

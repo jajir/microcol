@@ -16,6 +16,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Functional tests](functional-tests.md) | Stable, readable scenarios and regression checks for gameplay and visual changes. |
 | [Java code formatting](code-formatting.md) | Shared HestiaStore formatter profile and Java format-on-save settings for VS Code. |
 | [Rules gap analysis](gap-analysis.md) | Comparison with the reference game's rules, implementation evidence, and outstanding work. |
+| [Gameplay use cases and acceptance](use-cases.md) | Testable player journeys from the manual, implementation/verification tracking, and the gate before focusing on graphics and UX polish. |
 | [Implementation plan](implementation-plan.md) | Deliverable work packages, playable stages, UX/art dependencies, and concrete task briefs based on the manual. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |
 | [Local Qwen worker](ai/local-qwen.md) | The configured local worker, delegation workflow, and verification evidence. |

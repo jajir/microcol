@@ -58,7 +58,8 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 
 | Podklad | K čemu slouží |
 | --- | --- |
-| [Rozbor pravidel](gap-analysis.md) | Autoritativní katalog 228 pravidel, jejich ID, stránky manuálu, současný stav, referenční tabulky a navržené kontroly. |
+| [Rozbor pravidel](gap-analysis.md) | Autoritativní katalog pravidel (228 původních a 2 doplněná 11. října), jejich ID, stránky manuálu, stav, referenční tabulky a navržené kontroly. |
+| [Use cases a přejímka](use-cases.md) | Konkrétní hráčské kroky a výsledky, povinné varianty, oddělený stav implementace a testů a podmínky přijetí pravidel. Do zadání vybírat konkrétní UC. |
 | Tento plán | Balíky, závislosti, průběžné výsledky a šablona zadání. Detailní pravidla se sem nekopírují. |
 | [Odpovědnosti Java balíčků](architecture.md) | Vlastník pravidel, stav hráče, AI, UI a persistence; hranice a současné přesahy pro přípravu každého zadání. |
 | [Odhad práce](implementation-estimate.md) | Historický rozpočtový rámec, předpoklady a samostatné náklady na UX, obsah a vydání. |
@@ -142,7 +143,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
 | **P10 Kolonie a zásoby**; COL-001–012 | Založení na platném místě, editovatelné jméno a otevření kolonie; společná pole sousedních kolonií, automatická produkce středu, jídlo, růst, hlad a kapacita skladu. Bezpečné rozhodnutí při přeplnění. | P03–P06/P08/P11. Ověřit hranice potravy a skladu, posledního pracovníka a zrušené založení/přesun; zachovat již správně implementované chování. |
-| **P11 Výroba a profese**; PROD-001–010 | Sedm výrobních řetězců, pořadí vstupů, skutečná spotřeba specialistů, venkovní výnosy, sluhové/trestanci, konvertité, kříže a chov koní. | P01/P03–P05/P10; konvertité také P19, politické bonusy P22/P23. Model, náhled produkce a výsledné zásoby se shodují včetně nedostatku surovin. |
+| **P11 Výroba a profese**; PROD-001–011 | Sedm výrobních řetězců, pořadí vstupů, skutečná spotřeba specialistů, venkovní výnosy, sluhové/trestanci, konvertité, kříže a chov koní; nabídka práce se současným/nejlepším výnosem a odpovídajícím přiřazením. | P01/P03–P05/P10; konvertité také P19, politické bonusy P22/P23. Model, náhled produkce a výsledné zásoby se shodují včetně nedostatku surovin. |
 | **P12 Stavby**; BUILD-001–019, tabulka budov | Populace, předchozí stavba, kladiva a nástroje; správné ceny, upgrady a účinky, změna projektu, dostavění za peníze, lodě/děla, rybolov, celnice a opevnění. | P05/P10/P11, odemykání zakladateli P23. Stavba nic nespotřebuje při zrušení, neobejde podmínky a oznámí chybějící nástroje; každý podporovaný typ má zobrazení. |
 | **P13 Vzdělávání**; EDU-001–006 | Učitelé, žáci, trvání a stupně škol; povyšování, zrušení odbornosti, zkušenost prací a domorodá výuka. | P03/P05/P10–P12/P19; parametry P01. Výuka přežije uložení, změnu práce a odchod učitele podle zvolených pravidel; UI ukazuje způsobilost a průběh. |
 | **P14 Imigrace a nákupy jednotek**; IMM-001–004, IMM-007 | Kříže místo pevného turnusu, tři obnovovaní kandidáti, zaplacení cesty, evropská univerzita a rostoucí cena lodí/děl. | P03/P05/P08/P11, národní/zakladatelské efekty P02/P23. Kandidát se odstraní a nahradí právě jednou; neúspěšný nákup nemění peníze ani přístav. ID IMM-005/006 v katalogu nejsou. |
@@ -172,14 +173,14 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | Balík a pravidla | Co doplnit nebo opravit | Důkaz dokončení |
 | --- | --- | --- |
 | **P26 Ukládání a obnova**; SUPPORT-001 | Ukládat nové stavy už v příslušné funkci: fáze, rozkazy, výuka, trasy, vztahy, trh, nábor, politika, náhoda a konec hry. Stanovit zacházení se staršími uloženými hrami a autosave. | Načtení nezmění výsledek ani nespustí událost znovu; poškozená/nepodporovaná hra má srozumitelnou chybu a nepoškodí jiný save. Přesný počet slotů řeší Q-07. |
-| **P27 Informace a nápověda**; SUPPORT-002–003, DIP-007 | Přehled tahu s přechodem na problém, poradci, ekonomika, práce, flotila, vztahy, Kongres a REF; doplnit encyklopedii a aktualizovat existující výuku. | Údaje odpovídají modelu a oprávněné znalosti hráče. Hlad, chybějící vstup nebo dokončení vedou ke konkrétnímu objektu a možné nápravě. |
+| **P27 Informace a nápověda**; SUPPORT-002–004, DIP-007 | Přehled tahu s přechodem na problém, poradci, ekonomika, práce, flotila, vztahy, Kongres a REF; doplnit encyklopedii a aktualizovat existující výuku. | Údaje odpovídají modelu a oprávněné znalosti hráče. Hlad, chybějící vstup nebo dokončení vedou ke konkrétnímu objektu a možné nápravě. |
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Zachovat [současný vzhled](graphics.md#soucasne-zadani-vzhledu). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
 | **P30 Zvuková odezva** | Podle [zvukových pravidel](audio.md) připravit krátké efekty, souběh s hudbou, nastavení a vybrané herní události. Rozsah další hudby určit samostatně. | Katalog určí událost, výsledek, příjemce a okamžik; zvuk se nespustí při pouhém náhledu nebo načtení reportu. Vše podstatné zůstane pochopitelné při ztlumení. |
 | **P31 Celková kvalita a vyvážení** | Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
 | **P32 Předání a vydání** | Používat existující CI, launcher a Mac/Linux balíčky; průběžně ověřovat aktualizaci a dokumentaci. Zbývající první vydání a Steam vést podle samostatného odhadu. | Úspěšné kontroly i publikace stejného commitu, odkaz na stažení a postup ověření; připravený plán zacházení s uloženými hrami. Nevytvářet již hotový distribuční systém znovu. |
 
-Přiřazení pokrývá všech 228 katalogových ID. Celé rodiny pravidel zůstávají
+Přiřazení pokrývá všech 230 katalogových ID včetně doplnění z 11. října. Celé rodiny pravidel zůstávají
 v rozsahu, včetně všech 25 zakladatelů a referenčních tabulek; priorita nezařazuje
 jejich zbývající části automaticky „mimo první vydání“.
 
@@ -366,6 +367,7 @@ Pravidla a zdroj: [ID z gap-analysis.md + stránky manuálu]
 Přijatá rozhodnutí: [hodnoty, vzorce, příklad; odkazy na uzavřené Q]
 Současný stav: [co už funguje, kde je chyba nebo mezera]
 Rozsah změny: [model, UI, data, save/load, dotčené soubory]
+Use cases: [konkrétní UC z use-cases.md, všechny jeho varianty a případné blokující Q]
 Vlastník a hranice: [balíček podle architecture.md, sdílená operace člověka/AI, relevantní současný přesah]
 Mimo rozsah: [co se v tomto řezu nedělá]
 Závislosti: [konkrétní hotové předpoklady]
