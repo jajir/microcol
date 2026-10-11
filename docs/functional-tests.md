@@ -312,6 +312,20 @@ na ovladači; šipky pak ovládaly tlačítka. Pomocník nyní kliká na skuteč
 Cílené opakování TC19/TC_06 a TC_07 pak prošlo 2/2, bez selhání, chyb a
 vynechání. Úplná přejímka všech scénářů stále vyžaduje nový CI běh.
 
+Třetí [CI běh](https://github.com/jajir/microcol/actions/runs/38176111274)
+na `9fdb0813` ověřil **663 herních testů** a všechny tři nativní balíčky.
+Z **44 UI scénářů prošlo 43**, jeden selhal, žádný neměl chybu ani nebyl vynechán.
+TC19/TC_17 kontroloval následující přesun bez potvrzeného dokončení nativních
+gest. Page object nyní u zrušeného i platného přetažení čeká na skutečnou
+událost `DRAG_DONE` původního zdroje a následnou FX frontu. Samotné puštění
+tlačítka a čekání na FX frontu tuto nativní fázi nemusí ukončit. Report sám
+nerozlišuje, které z obou gest ještě probíhalo.
+Očekávání zásob 50/20 po zrušení a 70/0 po platném přesunu zůstává zachováno.
+Po čekání na zrušené gesto prošla místně celá TC19: 17/17. Po doplnění
+stejné kontroly platného přetažení prošlo šest cílených scénářů (TC19/TC_01,
+TC_13, TC_17 a všechny tři TC05), bez selhání, chyb a vynechání.
+Úplné CI ověření této poslední úpravy je zatím otevřené.
+
 Nezávislá kontrola doplnila existenci kolonie a lodi v živém modelu.
 Oba reprodukční modelové testy před opravou selhaly (chybějící výjimka),
 po opravě prošly a UI scénáře TC_14/TC_15 ověřily odmítnutí přes skutečný dialog.
@@ -321,5 +335,6 @@ omezeného množství, plného skladu a změny stavu: text i tlačítka jsou vid
 Screenshoty dialogů se ukládají do ignorovaného
 `microcol-test/target/warehouse-qa/` a CI je přiloží k `tests-functional`.
 Slouží k vizuální kontrole textu a ovládání, nenahrazují herní aserce.
-Samostatný PR míří do `main`; do sloučení nepublikuje nový vývojový release
+Samostatný [PR #44](https://github.com/jajir/microcol/pull/44) míří do `main`;
+do sloučení nepublikuje nový vývojový release
 ani web. Potraviny, produkční zahazování a kolonijní UI vozů zůstávají mimo Z01.

@@ -8,6 +8,8 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
@@ -24,10 +26,12 @@ import org.slf4j.LoggerFactory;
 import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -124,34 +128,57 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public DialogChooseGoodsAmount dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(
-            final int cargoSlotIndex, final int goodsIndexInWarehouse) {
+            final int cargoSlotIndex, final int goodsIndexInWarehouse)
+            throws InterruptedException {
         getRobot().press(getGoodsAmountModifiers());
-        dragGoodsFromShipCargoSlotToWarehouse(cargoSlotIndex,
-                goodsIndexInWarehouse);
-        getRobot().release(getGoodsAmountModifiers());
+        try {
+            dragGoodsFromShipCargoSlotToWarehouse(cargoSlotIndex,
+                    goodsIndexInWarehouse);
+        } finally {
+            getRobot().release(getGoodsAmountModifiers());
+        }
         return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex,
-            final int goodsIndexInWarehouse) {
-        getRobot()
-                .drag(getListOfCrates().get(cargoSlotIndex),
-                        MouseButton.PRIMARY)
-                .dropTo(getListOfGoodsImagesInWarehouse()
-                        .get(goodsIndexInWarehouse))
-                .release(MouseButton.PRIMARY);
+            final int goodsIndexInWarehouse) throws InterruptedException {
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        completeCargoDrag(crate,
+                () -> getRobot().drag(crate, MouseButton.PRIMARY)
+                        .dropTo(getListOfGoodsImagesInWarehouse()
+                                .get(goodsIndexInWarehouse))
+                        .release(MouseButton.PRIMARY));
     }
 
-    public void dragGoodsOutsideWindow(final int cargoSlotIndex) {
-        getRobot()
-                .drag(getListOfCrates().get(cargoSlotIndex),
-                        MouseButton.PRIMARY)
-                .dropTo(getPrimaryStage().getX() + getPrimaryStage().getWidth()
-                        + 50,
-                        getPrimaryStage().getY()
-                                + getPrimaryStage().getHeight() / 2)
-                .release(MouseButton.PRIMARY);
-        WaitForAsyncUtils.waitForFxEvents();
+    public void dragGoodsOutsideWindow(final int cargoSlotIndex)
+            throws InterruptedException {
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        completeCargoDrag(crate,
+                () -> getRobot().drag(crate, MouseButton.PRIMARY)
+                        .dropTo(getPrimaryStage().getX()
+                                + getPrimaryStage().getWidth() + 50,
+                                getPrimaryStage().getY()
+                                        + getPrimaryStage().getHeight() / 2)
+                        .release(MouseButton.PRIMARY));
+    }
+
+    private void completeCargoDrag(final StackPane crate, final Runnable drag)
+            throws InterruptedException {
+        final CountDownLatch finished = new CountDownLatch(1);
+        final EventHandler<DragEvent> done = event -> finished.countDown();
+        getRobot().interact(
+                () -> crate.addEventHandler(DragEvent.DRAG_DONE, done));
+        try {
+            drag.run();
+            // Native drag/drop can outlive the robot's release and FX event
+            // queue.
+            assertTrue(finished.await(5, TimeUnit.SECONDS),
+                    "The native cargo drag must finish");
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            getRobot().interact(
+                    () -> crate.removeEventHandler(DragEvent.DRAG_DONE, done));
+        }
     }
 
     public ColonyScreen verifyNumberOfUnitsOnFields(
