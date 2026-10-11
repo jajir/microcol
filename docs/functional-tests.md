@@ -17,6 +17,12 @@ TC/metody a po ověření aktualizovat jejich evidenci. UC nenahrazuje ID TC
 ani zde předepsanou strukturu testů; jediný dílčí scénář neuzavírá všechny
 varianty celého UC.
 
+V zadání rozlišovat [Hru, Nastavení a Regresi](use-cases.md#zavazna-hra-a-samostatne-nastaveni).
+Herní výsledky mají závazné očekávání z manuálu a přijatých rozhodnutí.
+Změna průvodce nastavením nebo vzhledu mění kroky či page objects, nikoli
+očekávané účinky pravidel. Národ, obtížnost a jejich uložené parametry ověřovat
+i tehdy, když jejich výběrové UI ještě není hotové.
+
 ## Co vyžaduje každá změna
 
 | Druh změny | Povinné pokrytí |

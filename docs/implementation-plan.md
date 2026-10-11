@@ -11,6 +11,14 @@ tahů, ekonomiky, soupeřů a války za nezávislost. První hratelné etapy jso
 průběžné výsledky; neznamenají omezení konečného rozsahu. Pořadí níže je návrh
 pro další práci, nikoli závazný termín nebo spuštěné implementační úkoly.
 
+Závaznost určuje [rozdělení use cases](use-cases.md#zavazna-hra-a-samostatne-nastaveni):
+**Hra** je pravidlový základ podle manuálu, **Nastavení** jsou samostatně
+přejímané volby nové partie a **Regrese** chrání každou další změnu. Otevření
+kolonie, detaily budov a správné herní informace patří do Hry. Podobu
+výběrových obrazovek, rozmístění a vzhled lze měnit; účinky národů a obtížnosti
+zůstávají součástí závazných pravidel. Balíky mohou obsahovat více kategorií,
+proto do dílčího zadání vždy patří konkrétní UC a jeho kategorie.
+
 ## Cíl běžné nové hry
 
 **Návrh formulace z 11. října 2026:** Hráč zvolí **Nová hra** a po případném
@@ -101,11 +109,12 @@ dokončení všech svých pravidel.
 | E4 Živý svět a konflikty | Existují ostatní evropské a domorodé národy; lze obchodovat, vyjednávat a bojovat. | P02/P04/P17–P21. Soupeři hospodaří, vztahy mění povolené akce a boj vysvětlitelně používá síly a následky. Teprve nyní lze plně ověřit pořadí všech národních tahů. |
 | E5 Politika a samospráva | Daně, bojkot, zvony, podpora nezávislosti a Kongres mění rozhodování hráče. | P22/P23/P27; dokončit národní výhody a dříve závislé efekty obchodu, budov, misí a vzdělávání. Každý z 25 zakladatelů má vlastní ověření. |
 | E6 Celá partie | Hráč může vyhlásit nezávislost, vyhrát nebo prohrát a dostane správné skóre. | P24/P25, všechny potřebné předchozí systémy. Ověřit každou podmínku ukončení zvlášť a také celou navazující partii. |
-| E7 Kandidát prvního vydání | Hru lze objevit, dohrát, uložit, aktualizovat a pochopit bez vývojáře vedle hráče. | Uzavřít P01–P32 podle rozsahu, regrese, obsah a hráčské ověření. Prověřit všechny čtyři evropské národy a pět obtížností; zbývající odchylky musí být výslovně rozhodnuté. |
+| E7 Kandidát prvního vydání | Hru lze objevit, dohrát, uložit, aktualizovat a pochopit bez vývojáře vedle hráče. | Převzít Hru podle katalogu UC, potom uzavřít P01–P32 podle rozsahu vydání včetně samostatného Nastavení, obsahu a hráčského ověření. Pravidlové účinky všech čtyř národů a pěti obtížností jsou povinné již pro Hru; úplný výběrový průvodce má vlastní přejímku. Zbývající odchylky musí být výslovně rozhodnuté. |
 
 Základní závislost je **tahy a uložený stav → ekonomika a doprava → okolní
 svět a boj → politika → revoluce a konec hry**. UX, grafika, nápověda a
-ověřování doprovázejí každou etapu. Nečekají až na poslední fázi.
+ověřování doprovázejí každou etapu v míře potřebné k použití funkcí. Hlavní
+ladění vzhledu a UX následuje po [přejímce Hry](use-cases.md#kdy-muzeme-pravidla-povazovat-za-dokoncena).
 
 ## Seznam pracovních balíků
 
@@ -315,6 +324,10 @@ se otevře vytvořená kolonie. Zakládající kolonista je stejná jednotka se 
 a přiřazením k práci. Návrh přijímá neprázdné jméno po odstranění krajních mezer;
 další pravidla názvů nesmějí vzniknout potichu jako součást tohoto úkolu.
 
+Automatické otevření je zvolený UX návrh tohoto příkladu. Lze jej později
+změnit při zachování možnosti kolonii otevřít a spravovat podle UC-031;
+není samostatnou podmínkou přijetí herních pravidel.
+
 - Před potvrzením nevznikne kolonie. Zrušení nezmění jednotku, její pohyb ani mapu.
 - Potvrzení vytvoří právě jednu kolonii; opakovaný vstup nezdvojí založení.
 - Změněné jméno a přiřazení přežijí save/load. UI otevře právě novou kolonii.
@@ -368,6 +381,7 @@ Přijatá rozhodnutí: [hodnoty, vzorce, příklad; odkazy na uzavřené Q]
 Současný stav: [co už funguje, kde je chyba nebo mezera]
 Rozsah změny: [model, UI, data, save/load, dotčené soubory]
 Use cases: [konkrétní UC z use-cases.md, všechny jeho varianty a případné blokující Q]
+Kategorie a profil: [Hra / Nastavení / Regrese; referenční herní parametry a co je volný návrh prezentace]
 Vlastník a hranice: [balíček podle architecture.md, sdílená operace člověka/AI, relevantní současný přesah]
 Mimo rozsah: [co se v tomto řezu nedělá]
 Závislosti: [konkrétní hotové předpoklady]

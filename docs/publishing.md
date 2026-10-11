@@ -63,7 +63,8 @@ Do not suppress a link failure merely to make publication pass.
 
 The same unittest discovery also checks the [use-case catalogue](use-cases.md):
 unique UC IDs, coverage of every rule in the gap analysis, recognized status
-and question IDs, and agreement with the stated case total. These are document
+and question IDs, separate gameplay/setup/regression scopes, and agreement
+with the stated catalogue and gameplay-gate totals. These are document
 consistency checks, not gameplay acceptance tests.
 
 ## Automatic publication
