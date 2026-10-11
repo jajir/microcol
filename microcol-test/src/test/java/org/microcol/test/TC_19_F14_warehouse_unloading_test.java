@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.Colony;
+import org.microcol.model.ConcurrentModelEvents;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
@@ -414,6 +416,101 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
         assertEquals(Goods.of(GoodsType.COTTON, 19), cargo(2).getGoods().get());
+    }
+
+    @Test
+    @Tag("local")
+    void TC_14_abandoned_colony_cannot_receive_cargo() throws Exception {
+        // Leave the one-unit proposal open in Delft.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, "Delft");
+        colony.selectUnitFromPort(0);
+        colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
+        final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
+                .of(getContext());
+        dialog.verifyOfferedAmount(1);
+        final Colony abandoned = getModel().getColonyByName("Delft").get();
+
+        // Simulate all workers leaving; the last departure destroys the colony.
+        WaitForAsyncUtils.asyncFx(() -> {
+            abandoned.getColonyFields().forEach(field -> field.getUnit()
+                    .ifPresent(unit -> unit.placeToLocation(COLONY_LOCATION)));
+            abandoned.getConstructions().forEach(building -> building
+                    .getConstructionSlots().forEach(slot -> {
+                        if (!slot.isEmpty()) {
+                            slot.getUnit().placeToLocation(COLONY_LOCATION);
+                        }
+                    }));
+        }).get(5, TimeUnit.SECONDS);
+        assertFalse(abandoned.isValid());
+
+        // Reject confirmation instead of consuming cargo into a detached
+        // warehouse.
+        dialog.clickOnOk();
+        colony.verifyWarehouseWarning(CHANGED);
+        colony.closeWarehouseWarning();
+        assertFalse(getModel().getColonyByName("Delft").isPresent());
+        assertEquals(99, abandoned.getWarehouse().getGoods(GoodsType.TOBACCO)
+                .getAmount());
+        assertEquals(Goods.of(GoodsType.TOBACCO, 100),
+                cargo(0).getGoods().get());
+    }
+
+    @Test
+    @Tag("local")
+    void TC_15_destroyed_carrier_cannot_supply_cargo() throws Exception {
+        // Leave the one-unit proposal open and retain its original source.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, "Delft");
+        colony.selectUnitFromPort(0);
+        colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
+        final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
+                .of(getContext());
+        dialog.verifyOfferedAmount(1);
+        final CargoSlot removedSource = cargo(0);
+
+        // Simulate the model event that removes a destroyed carrier from the
+        // game.
+        WaitForAsyncUtils.asyncFx(() -> ConcurrentModelEvents
+                .destroyUnit(getModel(), removedSource.getOwnerUnit()))
+                .get(5, TimeUnit.SECONDS);
+        assertFalse(getModel().tryGetUnitById(3).isPresent());
+
+        // Stale confirmation cannot credit cargo from a ship that no longer
+        // exists.
+        dialog.clickOnOk();
+        colony.verifyWarehouseWarning(CHANGED);
+        colony.closeWarehouseWarning();
+        colony.verifyNumberOfGoodsInWrehouse(2, 99);
+        assertEquals(Goods.of(GoodsType.TOBACCO, 100),
+                removedSource.getGoods().get());
+    }
+
+    @Test
+    @Tag("local")
+    void TC_16_carrier_at_high_seas_cannot_unload() throws Exception {
+        // Leave the one-unit proposal open at the colony.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, "Delft");
+        colony.selectUnitFromPort(0);
+        colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
+        final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
+                .of(getContext());
+        dialog.verifyOfferedAmount(1);
+
+        // Simulate departure from the map before the player confirms.
+        WaitForAsyncUtils
+                .asyncFx(() -> getModel().getUnitById(3).placeToHighSeas(true))
+                .get(5, TimeUnit.SECONDS);
+        assertTrue(getModel().getUnitById(3).isAtHighSea());
+
+        // Reject the stale proposal without trying to read an off-map location.
+        dialog.clickOnOk();
+        colony.verifyWarehouseWarning(CHANGED);
+        colony.closeWarehouseWarning();
+        colony.verifyNumberOfGoodsInWrehouse(2, 99);
+        assertEquals(Goods.of(GoodsType.TOBACCO, 100),
+                cargo(0).getGoods().get());
     }
 
     private CargoSlot cargo(final int index) {

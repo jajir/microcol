@@ -106,6 +106,8 @@ public class ColonyWarehouse {
             final CargoSlot source) {
         Preconditions.checkNotNull(requested);
         Preconditions.checkNotNull(source);
+        Preconditions.checkArgument(colony.isValid(),
+                "Colony no longer exists");
         Preconditions.checkArgument(requested.getAmount() > 0,
                 "Unloading requires a positive amount");
         Preconditions.checkArgument(
@@ -127,6 +129,10 @@ public class ColonyWarehouse {
                 carrier.isAtPlaceLocation()
                         && carrier.getLocation().equals(colony.getLocation()),
                 "Cargo must be at the colony");
+        Preconditions.checkArgument(
+                colony.getOwner().getUnitsAt(colony.getLocation())
+                        .contains(carrier),
+                "Cargo carrier no longer exists at the colony");
         final int freeStorage = getStorageCapacity(requested.getType())
                 .getAmount() - getGoods(requested.getType()).getAmount();
         return requested

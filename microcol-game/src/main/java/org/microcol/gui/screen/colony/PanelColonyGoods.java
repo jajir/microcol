@@ -22,6 +22,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.application.Platform;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -107,33 +108,42 @@ public final class PanelColonyGoods implements JavaFxComponent {
             final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
 
             final ColonyWarehouse target = colonyWarehouse;
-            try {
-                final Goods available = target.getUnloadableGoods(originalGoods,
-                        fromCargoSlot);
-                if (available.isZero()) {
-                    transferWarning.show(i18n.get(ColonyMsg.unloadFull));
-                } else {
-                    final Goods goods = adjustedAmount(originalGoods, available,
-                            event.getTransferMode() == TransferMode.LINK);
-                    if (!goods.isZero()) {
-                        // A modal dialog can process events that change either
-                        // inventory.
-                        if (target.getUnloadableGoods(goods, fromCargoSlot)
-                                .equals(goods)) {
-                            target.moveToWarehouse(goods, fromCargoSlot);
-                            event.setDropCompleted(true);
-                        } else {
-                            transferWarning
-                                    .show(i18n.get(ColonyMsg.unloadChanged));
-                        }
-                    }
-                }
-            } catch (final IllegalArgumentException ex) {
-                transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
-            }
-            eventBus.post(new RepaintColonyEvent());
+            final boolean partialTransfer = event
+                    .getTransferMode() == TransferMode.LINK;
+            // Finish native drag/drop before entering a modal dialog's event
+            // loop.
+            event.setDropCompleted(true);
+            Platform.runLater(() -> unload(target, originalGoods, fromCargoSlot,
+                    partialTransfer));
         }
         event.consume();
+    }
+
+    private void unload(final ColonyWarehouse target, final Goods originalGoods,
+            final CargoSlot fromCargoSlot, final boolean partialTransfer) {
+        try {
+            final Goods available = target.getUnloadableGoods(originalGoods,
+                    fromCargoSlot);
+            if (available.isZero()) {
+                transferWarning.show(i18n.get(ColonyMsg.unloadFull));
+            } else {
+                final Goods goods = adjustedAmount(originalGoods, available,
+                        partialTransfer);
+                if (!goods.isZero()) {
+                    // A modal dialog can process events that change either
+                    // inventory.
+                    if (target.getUnloadableGoods(goods, fromCargoSlot)
+                            .equals(goods)) {
+                        target.moveToWarehouse(goods, fromCargoSlot);
+                    } else {
+                        transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+                    }
+                }
+            }
+        } catch (final IllegalArgumentException ex) {
+            transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+        }
+        eventBus.post(new RepaintColonyEvent());
     }
 
     private Goods adjustedAmount(final Goods originalAmount,

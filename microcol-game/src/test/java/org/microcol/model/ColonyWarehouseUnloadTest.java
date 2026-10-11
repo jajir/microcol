@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Map;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ class ColonyWarehouseUnloadTest {
 
     @BeforeEach
     void prepareOwnCargoAtColony() {
+        when(colony.isValid()).thenReturn(true);
         when(colony.getWarehouseType())
                 .thenReturn(ConstructionType.WAREHOUSE_BASIC);
         when(colony.getOwner()).thenReturn(owner);
@@ -31,6 +33,8 @@ class ColonyWarehouseUnloadTest {
         when(carrier.getOwner()).thenReturn(owner);
         when(carrier.isAtPlaceLocation()).thenReturn(true);
         when(carrier.getLocation()).thenReturn(Location.of(22, 12));
+        when(owner.getUnitsAt(Location.of(22, 12)))
+                .thenReturn(List.of(carrier));
         warehouse = new ColonyWarehouse(colony, Map.of("TOBACCO", 99));
         source = new CargoSlot(cargo, Goods.of(GoodsType.TOBACCO, 100));
     }
@@ -215,6 +219,34 @@ class ColonyWarehouseUnloadTest {
                 () -> warehouse.moveToWarehouse(preview, source));
         when(carrier.getOwner()).thenReturn(owner);
         when(carrier.getLocation()).thenReturn(Location.of(23, 12));
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.moveToWarehouse(preview, source));
+        assertEquals(99, warehouse.getGoods(GoodsType.TOBACCO).getAmount());
+        assertEquals(Goods.of(GoodsType.TOBACCO, 100), source.getGoods().get());
+    }
+
+    @Test
+    void rejectsDestroyedColonyAfterPreview() {
+        final Goods preview = warehouse
+                .getUnloadableGoods(Goods.of(GoodsType.TOBACCO, 100), source);
+        when(colony.isValid()).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.getUnloadableGoods(preview, source));
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.moveToWarehouse(preview, source));
+        assertEquals(99, warehouse.getGoods(GoodsType.TOBACCO).getAmount());
+        assertEquals(Goods.of(GoodsType.TOBACCO, 100), source.getGoods().get());
+    }
+
+    @Test
+    void rejectsDestroyedCarrierAfterPreview() {
+        final Goods preview = warehouse
+                .getUnloadableGoods(Goods.of(GoodsType.TOBACCO, 100), source);
+        when(owner.getUnitsAt(Location.of(22, 12))).thenReturn(List.of());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.getUnloadableGoods(preview, source));
         assertThrows(IllegalArgumentException.class,
                 () -> warehouse.moveToWarehouse(preview, source));
         assertEquals(99, warehouse.getGoods(GoodsType.TOBACCO).getAmount());

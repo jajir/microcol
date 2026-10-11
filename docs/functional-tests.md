@@ -230,6 +230,7 @@ inventárními asercemi.
 | TC_07 | Přesné částečné množství 17 z 20; opakované otevření téhož dialogu s vysvětlením a bez něj. |
 | TC_08 / TC_09 | Změna kapacity nebo vyprázdnění nákladu při otevřeném dialogu bezpečně odmítne potvrzení. |
 | TC_10 / TC_11 / TC_12 / TC_13 | Změna polohy, vlastníka, druhu nebo snížení zásoby při otevřeném dialogu se odmítne bez dalšího přesunu. |
+| TC_14 / TC_15 / TC_16 | Zánik kolonie nebo lodi a odplutí mimo mapu během dialogu nesmějí připsat ani odebrat náklad. |
 
 U scénářů změny během dialogu test výslovně simuluje **konkurenční událost**
 platnou modelovou operací na FX vlákně. Testované vyložení nadále provádí
@@ -243,7 +244,7 @@ atomické odmítnutí a zachování nákladu. Nové Zrušit používá také sd�
 v Evropě: rozšíření TC06 kontroluje, že zrušený přesun mezi prostory nevytvoří
 náklad s nulovým množstvím. Obchodní ceny ani evropská pravidla se nemění.
 
-**Dosavadní skutečné ověření:** macOS/JDK 17: 659 herních testů, 0 selhání,
+**Dosavadní skutečné ověření:** macOS/JDK 17: 661 herních testů, 0 selhání,
 0 chyb, 0 vynechání. Reprodukční test cizího nákladu na původní revizi
 `89354999954f8a1bfa4c9a6ac0030751056f63e2` selhal očekávaně: chyběla výjimka.
 První místní Monocle běh vybral osm nových scénářů (1 selhání, 7 chyb):
@@ -253,8 +254,20 @@ Cílený nativní macOS běh nedokončil vstup do hry.
 Po opravě výběru Monocle otevřel dialog a vytvořil screenshot, ale narazil
 na chyby vnořené smyčky drag/drop (`dndGesture.dragboard`, `wrong EventLoop`):
 11 vybraných, 1 prošlý, 1 selhání, 9 chyb, 0 vynechání.
-To není úspěšná UI verifikace. Úplný nativní Linux/Xvfb běh bude doložen
-v pull requestu; do jeho dokončení je přejímka otevřená.
+První [Linux CI](https://github.com/jajir/microcol/actions/runs/38172274558)
+na revizi `09887b8c` ověřilo všech 27 původních testů, ale z 13 nových prošly
+jen dva (celkem 40 vybraných, 29 prošlých, 11 selhání, 0 chyb/vynechání).
+Po otevření modálního okna během nativního drag/drop zůstával vstup zablokovaný.
+Vyložení nyní nejprve dokončí drag/drop a dialog otevře přes `Platform.runLater`.
+Po této opravě prošlo na macOS/Monocle **14/14** scénářů TC19 bez selhání,
+chyb a vynechání; TC_07/TC_13 vyžadují nativní režim LINK, proto v tomto
+cíleném výběru nejsou. Přejímka celé sady čeká na nový Linux/Xvfb běh.
+
+Nezávislá kontrola doplnila existenci kolonie a lodi v živém modelu.
+Oba reprodukční modelové testy před opravou selhaly (chybějící výjimka),
+po opravě prošly a UI scénáře TC_14/TC_15 ověřily odmítnutí přes skutečný dialog.
+TC_16 chrání také zdroj mimo mapu. Místně byly prohlédnuty screenshoty
+omezeného množství, plného skladu a změny stavu: text i tlačítka jsou viditelné.
 
 Screenshoty dialogů se ukládají do ignorovaného
 `microcol-test/target/warehouse-qa/` a CI je přiloží k `tests-functional`.

@@ -124,6 +124,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [`microcol-game/src/test/java`](../microcol-game/src/test/java/) | Jednotkové a modelové testy u odpovídajících balíčků; nezávislé očekávané výsledky pravidel. |
 | [`microcol-test/src/test/java/org/microcol/test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelné hráčské scénáře `TC_...`, jejich příprava a výslovné kontroly výsledků. |
 | [`microcol-test/src/test/java/org/microcol/page`](../microcol-test/src/test/java/org/microcol/page/) | Page objects: selektory, kliknutí, souřadnice a čekání na dokončení UI. |
+| [`microcol-test/src/test/java/org/microcol/model`](../microcol-test/src/test/java/org/microcol/model/) | Pouze příprava souběžné modelové události vyžadující package access (například zánik lodi při otevřeném dialogu). Testovaná hráčská akce nadále prochází UI; adaptér není součástí hry. |
 | [`microcol-test/src/main/java/org/microcol/mock`](../microcol-test/src/main/java/org/microcol/mock/) | Náhrady UI služeb potřebné pro testovací prostředí. |
 | [`microcol-test/src/test/scenarios`](../microcol-test/src/test/scenarios/) | Výchozí uložené pozice a nastavení scénářů; zachovávat podle [testového kontraktu](functional-tests.md). |
 | [`microcol-build-tests/src/test/java/org/microcol/build`](../microcol-build-tests/src/test/java/org/microcol/build/) | Kontroly launcheru, publikace a nativních distribucí. |
