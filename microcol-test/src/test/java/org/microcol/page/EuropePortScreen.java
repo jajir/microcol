@@ -11,7 +11,6 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
@@ -71,9 +70,9 @@ public class EuropePortScreen extends AbstractScreen {
 
     public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(final int indexOfGoods,
 	    final int indexOfCargoSlot) {
-	getRobot().press(KeyCode.CONTROL);
+	getRobot().press(getGoodsAmountModifiers());
 	buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
-	getRobot().release(KeyCode.CONTROL);
+	getRobot().release(getGoodsAmountModifiers());
 	WaitForAsyncUtils.waitForFxEvents();
 	return ScreenMarketBuy.of(getContext());
     }
@@ -84,9 +83,9 @@ public class EuropePortScreen extends AbstractScreen {
     }
 
     public ScreenMarketSell sellGoodsWithPressedControl(final int indexOfCargoSlot, final int indexOfGoods) {
-	getRobot().press(KeyCode.CONTROL);
+	getRobot().press(getGoodsAmountModifiers());
 	sellGoods(indexOfCargoSlot, indexOfGoods);
-	getRobot().release(KeyCode.CONTROL);
+	getRobot().release(getGoodsAmountModifiers());
 	WaitForAsyncUtils.waitForFxEvents();
 	return ScreenMarketSell.of(getContext());
     }

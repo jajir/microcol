@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>openjfx-monocle</artifactId>
-			<version>jdk-11+26</version>
+			<version>17.0.10</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -79,8 +79,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<!-- disable all tests -->
-				<testedTags>ci-save</testedTags>
+				<testedTags>ci, local</testedTags>
 			</properties>
 		</profile>
 		<profile>
@@ -136,8 +135,10 @@
 					<useFile>true</useFile>
 					<trimStackTrace>false</trimStackTrace>
 					<printSummary>true</printSummary>
+					<failIfNoTests>true</failIfNoTests>
 					<groups>${testedTags}</groups>
 					<includes>
+						<include>**/TC_*.java</include>
 						<include>**/*_test.java</include>
 						<include>**/Test*.java</include>
 						<include>**/*Test.java</include>

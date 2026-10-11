@@ -12,6 +12,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Sound and player feedback](audio.md) | Current music playback, file formats, event feedback, and guidelines and a catalog for future sounds. |
 | [UX and interaction guidelines](ux.md) | Shared interaction rules, current controls, feature briefs, player journeys, and usability findings. |
+| [Functional tests](functional-tests.md) | Stable, readable scenarios and regression checks for gameplay and visual changes. |
 | [Rules gap analysis](gap-analysis.md) | Comparison with the reference game's rules, implementation evidence, and outstanding work. |
 | [Implementation plan](implementation-plan.md) | Deliverable work packages, playable stages, UX/art dependencies, and concrete task briefs based on the manual. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |

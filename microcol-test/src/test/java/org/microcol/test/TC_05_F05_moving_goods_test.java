@@ -90,6 +90,16 @@ public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
 	// Verify that just 23 corn is in first cargo slot.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 23));
 
+	// Unload 17 corn from the third cargo slot into the first warehouse slot.
+	final DialogChooseGoodsAmount dialog3 = colonyScreen.dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2,
+		0);
+	dialog3.selectValueAtSlider(17);
+	dialog3.clickOnOk();
+
+	// Verify that the selected cargo slot lost goods and the first slot did not.
+	verifyThatGoodsInShip(2, Goods.of(GoodsType.CORN, 30));
+	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 23));
+
     }
 
     @Test
@@ -136,6 +146,7 @@ public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_05_mooving_to_warehouse_more_than_limit() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
@@ -161,8 +172,17 @@ public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
 	// Open colony Delft
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-	// Drag corn from ship cargo slot to warehouse
+	// Record the warehouse corn before unloading the full cargo slot.
+	final int cornBefore = getModel().getColonyAt(Location.of(22, 12)).get()
+		.getWarehouse().getGoods(GoodsType.CORN).getAmount();
+
+	// Drag corn from ship cargo slot to warehouse.
 	colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
+
+	// All 100 corn should reach the warehouse; the ship's slot should be empty.
+	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+	assertEquals(cornBefore + 100, getModel().getColonyAt(Location.of(22, 12)).get()
+		.getWarehouse().getGoods(GoodsType.CORN).getAmount());
     }
 
     private void verifyThatGoodsInShip(final int cargoSlotIndex, final Goods expectedGoods) {

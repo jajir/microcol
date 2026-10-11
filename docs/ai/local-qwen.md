@@ -55,8 +55,10 @@ existing limits and unload before Maven.
 
 Broader features are sequences of bounded jobs, not proof that current 8k
 worker can own whole features. Expand assignments from accepted evidence.
-Execution of the legacy TestFX suite is not yet verified; bounded UI changes
-need an explicit caller verification plan.
+UI changes require the caller verification plan in the
+[functional test contract](../functional-tests.md). The dated plowing task below
+records local execution and its environment limits; the complete suite is a
+required Linux/Xvfb publication check.
 
 For each result report what Qwen did, main-agent repairs, actual checks and
 pending checks. Record attempts/time/available usage; no measured savings
@@ -545,3 +547,45 @@ matched the accepted pilot's task, local model identity, tool events, diff, Mave
 log and nine-case XML report. At that point the pilot test remained isolated;
 the user's subsequent branch consolidation brought the accepted test patch into
 `develop` without changing production code.
+
+
+## Functional plowing regression — 2026-10-11
+
+Task `2026-10-11-functional-plow-contract` used baseline
+`94bd260e3538c4d632d76f108155fb28476a56cf` and the existing local alias at
+context 8192. One attempt exited 0 after **136.581 seconds**, with no worker
+repair round. Reported usage was 23,832 input tokens, 17,144 cached input tokens,
+1,688 output tokens and zero reasoning output tokens across the CLI turn.
+These are local-worker counts, not measured cloud savings.
+
+Qwen added assertions for the selected colonist's plowing action, consumed
+movement and unchanged position in TC18. The main agent restored the existing
+format, added preconditions, corrected stale comments and shortened the JavaDoc.
+The caller handled test-environment diagnosis, shared helper corrections,
+coverage policy, CI integration and verification because those required
+cross-module review and actual runtime evidence.
+
+The caller passed the 603 game tests on JDK 17 and the targeted TC18/TC15
+plowing checks using Monocle 17.0.10. The first full local headless run selected
+27 tests, with two failures and one error: Monocle does not implement the LINK
+drag needed by TC05/TC06, and mission XML used a DTD rejected by Java 17.
+After correcting the two mission bundles, both language checks passed; TC03
+also passed after removing a double-lookup race in its shared wait helper.
+The two new language tests failed against the original bundles before the fix.
+
+Native Glass on this macOS session did not successfully click Load Game, so
+that attempt does not verify the native goods scenarios. The complete suite
+uses Linux/Xvfb in the required `functional` job, with native LINK modifiers
+handled by the existing page objects. Consult that run's `tests-functional`
+artifact for complete-suite evidence; a local partial run is insufficient.
+Checkout paths containing spaces also prevent the existing JavaFX font loader
+from starting the unpacked game. See the [functional test contract](../functional-tests.md)
+for commands and the environment limits.
+
+Evidence is retained under
+`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-functional-plow-contract/`:
+worker input/result, runtime identity, patches, failed environment attempts,
+`game-final.log`, `plow-final.log`, mission red/green logs and verification summary.
+The worker model was unloaded before Maven. Source fixtures were unchanged by
+the verified isolated test setup. No broad reliability or savings claim follows
+from this single assignment.

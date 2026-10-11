@@ -370,7 +370,7 @@ Závislosti: [konkrétní hotové předpoklady]
 Ovládání: [nalezení, podmínky, náhled, potvrzení, zrušení, výsledek]
 Grafika a zvuk: [existující prvky / konkrétní nové podklady a spotřebitelé]
 Akceptace: [počáteční stav → akce → přesný výsledek; také chyba/zrušení]
-Ověření: [cílené testy, save/load, UI scénář a potřebná kontrola obrazu]
+Ověření: [konkrétní ID TC scénářů, změněná očekávání, modelové testy, save/load a kontrola obrazu]
 Ověření hlavním agentem: [přesné příkazy, prostředí, UI postup a očekávané výsledky]
 Výjimka z delegace: [důvod a rozsah práce ponechané hlavnímu agentovi; nebo žádná]
 Časový rámec: [rozpočet práce a kontrolní bod; co předat při nedokončení]
@@ -424,7 +424,9 @@ pravidla. Žádné budoucí běhy tímto dokumentem nejsou naplánované.
    nezpůsobí nežádoucí vedlejší účinek.
 3. Hráč funkci najde, pozná podmínky a výsledek. Potřebné obrázky a texty
    jsou zapojené a zkontrolované v běžící hře; zvuk je doplňkový.
-4. Projdou relevantní automatické kontroly a cílený hráčský průchod. Testy
+4. Projdou relevantní automatické kontroly podle [pravidel funkčních testů](functional-tests.md)
+   a cílený hráčský průchod. Každá změna chování má scénář `TC_...`; úprava
+   vzhledu zachovává jeho herní očekávání a čitelnou strukturu. Testy
    vlastností pravidel jsou oddělené od nálezů skutečného pozorování hráčů.
 5. Aktualizují se dotčené řádky katalogu, dokumentace a případně grafický
    či zvukový katalog, s datem, revizí a rozsahem důkazu.

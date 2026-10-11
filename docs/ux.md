@@ -90,7 +90,7 @@ Před dokončením změny ovlivňující ovládání:
 - Sladit vizuální a případnou zvukovou odezvu s jejich vlastními pravidly.
 - Zapsat důležité nové zjištění nebo změnu společného pravidla sem; konkrétní podrobnosti funkce ponechat u jejího zadání a kódu.
 
-Automatické testy mají hlídat podstatné funkční chování a regresi. Úspěšný skriptovaný průchod není důkaz, že nový hráč ovládání objeví nebo pochopí. Rozsah ověřování volit podle změny; drobná textová oprava nepotřebuje nové uživatelské testování.
+Automatické testy se řídí [pravidly funkčních scénářů](functional-tests.md): každá změna chování má odpovídající pokrytí a úpravy vzhledu zachovávají herní očekávání. Úspěšný skriptovaný průchod není důkaz, že nový hráč ovládání objeví nebo pochopí. Rozsah ověřování volit podle změny; drobná textová oprava nepotřebuje nové uživatelské testování.
 
 ## Ověřování s hráči a záznam zjištění
 

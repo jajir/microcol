@@ -18,6 +18,7 @@ import com.google.common.base.Preconditions;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public abstract class AbstractScreen {
@@ -42,6 +43,12 @@ public abstract class AbstractScreen {
 
     protected FxRobot getRobot() {
 	return context.getRobot();
+    }
+
+    protected KeyCode[] getGoodsAmountModifiers() {
+	// JavaFX LINK uses Control on macOS and Control+Shift on Linux/Windows.
+	return System.getProperty("os.name").startsWith("Mac") ? new KeyCode[] { KeyCode.CONTROL }
+		: new KeyCode[] { KeyCode.CONTROL, KeyCode.SHIFT };
     }
 
     protected Model getModel() {

@@ -28,7 +28,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -88,9 +87,9 @@ public class ColonyScreen extends AbstractScreen {
 
     public DialogChooseGoodsAmount dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
 	    final int goodsIndexInWarehouse, final int cargoSlotIndex) {
-	getRobot().press(KeyCode.CONTROL);
+	getRobot().press(getGoodsAmountModifiers());
 	dragGoodsFromWarehouseToShipCargoSlot(goodsIndexInWarehouse, cargoSlotIndex);
-	getRobot().release(KeyCode.CONTROL);
+	getRobot().release(getGoodsAmountModifiers());
 	return DialogChooseGoodsAmount.of(getContext());
     }
 
@@ -101,9 +100,9 @@ public class ColonyScreen extends AbstractScreen {
 
     public DialogChooseGoodsAmount dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
 	    final int goodsIndexInWarehouse) {
-	getRobot().press(KeyCode.CONTROL);
-	dragGoodsFromShipCargoSlotToWarehouse(goodsIndexInWarehouse, cargoSlotIndex);
-	getRobot().release(KeyCode.CONTROL);
+	getRobot().press(getGoodsAmountModifiers());
+	dragGoodsFromShipCargoSlotToWarehouse(cargoSlotIndex, goodsIndexInWarehouse);
+	getRobot().release(getGoodsAmountModifiers());
 	return DialogChooseGoodsAmount.of(getContext());
     }
 

@@ -64,6 +64,19 @@ UX hypotheses and actual player observations distinct. Update the shared
 guidelines as findings warrant; small changes do not require a full UI redesign
 or a new player study.
 
+# Functional regression tests
+
+Follow [the functional test contract](docs/functional-tests.md) for every behavior
+change and every change to graphics, CSS, layout, controls or shared UI helpers.
+Map changed behavior to named `TC_...` scenarios in `microcol-test`; add or update
+the scenario and relevant rule tests in the same change. Preserve the existing
+fixture, `@Start`, linear commented player steps, page objects and explicit
+assertion structure. Keep stable scenario IDs and English test prose. Visual
+changes must preserve gameplay assertions and expected outcomes; fix selectors
+and interaction details in page objects instead of weakening tests. Record actual
+test selection, counts and results; a skipped or failing scenario is an open
+blocker, not a verified change. Use the contract's completion checklist.
+
 # Local worker
 
 Prefer local Qwen for the maximum suitable development work once the user and

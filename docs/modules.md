@@ -58,12 +58,16 @@ module; those commands do not create an installer. The optional `sass` profile
 is also a development tool: it writes CSS into `src/main/resources/gui/` and is
 not enabled in a normal build.
 
-The test module's `local` profile selects the `ci` and `local` test tags by
-default. Its explicitly selected `ci` profile instead selects `ci-save`, with a
-comment about disabling tests. A successful Maven result therefore does not
-establish that the intended GUI tests ran: check the selected tests and their
-counts in Surefire reports. Compiled test classes are separate from the helper
-JAR.
+The test module's `local` (default) and `ci` profiles both select the `ci` and
+`local` test tags. Surefire includes all `TC_...` scenario classes and fails
+when no tests are selected. The complete TestFX suite uses native Glass under
+Xvfb on Linux/JDK 17. Monocle 17.0.10 supports targeted headless checks, but cannot
+exercise the modified goods drag used by TC05/TC06. Each test copies its initial settings
+to `target/test-homes/`, preserving the source fixtures and personal settings.
+The development workflow requires the functional job before publication.
+See the [functional test contract](functional-tests.md) for the stable scenario
+structure, commands and verification evidence. Compiled test classes are separate
+from the helper JAR.
 
 ### Modular JAR
 

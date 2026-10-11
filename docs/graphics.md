@@ -8,6 +8,10 @@ Stav k **11. říjnu 2026**, větev `develop`, revize `1854fa5446f54cbf99d4f6892
 
 ## Současné zadání vzhledu
 
+Každá změna vzhledu musí zachovat herní výsledky podle
+[pravidel funkčních testů](functional-tests.md). Kontrola obrázku nenahrazuje
+provedení dotčených hráčských scénářů.
+
 Platná dohoda z **11. října 2026**: konkrétní výtvarné detaily nyní není potřeba předem specifikovat. Pro novou i upravovanou grafiku stačí tato pravidla:
 
 - Přibližně navazovat na současný vzhled hry, aby nové prvky působily jako její přirozená součást.

@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.microcol.MicroColApplication;
@@ -41,11 +46,23 @@ public abstract class AbstractMicroColTest {
 
     AbstractMicroColTest(final String directoryWithTestScenarios) {
 	/*
-	 * Following code rewrite user home directory where is stored MicroCol game
-	 * saves and configuration file. It allows to set special configuration for
-	 * tests.
+	 * Each test gets writable copies of the fixture settings. Running the game
+	 * must not change source fixtures or the player's personal configuration.
 	 */
-	System.setProperty("user.home", Preconditions.checkNotNull(directoryWithTestScenarios));
+	final Path settings = Path.of(Preconditions.checkNotNull(directoryWithTestScenarios), ".microcol");
+	try {
+	    final Path homes = Files.createDirectories(Path.of("target", "test-homes"));
+	    final Path home = Files.createTempDirectory(homes, getClass().getSimpleName() + "-");
+	    final Path targetSettings = Files.createDirectories(home.resolve(".microcol"));
+	    try (Stream<Path> files = Files.list(settings)) {
+		for (Path file : (Iterable<Path>) files::iterator) {
+		    Files.copy(file, targetSettings.resolve(file.getFileName()));
+		}
+	    }
+	    System.setProperty("user.home", home.toAbsolutePath().toString());
+	} catch (IOException e) {
+	    throw new UncheckedIOException("Unable to prepare isolated test settings", e);
+	}
     }
 
     AbstractMicroColTest() {

@@ -64,7 +64,8 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 ## What happens after a change
 
 1. The completed, checked change is pushed to `main`.
-2. GitHub Actions checks the launcher and publication logic, then uses JDK 17 and
+2. GitHub Actions checks the launcher and publication logic and runs the
+   [functional player scenarios](functional-tests.md), then uses JDK 17 and
    Maven to build the macOS ARM64, macOS Intel and Linux x86-64 packages from the
    same source commit. Failed builds do not become the current development build.
 3. Successful outputs are uploaded to a separate prerelease identified by
@@ -137,6 +138,12 @@ the actual launcher packages and publication behavior. Its native profiles run
 Failsafe checks after the game packages exist, including archive permissions and
 paths, real game test counts, the bundled JVM, and Linux startup under Xvfb.
 The workflow calls `mvn verify` so these checks must pass before upload.
+
+A separate required `functional` job runs `microcol-test` and its game dependency
+on JDK 17 with TestFX and native Glass under Xvfb. It includes all numbered player scenarios, uploads
+fresh Surefire reports as `tests-functional` even on failure, and gates the
+`publish` job alongside build-tool and native checks. The exact commands and
+scenario maintenance rules are in the [functional test contract](functional-tests.md).
 
 The [publisher](../scripts/distribution/publish.sh) uses Bash, `gh` and `jq` to
 check Maven's checksums, assemble the cross-platform manifest, upload releases,

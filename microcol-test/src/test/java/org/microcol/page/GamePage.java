@@ -166,16 +166,9 @@ public class GamePage extends AbstractScreen {
      */
     public void waitWhileMoving() throws TimeoutException {
 	final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
-	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> {
-	    // button could be hidden, because turn report page could be shown.
-	    if (isCssIdVisible(id)) {
-		final Button buttonNextTurn = getButtonById(id);
-		return !buttonNextTurn.isDisabled();
-	    } else {
-		// immediately stop waiting.
-		return true;
-	    }
-	});
+	// Query once: the turn report may replace the game screen between lookups.
+	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> getNodeFinder().lookup("#" + id)
+		.<Button>tryQuery().map(button -> !button.isDisabled()).orElse(true));
     }
 
     public void verifyNumberOfUnitInRightPanel(int expectedUnitsInRightPanel) {

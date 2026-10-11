@@ -9,6 +9,38 @@ permissions:
   contents: read
 
 jobs:
+  functional:
+    name: Functional player scenarios
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Install JavaFX runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libasound2t64 fonts-dejavu-core xvfb xauth
+      - name: Run game tests and all functional player scenarios
+        run: >-
+          xvfb-run -a --server-args='-screen 0 1600x1200x24'
+          mvn -B -ntp -pl microcol-test -am clean test -P ci
+          -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw
+          -DsoundEnabled=false
+      - name: Keep functional test evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tests-functional
+          path: |
+            microcol-game/target/surefire-reports/
+            microcol-test/target/surefire-reports/
+          if-no-files-found: warn
+          retention-days: 14
+
   checks:
     runs-on: ubuntu-24.04
     steps:
@@ -81,7 +113,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y fakeroot dpkg-dev libgtk-3-0 libasound2t64 xvfb xauth x11-utils jq unzip
       - name: Build and verify native distributions through Maven
         # Profile dependencies put native packaging before its Failsafe tests.
-        # The legacy TestFX module is not selected by this reactor.
+        # TestFX player scenarios run in the separate required functional job.
         env:
           PLATFORM: ${{ matrix.platform }}
           VERIFICATION_PROFILE: ${{ matrix.verification }}
@@ -115,7 +147,7 @@ jobs:
 
   publish:
     if: github.ref == 'refs/heads/main'
-    needs: [checks, native]
+    needs: [checks, native, functional]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
