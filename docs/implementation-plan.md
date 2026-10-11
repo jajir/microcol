@@ -11,6 +11,49 @@ tahů, ekonomiky, soupeřů a války za nezávislost. První hratelné etapy jso
 průběžné výsledky; neznamenají omezení konečného rozsahu. Pořadí níže je návrh
 pro další práci, nikoli závazný termín nebo spuštěné implementační úkoly.
 
+## Cíl běžné nové hry
+
+**Návrh formulace z 11. října 2026:** Hráč zvolí **Nová hra** a po případném
+nastavení partie vstoupí do běžné volné hry podle pravidel manuálu. Tento vstup
+je dostupný už při prvním spuštění, bez dokončení kampaně nebo výukových úkolů.
+Funkce dodávané pracovními balíky se postupně propojí v této partii: průzkum,
+kolonie, tahy, hospodářství, ostatní národy, politika a válka za nezávislost.
+Hráč kvůli nim nemusí spouštět jednotlivé mise či zvláštní demonstrační scénáře.
+
+Kampaň a výuka mohou zůstat jako samostatné, nepovinné možnosti. Dostupná
+nápověda pomáhá během běžné hry; její absolvování neodemyká základní režim.
+Pracovní výklad o samostatné výuce lze upřesnit při potvrzení cíle.
+
+### Jak poznáme splnění cíle
+
+1. Nový hráč bez záznamu o dokončené kampani může z hlavního menu zahájit
+   běžnou partii. Nemusí nejprve vybrat či splnit misi.
+2. Po potvrzení případného nastavení se otevře herní mapa volné partie.
+   Zrušení nastavení ponechá hráče v menu bez spuštění partie.
+3. Funkce přijaté v jednotlivých etapách jsou dostupné v této partii při
+   splnění svých herních podmínek; demonstrační scénář samotný není důkazem
+   jejich dokončené integrace. Hráč nemusí odemykat funkce plněním kampaně.
+4. Uložení a pokračování zachová stejnou volnou partii, stav a dostupné funkce.
+5. Konečný rozsah umožní souvislou partii až k řádnému výsledku podle pravidel,
+   včetně nezávislosti a skóre. Podmínky výhry a prohry vycházejí z herních
+   pravidel, nikoli ze seznamu výukových úkolů.
+
+**Současný stav doložený kódem, revize
+[`27a89c8e`](https://github.com/jajir/microcol/commit/27a89c8e87d732cc67227fa7dd70b43bdc193aac):**
+[ButtonsPanelPresenter.refresh](../microcol-game/src/main/java/org/microcol/gui/screen/menu/ButtonsPanelPresenter.java)
+zpřístupňuje volnou hru až po dokončení kampaně. Naproti tomu
+[ApplicationController.startNewFreeGame](../microcol-game/src/main/java/org/microcol/gui/dialog/ApplicationController.java)
+už přímo spouští režim `freePlay` a jeho
+[factory](../microcol-game/src/main/java/org/microcol/model/campaign/FreePlay_0_missionFactory.java)
+používá prázdné cíle mise. To neprokazuje úplnost pravidel ani dohratelnost
+celé partie; ty zůstávají předmětem balíků níže. Jde o čtení zdrojů,
+nikoli o nově provedený průchod běžící hrou.
+
+Tento zápis stanovuje hráčský cíl a jeho přejímací podmínky. Implementačně
+navazuje zejména na P02/P28 pro vstup do hry, P26 pro obnovu a P31 pro ověření
+celé cesty; úplnost partie vyžaduje i ostatní příslušné balíky. Zapsání cíle
+ani samotné odemčení tlačítka neznamená dokončení celé hry.
+
 ## Z čeho vycházíme
 
 | Podklad | K čemu slouží |
@@ -42,7 +85,8 @@ testů není důkazem shody se všemi pravidly manuálu.
 ## Etapy podle toho co hráč dokáže
 
 Každá etapa končí předveditelným scénářem, uloženou pozicí a ověřenou vývojovou
-distribucí. Balík se může objevit ve více etapách: nejprve společný základ,
+distribucí. Přijatá funkce musí být zapojená i do [běžné nové hry](#cil-bezne-nove-hry),
+ne pouze do zvlášť spouštěné ukázky. Balík se může objevit ve více etapách: nejprve společný základ,
 později integrace jeho závislých pravidel. Za celý hotový se označí až po
 dokončení všech svých pravidel.
 

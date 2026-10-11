@@ -58,6 +58,10 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 
 ## První scénář k ověření
 
+Souvislý průchod navazuje na [cíl běžné nové hry](implementation-plan.md#cil-bezne-nove-hry):
+hráč začne z hlavního menu bez nutnosti dokončené kampaně. Níže uvedený úkol
+je zadání pro ověření použitelnosti, nikoli povinná mise odemykající volnou hru.
+
 Výchozím návrhem je **založení první fungující kolonie**. Pokrývá souvislou činnost od mapy po ekonomický výsledek:
 
 1. Vybrat jednotku a zjistit, co s ní lze provést.
