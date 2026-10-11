@@ -29,16 +29,28 @@ public final class MicroCol {
             cleanAll();
             System.exit(0);
         } else {
-            if (isOSX()) {
-                System.setProperty("com.apple.macos.useScreenMenuBar", "true");
-                // set application name for oracle JDK
-                System.setProperty(
-                        "com.apple.mrj.application.apple.menu.about.name",
-                        "MicroCol");
-                // set application name for openJDK
-                System.setProperty("apple.awt.application.name", "MicroCol");
-            }
+            configureJavaFx();
             Application.launch(MicroColApplication.class, args);
+        }
+    }
+
+    /**
+     * Configure the native toolkit before JavaFX starts, including in UI tests.
+     */
+    public static void configureJavaFx() {
+        if (System.getProperty("os.name").startsWith("Linux")) {
+            // shortcut: GTK retains a drag grab across modal dialogs; remove
+            // when JavaFX fixes it.
+            System.setProperty("glass.disableGrab", "true");
+        }
+        if (isOSX()) {
+            System.setProperty("com.apple.macos.useScreenMenuBar", "true");
+            // set application name for oracle JDK
+            System.setProperty(
+                    "com.apple.mrj.application.apple.menu.about.name",
+                    "MicroCol");
+            // set application name for openJDK
+            System.setProperty("apple.awt.application.name", "MicroCol");
         }
     }
 

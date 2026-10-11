@@ -65,7 +65,7 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
-| [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
+| [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, nastavení nativního toolkitu před startem, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. UI testy přebírají nastavení přes `MicroCol.configureJavaFx()`. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
 | [model](../microcol-game/src/main/java/org/microcol/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. |
 | [model.unit](../microcol-game/src/main/java/org/microcol/model/unit/) | Konkrétní druhy jednotek, továrna a jednotkové akce, například `UnitFactory`, `Ship`, `UnitActionPlowField`. Sdílené `Unit`, `AbstractUnit` a `UnitType` jsou nadále v `model`. | Schopnosti a provedení akcí; rozhodování soupeře a animace patří jinam. |
 | [model.event](../microcol-game/src/main/java/org/microcol/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |

@@ -111,7 +111,7 @@ pravidel musí doplnit příslušné kroky a modelové testy.
 Použít **JDK 17** a checkout s cestou bez mezer. Maven používá JVM uvedenou
 v `mvn --version`; samotné `java -version` nemusí ukazovat stejnou instalaci.
 Celá sada potřebuje nativní JavaFX Glass v grafické relaci; na Linuxu bez
-monitoru použít Xvfb s obrazovkou alespoň 1600 × 1200.
+monitoru použít Xvfb s obrazovkou alespoň 1600 × 1200 a Openbox ve stejné relaci.
 
 Celá sada včetně závislého herního modulu, z kořene repozitáře:
 
@@ -121,8 +121,10 @@ mvn -B -ntp -pl microcol-test -am clean test -P ci \
   -DsoundEnabled=false
 ```
 
-V CI se před tento příkaz přidává
-`xvfb-run -a --server-args='-screen 0 1600x1200x24'`. V místní grafické relaci
+V CI běží příkaz uvnitř
+`xvfb-run -a --server-args='-screen 0 1600x1200x24'`; nejprve se v téže relaci
+spustí Openbox. Přesný příkaz včetně ukončení správce oken je ve
+[workflow](../.github/workflows/dev-builds.yml). V místní grafické relaci
 po dobu testu neovládat okno hry ručně.
 
 Rychlá cílená kontrola obou scénářů orby při vývoji:
@@ -152,7 +154,7 @@ modulu selže. Testové nastavení se pro každý test kopíruje do
 `microcol-test/target/test-homes/`; původní uložené hry a nastavení se nemění.
 
 [Vývojový workflow](../.github/workflows/dev-builds.yml) spouští celou sadu
-v samostatném jobu `functional` na Linuxu/JDK 17 s Xvfb při každém pushi na `main`.
+v samostatném jobu `functional` na Linuxu/JDK 17 s Xvfb a správcem oken Openbox při každém pushi na `main`.
 Job `publish` závisí i na tomto výsledku. Selhání tedy zabrání vydání nové
 vývojové distribuce; dřívější vydání zůstane dostupné. Reporty se ukládají jako
 artifact `tests-functional` i při selhání. Publikace dokumentace má vlastní
@@ -166,6 +168,27 @@ použilo doslovné `%20` v souborové cestě. Ověřování proto používá bě
 bez mezer. Tato úprava testů nemění produkční `FontService`; případná oprava
 načítání fontů musí mít vlastní regresi. Původní Monocle `jdk-11+26` navíc
 selhávalo na rozhraní časovače JavaFX 17 a bylo nahrazeno kompatibilní verzí.
+
+Na Linuxu nastavuje `MicroCol.configureJavaFx()` před startem JavaFX
+`glass.disableGrab=true`. Stejný produkční vstup volá `@BeforeAll` funkčních
+testů. Jde o dočasné obejití chyby GTK/Glass, kdy po drag/drop zůstává myš
+zachycená u původního okna a nově otevřený modální dialog nedostává kliknutí.
+Vypíná se explicitní zachytávání ukazatele v Glass, nikoli nativní drag/drop
+nebo modalita dialogu; na ostatních platformách se toto nastavení nepoužívá.
+Přepínač zpracovává
+[GtkApplication](https://github.com/openjdk/jfx17u/blob/master/modules/javafx.graphics/src/main/java/com/sun/glass/ui/gtk/GtkApplication.java)
+a [nativní grab_pointer](https://github.com/openjdk/jfx17u/blob/master/modules/javafx.graphics/src/main/native-glass/gtk/glass_general.cpp).
+Při změně JavaFX toto obejití znovu posoudit, včetně přetažení mimo okno,
+modálních dialogů a obvyklé sady UI scénářů. TC19/TC_17 chrání zrušený drag/drop
+mimo okno a následující funkční přesun. Není dovoleno přidat přepínač pouze
+do CI a ponechat hráčům jiné chování.
+
+Xvfb dodává displej, nikoli správu zaměření oken. Funkční job proto spouští
+Openbox: bez správce oken po opakovaném otevření modálního dialogu klávesnice
+mířila na zakázané hlavní okno, přestože JavaFX hlásilo dialog jako zaměřený.
+Page object po OK, Zrušit i Escape čeká na skutečné zavření původního okna.
+Tato kontrola doplňuje aserce zásob; jejich nezměněná hodnota sama o sobě
+nedokazuje, že zrušení proběhlo.
 
 ### Ověření při zavedení pravidel — 11. října 2026
 
@@ -231,6 +254,7 @@ inventárními asercemi.
 | TC_08 / TC_09 | Změna kapacity nebo vyprázdnění nákladu při otevřeném dialogu bezpečně odmítne potvrzení. |
 | TC_10 / TC_11 / TC_12 / TC_13 | Změna polohy, vlastníka, druhu nebo snížení zásoby při otevřeném dialogu se odmítne bez dalšího přesunu. |
 | TC_14 / TC_15 / TC_16 | Zánik kolonie nebo lodi a odplutí mimo mapu během dialogu nesmějí připsat ani odebrat náklad. |
+| TC_17 | Přetažení mimo okno zachová zásoby; následující platné přetažení stále funguje. |
 
 U scénářů změny během dialogu test výslovně simuluje **konkurenční událost**
 platnou modelovou operací na FX vlákně. Testované vyložení nadále provádí
@@ -258,10 +282,35 @@ První [Linux CI](https://github.com/jajir/microcol/actions/runs/38172274558)
 na revizi `09887b8c` ověřilo všech 27 původních testů, ale z 13 nových prošly
 jen dva (celkem 40 vybraných, 29 prošlých, 11 selhání, 0 chyb/vynechání).
 Po otevření modálního okna během nativního drag/drop zůstával vstup zablokovaný.
-Vyložení nyní nejprve dokončí drag/drop a dialog otevře přes `Platform.runLater`.
+Vyložení nyní čeká na `DRAG_DONE` zdroje a dialog otevře přes `Platform.runLater`.
 Po této opravě prošlo na macOS/Monocle **14/14** scénářů TC19 bez selhání,
 chyb a vynechání; TC_07/TC_13 vyžadují nativní režim LINK, proto v tomto
-cíleném výběru nejsou. Přejímka celé sady čeká na nový Linux/Xvfb běh.
+cíleném výběru nejsou.
+
+Druhý [Linux CI](https://github.com/jajir/microcol/actions/runs/38173009939)
+na `7c48ba8a` znovu ověřil 661 herních a 27 původních UI testů, ale TC19
+selhal: 43 vybraných, 15 selhání, 1 chyba, 0 vynechání. První dialog nepřijal
+kliknutí a zůstal otevřený; ostatní selhání v této třídě byla důsledkem
+zablokovaného vstupu. Místní Linux/Xvfb reprodukce potvrdila chybu nativního
+zachytávání myši. Před samotným kliknutím byl dialog viditelný, zaměřený a
+tlačítko povolené. Čekání ani změna robota Glass → AWT problém neodstranily.
+Nastavení `glass.disableGrab=true` reprodukční TC_13 opravilo; nyní se používá
+ve skutečné hře i testech podle výše popsaného kontraktu. Přejímka celé sady
+čeká na nový běh s tímto produkčním nastavením a správcem oken.
+
+Nativní TC05 navíc odhalil souběžné čtení nastavení při překreslení a zápis
+na vlákně tahu. `SettingService` nyní synchronizuje čtení, zápis i celou
+operaci read–modify–write. Oba nové testy v `SettingServiceConcurrencyTest`
+před opravou selhaly; po opravě prošlo všech devět cílených testů nastavení.
+Nejde o potlačení chyby v čekání TestFX.
+
+Místní nativní běh s Openbox vybral 22 scénářů: TC05 3/3, TC06 2/2,
+TC19 16/17 (jedno selhání, žádná chyba ani vynechání). TC19/TC_07 odhalil,
+že page object kliká na střed celého slideru, který u popsané stupnice neleží
+na ovladači; šipky pak ovládaly tlačítka. Pomocník nyní kliká na skutečný
+úchyt slideru a ověřuje zaměření i zvolenou hodnotu před potvrzením.
+Cílené opakování TC19/TC_06 a TC_07 pak prošlo 2/2, bez selhání, chyb a
+vynechání. Úplná přejímka všech scénářů stále vyžaduje nový CI běh.
 
 Nezávislá kontrola doplnila existenci kolonie a lodi v živém modelu.
 Oba reprodukční modelové testy před opravou selhaly (chybějící výjimka),

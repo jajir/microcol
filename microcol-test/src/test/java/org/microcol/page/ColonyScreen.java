@@ -142,6 +142,18 @@ public class ColonyScreen extends AbstractScreen {
                 .release(MouseButton.PRIMARY);
     }
 
+    public void dragGoodsOutsideWindow(final int cargoSlotIndex) {
+        getRobot()
+                .drag(getListOfCrates().get(cargoSlotIndex),
+                        MouseButton.PRIMARY)
+                .dropTo(getPrimaryStage().getX() + getPrimaryStage().getWidth()
+                        + 50,
+                        getPrimaryStage().getY()
+                                + getPrimaryStage().getHeight() / 2)
+                .release(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public ColonyScreen verifyNumberOfUnitsOnFields(
             final Integer expectedumberOfUnitsAtFields) {
         final Integer unitsInColony = colony.getColonyFields().stream()

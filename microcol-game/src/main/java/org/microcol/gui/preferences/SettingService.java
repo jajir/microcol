@@ -43,11 +43,11 @@ public class SettingService {
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
     }
 
-    public void save(final Setting setting) {
+    public synchronized void save(final Setting setting) {
         settingDao.saveToFile(setting, getSettingFile());
     }
 
-    public Setting load() {
+    public synchronized Setting load() {
         final Setting out = simpleLoad();
         if (Setting.CURRENT_VERSION.equals(out.getVersion())) {
             return out;
@@ -142,7 +142,7 @@ public class SettingService {
         }
     }
 
-    public void update(final Consumer<Setting> setter) {
+    public synchronized void update(final Consumer<Setting> setter) {
         final Setting setting = load();
         setter.accept(setting);
         save(setting);

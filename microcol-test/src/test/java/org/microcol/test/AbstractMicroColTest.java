@@ -11,7 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.microcol.MicroCol;
 import org.microcol.MicroColApplication;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.preferences.GamePreferences;
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.service.finder.NodeFinder;
+import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
@@ -78,9 +81,16 @@ public abstract class AbstractMicroColTest {
         this(DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS);
     }
 
+    @BeforeAll
+    static void configureJavaFx() {
+        MicroCol.configureJavaFx();
+    }
+
     @BeforeEach
     void beforeEach(final FxRobot robot) {
         getContext().setRobot(robot);
+        robot.interact(() -> getPrimaryStage().requestFocus());
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /**

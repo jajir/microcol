@@ -23,6 +23,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -103,18 +105,30 @@ public final class PanelColonyGoods implements JavaFxComponent {
         final ClipboardEval eval = ClipboardEval
                 .make(gameModelController.getModel(), event.getDragboard())
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from);
-        if (eval.getGoods().isPresent() && eval.getCargoSlot().isPresent()) {
+        if (eval.getGoods().isPresent() && eval.getCargoSlot().isPresent()
+                && event.getGestureSource() instanceof Node) {
             final Goods originalGoods = eval.getGoods().get();
             final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
 
             final ColonyWarehouse target = colonyWarehouse;
             final boolean partialTransfer = event
                     .getTransferMode() == TransferMode.LINK;
-            // Finish native drag/drop before entering a modal dialog's event
-            // loop.
+            // Finish native drag/drop before opening a modal dialog.
+            final Node source = (Node) event.getGestureSource();
+            source.addEventHandler(DragEvent.DRAG_DONE,
+                    new EventHandler<DragEvent>() {
+                        @Override
+                        public void handle(final DragEvent done) {
+                            source.removeEventHandler(DragEvent.DRAG_DONE,
+                                    this);
+                            if (done.getTransferMode() != null) {
+                                Platform.runLater(() -> unload(target,
+                                        originalGoods, fromCargoSlot,
+                                        partialTransfer));
+                            }
+                        }
+                    });
             event.setDropCompleted(true);
-            Platform.runLater(() -> unload(target, originalGoods, fromCargoSlot,
-                    partialTransfer));
         }
         event.consume();
     }

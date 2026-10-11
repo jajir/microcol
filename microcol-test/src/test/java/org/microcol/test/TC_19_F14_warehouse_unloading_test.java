@@ -513,6 +513,24 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
                 cargo(0).getGoods().get());
     }
 
+    @Test
+    @Tag("local")
+    void TC_17_drop_outside_window_keeps_cargo_and_allows_next_transfer()
+            throws Exception {
+        // Drop cotton outside the application; no target accepts the cargo.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, "Delft");
+        colony.selectUnitFromPort(0);
+        colony.dragGoodsOutsideWindow(2);
+        colony.verifyNumberOfGoodsInWrehouse(3, 50);
+        assertEquals(Goods.of(GoodsType.COTTON, 20), cargo(2).getGoods().get());
+
+        // The next ordinary transfer must still receive mouse input.
+        colony.dragGoodsFromShipCargoSlotToWarehouse(2, 3);
+        colony.verifyNumberOfGoodsInWrehouse(3, 70);
+        assertTrue(cargo(2).isEmpty());
+    }
+
     private CargoSlot cargo(final int index) {
         return ((UnitWithCargo) getModel().getUnitById(3)).getCargo()
                 .getSlotByIndex(index);
