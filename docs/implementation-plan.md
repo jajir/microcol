@@ -60,6 +60,7 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 | --- | --- |
 | [Rozbor pravidel](gap-analysis.md) | Autoritativní katalog 228 pravidel, jejich ID, stránky manuálu, současný stav, referenční tabulky a navržené kontroly. |
 | Tento plán | Balíky, závislosti, průběžné výsledky a šablona zadání. Detailní pravidla se sem nekopírují. |
+| [Odpovědnosti Java balíčků](architecture.md) | Vlastník pravidel, stav hráče, AI, UI a persistence; hranice a současné přesahy pro přípravu každého zadání. |
 | [Odhad práce](implementation-estimate.md) | Historický rozpočtový rámec, předpoklady a samostatné náklady na UX, obsah a vydání. |
 | [UX](ux.md), [grafika](graphics.md), [zvuk](audio.md) | Společná pravidla ovládání, existující podklady a požadavky na jejich integraci. |
 | [Vývojové distribuce](development-builds.md) | Současné sestavení, publikace a způsob předávání hratelného výsledku. |
@@ -365,6 +366,7 @@ Pravidla a zdroj: [ID z gap-analysis.md + stránky manuálu]
 Přijatá rozhodnutí: [hodnoty, vzorce, příklad; odkazy na uzavřené Q]
 Současný stav: [co už funguje, kde je chyba nebo mezera]
 Rozsah změny: [model, UI, data, save/load, dotčené soubory]
+Vlastník a hranice: [balíček podle architecture.md, sdílená operace člověka/AI, relevantní současný přesah]
 Mimo rozsah: [co se v tomto řezu nedělá]
 Závislosti: [konkrétní hotové předpoklady]
 Ovládání: [nalezení, podmínky, náhled, potvrzení, zrušení, výsledek]

@@ -37,6 +37,15 @@ root, `/microcol/`, through GitHub Actions. Exclude `microcol-site` and previous
 generated Maven pages from publication. Do not remove or relocate the source
 module unless the user requests it.
 
+# Package responsibilities
+
+Read [the package responsibility map](docs/architecture.md) before assigning or
+implementing a change. Reuse the existing owner of game rules; UI and AI use
+shared model operations. Do not add new model-to-GUI or AI-to-GUI dependencies.
+Treat documented legacy cross-layer dependencies as exceptions to reduce within
+relevant work, not patterns to extend. Update the map and the affected
+`package-info.java` when adding a package or changing its responsibility.
+
 # Code formatting
 
 Use the shared [Java formatter](docs/code-formatting.md) and its

@@ -1,9 +1,9 @@
 /**
- * In this package will be unit type hierarchy placed.
- * <p>
- * In long term {@link org.microcol.model.UnitType} should not be used to
- * determine which unit is it. Instead of it unit class hierarchy should be
- * used.
- * </p>
+ * Concrete unit types, their factory and persistent actions such as plowing.
+ * Shared Unit, AbstractUnit and UnitType classes remain in model. AI strategy
+ * and animation belong to their respective packages.
+ *
+ * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
+ *      responsibilities</a>
  */
 package org.microcol.model.unit;

@@ -11,6 +11,10 @@ records actual build and launch evidence. The linked POMs remain the source of
 truth, and [Building macOS and Linux distributions](distribution.md) owns the
 build commands and release limitations.
 
+For responsibilities inside the game and test modules, use the
+[Java package map](architecture.md). It distinguishes game rules, player state,
+AI decisions, UI, persistence and the existing cross-layer exceptions.
+
 ## Module overview
 
 `<version>` in filenames means the Maven project version, currently

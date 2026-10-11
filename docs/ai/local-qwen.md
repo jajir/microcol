@@ -592,3 +592,25 @@ worker input/result, runtime identity, patches, failed environment attempts,
 The worker model was unloaded before Maven. Source fixtures were unchanged by
 the verified isolated test setup. No broad reliability or savings claim follows
 from this single assignment.
+
+## Package responsibility documentation — 2026-10-11
+
+Task `2026-10-11-package-responsibilities` used baseline `dba286043459eef872f5ef561e0da753417cdb3e`
+and the existing local alias. Runtime samples confirmed its documented digest
+and context 8192. The caller stopped the single attempt at **180.25 seconds**
+(exit -15). Six of eight assigned `package-info.java` files contained drafts;
+there was no final worker result or completed-turn usage report. No repair round
+was requested for the small remaining edits.
+
+The main agent reviewed and reused those drafts, corrected the JavaDoc URL syntax,
+added missing links, clarified turn-report lifetime, wrapped text and completed
+the AI/GUI descriptions. The caller owns the package map, architecture decisions,
+documentation links and agent guidance. After unloading the model, the caller
+verified comment-only changes in all eight Java files, unchanged declarations,
+all 37 production package links, six documentation checks, strict MkDocs and
+JDK 17 Maven compilation with tests skipped. This documents no gameplay change;
+the publication workflow independently runs its usual checks on push.
+
+Input, raw worker patch, runtime samples and caller evidence are retained in
+`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-package-responsibilities/`.
+The partial result does not establish a measured saving or broader capability.
