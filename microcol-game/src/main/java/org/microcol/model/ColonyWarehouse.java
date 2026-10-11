@@ -97,16 +97,51 @@ public class ColonyWarehouse {
         setGoods(getGoods(goods.getType()).add(goods));
     }
 
+    /**
+     * Validate the source and preview the amount that fits, without changing
+     * either inventory. A full warehouse returns zero; invalid requests throw
+     * IllegalArgumentException.
+     */
+    public Goods getUnloadableGoods(final Goods requested,
+            final CargoSlot source) {
+        Preconditions.checkNotNull(requested);
+        Preconditions.checkNotNull(source);
+        Preconditions.checkArgument(requested.getAmount() > 0,
+                "Unloading requires a positive amount");
+        Preconditions.checkArgument(
+                GoodsType.BUYABLE_GOOD_TYPES.contains(requested.getType()),
+                "Only cargo goods can be unloaded");
+        Preconditions.checkArgument(source.getGoods().isPresent(),
+                "Source contains no goods");
+        final Goods stored = source.getGoods().get();
+        Preconditions.checkArgument(
+                stored.getType().equals(requested.getType()),
+                "Cargo type changed");
+        Preconditions.checkArgument(stored.getAmount() >= requested.getAmount(),
+                "Not enough cargo");
+        Preconditions.checkArgument(
+                source.getOwnerPlayer().equals(colony.getOwner()),
+                "Cargo and colony must have the same owner");
+        final Unit carrier = source.getOwnerUnit();
+        Preconditions.checkArgument(
+                carrier.isAtPlaceLocation()
+                        && carrier.getLocation().equals(colony.getLocation()),
+                "Cargo must be at the colony");
+        final int freeStorage = getStorageCapacity(requested.getType())
+                .getAmount() - getGoods(requested.getType()).getAmount();
+        return requested
+                .setAmount(Math.min(requested.getAmount(), freeStorage));
+    }
+
+    /**
+     * Transfer the exact requested amount, or reject it before either inventory
+     * changes.
+     */
     public void moveToWarehouse(final Goods goods,
             final CargoSlot fromCargoSlot) {
-        Preconditions.checkNotNull(goods);
-        Preconditions.checkNotNull(fromCargoSlot);
-
-        Preconditions.checkArgument(fromCargoSlot.getGoods().isPresent());
-        Preconditions.checkArgument(goods.getType()
-                .equals(fromCargoSlot.getGoods().get().getType()));
-        Preconditions.checkArgument(fromCargoSlot.getGoods().get()
-                .getAmount() >= goods.getAmount());
+        Preconditions.checkArgument(
+                getUnloadableGoods(goods, fromCargoSlot).equals(goods),
+                "Not enough warehouse capacity for the requested cargo");
 
         addGoods(goods);
         fromCargoSlot.removeCargo(goods);

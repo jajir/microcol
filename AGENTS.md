@@ -46,6 +46,12 @@ Treat documented legacy cross-layer dependencies as exceptions to reduce within
 relevant work, not patterns to extend. Update the map and the affected
 `package-info.java` when adding a package or changing its responsibility.
 
+Model operations validate every gameplay precondition before mutation and throw
+on rule violations without partial effects. UI uses model-provided limits to
+prevent invalid actions and handles expected rejection if state changes before
+confirmation. Cover boundaries in model tests and the corresponding player
+paths in UI tests; see the contract in `docs/architecture.md`.
+
 # Code formatting
 
 Use the shared [Java formatter](docs/code-formatting.md) and its

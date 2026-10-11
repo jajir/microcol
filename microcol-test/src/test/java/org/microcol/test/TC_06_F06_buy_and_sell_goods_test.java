@@ -1,6 +1,7 @@
 package org.microcol.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
@@ -133,6 +134,15 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
 
         // Verify that amount of gold dropped.
+        europePort.assertGold(94600);
+
+        // Cancel a partial transfer to an empty slot; zero goods must not
+        // occupy it.
+        europePort.moveCargoWithPressedControl(0, 1).cancel();
+        verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        assertTrue(getModel().getEurope().getPort()
+                .getShipsInPort(getHumanPlayer()).get(0).getCargo()
+                .getSlotByIndex(1).isEmpty());
         europePort.assertGold(94600);
 
         // Buy another 100 of corn and move it into first cargo slot.

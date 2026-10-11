@@ -23,6 +23,12 @@ Změna průvodce nastavením nebo vzhledu mění kroky či page objects, nikoli
 očekávané účinky pravidel. Národ, obtížnost a jejich uložené parametry ověřovat
 i tehdy, když jejich výběrové UI ještě není hotové.
 
+U herní akce ověřit obě vrstvy podle [kontraktu modelu](architecture.md#platnost-herni-akce-a-vyjimky):
+model nepovolený vstup odmítne výjimkou před změnou stavu; UI hráči nabídne
+jen dovolenou akci nebo vysvětlení. Testovat také zrušení a změnu stavu mezi
+náhledem a potvrzením. Výjimka v modelovém testu nenahrazuje test dostupného
+ovládání a bezpečného výsledku v UI.
+
 ## Co vyžaduje každá změna
 
 | Druh změny | Povinné pokrytí |
@@ -197,3 +203,61 @@ Do výsledku úkolu stačí uvést revizi, změněné chování, ID scénářů,
 JDK a prostředí, skutečné počty a cestu k reportům. Neprovedené kontroly nebo
 nefunkční testovací prostředí uvést jako otevřenou překážku. Hlavní agent
 ověřuje skutečný běh i u testů napsaných [místním Qwenem](ai/local-qwen.md).
+
+
+## Z01 — bezpečné vyložení nákladu
+
+Implementace ve větvi `codex/rules-warehouse-unloading` (11. října 2026) pokrývá
+část UC-023/UC-036: vlastní loď → vlastní sklad, kontrolu zdroje, vlastníka,
+polohy, druhu, kladného množství a kapacity. `ColonyWarehouse.getUnloadableGoods`
+je neměnný náhled; `moveToWarehouse` ověřuje celý požadavek znovu a odmítne jej
+výjimkou před změnou inventářů. UI používá stejný náhled při přetažení i po
+návratu z dialogu. Automaticky se nic nezahazuje ani nezmenšuje již potvrzený
+požadavek.
+
+[TC19 / F14](../microcol-test/src/test/java/org/microcol/test/TC_19_F14_warehouse_unloading_test.java)
+má vlastní [fixture](../microcol-test/src/test/scenarios/F14-warehouse-unloading.microcol);
+F05 sdílená s TC15 se nemění. Metody jsou samostatné lineární příběhy podle
+TC18, s `@Start`, komentovanými anglickými kroky, page objects a explicitními
+inventárními asercemi.
+
+| Metoda v TC19 | Kontrolovaný výsledek |
+| --- | --- |
+| TC_01 | Návrh 1 kusu z nákladu 100 do skladu 99/100; potvrzení 100/99, opakované odmítnutí, save/load stejných zásob. |
+| TC_02 / TC_03 | Viditelné Zrušit i Escape zachovají 99/100. |
+| TC_04 / TC_05 | Plný sklad vypíše vysvětlení; běžné vyložení 20 do 50 vytvoří 70 a prázdný zdroj. |
+| TC_06 | Skutečná klávesnice nemůže potvrdit nulu ani překročit volnou kapacitu. |
+| TC_07 | Přesné částečné množství 17 z 20; opakované otevření téhož dialogu s vysvětlením a bez něj. |
+| TC_08 / TC_09 | Změna kapacity nebo vyprázdnění nákladu při otevřeném dialogu bezpečně odmítne potvrzení. |
+| TC_10 / TC_11 / TC_12 / TC_13 | Změna polohy, vlastníka, druhu nebo snížení zásoby při otevřeném dialogu se odmítne bez dalšího přesunu. |
+
+U scénářů změny během dialogu test výslovně simuluje **konkurenční událost**
+platnou modelovou operací na FX vlákně. Testované vyložení nadále provádí
+hráč přetažením a potvrzením v UI; simulace neobchází tuto akci. Syntakticky
+nemožné vstupy z UI, například `null` a záporný objekt `Goods`, chrání modelové
+testy. Prázdný či jednotkou obsazený zdroj nemůže být přetažen jako zboží.
+
+[ColonyWarehouseUnloadTest](../microcol-game/src/test/java/org/microcol/model/ColonyWarehouseUnloadTest.java)
+ověřuje všechny nepotravinové druhy při kapacitách 100/200/300, neměnný náhled,
+atomické odmítnutí a zachování nákladu. Nové Zrušit používá také sdílený dialog
+v Evropě: rozšíření TC06 kontroluje, že zrušený přesun mezi prostory nevytvoří
+náklad s nulovým množstvím. Obchodní ceny ani evropská pravidla se nemění.
+
+**Dosavadní skutečné ověření:** macOS/JDK 17: 659 herních testů, 0 selhání,
+0 chyb, 0 vynechání. Reprodukční test cizího nákladu na původní revizi
+`89354999954f8a1bfa4c9a6ac0030751056f63e2` selhal očekávaně: chyběla výjimka.
+První místní Monocle běh vybral osm nových scénářů (1 selhání, 7 chyb):
+pomocník pro výběr znovu klikl na automaticky vybranou loď a odznačil ji.
+Page object nyní kliká jen při potřebě výběru a vybraný stav výslovně ověří.
+Cílený nativní macOS běh nedokončil vstup do hry.
+Po opravě výběru Monocle otevřel dialog a vytvořil screenshot, ale narazil
+na chyby vnořené smyčky drag/drop (`dndGesture.dragboard`, `wrong EventLoop`):
+11 vybraných, 1 prošlý, 1 selhání, 9 chyb, 0 vynechání.
+To není úspěšná UI verifikace. Úplný nativní Linux/Xvfb běh bude doložen
+v pull requestu; do jeho dokončení je přejímka otevřená.
+
+Screenshoty dialogů se ukládají do ignorovaného
+`microcol-test/target/warehouse-qa/` a CI je přiloží k `tests-functional`.
+Slouží k vizuální kontrole textu a ovládání, nenahrazují herní aserce.
+Samostatný PR míří do `main`; do sloučení nepublikuje nový vývojový release
+ani web. Potraviny, produkční zahazování a kolonijní UI vozů zůstávají mimo Z01.

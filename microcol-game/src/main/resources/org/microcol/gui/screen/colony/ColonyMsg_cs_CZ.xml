@@ -8,4 +8,9 @@
 	<entry key="colonyName">Toto je jméno kolonie.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
 
+	<entry key="unloadCaption">Vyložení nákladu</entry>
+	<entry key="unloadLimited">Ve skladu je místo jen pro %s jednotek tohoto zboží. Vyberte množství nebo přesun zrušte. Zbytek zůstane na lodi.</entry>
+	<entry key="unloadFull">Sklad je pro toto zboží plný. Nic se nevyložilo. Uvolněte místo a zkuste to znovu.</entry>
+	<entry key="unloadChanged">Náklad nebo kolonie se změnily. Nic se nevyložilo. Zkontrolujte náklad a místo ve skladu a zkuste to znovu.</entry>
+
 </properties>

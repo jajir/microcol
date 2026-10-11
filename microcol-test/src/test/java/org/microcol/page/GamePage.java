@@ -103,6 +103,16 @@ public class GamePage extends AbstractScreen {
         getRobot().clickOn(MouseButton.PRIMARY);
     }
 
+    public void saveGame() {
+        getRobot().push(KeyCode.CONTROL, KeyCode.S);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public WelcomePage exitToMenu() {
+        clickOnButtonWithId("exit");
+        return WelcomePage.of(getContext());
+    }
+
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
         final Button buttonNextTurn = getButtonById(
                 ButtonsGamePanel.BUTTON_NEXT_TURN_ID);

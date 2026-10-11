@@ -5,7 +5,7 @@
 	<comment>Define keys for Europe dialog</comment>
 	
 	<entry key="ok">Ok</entry>
-	<entry key="cancel">Cancel</entry>
+	<entry key="cancel">Zrušit</entry>
 
 	<entry key="fight_title">Útok</entry>
 	<entry key="fight_attacker">Útočník</entry>

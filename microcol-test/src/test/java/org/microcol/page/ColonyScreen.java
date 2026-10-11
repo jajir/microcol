@@ -73,6 +73,15 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
+    public void verifyWarehouseWarning(final String expectedText) {
+        assertEquals(expectedText,
+                getLabeledById("warehouseTransferMessage").getText());
+    }
+
+    public void closeWarehouseWarning() {
+        clickOnButtonWithId("buttonOk");
+    }
+
     public void verifyNumberOfShipsInPort(
             final int expectedNumberOfShipsInPort) {
         pageComponentPanelDock

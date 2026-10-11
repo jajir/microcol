@@ -29,6 +29,24 @@ jednu společnou implementaci, kterou používá tlačítko, klávesa i AI.
 Název `PlayerHuman` dnes neznamená výhradně člověka: `Player.make` tuto třídu
 vytváří i pro počítačové kolonizační hráče podle příznaku `isComputer`.
 
+### Platnost herní akce a výjimky
+
+Model ověří všechny herní podmínky před první změnou stavu. Neplatné množství,
+vlastnictví, poloha, zdroj nebo kapacita vyvolají výjimku; zamítnutá akce
+nesmí provést část převodu. Používat existující výjimky a kontroly modelu
+(`IllegalArgumentException`, případně `IllegalStateException`), bez vazby
+na GUI. Chybějící programový argument zůstává chybou volajícího.
+
+UI předem získá dovolené možnosti z modelu, omezí nabídku a zabrání potvrzení
+neplatné akce. Nevytváří vlastní kopii výpočtu pravidla. Zrušení nevolá
+měnící operaci. Model při provedení zkontroluje živý stav znovu; pokud se
+během dialogu změnil, UI převod neprovede a vysvětlí výsledek. Zachytává
+konkrétní očekávané zamítnutí, nikoli libovolnou programovou výjimku.
+
+Každá měněná podmínka má modelové hraniční testy a odpovídající ochranu
+skutečné cesty hráče v UI. Test modelu dokládá výjimku i nezměněný stav;
+UI test dokládá omezenou nabídku, zrušení či srozumitelné odmítnutí a zásoby.
+
 ```text
 gui: volba člověka ───┐
                      ├──> model: ověření a provedení akce

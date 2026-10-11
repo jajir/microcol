@@ -111,6 +111,18 @@ public class EuropePortScreen extends AbstractScreen {
                 .release(MouseButton.PRIMARY);
     }
 
+    public DialogChooseGoodsAmount moveCargoWithPressedControl(final int source,
+            final int target) {
+        getRobot().press(getGoodsAmountModifiers());
+        getRobot()
+                .drag(pageComponentPanelDock.getListOfCrates().get(source),
+                        MouseButton.PRIMARY)
+                .dropTo(pageComponentPanelDock.getListOfCrates().get(target))
+                .release(MouseButton.PRIMARY);
+        getRobot().release(getGoodsAmountModifiers());
+        return DialogChooseGoodsAmount.of(getContext());
+    }
+
     public List<VBox> getListOfGoodsToBuy() {
         return getListOfNodes(".panelGoods");
     }

@@ -44,17 +44,23 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final ChooseGoodsDialog chooseGoods;
 
+    private final DialogWarehouseTransfer transferWarning;
+
+    private final I18n i18n;
+
     private ColonyWarehouse colonyWarehouse;
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
             final ImageProvider imageProvider,
             final ChooseGoodsDialog chooseGoods, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final DialogWarehouseTransfer transferWarning) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
+        this.transferWarning = Preconditions.checkNotNull(transferWarning);
+        this.i18n = Preconditions.checkNotNull(i18n);
         panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream()
                 .map(goodsType -> {
                     final PanelColonyGood out = new PanelColonyGood(
@@ -100,20 +106,41 @@ public final class PanelColonyGoods implements JavaFxComponent {
             final Goods originalGoods = eval.getGoods().get();
             final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
 
-            final Goods goods = adjustedAmount(originalGoods,
-                    event.getTransferMode().equals(TransferMode.LINK));
-
-            colonyWarehouse.moveToWarehouse(goods, fromCargoSlot);
-            event.setDropCompleted(true);
+            final ColonyWarehouse target = colonyWarehouse;
+            try {
+                final Goods available = target.getUnloadableGoods(originalGoods,
+                        fromCargoSlot);
+                if (available.isZero()) {
+                    transferWarning.show(i18n.get(ColonyMsg.unloadFull));
+                } else {
+                    final Goods goods = adjustedAmount(originalGoods, available,
+                            event.getTransferMode() == TransferMode.LINK);
+                    if (!goods.isZero()) {
+                        // A modal dialog can process events that change either
+                        // inventory.
+                        if (target.getUnloadableGoods(goods, fromCargoSlot)
+                                .equals(goods)) {
+                            target.moveToWarehouse(goods, fromCargoSlot);
+                            event.setDropCompleted(true);
+                        } else {
+                            transferWarning
+                                    .show(i18n.get(ColonyMsg.unloadChanged));
+                        }
+                    }
+                }
+            } catch (final IllegalArgumentException ex) {
+                transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+            }
             eventBus.post(new RepaintColonyEvent());
         }
         event.consume();
     }
 
     private Goods adjustedAmount(final Goods originalAmount,
-            final boolean specialOperationWasSelected) {
-        if (specialOperationWasSelected) {
-            chooseGoods.init(originalAmount);
+            final Goods available, final boolean specialOperationWasSelected) {
+        if (specialOperationWasSelected || !available.equals(originalAmount)) {
+            chooseGoods.init(available, available.equals(originalAmount) ? ""
+                    : i18n.get(ColonyMsg.unloadLimited, available.getAmount()));
             return chooseGoods.getActualValue();
         } else {
             return originalAmount;
@@ -121,8 +148,19 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     private boolean isItGoods(final Dragboard db) {
-        return ClipboardEval.make(gameModelController.getModel(), db).getGoods()
-                .isPresent();
+        final ClipboardEval eval = ClipboardEval
+                .make(gameModelController.getModel(), db)
+                .filterFrom(from -> from == From.VALUE_FROM_UNIT);
+        if (!eval.getGoods().isPresent() || !eval.getCargoSlot().isPresent()) {
+            return false;
+        }
+        try {
+            colonyWarehouse.getUnloadableGoods(eval.getGoods().get(),
+                    eval.getCargoSlot().get());
+            return true;
+        } catch (final IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     @Override

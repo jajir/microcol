@@ -38,6 +38,7 @@ jobs:
           path: |
             microcol-game/target/surefire-reports/
             microcol-test/target/surefire-reports/
+            microcol-test/target/warehouse-qa/
           if-no-files-found: warn
           retention-days: 14
 

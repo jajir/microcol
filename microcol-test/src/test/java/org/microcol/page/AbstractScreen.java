@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
 
 import org.microcol.MicroColApplication;
 import org.microcol.model.Model;
@@ -84,6 +87,16 @@ public abstract class AbstractScreen {
 
     protected boolean isButtonBackVisible() {
         return isCssIdVisible("closeButtonId");
+    }
+
+    public void captureDialog(final String contentId, final String fileName)
+            throws IOException {
+        final Node root = getNodeFinder().lookup("#" + contentId).query()
+                .getScene().getRoot();
+        final Path output = Path.of("target", "warehouse-qa", fileName);
+        Files.createDirectories(output.getParent());
+        getRobot().robotContext().getCaptureSupport()
+                .saveImage(getRobot().capture(root).getImage(), output);
     }
 
     protected boolean isCssIdVisible(final String cssId) {

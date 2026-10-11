@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -22,8 +23,12 @@ public class PageComponentPanelDock extends AbstractPageComponent {
     }
 
     public void selectUnitFromPort(final int unitIndex) {
-        getRobot().clickOn(getUnitsInPort().get(unitIndex));
+        final ToggleButton ship = getUnitsInPort().get(unitIndex);
+        if (!ship.isSelected()) {
+            getRobot().clickOn(ship);
+        }
         WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(ship.isSelected(), "The requested ship must be selected");
     }
 
     public List<ToggleButton> getUnitsInPort() {

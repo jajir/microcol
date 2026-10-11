@@ -614,3 +614,33 @@ the publication workflow independently runs its usual checks on push.
 Input, raw worker patch, runtime samples and caller evidence are retained in
 `/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-package-responsibilities/`.
 The partial result does not establish a measured saving or broader capability.
+
+
+### Z01 attempt evidence — 11 October 2026
+
+Baseline: `89354999954f8a1bfa4c9a6ac0030751056f63e2`. The caller prepared the
+isolated worker tree `~/Library/Application Support/Microcol/local-worker/worktrees/2026-10-11-warehouse-unloading`
+and the PR branch `codex/rules-warehouse-unloading` in a separate checkout.
+The requested delivery is an open PR into `main`, so no direct main push or merge.
+
+| Attempt | Actual result | Accepted worker edits |
+| --- | --- | --- |
+| `2026-10-11-warehouse-model` | Watchdog timeout, 180.47 s, exit -15; repeated reads. | None |
+| `2026-10-11-warehouse-model-repair1` | Watchdog timeout, 180.50 s, exit -15; generated patch script failed with an undefined variable. | None |
+| `2026-10-11-warehouse-fixture` | Caller runner preparation error: child CODEX_HOME directory missing, exit 1 after 3.02 s; no inference. | None |
+| `2026-10-11-warehouse-fixture-retry` | After caller created the directory, watchdog timeout, 180.51 s, exit -15; incorrect JSON traversal. | None |
+
+The compact repair and fixture invocation used `project_doc_max_bytes=0` to
+avoid automatic duplicate repository instructions; applicable rules and scope
+were explicitly supplied in the task. This did not make the task succeed and
+is not evidence of a reliable new profile. Runtime samples confirmed the
+configured local alias, digest and 8192 context. Each runner unloaded the model
+before caller Maven verification; only the owned host lock was removed.
+
+The caller reported the failure and completed the implementation, fixture,
+tests and documentation directly. No cloud worker was substituted and no local
+worker code was accepted. This is a failed delegation, not measured token savings.
+Logs, commands, runtime samples and exit reports remain under
+`~/Library/Logs/Microcol/local-qwen/jobs/` in the directories above. Actual
+model and functional verification is recorded in the
+[Z01 test evidence](../functional-tests.md#z01-bezpecne-vylozeni-nakladu).
