@@ -230,6 +230,27 @@ ověřuje skutečný běh i u testů napsaných [místním Qwenem](ai/local-qwen
 
 ## Z01 — bezpečné vyložení nákladu
 
+**Přijaté ověření — 11. října 2026:**
+[CI běh 19](https://github.com/jajir/microcol/actions/runs/38176961016)
+na revizi `c2e24ba45d8e5530664a89e784c4572694e95283`, JDK 17,
+Linux/Xvfb/Openbox, nativní Glass. Čerstvé Surefire XML v artefaktu
+[tests-functional](https://github.com/jajir/microcol/actions/runs/38176961016/artifacts/11716435850)
+potvrzuje:
+
+| Sada | Vybráno / prošlo | Selhání / chyby / vynecháno |
+| --- | --- | --- |
+| Herní modul včetně modelových hranic | 663 / 663 | 0 / 0 / 0 |
+| Všechny funkční scénáře | 44 / 44 | 0 / 0 / 0 |
+| Z toho nová TC19 | 17 / 17 | 0 / 0 / 0 |
+
+Prošly také kontroly launcheru a balíčky macOS ARM64, macOS Intel a Linux x86-64.
+Testovací build je `dev-19-c2e24ba45d8e`; například
+[macOS ARM64 ke stažení](https://github.com/jajir/microcol/actions/runs/38176961016/artifacts/11715904023).
+Větev PR správně vynechala publikaci release. Následné doplnění této evidence
+mění jen dokumentaci; ověřený herní a testovací kód zůstává shodný s uvedenou revizí.
+Celé UC-023/036 tím není přijato: další směry, vozy, výroba a potraviny mají
+v katalogu vlastní zbývající kritéria.
+
 Implementace ve větvi `codex/rules-warehouse-unloading` (11. října 2026) pokrývá
 část UC-023/UC-036: vlastní loď → vlastní sklad, kontrolu zdroje, vlastníka,
 polohy, druhu, kladného množství a kapacity. `ColonyWarehouse.getUnloadableGoods`
@@ -268,7 +289,7 @@ atomické odmítnutí a zachování nákladu. Nové Zrušit používá také sd�
 v Evropě: rozšíření TC06 kontroluje, že zrušený přesun mezi prostory nevytvoří
 náklad s nulovým množstvím. Obchodní ceny ani evropská pravidla se nemění.
 
-**Dosavadní skutečné ověření:** macOS/JDK 17: 661 herních testů, 0 selhání,
+**Historie oprav a ověřování:** macOS/JDK 17: 661 herních testů, 0 selhání,
 0 chyb, 0 vynechání. Reprodukční test cizího nákladu na původní revizi
 `89354999954f8a1bfa4c9a6ac0030751056f63e2` selhal očekávaně: chyběla výjimka.
 První místní Monocle běh vybral osm nových scénářů (1 selhání, 7 chyb):
@@ -295,8 +316,8 @@ zablokovaného vstupu. Místní Linux/Xvfb reprodukce potvrdila chybu nativního
 zachytávání myši. Před samotným kliknutím byl dialog viditelný, zaměřený a
 tlačítko povolené. Čekání ani změna robota Glass → AWT problém neodstranily.
 Nastavení `glass.disableGrab=true` reprodukční TC_13 opravilo; nyní se používá
-ve skutečné hře i testech podle výše popsaného kontraktu. Přejímka celé sady
-čeká na nový běh s tímto produkčním nastavením a správcem oken.
+ve skutečné hře i testech podle výše popsaného kontraktu. Tento cílený výsledek
+ještě nenahrazoval přejímku celé sady se správcem oken.
 
 Nativní TC05 navíc odhalil souběžné čtení nastavení při překreslení a zápis
 na vlákně tahu. `SettingService` nyní synchronizuje čtení, zápis i celou
@@ -310,7 +331,7 @@ TC19 16/17 (jedno selhání, žádná chyba ani vynechání). TC19/TC_07 odhalil
 na ovladači; šipky pak ovládaly tlačítka. Pomocník nyní kliká na skutečný
 úchyt slideru a ověřuje zaměření i zvolenou hodnotu před potvrzením.
 Cílené opakování TC19/TC_06 a TC_07 pak prošlo 2/2, bez selhání, chyb a
-vynechání. Úplná přejímka všech scénářů stále vyžaduje nový CI běh.
+vynechání. Ani tento cílený výběr ještě nenahrazoval úplné CI.
 
 Třetí [CI běh](https://github.com/jajir/microcol/actions/runs/38176111274)
 na `9fdb0813` ověřil **663 herních testů** a všechny tři nativní balíčky.
@@ -324,7 +345,7 @@ Očekávání zásob 50/20 po zrušení a 70/0 po platném přesunu zůstává z
 Po čekání na zrušené gesto prošla místně celá TC19: 17/17. Po doplnění
 stejné kontroly platného přetažení prošlo šest cílených scénářů (TC19/TC_01,
 TC_13, TC_17 a všechny tři TC05), bez selhání, chyb a vynechání.
-Úplné CI ověření této poslední úpravy je zatím otevřené.
+Následující úplný CI běh 19 prošel podle přejímací tabulky výše.
 
 Nezávislá kontrola doplnila existenci kolonie a lodi v živém modelu.
 Oba reprodukční modelové testy před opravou selhaly (chybějící výjimka),

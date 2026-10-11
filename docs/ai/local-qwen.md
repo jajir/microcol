@@ -638,8 +638,12 @@ configured local alias, digest and 8192 context. Each runner unloaded the model
 before caller Maven verification; only the owned host lock was removed.
 
 The caller reported the failure and completed the implementation, fixture,
-tests and documentation directly. No cloud worker was substituted and no local
-worker code was accepted. This is a failed delegation, not measured token savings.
+tests and documentation under the main agent's control. During native verification,
+a Codex collaborator authored the small settings synchronization fix and two
+concurrency regressions; the main agent reviewed the changes and verified the
+complete native test suite. No local Qwen code was accepted. The configured
+local runner was not silently replaced or reconfigured. This is a failed local
+delegation, not measured token savings.
 Logs, commands, runtime samples and exit reports remain under
 `~/Library/Logs/Microcol/local-qwen/jobs/` in the directories above. Actual
 model and functional verification is recorded in the
