@@ -1,0 +1,128 @@
+# UX a pravidla ovládání MicroCol
+
+MicroCol má zachovat strategickou hloubku a současně hráči pomáhat pochopit jeho možnosti, ovládání a důsledky rozhodnutí. Při nové funkci proto řešíme také to, kde ji hráč najde, jak ji použije a jak pozná výsledek.
+
+Tato stránka je společným místem pro pravidla UX, popis současného ovládání a zjištění z jeho ověřování. Navazuje na [grafické zadání](graphics.md#soucasne-zadani-vzhledu) a [pravidla zvukové odezvy](audio.md). Platná pracovní dohoda z **11. října 2026**. Technická pozorování níže vycházejí z kódu na větvi `develop`, revize `77f75eb03c74f07ad0253595d14fb0b31ac6e78a`; nejsou výsledkem pozorování hráčů.
+
+## Společná pravidla pro další změny
+
+| Pravidlo | Jak se projeví ve hře |
+| --- | --- |
+| Hráč pozná aktuální stav. | Je zřejmé, která jednotka či kolonie je vybraná, kdo je na tahu, kolik zbývá pohybu a zda se právě zadává nebo provádí příkaz. Výběr a provedení akce jsou rozlišitelné. |
+| Důsledky jsou srozumitelné před akcí. | U nákupu ukázat cenu a podmínky, u změny práce dostupnou informaci o očekávané produkci. U nejistých výsledků vyjádřit nejistotu; neprozrazovat skryté herní informace. |
+| Nedostupná akce má dohledatelný důvod. | V relevantním kontextu vysvětlit například chybějící nástroje, peníze či pohyb. Pouhé zmizení nebo zešednutí ovládacího prvku nemusí hráči vysvětlit, co má změnit. |
+| Stejné činnosti mají stejné ovládání. | Sjednotit význam kliknutí, přetažení, kontextového menu, potvrzení a zrušení. Zachovávat názvy, ikony a umístění běžných akcí napříč obrazovkami. |
+| Klíčové možnosti lze objevit. | Důležitá činnost má mít viditelnou cestu nebo nápovědu v místě použití. Klávesové zkratky a gesta pomáhají zkušeným hráčům, ale jejich znalost nemá být jedinou cestou k základním akcím. |
+| Rozpracovanou akci lze opustit. | Před provedením příkazu nabídnout jasné zrušení bez vedlejších změn. U závažných nevratných akcí vysvětlit důsledky a použít přiměřené potvrzení; běžné opakované kroky nemají vyžadovat zbytečné dialogy. Vrácení již provedené herní akce zavádět jen v souladu s pravidly hry. |
+| Odezva odpovídá výsledku a důležitosti. | Potvrdit skutečně dokončenou akci, chybu vysvětlit včetně dalšího možného kroku. Hrozící hladomor odlišit od běžného příjezdu lodi. Přerušující dialog používat tam, kde je pozornost nebo rozhodnutí hráče potřebné. |
+| Informace je čitelná a dostupná více způsoby. | Důležitý význam nesmí záviset pouze na zvuku nebo barvě. Držet kontrast, čitelné texty a viditelné klávesové zaměření. U měněné obrazovky prověřit relevantní velikosti okna, ovládání klávesnicí a délky lokalizovaných textů. |
+| Nápověda zůstává dostupná. | Úvodní výuka může naučit základ; zapomenutý postup má jít později dohledat bez opakování celé výuky. Texty používají názvy známé hráči, nikoli interní názvy tříd a událostí. |
+
+Pravidla vycházejí také z [principů použitelnosti NN/g](https://www.nngroup.com/articles/ten-usability-heuristics/) a herních [doporučení k vizuální a zvukové odezvě](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103). Konkrétní způsob jejich použití se řídí kontextem MicroCol a zjištěními z hraní.
+
+### Kdy akci skrýt a kdy vysvětlit její nedostupnost
+
+Akci, která se k vybranému objektu vůbec nevztahuje, lze skrýt. Pokud ji hráč v daném kontextu může očekávat a chybí pouze splnitelná podmínka, upřednostnit dohledatelnou akci s důvodem nedostupnosti. Vysvětlení musí být dostupné také u neaktivního ovládacího prvku; samotná existence tooltipu v kódu to nezaručuje.
+
+Toto je pravidlo pro návrh dalších změn, nikoli tvrzení, že tak nyní fungují všechny panely. Při úpravách zohlednit také stabilitu polohy tlačítek a množství zobrazených možností.
+
+## Krátké zadání UX pro novou funkci
+
+Před implementací funkce ovlivňující hráče doplnit do jejího zadání následující body. U malé změny stačí několik vět; podrobný návrh každé obrazovky ani samostatná studie nejsou automaticky potřeba.
+
+| Otázka | Co má zadání obsahovat |
+| --- | --- |
+| Co chce hráč udělat | Cíl vyjádřený herním jazykem, například získat novou jednotku nebo zvýšit výrobu potravin. |
+| Kde možnost najde | Obrazovka, vybraný objekt, viditelná akce a případná kontextová nápověda. |
+| Co potřebuje vědět předem | Cena, podmínky, dostupné kapacity a očekávané důsledky. |
+| Jak akci provede a zruší | Základní cesta ovládání, případná zkratka, potvrzení a chování při zrušení. |
+| Jak pozná výsledek | Změna stavu, text, ikona nebo animace; zvuk pouze tam, kde pomáhá. |
+| Co se stane při nesplněných podmínkách | Konkrétní vysvětlení a možný další krok; zachování rozpracovaných údajů, kde to dává smysl. |
+| Jak navazuje na další práci | Co zůstane vybrané, kam se hráč vrátí a jak snadno činnost zopakuje. |
+| Jak funkci ověříme | Pozorovatelný scénář, očekávaný výsledek a potřebný druh kontroly. |
+
+Například nová jednotka potřebuje srozumitelný popis účelu, místo pořízení, cenu a podmínky před nákupem, vysvětlení nedostupnosti a jasný výsledek po získání. Vlastní dialog, nová ikona ani vlastní zvuk nejsou automatickou podmínkou: vhodné existující prvky lze použít znovu.
+
+## Současné ovládání a místa pro další práci
+
+Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o úplný audit ovládání ani hodnocení skutečné úspěšnosti hráčů.
+
+| Oblast | Současný stav doložený kódem | Co potřebujeme ověřit při používání |
+| --- | --- | --- |
+| Výběr a pohyb na mapě | [GamePanelMouseListener](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/GamePanelMouseListener.java) při primárním stisku na poli s pohyblivou vlastní jednotkou z běžného režimu zkouší přejít do režimu pohybu; zpracovává také uvolnění myši, posouvání mapy a modifikátory Ctrl/Alt. | Zda hráč pozná rozdíl mezi výběrem, zadáním příkazu a posouváním mapy a dokáže rozpracovaný příkaz zrušit. |
+| Dostupnost akcí | [ButtonsGamePanelController](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/ButtonsGamePanelController.java) podle stavu přidává či odebírá akce pro založení kolonie a orbu. [ButtonsGamePanel](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/ButtonsGamePanel.java) je umísťuje do panelu. | Zda hráč pochopí důvod chybějící akce a zda změny polohy tlačítek nekomplikují naučené ovládání. |
+| Popisky ikon | [ButtonImage](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/ButtonImage.java) při najetí myši posílá lokalizovaný popis do stavového řádku a při opuštění jej odstraňuje. | Zda si hráč popisku všimne, rozpozná ikonu a dostane obdobnou pomoc při ovládání klávesnicí. |
+| Práce a vybavení v kolonii | [PanelOutsideColonyUnit](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelOutsideColonyUnit.java) používá přetažení a kontextové menu vybavení. [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) nabízí změnu produkce přes kontextové menu obsazeného pole. | Zda hráč najde tyto možnosti bez náhodného zkoušení, pozná platný cíl přesunu a potřebné suroviny. |
+| Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
+| Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Hlavní obsah [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) je zatím prázdný. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
+
+## První scénář k ověření
+
+Výchozím návrhem je **založení první fungující kolonie**. Pokrývá souvislou činnost od mapy po ekonomický výsledek:
+
+1. Vybrat jednotku a zjistit, co s ní lze provést.
+2. Přesunout ji na vhodné místo a založit kolonii.
+3. Přidělit pracovníka k práci a zjistit, co bude vyrábět.
+4. Ukončit tah a rozpoznat, co se změnilo.
+5. Vysvětlit vzniklou produkci a najít případný problém nebo další potřebný krok.
+
+Zadání pro hráče popisuje cíl, například „Založ kolonii a zajisti v ní výrobu potravin“. Konkrétní kliknutí jsou součástí interního funkčního scénáře, nikoli návodem při ověřování, zda hráč sám najde potřebné ovládání. Výchozí uložená hra, pravidla a podmínky musí tento úkol skutečně umožňovat.
+
+Sledujeme dokončení úkolu bez zásahu pozorovatele, místa zaváhání, mylná očekávání, potřebu nápovědy a schopnost hráče poznat výsledek. Počet kliknutí či rychlost slouží jako doplňující údaje; promyšlené strategické rozhodování samo o sobě není problém UX.
+
+Scénář je **navržený, dosud zde není zaznamenáno ověření s hráči**. Další vhodné cesty jsou naložení a vyložení lodě, obchod v Evropě, reakce na hladomor a získání nové jednotky. Rozšiřovat je podle skutečných změn a nalezených problémů.
+
+## Jak pravidla udržovat v implementaci
+
+Opakované chování zavádět do společných komponent, aby je nové obrazovky přebíraly. Existujícími místy jsou například [ButtonImage](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/ButtonImage.java), [AbstractButtonsPanel](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/AbstractButtonsPanel.java) a základ dialogů [AbstractYesNoDialog](../microcol-game/src/main/java/org/microcol/gui/util/AbstractYesNoDialog.java). Hráčské texty zapojovat přes existující [I18n](../microcol-game/src/main/java/org/microcol/i18n/I18n.java) a jazykové resources.
+
+Při změně sdílené komponenty projít její dotčená použití. Změna jednoho tlačítka nemá nechtěně změnit chování ostatních obrazovek. Novou abstrakci zavádět tehdy, když řeší skutečně společné chování; samotné přijetí těchto pravidel nevyžaduje přepis celého UI.
+
+Před dokončením změny ovlivňující ovládání:
+
+- Projít základní hráčskou cestu a relevantní nedostupný, chybový či zrušený stav.
+- Zkontrolovat srozumitelnost textů, stav výběru, návrat z dialogu a návaznost na další krok.
+- Ověřit dotčené ovládání myší a klávesnicí, čitelnost a lokalizaci v přiměřeném rozsahu.
+- Sladit vizuální a případnou zvukovou odezvu s jejich vlastními pravidly.
+- Zapsat důležité nové zjištění nebo změnu společného pravidla sem; konkrétní podrobnosti funkce ponechat u jejího zadání a kódu.
+
+Automatické testy mají hlídat podstatné funkční chování a regresi. Úspěšný skriptovaný průchod není důkaz, že nový hráč ovládání objeví nebo pochopí. Rozsah ověřování volit podle změny; drobná textová oprava nepotřebuje nové uživatelské testování.
+
+## Ověřování s hráči a záznam zjištění
+
+Pro první malé kolo lze zvolit několik lidí s různou zkušeností se strategiemi. Pozorovatel zadá cíl a sleduje postup, očekávání a záseky; pokud pomůže, pomoc zaznamená. Hráč může nahlas popisovat, co očekává. Po úkolu ověřit, zda rozumí výsledku, a zjistit, co mu připadalo nejasné.
+
+Nejdříve řešit překážky dokončení, nechtěné závažné akce a opakované nedorozumění. Následují zbytečné kroky a další nepohodlí. Upravenou cestu znovu ověřit. Malá skupina pomůže najít konkrétní potíže, ale sama nedokazuje použitelnost pro všechny hráče ani zábavnost celé kampaně. Delší hraní je potřeba pro tempo, opakování činností a pozdní fáze hry.
+
+Rozpočet a rozsah plánovaných kol zůstávají v [odhadu pracnosti](implementation-estimate.md#real-player-test-plan-and-completion-evidence); tato pravidla automaticky nezahajují nábor ani další kolo. Průchod kódem a aplikací může připravit implementátor, skutečné porozumění a dlouhodobý dojem potřebují také zkušenost hráčů.
+
+### Druhy důkazů
+
+| Označení | Co skutečně dokládá |
+| --- | --- |
+| Návrh nebo hypotéza | Očekávaný problém či zlepšení, které je potřeba ověřit. |
+| Doloženo kódem | Konkrétní implementovaná vazba; nemusí být ověřená v běžící aplikaci. |
+| Ověřeno v aplikaci | Popsaný scénář proběhl v konkrétní verzi a prostředí. Uvést datum, postup a výsledek. |
+| Ověřeno s hráči | Záznam konkrétních pozorování, počtu a zkušenosti účastníků, podmínek a výsledku. Nezobecňovat mimo rozsah ověření. |
+
+Tyto značky popisují důkaz, nikoli automaticky úspěch. Zvlášť uvádět stav řešení: otevřeno, plánováno, upraveno nebo uzavřeno. Za potvrzený problém nepovažovat pouhý předpoklad odvozený z neobvyklého kódu.
+
+### Počáteční seznam k ověření
+
+| ID | Otázka | Dosavadní důkaz a stav |
+| --- | --- | --- |
+| UX-001 | Rozpozná hráč výběr jednotky, režim pohybu a zrušení příkazu? | Hypotéza z mapového ovládání popsaného výše; otevřeno. |
+| UX-002 | Pochopí, proč chybí akce založení kolonie nebo orby? | Skrývání akcí doloženo kódem; dopad na hráče je hypotéza, otevřeno. |
+| UX-003 | Najde přidělení práce, změnu produkce a podmínky vybavení? | Přetažení a kontextové nabídky doloženy kódem; nalezení těchto možností hráčem je k ověření, otevřeno. |
+| UX-004 | Dokáže podle zprávy o hladomoru najít kolonii a navázat řešením? | Textový report doložen kódem; porozumění a návaznost jsou k ověření, otevřeno. |
+| UX-005 | Dokáže po úvodní výuce znovu najít zapomenutý postup? | Výuka a prázdný obsah encyklopedie doloženy kódem; hráčská cesta je k ověření, otevřeno. |
+
+Při práci na položce doplnit scénář a verzi hry, datum, očekávané a skutečné chování, druh důkazu, dopad a četnost, navrženou úpravu, stav řešení a výsledek následného ověření. Ke skutečnému pozorování patří i podmínky, například velikost okna, způsob ovládání a použitá nápověda. Podle potřeby připojit odkaz na úkol, změnu kódu nebo snímek.
+
+## Údržba pravidel
+
+Pravidla lze průběžně upřesňovat podle ověřených zkušeností. Při změně uvést důvod a datum, upravit příslušné společné komponenty v rozsahu dané práce a ponechat zde jedinou aktuální verzi pravidla. Rozhodnutí o herních mechanikách patří také do jejich vlastní dokumentace; výtvarné detaily do [grafiky](graphics.md), zvukové soubory a jejich spouštěče do [audia](audio.md).
+
+Při založení stránky **11. října 2026** byly zkontrolovány uvedené zdrojové vazby. Nebyl proveden nový průchod běžící hrou ani test s hráči; první scénář a seznam hypotéz zůstávají připravené k budoucímu ověření.
+
+Dokumentace byla téhož dne ověřena přísným sestavením `target/docs-venv/bin/python -m mkdocs build --strict`, kontrolou odkazů a vizuálním náhledem.

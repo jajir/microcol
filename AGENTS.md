@@ -46,6 +46,24 @@ to make it appealing. Detailed styling is intentionally deferred; do not block
 functional work on a detailed style guide or request approval for routine
 visual choices within this brief.
 
+# Sound and feedback
+
+Follow [the audio guidelines](docs/audio.md) when adding or changing sound and
+player feedback. Keep important outcomes understandable without sound, define
+the event and timing for each cue, and document its asset and integration in the
+shared catalog. Distinguish implemented playback from proposed audio features;
+the current background music player is not an event sound-effects service.
+
+# User experience
+
+Follow [the UX guidelines](docs/ux.md) for player-facing changes. Describe the
+player's goal, discovery, prerequisites, action/cancel path and outcome feedback
+at a level appropriate to the change. Reuse consistent shared controls and check
+the affected journey and relevant failure states. Keep implementation evidence,
+UX hypotheses and actual player observations distinct. Update the shared
+guidelines as findings warrant; small changes do not require a full UI redesign
+or a new player study.
+
 # Local worker
 
 When a local worker is configured and available, the main agent uses the

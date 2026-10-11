@@ -68,6 +68,11 @@ The 24 increments represent approximately one review point per 100 hours of base
 
 Human UX tests examine whether players understand and can use the game. Automated UI tests check whether scripted interactions behave correctly. These are separate activities. Necessary functional controls are already funded by the gameplay estimate; these additions address consistency, discoverability, feedback and unnecessary interaction steps. Participant time and compensation are outside the person-hour figures.
 
+The [UX guidelines](ux.md) define the shared interaction rules, feature brief,
+initial player journey and findings record. This estimate remains the source for
+staffing and test-round allowances; adopting the guidelines does not add a new
+testing round or change those budgets.
+
 ### Release engineering and upkeep
 
 | Additional work | Low | Likely | High | Work units and completion scope |
@@ -156,7 +161,7 @@ Status: open, 2026-10-02. The project owner should select the release scope and 
 ### Existing allowances and unresolved decisions
 
 - **Graphics:** 160 likely hours already covers polishing 10–12 screen families and 16–24 small assets. Steam artwork and trailer production have separate 48-hour allowances each. None establishes that every new profession, equipment state, ship, building, terrain improvement, native settlement or Congress view has suitable game art. Create a coverage inventory with reuse/new/replace decisions, required variants, dimensions, owner and acceptance criteria. [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderUnit.java) uses cells from a shared atlas, so counting PNG/SVG files is not a count of usable assets. Distinct portraits and elaborate animations are separate choices, not assumed prerequisites for every rule.
-- **Sound and music:** [MusicController](../microcol-game/src/main/java/org/microcol/gui/MusicController.java) already starts one bundled WAV, and [MusicPlayer](../microcol-game/src/main/java/org/microcol/gui/MusicPlayer.java) provides streaming, volume and stop behavior. The inspected path plays a hardcoded track to its end; it does not provide a playlist or event-driven effects system. Decide whether to retain the current track, how many effects/variants are needed, desired music duration and whether music is sourced or composed. Existing playback and settings receive credit.
+- **Sound and music:** Existing playback and volume settings receive credit; the current implementation plays one bundled WAV and has no event-driven effects system. See the authoritative [audio implementation, guidelines and catalog](audio.md) for technical details and extension rules. Decide whether to retain the current track, how many effects/variants are needed, desired music duration and whether music is sourced or composed.
 - **Real users:** 160 likely UX hours already funds two rounds of about five participants, including 72 hours of usability improvements. The separate 240-hour integration allowance includes balancing and complete playthroughs; accessibility has 100 hours. Decide whether two observed rounds are enough and whether an organized external beta is required. Short usability sessions, long-game pacing/balance tests and automated UI tests answer different questions.
 
 ### Provisional additional work

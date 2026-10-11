@@ -10,6 +10,8 @@ directory on `main`. Development, integration and publication all use `main`.
 | [macOS and Linux distributions](distribution.md) | Maven commands, bundled runtimes, DMG/DEB/archive outputs, and verified build and launch results. |
 | [MicroCol Dev and automatic updates](development-builds.md) | Install the development launcher once and receive each successful build from `main`. |
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
+| [Sound and player feedback](audio.md) | Current music playback, file formats, event feedback, and guidelines and a catalog for future sounds. |
+| [UX and interaction guidelines](ux.md) | Shared interaction rules, current controls, feature briefs, player journeys, and usability findings. |
 | [Rules gap analysis](gap-analysis.md) | Comparison with the reference game's rules, implementation evidence, and outstanding work. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |
 | [Local Qwen worker](ai/local-qwen.md) | The configured local worker, delegation workflow, and verification evidence. |
