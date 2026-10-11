@@ -23,6 +23,15 @@ even where its content is outdated. Keep the existing Maven website at the proje
 root and publish `docs/` under `/microcol/docs/`. Do not remove or relocate the
 module or move its website into an archive unless the user requests it.
 
+# Graphics
+
+Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for
+graphics changes. Keep artwork broadly consistent with the existing game,
+prioritize high contrast and readability, and use your own aesthetic judgment
+to make it appealing. Detailed styling is intentionally deferred; do not block
+functional work on a detailed style guide or request approval for routine
+visual choices within this brief.
+
 # Local worker
 
 When a local worker is configured and available, the main agent uses the

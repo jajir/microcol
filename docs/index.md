@@ -7,6 +7,7 @@ directory. Development and documentation changes are integrated on `develop`.
 | Page | Purpose |
 | --- | --- |
 | [Modules and build outputs](modules.md) | Responsibilities of the Maven modules, generated products, and current distribution limitations. |
+| [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Rules gap analysis](gap-analysis.md) | Comparison with the reference game's rules, implementation evidence, and outstanding work. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |
 | [Local Qwen worker](ai/local-qwen.md) | The configured local worker, delegation workflow, and verification evidence. |
