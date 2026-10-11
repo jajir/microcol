@@ -138,6 +138,79 @@ Přiřazení pokrývá všech 228 katalogových ID. Celé rodiny pravidel zůst�
 v rozsahu, včetně všech 25 zakladatelů a referenčních tabulek; priorita nezařazuje
 jejich zbývající části automaticky „mimo první vydání“.
 
+## Rozdělení práce mezi Qwen a hlavního agenta
+
+**Dohoda z 11. října 2026:** maximum vhodné implementační práce předáváme
+lokálnímu Qwenu. Všech 32 balíků obsahuje delegovatelnou část. Velký nebo složitý
+balík rozdělíme na menší zadání; jeho složitost sama o sobě není důvodem,
+aby vše napsal hlavní agent. Tato mapa vyjadřuje plánované rozdělení práce,
+nikoli tvrzení, že Qwen už jednotlivé oblasti úspěšně zvládl.
+
+Hlavní agent připravuje pravidla, architekturu, rozhraní a akceptaci; s vlastníkem
+hry řeší potřebná herní a UX rozhodnutí. Qwen dostává implementaci, psaní testů,
+opravy a navazující dokumentaci v dohodnutém rozsahu. Skutečné spuštění kontrol,
+vizuální a hráčské ověření, revizi změn, integraci a publikaci drží hlavní agent.
+Pro přijetí dílčí práce není nutné znovu schvalovat již dohodnutý záměr.
+
+V posledním sloupci je příprava **hlavního agenta**, případně jím předložené
+rozhodnutí vlastníka hry. Závislosti na funkcích zůstávají v katalogu balíků
+výše. Předává se jen potřebné rozhraní a dokončená část závislosti, nikoli
+automaticky celý předchozí balík. Výtvarnou tvorbu nesvěřujeme textovému workeru;
+jeho prostor je zejména technická příprava a zapojení podkladů.
+
+| Balík | Co zadávat Qwenu po malých částech | Co připravit před předáním |
+| --- | --- | --- |
+| P01 Pravidla | Schválené datové tabulky, validátory a nezávislé testovací příklady. | Rozhodnutí příslušné Q, zdroj hodnot a očekávané výsledky. |
+| P02 Nová hra | Jednotlivé volby, uložené nastavení, inicializace a testy profilů. | Rozhraní nastavení, počáteční hodnoty a návrh obrazovky. |
+| P03 Tahy | Jedna fáze či přechod, ukládaný stav a testy pořadí. | Kalendář, pořadí událostí a rozhraní průchodu tahem. |
+| P04 Mapa | Terénní data, výnos/cena pole, generátorový krok a testy. | Model mapy, přijatá pravidla a reprodukovatelné příklady. |
+| P05 Jednotky | Jeden typ nebo změna výstroje, továrna, persistence a testy. | Rozlišení identity, odbornosti a výstroje, povolené přechody. |
+| P06 Rozkazy | Jednotlivý příkaz, cena kroku, přerušení a regresní testy. | Smlouva příkazu, hraniční pohyb a způsob ovládání. |
+| P07 Pionýři | Jeden druh práce, spotřeba nástrojů a testy dokončení. | Délka a přerušení práce, přesný okamžik účtování. |
+| P08 Náklad | Jedna transakce, kontrola kapacity, dílčí dialog a testy. | Pravidla přenosu, zachování stavu při chybě a návrh dialogu. |
+| P09 Atlantik | Přechod plavby, návratové místo a testy načtení. | Doby cesty, směry a rozhraní stavu plavby. |
+| P10 Kolonie | Založení, sklad či přiřazení pracovníka jako oddělená zadání. | Přesný řez pravidel, rozhraní a požadovaný průchod UI. |
+| P11 Výroba | Jeden řetězec nebo bonus, spotřeba a hraniční testy. | Pořadí výpočtu, vzorce a nezávislé účetní příklady. |
+| P12 Stavby | Jedna podmínka, upgrade, transakce či zpráva a testy. | Schválená tabulka nákladů, účinky a návrh ovládání. |
+| P13 Vzdělávání | Přidělení žáka, postup výuky nebo přerušení a persistence. | Stavový model, trvání a chování při odchodu učitele. |
+| P14 Imigrace | Výběr kandidáta, doplnění nabídky, nákup a testy. | Práh imigrace, rozhraní nabídky a způsob potvrzení. |
+| P15 Trh | Cena, daň, transakce nebo dílčí zpráva a testy. | Vzorec trhu, zaokrouhlení, pravidla daně a náhled ceny. |
+| P16 Trasy | Zastávka, nakládací pravidlo, zrušení či editorový prvek. | Stav trasy, reakce na nedosažitelný cíl a návrh editoru. |
+| P17 Boj | Dílčí výpočet síly, jeden následek boje a řízené testy. | Pořadí bonusů, pravidla náhody a rozhraní výsledku. |
+| P18 Domorodé společnosti | Stav vztahu, jedna změna poplachu, ukládání a testy. | Význam stavů, parametry, oprávněně viditelné informace. |
+| P19 Interakce | Jedna nabídka, mise, výuka nebo transakce a testy. | Pravidla návštěvy, účtování a přijatý průchod rozhodnutím. |
+| P20 Diplomacie | Přechod válka/mír, nabídka nebo kontrola povolené akce. | Diplomatický model, následky voleb a rozhraní kontaktu. |
+| P21 Soupeři | Jedna strategie či krok AI, scénáře a opravy konkrétních vad. | Architektura rozhodování, povolené příkazy a měřitelný cíl. |
+| P22 Politika | Jeden výpočet podpory, daňové rozhodnutí nebo bojkot a testy. | Vzorce, prahy, zaokrouhlení a pořadí změn stavu. |
+| P23 Kongres | Náborový krok a potom jeden efekt zakladatele s testy. | Rozhraní efektů, souběh bonusů a podmínky jednorázovosti. |
+| P24 Revoluce | Jeden přechod, podmínka výsledku nebo zásah spojence. | Stavový model revoluce, přesné podmínky a příklady. |
+| P25 Skóre | Jedna skórovací položka, větev konce nebo záznam výsledku. | Přijaté vzorce a rozlišení ukončení, skórování a pokračování. |
+| P26 Ukládání | Jedno nové pole, schválená migrace a testy obnovy/chyb. | Verze formátu, kompatibilita a migrační strategie. |
+| P27 Informace | Jeden přehled, navigace zprávy, nápovědný text a testy. | Herní pojmy, rozsah dostupných informací a návrh obrazovky. |
+| P28 UX | Komponenta, klávesové ovládání, popisek či stav chyby podle briefu. | Cesta hráče, návrh interakce a plán skutečného ověření UI. |
+| P29 Grafika | Inventář, alias, exportní skript, integrace assetu a validátor. | Zdrojový obrázek, cílové rozměry, varianty a vizuální očekávání. |
+| P30 Zvuk | Zapojení události, nastavení, přehrávání, katalog a testy. | Vybraný zvuk, okamžik přehrání a očekávaná odezva. |
+| P31 Kvalita | Testy, fixture, reprodukční scénáře, měřicí nástroje a opravy. | Co se ověřuje, nezávislý očekávaný výsledek a způsob měření. |
+| P32 Vydání | Konkrétní oprava CI, balení, launcheru či dokumentace. | Kontrakt výstupů a akceptace; publikaci provede hlavní agent. |
+
+### Připravenost prvních zadání
+
+„Vhodné pro Qwen“ neznamená „lze okamžitě spustit“. Vlastníkem níže uvedené
+přípravy je hlavní agent. Stav zachycuje plán k 11. říjnu 2026; žádné z těchto
+tří herních zadání zatím nebylo předáno k implementaci.
+
+| Zadání | Stav a konkrétní podmínka předání | Nejmenší práce pro Qwen |
+| --- | --- | --- |
+| Z01 Vyložení do skladu | K dopracování kontraktu: určit rozhraní kontroly kapacity a přenosu, použitý dialog a živé ověření. Není nutné čekat na celou ekonomiku. | Nejprve bezpečný modelový přenos a hraniční testy; potom dialog podle přijatého návrhu. |
+| Z02 Pojmenování kolonie | K dopracování kontraktu: určit rozhraní předání jména, vytvoření a otevření kolonie a kontrolu zrušení. | Nejprve předání jména a testy založení; potom dialog a otevření správné kolonie. |
+| Z03 Průchod tahem | Změna chování blokovaná: hlavní agent připraví k rozhodnutí Q-02 a stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Před rozhodnutím inventář přechodů a testy současného chování; po rozhodnutí jedna fáze/přechod a její testy. |
+
+Před spuštěním každého řezu hlavní agent doplní konkrétní revizi `main`, vstupy,
+povolené soubory, kontrolní příkazy a ověří dostupnost workeru. U UI zadání
+nesmí spoléhat na dosud nedoložený běh celé legacy TestFX sady; musí mít
+proveditelný plán kontroly dotčené cesty. To je podmínka převzetí UI kódu,
+nikoli důvod ponechat veškeré jeho psaní hlavnímu agentovi.
+
 ## Co potřebujeme rozhodnout společně
 
 Manuál není úplnou technickou specifikací. Některé přesné vzorce, pravděpodobnosti
@@ -232,11 +305,17 @@ a [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java).
 ## Šablona předání práce
 
 Balík vybírá hlavní agent spolu s vlastníkem hry. Rozpad na úkol má mít jeden
-pozorovatelný výsledek. Připravené zadání může vypadat takto:
+pozorovatelný výsledek. Výchozím zpracovatelem vhodné implementace je lokální
+Qwen. Připravené zadání může vypadat takto:
 
 ```text
 Úkol: [Z01 / P08 – konkrétní výsledek]
 Výchozí revize: [commit main]
+Zpracovatel: [lokální Qwen; případnou výjimku zdůvodnit níže]
+Dílčí úkol pro Qwen: [jeden konkrétní výstup a hranice změny]
+Příprava hlavního agenta: [potřebné rozhodnutí, rozhraní, data a návrh UX]
+Připravenost: [připraveno / k dopracování kontraktu / blokováno]
+Blokace: [konkrétní závislost, vlastník a podmínka odblokování; nebo žádná]
 Cíl hráče: [co po dokončení dokáže]
 Pravidla a zdroj: [ID z gap-analysis.md + stránky manuálu]
 Přijatá rozhodnutí: [hodnoty, vzorce, příklad; odkazy na uzavřené Q]
@@ -248,15 +327,32 @@ Ovládání: [nalezení, podmínky, náhled, potvrzení, zrušení, výsledek]
 Grafika a zvuk: [existující prvky / konkrétní nové podklady a spotřebitelé]
 Akceptace: [počáteční stav → akce → přesný výsledek; také chyba/zrušení]
 Ověření: [cílené testy, save/load, UI scénář a potřebná kontrola obrazu]
+Ověření hlavním agentem: [přesné příkazy, prostředí, UI postup a očekávané výsledky]
+Výjimka z delegace: [důvod a rozsah práce ponechané hlavnímu agentovi; nebo žádná]
 Časový rámec: [rozpočet práce a kontrolní bod; co předat při nedokončení]
 Předání: [diff, výsledek kontrol, dokumentace, zbývající vady, build ke stažení]
 ```
 
-Návrhová rozhodnutí, integraci a přijetí drží hlavní agent. Ohraničené jednoznačné
-implementační úkoly standardně předává dostupnému [lokálnímu workeru](ai/local-qwen.md) podle jeho
-[pracovního postupu](../.agents/skills/local-worker/SKILL.md); velká pravidlová
-nejasnost nebo celá herní etapa pro něj není vhodné zadání. Jeho návrh testů
-ani vlastní tvrzení o úspěchu nenahrazují skutečně spuštěné kontroly.
+### Připravenost a předání Qwenu
+
+Před předáním musí být určené chování, rozhraní, vstupy, povolené soubory,
+akceptace, plán ověření a výchozí revize. Velký balík se předává po ohraničených
+úlohách, ne jako celá etapa. Nevyřešená podmínka blokuje jen závislý řez;
+nezávislou připravenou práci lze zadat dál. Již dohodnutý rozsah nevyžaduje
+další souhlas pro každé dílčí zadání.
+
+Qwen standardně píše vhodný kód a testy, opravuje chyby, provádí opakované
+refaktoringy a mění dokumentaci či konfiguraci. Patří sem také UI podle
+konkrétního návrhu a integrace grafických a zvukových podkladů. Hlavní agent
+drží architekturu, nejasná pravidla, návrh UX a výtvarné řešení, skutečné
+kontroly, revizi, integraci a publikaci. Stejnou implementaci souběžně nepíše.
+
+Každý místní běh se řídí [postupem workeru](../.agents/skills/local-worker/SKILL.md)
+a aktuálními [provozními limity](ai/local-qwen.md#operating-profile-bounded-assignments).
+Nedostupnost nebo neúspěch se oznámí; nespouští automatickou instalaci ani
+tiché nahrazení cloudovým workerem. Případné dokončení hlavním agentem má
+konkrétní důvod a zaznamenané opravy. Návrh testů od Qwenu nenahrazuje jejich
+skutečné spuštění. Podíl delegované práce a úspory lze hodnotit až z měření.
 
 ### Zadání na omezený čas
 

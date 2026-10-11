@@ -361,6 +361,30 @@ diff, runtime samples and acceptance evidence are retained under
 This check verifies the handoff path and the need for review, not unattended
 reliability or measured Codex-budget savings.
 
+### Implementation-plan handoff attempt — 2026-10-11
+
+Task `2026-10-11-plan-worker-handoff` assigned a bounded Czech documentation
+change at baseline `1fb920259987d216d54698188fd66aee1b9df986`: extend the
+implementation-plan task template and describe readiness for delegation.
+The caller stopped the first attempt at **180.84 seconds**; the owned process
+exited **-15**. Qwen produced a temporary draft but made **no worktree changes**
+and did not deliver a final report. Runtime samples confirmed the configured
+alias digest and **8192** context; the events included a compaction warning.
+The model was unloaded after cancellation. No repair attempt was dispatched.
+
+The main agent completed the edit, repaired Czech wording and the draft's
+incorrect whole-package blocking statement, and replaced documentation-specific
+verification fields with a general caller verification contract. The caller
+separately designed the package responsibility matrix. This was an incomplete
+worker attempt with main-agent completion, not an independently accepted worker
+implementation. Timing includes the complete supervised attempt; token usage
+and savings were not established.
+
+Input, command, runtime samples, draft, empty worker patch, caller repairs and
+verification evidence are retained in
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-plan-worker-handoff/`.
+The detached worktree remains under the standard worktree root with that task ID.
+
 ### Earlier native feasibility evidence — 2026-10-10
 
 Before the implementation pilot, CLI 0.142.3 used the base model in a read-only
