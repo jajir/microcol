@@ -18,6 +18,11 @@ documentation changes. Commit sources and assets, not generated HTML. The Pages
 workflow publishes pushed `develop` changes; do not duplicate new pages in the
 legacy Maven site or use its old publishing commands.
 
+Preserve `microcol-site` in place as a useful design and development reference,
+even where its content is outdated. Keep the existing Maven website at the project
+root and publish `docs/` under `/microcol/docs/`. Do not remove or relocate the
+module or move its website into an archive unless the user requests it.
+
 # Local worker
 
 When a local worker is configured and available, the main agent uses the

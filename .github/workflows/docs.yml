@@ -37,25 +37,24 @@ jobs:
         env:
           DOCS_REVISION: ${{ github.sha }}
         run: python -m mkdocs build --strict
-      - name: Check out the archived Maven website
+      - name: Check out the existing Maven website
         uses: actions/checkout@v6
         with:
-          # Last gh-pages revision before switching to docs/ as the website.
+          # Preserve the existing website at its original URLs.
           ref: e80be63deb0a7c4c81306a1434ca27a0934e5f56
-          path: target/legacy-site
+          path: target/maven-site
           persist-credentials: false
-      - name: Include the legacy website
+      - name: Keep the Maven website at the project root
         run: |
-          mkdir -p target/docs-site/legacy
-          git -C target/legacy-site archive HEAD | tar -x -C target/docs-site/legacy
+          git -C target/maven-site archive HEAD | tar -x -C target/docs-site
           python - <<'PY'
           from pathlib import Path
-          for page in Path('target/docs-site/legacy').rglob('*.html'):
-              html = page.read_text(encoding='utf-8')
-              updated = html.replace('https://jajir.github.io/microcol/',
-                                     'https://jajir.github.io/microcol/legacy/')
-              if updated != html:
-                  page.write_text(updated, encoding='utf-8')
+          page = Path('target/docs-site/index.html')
+          html = page.read_text(encoding='utf-8')
+          marker = '<li class="nav-header">Development</li>'
+          assert html.count(marker) == 1, 'Expected Maven navigation entry missing'
+          link = '<li><a href="docs/index.html">Current documentation</a></li>'
+          page.write_text(html.replace(marker, marker + '\n' + link), encoding='utf-8')
           PY
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

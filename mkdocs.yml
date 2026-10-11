@@ -1,10 +1,10 @@
 site_name: MicroCol
 site_description: Project documentation for the MicroCol colonization game.
-site_url: https://jajir.github.io/microcol/
+site_url: https://jajir.github.io/microcol/docs/
 repo_url: https://github.com/jajir/microcol
 edit_uri: blob/develop/docs/
 docs_dir: docs
-site_dir: target/docs-site
+site_dir: target/docs-site/docs
 use_directory_urls: false
 
 theme:

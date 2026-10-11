@@ -1,9 +1,11 @@
 # Writing and publishing documentation
 
 The project website is [jajir.github.io/microcol](https://jajir.github.io/microcol/).
-Its maintained source is `docs/` on `develop`. MkDocs renders the Markdown pages,
-copies their assets, and builds navigation and search. Publishing documentation
-does not compile the game, run Maven tests, or create game distributions.
+The existing Maven website stays at that address. Current Markdown documentation
+is published separately at [/microcol/docs/](https://jajir.github.io/microcol/docs/)
+from `docs/` on `develop`. MkDocs renders those pages, copies their assets, and
+builds navigation and search. Publishing documentation does not compile the game,
+run Maven tests, or create game distributions.
 
 ## Editing workflow
 
@@ -39,9 +41,10 @@ target/docs-venv/bin/python -m mkdocs serve
 ```
 
 Open the address printed by `serve` (normally
-`http://127.0.0.1:8000/microcol/`). The static build is in `target/docs-site/`.
-The archived Maven website is added by CI, so it is not part of this local MkDocs
-preview. Its link opens the published archive.
+`http://127.0.0.1:8000/microcol/docs/`). The Markdown site's static build is in
+`target/docs-site/docs/`. CI adds the existing Maven website at `target/docs-site/`
+before publishing the combined site. The local MkDocs preview contains only the
+Markdown section; its project website link opens the existing published site.
 
 [mkdocs.yml](../mkdocs.yml) owns the site settings;
 [requirements-docs.txt](../requirements-docs.txt) pins MkDocs. The small
@@ -62,8 +65,9 @@ Do not suppress a link failure merely to make publication pass.
   `develop` when deployment is intended.
 
 The build uses Python 3.12, installs the pinned documentation tools, and executes
-`python -m mkdocs build --strict`. It adds the frozen legacy website under
-`legacy/`, then uploads the complete Pages artifact. The dependent deployment
+`python -m mkdocs build --strict`. It keeps the existing Maven website at the
+project root, adds a navigation link to the Markdown section under `docs/`, and
+uploads the combined Pages artifact. The dependent deployment
 job publishes only successful builds from `develop`. Source-code links in a
 published page point to that build's commit rather than a moving branch.
 
@@ -92,17 +96,24 @@ repeated if this setup is copied into a different repository. GitHub documents
 the artifact, permissions, and deployment requirements in
 [Using custom workflows with GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-## Previous Maven website
+## Preserved Maven website and module
 
-The site previously served the root of `gh-pages`. The new workflow preserves its
-snapshot at commit `e80be63deb0a7c4c81306a1434ca27a0934e5f56` under
-[/microcol/legacy/](https://jajir.github.io/microcol/legacy/); it does not rebuild
-its content. Absolute links to the previous site root are rebased into the archive
-so that its reports remain reachable. The `gh-pages` branch is retained, but is no longer the
-publication source once Pages is switched to Actions.
+Keep `microcol-site` at its existing repository path. Its APT pages, reports, and
+PlantUML sources remain a useful foundation for game development and design ideas,
+even where the content is outdated. Do not remove or relocate the module, or move
+its website into an archive, without a user request.
 
-The old APT pages, Maven reports, and PlantUML configuration remain in
-`microcol-site`. See [Modules and build outputs](modules.md). Do not use
+The workflow keeps the existing website from `gh-pages` commit
+`e80be63deb0a7c4c81306a1434ca27a0934e5f56` at its original `/microcol/` URLs.
+It adds only a link from the homepage navigation to `/microcol/docs/`; existing
+pages, report paths, and assets remain in place. No `/legacy/` relocation is used.
+The `gh-pages` branch is retained as the source of that snapshot, while Pages
+publishes the combined artifact through Actions.
+
+The current workflow reuses the already generated Maven website; it does not
+rebuild APT pages or reports from `microcol-site` on each push. Publishing future
+changes to that module will need a separately verified Maven site build step.
+See [Modules and build outputs](modules.md). Do not use
 `mvn site-deploy` or `mkdocs gh-deploy` for current documentation publication;
 the Actions workflow is the single publishing route. Do not duplicate new
 documentation in APT just to make it visible on the web.

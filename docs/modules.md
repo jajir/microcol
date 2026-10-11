@@ -97,6 +97,11 @@ under `src/site/`; PlantUML reads `src/site/plantuml/**/*.txt` and also writes t
 `target/site/`. The game and test modules have their own Maven report
 configuration.
 
+Keep `microcol-site` in its existing location. Its documentation remains a useful
+design and development reference even where it is outdated. The existing Maven
+website stays at the project root; current Markdown documentation is published
+alongside it under `/microcol/docs/`.
+
 The legacy GitHub site plugin is bound to `site-deploy`; `mvn site` alone does not
 invoke it. These Maven website sources and report plugins are separate from the
 Markdown documentation in `docs/`, whose current publishing workflow is described

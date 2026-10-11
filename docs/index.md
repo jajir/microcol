@@ -16,6 +16,8 @@ The navigation includes all Markdown pages in `docs/`, including newly committed
 pages. Assessment dates and verification notes on each page distinguish observed
 behavior from proposals and historical results.
 
-The [archived Maven website](https://jajir.github.io/microcol/legacy/) retains the
-previous project pages and reports. It is a historical snapshot; the current
-module overview and operating instructions are maintained here.
+The [Maven project website](https://jajir.github.io/microcol/) remains at its
+original address. Its pages, reports, and the `microcol-site` source module are
+retained as a useful foundation and source of design ideas, including where they
+are outdated. This section at `/microcol/docs/` contains the current module
+overview and operating instructions.
