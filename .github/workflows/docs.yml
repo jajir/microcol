@@ -1,0 +1,80 @@
+name: Publish documentation
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Publish the newest develop state; never interrupt an active deployment.
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-docs.txt
+      - name: Install documentation tools
+        run: python -m pip install -r requirements-docs.txt
+      - name: Check repository link conversion
+        run: python -m unittest discover -s scripts/docs -p 'test_*.py'
+      - name: Build documentation and validate links
+        env:
+          DOCS_REVISION: ${{ github.sha }}
+        run: python -m mkdocs build --strict
+      - name: Check out the archived Maven website
+        uses: actions/checkout@v6
+        with:
+          # Last gh-pages revision before switching to docs/ as the website.
+          ref: e80be63deb0a7c4c81306a1434ca27a0934e5f56
+          path: target/legacy-site
+          persist-credentials: false
+      - name: Include the legacy website
+        run: |
+          mkdir -p target/docs-site/legacy
+          git -C target/legacy-site archive HEAD | tar -x -C target/docs-site/legacy
+          python - <<'PY'
+          from pathlib import Path
+          for page in Path('target/docs-site/legacy').rglob('*.html'):
+              html = page.read_text(encoding='utf-8')
+              updated = html.replace('https://jajir.github.io/microcol/',
+                                     'https://jajir.github.io/microcol/legacy/')
+              if updated != html:
+                  page.write_text(updated, encoding='utf-8')
+          PY
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: target/docs-site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
