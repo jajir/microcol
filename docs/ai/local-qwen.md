@@ -576,8 +576,11 @@ The two new language tests failed against the original bundles before the fix.
 Native Glass on this macOS session did not successfully click Load Game, so
 that attempt does not verify the native goods scenarios. The complete suite
 uses Linux/Xvfb in the required `functional` job, with native LINK modifiers
-handled by the existing page objects. Consult that run's `tests-functional`
-artifact for complete-suite evidence; a local partial run is insufficient.
+handled by the existing page objects. The caller downloaded and inspected the
+`tests-functional` artifact from [run 38156401646](https://github.com/jajir/microcol/actions/runs/38156401646),
+commit `951e82ae824f55084f7af65edafbdc1948293997`: **27 functional tests and 603
+game tests passed**, with zero failures, errors or skips. The complete Linux
+result, rather than the partial local run, establishes this acceptance.
 Checkout paths containing spaces also prevent the existing JavaFX font loader
 from starting the unpacked game. See the [functional test contract](../functional-tests.md)
 for commands and the environment limits.

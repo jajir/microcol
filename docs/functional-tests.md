@@ -154,8 +154,13 @@ vyhledání tlačítka po konci tahu a omezení Monocle pro TC05/TC06. Texty mis
 i čekání byly opraveny a TC03 poté prošel. Oba jazyky textů mise mají nový
 modelový test ověřený před opravou i po ní.
 
-Úplné ověření je výsledkem jobu `functional` v
-[GitHub Actions](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
+Na Linuxu/JDK 17 s Xvfb následně prošlo **27/27 funkčních testů** (21 metod
+v 18 třídách TC a šest základních testů) a **603/603 herních testů**, bez
+selhání, chyb i vynechání. Ověřeny stažené Surefire XML v artifactu
+`tests-functional` z [běhu 38156401646](https://github.com/jajir/microcol/actions/runs/38156401646),
+revize `951e82ae824f55084f7af65edafbdc1948293997`. Pro další změny vždy
+zkontrolovat čerstvý běh, nikoli tento historický výsledek.
+
 Místní nativní běh na macOS v této relaci nedokázal načíst hru kliknutím;
 nepovažuje se za úspěšný výsledek. Pro úplnou sadu slouží Linux/Xvfb a jeho
 uložené reporty. [Záznam delegace](ai/local-qwen.md#functional-plowing-regression-2026-10-11)
