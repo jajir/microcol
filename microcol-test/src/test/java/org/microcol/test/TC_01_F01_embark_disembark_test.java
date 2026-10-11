@@ -73,6 +73,8 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
 	// disembark units
 	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
 	gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
+	// Disembarking animates each unit separately.
+	gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
 
 	// verify that units are at expected location.
 	assertEquals(2, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());

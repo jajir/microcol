@@ -64,6 +64,9 @@ používá Ctrl na macOS a Ctrl+Shift na Linuxu; rozdíl řeší společný page
 Zachovávat stabilní ID ovládacích
 prvků i při výměně ikony. Nové čekání má sledovat skutečnou podmínku s časovým
 limitem; náhodně prodlužované `sleep` neschovává chybu synchronizace.
+U akcí více jednotek čekat na celý očekávaný výsledek: například TC01 čeká
+na obě vyloděné jednotky. Tlačítko dalšího tahu se může krátce odblokovat
+mezi jejich animacemi, a samo tedy dokončení celé akce nepotvrzuje.
 
 Model lze číst pro ověření výsledku. Herní akci ale test provádí přes UI:
 `unit.setActionType(...)` by v testu klávesy P obešlo právě chování, které

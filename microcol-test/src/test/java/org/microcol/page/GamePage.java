@@ -159,16 +159,30 @@ public class GamePage extends AbstractScreen {
     }
 
     /**
-     * Wait until next turn button is available again. Unavailable next turn button
-     * meant that there is some animation in progress.
+     * Wait until the current animation releases the next turn button. The button
+     * may briefly become available between units in a multi-unit action.
      * 
      * @throws Exception
      */
     public void waitWhileMoving() throws TimeoutException {
-	final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
-	// Query once: the turn report may replace the game screen between lookups.
-	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> getNodeFinder().lookup("#" + id)
-		.<Button>tryQuery().map(button -> !button.isDisabled()).orElse(true));
+        final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
+        // Query on the FX thread while the scene graph may be changing.
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> getNodeFinder()
+                        .lookup("#" + id).<Button>tryQuery()
+                        .map(button -> !button.isDisabled()).orElse(true))
+                        .get(60, TimeUnit.SECONDS));
+    }
+
+    /**
+     * Wait for an expected unit count after an asynchronous map action.
+     */
+    public void waitForNumberOfUnitsAt(final Location location,
+            final int expectedCount) throws TimeoutException {
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> getModel().getUnitsAt(location).size() == expectedCount);
+        waitWhileMoving();
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyNumberOfUnitInRightPanel(int expectedUnitsInRightPanel) {
