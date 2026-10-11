@@ -21,12 +21,35 @@
     </dependencies>
 
     <properties>
+        <!-- Profiles derive the host label; CI may set microcol.platform only to the matching label. -->
+        <expected.platform>unsupported</expected.platform>
+        <microcol.platform>${expected.platform}</microcol.platform>
+        <dev.assets>${project.build.directory}/dev-assets</dev.assets>
+        <dev.asset.basename>MicroCol-${microcol.platform}-${microcol.build.id}</dev.asset.basename>
         <runtime.image>${project.parent.basedir}/microcol-dist/target/dist</runtime.image>
         <!-- jpackage on macOS requires a positive major version; keep game version unchanged.
              Map Maven major N to native bundle major N+1 to preserve version ordering. -->
         <native.app.version>${parsedVersion.nextMajorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</native.app.version>
         <app.image>${project.build.directory}/app-image/MicroCol.app</app.image>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>native-aarch64</id>
+            <activation><os><family>mac</family><arch>aarch64</arch></os></activation>
+            <properties><expected.platform>macos-arm64</expected.platform></properties>
+        </profile>
+        <profile>
+            <id>native-arm64</id>
+            <activation><os><family>mac</family><arch>arm64</arch></os></activation>
+            <properties><expected.platform>macos-arm64</expected.platform></properties>
+        </profile>
+        <profile>
+            <id>native-x86_64</id>
+            <activation><os><family>mac</family><arch>x86_64</arch></os></activation>
+            <properties><expected.platform>macos-x86_64</expected.platform></properties>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>MicroCol-${project.version}-macos-${os.arch}</finalName>
@@ -41,6 +64,11 @@
                         <goals><goal>enforce</goal></goals>
                         <configuration><rules>
                             <requireOS><family>mac</family></requireOS>
+                            <requireProperty>
+                                <property>microcol.platform</property>
+                                <regex>macos-(arm64|x86_64)</regex>
+                                <message>Unsupported native platform; use a supported host JDK architecture.</message>
+                            </requireProperty>
                             <requireJavaVersion>
                                 <version>[17,18)</version>
                                 <message>Use JDK 17 (set JAVA_HOME) for native distribution builds.</message>
@@ -65,21 +93,6 @@
                     <!-- Native installers require a numeric version, without -SNAPSHOT. -->
                     <id>native-version</id><phase>initialize</phase>
                     <goals><goal>parse-version</goal></goals>
-                </execution></executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions><execution>
-                    <id>clear-generated-packages</id><phase>prepare-package</phase>
-                    <goals><goal>run</goal></goals>
-                    <configuration><target>
-                        <!-- Repeated package runs must not reuse a stale application image. -->
-                        <delete dir="${project.build.directory}/app-image"/>
-                        <delete dir="${project.build.directory}/packages"/>
-                        <mkdir dir="${project.build.directory}/packages"/>
-                    </target></configuration>
                 </execution></executions>
             </plugin>
             <plugin>
@@ -117,6 +130,74 @@
                             <argument>--resource-dir</argument><argument>${project.basedir}/src/main/jpackage</argument>
                             <argument>--dest</argument><argument>${project.build.directory}/packages</argument>
                         </arguments></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <executions><execution>
+                    <!-- Maven owns the updater archive, including executable file modes. -->
+                    <id>updater-archive</id><phase>package</phase>
+                    <goals><goal>single</goal></goals>
+                    <configuration>
+                        <descriptors><descriptor>src/assembly/updater.xml</descriptor></descriptors>
+                        <appendAssemblyId>false</appendAssemblyId>
+                        <attach>false</attach>
+                        <finalName>${dev.asset.basename}</finalName>
+                        <outputDirectory>${dev.assets}</outputDirectory>
+                    </configuration>
+                </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>validate-release-labels</id><phase>validate</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <fail message="microcol.platform must match this host's JDK architecture (${expected.platform}).">
+                                <condition><not><equals arg1="${microcol.platform}" arg2="${expected.platform}"/></not></condition>
+                            </fail>
+                            <fail message="microcol.build.id must be local or dev-RUNNUMBER-12LOWERCASEHEX.">
+                                <condition><not><matches string="${microcol.build.id}" pattern="^(local|dev-[1-9][0-9]*-[0-9a-f]{12})$"/></not></condition>
+                            </fail>
+                        </target></configuration>
+                    </execution>
+                    <execution>
+                        <id>clear-generated-packages</id><phase>prepare-package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <!-- Repeated package runs must not retain a previous release's assets. -->
+                            <delete dir="${project.build.directory}/app-image"/>
+                            <delete dir="${project.build.directory}/packages"/>
+                            <delete dir="${dev.assets}"/>
+                            <mkdir dir="${project.build.directory}/packages"/>
+                            <mkdir dir="${dev.assets}"/>
+                        </target></configuration>
+                    </execution>
+                    <execution>
+                        <id>release-assets-and-checksums</id><phase>package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <!-- Fail the build if an updater image contains links or special files.
+                                 The updater accepts only regular files and directories. -->
+                            <fail message="Updater application image contains a symbolic link or special file.">
+                                <condition><not><resourcecount count="0"><union>
+                                    <fileset dir="${app.image}"><or><symlink/><not><type type="file"/></not></or></fileset>
+                                    <dirset dir="${app.image}"><symlink/></dirset>
+                                </union></resourcecount></not></condition>
+                            </fail>
+                            <copy file="${project.build.directory}/packages/MicroCol-${native.app.version}.dmg"
+                                  tofile="${dev.assets}/${dev.asset.basename}.dmg"/>
+                            <!-- Raw SHA-256 plus newline; publishing verifies these without repacking assets. -->
+                            <checksum algorithm="SHA-256" fileext=".sha256" format="CHECKSUM" forceOverwrite="yes">
+                                <fileset dir="${dev.assets}" includes="${dev.asset.basename}.zip,${dev.asset.basename}.dmg"/>
+                            </checksum>
+                        </target></configuration>
                     </execution>
                 </executions>
             </plugin>

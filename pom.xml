@@ -30,6 +30,9 @@
 		<module>microcol-test</module>
 		<module>microcol-module</module>
 		<module>microcol-dist</module>
+		<!-- Bootstrap archives and their verification are regular Maven products. -->
+		<module>microcol-launcher</module>
+		<module>microcol-build-tests</module>
 		<module>microcol-site</module>
 	</modules>
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <id>macos</id>
+    <formats><format>zip</format></formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <!-- Explicit mappings retain the native app layout and the Terminal fallback on any build host. -->
+    <files>
+        <file>
+            <source>${project.build.outputDirectory}/Info.plist</source>
+            <outputDirectory>MicroCol Dev.app/Contents</outputDirectory>
+            <destName>Info.plist</destName><fileMode>0644</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/macos-wrapper.sh</source>
+            <outputDirectory>MicroCol Dev.app/Contents/MacOS</outputDirectory>
+            <destName>MicroCol Dev</destName><fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/microcol-dev</source>
+            <outputDirectory>MicroCol Dev.app/Contents/Resources</outputDirectory>
+            <destName>microcol-dev</destName><fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/microcol-dist/src/icon.icns</source>
+            <outputDirectory>MicroCol Dev.app/Contents/Resources</outputDirectory>
+            <destName>MicroCol.icns</destName><fileMode>0644</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/microcol-dev</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>MicroCol Dev.command</destName><fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/README.txt</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>README.txt</destName><fileMode>0644</fileMode>
+        </file>
+    </files>
+</assembly>

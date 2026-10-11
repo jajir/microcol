@@ -383,6 +383,21 @@ nine executed cases, zero failures/errors and zero skipped. Record the real coun
 
 ## Acceptance and further measurements
 
+On **2026-10-11**, the Maven packaging migration delegated launcher metadata to
+the local worker as job `2026-10-11-maven-launcher-metadata`. The worker used
+`microcol-qwen:9b-q4_K_M-8k`, digest
+`dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2`, with an
+8192-token context. One attempt finished in 128.69 seconds with exit 0 and no
+worker repair rounds. Review accepted its static macOS `Info.plist`; its Linux
+assembly descriptor had incorrect paths and public filenames and was replaced
+by the main agent. The worker did not run Maven. Caller verification passed XML
+and plist validation, a clean Maven launcher package, a repeated package that
+removed stale output, and archive layout, executable-mode and SHA-256 checks.
+The model was unloaded before native builds. This is a **partially accepted**
+delegation, not evidence of measured budget savings. The task, tool events, diff
+and `verification.json` are retained in the local job log directory documented
+above.
+
 A completed delegation requires **Astra task → verified local Qwen call → actual
 change → required caller verification → Astra review**. The accepted pilot above
 records this chain. Installation, a text response or a tool diagnostic alone

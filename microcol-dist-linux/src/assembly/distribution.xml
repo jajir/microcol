@@ -7,6 +7,8 @@
         <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
+    <!-- Keep one stable application directory even when the release filename changes. -->
+    <baseDirectory>${project.build.finalName}</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>${project.build.directory}/app-image/MicroCol</directory>

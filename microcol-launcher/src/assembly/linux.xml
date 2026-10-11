@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <id>linux</id>
+    <formats><format>tar.gz</format></formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <!-- Package existing sources with their public names; no generated scripts or root installer. -->
+    <files>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/microcol-dev</source>
+            <outputDirectory>microcol-dev</outputDirectory>
+            <destName>microcol-dev</destName><fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/install-linux.sh</source>
+            <outputDirectory>microcol-dev</outputDirectory>
+            <destName>install.sh</destName><fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/microcol-dist/src/icon.png</source>
+            <outputDirectory>microcol-dev</outputDirectory>
+            <destName>MicroCol.png</destName><fileMode>0644</fileMode>
+        </file>
+        <file>
+            <source>${project.parent.basedir}/scripts/launcher/README.txt</source>
+            <outputDirectory>microcol-dev</outputDirectory>
+            <destName>README.txt</destName><fileMode>0644</fileMode>
+        </file>
+    </files>
+</assembly>

@@ -21,9 +21,27 @@
     </dependencies>
 
     <properties>
+        <!-- Profiles derive the host label; CI may set microcol.platform only to the matching label. -->
+        <expected.platform>unsupported</expected.platform>
+        <microcol.platform>${expected.platform}</microcol.platform>
+        <dev.assets>${project.build.directory}/dev-assets</dev.assets>
+        <dev.asset.basename>MicroCol-${microcol.platform}-${microcol.build.id}</dev.asset.basename>
         <runtime.image>${project.parent.basedir}/microcol-dist/target/dist</runtime.image>
         <app.image>${project.build.directory}/app-image/MicroCol</app.image>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>native-amd64</id>
+            <activation><os><name>Linux</name><arch>amd64</arch></os></activation>
+            <properties><expected.platform>linux-x86_64</expected.platform></properties>
+        </profile>
+        <profile>
+            <id>native-x86_64</id>
+            <activation><os><name>Linux</name><arch>x86_64</arch></os></activation>
+            <properties><expected.platform>linux-x86_64</expected.platform></properties>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>MicroCol-${project.version}-linux-${os.arch}</finalName>
@@ -38,6 +56,11 @@
                         <goals><goal>enforce</goal></goals>
                         <configuration><rules>
                             <requireOS><name>Linux</name></requireOS>
+                            <requireProperty>
+                                <property>microcol.platform</property>
+                                <regex>linux-x86_64</regex>
+                                <message>Unsupported native platform; use a supported host JDK architecture.</message>
+                            </requireProperty>
                             <requireJavaVersion>
                                 <version>[17,18)</version>
                                 <message>Use JDK 17 (set JAVA_HOME) for native distribution builds.</message>
@@ -62,21 +85,6 @@
                     <!-- Native installers require a numeric version, without -SNAPSHOT. -->
                     <id>native-version</id><phase>initialize</phase>
                     <goals><goal>parse-version</goal></goals>
-                </execution></executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions><execution>
-                    <id>clear-generated-packages</id><phase>prepare-package</phase>
-                    <goals><goal>run</goal></goals>
-                    <configuration><target>
-                        <!-- Repeated package runs must not reuse a stale application image. -->
-                        <delete dir="${project.build.directory}/app-image"/>
-                        <delete dir="${project.build.directory}/packages"/>
-                        <mkdir dir="${project.build.directory}/packages"/>
-                    </target></configuration>
                 </execution></executions>
             </plugin>
             <plugin>
@@ -134,6 +142,60 @@
                     <id>portable-archive</id><phase>package</phase>
                     <goals><goal>single</goal></goals>
                 </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>validate-release-labels</id><phase>validate</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <fail message="microcol.platform must match this host's JDK architecture (${expected.platform}).">
+                                <condition><not><equals arg1="${microcol.platform}" arg2="${expected.platform}"/></not></condition>
+                            </fail>
+                            <fail message="microcol.build.id must be local or dev-RUNNUMBER-12LOWERCASEHEX.">
+                                <condition><not><matches string="${microcol.build.id}" pattern="^(local|dev-[1-9][0-9]*-[0-9a-f]{12})$"/></not></condition>
+                            </fail>
+                        </target></configuration>
+                    </execution>
+                    <execution>
+                        <id>clear-generated-packages</id><phase>prepare-package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <!-- Repeated package runs must not retain a previous release's assets. -->
+                            <delete dir="${project.build.directory}/app-image"/>
+                            <delete dir="${project.build.directory}/packages"/>
+                            <delete dir="${dev.assets}"/>
+                            <mkdir dir="${project.build.directory}/packages"/>
+                            <mkdir dir="${dev.assets}"/>
+                        </target></configuration>
+                    </execution>
+                    <execution>
+                        <id>release-assets-and-checksums</id><phase>package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <!-- Fail the build if an updater image contains links or special files.
+                                 The updater accepts only regular files and directories. -->
+                            <fail message="Updater application image contains a symbolic link or special file.">
+                                <condition><not><resourcecount count="0"><union>
+                                    <fileset dir="${app.image}"><or><symlink/><not><type type="file"/></not></or></fileset>
+                                    <dirset dir="${app.image}"><symlink/></dirset>
+                                </union></resourcecount></not></condition>
+                            </fail>
+                            <copy file="${project.build.directory}/packages/microcol_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-1_amd64.deb"
+                                  tofile="${dev.assets}/${dev.asset.basename}.deb"/>
+                            <!-- Reuse the portable archive's exact bytes and layout, without compressing twice. -->
+                            <copy file="${project.build.directory}/${project.build.finalName}.tar.gz"
+                                  tofile="${dev.assets}/${dev.asset.basename}.tar.gz"/>
+                            <!-- Raw SHA-256 plus newline; publishing verifies these without repacking assets. -->
+                            <checksum algorithm="SHA-256" fileext=".sha256" format="CHECKSUM" forceOverwrite="yes">
+                                <fileset dir="${dev.assets}" includes="${dev.asset.basename}.tar.gz,${dev.asset.basename}.deb"/>
+                            </checksum>
+                        </target></configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

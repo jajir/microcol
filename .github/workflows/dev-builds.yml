@@ -15,18 +15,32 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Test updater and release contract
-        run: |
-          python3 -m unittest discover -s scripts/distribution -p 'test_*.py'
-          python3 -m unittest discover -s scripts/launcher/tests -p 'test_*.py'
-      - name: Package the one-time launchers
-        run: python3 scripts/launcher/package.py --output-dir target/dev-launchers
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Install build-tool test dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq unzip
+      - name: Package launchers and test the updater and publication contract
+        # The launcher dependency creates both archives before the Java tests run.
+        run: mvn -B -ntp -pl microcol-build-tests -am clean verify
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dev-launchers
-          path: target/dev-launchers/*
+          path: microcol-launcher/target/dev-assets/*
           if-no-files-found: error
           compression-level: 0
+          retention-days: 14
+      - name: Keep launcher and publication test evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tests-build-tools
+          path: |
+            microcol-build-tests/target/surefire-reports/
+            microcol-build-tests/target/failsafe-reports/
+          if-no-files-found: warn
           retention-days: 14
 
   native:
@@ -38,14 +52,17 @@ jobs:
           - platform: macos-arm64
             runner: macos-15
             module: microcol-dist-macos
+            verification: verify-macos
             architecture: aarch64
           - platform: macos-x86_64
             runner: macos-15-intel
             module: microcol-dist-macos
+            verification: verify-macos
             architecture: x64
           - platform: linux-x86_64
             runner: ubuntu-24.04
             module: microcol-dist-linux
+            verification: verify-linux
             architecture: x64
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 45
@@ -61,21 +78,25 @@ jobs:
           cache: maven
       - name: Install Linux packaging dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y fakeroot dpkg-dev libgtk-3-0 libasound2t64 xvfb xauth x11-utils
-      - name: Build runtime, run unit tests and create native packages
-        # -am selects the game tests; the unrelated TestFX module is not in this reactor.
-        run: mvn -B -ntp -pl ${{ matrix.module }} -am clean package -Dmicrocol.build.id="dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}"
-      - name: Stage platform assets and verify test reports
+        run: sudo apt-get update && sudo apt-get install -y fakeroot dpkg-dev libgtk-3-0 libasound2t64 xvfb xauth x11-utils jq unzip
+      - name: Build and verify native distributions through Maven
+        # Profile dependencies put native packaging before its Failsafe tests.
+        # The legacy TestFX module is not selected by this reactor.
         env:
           PLATFORM: ${{ matrix.platform }}
-        run: python3 scripts/distribution/stage.py "$PLATFORM" "dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}" "$GITHUB_SHA" target/dev-assets
-      - name: Open the packaged Linux game in a virtual display
-        if: runner.os == 'Linux'
-        run: python3 scripts/distribution/smoke_linux.py target/dev-assets/*.tar.gz target/dev-smoke
+          VERIFICATION_PROFILE: ${{ matrix.verification }}
+        run: |
+          maven_command=(mvn -B -ntp -pl microcol-build-tests -am -P"$VERIFICATION_PROFILE" clean verify
+            -Dmicrocol.platform="$PLATFORM" -Dmicrocol.build.id="dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}")
+          if [[ "$RUNNER_OS" == Linux ]]; then
+            xvfb-run -a --server-args='-screen 0 1280x1024x24' "${maven_command[@]}"
+          else
+            "${maven_command[@]}"
+          fi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dev-${{ matrix.platform }}
-          path: target/dev-assets/*
+          path: ${{ matrix.module }}/target/dev-assets/*
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
@@ -86,7 +107,9 @@ jobs:
           name: tests-${{ matrix.platform }}
           path: |
             microcol-game/target/surefire-reports/
-            target/dev-smoke/
+            microcol-build-tests/target/surefire-reports/
+            microcol-build-tests/target/failsafe-reports/
+            microcol-build-tests/target/native-smoke/
           if-no-files-found: warn
           retention-days: 14
 
@@ -113,4 +136,5 @@ jobs:
       - name: Publish complete release, then update the development channel
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/distribution/release.py target/dev-assets "dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}" "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY"
+        # Maven supplies packages and SHA-256 sidecars; only this job writes releases.
+        run: bash scripts/distribution/publish.sh target/dev-assets "dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}" "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY"

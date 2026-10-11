@@ -1,6 +1,6 @@
 # Maven modules and build outputs
 
-MicroCol has one parent POM and seven child modules. Five are shared modules;
+MicroCol has one parent POM and nine child modules. Seven are shared modules;
 the macOS or Linux profile selects the matching native distribution module on
 that host. The distribution pipeline assembles the game, makes it a Java module,
 links a Java runtime, and packages the result with `jpackage` and Maven Assembly.
@@ -23,8 +23,10 @@ build commands and release limitations.
 | [microcol-test](../microcol-test/pom.xml) | GUI and integration tests using TestFX and Monocle, plus shared test support. | `microcol-test/target/microcol-test-<version>.jar` for main-source support code; test results in `microcol-test/target/surefire-reports/`. This is not another game distribution. |
 | [microcol-module](../microcol-module/pom.xml) | Converts the game JAR with dependencies into the explicit Java module `microcol.game`. | `microcol-module/target/microcol-module-<version>.jar`, containing the game, dependencies, and `module-info.class`. |
 | [microcol-dist](../microcol-dist/pom.xml) | Uses the modular game to create a linked image with its own Java runtime. | `microcol-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `microcol-dist-<version>.jar` in `target/`. |
-| [microcol-dist-macos](../microcol-dist-macos/pom.xml) | Packages the linked runtime as a macOS application and disk image. Selected on macOS; packaging is `pom`. | `microcol-dist-macos/target/app-image/MicroCol.app` and `target/packages/MicroCol-<numeric-version>.dmg` within that module. |
-| [microcol-dist-linux](../microcol-dist-linux/pom.xml) | Packages the linked runtime as a Linux application, Debian installer, and portable archive. Selected on Linux; packaging is `pom`. | `microcol-dist-linux/target/app-image/MicroCol/`, a DEB in `target/packages/`, and `target/MicroCol-<version>-linux-<os.arch>.tar.gz` within that module. |
+| [microcol-dist-macos](../microcol-dist-macos/pom.xml) | Packages the linked runtime as a macOS application, disk image and updater ZIP. Selected on macOS; packaging is `pom`. | `microcol-dist-macos/target/app-image/MicroCol.app`, DMG in `target/packages/`, and ZIP/DMG assets with SHA-256 sidecars in `target/dev-assets/`. |
+| [microcol-dist-linux](../microcol-dist-linux/pom.xml) | Packages the linked runtime as a Linux application, Debian installer, and portable archive. Selected on Linux; packaging is `pom`. | `microcol-dist-linux/target/app-image/MicroCol/`, DEB in `target/packages/`, portable TAR, and TAR/DEB assets with SHA-256 sidecars in `target/dev-assets/`. |
+| [microcol-launcher](../microcol-launcher/pom.xml) | Assembles the existing Bash updater, wrapper, metadata and icons into platform-independent bootstrap downloads. Packaging is `pom`; no game or Java runtime is bundled here. | `microcol-launcher/target/dev-assets/MicroCol-Dev-macos.zip`, `MicroCol-Dev-linux.tar.gz`, and SHA-256 sidecars. |
+| [microcol-build-tests](../microcol-build-tests/pom.xml) | Java/JUnit checks for updater behavior and release publication; optional native package verification and Linux startup tests. | `target/surefire-reports/`, `target/failsafe-reports/` and `target/native-smoke/` within the module. Its helper JAR is not a player download. |
 | [microcol-site](../microcol-site/pom.xml) | Legacy Maven website built from APT pages, static resources, and PlantUML diagrams. Packaging is `pom`. | `microcol-site/target/site/` during the Maven `site` lifecycle. No game binary. |
 
 ## From game code to a distribution
@@ -33,10 +35,12 @@ build commands and release limitations.
 microcol-game: JAR with dependencies
     -> microcol-module: modular JAR
         -> microcol-dist: application + Java runtime + launcher
-            -> microcol-dist-macos: MicroCol.app + DMG
+            -> microcol-dist-macos: MicroCol.app + DMG + ZIP
             -> microcol-dist-linux: application directory + DEB + tar.gz
 
 microcol-game -> microcol-test: GUI and integration tests
+microcol-launcher: Mac and Linux MicroCol Dev bootstrap archives
+microcol-launcher + optional native package -> microcol-build-tests: verification
 microcol-site: separate legacy website lifecycle
 ```
 
@@ -94,8 +98,9 @@ artifact is no longer skipped.
 Each native module depends on `microcol-dist`, which orders the reactor when
 building with `-am`. During `package`, it invokes `jpackage` first for the
 application image and then for the DMG or DEB, reusing the linked runtime.
-The Linux module also assembles its application directory into `tar.gz`, retaining
-executable launchers and runtime helpers. The modules check the host OS, require
+Both modules use Maven Assembly to create updater archives, retaining executable
+launchers and runtime helpers. Maven also prepares release filenames and SHA-256
+sidecars under each module's `target/dev-assets/`. The modules check the host OS, require
 JDK 17, and clear previous application/installer output before creating it again.
 
 Linux installer versions use the numeric Maven version without the snapshot
@@ -106,6 +111,26 @@ archive retains the full Maven version and CPU architecture in its name.
 Maven packaging remains local to `target/`; no release upload is part of this
 lifecycle. The separate [development delivery workflow](development-builds.md)
 builds and publishes these outputs after each push to `main`.
+
+### Launcher packaging and distribution checks
+
+`microcol-launcher` uses ordinary Maven resource and assembly configuration to
+package the shell sources from `scripts/launcher/`. The Mac bundle's `Info.plist`
+is a source file; it does not need a metadata-generation script. AntRun checksum
+tasks generate SHA-256 sidecars. These build-time files let the publisher verify
+that uploaded assets are the exact Maven outputs.
+
+`microcol-build-tests` runs behavior tests through Surefire during `test`. Its
+launcher module dependency orders packaging before Failsafe inspects the actual
+bootstrap downloads during `verify`. The `verify-macos` and `verify-linux` profiles
+add the corresponding native module dependency and its Failsafe integration
+test. Use `verify` to execute the archive checks; stopping at `package`
+does not run Failsafe verification. The profiles are separate from the legacy
+TestFX suite in `microcol-test`. See [the distribution commands](distribution.md#build-commands).
+
+GitHub publication is a separate, explicitly invoked shell operation using `gh`.
+The game distribution build, launcher checks and packaged-game tests do not need
+Python. The documentation website continues to use MkDocs.
 
 ## Website versus application builds
 

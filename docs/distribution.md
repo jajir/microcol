@@ -3,7 +3,8 @@
 Maven assembles the game, links its Java runtime, and creates the native packages
 in module-local `target/` directories. Players do not need a separate Java
 installation. The configured outputs are a macOS application and DMG, plus a
-Linux application, DEB, and portable `tar.gz` archive.
+Linux application, DEB, and portable `tar.gz` archive. Maven also creates the
+MicroCol Dev launcher downloads, macOS updater ZIPs, and SHA-256 sidecars.
 
 This page describes the implementation as of 11 October 2026. Configuration and
 successful execution are separate: see [Verification evidence](#verification-evidence)
@@ -67,6 +68,41 @@ On a Linux build host, build the application, DEB, and portable archive:
 mvn -pl microcol-dist-linux -am clean package
 ```
 
+Build both small bootstrap launcher archives without building the game:
+
+```sh
+mvn -pl microcol-launcher -am clean package
+```
+
+Package those launchers and run the Java/JUnit updater and publication tests.
+These checks need Bash, `jq`, `tar` and `unzip` on the build host. They simulate
+network requests and GitHub operations; no GitHub token or release access is
+needed:
+
+```sh
+mvn -pl microcol-build-tests -am clean verify
+```
+
+To check a complete Mac distribution, including its extracted updater archive
+and bundled runtime, use the native verification profile:
+
+```sh
+mvn -pl microcol-build-tests -am -Pverify-macos clean verify
+```
+
+On Linux, the native profile also opens the extracted game in a virtual display.
+It requires `xvfb`, `xauth`, `xwininfo` (from `x11-utils` on Ubuntu), GTK and ALSA:
+
+```sh
+xvfb-run -a --server-args='-screen 0 1280x1024x24' \
+  mvn -pl microcol-build-tests -am -Pverify-linux clean verify
+```
+
+These profiles make the verification module depend on the corresponding native
+module, so Maven builds the application before checking it. `verify` runs and
+evaluates Failsafe integration tests; `package` alone does not. Test evidence is
+in `microcol-build-tests/target/{surefire-reports,failsafe-reports,native-smoke}/`.
+
 `-am` includes the game, module, runtime, and parent projects in dependency order.
 It does not select the separate `microcol-test` GUI test module or the legacy
 Maven website. The game module's normal tests run unless explicitly skipped;
@@ -90,6 +126,17 @@ For the current project version `0.7.0-SNAPSHOT`, the configured outputs are:
 | Linux application | `microcol-dist-linux/target/app-image/MicroCol/` | Launch with `bin/MicroCol` from inside this directory. |
 | Linux Debian package, x86-64 | `microcol-dist-linux/target/packages/microcol_0.7.0-1_amd64.deb` | Install with the distribution's package manager; desktop integration is requested. |
 | Linux portable archive, x86-64 | `microcol-dist-linux/target/MicroCol-0.7.0-SNAPSHOT-linux-amd64.tar.gz` | Extract it, then run `bin/MicroCol` inside the extracted top-level directory. |
+| Native release assets | `microcol-dist-{macos,linux}/target/dev-assets/MicroCol-<platform>-<build>.<format>` | Updater ZIP/TAR and manual DMG/DEB, each with a `.sha256` sidecar. |
+| macOS bootstrap launcher | `microcol-launcher/target/dev-assets/MicroCol-Dev-macos.zip` | Includes `MicroCol Dev.app` and the Terminal alternative. |
+| Linux bootstrap launcher | `microcol-launcher/target/dev-assets/MicroCol-Dev-linux.tar.gz` | Includes the updater and user-local installer. |
+
+`<platform>` is `macos-arm64`, `macos-x86_64`, or `linux-x86_64`. `<build>` defaults
+to `local`; CI supplies `-Dmicrocol.build.id=dev-<run-number>-<commit-prefix>`.
+`-Dmicrocol.platform=...` can select the matching label explicitly; verification
+checks it against the actual host. The release names match the existing update
+manifest, so already-installed MicroCol Dev launchers continue to receive builds.
+Maven's checksum sidecars contain the asset's SHA-256 digest. The publication job
+verifies them and creates the consolidated release manifest and `SHA256SUMS`.
 
 The Linux archive preserves executable permissions for launchers and runtime
 helpers. Its filename includes Maven's `os.arch`; the examples above assume
@@ -124,9 +171,23 @@ which builds all supported targets and publishes successful results automaticall
    through `jpackage --runtime-image`. It creates an application image and then
    the native installer during `package`, explicitly passing the numeric version
    to both invocations. Each run removes previous application images and installer
-   output directories. The Linux module also runs the
-   [Maven Assembly descriptor](../microcol-dist-linux/src/assembly/distribution.xml)
-   to create the portable archive.
+   output directories. Maven Assembly creates both platforms' updater archives,
+   including the [Linux portable archive](../microcol-dist-linux/src/assembly/distribution.xml).
+   Standard Maven configuration also prepares release filenames and checksum
+   sidecars in `target/dev-assets/`.
+5. [`microcol-launcher`](../microcol-launcher/pom.xml) assembles the existing Bash
+   updater and wrappers into both bootstrap downloads. The Mac `Info.plist` is a
+   source file, and Maven copies icons and text resources without filtering shell
+   code or binary data.
+6. [`microcol-build-tests`](../microcol-build-tests/pom.xml) checks the assembled
+   launchers using JUnit. Its optional native profiles add archive/runtime
+   integration tests and the Linux window startup check through Failsafe.
+
+Use Maven plugins for archive creation, copying and checksums. Java/JUnit owns
+checks that require behavior, such as interrupted downloads or a running game
+window. The remaining [publication script](../scripts/distribution/publish.sh)
+handles GitHub-specific release and channel promotion through `gh`; it does not
+build or repackage the application. The distribution pipeline uses no Python.
 
 The macOS module supplies a short
 [DMG setup script](../microcol-dist-macos/src/main/jpackage/MicroCol-dmg-setup.scpt)
@@ -165,6 +226,10 @@ Developer ID signing/notarization, a broader compatibility matrix, stable-releas
 promotion, and any RPM format remain separate work.
 
 ## Verification evidence
+
+The Maven packaging migration is checked separately in
+[development delivery verification](development-builds.md#verification).
+The records below describe the earlier native packaging implementation.
 
 Verified on **11 October 2026**, using Maven 3.9.12 and JDK 17.0.18:
 

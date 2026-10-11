@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.microcol</groupId>
+        <artifactId>microcol-root</artifactId>
+        <version>0.7.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>microcol-launcher</artifactId>
+    <packaging>pom</packaging>
+    <name>MicroCol development launchers</name>
+    <description>Platform-independent packaging of the macOS and Linux shell launchers.</description>
+
+    <build>
+        <!-- Static bundle metadata has one source and needs no code generation. -->
+        <resources><resource>
+            <directory>src/main/resources</directory>
+            <filtering>false</filtering>
+        </resource></resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions><execution>
+                    <id>launcher-metadata</id><phase>process-resources</phase>
+                    <goals><goal>resources</goal></goals>
+                </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <attach>false</attach>
+                    <outputDirectory>${project.build.directory}/dev-assets</outputDirectory>
+                    <tarLongFileMode>posix</tarLongFileMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>macos-launcher</id><phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <configuration>
+                            <descriptors><descriptor>src/assembly/macos.xml</descriptor></descriptors>
+                            <finalName>MicroCol-Dev-macos</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>linux-launcher</id><phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <configuration>
+                            <descriptors><descriptor>src/assembly/linux.xml</descriptor></descriptors>
+                            <finalName>MicroCol-Dev-linux</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>clear-release-assets</id><phase>prepare-package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <delete dir="${project.build.directory}/dev-assets"/>
+                            <mkdir dir="${project.build.directory}/dev-assets"/>
+                        </target></configuration>
+                    </execution>
+                    <execution>
+                        <id>launcher-checksums</id><phase>package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration><target>
+                            <!-- Assembly owns archives; Ant records their exact bytes for publication. -->
+                            <checksum algorithm="SHA-256" fileext=".sha256" format="CHECKSUM" forceOverwrite="yes">
+                                <fileset dir="${project.build.directory}/dev-assets"
+                                         includes="MicroCol-Dev-macos.zip,MicroCol-Dev-linux.tar.gz"/>
+                            </checksum>
+                        </target></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

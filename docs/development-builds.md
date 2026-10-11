@@ -125,11 +125,33 @@ update transport used here.
 
 ## Implementation and operation
 
-The [development workflow](../.github/workflows/dev-builds.yml) owns the build and
-publication pipeline. The [distribution scripts](../scripts/distribution/)
-prepare release assets and the manifest. The [launcher sources](../scripts/launcher/)
-own the local update and launch behavior. Native Maven packaging remains described
-in [Building distributions](distribution.md); it also works without publishing.
+The [development workflow](../.github/workflows/dev-builds.yml) runs Maven builds
+and then publishes their verified outputs. Packaging belongs to the native Maven
+modules and [microcol-launcher](../microcol-launcher/pom.xml): Assembly creates
+ZIP/TAR downloads, resource configuration supplies metadata and icons, and AntRun
+creates SHA-256 sidecars. Each module writes its release assets into
+`target/dev-assets/`; GitHub Actions collects those files without repackaging them.
+
+[microcol-build-tests](../microcol-build-tests/pom.xml) runs Java/JUnit checks of
+the actual launcher packages and publication behavior. Its native profiles run
+Failsafe checks after the game packages exist, including archive permissions and
+paths, real game test counts, the bundled JVM, and Linux startup under Xvfb.
+The workflow calls `mvn verify` so these checks must pass before upload.
+
+The [publisher](../scripts/distribution/publish.sh) uses Bash, `gh` and `jq` to
+check Maven's checksums, assemble the cross-platform manifest, upload releases,
+and promote the current development build. GitHub publication stays outside
+Maven's local packaging lifecycle. The publisher preserves completed build
+assets on retries, verifies remote checksums, and updates the stable manifest
+only after every platform is available and the source is still current.
+The `.sha256` sidecars are build inputs for this verification; published releases
+include the consolidated `SHA256SUMS` and the unchanged launcher manifest format.
+
+The [launcher sources](../scripts/launcher/) own update and launch behavior on
+the player's computer. Their download URLs and manifest contract remain stable
+across the migration to Maven. The game distribution workflow needs no Python;
+the separate documentation workflow uses MkDocs. See
+[Building distributions](distribution.md) for local Maven commands and outputs.
 
 GitHub-hosted runners perform these builds, not a persistent runner on the Mac
 mini. Builds have read access to the repository; only the publication job receives
@@ -149,6 +171,33 @@ workflow results for the pushed commit before reporting a task as published.
 
 ## Verification
 
+### Maven migration
+
+On **11 October 2026**, the migrated pipeline passed on macOS 27 ARM64 and in
+an isolated Ubuntu 24.04 x86-64 container, using Maven 3.9.12 and JDK 17. Each
+native verification run passed **601 game tests**, **31 build-tool unit tests**,
+**one launcher-package integration test**, and **one native integration test**,
+with no failures, errors or skipped cases. The native checks validated archive
+layout and executable modes, installer signatures and SHA-256 sidecars, and
+executed the Java runtime extracted from the archive. Linux additionally opened
+a usable production game window under Xvfb.
+
+A clean `mvn -pl microcol-build-tests -am test` separately passed its 31 behavior
+tests without prebuilt archives. `verify` then packaged and checked both
+bootstraps through Failsafe. Launcher packaging also passed a repeated run that
+removed stale output. The documentation passed six link-hook tests and a strict
+build of the staged source tree. Local logs and reports are retained under
+`~/Library/Logs/Microcol/maven-distribution/2026-10-11/`.
+
+The disposable Linux test host required `jq`, `unzip` and `x11-utils` in addition
+to its existing packaging libraries; CI declares these dependencies explicitly.
+These local results do not establish publication or Intel Mac compatibility:
+check the corresponding commit's three-platform Actions run and development
+channel before treating it as a delivered update. Gameplay, audio and the
+legacy TestFX suite were outside these packaging checks.
+
+### Initial delivery
+
 Local checks on **11 October 2026** used macOS 27 ARM64, JDK 17.0.18 and Maven
 3.9.12. The integrated Mac distribution build passed **601 game tests**. The
 publication contract passed **13 tests**, the launcher passed **12** download/cache/
@@ -165,6 +214,7 @@ A successful native build with a failed publishing job is not an available updat
 Local evidence is retained under `~/Library/Logs/Microcol/dev-delivery/2026-10-11/`
 and `~/Library/Logs/Microcol/dev-ci-smoke/`.
 
-macOS Gatekeeper acceptance on the user's separate computer, full gameplay and
-audio are not covered by the local fixture tests. The initial delivery work does
-not claim Developer ID signing or notarization.
+The user subsequently confirmed that MicroCol Dev opened the game on their
+MacBook after approving it in macOS. This is a user-reported launch result;
+full gameplay and audio are not covered by the automated checks. The packages
+remain unsigned and unnotarized.
