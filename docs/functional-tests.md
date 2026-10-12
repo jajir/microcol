@@ -446,5 +446,23 @@ po doplnění třetí kontroly byl samostatně znovu spuštěn
 `-Dtest=PageVerificationContractTest`. Společný formatter ověřil 32 změněných
 Java souborů se zachovanými tokeny, komentáři a idempotencí. Prošlo všech
 9 dokumentačních kontrol, přísný MkDocs a validátor local-worker skillu.
-Úplná funkční regrese této nové změny zatím není ověřena.
-Historických 44 úspěšných scénářů na `e229682e` není výsledkem tohoto refaktoru.
+
+**Úplná regrese ověřena 12. října 2026:**
+[CI běh 25](https://github.com/jajir/microcol/actions/runs/38247066928)
+na revizi `450a7fdc6b7e38b734c750fe204547f9956804cb`, JDK 17,
+Linux/Xvfb/Openbox, nativní Glass a úplný Maven příkaz uvedený výše.
+Stažené Surefire XML z
+[tests-functional](https://github.com/jajir/microcol/actions/runs/38247066928/artifacts/11745963820)
+potvrzuje **663 herních testů, všech 44 UI scénářů a 3 kontroly
+PageVerificationContractTest**, vždy 0 selhání, 0 chyb a 0 vynechání.
+TC19 prošlo všech 17 scénářů. Modul `microcol-test` tedy nově vykazuje
+47 testů, nikoli 47 hráčských scénářů. Místní kopie XML je v
+`target/pr44-verifier-ci-evidence/`.
+
+Prošly také všechny tři nativní balíčky, kontroly launcherů a
+[dokumentační CI](https://github.com/jajir/microcol/actions/runs/38247070083).
+Testovací build `dev-25-450a7fdc6b7e` lze stáhnout například pro
+[macOS ARM64](https://github.com/jajir/microcol/actions/runs/38247066928/artifacts/11745613581).
+Publikace release/webu je na větvi PR vynechána. Následné doplnění tohoto
+záznamu mění jen dokumentaci, ne ověřený Java kód. PR není sloučený;
+existující konflikty s `main` zůstávají mimo tento refaktor.
