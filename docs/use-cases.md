@@ -430,6 +430,17 @@ U ostatních UC se konkrétní TC doplní po přečtení jejich skutečných ase
 Prázdná vazba není důkaz neexistence implementace, nýbrž dosud nepřiřazeného
 úplného přejímacího důkazu.
 
+Historicky dne 12. října byly kontroly počtu lodí přesunuty z page component do samotných
+TC01 a obou scénářů TC06. TC01 souvisí s UC-024/025 (přeprava jednotek), TC06
+s UC-055/056 (nákup lodě a obchod). Tento přesun zachovává původní očekávání
+jedné lodi, neověřuje všechny varianty těchto UC a nemění jejich stav přejímky.
+Lokálně po opravě výstupu Qwen prošel TC01 (1/1); úplnou sadu včetně TC06
+nadále vyžaduje UC-119. Příkazy a rozsah jsou ve
+[funkčním kontraktu](functional-tests.md), průběh delegace v
+[záznamu Qwen](ai/local-qwen.md#dock-assertion-move-2026-10-12).
+Tento směr byl ještě téhož dne nahrazen pojmenovanými page verifikacemi
+v PR #44; aktuální pravidlo určuje funkční kontrakt.
+
 Historický běh na revizi
 [fb3a9734](https://github.com/jajir/microcol/commit/fb3a9734149a8e95c8b940cfd6a479e2c04a2fe7)
 z 11. října měl 603 úspěšných herních testů a ve funkční sadě 27 vybraných,

@@ -59,6 +59,13 @@ Use the shared [Java formatter](docs/code-formatting.md) and its
 scoped to files touched by the task; preserve the functional tests' readable
 scenario structure and stable IDs.
 
+This rule applies to the main agent and every worker, including local Qwen.
+Include the formatting requirements and accessible profile in Java task handoffs.
+Before accepting or committing Java changes, the main agent applies the shared
+formatter to the task's changed Java files and reviews the diff, including worker
+output. VS Code format-on-save does not format files written by CLI tools. Report
+an unavailable formatter as a blocker rather than silently using another style.
+
 # Graphics
 
 Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for
@@ -126,3 +133,10 @@ without further delegation, commits or pushes. Follow the
 contracts, limits and evidence; an unavailable worker does not trigger setup or
 a silent cloud fallback. Keep operating values and measured results there, and
 do not claim token savings without measurements.
+
+For every failed or incomplete worker attempt, diagnose the actual failure and
+record the evidence. Correct caller setup errors; send simple in-scope code or
+tool errors back to Qwen for a targeted repair while time and repair budgets
+remain. Rerun the failed check and required acceptance checks before calling the
+problem fixed. Main-agent takeover or a skipped retry requires an explicit reason;
+follow the [failure and recovery loop](docs/ai/local-qwen.md#failure-and-recovery-loop).

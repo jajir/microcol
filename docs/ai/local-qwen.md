@@ -17,6 +17,12 @@ on the 16 GB Mac mini**. Preserve the main agent's model and highest supported
 reasoning setting. The goal is more correctly completed work within the same
 Codex budget; no savings percentage has been measured.
 
+The user approved revised [time budgets](#time-budget-2026-10-12) on **2026-10-12**:
+five minutes per attempt and ten minutes of cumulative worker time per task.
+The [failure analysis](#failure-analysis-2026-10-12) below reviews the earlier
+attempts. A subsequent [recovery check](#recovery-check-2026-10-12) used the new
+limits and verified a targeted repair, not a general success-rate improvement.
+
 ## Instruction ownership
 
 | Source | Responsibility |
@@ -86,6 +92,11 @@ required Linux/Xvfb publication check.
 For each result report what Qwen did, main-agent repairs, actual checks and
 pending checks. Record attempts/time/available usage; no measured savings
 percentage yet.
+
+Every failed or incomplete attempt follows the mandatory
+[failure and recovery loop](#failure-and-recovery-loop). Simple repairable errors
+go back to Qwen while budgets remain; taking over the implementation is not the
+default response to the first failure.
 
 If the runtime is unavailable, report the limitation and continue directly when
 useful; do not install anything or silently switch to a cloud worker. The main
@@ -239,7 +250,7 @@ for this route. No persistent user Codex configuration has been changed.
 | Codex metadata | `model_context_window=8192` describes the window to Codex; it does not set Ollama's allocation. Confirm actual context and identity in Ollama evidence. |
 | Reasoning | Non-thinking with the three CLI settings shown below; the accepted pilot reported zero reasoning events/tokens. Do not copy Astra's `ultra` setting to the worker. |
 | Concurrency | One active local request, serialized across sessions using a host-wide lock. Unload the worker model before Maven; no concurrent heavy tests. |
-| Limits | **180 seconds per attempt**, with at most **two repair rounds** after the first implementation. The caller enforces the deadline, stops the owned process and retains evidence. |
+| Limits | **300 seconds (5 minutes) per attempt**, **600 seconds (10 minutes) cumulative worker time per task**, with at most **two repair rounds** and only while budget remains. The caller enforces both limits; see the accounting rules below. |
 | Language/context | English code and project instructions; Czech user requests remain welcome. Give the worker a small complete task, inline relevant rules and code, without full skill/app catalogs or conversation history. Split tasks that do not fit. |
 
 The alias was created from the project Modelfile with:
@@ -255,6 +266,85 @@ The small context remains an experiment: [Ollama's Codex guidance](https://docs.
 recommends substantially more context, while the 8k installation checks above
 already caused swapping on this machine. Keep task size and memory use bounded.
 
+### Time budget — 2026-10-12
+
+These are the approved limits for **future dispatches**, replacing the previous
+180-second attempt limit. Historical job scripts and reports remain unchanged.
+There is no persistent runner or Ollama setting enforcing wall-clock deadlines:
+the caller supervising each direct `codex exec` process must enforce them.
+Do not copy the old `180` constant from archived per-job runners.
+
+- Before the first attempt, assign a stable logical task ID and start its
+  cumulative worker time at zero. Record each attempt's elapsed time using a
+  monotonic clock, including process startup/model loading, tool calls and model
+  generation. Charge failed starts, cancelled attempts and repairs too.
+- Before every attempt, subtract previously used worker time from **600 seconds**.
+  Do not start if none remains. The attempt's allowed runtime is the smaller of
+  **300 seconds** and the remaining task budget. Record these values with the
+  task input and executed command so the worker and caller share the same limit.
+- Repairs, restarted processes and differently named attempt directories retain
+  that same task budget. The existing maximum of two repair rounds is an upper
+  bound, not an entitlement to another full attempt. Two 300-second attempts
+  exhaust the task budget; a third attempt is not allowed.
+- On either deadline, stop the owned process/request, unload the model and keep
+  the partial diff and logs. Cleanup may finish slightly after the deadline;
+  record and charge the actual elapsed time before considering another attempt.
+  If prior elapsed-time evidence is missing, reconstruct it before dispatching
+  again rather than assuming a fresh budget.
+- Caller preparation, review, Maven/tests and publication are outside this
+  **worker-runtime** budget. Do not run heavy verification concurrently with Qwen.
+  Repeated reads or errors without progress can justify stopping earlier; more
+  time is not a reason to continue an unchanged failing loop.
+
+For example, 180 seconds already used leaves a 300-second attempt available;
+480 used leaves only 120 seconds; 600 used permits no further attempt. This is
+a caller-enforced workflow change, not a claim that the longer budget improves
+success rates. The model, 8k context, output limit and concurrency are unchanged.
+
+### Failure and recovery loop
+
+**Required from 2026-10-12.** Previously the workflow allowed bounded repairs,
+but did not require a diagnosed retry before main-agent completion. Recording a
+failure without checking a feasible correction does not meet this contract.
+
+1. **Inspect and classify.** After a failed command, incomplete/invalid result,
+   timeout or caller acceptance failure, preserve the task, runtime identity,
+   exact command/error, exit status, current diff and elapsed budget. Determine
+   whether the cause is caller setup, a tool/script/code error, missing context,
+   resource limits or a failed requirement. State unknown causes as unknown;
+   a timeout alone does not establish that more time is the answer.
+2. **Make a specific correction.** The caller fixes its own setup, such as a
+   missing child `CODEX_HOME`, without installing a runtime or changing models.
+   For a simple in-scope worker error, give Qwen the relevant failing fragment,
+   traceback/current diff and a focused repair task. Keep required behavior and
+   checks unchanged. Do not dump the full previous conversation or repeat an
+   unchanged failing prompt. Do not silently replace Qwen's implementation.
+3. **Rerun within the same budget.** Dispatch the corrected setup or repair with
+   the same logical task ID, remaining cumulative runtime and repair count.
+   The caller must attempt a feasible, safe repair while those limits permit it;
+   no extra user approval is needed. A new directory is not a new allowance.
+   If the runtime is unavailable, scope is unclear, retry would be unsafe, or
+   budgets are exhausted, record that concrete reason rather than retrying
+   indefinitely. Main-agent takeover must explain why another worker repair
+   was not appropriate.
+4. **Verify the original failure and the result.** After unloading Qwen, the
+   caller reruns the failed command/check against the repaired state and then
+   the assigned acceptance checks, including formatting for Java changes.
+   A corrected variable name, successful CLI exit or passing syntax check alone
+   does not establish a working feature. Preserve actual before/after results,
+   intended test selection, counts and any remaining failures.
+5. **Close the loop visibly.** The job's verification/acceptance record must say
+   what failed, why, who corrected it, which retry/check ran, and whether recovery
+   is verified, partial or unresolved. Record skipped-retry/takeover reasons and
+   reusable prevention in its existing owning instructions or tool. Summarize
+   relevant measured outcomes here; do not present caller-completed work as an
+   independently successful Qwen task.
+
+This is enforced by the main agent's dispatch and acceptance procedure through
+`AGENTS.md`, the worker skill and task/result contract. It is **not** an unattended
+retry service or a guarantee of model correctness. The evidence and explicit
+dispositions make compliance reviewable; they do not replace actual verification.
+
 ### Prepare, invoke, verify
 
 1. Read the [local-worker skill](../../.agents/skills/local-worker/SKILL.md), current
@@ -264,16 +354,19 @@ already caused swapping on this machine. Keep task size and memory use bounded.
    `~/Library/Application Support/Microcol/local-worker/worktrees/<task-id>`.
 2. Store task input, copied `worker-role.md`, command, events, result and test
    reports under `~/Library/Logs/Microcol/local-qwen/jobs/<task-id>/`. Fill the
-   existing task template, including scope, expected behavior, deadline and test
-   ownership. Inline applicable project rules; the child must receive them even
-   when the source documents are untracked in the main checkout.
+   existing task template, including scope, expected behavior, both time budgets,
+   previous attempts' elapsed time and test ownership. Create the child-specific
+   `codex-home` directory before dispatch. Inline applicable project rules; the
+   child must receive them even when the source documents are untracked in the
+   main checkout.
 3. Claim `~/Library/Application Support/Microcol/local-worker/active.lock` with an
    atomic directory creation before starting. If it already exists, inspect its
    owning task/process; do not start a second job or remove another caller's
    lock. Record the task and owned process there. Hold the lock through worker
    execution and caller verification, then release your lock after cleanup.
 4. Run the command below in the assigned worktree. Capture stdout events, stderr,
-   final response and exit code. Enforce the deadline from the calling session;
+   final response and exit code. Enforce the effective attempt deadline and shared
+   task budget from the calling session using the accounting rules above;
    this command has no built-in timeout wrapper. On timeout or interruption,
    stop the owned worker and any still-active local request, unload its model,
    and preserve the partial diff and logs. Never replace failed local inference
@@ -281,8 +374,9 @@ already caused swapping on this machine. Keep task size and memory use bounded.
 5. Inspect the actual diff against scope, unload the alias, and run the specified
    Maven command on that worktree. Require a fresh Surefire report with the
    intended tests and exact counts, exit codes, failures and skips. Send concrete
-   failures back only within the repair limit. The worker must report its tests
-   as pending caller verification, not claim they passed.
+   failures back only within the repair limit and remaining task budget. The
+   worker must report its tests as pending caller verification, not claim they
+   passed.
 6. Astra reviews behavior and test meaning, checks the main checkout's current
    state, and integrates accepted changes within the assigned scope. The worker
    does not commit, merge or push its result. The main agent records repairs and
@@ -291,10 +385,15 @@ already caused swapping on this machine. Keep task size and memory use bounded.
    isolated pilot may stay isolated when that is the agreed scope.
 
 Example invocation, after setting `worker_tree` and `worker_job` to the prepared
-absolute paths and creating the job's `codex-home` directory. These variables are
-caller-local; `CODEX_HOME` below applies only to the child process:
+absolute paths. The quoted, fail-fast preflight creates the child home and checks
+the required inputs before dispatch. These variables are caller-local;
+`CODEX_HOME` below applies only to the child process:
 
 ```sh
+test -d "$worker_tree" && test -r "$worker_job/task.md" \
+  && test -r "$worker_job/worker-role.md" \
+  && mkdir -p "$worker_job/codex-home" || exit 1
+
 env CODEX_HOME="$worker_job/codex-home" \
   /opt/homebrew/bin/codex -a never exec \
   --oss --local-provider ollama -m microcol-qwen:9b-q4_K_M-8k \
@@ -320,6 +419,92 @@ post-run diff check alone are not a filesystem sandbox.
 The CLI emitted fallback model-metadata warnings for the local model. This is
 an observed metadata limitation, not model substitution: the local model and
 digest were checked through Ollama's runtime evidence.
+
+### Failure analysis — 2026-10-12
+
+This is a read-only review of **14 recorded attempts** from 10–11 October, not
+14 independent tasks or a controlled model benchmark. It includes retries and
+one startup failure. Sources are each job's `events.jsonl`, execution metadata,
+`stderr.log`, and caller verification/acceptance records under
+`~/Library/Logs/Microcol/local-qwen/jobs/`. The derived attempt inventory is in
+`~/Library/Logs/Microcol/local-qwen/analysis/2026-10-12-timeouts/summary.json`.
+
+| Recorded outcome | Attempts | Interpretation |
+| --- | --- | --- |
+| Completed model turn, process exit 0 | 5 | Goods-trade retry, build identity, plowing assertions, Linux assembly and launcher metadata. Four needed caller corrections or only partial acceptance; completion is not correctness. |
+| Stopped at the old deadline | 7 | Documentation links, workflow policy, implementation-plan handoff, package descriptions, warehouse model, its repair and the warehouse fixture retry. Some produced reusable partial work. |
+| Caller stopped before the deadline | 1 | Initial goods-trade pilot: context compaction and no edits after 145.73 seconds. |
+| Failed before model execution | 1 | Warehouse fixture: missing child `CODEX_HOME`, exit 1 after 3.02 seconds. This was caller setup failure, not a Qwen generation failure. |
+
+Observed causes overlap; a timeout is a stopping reason, not by itself a root
+cause. The strongest evidence is:
+
+| Finding | Evidence and interpretation |
+| --- | --- |
+| Reading/context churn | The warehouse-model attempt read the same 7,375-character Java file three times, made no edit and reported a compaction warning. Four attempts reported compaction warnings. The workflow-policy attempt read the whole growing operating document. This supports narrowing inputs, not simply waiting longer. |
+| Oversized output and guessed data shape | The fixture retry printed 103,428 characters from the saved game, then treated colony data as a unit and failed with `TypeError: 'NoneType' object is not subscriptable`. Raw trace size is not proof that all those characters reached the model: tool output was capped. It does show an unhelpfully broad read followed by an incorrect schema assumption. |
+| Failed editing mechanics | The warehouse repair reached an edit script, but `old_addgoods` was undefined and Python raised `NameError`. The documentation-link job used unquoted `Application Support` paths, spent calls diagnosing the wrong directories and left only an empty helper. These are concrete command/edit errors, not evidence that all work only needed more generation time. |
+| Deadline/task size mismatch | The package-documentation attempt issued 16 commands and drafted six of eight files before cancellation at 180.25 seconds. Build identity completed at 180.48 seconds in the caller's recorded timing. More time plausibly helps such progressing attempts; the logs cannot establish that all timed-out work would finish correctly at 300 seconds. |
+| Output quality still needs review | Even completed runs needed fixes: helper visibility/resource handling in build identity, XML structure/output paths in Linux assembly, and replacement of the launcher's Linux descriptor. A longer deadline does not remove the acceptance gate. |
+
+The fallback-model-metadata warning appeared in all **13 attempts that started
+a model turn**, including all five completed turns. It is a compatibility caveat,
+not a demonstrated sole cause of failure. Codex documents the context-window and
+compaction controls separately in its
+[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+Do not disable compaction or increase context solely to hide the warning.
+Earlier measurements showed memory pressure, but these logs do not isolate
+swapping or model loading as the cause of the individual timeouts. Complete
+generation timing and token totals are also unavailable for the interrupted runs.
+
+**Recommended next checks, not yet measured improvements:** preflight the child
+home and working directory; use relative worktree paths or quote absolute paths;
+provide the exact method/data fragment and acceptance example instead of whole
+documents or fixtures; split multi-file batches that leave little editing time.
+On a repair, supply the actual error and current diff rather than repeating the
+original broad discovery task. Keep the 8k context for a comparable trial and
+record useful edits, accepted results, caller repair time and budget consumption
+for the next 3–5 assignments under the new limits. This initial read-only diagnosis
+included no live worker run or token-saving claim; the later recovery check is
+recorded separately below.
+
+### Recovery check — 2026-10-12
+
+Task `2026-10-12-recovery-check` verified the failure loop on a detached worktree
+at `5db07522ccf9dc1a731f276c88bce951a9aa441f`. It used two **controlled
+reproductions** of observed failures: a deliberately missing child home and a
+seven-line Python function with the same `old_method` / undefined `old_addgoods`
+mismatch as the archived warehouse edit script. It did not resume or complete
+the original warehouse feature, reset that task's budget, or modify game code.
+
+| Step | Actual result |
+| --- | --- |
+| Original code check | Caller ran `python3 -m unittest -v test_recovery_probe`: 4 tests, 4 `NameError` errors, exit 1. |
+| Missing-home reproduction | Attempt 0 exited 1 before inference because its child `CODEX_HOME` did not exist; 1.062 seconds including cleanup. |
+| Caller setup correction | The documented quoted, fail-fast preflight created the child home. The retry retained the same task ID and charged the first attempt's elapsed time. |
+| Targeted Qwen retry | Attempt 1 exited 0 in 48.509 seconds including cleanup. Qwen changed only the undefined reference to the already-defined `old_method`; no caller code repair was needed. |
+| Runtime verification | Samples matched local alias `microcol-qwen:9b-q4_K_M-8k`, the documented digest and actual context 8192. The model was unloaded before caller checks. |
+| Same acceptance check after repair | The identical command passed all 4 tests, with no failures, errors or skips. Caller checked that the test file hash and all tracked repository files were unchanged. |
+| Budget and result | Total worker time 49.571 seconds, within the 300/600-second limits. Both reproduced failures have verified recovery; the repaired probe remains isolated. |
+
+The four cases check replacement, unchanged surrounding text, unrelated content
+and repeated occurrences. Qwen used three shell commands and left tests pending
+caller verification. Its completed-turn usage was 14,013 input tokens (10,262
+cached), 397 output tokens and zero reasoning output tokens across requests;
+these are not a single prompt's size or measured cloud savings. The caller
+prepared the reproduction, diagnosed both faults and ran the checks. This is
+evidence of one supervised recovery, not proof of general autonomous reliability
+or that a five-minute allowance is better than three minutes.
+
+The documented preflight also passed six caller-run cases: missing/existing child
+home, missing worktree, task or role, and a file blocking the home-directory path.
+Paths contained spaces; existing home content was preserved. These checks are
+recorded in `preflight-checks.json` and do not require model inference.
+
+Task input, updated worker role, `diagnosis.json`, both attempt directories,
+original/corrected probe, immutable tests, red/green logs and `verification.json`
+are retained in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-recovery-check/`.
+The isolated checkout remains under the standard worker worktree directory.
 
 ### Current Microcol pilot — 2026-10-10
 
@@ -744,3 +929,49 @@ then passed 2/2. Final functional evidence is kept in the
 [test contract](../functional-tests.md#pr-44-pojmenovane-verifikace).
 Inputs, raw results, token reports, model samples and process evidence remain in
 `~/Library/Logs/Microcol/local-qwen/jobs/` under the two task IDs above.
+
+## Dock assertion move — 2026-10-12
+
+Historical main-branch work, superseded by the named-verification rule
+integrated from PR #44. The checks below describe that earlier revision.
+
+Task `2026-10-12-dock-assertions`, baseline `1b15f866`, moves three ship-count
+expectations into TC01 and both TC06 scenarios. The dock and its two screen
+wrappers expose the actual count without validating an expected value.
+Scope is five Java files; other legacy page assertions are not migrated.
+
+| Attempt | Worker seconds | Observed result |
+| --- | ---: | --- |
+| 0 | 224.693 | Caller stopped repeated broad reads/context compaction; no edits. |
+| 1 | 300.112 | Targeted fragments did not prevent shell-editing errors: incompatible BSD `sed -i`, ineffective Perl replacement, then deletion of the method and JavaDoc opener. Timed out; malformed partial diff rejected. |
+| 2 | 75.253 | Text-only patch request exhausted the remaining original budget without a completed response. |
+| 3 | 115.871 | After a user-authorized extension, returned a patch with invented surrounding code and invalid syntax; `git apply --check` exited 128. Rejected without application. |
+| 4 | 48.409 | Returned six exact replacement entries for the five files; old strings matched, but TC06's new assertion lacked a semicolon. |
+| 5 | 21.201 | Qwen corrected that specific statement; caller applied the returned replacements and shared formatter without semantic changes. |
+
+The first three attempts consumed **600.058 seconds including cleanup**.
+The user then explicitly authorized **another 30 minutes** for this task,
+including its targeted repairs: the extended cumulative ceiling was 2400.058
+seconds, not a reset of prior time. The extension used **185.481 seconds**;
+total worker time was **785.539 seconds**. This was a one-off exception, not
+a change to the default five-/ten-minute limits or a general reliability claim.
+The caller's provisional direct implementation was archived and rolled back
+before the extended attempt; it was not supplied to Qwen or used as its output.
+
+The accepted result is Qwen-generated replacement text applied by the caller,
+not autonomous worker filesystem editing. Source checks verify no dock
+assertions/verifications, no old ship-verification method, and three direct
+expected-one assertions in unchanged TC steps. All five Java files passed the
+shared formatter's token-preservation/idempotence checks. After unloading Qwen,
+the caller reran TC01 on macOS/JDK 17/Monocle: **1 passed, no failures/errors/skips**.
+Both TC06 scenarios require native Glass/LINK and the full Linux/Xvfb publication
+gate; the local TC01 result does not replace that check.
+
+Runtime samples confirmed the same local alias/digest and 8192 context.
+Completed attempts 3/4/5 report respectively 3787/3424/3031 input tokens and
+1707/522/70 output tokens, zero cached input and reasoning tokens. Interrupted
+attempts have no completed-turn usage totals. More time alone is not an
+established fix: output format and handoff changed too. The useful recovery
+was exact replacement matching plus a targeted syntax repair, not blind retry.
+Artifacts, failed patches, responses and caller verification are under
+`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-dock-assertions/`.

@@ -244,6 +244,32 @@ rozlišuje práci Qwenu, opravy hlavního agenta a místní důkazy.
 
 ## Dokončení a záznam výsledku
 
+### Přesun asercí přístavu — 12. října 2026
+
+**Historický výsledek větve main, nahrazený pravidlem pojmenovaných verifikací
+integrovaným z PR #44.** Následující kontroly popisují tehdejší revizi.
+
+`PageComponentPanelDock` nyní pouze vrací počet lodí; `ColonyScreen`
+a `EuropePortScreen` jej zpřístupňují bez očekávané hodnoty. Původní tři
+kontroly jedné lodi jsou přímo v `TC_01_embark_disembark`, `TC_06_moving_goods`
+a `TC_06_moving_goods_buy_cargo_and_move_it_to_occupied_cargo_slot`.
+Selektory, akce, fixtures, ID i očekávání zůstaly stejné; ostatní historické
+verifikační metody nebyly v tomto úkolu převáděny.
+
+Kontrola zdrojů potvrdila odstranění všech použití `verifyNumberOfShipsInPort`,
+absenci asercí/verifikace v komponentě a zachování tří očekávání v testech.
+Sdílený formatter prošel všech pět změněných Java souborů se zachováním tokenů
+a idempotencí. Po aplikaci opraveného výstupu Qwen prošel na macOS/JDK 17
+s Monocle cílený **TC01: 1 test, 0 selhání, 0 chyb, 0 přeskočených**.
+Použit byl výše uvedený cílený příkaz s výběrem
+`-Dtest=TC_01_F01_embark_disembark_test`; log je `target/dock-qwen-tc01.log`.
+TC06 potřebuje nativní režim LINK; oba jeho scénáře a celou sadu ověřuje
+povinný Linux/Xvfb job publikované revize. Lokální TC01 jej nenahrazuje.
+[Záznam Qwen](ai/local-qwen.md#dock-assertion-move-2026-10-12) rozlišuje neúspěšné
+pokusy, opravu workerem a aplikaci/formátování hlavním agentem.
+
+### Kontrolní seznam
+
 Před přijetím změny reviewer ověří:
 
 - Každé změněné chování má dohledatelné ID scénáře a konkrétní očekávání;
@@ -466,3 +492,22 @@ Testovací build `dev-25-450a7fdc6b7e` lze stáhnout například pro
 Publikace release/webu je na větvi PR vynechána. Následné doplnění tohoto
 záznamu mění jen dokumentaci, ne ověřený Java kód. PR není sloučený;
 existující konflikty s `main` zůstávají mimo tento refaktor.
+
+## PR #44 — sjednocení s main
+
+Dne **12. října 2026** byly vyřešeny konflikty při začlenění `main`
+(`92a22efa`) do větve PR (`972e1007`). Aktuální pojmenované page verifikace
+zůstaly zachované; starší přesun asercí přímo do TC je označený jako historie.
+Záznamy obou větví o Qwen zůstávají dostupné společně s novými časovými limity
+a postupem cílených oprav. Pět dotčených Java souborů je obsahově shodných
+s hlavou PR před sloučením; žádná herní očekávání ani fixtures se nemění.
+
+Místně na macOS ARM64/JDK 17 prošlo **663 herních testů**, **TC01 1/1**
+a **PageVerificationContractTest 3/3**, bez selhání, chyb a vynechání.
+Příkazy odpovídají výše uvedeným běhům; cílený výběr byl
+`-Dtest=PageVerificationContractTest,TC_01_F01_embark_disembark_test`.
+Logy jsou `target/merge44-game.log` a `target/merge44-tests.log`, čerstvé XML
+v příslušných `target/surefire-reports/`. Všech pět Java souborů prošlo
+sdíleným Eclipse formatterem bez změny obsahu. Prošlo také devět kontrol
+dokumentace a přísný MkDocs build. Tato místní kontrola nenahrazuje úplnou
+Linux/Xvfb regresi ani ověření distribucí v CI výsledné revize na main.

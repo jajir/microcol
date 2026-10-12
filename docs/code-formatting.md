@@ -28,6 +28,27 @@ uloženém souboru. Před commitem zkontrolovat diff. Formátovat soubory dotče
 U funkčních testů nadále zachovat [čitelnou strukturu scénářů](functional-tests.md#stala-a-citelna-struktura-scenaru),
 jejich ID, pořadí kroků a očekávané výsledky.
 
+## Pravidlo pro agenty a Qwen
+
+Od **12. října 2026** platí stejný profil pro hlavního agenta i všechny workery,
+včetně lokálního Qwen. Pravidlo je součástí [AGENTS.md](../AGENTS.md),
+[role workeru](../.agents/skills/local-worker/references/worker-role.md)
+a [šablony zadání](../.agents/skills/local-worker/references/worker-instructions.md).
+Nevytvářet zvláštní styl pro kód generovaný modelem.
+
+Při předání Java úkolu uvést požadavky na formátování, zpřístupnit XML profil
+v pracovním stromu a určit konkrétní příkaz omezený na změněné Java soubory.
+Hlavní agent po uvolnění Qwen z paměti použije sdílený formatter, zkontroluje
+diff a teprve potom provede ověření a přijetí změny. Totéž platí pro jeho vlastní
+Java úpravy před commitem. Zachovat kroky, komentáře a aserce funkčních scénářů;
+nesouvisející soubory nepřeformátovávat.
+
+Zápis přes CLI nebo patch **nespouští** formátování při uložení ve VS Code.
+V předání výsledku rozlišit skutečně provedené formátování od práce čekající
+na hlavního agenta. Nedostupný formatter je překážka dokončení, nikoli důvod
+k použití jiného stylu. Jde o pravidlo pracovního postupu, ne nový automatický
+hook v CLI, Maven nebo CI; tato změna instrukcí sama neověřuje chování Qwen.
+
 ## Rozsah a ověření přenosu
 
 Přenesl se formatter a související editorové volby. Debugger, Maven panel,

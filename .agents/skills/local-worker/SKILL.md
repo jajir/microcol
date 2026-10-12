@@ -54,9 +54,12 @@ them here.
 The caller starts the documented direct `codex exec` command in the prepared
 worktree, captures process output and exit status, and checks the actual local
 model identity in execution evidence. Keep only one worker request active. Enforce
-the task deadline and documented cancellation procedure; stop the owned worker
-on expiry and preserve partial changes and logs. An isolated worktree separates
-changes but does not itself restrict filesystem access; use the documented
+both the per-attempt limit and cumulative task budget from the operating document.
+Before each dispatch, record prior worker elapsed time and cap the attempt by the
+remaining task budget; retries and new attempt directories do not reset it.
+Follow the documented cancellation procedure on either limit and preserve partial
+changes and logs. An isolated worktree separates changes but does not itself
+restrict filesystem access; use the documented
 execution restrictions as well.
 
 The worker may fix ordinary mistakes within its assigned scope and repair limit.
@@ -80,11 +83,26 @@ then review, format changed Java files with the shared project profile, and run
 the same acceptance checks as for direct worker edits. Record generated text
 separately from caller application, formatting and verification.
 
-After a failure, diagnose the actual error and send the current fragment/diff,
-specific failed check and unchanged acceptance criteria for a bounded repair.
-Do not replay the same broad investigation. Rerun the failed check and required
-acceptance tests; retain before/after evidence and explain any skipped retry
-or main-agent takeover. Changing output mode does not reset the task's budget.
+## Diagnose, repair and rerun
+
+After a failed or incomplete attempt, inspect the actual error, commands, diff
+and remaining budget before deciding the next step. A timeout or exit code alone
+is not a diagnosis; distinguish caller setup, tool/code errors, missing context,
+resource limits and acceptance failures. Record uncertainty when the cause is
+not established.
+
+Fix caller-owned setup issues before redispatch. For a simple in-scope worker
+error, send Qwen the specific failure, current relevant code/diff and unchanged
+acceptance check, then require a targeted repair while budgets permit. Do not
+replace repairable worker work with a main-agent rewrite by default or replay
+the same failing prompt without a concrete correction.
+
+After the repair, the caller reruns the failed command/check and required
+acceptance checks. Preserve before/after evidence and distinguish a verified
+repair from a partial result. If a retry is unsafe, out of scope, budget-exhausted
+or blocked by an unavailable runtime, record the reason and hand back the
+remaining work; do not reset the budget or claim recovery. Capture a reusable
+prevention in the owning instructions/tool when the evidence warrants it.
 
 ## Review and accept
 
@@ -94,10 +112,11 @@ Match the report to runner output, including exit codes, intended test names,
 counts, skips, and report paths. A successful build with no intended tests run
 does not verify the task.
 
-Request a bounded correction or finish the remaining work directly when needed,
-recording main-agent repairs. Run additional checks only to resolve remaining
-uncertainty. Bring accepted changes into the caller's checkout after checking its
-current state and preserving unrelated edits. Report accepted changes,
+Use the repair loop before taking over repairable worker work. If direct
+completion is necessary, record why another Qwen repair was not appropriate and
+separate main-agent repairs from worker output. Run additional checks only to
+resolve remaining uncertainty. Bring accepted changes into the caller's checkout
+after checking its current state and preserving unrelated edits. Report accepted changes,
 verification, omissions, and available local-run metrics; do not claim a fully
 verified task while required checks are missing. Record measured operating
 findings in the operating document without turning a single successful task into
