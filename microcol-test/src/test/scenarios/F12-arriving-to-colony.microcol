@@ -94,8 +94,10 @@
         "mounted": false
       }
     ],
+    "nextColonyId": 1,
     "colonies": [
       {
+        "id": 0,
         "name": "New Amsterdam",
         "ownerName": "Dutch",
         "location": {

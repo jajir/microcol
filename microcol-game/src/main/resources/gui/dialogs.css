@@ -2,6 +2,9 @@
  * File contains definition of dialogs.
  */
 
+.name-error { -fx-text-fill: #a71919; }
+#colonyNameInput:invalid { -fx-text-fill: #a71919; -fx-border-color: #a71919; }
+
 .root{
 	-fx-padding: 30 30 15 30;
 	-fx-font-family: Tillana;

@@ -257,7 +257,7 @@ tří herních zadání zatím nebylo předáno k implementaci.
 | Zadání | Stav a konkrétní podmínka předání | Nejmenší práce pro Qwen |
 | --- | --- | --- |
 | Z01 Vyložení do skladu | Kontrakt přijat: pravidla a výjimky v modelu, UI používá náhled a ověří změnu před potvrzením. Samostatný PR do main. | [Implementace a konkrétní ověření Z01](functional-tests.md#z01-bezpecne-vylozeni-nakladu). |
-| Z02 Pojmenování kolonie | K dopracování kontraktu: určit rozhraní předání jména, vytvoření a otevření kolonie a kontrolu zrušení. | Nejprve předání jména a testy založení; potom dialog a otevření správné kolonie. |
+| Z02 Pojmenování kolonie | Kontrakt přijat 12. října 2026: neměnná ID, modální pojmenování/přejmenování a aktuální JSON bez zpětné kompatibility. | [Kontrakt Z02](#z02-zalozeni-pojmenovane-kolonie) a [ověření](functional-tests.md#z02-pojmenovani-a-identita-kolonie). |
 | Z03 Průchod tahem | Změna chování blokovaná: hlavní agent připraví k rozhodnutí Q-02 a stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Před rozhodnutím inventář přechodů a testy současného chování; po rozhodnutí jedna fáze/přechod a její testy. |
 
 Před spuštěním každého řezu hlavní agent doplní konkrétní revizi `main`, vstupy,
@@ -320,6 +320,42 @@ UI scénářů a přejímky](functional-tests.md#z01-bezpecne-vylozeni-nakladu).
 UC-023 ani UC-036 se tímto dílčím řezem neuzavírá.
 
 ### Z02 Založení pojmenované kolonie
+
+**Přijatý kontrakt — 12. října 2026:** zahrnuje pojmenování při založení i
+pozdější přejmenování. Kliknutí na jméno kolonie otevře modální dialog;
+stejná cesta je dostupná klávesnicí. Pole obsahuje vybrané současné/navržené
+jméno, tlačítka Navrhnout jiné jméno, Zrušit a Uložit (při založení Založit
+kolonii). Enter potvrzuje, Escape ruší. Do potvrzení se model nemění.
+
+- Jméno se ořízne o krajní Unicode mezery a normalizuje do NFC. Musí mít
+  1–64 Unicode code points; řídicí znaky a neplatné surrogate sekvence
+  se odmítají. Vnitřní mezery, diakritika a interpunkce se zachovají.
+- Duplicitní jméno v celé hře bez ohledu na velikost písmen je chyba.
+  Pole zčervená, text vysvětlí chybu a potvrzení není dostupné. Vlastní
+  nezměněné jméno není duplicita. Kontrolu provádí také model při potvrzení.
+- Generátor projde existující seznam, neopakuje návrhy v témže dialogu ani
+  obsazená jména. Po vyčerpání použije New Amsterdam 2, 3 atd. Návrhy nejsou
+  rezervace a zrušení je nezapisuje do modelu.
+- Přejmenovat může pouze vlastník ve svém tahu. Změna vlastníka, zánik
+  kolonie nebo změna zakládající jednotky během dialogu nesmí způsobit
+  částečnou změnu. Při založení se otevře právě vytvořená kolonie.
+- Kolonie mají neměnný nezáporný `int id`, společnou posloupnost od nuly
+  pro celou hru, oddělenou od jednotek. Přejmenování ani obsazení ID nemění.
+  Zaniklá ID se nerecyklují; JSON ukládá `id` a `nextColonyId`, i když
+  nezůstala žádná kolonie. Zrušený dialog ID nespotřebuje. Přetečení se odmítá.
+- Obnova pracovníků používá ID kolonie. Zprávy o kolonii ukládají ID a
+  tehdejší jméno jako textový snímek; přejmenování nemění jejich vazbu ani
+  původní text, zpráva zůstane čitelná i po zániku kolonie.
+
+**Obecná pravidla hry přijatá uživatelem:** textové vstupy jsou Unicode a
+před validací/uložením se oříznou krajní Unicode mezery. V této vývojové fázi
+se **nepožaduje zpětná kompatibilita uložených her**. Scénáře a testové
+fixtures se upravují přímo na aktuální JSON; nevytvářet migrační vrstvu ani
+opakovaně otevírat otázku kompatibility. Chybějící nebo chybná povinná data
+se odmítnou, nikoli tiše doplní. Načtení samo nepřepisuje původní soubor.
+Pravidlo textových vstupů platí i pro další úkoly; Z02 není plošný audit všech
+starších formulářů. Národní seznamy jmen a atomické zapisování souborů jsou
+mimo tento řez. Výsledky ověření patří do [funkčního kontraktu](functional-tests.md#z02-pojmenovani-a-identita-kolonie).
 
 **Balíky:** P10/P28. **Pravidlo:** COL-012; zachovat platné podmínky COL-011.
 

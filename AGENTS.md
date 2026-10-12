@@ -52,6 +52,20 @@ prevent invalid actions and handles expected rejection if state changes before
 confirmation. Cover boundaries in model tests and the corresponding player
 paths in UI tests; see the contract in `docs/architecture.md`.
 
+# Text input and save compatibility
+
+Treat player-entered text as Unicode and trim surrounding Unicode whitespace
+before validation/storage; preserve internal spaces, accents and punctuation.
+Colony names have a 64-Unicode-code-point limit and are globally unique under
+normalized, case-insensitive comparison. Keep model validation authoritative.
+
+During current development, backward compatibility of saved games is explicitly
+not required. Update bundled scenarios and test fixtures to the current JSON
+schema directly; do not add migrations or ask about backward compatibility for
+each task. Reject missing/invalid required identity data rather than guessing.
+Never modify a player's existing save just by opening it. See the Z02 contract
+in docs/implementation-plan.md for colony identity and naming rules.
+
 # Code formatting
 
 Use the shared [Java formatter](docs/code-formatting.md) and its

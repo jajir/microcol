@@ -1,61 +1,81 @@
 package org.microcol.model;
 
+import java.text.Normalizer;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 final class ColonyNames {
-
-    private final static String LEXICON = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    private final static List<String> dutchNames = Lists.newArrayList(
-            "New Amsterdam", "Delft", "Haarlem", "Leiden", "Rotterdam",
-            "Utrecht", "Eindhoven", "Tilburg", "Groningen", "Almere Stad",
-            "Breda");
-
-    private final Random rand = new Random();
-
+    private static final List<String> NAMES = List.of("New Amsterdam", "Delft",
+            "Haarlem", "Leiden", "Rotterdam", "Utrecht", "Eindhoven", "Tilburg",
+            "Groningen", "Almere Stad", "Breda");
     private final Model model;
 
     ColonyNames(final Model model) {
         this.model = Preconditions.checkNotNull(model);
     }
 
-    String getNewColonyName(final Player player) {
-        for (final String colonyName : dutchNames) {
-            if (isColonyNameAvailable(player, colonyName)) {
-                return colonyName;
+    static String normalize(final String value) {
+        Preconditions.checkNotNull(value, "Name is null");
+        int start = 0;
+        int end = value.length();
+        while (start < end && isSpace(value.codePointAt(start))) {
+            start += Character.charCount(value.codePointAt(start));
+        }
+        while (end > start && isSpace(value.codePointBefore(end))) {
+            end -= Character.charCount(value.codePointBefore(end));
+        }
+        return Normalizer.normalize(value.substring(start, end),
+                Normalizer.Form.NFC);
+    }
+
+    private static boolean isSpace(final int codePoint) {
+        return Character.isWhitespace(codePoint)
+                || Character.isSpaceChar(codePoint);
+    }
+
+    Optional<ColonyNameProblem> getProblem(final String value,
+            final Colony except) {
+        final String normalized = normalize(value);
+        if (normalized.isEmpty()) {
+            return Optional.of(ColonyNameProblem.EMPTY);
+        }
+        if (normalized.codePointCount(0, normalized.length()) > 64) {
+            return Optional.of(ColonyNameProblem.TOO_LONG);
+        }
+        if (normalized.codePoints()
+                .anyMatch(point -> Character.isISOControl(point)
+                        || (point >= 0xD800 && point <= 0xDFFF))) {
+            return Optional.of(ColonyNameProblem.INVALID);
+        }
+        if (model.getColonies().stream().anyMatch(colony -> colony != except
+                && normalized.equalsIgnoreCase(normalize(colony.getName())))) {
+            return Optional.of(ColonyNameProblem.DUPLICATE);
+        }
+        return Optional.empty();
+    }
+
+    String suggest(final Set<String> excluded) {
+        for (final String candidate : NAMES) {
+            if (available(candidate, excluded)) {
+                return candidate;
             }
         }
-        return randomColonyName(player);
-    }
-
-    private String randomColonyName(final Player player) {
-        String colonyName = randomColonyName();
-        while (!isColonyNameAvailable(player, colonyName)) {
-            colonyName = randomColonyName();
-        }
-        return colonyName;
-    }
-
-    private boolean isColonyNameAvailable(final Player player,
-            final String colonyName) {
-        return !model.getColonies(player).stream()
-                .filter(colony -> colonyName.equals(colony.getName())).findAny()
-                .isPresent();
-    }
-
-    private String randomColonyName() {
-        StringBuilder builder = new StringBuilder();
-        while (builder.toString().length() == 0) {
-            int length = rand.nextInt(5) + 5;
-            for (int i = 0; i < length; i++) {
-                builder.append(LEXICON.charAt(rand.nextInt(LEXICON.length())));
+        for (long suffix = 2; suffix < Long.MAX_VALUE; suffix++) {
+            final String candidate = "New Amsterdam " + suffix;
+            if (available(candidate, excluded)) {
+                return candidate;
             }
         }
-        return builder.toString();
+        throw new IllegalStateException("No colony names available");
     }
 
+    private boolean available(final String candidate,
+            final Set<String> excluded) {
+        return getProblem(candidate, null).isEmpty()
+                && excluded.stream().noneMatch(
+                        value -> candidate.equalsIgnoreCase(normalize(value)));
+    }
 }

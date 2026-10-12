@@ -18,8 +18,8 @@ import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
-import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.Ship;
+import org.microcol.model.unit.UnitActionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.robot.Motion;
@@ -81,7 +81,7 @@ public class GamePage extends AbstractScreen {
         }
     }
 
-    private void verifyThatStatusBarContains(final String string) {
+    public void verifyThatStatusBarContains(final String string) {
         final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
         logger.info("Status bar: " + label.getText());
         assertTrue(label.getText().contains(string), String.format(
@@ -109,6 +109,12 @@ public class GamePage extends AbstractScreen {
     public void saveGame() {
         getRobot().push(KeyCode.CONTROL, KeyCode.S);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public ColonyNameDialog foundColony() {
+        getRobot().push(KeyCode.B);
+        WaitForAsyncUtils.waitForFxEvents();
+        return new ColonyNameDialog(getContext());
     }
 
     public WelcomePage exitToMenu() {
@@ -157,6 +163,7 @@ public class GamePage extends AbstractScreen {
             final String expectedNamePart) {
         moveMouseAtLocation(colonyLocation);
         getRobot().clickOn(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
         return ColonyScreen.of(getContext(), expectedNamePart);
     }
 

@@ -1,6 +1,7 @@
 {
   "units": [
   ],
+  "nextColonyId": 0,
   "colonies": [],
   "map": {
   	"seed": 1234,

@@ -6,11 +6,20 @@ import com.google.common.base.Preconditions;
 
 public class TurnEventColonyWasLost extends AbstractTurnEvent {
 
+    private final int colonyId;
+
     private final String colonyName;
 
-    TurnEventColonyWasLost(final String playerName, final String colonyName) {
+    TurnEventColonyWasLost(final String playerName, final int colonyId,
+            final String colonyName) {
         super(playerName);
+        Preconditions.checkArgument(colonyId >= 0, "Invalid colony id");
+        this.colonyId = colonyId;
         this.colonyName = Preconditions.checkNotNull(colonyName);
+    }
+
+    public int getColonyId() {
+        return colonyId;
     }
 
     public String getColonyName() {
@@ -22,6 +31,7 @@ public class TurnEventColonyWasLost extends AbstractTurnEvent {
         final TurnEventPo out = new TurnEventPo();
         out.setType(getClass().getSimpleName());
         out.setPlayerName(getPlayerName());
+        out.setColonyId(colonyId);
         out.setColonyName(getColonyName());
         return out;
     }
@@ -30,7 +40,9 @@ public class TurnEventColonyWasLost extends AbstractTurnEvent {
         if (TurnEventColonyWasLost.class.getSimpleName().equals(po.getType())) {
             final String playerName = po.getPlayerName();
             final String colonyName = po.getColonyName();
-            return new TurnEventColonyWasLost(playerName, colonyName);
+            return new TurnEventColonyWasLost(playerName, Preconditions
+                    .checkNotNull(po.getColonyId(), "Missing colony id"),
+                    colonyName);
         }
         return null;
     }

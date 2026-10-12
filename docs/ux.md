@@ -45,6 +45,16 @@ Například nová jednotka potřebuje srozumitelný popis účelu, místo poří
 
 ## Současné ovládání a místa pro další práci
 
+### Pojmenování a přejmenování kolonie — Z02
+
+Uživatel **12. října 2026** zvolil modální dialog po kliknutí na jméno,
+nikoli inline editor. Založení používá stejnou podobu s jiným potvrzovacím
+tlačítkem. Chybné jméno má červené pole i vysvětlující text; samotná barva
+nestačí. Zrušit/Escape nic nezmění, Enter potvrzuje platný návrh. Jméno je
+dostupné také klávesnicí a po přejmenování se do něj vrací fokus.
+Podrobná pravidla patří do [Z02](implementation-plan.md#z02-zalozeni-pojmenovane-kolonie).
+Jde o přijatý návrh; automatické testy nejsou uživatelskou studií.
+
 Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o úplný audit ovládání ani hodnocení skutečné úspěšnosti hráčů.
 
 | Oblast | Současný stav doložený kódem | Co potřebujeme ověřit při používání |

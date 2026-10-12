@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList;
 
 public class Colony {
 
+    private final int id;
+
     /**
      * When this level is reached than new colonist appears.
      */
@@ -47,12 +49,14 @@ public class Colony {
 
     private final Random random = new Random();
 
-    public Colony(final Model model, final String name, final Player owner,
-            final Location location,
+    public Colony(final Model model, final int id, final String name,
+            final Player owner, final Location location,
             final Function<Colony, List<Construction>> constructionsBuilder,
             final Map<String, Integer> initialGoods,
             final List<ColonyBuildingItemProgress<?>> buildingQueue) {
         this.model = Preconditions.checkNotNull(model);
+        Preconditions.checkArgument(id >= 0, "Invalid colony id");
+        this.id = id;
         this.name = Preconditions.checkNotNull(name);
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
         this.location = Preconditions.checkNotNull(location);
@@ -121,6 +125,7 @@ public class Colony {
 
     ColonyPo save() {
         ColonyPo out = new ColonyPo();
+        out.setId(id);
         out.setName(name);
         out.setOwnerName(owner.getName());
         out.setLocation(location);
@@ -406,6 +411,14 @@ public class Colony {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    void setName(final String name) {
+        this.name = Preconditions.checkNotNull(name);
     }
 
     public Location getLocation() {

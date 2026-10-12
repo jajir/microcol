@@ -12,6 +12,16 @@ public final class TurnEventPo {
 
     private String colonyName;
 
+    private Integer colonyId;
+
+    public Integer getColonyId() {
+        return colonyId;
+    }
+
+    public void setColonyId(final Integer colonyId) {
+        this.colonyId = colonyId;
+    }
+
     /**
      * @return the playerName
      */

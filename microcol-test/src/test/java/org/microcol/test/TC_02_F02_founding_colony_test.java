@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.page.ColonyNameDialog;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
@@ -15,7 +16,6 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
@@ -47,8 +47,11 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         gamePage.getRightPanelUnit(1).verifyFreeActionPoints(1);
 
         // found colony by pressing key 'b'
-        robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
-        WaitForAsyncUtils.waitForFxEvents();
+        final ColonyNameDialog naming = gamePage.foundColony();
+        naming.verifyDraft("Leiden");
+        naming.save();
+        final ColonyScreen opened = ColonyScreen.of(getContext(), "Leiden");
+        gamePage = opened.close();
 
         // verify that option build colony is not here
         gamePage.verifyThatBuildColonyButtonIsHidden();

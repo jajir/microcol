@@ -25,6 +25,35 @@ limits and verified a targeted repair, not a general success-rate improvement.
 
 ## Instruction ownership
 
+### Z02 name helper — 2026-10-12
+
+Task `2026-10-12-z02-names`, baseline `8bef9928`, assigned only the
+`ColonyNames` helper with explicit interfaces, Unicode validation, global
+duplicates and deterministic suggestions. The caller retained architecture,
+JSON integrity, dialogs, integration tests and publication. All attempts used
+the documented alias/digest and context 8192, confirmed in runtime samples.
+
+| Attempt | Seconds | Evidence and decision |
+| --- | --- | --- |
+| 0 | 300.122 | Timeout after repeated source/formatter reads despite text-only instructions; no completed source. Repair explicitly confirmed the new interfaces and prohibited further discovery. |
+| 1 | 110.898 | Rejected: nonexistent `Character.isControl`, inaccessible constructor, missing NBSP trimming, incorrect validation order and incomplete surrogate check. Caller sent those concrete failures for repair. |
+| 2 | 72.580 | Rejected: invalid stream construction and Java-11-incompatible APIs, no actual trimming/control validation, suggestions ignored occupied names. Both allowed repairs exhausted. |
+
+Total worker time **483.600 s**. Completed attempts reported input/output
+tokens 3677/1556 and 3754/924; the interrupted attempt has no completed-turn
+usage report. No worker implementation was accepted. The main agent took over
+only after both targeted repairs failed, then implemented the helper and its
+normalization, boundary, duplicate and suggestion tests. No cloud worker fallback
+or savings claim. The local model was unloaded before Maven and the owned lock
+released. Full prompts, results and process evidence remain in
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-z02-names/`.
+
+This failure does not establish that more time would help. A new interface
+absent from the baseline must be explicitly identified in the initial handoff;
+repeat source discovery was unnecessary. Tests, not exit code 0, determine
+acceptance. Integration verification is recorded in the
+[Z02 evidence](../functional-tests.md#z02-pojmenovani-a-identita-kolonie).
+
 | Source | Responsibility |
 | --- | --- |
 | [AGENTS.md](../../AGENTS.md) | Short routing rule and responsibility for acceptance. |

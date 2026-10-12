@@ -79,6 +79,21 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 
 ## Uživatelské rozhraní a podpůrné služby
 
+### Identita kolonií a textové vstupy
+
+Kontrakt [Z02](implementation-plan.md#z02-zalozeni-pojmenovane-kolonie)
+odděluje neměnné ID kolonie od upravitelného jména. `Model` vlastní
+přidělení ID, normalizaci, jedinečnost jmen a oprávnění k přejmenování;
+UI pouze připraví návrh a zobrazí výsledek či chybu. `model.store` ukládá
+ID a další volné ID, `PlaceBuilderPo` podle ID obnovuje vazby pracovníků.
+Zprávy tahu nesou ID i historický text jména. Samotná shoda čísel z různých
+her neznamená totožnost objektů; objektové equality se tímto řezem nemění.
+Přetrvávající souborové čtení/zápis zůstává v `model.campaign.po`.
+
+Textové vstupy hráče jsou Unicode a mají oříznuté krajní Unicode mezery.
+Zpětná kompatibilita save souborů není nyní požadována; aktuální fixtures
+mají povinné identifikátory. Podrobnosti a limity vlastní výše uvedený kontrakt.
+
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
 | [gui](../microcol-game/src/main/java/org/microcol/gui/) | Sdílené UI služby a typy: hlavní okno, Guice vazby, barvy, pixelové souřadnice, panely jednotek, klávesové ovládání a hudba. | Prezentace a propojení aplikace; další ekonomické a herní výpočty patří do modelu. Hudba není obecná služba herních zvukových událostí; viz [audio](audio.md). |
