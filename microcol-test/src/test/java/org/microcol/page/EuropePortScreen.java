@@ -69,10 +69,8 @@ public class EuropePortScreen extends AbstractScreen {
         return this;
     }
 
-    public void verifyNumberOfShipsInPort(
-            final int expectedNumberOfShipsInPort) {
-        pageComponentPanelDock
-                .verifyNumberOfShipsInPort(expectedNumberOfShipsInPort);
+    public int getNumberOfShipsInPort() {
+        return pageComponentPanelDock.getNumberOfShipsInPort();
     }
 
     public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(

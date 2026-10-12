@@ -799,3 +799,46 @@ the publication workflow independently runs its usual checks on push.
 Input, raw worker patch, runtime samples and caller evidence are retained in
 `/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-package-responsibilities/`.
 The partial result does not establish a measured saving or broader capability.
+
+## Dock assertion move — 2026-10-12
+
+Task `2026-10-12-dock-assertions`, baseline `1b15f866`, moves three ship-count
+expectations into TC01 and both TC06 scenarios. The dock and its two screen
+wrappers expose the actual count without validating an expected value.
+Scope is five Java files; other legacy page assertions are not migrated.
+
+| Attempt | Worker seconds | Observed result |
+| --- | ---: | --- |
+| 0 | 224.693 | Caller stopped repeated broad reads/context compaction; no edits. |
+| 1 | 300.112 | Targeted fragments did not prevent shell-editing errors: incompatible BSD `sed -i`, ineffective Perl replacement, then deletion of the method and JavaDoc opener. Timed out; malformed partial diff rejected. |
+| 2 | 75.253 | Text-only patch request exhausted the remaining original budget without a completed response. |
+| 3 | 115.871 | After a user-authorized extension, returned a patch with invented surrounding code and invalid syntax; `git apply --check` exited 128. Rejected without application. |
+| 4 | 48.409 | Returned six exact replacement entries for the five files; old strings matched, but TC06's new assertion lacked a semicolon. |
+| 5 | 21.201 | Qwen corrected that specific statement; caller applied the returned replacements and shared formatter without semantic changes. |
+
+The first three attempts consumed **600.058 seconds including cleanup**.
+The user then explicitly authorized **another 30 minutes** for this task,
+including its targeted repairs: the extended cumulative ceiling was 2400.058
+seconds, not a reset of prior time. The extension used **185.481 seconds**;
+total worker time was **785.539 seconds**. This was a one-off exception, not
+a change to the default five-/ten-minute limits or a general reliability claim.
+The caller's provisional direct implementation was archived and rolled back
+before the extended attempt; it was not supplied to Qwen or used as its output.
+
+The accepted result is Qwen-generated replacement text applied by the caller,
+not autonomous worker filesystem editing. Source checks verify no dock
+assertions/verifications, no old ship-verification method, and three direct
+expected-one assertions in unchanged TC steps. All five Java files passed the
+shared formatter's token-preservation/idempotence checks. After unloading Qwen,
+the caller reran TC01 on macOS/JDK 17/Monocle: **1 passed, no failures/errors/skips**.
+Both TC06 scenarios require native Glass/LINK and the full Linux/Xvfb publication
+gate; the local TC01 result does not replace that check.
+
+Runtime samples confirmed the same local alias/digest and 8192 context.
+Completed attempts 3/4/5 report respectively 3787/3424/3031 input tokens and
+1707/522/70 output tokens, zero cached input and reasoning tokens. Interrupted
+attempts have no completed-turn usage totals. More time alone is not an
+established fix: output format and handoff changed too. The useful recovery
+was exact replacement matching plus a targeted syntax repair, not blind retry.
+Artifacts, failed patches, responses and caller verification are under
+`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-dock-assertions/`.

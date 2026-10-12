@@ -1,7 +1,5 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.List;
 
 import org.microcol.gui.dock.PanelCrateView;
@@ -30,12 +28,8 @@ public class PageComponentPanelDock extends AbstractPageComponent {
         return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
     }
 
-    public void verifyNumberOfShipsInPort(
-            final int expectedNumberOfShipsInPort) {
-        assertEquals(expectedNumberOfShipsInPort, getUnitsInPort().size(),
-                String.format(
-                        "Expected numeber of ships is '%s' but really there is '%s' ships.",
-                        expectedNumberOfShipsInPort, getUnitsInPort().size()));
+    public int getNumberOfShipsInPort() {
+        return getUnitsInPort().size();
     }
 
     /**

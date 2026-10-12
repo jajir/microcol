@@ -54,6 +54,13 @@ Zachovat současný JUnit 5 a TestFX a členění následujících souborů:
 | [`src/test/scenarios`](../microcol-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
 | [`AbstractMicroColTest`](../microcol-test/src/test/java/org/microcol/test/AbstractMicroColTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
 
+Page objects poskytují přístup ke komponentám, jejich aktuálnímu stavu a akcím;
+nepřijímají očekávané výsledky a neprovádějí aserce ani verifikaci. Očekávání
+patří přímo do scénáře `TC_...`. Například počet lodí zpřístupní
+`getNumberOfShipsInPort()`, zatímco `assertEquals(1, ...)` provede samotný test.
+Starší verifikační metody v ostatních page objects jsou dosud nepřevedený kód,
+nikoli vzor pro nové kontroly; při přesunu zachovat všechny původní aserce.
+
 Každý scénář dodržuje stejné pořadí:
 
 1. Krátký JavaDoc vysvětlí ověřované chování.
@@ -182,6 +189,29 @@ uložené reporty. [Záznam delegace](ai/local-qwen.md#functional-plowing-regres
 rozlišuje práci Qwenu, opravy hlavního agenta a místní důkazy.
 
 ## Dokončení a záznam výsledku
+
+### Přesun asercí přístavu — 12. října 2026
+
+`PageComponentPanelDock` nyní pouze vrací počet lodí; `ColonyScreen`
+a `EuropePortScreen` jej zpřístupňují bez očekávané hodnoty. Původní tři
+kontroly jedné lodi jsou přímo v `TC_01_embark_disembark`, `TC_06_moving_goods`
+a `TC_06_moving_goods_buy_cargo_and_move_it_to_occupied_cargo_slot`.
+Selektory, akce, fixtures, ID i očekávání zůstaly stejné; ostatní historické
+verifikační metody nebyly v tomto úkolu převáděny.
+
+Kontrola zdrojů potvrdila odstranění všech použití `verifyNumberOfShipsInPort`,
+absenci asercí/verifikace v komponentě a zachování tří očekávání v testech.
+Sdílený formatter prošel všech pět změněných Java souborů se zachováním tokenů
+a idempotencí. Po aplikaci opraveného výstupu Qwen prošel na macOS/JDK 17
+s Monocle cílený **TC01: 1 test, 0 selhání, 0 chyb, 0 přeskočených**.
+Použit byl výše uvedený cílený příkaz s výběrem
+`-Dtest=TC_01_F01_embark_disembark_test`; log je `target/dock-qwen-tc01.log`.
+TC06 potřebuje nativní režim LINK; oba jeho scénáře a celou sadu ověřuje
+povinný Linux/Xvfb job publikované revize. Lokální TC01 jej nenahrazuje.
+[Záznam Qwen](ai/local-qwen.md#dock-assertion-move-2026-10-12) rozlišuje neúspěšné
+pokusy, opravu workerem a aplikaci/formátování hlavním agentem.
+
+### Kontrolní seznam
 
 Před přijetím změny reviewer ověří:
 
