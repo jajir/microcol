@@ -22,6 +22,12 @@ task unless that change is explicitly allowed. Derive expected test results from
 the requested behavior and rules; never weaken assertions, skip tests, or change
 expected values merely to obtain a passing run.
 
+On a tool or script error, inspect the actual output and correct the specific
+cause rather than repeating the unchanged command or hiding its failure. For a
+repair assignment, preserve the supplied acceptance check and report the change
+addressing the observed error. Checks owned by the caller remain pending until
+the caller reruns them; a proposed fix alone is not verified recovery.
+
 Use only the assigned tools and verification ownership. When the caller owns
 verification, do not run Maven or other checks assigned to that runner. Report
 them as not run, pending caller verification. If you can only generate text,

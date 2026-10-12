@@ -19,8 +19,9 @@ Codex budget; no savings percentage has been measured.
 
 The user approved revised [time budgets](#time-budget-2026-10-12) on **2026-10-12**:
 five minutes per attempt and ten minutes of cumulative worker time per task.
-The [failure analysis](#failure-analysis-2026-10-12) below reviews the recorded
-attempts; the longer budget has not yet been evaluated in a new Qwen run.
+The [failure analysis](#failure-analysis-2026-10-12) below reviews the earlier
+attempts. A subsequent [recovery check](#recovery-check-2026-10-12) used the new
+limits and verified a targeted repair, not a general success-rate improvement.
 
 ## Instruction ownership
 
@@ -68,6 +69,11 @@ required Linux/Xvfb publication check.
 For each result report what Qwen did, main-agent repairs, actual checks and
 pending checks. Record attempts/time/available usage; no measured savings
 percentage yet.
+
+Every failed or incomplete attempt follows the mandatory
+[failure and recovery loop](#failure-and-recovery-loop). Simple repairable errors
+go back to Qwen while budgets remain; taking over the implementation is not the
+default response to the first failure.
 
 If the runtime is unavailable, report the limitation and continue directly when
 useful; do not install anything or silently switch to a cloud worker. The main
@@ -272,6 +278,50 @@ For example, 180 seconds already used leaves a 300-second attempt available;
 a caller-enforced workflow change, not a claim that the longer budget improves
 success rates. The model, 8k context, output limit and concurrency are unchanged.
 
+### Failure and recovery loop
+
+**Required from 2026-10-12.** Previously the workflow allowed bounded repairs,
+but did not require a diagnosed retry before main-agent completion. Recording a
+failure without checking a feasible correction does not meet this contract.
+
+1. **Inspect and classify.** After a failed command, incomplete/invalid result,
+   timeout or caller acceptance failure, preserve the task, runtime identity,
+   exact command/error, exit status, current diff and elapsed budget. Determine
+   whether the cause is caller setup, a tool/script/code error, missing context,
+   resource limits or a failed requirement. State unknown causes as unknown;
+   a timeout alone does not establish that more time is the answer.
+2. **Make a specific correction.** The caller fixes its own setup, such as a
+   missing child `CODEX_HOME`, without installing a runtime or changing models.
+   For a simple in-scope worker error, give Qwen the relevant failing fragment,
+   traceback/current diff and a focused repair task. Keep required behavior and
+   checks unchanged. Do not dump the full previous conversation or repeat an
+   unchanged failing prompt. Do not silently replace Qwen's implementation.
+3. **Rerun within the same budget.** Dispatch the corrected setup or repair with
+   the same logical task ID, remaining cumulative runtime and repair count.
+   The caller must attempt a feasible, safe repair while those limits permit it;
+   no extra user approval is needed. A new directory is not a new allowance.
+   If the runtime is unavailable, scope is unclear, retry would be unsafe, or
+   budgets are exhausted, record that concrete reason rather than retrying
+   indefinitely. Main-agent takeover must explain why another worker repair
+   was not appropriate.
+4. **Verify the original failure and the result.** After unloading Qwen, the
+   caller reruns the failed command/check against the repaired state and then
+   the assigned acceptance checks, including formatting for Java changes.
+   A corrected variable name, successful CLI exit or passing syntax check alone
+   does not establish a working feature. Preserve actual before/after results,
+   intended test selection, counts and any remaining failures.
+5. **Close the loop visibly.** The job's verification/acceptance record must say
+   what failed, why, who corrected it, which retry/check ran, and whether recovery
+   is verified, partial or unresolved. Record skipped-retry/takeover reasons and
+   reusable prevention in its existing owning instructions or tool. Summarize
+   relevant measured outcomes here; do not present caller-completed work as an
+   independently successful Qwen task.
+
+This is enforced by the main agent's dispatch and acceptance procedure through
+`AGENTS.md`, the worker skill and task/result contract. It is **not** an unattended
+retry service or a guarantee of model correctness. The evidence and explicit
+dispositions make compliance reviewable; they do not replace actual verification.
+
 ### Prepare, invoke, verify
 
 1. Read the [local-worker skill](../../.agents/skills/local-worker/SKILL.md), current
@@ -312,10 +362,15 @@ success rates. The model, 8k context, output limit and concurrency are unchanged
    isolated pilot may stay isolated when that is the agreed scope.
 
 Example invocation, after setting `worker_tree` and `worker_job` to the prepared
-absolute paths and creating the job's `codex-home` directory. These variables are
-caller-local; `CODEX_HOME` below applies only to the child process:
+absolute paths. The quoted, fail-fast preflight creates the child home and checks
+the required inputs before dispatch. These variables are caller-local;
+`CODEX_HOME` below applies only to the child process:
 
 ```sh
+test -d "$worker_tree" && test -r "$worker_job/task.md" \
+  && test -r "$worker_job/worker-role.md" \
+  && mkdir -p "$worker_job/codex-home" || exit 1
+
 env CODEX_HOME="$worker_job/codex-home" \
   /opt/homebrew/bin/codex -a never exec \
   --oss --local-provider ollama -m microcol-qwen:9b-q4_K_M-8k \
@@ -386,8 +441,47 @@ documents or fixtures; split multi-file batches that leave little editing time.
 On a repair, supply the actual error and current diff rather than repeating the
 original broad discovery task. Keep the 8k context for a comparable trial and
 record useful edits, accepted results, caller repair time and budget consumption
-for the next 3–5 assignments under the new limits. No new live worker run or
-token-saving claim is part of this diagnosis.
+for the next 3–5 assignments under the new limits. This initial read-only diagnosis
+included no live worker run or token-saving claim; the later recovery check is
+recorded separately below.
+
+### Recovery check — 2026-10-12
+
+Task `2026-10-12-recovery-check` verified the failure loop on a detached worktree
+at `5db07522ccf9dc1a731f276c88bce951a9aa441f`. It used two **controlled
+reproductions** of observed failures: a deliberately missing child home and a
+seven-line Python function with the same `old_method` / undefined `old_addgoods`
+mismatch as the archived warehouse edit script. It did not resume or complete
+the original warehouse feature, reset that task's budget, or modify game code.
+
+| Step | Actual result |
+| --- | --- |
+| Original code check | Caller ran `python3 -m unittest -v test_recovery_probe`: 4 tests, 4 `NameError` errors, exit 1. |
+| Missing-home reproduction | Attempt 0 exited 1 before inference because its child `CODEX_HOME` did not exist; 1.062 seconds including cleanup. |
+| Caller setup correction | The documented quoted, fail-fast preflight created the child home. The retry retained the same task ID and charged the first attempt's elapsed time. |
+| Targeted Qwen retry | Attempt 1 exited 0 in 48.509 seconds including cleanup. Qwen changed only the undefined reference to the already-defined `old_method`; no caller code repair was needed. |
+| Runtime verification | Samples matched local alias `microcol-qwen:9b-q4_K_M-8k`, the documented digest and actual context 8192. The model was unloaded before caller checks. |
+| Same acceptance check after repair | The identical command passed all 4 tests, with no failures, errors or skips. Caller checked that the test file hash and all tracked repository files were unchanged. |
+| Budget and result | Total worker time 49.571 seconds, within the 300/600-second limits. Both reproduced failures have verified recovery; the repaired probe remains isolated. |
+
+The four cases check replacement, unchanged surrounding text, unrelated content
+and repeated occurrences. Qwen used three shell commands and left tests pending
+caller verification. Its completed-turn usage was 14,013 input tokens (10,262
+cached), 397 output tokens and zero reasoning output tokens across requests;
+these are not a single prompt's size or measured cloud savings. The caller
+prepared the reproduction, diagnosed both faults and ran the checks. This is
+evidence of one supervised recovery, not proof of general autonomous reliability
+or that a five-minute allowance is better than three minutes.
+
+The documented preflight also passed six caller-run cases: missing/existing child
+home, missing worktree, task or role, and a file blocking the home-directory path.
+Paths contained spaces; existing home content was preserved. These checks are
+recorded in `preflight-checks.json` and do not require model inference.
+
+Task input, updated worker role, `diagnosis.json`, both attempt directories,
+original/corrected probe, immutable tests, red/green logs and `verification.json`
+are retained in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-recovery-check/`.
+The isolated checkout remains under the standard worker worktree directory.
 
 ### Current Microcol pilot — 2026-10-10
 

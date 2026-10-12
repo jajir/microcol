@@ -121,3 +121,10 @@ without further delegation, commits or pushes. Follow the
 contracts, limits and evidence; an unavailable worker does not trigger setup or
 a silent cloud fallback. Keep operating values and measured results there, and
 do not claim token savings without measurements.
+
+For every failed or incomplete worker attempt, diagnose the actual failure and
+record the evidence. Correct caller setup errors; send simple in-scope code or
+tool errors back to Qwen for a targeted repair while time and repair budgets
+remain. Rerun the failed check and required acceptance checks before calling the
+problem fixed. Main-agent takeover or a skipped retry requires an explicit reason;
+follow the [failure and recovery loop](docs/ai/local-qwen.md#failure-and-recovery-loop).

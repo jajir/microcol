@@ -36,6 +36,8 @@ Relevant code and context:
 Interfaces to preserve:
 Existing test example:
 Expected behavior and important edge cases:
+For a repair: previous failure evidence, diagnosed cause and targeted correction:
+Original failing command/check and unchanged acceptance criteria:
 
 Available tools and who applies the changes:
 Verification owner: caller runner (Maven and required test runs).
@@ -77,6 +79,12 @@ Unverified:
 
 Blockers:
 - Concrete failure, missing context, or decision required from the main agent.
+
+Failure and recovery (not applicable only if no failure occurred):
+- Original error/check and evidence; diagnosed cause or remaining uncertainty.
+- Targeted correction and owner; actual retry and before/after verification.
+- Outcome: verified recovery | partial | unresolved; reason if no retry ran.
+- Any reusable prevention and its owning instruction/tool.
 
 Run data, when available:
 - Actual runtime and exact local model identity, including digest if exposed.
