@@ -62,7 +62,7 @@ public class ColonyScreen extends AbstractScreen {
         pageComponentPanelDock = PageComponentPanelDock.of(context);
     }
 
-    private void verifyColonyName(final String expectedNamePart) {
+    public void verifyColonyName(final String expectedNamePart) {
         final Labeled labeled = getLabeledById(PanelColonyName.COLONY_NAME_ID);
         logger.info("Colony name: " + labeled.getText());
         assertTrue(labeled.getText().contains(expectedNamePart),
@@ -75,6 +75,12 @@ public class ColonyScreen extends AbstractScreen {
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);
         getRobot().clickOn(buttonNextTurn);
         return GamePage.of(getContext());
+    }
+
+    public ColonyNameDialog rename() {
+        getRobot().clickOn(getLabeledById(PanelColonyName.COLONY_NAME_ID));
+        WaitForAsyncUtils.waitForFxEvents();
+        return new ColonyNameDialog(getContext());
     }
 
     public ColonyScreen selectUnitFromPort(final int unitIndex) {

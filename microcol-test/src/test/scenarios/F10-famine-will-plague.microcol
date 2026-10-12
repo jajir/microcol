@@ -491,8 +491,10 @@
       "mounted": false
     }
   ],
+  "nextColonyId": 3,
   "colonies": [
     {
+      "id": 0,
       "name": "New Amsterdam",
       "ownerName": "Dutch",
       "location": {
@@ -651,6 +653,7 @@
       }
     },
     {
+      "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
       "location": {
@@ -809,6 +812,7 @@
       }
     },
     {
+      "id": 2,
       "name": "Haarlem",
       "ownerName": "Dutch",
       "location": {
@@ -975,6 +979,7 @@
         "type": "CIGARS",
         "amount": 3
       },
+      "colonyId": 1,
       "colonyName": "Delft"
     },
     {
@@ -984,6 +989,7 @@
         "type": "CIGARS",
         "amount": 9
       },
+      "colonyId": 2,
       "colonyName": "Haarlem"
     }
   ],

@@ -9,6 +9,16 @@ import com.google.common.base.Preconditions;
 
 public class ModelPo {
 
+    private Integer nextColonyId;
+
+    public Integer getNextColonyId() {
+        return nextColonyId;
+    }
+
+    public void setNextColonyId(final Integer nextColonyId) {
+        this.nextColonyId = nextColonyId;
+    }
+
     private CalendarPo calendar = new CalendarPo();
 
     private List<UnitPo> units = new ArrayList<>();

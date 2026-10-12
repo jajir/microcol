@@ -44,7 +44,7 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getFaminePlagueColony(final Player player,
             final Colony colony) {
-        return new TurnEventFaminePlagueColony(player.getName(),
+        return new TurnEventFaminePlagueColony(player.getName(), colony.getId(),
                 colony.getName());
     }
 
@@ -58,7 +58,7 @@ public final class TurnEventProvider {
     public static TurnEvent getFamineWillPlagueColony(final Player player,
             final Colony colony) {
         return new TurnEventFamineWillPlagueColony(player.getName(),
-                colony.getName());
+                colony.getId(), colony.getName());
     }
 
     /**
@@ -70,7 +70,7 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getColonyWasDestroyed(final Player player,
             final Colony colony) {
-        return new TurnEventColonyWasDestroyed(player.getName(),
+        return new TurnEventColonyWasDestroyed(player.getName(), colony.getId(),
                 colony.getName());
     }
 
@@ -84,7 +84,8 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getColonyWasLost(final Player player,
             final Colony colony) {
-        return new TurnEventColonyWasLost(player.getName(), colony.getName());
+        return new TurnEventColonyWasLost(player.getName(), colony.getId(),
+                colony.getName());
     }
 
     /**
@@ -106,7 +107,8 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getNewUnitInColony(final Player player,
             final Colony colony) {
-        return new TurnEventNewUnitInColony(player.getName(), colony.getName());
+        return new TurnEventNewUnitInColony(player.getName(), colony.getId(),
+                colony.getName());
     }
 
     /**
@@ -120,7 +122,7 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getGoodsWasThrowsAway(final Player player,
             final Goods goods, final Colony colony) {
-        return new TurnEventGoodsWasThrownAway(player.getName(),
+        return new TurnEventGoodsWasThrownAway(player.getName(), colony.getId(),
                 colony.getName(), goods);
     }
 

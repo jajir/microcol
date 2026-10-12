@@ -187,7 +187,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 if (slotPo.getWorkerId() != null
                         && unit.getId() == slotPo.getWorkerId()) {
                     final Optional<Colony> oColony = model
-                            .getColonyAt(colonyPo.getLocation());
+                            .getColonyById(colonyPo.getId());
                     Preconditions.checkState(oColony.isPresent(),
                             "Colony at (%s) is not in model",
                             colonyPo.getLocation());
@@ -211,7 +211,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
             if (constructionPo.getWorkerId() != null
                     && unit.getId() == constructionPo.getWorkerId()) {
                 final Optional<Colony> oColony = model
-                        .getColonyAt(colonyPo.getLocation());
+                        .getColonyById(colonyPo.getId());
                 Preconditions.checkState(oColony.isPresent(),
                         "Colony at (%s) is not in model",
                         colonyPo.getLocation());

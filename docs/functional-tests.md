@@ -31,6 +31,7 @@ ovládání a bezpečného výsledku v UI.
 
 ## Co vyžaduje každá změna
 
+
 | Druh změny | Povinné pokrytí |
 | --- | --- |
 | Nová funkce nebo změna pravidla | Doplnit nebo upravit pojmenovaný scénář `TC_...`, který provede akci přes UI a ověří herní výsledek. Výpočty a hraniční případy doplnit do modelových testů v `microcol-game`. |
@@ -511,3 +512,83 @@ v příslušných `target/surefire-reports/`. Všech pět Java souborů prošlo
 sdíleným Eclipse formatterem bez změny obsahu. Prošlo také devět kontrol
 dokumentace a přísný MkDocs build. Tato místní kontrola nenahrazuje úplnou
 Linux/Xvfb regresi ani ověření distribucí v CI výsledné revize na main.
+
+## Z02 — pojmenování a identita kolonie
+
+Kontrakt a obecná rozhodnutí jsou v [plánu Z02](implementation-plan.md#z02-zalozeni-pojmenovane-kolonie).
+Dotčené UC-031, UC-114 a UC-119 pokrývá původní TC02 a nová
+`TC_20_F02_colony_names_test` se stejnou F02 fixture. JSON fixtures dostávají
+jen explicitní ID a další volné ID; herní stav, vlastníci, zásoby, jednotky
+a původní ID scénářů zůstávají zachované.
+
+| Scénář | Očekávaný výsledek |
+| --- | --- |
+| TC02/TC_02 | Potvrzení navrženého jména otevře novou kolonii; původní kontroly pracovníků a produkce zůstávají. |
+| TC20/TC_01 | Opakované návrhy, změna konceptu, Zrušit a Escape nezaloží kolonii ani nespotřebují ID/pohyb. |
+| TC20/TC_02 | Unicode jméno, potvrzení Enter, správná nová kolonie a stejný zakladatel/ID po save/load. |
+| TC20/TC_03 | Duplicitní jméno má červené pole, vysvětlení a neaktivní Uložit; přejmenování vyžaduje potvrzení. |
+| TC20/TC_04 | Prázdné a 65znakové jméno se odmítne; 64 znaků se přijme; obsazené pole nelze znovu založit. |
+| TC20/TC_05 | Simulovaný souběžný přesun zakladatele bezpečně odmítne staré potvrzení. |
+
+Modelové testy `ColonyNamesTest` a `ColonyIdentityTest` chrání Unicode/NFC,
+NBSP, délku v code points, neplatné surrogate sekvence, globální duplicity,
+generování, oprávnění, pracovníky, JSON round-trip, nerecyklování zaniklých
+ID a zprávy s historickým jménem. Chybějící či chybná identita se odmítá;
+kompatibilita se starým save formátem není požadována.
+
+**Lokálně ověřeno 12. října 2026:** JDK 17/macOS, `mvn -B -ntp -pl
+microcol-game -am test`: **673 testů**, bez selhání, chyb a vynechání.
+TC20 prošlo **5/5**, TC02 **1/1** a kontrakt page verifikací **3/3** s
+Monocle (`-Dtest=TC_20_F02_colony_names_test,TC_02_F02_founding_colony_test,PageVerificationContractTest`
+a headless parametry popsanými výše). Logy: `target/z02-game.log`,
+`target/z02-targeted-final.log`; čerstvé XML jsou v `target/surefire-reports`
+příslušných modulů. Tyto cílené běhy nenahrazují úplnou Linux/Xvfb regresi.
+
+První UI běh odhalil, že původní široký panel tlačítek překrýval jméno;
+jméno je nyní nad ním, s omezenou šířkou a tooltipem pro dlouhé názvy,
+aby nepřekrývalo ostatní ovládání. Testovací clipboardové zkratky v místním
+headless prostředí neměnily text; page helper nyní používá klávesy a textový
+vstup TestFX. Neúspěšné kroky byly znovu spuštěny se stejnými očekáváními.
+Screenshot `microcol-test/target/warehouse-qa/duplicate-name.png` byl
+prohlédnut: červené pole, úplné vysvětlení, Zrušit a neaktivní Uložit jsou
+čitelné. Jde o kontrolu implementátorem, nikoli studii s hráči.
+
+**První úplné CI na `d598be1f`:** [běh 27](https://github.com/jajir/microcol/actions/runs/38262477833)
+ověřil 673 modelových testů a všechny tři distribuce. Z 52 testů modulu
+`microcol-test` prošlo 49; TC20/TC_01 četlo po kliknutí na Generovat ještě
+původní návrh a otevřený dialog zablokoval následující dva scénáře. Žádný
+test nebyl vynechán. Všechny původní UI scénáře prošly.
+
+Lokální Linux/Xvfb/Openbox diagnostika ukázala skutečné události tlačítka a
+správné návrhy; s diagnostikou prošel izolovaný TC20/TC_01 i všech pět TC20.
+Z původního CI samotného nelze rozlišit opožděné a nedoručené kliknutí.
+Page helper proto po jednom kliknutí čeká nejvýše pět sekund na skutečnou
+změnu textu, nikoli pouze na vyprázdnění FX fronty. Nedojde-li ke změně,
+test selže; nekliká znovu a očekávaná jména se nemění. Diagnostický kód není
+součástí aplikace ani PR. Logy jsou v `target/z02-linux/`.
+
+Po této změně a bez diagnostických úprav prošlo lokálně na Linuxu/JDK 17,
+Xvfb/Openbox a nativním Glass **TC20 5/5, TC02 1/1 a page kontrakt 3/3**, bez
+selhání, chyb a vynechání (`target/z02-linux/verified.log`). Použit byl stejný
+cílený výběr, ale `-Dtestfx.headless=false`. Sdílený formatter znovu ověřil
+všech 32 dotčených Java souborů včetně zachování tokenů a idempotence.
+
+**Úplné CI po opravě, 12. října 2026:** [běh 28](https://github.com/jajir/microcol/actions/runs/38264716437)
+na revizi `d494f18de25f310f5d07b3f8ed9591425b6428a3` prošel. Stažené
+Surefire XML z [tests-functional](https://github.com/jajir/microcol/actions/runs/38264716437/artifacts/11753973451)
+potvrzuje **673 herních testů a 52 testů modulu microcol-test**, vždy
+0 selhání, 0 chyb a 0 vynechání. Druhý součet zahrnuje 43 pojmenovaných
+TC scénářů (včetně všech pěti TC20), pět `SimpleOperationsTest`, jeden
+`EnvironmentTest` a tři kontroly `PageVerificationContractTest`; nejde o
+52 hráčských scénářů. Původní selhávající scénáře byly skutečně znovu ověřeny.
+Místní kopie důkazů je v `target/z02-ci-verified/`. Screenshot duplicitního
+jména z tohoto nativního Linux běhu byl prohlédnut: červené pole,
+vysvětlení, Zrušit a neaktivní Uložit jsou čitelné.
+
+Prošly také kontroly launcherů, všechny tři nativní distribuce a
+[dokumentační CI](https://github.com/jajir/microcol/actions/runs/38264722933).
+Testovací build `dev-28-d494f18de25f` je dostupný například pro
+[macOS ARM64](https://github.com/jajir/microcol/actions/runs/38264716437/artifacts/11753909068).
+Publikace release a webu je na větvi PR záměrně vynechána; PR #45 není
+sloučený. Následné doplnění tohoto záznamu mění pouze dokumentaci,
+nikoli ověřený kód nebo fixtures.

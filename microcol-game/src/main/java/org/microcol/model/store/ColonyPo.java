@@ -10,6 +10,16 @@ import org.microcol.model.Location;
 
 public final class ColonyPo {
 
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(final Integer id) {
+        this.id = id;
+    }
+
     private String name;
 
     private String ownerName;

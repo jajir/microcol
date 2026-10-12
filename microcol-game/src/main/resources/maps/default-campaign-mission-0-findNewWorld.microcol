@@ -73,6 +73,7 @@
         "mounted": false
       }
     ],
+    "nextColonyId": 0,
     "colonies": [],
     "turnEvents": [],
     "map": {

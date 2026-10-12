@@ -247,7 +247,7 @@ public class ColonyTest {
 
     private Colony makeColony(
             final Function<Colony, List<Construction>> constructionsBuilder) {
-        return new Colony(model, "Prague", owner, Location.of(25, 35),
+        return new Colony(model, 0, "Prague", owner, Location.of(25, 35),
                 constructionsBuilder, new HashMap<String, Integer>(),
                 new ArrayList<>());
     }

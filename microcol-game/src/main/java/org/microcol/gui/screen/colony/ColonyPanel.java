@@ -56,12 +56,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.panelColonyName = Preconditions.checkNotNull(panelColonyName);
 
         mainPanel = new StackPane();
-        mainPanel.getChildren().add(panelColonyName.getContent());
         mainPanel.getChildren().add(panelOutsideColony.getContent());
         mainPanel.getChildren().add(colonyStructures.getContent());
         mainPanel.getChildren().add(colonyFields.getContent());
         mainPanel.getChildren().add(panelDock.getContent());
         mainPanel.getChildren().add(colonyButtonsPanel.getContent());
+        mainPanel.getChildren().add(panelColonyName.getContent());
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
     }
 
@@ -97,7 +97,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
      */
     void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
-        panelColonyName.setColonyName(colony.getName());
+        panelColonyName.setColony(colony);
         goods.setColony(colony);
         repaint();
     }

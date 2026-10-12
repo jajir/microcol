@@ -2,9 +2,11 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.microcol.gui.MicroColException;
@@ -31,6 +33,7 @@ import com.google.common.collect.ImmutableMap;
 public class Model {
 
     private final ColonyNames colonyNames;
+    private int nextColonyId;
     private final ListenerManager listenerManager;
     private final Calendar calendar;
     private final WorldMap map;
@@ -78,6 +81,27 @@ public class Model {
             final UnitStorage unitStorage,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         Preconditions.checkNotNull(modelPo);
+        Preconditions.checkArgument(
+                modelPo.getNextColonyId() != null
+                        && modelPo.getNextColonyId() >= 0,
+                "Unsupported save: missing or invalid nextColonyId");
+        nextColonyId = modelPo.getNextColonyId();
+        final Set<Integer> colonyIds = new HashSet<>();
+        for (final ColonyPo colonyPo : modelPo.getColonies()) {
+            Preconditions.checkArgument(
+                    colonyPo.getId() != null && colonyPo.getId() >= 0
+                            && colonyPo.getId() < nextColonyId
+                            && colonyIds.add(colonyPo.getId()),
+                    "Invalid or duplicate colony id");
+        }
+        modelPo.getTurnEvents().forEach(event -> {
+            if (event.getColonyId() != null) {
+                Preconditions.checkArgument(
+                        event.getColonyId() >= 0
+                                && event.getColonyId() < nextColonyId,
+                        "Report refers to an unallocated colony id");
+            }
+        });
         listenerManager = new ListenerManager();
         this.focusedField = modelPo.getFocusedField();
 
@@ -108,7 +132,8 @@ public class Model {
                     buildingQueue.add(item);
                 }
             });
-            final Colony col = new Colony(this, colonyPo.getName(),
+            final Colony col = new Colony(this, colonyPo.getId(),
+                    colonyPo.getName(),
                     playerStore.getPlayerByName(colonyPo.getOwnerName()),
                     colonyPo.getLocation(), colony -> {
                         final List<Construction> constructions = new ArrayList<>();
@@ -121,6 +146,14 @@ public class Model {
                     }, colonyPo.getColonyWarehouse(), buildingQueue);
             colonies.add(col);
         });
+
+        for (final Colony colony : colonies) {
+            Preconditions.checkArgument(
+                    !colonyNames.getProblem(colony.getName(), colony)
+                            .isPresent(),
+                    "Invalid or duplicate colony name: %s", colony.getName());
+            colony.setName(ColonyNames.normalize(colony.getName()));
+        }
 
         unitFactory = new UnitFactory();
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
@@ -194,9 +227,22 @@ public class Model {
         return model;
     }
 
-    public void buildColony(final Player player, final Unit unit) {
+    public Colony buildColony(final Player player, final Unit unit,
+            final String name) {
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
+        Preconditions.checkArgument(
+                player == getCurrentPlayer() && unit.getOwner() == player,
+                "Only the current owner may found a colony");
+        Preconditions.checkArgument(
+                unitStorage.getUnits().contains(unit)
+                        && canUnitBuildColony(unit),
+                "This unit cannot found a colony here");
+        Preconditions.checkArgument(
+                !colonyNames.getProblem(name, null).isPresent(),
+                "Invalid colony name");
+        Preconditions.checkState(nextColonyId < Integer.MAX_VALUE,
+                "Colony IDs exhausted");
         Preconditions.checkArgument(unit.isAtPlaceLocation(),
                 "Unit (%s) have to be on map", unit);
         Preconditions.checkArgument(!unit.getType().isShip(),
@@ -210,9 +256,8 @@ public class Model {
         Preconditions.checkArgument(!isColonyInNeighbourhood(location),
                 "There is another colony in neighbourhood os %s.", location);
 
-        final Colony col = new Colony(this,
-                colonyNames.getNewColonyName(player), player, location,
-                colony -> {
+        final Colony col = new Colony(this, nextColonyId,
+                ColonyNames.normalize(name), player, location, colony -> {
                     final List<Construction> constructions = new ArrayList<>();
                     ConstructionType.NEW_COLONY_CONSTRUCTIONS
                             .forEach(constructionType -> {
@@ -222,9 +267,44 @@ public class Model {
                             });
                     return constructions;
                 }, new HashMap<String, Integer>(), new ArrayList<>());
+        nextColonyId++;
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
         listenerManager.fireColonyWasFounded(this, col);
+        return col;
+    }
+
+    public Optional<ColonyNameProblem> getColonyNameProblem(final String name,
+            final Colony colony) {
+        return colonyNames.getProblem(name, colony);
+    }
+
+    public String suggestColonyName(final Set<String> excluded) {
+        return colonyNames.suggest(excluded);
+    }
+
+    public boolean canRenameColony(final Player player, final Colony colony) {
+        return colony != null && colonies.contains(colony)
+                && player == getCurrentPlayer() && colony.getOwner() == player;
+    }
+
+    public void renameColony(final Player player, final Colony colony,
+            final String name) {
+        Preconditions.checkArgument(canRenameColony(player, colony),
+                "Colony cannot be renamed");
+        Preconditions.checkArgument(
+                !colonyNames.getProblem(name, colony).isPresent(),
+                "Invalid colony name");
+        colony.setName(ColonyNames.normalize(name));
+    }
+
+    public List<Colony> getColonies() {
+        return ImmutableList.copyOf(colonies);
+    }
+
+    public Optional<Colony> getColonyById(final int id) {
+        return colonies.stream().filter(colony -> colony.getId() == id)
+                .findFirst();
     }
 
     public boolean isColonyInNeighbourhood(final Location location) {
@@ -477,6 +557,7 @@ public class Model {
 
     public ModelPo save() {
         final ModelPo out = new ModelPo();
+        out.setNextColonyId(nextColonyId);
         map.save(out);
         unitStorage.save(out);
         out.setCalendar(calendar.save());

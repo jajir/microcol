@@ -640,8 +640,10 @@
       "availableMoves": 1
     }
   ],
+  "nextColonyId": 4,
   "colonies": [
     {
+      "id": 0,
       "name": "New Amsterdam",
       "ownerName": "Dutch\u0027s King",
       "location": {
@@ -782,6 +784,7 @@
       }
     },
     {
+      "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
       "location": {
@@ -920,6 +923,7 @@
       }
     },
     {
+      "id": 2,
       "name": "Haarlem",
       "ownerName": "Dutch",
       "location": {
@@ -1058,6 +1062,7 @@
       }
     },
     {
+      "id": 3,
       "name": "Leiden",
       "ownerName": "Dutch",
       "location": {

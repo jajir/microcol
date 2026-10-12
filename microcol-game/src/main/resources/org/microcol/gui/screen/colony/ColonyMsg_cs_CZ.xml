@@ -5,7 +5,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="goods"> ve skladu</entry>
-	<entry key="colonyName">Toto je jméno kolonie.</entry>
+	<entry key="colonyName">Kliknutím přejmenujete kolonii.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
 
 	<entry key="unloadCaption">Vyložení nákladu</entry>
@@ -13,4 +13,17 @@
 	<entry key="unloadFull">Sklad je pro toto zboží plný. Nic se nevyložilo. Uvolněte místo a zkuste to znovu.</entry>
 	<entry key="unloadChanged">Náklad nebo kolonie se změnily. Nic se nevyložilo. Zkontrolujte náklad a místo ve skladu a zkuste to znovu.</entry>
 
+	<entry key="nameLabel">Jméno kolonie</entry>
+	<entry key="nameGenerate">Navrhnout jiné jméno</entry>
+	<entry key="nameCancel">Zrušit</entry>
+	<entry key="nameFound">Založit kolonii</entry>
+	<entry key="nameRename">Přejmenovat kolonii</entry>
+	<entry key="nameSave">Uložit</entry>
+	<entry key="nameEMPTY">Zadejte jméno kolonie.</entry>
+	<entry key="nameTOO_LONG">Použijte nejvýše 64 znaků.</entry>
+	<entry key="nameINVALID">Jméno obsahuje nepovolený znak.</entry>
+	<entry key="nameDUPLICATE">Kolonie s tímto jménem již existuje. Zvolte jiné jméno.</entry>
+	<entry key="nameChanged">Kolonie nebo zakládající jednotka se změnila. Nic se nezměnilo. Zrušte dialog a zkuste to znovu.</entry>
+
+    <entry key="nameCannotFound">Vyberte kolonistu se zbývajícím pohybem na volném poli mimo sousedství kolonií.</entry>
 </properties>

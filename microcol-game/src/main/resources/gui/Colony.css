@@ -189,3 +189,6 @@
 }
 
 /*# sourceMappingURL=Colony.css.map */
+#colonyName:hover, #colonyName:focused {
+    -fx-underline: true;
+}

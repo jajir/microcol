@@ -1,7 +1,7 @@
 package org.microcol.model;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +113,7 @@ public class ColonyConstructorTest {
 
     private Colony makeColony(
             final Function<Colony, List<Construction>> constructionsBuilder) {
-        return new Colony(model, "Prague", owner, Location.of(2, 2),
+        return new Colony(model, 0, "Prague", owner, Location.of(2, 2),
                 constructionsBuilder, new HashMap<String, Integer>(),
                 new ArrayList<>());
     }

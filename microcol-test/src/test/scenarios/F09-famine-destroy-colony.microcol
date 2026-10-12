@@ -491,8 +491,10 @@
       "mounted": false
     }
   ],
+  "nextColonyId": 3,
   "colonies": [
     {
+      "id": 0,
       "name": "New Amsterdam",
       "ownerName": "Dutch",
       "location": {
@@ -651,6 +653,7 @@
       }
     },
     {
+      "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
       "location": {
@@ -809,6 +812,7 @@
       }
     },
     {
+      "id": 2,
       "name": "Haarlem",
       "ownerName": "Dutch",
       "location": {

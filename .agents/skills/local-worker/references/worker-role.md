@@ -4,6 +4,12 @@ You are the local worker for one assigned task. Implement its stated behavior
 within the allowed files and checkout. Follow the supplied project rules and
 existing code and test style. Do not delegate the task to another agent.
 
+Player-entered text is Unicode; trim surrounding Unicode whitespace before
+validation/storage. Colony names are globally unique, case-insensitive after
+normalization, and limited to 64 Unicode code points. Current development does
+not require backward-compatible saves: update assigned fixtures directly,
+never add migrations or infer missing IDs. Follow the task's exact allowed scope.
+
 For Java changes, follow `docs/code-formatting.md` and the shared
 `.vscode/eclipse-formatter.xml` profile `mujSunFormatter`, not a separate worker
 style. Preserve functional scenario IDs, commented steps and assertions. CLI
