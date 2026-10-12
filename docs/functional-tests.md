@@ -552,3 +552,23 @@ vstup TestFX. Neúspěšné kroky byly znovu spuštěny se stejnými očekáván
 Screenshot `microcol-test/target/warehouse-qa/duplicate-name.png` byl
 prohlédnut: červené pole, úplné vysvětlení, Zrušit a neaktivní Uložit jsou
 čitelné. Jde o kontrolu implementátorem, nikoli studii s hráči.
+
+**První úplné CI na `d598be1f`:** [běh 27](https://github.com/jajir/microcol/actions/runs/38262477833)
+ověřil 673 modelových testů a všechny tři distribuce. Z 52 testů modulu
+`microcol-test` prošlo 49; TC20/TC_01 četlo po kliknutí na Generovat ještě
+původní návrh a otevřený dialog zablokoval následující dva scénáře. Žádný
+test nebyl vynechán. Všechny původní UI scénáře prošly.
+
+Lokální Linux/Xvfb/Openbox diagnostika ukázala skutečné události tlačítka a
+správné návrhy; s diagnostikou prošel izolovaný TC20/TC_01 i všech pět TC20.
+Z původního CI samotného nelze rozlišit opožděné a nedoručené kliknutí.
+Page helper proto po jednom kliknutí čeká nejvýše pět sekund na skutečnou
+změnu textu, nikoli pouze na vyprázdnění FX fronty. Nedojde-li ke změně,
+test selže; nekliká znovu a očekávaná jména se nemění. Diagnostický kód není
+součástí aplikace ani PR. Logy jsou v `target/z02-linux/`.
+
+Po této změně a bez diagnostických úprav prošlo lokálně na Linuxu/JDK 17,
+Xvfb/Openbox a nativním Glass **TC20 5/5, TC02 1/1 a page kontrakt 3/3**, bez
+selhání, chyb a vynechání (`target/z02-linux/verified.log`). Použit byl stejný
+cílený výběr, ale `-Dtestfx.headless=false`. Sdílený formatter znovu ověřil
+všech 32 dotčených Java souborů včetně zachování tokenů a idempotence.

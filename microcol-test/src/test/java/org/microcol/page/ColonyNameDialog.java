@@ -2,6 +2,9 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -28,9 +31,11 @@ public final class ColonyNameDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void generate() {
+    public void generate() throws TimeoutException {
+        final String previous = input().getText();
         clickOnButtonWithId("colonyNameGenerate");
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> WaitForAsyncUtils
+                .asyncFx(() -> !previous.equals(input().getText())).get());
     }
 
     public void save() {
