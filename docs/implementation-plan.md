@@ -290,6 +290,22 @@ následující kroky i chybový a zrušený průchod.
 
 ## První konkrétní zadání
 
+**Další práce — návrhy z 12. října 2026:** prvních deset nových analýz najdete
+v [seznamu R-0001 až R-0010](requirements/README.md#first-ten-upcoming-requirements).
+Jde o připravené koncepty pro jednotlivé upřesnění, nikoli schválení nebo
+spuštění deseti implementací. Dokončené Z01/Z02 zůstávají níže jako dosavadní
+kontrakty; nejsou znovu zařazené mezi budoucí změny.
+
+| Balík / původní zadání | Analýzy pro postupné upřesnění |
+| --- | --- |
+| P02/P28 | [R-0001 — vstup do volné hry bez kampaně](requirements/R-0001.md). |
+| P01/P03/P26, Z03 | [R-0002 — fáze tahu a posun kalendáře](requirements/R-0002.md). |
+| P06 | [R-0003 — čekání a vynechání tahu jednotky](requirements/R-0003.md); [R-0004 — pobřežní přístavy](requirements/R-0004.md). |
+| P10/P11 | [R-0005 — sdílená pole a bezpečné přiřazení](requirements/R-0005.md); [R-0006 — výběr práce podle výnosu](requirements/R-0006.md). |
+| P10/P03 | [R-0007 — spotřeba jídla a růst](requirements/R-0007.md); [R-0008 — hlad a poslední obyvatel](requirements/R-0008.md). |
+| P11/P05 | [R-0009 — vstupy odborného kováře](requirements/R-0009.md). |
+| P11 | [R-0010 — automatická základní produkce kříže](requirements/R-0010.md). |
+
 Následující menší řezy lze připravit před velkými chybějícími systémy. Časový
 rozpočet se doplní při zadání; nejde o tři stejně velké úkoly.
 
@@ -382,25 +398,10 @@ a [SelectedUnitManager](../microcol-game/src/main/java/org/microcol/gui/screen/g
 
 ### Z03 Specifikace a první řez průchodu tahem
 
-**Balíky:** P01/P03/P26. **Pravidla:** TURN-001/002, SETUP-009 a SUPPORT-001.
-
-Nejprve uzavřít Q-02 pro kalendář a místo posunu data. Manuál, tištěná strana
-10 / PDF 16, stanoví národní pořadí a fáze. Nestanoví každý detail vnitřního
-výpočtu kolonie; ty zůstávají v Q-10. Potom oddělit fáze tahu a vytvořit
-testovatelnou posloupnost na malém scénáři bez nutnosti spouštět grafiku.
-
-- Záznam ukáže Evropu, kolonii a aktivaci jednotek v dohodnutém pořadí.
-- Celé kolo posune datum právě jednou; načtení uprostřed hráčských akcí
-  nezpůsobí další produkci, příchod kolonisty ani posun času.
-- Test pokryje přechod na dalšího hráče i z posledního hráče do nového kola.
-- První řez používá dostupné hráče. Úplné národní pořadí vyžaduje P02/P18
-  a před jeho ověřením se TURN-001 nesmí označit za dokončené.
-- Ceny trhu, nativní AI, vzorce zvonů a celé přepracování save formátu
-  nejsou součástí tohoto prvního řezu.
-
-Vstupní kód: [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java),
-[Player](../microcol-game/src/main/java/org/microcol/model/Player.java)
-a [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java).
+Analýza je nyní vedena v [R-0002 — fáze tahu a posun kalendáře](requirements/R-0002.md).
+ID Z03 i tento odkaz zůstávají platné. Soubor R-0002 vlastní rozsah, chování,
+implementační kroky a otevřené otázky; blokující Q-02 se rozhoduje ve společném
+registru. Přesun dokumentace neznamená implementaci ani přijetí TURN-001/002.
 
 ## Šablona předání práce
 

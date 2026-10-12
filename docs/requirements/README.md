@@ -5,14 +5,46 @@ and so on. The file records the agreed outcome, how to check it, the proposed
 implementation steps and unresolved questions. Aim for one or two pages;
 include detail only where it changes behavior or acceptance.
 
+## First ten upcoming requirements
+
+Captured on **2026-10-12** from the implementation plan and source inspection at
+`4b3a1b56`. These are drafts for individual refinement, not ten approved
+implementation assignments or newly verified features. Each file owns its
+current status, scope and open questions. Completed Z01/Z02 remain in the
+[implementation plan](../implementation-plan.md#prvni-konkretni-zadani).
+
+| Requirement | Small outcome | Main dependency or refinement decision |
+| --- | --- | --- |
+| [R-0001](R-0001.md) | Start free play without completing the campaign. | Existing free-play baseline. |
+| [R-0002](R-0002.md) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
+| [R-0003](R-0003.md) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
+| [R-0004](R-0004.md) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
+| [R-0005](R-0005.md) | Assign workers safely to globally shared fields. | Invalid restored-assignment policy. |
+| [R-0006](R-0006.md) | Choose work using the selected worker's available yield. | R-0005; ordinary-worker first slice. |
+| [R-0007](R-0007.md) | Food consumption and population growth at the threshold. | R-0002; Q-10 imports and large surpluses. |
+| [R-0008](R-0008.md) | Famine boundaries and loss of the last resident. | R-0007; Q-10 victim and processing order. |
+| [R-0009](R-0009.md) | Match expert blacksmith output to ore consumption. | Reachable expert and acquisition path. |
+| [R-0010](R-0010.md) | Produce the colony's automatic base cross. | Agree the limited production slice. |
+
+Start refinement with R-0001, then select the next useful requirement according
+to dependencies and decisions. R-0002 through R-0010 need a way into ordinary
+free play for player acceptance; R-0001 provides that entry without requiring
+the other systems to be complete. Preparing these drafts does not close any UC.
+
+Test class/fixture names marked **proposed** in the files reserve a concrete
+verification plan, not runnable tests. Check availability again before creating
+them and preserve existing TC/F IDs. Use the common
+[model and UI test contract](../functional-tests.md) for fixtures, assertions,
+environment, commands and completion evidence; do not duplicate that contract
+inside each analysis.
+
 ## Naming and scope
 
 - Allocate the next unused number after the highest existing `R-` number on
   `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
   reuse an allocated ID, including a deferred or cancelled requirement.
-- Give the document a descriptive title, for example
-  `# R-0001 — Safe unloading into a nearly full warehouse`. This is a naming
-  example, not an allocation or a new implementation request.
+- Give the document a descriptive title, for example the existing
+  `# R-0001 — Start free play without completing the campaign`.
 - Describe one independently reviewable outcome. Split a larger requirement
   into linked requirements when its parts need separate decisions or delivery.
   The number identifies the requirement; it does not set priority.
