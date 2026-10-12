@@ -671,3 +671,39 @@ Logs, commands, runtime samples and exit reports remain under
 `~/Library/Logs/Microcol/local-qwen/jobs/` in the directories above. Actual
 model and functional verification is recorded in the
 [Z01 test evidence](../functional-tests.md#z01-bezpecne-vylozeni-nakladu).
+
+## PR #44 dock assertion migration — 2026-10-12
+
+Task `2026-10-12-pr44-dock-selection` used clean PR head `0dc70bb8`, not
+`main`, as explicitly requested. The caller reused the previously accepted
+Qwen ship-count refactor from `main` (`92a22efa`) and assigned only the
+PR-specific selection assertion/accessors and 18 TC19 call sites to Qwen.
+The text-only handoff included exact snippets, paths and match counts; no
+worker file discovery or edits were required. This task used the subsequently
+agreed **300-second attempt / 600-second cumulative** limits and two repairs,
+overriding the older 180-second profile still recorded on this PR branch.
+
+| Attempt | Measured seconds | Actual result and recovery |
+| --- | --- | --- |
+| 0 | 25.233 | Returned a request for file inspection, not replacements. Caller clarified that supplied fragments had already been inspected. |
+| 1 | 46.378 | Generated usable accessors and assertions, but included instruction prose in one old-text field and used match count 1 instead of 17. Caller rejected the batch and sent exact validation failures. |
+| 2 | 29.265 | Corrected the repeated count but retained prose in the import match and over-escaped Java quotes. Repair limit reached. |
+
+The caller reused attempt 1's implementation, corrected its import-match
+field and repeated count, then verified every replacement against both the
+worker baseline and integration checkout before applying it. Main-agent
+takeover was limited to those two contract corrections because both allowed
+repairs had failed; this was not an unattended worker success. Total worker
+time was **100.876 seconds**, including runner cleanup. Runtime samples for
+all attempts confirmed the documented model digest and context 8192. Reported
+input/output tokens were 3630/22, 3782/460 and 3950/138; separate loading,
+prompt-processing and generation timings were unavailable. No savings claim.
+
+The model was unloaded before caller Maven checks. Caller review confirmed
+an assertion-free dock component, three explicit count checks in TC01/TC06
+and 18 immediate selection checks in TC19, with unchanged scenario IDs,
+comments, fixtures, conditional click and FX wait. The shared formatter checked
+all six changed Java files with unchanged tokens/comments and idempotent output.
+Actual test evidence is recorded in the [functional contract](../functional-tests.md#pr-44-presun-aserci-doku).
+Inputs, rejected results, runtime samples and exit reports remain under
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-pr44-dock-selection/`.

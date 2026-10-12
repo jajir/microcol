@@ -59,7 +59,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.assertGold(95000);
 
         // Verify that there is exactly 1 ship in port.
-        europePort.verifyNumberOfShipsInPort(1);
+        assertEquals(1, europePort.getNumberOfShipsInPort(),
+                "Expected exactly one ship in port");
 
         // Verify that ship is empty.
         verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
@@ -122,7 +123,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.assertGold(95000);
 
         // Verify that there is exactly 1 ship in port.
-        europePort.verifyNumberOfShipsInPort(1);
+        assertEquals(1, europePort.getNumberOfShipsInPort(),
+                "Expected exactly one ship in port");
 
         // Verify that ship is empty.
         verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 0));

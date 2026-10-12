@@ -77,6 +77,10 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
+    public boolean isUnitInPortSelected(final int unitIndex) {
+        return pageComponentPanelDock.isUnitInPortSelected(unitIndex);
+    }
+
     public void verifyWarehouseWarning(final String expectedText) {
         assertEquals(expectedText,
                 getLabeledById("warehouseTransferMessage").getText());
@@ -86,10 +90,8 @@ public class ColonyScreen extends AbstractScreen {
         clickOnButtonWithId("buttonOk");
     }
 
-    public void verifyNumberOfShipsInPort(
-            final int expectedNumberOfShipsInPort) {
-        pageComponentPanelDock
-                .verifyNumberOfShipsInPort(expectedNumberOfShipsInPort);
+    public int getNumberOfShipsInPort() {
+        return pageComponentPanelDock.getNumberOfShipsInPort();
     }
 
     public void verifyNumberOfUnitsAtPier(

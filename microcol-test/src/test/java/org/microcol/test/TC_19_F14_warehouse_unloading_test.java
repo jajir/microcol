@@ -61,6 +61,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final ColonyScreen colony = game.openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
 
         // Try unloading 100 tobacco into a warehouse with room for one.
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
@@ -96,6 +98,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen reloaded = afterUnloading.exitToMenu().loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         reloaded.selectUnitFromPort(0);
+        assertTrue(reloaded.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         reloaded.verifyNumberOfGoodsInWrehouse(2, 100);
         assertEquals(Goods.of(GoodsType.TOBACCO, 99),
                 cargo(0).getGoods().get());
@@ -108,6 +112,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
 
         // Cancel the proposed one-unit transfer with the visible button.
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
@@ -129,6 +135,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
 
         // Dismiss the proposal with Escape.
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
@@ -150,6 +158,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.verifyNumberOfGoodsInWrehouse(10, 100);
 
         // Attempt to unload cigars and acknowledge the explanation.
@@ -170,6 +180,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
         assertEquals(Goods.of(GoodsType.COTTON, 20), cargo(2).getGoods().get());
 
@@ -191,6 +203,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -215,6 +229,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         final DialogChooseGoodsAmount dialog = colony
                 .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2, 3);
         dialog.verifyOfferedAmount(20);
@@ -252,6 +268,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -282,6 +300,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -308,6 +328,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -338,6 +360,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -369,6 +393,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -399,6 +425,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         final DialogChooseGoodsAmount dialog = colony
                 .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2, 3);
         dialog.verifyOfferedAmount(20);
@@ -425,6 +453,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -463,6 +493,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -493,6 +525,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -521,6 +555,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
+        assertTrue(colony.isUnitInPortSelected(0),
+                "The requested ship must be selected");
         colony.dragGoodsOutsideWindow(2);
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
         assertEquals(Goods.of(GoodsType.COTTON, 20), cargo(2).getGoods().get());

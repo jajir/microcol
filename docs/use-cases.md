@@ -443,6 +443,10 @@ scénářů včetně TC08/TC09, bez chyb a vynechání; viz
 Historický neúspěch zůstává zaznamenaný, ale není posledním výsledkem regrese.
 Všechny varianty změn jazyka a Nastavení vyžadují vlastní přejímku UC-119.
 
+Přesun asercí doku z page komponenty do TC01, TC06 a TC19 v PR #44
+z 12. října 2026 zachovává tato očekávání; aktuální stav jeho ověření je
+v [samostatné evidenci funkčního kontraktu](functional-tests.md#pr-44-presun-aserci-doku).
+
 ### Kontrola samotného katalogu — 11. října 2026
 
 Lokálně prošlo všech 8 dokumentačních kontrol a přísné sestavení MkDocs.

@@ -45,7 +45,8 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
                 "Delft");
 
         // Verify that there is just one ship in port
-        colonyScreen.verifyNumberOfShipsInPort(1);
+        assertEquals(1, colonyScreen.getNumberOfShipsInPort(),
+                "Expected exactly one ship in port");
 
         // drag first units to crate 0
         colonyScreen.dragUnitFromPierToShipCargoSlot(0, 0);

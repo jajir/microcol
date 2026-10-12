@@ -1,8 +1,5 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.List;
 
 import org.microcol.gui.dock.PanelCrateView;
@@ -28,19 +25,18 @@ public class PageComponentPanelDock extends AbstractPageComponent {
             getRobot().clickOn(ship);
         }
         WaitForAsyncUtils.waitForFxEvents();
-        assertTrue(ship.isSelected(), "The requested ship must be selected");
+    }
+
+    public boolean isUnitInPortSelected(final int unitIndex) {
+        return getUnitsInPort().get(unitIndex).isSelected();
     }
 
     public List<ToggleButton> getUnitsInPort() {
         return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
     }
 
-    public void verifyNumberOfShipsInPort(
-            final int expectedNumberOfShipsInPort) {
-        assertEquals(expectedNumberOfShipsInPort, getUnitsInPort().size(),
-                String.format(
-                        "Expected numeber of ships is '%s' but really there is '%s' ships.",
-                        expectedNumberOfShipsInPort, getUnitsInPort().size()));
+    public int getNumberOfShipsInPort() {
+        return getUnitsInPort().size();
     }
 
     /**

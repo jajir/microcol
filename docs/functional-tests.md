@@ -60,6 +60,13 @@ Zachovat současný JUnit 5 a TestFX a členění následujících souborů:
 | [`src/test/scenarios`](../microcol-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
 | [`AbstractMicroColTest`](../microcol-test/src/test/java/org/microcol/test/AbstractMicroColTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
 
+Page komponenty zpřístupňují prvky a jejich stav; neurčují očekávané hodnoty
+a neobsahují aserce ani verifikační metody. Ty patří přímo do scénářů TC.
+Například `PageComponentPanelDock` vrací počet lodí a stav výběru, zatímco
+TC01/TC06 ověřují počet a TC19 ověřuje výběr po každém požadavku na loď.
+Kliknutí a čekání na FX frontu zůstávají v komponentě. Toto rozdělení
+neznamená, že byly převedeny všechny historické verifikace ostatních page objects.
+
 Každý scénář dodržuje stejné pořadí:
 
 1. Krátký JavaDoc vysvětlí ověřované chování.
@@ -359,3 +366,22 @@ Slouží k vizuální kontrole textu a ovládání, nenahrazují herní aserce.
 Samostatný [PR #44](https://github.com/jajir/microcol/pull/44) míří do `main`;
 do sloučení nepublikuje nový vývojový release
 ani web. Potraviny, produkční zahazování a kolonijní UI vozů zůstávají mimo Z01.
+
+## PR #44 — přesun asercí doku
+
+**Změna 12. října 2026:** `PageComponentPanelDock` neobsahuje aserce,
+verifikační metody ani JUnit importy. Počet lodí vrací přes
+`getNumberOfShipsInPort()`; TC01 obsahuje jednu a TC06 dvě přímé aserce počtu.
+`isUnitInPortSelected(...)` pouze čte stav; všech 18 volání výběru lodi
+v 17 scénářích TC19 bezprostředně následuje explicitní aserce, včetně načtení
+uložené hry. Podmíněné kliknutí a čekání na FX frontu zůstávají beze změny.
+Scénáře, fixtures, komentované kroky a očekávané herní výsledky se nemění.
+
+Jde o ochranu UC-023, UC-036 a UC-119, nikoli nové herní chování. Kontrola
+zdrojů a společný formatter prošly pro všech šest změněných Java souborů.
+Lokálně na macOS/JDK 17 prošel TC01 s Monocle: 1 test, 0 selhání, chyb
+a vynechání; Maven přitom zkompiloval všechny testové třídy. Příkaz byl
+`mvn -B -ntp -pl microcol-test -am test -Dtest=TC_01_F01_embark_disembark_test -Dsurefire.failIfNoSpecifiedTests=false -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32 -Dprism.allowhidpi=false -DsoundEnabled=false`.
+Prošly také všechny 9 dokumentační kontroly a přísné sestavení MkDocs.
+Úplné nativní CI ověření této změny je zatím neprovedené; historický běh Z01
+výše není důkazem nově přesunutých asercí. Výsledek bude doplněn po běhu.
