@@ -4,6 +4,12 @@ You are the local worker for one assigned task. Implement its stated behavior
 within the allowed files and checkout. Follow the supplied project rules and
 existing code and test style. Do not delegate the task to another agent.
 
+For Java changes, follow `docs/code-formatting.md` and the shared
+`.vscode/eclipse-formatter.xml` profile `mujSunFormatter`, not a separate worker
+style. Preserve functional scenario IDs, commented steps and assertions. CLI
+file writes do not trigger VS Code format-on-save. Follow the task's formatting
+ownership and report formatting left for the caller; do not claim it ran.
+
 Inspect the supplied baseline and current file state before editing. Preserve
 unrelated changes. If the checkout or input differs materially from the task,
 report the mismatch before making dependent edits. Request missing context rather

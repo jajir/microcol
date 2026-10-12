@@ -53,6 +53,13 @@ Use the shared [Java formatter](docs/code-formatting.md) and its
 scoped to files touched by the task; preserve the functional tests' readable
 scenario structure and stable IDs.
 
+This rule applies to the main agent and every worker, including local Qwen.
+Include the formatting requirements and accessible profile in Java task handoffs.
+Before accepting or committing Java changes, the main agent applies the shared
+formatter to the task's changed Java files and reviews the diff, including worker
+output. VS Code format-on-save does not format files written by CLI tools. Report
+an unavailable formatter as a blocker rather than silently using another style.
+
 # Graphics
 
 Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for

@@ -14,6 +14,12 @@ Fill every field before dispatch. Use `not applicable` with a reason where
 appropriate. Include file contents when the worker cannot read the referenced
 paths. This template is independent of the chosen transport or agent runtime.
 
+For Java tasks, include the requirements from `docs/code-formatting.md` and make
+`.vscode/eclipse-formatter.xml` accessible in the worktree. The caller applies
+that profile to changed Java files after unloading Qwen and before verification
+and acceptance; specify the scoped formatter command in the task. Do not rely on
+VS Code save hooks for worker edits.
+
 ```text
 Task ID:
 Assigned isolated worktree and host:
@@ -33,6 +39,7 @@ Expected behavior and important edge cases:
 Available tools and who applies the changes:
 Verification owner: caller runner (Maven and required test runs).
 Any explicitly allowed lightweight worker checks:
+Java formatting command and scoped files (or not applicable with reason):
 Caller verification commands and working directories:
 Intended test names/selection, expected counts, and required checks:
 Output locations for the patch, logs, and test reports:
@@ -60,6 +67,7 @@ Verification:
 - For each executed command: working directory, command, runner, exit code.
 - Intended test names, actual test selection, counts, failures, and skips.
 - Accessible log and report paths.
+- Java formatting: files, profile, executed command/runner or pending caller work.
 
 Unverified:
 - Checks that did not run, why, and any commands merely proposed.
