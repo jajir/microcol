@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -45,8 +43,8 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         gamePage.verifyNumberOfUnitInRightPanel(2);
 
         // verify that both units have 1 free action point
-        gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
-        gamePage.getRightPanelUnit(1).assertFreeActionPoints(1);
+        gamePage.getRightPanelUnit(0).verifyFreeActionPoints(1);
+        gamePage.getRightPanelUnit(1).verifyFreeActionPoints(1);
 
         // found colony by pressing key 'b'
         robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
@@ -57,7 +55,7 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
 
         // verify that one unit was moved into city
         gamePage.verifyNumberOfUnitInRightPanel(1);
-        gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
+        gamePage.getRightPanelUnit(0).verifyFreeActionPoints(1);
 
         // open colony and verify city name
         final ColonyScreen colonyScreen = gamePage
@@ -74,8 +72,7 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
 
         // unit will placed at field with production 4 or 3 randomly.
-        assertTrue(cornProduction >= 3 && cornProduction <= 4, String
-                .format("Unexpected corn production '%s'", cornProduction));
+        colonyScreen.verifyProductionInRange(cornProduction, 3, 4);
     }
 
 }

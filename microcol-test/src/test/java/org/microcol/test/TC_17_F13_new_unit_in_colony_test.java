@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -42,21 +40,21 @@ public class TC_17_F13_new_unit_in_colony_test extends AbstractMicroColTest {
         gamePage.verifyThatSelectedTileIs(COLONY_LOCATION);
 
         // Verify there is not unit in colony.
-        assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 0);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify new unit in colony.
-        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
 
         // Move ship to far location.
         gamePage.moveMouseAtLocation(COLONY_LOCATION);
         gamePage.dragMouseAtLocation(NEAR_LOCATION);
 
         // Verify that unit move to new place.
-        assertEquals(1, getModel().getUnitsAt(NEAR_LOCATION).size());
-        assertEquals(0, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(NEAR_LOCATION, 1);
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 0);
     }
 
 }

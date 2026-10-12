@@ -1,7 +1,5 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
 import org.microcol.gui.screen.europe.BuyUnitPanel;
@@ -52,7 +50,6 @@ public class BuyUnitScreen extends AbstractScreen {
     public EuropePortScreen close() {
         final Button buttonNextTurn = getButtonById(
                 EuropeButtonsPanel.CLOSE_BUTTON_ID);
-        assertNotNull(buttonNextTurn);
         getRobot().clickOn(buttonNextTurn);
         WaitForAsyncUtils.waitForFxEvents();
         return EuropePortScreen.of(getContext());

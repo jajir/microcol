@@ -1,9 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -19,11 +15,7 @@ import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.mock.CursorServiceNoOpp;
-import org.microcol.model.CargoSlot;
-import org.microcol.model.Goods;
 import org.microcol.model.Model;
-import org.microcol.model.Player;
-import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.TestContext;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -170,31 +162,6 @@ public abstract class AbstractMicroColTest {
 
     public Model getModel() {
         return getContext().getModel();
-    }
-
-    public Player getHumanPlayer() {
-        return getModel().getPlayers().stream()
-                .filter(player -> player.isHuman()).findAny()
-                .orElseThrow(() -> new IllegalStateException(
-                        "There is no human player in game model."));
-    }
-
-    public void verifyNumberOfGoodsInShip(final UnitWithCargo ship,
-            final int cargoSlotIndex, final Goods expectedGoods) {
-        final CargoSlot cargoSlot = ship.getCargo()
-                .getSlotByIndex(cargoSlotIndex);
-
-        if (expectedGoods.isZero()) {
-            assertFalse(cargoSlot.getGoods().isPresent(),
-                    "Cargo slot should be empty");
-        } else {
-            assertTrue(cargoSlot.getGoods().isPresent(),
-                    "Cargo slot should not be empty");
-            assertEquals(expectedGoods.getType(),
-                    cargoSlot.getGoods().get().getType());
-            assertEquals(expectedGoods.getAmount(),
-                    cargoSlot.getGoods().get().getAmount());
-        }
     }
 
 }

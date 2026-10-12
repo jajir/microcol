@@ -60,17 +60,28 @@ public class DialogChooseGoodsAmount extends AbstractScreenMarket {
                 getLabeledById("goodsTransferExplanation").getText());
     }
 
-    public void selectAmountWithKeyboard(final int amount) {
-        final Slider slider = getNodeFinder().lookup(".slider")
-                .queryAs(Slider.class);
+    public void focusAmountSlider() {
         getRobot().clickOn(".slider .thumb");
-        assertTrue(slider.isFocused(),
+    }
+
+    public void verifyAmountSliderFocused() {
+        assertTrue(
+                getNodeFinder().lookup(".slider").queryAs(Slider.class)
+                        .isFocused(),
                 "The amount slider must receive keyboard input");
+    }
+
+    public void selectAmountWithKeyboard(final int amount) {
         getRobot().push(KeyCode.HOME);
-        for (int i = 0; i < amount; i++) {
+        for (int step = 0; step < amount; step++) {
             getRobot().push(KeyCode.RIGHT);
         }
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySelectedAmount(final int amount) {
+        final Slider slider = getNodeFinder().lookup(".slider")
+                .queryAs(Slider.class);
         assertEquals(Math.min(amount, slider.getMax()), slider.getValue());
     }
 

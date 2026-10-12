@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.util.Optional;
 
@@ -43,9 +41,10 @@ public class TC_10_F10_famine_will_plague_colony_test
         Optional<ScreenTurnReport> oTurnDialog = gamePage.nextTurn();
 
         // Verify that turn event dialog is shown.
-        assertTrue(oTurnDialog.isPresent());
+        gamePage.verifyTurnReportPresent(oTurnDialog);
 
         ScreenTurnReport dialogTurnReport = oTurnDialog.get();
+        dialogTurnReport.verifyReady();
 
         dialogTurnReport.verifyThatAtLeastOneEventMessageContains(
                 "Famine is coming in colony Delft. In next turn colonist will die.");

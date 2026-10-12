@@ -65,7 +65,8 @@ public class TC_09_F09_famine_destroy_colony_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify colony doesn't exists anymore.
-        gamePage.verifyThatItsNotPossibleToOpenColonyAt(Location.of(22, 12));
+        gamePage.selectTile(Location.of(22, 12));
+        gamePage.verifyMapRemainsVisibleAt(Location.of(22, 12));
 
     }
 

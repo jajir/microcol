@@ -5,6 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.microcol.gui.screen.europe.EuropeButtonsPanel;
+import org.microcol.model.Goods;
+import org.microcol.model.Player;
+import org.microcol.model.unit.UnitGalleon;
+import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.util.WaitForAsyncUtils;
@@ -46,7 +50,7 @@ public class EuropePortScreen extends AbstractScreen {
                         expectedNamePart, labeled.getText()));
     }
 
-    public void assertGold(final int expectedAmountOfGold) {
+    public void verifyGold(final int expectedAmountOfGold) {
         final Labeled labeledGold = getLabeledById("labelGold");
         String gold = labeledGold.getText();
         gold = gold.substring(gold.lastIndexOf(" ") + 1);
@@ -54,6 +58,28 @@ public class EuropePortScreen extends AbstractScreen {
         assertEquals(expectedAmountOfGold, realGold,
                 String.format("Expected gold was '%s' but really is '%s'",
                         expectedAmountOfGold, realGold));
+    }
+
+    private List<UnitWithCargo> getShipsInPort() {
+        final Player human = getModel().getPlayers().stream()
+                .filter(Player::isHuman).findAny()
+                .orElseThrow(() -> new IllegalStateException(
+                        "There is no human player in game model."));
+        return getModel().getEurope().getPort().getShipsInPort(human);
+    }
+
+    public void verifyGoodsInShip(final int cargoSlotIndex,
+            final Goods expectedGoods) {
+        final List<UnitWithCargo> ships = getShipsInPort();
+        assertEquals(1, ships.size());
+        new ShipWrapper((UnitGalleon) ships.get(0))
+                .verifyCargoGoods(cargoSlotIndex, expectedGoods);
+    }
+
+    public void verifyCargoSlotEmpty(final int shipIndex,
+            final int cargoSlotIndex) {
+        new ShipWrapper(getShipsInPort().get(shipIndex))
+                .verifyCargoSlotEmpty(cargoSlotIndex);
     }
 
     public BuyUnitScreen openBuyUnitScreen() {
@@ -69,8 +95,8 @@ public class EuropePortScreen extends AbstractScreen {
         return this;
     }
 
-    public int getNumberOfShipsInPort() {
-        return pageComponentPanelDock.getNumberOfShipsInPort();
+    public void verifyNumberOfShipsInPort(final int expectedCount) {
+        pageComponentPanelDock.verifyNumberOfShipsInPort(expectedCount);
     }
 
     public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(

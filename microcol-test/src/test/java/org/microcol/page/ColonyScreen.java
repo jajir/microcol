@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
@@ -18,9 +19,13 @@ import org.microcol.gui.screen.colony.PanelColonyName;
 import org.microcol.gui.screen.colony.PanelOutsideColonyUnit;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.Goods;
 import org.microcol.model.GoodsProductionStats;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitGalleon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.service.finder.NodeFinder;
@@ -77,8 +82,10 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
-    public boolean isUnitInPortSelected(final int unitIndex) {
-        return pageComponentPanelDock.isUnitInPortSelected(unitIndex);
+    public void verifyUnitInPortSelected(final int unitIndex,
+            final boolean expectedSelected) {
+        pageComponentPanelDock.verifyUnitInPortSelected(unitIndex,
+                expectedSelected);
     }
 
     public void verifyWarehouseWarning(final String expectedText) {
@@ -90,8 +97,8 @@ public class ColonyScreen extends AbstractScreen {
         clickOnButtonWithId("buttonOk");
     }
 
-    public int getNumberOfShipsInPort() {
-        return pageComponentPanelDock.getNumberOfShipsInPort();
+    public void verifyNumberOfShipsInPort(final int expectedCount) {
+        pageComponentPanelDock.verifyNumberOfShipsInPort(expectedCount);
     }
 
     public void verifyNumberOfUnitsAtPier(
@@ -174,8 +181,10 @@ public class ColonyScreen extends AbstractScreen {
             drag.run();
             // Native drag/drop can outlive the robot's release and FX event
             // queue.
-            assertTrue(finished.await(5, TimeUnit.SECONDS),
-                    "The native cargo drag must finish");
+            if (!finished.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The native cargo drag must finish");
+            }
             WaitForAsyncUtils.waitForFxEvents();
         } finally {
             getRobot().interact(
@@ -189,6 +198,47 @@ public class ColonyScreen extends AbstractScreen {
                 .mapToInt(field -> field.isEmpty() ? 0 : 1).sum();
         assertEquals(expectedumberOfUnitsAtFields, unitsInColony);
         return this;
+    }
+
+    public void verifyProductionInRange(final int actualProduction,
+            final int expectedMinimum, final int expectedMaximum) {
+        assertTrue(
+                actualProduction >= expectedMinimum
+                        && actualProduction <= expectedMaximum,
+                String.format("Unexpected corn production '%s'",
+                        actualProduction));
+    }
+
+    public void verifyWarehouseGoods(final Goods expectedGoods) {
+        assertEquals(expectedGoods.getAmount(), colony.getWarehouse()
+                .getGoods(expectedGoods.getType()).getAmount());
+    }
+
+    public void verifyGoodsInShip(final int cargoSlotIndex,
+            final Goods expectedGoods) {
+        final List<Unit> ships = getModel().getUnitsAt(colony.getLocation())
+                .stream()
+                .filter(unit -> unit.getType().equals(UnitType.GALLEON))
+                .collect(Collectors.toList());
+        assertEquals(1, ships.size());
+        new ShipWrapper((UnitGalleon) ships.get(0))
+                .verifyCargoGoods(cargoSlotIndex, expectedGoods);
+    }
+
+    public void verifyColonyValid(final boolean expectedValid) {
+        assertEquals(expectedValid, colony.isValid());
+    }
+
+    public void verifyColonyPresent(final String colonyName,
+            final boolean expectedPresent) {
+        assertEquals(expectedPresent,
+                getModel().getColonyByName(colonyName).isPresent());
+    }
+
+    public void verifyCarrierPresent(final int unitId,
+            final boolean expectedPresent) {
+        assertEquals(expectedPresent,
+                getModel().tryGetUnitById(unitId).isPresent());
     }
 
     /**

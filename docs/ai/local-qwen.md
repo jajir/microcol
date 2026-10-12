@@ -674,6 +674,10 @@ model and functional verification is recorded in the
 
 ## PR #44 dock assertion migration — 2026-10-12
 
+Historical direction, superseded later that day by the user's
+[named-verification rule](../functional-tests.md#stala-a-citelna-struktura-scenaru).
+The evidence below describes the earlier revision, not the current assertion placement.
+
 Task `2026-10-12-pr44-dock-selection` used clean PR head `0dc70bb8`, not
 `main`, as explicitly requested. The caller reused the previously accepted
 Qwen ship-count refactor from `main` (`92a22efa`) and assigned only the
@@ -707,3 +711,36 @@ all six changed Java files with unchanged tokens/comments and idempotent output.
 Actual test evidence is recorded in the [functional contract](../functional-tests.md#pr-44-presun-aserci-doku).
 Inputs, rejected results, runtime samples and exit reports remain under
 `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-pr44-dock-selection/`.
+
+## PR #44 named page verifications — 2026-10-12
+
+The revised rule keeps assertions in page methods named `verify...`, with
+expected parameters, and removes direct assertions from TC classes. Two bounded
+Qwen assignments used clean `ad7140fd` worktrees; the main agent owned the
+cross-screen caller migration, source-contract test, documentation and verification.
+Both used the agreed 300-second attempt / 600-second task budget and two repairs.
+
+| Task / attempt | Seconds | Diagnosis and outcome |
+| --- | --- | --- |
+| `2026-10-12-pr44-dock-verifiers` / 0 | 69.636 | Removed getters still called by the proposed verifiers and omitted a wrapper. Rejected before application. Also performed four reads despite the text-only prompt. |
+| dock / 1 | 45.412 | Restored getters, but added a guard silently skipping selection checks for missing ships. Rejected; targeted repair required unconditional verification. |
+| dock / 2 | 44.363 | Corrected the guard; accepted after exact-match validation and review. Caller stripped JSON fences and applied the identical count delegate to EuropePortScreen. |
+| `2026-10-12-pr44-ship-verifiers` / 0 | 55.440 | Wrong CargoSlot package and unused imports; rejected. One unnecessary file-read command failed due to path escaping. |
+| ship / 1 | 49.385 | Corrected import and retained all required cargo/state checks. Accepted; caller added one local `final` modifier and normalized import grouping. |
+
+Total worker durations were 159.411 and 104.825 seconds including cleanup.
+All attempts exited 0; acceptance depended on source review, not exit status.
+Runtime samples confirmed digest
+`dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2` and context8192.
+The unnecessary reads show that a text-only prompt alone does not disable tools;
+no worker file edits occurred. Repairs used the concrete rejected output, not
+a restarted investigation. No repairs were skipped and no savings are claimed.
+
+The caller unloaded Qwen before Maven, applied the shared formatter and moved
+the checks without changing fixture files or scenario IDs. The initial caller
+compile exposed one missed TC09 caller after splitting a mixed action/verifier;
+it was updated and the same check rerun successfully. The source-contract tests
+then passed 2/2. Final functional evidence is kept in the
+[test contract](../functional-tests.md#pr-44-pojmenovane-verifikace).
+Inputs, raw results, token reports, model samples and process evidence remain in
+`~/Library/Logs/Microcol/local-qwen/jobs/` under the two task IDs above.

@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -48,10 +46,10 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         // Select the third unit in the right panel. It is a free colonist.
         final RightPanelUnit rpu = gamePage.getRightPanelUnit(2);
         rpu.selectUnit();
-        rpu.assertFreeActionPoints(1);
+        rpu.verifyFreeActionPoints(1);
 
         // Verify there is no unit at location near colony.
-        assertEquals(0, getModel().getUnitsAt(NEAR_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(NEAR_LOCATION, 0);
 
         // Move the colonist to the tile next to the colony.
         gamePage.moveMouseAtLocation(COLONY_LOCATION);
@@ -61,15 +59,12 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify that unit moved to new place.
-        assertEquals(1, getModel().getUnitsAt(NEAR_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(NEAR_LOCATION, 1);
 
         // Verify the moved colonist is ready for a new order.
         final Unit capturedUnit = getModel().getUnitsAt(NEAR_LOCATION).get(0);
-        assertEquals(UnitActionType.noAction,
-                capturedUnit.getAction().getType(),
-                "The colonist should have no active order before pressing P");
-        assertEquals(1, capturedUnit.getActionPoints(),
-                "The colonist should have one action point before pressing P");
+        gamePage.verifyUnitAction(capturedUnit, UnitActionType.noAction);
+        gamePage.verifyUnitActionPoints(capturedUnit, 1);
 
         // Verify that icon for plow field is visible.
         gamePage.verifyThatPlowFieldButtonIsVisible();
@@ -82,13 +77,9 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
 
         // Assert the captured unit's action type changed to plowField and AP
         // consumed
-        assertEquals(UnitActionType.plowField,
-                capturedUnit.getAction().getType(),
-                "Expected captured unit to have plowField action after pressing P");
-        assertEquals(0, capturedUnit.getActionPoints(),
-                "Expected captured unit to have 0 action points after consuming AP for plowing");
-        assertEquals(NEAR_LOCATION, capturedUnit.getLocation(),
-                "Expected captured unit to remain at NEAR_LOCATION after plowing");
+        gamePage.verifyUnitAction(capturedUnit, UnitActionType.plowField);
+        gamePage.verifyUnitActionPoints(capturedUnit, 0);
+        gamePage.verifyUnitLocation(capturedUnit, NEAR_LOCATION);
     }
 
 }

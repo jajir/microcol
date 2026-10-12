@@ -34,10 +34,14 @@ public class AbstractScreenMarket extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void verifyNumberOfSliders(final int expectedCount) {
+        assertEquals(expectedCount,
+                getNodeFinder().lookup(".slider").queryAll().size());
+    }
+
     private Slider getSlider() {
         final String cssClass = ".slider";
         final Set<Slider> sliders = getNodeFinder().lookup(cssClass).queryAll();
-        assertEquals(1, sliders.size());
         return sliders.stream().findAny().orElseThrow(
                 () -> new MicroColException("There is no such slider"));
     }

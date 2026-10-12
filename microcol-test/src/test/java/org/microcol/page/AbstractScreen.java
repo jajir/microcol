@@ -1,7 +1,5 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -72,17 +70,15 @@ public abstract class AbstractScreen {
     protected Labeled getLabeledById(final String cssId) {
         final String id = "#" + cssId;
         final Labeled label = getNodeFinder().lookup(id).queryLabeled();
-        assertNotNull(label,
+        return Preconditions.checkNotNull(label,
                 String.format("unable to find labeled by id '%s'", cssId));
-        return label;
     }
 
     protected Button getButtonById(final String cssId) {
         final String id = "#" + cssId;
         final Button label = getNodeFinder().lookup(id).queryButton();
-        assertNotNull(label,
+        return Preconditions.checkNotNull(label,
                 String.format("unable to find button by id '%s'", cssId));
-        return label;
     }
 
     protected boolean isButtonBackVisible() {

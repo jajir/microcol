@@ -443,9 +443,11 @@ scénářů včetně TC08/TC09, bez chyb a vynechání; viz
 Historický neúspěch zůstává zaznamenaný, ale není posledním výsledkem regrese.
 Všechny varianty změn jazyka a Nastavení vyžadují vlastní přejímku UC-119.
 
-Přesun asercí doku z page komponenty do TC01, TC06 a TC19 v PR #44
-z 12. října 2026 zachovává tato očekávání; aktuální stav jeho ověření je
-v [samostatné evidenci funkčního kontraktu](functional-tests.md#pr-44-presun-aserci-doku).
+Nové pravidlo z 12. října 2026 nahrazuje původní přesun asercí doku do TC.
+Scénáře teď předávají očekávání pojmenovaným metodám `verify…` v page objektech,
+nikoli přímým asercím. Refaktor všech tříd TC zachovává jejich ID a herní
+výsledky; aktuální ověření UC-119 a dotčených scénářů je v
+[evidenci pojmenovaných verifikací](functional-tests.md#pr-44-pojmenovane-verifikace).
 
 ### Kontrola samotného katalogu — 11. října 2026
 

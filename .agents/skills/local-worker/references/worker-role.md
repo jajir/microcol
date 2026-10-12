@@ -22,6 +22,12 @@ task unless that change is explicitly allowed. Derive expected test results from
 the requested behavior and rules; never weaken assertions, skip tests, or change
 expected values merely to obtain a passing run.
 
+For MicroCol functional tests, follow `docs/functional-tests.md`: assertions in
+page classes belong only in named `verify...` methods with relevant expected
+parameters. TC scenarios call these methods, never assertions directly; keep
+action/getter/constructor bodies separate from assertion bodies. Do not weaken
+checks or skip them when an expected element is missing.
+
 For a repair, address the supplied error and current source/output specifically,
 not an unchanged broad investigation. Keep acceptance criteria intact and report
 checks left to the caller. Java output uses the shared project formatter profile;

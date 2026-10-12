@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.microcol.gui.Tile.TILE_CENTER;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,8 @@ import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.Location;
+import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.Ship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,10 +160,7 @@ public class GamePage extends AbstractScreen {
         return ColonyScreen.of(getContext(), expectedNamePart);
     }
 
-    public GamePage verifyThatItsNotPossibleToOpenColonyAt(
-            final Location colonyLocation) {
-        moveMouseAtLocation(colonyLocation);
-        getRobot().clickOn(MouseButton.PRIMARY);
+    public GamePage verifyMapRemainsVisibleAt(final Location colonyLocation) {
         verifyThatStatusBarContains(String.valueOf(colonyLocation.getX()));
         verifyThatStatusBarContains(String.valueOf(colonyLocation.getY()));
         return this;
@@ -290,10 +290,63 @@ public class GamePage extends AbstractScreen {
         assertFalse(getNodeFinder().lookup("#plowField").tryQuery().isEmpty());
     }
 
-    public ShipWrapper getShipAt(final Location location) {
+    public void verifyShipPresentAt(final Location location) {
         assertFalse(getModel().getUnitsAt(location).isEmpty(), String
                 .format("There should be at leat on ship at %s.", location));
+    }
+
+    public ShipWrapper getShipAt(final Location location) {
         return new ShipWrapper((Ship) getModel().getUnitsAt(location).get(0));
+    }
+
+    public void verifyNumberOfUnitsAt(final Location location,
+            final int expectedCount) {
+        assertEquals(expectedCount, getModel().getUnitsAt(location).size());
+    }
+
+    public void verifyUnitAction(final Unit unit,
+            final UnitActionType expectedAction) {
+        assertEquals(expectedAction, unit.getAction().getType(),
+                "Unexpected unit action");
+    }
+
+    public void verifyUnitActionPoints(final Unit unit,
+            final int expectedPoints) {
+        assertEquals(expectedPoints, unit.getActionPoints(),
+                "Unexpected unit action points");
+    }
+
+    public void verifyUnitLocation(final Unit unit,
+            final Location expectedLocation) {
+        assertEquals(expectedLocation, unit.getLocation(),
+                "Unexpected unit location");
+    }
+
+    public void verifyMinimumKingUnitsOnMap(final int expectedMinimum) {
+        final long count = getModel().getAllUnits().stream()
+                .filter(unit -> unit.getOwner().getName().contains("King"))
+                .filter(unit -> unit.isAtPlaceLocation()).count();
+        logger.info("Number of enemy ships at map: " + count);
+        assertTrue(count >= expectedMinimum);
+    }
+
+    public void verifyNumberOfHumanUnitsAt(final List<Location> locations,
+            final int expectedCount) {
+        final long count = locations.stream()
+                .flatMap(location -> getModel().getUnitsAt(location).stream())
+                .filter(unit -> unit.getOwner().isHuman()).count();
+        assertEquals(expectedCount, count,
+                "Unexpected number of escaped human units");
+    }
+
+    public void verifyTurnReportPresent(
+            final Optional<ScreenTurnReport> report) {
+        assertTrue(report.isPresent(), "The turn report must be shown");
+    }
+
+    public void verifySavedGame(final File savedFile) {
+        assertTrue(savedFile.isFile(), "The saved game must exist");
+        assertTrue(savedFile.length() > 0, "The saved game must not be empty");
     }
 
 }

@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -35,7 +33,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // verify that there in colony are 3 units
-        assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 3);
 
         // verify that first unit is selected
         gamePage.verifyThatUnitIsSelected(0);

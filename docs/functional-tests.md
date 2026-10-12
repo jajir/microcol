@@ -55,17 +55,42 @@ Zachovat současný JUnit 5 a TestFX a členění následujících souborů:
 
 | Místo | Odpovědnost |
 | --- | --- |
-| [`org.microcol.test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelný příběh hráče: příprava, kroky a konkrétní očekávání. |
-| [`org.microcol.page`](../microcol-test/src/test/java/org/microcol/page/) | Vyhledání prvků, kliknutí, přetažení, klávesy a čekání na dokončení UI. |
+| [`org.microcol.test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelný příběh hráče: příprava, kroky a explicitní volání `verify…` s očekávanými výsledky. |
+| [`org.microcol.page`](../microcol-test/src/test/java/org/microcol/page/) | Vyhledání prvků, akce a čekání; oddělené pojmenované metody `verify…` pro ověření výsledků. |
 | [`src/test/scenarios`](../microcol-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
 | [`AbstractMicroColTest`](../microcol-test/src/test/java/org/microcol/test/AbstractMicroColTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
 
-Page komponenty zpřístupňují prvky a jejich stav; neurčují očekávané hodnoty
-a neobsahují aserce ani verifikační metody. Ty patří přímo do scénářů TC.
-Například `PageComponentPanelDock` vrací počet lodí a stav výběru, zatímco
-TC01/TC06 ověřují počet a TC19 ověřuje výběr po každém požadavku na loď.
-Kliknutí a čekání na FX frontu zůstávají v komponentě. Toto rozdělení
-neznamená, že byly převedeny všechny historické verifikace ostatních page objects.
+**Aktuální pravidlo od 12. října 2026:** aserce v balíčku `page` patří pouze
+do metod začínajících `verify`, dále pojmenovaných podle ověřované věci.
+Nejde o prefix názvu třídy. Očekávané počty, hodnoty či stavy přijímají jako
+parametry, například `verifyNumberOfShipsInPort(expectedCount)` nebo
+`verifyUnitInPortSelected(unitIndex, expectedSelected)`. Aserce nesmí být
+přímo v akčních metodách, getterech ani konstruktorech.
+
+Třídy `TC_...` nevolají JUnit/TestFX aserce přímo, ani je neschovávají do
+vlastních pomocných metod. Scénář udává očekávání a volá příslušnou page
+verifikaci; nevznikají obecné obálky typu `verifyEquals(expected, actual)`.
+Například `PageComponentPanelDock` má samostatné gettery, `selectUnitFromPort`
+s podmíněným kliknutím a FX čekáním a dvě samostatné metody `verify…`.
+TC19 tak čitelně provede `colony.selectUnitFromPort(0)` a následně
+`colony.verifyUnitInPortSelected(0, true)`. TC01/TC06 volají
+`verifyNumberOfShipsInPort(1)`; tělo aserce zůstává v komponentě doku.
+
+Ověření nepřesouvá jednotky, nekliká a nemění ověřovaný stav. Akce zachovávají
+technické preconditions a časově omezená čekání: chybějící prvek nebo
+nedokončené nativní gesto musí selhat, ne být tiše přeskočeno. Dotazy TestFX
+`FxAssert.assertContext()` pouze zpřístupňují vyhledávání, nejsou asercí.
+Kontroly identity obrazovek zůstávají v pojmenovaných `verify…` metodách;
+stávající navigace je může volat při přechodu. Přímá herní očekávání scénáře
+zůstávají explicitní, například výběr lodi a stav zásob.
+
+[PageVerificationContractTest](../microcol-test/src/test/java/org/microcol/test/PageVerificationContractTest.java)
+při běžném Maven testu parsuje zdroje pomocí JDK compiler API: odmítne aserce
+v `TC_...` a aserce mimo `verify…` v `page`. Zahrnuje i Java `assert`, lambdy
+a kvalifikovaná volání; vlastní negativní příklad chrání funkčnost této
+kontroly. Třetí test ověřuje, že verifikace doku odmítne chybný počet, chybný
+výběr i neexistující loď, nikoli že kontrolu přeskočí. Tyto kontroly doplňují,
+nenahrazují hráčské scénáře.
 
 Každý scénář dodržuje stejné pořadí:
 
@@ -369,7 +394,8 @@ ani web. Potraviny, produkční zahazování a kolonijní UI vozů zůstávají 
 
 ## PR #44 — přesun asercí doku
 
-**Změna 12. října 2026:** `PageComponentPanelDock` neobsahuje aserce,
+**Historická změna 12. října 2026, nahrazená novým pravidlem níže:**
+Na revizi `e229682e` `PageComponentPanelDock` neobsahoval aserce,
 verifikační metody ani JUnit importy. Počet lodí vrací přes
 `getNumberOfShipsInPort()`; TC01 obsahuje jednu a TC06 dvě přímé aserce počtu.
 `isUnitInPortSelected(...)` pouze čte stav; všech 18 volání výběru lodi
@@ -401,3 +427,24 @@ Testovací build `dev-24-e229682ecd0e` je dostupný například pro
 Publikace release a webu byla na větvi PR správně vynechána. Toto následné
 doplnění evidence mění pouze dokumentaci, nikoli ověřený Java kód.
 PR zůstává otevřený; existující konflikty s `main` tento přesun neřeší.
+
+## PR #44 — pojmenované verifikace
+
+Nové zadání z 12. října 2026 nahrazuje předchozí směr přesunu asercí.
+Všech 19 tříd TC používá pojmenované verifikační metody místo přímých asercí;
+počty, zásoby, typy zboží, prázdný náklad, uložený soubor, zachované reference
+na kolonistu i zničený zdroj zůstávají ověřené. TC19 stále ověřuje výběr lodi
+po všech 18 výběrech včetně opětovného načtení. ID scénářů ani fixtures se nemění.
+Byly odděleny také kontroly slideru, existence lodi a připravenosti dialogu;
+kontrola nativního `DRAG_DONE` stále selže po pěti sekundách.
+
+Místně na macOS/JDK 17 prošly TC01 a TC18 (každý 1/1) s Monocle a všechny
+tři kontroly `PageVerificationContractTest`, bez selhání, chyb a vynechání.
+Maven zkompiloval všechny testové třídy. Použit byl stejný cílený příkaz
+výše s výběrem `-Dtest=PageVerificationContractTest,TC_01_F01_embark_disembark_test,TC_18_F01_plow_field_test`;
+po doplnění třetí kontroly byl samostatně znovu spuštěn
+`-Dtest=PageVerificationContractTest`. Společný formatter ověřil 32 změněných
+Java souborů se zachovanými tokeny, komentáři a idempotencí. Prošlo všech
+9 dokumentačních kontrol, přísný MkDocs a validátor local-worker skillu.
+Úplná funkční regrese této nové změny zatím není ověřena.
+Historických 44 úspěšných scénářů na `e229682e` není výsledkem tohoto refaktoru.
