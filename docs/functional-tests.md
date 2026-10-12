@@ -382,6 +382,22 @@ zdrojů a společný formatter prošly pro všech šest změněných Java soubor
 Lokálně na macOS/JDK 17 prošel TC01 s Monocle: 1 test, 0 selhání, chyb
 a vynechání; Maven přitom zkompiloval všechny testové třídy. Příkaz byl
 `mvn -B -ntp -pl microcol-test -am test -Dtest=TC_01_F01_embark_disembark_test -Dsurefire.failIfNoSpecifiedTests=false -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32 -Dprism.allowhidpi=false -DsoundEnabled=false`.
-Prošly také všechny 9 dokumentační kontroly a přísné sestavení MkDocs.
-Úplné nativní CI ověření této změny je zatím neprovedené; historický běh Z01
-výše není důkazem nově přesunutých asercí. Výsledek bude doplněn po běhu.
+Prošlo také všech 9 dokumentačních kontrol a přísné sestavení MkDocs.
+
+**Ověřeno 12. října 2026:** [CI běh 24](https://github.com/jajir/microcol/actions/runs/38242771215)
+na revizi `e229682ecd0ef5f492534bd6192e804bd8bfc13b`, JDK 17,
+Linux/Xvfb/Openbox a nativní Glass, úplným příkazem z oddílu
+[Spouštění a ochrana publikace](#spousteni-a-ochrana-publikace).
+Stažené čerstvé Surefire XML v artefaktu
+[tests-functional](https://github.com/jajir/microcol/actions/runs/38242771215/artifacts/11744026846)
+potvrzuje 663 herních testů a 44 funkčních scénářů; ve všech sadách je
+0 selhání, 0 chyb a 0 vynechání. Dotčené TC01 prošlo 1/1, TC06 2/2
+a TC19 17/17. Místní kopie reportů je v `target/pr44-ci-evidence/`.
+
+Prošly také kontroly launcherů a všechny tři nativní balíčky.
+Testovací build `dev-24-e229682ecd0e` je dostupný například pro
+[macOS ARM64](https://github.com/jajir/microcol/actions/runs/38242771215/artifacts/11744106186).
+[Dokumentační CI](https://github.com/jajir/microcol/actions/runs/38242774635) prošlo.
+Publikace release a webu byla na větvi PR správně vynechána. Toto následné
+doplnění evidence mění pouze dokumentaci, nikoli ověřený Java kód.
+PR zůstává otevřený; existující konflikty s `main` tento přesun neřeší.
