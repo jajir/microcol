@@ -96,6 +96,9 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
             // transfer between cargo slots
             if (specialOperatonWasSelected) {
                 chooseGoodsDialog.init(goods);
+                if (chooseGoodsDialog.getActualValue().isZero()) {
+                    return;
+                }
                 targetCargoSlot.storeFromCargoSlot(
                         chooseGoodsDialog.getActualValue(), sourceCargoSlot);
             } else {

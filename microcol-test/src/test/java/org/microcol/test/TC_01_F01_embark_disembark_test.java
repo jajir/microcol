@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -38,15 +36,14 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // verify that there in colony are 3 units
-        assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 3);
 
         // go at main game panel
         ColonyScreen colonyScreen = gamePage.openColonyAt(COLONY_LOCATION,
                 "Delft");
 
         // Verify that there is just one ship in port
-        assertEquals(1, colonyScreen.getNumberOfShipsInPort(),
-                "Expected exactly one ship in port");
+        colonyScreen.verifyNumberOfShipsInPort(1);
 
         // drag first units to crate 0
         colonyScreen.dragUnitFromPierToShipCargoSlot(0, 0);
@@ -58,7 +55,7 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         gamePage = colonyScreen.close();
 
         // verify that just on unit is in colony
-        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
 
         // move ship few tiles to the right
         gamePage.moveMouseAtLocation(COLONY_LOCATION);
@@ -68,9 +65,10 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
 
         // verify that there are no ship
-        assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(SHORE_LAND_LOCATION, 0);
 
         // Verify that ship have occupied two cargo slots.
+        gamePage.verifyShipPresentAt(SHORE_SEE_LOCATION);
         gamePage.getShipAt(SHORE_SEE_LOCATION)
                 .verifyNumberOfOccupiedCargoSlots(2);
 
@@ -81,12 +79,13 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
 
         // verify that units are at expected location.
-        assertEquals(2, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
 
         // press next turn.
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify that ship have all cargo slots empty.
+        gamePage.verifyShipPresentAt(SHORE_SEE_LOCATION);
         gamePage.getShipAt(SHORE_SEE_LOCATION)
                 .verifyNumberOfOccupiedCargoSlots(0);
 
@@ -97,18 +96,19 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
         // Verify that ship have occupied two cargo slots.
+        gamePage.verifyShipPresentAt(SHORE_SEE_LOCATION);
         gamePage.getShipAt(SHORE_SEE_LOCATION)
                 .verifyNumberOfOccupiedCargoSlots(2);
 
         // Verify that there are no units at continent.
-        assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(SHORE_LAND_LOCATION, 0);
 
         // Go back to town with ship.
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(COLONY_LOCATION);
 
         // Verify that just one unit is in colony.
-        assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
     }
 
 }

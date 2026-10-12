@@ -20,6 +20,9 @@ public class DialogMessagePage extends AbstractScreen {
 
     private DialogMessagePage(final TestContext context) {
         super(context);
+    }
+
+    public void verifyReady() {
         assertNotNull(getButtonOk());
     }
 

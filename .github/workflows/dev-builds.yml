@@ -23,13 +23,16 @@ jobs:
           java-version: '17'
           cache: maven
       - name: Install JavaFX runtime libraries
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libasound2t64 fonts-dejavu-core xvfb xauth
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libasound2t64 libxtst6 fonts-dejavu-core xvfb xauth openbox
       - name: Run game tests and all functional player scenarios
-        run: >-
-          xvfb-run -a --server-args='-screen 0 1600x1200x24'
-          mvn -B -ntp -pl microcol-test -am clean test -P ci
-          -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw
-          -DsoundEnabled=false
+        run: |
+          xvfb-run -a --server-args='-screen 0 1600x1200x24' bash -euc '
+            openbox > /tmp/microcol-openbox.log 2>&1 &
+            trap "kill $!" EXIT
+            mvn -B -ntp -pl microcol-test -am clean test -P ci \
+              -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
+              -DsoundEnabled=false
+          '
       - name: Keep functional test evidence even on failure
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -38,6 +41,7 @@ jobs:
           path: |
             microcol-game/target/surefire-reports/
             microcol-test/target/surefire-reports/
+            microcol-test/target/warehouse-qa/
           if-no-files-found: warn
           retention-days: 14
 

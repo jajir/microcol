@@ -29,6 +29,24 @@ jednu společnou implementaci, kterou používá tlačítko, klávesa i AI.
 Název `PlayerHuman` dnes neznamená výhradně člověka: `Player.make` tuto třídu
 vytváří i pro počítačové kolonizační hráče podle příznaku `isComputer`.
 
+### Platnost herní akce a výjimky
+
+Model ověří všechny herní podmínky před první změnou stavu. Neplatné množství,
+vlastnictví, poloha, zdroj nebo kapacita vyvolají výjimku; zamítnutá akce
+nesmí provést část převodu. Používat existující výjimky a kontroly modelu
+(`IllegalArgumentException`, případně `IllegalStateException`), bez vazby
+na GUI. Chybějící programový argument zůstává chybou volajícího.
+
+UI předem získá dovolené možnosti z modelu, omezí nabídku a zabrání potvrzení
+neplatné akce. Nevytváří vlastní kopii výpočtu pravidla. Zrušení nevolá
+měnící operaci. Model při provedení zkontroluje živý stav znovu; pokud se
+během dialogu změnil, UI převod neprovede a vysvětlí výsledek. Zachytává
+konkrétní očekávané zamítnutí, nikoli libovolnou programovou výjimku.
+
+Každá měněná podmínka má modelové hraniční testy a odpovídající ochranu
+skutečné cesty hráče v UI. Test modelu dokládá výjimku i nezměněný stav;
+UI test dokládá omezenou nabídku, zrušení či srozumitelné odmítnutí a zásoby.
+
 ```text
 gui: volba člověka ───┐
                      ├──> model: ověření a provedení akce
@@ -47,7 +65,7 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
-| [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
+| [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, nastavení nativního toolkitu před startem, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. UI testy přebírají nastavení přes `MicroCol.configureJavaFx()`. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
 | [model](../microcol-game/src/main/java/org/microcol/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. |
 | [model.unit](../microcol-game/src/main/java/org/microcol/model/unit/) | Konkrétní druhy jednotek, továrna a jednotkové akce, například `UnitFactory`, `Ship`, `UnitActionPlowField`. Sdílené `Unit`, `AbstractUnit` a `UnitType` jsou nadále v `model`. | Schopnosti a provedení akcí; rozhodování soupeře a animace patří jinam. |
 | [model.event](../microcol-game/src/main/java/org/microcol/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
@@ -104,8 +122,9 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | Místo | Odpovědnost |
 | --- | --- |
 | [`microcol-game/src/test/java`](../microcol-game/src/test/java/) | Jednotkové a modelové testy u odpovídajících balíčků; nezávislé očekávané výsledky pravidel. |
-| [`microcol-test/src/test/java/org/microcol/test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelné hráčské scénáře `TC_...`, jejich příprava a výslovné kontroly výsledků. |
-| [`microcol-test/src/test/java/org/microcol/page`](../microcol-test/src/test/java/org/microcol/page/) | Page objects: selektory, kliknutí, souřadnice a čekání na dokončení UI. |
+| [`microcol-test/src/test/java/org/microcol/test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelné hráčské scénáře `TC_...`, jejich příprava a očekávání předávaná metodám `verify…`; bez přímých asercí ve třídách TC. Strukturální test kontroluje toto rozdělení. |
+| [`microcol-test/src/test/java/org/microcol/page`](../microcol-test/src/test/java/org/microcol/page/) | Page objects: selektory, kliknutí, souřadnice a čekání na dokončení UI; oddělené metody `verify…` obsahují aserce a čtou skutečný stav. Akce/gettery neobsahují těla asercí. Viz [funkční kontrakt](functional-tests.md#stala-a-citelna-struktura-scenaru). |
+| [`microcol-test/src/test/java/org/microcol/model`](../microcol-test/src/test/java/org/microcol/model/) | Pouze příprava souběžné modelové události vyžadující package access (například zánik lodi při otevřeném dialogu). Testovaná hráčská akce nadále prochází UI; adaptér není součástí hry. |
 | [`microcol-test/src/main/java/org/microcol/mock`](../microcol-test/src/main/java/org/microcol/mock/) | Náhrady UI služeb potřebné pro testovací prostředí. |
 | [`microcol-test/src/test/scenarios`](../microcol-test/src/test/scenarios/) | Výchozí uložené pozice a nastavení scénářů; zachovávat podle [testového kontraktu](functional-tests.md). |
 | [`microcol-build-tests/src/test/java/org/microcol/build`](../microcol-build-tests/src/test/java/org/microcol/build/) | Kontroly launcheru, publikace a nativních distribucí. |

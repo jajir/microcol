@@ -25,6 +25,9 @@ public class ScreenTurnReport extends AbstractScreen {
 
     private ScreenTurnReport(final TestContext context) {
         super(context);
+    }
+
+    public void verifyReady() {
         assertNotNull(getButtonOk());
     }
 

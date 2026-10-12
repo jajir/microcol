@@ -46,6 +46,12 @@ Treat documented legacy cross-layer dependencies as exceptions to reduce within
 relevant work, not patterns to extend. Update the map and the affected
 `package-info.java` when adding a package or changing its responsibility.
 
+Model operations validate every gameplay precondition before mutation and throw
+on rule violations without partial effects. UI uses model-provided limits to
+prevent invalid actions and handles expected rejection if state changes before
+confirmation. Cover boundaries in model tests and the corresponding player
+paths in UI tests; see the contract in `docs/architecture.md`.
+
 # Code formatting
 
 Use the shared [Java formatter](docs/code-formatting.md) and its
@@ -96,7 +102,13 @@ update implementation and verification evidence alongside the change.
 Map changed behavior to named `TC_...` scenarios in `microcol-test`; add or update
 the scenario and relevant rule tests in the same change. Preserve the existing
 fixture, `@Start`, linear commented player steps, page objects and explicit
-assertion structure. Keep stable scenario IDs and English test prose. Visual
+verification calls. Assertions in `org.microcol.page` belong only in dedicated
+`verify...` methods named for the checked subject, with expected values as
+parameters where appropriate. Keep them out of action/getter/constructor bodies;
+`TC_...` classes call those verification methods, not assertions directly or
+through local assertion helpers. Follow the functional contract, including its
+source-contract test, for the main agent and every worker including Qwen.
+Keep stable scenario IDs and English test prose. Visual
 changes must preserve gameplay assertions and expected outcomes; fix selectors
 and interaction details in page objects instead of weakening tests. Record actual
 test selection, counts and results; a skipped or failing scenario is an open

@@ -29,7 +29,7 @@ public class RightPanelUnit extends AbstractPageComponent {
         getRobot().clickOn(unitBox, MouseButton.PRIMARY);
     }
 
-    public RightPanelUnit assertFreeActionPoints(
+    public RightPanelUnit verifyFreeActionPoints(
             final Integer expectedNUmberOfActionPoints) {
         Preconditions.checkNotNull(expectedNUmberOfActionPoints);
         final Label l = getNodeFinder().from(unitBox).lookup(".unitMoves")
@@ -43,6 +43,10 @@ public class RightPanelUnit extends AbstractPageComponent {
     public boolean isSelected() {
         return getNodeFinder().from(unitBox).lookup(".selected").tryQuery()
                 .isPresent();
+    }
+
+    public void verifySelected(final boolean expectedSelected) {
+        assertEquals(expectedSelected, isSelected());
     }
 
 }

@@ -59,6 +59,29 @@ chat history or duplicate implementation in parallel. Qwen edits its isolated
 worktree and does not delegate, commit or push. One worker at a time; preserve
 existing limits and unload before Maven.
 
+### Focused handoffs — 2026-10-12
+
+The [worker skill](../../.agents/skills/local-worker/SKILL.md) and
+[task contract](../../.agents/skills/local-worker/references/worker-instructions.md#focused-handoff)
+now require exact paths, relevant current code/call sites, explicit acceptance
+checks and a clear unchanged scope. Prefer small assignments over broad repository
+investigation; do not send unnecessary history or entire files by default.
+
+For simple edits with known source, prefer text-only replacements with exact
+match counts. The worker proposes the changes without shell editing; the caller
+validates the complete batch against allowed paths and current text before
+application, then reviews, formats and tests it. Missing matches or syntax errors
+go back with a specific diagnosis and unchanged checks, within the remaining
+budget. Direct editing remains available when the task needs it.
+
+This captures the lesson from the
+[dock assertion recovery on main](https://github.com/jajir/microcol/blob/92a22efaf9c9b991dbc40f4c681b276af34d8423/docs/ai/local-qwen.md#dock-assertion-move-2026-10-12),
+not a new Qwen benchmark or a claim that the earlier warehouse jobs succeeded.
+It changes handoff/review instructions, not the runtime, model, time limits or
+cloud-fallback policy, and does not install an automatic replacement service.
+
+### Scope and acceptance
+
 Broader features are sequences of bounded jobs, not proof that current 8k
 worker can own whole features. Expand assignments from accepted evidence.
 UI changes require the caller verification plan in the
@@ -800,7 +823,117 @@ Input, raw worker patch, runtime samples and caller evidence are retained in
 `/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-package-responsibilities/`.
 The partial result does not establish a measured saving or broader capability.
 
+
+### Z01 attempt evidence — 11 October 2026
+
+Baseline: `89354999954f8a1bfa4c9a6ac0030751056f63e2`. The caller prepared the
+isolated worker tree `~/Library/Application Support/Microcol/local-worker/worktrees/2026-10-11-warehouse-unloading`
+and the PR branch `codex/rules-warehouse-unloading` in a separate checkout.
+The requested delivery is an open PR into `main`, so no direct main push or merge.
+
+| Attempt | Actual result | Accepted worker edits |
+| --- | --- | --- |
+| `2026-10-11-warehouse-model` | Watchdog timeout, 180.47 s, exit -15; repeated reads. | None |
+| `2026-10-11-warehouse-model-repair1` | Watchdog timeout, 180.50 s, exit -15; generated patch script failed with an undefined variable. | None |
+| `2026-10-11-warehouse-fixture` | Caller runner preparation error: child CODEX_HOME directory missing, exit 1 after 3.02 s; no inference. | None |
+| `2026-10-11-warehouse-fixture-retry` | After caller created the directory, watchdog timeout, 180.51 s, exit -15; incorrect JSON traversal. | None |
+
+The compact repair and fixture invocation used `project_doc_max_bytes=0` to
+avoid automatic duplicate repository instructions; applicable rules and scope
+were explicitly supplied in the task. This did not make the task succeed and
+is not evidence of a reliable new profile. Runtime samples confirmed the
+configured local alias, digest and 8192 context. Each runner unloaded the model
+before caller Maven verification; only the owned host lock was removed.
+
+The caller reported the failure and completed the implementation, fixture,
+tests and documentation under the main agent's control. During native verification,
+a Codex collaborator authored the small settings synchronization fix and two
+concurrency regressions; the main agent reviewed the changes and verified the
+complete native test suite. No local Qwen code was accepted. The configured
+local runner was not silently replaced or reconfigured. This is a failed local
+delegation, not measured token savings.
+Logs, commands, runtime samples and exit reports remain under
+`~/Library/Logs/Microcol/local-qwen/jobs/` in the directories above. Actual
+model and functional verification is recorded in the
+[Z01 test evidence](../functional-tests.md#z01-bezpecne-vylozeni-nakladu).
+
+## PR #44 dock assertion migration — 2026-10-12
+
+Historical direction, superseded later that day by the user's
+[named-verification rule](../functional-tests.md#stala-a-citelna-struktura-scenaru).
+The evidence below describes the earlier revision, not the current assertion placement.
+
+Task `2026-10-12-pr44-dock-selection` used clean PR head `0dc70bb8`, not
+`main`, as explicitly requested. The caller reused the previously accepted
+Qwen ship-count refactor from `main` (`92a22efa`) and assigned only the
+PR-specific selection assertion/accessors and 18 TC19 call sites to Qwen.
+The text-only handoff included exact snippets, paths and match counts; no
+worker file discovery or edits were required. This task used the subsequently
+agreed **300-second attempt / 600-second cumulative** limits and two repairs,
+overriding the older 180-second profile still recorded on this PR branch.
+
+| Attempt | Measured seconds | Actual result and recovery |
+| --- | --- | --- |
+| 0 | 25.233 | Returned a request for file inspection, not replacements. Caller clarified that supplied fragments had already been inspected. |
+| 1 | 46.378 | Generated usable accessors and assertions, but included instruction prose in one old-text field and used match count 1 instead of 17. Caller rejected the batch and sent exact validation failures. |
+| 2 | 29.265 | Corrected the repeated count but retained prose in the import match and over-escaped Java quotes. Repair limit reached. |
+
+The caller reused attempt 1's implementation, corrected its import-match
+field and repeated count, then verified every replacement against both the
+worker baseline and integration checkout before applying it. Main-agent
+takeover was limited to those two contract corrections because both allowed
+repairs had failed; this was not an unattended worker success. Total worker
+time was **100.876 seconds**, including runner cleanup. Runtime samples for
+all attempts confirmed the documented model digest and context 8192. Reported
+input/output tokens were 3630/22, 3782/460 and 3950/138; separate loading,
+prompt-processing and generation timings were unavailable. No savings claim.
+
+The model was unloaded before caller Maven checks. Caller review confirmed
+an assertion-free dock component, three explicit count checks in TC01/TC06
+and 18 immediate selection checks in TC19, with unchanged scenario IDs,
+comments, fixtures, conditional click and FX wait. The shared formatter checked
+all six changed Java files with unchanged tokens/comments and idempotent output.
+Actual test evidence is recorded in the [functional contract](../functional-tests.md#pr-44-presun-aserci-doku).
+Inputs, rejected results, runtime samples and exit reports remain under
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-pr44-dock-selection/`.
+
+## PR #44 named page verifications — 2026-10-12
+
+The revised rule keeps assertions in page methods named `verify...`, with
+expected parameters, and removes direct assertions from TC classes. Two bounded
+Qwen assignments used clean `ad7140fd` worktrees; the main agent owned the
+cross-screen caller migration, source-contract test, documentation and verification.
+Both used the agreed 300-second attempt / 600-second task budget and two repairs.
+
+| Task / attempt | Seconds | Diagnosis and outcome |
+| --- | --- | --- |
+| `2026-10-12-pr44-dock-verifiers` / 0 | 69.636 | Removed getters still called by the proposed verifiers and omitted a wrapper. Rejected before application. Also performed four reads despite the text-only prompt. |
+| dock / 1 | 45.412 | Restored getters, but added a guard silently skipping selection checks for missing ships. Rejected; targeted repair required unconditional verification. |
+| dock / 2 | 44.363 | Corrected the guard; accepted after exact-match validation and review. Caller stripped JSON fences and applied the identical count delegate to EuropePortScreen. |
+| `2026-10-12-pr44-ship-verifiers` / 0 | 55.440 | Wrong CargoSlot package and unused imports; rejected. One unnecessary file-read command failed due to path escaping. |
+| ship / 1 | 49.385 | Corrected import and retained all required cargo/state checks. Accepted; caller added one local `final` modifier and normalized import grouping. |
+
+Total worker durations were 159.411 and 104.825 seconds including cleanup.
+All attempts exited 0; acceptance depended on source review, not exit status.
+Runtime samples confirmed digest
+`dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2` and context8192.
+The unnecessary reads show that a text-only prompt alone does not disable tools;
+no worker file edits occurred. Repairs used the concrete rejected output, not
+a restarted investigation. No repairs were skipped and no savings are claimed.
+
+The caller unloaded Qwen before Maven, applied the shared formatter and moved
+the checks without changing fixture files or scenario IDs. The initial caller
+compile exposed one missed TC09 caller after splitting a mixed action/verifier;
+it was updated and the same check rerun successfully. The source-contract tests
+then passed 2/2. Final functional evidence is kept in the
+[test contract](../functional-tests.md#pr-44-pojmenovane-verifikace).
+Inputs, raw results, token reports, model samples and process evidence remain in
+`~/Library/Logs/Microcol/local-qwen/jobs/` under the two task IDs above.
+
 ## Dock assertion move — 2026-10-12
+
+Historical main-branch work, superseded by the named-verification rule
+integrated from PR #44. The checks below describe that earlier revision.
 
 Task `2026-10-12-dock-assertions`, baseline `1b15f866`, moves three ship-count
 expectations into TC01 and both TC06 scenarios. The dock and its two screen

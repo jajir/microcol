@@ -8,6 +8,9 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
@@ -16,18 +19,24 @@ import org.microcol.gui.screen.colony.PanelColonyName;
 import org.microcol.gui.screen.colony.PanelOutsideColonyUnit;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.Goods;
 import org.microcol.model.GoodsProductionStats;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitGalleon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -73,8 +82,23 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
-    public int getNumberOfShipsInPort() {
-        return pageComponentPanelDock.getNumberOfShipsInPort();
+    public void verifyUnitInPortSelected(final int unitIndex,
+            final boolean expectedSelected) {
+        pageComponentPanelDock.verifyUnitInPortSelected(unitIndex,
+                expectedSelected);
+    }
+
+    public void verifyWarehouseWarning(final String expectedText) {
+        assertEquals(expectedText,
+                getLabeledById("warehouseTransferMessage").getText());
+    }
+
+    public void closeWarehouseWarning() {
+        clickOnButtonWithId("buttonOk");
+    }
+
+    public void verifyNumberOfShipsInPort(final int expectedCount) {
+        pageComponentPanelDock.verifyNumberOfShipsInPort(expectedCount);
     }
 
     public void verifyNumberOfUnitsAtPier(
@@ -113,22 +137,59 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public DialogChooseGoodsAmount dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(
-            final int cargoSlotIndex, final int goodsIndexInWarehouse) {
+            final int cargoSlotIndex, final int goodsIndexInWarehouse)
+            throws InterruptedException {
         getRobot().press(getGoodsAmountModifiers());
-        dragGoodsFromShipCargoSlotToWarehouse(cargoSlotIndex,
-                goodsIndexInWarehouse);
-        getRobot().release(getGoodsAmountModifiers());
+        try {
+            dragGoodsFromShipCargoSlotToWarehouse(cargoSlotIndex,
+                    goodsIndexInWarehouse);
+        } finally {
+            getRobot().release(getGoodsAmountModifiers());
+        }
         return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex,
-            final int goodsIndexInWarehouse) {
-        getRobot()
-                .drag(getListOfCrates().get(cargoSlotIndex),
-                        MouseButton.PRIMARY)
-                .dropTo(getListOfGoodsImagesInWarehouse()
-                        .get(goodsIndexInWarehouse))
-                .release(MouseButton.PRIMARY);
+            final int goodsIndexInWarehouse) throws InterruptedException {
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        completeCargoDrag(crate,
+                () -> getRobot().drag(crate, MouseButton.PRIMARY)
+                        .dropTo(getListOfGoodsImagesInWarehouse()
+                                .get(goodsIndexInWarehouse))
+                        .release(MouseButton.PRIMARY));
+    }
+
+    public void dragGoodsOutsideWindow(final int cargoSlotIndex)
+            throws InterruptedException {
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        completeCargoDrag(crate,
+                () -> getRobot().drag(crate, MouseButton.PRIMARY)
+                        .dropTo(getPrimaryStage().getX()
+                                + getPrimaryStage().getWidth() + 50,
+                                getPrimaryStage().getY()
+                                        + getPrimaryStage().getHeight() / 2)
+                        .release(MouseButton.PRIMARY));
+    }
+
+    private void completeCargoDrag(final StackPane crate, final Runnable drag)
+            throws InterruptedException {
+        final CountDownLatch finished = new CountDownLatch(1);
+        final EventHandler<DragEvent> done = event -> finished.countDown();
+        getRobot().interact(
+                () -> crate.addEventHandler(DragEvent.DRAG_DONE, done));
+        try {
+            drag.run();
+            // Native drag/drop can outlive the robot's release and FX event
+            // queue.
+            if (!finished.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The native cargo drag must finish");
+            }
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            getRobot().interact(
+                    () -> crate.removeEventHandler(DragEvent.DRAG_DONE, done));
+        }
     }
 
     public ColonyScreen verifyNumberOfUnitsOnFields(
@@ -137,6 +198,47 @@ public class ColonyScreen extends AbstractScreen {
                 .mapToInt(field -> field.isEmpty() ? 0 : 1).sum();
         assertEquals(expectedumberOfUnitsAtFields, unitsInColony);
         return this;
+    }
+
+    public void verifyProductionInRange(final int actualProduction,
+            final int expectedMinimum, final int expectedMaximum) {
+        assertTrue(
+                actualProduction >= expectedMinimum
+                        && actualProduction <= expectedMaximum,
+                String.format("Unexpected corn production '%s'",
+                        actualProduction));
+    }
+
+    public void verifyWarehouseGoods(final Goods expectedGoods) {
+        assertEquals(expectedGoods.getAmount(), colony.getWarehouse()
+                .getGoods(expectedGoods.getType()).getAmount());
+    }
+
+    public void verifyGoodsInShip(final int cargoSlotIndex,
+            final Goods expectedGoods) {
+        final List<Unit> ships = getModel().getUnitsAt(colony.getLocation())
+                .stream()
+                .filter(unit -> unit.getType().equals(UnitType.GALLEON))
+                .collect(Collectors.toList());
+        assertEquals(1, ships.size());
+        new ShipWrapper((UnitGalleon) ships.get(0))
+                .verifyCargoGoods(cargoSlotIndex, expectedGoods);
+    }
+
+    public void verifyColonyValid(final boolean expectedValid) {
+        assertEquals(expectedValid, colony.isValid());
+    }
+
+    public void verifyColonyPresent(final String colonyName,
+            final boolean expectedPresent) {
+        assertEquals(expectedPresent,
+                getModel().getColonyByName(colonyName).isPresent());
+    }
+
+    public void verifyCarrierPresent(final int unitId,
+            final boolean expectedPresent) {
+        assertEquals(expectedPresent,
+                getModel().tryGetUnitById(unitId).isPresent());
     }
 
     /**

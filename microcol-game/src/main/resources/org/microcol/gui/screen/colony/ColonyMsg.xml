@@ -8,4 +8,9 @@
 	<entry key="colonyName">This is colony name.</entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
 
+	<entry key="unloadCaption">Unload cargo</entry>
+	<entry key="unloadLimited">Available warehouse space for this cargo: %s. Choose an amount or cancel. The rest stays aboard.</entry>
+	<entry key="unloadFull">The warehouse is full for this cargo. Nothing was unloaded. Free storage and try again.</entry>
+	<entry key="unloadChanged">The cargo or colony changed. Nothing was unloaded. Check the cargo and available storage, then try again.</entry>
+
 </properties>

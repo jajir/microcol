@@ -22,6 +22,9 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -44,17 +47,23 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final ChooseGoodsDialog chooseGoods;
 
+    private final DialogWarehouseTransfer transferWarning;
+
+    private final I18n i18n;
+
     private ColonyWarehouse colonyWarehouse;
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
             final ImageProvider imageProvider,
             final ChooseGoodsDialog chooseGoods, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final DialogWarehouseTransfer transferWarning) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
+        this.transferWarning = Preconditions.checkNotNull(transferWarning);
+        this.i18n = Preconditions.checkNotNull(i18n);
         panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream()
                 .map(goodsType -> {
                     final PanelColonyGood out = new PanelColonyGood(
@@ -96,24 +105,66 @@ public final class PanelColonyGoods implements JavaFxComponent {
         final ClipboardEval eval = ClipboardEval
                 .make(gameModelController.getModel(), event.getDragboard())
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from);
-        if (eval.getGoods().isPresent() && eval.getCargoSlot().isPresent()) {
+        if (eval.getGoods().isPresent() && eval.getCargoSlot().isPresent()
+                && event.getGestureSource() instanceof Node) {
             final Goods originalGoods = eval.getGoods().get();
             final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
 
-            final Goods goods = adjustedAmount(originalGoods,
-                    event.getTransferMode().equals(TransferMode.LINK));
-
-            colonyWarehouse.moveToWarehouse(goods, fromCargoSlot);
+            final ColonyWarehouse target = colonyWarehouse;
+            final boolean partialTransfer = event
+                    .getTransferMode() == TransferMode.LINK;
+            // Finish native drag/drop before opening a modal dialog.
+            final Node source = (Node) event.getGestureSource();
+            source.addEventHandler(DragEvent.DRAG_DONE,
+                    new EventHandler<DragEvent>() {
+                        @Override
+                        public void handle(final DragEvent done) {
+                            source.removeEventHandler(DragEvent.DRAG_DONE,
+                                    this);
+                            if (done.getTransferMode() != null) {
+                                Platform.runLater(() -> unload(target,
+                                        originalGoods, fromCargoSlot,
+                                        partialTransfer));
+                            }
+                        }
+                    });
             event.setDropCompleted(true);
-            eventBus.post(new RepaintColonyEvent());
         }
         event.consume();
     }
 
+    private void unload(final ColonyWarehouse target, final Goods originalGoods,
+            final CargoSlot fromCargoSlot, final boolean partialTransfer) {
+        try {
+            final Goods available = target.getUnloadableGoods(originalGoods,
+                    fromCargoSlot);
+            if (available.isZero()) {
+                transferWarning.show(i18n.get(ColonyMsg.unloadFull));
+            } else {
+                final Goods goods = adjustedAmount(originalGoods, available,
+                        partialTransfer);
+                if (!goods.isZero()) {
+                    // A modal dialog can process events that change either
+                    // inventory.
+                    if (target.getUnloadableGoods(goods, fromCargoSlot)
+                            .equals(goods)) {
+                        target.moveToWarehouse(goods, fromCargoSlot);
+                    } else {
+                        transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+                    }
+                }
+            }
+        } catch (final IllegalArgumentException ex) {
+            transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+        }
+        eventBus.post(new RepaintColonyEvent());
+    }
+
     private Goods adjustedAmount(final Goods originalAmount,
-            final boolean specialOperationWasSelected) {
-        if (specialOperationWasSelected) {
-            chooseGoods.init(originalAmount);
+            final Goods available, final boolean specialOperationWasSelected) {
+        if (specialOperationWasSelected || !available.equals(originalAmount)) {
+            chooseGoods.init(available, available.equals(originalAmount) ? ""
+                    : i18n.get(ColonyMsg.unloadLimited, available.getAmount()));
             return chooseGoods.getActualValue();
         } else {
             return originalAmount;
@@ -121,8 +172,19 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     private boolean isItGoods(final Dragboard db) {
-        return ClipboardEval.make(gameModelController.getModel(), db).getGoods()
-                .isPresent();
+        final ClipboardEval eval = ClipboardEval
+                .make(gameModelController.getModel(), db)
+                .filterFrom(from -> from == From.VALUE_FROM_UNIT);
+        if (!eval.getGoods().isPresent() || !eval.getCargoSlot().isPresent()) {
+            return false;
+        }
+        try {
+            colonyWarehouse.getUnloadableGoods(eval.getGoods().get(),
+                    eval.getCargoSlot().get());
+            return true;
+        } catch (final IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     @Override

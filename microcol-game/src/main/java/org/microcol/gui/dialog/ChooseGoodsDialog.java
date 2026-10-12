@@ -3,7 +3,7 @@ package org.microcol.gui.dialog;
 import org.microcol.gui.screen.europe.ChooseGoods;
 import org.microcol.gui.screen.market.SimpleStringConverter;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.ButtonBarOk;
+import org.microcol.gui.util.ButtonsBarYesNo;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Goods;
@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -35,6 +36,10 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
 
     private final Label labelCaption;
 
+    private final Label explanation = new Label();
+
+    private final Button cancel;
+
     @Inject
     public ChooseGoodsDialog(final ViewUtil viewUtil, final I18n i18n) {
         super(viewUtil, i18n);
@@ -44,6 +49,9 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         init(root);
 
         labelCaption = new Label();
+        explanation.setId("goodsTransferExplanation");
+        explanation.setWrapText(true);
+        explanation.setMaxWidth(420);
 
         final HBox boxActualValue = new HBox();
         labelActualValue = new Label();
@@ -57,6 +65,7 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         slider.setSnapToTicks(false);
         slider.setMajorTickUnit(10);
         slider.setMinorTickCount(1);
+        slider.setBlockIncrement(1);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(false);
 
@@ -65,18 +74,31 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
             actualValue = Goods.of(actualValue.getType(), newValue.intValue());
         });
 
-        final ButtonBarOk buttonsBar = new ButtonBarOk(i18n);
-        buttonsBar.getButtonOk().setOnAction(e -> {
+        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(i18n);
+        buttonsBar.getButtonYes().setId("buttonOk");
+        cancel = buttonsBar.getButtonNo();
+        buttonsBar.getButtonYes().setOnAction(e -> {
             close();
         });
-        buttonsBar.getButtonOk().requestFocus();
+        buttonsBar.getButtonYes().requestFocus();
+        buttonsBar.getButtonYes().disableProperty()
+                .bind(slider.valueProperty().lessThan(1));
+        cancel.setId("buttonCancel");
+        cancel.setOnAction(e -> onCancelDialog());
 
-        root.getChildren().addAll(labelCaption, boxActualValue, slider,
-                buttonsBar.getContent());
+        root.getChildren().addAll(labelCaption, explanation, boxActualValue,
+                slider, buttonsBar.getContent());
     }
 
     public void init(final Goods maximalGoodsToTransfer) {
+        init(maximalGoodsToTransfer, "");
+    }
+
+    public void init(final Goods maximalGoodsToTransfer, final String reason) {
         actualValue = maximalGoodsToTransfer;
+        explanation.setText(reason);
+        explanation.setVisible(!reason.isEmpty());
+        explanation.setManaged(!reason.isEmpty());
         this.maximalNumberToTransfer = maximalGoodsToTransfer.getAmount();
         slider.setMax(maximalGoodsToTransfer.getAmount());
         slider.setValue(maximalGoodsToTransfer.getAmount());
@@ -94,6 +116,8 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         setTitle(i18n.get(ChooseGoods.caption));
         labelCaption.setText(i18n.get(ChooseGoods.caption));
         labelActualValue.setText(i18n.get(ChooseGoods.selectedAmount));
+        cancel.setText(i18n.get(Dialog.cancel));
+        getScene().getWindow().sizeToScene();
     }
 
     public Goods getActualValue() {

@@ -256,7 +256,7 @@ tří herních zadání zatím nebylo předáno k implementaci.
 
 | Zadání | Stav a konkrétní podmínka předání | Nejmenší práce pro Qwen |
 | --- | --- | --- |
-| Z01 Vyložení do skladu | K dopracování kontraktu: určit rozhraní kontroly kapacity a přenosu, použitý dialog a živé ověření. Není nutné čekat na celou ekonomiku. | Nejprve bezpečný modelový přenos a hraniční testy; potom dialog podle přijatého návrhu. |
+| Z01 Vyložení do skladu | Kontrakt přijat: pravidla a výjimky v modelu, UI používá náhled a ověří změnu před potvrzením. Samostatný PR do main. | [Implementace a konkrétní ověření Z01](functional-tests.md#z01-bezpecne-vylozeni-nakladu). |
 | Z02 Pojmenování kolonie | K dopracování kontraktu: určit rozhraní předání jména, vytvoření a otevření kolonie a kontrolu zrušení. | Nejprve předání jména a testy založení; potom dialog a otevření správné kolonie. |
 | Z03 Průchod tahem | Změna chování blokovaná: hlavní agent připraví k rozhodnutí Q-02 a stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Před rozhodnutím inventář přechodů a testy současného chování; po rozhodnutí jedna fáze/přechod a její testy. |
 
@@ -314,6 +314,10 @@ Vstupní kód: [PanelColonyGoods](../microcol-game/src/main/java/org/microcol/gu
 [ColonyWarehouse](../microcol-game/src/main/java/org/microcol/model/ColonyWarehouse.java),
 [ColonyWarehouseTest](../microcol-game/src/test/java/org/microcol/model/ColonyWarehouseTest.java)
 a [CargoSlotTest](../microcol-game/src/test/java/org/microcol/model/CargoSlotTest.java).
+
+**Stav 11. října 2026:** realizace v samostatném PR do `main`; [evidence modelu,
+UI scénářů a přejímky](functional-tests.md#z01-bezpecne-vylozeni-nakladu).
+UC-023 ani UC-036 se tímto dílčím řezem neuzavírá.
 
 ### Z02 Založení pojmenované kolonie
 

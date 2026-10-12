@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -44,14 +42,14 @@ public class TC_16_F12_arriving_to_colony_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // Verify that ship is at correct location.
-        assertEquals(1, getModel().getUnitsAt(SHIP_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(SHIP_LOCATION, 1);
 
         // Move ship to far location.
         gamePage.moveMouseAtLocation(SHIP_LOCATION);
         gamePage.dragMouseAtLocation(FAR_LOCATION);
 
         // Verify that ship is at far location.
-        assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(FAR_LOCATION, 1);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
@@ -61,7 +59,7 @@ public class TC_16_F12_arriving_to_colony_test extends AbstractMicroColTest {
         gamePage.dragMouseAtLocationAndClosePossibleDialog(COLONY_LOCATION);
 
         // Verify that ship doesn't moved.
-        assertEquals(1, getModel().getUnitsAt(FAR_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(FAR_LOCATION, 1);
     }
 
 }

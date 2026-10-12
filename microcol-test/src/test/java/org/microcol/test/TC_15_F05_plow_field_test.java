@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -68,8 +66,8 @@ public class TC_15_F05_plow_field_test extends AbstractMicroColTest {
 
         // Verify that selected unit have '0' action points.
         final RightPanelUnit rpu = gamePage.getRightPanelUnit(1);
-        assertTrue(rpu.isSelected());
-        rpu.assertFreeActionPoints(0);
+        rpu.verifySelected(true);
+        rpu.verifyFreeActionPoints(0);
     }
 
 }

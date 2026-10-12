@@ -1,8 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -44,20 +41,20 @@ public class TC_14_F01_founding_colony_close_to_other_test
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // verify that there in colony are 3 units
-        assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 3);
 
         // Select second unit. It should be free colonist.
         gamePage.getRightPanelUnit(1).selectUnit();
 
         // Verify that second unit is selected.
-        assertTrue(gamePage.getRightPanelUnit(1).isSelected());
+        gamePage.getRightPanelUnit(1).verifySelected(true);
 
         // Move free colonist next to colony.
         gamePage.moveMouseAtLocation(COLONY_LOCATION);
         gamePage.dragMouseAtLocation(CLOSE_TO_COLOY_LOCATION);
 
         // Verify that free colonist move to next location.
-        assertEquals(1, getModel().getUnitsAt(CLOSE_TO_COLOY_LOCATION).size());
+        gamePage.verifyNumberOfUnitsAt(CLOSE_TO_COLOY_LOCATION, 1);
 
         // Verify that build colony button is hidden.
         gamePage.verifyThatBuildColonyButtonIsHidden();

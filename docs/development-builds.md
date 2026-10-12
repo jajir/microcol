@@ -140,7 +140,7 @@ paths, real game test counts, the bundled JVM, and Linux startup under Xvfb.
 The workflow calls `mvn verify` so these checks must pass before upload.
 
 A separate required `functional` job runs `microcol-test` and its game dependency
-on JDK 17 with TestFX and native Glass under Xvfb. It includes all numbered player scenarios, uploads
+on JDK 17 with TestFX and native Glass under Xvfb with Openbox. It includes all numbered player scenarios, uploads
 fresh Surefire reports as `tests-functional` even on failure, and gates the
 `publish` job alongside build-tool and native checks. The exact commands and
 scenario maintenance rules are in the [functional test contract](functional-tests.md).

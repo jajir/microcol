@@ -1,7 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 
 import org.junit.jupiter.api.Tag;
@@ -10,8 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.DialogMessagePage;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -19,9 +15,6 @@ import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
-
-    private final Logger logger = LoggerFactory
-            .getLogger(TC_03_F03_declare_independence_test.class);
 
     private final static File testFileName = new File(
             "src/test/scenarios/F03-independence.microcol");
@@ -40,6 +33,7 @@ public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
         // declare independence
         final DialogMessagePage dialogMessagePage = gamePage
                 .declareIndependence();
+        dialogMessagePage.verifyReady();
 
         // close first dialog
         dialogMessagePage.close();
@@ -56,15 +50,7 @@ public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.nextTurnAndCloseDialogs();
 
-        assertThatThereAreKingsUnitAtMap();
-    }
-
-    private void assertThatThereAreKingsUnitAtMap() {
-        final long count = getModel().getAllUnits().stream()
-                .filter(unit -> unit.getOwner().getName().contains("King"))
-                .filter(unit -> unit.isAtPlaceLocation()).count();
-        logger.info("Number of enemy ships at map: " + count);
-        assertTrue(count >= 3);
+        gamePage.verifyMinimumKingUnitsOnMap(3);
     }
 
 }

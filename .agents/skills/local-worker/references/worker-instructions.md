@@ -8,6 +8,28 @@ worker. Take actual operating values and the direct `codex exec` invocation from
 [the operating document](../../../../docs/ai/local-qwen.md); do not treat proposals
 there as configured services.
 
+## Focused handoff
+
+Keep the assignment small enough to implement and check within its budget. Give
+exact worktree-relative paths, the current relevant fragments/callers, expected
+behavior and explicit acceptance checks. Omit unrelated history and broad file
+dumps; preserve required interfaces, edge cases and fixtures.
+
+For a simple known edit, prefer text-only replacements over shell editing. State
+that the worker must not run tools or write files in this mode. Request a JSON
+object with a `replacements` array; each entry contains `file`, `old`, `new` and
+`expected_matches` (a positive count, including deliberate repeated call sites).
+Use literal current text, not invented surrounding code. The caller checks all
+paths against the allowlist and all match counts before applying the batch; a
+mismatch requires fresh context or a targeted repair, not a fuzzy replacement.
+This is an output contract, not an installed automatic patch runner.
+
+Repair input includes the actual error/check, current source or rejected output,
+and the one correction needed. Keep acceptance criteria and remaining budget;
+do not restart an unchanged broad prompt. The caller reviews, applies the shared
+Java formatter and runs verification regardless of output mode. Model-proposed
+checks remain pending until actually executed.
+
 ## Task template
 
 Fill every field before dispatch. Use `not applicable` with a reason where
@@ -33,6 +55,7 @@ Excluded work:
 
 Applicable project instructions (paths with accessible content, or inline):
 Relevant code and context:
+Exact current source fragments and relevant call sites:
 Interfaces to preserve:
 Existing test example:
 Expected behavior and important edge cases:
@@ -40,7 +63,10 @@ For a repair: previous failure evidence, diagnosed cause and targeted correction
 Original failing command/check and unchanged acceptance criteria:
 
 Available tools and who applies the changes:
+Output mode: direct edits or text-only replacements (no worker tools/writes):
+For replacements: exact current text and expected match counts; worker proposes new text:
 Verification owner: caller runner (Maven and required test runs).
+Java formatting profile and caller ownership:
 Any explicitly allowed lightweight worker checks:
 Java formatting command and scoped files (or not applicable with reason):
 Caller verification commands and working directories:
@@ -66,6 +92,7 @@ Status: completed | partially completed | blocked
 Changes:
 - Actual diff/patch or result location, baseline, and changed files.
 - Brief description of the implemented behavior.
+- For text-only output: generated replacements; application and checks pending caller.
 
 Verification:
 - For each executed command: working directory, command, runner, exit code.

@@ -1,9 +1,5 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -11,17 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.microcol.MicroCol;
 import org.microcol.MicroColApplication;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.mock.CursorServiceNoOpp;
-import org.microcol.model.CargoSlot;
-import org.microcol.model.Goods;
 import org.microcol.model.Model;
-import org.microcol.model.Player;
-import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.TestContext;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -29,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.service.finder.NodeFinder;
+import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
@@ -78,9 +73,16 @@ public abstract class AbstractMicroColTest {
         this(DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS);
     }
 
+    @BeforeAll
+    static void configureJavaFx() {
+        MicroCol.configureJavaFx();
+    }
+
     @BeforeEach
     void beforeEach(final FxRobot robot) {
         getContext().setRobot(robot);
+        robot.interact(() -> getPrimaryStage().requestFocus());
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /**
@@ -160,31 +162,6 @@ public abstract class AbstractMicroColTest {
 
     public Model getModel() {
         return getContext().getModel();
-    }
-
-    public Player getHumanPlayer() {
-        return getModel().getPlayers().stream()
-                .filter(player -> player.isHuman()).findAny()
-                .orElseThrow(() -> new IllegalStateException(
-                        "There is no human player in game model."));
-    }
-
-    public void verifyNumberOfGoodsInShip(final UnitWithCargo ship,
-            final int cargoSlotIndex, final Goods expectedGoods) {
-        final CargoSlot cargoSlot = ship.getCargo()
-                .getSlotByIndex(cargoSlotIndex);
-
-        if (expectedGoods.isZero()) {
-            assertFalse(cargoSlot.getGoods().isPresent(),
-                    "Cargo slot should be empty");
-        } else {
-            assertTrue(cargoSlot.getGoods().isPresent(),
-                    "Cargo slot should not be empty");
-            assertEquals(expectedGoods.getType(),
-                    cargoSlot.getGoods().get().getType());
-            assertEquals(expectedGoods.getAmount(),
-                    cargoSlot.getGoods().get().getAmount());
-        }
     }
 
 }

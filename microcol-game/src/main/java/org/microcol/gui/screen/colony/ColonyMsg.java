@@ -4,6 +4,7 @@ import org.microcol.i18n.MessageKeyResource;
 
 enum ColonyMsg implements MessageKeyResource {
 
-    goods, buttonClose, colonyName,;
+    goods, buttonClose, colonyName, unloadCaption, unloadLimited, unloadFull,
+    unloadChanged;
 
 }

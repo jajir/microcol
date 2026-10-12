@@ -15,12 +15,29 @@ unrelated changes. If the checkout or input differs materially from the task,
 report the mismatch before making dependent edits. Request missing context rather
 than inventing behavior or silently dropping requirements to fit the context.
 
+Use the supplied exact paths and focused source fragments; avoid broad discovery
+or repeated whole-file reads when the needed context is already provided. For
+text-only replacement tasks, do not run tools or write files: return the exact
+old/new strings and required match counts in the assigned format. Do not invent
+surrounding code. Report missing or mismatched context instead of guessing.
+
 Fix ordinary errors in your own changes within the task's repair limit. If a
 solution needs a different interface, required behavior, or scope, return the
 specific decision to the main agent. Do not change production code for a test-only
 task unless that change is explicitly allowed. Derive expected test results from
 the requested behavior and rules; never weaken assertions, skip tests, or change
 expected values merely to obtain a passing run.
+
+For MicroCol functional tests, follow `docs/functional-tests.md`: assertions in
+page classes belong only in named `verify...` methods with relevant expected
+parameters. TC scenarios call these methods, never assertions directly; keep
+action/getter/constructor bodies separate from assertion bodies. Do not weaken
+checks or skip them when an expected element is missing.
+
+For a repair, address the supplied error and current source/output specifically,
+not an unchanged broad investigation. Keep acceptance criteria intact and report
+checks left to the caller. Java output uses the shared project formatter profile;
+caller application, formatting and tests are separate from generated text.
 
 On a tool or script error, inspect the actual output and correct the specific
 cause rather than repeating the unchanged command or hiding its failure. For a
