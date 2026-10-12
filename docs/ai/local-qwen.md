@@ -17,6 +17,11 @@ on the 16 GB Mac mini**. Preserve the main agent's model and highest supported
 reasoning setting. The goal is more correctly completed work within the same
 Codex budget; no savings percentage has been measured.
 
+The user approved revised [time budgets](#time-budget-2026-10-12) on **2026-10-12**:
+five minutes per attempt and ten minutes of cumulative worker time per task.
+The [failure analysis](#failure-analysis-2026-10-12) below reviews the recorded
+attempts; the longer budget has not yet been evaluated in a new Qwen run.
+
 ## Instruction ownership
 
 | Source | Responsibility |
@@ -216,7 +221,7 @@ for this route. No persistent user Codex configuration has been changed.
 | Codex metadata | `model_context_window=8192` describes the window to Codex; it does not set Ollama's allocation. Confirm actual context and identity in Ollama evidence. |
 | Reasoning | Non-thinking with the three CLI settings shown below; the accepted pilot reported zero reasoning events/tokens. Do not copy Astra's `ultra` setting to the worker. |
 | Concurrency | One active local request, serialized across sessions using a host-wide lock. Unload the worker model before Maven; no concurrent heavy tests. |
-| Limits | **180 seconds per attempt**, with at most **two repair rounds** after the first implementation. The caller enforces the deadline, stops the owned process and retains evidence. |
+| Limits | **300 seconds (5 minutes) per attempt**, **600 seconds (10 minutes) cumulative worker time per task**, with at most **two repair rounds** and only while budget remains. The caller enforces both limits; see the accounting rules below. |
 | Language/context | English code and project instructions; Czech user requests remain welcome. Give the worker a small complete task, inline relevant rules and code, without full skill/app catalogs or conversation history. Split tasks that do not fit. |
 
 The alias was created from the project Modelfile with:
@@ -232,6 +237,41 @@ The small context remains an experiment: [Ollama's Codex guidance](https://docs.
 recommends substantially more context, while the 8k installation checks above
 already caused swapping on this machine. Keep task size and memory use bounded.
 
+### Time budget — 2026-10-12
+
+These are the approved limits for **future dispatches**, replacing the previous
+180-second attempt limit. Historical job scripts and reports remain unchanged.
+There is no persistent runner or Ollama setting enforcing wall-clock deadlines:
+the caller supervising each direct `codex exec` process must enforce them.
+Do not copy the old `180` constant from archived per-job runners.
+
+- Before the first attempt, assign a stable logical task ID and start its
+  cumulative worker time at zero. Record each attempt's elapsed time using a
+  monotonic clock, including process startup/model loading, tool calls and model
+  generation. Charge failed starts, cancelled attempts and repairs too.
+- Before every attempt, subtract previously used worker time from **600 seconds**.
+  Do not start if none remains. The attempt's allowed runtime is the smaller of
+  **300 seconds** and the remaining task budget. Record these values with the
+  task input and executed command so the worker and caller share the same limit.
+- Repairs, restarted processes and differently named attempt directories retain
+  that same task budget. The existing maximum of two repair rounds is an upper
+  bound, not an entitlement to another full attempt. Two 300-second attempts
+  exhaust the task budget; a third attempt is not allowed.
+- On either deadline, stop the owned process/request, unload the model and keep
+  the partial diff and logs. Cleanup may finish slightly after the deadline;
+  record and charge the actual elapsed time before considering another attempt.
+  If prior elapsed-time evidence is missing, reconstruct it before dispatching
+  again rather than assuming a fresh budget.
+- Caller preparation, review, Maven/tests and publication are outside this
+  **worker-runtime** budget. Do not run heavy verification concurrently with Qwen.
+  Repeated reads or errors without progress can justify stopping earlier; more
+  time is not a reason to continue an unchanged failing loop.
+
+For example, 180 seconds already used leaves a 300-second attempt available;
+480 used leaves only 120 seconds; 600 used permits no further attempt. This is
+a caller-enforced workflow change, not a claim that the longer budget improves
+success rates. The model, 8k context, output limit and concurrency are unchanged.
+
 ### Prepare, invoke, verify
 
 1. Read the [local-worker skill](../../.agents/skills/local-worker/SKILL.md), current
@@ -241,16 +281,19 @@ already caused swapping on this machine. Keep task size and memory use bounded.
    `~/Library/Application Support/Microcol/local-worker/worktrees/<task-id>`.
 2. Store task input, copied `worker-role.md`, command, events, result and test
    reports under `~/Library/Logs/Microcol/local-qwen/jobs/<task-id>/`. Fill the
-   existing task template, including scope, expected behavior, deadline and test
-   ownership. Inline applicable project rules; the child must receive them even
-   when the source documents are untracked in the main checkout.
+   existing task template, including scope, expected behavior, both time budgets,
+   previous attempts' elapsed time and test ownership. Create the child-specific
+   `codex-home` directory before dispatch. Inline applicable project rules; the
+   child must receive them even when the source documents are untracked in the
+   main checkout.
 3. Claim `~/Library/Application Support/Microcol/local-worker/active.lock` with an
    atomic directory creation before starting. If it already exists, inspect its
    owning task/process; do not start a second job or remove another caller's
    lock. Record the task and owned process there. Hold the lock through worker
    execution and caller verification, then release your lock after cleanup.
 4. Run the command below in the assigned worktree. Capture stdout events, stderr,
-   final response and exit code. Enforce the deadline from the calling session;
+   final response and exit code. Enforce the effective attempt deadline and shared
+   task budget from the calling session using the accounting rules above;
    this command has no built-in timeout wrapper. On timeout or interruption,
    stop the owned worker and any still-active local request, unload its model,
    and preserve the partial diff and logs. Never replace failed local inference
@@ -258,8 +301,9 @@ already caused swapping on this machine. Keep task size and memory use bounded.
 5. Inspect the actual diff against scope, unload the alias, and run the specified
    Maven command on that worktree. Require a fresh Surefire report with the
    intended tests and exact counts, exit codes, failures and skips. Send concrete
-   failures back only within the repair limit. The worker must report its tests
-   as pending caller verification, not claim they passed.
+   failures back only within the repair limit and remaining task budget. The
+   worker must report its tests as pending caller verification, not claim they
+   passed.
 6. Astra reviews behavior and test meaning, checks the main checkout's current
    state, and integrates accepted changes within the assigned scope. The worker
    does not commit, merge or push its result. The main agent records repairs and
@@ -297,6 +341,53 @@ post-run diff check alone are not a filesystem sandbox.
 The CLI emitted fallback model-metadata warnings for the local model. This is
 an observed metadata limitation, not model substitution: the local model and
 digest were checked through Ollama's runtime evidence.
+
+### Failure analysis — 2026-10-12
+
+This is a read-only review of **14 recorded attempts** from 10–11 October, not
+14 independent tasks or a controlled model benchmark. It includes retries and
+one startup failure. Sources are each job's `events.jsonl`, execution metadata,
+`stderr.log`, and caller verification/acceptance records under
+`~/Library/Logs/Microcol/local-qwen/jobs/`. The derived attempt inventory is in
+`~/Library/Logs/Microcol/local-qwen/analysis/2026-10-12-timeouts/summary.json`.
+
+| Recorded outcome | Attempts | Interpretation |
+| --- | --- | --- |
+| Completed model turn, process exit 0 | 5 | Goods-trade retry, build identity, plowing assertions, Linux assembly and launcher metadata. Four needed caller corrections or only partial acceptance; completion is not correctness. |
+| Stopped at the old deadline | 7 | Documentation links, workflow policy, implementation-plan handoff, package descriptions, warehouse model, its repair and the warehouse fixture retry. Some produced reusable partial work. |
+| Caller stopped before the deadline | 1 | Initial goods-trade pilot: context compaction and no edits after 145.73 seconds. |
+| Failed before model execution | 1 | Warehouse fixture: missing child `CODEX_HOME`, exit 1 after 3.02 seconds. This was caller setup failure, not a Qwen generation failure. |
+
+Observed causes overlap; a timeout is a stopping reason, not by itself a root
+cause. The strongest evidence is:
+
+| Finding | Evidence and interpretation |
+| --- | --- |
+| Reading/context churn | The warehouse-model attempt read the same 7,375-character Java file three times, made no edit and reported a compaction warning. Four attempts reported compaction warnings. The workflow-policy attempt read the whole growing operating document. This supports narrowing inputs, not simply waiting longer. |
+| Oversized output and guessed data shape | The fixture retry printed 103,428 characters from the saved game, then treated colony data as a unit and failed with `TypeError: 'NoneType' object is not subscriptable`. Raw trace size is not proof that all those characters reached the model: tool output was capped. It does show an unhelpfully broad read followed by an incorrect schema assumption. |
+| Failed editing mechanics | The warehouse repair reached an edit script, but `old_addgoods` was undefined and Python raised `NameError`. The documentation-link job used unquoted `Application Support` paths, spent calls diagnosing the wrong directories and left only an empty helper. These are concrete command/edit errors, not evidence that all work only needed more generation time. |
+| Deadline/task size mismatch | The package-documentation attempt issued 16 commands and drafted six of eight files before cancellation at 180.25 seconds. Build identity completed at 180.48 seconds in the caller's recorded timing. More time plausibly helps such progressing attempts; the logs cannot establish that all timed-out work would finish correctly at 300 seconds. |
+| Output quality still needs review | Even completed runs needed fixes: helper visibility/resource handling in build identity, XML structure/output paths in Linux assembly, and replacement of the launcher's Linux descriptor. A longer deadline does not remove the acceptance gate. |
+
+The fallback-model-metadata warning appeared in all **13 attempts that started
+a model turn**, including all five completed turns. It is a compatibility caveat,
+not a demonstrated sole cause of failure. Codex documents the context-window and
+compaction controls separately in its
+[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+Do not disable compaction or increase context solely to hide the warning.
+Earlier measurements showed memory pressure, but these logs do not isolate
+swapping or model loading as the cause of the individual timeouts. Complete
+generation timing and token totals are also unavailable for the interrupted runs.
+
+**Recommended next checks, not yet measured improvements:** preflight the child
+home and working directory; use relative worktree paths or quote absolute paths;
+provide the exact method/data fragment and acceptance example instead of whole
+documents or fixtures; split multi-file batches that leave little editing time.
+On a repair, supply the actual error and current diff rather than repeating the
+original broad discovery task. Keep the 8k context for a comparable trial and
+record useful edits, accepted results, caller repair time and budget consumption
+for the next 3–5 assignments under the new limits. No new live worker run or
+token-saving claim is part of this diagnosis.
 
 ### Current Microcol pilot — 2026-10-10
 

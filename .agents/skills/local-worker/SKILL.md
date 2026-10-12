@@ -48,8 +48,11 @@ them here.
 The caller starts the documented direct `codex exec` command in the prepared
 worktree, captures process output and exit status, and checks the actual local
 model identity in execution evidence. Keep only one worker request active. Enforce
-the task deadline and documented cancellation procedure; stop the owned worker
-on expiry and preserve partial changes and logs. An isolated worktree separates
+both the per-attempt limit and cumulative task budget from the operating document.
+Before each dispatch, record prior worker elapsed time and cap the attempt by the
+remaining task budget; retries and new attempt directories do not reset it.
+Follow the documented cancellation procedure on either limit and preserve partial
+changes and logs. An isolated worktree separates
 changes but does not itself restrict filesystem access; use the documented
 execution restrictions as well.
 

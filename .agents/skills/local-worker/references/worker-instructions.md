@@ -21,7 +21,8 @@ and acceptance; specify the scoped formatter command in the task. Do not rely on
 VS Code save hooks for worker edits.
 
 ```text
-Task ID:
+Task ID (shared across retries):
+Attempt ID and prior attempt evidence:
 Assigned isolated worktree and host:
 Baseline revision and relevant current state (including existing changes):
 
@@ -47,7 +48,8 @@ Output locations for the patch, logs, and test reports:
 Assigned local runtime/model identity and how the caller verifies it:
 Context, output, concurrency, and memory limits:
 Repair limit after the first implementation:
-Deadline and caller cancellation procedure:
+Per-attempt limit, cumulative task budget and worker time already used:
+Effective attempt deadline and caller cancellation procedure:
 Other agreed limits and stopping conditions:
 
 Required result: use the result format below.
@@ -79,6 +81,7 @@ Blockers:
 Run data, when available:
 - Actual runtime and exact local model identity, including digest if exposed.
 - Number of attempts and repair rounds; elapsed time and token usage.
+- Cumulative worker time and remaining task budget, including previous attempts.
 - Separate model loading, input processing, and generation times if reported.
 - Unavailable measurements explicitly marked unavailable.
 ```
