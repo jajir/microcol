@@ -53,6 +53,29 @@ chat history or duplicate implementation in parallel. Qwen edits its isolated
 worktree and does not delegate, commit or push. One worker at a time; preserve
 existing limits and unload before Maven.
 
+### Focused handoffs — 2026-10-12
+
+The [worker skill](../../.agents/skills/local-worker/SKILL.md) and
+[task contract](../../.agents/skills/local-worker/references/worker-instructions.md#focused-handoff)
+now require exact paths, relevant current code/call sites, explicit acceptance
+checks and a clear unchanged scope. Prefer small assignments over broad repository
+investigation; do not send unnecessary history or entire files by default.
+
+For simple edits with known source, prefer text-only replacements with exact
+match counts. The worker proposes the changes without shell editing; the caller
+validates the complete batch against allowed paths and current text before
+application, then reviews, formats and tests it. Missing matches or syntax errors
+go back with a specific diagnosis and unchanged checks, within the remaining
+budget. Direct editing remains available when the task needs it.
+
+This captures the lesson from the
+[dock assertion recovery on main](https://github.com/jajir/microcol/blob/92a22efaf9c9b991dbc40f4c681b276af34d8423/docs/ai/local-qwen.md#dock-assertion-move-2026-10-12),
+not a new Qwen benchmark or a claim that the earlier warehouse jobs succeeded.
+It changes handoff/review instructions, not the runtime, model, time limits or
+cloud-fallback policy, and does not install an automatic replacement service.
+
+### Scope and acceptance
+
 Broader features are sequences of bounded jobs, not proof that current 8k
 worker can own whole features. Expand assignments from accepted evidence.
 UI changes require the caller verification plan in the

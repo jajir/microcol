@@ -37,11 +37,17 @@ them here.
    pass the completed task and relevant project rules. Reading instructions in
    the main agent does not deliver them to the worker. Make referenced files
    accessible in the assigned worktree, or include their necessary contents.
-5. Include enough code, interfaces, expected behavior, edge cases, and an existing
-   test example to implement the task. Budget for instructions, input, tool
-   history, and output together. Split the task or retain it with the main agent
-   if the available context is insufficient; do not silently truncate essential
-   requirements.
+5. Supply exact worktree-relative paths and current relevant methods/call sites,
+   expected behavior, edge cases and acceptance checks. Include a test example
+   when needed, not whole files or conversation history by default. Identify
+   what may change and what must stay unchanged. Budget for instructions, input,
+   tool history and output together; split work that does not fit rather than
+   dropping requirements.
+6. For small edits whose source is already known, prefer text replacements for
+   the caller to apply instead of asking Qwen to rediscover files and script
+   edits. Use the [focused handoff contract](references/worker-instructions.md#focused-handoff)
+   to specify the output mode and exact match counts. Keep direct editing for
+   tasks that actually need it; do not impose replacement mode on all work.
 
 ## Execute and receive
 
@@ -66,6 +72,19 @@ model before Maven. The caller runs the assigned verification commands against
 that worktree, records actual exit codes and reports, and supplies any relevant
 failures for a bounded repair. Distinguish worker-proposed checks from tests the
 caller actually executed.
+
+For replacement output, validate every allowed path and expected old-text match
+count against the current assigned worktree before applying anything. Reject missing or
+ambiguous matches rather than guessing context. Apply only the validated edits,
+then review, format changed Java files with the shared project profile, and run
+the same acceptance checks as for direct worker edits. Record generated text
+separately from caller application, formatting and verification.
+
+After a failure, diagnose the actual error and send the current fragment/diff,
+specific failed check and unchanged acceptance criteria for a bounded repair.
+Do not replay the same broad investigation. Rerun the failed check and required
+acceptance tests; retain before/after evidence and explain any skipped retry
+or main-agent takeover. Changing output mode does not reset the task's budget.
 
 ## Review and accept
 
