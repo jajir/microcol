@@ -572,3 +572,23 @@ Xvfb/Openbox a nativním Glass **TC20 5/5, TC02 1/1 a page kontrakt 3/3**, bez
 selhání, chyb a vynechání (`target/z02-linux/verified.log`). Použit byl stejný
 cílený výběr, ale `-Dtestfx.headless=false`. Sdílený formatter znovu ověřil
 všech 32 dotčených Java souborů včetně zachování tokenů a idempotence.
+
+**Úplné CI po opravě, 12. října 2026:** [běh 28](https://github.com/jajir/microcol/actions/runs/38264716437)
+na revizi `d494f18de25f310f5d07b3f8ed9591425b6428a3` prošel. Stažené
+Surefire XML z [tests-functional](https://github.com/jajir/microcol/actions/runs/38264716437/artifacts/11753973451)
+potvrzuje **673 herních testů a 52 testů modulu microcol-test**, vždy
+0 selhání, 0 chyb a 0 vynechání. Druhý součet zahrnuje 43 pojmenovaných
+TC scénářů (včetně všech pěti TC20), pět `SimpleOperationsTest`, jeden
+`EnvironmentTest` a tři kontroly `PageVerificationContractTest`; nejde o
+52 hráčských scénářů. Původní selhávající scénáře byly skutečně znovu ověřeny.
+Místní kopie důkazů je v `target/z02-ci-verified/`. Screenshot duplicitního
+jména z tohoto nativního Linux běhu byl prohlédnut: červené pole,
+vysvětlení, Zrušit a neaktivní Uložit jsou čitelné.
+
+Prošly také kontroly launcherů, všechny tři nativní distribuce a
+[dokumentační CI](https://github.com/jajir/microcol/actions/runs/38264722933).
+Testovací build `dev-28-d494f18de25f` je dostupný například pro
+[macOS ARM64](https://github.com/jajir/microcol/actions/runs/38264716437/artifacts/11753909068).
+Publikace release a webu je na větvi PR záměrně vynechána; PR #45 není
+sloučený. Následné doplnění tohoto záznamu mění pouze dokumentaci,
+nikoli ověřený kód nebo fixtures.
