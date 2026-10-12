@@ -69,6 +69,7 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 | [Rozbor pravidel](gap-analysis.md) | Autoritativní katalog pravidel (228 původních a 2 doplněná 11. října), jejich ID, stránky manuálu, stav, referenční tabulky a navržené kontroly. |
 | [Use cases a přejímka](use-cases.md) | Konkrétní hráčské kroky a výsledky, povinné varianty, oddělený stav implementace a testů a podmínky přijetí pravidel. Do zadání vybírat konkrétní UC. |
 | Tento plán | Balíky, závislosti, průběžné výsledky a šablona zadání. Detailní pravidla se sem nekopírují. |
+| [Malé analýzy požadavků](requirements/README.md) | Samostatné soubory R-0001.md a další: shrnutí, chování, implementační kroky a otevřené otázky; postupné upřesnění před implementací. |
 | [Odpovědnosti Java balíčků](architecture.md) | Vlastník pravidel, stav hráče, AI, UI a persistence; hranice a současné přesahy pro přípravu každého zadání. |
 | [Odhad práce](implementation-estimate.md) | Historický rozpočtový rámec, předpoklady a samostatné náklady na UX, obsah a vydání. |
 | [UX](ux.md), [grafika](graphics.md), [zvuk](audio.md) | Společná pravidla ovládání, existující podklady a požadavky na jejich integraci. |
@@ -403,12 +404,19 @@ a [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java).
 
 ## Šablona předání práce
 
+Nové změny nejprve popisujeme v samostatné [analýze R-NNNN](requirements/README.md).
+Upřesňujeme vždy jeden vybraný požadavek; požadavek na upřesnění sám
+nespouští implementaci. Existující Z01–Z03 a jejich odkazy zůstávají platné.
+Analýza vlastní dohodnuté chování a akceptaci, následující šablona slouží
+k předání konkrétní implementační práce a odkazuje na tuto analýzu.
+
 Balík vybírá hlavní agent spolu s vlastníkem hry. Rozpad na úkol má mít jeden
 pozorovatelný výsledek. Výchozím zpracovatelem vhodné implementace je lokální
 Qwen. Připravené zadání může vypadat takto:
 
 ```text
-Úkol: [Z01 / P08 – konkrétní výsledek]
+Úkol: [R-NNNN / související Z a P – konkrétní výsledek]
+Analýza: [odkaz na docs/requirements/R-NNNN.md s dohodnutým chováním a akceptací]
 Výchozí revize: [commit main]
 Zpracovatel: [lokální Qwen; případnou výjimku zdůvodnit níže]
 Dílčí úkol pro Qwen: [jeden konkrétní výstup a hranice změny]
@@ -491,10 +499,11 @@ pravidla. Žádné budoucí běhy tímto dokumentem nejsou naplánované.
 6. Změna projde běžným [dokončením a publikací](publishing.md): commit a push
    na `main`, kontrola dokumentace i vývojové distribuce a ověřený odkaz.
 
-Pro evidenci úkolu stačí stav **navrženo → připraveno → rozpracováno → ověřeno
-→ publikováno**, odkazy na pravidla a revizi, aktuální závislost, výsledek
-kontrol a další krok. Po dodání se nemění celý katalog na „hotovo“ podle
-jednoho úspěšného buildu.
+Stav požadavku vedeme podle [postupu analýzy a dodání](requirements/README.md#work-through-requirements-one-at-a-time)
+spolu s odkazy na pravidla a revizi, aktuální závislostí, výsledkem kontrol
+a dalším krokem. Připravená analýza není dokončená implementace a ověření
+není publikace. Po dodání se nemění celý katalog na „hotovo“ podle jednoho
+úspěšného buildu.
 
 ## Rozsah této přípravy
 

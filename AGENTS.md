@@ -37,6 +37,17 @@ root, `/microcol/`, through GitHub Actions. Exclude `microcol-site` and previous
 generated Maven pages from publication. Do not remove or relocate the source
 module unless the user requests it.
 
+# Requirement analysis
+
+Prepare each new change as a small analysis in `docs/requirements/R-NNNN.md`
+using the [requirement workflow and template](docs/requirements/README.md).
+Keep its four chapters: summary, behavior, implementation steps and open
+questions. Refine one selected requirement at a time, preserve existing
+Z/P/rule/UC/test IDs, and distinguish proposals, agreed behavior and verified
+results. A refinement-only request updates the analysis without starting
+implementation. Reuse agreed decisions; do not ask for approval again merely
+to prepare an implementation handoff.
+
 # Package responsibilities
 
 Read [the package responsibility map](docs/architecture.md) before assigning or
