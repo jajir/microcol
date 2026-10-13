@@ -41,6 +41,13 @@ public final class MouseOverTileManager {
         return Optional.ofNullable(mouseOverTile);
     }
 
+    /**
+     * Invalidate the tile after another control has replaced its description.
+     */
+    public void clearMouseOverTile() {
+        mouseOverTile = null;
+    }
+
     public void setMouseOverTile(final Location newMouseOverTile) {
         Preconditions.checkNotNull(newMouseOverTile);
         if (mouseOverTile == null) {

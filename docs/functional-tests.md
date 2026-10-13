@@ -1312,3 +1312,27 @@ Lokální ověření na macOS/JDK 17:
    Počty potvrzují čerstvé XML 98 modelových a 34 funkčních/kontrolních tříd.
    Publikace zatím čeká. Tento řez nepředstavuje přijetí všech směrů UC-023 ani
    výrobního přetečení a potravin v UC-036.
+
+6. Následné CI `38466289267` pro `e43e32fc` prošlo 801 modelovými případy,
+   třemi nativními balíčky a kontrolami publikace. Funkční sada měla 113 případů,
+   jedno selhání TC27/07 a žádné chyby či vynechání. Všech osm TC31 prošlo.
+   Herní publikace byla přeskočena; Pages `38466289130` uspěly. Artefakt
+   `tests-functional` potvrzuje selhání prázdného stavového řádku při návratu
+   na pole 31,16 po dalším tahu (`target/r19-r31/ci-r24/`).
+7. Nový TC21/08 reprodukoval problém přes skutečný nativní přesun kurzoru:
+   popis kolonie → popis tlačítka Další tah → návrat na totéž pole ukázal prázdný
+   text. První příprava s TestFX `Motion.DIRECT` nezachovala stejné poslední
+   pole, protože i tento režim interpoluje mezilehlé pohyby; nativní
+   `MouseRobot.move` pak chybu doložil (čtyři funkční/kontrolní případy,
+   jedno selhání, žádná chyba ani vynechání; `r24-status-native-before.log`).
+   `MouseOverTileManager` si ponechával stejné pole, zatímco opuštění tlačítka
+   vymazalo jeho popis. Malá oprava invaliduje cache při vstupu na mapu,
+   bez opakovaného přepočítávání cesty při každém pohybu uvnitř stejného pole.
+   Cílená regrese poté prošla **6 modelovými a 35 funkčními/kontrolními
+   případy**, bez selhání, chyb a vynechání (`run-zWp3q1`, exit 0;
+   `target/r19-r31/r24-status-fixed.log`). Výběr zahrnul
+   `MouseOverTileManagerTest,ModelArchitectureTest,TC_21_F15_free_play_screen_navigation_test,TC_27_F19_europe_equipment_test,TC_30_F22_expert_purchase_test,TC_31_F23_wagon_unloading_test,PageVerificationContractTest`
+   se stejným Docker příkazem a `-Dsurefire.failIfNoSpecifiedTests=false`.
+   Všech osm TC21 včetně nové regrese a všech devět TC27 včetně původního
+   selhání prošlo. Pět Java souborů prošlo společným formatterem se shodou
+   tokenů a idempotencí. Úplné CI a nová publikace zatím čekají.

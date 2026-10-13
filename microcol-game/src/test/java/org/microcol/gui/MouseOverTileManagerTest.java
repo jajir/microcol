@@ -74,4 +74,19 @@ public class MouseOverTileManagerTest {
         viewState = null;
     }
 
+    @Test
+    void returningToTheSameTileAfterLeavingPublishesItsDescriptionAgain() {
+        final Location location = Location.of(24, 16);
+        viewState.setMouseOverTile(location);
+        viewState.setMouseOverTile(location);
+        verify(eventBus, times(1))
+                .post(new MouseOverTileChangedEvent(location));
+        viewState.clearMouseOverTile();
+        assertTrue(viewState.getMouseOverTile().isEmpty());
+        viewState.setMouseOverTile(location);
+        assertEquals(location, viewState.getMouseOverTile().orElseThrow());
+        verify(eventBus, times(2))
+                .post(new MouseOverTileChangedEvent(location));
+    }
+
 }

@@ -158,4 +158,22 @@ public class TC_21_F15_free_play_screen_navigation_test
         game.openEuroperPort().verifyGold(10000);
     }
 
+    @Test
+    @Tag("local")
+    void TC_08_returning_from_a_button_to_the_same_tile_restores_its_description()
+            throws Exception {
+        // Read an owned colony, then hover a game command without executing it.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        audit.hoverTileDirectly(COLONY);
+        game.verifyThatStatusBarContains("New Amsterdam");
+        audit.hoverNextTurnDirectly();
+        game.verifyThatStatusBarContains("Next turn");
+
+        // Returning directly to the same tile must restore its map description.
+        audit.hoverTileDirectly(COLONY);
+        game.verifyThatStatusBarContains("New Amsterdam");
+        audit.verifyCalendarAndGold(18, 10000);
+    }
+
 }

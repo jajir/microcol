@@ -88,6 +88,8 @@ public final class GamePanelMouseListener {
                 onMouseReleased();
             }
         });
+        gamePanelComponent.getCanvas().setOnMouseEntered(
+                e -> mouseOverTileManager.clearMouseOverTile());
         gamePanelComponent.getCanvas().setOnMouseMoved(e -> {
             if (gamePanelController.isMouseEnabled()
                     && !gamePanelController.isUnitMoving()) {

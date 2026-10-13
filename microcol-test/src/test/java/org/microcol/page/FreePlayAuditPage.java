@@ -61,6 +61,27 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getModel().getPlayerByName("Dutch").getGold());
     }
 
+    public void hoverTileDirectly(final Location location) {
+        final org.microcol.gui.Point point = getContext().getArea()
+                .convertToCanvasPoint(location)
+                .add(getPrimaryStage().getX(), getPrimaryStage().getY())
+                .add(org.microcol.gui.Tile.TILE_CENTER);
+        getRobot().robotContext().getMouseRobot()
+                .move(new javafx.geometry.Point2D(point.getX(), point.getY()));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void hoverNextTurnDirectly() {
+        final javafx.scene.control.Button button = getButtonById("nextTurn");
+        final javafx.geometry.Bounds bounds = button
+                .localToScreen(button.getBoundsInLocal());
+        getRobot().robotContext().getMouseRobot()
+                .move(new javafx.geometry.Point2D(
+                        bounds.getMinX() + bounds.getWidth() / 2,
+                        bounds.getMinY() + bounds.getHeight() / 2));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void openStatistics() {
         clickOnButtonWithId("statistics");
     }
