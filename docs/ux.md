@@ -28,6 +28,12 @@ Toto je pravidlo pro návrh dalších změn, nikoli tvrzení, že tak nyní fung
 
 ## Krátké zadání UX pro novou funkci
 
+Před jednotlivými změnami vyjasnit potřebnou strukturu [vybrané oblasti](requirements/areas.md):
+A01 vlastní menu a navigaci aplikace, A02 nastavení partie a A03 obrazovky volné
+hry se společným jazykem UI. Struktura a ovládání se připravují už před prvním
+řezem; pozdější hlavní ladění grafiky a UX neznamená odklad těchto základů.
+Současná cesta obrazovkami je podklad k posouzení, nikoli automaticky finální návrh.
+
 Před implementací funkce ovlivňující hráče doplnit do jejího zadání následující body. U malé změny stačí několik vět; podrobný návrh každé obrazovky ani samostatná studie nejsou automaticky potřeba.
 
 | Otázka | Co má zadání obsahovat |

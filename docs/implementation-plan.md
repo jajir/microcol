@@ -11,6 +11,13 @@ tahů, ekonomiky, soupeřů a války za nezávislost. První hratelné etapy jso
 průběžné výsledky; neznamenají omezení konečného rozsahu. Pořadí níže je návrh
 pro další práci, nikoli závazný termín nebo spuštěné implementační úkoly.
 
+**Zpřesnění postupu z 13. října 2026:** nejdřív vybíráme jednu z
+[deseti pracovních oblastí](requirements/areas.md), vyjasníme její potřebnou
+společnou strukturu a potom upřesňujeme jednotlivá R. Nejbližším navrženým
+krokem je struktura menu A01, ne automatická implementace R-0001.
+Oblasti určují soustředění práce; balíky P zůstávají rozpadem rozsahu a etapy E
+přejímacími výsledky. Číselné pořadí R ani P není fronta k provedení.
+
 Závaznost určuje [rozdělení use cases](use-cases.md#zavazna-hra-a-samostatne-nastaveni):
 **Hra** je pravidlový základ podle manuálu, **Nastavení** jsou samostatně
 přejímané volby nové partie a **Regrese** chrání každou další změnu. Otevření
@@ -70,6 +77,7 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 | [Use cases a přejímka](use-cases.md) | Konkrétní hráčské kroky a výsledky, povinné varianty, oddělený stav implementace a testů a podmínky přijetí pravidel. Do zadání vybírat konkrétní UC. |
 | Tento plán | Balíky, závislosti, průběžné výsledky a šablona zadání. Detailní pravidla se sem nekopírují. |
 | [Malé analýzy požadavků](requirements/README.md) | Samostatné soubory R-0001.md a další: shrnutí, chování, implementační kroky a otevřené otázky; postupné upřesnění před implementací. |
+| [Pracovní oblasti](requirements/areas.md) | Jediné rozdělení všech katalogových pravidel do deseti oblastí, jejich hranice, potřebná příprava a navržené pořadí soustředěné práce. |
 | [Odpovědnosti Java balíčků](architecture.md) | Vlastník pravidel, stav hráče, AI, UI a persistence; hranice a současné přesahy pro přípravu každého zadání. |
 | [Odhad práce](implementation-estimate.md) | Historický rozpočtový rámec, předpoklady a samostatné náklady na UX, obsah a vydání. |
 | [UX](ux.md), [grafika](graphics.md), [zvuk](audio.md) | Společná pravidla ovládání, existující podklady a požadavky na jejich integraci. |
@@ -290,10 +298,11 @@ následující kroky i chybový a zrušený průchod.
 
 ## První konkrétní zadání
 
-**Další práce — návrhy z 12. října 2026:** prvních deset nových analýz najdete
+**Zásobník návrhů z 12. října 2026, zařazený do oblastí 13. října:** prvních deset analýz najdete
 v [seznamu R-0001 až R-0010](requirements/README.md#first-ten-upcoming-requirements).
 Jde o připravené koncepty pro jednotlivé upřesnění, nikoli schválení nebo
-spuštění deseti implementací. Dokončené Z01/Z02 zůstávají níže jako dosavadní
+spuštění deseti implementací. Výběr začíná [přípravou oblasti](requirements/areas.md#postup-po-oblastech),
+u menu konkrétní strukturou a navigací před R-0001. Dokončené Z01/Z02 zůstávají níže jako dosavadní
 kontrakty; nejsou znovu zařazené mezi budoucí změny.
 
 | Balík / původní zadání | Analýzy pro postupné upřesnění |
@@ -406,7 +415,8 @@ registru. Přesun dokumentace neznamená implementaci ani přijetí TURN-001/002
 ## Šablona předání práce
 
 Nové změny nejprve popisujeme v samostatné [analýze R-NNNN](requirements/README.md).
-Upřesňujeme vždy jeden vybraný požadavek; požadavek na upřesnění sám
+Nejdřív vyjasníme potřebný základ její [hlavní oblasti](requirements/areas.md).
+Upřesňujeme vždy jeden vybraný požadavek v této oblasti; požadavek na upřesnění sám
 nespouští implementaci. Existující Z01–Z03 a jejich odkazy zůstávají platné.
 Analýza vlastní dohodnuté chování a akceptaci, následující šablona slouží
 k předání konkrétní implementační práce a odkazuje na tuto analýzu.
@@ -418,6 +428,7 @@ Qwen. Připravené zadání může vypadat takto:
 ```text
 Úkol: [R-NNNN / související Z a P – konkrétní výsledek]
 Analýza: [odkaz na docs/requirements/R-NNNN.md s dohodnutým chováním a akceptací]
+Oblast: [jedna hlavní A01–A10; odkaz na společný základ a konkrétní závislosti na dalších oblastech]
 Výchozí revize: [commit main]
 Zpracovatel: [lokální Qwen; případnou výjimku zdůvodnit níže]
 Dílčí úkol pro Qwen: [jeden konkrétní výstup a hranice změny]

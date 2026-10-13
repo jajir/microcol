@@ -617,6 +617,13 @@ An intentional departure from the manual should remain a `Differs` entry with a 
 
 ## Implementation order
 
+The [ten work areas](requirements/areas.md) added on 2026-10-13 map every
+catalogue ID to one primary area. Select an area and settle its relevant
+structure before refining small R requirements. Menu/navigation preparation
+comes before assuming the current free-play entry is the final design.
+The dependency order below remains a rules implementation guide, not a separate
+execution queue. Classification does not update any implementation status.
+
 For deliverable work packages, playable milestones, UX/art dependencies and
 ready-to-refine task briefs, use the [implementation plan](implementation-plan.md).
 This page remains the authoritative rule catalogue and decision register.

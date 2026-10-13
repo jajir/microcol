@@ -19,6 +19,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Gameplay use cases and acceptance](use-cases.md) | Testable player journeys from the manual, implementation/verification tracking, and the gate before focusing on graphics and UX polish. |
 | [Implementation plan](implementation-plan.md) | Deliverable work packages, playable stages, UX/art dependencies, and concrete task briefs based on the manual. |
 | [Small requirement analyses](requirements/README.md) | One R-numbered file per change, a four-chapter template, and refinement of requirements one at a time. |
+| [Requirement work areas](requirements/areas.md) | Ten areas covering the manual rules, their boundaries, and an area-first workflow beginning with menu structure. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |
 | [Local Qwen worker](ai/local-qwen.md) | The configured local worker, delegation workflow, and verification evidence. |
 | [Writing and publishing documentation](publishing.md) | Where to edit, how to preview, and how automatic publication works. |

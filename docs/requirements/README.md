@@ -13,23 +13,26 @@ implementation assignments or newly verified features. Each file owns its
 current status, scope and open questions. Completed Z01/Z02 remain in the
 [implementation plan](../implementation-plan.md#prvni-konkretni-zadani).
 
-| Requirement | Small outcome | Main dependency or refinement decision |
-| --- | --- | --- |
-| [R-0001](R-0001.md) | Start free play without completing the campaign. | Existing free-play baseline. |
-| [R-0002](R-0002.md) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
-| [R-0003](R-0003.md) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
-| [R-0004](R-0004.md) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
-| [R-0005](R-0005.md) | Assign workers safely to globally shared fields. | Invalid restored-assignment policy. |
-| [R-0006](R-0006.md) | Choose work using the selected worker's available yield. | R-0005; ordinary-worker first slice. |
-| [R-0007](R-0007.md) | Food consumption and population growth at the threshold. | R-0002; Q-10 imports and large surpluses. |
-| [R-0008](R-0008.md) | Famine boundaries and loss of the last resident. | R-0007; Q-10 victim and processing order. |
-| [R-0009](R-0009.md) | Match expert blacksmith output to ore consumption. | Reachable expert and acquisition path. |
-| [R-0010](R-0010.md) | Produce the colony's automatic base cross. | Agree the limited production slice. |
+| Requirement | Primary area | Small outcome | Main dependency or refinement decision |
+| --- | --- | --- | --- |
+| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | A01 navigation foundation; A02 initial entry/profile decision. |
+| [R-0002](R-0002.md) | [A04](areas.md#a04) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
+| [R-0003](R-0003.md) | [A05](areas.md#a05) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
+| [R-0004](R-0004.md) | [A05](areas.md#a05) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
+| [R-0005](R-0005.md) | [A07](areas.md#a07) | Assign workers safely to globally shared fields. | Invalid restored-assignment policy. |
+| [R-0006](R-0006.md) | [A07](areas.md#a07) | Choose work using the selected worker's available yield. | R-0005; ordinary-worker first slice. |
+| [R-0007](R-0007.md) | [A07](areas.md#a07) | Food consumption and population growth at the threshold. | R-0002; Q-10 imports and large surpluses. |
+| [R-0008](R-0008.md) | [A07](areas.md#a07) | Famine boundaries and loss of the last resident. | R-0007; Q-10 victim and processing order. |
+| [R-0009](R-0009.md) | [A07](areas.md#a07) | Match expert blacksmith output to ore consumption. | Reachable expert and acquisition path. |
+| [R-0010](R-0010.md) | [A07](areas.md#a07) | Produce the colony's automatic base cross. | Agree the limited production slice. |
 
-Start refinement with R-0001, then select the next useful requirement according
-to dependencies and decisions. R-0002 through R-0010 need a way into ordinary
-free play for player acceptance; R-0001 provides that entry without requiring
-the other systems to be complete. Preparing these drafts does not close any UC.
+These are candidate changes, not a numbered execution queue. Start with the
+[area overview and proposed sequence](areas.md#postup-po-oblastech). The proposed
+first preparation is A01's menu/navigation foundation, including the boundary
+with A02 setup and A03 common controls. R-0001 can then implement the agreed
+entry into ordinary free play; its earlier direct-launch proposal is not the
+final menu design. Later player acceptance still needs that ordinary-game entry.
+Preparing or classifying these drafts does not close any UC.
 
 Test class/fixture names marked **proposed** in the files reserve a concrete
 verification plan, not runnable tests. Check availability again before creating
@@ -62,10 +65,20 @@ inside each analysis.
 
 ## Work through requirements one at a time
 
+Select one active [work area](areas.md) and define its relevant shared structure
+before refining its small changes. Reuse an existing agreed contract or prepare
+one foundation R for the missing decisions; do not create parallel copies.
+An area is not a code layer or a replacement for the UC acceptance category.
+Record one primary area in each R and specific dependencies on other areas.
+Stay with the selected area until its chosen outcome is delivered, or explicitly
+explain a necessary dependency before switching. Full design of all ten areas
+is not a prerequisite for the first small delivery.
+
 1. **Capture:** record the user's need as a draft using the template below.
    Incomplete information is fine; put unknowns in chapter 4. Link the file
    from the relevant item in the implementation plan.
-2. **Refine:** select one requirement. Read its sources, relevant code, callers,
+2. **Refine:** select one requirement in the active area. Check that its affected
+   area-level decisions are settled. Read its sources, relevant code, callers,
    tests and the [package responsibility map](../architecture.md). Separate
    observed behavior from proposed behavior, assumptions and agreed decisions.
    Date observations and identify the inspected revision; source reading is
@@ -87,7 +100,7 @@ inside each analysis.
    source commit and published build. Follow the existing
    [completion checks](../implementation-plan.md#kdy-je-ukol-hotovy) and
    [publication workflow](../publishing.md). Select the next requirement
-   explicitly; do not automatically process the whole backlog.
+   explicitly within the active area; do not automatically process the whole backlog.
 
 Use **Draft → Refining → Ready → In progress → Verified → Published**. `Verified`
 requires the relevant acceptance checks to pass; `Published` additionally
@@ -116,6 +129,8 @@ test placeholders with concrete existing or proposed scenario names.
 2. Updated: YYYY-MM-DD
 3. Related: Z/P/rule/UC IDs with links; applicable UC category and variants
 4. Dependencies: requirement IDs or existing capabilities; none if independent
+5. Primary area: one A01–A10 link from areas.md
+6. Related areas: specific cross-area decisions or capabilities; none if independent
 
 ## 1. Summary
 
@@ -167,7 +182,9 @@ inventing a gameplay scenario. Planned checks are not test results.
 
 ## Refinement task wording
 
-> Refine `docs/requirements/R-0001.md`. Inspect the relevant documentation,
+> Refine the selected `docs/requirements/R-NNNN.md` within its primary area.
+> Read the area foundation first; reuse its agreed decisions and identify any
+> missing structural decision that blocks this requirement. Inspect the relevant documentation,
 > code and tests, complete its four chapters, and identify the smallest
 > implementable scope and concrete acceptance checks. Resolve what existing
 > agreements already answer and ask only the remaining blocking questions.

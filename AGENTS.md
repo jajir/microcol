@@ -41,6 +41,11 @@ module unless the user requests it.
 
 Prepare each new change as a small analysis in `docs/requirements/R-NNNN.md`
 using the [requirement workflow and template](docs/requirements/README.md).
+Select one [work area](docs/requirements/areas.md), establish the shared
+structure needed by the selected change, and record one primary area plus
+specific cross-area dependencies in each requirement. Area IDs do not replace
+UC acceptance categories or model/AI/UI ownership. Requirement numbers are
+identifiers, not an automatic implementation order.
 Keep its four chapters: summary, behavior, implementation steps and open
 questions. Use numbered lists so each point can be referenced by requirement,
 chapter and item number. Refine one selected requirement at a time, preserve existing

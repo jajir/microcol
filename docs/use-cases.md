@@ -10,7 +10,9 @@ situaci, kroky, očekávané výsledky a vlastní záznam implementace a ověře
 Pravidla, jejich přesné hodnoty, stránky a rozbor zdrojového kódu zůstávají v
 [analýze rozdílů](gap-analysis.md). Tato stránka je autoritativní pro hráčské
 scénáře a jejich přejímku; [implementační plán](implementation-plan.md) určuje
-pracovní balíky a pořadí. UC není nová třída ani nový Java balíček.
+pracovní balíky a etapy. [Deset pracovních oblastí](requirements/areas.md)
+určuje soustředění a přípravu další práce. Oblasti nenahrazují níže uvedené
+kategorie Hra / Nastavení / Regrese. UC není nová třída ani nový Java balíček.
 
 ## Závazná hra a samostatné nastavení
 
@@ -50,7 +52,8 @@ vytvořit další režim, ale nesmějí potichu přepsat referenční pravidla a
 
 ## Jak seznam používat
 
-1. Vybrat jedno UC nebo malou navazující skupinu; projít odkazovaná pravidla
+1. V rámci zvolené oblasti a jejího připraveného základu vybrat jedno UC
+   nebo malou navazující skupinu; projít odkazovaná pravidla
    a otázky Q v rozboru. Do zadání převzít kategorii a **všechny varianty**,
    ne pouze název. U Hry určit referenční profil; prezentační návrh vést zvlášť.
 2. Určit vlastníka podle [mapy balíčků](architecture.md): pravidlo v modelu,
