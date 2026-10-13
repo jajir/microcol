@@ -108,7 +108,8 @@ installation, configuration changes or a cloud fallback when the worker fails.
    limit. No cloud worker fallback or token-savings claim was made.
 6. Job directories under `~/Library/Logs/Microcol/local-qwen/jobs/` retain prompts,
    raw responses, elapsed times, reviews and caller corrections. Qwen was unloaded
-   before Maven; Ollama remains running as requested. Actual player evidence and
+   before Maven; Ollama remains running as requested. The final native CI passed 683 game tests and all 64 functional/control tests
+   at `64927cde`, including all 12 new scenarios. Actual player evidence and
    publication belong to the [functional audit](../functional-tests.md#free-play-audit-2026-10-13).
 
 ## Default development workflow — 2026-10-11

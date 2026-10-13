@@ -663,3 +663,25 @@ Lokální ověření na macOS/JDK 17:
    v povinném [vývojovém workflow](../.github/workflows/dev-builds.yml).
    Lokální překážky se neskrývají pomocí skipů, retry ani slabších asercí.
    Logy jsou v `~/Library/Logs/Microcol/freeplay-audit-2026-10-13/`.
+
+### Výsledná nativní přejímka a publikace
+
+1. Revize [64927cde](https://github.com/jajir/microcol/commit/64927cde2144b64ac23797e146e919d94fccf01d)
+   prošla 13. října 2026 [Linux CI](https://github.com/jajir/microcol/actions/runs/38362888217):
+   **683 herních testů a všech 64 funkčních/kontrolních testů**, bez selhání,
+   chyb nebo vynechání. To zahrnuje **12 nových scénářů TC21–TC23**, původní
+   TC01/TC06/TC12/TC19 a tři source-contract kontroly. Oba TC23 prošly včetně
+   plavby do Evropy, pokračování z uloženého průběhu a návratu s nákladem.
+2. Nativní běh vyřešil místní překážku Monocle a zamčené plochy, nikoli
+   popsané herní mezery. Continue v čistém profilu, uložení při vstupu do menu,
+   výbava na evropském molu, odborník, vůz, skrytá fronta a návrat na původní
+   místo zůstávají následnými opravami. Cílová pravidla nebyla oslabena.
+3. Prošly všechny tři nativní balíčky a job `publish`. Vydání
+   [dev-39-64927cde2144](https://github.com/jajir/microcol/releases/tag/dev-39-64927cde2144)
+   obsahuje 10 souborů včetně manifestu a kontrolních součtů. Dokumentaci
+   nasadil [Pages workflow](https://github.com/jajir/microcol/actions/runs/38362888204);
+   publikované R-0014 a tato stránka byly ověřeny včetně odkazů na správný commit.
+4. Tento záznam uzavírá audit a testovou implementaci. Neoznačuje R-0012–R-0025
+   ani celé dotčené UC za implementované. Nové mapy, Francie, opravy menu,
+   fog-of-war renderovací testy a chybějící pravidlové varianty se přijímají
+   zvlášť podle jejich analýz.
