@@ -39,10 +39,9 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public List<UnitWithCargo> getUnitsInPort() {
-        return (List) colonyDialogCallback.getColony().getUnitsInPort();
+        return colonyDialogCallback.getColony().getUnitsInPort();
     }
 
     @Override

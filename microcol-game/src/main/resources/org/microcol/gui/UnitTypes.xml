@@ -17,4 +17,8 @@
 	<entry key="MASTER_BLACKSMITH_name_7">Master Blacksmith</entry>
 	<entry key="MASTER_BLACKSMITH_name_7pl">Master Blacksmiths</entry>
 
+	<entry key="WAGON_name">Wagon</entry>
+	<entry key="WAGON_name_7">Wagon</entry>
+	<entry key="WAGON_name_7pl">Wagons</entry>
+
 </properties>

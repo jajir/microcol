@@ -95,7 +95,9 @@ public class PanelDockView implements JavaFxComponent {
         toggleButtonShip.setBackground(new Background(myBI));
         toggleButtonShip.setToggleGroup(toggleGroup);
         toggleButtonShip.setUserData(ship);
-        toggleButtonShip.setOnDragDetected(this::onDragDetected);
+        if (ship.isShip()) {
+            toggleButtonShip.setOnDragDetected(this::onDragDetected);
+        }
         panelShips.getChildren().add(toggleButtonShip);
     }
 

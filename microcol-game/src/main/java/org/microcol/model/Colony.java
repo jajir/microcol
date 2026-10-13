@@ -13,7 +13,7 @@ import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.turnevent.TurnEventProvider;
-import org.microcol.model.unit.Ship;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -324,10 +324,14 @@ public class Colony {
                 .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
     }
 
-    public List<Ship> getUnitsInPort() {
+    /**
+     * @return owned cargo carriers currently at the colony, in registry order
+     */
+    public List<UnitWithCargo> getUnitsInPort() {
         return model.getUnitsAt(location).stream()
-                .filter(unit -> unit.getType().isShip())
-                .map(unit -> (Ship) unit)
+                .filter(unit -> unit instanceof UnitWithCargo
+                        && unit.getOwner().equals(owner))
+                .map(UnitWithCargo.class::cast)
                 .collect(ImmutableList.toImmutableList());
     }
 

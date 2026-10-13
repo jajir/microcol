@@ -17,4 +17,8 @@
 	<entry key="MASTER_BLACKSMITH_name_7">mistrem kovářem</entry>
 	<entry key="MASTER_BLACKSMITH_name_7pl">mistry kováři</entry>
 
+	<entry key="WAGON_name">Povoz</entry>
+	<entry key="WAGON_name_7">povozem</entry>
+	<entry key="WAGON_name_7pl">povozy</entry>
+
 </properties>

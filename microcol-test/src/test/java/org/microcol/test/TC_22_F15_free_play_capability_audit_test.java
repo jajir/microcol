@@ -89,13 +89,11 @@ public class TC_22_F15_free_play_capability_audit_test
     @Test
     @Tag("local")
     void TC_04_wagon_artwork_gap_after_loading_fixture() throws Exception {
-        // The fixture contains no wagon because unsupported artwork prevents
-        // opening the map;
-        // explicitly observe ImageProvider failure and verify ordinary colony
-        // screen still opens.
+        // The shared image provider supports wagon type and direction requests.
+        // The full wagon movement and unloading journey is verified by TC31.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
-        new FreePlayAuditPage(getContext()).verifyWagonArtworkUnsupported();
+        new FreePlayAuditPage(getContext()).verifyWagonArtworkSupported();
         colony.close();
     }
 

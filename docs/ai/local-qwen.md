@@ -1654,3 +1654,41 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    failure diagnoses and `acceptance.json` remain in
    `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-worker-identity/`.
    No throughput or token-saving claim is made.
+
+
+### R-0024 wagon display — 2026-10-13
+
+1. Task `2026-10-13-r24-wagon-display` used isolated baseline `2a464170`
+   plus four recorded caller inputs (analysis, F23 fixture, page object and
+   TC31). The worker owned seven production files: image registration,
+   English/Czech unit names, colony carrier query and its dock consumers.
+   The main agent retained manual interpretation, acceptance tests and review.
+2. Attempts consumed **257.939 / 179.233 / 163.102 seconds**, **600.274 total**,
+   both repairs exhausted. The first response was truncated at the 4096-token
+   output limit and had an incorrect image-map anchor; no patch was applied.
+   The first repair returned seven replacements. Its map insertion incorrectly
+   used `request` inside the map builder and was rejected. Six valid changes
+   were applied: instance image, colony import/query, removal of the raw cast
+   and suppression, and ship-only carrier-icon dragging.
+3. The final repair timed out while rereading image-provider source and
+   searching insertion anchors, without a final response. The supervised
+   limit was the remaining 162.828 seconds; cleanup accounts for the small
+   overrun. The caller then completed the five remaining replacements:
+   type image, enum keys, both resource bundles and query return documentation.
+   This is partial worker reuse with caller completion, not autonomous success.
+4. The runner unloaded the model before Docker tests. Shared formatting
+   checked ten Java files, changed six, and passed token preservation and
+   idempotence. Initial acceptance exposed a stale warehouse label in a caller-authored
+   scenario. The caller added three lines using the existing repaint event
+   before a refreshed amount dialog. The identical selection then passed
+   **66 model and 34 functional/control cases**, no failures/errors/skips
+   (`run-XUJtg1`). All eight TC31 cases ran. The caller integrated the
+   14 source/test/fixture files after baseline checks and released the owned
+   lock. The full main regression then passed 801 model and 113 functional/control
+   cases without failures, errors or skips (`run-vD4k94`). Publication remains pending. The caller authored seven
+   real-model checks and eight player scenarios and updated the existing
+   TC22 artwork diagnostic, preserving its stable ID.
+5. Prompts, rejected responses, execution records and caller application
+   evidence remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r24-wagon-display/`.
+   No token-saving claim. Inference did not overlap local Maven/Docker tests.

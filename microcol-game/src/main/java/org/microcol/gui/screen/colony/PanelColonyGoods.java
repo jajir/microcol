@@ -153,6 +153,9 @@ public final class PanelColonyGoods implements JavaFxComponent {
                 }
                 break;
             }
+            if (refreshed) {
+                eventBus.post(new RepaintColonyEvent());
+            }
             final Goods chosen = adjustedAmount(requested, available,
                     partialTransfer || refreshed);
             if (chosen.isZero()) {

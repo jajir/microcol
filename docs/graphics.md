@@ -90,7 +90,7 @@ Odkazy v této části otevírají editovatelné zdroje. **Skriptovaná vazba** 
 | [clouds.svg](../microcol-game/src/graphics/clouds.svg) | Viditelné `example-background` a `cloud-1`, skrytá `cloud-2`. Ukázkové pozadí je vložený raster přímo uvnitř SVG. | Skupina `g929` má metadata pro `cloud-1.png` **799 × 479**, `g1215` pro `cloud-2.png` **1000 × 795**. Exportovat se má mrak bez referenčního pozadí. Mapa posouvá celý `cloud-1.png`; pro `cloud-2.png` nebyl nalezen runtime odkaz. |
 | [kings-seal.svg](../microcol-game/src/graphics/kings-seal.svg) | Skrytá vrstva `main` a viditelná `shadow`. | Dva samostatné exporty `kings-seal.png` a `kings-seal-shadow.png`, oba **40 × 41**. V přehledu cílů se vybírá plná pečeť pro splněný cíl a světlá varianta pro nesplněný. Hra je nevrství přes sebe jako objekt a jeho stín. |
 | [person.svg](../microcol-game/src/graphics/person.svg) | Tři kopie drobné postavy a větší otevřený rám, jedna vrstva s opacitou `0.94`. | Nemá skriptovaný výstup ani exportní metadata. Patnáct ze sedmnácti atributů cest `d` je doslova shodných s cestami v `background.svg`; dvě zbývající rámové cesty odpovídají `colony-frame.svg`. Dokládá sdílené kresby, ne automatické propojení. Herní kolonista se načítá z atlasu, nikoli z tohoto souboru. |
-| [wagon.svg](../microcol-game/src/graphics/wagon.svg) | Viditelná vektorová vrstva `draw`, skrytá vrstva `image` s vloženou rastrovou předlohou. | Všech 12 cest `d` je doslova obsaženo také v `background.svg`. Samostatný export ve skriptu není. Loader registruje `wagon` z buňky `(1,6)` atlasu, ale aktuální Java kód nemá nalezeného spotřebitele tohoto aliasu. Změna zdejšího vozu sama atlas neaktualizuje. |
+| [wagon.svg](../microcol-game/src/graphics/wagon.svg) | Viditelná vektorová vrstva `draw`, skrytá vrstva `image` s vloženou rastrovou předlohou. | Všech 12 cest `d` je doslova obsaženo také v `background.svg`. Samostatný export ve skriptu není. Loader registruje `wagon` z buňky `(1,6)` atlasu; R-0024 jej nyní používá v `UnitImageProvider` pro typ i instanci vozu. Změna zdejšího vozu sama atlas neaktualizuje. |
 | [logo.svg](../microcol-game/src/graphics/logo.svg) | Kostel, pozadí a nápis MicroCol. Skrytá `background`, viditelné `background-2` a `logo`. | Metadata pro `splash-screen.png` **200 × 200**. Build jej vkládá do manifestu jako spouštěcí obrázek JVM a používá jej také argument `-splash`. Text zůstává textem, takže při novém exportu záleží i na dostupném písmu. |
 | [icon.svg](../microcol-game/src/graphics/icon.svg) | Černý text MicroCol v Inkscape `flowRoot`, nikoli ilustrace kostela. Rozměr dokumentu **1024 × 1024**. | Metadata ukazují na starou cestu `microcol-game/src/icon.png`, která v současném stromu není. Současná distribuční ikona s kostelem má odlišný obsah; tento SVG nelze označit za její doložený zdroj. Obecný SVG renderer nemusí podporovat `flowRoot` a může zobrazit prázdný náhled. |
 
@@ -269,7 +269,7 @@ Mapování je v [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gu
 | `(2,6)` | `free-colonist-tools` | Pěší kolonista s nástroji |
 | `(6,6)` | `free-colonist-muskets` | Pěší kolonista se zbraněmi |
 | `(5,6)` | `free-colonist-mounted-muskets` | Ozbrojený kolonista na koni |
-| `(1,6)` | `wagon` | Registrovaný vůz, spotřebitel nenalezen |
+| `(1,6)` | `wagon` | R-0024: obraz typu i instance vozu, stejný výřez pro oba směry |
 
 U kolonisty má nejprve význam kůň, potom zbraně a u pěšího nástroje. Orientace nemění jeho sprite. Galeona má zvláštní větev pro východ a západ; fregata vždy dostává základní variantu. Jednotka mimo mapovou lokaci používá při běžném dotazu výchozí orientaci east.
 
@@ -493,7 +493,7 @@ Pokud později vzniknou podrobná pravidla pro historické období, proporce, pa
 | Ruční exporty nemají jednotný manifest výběrů/vrstev | Metadata jsou vodítko; u některých zdrojů je nutné potvrdit přesný recept. |
 | `sunset`/`sunset2`, `europe`/`europe1`, dvě sady rámů | Je potřeba zachovat rozlišení aktuálně doloženého zdroje a alternativní kresby. |
 | `button_cut_tree` a `button_build_road` sdílejí `(3,2)` | Mapování se liší od očekávání podle kresby pařezu v `(1,2)`; v tomto rozboru nebylo opraveno. |
-| `frigate_left` a `wagon` jsou registrované bez odpovídajícího současného použití | Příprava výřezu není totéž co aktivní herní zobrazení. |
+| `frigate_left` je registrovaná bez odpovídajícího současného použití | Vůz má od R-0024 aktivní resolver; zrcadlo fregaty zůstává samostatnou odchylkou. |
 | Pro 12 typů staveb nejsou aliasy | Při rozšíření použití těchto typů je potřeba doplnit grafické pokrytí nebo ošetřit chybějící obrázek. |
 | Značky chůze/kotvy pro různé tahy jsou totožné | Rozdílné názvy dnes nenesou rozdílný vzhled. |
 | Dvě `.png` jsou ve skutečnosti GIFy | Automatické nástroje musí ověřovat obsah formátu; převod jediného snímku by zahodil animaci. |
@@ -509,3 +509,14 @@ Katalog vznikl z XML struktury všech 24 SVG, exportních metadat, exportního s
 Hra nebyla během tohoto rozboru spuštěna a Maven testy nebyly opakovány; popis zobrazování vychází z kódu a uložených obrázků. Produkční kód ani herní grafika nebyly změněny. Statické kontroly nedokládají pixelově totožnou regeneraci všech PNG ze současných SVG ani správný vzhled všech živých obrazovek.
 
 Existující [ImageCacheTest](../microcol-game/src/test/java/org/microcol/gui/ImageCacheTest.java) ověřuje načtení, opakované použití a chybějící resource. Startup loadery kontrolují rozměry atlasů. [ImageProviderTestUtil](../microcol-game/src/test/java/org/microcol/integration/ImageProviderTestUtil.java) je ruční `main` utilita pro export obrázků z cache do `target/img`; není automatický vizuální test a exportuje jen tehdy načtené položky. Ke klíčům připojuje `.png`, takže některé výstupy mají `.png.png`.
+
+
+### Zapojení vozu — 13. října 2026
+
+1. R-0024 používá původní `ImageLoaderUnit.IMG_UNIT_WAGON`; nový obrázek,
+   export ani rozměry atlasu nevznikají. Stejný výřez se používá na mapě
+   a v seznamu dopravců pro oba směry. Český stavový text používá „povoz“.
+2. Cílené TC22/TC_04 ověřilo obrázek typu i obou směrů instance; osm TC31
+   ověřilo skutečné ovládání vozu a zásoby. Snímek `wagon-colony.png`
+   potvrzuje rozpoznatelný vůz vedle lodi. Úplnou regresi a publikaci vede
+   [testová evidence](functional-tests.md#wagon-unloading-implementation-2026-10-13).

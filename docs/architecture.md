@@ -266,7 +266,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 
 ### Odbornost najatého kolonisty (R-0023)
 
-1. Rozpracované R-0023 používá `model.unit.UnitMasterBlacksmith` jako konkrétní
+1. Implementované R-0023 používá `model.unit.UnitMasterBlacksmith` jako konkrétní
    podtyp `UnitFreeColonist`. Typ je dostupný i při konstrukci místa a ukládá
    se přes stávající `UnitPo.type`; vybavení zůstává oddělené od odbornosti.
 2. Autoritativní dostupnost nákupu a účtování vlastní `Player`. Evropský
@@ -274,5 +274,21 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    hru a hráče. Odborník se nepřidává do existující nabídky imigračních kandidátů.
 3. Vybrané modelové a nákupní UI cesty i skutečná cesta odborníka do kolonie
    a kovárny včetně jejího stavového popisu i nahrazení hry během nabídky
-   prošly; celková regrese a doručení zatím čekají. Aktuální důkazy vlastní
+   prošly. Úplná regrese lokálně i v CI ověřila 794 modelových a 105
+   funkčních/kontrolních případů; build `dev-52-2a464170c54d` je zveřejněný. Důkazy vlastní
    [záznam testů](functional-tests.md#expert-purchase-implementation-2026-10-13).
+
+
+### Sdílené vykládání vozů a lodí (R-0024)
+
+1. `Colony.getUnitsInPort` poskytuje vlastní nákladní dopravce přítomné
+   v kolonii jako `UnitWithCargo`, ve stejném pořadí registru. Kolonijní
+   panel tento seznam používá bez raw přetypování; evropský seznam se nemění.
+2. `ColonyWarehouse` zůstává jediným vlastníkem kapacity a atomického převodu.
+   Obrázek a názvy doplňuje GUI; tažení ikony celé jednotky zůstává pouze
+   lodní operací. Před obnovenou nabídkou množství UI překreslí aktuální
+   zásoby, aby odpovídaly modelu. Pravidla pasažérů stále vyžadují loď.
+3. Cílené ověření prošlo 66 modelovými a 34 funkčními/kontrolními případy.
+   Úplná regrese prošla 801 modelovými a 113 funkčními/kontrolními případy.
+   Publikace čeká; aktuální důkazy vlastní
+   [evidence R-0024](functional-tests.md#wagon-unloading-implementation-2026-10-13).

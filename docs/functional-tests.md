@@ -1251,3 +1251,64 @@ Lokální ověření na macOS/JDK 17:
     původní TC03 i všech sedm TC30. Sdílený formatter ověřil 23 změněných
     Java souborů včetně shody tokenů a idempotence. Lokální testování tím
     prošlo; CI, Pages a zveřejněný distribuční manifest ještě čekají.
+
+11. Publikace R-0023 ověřena 13. října 2026: commit
+    `2a464170c54d95713ab9781ece0cc0f24c17e0a2`,
+    [CI 38459737614](https://github.com/jajir/microcol/actions/runs/38459737614)
+    úspěšně dokončilo všechny tři nativní balíčky, kontroly, úplné funkční
+    scénáře a publikaci. Čerstvý artifact `tests-functional` obsahuje
+    **794 modelových a 105 funkčních/kontrolních případů**, nula selhání,
+    chyb a vynechání. [Pages 38459737655](https://github.com/jajir/microcol/actions/runs/38459737655)
+    také prošlo; veřejná stránka R-0023 obsahuje závěrečnou lokální evidenci.
+    Manifest kanálu odkazuje na stejný úplný commit a
+    [build dev-52-2a464170c54d](https://github.com/jajir/microcol/releases/tag/dev-52-2a464170c54d).
+    Skutečně stažený macOS ARM64 ZIP má 61 109 033 bytů a SHA-256
+    `870eae3ecaca643e9485cfe432283fc4909ef59fdaae9fa5cd0d105f6159fbb9`,
+    shodný s manifestem. Reporty a distribuční důkazy jsou uložené v
+    `target/r19-r31/ci-r23/` a `target/r19-r31/release-r23/`.
+
+
+## Wagon unloading implementation — 2026-10-13
+
+1. [R-0024](requirements/R-0024.md) doplňuje vůz do stejného seznamu
+   dopravců jako lodě. `Colony.getUnitsInPort` vrací vlastní místní
+   `UnitWithCargo`; existující obrázek a české/anglické názvy podporují mapu
+   i přístav. Vykládání nadále používá jedinou modelovou transakci skladu.
+   Nezavádí se přeprava lidí vozem ani automatické trasy.
+2. Nové `WagonWarehouseTest` obsahuje sedm případů se skutečným vozem
+   vytvořeným továrnou: limity 100/200/300, zastaralá nabídka, vzdálený/cizí/
+   odstraněný vůz, zákaz pasažérů a uložení identity i obou zásob.
+   `TC_31_F23_wagon_unloading_test` má osm čitelných hráčských scénářů.
+   TC01 přesune vůz po mapě, vybere jej vedle lodi, zruší nabídku 10 z 30
+   rud při zásobě 90, potvrdí 100/20, ověří plný sklad a Continue.
+   TC02 ověřuje rozšíření skladu a Escape; TC03–06 změněné zásoby,
+   náklad, místo a vlastníka během potvrzení. TC07 odmítne pasažéra
+   a neplatné tažení ikony; TC08 ověří skutečný český mapový popis.
+   Stávající TC22/TC_04 si ponechává ID, ale požaduje podporovaný obrázek.
+3. První běh `run-SsY6YV`, exit 1, prošel **66 modelovými případy**.
+   Funkční část měla **34 případů, šest selhání, žádnou chybu ani vynechání**.
+   TC31/03 zobrazil správnou novou nabídku 5 a model držel 95 rud, ale
+   panel skladu stále ukazoval 90. Původní `PanelColonyGoods` překresloval
+   pouze po ukončení celé smyčky dialogu. Selhání při otevřeném modálu
+   předcházelo pěti dalším selháním načtení hry; nevznikl jejich log načtení
+   fixture. Všech 18 TC19, pět TC22, tři strukturální kontroly a TC31/07–08
+   prošlo. Log: `target/r19-r31/wagon-first.log`.
+4. Hlavní agent doplnil existující `RepaintColonyEvent` po úspěšném ověření
+   obnovené nabídky a před novým výběrem množství. Pravidla převodu i všechna
+   očekávání zůstala zachovaná. Stejný příkaz poté prošel **66 modelovými
+   a 34 funkčními/kontrolními případy**, nula selhání, chyb a vynechání
+   (`run-XUJtg1`, exit 0; `target/r19-r31/wagon-refresh-fixed.log`):
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests -Dtest=WagonWarehouseTest,ColonyWarehouseUnloadTest,ModelArchitectureTest,TC_31_F23_wagon_unloading_test,TC_22_F15_free_play_capability_audit_test,TC_19_F14_warehouse_unloading_test,PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false`.
+   Čerstvé XML potvrzují všech osm TC31. Snímek `wagon-colony.png` byl
+   prohlédnut: vůz se odlišuje od lodi a zobrazuje své dva prostory.
+   Název kolonie je ve snímku vlevo oříznutý; nejde o přijetí celého layoutu.
+5. Přijatých 14 zdrojových/testovacích/fixture souborů bylo začleněno
+   z izolovaného checkoutu po ověření původního commitu `2a464170`.
+   Jedenáct Java souborů prošlo společným formatterem, shodou tokenů
+   a idempotencí. Úplná regrese hlavního checkoutu příkazem
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`
+   prošla **801 modelovými a 113 funkčními/kontrolními případy**, bez selhání,
+   chyb a vynechání (`run-vD4k94`, exit 0; `target/r19-r31/wagon-full.log`).
+   Počty potvrzují čerstvé XML 98 modelových a 34 funkčních/kontrolních tříd.
+   Publikace zatím čeká. Tento řez nepředstavuje přijetí všech směrů UC-023 ani
+   výrobního přetečení a potravin v UC-036.

@@ -183,18 +183,19 @@ public final class FreePlayAuditPage extends AbstractScreen {
         assertEquals(guns, unit.isHoldingGuns());
     }
 
-    public void verifyWagonArtworkUnsupported() {
+    public void verifyWagonArtworkSupported() {
         final Unit wagon = org.mockito.Mockito.mock(Unit.class);
         org.mockito.Mockito.when(wagon.getType())
                 .thenReturn(org.microcol.model.UnitType.WAGON);
         final org.microcol.gui.image.ImageProvider provider = getContext()
                 .getClassFromGuice(org.microcol.gui.image.ImageProvider.class);
-        assertNull(provider.getUnitImage(org.microcol.model.UnitType.WAGON));
-        final IllegalArgumentException error = assertThrows(
-                IllegalArgumentException.class,
-                () -> provider.getUnitImage(wagon,
-                        org.microcol.model.Direction.east));
-        assertTrue(error.getMessage().contains("WAGON"));
+        final javafx.scene.image.Image image = provider
+                .getUnitImage(org.microcol.model.UnitType.WAGON);
+        assertNotNull(image);
+        assertSame(image, provider.getUnitImage(wagon,
+                org.microcol.model.Direction.east));
+        assertSame(image, provider.getUnitImage(wagon,
+                org.microcol.model.Direction.west));
     }
 
     public void verifyConstructionQueueUnavailable(final int population) {
