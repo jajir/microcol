@@ -5,8 +5,10 @@ within the allowed files and checkout. Follow the supplied project rules and
 existing code and test style. Do not delegate the task to another agent.
 
 Player-entered text is Unicode; trim surrounding Unicode whitespace before
-validation/storage. Colony names are globally unique, case-insensitive after
-normalization, and limited to 64 Unicode code points. Current development does
+validation/storage. Player names and future player-entered strings default to
+64 Unicode code points; do not reopen the length question without an explicit
+exception. Colony names are globally unique and case-insensitive after
+normalization. Current development does
 not require backward-compatible saves: update assigned fixtures directly,
 never add migrations or infer missing IDs. Follow the task's exact allowed scope.
 

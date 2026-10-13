@@ -615,3 +615,51 @@ nikoli ověřený kód nebo fixtures.
    a 52 funkčních kontrol**, bez selhání, chyb a vynechání. Prošly i kontroly
    sestavení a všechny tři nativní platformy; publikaci a přesný build
    zaznamenává [R-0011](requirements/R-0011.md).
+
+<a id="free-play-audit-2026-10-13"></a>
+## Audit existujících cest volné hry — 13. října 2026
+
+1. Zadání zpřesňuje R-0012–R-0025 a ověřuje současné UI. Nemění produkční
+   pravidla ani nerealizuje celé budoucí návrhy. Testy výslovně označené jako
+   pozorování mezery neslouží k přijetí požadovaného cílového chování.
+2. Nové scénáře používají F15/F16 a pojmenované page verifikace. TC21 ověřuje
+   obrazovky a čistý profil, TC22 dostupnost evropských a kolonijních operací,
+   TC23 plavbu a obnovu existujícího autosave. Starý ignorovaný autosave v
+   místním adresáři fixture nesmí určovat výchozí stav: TC21 jej odstraňuje
+   pouze ze své izolované testovací kopie, TC23 tam připraví známou F16.
+3. Podrobnosti hráčských výsledků a otevřených otázek vlastní jednotlivá R.
+   Výjimka obrázkového provideru v TC22/TC_04 je diagnostikou nedostupného
+   vozu, nikoli úspěšným UI vyložením. Skrytá stavební fronta se neobchází
+   přímou změnou modelu. TC21/TC_05 a TC23/TC_02 dokumentují rozdíl mezi
+   uložením na začátku tahu a očekávaným uložením při vstupu do menu.
+
+| Cesta | Scénář | Rozsah |
+| --- | --- | --- |
+| Evropa, report tahu, statistiky, kolonie | TC21/TC_01–TC_04 | Kliknutí a existující klávesy; klávesa pro otevření kolonie chybí. |
+| Menu a Continue | TC21/TC_05, TC23/TC_02 | Samostatně čistý profil a existující autosave; požadované uložení při odchodu dosud chybí. |
+| Výbava a nákup v Evropě | TC22/TC_01–TC_02 | Molo nemá vybavovací nabídku; úplný nákupní seznam nemá odborného kováře. |
+| Cestující | TC22/TC_03, TC01 | Nalodění/vylodění na molu a mezi kolonií, lodí a pobřežím. |
+| Vůz a stavba | TC22/TC_04–TC_05 | Chybí napojení obrázku vozu, stavební ovládání je skryté. |
+| Atlantik a uložená plavba | TC23/TC_01 | Aktuální okamžitý odjezd při vstupu na HIGH_SEA, zachování nákladu a jiný návratový bod. |
+
+Lokální ověření na macOS/JDK 17:
+
+1. Cílený Monocle běh vybral TC21, TC22, TC23, TC01, TC12 a
+   PageVerificationContractTest: **17 kontrol, 16 úspěšných, 1 chyba,
+   0 vynechaných**. TC23/TC_01 narazil na výjimku Monocle
+   `ClipboardAssistance` při drag-and-drop. Ostatní nové cesty včetně obou
+   stavů autosave prošly. Následná kontrola fixture opravila cestujícího na
+   legální výbavu 80 nástrojů bez mušket; konečný stav ověřuje nativní brána.
+2. Úplný příkaz `mvn -B -ntp -pl microcol-test -am clean test -P ci
+   -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw
+   -DsoundEnabled=false` v samostatném checkoutu bez mezer: **683 herních
+   testů prošlo**; funkční sada vybrala 64 kontrol, měla 56 selhání a 2 chyby,
+   bez skipů. Diagnostika plochy potvrdila zamčený Mac; běžné načtení hry
+   nepřijímalo kliknutí ani v nezměněných TC. Tento běh není přejímkou UI.
+3. Sdílený formatter prošel všech pět nových Java souborů, zachoval tokeny
+   a při opakování nic nezměnil. Prošlo 9 dokumentačních kontrol a strict
+   MkDocs; číslované kapitoly byly zkontrolovány ve webovém náhledu.
+4. Konečnou UI přejímku a publikaci musí potvrdit Linux/JDK 17/Xvfb/Openbox
+   v povinném [vývojovém workflow](../.github/workflows/dev-builds.yml).
+   Lokální překážky se neskrývají pomocí skipů, retry ani slabších asercí.
+   Logy jsou v `~/Library/Logs/Microcol/freeplay-audit-2026-10-13/`.

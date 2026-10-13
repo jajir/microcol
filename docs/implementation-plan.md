@@ -13,8 +13,9 @@ pro další práci, nikoli závazný termín nebo spuštěné implementační ú
 
 **Zpřesnění postupu z 13. října 2026:** nejdřív vybíráme jednu z
 [deseti pracovních oblastí](requirements/areas.md), vyjasníme její potřebnou
-společnou strukturu a potom upřesňujeme jednotlivá R. Nejbližším navrženým
-krokem je struktura menu A01, ne automatická implementace R-0001.
+společnou strukturu a potom upřesňujeme jednotlivá R. Uživatel následně potvrdil
+zachování současného menu A01: R-0001 odstraní podmínku kampaně; R-0014
+naváže mock nastavením a dvěma mapami.
 Oblasti určují soustředění práce; balíky P zůstávají rozpadem rozsahu a etapy E
 přejímacími výsledky. Číselné pořadí R ani P není fronta k provedení.
 
@@ -204,8 +205,9 @@ jejich zbývající části automaticky „mimo první vydání“.
 
 ### Nové analýzy pro free play
 
-Doplněno 13. října 2026: **dvacet návrhů R-0012–R-0031**, všechny ve stavu
-Draft. [Katalog analýz](requirements/README.md#twenty-free-play-follow-up-drafts)
+Doplněno 13. října 2026: **dvacet návrhů R-0012–R-0031**, původně ve stavu
+Draft; R-0012–R-0025 následně přešly do Refining podle rozhodnutí uživatele
+a ověřování existujících UI cest. [Katalog analýz](requirements/README.md#twenty-free-play-follow-up-drafts)
 a [mapa oblastí](requirements/areas.md#navazujici-navrhy-pro-free-play) určují
 jejich zařazení; konkrétní rozsah a otázky vlastní každý dokument. Příprava
 neznamená implementaci ani uzavření příslušného balíku nebo UC.
@@ -328,7 +330,7 @@ následující kroky i chybový a zrušený průchod.
 v [seznamu R-0001 až R-0010](requirements/README.md#first-ten-upcoming-requirements).
 Jde o připravené koncepty pro jednotlivé upřesnění, nikoli schválení nebo
 spuštění deseti implementací. Výběr začíná [přípravou oblasti](requirements/areas.md#postup-po-oblastech),
-u menu konkrétní strukturou a navigací před R-0001. Dokončené Z01/Z02 zůstávají níže jako dosavadní
+u menu už je zachování současné navigace dohodnuté v R-0012. Dokončené Z01/Z02 zůstávají níže jako dosavadní
 kontrakty; nejsou znovu zařazené mezi budoucí změny.
 
 | Balík / původní zadání | Analýzy pro postupné upřesnění |

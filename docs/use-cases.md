@@ -433,6 +433,14 @@ U ostatních UC se konkrétní TC doplní po přečtení jejich skutečných ase
 Prázdná vazba není důkaz neexistence implementace, nýbrž dosud nepřiřazeného
 úplného přejímacího důkazu.
 
+Doplnění z 13. října 2026: [audit existujících cest volné hry](functional-tests.md#free-play-audit-2026-10-13)
+přiřazuje TC21 k navigaci UC-114/115 a ukládání UC-113; TC22 k UC-018,
+UC-024/025, UC-055, UC-023/036 a UC-042; TC23 k UC-027 a uložení plavby.
+Jde o omezené fungující cesty a explicitní pozorování mezer. Nedostupná výbava,
+odborník, vůz nebo stavební fronta neznamenají úspěšnou přejímku těchto UC;
+stavy celých UC se tímto auditem neuzavírají. Původní cílová očekávání v tabulkách
+zůstávají zachována, jednotlivé opravy vlastní R-0018 a R-0020–R-0025.
+
 Historicky dne 12. října byly kontroly počtu lodí přesunuty z page component do samotných
 TC01 a obou scénářů TC06. TC01 souvisí s UC-024/025 (přeprava jednotek), TC06
 s UC-055/056 (nákup lodě a obchod). Tento přesun zachovává původní očekávání

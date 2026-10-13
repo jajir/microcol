@@ -73,7 +73,9 @@ paths in UI tests; see the contract in `docs/architecture.md`.
 
 Treat player-entered text as Unicode and trim surrounding Unicode whitespace
 before validation/storage; preserve internal spaces, accents and punctuation.
-Colony names have a 64-Unicode-code-point limit and are globally unique under
+By default, all future player-entered strings have a 64-Unicode-code-point
+limit; player names use this limit. Do not ask again about length unless the
+user explicitly requests an exception. Colony names are globally unique under
 normalized, case-insensitive comparison. Keep model validation authoritative.
 
 During current development, backward compatibility of saved games is explicitly

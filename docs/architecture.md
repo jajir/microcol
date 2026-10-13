@@ -92,6 +92,9 @@ her neznamená totožnost objektů; objektové equality se tímto řezem neměn�
 Přetrvávající souborové čtení/zápis zůstává v `model.campaign.po`.
 
 Textové vstupy hráče jsou Unicode a mají oříznuté krajní Unicode mezery.
+Dohoda z 13. října 2026 stanoví výchozí limit **64 Unicode code points** pro
+jméno hráče i další budoucí textové vstupy; na délku se znovu neptáme, pokud
+uživatel výslovně nepožaduje výjimku. Jedinečnost názvů kolonií je samostatné pravidlo.
 Zpětná kompatibilita save souborů není nyní požadována; aktuální fixtures
 mají povinné identifikátory. Podrobnosti a limity vlastní výše uvedený kontrakt.
 

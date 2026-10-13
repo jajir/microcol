@@ -15,7 +15,7 @@ current status, scope and open questions. Completed Z01/Z02 remain in the
 
 | Requirement | Primary area | Small outcome | Main dependency or refinement decision |
 | --- | --- | --- | --- |
-| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | A01 navigation foundation; A02 initial entry/profile decision. |
+| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | Existing menu reuse agreed; R-0014 adds mock setup later. |
 | [R-0002](R-0002.md) | [A04](areas.md#a04) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
 | [R-0003](R-0003.md) | [A05](areas.md#a05) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
 | [R-0004](R-0004.md) | [A05](areas.md#a05) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
@@ -26,13 +26,11 @@ current status, scope and open questions. Completed Z01/Z02 remain in the
 | [R-0009](R-0009.md) | [A07](areas.md#a07) | Match expert blacksmith output to ore consumption. | Reachable expert and acquisition path. |
 | [R-0010](R-0010.md) | [A07](areas.md#a07) | Produce the colony's automatic base cross. | Agree the limited production slice. |
 
-These are candidate changes, not a numbered execution queue. Start with the
-[area overview and proposed sequence](areas.md#postup-po-oblastech). The proposed
-first preparation is A01's menu/navigation foundation, including the boundary
-with A02 setup and A03 common controls. R-0001 can then implement the agreed
-entry into ordinary free play; its earlier direct-launch proposal is not the
-final menu design. Later player acceptance still needs that ordinary-game entry.
-Preparing or classifying these drafts does not close any UC.
+These are candidate changes, not a numbered execution queue. Use the
+[area overview](areas.md#postup-po-oblastech). On 2026-10-13 the user settled
+A01: retain the existing menu and remove the campaign gate through R-0001.
+R-0014 owns the later mock setup. Refinement and capability checks do not close
+any whole UC or authorize all drafts for implementation.
 
 Test class/fixture names marked **proposed** in the files reserve a concrete
 verification plan, not runnable tests. Check availability again before creating
@@ -50,20 +48,21 @@ inside each analysis.
 ## Twenty free-play follow-up drafts
 
 Captured on **2026-10-13** against `b5077d1e`, using the area map, existing
-analyses and the rule/use-case catalogues. R-0012–R-0031 are **Draft** analyses,
-not approved implementation assignments or verified gameplay. Their publication
+analyses and the rule/use-case catalogues. They began as **Draft** analyses. R-0012–R-0025 are now **Refining** following
+the user’s decisions and UI audit; each file owns its current evidence.
+This does not make every proposed behavior approved or verified. Their publication
 publishes the documents only. Refine one selected requirement at a time.
 
 | Requirement | Primary area | Small outcome |
 | --- | --- | --- |
-| [R-0012](R-0012.md) | [A01](areas.md#a01) | Define the free-play menu and navigation foundation. |
+| [R-0012](R-0012.md) | [A01](areas.md#a01) | Reuse the existing free-play menu. |
 | [R-0013](R-0013.md) | [A01](areas.md#a01) | Leave or replace an active game safely. |
-| [R-0014](R-0014.md) | [A02](areas.md#a02) | Create and persist a reference free-play start profile. |
-| [R-0015](R-0015.md) | [A02](areas.md#a02) | Define the participants in a free-play game. |
-| [R-0016](R-0016.md) | [A03](areas.md#a03) | Define the free-play screen and information structure. |
+| [R-0014](R-0014.md) | [A02](areas.md#a02) | Choose a map through a mock free-play setup. |
+| [R-0015](R-0015.md) | [A02](areas.md#a02) | Add fixed French cities and units to free play. |
+| [R-0016](R-0016.md) | [A03](areas.md#a03) | Verify existing screens with mouse and keyboard. |
 | [R-0017](R-0017.md) | [A03](areas.md#a03) | Use consistent command availability and rejection feedback. |
-| [R-0018](R-0018.md) | [A04](areas.md#a04) | Restore a free-play save without losing the active game. |
-| [R-0019](R-0019.md) | [A05](areas.md#a05) | Separate explored terrain from current unit visibility. |
+| [R-0018](R-0018.md) | [A04](areas.md#a04) | Keep automatic saving and verify Continue. |
+| [R-0019](R-0019.md) | [A05](areas.md#a05) | Clarify fog of war separately from movement range. |
 | [R-0020](R-0020.md) | [A05](areas.md#a05) | Buy and sell colonist equipment on the European pier. |
 | [R-0021](R-0021.md) | [A06](areas.md#a06) | Depart through sea lanes and return to the recorded coast. |
 | [R-0022](R-0022.md) | [A06](areas.md#a06) | Embark and disembark an individual colonist safely. |
@@ -77,7 +76,7 @@ publishes the documents only. Refine one selected requirement at a time.
 | [R-0030](R-0030.md) | [A10](areas.md#a10) | Resolve a Crown tax demand and a commodity boycott. |
 | [R-0031](R-0031.md) | [A10](areas.md#a10) | Compute local and national rebel sentiment. |
 
-Start with **R-0012**, then agree the A01 delivery around R-0001/R-0013.
+R-0012 now records the agreed A01 reuse; R-0001 can remove the campaign gate.
 Prepare only the A02/A03 dependencies needed for that delivery before moving
 through the [area sequence](areas.md#postup-po-oblastech). IDs are not priorities:
 R-0023 enables R-0009, and R-0031 enables R-0030. A dependency names needed
@@ -88,6 +87,19 @@ not the complete free-play backlog. Map generation, a full unit roster, native
 societies, trade routes, education, full combat resolution, founders and the
 independence/endgame journey still need their own small analyses. Existing
 manual rules, work packages and UC acceptance remain in scope and open.
+
+## User decisions and current UI audit — 2026-10-13
+
+The user retained the current main menu and requested that its free-play entry
+be enabled independently of campaign completion. R-0014 now specifies a mock
+setup with working Start/Back and two map choices; R-0015 specifies fixed French
+cities and units. R-0016 and R-0020–R-0025 are being checked through actual UI
+journeys before missing work is restated. See each analysis for its current
+scope and evidence; the earlier capture tables describe the initial drafts.
+
+Player-entered text defaults to **64 Unicode code points**, including player
+names. Do not reopen that length question for future fields unless the user
+requests an exception. Colony-name uniqueness is a separate existing rule.
 
 ## Naming and scope
 

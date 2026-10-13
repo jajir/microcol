@@ -15,6 +15,19 @@ This document compares MicroCol with the gameplay rules in the [downloaded Sid M
 
 The assessment covers the manual's gameplay chapters and all four reference cards. Findings combine reading the manual, tracing model/UI/AI/persistence paths, inspecting existing tests, and running the model test suite. No gameplay implementation was changed during the assessment. Exact formulas not supplied by the manual are recorded as open questions rather than filled from memory of the original game or another remake.
 
+<a id="free-play-ui-audit-2026-10-13"></a>
+## Free-play UI refinement — 2026-10-13
+
+The [functional audit](functional-tests.md#free-play-audit-2026-10-13) links actual
+player paths to R-0016/R-0018 and R-0020–R-0025. It preserves the catalogue's
+manual targets; baseline gap observations do not change a missing rule to
+implemented. In particular, Europe supports passenger transfer but lacks pier
+equipment controls and expert purchase. Wagon artwork is not registered in the
+unit image provider, and the colony construction control is hidden by CSS before
+its model eligibility can be exercised through UI. Automatic saving writes at
+human-turn start; menu-entry saving and fresh-session Continue refresh remain
+separate gaps. Each requirement owns its bounded follow-up and open questions.
+
 ## Main findings
 
 MicroCol has a useful foundation for colony production, cargo, European purchases, map movement, and saved scenarios. Substantial rules work remains across the complete game:

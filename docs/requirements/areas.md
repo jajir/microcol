@@ -39,7 +39,7 @@ cíle, přechody, návrat, zrušení a vstupy do nové nebo uložené partie.
 Nejdřív potřebujeme mapu obrazovek a tabulku přechodů včetně chybových stavů.
 A02 vlastní nastavení a vytvořenou partii, A04 obnovu pozice a A10 význam
 odchodu se skóre. Společné ovládací prvky a texty přebíráme z A03.
-První kandidát: [R-0001](R-0001.md), až po vyjasnění struktury menu.
+První kandidát: [R-0001](R-0001.md); stávající menu bylo potvrzeno 13. října 2026.
 
 ### A02
 
@@ -195,7 +195,7 @@ IMM-005/006 neexistují; mezery v ID nedoplňujeme.
 
 | Krok | Soustředění | Co potřebujeme před přechodem dál |
 | --- | --- | --- |
-| 1 | A01 menu; nezbytné hranice A02/A03 | Domluvená struktura a navigace. Potom malý vstup do hry R-0001 v dohodnuté podobě. |
+| 1 | A01 menu; nezbytné hranice A02/A03 | Stávající menu potvrzeno; R-0001 odstraní podmínku dokončené kampaně. |
 | 2 | A04 tahy a A05 svět/jednotky | Konkrétní kontrakty času, stavu, pohybu a obnovy; malé řezy R-0002–0004 podle závislostí. |
 | 3 | A07 kolonie | Postupné R-0005–0010 po vyjasnění společného základu; souvislá první kolonie a hospodářský tah. |
 | 4 | A06 doprava a Evropa | Oběh lidí, zásob a peněz. Je-li získání odborníka podmínkou R-0009, tento úzký předpoklad vyřešíme už před ním. |
@@ -204,7 +204,7 @@ IMM-005/006 neexistují; mezery v ID nedoplňujeme.
 
 A02 se rozšiřuje o další volby, když existují jejich herní účinky. A03 provází
 každou oblast a vytváří společný základ už na začátku. Přesný rozsah první
-dodávky menu a referenční profil zatím nejsou uzavřené. Toto pořadí nahrazuje
+dodávky menu je upřesněn v R-0012; mock nastavení vlastní R-0014. Toto pořadí nahrazuje
 automatický postup R-0001, R-0002, …; [etapy E0–E7](../implementation-plan.md#etapy-podle-toho-co-hrac-dokaze)
 nadále popisují ověřitelné výsledky, nikoli konkurenční frontu úkolů.
 
@@ -227,35 +227,26 @@ pozdějších oblastí; nejsou úplným seznamem práce do dokončení hry.
 | A09 | [R-0028 přípustnost útoku](R-0028.md), [R-0029 výpočet pozemní síly](R-0029.md) |
 | A10 | [R-0030 daňový požadavek](R-0030.md), [R-0031 podpora nezávislosti](R-0031.md) |
 
-Nejbližší vybraný návrh zůstává A01: upřesnit R-0012, potom z něj vymezit
-první dodávku s R-0001/R-0013. R-0023 je navržený předpoklad dosažitelnosti
-odborníka pro R-0009; R-0031 je předpoklad politického účinku protestu v R-0030.
-Tyto závislosti mají přednost před číselným pořadím. Úplné trasy UC-115–118
-se přejímají až po propojení příslušných funkcí.
+A01 má od 13. října 2026 dohodnutý základ: ponechat stávající menu, odstranit
+podmínku kampaně v R-0001 a ověřit skutečné ukládání v R-0018. R-0023 zůstává
+předpokladem dosažitelnosti odborníka pro R-0009; R-0031 předchází politickému
+účinku protestu v R-0030. Číslo R neurčuje prioritu.
 
 ## Nejbližší příprava: struktura A01
 
-**Návrh dalšího upřesnění, dosud bez schváleného stromu menu.** Před implementací
-R-0001 potřebujeme konkrétní přehled současné a navržené navigace.
-Vlastníkem tohoto návrhu je [R-0012](R-0012.md); při jeho upřesnění doplníme:
+**Rozhodnutí uživatele z 13. října 2026.** [R-0012](R-0012.md) vlastní
+zachování současného menu; jeho nový návrh již není blokátorem R-0001.
 
-1. Cíle hlavního menu a menu v rozehrané hře; umístění kampaně, výuky,
-   nastavení a nápovědy podle zvoleného rozsahu. Existence dnešní položky
-   není důkazem, že má být ve finální struktuře na stejném místě.
-2. Význam a dostupnost akcí Nová hra, Pokračovat, Načíst, Zpět, Ukončit
-   aplikaci a Ukončit partii se skóre. Jde o možnosti k rozlišení, nikoli
-   přikázané popisky nebo potvrzený seznam tlačítek.
-3. Hranici A01/A02: kam vede nová hra, zda přes nastavení nebo přijatý
-   přímý start a kam vede zrušení. Volná hra nesmí být podmíněná kampaní.
-4. Stavy bez uložené hry, s aktivní partií, při rozpracovaném nastavení a po
-   neúspěšném načtení; ochranu stávající partie při nahrazení nebo odchodu.
-5. Tabulku **výchozí stav → akce → cílová obrazovka a změna stavu → zpět/zrušit**.
-   Ta určí souvislou cestu, ne jen nezávislý seznam tlačítek.
-6. Společné názvy, klávesové ovládání, návrat fokusu a vysvětlení nedostupnosti
-   podle A03. Grafický detail řešíme v mezích stávajícího briefu; finální
-   ilustrace nejsou podmínkou dohody o navigaci.
-7. Nejmenší první realizovatelný řez a navazující R. R-0001 převezme výsledek
-   této přípravy; jeho původní návrh přímého startu nepovažujeme za rozhodnutí.
+1. R-0001 zpřístupní existující „New free play game“ bez dokončení kampaně.
+2. R-0014 naváže mock nastavením ve stylu menu: Start/Zpět a dvě funkční mapy;
+   národ bude prozatím pouze mock volba.
+3. R-0015 přidá Francii na pevná místa s městy a jednotkami.
+4. R-0016 ověří existující obrazovky myší a dostupnými klávesami. Chybějící
+   klávesová cesta není důvod k návrhu celého nového UI.
+5. R-0018 ověří automatické uložení a Pokračovat; nezamění uživatelský
+   předpoklad o uložení při odchodu do menu za doložené chování.
+6. Aktuální zadání je upřesnění a ověření cest. Nové herní funkce zůstávají
+   jednotlivými následnými implementacemi.
 
 Zařazení oblastí i pořadí jsou návrhy pro další společnou práci. Nezakládají
 implementační úkoly, nespouštějí automaticky deset oblastí a nemění dosavadní

@@ -78,6 +78,39 @@ installation, configuration changes or a cloud fallback when the worker fails.
    local runtime was unavailable. No service setup or cloud worker substitution
    was attempted. Acceptance belongs to [R-0011](../requirements/R-0011.md).
 
+### Free-play audit runtime — 2026-10-13
+
+1. Initial preflight found Ollama stopped. The main agent prepared TC21/TC22 and a fixture; the first compile found three helper errors before any UI scenario ran.
+2. The user explicitly requested starting Ollama and no further work without Qwen. `brew services start ollama` succeeded. `ollama list` found the existing worker alias, and `ollama ps` confirmed digest prefix `dfe6877b76ae`, context 8192 and GPU execution. No model download or cloud worker substitution occurred.
+3. Four bounded tasks have completed their worker attempts; caller verification
+   and integration are separate. Baseline was `23b2b013`; the isolated checkout
+   was later advanced to `6ed5a8e1` (the independent validation cleanup) and moved
+   to a path without spaces for JavaFX verification.
+
+| Task | Attempt durations (seconds) | Review and recovery |
+| --- | --- | --- |
+| `2026-10-13-freeplay-audit-compile` | 75.787 / 47.928 / 12.241 | First results omitted a repair or used invalid Java. Both targeted repairs were used; three final replacements fixed compilation. Source-contract tests passed 3/3; UI then exposed a wagon-render fixture blocker. |
+| `2026-10-13-freeplay-wagon-isolation` | 77.349 / 48.962 / 44.449 | First result referenced an undefined exception; repair fixed it. Caller UI run exposed a wrong image-provider overload supplied in the handoff, a wrong statistics selector/title and genuinely hidden construction controls. Last repair received an oversized caller prompt (8180 input / 12 output tokens) and returned an incomplete fragment. Both repairs exhausted; caller completed those specific corrections, retaining explicit gap observations. |
+| `2026-10-13-atlantic-ui-audit` | 132.371 / 300.023 / 39.424 | First result invented APIs and omitted required setup/steps. First repair timed out with a compaction warning and no completed source; exact internal cause is not established. Last repair accepted only two read-only verifiers. Caller supplied fixture, UI sequence and navigation integration, and corrected a caller-provided `Integer` assumption where `getId()` actually returns `int`. |
+
+| `2026-10-13-audit-save-fixtures` | 81.596 / 32.539 | First batch mixed assertions into TC, duplicated setup and missed the clean-profile deletion. Targeted repair supplied two correct isolated-home setup methods; caller added omitted imports and integrated the separate verifier/scenarios. |
+
+4. These are partial delegation results, not autonomous successes. The caller
+   also strengthened the purchase-roster assertion to compare the complete
+   visible list. The clean-checkout test exposed an ignored source autosave
+   influencing earlier local results; the separate task
+   `2026-10-13-audit-save-fixtures` isolates startup states without changing
+   production behavior. After preparation repair, 16/17 targeted checks passed; the remaining voyage scenario hit a native clipboard exception in Monocle, so final acceptance uses native JavaFX.
+5. Keep handoffs below the available total context, including role and CLI
+   instructions; do not send two complete classes for a three-fragment repair.
+   The voyage task shows that even a text-only prompt can fail: accept only
+   reviewed source and actual tests. Remaining time never resets the two-repair
+   limit. No cloud worker fallback or token-savings claim was made.
+6. Job directories under `~/Library/Logs/Microcol/local-qwen/jobs/` retain prompts,
+   raw responses, elapsed times, reviews and caller corrections. Qwen was unloaded
+   before Maven; Ollama remains running as requested. Actual player evidence and
+   publication belong to the [functional audit](../functional-tests.md#free-play-audit-2026-10-13).
+
 ## Default development workflow — 2026-10-11
 
 User and main agent agree player goal, rules, edge cases, cancellation/failure
