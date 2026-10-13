@@ -43,6 +43,8 @@ public class UnitImageProvider {
                         imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
                 .put(UnitType.COLONIST,
                         imageCache.getImage(IMG_UNIT_FREE_COLONIST))
+                .put(UnitType.MASTER_BLACKSMITH,
+                        imageCache.getImage(IMG_UNIT_FREE_COLONIST))
                 .build();
 
         unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
@@ -58,7 +60,9 @@ public class UnitImageProvider {
                     }
                     return null;
                 }, request -> {
-                    if (UnitType.COLONIST == request.getUnitType()) {
+                    if (UnitType.COLONIST == request.getUnitType()
+                            || UnitType.MASTER_BLACKSMITH == request
+                                    .getUnitType()) {
                         if (request.getUnit() instanceof UnitFreeColonist) {
                             final UnitFreeColonist fc = (UnitFreeColonist) request
                                     .getUnit();

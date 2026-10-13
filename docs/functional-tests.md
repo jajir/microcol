@@ -1092,3 +1092,162 @@ Lokální ověření na macOS/JDK 17:
     konfigurace historicky vylučuje. Tento dodatečný test také prošel.
     Žádná jiná třída ani počet případů se mezi oběma herními výběry neliší;
     nejde o odstraněný či vynechaný test nové přepravy.
+
+17. Commit `a2a4ac22b9dbf1341fb1be81f3cadb84adb5176a` byl odeslán na `main`.
+    Pages [38442144492](https://github.com/jajir/microcol/actions/runs/38442144492)
+    prošly. Vývojový běh
+    [38442144257](https://github.com/jajir/microcol/actions/runs/38442144257)
+    ověřil všechny tři nativní balíčky, ale funkční job dokončil **98 případů
+    s jednou chybou**, nula selhání a vynechání. TC29/TC_04 čekal na nalodění
+    do volného místa po předchozím odmítnutém přetažení na obsazený slot.
+    Publikační job se nespustil; nový vývojový build proto není dodaný.
+    Stažená XML `target/r19-r31/ci-r22/docker-ui/run-AcYIkY/` a log
+    `target/r19-r31/r22-ci-failed.log` uchovávají původní výsledek.
+    Diagnostika běží nad čistým checkoutem tohoto commitu, odděleně od R-0023.
+
+18. Cílená lokální diagnostika původního R-0022 commitu prošla všemi šesti
+    TC29 a třemi strukturálními kontrolami; log
+    `target/r19-r31/passenger-ci-diagnostic.log`. Dočasné filtry událostí myši
+    v izolovaném checkoutu nebyly převzaty do zdrojů. Příčina původního CI
+    timeoutu zůstává neprokázaná. Neúspěšný CI job byl jednou zopakován
+    beze změny kódu (`38442144257`, pokus 2); opět selhal na TC29/TC_04.
+19. Pomůcka `PassengerTransferPage` nyní po přetažení čeká na nativní
+    `DRAG_DONE`, včetně odmítnutého cíle, místo pouhého vyprázdnění FX fronty.
+    Používá existující vzor z `ColonyScreen`, pětisekundový limit a odstranění
+    posluchače v `finally`. Scénáře a všechna očekávání zůstala stejná.
+    Izolovaná revize R22 prošla výběrem **13 modelových a devíti funkčních/
+    podpůrných testů**, nula selhání, chyb a vynechání (`run-lw3bzb`, exit 0;
+    `target/r19-r31/passenger-drag-completion.log`). Přesná sekvence událostí
+    původního vzdáleného timeoutu nebyla zachycena; úplná regrese a nové CI
+    měly ověřit vyřešení publikační překážky.
+20. Nové CI `38448815206` pro samostatnou opravu `b3ba0efc` prošlo celé:
+    **781 modelových a 98 funkčních/podpůrných případů**, bez selhání,
+    chyb a vynechání. Čerstvá XML jsou v
+    `target/r19-r31/ci-r22-fixed/docker-ui/run-cYDLux`, návratový kód 0.
+    Prošly všechny tři nativní balíčky, ostatní kontroly i publikace;
+    Pages `38448815200` také uspěly. Manifest buildu
+    `dev-51-b3ba0efcf67e` obsahuje úplné SHA
+    `b3ba0efcf67e400fa80a83fef20d07107e8db784` a všechny tři archivy.
+    Původní dvě selhání zůstávají v evidenci, nyní prošel stejný TC29/TC_04
+    v celé CI sadě. Stažený archiv macOS ARM64 má 61 107 194 bajtů a
+    SHA-256 `3c3905f09109de51eb27d2a67ff33355546dcf070a856fde11b85b953292bf67`,
+    shodné s manifestem. Rozpracované R-0023 v tomto commitu není.
+
+## Expert purchase implementation — 2026-10-13
+
+1. Rozpracované [R-0023](requirements/R-0023.md) přidává skutečný typ
+   `MASTER_BLACKSMITH` přes stávajícího kolonistu, továrnu a ukládání.
+   `Player` ověřuje dostupný typ, živého aktuálního hráče, Evropu a peníze
+   před vytvořením jednotky a účtováním. První regresní test nad původním
+   nákupem skutečně selhal: odmítnutý horník odečetl 600 zlata
+   (`run-lsw2rs`, `expert-unsupported-before.log`). Po opravě stejná kontrola
+   nezměněného stavu prošla; další úspěšný nákup navíc ověřuje zachování
+   následujícího ID.
+2. Izolovaný výběr `ExpertPurchaseTest,EuropeEquipmentTest,UnitTypeTest,ModelArchitectureTest,PageVerificationContractTest`
+   nejprve našel chybu přípravy: uložená mapa skladu nebyla měnitelná.
+   Kopie mapy opravila přípravu bez změny modelové validace. Následně prošlo
+   **36 modelových a tři strukturální případy**, nula selhání, chyb a
+   vynechání (`run-AfJ4fv`, `expert-model-fixture-fixed.log`).
+   Dvanáct nových modelových případů zahrnuje nákup, odmítnutí, vybavení,
+   save/load, přepravu a skutečné pracovní místo kováře.
+3. Nové TC30/F22 používá skutečnou evropskou nabídku. První hlavní výběr
+   prošel modelem a scénářem zrušení/duplicitního potvrzení/opětovného
+   nákupu/Continue, ale TC30/TC_03 hledal obecné `buttonOk` ve dvou oknech.
+   Po zavření nesprávného okna zmizela nabídka; následující TC30/TC_02 také
+   selhal na viditelnosti startovní obrazovky. Selektor nyní hledá tlačítko
+   uvnitř okna konkrétního varování. Očekávání nákupu ani zásob se neměnila.
+4. Opakovaný hlavní výběr **prošel: 36 modelových a 13 funkčních/podpůrných
+   testů**, nula selhání, chyb a vynechání; návratový kód 0, čas 1:50.
+   Příkaz: `docker compose -f compose.ui-tests.yml run --build --rm ui-tests -Dtest=ExpertPurchaseTest,EuropeEquipmentTest,UnitTypeTest,ModelArchitectureTest,TC_30_F22_expert_purchase_test,TC_22_F15_free_play_capability_audit_test,TC_06_F06_buy_and_sell_goods_test,PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false`.
+   Čerstvá XML `target/docker-ui/run-CiqOHJ/`, log
+   `target/r19-r31/expert-ui-warning-fixed.log`. Původní neúspěch zůstává
+   v `expert-ui-first.log`. Všechna tři TC30, pět TC22, dvě TC06 a tři
+   strukturální kontroly prošly. Snímek `expert-hiring.png` byl zkontrolován:
+   čtyři nabídky, název odborníka, přesná cena a důvod nedostatku zlata
+   jsou čitelné. Java změny byly naformátované sdíleným profilem.
+5. Navazující výběr prošel: **13 modelových a sedm funkčních/podpůrných
+   testů**, nula selhání, chyb a vynechání (`run-JpZkqv`, návratový kód 0,
+   `target/r19-r31/expert-journey-first.log`). Nové TC30/TC_04 najme kováře,
+   koupí mu muškety, uloží/načte na molu a během plavby, přes skutečné
+   ovládání dopluje do kolonie a vylodí ho mimo pracovní místa. Po dalším
+   Continue ho přetáhne do kovárny: muškety se vrátí do skladu, odbornost
+   zůstane a po tahu přibude šest nástrojů za tři kusy rudy. Identita,
+   vybavení a přiřazení jsou kontrolované také po načtení.
+6. Rozšířený běh nejprve selhal pouze v TC30/TC_06: testovací
+   `EuropePortScreen` očekával anglické „Europe“ i po přepnutí do češtiny.
+   Pomůcka nyní přijímá očekávaný nadpis; anglické scénáře ponechávají
+   původní kontrolu, český požaduje „Evropa“. Původní neúspěch je v
+   `target/r19-r31/expert-journey-complete.log`. Následující běh prošel:
+   **13 modelových a 14 funkčních/podpůrných testů**, nula selhání, chyb
+   a vynechání (`run-9jWePO`, exit 0, čas 2:32;
+   `target/r19-r31/expert-journey-language-fixed.log`). Všech šest TC30,
+   pět TC22 a tři strukturální kontroly zahrnují také odmítnutí odebraného
+   hráče a českou nabídku potvrzenou přes Tab/Space. Snímek
+   `expert-hiring-czech.png` byl zkontrolován jako čitelný.
+7. Lokální worker doplnil pojmenování pracovníků ve stávajícím stavovém
+   řádku budovy. První izolovaný výběr selhal v TC30/TC_04 na názvu prázdné
+   kovárny: test očekával „Blacksmith’s House“ z obecných prostředků,
+   obrazovka ale správně používá „Blacksmith house“ z vlastního
+   `screen/colony/ConstructionTypeName.xml`. Opravené je pouze přesné
+   očekávání původního názvu; jméno odborníka, jeho odchod a výroba mají
+   původní kontroly. Log `target/r19-r31/expert-workplace-first.log` zachovává
+   neúspěch. Další běh už ověřil název pracovníka a jeho zachování po Continue,
+   ale gesto odchodu skončilo timeoutem. Diagnostika skutečného
+   `MOUSE_PRESSED` ukázala, že viditelného kováře na souřadnicích (291, 695)
+   překrývá prázdný přesah `id_tobacco` z předchozího řádku; jeho hranice
+   zvětšoval posunutý panel výroby. Důkaz je v
+   `expert-workplace-pick-diagnostic.log`, původní timeout v
+   `expert-workplace-label-fixed.log`. Hlavní agent omezil zachytávání myši
+   na skutečný obsah panelu a vypnul je pro dekorativní výrobní údaje.
+   Stejná cesta, souřadnice a všechna herní očekávání poté prošly:
+   **13 modelových a 14 funkčních/podpůrných případů**, nula selhání, chyb
+   a vynechání (`run-CqcmQQ`, exit 0, čas 2:37;
+   `target/r19-r31/expert-workplace-picking-fixed.log`). Dočasná diagnostika
+   byla odstraněna. Názvy prázdné a obsazené kovárny, Continue, odchod
+   pracovníka a výroba se ověřují skutečným ovládáním. Přijatý workerův
+   kód i dvouřádková oprava hlavního agenta byly začleněné. Samostatné
+   nové TC30/TC_07 pro nahrazení celé hry pak také prošlo spolu se třemi
+   strukturálními kontrolami (**čtyři případy**, `run-BnErBn`, exit 0;
+   `target/r19-r31/expert-replaced-game.log`). Obě hry si zachovají zlato
+   a nevznikne odborník. Úplná regrese v hlavním checkoutu
+   (`target/r19-r31/expert-full.log`) skončila chybou popsanou níže; publikace R-0023 čeká. Celé UC-055 tím není přijaté.
+
+8. Konečný výsledek první úplné regrese: **793 modelových testů prošlo** bez
+   selhání, chyb a vynechání. Funkční část zaznamenala chybu v
+   TC03/TC_03 při vyhlášení nezávislosti: královská AI měnila seznam
+   jednotek současně s vykreslováním, které streamovalo živý `ArrayList`
+   v `UnitStorage.getUnitsAt` (řádek 109). Výsledkem byla
+   `ConcurrentModificationException`. Funkční část dokončila **105 případů,
+   jedna chyba, žádné selhání aserce ani vynechání**; všech sedm TC30 prošlo.
+   Log `target/r19-r31/expert-full.log`, běh `run-VHuz8A`, exit 1.
+   Tento běh neumožnil commit ani publikaci. Následná oprava je ověřená
+   cíleně podle bodu 9; úplnou sadu je nutné ověřit znovu.
+
+9. Oprava registru zachovává pořadí a používá `CopyOnWriteArrayList` pro
+   stabilní členství při čtení. Nový
+   `UnitStorageTest.mapQueryKeepsMembershipSnapshotWhileUnitsAreReplaced`
+   řízeně pozastaví čtení, odebere původní jednotku, přidá jinou a ověří
+   původní i následující výsledek. Žádné spánky, náhodné opakování ani
+   potlačení výjimky. Na původním kódu test skutečně skončil
+   `ExecutionException` způsobenou `ConcurrentModificationException`
+   (`run-dgJqvu`, jeden modelový případ, jedna chyba, exit 1; UI fáze se
+   kvůli očekávanému selhání nespustila). Po opravě prošlo **18 modelových
+   a 11 funkčních/kontrolních případů**, žádná chyba, selhání ani vynechání
+   (`run-PdZoxo`, exit 0). Výběr obsahoval všech pět `UnitStorageTest`,
+   12 `ExpertPurchaseTest`, jeden `ModelArchitectureTest`, původní TC03,
+   všech sedm TC30 a tři strukturální kontroly. Příkaz:
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests -Dtest=UnitStorageTest,ExpertPurchaseTest,ModelArchitectureTest,TC_03_F03_declare_independence_test,TC_30_F22_expert_purchase_test,PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false`.
+   Dvouřádková produkční změna pochází z návrhu lokálního workera; test
+   dokončil hlavní agent po vyčerpání obou oprav a společného limitu.
+   Změna je začleněná a naformátovaná v hlavním checkoutu. Úplná regrese
+   a publikace R-0023 ještě nejsou doložené.
+
+10. Následná úplná regrese hlavního checkoutu prošla: **794 modelových testů
+    v 97 třídách a 105 funkčních/kontrolních případů ve 33 třídách**, žádné
+    selhání, chyby ani vynechání. Příkaz
+    `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`,
+    exit 0, doba 18:50, běh `run-QGuMTf`, log
+    `target/r19-r31/expert-full-fixed.log`. Čerstvé XML reporty potvrzují
+    původní TC03 i všech sedm TC30. Sdílený formatter ověřil 23 změněných
+    Java souborů včetně shody tokenů a idempotence. Lokální testování tím
+    prošlo; CI, Pages a zveřejněný distribuční manifest ještě čekají.

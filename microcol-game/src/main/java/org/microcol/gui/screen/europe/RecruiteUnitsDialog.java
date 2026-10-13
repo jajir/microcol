@@ -2,6 +2,7 @@ package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
+import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -30,7 +31,8 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
             final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper,
-            final DialogNotEnoughGold dialogNotEnoughGold, final I18n i18n) {
+            final DialogNotEnoughGold dialogNotEnoughGold, final I18n i18n,
+            final DialogMessage rejection) {
         super(viewUtil, i18n);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
@@ -43,12 +45,13 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
         final HBox gridWithUnits = new HBox();
 
         UnitType.UNIT_TYPES.stream()
-                .filter(unitType -> unitType.getEuropePrice() > 0)
+                .filter(unitType -> unitType.getEuropePrice() > 0
+                        && unitType != UnitType.MASTER_BLACKSMITH)
                 .forEach(unitType -> {
                     final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(
                             unitType, imageProvider, gameModelController,
-                            localizationHelper, i18n, this,
-                            dialogNotEnoughGold);
+                            localizationHelper, i18n, this, dialogNotEnoughGold,
+                            rejection);
                     HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
                     gridWithUnits.getChildren().add(buyUnitPanel);
                 });

@@ -174,11 +174,15 @@ public class GamePage extends AbstractScreen {
     }
 
     public EuropePortScreen openEuroperPort() {
+        return openEuroperPort("Europe");
+    }
+
+    public EuropePortScreen openEuroperPort(final String expectedName) {
         final Button buttonNextTurn = getButtonById(
                 ButtonsGamePanel.BUTTON_EUROPE_ID);
         getRobot().clickOn(buttonNextTurn);
         WaitForAsyncUtils.waitForFxEvents();
-        return EuropePortScreen.of(getContext());
+        return EuropePortScreen.of(getContext(), expectedName);
     }
 
     public EuropePortScreen openEuroperPortByPressingKey() {

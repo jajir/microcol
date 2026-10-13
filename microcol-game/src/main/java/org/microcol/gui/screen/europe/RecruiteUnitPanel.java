@@ -2,6 +2,7 @@ package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
+import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
@@ -20,7 +21,8 @@ public final class RecruiteUnitPanel extends VBox {
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final I18n i18n,
             final RecruiteUnitsDialog buyUnitsDialog,
-            final DialogNotEnoughGold dialogNotEnoughGold) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final DialogMessage rejection) {
         final ImageView image = new ImageView(
                 imageProvider.getUnitImage(unitType));
         final Label labelName = new Label(
@@ -34,6 +36,11 @@ public final class RecruiteUnitPanel extends VBox {
                 buyUnitsDialog.close();
             } catch (NotEnoughtGoldException e) {
                 dialogNotEnoughGold.showAndWait();
+            } catch (IllegalStateException e) {
+                rejection.setTitle(i18n.get(Europe.recruitUnitDialogTitle));
+                rejection.setText(i18n.get(Europe.buyUnitDialog_unavailable));
+                rejection.showAndWait();
+                buyUnitsDialog.close();
             }
         });
         getChildren().addAll(image, labelName, buttonBuy);

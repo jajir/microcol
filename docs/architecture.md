@@ -59,6 +59,15 @@ i [SimpleAiPlayer](../microcol-game/src/main/java/org/microcol/ai/SimpleAiPlayer
 volají `Model.moveUnit`. Diagram vyjadřuje hranici pro herní operace;
 neznamená, že všechny současné akce už používají totožnou cestu.
 
+### Čtení seznamu jednotek při tahu AI
+
+`UnitStorage` používá pro často čtené členství jednotek `CopyOnWriteArrayList`.
+Každý průchod vidí stabilní seznam v původním pořadí i při souběžném přidání
+nebo odebrání jednotky královskou AI. Toto omezené řešení neopravňuje k
+souběžnému provádění celých herních akcí a nezajišťuje konzistentní snapshot
+měnitelných atributů jednotlivých jednotek. Herní validace zůstává v modelu.
+Regresní důkaz a stav úplné sady uvádí [evidence R-0023](functional-tests.md#expert-purchase-implementation-2026-10-13).
+
 ## Model a rozhodování počítače
 
 V následujících tabulkách jsou názvy relativní k `org.microcol` v
@@ -242,7 +251,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 
 ### Individuální přeprava pasažérů (R-0022)
 
-1. Rozpracovaná změna z 13. října 2026 soustřeďuje oprávnění a účtování převodu
+1. Implementované R-0022 z 13. října 2026 soustřeďuje oprávnění a účtování převodu
    do `AbstractUnit`: `canEmbark`, `canUnitDisembarkAt` a
    `canDisembarkToEuropePier`. Mapa, přístav a AI používají stejné kontroly.
 2. `Model.isOwnedCoastalPort` vymezuje vlastní kolonii sousedící s vodou v osmi
@@ -251,6 +260,19 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    `PlaceBuilderPo` a nepouští herní příkazy při načítání.
 3. Výběrový dialog vrací jednoho pasažéra nebo zrušení. Před potvrzeným převodem
    model znovu kontroluje živé objekty, místo, vlastnictví a kapacitu. Zápis
-   obou stran vazby předchází události nalodění. První cílené modelové a UI
-   scénáře prošly; rozšířené hranice, úplná regrese a publikace ještě nejsou
-   přijaté. Výsledky vlastní [testová evidence](functional-tests.md#individual-passenger-transfers-2026-10-13).
+   obou stran vazby předchází události nalodění. Úplná regrese prošla
+   lokálně i v CI (781 modelových a 98 funkčních/podpůrných případů).
+   Po opravě synchronizace testovacího gesta vyšel build `dev-51-b3ba0efcf67e`. Výsledky vlastní [testová evidence](functional-tests.md#individual-passenger-transfers-2026-10-13).
+
+### Odbornost najatého kolonisty (R-0023)
+
+1. Rozpracované R-0023 používá `model.unit.UnitMasterBlacksmith` jako konkrétní
+   podtyp `UnitFreeColonist`. Typ je dostupný i při konstrukci místa a ukládá
+   se přes stávající `UnitPo.type`; vybavení zůstává oddělené od odbornosti.
+2. Autoritativní dostupnost nákupu a účtování vlastní `Player`. Evropský
+   dialog zobrazuje typ a cenu z modelu a váže jedno potvrzení na otevřenou
+   hru a hráče. Odborník se nepřidává do existující nabídky imigračních kandidátů.
+3. Vybrané modelové a nákupní UI cesty i skutečná cesta odborníka do kolonie
+   a kovárny včetně jejího stavového popisu i nahrazení hry během nabídky
+   prošly; celková regrese a doručení zatím čekají. Aktuální důkazy vlastní
+   [záznam testů](functional-tests.md#expert-purchase-implementation-2026-10-13).

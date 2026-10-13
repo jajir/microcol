@@ -1,0 +1,303 @@
+package org.microcol.test;
+
+import java.io.File;
+import java.util.List;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.model.Location;
+import org.microcol.model.PlaceCargoSlot;
+import org.microcol.model.PlaceEuropePier;
+import org.microcol.model.PlaceLocation;
+import org.microcol.model.PlaceConstructionSlot;
+import org.microcol.model.GoodsType;
+import org.microcol.page.EuropeEquipmentPage;
+import org.microcol.page.ColonyScreen;
+import org.microcol.page.EuropePortScreen;
+import org.microcol.page.ExpertPurchasePage;
+import org.microcol.page.FreePlayAuditPage;
+import org.microcol.page.GamePage;
+import org.microcol.page.WelcomePage;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+
+import javafx.stage.Stage;
+
+/** Hiring, transporting and employing a persistent European specialist. */
+@ExtendWith(ApplicationExtension.class)
+public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
+    private static final File FIXTURE = new File(
+            "src/test/scenarios/F22-expert-purchase.microcol");
+
+    @Start
+    private void start(Stage stage) throws Exception {
+        initialize(stage, getClass(), FIXTURE);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_01_cancel_buy_once_reopen_and_continue() throws Exception {
+        // Find the priced specialty and cancel without changing the pier.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        europe.openBuyUnitScreen();
+        purchase.verifyOffer(true, "");
+        purchase.captureDialog("mainVbox", "expert-hiring.png");
+        purchase.escape();
+        purchase.verifyTreasuryAndPierExperts(4400, List.of());
+
+        // A duplicated confirmation buys only one expert, even with funds for
+        // two.
+        europe.openBuyUnitScreen();
+        purchase.confirmAndDeliverDuplicateAction();
+        purchase.verifyTreasuryAndPierExperts(2200, List.of(103));
+        europe.verifyGold(2200);
+
+        // Reopening is an independent purchase; exactly 2200 gold is
+        // sufficient.
+        europe.openBuyUnitScreen();
+        purchase.verifyOffer(true, "");
+        purchase.confirm();
+        purchase.verifyTreasuryAndPierExperts(0, List.of(103, 104));
+        GamePage game = europe.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        game.openEuroperPort();
+        purchase.verifyTreasuryAndPierExperts(0, List.of(103, 104));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_02_one_gold_short_disables_hiring_with_visible_reason()
+            throws Exception {
+        // Prepare a player with one gold less than the advertised price.
+        com.google.gson.JsonObject saved = new com.google.gson.Gson().fromJson(
+                java.nio.file.Files.readString(FIXTURE.toPath()),
+                com.google.gson.JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonObject("gameManager")
+                .getAsJsonArray("players").forEach(value -> {
+                    if (value.getAsJsonObject().get("name").getAsString()
+                            .equals("Dutch")) {
+                        value.getAsJsonObject().addProperty("gold", 2199);
+                    }
+                });
+        File fixture = new File(System.getProperty("user.home"),
+                "expert-one-short.microcol");
+        java.nio.file.Files.writeString(fixture.toPath(), saved.toString());
+        org.mockito.Mockito
+                .when(getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.FileSelectingService.class)
+                        .loadFile(org.mockito.ArgumentMatchers.any(File.class)))
+                .thenReturn(fixture);
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        europe.openBuyUnitScreen();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        purchase.verifyOffer(false, "Not enough gold.");
+        purchase.escape();
+        purchase.verifyTreasuryAndPierExperts(2199, List.of());
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_expense_during_offer_rejects_without_creating_an_expert()
+            throws Exception {
+        // The quote is affordable when opened, but another expense consumes
+        // funds.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        europe.openBuyUnitScreen();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        purchase.verifyOffer(true, "");
+        getContext().getRobot().interact(
+                () -> getModel().getPlayerByName("Dutch").setGold(2199));
+        purchase.confirm();
+        purchase.verifyInsufficientFundsWarning();
+        purchase.closeWarning();
+        purchase.verifyOffer(false, "Not enough gold.");
+        purchase.escape();
+        purchase.verifyTreasuryAndPierExperts(2199, List.of());
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_hired_expert_sails_home_and_works_in_the_smithy()
+            throws Exception {
+        // Hire the specialist, equip them, and persist the same person on the
+        // pier.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
+        europe.openBuyUnitScreen();
+        purchase.confirm();
+        purchase.verifyTreasuryAndPierExperts(2200, List.of(103));
+        equipment.open(103, "Buy 50 muskets");
+        equipment.confirm();
+        purchase.verifyExpertState(103, 2025, true, PlaceEuropePier.class);
+        GamePage game = europe.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        purchase.verifyExpertState(103, 2025, true, PlaceEuropePier.class);
+        europe = game.openEuroperPort();
+        europe.selectUnitFromPort(0);
+        equipment.embark(103);
+        equipment.verifyPassenger(103, 102);
+        purchase.verifyExpertState(103, 2025, true, PlaceCargoSlot.class);
+        equipment.depart(102);
+        equipment.verifyVoyage(102, 3);
+        game = europe.close();
+        game.nextTurnAndCloseDialogs();
+
+        // Continue keeps the identity, equipment and remaining voyage together.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        equipment.verifyVoyage(102, 2);
+        equipment.verifyPassenger(103, 102);
+        purchase.verifyExpertState(103, 2025, true, PlaceCargoSlot.class);
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+        equipment.verifyArrived(102);
+
+        // Sail from the actual eastern arrival through four ordinary sea turns.
+        equipment.verifyCarrierAt(102, Location.of(49, 15));
+        equipment.showSeaRoute(Location.of(49, 15), Location.of(43, 16));
+        game.moveMouseAtLocation(Location.of(49, 15));
+        game.dragMouseAtLocation(Location.of(43, 16));
+        equipment.verifyCarrierAt(102, Location.of(43, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(43, 16), Location.of(37, 16));
+        game.moveMouseAtLocation(Location.of(43, 16));
+        game.dragMouseAtLocation(Location.of(37, 16));
+        equipment.verifyCarrierAt(102, Location.of(37, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(37, 16), Location.of(31, 16));
+        game.moveMouseAtLocation(Location.of(37, 16));
+        game.dragMouseAtLocation(Location.of(31, 16));
+        equipment.verifyCarrierAt(102, Location.of(31, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(31, 16), Location.of(26, 16));
+        game.moveMouseAtLocation(Location.of(31, 16));
+        game.dragMouseAtLocation(Location.of(26, 16));
+        equipment.verifyCarrierAt(102, Location.of(26, 16));
+        game.nextTurnAndCloseDialogs();
+
+        // Enter the owned colony and land outside its workforce with the tools.
+        equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
+        game.moveMouseAtLocation(Location.of(26, 16));
+        game.dragMouseAtLocation(Location.of(24, 16));
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
+        ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        colony.selectUnitFromPort(0);
+        new org.microcol.page.PassengerTransferPage(getContext())
+                .disembarkInPort(103, 0, false);
+        purchase.verifyExpertState(103, 2025, true, PlaceLocation.class);
+        equipment.verifyLandedPassenger(103, 102, Location.of(24, 16));
+        game = colony.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        purchase.verifyExpertState(103, 2025, true, PlaceLocation.class);
+        equipment.verifyLandedPassenger(103, 102, Location.of(24, 16));
+
+        // Assign the expert through the colony panel; equipment returns to
+        // stock.
+        colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
+        purchase.hoverSmithy();
+        purchase.verifyWorkplaceDescription("Blacksmith house");
+        purchase.assignToSmithy(103);
+        purchase.hoverSmithy();
+        purchase.verifyWorkplaceDescription(
+                "Blacksmith house: Master Blacksmith");
+        purchase.verifyExpertState(103, 2025, false,
+                PlaceConstructionSlot.class);
+        purchase.verifySmithyWorker(103, 0, 90);
+        colony.verifyThatProductionIs(GoodsType.TOOLS, 6);
+        game = colony.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        purchase.verifyExpertState(103, 2025, false,
+                PlaceConstructionSlot.class);
+        purchase.verifySmithyWorker(103, 0, 90);
+        game.nextTurnAndCloseDialogs();
+        colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
+        purchase.verifySmithyWorker(103, 6, 87);
+        purchase.hoverSmithy();
+        purchase.verifyWorkplaceDescription(
+                "Blacksmith house: Master Blacksmith");
+        purchase.captureDialog("id_blacksmith", "expert-smithy.png");
+
+        // Leaving the job removes the worker's name from the building
+        // description.
+        purchase.leaveSmithy(103);
+        purchase.verifyExpertState(103, 2025, false, PlaceLocation.class);
+        purchase.hoverSmithy();
+        purchase.verifyWorkplaceDescription("Blacksmith house");
+        colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_removed_buyer_cannot_confirm_a_stale_offer() throws Exception {
+        // Simulate removal of the buyer while their old offer is still open.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        europe.openBuyUnitScreen();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        purchase.verifyOffer(true, "");
+        org.microcol.model.Player buyer = getModel().getPlayerByName("Dutch");
+        getContext().getRobot().interact(
+                () -> getModel().getPlayerStore().getPlayers().remove(buyer));
+        purchase.confirm();
+        purchase.verifyUnavailableWarning();
+        purchase.closeUnavailableWarning();
+        // Restore the simulated membership loss to inspect the untouched
+        // player.
+        getContext().getRobot().interact(
+                () -> getModel().getPlayerStore().getPlayers().add(0, buyer));
+        purchase.verifyTreasuryAndPierExperts(4400, List.of());
+        europe.verifyGold(4400);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_czech_hiring_offer_supports_keyboard_confirmation()
+            throws Exception {
+        // Choose Czech in settings, then hire through the keyboard focus order.
+        org.microcol.page.SettingPage settings = WelcomePage.of(getContext())
+                .openSetting();
+        settings.setCzechLanguage();
+        EuropePortScreen europe = settings.goBack().loadGame()
+                .openEuroperPort("Evropa");
+        europe.openBuyUnitScreen();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        purchase.verifyCzechOffer();
+        purchase.captureDialog("mainVbox", "expert-hiring-czech.png");
+        purchase.confirmWithKeyboard();
+        purchase.verifyTreasuryAndPierExperts(2200, List.of(103));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_replaced_game_rejects_the_old_hiring_offer() throws Exception {
+        // An asynchronous load replaces the game while the old offer is open.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        europe.openBuyUnitScreen();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        purchase.verifyOffer(true, "");
+        org.microcol.model.Model previous = getModel();
+        getContext().getRobot()
+                .interact(() -> getContext().getClassFromGuice(
+                        org.microcol.gui.event.model.GameController.class)
+                        .loadModelFromFile(FIXTURE));
+        purchase.confirm();
+        purchase.verifyUnavailableWarning();
+        purchase.closeUnavailableWarning();
+        purchase.verifyReplacedGameUntouched(previous, 4400);
+        purchase.verifyTreasuryAndPierExperts(4400, List.of());
+    }
+}

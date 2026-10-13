@@ -1,6 +1,6 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +34,7 @@ public final class UnitStorage {
 
     UnitStorage(final IdManager idManager) {
         this.idManager = Preconditions.checkNotNull(idManager);
-        this.units = new ArrayList<>();
+        this.units = new CopyOnWriteArrayList<>();
         this.unitFactory = new UnitFactory();
     }
 

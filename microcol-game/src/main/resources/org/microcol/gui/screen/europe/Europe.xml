@@ -44,4 +44,8 @@ Total: %s gold</entry>
     <entry key="equipmentTRADE_RESTRICTED">Trade with your European port is unavailable. Nothing was changed.</entry>
     <entry key="equipmentGOLD_LIMIT">This trade exceeds the treasury limit. Nothing was changed.</entry>
 
+	<entry key="buyUnitDialog_buttonHire">Hire specialist for</entry>
+	<entry key="buyUnitDialog_notEnoughGold">Not enough gold.</entry>
+	<entry key="buyUnitDialog_unavailable">This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.</entry>
+
 </properties>

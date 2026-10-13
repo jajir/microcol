@@ -13,4 +13,8 @@
 	<entry key="COLONIST_name_7">svobodným kolonistou</entry>
 	<entry key="COLONIST_name_7pl">svobodnými kolonisty</entry>
 
+	<entry key="MASTER_BLACKSMITH_name">mistr kovář</entry>
+	<entry key="MASTER_BLACKSMITH_name_7">mistrem kovářem</entry>
+	<entry key="MASTER_BLACKSMITH_name_7pl">mistry kováři</entry>
+
 </properties>

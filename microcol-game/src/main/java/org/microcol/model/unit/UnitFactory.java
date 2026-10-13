@@ -40,6 +40,9 @@ public class UnitFactory {
                 if (UnitType.WAGON == request.getUnitType()) {
                     return makeWagon(request);
                 }
+                if (UnitType.MASTER_BLACKSMITH == request.getUnitType()) {
+                    return makeMasterBlacksmith(request);
+                }
                 return null;
             }));
 
@@ -50,6 +53,14 @@ public class UnitFactory {
                 request.getAction(), request.getTools(),
                 request.isHoldingGuns(), request.isMounted());
         return out;
+    }
+
+    private Unit makeMasterBlacksmith(final UnitCreateRequest request) {
+        return new UnitMasterBlacksmith(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction(),
+                request.getTools(), request.isHoldingGuns(),
+                request.isMounted());
     }
 
     private Unit makeGalleon(final UnitCreateRequest request) {

@@ -44,4 +44,8 @@ Celkem: %s zlatých</entry>
     <entry key="equipmentTRADE_RESTRICTED">Obchod s vaším evropským přístavem není dostupný. Nic se nezměnilo.</entry>
     <entry key="equipmentGOLD_LIMIT">Tento obchod překračuje limit pokladny. Nic se nezměnilo.</entry>
 
+	<entry key="buyUnitDialog_buttonHire">Najmout odborníka za</entry>
+	<entry key="buyUnitDialog_notEnoughGold">Nedostatek zlata.</entry>
+	<entry key="buyUnitDialog_unavailable">Tento nákup už není dostupný. Otevřete nabídku znovu ve svém tahu, dokud máte přístup do Evropy.</entry>
+
 </properties>

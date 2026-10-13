@@ -13,4 +13,8 @@
 	<entry key="COLONIST_name_7">Free Colonist</entry>
 	<entry key="COLONIST_name_7pl">Free Colonists</entry>
 
+	<entry key="MASTER_BLACKSMITH_name">Master Blacksmith</entry>
+	<entry key="MASTER_BLACKSMITH_name_7">Master Blacksmith</entry>
+	<entry key="MASTER_BLACKSMITH_name_7pl">Master Blacksmiths</entry>
+
 </properties>

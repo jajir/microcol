@@ -29,17 +29,22 @@ public class EuropePortScreen extends AbstractScreen {
     private final PageComponentPanelDock pageComponentPanelDock;
 
     public static EuropePortScreen of(final TestContext context) {
-        return new EuropePortScreen(context);
+        return of(context, "Europe");
     }
 
-    private EuropePortScreen(final TestContext context) {
+    public static EuropePortScreen of(final TestContext context,
+            final String expectedName) {
+        return new EuropePortScreen(context, expectedName);
+    }
+
+    private EuropePortScreen(final TestContext context,
+            final String expectedName) {
         super(context);
         pageComponentPanelDock = PageComponentPanelDock.of(context);
-        verifyEuropePortName();
+        verifyEuropePortName(expectedName);
     }
 
-    private void verifyEuropePortName() {
-        final String expectedNamePart = "Europe";
+    public void verifyEuropePortName(final String expectedNamePart) {
         final String cssClass = ".label-title";
         final List<Labeled> list = getListOfNodes(cssClass);
         final Labeled labeled = list.get(0);

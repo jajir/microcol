@@ -553,6 +553,22 @@ plná/cizí loď a změněný cíl. Model znovu kontroluje oprávnění před zm
 místa. TC27/TC_07 navíc prošel skutečnou plavbou z východního okraje do
 kolonie, vyložením vybaveného člověka mimo pracovníky a dalším Continue.
 Specialista zůstává návazností R-0023. Úplná regrese R-0022 prošla 781 modelovými
-a 98 funkčními/podpůrnými testy bez selhání, chyb a vynechání; publikace čeká.
+a 98 funkčními/podpůrnými testy bez selhání, chyb a vynechání lokálně i v CI;
+publikovaný build je `dev-51-b3ba0efcf67e`.
 Aktuální stav a neuzavřené kontroly jsou v
 [záznamu ověření přepravy](functional-tests.md#individual-passenger-transfers-2026-10-13).
+
+Rozpracované R-0023 doplňuje omezenou odbornickou část UC-055: TC30/F22
+ověřuje cenu 2 200 zlata, zrušení, dvojí potvrzení téže nabídky, další samostatný
+nákup, nedostatek peněz a Continue na molu. Tři scénáře prošly v cíleném
+výběru 36 modelových a 13 funkčních/podpůrných testů; viz
+[evidence](functional-tests.md#expert-purchase-implementation-2026-10-13).
+Následný TC30/TC_04 prošel skutečnou plavbou, vyloděním mimo pracovníky,
+zařazením do kovárny a výrobou šesti nástrojů ze tří rud. Continue na molu,
+na lodi, před zaměstnáním a v zaměstnání zachovává odbornost a identitu.
+Rozšířených šest TC30 včetně ztráty oprávnění a českého klávesového nákupu
+prošlo ve výběru 13 modelových a 14 funkčních/podpůrných testů. Viditelné
+pojmenování pracovníka u kovárny včetně jeho odchodu prošlo v dalším
+stejném výběru; samostatně prošlo i odmítnutí staré nabídky po nahrazení
+hry. Celková regrese a publikace ještě čekají. Tím není
+přijat celý UC-055 s imigračním poolem a dalšími profesemi.

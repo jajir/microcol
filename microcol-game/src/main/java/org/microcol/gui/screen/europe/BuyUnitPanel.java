@@ -1,11 +1,9 @@
 package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.dialog.DialogNotEnoughGold;
-import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
-import org.microcol.model.NotEnoughtGoldException;
+import org.microcol.model.Player;
 import org.microcol.model.UnitType;
 
 import javafx.scene.control.Button;
@@ -15,31 +13,47 @@ import javafx.scene.layout.VBox;
 
 public final class BuyUnitPanel extends VBox {
 
+    private final UnitType unitType;
+    private final LocalizationHelper localizationHelper;
+    private final I18n i18n;
+    private final Label labelName = new Label();
+    private final Label unavailable = new Label();
+    private final Button buttonBuy = new Button();
+
     public BuyUnitPanel(final UnitType unitType,
             final ImageProvider imageProvider,
-            final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final I18n i18n,
-            final BuyUnitsDialog buyUnitsDialog,
-            final DialogNotEnoughGold dialogNotEnoughGold) {
+            final BuyUnitsDialog buyUnitsDialog) {
+        this.unitType = unitType;
+        this.localizationHelper = localizationHelper;
+        this.i18n = i18n;
         getStyleClass().add("unitPanel");
         final ImageView image = new ImageView(
                 imageProvider.getUnitImage(unitType));
-        final Label labelName = new Label(
-                localizationHelper.getUnitName(unitType));
         labelName.getStyleClass().add("name");
-        final Button buttonBuy = new Button(
-                i18n.get(Europe.buyUnitDialog_buttonBuyUnit) + " "
-                        + unitType.getEuropePrice());
         buttonBuy.getStyleClass().add("buttonBuy");
-        buttonBuy.setOnAction(event -> {
-            try {
-                gameModelController.getHumanPlayer().buy(unitType);
-                buyUnitsDialog.closeAndRepaint();
-            } catch (NotEnoughtGoldException e) {
-                dialogNotEnoughGold.showAndWait();
-            }
-        });
-        getChildren().addAll(image, labelName, buttonBuy);
+        buttonBuy.setId("buy-unit-" + unitType.name());
+        buttonBuy.setOnAction(event -> buyUnitsDialog.buy(unitType));
+        unavailable.setId("buy-unit-reason-" + unitType.name());
+        unavailable.setWrapText(true);
+        unavailable.setMaxWidth(240);
+        getChildren().addAll(image, labelName, buttonBuy, unavailable);
     }
 
+    void refresh(final Player buyer) {
+        labelName.setText(localizationHelper.getUnitName(unitType));
+        buttonBuy.setText(i18n
+                .get(unitType == UnitType.MASTER_BLACKSMITH
+                        ? Europe.buyUnitDialog_buttonHire
+                        : Europe.buyUnitDialog_buttonBuyUnit)
+                + " " + unitType.getEuropePrice());
+        final boolean available = buyer.canBuyUnit(unitType);
+        buttonBuy.setDisable(!available);
+        unavailable.setText(available ? ""
+                : i18n.get(buyer.getGold() < unitType.getEuropePrice()
+                        ? Europe.buyUnitDialog_notEnoughGold
+                        : Europe.buyUnitDialog_unavailable));
+        unavailable.setVisible(!available);
+        unavailable.setManaged(!available);
+    }
 }

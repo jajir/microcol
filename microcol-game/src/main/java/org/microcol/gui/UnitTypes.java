@@ -9,7 +9,9 @@ import org.microcol.model.UnitType;
 public enum UnitTypes implements MessageKeyResource {
 
     FRIGATE_name, FRIGATE_name_7, GALLEON_name, GALLEON_name_7,
-    GALLEON_name_7pl, COLONIST_name, COLONIST_name_7, COLONIST_name_7pl;
+    GALLEON_name_7pl, COLONIST_name, COLONIST_name_7, COLONIST_name_7pl,
+    MASTER_BLACKSMITH_name, MASTER_BLACKSMITH_name_7,
+    MASTER_BLACKSMITH_name_7pl;
 
     private static final String UNIT_SUFFIX_NAME = "_name";
 

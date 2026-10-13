@@ -20,6 +20,34 @@ for larger assignments.
 
 ## Instruction ownership
 
+### Unit registry concurrency repair — 2026-10-13
+
+1. Task `2026-10-13-r23-unit-registry`, baseline `b3ba0efc` plus 33 explicitly
+   copied R-0023 inputs, followed the actual TC03 `ConcurrentModificationException`
+   in the full Docker suite. The caller selected a standard
+   `CopyOnWriteArrayList` for ordered, read-heavy membership snapshots; this does
+   not make mutable unit fields or compound gameplay actions thread-safe.
+2. Attempt 0 took **196.028 s** and returned matching replacement anchors, but
+   its test nested a method inside setup, used string unit IDs and an unimported
+   Mockito qualifier, installed the blocking callback before setup registration,
+   and omitted finally cleanup. The caller rejected the test before application
+   and sent these defects for targeted repair. An initial caller suspicion about
+   JSON newline escaping was disproved by all three exact match counts of one;
+   the review record corrects that observation.
+3. Repair 1 took **300.343 s** and timed out after unnecessary source discovery
+   despite the text-only contract. Repair 2 was narrowed to the single test
+   method and used its remaining **103.859 s**, also without a final result.
+   Total **600.230 s**, including cleanup; both repairs and the cumulative
+   budget were exhausted. The caller then implemented the regression test.
+   Only the two production replacements came from the first worker result.
+4. Runtime samples confirmed the configured alias/digest and context **32768**;
+   each attempt unloaded before caller Docker checks. Full evidence is in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-unit-registry/`.
+   Actual red/green and integration checks remain caller-owned and are recorded
+   in the [functional test evidence](../functional-tests.md#expert-purchase-implementation-2026-10-13).
+   No savings or successful test-authoring claim follows from this attempt.
+
+
 ### Z02 name helper — 2026-10-12
 
 Task `2026-10-12-z02-names`, baseline `8bef9928`, assigned only the
@@ -1561,3 +1589,68 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    separate from the bounded worker acceptance. Additional caller inputs are
    recorded in `integration-inputs.json`; they are not worker-authored changes.
    Actual results belong to the [passenger evidence](../functional-tests.md#individual-passenger-transfers-2026-10-13).
+
+### R-0023 specialist type — 2026-10-13
+
+1. `2026-10-13-r23-specialist-type` used isolated baseline
+   `a2a4ac22b9dbf1341fb1be81f3cadb84adb5176a` plus the explicit Ready R-0023
+   analysis. Scope: remove `final` from the ordinary colonist, add the concrete
+   blacksmith subtype, factory route and type registry entry. The caller owns
+   purchase validation, UI, actual model/player tests and integration.
+2. Attempts used **270.833 / 242.690 / 78.808 seconds**, **592.331 total**,
+   both repair rounds used. Attempt 0 ended with truncated JSON at output 4096,
+   a wrong registry path and an ambiguous insertion anchor; no text was applied.
+   A focused repair provided exact unique anchors. Its valid JSON was applied
+   in isolation, but source review found an invalid superclass constructor call
+   and private inherited-field assignments. The final small repair forwards all
+   nine constructor arguments to the existing superclass. No new fields or
+   profession framework were introduced.
+3. The caller supplied `Player` purchase guards and `ExpertPurchaseTest` as
+   recorded integration inputs. The first Docker selection had 36 model cases
+   with one caller fixture error: a saved warehouse map was immutable. Copying
+   that map fixed the setup. The unchanged selection then passed **36 model and
+   three structural cases**, no failures, errors or skips (`run-AfJ4fv`), exit 0.
+   Six isolated Java files were formatted with the shared profile, preserving
+   code tokens. Only the four assigned worker files were accepted into main;
+   caller files retain separate ownership. Player journeys remain unverified.
+4. All three runtime traces identify the configured GPT-OSS digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`, context
+   32768. The runner unloaded before each Docker check and released its owned
+   lock after acceptance. Evidence remains in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-specialist-type/`,
+   including rejected outputs, review/application records and `acceptance.json`.
+   No token-saving or general quality claim is made from this assignment.
+
+## Specialist workplace identity — 2026-10-13
+
+1. Task `2026-10-13-r23-worker-identity` used baseline `b3ba0efc` plus 29
+   explicitly copied caller inputs. Its only allowed edit was
+   `AbstractPanelConstruction.getConstructionName`: retain the existing
+   localized building name and append the localized names of occupied slots.
+   The worker returned one valid exact replacement in **93.628 seconds**;
+   no worker repair was needed. Runtime samples confirmed the configured
+   GPT-OSS digest and context **32768**. The model was unloaded before Docker.
+2. Caller acceptance first exposed a wrong expected building translation:
+   `ConstructionTypes.xml` was used instead of the colony screen's owning
+   `ConstructionTypeName.xml`. After correcting that expectation, the new
+   departure gesture exposed an existing UI problem. Captured mouse events
+   showed `id_tobacco` intercepting a click on the visible blacksmith below it
+   because a translated production box enlarged its picking bounds.
+3. The main agent applied the two-line picking correction directly: panel
+   empty bounds no longer catch the mouse, and decorative production boxes
+   are mouse-transparent. This is outside the worker's naming-only method;
+   a new delegation for those two diagnosed lines would cost more than direct
+   application/review. The caller preserved the original gesture coordinates
+   and state/name expectations and removed temporary diagnostic logging.
+4. The same isolated selection then passed **13 model and 14 functional/control
+   tests**, zero failures/errors/skips (`run-CqcmQQ`, exit 0, 2:37). All six
+   TC30 cases, five TC22 cases and three source-contract controls ran. The
+   worker method and the two caller picking corrections were integrated;
+   the owned worker lock was released. Shared Java formatting passed.
+   The separate new caller test for replacing the entire game subsequently
+   passed with three structural controls. Full regression and publication
+   remain pending; this is not whole-R-0023 acceptance.
+5. Prompts, runtime samples, generated output, exact application, caller
+   failure diagnoses and `acceptance.json` remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-worker-identity/`.
+   No throughput or token-saving claim is made.

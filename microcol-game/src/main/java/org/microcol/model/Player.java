@@ -340,11 +340,36 @@ public abstract class Player {
         return Goods.of(type, 0);
     }
 
+    /**
+     * @param unitType the offered unit type
+     * @return whether this live player can currently afford and acquire it
+     */
+    public boolean canBuyUnit(final UnitType unitType) {
+        return isUnitPurchaseAvailable(unitType)
+                && gold >= unitType.getEuropePrice();
+    }
+
+    private boolean isUnitPurchaseAvailable(final UnitType unitType) {
+        return unitType != null && UnitType.UNIT_TYPES.contains(unitType)
+                && unitType.getEuropePrice() > 0 && model.isGameRunning()
+                && model.getPlayerStore().getPlayers().stream()
+                        .anyMatch(player -> player == this)
+                && model.getCurrentPlayer() == this && !isKing()
+                && canTradeInEurope();
+    }
+
     public void buy(final UnitType unitType) {
-        int price = unitType.getEuropePrice();
+        Preconditions.checkNotNull(unitType);
+        Preconditions.checkArgument(
+                UnitType.UNIT_TYPES.contains(unitType)
+                        && unitType.getEuropePrice() > 0,
+                "This unit type cannot be bought in Europe");
+        Preconditions.checkState(isUnitPurchaseAvailable(unitType),
+                "Unit purchase is unavailable for this player");
+        final int price = unitType.getEuropePrice();
         verifyAvailibilityOFGold(price);
-        setGold(getGold() - price);
         model.addUnitInEurope(unitType, this);
+        setGold(getGold() - price);
     }
 
     private void verifyAvailibilityOFGold(final int price) {

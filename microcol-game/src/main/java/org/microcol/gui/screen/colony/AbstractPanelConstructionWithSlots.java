@@ -114,6 +114,9 @@ abstract class AbstractPanelConstructionWithSlots
             }
 
             final HBox box = new HBox();
+            // Decorative output must not cover workers in the next building
+            // row.
+            box.setMouseTransparent(true);
             box.getStyleClass().add("production");
 
             if (goodsStats.getNetProduction() != 0) {

@@ -35,6 +35,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.construction = Preconditions.checkNotNull(construction);
+        mainPane.setPickOnBounds(false);
         canvas = new Canvas(canvasSize.getX(), canvasSize.getY());
         canvas.getStyleClass().add("canvas");
         mainPane.setOnMouseEntered(this::onMouseEntered);
@@ -71,8 +72,20 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
      * @return construction name in the current language
      */
     private String getConstructionName() {
-        return i18n.get(
+        String baseName = i18n.get(
                 ConstructionTypeName.getNameForType(construction.getType()));
+        java.util.List<org.microcol.model.ConstructionSlot> slots = construction
+                .getConstructionSlots();
+        java.util.List<String> workerNames = slots.stream()
+                .filter(slot -> !slot.isEmpty()).map(slot -> {
+                    org.microcol.model.Unit unit = slot.getUnit();
+                    return i18n.get(org.microcol.gui.UnitTypes
+                            .getUnitName(unit.getType()));
+                }).collect(java.util.stream.Collectors.toList());
+        if (workerNames.isEmpty()) {
+            return baseName;
+        }
+        return baseName + ": " + String.join(", ", workerNames);
     }
 
     private void onMouseExited(

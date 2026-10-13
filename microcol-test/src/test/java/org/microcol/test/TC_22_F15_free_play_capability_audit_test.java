@@ -60,8 +60,8 @@ public class TC_22_F15_free_play_capability_audit_test
                 .openEuroperPort();
         europe.openBuyUnitScreen();
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyPurchaseOffers(
-                java.util.List.of("Free Colonist", "Frigate", "Galleon"));
+        audit.verifyPurchaseOffers(java.util.List.of("Free Colonist", "Frigate",
+                "Galleon", "Master Blacksmith"));
         // Cancel the offer list without spending money.
         audit.closePurchaseDialog();
         europe.verifyGold(10000);
