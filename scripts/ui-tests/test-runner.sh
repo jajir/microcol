@@ -56,3 +56,15 @@ for scenario in success test-failure export-failure; do
 done
 test ! -d "$check_dir/source/microcol-game"
 echo "PASS: read-only source, clean snapshot and quoted argument forwarding"
+
+# Docker Desktop bind mounts do not reproduce Linux result permissions.
+docker run --rm --platform linux/amd64 --entrypoint /bin/bash \
+    -v "$check_dir/source:/source:ro" -v "$check_dir/mvn:/test-bin/mvn:ro" \
+    -e PATH=/test-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    -e CASE=success -e MAVEN_EXIT=0 "$image" -ec '
+    mkdir /results
+    microcol-ui-tests "-Dsample=two words"
+    su nobody -s /bin/bash -c "cat /results/run-*/exit-code.txt \
+        /results/run-*/microcol-test/surefire-reports/ui.txt > /dev/null"
+' > "$check_dir/linux-permissions.log" 2>&1
+echo "PASS: reports readable by an unprivileged Linux user"

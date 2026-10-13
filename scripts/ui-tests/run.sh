@@ -2,6 +2,7 @@
 set -euo pipefail
 
 RESULT_DIR=$(mktemp -d /results/run-XXXXXX)
+chmod 755 "$RESULT_DIR"
 export RESULT_DIR
 echo "Result directory: $RESULT_DIR"
 

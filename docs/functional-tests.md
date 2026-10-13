@@ -199,7 +199,9 @@ Samotný runner lze ověřit příkazem `bash scripts/ui-tests/test-runner.sh`.
 Kontrola používá skutečný Xvfb/Openbox s malou náhradou Maven: ověří zachování
 návratového kódu 7, chybu exportu, oddělené reporty, skryté zdroje, vynechání
 starých `target` adresářů a argument s mezerou. Výsledky nechá v
-`target/docker-ui-runner-checks/`. Nenahrazuje skutečné herní testy.
+`target/docker-ui-runner-checks/`. Na vlastním Linux filesystemu kontejneru také
+ověří čtení reportů neprivilegovaným uživatelem; macOS bind mount tuto kontrolu
+oprávnění nenahrazuje. Nenahrazuje skutečné herní testy.
 
 Povinný CI job `functional` spouští stejný Compose příkaz. Nejprve ověří také
 runner. Artifact
