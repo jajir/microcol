@@ -15,6 +15,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CountDownLatch;
+
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.DragEvent;
 
 /** Passenger choices and observations through the ordinary game controls. */
 public final class PassengerTransferPage extends AbstractScreen {
@@ -55,13 +60,29 @@ public final class PassengerTransferPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void dragPassengerToSlot(int unitId, int slotIndex, boolean europe) {
-        getRobot()
-                .drag((europe ? "#europe-pier-unit-" : "#colonyUnit-") + unitId,
-                        MouseButton.PRIMARY)
-                .dropTo(PageComponentPanelDock.of(getContext())
-                        .getListOfCrates().get(slotIndex));
-        WaitForAsyncUtils.waitForFxEvents();
+    public void dragPassengerToSlot(int unitId, int slotIndex, boolean europe)
+            throws InterruptedException {
+        final Node source = getNodeFinder().lookup(
+                (europe ? "#europe-pier-unit-" : "#colonyUnit-") + unitId)
+                .query();
+        final CountDownLatch finished = new CountDownLatch(1);
+        final EventHandler<DragEvent> done = event -> finished.countDown();
+        getRobot().interact(
+                () -> source.addEventHandler(DragEvent.DRAG_DONE, done));
+        try {
+            getRobot().drag(source, MouseButton.PRIMARY)
+                    .dropTo(PageComponentPanelDock.of(getContext())
+                            .getListOfCrates().get(slotIndex));
+            // A rejected native drop can outlive the robot and FX event queue.
+            if (!finished.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The native passenger drag must finish");
+            }
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            getRobot().interact(
+                    () -> source.removeEventHandler(DragEvent.DRAG_DONE, done));
+        }
     }
 
     public void embarkInPort(int unitId, int slotIndex, boolean europe)
