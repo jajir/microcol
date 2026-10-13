@@ -44,7 +44,7 @@ them here.
    tool history and output together; split work that does not fit rather than
    dropping requirements.
 6. For small edits whose source is already known, prefer text replacements for
-   the caller to apply instead of asking Qwen to rediscover files and script
+   the caller to apply instead of asking the worker to rediscover files and script
    edits. Use the [focused handoff contract](references/worker-instructions.md#focused-handoff)
    to specify the output mode and exact match counts. Keep direct editing for
    tasks that actually need it; do not impose replacement mode on all work.
@@ -92,7 +92,7 @@ resource limits and acceptance failures. Record uncertainty when the cause is
 not established.
 
 Fix caller-owned setup issues before redispatch. For a simple in-scope worker
-error, send Qwen the specific failure, current relevant code/diff and unchanged
+error, send the worker the specific failure, current relevant code/diff and unchanged
 acceptance check, then require a targeted repair while budgets permit. Do not
 replace repairable worker work with a main-agent rewrite by default or replay
 the same failing prompt without a concrete correction.
@@ -113,7 +113,7 @@ counts, skips, and report paths. A successful build with no intended tests run
 does not verify the task.
 
 Use the repair loop before taking over repairable worker work. If direct
-completion is necessary, record why another Qwen repair was not appropriate and
+completion is necessary, record why another worker repair was not appropriate and
 separate main-agent repairs from worker output. Run additional checks only to
 resolve remaining uncertainty. Bring accepted changes into the caller's checkout
 after checking its current state and preserving unrelated edits. Report accepted changes,

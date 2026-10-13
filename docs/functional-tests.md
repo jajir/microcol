@@ -342,7 +342,7 @@ Před přijetím změny reviewer ověří:
 Do výsledku úkolu stačí uvést revizi, změněné chování, ID scénářů, příkaz,
 JDK a prostředí, skutečné počty a cestu k reportům. Neprovedené kontroly nebo
 nefunkční testovací prostředí uvést jako otevřenou překážku. Hlavní agent
-ověřuje skutečný běh i u testů napsaných [místním Qwenem](ai/local-qwen.md).
+ověřuje skutečný běh i u testů napsaných [místním workerem](ai/local-qwen.md).
 
 
 ## Z01 — bezpečné vyložení nákladu

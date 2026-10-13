@@ -196,7 +196,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Zachovat [současný vzhled](graphics.md#soucasne-zadani-vzhledu). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
 | **P30 Zvuková odezva** | Podle [zvukových pravidel](audio.md) připravit krátké efekty, souběh s hudbou, nastavení a vybrané herní události. Rozsah další hudby určit samostatně. | Katalog určí událost, výsledek, příjemce a okamžik; zvuk se nespustí při pouhém náhledu nebo načtení reportu. Vše podstatné zůstane pochopitelné při ztlumení. |
-| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/R-0032.md). [R-0033: UI testy v Dockeru](requirements/R-0033.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
+| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/R-0032.md). [R-0033: UI testy v Dockeru](requirements/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/R-0034.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
 | **P32 Předání a vydání** | Používat existující CI, launcher a Mac/Linux balíčky; průběžně ověřovat aktualizaci a dokumentaci. Zbývající první vydání a Steam vést podle samostatného odhadu. | Úspěšné kontroly i publikace stejného commitu, odkaz na stažení a postup ověření; připravený plán zacházení s uloženými hrami. Nevytvářet již hotový distribuční systém znovu. |
 
 Přiřazení pokrývá všech 230 katalogových ID včetně doplnění z 11. října. Celé rodiny pravidel zůstávají
@@ -230,16 +230,17 @@ neznamená implementaci ani uzavření příslušného balíku nebo UC.
 | P17 | [R-0028 útok](requirements/R-0028.md), [R-0029 síla](requirements/R-0029.md) |
 | P22 | [R-0030 daně](requirements/R-0030.md), [R-0031 podpora nezávislosti](requirements/R-0031.md) |
 
-## Rozdělení práce mezi Qwen a hlavního agenta
+## Rozdělení práce mezi lokálního workera a hlavního agenta
 
-**Dohoda z 11. října 2026:** maximum vhodné implementační práce předáváme
-lokálnímu Qwenu. Všech 32 balíků obsahuje delegovatelnou část. Velký nebo složitý
-balík rozdělíme na menší zadání; jeho složitost sama o sobě není důvodem,
+**Dohoda z 11. října 2026, model změněn 13. října 2026:** maximum vhodné implementační
+práce předáváme lokálnímu workeru. Aktuální model GPT-OSS 20B a jeho ověřené
+nastavení vlastní [provozní stránka](ai/local-qwen.md). Všech 32 balíků obsahuje
+delegovatelnou část. Velký nebo složitý balík rozdělíme na menší zadání; jeho složitost sama o sobě není důvodem,
 aby vše napsal hlavní agent. Tato mapa vyjadřuje plánované rozdělení práce,
-nikoli tvrzení, že Qwen už jednotlivé oblasti úspěšně zvládl.
+nikoli tvrzení, že worker už jednotlivé oblasti úspěšně zvládl.
 
 Hlavní agent připravuje pravidla, architekturu, rozhraní a akceptaci; s vlastníkem
-hry řeší potřebná herní a UX rozhodnutí. Qwen dostává implementaci, psaní testů,
+hry řeší potřebná herní a UX rozhodnutí. Worker dostává implementaci, psaní testů,
 opravy a navazující dokumentaci v dohodnutém rozsahu. Skutečné spuštění kontrol,
 vizuální a hráčské ověření, revizi změn, integraci a publikaci drží hlavní agent.
 Pro přijetí dílčí práce není nutné znovu schvalovat již dohodnutý záměr.
@@ -250,7 +251,7 @@ výše. Předává se jen potřebné rozhraní a dokončená část závislosti,
 automaticky celý předchozí balík. Výtvarnou tvorbu nesvěřujeme textovému workeru;
 jeho prostor je zejména technická příprava a zapojení podkladů.
 
-| Balík | Co zadávat Qwenu po malých částech | Co připravit před předáním |
+| Balík | Co zadávat workeru po malých částech | Co připravit před předáním |
 | --- | --- | --- |
 | P01 Pravidla | Schválené datové tabulky, validátory a nezávislé testovací příklady. | Rozhodnutí příslušné Q, zdroj hodnot a očekávané výsledky. |
 | P02 Nová hra | Jednotlivé volby, uložené nastavení, inicializace a testy profilů. | Rozhraní nastavení, počáteční hodnoty a návrh obrazovky. |
@@ -287,11 +288,11 @@ jeho prostor je zejména technická příprava a zapojení podkladů.
 
 ### Připravenost prvních zadání
 
-„Vhodné pro Qwen“ neznamená „lze okamžitě spustit“. Vlastníkem níže uvedené
+„Vhodné pro workera“ neznamená „lze okamžitě spustit“. Vlastníkem níže uvedené
 přípravy je hlavní agent. Stav zachycuje plán k 11. říjnu 2026; žádné z těchto
 tří herních zadání zatím nebylo předáno k implementaci.
 
-| Zadání | Stav a konkrétní podmínka předání | Nejmenší práce pro Qwen |
+| Zadání | Stav a konkrétní podmínka předání | Nejmenší práce pro workera |
 | --- | --- | --- |
 | Z01 Vyložení do skladu | Kontrakt přijat: pravidla a výjimky v modelu, UI používá náhled a ověří změnu před potvrzením. Samostatný PR do main. | [Implementace a konkrétní ověření Z01](functional-tests.md#z01-bezpecne-vylozeni-nakladu). |
 | Z02 Pojmenování kolonie | Kontrakt přijat 12. října 2026: neměnná ID, modální pojmenování/přejmenování a aktuální JSON bez zpětné kompatibility. | [Kontrakt Z02](#z02-zalozeni-pojmenovane-kolonie) a [ověření](functional-tests.md#z02-pojmenovani-a-identita-kolonie). |
@@ -451,15 +452,15 @@ k předání konkrétní implementační práce a odkazuje na tuto analýzu.
 
 Balík vybírá hlavní agent spolu s vlastníkem hry. Rozpad na úkol má mít jeden
 pozorovatelný výsledek. Výchozím zpracovatelem vhodné implementace je lokální
-Qwen. Připravené zadání může vypadat takto:
+worker. Připravené zadání může vypadat takto:
 
 ```text
 Úkol: [R-NNNN / související Z a P – konkrétní výsledek]
 Analýza: [odkaz na docs/requirements/R-NNNN.md s dohodnutým chováním a akceptací]
 Oblast: [jedna hlavní A01–A10; odkaz na společný základ a konkrétní závislosti na dalších oblastech]
 Výchozí revize: [commit main]
-Zpracovatel: [lokální Qwen; případnou výjimku zdůvodnit níže]
-Dílčí úkol pro Qwen: [jeden konkrétní výstup a hranice změny]
+Zpracovatel: [lokální worker; případnou výjimku zdůvodnit níže]
+Dílčí úkol pro workera: [jeden konkrétní výstup a hranice změny]
 Příprava hlavního agenta: [potřebné rozhodnutí, rozhraní, data a návrh UX]
 Připravenost: [připraveno / k dopracování kontraktu / blokováno]
 Blokace: [konkrétní závislost, vlastník a podmínka odblokování; nebo žádná]
@@ -483,7 +484,7 @@ Výjimka z delegace: [důvod a rozsah práce ponechané hlavnímu agentovi; nebo
 Předání: [diff, výsledek kontrol, dokumentace, zbývající vady, build ke stažení]
 ```
 
-### Připravenost a předání Qwenu
+### Připravenost a předání workeru
 
 Před předáním musí být určené chování, rozhraní, vstupy, povolené soubory,
 akceptace, plán ověření a výchozí revize. Velký balík se předává po ohraničených
@@ -491,7 +492,7 @@ akceptace, plán ověření a výchozí revize. Velký balík se předává po o
 nezávislou připravenou práci lze zadat dál. Již dohodnutý rozsah nevyžaduje
 další souhlas pro každé dílčí zadání.
 
-Qwen standardně píše vhodný kód a testy, opravuje chyby, provádí opakované
+Worker standardně píše vhodný kód a testy, opravuje chyby, provádí opakované
 refaktoringy a mění dokumentaci či konfiguraci. Patří sem také UI podle
 konkrétního návrhu a integrace grafických a zvukových podkladů. Hlavní agent
 drží architekturu, nejasná pravidla, návrh UX a výtvarné řešení, skutečné
@@ -501,7 +502,7 @@ Každý místní běh se řídí [postupem workeru](../.agents/skills/local-work
 a aktuálními [provozními limity](ai/local-qwen.md#operating-profile-bounded-assignments).
 Nedostupnost nebo neúspěch se oznámí; nespouští automatickou instalaci ani
 tiché nahrazení cloudovým workerem. Případné dokončení hlavním agentem má
-konkrétní důvod a zaznamenané opravy. Návrh testů od Qwenu nenahrazuje jejich
+konkrétní důvod a zaznamenané opravy. Návrh testů od workeru nenahrazuje jejich
 skutečné spuštění. Podíl delegované práce a úspory lze hodnotit až z měření.
 
 ### Zadání na omezený čas

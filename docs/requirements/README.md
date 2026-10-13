@@ -154,7 +154,7 @@ is not a prerequisite for the first small delivery.
 5. **Implement when requested:** use the agreed analysis to prepare the existing
    [implementation handoff](../implementation-plan.md#sablona-predani-prace).
    Keep worker instructions, limits and detailed assignments there; suitable
-   implementation goes to local Qwen under the existing workflow. Refinement
+   implementation goes to the configured local worker under the existing workflow. Refinement
    alone changes documentation and does not start implementation.
 6. **Verify and deliver:** update the same file with links to the actual evidence,
    source commit and published build. Follow the existing

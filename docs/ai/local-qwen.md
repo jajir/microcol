@@ -1,27 +1,22 @@
-# Codex and a local Qwen worker
+# Codex and a local development worker
 
-Status as of **2026-10-11: direct `codex exec` ready for bounded tasks; Qwen is
-the default for suitable development assignments**. Astra supervises a separate
-Codex CLI process using local Qwen, runs tests and reviews the changes. The test
-pilot and subsequent implementation and packaging tasks below establish a
-working path, with main-agent corrections needed on some tasks. No custom runner
-service or MCP server was developed. The accepted pilot test changes were
-incorporated into `develop`, the branch selected for development at that time. Development
-now uses `main`; follow the current [branch workflow](../../AGENTS.md) when
-selecting a baseline and accepting new worker changes. The isolated worktree and
-artifacts retain the original evidence. These bounded tasks do not establish
-broad reliability or measured savings.
+Status as of **2026-10-13: local GPT-OSS 20B is the configured default for bounded
+worker assignments**, under [R-0034](../requirements/R-0034.md). Astra remains the main
+agent and supervises a separate local Codex CLI process, checks the result and
+owns integration and publication. The current operating profile below replaces
+Qwen3.5-9B for new assignments; dated Qwen results remain historical evidence.
 
-The arrangement is **cloud Astra as the main agent and local Qwen3.5-9B Q4_K_M
-on the 16 GB Mac mini**. Preserve the main agent's model and highest supported
-reasoning setting. The goal is more correctly completed work within the same
-Codex budget; no savings percentage has been measured.
+The host is the **16 GB Mac mini**. Preserve the main agent's model and reasoning
+settings. The goal is more correctly completed work within the same Codex budget;
+no improvement or savings percentage has been measured. The operating page and
+log directory retain their `local-qwen` names to preserve existing links and
+artifacts; they are not model selectors.
 
-The user approved revised [time budgets](#time-budget-2026-10-12) on **2026-10-12**:
-five minutes per attempt and ten minutes of cumulative worker time per task.
-The [failure analysis](#failure-analysis-2026-10-12) below reviews the earlier
-attempts. A subsequent [recovery check](#recovery-check-2026-10-12) used the new
-limits and verified a targeted repair, not a general success-rate improvement.
+The existing [time budgets](#time-budget-2026-10-12) remain five minutes per
+attempt, ten minutes cumulative per task and at most two targeted repairs.
+The user explicitly accepts slower inference for this model trial. A completed
+smoke test is not evidence of general Java coding quality or sufficient capacity
+for larger assignments.
 
 ## Instruction ownership
 
@@ -60,7 +55,7 @@ acceptance. Integration verification is recorded in the
 | [local-worker skill](../../.agents/skills/local-worker/SKILL.md) | Reusable selection, handoff, repair and review workflow. |
 | [Worker role](../../.agents/skills/local-worker/references/worker-role.md) | Single source of model instructions, supplied through `model_instructions_file`. |
 | [Task and result contract](../../.agents/skills/local-worker/references/worker-instructions.md) | Completed task input and required result format. |
-| [Worker Modelfile](../../.codex/local-worker/Modelfile) | Local alias using the installed weights with the pilot context/output limits. |
+| [Worker Modelfile](../../.codex/local-worker/Modelfile) | Local alias using the installed weights with the current context/output limits. |
 | This document | Microcol environment, operating profile, integration status, verification and measurements. |
 | [Rules gap analysis](../gap-analysis.md) | Existing gameplay findings and historical test commands/results. |
 
@@ -116,8 +111,8 @@ installation, configuration changes or a cloud fallback when the worker fails.
 
 User and main agent agree player goal, rules, edge cases, cancellation/failure
 behavior, and observable acceptance criteria before implementation. Main agent
-decomposes larger features into small complete tasks and prefers local Qwen for
-suitable implementation, behavior tests, bug fixes, repetitive refactoring, and
+decomposes larger features into small complete tasks and prefers the configured
+local worker for suitable implementation, behavior tests, bug fixes, repetitive refactoring, and
 documentation/configuration edits within agreed interfaces. No extra user
 approval per suitable task.
 
@@ -127,7 +122,7 @@ trivial edits when delegation costs more; explain other skipped/degraded
 delegations briefly.
 
 Send compact English task contracts and relevant code only; do not include full
-chat history or duplicate implementation in parallel. Qwen edits its isolated
+chat history or duplicate implementation in parallel. The worker edits its isolated
 worktree and does not delegate, commit or push. One worker at a time; preserve
 existing limits and unload before Maven.
 
@@ -161,14 +156,14 @@ UI changes require the caller verification plan in the
 records local execution and its environment limits; the complete suite is a
 required Linux/Xvfb publication check.
 
-For each result report what Qwen did, main-agent repairs, actual checks and
+For each result report what the worker did, main-agent repairs, actual checks and
 pending checks. Record attempts/time/available usage; no measured savings
 percentage yet.
 
 Every failed or incomplete attempt follows the mandatory
 [failure and recovery loop](#failure-and-recovery-loop). Simple repairable errors
-go back to Qwen while budgets remain; taking over the implementation is not the
-default response to the first failure.
+go back to the worker while budgets remain; taking over the implementation is not
+the default response to the first failure.
 
 If the runtime is unavailable, report the limitation and continue directly when
 useful; do not install anything or silently switch to a cloud worker. The main
@@ -291,52 +286,119 @@ quality and memory limits. Qwen only returned text: the caller wrote and tested
 the isolated Java snippet outside the checkout. No game files were changed by
 Qwen during these installation checks; they are not the delegated-worker acceptance chain.
 
+### Historical Qwen worker profile — 2026-10-10 to 2026-10-13
+
+The earlier tasks used `qwen3.5:9b-q4_K_M`, project alias
+`microcol-qwen:9b-q4_K_M-8k`, digest
+`dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2`.
+Its weight blob was `sha256-02d45dc1cf451ba2475ac33b301c2dd8f985abe4c182ce04a1f2f5bf0260278d`.
+The alias allocated context 8192 and generation limit 2048; Codex requested
+reasoning `none`. References to the Qwen alias/digest in dated evidence below
+mean this historical profile, not the replacement GPT-OSS profile. Archived
+job commands remain the source for each past invocation and its actual limits.
+
 ### Operator commands
 
-Use `brew services run ollama` to run the service without registering it at login,
-and `brew services stop ollama` to stop it. If the user later requests login
-autostart, `brew services start ollama` enables it; that option has not been used.
-These service behaviors are described in the [Homebrew manual](https://docs.brew.sh/Manpage#services-subcommand).
+Ollama was started with `brew services start ollama` at the user's request on
+2026-10-13; this also registers login autostart. This migration keeps the existing
+service configuration. `brew services stop ollama` stops it;
+`brew services run ollama` runs it without login registration. See the
+[Homebrew manual](https://docs.brew.sh/Manpage#services-subcommand).
 
-Inspect the installed model with `ollama list` and
-`ollama show qwen3.5:9b-q4_K_M`; use `ollama --version` for the runtime and
-`ollama ps` for loaded models. A direct interactive request uses
-`ollama run qwen3.5:9b-q4_K_M`; it is not a delegated agent task.
-`ollama stop qwen3.5:9b-q4_K_M` unloads that model while leaving the server
-running. For the current worker alias, unload with
-`ollama stop microcol-qwen:9b-q4_K_M-8k` before Maven.
+Inspect the installed worker using `ollama list`, `ollama show
+microcol-gpt-oss:20b-8k`, `ollama --version` and `ollama ps`.
+`ollama stop microcol-gpt-oss:20b-8k` unloads it before Maven while retaining the
+server. The old Qwen weights and alias remain installed for explicit comparison;
+do not select them automatically or load both models concurrently.
 
 ## Selected direct CLI workflow
 
 Use the installed Homebrew Codex CLI as the worker and the caller's existing
-shell tools to supervise it. MCP and a custom in-session subagent are not needed
-for this route. No persistent user Codex configuration has been changed.
+shell tools to supervise it. No new runner service, MCP integration or persistent
+user Codex configuration is needed.
+
+### GPT-OSS installation and worker verification — 2026-10-13
+
+The user requested this replacement in [R-0034](../requirements/R-0034.md).
+`ollama pull gpt-oss:20b` completed with exit 0 and SHA-256 verification. The
+local package is **13,793,441,566 bytes**, reports **20.9B / MXFP4** and uses the
+`llamacpp` runner. The base digest is
+`f38aa0c53da5f8c49d08c43a99df24ff53167fe68e24664a7777288e7656fdfe`;
+the configured alias digest is
+`855c7ef433e4a7ed323d53dba8c5ce5e3a57ab5398e3844af84a02047ef124a7`.
+`/api/show` confirms `num_ctx 8192`, `num_predict 4096`, tool support and
+thinking levels `low`, `medium`, `high` with default `medium`. Creating the
+alias reused the same weights.
+
+The real Codex CLI smoke task requested four exact instruction replacements
+in the worker skill and task contract. The caller retained runtime setup and
+operating documentation, validated the whole returned batch before applying it,
+and did not repair the accepted replacement text manually.
+
+| Attempt | Seconds | Caller verification |
+| --- | --- | --- |
+| 0 | 70.987 | Valid JSON with all four entries, but three new strings omitted the required `the`; the exact-diff check rejected the batch before any application. The initial instruction used an unquoted replacement phrase; the repair supplied all four complete new strings explicitly. |
+| 1 | 74.318 | Accepted all four exact replacements in the two allowed files; no worker shell commands, file edits or extra changes. The caller reran the failed validation and applied the verified batch. |
+
+Total worker time was **145.305 seconds**, within the unchanged task/repair
+limits. Both processes exited 0 and unloaded the model successfully; exit status
+alone did not determine acceptance. Reported input/output tokens were 2684/757
+and 2885/812, with no cached input. The CLI reported zero separate reasoning
+tokens; this does not establish that reasoning was disabled or expose its actual
+token split. Codex emitted nonfatal unknown-model metadata and alias-telemetry
+warnings; completion and acceptance are verified despite those warnings.
+
+All 105 loaded-model samples matched the alias digest above and context 8192.
+`ollama ps` reported **18% CPU / 82% GPU**; `/api/ps` reported allocation
+13,968,500,323 bytes, including 11,450,754,006 bytes of VRAM. Whole-host swap
+was already 6850.94 MiB before the first attempt, peaked at 13364.69 MiB during it
+(an increase of about **6.36 GiB**), and reached 13574.62 MiB during the repair.
+Both attempts briefly reached memory-pressure level 4 (critical). These are
+whole-host observations, not model-only memory measurements. The final
+`/api/ps` contained no loaded models. This host is under significant memory
+pressure with GPT-OSS even at 8k: keep inference separate from heavy tests and
+do not increase context on the strength of this smoke result.
+
+The check establishes the actual local handoff and repair path. It does not
+compare Java coding quality with Qwen or demonstrate reliable larger tasks.
+After integrating with the current `main`, the caller passed all 9 documentation
+tests, the strict MkDocs build, worker skill validation and `git diff --check`.
+No Java or player behavior changed; local Maven/TestFX was not rerun for this
+configuration and instruction change.
+
+Download, setup, model metadata and subsequent worker evidence are retained in
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-gpt-oss-switch/`.
+The previous Qwen task was still verifying Docker UI tests during setup; no
+inference was started while its shared worker lock was held.
 
 ### Operating profile — bounded assignments
 
 | Setting | Current choice and limit |
 | --- | --- |
 | Runtime/provider | Ollama 0.40.2 on loopback, Homebrew Codex CLI 0.142.3, `--oss --local-provider ollama`. |
-| Model | Base `qwen3.5:9b-q4_K_M`; local alias `microcol-qwen:9b-q4_K_M-8k` uses the same installed weights without another download. Alias digest `dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2`. |
-| Model allocation | [Modelfile](../../.codex/local-worker/Modelfile): `num_ctx 8192`, `num_predict 2048`. Loaded-model evidence confirmed context 8192 in the accepted pilot. |
-| Codex metadata | `model_context_window=8192` describes the window to Codex; it does not set Ollama's allocation. Confirm actual context and identity in Ollama evidence. |
-| Reasoning | Non-thinking with the three CLI settings shown below; the accepted pilot reported zero reasoning events/tokens. Do not copy Astra's `ultra` setting to the worker. |
-| Concurrency | One active local request, serialized across sessions using a host-wide lock. Unload the worker model before Maven; no concurrent heavy tests. |
-| Limits | **300 seconds (5 minutes) per attempt**, **600 seconds (10 minutes) cumulative worker time per task**, with at most **two repair rounds** and only while budget remains. The caller enforces both limits; see the accounting rules below. |
-| Language/context | English code and project instructions; Czech user requests remain welcome. Give the worker a small complete task, inline relevant rules and code, without full skill/app catalogs or conversation history. Split tasks that do not fit. |
+| Model | Base `gpt-oss:20b` (local MXFP4 weights); project alias `microcol-gpt-oss:20b-8k`. Installation/runtime digest is recorded in the dated verification above. |
+| Model allocation | [Modelfile](../../.codex/local-worker/Modelfile): `num_ctx 8192`, `num_predict 4096`. The generation allowance includes reasoning and final output within the context window. |
+| Codex metadata | `model_context_window=8192` describes the window to Codex; it does not set Ollama allocation. Confirm actual context and model identity in runtime evidence. |
+| Reasoning | `medium`, a supported GPT-OSS reasoning level; use the complete CLI settings below. Do not reuse Qwen's `none` setting or Astra's `ultra`. |
+| Concurrency | One local request, serialized with the existing host-wide lock. Unload before Maven; no concurrent heavy tests or second local model. |
+| Limits | **300 seconds per attempt**, **600 seconds cumulative worker time per task**, at most **two repairs** while budget remains. Caller-enforced, including model loading and cleanup. |
+| Language/context | Focused English task contracts and relevant code. No full chat history or unrelated catalogs. Split work that does not fit. |
 
-The alias was created from the project Modelfile with:
+The user authorized this installation and model change on 2026-10-13. Setup is
+performed once, not for each delegation:
 
 ```sh
-ollama create microcol-qwen:9b-q4_K_M-8k -f .codex/local-worker/Modelfile
+ollama pull gpt-oss:20b
+ollama create microcol-gpt-oss:20b-8k -f .codex/local-worker/Modelfile
 ```
 
-Do not run setup on every delegation. The base and alias both report weight blob
-`sha256-02d45dc1cf451ba2475ac33b301c2dd8f985abe4c182ce04a1f2f5bf0260278d`.
-This alias changes operating parameters, not weights or the main configuration.
-The small context remains an experiment: [Ollama's Codex guidance](https://docs.ollama.com/integrations/codex)
-recommends substantially more context, while the 8k installation checks above
-already caused swapping on this machine. Keep task size and memory use bounded.
+The alias reuses downloaded weights and sets project limits. GPT-OSS uses
+[Ollama's Harmony template](https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama)
+and supports [low/medium/high reasoning](https://docs.ollama.com/capabilities/thinking).
+The 8k profile is a deliberate memory compromise on this 16 GB host:
+[Ollama recommends at least 64k for Codex](https://docs.ollama.com/integrations/codex).
+Do not infer that a model's advertised context fits this machine. Measure actual
+memory pressure, swapping and completion before increasing allocation.
 
 ### Time budget — 2026-10-12
 
@@ -364,14 +426,14 @@ Do not copy the old `180` constant from archived per-job runners.
   If prior elapsed-time evidence is missing, reconstruct it before dispatching
   again rather than assuming a fresh budget.
 - Caller preparation, review, Maven/tests and publication are outside this
-  **worker-runtime** budget. Do not run heavy verification concurrently with Qwen.
+  **worker-runtime** budget. Do not run heavy verification concurrently with the local worker.
   Repeated reads or errors without progress can justify stopping earlier; more
   time is not a reason to continue an unchanged failing loop.
 
 For example, 180 seconds already used leaves a 300-second attempt available;
 480 used leaves only 120 seconds; 600 used permits no further attempt. This is
 a caller-enforced workflow change, not a claim that the longer budget improves
-success rates. The model, 8k context, output limit and concurrency are unchanged.
+success rates. R-0034 changes the model and generation allowance; the time limits and single-request concurrency remain unchanged.
 
 ### Failure and recovery loop
 
@@ -387,10 +449,10 @@ failure without checking a feasible correction does not meet this contract.
    a timeout alone does not establish that more time is the answer.
 2. **Make a specific correction.** The caller fixes its own setup, such as a
    missing child `CODEX_HOME`, without installing a runtime or changing models.
-   For a simple in-scope worker error, give Qwen the relevant failing fragment,
+   For a simple in-scope worker error, give the worker the relevant failing fragment,
    traceback/current diff and a focused repair task. Keep required behavior and
    checks unchanged. Do not dump the full previous conversation or repeat an
-   unchanged failing prompt. Do not silently replace Qwen's implementation.
+   unchanged failing prompt. Do not silently replace the worker's implementation.
 3. **Rerun within the same budget.** Dispatch the corrected setup or repair with
    the same logical task ID, remaining cumulative runtime and repair count.
    The caller must attempt a feasible, safe repair while those limits permit it;
@@ -399,7 +461,7 @@ failure without checking a feasible correction does not meet this contract.
    budgets are exhausted, record that concrete reason rather than retrying
    indefinitely. Main-agent takeover must explain why another worker repair
    was not appropriate.
-4. **Verify the original failure and the result.** After unloading Qwen, the
+4. **Verify the original failure and the result.** After unloading the local model, the
    caller reruns the failed command/check against the repaired state and then
    the assigned acceptance checks, including formatting for Java changes.
    A corrected variable name, successful CLI exit or passing syntax check alone
@@ -410,7 +472,7 @@ failure without checking a feasible correction does not meet this contract.
    is verified, partial or unresolved. Record skipped-retry/takeover reasons and
    reusable prevention in its existing owning instructions or tool. Summarize
    relevant measured outcomes here; do not present caller-completed work as an
-   independently successful Qwen task.
+   independently successful worker task.
 
 This is enforced by the main agent's dispatch and acceptance procedure through
 `AGENTS.md`, the worker skill and task/result contract. It is **not** an unattended
@@ -468,24 +530,27 @@ test -d "$worker_tree" && test -r "$worker_job/task.md" \
 
 env CODEX_HOME="$worker_job/codex-home" \
   /opt/homebrew/bin/codex -a never exec \
-  --oss --local-provider ollama -m microcol-qwen:9b-q4_K_M-8k \
+  --oss --local-provider ollama -m microcol-gpt-oss:20b-8k \
   --ignore-user-config --ephemeral -s workspace-write -C "$worker_tree" \
   --json --color never -o "$worker_job/response.md" \
   -c "model_instructions_file=\"$worker_job/worker-role.md\"" \
-  -c model_context_window=8192 \
+  -c model_context_window=8192 -c project_doc_max_bytes=0 \
   -c features.multi_agent=false -c skills.include_instructions=false \
   -c features.plugins=false -c features.apps=false -c 'web_search="disabled"' \
-  -c 'model_reasoning_effort="none"' \
+  -c 'model_reasoning_effort="medium"' \
   -c model_supports_reasoning_summaries=true \
   -c 'model_reasoning_summary="none"' \
   -c tool_output_token_limit=1000 - \
   < "$worker_job/task.md" > "$worker_job/events.jsonl" 2> "$worker_job/stderr.log"
 ```
 
-Preserve all three reasoning settings together. A wire check found that without
-`model_supports_reasoning_summaries=true`, this CLI sent `reasoning: null` despite
-requesting effort `none`; the full set sends the intended reasoning controls.
-This compatibility detail belongs to the checked CLI version, not to Astra.
+Preserve all three reasoning settings together. The earlier Qwen wire check
+found that this CLI omitted the reasoning object without
+`model_supports_reasoning_summaries=true`; GPT-OSS uses effort `medium` and
+summary `none` to request reasoning without a separate prose summary. Inspect
+actual runtime identity and completion instead of treating these flags as proof
+of a successful inference. `project_doc_max_bytes=0` avoids duplicate repository
+instructions; the completed task must include all applicable rules explicitly.
 `workspace-write` supplies the execution restriction; an isolated worktree and a
 post-run diff check alone are not a filesystem sandbox.
 The CLI emitted fallback model-metadata warnings for the local model. This is
@@ -590,7 +655,7 @@ The baseline, exact executed command, task and role are retained in the artifact
 | --- | --- |
 | Baseline `GoodsTradeTest` | Caller verification passed **3 existing cases** before worker edits. See `baseline-maven.log` and `baseline.json`. |
 | First worker attempt | Actual 4k context with default thinking. Caller stopped it after **145.73 s** because context compaction occurred before any edit. No changes were produced; this was not a successful implementation. |
-| Accepted retry | `retry-8k/command.json` records the exact command above. CLI exit **0**, **69.0 s**. Qwen changed only `GoodsTradeTest.java`: six assigned parameter rows and explanatory comments; original assertions and cases remained intact. |
+| Accepted retry | `retry-8k/command.json` records the historical Qwen invocation. CLI exit **0**, **69.0 s**. Qwen changed only `GoodsTradeTest.java`: six assigned parameter rows and explanatory comments; original assertions and cases remained intact. |
 | Caller verification | After unloading the model, Maven on **JDK 11** exited **0**. Fresh Surefire XML reports **9 tests, 0 failures, 0 errors, 0 skipped**, up from the 3-case baseline. |
 | Review and delivery | Astra accepted the diff in the isolated worktree. When the user subsequently selected `develop` for ongoing development, the same patch was incorporated into the main checkout on that branch. The original worktree and artifacts retain the pilot evidence. |
 
@@ -766,7 +831,7 @@ delegation, not evidence of measured budget savings. The task, tool events, diff
 and `verification.json` are retained in the local job log directory documented
 above.
 
-A completed delegation requires **Astra task → verified local Qwen call → actual
+A completed delegation requires **Astra task → verified local worker call → actual
 change → required caller verification → Astra review**. The accepted pilot above
 records this chain. Installation, a text response or a tool diagnostic alone
 would not establish it.

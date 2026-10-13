@@ -92,7 +92,7 @@ Use the shared [Java formatter](docs/code-formatting.md) and its
 scoped to files touched by the task; preserve the functional tests' readable
 scenario structure and stable IDs.
 
-This rule applies to the main agent and every worker, including local Qwen.
+This rule applies to the main agent and every worker.
 Include the formatting requirements and accessible profile in Java task handoffs.
 Before accepting or committing Java changes, the main agent applies the shared
 formatter to the task's changed Java files and reviews the diff, including worker
@@ -148,7 +148,7 @@ verification calls. Assertions in `org.microcol.page` belong only in dedicated
 parameters where appropriate. Keep them out of action/getter/constructor bodies;
 `TC_...` classes call those verification methods, not assertions directly or
 through local assertion helpers. Follow the functional contract, including its
-source-contract test, for the main agent and every worker including Qwen.
+source-contract test, for the main agent and every worker.
 Keep stable scenario IDs and English test prose. Visual
 changes must preserve gameplay assertions and expected outcomes; fix selectors
 and interaction details in page objects instead of weakening tests. Record actual
@@ -157,8 +157,9 @@ blocker, not a verified change. Use the contract's completion checklist.
 
 # Local worker
 
-Prefer local Qwen for the maximum suitable development work once the user and
-main agent agree the use case and acceptance criteria. The main agent decomposes
+Prefer the configured local GPT-OSS 20B worker for the maximum suitable
+development work once the user and main agent agree the use case and acceptance
+criteria. The main agent decomposes
 larger features into bounded assignments and uses the
 [local-worker skill](.agents/skills/local-worker/SKILL.md) for implementation,
 test authoring, bug fixes, repetitive refactoring, and documentation or
@@ -177,7 +178,7 @@ do not claim token savings without measurements.
 
 For every failed or incomplete worker attempt, diagnose the actual failure and
 record the evidence. Correct caller setup errors; send simple in-scope code or
-tool errors back to Qwen for a targeted repair while time and repair budgets
-remain. Rerun the failed check and required acceptance checks before calling the
+tool errors back to the local worker for a targeted repair while time and
+repair budgets remain. Rerun the failed check and required acceptance checks before calling the
 problem fixed. Main-agent takeover or a skipped retry requires an explicit reason;
 follow the [failure and recovery loop](docs/ai/local-qwen.md#failure-and-recovery-loop).

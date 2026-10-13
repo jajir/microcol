@@ -38,7 +38,7 @@ paths. This template is independent of the chosen transport or agent runtime.
 
 For Java tasks, include the requirements from `docs/code-formatting.md` and make
 `.vscode/eclipse-formatter.xml` accessible in the worktree. The caller applies
-that profile to changed Java files after unloading Qwen and before verification
+that profile to changed Java files after unloading the local model and before verification
 and acceptance; specify the scoped formatter command in the task. Do not rely on
 VS Code save hooks for worker edits.
 
