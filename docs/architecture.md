@@ -140,7 +140,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.game.components](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/) | Pravý panel, tlačítka, stavový řádek a údaje o poli a jednotkách. |
 | [gui.screen.game.gamepanel](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/) | Canvas mapy, viditelná oblast, výběr, kurzor, posun, zvýraznění cesty a animace. |
 | [gui.screen.colony](../microcol-game/src/main/java/org/microcol/gui/screen/colony/) | Pracovníci, pole, sklad, budovy a přístav na obrazovce kolonie. |
-| [gui.screen.colony.buildingqueue](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/) | Dialog a editace stavební fronty; zpracování fronty a ceny zůstávají v modelu. |
+| [gui.screen.colony.buildingqueue](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/) | Lokalizovaný výběr a explicitní potvrzení projektu, pořadí a odebrání z fronty. Výběr drží původní kolonii/model a kontroluje změnu zobrazeného stavu; pravidla dostupnosti, ceny a zpracování fronty zůstávají v modelu. |
 | [gui.screen.europe](../microcol-game/src/main/java/org/microcol/gui/screen/europe/) | Evropský přístav, nákup a nábor jednotek, zboží a přehled plavby; nabídky vybavení na molu zobrazují ceny a důvody odmítnutí z modelu. |
 | [gui.screen.market](../microcol-game/src/main/java/org/microcol/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
 | [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
@@ -290,5 +290,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    zásoby, aby odpovídaly modelu. Pravidla pasažérů stále vyžadují loď.
 3. Cílené ověření prošlo 66 modelovými a 34 funkčními/kontrolními případy.
    Úplná regrese prošla 801 modelovými a 113 funkčními/kontrolními případy.
-   Publikace čeká; aktuální důkazy vlastní
+   Po opravě obnovení popisu mapového pole prošlo úplné CI 802 modelovými
+   a 114 funkčními/kontrolními případy; build `dev-54-13001e6ac6b8` je publikovaný.
+   Aktuální důkazy vlastní
    [evidence R-0024](functional-tests.md#wagon-unloading-implementation-2026-10-13).

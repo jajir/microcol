@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="open">Stavění…</entry>
+    <entry key="title">Stavění — %s</entry>
+    <entry key="projects">Budovy a jednotky</entry>
+    <entry key="queue">Fronta staveb</entry>
+    <entry key="choose">Vyberte projekt pro zobrazení požadavků.</entry>
+    <entry key="cost">Cena: %s kladiv · %s nástrojů</entry>
+    <entry key="available">Dostupné. Potvrzením přidáte do fronty.</entry>
+    <entry key="population">Vyžaduje %s obyvatel; nyní %s.</entry>
+    <entry key="predecessor">Vyžaduje: %s.</entry>
+    <entry key="alreadyBuilt">Tato budova nebo vyšší vylepšení již existuje.</entry>
+    <entry key="alreadyQueued">Tato budova nebo její vylepšení již je ve frontě.</entry>
+    <entry key="unavailable">Tento projekt není v současné kolonii dostupný.</entry>
+    <entry key="add">Potvrdit a přidat</entry>
+    <entry key="up">Posunout výše</entry>
+    <entry key="down">Posunout níže</entry>
+    <entry key="remove">Odebrat</entry>
+    <entry key="cancel">Zavřít / zrušit výběr</entry>
+    <entry key="changed">Kolonie se změnila. Vyberte projekt znovu a zkontrolujte aktuální požadavky.</entry>
+    <entry key="added">Přidáno do fronty.</entry>
+    <entry key="empty">Není vybraná žádná stavba.</entry>
+    <entry key="hammers">Kladiva: %s / %s (+%s/tah)</entry>
+    <entry key="tools">Nástroje: %s / %s</entry>
+    <entry key="waitingTools">Čeká na %s nástrojů.</entry>
+    <entry key="waitingHammers">Čeká na kladiva.</entry>
+    <entry key="ready">Připraveno na příští fázi stavění.</entry>
+<entry key="queueProgress">Přidělená kladiva: %s / %s</entry>
+</properties>

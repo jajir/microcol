@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="open">Construction…</entry>
+    <entry key="title">Construction — %s</entry>
+    <entry key="projects">Buildings and units</entry>
+    <entry key="queue">Construction queue</entry>
+    <entry key="choose">Select a project to see its requirements.</entry>
+    <entry key="cost">Cost: %s hammers · %s tools</entry>
+    <entry key="available">Available. Confirm to add to the queue.</entry>
+    <entry key="population">Requires %s residents; currently %s.</entry>
+    <entry key="predecessor">Requires: %s.</entry>
+    <entry key="alreadyBuilt">This building or a higher upgrade already exists.</entry>
+    <entry key="alreadyQueued">This building or an upgrade in its chain is already queued.</entry>
+    <entry key="unavailable">This project is unavailable in the current colony.</entry>
+    <entry key="add">Confirm and add</entry>
+    <entry key="up">Move up</entry>
+    <entry key="down">Move down</entry>
+    <entry key="remove">Remove</entry>
+    <entry key="cancel">Close / cancel selection</entry>
+    <entry key="changed">The colony has changed. Select a project again to review its current requirements.</entry>
+    <entry key="added">Added to the queue.</entry>
+    <entry key="empty">No construction selected.</entry>
+    <entry key="hammers">Hammers: %s / %s (+%s/turn)</entry>
+    <entry key="tools">Tools: %s / %s</entry>
+    <entry key="waitingTools">Waiting for tools: %s.</entry>
+    <entry key="waitingHammers">Waiting for hammers.</entry>
+    <entry key="ready">Ready for the next construction phase.</entry>
+<entry key="queueProgress">Assigned hammers: %s / %s</entry>
+</properties>

@@ -3,14 +3,12 @@ package org.microcol.gui.screen.colony;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.UnitTypes;
+import org.microcol.gui.screen.colony.buildingqueue.ConstructionText;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
 import org.microcol.model.BuildingStatus;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyBuildingItem;
-import org.microcol.model.ColonyBuildingItemConstruction;
-import org.microcol.model.ColonyBuildingItemUnit;
 import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.Model;
@@ -19,7 +17,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
 /**
@@ -46,14 +45,8 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
         super(eventBus, i18n, imageProvider, construction, colonyStats, model);
         this.colony = Preconditions.checkNotNull(colony);
         getMainPane().getStyleClass().add("constructionPaneCarpenter");
-        getMainPane().setOnMouseClicked(this::onMouseClicked);
         getMainPane().getChildren().add(mainVbox);
         mainVbox.getStyleClass().add("description");
-    }
-
-    private void onMouseClicked(
-            @SuppressWarnings("unused") final MouseEvent event) {
-        getEventBus().post(new ShowBuildingQueueEvent());
     }
 
     @Override
@@ -68,48 +61,34 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
         final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colony
                 .getColonyBuildingQueue().getActuallyBuildingStat();
         mainVbox.getChildren().clear();
+        final Button open = new Button(getI18n().get(ConstructionText.open));
+        open.setId("constructionOpen");
+        open.setOnAction(
+                event -> getEventBus().post(new ShowBuildingQueueEvent()));
+        mainVbox.getChildren().add(open);
         if (oStats.isPresent()) {
             final BuildingStatus<ColonyBuildingItem> stats = oStats.get();
-            mainVbox.getChildren().add(label("Building " + getName(stats)));
-            if (stats.getTurnsToComplete().isPresent()) {
-                mainVbox.getChildren().add(label("Turns to complete "
-                        + stats.getTurnsToComplete().get()));
-            } else {
-                mainVbox.getChildren().add(label("Not will be completed."));
-            }
+            mainVbox.getChildren().add(
+                    label(ConstructionText.name(getI18n(), stats.getItem())));
             mainVbox.getChildren()
-                    .add(label("Hammers, there are ("
-                            + stats.getHammers().getAlreadyHave() + " + "
-                            + stats.getHammers().getBuildPerTurn() + ") of "
-                            + stats.getHammers().getRequired()));
+                    .add(label(getI18n().get(ConstructionText.hammers,
+                            stats.getHammers().getAlreadyHave(),
+                            stats.getHammers().getRequired(),
+                            stats.getHammers().getBuildPerTurn())));
             mainVbox.getChildren()
-                    .add(label("Tools, there are ("
-                            + stats.getTools().getAlreadyHave() + " + "
-                            + stats.getTools().getBuildPerTurn() + ") of "
-                            + stats.getTools().getRequired()));
-        } else {
-            mainVbox.getChildren().add(label("V kolonii se nic nestavi"));
+                    .add(label(getI18n().get(ConstructionText.tools,
+                            stats.getTools().getAlreadyHave(),
+                            stats.getTools().getRequired())));
         }
-    }
-
-    private String getName(final BuildingStatus<ColonyBuildingItem> status) {
-        if (status.getItem() instanceof ColonyBuildingItemConstruction) {
-            final ColonyBuildingItemConstruction cbi = (ColonyBuildingItemConstruction) status
-                    .getItem();
-            return getI18n().get(ConstructionTypeName
-                    .getNameForType(cbi.getConstructionType()));
-        } else if (status.getItem() instanceof ColonyBuildingItemUnit) {
-            final ColonyBuildingItemUnit cbi = (ColonyBuildingItemUnit) status
-                    .getItem();
-            return getI18n().get(UnitTypes.getUnitName(cbi.getUnitType()));
-        } else {
-            throw new IllegalStateException(String
-                    .format("Unexpected statu stype %s", status.getItem()));
-        }
+        final Label status = label(ConstructionText.status(getI18n(), colony));
+        status.setId("constructionStatus");
+        status.setWrapText(true);
+        mainVbox.getChildren().add(status);
     }
 
     private Label label(final String text) {
         final Label label = new Label(text);
+        label.setTooltip(new Tooltip(text));
         return label;
     }
 

@@ -5,9 +5,8 @@
 	<comment>Define construction type names</comment>
 
 	<entry key="townHall">Radnice</entry>
-	<entry key="lubmerMill">Velká pila</entry>
-	<entry key="carpenterShop">Truhlářství</entry>
-	<entry key="carpenterStand">Malé truhlářství</entry>
+	<entry key="lubmerMill">Pila</entry>
+	<entry key="carpenterStand">Truhlářství</entry>
 	<entry key="ironWorks">Kovářská manufaktura</entry>
 	<entry key="blacksmithShop">Kovářství</entry>
 	<entry key="blacksmithHouse">Malé kovářství</entry>

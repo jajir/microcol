@@ -96,7 +96,7 @@ The user retained the current main menu and requested that its free-play entry
 be enabled independently of campaign completion. R-0014 now specifies a mock
 setup with working Start/Back and two map choices; R-0015 specifies fixed French
 cities and units. R-0016 now has passing UI journeys; R-0020–R-0025 retain their separate
-capability checks and missing work. See each analysis for its current
+capability checks and follow-up evidence. See each analysis for its current
 scope and evidence; the earlier capture tables describe the initial drafts.
 
 Player-entered text defaults to **64 Unicode code points**, including player
@@ -271,5 +271,5 @@ does not itself create chats, scheduled work or implementation assignments.
 
 1. The user requested implementation of all remaining requirements from R-0019, consulting the original Colonization manual for open questions. The active gameplay scope is R-0019–R-0031; R-0032–R-0034 already contain delivered technical changes and require a completion audit, not duplicate implementation.
 2. Work through A05 visibility/equipment, A06 voyages/passengers/expert purchase, A07 wagon/construction, A08 relations/rival founding, A09 attack/strength, then A10 sentiment before its dependent tax demand. Numbered requirements retain their existing acceptance; needed earlier capabilities are implemented when dependency evidence requires them.
-3. R-0019 is published ([evidence](../functional-tests.md#fog-implementation-2026-10-13)). The R-0020 pier-trading slice is published as `dev-48-b989413bb606`, while the colony follow-up is verified in the complete local R-0022 regression and specialist integration remains in progress. R-0021 is published as `dev-49-88573a85ac03`, with 767 game and 92 functional/control tests passing both locally and in CI. R-0022 individual passenger transfers are locally verified with 781 game and 98 functional/control tests passing; publication is pending. Subsequent requirements remain unverified until their individual model, player journey, persistence and delivery checks pass. Manual-backed decisions cite printed and PDF page numbers; implementation policy for parameters absent from the manual is explicitly distinguished from historical rules.
+3. R-0019–R-0024 are published; each numbered analysis owns its current scope and delivery evidence. R-0025 has passed the full regression and final targeted acceptance; publication is pending. R-0026 onward remain pending their individual acceptance. Manual-backed decisions cite printed and PDF page numbers; implementation policy for parameters absent from the manual is explicitly distinguished from historical rules.
 4. Local implementation uses the configured Ollama GPT-OSS worker with bounded assignments; requirements, architecture, review, actual checks and publication remain caller-owned.

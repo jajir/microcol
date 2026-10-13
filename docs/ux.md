@@ -164,3 +164,18 @@ Dokumentace byla téhož dne ověřena přísným sestavením `target/docs-venv/
    fungovat i při druhém a dalším potvrzení. Cílené TC05/TC06/TC25 po opravě prošly.
 5. Toto jsou implementační rozhodnutí a automaticky ověřované cesty,
    nikoli výsledky uživatelské studie. Přijetí a kontrola snímků obrazovek jsou doložené v [záznamu implementace](functional-tests.md#free-play-implementation-2026-10-13).
+
+## Stavění — 14. října 2026
+
+1. Cílem hráče je najít dostupný projekt, porozumět ceně a podmínkám,
+   výslovně jej zařadit a zjistit důvod čekání. Viditelné tlačítko v dílně
+   otevírá stejnou nabídku myší i klávesnicí; výběr ještě frontu nemění.
+2. Zrušení musí fungovat také s fokusem uvnitř seznamu. V TC22 se ukázalo,
+   že samotná obsluha Escape na konci průchodu události nestačí, protože
+   klávesu spotřebuje seznam. Opravený dialog a přímá kontrola jeho zavření
+   prošly cílenými scénáři. Potvrzené přesuny/odebrání z fronty jsou samostatné
+   provedené akce; „Zavřít / zrušit výběr“ zahazuje pouze nepotvrzený výběr.
+3. České a anglické texty, náklady, důvod nedostupnosti a čekání na nástroje
+   byly zkontrolovány na skutečných snímcích. Výsledky TC32 včetně výroby a
+   Continue jsou v [evidenci](functional-tests.md#construction-ui-implementation-2026-10-14).
+   Nejde o pozorování hráčů ani úplnou přejímku všech pravidel staveb.

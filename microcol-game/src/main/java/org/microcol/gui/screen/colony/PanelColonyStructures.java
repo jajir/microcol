@@ -125,8 +125,6 @@ final class PanelColonyStructures implements JavaFxComponent {
                 // lumber
                 .put(ConstructionType.LUMBER_MILL,
                         new PanelConstructionCarpenterFactory("id_carpenter"))
-                .put(ConstructionType.CARPENTERS_SHOP,
-                        new PanelConstructionCarpenterFactory("id_carpenter"))
                 .put(ConstructionType.CARPENTERS_STAND,
                         new PanelConstructionCarpenterFactory("id_carpenter"))
                 // Dock

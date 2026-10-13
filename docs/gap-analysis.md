@@ -30,12 +30,20 @@ full-UC acceptance states below remain distinct from these bounded changes.
 The [functional audit](functional-tests.md#free-play-audit-2026-10-13) links actual
 player paths to R-0016/R-0018 and R-0020–R-0025. It preserves the catalogue's
 manual targets; baseline gap observations do not change a missing rule to
-implemented. In particular, Europe supports passenger transfer but lacks pier
-equipment controls and expert purchase. Wagon artwork is not registered in the
-unit image provider, and the colony construction control is hidden by CSS before
-its model eligibility can be exercised through UI. Automatic saving writes at
-human-turn start; menu-entry saving and fresh-session Continue refresh remain
-separate gaps. Each requirement owns its bounded follow-up and open questions.
+implemented. At that audit baseline, Europe supported passenger transfer but
+lacked pier equipment controls and expert purchase. Wagon artwork was not
+registered in the unit image provider, and CSS hid the colony construction
+control. Menu-entry saving and fresh-session Continue refresh were separate
+gaps. Each requirement owns its bounded follow-up and open questions.
+
+Follow-up, 2026-10-14: [R-0019–R-0024](requirements/README.md#implementation-from-r-0019-authorized-2026-10-13)
+are published. [R-0025](requirements/R-0025.md) adds shared building admission,
+queue/persistence validation and a visible construction picker; targeted model
+and player scenarios, the full regression and final targeted acceptance have
+passed; delivery remains pending. Its visible missing-tools explanation is not a claim that the complete
+advisor/event behavior of BUILD-019, all building effects or Founding Father
+gates are implemented. The historical assessment table below remains distinct
+from these bounded acceptance results.
 
 ## Main findings
 

@@ -185,7 +185,6 @@
 #id_carpenter {
   -fx-translate-x: 310;
   -fx-translate-y: 147;
-  visibility: hidden;
 }
 
 /*# sourceMappingURL=Colony.css.map */
@@ -197,4 +196,14 @@
     -fx-border-color: black;
     -fx-border-width: 2;
     -fx-border-insets: -2;
+}
+
+.constructionPaneCarpenter .description .label {
+    -fx-font-size: 11;
+    -fx-text-fill: #17120b;
+}
+
+.constructionPaneCarpenter .description .button {
+    -fx-font-size: 12;
+    -fx-padding: 3 8 3 8;
 }

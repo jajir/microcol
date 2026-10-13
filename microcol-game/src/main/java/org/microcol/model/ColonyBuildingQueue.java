@@ -66,8 +66,10 @@ public class ColonyBuildingQueue {
     public Optional<BuildingStatus<ColonyBuildingItem>> getActuallyBuildingStat() {
         if (getActualyBuilding().isPresent()) {
             final ColonyBuildingItem pok = getActualyBuilding().get().getItem();
-            final int alreadyHaveHammers = colony.getWarehouse()
-                    .getGoods(GoodsType.HAMMERS).getAmount();
+            final int alreadyHaveHammers = Math.addExact(
+                    getActualyBuilding().get().getBuildHammers(),
+                    colony.getWarehouse().getGoods(GoodsType.HAMMERS)
+                            .getAmount());
             final int productionHammers = colony.getGoodsStats()
                     .getStatsByType(GoodsType.HAMMERS).getNetProduction();
             final int alreadyHaveTools = colony.getWarehouse()
@@ -95,14 +97,23 @@ public class ColonyBuildingQueue {
 
     public void moveItemBefore(final ColonyBuildingItemProgress<?> movingItem,
             final ColonyBuildingItemProgress<?> beforeItem) {
-        buildingQueue.remove(movingItem);
-        final int index = buildingQueue.indexOf(beforeItem);
-        buildingQueue.add(index, movingItem);
+        validateEditable();
+        Preconditions.checkArgument(
+                buildingQueue.contains(movingItem)
+                        && buildingQueue.contains(beforeItem),
+                "Queue item is no longer present");
+        if (movingItem != beforeItem) {
+            buildingQueue.remove(movingItem);
+            buildingQueue.add(buildingQueue.indexOf(beforeItem), movingItem);
+        }
     }
 
     public void moveItemAtTheEnd(
             final ColonyBuildingItemProgress<?> movingItem) {
-        logger.debug("Moving item '%s' at the end of the queue.", movingItem);
+        validateEditable();
+        Preconditions.checkArgument(buildingQueue.contains(movingItem),
+                "Queue item is no longer present");
+        logger.debug("Moving item '{}' at the end of the queue.", movingItem);
         buildingQueue.remove(movingItem);
         buildingQueue.add(movingItem);
     }
@@ -138,55 +149,76 @@ public class ColonyBuildingQueue {
     }
 
     private boolean canUnitBeBuild(final UnitType unitType) {
-        return unitType.canBeBuildInColony()
+        return unitType != null && UnitType.UNIT_TYPES.contains(unitType)
+                && colony.isValid()
+                && model.getPlayers().contains(colony.getOwner())
+                && colony.getOwner().equals(model.getCurrentPlayer())
+                && unitType.canBeBuildInColony()
                 && unitType.getCanByBuildInColony().apply(model, colony);
     }
 
-    private boolean canConstructionBeBuild(final ConstructionType type) {
-        final boolean isAlreadyBuilded = type.getUpgradeChain().stream()
-                .filter(t -> colony.isContainsConstructionByType(t)).findAny()
-                .isPresent();
-        if (isAlreadyBuilded) {
-            return false;
-        } else {
-            final Optional<ColonyBuildingItemProgressConstruction> oItem = getItemByType(
-                    type);
-            if (oItem.isPresent()) {
-                return false;
-            } else {
-                if (type.getUpgradeFrom().isPresent()) {
-                    return colony.isContainsConstructionByType(
-                            type.getUpgradeFrom().get());
-                } else {
-                    return true;
-                }
-            }
-        }
+    public enum UnavailableReason {
+        UNKNOWN_TYPE, COLONY_UNAVAILABLE, NOT_A_PROJECT, ALREADY_BUILT,
+        ALREADY_QUEUED, MISSING_PREDECESSOR, POPULATION
     }
 
-    /**
-     * Add new construction to building queue.
-     *
-     * @param constructionType required construction type
-     * @return Return <code>null</code> when it wasn't possible to add
-     *         construction to queue otherwise return newly created item.
-     */
+    public Optional<UnavailableReason> getUnavailableReason(
+            final ConstructionType type) {
+        if (type == null || !ConstructionType.ALL.contains(type)) {
+            return Optional.of(UnavailableReason.UNKNOWN_TYPE);
+        }
+        if (!colony.isValid() || !model.getPlayers().contains(colony.getOwner())
+                || model.getCurrentPlayer() != colony.getOwner()) {
+            return Optional.of(UnavailableReason.COLONY_UNAVAILABLE);
+        }
+        if (!type.canBeConstructed()) {
+            return Optional.of(UnavailableReason.NOT_A_PROJECT);
+        }
+        if (colony.isContainsConstructionByType(type)) {
+            return Optional.of(UnavailableReason.ALREADY_BUILT);
+        }
+        final boolean alreadyQueued = buildingQueue.stream().filter(
+                item -> item instanceof ColonyBuildingItemProgressConstruction)
+                .map(item -> ((ColonyBuildingItemProgressConstruction) item)
+                        .getConstructionType())
+                .anyMatch(qType -> type.getUpgradeChain().contains(qType)
+                        || qType.getUpgradeChain().contains(type));
+        if (alreadyQueued) {
+            return Optional.of(UnavailableReason.ALREADY_QUEUED);
+        }
+        if (type.getUpgradeFrom().isPresent()
+                && colony.getConstructions().stream().noneMatch(
+                        c -> c.getType() == type.getUpgradeFrom().get())) {
+            return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
+        }
+        if (colony.getUnitsInsideColony().size() < type
+                .getRequiredColonyPopulation()) {
+            return Optional.of(UnavailableReason.POPULATION);
+        }
+        return Optional.empty();
+    }
+
+    private boolean canConstructionBeBuild(final ConstructionType type) {
+        return getUnavailableReason(type).isEmpty();
+    }
+
+    /** Add a project only while its current admission conditions hold. */
     public ColonyBuildingItemProgressConstruction addAtEnd(
             final ConstructionType constructionType) {
-        final Optional<ColonyBuildingItemProgressConstruction> oItem = getItemByType(
+        final Optional<UnavailableReason> reason = getUnavailableReason(
                 constructionType);
-        if (oItem.isPresent()) {
-            return null;
-        } else {
-            final ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
-                    new ColonyBuildingItemConstruction(constructionType),
-                    getNextId());
-            buildingQueue.add(item);
-            return item;
-        }
+        Preconditions.checkArgument(reason.isEmpty(),
+                "Construction unavailable: %s", reason);
+        final ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
+                new ColonyBuildingItemConstruction(constructionType),
+                getNextId());
+        buildingQueue.add(item);
+        return item;
     }
 
     public ColonyBuildingItemProgressUnit addAtEnd(final UnitType unitType) {
+        Preconditions.checkArgument(canUnitBeBuild(unitType),
+                "Unit project is unavailable");
         final ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
                 new ColonyBuildingItemUnit(unitType), getNextId());
         buildingQueue.add(item);
@@ -195,75 +227,110 @@ public class ColonyBuildingQueue {
 
     public ColonyBuildingItemProgressConstruction addBeforeItem(
             final ConstructionType constructionType, final int beforeId) {
+        final ColonyBuildingItemProgress<?> before = getItemById(beforeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Insertion anchor is no longer present"));
         final ColonyBuildingItemProgressConstruction item = addAtEnd(
                 constructionType);
-        if (item == null) {
-            return null;
-        } else {
-            final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(
-                    beforeId);
-            moveItemBefore(item, oBeforeItem.get());
-            return item;
-        }
+        moveItemBefore(item, before);
+        return item;
     }
 
     public ColonyBuildingItemProgressUnit addBeforeItem(final UnitType unitType,
             final int beforeId) {
+        final ColonyBuildingItemProgress<?> before = getItemById(beforeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Insertion anchor is no longer present"));
         final ColonyBuildingItemProgressUnit item = addAtEnd(unitType);
-        final Optional<ColonyBuildingItemProgress<?>> oBeforeItem = getItemById(
-                beforeId);
-        moveItemBefore(item, oBeforeItem.get());
+        moveItemBefore(item, before);
         return item;
     }
 
     public void removeItem(final ColonyBuildingItemProgress<?> item) {
+        validateEditable();
+        Preconditions.checkArgument(buildingQueue.contains(item),
+                "Queue item is no longer present");
         buildingQueue.remove(item);
     }
 
-    private int getNextId() {
-        return buildingQueue.stream().mapToInt(item -> item.getId()).max()
-                .orElse(INITIAL_ID) + 1;
+    private void validateEditable() {
+        Preconditions.checkArgument(
+                colony.isValid()
+                        && model.getPlayers().contains(colony.getOwner())
+                        && colony.getOwner().equals(model.getCurrentPlayer()),
+                "Colony is unavailable");
     }
 
-    private Optional<ColonyBuildingItemProgressConstruction> getItemByType(
-            final ConstructionType constructionType) {
-        return buildingQueue.stream().filter(
-                item -> item instanceof ColonyBuildingItemProgressConstruction)
-                .map(item -> (ColonyBuildingItemProgressConstruction) item)
-                .filter(item -> item.getItem().getConstructionType()
-                        .equals(constructionType))
-                .findFirst();
+    private int getNextId() {
+        final int greatest = buildingQueue.stream()
+                .mapToInt(item -> item.getId()).max().orElse(INITIAL_ID);
+        Preconditions.checkArgument(greatest < Integer.MAX_VALUE,
+                "Queue identity space is exhausted");
+        return greatest + 1;
     }
 
     List<ColonyBuildingQueueItemPo> save() {
         final List<ColonyBuildingQueueItemPo> out = new ArrayList<>();
-        buildingQueue.stream().filter(item -> item.isVisible()).filter(
-                item -> item instanceof ColonyBuildingItemProgressConstruction)
-                .map(item -> (ColonyBuildingItemProgressConstruction) item)
-                .forEach(item -> {
-                    final ColonyBuildingQueueItemPo itemPo = new ColonyBuildingQueueItemPo();
-                    itemPo.setType(QueueItemType.CONSTRUCTION);
-                    itemPo.setConstructionType(item.getConstructionType());
-                    itemPo.setId(item.getId());
-                    itemPo.setBuildHammers(item.getBuildHammers());
-                    out.add(itemPo);
-                });
-        buildingQueue.stream().filter(item -> item.isVisible())
-                .filter(item -> item instanceof ColonyBuildingItemProgressUnit)
-                .map(item -> (ColonyBuildingItemProgressUnit) item)
-                .forEach(item -> {
-                    final ColonyBuildingQueueItemPo itemPo = new ColonyBuildingQueueItemPo();
-                    itemPo.setType(QueueItemType.UNIT);
-                    itemPo.setUnitType(item.getUnitType());
-                    itemPo.setId(item.getId());
-                    itemPo.setBuildHammers(item.getBuildHammers());
-                    out.add(itemPo);
-                });
+        for (final ColonyBuildingItemProgress<?> item : getBuildingQueue()) {
+            final ColonyBuildingQueueItemPo stored = new ColonyBuildingQueueItemPo();
+            stored.setId(item.getId());
+            stored.setBuildHammers(item.getBuildHammers());
+            if (item instanceof ColonyBuildingItemProgressConstruction) {
+                stored.setType(QueueItemType.CONSTRUCTION);
+                stored.setConstructionType(
+                        ((ColonyBuildingItemProgressConstruction) item)
+                                .getConstructionType());
+            } else if (item instanceof ColonyBuildingItemProgressUnit) {
+                stored.setType(QueueItemType.UNIT);
+                stored.setUnitType(
+                        ((ColonyBuildingItemProgressUnit) item).getUnitType());
+            } else {
+                throw new IllegalArgumentException("Unknown queue item kind");
+            }
+            out.add(stored);
+        }
         return out;
     }
 
+    public Optional<UnavailableReason> getCompletionUnavailableReason() {
+        if (buildingQueue.isEmpty()) {
+            return Optional.empty();
+        }
+        if (!colony.isValid() || !model.getPlayers().contains(colony.getOwner())
+                || model.getCurrentPlayer() != colony.getOwner()) {
+            return Optional.of(UnavailableReason.COLONY_UNAVAILABLE);
+        }
+        ColonyBuildingItemProgress<?> first = buildingQueue.get(0);
+        if (first instanceof ColonyBuildingItemProgressConstruction) {
+            ColonyBuildingItemProgressConstruction construction = (ColonyBuildingItemProgressConstruction) first;
+            ConstructionType type = construction.getConstructionType();
+            if (colony.isContainsConstructionByType(type)) {
+                return Optional.of(UnavailableReason.ALREADY_BUILT);
+            }
+            Optional<ConstructionType> upgradeFrom = type.getUpgradeFrom();
+            if (upgradeFrom.isPresent()) {
+                ConstructionType predecessor = upgradeFrom.get();
+                if (colony.getConstructions().stream()
+                        .noneMatch(c -> c.getType() == predecessor)) {
+                    return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
+                }
+            }
+            return Optional.empty();
+        } else if (first instanceof ColonyBuildingItemProgressUnit) {
+            ColonyBuildingItemProgressUnit unitProgress = (ColonyBuildingItemProgressUnit) first;
+            UnitType unitType = unitProgress.getUnitType();
+            if (!canUnitBeBuild(unitType)) {
+                return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
+            }
+            return Optional.empty();
+        } else {
+            return Optional.of(UnavailableReason.UNKNOWN_TYPE);
+        }
+    }
+
     void startTurn() {
-        if (getActualyBuilding().isPresent()) {
+        if (getActualyBuilding().isPresent()
+                && getCompletionUnavailableReason().isEmpty()) {
             final int wasDone = colony.getWarehouse()
                     .getGoods(GoodsType.HAMMERS).getAmount();
             final ColonyBuildingItemProgress<?> item = getActualyBuilding()

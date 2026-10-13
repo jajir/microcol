@@ -74,23 +74,16 @@ public class ConstructionType {
             .setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType LUMBER_MILL = ConstructionTypeBuilder
-            .make().setName("LUMBER_MILL").setRequiredHammers(200)
-            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(LUMBER, 6))
+            .make().setName("LUMBER_MILL").setRequiredHammers(52)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(LUMBER, 6))
             .setProductionPerTurn(Goods.of(HAMMERS, 6)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(3).build();
-
-    public final static ConstructionType CARPENTERS_SHOP = ConstructionTypeBuilder
-            .make().setName("CARPENTERS_SHOP").setRequiredHammers(52)
-            .setConsumptionPerTurn(Goods.of(LUMBER, 6))
-            .setProductionPerTurn(Goods.of(HAMMERS, 6)).setSlotsForWorkers(3)
-            .setUpgradeTo(LUMBER_MILL).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CARPENTERS_STAND = ConstructionTypeBuilder
             .make().setName("CARPENTERS_STAND")
             .setConsumptionPerTurn(Goods.of(LUMBER, 3))
             .setProductionPerTurn(Goods.of(HAMMERS, 3)).setSlotsForWorkers(3)
-            .setUpgradeTo(CARPENTERS_SHOP).setRequiredColonyPopulation(1)
-            .build();
+            .setUpgradeTo(LUMBER_MILL).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType IRON_WORKS = ConstructionTypeBuilder
             .make().setName("IRON_WORKS").setRequiredHammers(240)
@@ -119,7 +112,7 @@ public class ConstructionType {
     public final static ConstructionType FORT = ConstructionTypeBuilder.make()
             .setName("FORT").setRequiredHammers(120).setRequiredTools(100)
             .setSlotsForWorkers(0).setUpgradeTo(FORTRESS)
-            .setRequiredColonyPopulation(40).build();
+            .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType STOCKADE = ConstructionTypeBuilder
             .make().setName("STOCKADE").setRequiredHammers(64)
@@ -188,17 +181,17 @@ public class ConstructionType {
             .setProductionPerTurn(Goods.of(COAT, 8)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(6).build();
 
-    public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder
-            .make().setName("FUR_TRADERS_HOUSE").setRequiredHammers(0)
-            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(FUR, 6))
-            .setProductionPerTurn(Goods.of(COAT, 6)).setSlotsForWorkers(3)
-            .setUpgradeTo(FUR_FACTORY).setRequiredColonyPopulation(1).build();
-
     public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder
             .make().setName("FUR_TRADING_POST").setRequiredHammers(56)
             .setRequiredTools(20).setConsumptionPerTurn(Goods.of(FUR, 3))
             .setProductionPerTurn(Goods.of(COAT, 3)).setSlotsForWorkers(3)
-            .setUpgradeTo(FUR_TRADERS_HOUSE).setRequiredColonyPopulation(3)
+            .setUpgradeTo(FUR_FACTORY).setRequiredColonyPopulation(3).build();
+
+    public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder
+            .make().setName("FUR_TRADERS_HOUSE").setRequiredHammers(0)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(FUR, 6))
+            .setProductionPerTurn(Goods.of(COAT, 6)).setSlotsForWorkers(3)
+            .setUpgradeTo(FUR_TRADING_POST).setRequiredColonyPopulation(1)
             .build();
 
     public final static ConstructionType ARSENAL = ConstructionTypeBuilder
@@ -282,7 +275,7 @@ public class ConstructionType {
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType CHURCH = ConstructionTypeBuilder.make()
-            .setName("CHURCH").setRequiredHammers(52).setRequiredTools(100)
+            .setName("CHURCH").setRequiredHammers(52).setRequiredTools(0)
             .setProductionPerTurn(Goods.of(CROSS, 3))
             .setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
@@ -310,15 +303,15 @@ public class ConstructionType {
             .setRequiredColonyPopulation(0).build();
 
     public final static List<ConstructionType> ALL = ImmutableList.of(TOWN_HALL,
-            LUMBER_MILL, CARPENTERS_SHOP, CARPENTERS_STAND, IRON_WORKS,
-            BLACKSMITHS_SHOP, BLACKSMITHS_HOUSE, FORTRESS, FORT, STOCKADE,
-            CIGAR_FACTORY, TOBACCONISTS_SHOP, TOBACCONISTS_HOUSE, TEXTILE_MILL,
-            WEAVERS_SHOP, WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY,
-            RUM_DISTILLERS_HOUSE, FUR_FACTORY, FUR_TRADING_POST,
-            FUR_TRADERS_HOUSE, ARSENAL, MAGAZINE, ARMORY, SHIPYARD, DRYDOCK,
-            DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE, WAREHOUSE_EXPANSION,
-            WAREHOUSE, WAREHOUSE_BASIC, STABLES, LARGE_STABLES, CHAPEL,
-            CATHEDRAL, CHURCH, NEWSPAPER, PRINTING_PRESS, CUSTOM_HOUSE);
+            LUMBER_MILL, CARPENTERS_STAND, IRON_WORKS, BLACKSMITHS_SHOP,
+            BLACKSMITHS_HOUSE, FORTRESS, FORT, STOCKADE, CIGAR_FACTORY,
+            TOBACCONISTS_SHOP, TOBACCONISTS_HOUSE, TEXTILE_MILL, WEAVERS_SHOP,
+            WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY, RUM_DISTILLERS_HOUSE,
+            FUR_FACTORY, FUR_TRADING_POST, FUR_TRADERS_HOUSE, ARSENAL, MAGAZINE,
+            ARMORY, SHIPYARD, DRYDOCK, DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE,
+            WAREHOUSE_EXPANSION, WAREHOUSE, WAREHOUSE_BASIC, STABLES,
+            LARGE_STABLES, CHAPEL, CATHEDRAL, CHURCH, NEWSPAPER, PRINTING_PRESS,
+            CUSTOM_HOUSE);
 
     /**
      * List of construction types that are in all newly builded colonies.
@@ -656,7 +649,7 @@ public class ConstructionType {
     }
 
     public boolean canBeConstructed() {
-        return requiredHammers > 0 && requiredTools > 0;
+        return requiredHammers > 0 || requiredTools > 0;
     }
 
     public int getRequiredColonyPopulation() {

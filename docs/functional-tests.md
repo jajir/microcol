@@ -1336,3 +1336,149 @@ Lokální ověření na macOS/JDK 17:
    Všech osm TC21 včetně nové regrese a všech devět TC27 včetně původního
    selhání prošlo. Pět Java souborů prošlo společným formatterem se shodou
    tokenů a idempotencí. Úplné CI a nová publikace zatím čekají.
+
+8. Následné úplné CI `38470444093` pro opravu `13001e6a` prošlo
+   **802 modelovými a 114 funkčními/kontrolními případy**, bez selhání,
+   chyb nebo vynechání; počty potvrzují čerstvé XML artefaktu
+   `tests-functional` v `target/r19-r31/ci-r24-fixed/`.
+   Prošly všechny tři nativní balíčky, kontroly i publikace; Pages
+   `38470444072` uspěly a veřejná stránka obsahuje opravenou evidenci.
+   Manifest vývojového kanálu identifikuje `dev-54-13001e6ac6b8`, úplný commit
+   `13001e6ac6b89ede1fa6da06945eebd0c4f72354` a všechny tři platformy.
+   Skutečně stažený [macOS ARM64 ZIP](https://github.com/jajir/microcol/releases/download/dev-54-13001e6ac6b8/MicroCol-macos-arm64-dev-54-13001e6ac6b8.zip)
+   má 61 109 572 bajtů a SHA-256
+   `9212a2b8409dc32820da113ebdb7dc1fb9c6e27e8beca5d006e8e4ef238e1418`,
+   shodný s manifestem i `SHA256SUMS`. Ověřeno 13. října 2026;
+   záznam `target/r19-r31/release-r24/verification.json`. Nejde o nové ruční
+   spuštění této distribuce na všech platformách.
+
+## Construction model implementation — 2026-10-13
+
+1. Rozpracované [R-0025](requirements/R-0025.md) opravilo metadata existujících
+   staveb, jejich společnou dostupnost, integritu fronty a její načítání.
+   První přijatý řez metadat prošel **52 modelovými a třemi strukturálními
+   případy** (`run-h4Sn6S`). Původní frontové testy ukázaly 18 skutečných
+   selhání z 23 případů; jeden další chybný předpoklad testu o historickém
+   předchůdci byl opraven na kontrolu skutečně existující budovy.
+2. Validace uložených položek prošla **24 modelovými a třemi strukturálními
+   případy** (`run-Ol9vPt`): 21 neplatných front, dvě platná načtení a
+   architektura. Platné načtení nepřepisuje soubor a nespouští dokončení.
+   Příprava testu JSON null měla dvě caller-owned chyby, nejprve převod
+   do `JsonArray`, potom vynechání null při serializaci. Oprava na
+   `JsonElement` a explicitní ukládání null prošla stejným výběrem;
+   log `target/r19-r31/construction-save-null-fixture-fixed.log`.
+3. Sdílená dostupnost prošla **125 modelovými a třemi strukturálními
+   případy** (`run-k4ldgf`), včetně 60 nových případů hranic všech
+   podporovaných projektů. Společný integrační běh následně provedl
+   **141 modelových případů, jedno selhání, žádnou chybu ani vynechání**.
+   Při chybějícím předchůdci staré dokončení spotřebovalo nástroje a vyhodilo
+   výjimku; UI modul se po modelovém selhání nespustil.
+4. Samostatná kontrola dokončení nyní před změnou fronty ověřuje živou
+   kolonii, již existující cíl a aktuálního předchůdce. Neopakuje populační
+   podmínku zahájení. Opravený výběr prošel **144 modelovými a třemi
+   strukturálními případy**, bez selhání, chyb či vynechání (`run-soSK6J`,
+   exit 0; `target/r19-r31/construction-completion-first.log`). Zahrnuje
+   původní selhání, dokončení po poklesu populace, již postavený cíl,
+   zánik kolonie a jednotku bez potřebné pily. Příkaz:
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests -Dtest=ConstructionAdmissionTest,ConstructionMetadataTest,ConstructionQueueSaveTest,ConstructionQueueIntegrityTest,ColonyBuildingQueueTest_queue,BuildingStatusTest,ModelArchitectureTest,PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false`.
+   Historický název třídy fronty v tomto provedeném příkazu je správný pro
+   daný běh; následné přejmenování níže mění budoucí výběry.
+5. Širší výběr `-Dtest=*,!TC_*` provedl **946 modelových případů s jedním
+   selháním a jednou chybou**, bez vynechání; UI modul se nespustil.
+   Navíc oproti výchozímu výběru zahrnul dva případy
+   `UnitColonistTestInCargo`, dva `ColonyBuildingQueueTest_queue` a historicky
+   vyloučený `integration.ConnectorTest`. Obě závady byly ve staré přípravě
+   vylodění: neúplné mocky už nesplňovaly přijatý živý vztah pasažér–loď
+   a očekávaný text výjimky byl z doby před R-0022. Hlavní agent nahradil tuto
+   malou přípravu skutečnou uloženou pozicí, zachoval oba případy a přidal
+   ověření prázdného slotu, identity, pohybu a nezměněného stavu při odmítnutí.
+   Názvy `UnitColonistInCargoTest` a `ColonyBuildingQueueTest` nyní odpovídají
+   běžnému Maven discovery. Opravený širší běh prošel **946 modelovými a devíti dalšími případy**,
+   bez selhání, chyb či vynechání (Docker exit 0; `run-paz8wv`,
+   `target/r19-r31/construction-all-model-fixed.log`). Devět případů tvoří
+   pět `SimpleOperationsTest`, jeden `EnvironmentTest` a tři strukturální
+   kontroly. Změněné Java soubory prošly společným formatterem se shodou
+   tokenů a idempotencí; pomocný seznam vstupů musel při přejmenování
+   přestat zahrnovat již neexistující původní soubory.
+6. Tento modelový výběr záměrně neprovádí hráčské třídy `TC_...`;
+   jejich nedokončená aktualizace pro stavění a úplná regrese jsou stále
+   nutné před publikací R-0025. Průběh lokálních zadání a oprav vlastní
+   [evidence workeru](ai/local-qwen.md#r-0025-construction-admission-2026-10-13).
+
+## Construction UI implementation — 2026-10-14
+
+1. [R-0025](requirements/R-0025.md) now exposes the carpenter's construction
+   control and a localized building/unit picker. Selection is a draft until
+   explicit confirmation. A changed colony/model or reviewed population,
+   predecessor, queue or resource state requires a new selection. Existing
+   queue order/removal remains available through visible buttons. The model
+   retains admission, progress, completion and persistence authority.
+2. `TC_32_F24_construction_eligibility_test` uses its own F24 fixture. TC_01
+   checks three/four residents, the missing immediate predecessor, Cancel,
+   Escape and duplicate confirmation. TC_02 assigns two carpenters through the
+   workplace UI, actually produces six hammers, preserves 64 assigned hammers
+   while one tool short, unloads the final tool, completes exactly once and
+   checks Continue before and after completion. The final acceptance also
+   keeps a second warehouse entry and its ID/progress through completion; the
+   model counterpart preserves 17 hammers on that following entry. TC_03 first builds the mill
+   through UI, then exercises a mixed wagon/warehouse queue, both order controls,
+   removal and Continue. TC_04 injects an external workforce change only to
+   exercise stale confirmation; TC_06 similarly replaces the current game.
+   TC_05 uses Czech settings and Tab/Space to open/confirm. TC_07 restores a
+   structurally valid project without its predecessor and verifies that a real
+   turn keeps its progress/tools and visible explanation.
+3. TC22/TC_05 keeps its historical method ID but now expects a visible,
+   keyboard-reachable control and model-derived population rejection. Six
+   `QueueControllerTest` cases cover model/presentation ordering, removed items,
+   rejected admission, a changed callback, a replaced model and a stopped game.
+   Assertions remain in the named page verification methods for player scenarios.
+4. The first isolated compilation (`run-P3kK5o`) failed because caller UI code
+   used the package-private resident query. The existing immutable resident
+   snapshot is now public; a caller controller-test setup was also changed to
+   use an already supported wagon instead of a package-private unit factory.
+   No behavior assertion was relaxed. The next run (`run-M1bOpA`) passed **74
+   model cases, six controller cases and three source-contract cases**, but six
+   of the twelve player scenarios failed. The focused list consumed Escape,
+   leaving the modal open and preventing subsequent navigation. The dialog now
+   handles Escape before the list; scenarios explicitly verify that the actual
+   modal window closes, as well as checking unchanged game state.
+5. The repair run **`run-EyvYNv` passed six controller cases and 15 functional/
+   control cases** (seven TC32, five TC22 and three source-contract checks),
+   zero failures, errors or skips, Docker exit 0. Main sources/resources/fixtures
+   were compared byte-for-byte with the isolated tested versions before broader
+   verification. Shared formatting passed on all 28 changed Java files with
+   exact code-token preservation and idempotence.
+6. The actual English/Czech picker screenshots and the colony's waiting state
+   were inspected. Costs, unavailable reasons, confirmation and the visible
+   `64 / 64` hammer and `19 / 20` tool state are readable. Screenshots are
+   diagnostic evidence under the run's `microcol-test/warehouse-qa/`; they are
+   not a substitute for the passing player assertions. This is automated
+   interaction and visual inspection, not a player study.
+7. Commands used in the isolated worker tree, after unloading GPT-OSS:
+
+   ```sh
+   docker compose -f compose.ui-tests.yml run --build --rm ui-tests '-Dtest=ConstructionAdmissionTest,ConstructionQueueIntegrityTest,QueueControllerTest,PageVerificationContractTest,TC_32_F24_construction_eligibility_test,TC_22_F15_free_play_capability_audit_test' -Dsurefire.failIfNoSpecifiedTests=false
+   docker compose -f compose.ui-tests.yml run --build --rm ui-tests '-Dtest=QueueControllerTest,PageVerificationContractTest,TC_32_F24_construction_eligibility_test,TC_22_F15_free_play_capability_audit_test' -Dsurefire.failIfNoSpecifiedTests=false
+   ```
+
+8. Full main regression **`run-5NRq2p` passed 951 game-module cases in 105
+   classes and 121 functional/control cases in 35 classes**, zero failures,
+   errors or skips, Docker exit 0 (21 min 36 s). Fresh XML totals are recorded in
+   `target/r19-r31/r25-full-main-evidence.json`. Production sources remained
+   unchanged while this suite ran. Two completion tests were strengthened after
+   its source snapshot to check preservation of a following queue entry; their
+   separate rerun **`run-cpJfEl` passed 14 queue-integrity cases and ten
+   functional/control cases** (seven TC32 plus three page-contract checks),
+   zero failures, errors or skips, Docker exit 0 (1 min 46 s). Fresh XML totals
+   are in `target/r19-r31/r25-completion-target-evidence.json`. Thus both the
+   existing full suite and the final strengthened acceptance passed.
+9. Main checkout acceptance commands:
+
+   ```sh
+   docker compose -f compose.ui-tests.yml run --build --rm ui-tests
+   docker compose -f compose.ui-tests.yml run --build --rm ui-tests '-Dtest=ConstructionQueueIntegrityTest,TC_32_F24_construction_eligibility_test,PageVerificationContractTest' -Dsurefire.failIfNoSpecifiedTests=false
+   ```
+
+10. Publication remains pending. The local source logs are `target/r19-r31/construction-ui-*.log`, with report
+   totals in `target/r19-r31/r25-ui-target-evidence.json`. Worker attempts and
+   caller repairs are recorded separately in the [worker evidence](ai/local-qwen.md#r-0025-queue-controller-2026-10-14).

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ColonyBuildingQueueTest_queue {
+public class ColonyBuildingQueueTest {
 
     private ColonyBuildingQueue queue;
 
@@ -30,16 +30,26 @@ public class ColonyBuildingQueueTest_queue {
     public void test_that_getBuildigItemsConstruction_is_builded_correctly()
             throws Exception {
         when(colony.isContainsConstructionByType(
-                ConstructionType.FUR_TRADING_POST)).thenReturn(true);
+                ConstructionType.FUR_TRADERS_HOUSE)).thenReturn(true);
+        final Player owner = mock(Player.class);
+        when(colony.isValid()).thenReturn(true);
+        when(colony.getOwner()).thenReturn(owner);
+        when(model.getCurrentPlayer()).thenReturn(owner);
+        when(model.getPlayers()).thenReturn(List.of(owner));
+        when(colony.getUnitsInsideColony())
+                .thenReturn(java.util.Collections.nCopies(8, mock(Unit.class)));
+        final Construction house = mock(Construction.class);
+        when(house.getType()).thenReturn(ConstructionType.FUR_TRADERS_HOUSE);
+        when(colony.getConstructions()).thenReturn(List.of(house));
 
         final List<ColonyBuildingItemConstruction> list = queue
                 .getBuildigItemsConstruction();
         assertFalse(
-                getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
+                getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
                 "Building should not be in list because is already builded.");
         assertTrue(
-                getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
-                "Building should be in list because is already builded.");
+                getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
+                "Upgrade should be offered because its predecessor is built.");
         assertFalse(getByType(list, ConstructionType.FUR_FACTORY).isPresent(),
                 "Building should not be in list because required building is not builded.");
     }

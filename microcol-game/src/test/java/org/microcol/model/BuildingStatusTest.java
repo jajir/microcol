@@ -50,6 +50,20 @@ public class BuildingStatusTest {
         assertFalse(stats.getTurnsToComplete().isPresent());
     }
 
+    @Test
+    void suppliedResourcesNeedNoFurtherProductionOrNegativeTurns() {
+        assertEquals(java.util.Optional.of(0),
+                new BuildingStatus.Stat(80, 0, 80).getTurnsToComplete());
+        assertEquals(java.util.Optional.of(0),
+                new BuildingStatus.Stat(100, 3, 80).getTurnsToComplete());
+        assertEquals(java.util.Optional.of(0),
+                new BuildingStatus.Stat(0, 0, 0).getTurnsToComplete());
+        assertEquals(java.util.Optional.empty(),
+                new BuildingStatus.Stat(19, -1, 20).getTurnsToComplete());
+        assertEquals(java.util.Optional.of(1),
+                new BuildingStatus.Stat(19, 3, 20).getTurnsToComplete());
+    }
+
     private void recordMock(final int requiredHammers,
             final int requiredTools) {
         when(item.getRequiredHammers()).thenReturn(requiredHammers);

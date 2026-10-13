@@ -878,7 +878,7 @@
           ]
         },
         {
-          "type": "CARPENTERS_SHOP",
+          "type": "LUMBER_MILL",
           "slots": [
             {},
             {},
@@ -1030,7 +1030,7 @@
           ]
         },
         {
-          "type": "CARPENTERS_SHOP",
+          "type": "LUMBER_MILL",
           "slots": [
             {},
             {},
@@ -1182,7 +1182,7 @@
           ]
         },
         {
-          "type": "CARPENTERS_SHOP",
+          "type": "LUMBER_MILL",
           "slots": [
             {},
             {},

@@ -1692,3 +1692,134 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    evidence remain in
    `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r24-wagon-display/`.
    No token-saving claim. Inference did not overlap local Maven/Docker tests.
+
+
+### R-0025 building metadata — 2026-10-13
+
+1. Task `2026-10-13-r25-building-metadata` used isolated baseline `e43e32fc`
+   plus the explicitly copied R-0025 analysis. The configured GPT-OSS 20B
+   alias/digest at context 32768 was confirmed in runtime samples and unloaded
+   before verification. Only `ConstructionType.java` belonged to the worker;
+   the caller owned removed-tier consumers, fixtures and acceptance tests.
+2. Attempts took **268.916, 266.676 and 61.648 seconds**, **597.240 total**.
+   The first exhausted its 4096-token output allowance mid-JSON and supplied
+   double-escaped source; nothing was applied. The first repair used plain
+   source blocks and a shorter contract but exhausted output in reasoning,
+   returning no final result. Exit code zero did not establish a usable patch.
+3. With 64.408 seconds left, the final bounded repair returned two valid exact
+   replacements: removing the obsolete registry entry and accepting paid
+   projects with a zero-tool cost. Both matched once and were reviewed before
+   application. The caller completed the other six metadata regions after
+   explicitly taking over that scope; the final repair did not own those edits.
+   Both repair rounds are exhausted. No cloud fallback or savings claim applies.
+4. Caller adaptations removed obsolete UI/name references, used the two carpenter
+   tiers in 16 saves, updated fur-chain expectations, and added 41 independent
+   metadata rows. Eight changed Java files passed the shared formatter with
+   token preservation and idempotence. Docker `run-h4Sn6S` passed **52 model
+   and three page-contract cases**, zero failures, errors or skips, using
+   `-Dtest=ConstructionMetadataTest,ConstructionTypeConstantTest,ColonyBuildingQueueTest_queue,ModelArchitectureTest,PageVerificationContractTest`
+   with `-Dsurefire.failIfNoSpecifiedTests=false`.
+5. Accepted 28 source/resource/test/fixture files were integrated after checking
+   their original main blobs. The task lock was released. Evidence, rejected
+   responses, runtime samples, caller completion and file hashes remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-building-metadata/`.
+   This accepts only metadata; full R-0025 queue behavior and UI remain unfinished.
+
+### R-0025 construction admission — 2026-10-13
+
+1. Task `2026-10-13-r25-construction-admission` used baseline `13001e6a`
+   with 34 explicitly recorded R-0025 inputs. The caller supplied the enum,
+   method stub, query/addition integration and real-model boundary tests.
+   The worker owned only `getUnavailableReason(ConstructionType)`, with the
+   established reason priority and no mutations or resource spending.
+2. Attempt 0 took **190.441 s**. Its conditions were mostly correct but used
+   a generic cast for a non-generic class and treated an `Optional` predecessor
+   as a nullable construction type. The caller rejected it before application.
+   An initial caller diagnosis of double-escaped newlines was wrong: parsing
+   confirmed one matching anchor. That mistaken warning had already entered
+   the first repair prompt and was explicitly corrected in the evidence and
+   final repair; it is not attributed to the worker.
+3. Repair 1 took **259.439 s**. It changed the required reason ordering,
+   confused zero-cost projects with population zero, omitted the reverse
+   queued-upgrade conflict and returned a nonmatching escaped anchor. None of
+   that revision was accepted. The caller staged the first candidate only in
+   isolation and narrowed the last repair to its two Java type errors.
+   Repair 2 took **74.941 s** and returned two matching replacements. Total
+   **524.821 s**, both allowed repairs used; no budgets were reset.
+4. The configured GPT-OSS alias/digest and actual context **32768** were
+   verified from runtime samples. Inference did not overlap local Docker
+   checks; the model was unloaded. After shared formatting, the isolated
+   Docker run `run-k4ldgf` passed **125 model cases and three page-contract
+   controls**, zero failures, errors or skips. This includes 60 admission
+   cases, 41 metadata cases, 23 saved-queue cases and the architecture check.
+5. The caller integrated the accepted admission method and its tests,
+   removed a now-unused exact-type helper, and retained separate ownership
+   of queue transactions, persistence and UI integration. This does not
+   establish completion of R-0025. Full prompts, rejected outputs, corrections,
+   runtime samples and acceptance evidence are in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-construction-admission/`.
+   No token-saving claim follows from this result.
+
+### R-0025 completion prerequisites — 2026-10-13
+
+1. Task `2026-10-13-r25-completion-prerequisites` used baseline `13001e6a`
+   plus 38 explicitly recorded inputs. The caller supplied the completion-query
+   stub, a guard before the existing queue completion mutation, and three
+   additional regressions. The worker owned only the read-only query; it must
+   check live colony, existing target and exact predecessor without reapplying
+   the population admission gate.
+2. Attempt 0 reached its deadline after **300.400 s** without a final patch.
+   It ignored the text-only handoff and made ten repository reads. All completed
+   reads returned exit 0; the caller's initial suspicion about nested shell
+   quoting was incorrect and was corrected in the diagnosis. Unnecessary
+   discovery, not a demonstrated shell failure, consumed the attempt.
+3. Repair 1 took **109.992 s** and supplied the required method, but placed
+   `expected_matches` outside the JSON replacement object. Parsing failed, so
+   no patch was applied. The final format-only repair took **116.701 s** and
+   returned valid JSON with the same method. Total **527.093 s**, both repairs
+   used; no time budget reset. The caller did not replace the implementation.
+4. The configured GPT-OSS alias/digest and context **32768** were confirmed
+   in runtime evidence. The model was unloaded before formatter and Docker
+   checks. The scoped run `run-soSK6J` passed **144 model cases and three
+   page-contract controls**, no failures, errors or skips. This includes the
+   earlier missing-predecessor failure and checks for an already-built target,
+   an abandoned colony and a unit whose required mill disappeared.
+5. The caller integrated the two changed files after checking their recorded
+   input hashes. The task evidence is in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-completion-prerequisites/`.
+   The caller subsequently ran the broader model selection and repaired two
+   stale passenger tests with nonstandard discovery names; those results belong
+   to the [construction evidence](../functional-tests.md#construction-model-implementation-2026-10-13).
+   The construction UI and player journeys remain unfinished; this result
+   alone does not complete R-0025.
+
+### R-0025 queue controller — 2026-10-14
+
+1. Task `2026-10-14-r25-queue-controller` used isolated baseline `13001e6a`
+   plus explicitly copied R-0025 model, metadata and caller UI/test changes.
+   The worker owned the bounded controller; the caller owned the picker,
+   localization, workplace control, fixtures and player scenarios.
+2. Attempts took **198.201 / 254.641 / 119.945 seconds**, **572.787 seconds**
+   cumulative. The first candidate had an incorrect Model import, missing item
+   imports, a silent foreign-item return and an unused helper. Repair 1 repeated
+   the whole file and returned truncated JSON; the caller's retained whole-file
+   example made the otherwise narrowed repair contract inconsistent. Repair 2
+   returned an array and changed a required semicolon to a comma in its import
+   anchor and replacement. Exact-match validation rejected that batch.
+3. Both repair rounds were exhausted. The caller retained the first candidate's
+   binding, model-first updates and reordering logic, repaired the listed small
+   defects and added a stopped-model guard with its regression. This is partial
+   worker reuse, not successful autonomous completion. An initial caller parser
+   assumed an object; after inspecting the actual array, the nonmatching import
+   anchor remained a separate substantive defect. No ambiguous patch was applied.
+4. All attempts used the configured GPT-OSS alias/digest and context 32768,
+   confirmed by runtime samples, and unloaded before Docker. Shared formatting
+   passed on 27 changed Java files in the isolated checkout. The repaired controller passed six caller tests; the selected model cases and
+   source contract also passed. After a separate caller Escape fix, all seven
+   TC32 scenarios and the five TC22 scenarios passed. Exact runs and the earlier
+   UI failures are in the [construction evidence](../functional-tests.md#construction-ui-implementation-2026-10-14). Full prompts, responses and
+   diagnoses remain under `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r25-queue-controller/`.
+5. Caller procedure correction: inspect the application result before dispatching
+   the dependent formatter. Twice formatting ran after a parser rejection;
+   it made no semantic repair, but should not be treated as evidence that the
+   patch had applied. Final application and formatting were explicitly sequenced.

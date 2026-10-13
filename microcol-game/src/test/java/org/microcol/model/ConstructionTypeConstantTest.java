@@ -28,7 +28,7 @@ public class ConstructionTypeConstantTest {
     public void test_requiredFrom_isCorrect_FUR_FACTORY() throws Exception {
         final Optional<ConstructionType> oType = FUR_FACTORY.getUpgradeFrom();
         assertTrue(oType.isPresent());
-        assertEquals(FUR_TRADERS_HOUSE, oType.get());
+        assertEquals(FUR_TRADING_POST, oType.get());
     }
 
     @Test
@@ -36,25 +36,25 @@ public class ConstructionTypeConstantTest {
             throws Exception {
         final Optional<ConstructionType> oType = FUR_TRADERS_HOUSE
                 .getUpgradeFrom();
-        assertTrue(oType.isPresent());
-        assertEquals(FUR_TRADING_POST, oType.get());
+        assertFalse(oType.isPresent());
     }
 
     @Test
     public void test_getUpgradeChain_FUR_TRADING_POST() {
         final List<ConstructionType> list = FUR_TRADING_POST.getUpgradeChain();
         assertTrue(list.contains(FUR_TRADING_POST));
-        assertTrue(list.contains(FUR_TRADERS_HOUSE));
+        assertFalse(list.contains(FUR_TRADERS_HOUSE));
         assertTrue(list.contains(FUR_FACTORY));
-        assertEquals(3, list.size());
+        assertEquals(2, list.size());
     }
 
     @Test
     public void test_getUpgradeChain_FUR_TRADERS_HOUSE() {
         final List<ConstructionType> list = FUR_TRADERS_HOUSE.getUpgradeChain();
         assertTrue(list.contains(FUR_TRADERS_HOUSE));
+        assertTrue(list.contains(FUR_TRADING_POST));
         assertTrue(list.contains(FUR_FACTORY));
-        assertEquals(2, list.size());
+        assertEquals(3, list.size());
     }
 
     @Test
@@ -73,17 +73,16 @@ public class ConstructionTypeConstantTest {
     }
 
     @Test
-    public void test_CARPENTERS_SHOP_production_source_values()
-            throws Exception {
-        assertTrue(CARPENTERS_SHOP.getConsumptionPerTurn().isPresent());
-        assertTrue(CARPENTERS_SHOP.getProductionPerTurn().isPresent());
-        assertEquals(1, CARPENTERS_SHOP.getProductionRatio());
+    public void test_LUMBER_MILL_production_source_values() throws Exception {
+        assertTrue(LUMBER_MILL.getConsumptionPerTurn().isPresent());
+        assertTrue(LUMBER_MILL.getProductionPerTurn().isPresent());
+        assertEquals(1, LUMBER_MILL.getProductionRatio());
 
-        final Goods consumption = CARPENTERS_SHOP.getConsumptionPerTurn().get();
+        final Goods consumption = LUMBER_MILL.getConsumptionPerTurn().get();
         assertEquals(GoodsType.LUMBER, consumption.getType());
         assertEquals(6, consumption.getAmount());
 
-        final Goods production = CARPENTERS_SHOP.getProductionPerTurn().get();
+        final Goods production = LUMBER_MILL.getProductionPerTurn().get();
         assertEquals(GoodsType.HAMMERS, production.getType());
         assertEquals(6, production.getAmount());
     }

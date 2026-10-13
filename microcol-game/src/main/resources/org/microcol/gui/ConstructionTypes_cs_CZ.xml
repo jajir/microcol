@@ -5,9 +5,8 @@
 	<comment>Define messages for construction types.</comment>
 	
 	<entry key="TOWN_HALL_name">Radnice</entry>
-	<entry key="LUMBER_MILL_name">Tesař</entry>
-	<entry key="CARPENTERS_SHOP_name">Pila</entry>
-	<entry key="CARPENTERS_STAND_name">Malá pila</entry>
+	<entry key="LUMBER_MILL_name">Pila</entry>
+	<entry key="CARPENTERS_STAND_name">Truhlářství</entry>
 	<entry key="IRON_WORKS_name">Huť</entry>
 	<entry key="BLACKSMITHS_SHOP_name">Velké Kovářství</entry>
 	<entry key="BLACKSMITHS_HOUSE_name">Kovář</entry>

@@ -115,8 +115,35 @@ public class Model {
         this.colonies = new ArrayList<>();
         modelPo.getColonies().forEach(colonyPo -> {
             final List<ColonyBuildingItemProgress<?>> buildingQueue = new ArrayList<>();
+            final Set<Integer> queueIds = new HashSet<>();
+            Preconditions.checkArgument(colonyPo.getBuildingQueue() != null,
+                    "Missing construction queue");
             colonyPo.getBuildingQueue().forEach(itemPo -> {
+                Preconditions.checkArgument(
+                        itemPo != null && itemPo.getType() != null
+                                && itemPo.getId() != null && itemPo.getId() >= 0
+                                && queueIds.add(itemPo.getId())
+                                && itemPo.getBuildHammers() != null
+                                && itemPo.getBuildHammers() >= 0,
+                        "Invalid construction queue identity, kind or progress");
                 if (itemPo.getType() == QueueItemType.CONSTRUCTION) {
+                    final ConstructionType type = itemPo.getConstructionType();
+                    Preconditions
+                            .checkArgument(
+                                    type != null
+                                            && ConstructionType.ALL
+                                                    .contains(type)
+                                            && type.canBeConstructed()
+                                            && itemPo.getUnitType() == null,
+                                    "Invalid construction project type");
+                    Preconditions.checkArgument(buildingQueue.stream().filter(
+                            entry -> entry instanceof ColonyBuildingItemProgressConstruction)
+                            .map(entry -> ((ColonyBuildingItemProgressConstruction) entry)
+                                    .getConstructionType())
+                            .noneMatch(queued -> type.getUpgradeChain()
+                                    .contains(queued)
+                                    || queued.getUpgradeChain().contains(type)),
+                            "Duplicate or incompatible construction projects");
                     ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
                             new ColonyBuildingItemConstruction(
                                     itemPo.getConstructionType()),
@@ -124,11 +151,21 @@ public class Model {
                     item.setBuildHammers(itemPo.getBuildHammers());
                     buildingQueue.add(item);
                 } else if (itemPo.getType() == QueueItemType.UNIT) {
+                    Preconditions.checkArgument(
+                            itemPo.getUnitType() != null
+                                    && UnitType.UNIT_TYPES
+                                            .contains(itemPo.getUnitType())
+                                    && itemPo.getUnitType().canBeBuildInColony()
+                                    && itemPo.getConstructionType() == null,
+                            "Invalid unit project type");
                     ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
                             new ColonyBuildingItemUnit(itemPo.getUnitType()),
                             itemPo.getId());
                     item.setBuildHammers(itemPo.getBuildHammers());
                     buildingQueue.add(item);
+                } else {
+                    throw new IllegalArgumentException(
+                            "Unknown construction queue kind");
                 }
             });
             final Colony col = new Colony(this, colonyPo.getId(),

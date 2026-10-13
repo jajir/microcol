@@ -324,7 +324,7 @@ Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval n
 | Řádek y | Sloupec x a typ stavby |
 | ---: | --- |
 | 0 | 1 `CHAPEL`; 2 `CHURCH`; 3 `CATHEDRAL`; 4 `TOWN_HALL`; 5 `STABLES`; 6 `LARGE_STABLES` |
-| 1 | 1 `TOBACCONISTS_HOUSE`; 2 `TOBACCONISTS_SHOP`; 3 `CIGAR_FACTORY`; 5 `CARPENTERS_STAND`; 6 `CARPENTERS_SHOP`; 7 `LUMBER_MILL` |
+| 1 | 1 `TOBACCONISTS_HOUSE`; 2 `TOBACCONISTS_SHOP`; 3 `CIGAR_FACTORY`; 5 `CARPENTERS_STAND`; 6 dříve `CARPENTERS_SHOP`, od R-0025 bez registrace; 7 `LUMBER_MILL` |
 | 2 | 1 `FUR_TRADING_POST`; 2 `FUR_TRADERS_HOUSE`; 3 `FUR_FACTORY`; 5 `SCHOOLHOUSE`; 6 `COLLEGE`; 7 `UNIVERSITY` |
 | 3 | 1 `BLACKSMITHS_HOUSE`; 2 `BLACKSMITHS_SHOP`; 3 `IRON_WORKS`; 5 `RUM_DISTILLERS_HOUSE`; 6 `RUM_DISTILLERY`; 7 `RUM_FACTORY` |
 | 4 | 1 `WAREHOUSE_BASIC`; 2 `WAREHOUSE`; 3 `WAREHOUSE_EXPANSION` |
@@ -335,7 +335,7 @@ Ostatní buňky zůstávají přístupné pouze svým souřadnicovým klíčem. 
 
 [AbstractPanelConstruction](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstruction.java) dostane typ stavby, požádá o obrázek a vykreslí jej v původní velikosti. Tento konkrétní spotřebitel při chybějícím obrázku vyvolá chybu. [PanelConstructionBasic](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionBasic.java) umisťuje stavbu na `(15,0)` do samostatného rámu, [PanelConstructionSimple](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionSimple.java) na `(0,0)` bez něj.
 
-Karta stavby není jediná bitmapa: rám přidává CSS, samotnou stavbu canvas, pracovníky a produkci další kreslení/UI. Navíc [ConstructionDraggablePanel](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/ConstructionDraggablePanel.java) a [QueueListCell](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/QueueListCell.java) v současné stavební frontě používají i pro stavební položky obrázek kolonisty. Nelze tedy předpokládat, že každý seznam staveb už využívá tento atlas.
+Karta stavby není jediná bitmapa: rám přidává CSS, samotnou stavbu canvas, pracovníky a produkci další kreslení/UI. Aktualizace R-0025 z 14. října 2026: [QueueDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/QueueDialog.java) používá textové seznamy s cenami a důvody nedostupnosti; původní přetahovací panely s obrázkem kolonisty byly odstraněny. Viditelná karta tesaře zachovává atlas i pracovní místa a přidává tlačítko stavění a stav projektu. Existující rastry se nemění. [Cílené ověření](functional-tests.md#construction-ui-implementation-2026-10-14) zahrnuje anglický/český dialog i skutečný stav čekání na nástroje.
 
 ## Atlas tlačítek
 

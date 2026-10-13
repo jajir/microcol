@@ -54,8 +54,6 @@ public final class ImageLoaderBuilding extends AbstractTiledImageLoader {
 
         imageCache.registerImage(makeKey(ConstructionType.CARPENTERS_STAND),
                 "building_5_1");
-        imageCache.registerImage(makeKey(ConstructionType.CARPENTERS_SHOP),
-                "building_6_1");
         imageCache.registerImage(makeKey(ConstructionType.LUMBER_MILL),
                 "building_7_1");
 

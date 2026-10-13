@@ -451,7 +451,11 @@ public class Colony {
         return warehouse;
     }
 
-    List<Unit> getUnitsInsideColony() {
+    /**
+     * Residents working in fields or buildings; excludes visitors and
+     * passengers.
+     */
+    public List<Unit> getUnitsInsideColony() {
         final List<Unit> out = new ArrayList<>();
         constructions.forEach(construction -> {
             construction.getConstructionSlots().forEach(slot -> {

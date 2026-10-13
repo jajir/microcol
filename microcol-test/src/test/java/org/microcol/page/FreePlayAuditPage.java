@@ -219,7 +219,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 org.microcol.model.Direction.west));
     }
 
-    public void verifyConstructionQueueUnavailable(final int population) {
+    public void verifyConstructionQueueAvailable(final int population) {
         final Colony colony = getModel().getColonyAt(Location.of(24, 16)).get();
         assertEquals((long) population,
                 colony.getColonyFields().stream()
@@ -228,8 +228,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
                                 .flatMap(construction -> construction
                                         .getConstructionSlots().stream())
                                 .filter(slot -> !slot.isEmpty()).count());
-        assertFalse(getNodeFinder().lookup(".constructionPaneCarpenter").query()
-                .isVisible(), "Baseline hides the queue control");
+        assertTrue(getNodeFinder().lookup(".constructionPaneCarpenter").query()
+                .isVisible(), "Construction must be discoverable");
+        assertTrue(getButtonById("constructionOpen").isFocusTraversable());
         assertTrue(
                 colony.getColonyBuildingQueue().getBuildingQueue().isEmpty());
     }

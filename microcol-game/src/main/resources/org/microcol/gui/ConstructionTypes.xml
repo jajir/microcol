@@ -6,8 +6,7 @@
 	
 	<entry key="TOWN_HALL_name">Town Hall</entry>
 	<entry key="LUMBER_MILL_name">Lumber Mill</entry>
-	<entry key="CARPENTERS_SHOP_name">Carpenter’s Shop</entry>
-	<entry key="CARPENTERS_STAND_name">Carpenter's Stand</entry>
+	<entry key="CARPENTERS_STAND_name">Carpenter’s Shop</entry>
 	<entry key="IRON_WORKS_name">Iron Works</entry>
 	<entry key="BLACKSMITHS_SHOP_name">Blacksmith’s Shop</entry>
 	<entry key="BLACKSMITHS_HOUSE_name">Blacksmith’s House</entry>

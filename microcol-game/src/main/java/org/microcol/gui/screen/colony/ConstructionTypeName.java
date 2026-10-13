@@ -10,11 +10,10 @@ import com.google.common.base.Preconditions;
 /**
  * Map {@link ConstructionType} to enumeration value,
  */
-enum ConstructionTypeName implements MessageKeyResource {
+public enum ConstructionTypeName implements MessageKeyResource {
 
     townHall(ConstructionType.TOWN_HALL),
     lubmerMill(ConstructionType.LUMBER_MILL),
-    carpenterShop(ConstructionType.CARPENTERS_SHOP),
     carpenterStand(ConstructionType.CARPENTERS_STAND),
     ironWorks(ConstructionType.IRON_WORKS),
     blacksmithShop(ConstructionType.BLACKSMITHS_SHOP),

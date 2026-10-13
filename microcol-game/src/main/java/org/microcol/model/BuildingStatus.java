@@ -61,7 +61,10 @@ public class BuildingStatus<I extends ColonyBuildingItem> {
          * @return the turnsToComplete
          */
         public Optional<Integer> getTurnsToComplete() {
-            if (buildPerTurn == 0) {
+            if (alreadyHave >= required) {
+                return Optional.of(0);
+            }
+            if (buildPerTurn <= 0) {
                 return Optional.empty();
             } else {
                 final int produce = required - alreadyHave;

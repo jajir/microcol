@@ -100,13 +100,18 @@ public class TC_22_F15_free_play_capability_audit_test
     @Test
     @Tag("local")
     void TC_05_construction_queue_is_hidden() throws Exception {
-        // The queue control exists but is hidden in the actual colony screen.
+        // The construction control is visible and opens the actual picker.
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY, "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
-        new FreePlayAuditPage(getContext())
-                .verifyConstructionQueueUnavailable(2);
-        // Population eligibility remains a source finding, not a UI result.
+        new FreePlayAuditPage(getContext()).verifyConstructionQueueAvailable(2);
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.open();
+        construction.select("BLACKSMITHS_SHOP");
+        construction.verifyOffer(false, "Requires 4 residents; currently 2.",
+                64, 20);
+        construction.escape();
+        construction.verifyPickerClosed();
         colony.close();
     }
 }
