@@ -165,6 +165,14 @@ může zasáhnout několik Java balíčků. Nevytvářet balíček jen podle č�
 
 ## Současné přesahy a jejich údržba
 
+Rozpracované [R-0021](requirements/R-0021.md) svěřuje `HighSea` určení pobřeží
+a výchozího návratového pole. `Ship` uchovává místo a směr odjezdu a řeší
+příjezd v tahu vlastníka; `AbstractUnit` ověřuje odplutí před spotřebou pohybu.
+`UnitPo` ukládá oba údaje společně a `UnitFactory` odmítá chybějící původ
+rozpluté lodi. Evropa pouze zobrazuje zbývající tahy či čekání na uvolnění cíle.
+Cílené modelové a hráčské cesty prošly; úplná regrese a publikace jsou zatím
+otevřené. Příkazy a výsledky vlastní [testová evidence](functional-tests.md#atlantic-voyage-implementation-2026-10-13).
+
 Následující vazby jsou **pozorované ve zdrojích k uvedené revizi**, nikoli
 doklad čistého oddělení nebo seznam oprav nutných před každou další funkcí.
 

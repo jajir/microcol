@@ -18,8 +18,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Verify baseline transit and persistence. Immediate lane departure and return
- * away from the origin are observations of gaps, not desired rules.
+ * Verify outward lane departure, exact return and transit persistence.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
@@ -27,6 +26,7 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
             "src/test/scenarios/F16-atlantic-audit.microcol");
     private static final Location START = Location.of(25, 16);
     private static final Location LANE = Location.of(26, 16);
+    private static final Location OUTWARD = Location.of(27, 16);
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -46,6 +46,9 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         byte[] saved = audit.readAutosave();
         game.moveMouseAtLocation(START);
         game.dragMouseAtLocation(LANE);
+        new AtlanticAuditPage(getContext()).verifyReturnedTo(LANE);
+        game.moveMouseAtLocation(LANE);
+        game.dragMouseAtLocation(OUTWARD);
         new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
 
         // Menu entry saves departure; Continue restores the same voyage and
@@ -62,12 +65,16 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_atlantic_round_trip_preserves_cargo() throws Exception {
-        // Enter an adjacent sea lane; the baseline immediately starts transit.
+        // Enter the lane first, then take a separate outward step to depart.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         AtlanticAuditPage audit = new AtlanticAuditPage(getContext());
         audit.verifyCargo();
         game.moveMouseAtLocation(START);
         game.dragMouseAtLocation(LANE);
+        audit.verifyReturnedTo(LANE);
+        audit.verifyCargo();
+        game.moveMouseAtLocation(LANE);
+        game.dragMouseAtLocation(OUTWARD);
         audit.verifyVoyage(3, true);
         audit.verifyCargo();
 
@@ -99,8 +106,8 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         audit.verifyVoyage(1, false);
         game.nextTurnAndCloseDialogs();
 
-        // Baseline uses another eastern arrival, but preserves the cargo.
-        audit.verifyReturnedAwayFrom(LANE);
+        // Return to the recorded source lane square with the same cargo.
+        audit.verifyReturnedTo(LANE);
         audit.verifyCargo();
     }
 }

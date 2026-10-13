@@ -1,7 +1,6 @@
 package org.microcol.model.unit;
 
-import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.microcol.model.Cargo;
@@ -13,13 +12,51 @@ import org.microcol.model.PlaceHighSea;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.store.UnitPo;
+import com.google.common.base.Preconditions;
 
 /**
  * Abstract class Ship allows to distinguish between ground and marine units.
  */
 public abstract class Ship extends UnitWithCargo {
 
-    private final Random random = new Random();
+    private Location departureLocation;
+    private Direction departureDirection;
+
+    /** @return the last departure square, or empty before the first voyage */
+    public Optional<Location> getDepartureLocation() {
+        return Optional.ofNullable(departureLocation);
+    }
+
+    /** @return the recorded outward coast direction */
+    public Optional<Direction> getDepartureDirection() {
+        return Optional.ofNullable(departureDirection);
+    }
+
+    /**
+     * Retain the return destination across map, transit and European places.
+     *
+     * @param location  required sea-lane square
+     * @param direction required corresponding east/west coast
+     */
+    public void rememberDeparture(final Location location,
+            final Direction direction) {
+        Preconditions.checkNotNull(location);
+        Preconditions.checkNotNull(direction);
+        Preconditions.checkArgument(
+                model.getHighSea().getDepartureDirection(location) == direction,
+                "Departure direction does not match the recorded coast");
+        departureLocation = location;
+        departureDirection = direction;
+    }
+
+    @Override
+    public UnitPo save() {
+        final UnitPo out = super.save();
+        out.setDepartureLocation(departureLocation);
+        out.setDepartureDirection(departureDirection);
+        return out;
+    }
 
     public Ship(final Function<Unit, Cargo> cargoBuilder, final Model model,
             final Integer id, final Function<Unit, Place> placeBuilder,
@@ -35,31 +72,34 @@ public abstract class Ship extends UnitWithCargo {
     }
 
     /**
-     * It's called before turn starts.
+     * Processes the ship’s turn when it is on a high‑sea voyage.
      */
+    @Override
     public void startTurn() {
         if (isAtHighSea()) {
-            PlaceHighSea placeHighSea = (PlaceHighSea) getPlace();
-            placeHighSea.decreaseRemainingTurns();
-            if (placeHighSea.getRemainigTurns() <= 0) {
-                if (placeHighSea.isTravelToEurope()) {
+            PlaceHighSea place = (PlaceHighSea) getPlace();
+            Preconditions.checkState(
+                    departureLocation != null && departureDirection != null,
+                    "departureLocation and departureDirection must be set");
+            place.decreaseRemainingTurns();
+            if (place.getRemainigTurns() == 0) {
+                if (place.isTravelToEurope()) {
                     model.getEurope().getPort().placeShipToPort(this);
                     model.getTurnEventStore().add(TurnEventProvider
                             .getShipComeEuropePort(getOwner()));
                 } else {
-                    /*
-                     * Ships always come from east side of map.
-                     */
-                    final List<Location> locations = model.getHighSea()
-                            .getSuitablePlaceForShipCommingFromEurope(
-                                    getOwner(), true);
-                    placeToLocation(
-                            locations.get(random.nextInt(locations.size())),
-                            Direction.west);
-                    getOwner().revealMapForUnit(this);
-                    model.getTurnEventStore().add(TurnEventProvider
-                            .getShipComeToHighSeas(getOwner()));
-                    model.fireUnitArrivedToColonies(this);
+                    if (isPossibleToMoveAt(departureLocation)) {
+                        Direction inward = (departureDirection == Direction.east)
+                                ? Direction.west
+                                : Direction.east;
+                        placeToLocation(departureLocation, inward);
+                        getOwner().revealMapForUnit(this);
+                        model.getTurnEventStore().add(TurnEventProvider
+                                .getShipComeToHighSeas(getOwner()));
+                        model.fireUnitArrivedToColonies(this);
+                    }
+                    // otherwise blocked; ship remains on the same high‑sea
+                    // place
                 }
             }
         }

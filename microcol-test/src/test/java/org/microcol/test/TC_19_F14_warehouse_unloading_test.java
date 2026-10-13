@@ -510,9 +510,12 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         dialog.verifyOfferedAmount(1);
 
         // Simulate departure from the map before the player confirms.
-        WaitForAsyncUtils
-                .asyncFx(() -> getModel().getUnitById(3).placeToHighSeas(true))
-                .get(5, TimeUnit.SECONDS);
+        WaitForAsyncUtils.asyncFx(() -> {
+            // Another game event sends the carrier away while its offer is
+            // open.
+            getModel().getUnitById(3).placeToLocation(Location.of(50, 16));
+            getModel().getUnitById(3).placeToHighSeas(true);
+        }).get(5, TimeUnit.SECONDS);
         ship().verifyAtHighSea(true);
 
         // Reject the stale proposal without trying to read an off-map location.

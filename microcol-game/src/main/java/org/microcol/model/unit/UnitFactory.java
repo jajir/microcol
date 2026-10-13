@@ -13,6 +13,7 @@ import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 
 /**
  * Class responsible for creating instances of unit.
@@ -92,11 +93,33 @@ public class UnitFactory {
         unitCreateRequest.setMounted(unitPo.isMounted());
         unitCreateRequest.setTools(unitPo.getTools());
 
-        return unitResolver.apply(unitCreateRequest);
+        final Unit unit = unitResolver.apply(unitCreateRequest);
+        final boolean hasLocation = unitPo.getDepartureLocation() != null;
+        final boolean hasDirection = unitPo.getDepartureDirection() != null;
+        Preconditions.checkArgument(hasLocation == hasDirection,
+                "Incomplete ship departure data");
+        Preconditions.checkArgument(!hasLocation || unit instanceof Ship,
+                "Only a ship can have a departure coast");
+        Preconditions.checkArgument(!unit.isAtHighSea() || hasLocation,
+                "A ship in transit requires its departure coast");
+        if (hasLocation) {
+            ((Ship) unit).rememberDeparture(unitPo.getDepartureLocation(),
+                    unitPo.getDepartureDirection());
+        }
+        return unit;
     }
 
     public Unit createUnit(final UnitCreateRequest unitCreateRequest) {
-        return unitResolver.apply(unitCreateRequest);
+        final Unit unit = unitResolver.apply(unitCreateRequest);
+        if (unit.isAtHighSea()) {
+            final org.microcol.model.Location origin = unitCreateRequest
+                    .getModel().getHighSea().getDefaultArrivalLocation()
+                    .orElseThrow(() -> new IllegalStateException(
+                            "No eastern sea-lane arrival is available"));
+            ((Ship) unit).rememberDeparture(origin,
+                    org.microcol.model.Direction.east);
+        }
+        return unit;
     }
 
 }

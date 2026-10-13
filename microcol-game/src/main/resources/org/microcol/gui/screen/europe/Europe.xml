@@ -5,6 +5,9 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="title">Europe</entry>
+	<entry key="voyageTurns">Turns remaining: %s</entry>
+	<entry key="voyageWaiting">Waiting: the arrival square is occupied.</entry>
+	<entry key="voyageUnavailable">This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.</entry>
 	<entry key="shipsTravelingToNewWorld">Ships traveling to New World</entry>
 	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>

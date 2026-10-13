@@ -534,5 +534,14 @@ UC-018, přesné citované ceny v návaznosti na UC-057 a identitu/nástroje př
 návratové plavbě s uložením v UC-027/113. TC22/TC_01 už očekává nabídku
 výbavy po obou druzích kliknutí, při zrušení stále původní stav. Jde o
 [rozpracovanou implementaci](functional-tests.md#europe-equipment-implementation-2026-10-13);
-vyložení v kolonii, nové odbornosti a úplná regrese se tímto dílčím během
-nepovažují za ověřené.
+vyložení v kolonii a nové odbornosti se tímto dílčím během nepovažují za
+ověřené. Úplná regrese tohoto řezu následně prošla lokálně i v publikované
+CI commitu `b989413b` (737 herních a 90 funkčních/strukturálních testů).
+
+Lokálně ověřené R-0021 pokrývá UC-027 a UC-113: TC23 nyní vyžaduje samostatný
+krok ven z pruhu a přesný návrat, nové TC28/F20 ověřuje západní plavbu,
+rušení, čekání na obsazený cíl, Continue a odmítnutí mapy bez návratového
+pole. Tyto cílené cesty prošly v Dockeru; [evidence](functional-tests.md#atlantic-voyage-implementation-2026-10-13)
+zachycuje i opravu zkráceného viditelného textu. Úplná lokální regrese
+prošla: 767 herních a 92 funkčních/strukturálních testů bez chyb a vynechání.
+Publikace celého R-0021 zatím čeká na dokončení.

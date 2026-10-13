@@ -47,9 +47,17 @@ public class UnitFrigateTest {
         when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
         when(model.getMap()).thenReturn(map);
         when(map.getMaxLocationX()).thenReturn(40);
+        when(map.isValid(Location.of(30, 30))).thenReturn(true);
+        when(map.getTerrainTypeAt(Location.of(30, 30)))
+                .thenReturn(TerrainType.HIGH_SEA);
+        when(model.getHighSea()).thenReturn(new HighSea(model));
+        when(owner.getAllUnits()).thenReturn(List.of(unit));
         unit.placeToHighSeas(true);
 
         assertTrue(unit.isAtHighSea());
+        assertEquals(availableMoves - 1, unit.getActionPoints());
+        assertEquals(Location.of(30, 30),
+                unit.getDepartureLocation().orElseThrow());
     }
 
     @Test

@@ -1,6 +1,8 @@
 package org.microcol.model.store;
 
 import org.microcol.model.UnitType;
+import org.microcol.model.Direction;
+import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
 
@@ -39,6 +41,26 @@ public class UnitPo {
     private boolean holdingGuns;
 
     private boolean mounted;
+
+    private Location departureLocation;
+
+    private Direction departureDirection;
+
+    public Location getDepartureLocation() {
+        return departureLocation;
+    }
+
+    public void setDepartureLocation(final Location departureLocation) {
+        this.departureLocation = departureLocation;
+    }
+
+    public Direction getDepartureDirection() {
+        return departureDirection;
+    }
+
+    public void setDepartureDirection(final Direction departureDirection) {
+        this.departureDirection = departureDirection;
+    }
 
     @Override
     public String toString() {

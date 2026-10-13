@@ -13,6 +13,7 @@ public enum Europe implements MessageKeyResource {
     equipmentCancel, equipmentChanged, equipmentQuote,
     equipmentUNIT_UNAVAILABLE, equipmentALREADY_SET,
     equipmentINCOMPATIBLE_EQUIPMENT, equipmentNOT_ENOUGH_GOLD,
-    equipmentTRADE_RESTRICTED, equipmentGOLD_LIMIT;
+    equipmentTRADE_RESTRICTED, equipmentGOLD_LIMIT, voyageTurns, voyageWaiting,
+    voyageUnavailable;
 
 }

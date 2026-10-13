@@ -5,6 +5,9 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="title">Evropa</entry>
+	<entry key="voyageTurns">Zbývající tahy: %s</entry>
+	<entry key="voyageWaiting">Čekání: místo příjezdu je obsazené.</entry>
+	<entry key="voyageUnavailable">Loď nemůže vyplout. Musí být ve vašem evropském přístavu během vašeho tahu a mít dostupné cílové pole námořní cesty.</entry>
 	<entry key="shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
 	<entry key="shipsTravelingToEurope">Lodě plující do Evropy</entry>
 	<entry key="buyUnitDialog_title">Koupit jednotku</entry>

@@ -1410,3 +1410,69 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    32768; model unload completed before checks. No token-saving claim. Source,
    prompts, errors, replacements and reports remain under the task's log
    directory. The owned worker lock was released after acceptance.
+
+### R-0021 sea-lane policy — 2026-10-13
+
+1. Task `2026-10-13-r21-sea-lane-policy`, baseline `f383ebfb`, assigned three
+   pure methods in `HighSea`: departure direction, outward gesture and default
+   arrival. The caller retained manual interpretation, persistence, movement,
+   UI integration and actual tests. Runtime samples confirmed the configured
+   GPT-OSS alias/digest and context 32768; inference did not overlap local tests.
+2. Attempts used **171.025 / 300.229 / 126.816 seconds**, **598.070 total**.
+   The first exited zero with an empty response after unnecessary reads. The
+   first repair repeated source discovery and timed out. The final repair
+   reduced the handoff to the exact APIs and three method contracts; it
+   returned complete source. The empty first completion's cause is unknown;
+   a metadata-fallback warning does not prove causation.
+3. Final source used nonexistent uppercase `Direction.EAST/WEST` despite the
+   supplied lowercase API and an unresolved `Optional` Javadoc link. Both
+   repairs were exhausted. The caller corrected those names, removed a
+   redundant comment, applied the shared formatter and retained the algorithm.
+   This is partial worker reuse with caller correction, not autonomous success.
+4. The first caller Docker selection passed its model tests but failed the
+   test module because no functional/control tests were selected. The corrected
+   command adds `PageVerificationContractTest`, preserving the no-tests gate:
+   `-Dtest=HighSeaPolicyTest,HighSeaTest,ModelArchitectureTest,PageVerificationContractTest`.
+   Fresh isolated XML `target/docker-ui/run-diqWLY/` prove **22 model/architecture
+   and three source-contract tests**, no failures, errors or skips. The caller
+   integrated only `HighSea` and its test, then released the owned lock.
+5. Logs, all rejected responses and caller review remain under the task's
+   directory in `~/Library/Logs/Microcol/local-qwen/jobs/`. Acceptance logs are
+   `target/r19-r31/sea-lane-policy*.log` in the caller checkout. Full voyage
+   integration remains pending; no savings or broader quality claim is made.
+
+### R-0021 voyage arrival — 2026-10-13
+
+1. Task `2026-10-13-r21-voyage-arrival` uses baseline `b989413b` plus recorded
+   caller integration inputs. The worker owns only the new `Ship.startTurn`
+   body. The caller owns the coast schema, departure validation, UI, fixtures
+   and test journeys. Runtime samples for all three attempts confirmed the
+   configured GPT-OSS digest and context 32768.
+2. Attempts consumed **179.693 / 127.823 / 39.527 seconds**, **347.043 total**.
+   The first method incorrectly fired New World arrival/reveal actions in the
+   Europe branch and called a nonexistent report factory. The first targeted
+   repair fixed those errors but fired the New World event before adding its
+   report. The final repair returned the correct three-statement sequence.
+   The caller checked the unique replacement and removed obsolete random
+   arrival code, then applied the shared formatter. Both repair rounds used.
+3. The initial caller test run selected 45 game/architecture cases; ten new
+   voyage cases failed during setup because an empty game-over evaluator list
+   is invalid. The caller reused the existing mission evaluators. The next
+   run exposed five JSON-save failures: the optional direction field requires
+   the existing Gson direction adapter's `nullSafe()` wrapper. The caller
+   corrected this integration point; factory validation still rejects missing
+   coast data for ships in transit and invalid direction/location pairs.
+4. After model unload, the same Docker selection passed all **45 model checks
+   and 34 functional/control cases**, including TC23, TC27, TC28, TC19 and the
+   source contract. Fresh isolated XML `run-hPfVaK` contain no failures,
+   errors or skips; log `target/r19-r31/voyage-integrated-json-fixed.log`.
+   The caller accepted the method and removal of obsolete random-arrival code,
+   integrated those files and released the owned lock. A subsequent visual
+   review exposed a truncated waiting label; the caller's layout correction
+   and additional occupied-outward-step model boundary passed a further
+   11 model and five functional/control tests in main `run-ZBBq6H`. The whole
+   regression and publication remain separate from this worker acceptance.
+5. Prompts, source responses, model samples and before/after diagnoses remain
+   in the task directory under `~/Library/Logs/Microcol/local-qwen/jobs/`.
+   The isolated checkout separates worker verification from main integration.
+   No local inference overlapped Maven/Docker and no savings claim is made.

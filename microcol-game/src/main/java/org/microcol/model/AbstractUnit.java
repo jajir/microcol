@@ -17,6 +17,7 @@ import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
+import org.microcol.model.unit.Ship;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -468,13 +469,11 @@ public abstract class AbstractUnit implements Unit {
                 "Unit can't move because already doing something else. Unit %s",
                 this);
 
-        actionPoints--;
-        final TerrainType targetTerrain = model.getMap()
-                .getTerrainTypeAt(moveTo);
-        if (targetTerrain == TerrainType.HIGH_SEA) {
+        if (isShip() && model.getHighSea().isDepartureMove(this, moveTo)) {
             placeToHighSeas(true);
             model.fireUnitMovedToHighSeas(this);
         } else {
+            actionPoints--;
             final Location start = getLocation();
             final Direction orientation = findOrintationForMove(moveTo);
             model.fireUnitMovedStepStarted(this, start, moveTo, orientation);
@@ -702,9 +701,41 @@ public abstract class AbstractUnit implements Unit {
     public void placeToHighSeas(final boolean isTravelToEurope) {
         Preconditions.checkArgument(getType().isShip(),
                 "Only ships could be placed to high sea.");
-        Preconditions.checkArgument(isAtPlaceLocation() || isAtEuropePort(),
-                "Unit %s have to at map or in Europe port.", this);
-        final int requiredTurns = countRequiredTurnsToSail(isTravelToEurope);
+        model.checkGameRunning();
+        model.checkCurrentPlayer(owner);
+        Preconditions.checkState(
+                owner.getAllUnits().stream().anyMatch(unit -> unit == this),
+                "Ship is no longer in this game");
+        final Ship ship = (Ship) this;
+        final Location origin;
+        final Direction direction;
+        if (isTravelToEurope) {
+            Preconditions.checkState(
+                    isAtPlaceLocation() && model.getMap().getTerrainTypeAt(
+                            getLocation()) == TerrainType.HIGH_SEA,
+                    "Departure requires a ship in a sea lane");
+            Preconditions.checkState(
+                    actionPoints > 0 && UnitActionType.noAction
+                            .equals(getAction().getType()),
+                    "Ship cannot depart without an available movement action");
+            origin = getLocation();
+            direction = model.getHighSea().getDepartureDirection(origin);
+        } else {
+            Preconditions.checkState(isAtEuropePort(),
+                    "Return departure requires the European port");
+            origin = ship.getDepartureLocation().orElseGet(() -> model
+                    .getHighSea().getDefaultArrivalLocation()
+                    .orElseThrow(() -> new IllegalStateException(
+                            "No eastern sea-lane arrival is available")));
+            direction = model.getHighSea().getDepartureDirection(origin);
+        }
+        final int requiredTurns = isTravelToEurope
+                && direction == Direction.west ? TRAVEL_TO_EUROPE_FROM_WEST
+                        : TRAVEL_TO_EUROPE;
+        ship.rememberDeparture(origin, direction);
+        if (isTravelToEurope) {
+            actionPoints--;
+        }
         place.destroy();
         place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
     }
@@ -712,27 +743,6 @@ public abstract class AbstractUnit implements Unit {
     private final static int TRAVEL_TO_EUROPE = 3;
 
     private final static int TRAVEL_TO_EUROPE_FROM_WEST = 4;
-
-    /**
-     * Count turn required to travel to Europe. When player send ship from west
-     * part of map than travel took more time. It's like send ships to Europe at
-     * west direction.
-     *
-     * @param isTravelToEurope required if ship travel to Europe or back.
-     * @return required number turns
-     */
-    private int countRequiredTurnsToSail(final boolean isTravelToEurope) {
-        if (isTravelToEurope) {
-            int x = getLocation().getX();
-            if (x < getModel().getMap().getMaxLocationX() / 2) {
-                return TRAVEL_TO_EUROPE_FROM_WEST;
-            } else {
-                return TRAVEL_TO_EUROPE;
-            }
-        } else {
-            return TRAVEL_TO_EUROPE;
-        }
-    }
 
     @Override
     public void placeToEuropePortPier() {

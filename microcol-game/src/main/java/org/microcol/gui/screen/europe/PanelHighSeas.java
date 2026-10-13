@@ -3,6 +3,7 @@ package org.microcol.gui.screen.europe;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -15,17 +16,20 @@ import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.i18n.MessageKeyResource;
 import org.microcol.model.Unit;
+import org.microcol.model.PlaceHighSea;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 
 /**
@@ -53,6 +57,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final I18n i18n;
 
+    private final DialogMessage dialogMessage;
+
     private T titleKey;
 
     private T onMouseEnteredKey;
@@ -61,13 +67,15 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     public PanelHighSeas(final EuropeCallback europeDialog,
             final ImageProvider imageProvider,
             final GameModelController gameModelController,
-            final EventBus eventBus, final I18n i18n) {
+            final EventBus eventBus, final I18n i18n,
+            final DialogMessage dialogMessage) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
 
         shipsContainer = new HBox();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
@@ -118,25 +126,33 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     private boolean isItCorrectObject(final Dragboard db) {
         if (!isShownShipsTravelingToEurope && db.hasString()) {
             return ClipboardEval.make(gameModelController.getModel(), db)
-                    .filterUnit(unit -> unit.getType().isShip()).getUnit()
-                    .isPresent();
+                    .filterUnit(this::isDepartingShip).getUnit().isPresent();
         } else {
             return false;
         }
     }
 
+    private boolean isDepartingShip(final Unit unit) {
+        return unit.isShip() && unit.isAtEuropePort()
+                && unit.getOwner() == gameModelController.getHumanPlayer();
+    }
+
     private void onDragDropped(final DragEvent event) {
         final Optional<Unit> oUnit = ClipboardEval
                 .make(gameModelController.getModel(), event.getDragboard())
-                .getUnit();
+                .filterUnit(this::isDepartingShip).getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
-            Preconditions.checkState(unit.getType().isShip(),
-                    "Only ships could be send to high seas");
-            unit.placeToHighSeas(false);
-            europeDialog.repaint();
-            event.acceptTransferModes(TransferMode.MOVE);
-            event.setDropCompleted(true);
+            try {
+                unit.placeToHighSeas(false);
+                europeDialog.repaint();
+                event.setDropCompleted(true);
+            } catch (IllegalStateException rejected) {
+                event.setDropCompleted(false);
+                dialogMessage.setTitle(i18n.get(Europe.title));
+                dialogMessage.setText(i18n.get(Europe.voyageUnavailable));
+                dialogMessage.showAndWait();
+            }
             event.consume();
         }
     }
@@ -146,8 +162,22 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                 .getUnitsTravelingTo(gameModelController.getHumanPlayer(),
                         isShownShipsTravelingToEurope)
                 .forEach(unit -> {
-                    shipsContainer.getChildren().add(
-                            new ImageView(imageProvider.getUnitImage(unit)));
+                    final PlaceHighSea voyage = (PlaceHighSea) unit.getPlace();
+                    final Label remaining = new Label(
+                            voyage.getRemainigTurns() == 0
+                                    && !voyage.isTravelToEurope()
+                                            ? i18n.get(Europe.voyageWaiting)
+                                            : i18n.get(Europe.voyageTurns,
+                                                    voyage.getRemainigTurns()));
+                    remaining.setId("voyage-remaining-" + unit.getId());
+                    remaining.setWrapText(true);
+                    remaining.setMinHeight(Region.USE_PREF_SIZE);
+                    remaining.setMaxWidth(140);
+                    shipsContainer.getChildren()
+                            .add(new VBox(
+                                    new ImageView(
+                                            imageProvider.getUnitImage(unit)),
+                                    remaining));
                 });
     }
 

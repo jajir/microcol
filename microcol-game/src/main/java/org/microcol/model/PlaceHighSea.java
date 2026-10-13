@@ -29,6 +29,8 @@ public class PlaceHighSea extends AbstractPlace {
         super(unit);
         Preconditions.checkArgument(unit.getType().isShip(),
                 "Only ships could be placed to high sea.");
+        Preconditions.checkArgument(requiredTurns >= 0,
+                "Remaining turns cannot be negative");
         this.isTravelToEurope = isTravelToEurope;
         this.remainigTurns = requiredTurns;
     }
@@ -38,11 +40,15 @@ public class PlaceHighSea extends AbstractPlace {
     }
 
     public void setRemainigTurns(int remainigTurns) {
+        Preconditions.checkArgument(remainigTurns >= 0,
+                "Remaining turns cannot be negative");
         this.remainigTurns = remainigTurns;
     }
 
     public void decreaseRemainingTurns() {
-        remainigTurns--;
+        if (remainigTurns > 0) {
+            remainigTurns--;
+        }
     }
 
     public boolean isTravelToEurope() {

@@ -41,7 +41,27 @@ public final class AtlanticAuditPage extends AbstractScreen {
         assertTrue(getModel().getUnitById(3).isAtEuropePort());
     }
 
+    public void verifyMovement(final int expected) {
+        assertEquals(expected, getModel().getUnitById(3).getActionPoints());
+    }
+
+    public void verifyVoyageText(final String expected) {
+        assertTrue(isCssIdVisible("voyage-remaining-3"));
+        assertEquals(expected, getLabeledById("voyage-remaining-3").getText());
+        final javafx.scene.text.Text rendered = (javafx.scene.text.Text) getLabeledById(
+                "voyage-remaining-3").lookup(".text");
+        assertEquals(expected, rendered.getText(),
+                "The visible voyage reason must not be truncated");
+    }
+
     public void sendShipBack() throws Exception {
+        attemptSendShipBack();
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> getModel().getUnitById(3).isAtHighSea());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void attemptSendShipBack() {
         final Parent panel = getNodeFinder().lookup(".to-new-world")
                 .queryAs(Parent.class);
         final HBox target = (HBox) panel.getChildrenUnmodifiable().stream()
@@ -49,14 +69,22 @@ public final class AtlanticAuditPage extends AbstractScreen {
         getRobot().drag(
                 PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
                 MouseButton.PRIMARY).dropTo(target);
-        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
-                () -> getModel().getUnitById(3).isAtHighSea());
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyReturnedAwayFrom(final Location departure) {
+    public void verifyDepartureRejection(final String expected) {
+        assertEquals(expected, getNodeFinder().lookup(expected)
+                .queryAs(javafx.scene.control.Label.class).getText());
+        assertTrue(isCssIdVisible("buttonOk"));
+    }
+
+    public void closeRejection() {
+        clickOnButtonWithId("buttonOk");
+    }
+
+    public void verifyReturnedTo(final Location departure) {
         final Unit ship = getModel().getUnitById(3);
         assertTrue(ship.isAtPlaceLocation());
-        assertNotEquals(departure, ship.getLocation());
+        assertEquals(departure, ship.getLocation());
     }
 }

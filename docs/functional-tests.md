@@ -901,6 +901,65 @@ Lokální ověření na macOS/JDK 17:
    Čerstvá XML jsou v `target/docker-ui/run-lQgf1l/`, log v
    `target/r19-r31/equipment-full.log`; příkaz
    `docker compose -f compose.ui-tests.yml run --build --rm ui-tests` skončil
-   s kódem 0. Publikace tohoto řezu ještě neproběhla. Vyložení v cílové kolonii a
+   s kódem 0. Vyložení v cílové kolonii a
    odbornost budoucího specialisty se ověří v návaznosti na R-0022/R-0023.
    Tento dílčí záznam nepovažuje celé R-0020 ani nadřazený cíl za dokončený.
+8. Tento ověřený řez je publikovaný v commitu
+   [`b989413bb606`](https://github.com/jajir/microcol/commit/b989413bb606b65a49c82c33076a2e82c4385768).
+   [CI 38424361493](https://github.com/jajir/microcol/actions/runs/38424361493)
+   prošla včetně všech tří nativních platforem a publikace; stažená funkční
+   XML potvrzují stejných **737 + 90 testů**, bez selhání, chyb a vynechání.
+   [Pages 38424361284](https://github.com/jajir/microcol/actions/runs/38424361284)
+   také prošly. Stažený manifest kanálu `dev` potvrzuje úplné SHA a build
+   [dev-48-b989413bb606](https://github.com/jajir/microcol/releases/tag/dev-48-b989413bb606).
+   Požadavek zůstává rozpracovaný kvůli výše uvedeným navazujícím cestám.
+
+## Atlantic voyage implementation — 2026-10-13
+
+1. Lokálně ověřené [R-0021](requirements/R-0021.md) mění odjezd až na samostatný
+   pohyb ven z námořního pruhu a ukládá jeho výchozí pole i pobřeží. Návrat
+   používá přesné pole; obsazený cíl nechává loď čekat na nule. Časování
+   3/4/3 tahy zůstává výslovně současnou politikou, nikoli rekonstruovaným
+   výpočtem počasí z manuálu.
+2. Izolované geometrické kontroly prošly: 19 `HighSeaPolicyTest`, dva
+   `HighSeaTest`, jeden ArchUnit a tři strukturální testy. Čerstvá XML
+   `run-diqWLY` v worktree `2026-10-13-r21-sea-lane-policy`; log
+   `target/r19-r31/sea-lane-policy-fixed.log` v hlavním checkoutu. První
+   příkaz opomněl vybrat test z funkčního modulu; opravený výběr přidal
+   strukturální kontrolu a zachoval selhání při prázdném výběru.
+3. Cílená integrace v Docker/JDK 17/Xvfb/Openbox prošla: **45 modelových a
+   34 funkčních/strukturálních testů**, nula selhání, chyb a vynechání.
+   Výběr: `AtlanticVoyageTest,HighSeaPolicyTest,HighSeaTest,UnitFrigateTest,UnitColonistOnMapTest,ModelArchitectureTest,TC_23_F16_atlantic_voyage_audit_test,TC_27_F19_europe_equipment_test,TC_28_F20_western_voyage_test,TC_19_F14_warehouse_unloading_test,PageVerificationContractTest`.
+   Příkaz používá běžný `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`
+   s tímto `-Dtest` a `-Dsurefire.failIfNoSpecifiedTests=false`.
+   XML jsou v izolovaném `2026-10-13-r21-voyage-arrival/target/docker-ui/run-hPfVaK/`,
+   log `target/r19-r31/voyage-integrated-json-fixed.log` v hlavním checkoutu.
+4. První integrační běh odhalil nesprávnou přípravu nového testu s prázdnou
+   sadou vyhodnocení konce hry. Oprava používá existující evaluátory mise.
+   Druhý běh odhalil pět chyb ukládání: volitelný směr odjezdu vyžaduje
+   `nullSafe()` registraci existujícího Gson převodníku. Následné stejné
+   kontroly prošly. Validace modelu nadále odmítá neúplný či chybný původ
+   rozpluté lodi; nejde o domýšlení dat nebo migraci starých save souborů.
+5. TC23 zachovává obě původní ID, nově očekává vstup do pruhu následovaný
+   dalším krokem ven a přesný návrat. TC28/F20 přidává západní vstup, pohyb
+   podél pruhu a zpět dovnitř, zrušení přetažení, čtyřtahový odjezd,
+   obsazený návrat s Continue a následné připlutí po uvolnění pole. Druhý
+   scénář skutečným přetažením ověřuje srozumitelné odmítnutí mapy bez cíle.
+   Náklad 7 rudy, cestující i 80 nástrojů zůstávají zachované. TC19/TC_16
+   stále ověřuje loď mimo mapu během otevřené nabídky vykládání; příprava
+   souběžné události nyní odplouvá z platného námořního pruhu.
+6. Kontrola exportovaných snímků odhalila zkrácenou zprávu čekání. Minimální
+   výška zalamovaného popisku je opravená; TC28 nově kontroluje skutečně
+   vykreslený text, nikoli pouze hodnotu `Label.getText()`. Stejná západní
+   cesta, odmítnutí mapy a 11 modelových případů včetně dodatečného obsazeného
+   kroku ven prošly: **11 modelových a pět funkčních/strukturálních testů**,
+   nula selhání, chyb a vynechání. Čerstvá XML hlavního checkoutu
+   `target/docker-ui/run-ZBBq6H/`, log `target/r19-r31/voyage-visible-status.log`.
+   Výsledný snímek `western-arrival-waiting.png` ukazuje celý důvod na dvou
+   řádcích.
+7. Úplná regrese hlavního checkoutu dokončena 2026-10-13 v 16:28 UTC:
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`, návratový
+   kód 0, **767 herních a 92 funkčních/strukturálních testů**, žádné selhání,
+   chyba ani vynechání. Čerstvá XML jsou v `target/docker-ui/run-DcYHSR/`,
+   log `target/r19-r31/voyage-full.log`. Zahrnuje obě TC23 a obě TC28,
+   devět TC27 a všech 18 TC19. Publikace R-0021 zatím neproběhla.

@@ -59,7 +59,7 @@ public final class GameModelPoDao {
                         new UnitActionPoAdapter())
                 .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
                 .registerTypeAdapter(Direction.class,
-                        new GsonDirectionTypeAdapter())
+                        new GsonDirectionTypeAdapter().nullSafe())
                 .registerTypeAdapter(Goods.class, new GsonGoodsAdapter())
                 .setPrettyPrinting().create();
     }
