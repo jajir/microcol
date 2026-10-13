@@ -68,7 +68,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
     /**
      * Get localized construction name.
      *
-     * @return
+     * @return construction name in the current language
      */
     private String getConstructionName() {
         return i18n.get(

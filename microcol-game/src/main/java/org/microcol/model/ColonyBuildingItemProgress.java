@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 
 /**
  * Hold how far is building of some item.
+ *
+ * @param <I> type of item being built
  */
 public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
 

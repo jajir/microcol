@@ -107,7 +107,7 @@ class CanvasArea {
      * @param currentCanvasSize     current canvas size
      * @param currentCanvasPosition current canvas position
      * @param maxMapSize            maximal map size
-     * @return
+     * @return canvas position preserving its center within the map bounds
      */
     private int getNewCanvasPositionWhenSizeChange(final int newCanvasSize,
             final int currentCanvasSize, final int currentCanvasPosition,
@@ -139,6 +139,7 @@ class CanvasArea {
      *
      * @param newTopLeftCanvasCorner required position of new top left screen
      *                               corner
+     * @param maxMapSize             map dimensions in pixels
      * @return normalized top left screen corner
      */
     Point computeNewTopLeftConnerOfCanvas(final Point newTopLeftCanvasCorner,

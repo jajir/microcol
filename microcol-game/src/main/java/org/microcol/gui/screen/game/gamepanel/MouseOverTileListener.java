@@ -54,6 +54,7 @@ public final class MouseOverTileListener {
     /**
      * When mouse is over tile method set correct status message.
      *
+     * @param player  player whose view determines the status message
      * @param terrain required terrain
      * @param where   required location over which is now mouse
      */

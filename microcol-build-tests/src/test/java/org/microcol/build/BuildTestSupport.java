@@ -63,6 +63,9 @@ final class BuildTestSupport {
     /**
      * No broad pkill: only this process and descendants observed while it is
      * owned.
+     *
+     * @param process process started by this test
+     * @throws InterruptedException if interrupted while waiting for termination
      */
     static void stopOwnedProcess(Process process) throws InterruptedException {
         List<ProcessHandle> children = process.descendants()

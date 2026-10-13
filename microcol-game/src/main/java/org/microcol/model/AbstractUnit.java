@@ -800,7 +800,7 @@ public abstract class AbstractUnit implements Unit {
     /**
      * If it's possible return colony where is unit placed.
      *
-     * @return
+     * @return colony where the unit works, or empty if it works in no colony
      */
     private Optional<Colony> getColony() {
         if (isAtPlaceColonyField()) {

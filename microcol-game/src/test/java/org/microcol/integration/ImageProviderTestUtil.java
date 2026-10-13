@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 
 /**
  * This is utility class. It loads all in game images and store them into
- * {@link #TARGET_DIR} directory.
+ * {@code target/img/} directory.
  * <p>
  * It allows to verify that images are correctly stored in image provider.
  * </p>

@@ -15,7 +15,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 /**
- * Abstract mission. Contain some basic functionality.
+ * Mission implementation delegating goals and events to its mission definition.
+ *
+ * @param <G> type of mission goals
  */
 public final class MissionImpl<G extends MissionGoals> implements Mission<G> {
 

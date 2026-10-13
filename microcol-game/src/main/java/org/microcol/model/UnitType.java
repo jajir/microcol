@@ -328,6 +328,7 @@ public final class UnitType {
 
         /**
          * @param canPlowField the canPlowField to set
+         * @return this builder
          */
         UnitTypeBuilder setCanPlowField(final boolean canPlowField) {
             this.canPlowField = canPlowField;
@@ -336,6 +337,7 @@ public final class UnitType {
 
         /**
          * @param canBuildRoad the canBuildRoad to set
+         * @return this builder
          */
         UnitTypeBuilder setCanBuildRoad(final boolean canBuildRoad) {
             this.canBuildRoad = canBuildRoad;
@@ -344,6 +346,7 @@ public final class UnitType {
 
         /**
          * @param canCutTrees the canCutTrees to set
+         * @return this builder
          */
         UnitTypeBuilder setCanCutTrees(final boolean canCutTrees) {
             this.canCutTrees = canCutTrees;
@@ -352,6 +355,7 @@ public final class UnitType {
 
         /**
          * @param requiredTools the requiredTools to set
+         * @return this builder
          */
         UnitTypeBuilder setRequiredTools(final Integer requiredTools) {
             this.requiredTools = requiredTools;
@@ -360,6 +364,7 @@ public final class UnitType {
 
         /**
          * @param requiredHammers the requiredHammers to set
+         * @return this builder
          */
         UnitTypeBuilder setRequiredHammers(final Integer requiredHammers) {
             this.requiredHammers = requiredHammers;
@@ -368,6 +373,7 @@ public final class UnitType {
 
         /**
          * @param canByBuildInColony the canByBuildInColony to set
+         * @return this builder
          */
         UnitTypeBuilder setCanByBuildInColony(
                 BiFunction<Model, Colony, Boolean> canByBuildInColony) {

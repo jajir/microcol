@@ -21,7 +21,6 @@ public final class CampaignModule extends AbstractModule {
 
     @Provides
     @Singleton
-    @SuppressWarnings("ucd")
     CampaignManager getCampaignManager(final CampaignsDao campaignsDao) {
         return new CampaignManager(Lists.newArrayList(new FreePlay_campaign(),
                 new Default_campaign()), campaignsDao);

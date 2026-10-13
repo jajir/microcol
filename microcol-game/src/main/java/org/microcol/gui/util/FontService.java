@@ -57,6 +57,7 @@ public final class FontService {
      * </p>
      *
      * @param relativePath required path for font definition file
+     * @param size         font size to load
      */
     private void load(final String relativePath, final double size) {
         final String path = FONT_DIRECTORY + relativePath;

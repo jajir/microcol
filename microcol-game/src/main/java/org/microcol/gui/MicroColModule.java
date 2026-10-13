@@ -310,7 +310,6 @@ public final class MicroColModule extends AbstractModule {
 
     @Provides
     @Singleton
-    @SuppressWarnings("ucd")
     I18n makeI18n(final GamePreferences gamePreferences,
             final StreamReader streamReader) {
         return I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)

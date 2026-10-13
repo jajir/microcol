@@ -101,6 +101,10 @@ public class ColonyWarehouse {
      * Validate the source and preview the amount that fits, without changing
      * either inventory. A full warehouse returns zero; invalid requests throw
      * IllegalArgumentException.
+     *
+     * @param requested goods and amount requested for unloading
+     * @param source    cargo slot supplying the goods
+     * @return requested goods limited to the available warehouse capacity
      */
     public Goods getUnloadableGoods(final Goods requested,
             final CargoSlot source) {
@@ -142,6 +146,9 @@ public class ColonyWarehouse {
     /**
      * Transfer the exact requested amount, or reject it before either inventory
      * changes.
+     *
+     * @param goods         exact goods and amount to unload
+     * @param fromCargoSlot cargo slot supplying the goods
      */
     public void moveToWarehouse(final Goods goods,
             final CargoSlot fromCargoSlot) {

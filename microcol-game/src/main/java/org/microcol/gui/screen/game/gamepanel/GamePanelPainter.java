@@ -135,9 +135,9 @@ public final class GamePanelPainter {
     /**
      * Paint everything.
      *
-     * @param g        required graphics context
-     * @param gameTick required long representing how many game ticks was
-     *                 already done. It allows to time animations.
+     * @param g               required graphics context
+     * @param currentGameTick required long representing how many game ticks was
+     *                        already done. It allows to time animations.
      */
     void paint(final GraphicsContext g, final long currentGameTick) {
         final Area area = getArea();

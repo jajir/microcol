@@ -69,7 +69,9 @@ public class PanelDockView implements JavaFxComponent {
     }
 
     /**
-     * Allows to hide ships add cargo slots entirely.
+     * Set the visibility of ships and cargo slots.
+     *
+     * @param isVisible whether the dock is visible
      */
     void setVisible(final boolean isVisible) {
         mainPanel.setVisible(isVisible);
@@ -123,9 +125,7 @@ public class PanelDockView implements JavaFxComponent {
                 (UnitWithCargo) toggleGroup.getSelectedToggle().getUserData());
     }
 
-    /**
-     * Move to new behavior interface
-     */
+    // Move drag handling to the behavior interface.
     private void onDragDetected(final MouseEvent event) {
         if (event.getSource() instanceof ToggleButton) {
             final ToggleButton butt = (ToggleButton) event.getSource();

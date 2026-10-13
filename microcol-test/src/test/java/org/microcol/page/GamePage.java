@@ -192,7 +192,7 @@ public class GamePage extends AbstractScreen {
      * Wait until the current animation releases the next turn button. The
      * button may briefly become available between units in a multi-unit action.
      *
-     * @throws Exception
+     * @throws TimeoutException if the next turn button stays disabled
      */
     public void waitWhileMoving() throws TimeoutException {
         final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
@@ -206,6 +206,10 @@ public class GamePage extends AbstractScreen {
 
     /**
      * Wait for an expected unit count after an asynchronous map action.
+     *
+     * @param location      map tile whose units are counted
+     * @param expectedCount unit count to wait for
+     * @throws TimeoutException if the unit count or movement does not settle
      */
     public void waitForNumberOfUnitsAt(final Location location,
             final int expectedCount) throws TimeoutException {

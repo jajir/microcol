@@ -42,7 +42,6 @@ public final class MicroColApplication extends Application {
      * Java FX application entry point.
      */
     @Override
-    @SuppressWarnings("ucd")
     public void start(final Stage primaryStage) throws Exception {
         Platform.runLater(() -> initializeMicrocol(primaryStage));
     }

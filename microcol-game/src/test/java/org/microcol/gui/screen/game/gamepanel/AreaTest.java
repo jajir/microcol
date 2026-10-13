@@ -13,8 +13,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
-import org.microcol.gui.screen.game.gamepanel.Area;
-import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
 import org.microcol.model.Location;
 
 /**

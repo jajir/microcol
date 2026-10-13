@@ -60,8 +60,9 @@ class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
     }
 
     /**
-     * Smallest game time interval. In ideal case it have time to draw world on
-     * screen.
+     * Paint one animation frame.
+     *
+     * @param tick number of elapsed animation ticks
      */
     @SuppressWarnings("unused")
     private void paintFrame(final Long tick) {

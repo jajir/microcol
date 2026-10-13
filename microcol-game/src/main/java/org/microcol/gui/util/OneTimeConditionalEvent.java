@@ -13,6 +13,8 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  * It allow to trigger some event just when two conditions are true and it's not
  * sure order in which conditions will be passed.
  * </p>
+ *
+ * @param <T> value passed to the consumer when both conditions have passed
  */
 public final class OneTimeConditionalEvent<T> {
 

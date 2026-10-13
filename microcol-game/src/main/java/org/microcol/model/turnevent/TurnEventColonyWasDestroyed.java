@@ -11,11 +11,11 @@ public class TurnEventColonyWasDestroyed extends AbstractTurnEvent {
     private final String colonyName;
 
     /**
-     * Default constructor. Just set properties.
+     * Record the destroyed colony and its name at the time of destruction.
      *
-     * @param messageKey required message key
-     * @param args       optional arguments for message
-     * @param player     required player
+     * @param playerName name of the player receiving the report
+     * @param colonyId   nonnegative identifier of the destroyed colony
+     * @param colonyName name of the colony at the time of destruction
      */
     TurnEventColonyWasDestroyed(final String playerName, final int colonyId,
             final String colonyName) {

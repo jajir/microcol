@@ -29,7 +29,7 @@ abstract class AbstractPlace implements Place {
     }
 
     /**
-     * Default implementation just delegate to {@link #destroy()}.
+     * Default implementation just delegate to {@link Place#destroy()}.
      */
     @Override
     public void destroySimple() {

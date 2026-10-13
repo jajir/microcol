@@ -46,6 +46,7 @@ class TileImageParams {
 
         /**
          * @param tileWidthCount the tileWidthCount to set
+         * @return this builder
          */
         public TileImageParamsBuilder setTileWidthCount(int tileWidthCount) {
             this.tileWidthCount = tileWidthCount;
@@ -54,6 +55,7 @@ class TileImageParams {
 
         /**
          * @param tileHeightCount the tileHeightCount to set
+         * @return this builder
          */
         public TileImageParamsBuilder setTileHeightCount(int tileHeightCount) {
             this.tileHeightCount = tileHeightCount;
@@ -62,6 +64,7 @@ class TileImageParams {
 
         /**
          * @param tileBorderWidth the backgroundImageTileBorderInPx to set
+         * @return this builder
          */
         public TileImageParamsBuilder setTileBorderWidth(int tileBorderWidth) {
             this.tileBorderWidth = tileBorderWidth;
@@ -70,6 +73,7 @@ class TileImageParams {
 
         /**
          * @param tileWidth the tileWidth to set
+         * @return this builder
          */
         public TileImageParamsBuilder setTileWidth(int tileWidth) {
             this.tileWidth = tileWidth;
@@ -133,9 +137,9 @@ class TileImageParams {
     }
 
     /**
-     * Total with of tiles with border in background image;
+     * Total width of a tile with its border in the background image.
      *
-     * @return
+     * @return tile width including its border, in pixels
      */
     public int getTileWidthIncludingBorder() {
         return getTileWidth() + getTileBorderWidth();
@@ -144,7 +148,7 @@ class TileImageParams {
     /**
      * Expected background image width in pixels.
      *
-     * @return
+     * @return background image width in pixels
      */
     public int getExpectedImageWidth() {
         return getTileWidthIncludingBorder() * getTileWidthCount();
@@ -153,7 +157,7 @@ class TileImageParams {
     /**
      * Expected background image height in pixels.
      *
-     * @return
+     * @return background image height in pixels
      */
     public int getExpectedImageHeight() {
         return getTileWidthIncludingBorder() * getTileHeightCount();

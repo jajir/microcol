@@ -387,9 +387,7 @@ public abstract class AbstractCoastMapGenerator {
                 "Invalid location '%s' it is not void", infoHolder.loc());
     }
 
-    /**
-     * NorthEast
-     */
+    // NorthEast corner variants.
 
     private String getNorthEastCorner_fromNorth(final InfoHolder ttNorthEast) {
         return isVoid(ttNorthEast) ? "3" : "4";
@@ -399,9 +397,7 @@ public abstract class AbstractCoastMapGenerator {
         return isVoid(ttNorthEast) ? "3" : "2";
     }
 
-    /**
-     * SouthEast
-     */
+    // SouthEast corner variants.
 
     private String getSouthEastCorner_fromEast(final InfoHolder ttSouthEast) {
         return isVoid(ttSouthEast) ? "6" : "7";
@@ -411,9 +407,7 @@ public abstract class AbstractCoastMapGenerator {
         return isVoid(ttSouthEast) ? "6" : "5";
     }
 
-    /**
-     * SouthWest
-     */
+    // SouthWest corner variants.
 
     private String getSouthWestCorner_fromSouth(final InfoHolder ttSouthWest) {
         return isVoid(ttSouthWest) ? "9" : "a";
@@ -423,9 +417,7 @@ public abstract class AbstractCoastMapGenerator {
         return isVoid(ttSouthWest) ? "9" : "8";
     }
 
-    /**
-     * NorthWest
-     */
+    // NorthWest corner variants.
 
     private String getNorthWestCorner_fromWest(final InfoHolder ttNortWest) {
         return isVoid(ttNortWest) ? "0" : "1";

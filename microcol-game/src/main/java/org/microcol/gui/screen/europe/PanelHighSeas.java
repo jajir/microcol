@@ -31,6 +31,8 @@ import javafx.scene.layout.Region;
 /**
  * Panels shows ships in seas. Ships are incoming to port or are going to new
  * world.
+ *
+ * @param <T> message key type used for ship travel text
  */
 public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         implements JavaFxComponent, Repaintable, UpdatableLanguage {
