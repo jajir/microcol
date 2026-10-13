@@ -1279,3 +1279,42 @@ timings are unavailable; no savings claim is made. Qwen was unloaded before
 container builds and Maven. Inputs, rejected drafts, reviews and measurements
 remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-docker-ui-runner/`.
 Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
+
+
+## R-0019 fog overlays — 2026-10-13
+
+1. Task `2026-10-13-r19-fog-rendering`, baseline `0fbd65b0`, assigned three
+   existing renderer/preview classes. Runtime samples confirmed
+   `microcol-gpt-oss:20b-32k`, digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`, context
+   32768. The caller owned the manual decision, fixture, regression tests,
+   review and publication.
+2. Attempt 0 used **170.478 seconds** and exited zero without edits or a
+   completed response. It unnecessarily searched a wrong `Unit` path; the
+   reason for the early end is not established. The first repair supplied
+   exact source fragments and requested replacement text without tools.
+3. Attempt 1 used **233.712 seconds** and returned two complete replacement
+   objects followed by a truncated third. The caller retained only the two
+   complete objects, then requested the missing small edit. Attempt 2 used
+   **94.329 seconds** and returned the valid third object. All allowed paths
+   and unique old-text matches were checked before applying the batch to the
+   isolated checkout. Total worker time: **498.519 seconds**, both repairs used.
+4. Accepted worker output restores fog after overlays and suppresses previews
+   into unknown cells. The caller applied the shared formatter and added one
+   explanatory comment. Ollama was unloaded before Maven/Docker. Exit zero and
+   replacement generation alone did not constitute acceptance.
+5. Caller test setup required an explicit predicate cast for TestFX, centering
+   the actual viewport, reusing the protected scene snapshot, and returning a
+   drag to its origin before release. The earlier Escape/release gesture moved
+   the ship and was not a valid cancellation; that failure is not product
+   evidence. A non-attacking galleon could not exercise attack-preview leakage;
+   the final fixture uses a frigate and an enemy six cells away. On the original
+   production code, the corrected test observed a FIGHT path to an unexplored
+   enemy; the compositor probe independently exposed an animation over fog.
+6. After restoration of the worker changes, the final targeted run passed
+   one visibility model test, three TC26 scenarios and three page-contract
+   checks. Full-regression acceptance belongs to the
+   [functional record](../functional-tests.md#fog-implementation-2026-10-13).
+   Prompts, responses, runtime samples and reviews remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r19-fog-rendering/`;
+   caller logs are in `target/r19-r31/`. No token-saving claim is made.

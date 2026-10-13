@@ -146,6 +146,10 @@ public final class MoveModeSupport {
 
     private void processMove(final Location moveToLocation) {
         final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+        if (!movingUnit.getOwner().isVisible(moveToLocation)) {
+            noMove();
+            return;
+        }
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
             // fights

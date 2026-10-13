@@ -94,23 +94,27 @@ public abstract class AbstractScreen {
         // Snapshot layout otherwise uses the menu's oversized preferred
         // dimensions.
         final javafx.scene.image.WritableImage image = WaitForAsyncUtils
-                .waitForAsyncFx(5000, () -> {
-                    final javafx.scene.layout.Region region = (javafx.scene.layout.Region) root;
-                    final double width = root.getScene().getWidth();
-                    final double height = root.getScene().getHeight();
-                    final double preferredWidth = region.getPrefWidth();
-                    final double preferredHeight = region.getPrefHeight();
-                    try {
-                        region.setPrefSize(width, height);
-                        return root.getScene().snapshot(null);
-                    } finally {
-                        region.setPrefSize(preferredWidth, preferredHeight);
-                        region.resize(width, height);
-                        region.layout();
-                    }
-                });
+                .waitForAsyncFx(5000, () -> snapshotScene(root.getScene()));
         getRobot().robotContext().getCaptureSupport()
                 .saveImage(getRobot().capture(image).getImage(), output);
+    }
+
+    public static javafx.scene.image.WritableImage snapshotScene(
+            final javafx.scene.Scene scene) {
+        final javafx.scene.layout.Region region = (javafx.scene.layout.Region) scene
+                .getRoot();
+        final double width = scene.getWidth();
+        final double height = scene.getHeight();
+        final double preferredWidth = region.getPrefWidth();
+        final double preferredHeight = region.getPrefHeight();
+        try {
+            region.setPrefSize(width, height);
+            return scene.snapshot(null);
+        } finally {
+            region.setPrefSize(preferredWidth, preferredHeight);
+            region.resize(width, height);
+            region.layout();
+        }
     }
 
     protected boolean isCssIdVisible(final String cssId) {

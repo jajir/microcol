@@ -145,14 +145,15 @@ public final class GamePanelPainter {
                 .make(visibleAreaService, gameModelController.getMapSize());
         gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter,
                 canvasInMapCoordinates, currentGameTick);
-        gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
-        gamePaintService.paintSelectedTile(g, area,
-                selectedTileManager.getSelectedTile());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
         gamePaintService.paintUnits(g, gameModelController.getModel(), area,
                 excludePainting, selectedUnitManager.getSelectedUnit());
         paintSteps(g, area);
         paintAnimation(g, area);
+        gamePaintService.paintFog(g, area, canvasInMapCoordinates);
+        gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
+        gamePaintService.paintSelectedTile(g, area,
+                selectedTileManager.getSelectedTile());
         animationClouds.paint(g);
         mapManager.gameTickUpdate(currentGameTick);
         if (gameModelController.getRealCurrentPlayer().isComputer()) {

@@ -798,3 +798,41 @@ Lokální ověření na macOS/JDK 17:
    Zveřejnění této revize musí potvrdit její [vývojový workflow](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
    a manifest [kanálu dev](https://github.com/jajir/microcol/releases/tag/dev);
    samotný lokální výsledek publikaci nedokládá.
+
+
+<a id="fog-implementation-2026-10-13"></a>
+
+## Mlha nad neprozkoumanou mapou R-0019 — 2026-10-13
+
+1. Cílený Docker/JDK 17/Xvfb/Openbox běh prošel **7 kontrolami**, bez selhání,
+   chyb nebo vynechání: `VisibilityTest` (1), `TC_26_F18_fog_of_war_test` (3)
+   a `PageVerificationContractTest` (3). Příkaz doplnil běžný Docker runner o
+   `-Dtest=VisibilityTest,TC_26_F18_fog_of_war_test,PageVerificationContractTest`
+   a `-Dsurefire.failIfNoSpecifiedTests=false`. Log:
+   `target/r19-r31/fog-final-targeted.log`; výstupy: `target/docker-ui/run-QUn0sq/`.
+2. TC26/TC_01 kontroluje skrytého nepřítele i kolonii, stavový řádek, pravý
+   panel, skutečné pixely mlhy a náhled známého/skrytého cíle. TC_02 odkrývá
+   hranici skutečným pohybem, vrací loď a ověřuje průzkum i po Continue.
+   TC_03 kreslí diagnostickou animaci skutečným mapovým kompozitorem: známý
+   pixel zůstane viditelný, skrytý zakryje mlha a dokončovací callback proběhne.
+   Nejde o tvrzení, že byly přehrány všechny konkrétní nepřátelské animace.
+3. Na původním produkčním kódu test s fregatou prokázal cestu útoku k dosud
+   neprozkoumanému nepříteli (`fog-final-baseline.log`); samostatný předchozí
+   běh prokázal překreslení mlhy animací (`fog-confirmed-baseline.log`).
+   Po opravě stejná očekávání prošla. Dřívější chyby testovacího gesta,
+   souřadnic a snapshotu nejsou důkazem chyby herních pravidel; jejich opravy
+   a lokální worker jsou popsány v [provozním záznamu](ai/local-qwen.md#r-0019-fog-overlays-2026-10-13).
+4. Snímky `fog-unknown.png` a `fog-discovered-continued.png` z konečného
+   cíleného běhu byly vizuálně zkontrolovány. Skrytá kolonie ani loď před
+   průzkumem nejsou vykreslené, po průzkumu a Continue zůstávají známé.
+5. Úplný příkaz `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`
+   prošel: **706 herních testů a 81 funkčních/kontrolních testů**, nula selhání,
+   chyb a vynechání. Ověřena čerstvá XML a návratový kód 0 v
+   `target/docker-ui/run-qniEHK/`; log `target/r19-r31/fog-full.log`, doba Maven
+   12:50. Zahrnuty jsou všechny tři TC26 i původní hráčské cesty. Prošlo osm
+   změněných Java souborů sdíleným formatterem, devět kontrol dokumentace a
+   strict MkDocs; číslovaná evidence byla zkontrolována ve webovém náhledu.
+6. Přesné dosahy rolí Q-11, druhá vrstva živé viditelnosti a nativní macOS UI
+   nejsou tímto řezem ověřeny. Celé UC-006 proto zůstává otevřené.
+   Publikaci výsledné revize musí potvrdit její vývojový workflow a manifest
+   [kanálu dev](https://github.com/jajir/microcol/releases/tag/dev).

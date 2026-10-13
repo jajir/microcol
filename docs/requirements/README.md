@@ -49,7 +49,7 @@ inside each analysis.
 
 Captured on **2026-10-13** against `b5077d1e`, using the area map, existing
 analyses and the rule/use-case catalogues. They began as **Draft** analyses. R-0012–R-0018 are now **Verified** after implementation and the full Docker regression;
-R-0019–R-0025 remain **Refining** following the user’s decisions and UI audit.
+Implementation of R-0019–R-0031 is now authorized; R-0019 has passed local acceptance.
 Each file owns its current evidence.
 This does not make every proposed behavior approved or verified. The initial capture
 published documents only; the implemented slice follows normal development delivery.
@@ -256,13 +256,20 @@ inventing a gameplay scenario. Planned checks are not test results.
 Use this wording when explicitly creating a refinement task. The document
 does not itself create chats, scheduled work or implementation assignments.
 
-## Current implementation slice — 2026-10-13
+## Completed implementation slice R-0012–R-0018 — 2026-10-13
 
 1. R-0012–R-0018 are authorized for implementation together: retained menu,
    recovery save, two-map setup, French scenario content, existing screen
    navigation and consistent equipment/unloading choices.
 2. This implements the same campaign-gate removal described by R-0001; do not
    create a second implementation for the duplicate menu entry. Acceptance is documented in the [combined regression record](../functional-tests.md#free-play-implementation-2026-10-13).
-3. R-0019 onward remain separate refinements. Mock nation selection does not
+3. At that slice’s acceptance, R-0019 onward were separate refinements; the subsequent authorization below supersedes that planning status. Mock nation selection does not
    implement national effects, and French scenario content does not establish
    a complete economic AI.
+
+## Implementation from R-0019 — authorized 2026-10-13
+
+1. The user requested implementation of all remaining requirements from R-0019, consulting the original Colonization manual for open questions. The active gameplay scope is R-0019–R-0031; R-0032–R-0034 already contain delivered technical changes and require a completion audit, not duplicate implementation.
+2. Work through A05 visibility/equipment, A06 voyages/passengers/expert purchase, A07 wagon/construction, A08 relations/rival founding, A09 attack/strength, then A10 sentiment before its dependent tax demand. Numbered requirements retain their existing acceptance; needed earlier capabilities are implemented when dependency evidence requires them.
+3. R-0019 has passed local acceptance ([evidence](../functional-tests.md#fog-implementation-2026-10-13)); publication is pending. Subsequent requirements remain unverified until their individual model, player journey, persistence and delivery checks pass. Manual-backed decisions cite printed and PDF page numbers; implementation policy for parameters absent from the manual is explicitly distinguished from historical rules.
+4. Local implementation uses the configured Ollama GPT-OSS worker with bounded assignments; requirements, architecture, review, actual checks and publication remain caller-owned.

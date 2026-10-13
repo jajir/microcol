@@ -95,14 +95,36 @@ final class GamePaintService {
                             oneTurnMoveHighlighter.isItHighlighted(location),
                             gameTick);
                 } else {
-                    final Image imageHidden = imageProvider
-                            .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
-                    graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX,
-                            TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                            TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+                    paintHiddenTile(graphics, point);
                 }
             }
         }
+    }
+
+    /** Cover overlays which can cross from explored into unknown tiles. */
+    public void paintFog(final GraphicsContext graphics, final Area area,
+            final CanvasInMapCoordinates coord) {
+        final Player player = gameModelController.getHumanPlayer();
+        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
+                .getX(); i++) {
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
+                    .getY(); j++) {
+                final Location location = Location.of(i, j);
+                final Point point = area.convertToCanvasPoint(location);
+                if (!player.isVisible(location)) {
+                    paintHiddenTile(graphics, point);
+                }
+            }
+        }
+    }
+
+    private void paintHiddenTile(final GraphicsContext graphics,
+            final Point point) {
+        final Image imageHidden = imageProvider
+                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
+        graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX,
+                TILE_WIDTH_IN_PX, point.getX(), point.getY(), TILE_WIDTH_IN_PX,
+                TILE_WIDTH_IN_PX);
     }
 
     /**
