@@ -208,10 +208,36 @@ dodávky menu a referenční profil zatím nejsou uzavřené. Toto pořadí nahr
 automatický postup R-0001, R-0002, …; [etapy E0–E7](../implementation-plan.md#etapy-podle-toho-co-hrac-dokaze)
 nadále popisují ověřitelné výsledky, nikoli konkurenční frontu úkolů.
 
+## Navazující návrhy pro free play
+
+Dne 13. října 2026 vzniklo [dalších dvacet analýz R-0012–R-0031](README.md#twenty-free-play-follow-up-drafts).
+Všechny mají stav Draft. Rozvíjejí první hospodářský průchod a vybrané základy
+pozdějších oblastí; nejsou úplným seznamem práce do dokončení hry.
+
+| Oblast | Nově připravené malé analýzy |
+| --- | --- |
+| A01 | [R-0012 struktura menu](R-0012.md), [R-0013 bezpečný odchod a nahrazení partie](R-0013.md) |
+| A02 | [R-0014 referenční profil](R-0014.md), [R-0015 účastníci partie](R-0015.md) |
+| A03 | [R-0016 struktura obrazovek](R-0016.md), [R-0017 dostupnost příkazů a chyby](R-0017.md) |
+| A04 | [R-0018 bezpečné obnovení hry](R-0018.md) |
+| A05 | [R-0019 průzkum a viditelnost](R-0019.md), [R-0020 vybavení na evropském molu](R-0020.md) |
+| A06 | [R-0021 odjezd a návrat přes Atlantik](R-0021.md), [R-0022 přeprava kolonisty](R-0022.md), [R-0023 nákup odborného kováře](R-0023.md) |
+| A07 | [R-0024 vyložení vozu](R-0024.md), [R-0025 podmínky staveb](R-0025.md) |
+| A08 | [R-0026 evropské vztahy](R-0026.md), [R-0027 první kolonie soupeře](R-0027.md) |
+| A09 | [R-0028 přípustnost útoku](R-0028.md), [R-0029 výpočet pozemní síly](R-0029.md) |
+| A10 | [R-0030 daňový požadavek](R-0030.md), [R-0031 podpora nezávislosti](R-0031.md) |
+
+Nejbližší vybraný návrh zůstává A01: upřesnit R-0012, potom z něj vymezit
+první dodávku s R-0001/R-0013. R-0023 je navržený předpoklad dosažitelnosti
+odborníka pro R-0009; R-0031 je předpoklad politického účinku protestu v R-0030.
+Tyto závislosti mají přednost před číselným pořadím. Úplné trasy UC-115–118
+se přejímají až po propojení příslušných funkcí.
+
 ## Nejbližší příprava: struktura A01
 
 **Návrh dalšího upřesnění, dosud bez schváleného stromu menu.** Před implementací
-R-0001 potřebujeme konkrétní přehled současné a navržené navigace. Připravíme:
+R-0001 potřebujeme konkrétní přehled současné a navržené navigace.
+Vlastníkem tohoto návrhu je [R-0012](R-0012.md); při jeho upřesnění doplníme:
 
 1. Cíle hlavního menu a menu v rozehrané hře; umístění kampaně, výuky,
    nastavení a nápovědy podle zvoleného rozsahu. Existence dnešní položky

@@ -47,6 +47,48 @@ inside each analysis.
 | --- | --- | --- |
 | [R-0011](R-0011.md) | [A05](areas.md#a05), cross-area P31 safeguard | Enforce the model dependency boundary with ArchUnit. |
 
+## Twenty free-play follow-up drafts
+
+Captured on **2026-10-13** against `b5077d1e`, using the area map, existing
+analyses and the rule/use-case catalogues. R-0012–R-0031 are **Draft** analyses,
+not approved implementation assignments or verified gameplay. Their publication
+publishes the documents only. Refine one selected requirement at a time.
+
+| Requirement | Primary area | Small outcome |
+| --- | --- | --- |
+| [R-0012](R-0012.md) | [A01](areas.md#a01) | Define the free-play menu and navigation foundation. |
+| [R-0013](R-0013.md) | [A01](areas.md#a01) | Leave or replace an active game safely. |
+| [R-0014](R-0014.md) | [A02](areas.md#a02) | Create and persist a reference free-play start profile. |
+| [R-0015](R-0015.md) | [A02](areas.md#a02) | Define the participants in a free-play game. |
+| [R-0016](R-0016.md) | [A03](areas.md#a03) | Define the free-play screen and information structure. |
+| [R-0017](R-0017.md) | [A03](areas.md#a03) | Use consistent command availability and rejection feedback. |
+| [R-0018](R-0018.md) | [A04](areas.md#a04) | Restore a free-play save without losing the active game. |
+| [R-0019](R-0019.md) | [A05](areas.md#a05) | Separate explored terrain from current unit visibility. |
+| [R-0020](R-0020.md) | [A05](areas.md#a05) | Buy and sell colonist equipment on the European pier. |
+| [R-0021](R-0021.md) | [A06](areas.md#a06) | Depart through sea lanes and return to the recorded coast. |
+| [R-0022](R-0022.md) | [A06](areas.md#a06) | Embark and disembark an individual colonist safely. |
+| [R-0023](R-0023.md) | [A06](areas.md#a06) | Purchase an expert blacksmith and bring them home. |
+| [R-0024](R-0024.md) | [A07](areas.md#a07) | Unload wagon goods using the shared warehouse limit. |
+| [R-0025](R-0025.md) | [A07](areas.md#a07) | Enforce population and prerequisites when choosing construction. |
+| [R-0026](R-0026.md) | [A08](areas.md#a08) | Persist European relations independently of player names. |
+| [R-0027](R-0027.md) | [A08](areas.md#a08) | Let a European rival establish its first colony. |
+| [R-0028](R-0028.md) | [A09](areas.md#a09) | Validate attack roles and confirmed hostilities in the model. |
+| [R-0029](R-0029.md) | [A09](areas.md#a09) | Calculate and explain ordinary land combat strength. |
+| [R-0030](R-0030.md) | [A10](areas.md#a10) | Resolve a Crown tax demand and a commodity boycott. |
+| [R-0031](R-0031.md) | [A10](areas.md#a10) | Compute local and national rebel sentiment. |
+
+Start with **R-0012**, then agree the A01 delivery around R-0001/R-0013.
+Prepare only the A02/A03 dependencies needed for that delivery before moving
+through the [area sequence](areas.md#postup-po-oblastech). IDs are not priorities:
+R-0023 enables R-0009, and R-0031 enables R-0030. A dependency names needed
+capability, not a requirement to implement every related area at once.
+
+This set advances the first economic loop and selected later foundations; it is
+not the complete free-play backlog. Map generation, a full unit roster, native
+societies, trade routes, education, full combat resolution, founders and the
+independence/endgame journey still need their own small analyses. Existing
+manual rules, work packages and UC acceptance remain in scope and open.
+
 ## Naming and scope
 
 1. Allocate the next unused number after the highest existing `R-` number on

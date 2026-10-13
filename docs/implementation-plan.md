@@ -202,6 +202,32 @@ Přiřazení pokrývá všech 230 katalogových ID včetně doplnění z 11. ř�
 v rozsahu, včetně všech 25 zakladatelů a referenčních tabulek; priorita nezařazuje
 jejich zbývající části automaticky „mimo první vydání“.
 
+### Nové analýzy pro free play
+
+Doplněno 13. října 2026: **dvacet návrhů R-0012–R-0031**, všechny ve stavu
+Draft. [Katalog analýz](requirements/README.md#twenty-free-play-follow-up-drafts)
+a [mapa oblastí](requirements/areas.md#navazujici-navrhy-pro-free-play) určují
+jejich zařazení; konkrétní rozsah a otázky vlastní každý dokument. Příprava
+neznamená implementaci ani uzavření příslušného balíku nebo UC.
+
+| Hlavní balík | Nové analýzy |
+| --- | --- |
+| P28 | [R-0012 menu](requirements/R-0012.md), [R-0013 bezpečný odchod](requirements/R-0013.md), [R-0017 odezva příkazů](requirements/R-0017.md) |
+| P02 | [R-0014 profil](requirements/R-0014.md), [R-0015 účastníci](requirements/R-0015.md) |
+| P27 | [R-0016 obrazovky a informace](requirements/R-0016.md) |
+| P26 | [R-0018 obnovení hry](requirements/R-0018.md) |
+| P04 | [R-0019 viditelnost](requirements/R-0019.md) |
+| P05 | [R-0020 evropské vybavení](requirements/R-0020.md) |
+| P09 | [R-0021 Atlantik](requirements/R-0021.md) |
+| P08 | [R-0022 cestující](requirements/R-0022.md) |
+| P14 | [R-0023 odborný kovář](requirements/R-0023.md) |
+| P10 | [R-0024 vyložení vozu](requirements/R-0024.md) |
+| P12 | [R-0025 podmínky staveb](requirements/R-0025.md) |
+| P20 | [R-0026 vztahy](requirements/R-0026.md) |
+| P21 | [R-0027 kolonie soupeře](requirements/R-0027.md) |
+| P17 | [R-0028 útok](requirements/R-0028.md), [R-0029 síla](requirements/R-0029.md) |
+| P22 | [R-0030 daně](requirements/R-0030.md), [R-0031 podpora nezávislosti](requirements/R-0031.md) |
+
 ## Rozdělení práce mezi Qwen a hlavního agenta
 
 **Dohoda z 11. října 2026:** maximum vhodné implementační práce předáváme
