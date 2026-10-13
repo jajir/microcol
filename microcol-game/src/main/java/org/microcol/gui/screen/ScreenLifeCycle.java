@@ -15,7 +15,7 @@ public interface ScreenLifeCycle {
      * Method is called after screen is hide. It allows to to stop all running
      * operations.
      * <p>
-     * Hide is not called when player close game.
+     * Also called for the current screen when the application stops.
      * </p>
      */
     void beforeHide();

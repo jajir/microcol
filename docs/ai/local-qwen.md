@@ -107,6 +107,100 @@ installation, configuration changes or a cloud fallback when the worker fails.
    at `64927cde`, including all 12 new scenarios. Actual player evidence and
    publication belong to the [functional audit](../functional-tests.md#free-play-audit-2026-10-13).
 
+## R-0012–R-0018 implementation — 2026-10-13
+
+1. Baseline `85644389`; the configured `microcol-gpt-oss:20b-32k` worker runs in separate detached worktrees. Ollama, Codex CLI and Docker were available. The caller owns architecture, integration, actual checks and publication; no cloud worker substitution.
+2. Each task retains the 300-second attempt, 600-second cumulative and two-repair limits. Generated text is validated against exact source matches before application. Model inference and Maven/Docker checks run separately.
+
+| Task | Worker seconds by attempt | Accepted output and recovery |
+| --- | --- | --- |
+| `2026-10-13-r12-r18-menu-save` | 205.994 / 237.764 / 37.052 | First response made no edits and returned an incomplete patch with the wrong readiness API. First repair produced exact replacements but imported `PersistingTool` from the wrong package. Final focused repair corrected the import. Caller applied replacements, removed leftover blank lines, formatted six Java files and strengthened the player scenarios. Docker passed 13 selected checks, including fresh/existing autosave, cancelled load, settings return, navigation and campaign-complete start. |
+| `2026-10-13-r14-player-name` | 162.190 / 300.198 / 114.569 | First draft used incorrect whitespace trimming and did not validate saved text. First repair ignored the text-only scope, repeatedly searched files and timed out. Final focused repair reused `ColonyNames.normalize` and validated stored display names. Caller’s first test run had one setup error from mocking final `PlayerStore`; using its real constructor fixed that test setup. All six unchanged boundary/persistence expectations then passed. |
+
+3. These accepted results required review and repairs; CLI exit zero alone did not establish correctness. The first two tasks consumed 480.810 and 576.957 worker seconds respectively. No token-saving or autonomous-completion claim is made.
+4. Equipment, unloading and complete integration checks passed. Final acceptance counts and delivery evidence are in the [functional record](../functional-tests.md#free-play-implementation-2026-10-13).
+5. Prompts, responses, runtime samples, rejected results and caller evidence are retained under `~/Library/Logs/Microcol/local-qwen/jobs/` using the task IDs above. Production changes were not accepted until their assigned caller checks passed.
+
+### R-0012–R-0018 additional local assignments — 2026-10-13
+
+1. `2026-10-13-r14-r15-maps` used 263.787, 155.354 and 79.207 seconds
+   (498.348 total). The first output was truncated; the first repair confused
+   the JSON schema and map content. The final repair supplied usable terrain
+   generation but allowed hills/prairie to overwrite water. After both repairs,
+   the caller restricted those predicates to land and completed French content.
+   This is partial reuse, not autonomous worker completion. Caller corrections
+   also fixed the generator working directory and two test setup errors. Both
+   real-model map tests then passed, including disk round trips and topology.
+2. `2026-10-13-r16-colony-menu` used 136.007 and 102.294 seconds
+   (238.301 total). The first result omitted selection-time ownership validation
+   and the requested return type. One targeted repair corrected both. The caller
+   applied the shared formatter and ran TC12, TC21, TC23 and the page contract in
+   Docker: 13 checks passed with zero failures, errors or skips. The caller owns
+   toolbar/key wiring and the player-path assertions.
+3. `2026-10-13-r14-setup-screen` used 300.285, 170.005 and 129.915
+   seconds (600.205 total, including cleanup). The first attempt repeatedly
+   rediscovered caller-provided APIs and timed out. The second supplied the
+   screen but used incorrect localization calls, a component cast and incomplete
+   validation. The final exact-replacement repair timed out. After both repairs
+   and the cumulative limit, the caller reused the layout and completed the
+   listed fixes. A caller brace-edit error failed compilation and was repaired.
+   Five setup journeys and three page-contract checks then passed after changing
+   the screenshot helper to avoid unbounded hidden-screen geometry. Image review
+   exposed an incomplete physical capture. JavaFX snapshot also re-laid out the
+   scene using oversized preferred dimensions. The caller now temporarily pins
+   the root preferred size to the live scene dimensions, restoring it in finally.
+   All six setup cases passed; Czech and English snapshots were visually checked. This is partial reuse, not autonomous worker completion.
+4. `2026-10-13-r17-equipment-preview` used 180.891, 88.509 and 55.874
+   seconds (325.274 total). The first result reversed the tools-return conditions
+   and returned a stock-based amount when unequipping. The first three-line
+   repair retained those conditions and invented a field; the final repair
+   corrected all three lines. Caller integration added preflight to all six
+   actions and automatic unequipping, plus validation of work destinations before
+   mutation. Caller tests initially treated `GoodsType` as an enum and mocked
+   final `ColonyField`; both setup errors were corrected without weakening the
+   expectations. All 696 isolated game tests then passed, including 13 new
+   equipment checks. The fourteenth invalid-production regression also passed in the
+   integrated run.
+5. `2026-10-13-r17-equipment-dialog` used 197.630, 228.018 and 47.795
+   seconds (473.443 total). The first class invented localization/model APIs and
+   missed changed-cost confirmation. A focused repair supplied the correct class.
+   UI verification then found retained Cancel focus, so the second repair set
+   focus on the appropriate button when opening. All five TC25 cases passed,
+   including Czech Enter confirmation. Caller setup corrections moved the F17
+   ship into its colony and fixed keyboard menu indexing; these were not worker
+   defects. Fourteen equipment model checks also passed. The separate caller-owned setup screenshot issue was subsequently fixed and
+   verified without changing production layout.
+6. `2026-10-13-r17-unload-refresh` used 160.483, 103.596 and 300.654
+   seconds (564.733 total). The first two methods broke initial transfer behavior,
+   reused stale cargo quantities or omitted goods-type validation; neither was
+   applied. The final focused repair ignored the text-only scope, repeatedly
+   searched already supplied source and timed out without a completed method.
+   Both repair rounds were exhausted. The caller completed the small loop in
+   the isolated tree, retaining one warning per rejected confirmation and an
+   explicit fresh quantity confirmation. All 18 TC19 scenarios then passed, including refresh/cancel/reconfirmation and
+   abandoned-colony recovery; the complete integration regression also passed.
+7. Caller integration found a retained map animation after test-window closure:
+   the manually started application was never stopped. A small application/
+   presenter shutdown hook and fixture `AfterEach` cleanup fixed the lifecycle;
+   the same targeted run then passed all 32 checks without increasing memory.
+   Full regression also exposed an old identity test assuming the bundled world
+   had no colonies. Its preparation now explicitly removes scenario opponents
+   and colonies; original first-ID-zero/exhaustion assertions remain intact.
+   Later native-dialog diagnostics showed a reopened window physically at
+   (300,317) while JavaFX reported (0,0), explaining missed clicks in TC05/06/25.
+   The shared dialog now centers after its native window is shown; offscreen
+   show/hide priming was removed. Thirteen targeted checks passed after this
+   root fix. Speculative test-click changes and diagnostic prints were reverted.
+8. These assignments used the configured GPT-OSS alias at context 32768, unloaded
+   before verification. Prompts, rejected results, runtime samples and acceptance
+   reports remain under `~/Library/Logs/Microcol/local-qwen/jobs/` using the task
+   names above. These intermediate results do not establish acceptance of all
+   seven requirements or any measured cloud-token saving.
+9. Across these eight assignments the recorded worker attempts total
+   **3758.071 seconds** (about 62.6 minutes), including loading/cleanup. This is
+   local worker runtime, not total task time or a token-saving measurement.
+
+
 ## Default development workflow — 2026-10-11
 
 User and main agent agree player goal, rules, edge cases, cancellation/failure
@@ -899,6 +993,7 @@ budget would require 87.5% savings and is not the working plan.
 The direct route is ready for similarly bounded tasks. Broader work still needs
 evidence of repeatability and reliable limits under this machine's memory
 constraints; GUI execution and precise Codex-budget savings remain unverified.
+
 
 ## Instruction validation
 

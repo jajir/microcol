@@ -5,8 +5,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
-import org.microcol.model.campaign.CampaignNames;
-import org.microcol.model.campaign.FreePlay_missionNames;
+import org.microcol.model.campaign.FreePlayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +48,9 @@ public final class ApplicationController {
         musicController.start(gamePreferences.getVolume());
     }
 
-    /**
-     * It's called only once per application life.
-     */
-    public void startNewFreeGame() {
-        logger.debug("Start new default game.");
-        gameController.startCampaignMission(CampaignNames.freePlay,
-                FreePlay_missionNames.freePlay);
+    public void startNewFreeGame(final FreePlayMap map,
+            final String playerName) {
+        gameController.startFreePlay(map, playerName);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 

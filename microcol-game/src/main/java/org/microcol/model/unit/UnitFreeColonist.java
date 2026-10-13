@@ -57,6 +57,7 @@ public final class UnitFreeColonist extends CanMount {
     @Override
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
+        validateColonyField(colonyField, producedGoodsType);
         unequipAll();
         super.placeToColonyField(colonyField, producedGoodsType);
     }
@@ -64,6 +65,7 @@ public final class UnitFreeColonist extends CanMount {
     @Override
     public void placeToColonyStructureSlot(
             final ConstructionSlot structureSlot) {
+        validateColonyStructureSlot(structureSlot);
         unequipAll();
         super.placeToColonyStructureSlot(structureSlot);
     }
@@ -74,6 +76,13 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     private void unequipAll() {
+        // Validate every return before the first inventory mutation.
+        if (isHoldingGuns())
+            checkEquipmentChange(GoodsType.MUSKET, false);
+        if (isHoldingTools())
+            checkEquipmentChange(GoodsType.TOOLS, false);
+        if (isMounted())
+            checkEquipmentChange(GoodsType.HORSE, false);
         if (isHoldingGuns()) {
             unequipWithMuskets();
         }
@@ -112,6 +121,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void equipWithHorses() {
+        checkEquipmentChange(GoodsType.HORSE, true);
         final Colony colony = verifyThatUnitIsOutsideColony();
         final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE)
                 .getAmount();
@@ -127,6 +137,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void unequipWithHorses() {
+        checkEquipmentChange(GoodsType.HORSE, false);
         final Colony colony = verifyThatUnitIsOutsideColony();
         colony.getWarehouse().addGoods(
                 Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
@@ -134,6 +145,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void equipWithMuskets() {
+        checkEquipmentChange(GoodsType.MUSKET, true);
         final Colony colony = verifyThatUnitIsOutsideColony();
         final int muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET)
                 .getAmount();
@@ -149,6 +161,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void unequipWithMuskets() {
+        checkEquipmentChange(GoodsType.MUSKET, false);
         final Colony colony = verifyThatUnitIsOutsideColony();
         colony.getWarehouse().addGoods(
                 Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
@@ -156,6 +169,7 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void equipWithTools() {
+        checkEquipmentChange(GoodsType.TOOLS, true);
         final Colony colony = verifyThatUnitIsOutsideColony();
         final int totalTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
                 .getAmount();
@@ -174,9 +188,116 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public void unequipWithTools() {
+        checkEquipmentChange(GoodsType.TOOLS, false);
         final Colony colony = verifyThatUnitIsOutsideColony();
         colony.getWarehouse().addGoods(Goods.of(GoodsType.TOOLS, tools));
         tools = 0;
+    }
+
+    public enum EquipmentProblem {
+        UNIT_UNAVAILABLE, ALREADY_SET, MISSING_GOODS, STORAGE_FULL
+    }
+
+    public java.util.Optional<EquipmentProblem> getEquipmentProblem(
+            GoodsType type, boolean equip) {
+        com.google.common.base.Preconditions.checkArgument(
+                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                        || type == GoodsType.TOOLS,
+                "Unsupported GoodsType: %s", type);
+
+        if (!getModel().isGameRunning()
+                || !getModel().getCurrentPlayer().equals(getOwner())
+                || !isAtPlaceLocation()
+                || !getOwner().getAllUnits().stream().anyMatch(u -> u == this)
+                || getModel().getColonyAt(getLocation()).isEmpty()
+                || !getModel().getColonyAt(getLocation()).get().isValid()
+                || !getModel().getColonyAt(getLocation()).get().getOwner()
+                        .equals(getOwner())) {
+            return java.util.Optional.of(EquipmentProblem.UNIT_UNAVAILABLE);
+        }
+
+        if (equip) {
+            if (type == GoodsType.MUSKET && holdingGuns)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+            if (type == GoodsType.HORSE && mounted)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+            if (type == GoodsType.TOOLS && tools > 0)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+        } else {
+            if (type == GoodsType.MUSKET && !holdingGuns)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+            if (type == GoodsType.HORSE && !mounted)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+            if (type == GoodsType.TOOLS && tools == 0)
+                return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
+        }
+
+        if (equip && type == GoodsType.TOOLS) {
+            Colony colony = getModel().getColonyAt(getLocation()).get();
+            int availableTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                    .getAmount();
+            if (availableTools <= 0)
+                return java.util.Optional.of(EquipmentProblem.MISSING_GOODS);
+        }
+
+        java.util.Map<GoodsType, Integer> delta = getEquipmentGoodsChange(type,
+                equip);
+        Colony colony = getModel().getColonyAt(getLocation()).get();
+        for (GoodsType t : delta.keySet()) {
+            int stock = colony.getWarehouse().getGoods(t).getAmount();
+            int newStock = stock + delta.get(t);
+            if (newStock < 0)
+                return java.util.Optional.of(EquipmentProblem.MISSING_GOODS);
+            int capacity = colony.getWarehouse().getStorageCapacity(t)
+                    .getAmount();
+            if (newStock > capacity)
+                return java.util.Optional.of(EquipmentProblem.STORAGE_FULL);
+        }
+
+        return java.util.Optional.empty();
+    }
+
+    public java.util.Map<GoodsType, Integer> getEquipmentGoodsChange(
+            GoodsType type, boolean equip) {
+        com.google.common.base.Preconditions.checkArgument(
+                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                        || type == GoodsType.TOOLS,
+                "Unsupported GoodsType: %s", type);
+        Colony colony = verifyThatUnitIsOutsideColony();
+
+        java.util.Map<GoodsType, Integer> changes = new java.util.LinkedHashMap<>();
+
+        final int gunCost = REQUIRED_MUSKETS_FOR_ARMED_UNIT;
+        final int horseCost = REQUIRED_HORSES_FOR_MOUNTED_UNIT;
+        final int toolsMax = MAXIMAL_NUMBER_OF_TOOLS;
+
+        if (type == GoodsType.MUSKET) {
+            changes.put(GoodsType.MUSKET, equip ? -gunCost : gunCost);
+            if (equip && tools > 0)
+                changes.put(GoodsType.TOOLS, tools);
+        } else if (type == GoodsType.HORSE) {
+            changes.put(GoodsType.HORSE, equip ? -horseCost : horseCost);
+            if (equip && tools > 0)
+                changes.put(GoodsType.TOOLS, tools);
+        } else if (type == GoodsType.TOOLS) {
+            int consume = Math.max(1, Math.min(
+                    colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount(),
+                    toolsMax));
+            changes.put(GoodsType.TOOLS, equip ? -consume : tools);
+            if (equip && holdingGuns)
+                changes.put(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT);
+            if (equip && mounted)
+                changes.put(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT);
+        }
+
+        return java.util.Collections.unmodifiableMap(changes);
+    }
+
+    private void checkEquipmentChange(GoodsType type, boolean equip) {
+        java.util.Optional<EquipmentProblem> problem = getEquipmentProblem(type,
+                equip);
+        com.google.common.base.Preconditions.checkState(problem.isEmpty(),
+                "Equipment change rejected: %s", problem.orElse(null));
     }
 
     private Colony verifyThatUnitIsOutsideColony() {

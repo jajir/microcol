@@ -15,7 +15,7 @@ current status, scope and open questions. Completed Z01/Z02 remain in the
 
 | Requirement | Primary area | Small outcome | Main dependency or refinement decision |
 | --- | --- | --- | --- |
-| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | Existing menu reuse agreed; R-0014 adds mock setup later. |
+| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | Verified with R-0012; working mock setup is delivered by R-0014. |
 | [R-0002](R-0002.md) | [A04](areas.md#a04) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
 | [R-0003](R-0003.md) | [A05](areas.md#a05) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
 | [R-0004](R-0004.md) | [A05](areas.md#a05) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
@@ -29,7 +29,7 @@ current status, scope and open questions. Completed Z01/Z02 remain in the
 These are candidate changes, not a numbered execution queue. Use the
 [area overview](areas.md#postup-po-oblastech). On 2026-10-13 the user settled
 A01: retain the existing menu and remove the campaign gate through R-0001.
-R-0014 owns the later mock setup. Refinement and capability checks do not close
+R-0014 owns the implemented mock setup. Refinement and capability checks do not close
 any whole UC or authorize all drafts for implementation.
 
 Test class/fixture names marked **proposed** in the files reserve a concrete
@@ -48,10 +48,12 @@ inside each analysis.
 ## Twenty free-play follow-up drafts
 
 Captured on **2026-10-13** against `b5077d1e`, using the area map, existing
-analyses and the rule/use-case catalogues. They began as **Draft** analyses. R-0012–R-0025 are now **Refining** following
-the user’s decisions and UI audit; each file owns its current evidence.
-This does not make every proposed behavior approved or verified. Their publication
-publishes the documents only. Refine one selected requirement at a time.
+analyses and the rule/use-case catalogues. They began as **Draft** analyses. R-0012–R-0018 are now **Verified** after implementation and the full Docker regression;
+R-0019–R-0025 remain **Refining** following the user’s decisions and UI audit.
+Each file owns its current evidence.
+This does not make every proposed behavior approved or verified. The initial capture
+published documents only; the implemented slice follows normal development delivery.
+Refine one selected requirement at a time.
 
 | Requirement | Primary area | Small outcome |
 | --- | --- | --- |
@@ -76,7 +78,7 @@ publishes the documents only. Refine one selected requirement at a time.
 | [R-0030](R-0030.md) | [A10](areas.md#a10) | Resolve a Crown tax demand and a commodity boycott. |
 | [R-0031](R-0031.md) | [A10](areas.md#a10) | Compute local and national rebel sentiment. |
 
-R-0012 now records the agreed A01 reuse; R-0001 can remove the campaign gate.
+R-0012 now records the agreed A01 reuse; R-0001 is satisfied by the shared campaign-gate removal.
 Prepare only the A02/A03 dependencies needed for that delivery before moving
 through the [area sequence](areas.md#postup-po-oblastech). IDs are not priorities:
 R-0023 enables R-0009, and R-0031 enables R-0030. A dependency names needed
@@ -93,8 +95,8 @@ manual rules, work packages and UC acceptance remain in scope and open.
 The user retained the current main menu and requested that its free-play entry
 be enabled independently of campaign completion. R-0014 now specifies a mock
 setup with working Start/Back and two map choices; R-0015 specifies fixed French
-cities and units. R-0016 and R-0020–R-0025 are being checked through actual UI
-journeys before missing work is restated. See each analysis for its current
+cities and units. R-0016 now has passing UI journeys; R-0020–R-0025 retain their separate
+capability checks and missing work. See each analysis for its current
 scope and evidence; the earlier capture tables describe the initial drafts.
 
 Player-entered text defaults to **64 Unicode code points**, including player
@@ -253,3 +255,14 @@ inventing a gameplay scenario. Planned checks are not test results.
 
 Use this wording when explicitly creating a refinement task. The document
 does not itself create chats, scheduled work or implementation assignments.
+
+## Current implementation slice — 2026-10-13
+
+1. R-0012–R-0018 are authorized for implementation together: retained menu,
+   recovery save, two-map setup, French scenario content, existing screen
+   navigation and consistent equipment/unloading choices.
+2. This implements the same campaign-gate removal described by R-0001; do not
+   create a second implementation for the duplicate menu entry. Acceptance is documented in the [combined regression record](../functional-tests.md#free-play-implementation-2026-10-13).
+3. R-0019 onward remain separate refinements. Mock nation selection does not
+   implement national effects, and French scenario content does not establish
+   a complete economic AI.

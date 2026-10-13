@@ -15,6 +15,15 @@ This document compares MicroCol with the gameplay rules in the [downloaded Sid M
 
 The assessment covers the manual's gameplay chapters and all four reference cards. Findings combine reading the manual, tracing model/UI/AI/persistence paths, inspecting existing tests, and running the model test suite. No gameplay implementation was changed during the assessment. Exact formulas not supplied by the manual are recorded as open questions rather than filled from memory of the original game or another remake.
 
+Implementation follow-up, 2026-10-13: [R-0012–R-0018](functional-tests.md#free-play-implementation-2026-10-13)
+now implement the retained free-play menu, latest-position recovery save, two
+concrete map choices, a separate player display name, fixed French content and
+owned-colony keyboard entry. Colony equipment confirmation and stale-unload
+recovery passed the complete model/player regression. Nation selection remains an explicit preview;
+this slice does not implement national effects, difficulty profiles, European
+pier equipment or a complete rival economy. The historical rule assessment and
+full-UC acceptance states below remain distinct from these bounded changes.
+
 <a id="free-play-ui-audit-2026-10-13"></a>
 ## Free-play UI refinement — 2026-10-13
 

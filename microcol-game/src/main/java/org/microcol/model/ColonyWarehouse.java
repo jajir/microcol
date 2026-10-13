@@ -216,7 +216,7 @@ public class ColonyWarehouse {
         warehouse.put(goods.getType(), goods.getAmount());
     }
 
-    Goods getStorageCapacity(final GoodsType goodsType) {
+    public Goods getStorageCapacity(final GoodsType goodsType) {
         return Goods.of(goodsType,
                 getStorageCapacity(goodsType, getConstructionType()));
     }

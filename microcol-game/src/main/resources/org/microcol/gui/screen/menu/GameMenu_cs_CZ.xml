@@ -26,4 +26,18 @@
 	<entry key="campaignPanel_default_thrive">Rozkvět</entry>
 
 
+
+    <entry key="setupTitle">Nová neomezená hra</entry>
+    <entry key="setupMap">Mapa</entry>
+    <entry key="setupMapOriginal">Původní svět</entry>
+    <entry key="setupMapTwoIslands">Dva ostrovy</entry>
+    <entry key="setupNation">Národ – náhled</entry>
+    <entry key="setupNationDutch">Nizozemsko</entry>
+    <entry key="setupNationFrench">Francie</entry>
+    <entry key="setupNationEnglish">Anglie</entry>
+    <entry key="setupNationSpanish">Španělsko</entry>
+    <entry key="setupNationNote">Pouze náhled. Hrát budete za Nizozemsko.</entry>
+    <entry key="setupPlayerName">Jméno hráče</entry>
+    <entry key="setupNameError">Zadejte 1–64 znaků bez řídicích znaků.</entry>
+    <entry key="setupStart">Začít hru</entry>
 </properties>

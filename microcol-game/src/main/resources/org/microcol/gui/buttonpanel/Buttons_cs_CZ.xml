@@ -17,4 +17,6 @@
 	<entry key="buttonBuildColony">Vybudovat novou kolonii. (B)</entry>
 	<entry key="buttonDeclareIndependence">Vyhlásit nezávislost na králi.</entry>
 	
+    <entry key="buttonColonies">Kolonie (O)</entry>
+    <entry key="noColonies">Zatím nemáte žádnou kolonii</entry>
 </properties>

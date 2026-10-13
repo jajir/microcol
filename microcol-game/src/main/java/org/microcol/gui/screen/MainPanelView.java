@@ -13,6 +13,7 @@ import org.microcol.gui.screen.goals.ScreenGoals;
 import org.microcol.gui.screen.market.ScreenMarketBuy;
 import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.menu.ScreenFreePlay;
 import org.microcol.gui.screen.setting.ScreenSetting;
 import org.microcol.gui.screen.statistics.ScreenStatistics;
 import org.microcol.gui.screen.turnreport.ScreenTurnReport;
@@ -44,6 +45,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
     public MainPanelView(final ScreenGame screenGame,
             final ScreenMenu screenMenu, final ScreenCampaign screenCampaign,
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
+            final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy,
             final ScreenMarketSell screenMarketSell,
@@ -54,6 +56,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         mainBox = new VBox();
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));
+        screens.add(Preconditions.checkNotNull(screenFreePlay));
         screens.add(Preconditions.checkNotNull(screenCampaign));
         screens.add(Preconditions.checkNotNull(screenEurope));
         screens.add(Preconditions.checkNotNull(screenSetting));

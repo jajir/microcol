@@ -91,8 +91,26 @@ public abstract class AbstractScreen {
                 .getScene().getRoot();
         final Path output = Path.of("target", "warehouse-qa", fileName);
         Files.createDirectories(output.getParent());
+        // Snapshot layout otherwise uses the menu's oversized preferred
+        // dimensions.
+        final javafx.scene.image.WritableImage image = WaitForAsyncUtils
+                .waitForAsyncFx(5000, () -> {
+                    final javafx.scene.layout.Region region = (javafx.scene.layout.Region) root;
+                    final double width = root.getScene().getWidth();
+                    final double height = root.getScene().getHeight();
+                    final double preferredWidth = region.getPrefWidth();
+                    final double preferredHeight = region.getPrefHeight();
+                    try {
+                        region.setPrefSize(width, height);
+                        return root.getScene().snapshot(null);
+                    } finally {
+                        region.setPrefSize(preferredWidth, preferredHeight);
+                        region.resize(width, height);
+                        region.layout();
+                    }
+                });
         getRobot().robotContext().getCaptureSupport()
-                .saveImage(getRobot().capture(root).getImage(), output);
+                .saveImage(getRobot().capture(image).getImage(), output);
     }
 
     protected boolean isCssIdVisible(final String cssId) {

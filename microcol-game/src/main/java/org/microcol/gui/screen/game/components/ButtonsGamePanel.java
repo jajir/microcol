@@ -77,7 +77,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
 
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final ColoniesMenu coloniesMenu) {
         super(imageProvider, eventBus, Source.GAME, i18n);
 
         buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER,
@@ -144,6 +144,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonPlowField);
         getButtonPanel().getChildren().add(buttonMove);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
+        getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCenter);
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);

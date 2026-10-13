@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
+import org.microcol.model.Player;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 
@@ -45,6 +46,16 @@ public final class GameModelDao {
             final EventBus eventBus) {
         return makeFromModelPo(gameModelPoDao.loadFromClassPath(fileName),
                 eventBus);
+    }
+
+    public GameModel createFreePlay(final FreePlayMap map,
+            final String playerName, final EventBus eventBus) {
+        final String name = Player.normalizeDisplayName(playerName);
+        final GameModel game = loadFromClassPath(
+                Preconditions.checkNotNull(map).getResource(), eventBus);
+        game.getModel().getPlayers().stream().filter(Player::isHuman)
+                .findFirst().orElseThrow().setDisplayName(name);
+        return game;
     }
 
     private GameModel makeFromModelPo(final GameModelPo gameModelPo,

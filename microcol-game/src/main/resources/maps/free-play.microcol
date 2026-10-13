@@ -90,10 +90,371 @@
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
+      },
+      {
+        "id": 4,
+        "type": "COLONIST",
+        "ownerId": "France",
+        "placeColonyField": {},
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "availableMoves": 1,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false
+      },
+      {
+        "id": 5,
+        "type": "COLONIST",
+        "ownerId": "France",
+        "placeColonyField": {},
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "availableMoves": 1,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false
+      },
+      {
+        "id": 6,
+        "type": "COLONIST",
+        "ownerId": "France",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "availableMoves": 1,
+        "tools": 0,
+        "holdingGuns": true,
+        "mounted": false,
+        "placeMap": {
+          "location": {
+            "x": 17,
+            "y": 10
+          },
+          "orientation": "east"
+        }
       }
     ],
-    "nextColonyId": 0,
-    "colonies": [],
+    "nextColonyId": 2,
+    "colonies": [
+      {
+        "id": 0,
+        "name": "Quebec",
+        "ownerName": "France",
+        "location": {
+          "x": 17,
+          "y": 10
+        },
+        "colonyFields": [
+          {
+            "direction": {
+              "x": 0,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 0
+            },
+            "workerId": 4,
+            "producedGoodsType": "CORN"
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": -1
+            }
+          }
+        ],
+        "constructions": [
+          {
+            "type": "TOWN_HALL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "CARPENTERS_STAND",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BLACKSMITHS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "TOBACCONISTS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "WEAVERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "RUM_DISTILLERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "FUR_TRADERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BASIC_WAREHOUSE",
+            "slots": []
+          },
+          {
+            "type": "CHAPEL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          }
+        ],
+        "buildingQueue": [],
+        "colonyWarehouse": {
+          "COAT": 0,
+          "HAMMERS": 0,
+          "FUR": 0,
+          "ORE": 0,
+          "HORSE": 0,
+          "SILVER": 0,
+          "LUMBER": 50,
+          "RUM": 0,
+          "SUGAR": 0,
+          "TOBACCO": 0,
+          "SILK": 0,
+          "MUSKET": 50,
+          "CROSS": 0,
+          "CORN": 100,
+          "CIGARS": 0,
+          "GOODS": 0,
+          "BELL": 0,
+          "COTTON": 0,
+          "TOOLS": 50
+        }
+      },
+      {
+        "id": 1,
+        "name": "Montreal",
+        "ownerName": "France",
+        "location": {
+          "x": 17,
+          "y": 21
+        },
+        "colonyFields": [
+          {
+            "direction": {
+              "x": 0,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 0
+            },
+            "workerId": 5,
+            "producedGoodsType": "CORN"
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": -1
+            }
+          }
+        ],
+        "constructions": [
+          {
+            "type": "TOWN_HALL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "CARPENTERS_STAND",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BLACKSMITHS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "TOBACCONISTS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "WEAVERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "RUM_DISTILLERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "FUR_TRADERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BASIC_WAREHOUSE",
+            "slots": []
+          },
+          {
+            "type": "CHAPEL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          }
+        ],
+        "buildingQueue": [],
+        "colonyWarehouse": {
+          "COAT": 0,
+          "HAMMERS": 0,
+          "FUR": 0,
+          "ORE": 0,
+          "HORSE": 0,
+          "SILVER": 0,
+          "LUMBER": 50,
+          "RUM": 0,
+          "SUGAR": 0,
+          "TOBACCO": 0,
+          "SILK": 0,
+          "MUSKET": 50,
+          "CROSS": 0,
+          "CORN": 100,
+          "CIGARS": 0,
+          "GOODS": 0,
+          "BELL": 0,
+          "COTTON": 0,
+          "TOOLS": 50
+        }
+      }
+    ],
     "turnEvents": [],
     "map": {
       "tiles": [
@@ -188,7 +549,7 @@
           "kingsTaxPercentage": 0
         },
         {
-          "name": "Dutch\u0027s King",
+          "name": "Dutch's King",
           "computer": true,
           "gold": 1108,
           "declaredIndependence": false,
@@ -198,6 +559,29 @@
             "visible": []
           },
           "kingsTaxPercentage": 0
+        },
+        {
+          "name": "France",
+          "computer": true,
+          "gold": 2000,
+          "declaredIndependence": false,
+          "extraData": {},
+          "visible": {
+            "visible": []
+          },
+          "kingsTaxPercentage": 0
+        },
+        {
+          "name": "France's King",
+          "computer": true,
+          "gold": 1000,
+          "declaredIndependence": false,
+          "extraData": {},
+          "visible": {
+            "visible": []
+          },
+          "kingsTaxPercentage": 0,
+          "whosKingThisPlayerIs": "France"
         }
       ],
       "gameStarted": false

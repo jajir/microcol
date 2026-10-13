@@ -743,3 +743,58 @@ Lokální ověření na macOS/JDK 17:
    ani celé dotčené UC za implementované. Nové mapy, Francie, opravy menu,
    fog-of-war renderovací testy a chybějící pravidlové varianty se přijímají
    zvlášť podle jejich analýz.
+
+<a id="free-play-implementation-2026-10-13"></a>
+
+## Implementace R-0012–R-0018 — 2026-10-13
+
+1. **Ověřeno 13. října 2026:** implementace R-0012–R-0018 prošla úplnou
+   lokální regresí v Dockeru/JDK 17/Xvfb/Openbox. **705 herních testů
+   a 78 funkčních/kontrolních testů**, bez selhání, chyb nebo vynechání.
+   Zahrnutý ArchUnit nadále hlídá nezávislost modelu. Nativní macOS UI se
+   pro tuto přejímku nepoužilo.
+2. TC12 zachovává start po kampani. Sedm TC21 ověřuje nově také čistý profil,
+   aktuální pozici po návratu do menu, zrušení načítání, Settings Back bez modelu
+   a nabídku vlastních kolonií myší i přes O/šipky/Enter. Prohlížení nemění tah
+   ani zlato. TC23/TC_02 obnovuje poslední odjezd lodi, náklad a zbývající plavbu.
+3. Šest TC24/F15 pokrývá skutečné spuštění obou map, francouzské vlastnictví,
+   další tah a Continue, Back/Escape beze změny uložené hry, jméno o délce
+   0/64/65 znaků, české nastavení a vyloučení cizích měst z nabídky kolonií.
+   `PlayerDisplayNameTest` má šest kontrol Unicode/persistence;
+   `FreePlayMapsTest` dvě kontroly načtení, persistence a topologie ostrovů.
+4. Čtrnáct `ColonistEquipmentTest` a pět TC25/F17 ověřují náklady a vracení
+   vybavení, nedostatek zásob, plný sklad, zrušení, změnu nákladů, nedostupný
+   subjekt, opakovanou operaci a češtinu/klávesnici. TC19 má 18 scénářů:
+   TC_13 po změně 20→19 zruší aktualizovanou volbu, TC_18 ji výslovně potvrdí;
+   TC_14 po zániku kolonie vrací mapu. Žádná zamítnutá změna se neprovede částečně.
+5. První společný běh odhalil heap OOM: fixture po zavření okna neukončila
+   mapovou animaci. `MicroColApplication.stop()` nyní ukončí aktivní obrazovku
+   přes presenter a `AfterEach` volá stejný úklid. Stejný cílený příkaz poté
+   prošel všemi **32 kontrolami** (TC19/24/25 a page contract), bez skipů.
+   Limit paměti ani herní očekávání nebyly oslabeny. První úplný běh odhalil
+   také zastaralou přípravu `ColonyIdentityTest`: scénář nyní výslovně odstraní
+   přibalené soupeře/kolonie před ověřením prvního ID 0; původní aserce zůstaly.
+6. Úplná UI sada odhalila nepotvrzené dialogy v TC05/TC06/TC25. Přímý záznam
+   nativních událostí a fyzický snímek prokázaly chybu souřadnic: znovu otevřený
+   dialog ležel na (300, 317), ale JavaFX hlásilo (0, 0), takže klik mířil mimo něj.
+   `AbstractMessageWindow` nyní centruje až po zobrazení nativního okna a nepoužívá
+   pomocné otevření mimo obrazovku. Spekulativní změny testovacích kliků i dočasné
+   diagnostické výpisy byly odstraněny. Původní kliknutí a herní aserce zůstaly;
+   následná cílená i úplná regrese prošly.
+7. JavaFX snapshot u hlavního menu přepočítával obrovskou preferovanou plochu.
+   Testovací helper po dobu snímku použije skutečné rozměry scény a původní
+   preference i rozměry obnoví v `finally`. Český/anglický setup a dialogy
+   vybavení byly vizuálně zkontrolovány: text, náklady a tlačítka jsou celé vidět.
+   Po snímku pokračují skutečné hráčské akce. Produkční rozložení starého menu
+   se kvůli snímkům neměnilo.
+8. Úplný příkaz: `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`.
+   Log: `target/r12-r18/docker-full.log`; XML a snímky:
+   `target/docker-ui/run-AMGZOF/`. Prošel sdílený Java formatter včetně kontroly
+   zachování tokenů a idempotence, devět dokumentačních kontrol a strict MkDocs.
+   Dílčí logy, odmítnuté lokální výstupy a opravy jsou v
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r*-*/`.
+9. Toto je přijetí uvedeného rozsahu, nikoli celé matice národů/obtížností,
+   kompletní ekonomické AI nebo všech UC. Výběr národa zůstává výslovně náhledem.
+   Zveřejnění této revize musí potvrdit její [vývojový workflow](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
+   a manifest [kanálu dev](https://github.com/jajir/microcol/releases/tag/dev);
+   samotný lokální výsledek publikaci nedokládá.

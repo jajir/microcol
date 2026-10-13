@@ -192,3 +192,9 @@
 #colonyName:hover, #colonyName:focused {
     -fx-underline: true;
 }
+
+.unitInPort:focused {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-border-insets: -2;
+}

@@ -6,12 +6,15 @@ import org.microcol.model.campaign.CampaignNames;
 
 public enum GameMenu implements MessageKeyResource {
 
-    mainMenu, buttonContinue, buttonLoadSave, buttonPlayCampaign,
-    buttonFreeGame, buttonExitMicroCol, buttonSetting, settingTitle, buttonBack,
-    campaignTitle, settingLanguage, settingLanguageCz, settingLanguageEn,
-    settingShowGrid, settingShowFightAdvisor, settingVersion,
-    campaignPanelButtonBack, campaignPanel_default_findNewWorld,
-    campaignPanel_default_buildArmy, campaignPanel_default_thrive;
+    setupTitle, setupMap, setupMapOriginal, setupMapTwoIslands, setupNation,
+    setupNationDutch, setupNationFrench, setupNationEnglish, setupNationSpanish,
+    setupNationNote, setupPlayerName, setupNameError, setupStart, mainMenu,
+    buttonContinue, buttonLoadSave, buttonPlayCampaign, buttonFreeGame,
+    buttonExitMicroCol, buttonSetting, settingTitle, buttonBack, campaignTitle,
+    settingLanguage, settingLanguageCz, settingLanguageEn, settingShowGrid,
+    settingShowFightAdvisor, settingVersion, campaignPanelButtonBack,
+    campaignPanel_default_findNewWorld, campaignPanel_default_buildArmy,
+    campaignPanel_default_thrive;
 
     public static GameMenu get(final CampaignName campaignName,
             final String missionName) {

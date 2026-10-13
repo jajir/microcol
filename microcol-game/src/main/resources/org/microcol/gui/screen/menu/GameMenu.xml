@@ -27,4 +27,18 @@
 	<entry key="campaignPanel_default_thrive">Thrive</entry>
 	
 
+
+    <entry key="setupTitle">New free play game</entry>
+    <entry key="setupMap">Map</entry>
+    <entry key="setupMapOriginal">Original world</entry>
+    <entry key="setupMapTwoIslands">Two islands</entry>
+    <entry key="setupNation">Nation preview</entry>
+    <entry key="setupNationDutch">Netherlands</entry>
+    <entry key="setupNationFrench">France</entry>
+    <entry key="setupNationEnglish">England</entry>
+    <entry key="setupNationSpanish">Spain</entry>
+    <entry key="setupNationNote">Preview only. You will play as the Netherlands.</entry>
+    <entry key="setupPlayerName">Player name</entry>
+    <entry key="setupNameError">Enter 1–64 characters without control characters.</entry>
+    <entry key="setupStart">Start game</entry>
 </properties>

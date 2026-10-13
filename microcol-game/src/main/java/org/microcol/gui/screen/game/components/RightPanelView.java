@@ -163,7 +163,7 @@ public final class RightPanelView implements JavaFxComponent {
         StringBuilder sb = new StringBuilder(200);
         sb.append(i18n.get(Loc.unitsPanel_currentUser));
         sb.append(" ");
-        sb.append(player.getName());
+        sb.append(player.getDisplayName());
         Platform.runLater(() -> {
             labelOnMove.setText(sb.toString());
         });

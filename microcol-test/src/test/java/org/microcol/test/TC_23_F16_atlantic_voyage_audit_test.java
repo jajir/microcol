@@ -39,7 +39,7 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_02_menu_keeps_previous_snapshot() throws Exception {
+    void TC_02_menu_preserves_latest_departure() throws Exception {
         // This profile starts with a known autosave, making Continue available.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
@@ -48,12 +48,14 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         game.dragMouseAtLocation(LANE);
         new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
 
-        // Menu entry does not save departure; Continue restores the prior map.
+        // Menu entry saves departure; Continue restores the same voyage and
+        // cargo.
         game.exitToMenu().verifyMainScreen();
-        audit.verifyAutosaveUnchanged(saved);
+        audit.verifyAutosaveChanged(saved);
         audit.verifyContinueButtonEnabled(true);
         game = audit.continueGame();
-        game.verifyNumberOfUnitsAt(START, 1);
+        game.verifyNumberOfUnitsAt(START, 0);
+        new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
         new AtlanticAuditPage(getContext()).verifyCargo();
     }
 

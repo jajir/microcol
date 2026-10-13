@@ -85,6 +85,13 @@ public abstract class AbstractMicroColTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    @org.junit.jupiter.api.AfterEach
+    void stopApplication() {
+        if (context != null) {
+            context.getRobot().interact(() -> getMicroCol().stop());
+        }
+    }
+
     /**
      * Method that initialize MicroCol game.
      * <p>

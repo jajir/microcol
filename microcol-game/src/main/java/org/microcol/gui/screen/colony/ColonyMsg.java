@@ -7,6 +7,9 @@ public enum ColonyMsg implements MessageKeyResource {
     goods, buttonClose, colonyName, unloadCaption, unloadLimited, unloadFull,
     unloadChanged, nameLabel, nameGenerate, nameCancel, nameFound, nameRename,
     nameSave, nameEMPTY, nameTOO_LONG, nameINVALID, nameDUPLICATE, nameChanged,
-    nameCannotFound;
+    nameCannotFound, equipmentOpen, equipMuskets, unequipMuskets, equipHorses,
+    unequipHorses, equipTools, unequipTools, equipmentConfirm, equipmentCancel,
+    equipmentCost, equipmentReturn, equipmentChanged, equipmentUNIT_UNAVAILABLE,
+    equipmentALREADY_SET, equipmentMISSING_GOODS, equipmentSTORAGE_FULL;
 
 }

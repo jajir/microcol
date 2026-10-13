@@ -7,7 +7,8 @@
  * ArchUnit forbids production dependencies on other game packages, including
  * GUI, AI and localization services. Model owns immutable colony IDs, unique
  * normalized names and permission checks; rename never changes identity or
- * assignments.
+ * assignments. Validated player display names are separate from nation keys
+ * used by ownership and kings.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

@@ -441,6 +441,14 @@ odborník, vůz nebo stavební fronta neznamenají úspěšnou přejímku těcht
 stavy celých UC se tímto auditem neuzavírají. Původní cílová očekávání v tabulkách
 zůstávají zachována, jednotlivé opravy vlastní R-0018 a R-0020–R-0025.
 
+Navazující [implementace R-0012–R-0018](functional-tests.md#free-play-implementation-2026-10-13)
+rozšiřuje důkazy: TC24 pokrývá dvě konkrétní mapy, jméno hráče, francouzské
+vlastnictví a návraty v UC-001/002/004/115; TC25 pokrývá kolonijní vybavení,
+vrácení zásob a odezvu příkazů v UC-114/119. TC19/TC_13/TC_18 ověřují novou
+volbu po změně množství. TC21/TC23 nyní vyžadují poslední uloženou pozici,
+nikoli původně pozorovanou ztrátu pohybu. Úplná regrese této implementace prošla;
+tyto omezené cesty neuzavírají celé UC ani matici národů a obtížností.
+
 Historicky dne 12. října byly kontroly počtu lodí přesunuty z page component do samotných
 TC01 a obou scénářů TC06. TC01 souvisí s UC-024/025 (přeprava jednotek), TC06
 s UC-055/056 (nákup lodě a obchod). Tento přesun zachovává původní očekávání

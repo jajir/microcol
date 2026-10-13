@@ -10,6 +10,7 @@ import org.microcol.gui.screen.goals.ScreenGoals;
 import org.microcol.gui.screen.market.ScreenMarketBuy;
 import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.menu.ScreenFreePlay;
 import org.microcol.gui.screen.setting.ScreenSetting;
 import org.microcol.gui.screen.statistics.ScreenStatistics;
 import org.microcol.gui.screen.turnreport.ScreenTurnReport;
@@ -48,6 +49,7 @@ public final class MainPanelPresenter {
             final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign,
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
+            final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy,
             final ScreenMarketSell screenMarketSell,
@@ -81,6 +83,11 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.SETTING == event.getScreen()) {
                         return screenSetting;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.FREE_PLAY_SETUP == event.getScreen()) {
+                        return screenFreePlay;
                     }
                     return null;
                 }, event -> {
@@ -136,6 +143,11 @@ public final class MainPanelPresenter {
         beforeShow(screen);
         view.showScreen(screen);
         shownScreen = screen;
+    }
+
+    public void stop() {
+        beforeHide(shownScreen);
+        shownScreen = null;
     }
 
     private void beforeShow(final GameScreen screen) {

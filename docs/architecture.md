@@ -72,7 +72,7 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 | [model.event](../microcol-game/src/main/java/org/microcol/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
 | [model.turnevent](../microcol-game/src/main/java/org/microcol/model/turnevent/) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. |
 | [model.store](../microcol-game/src/main/java/org/microcol/model/store/) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
-| [model.campaign](../microcol-game/src/main/java/org/microcol/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
+| [model.campaign](../microcol-game/src/main/java/org/microcol/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
 | [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; `PersistingTool` vlastní adresář a názvy save souborů i příponu. Nespouštět zde herní akce ani dialogy. |
 | [model.campaign.store](../microcol-game/src/main/java/org/microcol/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
 | [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
@@ -81,6 +81,13 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 ## Uživatelské rozhraní a podpůrné služby
 
 ### Identita kolonií a textové vstupy
+
+Implementace R-0014 odděluje `Player.getDisplayName()` od neměnného
+`Player.getName()` používaného jako klíč národa/vlastnictví. Zobrazované jméno
+se ukládá v existujícím `extraData`; validaci vlastní model a nastavení ji
+používá před spuštěním. Náhled národa nepřepisuje identitu Nizozemska.
+Modelové a hráčské cesty prošly úplnou Docker regresí; viz [evidence](functional-tests.md#free-play-implementation-2026-10-13).
+
 
 Kontrakt [Z02](implementation-plan.md#z02-zalozeni-pojmenovane-kolonie)
 odděluje neměnné ID kolonie od upravitelného jména. `Model` vlastní
@@ -119,7 +126,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 
 | Balíček | Konkrétní odpovědnost |
 | --- | --- |
-| [gui.screen](../microcol-game/src/main/java/org/microcol/gui/screen/) | Volba obrazovky, životní cyklus a hlavní kontejner. |
+| [gui.screen](../microcol-game/src/main/java/org/microcol/gui/screen/) | Volba obrazovky, životní cyklus a hlavní kontejner. `MainPanelPresenter.stop()` ukončí aktuální obrazovku při JavaFX shutdownu; testovací fixture stejný úklid volá po každém scénáři. |
 | [gui.screen.game](../microcol-game/src/main/java/org/microcol/gui/screen/game/) | Sestavení herní obrazovky a její klávesové vstupy. |
 | [gui.screen.game.components](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/) | Pravý panel, tlačítka, stavový řádek a údaje o poli a jednotkách. |
 | [gui.screen.game.gamepanel](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/) | Canvas mapy, viditelná oblast, výběr, kurzor, posun, zvýraznění cesty a animace. |
@@ -131,7 +138,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
 | [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik a grafů. |
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. |
-| [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu a navigace. |
+| [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |
 | [gui.screen.colonizopedia](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/) | Herní nápověda. |
 | [gui.screen.editor](../microcol-game/src/main/java/org/microcol/gui/screen/editor/) | Nástroje pro editaci mapového podkladu a jeho PO dat. Editor záměrně mění mapu mimo běžné herní tahy; tato cesta není vzorem provádění akcí hráče či AI. |
@@ -211,3 +218,15 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    Potřebné kontroly určuje [funkční kontrakt](functional-tests.md).
 5. Při odstranění zdokumentovaného přesahu aktualizovat jeho řádek;
    neudržovat druhou odlišnou mapu v zadáních, README nebo agentích instrukcích.
+
+### Vybavení kolonisty — ověřeno 13. 10. 2026
+
+1. `UnitFreeColonist` vlastní důvod nedostupnosti, náhled změn zásob a úplnou
+   validaci před vybavením i vrácením vybavení. `ColonyWarehouse` poskytuje
+   kapacitu skladu; UI nepočítá vlastní limity. Kladné hodnoty náhledu znamenají
+   vrácené zboží, záporné spotřebu.
+2. `DialogEquipment` zobrazuje náhled a při změně zásob vyžaduje nové potvrzení.
+   Konkrétní změnu stále provádí existující modelová operace. Přesun do pracovního
+   místa musí ověřit cíl před automatickým vrácením vybavení.
+3. Tato změna je součástí [R-0017](requirements/R-0017.md). Modelové hranice a hráčské cesty prošly
+   [úplnou regresí](functional-tests.md#free-play-implementation-2026-10-13).

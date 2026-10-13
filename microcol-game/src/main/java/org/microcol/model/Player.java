@@ -47,6 +47,9 @@ public abstract class Player {
         this.gold = initialGold;
         this.declaredIndependence = declaredIndependence;
         this.extraData.putAll(Preconditions.checkNotNull(extraData));
+        if (this.extraData.containsKey("displayName")) {
+            getDisplayName();
+        }
         this.visibility = new Visibility(
                 Preconditions.checkNotNull(visible, "Visible is null"));
     }
@@ -100,6 +103,34 @@ public abstract class Player {
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),
                 model.getMap().getMaxLocationY());
         return out;
+    }
+
+    public static String normalizeDisplayName(final String value) {
+        final String normalized = ColonyNames.normalize(value);
+        Preconditions.checkArgument(!normalized.isEmpty(),
+                "Name cannot be empty");
+        Preconditions.checkArgument(Character.codePointCount(normalized, 0,
+                normalized.length()) <= 64, "Name too long");
+        Preconditions.checkArgument(
+                normalized.codePoints()
+                        .noneMatch(point -> Character.isISOControl(point)
+                                || (point >= 0xD800 && point <= 0xDFFF)),
+                "Name contains invalid code points");
+        return normalized;
+    }
+
+    public void setDisplayName(final String value) {
+        extraData.put("displayName", normalizeDisplayName(value));
+    }
+
+    public String getDisplayName() {
+        if (!extraData.containsKey("displayName")) {
+            return name;
+        }
+        Object value = extraData.get("displayName");
+        Preconditions.checkArgument(value instanceof String,
+                "Invalid display name");
+        return normalizeDisplayName((String) value);
     }
 
     public String getName() {

@@ -9,6 +9,7 @@ import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.GameModelDao;
+import org.microcol.model.campaign.FreePlayMap;
 import org.microcol.model.campaign.MissionName;
 
 import com.google.common.base.Preconditions;
@@ -47,6 +48,10 @@ public final class GameController {
 
     public void loadModelFromFile(final File sourceFile) {
         startMission(gameModelDao.loadFromFile(sourceFile, eventBus));
+    }
+
+    public void startFreePlay(final FreePlayMap map, final String playerName) {
+        startMission(gameModelDao.createFreePlay(map, playerName, eventBus));
     }
 
     public void startCampaignMission(final CampaignName campaignName,

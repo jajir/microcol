@@ -19,11 +19,15 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
     private final MenuHolderPanel menuHolderPanel;
 
     private final ButtonsPanelView buttonsPanelView;
+    private final ButtonsPanelPresenter buttonsPanelPresenter;
 
     @Inject
     ScreenMenu(final ButtonsPanelView buttonsPanelView,
-            final MenuHolderPanel menuHolderPanel) {
+            final MenuHolderPanel menuHolderPanel,
+            final ButtonsPanelPresenter buttonsPanelPresenter) {
         this.buttonsPanelView = Preconditions.checkNotNull(buttonsPanelView);
+        this.buttonsPanelPresenter = Preconditions
+                .checkNotNull(buttonsPanelPresenter);
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         menuHolderPanel.getContent().getStylesheets()
                 .add(STYLE_SHEET_GAME_MENU);
@@ -43,6 +47,7 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
 
     @Override
     public void beforeShow() {
+        buttonsPanelPresenter.refresh();
         menuHolderPanel.beforeShow();
     }
 

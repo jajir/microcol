@@ -87,6 +87,14 @@ public final class MicroColApplication extends Application {
         }
     }
 
+    @Override
+    public void stop() {
+        if (injector != null) {
+            injector.getInstance(
+                    org.microcol.gui.screen.MainPanelPresenter.class).stop();
+        }
+    }
+
     public Injector getInjector() {
         return Preconditions.checkNotNull(injector, "Guice injector is null");
     }

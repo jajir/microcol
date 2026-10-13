@@ -206,3 +206,9 @@ $row-4: $row-3 + $row-height + $row-gap;
 	visibility: hidden;
 }
 
+
+.unitInPort:focused {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-border-insets: -2;
+}

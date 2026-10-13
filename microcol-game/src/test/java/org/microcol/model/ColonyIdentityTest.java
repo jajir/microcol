@@ -127,6 +127,10 @@ class ColonyIdentityTest {
     void firstColonyStartsAtZeroAndExhaustionCannotWrap() {
         final ModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol").getModel();
+        // This case needs an empty world, independent of bundled opponents.
+        data.getColonies().clear();
+        data.getUnits().removeIf(unit -> !"Dutch".equals(unit.getOwnerId()));
+        data.setNextColonyId(0);
         data.getGameManager().setGameStarted(true);
         data.getGameManager().setCurrentPlayer("Dutch");
         data.getUnits().get(0).setAvailableMoves(1);

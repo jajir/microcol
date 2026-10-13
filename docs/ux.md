@@ -146,3 +146,21 @@ Pravidla lze průběžně upřesňovat podle ověřených zkušeností. Při zm�
 Při založení stránky **11. října 2026** byly zkontrolovány uvedené zdrojové vazby. Nebyl proveden nový průchod běžící hrou ani test s hráči; první scénář a seznam hypotéz zůstávají připravené k budoucímu ověření.
 
 Dokumentace byla téhož dne ověřena přísným sestavením `target/docs-venv/bin/python -m mkdocs build --strict`, kontrolou odkazů a vizuálním náhledem.
+
+## Volná hra a vybavení — 13. října 2026
+
+1. Nová volná hra otevírá nastavení se dvěma skutečnými mapami a samostatným
+   zobrazovaným jménem hráče. Výběr národa výslovně uvádí, že jde o náhled bez
+   změny skutečného vlastníka. Back/Escape zachovává existující uložení.
+2. Nabídka Kolonie (O) uvádí pouze vlastní kolonie. Myš a šipky/Enter otevírají
+   stejnou obrazovku; Escape vrací hráče zpět. Samotné prohlížení nemění tah ani
+   zlato. Dílčí TC21 a TC24 tyto cesty ověřily.
+3. Kontextové menu kolonisty nabízí vybavení i při nedostatku zboží. Dialog
+   ukazuje spotřebu, vracené zboží a textový důvod nedostupnosti. Přístup zůstává
+   pravým tlačítkem nebo Shift+F10; nápověda a obrys označují klávesové zaměření.
+   Při změně množství vyžaduje aktualizovaná volba nové potvrzení.
+4. Sdílený dialog se centruje až po zobrazení nativního okna. Opakované otevření
+   nesmí ponechat jiné souřadnice v JavaFX než na obrazovce; stejná tlačítka musí
+   fungovat i při druhém a dalším potvrzení. Cílené TC05/TC06/TC25 po opravě prošly.
+5. Toto jsou implementační rozhodnutí a automaticky ověřované cesty,
+   nikoli výsledky uživatelské studie. Přijetí a kontrola snímků obrazovek jsou doložené v [záznamu implementace](functional-tests.md#free-play-implementation-2026-10-13).

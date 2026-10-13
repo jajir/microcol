@@ -34,6 +34,33 @@ public final class FreePlayAuditPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void openColonyMenu() {
+        getRobot().clickOn("#coloniesMenu");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void chooseColony(final String name) {
+        getRobot().clickOn(name);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyColonyMenu(final String... expectedNames) {
+        assertEquals(java.util.Set.of(expectedNames),
+                getListOfNodes(".context-menu .label").stream()
+                        .filter(node -> node instanceof Label)
+                        .map(node -> ((Label) node).getText())
+                        .filter(text -> !text.isEmpty())
+                        .collect(Collectors.toSet()));
+    }
+
+    public void verifyCalendarAndGold(final int expectedTurns,
+            final int expectedGold) {
+        assertEquals(expectedTurns,
+                getModel().getCalendar().getNumberOfPlayedTurns());
+        assertEquals(expectedGold,
+                getModel().getPlayerByName("Dutch").getGold());
+    }
+
     public void openStatistics() {
         clickOnButtonWithId("statistics");
     }
@@ -69,16 +96,31 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return GamePage.of(getContext());
     }
 
+    public void cancelLoadChooser() {
+        org.mockito.Mockito
+                .when(getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.FileSelectingService.class)
+                        .loadFile(org.mockito.Mockito.any(java.io.File.class)))
+                .thenReturn(null);
+        clickOnButtonWithId("buttonLoad");
+    }
+
     public byte[] readAutosave() throws Exception {
         return Files.readAllBytes(
                 getContext().getClassFromGuice(PersistingTool.class)
                         .getAutoSaveFile().toPath());
     }
 
+    public void verifyAutosaveChanged(final byte[] previous) throws Exception {
+        assertFalse(java.util.Arrays.equals(previous, readAutosave()),
+                "Menu entry must save the latest position");
+    }
+
     public void verifyAutosaveUnchanged(final byte[] previous)
             throws Exception {
         assertArrayEquals(previous, readAutosave(),
-                "Baseline does not save on menu entry");
+                "Navigation must preserve the recovery save");
     }
 
     public void clickPierColonist(final MouseButton button) {

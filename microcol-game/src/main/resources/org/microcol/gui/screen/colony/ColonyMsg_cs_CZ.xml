@@ -26,4 +26,20 @@
 	<entry key="nameChanged">Kolonie nebo zakládající jednotka se změnila. Nic se nezměnilo. Zrušte dialog a zkuste to znovu.</entry>
 
     <entry key="nameCannotFound">Vyberte kolonistu se zbývajícím pohybem na volném poli mimo sousedství kolonií.</entry>
+    <entry key="equipmentOpen">Vybavení kolonisty: pravé tlačítko nebo Shift+F10</entry>
+    <entry key="equipMuskets">Vybavit mušketami</entry>
+    <entry key="unequipMuskets">Vrátit muškety</entry>
+    <entry key="equipHorses">Osedlat koně</entry>
+    <entry key="unequipHorses">Vrátit koně</entry>
+    <entry key="equipTools">Vybavit nářadím</entry>
+    <entry key="unequipTools">Vrátit nářadí</entry>
+    <entry key="equipmentConfirm">Potvrdit</entry>
+    <entry key="equipmentCancel">Zrušit</entry>
+    <entry key="equipmentCost">Potřeba: %s %s</entry>
+    <entry key="equipmentReturn">Vráceno do skladu: %s %s</entry>
+    <entry key="equipmentChanged">Dostupné zboží se změnilo. Zkontrolujte aktualizovanou volbu a znovu potvrďte, nebo ji zrušte.</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">Tento kolonista již není dostupný u vaší kolonie ve vašem tahu. Nic se nezměnilo. Zavřete volbu a znovu vyberte kolonistu.</entry>
+    <entry key="equipmentALREADY_SET">Stav vybavení se již změnil. Nic se nezměnilo. Zrušte volbu a vyberte znovu.</entry>
+    <entry key="equipmentMISSING_GOODS">Ve skladu není dostatek zboží. Zrušte volbu a obstarejte potřebné zboží.</entry>
+    <entry key="equipmentSTORAGE_FULL">Vracené vybavení se nevejde do skladu. Zrušte volbu a nejprve uvolněte místo.</entry>
 </properties>

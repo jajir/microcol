@@ -135,29 +135,54 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private void unload(final ColonyWarehouse target, final Goods originalGoods,
             final CargoSlot fromCargoSlot, final boolean partialTransfer) {
-        try {
-            final Goods available = target.getUnloadableGoods(originalGoods,
-                    fromCargoSlot);
-            if (available.isZero()) {
-                transferWarning.show(i18n.get(ColonyMsg.unloadFull));
-            } else {
-                final Goods goods = adjustedAmount(originalGoods, available,
-                        partialTransfer);
-                if (!goods.isZero()) {
-                    // A modal dialog can process events that change either
-                    // inventory.
-                    if (target.getUnloadableGoods(goods, fromCargoSlot)
-                            .equals(goods)) {
-                        target.moveToWarehouse(goods, fromCargoSlot);
-                    } else {
-                        transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
-                    }
+        Goods requested = originalGoods;
+        boolean refreshed = false;
+        while (true) {
+            final Goods available;
+            try {
+                available = target.getUnloadableGoods(requested, fromCargoSlot);
+            } catch (final IllegalArgumentException ex) {
+                if (!refreshed) {
+                    transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
                 }
+                break;
             }
-        } catch (final IllegalArgumentException ex) {
+            if (available.isZero()) {
+                if (!refreshed) {
+                    transferWarning.show(i18n.get(ColonyMsg.unloadFull));
+                }
+                break;
+            }
+            final Goods chosen = adjustedAmount(requested, available,
+                    partialTransfer || refreshed);
+            if (chosen.isZero()) {
+                break;
+            }
+            try {
+                if (target.getUnloadableGoods(chosen, fromCargoSlot)
+                        .equals(chosen)) {
+                    target.moveToWarehouse(chosen, fromCargoSlot);
+                    break;
+                }
+            } catch (final IllegalArgumentException ex) {
+                // The modal choice may outlive its source or destination.
+            }
             transferWarning.show(i18n.get(ColonyMsg.unloadChanged));
+            final java.util.Optional<Goods> current = fromCargoSlot.getGoods();
+            if (current.isEmpty() || !current.get().getType()
+                    .equals(originalGoods.getType())) {
+                break;
+            }
+            requested = current.get();
+            refreshed = true;
         }
-        eventBus.post(new RepaintColonyEvent());
+        if (gameModelController.getModel().getColonies().stream()
+                .noneMatch(colony -> colony.getWarehouse() == target)) {
+            eventBus.post(new org.microcol.gui.screen.ShowScreenEvent(
+                    org.microcol.gui.screen.Screen.GAME));
+        } else {
+            eventBus.post(new RepaintColonyEvent());
+        }
     }
 
     private Goods adjustedAmount(final Goods originalAmount,

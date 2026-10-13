@@ -746,15 +746,7 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToColonyStructureSlot(
             final ConstructionSlot structureSlot) {
-        Preconditions.checkNotNull(structureSlot);
-        Preconditions.checkState(!isAtEuropePort(),
-                "Unit can't skip from europe port to map");
-        Preconditions.checkState(!isAtEuropePier(),
-                "Unit can't skip from europe port pier to map");
-        Preconditions.checkState(structureSlot.isEmpty(),
-                "Unit can't be placed to non empty colony structure");
-        Preconditions.checkState(structureSlot.isValid(),
-                "Unit can't be placed to already destroyed colony");
+        validateColonyStructureSlot(structureSlot);
         if (isAlreadyInSameColony(structureSlot.getColony())) {
             place.destroySimple();
         } else {
@@ -767,6 +759,31 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
+        validateColonyField(colonyField, producedGoodsType);
+        if (isAlreadyInSameColony(colonyField.getColony())) {
+            place.destroySimple();
+        } else {
+            place.destroy();
+        }
+        place = new PlaceColonyField(this, colonyField, producedGoodsType);
+        colonyField.setPlaceColonyField((PlaceColonyField) place);
+    }
+
+    protected void validateColonyStructureSlot(
+            final ConstructionSlot structureSlot) {
+        Preconditions.checkNotNull(structureSlot);
+        Preconditions.checkState(!isAtEuropePort(),
+                "Unit can't skip from europe port to map");
+        Preconditions.checkState(!isAtEuropePier(),
+                "Unit can't skip from europe port pier to map");
+        Preconditions.checkState(structureSlot.isEmpty(),
+                "Unit can't be placed to non empty colony structure");
+        Preconditions.checkState(structureSlot.isValid(),
+                "Unit can't be placed to already destroyed colony");
+    }
+
+    protected void validateColonyField(final ColonyField colonyField,
+            final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
@@ -776,13 +793,9 @@ public abstract class AbstractUnit implements Unit {
                 "Unit can't be placed to non empty colony field");
         Preconditions.checkState(colonyField.isValid(),
                 "Unit can't be placed to already destroyed colony");
-        if (isAlreadyInSameColony(colonyField.getColony())) {
-            place.destroySimple();
-        } else {
-            place.destroy();
-        }
-        place = new PlaceColonyField(this, colonyField, producedGoodsType);
-        colonyField.setPlaceColonyField((PlaceColonyField) place);
+        Preconditions.checkNotNull(producedGoodsType);
+        Preconditions.checkArgument(colonyField.canProduce(producedGoodsType),
+                "Field cannot produce requested goods");
     }
 
     private boolean isAlreadyInSameColony(

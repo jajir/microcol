@@ -17,10 +17,6 @@ import javafx.stage.StageStyle;
  */
 public abstract class AbstractMessageWindow implements UpdatableLanguage {
 
-    private final static double OFFSCREEN_X = 10000;
-
-    private final static double OFFSCREEN_Y = 10000;
-
     private final ViewUtil viewUtil;
 
     private final Stage stageDialog;
@@ -35,6 +31,10 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
         stageDialog = new Stage(StageStyle.UNDECORATED);
         stageDialog.initModality(Modality.WINDOW_MODAL);
         stageDialog.initOwner(viewUtil.getPrimaryStage());
+        // A reopened native window must exist before its position is assigned.
+        stageDialog.setOnShown(event -> javafx.application.Platform
+                .runLater(() -> centerStage(stageDialog, stageDialog.getWidth(),
+                        stageDialog.getHeight())));
     }
 
     @Override
@@ -44,20 +44,6 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
 
     public void showAndWait() {
         updateLanguage(i18n);
-        /**
-         * Following code show dialog centered to parent window.
-         * <p>
-         * By default are dialogs centered on main screen.
-         * </p>
-         */
-        if (Double.isNaN(stageDialog.getWidth())
-                || Double.isNaN(stageDialog.getHeight())) {
-            placeStageAt(stageDialog, OFFSCREEN_X, OFFSCREEN_Y);
-            stageDialog.show();
-            stageDialog.hide();
-        }
-        centerStage(stageDialog, stageDialog.getWidth(),
-                stageDialog.getHeight());
         stageDialog.showAndWait();
     }
 

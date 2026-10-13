@@ -554,3 +554,15 @@ zakladatelů; stránka tahu byla zkontrolována i vizuálně. Úplné rozebrán�
 228 položek a čtyř karet zůstává doložené v původním rozboru.
 Nevznikla nová implementace herních funkcí ani nové pozorování hráčů.
 Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
+
+## Implementační řez R-0012–R-0018 — 13. října 2026
+
+1. Uživatel schválil společnou implementaci zachovaného menu A01, malého
+   nastavení A02, přístupu k obrazovkám a odezvy A03 a obnovení pozice A04.
+   Odstranění podmínky kampaně současně naplňuje stejný rozsah R-0001.
+2. Model vlastní jméno hráče, herní obsah map a úplnou validaci vybavení.
+   Obrazovky využívají jeho náhledy; nevzniká druhý systém pravidel nebo nový
+   univerzální systém příkazů. Francii řídí dosavadní AI.
+3. Stav implementace a dílčí důkazy jsou v [funkčním záznamu](functional-tests.md#free-play-implementation-2026-10-13).
+   Závěrečná regrese prošla; publikaci potvrzuje vývojové workflow. Žádný další požadavek se tím
+   automaticky neposouvá do implementace; R-0019 a vyšší zůstávají samostatné.

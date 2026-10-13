@@ -26,4 +26,20 @@
 	<entry key="nameChanged">The colony or founding unit changed. Nothing was changed. Cancel and try again.</entry>
 
     <entry key="nameCannotFound">Select a colonist with movement remaining on an unoccupied tile away from existing colonies.</entry>
+    <entry key="equipmentOpen">Colonist equipment: right-click or Shift+F10</entry>
+    <entry key="equipMuskets">Equip with muskets</entry>
+    <entry key="unequipMuskets">Return muskets</entry>
+    <entry key="equipHorses">Mount horses</entry>
+    <entry key="unequipHorses">Return horses</entry>
+    <entry key="equipTools">Equip with tools</entry>
+    <entry key="unequipTools">Return tools</entry>
+    <entry key="equipmentConfirm">Confirm</entry>
+    <entry key="equipmentCancel">Cancel</entry>
+    <entry key="equipmentCost">Required: %s %s</entry>
+    <entry key="equipmentReturn">Returned to storage: %s %s</entry>
+    <entry key="equipmentChanged">The available goods changed. Review the updated choice and confirm again or cancel.</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">This colonist is no longer available at your colony on your turn. Nothing was changed. Cancel and select the colonist again.</entry>
+    <entry key="equipmentALREADY_SET">This equipment state has already changed. Nothing was changed. Cancel and choose again.</entry>
+    <entry key="equipmentMISSING_GOODS">Not enough goods in the warehouse. Cancel and obtain the required goods.</entry>
+    <entry key="equipmentSTORAGE_FULL">Returned equipment will not fit in the warehouse. Cancel and free storage first.</entry>
 </properties>

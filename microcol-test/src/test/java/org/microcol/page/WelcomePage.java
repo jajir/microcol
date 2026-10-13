@@ -36,8 +36,12 @@ public class WelcomePage extends AbstractMenuScreen {
     }
 
     public GamePage startFreeGame() {
+        return openFreePlaySetup().start();
+    }
+
+    public FreePlaySetupPage openFreePlaySetup() {
         clickOnButtonWithId(ButtonsPanelView.BUTTON_START_FREE_GAME_ID);
-        return GamePage.of(getContext());
+        return new FreePlaySetupPage(getContext());
     }
 
 }

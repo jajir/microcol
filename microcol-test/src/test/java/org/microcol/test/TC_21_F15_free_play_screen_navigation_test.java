@@ -41,6 +41,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         europe = game.openEuroperPortByPressingKey();
         europe.verifyGold(10000);
         new FreePlayAuditPage(getContext()).closeWithEscape();
+        new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
     }
 
     @Test
@@ -57,6 +58,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.press(KeyCode.T);
         ScreenTurnReport.of(getContext()).verifyReady();
         audit.closeWithEscape();
+        audit.verifyCalendarAndGold(18, 10000);
     }
 
     @Test
@@ -72,6 +74,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.press(KeyCode.R);
         audit.verifyReportScreen("Gold");
         audit.closeWithEscape();
+        audit.verifyCalendarAndGold(18, 10000);
     }
 
     @Test
@@ -82,18 +85,33 @@ public class TC_21_F15_free_play_screen_navigation_test
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
         game = colony.close();
-        // Reopen it and use Escape; this does not claim a colony-open shortcut.
+        // Reopen it and use Escape.
         game.openColonyAt(COLONY, "New Amsterdam")
                 .verifyColonyName("New Amsterdam");
-        new FreePlayAuditPage(getContext()).closeWithEscape();
+        FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        audit.closeWithEscape();
+
+        // The visible owned-colony menu and O both open the same colony.
+        audit.openColonyMenu();
+        audit.verifyColonyMenu("New Amsterdam");
+        audit.chooseColony("New Amsterdam");
+        ColonyScreen.of(getContext(), "New Amsterdam").close();
+        audit.press(KeyCode.O);
+        audit.verifyColonyMenu("New Amsterdam");
+        audit.press(KeyCode.DOWN);
+        audit.press(KeyCode.ENTER);
+        ColonyScreen.of(getContext(), "New Amsterdam")
+                .verifyColonyName("New Amsterdam");
+        audit.closeWithEscape();
+        audit.verifyCalendarAndGold(18, 10000);
     }
 
     @Test
     @Tag("local")
-    void TC_05_menu_records_current_save_boundary() throws Exception {
-        // Inspect the unfinished-campaign gate before loading an ordinary game.
+    void TC_05_menu_saves_latest_position_for_fresh_profile() throws Exception {
+        // Free play is available before completing the campaign.
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyFreePlayButtonEnabled(false);
+        audit.verifyFreePlayButtonEnabled(true);
         GamePage game = WelcomePage.of(getContext()).loadGame();
         // Save at the existing human-turn boundary, then move the ship.
         game.nextTurnAndCloseDialogs();
@@ -101,10 +119,43 @@ public class TC_21_F15_free_play_screen_navigation_test
         game.moveMouseAtLocation(Location.of(25, 16));
         game.dragMouseAtLocation(COLONY);
         game.verifyNumberOfUnitsAt(Location.of(25, 16), 0);
-        // Menu entry currently preserves the old snapshot: a documented gap.
+        // Menu entry saves the move and enables Continue for this fresh
+        // profile.
         game.exitToMenu().verifyMainScreen();
-        audit.verifyAutosaveUnchanged(saved);
-        // The fresh-start menu also fails to refresh Continue availability.
+        audit.verifyAutosaveChanged(saved);
+        audit.verifyContinueButtonEnabled(true);
+        game = audit.continueGame();
+        game.verifyNumberOfUnitsAt(Location.of(25, 16), 0);
+        game.verifyNumberOfUnitsAt(COLONY, 1);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_settings_return_without_active_game() throws Exception {
+        // Returning from settings must not try to save a nonexistent game.
+        WelcomePage.of(getContext()).openSetting().goBack().verifyMainScreen();
+        FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        audit.verifyFreePlayButtonEnabled(true);
         audit.verifyContinueButtonEnabled(false);
     }
+
+    @Test
+    @Tag("local")
+    void TC_07_cancelled_load_preserves_recovery_save() throws Exception {
+        // Preserve a playable position through the ordinary menu save path.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.exitToMenu().verifyMainScreen();
+        FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        byte[] saved = audit.readAutosave();
+
+        // Cancelling the native chooser leaves the menu and save intact.
+        audit.cancelLoadChooser();
+        WelcomePage.of(getContext()).verifyMainScreen();
+        audit.verifyAutosaveUnchanged(saved);
+        audit.verifyContinueButtonEnabled(true);
+        game = audit.continueGame();
+        game.verifyNumberOfUnitsAt(Location.of(25, 16), 1);
+        game.openEuroperPort().verifyGold(10000);
+    }
+
 }

@@ -12,6 +12,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPresenter;
+import org.microcol.gui.screen.game.components.ColoniesMenu;
 import org.microcol.gui.screen.game.gamepanel.ModeController;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -49,6 +50,8 @@ public class ScreenGamePresenter {
 
     private final WasdController wasdController;
 
+    private final ColoniesMenu coloniesMenu;
+
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
             final MouseOverTileManager mouseOverTileManager,
@@ -57,7 +60,8 @@ public class ScreenGamePresenter {
             final PersistingService persistingService,
             final GamePanelPresenter gamePanelPresenter,
             final GameModelController gameModelController,
-            final WasdController wasdController) {
+            final WasdController wasdController,
+            final ColoniesMenu coloniesMenu) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.mouseOverTileManager = Preconditions
                 .checkNotNull(mouseOverTileManager);
@@ -70,6 +74,7 @@ public class ScreenGamePresenter {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.wasdController = Preconditions.checkNotNull(wasdController);
+        this.coloniesMenu = Preconditions.checkNotNull(coloniesMenu);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
         screenGame.setOnTabPressed(
@@ -108,6 +113,11 @@ public class ScreenGamePresenter {
         }
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        }
+        if (KeyCode.O == event.getCode()) {
+            coloniesMenu.show();
+            event.consume();
+            return;
         }
         if (KeyCode.M == event.getCode()) {
             onKeyMWasPressed();

@@ -421,6 +421,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         dialog.clickOnOk();
         colony.verifyWarehouseWarning(CHANGED);
         colony.closeWarehouseWarning();
+        dialog.verifyOfferedAmount(19);
+        dialog.cancel();
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
         ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 19));
     }
@@ -460,6 +462,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.verifyColonyPresent("Delft", false);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 99));
         ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        GamePage.of(getContext());
     }
 
     @Test
@@ -536,6 +539,35 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         // The next ordinary transfer must still receive mouse input.
         colony.dragGoodsFromShipCargoSlotToWarehouse(2, 3);
         colony.verifyNumberOfGoodsInWrehouse(3, 70);
+        ship().verifyCargoSlotEmpty(2);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_18_changed_amount_can_be_explicitly_reconfirmed() throws Exception {
+        // Open an amount choice, then simulate competing use of the cargo.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, "Delft");
+        colony.selectUnitFromPort(0);
+        colony.verifyUnitInPortSelected(0, true);
+        final DialogChooseGoodsAmount dialog = colony
+                .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2, 3);
+        dialog.verifyOfferedAmount(20);
+        WaitForAsyncUtils.asyncFx(
+                () -> cargo(2).removeCargo(Goods.of(GoodsType.COTTON, 1)))
+                .get(5, TimeUnit.SECONDS);
+
+        // The stale confirmation explains the change and offers a new amount.
+        dialog.clickOnOk();
+        colony.verifyWarehouseWarning(CHANGED);
+        colony.closeWarehouseWarning();
+        dialog.verifyOfferedAmount(19);
+        colony.verifyNumberOfGoodsInWrehouse(3, 50);
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 19));
+
+        // Only this fresh confirmation transfers the newly offered cargo.
+        dialog.clickOnOk();
+        colony.verifyNumberOfGoodsInWrehouse(3, 69);
         ship().verifyCargoSlotEmpty(2);
     }
 

@@ -17,4 +17,6 @@
 	<entry key="buttonBuildColony">Build new colony. (B)</entry>
 	<entry key="buttonDeclareIndependence">Declare independence.</entry>
 
+    <entry key="buttonColonies">Colonies (O)</entry>
+    <entry key="noColonies">No colonies yet</entry>
 </properties>
