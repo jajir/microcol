@@ -40,25 +40,25 @@ inside each analysis.
 
 ## Naming and scope
 
-- Allocate the next unused number after the highest existing `R-` number on
-  `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
-  reuse an allocated ID, including a deferred or cancelled requirement.
-- Give the document a descriptive title, for example the existing
-  `# R-0001 — Start free play without completing the campaign`.
-- Describe one independently reviewable outcome. Split a larger requirement
-  into linked requirements when its parts need separate decisions or delivery.
-  The number identifies the requirement; it does not set priority.
-- Keep existing Z01/Z02, P, rule, UC and `TC_...` identifiers. Link the relevant
-  entries in the [implementation plan](../implementation-plan.md),
-  [rule catalogue](../gap-analysis.md) and [use cases](../use-cases.md).
-  An R ID identifies the analysis, not a replacement for those IDs.
-- Use the requirement file as the single source of its agreed scope and
-  acceptance. Existing Z analyses stay in place until deliberately moved; when
-  moving one, retain its old heading and replace the body with a link. Do not
-  maintain two copies of the same contract or copy shared project guidelines.
-  Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
-  in the use-case catalogue, and functional results in the test contract.
-  Completing one R requirement does not close a whole UC or work package.
+1. Allocate the next unused number after the highest existing `R-` number on
+   `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
+   reuse an allocated ID, including a deferred or cancelled requirement.
+2. Give the document a descriptive title, for example the existing
+   `# R-0001 — Start free play without completing the campaign`.
+3. Describe one independently reviewable outcome. Split a larger requirement
+   into linked requirements when its parts need separate decisions or delivery.
+   The number identifies the requirement; it does not set priority.
+4. Keep existing Z01/Z02, P, rule, UC and `TC_...` identifiers. Link the relevant
+   entries in the [implementation plan](../implementation-plan.md),
+   [rule catalogue](../gap-analysis.md) and [use cases](../use-cases.md).
+   An R ID identifies the analysis, not a replacement for those IDs.
+5. Use the requirement file as the single source of its agreed scope and
+   acceptance. Existing Z analyses stay in place until deliberately moved; when
+   moving one, retain its old heading and replace the body with a link. Do not
+   maintain two copies of the same contract or copy shared project guidelines.
+   Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
+   in the use-case catalogue, and functional results in the test contract.
+   Completing one R requirement does not close a whole UC or work package.
 
 ## Work through requirements one at a time
 
@@ -98,6 +98,12 @@ continuing dependent implementation.
 
 ## Copyable template
 
+Use numbered lists for all list items, including acceptance examples and open
+questions. Write explicit sequential numbers in the Markdown source and restart
+at 1 for each list. Refer to an item by requirement, chapter and number, for
+example “R-0001, chapter 4, question 2”. Keep question order when recording
+answers and append new questions so existing references remain useful.
+
 Keep these four chapters. Remove irrelevant prompts and write “Not applicable”
 with a brief reason where useful; do not invent rules to fill a field. In a
 draft, unknowns may remain explicit. Before marking it ready, replace generic
@@ -106,16 +112,16 @@ test placeholders with concrete existing or proposed scenario names.
 ```markdown
 # R-NNNN — Short requirement title
 
-- Status: Draft
-- Updated: YYYY-MM-DD
-- Related: Z/P/rule/UC IDs with links; applicable UC category and variants
-- Dependencies: requirement IDs or existing capabilities; none if independent
+1. Status: Draft
+2. Updated: YYYY-MM-DD
+3. Related: Z/P/rule/UC IDs with links; applicable UC category and variants
+4. Dependencies: requirement IDs or existing capabilities; none if independent
 
 ## 1. Summary
 
-- Problem and intended outcome: who needs what, and why.
-- Current behavior: observed facts, source/revision and limits of the evidence.
-- Scope: what this requirement includes and explicitly leaves out.
+1. Problem and intended outcome: who needs what, and why.
+2. Current behavior: observed facts, source/revision and limits of the evidence.
+3. Scope: what this requirement includes and explicitly leaves out.
 
 ## 2. Behavior
 
@@ -127,9 +133,9 @@ For gameplay, explain how the change is reached in ordinary free play.
 
 Acceptance examples (initial state → action → exact expected result):
 
-- Normal path: ...
-- Cancellation or rejection: ...; specify what remains unchanged.
-- Relevant boundary or persistence case: ...
+1. Normal path: ...
+2. Cancellation or rejection: ...; specify what remains unchanged.
+3. Relevant boundary or persistence case: ...
 
 ## 3. Implementation steps
 
@@ -145,10 +151,10 @@ environment, selected tests, counts and failures/skips, then the published build
 
 ## 4. Open questions
 
-- Question: ...
-  Blocking: yes/no, with the affected step or why it can wait.
-  Proposed answer and tradeoff: ...
-  Decision: unresolved, or agreed answer with date and source.
+1. Question: ...
+   Blocking: yes/no, with the affected step or why it can wait.
+   Proposed answer and tradeoff: ...
+   Decision: unresolved, or agreed answer with date and source.
 
 Write “None” when there are no questions. Retain resolved decisions here or
 link their authoritative Q entry; reflect agreed answers in chapters 2 and 3.

@@ -42,7 +42,8 @@ module unless the user requests it.
 Prepare each new change as a small analysis in `docs/requirements/R-NNNN.md`
 using the [requirement workflow and template](docs/requirements/README.md).
 Keep its four chapters: summary, behavior, implementation steps and open
-questions. Refine one selected requirement at a time, preserve existing
+questions. Use numbered lists so each point can be referenced by requirement,
+chapter and item number. Refine one selected requirement at a time, preserve existing
 Z/P/rule/UC/test IDs, and distinguish proposals, agreed behavior and verified
 results. A refinement-only request updates the analysis without starting
 implementation. Reuse agreed decisions; do not ask for approval again merely
