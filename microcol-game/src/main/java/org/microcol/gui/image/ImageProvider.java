@@ -4,11 +4,11 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
+import org.microcol.model.MicroColException;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;

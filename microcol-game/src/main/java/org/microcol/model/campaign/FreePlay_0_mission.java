@@ -3,8 +3,6 @@ package org.microcol.model.campaign;
 import java.util.List;
 import java.util.function.Function;
 
-import org.microcol.gui.dialog.Dialog;
-
 import com.google.common.collect.Lists;
 
 public final class FreePlay_0_mission
@@ -21,8 +19,8 @@ public final class FreePlay_0_mission
     }
 
     public void onIndependenceWasDeclared() {
-        fireEvent(
-                new EventShowMessages(Dialog.independenceWasDeclared_caption));
+        fireEvent(new EventShowMessages(
+                Missions.independenceWasDeclared_caption));
     }
 
 }

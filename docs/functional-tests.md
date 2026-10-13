@@ -592,3 +592,22 @@ Testovací build `dev-28-d494f18de25f` je dostupný například pro
 Publikace release a webu je na větvi PR záměrně vynechána; PR #45 není
 sloučený. Následné doplnění tohoto záznamu mění pouze dokumentaci,
 nikoli ověřený kód nebo fixtures.
+
+## R-0011 — hranice modelu
+
+1. Dne 13. října 2026 prošlo na macOS/JDK 17.0.18 všech **683 testů**
+   `microcol-game` příkazem `mvn -B -ntp -pl microcol-game -am test`.
+   ArchUnit kontroluje produkční model včetně podbalíčků bez výjimek;
+   konkrétní kontrakt vlastní [R-0011](requirements/R-0011.md).
+2. Nové regrese chrání identifikátory a oba překlady zpráv o konci hry
+   a nezávislosti, zahájení a jednorázové objevení kontinentu v tutoriálu,
+   pořadí stejně hodnocených cílů AI a limit tří kontinentů.
+3. Cílený běh `mvn -B -ntp -pl microcol-test -am test
+   -Dtest=TC_03_F03_declare_independence_test,TC_12_F11_start_free_game,TC_20_F02_colony_names_test,PageVerificationContractTest
+   -Dsurefire.failIfNoSpecifiedTests=false` s dokumentovanými přepínači Monocle
+   prošel: **10 kontrol, 0 selhání, 0 chyb, 0 vynechaných**. To zahrnuje
+   sedm hráčských scénářů a tři kontroly zdrojového kontraktu.
+4. Jde o regrese stávajících cest UC-080/082, UC-113, UC-115 a UC-119,
+   bez změny pravidel, vzhledu či textů. Příslušné UC tím nejsou celé přijaté;
+   zprávy v jednotkovém testu samy neověřují kompletní konec hry UC-111.
+   Povinná celá funkční sada a distribuce se ověřují při publikaci této revize.

@@ -1,14 +1,8 @@
-package org.microcol.ai;
+package org.microcol.model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
-import org.microcol.gui.MicroColException;
-import org.microcol.model.Location;
-import org.microcol.model.Player;
-import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -27,15 +21,7 @@ public final class Continents {
                 .filter(continent -> continent.contains(location)).findAny();
     }
 
-    List<Continent> getContinentsToAttack(final Player enemyPlayer) {
-        return continents.stream().filter(
-                continents -> continents.getMilitaryImportance(enemyPlayer) > 0)
-                .sorted(Comparator.comparingInt(continent -> continent
-                        .getMilitaryImportance(enemyPlayer)))
-                .limit(3).collect(ImmutableList.toImmutableList());
-    }
-
-    Continent getContinentWhereIsUnitPlaced(final Unit unit) {
+    public Continent getContinentWhereIsUnitPlaced(final Unit unit) {
         Preconditions.checkNotNull(unit);
         return continents.stream().filter(continent -> continent.contains(unit))
                 .findFirst()

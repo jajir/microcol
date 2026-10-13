@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.QueueItemType;

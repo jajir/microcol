@@ -8,9 +8,9 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.PersistingTool;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
+import org.microcol.model.campaign.po.PersistingTool;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;

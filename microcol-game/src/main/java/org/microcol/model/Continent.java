@@ -1,14 +1,8 @@
-package org.microcol.ai;
+package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-
-import org.microcol.model.Location;
-import org.microcol.model.Model;
-import org.microcol.model.Player;
-import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -26,10 +20,9 @@ public class Continent {
     /**
      * Default constructor.
      *
-     * @param model       required model
-     * @param enemyPlayer required enemyPlayer
+     * @param model required model
      */
-    Continent(final Model model, final Player enemyPlayer) {
+    Continent(final Model model) {
         this.model = Preconditions.checkNotNull(model);
     }
 
@@ -47,15 +40,6 @@ public class Continent {
         return contains(unit.getLocation());
     }
 
-    Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation,
-            final Player enemyPlayer) {
-        return locations.stream().filter(
-                loc -> model.getColoniesAt(loc, enemyPlayer).isPresent())
-                .sorted(Comparator
-                        .comparingInt(loc -> unitLocation.getDistance(loc)))
-                .findFirst();
-    }
-
     public List<Location> getLocations() {
         return ImmutableList.copyOf(locations);
     }
@@ -65,20 +49,6 @@ public class Continent {
                 .sorted(Comparator
                         .comparingInt(loc -> location.getDistance(loc)))
                 .findFirst().get().getDistance(location);
-    }
-
-    /**
-     * Return score how much interesting to conquer is this continent. Score is
-     * sum of military force of all colonies.
-     *
-     * @param enemyPlayer required player to attack
-     * @return score
-     */
-    int getMilitaryImportance(final Player enemyPlayer) {
-        return locations.stream()
-                .map(loc -> model.getColoniesAt(loc, enemyPlayer)
-                        .map(col -> col.getMilitaryForce()).orElse(0))
-                .mapToInt(Integer::intValue).sum();
     }
 
     /**

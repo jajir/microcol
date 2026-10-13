@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 
 import com.google.inject.Singleton;
 

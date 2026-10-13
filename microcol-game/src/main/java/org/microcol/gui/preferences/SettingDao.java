@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

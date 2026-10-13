@@ -66,7 +66,7 @@ Zvuk používá **Java Sound z `javax.sound.sampled`**, nikoli JavaFX `MediaPlay
 | Rozsah | 0 až 100; výchozí hodnota 75. |
 | Změna za běhu | [SettingVolumePresenter](../microcol-game/src/main/java/org/microcol/gui/screen/setting/SettingVolumePresenter.java) propojuje posuvník s `PreferencesProperties.volumeProperty`. |
 | Uložení | [PreferencesProperties](../microcol-game/src/main/java/org/microcol/gui/preferences/PreferencesProperties.java) při změně uloží hodnotu přes `GamePreferences` a vyšle `VolumeChangeEvent`. |
-| Soubor nastavení | Pole `volume` v `${user.home}/.microcol/.setting.json`; [SettingService](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingService.java), [SettingDao](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingDao.java) a [PersistingTool](../microcol-game/src/main/java/org/microcol/gui/util/PersistingTool.java). |
+| Soubor nastavení | Pole `volume` v `${user.home}/.microcol/.setting.json`; [SettingService](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingService.java), [SettingDao](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingDao.java) a [PersistingTool](../microcol-game/src/main/java/org/microcol/model/campaign/po/PersistingTool.java). |
 | Zpracování události | `MusicController` předá hodnotu do `MusicPlayer.setVolume()`, pokud je zvuk povolený. |
 | Vypnutí při spuštění | JVM vlastnost `soundEnabled=false`, například argument `-DsoundEnabled=false` předaný přímo JVM hry. |
 | Výchozí povolení | `GamePreferences.isSoundEnabled()` používá výchozí hodnotu **`true`**. Komentář o výchozím `false` je zastaralý. |

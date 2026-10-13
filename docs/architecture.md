@@ -5,7 +5,8 @@ spolupracovat. Před zadáním práce vybrat vlastníka pravidla a dotčené bal
 z této mapy; není potřeba pokaždé znovu odvozovat rozdělení celé hry ze zdrojů.
 Konkrétní metody a jejich volající je před úpravou stále nutné přečíst.
 
-**Stav a pravidla údržby k 11. říjnu 2026.** Mapa vychází ze zdrojů revize
+**Mapa založená na stavu k 11. říjnu 2026; hranice modelu aktualizována
+13. října 2026 v [R-0011](requirements/R-0011.md).** Mapa vychází ze zdrojů revize
 [`dba28604`](https://github.com/jajir/microcol/commit/dba286043459eef872f5ef561e0da753417cdb3e).
 Popisuje současné umístění kódu a hranice pro další změny. Známé odchylky
 jsou uvedené níže; samotný zápis je neodstraňuje.
@@ -66,15 +67,15 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
 | [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, nastavení nativního toolkitu před startem, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. UI testy přebírají nastavení přes `MicroCol.configureJavaFx()`. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
-| [model](../microcol-game/src/main/java/org/microcol/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. |
+| [model](../microcol-game/src/main/java/org/microcol/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`; společná topologie kontinentů a `MicroColException`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. |
 | [model.unit](../microcol-game/src/main/java/org/microcol/model/unit/) | Konkrétní druhy jednotek, továrna a jednotkové akce, například `UnitFactory`, `Ship`, `UnitActionPlowField`. Sdílené `Unit`, `AbstractUnit` a `UnitType` jsou nadále v `model`. | Schopnosti a provedení akcí; rozhodování soupeře a animace patří jinam. |
 | [model.event](../microcol-game/src/main/java/org/microcol/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
 | [model.turnevent](../microcol-game/src/main/java/org/microcol/model/turnevent/) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. |
 | [model.store](../microcol-game/src/main/java/org/microcol/model/store/) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
 | [model.campaign](../microcol-game/src/main/java/org/microcol/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
-| [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; nespouštět zde herní akce ani dialogy. |
+| [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; `PersistingTool` vlastní adresář a názvy save souborů i příponu. Nespouštět zde herní akce ani dialogy. |
 | [model.campaign.store](../microcol-game/src/main/java/org/microcol/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
-| [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a analýza kontinentů. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
+| [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
 | [i18n](../microcol-game/src/main/java/org/microcol/i18n/) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
 
 ## Uživatelské rozhraní a podpůrné služby
@@ -159,16 +160,37 @@ doklad čistého oddělení nebo seznam oprav nutných před každou další fun
 | Současný přesah | Jak postupovat při relevantní změně |
 | --- | --- |
 | [`AbstractRobotPlayer`](../microcol-game/src/main/java/org/microcol/ai/AbstractRobotPlayer.java) a `SimpleAiPlayer` používají `AnimationLock`/`AnimationManager` z GUI. | Při práci na AI nebo řízení tahu oddělit rozhodování a herní dokončení od čekání na obraz; zachovat pořadí akcí a ověřit oba režimy. |
-| [`GameOverProcessors`](../microcol-game/src/main/java/org/microcol/model/campaign/GameOverProcessors.java) a mise používají GUI enum `Dialog`. | Význam výsledku má určit model/mise, výběr textu a dialogu UI. Nevytvářet další přímé závislosti misí na obrazovkách. |
-| Model používá `gui.MicroColException`, persistence kampaně `gui.util.PersistingTool` a `i18n` používá `gui.util.StreamReader`. | Jde o historické umístění společných pomůcek. Přesun řešit s jejich skutečnými volajícími, nepovažovat tyto importy za vzor pro nové vazby. |
-| [`Default_0_mission`](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) používá analýzu kontinentů z `ai`. | Společná analýza mapy nemá vyžadovat strategii robota. Při jejím rozšíření určit společného vlastníka podle použití. |
+| `i18n` používá `gui.util.StreamReader`. | Historické umístění čtečky prostředků; tato zbývající vazba leží mimo model. |
 | Založení/spuštění/uložení aplikace je rozdělené mezi `gui.event.model`, `gui.dialog.ApplicationController` a `PersistingService`. | Při změně projít celý tok; název `dialog` dnes nezaručuje pouze zobrazování oken. |
 | Podmínky orání doplňuje také [`ButtonsGamePanelController`](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/ButtonsGamePanelController.java); AI při nalodění používá jiný vstup než člověk v `GameModelController`. | Při změně těchto akcí sjednotit autoritativní kontrolu a provedení v modelu; ověřit tlačítko, klávesu a AI podle dotčeného rozsahu. Zápis není nově provedená runtime reprodukce. |
 
 Nový kód má respektovat směr `gui → model` a `ai → model`. Stávající přesahy
-neopravovat plošně v nesouvisejícím úkolu ani je nerozšiřovat. Hranice nyní
-kontroluje review; samostatný automatický test architektonických závislostí
-zatím není zavedený.
+neopravovat plošně v nesouvisejícím úkolu ani je nerozšiřovat. Vazby modelu
+na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy zůstávají.
+
+## Automatická hranice modelu
+
+1. [ModelArchitectureTest](../microcol-game/src/test/java/org/microcol/ModelArchitectureTest.java)
+   používá [ArchUnit](https://www.archunit.org/userguide/html/000_Index.html)
+   1.5.1 v rozsahu `test`. Běží jako běžný JUnit Jupiter test při `mvn test`,
+   včetně povinného CI před publikací distribucí. Není součástí hry.
+2. Produkční `org.microcol.model..` nesmí záviset na žádné třídě
+   `org.microcol..` mimo vlastní podstrom. Zahrnuté jsou i podbalíčky kampaní,
+   persistence a událostí. Testy se neimportují a prázdný výběr selže.
+   Přímé vazby na `javafx..` jsou také zakázané. Java a ostatní externí
+   knihovny zůstávají povolené; jde o kontrolu závislostí
+   v bytecode, nikoli řetězců pro reflexi nebo nepoužitých importů.
+3. Výjimka `MicroColException` je v `model`, souborová pomůcka `PersistingTool`
+   v `model.campaign.po`. Topologie `Continent`, `Continents` a `ContinentTool`
+   je společná; skórování a pořadí cílů v `ai.ContinentTargets` zachovává
+   dosavadní rozhodování královské armády.
+4. Události mise přenášejí pouze `Missions`. Překladové prostředky zachovávají
+   původní české a anglické zprávy; `I18n` překládá enumy bez požadavku,
+   aby model implementoval rozhraní překladové služby.
+5. Ověření a dodání vlastní [R-0011](requirements/R-0011.md). Ručně lze
+   spustit `mvn -pl microcol-game -am test -Dtest=ModelArchitectureTest
+   -Dsurefire.failIfNoSpecifiedTests=false`. Pravidlo nemá seznam výjimek
+   ani zmrazený seznam historických porušení.
 
 ## Jak udržet popis platný
 

@@ -3,12 +3,11 @@ package org.microcol.gui.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.annotation.Nullable;
 
-import org.microcol.gui.MicroColException;
-import org.microcol.model.GoodsType;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 

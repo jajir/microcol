@@ -3,9 +3,11 @@
  * operations for both human and computer players. New gameplay rules belong
  * here; UI and AI use these operations. Invalid actions must throw before
  * changing state; UI previews do not replace validation when committing an
- * action. Legacy cross-layer dependencies are recorded in the package
- * responsibility map. Model owns immutable colony IDs, unique normalized names
- * and permission checks; rename never changes identity or assignments.
+ * action. Continent topology and shared game exceptions also belong here.
+ * ArchUnit forbids production dependencies on other game packages, including
+ * GUI, AI and localization services. Model owns immutable colony IDs, unique
+ * normalized names and permission checks; rename never changes identity or
+ * assignments.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

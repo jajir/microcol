@@ -1,4 +1,4 @@
-package org.microcol.gui.util;
+package org.microcol.model.campaign.po;
 
 import java.io.File;
 
@@ -21,7 +21,9 @@ public class PersistingTool {
 
     private final static String SAVE_DIRECTORY = ".microcol";
 
-    private final static String EXTENSION = ".microcol";
+    public static final String SAVE_FILE_EXTENSION = "microcol";
+
+    private final static String EXTENSION = "." + SAVE_FILE_EXTENSION;
 
     private final static String AUTOSAVE_FILE_NAME = "autosave.microcol";
 

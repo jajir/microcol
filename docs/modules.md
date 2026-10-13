@@ -23,7 +23,7 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 | Module | Responsibility | Main configured outputs |
 | --- | --- | --- |
 | [microcol-root](../pom.xml) | Parent and reactor: shared versions, compiler settings, plugin configuration, and the list of modules. Packaging is `pom`. | Parent POM; no application binary. |
-| [microcol-game](../microcol-game/pom.xml) | Game logic, JavaFX UI, resources, and unit tests. | `microcol-game/target/microcol-game-<version>.jar`; `microcol-game-<version>-jar-with-dependencies.jar`, `-sources.jar`, and `-javadoc.jar` in the same directory. |
+| [microcol-game](../microcol-game/pom.xml) | Game logic, JavaFX UI, resources, unit tests, and the [ArchUnit model boundary](architecture.md#automaticka-hranice-modelu) (test scope only). | `microcol-game/target/microcol-game-<version>.jar`; `microcol-game-<version>-jar-with-dependencies.jar`, `-sources.jar`, and `-javadoc.jar` in the same directory. |
 | [microcol-test](../microcol-test/pom.xml) | GUI and integration tests using TestFX and Monocle, plus shared test support. | `microcol-test/target/microcol-test-<version>.jar` for main-source support code; test results in `microcol-test/target/surefire-reports/`. This is not another game distribution. |
 | [microcol-module](../microcol-module/pom.xml) | Converts the game JAR with dependencies into the explicit Java module `microcol.game`. | `microcol-module/target/microcol-module-<version>.jar`, containing the game, dependencies, and `module-info.class`. |
 | [microcol-dist](../microcol-dist/pom.xml) | Uses the modular game to create a linked image with its own Java runtime. | `microcol-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `microcol-dist-<version>.jar` in `target/`. |

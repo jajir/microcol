@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.event.GameFinishedEvent;

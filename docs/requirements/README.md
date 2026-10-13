@@ -41,6 +41,12 @@ them and preserve existing TC/F IDs. Use the common
 environment, commands and completion evidence; do not duplicate that contract
 inside each analysis.
 
+## Additional requirements
+
+| Requirement | Primary area | Outcome |
+| --- | --- | --- |
+| [R-0011](R-0011.md) | [A05](areas.md#a05), cross-area P31 safeguard | Enforce the model dependency boundary with ArchUnit. |
+
 ## Naming and scope
 
 1. Allocate the next unused number after the highest existing `R-` number on

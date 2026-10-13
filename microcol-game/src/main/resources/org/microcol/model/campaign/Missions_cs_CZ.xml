@@ -43,4 +43,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="default_m2_done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
 	<entry key="default_m2_done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
 
+	<entry key="independenceWasDeclared_caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
+	<entry key="gameOver_allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
+	<entry key="gameOver_timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
 </properties>

@@ -18,13 +18,10 @@
 	
 	<entry key="notEnoughGold_caption">You don't have enough gold.</entry>
 	
-	<entry key="independenceWasDeclared_caption">You declared independence. Now get ready for Royal army.</entry>
 
 	<entry key="unitCantMoveHere_caption">I't not possible to move unit here.</entry>
 
 	<entry key="gameOver_caption">Game over.</entry>
-	<entry key="gameOver_allColoniesAreLost">You lost all colonies.</entry>
-	<entry key="gameOver_timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
 
 	<entry key="destroyColony_caption">Do you want do destroy colony?</entry>
 	<entry key="destroyColony_question">When you leave colony with last unit than colony will be destroyed.</entry>

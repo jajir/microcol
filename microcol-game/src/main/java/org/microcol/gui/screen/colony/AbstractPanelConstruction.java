@@ -1,13 +1,13 @@
 package org.microcol.gui.screen.colony;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Construction;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;

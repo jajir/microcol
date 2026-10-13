@@ -3,12 +3,12 @@ package org.microcol.model.campaign;
 import java.util.List;
 import java.util.function.Function;
 
-import org.microcol.ai.Continent;
-import org.microcol.ai.ContinentTool;
-import org.microcol.ai.Continents;
-import org.microcol.gui.MicroColException;
+import org.microcol.model.Continent;
+import org.microcol.model.ContinentTool;
+import org.microcol.model.Continents;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
@@ -80,8 +80,8 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
         } else {
             if (!getGoals().getGoalFindNewWorld().isFinished()) {
                 final ContinentTool ct = new ContinentTool();
-                final Continents continents = ct.findContinents(
-                        event.getModel(), getModel().getCurrentPlayer());
+                final Continents continents = ct
+                        .findContinents(event.getModel());
                 final Continent c = continents
                         .getForLocation(Location.of(19, 15))
                         .orElseThrow(() -> new MicroColException(

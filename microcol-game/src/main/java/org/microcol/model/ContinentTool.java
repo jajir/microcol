@@ -1,24 +1,14 @@
-package org.microcol.ai;
-
-import org.microcol.model.Direction;
-import org.microcol.model.Location;
-import org.microcol.model.Model;
-import org.microcol.model.Player;
-import org.microcol.model.TerrainType;
-import org.microcol.model.WorldMap;
+package org.microcol.model;
 
 public final class ContinentTool {
 
     /**
-     * Find top 3 continents with biggest military forces in cities owned by
-     * enemy player.
+     * Find connected land masses in map encounter order.
      *
-     * @param model       required model
-     * @param enemyPlayer required enemy player
+     * @param model required model
      * @return continents
      */
-    public Continents findContinents(final Model model,
-            final Player enemyPlayer) {
+    public Continents findContinents(final Model model) {
         final WorldMap map = model.getMap();
         final Continents continents = new Continents();
         for (int x = 1; x <= model.getMap().getMaxLocationX(); x++) {
@@ -27,8 +17,7 @@ public final class ContinentTool {
                 final TerrainType terrainType = map.getTerrainTypeAt(loc);
                 if (!terrainType.isSea()
                         && !continents.getForLocation(loc).isPresent()) {
-                    final Continent continent = createContinent(loc, model,
-                            enemyPlayer);
+                    final Continent continent = createContinent(loc, model);
                     continents.add(continent);
                 }
             }
@@ -36,9 +25,8 @@ public final class ContinentTool {
         return continents;
     }
 
-    private Continent createContinent(final Location loc, final Model model,
-            final Player enemyPlayer) {
-        final Continent out = new Continent(model, enemyPlayer);
+    private Continent createContinent(final Location loc, final Model model) {
+        final Continent out = new Continent(model);
         tryToAdd(loc, model.getMap(), out);
         return out;
     }

@@ -2,7 +2,6 @@ package org.microcol.model.campaign;
 
 import java.util.function.Function;
 
-import org.microcol.gui.dialog.Dialog;
 import org.microcol.model.GameOverEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,8 @@ final class GameOverProcessors {
         if (GameOverEvaluator.REASON_TIME_IS_UP.equals(
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, time is up.");
-            context.fireEvent(new EventFinishMission(Dialog.gameOver_timeIsUp));
+            context.fireEvent(
+                    new EventFinishMission(Missions.gameOver_timeIsUp));
             return "ok";
         }
         return null;
@@ -32,8 +32,8 @@ final class GameOverProcessors {
         if (GameOverEvaluator.REASON_NO_COLONIES.equals(
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, no colonies.");
-            context.fireEvent(
-                    new EventFinishMission(Dialog.gameOver_allColoniesAreLost));
+            context.fireEvent(new EventFinishMission(
+                    Missions.gameOver_allColoniesAreLost));
             return "ok";
         }
         return null;

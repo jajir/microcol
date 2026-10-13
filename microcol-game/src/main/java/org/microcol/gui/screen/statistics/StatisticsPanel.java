@@ -3,13 +3,13 @@ package org.microcol.gui.screen.statistics;
 import java.util.List;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
+import org.microcol.model.MicroColException;
 import org.microcol.model.TurnPlayerStatistics;
 
 import com.google.common.base.Preconditions;

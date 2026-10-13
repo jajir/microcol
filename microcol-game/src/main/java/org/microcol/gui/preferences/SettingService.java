@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.MicroColException;
-import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.MicroColException;
+import org.microcol.model.campaign.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

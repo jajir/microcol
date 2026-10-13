@@ -9,11 +9,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
+import org.microcol.model.MicroColException;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 import org.microcol.model.WorldMap;

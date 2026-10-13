@@ -69,6 +69,15 @@ architecture and acceptance. The child edits its assigned worktree; the caller
 owns Maven/test execution and its evidence. Instructions do not trigger automatic
 installation, configuration changes or a cloud fallback when the worker fails.
 
+### ArchUnit availability check — 2026-10-13
+
+1. For R-0011, preflight confirmed Codex CLI 0.142.3 but `ollama list`
+   returned `could not connect to ollama server`. No inference request,
+   worker edit or worker attempt was started; elapsed worker time is zero.
+2. The main agent implemented the bounded change directly because the required
+   local runtime was unavailable. No service setup or cloud worker substitution
+   was attempted. Acceptance belongs to [R-0011](../requirements/R-0011.md).
+
 ## Default development workflow — 2026-10-11
 
 User and main agent agree player goal, rules, edge cases, cancellation/failure

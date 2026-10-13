@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.campaign.po.PersistingTool;
 
 class SettingServiceConcurrencyTest {
 

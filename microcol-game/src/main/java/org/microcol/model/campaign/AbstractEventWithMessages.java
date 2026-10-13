@@ -1,32 +1,21 @@
 package org.microcol.model.campaign;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.i18n.MessageKeyResource;
-
-import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
- * Event show simple message box with given key. Keys will later replaced with
- * text from localized resource bundle.
+ * Mission message identifiers; the UI owns translation and presentation.
  */
 abstract class AbstractEventWithMessages {
 
-    private List<MessageKeyResource> keys = new ArrayList<>();
+    private final List<Missions> keys;
 
-    @SuppressWarnings("unchecked")
-    <T extends Enum<T> & MessageKeyResource> AbstractEventWithMessages(
-            final T... messageKeys) {
-        Preconditions.checkNotNull(messageKeys);
-        for (final MessageKeyResource messageKey : messageKeys) {
-            keys.add(messageKey);
-        }
+    AbstractEventWithMessages(final Missions... messageKeys) {
+        keys = ImmutableList.copyOf(messageKeys);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <T extends Enum<T> & MessageKeyResource> List<T> getMessages() {
-        return (List) keys;
+    public List<Missions> getMessages() {
+        return keys;
     }
-
 }

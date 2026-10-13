@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Singleton;

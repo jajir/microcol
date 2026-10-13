@@ -43,4 +43,7 @@ Your next task is to produce 30 cigars.</entry>
 	<entry key="default_m2_done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
 	<entry key="default_m2_done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
 
+	<entry key="independenceWasDeclared_caption">You declared independence. Now get ready for Royal army.</entry>
+	<entry key="gameOver_allColoniesAreLost">You lost all colonies.</entry>
+	<entry key="gameOver_timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
 </properties>

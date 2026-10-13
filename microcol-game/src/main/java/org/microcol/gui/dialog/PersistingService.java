@@ -5,12 +5,12 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 import org.microcol.gui.FileSelectingService;
-import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
-import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
+import org.microcol.model.campaign.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +23,6 @@ import com.google.inject.Inject;
  * dialog.
  */
 public class PersistingService {
-
-    public static final String SAVE_FILE_EXTENSION = "microcol";
 
     private final Logger logger = LoggerFactory
             .getLogger(PersistingService.class);
@@ -103,7 +101,7 @@ public class PersistingService {
         final Path path = targetFile.toPath();
         final String fileName = getFileName(path);
         if (fileName.toLowerCase(Locale.getDefault())
-                .endsWith(SAVE_FILE_EXTENSION)) {
+                .endsWith(PersistingTool.SAVE_FILE_EXTENSION)) {
             return targetFile;
         } else {
             final Path parent = path.getParent();
@@ -111,7 +109,8 @@ public class PersistingService {
                 throw new MicroColException(String.format(
                         "Unable to determine paret path of '%s'", path));
             }
-            Path out = parent.resolve(fileName + "." + SAVE_FILE_EXTENSION);
+            Path out = parent.resolve(
+                    fileName + "." + PersistingTool.SAVE_FILE_EXTENSION);
             return out.toFile();
         }
     }

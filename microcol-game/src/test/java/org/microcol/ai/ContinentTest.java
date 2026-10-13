@@ -1,14 +1,17 @@
 package org.microcol.ai;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.microcol.model.Colony;
+import org.microcol.model.Continent;
+import org.microcol.model.Continents;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -58,6 +61,8 @@ public class ContinentTest {
 
     private Continent continent = mock(Continent.class);
 
+    private ContinentTargets targets;
+
     protected Model model = mock(Model.class);
 
     protected Player enemyPlayer = mock(Player.class);
@@ -65,16 +70,10 @@ public class ContinentTest {
     protected Colony enemyColony = mock(Colony.class);
 
     @Test
-    public void test_verify_that_cities_are_at_continent() throws Exception {
-        assertTrue(continent.contains(CITY_1));
-        assertTrue(continent.contains(CITY_2));
-    }
-
-    @Test
     public void test_findClosestCityToAttack_location_in_not_atContinent()
             throws Exception {
-        final Optional<Location> oLoc = continent
-                .getClosesEnemyCityToAttack(Location.of(1, 1), enemyPlayer);
+        final Optional<Location> oLoc = targets.getClosesEnemyCityToAttack(
+                continent, Location.of(1, 1), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
@@ -83,8 +82,8 @@ public class ContinentTest {
     @Test
     public void test_findClosestCityToAttack_no_enemy_cities()
             throws Exception {
-        final Optional<Location> oLoc = continent
-                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+        final Optional<Location> oLoc = targets.getClosesEnemyCityToAttack(
+                continent, Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
@@ -95,8 +94,8 @@ public class ContinentTest {
         when(model.getColoniesAt(CITY_1, enemyPlayer))
                 .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent
-                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+        final Optional<Location> oLoc = targets.getClosesEnemyCityToAttack(
+                continent, Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -110,8 +109,8 @@ public class ContinentTest {
         when(model.getColoniesAt(CITY_2, enemyPlayer))
                 .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent
-                .getClosesEnemyCityToAttack(Location.of(23, 14), enemyPlayer);
+        final Optional<Location> oLoc = targets.getClosesEnemyCityToAttack(
+                continent, Location.of(23, 14), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -125,8 +124,8 @@ public class ContinentTest {
         when(model.getColoniesAt(CITY_2, enemyPlayer))
                 .thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent
-                .getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
+        final Optional<Location> oLoc = targets.getClosesEnemyCityToAttack(
+                continent, Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -141,12 +140,51 @@ public class ContinentTest {
                 .thenReturn(Optional.of(enemyColony));
         when(enemyColony.getMilitaryForce()).thenReturn(7, 4);
 
-        assertEquals(11, continent.getMilitaryImportance(enemyPlayer));
+        assertEquals(11, targets.getMilitaryImportance(continent, enemyPlayer));
+    }
+
+    @Test
+    void ranksWeakestOccupiedContinentsFirstWithStableTiesAndLimitThree() {
+        final Continents continents = new Continents();
+        final Continent strong = target(1, 9);
+        final Continent tiedFirst = target(2, 4);
+        final Continent empty = target(3, 0);
+        final Continent weak = target(4, 2);
+        final Continent tiedSecond = target(5, 4);
+        continents.getContinents()
+                .addAll(List.of(strong, tiedFirst, empty, weak, tiedSecond));
+        assertEquals(List.of(weak, tiedFirst, tiedSecond),
+                targets.getContinentsToAttack(continents, enemyPlayer));
+    }
+
+    @Test
+    void nearestTargetKeepsLocationOrderForEqualDistance() {
+        final Location first = Location.of(9, 10);
+        final Location second = Location.of(11, 10);
+        when(continent.getLocations()).thenReturn(List.of(first, second));
+        when(model.getColoniesAt(first, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(second, enemyPlayer))
+                .thenReturn(Optional.of(enemyColony));
+        assertEquals(Optional.of(first), targets.getClosesEnemyCityToAttack(
+                continent, Location.of(10, 10), enemyPlayer));
+    }
+
+    private Continent target(final int x, final int strength) {
+        final Continent target = mock(Continent.class);
+        final Location location = Location.of(x, 1);
+        when(target.getLocations()).thenReturn(List.of(location));
+        final Colony colony = mock(Colony.class);
+        when(colony.getMilitaryForce()).thenReturn(strength);
+        when(model.getColoniesAt(location, enemyPlayer))
+                .thenReturn(Optional.of(colony));
+        return target;
     }
 
     @BeforeEach
     public void before() {
-        continent = new Continent(model, enemyPlayer);
+        continent = mock(Continent.class);
+        targets = new ContinentTargets(model);
         /**
          * Following code is little hack. It use property of world map where
          * data are in JSON stored as array of strings but in code are used as
@@ -154,7 +192,8 @@ public class ContinentTest {
          */
         final WorldMapPo po = new WorldMapPo();
         po.setTrees(trees);
-        po.getTreeSet().forEach(loc -> continent.add(loc));
+        when(continent.getLocations())
+                .thenReturn(new java.util.ArrayList<>(po.getTreeSet()));
     }
 
     @AfterEach

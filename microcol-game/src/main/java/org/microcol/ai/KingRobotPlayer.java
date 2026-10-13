@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
+import org.microcol.model.Continent;
+import org.microcol.model.ContinentTool;
+import org.microcol.model.Continents;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -30,9 +33,12 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private final ContinentTool continentTool = new ContinentTool();
 
+    private final ContinentTargets continentTargets;
+
     public KingRobotPlayer(final Model model, final PlayerKing playerKing,
             final AnimationManager animationManager) {
         super(model, playerKing, animationManager);
+        continentTargets = new ContinentTargets(model);
         this.whosKingThisPlayerIs = Preconditions
                 .checkNotNull(playerKing.getWhosKingThisPlayerIs());
     }
@@ -66,8 +72,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     @Override
     void moveUnit(final Unit unit) {
-        final Continents continents = continentTool.findContinents(getModel(),
-                whosKingThisPlayerIs);
+        final Continents continents = continentTool.findContinents(getModel());
         if (unit.isAtPlaceLocation()) {
             if (unit.getType().isShip()) {
                 performMoveUnit(unit, continents);
@@ -86,8 +91,9 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
                 if (isPossibleToDisembark(unitWithCargo)) {
                     disembarkUnit(unitWithCargo);
                 } else {
-                    tryToReachSomeContinent(unitWithCargo, continents
-                            .getContinentsToAttack(whosKingThisPlayerIs));
+                    tryToReachSomeContinent(unitWithCargo,
+                            continentTargets.getContinentsToAttack(continents,
+                                    whosKingThisPlayerIs));
                     if (isPossibleToDisembark(unitWithCargo)) {
                         disembarkUnit(unitWithCargo);
                     }
@@ -98,8 +104,9 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private void performSeekAndDestroy(final Unit unit,
             final Continents continents) {
-        final Optional<Location> oLoc = continents
-                .getContinentWhereIsUnitPlaced(unit).getClosesEnemyCityToAttack(
+        final Optional<Location> oLoc = continentTargets
+                .getClosesEnemyCityToAttack(
+                        continents.getContinentWhereIsUnitPlaced(unit),
                         unit.getLocation(), whosKingThisPlayerIs);
         if (oLoc.isPresent()) {
             final Optional<List<Location>> oPath = unit.getPath(oLoc.get(),

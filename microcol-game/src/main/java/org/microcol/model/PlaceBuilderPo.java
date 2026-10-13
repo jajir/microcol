@@ -3,7 +3,6 @@ package org.microcol.model;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.store.CargoSlotPo;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;

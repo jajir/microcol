@@ -18,13 +18,10 @@
 	
 	<entry key="notEnoughGold_caption">K dokončení operace nemáte dost zlata.</entry>
 
-	<entry key="independenceWasDeclared_caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
 
 	<entry key="unitCantMoveHere_caption">Sem neni možné jednotku přesunout.</entry>
 
 	<entry key="gameOver_caption">Konec hry.</entry>
-	<entry key="gameOver_allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
-	<entry key="gameOver_timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
 
 	<entry key="destroyColony_caption">Opravdu si přejete zrušit kolonii?</entry>
 	<entry key="destroyColony_question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>

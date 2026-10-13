@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.MainStageBuilder;
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.microcol.gui.image.ImageCache;
 import org.microcol.gui.util.StreamReader;
+import org.microcol.model.MicroColException;
 
 import javafx.scene.image.Image;
 

@@ -1,7 +1,5 @@
 package org.microcol.model;
 
-import org.microcol.gui.MicroColException;
-
 /**
  * Exception raised when there is not enough gold for operation.
  */

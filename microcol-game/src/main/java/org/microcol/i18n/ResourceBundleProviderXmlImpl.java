@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.gui.util.StreamReader;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 

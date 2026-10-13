@@ -25,7 +25,7 @@ import com.google.common.base.Preconditions;
  * For configuration option look at documentation below. There should be
  *
  * <pre>
- * public enum Keys implements MessageKeyResource {
+ * public enum Keys {
  *     greeting;
  * }
  * </pre>
@@ -137,15 +137,14 @@ public class I18n {
         }
     }
 
-    private <T extends Enum<T> & MessageKeyResource> String getRawMessage(
-            final T messageKeyEnum) {
+    private <T extends Enum<T>> String getRawMessage(final T messageKeyEnum) {
         Objects.requireNonNull(messageKeyEnum,
                 "Message key enum can't be null");
         final String messageKey = messageKeyEnum.toString();
         return getRourceBundle(messageKeyEnum).getString(messageKey);
     }
 
-    private <T extends Enum<T> & MessageKeyResource> ResourceBundle getRourceBundle(
+    private <T extends Enum<T>> ResourceBundle getRourceBundle(
             final T messageKeyResource) {
         final String baseName = messageKeyResource.getClass()
                 .getCanonicalName();
@@ -153,7 +152,7 @@ public class I18n {
                 .orElseGet(() -> initResourceBundle(messageKeyResource));
     }
 
-    private <T extends Enum<T> & MessageKeyResource> ResourceBundle initResourceBundle(
+    private <T extends Enum<T>> ResourceBundle initResourceBundle(
             final T messageKeyResource) {
         final String baseName = messageKeyResource.getClass()
                 .getCanonicalName();
@@ -169,18 +168,17 @@ public class I18n {
         return resourceBundle;
     }
 
-    private <T extends Enum<T> & MessageKeyResource> String getMessage(
-            final T messageKeyEnum, final Object... arguments) {
+    private <T extends Enum<T>> String getMessage(final T messageKeyEnum,
+            final Object... arguments) {
         return String.format(getRawMessage(messageKeyEnum), arguments);
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String get(
-            final T messageKeyEnum, final Object... arguments) {
+    public <T extends Enum<T>> String get(final T messageKeyEnum,
+            final Object... arguments) {
         return getMessage(messageKeyEnum, arguments);
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String get(
-            final T messageKeyEnum) {
+    public <T extends Enum<T>> String get(final T messageKeyEnum) {
         return getMessage(messageKeyEnum);
     }
 

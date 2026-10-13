@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.campaign.po.PersistingTool;
 
 import com.google.common.io.Files;
 

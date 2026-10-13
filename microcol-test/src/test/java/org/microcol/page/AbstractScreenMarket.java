@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Set;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.MicroColException;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.application.Platform;

@@ -8,9 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
-import org.microcol.gui.MicroColException;
-import org.microcol.gui.dialog.PersistingService;
-import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.MicroColException;
+import org.microcol.model.campaign.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +72,7 @@ public class CampaignsDao {
 
     private File getFile() {
         return new File(saveDir + File.separator + ".campaigns."
-                + PersistingService.SAVE_FILE_EXTENSION);
+                + PersistingTool.SAVE_FILE_EXTENSION);
     }
 
 }

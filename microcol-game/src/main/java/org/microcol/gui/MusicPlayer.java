@@ -3,7 +3,6 @@ package org.microcol.gui;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -14,6 +13,7 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.microcol.gui.util.StreamReader;
+import org.microcol.model.MicroColException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

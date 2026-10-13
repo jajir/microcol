@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.GameOverResult;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;

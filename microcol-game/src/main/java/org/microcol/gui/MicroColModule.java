@@ -89,12 +89,12 @@ import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PathPlanning;
-import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.StreamReader;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.campaign.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
