@@ -1,7 +1,7 @@
 # Codex and a local development worker
 
 Status as of **2026-10-13: local GPT-OSS 20B is the configured default for bounded
-worker assignments**, under [R-0034](../requirements/R-0034.md). Astra remains the main
+worker assignments with context 32768**, under [R-0034](../requirements/R-0034.md). Astra remains the main
 agent and supervises a separate local Codex CLI process, checks the result and
 owns integration and publication. The current operating profile below replaces
 Qwen3.5-9B for new assignments; dated Qwen results remain historical evidence.
@@ -149,7 +149,7 @@ cloud-fallback policy, and does not install an automatic replacement service.
 
 ### Scope and acceptance
 
-Broader features are sequences of bounded jobs, not proof that current 8k
+Broader features are sequences of bounded jobs, not proof that the current
 worker can own whole features. Expand assignments from accepted evidence.
 UI changes require the caller verification plan in the
 [functional test contract](../functional-tests.md). The dated plowing task below
@@ -306,10 +306,11 @@ service configuration. `brew services stop ollama` stops it;
 [Homebrew manual](https://docs.brew.sh/Manpage#services-subcommand).
 
 Inspect the installed worker using `ollama list`, `ollama show
-microcol-gpt-oss:20b-8k`, `ollama --version` and `ollama ps`.
-`ollama stop microcol-gpt-oss:20b-8k` unloads it before Maven while retaining the
-server. The old Qwen weights and alias remain installed for explicit comparison;
-do not select them automatically or load both models concurrently.
+microcol-gpt-oss:20b-32k`, `ollama --version` and `ollama ps`.
+`ollama stop microcol-gpt-oss:20b-32k` unloads it before Maven while retaining the
+server. The old Qwen weights/alias and the initial GPT-OSS 8k alias remain
+installed for explicit comparison; do not select them automatically or load
+multiple models concurrently.
 
 ## Selected direct CLI workflow
 
@@ -320,11 +321,13 @@ user Codex configuration is needed.
 ### GPT-OSS installation and worker verification — 2026-10-13
 
 The user requested this replacement in [R-0034](../requirements/R-0034.md).
+This initial installation test used the 8k profile; the later 32k verification
+below supersedes its context and alias for new assignments.
 `ollama pull gpt-oss:20b` completed with exit 0 and SHA-256 verification. The
 local package is **13,793,441,566 bytes**, reports **20.9B / MXFP4** and uses the
 `llamacpp` runner. The base digest is
 `f38aa0c53da5f8c49d08c43a99df24ff53167fe68e24664a7777288e7656fdfe`;
-the configured alias digest is
+the initial `microcol-gpt-oss:20b-8k` alias digest is
 `855c7ef433e4a7ed323d53dba8c5ce5e3a57ab5398e3844af84a02047ef124a7`.
 `/api/show` confirms `num_ctx 8192`, `num_predict 4096`, tool support and
 thinking levels `low`, `medium`, `high` with default `medium`. Creating the
@@ -371,14 +374,53 @@ Download, setup, model metadata and subsequent worker evidence are retained in
 The previous Qwen task was still verifying Docker UI tests during setup; no
 inference was started while its shared worker lock was held.
 
+### 32k context verification — 2026-10-13
+
+After the initial installation, the user requested context **32768** because
+previous assignments exhausted 8k. The new alias `microcol-gpt-oss:20b-32k`
+reuses the installed weights; its digest is
+`425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`.
+Both Ollama `num_ctx` and Codex `model_context_window` are 32768. Generation
+allowance 4096, medium reasoning and the existing time/repair limits are unchanged.
+The caller made this small runtime/configuration change directly and used the
+actual local worker for the capacity check.
+
+The tool-free Codex request contained five unchanged related Java page objects
+(39,814 source characters) and requested three exact JSON answers from their
+beginning, middle and end. The caller checked source hashes, all answers and
+that the worker made no edits. One attempt passed in **119.541 seconds** with
+**11162 input / 849 output tokens**, zero cached input, no reported compaction
+or truncation, exit 0 and successful unload. All 100 loaded-model samples matched
+the new digest and **context 32768**. This verifies a request larger than the
+old 8192-token window, not the full 32k occupancy or general coding quality.
+
+`ollama ps` reported **21% CPU / 79% GPU**. Runtime allocation was
+14,070,306,565 bytes, including 11,126,869,850 bytes of VRAM. Whole-host swap
+started at 9822.25 MiB and peaked at 12965.69 MiB; memory-pressure levels included
+1, 2 and **4 (critical)**. After unload, no model remained loaded and a
+snapshot returned pressure level 1. These observations are not a controlled
+comparison with the earlier 8k run; other desktop memory use differs.
+
+The 32k profile is now the default. Continue one worker at a time and unload
+before heavy tests. A larger context raises the available window but does not fix
+incorrect output or guarantee that long tasks finish inside the attempt budget.
+The fallback-metadata and alias-telemetry warnings remain the same known CLI
+limitation as in the initial trial. Evidence, source hashes, task, response,
+validation and runtime samples are under
+`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-gpt-oss-32k/`.
+
+Caller verification passed all **9 documentation tests**, a strict MkDocs build,
+the rendered-page review and `git diff --check`. No Java or UI behavior changed;
+local Maven/TestFX was not rerun for this configuration-only follow-up.
+
 ### Operating profile — bounded assignments
 
 | Setting | Current choice and limit |
 | --- | --- |
 | Runtime/provider | Ollama 0.40.2 on loopback, Homebrew Codex CLI 0.142.3, `--oss --local-provider ollama`. |
-| Model | Base `gpt-oss:20b` (local MXFP4 weights); project alias `microcol-gpt-oss:20b-8k`. Installation/runtime digest is recorded in the dated verification above. |
-| Model allocation | [Modelfile](../../.codex/local-worker/Modelfile): `num_ctx 8192`, `num_predict 4096`. The generation allowance includes reasoning and final output within the context window. |
-| Codex metadata | `model_context_window=8192` describes the window to Codex; it does not set Ollama allocation. Confirm actual context and model identity in runtime evidence. |
+| Model | Base `gpt-oss:20b` (local MXFP4 weights); project alias `microcol-gpt-oss:20b-32k`. Installation/runtime digest is recorded in the dated verification above. |
+| Model allocation | [Modelfile](../../.codex/local-worker/Modelfile): `num_ctx 32768`, `num_predict 4096`. The generation allowance includes reasoning and final output within the context window. |
+| Codex metadata | `model_context_window=32768` describes the window to Codex; it does not set Ollama allocation. Confirm actual context and model identity in runtime evidence. |
 | Reasoning | `medium`, a supported GPT-OSS reasoning level; use the complete CLI settings below. Do not reuse Qwen's `none` setting or Astra's `ultra`. |
 | Concurrency | One local request, serialized with the existing host-wide lock. Unload before Maven; no concurrent heavy tests or second local model. |
 | Limits | **300 seconds per attempt**, **600 seconds cumulative worker time per task**, at most **two repairs** while budget remains. Caller-enforced, including model loading and cleanup. |
@@ -389,13 +431,13 @@ performed once, not for each delegation:
 
 ```sh
 ollama pull gpt-oss:20b
-ollama create microcol-gpt-oss:20b-8k -f .codex/local-worker/Modelfile
+ollama create microcol-gpt-oss:20b-32k -f .codex/local-worker/Modelfile
 ```
 
 The alias reuses downloaded weights and sets project limits. GPT-OSS uses
 [Ollama's Harmony template](https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama)
 and supports [low/medium/high reasoning](https://docs.ollama.com/capabilities/thinking).
-The 8k profile is a deliberate memory compromise on this 16 GB host:
+The user requested the 32k profile after the initial 8k trial on this 16 GB host.
 [Ollama recommends at least 64k for Codex](https://docs.ollama.com/integrations/codex).
 Do not infer that a model's advertised context fits this machine. Measure actual
 memory pressure, swapping and completion before increasing allocation.
@@ -433,7 +475,7 @@ Do not copy the old `180` constant from archived per-job runners.
 For example, 180 seconds already used leaves a 300-second attempt available;
 480 used leaves only 120 seconds; 600 used permits no further attempt. This is
 a caller-enforced workflow change, not a claim that the longer budget improves
-success rates. R-0034 changes the model and generation allowance; the time limits and single-request concurrency remain unchanged.
+success rates. R-0034 changes the model, context and generation allowance; the time limits and single-request concurrency remain unchanged.
 
 ### Failure and recovery loop
 
@@ -530,11 +572,11 @@ test -d "$worker_tree" && test -r "$worker_job/task.md" \
 
 env CODEX_HOME="$worker_job/codex-home" \
   /opt/homebrew/bin/codex -a never exec \
-  --oss --local-provider ollama -m microcol-gpt-oss:20b-8k \
+  --oss --local-provider ollama -m microcol-gpt-oss:20b-32k \
   --ignore-user-config --ephemeral -s workspace-write -C "$worker_tree" \
   --json --color never -o "$worker_job/response.md" \
   -c "model_instructions_file=\"$worker_job/worker-role.md\"" \
-  -c model_context_window=8192 -c project_doc_max_bytes=0 \
+  -c model_context_window=32768 -c project_doc_max_bytes=0 \
   -c features.multi_agent=false -c skills.include_instructions=false \
   -c features.plugins=false -c features.apps=false -c 'web_search="disabled"' \
   -c 'model_reasoning_effort="medium"' \
@@ -599,9 +641,10 @@ home and working directory; use relative worktree paths or quote absolute paths;
 provide the exact method/data fragment and acceptance example instead of whole
 documents or fixtures; split multi-file batches that leave little editing time.
 On a repair, supply the actual error and current diff rather than repeating the
-original broad discovery task. Keep the 8k context for a comparable trial and
-record useful edits, accepted results, caller repair time and budget consumption
-for the next 3–5 assignments under the new limits. This initial read-only diagnosis
+original broad discovery task. That Qwen comparison recommended keeping 8k and
+recording useful edits, accepted results, caller repair time and budget consumption
+for the next 3–5 assignments under the new limits. The later user-requested
+GPT-OSS 32k profile supersedes that context choice for new work. This initial read-only diagnosis
 included no live worker run or token-saving claim; the later recovery check is
 recorded separately below.
 
