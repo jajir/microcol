@@ -5890,7 +5890,7 @@
         "name": "Dutch",
         "computer": false,
         "gold": 100000,
-        "declaredIndependence": true,
+        "declaredIndependence": false,
         "extraData": {},
         "visible": {
           "visible": [

@@ -528,3 +528,11 @@ Mimo tuto přejímku jsou původní DOS instalace/hardware, shoda jednotlivých
 kláves, ilustrací, rozložení oken a textu epitafu, historická příloha
 PDF 101–131 a dokončení volitelné kampaně. Dostupnost herních informací,
 příkazů a srozumitelného výsledku do přejímky naopak patří.
+
+Doplnění R-0020 z 13. října 2026: TC27 ověřuje nákupy/prodeje výbavy v
+UC-018, přesné citované ceny v návaznosti na UC-057 a identitu/nástroje při
+návratové plavbě s uložením v UC-027/113. TC22/TC_01 už očekává nabídku
+výbavy po obou druzích kliknutí, při zrušení stále původní stav. Jde o
+[rozpracovanou implementaci](functional-tests.md#europe-equipment-implementation-2026-10-13);
+vyložení v kolonii, nové odbornosti a úplná regrese se tímto dílčím během
+nepovažují za ověřené.

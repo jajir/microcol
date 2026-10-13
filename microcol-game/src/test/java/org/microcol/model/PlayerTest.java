@@ -76,6 +76,90 @@ public class PlayerTest {
     }
 
     @Test
+    void quotedPricesUseBidAskAndFractionalTaxWithoutMutatingGold() {
+        when(model.getEurope()).thenReturn(europe);
+        when(europe.getGoodsTradeForType(GoodsType.MUSKET))
+                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+        when(model.getKingsTaxForPlayer(player)).thenReturn(17);
+        player.setGold(175);
+
+        assertEquals(175,
+                player.quoteEuropeTrade(Goods.of(GoodsType.MUSKET, 50), true)
+                        .getTotal());
+        assertEquals(83,
+                player.quoteEuropeTrade(Goods.of(GoodsType.MUSKET, 50), false)
+                        .getTotal());
+        assertEquals(175, player.getGold());
+        player.buyGoods(Goods.of(GoodsType.MUSKET, 50));
+        assertEquals(0, player.getGold());
+        player.sellGoods(Goods.of(GoodsType.MUSKET, 50));
+        assertEquals(83, player.getGold());
+    }
+
+    @Test
+    void taxedAffordabilityRejectsOneGoldShortWithoutMutation() {
+        when(model.getEurope()).thenReturn(europe);
+        when(europe.getGoodsTradeForType(GoodsType.MUSKET))
+                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+        when(model.getKingsTaxForPlayer(player)).thenReturn(17);
+        player.setGold(174);
+
+        assertEquals(49,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+        assertThrows(NotEnoughtGoldException.class,
+                () -> player.buyGoods(Goods.of(GoodsType.MUSKET, 50)));
+        assertEquals(174, player.getGold());
+        player.setGold(175);
+        assertEquals(50,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+    }
+
+    @Test
+    void affordabilityHandlesZeroPricesAndIntegerTreasuryBoundary() {
+        when(model.getEurope()).thenReturn(europe);
+        final GoodsTrade trade = new GoodsTrade(GoodsType.MUSKET, 2, 0);
+        when(europe.getGoodsTradeForType(GoodsType.MUSKET)).thenReturn(trade);
+        player.setGold(0);
+        assertEquals(100,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+        trade.setBuyPrice(Integer.MAX_VALUE);
+        player.setGold(Integer.MAX_VALUE);
+        assertEquals(1,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+        when(model.getKingsTaxForPlayer(player)).thenReturn(1);
+        assertEquals(0,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+    }
+
+    @Test
+    void saleOverflowDoesNotAlterTreasury() {
+        when(model.getEurope()).thenReturn(europe);
+        when(europe.getGoodsTradeForType(GoodsType.MUSKET))
+                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+        player.setGold(Integer.MAX_VALUE);
+
+        assertThrows(ArithmeticException.class,
+                () -> player.sellGoods(Goods.of(GoodsType.MUSKET, 1)));
+        assertEquals(Integer.MAX_VALUE, player.getGold());
+    }
+
+    @Test
+    void independenceRejectsBothTradeDirectionsBeforeTreasuryMutation() {
+        player = new PlayerHuman("Czech", false, 100, model, true,
+                new HashMap<>(), new HashSet<>());
+        when(model.getEurope()).thenReturn(europe);
+        when(europe.getGoodsTradeForType(GoodsType.MUSKET))
+                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+        assertEquals(0,
+                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+        assertThrows(IllegalStateException.class,
+                () -> player.buyGoods(Goods.of(GoodsType.MUSKET, 1)));
+        assertThrows(IllegalStateException.class,
+                () -> player.sellGoods(Goods.of(GoodsType.MUSKET, 1)));
+        assertEquals(100, player.getGold());
+    }
+
+    @Test
     public void test_setGold_lessThanZero() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> player.setGold(-2));
     }

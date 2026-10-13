@@ -7,8 +7,8 @@ import java.util.Set;
 import org.microcol.model.MicroColException;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.application.Platform;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 
 /**
  * Object allows to test one unit shown in right panel.
@@ -24,14 +24,22 @@ public class AbstractScreenMarket extends AbstractScreen {
     }
 
     public void selectValueAtSlider(final int value) {
-        final Slider slider = getSlider();
-        /*
-         * Following code is not correct test. It get JavaFX component from
-         * screen and in JavaFX Application Thread set desired value. It should
-         * be set by mouse.
-         */
-        Platform.runLater(() -> slider.setValue(value));
+        getRobot().clickOn(".slider .thumb").push(KeyCode.HOME);
+        for (int step = 0; step < value; step++) {
+            getRobot().push(KeyCode.RIGHT);
+        }
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySelectedMarketQuantity(final int expected) {
+        assertEquals(expected, getSlider().getValue());
+    }
+
+    public void verifyQuotedPrice(final String expectedUnitPrice,
+            final String expectedTotal) {
+        assertEquals(expectedUnitPrice,
+                getLabeledById("marketUnitPrice").getText());
+        assertEquals(expectedTotal, getLabeledById("marketTotal").getText());
     }
 
     public void verifyNumberOfSliders(final int expectedCount) {

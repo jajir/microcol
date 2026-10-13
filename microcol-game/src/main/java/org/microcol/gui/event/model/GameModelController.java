@@ -106,9 +106,7 @@ public class GameModelController {
     }
 
     public Goods getMaxBuyableGoods(final GoodsType goodsType) {
-        final GoodsTrade goodsTrade = getModel().getEurope()
-                .getGoodsTradeForType(goodsType);
-        return goodsTrade.getAvailableAmountFor(getHumanPlayer().getGold());
+        return getHumanPlayer().getMaxBuyableGoods(goodsType);
     }
 
     public GoodsTrade getEuropeGoodsTradeForType(final GoodsType goodsType) {

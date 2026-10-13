@@ -49,19 +49,22 @@ public final class PanelPortPier
 
     private final I18n i18n;
 
+    private final DialogEuropeEquipment equipmentDialog;
+
     private final Pane panelUnits;
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
             final EuropeCallback europeDialogCallback,
             final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final DialogEuropeEquipment equipmentDialog) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.equipmentDialog = Preconditions.checkNotNull(equipmentDialog);
         panelUnits = new HBox();
         panelUnits.getStyleClass().add("panel-port-pier");
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
@@ -92,7 +95,8 @@ public final class PanelPortPier
         gameModelController.getModel().getEurope().getPier()
                 .getUnits(gameModelController.getHumanPlayer())
                 .forEach(unit -> panelUnits.getChildren()
-                        .add(new PanelPortPierUnit(unit, imageProvider)));
+                        .add(new PanelPortPierUnit(unit, imageProvider,
+                                equipmentDialog, i18n, europeDialog)));
     }
 
     @Override

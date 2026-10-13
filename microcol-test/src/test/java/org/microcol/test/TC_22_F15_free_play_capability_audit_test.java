@@ -30,16 +30,23 @@ public class TC_22_F15_free_play_capability_audit_test
 
     @Test
     @Tag("local")
-    void TC_01_pier_clicks_do_not_offer_equipment() throws Exception {
+    void TC_01_pier_clicks_offer_equipment() throws Exception {
         // An ordinary colonist is waiting on the real European pier.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         EuropePortScreen europe = game.openEuroperPort();
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyPierEquipmentBaseline(1, 0);
-        // Neither primary nor context click opens equipment actions.
+        // Both primary and context click expose the same equipment choices.
+        EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         audit.clickPierColonist(MouseButton.PRIMARY);
+        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses",
+                "Buy 100 tools");
+        equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         audit.clickPierColonist(MouseButton.SECONDARY);
+        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses",
+                "Buy 100 tools");
+        equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         europe.verifyGold(10000);
         europe.close();

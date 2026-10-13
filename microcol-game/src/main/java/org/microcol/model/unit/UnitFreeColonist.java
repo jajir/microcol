@@ -8,6 +8,7 @@ import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.Goods;
+import org.microcol.model.EuropeTradeQuote;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.Place;
@@ -73,6 +74,123 @@ public final class UnitFreeColonist extends CanMount {
     @Override
     public UnitType getType() {
         return UnitType.COLONIST;
+    }
+
+    /**
+     * @param type muskets, horses or tools
+     * @param buy  true for a purchase, false for sale of carried equipment
+     * @return current market quote without changing this colonist
+     */
+    public EuropeTradeQuote getEuropeEquipmentQuote(GoodsType type,
+            boolean buy) {
+        Preconditions
+                .checkArgument(
+                        type == GoodsType.MUSKET || type == GoodsType.HORSE
+                                || type == GoodsType.TOOLS,
+                        "Unsupported equipment");
+        int amount;
+        if (type == GoodsType.MUSKET || type == GoodsType.HORSE) {
+            amount = 50;
+        } else { // TOOLS
+            amount = buy ? 100 : tools;
+        }
+        return getOwner().quoteEuropeTrade(Goods.of(type, amount), buy);
+    }
+
+    /**
+     * @param type muskets, horses or tools
+     * @param buy  true for a purchase, false for a sale
+     * @return a rejection reason, or empty when the current trade is allowed
+     */
+    public Optional<EquipmentProblem> getEuropeEquipmentProblem(GoodsType type,
+            boolean buy) {
+        Preconditions.checkArgument(
+                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                        || type == GoodsType.TOOLS,
+                "Unsupported equipment type: %s", type);
+
+        if (!getModel().isGameRunning()
+                || getModel().getCurrentPlayer() != getOwner()
+                || !isAtEuropePier() || getOwner().getAllUnits().stream()
+                        .noneMatch(u -> u == this)) {
+            return Optional.of(EquipmentProblem.UNIT_UNAVAILABLE);
+        }
+
+        if (!getOwner().canTradeInEurope()) {
+            return Optional.of(EquipmentProblem.TRADE_RESTRICTED);
+        }
+
+        boolean present = false;
+        if (type == GoodsType.MUSKET) {
+            present = holdingGuns;
+        } else if (type == GoodsType.HORSE) {
+            present = mounted;
+        } else if (type == GoodsType.TOOLS) {
+            present = tools > 0;
+        }
+
+        if (buy == present) {
+            return Optional.of(EquipmentProblem.ALREADY_SET);
+        }
+
+        if (buy && ((type == GoodsType.TOOLS && (holdingGuns || mounted))
+                || (type != GoodsType.TOOLS && tools > 0))) {
+            return Optional.of(EquipmentProblem.INCOMPATIBLE_EQUIPMENT);
+        }
+
+        int price;
+        try {
+            price = getEuropeEquipmentQuote(type, buy).getTotal();
+        } catch (ArithmeticException e) {
+            return Optional.of(EquipmentProblem.GOLD_LIMIT);
+        }
+
+        if (buy) {
+            if (price > getOwner().getGold()) {
+                return Optional.of(EquipmentProblem.NOT_ENOUGH_GOLD);
+            }
+        } else {
+            if (price > Integer.MAX_VALUE - getOwner().getGold()) {
+                return Optional.of(EquipmentProblem.GOLD_LIMIT);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Validate the live pier, equipment and offer before any treasury mutation.
+     *
+     * @param type    muskets, horses or tools
+     * @param buy     true for a purchase, false for a sale
+     * @param offered the exact quote the caller confirmed
+     * @throws IllegalStateException when eligibility or the quote changed
+     */
+    public void tradeEquipmentInEurope(GoodsType type, boolean buy,
+            EuropeTradeQuote offered) {
+        Preconditions.checkNotNull(offered, "offered quote must not be null");
+        Optional<EquipmentProblem> problem = getEuropeEquipmentProblem(type,
+                buy);
+        Preconditions.checkState(problem.isEmpty(),
+                "Equipment trade rejected: %s", problem.orElse(null));
+
+        EuropeTradeQuote fresh = getEuropeEquipmentQuote(type, buy);
+        Preconditions.checkState(fresh.equals(offered),
+                "Equipment offer changed: %s vs %s", offered, fresh);
+
+        if (buy) {
+            getOwner().buyGoods(fresh.getGoods());
+        } else {
+            getOwner().sellGoods(fresh.getGoods());
+        }
+
+        if (type == GoodsType.MUSKET) {
+            holdingGuns = buy;
+        } else if (type == GoodsType.HORSE) {
+            mounted = buy;
+        } else if (type == GoodsType.TOOLS) {
+            tools = buy ? 100 : 0;
+        }
     }
 
     private void unequipAll() {
@@ -195,7 +313,8 @@ public final class UnitFreeColonist extends CanMount {
     }
 
     public enum EquipmentProblem {
-        UNIT_UNAVAILABLE, ALREADY_SET, MISSING_GOODS, STORAGE_FULL
+        UNIT_UNAVAILABLE, ALREADY_SET, MISSING_GOODS, STORAGE_FULL,
+        INCOMPATIBLE_EQUIPMENT, NOT_ENOUGH_GOLD, TRADE_RESTRICTED, GOLD_LIMIT
     }
 
     public java.util.Optional<EquipmentProblem> getEquipmentProblem(

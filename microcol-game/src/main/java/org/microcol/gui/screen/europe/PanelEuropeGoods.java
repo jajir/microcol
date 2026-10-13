@@ -27,6 +27,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -43,6 +45,8 @@ public final class PanelEuropeGoods
             .getLogger(PanelEuropeGoods.class);
 
     private final HBox mainPanel;
+
+    private final Label tradeRestriction = new Label();
 
     private final TitledPanel titledPanel;
 
@@ -66,6 +70,9 @@ public final class PanelEuropeGoods
                 .checkNotNull(europeDialogCallback);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         mainPanel = new HBox();
+        mainPanel.setId("europeMarketGoods");
+        tradeRestriction.setId("europeMarketRestriction");
+        tradeRestriction.setWrapText(true);
         GoodsType.BUYABLE_GOOD_TYPES.forEach(goodsType -> {
             final PanelGood panelGood = new PanelGood(goodsType, imageProvider,
                     gameModelController, dialogNotEnoughGold, eventBus, i18n);
@@ -80,18 +87,25 @@ public final class PanelEuropeGoods
         mainPanel.setOnDragDropped(this::onDragDropped);
 
         titledPanel = new TitledPanel();
-        titledPanel.getContentPane().getChildren().add(mainPanel);
+        titledPanel.getContentPane().getChildren()
+                .add(new VBox(mainPanel, tradeRestriction));
         titledPanel.getStyleClass().add("goods");
     }
 
     @Override
     public void repaint() {
         panelGoods.forEach(PanelGood::repaint);
+        final boolean available = gameModelController.getHumanPlayer()
+                .canTradeInEurope();
+        mainPanel.setDisable(!available);
+        tradeRestriction.setVisible(!available);
+        tradeRestriction.setManaged(!available);
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
         titledPanel.setTitle(i18n.get(Europe.goodsPanelTitle));
+        tradeRestriction.setText(i18n.get(Europe.equipmentTRADE_RESTRICTED));
     }
 
     private void onDragOver(final DragEvent event) {
@@ -102,6 +116,12 @@ public final class PanelEuropeGoods
     }
 
     private void onDragDropped(final DragEvent event) {
+        if (!gameModelController.getHumanPlayer().canTradeInEurope()) {
+            event.setDropCompleted(false);
+            event.consume();
+            repaint();
+            return;
+        }
         logger.debug("Object was dropped on panel goods.");
         final Dragboard db = event.getDragboard();
         final ClipboardEval eval = ClipboardEval
@@ -129,6 +149,9 @@ public final class PanelEuropeGoods
     }
 
     private boolean isItGoods(final Dragboard db) {
+        if (!gameModelController.getHumanPlayer().canTradeInEurope()) {
+            return false;
+        }
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from).isNotEmpty();

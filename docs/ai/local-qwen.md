@@ -1318,3 +1318,95 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    Prompts, responses, runtime samples and reviews remain in
    `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r19-fog-rendering/`;
    caller logs are in `target/r19-r31/`. No token-saving claim is made.
+
+
+## R-0020 shared trade quote — 2026-10-13
+
+1. Task `2026-10-13-r20-trade-quote` uses baseline `f383ebfb` and the configured
+   GPT-OSS 20B alias/digest with actual context 32768. The worker owns the new
+   immutable price quote and its focused unit test; the caller owns pricing
+   policy, Player/market integration and actual acceptance. No inference ran
+   alongside Docker/Maven.
+2. Attempt 0 used **270.426 seconds**: the production class was complete, but
+   the test/outer JSON ended mid-expression. The caller extracted the complete
+   object without applying an incomplete batch and requested just the test.
+3. Attempt 1 used **171.112 seconds** and returned a complete test with an
+   incorrect small-sale expectation and missing requested boundaries. The
+   isolated Docker run selected four quote tests: three passed, one failed
+   (`expected 3, actual 1`). The generated example used quantity 2, price 1;
+   the requested case was quantity 1, price 3, yielding net 2 at 17% tax.
+   Source review also found that the alleged equal-total comparison had
+   different totals, and the 100% sale case actually used 0%.
+4. The final targeted repair supplied five exact replacement blocks and the
+   unchanged acceptance. It timed out after **158.816 seconds**, with a reasoning
+   event but no completed response. Total **600.354 seconds including cleanup**;
+   both repair rounds and the cumulative budget were exhausted. The caller
+   then corrected those test cases, added the omitted getter/boundary checks,
+   validated both new file paths and applied the shared formatter. The production
+   quote remains worker output. This is partial reuse with caller repair, not
+   autonomous completion.
+5. After unloading the model, the caller reran the failing quote test together
+   with Player integration: **4 quote and 11 Player tests passed**, zero failures,
+   errors or skips. The same targeted run also passed three TC05 cargo scenarios, two TC06
+   purchase/sale scenarios and three page-contract checks. The complete R-0020
+   equipment journey remains pending; this pricing foundation does not complete
+   pier equipment trading.
+   Logs and reviews are in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r20-trade-quote/`
+   and `target/r19-r31/pricing-*.log`. No savings claim is made.
+
+### R-0020 pier equipment model — 2026-10-13
+
+1. Task `2026-10-13-r20-pier-equipment-model`, baseline `f383ebfb`, received
+   the caller's current `Player`/`EuropeTradeQuote` APIs in an isolated tree.
+   Attempts used **98.340 / 243.131 / 101.307 seconds** (**442.778 total**).
+   Initial placeholders were rejected. The first repair supplied the enum and
+   quote but truncated validation. The final repair supplied both remaining
+   operations; after both repairs were exhausted the caller narrowed an overly
+   broad `catch (Exception)` to `ArithmeticException` and removed redundant
+   comments. Existing colony equipment behavior was preserved.
+2. Runtime samples confirmed digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`, context
+   32768 and the configured GPT-OSS alias. The runner unloaded before Docker.
+   The first check failed to compile a caller-authored test using the nonexistent
+   `getAvailableMoves()`; the caller corrected it to the actual
+   `getActionPoints()`, preserving the movement assertion.
+3. The same Docker acceptance command then passed **52 model tests and three
+   page-contract checks**, with no failures, errors or skips. This includes all
+   22 `EuropeEquipmentTest` cases, 14 colony-equipment regression cases,
+   12 Player cases and four quote cases. The caller inspected fresh XML,
+   formatted with the shared profile and integrated only `UnitFreeColonist`.
+   Model evidence does not establish working pier UI or complete R-0020.
+4. Logs and before/after results remain in the task's directory under
+   `~/Library/Logs/Microcol/local-qwen/jobs/`; acceptance log is
+   `target/r19-r31/equipment-model-fixed.log` in the caller checkout.
+   No autonomous-success or token-saving claim is made.
+
+### R-0020 equipment confirmation dialog — 2026-10-13
+
+1. Task `2026-10-13-r20-pier-equipment-dialog` received the precise model API,
+   localization keys and existing colony-dialog example. Attempts consumed
+   **236.903 / 77.247 / 45.550 seconds** (**359.700 total**). Initial source
+   was complete but incorrectly enabled confirmation for some rejected offers.
+   The caller requested a one-line presence check, without changing criteria.
+2. Repair one ignored text-only instructions and listed the tree, then failed
+   after five reconnects with `stream closed before response.completed`.
+   No response was produced; the disconnection's cause is not established.
+   The caller placed the initial source in the isolated tree and made the final
+   repair request self-contained. The final exact replacement correctly uses
+   `confirm.setDisable(problemOpt.isPresent())`; the unique match was validated
+   before application. The task used both allowed repairs, not a reset budget.
+3. The first caller check found that the installed Gson lacks the test's
+   `JsonParser.parseString`; caller fixture preparation now uses existing
+   `Gson.fromJson`. The same Docker selection then passed **52 model tests,
+   nine TC27 scenarios and three page-contract checks**, no failures, errors
+   or skips. Fresh reports: isolated `target/docker-ui/run-jRkncS/`;
+   caller log `target/r19-r31/equipment-ui-fixed.log`.
+4. The caller accepted the dialog after formatting and these checks, reviewed
+   English/Czech screenshots, and changed the goods label to the existing
+   plural localization key. The caller also owns pier controls, translations,
+   fixtures, player tests and the shared cargo-market restriction display.
+   Those final integration changes receive separate regression checks.
+5. Runtime samples use the same documented GPT-OSS alias/digest and context
+   32768; model unload completed before checks. No token-saving claim. Source,
+   prompts, errors, replacements and reports remain under the task's log
+   directory. The owned worker lock was released after acceptance.

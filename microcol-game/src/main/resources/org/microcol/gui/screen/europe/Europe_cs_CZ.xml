@@ -20,4 +20,25 @@
 	<entry key="buttonClose">Zavřít evropský přístav a vrátit se zpět na hlavní mapu.</entry>
 	<entry key="buttonBuyUnit">Koupit novou jednotku.</entry>
 
+    <entry key="equipmentOpen">Výbava: kliknutím, pravým tlačítkem nebo Enter nakoupíte či prodáte</entry>
+    <entry key="buyMuskets">Koupit 50 mušket</entry>
+    <entry key="sellMuskets">Prodat muškety</entry>
+    <entry key="buyHorses">Koupit 50 koní</entry>
+    <entry key="sellHorses">Prodat koně</entry>
+    <entry key="buyTools">Koupit 100 nástrojů</entry>
+    <entry key="sellTools">Prodat zbývající nástroje</entry>
+    <entry key="equipmentConfirm">Potvrdit</entry>
+    <entry key="equipmentCancel">Zrušit</entry>
+    <entry key="equipmentChanged">Nabídka se změnila. Zkontrolujte novou cenu a znovu potvrďte, nebo akci zrušte.</entry>
+    <entry key="equipmentQuote">%s %s
+Cena za kus: %s zlatých
+Daň: %s%% (%s zlatých)
+Celkem: %s zlatých</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">Tento kolonista už není dostupný na vašem evropském molu ve vašem tahu. Nic se nezměnilo. Zrušte nabídku a vyberte kolonistu znovu.</entry>
+    <entry key="equipmentALREADY_SET">Výbava se už změnila. Nic se neprovedlo. Zrušte nabídku a vyberte znovu.</entry>
+    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Nejprve prodejte neslučitelnou výbavu. Koně a muškety lze kombinovat; nástroje vyžadují kolonistu bez jiné výbavy.</entry>
+    <entry key="equipmentNOT_ENOUGH_GOLD">Nemáte dost zlata. Nic se nezměnilo. Zrušte nabídku a zajistěte potřebné zlato.</entry>
+    <entry key="equipmentTRADE_RESTRICTED">Obchod s vaším evropským přístavem není dostupný. Nic se nezměnilo.</entry>
+    <entry key="equipmentGOLD_LIMIT">Tento obchod překračuje limit pokladny. Nic se nezměnilo.</entry>
+
 </properties>

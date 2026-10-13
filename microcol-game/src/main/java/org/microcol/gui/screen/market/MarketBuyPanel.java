@@ -77,6 +77,9 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         this.dialogNotEnoughGold = Preconditions
                 .checkNotNull(dialogNotEnoughGold);
 
+        labelPricePerPieceValue.setId("marketUnitPrice");
+        labelTotalValue.setId("marketTotal");
+
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("mainPanel");
 
@@ -85,6 +88,7 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
                 new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
         slider.setSnapToTicks(false);
+        slider.setBlockIncrement(1);
         slider.setMajorTickUnit(10);
         slider.setMinorTickCount(1);
         slider.setShowTickLabels(true);
@@ -168,15 +172,17 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private int getPriceWithoutTax() {
-        return getActualValue().getAmount() * getPricePerPiece();
+        return gameModelController.getHumanPlayer()
+                .quoteEuropeTrade(getActualValue(), true).getGross();
     }
 
     private int getKingsTaxValue() {
-        return (int) (getKingsTaxPercentage() / 100F * getPriceWithoutTax());
+        return getTotal() - getPriceWithoutTax();
     }
 
     private int getTotal() {
-        return getPriceWithoutTax() + getKingsTaxValue();
+        return gameModelController.getHumanPlayer()
+                .quoteEuropeTrade(getActualValue(), true).getTotal();
     }
 
     @Override

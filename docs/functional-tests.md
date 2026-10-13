@@ -834,5 +834,73 @@ Lokální ověření na macOS/JDK 17:
    strict MkDocs; číslovaná evidence byla zkontrolována ve webovém náhledu.
 6. Přesné dosahy rolí Q-11, druhá vrstva živé viditelnosti a nativní macOS UI
    nejsou tímto řezem ověřeny. Celé UC-006 proto zůstává otevřené.
-   Publikaci výsledné revize musí potvrdit její vývojový workflow a manifest
-   [kanálu dev](https://github.com/jajir/microcol/releases/tag/dev).
+7. [CI revize f383ebfb](https://github.com/jajir/microcol/actions/runs/38411903978)
+   zopakovalo celých **706/81 kontrol**, bez selhání, chyb nebo vynechání;
+   ověřena stažená XML v `target/r19-r31/ci-r19/`. Všechny tři platformní
+   balíčky i publikace prošly. Manifest kanálu `dev` potvrzuje vydání
+   [dev-47-f383ebfbe87f](https://github.com/jajir/microcol/releases/tag/dev-47-f383ebfbe87f)
+   a plnou revizi `f383ebfbe87f350970af36868cfb4d6b2d242b03`.
+   [Pages](https://github.com/jajir/microcol/actions/runs/38411903434) nasadily
+   dokumentaci; zkontrolován zveřejněný text R-0019 a odkazy architektury na
+   správný commit. Toto následné doplnění evidence nemění ověřený herní kód.
+
+
+<a id="europe-equipment-implementation-2026-10-13"></a>
+
+## Evropská výbava R-0020 — rozpracováno 2026-10-13
+
+1. Zatím je ověřený cenový základ, nikoli celé vybavování na molu. Cílený
+   Docker příkaz s výběrem
+   `-Dtest=EuropeTradeQuoteTest,PlayerTest,TC_05_F05_moving_goods_test,TC_06_F06_buy_and_sell_goods_test,PageVerificationContractTest`
+   a `-Dsurefire.failIfNoSpecifiedTests=false` prošel: **15 modelových a 8
+   funkčních/kontrolních testů**, bez selhání, chyb a vynechání. Čerstvá XML
+   jsou v `target/docker-ui/run-G3aGhn/`, log `target/r19-r31/pricing-targeted.log`.
+2. Čtyři testy nabídky a jedenáct testů hráče kontrolují bid/ask, celá čísla,
+   zlomkovou daň, přesnou částku, nedostatek jednoho zlatého, přetečení,
+   nulovou cenu a rozlišení změněné nabídky i při shodném zaokrouhleném součtu.
+   Politiku čísel, odlišenou od výslovného textu manuálu, vlastní [R-0020](requirements/R-0020.md).
+3. TC06 nově kontroluje viditelnou jednotkovou cenu i celkovou částku před
+   skutečným nákupem/prodejem. Sdílený page helper mění množství kliknutím na
+   úchyt a klávesami Home/šipka, ne přímým zápisem do slideru; klávesový krok
+   trhu je jeden kus. Prošly i všechny tři TC05 používající tento helper.
+   Samostatný TC06/TC_06_moving_goods s původními cenovými metodami prodeje
+   selhal přesně na `expected 2 gold, actual 4 gold`; po vrácení opravy stejný
+   příkaz prošel. Logy `market-original-regression.log` a
+   `market-fixed-regression.log` jsou v `target/r19-r31/`.
+4. Navazující modelová kontrola s výběrem
+   `-Dtest=EuropeEquipmentTest,PlayerTest,EuropeTradeQuoteTest,ColonistEquipmentTest,PageVerificationContractTest`
+   prošla: **52 modelových a tři strukturální kontroly**, nula selhání, chyb
+   a vynechání. Nových 22 případů ověřuje nákup/prodej všech tří druhů,
+   souběh koní a mušket, zbylých 37 nástrojů, přesné peníze, opakování,
+   zastaralou nabídku, polohu/vlastnictví/identitu, uzavřený obchod a přetečení.
+   Stejná kontrola nejprve odhalila chybný název getteru v novém testu; po
+   opravě na `getActionPoints()` prošla. Logy `equipment-model-targeted.log`
+   a `equipment-model-fixed.log` jsou v `target/r19-r31/`; XML v izolovaném
+   worktree úkolu `2026-10-13-r20-pier-equipment-model`, `target/docker-ui/`.
+5. První celý běh TC27 prošel: **devět hráčských scénářů a tři strukturální
+   kontroly** spolu s 52 modelovými testy, bez selhání, chyb a vynechání.
+   Log `equipment-ui-fixed.log`, izolovaná XML `run-jRkncS`. Předchozí kompilace
+   narazila na neexistující `JsonParser.parseString` v instalované verzi Gson;
+   příprava testovacího save používá existující `Gson.fromJson`.
+   Scénáře kontrolují všechny nákupy/prodeje, rušení, nekompatibilní výbavu,
+   přesné peníze, změnu nabídky, přesunutý subjekt, klávesnici, češtinu,
+   uzavřený obchod a nástroje/identitu při nalodění, plavbě a Continue.
+6. Anglické i české snímky nabídky a zprávy po změně ceny byly zkontrolovány.
+   Následně se názvy zboží změnily na existující množné překladové klíče.
+   Integrační běh již ověřil všech devět TC27 včetně doplněného odmítnutí
+   přesunů nákladu po nezávislosti, ale odhalil dvě chyby TC06: stará fixture
+   měla `declaredIndependence=true` a přesto očekávala povolený obchod.
+   F06 nyní nastavuje správnou obchodní podmínku před nezávislostí; žádná
+   očekávaná cena, zásoba ani ID testu se neoslabila. Stejná integrační
+   kontrola po opravě prošla: **53 modelových/architektonických a 27
+   funkčních/strukturálních testů**, bez selhání, chyb a vynechání. Čerstvá
+   XML `target/docker-ui/run-5AoDQ4/`, log `equipment-integrated-fixed.log`.
+   Zahrnuty jsou TC05, TC06, TC22, TC25, TC27 a modelová hranice ArchUnit.
+7. Úplná lokální Docker regrese dokončena 13. října 2026: **737 herních a
+   90 funkčních/strukturálních testů**, nula selhání, chyb a vynechání.
+   Čerstvá XML jsou v `target/docker-ui/run-lQgf1l/`, log v
+   `target/r19-r31/equipment-full.log`; příkaz
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests` skončil
+   s kódem 0. Publikace tohoto řezu ještě neproběhla. Vyložení v cílové kolonii a
+   odbornost budoucího specialisty se ověří v návaznosti na R-0022/R-0023.
+   Tento dílčí záznam nepovažuje celé R-0020 ani nadřazený cíl za dokončený.

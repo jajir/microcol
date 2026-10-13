@@ -283,24 +283,61 @@ public abstract class Player {
     }
 
     public void buyGoods(final Goods goods) {
-        Preconditions.checkNotNull(goods);
-        float initialPrice = goods.getAmount() * model.getEurope()
-                .getGoodsTradeForType(goods.getType()).getBuyPrice();
-        int price = (int) (initialPrice + getKingsTaxFor(initialPrice));
+        final int price = quoteEuropeTrade(goods, true).getTotal();
+        Preconditions.checkState(canTradeInEurope(),
+                "European trade is unavailable");
         verifyAvailibilityOFGold(price);
         setGold(getGold() - price);
     }
 
     public void sellGoods(final Goods goods) {
-        Preconditions.checkNotNull(goods);
-        float initialPrice = goods.getAmount() * model.getEurope()
-                .getGoodsTradeForType(goods.getType()).getSellPrice();
-        int price = (int) (initialPrice - getKingsTaxFor(initialPrice));
-        setGold(getGold() + price);
+        final int price = quoteEuropeTrade(goods, false).getTotal();
+        Preconditions.checkState(canTradeInEurope(),
+                "European trade is unavailable");
+        setGold(Math.addExact(getGold(), price));
     }
 
-    private float getKingsTaxFor(final float initialPrice) {
-        return model.getKingsTaxForPlayer(this) * initialPrice / 100F;
+    /** @return whether this player still has access to the home market */
+    public boolean canTradeInEurope() {
+        return !isDeclaredIndependence();
+    }
+
+    /**
+     * Quote the same total used by cargo and pier-equipment transactions.
+     *
+     * @param goods    required goods, including zero for a slider preview
+     * @param purchase true for buying, false for selling
+     * @return an immutable snapshot of the current price and tax
+     */
+    public EuropeTradeQuote quoteEuropeTrade(final Goods goods,
+            final boolean purchase) {
+        Preconditions.checkNotNull(goods);
+        final GoodsTrade trade = model.getEurope()
+                .getGoodsTradeForType(goods.getType());
+        return new EuropeTradeQuote(goods, purchase,
+                purchase ? trade.getBuyPrice() : trade.getSellPrice(),
+                model.getKingsTaxForPlayer(this));
+    }
+
+    /**
+     * @param type required market commodity
+     * @return an affordable cargo-slot quantity including purchase tax
+     */
+    public Goods getMaxBuyableGoods(final GoodsType type) {
+        if (!canTradeInEurope()) {
+            return Goods.of(type, 0);
+        }
+        for (int amount = CargoSlot.MAX_CARGO_SLOT_CAPACITY; amount > 0; amount--) {
+            final Goods goods = Goods.of(type, amount);
+            try {
+                if (quoteEuropeTrade(goods, true).getTotal() <= gold) {
+                    return goods;
+                }
+            } catch (ArithmeticException overflow) {
+                // A price beyond integer treasury capacity is unaffordable.
+            }
+        }
+        return Goods.of(type, 0);
     }
 
     public void buy(final UnitType unitType) {

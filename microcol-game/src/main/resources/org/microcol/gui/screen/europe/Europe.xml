@@ -20,4 +20,25 @@
 	<entry key="buttonClose">Close Europe port. Return back to main world view.</entry>
 	<entry key="buttonBuyUnit">Buy new unit.</entry>
 
+    <entry key="equipmentOpen">Equipment: click, right-click or press Enter to buy or sell</entry>
+    <entry key="buyMuskets">Buy 50 muskets</entry>
+    <entry key="sellMuskets">Sell muskets</entry>
+    <entry key="buyHorses">Buy 50 horses</entry>
+    <entry key="sellHorses">Sell horses</entry>
+    <entry key="buyTools">Buy 100 tools</entry>
+    <entry key="sellTools">Sell remaining tools</entry>
+    <entry key="equipmentConfirm">Confirm</entry>
+    <entry key="equipmentCancel">Cancel</entry>
+    <entry key="equipmentChanged">The offer changed. Review the updated price and confirm again or cancel.</entry>
+    <entry key="equipmentQuote">%s %s
+Unit price: %s gold
+Tax: %s%% (%s gold)
+Total: %s gold</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">This colonist is no longer available on your European pier during your turn. Nothing was changed. Cancel and select the colonist again.</entry>
+    <entry key="equipmentALREADY_SET">The equipment has already changed. Nothing was changed. Cancel and choose again.</entry>
+    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Sell the incompatible equipment first. Horses and muskets can be combined; tools require an unequipped colonist.</entry>
+    <entry key="equipmentNOT_ENOUGH_GOLD">Not enough gold. Nothing was changed. Cancel and obtain the required gold.</entry>
+    <entry key="equipmentTRADE_RESTRICTED">Trade with your European port is unavailable. Nothing was changed.</entry>
+    <entry key="equipmentGOLD_LIMIT">This trade exceeds the treasury limit. Nothing was changed.</entry>
+
 </properties>

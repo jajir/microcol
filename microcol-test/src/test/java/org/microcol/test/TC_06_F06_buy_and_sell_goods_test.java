@@ -66,6 +66,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
         screenMarketBuy.verifyNumberOfSliders(1);
         screenMarketBuy.selectValueAtSlider(63);
+        screenMarketBuy.verifySelectedMarketQuantity(63);
+        screenMarketBuy.verifyQuotedPrice("4 gold", "252 gold");
         screenMarketBuy.clickOnBuy();
 
         // Verify that in first cargo slot is 63 corn.
@@ -82,6 +84,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 .sellGoodsWithPressedControl(0, 0);
         screenMarketSell.verifyNumberOfSliders(1);
         screenMarketSell.selectValueAtSlider(27);
+        screenMarketSell.verifySelectedMarketQuantity(27);
+        screenMarketSell.verifyQuotedPrice("2 gold", "54 gold");
         screenMarketSell.clickOnSell();
 
         // Verify that in first cargo slot is 36 corn.
