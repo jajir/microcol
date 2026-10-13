@@ -12,36 +12,23 @@ jobs:
   functional:
     name: Functional player scenarios
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-      - name: Install JavaFX runtime libraries
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libasound2t64 libxtst6 fonts-dejavu-core xvfb xauth openbox
-      - name: Run game tests and all functional player scenarios
+      - name: Run game tests and all functional player scenarios in Docker
         run: |
-          xvfb-run -a --server-args='-screen 0 1600x1200x24' bash -euc '
-            openbox > /tmp/microcol-openbox.log 2>&1 &
-            trap "kill $!" EXIT
-            mvn -B -ntp -pl microcol-test -am clean test -P ci \
-              -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
-              -DsoundEnabled=false
-          '
+          bash scripts/ui-tests/test-runner.sh
+          docker compose -f compose.ui-tests.yml run --build --rm ui-tests
       - name: Keep functional test evidence even on failure
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tests-functional
           path: |
-            microcol-game/target/surefire-reports/
-            microcol-test/target/surefire-reports/
-            microcol-test/target/warehouse-qa/
+            target/docker-ui/
+            target/docker-ui-runner-checks/
           if-no-files-found: warn
           retention-days: 14
 

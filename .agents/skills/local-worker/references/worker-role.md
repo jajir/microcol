@@ -36,6 +36,10 @@ task unless that change is explicitly allowed. Derive expected test results from
 the requested behavior and rules; never weaken assertions, skip tests, or change
 expected values merely to obtain a passing run.
 
+Routine UI verification uses the documented Docker/Xvfb/Openbox environment,
+not host-desktop interaction. A locked Mac does not require an unlock request
+for these tests; leave actual execution to the assigned caller.
+
 For MicroCol functional tests, follow `docs/functional-tests.md`: assertions in
 page classes belong only in named `verify...` methods with relevant expected
 parameters. TC scenarios call these methods, never assertions directly; keep

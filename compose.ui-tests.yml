@@ -1,0 +1,19 @@
+name: microcol-ui
+
+services:
+  ui-tests:
+    platform: linux/amd64
+    build: ./scripts/ui-tests
+    init: true
+    mem_limit: 4g
+    shm_size: 256mb
+    environment:
+      MAVEN_OPTS: -Xmx768m
+      JAVA_TOOL_OPTIONS: -Xmx2g
+    volumes:
+      - .:/source:ro
+      - ./target/docker-ui:/results
+      - maven-cache:/root/.m2
+
+volumes:
+  maven-cache:

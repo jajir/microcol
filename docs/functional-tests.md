@@ -141,24 +141,80 @@ pravidel musí doplnit příslušné kroky a modelové testy.
 
 ## Spouštění a ochrana publikace
 
-Použít **JDK 17** a checkout s cestou bez mezer. Maven používá JVM uvedenou
-v `mvn --version`; samotné `java -version` nemusí ukazovat stejnou instalaci.
-Celá sada potřebuje nativní JavaFX Glass v grafické relaci; na Linuxu bez
-monitoru použít Xvfb s obrazovkou alespoň 1600 × 1200 a Openbox ve stejné relaci.
+Od **13. října 2026** je výchozím prostředím lokálních UI testů **Docker
+s Xvfb a Openbox**, podle dohody v [R-0033](requirements/R-0033.md). Zamčený
+Mac není překážkou těchto testů. Nativní macOS okno používat jen pro výslovnou
+platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odemčení.
 
-Celá sada včetně závislého herního modulu, z kořene repozitáře:
+### Docker UI tests
+
+Z kořene repozitáře spustit:
 
 ```sh
-mvn -B -ntp -pl microcol-test -am clean test -P ci \
-  -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
-  -DsoundEnabled=false
+docker compose -f compose.ui-tests.yml run --build --rm ui-tests
 ```
 
-V CI běží příkaz uvnitř
-`xvfb-run -a --server-args='-screen 0 1600x1200x24'`; nejprve se v téže relaci
-spustí Openbox. Přesný příkaz včetně ukončení správce oken je ve
-[workflow](../.github/workflows/dev-builds.yml). V místní grafické relaci
-po dobu testu neovládat okno hry ručně.
+[Compose](../compose.ui-tests.yml) sestaví [testovací obraz](../scripts/ui-tests/Dockerfile)
+s Maven 3.9.12, JDK 17, Linuxem amd64, knihovnami JavaFX, Xvfb a Openbox.
+Apple Silicon používá emulaci amd64, aby lokální prostředí odpovídalo CI.
+Kontejner má limit 4 GiB; testovací JVM používá explicitní heap 2 GiB
+a Maven 768 MiB. Výchozí JVM heap 1 GiB při tomto limitu nestačil pro TC19.
+Obraz je testovací nástroj, nikoli distribuovaná hra. Neotevírá porty ani
+nepřipojuje displej hostitele. Docker Engine musí běžet; u již nainstalovaného
+Docker Desktop jej lze spustit příkazem `docker desktop start` a ověřit
+`docker info`. Nedostupný runtime diagnostikovat nebo použít Linux CI,
+nikoli přejít na klikání do zamčené macOS plochy.
+
+[Entrypoint](../scripts/ui-tests/run.sh) čte checkout přes read-only mount,
+zkopíruje aktuální zdroje včetně necommitnutých změn bez `.git` a adresářů
+`target` do dočasného `/workspace` a tam spustí čistý Maven build. Tím se
+nepřenášejí staré výsledky ani nativní binárky hostitele a JavaFX má cestu bez
+mezer. Osobní save soubory ani hostitelský Maven profil se nepřipojují.
+Maven závislosti se ukládají v samostatném Docker volume.
+
+Každý běh ponechá vlastní adresář `target/docker-ui/run-XXXXXX/` s `maven.log`,
+`xvfb.log`, `openbox.log`, `exit-code.txt` a dostupnými reporty v
+`microcol-game/surefire-reports/`, `microcol-test/surefire-reports/` a screenshoty
+v `microcol-test/warehouse-qa/`. Při selhání zůstávají dostupné výsledky zachované
+a příkaz vrací nenulový stav. Kontrolovat výsledky konkrétního nového běhu,
+ne starší sousední adresář. Na Linuxu jsou exportované soubory vlastněné rootem
+kontejneru; obsah je čitelný pro nahrání CI artifactu.
+
+Cílenou diagnostiku lze vybrat běžnými Maven argumenty, například:
+
+```sh
+docker compose -f compose.ui-tests.yml run --build --rm ui-tests \
+  -Dtest=TC_06_F06_buy_and_sell_goods_test,TC_23_F16_atlantic_voyage_audit_test \
+  -Dsurefire.failIfNoSpecifiedTests=false
+```
+
+Název konkrétní třídy ověřit ve zdrojích; cílený běh nenahrazuje celou sadu.
+`failIfNoSpecifiedTests=false` zde dovoluje závislý herní modul bez zvoleného
+TC, nikoli přijetí nulového počtu testů. Výchozí plný příkaz tento přepínač
+nepoužívá. Všechny běhy používají skutečný Linux Glass a
+`testfx.headless=false` ve virtuálním X11 displeji 1600 × 1200; Openbox spravuje
+zaměření oken. Hostitelský monitor se nepoužívá.
+
+Samotný runner lze ověřit příkazem `bash scripts/ui-tests/test-runner.sh`.
+Kontrola používá skutečný Xvfb/Openbox s malou náhradou Maven: ověří zachování
+návratového kódu 7, chybu exportu, oddělené reporty, skryté zdroje, vynechání
+starých `target` adresářů a argument s mezerou. Výsledky nechá v
+`target/docker-ui-runner-checks/`. Nenahrazuje skutečné herní testy.
+
+Povinný CI job `functional` spouští stejný Compose příkaz. Nejprve ověří také
+runner. Artifact
+`tests-functional` obsahuje adresář nového kontejnerového běhu i při selhání;
+`publish` zůstává závislý na úspěšné úplné sadě. [Workflow](../.github/workflows/dev-builds.yml)
+je zdrojem přesné konfigurace a časového limitu.
+
+Ověření **13. října 2026** na Apple Silicon v tomto amd64 kontejneru:
+výchozí příkaz prošel s **683 herními a 64 funkčními kontrolami**, bez selhání,
+chyb či vynechání, včetně TC05/TC06 a TC23. Běh `run-6BVsG8` trval 10:27;
+všech 22 zdrojových fixtures zůstalo beze změny. Runner ověřil i nenulové
+návratové kódy a export reportů při selhání. První neúspěšný běh, opravu limitu
+heapu a konkrétní důkazy zachovává [R-0033](requirements/R-0033.md).
+
+### Omezená alternativa Monocle
 
 Rychlá cílená kontrola obou scénářů orby při vývoji:
 

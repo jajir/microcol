@@ -128,6 +128,14 @@ or a new player study.
 
 # Functional regression tests
 
+Use Docker with Xvfb/Openbox as the default environment for local UI tests,
+following [the container command](docs/functional-tests.md#docker-ui-tests).
+Routine automated UI verification must not require unlocking the host desktop.
+If Docker is unavailable, diagnose/start the existing runtime or use the Linux
+CI path; report that limitation rather than silently falling back to native
+macOS input or treating Monocle as full-suite acceptance. Reserve native desktop
+inspection for explicitly platform-specific or manual visual checks.
+
 Follow [the functional test contract](docs/functional-tests.md) for every behavior
 change and every change to graphics, CSS, layout, controls or shared UI helpers.
 Select affected [use cases](docs/use-cases.md), preserve their stable IDs, and

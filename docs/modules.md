@@ -65,8 +65,13 @@ not enabled in a normal build.
 The test module's `local` (default) and `ci` profiles both select the `ci` and
 `local` test tags. Surefire includes all `TC_...` scenario classes and fails
 when no tests are selected. The complete TestFX suite uses native Glass under
-Xvfb on Linux/JDK 17. Monocle 17.0.10 supports targeted headless checks, but cannot
-exercise the modified goods drag used by TC05/TC06. Each test copies its initial settings
+Xvfb/Openbox on Linux/JDK 17 in the shared Docker environment, locally and in
+CI. Each container run exports logs and reports into a separate
+`target/docker-ui/run-XXXXXX/` directory; module Surefire reports are under
+`microcol-game/surefire-reports/` and `microcol-test/surefire-reports/` there.
+This test image is not a player distribution. Monocle 17.0.10 supports targeted
+headless checks, but cannot exercise the modified goods drag used by TC05/TC06.
+Each test copies its initial settings
 to `target/test-homes/`, preserving the source fixtures and personal settings.
 The development workflow requires the functional job before publication.
 See the [functional test contract](functional-tests.md) for the stable scenario

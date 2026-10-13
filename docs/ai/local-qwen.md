@@ -1047,3 +1047,32 @@ established fix: output format and handoff changed too. The useful recovery
 was exact replacement matching plus a targeted syntax repair, not blind retry.
 Artifacts, failed patches, responses and caller verification are under
 `/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-dock-assertions/`.
+
+
+## Docker UI runner — 2026-10-13
+
+Task `2026-10-13-docker-ui-runner` used clean baseline `595038b3` and the
+existing local alias/digest at context 8192. The worker owned only the proposed
+Bash entrypoint; the caller owned the Docker/CI environment and verification.
+
+| Attempt | Seconds | Result and recovery |
+| --- | ---: | --- |
+| 0 | 104.424 | Direct draft used wrong tar destination, inserted prompt prose into Maven arguments, masked exit status and waited indefinitely for Openbox. Rejected; supplied each concrete failure. |
+| 1 | 70.053 | Text-only repair still copied the wrong path, used a non-pipefail shell, nested report directories and ignored copy errors. Rejected; requested a focused final repair. |
+| 2 | 42.545 | Corrected snapshot command but retained ignored export failures and incorrect paths, expanded a quoted command as a string and did not start Openbox. Both permitted repairs exhausted. |
+
+Total worker elapsed time was **217.022 seconds**. All turns exited zero, but
+none provided an accepted complete implementation. The caller completed the
+small runner after the two repair rounds and added runtime checks for success,
+Maven failure, export failure, quoted arguments and a clean read-only snapshot.
+The caller's first check harness used `compose images` before a container
+existed; it was corrected to `compose config --images`, and all checks passed.
+This caller setup correction is separate from the worker failures.
+
+Reported input/output tokens were 22266/1257, 3924/816 and 3392/378; the first
+turn reported 16879 cached input tokens, the others zero. Runtime samples
+confirmed the documented local model and 8192 context. Loading and generation
+timings are unavailable; no savings claim is made. Qwen was unloaded before
+container builds and Maven. Inputs, rejected drafts, reviews and measurements
+remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-docker-ui-runner/`.
+Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
