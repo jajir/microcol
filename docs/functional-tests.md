@@ -610,4 +610,8 @@ nikoli ověřený kód nebo fixtures.
 4. Jde o regrese stávajících cest UC-080/082, UC-113, UC-115 a UC-119,
    bez změny pravidel, vzhledu či textů. Příslušné UC tím nejsou celé přijaté;
    zprávy v jednotkovém testu samy neověřují kompletní konec hry UC-111.
-   Povinná celá funkční sada a distribuce se ověřují při publikaci této revize.
+5. Následný [CI běh revize dcc1cfa1](https://github.com/jajir/microcol/actions/runs/38350505498)
+   prošel na první pokus na Linuxu/JDK 17 s Xvfb/Openbox: **683 herních testů
+   a 52 funkčních kontrol**, bez selhání, chyb a vynechání. Prošly i kontroly
+   sestavení a všechny tři nativní platformy; publikaci a přesný build
+   zaznamenává [R-0011](requirements/R-0011.md).
