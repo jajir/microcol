@@ -538,10 +538,21 @@ vyložení v kolonii a nové odbornosti se tímto dílčím během nepovažují 
 ověřené. Úplná regrese tohoto řezu následně prošla lokálně i v publikované
 CI commitu `b989413b` (737 herních a 90 funkčních/strukturálních testů).
 
-Lokálně ověřené R-0021 pokrývá UC-027 a UC-113: TC23 nyní vyžaduje samostatný
+Publikované R-0021 pokrývá UC-027 a UC-113: TC23 nyní vyžaduje samostatný
 krok ven z pruhu a přesný návrat, nové TC28/F20 ověřuje západní plavbu,
 rušení, čekání na obsazený cíl, Continue a odmítnutí mapy bez návratového
 pole. Tyto cílené cesty prošly v Dockeru; [evidence](functional-tests.md#atlantic-voyage-implementation-2026-10-13)
 zachycuje i opravu zkráceného viditelného textu. Úplná lokální regrese
 prošla: 767 herních a 92 funkčních/strukturálních testů bez chyb a vynechání.
-Publikace celého R-0021 zatím čeká na dokončení.
+Stejné počty prošly v CI a build `dev-49-88573a85ac03` byl publikován.
+
+Lokálně ověřené R-0022 doplňuje UC-024/UC-025: TC01 zachovává nalodění a vylodění
+obou osob pomocí dvou samostatných voleb. Šest cílených TC29/F21 prošlo:
+výběr i jediného pasažéra, zrušení, Continue, nulový pohyb v místním přístavu,
+plná/cizí loď a změněný cíl. Model znovu kontroluje oprávnění před změnou
+místa. TC27/TC_07 navíc prošel skutečnou plavbou z východního okraje do
+kolonie, vyložením vybaveného člověka mimo pracovníky a dalším Continue.
+Specialista zůstává návazností R-0023. Úplná regrese R-0022 prošla 781 modelovými
+a 98 funkčními/podpůrnými testy bez selhání, chyb a vynechání; publikace čeká.
+Aktuální stav a neuzavřené kontroly jsou v
+[záznamu ověření přepravy](functional-tests.md#individual-passenger-transfers-2026-10-13).

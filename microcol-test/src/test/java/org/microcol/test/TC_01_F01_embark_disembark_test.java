@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
+import org.microcol.page.PassengerTransferPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -75,7 +76,16 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         // disembark units
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
-        // Disembarking animates each unit separately.
+        // Select and confirm each passenger separately.
+        PassengerTransferPage passengers = new PassengerTransferPage(
+                getContext());
+        passengers.choose(24);
+        passengers.confirm();
+        gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 1);
+        gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
+        gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
+        passengers.choose(25);
+        passengers.confirm();
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
 
         // verify that units are at expected location.

@@ -13,7 +13,9 @@ public class UnitUtil {
             final Location targetLocation) {
         if (unit.canHoldCargo()) {
             final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
-            return unitWithCargo.isPossibleToDisembarkAt(targetLocation, true);
+            return !unitWithCargo.isPossibleToGoToPort(targetLocation)
+                    && unitWithCargo.isPossibleToDisembarkAt(targetLocation,
+                            true);
         } else {
             return false;
         }

@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import org.microcol.model.AbstractUnit;
 import org.microcol.model.Cargo;
-import org.microcol.model.CargoSlot;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Place;
@@ -57,43 +56,19 @@ public abstract class UnitWithCargo extends AbstractUnit {
     }
 
     /**
-     * Unit can disembark unit from cargo slot to location. Location should be:
-     * <ul>
-     * <li>No enemy units should be at location.</li>
-     * <li>Location should be at neighbor of location of this unit.</li>
-     * <li>There should be at least one cargo that could disembark.</li>
-     * <li>There should not be colony at location.</li>
-     * </ul>
+     * Check whether at least one passenger can land through the shared rules.
      *
-     * @param targetLocation required target location
-     * @param inCurrentTurn  required if it should be done in current turn
-     * @return Return <code>true</code> when unit could disembark at given
-     *         location otherwise return <code>false</code>.
+     * @param targetLocation required destination
+     * @param inCurrentTurn  whether passenger movement points are required
+     * @return whether an eligible passenger is aboard
      */
     public boolean isPossibleToDisembarkAt(final Location targetLocation,
             boolean inCurrentTurn) {
         Preconditions.checkNotNull(targetLocation);
-        Preconditions.checkState(isAtPlaceLocation(),
-                "Unit %s should by at map.", this);
-        return getLocation().isNeighbor(targetLocation)
-                && getType().getCargoCapacity() > 0
-                && model.getColonyAt(targetLocation).isEmpty()
-                && model.getColonyAt(getLocation()).isEmpty()
-                && getCargo().getSlots().stream()
-                        .filter(cargoSlot -> canCargoDisembark(cargoSlot,
-                                targetLocation, inCurrentTurn))
-                        .findAny().isPresent();
-    }
-
-    private boolean canCargoDisembark(final CargoSlot slot,
-            final Location moveToLocation, boolean inCurrentTurn) {
-        if (slot.isEmpty() || slot.isLoadedGood()) {
-            return false;
-        } else {
-            final Unit holdedUnit = slot.getUnit().get();
-            return (!inCurrentTurn || holdedUnit.getActionPoints() > 0)
-                    && holdedUnit.canUnitDisembarkAt(moveToLocation);
-        }
+        return isShip() && isAtPlaceLocation() && getCargo().getSlots().stream()
+                .flatMap(slot -> slot.getUnit().stream())
+                .anyMatch(passenger -> passenger
+                        .canUnitDisembarkAt(targetLocation, inCurrentTurn));
     }
 
     protected List<UnitActionType> getSupportedActions() {

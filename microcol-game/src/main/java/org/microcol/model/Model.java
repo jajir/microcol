@@ -420,6 +420,25 @@ public class Model {
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
     }
 
+    /**
+     * A port uses eight-direction water adjacency, without an
+     * ocean-connectivity rule.
+     *
+     * @param player   required port owner
+     * @param location required colony square
+     * @return whether this is the player's coastal colony
+     */
+    public boolean isOwnedCoastalPort(final Player player,
+            final Location location) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(location);
+        return getMap().isValid(location) && getColonyAt(location)
+                .filter(colony -> colony.getOwner() == player).isPresent()
+                && location.getNeighbors().stream().filter(getMap()::isValid)
+                        .anyMatch(neighbor -> getMap()
+                                .getTerrainTypeAt(neighbor).isSea());
+    }
+
     public boolean isGameStarted() {
         return gameManager.isStarted();
     }

@@ -717,6 +717,13 @@ public class CargoSlotTest {
     @BeforeEach
     private void beforeEach() {
         slot = new CargoSlot(cargo);
+        // The real passenger now installs both sides before publishing its
+        // event.
+        doAnswer(invocation -> {
+            PlaceCargoSlot place = invocation.getArgument(0);
+            place.getCargoSlot().store(place);
+            return null;
+        }).when(unit).placeToCargoSlot(any());
     }
 
     @AfterEach

@@ -144,8 +144,9 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
         ship.getCargo().getSlots().forEach(slot -> {
             if (slot.isLoadedUnit()) {
                 final Unit unit = slot.getUnit().get();
-                unit.disembarkToLocation(location);
-                // slot.disembark(location);
+                if (unit.canUnitDisembarkAt(location)) {
+                    unit.disembarkToLocation(location);
+                }
             }
         });
     }

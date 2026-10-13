@@ -94,7 +94,8 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                 && unit.getActionPoints() > 0) {
             unit.getNeighborUnitsWithFreeSlot().stream()
                     .flatMap(u -> u.getCargo().getSlots().stream())
-                    .filter(slot -> slot.isEmpty()).findAny().get().store(unit);
+                    .filter(unit::canEmbark).findFirst()
+                    .ifPresent(unit::embarkFromLocation);
         }
     }
 

@@ -3,304 +3,270 @@ package org.microcol.model;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Optional;
+import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.microcol.model.campaign.MissionImpl;
+import org.microcol.model.campaign.po.GameModelPo;
+import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.event.UnitEmbarkedEvent;
+import org.microcol.model.event.UnitMoveStartedEvent;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitPo;
+import org.microcol.model.unit.Ship;
+import org.microcol.model.unit.UnitActionNoAction;
 
-/**
- * Verify embark from map location and disembark to specific location.
- */
-public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
+import com.google.gson.Gson;
 
-    /**
-     * Move starts at this location.
-     */
-    private final static Location START_LOCATION = Location.of(1, 1);
+/** Verify individual map transfers against live ownership and cargo links. */
+public class UnitColonistEmbarkTest {
+    private static final Location WATER = Location.of(49, 15);
+    private static final Location SHORE = Location.of(48, 15);
+    private static final Location FAR = Location.of(46, 15);
+    private GameModelPo data;
+    private Model model;
+    private Unit unit;
+    private Ship ship;
+    private CargoSlot slot;
+    private ModelListener listener;
 
-    /**
-     * Target map location of move.
-     */
-    private final static Location TARGET_LOCATION = Location.of(1, 2);
+    @BeforeEach
+    void prepare() {
+        data = new GameModelPoDao().loadFromClassPath(
+                "/maps/default-campaign-mission-2-thrive.microcol");
+        UnitPo carrier = data.getModel().getUnits().stream()
+                .filter(u -> u.getId() == 3).findFirst().orElseThrow();
+        carrier.setPlaceHighSeas(null);
+        carrier.setDepartureLocation(null);
+        carrier.setDepartureDirection(null);
+        carrier.setPlaceMap(at(WATER));
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 16)
+                .findFirst().orElseThrow().setAvailableMoves(2);
+        Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        terrain.put(WATER, TerrainType.OCEAN);
+        terrain.put(SHORE, TerrainType.GRASSLAND);
+        terrain.put(FAR, TerrainType.GRASSLAND);
+        data.getModel().getMap().setTerrainType(terrain);
+        restore();
+    }
 
-    /**
-     * Map location that is too far from start location to move there in one
-     * step.
-     */
-    private final static Location TOO_FAR_LOCATION = Location.of(1, 4);
+    private PlaceMapPo at(Location location) {
+        PlaceMapPo place = new PlaceMapPo();
+        place.setLocation(location);
+        place.setOrientation(Direction.west);
+        return place;
+    }
 
-    private Player differentOwner = mock(Player.class);
+    private void restore() {
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        unit = model.getUnitById(16);
+        ship = (Ship) model.getUnitById(3);
+        slot = ship.getCargo().getSlotByIndex(0);
+        listener = mock(ModelListener.class);
+        model.addListener(listener);
+    }
 
-    private PlaceLocation placeLocation = mock(PlaceLocation.class);
+    private String snapshot() {
+        return new Gson().toJson(model.save());
+    }
 
-    private CargoSlot cargoSlot = mock(CargoSlot.class);
-
-    private PlaceConstructionSlot placeConstructionSlot = mock(
-            PlaceConstructionSlot.class);
-
-    private PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
-
-    private Colony colony = mock(Colony.class);
-
-    /**
-     * To this unit will be tested unit embarked.
-     */
-    private Unit targetUnit = mock(Unit.class);
-
-    /**
-     * From this unit will be other unit disembarked.
-     */
-    private Unit sourceUnit = mock(Unit.class);
+    private void rejected(Runnable action) {
+        String before = snapshot();
+        assertThrows(IllegalStateException.class, action::run);
+        assertEquals(before, snapshot());
+        verify(listener, never()).onUnitMovedStepStarted(any());
+    }
 
     @Test
-    public void test_embarkFromLocation_cargoSlot_is_null() throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-
+    public void test_embarkFromLocation_cargoSlot_is_null() {
+        unit.placeToLocation(SHORE);
+        String before = snapshot();
         assertThrows(NullPointerException.class,
                 () -> unit.embarkFromLocation(null));
+        assertEquals(before, snapshot());
     }
 
     @Test
-    public void test_embarkFromLocation_cargoSlot_is_not_empty()
-            throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(false);
-
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> unit.embarkFromLocation(cargoSlot));
-
-        assertTrue(ex.getMessage().contains("is already loaded"));
+    public void test_embarkFromLocation_cargoSlot_is_not_empty() {
+        unit.placeToLocation(SHORE);
+        rejected(() -> unit
+                .embarkFromLocation(ship.getCargo().getSlotByIndex(1)));
     }
 
     @Test
-    public void test_embarkFromLocation_unit_isNotAtMapLocation()
-            throws Exception {
-        makeColonist(model, 23, placeConstructionSlot, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.embarkFromLocation(cargoSlot));
-
-        assertTrue(ex.getMessage().contains("Unit have to be at map, it's at"));
+    public void test_embarkFromLocation_unit_isNotAtMapLocation() {
+        ship.placeToEuropePort(model.getEurope().getPort());
+        unit.placeToEuropePortPier();
+        rejected(() -> unit.embarkFromLocation(slot));
     }
 
     @Test
-    public void test_embarkFromLocation_target_unit_isNotAtMapLocation()
-            throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-        when(cargoSlot.getOwnerUnit()).thenReturn(targetUnit);
-        when(targetUnit.isAtPlaceLocation()).thenReturn(false);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.embarkFromLocation(cargoSlot));
-
-        assertTrue(ex.getMessage().contains(
-                "where other unit would like to embark have to be at map"));
+    public void test_embarkFromLocation_target_unit_isNotAtMapLocation() {
+        unit.placeToLocation(SHORE);
+        ship.placeToEuropePort(model.getEurope().getPort());
+        rejected(() -> unit.embarkFromLocation(slot));
     }
 
     @Test
-    public void test_embarkFromLocation_cargoSlow_belongs_to_different_owner()
-            throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-        when(cargoSlot.getOwnerUnit()).thenReturn(targetUnit);
-        when(targetUnit.isAtPlaceLocation()).thenReturn(true);
-        when(cargoSlot.getOwnerPlayer()).thenReturn(differentOwner);
-
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> unit.embarkFromLocation(cargoSlot));
-
-        assertTrue(ex.getMessage()
-                .contains("Cargo slot belongs to different player"));
+    public void test_embarkFromLocation_cargoSlow_belongs_to_different_owner() {
+        unit.placeToLocation(SHORE);
+        UnitPo foreign = new UnitPo();
+        foreign.setId(100);
+        foreign.setType(UnitType.GALLEON);
+        foreign.setOwnerId("Dutch's King");
+        foreign.setAvailableMoves(3);
+        foreign.setAction(new UnitActionNoAction().save());
+        foreign.setPlaceMap(at(Location.of(49, 16)));
+        Ship other = (Ship) model.createUnit(model.save(), foreign);
+        rejected(() -> unit
+                .embarkFromLocation(other.getCargo().getSlotByIndex(0)));
     }
 
     @Test
-    public void test_embarkFromLocation_embark_location_is_too_far()
-            throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-        when(cargoSlot.getOwnerUnit()).thenReturn(targetUnit);
-        when(targetUnit.isAtPlaceLocation()).thenReturn(true);
-        when(cargoSlot.getOwnerPlayer()).thenReturn(owner);
-        when(placeLocation.getLocation()).thenReturn(START_LOCATION);
-        when(targetUnit.getLocation()).thenReturn(TOO_FAR_LOCATION);
-        when(placeLocation.getOrientation()).thenReturn(Direction.southWest);
-        when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(false);
-
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> unit.embarkFromLocation(cargoSlot));
-
-        assertTrue(ex.getMessage().contains("have to be neighbours"));
-
-        verify(model, times(0)).fireUnitMovedStepStarted(unit, START_LOCATION,
-                TOO_FAR_LOCATION, Direction.southWest);
+    public void test_embarkFromLocation_embark_location_is_too_far() {
+        unit.placeToLocation(FAR);
+        rejected(() -> unit.embarkFromLocation(slot));
     }
 
     @Test
-    public void test_embarkFromLocation_move_was_stoped_by_ui()
-            throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-        when(cargoSlot.getOwnerUnit()).thenReturn(targetUnit);
-        when(targetUnit.isAtPlaceLocation()).thenReturn(true);
-        when(cargoSlot.getOwnerPlayer()).thenReturn(owner);
-        when(placeLocation.getLocation()).thenReturn(START_LOCATION);
-        when(targetUnit.getLocation()).thenReturn(TARGET_LOCATION);
-        when(placeLocation.getOrientation()).thenReturn(Direction.southWest);
-        when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(false);
-
-        unit.embarkFromLocation(cargoSlot);
-
-        verify(model, times(0)).fireUnitMovedStepStarted(unit, START_LOCATION,
-                TARGET_LOCATION, Direction.southWest);
+    public void test_embarkFromLocation_move_was_stoped_by_ui() {
+        unit.placeToLocation(SHORE);
+        cancelMovement();
+        String before = snapshot();
+        unit.embarkFromLocation(slot);
+        assertEquals(before, snapshot());
+        verify(listener, never()).onUnitMovedStepStarted(any());
     }
 
     @Test
-    public void test_embarkFromLocation() throws Exception {
-        makeColonist(model, 23, placeLocation, owner, 10);
-        when(cargoSlot.isEmpty()).thenReturn(true);
-        when(cargoSlot.getOwnerUnit()).thenReturn(targetUnit);
-        when(targetUnit.isAtPlaceLocation()).thenReturn(true);
-        when(cargoSlot.getOwnerPlayer()).thenReturn(owner);
-        when(placeLocation.getLocation()).thenReturn(START_LOCATION);
-        when(targetUnit.getLocation()).thenReturn(TARGET_LOCATION);
-        when(placeLocation.getOrientation()).thenReturn(Direction.southWest);
-        when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(true);
-
-        unit.embarkFromLocation(cargoSlot);
-
-        verify(cargoSlot, times(1)).store((PlaceCargoSlot) any());
-        verify(model, times(1)).fireUnitMovedStepStarted(unit, START_LOCATION,
-                TARGET_LOCATION, Direction.southWest);
-        verify(model, times(1)).fireUnitMovedFinished(eq(unit), any());
+    public void test_embarkFromLocation() {
+        unit.placeToLocation(SHORE);
+        int shipPoints = ship.getActionPoints();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitEmbarked(UnitEmbarkedEvent event) {
+                assertSame(unit, event.getUnit());
+                assertSame(slot, event.getSlot());
+                assertSame(unit, slot.getUnit().orElseThrow());
+                assertSame(slot, unit.getPlaceCargoSlot().getCargoSlot());
+            }
+        });
+        unit.embarkFromLocation(slot);
+        assertEquals(1, unit.getActionPoints());
+        assertEquals(shipPoints, ship.getActionPoints());
+        assertSame(unit, slot.getUnit().orElseThrow());
+        assertSame(slot, unit.getPlaceCargoSlot().getCargoSlot());
+        verify(listener).onUnitEmbarked(any());
+        verify(listener).onUnitMovedStepStarted(
+                argThat(event -> event.getStart().equals(SHORE)
+                        && event.getEnd().equals(WATER)
+                        && event.getUnit() == unit));
+        verify(listener).onUnitMoveFinished(any());
     }
 
     @Test
-    public void test_disembarkToLocation_cargoSlot_is_null() throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-
+    public void test_disembarkToLocation_cargoSlot_is_null() {
+        String before = snapshot();
         assertThrows(NullPointerException.class,
                 () -> unit.disembarkToLocation(null));
+        assertEquals(before, snapshot());
     }
 
     @Test
-    public void test_disembarkToLocation_not_enought_action_points()
-            throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 0);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.disembarkToLocation(TARGET_LOCATION));
-
-        assertTrue(ex.getMessage()
-                .contains("need for unload at least one action point"));
+    public void test_disembarkToLocation_not_enought_action_points() {
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 16)
+                .findFirst().orElseThrow().setAvailableMoves(0);
+        restore();
+        rejected(() -> unit.disembarkToLocation(SHORE));
     }
 
     @Test
-    public void test_disembarkToLocation_unit_not_in_cargo_slot()
-            throws Exception {
-        makeColonist(model, 23, placeConstructionSlot, owner, 1);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.disembarkToLocation(TARGET_LOCATION));
-
-        assertTrue(ex.getMessage()
-                .contains("can't be unload, it's not in cargo slot"));
+    public void test_disembarkToLocation_unit_not_in_cargo_slot() {
+        unit.placeToLocation(SHORE);
+        rejected(() -> unit.disembarkToLocation(SHORE));
     }
 
     @Test
-    public void test_disembarkToLocation_unit_cant_move_at_target_location()
-            throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-        when(model.getMap()).thenReturn(worldMap);
-        when(worldMap.getTerrainTypeAt(TARGET_LOCATION))
-                .thenReturn(TerrainType.OCEAN);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.disembarkToLocation(TARGET_LOCATION));
-
-        assertTrue(ex.getMessage().contains("can't move at target terrain"));
+    public void test_disembarkToLocation_unit_cant_move_at_target_location() {
+        rejected(() -> unit.disembarkToLocation(WATER));
     }
 
     @Test
-    public void test_disembarkToLocation_target_location_is_too_far()
-            throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-        when(model.getMap()).thenReturn(worldMap);
-        when(worldMap.getTerrainTypeAt(TOO_FAR_LOCATION))
-                .thenReturn(TerrainType.GRASSLAND);
-        when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
-        when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
-
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> unit.disembarkToLocation(TOO_FAR_LOCATION));
-
-        assertTrue(ex.getMessage()
-                .contains("have to neighbour of target location"));
+    public void test_disembarkToLocation_target_location_is_too_far() {
+        rejected(() -> unit.disembarkToLocation(FAR));
     }
 
     @Test
-    public void test_disembarkToLocation_target_location_is_colony()
-            throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-        when(model.getMap()).thenReturn(worldMap);
-        when(worldMap.getTerrainTypeAt(TARGET_LOCATION))
-                .thenReturn(TerrainType.GRASSLAND);
-        when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
-        when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
-        when(model.getColonyAt(TARGET_LOCATION))
-                .thenReturn(Optional.of(colony));
+    public void test_disembarkToLocation_target_location_is_colony() {
+        Location port = Location.of(25, 14);
+        // An owned coastal colony is now valid; a foreign one remains
+        // forbidden.
+        data.getModel().getColonies().stream()
+                .filter(c -> c.getLocation().equals(port)).findFirst()
+                .orElseThrow().setOwnerName("Dutch's King");
+        Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        terrain.put(Location.of(26, 14), TerrainType.OCEAN);
+        data.getModel().getMap().setTerrainType(terrain);
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 3)
+                .findFirst().orElseThrow().setPlaceMap(at(Location.of(26, 14)));
+        restore();
+        assertFalse(unit.canUnitDisembarkAt(port));
+        rejected(() -> unit.disembarkToLocation(port));
+    }
 
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> unit.disembarkToLocation(TARGET_LOCATION));
-
-        assertTrue(ex.getMessage().contains("can't be colony"));
+    private void cancelMovement() {
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitMoveStarted(UnitMoveStartedEvent event) {
+                event.stopEventExecution();
+            }
+        });
     }
 
     @Test
-    public void test_disembarkToLocation_move_was_stoped_by_ui()
-            throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-        when(model.getMap()).thenReturn(worldMap);
-        when(worldMap.getTerrainTypeAt(TARGET_LOCATION))
-                .thenReturn(TerrainType.GRASSLAND);
-        when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
-        when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
-        when(model.getColonyAt(TARGET_LOCATION)).thenReturn(Optional.empty());
-        when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(false);
+    public void test_disembarkToLocation_move_was_stoped_by_ui() {
+        cancelMovement();
+        String before = snapshot();
+        unit.disembarkToLocation(SHORE);
+        assertEquals(before, snapshot());
+        verify(listener, never()).onUnitMovedStepStarted(any());
+    }
 
-        unit.disembarkToLocation(TARGET_LOCATION);
-
+    @Test
+    public void test_disembarkToLocation() {
+        int shipPoints = ship.getActionPoints();
+        unit.disembarkToLocation(SHORE);
         assertEquals(1, unit.getActionPoints());
-        verify(model, times(0)).fireUnitMovedStepStarted(unit, START_LOCATION,
-                TARGET_LOCATION, Direction.east);
+        assertEquals(shipPoints, ship.getActionPoints());
+        assertTrue(slot.isEmpty());
+        assertEquals(SHORE, unit.getLocation());
+        verify(listener).onUnitMovedStepStarted(
+                argThat(event -> event.getStart().equals(WATER)
+                        && event.getEnd().equals(SHORE)
+                        && event.getUnit() == unit));
+        verify(listener).onUnitMoveFinished(any());
     }
 
     @Test
-    public void test_disembarkToLocation() throws Exception {
-        makeColonist(model, 23, placeCargoSlot, owner, 1);
-        when(model.getMap()).thenReturn(worldMap);
-        when(worldMap.getTerrainTypeAt(TARGET_LOCATION))
-                .thenReturn(TerrainType.GRASSLAND);
-        when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
-        when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
-        when(model.getColonyAt(TARGET_LOCATION)).thenReturn(Optional.empty());
-        when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(true);
-
-        unit.disembarkToLocation(TARGET_LOCATION);
-
-        assertEquals(0, unit.getActionPoints());
-        verify(model, times(1)).fireUnitMovedStepStarted(unit, START_LOCATION,
-                TARGET_LOCATION, Direction.east);
+    void rejectsSlotFilledDuringMovementConfirmationBeforeAnimation() {
+        unit.placeToLocation(SHORE);
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitMoveStarted(UnitMoveStartedEvent event) {
+                slot.addGoods(Goods.of(GoodsType.ORE, 7));
+            }
+        });
+        assertThrows(IllegalStateException.class,
+                () -> unit.embarkFromLocation(slot));
+        assertEquals(SHORE, unit.getLocation());
+        assertEquals(2, unit.getActionPoints());
+        assertEquals(Goods.of(GoodsType.ORE, 7), slot.getGoods().orElseThrow());
+        verify(listener, never()).onUnitMovedStepStarted(any());
+        verify(listener, never()).onUnitEmbarked(any());
     }
 
 }

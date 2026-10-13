@@ -136,6 +136,20 @@ public final class EuropeEquipmentPage extends AbstractScreen {
                 .getCargo().getSlotByIndex(0).getUnit().orElseThrow());
     }
 
+    public void verifyLandedPassenger(int id, int shipId,
+            org.microcol.model.Location location) {
+        UnitFreeColonist unit = (UnitFreeColonist) getModel().getUnitById(id);
+        assertTrue(unit.isAtPlaceLocation());
+        assertEquals(location, unit.getLocation());
+        UnitWithCargo ship = (UnitWithCargo) getModel().getUnitById(shipId);
+        assertEquals(location, ship.getLocation());
+        assertTrue(ship.getCargo().getSlotByIndex(0).isEmpty());
+        assertEquals(
+                org.microcol.model.Goods.of(org.microcol.model.GoodsType.ORE,
+                        7),
+                ship.getCargo().getSlotByIndex(1).getGoods().orElseThrow());
+    }
+
     public void verifyVoyage(int shipId, int turns) {
         assertTrue(getModel().getUnitById(shipId)
                 .getPlace() instanceof PlaceHighSea);
@@ -143,6 +157,42 @@ public final class EuropeEquipmentPage extends AbstractScreen {
                 .getPlace();
         assertFalse(sea.isTravelToEurope());
         assertEquals(turns, sea.getRemainigTurns());
+    }
+
+    public void showSeaRoute(org.microcol.model.Location from,
+            org.microcol.model.Location to) throws Exception {
+        javafx.scene.canvas.Canvas canvas = getContext().getClassFromGuice(
+                org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        java.util.function.BooleanSupplier visible = () -> {
+            double left = Math.min(
+                    getContext().getArea().convertToCanvasPoint(from).getX(),
+                    getContext().getArea().convertToCanvasPoint(to).getX());
+            double right = Math.max(
+                    getContext().getArea().convertToCanvasPoint(from).getX(),
+                    getContext().getArea().convertToCanvasPoint(to).getX());
+            return left >= 0 && right <= canvas.getWidth()
+                    - org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+        };
+        if (!visible.getAsBoolean()) {
+            double left = Math.min(
+                    getContext().getArea().convertToCanvasPoint(from).getX(),
+                    getContext().getArea().convertToCanvasPoint(to).getX());
+            KeyCode direction = left < 0 ? KeyCode.A : KeyCode.D;
+            getRobot().press(direction);
+            try {
+                WaitForAsyncUtils.waitFor(20, TimeUnit.SECONDS,
+                        visible::getAsBoolean);
+            } finally {
+                getRobot().release(direction);
+            }
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    public void verifyCarrierAt(int shipId,
+            org.microcol.model.Location location) {
+        assertEquals(location, getModel().getUnitById(shipId).getLocation());
     }
 
     public void verifyArrived(int shipId) {

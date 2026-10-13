@@ -1476,3 +1476,88 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    in the task directory under `~/Library/Logs/Microcol/local-qwen/jobs/`.
    The isolated checkout separates worker verification from main integration.
    No local inference overlapped Maven/Docker and no savings claim is made.
+
+### R-0022 passenger selector — 2026-10-13
+
+1. Task `2026-10-13-r22-passenger-dialog` uses isolated baseline
+   `88573a85ac0336307724b7da8bf06bc4bb159990`. The caller supplied the translated
+   enum/XML keys and R-0022 contract; later model/controller/test inputs were
+   copied explicitly for integration. Only `ChoosePassengerDialog.java` is
+   worker-authored. Architecture, shared transfer validation and actual checks
+   remain caller-owned because they span persistence, map, port and AI callers.
+2. Attempt 0 timed out after **300.337 seconds** without a file change. Events
+   show repeated source discovery, including a wrong enum path and broad GUI
+   listing. Repair 1 provided exact API signatures inline and requested one
+   complete source file without tool use; it completed in **111.946 seconds**.
+3. Static review found access to the superclass's private `i18n`, missing radio
+   IDs, enabled confirmation with no selected passenger, a premature accepted
+   result, unused imports and an invalid generic Javadoc link. Repair 2 took
+   **109.415 seconds**, fixing the compile/selection errors but removing default
+   first selection and retaining the Javadoc link. Both repairs were exhausted;
+   the caller restored initial selection and corrected the link, then used
+   ordinary coordinates in the caption instead of the model object's `toString`.
+4. Total worker time **521.698 seconds**, three attempts, two repairs. All actual
+   runtime samples identify `microcol-gpt-oss:20b-32k`, context **32768**, digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`.
+   The runner unloaded after every attempt before Docker checks. No measured
+   token saving or autonomous acceptance is claimed.
+5. The caller applied the shared formatter to the integrated isolated inputs;
+   token preservation and idempotence passed. Compilation passed. The first
+   model run exposed stale departure fields in the caller's modified scenario;
+   the second exposed two further test setup mistakes: `Model.stop()` does not
+   change the saved game-start flag, and a foreign carrier cannot be created on
+   the friendly carrier's occupied square. Corrected fixtures clear the old
+   voyage origin, explicitly set the unstarted state, and use adjacent water.
+   A further comparison error used whole-game save before the game had started;
+   the corrected rejection test compares passenger/carrier snapshots and all
+   cargo instead. The first UI load also exposed a tree left on new water in
+   F21; this caller fixture was corrected without weakening map validation.
+   The unchanged acceptance selection then passed in isolated `run-MZv8FT`:
+   **10 model/architecture and six functional/control tests**, zero failures,
+   errors or skips. TC01 retains its original cargo assertions through two
+   choices; both TC29 selection/cancel/Continue/stale-target cases passed.
+   The caller reviewed `passenger-selection.png`, accepted the selector,
+   copied only its class into main and released the owned lock. All 20 current
+   main Java changes then passed the shared formatter/token/idempotence check.
+   Full R-0022 acceptance remains pending broader boundaries and regression.
+6. Evidence: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r22-passenger-dialog/`
+   contains task revisions, generated source, runtime samples, execution budgets
+   and caller review. Main-checkout logs are
+   `target/r19-r31/passenger-model-first.log`, `passenger-integrated.log` and
+   `passenger-integrated-fixture-fixed.log`. These failures concern caller test
+   preparation; they are not reported as worker implementation defects.
+
+### R-0022 frigate eligibility tests — 2026-10-13
+
+1. Task `2026-10-13-r22-frigate-tests`, detached baseline
+   `88573a85ac0336307724b7da8bf06bc4bb159990`, received the current R-0022
+   inputs explicitly recorded in `caller-inputs.json`. Only
+   `UnitFrigateEmbarkTest.java` was assigned. The caller owns real-model
+   transfer fixtures, coastal boundaries, UI journeys and acceptance.
+2. Attempts used **239.736 / 232.304 / 108.129 seconds**, **580.169 total**.
+   The first response was truncated, retained the obsolete Europe exception
+   and omitted the fifth test. The first repair was also truncated and
+   invented `sharedPassengerPredicate`. Neither result was applied. The last
+   repair returned four complete snippets using the actual passenger API.
+3. The caller applied the last snippets only in the isolated tree. An initial
+   exact-match check stopped before writing because the old file lacked a
+   trailing newline; the application was corrected against the actual ending.
+   The first compile then rejected `verifyNoInteractions`, an API explicitly
+   supplied by the caller but absent from this project's Mockito version.
+   The caller replaced it with existing `verifyZeroInteractions`, preserving
+   the assertion. Both worker repairs were exhausted; this one-line caller
+   setup correction did not justify another worker task or a budget reset.
+4. All three attempts reported the configured digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`
+   and context 32768. The model was unloaded before formatting and Docker
+   verification. No cloud fallback or savings claim. Full prompts, responses,
+   execution metadata and caller reviews remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r22-frigate-tests/`.
+5. The five assigned frigate tests and three page-contract tests passed in
+   isolated `run-myTaDs`. Only the assigned class was integrated into `main`
+   and the owned worker lock released. The complete selected model group
+   passed 44 cases; the UI group had one caller-authored journey failure
+   among 18 cases (incorrect assumed return location). That failure remains
+   separate from the bounded worker acceptance. Additional caller inputs are
+   recorded in `integration-inputs.json`; they are not worker-authored changes.
+   Actual results belong to the [passenger evidence](../functional-tests.md#individual-passenger-transfers-2026-10-13).

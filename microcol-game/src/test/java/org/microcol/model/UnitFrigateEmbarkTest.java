@@ -57,11 +57,8 @@ public class UnitFrigateEmbarkTest extends AbstractUnitFreeColonistTest {
         final UnitFrigate frigate = makeFrigate(model, 23, placeEuropePort,
                 owner, 10);
 
-        final IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> frigate.isPossibleToDisembarkAt(TARGET_LOCATION, false));
-
-        assertTrue(ex.getMessage().contains("should by at map"));
+        assertFalse(frigate.isPossibleToDisembarkAt(TARGET_LOCATION, false));
+        verifyZeroInteractions(sourceUnit);
     }
 
     @Test
@@ -76,9 +73,10 @@ public class UnitFrigateEmbarkTest extends AbstractUnitFreeColonistTest {
         when(cargoSlot.isLoadedGood()).thenReturn(false);
         when(cargoSlot.getUnit()).thenReturn(Optional.of(sourceUnit));
         when(sourceUnit.getActionPoints()).thenReturn(3);
-        when(sourceUnit.canUnitDisembarkAt(FAR_LOCATION)).thenReturn(true);
-
+        when(sourceUnit.canUnitDisembarkAt(FAR_LOCATION, false))
+                .thenReturn(false);
         assertFalse(frigate.isPossibleToDisembarkAt(FAR_LOCATION, false));
+        verify(sourceUnit).canUnitDisembarkAt(FAR_LOCATION, false);
     }
 
     @Test
@@ -92,9 +90,21 @@ public class UnitFrigateEmbarkTest extends AbstractUnitFreeColonistTest {
         when(cargoSlot.isLoadedGood()).thenReturn(false);
         when(cargoSlot.getUnit()).thenReturn(Optional.of(sourceUnit));
         when(sourceUnit.getActionPoints()).thenReturn(3);
-        when(sourceUnit.canUnitDisembarkAt(TARGET_LOCATION)).thenReturn(true);
-
+        when(sourceUnit.canUnitDisembarkAt(TARGET_LOCATION, false))
+                .thenReturn(true);
         assertTrue(frigate.isPossibleToDisembarkAt(TARGET_LOCATION, false));
+        verify(sourceUnit).canUnitDisembarkAt(TARGET_LOCATION, false);
     }
 
+    @Test
+    public void test_current_turn_flag() {
+        final UnitFrigate frigate = makeFrigate(model, 23, placeLocation, owner,
+                10);
+        when(cargo.getSlots()).thenReturn(Lists.newArrayList(cargoSlot));
+        when(cargoSlot.getUnit()).thenReturn(Optional.of(sourceUnit));
+        when(sourceUnit.canUnitDisembarkAt(TARGET_LOCATION, true))
+                .thenReturn(false);
+        assertFalse(frigate.isPossibleToDisembarkAt(TARGET_LOCATION, true));
+        verify(sourceUnit).canUnitDisembarkAt(TARGET_LOCATION, true);
+    }
 }

@@ -117,7 +117,14 @@ public final class PanelPortPier
                 .make(gameModelController.getModel(), event.getDragboard())
                 .getUnit();
         if (oUnit.isPresent()) {
-            oUnit.get().placeToEuropePortPier();
+            try {
+                oUnit.get().placeToEuropePortPier();
+            } catch (IllegalStateException rejected) {
+                event.setDropCompleted(false);
+                event.consume();
+                gameModelController.showPassengerTransferRejection();
+                return;
+            }
             europeDialog.repaintAfterGoodMoving();
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
@@ -127,7 +134,7 @@ public final class PanelPortPier
 
     private boolean isItCorrectObject(final Dragboard db) {
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterUnit(unit -> !unit.getType().isShip())
+                .filterUnit(Unit::canDisembarkToEuropePier)
                 .filterFrom(from -> From.VALUE_FROM_EUROPE_PORT_PIER != from
                         && From.VALUE_FROM_EUROPE_SHOP != from)
                 .isNotEmpty();

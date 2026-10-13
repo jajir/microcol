@@ -38,4 +38,9 @@
 	
 	<entry key="buildingQueueDialog_caption">Plánování stavby</entry>
 
+	<entry key="passenger_title">Vylodit cestujícího</entry>
+	<entry key="passenger_destination">Vyberte jednoho cestujícího pro vylodění na %s.</entry>
+	<entry key="passenger_hold">Nákladový prostor %s: %s</entry>
+	<entry key="passenger_confirm">Vylodit</entry>
+	<entry key="passenger_unavailable">Cestující teď nemůže přestoupit. Zkontrolujte loď, cíl, volný nákladový prostor a zbývající pohyb.</entry>
 </properties>

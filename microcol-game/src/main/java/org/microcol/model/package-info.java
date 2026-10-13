@@ -10,7 +10,10 @@
  * assignments. Validated player display names are separate from nation keys
  * used by ownership and kings. European trade quotes own bid/ask prices,
  * integer tax totals and affordable quantities; UI displays the same quote used
- * by treasury mutations.
+ * by treasury mutations. Passenger transfers validate live ownership, location,
+ * carrier links, coastal access and capacity before updating either place;
+ * adjacent movement costs one passenger point and local port transfers preserve
+ * it.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

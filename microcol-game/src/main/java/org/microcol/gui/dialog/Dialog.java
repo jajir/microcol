@@ -12,6 +12,8 @@ public enum Dialog implements MessageKeyResource {
     notEnoughGold_caption, unitCantMoveHere_caption, gameOver_caption,
     destroyColony_caption, destroyColony_question, colonyWasCaptured_caption,
     colonyWasCaptured_text1, colonyWasCaptured_text2, about_caption,
-    about_version, saveGame_title, loadGame_title, buildingQueueDialog_caption;
+    about_version, saveGame_title, loadGame_title, buildingQueueDialog_caption,
+    passenger_title, passenger_destination, passenger_hold, passenger_confirm,
+    passenger_unavailable;
 
 }

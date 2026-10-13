@@ -165,13 +165,13 @@ může zasáhnout několik Java balíčků. Nevytvářet balíček jen podle č�
 
 ## Současné přesahy a jejich údržba
 
-Rozpracované [R-0021](requirements/R-0021.md) svěřuje `HighSea` určení pobřeží
+Implementované [R-0021](requirements/R-0021.md) svěřuje `HighSea` určení pobřeží
 a výchozího návratového pole. `Ship` uchovává místo a směr odjezdu a řeší
 příjezd v tahu vlastníka; `AbstractUnit` ověřuje odplutí před spotřebou pohybu.
 `UnitPo` ukládá oba údaje společně a `UnitFactory` odmítá chybějící původ
 rozpluté lodi. Evropa pouze zobrazuje zbývající tahy či čekání na uvolnění cíle.
-Cílené modelové a hráčské cesty prošly; úplná regrese a publikace jsou zatím
-otevřené. Příkazy a výsledky vlastní [testová evidence](functional-tests.md#atlantic-voyage-implementation-2026-10-13).
+Úplná regrese i publikace buildu `dev-49-88573a85ac03` byly ověřeny
+13. října 2026. Příkazy a výsledky vlastní [testová evidence](functional-tests.md#atlantic-voyage-implementation-2026-10-13).
 
 Následující vazby jsou **pozorované ve zdrojích k uvedené revizi**, nikoli
 doklad čistého oddělení nebo seznam oprav nutných před každou další funkcí.
@@ -239,3 +239,18 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    místa musí ověřit cíl před automatickým vrácením vybavení.
 3. Tato změna je součástí [R-0017](requirements/R-0017.md). Modelové hranice a hráčské cesty prošly
    [úplnou regresí](functional-tests.md#free-play-implementation-2026-10-13).
+
+### Individuální přeprava pasažérů (R-0022)
+
+1. Rozpracovaná změna z 13. října 2026 soustřeďuje oprávnění a účtování převodu
+   do `AbstractUnit`: `canEmbark`, `canUnitDisembarkAt` a
+   `canDisembarkToEuropePier`. Mapa, přístav a AI používají stejné kontroly.
+2. `Model.isOwnedCoastalPort` vymezuje vlastní kolonii sousedící s vodou v osmi
+   směrech. Tento předpoklad pro R-0022 opravuje dřívější přijetí každé vlastní
+   kolonie za přístav; neřeší spojitost oceánu. Uložení obnovuje vazby přes
+   `PlaceBuilderPo` a nepouští herní příkazy při načítání.
+3. Výběrový dialog vrací jednoho pasažéra nebo zrušení. Před potvrzeným převodem
+   model znovu kontroluje živé objekty, místo, vlastnictví a kapacitu. Zápis
+   obou stran vazby předchází události nalodění. První cílené modelové a UI
+   scénáře prošly; rozšířené hranice, úplná regrese a publikace ještě nejsou
+   přijaté. Výsledky vlastní [testová evidence](functional-tests.md#individual-passenger-transfers-2026-10-13).

@@ -240,6 +240,47 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.verifyState(100, 766, false, false, 100,
                 PlaceCargoSlot.class);
         equipment.verifyPassenger(100, 102);
+
+        // Sail from the actual eastern arrival through four ordinary sea turns.
+        equipment.verifyCarrierAt(102, Location.of(49, 15));
+        equipment.showSeaRoute(Location.of(49, 15), Location.of(43, 16));
+        game.moveMouseAtLocation(Location.of(49, 15));
+        game.dragMouseAtLocation(Location.of(43, 16));
+        equipment.verifyCarrierAt(102, Location.of(43, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(43, 16), Location.of(37, 16));
+        game.moveMouseAtLocation(Location.of(43, 16));
+        game.dragMouseAtLocation(Location.of(37, 16));
+        equipment.verifyCarrierAt(102, Location.of(37, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(37, 16), Location.of(31, 16));
+        game.moveMouseAtLocation(Location.of(37, 16));
+        game.dragMouseAtLocation(Location.of(31, 16));
+        equipment.verifyCarrierAt(102, Location.of(31, 16));
+        game.nextTurnAndCloseDialogs();
+        equipment.showSeaRoute(Location.of(31, 16), Location.of(26, 16));
+        game.moveMouseAtLocation(Location.of(31, 16));
+        game.dragMouseAtLocation(Location.of(26, 16));
+        equipment.verifyCarrierAt(102, Location.of(26, 16));
+        game.nextTurnAndCloseDialogs();
+
+        // Enter the owned colony and land outside its workforce with the tools.
+        equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
+        game.moveMouseAtLocation(Location.of(26, 16));
+        game.dragMouseAtLocation(Location.of(24, 16));
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
+        org.microcol.page.ColonyScreen colony = game
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.selectUnitFromPort(0);
+        new org.microcol.page.PassengerTransferPage(getContext())
+                .disembarkInPort(100, 0, false);
+        equipment.verifyState(100, 766, false, false, 100, PlaceLocation.class);
+        equipment.verifyLandedPassenger(100, 102, Location.of(24, 16));
+        game = colony.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        equipment.verifyState(100, 766, false, false, 100, PlaceLocation.class);
+        equipment.verifyLandedPassenger(100, 102, Location.of(24, 16));
     }
 
     @Test

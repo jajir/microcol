@@ -198,7 +198,8 @@ public abstract class AbstractUnit implements Unit {
         if (!getType()
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             if (isPossibleToGoToPort(location)) {
-                return true;
+                return ignoreEnemies
+                        || owner.getEnemyUnitsAt(location).isEmpty();
             }
             return false;
         }
@@ -218,7 +219,12 @@ public abstract class AbstractUnit implements Unit {
         model.checkCurrentPlayer(owner);
 
         if (actionPoints == 0) {
-            return Collections.emptyList();
+            return isShip()
+                    ? getLocation().getNeighbors().stream()
+                            .filter(location -> ((UnitWithCargo) this)
+                                    .isPossibleToDisembarkAt(location, true))
+                            .collect(Collectors.toList())
+                    : Collections.emptyList();
         }
 
         /*
@@ -312,10 +318,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean isPossibleToGoToPort(final Location moveToLocation) {
-        if (model.getColoniesAt(moveToLocation, owner).isPresent()) {
-            return true;
-        }
-        return false;
+        return isShip() ? model.isOwnedCoastalPort(owner, moveToLocation)
+                : model.getColoniesAt(moveToLocation, owner).isPresent();
     }
 
     /**
@@ -340,10 +344,109 @@ public abstract class AbstractUnit implements Unit {
         return false;
     }
 
+    private boolean isLiveOwnedUnit(final Unit unit) {
+        return unit.getOwner() == owner
+                && owner.getAllUnits().stream().anyMatch(live -> live == unit);
+    }
+
+    private boolean canTransferPassenger() {
+        return model.isGameRunning() && model.getCurrentPlayer() == owner
+                && isLiveOwnedUnit(this) && isStorable()
+                && getAction().getType() == UnitActionType.noAction;
+    }
+
+    private boolean hasValidCarrier() {
+        if (!isAtCargoSlot()) {
+            return false;
+        }
+        final CargoSlot slot = getPlaceCargoSlot().getCargoSlot();
+        final Unit carrier = slot.getOwnerUnit();
+        return carrier.isShip() && isLiveOwnedUnit(carrier)
+                && ((UnitWithCargo) carrier).getCargo().getSlots().stream()
+                        .anyMatch(actual -> actual == slot)
+                && slot.getUnit().orElse(null) == this;
+    }
+
+    private boolean isPortTransfer(final Unit carrier) {
+        return carrier.isAtPlaceLocation()
+                && model.isOwnedCoastalPort(owner, carrier.getLocation());
+    }
+
     @Override
-    public boolean canUnitDisembarkAt(final Location targeLocation) {
-        return getType().canMoveAtTerrain(
-                model.getMap().getTerrainTypeAt(targeLocation));
+    public boolean canEmbark(final CargoSlot slot) {
+        Preconditions.checkNotNull(slot);
+        if (!canTransferPassenger() || !slot.isEmpty()) {
+            return false;
+        }
+        final Unit carrier = slot.getOwnerUnit();
+        if (!carrier.isShip() || !isLiveOwnedUnit(carrier)
+                || !((UnitWithCargo) carrier).getCargo().getSlots().stream()
+                        .anyMatch(actual -> actual == slot)) {
+            return false;
+        }
+        if (isAtEuropePier()) {
+            return carrier.isAtEuropePort();
+        }
+        if (isAtCargoSlot()) {
+            if (!hasValidCarrier()) {
+                return false;
+            }
+            final Unit source = getPlaceCargoSlot().getOwnerUnit();
+            return (source.isAtEuropePort() && carrier.isAtEuropePort())
+                    || (isPortTransfer(source) && isPortTransfer(carrier)
+                            && source.getLocation()
+                                    .equals(carrier.getLocation()));
+        }
+        if (!isAtPlaceLocation() || !carrier.isAtPlaceLocation()
+                || !model.getMap().isValid(getLocation())
+                || !model.getMap().getTerrainTypeAt(getLocation()).isLand()
+                || !carrier.isPossibleToMoveAt(carrier.getLocation())) {
+            return false;
+        }
+        if (getLocation().equals(carrier.getLocation())) {
+            return isPortTransfer(carrier);
+        }
+        return actionPoints > 0
+                && getLocation().isNeighbor(carrier.getLocation());
+    }
+
+    @Override
+    public boolean canDisembarkToEuropePier() {
+        return canTransferPassenger() && hasValidCarrier()
+                && getPlaceCargoSlot().getOwnerUnit().isAtEuropePort();
+    }
+
+    @Override
+    public boolean canUnitDisembarkAt(final Location targetLocation) {
+        return canUnitDisembarkAt(targetLocation, true);
+    }
+
+    @Override
+    public boolean canUnitDisembarkAt(final Location targetLocation,
+            final boolean inCurrentTurn) {
+        Preconditions.checkNotNull(targetLocation);
+        if (!canTransferPassenger() || !hasValidCarrier()
+                || !model.getMap().isValid(targetLocation)
+                || !model.getMap().getTerrainTypeAt(targetLocation).isLand()
+                || !getType().canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(targetLocation))
+                || !owner.getEnemyUnitsAt(targetLocation).isEmpty()) {
+            return false;
+        }
+        final Unit carrier = getPlaceCargoSlot().getOwnerUnit();
+        if (!carrier.isAtPlaceLocation()
+                || !carrier.isPossibleToMoveAt(carrier.getLocation())) {
+            return false;
+        }
+        if (model.getColonyAt(targetLocation).isPresent()
+                && !model.isOwnedCoastalPort(owner, targetLocation)) {
+            return false;
+        }
+        if (carrier.getLocation().equals(targetLocation)) {
+            return isPortTransfer(carrier);
+        }
+        return carrier.getLocation().isNeighbor(targetLocation)
+                && (!inCurrentTurn || actionPoints > 0);
     }
 
     @Override
@@ -354,18 +457,16 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public Optional<UnitWithCargo> getFirstUnitToEmbarkAt(
             final Location targetLocation) {
-        if (isStorable() && getLocation().isNeighbor(targetLocation)
-                && actionPoints > 0
-                && !model.getColonyAt(targetLocation).isPresent()) {
-            final List<Unit> units = model.getUnitsAt(targetLocation);
-            return units.stream().filter(unit -> unit.canHoldCargo())
-                    .map(unit -> (UnitWithCargo) unit)
-                    .filter(unit -> unit.getOwner().equals(owner))
-                    .filter(unit -> unit.isAtLeastOneCargoSlotEmpty())
-                    .findFirst();
-        } else {
+        Preconditions.checkNotNull(targetLocation);
+        if (!isAtPlaceLocation() || !model.getMap().isValid(targetLocation)
+                || !getLocation().isNeighbor(targetLocation)) {
             return Optional.empty();
         }
+        return model.getUnitsAt(targetLocation).stream().filter(Unit::isShip)
+                .map(unit -> (UnitWithCargo) unit)
+                .filter(ship -> ship.getCargo().getSlots().stream()
+                        .anyMatch(this::canEmbark))
+                .findFirst();
     }
 
     @Override
@@ -420,7 +521,7 @@ public abstract class AbstractUnit implements Unit {
                 .filter(unit -> unit != this && unit.canHoldCargo())
                 .map(unit -> (UnitWithCargo) unit)
                 .filter(unit -> unit.getCargo().getSlots().stream()
-                        .filter(slot -> slot.isEmpty()).findAny().isPresent())
+                        .anyMatch(this::canEmbark))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -654,11 +755,18 @@ public abstract class AbstractUnit implements Unit {
                 owner.equals(placeCargoSlot.getCargoSlotOwner()),
                 "Cargo slot belongs to different player %s than unit %s",
                 placeCargoSlot.getCargoSlotOwner(), owner);
-        // remove from previous place
+        final CargoSlot slot = placeCargoSlot.getCargoSlot();
+        Preconditions.checkState(
+                placeCargoSlot.getUnit() == this && canEmbark(slot),
+                "Passenger cannot board this cargo slot");
+        final int cost = isAtPlaceLocation()
+                && !getLocation().equals(slot.getOwnerUnit().getLocation()) ? 1
+                        : 0;
         place.destroy();
         place = placeCargoSlot;
-        actionPoints = 0;
-        model.fireUnitEmbarked(this, placeCargoSlot.getCargoSlot());
+        actionPoints -= cost;
+        slot.store(placeCargoSlot);
+        model.fireUnitEmbarked(this, slot);
     }
 
     @Override
@@ -746,10 +854,9 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public void placeToEuropePortPier() {
-        Preconditions.checkState(isAtCargoSlot(), "Unit is not in cargo.");
-        Preconditions.checkState(getPlaceCargoSlot().isOwnerAtEuropePort(),
-                "Holding unit is not at europe port, cant be placed to port pier.");
-        getPlaceCargoSlot().getCargoSlot().empty();
+        Preconditions.checkState(canDisembarkToEuropePier(),
+                "Passenger cannot disembark to the European pier");
+        place.destroy();
         place = new PlaceEuropePier(this);
     }
 
@@ -844,6 +951,10 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToMap(final Location location) {
         Preconditions.checkNotNull(location);
+        if (isAtCargoSlot()) {
+            disembarkToLocation(location);
+            return;
+        }
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(),
@@ -860,32 +971,24 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void disembarkToLocation(final Location targetLocation) {
         Preconditions.checkNotNull(targetLocation);
-        Preconditions.checkState(actionPoints > 0,
-                "Unit (%s) need for unload at least one action point", this);
-        Preconditions.checkState(isAtCargoSlot(),
-                "This unit (%s) can't be unload, it's not in cargo slot.",
-                this);
-        final TerrainType terrainType = model.getMap()
-                .getTerrainTypeAt(targetLocation);
-        Preconditions.checkState(
-                getType().getMoveableTerrains().contains(terrainType),
-                "This unit (%s) can't move at target terrain %s.", this,
-                terrainType);
+        Preconditions.checkState(canUnitDisembarkAt(targetLocation),
+                "Passenger cannot disembark at %s", targetLocation);
         final Location startLocation = getPlaceCargoSlot().getOwnerUnit()
                 .getLocation();
-        Preconditions.checkState(startLocation.isNeighbor(targetLocation),
-                "Start location '%s' have to neighbour of target location '%s'",
-                startLocation, targetLocation);
-        Preconditions.checkArgument(model.getColonyAt(targetLocation).isEmpty(),
-                "Target location %s can't be colony.", targetLocation);
+        if (startLocation.equals(targetLocation)) {
+            placeToLocation(targetLocation, getDefaultOrintation());
+            return;
+        }
 
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path
                 .of(Lists.newArrayList(startLocation, targetLocation));
         if (model.fireUnitMoveStarted(this, path)) {
+            Preconditions.checkState(canUnitDisembarkAt(targetLocation),
+                    "Passenger transfer changed before landing");
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation,
                     orientation);
-            this.actionPoints = 0;
+            this.actionPoints--;
             placeToLocation(targetLocation, orientation);
             owner.revealMapForUnit(this);
             model.fireUnitMovedStepFinished(this, startLocation,
@@ -897,35 +1000,29 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void embarkFromLocation(final CargoSlot cargoSlot) {
         Preconditions.checkNotNull(cargoSlot);
-        Preconditions.checkArgument(cargoSlot.isEmpty(),
-                "Cargo slot (%s) is already loaded.", cargoSlot);
-        Preconditions.checkState(isAtPlaceLocation(),
-                "Unit have to be at map, it's at '%s'", place);
-        Preconditions.checkState(cargoSlot.getOwnerUnit().isAtPlaceLocation(),
-                "Unit '%s' where other unit would like to embark have to be at map",
-                cargoSlot.getOwnerUnit());
-        Preconditions.checkArgument(owner.equals(cargoSlot.getOwnerPlayer()),
-                "Cargo slot belongs to different player %s than unit %s",
-                cargoSlot.getOwnerPlayer(), owner);
+        Preconditions.checkState(isAtPlaceLocation() && canEmbark(cargoSlot),
+                "Passenger cannot embark from this location");
+        final Location startLocation = getLocation();
+        final Location targetLocation = cargoSlot.getOwnerUnit().getLocation();
         final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(this,
                 cargoSlot);
-        final Location startLocation = getLocation();
-        final Location targetLocation = placeCargoSlot.getCargoSlot()
-                .getOwnerUnit().getLocation();
-        Preconditions.checkArgument(startLocation.isNeighbor(targetLocation),
-                "Start location %s and target locations %s have to be neighbours",
-                cargoSlot.getOwnerPlayer(), owner);
+        if (startLocation.equals(targetLocation)) {
+            placeToCargoSlot(placeCargoSlot);
+            return;
+        }
 
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path
                 .of(Lists.newArrayList(startLocation, targetLocation));
 
         if (model.fireUnitMoveStarted(this, path)) {
+            Preconditions.checkState(
+                    isAtPlaceLocation() && canEmbark(cargoSlot),
+                    "Passenger transfer changed before boarding");
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation,
                     orientation);
 
             placeToCargoSlot(placeCargoSlot);
-            cargoSlot.store(placeCargoSlot);
 
             model.fireUnitMovedStepFinished(this, startLocation,
                     targetLocation);

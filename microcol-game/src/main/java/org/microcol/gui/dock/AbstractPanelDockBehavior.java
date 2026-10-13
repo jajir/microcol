@@ -53,8 +53,15 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
             consumeGoods(targetCargoSlot,
                     event.getTransferMode().equals(TransferMode.LINK), eval);
         } else if (eval.getUnit().isPresent()) {
-            consumeUnit(targetCargoSlot, eval.getUnit().get(),
-                    eval.getFrom().get());
+            try {
+                consumeUnit(targetCargoSlot, eval.getUnit().get(),
+                        eval.getFrom().get());
+            } catch (IllegalStateException rejected) {
+                event.setDropCompleted(false);
+                event.consume();
+                gameModelController.showPassengerTransferRejection();
+                return;
+            }
         }
         event.acceptTransferModes(TransferMode.ANY);
         event.setDropCompleted(true);
@@ -120,8 +127,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
             final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterUnit(
-                        unit -> !unit.getType().isShip() && cargoSlot.isEmpty())
+                .filterUnit(unit -> unit.canEmbark(cargoSlot))
                 .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods))
                 .isNotEmpty();
     }

@@ -4,6 +4,9 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import org.microcol.model.unit.UnitWithCargo;
 
 import org.junit.jupiter.api.Test;
 
@@ -96,6 +99,7 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
 
     @Test
     public void test_placeToCargoSlot_place_is_required() throws Exception {
+        makeColonist(model, 4, placeEuropePier, owner, 10);
         assertThrows(NullPointerException.class,
                 () -> unit.placeToCargoSlot(null));
     }
@@ -104,16 +108,26 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     public void test_placeToCargoSlot_is_already_in_cargoSlot()
             throws Exception {
         final PlaceCargoSlot placeSlot1 = mock(PlaceCargoSlot.class);
-        final PlaceCargoSlot placeSlot2 = mock(PlaceCargoSlot.class);
-        when(placeSlot1.getCargoSlotOwner()).thenReturn(owner);
-        when(placeSlot2.getCargoSlotOwner()).thenReturn(owner);
         makeColonist(model, 4, placeSlot1, owner, 10);
+        final UnitWithCargo carrier = mock(UnitWithCargo.class);
+        final CargoSlot oldSlot = mock(CargoSlot.class);
+        final CargoSlot target = prepareBoardingSlot(carrier);
+        when(cargo.getSlots()).thenReturn(Lists.newArrayList(oldSlot, target));
+        when(carrier.isAtEuropePort()).thenReturn(true);
+        when(placeSlot1.getCargoSlot()).thenReturn(oldSlot);
+        when(placeSlot1.getOwnerUnit()).thenReturn(carrier);
+        when(oldSlot.getOwnerUnit()).thenReturn(carrier);
+        when(oldSlot.getUnit()).thenReturn(Optional.of(unit));
+        final PlaceCargoSlot placeSlot2 = new PlaceCargoSlot(unit, target);
 
         unit.placeToCargoSlot(placeSlot2);
 
         assertTrue(unit.isAtCargoSlot());
-        assertEquals(0, unit.getActionPoints());
-        verify(placeSlot1, times(1)).destroy();
+        assertSame(placeSlot2, unit.getPlaceCargoSlot());
+        assertEquals(10, unit.getActionPoints());
+        verify(placeSlot1).destroy();
+        verify(target).store(placeSlot2);
+        verify(model).fireUnitEmbarked(unit, target);
     }
 
     @Test
@@ -133,18 +147,44 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
 
     @Test
     public void test_placeToCargoSlot_unit_was_at_location() throws Exception {
-        final PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
-        final CargoSlot cargoSlot = mock(CargoSlot.class);
         makeColonist(model, 4, placeLocation, owner, 10);
-        when(placeCargoSlot.getCargoSlotOwner()).thenReturn(owner);
-        when(placeCargoSlot.getCargoSlot()).thenReturn(cargoSlot);
+        final UnitWithCargo carrier = mock(UnitWithCargo.class);
+        final CargoSlot cargoSlot = prepareBoardingSlot(carrier);
+        final Location shore = Location.of(1, 1);
+        final Location water = Location.of(1, 2);
+        when(placeLocation.getLocation()).thenReturn(shore);
+        when(carrier.isAtPlaceLocation()).thenReturn(true);
+        when(carrier.getLocation()).thenReturn(water);
+        when(carrier.isPossibleToMoveAt(water)).thenReturn(true);
+        when(model.getMap()).thenReturn(worldMap);
+        when(worldMap.isValid(shore)).thenReturn(true);
+        when(worldMap.getTerrainTypeAt(shore))
+                .thenReturn(TerrainType.GRASSLAND);
+        final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
+                cargoSlot);
 
         unit.placeToCargoSlot(placeCargoSlot);
 
         assertTrue(unit.isAtCargoSlot());
-        assertEquals(0, unit.getActionPoints());
-        verify(placeLocation, times(1)).destroy();
-        verify(model, times(1)).fireUnitEmbarked(unit, cargoSlot);
+        assertSame(placeCargoSlot, unit.getPlaceCargoSlot());
+        assertEquals(9, unit.getActionPoints());
+        verify(placeLocation).destroy();
+        verify(cargoSlot).store(placeCargoSlot);
+        verify(model).fireUnitEmbarked(unit, cargoSlot);
     }
 
+    private CargoSlot prepareBoardingSlot(UnitWithCargo carrier) {
+        final CargoSlot slot = mock(CargoSlot.class);
+        when(model.isGameRunning()).thenReturn(true);
+        when(model.getCurrentPlayer()).thenReturn(owner);
+        when(owner.getAllUnits()).thenReturn(Lists.newArrayList(unit, carrier));
+        when(carrier.getOwner()).thenReturn(owner);
+        when(carrier.isShip()).thenReturn(true);
+        when(carrier.getCargo()).thenReturn(cargo);
+        when(cargo.getSlots()).thenReturn(Lists.newArrayList(slot));
+        when(slot.getOwnerPlayer()).thenReturn(owner);
+        when(slot.getOwnerUnit()).thenReturn(carrier);
+        when(slot.isEmpty()).thenReturn(true);
+        return slot;
+    }
 }

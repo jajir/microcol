@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
+import org.microcol.gui.dialog.Dialog;
+import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.i18n.I18n;
+import com.google.inject.Provider;
+import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
@@ -16,7 +21,6 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.WorldMap;
 import org.microcol.model.campaign.GameModel;
-import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,15 +47,21 @@ public class GameModelController {
 
     private GameModel gameModel = null;
 
+    private final Provider<DialogMessage> passengerMessage;
+    private final I18n i18n;
+
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
             final ArtifitialPlayersManager artifitialPlayersManager,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final Provider<DialogMessage> passengerMessage, final I18n i18n) {
         this.selectedTileManager = Preconditions
                 .checkNotNull(selectedTileManager);
         this.artifitialPlayersManager = Preconditions
                 .checkNotNull(artifitialPlayersManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.passengerMessage = Preconditions.checkNotNull(passengerMessage);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     /**
@@ -152,21 +162,31 @@ public class GameModelController {
         }).start();
     }
 
-    public void disembark(final UnitWithCargo movingUnit,
-            final Location targetLocation) {
+    public void disembark(final Unit passenger, final Location targetLocation) {
         new Thread(() -> {
-            movingUnit.getCargo().getSlots().stream()
-                    .filter(cargoSlot -> cargoSlot.isLoadedUnit())
-                    .map(cargoSlot -> cargoSlot.getUnit().get())
-                    .filter(unit -> unit.getActionPoints() > 0)
-                    .forEach(unit -> unit.disembarkToLocation(targetLocation));
+            try {
+                passenger.disembarkToLocation(targetLocation);
+            } catch (IllegalStateException rejected) {
+                Platform.runLater(this::showPassengerTransferRejection);
+            }
         }).start();
     }
 
     public void embark(final CargoSlot cargoSlot, final Unit unit) {
         new Thread(() -> {
-            unit.embarkFromLocation(cargoSlot);
+            try {
+                unit.embarkFromLocation(cargoSlot);
+            } catch (IllegalStateException rejected) {
+                Platform.runLater(this::showPassengerTransferRejection);
+            }
         }).start();
+    }
+
+    public void showPassengerTransferRejection() {
+        final DialogMessage message = passengerMessage.get();
+        message.setTitle(i18n.get(Dialog.passenger_title));
+        message.setText(i18n.get(Dialog.passenger_unavailable));
+        message.showAndWait();
     }
 
     public void nextTurn() {

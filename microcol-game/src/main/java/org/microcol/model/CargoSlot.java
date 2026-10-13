@@ -122,8 +122,7 @@ public class CargoSlot {
     }
 
     /**
-     * This simply put some other unit to cargo store. It should not be used for
-     * unit at map.
+     * Board a passenger through the shared gameplay transfer validation.
      *
      * @param unit required unit
      */
@@ -138,7 +137,6 @@ public class CargoSlot {
 
         final PlaceCargoSlot tmp = new PlaceCargoSlot(unit, this);
         unit.placeToCargoSlot(tmp);
-        cargoUnit = tmp;
     }
 
     /**

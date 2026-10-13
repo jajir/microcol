@@ -148,7 +148,7 @@ class ColonyWarehouseUnloadTest {
 
         final Unit passenger = mock(Unit.class);
         when(passenger.getOwner()).thenReturn(owner);
-        source.store(passenger);
+        source.store(new PlaceCargoSlot(passenger, source));
         assertInvalidSource();
         assertSame(passenger, source.getUnit().get());
     }

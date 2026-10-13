@@ -92,8 +92,10 @@ final class PanelOutsideColony implements JavaFxComponent {
     }
 
     private boolean isItUnit(final Dragboard db) {
-        return ClipboardEval.make(gameModelController.getModel(), db).getUnit()
-                .isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db)
+                .filterUnit(unit -> !unit.isAtCargoSlot()
+                        || unit.canUnitDisembarkAt(colony.getLocation()))
+                .getUnit().isPresent();
     }
 
     private void onDragDropped(final DragEvent event) {
@@ -103,7 +105,17 @@ final class PanelOutsideColony implements JavaFxComponent {
                 .getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
-            if (colony.isLastUnitIncolony(unit)) {
+            if (unit.isAtCargoSlot()) {
+                try {
+                    unit.disembarkToLocation(colony.getLocation());
+                } catch (IllegalStateException rejected) {
+                    event.setDropCompleted(false);
+                    event.consume();
+                    gameModelController.showPassengerTransferRejection();
+                    return;
+                }
+                eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
+            } else if (colony.isLastUnitIncolony(unit)) {
                 if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
                     unit.placeToMap(colony.getLocation());
                     eventBus.post(

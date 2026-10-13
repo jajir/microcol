@@ -2,6 +2,8 @@ package org.microcol.gui.screen.game.gamepanel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.microcol.gui.dialog.ChoosePassengerDialog;
 
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
 import org.microcol.gui.dialog.DialogUnitCantFightWarning;
@@ -65,6 +67,8 @@ public final class GamePanelPresenter {
 
     private final MoveModeController moveModeController;
 
+    private final ChoosePassengerDialog choosePassenger;
+
     private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
     @Inject
@@ -79,10 +83,12 @@ public final class GamePanelPresenter {
             final @Named("game") VisibleAreaService visibleArea,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final UnitUtil unitUtil,
-            final MoveModeController moveModeController) {
+            final MoveModeController moveModeController,
+            final ChoosePassengerDialog choosePassenger) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
+        this.choosePassenger = Preconditions.checkNotNull(choosePassenger);
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
         this.dialogColonyWasCaptured = Preconditions
                 .checkNotNull(dialogColonyWasCaptured);
@@ -204,9 +210,16 @@ public final class GamePanelPresenter {
 
         if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
             // try to disembark
-            gameModelController.disembark((UnitWithCargo) movingUnit,
-                    moveToLocation);
             disableMoveMode(movingUnit);
+            final List<Unit> passengers = ((UnitWithCargo) movingUnit)
+                    .getCargo().getSlots().stream()
+                    .flatMap(slot -> slot.getUnit().stream())
+                    .filter(passenger -> passenger
+                            .canUnitDisembarkAt(moveToLocation))
+                    .collect(Collectors.toList());
+            choosePassenger.choose(passengers, moveToLocation)
+                    .ifPresent(passenger -> gameModelController
+                            .disembark(passenger, moveToLocation));
             return;
         }
 

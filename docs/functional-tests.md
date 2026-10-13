@@ -916,7 +916,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Atlantic voyage implementation — 2026-10-13
 
-1. Lokálně ověřené [R-0021](requirements/R-0021.md) mění odjezd až na samostatný
+1. Publikované [R-0021](requirements/R-0021.md) mění odjezd až na samostatný
    pohyb ven z námořního pruhu a ukládá jeho výchozí pole i pobřeží. Návrat
    používá přesné pole; obsazený cíl nechává loď čekat na nule. Časování
    3/4/3 tahy zůstává výslovně současnou politikou, nikoli rekonstruovaným
@@ -962,4 +962,133 @@ Lokální ověření na macOS/JDK 17:
    kód 0, **767 herních a 92 funkčních/strukturálních testů**, žádné selhání,
    chyba ani vynechání. Čerstvá XML jsou v `target/docker-ui/run-DcYHSR/`,
    log `target/r19-r31/voyage-full.log`. Zahrnuje obě TC23 a obě TC28,
-   devět TC27 a všech 18 TC19. Publikace R-0021 zatím neproběhla.
+   devět TC27 a všech 18 TC19.
+8. Publikace ověřena 2026-10-13: commit `88573a85ac0336307724b7da8bf06bc4bb159990`,
+   [build dev-49-88573a85ac03](https://github.com/jajir/microcol/releases/tag/dev-49-88573a85ac03).
+   [CI 38430949548](https://github.com/jajir/microcol/actions/runs/38430949548)
+   včetně funkčních testů, tří nativních balíků a `publish` uspěla; uspěly také
+   [Pages 38430949275](https://github.com/jajir/microcol/actions/runs/38430949275).
+   Stažený `release-r21/manifest.tsv` potvrzuje stejný celý SHA a build;
+   odpovídající Mac ARM ZIP je v releasu dostupný (61 102 179 bajtů).
+   Čerstvá CI XML v `target/r19-r31/ci-r21/` potvrzují **767 + 92 testů**,
+   nula selhání, chyb a vynechání. Tím není přijata zbývající práce R-0022 a dále.
+
+## Individual passenger transfers — 2026-10-13
+
+1. Lokálně ověřené [R-0022](requirements/R-0022.md) mění hromadné vylodění na
+   výběr jednoho cestujícího. TC01 zachovává původní dvě osoby a kontroly
+   nákladu, ale potvrzuje dvě samostatné volby. Nové TC29/F21 ověřuje zrušení,
+   Escape, reset volby, jednotlivé vylodění, vybavení, Continue a odmítnutí
+   pobřeží obsazeného během otevřené nabídky. Úplná regrese prošla
+   781 modelovými a 98 funkčními/podpůrnými testy; publikace zatím čeká.
+2. `PassengerTransferTest` používá skutečný model a JSON save/load. První
+   cílený běh zkompiloval změny, ale devět případů skončilo na chybně připravené
+   mapě: starý námořní původ lodi odkazoval na pole nově změněné na oceán.
+   Druhý běh po opravě prošel sedmi případy a ArchUnit; dva zbývající případy
+   odhalily další chyby přípravy: `Model.stop()` neznamená neodstartovanou hru
+   a nepřátelská loď nesmí být nově vytvořená na obsazeném poli. Následná
+   oprava používá explicitní příznak zahájení a sousední volné vodní pole.
+3. Další běh odhalil, že celou neodstartovanou hru nelze uložit pro porovnání;
+   kontrola odmítnutí nyní porovnává uložitelné stavy pasažéra a lodi, všechny
+   ostatní sloty a příznak běhu. Po této opravě **devět modelových případů a
+   ArchUnit prošlo** bez selhání či vynechání. UI část pak odhalila chybný
+   les na novém vodním poli F21; opravená příprava nemění validaci hry.
+4. Opravený cílený výběr prošel: **10 modelových/architektonických a šest
+   funkčních/strukturálních testů**, žádné selhání, chyba ani vynechání.
+   Výběr: `PassengerTransferTest,ModelArchitectureTest,TC_01_F01_embark_disembark_test,TC_29_F21_passenger_transfer_test,PageVerificationContractTest`,
+   běžný Docker příkaz s `-Dtest` a `-Dsurefire.failIfNoSpecifiedTests=false`.
+   Log `target/r19-r31/passenger-integrated-map-fixed.log`, izolovaný
+   checkout `2026-10-13-r22-passenger-dialog`, čerstvá XML `run-MZv8FT`.
+   Původní chyby zůstávají v `passenger-model-first.log`,
+   `passenger-integrated.log`, `passenger-integrated-fixture-fixed.log` a
+   `passenger-integrated-state-fixed.log`. Snímek `passenger-selection.png`
+   byl zkontrolován: celé souřadnice, obě volby, vybavení a tlačítka jsou viditelné.
+5. V této fázi před přejímkou zbývalo rozšířit hraniční a hráčské kontroly plné/cizí lodi,
+   přístavního převodu bez bodů a pobřežního predikátu; aktualizovat starší
+   izolované mock testy podle skutečného kontraktu; provést úplnou regresi,
+   kontrolu snímků a publikaci. Žádný neprovedený scénář není přijatý.
+6. Následná kontrola všech testů herního modulu v hlavním checkoutu našla
+   **777 případů, 17 selhání a osm chyb**, nula vynechání (`run-7ZqsCH`,
+   `target/r19-r31/passenger-model-regression.log`). Funkční modul se po tomto
+   selhání nespustil. Nejde o úspěšnou regresi. Zasažené třídy:
+   `CargoSlotTest`, `ColonyWarehouseUnloadTest`, `UnitColonistEmbarkTest`,
+   `UnitFrigateEmbarkTest` a `UnitTest`.
+7. Dvě přípravy testů nákladu používaly mock pasažéra bez účinku při umístění,
+   přestože skutečný pasažér nyní zapisuje obě strany vazby před událostí.
+   `CargoSlotTest` napodobuje tento účinek v mocku; test vykládání skladu
+   připravuje obsazený slot přes nízkoúrovňový konstruktor místa. Původní
+   tvrzení o obsahu a odmítnutí převodu jsou zachovaná. Cílená oprava prošla:
+   **105 modelových a tři strukturální testy**, nula selhání, chyb a vynechání,
+   čerstvá XML `target/docker-ui/run-jSDIvr/`, návratový kód 0; log
+   `passenger-cargo-fixtures-fixed.log`. Zbývající tři starší testovací třídy
+   přepravy se ještě musely přizpůsobit živým modelovým předpokladům a novému účtování.
+8. Rozšíření přípravy z 13. října zachovává všech 16 původních případů
+   `UnitColonistEmbarkTest`, ale ověřuje je nad skutečným modelem a oběma
+   vazbami nákladu. Odmítnutí a zrušení porovnává uložený stav; úspěch kontroluje
+   jednu spotřebovanou akci a nezměněnou loď. Dvě izolované přípravy `UnitTest`
+   nyní mají živé vlastníky a skutečnou identitu místa, s nulovou místní cenou
+   a cenou jedna při sousedním nalodění. Fregata předává i příznak aktuálního
+   tahu sdílenému predikátu pasažéra. ID původních testů zůstala zachovaná.
+9. Nový reprodukční test `rejectsSlotFilledDuringMovementConfirmationBeforeAnimation`
+   skutečně selhal: po zaplnění místa během potvrzovací události model ještě
+   vyslal začátek kroku (`run-YIOwMX`, `passenger-boundaries-compile-fixed.log`).
+   `embarkFromLocation` nyní opakuje kontrolu před touto událostí, obdobně jako
+   vylodění. Stejný test po opravě prošel; nešlo pouze o změnu očekávání.
+10. Rozšířená pobřežní příprava zpočátku nechala na novém moři pole a tabákovou
+    práci, které loader správně odmítl. Příprava nyní odstraňuje pole/stromy
+    z vodního políčka a používá u pracovníků kukuřici, platnou na obou terénech.
+    První oprava nesprávně použila neexistující `GoodsType.FOOD`; překlad
+    ji odmítl a následovala oprava na skutečné `CORN`. Produkční validace
+    nebyla uvolněna. Přidány jsou všech osm směrů vody, cizí vlastník přístavu,
+    falešná identita pasažéra a neplatné odkazy na odstraněného člověka či loď.
+11. Opravený cílený běh v izolovaném checkoutu `2026-10-13-r22-frigate-tests`
+    prošel **44 modelovými/architektonickými případy**, nula selhání, chyb
+    a vynechání (`run-myTaDs`, `passenger-boundaries-fixture-fixed.log`).
+    Výběr: `UnitColonistEmbarkTest,UnitFrigateEmbarkTest,UnitTest,PassengerTransferTest,ModelArchitectureTest`.
+    Funkční část stejného běhu (`TC01,TC27,TC29,PageVerificationContractTest`)
+    dokončila **18 případů s jedním selháním**, nula chyb a vynechání.
+    Všech pět TC29, TC01 a tři strukturální kontroly prošly. TC29 zahrnuje
+    také jedinou zbývající volbu, nulový pohyb v kolonii a Evropě, obsazený
+    náklad a odmítnutí cizí lodi přes UI. Čerstvá XML byla zkontrolována.
+12. Zbývající selhání TC27/TC_07 odhalilo chybný předpoklad autora testu:
+    nová loď se vrací na `[49,15]`, nikoli na `[26,16]`. Rozšíření původní
+    evropské cesty nyní zachovává skutečný návrat a provádí další plavbu
+    a tahy přes UI až ke kolonii. Ovládání posunu mapy používá hráčské
+    klávesy A/D, nikoli přemístění lodi v modelu. Výsledek následného
+    ověření je v bodech 13–15.
+
+13. Úplný výběr herního modulu v hlavním checkoutu prošel **782 testy**,
+    nula selhání, chyb a vynechání (`run-rOOFNJ`,
+    `passenger-model-and-return.log`). Přesný výběr je uložen v
+    `target/r19-r31/passenger-model-and-return-command.txt`. Čerstvá XML
+    byla zkontrolována. Ve funkční části prošly tři strukturální kontroly,
+    ale TC27/TC_07 čekal na nedosažitelný odstup od pravého okraje mapy.
+    Pomocná metoda posunu nyní používá plnou viditelnost skutečného políčka
+    o 45 pixelech, nikoli dodatečný pravý okraj 128 pixelů. Opakovaný test
+    následoval společně s TC29 včetně nového scénáře zcela plné lodi.
+
+14. Následný hlavní běh **prošel: 34 modelových a deset funkčních/strukturálních
+    případů**, nula selhání, chyb a vynechání, návratový kód 0
+    (`run-WcEg9m`, `passenger-return-scroll-fixed.log`). Výběr:
+    `UnitColonistEmbarkTest,UnitFrigateEmbarkTest,PassengerTransferTest,TC_27_F19_europe_equipment_test#TC_07_equipment_and_identity_survive_embarkation_voyage_and_continue,TC_29_F21_passenger_transfer_test,PageVerificationContractTest`.
+    Všech šest TC29, návrat TC27 a tři strukturální testy prošly. TC27
+    provádí 25 polí plavby a běžné tahy od skutečného návratu `[49,15]`
+    k přístavu `[24,16]`, vyloží člověka mimo pracovní místa a ověří zachování
+    100 nástrojů i stejné identity po Continue. TC29/TC_06 prokazuje odmítnutí
+    úplně plné lodi se zachováním všech zásob a druhého pasažéra. Čerstvá
+    XML byla zkontrolována; exportovaný výběrový dialog je celý čitelný.
+15. Úplná hlavní regrese **prošla: 781 modelových a 98 funkčních/podpůrných
+    testů**, nula selhání, chyb a vynechání; návratový kód 0, čas 17:15.
+    Příkaz `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`,
+    log `target/r19-r31/passenger-full.log`, čerstvá XML
+    `target/docker-ui/run-oIvH5v/` (96 herních a 32 funkčních tříd).
+    Ověřeny jsou i původní TC01/TC22/TC23, všech devět TC27 a všech šest TC29.
+    Sdíleným formatterem prošlo 27 změněných Java souborů; následně se již
+    Java kód neměnil. Dokumentace prošla devíti kontrolami a striktním
+    sestavením, náhled byl zkontrolován. CI a publikace balíčků zatím čekají.
+16. Rozdíl **782** ve výslovném výběru a **781** v běžném herním běhu
+    je ověřen porovnáním XML: explicitní `-Dtest` navíc zahrnul jeden
+    `org.microcol.integration.ConnectorTest`, který standardní Maven
+    konfigurace historicky vylučuje. Tento dodatečný test také prošel.
+    Žádná jiná třída ani počet případů se mezi oběma herními výběry neliší;
+    nejde o odstraněný či vynechaný test nové přepravy.

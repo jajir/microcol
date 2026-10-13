@@ -33,7 +33,13 @@ public interface Unit {
 
     Location getLocation();
 
-    boolean canUnitDisembarkAt(Location targeLocation);
+    boolean canUnitDisembarkAt(Location targetLocation);
+
+    boolean canUnitDisembarkAt(Location targetLocation, boolean inCurrentTurn);
+
+    boolean canEmbark(CargoSlot cargoSlot);
+
+    boolean canDisembarkToEuropePier();
 
     void setActionType(UnitActionType actionType);
 
