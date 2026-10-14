@@ -72,7 +72,8 @@ polí cizími jednotkami. Cizí mírová jednotka nadále brání vstupu a vylod
 Králové nemají evropský záznam míru/války; dotaz pro ně zachovává dosavadní
 nepřátelství k cizím vlastníkům a vznik/řízení královských sil zůstává v cestě
 vzpoury. AI používá stejné útočné a pohybové dotazy jednotek jako modelový
-příkaz. Potvrzené porušení smlouvy útokem přidává až R-0028.
+příkaz. Potvrzené porušení smlouvy útokem propojuje rozpracované R-0028,
+jak je popsáno níže.
 Před vstupem do dobývaného přístavu `Colony` naplánuje únik všech cizích
 nepřátelských lodí. Neutrální obsazení nebo chybějící bezpečné sousední moře
 vstup odmítnou před spotřebou pohybu či změnou vlastníka. AI používá tentýž
@@ -86,6 +87,25 @@ se ukládá jako `gameFinished`, aby načtení nepovolilo další tah. Samotné
 zahození instance se neukládá: běžnou rozehranou pozici lze načíst do nové
 instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento popis
 není potvrzením dokončení celého požadavku.
+
+
+### Potvrzení útoku (R-0028, rozpracováno)
+
+1. `Unit.canAttack()` určuje schopnost podle aktuálního vybavení. Královská
+   továrna v `Model` proto své nové vojáky vybavuje mušketami; nepoužívá
+   výjimku pro neozbrojeného krále. Typ jednotky
+   samostatně vymezuje přípustný druh cíle. `prepareAttack` pouze čte živý stav:
+   aktuálního hráče, registrovanou jednotku, sousedství, známý cíl, terén, pohyb
+   a vztahy. UI smí připravit mírový cíl k výslovnému vyhlášení války; běžná AI
+   používá pouze již nepřátelské cíle.
+2. Neměnný `AttackOrder` váže potvrzení na původní model, jednotky, vlastníky,
+   polohy a očekávaný vztah. Při provedení znovu ověřuje všechny podmínky před
+   vyhlášením a bojem. Nepronásleduje přesunutý cíl. Přijatý boj vyčerpá pohyb
+   obou účastníků; přeživší jej obnoví při svém příštím běžném tahu.
+3. Dialog zobrazuje skutečně vybraného obránce a před každým otevřením zahodí
+   předchozí souhlas. Povinné potvrzení porušení míru platí i při skrytém rádci.
+   GUI kontroluje výměnu modelu a překládá očekávané odmítnutí. Stav cílených
+   testů, úplné regrese a publikace vlastní [R-0028](requirements/R-0028.md).
 
 ### Zakládání a okraj mapy (R-0027)
 

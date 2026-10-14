@@ -477,6 +477,7 @@
     {
       "id": 29,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -496,6 +497,7 @@
     {
       "id": 30,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -515,6 +517,7 @@
     {
       "id": 31,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -534,6 +537,7 @@
     {
       "id": 32,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -553,6 +557,7 @@
     {
       "id": 33,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -572,6 +577,7 @@
     {
       "id": 35,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -591,6 +597,7 @@
     {
       "id": 36,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -610,6 +617,7 @@
     {
       "id": 37,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -629,6 +637,7 @@
     {
       "id": 38,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -648,6 +657,7 @@
     {
       "id": 39,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -667,6 +677,7 @@
     {
       "id": 40,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -686,6 +697,7 @@
     {
       "id": 42,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -705,6 +717,7 @@
     {
       "id": 43,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -724,6 +737,7 @@
     {
       "id": 44,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -743,6 +757,7 @@
     {
       "id": 45,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -762,6 +777,7 @@
     {
       "id": 46,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {
@@ -781,6 +797,7 @@
     {
       "id": 47,
       "type": "COLONIST",
+      "holdingGuns": true,
       "ownerId": "Dutch\u0027s King",
       "placeMap": {
         "location": {

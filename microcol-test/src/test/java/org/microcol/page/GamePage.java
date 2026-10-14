@@ -337,12 +337,15 @@ public class GamePage extends AbstractScreen {
                 "Unexpected unit location");
     }
 
-    public void verifyMinimumKingUnitsOnMap(final int expectedMinimum) {
+    public void verifyMinimumArmedKingSoldiersOnMap(final int expectedMinimum) {
         final long count = getModel().getAllUnits().stream()
-                .filter(unit -> unit.getOwner().getName().contains("King"))
-                .filter(unit -> unit.isAtPlaceLocation()).count();
-        logger.info("Number of enemy ships at map: " + count);
-        assertTrue(count >= expectedMinimum);
+                .filter(unit -> unit.getOwner().isKing())
+                .filter(unit -> unit.isAtPlaceLocation() && unit.canAttack()
+                        && !unit.getType().isShip())
+                .count();
+        assertTrue(count >= expectedMinimum,
+                "Expected at least " + expectedMinimum
+                        + " armed royal soldiers on land, found " + count);
     }
 
     public void verifyNumberOfHumanUnitsAt(final List<Location> locations,

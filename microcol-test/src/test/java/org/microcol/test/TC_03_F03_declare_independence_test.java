@@ -50,7 +50,8 @@ public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.nextTurnAndCloseDialogs();
 
-        gamePage.verifyMinimumKingUnitsOnMap(3);
+        // The royal expedition lands armed soldiers who can actually attack.
+        gamePage.verifyMinimumArmedKingSoldiersOnMap(3);
     }
 
 }

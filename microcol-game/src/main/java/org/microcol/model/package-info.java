@@ -27,6 +27,10 @@
  * local visibility is restored for every owner's on-map units, including
  * rivals.
  *
+ * Attack proposals bind confirmation to registered participants, positions and
+ * diplomatic state. Execution revalidates before declaring war and consumes
+ * both participants' current movement; current equipment owns attack ability.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

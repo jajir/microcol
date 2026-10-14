@@ -159,7 +159,7 @@ public final class UnitType {
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
             .setName("MASTER_BLACKSMITH")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
-            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
             .setCargoCapacity(0).setStorable(true)
             .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
             .setExpertise(GoodsType.TOOLS, 2.0F).setCanBuildRoad(true)

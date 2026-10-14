@@ -118,6 +118,72 @@ class EuropeanRelationAiTest {
                 model.getEuropeanRelation(france(), dutch()));
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(booleans = { false, true })
+    void mountedWandererRechecksCombatAfterEachActualStep(
+            final boolean stopAfterStep) throws Exception {
+        rival.placeToLocation(Location.of(18, 12));
+        human.placeToLocation(Location.of(18, 14));
+        ((UnitFreeColonist) rival).setMounted(true);
+        ((org.microcol.model.AbstractUnit) rival).setActionPoints(3);
+        rival.getOwner().revealMapForUnit(rival);
+        model.declareHostilities(france(), dutch());
+        final int count = model.getAllUnits().size();
+        model = org.mockito.Mockito.spy(model);
+        final SimpleAiPlayer ai = new SimpleAiPlayer(model, france(),
+                new AnimationManager(new EventBus()));
+        // Keep the ordinary random direction deterministic, towards the enemy.
+        final java.lang.reflect.Field navigatorField = SimpleAiPlayer.class
+                .getDeclaredField("unitDirections");
+        navigatorField.setAccessible(true);
+        final java.lang.reflect.Field directionsField = UnitMoveNavigator.class
+                .getDeclaredField("lastDirections");
+        directionsField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        final java.util.Map<Unit, org.microcol.model.Direction> directions = (java.util.Map<Unit, org.microcol.model.Direction>) directionsField
+                .get(navigatorField.get(ai));
+        directions.put(rival, org.microcol.model.Direction.south);
+        final java.util.concurrent.atomic.AtomicInteger steps = new java.util.concurrent.atomic.AtomicInteger();
+        model.addListener(new org.microcol.model.ModelListenerAdapter() {
+            @Override
+            public void onUnitMovedStepFinished(
+                    final org.microcol.model.event.UnitMovedStepFinishedEvent event) {
+                steps.incrementAndGet();
+            }
+        });
+        // Stop between model commands, after the real move has returned from
+        // event dispatch.
+        org.mockito.Mockito.doAnswer(invocation -> {
+            invocation.callRealMethod();
+            if (stopAfterStep) {
+                ai.stop();
+            }
+            return null;
+        }).when(model).moveUnit(org.mockito.ArgumentMatchers.eq(rival),
+                org.mockito.ArgumentMatchers
+                        .any(org.microcol.model.Path.class));
+        final String defenderBefore = new Gson().toJson(human.save());
+        try {
+            assertTimeoutPreemptively(Duration.ofSeconds(5),
+                    () -> ai.moveUnit(rival));
+        } finally {
+            ai.stop();
+        }
+        assertEquals(1, steps.get());
+        if (stopAfterStep) {
+            assertEquals(count, model.getAllUnits().size());
+            assertEquals(Location.of(18, 13), rival.getLocation());
+            assertTrue(rival.getActionPoints() > 0);
+            assertEquals(defenderBefore, new Gson().toJson(human.save()));
+            return;
+        }
+        assertEquals(count - 1, model.getAllUnits().size());
+        assertNotEquals(model.tryGetUnitById(human.getId()).isPresent(),
+                model.tryGetUnitById(rival.getId()).isPresent());
+        assertEquals(0, rival.getActionPoints());
+        assertEquals(0, human.getActionPoints());
+    }
+
     private Colony undefendedHumanColony() {
         final GameModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol");

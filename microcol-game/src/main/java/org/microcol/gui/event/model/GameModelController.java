@@ -1,7 +1,6 @@
 package org.microcol.gui.event.model;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.dialog.Dialog;
@@ -10,6 +9,7 @@ import org.microcol.i18n.I18n;
 import com.google.inject.Provider;
 import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
+import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsTrade;
@@ -147,18 +147,21 @@ public class GameModelController {
         new Thread(() -> getModel().moveUnit(ship, Path.of(path))).start();
     }
 
-    public void performFight(final Unit attacker, final Unit defender) {
-        logger.debug("Start move ship: " + attacker);
+    public void performFight(final AttackOrder order) {
         new Thread(() -> {
-            /**
-             * If it's necessary than move.
-             */
-            final Optional<List<Location>> locations = attacker
-                    .getPath(defender.getLocation(), true);
-            if (locations.isPresent() && !locations.get().isEmpty()) {
-                getModel().moveUnit(attacker, Path.of(locations.get()));
+            try {
+                Preconditions.checkState(
+                        gameModel != null && getModel() == order.getModel(),
+                        "The game changed during attack confirmation");
+                order.execute();
+            } catch (IllegalStateException rejected) {
+                Platform.runLater(() -> {
+                    final DialogMessage message = passengerMessage.get();
+                    message.setTitle(i18n.get(Dialog.fight_title));
+                    message.setText(i18n.get(Dialog.fight_unavailable));
+                    message.showAndWait();
+                });
             }
-            attacker.attack(defender.getLocation());
         }).start();
     }
 

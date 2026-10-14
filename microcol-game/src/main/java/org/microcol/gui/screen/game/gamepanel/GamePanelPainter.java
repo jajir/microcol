@@ -8,6 +8,7 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.PathPlanning;
 import org.microcol.model.Location;
+import org.microcol.model.AttackOrder;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -209,10 +210,8 @@ public final class GamePanelPainter {
                 gamePreferences.getAnimationSpeed()));
     }
 
-    boolean performFightDialog(final Unit unitAttacker,
-            final Unit unitDefender) {
-        dialogFigth.showAndWait(unitAttacker, unitDefender);
-        return dialogFigth.isUserChooseFight();
+    boolean performFightDialog(final AttackOrder order) {
+        return dialogFigth.showAndWait(order);
     }
 
     public Area getArea() {

@@ -1,7 +1,6 @@
 package org.microcol.gui.screen.game.gamepanel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.microcol.gui.event.StartMoveEvent;
@@ -151,12 +150,8 @@ public final class MoveModeSupport {
             return;
         }
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
-        if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
-            // fights
-            moveLocations = Lists
-                    .newArrayList(movingUnit.getPath(moveToLocation, true)
-                            .orElse(Collections.emptyList()));
-            moveLocations.add(moveToLocation);
+        if (movingUnit.prepareAttack(moveToLocation, true).isPresent()) {
+            moveLocations = List.of(moveToLocation);
             moveMode = MoveMode.FIGHT;
         } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
             // embark

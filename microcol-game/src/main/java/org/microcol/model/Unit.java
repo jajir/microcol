@@ -117,7 +117,23 @@ public interface Unit {
 
     boolean isSameOwner(List<Unit> units);
 
+    /**
+     * @return whether this unit can attack
+     */
+    boolean canAttack();
+
     boolean isPossibleToAttackAt(Location targetLocation);
+
+    /**
+     * Prepares a read-only proposal for a live adjacent target.
+     *
+     * @param targetLocation   proposed battlefield
+     * @param allowDeclaration whether a peaceful European target may be
+     *                         proposed
+     * @return a proposal bound to the selected participants, or no legal attack
+     */
+    Optional<AttackOrder> prepareAttack(Location targetLocation,
+            boolean allowDeclaration);
 
     boolean isPossibleToCaptureColonyAt(Location targetLocation);
 

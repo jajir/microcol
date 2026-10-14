@@ -508,6 +508,7 @@ public class Model {
                 this, unit -> new PlaceCargoSlot(unit, cargoSlot),
                 UnitType.COLONIST, king, UnitType.COLONIST.getSpeed(),
                 new UnitActionNoAction());
+        ((UnitFreeColonist) out).setHoldingGuns(true);
         cargoSlot.store(out.getPlaceCargoSlot());
         return out;
     }

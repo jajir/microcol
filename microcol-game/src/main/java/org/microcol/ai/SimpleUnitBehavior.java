@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 final class SimpleUnitBehavior {
 
     void tryToFight(final Unit unit) {
-        if (unit.getType().canAttack() && unit.isAtPlaceLocation()
+        if (unit.canAttack() && unit.isAtPlaceLocation()
                 && unit.getActionPoints() > 0) {
             /*
              * Following filter stops executing when first location return from

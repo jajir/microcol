@@ -213,6 +213,11 @@ public class UnitFreeColonist extends CanMount {
     }
 
     @Override
+    public boolean canAttack() {
+        return isHoldingGuns();
+    }
+
+    @Override
     public int getSpeed() {
         if (isMounted()) {
             return 5;

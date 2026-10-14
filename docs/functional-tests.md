@@ -1806,3 +1806,89 @@ Lokální ověření na macOS/JDK 17:
     Sdílený formatter znovu ověřil jediný Java soubor. Čerstvá evidence:
     `target/r27-draft/ci-native-rearm-check.log` a `native-rearm-evidence.json`.
     Plná vzdálená regrese a zveřejnění této opravy nadále zbývají.
+
+
+20. [CI 38507855238](https://github.com/jajir/microcol/actions/runs/38507855238)
+    pro `6db8473d` znovu selhalo pouze na TC34/03: po odmítnutém přetažení
+    nedorazil běžný pohyb myši ve zdrojovém poli. Všech **1062 herních případů**
+    a dalších **134 ze 135 hráčských/podpůrných případů** prošlo; nativní balíčky
+    a build kontroly také. Publikace byla vynechána, Pages `38507854874` prošly.
+    Příčina v nativním vstupu zůstává neprokázaná. Diagnostický `c2c96e60`
+    zaznamenává skutečné události scény, souřadnice, bounds plátna a zaměření;
+    nemění gesta ani očekávání. Před odesláním prošel TC34/03 se třemi
+    strukturálními kontrolami (**4 případy**, `run-amABsR`, nula
+    failures/errors/skips). Nové CI `38510205972` má dodat vzdálenou stopu;
+    tato instrumentace sama o sobě není prokázanou opravou.
+
+## Attack initiation integration — 2026-10-14
+
+1. Rozpracované [R-0028](requirements/R-0028.md) pokrývá UC-072 a
+   COMBAT-001/002/003 s návazností na DIP-002. `TC_35_F27_attack_eligibility_test`
+   používá `F27-attack-eligibility.microcol`: ozbrojeného kolonistu, neozbrojeného
+   pracovníka, ozbrojeného jezdce s profesí mistra kováře, vůz a francouzského
+   obránce. Hlavní hráčská cesta používá skutečné gesto na mapě, potvrzení,
+   běžné uložení a Continue. Úpravy modelu během dialogu výslovně simulují
+   změněný stav; řízený generátor volí obě již existující větve výsledku boje.
+2. TC35/01 ověřuje čtecí náhled mírového útoku. /02 ověřuje povinné potvrzení
+   při skrytém rádci, skutečná jména/obrázky účastníků a Cancel/Escape/zavření.
+   /03 pokrývá neozbrojeného pracovníka a vůz. /04–06 odmítají změnu vybavení,
+   polohy cíle a celé hry bez dalších účinků. /07 potvrzuje útok specialisty,
+   vyčerpání pohybu, Continue a reset předchozího souhlasu. /08 ověřuje češtinu.
+   /09 provádí už nepřátelský útok bez skrytého volitelného rádce a kontroluje
+   přeživšího obránce i po Continue.
+3. `run-53UF9h` prošel **90 modelovými/AI a 19 hráčskými/kontrolními případy**,
+   nula failures/errors/skips, Docker exit 0, doba 2:10. Výběr byl
+   `TC_35_F27_attack_eligibility_test,TC_33_F25_european_relations_test,PageVerificationContractTest,AttackBoundaryTest,AttackOrderTest,AttackRoleTest,EuropeanHostilityTest,EuropeanRelationAiTest,FirstColonyPlannerTest,ModelArchitectureTest`
+   s příkazem `docker compose -f compose.ui-tests.yml run --build --rm ui-tests`
+   a `-Dsurefire.failIfNoSpecifiedTests=false`. Všech devět TC35 a všech sedm
+   dosavadních TC33 prošlo. XML jsou v `target/docker-ui/run-53UF9h/`, log je
+   `target/r28-draft/integration-check.log`. Další kontrola zastavení AI mezi
+   jednotlivými akcemi a úplná regrese dosud zbývají; R-0028 není publikovaný.
+4. Modelové hranice zahrnují deset kombinací rolí/domén, dvanáct nepřípustných
+   stavů, lodní pohyb, dvanáct změn potvrzeného návrhu, cizí model, smíšené
+   obsazení a oba výsledky boje. Obnovená hra postupuje skutečnými tahy do
+   dalšího tahu vlastníka přeživší jednotky. Anglické a české snímky dialogu
+   byly prohlédnuty v předchozím úspěšném `run-ituNEe`; obě strany zobrazují
+   správné a odlišné vybavení, varování ani tlačítka se neřežou.
+5. Počáteční `run-8wW4qZ` reprodukoval chybějící náhled útoku. Při přípravě
+   testů caller opravil chybný import, nesprávné klonování typovaného fixture
+   objektu a šest bodů pohybu přidělených čtyřbodové fregatě. Herní snapshot
+   záměrně vynechává pouze `focusedField`: výběr jednotky mění polohu pohledu.
+   Jednotky, pohyb, diplomacie, kolonie i ostatní uložený stav zůstávají
+   porovnávané. Starší neúspěšné běhy nejsou počítané jako přejímka.
+6. Výpočet síly a šancí zůstává v R-0029. Chybějící role, korzárské výjimky
+   a obecné vyjednávání nejsou touto přejímkou uzavřené. Dvě lokální AI/role
+   delegace a jejich skutečné výsledky vlastní [provozní evidence](ai/local-qwen.md).
+
+7. Dodatečný případ zastavení po skutečném modelovém kroku nejprve selhal v
+   `run-M8uv3z`: robot ještě zaútočil po `stop`. Dvě cílené opravy v rámci stejné
+   lokální delegace doplnily stávající `isActiveTurn` před každou další akcí
+   a zachovaly kontrolu vlastníka jednotky. Izolovaný `run-7VaET0` prošel **94
+   modelovými/AI a 3 kontrolními případy**, nula failures/errors/skips, exit 0.
+   Výběr: `EuropeanRelationAiTest,RobotLifecycleTest,FirstColonyPlannerTest,AttackBoundaryTest,AttackOrderTest,AttackRoleTest,EuropeanHostilityTest,PageVerificationContractTest`
+   se stejným Docker příkazem jako výše. Původní živá větev nadále bojuje;
+   zastavená větev provede právě jeden již dokončený krok a další boj ani
+   nalodění nespustí. Log vlastní `target/r28-draft/ai-stop-check.log`.
+
+8. Úplný lokální `run-jcIFvV` (`-Dtest=*`) dokončil **1114 modelových a 144
+   hráčských/podpůrných případů**. Modelové případy a 143 hráčských/podpůrných
+   případů prošly, včetně všech devíti TC35. Jediné selhání TC04 postrádalo
+   očekávanou ztrátu kolonie: původní královští útočníci ve fixture nebyli
+   ozbrojení. Nula errors/skips, žádná nezachycená výjimka vlákna, exit 1.
+   Původních 30 souborů checkpointu zůstalo beze změn. Důkazy:
+   `target/r28-draft/full-regression-evidence.json`, `full-regression.log`
+   a čerstvá XML `target/docker-ui/run-jcIFvV/`. Tento běh není zelená přejímka.
+9. Stejně neozbrojené vojáky vytvářela produkční královská továrna. Nový
+   `RoyalExpeditionRoleTest` to reprodukoval (`run-ErblLA`, jeden neúspěšný
+   modelový případ). Inicializace nyní přidává muškety; F04 výslovně vybavuje
+   svých 17 útočníků, ostatní data a původní herní aserce TC04 zůstaly.
+   TC03 nově počítá ozbrojené královské pozemní jednotky podle role hráče,
+   minimálně tři. Caller opravil i vlastní přípravu nového testu: před uložením
+   musí normálně zahájit hru. Dřívější `run-PToN2S` s touto chybou se nepočítá
+   jako ověření opravy. `run-XRWRk0` poté prošel **23 modelovými a 5
+   hráčskými/podpůrnými případy**, nula failures/errors/skips, exit 0, doba 2:24.
+   Výběr: `RoyalExpeditionRoleTest,AttackRoleTest,AtlanticVoyageTest,ModelArchitectureTest,TC_03_F03_declare_independence_test,TC_04_F04_loosing_battle_test,PageVerificationContractTest`
+   se standardním Docker runnerem a `-Dsurefire.failIfNoSpecifiedTests=false`.
+   Oprava zachovává výbavu v nákladu i po uložení/načtení; další úplná regrese
+   musí potvrdit společnou výslednou revizi. Evidence: `royal-role-evidence.json`
+   a `royal-role-fixed-check.log` v `target/r28-draft/`.

@@ -43,4 +43,6 @@
 	<entry key="passenger_hold">Hold %s: %s</entry>
 	<entry key="passenger_confirm">Disembark</entry>
 	<entry key="passenger_unavailable">This passenger cannot transfer now. Check the ship, destination, free cargo space and remaining movement.</entry>
+	<entry key="fight_declaration">Attacking %s ends peace and declares war. Fight?</entry>
+	<entry key="fight_unavailable">The attack is no longer available. No battle was started. Check the units, positions, equipment and remaining movement, then choose the attack again.</entry>
 </properties>

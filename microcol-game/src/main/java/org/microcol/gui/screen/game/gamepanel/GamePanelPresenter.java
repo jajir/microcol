@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.microcol.gui.dialog.ChoosePassengerDialog;
 
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
-import org.microcol.gui.dialog.DialogUnitCantFightWarning;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.EndMoveEvent;
@@ -21,6 +20,7 @@ import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -230,16 +230,19 @@ public final class GamePanelPresenter {
             return;
         }
 
+        final Optional<AttackOrder> attack = movingUnit
+                .prepareAttack(moveToLocation, true);
+        if (attack.isPresent()) {
+            disableMoveMode(movingUnit);
+            fight(attack.get());
+            return;
+        }
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (unitMove.requiredActionPoints() > movingUnit.getActionPoints()) {
             new DialogUnitCantMoveHere(viewUtil, i18n);
         } else if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
             // use can capture target colony
             gameModelController.performMove(movingUnit, unitMove.getPath());
-        } else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
-            // fight
-            fight(movingUnit, moveToLocation);
-            // } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
         } else if (unitMove.isOneTurnMove()) {
             // user will move
             if (!unitMove.getPath().isEmpty()) {
@@ -274,31 +277,11 @@ public final class GamePanelPresenter {
         eventBus.post(new EndMoveEvent(movingUnit));
     }
 
-    private void fight(final Unit movingUnit, final Location moveToLocation) {
-        if (!movingUnit.getType().canAttack()) {
-            selectedTileManager.setSelectedTile(moveToLocation,
-                    ScrollToFocusedTile.smoothScroll);
-            disableMoveMode(movingUnit);
-            new DialogUnitCantFightWarning(viewUtil, i18n);
-            return;
-        }
-        final Unit targetUnit = gameModelController.getModel()
-                .getUnitsAt(moveToLocation).get(0);
-        if (gamePreferences.isShowFightAdvisor()) {
-            if (gamePanelView.performFightDialog(movingUnit, targetUnit)) {
-                // User choose to fight
-                disableMoveMode(movingUnit);
-                gameModelController.performFight(movingUnit, targetUnit);
-            } else {
-                // User choose to quit fight
-                selectedTileManager.setSelectedTile(moveToLocation,
-                        ScrollToFocusedTile.smoothScroll);
-                disableMoveMode(movingUnit);
-            }
-        } else {
-            // implicit fight
-            disableMoveMode(movingUnit);
-            gameModelController.performFight(movingUnit, targetUnit);
+    private void fight(final AttackOrder order) {
+        if ((!order.isDeclarationRequired()
+                && !gamePreferences.isShowFightAdvisor())
+                || gamePanelView.performFightDialog(order)) {
+            gameModelController.performFight(order);
         }
     }
 

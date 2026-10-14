@@ -55,6 +55,7 @@ class EuropeanHostilityTest {
         ((UnitFreeColonist) attacker).setHoldingGuns(true);
         defender = model.getUnitById(6);
         defender.placeToLocation(Location.of(17, 11));
+        attacker.getOwner().revealMapForUnit(attacker);
         colony = model.getColonyById(0).orElseThrow();
         assertEquals(Location.of(17, 10), colony.getLocation());
         assertEquals(1, attacker.getActionPoints());
@@ -219,6 +220,8 @@ class EuropeanHostilityTest {
         model.declareHostilities(player("Dutch"), player("Spain"));
         final String before = snapshot();
         assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
+        assertTrue(
+                attacker.prepareAttack(colony.getLocation(), true).isEmpty());
         assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
         assertThrows(IllegalStateException.class,
                 () -> attacker.attack(colony.getLocation()));
@@ -234,7 +237,11 @@ class EuropeanHostilityTest {
         model.declareHostilities(player("Dutch"), player("Spain"));
         final String peacefulUnit = gson.toJson(defender.save());
         assertTrue(attacker.isPossibleToAttackAt(defender.getLocation()));
-        attacker.attack(defender.getLocation());
+        final AttackOrder proposal = attacker
+                .prepareAttack(defender.getLocation(), true).orElseThrow();
+        assertSame(hostile, proposal.getDefender());
+        assertFalse(proposal.isDeclarationRequired());
+        proposal.execute();
         assertSame(defender, model.getUnitById(6));
         assertEquals(peacefulUnit, gson.toJson(defender.save()));
         assertEquals(EuropeanRelationState.PEACE,

@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -472,23 +473,54 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
+    public boolean canAttack() {
+        return getType().canAttack();
+    }
+
+    @Override
     public boolean isPossibleToAttackAt(final Location targetLocation) {
-        if (!model.getMap().isValid(targetLocation)) {
-            return false;
+        return findAttackTarget(targetLocation, false).isPresent();
+    }
+
+    @Override
+    public Optional<AttackOrder> prepareAttack(final Location targetLocation,
+            final boolean allowDeclaration) {
+        return findAttackTarget(targetLocation, allowDeclaration)
+                .map(defender -> new AttackOrder(this, defender));
+    }
+
+    private Optional<Unit> findAttackTarget(final Location targetLocation,
+            final boolean allowDeclaration) {
+        if (!model.isGameRunning() || model.getCurrentPlayer() != owner
+                || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
+                || !canAttack() || actionPoints <= 0
+                || !getAction().isNoAction() || targetLocation == null
+                || !model.getMap().isValid(targetLocation)
+                || !getLocation().isNeighbor(targetLocation)
+                || !owner.isVisible(targetLocation)
+                || !getType().canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(targetLocation))) {
+            return Optional.empty();
         }
-        if (!getType().canMoveAtTerrain(
-                model.getMap().getTerrainTypeAt(targetLocation))) {
-            return false;
+        final Optional<Colony> peacefulColony = model
+                .getColonyAt(targetLocation)
+                .filter(colony -> colony.getOwner() != owner
+                        && !model.areHostile(owner, colony.getOwner()));
+        if (peacefulColony.isPresent() && !allowDeclaration) {
+            return Optional.empty();
         }
-        final Optional<Colony> optColony = model.getColonyAt(targetLocation);
-        if (optColony.isPresent()) {
-            final Colony colony = optColony.get();
-            if (!owner.equals(colony.getOwner())
-                    && !model.areHostile(owner, colony.getOwner())) {
-                return false;
-            }
-        }
-        return !getAttackableUnitsAt(targetLocation).isEmpty();
+        return owner.getEnemyUnitsAt(targetLocation).stream()
+                .filter(unit -> getType().getAttackableUnitType()
+                        .contains(unit.getType()))
+                .filter(unit -> allowDeclaration
+                        || model.areHostile(owner, unit.getOwner()))
+                .filter(unit -> peacefulColony.isEmpty()
+                        || peacefulColony.get().getOwner() == unit.getOwner())
+                // An existing enemy takes priority over breaking another
+                // treaty.
+                .sorted(Comparator.comparing(
+                        unit -> !model.areHostile(owner, unit.getOwner())))
+                .findFirst();
     }
 
     /**
@@ -619,80 +651,51 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
-     * This unit attack unit at given location.
-     * <p>
-     * Attack is composed from two steps:
-     * </p>
-     * <ul>
-     * <li>Move at attacked place. Show moving one step animation.</li>
-     * <li>Perform attack.</li>
-     * </ul>
+     * Attacks a currently hostile adjacent target using the shared live checks.
      *
-     * @param attackAt Required attacked location.
+     * @param attackAt required battlefield
      */
     @Override
     public void attack(final Location attackAt) {
-        canAttackValidation(attackAt);
-        Preconditions.checkState(!getAttackableUnitsAt(attackAt).isEmpty(),
-                "There is not attackable unit on target location (%s).",
-                attackAt);
-        Preconditions.checkState(getLocation().isNeighbor(attackAt),
-                "Attacked location '%s' should be neighbor of attacking unit '%s'",
-                attackAt, this);
+        prepareAttack(attackAt, false)
+                .orElseThrow(() -> new IllegalStateException(
+                        "There is no legal hostile attack at " + attackAt))
+                .execute();
+    }
 
+    void executeAttack(final AttackOrder order) {
+        Preconditions.checkState(
+                order.getAttacker() == this && order.matchesParticipants(),
+                "The selected battle changed");
+        final Unit selected = findAttackTarget(order.getTarget(),
+                order.isDeclarationRequired())
+                .orElseThrow(() -> new IllegalStateException(
+                        "The selected attack is no longer legal"));
+        Preconditions.checkState(selected == order.getDefender(),
+                "The selected defender changed");
+        Preconditions
+                .checkState(
+                        order.isDeclarationRequired() == !model
+                                .areHostile(owner, selected.getOwner()),
+                        "The diplomatic state changed");
+        final AbstractUnit defender = (AbstractUnit) selected;
+        if (order.isDeclarationRequired()) {
+            model.declareHostilities(owner, defender.getOwner());
+        }
         actionPoints = 0;
-        final Unit defender = getAttackableUnitsAt(attackAt).get(0);
+        defender.actionPoints = 0;
         final Unit winner = isWinnerAttacker() ? this : defender;
         if (winner == this) {
-            final Unit destroyed = defender;
-            model.fireUnitAttacked(this, defender, destroyed);
-            model.destroyUnit(destroyed);
-            if (owner.getEnemyUnitsAt(attackAt).isEmpty()) {
-                placeToLocation(attackAt);
-                tryToCaptureColony(attackAt);
+            model.fireUnitAttacked(this, defender, defender);
+            model.destroyUnit(defender);
+            if (owner.getEnemyUnitsAt(order.getTarget()).isEmpty()) {
+                placeToLocation(order.getTarget());
+                tryToCaptureColony(order.getTarget());
             }
         } else {
-            final Unit destroyed = this;
-            model.fireUnitAttacked(this, defender, destroyed);
-            model.destroyUnit(destroyed);
+            model.fireUnitAttacked(this, defender, this);
+            model.destroyUnit(this);
         }
-    }
-
-    private void canAttackValidation(final Location attackAt) {
-        verifyThatUnitIsAtMap();
-
-        model.checkGameRunning();
-        model.checkCurrentPlayer(owner);
-
-        Preconditions.checkState(getType().canAttack(),
-                "This unit type (%s) cannot attack.", this);
-        Preconditions.checkNotNull(attackAt);
-        Preconditions.checkArgument(
-                getType().canMoveAtTerrain(
-                        model.getMap().getTerrainTypeAt(attackAt)),
-                "Target location (%s) is not moveable for this unit (%s)",
-                attackAt, this);
-        Preconditions.checkArgument(this.getLocation().isNeighbor(attackAt),
-                "Unit location (%s) is not neighbor to target location (%s).",
-                this.getLocation(), attackAt);
-        Preconditions.checkState(actionPoints > 0,
-                "Unit (%s) cannot attack this turn.", this);
-        Preconditions.checkState(isPossibleToAttackAt(attackAt),
-                "There is no legal hostile target at (%s).", attackAt);
-    }
-
-    /**
-     * Get list of units that could be attacked by this unit at some location.
-     *
-     * @param at required examined location
-     * @return Return list of units that could be attacked.
-     */
-    private List<Unit> getAttackableUnitsAt(final Location at) {
-        return owner.getEnemyUnitsAt(at).stream()
-                .filter(unit -> getType().getAttackableUnitType()
-                        .contains(unit.getType())
-                        && model.areHostile(owner, unit.getOwner()))
-                .collect(ImmutableList.toImmutableList());
     }
 
     /**

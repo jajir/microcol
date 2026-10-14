@@ -43,20 +43,31 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             pursueFirstColony(unit);
             return;
         }
-        final List<Location> locations = computeMoveLocation(unit);
-
-        if (!locations.isEmpty()) {
-            getModel().moveUnit(unit, Path.of(locations));
+        while (isActiveTurn()
+                && getModel().getCurrentPlayer() == unit.getOwner()
+                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
+            final List<Location> locations = computeMoveLocation(unit);
+            if (!locations.isEmpty()) {
+                getModel().moveUnit(unit, Path.of(locations));
+            }
+            if (!isActiveTurn()) {
+                return;
+            }
+            simpleUnitBehavior.tryToFight(unit);
+            if (locations.isEmpty()) {
+                break;
+            }
         }
-
-        simpleUnitBehavior.tryToFight(unit);
-        tryToEmbark(unit);
+        if (isActiveTurn()) {
+            tryToEmbark(unit);
+        }
     }
 
     private List<Location> computeMoveLocation(final Unit unit) {
         final List<Location> locations = new ArrayList<>();
         Location lastLocation = unit.getLocation();
-        while (locations.size() < unit.getActionPoints()) {
+        while (locations.size() < 1
+                && locations.size() < unit.getActionPoints()) {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
@@ -102,7 +113,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private boolean isPossibleToAttack(final Unit unit,
             final Location lastLocation) {
-        if (unit.getType().canAttack()) {
+        if (unit.canAttack()) {
             for (final Location location : lastLocation.getNeighbors()) {
                 if (unit.isPossibleToAttackAt(location)) {
                     return true;

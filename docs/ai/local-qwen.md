@@ -2079,3 +2079,74 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    algorithmic step before dispatch; do not spend the allowance rediscovering
    APIs already supplied. This observation does not change configured limits
    or claim savings.
+
+
+## R-0028 attack-role prerequisite — 2026-10-14
+
+1. Assignment `2026-10-14-r28-attack-roles` used isolated main revision
+   `a43507d5` with the caller's role tests and refined analysis copied explicitly.
+   Its scope was four production files: instance attack capability, the shared
+   query/command role guard and the specialist's potential land-target domain.
+   The caller retained attack snapshots, live-state validation, UI and tests.
+2. Attempt 0 ended after **252.863 s** with process exit 0 but an empty final
+   response. Its 4096-token output went into reasoning about whitespace and
+   serialization. No code was accepted. Repair 1 supplied the same five exact
+   anchors and fixed requirements, omitting the unneeded formatting discussion;
+   it completed in **131.770 s** with five valid JSON replacements. Total worker
+   time was **384.633 s**, one repair, within the unchanged 600-second budget.
+3. Across the two attempts, **346 loaded runtime samples** matched alias
+   `microcol-gpt-oss:20b-32k`, digest
+   `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef` and context
+   32768. The model was unloaded before formatting and Maven. The shared formatter
+   checked five Java files, changed two and passed token/idempotence checks.
+4. The original caller run `run-qbwL79` had six failed role assertions among ten
+   cases. Isolated acceptance `run-qmBniN` passed all ten and the unchanged
+   hostility/AI controls: **37 model/AI and 3 source-contract cases**, no failures,
+   errors or skips. The caller integrated only the four approved production files
+   and released the owned lock. Main's later attack-order work is separate from
+   this worker result; complete R-0028 player acceptance remains pending.
+5. Commands, exact anchors, original empty response, repair, runtime samples,
+   diagnosis and acceptance are retained under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r28-attack-roles/`.
+   No token-saving or full-feature success claim follows from this prerequisite.
+
+### R-0028 live AI step integration — 2026-10-14
+
+1. `2026-10-14-r28-ai-live-step` ran against `afcdb67d` with the caller's
+   recorded R-0028 work copied into its isolated checkout. The mounted-wanderer
+   reproduction kept seven units instead of six: the new current-position query
+   could not validate an attack from a hypothetical later path position.
+2. One local attempt took **138.386 seconds** and returned one exact replacement
+   combining the two supplied anchors. It performed one unnecessary bounded read
+   despite the text-only instruction; it wrote no files. The caller validated
+   both changes and their exact source match before applying them. All 116 loaded
+   runtime samples matched the configured GPT-OSS digest and context 32768.
+3. Ordinary wandering now executes one real step, checks shared combat, then
+   continues while the live turn and remaining movement permit. The founding
+   branch, peace policy and shared combat rules remain authoritative. Caller
+   formatting passed; isolated `run-7JPXpL` passed **89 model/AI and 3 source-contract
+   cases**, zero failures/errors/skips, including the failed mounted case and
+   twelve first-colony planner cases. Only the accepted AI file was integrated.
+4. The model was unloaded and the owned lock released. UI integration remains
+   caller-owned; this result does not establish full R-0028 acceptance or
+   publication. Full logs are under the task ID in the documented jobs directory.
+
+5. Caller review extended the same assignment with a stop-between-commands case.
+   The initial handoff omitted the robot-local running flag. An initial test
+   attempted nested listener removal during dispatch and errored; the corrected
+   seam stops the robot immediately after the real model move returns.
+   `run-M8uv3z` then ran 14 cases with one valid failure: the stopped robot still
+   fought (six units remained instead of seven).
+6. Repair 1 took **104.907 seconds** and added the cancellation gates, but omitted
+   the explicitly required existing unit-owner guard. It was applied only in the
+   isolated tree and not accepted. Final repair 2 took **65.564 seconds** and
+   restored that exact predicate. Total worker time was **308.857 seconds** with
+   both repairs used; all 250 loaded samples matched the configured digest and
+   context. These are measured run costs, not a token-savings estimate.
+7. After caller formatting, `run-7VaET0` passed **94 model/AI and 3 source-contract
+   cases**, zero failures/errors/skips, exit 0. Both actual-step variants passed:
+   a live robot fights after approaching; a stopped robot retains its one legal
+   move and performs no further attack or embark command. The final AI file was
+   integrated after checking the main source still matched its handoff baseline.
+   The model was unloaded and the owned lock released. Full R-0028 regression
+   and publication remain separate acceptance gates.
