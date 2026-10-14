@@ -4,18 +4,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.microcol.model.campaign.po.PersistingTool;
-
-import com.google.common.io.Files;
 
 /**
  * This test initialize {@link SettingDao} to really read and write to json
  * file.
  */
 public class SettingServicePersistingTest {
+
+    @TempDir
+    File temporaryDirectory;
 
     private SettingDao settingDao;
 
@@ -26,7 +30,7 @@ public class SettingServicePersistingTest {
     @Test
     public void verify_that_default_setting_is_used() throws Exception {
         when(persistingTool.getRootSaveDirectory())
-                .thenReturn(Files.createTempDir());
+                .thenReturn(temporaryDirectory);
 
         assertEquals(GamePreferences.DEFAULT_ANIMATION_SPEED,
                 settingService.load().getAnimationSpeed());

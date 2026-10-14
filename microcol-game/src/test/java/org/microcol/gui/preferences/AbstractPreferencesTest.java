@@ -4,12 +4,20 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.Locale;
 
-import com.google.common.io.Files;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 public abstract class AbstractPreferencesTest {
 
-    protected final static File SETTING_FILE = new File(Files.createTempDir(),
-            "setting.txt");
+    @TempDir
+    protected File temporaryDirectory;
+
+    protected File SETTING_FILE;
+
+    @BeforeEach
+    void prepareSettingFile() {
+        SETTING_FILE = new File(temporaryDirectory, "setting.txt");
+    }
 
     protected Setting createSetting() {
         final Setting out = new Setting();

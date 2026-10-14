@@ -273,3 +273,9 @@ does not itself create chats, scheduled work or implementation assignments.
 2. Work through A05 visibility/equipment, A06 voyages/passengers/expert purchase, A07 wagon/construction, A08 relations/rival founding, A09 attack/strength, then A10 sentiment before its dependent tax demand. Numbered requirements retain their existing acceptance; needed earlier capabilities are implemented when dependency evidence requires them.
 3. R-0019–R-0026 were already published when the scope was narrowed. Each numbered analysis owns its implementation scope and dated evidence. R-0027 and R-0028 share the final regression and delivery gate described in [R-0028](R-0028.md); the [development channel](../development-builds.md) identifies the current verified distribution. Manual-backed decisions cite printed and PDF page numbers; implementation policy for parameters absent from the manual is explicitly distinguished from historical rules.
 4. Local implementation uses the configured Ollama GPT-OSS worker with bounded assignments; requirements, architecture, review, actual checks and publication remain caller-owned.
+
+## Dependency maintenance
+
+| Requirement | Primary area | Outcome |
+| --- | --- | --- |
+| [R-0037](R-0037.md) | [A03](areas.md#a03) | Safe Guava update, preference temporary directories and Windows/Java compatibility checks. |

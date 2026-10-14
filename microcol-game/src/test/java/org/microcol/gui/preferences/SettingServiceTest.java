@@ -14,8 +14,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.microcol.model.campaign.po.PersistingTool;
 
-import com.google.common.io.Files;
-
 /**
  * Test for update method.
  */
@@ -32,7 +30,7 @@ public class SettingServiceTest extends AbstractPreferencesTest {
     public void verify_that_update_save_changes() throws Exception {
         final Setting setting = createSetting();
         when(persistingTool.getRootSaveDirectory())
-                .thenReturn(Files.createTempDir());
+                .thenReturn(temporaryDirectory);
         when(settingDao.loadFromFile(any(File.class)))
                 .thenReturn(Optional.of(setting));
         settingService.update(set -> {
