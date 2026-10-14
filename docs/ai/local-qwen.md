@@ -1,7 +1,7 @@
 # Codex and a local development worker
 
-Status as of **2026-10-13: local GPT-OSS 20B is the configured default for bounded
-worker assignments with context 32768**, under [R-0034](../requirements/R-0034.md). Astra remains the main
+Status as of **2026-10-14: local GPT-OSS 20B uses context 32768 and a 16384-token
+generation allowance**, under [R-0035](../requirements/R-0035.md). Astra remains the main
 agent and supervises a separate local Codex CLI process, checks the result and
 owns integration and publication. The current operating profile below replaces
 Qwen3.5-9B for new assignments; dated Qwen results remain historical evidence.
@@ -12,11 +12,71 @@ no improvement or savings percentage has been measured. The operating page and
 log directory retain their `local-qwen` names to preserve existing links and
 artifacts; they are not model selectors.
 
-The existing [time budgets](#time-budget-2026-10-12) remain five minutes per
-attempt, ten minutes cumulative per task and at most two targeted repairs.
+The current [time budgets](#time-budget-2026-10-14) are thirty minutes per
+attempt, sixty minutes cumulative per task and at most two targeted repairs.
 The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
+
+## Larger output and shared launcher verification — 2026-10-14
+
+1. [R-0035](../requirements/R-0035.md) implements the user's requested trial:
+   GPT-OSS 20B, context 32768, output 16384, medium reasoning, 1800-second
+   attempts and a 3600-second task budget with two repairs. The installed alias's
+   `/api/show` matches both parameters; its new digest is recorded in the
+   [operating profile](#operating-profile-bounded-assignments). The weights were
+   reused, not downloaded. Runtime samples matched that alias/digest/context.
+2. The shared standard-library launcher replaces copied job scripts. It rejects
+   bad baselines/paths/anchors before dispatch, disables command execution for
+   text-only work, snapshots the effective profile and checks runtime identity.
+   It keeps the existing host-wide lock through caller acceptance, charges
+   previous attempts, handles owned-process cancellation/unload and validates an
+   entire replacement batch before writing. New prompts request IDs/new text;
+   original-prompt replays retain the historical output shape.
+3. Two historical tasks were replayed in separate worktrees at their recorded
+   main revisions. Their original role, coding instructions, source and acceptance
+   inputs were retained; only execution paths, digest and approved budget values
+   changed in the first prompts. Repairs retained the original acceptance.
+   Both replays made **zero observed command/file/tool calls**. Inference and
+   Docker acceptance were serialized, and both owned locks were released.
+
+| Replay | Historical result | New profile result |
+| --- | --- | --- |
+| `2026-10-14-r35-attack-replay`, baseline `a43507d5` | First attempt empty at 4096 output tokens; original repair subsequently accepted after 384.633 s total. | **Unsuccessful coding replay.** Three attempts used 184.902 / 101.676 / 68.147 s (**354.725 s total**). First result omitted the base implementation and made a pure query throw. Repair 1 duplicated a guard body; final repair broke the remaining terrain condition and was rejected before application. Compilation of the last staged candidate failed, exit 1; **zero tests ran**. Both repairs exhausted. |
+| `2026-10-14-r35-relations-replay`, baseline `61789f81` | Two truncated responses and final timeout; **600.216 s**, no worker code accepted. | **Original behavior acceptance passed on attempt 1:** 175.048 s, no manual code repairs. Shared formatting preserved code tokens and idempotence. Docker `run-agOZfU` passed **8 EuropeanRelationsTest cases and 3 PageVerificationContractTest cases**, zero failures/errors/skips, exit 0. |
+
+4. The attack replay produced complete answers but retained coding defects. Its
+   partial-method repair anchors proved fragile; no caller rewrite was needed
+   because the real product already contains the completed feature. The isolated
+   compilation failure is retained as a failed experiment, not a passing game
+   change. The relation candidate implements the original behavior with a private
+   pair-key class and verbose comments; passing its tests does not establish a
+   preferred production design. **Neither replay changed main's gameplay code.**
+5. The successful relation response used **2832 input / 2726 output tokens**;
+   its 157 loaded runtime samples matched the configured model. Since its output
+   stayed below the former 4096 limit, this comparison **does not isolate the
+   benefit of the larger output allowance** from tool restrictions or sampling
+   variation. The first attack attempt likewise used 3110 output tokens. There
+   is one recovered historical task and one unsuccessful replay, not a general
+   success-rate, throughput or cloud-token-saving measurement.
+6. Full prompts, original prompts, response JSON, runtime samples, exact
+   application records, diagnoses and Docker logs remain under the two job IDs
+   in `~/Library/Logs/Microcol/local-qwen/jobs/`. The acceptance records explicitly
+   distinguish worker output, caller formatting and failures. No failing candidate
+   was integrated and no failed check was weakened or relabeled as passing.
+7. Caller launcher verification passed **14 behavioral tests** without inference:
+   budgets/repair exhaustion, incomplete history/profile drift, stale or escaping
+   source paths, ambiguous anchors, invalid whole batches, JSON newlines, legacy
+   replay anchors, mode-specific shell settings, foreign/concurrent locks, process
+   timeout/cleanup, failed starts and runtime-parameter mismatch. One caller
+   regression initially rejected macOS's `/var` symlink in temporary roots;
+   canonicalizing the worktree root fixed it and the same tests passed. Diagnostics
+   preserve original process errors rather than masking them with a missing-sample
+   error. The documentation workflow now runs these portable tests.
+8. Local caller checks also passed the **9 documentation tests**, skill validation,
+   strict MkDocs build, rendered operating-page review and `git diff --check`.
+   Publication is checked separately for the final source commit. No new game
+   behavior, Java package or player scenario belongs to this tooling change.
 
 ## Instruction ownership
 
@@ -83,7 +143,9 @@ acceptance. Integration verification is recorded in the
 | [local-worker skill](../../.agents/skills/local-worker/SKILL.md) | Reusable selection, handoff, repair and review workflow. |
 | [Worker role](../../.agents/skills/local-worker/references/worker-role.md) | Single source of model instructions, supplied through `model_instructions_file`. |
 | [Task and result contract](../../.agents/skills/local-worker/references/worker-instructions.md) | Completed task input and required result format. |
-| [Worker Modelfile](../../.codex/local-worker/Modelfile) | Local alias using the installed weights with the current context/output limits. |
+| [Worker Modelfile](../../.codex/local-worker/Modelfile) | Installed weights and the sole configured context/output limits. |
+| [Launcher profile](../../.codex/local-worker/profile.json) | Alias, reasoning, attempt/task deadlines and repair limit. |
+| [Launcher](../../scripts/local-worker/worker.py) | Preflight, local-only dispatch, tool restrictions, budgets, cleanup and validated application. |
 | This document | Microcol environment, operating profile, integration status, verification and measurements. |
 | [Rules gap analysis](../gap-analysis.md) | Existing gameplay findings and historical test commands/results. |
 
@@ -436,9 +498,10 @@ multiple models concurrently.
 
 ## Selected direct CLI workflow
 
-Use the installed Homebrew Codex CLI as the worker and the caller's existing
-shell tools to supervise it. No new runner service, MCP integration or persistent
-user Codex configuration is needed.
+Use the installed Homebrew Codex CLI through the repository's small
+[launcher](../../scripts/local-worker/worker.py). It replaces copied per-job scripts;
+there is no background service, new MCP integration or persistent user Codex
+configuration.
 
 ### GPT-OSS installation and worker verification — 2026-10-13
 
@@ -537,67 +600,64 @@ local Maven/TestFX was not rerun for this configuration-only follow-up.
 
 ### Operating profile — bounded assignments
 
-| Setting | Current choice and limit |
-| --- | --- |
-| Runtime/provider | Ollama 0.40.2 on loopback, Homebrew Codex CLI 0.142.3, `--oss --local-provider ollama`. |
-| Model | Base `gpt-oss:20b` (local MXFP4 weights); project alias `microcol-gpt-oss:20b-32k`. Installation/runtime digest is recorded in the dated verification above. |
-| Model allocation | [Modelfile](../../.codex/local-worker/Modelfile): `num_ctx 32768`, `num_predict 4096`. The generation allowance includes reasoning and final output within the context window. |
-| Codex metadata | `model_context_window=32768` describes the window to Codex; it does not set Ollama allocation. Confirm actual context and model identity in runtime evidence. |
-| Reasoning | `medium`, a supported GPT-OSS reasoning level; use the complete CLI settings below. Do not reuse Qwen's `none` setting or Astra's `ultra`. |
-| Concurrency | One local request, serialized with the existing host-wide lock. Unload before Maven; no concurrent heavy tests or second local model. |
-| Limits | **300 seconds per attempt**, **600 seconds cumulative worker time per task**, at most **two repairs** while budget remains. Caller-enforced, including model loading and cleanup. |
-| Language/context | Focused English task contracts and relevant code. No full chat history or unrelated catalogs. Split work that does not fit. |
+Approved on **2026-10-14** under [R-0035](../requirements/R-0035.md). The existing
+[Modelfile](../../.codex/local-worker/Modelfile) owns context/output values;
+[profile.json](../../.codex/local-worker/profile.json) owns the remaining settings.
+The launcher reads both, checks the installed alias, and snapshots their effective
+values per attempt. Changing settings during a task is rejected; retries retain
+that task's original budget. Historical jobs retain their original evidence.
 
-The user authorized this installation and model change on 2026-10-13. Setup is
-performed once, not for each delegation:
+| Setting | Current configured value |
+| --- | --- |
+| Runtime | Existing Ollama 0.40.2 and Codex CLI 0.142.3, local loopback only. |
+| Model | `gpt-oss:20b`, alias `microcol-gpt-oss:20b-32k`; no cloud fallback. |
+| Context / generation | `num_ctx 32768`, `num_predict 16384`; generation includes reasoning and final output. Input, tools and generated text share the context. |
+| Reasoning | `medium`, unchanged during this trial. |
+| Limits | 1800 seconds per attempt, 3600 cumulative seconds per task, at most two repairs. |
+| Text-only mode | `features.shell_tool=false`, read-only sandbox; browser/computer/image generation, plugins, apps and delegation disabled. |
+| Direct-edit mode | Command execution and workspace writes permitted in the isolated worktree, within the supplied scope. |
+| Concurrency | One local worker; host-wide lock retained through caller verification. Unload before Maven/Docker. |
+
+To change model or runtime limits deliberately, update these configuration files
+and recreate the alias from the existing weights while holding the worker lock:
 
 ```sh
-ollama pull gpt-oss:20b
 ollama create microcol-gpt-oss:20b-32k -f .codex/local-worker/Modelfile
 ```
 
-The alias reuses downloaded weights and sets project limits. GPT-OSS uses
-[Ollama's Harmony template](https://developers.openai.com/cookbook/articles/gpt-oss/run-locally-ollama)
-and supports [low/medium/high reasoning](https://docs.ollama.com/capabilities/thinking).
-The user requested the 32k profile after the initial 8k trial on this 16 GB host.
-[Ollama recommends at least 64k for Codex](https://docs.ollama.com/integrations/codex).
-Do not infer that a model's advertised context fits this machine. Measure actual
-memory pressure, swapping and completion before increasing allocation.
+Changing the file alone does not update Ollama. The launcher rejects a mismatch
+between the installed alias's context/output parameters and repository settings.
+The model alias is configurable in the profile; model changes require an explicit
+operator decision and verification. No launch installs or downloads a model.
+
+The alias now has digest
+`b1630d4983e67a857f552db4e439ef29ed2d7131cb5ab6677809398fbb90abd8`.
+The earlier `425bbb...` digest identifies the historical 4096-output profile.
+The configured change is verified by `/api/show`; coding results are recorded
+separately below, not inferred from configuration.
+
+### Time budget — 2026-10-14
+
+1. The launcher derives the next attempt number and elapsed time from all prior
+   `attempt-*/execution.json` records. Missing/nonconsecutive evidence, a changed
+   profile, exhausted time or exhausted repairs stops dispatch.
+2. Each attempt gets `min(attempt_seconds, task_seconds - elapsed_seconds)`.
+   Startup, failed execution, cancellation and cleanup count. For example, 3500
+   seconds already used leaves 100 seconds, not a new 30-minute attempt.
+3. On deadline, interruption or runtime identity failure, the launcher terminates
+   its owned process group, escalates after five seconds if needed, unloads the
+   model and records the result. Repeated discovery without progress can still
+   justify cancellation before the deadline; the larger allowance is not a
+   reason to repeat an unchanged failing investigation.
+4. Caller preparation, review and tests remain outside the inference budget.
+   A new directory is not permission to reset an unfinished logical task.
 
 ### Time budget — 2026-10-12
 
-These are the approved limits for **future dispatches**, replacing the previous
-180-second attempt limit. Historical job scripts and reports remain unchanged.
-There is no persistent runner or Ollama setting enforcing wall-clock deadlines:
-the caller supervising each direct `codex exec` process must enforce them.
-Do not copy the old `180` constant from archived per-job runners.
-
-- Before the first attempt, assign a stable logical task ID and start its
-  cumulative worker time at zero. Record each attempt's elapsed time using a
-  monotonic clock, including process startup/model loading, tool calls and model
-  generation. Charge failed starts, cancelled attempts and repairs too.
-- Before every attempt, subtract previously used worker time from **600 seconds**.
-  Do not start if none remains. The attempt's allowed runtime is the smaller of
-  **300 seconds** and the remaining task budget. Record these values with the
-  task input and executed command so the worker and caller share the same limit.
-- Repairs, restarted processes and differently named attempt directories retain
-  that same task budget. The existing maximum of two repair rounds is an upper
-  bound, not an entitlement to another full attempt. Two 300-second attempts
-  exhaust the task budget; a third attempt is not allowed.
-- On either deadline, stop the owned process/request, unload the model and keep
-  the partial diff and logs. Cleanup may finish slightly after the deadline;
-  record and charge the actual elapsed time before considering another attempt.
-  If prior elapsed-time evidence is missing, reconstruct it before dispatching
-  again rather than assuming a fresh budget.
-- Caller preparation, review, Maven/tests and publication are outside this
-  **worker-runtime** budget. Do not run heavy verification concurrently with the local worker.
-  Repeated reads or errors without progress can justify stopping earlier; more
-  time is not a reason to continue an unchanged failing loop.
-
-For example, 180 seconds already used leaves a 300-second attempt available;
-480 used leaves only 120 seconds; 600 used permits no further attempt. This is
-a caller-enforced workflow change, not a claim that the longer budget improves
-success rates. R-0034 changes the model, context and generation allowance; the time limits and single-request concurrency remain unchanged.
+The historical limit was 300 seconds per attempt and 600 seconds per task, with
+at most two repairs. The user superseded those time limits on 2026-10-14; use the
+[current budget](#time-budget-2026-10-14). Archived runners are evidence, not
+current invocation templates.
 
 ### Failure and recovery loop
 
@@ -645,81 +705,93 @@ dispositions make compliance reviewable; they do not replace actual verification
 
 ### Prepare, invoke, verify
 
-1. Read the [local-worker skill](../../.agents/skills/local-worker/SKILL.md), current
-   Git state and relevant code. Choose a unique task ID. Record the baseline and
-   include any relevant uncommitted inputs deliberately; a worktree of `HEAD`
-   alone does not include them. Create a detached isolated worktree under
-   `~/Library/Application Support/Microcol/local-worker/worktrees/<task-id>`.
-2. Store task input, copied `worker-role.md`, command, events, result and test
-   reports under `~/Library/Logs/Microcol/local-qwen/jobs/<task-id>/`. Fill the
-   existing task template, including scope, expected behavior, both time budgets,
-   previous attempts' elapsed time and test ownership. Create the child-specific
-   `codex-home` directory before dispatch. Inline applicable project rules; the
-   child must receive them even when the source documents are untracked in the
-   main checkout.
-3. Claim `~/Library/Application Support/Microcol/local-worker/active.lock` with an
-   atomic directory creation before starting. If it already exists, inspect its
-   owning task/process; do not start a second job or remove another caller's
-   lock. Record the task and owned process there. Hold the lock through worker
-   execution and caller verification, then release your lock after cleanup.
-4. Run the command below in the assigned worktree. Capture stdout events, stderr,
-   final response and exit code. Enforce the effective attempt deadline and shared
-   task budget from the calling session using the accounting rules above;
-   this command has no built-in timeout wrapper. On timeout or interruption,
-   stop the owned worker and any still-active local request, unload its model,
-   and preserve the partial diff and logs. Never replace failed local inference
-   with a cloud model silently.
-5. Inspect the actual diff against scope, unload the alias, and run the specified
-   Maven command on that worktree. Require a fresh Surefire report with the
-   intended tests and exact counts, exit codes, failures and skips. Send concrete
-   failures back only within the repair limit and remaining task budget. The
-   worker must report its tests as pending caller verification, not claim they
-   passed.
-6. Astra reviews behavior and test meaning, checks the main checkout's current
-   state, and integrates accepted changes within the assigned scope. The worker
-   does not commit, merge or push its result. The main agent records repairs and
-   uncertainty, then completes the authorized checks, commit, push to `main` and
-   publication verification from [AGENTS.md](../../AGENTS.md). An explicitly
-   isolated pilot may stay isolated when that is the agreed scope.
+1. Prepare a detached worktree at the agreed `main` revision. For a historical
+   replay, use its recorded historical main revision and explicitly copy the
+   original acceptance inputs. Never give the worker the main checkout.
+2. Create a unique job directory in
+   `~/Library/Logs/Microcol/local-qwen/jobs/<task-id>/` containing `task.md`,
+   `worker-role.md` and `job.json`. Copy the current role from the skill; a
+   historical replay records use of its original role explicitly. Supply the
+   applicable rules, exact source/APIs, unchanged acceptance checks and caller
+   formatting/test ownership in the task. Verify APIs against the checkout before
+   passing them; source-anchor validation cannot establish Java type correctness.
+3. Declare every allowed source path and exact anchor as below. Paths are
+   relative to the worktree; escaping paths, symlinks, missing sources, duplicate
+   IDs and incorrect counts fail preflight. For new files, prepare an explicit
+   skeleton first. Record copied/uncommitted inputs; the launcher captures the
+   Git diff/status and allowed file hashes at dispatch.
+4. Run the launcher. It creates the child-specific Codex home, claims the existing
+   host-wide lock, validates the alias and records the prompt, role, command,
+   effective profile, runtime identity samples and process outcome. An existing
+   lock owned by another job or an active invocation prevents dispatch. Do not
+   remove another caller's lock. A crash leaving incomplete evidence or a running
+   marker requires diagnosis before retrying.
+5. Review the returned code. For text-only output, run the separate `apply`
+   action; it accepts the complete expected set of IDs, decodes JSON normally,
+   checks original file hashes and validates every exact match before writing.
+   Unknown, duplicate, missing or unchanged replacements fail. Original-prompt
+   replays may return the historical full `file`/`old`/`new`/`expected_matches`
+   objects only when they identify the same declared anchors exactly.
+6. **Inspect the application exit status before formatting or tests.** Formatting
+   is not evidence that a rejected patch applied. Use the shared formatter on
+   changed Java files, review the diff and run the assigned acceptance after model
+   unload. A nonempty response and exit zero do not establish acceptance.
+7. For a repair, retain the job directory/history, update only the focused task
+   and caller-owned anchors to the current reviewed source, and rerun within the
+   remaining budget. Preserve correct fragments; do not ask for the whole file
+   again when one fragment is wrong. Explain caller corrections and failure causes.
+8. Integrate accepted changes only after checking current main state, then
+   release this job's lock. The caller owns commit, push and publication. Replays
+   retain their candidate only in the isolated tree; they do not rewrite gameplay.
 
-Example invocation, after setting `worker_tree` and `worker_job` to the prepared
-absolute paths. The quoted, fail-fast preflight creates the child home and checks
-the required inputs before dispatch. These variables are caller-local;
-`CODEX_HOME` below applies only to the child process:
+Example `job.json` (replace the illustrative path, full revision and source):
 
-```sh
-test -d "$worker_tree" && test -r "$worker_job/task.md" \
-  && test -r "$worker_job/worker-role.md" \
-  && mkdir -p "$worker_job/codex-home" || exit 1
-
-env CODEX_HOME="$worker_job/codex-home" \
-  /opt/homebrew/bin/codex -a never exec \
-  --oss --local-provider ollama -m microcol-gpt-oss:20b-32k \
-  --ignore-user-config --ephemeral -s workspace-write -C "$worker_tree" \
-  --json --color never -o "$worker_job/response.md" \
-  -c "model_instructions_file=\"$worker_job/worker-role.md\"" \
-  -c model_context_window=32768 -c project_doc_max_bytes=0 \
-  -c features.multi_agent=false -c skills.include_instructions=false \
-  -c features.plugins=false -c features.apps=false -c 'web_search="disabled"' \
-  -c 'model_reasoning_effort="medium"' \
-  -c model_supports_reasoning_summaries=true \
-  -c 'model_reasoning_summary="none"' \
-  -c tool_output_token_limit=1000 - \
-  < "$worker_job/task.md" > "$worker_job/events.jsonl" 2> "$worker_job/stderr.log"
+```json
+{
+  "worktree": "/absolute/path/to/detached/worktree",
+  "baseline": "full-git-commit-id",
+  "mode": "text-only",
+  "allowed_files": ["path/to/Example.java"],
+  "anchors": [{
+    "id": "method",
+    "file": "path/to/Example.java",
+    "old": "exact original source",
+    "expected_matches": 1
+  }]
+}
 ```
 
-Preserve all three reasoning settings together. The earlier Qwen wire check
-found that this CLI omitted the reasoning object without
-`model_supports_reasoning_summaries=true`; GPT-OSS uses effort `medium` and
-summary `none` to request reasoning without a separate prose summary. Inspect
-actual runtime identity and completion instead of treating these flags as proof
-of a successful inference. `project_doc_max_bytes=0` avoids duplicate repository
-instructions; the completed task must include all applicable rules explicitly.
-`workspace-write` supplies the execution restriction; an isolated worktree and a
-post-run diff check alone are not a filesystem sandbox.
-The CLI emitted fallback model-metadata warnings for the local model. This is
-an observed metadata limitation, not model substitution: the local model and
-digest were checked through Ollama's runtime evidence.
+The prompt supplies the source/context and requests only
+`{"replacements":[{"id":"method","new":"replacement source"}]}`. It need not
+repeat the original text, path or match count in its answer. Direct-edit jobs
+select `"mode":"edit"`; anchors may be empty, while `allowed_files` and caller
+review still define scope. The workspace sandbox is broader than that allowlist;
+review the entire diff before accepting direct edits.
+
+From the main checkout, after assigning the absolute `worker_job` path:
+
+```sh
+python3 scripts/local-worker/worker.py run "$worker_job"
+# Review the candidate, then apply the explicitly selected attempt:
+python3 scripts/local-worker/worker.py apply "$worker_job" --attempt 0
+# Only after successful application: formatter, diff review, caller acceptance.
+# After verification/integration (or documented rejection):
+python3 scripts/local-worker/worker.py release "$worker_job"
+```
+
+These are separate operator steps, not an unconditional shell sequence. If an
+application fails, stop the dependent steps and diagnose it. The launcher does
+not run acceptance tests, auto-accept code, schedule retries, commit or publish.
+Its output metadata says verification is pending caller work.
+
+Portable launcher checks run without inference or the host lock:
+
+```sh
+python3 -m unittest discover -s scripts/local-worker -p 'test_*.py'
+```
+
+The documentation CI runs these tests alongside the existing documentation checks.
+Actual coding acceptance requires the local model and the assigned Java checks.
 
 ### Failure analysis — 2026-10-12
 

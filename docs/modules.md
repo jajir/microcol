@@ -35,6 +35,14 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 
 ## From game code to a distribution
 
+The [local worker launcher](../scripts/local-worker/worker.py) is development
+tooling outside the Maven modules. Its [profile](../.codex/local-worker/profile.json)
+and [Modelfile](../.codex/local-worker/Modelfile) configure local execution;
+per-attempt prompts, responses, runtime samples and application records stay in
+the operator's log directory, never in game distributions. Its standard-library
+tests run with the documentation checks. See [worker operations](ai/local-qwen.md)
+for the contract and measured results.
+
 ```text
 microcol-game: JAR with dependencies
     -> microcol-module: modular JAR

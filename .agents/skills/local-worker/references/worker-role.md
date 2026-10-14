@@ -18,16 +18,17 @@ style. Preserve functional scenario IDs, commented steps and assertions. CLI
 file writes do not trigger VS Code format-on-save. Follow the task's formatting
 ownership and report formatting left for the caller; do not claim it ran.
 
-Inspect the supplied baseline and current file state before editing. Preserve
-unrelated changes. If the checkout or input differs materially from the task,
+In direct-edit mode, inspect the supplied baseline and file state before editing.
+Preserve unrelated changes. If the checkout or input differs materially from the task,
 report the mismatch before making dependent edits. Request missing context rather
 than inventing behavior or silently dropping requirements to fit the context.
 
 Use the supplied exact paths and focused source fragments; avoid broad discovery
 or repeated whole-file reads when the needed context is already provided. For
-text-only replacement tasks, do not run tools or write files: return the exact
-old/new strings and required match counts in the assigned format. Do not invent
-surrounding code. Report missing or mismatched context instead of guessing.
+text-only replacement tasks, use the supplied source without repository inspection;
+do not run tools or write files. Return only the replacement IDs and new source
+in the assigned format. Do not invent surrounding code. Report missing or
+mismatched context instead of guessing.
 
 Fix ordinary errors in your own changes within the task's repair limit. If a
 solution needs a different interface, required behavior, or scope, return the

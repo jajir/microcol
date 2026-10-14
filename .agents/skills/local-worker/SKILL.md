@@ -8,8 +8,9 @@ description: Delegate a small implementation, test, or repair task to a configur
 The main agent owns the task definition, required behavior, and acceptance of the
 result. The worker implements the assigned task without further delegation.
 
-The selected route is a direct `codex exec` worker process supervised by the
-caller. Read [the operating document](../../../docs/ai/local-qwen.md) for the
+The selected route is `codex exec` supervised by the shared
+[launcher](../../../scripts/local-worker/worker.py), not a copied per-job runner.
+Read [the operating document](../../../docs/ai/local-qwen.md) for the
 verified invocation, current status, host, model, resource limits, deadline,
 repair limit, and test commands. Treat proposed settings as proposals, not working
 services. Keep project-specific operating details there rather than duplicating
@@ -51,9 +52,10 @@ them here.
 
 ## Execute and receive
 
-The caller starts the documented direct `codex exec` command in the prepared
-worktree, captures process output and exit status, and checks the actual local
-model identity in execution evidence. Keep only one worker request active. Enforce
+The caller prepares the documented job manifest, prompt and role, then invokes
+the launcher. It validates preflight, freezes the profile, captures output/exit
+status and checks actual model identity. Text-only mode disables command
+execution and uses a read-only sandbox. Keep only one worker request active. Enforce
 both the per-attempt limit and cumulative task budget from the operating document.
 Before each dispatch, record prior worker elapsed time and cap the attempt by the
 remaining task budget; retries and new attempt directories do not reset it.
@@ -76,9 +78,11 @@ that worktree, records actual exit codes and reports, and supplies any relevant
 failures for a bounded repair. Distinguish worker-proposed checks from tests the
 caller actually executed.
 
-For replacement output, validate every allowed path and expected old-text match
-count against the current assigned worktree before applying anything. Reject missing or
-ambiguous matches rather than guessing context. Apply only the validated edits,
+For replacement output, use the launcher's separate `apply` command. It parses
+the response, validates every ID/path, original file hash and exact anchor count
+before writing the batch. Caller-owned anchors let new tasks request only IDs
+and new text. Inspect application success before formatting or testing; a rejected
+batch is not an applied patch. Apply only the validated edits,
 then review, format changed Java files with the shared project profile, and run
 the same acceptance checks as for direct worker edits. Record generated text
 separately from caller application, formatting and verification.

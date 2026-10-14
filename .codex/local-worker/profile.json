@@ -1,0 +1,7 @@
+{
+  "model": "microcol-gpt-oss:20b-32k",
+  "reasoning": "medium",
+  "attempt_seconds": 1800,
+  "task_seconds": 3600,
+  "max_repairs": 2
+}

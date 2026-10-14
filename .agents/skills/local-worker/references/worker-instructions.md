@@ -15,14 +15,15 @@ exact worktree-relative paths, the current relevant fragments/callers, expected
 behavior and explicit acceptance checks. Omit unrelated history and broad file
 dumps; preserve required interfaces, edge cases and fixtures.
 
-For a simple known edit, prefer text-only replacements over shell editing. State
-that the worker must not run tools or write files in this mode. Request a JSON
-object with a `replacements` array; each entry contains `file`, `old`, `new` and
-`expected_matches` (a positive count, including deliberate repeated call sites).
-Use literal current text, not invented surrounding code. The caller checks all
-paths against the allowlist and all match counts before applying the batch; a
-mismatch requires fresh context or a targeted repair, not a fuzzy replacement.
-This is an output contract, not an installed automatic patch runner.
+For a simple known edit, prefer text-only replacements over shell editing. The
+shared launcher disables command execution and uses a read-only sandbox in this
+mode. Store `id`, `file`, exact `old` text and positive `expected_matches` in the
+caller-owned job manifest. Include that context in the prompt, but request only
+`{"replacements":[{"id":"the supplied ID","new":"replacement source"}]}`.
+Do not make the worker repeat paths and original source. The launcher validates
+the entire batch and unchanged file hashes before applying any edit; a mismatch
+requires fresh context or a targeted repair, not a fuzzy replacement. Historical
+full-anchor responses are supported for original-prompt replays only.
 
 Repair input includes the actual error/check, current source or rejected output,
 and the one correction needed. Keep acceptance criteria and remaining budget;
@@ -64,7 +65,7 @@ Original failing command/check and unchanged acceptance criteria:
 
 Available tools and who applies the changes:
 Output mode: direct edits or text-only replacements (no worker tools/writes):
-For replacements: exact current text and expected match counts; worker proposes new text:
+For replacements: caller-owned IDs, exact current text and match counts; worker returns IDs/new text:
 Verification owner: caller runner (Maven and required test runs).
 Java formatting profile and caller ownership:
 Any explicitly allowed lightweight worker checks:
