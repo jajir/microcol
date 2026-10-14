@@ -194,6 +194,14 @@ public abstract class AbstractUnit implements Unit {
         if (!model.getMap().isValid(location)) {
             return false;
         }
+        final Optional<Colony> optColony = model.getColonyAt(location);
+        if (optColony.isPresent()) {
+            final Colony colony = optColony.get();
+            if (!owner.equals(colony.getOwner())
+                    && !model.areHostile(owner, colony.getOwner())) {
+                return false;
+            }
+        }
 
         if (!getType()
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
@@ -204,7 +212,8 @@ public abstract class AbstractUnit implements Unit {
             return false;
         }
 
-        return ignoreEnemies || owner.getEnemyUnitsAt(location).isEmpty();
+        return ignoreEnemies || owner.getEnemyUnitsAt(location).isEmpty()
+                || isPossibleToCaptureColonyAt(location);
     }
 
     /**
@@ -332,16 +341,9 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public boolean isPossibleToCaptureColonyAt(final Location targetLocation) {
-        if (getType().canMoveAtTerrain(
-                model.getMap().getTerrainTypeAt(targetLocation))
-                && model.getColonyAt(targetLocation).isPresent()) {
-            final Colony c = model.getColonyAt(targetLocation).get();
-            if (!c.getOwner().equals(owner)
-                    && !isPossibleToAttackAt(targetLocation)) {
-                return true;
-            }
-        }
-        return false;
+        return model.getMap().isValid(targetLocation) && model
+                .getColonyAt(targetLocation)
+                .map(colony -> colony.canBeCapturedBy(this)).orElse(false);
     }
 
     private boolean isLiveOwnedUnit(final Unit unit) {
@@ -471,25 +473,22 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean isPossibleToAttackAt(final Location targetLocation) {
-        if (model.getUnitsAt(targetLocation).isEmpty()) {
+        if (!model.getMap().isValid(targetLocation)) {
             return false;
-        } else {
-            if (getType().canMoveAtTerrain(
-                    model.getMap().getTerrainTypeAt(targetLocation))) {
-                List<Unit> units = model.getEnemyUnitsAt(owner, targetLocation)
-                        .stream()
-                        .filter(unit -> getType().getAttackableUnitType()
-                                .contains(unit.getType()))
-                        .collect(ImmutableList.toImmutableList());
-                if (isSameOwner(units)) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
+        }
+        if (!getType().canMoveAtTerrain(
+                model.getMap().getTerrainTypeAt(targetLocation))) {
+            return false;
+        }
+        final Optional<Colony> optColony = model.getColonyAt(targetLocation);
+        if (optColony.isPresent()) {
+            final Colony colony = optColony.get();
+            if (!owner.equals(colony.getOwner())
+                    && !model.areHostile(owner, colony.getOwner())) {
                 return false;
             }
         }
+        return !getAttackableUnitsAt(targetLocation).isEmpty();
     }
 
     /**
@@ -678,6 +677,8 @@ public abstract class AbstractUnit implements Unit {
                 this.getLocation(), attackAt);
         Preconditions.checkState(actionPoints > 0,
                 "Unit (%s) cannot attack this turn.", this);
+        Preconditions.checkState(isPossibleToAttackAt(attackAt),
+                "There is no legal hostile target at (%s).", attackAt);
     }
 
     /**
@@ -689,7 +690,8 @@ public abstract class AbstractUnit implements Unit {
     private List<Unit> getAttackableUnitsAt(final Location at) {
         return owner.getEnemyUnitsAt(at).stream()
                 .filter(unit -> getType().getAttackableUnitType()
-                        .contains(unit.getType()))
+                        .contains(unit.getType())
+                        && model.areHostile(owner, unit.getOwner()))
                 .collect(ImmutableList.toImmutableList());
     }
 

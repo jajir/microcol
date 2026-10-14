@@ -13,4 +13,17 @@
 
 	<entry key="statistics_year">Year</entry>
 
+	<entry key="titleRelations">European relations</entry>
+	<entry key="relationPeace">Peace</entry>
+	<entry key="relationWar">War</entry>
+	<entry key="relationsEmpty">No European rivals.</entry>
+	<entry key="relationsUnavailable">No game is open. Return to the menu to load a game.</entry>
+	<entry key="relationsReadOnly">Declarations are available during your turn in an ongoing game.</entry>
+	<entry key="declarationReview">Declare war…</entry>
+	<entry key="declarationTitle">Declaration of war</entry>
+	<entry key="declarationMessage">%s will declare war on %s. This ends peace between these players and permits attacks and colony capture. Declare war?</entry>
+	<entry key="declarationCancel">Cancel</entry>
+	<entry key="declarationConfirm">Declare war</entry>
+	<entry key="declarationDone">%s and %s are now at war.</entry>
+	<entry key="declarationStale">The game or selected players changed. Nothing was declared. Review the updated relations.</entry>
 </properties>

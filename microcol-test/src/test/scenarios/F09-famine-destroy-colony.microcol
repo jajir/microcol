@@ -4327,6 +4327,13 @@
       }
     ]
   },
+  "europeanRelations": [
+    {
+      "firstPlayer": "Dutch",
+      "secondPlayer": "Dutch's King",
+      "state": "PEACE"
+    }
+  ],
   "gameManager": {
     "players": [
       {

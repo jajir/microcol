@@ -13,4 +13,17 @@
 
 	<entry key="statistics_year">Rok</entry>
 
+	<entry key="titleRelations">Evropské vztahy</entry>
+	<entry key="relationPeace">Mír</entry>
+	<entry key="relationWar">Válka</entry>
+	<entry key="relationsEmpty">Žádní evropští soupeři.</entry>
+	<entry key="relationsUnavailable">Není otevřena hra. Vraťte se do menu a načtěte hru.</entry>
+	<entry key="relationsReadOnly">Válku lze vyhlásit během vašeho tahu v probíhající hře.</entry>
+	<entry key="declarationReview">Vyhlásit válku…</entry>
+	<entry key="declarationTitle">Vyhlášení války</entry>
+	<entry key="declarationMessage">%s vyhlásí válku hráči %s. Tím mezi těmito hráči skončí mír a budou možné útoky a zabrání kolonií. Vyhlásit válku?</entry>
+	<entry key="declarationCancel">Zrušit</entry>
+	<entry key="declarationConfirm">Vyhlásit válku</entry>
+	<entry key="declarationDone">%s a %s jsou nyní ve válce.</entry>
+	<entry key="declarationStale">Hra nebo vybraní hráči se změnili. Válka nebyla vyhlášena. Zkontrolujte aktuální vztahy.</entry>
 </properties>

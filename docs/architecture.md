@@ -59,6 +59,34 @@ i [SimpleAiPlayer](../microcol-game/src/main/java/org/microcol/ai/SimpleAiPlayer
 volají `Model.moveUnit`. Diagram vyjadřuje hranici pro herní operace;
 neznamená, že všechny současné akce už používají totožnou cestu.
 
+### Evropské vztahy a životní cyklus hry
+
+Implementované [R-0026](requirements/R-0026.md) ukládá jeden vztah míru/války
+pro každou neuspořádanou dvojici kolonizačních hráčů. `Model` kontroluje živou
+hru, aktuálního aktéra a registrované objekty hráčů; `EuropeanRelations` vlastní
+úplnost dvojic a očekávaný předchozí stav. `model.store` uchovává interní klíče
+hráčů, nikoli upravitelné zobrazované názvy. Královské hráče určuje jejich role.
+Chybějící vztahy se při načítání nedoplňují odhadem.
+Sdílený dotaz `Model.areHostile` odděluje diplomatické oprávnění od obsazení
+polí cizími jednotkami. Cizí mírová jednotka nadále brání vstupu a vylodění.
+Králové nemají evropský záznam míru/války; dotaz pro ně zachovává dosavadní
+nepřátelství k cizím vlastníkům a vznik/řízení královských sil zůstává v cestě
+vzpoury. AI používá stejné útočné a pohybové dotazy jednotek jako modelový
+příkaz. Potvrzené porušení smlouvy útokem přidává až R-0028.
+Před vstupem do dobývaného přístavu `Colony` naplánuje únik všech cizích
+nepřátelských lodí. Neutrální obsazení nebo chybějící bezpečné sousední moře
+vstup odmítnou před spotřebou pohybu či změnou vlastníka. AI používá tentýž
+dotaz jako pohyb hráče. Dobývající jednotka zůstává vybavená na mapě.
+
+
+`GameManager` odlišuje zahájení, dosažený herní konec a zahození instance přes
+`Model.stop()`. Zastavení zneplatní další akce před oznámením posluchačům;
+zahájený stav zůstává dostupný pro čtení a uložení. Výsledek herního konce
+se ukládá jako `gameFinished`, aby načtení nepovolilo další tah. Samotné
+zahození instance se neukládá: běžnou rozehranou pozici lze načíst do nové
+instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento popis
+není potvrzením dokončení celého požadavku.
+
 ### Čtení seznamu jednotek při tahu AI
 
 `UnitStorage` používá pro často čtené členství jednotek `CopyOnWriteArrayList`.
@@ -145,7 +173,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.market](../microcol-game/src/main/java/org/microcol/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
 | [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
 | [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
-| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik a grafů. |
+| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů a základních evropských vztahů; potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. |
 | [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |

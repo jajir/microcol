@@ -8,6 +8,8 @@ import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.Place;
+import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
@@ -72,8 +74,12 @@ public final class PaintService {
      */
     public void paintUnit(final GraphicsContext graphics, final Point point,
             final Unit unit) {
-        paintUnit(graphics, point, unit,
-                unit.getPlaceLocation().getOrientation());
+        // A frame's unit list can outlive the unit's departure from the map.
+        final Place place = unit.getPlace();
+        if (place instanceof PlaceLocation) {
+            paintUnit(graphics, point, unit,
+                    ((PlaceLocation) place).getOrientation());
+        }
     }
 
     public void paintUnit(final GraphicsContext graphics, final Point point,

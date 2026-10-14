@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -136,16 +137,59 @@ public class Colony {
         return out;
     }
 
+    boolean canBeCapturedBy(final Unit force) {
+        return planCapture(force).isPresent();
+    }
+
+    private Optional<Map<Unit, Location>> planCapture(final Unit force) {
+        final Player attacker = force.getOwner();
+        if (!model.areHostile(attacker, owner) || !force.getType()
+                .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
+            return Optional.empty();
+        }
+        final List<Unit> occupants = model.getEnemyUnitsAt(attacker, location);
+        if (occupants.stream()
+                .anyMatch(unit -> !model.areHostile(attacker, unit.getOwner())
+                        || (!unit.isShip() && unit.getType().canAttack()))) {
+            return Optional.empty();
+        }
+        final Map<Unit, Location> escapes = new LinkedHashMap<>();
+        for (final Unit ship : occupants) {
+            if (!ship.isShip()) {
+                continue;
+            }
+            final Optional<Location> destination = location.getNeighbors()
+                    .stream().filter(model.getMap()::isValid)
+                    .filter(target -> ship.getType().canMoveAtTerrain(
+                            model.getMap().getTerrainTypeAt(target)))
+                    .filter(target -> model
+                            .getEnemyUnitsAt(ship.getOwner(), target).isEmpty())
+                    .filter(target -> escapes.entrySet().stream().noneMatch(
+                            entry -> entry.getValue().equals(target) && entry
+                                    .getKey().getOwner() != ship.getOwner()))
+                    // Use owner-only occupied destinations before reserving
+                    // shared empty water.
+                    .sorted(Comparator.comparing(
+                            target -> model.getUnitsAt(target).isEmpty()))
+                    .findFirst();
+            if (destination.isEmpty()) {
+                return Optional.empty();
+            }
+            escapes.put(ship, destination.get());
+        }
+        return Optional.of(escapes);
+    }
+
     public void captureColony(final Unit capturingUnit) {
         final Player player = capturingUnit.getOwner();
-        model.getEnemyUnitsAt(player, location).stream()
-                .forEach(unit -> Preconditions.checkState(
-                        !unit.getType().canAttack() || unit.getType().isShip(),
-                        "At least one unit '%s' at captured city still could fight",
-                        unit));
-        model.getEnemyUnitsAt(player, location).stream()
-                .filter(unit -> unit.getType().isShip())
-                .forEach(unit -> escapeOneStep(unit));
+        Preconditions.checkState(
+                capturingUnit.isAtPlaceLocation()
+                        && location.equals(capturingUnit.getLocation()),
+                "Capturing force must be on the colony tile");
+        final Map<Unit, Location> escapes = planCapture(capturingUnit)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Colony cannot be captured"));
+        escapes.forEach(this::escapeOneStep);
         model.getEnemyUnitsAt(player, location).stream()
                 .filter(unit -> !unit.getType().isShip())
                 .forEach(unit -> unit.takeOver(player));
@@ -154,8 +198,6 @@ public class Colony {
         constructions.forEach(construction -> construction
                 .getConstructionSlots().stream().filter(slot -> !slot.isEmpty())
                 .forEach(slot -> slot.getUnit().takeOver(player)));
-
-        placeUnitToProduceFood(capturingUnit);
 
         if (owner.isHuman()) {
             model.getTurnEventStore()
@@ -170,18 +212,10 @@ public class Colony {
      * Unit escape from occupied place. When colony is captured naval unit
      * escape from occupied colony.
      *
-     * @param unit required escaping unit
+     * @param unit   required escaping unit
+     * @param target legal adjacent destination validated before capture
      */
-    private void escapeOneStep(final Unit unit) {
-        final List<Location> whereCouldMove = unit.getLocation().getNeighbors()
-                .stream()
-                .filter(loc -> unit.getType()
-                        .canMoveAtTerrain(model.getMap().getTerrainTypeAt(loc)))
-                .filter(loc -> model.getEnemyUnitsAt(unit.getOwner(), loc)
-                        .isEmpty())
-                .collect(ImmutableList.toImmutableList());
-        final Location target = whereCouldMove
-                .get(random.nextInt(whereCouldMove.size()));
+    private void escapeOneStep(final Unit unit, final Location target) {
         final Location oldLocation = unit.getLocation();
         model.fireUnitMovedStepStarted(unit, oldLocation, target,
                 unit.getPlaceLocation().getOrientation());

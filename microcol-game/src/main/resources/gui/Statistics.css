@@ -34,3 +34,9 @@
 	-fx-font-size: 32;
 	-fx-padding: 0 0 50 0;
 }
+
+.relations-report { -fx-max-width: 430; }
+.relation-row { -fx-padding: 10; -fx-background-color: #f6eddb; }
+.relation-row .label { -fx-text-fill: #211a10; }
+.relations-report .scroll-pane { -fx-background-color: transparent; }
+#relationsFeedback { -fx-max-width: 430; -fx-text-fill: #211a10; -fx-background-color: #f6eddb; }

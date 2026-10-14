@@ -36,14 +36,25 @@ registered in the unit image provider, and CSS hid the colony construction
 control. Menu-entry saving and fresh-session Continue refresh were separate
 gaps. Each requirement owns its bounded follow-up and open questions.
 
-Follow-up, 2026-10-14: [R-0019–R-0024](requirements/README.md#implementation-from-r-0019-authorized-2026-10-13)
+Follow-up, 2026-10-14: [R-0019–R-0025](requirements/README.md#implementation-from-r-0019-authorized-2026-10-13)
 are published. [R-0025](requirements/R-0025.md) adds shared building admission,
 queue/persistence validation and a visible construction picker; targeted model
 and player scenarios, the full regression and final targeted acceptance have
-passed; delivery remains pending. Its visible missing-tools explanation is not a claim that the complete
+passed; delivery is verified as `dev-55-61789f816924`. Its visible missing-tools explanation is not a claim that the complete
 advisor/event behavior of BUILD-019, all building effects or Founding Father
 gates are implemented. The historical assessment table below remains distinct
 from these bounded acceptance results.
+
+
+R-0026 follow-up, 2026-10-14: [European relations](requirements/R-0026.md)
+now have complete persisted bilateral state, model declarations/accepted peace,
+routine hostility gates and a localized political report. These implement parts
+of DIP-003 and DIP-007; negotiation, alliances, native/naval advisors and detailed
+foreign intelligence remain open. DIP-002's atomic treaty-breaking attack is
+reserved for R-0028. The [test evidence](functional-tests.md#european-hostility-and-political-report-2026-10-14)
+records targeted passes, the repaired full-run failure and the still-pending final CI acceptance/publication.
+The diplomacy rows below retain their dated historical baseline; they are not
+a statement that this newly implemented state is absent.
 
 ## Main findings
 

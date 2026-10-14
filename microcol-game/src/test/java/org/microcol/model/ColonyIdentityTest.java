@@ -163,7 +163,7 @@ class ColonyIdentityTest {
         final Player oldOwner = colony.getOwner();
         final Unit capturing = model.getUnitById(0);
         final Player king = model.getPlayerByName("Dutch's King");
-        capturing.placeToLocation(Location.of(19, 11));
+        capturing.placeToLocation(colony.getLocation());
         capturing.takeOver(king);
         colony.captureColony(capturing);
         assertSame(king, colony.getOwner());

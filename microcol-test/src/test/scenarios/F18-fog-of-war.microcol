@@ -900,6 +900,13 @@
         }
       ]
     },
+    "europeanRelations": [
+      {
+        "firstPlayer": "Dutch",
+        "secondPlayer": "France",
+        "state": "PEACE"
+      }
+    ],
     "gameManager": {
       "players": [
         {

@@ -44,12 +44,14 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         byte[] saved = audit.readAutosave();
+        new AtlanticAuditPage(getContext()).verifyShipMapPainting(true);
         game.moveMouseAtLocation(START);
         game.dragMouseAtLocation(LANE);
         new AtlanticAuditPage(getContext()).verifyReturnedTo(LANE);
         game.moveMouseAtLocation(LANE);
         game.dragMouseAtLocation(OUTWARD);
         new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
+        new AtlanticAuditPage(getContext()).verifyShipMapPainting(false);
 
         // Menu entry saves departure; Continue restores the same voyage and
         // cargo.

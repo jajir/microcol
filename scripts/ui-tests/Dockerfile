@@ -2,7 +2,7 @@ FROM maven:3.9.12-eclipse-temurin-17-noble@sha256:22e5056a4cd1e09d0373044e1a8f5f
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        libgtk-3-0 libasound2t64 libxtst6 fonts-dejavu-core \
+        libgtk-3-0 libasound2t64 libxtst6 fonts-dejavu-core fonts-symbola \
         xvfb xauth openbox \
     && rm -rf /var/lib/apt/lists/*
 

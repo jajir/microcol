@@ -43,6 +43,9 @@ class FreePlayMapsTest {
         assertEquals(30, model.getMap().getMaxLocationY());
         final Player france = model.getPlayerByName("France");
         final Player dutch = model.getPlayerByName("Dutch");
+        assertEquals(EuropeanRelationState.PEACE,
+                model.getEuropeanRelation(dutch, france));
+        assertEquals(1, model.save().getEuropeanRelations().size());
         assertTrue(france.isComputer());
         assertFalse(france.isKing());
         assertTrue(dutch.isHuman());

@@ -10,6 +10,16 @@ public final class GameManagerPo {
 
     private boolean gameStarted;
 
+    private boolean gameFinished;
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public void setGameFinished(final boolean gameFinished) {
+        this.gameFinished = gameFinished;
+    }
+
     private String currentPlayer;
 
     /**

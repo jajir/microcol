@@ -2,11 +2,17 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.TimeUnit;
+import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
+import org.microcol.gui.util.PaintService;
 import org.microcol.model.*;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 
@@ -22,6 +28,30 @@ public final class AtlanticAuditPage extends AbstractScreen {
         final PlaceHighSea place = (PlaceHighSea) ship.getPlace();
         assertEquals(turns, place.getRemainigTurns());
         assertEquals(toEurope, place.isTravelToEurope());
+    }
+
+    public void verifyShipMapPainting(final boolean expectedVisible) {
+        getRobot().interact(() -> {
+            final Canvas canvas = new Canvas(Tile.TILE_WIDTH_IN_PX,
+                    Tile.TILE_WIDTH_IN_PX);
+            canvas.getGraphicsContext2D().setFill(Color.MAGENTA);
+            canvas.getGraphicsContext2D().fillRect(0, 0, canvas.getWidth(),
+                    canvas.getHeight());
+            // A frame may still hold this unit after the model moves it to sea.
+            getContext().getClassFromGuice(PaintService.class).paintUnit(
+                    canvas.getGraphicsContext2D(), Point.ZERO,
+                    getModel().getUnitById(3));
+            final WritableImage frame = canvas.snapshot(null, null);
+            boolean painted = false;
+            for (int y = 0; y < frame.getHeight(); y++) {
+                for (int x = 0; x < frame.getWidth(); x++) {
+                    painted |= frame.getPixelReader().getArgb(x,
+                            y) != 0xffff00ff;
+                }
+            }
+            assertEquals(expectedVisible, painted,
+                    "Only an on-map ship should paint a sprite or flag");
+        });
     }
 
     public void verifyCargo() {

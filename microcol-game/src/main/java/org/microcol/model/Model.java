@@ -37,6 +37,7 @@ public class Model {
     private final Calendar calendar;
     private final WorldMap map;
     private final PlayerStore playerStore;
+    private final EuropeanRelations europeanRelations;
     private final List<Colony> colonies;
     private final UnitStorage unitStorage;
     private final Europe europe;
@@ -108,6 +109,8 @@ public class Model {
         this.map = Preconditions.checkNotNull(map);
 
         this.playerStore = PlayerStore.makePlayers(this, modelPo);
+        europeanRelations = new EuropeanRelations(playerStore.getPlayers(),
+                modelPo.getEuropeanRelations());
         turnEventStore = new TurnEventStore(modelPo, playerStore);
 
         colonyNames = new ColonyNames(this);
@@ -476,6 +479,61 @@ public class Model {
                                 .getTerrainTypeAt(neighbor).isSea());
     }
 
+    public EuropeanRelationState getEuropeanRelation(final Player first,
+            final Player second) {
+        return europeanRelations.get(first, second);
+    }
+
+    /**
+     * Diplomatic permission; Crown actions retain the existing rebellion path.
+     *
+     * @param first  registered participant
+     * @param second registered participant
+     * @return whether the distinct participants may engage in hostilities
+     */
+    public boolean areHostile(final Player first, final Player second) {
+        checkRegisteredPlayers(first, second);
+        return first != second
+                && (first.isKing() || second.isKing() || europeanRelations
+                        .get(first, second) == EuropeanRelationState.WAR);
+    }
+
+    private void checkRegisteredPlayers(final Player first,
+            final Player second) {
+        Preconditions.checkArgument(
+                first != null && second != null
+                        && playerStore.getPlayers().stream()
+                                .anyMatch(p -> p == first)
+                        && playerStore.getPlayers().stream()
+                                .anyMatch(p -> p == second),
+                "Unregistered relation participant");
+    }
+
+    public void declareHostilities(final Player actor, final Player target) {
+        changeEuropeanRelation(actor, target, EuropeanRelationState.PEACE,
+                EuropeanRelationState.WAR);
+    }
+
+    /**
+     * Records a treaty already accepted by both parties, not a peace offer.
+     *
+     * @param actor  current colonizing player accepting the treaty
+     * @param target registered rival currently at war with the actor
+     */
+    public void acceptPeace(final Player actor, final Player target) {
+        changeEuropeanRelation(actor, target, EuropeanRelationState.WAR,
+                EuropeanRelationState.PEACE);
+    }
+
+    private void changeEuropeanRelation(final Player actor, final Player target,
+            final EuropeanRelationState expected,
+            final EuropeanRelationState next) {
+        checkGameRunning();
+        checkRegisteredPlayers(actor, target);
+        checkCurrentPlayer(actor);
+        europeanRelations.transition(actor, target, expected, next);
+    }
+
     public boolean isGameStarted() {
         return gameManager.isStarted();
     }
@@ -500,6 +558,7 @@ public class Model {
      * Prepare model to be removed from memory.
      */
     public void stop() {
+        gameManager.stop();
         listenerManager.fireGameStopped(this);
         listenerManager.removeAllListeners();
     }
@@ -618,6 +677,7 @@ public class Model {
         out.setCalendar(calendar.save());
         gameManager.save(out);
         playerStore.save(out);
+        out.setEuropeanRelations(europeanRelations.save());
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());

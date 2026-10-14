@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.gamepanel;
 
+import javafx.application.Platform;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,7 +118,12 @@ public final class GamePanelPresenter {
 
     @Subscribe
     private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
-        dialogColonyWasCaptured.showAndWait(event);
+        Platform.runLater(() -> {
+            if (gameModelController.isGameModelReady()
+                    && gameModelController.getModel() == event.getModel()) {
+                dialogColonyWasCaptured.showAndWait(event);
+            }
+        });
     }
 
     @Subscribe

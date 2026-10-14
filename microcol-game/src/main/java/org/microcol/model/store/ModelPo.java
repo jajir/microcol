@@ -9,6 +9,17 @@ import com.google.common.base.Preconditions;
 
 public class ModelPo {
 
+    private List<EuropeanRelationPo> europeanRelations;
+
+    public List<EuropeanRelationPo> getEuropeanRelations() {
+        return europeanRelations;
+    }
+
+    public void setEuropeanRelations(
+            final List<EuropeanRelationPo> europeanRelations) {
+        this.europeanRelations = europeanRelations;
+    }
+
     private Integer nextColonyId;
 
     public Integer getNextColonyId() {

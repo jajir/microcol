@@ -13,7 +13,13 @@
  * by treasury mutations. Passenger transfers validate live ownership, location,
  * carrier links, coastal access and capacity before updating either place;
  * adjacent movement costs one passenger point and local port transfers preserve
- * it.
+ * it. European relations keep one peace/war state per pair of colonizing
+ * identities; transitions validate the live game and current actor. Shared
+ * hostility queries govern attacks and entry into foreign colonies without
+ * weakening foreign occupancy. Capturing forces stay equipped on the map;
+ * capture does not assign them to productive work. Port entry validates all
+ * ship retreats before spending movement or changing ownership. Stopped or
+ * finished games cannot perform further guarded gameplay operations.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

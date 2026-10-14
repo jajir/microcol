@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.GameScreen;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
@@ -33,6 +34,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 final class StatisticsPanel implements GameScreen {
+
+    private final static String KEY_RELATIONS = "relations";
+    private final EuropeanRelationsPanel relations;
+    private final ToggleButton relationsButton = new ToggleButton();
 
     private final static String KEY_GOLD = "gold";
     private final static String KEY_MILITARY = "military";
@@ -64,12 +69,19 @@ final class StatisticsPanel implements GameScreen {
     @Inject
     StatisticsPanel(final I18n i18n, final EventBus eventBus,
             final GameModelController gameModelController,
-            final StatisticsView statisticsView) {
+            final StatisticsView statisticsView, final ViewUtil viewUtil) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.statisticsView = Preconditions.checkNotNull(statisticsView);
+
+        relations = new EuropeanRelationsPanel(gameModelController, viewUtil,
+                i18n);
+        relationsButton.setId("relationsTab");
+        relationsButton.getStyleClass().add("relations-tab");
+        relationsButton.setToggleGroup(toggleGroup);
+        relationsButton.setUserData(KEY_RELATIONS);
 
         toggleGroup.selectedToggleProperty()
                 .addListener(this::onToggleGroupWasChanged);
@@ -98,6 +110,7 @@ final class StatisticsPanel implements GameScreen {
         leftPanel.getChildren().add(tb2);
         leftPanel.getChildren().add(tb3);
         leftPanel.getChildren().add(tb4);
+        leftPanel.getChildren().add(relationsButton);
 
         final VBox rightPanel = new VBox();
         rightPanel.getStyleClass().add("right");
@@ -114,6 +127,12 @@ final class StatisticsPanel implements GameScreen {
             final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
         if (newValue == null) {
+            return;
+        }
+        if (KEY_RELATIONS.equals(newValue.getUserData())) {
+            setTitle(Stats.titleRelations);
+            relations.showReport();
+            chartPanel.getChildren().setAll(relations);
             return;
         }
         final List<TurnPlayerStatistics> stats = gameModelController.getModel()
@@ -227,6 +246,7 @@ final class StatisticsPanel implements GameScreen {
         tb2.setText(i18n.get(Stats.titleMilitary));
         tb3.setText(i18n.get(Stats.titleWealth));
         tb4.setText(i18n.get(Stats.titleScore));
+        relationsButton.setText(i18n.get(Stats.titleRelations));
     }
 
     @Override

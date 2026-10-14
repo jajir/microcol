@@ -1823,3 +1823,140 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    the dependent formatter. Twice formatting ran after a parser rejection;
    it made no semantic repair, but should not be treated as evidence that the
    patch had applied. Final application and formatting were explicitly sequenced.
+
+## R-0026 relation pairs — 2026-10-14
+
+1. The isolated `2026-10-14-r26-relation-pairs` assignment at `61789f81`
+   requested only the package-private bilateral-state helper. The caller supplied
+   its interface, trivial state/PO classes, eight acceptance cases and the
+   manual-based requirement. Model lifecycle, persistence integration, AI and
+   GUI were outside that worker assignment and remain separate work.
+2. Attempts took **262.801 / 249.641 / 87.774 seconds** (**600.216 seconds**
+   including final timeout cleanup), with both repairs used. The first two CLI
+   runs exited 0 but reached the reported 4096-token output limit with incomplete
+   JSON; neither response was applied. A zero process exit was not acceptance.
+   Their exact reasoning/final-output split is not established by the available
+   usage counters.
+3. Review of the first fragment found duplicated adjacency entries and a joined
+   string pair key instead of one unordered record. The first repair required a
+   compact map with immutable two-name keys. Its partial constructor still
+   counted Crown players, accepted Crown endpoints and used null exceptions
+   inconsistent with the validation contract. The final repair requested only
+   that constructor, using the remaining 87.558-second allowance; it timed out
+   without a completed response. No further retry was allowed by either limit.
+4. The caller then implemented the small helper directly: one unordered-pair
+   map, exact registered player identities, non-Crown completeness, atomic
+   expected-state transitions and fresh saved DTOs. **No worker-generated code
+   was accepted.** This takeover follows exhausted repairs/runtime, not a
+   silent replacement of a still-repairable attempt. The original eight
+   acceptance expectations remain unchanged. For subsequent assignments, split
+   multi-method new-class output before requesting another whole-class response;
+   the existing focused-handoff workflow owns that choice.
+5. All loaded runtime samples matched the configured GPT-OSS digest and context
+   32768; every attempt unloaded successfully. The shared formatter checked all
+   four Java inputs with exact token preservation and idempotence. Targeted
+   caller verification after unload passed **eight model cases and three
+   page-contract controls**, zero failures, errors or skips (`run-p36aLJ`,
+   Docker exit 0). The four formatted Java files were copied byte-for-byte into
+   main; game lifecycle/save-schema wiring, AI, report UI and full R-0026
+   acceptance remain pending. Evidence is in the job's `attempt-*/execution.json`,
+   runtime samples, diagnoses and `acceptance.json`, with the caller log at
+   `target/r26-draft/pairs-target.log`.
+
+
+## R-0026 save validation cases — 2026-10-14
+
+1. Task `2026-10-14-r26-save-cases` used baseline `61789f81` with explicitly
+   copied R-0026 work. The caller owned Model/ModelPo wiring, lifecycle guards,
+   fixture updates, the disk-test harness and live-model tests. The worker owned
+   only the `malformedRelations()` provider with 16 specified invalid inputs.
+2. Attempt 0 took **184.618 s**. Its JSON wrapper and replacement anchor were
+   valid, but cases 4–14 returned objects instead of one-row arrays; those would
+   test the wrong boundary. The Crown case also used a self-pair with state
+   `KING`. Nothing was applied. The targeted repair described these concrete
+   defects and retained the original acceptance criteria.
+3. Repair 1 took **129.115 s**, producing all 16 intended defects. The caller
+   checked the exact source anchor, permitted method body and decoded input
+   semantics before applying one replacement. Total worker time **313.733 s**;
+   one repair used. Runtime samples for both attempts matched the configured
+   GPT-OSS digest and context **32768**; both unloaded before Docker checks.
+4. Caller formatting checked 13 touched Java files with exact-token preservation
+   and idempotence. In the isolated checkout, `run-PAfjpb` passed **44 model
+   cases plus 3 source-contract cases**, zero failures, errors or skips. The
+   17 disk cases comprise the worker's 16 malformed inputs and the caller's
+   missing-list case; this is not complete R-0026 gameplay acceptance.
+5. Separate caller reproduction `run-3zhffH` disabled only the new stop/game-over
+   flags and ran two lifecycle tests: both failed because the old behavior
+   still reported a running game. Restoring the flags made both pass in the
+   targeted group. Thirteen formatted Java files were copied to main; the
+   worker authored only the provider method. Evidence and acceptance remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-save-cases/`.
+   The owned lock was released. No cloud fallback or token-savings claim.
+
+
+## R-0026 hostility queries — 2026-10-14
+
+1. Task `2026-10-14-r26-hostility-queries`, baseline `61789f81` plus copied
+   R-0026 work, assigned three regions of `AbstractUnit`: foreign-colony movement
+   permission, attack availability and hostile-target filtering. The caller
+   supplied the shared `Model.areHostile` query, command/capture guards and tests.
+2. Attempt 0 took **247.129 s**. All three old-text anchors had lost internal
+   indentation and matched zero times. The attack query also omitted the peaceful
+   colony-owner gate for a hostile third-party defender. Nothing was applied;
+   the caller sent these concrete defects for a targeted repair.
+3. Repair 1 took **130.229 s**, returning three matching replacements with both
+   movement and attack gates. Total **377.358 s**, one repair. Caller review used
+   the existing `Optional` import and final locals, removed a redundant self-owner
+   filter and a comment repeating its conditional. All three query regions
+   otherwise retain the worker's implementation. Both runtime traces matched
+   the configured GPT-OSS digest/context **32768**, and unloaded before tests.
+4. A separate caller reproduction, `run-qkkQKc`, failed both armed-capture tests
+   with `Equipment change rejected: UNIT_UNAVAILABLE`: automatic field assignment
+   tried to return weapons before colony ownership changed. Following manual
+   pages 32/46, the caller removed that automatic assignment, required the force
+   to be on the colony tile, and routed adjacent AI capture through ordinary
+   movement. The capturer remains equipped on the map. The existing colony-ID
+   test now places its capturing force at the actual colony instead of a remote
+   coordinate; its ownership, identity and rename assertions remain intact.
+5. Caller verification `run-n3Tff9` passed **68 model/AI cases plus 3 source-contract
+   cases**, zero failures/errors/skips. It includes 13 new hostility-boundary
+   cases and seven actual simple-AI planning/fighting/capture cases. Nineteen
+   touched Java files passed shared formatting, token preservation and
+   idempotence before integration. The owned lock was released.
+6. Prompts, rejected response, diagnosis, accepted replacement and actual reports
+   remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-hostility-queries/`.
+   The caller owns the manual decisions, additional capture repair, test authoring,
+   integration and wider checks. No cloud fallback or token-savings claim.
+
+## R-0026 declaration review — 2026-10-14
+
+1. Task `2026-10-14-r26-declaration-dialog` used baseline `61789f81` and recorded
+   copied R-0026 inputs in an isolated worktree. The worker owned only the small
+   `DeclarationDialog`; the caller owned report wiring, model guards, translation,
+   fixture, scenarios, screenshots and actual verification.
+2. Attempt 0 (**157.246 s**) returned malformed JSON, invented import packages
+   and no visible title for the undecorated window. Nothing was applied. The
+   caller clarified exact imports, which should have been supplied explicitly
+   in the original tool-free handoff, and requested targeted repair.
+3. Repair 1 (**128.298 s**) fixed JSON/imports but still omitted the visible title
+   and retained an unused field. It was staged only in the isolated worktree.
+   Repair 2 (**96.376 s**) supplied three exact replacements, but its insertion
+   contained a literal backslash-n outside a Java string. The formatter preserved
+   those tokens; compilation of `ui-first.log` rejected them before any test ran.
+4. Both allowed repairs were exhausted at **381.920 s** cumulative worker time.
+   The caller replaced that one escape with an actual newline and closed the
+   one-shot dialog lifecycle after every modal dismissal, including a window
+   close. Caller final locals and shared formatting are separate from worker
+   output. Runtime traces contained **326** loaded-model samples of the configured
+   digest and context **32768**; all attempts unloaded with exit 0 before Maven.
+5. The subsequent main model selection passed **75 cases**, but front-end test
+   compilation found a separate caller mistake: the page object read package-private
+   `Colony.save()`. It now reads colony stock through public `Model.save()`.
+   The subsequent `run-sFAN9W` passed all seven TC33 player scenarios and three
+   source-contract checks, including actual English/Czech confirmation, keyboard
+   cancellation and stale-state rejection. Broader acceptance remains in the
+   [functional evidence](../functional-tests.md#european-hostility-and-political-report-2026-10-14).
+6. Full prompts, generated text, diagnoses, runtime samples and caller application
+   records remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-declaration-dialog/`.
+   Valid JSON and exact anchors alone do not prove compilable Java: inspect inserted
+   escapes before application. No cloud fallback or savings claim.

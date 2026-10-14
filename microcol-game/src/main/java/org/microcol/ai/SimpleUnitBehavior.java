@@ -1,9 +1,7 @@
 package org.microcol.ai;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
@@ -43,12 +41,10 @@ final class SimpleUnitBehavior {
                 String.format(
                         "Unit '%s' sould try to conquer city in neighbor and city is at '%s'",
                         unit, location));
-        if (!unit.isPossibleToAttackAt(location)) {
-            final Optional<Colony> oColony = model.getColonyAt(location);
-            Preconditions.checkState(oColony.isPresent(),
-                    "Colony wasn't fount at '%s'", location);
-            final Colony colony = oColony.get();
-            colony.captureColony(unit);
+        Preconditions.checkState(model.getColonyAt(location).isPresent(),
+                "Colony wasn't found at '%s'", location);
+        if (unit.isPossibleToCaptureColonyAt(location)) {
+            unit.moveOneStep(location);
         }
     }
 }

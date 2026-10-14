@@ -1479,6 +1479,152 @@ Lokální ověření na macOS/JDK 17:
    docker compose -f compose.ui-tests.yml run --build --rm ui-tests '-Dtest=ConstructionQueueIntegrityTest,TC_32_F24_construction_eligibility_test,PageVerificationContractTest' -Dsurefire.failIfNoSpecifiedTests=false
    ```
 
-10. Publication remains pending. The local source logs are `target/r19-r31/construction-ui-*.log`, with report
+10. Publication **`dev-55-61789f816924`** is verified for commit
+    `61789f8169248f7ec1987d48be4b750311dcc81f`. [CI](https://github.com/jajir/microcol/actions/runs/38480041688)
+    passed all three native builds, build-tool checks, functional scenarios and
+    publication; [Pages](https://github.com/jajir/microcol/actions/runs/38480041684)
+    passed build/deployment. Fresh CI XML (`run-OcrDcI`) passed **951 game-module
+    and 121 functional/control cases**, zero failures, errors or skips. The
+    public analysis and source links were checked against the intended commit.
+    The development manifest and per-build assets agree on the full SHA and all
+    three platforms; the downloaded macOS ARM archive is **61,111,759 bytes** with
+    SHA-256 `2747cbd808e0782e39e3017892f05e2873dacc13f2224fabca454c3a6c369d15`,
+    matching both the manifest and `SHA256SUMS`. Publication evidence is in
+    `target/r19-r31/release-r25/verification.json`; CI totals are in
+    `target/r19-r31/r25-ci-evidence.json`.
+11. The local source logs are `target/r19-r31/construction-ui-*.log`, with report
    totals in `target/r19-r31/r25-ui-target-evidence.json`. Worker attempts and
    caller repairs are recorded separately in the [worker evidence](ai/local-qwen.md#r-0025-queue-controller-2026-10-14).
+
+
+## European relation model integration — 2026-10-14
+
+1. Rozpracované [R-0026](requirements/R-0026.md), UC-069 / DIP-002/003,
+   má zapojené ukládání úplných dvojic a modelové přechody mír/válka. Interní
+   identita je nezávislá na upravitelném názvu hráče. Referenční mapy začínají
+   v míru; všech 31 přibalených modelových pozic má explicitní seznam vztahů.
+2. `EuropeanRelationModelTest` má 17 případů: symetrie a izolace třetích stran,
+   nesprávný tah, cizí/odebrané identity, králové, neplatné opakované přechody,
+   ukončená či nezahájená hra, přijatý mír, přejmenování a změna pořadí dat
+   při skutečném diskovém uložení/načtení. Porovnání snapshotů chrání jednotky,
+   pohyb, zásoby, vlastnictví i peníze před vedlejšími účinky.
+3. `EuropeanRelationSaveTest` má 17 diskových případů včetně chybějícího seznamu,
+   neúplných řádků, neplatných identit/stavu a duplicitních či obrácených dvojic.
+   Každé odmítnutí zachovává původní bajty souboru. Osm `EuropeanRelationsTest`
+   chrání samostatný datový kontrakt; dvě `FreePlayMapsTest` ověřují referenční
+   světy včetně počátečního míru a uložených dvojic.
+4. Reprodukční `run-3zhffH` vypnul pouze nové příznaky stop/game-over: oba
+   vybrané lifecycle testy selhaly na stále běžící hře. Po obnově opravy prošel
+   `run-PAfjpb`: **44 modelových + 3 source-contract případy**, nula selhání,
+   chyb a vynechání. `GameManager` invaliduje zastavenou instanci před událostí
+   a ukládá dosažený herní konec, aniž by odstranil čitelný aktuální tah.
+5. Širší regrese na main `run-HEgCQZ`, Docker exit **0**, příkaz
+   `docker compose -f compose.ui-tests.yml run --build --rm ui-tests
+   '-Dtest=*,!TC_*' -Dsurefire.failIfNoSpecifiedTests=false`, prošla
+   **994 modelovými případy ve 109 třídách a 9 podpůrnými případy ve 3 třídách**,
+   nula selhání/chyb/vynechání. Explicitní wildcard zahrnuje i `ExtraConnectorTest`,
+   který výchozí Maven výběr nespouští. Reporty jsou v
+   `target/docker-ui/run-HEgCQZ/`; souhrn v
+   `target/r26-draft/all-model-evidence.json`.
+6. Nejnovější formátování zkontrolovalo 13 Java souborů, bez dalších změn,
+   se zachováním tokenů a idempotencí. Lokální worker dodal pouze provider
+   neplatných vstupů; [evidence](ai/local-qwen.md#r-0026-save-validation-cases-2026-10-14)
+   odděluje jeho dva pokusy od implementace a skutečných kontrol hlavního agenta.
+7. Tento běh ověřoval modelový základ, nikoli dokončení R-0026 nebo celé
+   UC-069. Všechny `TC_...` byly výslovně mimo výběr. Další práce a skutečné
+   výsledky jsou uvedené níže.
+
+### European hostility and political report — 2026-10-14
+
+1. Cílený `run-n3Tff9` prošel **68 modelovými/AI případy a 3 source-contract
+   kontrolami**, nula selhání/chyb/vynechání. Následný širší `run-Sz9Rjx`
+   (`'-Dtest=*,!TC_*'`) prošel **1014 modelovými + 9 podpůrnými případy**,
+   Docker exit 0. Tyto běhy předcházely pozdější opravě úniku lodí a novému UI.
+2. Hráčský `run-D95R6O` ověřil TC03 a tři source-contract kontroly, ale **TC04
+   selhal**: po porážce obránců blokovala loď v přístavu běžný vstup dobyvatele.
+   Očekávání ztráty kolonie a úniku lodi zůstala zachovaná. Hlavní agent doplnil
+   společné plánování úniku před pohybem a použití dotazu také v AI.
+3. Při tvorbě dalších regresí dva běhy (`run-lR21XW`, `run-ixUZ5r`) skončily
+   na chybách kompilace testu: chybějící import a nesprávně zvolená metoda nákladu.
+   `run-OZhjBu` spustil 75 modelových/AI případů a měl tři chyby přípravy
+   nestandardní smíšené skupiny lodí; `run-3cCd4o` měl dvě. Registrační kontrola
+   odhalila cizí vlastníky na jednom poli ještě před testovanou akcí. Příprava
+   nyní nejprve registruje jednotky odděleně, potom vytvoří záměrný hraniční stav.
+   Tyto neúspěšné běhy neověřují opravu ani hráčské scénáře.
+4. Nové `TC_33_F25_european_relations_test` / `EuropeanRelationsPage` a fixture
+   F25 jsou připravené pro politický přehled tří hráčů, zrušení, potvrzení právě
+   jednou, Continue, mírové odmítnutí vstupu a válečné zabrání s vybavenou
+   jednotkou, změněný vztah/model/jméno, zastavenou hru a českou klávesnici.
+   V této fázi sedm hráčských scénářů ještě čekalo na ověření. Po opravě přípravy lodí prošlo
+   **75 modelových/AI případů** v `run-eYTrYy`, bez selhání/chyb/vynechání.
+   Celý reactor měl exit 1 kvůli kompilaci nového page objectu (přístup k neveřejné
+   metodě); UI tímto během ještě nebylo ověřeno.
+5. R-0026 zůstává rozpracované a nepublikované. Další kontrola musí zahrnout
+   uvedené scénáře, TC03/TC04, širší modelové testy, vizuální kontrolu a úplnou
+   hráčskou regresi. Lokální reporty vlastní `target/r26-draft/` a
+   `target/docker-ui/`; nejsou náhradou následné CI/publikační evidence.
+
+6. `run-PGxGlm` pak skutečně spustil TC03, TC04, sedm TC33 a tři
+   source-contract kontroly: **12 případů, jedna chyba, nula vynechání**.
+   Oba původní Crown scénáře prošly včetně úniku lodi z dobytého přístavu.
+   Česká cesta chybně zkoušela vstoupit Tabem do nevybrané záložky; page object
+   nyní používá Tab pro vstup do skupiny a šipky pro výběr záložky.
+7. Běh zároveň zaznamenal `Not on FX application thread` při oznámení lidského
+   dobytí kolonie. Dosavadní kontrola vlastnictví to neodhalila. Nová kontrola
+   skutečně zobrazené zprávy selhala v `run-AB5iU1` (1 UI chyba + 3 úspěšné
+   source-contract kontroly). Oprava předává zprávu přes `Platform.runLater`
+   a ověří původní instanci hry. Hlavní agent vlastní tuto integrační opravu;
+   nejde o chybu lokálně generovaného potvrzení války.
+8. Snímky `run-PGxGlm` ukázaly čitelné tři dvojice a zalamování dlouhého jména.
+   Pro Unicode emoji v kontejneru chyběl glyph. Zkoušený
+   `fonts-noto-color-emoji` však ve snímku vykreslil prázdné místo; finální
+   testovací image proto používá monochromatický `fonts-symbola` (ověření níže).
+
+9. Po opravě `run-sFAN9W` prošlo **7 TC33 + 3 source-contract kontroly**,
+   nula selhání/chyb/vynechání, Docker exit 0. Zpráva o zabrání kolonie je nyní
+   výslovně ověřena jako zobrazené okno. České ovládání používá Tab/šipky/Space
+   a Escape. Zkontrolované snímky potvrzují rozložení a zalomení dlouhých jmen;
+   uvedený glyphový problém prostředí se tím neuzavírá. Chybně zadané jméno
+   TC21 v tomto příkazu žádný TC21 nespustilo; skutečné navigační scénáře
+   zahrnuje až následující úplný výběr `'-Dtest=*'`.
+10. Úplná regrese `run-YyZwF5` dokončila **1021 modelových případů** bez
+    selhání/chyb/vynechání a **128 hráčských/podpůrných případů s jednou chybou**,
+    nula vynechání, Docker exit 1. TC33 všech sedm, TC03/TC04 a osm TC21 prošly.
+    Selhal `TC23/02_menu_preserves_latest_departure`: starší snímek seznamu
+    jednotek v `GamePaintService` předal do `PaintService.paintUnit` loď,
+    kterou model mezitím přesunul na širé moře. Živý `getPlaceLocation()`
+    pak vyhodil výjimku na JavaFX vlákně. Kontrola plavby nebyla oslabena;
+    cílená reprodukce a oprava sdíleného vykreslování jsou rozpracované.
+    Tento běh používal obraz s barevným fontem; samostatné ověření Symbola
+    zaznamenává finální cílený běh níže.
+
+11. Kontrola zdrojů Eclipse compilerem (`--release 11`, zapnutá validace Javadoc)
+    nalezla 11 nových neúplných popisů parametrů/návratových hodnot v R-0026.
+    Doplnění komentářů a sdílený formatter je odstranily bez změny vykonávaného
+    kódu. Zbývá 10 upozornění z dřívějších změn pro závěrečný audit R-0032;
+    tento běh není tvrzením o celé sadě bez upozornění. Evidence je v
+    `target/r26-draft/source-validation-evidence.json`; formatter ověřil
+    27 Java souborů, zachování tokenů a idempotenci.
+
+12. Cílený `run-cEAatQ` reprodukoval chybu deterministicky: nová kontrola
+    `TC23/02` nejprve ověřila vykreslení lodi na mapě, po skutečném odplutí pak
+    předala tutéž loď do sdíleného painteru. Tento druhý krok selhal původním
+    `getPlaceLocation()` (1 UI chyba + 3 úspěšné source-contract kontroly).
+    Oprava čte `Unit.getPlace()` právě jednou a kreslí jen zachycené
+    `PlaceLocation`; dodatečná kontrola typu následovaná novým živým čtením by
+    ponechala souběhové okno. Explicitní orientace animací zůstává zachovaná.
+    Drobnou integrační opravu provedl hlavní agent: předání této jedné metody
+    a následná revize by převýšily vlastní změnu. Ověření opravy je v následujícím bodě.
+
+13. Finální cílený `run-ZOs4ll` prošel **2 TC23 + 7 TC33 + 3 source-contract
+    kontrolami**, nula selhání/chyb/vynechání, Docker exit 0. Pozitivní kontrola
+    kreslí loď na mapě; po odplutí stejný painter bezpečně nechá podklad beze změny.
+    Obě plavby zachovaly původní kontroly nákladu, Continue a návratu. V logu
+    nebyla nalezena další výjimka vykreslování ani chyba JavaFX vlákna.
+    Snímky `relations-initial.png`, `declaration-czech.png` a
+    `declaration-long-name.png` potvrzují čitelný přehled, ovládání a zalamování;
+    znak vlny je nyní viditelný. `fc-match ':charset=1f30a'` vybral Symbola.
+    Jde o ověření linuxového testovacího obrazu, nikoli balení nového fontu do hry.
+    Finální formatter zkontroloval 30 Java souborů, tokeny a idempotenci.
+    Úplnou regresi po této opravě musí potvrdit povinné CI před publikací;
+    předchozí lokální úplný běh zůstává zaznamenaný jako neúspěšný.

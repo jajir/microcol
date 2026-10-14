@@ -22,13 +22,17 @@ final class GameManager {
     private final GameOverEvaluator gameOverEvaluator;
     private final Model model;
     private boolean started;
+    private volatile boolean stopped;
+    private volatile boolean finished;
     private Player currentPlayer;
 
     GameManager(final Model model,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,
-            final boolean alreadyStarted, final Player currentPlayer) {
+            final boolean alreadyStarted, final boolean alreadyFinished,
+            final Player currentPlayer) {
         gameOverEvaluator = new GameOverEvaluator(gameOverEvaluators);
         this.started = alreadyStarted;
+        this.finished = alreadyFinished;
         this.currentPlayer = currentPlayer;
         this.model = Preconditions.checkNotNull(model);
     }
@@ -38,6 +42,7 @@ final class GameManager {
             final PlayerStore playerStore) {
         return new GameManager(model, gameOverEvaluators,
                 modelPo.getGameManager().isGameStarted(),
+                modelPo.getGameManager().isGameFinished(),
                 findPlayer(modelPo, playerStore));
     }
 
@@ -56,11 +61,15 @@ final class GameManager {
     }
 
     boolean isRunning() {
-        return started && !isFinished();
+        return started && !stopped && !isFinished();
+    }
+
+    void stop() {
+        stopped = true;
     }
 
     boolean isFinished() {
-        return model.getCalendar().isFinished();
+        return finished || model.getCalendar().isFinished();
     }
 
     void checkGameRunning() {
@@ -86,7 +95,8 @@ final class GameManager {
     }
 
     void startGame() {
-        Preconditions.checkState(!started, "Game was already started.");
+        Preconditions.checkState(!started && !stopped && !isFinished(),
+                "Game was already started or stopped.");
         started = true;
         currentPlayer = model.getPlayers().get(0);
         model.fireGameStarted();
@@ -101,8 +111,8 @@ final class GameManager {
      * When game is loaded from file this should start it.
      */
     void continueGame() {
-        Preconditions.checkState(started,
-                "Game can't continue because wasn't started.");
+        Preconditions.checkState(isRunning(),
+                "Only a running game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         model.fireGameStarted();
         model.fireRoundStarted();
@@ -134,10 +144,8 @@ final class GameManager {
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator
                     .evaluate(model);
             if (oGameOverResult.isPresent()) {
+                finished = true;
                 model.fireGameFinished(oGameOverResult.get());
-                // TODO here should be following code, but IU can't live with
-                // that.
-                // started = false;
             } else {
                 currentPlayer = model.getPlayers().get(0);
                 model.getStatistics().countNextTurn(model);
@@ -150,6 +158,7 @@ final class GameManager {
 
     void save(final ModelPo modelPo) {
         modelPo.getGameManager().setGameStarted(isStarted());
+        modelPo.getGameManager().setGameFinished(isFinished());
         modelPo.getGameManager().setCurrentPlayer(getCurrentPlayer().getName());
     }
 

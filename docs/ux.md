@@ -72,6 +72,21 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 | Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
 | Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Hlavní obsah [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) je zatím prázdný. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
 
+### Evropské vztahy — R-0026
+
+1. Rozpracované [R-0026](requirements/R-0026.md) přidává přehled **Statistiky →
+   Evropské vztahy**. Zobrazuje všechny dvojice kolonizačních hráčů a mír/válku,
+   bez skrytých vojenských či hospodářských údajů. Upravený název doplňuje národ,
+   aby dvě stejná zobrazovaná jména nezaměnila soupeře.
+2. Během vlastního tahu lze u mírového soupeře otevřít potvrzení vyhlášení války.
+   Text pojmenuje oba hráče a důsledek pro útoky a zabrání kolonií. Zrušit/Escape
+   nic nemění; válka vznikne až po výslovném potvrzení. Po změně hry, vztahu nebo
+   zobrazeného jména se stará volba odmítne a přehled obnoví.
+3. Výsledek a odmítnutí jsou textové a nezávislé na zvuku. Samostatné vyjednání
+   míru ještě nemá hráčskou cestu. Implementace a automatické scénáře jsou
+   rozpracované; aktuální důkazy vlastní [testová evidence](functional-tests.md).
+   Tento popis není výsledkem uživatelské studie.
+
 ## První scénář k ověření
 
 Souvislý průchod navazuje na [cíl běžné nové hry](implementation-plan.md#cil-bezne-nove-hry):
