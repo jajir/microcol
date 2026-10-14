@@ -2,8 +2,10 @@
 
 Status as of **2026-10-14: the default local GPT-OSS 20B profile requests medium
 reasoning, context 32768 and a 16384-token generation allowance**, under
-[R-0036](../requirements/R-0036.md). The high trial exhausted generation before
-delivering code on both tasks, so high remains an explicit experimental profile.
+[R-0036](../requirements/R-0036.md). The original 16k-output high trial exhausted
+generation before delivering code on both tasks. The larger-budget high trial
+below passed after one repair; high remains an explicit experimental profile
+because this case did not outperform medium.
 Qwen2.5-Coder 14B Instruct Q4_K_M is installed as another explicit profile. Astra remains the main
 agent and supervises a separate local Codex CLI process, checks the result and
 owns integration and publication. The current operating profile below replaces
@@ -16,11 +18,83 @@ measured. The operating page and
 log directory retain their `local-qwen` names to preserve existing links and
 artifacts; they are not model selectors.
 
-The current [time budgets](#time-budget-2026-10-14) are thirty minutes per
+The default [time budgets](#time-budget-2026-10-14) are thirty minutes per
 attempt, sixty minutes cumulative per task and at most two targeted repairs.
+The explicit [64k-output experiment](#explicit-gpt-oss-high-with-64k-output)
+uses longer limits.
 The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
+
+## GPT-OSS high with a 64k generation allowance — 2026-10-14
+
+1. [R-0038](../requirements/R-0038.md) adds the explicit 96k-context / 64k-output
+   high profile described below. It replays the relation helper from R-0036 at
+   `61789f8169248f7ec1987d48be4b750311dcc81f`. Independent review confirmed all
+   five initial source/test hashes, role and replacement anchors match the
+   original high attempt. Only task identifiers and runtime metadata differ.
+2. The known contradictory attack handoff is not replayed. Its previous partial
+   result remains in the paired-trial record; a corrected attack task would
+   require a new contract and would not be an unchanged replay.
+3. Evidence lives under `~/Library/Logs/Microcol/local-qwen/jobs/` in
+   `2026-10-14-r37-high64-relations` and `2026-10-14-r37-comparison`. These retain
+   the unpublished draft prefix; concurrent Guava work used R-0037, so the final
+   requirement is R-0038. A caller
+   preparation error initially left the owned running marker after alias
+   creation. The launcher refused it before creating any model attempt. The
+   caller verified the owner process had exited, archived the preflight logs
+   and removed only its stale marker. This consumed zero model tokens and is
+   recorded separately from coding failures.
+4. The first attempt completed normally after **6987.117 seconds** (116.45
+   minutes), reporting **2799 input / 61585 output tokens** and a 6864-byte final
+   answer. Both the actual loaded context **98304** and the server's effective
+   generation limit **65536** were verified. The run used the larger allowance:
+   output exceeded the original 16384 cap, and a complete JSON replacement
+   reached the caller. The 7200-second deadline was not hit; a contemplated longer
+   replay was therefore unnecessary and was not run.
+5. Application and shared Java formatting succeeded. Docker `run-43Prdm`
+   compiled the candidate and ran **8 model tests with 1 failure, 0 errors/skips**;
+   source-contract cases were not reached. `HashSet.contains()` used
+   `Player.equals()` (name and computer flag), accepting an equal but unregistered
+   player. This violates the original exact-object-identity contract. Independent
+   review confirmed the same blocker and found no other concrete violation.
+   A targeted worker repair changed only `validateEndpoints` to check both
+   registered objects by reference identity. The caller did not rewrite Java.
+6. The repair completed in **167.531 seconds**, using **2007 input / 864 output
+   tokens**. Shared formatting and Docker `run-KbQtcx` passed **8
+   EuropeanRelationsTest + 3 PageVerificationContractTest cases**, zero
+   failures/errors/skips. Independent review confirmed the identity fix and the
+   remaining contract. The isolated replay is **accepted after one repair**;
+   no candidate Java or replay fixture is integrated into main.
+7. Total worker time is **7154.648 seconds (119.24 minutes)** and total reported
+   usage is **4806 input / 62449 output tokens**. Medium completed the same
+   initial task with one repair in **393.789 seconds**, using **6030 output
+   tokens**. This high profile took about **18.2 times the worker time and 10.4
+   times the generated tokens**, reaching the same acceptance checks. The larger
+   budget enabled a complete high answer in this run, but did not demonstrate
+   better quality than medium. Keep medium as the ordinary default; high/64k is
+   an explicit option, not an automatic fallback.
+8. Both attempts loaded the same digest and actual **98304-token context**.
+   Runtime allocation was **14,249,025,861 bytes total / 10,290,525,633 bytes
+   GPU**; these are allocation reports, not host RAM or process RSS. The first
+   run allocated **1224 MiB non-SWA + 9.56 MiB SWA KV cache**, using existing
+   `q8_0` settings. The log reports 25/25 layers offloaded but also **2554.98 MiB
+   CPU_REPACK** model storage, so that layer count does not mean every weight
+   stayed on the GPU. First-run decoding averaged **8.92 tokens/second** and
+   varied during the run. Host swap peaked at **13494.12 MiB** across both
+   attempts, including unrelated processes. Models were unloaded before Docker
+   and the owned lock was released after acceptance.
+9. Context, generation allowance and deadlines change together, and sampling
+   remains unseeded. The observed answer needed more than 16k tokens, but this
+   single replay does not isolate the output limit's individual causal effect,
+   establish general Java reliability or measure a Codex-budget saving. The
+   provider reports zero separated reasoning tokens; that field does not mean
+   reasoning was disabled. The generation total includes the final answer and
+   any other generated content. Both attempts made zero tool calls.
+10. Caller checks passed **18 launcher tests**, **9 documentation tests**, the
+    strict MkDocs build, rendered-page/link review and `git diff --check`.
+    Publication is checked separately against the final source commit. The
+    main-branch change contains one explicit profile and its documentation.
 
 ## GPT-OSS high and Qwen2.5-Coder paired trial — 2026-10-14
 
@@ -110,7 +184,8 @@ for larger assignments.
     skipped both retries because this was the third identical budget exhaustion
     across the high trial, including the earlier compact-output repair, with no
     delivered source to correct. No caller takeover occurred. Raising generation
-    above 16384 would be a separate, untested profile; these results do not prove
+    above 16384 requires a separate profile, subsequently tested under
+    [R-0038](../requirements/R-0038.md); these results do not prove
     that high fails at every possible budget. The ordinary default returns to
     medium, while the exact high trial remains selectable explicitly.
 12. Qwen's first attack response omitted three methods and invented a new speed
@@ -777,6 +852,30 @@ would remedy the observed generation-limit failures:
 
 ```sh
 python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high
+```
+
+### Explicit GPT-OSS high with 64k output
+
+The larger-budget profile authorized under [R-0038](../requirements/R-0038.md)
+on **2026-10-14** uses the same installed GPT-OSS 20B MXFP4 weights. Its
+[Modelfile](../../.codex/local-worker/gpt-oss-high-64k/Modelfile) configures
+**98304 context / 65536 generated tokens**; its
+[profile](../../.codex/local-worker/gpt-oss-high-64k/profile.json) requests **high**,
+**7200 seconds per attempt / 14400 cumulative seconds / at most two repairs**.
+Input and generation share context, so a 65536-token context would not leave
+room for a full 65536-token generation. Installed metadata and the
+[official model documentation](https://developers.openai.com/api/docs/models/gpt-oss-20b)
+report a 131072-token context limit; this does not guarantee sufficient host memory.
+
+The separate alias is `microcol-gpt-oss:20b-96k-output64k`, digest
+`aa2f84a12eb2606aeb426045b0d256cff9ffe8f92b8ee6f11b5499a08c0a174f`.
+Its installed parameters match the files. Alias creation reuses existing weights;
+service settings and the default medium profile remain unchanged.
+
+```sh
+# Hold the existing worker lock while recreating an explicitly changed alias.
+ollama create microcol-gpt-oss:20b-96k-output64k -f .codex/local-worker/gpt-oss-high-64k/Modelfile
+python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high-64k
 ```
 
 ### Explicit Qwen2.5-Coder comparison profile
