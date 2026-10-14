@@ -1,5 +1,11 @@
 # First-release rules gap analysis
 
+**2026-10-14 requirement migration:** current ownership and newer evidence for
+R-0001–R-0040 are in the [migration map](requirements/migration-2026-10-14.md);
+select future work from the [new backlog](requirements/backlog.md). Older source
+observations below retain their audit date; they are not all current defects.
+This migration does not change rule IDs, Q decisions or whole-UC acceptance.
+
 Assessment date: 2026-10-02. Implementation baseline: [`f0fdee25824ee5f5dc50b05dfc9619e850c066c9`](https://github.com/jajir/microcol/commit/f0fdee25824ee5f5dc50b05dfc9619e850c066c9), branch `validation`.
 
 Addendum, 2026-10-11: the [use-case acceptance catalogue](use-cases.md) turns

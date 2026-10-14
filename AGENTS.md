@@ -63,10 +63,14 @@ Z/P/rule/UC/test IDs, and distinguish proposals, agreed behavior and verified
 results. A refinement-only request updates the analysis without starting
 implementation. Reuse agreed decisions; do not ask for approval again merely
 to prepare an implementation handoff.
-The 2026-10-14 workflow change does not migrate the existing backlog. In the
-later agreed migration, create new linked requirements only for the remaining
-unimplemented outcomes, preserve old IDs/decisions/evidence, and select further
-development with the user; do not bulk-relabel old requirements or restart
+The user authorized the backlog migration on 2026-10-14. Use the
+[current backlog](docs/requirements/backlog.md) for R-0050 onward and the
+[migration map](docs/requirements/migration-2026-10-14.md) for R-0001–R-0040.
+Leave R-0041–R-0049 unused. Preserve old IDs, resolved decisions and evidence;
+old canceled assignments have linked successors, not deleted feature scope.
+Capture only remaining outcomes or explicitly classified specification follow-ups;
+distinguish missing verification from missing behavior. Select further development
+with the user; migration does not authorize implementing the new set or restarting
 completed work.
 
 # Package responsibilities

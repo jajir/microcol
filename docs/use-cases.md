@@ -1,5 +1,11 @@
 # Use cases a přejímka pravidel hry
 
+**Migrace požadavků 2026-10-14:** aktuální zbytek R-0001–R-0040 a novější
+důkazy vlastní [mapa migrace](requirements/migration-2026-10-14.md), další práci
+vybíráme z [nové řady](requirements/backlog.md). Starší auditní pozorování níže
+mají platnost své uvedené revize; nejsou všechna tvrzením o aktuální chybě.
+Migrace nemění ID ani nepovyšuje dílčí přejímku na hotový celý UC.
+
 Toto je pracovní seznam toho, co musí hráč dokázat v běžné partii MicroCol,
 abychom mohli přijmout implementaci pravidel a přesunout hlavní pozornost na
 grafiku a ladění UX. Závazná herní pravidla jsou oddělena od nastavení nové

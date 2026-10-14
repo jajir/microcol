@@ -1913,3 +1913,24 @@ Lokální ověření na macOS/JDK 17:
    Oprava zachovává výbavu v nákladu i po uložení/načtení; další úplná regrese
    musí potvrdit společnou výslednou revizi. Evidence: `royal-role-evidence.json`
    a `royal-role-fixed-check.log` v `target/r28-draft/`.
+
+
+## Uzavření publikačního ověření R-0027/R-0028 — 2026-10-14
+
+Při migraci požadavků byl zkontrolován úspěšný [CI běh 38584259123](https://github.com/jajir/microcol/actions/runs/38584259123)
+na `062f8ce9ec5e1d04f85bc2f182346417a2274f6b` a stažen artefakt
+`tests-functional`. XML dokládají **1 115 modelových a 144 hráčských/kontrolních
+případů**, nula failures/errors/skips; zahrnují všech sedm TC34 a devět TC35.
+Nejde o nový lokální běh při úpravě dokumentace. Kopie zpráv je v
+`target/requirements-migration/ci-functional/`.
+
+Tento následný úplný běh uzavírá výše zaznamenané čekání na regresi a publikaci;
+staré neúspěšné běhy zůstávají historií. Distribuce
+[dev-70-062f8ce9ec5e](https://github.com/jajir/microcol/releases/tag/dev-70-062f8ce9ec5e)
+a její manifest potvrzují stejnou revizi a tři platformy. Samostatná
+[kompatibilita 38584258925](https://github.com/jajir/microcol/actions/runs/38584258925)
+prošla na Linuxu/Windows a Java 11/17, včetně opravy úklidu testu R-0037.
+
+[R-0050](requirements/R-0050.md) a [mapa migrace](requirements/migration-2026-10-14.md)
+odlišují tuto přijatou část od nových požadavků. Úspěšný TC30 například stále
+obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není ověřena.

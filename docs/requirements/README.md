@@ -8,13 +8,15 @@ Technical work describes the developer/operator outcome without an invented play
 
 **Agreed on 2026-10-14:** use the [six statuses](#status-and-transitions) and
 [copyable template](#copyable-template) below. [R-0040](R-0040.md) records this
-workflow change. Existing R-0001–R-0039 retain their old content and statuses
-until the separate [backlog migration](#existing-backlog-migration).
+workflow change. The subsequent authorized [migration](migration-2026-10-14.md)
+now covers R-0001–R-0040. Start further work from the [current backlog](backlog.md),
+with new outcomes numbered from R-0050; old IDs retain their history.
 
 ## Naming and scope
 
 1. Allocate the next unused number after the highest existing `R-` number on
-   `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
+   `main`. The 2026-10-14 migration deliberately started its new series at
+   `R-0050`, leaving R-0041–R-0049 unused. Keep four digits at minimum. Never renumber or
    reuse an allocated ID, including a deferred or cancelled requirement.
 2. Give the document a descriptive title, for example the existing
    `# R-0001 — Start free play without completing the campaign`.
@@ -130,6 +132,7 @@ for an infrastructure requirement may be part of its observable operator contrac
 4. Dependencies: specific existing capabilities or linked R outcomes; none if independent
 5. Primary area: one A01–A10 link from areas.md
 6. Related areas: specific cross-area dependencies; none if independent
+7. Origin: source request/specification or linked predecessor; migrated items link their original R and migration disposition
 
 ## 1. Summary
 
@@ -183,144 +186,62 @@ This wording does not create chats, scheduled work or implementation assignments
 
 ## Existing backlog migration
 
-Agreed on **2026-10-14**, to follow this workflow change as a separate step:
+The user authorized the migration on **2026-10-14**. [R-0050](R-0050.md) records
+its scope and checks; the [coverage map](migration-2026-10-14.md) accounts for
+all forty old records and their successors. The [current backlog](backlog.md)
+is the entry point for selection. Preserve source lineage when splitting again;
+future requests without an old predecessor may identify their actual user/spec
+source instead of inventing a link to an old requirement.
 
-1. Inspect old requirements against actual implementation and acceptance evidence.
-   Separate delivered behavior, unresolved verification and unimplemented outcomes;
-   do not infer completion from an old status or a shared successful build.
-2. Split or merge only the remaining unimplemented outcomes into new R files,
-   with one independently reviewable outcome each. Give them new unused IDs,
-   link their exact source requirements/items and reuse prior agreed decisions.
-   A verification-only gap is identified explicitly rather than reimplemented.
-3. Preserve old IDs, decisions and evidence. When an old scope is superseded,
-   record the new owner links and any remainder so two active contracts do not
-   compete. Do not automatically mark partially delivered old requirements done
-   or perform a bulk mapping of legacy statuses.
-4. New replacement requirements start at `new`. Choose them with the user for
-   refinement and subsequent development under the lifecycle above. Migration
-   itself does not authorize implementing the remaining backlog.
-
-The historical sections below retain their headings and links for traceability.
-Their legacy status labels are not the vocabulary for new requirements.
+1. Keep implemented behavior and its evidence. Split only unfinished outcomes
+   or explicitly identified follow-ups; classify verification-only gaps honestly.
+2. Keep old IDs, decisions and historical chapter/item references. A replaced
+   unfinished assignment is `canceled` with linked new owners, not a feature
+   deletion. A delivered bounded scope is `done` even when its larger UC remains open.
+3. New successors begin as `new`. Select and refine one with the user before
+   development; an ID, a dependency link or this migration is not implementation
+   authorization. Unknown parameters stay in the shared Q register.
+4. Follow the accepted tax, passenger, coast, queue and identity policies.
+   Later proposals cannot silently override those decisions. New functionality
+   after a completed requirement belongs in a new linked requirement.
 
 ## First ten upcoming requirements
 
-Captured on **2026-10-12** from the implementation plan and source inspection at
-`4b3a1b56`. These are drafts for individual refinement, not ten approved
-implementation assignments or newly verified features. Each file owns its
-current status, scope and open questions. Completed Z01/Z02 remain in the
-[implementation plan](../implementation-plan.md#prvni-konkretni-zadani).
-
-| Requirement | Primary area | Small outcome | Main dependency or refinement decision |
-| --- | --- | --- | --- |
-| [R-0001](R-0001.md) | [A01](areas.md#a01) | Start free play without completing the campaign. | Verified with R-0012; working mock setup is delivered by R-0014. |
-| [R-0002](R-0002.md) | [A04](areas.md#a04) | Explicit turn phases and one calendar advance per round (Z03). | Q-02; continuation boundary. |
-| [R-0003](R-0003.md) | [A05](areas.md#a05) | Distinguish waiting from skipping a unit's turn. | Existing selection and next-turn reset. |
-| [R-0004](R-0004.md) | [A05](areas.md#a05) | Restrict ship entry to valid coastal colonies. | Precise coastal eligibility. |
-| [R-0005](R-0005.md) | [A07](areas.md#a07) | Assign workers safely to globally shared fields. | Invalid restored-assignment policy. |
-| [R-0006](R-0006.md) | [A07](areas.md#a07) | Choose work using the selected worker's available yield. | R-0005; ordinary-worker first slice. |
-| [R-0007](R-0007.md) | [A07](areas.md#a07) | Food consumption and population growth at the threshold. | R-0002; Q-10 imports and large surpluses. |
-| [R-0008](R-0008.md) | [A07](areas.md#a07) | Famine boundaries and loss of the last resident. | R-0007; Q-10 victim and processing order. |
-| [R-0009](R-0009.md) | [A07](areas.md#a07) | Match expert blacksmith output to ore consumption. | Reachable expert and acquisition path. |
-| [R-0010](R-0010.md) | [A07](areas.md#a07) | Produce the colony's automatic base cross. | Agree the limited production slice. |
-
-These are candidate changes, not a numbered execution queue. Use the
-[area overview](areas.md#postup-po-oblastech). On 2026-10-13 the user settled
-A01: retain the existing menu and remove the campaign gate through R-0001.
-R-0014 owns the implemented mock setup. Refinement and capability checks do not close
-any whole UC or authorize all drafts for implementation.
-
-Test class/fixture names marked **proposed** in the files reserve a concrete
-verification plan, not runnable tests. Check availability again before creating
-them and preserve existing TC/F IDs. Use the common
-[model and UI test contract](../functional-tests.md) for fixtures, assertions,
-environment, commands and completion evidence; do not duplicate that contract
-inside each analysis.
+Historical heading retained for existing links. R-0001–R-0010 are now reviewed
+in the [migration map](migration-2026-10-14.md); they are not the current work queue.
 
 ## Additional requirements
 
-| Requirement | Primary area | Outcome |
-| --- | --- | --- |
-| [R-0011](R-0011.md) | [A05](areas.md#a05), cross-area P31 safeguard | Enforce the model dependency boundary with ArchUnit. |
+Use the [current catalogue](backlog.md). Old records R-0011–R-0040 retain their
+accepted scope, decisions and immutable source-history links.
 
 ## Twenty free-play follow-up drafts
 
-Captured on **2026-10-13** against `b5077d1e`, using the area map, existing
-analyses and the rule/use-case catalogues. They began as **Draft** analyses. R-0012–R-0018 are now **Verified** after implementation and the full Docker regression;
-Implementation of R-0019–R-0031 is now authorized; R-0019 is published.
-Each file owns its current evidence.
-This does not make every proposed behavior approved or verified. The initial capture
-published documents only; the implemented slice follows normal development delivery.
-Refine one selected requirement at a time.
-
-| Requirement | Primary area | Small outcome |
-| --- | --- | --- |
-| [R-0012](R-0012.md) | [A01](areas.md#a01) | Reuse the existing free-play menu. |
-| [R-0013](R-0013.md) | [A01](areas.md#a01) | Leave or replace an active game safely. |
-| [R-0014](R-0014.md) | [A02](areas.md#a02) | Choose a map through a mock free-play setup. |
-| [R-0015](R-0015.md) | [A02](areas.md#a02) | Add fixed French cities and units to free play. |
-| [R-0016](R-0016.md) | [A03](areas.md#a03) | Verify existing screens with mouse and keyboard. |
-| [R-0017](R-0017.md) | [A03](areas.md#a03) | Use consistent command availability and rejection feedback. |
-| [R-0018](R-0018.md) | [A04](areas.md#a04) | Keep automatic saving and verify Continue. |
-| [R-0019](R-0019.md) | [A05](areas.md#a05) | Clarify fog of war separately from movement range. |
-| [R-0020](R-0020.md) | [A05](areas.md#a05) | Buy and sell colonist equipment on the European pier. |
-| [R-0021](R-0021.md) | [A06](areas.md#a06) | Depart through sea lanes and return to the recorded coast. |
-| [R-0022](R-0022.md) | [A06](areas.md#a06) | Embark and disembark an individual colonist safely. |
-| [R-0023](R-0023.md) | [A06](areas.md#a06) | Purchase an expert blacksmith and bring them home. |
-| [R-0024](R-0024.md) | [A07](areas.md#a07) | Unload wagon goods using the shared warehouse limit. |
-| [R-0025](R-0025.md) | [A07](areas.md#a07) | Enforce population and prerequisites when choosing construction. |
-| [R-0026](R-0026.md) | [A08](areas.md#a08) | Persist European relations independently of player names. |
-| [R-0027](R-0027.md) | [A08](areas.md#a08) | Let a European rival establish its first colony. |
-| [R-0028](R-0028.md) | [A09](areas.md#a09) | Validate attack roles and confirmed hostilities in the model. |
-| [R-0029](R-0029.md) | [A09](areas.md#a09) | Calculate and explain ordinary land combat strength. |
-| [R-0030](R-0030.md) | [A10](areas.md#a10) | Resolve a Crown tax demand and a commodity boycott. |
-| [R-0031](R-0031.md) | [A10](areas.md#a10) | Compute local and national rebel sentiment. |
-
-R-0012 now records the agreed A01 reuse; R-0001 is satisfied by the shared campaign-gate removal.
-Prepare only the A02/A03 dependencies needed for that delivery before moving
-through the [area sequence](areas.md#postup-po-oblastech). IDs are not priorities:
-R-0023 enables R-0009, and R-0031 enables R-0030. A dependency names needed
-capability, not a requirement to implement every related area at once.
-
-This set advances the first economic loop and selected later foundations; it is
-not the complete free-play backlog. Map generation, a full unit roster, native
-societies, trade routes, education, full combat resolution, founders and the
-independence/endgame journey still need their own small analyses. Existing
-manual rules, work packages and UC acceptance remain in scope and open.
+Historical capture heading retained. Current ownership and source lineage are
+in the [migration map](migration-2026-10-14.md), with further work in the new series.
 
 ## User decisions and current UI audit — 2026-10-13
 
-The user retained the current main menu and requested that its free-play entry
-be enabled independently of campaign completion. R-0014 now specifies a mock
-setup with working Start/Back and two map choices; R-0015 specifies fixed French
-cities and units. R-0016 now has passing UI journeys; R-0020–R-0025 retain their separate
-capability checks and follow-up evidence. See each analysis for its current
-scope and evidence; the earlier capture tables describe the initial drafts.
-
-Player-entered text defaults to **64 Unicode code points**, including player
-names. Do not reopen that length question for future fields unless the user
-requests an exception. Colony-name uniqueness is a separate existing rule.
+The retained menu, mock setup and fixed French scenarios were delivered in their
+bounded slices. Player-entered text defaults to **64 Unicode code points** with
+Unicode whitespace trimming. Colony-name uniqueness remains its separate
+accepted rule. See the old numbered records for preserved decisions and evidence.
 
 ## Completed implementation slice R-0012–R-0018 — 2026-10-13
 
-1. R-0012–R-0018 are authorized for implementation together: retained menu,
-   recovery save, two-map setup, French scenario content, existing screen
-   navigation and consistent equipment/unloading choices.
-2. This implements the same campaign-gate removal described by R-0001; do not
-   create a second implementation for the duplicate menu entry. Acceptance is documented in the [combined regression record](../functional-tests.md#free-play-implementation-2026-10-13).
-3. At that slice’s acceptance, R-0019 onward were separate refinements; the subsequent authorization below supersedes that planning status. Mock nation selection does not
-   implement national effects, and French scenario content does not establish
-   a complete economic AI.
+Retained as completed scope in the [coverage map](migration-2026-10-14.md).
+R-0001/R-0012 share one menu-gate implementation. The [combined regression
+record](../functional-tests.md#free-play-implementation-2026-10-13) remains authoritative
+for that delivery, without implying complete nation profiles or economic AI.
 
 ## Implementation from R-0019 — authorized 2026-10-13
 
-1. The user requested implementation of all remaining requirements from R-0019, consulting the original Colonization manual for open questions. The original gameplay scope was R-0019–R-0031; R-0032–R-0034 already contain delivered technical changes. On 2026-10-14 the user narrowed this request: finish R-0028 and then stop. R-0029 onward and further audits must not start under this completion.
-2. Work through A05 visibility/equipment, A06 voyages/passengers/expert purchase, A07 wagon/construction, A08 relations/rival founding, A09 attack/strength, then A10 sentiment before its dependent tax demand. Numbered requirements retain their existing acceptance; needed earlier capabilities are implemented when dependency evidence requires them.
-3. R-0019–R-0026 were already published when the scope was narrowed. Each numbered analysis owns its implementation scope and dated evidence. R-0027 and R-0028 share the final regression and delivery gate described in [R-0028](R-0028.md); the [development channel](../development-builds.md) identifies the current verified distribution. Manual-backed decisions cite printed and PDF page numbers; implementation policy for parameters absent from the manual is explicitly distinguished from historical rules.
-4. Local implementation uses the configured Ollama GPT-OSS worker with bounded assignments; requirements, architecture, review, actual checks and publication remain caller-owned.
+Historical authorization was narrowed on 2026-10-14 to finish R-0028 and stop.
+The later [verified baseline](migration-2026-10-14.md#verification-baseline)
+closes delivery for R-0027/R-0028. The current request authorizes backlog migration,
+not automatic implementation of R-0029 onward or their successors.
 
 ## Dependency maintenance
 
-| Requirement | Primary area | Outcome |
-| --- | --- | --- |
-| [R-0037](R-0037.md) | [A03](areas.md#a03) | Safe Guava update, preference temporary directories and Windows/Java compatibility checks. |
+[R-0037](R-0037.md) retains the completed Guava/compatibility outcome. Use the
+actual dated CI evidence, including Windows, instead of its old pending-state note.

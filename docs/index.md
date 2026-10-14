@@ -1,5 +1,8 @@
 # MicroCol documentation
 
+Development planning: [current requirements R-0050+](requirements/backlog.md)
+and the [migration of the original forty requirements](requirements/migration-2026-10-14.md).
+
 MicroCol is a colonization strategy game implemented in Java and JavaFX. This
 website publishes the documentation maintained in the repository's `docs/`
 directory on `main`. Development, integration and publication all use `main`.

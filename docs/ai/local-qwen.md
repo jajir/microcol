@@ -2549,3 +2549,51 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    integrated after checking the main source still matched its handoff baseline.
    The model was unloaded and the owned lock released. Full R-0028 regression
    and publication remain separate acceptance gates.
+
+
+### Requirement catalogue checks — 2026-10-14
+
+Under [R-0050](../requirements/R-0050.md), the main agent retains requirement
+analysis and migration. The local worker received only a bounded Python
+`unittest` catalogue-consistency task, with text replacements in an isolated
+worktree based on `062f8ce9ec5e1d04f85bc2f182346417a2274f6b`. No game change,
+Java formatting, worker commits or worker-side tests were authorized.
+
+Job: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-requirements-catalogue/`.
+The installed GPT-OSS alias/digest matches the current operating profile.
+Attempt 0 (medium/64k, **525.670 seconds**) returned applicable JSON but failed
+caller acceptance: multiline heading/table patterns lacked multiline matching;
+the origin pattern matched three digits instead of four, and duplicate metadata
+and table rows could be silently dropped. The caller’s valid minimal catalogue
+probe failed on missing headings, before any test method ran.
+
+The targeted repair (medium/64k, **391.546 seconds**) fixed multiline matching
+but retained the invalid origin pattern and other requested corrections. The
+same probe then failed on the valid R-0050 → R-0040 origin. This was not accepted.
+The caller escalated the last allowed repair to high/64k in the same job and
+worktree, preserving **917.216 seconds** already spent and the shared time/repair
+budget. The repair also corrects a caller contract issue: lineage to an old
+requirement applies to this historical migration, not every unrelated future
+request. Future catalogue growth must not require fictional predecessor links.
+
+The high attempt was **canceled incomplete after 1,996.219 seconds**, with
+SIGTERM handled by the launcher, child exit −15 and successful model unload.
+Total worker runtime was **2,913.435 seconds**, three attempts, two repair slots.
+CLI usage for the completed attempts reports 1,771 input / 2,997 output tokens
+and 6,741 input / 2,502 output tokens (3,661 cached input in the second). The
+interrupted high attempt has no completed usage report; its token total is unavailable.
+This is not a timeout, an accepted repair or a model-unavailability claim.
+The caller corrected its own scope: a new permanent checker was an unnecessary
+addition to this documentation-only migration. Existing mandatory checks and a
+direct audit of all catalogue records satisfy the requested deliverable without
+adding this rejected prototype to the repository. No worker code was integrated,
+no replacement cloud implementation was written, and no required check was waived.
+No further retry is requested for the withdrawn task; the original failures remain
+unresolved in the isolated candidate, rather than being reported as fixed.
+
+The job retains `disposition.json`, attempt records and
+`probe-before.txt` / `probe-after-repair1.txt`. The main-agent documentation audit
+and passing project checks are recorded in [R-0050](../requirements/R-0050.md).
+No measured cloud-token saving or general model-reliability conclusion follows
+from this unsuccessful optional assignment. Future documentation-only tasks
+should reuse existing validation and a focused audit before proposing new tooling.

@@ -14,8 +14,8 @@ pro další práci, nikoli závazný termín nebo spuštěné implementační ú
 **Zpřesnění postupu z 13. října 2026:** nejdřív vybíráme jednu z
 [deseti pracovních oblastí](requirements/areas.md), vyjasníme její potřebnou
 společnou strukturu a potom upřesňujeme jednotlivá R. Uživatel následně potvrdil
-zachování současného menu A01: R-0001 odstraní podmínku kampaně; R-0014
-naváže mock nastavením a dvěma mapami.
+zachování současného menu A01; odstranění podmínky kampaně a mock nastavení
+jsou již dodané části R-0001/R-0014.
 Oblasti určují soustředění práce; balíky P zůstávají rozpadem rozsahu a etapy E
 přejímacími výsledky. Číselné pořadí R ani P není fronta k provedení.
 
@@ -26,6 +26,28 @@ kolonie, detaily budov a správné herní informace patří do Hry. Podobu
 výběrových obrazovek, rozmístění a vzhled lze měnit; účinky národů a obtížnosti
 zůstávají součástí závazných pravidel. Balíky mohou obsahovat více kategorií,
 proto do dílčího zadání vždy patří konkrétní UC a jeho kategorie.
+
+## Aktuální zadávání práce — 2026-10-14
+
+Všech čtyřicet původních R prošlo [migrací](requirements/migration-2026-10-14.md).
+Pro další výběr používej [nový katalog](requirements/backlog.md); staré odkazy
+v balících zůstávají dohledatelnou historií a vedou na nové vlastníky zbylého
+rozsahu. Samotné zachycení požadavku neznamená zahájení vývoje.
+
+| Balíky | Aktuální rozpad zbývajících výsledků |
+| --- | --- |
+| P02 | [Nastavení A02](requirements/backlog.md#a02) |
+| P03/P26 | [Tah a obnova A04](requirements/backlog.md#a04) |
+| P04–P07 | [Svět a rozkazy A05](requirements/backlog.md#a05) |
+| P08/P09/P14/P15 | [Doprava a Evropa A06](requirements/backlog.md#a06) |
+| P10–P13 | [Hospodářství A07](requirements/backlog.md#a07) |
+| P20/P21 | [Diplomacie a soupeř A08](requirements/backlog.md#a08) |
+| P17 | [Boj A09](requirements/backlog.md#a09) |
+| P22–P24 | [Politika A10](requirements/backlog.md#a10) |
+| P31 | [Migrace R-0050](requirements/R-0050.md) |
+
+Výběr dalšího R proběhne po dohodě. Zbytek úplného manuálu zůstává v tomto
+plánu a v UC; migrace prvních čtyřiceti zadání nezavírá celý backlog hry.
 
 ## Cíl běžné nové hry
 

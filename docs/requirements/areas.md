@@ -3,7 +3,8 @@
 **Pracovní návrh z 13. října 2026.** Nad katalogem pravidel, use cases a malými
 analýzami zavádíme deset oblastí. Nejdřív vyjasníme podobu vybrané oblasti,
 potom postupně upřesníme a dodáme její malé požadavky. Číslo R ani A neurčuje
-prioritu. Prvních deset R zůstává zásobníkem návrhů, nikoli frontou implementací.
+prioritu. Aktuální zásobník tvoří [nová řada R](backlog.md); původních čtyřicet
+požadavků má [mapu migrace](migration-2026-10-14.md).
 
 Podkladem je [katalog 230 pravidel](../gap-analysis.md#rule-catalogue),
 [119 use cases](../use-cases.md) a [32 pracovních balíků](../implementation-plan.md#seznam-pracovnich-baliku)
@@ -36,10 +37,12 @@ existujících podkladů, nikoli nový audit manuálu nebo běžící hry.
 
 **Menu a navigace aplikace.** Hlavní menu, menu v rozehrané hře, dostupné
 cíle, přechody, návrat, zrušení a vstupy do nové nebo uložené partie.
-Nejdřív potřebujeme mapu obrazovek a tabulku přechodů včetně chybových stavů.
+Příprava vychází z existujících obrazovek a ověřených přechodů; chybějící
+chybové stavy mají vlastní malé požadavky.
 A02 vlastní nastavení a vytvořenou partii, A04 obnovu pozice a A10 význam
 odchodu se skóre. Společné ovládací prvky a texty přebíráme z A03.
-První kandidát: [R-0001](R-0001.md); stávající menu bylo potvrzeno 13. října 2026.
+Dodané menu: [R-0001](R-0001.md)/[R-0012](R-0012.md); další obnova po
+neúspěšném načtení patří do A04, [R-0067](R-0067.md).
 
 ### A02
 
@@ -70,7 +73,7 @@ produkce, posun času, ukládání, načítání a autosave. Výstupem příprav
 přehled stavů a přechodů včetně míst, odkud lze bezpečně pokračovat bez
 opakování událostí. Doménové stavy ukládáme spolu s jejich funkcí; kompatibilitu
 starších save souborů během vývoje nevyžadujeme podle [platného kontraktu](../architecture.md#identita-kolonii-a-textove-vstupy).
-Kandidát: [R-0002](R-0002.md).
+Kandidáti: [R-0051](R-0051.md) a [R-0052](R-0052.md).
 
 ### A05
 
@@ -79,7 +82,7 @@ jednotek, výstroj, pohyb, dlouhodobé rozkazy a práce pionýrů. Připravíme
 schopnosti objektů, jejich platné stavy a podmínky akcí včetně ceny a odmítnutí.
 Kapacita lodě je vlastnost jednotky; konkrétní převod nákladu řeší A06.
 Výnos pole používá A07, obranu A09. Kandidáti:
-[R-0003](R-0003.md) a [R-0004](R-0004.md).
+[R-0053](R-0053.md) a [R-0054](R-0054.md).
 
 ### A06
 
@@ -96,8 +99,8 @@ oblast zde; výběr národa je nepřesouvá do UI nastavení.
 pole, jídlo, růst, hlad, sklad, výroba, stavby a vzdělávání. Výstupem je
 přehled stavů kolonie, pořadí výpočtů a nezávislé příklady vstupů a výstupů.
 Zobrazení použije A03, aktualizace A04, venkovní data A05 a převody A06.
-Kandidáti: [R-0005](R-0005.md), [R-0006](R-0006.md), [R-0007](R-0007.md),
-[R-0008](R-0008.md), [R-0009](R-0009.md), [R-0010](R-0010.md).
+Aktuální kandidáti jsou v [A07 nového katalogu](backlog.md#a07), zejména
+sdílená pole R-0055, spotřeba rudy R-0061 a základní kříž R-0062.
 Dokončené Z01/Z02 zůstávají přijatými výchozími kontrakty, ne novými úkoly.
 
 ### A08
