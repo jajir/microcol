@@ -95,6 +95,32 @@ class WorkerTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Source changed"):
             worker.replacements(self.tree, self.contract, self.hashes, self.response)
 
+    def test_single_json_fence_is_normalized_without_bypassing_batch_validation(self):
+        path = self.attempt(0, 1)
+        worker.write_json(path / "job.json", self.contract)
+        worker.write_json(path / "source-hashes.json", self.hashes)
+        for replacements, valid in [(self.response["replacements"][:1], False),
+                                    (self.response["replacements"], True)]:
+            (path / "response.md").write_text(
+                "```json\n" + json.dumps({"replacements": replacements}) + "\n```\n")
+            with patch.object(worker, "git", return_value="abc"):
+                if valid:
+                    worker.apply(self.job, 0)
+                else:
+                    with self.assertRaisesRegex(ValueError, "Missing replacements"):
+                        worker.apply(self.job, 0)
+                    self.assertEqual((self.tree / "a.java").read_text(), "old A\n")
+        self.assertTrue(worker.read_json(path / "application.json")["json_fence_removed"])
+        self.assertEqual((self.tree / "a.java").read_text(), "new A\n")
+
+    def test_response_parser_rejects_prose_multiple_fences_and_invalid_json(self):
+        fenced = '```json\n{"replacements": []}\n```'
+        for text in ("Here is the result:\n" + fenced, fenced + "\nExplanation",
+                     fenced + "\n" + fenced, "```json\ninvalid\n```"):
+            (self.job / "response.md").write_text(text)
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                worker.read_response(self.job / "response.md")
+
     def test_legacy_response_requires_exact_anchor(self):
         legacy = {"replacements": [dict(a, new="new " + a["id"]) for a in self.contract["anchors"]]}
         for item in legacy["replacements"]:
@@ -124,6 +150,39 @@ class WorkerTest(unittest.TestCase):
             self.assertEqual(cmd[cmd.index("-s") + 1], sandbox)
             self.assertIn("--oss", cmd)
             self.assertEqual(cmd[cmd.index("-m") + 1], "local:trial")
+
+    def test_explicit_profile_selects_model_limits_and_nonthinking_command(self):
+        worker.write_json(self.root / "profile.json", {
+            **self.config, "model": "coder:trial", "reasoning": "none"})
+        (self.root / "Modelfile").write_text(
+            "FROM qwen2.5-coder:14b-instruct-q4_K_M\n"
+            "PARAMETER num_ctx 32768\nPARAMETER num_predict 16384\n")
+        config = worker.profile(self.root)
+        self.assertEqual(config["base_model"], "qwen2.5-coder:14b-instruct-q4_K_M")
+        self.assertEqual(config["num_ctx"], 32768)
+        cmd = worker.command(config, self.contract, self.tree, self.job, "codex")
+        self.assertEqual(cmd[cmd.index("-m") + 1], "coder:trial")
+        self.assertIn('model_reasoning_effort="none"', cmd)
+        self.assertIn("model_supports_reasoning_summaries=false", cmd)
+
+    def test_thinking_level_must_match_actual_model_capability(self):
+        info = {"details": {"parent_model": "gpt-oss:20b"},
+                "parameters": "num_ctx 32768\nnum_predict 16384\n",
+                "capabilities": ["completion", "thinking"],
+                "thinking": {"values": ["low", "medium", "high"], "default": "medium"}}
+        tags = {"models": [{"name": "local:trial", "digest": "actual"}]}
+        with patch.object(worker, "api", side_effect=[info, tags]):
+            self.assertEqual(worker.model_info(self.config)["digest"], "actual")
+        with patch.object(worker, "api", return_value=info), \
+                self.assertRaisesRegex(ValueError, "cannot disable"):
+            worker.model_info({**self.config, "reasoning": "none"})
+        plain = {**info, "capabilities": ["completion"], "thinking": {"values": [False]}}
+        with patch.object(worker, "api", return_value=plain), \
+                self.assertRaisesRegex(ValueError, "Unsupported model reasoning"):
+            worker.model_info(self.config)
+        with patch.object(worker, "api", side_effect=[plain, tags]):
+            self.assertEqual(worker.model_info({**self.config, "reasoning": "none"})["digest"],
+                             "actual")
 
     def test_foreign_lock_and_same_job_concurrency_are_rejected(self):
         lock = self.root / "active.lock"

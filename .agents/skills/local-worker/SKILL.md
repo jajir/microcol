@@ -44,6 +44,9 @@ them here.
    what may change and what must stay unchanged. Budget for instructions, input,
    tool history and output together; split work that does not fit rather than
    dropping requirements.
+   Trace callers of changed shared capabilities before freezing the contract;
+   resolve any conflict between the prescribed design and preserved behavior,
+   and include the affected source and acceptance boundary in the handoff.
 6. For small edits whose source is already known, prefer text replacements for
    the caller to apply instead of asking the worker to rediscover files and script
    edits. Use the [focused handoff contract](references/worker-instructions.md#focused-handoff)
@@ -81,7 +84,9 @@ caller actually executed.
 For replacement output, use the launcher's separate `apply` command. It parses
 the response, validates every ID/path, original file hash and exact anchor count
 before writing the batch. Caller-owned anchors let new tasks request only IDs
-and new text. Inspect application success before formatting or testing; a rejected
+and new text. A single outer `json` Markdown fence is removed and recorded;
+extra prose, multiple blocks or invalid JSON still fail parsing. Inspect
+application success before formatting or testing; a rejected
 batch is not an applied patch. Apply only the validated edits,
 then review, format changed Java files with the shared project profile, and run
 the same acceptance checks as for direct worker edits. Record generated text

@@ -23,6 +23,14 @@ def read_json(path):
     return json.loads(path.read_text())
 
 
+def read_response(path):
+    text = path.read_text().strip()
+    fenced = text.startswith("```json\n") and text.endswith("\n```")
+    if fenced:
+        text = text[len("```json\n"):-len("\n```")]
+    return json.loads(text), fenced
+
+
 def write_json(path, value):
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, indent=2) + "\n")
@@ -38,9 +46,9 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def profile(root=ROOT):
-    config = read_json(root / ".codex/local-worker/profile.json")
-    model_file = (root / ".codex/local-worker/Modelfile").read_text()
+def profile(directory=ROOT / ".codex/local-worker"):
+    config = read_json(directory / "profile.json")
+    model_file = (directory / "Modelfile").read_text()
     bases = re.findall(r"^FROM (\S+)$", model_file, re.M)
     require(len(bases) == 1, "Modelfile must select one installed base model")
     config["base_model"] = bases[0]
@@ -53,7 +61,7 @@ def profile(root=ROOT):
     require(type(config["max_repairs"]) is int and config["max_repairs"] >= 0,
             "Invalid repair limit")
     require(config["num_predict"] < config["num_ctx"], "Leave room for input")
-    require(config["reasoning"] in ("low", "medium", "high"), "Invalid reasoning")
+    require(config["reasoning"] in ("none", "low", "medium", "high"), "Invalid reasoning")
     require(isinstance(config["model"], str) and config["model"].strip(), "Missing model")
     return config
 
@@ -143,9 +151,17 @@ def model_info(config):
     for name in ("num_ctx", "num_predict"):
         actual = re.search(r"^" + name + r"\s+(\d+)\s*$", info["parameters"], re.M)
         require(actual and int(actual[1]) == config[name], "Ollama profile mismatch: " + name)
+    thinking = info.get("thinking", {})
+    supported = thinking.get("values", [])
+    if config["reasoning"] == "none":
+        require("thinking" not in info.get("capabilities", []) or False in supported,
+                "Model cannot disable thinking")
+    else:
+        require(config["reasoning"] in supported, "Unsupported model reasoning level")
     models = [m for m in api("tags")["models"] if m["name"] == config["model"]]
     require(len(models) == 1, "Installed alias missing")
-    return {"digest": models[0]["digest"], "parameters": info["parameters"]}
+    return {"digest": models[0]["digest"], "parameters": info["parameters"],
+            "details": info.get("details"), "thinking": thinking}
 
 
 def command(config, contract, tree, attempt, codex):
@@ -162,7 +178,8 @@ def command(config, contract, tree, attempt, codex):
         "features.apps": False, "features.browser_use": False,
         "features.computer_use": False, "features.image_generation": False,
         "web_search": "disabled", "model_reasoning_effort": config["reasoning"],
-        "model_supports_reasoning_summaries": True, "model_reasoning_summary": "none",
+        "model_supports_reasoning_summaries": config["reasoning"] != "none",
+        "model_reasoning_summary": "none",
         "tool_output_token_limit": 1000,
     }
     for key, value in settings.items():
@@ -218,8 +235,8 @@ def claim(job, lock=LOCK):
     write_json(lock / "owner.json", {"job": str(job), "runner_pid": os.getpid()})
 
 
-def run(job):
-    config = profile()
+def run(job, profile_directory=None):
+    config = profile() if profile_directory is None else profile(profile_directory)
     contract, tree, hashes, (number, used, seconds) = preflight(job, config)
     codex, ollama = shutil.which("codex"), shutil.which("ollama")
     require(codex and ollama, "Codex and Ollama must already be installed")
@@ -345,8 +362,9 @@ def apply(job, number):
     require(contract["mode"] == "text-only", "Direct edits do not use replacement application")
     tree = Path(contract["worktree"])
     require(git(tree, "rev-parse", "HEAD") == contract["baseline"], "Baseline changed")
+    response, fenced = read_response(attempt / "response.md")
     planned = replacements(tree, contract, read_json(attempt / "source-hashes.json"),
-                           read_json(attempt / "response.md"))
+                           response)
     originals = {path: path.read_bytes() for path in planned}
     try:
         for path, text in planned.items():
@@ -356,6 +374,7 @@ def apply(job, number):
             path.write_bytes(content)
         raise
     write_json(attempt / "application.json", {"files": [str(p) for p in planned],
+                                              "json_fence_removed": fenced,
                                               "verification": "pending caller"})
     print("Applied validated replacements; formatting and tests remain caller-owned.")
 
@@ -373,10 +392,13 @@ def main():
     parser.add_argument("action", choices=("run", "apply", "release"))
     parser.add_argument("job", type=Path)
     parser.add_argument("--attempt", type=int)
+    parser.add_argument("--profile", type=Path,
+                        help="Directory containing profile.json and Modelfile (run only)")
     args = parser.parse_args()
     job = args.job.resolve()
     if args.action == "run":
-        return run(job)
+        return run(job, args.profile)
+    require(args.profile is None, "--profile is only used when running an attempt")
     if args.action == "apply":
         require(args.attempt is not None and args.attempt >= 0, "Select --attempt explicitly")
         apply(job, args.attempt)

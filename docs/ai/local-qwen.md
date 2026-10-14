@@ -1,14 +1,18 @@
 # Codex and a local development worker
 
-Status as of **2026-10-14: local GPT-OSS 20B uses context 32768 and a 16384-token
-generation allowance**, under [R-0035](../requirements/R-0035.md). Astra remains the main
+Status as of **2026-10-14: the default local GPT-OSS 20B profile requests medium
+reasoning, context 32768 and a 16384-token generation allowance**, under
+[R-0036](../requirements/R-0036.md). The high trial exhausted generation before
+delivering code on both tasks, so high remains an explicit experimental profile.
+Qwen2.5-Coder 14B Instruct Q4_K_M is installed as another explicit profile. Astra remains the main
 agent and supervises a separate local Codex CLI process, checks the result and
 owns integration and publication. The current operating profile below replaces
 Qwen3.5-9B for new assignments; dated Qwen results remain historical evidence.
 
 The host is the **16 GB Mac mini**. Preserve the main agent's model and reasoning
 settings. The goal is more correctly completed work within the same Codex budget;
-no improvement or savings percentage has been measured. The operating page and
+no general reliability improvement or Codex-budget savings percentage has been
+measured. The operating page and
 log directory retain their `local-qwen` names to preserve existing links and
 artifacts; they are not model selectors.
 
@@ -17,6 +21,131 @@ attempt, sixty minutes cumulative per task and at most two targeted repairs.
 The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
+
+## GPT-OSS high and Qwen2.5-Coder paired trial — 2026-10-14
+
+1. [R-0036](../requirements/R-0036.md) compares the existing GPT-OSS at medium
+   and high with the explicitly requested Qwen2.5-Coder 14B Instruct Q4_K_M.
+   All use context 32768, output 16384 and the existing 1800/3600-second limits
+   with at most two repairs. Qwen has no thinking level; its profile uses none.
+2. The two historical main baselines are `61789f8169248f7ec1987d48be4b750311dcc81f`
+   for the relation helper and `a43507d5fbd700195d4e5ea10f9e82a99d4b73bf` for
+   equipment-aware attack roles. Six detached worktrees receive the same initial
+   source, tests, role and task prompt per case. The comparison manifest records
+   matching source/prompt hashes. Previously completed or rejected production
+   implementations are not copied into these inputs.
+3. The new handoff supplies whole methods for attack-role replacements and asks
+   for IDs/new text instead of repeating old source. Medium is rerun with that
+   same handoff so an input improvement is not mistaken for a model improvement.
+   The caller applies validated responses, formats with the shared Java profile,
+   reviews semantics and runs unchanged Docker acceptance after model unload.
+
+| Profile / task | Worker seconds, including repairs | Result |
+| --- | --- | --- |
+| GPT-OSS medium / relations | 295.010 + 98.779 = **393.789** | Accepted after one worker repair; **8 model + 3 source-contract tests** passed, zero failures/errors/skips. |
+| GPT-OSS high / relations | 920.118 + 916.083 = **1836.201** | Rejected: both attempts exhausted 16384 output tokens without a final message. No source applied; **0 tests run**. |
+| Qwen / relations | 146.581 + 161.615 + 191.487 = **499.683** | Rejected after both repairs: last revision ran **8 model tests, 6 failures + 1 error**, zero skips; source-contract tests not reached. |
+| GPT-OSS medium / attack | 334.946 + 213.597 + 176.282 = **724.825** | Rejected after both repairs: double-escaped Java line breaks and omitted required methods. No source applied; **0 tests run**. |
+| GPT-OSS high / attack | **903.644** | Rejected: 16384 output tokens without a final answer. No source applied; **0 tests run**. |
+| Qwen / attack | 124.933 + 124.350 + 55.873 = **305.156** | Partial: prescribed API implemented after two repairs; **40 tests passed**, zero failures/errors/skips. Full handoff not accepted because caller's capture-preservation constraint conflicts with its prescribed API; see below. |
+
+4. Medium's first relation implementation compiled, but two of eight model cases
+   rejected `NullPointerException` where the contract required
+   `IllegalArgumentException`. A targeted worker repair corrected the constructor
+   checks; the caller made no Java implementation rewrite. The successful rerun
+   is Docker `run-PaebYW`. Total reported usage is **5253 input / 6030 output
+   tokens**, including repair; these are local-run costs, not Codex savings.
+5. High's first relation attempt produced no final answer after **2796 input /
+   16384 output tokens**. Its 920.118 seconds remained below the attempt deadline;
+   input plus generation remained below the 32768-token context. This is output
+   budget exhaustion before a usable final response, not context overflow or
+   repository wandering. The launcher rejected the empty response and unloaded
+   the model. The targeted compact-output repair repeated the same failure with 3041
+   input / 16384 output tokens. Total usage was **5837 / 32768**. One repair and
+   1763.799 worker seconds remained; the caller skipped another attempt because
+   the same generation-budget failure had repeated after a concrete correction,
+   with no delivered code or specific source/tool error to repair. Another
+   unchanged dispatch offered no concrete correction to that limit; another
+   sampled answer might differ, but changing the profile would be a different
+   experiment. No caller implementation takeover occurred.
+6. Evidence is retained in `~/Library/Logs/Microcol/local-qwen/jobs/` under
+   `2026-10-14-r36-{medium,high,qwen}-{relations,attack}` and the shared
+   `2026-10-14-r36-comparison` directory. Per-attempt records distinguish model
+   output, application, formatting, fresh test XML and acceptance. Replayed Java
+   candidates remain isolated; main receives tooling, profiles and documentation.
+7. This is one paired run per task/profile with bounded repairs, not a statistical
+   Java benchmark. Sampling uses installed defaults without a fixed seed. The
+   first medium run overlaps the final minutes of the Qwen weight download;
+   wall time also includes loading and cleanup. Host swap includes unrelated
+   processes and cannot be treated as model-exclusive memory use. No measured
+   Codex-budget saving follows from this experiment.
+8. The existing service uses `q8_0` KV cache for both models; no service settings
+   changed for this trial. Qwen's first 32k run allocated **3264 MiB of KV cache**,
+   offloaded **46/49 layers** to the GPU, and `/api/ps` reported **12,791,001,905
+   bytes total / 11,465,004,154 bytes GPU**. These are runtime allocation reports,
+   not total host RAM or process RSS. The configured 32k context actually loaded;
+   a successful load alone is not coding acceptance.
+9. Qwen repeatedly wrapped otherwise parseable JSON in a Markdown fence. The
+   shared caller now strips exactly one outer `json` fence and records that
+   transport normalization; source and path validation remain unchanged. The
+   raw responses are preserved. This does not repair Java code: the first
+   delivered relation candidate had missing validation and incorrect player
+   identity handling; repair 1 failed compilation with incompatible
+   `HashSet<Player>`/String types. Repair 2 removed the state and returned
+   placeholder PEACE results. Docker `run-x9fGSM` confirmed six failures and one
+   error in eight model tests. Both repairs were exhausted, with no caller Java
+   takeover. Total reported usage was **11129 input / 3449 output tokens**.
+10. Medium's attack response omitted the common `canAttack()` implementation,
+    replaced the whole master declaration with a fragment and encoded literal
+    backslash-n characters in Java. Repair 1 corrected those defects but omitted
+    the interface declaration and equipment override; whole-batch application
+    rejected its unchanged anchor before writing. The final repair again omitted
+    the base method and returned literal backslash-n strings. Both repairs were
+    exhausted, with no Java applied, no tests run and no caller takeover. Total
+    reported usage was **9835 input / 12040 output tokens**. More explicit whole
+    method anchors did not by themselves make this medium run succeed.
+11. High's attack attempt repeated the same generation-limit failure after
+    **3163 input / 16384 output tokens**, below both time and context limits.
+    Two repairs and 2696.356 worker seconds remained. The caller explicitly
+    skipped both retries because this was the third identical budget exhaustion
+    across the high trial, including the earlier compact-output repair, with no
+    delivered source to correct. No caller takeover occurred. Raising generation
+    above 16384 would be a separate, untested profile; these results do not prove
+    that high fails at every possible budget. The ordinary default returns to
+    medium, while the exact high trial remains selectable explicitly.
+12. Qwen's first attack response omitted three methods and invented a new speed
+    for armed colonists. Repair 1 restored movement and most required edits but
+    omitted `AbstractUnit.canAttack()`; Docker compilation failed for frigate,
+    galleon and wagon before any test ran. The final targeted repair added only
+    the missing base method. Docker `run-xT65HO` passed **10 AttackRoleTest,
+    19 EuropeanHostilityTest, 8 EuropeanRelationAiTest and 3 source-contract
+    cases**, with no caller Java rewrite. Total reported usage was **9665 input /
+    1779 output tokens**. One outer JSON fence was normalized during application.
+13. Independent review found a **caller handoff defect shared by all three
+    attack inputs**: prescribing the master-blacksmith type filter change while
+    requiring unchanged capture behavior is inconsistent with the historical
+    `Colony.planCapture()` defender check, which still calls
+    `unit.getType().canAttack()`. The resulting type-level change also affects
+    capture eligibility. Qwen correctly followed the prescribed API; this is
+    not a model deviation. The 40 passing tests do not cover this boundary, and
+    no new capture case was executed. Initial API acceptance was therefore
+    corrected to **partial, full handoff not accepted**, with both review records
+    retained. Do not reuse this handoff for production: first resolve capture
+    behavior and include its source and acceptance test. Changing only Qwen's
+    task at the end would no longer compare identical initial inputs.
+14. The result supports keeping medium as the ordinary default, retaining Qwen
+    for explicitly bounded trials, and not promoting high at this output limit.
+    Qwen delivered the specified attack API with repairs; medium delivered the
+    complete relation helper with one repair. Neither result establishes
+    dependable autonomous implementation. Every observed run made zero tool
+    calls, so repository discovery did not cause these failures. All owned
+    locks were released and models unloaded after caller disposition.
+15. Caller verification passed **18 launcher tests**, **9 documentation tests**,
+    skill validation, the strict MkDocs build, rendered comparison-table/link
+    review and `git diff --check`. All three final profiles matched installed
+    model metadata; the default is medium, with high and Qwen selected explicitly.
+    Publication is verified separately for the final source commit. No gameplay
+    code or replay test fixture is part of the main-branch change.
 
 ## Larger output and shared launcher verification — 2026-10-14
 
@@ -600,7 +729,10 @@ local Maven/TestFX was not rerun for this configuration-only follow-up.
 
 ### Operating profile — bounded assignments
 
-Approved on **2026-10-14** under [R-0035](../requirements/R-0035.md). The existing
+Approved on **2026-10-14** under [R-0035](../requirements/R-0035.md), with high
+reasoning and Qwen comparison trials authorized by
+[R-0036](../requirements/R-0036.md). The trial temporarily selected high;
+the completed high results support returning the default to medium. The existing
 [Modelfile](../../.codex/local-worker/Modelfile) owns context/output values;
 [profile.json](../../.codex/local-worker/profile.json) owns the remaining settings.
 The launcher reads both, checks the installed alias, and snapshots their effective
@@ -612,14 +744,15 @@ that task's original budget. Historical jobs retain their original evidence.
 | Runtime | Existing Ollama 0.40.2 and Codex CLI 0.142.3, local loopback only. |
 | Model | `gpt-oss:20b`, alias `microcol-gpt-oss:20b-32k`; no cloud fallback. |
 | Context / generation | `num_ctx 32768`, `num_predict 16384`; generation includes reasoning and final output. Input, tools and generated text share the context. |
-| Reasoning | `medium`, unchanged during this trial. |
+| Reasoning | `medium`; installed GPT-OSS supports `low`, `medium`, `high`. This is a request setting, not a different set of weights. |
 | Limits | 1800 seconds per attempt, 3600 cumulative seconds per task, at most two repairs. |
 | Text-only mode | `features.shell_tool=false`, read-only sandbox; browser/computer/image generation, plugins, apps and delegation disabled. |
 | Direct-edit mode | Command execution and workspace writes permitted in the isolated worktree, within the supplied scope. |
 | Concurrency | One local worker; host-wide lock retained through caller verification. Unload before Maven/Docker. |
 
-To change model or runtime limits deliberately, update these configuration files
-and recreate the alias from the existing weights while holding the worker lock:
+To change model or context/output limits deliberately, update these configuration
+files and recreate the alias from the existing weights while holding the worker
+lock. A reasoning-only change is passed per request and needs no alias rebuild:
 
 ```sh
 ollama create microcol-gpt-oss:20b-32k -f .codex/local-worker/Modelfile
@@ -634,7 +767,42 @@ The alias now has digest
 `b1630d4983e67a857f552db4e439ef29ed2d7131cb5ab6677809398fbb90abd8`.
 The earlier `425bbb...` digest identifies the historical 4096-output profile.
 The configured change is verified by `/api/show`; coding results are recorded
-separately below, not inferred from configuration.
+in the dated evidence, not inferred from configuration.
+
+The [high profile](../../.codex/local-worker/gpt-oss-high/profile.json) and its
+[Modelfile](../../.codex/local-worker/gpt-oss-high/Modelfile) preserve the exact
+tested high settings with the same installed GPT-OSS alias. Select it only for
+an explicit experiment; these runs provide no evidence that an unchanged retry
+would remedy the observed generation-limit failures:
+
+```sh
+python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high
+```
+
+### Explicit Qwen2.5-Coder comparison profile
+
+The authorized installation on **2026-10-14** uses exactly
+`qwen2.5-coder:14b-instruct-q4_K_M`: local metadata reports 14.8B parameters and
+Q4_K_M quantization. The separate
+[Modelfile](../../.codex/local-worker/qwen2.5-coder-14b/Modelfile) and
+[profile](../../.codex/local-worker/qwen2.5-coder-14b/profile.json) select alias
+`microcol-qwen2.5-coder:14b-q4_K_M-32k`, context **32768**, output **16384**, and
+the same time/repair limits as GPT-OSS. Its installed digest is
+`9ea50088a1236ab5b3d379b1b266636db45a63eb7db2108becb47c394f8f8fa0`.
+The model does not expose thinking capability; `reasoning: none` and disabled
+reasoning summaries reflect that capability. There is no Qwen `high` level.
+
+```sh
+# Installation was explicitly authorized for this comparison; runs never install.
+ollama pull qwen2.5-coder:14b-instruct-q4_K_M
+ollama create microcol-qwen2.5-coder:14b-q4_K_M-32k -f .codex/local-worker/qwen2.5-coder-14b/Modelfile
+python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/qwen2.5-coder-14b
+```
+
+Pass the same `--profile` for every repair of that job. The launcher checks the
+actual model capability before starting and rejects unsupported reasoning or a
+profile change between attempts. Apply/release commands are unchanged. Selection
+is explicit, with no automatic fallback or change to the main agent's model.
 
 ### Time budget — 2026-10-14
 
@@ -729,6 +897,8 @@ dispositions make compliance reviewable; they do not replace actual verification
 5. Review the returned code. For text-only output, run the separate `apply`
    action; it accepts the complete expected set of IDs, decodes JSON normally,
    checks original file hashes and validates every exact match before writing.
+   One outer `json` Markdown fence may be removed and recorded in
+   `application.json`; surrounding prose or multiple blocks remain invalid.
    Unknown, duplicate, missing or unchanged replacements fail. Original-prompt
    replays may return the historical full `file`/`old`/`new`/`expected_matches`
    objects only when they identify the same declared anchors exactly.

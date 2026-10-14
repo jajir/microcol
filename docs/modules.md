@@ -38,6 +38,10 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 The [local worker launcher](../scripts/local-worker/worker.py) is development
 tooling outside the Maven modules. Its [profile](../.codex/local-worker/profile.json)
 and [Modelfile](../.codex/local-worker/Modelfile) configure local execution;
+explicit [GPT-OSS high](../.codex/local-worker/gpt-oss-high/profile.json) and
+[Qwen comparison profiles](../.codex/local-worker/qwen2.5-coder-14b/profile.json)
+use the same launcher and acceptance contract. Model capability checks reject
+unsupported reasoning levels. The
 per-attempt prompts, responses, runtime samples and application records stay in
 the operator's log directory, never in game distributions. Its standard-library
 tests run with the documentation checks. See [worker operations](ai/local-qwen.md)

@@ -1,0 +1,7 @@
+{
+  "model": "microcol-qwen2.5-coder:14b-q4_K_M-32k",
+  "reasoning": "none",
+  "attempt_seconds": 1800,
+  "task_seconds": 3600,
+  "max_repairs": 2
+}

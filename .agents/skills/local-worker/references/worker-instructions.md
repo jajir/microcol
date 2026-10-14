@@ -24,6 +24,13 @@ Do not make the worker repeat paths and original source. The launcher validates
 the entire batch and unchanged file hashes before applying any edit; a mismatch
 requires fresh context or a targeted repair, not a fuzzy replacement. Historical
 full-anchor responses are supported for original-prompt replays only.
+The caller may normalize one outer `json` Markdown fence and records doing so;
+the worker should still return the bare JSON object. Extra prose or multiple
+blocks are not accepted, and source/path/batch validation remains mandatory.
+
+When changing a method body or inserting an adjacent method, supply the complete
+existing method as the anchor and require its complete replacement. A signature
+or opening guard alone leaves the closing braces and preserved body ambiguous.
 
 Repair input includes the actual error/check, current source or rejected output,
 and the one correction needed. Keep acceptance criteria and remaining budget;

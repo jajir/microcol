@@ -1,0 +1,3 @@
+FROM qwen2.5-coder:14b-instruct-q4_K_M
+PARAMETER num_ctx 32768
+PARAMETER num_predict 16384
