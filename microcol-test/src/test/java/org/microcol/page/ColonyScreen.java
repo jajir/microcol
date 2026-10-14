@@ -326,23 +326,10 @@ public class ColonyScreen extends AbstractScreen {
         final EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
                 .runLater(started::countDown);
         final EventHandler<DragEvent> done = event -> finished.countDown();
-        final javafx.scene.Scene scene = canvas.getScene();
-        final EventHandler<javafx.scene.input.MouseEvent> mouseTrace = event -> logger
-                .info("Field drag {} mouse at ({}, {}): {}", target,
-                        event.getScreenX(), event.getScreenY(), event);
-        final EventHandler<DragEvent> dragTrace = event -> logger.info(
-                "Field drag {} native {} at ({}, {}), target {}", target,
-                event.getEventType(), event.getScreenX(), event.getScreenY(),
-                event.getTarget());
         getRobot().interact(() -> {
-            logger.info(
-                    "Field drag unit {} from {} to {}; canvas {}; focused {}",
-                    unitId, start, destination,
-                    canvas.localToScreen(canvas.getBoundsInLocal()),
-                    scene.getWindow().isFocused());
-            scene.addEventFilter(javafx.scene.input.MouseEvent.ANY, mouseTrace);
-            scene.addEventFilter(DragEvent.ANY, dragTrace);
             canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_MOVED,
+                    moved);
+            canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_ENTERED,
                     moved);
             canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
                     press);
@@ -352,12 +339,12 @@ public class ColonyScreen extends AbstractScreen {
         });
         boolean released = false;
         try {
-            // A completed native drop must yield normal mouse events before the
-            // next press.
+            // Native drop cleanup may restore the pointer with ENTERED instead
+            // of MOVED; both must reach the source before the next press.
             getRobot().moveTo(start.add(0, -8)).moveTo(start);
             if (!positioned.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException(
-                        "The field drag source must receive normal pointer movement");
+                        "The field drag source must receive pointer movement or entry");
             }
             getRobot().press(MouseButton.PRIMARY);
             if (!pressed.await(5, TimeUnit.SECONDS)) {
@@ -381,14 +368,10 @@ public class ColonyScreen extends AbstractScreen {
                 getRobot().release(MouseButton.PRIMARY);
             }
             getRobot().interact(() -> {
-                logger.info("Field drag {} ended; canvas {}; focused {}",
-                        target, canvas.localToScreen(canvas.getBoundsInLocal()),
-                        scene.getWindow().isFocused());
-                scene.removeEventFilter(javafx.scene.input.MouseEvent.ANY,
-                        mouseTrace);
-                scene.removeEventFilter(DragEvent.ANY, dragTrace);
                 canvas.removeEventHandler(
                         javafx.scene.input.MouseEvent.MOUSE_MOVED, moved);
+                canvas.removeEventHandler(
+                        javafx.scene.input.MouseEvent.MOUSE_ENTERED, moved);
                 canvas.removeEventHandler(
                         javafx.scene.input.MouseEvent.MOUSE_PRESSED, press);
                 canvas.removeEventHandler(

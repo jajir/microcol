@@ -1820,6 +1820,27 @@ Lokální ověření na macOS/JDK 17:
     failures/errors/skips). Nové CI `38510205972` má dodat vzdálenou stopu;
     tato instrumentace sama o sobě není prokázanou opravou.
 
+21. Diagnostické [CI 38510205972](https://github.com/jajir/microcol/actions/runs/38510205972)
+    zachytilo konkrétní rozdíl: druhé gesto opustilo plátno při (846, 361)
+    a vrátilo se na požadovaný zdroj (872, 340) událostí `MOUSE_ENTERED` bez
+    stisknutého tlačítka; další `MOUSE_MOVED` už nepřišlo. Bounds plátna byly
+    stejné a okno mělo fokus. To prokazuje chybné očekávání jediného typu
+    události, nikoli vnitřní příčinu chování GTK. Helper nyní přijímá oba typy
+    návratu na zdroj, zachovává kontrolu stisku, zahájení i dokončení drag/drop
+    a stejných pět sekund. Dočasné trasování je odstraněné. CI navíc selhalo
+    na TC30/04 kvůli prázdnému stavovému řádku; příčina tohoto samostatného
+    selhání není prokázaná. Publikace byla vynechána.
+22. Oprava vstupu prošla v `run-qLhRQy`: **14 hráčských/podpůrných případů**,
+    nula failures/errors/skips, exit 0, doba 3:40. Výběr tvoří všech sedm TC34,
+    TC01, TC07, TC17, TC30/04 a tři strukturální kontroly, se standardním Docker
+    runnerem a `-Dsurefire.failIfNoSpecifiedTests=false`. TC30/04 zde prošel
+    bez cílené změny svého chování; nejde o důkaz odstranění jeho příčiny.
+    Čerstvá XML vlastní `target/docker-ui/run-qLhRQy/`, log a souhrn
+    `target/r27-draft/native-entry-check.log` a `native-entry-evidence.json`.
+    Sdílený formatter ověřil jeden změněný Java soubor. Konečnou společnou
+    revizi R-0028 musí přijmout úplné CI; další požadavky se podle zadání
+    z 2026-10-14 nezahajují.
+
 ## Attack initiation integration — 2026-10-14
 
 1. Rozpracované [R-0028](requirements/R-0028.md) pokrývá UC-072 a
