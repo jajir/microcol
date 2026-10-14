@@ -20,6 +20,12 @@
  * capture does not assign them to productive work. Port entry validates all
  * ship retreats before spending movement or changing ownership. Stopped or
  * finished games cannot perform further guarded gameplay operations.
+ * Prospective founding queries share terrain and occupancy rules with the live
+ * founding command. Founding preflights identity, workplace and returned
+ * equipment before registration; off-map colony fields are never workplaces.
+ * Food viability and exploration preferences belong to the AI strategy. Initial
+ * local visibility is restored for every owner's on-map units, including
+ * rivals.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

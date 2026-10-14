@@ -41,7 +41,8 @@ public final class ColonyField {
     }
 
     public boolean canProduce(final GoodsType goodsType) {
-        return getTerrainType().canProduce(goodsType);
+        return getMap().isValid(getLocation())
+                && getTerrainType().canProduce(goodsType);
     }
 
     public Direction getDirection() {
@@ -129,7 +130,9 @@ public final class ColonyField {
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {
-        return getTerrain().canProduceAmmount(goodsType);
+        return getMap().isValid(getLocation())
+                ? getTerrain().canProduceAmmount(goodsType)
+                : 0;
     }
 
     public void setProducedGoodsType(final GoodsType producedGoodsType) {
@@ -169,6 +172,6 @@ public final class ColonyField {
     }
 
     public boolean isValid() {
-        return model.isExists(colony);
+        return model.isExists(colony) && getMap().isValid(getLocation());
     }
 }

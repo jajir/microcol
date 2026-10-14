@@ -33,7 +33,7 @@ public abstract class AbstractRobotPlayer {
      */
     private final Player player;
 
-    private boolean running;
+    private volatile boolean running;
 
     AbstractRobotPlayer(final Model model, final Player player,
             final AnimationLock animationLock) {
@@ -52,33 +52,51 @@ public abstract class AbstractRobotPlayer {
      * @param event required event
      */
     private void onTurnStarted(final TurnStartedEvent event) {
-        if (event.getPlayer().equals(player)) {
+        if (event.getPlayer() == player && isActiveTurn()) {
             logger.debug("AI player '{}' starts turn.", player.getName());
             turn(event.getPlayer());
             logger.debug("AI player '{}' finished turn.", player.getName());
-            player.endTurn();
+            if (isActiveTurn()) {
+                player.endTurn();
+            }
         }
     }
 
     public void stop() {
+        running = false;
         model.removeListener(modelAdapter);
     }
 
     private void turn(final Player player) {
-        if (!running) {
+        if (!isActiveTurn()) {
             return;
         }
         turnStarted();
         player.getUnits().stream().filter(unit -> unit.isAtPlaceLocation())
                 .forEach(unit -> move(unit));
-        animationLock.waitWhileRunning();
+        waitForAnimations();
     }
 
     private void move(final Unit unit) {
-        if (!running) {
+        if (!isActiveTurn()) {
             return;
         }
         moveUnit(unit);
+        waitForAnimations();
+    }
+
+    /**
+     * @return whether queued work still belongs to this robot's live turn
+     */
+    protected boolean isActiveTurn() {
+        return running && model.isGameRunning()
+                && model.getCurrentPlayer() == player;
+    }
+
+    /**
+     * Waits before the next model action can reuse the existing animation slot.
+     */
+    protected void waitForAnimations() {
         animationLock.waitWhileRunning();
     }
 

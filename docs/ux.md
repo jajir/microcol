@@ -194,3 +194,20 @@ Dokumentace byla téhož dne ověřena přísným sestavením `target/docs-venv/
    byly zkontrolovány na skutečných snímcích. Výsledky TC32 včetně výroby a
    Continue jsou v [evidenci](functional-tests.md#construction-ui-implementation-2026-10-14).
    Nejde o pozorování hráčů ani úplnou přejímku všech pravidel staveb.
+
+## Výchozí výprava soupeře — 14. října 2026
+
+1. R-0027 přidává do běžné volby mapy možnost „Soupeřova výprava“
+   / „Rival expedition“. Hráč ji volí stejným ovládáním jako dosavadní mapy;
+   původní světy s francouzskými městy zůstávají dostupné. Nový svět začíná
+   soupeřovou lodí s kolonistou. Strategie nyní v referenčním světě založí
+   první kolonii ve třetím tahu přes běžné pohybové a zakládací operace.
+2. TC34 ověřil skutečný start a Continue i zachování této volby po návratu přes
+   nastavení jazyka. Anglické a české snímky byly zkontrolované. Tyto výsledky
+   potvrzují nastavení počátečního světa; TC34/06 navíc ověřuje Continue během
+   plavby, viditelnou kolonii ve třetím tahu a její další tři tahy bez druhé
+   kolonie. Úplná lokální regrese [R-0027](requirements/R-0027.md) prošla všemi 135 hráčskými/podpůrnými případy; stav publikace vlastní analýza požadavku.
+
+3. TC34/07 ověřuje také dvě další kola bez dosažitelného břehu: ovládání
+   dalšího tahu zůstává použitelné a nevzniká kolonie ani změna lidské flotily.
+   Jde o automatické ověření cesty, nikoli pozorování skutečných hráčů.

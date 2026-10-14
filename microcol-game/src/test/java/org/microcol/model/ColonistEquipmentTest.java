@@ -205,6 +205,8 @@ class ColonistEquipmentTest {
         when(model.getMap()).thenReturn(map);
         when(model.isExists(colony)).thenReturn(true);
         when(colony.getLocation()).thenReturn(location);
+        when(map.isValid(location.add(Direction.west.getVector())))
+                .thenReturn(true);
         when(map.getTerrainTypeAt(any(Location.class)))
                 .thenReturn(TerrainType.GRASSLAND);
         final ColonyField field = new ColonyField(model, Direction.west,

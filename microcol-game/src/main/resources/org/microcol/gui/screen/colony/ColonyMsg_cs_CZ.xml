@@ -25,7 +25,7 @@
 	<entry key="nameDUPLICATE">Kolonie s tímto jménem již existuje. Zvolte jiné jméno.</entry>
 	<entry key="nameChanged">Kolonie nebo zakládající jednotka se změnila. Nic se nezměnilo. Zrušte dialog a zkuste to znovu.</entry>
 
-    <entry key="nameCannotFound">Vyberte kolonistu se zbývajícím pohybem na volném poli mimo sousedství kolonií.</entry>
+    <entry key="nameCannotFound">Vyberte kolonistu se zbývajícím pohybem na volné pevnině mimo hory a sousedství kolonií.</entry>
     <entry key="equipmentOpen">Vybavení kolonisty: pravé tlačítko nebo Shift+F10</entry>
     <entry key="equipMuskets">Vybavit mušketami</entry>
     <entry key="unequipMuskets">Vrátit muškety</entry>

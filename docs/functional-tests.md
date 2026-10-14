@@ -1628,3 +1628,143 @@ Lokální ověření na macOS/JDK 17:
     Finální formatter zkontroloval 30 Java souborů, tokeny a idempotenci.
     Úplnou regresi po této opravě musí potvrdit povinné CI před publikací;
     předchozí lokální úplný běh zůstává zaznamenaný jako neúspěšný.
+
+14. Publikace byla ověřena 14. října 2026: [CI 38491697779](https://github.com/jajir/microcol/actions/runs/38491697779)
+    a [Pages 38491697769](https://github.com/jajir/microcol/actions/runs/38491697769)
+    skončily úspěšně na `432e96b0f691cbbd80242597e98a53d998986259`.
+    Čerstvý CI `run-WEFxnK` ověřil **1020 testů herního modulu a 128 hráčských/podpůrných
+    případů**, nula selhání/chyb/vynechání. TC03, TC04, osm TC21, oba TC23 a všech
+    sedm TC33 jsou v XML; log nemá zachycenou chybu asynchronního vykreslování.
+    Lokální explicitní `-Dtest=*` navíc spouštěl existující `integration.ConnectorTest`,
+    který běžný Maven podle dosavadního POM vylučuje; proto měl 1021 případů.
+    Žádné vyloučení testu se touto změnou neměnilo.
+15. Nativní reporty všech tří platforem mají po **1020 herních, 31 build-tool
+    a 2 integračních testech**, vše bez chyb/vynechání. Samostatný build-tool job
+    má 31 + 1. Vydání a vývojový manifest uvádějí `dev-56-432e96b0f691` a stejnou
+    úplnou revizi; ověřeny jsou tři platformní záznamy a jejich assety/SHA256SUMS.
+    Skutečně stažený [Mac ARM archiv](https://github.com/jajir/microcol/releases/download/dev-56-432e96b0f691/MicroCol-macos-arm64-dev-56-432e96b0f691.zip)
+    má 61 123 089 bajtů a SHA-256
+    `7761fb5009e8171e1362dfc2b440d2fc65cbd746605ba701ce80f4caa76167c6`.
+    Publikovaný text R-0026 i zdrojové odkazy stránky architektury odpovídají
+    této revizi. Lokální evidence vlastní `target/r26-draft/ci-functional-evidence.json`,
+    `ci-native-tools-evidence.json` a `release/verification.json`.
+
+## Rival first-colony preparation — 2026-10-14
+
+1. Rozpracované [R-0027](requirements/R-0027.md) patří k zakládací části
+   UC-068/DIP-001. První krok opravuje nekonečné hledání směru obklíčené jednotky.
+   Reprodukční `run-Ujxgay` spustil tři `BoundedAiMovementTest`: jedna kontrola
+   nedokončila pohyb do dvou sekund a selhala, dvě prošly. Po omezení hledání na
+   konečný průchod sousedy prošel `run-sAeMOC`: **3 nové pohybové případy,
+   8 EuropeanRelationAiTest a 3 page-contract kontroly**, bez chyb a vynechání.
+2. Nový přibalený svět `free-play-rival-expedition.microcol` má francouzskou loď
+   s kolonistou a žádné francouzské kolonie. Původní a dvouostrovní svět nadále
+   splňují R-0015. `run-mZrKO0` prošel **4 modelovými případy**, včetně skutečného
+   diskového round tripu, a **11 hráčskými/podpůrnými případy**: šest stávajících
+   TC24, dva nové TC34 a tři kontroly struktury testů. Nula failures/errors/skips.
+3. Aktuální `TC_34_F26_rival_first_colony_test` ověřuje běžnou volbu třetího světa,
+   Start/Continue před prvním tahem a zachování zvolené mapy po přepnutí do
+   češtiny. Kontroluje vlastníka, ID, nákladní vztah lodě/kolonisty, mír a absenci
+   kolonií. Anglický a český snímek nastavení byl vizuálně zkontrolován: nové
+   názvy i ovládací prvky jsou čitelné. Jde o automatické ověření, nikoli studii
+   s hráči nebo důkaz kolonizační strategie.
+4. Oba kladné běhy použily `docker compose -f compose.ui-tests.yml run --build
+   --rm ui-tests` s `-Dsurefire.failIfNoSpecifiedTests=false`; první výběr byl
+   `BoundedAiMovementTest,EuropeanRelationAiTest,PageVerificationContractTest`,
+   druhý `FreePlayMapsTest,RivalExpeditionWorldTest,TC_24_F15_free_play_setup_test,TC_34_F26_rival_first_colony_test,PageVerificationContractTest`.
+   Skutečné XML reporty a snímky zůstávají v `target/docker-ui/` příslušných
+   izolovaných worktrees, odkazy na běhy a integraci v
+   `target/r27-draft/navigation-evidence.json` a `map-setup-evidence.json`.
+5. První dva běhy výše ověřovaly přípravu světa, nikoli zakládací AI.
+   Následující kroky doplňují strategii a její skutečný průchod. Změny zatím
+   zůstávají v pracovní kopii `main`; úplná regrese a publikace jsou otevřené.
+   Dílčí zakládací cíl neuzavírá celé UC-068 o ekonomice a strategii soupeřů.
+
+6. Sdílené zakládání nejprve odhalilo chyby v `run-91JTPK`: ze sedmi
+   reprodukčních případů čtyři selhaly a dva skončily výjimkou (moře/hory,
+   zastavená hra, částečné vrácení vybavení, okraj mapy a neúrodné okolí).
+   Po opravě prošel `run-x0oL0L`: **51 modelových a 15 hráčských/kontrolních
+   případů**, nula failures/errors/skips. Nových 16 `FoundingPreconditionsTest`
+   ověřuje i identitu, pohyb, perspektivní dotaz pro pasažéra, šest okrajových
+   souřadnic, obnovení a nepřevzetí již obhospodařovaného pole.
+7. Při rozšíření ochrany okraje přibyl sedmnáctý modelový případ. `run-sNwYeq`
+   prošel **52 modelovými případy**; z 15 UI/kontrolních případů selhal pouze
+   nový platný přesun pracovníka po předchozím odmítnutí pole mimo mapu.
+   Robotovo uvolnění tlačítka a vyprázdnění FX fronty předběhlo nativní
+   dokončení tažení. Page object nyní používá existující čekání na
+   `DRAG_DONE` také pro pole. Stejný TC34 byl znovu spuštěn v `run-GEqhIN`:
+   **všech pět TC34 a tři page-contract kontroly prošly**, bez chyb/vynechání.
+   Očekávaný přesun na (2, 15) ani výnos 4 nebyly změněny.
+8. Nové TC34/03–05 skutečně založí kolonii na okraji, odmítnou hory přes
+   tlačítko i klávesu a založí neúrodné stanoviště s obyvatelem v radnici.
+   Snímky ukazují skutečná okrajová pole a vnitřního pracovníka na Arktidě;
+   nevydáváme je za úplnou přejímku rozložení celé obrazovky (v zachyceném
+   900px okně je část názvu vlevo oříznutá). První izolovaný pokus
+   `run-6PeruE` navíc vyžadoval opravu testovacího mocku platné souřadnice
+   v `ColonistEquipmentTest`; původní očekávaná výjimka a kontrola nezměněných
+   zásob zůstaly zachované a následně prošly.
+9. Zakládací výběr použil stejný Docker příkaz s
+   `-Dtest=FoundingPreconditionsTest,ColonyIdentityTest,ColonyTest,ColonyFieldTest,ColonistEquipmentTest,ModelArchitectureTest,TC_02_F02_founding_colony_test,TC_14_F01_founding_colony_close_to_other_test,TC_20_F02_colony_names_test,TC_34_F26_rival_first_colony_test,PageVerificationContractTest`;
+   poslední cílené opakování použilo `TC_34_F26_rival_first_colony_test,PageVerificationContractTest`.
+   Reporty jsou v izolovaném `2026-10-14-r27-founding-query/target/docker-ui/`,
+   souhrn v `target/r27-draft/founding-evidence.json`. Nejnovější výsledek
+   každé vybrané třídy dokládá 52 modelových a 15 hráčských/kontrolních
+   případů; nejde o jeden společný běh ani úplnou regresi.
+
+10. Počáteční znalost mapy byla obnovována pouze člověku. `run-iHqAJl`
+    spustil dva `RivalExpeditionWorldTest` a oba selhaly: soupeř neznal ani
+    pole vlastní lodě. Model nyní odhaluje skutečné okolí jednotek všem
+    vlastníkům. `run-tYgNmS` prošel **44 modelovými a 3 kontrolními případy**,
+    včetně obou původně selhávajících kontrol, `VisibilityTest`, dvanácti
+    nových čtecích plánovacích případů a předchozí zakládací/pohybové regrese.
+11. Po zapojení do tahů proběhl `run-y9AeVC`: **46 modelových a 12
+    hráčských/kontrolních případů**, bez failures/errors/skips. Dva skutečné
+    modelové průchody stanovují tři tahy: loď (35,10) → (29,12) → (27,14),
+    vylodění kolonisty 4 na (26,15) za jeho pohybový bod, založení ve třetím
+    tahu. TC34/06 tentýž průchod provádí přes běžné nastavení, další tah a
+    Continue během plavby; po třech dalších tazích zůstává jediná kolonie,
+    stejný obyvatel a nezměněná lidská flotila i zlato. Snímek
+    `rival-first-colony-map.png` byl prohlédnut: jméno, francouzská vlajka a
+    stavový řádek jsou viditelné; člověk zůstává na mapě. Prošly i všechny tři
+    `TC_26_F18_fog_of_war_test`, včetně ochrany neznámých polí.
+12. `run-g1B6ja` prošel **20 modelovými a 3 kontrolními případy**. Obsahuje
+    12 `FirstColonyPlannerTest`, 4 `FirstColonyJourneyTest` a 4
+    `RobotLifecycleTest`. Skutečné tahy obklíčené flotily vracejí řízení
+    člověku; zabrání-li člověk plánovanému břehu během plavby, soupeř přistane
+    a založí jinde bez změny lidských jednotek. Zachycený skutečný callback AI
+    po `stop` nic neprovede, zastavení během první akce nepohne druhou jednotkou
+    ani neukončí tah. Živý kontrolní případ nadále provede obě akce a jediný
+    `endTurn`. Čtecí plánovač pokrývá i neznámý terén, nedostatek pevninského
+    jídla, pořadí volby, zákaz průzkumu přes širé moře a stejné rozhodnutí po
+    obnovení. Úplná regrese a zveřejnění stále zbývají.
+13. `run-y9AeVC` použil Docker příkaz s výběrem
+    `FirstColonyJourneyTest,FirstColonyPlannerTest,RivalExpeditionWorldTest,VisibilityTest,FoundingPreconditionsTest,BoundedAiMovementTest,EuropeanRelationAiTest,ModelArchitectureTest,PageVerificationContractTest,TC_34_F26_rival_first_colony_test,TC_26_F18_fog_of_war_test`;
+    `run-g1B6ja` vybral `FirstColonyJourneyTest,RobotLifecycleTest,FirstColonyPlannerTest,PageVerificationContractTest`.
+    V obou případech platí `-Dsurefire.failIfNoSpecifiedTests=false` a skutečné
+    výsledky pocházejí z XML v `target/docker-ui/`, nikoli z návrhu workeru.
+
+14. TC34/07 provádí dvě skutečná kliknutí na další tah s francouzskou lodí
+    uzavřenou horami: oba tahy skončí u člověka, kolonista zůstává na palubě,
+    kolonie nevznikne a lidské jednotky/zlato zůstanou stejné. První
+    `run-sWOoW2` zachytil chybu přípravy: uložený lidský tah začínal s lodí
+    vyčerpanou na 0 bodech a běžný další tah jí doplnil 6. Porovnání všech
+    polí potvrdilo, že jde o jediný rozdíl. Fixture nyní začíná s plným pohybem
+    jako ostatní jednotky, očekávání celého snapshotu zůstalo zachované.
+    Opakování `run-w3JjEJ` prošlo **všemi 7 TC34 a 3 source-contract kontrolami**,
+    nula failures/errors/skips. Použitý výběr byl
+    `TC_34_F26_rival_first_colony_test,PageVerificationContractTest` se stejným
+    Docker příkazem a přepínačem jako výše. Podklady vlastní
+    `target/r27-draft/blocked-ui-diagnosis.json` a `journey-evidence.json`.
+15. Úplná regrese `run-34q6U7` prošla: **1063 modelových/herních a 135
+    hráčských/podpůrných případů**, nula failures/errors/skips, Docker exit 0,
+    doba 23:39. Příkaz byl `docker compose -f compose.ui-tests.yml run --build
+    --rm ui-tests '-Dtest=*' -Dsurefire.failIfNoSpecifiedTests=false`.
+    Čerstvé XML reporty obsahují 117 modelových a 37 funkčních testovacích tříd;
+    všech sedm TC34 prošlo spolu s celou starší sadou. Log neobsahuje
+    nezachycenou výjimku vlákna. Všech 40 souborů kontrolovaného checkpointu
+    zůstalo během běhu beze změny; sdílený formatter předtím ověřil 25 Java
+    souborů. Záznam vlastní `target/r27-draft/full-regression.log` a
+    `full-regression-evidence.json`; XML jsou v `target/docker-ui/run-34q6U7/`.
+    Výslovné `-Dtest=*` zahrnuje také běžně vynechaný `integration.ConnectorTest`;
+    výchozí CI má tedy o jeden herní případ méně, bez změny výjimek. Lokální
+    přejímka je dokončená; vzdálené CI, Pages a publikace ještě nejsou ověřené.

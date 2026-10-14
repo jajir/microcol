@@ -2,8 +2,11 @@ package org.microcol.ai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.Set;
 
-import org.microcol.gui.screen.game.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.AnimationLock;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -19,8 +22,12 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private final UnitMoveNavigator unitDirections;
 
+    private Unit founder;
+
+    private Unit carrier;
+
     public SimpleAiPlayer(final Model model, final Player player,
-            final AnimationManager animationManager) {
+            final AnimationLock animationManager) {
         super(model, player, animationManager);
         unitDirections = new UnitMoveNavigator();
     }
@@ -32,6 +39,10 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     @Override
     void moveUnit(final Unit unit) {
+        if (unit == founder || unit == carrier) {
+            pursueFirstColony(unit);
+            return;
+        }
         final List<Location> locations = computeMoveLocation(unit);
 
         if (!locations.isEmpty()) {
@@ -49,14 +60,26 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
-            final Location newLocation = lastLocation
+            final Location preferred = lastLocation
                     .add(unitDirections.getLastVector(unit));
-            if (canMoveAt(unit, newLocation)) {
-                locations.add(newLocation);
-                lastLocation = newLocation;
-            } else {
-                unitDirections.resetDirection(unit);
+            if (canMoveAt(unit, preferred)) {
+                locations.add(preferred);
+                lastLocation = preferred;
+                continue;
             }
+            boolean moved = false;
+            for (Location neighbor : lastLocation.getNeighbors()) {
+                if (canMoveAt(unit, neighbor)) {
+                    locations.add(neighbor);
+                    lastLocation = neighbor;
+                    moved = true;
+                    break;
+                }
+            }
+            if (!moved) {
+                return locations;
+            }
+            unitDirections.resetDirection(unit);
         }
         return locations;
     }
@@ -101,6 +124,76 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     @Override
     void turnStarted() {
-        // do nothing
+        founder = null;
+        carrier = null;
+        if (getPlayer().isKing() || !getPlayer().getColonies().isEmpty()) {
+            return;
+        }
+        founder = getPlayer().getAllUnits().stream()
+                .filter(unit -> unit.getType().canBuildColony()
+                        && unit.getAction().isNoAction())
+                .filter(unit -> unit.isAtPlaceLocation() || (unit
+                        .isAtCargoSlot()
+                        && unit.getPlaceCargoSlot().getOwnerUnit().isShip()
+                        && unit.getPlaceCargoSlot().getOwnerUnit()
+                                .getOwner() == getPlayer()
+                        && unit.getPlaceCargoSlot().getOwnerUnit()
+                                .isAtPlaceLocation()
+                        && unit.getPlaceCargoSlot().getOwnerUnit().getAction()
+                                .isNoAction()))
+                .min(Comparator.comparingInt(Unit::getId)).orElse(null);
+        if (founder != null && founder.isAtCargoSlot()) {
+            carrier = founder.getPlaceCargoSlot().getOwnerUnit();
+        }
+    }
+
+    private void pursueFirstColony(final Unit mover) {
+        // One extra iteration permits landing after the carrier spends its last
+        // point.
+        final int limit = mover.getActionPoints() + 1;
+        for (int step = 0; step < limit && isActiveTurn()
+                && mover.isAtPlaceLocation(); step++) {
+            final Optional<Location> next = FirstColonyPlanner
+                    .nextStep(getModel(), founder);
+            if (next.isEmpty()) {
+                return;
+            }
+            final Location target = next.get();
+            try {
+                if (founder.isAtPlaceLocation()
+                        && target.equals(founder.getLocation())) {
+                    if (getModel().canUnitBuildColony(founder)) {
+                        getModel().buildColony(getPlayer(), founder,
+                                getModel().suggestColonyName(Set.of()));
+                    }
+                    return;
+                }
+                if (founder.isAtCargoSlot() && getModel().getMap()
+                        .getTerrainTypeAt(target).isLand()) {
+                    if (founder.canUnitDisembarkAt(target)) {
+                        founder.disembarkToLocation(target);
+                        waitForAnimations();
+                    }
+                    return;
+                }
+                if (mover.getActionPoints() <= 0) {
+                    return;
+                }
+                final Location before = mover.getLocation();
+                getModel().moveUnit(mover, Path.of(List.of(target)));
+                waitForAnimations();
+                if (!isActiveTurn() || !mover.isAtPlaceLocation()
+                        || mover.getLocation().equals(before)) {
+                    return;
+                }
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                // A live model rejection ends this attempt; the next turn
+                // replans.
+                org.slf4j.LoggerFactory.getLogger(SimpleAiPlayer.class)
+                        .debug("First-colony action was rejected", rejected);
+                return;
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFactory;
+import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
@@ -206,12 +207,11 @@ public class Model {
     }
 
     /**
-     * For each unit owned by human on assure that visible are is really
-     * revealed. It allows to not-define correct visible area in save files.
+     * Each on-map unit reveals its owner's starting surroundings, including
+     * computer players. Saved exploration outside that radius is preserved.
      */
     private void assureDefaultVisibility() {
-        unitStorage.getUnits().stream().filter(
-                unit -> unit.getOwner().isHuman() && unit.isAtPlaceLocation())
+        unitStorage.getUnits().stream().filter(Unit::isAtPlaceLocation)
                 .forEach(unit -> unit.getOwner().revealMapForUnit(unit));
     }
 
@@ -268,32 +268,20 @@ public class Model {
 
     public Colony buildColony(final Player player, final Unit unit,
             final String name) {
+        checkGameRunning();
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(
                 player == getCurrentPlayer() && unit.getOwner() == player,
                 "Only the current owner may found a colony");
-        Preconditions.checkArgument(
-                unitStorage.getUnits().contains(unit)
-                        && canUnitBuildColony(unit),
+        Preconditions.checkArgument(canUnitBuildColony(unit),
                 "This unit cannot found a colony here");
         Preconditions.checkArgument(
                 !colonyNames.getProblem(name, null).isPresent(),
                 "Invalid colony name");
         Preconditions.checkState(nextColonyId < Integer.MAX_VALUE,
                 "Colony IDs exhausted");
-        Preconditions.checkArgument(unit.isAtPlaceLocation(),
-                "Unit (%s) have to be on map", unit);
-        Preconditions.checkArgument(!unit.getType().isShip(),
-                "Ship Unit (%s) can't found city", unit);
-        Preconditions.checkArgument(!unit.getType().canHoldCargo(),
-                "Unit (%s) that transport cargo, can't found city", unit);
         final Location location = unit.getLocation();
-        final Optional<Colony> oColony = getColonyAt(location);
-        Preconditions.checkArgument(!oColony.isPresent(),
-                "There is already colony '%s' at '%s'", oColony, location);
-        Preconditions.checkArgument(!isColonyInNeighbourhood(location),
-                "There is another colony in neighbourhood os %s.", location);
 
         final Colony col = new Colony(this, nextColonyId,
                 ColonyNames.normalize(name), player, location, colony -> {
@@ -306,9 +294,37 @@ public class Model {
                             });
                     return constructions;
                 }, new HashMap<String, Integer>(), new ArrayList<>());
+        final List<ColonyField> fields = col
+                .getEmptyFieldsWithMaxCornProduction();
+        final ConstructionSlot indoorWork = col
+                .getConstructionByType(ConstructionType.TOWN_HALL).getSlotAt(0);
+        Preconditions.checkState(indoorWork.isEmpty(),
+                "Founding workplace is occupied");
+        if (unit instanceof UnitFreeColonist) {
+            final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+            final Map<GoodsType, Integer> returnedEquipment = ImmutableMap.of(
+                    GoodsType.MUSKET,
+                    colonist.isHoldingGuns()
+                            ? UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT
+                            : 0,
+                    GoodsType.HORSE,
+                    colonist.isMounted()
+                            ? UnitFreeColonist.REQUIRED_HORSES_FOR_MOUNTED_UNIT
+                            : 0,
+                    GoodsType.TOOLS, colonist.getTools());
+            returnedEquipment
+                    .forEach((type, amount) -> Preconditions.checkState(
+                            amount >= 0 && amount <= col.getWarehouse()
+                                    .getStorageCapacity(type).getAmount(),
+                            "Founder equipment does not fit in the new colony"));
+        }
         nextColonyId++;
         colonies.add(col);
-        col.placeUnitToProduceFood(unit);
+        if (fields.isEmpty()) {
+            unit.placeToColonyStructureSlot(indoorWork);
+        } else {
+            unit.placeToColonyField(fields.get(0), GoodsType.CORN);
+        }
         listenerManager.fireColonyWasFounded(this, col);
         return col;
     }
@@ -352,24 +368,89 @@ public class Model {
                 .isPresent();
     }
 
+    /**
+     * Checks a prospective site without requiring the founder to be there yet.
+     * Food policy, equipment capacity, turn and movement are separate checks.
+     *
+     * @param founder  registered prospective founder
+     * @param location prospective colony position
+     * @return whether the site permits founding
+     */
+    public boolean canFoundColonyAt(final Unit founder,
+            final Location location) {
+        if (founder == null || location == null)
+            return false;
+        if (!unitStorage.getUnits().stream().anyMatch(u -> u == founder))
+            return false;
+        if (!founder.getType().canBuildColony())
+            return false;
+        if (!map.isValid(location))
+            return false;
+        final TerrainType terrain = map.getTerrainTypeAt(location);
+        if (terrain.isSea() || terrain == TerrainType.MOUNTAIN)
+            return false;
+        if (getColonyAt(location).isPresent())
+            return false;
+        if (isColonyInNeighbourhood(location))
+            return false;
+        if (getUnitsAt(location).stream()
+                .anyMatch(u -> u.getOwner() != founder.getOwner()))
+            return false;
+        return true;
+    }
+
+    /**
+     * Checks live founding permission at the unit's current position.
+     *
+     * @param unit prospective founder
+     * @return whether the current player can found with this unit now
+     */
     public boolean canUnitBuildColony(final Unit unit) {
-        if (unit == null) {
+        if (unit == null)
             return false;
-        }
-        if (!unit.getType().canBuildColony()) {
+        if (!isGameRunning())
             return false;
-        }
-        if (!unit.isAtPlaceLocation()) {
+        if (unit.getOwner() != getCurrentPlayer())
             return false;
-        }
-        final Optional<Colony> oColony = getColonyAt(unit.getLocation());
-        if (oColony.isPresent()) {
+        if (!unit.isAtPlaceLocation())
             return false;
-        }
-        if (isColonyInNeighbourhood(unit.getLocation())) {
+        final Location loc = unit.getLocation();
+        if (loc == null || !map.isValid(loc))
             return false;
-        }
-        return unit.getActionPoints() > 0;
+        if (unit.getActionPoints() <= 0)
+            return false;
+        if (!canFoundColonyAt(unit, loc))
+            return false;
+        return true;
+    }
+
+    /**
+     * Read-only food opportunities around a prospective settlement.
+     *
+     * @param owner prospective colony owner
+     * @param site  prospective colony position
+     * @return valid, unworked fields that can produce corn
+     */
+    public List<Location> getAvailableColonyFoodFields(final Player owner,
+            final Location site) {
+        Preconditions.checkNotNull(site);
+        return site.getNeighbors().stream()
+                .filter(at -> isColonyFieldAvailable(owner, at))
+                .filter(at -> map.getTerrainTypeAt(at)
+                        .canProduce(GoodsType.CORN))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    boolean isColonyFieldAvailable(final Player owner, final Location at) {
+        return owner != null
+                && getPlayers().stream().anyMatch(player -> player == owner)
+                && map.isValid(at) && getColonyAt(at).isEmpty()
+                && getUnitsAt(at).stream()
+                        .noneMatch(unit -> unit.getOwner() != owner)
+                && colonies.stream()
+                        .flatMap(colony -> colony.getColonyFields().stream())
+                        .noneMatch(field -> field.isNotEmpty()
+                                && field.getLocation().equals(at));
     }
 
     public int getKingsTaxForPlayer(final Player subduedPlayer) {

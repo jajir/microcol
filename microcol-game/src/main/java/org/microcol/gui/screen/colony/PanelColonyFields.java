@@ -167,7 +167,9 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private boolean canFieldAcceptDraggedUnit(final Optional<Direction> oLoc) {
-        return oLoc.map(loc -> colony.getColonyFieldInDirection(loc).isEmpty())
+        return oLoc.map(colony::getColonyFieldInDirection)
+                .map(field -> field.isEmpty() && field.isValid()
+                        && field.canProduce(GoodsType.CORN))
                 .orElse(false);
     }
 
@@ -175,7 +177,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         logger.debug("Drag dropped");
         clickableArea.getDirection(Point.of(event.getX(), event.getY()))
                 .map(loc -> colony.getColonyFieldInDirection(loc))
-                .filter(ColonyField::isEmpty)
+                .filter(field -> field.isEmpty() && field.isValid()
+                        && field.canProduce(GoodsType.CORN))
                 .ifPresent(colonyField -> dragDropped(colonyField, event));
         event.consume();
     }
@@ -202,6 +205,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void paint(final GraphicsContext gc) {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         colony.getColonyFields()
                 .forEach(colonyField -> paintColonyField(gc, colonyField));
         final Point colonyPoint = Point.of(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
@@ -214,6 +218,9 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void paintColonyField(final GraphicsContext gc,
             final ColonyField colonyField) {
+        if (!colonyField.isValid()) {
+            return;
+        }
         final Terrain terrain = colonyField.getTerrain();
         final ColonyFieldTile colonyFieldTile = ColonyFieldTile
                 .ofDirection(colonyField.getDirection());

@@ -224,32 +224,24 @@ public class Colony {
     }
 
     /**
-     * Try to place unit to produce food. If there is no free field than place
-     * unit outside colony.
-     *
-     * @param unit required unit
-     */
-    void placeUnitToProduceFood(final Unit unit) {
-        final List<ColonyField> fields = getEmptyFieldsWithMaxCornProduction();
-        Preconditions.checkState(!fields.isEmpty(),
-                "There are no empty field in colony");
-        final ColonyField field = fields.get(random.nextInt(fields.size()));
-        unit.placeToColonyField(field, GoodsType.CORN);
-    }
-
-    /**
      * Get list of empty fields with maximal corn production. At all returned
      * field could be place unit and start producing food.
      *
      * @return list of colony fields
      */
     List<ColonyField> getEmptyFieldsWithMaxCornProduction() {
-        final Integer max = colonyFields.stream().filter(f -> f.isEmpty())
-                .map(f -> f.getGoodsTypeProduction(GoodsType.CORN))
-                .max(Comparator.naturalOrder()).orElse(-1);
-        return colonyFields.stream()
-                .filter(f -> f.isEmpty()
-                        && f.getGoodsTypeProduction(GoodsType.CORN) == max)
+        final List<ColonyField> available = colonyFields.stream()
+                .filter(ColonyField::isEmpty)
+                .filter(field -> model.isColonyFieldAvailable(owner,
+                        field.getLocation()))
+                .filter(field -> field.canProduce(GoodsType.CORN)
+                        && field.getGoodsTypeProduction(GoodsType.CORN) > 0)
+                .collect(ImmutableList.toImmutableList());
+        final int max = available.stream()
+                .map(field -> field.getGoodsTypeProduction(GoodsType.CORN))
+                .max(Comparator.naturalOrder()).orElse(0);
+        return available.stream().filter(
+                field -> field.getGoodsTypeProduction(GoodsType.CORN) == max)
                 .collect(ImmutableList.toImmutableList());
     }
 

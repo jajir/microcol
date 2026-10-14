@@ -68,11 +68,20 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(isCssIdVisible("freePlaySetup"));
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(2, map.getItems().size());
+        assertEquals(3, map.getItems().size());
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
         assertEquals("Preview only. You will play as the Netherlands.",
                 getLabeledById("freePlayNationNote").getText());
+    }
+
+    public void verifySelectedMap(final int expectedIndex,
+            final String expectedName) {
+        final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
+                .queryAs(ChoiceBox.class);
+        assertEquals(3, map.getItems().size());
+        assertEquals(expectedIndex, map.getSelectionModel().getSelectedIndex());
+        assertEquals(expectedName, map.getSelectionModel().getSelectedItem());
     }
 
     public void verifySetupLanguage(final String expectedStart,

@@ -77,7 +77,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         mapLabel.setLabelFor(mapChoiceBox = new ChoiceBox<>());
         mapChoiceBox.setId(ID_MAP);
         mapChoiceBox.getItems().addAll(i18n.get(GameMenu.setupMapOriginal),
-                i18n.get(GameMenu.setupMapTwoIslands));
+                i18n.get(GameMenu.setupMapTwoIslands),
+                i18n.get(GameMenu.setupMapRivalExpedition));
         mapChoiceBox.getSelectionModel().selectFirst();
 
         nationLabel = new Label();
@@ -167,7 +168,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         backButton.setText(i18n.get(GameMenu.buttonBack));
 
         mapChoiceBox.getItems().setAll(i18n.get(GameMenu.setupMapOriginal),
-                i18n.get(GameMenu.setupMapTwoIslands));
+                i18n.get(GameMenu.setupMapTwoIslands),
+                i18n.get(GameMenu.setupMapRivalExpedition));
         nationChoiceBox.getItems().setAll(i18n.get(GameMenu.setupNationDutch),
                 i18n.get(GameMenu.setupNationFrench),
                 i18n.get(GameMenu.setupNationEnglish),
@@ -200,9 +202,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
             return;
         starting = true;
         startButton.setDisable(true);
-        FreePlayMap map = mapChoiceBox.getSelectionModel()
-                .getSelectedIndex() == 0 ? FreePlayMap.ORIGINAL
-                        : FreePlayMap.TWO_ISLANDS;
+        FreePlayMap map = FreePlayMap.values()[mapChoiceBox.getSelectionModel()
+                .getSelectedIndex()];
         applicationController.startNewFreeGame(map, nameField.getText());
     }
 

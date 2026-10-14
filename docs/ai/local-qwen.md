@@ -1960,3 +1960,122 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
    records remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-declaration-dialog/`.
    Valid JSON and exact anchors alone do not prove compilable Java: inspect inserted
    escapes before application. No cloud fallback or savings claim.
+
+## R-0027 bounded movement — 2026-10-14
+
+1. Task `2026-10-14-r27-bounded-navigation` used isolated baseline `432e96b0`.
+   The worker owned only `SimpleAiPlayer.computeMoveLocation`; the caller owned
+   three regression cases, architecture, manual decisions and actual checks.
+   The four unrelated R-0026 publication-evidence updates stayed in main.
+2. One attempt took **144.743 seconds**, with no repair. The generated method
+   retains the preferred direction, scans the eight neighbours once if blocked,
+   and returns when no legal continuation exists. All candidate moves still use
+   the shared movement and diplomatic query. An initial caller suspicion about
+   escaped newlines was disproved by decoding the JSON and checking its exact
+   single source match; no correction was needed or dispatched.
+3. Caller reproduction `run-Ujxgay` ran three movement cases against the original
+   method: the surrounded-unit case failed with a two-second timeout. After
+   worker application and shared formatting, isolated `run-sAeMOC` passed
+   **11 AI cases and 3 page-contract controls**, zero failures/errors/skips.
+   This proves the bounded-movement prerequisite, not completed R-0027 gameplay.
+4. All **125** loaded-runtime samples matched the configured GPT-OSS digest and
+   context **32768**. The model unloaded before tests; the two formatted Java
+   files were integrated byte-for-byte and the owned lock released. Prompts,
+   runtime evidence, caller review and `acceptance.json` remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-bounded-navigation/`.
+   Full first-colony/UI acceptance and publication remain pending.
+
+## R-0027 expedition map selection — 2026-10-14
+
+1. Task `2026-10-14-r27-map-selection` used isolated baseline `432e96b0` plus
+   recorded R-0027 inputs. The worker owned six bounded edits across the map
+   enum, setup screen and English/Czech keys. The caller owned scenario content,
+   tests, the first-colony architecture and actual acceptance.
+2. Attempt 0 took **205.894 s** and returned seven entries: the setup list anchor
+   was duplicated with `expected_matches: 1` twice, although its original source
+   has two matches. The caller rejected the batch before application. A caller
+   review assertion expected six entries, but its shell then launched the old
+   prompt after the assertion failed. That unintended attempt was stopped after
+   **12.732 s**, unloaded, and charged to both the runtime and repair budget.
+   Subsequent preparation/dispatch uses `set -e` so review failure stops dispatch.
+3. Final repair 2 took **154.799 s** and returned identical old/new text, adding
+   no map choice. Both repair slots were exhausted at **373.425 s** cumulative
+   runtime. The caller retained the original valid source edits and consolidated
+   the duplicated setup edit into one replacement with an exact match count of
+   two. This is caller completion after failed repair, not autonomous success.
+4. Shared formatting checked ten changed Java files with exact token preservation
+   and idempotence. Caller verification covers both original worlds, the new
+   world's model/disk state, existing TC24 journeys and new TC34 setup/Continue
+   and Czech selection-refresh cases. Isolated `run-mZrKO0` passed **4 model
+   cases and 11 player/support cases**, zero failures/errors/skips; both new
+   setup screenshots were inspected. All **323** loaded-runtime samples matched
+   the configured GPT-OSS digest/context 32768, and all attempts unloaded before
+   tests. Ten accepted source/test files were copied byte-for-byte to main and
+   the owned lock released. These checks do not prove founding AI; full R-0027
+   acceptance and publication remain pending.
+5. Full inputs, generated text, caller setup diagnosis, bounded execution and
+   application records remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-map-selection/`.
+   No cloud fallback or token-savings claim.
+
+
+### R-0027 shared founding queries — 2026-10-14
+
+1. `2026-10-14-r27-founding-query` assigned only prospective and immediate
+   founding queries in `Model` to the local worker. The caller retained atomic
+   creation, equipment/food preflight, map-edge presentation, fixtures and tests.
+2. Attempt zero took **265.168 s** and exhausted its output before completing
+   the replacement JSON; its partial Java also invented a `SEA` constant.
+   Nothing was applied. The first targeted repair took **251.698 s** and
+   supplied complete code, but review found `getLocation()` before the on-map
+   guard. The second repair took **76.494 s** and corrected that order.
+   Total **593.360 s**, both repairs used. Caller edits only shortened the
+   query Javadoc; production query logic is the repaired worker result.
+3. All **526 loaded-model samples** matched the configured alias/digest and
+   context **32768**; every attempt unloaded before caller checks. Shared
+   formatting passed token preservation and idempotence. No cloud fallback
+   or measured token-savings claim.
+4. Caller checks first exposed a missing `map.isValid` stub in an existing
+   equipment test; the caller repaired its fixture without changing the
+   expected rejection. A newly authored UI drag check exposed native gesture
+   completion after the FX queue; the caller reused the existing `DRAG_DONE`
+   wait. These were caller test integration repairs, not further worker attempts.
+   The latest selected class reports prove **52 model and 15 UI/control cases**
+   passing across the recorded runs. Original red/green counts and commands
+   belong to the [functional evidence](../functional-tests.md#rival-first-colony-preparation-2026-10-14).
+5. Accepted sources were copied to main and the owned lock released. Prompts,
+   failed outputs, runtime samples, diagnoses and `acceptance.json` remain in
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-founding-query/`.
+   This accepts a shared-model prerequisite; first-colony AI, full regression
+   and publication are still pending.
+
+
+### R-0027 first-colony planner — 2026-10-14
+
+1. `2026-10-14-r27-first-colony-planner` assigned a single read-only planner.
+   Attempt zero ignored the text-only mode, performed repeated source discovery
+   and used inconsistent relative working directories. It had no implementation
+   after **232.315 s**; the caller stopped that owned process, recorded the
+   actual failed commands and supplied a shorter explicit text-only repair.
+2. Repair one took **284.519 s** but used the entire 4096-token output for
+   reasoning and produced an empty final file. Exit zero did not signify success.
+   With only **83.166 s** left, the last targeted repair requested just the small
+   site/food scoring method. It timed out after **83.469 s** without a usable
+   result. Total **600.303 s**, both repair slots exhausted, **zero worker code
+   accepted**. The caller then implemented the planner and retained the full
+   original acceptance criteria, along with the caller-owned action integration.
+3. All **537 loaded-model samples** matched the configured alias/digest and
+   context **32768**. Each attempt unloaded before verification. The caller
+   implementation passed shared formatting and `run-tYgNmS` (**44 model and
+   3 source-contract cases**); later real-turn and UI acceptance is recorded
+   in the [functional evidence](../functional-tests.md#rival-first-colony-preparation-2026-10-14).
+   The job's `acceptance.json` explicitly distinguishes failed delegation from
+   accepted caller implementation. The owned lock was released after those checks.
+4. Evidence, original and repair prompts, runtime samples, cancellation diagnosis
+   and `caller-takeover.json` remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-first-colony-planner/`.
+   A complete search algorithm proved too large for this worker's output/time
+   allowance in this attempt. Future handoffs should isolate one supplied
+   algorithmic step before dispatch; do not spend the allowance rediscovering
+   APIs already supplied. This observation does not change configured limits
+   or claim savings.

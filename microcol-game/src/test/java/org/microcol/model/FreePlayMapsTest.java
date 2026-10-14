@@ -19,7 +19,8 @@ class FreePlayMapsTest {
 
     @Test
     void bothWorldsHaveLegalOwnedFrenchContentAndPreserveItOnDisk() {
-        for (FreePlayMap map : FreePlayMap.values()) {
+        for (FreePlayMap map : List.of(FreePlayMap.ORIGINAL,
+                FreePlayMap.TWO_ISLANDS)) {
             final GameModelPo data = dao.loadFromClassPath(map.getResource());
             final Model model = Model.make(data.getModel(),
                     org.microcol.model.campaign.MissionImpl

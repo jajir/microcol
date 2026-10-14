@@ -87,6 +87,46 @@ zahození instance se neukládá: běžnou rozehranou pozici lze načíst do nov
 instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento popis
 není potvrzením dokončení celého požadavku.
 
+### Zakládání a okraj mapy (R-0027)
+
+1. `Model.canFoundColonyAt` je sdílený dotaz na budoucí místo: kontroluje
+   registrovaného zakladatele, pevninu mimo hory, rozestup kolonií a cizí
+   obsazení. Nepožaduje, aby kolonista už na místě stál. Bezprostřední
+   `canUnitBuildColony` navíc vyžaduje běžící hru, aktuálního vlastníka,
+   umístění na mapě a zbývající pohyb. Strategie musí před čtením cíle
+   respektovat hráčovu znalost mapy.
+   Načtení světa zpřístupňuje každému vlastníkovi okolí jeho jednotek na mapě;
+   samotné zahájení počítačového tahu neopravňuje k odhalení zbytku světa.
+2. `buildColony` před přidělením ID a registrací připraví pracovní místo
+   a ověří kapacitu pro vrácené vybavení. Zakladatel dostane dostupné pole
+   s nejvyšším výnosem jídla; pokud žádné není, pracuje v radnici. Volba
+   AI vyžadující životaschopné pobřeží není obecným zákazem zakládat na
+   neúrodné pevnině. Výroba ze středu kolonie podle manuálu zůstává
+   samostatnou mezerou.
+3. Osm směrových slotů zůstává zachovaných i na okraji mapy. Slot mimo
+   skutečnou mapu není platné pracovní místo, nevyrábí a UI jej nekreslí
+   ani nepřijímá jako cíl přetažení. Počáteční umístění zakladatele nepřebírá
+   pole již obhospodařované jinou kolonií; toto není tvrzení, že jsou
+   vyřešené všechny ruční přesuny mezi sdílenými poli. Výsledky a zbývající
+   práci vlastní [evidence R-0027](functional-tests.md#rival-first-colony-preparation-2026-10-14).
+
+### První kolonie soupeře (R-0027)
+
+1. `ai.FirstColonyPlanner` je čtecí výběr dalšího kroku přes známá dosažitelná
+   pole. Pobřežní místo s dostupným pevninským jídlem řadí podle vzdálenosti,
+   výnosu a souřadnic. Neodhaluje mapu a neprovádí pohyb ani založení.
+2. `SimpleAiPlayer` vybírá skutečného zakladatele s nejnižším ID a případnou
+   vlastní loď. Provádí jednotlivé sdílené modelové akce a mezi nimi čeká na
+   dosavadní animační slot. Po vylodění zakladatel musí získat nový pohybový
+   bod před založením. Jakmile soupeř vlastní kolonii, tento omezený cíl končí;
+   neřeší obecnou expanzi, hospodářství ani obchod.
+3. Výběr se obnovuje ze stavu jednotek a uložené znalosti, bez nových
+   plánovacích dat v save formátu. `AbstractRobotPlayer.stop` zneplatní i
+   již zařazený callback; po zastavení nebo výměně modelu nevydá další
+   modelovou akci ani `endTurn`. Model nadále validuje každý příkaz.
+   Referenční průchod, úspěšnou úplnou lokální regresi a stav publikace vlastní
+   [R-0027](requirements/R-0027.md).
+
 ### Čtení seznamu jednotek při tahu AI
 
 `UnitStorage` používá pro často čtené členství jednotek `CopyOnWriteArrayList`.

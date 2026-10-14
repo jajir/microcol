@@ -25,7 +25,7 @@
 	<entry key="nameDUPLICATE">A colony with this name already exists. Choose another name.</entry>
 	<entry key="nameChanged">The colony or founding unit changed. Nothing was changed. Cancel and try again.</entry>
 
-    <entry key="nameCannotFound">Select a colonist with movement remaining on an unoccupied tile away from existing colonies.</entry>
+    <entry key="nameCannotFound">Select a colonist with movement remaining on unoccupied land outside mountains, away from existing colonies.</entry>
     <entry key="equipmentOpen">Colonist equipment: right-click or Shift+F10</entry>
     <entry key="equipMuskets">Equip with muskets</entry>
     <entry key="unequipMuskets">Return muskets</entry>

@@ -208,6 +208,8 @@ public class ColonyTest {
 
     private void recordTerranAtPlace(final Location loc,
             final TerrainType terrainType) {
+        when(map.isValid(loc)).thenReturn(true);
+        when(model.isColonyFieldAvailable(owner, loc)).thenReturn(true);
         when(map.getTerrainAt(loc)).thenReturn(new Terrain(loc, terrainType));
         when(map.getTerrainTypeAt(loc)).thenReturn(terrainType);
     }

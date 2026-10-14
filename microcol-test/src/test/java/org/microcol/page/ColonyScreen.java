@@ -158,7 +158,7 @@ public class ColonyScreen extends AbstractScreen {
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex,
             final int goodsIndexInWarehouse) throws InterruptedException {
         final StackPane crate = getListOfCrates().get(cargoSlotIndex);
-        completeCargoDrag(crate,
+        completeDrag(crate,
                 () -> getRobot().drag(crate, MouseButton.PRIMARY)
                         .dropTo(getListOfGoodsImagesInWarehouse()
                                 .get(goodsIndexInWarehouse))
@@ -168,7 +168,7 @@ public class ColonyScreen extends AbstractScreen {
     public void dragGoodsOutsideWindow(final int cargoSlotIndex)
             throws InterruptedException {
         final StackPane crate = getListOfCrates().get(cargoSlotIndex);
-        completeCargoDrag(crate,
+        completeDrag(crate,
                 () -> getRobot().drag(crate, MouseButton.PRIMARY)
                         .dropTo(getPrimaryStage().getX()
                                 + getPrimaryStage().getWidth() + 50,
@@ -177,8 +177,8 @@ public class ColonyScreen extends AbstractScreen {
                         .release(MouseButton.PRIMARY));
     }
 
-    private void completeCargoDrag(final StackPane crate, final Runnable drag)
-            throws InterruptedException {
+    private void completeDrag(final javafx.scene.Node crate,
+            final Runnable drag) throws InterruptedException {
         final CountDownLatch finished = new CountDownLatch(1);
         final EventHandler<DragEvent> done = event -> finished.countDown();
         getRobot().interact(
@@ -188,8 +188,7 @@ public class ColonyScreen extends AbstractScreen {
             // Native drag/drop can outlive the robot's release and FX event
             // queue.
             if (!finished.await(5, TimeUnit.SECONDS)) {
-                throw new IllegalStateException(
-                        "The native cargo drag must finish");
+                throw new IllegalStateException("The native drag must finish");
             }
             WaitForAsyncUtils.waitForFxEvents();
         } finally {
@@ -297,6 +296,38 @@ public class ColonyScreen extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
         return colony.getGoodsStats().getStatsByType(GoodsType.CORN)
                 .getNetProduction();
+    }
+
+    public void dragFieldWorkerTo(final int unitId,
+            final org.microcol.model.Direction target)
+            throws InterruptedException {
+        final ColonyField source = colony.getColonyFields().stream().filter(
+                field -> field.getUnit().map(Unit::getId).orElse(-1) == unitId)
+                .findFirst().orElseThrow();
+        final javafx.scene.Node canvas = getContext()
+                .getClassFromGuice(PanelColonyFields.class).getContent()
+                .lookup("Canvas");
+        completeDrag(canvas,
+                () -> getRobot()
+                        .drag(findPlaceOfField(source), MouseButton.PRIMARY)
+                        .dropTo(findPlaceOfField(
+                                colony.getColonyFieldInDirection(target)))
+                        .release(MouseButton.PRIMARY));
+    }
+
+    public void verifyFieldWorker(final int expectedUnitId,
+            final Location expectedLocation, final int expectedCornYield) {
+        final ColonyField field = colony.getColonyFields().stream()
+                .filter(candidate -> candidate.getUnit().map(Unit::getId)
+                        .orElse(-1) == expectedUnitId)
+                .findFirst().orElseThrow();
+        assertEquals(expectedLocation, field.getLocation());
+        assertEquals(expectedCornYield,
+                field.getProduction().orElseThrow().getAmount());
+        assertEquals(GoodsType.CORN,
+                field.getProduction().orElseThrow().getType());
+        assertEquals(1, colony.getColonyFields().stream()
+                .filter(ColonyField::isNotEmpty).count());
     }
 
     private Point2D findPlaceOfField(final ColonyField colonyField) {
