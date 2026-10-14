@@ -1768,3 +1768,26 @@ Lokální ověření na macOS/JDK 17:
     Výslovné `-Dtest=*` zahrnuje také běžně vynechaný `integration.ConnectorTest`;
     výchozí CI má tedy o jeden herní případ méně, bez změny výjimek. Lokální
     přejímka je dokončená; vzdálené CI, Pages a publikace ještě nejsou ověřené.
+
+16. Vzdálené [CI 38503447587](https://github.com/jajir/microcol/actions/runs/38503447587)
+    pro `a43507d5` prošlo 1062 modelovými/herními případy, všemi nativními
+    balíčky a publikačními nástroji. Z 135 hráčských/podpůrných případů měl
+    TC34/03 jednu chybu: druhé, platné přetažení pracovníka nedoručilo čekaný
+    `DRAG_DONE`. První přetažení na neplatné pole skončilo a zachovalo obyvatele.
+    Záznam s úrovní INFO neurčuje přesný důvod nedokončeného nativního gesta;
+    není to selhání modelové aserce. Publikace byla správně vynechána, Pages
+    `38503447615` prošly. Čerstvé XML a log vlastní
+    `target/r27-draft/ci-functional/` a `ci-drag-diagnosis.json`.
+
+17. Izolovaná oprava nad stejnou revizí mění pouze gesto v
+    `ColonyScreen.dragFieldWorkerTo`: po stisku a krátkém pohybu uvnitř zdrojového
+    pole čeká na skutečné `DRAG_DETECTED` a návrat jeho obsluhy; teprve pak
+    přesune kurzor na cíl, uvolní tlačítko a čeká na `DRAG_DONE`. Náhodné čekání,
+    opakování ani slabší očekávání se nepřidaly. Běh `run-X7yDOw` prošel všemi
+    **13 případy**, nula failures/errors/skips, exit 0, doba 2:18. Výběr:
+    `TC_34_F26_rival_first_colony_test,TC_01_F01_embark_disembark_test,TC_07_F07_producing_gooods_test,TC_17_F13_new_unit_in_colony_test,PageVerificationContractTest`
+    s obvyklým Docker příkazem a `-Dsurefire.failIfNoSpecifiedTests=false`.
+    Sdílený formatter ověřil jediný změněný Java soubor. Log je
+    `target/r27-draft/ci-drag-check.log`; výsledky a původní selhání vlastní
+    `ci-drag-diagnosis.json`. Celou sadu musí znovu potvrdit CI opravného commitu;
+    změny rozpracovaného R-0028 nejsou součástí této opravy.

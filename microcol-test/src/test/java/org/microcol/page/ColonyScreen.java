@@ -307,12 +307,43 @@ public class ColonyScreen extends AbstractScreen {
         final javafx.scene.Node canvas = getContext()
                 .getClassFromGuice(PanelColonyFields.class).getContent()
                 .lookup("Canvas");
-        completeDrag(canvas,
-                () -> getRobot()
-                        .drag(findPlaceOfField(source), MouseButton.PRIMARY)
-                        .dropTo(findPlaceOfField(
-                                colony.getColonyFieldInDirection(target)))
-                        .release(MouseButton.PRIMARY));
+        final Point2D start = findPlaceOfField(source);
+        final Point2D destination = findPlaceOfField(
+                colony.getColonyFieldInDirection(target));
+        final CountDownLatch started = new CountDownLatch(1);
+        final CountDownLatch finished = new CountDownLatch(1);
+        final EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
+                .runLater(started::countDown);
+        final EventHandler<DragEvent> done = event -> finished.countDown();
+        getRobot().interact(() -> {
+            canvas.addEventHandler(javafx.scene.input.MouseEvent.DRAG_DETECTED,
+                    detected);
+            canvas.addEventHandler(DragEvent.DRAG_DONE, done);
+        });
+        boolean released = false;
+        try {
+            // Wait for the canvas to start its native gesture before dropping.
+            getRobot().moveTo(start).press(MouseButton.PRIMARY)
+                    .moveTo(start.add(8, 0));
+            if (!started.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("The field drag must start");
+            }
+            getRobot().moveTo(destination).release(MouseButton.PRIMARY);
+            released = true;
+            if (!finished.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("The field drag must finish");
+            }
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            if (!released) {
+                getRobot().release(MouseButton.PRIMARY);
+            }
+            getRobot().interact(() -> {
+                canvas.removeEventHandler(
+                        javafx.scene.input.MouseEvent.DRAG_DETECTED, detected);
+                canvas.removeEventHandler(DragEvent.DRAG_DONE, done);
+            });
+        }
     }
 
     public void verifyFieldWorker(final int expectedUnitId,
