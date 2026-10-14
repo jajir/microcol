@@ -1791,3 +1791,18 @@ Lokální ověření na macOS/JDK 17:
     `target/r27-draft/ci-drag-check.log`; výsledky a původní selhání vlastní
     `ci-drag-diagnosis.json`. Celou sadu musí znovu potvrdit CI opravného commitu;
     změny rozpracovaného R-0028 nejsou součástí této opravy.
+
+18. Opakované [CI 38505754614](https://github.com/jajir/microcol/actions/runs/38505754614)
+    pro `afcdb67d` znovu prošlo všemi 1062 herními testy a nativními balíčky,
+    ale z 135 hráčských/podpůrných případů selhal TC34/03. Nová diagnostika
+    upřesnila fázi: druhé gesto nevyvolalo `DRAG_DETECTED`, takže nešlo pouze
+    o chybějící oznámení dokončení. Přesné nativní načasování z INFO logu
+    odvodit nelze; publikace byla znovu vynechána. Pages `38505754829` prošly.
+19. Gesto nyní nejprve ověří běžný pohyb ukazatele ve zdrojovém poli a skutečný
+    stisk; až potom zahájí přetažení pohybem 15 px uvnitř 45px pole. Zachovává
+    kontrolu zahájení i dokončení, stejný časový limit, úklid tlačítek a všechny
+    herní aserce. Izolovaný `run-Ddq9Mm` prošel **13 případy**, nula
+    failures/errors/skips, exit 0, doba 2:23; výběr odpovídá bodu 17.
+    Sdílený formatter znovu ověřil jediný Java soubor. Čerstvá evidence:
+    `target/r27-draft/ci-native-rearm-check.log` a `native-rearm-evidence.json`.
+    Plná vzdálená regrese a zveřejnění této opravy nadále zbývají.

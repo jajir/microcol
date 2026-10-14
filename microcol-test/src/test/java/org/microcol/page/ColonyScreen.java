@@ -310,21 +310,48 @@ public class ColonyScreen extends AbstractScreen {
         final Point2D start = findPlaceOfField(source);
         final Point2D destination = findPlaceOfField(
                 colony.getColonyFieldInDirection(target));
+        final CountDownLatch positioned = new CountDownLatch(1);
+        final CountDownLatch pressed = new CountDownLatch(1);
         final CountDownLatch started = new CountDownLatch(1);
         final CountDownLatch finished = new CountDownLatch(1);
+        final EventHandler<javafx.scene.input.MouseEvent> moved = event -> {
+            if (!event.isPrimaryButtonDown()
+                    && Math.abs(event.getScreenX() - start.getX()) < 2
+                    && Math.abs(event.getScreenY() - start.getY()) < 2) {
+                positioned.countDown();
+            }
+        };
+        final EventHandler<javafx.scene.input.MouseEvent> press = event -> pressed
+                .countDown();
         final EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
                 .runLater(started::countDown);
         final EventHandler<DragEvent> done = event -> finished.countDown();
         getRobot().interact(() -> {
+            canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_MOVED,
+                    moved);
+            canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
+                    press);
             canvas.addEventHandler(javafx.scene.input.MouseEvent.DRAG_DETECTED,
                     detected);
             canvas.addEventHandler(DragEvent.DRAG_DONE, done);
         });
         boolean released = false;
         try {
-            // Wait for the canvas to start its native gesture before dropping.
-            getRobot().moveTo(start).press(MouseButton.PRIMARY)
-                    .moveTo(start.add(8, 0));
+            // A completed native drop must yield normal mouse events before the
+            // next press.
+            getRobot().moveTo(start.add(0, -8)).moveTo(start);
+            if (!positioned.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The field drag source must receive normal pointer movement");
+            }
+            getRobot().press(MouseButton.PRIMARY);
+            if (!pressed.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The field drag source must receive the press");
+            }
+            // Cross drag hysteresis while still inside the original 45-pixel
+            // field.
+            getRobot().moveTo(start.add(TILE_WIDTH_IN_PX / 3.0, 0));
             if (!started.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("The field drag must start");
             }
@@ -339,6 +366,10 @@ public class ColonyScreen extends AbstractScreen {
                 getRobot().release(MouseButton.PRIMARY);
             }
             getRobot().interact(() -> {
+                canvas.removeEventHandler(
+                        javafx.scene.input.MouseEvent.MOUSE_MOVED, moved);
+                canvas.removeEventHandler(
+                        javafx.scene.input.MouseEvent.MOUSE_PRESSED, press);
                 canvas.removeEventHandler(
                         javafx.scene.input.MouseEvent.DRAG_DETECTED, detected);
                 canvas.removeEventHandler(DragEvent.DRAG_DONE, done);
