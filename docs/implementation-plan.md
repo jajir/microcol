@@ -196,7 +196,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Zachovat [současný vzhled](graphics.md#soucasne-zadani-vzhledu). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
 | **P30 Zvuková odezva** | Podle [zvukových pravidel](audio.md) připravit krátké efekty, souběh s hudbou, nastavení a vybrané herní události. Rozsah další hudby určit samostatně. | Katalog určí událost, výsledek, příjemce a okamžik; zvuk se nespustí při pouhém náhledu nebo načtení reportu. Vše podstatné zůstane pochopitelné při ztlumení. |
-| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/R-0032.md). [R-0033: UI testy v Dockeru](requirements/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/R-0039.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
+| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/R-0032.md). [R-0033: UI testy v Dockeru](requirements/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/R-0039.md). [R-0040: struktura a stavy požadavků](requirements/R-0040.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
 | **P32 Předání a vydání** | Používat existující CI, launcher a Mac/Linux balíčky; průběžně ověřovat aktualizaci a dokumentaci. Zbývající první vydání a Steam vést podle samostatného odhadu. | Úspěšné kontroly i publikace stejného commitu, odkaz na stažení a postup ověření; připravený plán zacházení s uloženými hrami. Nevytvářet již hotový distribuční systém znovu. |
 
 Přiřazení pokrývá všech 230 katalogových ID včetně doplnění z 11. října. Celé rodiny pravidel zůstávají
@@ -449,6 +449,10 @@ Upřesňujeme vždy jeden vybraný požadavek v této oblasti; požadavek na up�
 nespouští implementaci. Existující Z01–Z03 a jejich odkazy zůstávají platné.
 Analýza vlastní dohodnuté chování a akceptaci, následující šablona slouží
 k předání konkrétní implementační práce a odkazuje na tuto analýzu.
+Předání vychází ze stavu `ready for development` podle
+[životního cyklu požadavku](requirements/README.md#status-and-transitions).
+Technické rozdělení práce nemění přijaté chování; jeho změna vyžaduje návrat
+do refinementu. Podrobná zadání a průběžné výsledky nekopírujeme do analýzy.
 
 Balík vybírá hlavní agent spolu s vlastníkem hry. Rozpad na úkol má mít jeden
 pozorovatelný výsledek. Výchozím zpracovatelem vhodné implementace je lokální
@@ -457,6 +461,7 @@ worker. Připravené zadání může vypadat takto:
 ```text
 Úkol: [R-NNNN / související Z a P – konkrétní výsledek]
 Analýza: [odkaz na docs/requirements/R-NNNN.md s dohodnutým chováním a akceptací]
+Status požadavku: ready for development
 Oblast: [jedna hlavní A01–A10; odkaz na společný základ a konkrétní závislosti na dalších oblastech]
 Výchozí revize: [commit main]
 Zpracovatel: [lokální worker; případnou výjimku zdůvodnit níže]
@@ -542,8 +547,10 @@ pravidla. Žádné budoucí běhy tímto dokumentem nejsou naplánované.
 
 Stav požadavku vedeme podle [postupu analýzy a dodání](requirements/README.md#work-through-requirements-one-at-a-time)
 spolu s odkazy na pravidla a revizi, aktuální závislostí, výsledkem kontrol
-a dalším krokem. Připravená analýza není dokončená implementace a ověření
-není publikace. Po dodání se nemění celý katalog na „hotovo“ podle jednoho
+a dalším krokem. `done` znamená dokončenou implementaci s úspěšnou přejímkou;
+publikaci ověřujeme samostatně a její výsledek připojíme odkazem. Připravená
+analýza není dokončená implementace a ověření není publikace.
+Po dodání se nemění celý katalog na „hotovo“ podle jednoho
 úspěšného buildu.
 
 ## Rozsah této přípravy

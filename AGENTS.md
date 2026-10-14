@@ -47,12 +47,27 @@ specific cross-area dependencies in each requirement. Area IDs do not replace
 UC acceptance categories or model/AI/UI ownership. Requirement numbers are
 identifiers, not an automatic implementation order.
 Keep its four chapters: summary, behavior, implementation steps and open
-questions. Use numbered lists so each point can be referenced by requirement,
+questions. Summary and behavior describe the need and observable acceptance;
+gameplay requirements must be understandable without reading Java code.
+Keep technical design in chapter 3, detailed worker assignments in the handoff,
+and execution history in the existing evidence pages, linked rather than copied.
+Use the required `Status` field with exactly `new`, `waiting for refinement`,
+`ready for development`, `done`, `deferred`, or `canceled`, following the
+[status meanings and transitions](docs/requirements/README.md#status-and-transitions).
+Capture first; refine when selected for development; mark ready only after
+refinement; mark done only after implementation and required acceptance checks.
+Publication remains independently verified under the branch workflow above.
+Use numbered lists so each point can be referenced by requirement,
 chapter and item number. Refine one selected requirement at a time, preserve existing
 Z/P/rule/UC/test IDs, and distinguish proposals, agreed behavior and verified
 results. A refinement-only request updates the analysis without starting
 implementation. Reuse agreed decisions; do not ask for approval again merely
 to prepare an implementation handoff.
+The 2026-10-14 workflow change does not migrate the existing backlog. In the
+later agreed migration, create new linked requirements only for the remaining
+unimplemented outcomes, preserve old IDs/decisions/evidence, and select further
+development with the user; do not bulk-relabel old requirements or restart
+completed work.
 
 # Package responsibilities
 

@@ -1,9 +1,207 @@
 # Small requirement analyses
 
-Each small change gets one file in this directory: `R-0001.md`, `R-0002.md`,
-and so on. The file records the agreed outcome, how to check it, the proposed
-implementation steps and unresolved questions. Aim for one or two pages;
-include detail only where it changes behavior or acceptance.
+Each requirement describes one independently reviewable outcome in `R-NNNN.md`.
+Keep the need and observable behavior separate from the technical design and
+execution evidence. Aim for one or two pages; link detailed records instead of
+copying them. For gameplay, chapters 1 and 2 must make sense without Java knowledge.
+Technical work describes the developer/operator outcome without an invented player story.
+
+**Agreed on 2026-10-14:** use the [six statuses](#status-and-transitions) and
+[copyable template](#copyable-template) below. [R-0040](R-0040.md) records this
+workflow change. Existing R-0001–R-0039 retain their old content and statuses
+until the separate [backlog migration](#existing-backlog-migration).
+
+## Naming and scope
+
+1. Allocate the next unused number after the highest existing `R-` number on
+   `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
+   reuse an allocated ID, including a deferred or cancelled requirement.
+2. Give the document a descriptive title, for example the existing
+   `# R-0001 — Start free play without completing the campaign`.
+3. Describe one independently reviewable outcome. Split a larger requirement
+   into linked requirements when its parts need separate decisions or delivery.
+   The number identifies the requirement; it does not set priority.
+4. Keep existing Z01/Z02, P, rule, UC and `TC_...` identifiers. Link the relevant
+   entries in the [implementation plan](../implementation-plan.md),
+   [rule catalogue](../gap-analysis.md) and [use cases](../use-cases.md).
+   An R ID identifies the analysis, not a replacement for those IDs.
+5. Use the requirement file as the single source of its agreed scope and
+   acceptance. Existing Z analyses stay in place until deliberately moved; when
+   moving one, retain its old heading and replace the body with a link. Do not
+   maintain two copies of the same contract or copy shared project guidelines.
+   Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
+   in the use-case catalogue, and functional results in the test contract.
+   Completing one R requirement does not close a whole UC or work package.
+
+## Status and transitions
+
+`Status` is required. Use exactly one of these lowercase values, with no progress
+comment appended to the value. Record the date in `Updated`; put a short current
+progress note and evidence links in chapter 3.
+
+| Status | Meaning and condition |
+| --- | --- |
+| `new` | The need is captured; it has not yet been selected for development. Incomplete details belong in chapter 4. |
+| `waiting for refinement` | Selected for development; refinement is queued or underway. Scope, behavior or acceptance still needs preparation. |
+| `ready for development` | Refinement is complete: the outcome and acceptance are agreed, dependencies are available and no blocking question remains. This status also applies while authorized implementation is underway. |
+| `done` | The agreed outcome is implemented and all required acceptance checks pass. A prepared analysis or an untested patch is insufficient. |
+| `deferred` | Deliberately postponed; record why and the condition for reconsideration. It is not a synonym for a failed test or an unresolved question. |
+| `canceled` | Deliberately abandoned; record the reason and any replacement requirement. Preserve the ID and decisions. |
+
+The ordinary path is **new → waiting for refinement → ready for development → done**.
+There is no separate in-progress, blocked, verified or published status.
+
+1. Capture the request as `new`. Select it with the user for development before
+   moving to `waiting for refinement`; existing explicit authorization suffices.
+   Keep this status while refinement is active, including unresolved blockers.
+2. Move to `ready for development` only after the readiness checks below pass.
+   An implementation request may already authorize the subsequent work; do not
+   ask again merely because refinement is complete. A refinement-only request
+   stops at preparation and does not authorize implementation.
+3. During implementation, keep `ready for development` and state the current
+   work or failed check briefly in chapter 3. If scope, behavior or acceptance
+   needs another decision, return to `waiting for refinement` before dependent work.
+4. Move to `done` after implementation and required acceptance, including the
+   appropriate checks for documentation-only work. Publication is separate
+   evidence, not another status: follow the [normal completion workflow](../publishing.md),
+   verify CI and delivery, and link the result. A local pass or push does not
+   establish publication; report a delivery failure explicitly.
+5. Unfinished work may become `deferred` or `canceled` by an explicit decision,
+   not merely because it is difficult. Resume deferred work as `new` if it is
+   back in the unselected backlog, or `waiting for refinement` if selected;
+   recheck readiness before development. Reopen canceled work only by a new
+   explicit decision. New scope after `done` belongs in a linked new requirement.
+
+## Work through requirements one at a time
+
+Select one active [work area](areas.md) and reuse its agreed shared decisions.
+Record one primary area and specific cross-area dependencies; an area is not a
+code layer or a replacement for UC acceptance. Full design of every area is not
+required before a small delivery.
+
+1. **Capture:** write the need, intended outcome and known scope using the template.
+   Link the requirement from the relevant [implementation-plan item](../implementation-plan.md).
+   At `new`, chapter 3 may say that technical preparation awaits selection.
+2. **Refine when selected:** read the relevant requirements, rules, code, callers,
+   tests and [package responsibilities](../architecture.md). Distinguish observed
+   behavior, proposed behavior and agreed decisions. Date observations and name
+   the inspected revision; source inspection is not a successful player test.
+3. **Resolve ownership and questions:** identify what this R alone delivers and
+   what it reuses from another requirement. Reference existing decisions instead
+   of reopening them. When a decision resolves another R's blocker, update its
+   question/dependency to point to that decision without claiming its whole scope done.
+4. **Check readiness:** chapters 1 and 2 name the actor/need, boundaries and
+   observable examples (initial state → action/event → exact result), including
+   relevant cancellation, rejection, boundaries and persistence. Chapter 3 has a
+   concise feasible design, affected owners and named checks. Dependencies are
+   available and chapter 4 has no blocking question; nonblocking ones explain
+   why they can wait. Unknown numeric rules are not implementation choices.
+5. **Implement within authorization:** use the existing
+   [handoff](../implementation-plan.md#sablona-predani-prace) for detailed assignments.
+   Suitable implementation uses the local worker; requirements, review and
+   actual acceptance remain caller-owned. Keep worker limits and run history out
+   of the requirement. Follow the [functional test contract](../functional-tests.md).
+6. **Complete and deliver:** record a short current result in chapter 3 and link
+   dated acceptance evidence and delivery. Detailed test runs belong in the
+   test record, worker failures in [worker evidence](../ai/local-qwen.md).
+   Check the whole selected outcome, not just the latest successful subtask.
+   Select the next requirement explicitly; IDs are not an implementation queue.
+
+## Copyable template
+
+Keep exactly these four chapters and numbered items, with explicit sequential
+numbers restarting in each list. Refer to an item by requirement, chapter and
+number. Preserve existing question numbers; append new questions. Remove irrelevant
+prompts, or write “Not applicable” with a reason. At capture, mark unknowns rather
+than inventing rules; before readiness, replace test placeholders with named checks.
+
+Chapter 2 describes **what happens**, chapter 3 describes **how to implement it**.
+For example, “cancel leaves cargo unchanged” belongs in chapter 2; the owning
+transaction method belongs in chapter 3. File paths, class names, algorithms and
+worker instructions are not gameplay acceptance. A necessary technical constraint
+for an infrastructure requirement may be part of its observable operator contract.
+
+```markdown
+# R-NNNN — Short outcome title
+
+1. Status: new
+2. Updated: YYYY-MM-DD
+3. Related: linked Z/P/rule/UC IDs and applicable UC category/variants; no gameplay UC if inapplicable
+4. Dependencies: specific existing capabilities or linked R outcomes; none if independent
+5. Primary area: one A01–A10 link from areas.md
+6. Related areas: specific cross-area dependencies; none if independent
+
+## 1. Summary
+
+1. Need and outcome: who needs what, and why.
+2. Current situation: concise observed facts, with dated source/revision or evidence link.
+3. Scope: the one outcome owned here, exclusions and links to related owners.
+
+## 2. Behavior
+
+1. Actor and starting situation: prerequisites, discovery and trigger in ordinary play
+   (or the developer/operator workflow for technical work).
+2. Main scenario: initial state → action/event → exact observable result and feedback.
+3. Alternative/rejection: cancellation, invalid input or changed state → outcome
+   and what remains unchanged; explain if an automatic event cannot be canceled.
+4. Boundaries and continuity: concrete edge values and save/load expectations
+   where relevant. Distinguish agreed rules from proposals and link shared decisions.
+
+## 3. Implementation steps
+
+1. Concise technical approach: owning components, existing operations to reuse,
+   affected callers/data/fixtures; leave detailed assignments in the linked handoff.
+2. Small ordered steps and specific dependencies. At `new`, this may remain
+   “Not prepared; refine after selection for development.”
+3. Verification plan: map chapter 2 examples to named existing/proposed TC scenarios
+   and model checks, or appropriate documentation/build checks for technical work.
+4. Current result: not implemented. After work, replace with a short accurate
+   summary and links to dated acceptance evidence and delivery; do not append a run diary.
+
+## 4. Open questions
+
+1. Question: ...
+   Blocking: yes/no; identify the affected outcome or explain why it can wait.
+   Decision: unresolved, or the agreed answer with date/source or authoritative Q link.
+
+Write “1. None.” if there are no questions. Preserve resolved decisions and reflect
+answers in chapters 2 and 3; shared decisions have one authoritative owner.
+```
+
+## Refinement task wording
+
+> Refine the selected `docs/requirements/R-NNNN.md` under the current workflow.
+> Set `waiting for refinement` for the selected requirement. Reuse agreed area
+> and rule decisions; read the relevant documentation, code and tests. Clarify
+> one owned outcome and observable acceptance in chapters 1 and 2, with a concise
+> technical approach and named checks in chapter 3. Resolve existing answers
+> before asking about remaining blockers. If all readiness checks pass, set
+> `ready for development`; otherwise retain `waiting for refinement` and explain
+> the blocker. Update this analysis without implementing the feature.
+
+This wording does not create chats, scheduled work or implementation assignments.
+
+## Existing backlog migration
+
+Agreed on **2026-10-14**, to follow this workflow change as a separate step:
+
+1. Inspect old requirements against actual implementation and acceptance evidence.
+   Separate delivered behavior, unresolved verification and unimplemented outcomes;
+   do not infer completion from an old status or a shared successful build.
+2. Split or merge only the remaining unimplemented outcomes into new R files,
+   with one independently reviewable outcome each. Give them new unused IDs,
+   link their exact source requirements/items and reuse prior agreed decisions.
+   A verification-only gap is identified explicitly rather than reimplemented.
+3. Preserve old IDs, decisions and evidence. When an old scope is superseded,
+   record the new owner links and any remainder so two active contracts do not
+   compete. Do not automatically mark partially delivered old requirements done
+   or perform a bulk mapping of legacy statuses.
+4. New replacement requirements start at `new`. Choose them with the user for
+   refinement and subsequent development under the lifecycle above. Migration
+   itself does not authorize implementing the remaining backlog.
+
+The historical sections below retain their headings and links for traceability.
+Their legacy status labels are not the vocabulary for new requirements.
 
 ## First ten upcoming requirements
 
@@ -102,159 +300,6 @@ scope and evidence; the earlier capture tables describe the initial drafts.
 Player-entered text defaults to **64 Unicode code points**, including player
 names. Do not reopen that length question for future fields unless the user
 requests an exception. Colony-name uniqueness is a separate existing rule.
-
-## Naming and scope
-
-1. Allocate the next unused number after the highest existing `R-` number on
-   `main`, starting at `R-0001`. Keep four digits at minimum. Never renumber or
-   reuse an allocated ID, including a deferred or cancelled requirement.
-2. Give the document a descriptive title, for example the existing
-   `# R-0001 — Start free play without completing the campaign`.
-3. Describe one independently reviewable outcome. Split a larger requirement
-   into linked requirements when its parts need separate decisions or delivery.
-   The number identifies the requirement; it does not set priority.
-4. Keep existing Z01/Z02, P, rule, UC and `TC_...` identifiers. Link the relevant
-   entries in the [implementation plan](../implementation-plan.md),
-   [rule catalogue](../gap-analysis.md) and [use cases](../use-cases.md).
-   An R ID identifies the analysis, not a replacement for those IDs.
-5. Use the requirement file as the single source of its agreed scope and
-   acceptance. Existing Z analyses stay in place until deliberately moved; when
-   moving one, retain its old heading and replace the body with a link. Do not
-   maintain two copies of the same contract or copy shared project guidelines.
-   Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
-   in the use-case catalogue, and functional results in the test contract.
-   Completing one R requirement does not close a whole UC or work package.
-
-## Work through requirements one at a time
-
-Select one active [work area](areas.md) and define its relevant shared structure
-before refining its small changes. Reuse an existing agreed contract or prepare
-one foundation R for the missing decisions; do not create parallel copies.
-An area is not a code layer or a replacement for the UC acceptance category.
-Record one primary area in each R and specific dependencies on other areas.
-Stay with the selected area until its chosen outcome is delivered, or explicitly
-explain a necessary dependency before switching. Full design of all ten areas
-is not a prerequisite for the first small delivery.
-
-1. **Capture:** record the user's need as a draft using the template below.
-   Incomplete information is fine; put unknowns in chapter 4. Link the file
-   from the relevant item in the implementation plan.
-2. **Refine:** select one requirement in the active area. Check that its affected
-   area-level decisions are settled. Read its sources, relevant code, callers,
-   tests and the [package responsibility map](../architecture.md). Separate
-   observed behavior from proposed behavior, assumptions and agreed decisions.
-   Date observations and identify the inspected revision; source reading is
-   not evidence of a successful player test.
-3. **Resolve:** settle only questions that affect this requirement's scope,
-   behavior, dependencies or acceptance. Record each answer and its date in
-   chapter 4. Link shared rule questions to their existing Q entry rather than
-   creating competing answers. Use existing agreements without asking again.
-4. **Mark ready:** the scope and behavior are agreed, acceptance is observable,
-   the affected components and verification plan are identified, dependencies
-   are available and no blocking question remains. A nonblocking question must
-   explain why it can wait. Readiness does not mean the feature is implemented.
-5. **Implement when requested:** use the agreed analysis to prepare the existing
-   [implementation handoff](../implementation-plan.md#sablona-predani-prace).
-   Keep worker instructions, limits and detailed assignments there; suitable
-   implementation goes to the configured local worker under the existing workflow. Refinement
-   alone changes documentation and does not start implementation.
-6. **Verify and deliver:** update the same file with links to the actual evidence,
-   source commit and published build. Follow the existing
-   [completion checks](../implementation-plan.md#kdy-je-ukol-hotovy) and
-   [publication workflow](../publishing.md). Select the next requirement
-   explicitly within the active area; do not automatically process the whole backlog.
-
-Use **Draft → Refining → Ready → In progress → Verified → Published**. `Verified`
-requires the relevant acceptance checks to pass; `Published` additionally
-requires confirmed delivery. A failed or skipped required check remains a
-blocker. For deferred or cancelled work, retain the file and state the reason.
-If agreed behavior changes, update the analysis and affected acceptance before
-continuing dependent implementation.
-
-## Copyable template
-
-Use numbered lists for all list items, including acceptance examples and open
-questions. Write explicit sequential numbers in the Markdown source and restart
-at 1 for each list. Refer to an item by requirement, chapter and number, for
-example “R-0001, chapter 4, question 2”. Keep question order when recording
-answers and append new questions so existing references remain useful.
-
-Keep these four chapters. Remove irrelevant prompts and write “Not applicable”
-with a brief reason where useful; do not invent rules to fill a field. In a
-draft, unknowns may remain explicit. Before marking it ready, replace generic
-test placeholders with concrete existing or proposed scenario names.
-
-```markdown
-# R-NNNN — Short requirement title
-
-1. Status: Draft
-2. Updated: YYYY-MM-DD
-3. Related: Z/P/rule/UC IDs with links; applicable UC category and variants
-4. Dependencies: requirement IDs or existing capabilities; none if independent
-5. Primary area: one A01–A10 link from areas.md
-6. Related areas: specific cross-area decisions or capabilities; none if independent
-
-## 1. Summary
-
-1. Problem and intended outcome: who needs what, and why.
-2. Current behavior: observed facts, source/revision and limits of the evidence.
-3. Scope: what this requirement includes and explicitly leaves out.
-
-## 2. Behavior
-
-Describe the intended observable behavior and distinguish agreed rules from
-proposals. For a player action, cover discovery, prerequisites, action,
-confirmation/cancellation and result feedback. Include relevant invalid input,
-boundaries, state changes during the action, and save/load expectations.
-For gameplay, explain how the change is reached in ordinary free play.
-
-Acceptance examples (initial state → action → exact expected result):
-
-1. Normal path: ...
-2. Cancellation or rejection: ...; specify what remains unchanged.
-3. Relevant boundary or persistence case: ...
-
-## 3. Implementation steps
-
-1. Identify the owning package and existing operations to reuse; list affected
-   callers, UI/AI paths, saved data, fixtures and resources as applicable.
-2. Describe the smallest ordered implementation steps and their dependencies.
-3. Map acceptance examples to named TC_... scenarios and model boundary tests
-   where applicable; identify fixtures, commands and any manual/visual checks.
-4. Update affected documentation and verify delivery using the project workflow.
-
-Evidence: not run yet. After execution, link dated results with revision,
-environment, selected tests, counts and failures/skips, then the published build.
-
-## 4. Open questions
-
-1. Question: ...
-   Blocking: yes/no, with the affected step or why it can wait.
-   Proposed answer and tradeoff: ...
-   Decision: unresolved, or agreed answer with date and source.
-
-Write “None” when there are no questions. Retain resolved decisions here or
-link their authoritative Q entry; reflect agreed answers in chapters 2 and 3.
-```
-
-Acceptance and test design follow the existing [functional test contract](../functional-tests.md)
-and [UX guidelines](../ux.md). For documentation or build work without a player
-path, describe the reader/operator outcome and appropriate checks instead of
-inventing a gameplay scenario. Planned checks are not test results.
-
-## Refinement task wording
-
-> Refine the selected `docs/requirements/R-NNNN.md` within its primary area.
-> Read the area foundation first; reuse its agreed decisions and identify any
-> missing structural decision that blocks this requirement. Inspect the relevant documentation,
-> code and tests, complete its four chapters, and identify the smallest
-> implementable scope and concrete acceptance checks. Resolve what existing
-> agreements already answer and ask only the remaining blocking questions.
-> Update this analysis without implementing the feature. Report whether it is
-> ready, what is still unresolved and the next step. Work on this requirement only.
-
-Use this wording when explicitly creating a refinement task. The document
-does not itself create chats, scheduled work or implementation assignments.
 
 ## Completed implementation slice R-0012–R-0018 — 2026-10-13
 
