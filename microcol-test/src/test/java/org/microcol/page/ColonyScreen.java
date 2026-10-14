@@ -326,7 +326,22 @@ public class ColonyScreen extends AbstractScreen {
         final EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
                 .runLater(started::countDown);
         final EventHandler<DragEvent> done = event -> finished.countDown();
+        final javafx.scene.Scene scene = canvas.getScene();
+        final EventHandler<javafx.scene.input.MouseEvent> mouseTrace = event -> logger
+                .info("Field drag {} mouse at ({}, {}): {}", target,
+                        event.getScreenX(), event.getScreenY(), event);
+        final EventHandler<DragEvent> dragTrace = event -> logger.info(
+                "Field drag {} native {} at ({}, {}), target {}", target,
+                event.getEventType(), event.getScreenX(), event.getScreenY(),
+                event.getTarget());
         getRobot().interact(() -> {
+            logger.info(
+                    "Field drag unit {} from {} to {}; canvas {}; focused {}",
+                    unitId, start, destination,
+                    canvas.localToScreen(canvas.getBoundsInLocal()),
+                    scene.getWindow().isFocused());
+            scene.addEventFilter(javafx.scene.input.MouseEvent.ANY, mouseTrace);
+            scene.addEventFilter(DragEvent.ANY, dragTrace);
             canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_MOVED,
                     moved);
             canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
@@ -366,6 +381,12 @@ public class ColonyScreen extends AbstractScreen {
                 getRobot().release(MouseButton.PRIMARY);
             }
             getRobot().interact(() -> {
+                logger.info("Field drag {} ended; canvas {}; focused {}",
+                        target, canvas.localToScreen(canvas.getBoundsInLocal()),
+                        scene.getWindow().isFocused());
+                scene.removeEventFilter(javafx.scene.input.MouseEvent.ANY,
+                        mouseTrace);
+                scene.removeEventFilter(DragEvent.ANY, dragTrace);
                 canvas.removeEventHandler(
                         javafx.scene.input.MouseEvent.MOUSE_MOVED, moved);
                 canvas.removeEventHandler(
