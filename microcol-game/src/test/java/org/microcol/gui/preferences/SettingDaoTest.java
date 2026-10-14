@@ -3,6 +3,7 @@ package org.microcol.gui.preferences;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Optional;
@@ -50,8 +51,10 @@ public class SettingDaoTest extends AbstractPreferencesTest {
     }
 
     private void printOutStoredSetting() throws IOException {
-        Files.newReader(SETTING_FILE, Charset.defaultCharset()).lines()
-                .forEach(logger::debug);
+        try (BufferedReader reader = Files.newReader(SETTING_FILE,
+                Charset.defaultCharset())) {
+            reader.lines().forEach(logger::debug);
+        }
     }
 
     @BeforeEach
