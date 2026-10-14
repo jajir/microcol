@@ -72,6 +72,50 @@ class WorkerTest(unittest.TestCase):
         self.assertEqual((self.tree / "a.java").read_text(), "old A\n")
         self.assertFalse((path / "application.json").exists())
 
+    def test_escalation_and_high_repair_keep_cumulative_time_and_attempt_count(self):
+        self.attempt(0, 1799.5)
+        high = {**self.config, "reasoning": "high"}
+        self.assertEqual(worker.budget(self.job, high, "Generation exhausted"),
+                         (1, 1799.5, 1800))
+        second = self.attempt(1, 1750)
+        worker.write_json(second / "profile.json", high)
+        worker.write_json(second / "execution.json", {
+            "elapsed_seconds": 1750, "escalation_reason": "Generation exhausted"})
+        self.assertEqual(worker.budget(self.job, high), (2, 3549.5, 50.5))
+        third = self.attempt(2, 1)
+        worker.write_json(third / "profile.json", high)
+        with self.assertRaisesRegex(ValueError, "Repair limit"):
+            worker.budget(self.job, high)
+
+    def test_escalation_rejects_missing_reason_changed_limits_and_downgrade(self):
+        self.attempt(0, 1)
+        high = {**self.config, "reasoning": "high"}
+        for reason in (None, "", "   "):
+            with self.subTest(reason=reason), self.assertRaisesRegex(ValueError, "reason"):
+                worker.budget(self.job, high, reason)
+        for change in ({"model": "other"}, {"task_seconds": 7200},
+                       {"num_ctx": 65536}, {"max_repairs": 3}):
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, "Profile changed"):
+                worker.budget(self.job, {**high, **change}, "Retry")
+        second = self.attempt(1, 1)
+        worker.write_json(second / "profile.json", high)
+        with self.assertRaisesRegex(ValueError, "reason"):
+            worker.budget(self.job, high)
+        worker.write_json(second / "execution.json", {
+            "elapsed_seconds": 1, "escalation_reason": "Failed acceptance"})
+        with self.assertRaisesRegex(ValueError, "Profile changed"):
+            worker.budget(self.job, self.config)
+
+    def test_escalation_cannot_start_a_job_or_revive_an_exhausted_budget(self):
+        high = {**self.config, "reasoning": "high"}
+        with self.assertRaisesRegex(ValueError, "previous medium"):
+            worker.budget(self.job, high, "Retry")
+        self.attempt(0, 3600)
+        with self.assertRaisesRegex(ValueError, "Task time"):
+            worker.budget(self.job, high, "Retry")
+        with self.assertRaisesRegex(ValueError, "requires a medium-to-high"):
+            worker.budget(self.job, self.config, "Retry")
+
     def test_batch_decodes_newlines_and_applies_all_valid_edits(self):
         path = self.attempt(0, 1)
         worker.write_json(path / "job.json", self.contract)

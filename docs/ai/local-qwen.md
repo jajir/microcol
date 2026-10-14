@@ -1,11 +1,12 @@
 # Codex and a local development worker
 
-Status as of **2026-10-14: the default local GPT-OSS 20B profile requests medium
-reasoning, context 32768 and a 16384-token generation allowance**, under
-[R-0036](../requirements/R-0036.md). The original 16k-output high trial exhausted
-generation before delivering code on both tasks. The larger-budget high trial
-below passed after one repair; high remains an explicit experimental profile
-because this case did not outperform medium.
+Status as of **2026-10-14: new ordinary jobs use GPT-OSS 20B medium,
+context 98304 and a 65536-token generation allowance**, under
+[R-0039](../requirements/R-0039.md). After diagnosed medium failure, the caller
+may escalate the same job to high/64k with unchanged time and repair budgets.
+This is the user's operating policy, not evidence that medium/64k has better
+coding quality. Earlier trials and their recommendations below remain dated
+historical evidence; R-0039 supersedes their default-selection policy.
 Qwen2.5-Coder 14B Instruct Q4_K_M is installed as another explicit profile. Astra remains the main
 agent and supervises a separate local Codex CLI process, checks the result and
 owns integration and publication. The current operating profile below replaces
@@ -18,13 +19,63 @@ measured. The operating page and
 log directory retain their `local-qwen` names to preserve existing links and
 artifacts; they are not model selectors.
 
-The default [time budgets](#time-budget-2026-10-14) are thirty minutes per
-attempt, sixty minutes cumulative per task and at most two targeted repairs.
-The explicit [64k-output experiment](#explicit-gpt-oss-high-with-64k-output)
-uses longer limits.
+The default [time budgets](#time-budget-2026-10-14) are two hours per
+attempt, four hours cumulative per task and at most two repairs across medium
+and high combined. The [64k-output experiment](#explicit-gpt-oss-high-with-64k-output)
+established the installed alias used by both reasoning levels.
 The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
+
+## Cloud-token priority and medium-to-high policy — 2026-10-14
+
+1. [AGENTS.md](../../AGENTS.md#local-worker) owns the project priority: saving
+   cloud tokens takes precedence over speed and unnecessary parallel cloud work.
+   Apply it in the current task, not only future sessions. Use local workers for
+   suitable bounded work; do trivial edits directly when delegation costs more.
+   Additional cloud agents need a stated reason based on expected total-token
+   savings or a concrete quality concern, not elapsed-time savings alone.
+2. Reuse known context, send exact relevant code and acceptance criteria, and
+   return concise diffs/results/failures rather than full logs. Avoid duplicate
+   cloud implementation, repeated broad discovery and redundant reviews. Keep
+   required checks and independent acceptance; local generation is not itself a
+   measured saving once caller preparation/review/repair costs are included.
+3. Start with the default medium/64k profile. Correct caller setup or unclear
+   instructions first. Target simple code errors with a focused repair. If medium
+   still cannot solve the task or exhausts generation, escalate with the command
+   below before consuming the remaining repair/time allowance. No additional user
+   approval is needed for this in-scope transition.
+4. Escalation is a caller decision, not an unattended retry service. Preserve the
+   same job, worktree, task scope and acceptance checks. The launcher allows only
+   medium to high with all other profile fields unchanged, records the reason,
+   checks the same installed digest and retains cumulative time/attempt counts.
+   High repairs must keep selecting the high profile. No downgrade, unrelated
+   profile change or new-directory budget reset is allowed.
+5. R-0039 verification covers configuration, installed alias and launcher budget
+   behavior; it does not rerun the two-hour coding benchmark. The main agent
+   performs this small policy/configuration/launcher change directly because a
+   separate handoff and review would add overhead. No extra cloud agents are used.
+
+```sh
+# First attempt and ordinary medium repair:
+python3 scripts/local-worker/worker.py run "$worker_job"
+# After diagnosis, retaining the same job and remaining allowance:
+python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high-64k --escalate-reason "Medium exhausted generation without a final answer"
+# A subsequent high repair omits --escalate-reason but retains --profile:
+python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high-64k
+```
+
+The reason above is an example; record the actual observed failure. A high
+attempt counts as a repair, leaving at most one further repair if escalation
+follows the first medium attempt. Required tests still decide acceptance.
+
+Verified on **2026-10-14**: all **21 launcher tests**, **9 documentation tests**
+and the strict MkDocs build passed. Tests cover escalation, subsequent high
+repair, missing reason, forbidden changes/downgrade and preserved time/repair
+limits. The installed alias matches both profiles and supports medium/high;
+the effective default command selects medium and context 98304. No model was
+loaded and no new inference was run. `target/r39/profile-verification.json`
+retains configuration evidence; publication is verified for the resulting commit.
 
 ## GPT-OSS high with a 64k generation allowance — 2026-10-14
 
@@ -804,23 +855,22 @@ local Maven/TestFX was not rerun for this configuration-only follow-up.
 
 ### Operating profile — bounded assignments
 
-Approved on **2026-10-14** under [R-0035](../requirements/R-0035.md), with high
-reasoning and Qwen comparison trials authorized by
-[R-0036](../requirements/R-0036.md). The trial temporarily selected high;
-the completed high results support returning the default to medium. The existing
+Updated on **2026-10-14** under [R-0039](../requirements/R-0039.md).
+The existing
 [Modelfile](../../.codex/local-worker/Modelfile) owns context/output values;
 [profile.json](../../.codex/local-worker/profile.json) owns the remaining settings.
 The launcher reads both, checks the installed alias, and snapshots their effective
-values per attempt. Changing settings during a task is rejected; retries retain
-that task's original budget. Historical jobs retain their original evidence.
+values per attempt. Only the diagnosed medium-to-high transition described above
+is allowed during a task; retries retain that task's original budget. Historical
+jobs retain their original evidence and need their original frozen profile to resume.
 
 | Setting | Current configured value |
 | --- | --- |
 | Runtime | Existing Ollama 0.40.2 and Codex CLI 0.142.3, local loopback only. |
-| Model | `gpt-oss:20b`, alias `microcol-gpt-oss:20b-32k`; no cloud fallback. |
-| Context / generation | `num_ctx 32768`, `num_predict 16384`; generation includes reasoning and final output. Input, tools and generated text share the context. |
+| Model | `gpt-oss:20b`, alias `microcol-gpt-oss:20b-96k-output64k`; no cloud fallback. |
+| Context / generation | `num_ctx 98304`, `num_predict 65536`; generation includes reasoning and final output. Input, tools and generated text share the context. |
 | Reasoning | `medium`; installed GPT-OSS supports `low`, `medium`, `high`. This is a request setting, not a different set of weights. |
-| Limits | 1800 seconds per attempt, 3600 cumulative seconds per task, at most two repairs. |
+| Limits | 7200 seconds per attempt, 14400 cumulative seconds per task, at most two repairs across both reasoning levels. |
 | Text-only mode | `features.shell_tool=false`, read-only sandbox; browser/computer/image generation, plugins, apps and delegation disabled. |
 | Direct-edit mode | Command execution and workspace writes permitted in the isolated worktree, within the supplied scope. |
 | Concurrency | One local worker; host-wide lock retained through caller verification. Unload before Maven/Docker. |
@@ -830,7 +880,7 @@ files and recreate the alias from the existing weights while holding the worker
 lock. A reasoning-only change is passed per request and needs no alias rebuild:
 
 ```sh
-ollama create microcol-gpt-oss:20b-32k -f .codex/local-worker/Modelfile
+ollama create microcol-gpt-oss:20b-96k-output64k -f .codex/local-worker/Modelfile
 ```
 
 Changing the file alone does not update Ollama. The launcher rejects a mismatch
@@ -839,14 +889,15 @@ The model alias is configurable in the profile; model changes require an explici
 operator decision and verification. No launch installs or downloads a model.
 
 The alias now has digest
-`b1630d4983e67a857f552db4e439ef29ed2d7131cb5ab6677809398fbb90abd8`.
-The earlier `425bbb...` digest identifies the historical 4096-output profile.
+`aa2f84a12eb2606aeb426045b0d256cff9ffe8f92b8ee6f11b5499a08c0a174f`.
+The `b1630d...` digest identifies the historical 32k-context / 16k-output alias;
+`425bbb...` identifies the older 4096-output profile.
 The configured change is verified by `/api/show`; coding results are recorded
 in the dated evidence, not inferred from configuration.
 
-The [high profile](../../.codex/local-worker/gpt-oss-high/profile.json) and its
+The historical [high profile](../../.codex/local-worker/gpt-oss-high/profile.json) and its
 [Modelfile](../../.codex/local-worker/gpt-oss-high/Modelfile) preserve the exact
-tested high settings with the same installed GPT-OSS alias. Select it only for
+tested 16k-output settings with the older 32k alias. Select it only for
 an explicit experiment; these runs provide no evidence that an unchanged retry
 would remedy the observed generation-limit failures:
 
@@ -870,7 +921,8 @@ report a 131072-token context limit; this does not guarantee sufficient host mem
 The separate alias is `microcol-gpt-oss:20b-96k-output64k`, digest
 `aa2f84a12eb2606aeb426045b0d256cff9ffe8f92b8ee6f11b5499a08c0a174f`.
 Its installed parameters match the files. Alias creation reuses existing weights;
-service settings and the default medium profile remain unchanged.
+service settings remain unchanged. R-0039 also selects this alias for the default
+medium profile; reasoning is the only difference between the current two profiles.
 
 ```sh
 # Hold the existing worker lock while recreating an explicitly changed alias.
@@ -886,7 +938,7 @@ Q4_K_M quantization. The separate
 [Modelfile](../../.codex/local-worker/qwen2.5-coder-14b/Modelfile) and
 [profile](../../.codex/local-worker/qwen2.5-coder-14b/profile.json) select alias
 `microcol-qwen2.5-coder:14b-q4_K_M-32k`, context **32768**, output **16384**, and
-the same time/repair limits as GPT-OSS. Its installed digest is
+the historical 1800/3600-second limits and two repairs. Its installed digest is
 `9ea50088a1236ab5b3d379b1b266636db45a63eb7db2108becb47c394f8f8fa0`.
 The model does not expose thinking capability; `reasoning: none` and disabled
 reasoning summaries reflect that capability. There is no Qwen `high` level.
@@ -898,19 +950,23 @@ ollama create microcol-qwen2.5-coder:14b-q4_K_M-32k -f .codex/local-worker/qwen2
 python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/qwen2.5-coder-14b
 ```
 
-Pass the same `--profile` for every repair of that job. The launcher checks the
-actual model capability before starting and rejects unsupported reasoning or a
-profile change between attempts. Apply/release commands are unchanged. Selection
-is explicit, with no automatic fallback or change to the main agent's model.
+Pass the same `--profile` for every Qwen repair. The launcher checks actual model
+capability before starting and rejects unsupported reasoning or unrelated profile
+changes. Only GPT-OSS medium-to-high escalation with otherwise identical settings
+is part of the ordinary policy. Apply/release commands are unchanged; there is no
+unattended fallback or change to the main agent's model.
 
 ### Time budget — 2026-10-14
 
 1. The launcher derives the next attempt number and elapsed time from all prior
    `attempt-*/execution.json` records. Missing/nonconsecutive evidence, a changed
-   profile, exhausted time or exhausted repairs stops dispatch.
+   profile other than a recorded medium-to-high transition, exhausted time or
+   exhausted repairs stops dispatch. R-0039 raises new-job limits to 7200/14400
+   seconds; historical jobs preserve their original limits.
 2. Each attempt gets `min(attempt_seconds, task_seconds - elapsed_seconds)`.
-   Startup, failed execution, cancellation and cleanup count. For example, 3500
-   seconds already used leaves 100 seconds, not a new 30-minute attempt.
+   Startup, failed execution, cancellation and cleanup count. For example, 14300
+   seconds already used leaves 100 seconds, not a new two-hour attempt. Escalation
+   does not renew time or the maximum two repairs.
 3. On deadline, interruption or runtime identity failure, the launcher terminates
    its owned process group, escalates after five seconds if needed, unloads the
    model and records the result. Repeated discovery without progress can still
@@ -952,6 +1008,8 @@ failure without checking a feasible correction does not meet this contract.
    budgets are exhausted, record that concrete reason rather than retrying
    indefinitely. Main-agent takeover must explain why another worker repair
    was not appropriate.
+   For an eligible medium failure, follow the diagnosed high/64k transition above
+   before exhausting the shared budget; keep the same job and verification contract.
 4. **Verify the original failure and the result.** After unloading the local model, the
    caller reruns the failed command/check against the repaired state and then
    the assigned acceptance checks, including formatting for Java changes.

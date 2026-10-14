@@ -157,6 +157,15 @@ blocker, not a verified change. Use the contract's completion checklist.
 
 # Local worker
 
+Cloud-token savings take priority over speed and unnecessary parallel cloud
+work in this project. Apply this rule immediately in the current task as well
+as future tasks. Do not spawn additional cloud agents merely to save elapsed
+time; use them only when their bounded work is expected to reduce total cloud
+tokens or is necessary for a concrete quality concern. State that reason first.
+Keep handoffs, tool output and reports focused; reuse known source context and
+verification evidence instead of repeating broad discovery or duplicate reviews.
+Never weaken required tests, validation or acceptance to save tokens.
+
 Prefer the configured local GPT-OSS 20B worker for the maximum suitable
 development work once the user and main agent agree the use case and acceptance
 criteria. The main agent decomposes
@@ -166,6 +175,14 @@ test authoring, bug fixes, repetitive refactoring, and documentation or
 configuration changes within agreed interfaces. No separate user approval is
 needed for each assignment. Do trivial edits directly when delegation and review
 would cost more; briefly explain other work retained by the main agent.
+
+Start new ordinary jobs with medium/64k, then use high/64k when diagnosed medium
+failure warrants escalation. Both use a 96k context. Correct caller/setup or
+ambiguous-instruction errors first; send simple code errors for targeted repair.
+Escalate before exhausting the shared time/repair budget, record why, and retain
+the same job and worktree. Follow the operating document's explicit transition
+command; changing reasoning must not reset budgets. No new user approval is
+needed for an in-scope transition. Historical experiments retain their profiles.
 
 The main agent owns requirements, architecture, actual verification, review,
 integration and the authorized completion workflow above. Do not duplicate the

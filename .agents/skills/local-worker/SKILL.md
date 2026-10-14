@@ -8,6 +8,12 @@ description: Delegate a small implementation, test, or repair task to a configur
 The main agent owns the task definition, required behavior, and acceptance of the
 result. The worker implements the assigned task without further delegation.
 
+Apply the project's cloud-token priority in `AGENTS.md`: prefer suitable local
+work over unnecessary parallel cloud agents, keep the handoff and returned
+evidence concise, and retain all required checks. Start new ordinary jobs with
+medium/64k; follow the operating document for a diagnosed high/64k escalation
+within the same job and cumulative time/repair budget.
+
 The selected route is `codex exec` supervised by the shared
 [launcher](../../../scripts/local-worker/worker.py), not a copied per-job runner.
 Read [the operating document](../../../docs/ai/local-qwen.md) for the

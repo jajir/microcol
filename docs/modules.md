@@ -37,7 +37,8 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 
 The [local worker launcher](../scripts/local-worker/worker.py) is development
 tooling outside the Maven modules. Its [profile](../.codex/local-worker/profile.json)
-and [Modelfile](../.codex/local-worker/Modelfile) configure local execution;
+and [Modelfile](../.codex/local-worker/Modelfile) configure medium/64k execution.
+The launcher supports diagnosed high/64k escalation without resetting task budgets;
 explicit [GPT-OSS high](../.codex/local-worker/gpt-oss-high/profile.json),
 [GPT-OSS high with 64k output](../.codex/local-worker/gpt-oss-high-64k/profile.json) and
 [Qwen comparison profiles](../.codex/local-worker/qwen2.5-coder-14b/profile.json)

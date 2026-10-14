@@ -97,17 +97,35 @@ def check_anchors(tree, contract):
     return hashes
 
 
-def budget(job, config):
+def check_profile_transition(previous, current, reason):
+    if previous == current:
+        require(reason is None, "Escalation reason requires a medium-to-high transition")
+        return
+    require(previous.get("reasoning") == "medium" and
+            current == {**previous, "reasoning": "high"}, "Profile changed during task")
+    require(isinstance(reason, str) and reason.strip(), "Record an escalation reason")
+
+
+def budget(job, config, escalation_reason=None):
     attempts = sorted(job.glob("attempt-*"), key=lambda p: int(p.name.split("-")[-1]))
     require([p.name for p in attempts] == [f"attempt-{n}" for n in range(len(attempts))],
             "Nonconsecutive attempt history")
     used = 0
+    previous = None
     for attempt in attempts:
         require((attempt / "execution.json").is_file(), "Incomplete attempt needs diagnosis")
-        elapsed = read_json(attempt / "execution.json")["elapsed_seconds"]
+        execution = read_json(attempt / "execution.json")
+        elapsed = execution["elapsed_seconds"]
         require(isinstance(elapsed, (int, float)) and elapsed >= 0, "Invalid elapsed time")
-        require(read_json(attempt / "profile.json") == config, "Profile changed during task")
+        recorded = read_json(attempt / "profile.json")
+        if previous is not None:
+            check_profile_transition(previous, recorded, execution.get("escalation_reason"))
+        previous = recorded
         used += elapsed
+    if previous is not None:
+        check_profile_transition(previous, config, escalation_reason)
+    else:
+        require(escalation_reason is None, "Escalation requires a previous medium attempt")
     require(len(attempts) <= config["max_repairs"], "Repair limit exhausted")
     allowed = min(config["attempt_seconds"], config["task_seconds"] - used)
     require(allowed > 0, "Task time exhausted")
@@ -118,7 +136,7 @@ def git(tree, *args):
     return subprocess.check_output(["git", "-C", str(tree), *args], text=True).strip()
 
 
-def preflight(job, config):
+def preflight(job, config, escalation_reason=None):
     contract = read_json(job / "job.json")
     require(contract["mode"] in ("text-only", "edit"), "Unknown output mode")
     require(Path(contract["worktree"]).is_absolute(), "Worktree path must be absolute")
@@ -132,7 +150,7 @@ def preflight(job, config):
             "Worktree belongs to another repository")
     for name in ("task.md", "worker-role.md"):
         require((job / name).is_file() and (job / name).read_text().strip(), "Missing " + name)
-    return contract, tree, check_anchors(tree, contract), budget(job, config)
+    return contract, tree, check_anchors(tree, contract), budget(job, config, escalation_reason)
 
 
 def api(route, body=None):
@@ -235,9 +253,9 @@ def claim(job, lock=LOCK):
     write_json(lock / "owner.json", {"job": str(job), "runner_pid": os.getpid()})
 
 
-def run(job, profile_directory=None):
+def run(job, profile_directory=None, escalation_reason=None):
     config = profile() if profile_directory is None else profile(profile_directory)
-    contract, tree, hashes, (number, used, seconds) = preflight(job, config)
+    contract, tree, hashes, (number, used, seconds) = preflight(job, config, escalation_reason)
     codex, ollama = shutil.which("codex"), shutil.which("ollama")
     require(codex and ollama, "Codex and Ollama must already be installed")
     info = model_info(config)
@@ -252,6 +270,8 @@ def run(job, profile_directory=None):
     attempt = job / f"attempt-{number}"
     started = time.monotonic()
     result = {"allowed_seconds": seconds, "previous_worker_seconds": used}
+    if escalation_reason is not None:
+        result["escalation_reason"] = escalation_reason
     loaded = 0
     try:
         attempt.mkdir()
@@ -394,11 +414,14 @@ def main():
     parser.add_argument("--attempt", type=int)
     parser.add_argument("--profile", type=Path,
                         help="Directory containing profile.json and Modelfile (run only)")
+    parser.add_argument("--escalate-reason",
+                        help="Diagnosed reason for medium-to-high escalation in this job (run only)")
     args = parser.parse_args()
     job = args.job.resolve()
     if args.action == "run":
-        return run(job, args.profile)
+        return run(job, args.profile, args.escalate_reason)
     require(args.profile is None, "--profile is only used when running an attempt")
+    require(args.escalate_reason is None, "--escalate-reason is only used when running an attempt")
     if args.action == "apply":
         require(args.attempt is not None and args.attempt >= 0, "Select --attempt explicitly")
         apply(job, args.attempt)
