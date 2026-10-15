@@ -2216,3 +2216,37 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    `target/r52/publish-rival-repair.log`. This also executes the final initial
    statistics ordering and the restored exact initial rival-position assertion.
    The full GitHub regression remains the publication gate.
+9. For source commit `36d104eb45c2c8d100162198aad948570c3a6d8d`, downloaded
+   [Linux native CI evidence](https://github.com/jajir/microcol/actions/runs/38758974439)
+   passed **1166 game cases and 33 build/package checks**; separate launcher
+   evidence passed **32 checks**, all without failures/errors/skips. The local
+   explicit `*Test` selection above includes one extra case outside the normal
+   CI game selection. All four Java 11/17 × Windows/Linux compatibility jobs
+   passed in [run 38758974476](https://github.com/jajir/microcol/actions/runs/38758974476).
+   [Pages run 38758974398](https://github.com/jajir/microcol/actions/runs/38758974398)
+   deployed; the live evidence page contains this section and source links pinned
+   to `36d104eb`. Native and launcher evidence is retained in
+   `target/r52/ci-linux/` and `target/r52/ci-build-tools/`.
+10. A separate Docker check of the remaining new-game entry paths passed **10
+    UI/support cases** (TC24's six scenarios, TC12 and three page-contract cases),
+    with zero failures/errors/skips. Selection:
+    `TC_12_F11_start_free_game,TC_24_F15_free_play_setup_test,PageVerificationContractTest`
+    with `-Dsurefire.failIfNoSpecifiedTests=false`; log
+    `target/r52/publish-new-game-check.log`. No additional source change was needed.
+11. The earlier [full CI run for 5beea7b5](https://github.com/jajir/microcol/actions/runs/38758246219)
+    finished with **1166 passing game cases** and **153 UI-module cases, two
+    failures**, no errors/skips. Downloaded XML confirms that its only failures
+    were the two TC34 shore-visibility expectations corrected in `36d104eb`;
+    no other gameplay failure appeared. Publication was skipped for that failed
+    run. Evidence is retained under `target/r52/ci-first-functional/`.
+12. The corrected [full CI run for 36d104eb](https://github.com/jajir/microcol/actions/runs/38758974439)
+    passed **1166 game tests and 153 UI-module cases**, with zero failures,
+    errors or skips. Downloaded XML is in `target/r52/ci-final-functional/`.
+    All three native packages, launcher checks and publication passed. The
+    [published build dev-84-36d104eb45c2](https://github.com/jajir/microcol/releases/tag/dev-84-36d104eb45c2)
+    is a public prerelease containing all three platform archives and installers.
+    The downloaded development-channel manifest identifies that exact build and
+    source commit; local manifest evidence is in `target/r52/published/`.
+    This completes acceptance and publication of this partial delivery, not the
+    outstanding preparation-time save/action boundary in R-0052. No manual
+    playtest is claimed.
