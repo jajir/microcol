@@ -2292,3 +2292,17 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    sestavení MkDocs; vykreslená sekce byla zkontrolována.
    UI běží v Docker/Xvfb/Openbox, bez ovládání hostitelské plochy. Manuální
    hraní nebylo provedeno. Publikace se ověřuje samostatně po pushi.
+
+6. První publikovaný kandidát `aa6677f3` prošel Pages, ale
+   [CI 38768159824](https://github.com/jajir/microcol/actions/runs/38768159824)
+   zastavilo vydání: **1199 modelových případů, 2 selhání, 0 chyb/přeskočení**.
+   Dva existující `CargoSlotTest` očekávaly odmítnutí rozdílné komodity dříve
+   než přístup k vlastníkovi. Caller zachoval tuto neměnící validaci před
+   novou přípravnou kontrolou; žádná mutace se před kontrolu nepřesunula
+   a původní testy zůstaly beze změny.
+7. Opravený místní Docker běh s `-Dtest=*Test` prošel **1200 případy herního
+   modulu a 9 případy UI modulu**, bez chyb či přeskočení, exit 0. Obsahuje
+   celý zvolený modelový výběr, 47 cargo testů a nové boundary/action testy;
+   nenahrazuje úplnou sadu číslovaných UI scénářů. Log je
+   `target/r52/boundary-all-model.log`. Následující CI ověří plnou sadu
+   před zveřejněním vývojové hry.

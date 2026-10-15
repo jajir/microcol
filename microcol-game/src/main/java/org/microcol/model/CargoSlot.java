@@ -224,8 +224,8 @@ public class CargoSlot {
      */
     public Goods storeFromCargoSlot(final Goods transferredGoods,
             final CargoSlot sourceCargoSlot) {
-        getOwnerPlayer().checkTurnPreparationComplete();
         verifyThatItCouldStored(transferredGoods);
+        getOwnerPlayer().checkTurnPreparationComplete();
         Preconditions.checkNotNull(sourceCargoSlot,
                 "source cargo slot is null");
         Preconditions.checkArgument(
@@ -257,8 +257,8 @@ public class CargoSlot {
      */
     public void storeFromColonyWarehouse(final Goods transferredGoods,
             final Colony colony) {
-        getOwnerPlayer().checkTurnPreparationComplete();
         verifyThatItCouldStored(transferredGoods);
+        getOwnerPlayer().checkTurnPreparationComplete();
         Preconditions.checkNotNull(colony, "colony is null");
         Preconditions.checkArgument(getOwnerPlayer().equals(colony.getOwner()),
                 "Source colony warehouse and target cargo slots doesn't belongs to same user (%s) (%s).",
