@@ -128,8 +128,10 @@ only to the described bounded delivery.
 The migration retains accepted policies even when they differ from an inferred
 historical rule: equipment purchase/sale tax arithmetic, passenger costs,
 coastal adjacency, safe blocked arrival and construction population-at-start.
-Unknown parameters stay in Q-01/Q-02/Q-03/Q-08/Q-09/Q-10/Q-11 and the successor’s
-chapter 4. Live visibility in R-0070 is explicitly a product proposal.
+At migration time, missing parameters remained in shared questions and successor
+chapter 4. The [rules accepted on 2026-10-15](../gap-analysis.md#accepted-game-rules)
+now supply those values, including provisional live visibility. Active successors
+incorporate the answers and retain only genuinely unanswered questions.
 
 Select one successor with the user and set `waiting for refinement`. Recheck its
 specific code, close its blocking questions and name actual test scenarios.

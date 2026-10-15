@@ -32,7 +32,7 @@ with new outcomes numbered from R-0050; old IDs retain their history.
    acceptance. Existing Z analyses stay in place until deliberately moved; when
    moving one, retain its old heading and replace the body with a link. Do not
    maintain two copies of the same contract or copy shared project guidelines.
-   Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
+   Shared rules remain in the rule catalogue, whole-UC acceptance
    in the use-case catalogue, and functional results in the test contract.
    Completing one R requirement does not close a whole UC or work package.
 
@@ -117,8 +117,9 @@ required before a small delivery.
    the inspected revision; source inspection is not a successful player test.
 3. **Resolve ownership and questions:** identify what this R alone delivers and
    what it reuses from another requirement. Reference existing decisions instead
-   of reopening them. When a decision resolves another R's blocker, update its
-   question/dependency to point to that decision without claiming its whole scope done.
+   of reopening them. [Incorporate each answer](#incorporate-answers) into all
+   affected active requirements and remove the resolved question, without claiming
+   their whole scope done.
 4. **Check readiness:** chapters 1 and 2 name the actor/need, boundaries and
    observable examples (initial state → action/event → exact result), including
    relevant cancellation, rejection, boundaries and persistence. Chapter 3 has a
@@ -136,11 +137,37 @@ required before a small delivery.
    Check the whole selected outcome, not just the latest successful subtask.
    Select the next requirement explicitly; IDs are not an implementation queue.
 
+## Incorporate answers
+
+Agreed on **2026-10-15**, recorded in [R-0116](done/R-0116.md).
+
+1. Put an accepted answer into the authoritative game-rule topic and the relevant
+   requirement chapters: need/observable behavior in chapters 1–2, design in
+   chapter 3. Keep shared values in one place and link to them by topic. Preserve
+   the answer's date, source and provisional status; adoption is not runtime evidence.
+2. In the same change, update every referring requirement with status `new`,
+   `waiting for refinement` or `ready for development`. Remove the fully answered
+   question and its retired Q references from those requirements and
+   [gap-analysis.md](../gap-analysis.md). Repair consuming catalogue/plan links;
+   do not retain an answered-question register in the current rules.
+3. If an answer is partial, incorporate the settled part and narrow the question
+   to the missing information. Chapter 4 contains only unanswered questions, or
+   “1. None.” Keep future balance/fidelity review with the provisional rule rather
+   than presenting an adopted value as an open decision.
+4. Preserve archived `done`, `deferred` and `canceled` records and dated evidence
+   as history, repairing links where necessary. On reactivation, reconcile the
+   requirement with current rules. Do not reuse retired question IDs or renumber
+   retained unanswered items merely to fill gaps left by deleted questions.
+5. Recheck dependencies and acceptance during individual refinement. Removing a
+   question alone does not mark a requirement ready/done, accept a whole UC or
+   authorize implementation of the gameplay backlog.
+
 ## Copyable template
 
 Keep exactly these four chapters and numbered items, with explicit sequential
 numbers restarting in each list. Refer to an item by requirement, chapter and
-number. Preserve existing question numbers; append new questions. Remove irrelevant
+number. Preserve unanswered question numbers; remove answered items under the
+[answer workflow](#incorporate-answers) and append new questions. Remove irrelevant
 prompts, or write “Not applicable” with a reason. At capture, mark unknowns rather
 than inventing rules; before readiness, replace test placeholders with named checks.
 
@@ -192,10 +219,11 @@ for an infrastructure requirement may be part of its observable operator contrac
 
 1. Question: ...
    Blocking: yes/no; identify the affected outcome or explain why it can wait.
-   Decision: unresolved, or the agreed answer with date/source or authoritative Q link.
+   Missing information: the specific unanswered part; link already accepted rules
+   without repeating resolved questions here.
 
-Write “1. None.” if there are no questions. Preserve resolved decisions and reflect
-answers in chapters 2 and 3; shared decisions have one authoritative owner.
+Write “1. None.” if there are no questions. Incorporate answers in chapters 1–3
+and the authoritative rule topic, then remove the answered question.
 ```
 
 ## Refinement task wording

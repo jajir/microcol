@@ -164,7 +164,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
-| **P01 Pravidlová rozhodnutí a referenční data**; Q-01–Q-11 a čtyři referenční tabulky | Oddělit hodnoty výslovně uvedené v manuálu od našich doplněných vzorců. Připravit nezávislé příklady pro terén, jednotky, profese a stavby. | Q-01–Q-11 mají [přijaté prozatímní odpovědi z 15. 10. 2026](gap-analysis.md#open-questions-and-decisions), zapsané v [R-0115](requirements/done/R-0115.md). Pro konkrétní zadání převzít relevantní příklady a doplnit návrh; test nesmí pouze číst stejné runtime konstanty jako implementace. |
+| **P01 Pravidlová rozhodnutí a referenční data**; přijatá pravidla a čtyři referenční tabulky | Oddělit hodnoty výslovně uvedené v manuálu od našich doplněných vzorců. Připravit nezávislé příklady pro terén, jednotky, profese a stavby. | Použít [přijatá pravidla](gap-analysis.md#accepted-game-rules), zapsané v [R-0115](requirements/done/R-0115.md). Pro konkrétní zadání převzít relevantní příklady a doplnit návrh; test nesmí pouze číst stejné runtime konstanty jako implementace. |
 | **P02 Nová hra**; SETUP-001–009 | Volba jména, čtyř národů, pěti obtížností, počáteční výpravy a data; generovaný svět, Amerika a vlastní parametry. Zapojit národní výhody do příslušných systémů. | P01/P04/P05; národní efekty také P15/P17/P18/P22. Každá volba se uloží a skutečně změní odpovídající chování; stejný seed reprodukuje mapu. |
 | **P03 Tahy a kalendář**; TURN-001–002, SETUP-009 | Výslovné fáze Evropa → kolonie → akce jednotek; pořadí domorodci → Anglie → Francie → Španělsko → Nizozemsko; jasný konec hráčského tahu a kola. | P01/P02/P26, domorodé akce P18/P21. Čas se posune právě jednou za kolo; načtení nezopakuje produkci, imigraci ani jednorázové události. |
 | **P04 Mapa a průzkum**; MAP-001–009, tabulka terénu | Doplnit terény, lesy, řeky, ložiska a jejich vyčerpání, výnosy, cenu pohybu, obranu a ztracená města. Zachovat funkční odkrývání; počáteční znalost světa ověřit a podle přijatého pravidla upravit. | P01/P02; návaznost na P06/P11/P17. Testovat terén s lesem i bez, zdroje a pohled jednotlivých hráčů; nápověda neprozradí neobjevené informace. |
@@ -175,9 +175,9 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
 | **P06 Pohyb a rozkazy**; MOVE-001–009 | Účtovat terén, cesty a řeky; trvalý cíl, čekání, přeskočení, hlídka, opevnění, aktivace a rozpuštění jednotky. | P03–P05. Jednotka nepřekročí možnosti tahu; trvalý rozkaz přežije další tah a načtení, lze jej zrušit. UI ukáže zbývající pohyb a rozdíl mezi čekáním a hlídkou. |
-| **P07 Pionýři**; PION-001–006 | Výdej a spotřeba nástrojů, orba, kácení, cesty, získané dřevo a rychlost specialisty; přerušení rozpracované práce. | P04–P06/P11; uzavřít relevantní Q-10/Q-11. Úprava pole a spotřeba vzniknou právě jednou, nedostatek nástrojů má srozumitelný důvod. |
+| **P07 Pionýři**; PION-001–006 | Výdej a spotřeba nástrojů, orba, kácení, cesty, získané dřevo a rychlost specialisty; přerušení rozpracované práce. | P04–P06/P11; použít přijaté hodnoty pro témata [ekonomika, produkce a výuka](gap-analysis.md#economy-production-and-education)/[průzkum, práce a přeprava](gap-analysis.md#exploration-work-and-transport). Úprava pole a spotřeba vzniknou právě jednou, nedostatek nástrojů má srozumitelný důvod. |
 | **P08 Náklad a přestupy**; CARGO-001–010, CARGO-015–016 | Správná pravidla přepravy lidí, zboží, děl a pokladu; částečné množství, překládka, nalodění/vylodění, zkratky a vyhození nákladu. | P05/P06/P10. Hraniční kapacity, plný sklad, zrušení a zakázaní cestující neztratí ani nezdvojí zboží nebo jednotky. |
-| **P09 Atlantik**; CARGO-011–014 | Nájezd do námořních cest, doba a směr plavby, původní návratové pole a obrat na cestě. | P03/P04/P05/P08; doby podle Q-11, později efekt Magellana P23. Náklad i místo návratu přežijí plavbu a save/load, hráč vidí stav cesty. |
+| **P09 Atlantik**; CARGO-011–014 | Nájezd do námořních cest, doba a směr plavby, původní návratové pole a obrat na cestě. | P03/P04/P05/P08; doby podle přijatých pravidel (viz [průzkum, práce a přeprava](gap-analysis.md#exploration-work-and-transport)), později efekt Magellana P23. Náklad i místo návratu přežijí plavbu a save/load, hráč vidí stav cesty. |
 | **P16 Obchodní trasy**; ROUTE-001–004 | Pojmenovaná trasa nejvýše čtyř dosažitelných zastávek, pravidla zboží, výchozí zastávka a opakování; úprava, zrušení a smazání. | P06/P08/P09/P15. Naplněná loď, prázdný sklad nebo ztracená kolonie nezpůsobí zaseknutí tahu; přerušená trasa má opravitelný stav. |
 
 ### Kolonie a hospodářství
@@ -189,14 +189,14 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | **P12 Stavby**; BUILD-001–019, tabulka budov | Populace, předchozí stavba, kladiva a nástroje; správné ceny, upgrady a účinky, změna projektu, dostavění za peníze, lodě/děla, rybolov, celnice a opevnění. | P05/P10/P11, odemykání zakladateli P23. Stavba nic nespotřebuje při zrušení, neobejde podmínky a oznámí chybějící nástroje; každý podporovaný typ má zobrazení. |
 | **P13 Vzdělávání**; EDU-001–006 | Učitelé, žáci, trvání a stupně škol; povyšování, zrušení odbornosti, zkušenost prací a domorodá výuka. | P03/P05/P10–P12/P19; parametry P01. Výuka přežije uložení, změnu práce a odchod učitele podle zvolených pravidel; UI ukazuje způsobilost a průběh. |
 | **P14 Imigrace a nákupy jednotek**; IMM-001–004, IMM-007 | Kříže místo pevného turnusu, tři obnovovaní kandidáti, zaplacení cesty, evropská univerzita a rostoucí cena lodí/děl. | P03/P05/P08/P11, národní/zakladatelské efekty P02/P23. Kandidát se odstraní a nahradí právě jednou; neúspěšný nákup nemění peníze ani přístav. ID IMM-005/006 v katalogu nejsou. |
-| **P15 Evropský trh**; TRADE-001–009 | Nákupní/prodejní ceny, částečná množství, správné čisté výnosy a daň; dynamická reakce národních trhů, ekonomický přehled a obchod celnicí během revoluce. | P08/P09/P11, Q-01 a otázka daně při nákupu; bojkot P22, revoluce P24. Náhled ceny souhlasí s účtem; hranice zásob a peněz, odmítnutí a zákaz obchodu jsou bezpečné. |
+| **P15 Evropský trh**; TRADE-001–009 | Nákupní/prodejní ceny, částečná množství, správné čisté výnosy a daň; dynamická reakce národních trhů, ekonomický přehled a obchod celnicí během revoluce. | P08/P09/P11, [národní výhody](gap-analysis.md#difficulty-and-national-effects) a [přijatý výpočet daně při nákupu](gap-analysis.md#economy-production-and-education); bojkot P22, revoluce P24. Náhled ceny souhlasí s účtem; hranice zásob a peněz, odmítnutí a zákaz obchodu jsou bezpečné. |
 
 ### Ostatní národy a boj
 
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
-| **P17 Boj a následky**; COMBAT-001–016, tabulka sil | Nahradit pevnou 60% šanci výpočtem z jednotek, výstroje, terénu a bonusů; způsobilost útoku, opevnění, veteráni, zajetí, poškození/opravování lodí a děl, kořist a obsazení kolonie. | P04–P06/P10/P12, Q-08; vztahy P20, politické bonusy P22/P24. Oddělit test síly od řízené náhody; ověřit porážku civilisty, plné kolonie i lodi s nákladem. |
-| **P18 Domorodé společnosti**; NAT-001–009 | Osm národů, sídla a hlavní sídla, půda, vztahy ke každému Evropanovi, kmenový hněv a místní poplach; role návštěvníka a dostupné akce. | P02–P05/P10, Q-09. Obchod, přiblížení vojska, zabrání půdy a čas mění odpovídající stav; informace je srozumitelná i bez barev. |
+| **P17 Boj a následky**; COMBAT-001–016, tabulka sil | Nahradit pevnou 60% šanci výpočtem z jednotek, výstroje, terénu a bonusů; způsobilost útoku, opevnění, veteráni, zajetí, poškození/opravování lodí a děl, kořist a obsazení kolonie. | P04–P06/P10/P12, [boj a námořní následky](gap-analysis.md#combat-and-naval-outcomes); vztahy P20, politické bonusy P22/P24. Oddělit test síly od řízené náhody; ověřit porážku civilisty, plné kolonie i lodi s nákladem. |
+| **P18 Domorodé společnosti**; NAT-001–009 | Osm národů, sídla a hlavní sídla, půda, vztahy ke každému Evropanovi, kmenový hněv a místní poplach; role návštěvníka a dostupné akce. | P02–P05/P10, [domorodé a evropské vztahy](gap-analysis.md#native-and-european-relations). Obchod, přiblížení vojska, zabrání půdy a čas mění odpovídající stav; informace je srozumitelná i bez barev. |
 | **P19 Domorodé interakce**; NAT-010–021 | Náčelník, obchod a smlouvání, dary, výuka, tribut a poklad; misionáři, mise, soupeření, podněcování útoku a konverze. | P05/P08/P13/P17/P18; zakladatelé P23. Přijetí/odmítnutí nabídky účtuje právě jednou a ovlivní vztahy; neplatná role dostane vysvětlení. |
 | **P20 Evropská diplomacie**; DIP-002–008 | Kontakt, válka/mír/aliance, odlišení korzárů, tribut, žoldnéři, obchod se soupeři, královské války a přístup k informacím. | P02/P08/P15/P17/P18, příslušní zakladatelé P23. Mírová návštěva nevyvolá automatické dobytí; smlouvy skutečně omezí útoky a přežijí načtení. |
 | **P21 Chování soupeřů**; DIP-001 a chování NAT | Evropská expanze a hospodářství, přeprava, obchod, obrana a útok; domorodé reakce na vztahy. | P03/P10–P20 postupně. Reprodukovatelné vícekolové scénáře bez zablokování tahu a nepovolených příkazů; soupeř využívá herní pravidla, nikoli jen přesouvá jednotky. |
@@ -205,16 +205,16 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
-| **P22 Daně a podpora nezávislosti**; GOV-001–006 | Daňové požadavky, protest, bojkot a doplacení; místní a národní podpora, zvony, loajalisté a výrobní bonusy/postihy. | P03/P10/P11/P15, Q-01/Q-03. Hráč vidí důsledek volby; prahy a zaokrouhlení mají příklady a neaplikují bonus vícekrát. |
-| **P23 Kongres a 25 zakladatelů**; GOV-007, FATHER-001–025 | Výběr, postup náboru, členství a společné zapojení modifikátorů. Potom samostatná dílčí zadání pro jednotlivé efekty. | P22 a systém ovlivněný daným zakladatelem; Q-05. Test před/při/po přijetí, načtení, kombinace efektů a jednorázové dary; žádný zakladatel nezůstane pouze portrétem. |
-| **P24 Revoluce**; GOV-008–022 | Podmínky a nevratnost vyhlášení, uzavření Evropy, mobilizace, královská armáda včetně rezerv, okupace, zahraniční pomoc, žoldnéři a všechny podmínky vítězství/prohry. | P03/P17/P20–P23, Q-03/Q-04/Q-08. Ověřit i všechny pobřežní kolonie, 90 % okupované populace a vojáky dosud v Evropě; pokračování po save/load. |
-| **P25 Konec hry a skóre**; END-001–004, SCORE-001–009 | Rozlišit opuštění, odchod se skóre, konec v 1800/1850, ztrátu poslední kolonie od 1600 a pokračování bez dalšího skórování. Výpočet položek a síň slávy. | P02/P03/P18/P22–P24, Q-06. Každá větev má samostatný scénář, skóre lze rozepsat a opakované otevření výsledku je nezapíše podruhé. |
+| **P22 Daně a podpora nezávislosti**; GOV-001–006 | Daňové požadavky, protest, bojkot a doplacení; místní a národní podpora, zvony, loajalisté a výrobní bonusy/postihy. | P03/P10/P11/P15, [obtížnost a národní výhody](gap-analysis.md#difficulty-and-national-effects)/[podpora, produkce a Kongres](gap-analysis.md#support-production-and-congress). Hráč vidí důsledek volby; prahy a zaokrouhlení mají příklady a neaplikují bonus vícekrát. |
+| **P23 Kongres a 25 zakladatelů**; GOV-007, FATHER-001–025 | Výběr, postup náboru, členství a společné zapojení modifikátorů. Potom samostatná dílčí zadání pro jednotlivé efekty. | P22 a systém ovlivněný daným zakladatelem; [účinky zakladatelů](gap-analysis.md#founder-details). Test před/při/po přijetí, načtení, kombinace efektů a jednorázové dary; žádný zakladatel nezůstane pouze portrétem. |
+| **P24 Revoluce**; GOV-008–022 | Podmínky a nevratnost vyhlášení, uzavření Evropy, mobilizace, královská armáda včetně rezerv, okupace, zahraniční pomoc, žoldnéři a všechny podmínky vítězství/prohry. | P03/P17/P20–P23, [podpora, produkce a Kongres](gap-analysis.md#support-production-and-congress)/[revoluce a intervence](gap-analysis.md#revolution-and-intervention)/[boj a námořní následky](gap-analysis.md#combat-and-naval-outcomes). Ověřit i všechny pobřežní kolonie, 90 % okupované populace a vojáky dosud v Evropě; pokračování po save/load. |
+| **P25 Konec hry a skóre**; END-001–004, SCORE-001–009 | Rozlišit opuštění, odchod se skóre, konec v 1800/1850, ztrátu poslední kolonie od 1600 a pokračování bez dalšího skórování. Výpočet položek a síň slávy. | P02/P03/P18/P22–P24, [konec hry a skóre](gap-analysis.md#end-dates-and-scoring). Každá větev má samostatný scénář, skóre lze rozepsat a opakované otevření výsledku je nezapíše podruhé. |
 
 ### Průřezová práce pro každou etapu
 
 | Balík a pravidla | Co doplnit nebo opravit | Důkaz dokončení |
 | --- | --- | --- |
-| **P26 Ukládání a obnova**; SUPPORT-001 | Ukládat nové stavy už v příslušné funkci: fáze, rozkazy, výuka, trasy, vztahy, trh, nábor, politika, náhoda a konec hry. Stanovit zacházení se staršími uloženými hrami a autosave. | Načtení nezmění výsledek ani nespustí událost znovu; poškozená/nepodporovaná hra má srozumitelnou chybu a nepoškodí jiný save. Přesný počet slotů řeší Q-07. |
+| **P26 Ukládání a obnova**; SUPPORT-001 | Ukládat nové stavy už v příslušné funkci: fáze, rozkazy, výuka, trasy, vztahy, trh, nábor, politika, náhoda a konec hry. Použít aktuální schéma bez migrací starších her a přijatá pravidla automatického ukládání. | Načtení nezmění výsledek ani nespustí událost znovu; poškozená/nepodporovaná hra má srozumitelnou chybu a nepoškodí jiný save. Souborové ukládání a pojmenované body obnovy stanovují [pravidla obnovy](gap-analysis.md#recovery-and-presentation). |
 | **P27 Informace a nápověda**; SUPPORT-002–004, DIP-007 | Přehled tahu s přechodem na problém, poradci, ekonomika, práce, flotila, vztahy, Kongres a REF; doplnit encyklopedii a aktualizovat existující výuku. | Údaje odpovídají modelu a oprávněné znalosti hráče. Hlad, chybějící vstup nebo dokončení vedou ke konkrétnímu objektu a možné nápravě. |
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Zachovat [současný vzhled](graphics.md#soucasne-zadani-vzhledu). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
@@ -319,7 +319,7 @@ tří herních zadání zatím nebylo předáno k implementaci.
 | --- | --- | --- |
 | Z01 Vyložení do skladu | Kontrakt přijat: pravidla a výjimky v modelu, UI používá náhled a ověří změnu před potvrzením. Samostatný PR do main. | [Implementace a konkrétní ověření Z01](functional-tests.md#z01-bezpecne-vylozeni-nakladu). |
 | Z02 Pojmenování kolonie | Kontrakt přijat 12. října 2026: neměnná ID, modální pojmenování/přejmenování a aktuální JSON bez zpětné kompatibility. | [Kontrakt Z02](#z02-zalozeni-pojmenovane-kolonie) a [ověření](functional-tests.md#z02-pojmenovani-a-identita-kolonie). |
-| Z03 Průchod tahem | Q-02 je pro vývoj rozhodnuté (1490 a popsaný kalendář); hlavní agent ještě stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Použít přijaté Q-02; po individuálním upřesnění jedna fáze/přechod a její testy. |
+| Z03 Průchod tahem | [Kalendář a počáteční výpravy](gap-analysis.md#calendar-and-starting-expeditions) jsou pro vývoj rozhodnuté (1490 a popsaný kalendář); hlavní agent ještě stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Použít přijatý [kalendář a počáteční výpravy](gap-analysis.md#calendar-and-starting-expeditions); po individuálním upřesnění jedna fáze/přechod a její testy. |
 
 Před spuštěním každého řezu hlavní agent doplní konkrétní revizi `main`, vstupy,
 povolené soubory, kontrolní příkazy a ověří dostupnost workeru. U UI zadání
@@ -327,19 +327,19 @@ nesmí spoléhat na dosud nedoložený běh celé legacy TestFX sady; musí mít
 proveditelný plán kontroly dotčené cesty. To je podmínka převzetí UI kódu,
 nikoli důvod ponechat veškeré jeho psaní hlavnímu agentovi.
 
-## Co potřebujeme rozhodnout společně
+## Přijatá pravidla a další upřesnění
 
 Manuál není úplnou technickou specifikací. Některé přesné vzorce, pravděpodobnosti
 a okrajové stavy neuvádí. Dne **15. října 2026** jsme na žádost uživatele přijali
-[prozatímní odpovědi Q-01 až Q-11](gap-analysis.md#open-questions-and-decisions),
+[přijatá pravidla](gap-analysis.md#accepted-game-rules),
 včetně zdrojů, hodnot a příkladů. Vývoj na jejich pozdější ladění nečeká; před
 implementací se ověřují konkrétní závislosti a doplňuje individuální zadání. Vývojář nesmí takovou volbu potichu vydávat za pravidlo
-originálu. Nejasnost pozdní revoluce ale nebrání opravě překládání nákladu.
+originálu. Pozdější ladění přijatých hodnot neblokuje vývoj.
 
 | Kdy | Společné rozhodnutí | Co lze připravit předem |
 | --- | --- | --- |
-| Při zadání času nebo nové hry | Převzít přijaté Q-01/Q-02: rok 1490, kalendář, výpravy a obtížnost. | Připravit malé modelové příklady a zkontrolovat integrační závislosti; nečekat na další schválení čísel. |
-| Při změně výpočtu | Použít přijaté prozatímní Q pro produkci, boj, trh, vztahy a politiku. | Nezávislé očekávané výsledky a hranice; nové chybějící případy zapsat konkrétně, neobnovovat obecnou blokaci celé Q. |
+| Při zadání času nebo nové hry | Převzít pravidla témat [obtížnost a národní výhody](gap-analysis.md#difficulty-and-national-effects)/[kalendář a počáteční výpravy](gap-analysis.md#calendar-and-starting-expeditions): rok 1490, kalendář, výpravy a obtížnost. | Připravit malé modelové příklady a zkontrolovat integrační závislosti; nečekat na další schválení čísel. |
+| Při změně výpočtu | Použít přijaté prozatímní pravidla pro produkci, boj, trh, vztahy a politiku. | Nezávislé očekávané výsledky a hranice; nové chybějící případy zapsat konkrétně, neobnovovat obecnou blokaci celého pravidlového tématu. |
 | U první hratelné etapy a nového typu obrazovky | Zda hráč cestu najde, rozumí důsledkům a zda je návrh příjemný při hraní. | Konkrétní ovladatelný návrh se současnými prvky; rutinní ikony a kontrast nevyžadují nové schvalování stylu. |
 | Před větší výrobou obsahu | Rozsah nápovědy a výuky, cílové jazyky, nové ilustrace a hudba, způsob hráčských zkoušek. | Inventář reuse/doplnit, ukázka jedné celé cesty a odhad přírůstku obsahu. |
 | Před plánováním termínu vydání | Kapacita týmu, cílový rozsah vydání a platformy nad již fungující Mac/Linux kanál. | Aktualizovat zbývající práci po etapách a oddělit práci, čekání a rezervu. |
@@ -460,10 +460,11 @@ a [SelectedUnitManager](../microcol-game/src/main/java/org/microcol/gui/screen/g
 
 ### Z03 Specifikace a první řez průchodu tahem
 
-Analýza je nyní vedena v [R-0002 — fáze tahu a posun kalendáře](requirements/canceled/R-0002.md).
-ID Z03 i tento odkaz zůstávají platné. Soubor R-0002 vlastní rozsah, chování,
-implementační kroky a otevřené otázky; blokující Q-02 se rozhoduje ve společném
-registru. Přesun dokumentace neznamená implementaci ani přijetí TURN-001/002.
+Původní [R-0002 — fáze tahu a posun kalendáře](requirements/canceled/R-0002.md)
+zůstává historickým záznamem Z03. Aktivní rozsah vlastní [R-0051](requirements/R-0051.md)
+a [R-0052](requirements/R-0052.md). Používají [přijatý kalendář](gap-analysis.md#calendar-and-starting-expeditions);
+upřesnit zbývá rozhraní fází a persistence. Přijetí pravidel neznamená implementaci
+ani přijetí TURN-001/002.
 
 ## Šablona předání práce
 

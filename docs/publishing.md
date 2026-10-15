@@ -164,7 +164,7 @@ documentation in APT just to make it visible on the web.
 ## Provisional rule decisions — 2026-10-15
 
 1. [R-0115](requirements/done/R-0115.md) records the documentation-only adoption
-   of [Q-01–Q-11](gap-analysis.md#open-questions-and-decisions). The register
+   of [Q-01–Q-11](gap-analysis.md#accepted-game-rules). The register
    distinguishes the user's fixed 1490 start, explicit manual rules, pinned
    FreeCol research precedents and provisional MicroCol estimates. Remaining
    balance/fidelity questions have nonblocking revisit conditions.
@@ -188,3 +188,32 @@ documentation in APT just to make it visible on the web.
    [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
    This refinement does not implement the proposed documentation-only CI exception
    in [R-0113](requirements/R-0113.md).
+
+## Answered-question cleanup — 2026-10-15
+
+1. [R-0116](requirements/done/R-0116.md) replaces the answered-question register
+   with [accepted game rules](gap-analysis.md#accepted-game-rules). The 51
+   active consumers of the retired questions use topical links and retain their
+   adopted behavior. R-0054 also loses its resolved coastal-question entry;
+   remaining verification work stays in implementation steps. The
+   [workflow](requirements/README.md#incorporate-answers) applies the same rule
+   to future answers and narrows partial answers to missing information.
+2. The direct audit preserves all eleven sections' numeric values, formulas and
+   tables, all 230 rule IDs/implementation states and all 119 UC implementation
+   and verification states. All 62 pre-existing active requirements retain their
+   statuses; none refers to a retired question. Archived records retain their
+   non-link text. All requirement files keep four chapters and their correct
+   status directory; incoming links use the new topic headings. Local snapshots
+   and audit scripts are under `target/answered-question-cleanup/`.
+3. The documented checks passed: 21 local-worker launcher tests without inference,
+   nine documentation tests, and strict MkDocs build. Browser review checked the
+   rendered accepted-rule section and R-0100's topical behavior link and empty
+   open-question chapter. A bounded review checked value preservation and retained
+   unanswered details; stale catalogue decision requests were corrected before
+   acceptance. No game code, fixtures or CI configuration changed; local Maven/UI
+   execution was not needed for this documentation-only change. Balance and
+   gameplay implementation remain unverified by these documentation checks.
+4. Publication is checked for the resulting main commit in
+   [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml) and
+   [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
+   The proposed documentation-only CI exception remains in [R-0113](requirements/R-0113.md).

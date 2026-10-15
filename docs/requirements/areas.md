@@ -253,4 +253,4 @@ zachování současného menu; jeho nový návrh již není blokátorem R-0001.
 
 Zařazení oblastí i pořadí jsou návrhy pro další společnou práci. Nezakládají
 implementační úkoly, nespouštějí automaticky deset oblastí a nemění dosavadní
-herní chování. Otevřené číselné otázky nadále řešíme v [Q-01–Q-11](../gap-analysis.md#open-questions-and-decisions).
+herní chování. Číselné hodnoty a vzorce přebíráme z [přijatých pravidel](../gap-analysis.md#accepted-game-rules).

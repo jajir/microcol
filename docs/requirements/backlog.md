@@ -10,8 +10,10 @@ Added on **2026-10-15**: [R-0112](done/R-0112.md) captures TC27/TC30 test stabil
 as a new technical request, separate from the 61 migrated gameplay/setup items.
 [R-0113](R-0113.md) captures skipping full game CI for changes only in `docs/`;
 [R-0114](done/R-0114.md) records the status-directory organization.
-[R-0115](done/R-0115.md) records the accepted provisional Q-01–Q-11 decisions;
-linked requirements retain their existing implementation status and selection boundary.
+[R-0115](done/R-0115.md) records the accepted provisional game rules;
+[R-0116](done/R-0116.md) incorporates answers into current rules and removes resolved
+questions from active requirements. Existing implementation statuses and selection
+boundaries remain unchanged.
 
 Active requirement files are at the top level. Inactive records remain accessible
 in [done](done/README.md), [deferred](deferred/README.md) and
@@ -20,7 +22,7 @@ The catalogue retains origin and process links even when their records move.
 
 Each requirement owns its current `Status`, scope, acceptance and open questions.
 This index does not duplicate status values. Use the [workflow](README.md) to
-select one requirement, refine it, then authorize its development. The [shared Q decisions](../gap-analysis.md#open-questions-and-decisions)
+select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)
 now provide provisional formulas; dependencies and individual readiness still
 need checking. This refinement does not authorize implementing the whole set.
 
@@ -179,7 +181,7 @@ assignment boundary worth resolving before richer job choices. These are
 recommendations for discussion, not selected or running implementations.
 
 Calendar, probability, political formulas and the proposed live-visibility policy
-now use the [2026-10-15 decisions](../gap-analysis.md#open-questions-and-decisions).
+now use the [2026-10-15 decisions](../gap-analysis.md#accepted-game-rules).
 Phase integration and concrete technical dependencies still need refinement;
 none of these links is an instruction to implement every earlier ID.
 

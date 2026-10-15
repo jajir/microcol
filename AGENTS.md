@@ -67,6 +67,15 @@ Z/P/rule/UC/test IDs, and distinguish proposals, agreed behavior and verified
 results. A refinement-only request updates the analysis without starting
 implementation. Reuse agreed decisions; do not ask for approval again merely
 to prepare an implementation handoff.
+When a question is answered, incorporate its answer into the authoritative game
+documentation and the behavior/design of every affected active requirement
+(`new`, `waiting for refinement`, `ready for development`). Remove the answered
+question and its retired Q references from `docs/gap-analysis.md` and those
+requirements; link to the rule topic instead. Keep only the missing information
+for partially answered questions. Chapter 4 contains unanswered questions or
+“None”; later balance review belongs with the provisional rule. Preserve archived
+history and repair links without rewriting old evidence. Answering a question
+does not by itself change readiness or authorize gameplay implementation.
 The user authorized the backlog migration on 2026-10-14. Use the
 [current backlog](docs/requirements/backlog.md) for R-0050 onward and the
 [migration map](docs/requirements/migration-2026-10-14.md) for R-0001–R-0040.
