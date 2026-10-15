@@ -1934,3 +1934,35 @@ prošla na Linuxu/Windows a Java 11/17, včetně opravy úklidu testu R-0037.
 [R-0050](requirements/R-0050.md) a [mapa migrace](requirements/migration-2026-10-14.md)
 odlišují tuto přijatou část od nových požadavků. Úspěšný TC30 například stále
 obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není ověřena.
+
+## TC27/TC30 stability analysis — 2026-10-15
+
+1. [R-0112](requirements/R-0112.md) zachycuje požadavek na diagnostiku a
+   stabilizaci TC27/07 a TC30/04. Následuje kontrola existujících výsledků
+   z 14. října, nikoli nová testovací kampaň nebo ověřená oprava.
+2. Plné CI pro [a35620ae](https://github.com/jajir/microcol/actions/runs/38552266613)
+   a [2d701dda](https://github.com/jajir/microcol/actions/runs/38568564709) prošlo.
+   [0825596c, pokus 1](https://github.com/jajir/microcol/actions/runs/38578635563/attempts/1)
+   dokončil 144 funkčních/kontrolních případů s jediným selháním: TC27/07
+   očekával ve stavovém řádku text `26`, ale řádek byl prázdný. Git objekty
+   `microcol-game`, `microcol-test`, `compose.ui-tests.yml`, `scripts/ui-tests`,
+   kořenového `pom.xml` a vývojového workflow jsou mezi těmito třemi revizemi
+   shodné. Shoda zdrojů neprokazuje shodné časování ani obsah sestavených obrazů.
+3. Dodatečná kontrola **15. října 2026** potvrdila, že i
+   [pokus 2 stejné revize](https://github.com/jajir/microcol/actions/runs/38578635563/attempts/2)
+   selhal v TC27/07: tentokrát očekával text `37`, opět dostal prázdný řádek.
+   Znovu šlo o 144 případů, jedno selhání, žádné chyby ani vynechání.
+   [CI pro f96b5710](https://github.com/jajir/microcol/actions/runs/38551980402)
+   mělo stejný počet případů a jediné selhání TC30/04 na textu `24`.
+4. Oba scénáře používají společné mapové pomůcky. Zdroj
+   [GamePage](../microcol-test/src/test/java/org/microcol/page/GamePage.java)
+   po přesunu kurzoru ihned kontroluje text bez explicitního čekání na jeho
+   aktualizaci; to je podezřelé místo, nikoli doložená příčina. Starší
+   [oprava návratu na stejné pole](#wagon-unloading-implementation-2026-10-13)
+   měla reprodukovanou chybu aplikace. Samotný podobný příznak neprokazuje,
+   že nová selhání mají tutéž příčinu, ani že jsou všechna falešným poplachem.
+5. Pozdější [CI 062f8ce9](https://github.com/jajir/microcol/actions/runs/38584259123)
+   a [9af7d9f9](https://github.com/jajir/microcol/actions/runs/38597668566) prošla.
+   Tyto zelené běhy neuzavírají příčinu proměnlivých výsledků. Četnost náhodných
+   selhání nebyla změřena řízeným opakováním stejného výběru a prostředí;
+   smíšené historické běhy nelze použít jako takovou statistiku.

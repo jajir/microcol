@@ -6,6 +6,9 @@ Captured on **2026-10-14**, from the [R-0001–R-0040 migration](migration-2026-
 unused to separate the new series. Allocate future requirements after the highest
 existing ID; the table is a catalogue, not an implementation sequence.
 
+Added on **2026-10-15**: [R-0112](R-0112.md) captures TC27/TC30 test stability
+as a new technical request, separate from the 61 migrated gameplay/setup items.
+
 Each requirement owns its current `Status`, scope, acceptance and open questions.
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. Capturing a
@@ -20,7 +23,8 @@ follow-up does not make its open formulas agreed or its dependencies available.
   completed into a coherent need using the existing manual/rule/UC specification.
   It is not a retroactive failure of the delivered slice.
 
-The capture contains **12 remainders, 3 acceptance gaps and 46 follow-ups**.
+The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-ups**.
+**New request** identifies subsequently requested work outside that migration.
 
 ## Process record
 
@@ -38,6 +42,14 @@ The capture contains **12 remainders, 3 acceptance gaps and 46 follow-ups**.
 | [R-0064](R-0064.md) | Keep the selected difficulty in the game profile | Follow-up | [R-0014](R-0014.md) |
 | [R-0065](R-0065.md) | Create a playable new-world map from setup choices | Follow-up | [R-0014](R-0014.md) |
 | [R-0066](R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](R-0014.md), [R-0015](R-0015.md), [R-0027](R-0027.md) |
+
+## A03
+
+[Shared UI interaction and feedback](areas.md#a03).
+
+| Requirement | Outcome | Kind | Origin |
+| --- | --- | --- | --- |
+| [R-0112](R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 
 ## A04
 
