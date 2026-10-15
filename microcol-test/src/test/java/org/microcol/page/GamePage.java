@@ -130,16 +130,28 @@ public class GamePage extends AbstractScreen {
     }
 
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
+        final int previousRound = getModel().getCalendar()
+                .getNumberOfPlayedTurns();
         final Button buttonNextTurn = getButtonById(
                 ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
         getRobot().clickOn(buttonNextTurn);
+        // Movement can enable the toolbar before the national round finishes.
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> getModel().isGameRunning()
+                        && getModel().getCurrentPlayer().isHuman()
+                        && getModel().getCalendar()
+                                .getNumberOfPlayedTurns() > previousRound);
         waitWhileMoving();
-        WaitForAsyncUtils.waitForFxEvents();
-        if (isButtonBackVisible()) {
+        if (!getModel()
+                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
+            WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils.asyncFx(this::isButtonBackVisible)
+                            .get(60, TimeUnit.SECONDS));
+            WaitForAsyncUtils.waitForFxEvents();
             return Optional.of(ScreenTurnReport.of(getContext()));
-        } else {
-            return Optional.empty();
         }
+        WaitForAsyncUtils.waitForFxEvents();
+        return Optional.empty();
     }
 
     public void nextTurnAndCloseDialogs() throws Exception {

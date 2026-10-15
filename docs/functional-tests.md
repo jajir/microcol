@@ -2369,3 +2369,25 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    kombinovaného UI výběru již prošlo; změněn byl pouze krok uzavírající hlášení
    v TC11/04. Model i GUI byly převzaty z kontrolovaného izolovaného checkoutu;
    hlavní checkout znovu používá sdílený formatter před commitem.
+
+7. První plná [CI revize b842b112](https://github.com/jajir/microcol/actions/runs/38780304686)
+   prošla **1211 herními případy**. Z **158 UI-modulových případů** měl jeden
+   chybu, žádný selhání ani přeskočení. TC11 prošel celý. TC03 při pátém
+   rychlém přechodu klikl na tlačítko odpojené od scény během otevření hlášení.
+   `GamePage.nextTurn` čekal jen na aktivní toolbar, který se může aktivovat
+   mezi pohyby královských jednotek před dokončením kola. Caller opravil
+   sdílenou synchronizaci testu: čeká na nové dokončené lidské kolo a při
+   existujících událostech na skutečně zobrazené hlášení. Nemění počet tahů,
+   očekávané ozbrojené vojáky ani ostatní herní assertions. Jde o malou opravu
+   callerem vlastněného ověření bez dalšího worker zadání.
+8. Všechny tři nativní balíčky té revize prošly **1211 herními a 33 balíčkovými
+   kontrolami**, launcher **32/32**, kompatibilita i Pages uspěly. Publikace
+   hry byla kvůli UI chybě správně přeskočena; tyto dílčí úspěchy nejsou
+   dokladem zveřejnění nové hry. Stažená evidence je v `target/r53/ci-*`.
+
+9. Opravený helper prošel místním Docker během **20/20 UI-modulových případů**
+   (TC03/04/10/11/36/37 a zdrojový kontrakt), bez selhání, chyb či přeskočení,
+   exit 0. TC03 dokončí všech sedm kol a zachovává ověření nejméně tří
+   ozbrojených královských vojáků; TC04 nadále kontroluje ztrátu kolonie a
+   únik lodi. Log je `target/r53/turn-ui-recheck.log`. Prošel sdílený formatter
+   a přísné MkDocs. Následující plná CI ověřuje všechny cesty před publikací.
