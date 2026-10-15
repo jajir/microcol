@@ -16,6 +16,9 @@ Pushes to `main` publish documentation and verified development distributions.
 See [development delivery](docs/development-builds.md) for the release channel,
 launcher behavior and acceptance checks. Do not maintain a separate `develop`
 promotion step for routine tasks.
+For changes only under `docs/`, verify successful Pages deployment and the
+intentional skipped game jobs under the documented CI filtering contract;
+report the unchanged published game build separately from the documentation commit.
 
 # Documentation
 

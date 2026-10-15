@@ -1,7 +1,7 @@
 # Current requirement backlog
 
 Captured on **2026-10-14**, from the [R-0001–R-0040 migration](migration-2026-10-14.md).
-**61 gameplay/setup requirements, R-0051–R-0111**, are captured as `new`;
+**61 gameplay/setup requirements, R-0051–R-0111**, were captured as `new`;
 [R-0050](done/R-0050.md) records the migration itself. R-0041–R-0049 are deliberately
 unused to separate the new series. Allocate future requirements after the highest
 existing ID; the table is a catalogue, not an implementation sequence.
@@ -12,8 +12,8 @@ as a new technical request, separate from the 61 migrated gameplay/setup items.
 [R-0114](done/R-0114.md) records the status-directory organization.
 [R-0115](done/R-0115.md) records the accepted provisional game rules;
 [R-0116](done/R-0116.md) incorporates answers into current rules and removes resolved
-questions from active requirements. Existing implementation statuses and selection
-boundaries remain unchanged.
+questions from active requirements. Their current statuses and subsequent
+selection are recorded in the individual requirements and authorization below.
 
 Active requirement files are at the top level. Inactive records remain accessible
 in [done](done/README.md), [deferred](deferred/README.md) and
@@ -24,7 +24,25 @@ Each requirement owns its current `Status`, scope, acceptance and open questions
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)
 now provide provisional formulas; dependencies and individual readiness still
-need checking. This refinement does not authorize implementing the whole set.
+need checking. Rule adoption alone does not authorize implementation; the later
+selection below authorizes this run.
+
+## Authorized implementation run — 2026-10-15
+
+The user selected all remaining requirements R-0051–R-0113 for implementation.
+Refinement proceeds one requirement at a time; implementation follows dependency
+order with one local assignment active. Caller preparation can overlap that
+assignment. Completed R-0112
+retains its evidence. Use reasonable documented decisions for missing choices,
+incorporate answers into current rules/requirements, and keep genuinely missing
+information in chapter 4. R-0113 is selected first to establish efficient delivery;
+then establish shared turn/profile capabilities before their gameplay consumers.
+Individual status changes still require refinement and actual acceptance.
+
+Do not start another requirement after the end of October 17: **2026-10-18
+00:00 Europe/Prague** (2026-10-17 22:00 UTC). At that cutoff finish the requirement already
+in progress, including verification and publication, then stop this run. The
+remaining scope is not silently canceled or marked done.
 
 ## How to read the set
 

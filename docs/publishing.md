@@ -6,7 +6,9 @@ directly at that address. MkDocs renders the pages and builds navigation and
 search; GitHub Actions deploys the result. Publishing documentation does not
 build `microcol-site`, compile the game, run Maven tests, or create game distributions.
 The separate [development delivery workflow](development-builds.md) builds and
-publishes the game from the same pushed `main` revision.
+publishes the game from the same pushed `main` revision when the change is not
+limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
+keeps the current game download unchanged.
 
 ## Editing workflow
 
@@ -35,7 +37,9 @@ next deployed version.
 replaces the earlier `develop` → `main` promotion workflow. Existing historical
 branches need not be deleted; they are not required for ordinary development.
 Never force-push to publish. After pushing, check the documentation deployment
-and the separate development distribution run rather than assuming both passed.
+and the separate development distribution run. For `docs/`-only changes, verify
+its successful classifier and intentionally skipped game jobs, then report the
+unchanged published game build separately from the documentation commit.
 
 ## Local preview and validation
 
@@ -217,3 +221,14 @@ documentation in APT just to make it visible on the web.
    [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml) and
    [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
    The proposed documentation-only CI exception remains in [R-0113](requirements/R-0113.md).
+
+## Documentation-only CI — 2026-10-15
+
+1. [R-0113](requirements/R-0113.md) owns the selected
+   [CI filtering contract](development-builds.md#ci-filtering). Local and live
+   acceptance are in progress; this record does not yet claim deployed filtering.
+2. Acceptance requires the implementation push to retain the complete game CI
+   and release publication, followed by a `docs/`-only push with successful Pages,
+   successful classifiers, skipped game jobs and the identical game manifest.
+   Classifier unit tests and workflow review cover PR/manual paths and uncertain
+   input; they are distinct from observed workflow runs.

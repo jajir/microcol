@@ -32,7 +32,7 @@ public final class TurnStartedListener {
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
-        if (event.getPlayer().isHuman()) {
+        if (event.isFreshStart() && event.getPlayer().isHuman()) {
             gameController.writeModelToFile(persistingTool.getAutoSaveFile());
             gamePreferences.setGameInProgressSaveFile("true");
         }

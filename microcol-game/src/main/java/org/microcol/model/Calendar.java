@@ -52,6 +52,8 @@ public final class Calendar {
         Preconditions.checkArgument(startYear < endYear,
                 "Start year (%s) must be less than end year (%s).", startYear,
                 endYear);
+        Preconditions.checkArgument(numberOfPlayedTurns >= 0,
+                "Number of played turns must not be negative.");
         this.startYear = startYear;
         this.endYear = endYear;
         this.numberOfPlayedTurns = numberOfPlayedTurns;
@@ -76,13 +78,7 @@ public final class Calendar {
     }
 
     public int getCurrentYear() {
-        if (numberOfPlayedTurns > getTurnWhenStartCountsSeasons()) {
-            return YEAR_WHEN_START_COUNT_SEASONS
-                    + (numberOfPlayedTurns - getTurnWhenStartCountsSeasons())
-                            / 4;
-        } else {
-            return startYear + numberOfPlayedTurns;
-        }
+        return getYearForTurnNo(numberOfPlayedTurns);
     }
 
     public Optional<Season> getCurrentSeason() {
@@ -107,7 +103,14 @@ public final class Calendar {
     }
 
     public int getYearForTurnNo(final int turnNo) {
-        return startYear + turnNo;
+        Preconditions.checkArgument(turnNo >= 0,
+                "Turn number must not be negative.");
+        final int annualTurns = getTurnWhenStartCountsSeasons();
+        if (turnNo <= annualTurns) {
+            return startYear + turnNo;
+        }
+        return Math.max(startYear, YEAR_WHEN_START_COUNT_SEASONS)
+                + (turnNo - annualTurns) / 4;
     }
 
     public CalendarPo save() {

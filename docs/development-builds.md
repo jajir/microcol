@@ -2,7 +2,9 @@
 
 Development, integration and publication use **`main`**. After a completed task
 has been checked, its changes are committed and pushed as part of the normal
-workflow. Each push starts native distribution builds automatically. The game
+workflow. Pushes containing changes outside `docs/` start native distribution
+builds automatically. Documentation-only pushes publish the website and retain
+the current game download under the [CI filtering contract](#ci-filtering). The game
 becomes available after the build and publication checks finish; saving a file
 or creating a local commit alone does not publish it.
 
@@ -63,7 +65,9 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 
 ## What happens after a change
 
-1. The completed, checked change is pushed to `main`.
+1. The completed, checked change is pushed to `main`. If every changed path is
+   under `docs/`, only documentation is published and this game delivery sequence
+   is skipped. Otherwise continue with the full checks below.
 2. GitHub Actions checks the launcher and publication logic and runs the
    [functional player scenarios](functional-tests.md), then uses JDK 17 and
    Maven to build the macOS ARM64, macOS Intel and Linux x86-64 packages from the
@@ -88,6 +92,48 @@ The launcher checks at startup. It does not install a background polling service
 or interrupt a running game when another commit is published. The initial
 launcher is a separate bootstrap download; game updates do not silently replace
 its own code.
+
+## CI filtering
+
+[R-0113](requirements/R-0113.md) defines this contract, selected on 2026-10-15.
+Implementation and live acceptance are recorded in that requirement and the
+[publication evidence](publishing.md#documentation-only-ci-2026-10-15).
+
+1. The development and Java-compatibility workflows still start on their existing
+   events. Each runs a lightweight `changes` job: checkout with full history,
+   classifier tests, then the shared [change classifier](../scripts/ci/game_changes.py).
+   No game compilation, Maven, Docker or native packaging occurs in this job.
+2. For automatic events, skip game work only when the entire change set is
+   nonempty and every path is under `docs/`. Nested files and additions/deletions
+   qualify. A move within `docs/` qualifies; a move across its boundary does not,
+   because both the old and new paths are checked. Changes to `AGENTS.md`,
+   `mkdocs.yml`, documentation tools or workflow files require full game checks.
+3. Push comparisons cover `before` through `after`, not only the latest commit.
+   Pull-request comparisons use the merge base of the event's base/head commits,
+   excluding unrelated target-branch changes. Missing/invalid event data,
+   unavailable history or an empty comparison conservatively require full work.
+   Manual dispatch always requests full work. A failed classifier test prevents
+   dependent jobs and publication rather than reporting a verified skip.
+4. `game_required=false` explicitly skips the development workflow's functional,
+   launcher-check, native and publish jobs and the compatibility game matrix.
+   `true` retains all their existing checks, platform variants and publication
+   dependencies. Pull requests still do not publish game releases. Pages keeps
+   its independent validation/deployment path; failed docs validation prevents
+   its deployment.
+5. For a docs-only push, verify the successful `changes` jobs, skipped game jobs
+   and successful Pages deployment. Report the documentation commit separately
+   from the unchanged game build in the `dev` manifest. No new game release is
+   expected. For other changes or manual dispatch, verify all normal delivery
+   gates and the published manifest before claiming a new game build.
+6. Branch settings inspected on 2026-10-15: main is unprotected and the effective
+   branch-rules API returns no rules. This is a dated observation. Workflows stay
+   visible and existing game job names are retained; any later required-check
+   changes must be checked against this contract.
+
+The classifier's local acceptance command is
+`python3 -m unittest discover -s scripts/ci -p 'test_*.py'`. Its temporary Git
+histories test complete pushes, pull requests, path boundaries and conservative
+fallbacks; live CI evidence remains necessary to prove actual skips/publication.
 
 ## Build identity and saved games
 

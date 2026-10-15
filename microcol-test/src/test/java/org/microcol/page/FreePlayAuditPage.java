@@ -2,7 +2,9 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -63,6 +65,28 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getModel().getCalendar().getNumberOfPlayedTurns());
         assertEquals(expectedGold,
                 getModel().getPlayerByName("Dutch").getGold());
+    }
+
+    public void verifyDisplayedDate(final String expectedDate) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(expectedDate,
+                getRobot().lookup("#labelEra").queryAs(Label.class).getText());
+    }
+
+    public void deliverTurnStartedNotification(final boolean fresh,
+            final boolean human) {
+        final Player player = getModel().getPlayers().stream()
+                .filter(candidate -> candidate.isHuman() == human).findFirst()
+                .orElseThrow();
+        getRobot().interact(() -> getContext().getClassFromGuice(EventBus.class)
+                .post(new TurnStartedEvent(getModel(), player, fresh)));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyAutosaveExists(final boolean expected) {
+        assertEquals(expected,
+                getContext().getClassFromGuice(PersistingTool.class)
+                        .getAutoSaveFile().exists());
     }
 
     public void deliverPreviousComputerTurnNotification() {
@@ -132,6 +156,15 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return GamePage.of(getContext());
     }
 
+    public void chooseLoadFile(final File file) {
+        org.mockito.Mockito
+                .when(getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.FileSelectingService.class)
+                        .loadFile(org.mockito.Mockito.any(File.class)))
+                .thenReturn(file);
+    }
+
     public void cancelLoadChooser() {
         org.mockito.Mockito
                 .when(getContext()
@@ -146,6 +179,18 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return Files.readAllBytes(
                 getContext().getClassFromGuice(PersistingTool.class)
                         .getAutoSaveFile().toPath());
+    }
+
+    public FileTime getAutosaveLastModifiedTime() throws Exception {
+        return Files.getLastModifiedTime(
+                getContext().getClassFromGuice(PersistingTool.class)
+                        .getAutoSaveFile().toPath());
+    }
+
+    public void verifyAutosaveLastModifiedTime(final FileTime expected)
+            throws Exception {
+        assertEquals(expected, getAutosaveLastModifiedTime(),
+                "Continue must not rewrite the opened save");
     }
 
     public void verifyAutosaveChanged(final byte[] previous) throws Exception {

@@ -9,7 +9,24 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    outputs:
+      game_required: ${{ steps.filter.outputs.game_required }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Test change classification
+        run: python3 -m unittest discover -s scripts/ci -p 'test_*.py'
+      - name: Classify the complete change set
+        id: filter
+        run: python3 scripts/ci/game_changes.py
+
   functional:
+    needs: changes
+    if: needs.changes.outputs.game_required == 'true'
     name: Functional player scenarios
     runs-on: ubuntu-24.04
     timeout-minutes: 25
@@ -33,6 +50,8 @@ jobs:
           retention-days: 14
 
   checks:
+    needs: changes
+    if: needs.changes.outputs.game_required == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -67,6 +86,8 @@ jobs:
           retention-days: 14
 
   native:
+    needs: changes
+    if: needs.changes.outputs.game_required == 'true'
     name: Package ${{ matrix.platform }}
     strategy:
       fail-fast: false
@@ -137,8 +158,8 @@ jobs:
           retention-days: 14
 
   publish:
-    if: github.ref == 'refs/heads/main'
-    needs: [checks, native, functional]
+    if: github.ref == 'refs/heads/main' && needs.changes.outputs.game_required == 'true'
+    needs: [changes, checks, native, functional]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:

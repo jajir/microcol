@@ -2099,3 +2099,53 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    compatibility [38697135095](https://github.com/jajir/microcol/actions/runs/38697135095)
    also passed. The final acceptance record changes documentation only;
    application, test and runner sources remain those accepted above.
+
+
+## R-0051 calendar and Continue — 2026-10-15
+
+1. The shared calendar now converts both the current date and historical round
+   indexes with the accepted annual/seasonal schedule. Explicit later starts keep
+   their own seasonal base. The bundled `thrive` mission now begins in 1490;
+   existing independence eligibility remains owned by R-0105. Continue no longer
+   triggers a fresh-turn autosave; explicit menu-position saves remain available.
+2. `TC_37_F29_calendar_boundaries_test` uses F29 fixtures for 1599 and a later
+   1630 winter. Its first three linear scenarios inspect the actual displayed date
+   across 1600 seasons and 1601, preserve winter through Continue, and check both
+   bytes and modification time of the opened recovery save. TC21's nine existing
+   navigation/Continue scenarios retain their original assertions. Calendar
+   acceptance is only part of UC-004; nationality, difficulty and expedition
+   profile acceptance remain open.
+3. The caller applied the shared Eclipse formatter to all seven final changed Java
+   files, checking exact code-token preservation and idempotence. The first two
+   targeted builds exposed caller-written test compatibility errors: parameterized
+   JUnit was absent in `microcol-test`, then its Mockito version lacked
+   `verifyNoInteractions`. Ordinary JUnit tests and the existing Mockito API fixed
+   those source errors without adding dependencies. Review then identified unsupported final-class mocking in those four
+   listener checks. The caller replaced them with TC37 scenarios observing real
+   recovery files for all fresh/resumed and human/computer combinations. The
+   installed mock library has no inline support; no dependency was added.
+4. The corrected Docker/Xvfb/Openbox targeted run passed **59 calendar cases,
+   12 player scenarios and 3 page-contract checks**, with zero failures, errors or
+   skips. Command selection: `CalendarTest,CalendarSeasonTest,CalendarSeasonsTest,
+   CalendarStoreTest,CalendarInvalidCreationTest,TurnStartedListenerTest,
+   PageVerificationContractTest,TC_37_F29_calendar_boundaries_test,
+   TC_21_F15_free_play_screen_navigation_test`, with
+   `-Dsurefire.failIfNoSpecifiedTests=false`. Fresh XML is in
+   `target/docker-ui/run-PoUuN7/`, log `target/r51/targeted-compatible.log`.
+   The listener test's tag was corrected after this snapshot; its four cases were
+   not executed in this targeted run and require the full run below.
+5. The full local Docker run (`target/docker-ui/run-Q9KKay/`,
+   `target/r51/full.log`, 24:47) passed **1153 game tests** and **148 UI-module
+   cases**. Four additional caller-written listener tests errored before their
+   assertions because Mockito could not mock final `GameController`. No other
+   failure/error/skip occurred. This is a failed run, not full-suite acceptance.
+   TC37 now owns equivalent real-file checks without final-class mocks; targeted
+   repair and the complete Linux CI run must pass before acceptance. Overall
+   UC-004 profile acceptance remains open.
+
+6. The repaired targeted Docker run passed all **7 TC37 scenarios and 3
+   page-contract checks**, with zero failures/errors/skips; fresh XML is in
+   `target/docker-ui/run-n0eDex/`, log `target/r51/autosave-fixed.log`.
+   It selected `TC_37_F29_calendar_boundaries_test,PageVerificationContractTest`
+   with `-Dsurefire.failIfNoSpecifiedTests=false`. The complete CI run remains the
+   final acceptance gate for the combined source before closing R-0051.

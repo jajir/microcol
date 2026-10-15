@@ -137,7 +137,10 @@ major; the game version stays unchanged. See the exact mapping and paths in
 archive retains the full Maven version and CPU architecture in its name.
 Maven packaging remains local to `target/`; no release upload is part of this
 lifecycle. The separate [development delivery workflow](development-builds.md)
-builds and publishes these outputs after each push to `main`.
+builds and publishes these outputs after pushes to `main` that include changes
+outside `docs/`, or explicit manual dispatch. The shared
+[CI filtering contract](development-builds.md#ci-filtering) retains the current
+game distribution for documentation-only pushes.
 
 ### Launcher packaging and distribution checks
 

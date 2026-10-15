@@ -741,6 +741,44 @@ keeps answered questions out of the current catalogue and active requirements.
    does not consume a third hold. No starting expert is implied. Use the manual's
    ship capacities/speeds. Native settlement placement belongs to map generation;
    this expedition decision does not require an otherwise unfinished map generator.
+5. Current-schema positions and explicit test scenarios may begin after 1600.
+   Their seasons advance from that stored start, never back to 1600: a 1630
+   start gives spring/summer/autumn/winter 1630, then spring 1631. Historical
+   statistics use the same zero-based round-to-year conversion as the current
+   date. Reject negative elapsed/query round indexes. These clarified boundaries
+   are selected for R-0051; they are not evidence of a corrected implementation.
+
+### National turn processing
+
+1. Selected on 2026-10-15 for [R-0052](requirements/R-0052.md): process present
+   native participants first, then England, France, Spain and Netherlands. No
+   absent participant receives a dummy turn. The current game has no native
+   actor implementation; adding native actors must use this same ordering owner.
+   Other scripted participants follow the European nations in stable internal
+   identity order. Crowns act last, ordered by their associated nation's place
+   above, then stable identity. Human/computer control and display names never
+   change this order. Advance the calendar once after the last present actor.
+2. Prepare each actor's turn once: first advance existing voyages and scheduled
+   Europe arrivals/immigration; next process its colonies; finally replenish unit
+   movement and progress continuing unit work before opening actions/management.
+   Preserve each subsystem's own accounting rules and eligibility. This does not
+   add immigration to actors currently ineligible for it or create absent tax,
+   native or market systems. A completed pioneer improvement in the last stage
+   therefore affects the next colony production update, not the update just run.
+3. Only a completed preparation is a playable save boundary. A position saved
+   before ending the previous actor's turn has not prepared the next actor; a
+   position saved after preparation has already charged food, produced goods,
+   advanced voyages and replenished movement. Loading either position resumes
+   exactly its saved actor/date/stocks/actions and does not rerun preparation.
+   Do not serialize a partially prepared turn or overwrite a valid save with it.
+4. Notify UI/AI and permit human-turn recovery saves only after preparation.
+   Opening a screen, showing a report or resuming a save does not create another
+   national update or trigger a fresh-turn recovery write. Opening an existing
+   save must not rewrite it; explicit saves and menu-position recovery retain
+   their own triggers. Future political choices must persist their pending decision
+   at the owning subsystem's boundary and resume without repeating earlier
+   updates; their individual requirements own that additional state. These are
+   agreed rules, not a claim of implemented or verified behavior.
 
 ### Support, production and Congress
 

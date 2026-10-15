@@ -2646,3 +2646,43 @@ should reuse existing validation and a focused audit before proposing new toolin
    in the [functional evidence](../functional-tests.md#r-0112-map-input-repair-2026-10-15).
    Full logs and `acceptance.json` remain under the job directory. No measured
    cloud-token savings are inferred from these runtimes.
+
+## R-0113 CI filtering — 2026-10-15
+
+1. Job `2026-10-15-r113-ci-filter` uses baseline `b2b3ec14`, GPT-OSS medium/64k
+   and four assigned files: the change classifier, its Git-fixture tests and the
+   two game workflows. The caller owns rules, documentation, review and all
+   verification. [R-0113](../requirements/R-0113.md) retains the full acceptance.
+2. Attempt 0 delivered no assigned source edits. Its CLI reported an idle SSE
+   timeout and then a stream closed before `response.completed`; the inference
+   server remained active. The underlying cause is unproven. After repeated
+   failures without edits, the caller interrupted the owned launcher. Exit was
+   `-15`, cleanup unloaded the model successfully, and **2108.077 seconds** count
+   against the same task budget. This was a caller interruption before the
+   deadline, not a successful result or a deadline timeout.
+3. Repair 1 retains medium, the same job/worktree, original behavior and all
+   checks. The corrected handoff requires small separate write calls and narrow
+   source reads, testing the hypothesis that long buffered output contributed to
+   the connection failures. No runtime or model setting changed. Repair 1 also delivered no source edits and reported repeated streams closed
+   before completion. The caller verified unchanged source hashes and stopped
+   the owned launcher after **595.370 seconds**; exit `-15`, clean unload. The
+   cumulative worker time is **2703.447 seconds**. The hypothesis is unconfirmed,
+   and no worker code has been accepted.
+4. Final repair 2 uses the authorized high/64k profile and tool-free exact
+   replacements for nine caller-owned anchors in the same four files. This
+   removes write-tool calls from the attempted delivery path without changing
+   behavior, tests, worktree, model digest or cumulative budget. The launcher
+   records the diagnosed escalation. No repairs remain after this attempt;
+   the caller stopped it after **3558.740 seconds** without a completed response
+   or applicable patch, to fulfill the user's publication request and release
+   resources for verification. Exit `-15`, successful model unload; cumulative
+   **6262.187 seconds**. This was an intentional interruption, not a runtime
+   crash or deadline timeout. No underlying stream failure was observed in this
+   final attempt. Both repair slots were consumed. The caller implemented the
+   four-file scope directly; no worker implementation was applied or accepted.
+5. Prompts, stream errors, runtime observations and the caller diagnosis remain
+   under `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r113-ci-filter/`.
+   The existing main checks passed 21 launcher and 9 documentation tests. Strict
+   MkDocs passed after the caller implementation. Its 13 Git-fixture/CLI tests
+   and workflow preservation check passed. These local checks do not prove live
+   filtering/publication. Full logs remain local; no token savings are claimed.
