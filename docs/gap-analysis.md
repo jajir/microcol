@@ -793,7 +793,7 @@ keeps answered questions out of the current catalogue and active requirements.
 
 ### Unit turn orders
 
-Selected for [R-0053](requirements/R-0053.md) on 2026-10-15. These are agreed
+Selected for [R-0053](requirements/done/R-0053.md) on 2026-10-15. These are agreed
 rules; implementation and acceptance are tracked by that requirement.
 
 1. Wait (Tab) selects the next current-owner on-map unit with movement and no

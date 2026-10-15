@@ -122,7 +122,7 @@ GUI navíc blokuje vstup během animace. Před vyčerpáním pohybu si zachová
 následující jednotku v pořadí. Výběr ruší nepotvrzený náhled trasy.
 Toolbar zobrazuje přeložené ovládání a modelovou dostupnost; klávesové filtry
 zpracují Tab/Space před zaměřeným tlačítkem. Přijetí a ověření eviduje
-[R-0053](requirements/R-0053.md).
+[R-0053](requirements/done/R-0053.md).
 
 ### Potvrzení útoku (R-0028, rozpracováno)
 

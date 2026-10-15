@@ -2330,7 +2330,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0053 unit turn orders — 2026-10-15
 
-1. [R-0053](requirements/R-0053.md) doplňuje viditelné Čekat (Tab) a
+1. [R-0053](requirements/done/R-0053.md) doplňuje viditelné Čekat (Tab) a
    Vynechat tah (Mezerník). Model kontroluje aktuální registrované identity,
    připravený tah, umístění, pohyb a pokračující práci. Vynechání mění pouze
    dosavadní pohyb; save/Continue a obnovení tahu využívají existující stav.
@@ -2391,3 +2391,19 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    ozbrojených královských vojáků; TC04 nadále kontroluje ztrátu kolonie a
    únik lodi. Log je `target/r53/turn-ui-recheck.log`. Prošel sdílený formatter
    a přísné MkDocs. Následující plná CI ověřuje všechny cesty před publikací.
+
+10. Implementace [`79784bd7`](https://github.com/jajir/microcol/commit/79784bd7515778e22650c695412e2795dece5cf2)
+    prošla [úplnou vývojovou CI](https://github.com/jajir/microcol/actions/runs/38783983178).
+    Stažené XML potvrzují **1211 herních a 158 UI-modulových případů**, bez
+    selhání, chyb nebo přeskočení; TC11 má všechny čtyři scénáře. Tím je
+    přijato celé UC-014 v rozsahu [jednotkových příkazů](gap-analysis.md#unit-turn-orders).
+11. Všechny tři nativní platformy mají každá **1211 herních a 33 balíčkových
+    kontrol**, launcher má **32/32**, bez chyb či přeskočení. Všechny čtyři
+    Windows/Linux × Java 11/17 [kombinace](https://github.com/jajir/microcol/actions/runs/38783983369)
+    uspěly; [Pages](https://github.com/jajir/microcol/actions/runs/38783983476)
+    úspěšně nasadily dokumentaci a živá stránka pravidel odkazuje na stejnou revizi.
+12. Manifest vývojového kanálu potvrzuje [dev-90-79784bd75157](https://github.com/jajir/microcol/releases/tag/dev-90-79784bd75157)
+    ze stejného commitu a archivy všech tří platforem. [R-0053](requirements/done/R-0053.md)
+    je dokončeno. Stažené reporty a manifest jsou v `target/r53/ci-*` a
+    `target/r53/published/`. Následný dokumentační commit uzavírá stav a odkazy;
+    ověřují se jeho Pages, úmyslně přeskočené game jobs a nezměněný manifest.

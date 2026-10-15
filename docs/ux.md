@@ -237,5 +237,5 @@ výsledek uživatelského výzkumu.
 3. Ruční prohlížení vyčerpané jednotky je možné; opětovné vynechání není.
    Pokračovat nevrací pohyb. Obnovení patří až následujícímu tahu vlastníka.
    Pravidlo je v [jednotkových příkazech](gap-analysis.md#unit-turn-orders),
-   stav přijetí v [R-0053](requirements/R-0053.md). Pozdější ladění vzhledu
+   stav přijetí v [R-0053](requirements/done/R-0053.md). Pozdější ladění vzhledu
    nebo zkratek není dosud výsledkem hráčského pozorování.

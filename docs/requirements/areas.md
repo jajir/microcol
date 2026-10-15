@@ -81,8 +81,8 @@ Kalendář řeší dokončené [R-0051](done/R-0051.md). Pořadí a hranici př�
 jednotek, výstroj, pohyb, dlouhodobé rozkazy a práce pionýrů. Připravíme
 schopnosti objektů, jejich platné stavy a podmínky akcí včetně ceny a odmítnutí.
 Kapacita lodě je vlastnost jednotky; konkrétní převod nákladu řeší A06.
-Výnos pole používá A07, obranu A09. Kandidáti:
-[R-0053](R-0053.md) a [R-0054](R-0054.md).
+Výnos pole používá A07, obranu A09. Čekat a vynechat tah řeší dokončené
+[R-0053](done/R-0053.md). Kandidát: [R-0054](R-0054.md).
 
 ### A06
 
