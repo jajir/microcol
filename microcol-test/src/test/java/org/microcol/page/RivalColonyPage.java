@@ -15,7 +15,8 @@ public final class RivalColonyPage extends AbstractScreen {
 
     public void verifyStartingExpeditions(final String expectedHumanName,
             final Location expectedHumanShip, final Location expectedRivalShip,
-            final int expectedFounderId, final int expectedRivalShipId) {
+            final int expectedFounderId, final int expectedRivalShipId,
+            final boolean expectedShoreVisible) {
         final Player human = getModel().getPlayerByName("Dutch");
         final Player rival = getModel().getPlayerByName("France");
         final Unit founder = getModel().getUnitById(expectedFounderId);
@@ -38,7 +39,8 @@ public final class RivalColonyPage extends AbstractScreen {
         assertEquals(expectedRivalShip, ship.getLocation());
         assertTrue(human.isVisible(expectedRivalShip));
         assertTrue(rival.isVisible(expectedRivalShip));
-        assertFalse(rival.isVisible(Location.of(26, 15)));
+        assertEquals(expectedShoreVisible,
+                rival.isVisible(Location.of(26, 15)));
         assertEquals(EuropeanRelationState.PEACE,
                 getModel().getEuropeanRelation(human, rival));
     }

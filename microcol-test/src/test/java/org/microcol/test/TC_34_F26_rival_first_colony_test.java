@@ -47,14 +47,14 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         final RivalColonyPage rival = new RivalColonyPage(getContext());
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(29, 12), 4, 5);
+                Location.of(29, 12), 4, 5, true);
 
         // Continue preserves the actual new fleet, not either settled world.
         game.exitToMenu().verifyMainScreen();
         new FreePlayAuditPage(getContext()).continueGame();
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(29, 12), 4, 5);
+                Location.of(29, 12), 4, 5, true);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         final RivalColonyPage rival = new RivalColonyPage(getContext());
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Jiří", Location.of(29, 15),
-                Location.of(29, 12), 4, 5);
+                Location.of(29, 12), 4, 5, true);
     }
 
     @Test

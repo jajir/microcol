@@ -2201,3 +2201,18 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    TC34 follows the same corrected calendar and still checks Continue during
    travel. Initial statistics are counted before notifying the first actor so
    an asynchronously started AI cannot race ahead of that bookkeeping.
+7. The revised broader Docker selection passed **1167 model cases** and **44 of
+   46 UI/support cases**; two TC34 visibility assertions failed, with no errors
+   or skips (`target/r52/publish-regression-fixed.log`). It selected `*Test`
+   plus TC07/08/09/10/13/15/16/17/18/21/23/28/34/36/37. France's newly earlier
+   first turn reveals (26,15) before Dutch control. The page verification now
+   takes the expected shore visibility, and those two new-game scenarios expect
+   it to be revealed. No visibility check was removed. This failed broader run
+   is retained separately from the repair and full CI acceptance.
+8. The repaired Docker run passed **17 model cases and 10 UI/support cases**,
+   with zero failures/errors/skips: `FirstColonyJourneyTest,NationalTurnOrderTest,NationalTurnPreparationTest,TC_34_F26_rival_first_colony_test,PageVerificationContractTest`
+   and `-Dsurefire.failIfNoSpecifiedTests=false`. All seven TC34 scenarios ran.
+   Evidence is in `target/docker-ui/run-GpxHoM/`, log
+   `target/r52/publish-rival-repair.log`. This also executes the final initial
+   statistics ordering and the restored exact initial rival-position assertion.
+   The full GitHub regression remains the publication gate.
