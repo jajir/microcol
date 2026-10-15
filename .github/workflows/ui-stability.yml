@@ -9,6 +9,12 @@ on:
         options: ['3', '10']
         default: '3'
         required: true
+      scope:
+        description: Include surrounding scenarios from both test classes
+        type: choice
+        options: ['journeys', 'classes']
+        default: 'journeys'
+        required: true
 
 permissions:
   contents: read
@@ -19,6 +25,7 @@ jobs:
     timeout-minutes: 45
     env:
       REPETITIONS: ${{ inputs.repetitions }}
+      SCOPE: ${{ inputs.scope }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -36,10 +43,15 @@ jobs:
           } > target/docker-ui/campaign-source.txt
       - name: Run each journey in a fresh JVM and container on every repetition
         run: |
+          selection='TC_27_F19_europe_equipment_test#TC_07_equipment_and_identity_survive_embarkation_voyage_and_continue,TC_30_F22_expert_purchase_test#TC_04_hired_expert_sails_home_and_works_in_the_smithy'
+          if [[ "$SCOPE" == classes ]]; then
+            selection='TC_27_F19_europe_equipment_test,TC_30_F22_expert_purchase_test'
+          fi
+          printf 'Selection: %s\n' "$selection" >> target/docker-ui/campaign-source.txt
           for iteration in $(seq 1 "$REPETITIONS"); do
             printf 'Repetition %s of %s\n' "$iteration" "$REPETITIONS" | tee -a target/docker-ui/campaign-runs.txt
             docker compose -f compose.ui-tests.yml run --rm ui-tests \
-              '-Dtest=TC_27_F19_europe_equipment_test#TC_07_equipment_and_identity_survive_embarkation_voyage_and_continue,TC_30_F22_expert_purchase_test#TC_04_hired_expert_sails_home_and_works_in_the_smithy' \
+              "-Dtest=$selection" \
               -Dsurefire.failIfNoSpecifiedTests=false
           done
       - name: Preserve every first result including a failed run

@@ -1991,3 +1991,18 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    budget; ten is acceptance after repair. The existing complete suite remains
    the development publication gate. No retries or skipped failures count as
    acceptance.
+
+4. Native Linux diagnostic campaign [38690874108](https://github.com/jajir/microcol/actions/runs/38690874108),
+   source `99e6c14b9a0a935bed838f313e21cb56f65be129`: all **three runs passed
+   2/2**, zero failures/errors/skips. TC27 durations **47.922–48.238 s**, TC30
+   **58.201–58.562 s**. Runtime: amd64, Temurin **17.0.18+8**, same Glass robot,
+   Xvfb/Openbox and software rendering as the earlier failure. Image:
+   `sha256:d927242a3a87425bf51b0445748c518c6f3fc2f01630e9dca56350ea0696c3c9`.
+   The observed map moves were delivered with input enabled and animation idle.
+   No cause is established from successful traces. Raw downloaded artifact:
+   `target/r112/native-diagnostic-3/`.
+5. Since isolated journeys did not reproduce the failure, the manual campaign
+   also offers `scope=classes` to preserve surrounding TC27 and TC30 scenarios
+   within each class JVM. This is a distinct diagnostic selection, not a retry
+   erasing a failure. Keep the source, first result and actual selection for
+   every campaign. The complete suite still provides the wider acceptance.
