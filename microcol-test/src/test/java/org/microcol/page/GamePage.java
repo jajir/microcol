@@ -49,6 +49,34 @@ public class GamePage extends AbstractScreen {
         super(context);
         WaitForAsyncUtils.waitForFxEvents();
         verifyThatStatusBarIsVisible();
+        getRobot().interact(() -> {
+            final javafx.scene.canvas.Canvas canvas = getContext()
+                    .getClassFromGuice(
+                            org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            if (canvas.getProperties().putIfAbsent("r112-trace",
+                    Boolean.TRUE) == null) {
+                final var controller = getContext().getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.GamePanelController.class);
+                final var hover = getContext().getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.MouseOverTileManager.class);
+                final Labeled label = getLabeledById(
+                        StatusBarView.STATUS_BAR_LABEL_ID);
+                label.textProperty().addListener((o, before, after) -> logger
+                        .info("R112 status '{}' -> '{}'", before, after));
+                canvas.addEventFilter(javafx.scene.input.MouseEvent.ANY,
+                        e -> logger.info(
+                                "R112 event={} xy={},{} screen={},{} enabled={} moving={} hover={} status='{}' area={} bounds={} focus={}",
+                                e.getEventType(), e.getX(), e.getY(),
+                                e.getScreenX(), e.getScreenY(),
+                                controller.isMouseEnabled(),
+                                controller.isUnitMoving(),
+                                hover.getMouseOverTile(), label.getText(),
+                                getContext().getArea(),
+                                canvas.localToScreen(canvas.getBoundsInLocal()),
+                                getPrimaryStage().isFocused()));
+            }
+        });
     }
 
     public void moveMouseAtLocation(final Location location) {
@@ -56,7 +84,10 @@ public class GamePage extends AbstractScreen {
         final Point p = getContext().getArea().convertToCanvasPoint(location)
                 .add(getPrimaryStage().getX(), getPrimaryStage().getY())
                 .add(TILE_CENTER);
+        logger.info("R112 move target={} point={} area={}", location, p,
+                getContext().getArea());
         getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
+        logger.info("R112 move returned target={}", location);
         verifyThatStatusBarContains(String.valueOf(location.getX()));
         verifyThatStatusBarContains(String.valueOf(location.getY()));
     }
@@ -66,6 +97,8 @@ public class GamePage extends AbstractScreen {
         final Point p = getContext().getArea().convertToCanvasPoint(location)
                 .add(getPrimaryStage().getX(), getPrimaryStage().getY())
                 .add(TILE_CENTER);
+        logger.info("R112 drag target={} point={} area={}", location, p,
+                getContext().getArea());
         getRobot().drag(MouseButton.PRIMARY).drag(p.getX(), p.getY())
                 .release(MouseButton.PRIMARY);
         waitWhileMoving();
@@ -123,11 +156,14 @@ public class GamePage extends AbstractScreen {
     }
 
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
+        logger.info("R112 nextTurn start");
         final Button buttonNextTurn = getButtonById(
                 ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
         getRobot().clickOn(buttonNextTurn);
         waitWhileMoving();
         WaitForAsyncUtils.waitForFxEvents();
+        logger.info("R112 nextTurn wait returned report={}",
+                isButtonBackVisible());
         if (isButtonBackVisible()) {
             return Optional.of(ScreenTurnReport.of(getContext()));
         } else {

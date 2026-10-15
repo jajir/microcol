@@ -1966,3 +1966,28 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Tyto zelené běhy neuzavírají příčinu proměnlivých výsledků. Četnost náhodných
    selhání nebyla změřena řízeným opakováním stejného výběru a prostředí;
    smíšené historické běhy nelze použít jako takovou statistiku.
+
+
+## R-0112 diagnostic campaign — 2026-10-15
+
+1. Selected requirement: [R-0112](requirements/R-0112.md). Baseline
+   `71074fc67df25e4b44290f86e6d87ddc210a8bd4`, clean isolated checkout.
+   Local Docker uses Linux amd64 emulation on Apple Silicon, Xvfb/Openbox and
+   unchanged Compose limits. Two fresh combined selections of TC27/07 and
+   TC30/04 passed **2/2 each**, no failures/errors/skips, Maven durations
+   **2:37 and 2:33**. A third diagnostic run with input/status logging also
+   passed **2/2**, **2:34**. These passes do not invalidate the earlier CI failures
+   or establish their cause. Raw local records: `target/r112/` and the attached
+   worktree's `target/docker-ui/`.
+2. Temporary test-side tracing records map input, coordinates, bounds, focus,
+   movement state, hover cache, status changes and action boundaries. It does
+   not change the gesture or add waits to obtain a pass. Application code,
+   fixtures and original assertions remain unchanged in the published diagnostic
+   revision. This is investigation, not an accepted repair.
+3. The manual `TC27 and TC30 stability campaign` workflow runs the exact two
+   suspect methods, each in its own JVM, in three or ten fresh Docker runs.
+   It records the source/image/fixture identity, stops on the first failed run
+   and uploads every result under `tc27-tc30-stability`. Three is the diagnostic
+   budget; ten is acceptance after repair. The existing complete suite remains
+   the development publication gate. No retries or skipped failures count as
+   acceptance.

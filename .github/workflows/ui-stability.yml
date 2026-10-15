@@ -1,0 +1,52 @@
+name: TC27 and TC30 stability campaign
+
+on:
+  workflow_dispatch:
+    inputs:
+      repetitions:
+        description: Fresh runs; stop on the first failure and preserve its evidence
+        type: choice
+        options: ['3', '10']
+        default: '3'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  stability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      REPETITIONS: ${{ inputs.repetitions }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and record the fixed environment
+        run: |
+          mkdir -p target/docker-ui
+          docker compose -f compose.ui-tests.yml build ui-tests
+          {
+            git rev-parse HEAD
+            git status --porcelain
+            uname -a
+            docker image inspect microcol-ui-ui-tests --format '{{.Id}} {{.Architecture}}'
+            sha256sum microcol-test/src/test/scenarios/F19* microcol-test/src/test/scenarios/F22*
+          } > target/docker-ui/campaign-source.txt
+      - name: Run each journey in a fresh JVM and container on every repetition
+        run: |
+          for iteration in $(seq 1 "$REPETITIONS"); do
+            printf 'Repetition %s of %s\n' "$iteration" "$REPETITIONS" | tee -a target/docker-ui/campaign-runs.txt
+            docker compose -f compose.ui-tests.yml run --rm ui-tests \
+              '-Dtest=TC_27_F19_europe_equipment_test#TC_07_equipment_and_identity_survive_embarkation_voyage_and_continue,TC_30_F22_expert_purchase_test#TC_04_hired_expert_sails_home_and_works_in_the_smithy' \
+              -Dsurefire.failIfNoSpecifiedTests=false
+          done
+      - name: Preserve every first result including a failed run
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tc27-tc30-stability
+          path: target/docker-ui/
+          if-no-files-found: error
+          retention-days: 14
