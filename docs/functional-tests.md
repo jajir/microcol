@@ -2410,7 +2410,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0054 coastal port movement — 2026-10-15
 
-1. Selected [R-0054](requirements/R-0054.md) retains the existing shared coastal
+1. Selected [R-0054](requirements/done/R-0054.md) retains the existing shared coastal
    predicate and separate passenger landing. Source baseline is `77dd824a`.
    F30 deliberately places an inland colony beside an own coastal port with
    one isolated water square; ordinary founding spacing is unchanged. TC38
@@ -2476,3 +2476,26 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    exception. Gameplay code and all required acceptance boundaries are unchanged.
    The reviewed test file is integrated into main; full CI regression and
    publication of this final model-test addition remain pending.
+
+9. Initial [development run 38817793009](https://github.com/jajir/microcol/actions/runs/38817793009)
+   for `df25024d` failed its functional job before compiling or running any
+   game or UI test: Maven could not reach Maven Central to resolve `maven-clean-plugin`.
+   The downloaded artifact confirms a network-unreachable dependency lookup,
+   not an assertion failure. Required functional acceptance and publication
+   remain pending a rerun of the failed work.
+
+10. Final acceptance on **2026-10-16**: [attempt 2 of the same run](https://github.com/jajir/microcol/actions/runs/38817793009/attempts/2)
+    passed the full functional suite and published successfully. Downloaded
+    reports contain **1225 game tests and 162 UI-module checks**, zero
+    failures/errors/skips. All three native packages and launcher checks passed;
+    downloaded Apple Silicon reports also confirm 1225 game tests and 33
+    packaging checks. [Java compatibility](https://github.com/jajir/microcol/actions/runs/38817792981)
+    and [Pages](https://github.com/jajir/microcol/actions/runs/38817792949) passed.
+11. The downloaded channel manifest identifies
+    [dev-94-df25024d4b3e](https://github.com/jajir/microcol/releases/tag/dev-94-df25024d4b3e)
+    from exact source `df25024d4b3e12ca4584586a6da0d047d59c5087`. Evidence is
+    retained under `target/r54/ci-model-final-retry`, `ci-model-native-arm` and
+    `published-final`. R-0054 and UC-011 are accepted for their complete scoped
+    variants; terrain costs and persistent orders remain separate requirements.
+    The following documentation-only closure must deploy Pages, intentionally
+    skip game jobs and preserve this game manifest.

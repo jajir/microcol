@@ -125,7 +125,7 @@ zpracují Tab/Space před zaměřeným tlačítkem. R-0054 doplňuje předání 
 před zaměřeným menu: presenter událost spotřebuje pouze při rušení aktivního
 náhledu pohybu, jinak zůstává dostupná menu. Přijetí příkazů eviduje
 [R-0053](requirements/done/R-0053.md), ověření Escape
-[R-0054](requirements/R-0054.md).
+[R-0054](requirements/done/R-0054.md).
 
 ### Potvrzení útoku (R-0028, rozpracováno)
 

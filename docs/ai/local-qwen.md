@@ -2877,4 +2877,6 @@ should reuse existing validation and a focused audit before proposing new toolin
     checks**, zero failures/errors/skips, exit 0. The caller reviewed and
     integrated the final test file after shared formatting. Accepted after
     worker generation plus the explicitly recorded caller corrections; full
-    CI regression/publication of the added model tests remains pending.
+    CI regression/publication of the added model tests subsequently passed in
+    `df25024d` / `dev-94-df25024d4b3e`; see the
+    [complete evidence](../functional-tests.md#r-0054-coastal-port-movement-2026-10-15).

@@ -82,7 +82,7 @@ jednotek, výstroj, pohyb, dlouhodobé rozkazy a práce pionýrů. Připravíme
 schopnosti objektů, jejich platné stavy a podmínky akcí včetně ceny a odmítnutí.
 Kapacita lodě je vlastnost jednotky; konkrétní převod nákladu řeší A06.
 Výnos pole používá A07, obranu A09. Čekat a vynechat tah řeší dokončené
-[R-0053](done/R-0053.md). Kandidát: [R-0054](R-0054.md).
+[R-0053](done/R-0053.md). Přístavy a jejich ověření řeší dokončené [R-0054](done/R-0054.md).
 
 ### A06
 
