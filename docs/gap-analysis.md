@@ -153,7 +153,7 @@ The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terr
 | SETUP-006 | 9 / 15 | Spanish attacks against native settlements gain 50%. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java) has no nationality profile; attack resolution has no native-settlement bonus (COMBAT entries). | Missing | Proposed: isolate a Spanish settlement attack and check the +50% modifier; do not apply it to unrelated battles. |
 | SETUP-007 | 9 / 15 | Dutch prices are more stable than other nations’ prices under trading pressure. | [Europe](../microcol-game/src/main/java/org/microcol/model/Europe.java) has fixed shared prices and no national market state. Static prices for everyone do not implement the Dutch advantage. | Missing | Proposed: equal-volume trading moves Dutch prices less than other markets under the response model in [difficulty and national effects](#difficulty-and-national-effects). |
 | SETUP-008 | 9 / 15 | Dutch players begin with a trading vessel. | The free-play scenario starts with a GALLEON; [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java) has no merchantman/caravel selection. The prose says trading vessel without defining the exact starting loadout. | Unclear | Proposed: test every nation’s accepted starting vessel and loadout in [calendar and starting expeditions](#calendar-and-starting-expeditions). |
-| SETUP-009 | 2, 10 / 8, 16 | The manual describes a start in 1500 and advancing the date once per complete turn. | The free-play scenario starts in 1490. [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) advances the calendar after the final player; [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java) adds four seasons from 1600, a schedule not specified by this manual. | Differs | Proposed: use the accepted 1490 start and year/season schedule in [calendar and starting expeditions](#calendar-and-starting-expeditions), retaining the deliberate departure from the manual. |
+| SETUP-009 | 2, 10 / 8, 16 | The manual describes a start in 1500 and advancing the date once per complete turn. | The free-play scenario starts in 1490. [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) advances the calendar after the final player; [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java) adds four seasons from 1600, a schedule not specified by this manual. | Differs | Verified on 2026-10-15 in [R-0051](requirements/done/R-0051.md): all bundled starts use 1490, calendar tests and TC37 cover annual/season boundaries and Continue. The accepted [calendar](#calendar-and-starting-expeditions) remains a deliberate departure from the manual. |
 | TURN-001 | 10 / 16 | Natives act first, followed by England, France, Spain, and Netherlands. | [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java).endTurn iterates the scenario/player-store list; [PlayerStore](../microcol-game/src/main/java/org/microcol/model/PlayerStore.java) appends kings after non-kings. No required nationality order or native turn exists. | Differs | Proposed: record a full round and assert the manual order independently of save-file player order. |
 | TURN-002 | 10 / 16 | Each national turn assesses Europe, then colonies, then movement/combat and management. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn calls units, colonies, then scheduled immigrants. European market/tax phases are absent. Ship arrival and unit actions can therefore precede colonial processing. | Differs | Proposed: trace Europe events, colony production and unit activation; retain management access before ending the turn. |
 
@@ -721,8 +721,8 @@ keeps answered questions out of the current catalogue and active requirements.
 
 ### Calendar and starting expeditions
 
-1. **Always start newly created games in 1490**, including bundled campaign
-   starts when those fixtures are next updated. This is an intentional departure
+1. **Always start newly created games in 1490**, including all bundled campaign
+   starts. This is an intentional departure
    from the manual's 1500 reference, not a change of the historical comparison.
    Loading a current-schema game retains its saved date and never restarts it.
    Test fixtures may set a later date to exercise a boundary.
@@ -746,7 +746,7 @@ keeps answered questions out of the current catalogue and active requirements.
    start gives spring/summer/autumn/winter 1630, then spring 1631. Historical
    statistics use the same zero-based round-to-year conversion as the current
    date. Reject negative elapsed/query round indexes. These clarified boundaries
-   are selected for R-0051; they are not evidence of a corrected implementation.
+   are implemented by [R-0051](requirements/done/R-0051.md); its [dated acceptance](functional-tests.md#r-0051-calendar-and-continue-2026-10-15) covers model conversion, actual displayed dates and Continue.
 
 ### National turn processing
 

@@ -83,7 +83,7 @@ only to the described bounded delivery.
 | Original requirement | Disposition | Current finding | New owners / continuation |
 | --- | --- | --- | --- |
 | [R-0001](done/R-0001.md) | done | The player can start free play without completing the campaign. | No further work within this bounded scope. |
-| [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](R-0051.md), [R-0052](R-0052.md) |
+| [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](done/R-0051.md), [R-0052](R-0052.md) |
 | [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
 | [R-0004](canceled/R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](R-0054.md) |
 | [R-0005](canceled/R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](R-0055.md), [R-0082](R-0082.md) |
@@ -95,8 +95,8 @@ only to the described bounded delivery.
 | [R-0011](done/R-0011.md) | done | The shared model dependency boundary is enforced by architecture checks. | No further work within this bounded scope. |
 | [R-0012](done/R-0012.md) | done | The existing free-play menu was retained and enabled independently of campaign completion. | No further work within this bounded scope. |
 | [R-0013](done/R-0013.md) | done | Leaving/replacing a game uses the accepted recovery-save and setup paths. | [R-0067](R-0067.md) |
-| [R-0014](done/R-0014.md) | done | Mock setup, map selection and player naming are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0064](R-0064.md), [R-0065](R-0065.md), [R-0066](R-0066.md) |
-| [R-0015](done/R-0015.md) | done | Fixed French reference colonies and units are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0066](R-0066.md) |
+| [R-0014](done/R-0014.md) | done | Mock setup, map selection and player naming are delivered. | [R-0051](done/R-0051.md), [R-0063](R-0063.md), [R-0064](R-0064.md), [R-0065](R-0065.md), [R-0066](R-0066.md) |
+| [R-0015](done/R-0015.md) | done | Fixed French reference colonies and units are delivered. | [R-0051](done/R-0051.md), [R-0063](R-0063.md), [R-0066](R-0066.md) |
 | [R-0016](done/R-0016.md) | done | Existing screen paths have mouse and keyboard acceptance evidence. | No further work within this bounded scope. |
 | [R-0017](done/R-0017.md) | done | Equipment and unloading commands use consistent availability and safe rejection. | No further work within this bounded scope. |
 | [R-0018](done/R-0018.md) | done | Automatic saving and the real Continue path are delivered. | [R-0067](R-0067.md), [R-0068](R-0068.md) |

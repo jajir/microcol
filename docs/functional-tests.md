@@ -2149,3 +2149,12 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    It selected `TC_37_F29_calendar_boundaries_test,PageVerificationContractTest`
    with `-Dsurefire.failIfNoSpecifiedTests=false`. The complete CI run remains the
    final acceptance gate for the combined source before closing R-0051.
+
+7. The complete [Linux CI run](https://github.com/jajir/microcol/actions/runs/38747926082)
+   for `48d6cfadae3445fe03d98dd1e82c749b0133987d` passed **1153 game tests and
+   152 UI-module cases**, with zero failures/errors/skips. The latter includes
+   all seven TC37 scenarios; no mocked listener test remains. Downloaded XML is
+   under `target/r51/ci-functional/docker-ui/run-sxCcLk/`. This is the clean full
+   regression acceptance following the local test repair. All four Java 11/17
+   Windows/Linux compatibility jobs also passed in
+   [run 38747926164](https://github.com/jajir/microcol/actions/runs/38747926164).

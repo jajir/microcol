@@ -461,7 +461,7 @@ a [SelectedUnitManager](../microcol-game/src/main/java/org/microcol/gui/screen/g
 ### Z03 Specifikace a první řez průchodu tahem
 
 Původní [R-0002 — fáze tahu a posun kalendáře](requirements/canceled/R-0002.md)
-zůstává historickým záznamem Z03. Aktivní rozsah vlastní [R-0051](requirements/R-0051.md)
+zůstává historickým záznamem Z03. Aktivní rozsah vlastní [R-0051](requirements/done/R-0051.md)
 a [R-0052](requirements/R-0052.md). Používají [přijatý kalendář](gap-analysis.md#calendar-and-starting-expeditions);
 upřesnit zbývá rozhraní fází a persistence. Přijetí pravidel neznamená implementaci
 ani přijetí TURN-001/002.

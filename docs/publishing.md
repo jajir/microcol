@@ -224,11 +224,25 @@ documentation in APT just to make it visible on the web.
 
 ## Documentation-only CI — 2026-10-15
 
-1. [R-0113](requirements/R-0113.md) owns the selected
-   [CI filtering contract](development-builds.md#ci-filtering). Local and live
-   acceptance are in progress; this record does not yet claim deployed filtering.
-2. Acceptance requires the implementation push to retain the complete game CI
-   and release publication, followed by a `docs/`-only push with successful Pages,
-   successful classifiers, skipped game jobs and the identical game manifest.
-   Classifier unit tests and workflow review cover PR/manual paths and uncertain
-   input; they are distinct from observed workflow runs.
+1. [R-0113](requirements/R-0113.md) implements the
+   [CI filtering contract](development-builds.md#ci-filtering). Local acceptance
+   passed 13 classifier tests, 21 launcher tests, nine documentation tests and
+   strict MkDocs. Workflow review preserved existing events, jobs, matrices,
+   permissions, steps and release dependencies.
+2. Implementation commit `48d6cfadae3445fe03d98dd1e82c749b0133987d` correctly
+   requested full game work. [Development run 38747926082](https://github.com/jajir/microcol/actions/runs/38747926082)
+   passed all jobs and published [dev-80-48d6cfadae34](https://github.com/jajir/microcol/releases/tag/dev-80-48d6cfadae34).
+   The downloaded development-channel manifest identifies that exact build and
+   commit. All three platform packages passed; the full Linux run has 1153 game
+   tests and 152 UI-module cases, with zero failures/errors/skips. Launcher-only
+   evidence has 32 passing checks; downloaded Linux and Apple Silicon native
+   evidence each has 1153 game tests and 33 build/package checks, without skips.
+3. [Java compatibility run 38747926164](https://github.com/jajir/microcol/actions/runs/38747926164)
+   passed all four Windows/Linux × Java 11/17 jobs.
+   [Pages run 38747926000](https://github.com/jajir/microcol/actions/runs/38747926000)
+   deployed successfully; the live delivery page contains the CI-filtering rule
+   and classifier source link pinned to the implementation commit.
+4. This documentation-only acceptance update must now pass Pages, run successful
+   classifiers, explicitly skip every game job and leave the downloaded
+   `dev-80-48d6cfadae34` manifest byte-identical. R-0113 remains open until that
+   observed result is recorded; no live skip is inferred from local tests alone.
