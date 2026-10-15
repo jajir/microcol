@@ -95,7 +95,7 @@ its own code.
 
 ## CI filtering
 
-[R-0113](requirements/R-0113.md) defines this contract, selected on 2026-10-15.
+[R-0113](requirements/done/R-0113.md) defines this contract, selected on 2026-10-15.
 Implementation and live acceptance are recorded in that requirement and the
 [publication evidence](publishing.md#documentation-only-ci-2026-10-15).
 

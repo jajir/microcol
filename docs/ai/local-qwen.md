@@ -2652,7 +2652,7 @@ should reuse existing validation and a focused audit before proposing new toolin
 1. Job `2026-10-15-r113-ci-filter` uses baseline `b2b3ec14`, GPT-OSS medium/64k
    and four assigned files: the change classifier, its Git-fixture tests and the
    two game workflows. The caller owns rules, documentation, review and all
-   verification. [R-0113](../requirements/R-0113.md) retains the full acceptance.
+   verification. [R-0113](../requirements/done/R-0113.md) retains the full acceptance.
 2. Attempt 0 delivered no assigned source edits. Its CLI reported an idle SSE
    timeout and then a stream closed before `response.completed`; the inference
    server remained active. The underlying cause is unproven. After repeated

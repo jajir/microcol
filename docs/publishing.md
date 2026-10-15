@@ -159,7 +159,7 @@ documentation in APT just to make it visible on the web.
    the new CI request R-0113. No Java, game fixture, workflow or gameplay
    behavior changed; no local Maven/UI suite was needed for this documentation
    acceptance.
-4. [R-0113](requirements/R-0113.md) captures the requested documentation-only
+4. [R-0113](requirements/done/R-0113.md) captures the requested documentation-only
    CI exception as `new`; it is not configured by this change. The current
    workflows still run after this push. Publication must be checked for the
    resulting commit in [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
@@ -191,7 +191,7 @@ documentation in APT just to make it visible on the web.
    [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml) and
    [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
    This refinement does not implement the proposed documentation-only CI exception
-   in [R-0113](requirements/R-0113.md).
+   in [R-0113](requirements/done/R-0113.md).
 
 ## Answered-question cleanup — 2026-10-15
 
@@ -220,11 +220,11 @@ documentation in APT just to make it visible on the web.
 4. Publication is checked for the resulting main commit in
    [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml) and
    [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
-   The proposed documentation-only CI exception remains in [R-0113](requirements/R-0113.md).
+   The proposed documentation-only CI exception remains in [R-0113](requirements/done/R-0113.md).
 
 ## Documentation-only CI — 2026-10-15
 
-1. [R-0113](requirements/R-0113.md) implements the
+1. [R-0113](requirements/done/R-0113.md) implements the
    [CI filtering contract](development-builds.md#ci-filtering). Local acceptance
    passed 13 classifier tests, 21 launcher tests, nine documentation tests and
    strict MkDocs. Workflow review preserved existing events, jobs, matrices,
@@ -242,7 +242,17 @@ documentation in APT just to make it visible on the web.
    [Pages run 38747926000](https://github.com/jajir/microcol/actions/runs/38747926000)
    deployed successfully; the live delivery page contains the CI-filtering rule
    and classifier source link pinned to the implementation commit.
-4. This documentation-only acceptance update must now pass Pages, run successful
-   classifiers, explicitly skip every game job and leave the downloaded
-   `dev-80-48d6cfadae34` manifest byte-identical. R-0113 remains open until that
-   observed result is recorded; no live skip is inferred from local tests alone.
+4. Documentation-only commit `a9b27a060aa04f43dbf356a893d98e0beece46d7`
+   passed [Pages build and deployment](https://github.com/jajir/microcol/actions/runs/38751061997).
+   Its [development workflow](https://github.com/jajir/microcol/actions/runs/38751061658)
+   has a successful `changes` job and explicitly skipped functional, native,
+   launcher-check and publish jobs. Its [compatibility workflow](https://github.com/jajir/microcol/actions/runs/38751061825)
+   has a successful `changes` job and explicitly skipped `game` job. Both
+   workflows concluded successfully; no game matrix or release was launched.
+5. The development-channel manifest downloaded before and after that docs-only
+   push is byte-identical and still identifies `dev-80-48d6cfadae34` from
+   `48d6cfadae3445fe03d98dd1e82c749b0133987d`. The live publishing page contains
+   the release evidence and source links pinned to the documentation commit.
+   This observed result closes R-0113; future documentation commits retain the
+   same distinction between their published documentation revision and the
+   unchanged game build. Local logs/downloads are under `target/r113/`.

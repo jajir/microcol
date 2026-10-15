@@ -8,7 +8,7 @@ existing ID; the table is a catalogue, not an implementation sequence.
 
 Added on **2026-10-15**: [R-0112](done/R-0112.md) captures TC27/TC30 test stability
 as a new technical request, separate from the 61 migrated gameplay/setup items.
-[R-0113](R-0113.md) captures skipping full game CI for changes only in `docs/`;
+[R-0113](done/R-0113.md) captures skipping full game CI for changes only in `docs/`;
 [R-0114](done/R-0114.md) records the status-directory organization.
 [R-0115](done/R-0115.md) records the accepted provisional game rules;
 [R-0116](done/R-0116.md) incorporates answers into current rules and removes resolved
@@ -82,7 +82,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
-| [R-0113](R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
+| [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
 
 ## A04
 
