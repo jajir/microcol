@@ -132,3 +132,31 @@ See [Modules and build outputs](modules.md) for the retained module's role. Do n
 `mvn site-deploy` or `mkdocs gh-deploy` for current documentation publication;
 the Actions workflow is the single publishing route. Do not duplicate new
 documentation in APT just to make it visible on the web.
+
+## Requirement status directories — 2026-10-15
+
+1. [R-0114](requirements/done/R-0114.md) implements the
+   [status-to-location rule](requirements/README.md#file-locations). The 41
+   inactive original records move to `done/` (29) and `canceled/` (12), with
+   their scope, statuses, decisions and historical evidence preserved. The
+   completed R-0114 itself also belongs in `done/`; `deferred/` has an index
+   ready for future postponed work. The final set has 105 unique R IDs,
+   including 63 active requirements, 30 completed and 12 canceled.
+2. The caller's direct audit compared the relocation against the pre-move
+   source: all 41 original archived records retain their non-link text, and
+   all 2,986 parsed link targets across 129 documentation/instruction pages
+   remain equivalent after relocation. It also checked unique IDs, all four
+   chapters, status/path agreement and the reserved R-0041–R-0049 gap. Review
+   scripts and snapshots are local evidence under
+   `target/requirement-status-review/`, not shipped tooling.
+3. The documented commands passed: 21 local-worker launcher tests (without
+   inference), nine documentation tests and `python -m mkdocs build --strict`.
+   Browser review checked the rendered location table, archived R-0050 and
+   the new CI request R-0113. No Java, game fixture, workflow or gameplay
+   behavior changed; no local Maven/UI suite was needed for this documentation
+   acceptance.
+4. [R-0113](requirements/R-0113.md) captures the requested documentation-only
+   CI exception as `new`; it is not configured by this change. The current
+   workflows still run after this push. Publication must be checked for the
+   resulting commit in [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
+   and [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).

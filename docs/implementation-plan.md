@@ -44,7 +44,8 @@ rozsahu. Samotné zachycení požadavku neznamená zahájení vývoje.
 | P20/P21 | [Diplomacie a soupeř A08](requirements/backlog.md#a08) |
 | P17 | [Boj A09](requirements/backlog.md#a09) |
 | P22–P24 | [Politika A10](requirements/backlog.md#a10) |
-| P31 | [Migrace R-0050](requirements/R-0050.md); [R-0112: stabilita TC27/TC30](requirements/R-0112.md) |
+| P31 | [Migrace R-0050](requirements/done/R-0050.md); [R-0112: stabilita TC27/TC30](requirements/R-0112.md); [R-0114: adresáře podle stavu požadavků](requirements/done/R-0114.md) |
+| P31/P32 | [R-0113: vynechání plného CI při změnách pouze v docs/](requirements/R-0113.md) |
 
 Výběr dalšího R proběhne po dohodě. Zbytek úplného manuálu zůstává v tomto
 plánu a v UC; migrace prvních čtyřiceti zadání nezavírá celý backlog hry.
@@ -218,7 +219,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Zachovat [současný vzhled](graphics.md#soucasne-zadani-vzhledu). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
 | **P30 Zvuková odezva** | Podle [zvukových pravidel](audio.md) připravit krátké efekty, souběh s hudbou, nastavení a vybrané herní události. Rozsah další hudby určit samostatně. | Katalog určí událost, výsledek, příjemce a okamžik; zvuk se nespustí při pouhém náhledu nebo načtení reportu. Vše podstatné zůstane pochopitelné při ztlumení. |
-| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/R-0032.md). [R-0033: UI testy v Dockeru](requirements/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/R-0039.md). [R-0040: struktura a stavy požadavků](requirements/R-0040.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
+| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/done/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/done/R-0032.md). [R-0033: UI testy v Dockeru](requirements/done/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/done/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/done/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/done/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/done/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/done/R-0039.md). [R-0040: struktura a stavy požadavků](requirements/done/R-0040.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
 | **P32 Předání a vydání** | Používat existující CI, launcher a Mac/Linux balíčky; průběžně ověřovat aktualizaci a dokumentaci. Zbývající první vydání a Steam vést podle samostatného odhadu. | Úspěšné kontroly i publikace stejného commitu, odkaz na stažení a postup ověření; připravený plán zacházení s uloženými hrami. Nevytvářet již hotový distribuční systém znovu. |
 
 Přiřazení pokrývá všech 230 katalogových ID včetně doplnění z 11. října. Celé rodiny pravidel zůstávají
@@ -236,21 +237,21 @@ neznamená implementaci ani uzavření příslušného balíku nebo UC.
 
 | Hlavní balík | Nové analýzy |
 | --- | --- |
-| P28 | [R-0012 menu](requirements/R-0012.md), [R-0013 bezpečný odchod](requirements/R-0013.md), [R-0017 odezva příkazů](requirements/R-0017.md) |
-| P02 | [R-0014 profil](requirements/R-0014.md), [R-0015 účastníci](requirements/R-0015.md) |
-| P27 | [R-0016 obrazovky a informace](requirements/R-0016.md) |
-| P26 | [R-0018 obnovení hry](requirements/R-0018.md) |
-| P04 | [R-0019 viditelnost](requirements/R-0019.md) |
-| P05 | [R-0020 evropské vybavení](requirements/R-0020.md) |
-| P09 | [R-0021 Atlantik](requirements/R-0021.md) |
-| P08 | [R-0022 cestující](requirements/R-0022.md) |
-| P14 | [R-0023 odborný kovář](requirements/R-0023.md) |
-| P10 | [R-0024 vyložení vozu](requirements/R-0024.md) |
-| P12 | [R-0025 podmínky staveb](requirements/R-0025.md) |
-| P20 | [R-0026 vztahy](requirements/R-0026.md) |
-| P21 | [R-0027 kolonie soupeře](requirements/R-0027.md) |
-| P17 | [R-0028 útok](requirements/R-0028.md), [R-0029 síla](requirements/R-0029.md) |
-| P22 | [R-0030 daně](requirements/R-0030.md), [R-0031 podpora nezávislosti](requirements/R-0031.md) |
+| P28 | [R-0012 menu](requirements/done/R-0012.md), [R-0013 bezpečný odchod](requirements/done/R-0013.md), [R-0017 odezva příkazů](requirements/done/R-0017.md) |
+| P02 | [R-0014 profil](requirements/done/R-0014.md), [R-0015 účastníci](requirements/done/R-0015.md) |
+| P27 | [R-0016 obrazovky a informace](requirements/done/R-0016.md) |
+| P26 | [R-0018 obnovení hry](requirements/done/R-0018.md) |
+| P04 | [R-0019 viditelnost](requirements/done/R-0019.md) |
+| P05 | [R-0020 evropské vybavení](requirements/done/R-0020.md) |
+| P09 | [R-0021 Atlantik](requirements/done/R-0021.md) |
+| P08 | [R-0022 cestující](requirements/done/R-0022.md) |
+| P14 | [R-0023 odborný kovář](requirements/done/R-0023.md) |
+| P10 | [R-0024 vyložení vozu](requirements/done/R-0024.md) |
+| P12 | [R-0025 podmínky staveb](requirements/done/R-0025.md) |
+| P20 | [R-0026 vztahy](requirements/done/R-0026.md) |
+| P21 | [R-0027 kolonie soupeře](requirements/done/R-0027.md) |
+| P17 | [R-0028 útok](requirements/done/R-0028.md), [R-0029 síla](requirements/canceled/R-0029.md) |
+| P22 | [R-0030 daně](requirements/canceled/R-0030.md), [R-0031 podpora nezávislosti](requirements/canceled/R-0031.md) |
 
 ## Rozdělení práce mezi lokálního workera a hlavního agenta
 
@@ -358,13 +359,13 @@ kontrakty; nejsou znovu zařazené mezi budoucí změny.
 
 | Balík / původní zadání | Analýzy pro postupné upřesnění |
 | --- | --- |
-| P02/P28 | [R-0001 — vstup do volné hry bez kampaně](requirements/R-0001.md). |
-| P01/P03/P26, Z03 | [R-0002 — fáze tahu a posun kalendáře](requirements/R-0002.md). |
-| P06 | [R-0003 — čekání a vynechání tahu jednotky](requirements/R-0003.md); [R-0004 — pobřežní přístavy](requirements/R-0004.md). |
-| P10/P11 | [R-0005 — sdílená pole a bezpečné přiřazení](requirements/R-0005.md); [R-0006 — výběr práce podle výnosu](requirements/R-0006.md). |
-| P10/P03 | [R-0007 — spotřeba jídla a růst](requirements/R-0007.md); [R-0008 — hlad a poslední obyvatel](requirements/R-0008.md). |
-| P11/P05 | [R-0009 — vstupy odborného kováře](requirements/R-0009.md). |
-| P11 | [R-0010 — automatická základní produkce kříže](requirements/R-0010.md). |
+| P02/P28 | [R-0001 — vstup do volné hry bez kampaně](requirements/done/R-0001.md). |
+| P01/P03/P26, Z03 | [R-0002 — fáze tahu a posun kalendáře](requirements/canceled/R-0002.md). |
+| P06 | [R-0003 — čekání a vynechání tahu jednotky](requirements/canceled/R-0003.md); [R-0004 — pobřežní přístavy](requirements/canceled/R-0004.md). |
+| P10/P11 | [R-0005 — sdílená pole a bezpečné přiřazení](requirements/canceled/R-0005.md); [R-0006 — výběr práce podle výnosu](requirements/canceled/R-0006.md). |
+| P10/P03 | [R-0007 — spotřeba jídla a růst](requirements/canceled/R-0007.md); [R-0008 — hlad a poslední obyvatel](requirements/canceled/R-0008.md). |
+| P11/P05 | [R-0009 — vstupy odborného kováře](requirements/canceled/R-0009.md). |
+| P11 | [R-0010 — automatická základní produkce kříže](requirements/canceled/R-0010.md). |
 
 Následující menší řezy lze připravit před velkými chybějícími systémy. Časový
 rozpočet se doplní při zadání; nejde o tři stejně velké úkoly.
@@ -458,7 +459,7 @@ a [SelectedUnitManager](../microcol-game/src/main/java/org/microcol/gui/screen/g
 
 ### Z03 Specifikace a první řez průchodu tahem
 
-Analýza je nyní vedena v [R-0002 — fáze tahu a posun kalendáře](requirements/R-0002.md).
+Analýza je nyní vedena v [R-0002 — fáze tahu a posun kalendáře](requirements/canceled/R-0002.md).
 ID Z03 i tento odkaz zůstávají platné. Soubor R-0002 vlastní rozsah, chování,
 implementační kroky a otevřené otázky; blokující Q-02 se rozhoduje ve společném
 registru. Přesun dokumentace neznamená implementaci ani přijetí TURN-001/002.

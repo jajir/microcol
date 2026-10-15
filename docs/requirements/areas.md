@@ -41,7 +41,7 @@ Příprava vychází z existujících obrazovek a ověřených přechodů; chyb�
 chybové stavy mají vlastní malé požadavky.
 A02 vlastní nastavení a vytvořenou partii, A04 obnovu pozice a A10 význam
 odchodu se skóre. Společné ovládací prvky a texty přebíráme z A03.
-Dodané menu: [R-0001](R-0001.md)/[R-0012](R-0012.md); další obnova po
+Dodané menu: [R-0001](done/R-0001.md)/[R-0012](done/R-0012.md); další obnova po
 neúspěšném načtení patří do A04, [R-0067](R-0067.md).
 
 ### A02
@@ -219,16 +219,16 @@ pozdějších oblastí; nejsou úplným seznamem práce do dokončení hry.
 
 | Oblast | Nově připravené malé analýzy |
 | --- | --- |
-| A01 | [R-0012 struktura menu](R-0012.md), [R-0013 bezpečný odchod a nahrazení partie](R-0013.md) |
-| A02 | [R-0014 referenční profil](R-0014.md), [R-0015 účastníci partie](R-0015.md) |
-| A03 | [R-0016 struktura obrazovek](R-0016.md), [R-0017 dostupnost příkazů a chyby](R-0017.md) |
-| A04 | [R-0018 bezpečné obnovení hry](R-0018.md) |
-| A05 | [R-0019 průzkum a viditelnost](R-0019.md), [R-0020 vybavení na evropském molu](R-0020.md) |
-| A06 | [R-0021 odjezd a návrat přes Atlantik](R-0021.md), [R-0022 přeprava kolonisty](R-0022.md), [R-0023 nákup odborného kováře](R-0023.md) |
-| A07 | [R-0024 vyložení vozu](R-0024.md), [R-0025 podmínky staveb](R-0025.md) |
-| A08 | [R-0026 evropské vztahy](R-0026.md), [R-0027 první kolonie soupeře](R-0027.md) |
-| A09 | [R-0028 přípustnost útoku](R-0028.md), [R-0029 výpočet pozemní síly](R-0029.md) |
-| A10 | [R-0030 daňový požadavek](R-0030.md), [R-0031 podpora nezávislosti](R-0031.md) |
+| A01 | [R-0012 struktura menu](done/R-0012.md), [R-0013 bezpečný odchod a nahrazení partie](done/R-0013.md) |
+| A02 | [R-0014 referenční profil](done/R-0014.md), [R-0015 účastníci partie](done/R-0015.md) |
+| A03 | [R-0016 struktura obrazovek](done/R-0016.md), [R-0017 dostupnost příkazů a chyby](done/R-0017.md) |
+| A04 | [R-0018 bezpečné obnovení hry](done/R-0018.md) |
+| A05 | [R-0019 průzkum a viditelnost](done/R-0019.md), [R-0020 vybavení na evropském molu](done/R-0020.md) |
+| A06 | [R-0021 odjezd a návrat přes Atlantik](done/R-0021.md), [R-0022 přeprava kolonisty](done/R-0022.md), [R-0023 nákup odborného kováře](done/R-0023.md) |
+| A07 | [R-0024 vyložení vozu](done/R-0024.md), [R-0025 podmínky staveb](done/R-0025.md) |
+| A08 | [R-0026 evropské vztahy](done/R-0026.md), [R-0027 první kolonie soupeře](done/R-0027.md) |
+| A09 | [R-0028 přípustnost útoku](done/R-0028.md), [R-0029 výpočet pozemní síly](canceled/R-0029.md) |
+| A10 | [R-0030 daňový požadavek](canceled/R-0030.md), [R-0031 podpora nezávislosti](canceled/R-0031.md) |
 
 A01 má od 13. října 2026 dohodnutý základ: ponechat stávající menu, odstranit
 podmínku kampaně v R-0001 a ověřit skutečné ukládání v R-0018. R-0023 zůstává
@@ -237,7 +237,7 @@ předpokladem dosažitelnosti odborníka pro R-0009; R-0031 předchází politic
 
 ## Nejbližší příprava: struktura A01
 
-**Rozhodnutí uživatele z 13. října 2026.** [R-0012](R-0012.md) vlastní
+**Rozhodnutí uživatele z 13. října 2026.** [R-0012](done/R-0012.md) vlastní
 zachování současného menu; jeho nový návrh již není blokátorem R-0001.
 
 1. R-0001 zpřístupní existující „New free play game“ bez dokončení kampaně.

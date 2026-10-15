@@ -54,6 +54,10 @@ and execution history in the existing evidence pages, linked rather than copied.
 Use the required `Status` field with exactly `new`, `waiting for refinement`,
 `ready for development`, `done`, `deferred`, or `canceled`, following the
 [status meanings and transitions](docs/requirements/README.md#status-and-transitions).
+Keep active requirement files at the top level; move `done`, `deferred` and
+`canceled` files into the matching subdirectories, updating links in the same
+change. Follow the [file-location rules](docs/requirements/README.md#file-locations)
+when resuming work and allocating IDs across all directories.
 Capture first; refine when selected for development; mark ready only after
 refinement; mark done only after implementation and required acceptance checks.
 Publication remains independently verified under the branch workflow above.

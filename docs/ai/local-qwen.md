@@ -2,7 +2,7 @@
 
 Status as of **2026-10-14: new ordinary jobs use GPT-OSS 20B medium,
 context 98304 and a 65536-token generation allowance**, under
-[R-0039](../requirements/R-0039.md). After diagnosed medium failure, the caller
+[R-0039](../requirements/done/R-0039.md). After diagnosed medium failure, the caller
 may escalate the same job to high/64k with unchanged time and repair budgets.
 This is the user's operating policy, not evidence that medium/64k has better
 coding quality. Earlier trials and their recommendations below remain dated
@@ -79,7 +79,7 @@ retains configuration evidence; publication is verified for the resulting commit
 
 ## GPT-OSS high with a 64k generation allowance — 2026-10-14
 
-1. [R-0038](../requirements/R-0038.md) adds the explicit 96k-context / 64k-output
+1. [R-0038](../requirements/done/R-0038.md) adds the explicit 96k-context / 64k-output
    high profile described below. It replays the relation helper from R-0036 at
    `61789f8169248f7ec1987d48be4b750311dcc81f`. Independent review confirmed all
    five initial source/test hashes, role and replacement anchors match the
@@ -149,7 +149,7 @@ retains configuration evidence; publication is verified for the resulting commit
 
 ## GPT-OSS high and Qwen2.5-Coder paired trial — 2026-10-14
 
-1. [R-0036](../requirements/R-0036.md) compares the existing GPT-OSS at medium
+1. [R-0036](../requirements/done/R-0036.md) compares the existing GPT-OSS at medium
    and high with the explicitly requested Qwen2.5-Coder 14B Instruct Q4_K_M.
    All use context 32768, output 16384 and the existing 1800/3600-second limits
    with at most two repairs. Qwen has no thinking level; its profile uses none.
@@ -236,7 +236,7 @@ retains configuration evidence; publication is verified for the resulting commit
     across the high trial, including the earlier compact-output repair, with no
     delivered source to correct. No caller takeover occurred. Raising generation
     above 16384 requires a separate profile, subsequently tested under
-    [R-0038](../requirements/R-0038.md); these results do not prove
+    [R-0038](../requirements/done/R-0038.md); these results do not prove
     that high fails at every possible budget. The ordinary default returns to
     medium, while the exact high trial remains selectable explicitly.
 12. Qwen's first attack response omitted three methods and invented a new speed
@@ -275,7 +275,7 @@ retains configuration evidence; publication is verified for the resulting commit
 
 ## Larger output and shared launcher verification — 2026-10-14
 
-1. [R-0035](../requirements/R-0035.md) implements the user's requested trial:
+1. [R-0035](../requirements/done/R-0035.md) implements the user's requested trial:
    GPT-OSS 20B, context 32768, output 16384, medium reasoning, 1800-second
    attempts and a 3600-second task budget with two repairs. The installed alias's
    `/api/show` matches both parameters; its new digest is recorded in the
@@ -416,7 +416,7 @@ installation, configuration changes or a cloud fallback when the worker fails.
    worker edit or worker attempt was started; elapsed worker time is zero.
 2. The main agent implemented the bounded change directly because the required
    local runtime was unavailable. No service setup or cloud worker substitution
-   was attempted. Acceptance belongs to [R-0011](../requirements/R-0011.md).
+   was attempted. Acceptance belongs to [R-0011](../requirements/done/R-0011.md).
 
 ### Free-play audit runtime — 2026-10-13
 
@@ -760,7 +760,7 @@ configuration.
 
 ### GPT-OSS installation and worker verification — 2026-10-13
 
-The user requested this replacement in [R-0034](../requirements/R-0034.md).
+The user requested this replacement in [R-0034](../requirements/done/R-0034.md).
 This initial installation test used the 8k profile; the later 32k verification
 below supersedes its context and alias for new assignments.
 `ollama pull gpt-oss:20b` completed with exit 0 and SHA-256 verification. The
@@ -855,7 +855,7 @@ local Maven/TestFX was not rerun for this configuration-only follow-up.
 
 ### Operating profile — bounded assignments
 
-Updated on **2026-10-14** under [R-0039](../requirements/R-0039.md).
+Updated on **2026-10-14** under [R-0039](../requirements/done/R-0039.md).
 The existing
 [Modelfile](../../.codex/local-worker/Modelfile) owns context/output values;
 [profile.json](../../.codex/local-worker/profile.json) owns the remaining settings.
@@ -907,7 +907,7 @@ python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-
 
 ### Explicit GPT-OSS high with 64k output
 
-The larger-budget profile authorized under [R-0038](../requirements/R-0038.md)
+The larger-budget profile authorized under [R-0038](../requirements/done/R-0038.md)
 on **2026-10-14** uses the same installed GPT-OSS 20B MXFP4 weights. Its
 [Modelfile](../../.codex/local-worker/gpt-oss-high-64k/Modelfile) configures
 **98304 context / 65536 generated tokens**; its
@@ -1705,7 +1705,7 @@ confirmed the documented local model and 8192 context. Loading and generation
 timings are unavailable; no savings claim is made. Qwen was unloaded before
 container builds and Maven. Inputs, rejected drafts, reviews and measurements
 remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-docker-ui-runner/`.
-Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
+Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
 
 
 ## R-0019 fog overlays — 2026-10-13
@@ -2553,7 +2553,7 @@ Acceptance and publication belong to [R-0033](../requirements/R-0033.md).
 
 ### Requirement catalogue checks — 2026-10-14
 
-Under [R-0050](../requirements/R-0050.md), the main agent retains requirement
+Under [R-0050](../requirements/done/R-0050.md), the main agent retains requirement
 analysis and migration. The local worker received only a bounded Python
 `unittest` catalogue-consistency task, with text replacements in an isolated
 worktree based on `062f8ce9ec5e1d04f85bc2f182346417a2274f6b`. No game change,
@@ -2593,7 +2593,7 @@ unresolved in the isolated candidate, rather than being reported as fixed.
 
 The job retains `disposition.json`, attempt records and
 `probe-before.txt` / `probe-after-repair1.txt`. The main-agent documentation audit
-and passing project checks are recorded in [R-0050](../requirements/R-0050.md).
+and passing project checks are recorded in [R-0050](../requirements/done/R-0050.md).
 No measured cloud-token saving or general model-reliability conclusion follows
 from this unsuccessful optional assignment. Future documentation-only tasks
 should reuse existing validation and a focused audit before proposing new tooling.

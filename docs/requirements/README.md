@@ -7,7 +7,7 @@ copying them. For gameplay, chapters 1 and 2 must make sense without Java knowle
 Technical work describes the developer/operator outcome without an invented player story.
 
 **Agreed on 2026-10-14:** use the [six statuses](#status-and-transitions) and
-[copyable template](#copyable-template) below. [R-0040](R-0040.md) records this
+[copyable template](#copyable-template) below. [R-0040](done/R-0040.md) records this
 workflow change. The subsequent authorized [migration](migration-2026-10-14.md)
 now covers R-0001–R-0040. Start further work from the [current backlog](backlog.md),
 with new outcomes numbered from R-0050; old IDs retain their history.
@@ -15,7 +15,8 @@ with new outcomes numbered from R-0050; old IDs retain their history.
 ## Naming and scope
 
 1. Allocate the next unused number after the highest existing `R-` number on
-   `main`. The 2026-10-14 migration deliberately started its new series at
+   `main`, searching the active directory and all status subdirectories.
+   The 2026-10-14 migration deliberately started its new series at
    `R-0050`, leaving R-0041–R-0049 unused. Keep four digits at minimum. Never renumber or
    reuse an allocated ID, including a deferred or cancelled requirement.
 2. Give the document a descriptive title, for example the existing
@@ -34,6 +35,30 @@ with new outcomes numbered from R-0050; old IDs retain their history.
    Shared rules and Q decisions remain in the rule catalogue, whole-UC acceptance
    in the use-case catalogue, and functional results in the test contract.
    Completing one R requirement does not close a whole UC or work package.
+
+## File locations
+
+Agreed on **2026-10-15**, recorded in [R-0114](done/R-0114.md): move the requirement
+file when its status changes. Each ID has exactly one authoritative file.
+
+| Status | Location relative to `docs/requirements/` |
+| --- | --- |
+| `new`, `waiting for refinement`, `ready for development` | `R-NNNN.md` |
+| `done` | `done/R-NNNN.md` — [completed requirements](done/README.md) |
+| `deferred` | `deferred/R-NNNN.md` — [deferred requirements](deferred/README.md) |
+| `canceled` | `canceled/R-NNNN.md` — [canceled requirements](canceled/README.md) |
+
+1. Change `Status` and move the actual file in the same change. Preserve its ID,
+   scope, decisions and evidence; do not leave a duplicate or stub at the old path.
+2. Update incoming links and the moved file's relative links together, including
+   catalogue, area, plan and evidence references. Historical links to a fixed Git
+   revision remain unchanged. Current published URLs follow the new file paths.
+3. When deferred work resumes, move the same file back to the active directory
+   with `new` or `waiting for refinement` as described below. Explicitly reopened
+   canceled work also returns there; new scope after `done` gets a new linked ID.
+4. Keep shared workflow, area, migration and backlog pages at the top level.
+   Keep a short README in every status directory even when it contains no
+   requirements. Check all directories before allocating a new number.
 
 ## Status and transitions
 
@@ -63,13 +88,15 @@ There is no separate in-progress, blocked, verified or published status.
 3. During implementation, keep `ready for development` and state the current
    work or failed check briefly in chapter 3. If scope, behavior or acceptance
    needs another decision, return to `waiting for refinement` before dependent work.
-4. Move to `done` after implementation and required acceptance, including the
-   appropriate checks for documentation-only work. Publication is separate
+4. Move to `done` and its [file location](#file-locations) after implementation
+   and required acceptance, including the appropriate checks for documentation-only
+   work. Publication is separate
    evidence, not another status: follow the [normal completion workflow](../publishing.md),
    verify CI and delivery, and link the result. A local pass or push does not
    establish publication; report a delivery failure explicitly.
-5. Unfinished work may become `deferred` or `canceled` by an explicit decision,
-   not merely because it is difficult. Resume deferred work as `new` if it is
+5. Unfinished work may become `deferred` or `canceled`, with the corresponding
+   file move, by an explicit decision, not merely because it is difficult.
+   Resume deferred work as `new` if it is
    back in the unselected backlog, or `waiting for refinement` if selected;
    recheck readiness before development. Reopen canceled work only by a new
    explicit decision. New scope after `done` belongs in a linked new requirement.
@@ -186,7 +213,7 @@ This wording does not create chats, scheduled work or implementation assignments
 
 ## Existing backlog migration
 
-The user authorized the migration on **2026-10-14**. [R-0050](R-0050.md) records
+The user authorized the migration on **2026-10-14**. [R-0050](done/R-0050.md) records
 its scope and checks; the [coverage map](migration-2026-10-14.md) accounts for
 all forty old records and their successors. The [current backlog](backlog.md)
 is the entry point for selection. Preserve source lineage when splitting again;
@@ -243,5 +270,5 @@ not automatic implementation of R-0029 onward or their successors.
 
 ## Dependency maintenance
 
-[R-0037](R-0037.md) retains the completed Guava/compatibility outcome. Use the
+[R-0037](done/R-0037.md) retains the completed Guava/compatibility outcome. Use the
 actual dated CI evidence, including Windows, instead of its old pending-state note.

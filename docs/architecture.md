@@ -6,7 +6,7 @@ z této mapy; není potřeba pokaždé znovu odvozovat rozdělení celé hry ze 
 Konkrétní metody a jejich volající je před úpravou stále nutné přečíst.
 
 **Mapa založená na stavu k 11. říjnu 2026; hranice modelu aktualizována
-13. října 2026 v [R-0011](requirements/R-0011.md).** Mapa vychází ze zdrojů revize
+13. října 2026 v [R-0011](requirements/done/R-0011.md).** Mapa vychází ze zdrojů revize
 [`dba28604`](https://github.com/jajir/microcol/commit/dba286043459eef872f5ef561e0da753417cdb3e).
 Popisuje současné umístění kódu a hranice pro další změny. Známé odchylky
 jsou uvedené níže; samotný zápis je neodstraňuje.
@@ -61,7 +61,7 @@ neznamená, že všechny současné akce už používají totožnou cestu.
 
 ### Evropské vztahy a životní cyklus hry
 
-Implementované [R-0026](requirements/R-0026.md) ukládá jeden vztah míru/války
+Implementované [R-0026](requirements/done/R-0026.md) ukládá jeden vztah míru/války
 pro každou neuspořádanou dvojici kolonizačních hráčů. `Model` kontroluje živou
 hru, aktuálního aktéra a registrované objekty hráčů; `EuropeanRelations` vlastní
 úplnost dvojic a očekávaný předchozí stav. `model.store` uchovává interní klíče
@@ -105,7 +105,7 @@ není potvrzením dokončení celého požadavku.
 3. Dialog zobrazuje skutečně vybraného obránce a před každým otevřením zahodí
    předchozí souhlas. Povinné potvrzení porušení míru platí i při skrytém rádci.
    GUI kontroluje výměnu modelu a překládá očekávané odmítnutí. Stav cílených
-   testů, úplné regrese a publikace vlastní [R-0028](requirements/R-0028.md).
+   testů, úplné regrese a publikace vlastní [R-0028](requirements/done/R-0028.md).
 
 ### Zakládání a okraj mapy (R-0027)
 
@@ -145,7 +145,7 @@ není potvrzením dokončení celého požadavku.
    již zařazený callback; po zastavení nebo výměně modelu nevydá další
    modelovou akci ani `endTurn`. Model nadále validuje každý příkaz.
    Referenční průchod, úspěšnou úplnou lokální regresi a stav publikace vlastní
-   [R-0027](requirements/R-0027.md).
+   [R-0027](requirements/done/R-0027.md).
 
 ### Čtení seznamu jednotek při tahu AI
 
@@ -262,7 +262,7 @@ může zasáhnout několik Java balíčků. Nevytvářet balíček jen podle č�
 
 ## Současné přesahy a jejich údržba
 
-Implementované [R-0021](requirements/R-0021.md) svěřuje `HighSea` určení pobřeží
+Implementované [R-0021](requirements/done/R-0021.md) svěřuje `HighSea` určení pobřeží
 a výchozího návratového pole. `Ship` uchovává místo a směr odjezdu a řeší
 příjezd v tahu vlastníka; `AbstractUnit` ověřuje odplutí před spotřebou pohybu.
 `UnitPo` ukládá oba údaje společně a `UnitFactory` odmítá chybějící původ
@@ -303,7 +303,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 4. Události mise přenášejí pouze `Missions`. Překladové prostředky zachovávají
    původní české a anglické zprávy; `I18n` překládá enumy bez požadavku,
    aby model implementoval rozhraní překladové služby.
-5. Ověření a dodání vlastní [R-0011](requirements/R-0011.md). Ručně lze
+5. Ověření a dodání vlastní [R-0011](requirements/done/R-0011.md). Ručně lze
    spustit `mvn -pl microcol-game -am test -Dtest=ModelArchitectureTest
    -Dsurefire.failIfNoSpecifiedTests=false`. Pravidlo nemá seznam výjimek
    ani zmrazený seznam historických porušení.
@@ -334,7 +334,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 2. `DialogEquipment` zobrazuje náhled a při změně zásob vyžaduje nové potvrzení.
    Konkrétní změnu stále provádí existující modelová operace. Přesun do pracovního
    místa musí ověřit cíl před automatickým vrácením vybavení.
-3. Tato změna je součástí [R-0017](requirements/R-0017.md). Modelové hranice a hráčské cesty prošly
+3. Tato změna je součástí [R-0017](requirements/done/R-0017.md). Modelové hranice a hráčské cesty prošly
    [úplnou regresí](functional-tests.md#free-play-implementation-2026-10-13).
 
 ### Individuální přeprava pasažérů (R-0022)

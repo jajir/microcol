@@ -142,7 +142,7 @@ pravidel musí doplnit příslušné kroky a modelové testy.
 ## Spouštění a ochrana publikace
 
 Od **13. října 2026** je výchozím prostředím lokálních UI testů **Docker
-s Xvfb a Openbox**, podle dohody v [R-0033](requirements/R-0033.md). Zamčený
+s Xvfb a Openbox**, podle dohody v [R-0033](requirements/done/R-0033.md). Zamčený
 Mac není překážkou těchto testů. Nativní macOS okno používat jen pro výslovnou
 platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odemčení.
 
@@ -214,7 +214,7 @@ výchozí příkaz prošel s **683 herními a 64 funkčními kontrolami**, bez s
 chyb či vynechání, včetně TC05/TC06 a TC23. Běh `run-6BVsG8` trval 10:27;
 všech 22 zdrojových fixtures zůstalo beze změny. Runner ověřil i nenulové
 návratové kódy a export reportů při selhání. První neúspěšný běh, opravu limitu
-heapu a konkrétní důkazy zachovává [R-0033](requirements/R-0033.md).
+heapu a konkrétní důkazy zachovává [R-0033](requirements/done/R-0033.md).
 
 ### Omezená alternativa Monocle
 
@@ -656,7 +656,7 @@ nikoli ověřený kód nebo fixtures.
 1. Dne 13. října 2026 prošlo na macOS/JDK 17.0.18 všech **683 testů**
    `microcol-game` příkazem `mvn -B -ntp -pl microcol-game -am test`.
    ArchUnit kontroluje produkční model včetně podbalíčků bez výjimek;
-   konkrétní kontrakt vlastní [R-0011](requirements/R-0011.md).
+   konkrétní kontrakt vlastní [R-0011](requirements/done/R-0011.md).
 2. Nové regrese chrání identifikátory a oba překlady zpráv o konci hry
    a nezávislosti, zahájení a jednorázové objevení kontinentu v tutoriálu,
    pořadí stejně hodnocených cílů AI a limit tří kontinentů.
@@ -672,7 +672,7 @@ nikoli ověřený kód nebo fixtures.
    prošel na první pokus na Linuxu/JDK 17 s Xvfb/Openbox: **683 herních testů
    a 52 funkčních kontrol**, bez selhání, chyb a vynechání. Prošly i kontroly
    sestavení a všechny tři nativní platformy; publikaci a přesný build
-   zaznamenává [R-0011](requirements/R-0011.md).
+   zaznamenává [R-0011](requirements/done/R-0011.md).
 
 <a id="free-play-audit-2026-10-13"></a>
 ## Audit existujících cest volné hry — 13. října 2026
@@ -858,7 +858,7 @@ Lokální ověření na macOS/JDK 17:
 2. Čtyři testy nabídky a jedenáct testů hráče kontrolují bid/ask, celá čísla,
    zlomkovou daň, přesnou částku, nedostatek jednoho zlatého, přetečení,
    nulovou cenu a rozlišení změněné nabídky i při shodném zaokrouhleném součtu.
-   Politiku čísel, odlišenou od výslovného textu manuálu, vlastní [R-0020](requirements/R-0020.md).
+   Politiku čísel, odlišenou od výslovného textu manuálu, vlastní [R-0020](requirements/done/R-0020.md).
 3. TC06 nově kontroluje viditelnou jednotkovou cenu i celkovou částku před
    skutečným nákupem/prodejem. Sdílený page helper mění množství kliknutím na
    úchyt a klávesami Home/šipka, ne přímým zápisem do slideru; klávesový krok
@@ -916,7 +916,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Atlantic voyage implementation — 2026-10-13
 
-1. Publikované [R-0021](requirements/R-0021.md) mění odjezd až na samostatný
+1. Publikované [R-0021](requirements/done/R-0021.md) mění odjezd až na samostatný
    pohyb ven z námořního pruhu a ukládá jeho výchozí pole i pobřeží. Návrat
    používá přesné pole; obsazený cíl nechává loď čekat na nule. Časování
    3/4/3 tahy zůstává výslovně současnou politikou, nikoli rekonstruovaným
@@ -975,7 +975,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Individual passenger transfers — 2026-10-13
 
-1. Lokálně ověřené [R-0022](requirements/R-0022.md) mění hromadné vylodění na
+1. Lokálně ověřené [R-0022](requirements/done/R-0022.md) mění hromadné vylodění na
    výběr jednoho cestujícího. TC01 zachovává původní dvě osoby a kontroly
    nákladu, ale potvrzuje dvě samostatné volby. Nové TC29/F21 ověřuje zrušení,
    Escape, reset volby, jednotlivé vylodění, vybavení, Continue a odmítnutí
@@ -1135,7 +1135,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Expert purchase implementation — 2026-10-13
 
-1. Rozpracované [R-0023](requirements/R-0023.md) přidává skutečný typ
+1. Rozpracované [R-0023](requirements/done/R-0023.md) přidává skutečný typ
    `MASTER_BLACKSMITH` přes stávajícího kolonistu, továrnu a ukládání.
    `Player` ověřuje dostupný typ, živého aktuálního hráče, Evropu a peníze
    před vytvořením jednotky a účtováním. První regresní test nad původním
@@ -1270,7 +1270,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Wagon unloading implementation — 2026-10-13
 
-1. [R-0024](requirements/R-0024.md) doplňuje vůz do stejného seznamu
+1. [R-0024](requirements/done/R-0024.md) doplňuje vůz do stejného seznamu
    dopravců jako lodě. `Colony.getUnitsInPort` vrací vlastní místní
    `UnitWithCargo`; existující obrázek a české/anglické názvy podporují mapu
    i přístav. Vykládání nadále používá jedinou modelovou transakci skladu.
@@ -1354,7 +1354,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Construction model implementation — 2026-10-13
 
-1. Rozpracované [R-0025](requirements/R-0025.md) opravilo metadata existujících
+1. Rozpracované [R-0025](requirements/done/R-0025.md) opravilo metadata existujících
    staveb, jejich společnou dostupnost, integritu fronty a její načítání.
    První přijatý řez metadat prošel **52 modelovými a třemi strukturálními
    případy** (`run-h4Sn6S`). Původní frontové testy ukázaly 18 skutečných
@@ -1407,7 +1407,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Construction UI implementation — 2026-10-14
 
-1. [R-0025](requirements/R-0025.md) now exposes the carpenter's construction
+1. [R-0025](requirements/done/R-0025.md) now exposes the carpenter's construction
    control and a localized building/unit picker. Selection is a draft until
    explicit confirmation. A changed colony/model or reviewed population,
    predecessor, queue or resource state requires a new selection. Existing
@@ -1499,7 +1499,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## European relation model integration — 2026-10-14
 
-1. Rozpracované [R-0026](requirements/R-0026.md), UC-069 / DIP-002/003,
+1. Rozpracované [R-0026](requirements/done/R-0026.md), UC-069 / DIP-002/003,
    má zapojené ukládání úplných dvojic a modelové přechody mír/válka. Interní
    identita je nezávislá na upravitelném názvu hráče. Referenční mapy začínají
    v míru; všech 31 přibalených modelových pozic má explicitní seznam vztahů.
@@ -1651,7 +1651,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Rival first-colony preparation — 2026-10-14
 
-1. Rozpracované [R-0027](requirements/R-0027.md) patří k zakládací části
+1. Rozpracované [R-0027](requirements/done/R-0027.md) patří k zakládací části
    UC-068/DIP-001. První krok opravuje nekonečné hledání směru obklíčené jednotky.
    Reprodukční `run-Ujxgay` spustil tři `BoundedAiMovementTest`: jedna kontrola
    nedokončila pohyb do dvou sekund a selhala, dvě prošly. Po omezení hledání na
@@ -1843,7 +1843,7 @@ Lokální ověření na macOS/JDK 17:
 
 ## Attack initiation integration — 2026-10-14
 
-1. Rozpracované [R-0028](requirements/R-0028.md) pokrývá UC-072 a
+1. Rozpracované [R-0028](requirements/done/R-0028.md) pokrývá UC-072 a
    COMBAT-001/002/003 s návazností na DIP-002. `TC_35_F27_attack_eligibility_test`
    používá `F27-attack-eligibility.microcol`: ozbrojeného kolonistu, neozbrojeného
    pracovníka, ozbrojeného jezdce s profesí mistra kováře, vůz a francouzského
@@ -1931,7 +1931,7 @@ a její manifest potvrzují stejnou revizi a tři platformy. Samostatná
 [kompatibilita 38584258925](https://github.com/jajir/microcol/actions/runs/38584258925)
 prošla na Linuxu/Windows a Java 11/17, včetně opravy úklidu testu R-0037.
 
-[R-0050](requirements/R-0050.md) a [mapa migrace](requirements/migration-2026-10-14.md)
+[R-0050](requirements/done/R-0050.md) a [mapa migrace](requirements/migration-2026-10-14.md)
 odlišují tuto přijatou část od nových požadavků. Úspěšný TC30 například stále
 obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není ověřena.
 

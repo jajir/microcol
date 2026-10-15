@@ -2,7 +2,7 @@
 
 The user authorized reviewing every existing **R-0001–R-0040**, rewriting their
 current records where needed, and separating further work into IDs beginning
-with **R-0050**. [R-0050](R-0050.md) owns this documentation change; the
+with **R-0050**. [R-0050](done/R-0050.md) owns this documentation change; the
 [current backlog](backlog.md) lists the 61 captured gameplay/setup outcomes.
 No game implementation starts from this migration alone.
 
@@ -82,46 +82,46 @@ only to the described bounded delivery.
 
 | Original requirement | Disposition | Current finding | New owners / continuation |
 | --- | --- | --- | --- |
-| [R-0001](R-0001.md) | done | The player can start free play without completing the campaign. | No further work within this bounded scope. |
-| [R-0002](R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](R-0051.md), [R-0052](R-0052.md) |
-| [R-0003](R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
-| [R-0004](R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](R-0054.md) |
-| [R-0005](R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](R-0055.md), [R-0082](R-0082.md) |
-| [R-0006](R-0006.md) | canceled | The ordinary-worker job/yield choice remains an unimplemented outcome. | [R-0056](R-0056.md), [R-0074](R-0074.md) |
-| [R-0007](R-0007.md) | canceled | Food consumption and births exist; boundary acceptance and import policy remain open. | [R-0057](R-0057.md), [R-0058](R-0058.md) |
-| [R-0008](R-0008.md) | canceled | Famine exists; complete boundary and final-resident acceptance remains open. | [R-0059](R-0059.md), [R-0060](R-0060.md), [R-0082](R-0082.md) |
-| [R-0009](R-0009.md) | canceled | The expert can now be purchased, but proportional ore consumption remains unfinished. | [R-0061](R-0061.md), [R-0079](R-0079.md) |
-| [R-0010](R-0010.md) | canceled | The automatic base cross remains absent from shared production. | [R-0062](R-0062.md), [R-0076](R-0076.md), [R-0110](R-0110.md) |
-| [R-0011](R-0011.md) | done | The shared model dependency boundary is enforced by architecture checks. | No further work within this bounded scope. |
-| [R-0012](R-0012.md) | done | The existing free-play menu was retained and enabled independently of campaign completion. | No further work within this bounded scope. |
-| [R-0013](R-0013.md) | done | Leaving/replacing a game uses the accepted recovery-save and setup paths. | [R-0067](R-0067.md) |
-| [R-0014](R-0014.md) | done | Mock setup, map selection and player naming are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0064](R-0064.md), [R-0065](R-0065.md), [R-0066](R-0066.md) |
-| [R-0015](R-0015.md) | done | Fixed French reference colonies and units are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0066](R-0066.md) |
-| [R-0016](R-0016.md) | done | Existing screen paths have mouse and keyboard acceptance evidence. | No further work within this bounded scope. |
-| [R-0017](R-0017.md) | done | Equipment and unloading commands use consistent availability and safe rejection. | No further work within this bounded scope. |
-| [R-0018](R-0018.md) | done | Automatic saving and the real Continue path are delivered. | [R-0067](R-0067.md), [R-0068](R-0068.md) |
-| [R-0019](R-0019.md) | done | Unexplored terrain is visually distinct and does not leak hidden content. | [R-0069](R-0069.md), [R-0070](R-0070.md) |
-| [R-0020](R-0020.md) | done | European equipment purchase and sale are implemented and published. | [R-0102](R-0102.md) |
-| [R-0021](R-0021.md) | done | Outward sea-lane departure and return to the recorded coast are delivered. | [R-0071](R-0071.md), [R-0072](R-0072.md) |
-| [R-0022](R-0022.md) | done | Individual passenger embark/disembark is implemented with explicit selection. | [R-0054](R-0054.md), [R-0073](R-0073.md) |
-| [R-0023](R-0023.md) | done | The master blacksmith can be hired and brought home. | [R-0061](R-0061.md), [R-0074](R-0074.md), [R-0075](R-0075.md), [R-0076](R-0076.md), [R-0077](R-0077.md), [R-0107](R-0107.md), [R-0108](R-0108.md), [R-0111](R-0111.md) |
-| [R-0024](R-0024.md) | done | Wagon unloading uses the shared nonfood warehouse limit. | [R-0058](R-0058.md), [R-0091](R-0091.md) |
-| [R-0025](R-0025.md) | done | Represented building projects have validated admission, queue operations and completion. | [R-0078](R-0078.md), [R-0079](R-0079.md), [R-0080](R-0080.md), [R-0081](R-0081.md), [R-0082](R-0082.md), [R-0083](R-0083.md), [R-0084](R-0084.md), [R-0085](R-0085.md), [R-0086](R-0086.md), [R-0095](R-0095.md), [R-0098](R-0098.md), [R-0104](R-0104.md), [R-0107](R-0107.md), [R-0108](R-0108.md), [R-0109](R-0109.md), [R-0110](R-0110.md) |
-| [R-0026](R-0026.md) | done | European peace/war state and the current explicit hostility/capture paths are delivered. | [R-0087](R-0087.md), [R-0088](R-0088.md), [R-0089](R-0089.md), [R-0096](R-0096.md), [R-0099](R-0099.md) |
-| [R-0027](R-0027.md) | done | The rival can establish its first colony on the reference expedition map. | [R-0055](R-0055.md), [R-0060](R-0060.md), [R-0066](R-0066.md), [R-0090](R-0090.md), [R-0091](R-0091.md), [R-0092](R-0092.md) |
-| [R-0028](R-0028.md) | done | Supported attack roles and live confirmation are delivered. | [R-0093](R-0093.md), [R-0094](R-0094.md), [R-0095](R-0095.md), [R-0096](R-0096.md), [R-0097](R-0097.md), [R-0098](R-0098.md), [R-0099](R-0099.md), [R-0108](R-0108.md), [R-0111](R-0111.md) |
-| [R-0029](R-0029.md) | canceled | A shared ordinary combat-strength calculation is still missing. | [R-0093](R-0093.md), [R-0094](R-0094.md), [R-0095](R-0095.md), [R-0097](R-0097.md), [R-0106](R-0106.md), [R-0111](R-0111.md) |
-| [R-0030](R-0030.md) | canceled | The tax-demand/protest and boycott lifecycle remains missing. | [R-0102](R-0102.md), [R-0103](R-0103.md) |
-| [R-0031](R-0031.md) | canceled | Local/national rebel support and its political dependents remain unfinished. | [R-0081](R-0081.md), [R-0084](R-0084.md), [R-0085](R-0085.md), [R-0100](R-0100.md), [R-0101](R-0101.md), [R-0104](R-0104.md), [R-0105](R-0105.md) |
-| [R-0032](R-0032.md) | done | Java source/documentation warnings were corrected and checked by the documented compiler/build path. | No further work within this bounded scope. |
-| [R-0033](R-0033.md) | done | Routine UI verification runs in the documented Docker/Linux environment. | No further work within this bounded scope. |
-| [R-0034](R-0034.md) | done | The local worker was switched to the installed GPT-OSS model with a verified historical profile. | No further work within this bounded scope. |
-| [R-0035](R-0035.md) | done | The local-worker output/task contract and bounded failure evidence are delivered. | No further work within this bounded scope. |
-| [R-0036](R-0036.md) | done | The bounded GPT-OSS/Qwen comparison is completed with its rejected and accepted results retained. | No further work within this bounded scope. |
-| [R-0037](R-0037.md) | done | The Guava update and Windows cleanup repair passed the subsequent compatibility matrix. | No further work within this bounded scope. |
-| [R-0038](R-0038.md) | done | The high/64k replay was accepted after one targeted worker repair. | No further work within this bounded scope. |
-| [R-0039](R-0039.md) | done | Local-work preference and budget-preserving escalation are implemented. | No further work within this bounded scope. |
-| [R-0040](R-0040.md) | done | The user needs requirements that separate an understandable outcome from    implementation details and have a consistent lifecycle. 2. Review at `0825596c` on 2026-10-14 found overlapping ownership, stale    dependencies and execution diaries in the existing 39 requirements. 3. This change owns the instructions, copyable template and status meanings.    This original change left R-0001–R-0039 unchanged. The later authorized    migration is now recorded in [R-0050](R-0050.md); gameplay implementation    still requires selecting its new requirements. | [R-0050](R-0050.md) |
+| [R-0001](done/R-0001.md) | done | The player can start free play without completing the campaign. | No further work within this bounded scope. |
+| [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](R-0051.md), [R-0052](R-0052.md) |
+| [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
+| [R-0004](canceled/R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](R-0054.md) |
+| [R-0005](canceled/R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](R-0055.md), [R-0082](R-0082.md) |
+| [R-0006](canceled/R-0006.md) | canceled | The ordinary-worker job/yield choice remains an unimplemented outcome. | [R-0056](R-0056.md), [R-0074](R-0074.md) |
+| [R-0007](canceled/R-0007.md) | canceled | Food consumption and births exist; boundary acceptance and import policy remain open. | [R-0057](R-0057.md), [R-0058](R-0058.md) |
+| [R-0008](canceled/R-0008.md) | canceled | Famine exists; complete boundary and final-resident acceptance remains open. | [R-0059](R-0059.md), [R-0060](R-0060.md), [R-0082](R-0082.md) |
+| [R-0009](canceled/R-0009.md) | canceled | The expert can now be purchased, but proportional ore consumption remains unfinished. | [R-0061](R-0061.md), [R-0079](R-0079.md) |
+| [R-0010](canceled/R-0010.md) | canceled | The automatic base cross remains absent from shared production. | [R-0062](R-0062.md), [R-0076](R-0076.md), [R-0110](R-0110.md) |
+| [R-0011](done/R-0011.md) | done | The shared model dependency boundary is enforced by architecture checks. | No further work within this bounded scope. |
+| [R-0012](done/R-0012.md) | done | The existing free-play menu was retained and enabled independently of campaign completion. | No further work within this bounded scope. |
+| [R-0013](done/R-0013.md) | done | Leaving/replacing a game uses the accepted recovery-save and setup paths. | [R-0067](R-0067.md) |
+| [R-0014](done/R-0014.md) | done | Mock setup, map selection and player naming are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0064](R-0064.md), [R-0065](R-0065.md), [R-0066](R-0066.md) |
+| [R-0015](done/R-0015.md) | done | Fixed French reference colonies and units are delivered. | [R-0051](R-0051.md), [R-0063](R-0063.md), [R-0066](R-0066.md) |
+| [R-0016](done/R-0016.md) | done | Existing screen paths have mouse and keyboard acceptance evidence. | No further work within this bounded scope. |
+| [R-0017](done/R-0017.md) | done | Equipment and unloading commands use consistent availability and safe rejection. | No further work within this bounded scope. |
+| [R-0018](done/R-0018.md) | done | Automatic saving and the real Continue path are delivered. | [R-0067](R-0067.md), [R-0068](R-0068.md) |
+| [R-0019](done/R-0019.md) | done | Unexplored terrain is visually distinct and does not leak hidden content. | [R-0069](R-0069.md), [R-0070](R-0070.md) |
+| [R-0020](done/R-0020.md) | done | European equipment purchase and sale are implemented and published. | [R-0102](R-0102.md) |
+| [R-0021](done/R-0021.md) | done | Outward sea-lane departure and return to the recorded coast are delivered. | [R-0071](R-0071.md), [R-0072](R-0072.md) |
+| [R-0022](done/R-0022.md) | done | Individual passenger embark/disembark is implemented with explicit selection. | [R-0054](R-0054.md), [R-0073](R-0073.md) |
+| [R-0023](done/R-0023.md) | done | The master blacksmith can be hired and brought home. | [R-0061](R-0061.md), [R-0074](R-0074.md), [R-0075](R-0075.md), [R-0076](R-0076.md), [R-0077](R-0077.md), [R-0107](R-0107.md), [R-0108](R-0108.md), [R-0111](R-0111.md) |
+| [R-0024](done/R-0024.md) | done | Wagon unloading uses the shared nonfood warehouse limit. | [R-0058](R-0058.md), [R-0091](R-0091.md) |
+| [R-0025](done/R-0025.md) | done | Represented building projects have validated admission, queue operations and completion. | [R-0078](R-0078.md), [R-0079](R-0079.md), [R-0080](R-0080.md), [R-0081](R-0081.md), [R-0082](R-0082.md), [R-0083](R-0083.md), [R-0084](R-0084.md), [R-0085](R-0085.md), [R-0086](R-0086.md), [R-0095](R-0095.md), [R-0098](R-0098.md), [R-0104](R-0104.md), [R-0107](R-0107.md), [R-0108](R-0108.md), [R-0109](R-0109.md), [R-0110](R-0110.md) |
+| [R-0026](done/R-0026.md) | done | European peace/war state and the current explicit hostility/capture paths are delivered. | [R-0087](R-0087.md), [R-0088](R-0088.md), [R-0089](R-0089.md), [R-0096](R-0096.md), [R-0099](R-0099.md) |
+| [R-0027](done/R-0027.md) | done | The rival can establish its first colony on the reference expedition map. | [R-0055](R-0055.md), [R-0060](R-0060.md), [R-0066](R-0066.md), [R-0090](R-0090.md), [R-0091](R-0091.md), [R-0092](R-0092.md) |
+| [R-0028](done/R-0028.md) | done | Supported attack roles and live confirmation are delivered. | [R-0093](R-0093.md), [R-0094](R-0094.md), [R-0095](R-0095.md), [R-0096](R-0096.md), [R-0097](R-0097.md), [R-0098](R-0098.md), [R-0099](R-0099.md), [R-0108](R-0108.md), [R-0111](R-0111.md) |
+| [R-0029](canceled/R-0029.md) | canceled | A shared ordinary combat-strength calculation is still missing. | [R-0093](R-0093.md), [R-0094](R-0094.md), [R-0095](R-0095.md), [R-0097](R-0097.md), [R-0106](R-0106.md), [R-0111](R-0111.md) |
+| [R-0030](canceled/R-0030.md) | canceled | The tax-demand/protest and boycott lifecycle remains missing. | [R-0102](R-0102.md), [R-0103](R-0103.md) |
+| [R-0031](canceled/R-0031.md) | canceled | Local/national rebel support and its political dependents remain unfinished. | [R-0081](R-0081.md), [R-0084](R-0084.md), [R-0085](R-0085.md), [R-0100](R-0100.md), [R-0101](R-0101.md), [R-0104](R-0104.md), [R-0105](R-0105.md) |
+| [R-0032](done/R-0032.md) | done | Java source/documentation warnings were corrected and checked by the documented compiler/build path. | No further work within this bounded scope. |
+| [R-0033](done/R-0033.md) | done | Routine UI verification runs in the documented Docker/Linux environment. | No further work within this bounded scope. |
+| [R-0034](done/R-0034.md) | done | The local worker was switched to the installed GPT-OSS model with a verified historical profile. | No further work within this bounded scope. |
+| [R-0035](done/R-0035.md) | done | The local-worker output/task contract and bounded failure evidence are delivered. | No further work within this bounded scope. |
+| [R-0036](done/R-0036.md) | done | The bounded GPT-OSS/Qwen comparison is completed with its rejected and accepted results retained. | No further work within this bounded scope. |
+| [R-0037](done/R-0037.md) | done | The Guava update and Windows cleanup repair passed the subsequent compatibility matrix. | No further work within this bounded scope. |
+| [R-0038](done/R-0038.md) | done | The high/64k replay was accepted after one targeted worker repair. | No further work within this bounded scope. |
+| [R-0039](done/R-0039.md) | done | Local-work preference and budget-preserving escalation are implemented. | No further work within this bounded scope. |
+| [R-0040](done/R-0040.md) | done | The user needs requirements that separate an understandable outcome from    implementation details and have a consistent lifecycle. 2. Review at `0825596c` on 2026-10-14 found overlapping ownership, stale    dependencies and execution diaries in the existing 39 requirements. 3. This change owns the instructions, copyable template and status meanings.    This original change left R-0001–R-0039 unchanged. The later authorized    migration is now recorded in [R-0050](done/R-0050.md); gameplay implementation    still requires selecting its new requirements. | [R-0050](done/R-0050.md) |
 
 ## Scope limits and next step
 
@@ -139,6 +139,6 @@ a promise to implement everything in ID order or to accept guessed formulas.
 ## Migration acceptance
 
 Documentation consistency, link validation and rendered review are recorded in
-[R-0050](R-0050.md). The rejected optional local-worker catalogue-check prototype and its caller
+[R-0050](done/R-0050.md). The rejected optional local-worker catalogue-check prototype and its caller
 scope correction remain in [worker operations](../ai/local-qwen.md#requirement-catalogue-checks-2026-10-14).
 The ordinary publication workflow applies to this documentation delivery too.
