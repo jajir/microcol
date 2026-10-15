@@ -239,3 +239,13 @@ výsledek uživatelského výzkumu.
    Pravidlo je v [jednotkových příkazech](gap-analysis.md#unit-turn-orders),
    stav přijetí v [R-0053](requirements/done/R-0053.md). Pozdější ladění vzhledu
    nebo zkratek není dosud výsledkem hráčského pozorování.
+
+## Náhled plavby a zrušení — R-0054
+
+1. Náhled rozlišuje plavbu do vlastního pobřežního přístavu od samostatného
+   vylodění pasažéra na pevninu. Vnitrozemská kolonie není cíl plavby;
+   podmínky a náklady vlastní [pravidlo přístavu](gap-analysis.md#coastal-port-movement).
+2. Escape ruší nepotvrzený náhled i po návratu přes Pokračovat, když zůstane
+   klávesové zaměření na menu kolonií. Bez aktivního náhledu Escape nadále
+   zavírá menu. Přijetí a regresní ověření opravy spotřebované klávesy eviduje
+   [R-0054](requirements/R-0054.md); automatický průchod není uživatelská studie.

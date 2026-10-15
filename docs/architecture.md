@@ -121,8 +121,11 @@ a vyčerpá pohyb; žádný nový trvalý příznak se neukládá.
 GUI navíc blokuje vstup během animace. Před vyčerpáním pohybu si zachová
 následující jednotku v pořadí. Výběr ruší nepotvrzený náhled trasy.
 Toolbar zobrazuje přeložené ovládání a modelovou dostupnost; klávesové filtry
-zpracují Tab/Space před zaměřeným tlačítkem. Přijetí a ověření eviduje
-[R-0053](requirements/done/R-0053.md).
+zpracují Tab/Space před zaměřeným tlačítkem. R-0054 doplňuje předání Escape
+před zaměřeným menu: presenter událost spotřebuje pouze při rušení aktivního
+náhledu pohybu, jinak zůstává dostupná menu. Přijetí příkazů eviduje
+[R-0053](requirements/done/R-0053.md), ověření Escape
+[R-0054](requirements/R-0054.md).
 
 ### Potvrzení útoku (R-0028, rozpracováno)
 

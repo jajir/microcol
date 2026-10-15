@@ -101,7 +101,17 @@ public class ScreenGame implements GameScreen {
      * @param eventHandler required key event handler
      */
     void setOnKeyPressed(EventHandler<? super KeyEvent> eventHandler) {
-        mainPanel.setOnKeyPressed(eventHandler);
+        // A focused menu must not consume cancellation of a map preview.
+        mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                eventHandler.handle(event);
+            }
+        });
+        mainPanel.setOnKeyPressed(event -> {
+            if (event.getCode() != KeyCode.ESCAPE) {
+                eventHandler.handle(event);
+            }
+        });
     }
 
     /**

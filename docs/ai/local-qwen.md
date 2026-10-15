@@ -2797,3 +2797,42 @@ should reuse existing validation and a focused audit before proposing new toolin
    unit's persisted state and the non-running boundary directly; other rejected
    states retain full-model before/after comparison. The unchanged combined
    selection was rerun after shared formatting.
+
+## Coastal movement acceptance worker — 2026-10-15
+
+1. R-0054 assigns `CoastalPortMovementTest` to a single medium/64k local job
+   based on `77dd824a`. The caller supplies a current-API fixture scaffold;
+   allowed output is one validated full-file replacement, with no production
+   changes. The caller owns refinement, F30 and TC38 player paths, review,
+   formatting, actual Docker acceptance and publication.
+2. Job and raw evidence: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r54-coastal-movement/`;
+   isolated checkout: `~/Library/Application Support/Microcol/local-worker/worktrees/2026-10-15-r54-coastal-movement/`.
+   The launcher verifies the configured alias and observed context 98304.
+3. Medium completed in **866.448 seconds**, exit 0 and unload 0, reporting
+   **7375 input / 4841 output tokens** (4258 cached input). Validated application
+   and shared formatting succeeded, but Docker `run-mYtKW9` failed test
+   compilation with **28 errors; zero tests ran**. The candidate omitted its
+   package and invented movement APIs. Review also found cyclic live-object
+   serialization, wrong moving actors, unpaired border cases, stale fixture
+   reconstruction and tautological passenger comparisons. No model test was
+   accepted or integrated into main.
+4. The caller corrected a separate scaffold defect before repair: terrain changes
+   could leave tobacco workers on water. The fixture now uses compatible corn
+   production and removes trees/fields from its sole water square. This does
+   not repair the worker's test methods. The focused repair supplies verified
+   APIs and complete method anchors while preserving the original checks.
+5. Attempt 1 completed at high/64k in **5044.344 seconds**, exit 0 and unload 0,
+   reporting **9619 input / 42911 output tokens**. Cumulative worker time is
+   **5910.792 seconds**. Validated application and shared formatting passed,
+   but Docker `run-DyLrPw` again failed compilation: **17 errors; zero tests ran**.
+   The repair retained nonexistent live-unit place APIs, confused file paths with
+   movement paths and used the wrong `UnitType` package. The incorrect movement,
+   snapshot and stale-state setups also remained. Neither candidate is accepted.
+6. The final permitted repair is prepared in the same job. Its input removes
+   the rejected test bodies as examples and supplies a clean fixture plus
+   persistence, identity and rejection helpers. Those helpers are caller-owned;
+   the worker must regenerate the same seven test methods (14 invocations).
+   This is a concrete prompt correction, not a smaller acceptance scope. It
+   retains high/64k, a 7200-second attempt cap and **8489.208 seconds** of the
+   original cumulative budget. No budget or repair count is reset. Actual
+   reruns and integration remain pending; no token saving is claimed.

@@ -2407,3 +2407,45 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     je dokončeno. Stažené reporty a manifest jsou v `target/r53/ci-*` a
     `target/r53/published/`. Následný dokumentační commit uzavírá stav a odkazy;
     ověřují se jeho Pages, úmyslně přeskočené game jobs a nezměněný manifest.
+
+## R-0054 coastal port movement — 2026-10-15
+
+1. Selected [R-0054](requirements/R-0054.md) retains the existing shared coastal
+   predicate and separate passenger landing. Source baseline is `77dd824a`.
+   F30 deliberately places an inland colony beside an own coastal port with
+   one isolated water square; ordinary founding spacing is unchanged. TC38
+   covers loaded entry/cancellation/save/exit, inland rejection, empty-ship
+   ordinary-land rejection and diagonal lake access. The cancellation defect
+   below requires a small game-screen keyboard-dispatch fix.
+2. The two local-worker model-test candidates failed compilation before any
+   test ran; see [worker evidence](ai/local-qwen.md#coastal-movement-acceptance-worker-2026-10-15).
+   They are not integrated into main. The caller ran the separate prepared UI
+   work from main in Docker `run-JWBcUF`: **25 model checks passed**
+   (`PassengerTransferTest` 12, `UnitColonistOnMapTest` 10,
+   `BoundedAiMovementTest` 3); **16 UI-module checks ran with 3 failures,
+   no errors/skips**. Existing TC01/13/16/29 and the three page-contract checks
+   passed. TC38's diagonal journey passed; its other three cases failed.
+3. Diagnosis: two whole-state comparisons differed only at `focusedField.y`
+   (15 → 16), because F30 inherited the old focus after moving the ship. The
+   third test released a canceled preview back onto the colony, opening its
+   screen before the next map gesture. The caller aligns fixture focus with
+   the ship and uses Escape before releasing the mouse. Whole-state, movement
+   and cargo assertions remain intact. A targeted TC38/source-contract rerun
+   narrowed the failures but did not establish acceptance: Docker `run-AMJLRB`
+   ran seven UI-module checks with two failures, no errors/skips.
+4. The focused diagnostic `run-ewrAEK` passed three source-contract checks and
+   failed TC38/TC_01. It captured the Colonies `MenuButton` as the focused
+   control while Escape left the preview active after Continue. This is a
+   reproduced input defect, distinct from the earlier fixture/click issues.
+   `ScreenGame` now routes Escape through a filter and the presenter consumes
+   it only when canceling a preview. TC38 verifies cancellation before mouse
+   release, deliberately retains menu focus, and also verifies ordinary menu
+   Escape dismissal. TC38, TC21 navigation, TC11 unit orders and the source
+   contract passed in Docker `run-Z5hHps`: **20 tests, zero failures/errors/skips**.
+   Full functional regression remains required.
+5. Shared formatting passes token-preservation and idempotence. The nine
+   documentation tests, strict MkDocs build and 21 worker-tooling checks pass.
+   The pre-push full Docker run also passed **1211 game tests**, with zero
+   failures/errors/skips; its UI portion and GitHub release checks remain
+   pending at this checkpoint. The user requested publication of all current
+   changes; the separate final model acceptance still keeps R-0054 open.

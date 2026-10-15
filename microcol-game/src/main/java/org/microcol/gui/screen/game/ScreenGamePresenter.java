@@ -92,7 +92,8 @@ public class ScreenGamePresenter {
          * Escape
          */
         if (KeyCode.ESCAPE == event.getCode()) {
-            onKeyPressed_escape();
+            onKeyPressed_escape(event);
+            return;
         }
         if (!gameModelController.isHumanTurnReady()) {
             return;
@@ -174,12 +175,13 @@ public class ScreenGamePresenter {
         wasdController.onKeyReleased(event);
     }
 
-    private void onKeyPressed_escape() {
+    private void onKeyPressed_escape(final KeyEvent event) {
         if (modeController.isMoveMode()) {
             Preconditions.checkArgument(modeController.isMoveMode(),
                     "switch to move mode was called from move mode");
             final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
             gamePanelPresenter.disableMoveMode(movingUnit);
+            event.consume();
         }
     }
 
