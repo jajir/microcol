@@ -10,6 +10,8 @@ Added on **2026-10-15**: [R-0112](R-0112.md) captures TC27/TC30 test stability
 as a new technical request, separate from the 61 migrated gameplay/setup items.
 [R-0113](R-0113.md) captures skipping full game CI for changes only in `docs/`;
 [R-0114](done/R-0114.md) records the status-directory organization.
+[R-0115](done/R-0115.md) records the accepted provisional Q-01–Q-11 decisions;
+linked requirements retain their existing implementation status and selection boundary.
 
 Active requirement files are at the top level. Inactive records remain accessible
 in [done](done/README.md), [deferred](deferred/README.md) and
@@ -18,8 +20,9 @@ The catalogue retains origin and process links even when their records move.
 
 Each requirement owns its current `Status`, scope, acceptance and open questions.
 This index does not duplicate status values. Use the [workflow](README.md) to
-select one requirement, refine it, then authorize its development. Capturing a
-follow-up does not make its open formulas agreed or its dependencies available.
+select one requirement, refine it, then authorize its development. The [shared Q decisions](../gap-analysis.md#open-questions-and-decisions)
+now provide provisional formulas; dependencies and individual readiness still
+need checking. This refinement does not authorize implementing the whole set.
 
 ## How to read the set
 
@@ -39,6 +42,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | --- | --- | --- |
 | [R-0050](done/R-0050.md) | Migrate the existing backlog with traceable ownership. | [R-0040](done/R-0040.md) |
 | [R-0114](done/R-0114.md) | Keep inactive requirements in status directories. | User request, 2026-10-15 |
+| [R-0115](done/R-0115.md) | Adopt provisional shared rules and remove Q decision blockers. | User request, 2026-10-15 |
 
 ## A02
 
@@ -174,9 +178,10 @@ which isolates the missing automatic cross. [R-0055](R-0055.md) is a shared
 assignment boundary worth resolving before richer job choices. These are
 recommendations for discussion, not selected or running implementations.
 
-Calendar/phase work, probability, political formulas and speculative live
-visibility require their recorded decisions before development. Dependencies
-name concrete capabilities, not an instruction to complete every earlier ID.
+Calendar, probability, political formulas and the proposed live-visibility policy
+now use the [2026-10-15 decisions](../gap-analysis.md#open-questions-and-decisions).
+Phase integration and concrete technical dependencies still need refinement;
+none of these links is an instruction to implement every earlier ID.
 
 This set starts with the gaps in the first forty requirements. It does **not**
 claim to allocate all 230 manual rules or close all 119 UCs. Remaining wider

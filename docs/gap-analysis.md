@@ -19,7 +19,7 @@ inspected at `fb3a9734149a8e95c8b940cfd6a479e2c04a2fe7`.
 
 This document compares MicroCol with the gameplay rules in the [downloaded Sid Meier's Colonization manual](Sid_Meiers_Colonization_manual.pdf), obtained from [Internet Archive](https://archive.org/details/Sid_Meiers_Colonization_manual). It is an implementation assessment and a backlog for reaching the requested first-release target. It does not establish that MicroCol already conforms to those rules.
 
-The assessment covers the manual's gameplay chapters and all four reference cards. Findings combine reading the manual, tracing model/UI/AI/persistence paths, inspecting existing tests, and running the model test suite. No gameplay implementation was changed during the assessment. Exact formulas not supplied by the manual are recorded as open questions rather than filled from memory of the original game or another remake.
+The assessment covers the manual's gameplay chapters and all four reference cards. Findings combine reading the manual, tracing model/UI/AI/persistence paths, inspecting existing tests, and running the model test suite. No gameplay implementation was changed during the assessment. The original assessment recorded formulas absent from the manual as open questions. The [2026-10-15 decision update](#open-questions-and-decisions) now supplies explicit provisional project choices, with sources and estimates distinguished.
 
 Implementation follow-up, 2026-10-13: [R-0012–R-0018](functional-tests.md#free-play-implementation-2026-10-13)
 now implement the retained free-play menu, latest-position recovery save, two
@@ -93,7 +93,7 @@ The target remains all gameplay rules described by the manual, across all four E
 
 Page references use the number printed on the main manual page followed by the one-based PDF page. Main-manual PDF page = printed page + 6. The first five supplement pages and the last four aid cards have their own numbering; do not apply that offset to them. Reference-card tables were also checked visually to avoid extraction errors in numeric cells.
 
-Gameplay information and commands must remain available, but reproducing the original illustrations, screen layout, key assignments, historical prose or epitaph presentation is outside this rules comparison. Save reliability and reports are tracked because they expose or preserve game state. Q-07 records the remaining presentation-boundary decisions.
+Gameplay information and commands must remain available, but reproducing the original illustrations, screen layout, key assignments, historical prose or epitaph presentation is outside this rules comparison. Save reliability and reports are tracked because they expose or preserve game state. [Q-07](#q-07-recovery-and-presentation) records the adopted presentation and recovery policy.
 
 Acceptance scope was separated on 2026-10-11 in the [use-case catalogue](use-cases.md#zavazna-hra-a-samostatne-nastaveni): gameplay UC-003–118, setup choices UC-001–002, and ongoing regression UC-119. This audit retains all 230 manual entries, including the original setup options as a reference; accepting gameplay does not certify those options. The setup interface can evolve independently, but nationality, persisted difficulty and their rule effects remain gameplay requirements. Opening a colony, inspecting its buildings and obtaining correct information are required functions. Pure Q-07 presentation decisions do not block their acceptance.
 
@@ -322,7 +322,7 @@ The core colony economy exists: workers occupy fields/buildings, input goods fee
 
 #### Building data matrix
 
-Each triple is **hammers / tools / minimum population**. Source: Building aid card 3, PDF 134; implementations: [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java). “Same” means the stored numeric triple only. All population gates still require BUILD-001. Factory prerequisites and functional effects are assessed above. The card's population 4 for Newspaper conflicts with the prose on printed 58 saying press and newspaper can start at population 1; this is recorded as an open question rather than silently resolved.
+Each triple is **hammers / tools / minimum population**. Source: Building aid card 3, PDF 134; implementations: [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java). “Same” means the stored numeric triple only. All population gates still require BUILD-001. Factory prerequisites and functional effects are assessed above. The card's population 4 for Newspaper conflicts with the prose on printed 58 saying press and newspaper can start at population 1. R-0025 accepted the chart value 4; [Q-10](#q-10-economy-production-and-education) preserves that decision.
 
 | Manual building | Manual triple | Current definition / difference |
 | --- | --- | --- |
@@ -362,7 +362,7 @@ Each triple is **hammers / tools / minimum population**. Source: Building aid ca
 | Church | 52 / 0 / 3 | 52 / **100** / 3. Extra initial staffed `CHAPEL` is not a chart building. |
 | Cathedral | 176 / 100 / 8 | Same. |
 | Printing Press | 80 / 0 / 1 | Same. |
-| Newspaper | 120 / 50 / 4 | Same as chart; prose conflict remains unresolved. |
+| Newspaper | 120 / 50 / 4 | Same as chart; population 4 accepted in R-0025 and retained by Q-10. |
 | Custom House | 160 / 50 / 0 | Same; Stuyvesant prerequisite and exports missing. |
 
 ### Education and skill acquisition
@@ -644,23 +644,680 @@ These entries assess recruitment and the stated father-dependent effects. The so
 
 ## Open questions and decisions
 
-These questions constrain an exact implementation. They do not block documenting the confirmed gaps. Where the manual is qualitative, preserve that distinction until the project adopts an interpretation or identifies additional authorized evidence.
+**Decision update, 2026-10-15 — [R-0115](requirements/done/R-0115.md).** The user
+authorized useful provisional answers to Q-01–Q-11 so missing historical formulas
+do not stop development. The initial year **1490** is an explicit user decision;
+the other choices below are accepted **provisional MicroCol policy**, available
+for implementation without another balance approval. They are not claims of
+original-game fidelity, implemented behavior or successful gameplay testing.
+Existing explicit manual values and previously accepted decisions take precedence
+unless a departure is identified below. Historical audit rows above retain their
+dated implementation status; their old requests to resolve Q now refer here.
 
-| ID | Decision needed | Affected rules / next evidence |
+This register owns the shared numbers. Active requirements link their applicable
+decision and keep their own scope, dependencies and acceptance. Removing a Q
+blocker does not mark a requirement ready/done, select the next implementation,
+or certify a whole UC. [Use-case verification](use-cases.md) changes from blocked
+to not yet run where these decisions supply the missing policy.
+
+### Sources and interpretation
+
+1. The [original manual](Sid_Meiers_Colonization_manual.pdf), also found through
+   [web research](https://www.pixelwings.org/col.dir/files.dir/Sid.Meiers.Colonization.Manual.pdf),
+   remains the baseline: printed 8–9 (national advantages), 21–22 (save/options),
+   79 (advisor), 85–89 (politics/revolution), and the four aid cards. Its exact
+   numeric rules remain as catalogued above. A remake is corroborating design
+   material, not evidence that the original used the same formula.
+2. Q-01 research: FreeCol's [classic specification, inspected revision
+   b210fe106e3f](https://github.com/FreeCol/freecol/blob/b210fe106e3f265ce6e9020e698111efb0cf614a/data/rules/classic/specification.xml)
+   has English immigration-cost reduction, French alarm reduction and Dutch
+   trade-pressure reduction, plus difficulty-specific government/economic
+   settings. Its government limits differ from this manual's endpoints. We use
+   the national-effect precedents below, but interpolate the manual's Tory
+   limits instead of copying FreeCol's full difficulty table.
+3. Q-03 research: FreeCol's [Colony calculation, same revision](https://github.com/FreeCol/freecol/blob/b210fe106e3f265ce6e9020e698111efb0cf614a/src/net/sf/freecol/common/model/Colony.java)
+   uses 200 liberty points per rebel and divides by population. This is the
+   precedent for the deliberately simpler local-support rule below; no claim
+   is made that its decay, founder prices or other accounting are copied.
+4. Q-07 research: the manual's options and advisor descriptions support labeled
+   recovery points, optional automatic reports and accessible combat information.
+   They do not settle a modern layout or accessibility. The presentation choices
+   below use the project's [UX](ux.md) and [visual brief](graphics.md#soucasne-zadani-vzhledu).
+   No external screen artwork or original keyboard layout is required.
+5. Uncited numbers below are estimates chosen for deterministic implementation
+   and initial play, not research findings. Fractions remain exact until the
+   explicitly named rounding step. `floor` rounds down, `ceil` rounds up and
+   `clamp` limits a value to the stated interval. A turn in these policies means
+   one update of the owning nation; a calendar step follows a complete round.
+   Random draws use persisted game random state, stable entity ordering and
+   controlled outcomes in tests; viewing/canceling a quote never draws again.
+
+### Adopted decision register
+
+| ID | Adopted scope | Remaining status |
 | --- | --- | --- |
-| Q-01 | Exact difficulty factors, intermediate Tory thresholds, and numeric English/French/Dutch advantages are not fully stated. | SETUP-002, SETUP-004–007, GOV-006; derive only the explicitly printed values now, then record chosen tables and their source. |
-| Q-02 | The introduction says the game starts in 1500; MicroCol starts free play in 1490. The manual does not define the complete year/season schedule or each nation's starting units/equipment. What exact scenario baseline applies? | SETUP-008–009; retain the manual's stated start as the reference and identify any deliberate interpretation separately. Do not silently substitute recollection of a different edition. |
-| Q-03 | Rebel sentiment, bell thresholds for Congress, recruitment timing/candidate selection, muster counts, modifier ordering/rounding and some production thresholds are incomplete. | GOV-004–010 and production rules; define formulas only after recording what the prose and aid cards actually establish. |
-| Q-04 | REF growth, the meaning of “very few” surviving troops, occupation/population bookkeeping, intervention targets and mercenary offers lack complete formulas. | GOV-014–022; select explicit values and denominators, with deterministic examples and documented uncertainty. |
-| Q-05 | Several founder effects omit details: Bolivar's percentage/points interpretation, La Salle's treatment of existing colonies, Magellan's westbound transit reduction, Washington's exact promotion steps for each starting colonist class, and effect stacking/rounding. | FATHER-001–025; one decision per unresolved effect before acceptance is declared complete. |
-| Q-06 | The 1850 end rule conflicts with post-1800 continuation; native-convert scoring is not stated. Final scoring omits the early-declaration formula and difficulty factor; independence-order wording mixes declaration and successful independence and does not define the fourth-place case. | SCORE-006, SCORE-008–009; document the chosen ordering event and formulas. |
-| Q-07 | Confirm presentation requirements where the original specifies turn/decade save slots (pages 21–22 reverse their order), advisor layouts/colors (exactly 50% sentiment is unstated), automatic reports/Europe arrival opening, combat analysis and shortcuts. | SUPPORT and information-display entries; preserve access to gameplay information and recoverable state while tracking exact presentation separately. |
-| Q-08 | Combat strengths/modifiers are specified, but full probability conversion, stacking, defender choice, ship damage/repair/plunder, patrol detection and some artillery penalties are not. | COMBAT entries; use a deterministic strength calculator first and document unresolved RNG/outcome policy. R-0028 resolves movement on 2026-10-14: both participants lose current remaining moves, restored on their next ordinary owner turn (PDF p. 36); other questions remain open. |
-| Q-09 | Native anger/alarm rates, thresholds, trade pricing, haggling, teaching timing, chief encounters, missionary contests and conversion triggers/probabilities are qualitative or incomplete. | NAT and DIP entries; first verify state transitions and directional effects, then documented parameters. |
-| Q-10 | The production/terrain card contains exceptional or ambiguous cells; the manual gives qualitative growth/famine, expert and factory behavior without every rounding/ordering rule. Also settle trade/purchase taxes, market and recruitment prices, immigration thresholds and rush-building costs where unspecified. | MAP, COL, PROD, BUILD and EDU entries; preserve the explicit card values, record any conflict with prose, and resolve before treating a disputed value as a defect. |
-| Q-11 | Initial sight range, Atlantic travel times, interrupted pioneer work, movement when terrain cost exceeds the full allowance, lost-city outcomes and some transport/cargo edge cases lack complete parameters. | MOVE, PION, CARGO and ROUTE entries; use the specific uncertainties recorded in those sections as the decision list. |
+| Q-01 | [Difficulty and national effects](#q-01-difficulty-and-national-effects) | Nonblocking balance review |
+| Q-02 | [1490, calendar and expeditions](#q-02-calendar-and-starting-expeditions) | Resolved for the development baseline |
+| Q-03 | [Support, production and Congress](#q-03-support-production-and-congress) | Nonblocking balance/fidelity review |
+| Q-04 | [Revolution, REF and intervention](#q-04-revolution-and-intervention) | Nonblocking balance review |
+| Q-05 | [Founder details](#q-05-founder-details) | Nonblocking effect tuning |
+| Q-06 | [End dates and scoring](#q-06-end-dates-and-scoring) | Nonblocking scoring calibration |
+| Q-07 | [Recovery and presentation](#q-07-recovery-and-presentation) | Nonblocking usability review |
+| Q-08 | [Combat and naval outcomes](#q-08-combat-and-naval-outcomes) | Nonblocking balance review |
+| Q-09 | [Native and European relations](#q-09-native-and-european-relations) | Nonblocking balance review |
+| Q-10 | [Economy, production and education](#q-10-economy-production-and-education) | Nonblocking balance/fidelity review |
+| Q-11 | [Exploration, work and transport](#q-11-exploration-work-and-transport) | Nonblocking pacing review |
 
-An intentional departure from the manual should remain a `Differs` entry with a dated decision and rationale. It must not become `Matches` by changing the expected rule to fit existing code. No departures have been approved by this assessment.
+### Q-01 — Difficulty and national effects
+
+1. Persist Discoverer, Explorer, Conquistador, Governor or Viceroy; default new
+   games to Conquistador. Reject missing/unknown required profile data on load;
+   update bundled fixtures explicitly. Use difficulty index `d = 0..4` in that
+   order. Human and rival nations obey the same profile; no hidden AI resources
+   or combat odds are introduced. The shared cost factor `k` is used only where
+   a decision below names it; other manual values remain unchanged.
+
+    | Difficulty | k | Tory penalty begins at | Initial gold |
+    | --- | --- | --- | --- |
+    | Discoverer | 0.75 | 10 | 1000 |
+    | Explorer | 0.90 | 9 | 750 |
+    | Conquistador | 1.00 | 8 | 500 |
+    | Governor | 1.15 | 7 | 250 |
+    | Viceroy | 1.30 | 6 | 0 |
+
+2. England needs `ceil(2 × normal cross threshold / 3)` per immigrant. France
+   generates half the positive local alarm of an otherwise identical nation;
+   direct tribal anger is unchanged. Netherlands applies half the market pressure
+   per traded unit. Preserve fractional pressure/alarm so repeated single-unit
+   actions cannot erase an effect. These are FreeCol-inspired approximations;
+   the English two-thirds rule is our simplification of its 33% reduction.
+3. Spain retains the manual's +50% attack against native **settlements**, not all
+   native units. No additional Spanish conversion advantage is adopted. Example:
+   a normal 100-cross threshold becomes 67 for England; alarm +10 becomes +5
+   for France; Dutch sale of 100 goods produces the price pressure of 50.
+
+### Q-02 — Calendar and starting expeditions
+
+1. **Always start newly created games in 1490**, including bundled campaign
+   starts when those fixtures are next updated. This is an intentional departure
+   from the manual's 1500 reference, not a change of the historical comparison.
+   Loading a current-schema game retains its saved date and never restarts it.
+   Test fixtures may set a later date to exercise a boundary.
+2. Provisionally retain the present pacing: one year per complete round until
+   1600, then spring → summer → autumn → winter, one season per round. Thus
+   1599 → spring 1600 → summer 1600 and winter 1600 → spring 1601. Mission-specific
+   objectives remain separate from the free-play end rules in Q-06.
+3. A free-play game contains all four European nations, one human selection and
+   the other three rivals, with matching Crowns and distinct internal identities.
+   Initial European pairs are at peace. Every expedition starts aboard its own
+   ship in a distinct valid eastern sea-lane cell with a reachable landing coast.
+   Use the same roster at all difficulties; gold alone varies by Q-01.
+4. Netherlands starts with a merchantman; the other nations with a caravel.
+   Each carries two free colonists: one soldier with 50 muskets and one pioneer
+   with 100 tools, no horses or other cargo. Equipment is carried by people and
+   does not consume a third hold. No starting expert is implied. Use the manual's
+   ship capacities/speeds. Native settlement placement belongs to map generation;
+   this expedition decision does not require an otherwise unfinished map generator.
+
+### Q-03 — Support, production and Congress
+
+1. Each colony stores nonnegative local liberty `L`. Each produced bell adds
+   one point; no passive decay. After a population change/update cap it at
+   `200 × resident population N`. Base rebel fraction is `L / (200N)`, zero at
+   `N=0`; Bolivar adds Q-05's 20 percentage points, capped at 100%. Display
+   `floor(100 × fraction)`. National support is the population-weighted mean of
+   exact colony fractions, floored only for display. Eligibility compares exact
+   support with 50%, not a rounded display. Residents working fields/buildings
+   count; outside garrisons, Europe and passengers do not.
+2. Progress stays with the colony, not migrants. Example: colonies of 2 and 8
+   residents with L=200 and 400 have 50% and 25%, national 30%. Move one resident
+   from the first to the second: L is unchanged, local values become 100% and
+   22% displayed, national remains 30%. Population loss can discard excess L at
+   the cap; it cannot export bells. Occupation preserves L but Crown-produced
+   bells subtract from it down to zero, strengthening Tories; liberation resumes
+   additions. Bolivar's modifier follows the rebel nation, not the occupier.
+3. At production start snapshot the exact support. Each staffed productive job
+   gets +1 at at least 50%, +2 at 100%, otherwise zero. Tory count is
+   `N − floor(N × rebel fraction)`; at Q-01's critical count apply −1 per job.
+   Combine these additions once, clamp output to zero, then apply the production
+   order in Q-10. No extra −2 penalty is inferred. Unattended outputs, breeding
+   and resource creation with zero base yield get no political job bonus.
+   Example: Conquistador, N=10 and 20% support gives 8 Tories and −1; 50%
+   support gives 5 Tories and +1. Newly produced bells affect the next production
+   snapshot, preventing a same-turn bonus loop.
+4. Congress independently accumulates every produced bell after the first
+   colony, without subtracting from local support or applying local caps. The
+   next founder costs `ceil(100 × (joined founders + 1) × k)`. Carry surplus
+   forward; join at most one per national update. Offer one uniformly selected
+   unjoined father per nonempty manual category (up to five), frozen until a
+   choice is made; no yearly refresh. Only the chosen candidate earns progress;
+   unspent bells wait while selection is pending. On joining, offer a new set.
+   Example at k=1: 120 bells recruits the first founder for 100, retains 20
+   toward the next 200. Recruit John Paul Jones first in the implementation
+   acceptance journey: one free frigate proves a real, exactly-once effect.
+5. Independence requires exact national support ≥50% and a declaration before
+   spring 1800, with at least one owned coastal colony. On declaration, a colony
+   with support s≥50% upgrades `floor(V × s/100)` eligible veteran soldiers/
+   dragoons on its tile to Continental equivalents, stable unit-ID order; below
+   50% upgrades none. V includes those garrison roles, not unarmed workers or
+   a unit assigned to another colony. V=5 yields 3 at 60%, 4 at 90%, 5 at 100%.
+   This is once per declaration; it does not create equipment or people.
+
+### Q-04 — Revolution and intervention
+
+1. Per Crown, initial REF is `4+d` regular infantry, `2+d` cavalry, 2 artillery
+   and 2 men-of-war. Before declaration, each `ceil(500/k)` cumulative bells
+   produced by its colonial nation adds one ground unit, cycling infantry,
+   cavalry, artillery. Add a man-of-war whenever total ground units exceed
+   six times the number of REF ships. No post-declaration growth. Persist the
+   roster, growth remainder and shipped/reserve/destroyed state; destruction
+   never recreates a unit. Use the manual's unit strengths and cargo capacities.
+2. Maintain a rebellion colony set: colonies owned at declaration plus colonies
+   acquired/founded by the rebel during the war. Track membership through capture;
+   remove a destroyed colony. At each completed gameplay action/update, loss
+   precedes victory: lose with no surviving colonies, all surviving colonies
+   Crown-held, all surviving coastal colonies Crown-held (or none left), or
+   Crown-held residents ≥90% of all current residents in this set. Count current
+   internal residents on both sides, not a frozen declaration population or
+   outside troops. A zero population denominator is a loss. Thus 90 of 100
+   residents occupied loses; 89 does not on this condition alone.
+3. Victory needs every surviving colony in the set under rebel control and
+   **at most two REF ground units** alive in total, counting Europe, sea cargo
+   and land. Ships alone do not count as troops. Evaluate only after declaration
+   and once; at three surviving ground units there is no victory. These explicit
+   set/denominator choices remain balance policy, not a historical formula.
+4. On the first rebel update after declaration announce a fixed intervention
+   target `ceil(500 × k)` bells; count new bells from that update onward. Deliver
+   once: 2 men-of-war, 4 Continental infantry and 2 Continental cavalry, at the
+   lowest-ID owned reachable coastal colony. If temporarily obstructed, keep
+   the delivery pending; no duplicate units or forced displacement. With no
+   coastal colony, evaluate loss first. Grant the manual's +50% bombardment
+   only against Tory/Crown-held colonies.
+5. Every tenth rebel update, a contacted European nation at peace may offer
+   2 veteran soldiers for `ceil(1000 × k)` gold; choose the lowest-ID eligible
+   nation, otherwise skip that interval. Offer expires at end of the rebel turn.
+   Accept atomically only with funds and a valid owned delivery port, decline
+   costs nothing. Use the same pending-delivery rule as intervention.
+6. At declaration home Europe closes. Ships already sailing there reverse
+   using Q-11; ships/people/goods still in the home port become inaccessible
+   Crown-seized assets and count neither as rebel resources nor destroyed REF.
+   Warn before confirmation. Custom-house and de Witt trade use Q-10/Q-09.
+
+### Q-05 — Founder details
+
+1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes
+   guarantees treasure and doubles Q-09's base treasure amount. Bolivar gives
+   a persistent **+20 percentage points**, including future colonies, capped
+   at 100%; he does not create spendable Congress bells. La Salle grants a
+   stockade to existing and future owned colonies at population ≥3, once per
+   eligible colony; never replaces a fort/fortress with a lesser building.
+2. Washington makes each eligible military victory promote one step with
+   certainty: criminal → servant → free → veteran; an existing expert gains
+   veteran military status without losing its civilian specialty. Ordinary
+   promotion uses Q-08. Defeat does not promote, veterans do not gain another
+   stage, and Continental mustering remains Q-03. Equipment and training are
+   distinct; disarming never erases veteran status.
+3. Magellan gives +1 map movement to all owned ship types and halves the sampled
+   **west-edge departure to Europe** duration, rounding up to a minimum of 1.
+   East-edge and Europe-to-map duration are unchanged; this is an edge rule,
+   not a claim that travel to Europe is westbound. An existing voyage keeps
+   its departure-time duration. A west-edge 3-turn voyage becomes 2.
+4. Franklin halves the Q-09 peace price, rounded up, prevents Crown-forced war,
+   and prompts each contacted wartime rival to offer that priced peace at the
+   next update. Pocahontas sets positive tribal anger and local alarm to zero
+   on joining, then halves positive **local** alarm generation only. France
+   and Pocahontas multiply: +10 becomes +2.5. Brebeuf makes existing and future
+   missionaries use expert values without doubling an already expert bonus.
+5. Sepulveda doubles Q-09 conversion probability, capped at 100%. Brewster
+   replaces any criminals/servants still in the candidate pool once on joining
+   and excludes them from future draws; existing people remain. He enables
+   choosing from the three for religious immigration. Jones's free frigate
+   arrives at the home port before rebellion, otherwise uses Q-04's port
+   delivery rule. Revere arms one eligible worker with 50 stored muskets only
+   if no armed defender exists; choose the strongest resulting defender then
+   unit ID, and do not create free equipment.
+6. Jefferson, Paine, Penn and Hudson use Q-10's common production order, with
+   the catalogue's stated effect scope. Newspaper replaces the press modifier.
+   Fugger clears existing arrears/boycotts once, not future protests. Minuit
+   waives future land payments without refunding earlier purchases; peaceful
+   use of that land no longer causes unpaid-land alarm. De Soto sets every
+   unit's sight to at least two and removes negative lost-city outcomes by
+   turning them into neutral discoveries. Existing explicit convert emancipation
+   and one-time colony revelation stay as stated in FATHER-018/021. Completed
+   buildings survive capture; new owner membership governs future projects, not
+   retroactive demolition. Revalidate an unfinished founder-gated head before
+   spending resources; missing membership pauses it without losing hammers.
+
+### Q-06 — End dates and scoring
+
+1. At entry to spring 1800, a nation without a declared revolution records its
+   result once and may continue without scoring until spring 1850. A revolution
+   already underway continues scoring until victory/loss or spring 1850; an
+   unresolved revolution loses then. Spring 1850 ends all play. This reconciles
+   the two manual passages by making post-1800 continuation bounded, not endless.
+2. Independence order means **successful independence**, ordered by completion
+   event sequence; stable national turn order breaks any same-round tie. Bonuses
+   are +100%, +50%, +25%, +0% for first through fourth. Declaration alone awards
+   none. Early-declaration points are `max(0, 1780 − declaration year)`, awarded
+   only on successful independence: 1779/1780/1781 give 1/0/0.
+3. Preserve SCORE-001–005 and SCORE-007. A native convert contributes 2 population
+   points; count each owned living person once across colonies, map, cargo and
+   accessible Europe. Let B be population + fathers + floor(gold/1000) + displayed
+   national support − destroyed native settlements × (d+1) + bells produced
+   after intervention. Result is `floor((max(0,B) × (1+order bonus) + early points)
+   × difficulty factor)`, with factors 0.5/0.75/1/1.25/1.5. Example: B=100,
+   second independence, declaration 1770, Conquistador yields 160. Without
+   successful independence both bonuses are zero.
+4. Keep the top ten results, higher score first, then earlier completion record;
+   one entry per game-result identity. Show the result breakdown even if it
+   misses the list. Retire records a result, Exit does not; canceled choices do
+   neither. Later unscored play cannot replace the stored result.
+
+### Q-07 — Recovery and presentation
+
+1. This question includes functional recovery and screen-opening behavior,
+   not just layout. Keep existing manual file-based save/load; do not introduce
+   an eight-slot limit. Recovery choices appear **Latest position**, **Latest
+   turn**, **Previous decade**, each with date/time. Latest position retains
+   R-0018's menu recovery; Latest turn is the safe human-turn-start checkpoint
+   after automatic updates, before human actions. Previous decade is the same
+   safe checkpoint when the displayed year first crosses a multiple of ten
+   (1500, 1510, …); seasons must not rewrite it four times. The initial 1490
+   start is not a previous-decade checkpoint. Keep one file per checkpoint,
+   atomically replacing only its own prior valid file. Autosave off suppresses
+   the turn/decade writes; retain the separately agreed menu recovery behavior.
+2. Use existing map/colony/Europe/report navigation and shared controls. Advisors
+   use labeled tables, numerical values and text alongside color. Support under
+   50% is labeled Tory majority, exactly 50% Balanced, above 50% Rebel majority;
+   the bonus activates at 50% despite the neutral label. Preserve every information
+   field in UC-114 and its disclosure restrictions; visual rearrangement cannot
+   remove a rule-relevant field.
+3. Default automatic turn summary on. Europe arrival adds a report action;
+   opening Europe automatically is an optional preference, default off. Queue
+   notices until the human turn; never interrupt an attack/equipment confirmation.
+   Critical rejection, famine, lost colony and endgame outcomes remain visible
+   even with routine summaries off. A report offers Open location and Close,
+   without spending moves or changing state.
+4. Combat confirmation displays the actual participants, strengths, modifiers
+   and win chance when the resolver consumes them, with Confirm and Cancel.
+   R-0093 and R-0094 must ship together for that strength-based preview; do not
+   present calculated odds while actual battles still use the old fixed chance.
+   Retain existing shortcuts, show them on commands, keep keyboard focus visible
+   and Escape as cancel/back where applicable. No exact DOS layout is required.
+
+### Q-08 — Combat and naval outcomes
+
+1. Use aid-card base strengths, already including veteran strength (do not add
+   it twice). Add applicable percentage modifiers on each side, multiply base
+   once, and keep exact fractional strength. Terrain and fortification combine;
+   use only the highest colony fortification. Respect the manual's native and
+   revolutionary ambush exceptions. Floor total multiplier at 0.1 for positive
+   base strength; base zero stays zero. Example: ordinary attacking soldier
+   2 × 1.5 = 3; ordinary defending soldier in forest and fortified is
+   2 × (1+0.5+0.5) = 4. Show rounding only in the display.
+2. With A,D effective strengths, attacker wins iff uniform draw `u` in [0,1)
+   is `< A/(A+D)`. 3 vs 4 means 3/7; equal strengths mean 1/2. Positive A vs
+   zero D wins; zero A cannot initiate; reject both-zero combat. Select the
+   legal defender with highest effective defense, then stable unit ID. Both
+   participants lose remaining movement as already agreed in R-0028, restored
+   only on their next ordinary owner turn.
+3. Ordinary eligible soldier/dragoon victory has 25% chance of one Q-05
+   promotion step, no promotion on defeat. A defeated dragoon loses 50 horses
+   and becomes a soldier; a defeated soldier loses 50 muskets and becomes an
+   unarmed survivor. Equipment is lost, not awarded to the victor. A defeated
+   unarmed field worker is captured by a European opponent; colony residents
+   change allegiance on capture, keeping jobs/identity, and the armed capturer
+   stays outside as already agreed. Against natives, an unarmed loser dies.
+4. Full artillery loses into damaged 5/3 artillery; already damaged artillery
+   loses into destruction. Apply −75% outside a fortified colony and +75%
+   when defending a fortified colony against native raids. Retain the card's
+   full 7/5 strengths. Civilian defense is 1; Revere uses Q-05. Ordinary capture
+   does not delete unrelated passengers, residents or full warehouses.
+5. Naval combat uses the same probability calculation, then a separate draw:
+   a defeated ship sinks with probability 50%, otherwise is damaged. Sinking
+   destroys passengers and unplundered goods; damage preserves people. The
+   victor can take goods up to its real free capacity in descending European
+   sale-value order (ties goods ID, then hold); transfer whole fitting units,
+   no passenger capture and no overflow duplication. Damaged-ship leftovers
+   stay aboard. Merchant cargo alone gives no additional guessed combat penalty.
+6. Damaged ships cannot move, fight or trade. Send them to the nearest reachable
+   owned drydock/shipyard by sea distance, ties colony ID; otherwise home Europe
+   if open. The off-map repair transfer takes 1 owner update, then repair takes
+   3 at a drydock or 2 at shipyard/Europe, free. Cargo stays aboard and inaccessible
+   until completion. Revalidate a lost destination before arrival; choose another
+   by the same rule. With none available the damaged ship sinks and reports its
+   losses. Existing captured-port ships retain their earlier escape/capture rule;
+   this procedure applies only to ships damaged in battle.
+7. An armed hostile patrol adjacent to a moved ship checks once per mover step,
+   using the strongest patrol then ID: 50% undetected, 25% loses one remaining
+   move, 25% loses all. No automatic battle. A hostile coastal fort/fortress fires
+   once per ship per owner round when it enters adjacent sea: strength 4/6 plus
+   2 per full artillery or 1 per damaged artillery on the colony tile. Use
+   A/(A+D) against ship defense; a hit damages and sends it for repair, a miss
+   does nothing. Stockades do not fire. Save/load does not repeat a shot.
+8. Privateers may attack foreign ships without changing peace/alliance to war;
+   either side may attack a foreign privateer on the same diplomatic exception.
+   This is no immunity to ordinary combat. Retain observed owner information,
+   but do not reveal an otherwise unknown national identity through the attack.
+   Confirmation states that this privateer action does not declare war; normal
+   frigate-versus-ordinary-ship attacks retain treaty-breaking confirmation.
+
+### Q-09 — Native and European relations
+
+1. Store tribal anger T and settlement-local alarm L separately per European,
+   both clamped 0..100 (fractions retained). Display hostility from `max(T,L)`:
+   [0,25) content, [25,50) uneasy, [50,75) angry, [75,100] hostile. Start at 0. Every
+   peaceful update reduces each by 1. Local unpaid worked/claimed land adds
+   2 per tile per update; taking a new tile adds 5 once. Each nearby European
+   resident within the settlement's claimed radius adds 0.25 per update, each
+   armed unit within two squares adds 2, and a fort/fortress there adds 2/3.
+   Apply Q-01/Q-05 local reductions after summing positive inputs. At the end
+   of each update add `mean(local alarm)/20` to tribal anger, then clamp; this
+   transmits local pressure without confusing the two stored measures.
+2. Attacking a native unit adds T+10 and its home's L+10; attacking a settlement
+   adds +20 to both, destroying it adds another +20; a capital doubles those
+   increments. Disturbing a burial site adds T+30. Tributes add +10 to both even
+   if refused. Buying one claimed tile costs `ceil(100 × k)` gold (capital
+   claims double), permanently removes unpaid-use alarm for that European and
+   tile. Land payment/claim changes are atomic. Nearby arms sold to natives
+   add +5 T per complete 50 muskets/horses; retain partial counters.
+3. A trade reduces local alarm by 2, a gift by 5 per 100 goods, proportionally;
+   at a capital double the reduction and apply it to tribal anger too. Native
+   hostile AI may attack the nearest reachable enemy within two tiles, otherwise
+   patrol its home; calmer states do not initiate attacks. Missions reduce
+   owner-local alarm by 2/4 per update ordinary/expert; add 1 to each contacted
+   rival's local alarm. Keep these effects separate from direct tribal anger.
+4. Preserve the catalogue's contact, role and repeated-commodity restrictions.
+   Settlement treasury starts at 1000 (capital 2000), gains 20/40 each update
+   capped at twice its initial amount. Offer three goods available in local
+   production, ordered by surplus then goods ID, initial stock 100 each and
+   restock 10/update capped at 200; demand is the three tradable goods with
+   lowest local production (ties ID). Native buy price is `max(1, floor(Europe
+   bid × 0.75))`, ×1.5 for demand; ship receipts get a final ×0.8. Native sell
+   price is Europe ask. Floor once per full quote; budget, stock and capacity
+   cap quantity. One haggle requests +10% receipts, accepted 50% when content,
+   25% uneasy, otherwise refused; the original offer remains. Save a pending
+   quote/draw so reopening cannot reroll. De Witt foreign-colony trade uses
+   the host's Europe prices without home tax and its actual stock/treasury,
+   requires peace/alliance, and transfers real goods and gold.
+5. A chief grants one encounter per visitor nation/settlement: content outcome
+   probabilities information/gold/death = 70/25/5%, uneasy 75/15/10%, angry
+   60/10/30%, hostile 40/0/60%. Seasoned scouts halve death probability and
+   move the difference to information. Gold is min(100, settlement treasury),
+   doubled cap in a capital; information reveals only that settlement's goods,
+   teaching and neighboring two-square terrain. Later visits repeat information
+   without another gift/death roll. Confirmed action consumes the visit.
+6. Native teaching requires content/uneasy relations and an unskilled free
+   colonist/servant, never a criminal or existing specialist. It takes 4 owner
+   updates at the settlement, one pupil at a time; cancel releases the person
+   without skill and discards progress. Hostility cancels teaching safely.
+   Keep the card's native-teachable list. Ordinary/expert missionary contest
+   strength is 1/2, each multiplied by `1 + (100 − hostility toward that
+   missionary’s nation)/100`: success `own/(own+resident)`, capped 10–90%; failure kills
+   the visitor, success kills the resident missionary and replaces the mission.
+   Show this risk before confirmation; cancel changes neither person nor mission. Incitement
+   costs `ceil(500 × (1 + own hostility/100) / (1 + 0.1×own missions in this
+   tribe))` gold and succeeds 25%/50% ordinary/expert, charging only a confirmed
+   attempt; success sets T toward the selected European to at least 75.
+7. Every fifth update of a nonhostile mission, conversion chance is 10% ordinary
+   or 20% expert, doubled by Sepulveda. At most one convert per event, delivered
+   to nearest owned colony by land distance then ID; without a reachable colony,
+   skip without banking a convert. No combat conversion is added. Persist native
+   affiliation and eight-turn unassigned expiry (PROD-007). Conquest treasure
+   without Cortes has 50% chance of 500 gold (capital 1000); Cortes guarantees
+   double. Native tribute yields min(100, treasury), capital cap 200, once per
+   10 turns per European/settlement if eligible armed force strength is at least
+   the settlement's defenders; otherwise refuses.
+8. European contact requires a visible adjacent foreign unit or colony; use
+   soldiers, dragoons or scouts for tribute, any colonist for peace/alliance.
+   AI accepts peace for `ceil(200 × max(1, rival military strength / max(1, own
+   military strength)))` gold, Franklin halves it. Strength is the sum of base
+   military strengths of living armed land units, excluding ships/civilians.
+   Tribute once per pair per 10 turns pays min(200, rival gold) only if demander's
+   strength is at least twice the rival's; otherwise refusal without war.
+   No repeated charge on cancel/rejection. Neutral basic relation reports remain
+   visible before contact, as already agreed.
+9. Alliance requires peace, contact and no tribute/attack between the pair in
+   the last 10 turns; AI accepts for 200 gold. It forbids attacks, grants reciprocal
+   passage (no colony ownership/workforce access), and obliges both to enter war
+   against an aggressor attacking either; no free units, cargo or map disclosure.
+   Explicit termination yields peace, with a 5-turn wait before declaring war.
+   Crown-forced wars occur only through the separate event, suppressed by Franklin;
+   they end conflicting alliances before applying war. Player attacks retain the
+   existing explicit treaty-breaking confirmation and model validation.
+
+### Q-10 — Economy, production and education
+
+1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
+   and Newspaper population **4**, already accepted in R-0025. Use no smoothing
+   or inferred positive yield on barren terrain. For missing resource quantities
+   use 100 bonus units for silver and 200 for ore/mixed deposits; only the bonus
+   extracted consumes that reserve, the last extraction is capped by it. Resource
+   discovery/loading never replenishes it. Small/large rivers add +1/+2 to a
+   tile's already positive output; roads add +1 to positive ore/furs/lumber and
+   mountain silver only with a silver deposit. Plow adds +1 to positive food/
+   sugar/cotton/tobacco on suitable cleared land. These are chosen additions,
+   not replacements for explicit aid-card bonuses. Where no resource bonus is
+   explicitly printed, use +2 to the named resource output: silver, ore, both
+   for mixed minerals, furs for trapping, lumber for prime timber, the named
+   crop for prime crop, food for game/oasis/prime food, fish for fishery. Treat
+   that overlay as part of the base before job modifiers; only an explicit
+   resource overlay may introduce its named output on a zero-yield terrain.
+2. Production order: base tile/building yield and flat terrain additions →
+   profession modifier → Q-03 per-job political addition → percentage modifiers
+   added together, except explicitly doubling effects multiply the result →
+   floor once → cap by real inputs. An expert doubles its job's ordinary output;
+   servants/criminals have −1/−2 on indoor jobs (minimum zero), ordinary outdoor
+   output; converts get +1 outdoors, −1 indoors, and cannot do manual-forbidden
+   jobs. Experts on another job use ordinary output. Bonuses never manufacture
+   goods from zero base yield. Print/Paine/Penn affect unattended eligible output
+   too; Jefferson only staffed statesman output. Example: staffed bells 3,
+   expert ×2, political +1, press +50%, Jefferson +50%, tax/Paine +20% gives
+   floor(7×2.2)=15; newspaper replaces press, giving floor(7×2.7)=18.
+3. Ordinary worker manufacturing pairs input→output are carpenter 3→3, lumber
+   mill 6→6; smith house/shop/ironworks 3→3, 6→6, 6→9; luxury house/shop/factory
+   3→3, 6→6, 6→9 for all four chains; armory/magazine/arsenal 3→3, 6→6, 3→6.
+   Expert doubles the throughput budget, retaining the ratio. Given an output
+   budget O, available input I and ratio r, actual output is
+   `min(O, floor(I×r))`, consume `ceil(actual/r)`; no output means no input.
+   A factory with 5 input and ordinary budget 9 yields 7, consumes 5. Apply
+   input shortage once per building aggregate, not separately discarding each
+   worker's fractions. Manufacture in dependency order, with stable building ID
+   tie-break; each producer runs once. Keep the previously accepted
+   smith-house expert baseline 6 ore→6 tools.
+4. Unattended crosses: initial colony/chapel 1, church 2, cathedral 3 total
+   (replacement tiers, not cumulative). Staffed ordinary preacher adds 3 per
+   person in a church and 6 in a cathedral; expert doubles those staffed
+   values. Keep existing staffing limits; one ordinary preacher gives 5/9
+   total before Penn, then floor(5×1.5)=7 or floor(9×1.5)=13. Town hall supplies 1 unattended
+   bell plus 3 per ordinary statesman before modifiers. Large Stables remains
+   an explicit nonmanual extension with the **same** breeding effect as Stables;
+   no deletion or invented second historical bonus in this refinement.
+5. Colony update: predict food using current residents; if production plus
+   stock minus 2 per resident is negative, select one random internal resident
+   as in R-0059, remove them, set opening food stock to zero and recompute all
+   production/consumption from survivors; clamp resulting food at zero without
+   a second death. The deceased contributes nothing to the committed update.
+   Preview warns that the victim/result is variable; the final report identifies
+   actual loss/stocks. Zero does not kill. Last-resident famine destroys the
+   colony/buildings/warehouse and leaves outside troops on the tile. Move
+   seaworthy docked ships with their cargo to a legal adjacent water tile,
+   ordered by coordinates; friendly ships may share it, enemy occupancy excludes
+   it. If no legal water neighbor exists, destroy those ships/cargo with an
+   explicit loss report. Clear work/route references. Repairing
+   ships revalidate their destination under Q-08. No conquest escape rule applies.
+6. After consumption, grow `floor(food/200)` new free colonists, spend 200 each
+   and retain 0..199. Imported food waits until the next colony update and may
+   temporarily exceed 199; confirmation shows this. Effective post-consumption
+   stock 199/200/201 gives 0/1/1 births and 199/0/1 food; 399/400/401 gives
+   1/2/2 and 199/0/1. Newborns do not produce/eat until next update. Then breed
+   horses with at least 2 existing horses: min(2, floor(stock/2)) per update,
+   doubled with stables, limited by remaining food (1 per new horse) and free
+   horse capacity. Pay only for actual new horses. No breeding during famine. Forced famine/combat losses may take a fortified
+   colony below three; voluntary removals still may not. Keep its fortification
+   unless the colony itself is destroyed.
+7. Nonfood storage stays 100/200/300. Player transfers keep Z01's explicit
+   overflow confirmation; automatic production/export is computed before final
+   capacity clamping, with discarded excess reported. Custom house exports
+   only selected tradable goods above a retained 100 units, after consumption,
+   production, construction and breeding. Boycotts block that commodity normally;
+   during revolution export uses half the normal tax-net proceeds and bypasses
+   the closed home port/boycott, with no duplicate rounding or hidden stock loss.
+8. Retain R-0020: purchase `floor(gross×(100+tax)/100)`, sale
+   `floor(gross×(100−tax)/100)`; fixed unit purchases are untaxed. Retain master
+   blacksmith 2200. Other missing expert prices: schoolhouse-tier 1000, college
+   2000, university 3000; exclude sugar/cotton/tobacco planters from European
+   purchase and immigration, retaining the other native-teachable experts as
+   eligible. This is the chosen formerly uncertain exclusion list. Existing
+   positive ship/artillery base prices remain; missing bases caravel 1000,
+   merchantman 2000, galleon 3000, privateer 2000, frigate 5000, artillery 500;
+   men-of-war cannot be bought. A type's nth prior purchase adds `n×ceil(base/10)`
+   to its next price, no shared demand group or arbitrary cap; reject arithmetic
+   overflow before charging.
+9. Maintain three candidates. Each replacement draws free colonist 60%, servant
+   20%, criminal 10%, eligible expert 10% (uniform within Q-10.8's expert list).
+   Brewster reallocates the excluded 30% to free colonists. Base passage cost
+   `ceil((200+20p)×k)` for p prior paid passages, independent of unit type;
+   after settling any pending earned immigration, price is
+   `max(50, ceil(base passage × (1 − min(crosses,target)/target)))`.
+   Paid passage does not consume cross progress or increment earned-immigrant
+   count. Cross target for e previously earned immigrants is
+   `ceil((100+25e)×k)`, then England's Q-01 factor. At update, consume each
+   reached threshold, carry surplus, select a random pool slot without Brewster
+   or prompt with him; freeze pending choices and resume sequentially. At k=1,
+   230 crosses earns two immigrants (100+125), leaves 5 toward 150. Remove the
+   old periodic grant when this mechanism is implemented.
+10. Dynamic market starts at each commodity's existing quote and spread (missing
+    tradable quotes use bid 2, ask 4). Signed pressure increases on sales,
+    decreases on purchases: full quantity in own market and one quarter in
+    each other European market, multiplied by the receiving market's Dutch
+    factor. Each +100/−100 pressure lowers/raises bid by 1, retain remainder,
+    bid bounded 1..20, ask=bid+initial spread. At the bound discard outward
+    pressure so it cannot accumulate indefinitely. Per update move bid one
+    step toward its initial value only if no trade affected that commodity
+    since its last update. Settle each transaction at its confirmed quote,
+    then update all affected markets; never reprice a half-completed trade.
+11. Every `max(5,20−3d)` colonial updates after first colony, propose tax +2
+    percentage points (cap 75), starting from zero. Pause that nation's actions
+    at the demand until accept/protest; save preserves the pending choice.
+    Protest chooses the largest sale-value tradable stock in an owned colony,
+    tie goods/colony ID, destroys up to 100 units, and boycotts that commodity.
+    With no such stock only acceptance is available. Protest adds 100 local
+    liberty in that colony (subject to cap), no Congress credit. Arrears for
+    that commodity are `max(100, 2×destroyed quantity×quoted bid at protest)`;
+    a later price does not change them. Payment clears that commodity only,
+    and insufficient gold leaves all state unchanged. Fugger clears all existing
+    arrears once. No additional undisclosed sentiment multiplier.
+12. Construction stores one colony hammer pool, not progress per queue item.
+    Changing/removing/reordering the head retains the pool, including building
+    ↔ unit changes. Complete at most one head per update; spend its hammer/tool
+    costs, retain surplus, revalidate completion gates. Empty queue retains
+    hammers. Rush quote = 2 gold per missing hammer plus the tax-inclusive current
+    Europe ask quote for missing tools, consuming available tools first; buy
+    missing tools directly for this project, not into a possibly full warehouse.
+    Require access to home Europe for rush purchases; during rebellion disable
+    rush. Keep population a start-only gate and the existing final tool check.
+    Example: 30 hammers missing, 5 tools missing at ask 3/tax 10 costs
+    60+floor(15×1.1)=76. Cancel/stale quotes do not debit anything.
+13. Education takes 4/6/8 owner updates for schoolhouse/college/university skill
+    tiers, 4 per criminal→servant→free step; preserve 1/2/3 teachers and explicit
+    teacher eligibility. One teacher/student pair, a removed teacher pauses
+    progress and replacement with the same skill resumes; changing skill resets
+    progress, leaving the colony cancels it. A free colonist becomes expert after
+    20 productive updates in the same job; changing jobs resets this experience,
+    merely pausing retains it. School and work completion in one update produce
+    one skill, school first. No learning from a zero-output job or UI inspection.
+
+### Q-11 — Exploration, work and transport
+
+1. Sight uses Chebyshev distance (all eight neighbors): ordinary land units 1,
+   scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2. Reveal only
+   the initial expedition's surroundings. Retain explored terrain; current
+   foreign units are visible only within present sight, no hidden updates to
+   remembered intelligence. Remember a discovered colony location and last-seen
+   owner/date, labeled stale outside sight; do not retain actionable ghost units
+   or refresh unseen ownership, buildings, cargo or population. This supersedes R-0019's temporary speed-derived
+   radius for future R-0069/R-0070 work, not its verified historical behavior.
+2. On departure draw weather w uniformly from {−1,0,+1}, persist it. Voyage
+   duration = `clamp(2 + w + westward + edge − fast, 1, 4)`, westward=1 for
+   Europe-to-map and 0 for map-to-Europe, edge=1 for west-edge departure
+   to Europe else 0, fast=1 if base ship speed≥6 else 0 (exclude Magellan's
+   movement increment). Apply Magellan afterward as Q-05. Example: caravel
+   from east edge to Europe 1/2/3 turns equally, fast ship 1/1/2; west-edge
+   caravel to Europe 2/3/4. Europe departures use edge=0 and westward=1,
+   giving caravel 2/3/4; thus eastward travel is usually faster. New navigation/ship bonuses require an explicit
+   decision; there is no hidden skill multiplier.
+3. Persist voyage length D and position x from its source, advancing one per
+   owner update. Reversing toward source takes x further updates; reversing
+   again takes D−x. No new weather draw, cargo change or full-duration reset.
+   D=4, after one update x=1 → reverse, 1 to source; reverse again before the
+   next update → 3 to destination. At x=0 return to source without advancing
+   the turn. Arrival at an occupied return tile waits offshore until legal;
+   it neither attacks nor chooses another undisclosed tile.
+4. Terrain costs follow the card. If cost exceeds full allowance, a unit with
+   its **full** allowance may make that one legal step and finish at zero;
+   otherwise insufficient points reject the step without movement. Full 1
+   entering cost 3 succeeds once; remaining 1 of full 3 cannot pay cost 2.
+   Connected roads or a connected river segment cost 1/3 move, in either
+   direction; use exact thirds throughout execution, previews and routing.
+   Soldiers, dragoons and artillery may issue fortify with positive movement,
+   spending all remaining moves; its bonus begins next owner turn. Cancel
+   removes the order/bonus without restoring spent movement.
+5. Ordinary clear/plow/road work takes 4/4/2 owner updates; hardy pioneer takes
+   2/2/1. Starting requires at least 20 tools and positive moves, consumes the
+   current movement, and first progress is the next owner update. Deduct 20
+   tools only on completion. Explicit cancel discards incomplete progress,
+   changes no terrain/tools and restores no spent movement. Completed effects
+   remain; save/load keeps progress. Clearing delivers 20 lumber to nearest
+   owned colony within two squares, tie ID; capacity excess is reported and
+   discarded, no recipient means no stored lumber. Confirm that outcome first.
+6. Lost-city ordinary outcomes are empty 40%, gold 25%, recruit 15%, expedition
+   lost 10%, burial site 10%. Seasoned scout: 30/35/25/5/5%. Gold is 200–500
+   uniformly in whole gold; recruit is one free colonist on the explored tile;
+   expedition lost removes only the explorer; burial site applies Q-09 anger
+   to the nearest native nation, none if absent. De Soto converts either bad
+   outcome to empty. Consume the rumor once; save/load never rerolls it.
+7. Quick load chooses highest current tax-net sale value per unit, excluding
+   horses/tools/muskets, ties goods ID, fills compatible partial holds first,
+   then empty holds in index order; no hidden future-price prediction. Jettison
+   selects one hold and quantity with confirmation, never other holds/passengers.
+   Disband requires an empty carrier; unload passengers/goods first. Cancel
+   preserves everything. Sentry boarding selects waiting passengers by stable
+   ID up to actual available holds and leaves the rest waiting. Sentry boarding
+   uses R-0022 costs: same port/pier zero, adjacent land-to-ship one passenger
+   move and no ship move, so an adjacent zero-move passenger cannot board.
+   Visible foreign movement to an adjacent square wakes a sentry immediately,
+   preserving current movement (including zero) and returning manual control.
+8. Route edits apply at the next stop, while cancel/delete immediately returns
+   assigned carriers to manual orders without changing their location or
+   voyage progress. An inaccessible/lost stop pauses the carrier and reports
+   the reason; do not spin or silently substitute a port. At a stop unload
+   before loading, up to actual capacity and configured stock; full/empty
+   transfers are explicit no-ops, failed market quotes do not consume resources.
+   Persist current stop and pending edited route so Continue repeats no transfer.
+
+### Remaining nonblocking questions
+
+The original unanswered decision list is replaced by the adopted register above.
+Q-02 has no remaining baseline question. The following are refinement targets,
+**not prerequisites for implementation or acceptance against these policies**.
+Do not reopen numerical approval merely to prepare a selected requirement.
+
+| Follow-up | Missing evidence to gather later | When to revisit |
+| --- | --- | --- |
+| Q-01 / Q-03 | Are difficulty, immigration, support and founder curves challenging without excessive waiting? Original-edition formula fidelity remains unproven. | First multi-nation economy/politics playthrough |
+| Q-04 / Q-08 | Are REF growth, intervention, naval losses and repair fair across five difficulties? | First complete rebellion and controlled naval journeys |
+| Q-05 | Are founder combinations too strong, especially Bolivar, production stacking and conversion? | Each effect's acceptance, then combined-founder play |
+| Q-06 | Does the score reward play well, including long post-intervention wars and early declarations? | First complete scoring comparisons |
+| Q-07 | Are recovery labels, 50% support wording and report defaults understandable to players? | Actual observation of recovery/report journeys |
+| Q-09 | Do alarm, diplomacy, teaching and trade choices create useful alternatives? | First native and European diplomacy playthroughs |
+| Q-10 / Q-11 | Are economic rates, food surpluses, resource stocks, voyage/work pacing and exploration rewards suitable? Any remaining discrepancy needs a specific card cell or reproducible example. | First integrated production/transport journeys |
+
+No further user decision is required for this documentation change. Implementation
+may expose a genuinely missing case; record its exact initial state and proposed
+outcome under the existing Q before changing policy. Preserve manual deviations
+as such; do not relabel historical `Differs` entries as `Matches` to conceal them.
+
 
 ## Implementation order
 

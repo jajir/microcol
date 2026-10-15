@@ -164,7 +164,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 
 | Balík a pravidla | Co doplnit nebo opravit | Závislost a důkaz dokončení |
 | --- | --- | --- |
-| **P01 Pravidlová rozhodnutí a referenční data**; Q-01–Q-11 a čtyři referenční tabulky | Oddělit hodnoty výslovně uvedené v manuálu od našich doplněných vzorců. Připravit nezávislé příklady pro terén, jednotky, profese a stavby. | Před každým závislým úkolem uzavřít jeho konkrétní otázky. Test nesmí pouze číst stejné runtime konstanty jako implementace. |
+| **P01 Pravidlová rozhodnutí a referenční data**; Q-01–Q-11 a čtyři referenční tabulky | Oddělit hodnoty výslovně uvedené v manuálu od našich doplněných vzorců. Připravit nezávislé příklady pro terén, jednotky, profese a stavby. | Q-01–Q-11 mají [přijaté prozatímní odpovědi z 15. 10. 2026](gap-analysis.md#open-questions-and-decisions), zapsané v [R-0115](requirements/done/R-0115.md). Pro konkrétní zadání převzít relevantní příklady a doplnit návrh; test nesmí pouze číst stejné runtime konstanty jako implementace. |
 | **P02 Nová hra**; SETUP-001–009 | Volba jména, čtyř národů, pěti obtížností, počáteční výpravy a data; generovaný svět, Amerika a vlastní parametry. Zapojit národní výhody do příslušných systémů. | P01/P04/P05; národní efekty také P15/P17/P18/P22. Každá volba se uloží a skutečně změní odpovídající chování; stejný seed reprodukuje mapu. |
 | **P03 Tahy a kalendář**; TURN-001–002, SETUP-009 | Výslovné fáze Evropa → kolonie → akce jednotek; pořadí domorodci → Anglie → Francie → Španělsko → Nizozemsko; jasný konec hráčského tahu a kola. | P01/P02/P26, domorodé akce P18/P21. Čas se posune právě jednou za kolo; načtení nezopakuje produkci, imigraci ani jednorázové události. |
 | **P04 Mapa a průzkum**; MAP-001–009, tabulka terénu | Doplnit terény, lesy, řeky, ložiska a jejich vyčerpání, výnosy, cenu pohybu, obranu a ztracená města. Zachovat funkční odkrývání; počáteční znalost světa ověřit a podle přijatého pravidla upravit. | P01/P02; návaznost na P06/P11/P17. Testovat terén s lesem i bez, zdroje a pohled jednotlivých hráčů; nápověda neprozradí neobjevené informace. |
@@ -319,7 +319,7 @@ tří herních zadání zatím nebylo předáno k implementaci.
 | --- | --- | --- |
 | Z01 Vyložení do skladu | Kontrakt přijat: pravidla a výjimky v modelu, UI používá náhled a ověří změnu před potvrzením. Samostatný PR do main. | [Implementace a konkrétní ověření Z01](functional-tests.md#z01-bezpecne-vylozeni-nakladu). |
 | Z02 Pojmenování kolonie | Kontrakt přijat 12. října 2026: neměnná ID, modální pojmenování/přejmenování a aktuální JSON bez zpětné kompatibility. | [Kontrakt Z02](#z02-zalozeni-pojmenovane-kolonie) a [ověření](functional-tests.md#z02-pojmenovani-a-identita-kolonie). |
-| Z03 Průchod tahem | Změna chování blokovaná: hlavní agent připraví k rozhodnutí Q-02 a stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Před rozhodnutím inventář přechodů a testy současného chování; po rozhodnutí jedna fáze/přechod a její testy. |
+| Z03 Průchod tahem | Q-02 je pro vývoj rozhodnuté (1490 a popsaný kalendář); hlavní agent ještě stanoví rozhraní fází a persistence. Plné národní pořadí navíc čeká na příslušné části P02/P18. | Použít přijaté Q-02; po individuálním upřesnění jedna fáze/přechod a její testy. |
 
 Před spuštěním každého řezu hlavní agent doplní konkrétní revizi `main`, vstupy,
 povolené soubory, kontrolní příkazy a ověří dostupnost workeru. U UI zadání
@@ -330,15 +330,16 @@ nikoli důvod ponechat veškeré jeho psaní hlavnímu agentovi.
 ## Co potřebujeme rozhodnout společně
 
 Manuál není úplnou technickou specifikací. Některé přesné vzorce, pravděpodobnosti
-a okrajové stavy neuvádí. Před implementací příslušného chování zapíšeme konkrétní
-volbu do [existujících otázek Q-01 až Q-11](gap-analysis.md#open-questions-and-decisions),
-včetně důvodu a příkladu. Vývojář nesmí takovou volbu potichu vydávat za pravidlo
+a okrajové stavy neuvádí. Dne **15. října 2026** jsme na žádost uživatele přijali
+[prozatímní odpovědi Q-01 až Q-11](gap-analysis.md#open-questions-and-decisions),
+včetně zdrojů, hodnot a příkladů. Vývoj na jejich pozdější ladění nečeká; před
+implementací se ověřují konkrétní závislosti a doplňuje individuální zadání. Vývojář nesmí takovou volbu potichu vydávat za pravidlo
 originálu. Nejasnost pozdní revoluce ale nebrání opravě překládání nákladu.
 
 | Kdy | Společné rozhodnutí | Co lze připravit předem |
 | --- | --- | --- |
-| Před prvním zadáním měnícím čas nebo novou hru | Počáteční rok, průběh kalendáře, výpravy a potřebné parametry obtížnosti; Q-01/Q-02. | Přehled doložených hodnot, varianty chybějících parametrů a malé modelové příklady. |
-| Před změnou sporného výpočtu | Produkce a zaokrouhlení, bojová náhoda, trh, vztahy, politika a revoluce podle příslušných Q. | Nezávislý výpočet síly nebo zásob a testy nesporných částí. |
+| Při zadání času nebo nové hry | Převzít přijaté Q-01/Q-02: rok 1490, kalendář, výpravy a obtížnost. | Připravit malé modelové příklady a zkontrolovat integrační závislosti; nečekat na další schválení čísel. |
+| Při změně výpočtu | Použít přijaté prozatímní Q pro produkci, boj, trh, vztahy a politiku. | Nezávislé očekávané výsledky a hranice; nové chybějící případy zapsat konkrétně, neobnovovat obecnou blokaci celé Q. |
 | U první hratelné etapy a nového typu obrazovky | Zda hráč cestu najde, rozumí důsledkům a zda je návrh příjemný při hraní. | Konkrétní ovladatelný návrh se současnými prvky; rutinní ikony a kontrast nevyžadují nové schvalování stylu. |
 | Před větší výrobou obsahu | Rozsah nápovědy a výuky, cílové jazyky, nové ilustrace a hudba, způsob hráčských zkoušek. | Inventář reuse/doplnit, ukázka jedné celé cesty a odhad přírůstku obsahu. |
 | Před plánováním termínu vydání | Kapacita týmu, cílový rozsah vydání a platformy nad již fungující Mac/Linux kanál. | Aktualizovat zbývající práci po etapách a oddělit práci, čekání a rezervu. |

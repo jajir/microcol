@@ -160,3 +160,31 @@ documentation in APT just to make it visible on the web.
    workflows still run after this push. Publication must be checked for the
    resulting commit in [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
    and [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
+
+## Provisional rule decisions — 2026-10-15
+
+1. [R-0115](requirements/done/R-0115.md) records the documentation-only adoption
+   of [Q-01–Q-11](gap-analysis.md#open-questions-and-decisions). The register
+   distinguishes the user's fixed 1490 start, explicit manual rules, pinned
+   FreeCol research precedents and provisional MicroCol estimates. Remaining
+   balance/fidelity questions have nonblocking revisit conditions.
+2. The change links 51 active requirements without changing their statuses.
+   A direct audit preserves all 119 UC implementation states and changes 89
+   Q-blocked verification states to not-yet-run, retaining each Q reference and
+   existing test evidence. It checks the eleven adopted Q IDs, four requirement
+   chapters, and arithmetic examples for support, scoring, production, growth,
+   immigration, rush prices and voyage duration. Local audit material is under
+   `target/rule-decisions-2026-10-15/`; it is not shipped gameplay verification.
+3. The documented checks passed: 21 local-worker launcher tests without
+   inference, nine documentation tests, and strict MkDocs build. Browser review
+   checked the rendered difficulty table/list numbering and the linked R-0100
+   decision/status. Review corrected draft inconsistencies before acceptance;
+   these checks validate documentation, not the balance or runtime behavior of
+   unimplemented rules. No Java, game fixture or workflow changed in this task,
+   so no local Maven/UI run was needed. Unrelated functional-test/R-0112 edits
+   remain outside this commit.
+4. Publication must be checked for the resulting commit in both
+   [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml) and
+   [development delivery](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
+   This refinement does not implement the proposed documentation-only CI exception
+   in [R-0113](requirements/R-0113.md).
