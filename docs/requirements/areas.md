@@ -73,7 +73,7 @@ produkce, posun času, ukládání, načítání a autosave. Výstupem příprav
 přehled stavů a přechodů včetně míst, odkud lze bezpečně pokračovat bez
 opakování událostí. Doménové stavy ukládáme spolu s jejich funkcí; kompatibilitu
 starších save souborů během vývoje nevyžadujeme podle [platného kontraktu](../architecture.md#identita-kolonii-a-textove-vstupy).
-Kalendář řeší dokončené [R-0051](done/R-0051.md). Kandidát: [R-0052](R-0052.md).
+Kalendář řeší dokončené [R-0051](done/R-0051.md). Pořadí a hranici přípravy řeší dokončené [R-0052](done/R-0052.md).
 
 ### A05
 

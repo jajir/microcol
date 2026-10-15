@@ -105,7 +105,7 @@ před otevřením souboru. GUI sdílí dotaz na připravený lidský tah pro my�
 klávesnici a další tah; při zamítnutí uložení přes `TurnPreparationException`
 zachová starý soubor a umožní návrat do menu. `AbstractUnit` dokončuje běžící
 práci interně, odděleně od veřejného příkazu pro novou práci.
-Ověření a rozsah jsou vedené v [R-0052](requirements/R-0052.md);
+Ověření a rozsah jsou vedené v [R-0052](requirements/done/R-0052.md);
 [evidence hranice přípravy](functional-tests.md#r-0052-preparation-boundary-2026-10-15)
 odlišuje cílené ověření a úplnou regresi.
 

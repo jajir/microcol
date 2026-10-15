@@ -750,7 +750,7 @@ keeps answered questions out of the current catalogue and active requirements.
 
 ### National turn processing
 
-1. Selected on 2026-10-15 for [R-0052](requirements/R-0052.md): process present
+1. Selected on 2026-10-15 for [R-0052](requirements/done/R-0052.md): process present
    native participants first, then England, France, Spain and Netherlands. No
    absent participant receives a dummy turn. The current game has no native
    actor implementation; adding native actors must use this same ordering owner.

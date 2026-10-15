@@ -83,7 +83,7 @@ only to the described bounded delivery.
 | Original requirement | Disposition | Current finding | New owners / continuation |
 | --- | --- | --- | --- |
 | [R-0001](done/R-0001.md) | done | The player can start free play without completing the campaign. | No further work within this bounded scope. |
-| [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](done/R-0051.md), [R-0052](R-0052.md) |
+| [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](done/R-0051.md), [R-0052](done/R-0052.md) |
 | [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
 | [R-0004](canceled/R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](R-0054.md) |
 | [R-0005](canceled/R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](R-0055.md), [R-0082](R-0082.md) |

@@ -219,5 +219,5 @@ dalšího tahu stejnou podmínku připravenosti modelu. Při selhání příprav
 hráč může odejít do menu; pokus o uložení nepřepíše předchozí soubor a
 dialog vysvětlí návrat přes Pokračovat nebo načtení. Upozornění je textové
 a nevyžaduje zvuk. Platná uložená pozice se načte bez opakování přípravy.
-Automatizované ověření patří k [R-0052](requirements/R-0052.md); nejde o
+Automatizované ověření patří k [R-0052](requirements/done/R-0052.md); nejde o
 výsledek uživatelského výzkumu.

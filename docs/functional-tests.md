@@ -2161,7 +2161,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0052 partial turn-order delivery — 2026-10-15
 
-1. The partial [R-0052](requirements/R-0052.md) delivery orders registered actors
+1. The partial [R-0052](requirements/done/R-0052.md) delivery orders registered actors
    by stable nation identity and their associated Crowns. Each existing actor's
    preparation advances voyages and scheduled immigration, processes colonies,
    then refreshes movement and ongoing unit work. This covers part of UC-005;
@@ -2253,7 +2253,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0052 preparation boundary — 2026-10-15
 
-1. [R-0052](requirements/R-0052.md) doplňuje hranici existujících národních
+1. [R-0052](requirements/done/R-0052.md) doplňuje hranici existujících národních
    tahů: příprava blokuje hráčské příkazy a reentrantní snímky; souběžný
    snímek čeká. Selhání nepovolí uložení částečného stavu. Původní soubor
    zůstává použitelný přes menu a Pokračovat. Nové tržní/domorodé fáze
@@ -2304,5 +2304,25 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    modulu a 9 případy UI modulu**, bez chyb či přeskočení, exit 0. Obsahuje
    celý zvolený modelový výběr, 47 cargo testů a nové boundary/action testy;
    nenahrazuje úplnou sadu číslovaných UI scénářů. Log je
-   `target/r52/boundary-all-model.log`. Následující CI ověří plnou sadu
+   `target/r52/boundary-all-model.log`. Následující CI ověřila plnou sadu
    před zveřejněním vývojové hry.
+
+8. Oprava `d71e71b0136a1840b5231313be2c56bf266ef77e` prošla
+   [celou vývojovou CI](https://github.com/jajir/microcol/actions/runs/38768750788).
+   Stažené XML funkčního běhu potvrzují **1199 případů herního modulu a
+   155 případů UI modulu**, bez selhání, chyb či přeskočení. TC36 má všechny
+   tři scénáře; ověřena je také celá dosavadní sada číslovaných cest hráče.
+9. Všechny tři nativní balíčky a publish job uspěly. Stažené reporty
+   macOS obou architektur a Linuxu mají každý **1199 herních a 33 balíčkových kontrol**,
+   bez chyb/přeskočení; launcher reporty mají **32/32**.
+   [Kompatibilita](https://github.com/jajir/microcol/actions/runs/38768750650)
+   uspěla ve všech čtyřech kombinacích Windows/Linux × Java 11/17.
+   [Pages](https://github.com/jajir/microcol/actions/runs/38768750791)
+   úspěšně sestavily a nasadily dokumentaci.
+10. Vývojový manifest potvrzuje [dev-87-d71e71b0136a](https://github.com/jajir/microcol/releases/tag/dev-87-d71e71b0136a)
+    ze stejného commitu a archivy všech tří platforem. Tím se uzavírá
+    [R-0052](requirements/done/R-0052.md) v přijatém rozsahu existujících fází.
+    XML a manifest jsou v `target/r52/boundary-ci-*` a
+    `target/r52/boundary-published/`. Následná dokumentační revize nemění
+    tuto publikovanou hru; její Pages a úmyslně přeskočené game jobs se
+    ověřují samostatně.
