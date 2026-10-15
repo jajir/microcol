@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.event.ExitGameEvent;
+import org.microcol.model.TurnPreparationException;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.campaign.po.PersistingTool;
@@ -44,12 +45,21 @@ public final class ExitGameListener {
     @SuppressWarnings("unused")
     @Subscribe
     private void onExitGame(final ExitGameEvent event) {
+        boolean incompleteTurn = false;
         if (gameModelController.isGameModelReady()) {
-            gameController.writeModelToFile(persistingTool.getAutoSaveFile());
-            gamePreferences.setGameInProgressSaveFile("true");
+            try {
+                gameController
+                        .writeModelToFile(persistingTool.getAutoSaveFile());
+                gamePreferences.setGameInProgressSaveFile("true");
+            } catch (TurnPreparationException rejected) {
+                incompleteTurn = true;
+            }
         }
         eventBus.post(new ShowScreenEvent(Screen.MENU));
         gameController.stopGame();
+        if (incompleteTurn) {
+            gameModelController.showTurnPreparationUnavailable();
+        }
     }
 
 }

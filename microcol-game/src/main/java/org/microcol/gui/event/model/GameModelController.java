@@ -192,7 +192,22 @@ public class GameModelController {
         message.showAndWait();
     }
 
+    public boolean isHumanTurnReady() {
+        return isGameModelReady() && getModel().isGameRunning()
+                && getRealCurrentPlayer().isHuman();
+    }
+
+    public void showTurnPreparationUnavailable() {
+        final DialogMessage message = passengerMessage.get();
+        message.setTitle(i18n.get(Dialog.turnPreparation_title));
+        message.setText(i18n.get(Dialog.turnPreparation_unavailable));
+        message.showAndWait();
+    }
+
     public void nextTurn() {
+        if (!isHumanTurnReady()) {
+            return;
+        }
         logger.debug("Next Turn event was triggered.");
         new Thread(() -> getModel().endTurn()).start();
     }

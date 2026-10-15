@@ -161,7 +161,11 @@ public abstract class AbstractUnit implements Unit {
      */
     public void startTurn() {
         actionPoints = getSpeed();
-        unitAction.startTurn(model, this);
+        if (unitAction.startTurn(model, this)) {
+            setAction(UnitActionType.noAction.make());
+            actionPoints = 0;
+            model.fireActionWasStarted(this);
+        }
     }
 
     /**
@@ -893,6 +897,7 @@ public abstract class AbstractUnit implements Unit {
 
     protected void validateColonyStructureSlot(
             final ConstructionSlot structureSlot) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(structureSlot);
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
@@ -906,6 +911,7 @@ public abstract class AbstractUnit implements Unit {
 
     protected void validateColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
@@ -955,6 +961,7 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void placeToMap(final Location location) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(location);
         if (isAtCargoSlot()) {
             disembarkToLocation(location);
@@ -1119,6 +1126,7 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public void setActionType(final UnitActionType actionType) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(actionType, "Unit action is null");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),

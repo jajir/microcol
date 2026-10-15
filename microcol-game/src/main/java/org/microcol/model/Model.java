@@ -45,6 +45,7 @@ public class Model {
     private final HighSea highSea;
     private final GameManager gameManager;
     private Location focusedField;
+    private boolean endingTurn;
     private final TurnEventStore turnEventStore;
     private final Statistics statistics;
     private final UnitFactory unitFactory;
@@ -345,6 +346,7 @@ public class Model {
 
     public void renameColony(final Player player, final Colony colony,
             final String name) {
+        checkTurnPreparationComplete();
         Preconditions.checkArgument(canRenameColony(player, colony),
                 "Colony cannot be renamed");
         Preconditions.checkArgument(
@@ -751,7 +753,8 @@ public class Model {
         return unitStorage.getUnitsAt(location);
     }
 
-    public ModelPo save() {
+    public synchronized ModelPo save() {
+        gameManager.checkTurnPreparationComplete();
         final ModelPo out = new ModelPo();
         out.setNextColonyId(nextColonyId);
         map.save(out);
@@ -821,6 +824,7 @@ public class Model {
      *                               path.
      */
     public void moveUnit(final Unit unit, final Path path) {
+        checkTurnPreparationComplete();
         listenerManager.fireActionStarted(this);
         if (fireUnitMoveStarted(unit, path)) {
             path.getLocations().forEach(loc -> {
@@ -864,6 +868,7 @@ public class Model {
      * @param path required path
      */
     public void moveUnitAsFarAsPossible(final Unit unit, final Path path) {
+        checkTurnPreparationComplete();
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
             path.getLocations().forEach(loc -> {
                 /*
@@ -879,7 +884,9 @@ public class Model {
         }
     }
 
-    public void startGame() {
+    public synchronized void startGame() {
+        Preconditions.checkState(!endingTurn,
+                "Cannot start or end game while ending a turn.");
         if (gameManager.isRunning()) {
             gameManager.continueGame();
         } else {
@@ -887,14 +894,27 @@ public class Model {
         }
     }
 
-    public void endTurn() {
-        if (listenerManager.fireBeforeEndTurn(this)) {
-            gameManager.endTurn();
+    public synchronized void endTurn() {
+        Preconditions.checkState(!endingTurn,
+                "Cannot start or end game while ending a turn.");
+        checkGameRunning();
+        gameManager.checkCurrentPlayer(getCurrentPlayer());
+        endingTurn = true;
+        try {
+            if (listenerManager.fireBeforeEndTurn(this)) {
+                gameManager.endTurn();
+            }
+        } finally {
+            endingTurn = false;
         }
     }
 
     void checkGameRunning() {
         gameManager.checkGameRunning();
+    }
+
+    void checkTurnPreparationComplete() {
+        gameManager.checkTurnPreparationComplete();
     }
 
     void checkCurrentPlayer(final Player player) {

@@ -27,7 +27,10 @@
  * local visibility is restored for every owner's on-map units, including
  * rivals. GameManager orders registered nation identities and associated
  * Crowns. Player prepares voyages/immigration, colonies and then unit work;
- * individual rule owners retain their own accounting.
+ * individual rule owners retain their own accounting. Model serializes turn
+ * transitions and snapshots; incomplete preparation rejects player commands and
+ * snapshots, including after failure. Unit work completes internally,
+ * independently of commands submitted at an action boundary.
  *
  * Attack proposals bind confirmation to registered participants, positions and
  * diplomatic state. Execution revalidates before declaring war and consumes

@@ -24,6 +24,7 @@ final class GameManager {
     private final GameOverEvaluator gameOverEvaluator;
     private final Model model;
     private boolean started;
+    private volatile boolean preparing;
     private volatile boolean stopped;
     private volatile boolean finished;
     private volatile Player currentPlayer;
@@ -84,7 +85,13 @@ final class GameManager {
     }
 
     boolean isRunning() {
-        return started && !stopped && !isFinished();
+        return started && !stopped && !isFinished() && !preparing;
+    }
+
+    void checkTurnPreparationComplete() {
+        if (preparing) {
+            throw new TurnPreparationException();
+        }
     }
 
     void stop() {
@@ -123,14 +130,15 @@ final class GameManager {
                 "Game was already started or stopped.");
         final List<Player> players = turnOrder();
         Preconditions.checkState(!players.isEmpty(), "No registered players.");
+        preparing = true;
         started = true;
         currentPlayer = players.get(0);
         model.fireGameStarted();
         model.fireRoundStarted();
         currentPlayer.startTurn();
         model.getStatistics().countNextTurn(model);
+        preparing = false;
         model.fireTurnStarted(currentPlayer, true);
-
     }
 
     /**
@@ -141,8 +149,10 @@ final class GameManager {
                 "Only a running game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         checkCurrentPlayer(currentPlayer);
+        preparing = true;
         model.fireGameStarted();
         model.fireRoundStarted();
+        preparing = false;
         model.fireTurnStarted(currentPlayer, false);
     }
 
@@ -151,14 +161,16 @@ final class GameManager {
         checkGameRunning();
         checkCurrentPlayer(currentPlayer);
         final List<Player> players = turnOrder();
+        final int index = players.indexOf(currentPlayer);
         LOGGER.debug("End turn was called, current player is {}",
                 currentPlayer);
+        preparing = true;
         model.fireTurnFinished(currentPlayer);
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
-        final int index = players.indexOf(currentPlayer);
         if (index < players.size() - 1) {
             currentPlayer = players.get(index + 1);
             currentPlayer.startTurn();
+            preparing = false;
             model.fireTurnStarted(currentPlayer, true);
         } else {
             model.getCalendar().endRound();
@@ -166,12 +178,14 @@ final class GameManager {
                     .evaluate(model);
             if (oGameOverResult.isPresent()) {
                 finished = true;
+                preparing = false;
                 model.fireGameFinished(oGameOverResult.get());
             } else {
                 currentPlayer = players.get(0);
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();
+                preparing = false;
                 model.fireTurnStarted(currentPlayer, true);
             }
         }

@@ -88,6 +88,9 @@ public class ScreenGamePresenter {
         if (KeyCode.ESCAPE == event.getCode()) {
             onKeyPressed_escape();
         }
+        if (!gameModelController.isHumanTurnReady()) {
+            return;
+        }
         /**
          * Enter
          */

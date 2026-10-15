@@ -72,4 +72,74 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         audit.verifyDisplayedDate("Year 1510 AD");
         audit.verifyCalendarAndGold(20, 10000);
     }
+
+    @Test
+    @Tag("local")
+    void TC_02_preparation_blocks_map_commands_and_duplicate_end_turn()
+            throws Exception {
+        // Select the ship before the human turn finishes.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        game.selectTile(org.microcol.model.Location.of(25, 16));
+        game.getRightPanelUnit(0).selectUnit();
+        final JsonElement ship = turns.readUnitState(3);
+        turns.observeTurnOrder();
+        game.verifyThatTileIsVisible(org.microcol.model.Location.of(26, 16));
+        turns.pauseBeforeNextHumanFinish();
+
+        // Hold preparation at a real lifecycle notification while the UI stays
+        // responsive.
+        turns.clickNextTurnWithoutWaiting();
+        try {
+            turns.verifyPreparationGate();
+            audit.press(javafx.scene.input.KeyCode.M);
+            turns.clickMapTile(org.microcol.model.Location.of(26, 16));
+            turns.clickNextTurnWithoutWaiting();
+            turns.verifyUnitAndMoveMode(3, ship, false);
+        } finally {
+            turns.releasePreparation();
+        }
+
+        // Releasing the update returns control after exactly one national
+        // round.
+        turns.verifyTurnOrder(ORDER);
+        audit.verifyCalendarAndGold(19, 10000);
+        audit.verifyDisplayedDate("Year 1509 AD");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_failed_preparation_keeps_recovery_save_and_menu_continue_works()
+            throws Exception {
+        // Establish a real recovery file at the completed action boundary.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        game.exitToMenu().verifyMainScreen();
+        game = audit.continueGame();
+        final byte[] checkpoint = audit.readAutosave();
+        final JsonElement before = turns.readTurnState();
+
+        // Inject a backend failure and use the ordinary exit/recovery controls.
+        turns.failNextPreparation();
+        turns.verifyFailedPreparation();
+        turns.clickNextTurnWithoutWaiting();
+        turns.exitFailedGame();
+        turns.verifyRecoveryMessage(
+                "The turn could not finish. No saved game was overwritten. Continue or load a saved game to play again.");
+        org.microcol.page.DialogMessagePage.of(getContext()).close();
+        WelcomePage.of(getContext()).verifyMainScreen();
+        audit.verifyAutosaveUnchanged(checkpoint);
+
+        // Continue loads the unchanged checkpoint; the next real round
+        // succeeds.
+        game = audit.continueGame();
+        turns.verifyTurnState(before);
+        turns.observeTurnOrder();
+        game.nextTurnAndCloseDialogs();
+        turns.verifyTurnOrder(ORDER);
+        audit.verifyCalendarAndGold(19, 10000);
+    }
+
 }

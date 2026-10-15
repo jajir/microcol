@@ -25,6 +25,7 @@ public class GamePanelControllerTest {
     @BeforeEach
     void setUp() {
         gateway = mock(GameModelController.class);
+        when(gateway.isHumanTurnReady()).thenCallRealMethod();
         model = mock(Model.class);
         human = mock(Player.class);
         computer = mock(Player.class);

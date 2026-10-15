@@ -205,6 +205,7 @@ public class ColonyBuildingQueue {
     /** Add a project only while its current admission conditions hold. */
     public ColonyBuildingItemProgressConstruction addAtEnd(
             final ConstructionType constructionType) {
+        model.checkTurnPreparationComplete();
         final Optional<UnavailableReason> reason = getUnavailableReason(
                 constructionType);
         Preconditions.checkArgument(reason.isEmpty(),
@@ -217,6 +218,7 @@ public class ColonyBuildingQueue {
     }
 
     public ColonyBuildingItemProgressUnit addAtEnd(final UnitType unitType) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkArgument(canUnitBeBuild(unitType),
                 "Unit project is unavailable");
         final ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
@@ -254,6 +256,7 @@ public class ColonyBuildingQueue {
     }
 
     private void validateEditable() {
+        model.checkTurnPreparationComplete();
         Preconditions.checkArgument(
                 colony.isValid()
                         && model.getPlayers().contains(colony.getOwner())

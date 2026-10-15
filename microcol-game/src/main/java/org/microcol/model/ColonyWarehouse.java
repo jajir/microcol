@@ -152,6 +152,7 @@ public class ColonyWarehouse {
      */
     public void moveToWarehouse(final Goods goods,
             final CargoSlot fromCargoSlot) {
+        colony.getOwner().checkTurnPreparationComplete();
         Preconditions.checkArgument(
                 getUnloadableGoods(goods, fromCargoSlot).equals(goods),
                 "Not enough warehouse capacity for the requested cargo");

@@ -224,6 +224,7 @@ public class CargoSlot {
      */
     public Goods storeFromCargoSlot(final Goods transferredGoods,
             final CargoSlot sourceCargoSlot) {
+        getOwnerPlayer().checkTurnPreparationComplete();
         verifyThatItCouldStored(transferredGoods);
         Preconditions.checkNotNull(sourceCargoSlot,
                 "source cargo slot is null");
@@ -256,6 +257,7 @@ public class CargoSlot {
      */
     public void storeFromColonyWarehouse(final Goods transferredGoods,
             final Colony colony) {
+        getOwnerPlayer().checkTurnPreparationComplete();
         verifyThatItCouldStored(transferredGoods);
         Preconditions.checkNotNull(colony, "colony is null");
         Preconditions.checkArgument(getOwnerPlayer().equals(colony.getOwner()),

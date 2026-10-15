@@ -285,7 +285,12 @@ public abstract class Player {
         model.fireGoldWasChanged(this, oldValue, newGoldValue);
     }
 
+    void checkTurnPreparationComplete() {
+        model.checkTurnPreparationComplete();
+    }
+
     public void buyGoods(final Goods goods) {
+        checkTurnPreparationComplete();
         final int price = quoteEuropeTrade(goods, true).getTotal();
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
@@ -294,6 +299,7 @@ public abstract class Player {
     }
 
     public void sellGoods(final Goods goods) {
+        checkTurnPreparationComplete();
         final int price = quoteEuropeTrade(goods, false).getTotal();
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
@@ -391,6 +397,7 @@ public abstract class Player {
     }
 
     public void declareIndependence() {
+        checkTurnPreparationComplete();
         Preconditions.checkState(isPossibleToDecalareIndependence(),
                 "It's not possible to declare independence");
         if (model.fireBeforeDeclaringIndependence(this)) {

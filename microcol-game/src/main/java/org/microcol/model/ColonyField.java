@@ -136,6 +136,7 @@ public final class ColonyField {
     }
 
     public void setProducedGoodsType(final GoodsType producedGoodsType) {
+        model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(placeColonyField,
                 "There in no unit placed at field");
         placeColonyField.setProducedGoodsType(producedGoodsType);

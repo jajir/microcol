@@ -51,7 +51,7 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onNextTurn(final NextTurnEvent event) {
         LOGGER.debug("Next turn was triggered");
-        view.disableAllButtons();
+        view.disableTurnCommands();
     }
 
     @Subscribe

@@ -10,6 +10,8 @@ import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
+import org.microcol.model.TurnPreparationException;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.campaign.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +36,15 @@ public class PersistingService {
     private final PersistingTool persistingTool;
 
     private final EventBus eventBus;
+    private final GameModelController gameModelController;
 
     @Inject
     public PersistingService(final GameController gameController,
             final EventBus eventBus, final PersistingTool persistingTool,
-            final FileSelectingService fileSelectingService) {
+            final FileSelectingService fileSelectingService,
+            final GameModelController gameModelController) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -127,7 +133,11 @@ public class PersistingService {
     }
 
     private void writeModelToFile(final File targetFile) {
-        gameController.writeModelToFile(targetFile);
+        try {
+            gameController.writeModelToFile(targetFile);
+        } catch (TurnPreparationException rejected) {
+            gameModelController.showTurnPreparationUnavailable();
+        }
     }
 
     private void loadModelFromFile(final File sourceFile) {

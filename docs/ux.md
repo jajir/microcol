@@ -211,3 +211,13 @@ Dokumentace byla téhož dne ověřena přísným sestavením `target/docs-venv/
 3. TC34/07 ověřuje také dvě další kola bez dosažitelného břehu: ovládání
    dalšího tahu zůstává použitelné a nevzniká kolonie ani změna lidské flotily.
    Jde o automatické ověření cesty, nikoli pozorování skutečných hráčů.
+
+### Obnova po nedokončené přípravě tahu (R-0052)
+
+Během přípravy dalšího národního tahu sdílí mapa, herní klávesy a tlačítko
+dalšího tahu stejnou podmínku připravenosti modelu. Při selhání přípravy
+hráč může odejít do menu; pokus o uložení nepřepíše předchozí soubor a
+dialog vysvětlí návrat přes Pokračovat nebo načtení. Upozornění je textové
+a nevyžaduje zvuk. Platná uložená pozice se načte bez opakování přípravy.
+Automatizované ověření patří k [R-0052](requirements/R-0052.md); nejde o
+výsledek uživatelského výzkumu.

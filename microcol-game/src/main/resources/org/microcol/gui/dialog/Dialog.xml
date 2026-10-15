@@ -45,4 +45,6 @@
 	<entry key="passenger_unavailable">This passenger cannot transfer now. Check the ship, destination, free cargo space and remaining movement.</entry>
 	<entry key="fight_declaration">Attacking %s ends peace and declares war. Fight?</entry>
 	<entry key="fight_unavailable">The attack is no longer available. No battle was started. Check the units, positions, equipment and remaining movement, then choose the attack again.</entry>
+	<entry key="turnPreparation_title">Turn could not finish</entry>
+	<entry key="turnPreparation_unavailable">The turn could not finish. No saved game was overwritten. Continue or load a saved game to play again.</entry>
 </properties>

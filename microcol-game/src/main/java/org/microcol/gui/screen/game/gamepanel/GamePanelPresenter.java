@@ -113,7 +113,9 @@ public final class GamePanelPresenter {
     @Subscribe
     private void onStartMove(
             @SuppressWarnings("unused") final StartMoveEvent event) {
-        swithToMoveMode();
+        if (gameModelController.isHumanTurnReady()) {
+            swithToMoveMode();
+        }
     }
 
     @Subscribe

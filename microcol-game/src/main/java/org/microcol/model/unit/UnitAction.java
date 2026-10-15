@@ -52,9 +52,10 @@ public interface UnitAction {
      *
      * @param model required model
      * @param unit  required unit
+     * @return whether the continuing action completed
      */
-    default void startTurn(final Model model, final AbstractUnit unit) {
-        // by default it do nothing.
+    default boolean startTurn(final Model model, final AbstractUnit unit) {
+        return false;
     }
 
 }

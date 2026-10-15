@@ -2724,3 +2724,33 @@ should reuse existing validation and a focused audit before proposing new toolin
    in [functional evidence](../functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15).
    No token savings are inferred. R-0052 remains open for preparation-time
    save/action exclusion and failure recovery.
+
+## Turn-preparation boundary worker — 2026-10-15
+
+1. Job `2026-10-15-r52-preparation-boundary`, baseline `57c7bb4f`, assigned
+   only the Model/GameManager lifecycle and snapshot boundary. Medium/64k
+   attempt 0 took **1121.613 s** (3244 input / 10592 output tokens). The
+   replacement batch applied in its isolated checkout, but review rejected
+   recursive BeforeEndTurn entry and a changed RoundStarted order. It also
+   added unnecessary save state and catch/rethrow blocks. No test acceptance
+   was claimed for that candidate.
+2. Targeted repair took **502.045 s** (2401 / 4232 tokens), **1623.658 s**
+   cumulative. Its Markdown response failed the JSON application contract;
+   no repair text was applied. The caller's shortened repair prompt omitted
+   the explicit JSON example, contributing format ambiguity. Source review
+   also found forbidden finally-clearing of preparation after failure, an
+   early readiness reset and removed actor validation. Future repairs must
+   repeat the exact response schema and failure invariant.
+3. To complete the user's publication request after these two rejected
+   results, the caller corrected the small lifecycle methods directly. One
+   repair slot and runtime budget remained; this was an explicit completion
+   decision, not exhausted budgets. No high escalation or cloud worker was
+   used. The accepted scope derives from attempt 0 plus caller corrections;
+   attempt 1 contributed no source. Both attempts unloaded the model before
+   Java verification. Main owns command guards, internal action completion,
+   GUI recovery, tests, formatting and actual acceptance.
+4. Full job records remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r52-preparation-boundary/`;
+   caller checks remain in `target/r52/boundary-*.log`. No token saving is
+   inferred from these measurements. Verification is recorded with the
+   [functional evidence](../functional-tests.md).

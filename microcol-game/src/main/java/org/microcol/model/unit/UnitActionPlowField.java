@@ -54,13 +54,14 @@ public final class UnitActionPlowField implements UnitAction {
     }
 
     @Override
-    public void startTurn(final Model model, final AbstractUnit unit) {
+    public boolean startTurn(final Model model, final AbstractUnit unit) {
         unit.setActionPoints(0);
         remainingTurns--;
         if (remainingTurns == 0) {
             model.getMap().plowFiled(unit.getLocation());
-            unit.setActionType(UnitActionType.noAction);
+            return true;
         }
+        return false;
     }
 
     @Override

@@ -155,7 +155,7 @@ The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terr
 | SETUP-008 | 9 / 15 | Dutch players begin with a trading vessel. | The free-play scenario starts with a GALLEON; [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java) has no merchantman/caravel selection. The prose says trading vessel without defining the exact starting loadout. | Unclear | Proposed: test every nation’s accepted starting vessel and loadout in [calendar and starting expeditions](#calendar-and-starting-expeditions). |
 | SETUP-009 | 2, 10 / 8, 16 | The manual describes a start in 1500 and advancing the date once per complete turn. | The free-play scenario starts in 1490. [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) advances the calendar after the final player; [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java) adds four seasons from 1600, a schedule not specified by this manual. | Differs | Verified on 2026-10-15 in [R-0051](requirements/done/R-0051.md): all bundled starts use 1490, calendar tests and TC37 cover annual/season boundaries and Continue. The accepted [calendar](#calendar-and-starting-expeditions) remains a deliberate departure from the manual. |
 | TURN-001 | 10 / 16 | Natives act first, followed by England, France, Spain, and Netherlands. | [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) orders a fresh roster copy by nation identity, with associated Crowns last. Native actors remain absent; [partial R-0052 evidence](functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15). | Differs | `NationalTurnOrderTest` and `TC_36_F28_national_turn_order_test` cover present actors and shuffled storage; native-turn acceptance remains open. |
-| TURN-002 | 10 / 16 | Each national turn assesses Europe, then colonies, then movement/combat and management. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn advances voyages and scheduled immigrants, then colonies, then unit activation. European market/tax phases and preparation-time save/action exclusion remain open. | Differs | `NationalTurnPreparationTest` covers arrival, immigration, birth, movement, delayed plowing benefit and Continue; [R-0052](requirements/R-0052.md) retains concurrency/failure-boundary acceptance. |
+| TURN-002 | 10 / 16 | Each national turn assesses Europe, then colonies, then movement/combat and management. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn advances voyages and scheduled immigrants, then colonies, then unit activation. Preparation rejects commands and partial snapshots; European market/tax phases remain open. | Differs | `NationalTurnPreparationTest` covers arrival, immigration, birth, movement, delayed plowing benefit and Continue; [R-0052 boundary evidence](functional-tests.md#r-0052-preparation-boundary-2026-10-15) tracks concurrent saves and failure recovery. |
 
 
 ### Map, terrain, and exploration
@@ -771,6 +771,9 @@ keeps answered questions out of the current catalogue and active requirements.
    advanced voyages and replenished movement. Loading either position resumes
    exactly its saved actor/date/stocks/actions and does not rerun preparation.
    Do not serialize a partially prepared turn or overwrite a valid save with it.
+   A concurrent save waits for preparation; a reentrant save is refused. If
+   preparation fails, refuse further actions/saves on that instance. Exit stays
+   available, preserves existing files and explains how to Continue or load.
 4. Notify UI/AI and permit human-turn recovery saves only after preparation.
    Opening a screen, showing a report or resuming a save does not create another
    national update or trigger a fresh-turn recovery write. Opening an existing
@@ -781,8 +784,9 @@ keeps answered questions out of the current catalogue and active requirements.
    agreed rules, not a claim of implemented or verified behavior.
 5. Partial implementation on 2026-10-15 orders present actors and the existing
    preparation stages. [R-0052 evidence](functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15)
-   tracks the checks; preparation-time snapshot/action rejection and recovery
-   from failed preparation remain required work. In a fresh France/Dutch game,
+   tracks those checks. The subsequent [boundary delivery](functional-tests.md#r-0052-preparation-boundary-2026-10-15)
+   implements snapshot/action rejection and recovery after failed preparation;
+   its acceptance is recorded separately. In a fresh France/Dutch game,
    France now completes its first turn before Dutch control; the reference rival
    expedition still needs three rival turns and founds in calendar round 2
    (rival turns in rounds 0, 1 and 2).

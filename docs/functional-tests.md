@@ -2250,3 +2250,45 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     This completes acceptance and publication of this partial delivery, not the
     outstanding preparation-time save/action boundary in R-0052. No manual
     playtest is claimed.
+
+## R-0052 preparation boundary — 2026-10-15
+
+1. [R-0052](requirements/R-0052.md) doplňuje hranici existujících národních
+   tahů: příprava blokuje hráčské příkazy a reentrantní snímky; souběžný
+   snímek čeká. Selhání nepovolí uložení částečného stavu. Původní soubor
+   zůstává použitelný přes menu a Pokračovat. Nové tržní/domorodé fáze
+   nejsou součástí tohoto převzetí.
+2. Izolovaný opravený životní cyklus prošel **49 modelovými případy**
+   (`NationalTurnOrderTest`, `NationalTurnPreparationTest`,
+   `TurnPreparationBoundaryTest`, `EuropeanRelationModelTest`, `CalendarTest`)
+   a **3 případy PageVerificationContractTest**, bez chyb nebo přeskočení.
+   Boundary test má 12 případů včetně skutečného DAO, nezměněných bajtů
+   souboru, souběžného snímku, chyby při příjezdu/zrození/práci, setupu kola,
+   rekurze, zrušení a konečného herního výsledku.
+3. Integrovaný první běh měl **74 modelových případů, 1 selhání, 0 chyb a
+   přeskočení**: pozitivní fixture pohybu neměla body. Caller nastavil běžný
+   počet bodů a tentýž výběr prošel **74/74**. Nový
+   `TurnPreparationActionTest` ověřuje 21 jinak platných příkazů a nezměněný
+   stav při jejich zamítnutí během přípravy i po selhání. První příkaz
+   obsahoval nesprávný název TC21; opravený výběr používá skutečnou třídu
+   `TC_21_F15_free_play_screen_navigation_test`.
+4. TC36 rozšiřují scénáře `TC_02_preparation_blocks_map_commands_and_duplicate_end_turn`
+   a `TC_03_failed_preparation_keeps_recovery_save_and_menu_continue_works`.
+   Zachovávají lineární kroky hráče a ověření v page objektech. Cílený běh
+   zahrnuje také TC07/08/10/15/18/21/23 a zdrojový kontrakt. Tento běh měl
+   **22 UI-modulových případů, 1 selhání, 0 chyb a přeskočení**. TC36/02
+   použil helper očekávající aktualizaci status baru, přestože zkoušel
+   zablokovanou mapu. Caller použil samostatný surový klik v page objektu;
+   ověření neměnného stavu jednotky a vypnutého režimu pohybu zůstalo.
+   První pokus o tento helper neprošel kompilací kvůli chybějícímu importu
+   `TILE_CENTER`; po doplnění prošlo všech **6 případů TC36 a zdrojového
+   kontraktu**, bez chyb nebo přeskočení. Ostatních 19 případů původního
+   UI výběru již prošlo. Úplná regrese poběží v povinném Linux CI před
+   zveřejněním hry; do jejího ověření požadavek zůstává `ready for development`.
+5. Sdílený formatter kontroluje shodu tokenů a idempotenci všech změněných
+   Java souborů. Logy jsou v `target/r52/boundary-*.log`; neúspěšné worker
+   pokusy a caller opravy popisuje [provozní evidence](ai/local-qwen.md#turn-preparation-boundary-worker-2026-10-15).
+   Prošlo také **21 testů worker nástroje**, **9 testů dokumentace** a přísné
+   sestavení MkDocs; vykreslená sekce byla zkontrolována.
+   UI běží v Docker/Xvfb/Openbox, bez ovládání hostitelské plochy. Manuální
+   hraní nebylo provedeno. Publikace se ověřuje samostatně po pushi.

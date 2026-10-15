@@ -52,9 +52,7 @@ public final class GamePanelController {
      */
     public boolean isMouseEnabled() {
         // Turn notifications can arrive out of order.
-        return gameModelController.isGameModelReady()
-                && gameModelController.getModel().isGameRunning()
-                && gameModelController.getRealCurrentPlayer().isHuman();
+        return gameModelController.isHumanTurnReady();
     }
 
     public boolean isUnitMoving() {

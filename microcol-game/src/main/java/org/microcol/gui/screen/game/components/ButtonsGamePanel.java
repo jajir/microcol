@@ -160,6 +160,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         setDisable(true);
     }
 
+    void disableTurnCommands() {
+        disableAllButtons();
+        // Recovery must remain reachable if turn preparation fails.
+        buttonExit.setDisable(false);
+    }
+
     void enableAllButtons() {
         LOGGER.debug("Enabling buttons bar");
         setDisable(false);
