@@ -50,6 +50,9 @@ class EuropeanHostilityTest {
         model = Model.make(saved.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
+        while (!model.getCurrentPlayer().getName().equals("Dutch")) {
+            model.endTurn();
+        }
         attacker = model.getUnitById(0);
         attacker.placeToLocation(Location.of(18, 10));
         ((UnitFreeColonist) attacker).setHoldingGuns(true);

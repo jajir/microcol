@@ -2158,3 +2158,46 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    regression acceptance following the local test repair. All four Java 11/17
    Windows/Linux compatibility jobs also passed in
    [run 38747926164](https://github.com/jajir/microcol/actions/runs/38747926164).
+
+## R-0052 partial turn-order delivery — 2026-10-15
+
+1. The partial [R-0052](requirements/R-0052.md) delivery orders registered actors
+   by stable nation identity and their associated Crowns. Each existing actor's
+   preparation advances voyages and scheduled immigration, processes colonies,
+   then refreshes movement and ongoing unit work. This covers part of UC-005;
+   native actors, absent political phases and preparation-time action/save
+   exclusion are not claimed as implemented.
+2. `NationalTurnOrderTest` has eleven cases for shuffled storage, absent nations,
+   human selection/display names, Crown association, fresh rosters, identical
+   registered actors and actual save/Continue. `NationalTurnPreparationTest`
+   checks real arrivals, immigration before birth, colony food, movement and
+   repeat Continue, plus plowing's effect only on the following colony update.
+   `TC_36_F28_national_turn_order_test` observes all eight actors across two
+   rounds and preserves the complete saved position across two Continue actions.
+3. Caller test corrections preserved the acceptance: use the existing misspelled
+   `onUnitArraviedToColonies` listener API, use a valid 200-corn producing colony
+   for birth rather than an over-capacity fixture, and set the existing game-over
+   regression to Dutch (now the last present nation) instead of Spain. The first
+   targeted build failed compilation; the second executed 37 model cases with
+   one failure and one fixture error. Neither is acceptance evidence.
+4. Remaining R-0052 work is unchanged: reject reentrant/concurrent partial saves
+   and actions throughout preparation, preserve the prior valid save on failure,
+   and verify failed-preparation recovery. The requirement stays `ready for
+   development`; this publication does not mark it done.
+5. The corrected targeted Docker/Xvfb/Openbox run passed **37 model cases and
+   4 UI/support cases**, with zero failures/errors/skips. Selection:
+   `NationalTurnOrderTest,NationalTurnPreparationTest,EuropeanRelationModelTest,CalendarTest,TC_36_F28_national_turn_order_test,PageVerificationContractTest`,
+   with `-Dsurefire.failIfNoSpecifiedTests=false`. Fresh evidence is in
+   `target/docker-ui/run-4V9AeR/`, log `target/r52/publish-targeted-fixtures.log`.
+   Shared Eclipse formatting preserved exact code tokens and was idempotent.
+   Documentation checks passed 21 worker-launcher tests, nine documentation
+   tests and strict MkDocs.
+6. The first broader model run executed **1167 cases**, with **25 failures and
+   26 errors**, no skips; UI did not run. Combat fixtures assumed Dutch was the
+   first fresh-game actor, and the rival journey assumed France first acted in
+   round 1. Fixtures now advance to the intended actor; the unchanged rival route
+   starts in round 0, lands in round 1 and founds in round 2. Combat outcomes,
+   voyage positions, visibility, ownership, movement and colony assertions remain.
+   TC34 follows the same corrected calendar and still checks Continue during
+   travel. Initial statistics are counted before notifying the first actor so
+   an asynchronously started AI cannot race ahead of that bookkeeping.

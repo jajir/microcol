@@ -28,6 +28,9 @@ class AttackOrderTest {
                 .loadFromClassPath("/maps/free-play.microcol").getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
+        while (!model.getCurrentPlayer().getName().equals("Dutch")) {
+            model.endTurn();
+        }
         attacker = (UnitFreeColonist) model.getUnitById(0);
         defender = (UnitFreeColonist) model.getUnitById(6);
         attacker.placeToLocation(Location.of(18, 10));

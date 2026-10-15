@@ -49,6 +49,9 @@ class AttackBoundaryTest {
         data.getMap().setTerrainType(terrainMap);
         model = Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
+        while (!model.getCurrentPlayer().getName().equals("Dutch")) {
+            model.endTurn();
+        }
         attacker = model.getUnitById(20);
         defender = model.getUnitById(6);
     }

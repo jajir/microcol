@@ -246,7 +246,7 @@ class EuropeanRelationModelTest {
                 new ArrayList<>(data.getModel().getGameManager().getPlayers()));
         data.getModel().getGameManager().getPlayers()
                 .removeIf(p -> p.getWhosKingThisPlayerIs() != null);
-        data.getModel().getGameManager().setCurrentPlayer("Spain");
+        data.getModel().getGameManager().setCurrentPlayer("Dutch");
         model = Model.make(data.getModel(),
                 List.of(m -> new GameOverResult("TEST_GAME_OVER")));
         final int[] notified = { 0 };
@@ -256,9 +256,9 @@ class EuropeanRelationModelTest {
                 notified[0]++;
                 assertFalse(model.isGameRunning());
                 assertTrue(model.isGameFinished());
-                assertEquals("Spain", model.getCurrentPlayer().getName());
+                assertEquals("Dutch", model.getCurrentPlayer().getName());
                 assertThrows(IllegalStateException.class, () -> model
-                        .declareHostilities(player("Spain"), player("Dutch")));
+                        .declareHostilities(player("Dutch"), player("France")));
             }
         });
         model.endTurn();

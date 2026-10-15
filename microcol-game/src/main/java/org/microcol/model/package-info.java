@@ -25,7 +25,9 @@
  * equipment before registration; off-map colony fields are never workplaces.
  * Food viability and exploration preferences belong to the AI strategy. Initial
  * local visibility is restored for every owner's on-map units, including
- * rivals.
+ * rivals. GameManager orders registered nation identities and associated
+ * Crowns. Player prepares voyages/immigration, colonies and then unit work;
+ * individual rule owners retain their own accounting.
  *
  * Attack proposals bind confirmation to registered participants, positions and
  * diplomatic state. Execution revalidates before declaring war and consumes

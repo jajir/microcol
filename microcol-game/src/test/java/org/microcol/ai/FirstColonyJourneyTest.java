@@ -33,7 +33,7 @@ import com.google.gson.Gson;
  * Real turn events drive the same rival and Crown players used in free play.
  */
 class FirstColonyJourneyTest {
-    private static final int FOUNDING_ROUND = 3;
+    private static final int FOUNDING_ROUND = 2;
     private static final Location COLONY_SITE = Location.of(26, 15);
 
     @TempDir
@@ -55,16 +55,17 @@ class FirstColonyJourneyTest {
     }
 
     private Colony reachColony(final Game game) throws Exception {
+        if (game.model.getCalendar().getNumberOfPlayedTurns() == 0) {
+            assertEquals(Location.of(29, 12),
+                    game.model.getUnitById(5).getLocation());
+            assertTrue(game.model.getUnitById(4).isAtCargoSlot());
+        }
         while (game.model.getCalendar()
                 .getNumberOfPlayedTurns() < FOUNDING_ROUND
                 && game.model.getColonies().isEmpty()) {
             game.nextTurn();
             final int round = game.model.getCalendar().getNumberOfPlayedTurns();
             if (round == 1) {
-                assertEquals(Location.of(29, 12),
-                        game.model.getUnitById(5).getLocation());
-                assertTrue(game.model.getUnitById(4).isAtCargoSlot());
-            } else if (round == 2) {
                 assertEquals(Location.of(27, 14),
                         game.model.getUnitById(5).getLocation());
                 assertTrue(game.model.getUnitById(4).isAtPlaceLocation());
@@ -119,7 +120,7 @@ class FirstColonyJourneyTest {
         final Location position;
         final java.util.Optional<Location> expectedNext;
         try (Game game = new Game(load(saved))) {
-            game.nextTurn();
+            // France has already acted before the initial Dutch turn.
             assertTrue(game.model.getColonies().isEmpty());
             assertTrue(game.model.getUnitById(4).isAtCargoSlot());
             position = game.model.getUnitById(5).getLocation();
@@ -169,7 +170,6 @@ class FirstColonyJourneyTest {
     void humanOccupationDuringTravelMakesTheNextTurnChooseAnotherSite()
             throws Exception {
         try (Game game = new Game(load(expedition()))) {
-            game.nextTurn();
             // The player occupies the intended shore before the rival's next
             // turn.
             game.model.getUnitById(0).placeToLocation(COLONY_SITE);

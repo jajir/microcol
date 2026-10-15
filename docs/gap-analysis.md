@@ -154,8 +154,8 @@ The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terr
 | SETUP-007 | 9 / 15 | Dutch prices are more stable than other nations’ prices under trading pressure. | [Europe](../microcol-game/src/main/java/org/microcol/model/Europe.java) has fixed shared prices and no national market state. Static prices for everyone do not implement the Dutch advantage. | Missing | Proposed: equal-volume trading moves Dutch prices less than other markets under the response model in [difficulty and national effects](#difficulty-and-national-effects). |
 | SETUP-008 | 9 / 15 | Dutch players begin with a trading vessel. | The free-play scenario starts with a GALLEON; [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java) has no merchantman/caravel selection. The prose says trading vessel without defining the exact starting loadout. | Unclear | Proposed: test every nation’s accepted starting vessel and loadout in [calendar and starting expeditions](#calendar-and-starting-expeditions). |
 | SETUP-009 | 2, 10 / 8, 16 | The manual describes a start in 1500 and advancing the date once per complete turn. | The free-play scenario starts in 1490. [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) advances the calendar after the final player; [Calendar](../microcol-game/src/main/java/org/microcol/model/Calendar.java) adds four seasons from 1600, a schedule not specified by this manual. | Differs | Verified on 2026-10-15 in [R-0051](requirements/done/R-0051.md): all bundled starts use 1490, calendar tests and TC37 cover annual/season boundaries and Continue. The accepted [calendar](#calendar-and-starting-expeditions) remains a deliberate departure from the manual. |
-| TURN-001 | 10 / 16 | Natives act first, followed by England, France, Spain, and Netherlands. | [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java).endTurn iterates the scenario/player-store list; [PlayerStore](../microcol-game/src/main/java/org/microcol/model/PlayerStore.java) appends kings after non-kings. No required nationality order or native turn exists. | Differs | Proposed: record a full round and assert the manual order independently of save-file player order. |
-| TURN-002 | 10 / 16 | Each national turn assesses Europe, then colonies, then movement/combat and management. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn calls units, colonies, then scheduled immigrants. European market/tax phases are absent. Ship arrival and unit actions can therefore precede colonial processing. | Differs | Proposed: trace Europe events, colony production and unit activation; retain management access before ending the turn. |
+| TURN-001 | 10 / 16 | Natives act first, followed by England, France, Spain, and Netherlands. | [GameManager](../microcol-game/src/main/java/org/microcol/model/GameManager.java) orders a fresh roster copy by nation identity, with associated Crowns last. Native actors remain absent; [partial R-0052 evidence](functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15). | Differs | `NationalTurnOrderTest` and `TC_36_F28_national_turn_order_test` cover present actors and shuffled storage; native-turn acceptance remains open. |
+| TURN-002 | 10 / 16 | Each national turn assesses Europe, then colonies, then movement/combat and management. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn advances voyages and scheduled immigrants, then colonies, then unit activation. European market/tax phases and preparation-time save/action exclusion remain open. | Differs | `NationalTurnPreparationTest` covers arrival, immigration, birth, movement, delayed plowing benefit and Continue; [R-0052](requirements/R-0052.md) retains concurrency/failure-boundary acceptance. |
 
 
 ### Map, terrain, and exploration
@@ -779,6 +779,13 @@ keeps answered questions out of the current catalogue and active requirements.
    at the owning subsystem's boundary and resume without repeating earlier
    updates; their individual requirements own that additional state. These are
    agreed rules, not a claim of implemented or verified behavior.
+5. Partial implementation on 2026-10-15 orders present actors and the existing
+   preparation stages. [R-0052 evidence](functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15)
+   tracks the checks; preparation-time snapshot/action rejection and recovery
+   from failed preparation remain required work. In a fresh France/Dutch game,
+   France now completes its first turn before Dutch control; the reference rival
+   expedition still needs three rival turns and founds in calendar round 2
+   (rival turns in rounds 0, 1 and 2).
 
 ### Support, production and Congress
 

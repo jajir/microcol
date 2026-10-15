@@ -45,14 +45,16 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         setup.captureDialog("freePlaySetup", "rival-expedition-setup.png");
         final GamePage game = setup.startWithEnter();
         final RivalColonyPage rival = new RivalColonyPage(getContext());
+        rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(35, 10), 4, 5);
+                Location.of(29, 12), 4, 5);
 
         // Continue preserves the actual new fleet, not either settled world.
         game.exitToMenu().verifyMainScreen();
         new FreePlayAuditPage(getContext()).continueGame();
+        rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(35, 10), 4, 5);
+                Location.of(29, 12), 4, 5);
     }
 
     @Test
@@ -77,8 +79,10 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         setup.enterName("Jiří");
         setup.captureDialog("freePlaySetup", "rival-expedition-czech.png");
         setup.startWithEnter();
-        new RivalColonyPage(getContext()).verifyStartingExpeditions("Jiří",
-                Location.of(29, 15), Location.of(35, 10), 4, 5);
+        final RivalColonyPage rival = new RivalColonyPage(getContext());
+        rival.waitForHumanRound(0);
+        rival.verifyStartingExpeditions("Jiří", Location.of(29, 15),
+                Location.of(29, 12), 4, 5);
     }
 
     @Test
@@ -159,29 +163,28 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         setup.enterName("Anna");
         GamePage game = setup.startWithEnter();
         final RivalColonyPage rival = new RivalColonyPage(getContext());
+        rival.waitForHumanRound(0);
         final String humanFleet = rival.captureHumanExpedition();
 
-        // The first turn explores six sea steps; Continue resumes the same
+        // France acts before the first Dutch turn; Continue preserves that
         // journey.
-        game.nextTurnAndCloseDialogs();
-        rival.waitForHumanRound(1);
-        rival.verifyRivalTravel(1, Location.of(29, 12), true, null);
+        rival.verifyRivalTravel(0, Location.of(29, 12), true, null);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        rival.verifyRivalTravel(1, Location.of(29, 12), true, null);
+        rival.verifyRivalTravel(0, Location.of(29, 12), true, null);
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
 
         // Two more sea steps permit landing, which spends the founder's point.
         game.nextTurnAndCloseDialogs();
-        rival.waitForHumanRound(2);
-        rival.verifyRivalTravel(2, Location.of(27, 14), false,
+        rival.waitForHumanRound(1);
+        rival.verifyRivalTravel(1, Location.of(27, 14), false,
                 Location.of(26, 15));
 
         // The third rival turn founds with the original settler at the visible
         // coast.
         game.nextTurnAndCloseDialogs();
-        rival.waitForHumanRound(3);
-        rival.verifyRivalColonyViable(3, 0, Location.of(26, 15));
+        rival.waitForHumanRound(2);
+        rival.verifyRivalColonyViable(2, 0, Location.of(26, 15));
         game.selectTile(Location.of(26, 15));
         game.verifyThatStatusBarContains("colony New Amsterdam");
         game.captureDialog("nextTurn", "rival-first-colony-map.png");
@@ -189,12 +192,12 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         // Food sustains that resident; the first-colony objective does not
         // expand again.
         game.nextTurnAndCloseDialogs();
+        rival.waitForHumanRound(3);
+        game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(4);
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(5);
-        game.nextTurnAndCloseDialogs();
-        rival.waitForHumanRound(6);
-        rival.verifyRivalColonyViable(6, 0, Location.of(26, 15));
+        rival.verifyRivalColonyViable(5, 0, Location.of(26, 15));
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
     }
 

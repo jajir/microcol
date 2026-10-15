@@ -2686,3 +2686,41 @@ should reuse existing validation and a focused audit before proposing new toolin
    MkDocs passed after the caller implementation. Its 13 Git-fixture/CLI tests
    and workflow preservation check passed. These local checks do not prove live
    filtering/publication. Full logs remain local; no token savings are claimed.
+
+## R-0052 ordering attempt and publication handoff — 2026-10-15
+
+1. Job `2026-10-15-r52-national-order`, baseline `40faafe3`, assigned only
+   `GameManager.java` through six exact replacement anchors. Medium/64k,
+   GPT-OSS 20B with 96k context, returned valid JSON in **1141.720 seconds**,
+   **3670 input / 9933 output tokens**; exit 0 and successful model unload.
+   The caller applied the batch in the isolated worktree and formatted it.
+2. The output was not accepted: it interleaved Crowns with nations, emitted
+   turn-finished before rejecting a removed current actor, omitted registration
+   from the shared actor guard and removed the resume round notification. The
+   corrected-fixture isolated Docker run executed **35 model cases**, with
+   **4 failures and 1 error**, no skips; the UI module did not execute.
+   One failure was an old game-over fixture's assumption that Spain is last;
+   the error was a caller fixture reversing an immutable saved-player list.
+   The other three failures directly exposed the worker's ordering/guard errors.
+   Review separately identified the missing resume notification.
+3. Caller setup also needed correction: the first check ran from main instead
+   of the worker checkout, and earlier roster mutations targeted the immutable
+   `Model.getPlayers()` copy. These are not worker defects. The final caller
+   fixture mutates `PlayerStore` for live-roster tests and copies the saved
+   list before reversal. Handoff claims about mutable `Model.getPlayers()` and
+   `PlayerPo` display-name access were inaccurate; future handoffs must verify
+   the actual mutation/access APIs before dispatch.
+4. The user then requested publication of all changes. The caller retained
+   the completed attempt and rejected patch as evidence, released its lock,
+   and took over the small ordering repair directly to finish that request
+   without another long inference attempt. No repair was dispatched and no
+   escalation occurred; two repair slots remained. This is an explicit
+   publication-scope takeover, not a claim that the repair budget was exhausted.
+   Main also owns the small Player/Ship stage split and all acceptance tests;
+   none of the worker patch was copied into main.
+5. Runtime logs and rejected output remain under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r52-national-order/`.
+   Caller before/after checks are in `target/r52/`; accepted results are recorded
+   in [functional evidence](../functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15).
+   No token savings are inferred. R-0052 remains open for preparation-time
+   save/action exclusion and failure recovery.

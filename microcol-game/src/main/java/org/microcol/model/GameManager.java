@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -56,6 +58,27 @@ final class GameManager {
         }
     }
 
+    private List<Player> turnOrder() {
+        final List<Player> players = new ArrayList<>(model.getPlayers());
+        players.sort(Comparator.comparing(Player::isKing)
+                .thenComparingInt(player -> nationRank(nationKey(player)))
+                .thenComparing(GameManager::nationKey)
+                .thenComparing(Player::getName));
+        return players;
+    }
+
+    private static String nationKey(final Player player) {
+        return player.isKing()
+                ? ((PlayerKing) player).getWhosKingThisPlayerIs().getName()
+                : player.getName();
+    }
+
+    private static int nationRank(final String nation) {
+        final int index = List.of("England", "France", "Spain", "Dutch")
+                .indexOf(nation);
+        return index < 0 ? 4 : index;
+    }
+
     boolean isStarted() {
         return started;
     }
@@ -81,7 +104,8 @@ final class GameManager {
     void checkCurrentPlayer(final Player player) {
         Preconditions.checkNotNull(player);
 
-        if (!player.equals(currentPlayer)) {
+        if (player != currentPlayer || model.getPlayers().stream()
+                .noneMatch(registered -> registered == player)) {
             throw new IllegalStateException(String.format(
                     "This player (%s) is not current player (%s).", player,
                     currentPlayer));
@@ -97,13 +121,15 @@ final class GameManager {
     void startGame() {
         Preconditions.checkState(!started && !stopped && !isFinished(),
                 "Game was already started or stopped.");
+        final List<Player> players = turnOrder();
+        Preconditions.checkState(!players.isEmpty(), "No registered players.");
         started = true;
-        currentPlayer = model.getPlayers().get(0);
+        currentPlayer = players.get(0);
         model.fireGameStarted();
         model.fireRoundStarted();
         currentPlayer.startTurn();
-        model.fireTurnStarted(currentPlayer, true);
         model.getStatistics().countNextTurn(model);
+        model.fireTurnStarted(currentPlayer, true);
 
     }
 
@@ -114,29 +140,24 @@ final class GameManager {
         Preconditions.checkState(isRunning(),
                 "Only a running game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
+        checkCurrentPlayer(currentPlayer);
         model.fireGameStarted();
         model.fireRoundStarted();
         model.fireTurnStarted(currentPlayer, false);
     }
 
-    /**
-     * Finish current players turn and start of next player. Ordering of players
-     * should be:
-     * <ul>
-     * <li>human</li>
-     * <li>AI</li>
-     * <li>Natives</li>
-     * </ul>
-     */
+    /** Finish one actor and advance through nations, then their Crowns. */
     void endTurn() {
         checkGameRunning();
+        checkCurrentPlayer(currentPlayer);
+        final List<Player> players = turnOrder();
         LOGGER.debug("End turn was called, current player is {}",
                 currentPlayer);
         model.fireTurnFinished(currentPlayer);
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
-        final int index = model.getPlayers().indexOf(currentPlayer);
-        if (index < model.getPlayers().size() - 1) {
-            currentPlayer = model.getPlayers().get(index + 1);
+        final int index = players.indexOf(currentPlayer);
+        if (index < players.size() - 1) {
+            currentPlayer = players.get(index + 1);
             currentPlayer.startTurn();
             model.fireTurnStarted(currentPlayer, true);
         } else {
@@ -147,7 +168,7 @@ final class GameManager {
                 finished = true;
                 model.fireGameFinished(oGameOverResult.get());
             } else {
-                currentPlayer = model.getPlayers().get(0);
+                currentPlayer = players.get(0);
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();

@@ -72,10 +72,9 @@ public abstract class Ship extends UnitWithCargo {
     }
 
     /**
-     * Processes the ship’s turn when it is on a high‑sea voyage.
+     * Advances a voyage before colony processing and movement replenishment.
      */
-    @Override
-    public void startTurn() {
+    public void advanceVoyage() {
         if (isAtHighSea()) {
             PlaceHighSea place = (PlaceHighSea) getPlace();
             Preconditions.checkState(
@@ -103,7 +102,6 @@ public abstract class Ship extends UnitWithCargo {
                 }
             }
         }
-        super.startTurn();
     }
 
 }

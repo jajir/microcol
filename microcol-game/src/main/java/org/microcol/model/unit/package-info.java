@@ -7,7 +7,9 @@
  * Concrete specialist colonists retain their type through equipment and place
  * changes; the factory and UnitPo preserve that identity. Ships retain their
  * departure coast across places and resolve arrival on the owner's turn; an
- * occupied return square keeps the same voyage waiting.
+ * occupied return square keeps the same voyage waiting. Ship.advanceVoyage runs
+ * before colony processing; inherited unit activation refreshes movement
+ * afterward without advancing the voyage again.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

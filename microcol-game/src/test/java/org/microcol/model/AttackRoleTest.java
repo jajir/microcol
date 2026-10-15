@@ -22,6 +22,9 @@ class AttackRoleTest {
         final Model model = Model.make(saved.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
+        while (!model.getCurrentPlayer().getName().equals("Dutch")) {
+            model.endTurn();
+        }
         model.getUnitById(0).placeToLocation(Location.of(18, 10));
         model.getUnitById(6).placeToLocation(Location.of(17, 11));
         model.getUnitById(0).getOwner().revealMapForUnit(model.getUnitById(0));

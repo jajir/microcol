@@ -9,6 +9,7 @@ import java.util.Set;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.Ship;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -191,11 +192,13 @@ public abstract class Player {
     }
 
     void startTurn() {
-        getAllUnits().forEach(unit -> unit.startTurn());
-        getColonies().forEach(colony -> colony.startTurn());
+        getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
+                .forEach(Ship::advanceVoyage);
         if (isHuman()) {
             optionallyAddNewUnitInEuropePort();
         }
+        getColonies().forEach(colony -> colony.startTurn());
+        getAllUnits().forEach(unit -> unit.startTurn());
     }
 
     private void optionallyAddNewUnitInEuropePort() {

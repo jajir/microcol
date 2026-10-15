@@ -89,6 +89,18 @@ instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento po
 není potvrzením dokončení celého požadavku.
 
 
+### Pořadí národních tahů (R-0052, částečně)
+
+`GameManager` řadí kopii aktuálního registru podle interních národních klíčů;
+králové následují podle svého národa. Nemění uložené pořadí a obnovení zachová
+aktuálního aktéra. `Player.startTurn` nejprve posune plavby přes
+`Ship.advanceVoyage` a vyřídí dosavadní imigraci, poté kolonie a nakonec pohyb
+a jednotkové práce. `Ship` nadále vlastní pravidla plavby, `Colony` účtování
+produkce a `AbstractUnit` obnovu pohybu. Ochrana celé přípravy proti souběžným
+akcím a ukládání zůstává otevřená v [R-0052](requirements/R-0052.md);
+[částečná evidence](functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15)
+není převzetím této zbývající hranice.
+
 ### Potvrzení útoku (R-0028, rozpracováno)
 
 1. `Unit.canAttack()` určuje schopnost podle aktuálního vybavení. Královská
