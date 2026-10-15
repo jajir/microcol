@@ -2828,11 +2828,53 @@ should reuse existing validation and a focused audit before proposing new toolin
    The repair retained nonexistent live-unit place APIs, confused file paths with
    movement paths and used the wrong `UnitType` package. The incorrect movement,
    snapshot and stale-state setups also remained. Neither candidate is accepted.
-6. The final permitted repair is prepared in the same job. Its input removes
+6. The final permitted repair was dispatched on **2026-10-15 at 21:11 UTC**
+   in the same job. Its input removes
    the rejected test bodies as examples and supplies a clean fixture plus
    persistence, identity and rejection helpers. Those helpers are caller-owned;
    the worker must regenerate the same seven test methods (14 invocations).
    This is a concrete prompt correction, not a smaller acceptance scope. It
    retains high/64k, a 7200-second attempt cap and **8489.208 seconds** of the
-   original cumulative budget. No budget or repair count is reset. Actual
-   reruns and integration remain pending; no token saving is claimed.
+   original cumulative budget. No budget or repair count is reset. The caller
+   synchronized the five published game-screen/UI/F30 files from `8b44b3d5`
+   into the existing isolated checkout before dispatch; worker edits remain
+   limited to the model test. No token saving is claimed.
+7. Attempt 2 completed in **4379.082 seconds**, exit 0 and unload 0, reporting
+   **4261 input / 26870 output tokens**. Total worker time across three attempts
+   is **10289.874 seconds**. Validated replacement application and shared
+   formatting passed. Review found a reversed inland-sailing assertion; the
+   original combined Docker selection is being run to expose any additional
+   defects. Both permitted repairs are now exhausted, so any necessary caller
+   corrections will be recorded separately and checked before integration.
+
+8. Docker `run-GIhSyH` failed compilation with **one error; zero tests ran**: the
+   caller-prescribed `Model.createUnit` is package-private and unavailable from
+   the AI test package. The caller corrected that fixture by rebuilding from
+   the current `model.save()` plus the enemy DTO, preserving the post-movement
+   ship state and resolving all units from the new model. The caller also
+   corrected the worker's reversed inland predicate assertion. The original
+   selection is rerun; neither correction reduces acceptance scope.
+
+9. Docker `run-VA0WGN` compiled and ran **39 model checks: 38 passed, one
+   error, no failures/skips**; UI execution was not reached. The caller scaffold
+   incorrectly gave a foot colonist two points despite its speed of one. The
+   caller now uses one point for each of the eight outward steps, verifies that
+   exhaustion rejects the return without mutation, then supplies a fresh legal
+   allowance to verify the return costs one point too. Ground terrain/border
+   setups also use the legal allowance. This corrects an impossible fixture,
+   retains both directions and adds the exhausted-step boundary.
+
+10. Docker `run-si7LcR` ran **39 model checks: 38 passed, one failure, no
+    errors/skips**. The added exhaustion assertion expected the wrong exception
+    type. `Model.moveUnit` documents `IllegalStateException`, and
+    `AbstractUnit.moveOneStep` uses `checkState` for insufficient movement. The
+    caller aligned that assertion with the existing contract; terrain/boundary
+    assertions retain `IllegalArgumentException`. Full-state preservation stays
+    required. The same combined selection is rerun again.
+
+11. Docker `run-Zqjuc6` passed the unchanged combined selection: **39 model
+    checks** (14 new coastal cases plus 25 existing checks) and **16 UI-module
+    checks**, zero failures/errors/skips, exit 0. The caller reviewed and
+    integrated the final test file after shared formatting. Accepted after
+    worker generation plus the explicitly recorded caller corrections; full
+    CI regression/publication of the added model tests remains pending.

@@ -2461,3 +2461,18 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    the published revision. Local logs, downloaded reports and manifest are in
    `target/r54/`. The following documentation-only evidence update retains the
    same game build; verify its Pages deployment and intentionally skipped game jobs.
+
+7. On **2026-10-16**, the remaining model/AI acceptance passed in isolated
+   Docker `run-Zqjuc6`: **39 model checks and 16 UI-module checks**, zero
+   failures/errors/skips, exit 0. `CoastalPortMovementTest` adds 14 invocations:
+   eight port directions with unchanged cargo/passenger identity, inland and
+   ordinary-land rejection, paired map edges, all eight foot-movement directions
+   with exhaustion, real file reload, actual AI port entry and a blocked AI
+   route. TC01/13/16/29/38 and the source contract passed together.
+8. The final worker candidate and caller corrections are separated in
+   [worker evidence](ai/local-qwen.md#coastal-movement-acceptance-worker-2026-10-15).
+   The caller corrected a package-private fixture API, a reversed assertion,
+   an impossible two-point foot-colonist setup and the expected exhaustion
+   exception. Gameplay code and all required acceptance boundaries are unchanged.
+   The reviewed test file is integrated into main; full CI regression and
+   publication of this final model-test addition remain pending.
