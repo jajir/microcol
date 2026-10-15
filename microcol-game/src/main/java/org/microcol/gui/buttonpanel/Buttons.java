@@ -7,6 +7,7 @@ public enum Buttons implements MessageKeyResource {
     buttonColonies, noColonies, buttonStatistics, buttonCenter,
     buttonTurnReport, buttonGoals, buttonHelp, buttonExit, buttonNextTurn,
     buttonEurope, buttonMove, buttonPlowField, buttonBuildColony,
-    buttonDeclareIndependence;
+    buttonDeclareIndependence, buttonWait, buttonSkipUnitTurn, waitExplanation,
+    skipUnitTurnExplanation, unitOrderUnavailable;
 
 }

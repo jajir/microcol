@@ -109,6 +109,21 @@ Ověření a rozsah jsou vedené v [R-0052](requirements/done/R-0052.md);
 [evidence hranice přípravy](functional-tests.md#r-0052-preparation-boundary-2026-10-15)
 odlišuje cílené ověření a úplnou regresi.
 
+### Jednotkové příkazy Čekat a Vynechat tah (R-0053)
+
+`UnitStorage` vlastní stabilní pořadí aktivních jednotek a v běžném cyklu
+vyřazuje jednotky s pokračující prací. Ruční výběr na mapě nadále dovoluje
+prohlédnout jednotku bez pohybu. `Model.canSkipUnitTurn` a `skipUnitTurn`
+ověřují připravený tah, identitu registrovaného vlastníka i jednotky,
+umístění, pohyb a nepřítomnost práce. Příkaz využívá existující `noAction`
+a vyčerpá pohyb; žádný nový trvalý příznak se neukládá.
+`SelectedUnitManager` vlastní výběr další jednotky a používá modelový příkaz;
+GUI navíc blokuje vstup během animace. Před vyčerpáním pohybu si zachová
+následující jednotku v pořadí. Výběr ruší nepotvrzený náhled trasy.
+Toolbar zobrazuje přeložené ovládání a modelovou dostupnost; klávesové filtry
+zpracují Tab/Space před zaměřeným tlačítkem. Přijetí a ověření eviduje
+[R-0053](requirements/R-0053.md).
+
 ### Potvrzení útoku (R-0028, rozpracováno)
 
 1. `Unit.canAttack()` určuje schopnost podle aktuálního vybavení. Královská

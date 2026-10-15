@@ -36,6 +36,7 @@ public class ScreenGame implements GameScreen {
     private final StatusBar statusBar;
 
     private final RightPanel rightPanel;
+    private final ButtonsGamePanel buttonGamePanel;
 
     private final StackPane mainPanel;
 
@@ -45,6 +46,7 @@ public class ScreenGame implements GameScreen {
             final GamePanelComponent gamePanelComponents) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
+        this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
         this.gamePanelComponents = Preconditions
                 .checkNotNull(gamePanelComponents);
         this.statusBar.setShowEventsFromSource(Source.GAME);
@@ -66,18 +68,29 @@ public class ScreenGame implements GameScreen {
     }
 
     /**
-     * Consumer is called when player press tabulator.
-     * <p>
-     * There is problem to catch pressed tabulator with usual event. It's
-     * because components handle tabulator to move focus.
-     * </p>
+     * Handles unit shortcuts before focused controls can consume them. Space
+     * acts on release, so holding it does not skip multiple units.
      *
-     * @param tabEventHandler required tabulator event handler
+     * @param handler required unit-order handler
      */
-    void setOnTabPressed(final Consumer<KeyEvent> tabEventHandler) {
+    void setOnUnitOrder(final Consumer<KeyEvent> handler) {
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.isControlDown() || event.isAltDown() || event.isMetaDown()
+                    || event.isShiftDown())
+                return;
             if (KeyCode.TAB == event.getCode()) {
-                tabEventHandler.accept(event);
+                handler.accept(event);
+                event.consume();
+            } else if (KeyCode.SPACE == event.getCode()) {
+                event.consume();
+            }
+        });
+        mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            if (KeyCode.SPACE == event.getCode() && !event.isControlDown()
+                    && !event.isAltDown() && !event.isMetaDown()
+                    && !event.isShiftDown()) {
+                handler.accept(event);
+                event.consume();
             }
         });
     }
@@ -104,6 +117,7 @@ public class ScreenGame implements GameScreen {
     public void updateLanguage(final I18n i18n) {
         statusBar.updateLanguage(i18n);
         rightPanel.updateLanguage(i18n);
+        buttonGamePanel.updateLanguage(i18n);
     }
 
     @Override

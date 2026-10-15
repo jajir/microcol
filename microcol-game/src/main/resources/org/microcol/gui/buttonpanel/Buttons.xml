@@ -19,4 +19,9 @@
 
     <entry key="buttonColonies">Colonies (O)</entry>
     <entry key="noColonies">No colonies yet</entry>
+    <entry key="buttonWait">Wait&#10;(Tab)</entry>
+    <entry key="buttonSkipUnitTurn">Skip turn&#10;(Space)</entry>
+    <entry key="waitExplanation">Select the next available unit without spending movement.</entry>
+    <entry key="skipUnitTurnExplanation">Spend all remaining movement for this unit until its next turn.</entry>
+    <entry key="unitOrderUnavailable">This unit cannot skip now. Select an available unit.</entry>
 </properties>

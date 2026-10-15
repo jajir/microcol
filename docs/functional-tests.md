@@ -2326,3 +2326,46 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     `target/r52/boundary-published/`. Následná dokumentační revize nemění
     tuto publikovanou hru; její Pages a úmyslně přeskočené game jobs se
     ověřují samostatně.
+
+
+## R-0053 unit turn orders — 2026-10-15
+
+1. [R-0053](requirements/R-0053.md) doplňuje viditelné Čekat (Tab) a
+   Vynechat tah (Mezerník). Model kontroluje aktuální registrované identity,
+   připravený tah, umístění, pohyb a pokračující práci. Vynechání mění pouze
+   dosavadní pohyb; save/Continue a obnovení tahu využívají existující stav.
+2. Po opravě caller fixture prošlo **40 modelových případů**:
+   `UnitTurnOrdersTest` **12**, `UnitStorageTest` **5**,
+   `TurnPreparationActionTest` **21**, `NationalTurnPreparationTest` **2**,
+   bez selhání, chyb či přeskočení. Předchozí běh měl jednu chybu testu,
+   protože se pokoušel uložit ještě nezahájenou hru. Model ji správně odmítl;
+   oprava kontroluje stav jednotky a hranici nezahájené hry přímo.
+3. Kombinovaný Docker/Xvfb/Openbox běh zahrnul TC07/08/10/11/15/18/21/23/36
+   a zdrojový kontrakt. Z **26 UI-modulových případů** mělo **25 úspěch**,
+   jeden chybu a žádný nebyl přeskočen. Nový TC11/04 po správně dokončeném
+   tahu hledal toolbar na stále otevřeném hlášení tahu. Caller doplnil
+   skutečný krok hráče zavírající hlášení a opakuje TC11 se zdrojovým kontraktem;
+   původní ověření zablokovaných vstupů a nezměněné jednotky zůstávají.
+4. TC11/01 zachovává původní ID i cyklus. Nové scénáře
+   `TC_02_wait_skip_save_resume_and_restore_movement`,
+   `TC_03_cancel_preview_and_preserve_cycle_position` a
+   `TC_04_preparation_rejects_wait_and_skip_input` pokrývají tlačítka, klávesy,
+   prostřední jednotku v pořadí, jednu/žádnou jednotku, dvakrát Pokračovat,
+   následující tah, zrušení náhledu a přípravnou hranici. Skutečný Space při
+   zaměřeném tlačítku působí jednou; ruční výběr vyčerpané jednotky dovoluje
+   prohlídku a odmítnuté vynechání zobrazí vysvětlení ve status baru.
+5. Snímek `target/r53/unit-turn-orders.png` byl vizuálně zkontrolován:
+   anglické popisky a zkratky se vejdou, toolbar i ukončení tahu jsou dostupné.
+   Zachycený obsah má 900 × 750 px. Český text je dodán, samostatné manuální
+   hraní ani česká vizuální kontrola nebyly provedeny. Sdílený formatter
+   zachoval tokeny a idempotenci; prošlo **21 testů worker nástroje** a
+   **9 testů dokumentace**. Logy a opravy jsou v `target/r53/` a
+   [provozní evidenci](ai/local-qwen.md#unit-turn-orders-worker-2026-10-15).
+   Úplná regrese, nativní distribuce a Pages se ověřují při publikaci;
+   do jejich přijetí požadavek zůstává `ready for development`.
+
+6. Opravený TC11 a `PageVerificationContractTest` prošly **7/7**, bez
+   selhání, chyb či přeskočení, exit 0. Ostatních **22** případů původního
+   kombinovaného UI výběru již prošlo; změněn byl pouze krok uzavírající hlášení
+   v TC11/04. Model i GUI byly převzaty z kontrolovaného izolovaného checkoutu;
+   hlavní checkout znovu používá sdílený formatter před commitem.

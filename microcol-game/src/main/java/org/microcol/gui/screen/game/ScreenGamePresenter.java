@@ -7,6 +7,7 @@ import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.SelectNextUnitEvent;
+import org.microcol.gui.event.SkipUnitTurnEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
@@ -77,8 +78,13 @@ public class ScreenGamePresenter {
         this.coloniesMenu = Preconditions.checkNotNull(coloniesMenu);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
-        screenGame.setOnTabPressed(
-                event -> eventBus.post(new SelectNextUnitEvent()));
+        screenGame.setOnUnitOrder(event -> {
+            if (event.getCode() == KeyCode.TAB) {
+                eventBus.post(new SelectNextUnitEvent());
+            } else {
+                eventBus.post(new SkipUnitTurnEvent());
+            }
+        });
     }
 
     private void onKeyPressed(final KeyEvent event) {

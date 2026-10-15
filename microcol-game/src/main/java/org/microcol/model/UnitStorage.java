@@ -201,8 +201,9 @@ public final class UnitStorage {
             final Unit currentUnit) {
         final List<Unit> list = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
-                .filter(unit -> unit.isAtPlaceLocation()
-                        && unit.getActionPoints() > 0)
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getAction().isNoAction())
                 .collect(Collectors.toList());
         if (list.size() == 0) {
             return Optional.empty();
@@ -231,7 +232,8 @@ public final class UnitStorage {
         return units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0).findFirst();
+                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getAction().isNoAction()).findFirst();
     }
 
     /**

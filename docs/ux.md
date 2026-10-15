@@ -221,3 +221,21 @@ dialog vysvětlí návrat přes Pokračovat nebo načtení. Upozornění je text
 a nevyžaduje zvuk. Platná uložená pozice se načte bez opakování přípravy.
 Automatizované ověření patří k [R-0052](requirements/done/R-0052.md); nejde o
 výsledek uživatelského výzkumu.
+
+
+## Čekat a vynechat tah — R-0053
+
+1. Hráč může ponechat jednotku na později v tomtéž tahu nebo jí zbývající
+   pohyb vyčerpat. Toolbar nabízí **Čekat (Tab)** a **Vynechat tah (Mezerník)**;
+   vysvětlivky rozlišují zachování a spotřebu pohybu. Anglické popisky jsou
+   Wait (Tab) a Skip turn (Space). Oba příkazy používají živou dostupnost
+   modelu, včetně probíhající přípravy a práce; GUI blokuje také animaci.
+2. Akce je okamžitá. Před volbou lze ponechat současný výběr nebo stiskem
+   Escape zavřít náhled trasy. Volba jiného pořadí náhled zruší a neprovede
+   pohyb. Další vybraná jednotka a její body poskytují výsledek bez zvuku;
+   odmítnutí vysvětlí status bar. Prázdný výběr neukončuje celý tah.
+3. Ruční prohlížení vyčerpané jednotky je možné; opětovné vynechání není.
+   Pokračovat nevrací pohyb. Obnovení patří až následujícímu tahu vlastníka.
+   Pravidlo je v [jednotkových příkazech](gap-analysis.md#unit-turn-orders),
+   stav přijetí v [R-0053](requirements/R-0053.md). Pozdější ladění vzhledu
+   nebo zkratek není dosud výsledkem hráčského pozorování.

@@ -25,10 +25,15 @@ import com.google.inject.Singleton;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.gui.event.SelectNextUnitEvent;
+import org.microcol.gui.event.SkipUnitTurnEvent;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Button;
 
 @Singleton
-public class ButtonsGamePanel extends AbstractButtonsPanel {
+public class ButtonsGamePanel extends AbstractButtonsPanel
+        implements UpdatableLanguage {
 
     private final static Logger LOGGER = LoggerFactory
             .getLogger(ButtonsGamePanel.class);
@@ -57,6 +62,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
+    private final Button buttonWait = new Button();
+    private final Button buttonSkipUnitTurn = new Button();
+    private final Tooltip waitTooltip = new Tooltip();
+    private final Tooltip skipTooltip = new Tooltip();
+
     private final Button buttonCenter;
     private final Button buttonHelp;
     private final Button buttonStatistics;
@@ -79,6 +89,17 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu) {
         super(imageProvider, eventBus, Source.GAME, i18n);
+
+        buttonWait.setId("waitUnit");
+        buttonWait.setTooltip(waitTooltip);
+        buttonWait
+                .setOnAction(event -> eventBus.post(new SelectNextUnitEvent()));
+        buttonSkipUnitTurn.setId("skipUnitTurn");
+        buttonSkipUnitTurn.setTooltip(skipTooltip);
+        buttonSkipUnitTurn
+                .setOnAction(event -> eventBus.post(new SkipUnitTurnEvent()));
+        setUnitOrdersEnabled(false, false);
+        updateLanguage(i18n);
 
         buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER,
                 Buttons.buttonCenter);
@@ -143,6 +164,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonBuildColony);
         getButtonPanel().getChildren().add(buttonPlowField);
         getButtonPanel().getChildren().add(buttonMove);
+        getButtonPanel().getChildren().add(buttonWait);
+        getButtonPanel().getChildren().add(buttonSkipUnitTurn);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCenter);
@@ -171,7 +194,22 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         setDisable(false);
     }
 
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        buttonWait.setText(i18n.get(Buttons.buttonWait));
+        buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
+        waitTooltip.setText(i18n.get(Buttons.waitExplanation));
+        skipTooltip.setText(i18n.get(Buttons.skipUnitTurnExplanation));
+    }
+
+    void setUnitOrdersEnabled(final boolean wait, final boolean skip) {
+        buttonWait.setDisable(!wait);
+        buttonSkipUnitTurn.setDisable(!skip);
+    }
+
     private void setDisable(final boolean disable) {
+        buttonWait.setDisable(disable);
+        buttonSkipUnitTurn.setDisable(disable);
         buttonCenter.setDisable(disable);
         buttonHelp.setDisable(disable);
         buttonStatistics.setDisable(disable);

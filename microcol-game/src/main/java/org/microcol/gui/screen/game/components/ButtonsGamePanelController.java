@@ -5,6 +5,8 @@ import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
+import org.microcol.gui.screen.game.gamepanel.GamePanelController;
+import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
@@ -35,11 +37,15 @@ public class ButtonsGamePanelController {
     private final SelectedUnitManager selectedUnitManager;
 
     private final ButtonsGamePanel view;
+    private final GamePanelController gamePanelController;
 
     @Inject
     ButtonsGamePanelController(final ButtonsGamePanel buttonGamePanel,
             final GameModelController gameModelController,
-            final SelectedUnitManager selectedUnitManager) {
+            final SelectedUnitManager selectedUnitManager,
+            final GamePanelController gamePanelController) {
+        this.gamePanelController = Preconditions
+                .checkNotNull(gamePanelController);
         this.view = Preconditions.checkNotNull(buttonGamePanel);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
@@ -68,6 +74,7 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonPlowField(false);
             }
         }
+        updateUnitOrders();
     }
 
     @Subscribe
@@ -88,6 +95,7 @@ public class ButtonsGamePanelController {
         if (event.getUnit().getOwner().isHuman()) {
             view.enableAllButtons();
         }
+        updateUnitOrders();
     }
 
     @Subscribe
@@ -103,6 +111,7 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonPlowField(false);
         }
         evaluateDeclareIndependenceButton();
+        updateUnitOrders();
     }
 
     @Subscribe
@@ -110,6 +119,7 @@ public class ButtonsGamePanelController {
             @SuppressWarnings("unused") final ActionWasStartedEvent event) {
         selectedUnitManager.getSelectedUnit()
                 .ifPresent(selectedUnit -> evaluatePlowField(selectedUnit));
+        updateUnitOrders();
     }
 
     @Subscribe
@@ -119,6 +129,7 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateAllButtonsForSelectedUnit(final Unit unit) {
+        updateUnitOrders();
         evaluateDeclareIndependenceButton();
         evaluateMoveButton(unit);
         evaluateBuildColony(unit);
@@ -155,6 +166,17 @@ public class ButtonsGamePanelController {
     private void evaluateBuildColony(final Unit unit) {
         view.setVisibleButtonBuildColony(
                 gameModelController.getModel().canUnitBuildColony(unit));
+    }
+
+    private void updateUnitOrders() {
+        Platform.runLater(() -> {
+            final boolean ready = gameModelController.isHumanTurnReady()
+                    && !gamePanelController.isUnitMoving();
+            view.setUnitOrdersEnabled(
+                    ready && getModel().getFirstSelectableUnit().isPresent(),
+                    ready && selectedUnitManager.getSelectedUnit()
+                            .map(getModel()::canSkipUnitTurn).orElse(false));
+        });
     }
 
     private Model getModel() {

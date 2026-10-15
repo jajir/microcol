@@ -2754,3 +2754,46 @@ should reuse existing validation and a focused audit before proposing new toolin
    caller checks remain in `target/r52/boundary-*.log`. No token saving is
    inferred from these measurements. Verification is recorded with the
    [functional evidence](../functional-tests.md).
+
+
+## Unit turn orders worker — 2026-10-15
+
+1. Job `2026-10-15-r53-unit-orders`, baseline `398df486`, assigns only the
+   model query/command, normal selection and their tests. Main owns requirement
+   refinement, GUI integration and acceptance. Medium/64k attempt 0 took
+   **559.222 s** and unloaded successfully. Its validated replacement batch
+   applied in isolation; shared formatting preserved tokens and was idempotent.
+2. Review rejected reversed `isNoAction` filters, owner equality instead of
+   identity, and tests with post-state self-comparisons. Docker acceptance then
+   failed compilation: missing Optional import, Unit passed to a Model-only
+   snapshot helper, invented Model accessors and an invalid event constructor.
+   These APIs and the intended assertions had been specified in the handoff.
+3. The caller retained the same job/worktree and dispatched focused repair 1
+   with exact current anchors, corrected APIs and unchanged acceptance. This
+   escalates to high/64k under the normal policy because medium lost multiple
+   semantic and test requirements. Prior elapsed time remains 559.222 s;
+   the shared limits and two-repair budget are not reset. Evidence is under
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r53-unit-orders/` and
+   `target/r53/`. No token savings are claimed.
+
+4. High repair 1 did not return a patch before the caller stopped its owned
+   launcher to complete the explicit publication request. It ran **1781.944 s**,
+   child exit **−15**, successful unload **0**, **2341.166 s** cumulative.
+   This was a deliberate completion decision, not a timeout or exhausted budget;
+   one repair slot remained. No high-attempt source was applied and its completed
+   token usage is unavailable. Continued waiting had no reviewable output.
+5. Main corrected the query identity/null checks, positive no-action filters and
+   the invalid test methods in the isolated candidate, retaining the worker's
+   command and usable test fragments. Main then copied its separately authored
+   GUI integration into that checkout and ran combined model/UI acceptance after
+   unloading and formatting. This is caller-completed work, not an independently
+   accepted worker implementation. The job retains `disposition.json` and both
+   attempts; actual check results belong in [functional evidence](../functional-tests.md).
+
+6. First caller-completed run compiled and executed **40 model cases**, with
+   **one error** and no failures/skips. The not-started fixture tried `Model.save`,
+   which correctly rejects an unstarted game. This came from the caller's
+   handoff/acceptance setup, not a gameplay defect. That case now compares the
+   unit's persisted state and the non-running boundary directly; other rejected
+   states retain full-model before/after comparison. The unchanged combined
+   selection was rerun after shared formatting.

@@ -173,6 +173,14 @@ public final class GamePanelPresenter {
         moveModeController.setMoveModeOn();
     }
 
+    @Subscribe
+    private void onSelectedUnitWasChanged(
+            @SuppressWarnings("unused") final SelectedUnitWasChangedEvent event) {
+        if (modeController.isMoveMode()) {
+            moveModeController.setMoveModeOff();
+        }
+    }
+
     /**
      * When move mode is enabled than it cancel it.
      */

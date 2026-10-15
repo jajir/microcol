@@ -18,6 +18,7 @@ import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
+import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
@@ -713,6 +714,24 @@ public class Model {
 
     public Optional<Unit> getFirstSelectableUnit() {
         return unitStorage.getFirstSelectableUnit(getCurrentPlayer());
+    }
+
+    public boolean canSkipUnitTurn(final Unit unit) {
+        return unit != null && isGameRunning()
+                && unit.getOwner() == getCurrentPlayer()
+                && getPlayers().stream()
+                        .anyMatch(player -> player == unit.getOwner())
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0
+                && unit.getLocation() != null && map.isValid(unit.getLocation())
+                && unit.getAction().isNoAction();
+    }
+
+    public void skipUnitTurn(final Unit unit) {
+        Preconditions.checkNotNull(unit, "Unit is null");
+        Preconditions.checkState(canSkipUnitTurn(unit),
+                "Unit turn cannot be skipped");
+        unit.setActionType(UnitActionType.noAction);
     }
 
     public Optional<Unit> getFirstSelectableUnitAt(final Location location) {

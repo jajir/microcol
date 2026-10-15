@@ -3,6 +3,13 @@ package org.microcol.gui.screen.game.gamepanel;
 import java.util.Optional;
 
 import org.microcol.gui.event.SelectNextUnitEvent;
+import org.microcol.gui.event.SkipUnitTurnEvent;
+import org.microcol.gui.event.RefreshRightPanelEvent;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.i18n.I18n;
+import org.microcol.model.Model;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
@@ -42,11 +49,17 @@ public final class SelectedUnitManager {
     private final EventBus eventBus;
 
     private Unit selectedUnit;
+    private final GamePanelController gamePanelController;
+    private final I18n i18n;
 
     @Inject
     public SelectedUnitManager(final GameModelController gameModelController,
             final SelectedTileManager selectedTileManager,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final GamePanelController gamePanelController, final I18n i18n) {
+        this.gamePanelController = Preconditions
+                .checkNotNull(gamePanelController);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.selectedTileManager = Preconditions
@@ -199,20 +212,49 @@ public final class SelectedUnitManager {
     }
 
     @Subscribe
-    private void onSelectNextUnit(
-            final SelectNextUnitEvent selectNextUnitEvent) {
-        Preconditions.checkNotNull(selectNextUnitEvent);
-        if (selectedUnit == null) {
-            selectedUnit(gameModelController.getModel().getFirstSelectableUnit()
-                    .orElse(null));
-        } else {
-            if (gameModelController.getModel()
-                    .getNextUnitForCurrentPlayer(selectedUnit).isPresent()) {
-                selectedUnit(gameModelController.getModel()
-                        .getNextUnitForCurrentPlayer(selectedUnit)
-                        .orElse(null));
-            }
+    private void onSelectNextUnit(final SelectNextUnitEvent event) {
+        Preconditions.checkNotNull(event);
+        if (!gameModelController.isHumanTurnReady()
+                || gamePanelController.isUnitMoving()) {
+            return;
         }
+        final Model model = gameModelController.getModel();
+        final Optional<Unit> next = selectedUnit == null
+                || selectedUnit.getOwner() != model.getCurrentPlayer()
+                        ? model.getFirstSelectableUnit()
+                        : model.getNextUnitForCurrentPlayer(selectedUnit);
+        selectAndFocus(next.orElse(null));
+    }
+
+    @Subscribe
+    private void onSkipUnitTurn(final SkipUnitTurnEvent event) {
+        Preconditions.checkNotNull(event);
+        if (!gameModelController.isHumanTurnReady()
+                || gamePanelController.isUnitMoving() || selectedUnit == null) {
+            return;
+        }
+        final Model model = gameModelController.getModel();
+        final Unit unit = selectedUnit;
+        try {
+            // Preserve the position in the cycle before spending movement.
+            final Optional<Unit> next = unit.getOwner() == model
+                    .getCurrentPlayer()
+                            ? model.getNextUnitForCurrentPlayer(unit)
+                                    .filter(candidate -> candidate != unit)
+                            : Optional.empty();
+            model.skipUnitTurn(unit);
+            selectAndFocus(next.filter(model::canSkipUnitTurn).orElseGet(
+                    () -> model.getFirstSelectableUnit().orElse(null)));
+            eventBus.post(new RefreshRightPanelEvent());
+        } catch (IllegalStateException rejected) {
+            eventBus.post(new SelectNextUnitEvent());
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.unitOrderUnavailable), Source.GAME));
+        }
+    }
+
+    private void selectAndFocus(final Unit next) {
+        selectedUnit(next);
         if (selectedUnit != null) {
             selectedTileManager.setSelectedTile(selectedUnit.getLocation(),
                     ScrollToFocusedTile.smoothScroll);
