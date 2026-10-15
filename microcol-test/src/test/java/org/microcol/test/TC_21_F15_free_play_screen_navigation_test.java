@@ -176,4 +176,26 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.verifyCalendarAndGold(18, 10000);
     }
 
+    @Test
+    @Tag("local")
+    void TC_09_late_computer_turn_notification_does_not_block_the_current_human()
+            throws Exception {
+        // A previous computer turn notification arrives after control returned
+        // to the human.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        audit.verifyCurrentPlayerIsHuman();
+        audit.deliverPreviousComputerTurnNotification();
+        audit.verifyCurrentPlayerIsHuman();
+
+        // Return from a command to the map and open the colony with native
+        // mouse input.
+        audit.hoverNextTurnDirectly();
+        game.verifyThatStatusBarContains("Next turn");
+        game.moveMouseAtLocation(COLONY);
+        game.verifyThatStatusBarContains("New Amsterdam");
+        game.openColonyAt(COLONY, "New Amsterdam").close();
+        audit.verifyCalendarAndGold(18, 10000);
+    }
+
 }

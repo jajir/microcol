@@ -24,7 +24,7 @@ final class GameManager {
     private boolean started;
     private volatile boolean stopped;
     private volatile boolean finished;
-    private Player currentPlayer;
+    private volatile Player currentPlayer;
 
     GameManager(final Model model,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,

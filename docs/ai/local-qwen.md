@@ -2597,3 +2597,52 @@ and passing project checks are recorded in [R-0050](../requirements/done/R-0050.
 No measured cloud-token saving or general model-reliability conclusion follows
 from this unsuccessful optional assignment. Future documentation-only tasks
 should reuse existing validation and a focused audit before proposing new tooling.
+
+
+## R-0112 diagnostic hypothesis — 2026-10-15
+
+1. The caller delegated four event-entry tests as job
+   `2026-10-15-r112-entry-regression`, baseline `99e6c14b`, medium/64k. Attempt 0
+   took **710.207 s**, reported **3805 input / 3862 output tokens**, and returned
+   malformed replacement JSON. Application was rejected without a source edit.
+   Review also found invalid imports and missing exact-state assertions; the
+   second case could incorrectly pass because it checked only after a subsequent
+   movement event. A focused repair retained the job, worktree and budgets.
+2. Two caller errors are retained in the job review: a test command was started
+   despite rejected application (**5 existing MouseOverTileManager + 3 page-contract
+   checks**, no generated test executed), and a review filename beginning with
+   `attempt-` collided with the launcher's directory enumeration. Renaming that
+   note corrected preflight before any repair inference. Neither is a successful
+   worker verification or an application repair.
+3. The native full-class trace then captured all **187 movement events delivered
+   with input disabled**. The caller withdrew the missing-movement hypothesis
+   and canceled repair 1 through the owned launcher (SIGTERM), after **575.475 s**;
+   child exit **−15**, model unload **0**, cumulative **1285.682 s**. Interrupted
+   token usage is unavailable. No worker code was applied or integrated, and no
+   further retry/takeover of that withdrawn hypothesis was needed. The original
+   output defects remain unresolved. `disposition.json` and all attempt evidence
+   remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r112-entry-regression/`.
+4. This host check observed Codex CLI **0.162.1** and Ollama **0.40.2** with the
+   configured model digest/context. CLI warnings about ignored reasoning-summary
+   metadata did not prevent inference. No model/runtime setup was performed and
+   no token savings are claimed. The confirmed turn-gate regression is a separate,
+   narrowly specified task; actual acceptance is recorded after caller execution.
+
+5. The confirmed-owner task `2026-10-15-r112-turn-gate-tests` used baseline
+   `cc9d5cbf`, medium/64k, with caller-owned constructor wiring, application fix
+   and native UI reproducer. Worker scope was only four unit cases. Attempt 0
+   delivered valid replacements in **561.455 s**, **2165 input / 4322 output
+   tokens**. The negative control exposed three expected owner failures and a
+   caller-handoff error: Mockito inline was available in `microcol-test`, not
+   `microcol-game`, so a mocked final movement event failed before that check.
+6. The caller supplied exact real-event constructors for one-method repair.
+   Repair 1 took **292.214 s**, **1543 input / 1380 output tokens**, preserving the
+   same job/worktree/budget; cumulative **853.669 s**, one repair. Both batches
+   applied through the validated launcher. Shared formatting preserved code tokens
+   and idempotence. After model unload, caller Docker checks passed **4 new gate +
+   5 existing hover tests, 3 page-contract checks and 4 player scenarios**, all
+   without failures/errors/skips. The worker did not run tests or change application
+   code. The reviewed test was integrated; wider R-0112 acceptance remains recorded
+   in the [functional evidence](../functional-tests.md#r-0112-map-input-repair-2026-10-15).
+   Full logs and `acceptance.json` remain under the job directory. No measured
+   cloud-token savings are inferred from these runtimes.

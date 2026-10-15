@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.microcol.model.Location;
+import org.microcol.model.Player;
+import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.PlaceEuropePier;
 import org.microcol.model.PlaceCargoSlot;
 import org.microcol.model.Unit;
@@ -15,6 +17,8 @@ import org.microcol.model.Colony;
 import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.testfx.util.WaitForAsyncUtils;
+
+import com.google.common.eventbus.EventBus;
 
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -59,6 +63,17 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getModel().getCalendar().getNumberOfPlayedTurns());
         assertEquals(expectedGold,
                 getModel().getPlayerByName("Dutch").getGold());
+    }
+
+    public void deliverPreviousComputerTurnNotification() {
+        final Player computer = getModel().getPlayers().stream()
+                .filter(player -> !player.isHuman()).findFirst().orElseThrow();
+        getRobot().interact(() -> getContext().getClassFromGuice(EventBus.class)
+                .post(new TurnStartedEvent(getModel(), computer, true)));
+    }
+
+    public void verifyCurrentPlayerIsHuman() {
+        assertTrue(getModel().getCurrentPlayer().isHuman());
     }
 
     public void hoverTileDirectly(final Location location) {

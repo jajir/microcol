@@ -2006,3 +2006,66 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    within each class JVM. This is a distinct diagnostic selection, not a retry
    erasing a failure. Keep the source, first result and actual selection for
    every campaign. The complete suite still provides the wider acceptance.
+
+6. Native full-class campaign [38692014520](https://github.com/jajir/microcol/actions/runs/38692014520),
+   source `cc9d5cbf949c8b60332d25439850633e3521a258`, reproduced the original
+   **TC27/07 empty status for tile 37,16** on repetition three. Runs
+   `run-GIiNJK` and `run-TFIhF8` passed **16/16**; `run-ccY1A9` ran **16 with
+   1 failure, 0 errors/skips** (TC27: 9/1; TC30: 7/0). Durations **3:06, 2:55,
+   2:36**. Every result is retained; this is not a calibrated random-failure rate.
+   Image `sha256:c5a019422810c2b1c43e08381d627b3dc96341f4a120714b3210bb64ae923b64`,
+   unchanged F19/F22 fixture hashes, same recorded native runtime. Raw artifact:
+   `target/r112/native-classes-3/`.
+7. The failed action delivered **187 `MOUSE_MOVED` events**, including the exact
+   target screen position **395,485** / canvas position **295,385**. All reported
+   **focus=true, moving=false, enabled=false**, empty hover cache/status. The
+   human `TurnStartedEvent` was emitted at **06:30:16.865 UTC**; movement began
+   at **06:30:18.143** and the empty assertion failed at **06:30:18.467**. No
+   subsequent turn change appears between them. Missing/delayed mouse delivery,
+   off-target positioning and an unfinished unit animation do not explain this
+   captured failure.
+8. Source inspection identifies a stale ownership cache: `ListenerManager`
+   dispatches each turn notification/listener on a separate executor, while
+   `GamePanelController.onTurnStarted` overwrites `humanIsOnTurn` from the event's
+   historical player. A delayed computer notification can therefore overwrite
+   the human notification after the model has already returned control. The
+   selected repair reads the existing live model ownership instead of keeping
+   that duplicate state; deterministic old-notification regression and acceptance
+   remain pending. No global event-dispatch redesign is selected.
+9. The separate full diagnostic suite [38690873812](https://github.com/jajir/microcol/actions/runs/38690873812)
+   passed **1115 game + 144 functional checks**, zero failures/errors/skips.
+   Its release job failed with **HTTP 403, Cannot create draft release**; that
+   diagnostic revision is not claimed as a published distribution. This does
+   not change the failed full-class measurement above.
+
+
+## R-0112 map input repair — 2026-10-15
+
+1. [R-0112](requirements/R-0112.md) removes `GamePanelController`'s cached turn
+   owner. Input now uses the current player in the existing live model;
+   unloaded/stopped games and computer turns remain disabled. The model's current
+   player and the controller's movement flag are `volatile` across model/FX
+   threads. Existing animation behavior and player gestures are preserved.
+   Temporary verbose input tracing is removed; a failed status assertion retains
+   expected/actual text plus input-enabled and movement state.
+2. Negative control kept the old cached predicate, with constructor dependency
+   wiring only, and delivered the prior computer notification after the human
+   turn. `TC21/09` verified the model still belonged to the human, then reproduced
+   **empty status instead of tile 24** before native colony selection. Its Docker
+   run had **1 failing UI case + 3 passing source-contract cases**, no errors/skips.
+   The separate unit run had **3 expected ownership failures**, **1 test setup
+   error** (the caller incorrectly specified mocking a final event in this module)
+   and **5 passing MouseOverTileManager cases**. That error was corrected using
+   real events; it is not evidence of an application failure.
+3. After the repair, Docker selection `GamePanelControllerTest`,
+   `MouseOverTileManagerTest`, `PageVerificationContractTest`, TC21/08–09,
+   TC27/07 and TC30/04 passed **9 game + 7 functional checks**, zero
+   failures/errors/skips. The UI reproducer uses a controlled stale UI notification
+   and actual native mouse hover/colony opening; it does not change model ownership,
+   goods or time to obtain a pass. Evidence: `target/r112/negative-control*.log`,
+   `target/r112/fix-targeted.log` and the attached worktree's exported Docker results.
+4. Complete acceptance still requires ten fresh complete-class runs in each
+   environment and the full regression. The targeted pass alone is not a
+   stability claim. Each campaign stops at its first failure and preserves all
+   first results. No automatic retry, timeout increase or weakened assertion is
+   part of this change.
