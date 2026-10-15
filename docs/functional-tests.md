@@ -2442,10 +2442,22 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    release, deliberately retains menu focus, and also verifies ordinary menu
    Escape dismissal. TC38, TC21 navigation, TC11 unit orders and the source
    contract passed in Docker `run-Z5hHps`: **20 tests, zero failures/errors/skips**.
-   Full functional regression remains required.
+   The full regression result follows below.
 5. Shared formatting passes token-preservation and idempotence. The nine
    documentation tests, strict MkDocs build and 21 worker-tooling checks pass.
-   The pre-push full Docker run also passed **1211 game tests**, with zero
-   failures/errors/skips; its UI portion and GitHub release checks remain
-   pending at this checkpoint. The user requested publication of all current
-   changes; the separate final model acceptance still keeps R-0054 open.
+   Full local Docker `run-qDtP0c` passed **1211 game tests and 162 UI-module
+   checks**, with zero failures/errors/skips. This includes all four TC38 cases.
+   The user requested publication of all current changes; the separate final
+   model acceptance still keeps R-0054 open.
+6. Published source `22bf30cbe160cb44f5784d11dfdf471050644d03` passed
+   [development run 38804463986](https://github.com/jajir/microcol/actions/runs/38804463986):
+   all three native packages, launcher checks, functional tests and publication.
+   Downloaded functional reports confirm **1211 game tests and 162 UI-module
+   checks**, with zero failures/errors/skips. The downloaded channel manifest
+   identifies [dev-92-22bf30cbe160](https://github.com/jajir/microcol/releases/tag/dev-92-22bf30cbe160)
+   from that exact commit. [Compatibility](https://github.com/jajir/microcol/actions/runs/38804463984)
+   and [Pages](https://github.com/jajir/microcol/actions/runs/38804463969) also passed;
+   the live documentation contains the new evidence and source links pinned to
+   the published revision. Local logs, downloaded reports and manifest are in
+   `target/r54/`. The following documentation-only evidence update retains the
+   same game build; verify its Pages deployment and intentionally skipped game jobs.
