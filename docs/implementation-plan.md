@@ -44,7 +44,7 @@ rozsahu. Samotné zachycení požadavku neznamená zahájení vývoje.
 | P20/P21 | [Diplomacie a soupeř A08](requirements/backlog.md#a08) |
 | P17 | [Boj A09](requirements/backlog.md#a09) |
 | P22–P24 | [Politika A10](requirements/backlog.md#a10) |
-| P31 | [Migrace R-0050](requirements/done/R-0050.md); [R-0112: stabilita TC27/TC30](requirements/R-0112.md); [R-0114: adresáře podle stavu požadavků](requirements/done/R-0114.md) |
+| P31 | [Migrace R-0050](requirements/done/R-0050.md); [R-0112: stabilita TC27/TC30](requirements/done/R-0112.md); [R-0114: adresáře podle stavu požadavků](requirements/done/R-0114.md) |
 | P31/P32 | [R-0113: vynechání plného CI při změnách pouze v docs/](requirements/R-0113.md) |
 
 Výběr dalšího R proběhne po dohodě. Zbytek úplného manuálu zůstává v tomto

@@ -1937,7 +1937,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## TC27/TC30 stability analysis — 2026-10-15
 
-1. [R-0112](requirements/R-0112.md) zachycuje požadavek na diagnostiku a
+1. [R-0112](requirements/done/R-0112.md) zachycuje požadavek na diagnostiku a
    stabilizaci TC27/07 a TC30/04. Následuje kontrola existujících výsledků
    z 14. října, nikoli nová testovací kampaň nebo ověřená oprava.
 2. Plné CI pro [a35620ae](https://github.com/jajir/microcol/actions/runs/38552266613)
@@ -1970,7 +1970,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0112 diagnostic campaign — 2026-10-15
 
-1. Selected requirement: [R-0112](requirements/R-0112.md). Baseline
+1. Selected requirement: [R-0112](requirements/done/R-0112.md). Baseline
    `71074fc67df25e4b44290f86e6d87ddc210a8bd4`, clean isolated checkout.
    Local Docker uses Linux amd64 emulation on Apple Silicon, Xvfb/Openbox and
    unchanged Compose limits. Two fresh combined selections of TC27/07 and
@@ -2041,7 +2041,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0112 map input repair — 2026-10-15
 
-1. [R-0112](requirements/R-0112.md) removes `GamePanelController`'s cached turn
+1. [R-0112](requirements/done/R-0112.md) removes `GamePanelController`'s cached turn
    owner. Input now uses the current player in the existing live model;
    unloaded/stopped games and computer turns remain disabled. The model's current
    player and the controller's movement flag are `volatile` across model/FX
@@ -2064,8 +2064,38 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and actual native mouse hover/colony opening; it does not change model ownership,
    goods or time to obtain a pass. Evidence: `target/r112/negative-control*.log`,
    `target/r112/fix-targeted.log` and the attached worktree's exported Docker results.
-4. Complete acceptance still requires ten fresh complete-class runs in each
-   environment and the full regression. The targeted pass alone is not a
-   stability claim. Each campaign stops at its first failure and preserves all
-   first results. No automatic retry, timeout increase or weakened assertion is
-   part of this change.
+4. Acceptance source is the clean commit
+   `e273f7f07d74a9de7b534a48f22c37c228f46b43`. The completed checks below have
+   **zero failures, errors or skips**. Local Docker uses amd64 emulation on Apple
+   Silicon; CI uses native amd64 Linux. These are separate measurements.
+
+   | Environment and selection | Result | Maven duration | Evidence |
+   | --- | --- | --- | --- |
+   | Local Docker, complete regression | 1119 game + 145 functional checks passed | 24:27 | `target/r112/local-acceptance/full.json`, `run-gkGeED` |
+   | Native CI, complete regression | 1119 game + 145 functional checks passed | 17:46 | [38697135103](https://github.com/jajir/microcol/actions/runs/38697135103), `run-hoG1Xd` |
+   | Local Docker, complete TC27 + TC30 classes | 10/10 runs, 16 cases each; 160 passed | 4:05–4:07 per run | `target/r112/local-acceptance/summary.json`, all ten exported result directories |
+   | Native CI, complete TC27 + TC30 classes | 10/10 runs, 16 cases each; 160 passed | 2:54–3:06 per run | [38697134714](https://github.com/jajir/microcol/actions/runs/38697134714), `target/r112/native-acceptance-10/` |
+
+   Both campaigns completed within their 45-minute budgets; the ten local runs
+   took approximately **41:35** wall time in total. Each campaign stops at its
+   first failure and preserves all first results. No automatic retry, timeout
+   increase or weakened assertion is part of this change. A finite successful
+   sample does not prove that all intermittent UI failures are impossible.
+5. Campaign metadata records the exact selection, clean source and unchanged
+   F19/F22 fixture hashes. Local image:
+   `sha256:fa136bbcf55270c61eff5b096f1a04505f9aa2f597fc450b729b02d4d1216a07`;
+   native campaign image:
+   `sha256:7a9c26c5ce0f691067c92e2f8d28e301a13f5892be9407a68f8be8ad364e813a`.
+   Raw records are under `target/r112/local-acceptance/` and
+   `target/r112/native-acceptance-10/`; exported local reports remain in the
+   attached worktree's `target/docker-ui/`. Every repetition uses a fresh
+   container and each class its own JVM.
+6. Candidate publication is independently verified: development workflow
+   [38697135103](https://github.com/jajir/microcol/actions/runs/38697135103)
+   published [dev-76-e273f7f07d74](https://github.com/jajir/microcol/releases/tag/dev-76-e273f7f07d74).
+   The release and downloaded channel manifest identify the same full commit
+   and all three platforms. Documentation
+   [38697135139](https://github.com/jajir/microcol/actions/runs/38697135139) and
+   compatibility [38697135095](https://github.com/jajir/microcol/actions/runs/38697135095)
+   also passed. The final acceptance record changes documentation only;
+   application, test and runner sources remain those accepted above.

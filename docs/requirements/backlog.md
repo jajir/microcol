@@ -6,7 +6,7 @@ Captured on **2026-10-14**, from the [R-0001–R-0040 migration](migration-2026-
 unused to separate the new series. Allocate future requirements after the highest
 existing ID; the table is a catalogue, not an implementation sequence.
 
-Added on **2026-10-15**: [R-0112](R-0112.md) captures TC27/TC30 test stability
+Added on **2026-10-15**: [R-0112](done/R-0112.md) captures TC27/TC30 test stability
 as a new technical request, separate from the 61 migrated gameplay/setup items.
 [R-0113](R-0113.md) captures skipping full game CI for changes only in `docs/`;
 [R-0114](done/R-0114.md) records the status-directory organization.
@@ -61,7 +61,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0112](R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
+| [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
 
 ## A04
