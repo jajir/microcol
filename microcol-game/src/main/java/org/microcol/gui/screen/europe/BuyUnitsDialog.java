@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -41,6 +42,7 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
     private final DialogMessage rejection;
     private final I18n i18n;
     private final List<BuyUnitPanel> panels = new ArrayList<>();
+    private final ScrollPane offers = new ScrollPane();
     private Player buyer;
     private Model openedModel;
     private boolean actionTaken;
@@ -94,12 +96,18 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
             close();
         });
 
-        root.getChildren().addAll(labelCaption, gridWithUnits,
-                buttonBar.getContent());
+        offers.setId("buy-unit-offers");
+        offers.setContent(gridWithUnits);
+        offers.setFitToWidth(true);
+        offers.setPrefViewportWidth(600);
+        root.getChildren().addAll(labelCaption, offers, buttonBar.getContent());
     }
 
     @Override
     public void showAndWait() {
+        offers.setPrefViewportHeight(Math.max(240, Math.min(520,
+                getViewUtil().getPrimaryStage().getHeight() - 180)));
+        offers.setVvalue(0);
         buyer = gameModelController.getHumanPlayer();
         openedModel = gameModelController.getModel();
         actionTaken = false;

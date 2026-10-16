@@ -20,16 +20,80 @@ public final class ExpertPurchasePage extends AbstractScreen {
     }
 
     public void confirm() {
+        revealSpecialist("MASTER_BLACKSMITH");
         clickOnButtonWithId("buy-unit-MASTER_BLACKSMITH");
     }
 
     public void confirmAndDeliverDuplicateAction() {
+        revealSpecialist("MASTER_BLACKSMITH");
         Button purchase = getButtonById("buy-unit-MASTER_BLACKSMITH");
         getRobot().clickOn(purchase);
         WaitForAsyncUtils.waitForFxEvents();
         // A queued second action on the closed offer must not buy another unit.
         getRobot().interact(purchase::fire);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void revealSpecialist(String type) {
+        javafx.scene.control.ScrollPane offers = getNodeFinder()
+                .lookup("#buy-unit-offers")
+                .queryAs(javafx.scene.control.ScrollPane.class);
+        Button button = getButtonById("buy-unit-" + type);
+        getRobot().interact(() -> {
+            javafx.geometry.Bounds bounds = offers.getContent().sceneToLocal(
+                    button.localToScene(button.getBoundsInLocal()));
+            double overflow = offers.getContent().getBoundsInLocal().getHeight()
+                    - offers.getViewportBounds().getHeight();
+            offers.setVvalue(overflow <= 0 ? 0
+                    : Math.max(0, Math.min(1, (bounds.getCenterY()
+                            - offers.getViewportBounds().getHeight() / 2)
+                            / overflow)));
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySpecialistOffer(String type, String name, int price,
+            String action) {
+        assertEquals(name, getLabeledById("buy-unit-name-" + type).getText());
+        Button button = getButtonById("buy-unit-" + type);
+        assertEquals(action + price, button.getText());
+        assertFalse(button.isDisabled());
+        javafx.scene.control.ScrollPane offers = getNodeFinder()
+                .lookup("#buy-unit-offers")
+                .queryAs(javafx.scene.control.ScrollPane.class);
+        javafx.scene.Node viewport = offers.lookup(".viewport");
+        assertTrue(viewport.localToScreen(viewport.getBoundsInLocal())
+                .contains(button.localToScreen(button.getBoundsInLocal())));
+    }
+
+    public void verifyExcludedPlanters() {
+        for (String type : List.of("MASTER_SUGAR_PLANTER",
+                "MASTER_COTTON_PLANTER", "MASTER_TOBACCO_PLANTER")) {
+            assertTrue(getNodeFinder().lookup("#buy-unit-" + type).queryAll()
+                    .isEmpty());
+        }
+    }
+
+    public void confirmSpecialistWithKeyboard(String type) {
+        Button button = getButtonById("buy-unit-" + type);
+        for (int i = 0; i < 40 && !button.isFocused(); i++) {
+            getRobot().push(KeyCode.TAB);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        if (!button.isFocused()) {
+            throw new IllegalStateException(
+                    "Specialist must be keyboard reachable: " + type);
+        }
+        getRobot().push(KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyPurchasedSpecialist(int id, String type, int gold) {
+        Unit unit = getModel().getUnitById(id);
+        assertSame(UnitType.valueOf(type), unit.getType());
+        assertTrue(unit.isAtEuropePier());
+        assertSame(getModel().getPlayerByName("Dutch"), unit.getOwner());
+        assertEquals(gold, unit.getOwner().getGold());
     }
 
     public void escape() {
@@ -49,7 +113,7 @@ public final class ExpertPurchasePage extends AbstractScreen {
 
     public void confirmWithKeyboard() {
         Button button = getButtonById("buy-unit-MASTER_BLACKSMITH");
-        for (int i = 0; i < 12 && !button.isFocused(); i++) {
+        for (int i = 0; i < 40 && !button.isFocused(); i++) {
             getRobot().push(KeyCode.TAB);
             WaitForAsyncUtils.waitForFxEvents();
         }

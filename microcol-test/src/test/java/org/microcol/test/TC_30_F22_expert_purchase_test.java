@@ -450,4 +450,169 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         new ExpertPurchasePage(getContext()).escape();
         europe.verifyGold(4400);
     }
+
+    @Test
+    @Tag("local")
+    void TC_11_complete_specialist_offer_english() throws Exception {
+        // Inspect every priced specialist, including entries below the
+        // viewport.
+        EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                .openEuroperPort();
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        europe.openBuyUnitScreen();
+        purchase.revealSpecialist("EXPERT_FARMER");
+        purchase.verifySpecialistOffer("EXPERT_FARMER", "Expert Farmer", 1000,
+                "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_FISHERMAN");
+        purchase.verifySpecialistOffer("EXPERT_FISHERMAN", "Expert Fisherman",
+                1000, "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_FUR_TRAPPER");
+        purchase.verifySpecialistOffer("EXPERT_FUR_TRAPPER",
+                "Expert Fur Trapper", 1000, "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_SILVER_MINER");
+        purchase.verifySpecialistOffer("EXPERT_SILVER_MINER",
+                "Expert Silver Miner", 1000, "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_LUMBERJACK");
+        purchase.verifySpecialistOffer("EXPERT_LUMBERJACK", "Expert Lumberjack",
+                1000, "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_ORE_MINER");
+        purchase.verifySpecialistOffer("EXPERT_ORE_MINER", "Expert Ore Miner",
+                1000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_CARPENTER");
+        purchase.verifySpecialistOffer("MASTER_CARPENTER", "Master Carpenter",
+                1000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_DISTILLER");
+        purchase.verifySpecialistOffer("MASTER_DISTILLER", "Master Distiller",
+                2000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_WEAVER");
+        purchase.verifySpecialistOffer("MASTER_WEAVER", "Master Weaver", 2000,
+                "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_TOBACCONIST");
+        purchase.verifySpecialistOffer("MASTER_TOBACCONIST",
+                "Master Tobacconist", 2000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_FUR_TRADER");
+        purchase.verifySpecialistOffer("MASTER_FUR_TRADER", "Master Fur Trader",
+                2000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_BLACKSMITH");
+        purchase.verifySpecialistOffer("MASTER_BLACKSMITH", "Master Blacksmith",
+                2200, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_GUNSMITH");
+        purchase.verifySpecialistOffer("MASTER_GUNSMITH", "Master Gunsmith",
+                2000, "Hire specialist for ");
+        purchase.revealSpecialist("FIREBRAND_PREACHER");
+        purchase.verifySpecialistOffer("FIREBRAND_PREACHER",
+                "Firebrand Preacher", 3000, "Hire specialist for ");
+        purchase.revealSpecialist("ELDER_STATESMAN");
+        purchase.verifySpecialistOffer("ELDER_STATESMAN", "Elder Statesman",
+                3000, "Hire specialist for ");
+        purchase.revealSpecialist("SEASONED_SCOUT");
+        purchase.verifySpecialistOffer("SEASONED_SCOUT", "Seasoned Scout", 1000,
+                "Hire specialist for ");
+        purchase.revealSpecialist("HARDY_PIONEER");
+        purchase.verifySpecialistOffer("HARDY_PIONEER", "Hardy Pioneer", 1000,
+                "Hire specialist for ");
+        purchase.revealSpecialist("VETERAN_SOLDIER");
+        purchase.verifySpecialistOffer("VETERAN_SOLDIER", "Veteran Soldier",
+                2000, "Hire specialist for ");
+        purchase.revealSpecialist("JESUIT_MISSIONARY");
+        purchase.verifySpecialistOffer("JESUIT_MISSIONARY", "Jesuit Missionary",
+                3000, "Hire specialist for ");
+        purchase.verifyExcludedPlanters();
+        purchase.captureDialog("mainVbox", "specialists-english.png");
+        purchase.escape();
+        europe.verifyGold(4400);
+
+        // Reach the final list entry by keyboard and retain it after disk
+        // reload.
+        europe.openBuyUnitScreen();
+        purchase.confirmSpecialistWithKeyboard("JESUIT_MISSIONARY");
+        purchase.verifyPurchasedSpecialist(103, "JESUIT_MISSIONARY", 1400);
+        europe.close().exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        purchase.verifyPurchasedSpecialist(103, "JESUIT_MISSIONARY", 1400);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_complete_specialist_offer_cs() throws Exception {
+        // Inspect every priced specialist, including entries below the
+        // viewport.
+        org.microcol.page.SettingPage settings = WelcomePage.of(getContext())
+                .openSetting();
+        settings.setCzechLanguage();
+        EuropePortScreen europe = settings.goBack().loadGame()
+                .openEuroperPort("Evropa");
+        ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
+        europe.openBuyUnitScreen();
+        purchase.revealSpecialist("EXPERT_FARMER");
+        purchase.verifySpecialistOffer("EXPERT_FARMER", "zkušený farmář", 1000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_FISHERMAN");
+        purchase.verifySpecialistOffer("EXPERT_FISHERMAN", "zkušený rybář",
+                1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_FUR_TRAPPER");
+        purchase.verifySpecialistOffer("EXPERT_FUR_TRAPPER",
+                "zkušený lovec kožešin", 1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_SILVER_MINER");
+        purchase.verifySpecialistOffer("EXPERT_SILVER_MINER",
+                "zkušený těžař stříbra", 1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_LUMBERJACK");
+        purchase.verifySpecialistOffer("EXPERT_LUMBERJACK",
+                "zkušený dřevorubec", 1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_ORE_MINER");
+        purchase.verifySpecialistOffer("EXPERT_ORE_MINER", "zkušený těžař rudy",
+                1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_CARPENTER");
+        purchase.verifySpecialistOffer("MASTER_CARPENTER", "mistr tesař", 1000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_DISTILLER");
+        purchase.verifySpecialistOffer("MASTER_DISTILLER", "mistr palírník",
+                2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_WEAVER");
+        purchase.verifySpecialistOffer("MASTER_WEAVER", "mistr tkadlec", 2000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_TOBACCONIST");
+        purchase.verifySpecialistOffer("MASTER_TOBACCONIST",
+                "mistr výrobce doutníků", 2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_FUR_TRADER");
+        purchase.verifySpecialistOffer("MASTER_FUR_TRADER", "mistr kožešník",
+                2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_BLACKSMITH");
+        purchase.verifySpecialistOffer("MASTER_BLACKSMITH", "mistr kovář", 2200,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_GUNSMITH");
+        purchase.verifySpecialistOffer("MASTER_GUNSMITH", "mistr puškař", 2000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("FIREBRAND_PREACHER");
+        purchase.verifySpecialistOffer("FIREBRAND_PREACHER", "horlivý kazatel",
+                3000, "Najmout odborníka za ");
+        purchase.revealSpecialist("ELDER_STATESMAN");
+        purchase.verifySpecialistOffer("ELDER_STATESMAN", "zkušený státník",
+                3000, "Najmout odborníka za ");
+        purchase.revealSpecialist("SEASONED_SCOUT");
+        purchase.verifySpecialistOffer("SEASONED_SCOUT", "zkušený průzkumník",
+                1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("HARDY_PIONEER");
+        purchase.verifySpecialistOffer("HARDY_PIONEER", "zdatný pionýr", 1000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("VETERAN_SOLDIER");
+        purchase.verifySpecialistOffer("VETERAN_SOLDIER", "vojenský veterán",
+                2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("JESUIT_MISSIONARY");
+        purchase.verifySpecialistOffer("JESUIT_MISSIONARY",
+                "jezuitský misionář", 3000, "Najmout odborníka za ");
+        purchase.verifyExcludedPlanters();
+        purchase.captureDialog("mainVbox", "specialists-cs.png");
+        purchase.escape();
+        europe.verifyGold(4400);
+
+        // Reach the final list entry by keyboard and retain it after disk
+        // reload.
+        europe.openBuyUnitScreen();
+        purchase.confirmSpecialistWithKeyboard("JESUIT_MISSIONARY");
+        purchase.verifyPurchasedSpecialist(103, "JESUIT_MISSIONARY", 1400);
+        europe.close().exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        purchase.verifyPurchasedSpecialist(103, "JESUIT_MISSIONARY", 1400);
+    }
 }

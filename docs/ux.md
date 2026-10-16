@@ -318,7 +318,7 @@ která by změnila hráčova data. Aktuální ověření uvádí
    se loď zobrazí v odpovídajícím směru nebo v přístavu; obsazené pobřeží
    ponechá srozumitelný stav čekání. Zastaralá nabídka zobrazí odmítnutí a
    přehled se obnoví.
-3. [R-0072](requirements/R-0072.md) a [testová evidence](functional-tests.md#r-0072-voyage-reversal-2026-10-16)
+3. [R-0072](requirements/done/R-0072.md) a [testová evidence](functional-tests.md#r-0072-voyage-reversal-2026-10-16)
    rozlišují implementaci, automatické ověření a dosud neprovedené uživatelské
    pozorování. Popis není výsledkem uživatelské studie.
 
@@ -334,3 +334,15 @@ která by změnila hráčova data. Aktuální ověření uvádí
    rozkaz zobrazí existující zpětnou vazbu a ovládání se obnoví.
 3. [R-0073](requirements/R-0073.md) a [testová evidence](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16)
    rozlišují návrh, implementaci a skutečné ověření. Nejde o pozorování hráčů.
+
+
+### Nabídka evropských odborníků — 16. října 2026
+
+R-0074 rozšiřuje nabídku nákupu na 19 odborností. Dvousloupcový seznam
+se posouvá uvnitř dialogu; zavření zůstává mimo posuvnou plochu. Cena a
+nedostupnost používají modelový nákupní kontrakt. Tab/mezerník umožní
+najmout i poslední položku, Escape zavře nabídku bez nákupu.
+TC30/11–12 ověřily všechny názvy a ceny v EN/CZ, viditelnost po posunutí,
+klávesový nákup a Continue. Snímky obou jazyků byly zkontrolovány;
+nejde o uživatelskou studii ani přejímku všech neprodukčních schopností.
+Podrobnosti uvádí [evidence R-0074](functional-tests.md#r-0074-specialist-roster-2026-10-16).

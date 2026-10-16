@@ -30,6 +30,7 @@ public final class BuyUnitPanel extends VBox {
         getStyleClass().add("unitPanel");
         final ImageView image = new ImageView(
                 imageProvider.getUnitImage(unitType));
+        labelName.setId("buy-unit-name-" + unitType.name());
         labelName.getStyleClass().add("name");
         buttonBuy.getStyleClass().add("buttonBuy");
         buttonBuy.setId("buy-unit-" + unitType.name());
@@ -43,7 +44,7 @@ public final class BuyUnitPanel extends VBox {
     void refresh(final Player buyer) {
         labelName.setText(localizationHelper.getUnitName(unitType));
         buttonBuy.setText(i18n
-                .get(unitType == UnitType.MASTER_BLACKSMITH
+                .get(UnitType.EUROPEAN_SPECIALISTS.contains(unitType)
                         ? Europe.buyUnitDialog_buttonHire
                         : Europe.buyUnitDialog_buttonBuyUnit)
                 + " " + unitType.getEuropePrice());

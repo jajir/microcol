@@ -57,6 +57,10 @@ public class UnitFactory {
                 if (UnitType.MASTER_BLACKSMITH == request.getUnitType()) {
                     return makeMasterBlacksmith(request);
                 }
+                if (UnitType.EUROPEAN_SPECIALISTS
+                        .contains(request.getUnitType())) {
+                    return makeSpecialist(request);
+                }
                 return null;
             }));
 
@@ -75,6 +79,14 @@ public class UnitFactory {
                 request.getAvailableMoves(), request.getAction(),
                 request.getTools(), request.isHoldingGuns(),
                 request.isMounted());
+    }
+
+    private Unit makeSpecialist(final UnitCreateRequest request) {
+        return new UnitSpecialist(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction(),
+                request.getTools(), request.isHoldingGuns(),
+                request.isMounted(), request.getUnitType());
     }
 
     private Unit makeGalleon(final UnitCreateRequest request) {

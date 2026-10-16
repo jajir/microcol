@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.Ship;
@@ -1223,7 +1224,12 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
                 this);
-        setAction(actionType.make());
+        final UnitAction next = actionType.make();
+        if (actionType == UnitActionType.plowField
+                && getType() == UnitType.HARDY_PIONEER) {
+            ((UnitActionPlowField) next).setRemainingTurns(2);
+        }
+        setAction(next);
         actionPoints = 0;
         model.fireActionWasStarted(this);
     }

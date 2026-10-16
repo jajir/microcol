@@ -46,7 +46,7 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
         UnitType.UNIT_TYPES.stream()
                 .filter(unitType -> unitType.getEuropePrice() > 0
-                        && unitType != UnitType.MASTER_BLACKSMITH)
+                        && !UnitType.EUROPEAN_SPECIALISTS.contains(unitType))
                 .forEach(unitType -> {
                     final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(
                             unitType, imageProvider, gameModelController,

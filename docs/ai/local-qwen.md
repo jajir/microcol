@@ -3264,3 +3264,16 @@ committed for this experiment.
     selection test after review. Main verified 1401 full model tests and eight
     focused cases. Main-owned UI fixture/helper failures and the final 31-pass
     Docker regression are recorded in [R-0073 evidence](../functional-tests.md#r-0073-repair-and-model-acceptance-2026-10-16).
+
+
+17. R-0074 uses one bounded Sol low model/test assignment in
+    `2026-10-16-r74`, based on `62b419d7`. Main owns GUI/localization and
+    player scenarios; no duplicate model implementation or additional cloud
+    reviewer was started. Review found saved-field identity validation and
+    construction-time type access that needed updating for typed specialists.
+    The worker repaired five old fixture errors after the first full model
+    run; main verified the complete 1464-test rerun, 12 TC30 scenarios and
+    three page-contract checks. Missing non-production role integration
+    and full acceptance remain separately tracked in
+    [R-0074 evidence](../functional-tests.md#r-0074-specialist-roster-2026-10-16).
+    No measured cloud-token saving is claimed.

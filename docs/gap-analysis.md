@@ -378,7 +378,7 @@ Each triple is **hammers / tools / minimum population**. Source: Building aid ca
 
 #### Skills matrix
 
-Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum schoolhouse/college/university tiers; “native” means marked teachable by natives on the card, not an exclusive acquisition route. Every row is missing as a usable persisted specialist; ore miner and blacksmith only have disconnected definitions. The three planter exclusions from Europe are an inference from printed 34, not an explicit list in the card. This matrix specifies eligibility, not numeric productivity modifiers omitted by the source.
+Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum schoolhouse/college/university tiers; “native” means marked teachable by natives on the card, not an exclusive acquisition route. The accepted European exclusions and tier prices are recorded in [economy, production and education](#economy-production-and-education). Blacksmith is already delivered by R-0023; [R-0074](requirements/R-0074.md) implements the remaining European roster and tracks actual skill acceptance separately. The matrix specifies eligibility; agreed productivity modifiers are in the shared economy rules.
 
 | Specialty | Production / role | Minimum school | Native teaching |
 | --- | --- | --- | --- |
@@ -388,9 +388,9 @@ Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum sch
 | Expert Silver Miner | Silver | S | Yes |
 | Expert Lumber Jack | Lumber | S | No marking |
 | Expert Ore Miner | Ore | S | No marking |
-| Master Sugar Planter | Sugar | C | Yes; likely Europe-excluded, requires confirmation |
-| Master Cotton Planter | Cotton | C | Yes; likely Europe-excluded, requires confirmation |
-| Master Tobacco Planter | Tobacco | C | Yes; likely Europe-excluded, requires confirmation |
+| Master Sugar Planter | Sugar | C | Yes; Europe-excluded by agreed rules |
+| Master Cotton Planter | Cotton | C | Yes; Europe-excluded by agreed rules |
+| Master Tobacco Planter | Tobacco | C | Yes; Europe-excluded by agreed rules |
 | Firebrand Preacher | Crosses | U | No marking |
 | Elder Statesman | Liberty bells | U | No marking |
 | Master Carpenter | Lumber→hammers | S | No marking |

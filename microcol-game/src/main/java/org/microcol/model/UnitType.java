@@ -61,7 +61,7 @@ public final class UnitType {
     /**
      * Default ore miner price in Europe port.
      */
-    private static final int DEFAULT_ORE_MINER_EUROPE_PRICE = 600;
+    private static final int DEFAULT_ORE_MINER_EUROPE_PRICE = 1_000;
 
     /**
      * Default master blacksmith price in Europe port.
@@ -139,11 +139,62 @@ public final class UnitType {
     public static final UnitType EXPERT_ORE_MINER = UnitType.make()
             .setName("EXPERT_ORE_MINER")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
-            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
             .setCargoCapacity(0).setStorable(true)
             .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
             .setExpertise(GoodsType.ORE, 2.0F).setCanBuildRoad(true)
             .setCanCutTrees(true).setCanPlowField(true).build();
+
+    private static UnitType specialist(final String name, final int price,
+            final GoodsType expertise) {
+        final UnitTypeBuilder builder = UnitType.make().setName(name)
+                .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+                .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+                .setCargoCapacity(0).setStorable(true).setEuropePrice(price)
+                .setCanBuildRoad(true).setCanCutTrees(true)
+                .setCanPlowField(true);
+        if (expertise != null) {
+            builder.setExpertise(expertise, 2.0F);
+        }
+        return builder.build();
+    }
+
+    public static final UnitType EXPERT_FARMER = specialist("EXPERT_FARMER",
+            1_000, GoodsType.CORN);
+    public static final UnitType EXPERT_FISHERMAN = specialist(
+            "EXPERT_FISHERMAN", 1_000, GoodsType.CORN);
+    public static final UnitType EXPERT_FUR_TRAPPER = specialist(
+            "EXPERT_FUR_TRAPPER", 1_000, GoodsType.FUR);
+    public static final UnitType EXPERT_SILVER_MINER = specialist(
+            "EXPERT_SILVER_MINER", 1_000, GoodsType.SILVER);
+    public static final UnitType EXPERT_LUMBERJACK = specialist(
+            "EXPERT_LUMBERJACK", 1_000, GoodsType.LUMBER);
+
+    public static final UnitType MASTER_CARPENTER = specialist(
+            "MASTER_CARPENTER", 1_000, GoodsType.HAMMERS);
+    public static final UnitType MASTER_DISTILLER = specialist(
+            "MASTER_DISTILLER", 2_000, GoodsType.RUM);
+    public static final UnitType MASTER_WEAVER = specialist("MASTER_WEAVER",
+            2_000, GoodsType.SILK);
+    public static final UnitType MASTER_TOBACCONIST = specialist(
+            "MASTER_TOBACCONIST", 2_000, GoodsType.CIGARS);
+    public static final UnitType MASTER_FUR_TRADER = specialist(
+            "MASTER_FUR_TRADER", 2_000, GoodsType.COAT);
+    public static final UnitType MASTER_GUNSMITH = specialist("MASTER_GUNSMITH",
+            2_000, GoodsType.MUSKET);
+
+    public static final UnitType FIREBRAND_PREACHER = specialist(
+            "FIREBRAND_PREACHER", 3_000, GoodsType.CROSS);
+    public static final UnitType ELDER_STATESMAN = specialist("ELDER_STATESMAN",
+            3_000, GoodsType.BELL);
+    public static final UnitType SEASONED_SCOUT = specialist("SEASONED_SCOUT",
+            1_000, null);
+    public static final UnitType HARDY_PIONEER = specialist("HARDY_PIONEER",
+            1_000, null);
+    public static final UnitType VETERAN_SOLDIER = specialist("VETERAN_SOLDIER",
+            2_000, null);
+    public static final UnitType JESUIT_MISSIONARY = specialist(
+            "JESUIT_MISSIONARY", 3_000, null);
 
     public static final UnitType WAGON = UnitType.make().setName("WAGON")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
@@ -214,9 +265,18 @@ public final class UnitType {
     /**
      * List of all available unit types.
      */
-    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST,
-            FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER, MAN_OF_WAR,
-            WAGON, MASTER_BLACKSMITH);
+    public static final List<UnitType> EUROPEAN_SPECIALISTS = ImmutableList.of(
+            EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_FUR_TRAPPER,
+            EXPERT_SILVER_MINER, EXPERT_LUMBERJACK, EXPERT_ORE_MINER,
+            MASTER_CARPENTER, MASTER_DISTILLER, MASTER_WEAVER,
+            MASTER_TOBACCONIST, MASTER_FUR_TRADER, MASTER_BLACKSMITH,
+            MASTER_GUNSMITH, FIREBRAND_PREACHER, ELDER_STATESMAN,
+            SEASONED_SCOUT, HARDY_PIONEER, VETERAN_SOLDIER, JESUIT_MISSIONARY);
+
+    public static final List<UnitType> UNIT_TYPES = ImmutableList
+            .<UnitType>builder().add(COLONIST, FRIGATE, GALLEON, CARAVEL,
+                    MERCHANTMAN, PRIVATEER, MAN_OF_WAR, WAGON)
+            .addAll(EUROPEAN_SPECIALISTS).build();
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES
             .stream().collect(ImmutableMap.toImmutableMap(UnitType::name,
@@ -623,6 +683,21 @@ public final class UnitType {
         } else {
             return DEFAULT_PRODUCTION_MODIFIER;
         }
+    }
+
+    public float getFieldProductionModifier(final GoodsType goodsType,
+            final TerrainType terrainType) {
+        Preconditions.checkNotNull(goodsType);
+        Preconditions.checkNotNull(terrainType);
+        if (goodsType == GoodsType.CORN) {
+            if (this == EXPERT_FARMER) {
+                return terrainType.isLand() ? 2.0F : 1.0F;
+            }
+            if (this == EXPERT_FISHERMAN) {
+                return terrainType.isLand() ? 1.0F : 2.0F;
+            }
+        }
+        return getProductionModifier(goodsType);
     }
 
     @Override

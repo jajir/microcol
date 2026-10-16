@@ -14,7 +14,7 @@ public class PlaceEuropePier extends AbstractPlace {
 
     PlaceEuropePier(final Unit unit) {
         super(unit);
-        Preconditions.checkArgument(!unit.getType().isShip(),
+        Preconditions.checkArgument(!unit.isShip(),
                 "Ship can't be placed to Europe port pier.");
     }
 

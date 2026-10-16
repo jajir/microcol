@@ -3218,3 +3218,43 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    after its contrast fix. Shared formatting passed for all 23 changed Java
    files; nine documentation tests and strict MkDocs passed before publication.
    Full CI/publication for R-0073 remain pending.
+
+### R-0072 full publication acceptance — 2026-10-16
+
+1. Full run [38932825583](https://github.com/jajir/microcol/actions/runs/38932825583)
+   on `79248aa4` passed **1393 model and 206 UI/support tests**, zero failures,
+   errors or skips. All three native package jobs and publication passed;
+   compatibility 38932825522 and Pages 38932825663 also passed.
+2. Verified release
+   [dev-122-79248aa40c1d](https://github.com/jajir/microcol/releases/tag/dev-122-79248aa40c1d)
+   contains all three platform archives/installers, launchers, manifest and
+   checksums. Publication explicitly kept the automatic development channel
+   unchanged because a newer main revision was present.
+
+<a id="r-0074-specialist-roster-2026-10-16"></a>
+## R-0074 European specialist roster — 2026-10-16
+
+1. One Sol low worker implemented the bounded model roster, production,
+   persistence and tests in an isolated worktree based on `62b419d7`. Main
+   implemented localized names/images, the scrollable purchase list and TC30
+   additions, reviewed shared callers and integrated the model stage.
+   No local worker was used. No token-saving measurement is claimed.
+2. First full model run executed **1464 tests, zero failures, five errors**.
+   All errors came from the existing `ColonyFieldTest` map mock returning no
+   terrain type. Farmer/fisherman production now requires that context.
+   The same worker supplied real grassland in the fixture without removing
+   assertions or weakening production validation. The full rerun passed **1464 tests**, zero failures/errors/skips. Main formatter checked all 20 changed Java files with exact-token preservation and idempotence.
+3. TC30/11 and TC30/12 inspect all 19 entries, independent expected prices and
+   English/Czech names, scroll visibility, excluded planters, keyboard purchase
+   of the final entry and disk continuation. Existing TC30 cases remain.
+   Docker `run-xivrXs` passed all **12 TC30 scenarios**, zero failures/errors/skips.
+   The page verification source contract passed **three tests** separately.
+   English and Czech screenshots were inspected: names/prices are readable,
+   the last entry is visible after scrolling and the close button remains
+   outside the scroll area. Nine documentation tests and strict MkDocs passed.
+   This is roster/shared purchase-flow acceptance; new-specialty transport-to-job
+   journeys and the remaining role effects still need final integration.
+4. Full R-0074 remains incomplete: veteran rank/strength, Jesuit missionary
+   outcomes, scout native/rumor effects and remaining improvement actions need
+   their real integrations. Current scout radius and hardy plow timing do not
+   substitute for those outcomes. Full CI/publication is also pending.

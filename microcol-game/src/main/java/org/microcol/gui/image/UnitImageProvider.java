@@ -36,7 +36,8 @@ public class UnitImageProvider {
     UnitImageProvider(final ImageCache imageCache) {
         Preconditions.checkNotNull(imageCache);
 
-        unitImageMap = ImmutableMap.<UnitType, Image>builder()
+        final ImmutableMap.Builder<UnitType, Image> images = ImmutableMap
+                .<UnitType, Image>builder()
                 .put(UnitType.CARAVEL,
                         imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.MERCHANTMAN,
@@ -51,11 +52,11 @@ public class UnitImageProvider {
                         imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
                 .put(UnitType.COLONIST,
                         imageCache.getImage(IMG_UNIT_FREE_COLONIST))
-                .put(UnitType.MASTER_BLACKSMITH,
-                        imageCache.getImage(IMG_UNIT_FREE_COLONIST))
                 .put(UnitType.WAGON,
-                        imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON))
-                .build();
+                        imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON));
+        UnitType.EUROPEAN_SPECIALISTS.forEach(type -> images.put(type,
+                imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
+        unitImageMap = images.build();
 
         unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
                 Lists.newArrayList(request -> {
@@ -73,8 +74,8 @@ public class UnitImageProvider {
                     return null;
                 }, request -> {
                     if (UnitType.COLONIST == request.getUnitType()
-                            || UnitType.MASTER_BLACKSMITH == request
-                                    .getUnitType()) {
+                            || UnitType.EUROPEAN_SPECIALISTS
+                                    .contains(request.getUnitType())) {
                         if (request.getUnit() instanceof UnitFreeColonist) {
                             final UnitFreeColonist fc = (UnitFreeColonist) request
                                     .getUnit();

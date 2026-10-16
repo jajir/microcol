@@ -159,7 +159,8 @@ public final class ColonyField {
 
     Goods getPotentialProduction(final Unit worker, final GoodsType goodsType) {
         return Goods.of(goodsType, getGoodsTypeProduction(goodsType))
-                .multiply(worker.getType().getProductionModifier(goodsType));
+                .multiply(worker.getType().getFieldProductionModifier(goodsType,
+                        getTerrainType()));
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {

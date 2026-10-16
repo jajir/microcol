@@ -73,7 +73,10 @@ public final class ColonyJobChoice {
                                 worker);
         currentStock = inputNeeded == null ? null
                 : colony.getWarehouse().getGoods(inputNeeded.getType());
-        specialty = worker.getType().getProductionModifier(goodsType) > 1;
+        specialty = field == null
+                ? worker.getType().getProductionModifier(goodsType) > 1
+                : worker.getType().getFieldProductionModifier(goodsType,
+                        field.getTerrainType()) > 1;
     }
 
     static List<ColonyJobChoice> forWorker(final Model model,

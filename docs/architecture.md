@@ -126,6 +126,19 @@ před výměnou rozehrané hry. Referenční profil přijímá všechny čtyři 
 Jméno hráče zůstává nezávislé na interním národním klíči. Stav ověření uvádí
 [evidence R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16).
 
+### Evropské odbornosti (R-0074)
+
+`UnitType.EUROPEAN_SPECIALISTS` je společný registr 19 evropsky dostupných
+odborností a jejich cen. `UnitSpecialist` používá vybavení a přesuny běžného
+kolonisty; existující `UnitMasterBlacksmith` zachovává svou identitu.
+`UnitFactory` vytváří stejné typy při nákupu i načítání. `ColonyField` používá
+terénově závislou potravinovou odbornost, `ColonyJobChoice` stejný výpočet
+pro nabídku práce. Budovy dál používají společnou produkci a vstupní zásoby.
+GUI pouze překládá typy a zobrazuje posuvnou nabídku; pravidla nákupu
+zůstávají v `Player`. Starý nábor zůstává oddělený do R-0075.
+Samotný registr neprokazuje dokončení vojenských, misionářských a dalších
+neprodukčních schopností; jejich přejímku sleduje [R-0074](requirements/R-0074.md).
+
 ### Délka plavby přes Atlantik (R-0071)
 
 `model.AtlanticVoyageDuration` vlastní výpočet běžné délky plavby z počasí,
@@ -149,7 +162,7 @@ zbývající dobu odvozuje z polohy a délky. Načtení kontroluje původní fak
 R-0071 a shodu odvozeného času. `Ship.tryArriveFromHighSea` sdílí příchod
 po běžném tahu i okamžitý návrat po otočení u počátku. Obsazené pobřeží dál
 znamená čekání, bez dodatečného tahu nebo změny nákladu. Ověření sleduje
-[R-0072](requirements/R-0072.md).
+[R-0072](requirements/done/R-0072.md).
 
 ### Pořadí národních tahů (R-0052)
 

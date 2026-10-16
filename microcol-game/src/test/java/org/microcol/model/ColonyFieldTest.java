@@ -168,6 +168,8 @@ public class ColonyFieldTest {
         when(worker.getType()).thenReturn(UnitType.COLONIST);
         when(placeColonyField.getUnit()).thenReturn(worker);
         when(map.isValid(any(Location.class))).thenReturn(true);
+        when(map.getTerrainTypeAt(any(Location.class)))
+                .thenReturn(TerrainType.GRASSLAND);
         field = new ColonyField(model, direction, colony);
         field.setPlaceColonyField(placeColonyField);
     }

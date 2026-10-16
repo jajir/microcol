@@ -102,7 +102,7 @@ only to the described bounded delivery.
 | [R-0018](done/R-0018.md) | done | Automatic saving and the real Continue path are delivered. | [R-0067](done/R-0067.md), [R-0068](done/R-0068.md) |
 | [R-0019](done/R-0019.md) | done | Unexplored terrain is visually distinct and does not leak hidden content. | [R-0069](R-0069.md), [R-0070](R-0070.md) |
 | [R-0020](done/R-0020.md) | done | European equipment purchase and sale are implemented and published. | [R-0102](R-0102.md) |
-| [R-0021](done/R-0021.md) | done | Outward sea-lane departure and return to the recorded coast are delivered. | [R-0071](done/R-0071.md), [R-0072](R-0072.md) |
+| [R-0021](done/R-0021.md) | done | Outward sea-lane departure and return to the recorded coast are delivered. | [R-0071](done/R-0071.md), [R-0072](done/R-0072.md) |
 | [R-0022](done/R-0022.md) | done | Individual passenger embark/disembark is implemented with explicit selection. | [R-0054](done/R-0054.md), [R-0073](R-0073.md) |
 | [R-0023](done/R-0023.md) | done | The master blacksmith can be hired and brought home. | [R-0061](done/R-0061.md), [R-0074](R-0074.md), [R-0075](R-0075.md), [R-0076](R-0076.md), [R-0077](R-0077.md), [R-0107](R-0107.md), [R-0108](done/R-0108.md), [R-0111](R-0111.md) |
 | [R-0024](done/R-0024.md) | done | Wagon unloading uses the shared nonfood warehouse limit. | [R-0058](done/R-0058.md), [R-0091](R-0091.md) |

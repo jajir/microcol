@@ -578,6 +578,14 @@ Výše uvedený poměr rudy a nástrojů je současná implementace; jeho opravu
 vlastní samostatné [R-0009](requirements/canceled/R-0009.md). Tím není
 přijat celý UC-055 s imigračním poolem a dalšími profesemi.
 
+Rozpracované R-0074 rozšiřuje odbornickou část UC-055 na 19 evropských
+profesí. Modelový běh 1464 testů prošel; TC30/11–12 přidávají kontrolu celého
+seznamu v češtině i angličtině a klávesový nákup poslední položky.
+Všech 12 TC30 scénářů prošlo v Dockeru; tři kontroly page objectů také prošly.
+Podrobné ověření a nehotové neprodukční schopnosti sleduje
+[evidence R-0074](functional-tests.md#r-0074-specialist-roster-2026-10-16);
+celý UC-055 zůstává nepřijatý.
+
 R-0071 rozšiřuje UC-027/113 o jednorázově vylosované počasí a uloženou původní
 délku plavby. Modelová sada (1386) a vybrané UI scénáře TC23/27/28/30
 s kontraktem (26) prošly 2026-10-16; [evidence](functional-tests.md#r-0071-voyage-duration-2026-10-16)
