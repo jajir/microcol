@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -426,6 +427,7 @@ public class Model {
         }
         nextColonyId++;
         colonies.add(col);
+        player.activateCongressAfterFirstColony();
         if (fields.isEmpty()) {
             unit.placeToColonyStructureSlot(indoorWork);
         } else {
@@ -691,6 +693,61 @@ public class Model {
                     }
                 }, unitType, owner, unitType.getSpeed(),
                 new UnitActionNoAction());
+    }
+
+    /** Deliver Jones's one-time frigate to the first reachable rebel port. */
+    Optional<Unit> deliverJonesFrigateAtCoastalColony(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        if (!unitStorage.canAllocateUnit()) {
+            return Optional.empty();
+        }
+        final Set<Location> reachableWater = new HashSet<>();
+        final ArrayDeque<Location> frontier = new ArrayDeque<>();
+        for (int x = 0; x <= map.getMaxLocationX(); x++) {
+            for (int y = 0; y <= map.getMaxLocationY(); y++) {
+                final Location location = Location.of(x, y);
+                if (map.isValid(location)
+                        && map.getTerrainTypeAt(
+                                location) == TerrainType.HIGH_SEA
+                        && getEnemyUnitsAt(owner, location).isEmpty()
+                        && reachableWater.add(location)) {
+                    frontier.add(location);
+                }
+            }
+        }
+        while (!frontier.isEmpty()) {
+            for (final Location neighbor : frontier.removeFirst()
+                    .getNeighbors()) {
+                if (map.isValid(neighbor)
+                        && map.getTerrainTypeAt(neighbor).isSea()
+                        && getEnemyUnitsAt(owner, neighbor).isEmpty()
+                        && reachableWater.add(neighbor)) {
+                    frontier.add(neighbor);
+                }
+            }
+        }
+        final Optional<Colony> destination = colonies.stream()
+                .filter(colony -> colony.getOwner() == owner)
+                .filter(colony -> getEnemyUnitsAt(owner, colony.getLocation())
+                        .isEmpty())
+                .filter(colony -> colony.getLocation().getNeighbors().stream()
+                        .anyMatch(reachableWater::contains))
+                .min(Comparator.comparingInt(Colony::getId));
+        if (destination.isEmpty()) {
+            return Optional.empty();
+        }
+        final Location location = destination.get().getLocation();
+        final Unit unit = unitStorage
+                .createUnit(
+                        created -> new Cargo(
+                                created, UnitType.FRIGATE.getCargoCapacity()),
+                        this,
+                        created -> new PlaceLocation(created, location,
+                                created.getDefaultOrintation()),
+                        UnitType.FRIGATE, owner, UnitType.FRIGATE.getSpeed(),
+                        new UnitActionNoAction());
+        owner.revealMapForUnit(unit);
+        return Optional.of(unit);
     }
 
     Unit addUnitOutSideColony(final Colony colony) {

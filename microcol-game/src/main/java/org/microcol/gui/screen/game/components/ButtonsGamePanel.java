@@ -1,6 +1,8 @@
 package org.microcol.gui.screen.game.components;
 
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
+import org.microcol.gui.screen.congress.CongressDialog;
+import org.microcol.gui.screen.congress.CongressText;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.event.ShowHelpEvent;
@@ -67,6 +69,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private boolean sentryActive;
     private I18n currentI18n;
 
+    private final Button buttonCongress = new Button();
+
     private final Button buttonWait = new Button();
     private final Button buttonSkipUnitTurn = new Button();
     private final Tooltip waitTooltip = new Tooltip();
@@ -92,9 +96,13 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n, final ColoniesMenu coloniesMenu) {
+            final I18n i18n, final ColoniesMenu coloniesMenu,
+            final CongressDialog congressDialog) {
         super(imageProvider, eventBus, Source.GAME, i18n);
 
+        buttonCongress.setId("congress");
+        buttonCongress.setText(i18n.get(CongressText.title));
+        buttonCongress.setOnAction(event -> congressDialog.showCongress());
         buttonSentry.setId("sentryUnit");
         buttonSentry.setTooltip(sentryTooltip);
         buttonSentry.setDisable(true);
@@ -177,6 +185,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonSentry);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
+        getButtonPanel().getChildren().add(buttonCongress);
         getButtonPanel().getChildren().add(buttonCenter);
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);
@@ -206,6 +215,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     @Override
     public void updateLanguage(final I18n i18n) {
         currentI18n = i18n;
+        buttonCongress.setText(i18n.get(CongressText.title));
         updateSentryText();
         buttonWait.setText(i18n.get(Buttons.buttonWait));
         buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
@@ -238,6 +248,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     private void setDisable(final boolean disable) {
+        buttonCongress.setDisable(disable);
         buttonSentry.setDisable(disable);
         buttonWait.setDisable(disable);
         buttonSkipUnitTurn.setDisable(disable);

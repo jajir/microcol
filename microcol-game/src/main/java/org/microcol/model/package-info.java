@@ -31,6 +31,10 @@
  * identities and associated Crowns. Player prepares voyages/immigration,
  * colonies and then unit work; individual rule owners retain their own
  * accounting. AtlanticVoyageDuration owns the ordinary crossing formula;
+ * Congress keeps frozen founder offers, a separate national bell account and
+ * durable membership; colony production credits it once per update. Founder
+ * effects remain in their respective rule owners, with Jones's one-time frigate
+ * delivered at the existing Europe or reachable coastal-port boundary.
  * PlaceHighSea retains sampled weather, original route and position across
  * saves. Model validates reversal offers against live ownership and voyage
  * revision before changing destination. Model serializes turn transitions and

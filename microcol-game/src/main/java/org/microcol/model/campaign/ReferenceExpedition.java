@@ -14,6 +14,7 @@ import org.microcol.model.EuropeanNation;
 import org.microcol.model.EuropeanRelationState;
 import org.microcol.model.Location;
 import org.microcol.model.RecruitmentPool;
+import org.microcol.model.Congress;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 import org.microcol.model.store.CargoSlotPo;
@@ -161,6 +162,7 @@ public final class ReferenceExpedition {
         player.setWhosKingThisPlayerIs(crownOf);
         if (crownOf == null) {
             player.setRecruitment(RecruitmentPool.initial());
+            player.setCongress(Congress.initial());
         }
         final VisibilityPo visibility = new VisibilityPo();
         visibility.setVisibility(Set.of(), maxX, maxY);

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Congress</entry>
+  <entry key="choose">Choose this founder</entry>
+  <entry key="close">Close</entry>
+  <entry key="progress">Congress bells: %s / %s</entry>
+  <entry key="objective">Working toward: %s</entry>
+  <entry key="chooseObjective">Choose the next founder. Bells wait until a choice is made.</entry>
+  <entry key="members">Members: %s</entry>
+  <entry key="none">None</entry>
+  <entry key="jonesPending">Jones: one frigate awaits a safe delivery port.</entry>
+  <entry key="jonesDelivered">Jones: one free frigate delivered.</entry>
+  <entry key="firstColony">Found your first colony to invite founding fathers.</entry>
+  <entry key="chosen">Objective chosen. New bells will advance this founder.</entry>
+  <entry key="changed">The offer changed. Close Congress and open it again.</entry>
+  <entry key="founderJoined">%s has joined Congress.</entry>
+  <entry key="MILITARY">Military</entry>
+  <entry key="POLITICAL">Political</entry>
+  <entry key="TRADE">Trade</entry>
+  <entry key="RELIGIOUS">Religious</entry>
+  <entry key="EXPLORATION">Exploration</entry>
+  <entry key="HERNAN_CORTES">Hernan Cortes</entry>
+  <entry key="FRANCIS_DRAKE">Francis Drake</entry>
+  <entry key="JOHN_PAUL_JONES">John Paul Jones</entry>
+  <entry key="PAUL_REVERE">Paul Revere</entry>
+  <entry key="GEORGE_WASHINGTON">George Washington</entry>
+  <entry key="SIMON_BOLIVAR">Simon Bolivar</entry>
+  <entry key="BENJAMIN_FRANKLIN">Benjamin Franklin</entry>
+  <entry key="THOMAS_JEFFERSON">Thomas Jefferson</entry>
+  <entry key="THOMAS_PAINE">Thomas Paine</entry>
+  <entry key="POCAHONTAS">Pocahontas</entry>
+  <entry key="ADAM_SMITH">Adam Smith</entry>
+  <entry key="JAKOB_FUGGER">Jakob Fugger</entry>
+  <entry key="PETER_MINUIT">Peter Minuit</entry>
+  <entry key="PETER_STUYVESANT">Peter Stuyvesant</entry>
+  <entry key="JAN_DE_WITT">Jan de Witt</entry>
+  <entry key="JEAN_DE_BREBEUF">Jean de Brebeuf</entry>
+  <entry key="WILLIAM_BREWSTER">William Brewster</entry>
+  <entry key="BARTOLOME_DE_LAS_CASAS">Bartolome de las Casas</entry>
+  <entry key="WILLIAM_PENN">William Penn</entry>
+  <entry key="JUAN_DE_SEPULVEDA">Juan de Sepulveda</entry>
+  <entry key="FRANCISCO_DE_CORONADO">Francisco de Coronado</entry>
+  <entry key="HENRY_HUDSON">Henry Hudson</entry>
+  <entry key="SIEUR_DE_LA_SALLE">Sieur de la Salle</entry>
+  <entry key="FERDINAND_MAGELLAN">Ferdinand Magellan</entry>
+  <entry key="HERNANDO_DE_SOTO">Hernando de Soto</entry>
+  <entry key="allMembers">All founding fathers have joined Congress.</entry>
+  <entry key="jonesEffect">John Paul Jones grants one free frigate on joining.</entry>
+</properties>

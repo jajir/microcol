@@ -387,6 +387,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
 | [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
 | [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů a základních evropských vztahů; potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
+| [gui.screen.congress](../microcol-game/src/main/java/org/microcol/gui/screen/congress/) | Zobrazení neměnné nabídky otců, národních zvonů, cíle a členství. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. |
 | [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |
@@ -623,3 +624,13 @@ Před změnou pokladnice, materiálů nebo fronty se znovu ověří vazba nabíd
 a frontu, její stav, vlastník, zdroje, cena i předpoklady dokončení.
 UI zobrazuje modelovou nabídku a vyžaduje výslovné potvrzení; samo cenu
 nepočítá. Viz [R-0083](requirements/R-0083.md).
+
+### Kongres a příchod otce (R-0104)
+
+`Player` vlastní uložený `Congress`: nabídku kandidátů, zvolený cíl, národní
+zvony, členy a případnou čekající Jonesovu fregatu. `Colony` připisuje novou
+výrobu zvonů nezávisle na místním skladu. Po aktualizaci kolonií hráč dokončí
+nejvýše jeden cíl a zachová přebytek. `FounderOffer` váže potvrzení na
+původního hráče a generaci nabídky. Model vytváří odměnu a uloženou zprávu
+příchodu; rozhraní pouze překládá a zobrazuje. Continue neopakuje aktualizaci.
+Rozsah a přejímku vede [R-0104](requirements/R-0104.md).

@@ -273,12 +273,17 @@ public class Colony {
         final int possibleCrosses = Math.max(0, initialProduction
                 .getStatsByType(GoodsType.CROSS).getRowProduction());
         owner.checkCanCreditProducedCrosses(possibleCrosses);
+        final int possibleBells = Math.max(0, initialProduction
+                .getStatsByType(GoodsType.BELL).getRowProduction());
+        owner.checkCanCreditProducedBells(possibleBells);
         final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
         // from now colony could be destroyed by famine.
         if (isValid()) {
             final ColonyProductionStats colonyStats = getRawGoodsStats();
             final int producedCrosses = Math.max(0, colonyStats
                     .getStatsByType(GoodsType.CROSS).getRowProduction());
+            final int producedBells = Math.max(0, colonyStats
+                    .getStatsByType(GoodsType.BELL).getRowProduction());
             colonyStats.forEach((goodsType, stats) -> {
                 if (GoodsType.CORN.equals(goodsType)) {
                     if (famineVictim != null) {
@@ -306,6 +311,7 @@ public class Colony {
                 }
             });
             owner.creditProducedCrosses(producedCrosses);
+            owner.creditProducedBells(producedBells);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));

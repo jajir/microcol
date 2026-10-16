@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.microcol.model.Goods;
 import org.microcol.model.UnitType;
+import org.microcol.model.Founder;
 
 public final class TurnEventPo {
 
@@ -23,6 +24,16 @@ public final class TurnEventPo {
 
     private Integer colonyId;
     private Integer lostShips;
+
+    private Founder founder;
+
+    public Founder getFounder() {
+        return founder;
+    }
+
+    public void setFounder(final Founder founder) {
+        this.founder = founder;
+    }
 
     public Integer getLostShips() {
         return lostShips;

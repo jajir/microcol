@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.RecruitmentPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
@@ -41,13 +42,15 @@ public abstract class Player {
 
     private final RecruitmentPool recruitment;
 
+    private final Congress congress;
+
     private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
 
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
             final boolean declaredIndependence,
             final Map<String, Object> extraData, Set<Location> visible,
-            final RecruitmentPo recruitmentPo) {
+            final RecruitmentPo recruitmentPo, final CongressPo congressPo) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.computer = computer;
@@ -61,6 +64,8 @@ public abstract class Player {
                 Preconditions.checkNotNull(visible, "Visible is null"));
         this.recruitment = recruitmentPo == null ? null
                 : new RecruitmentPool(recruitmentPo);
+        this.congress = congressPo == null ? null
+                : new Congress(congressPo, model.getDifficulty());
         if (recruitment != null) {
             try {
                 recruitment.price(model.getDifficulty(), name);
@@ -81,16 +86,20 @@ public abstract class Player {
         if (playerPo.getWhosKingThisPlayerIs() == null) {
             Preconditions.checkArgument(playerPo.getRecruitment() != null,
                     "Missing colonial recruitment pool");
+            Preconditions.checkArgument(playerPo.getCongress() != null,
+                    "Missing colonial Congress");
             final Player player = new PlayerHuman(playerPo.getName(),
                     playerPo.isComputer(), playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
                     playerPo.getVisible().getVisibilitySet(),
-                    playerPo.getRecruitment());
+                    playerPo.getRecruitment(), playerPo.getCongress());
             player.loadUnitPurchaseCounts(playerPo.getUnitPurchaseCounts());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
                     "Kings cannot have recruitment pools");
+            Preconditions.checkArgument(playerPo.getCongress() == null,
+                    "Kings cannot have Congress");
             Preconditions.checkArgument(
                     playerPo.getUnitPurchaseCounts().isEmpty(),
                     "Kings cannot have purchase counts");
@@ -132,6 +141,9 @@ public abstract class Player {
         out.setVisible(new VisibilityPo());
         if (recruitment != null) {
             out.setRecruitment(recruitment.save());
+        }
+        if (congress != null) {
+            out.setCongress(congress.save());
         }
         final Map<String, Integer> counts = new HashMap<>();
         unitPurchaseCounts
@@ -231,8 +243,117 @@ public abstract class Player {
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
                 .forEach(Ship::advanceVoyage);
         settleEarnedImmigrants();
+        if (congress != null && !getColonies().isEmpty()) {
+            congress.activate();
+        }
+        if (congress != null && congress.isActivated()) {
+            int projectedBells = 0;
+            for (final Colony colony : getColonies()) {
+                projectedBells = Math.addExact(projectedBells,
+                        Math.max(0,
+                                colony.getGoodsStats()
+                                        .getStatsByType(GoodsType.BELL)
+                                        .getRowProduction()));
+            }
+            congress.checkCredit(projectedBells);
+            if (congress.selected().orElse(null) == Founder.JOHN_PAUL_JONES
+                    && congress.willJoinAfter(projectedBells,
+                            model.getDifficulty())) {
+                Preconditions.checkState(model.canAddUnitInEurope(),
+                        "No unit IDs remain for Jones's frigate");
+            }
+        }
         getColonies().forEach(colony -> colony.startTurn());
+        settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
+    }
+
+    void activateCongressAfterFirstColony() {
+        if (congress != null) {
+            congress.activate();
+        }
+    }
+
+    public List<FounderOffer> getFounderOffers() {
+        return congress == null ? List.of() : congress.offers(this);
+    }
+
+    public List<Founder> getCongressMembers() {
+        return congress == null ? List.of() : congress.members();
+    }
+
+    public int getCongressBells() {
+        return congress == null ? 0 : congress.bells();
+    }
+
+    public int getCongressTarget() {
+        return congress == null ? 0 : congress.target(model.getDifficulty());
+    }
+
+    public Optional<Founder> getSelectedFounder() {
+        return congress == null ? Optional.empty() : congress.selected();
+    }
+
+    public boolean canChooseFounder(final FounderOffer offer) {
+        return congress != null && model.isGameRunning()
+                && model.getCurrentPlayer() == this
+                && model.getPlayers().stream()
+                        .anyMatch(player -> player == this)
+                && congress.canChoose(this, offer);
+    }
+
+    public void chooseFounder(final FounderOffer offer) {
+        Preconditions.checkNotNull(offer);
+        model.checkTurnPreparationComplete();
+        Preconditions.checkState(canChooseFounder(offer),
+                "Founder offer is unavailable");
+        congress.choose(this, offer);
+    }
+
+    public boolean isJonesDeliveryPending() {
+        return congress != null && congress.isJonesDeliveryPending();
+    }
+
+    void checkCanCreditProducedBells(final int produced) {
+        if (congress != null) {
+            congress.checkCredit(produced);
+        }
+    }
+
+    void creditProducedBells(final int produced) {
+        if (congress != null) {
+            congress.credit(produced);
+        }
+    }
+
+    private void settleCongress() {
+        if (congress == null) {
+            return;
+        }
+        if (congress.canJoin(model.getDifficulty())) {
+            final Founder selected = congress.selected().orElseThrow();
+            if (selected == Founder.JOHN_PAUL_JONES) {
+                Preconditions.checkState(model.canAddUnitInEurope(),
+                        "No unit IDs remain for Jones's frigate");
+            }
+            final Founder arrived = congress.join(model.getDifficulty());
+            model.getTurnEventStore()
+                    .add(TurnEventProvider.getFounderArrived(this, arrived));
+        }
+        if (congress.isJonesDeliveryPending()) {
+            if (!model.canAddUnitInEurope()) {
+                return;
+            }
+            if (!declaredIndependence) {
+                model.addUnitInEurope(UnitType.FRIGATE, this);
+                congress.markJonesDelivered();
+                model.getTurnEventStore()
+                        .add(TurnEventProvider.getNewUnitInEurope(this));
+            } else {
+                model.deliverJonesFrigateAtCoastalColony(this)
+                        .ifPresent(unit -> congress.markJonesDelivered());
+            }
+        }
     }
 
     private void settleEarnedImmigrants() {

@@ -5,6 +5,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.GoodsType;
+import org.microcol.model.Founder;
 import java.util.stream.Collectors;
 
 /**
@@ -109,6 +110,11 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getNewUnitInEurope(final Player player) {
         return new TurnEventNewUnitInEurope(player.getName());
+    }
+
+    public static TurnEvent getFounderArrived(final Player player,
+            final Founder founder) {
+        return new TurnEventFounderArrived(player.getName(), founder);
     }
 
     /**

@@ -4150,6 +4150,20 @@
   "gameManager": {
     "players": [
       {
+        "congress": {
+          "activated": true,
+          "bells": 0,
+          "members": [],
+          "candidates": [
+            "JOHN_PAUL_JONES",
+            "THOMAS_JEFFERSON",
+            "ADAM_SMITH",
+            "WILLIAM_PENN",
+            "FERDINAND_MAGELLAN"
+          ],
+          "generation": 1,
+          "jonesDeliveryPending": false
+        },
         "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
         "name": "Dutch",
         "computer": false,
@@ -4193,6 +4207,14 @@
         }
       },
       {
+        "congress": {
+          "activated": false,
+          "bells": 0,
+          "members": [],
+          "candidates": [],
+          "generation": 0,
+          "jonesDeliveryPending": false
+        },
         "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
         "name": "Dutch\u0027s King",
         "computer": true,

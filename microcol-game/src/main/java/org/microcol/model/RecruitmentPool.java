@@ -128,7 +128,7 @@ public final class RecruitmentPool {
                 : normal;
     }
 
-    private static int factor(final Difficulty difficulty) {
+    static int factor(final Difficulty difficulty) {
         switch (Preconditions.checkNotNull(difficulty)) {
         case DISCOVERER:
             return 75;

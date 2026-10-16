@@ -3666,6 +3666,10 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    development channel unchanged. R-0078, R-0079 and R-0080 are now done.
 
 
+9. Full R-0082 CI on `3ac0bc75` failed with **234 UI/support cases, one error**, zero assertion failures/skips: TC53/01 attempted `#chooseWork` after the rejected native drag before the popup was found. Main separated context-click and popup lookup with an explicit bounded wait; TC53, TC40 and TC52 are selected for a fresh regression. R-0082 publication remains blocked until fresh acceptance.
+
+10. Fresh Docker `run-uJVC0Q` passed both TC53 cases, all 15 TC40 cases and both TC52 cases within a 36-case run, zero failures/errors/skips. The shared popup wait preserves all departure/reassignment assertions. Full CI of the repair is still required; the earlier failed publication is not counted as success.
+
 ### R-0109 shared hammers — 2026-10-16
 
 1. Selected before R-0083 because rush purchase requires the accepted shared
@@ -3721,3 +3725,38 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    total and remaining-treasury text and both buttons are readable.
 5. Full CI and publication remain pending; R-0083 stays ready until those
    gates finish. No failed or skipped check is counted as acceptance.
+
+### R-0104 Congress recruitment — 2026-10-16
+
+1. Scope: GOV-007 / UC-079 acquisition and FATHER-003 / UC-088 Jones's
+   exactly-once frigate. A bounded Sol low worker owns model state, commands,
+   production integration and model tests in an isolated worktree. Main owns
+   the Congress dialog, current-schema fixtures, F47/TC56, review and actual
+   verification. No local model or duplicate model implementation is used.
+2. Initial model run: **1602 tests, one failure and three errors**, zero skips.
+   The new round-trip assertion compared unit-list ordering although loading
+   groups ships before other units; the full state must instead be compared by
+   stable unit ID. Two new fixtures assumed a nonexistent England player or
+   removed required HIGH_SEA voyage origins. An existing Mockito test constructed
+   a player inside unfinished stubbing, now exposed by the constructor's
+   difficulty read. These four issues were sent to the same worker for targeted
+   repair; no failing run is counted as acceptance.
+3. Targeted repairs preserve every saved field while normalizing only the unit
+   list by stable ID; fixture ownership and the isolated voyage origin are now
+   valid, and Mockito setup is completed before constructing the foreign player.
+   The full rerun passed **1602 tests**, zero failures/errors/skips. Shared
+   formatting checked 32 Java files with exact-token preservation and idempotence.
+4. Main's first documentation check rejected the UC evidence-cell format; the
+   required implementation/verification prefix was restored before rerunning.
+   Player acceptance and final delivery remain pending.
+5. Docker `run-uJVC0Q` passed **36 tests**, zero failures/errors/skips:
+   TC56 (two Congress journeys), TC53 (two fortified-population cases), TC40
+   (15 job cases), TC52 (two printing cases), TC30 (12 Europe purchase/transport
+   cases) and three page-contract checks. Jones arrived through ordinary
+   production, created one real frigate without payment, and retained membership
+   and the ship through Continue; local bells were not consumed. Cancel and
+   stale confirmation preserved the saved world. Main inspected both captured
+   Congress screens: all five candidates, progress, members and reward are readable.
+6. Packaging including Javadoc, nine documentation tests and strict MkDocs
+   passed. Full CI and publication remain pending; R-0104 stays ready until
+   delivery gates finish. This does not certify the other 24 founder effects.

@@ -187,8 +187,9 @@ class EuropeEquipmentTest {
     void foreignTurnRejectsWithoutMutatingTheOwner() {
         final EuropeTradeQuote offer = unit
                 .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
-        when(model.getCurrentPlayer()).thenReturn(new PlayerHuman("French",
-                false, 1000, model, false, new HashMap<>(), new HashSet<>()));
+        final PlayerHuman french = new PlayerHuman("French", false, 1000, model,
+                false, new HashMap<>(), new HashSet<>());
+        when(model.getCurrentPlayer()).thenReturn(french);
         assertRejected(GoodsType.MUSKET, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
     }

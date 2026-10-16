@@ -62,9 +62,15 @@ public final class ColonyJobPage extends AbstractScreen {
         return canvas.localToScreen(10 + 31 * index, 82);
     }
 
-    public void openFromIndoor(final String buildingId, final int index) {
-        getRobot().clickOn(slotPoint(buildingId, index), MouseButton.SECONDARY)
-                .clickOn("#chooseWork");
+    public void openFromIndoor(final String buildingId, final int index)
+            throws Exception {
+        getRobot().clickOn(slotPoint(buildingId, index), MouseButton.SECONDARY);
+        // Native drag cleanup and context-menu creation need separate event
+        // cycles.
+        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getNodeFinder()
+                .lookup("#chooseWork").tryQuery().isPresent());
+        getRobot().clickOn("#chooseWork");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

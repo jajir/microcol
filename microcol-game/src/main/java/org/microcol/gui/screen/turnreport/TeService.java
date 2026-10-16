@@ -32,12 +32,14 @@ public class TeService {
             final TeProcessorFamineWillPlagueColony teProcessorFamineWillPlagueColony,
             final TeProcessorFaminePlagueColony teProcessorFaminePlagueColony,
             final TeProcessorShipComeToEuropePort teProcessorShipComeToEuropePort,
-            final TeProcessorShipComeToHighSeas teProcessorShipComeToHighSeas) {
+            final TeProcessorShipComeToHighSeas teProcessorShipComeToHighSeas,
+            final TeProcessorFounderArrived teProcessorFounderArrived) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
 
         this.turnEventResolver = new ChainOfCommandStrategy<>(
                 Lists.newArrayList(
+                        Preconditions.checkNotNull(teProcessorFounderArrived),
                         Preconditions
                                 .checkNotNull(teProcessorGoodsWasThrownAway),
                         Preconditions.checkNotNull(teProcessorNewUnitInColony),

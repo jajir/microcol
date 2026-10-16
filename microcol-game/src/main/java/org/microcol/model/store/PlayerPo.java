@@ -23,6 +23,16 @@ public final class PlayerPo {
 
     private RecruitmentPo recruitment;
 
+    private CongressPo congress;
+
+    public CongressPo getCongress() {
+        return congress;
+    }
+
+    public void setCongress(final CongressPo congress) {
+        this.congress = congress;
+    }
+
     private Map<String, Integer> unitPurchaseCounts = new HashMap<>();
 
     public Map<String, Integer> getUnitPurchaseCounts() {

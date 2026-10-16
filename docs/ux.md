@@ -442,3 +442,15 @@ a nástroje, celkovou cenu včetně daně a zbývající pokladnici. Platba
 vyžaduje „Zaplatit a dokončit“; zrušení a Escape nic neutratí.
 Nedostatek zlata zakáže potvrzení. Změněná nabídka vysvětlí odmítnutí
 a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
+
+### Kongres — R-0104
+
+1. Z mapy otevřít Kongres, prohlédnout národní zvony, cíl, kandidáty podle
+   kategorií a členy. Před první kolonií okno vysvětlí podmínku.
+2. Označení kandidáta ještě nic nemění; volbu provede samostatné tlačítko.
+   Zavření či Escape bez potvrzení ponechá nabídku i svět beze změny.
+3. Po potvrzení zobrazit zvolený cíl; po příchodu členství a zprávu v přehledu
+   tahu. Jonesova odměna rozlišuje doručení a čekání na bezpečný přístav.
+   Staré potvrzení po změně modelu nebo nabídky odmítnout s pokynem znovu otevřít.
+4. Ověření vede [R-0104](requirements/R-0104.md); popis není samostatným
+   tvrzením o provedené hráčské studii.

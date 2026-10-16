@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Kongres</entry>
+  <entry key="choose">Zvolit tohoto otce</entry>
+  <entry key="close">Zavřít</entry>
+  <entry key="progress">Zvony pro Kongres: %s / %s</entry>
+  <entry key="objective">Cíl: %s</entry>
+  <entry key="chooseObjective">Zvolte dalšího otce. Zvony čekají na vaši volbu.</entry>
+  <entry key="members">Členové: %s</entry>
+  <entry key="none">Nikdo</entry>
+  <entry key="jonesPending">Jones: jedna fregata čeká na bezpečný přístav.</entry>
+  <entry key="jonesDelivered">Jones: jedna fregata zdarma doručena.</entry>
+  <entry key="firstColony">Založte první kolonii, abyste mohli pozvat otce zakladatele.</entry>
+  <entry key="chosen">Cíl zvolen. Nové zvony přispějí k jeho příchodu.</entry>
+  <entry key="changed">Nabídka se změnila. Zavřete Kongres a otevřete jej znovu.</entry>
+  <entry key="founderJoined">%s vstoupil do Kongresu.</entry>
+  <entry key="MILITARY">Vojenství</entry>
+  <entry key="POLITICAL">Politika</entry>
+  <entry key="TRADE">Obchod</entry>
+  <entry key="RELIGIOUS">Náboženství</entry>
+  <entry key="EXPLORATION">Průzkum</entry>
+  <entry key="HERNAN_CORTES">Hernan Cortes</entry>
+  <entry key="FRANCIS_DRAKE">Francis Drake</entry>
+  <entry key="JOHN_PAUL_JONES">John Paul Jones</entry>
+  <entry key="PAUL_REVERE">Paul Revere</entry>
+  <entry key="GEORGE_WASHINGTON">George Washington</entry>
+  <entry key="SIMON_BOLIVAR">Simon Bolivar</entry>
+  <entry key="BENJAMIN_FRANKLIN">Benjamin Franklin</entry>
+  <entry key="THOMAS_JEFFERSON">Thomas Jefferson</entry>
+  <entry key="THOMAS_PAINE">Thomas Paine</entry>
+  <entry key="POCAHONTAS">Pocahontas</entry>
+  <entry key="ADAM_SMITH">Adam Smith</entry>
+  <entry key="JAKOB_FUGGER">Jakob Fugger</entry>
+  <entry key="PETER_MINUIT">Peter Minuit</entry>
+  <entry key="PETER_STUYVESANT">Peter Stuyvesant</entry>
+  <entry key="JAN_DE_WITT">Jan de Witt</entry>
+  <entry key="JEAN_DE_BREBEUF">Jean de Brebeuf</entry>
+  <entry key="WILLIAM_BREWSTER">William Brewster</entry>
+  <entry key="BARTOLOME_DE_LAS_CASAS">Bartolome de las Casas</entry>
+  <entry key="WILLIAM_PENN">William Penn</entry>
+  <entry key="JUAN_DE_SEPULVEDA">Juan de Sepulveda</entry>
+  <entry key="FRANCISCO_DE_CORONADO">Francisco de Coronado</entry>
+  <entry key="HENRY_HUDSON">Henry Hudson</entry>
+  <entry key="SIEUR_DE_LA_SALLE">Sieur de la Salle</entry>
+  <entry key="FERDINAND_MAGELLAN">Ferdinand Magellan</entry>
+  <entry key="HERNANDO_DE_SOTO">Hernando de Soto</entry>
+  <entry key="allMembers">Všichni otcové zakladatelé již vstoupili do Kongresu.</entry>
+  <entry key="jonesEffect">John Paul Jones při příchodu daruje jednu fregatu zdarma.</entry>
+</properties>

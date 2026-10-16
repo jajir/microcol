@@ -9,6 +9,7 @@ import java.util.Set;
 import org.microcol.gui.screen.game.gamepanel.AnimationLock;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.FounderOffer;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -137,6 +138,12 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     void turnStarted() {
         founder = null;
         carrier = null;
+        if (!getPlayer().getFounderOffers().isEmpty()) {
+            final FounderOffer offer = getPlayer().getFounderOffers().get(0);
+            if (getPlayer().canChooseFounder(offer)) {
+                getPlayer().chooseFounder(offer);
+            }
+        }
         if (getPlayer().isKing() || !getPlayer().getColonies().isEmpty()) {
             return;
         }
