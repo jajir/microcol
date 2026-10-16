@@ -540,6 +540,7 @@
         }
       ],
       "constructions": [
+        {"type": "CHAPEL", "slots": [{}, {}, {}]},
         {
           "type": "TOWN_HALL",
           "slots": [
@@ -700,6 +701,7 @@
         }
       ],
       "constructions": [
+        {"type": "CHAPEL", "slots": [{}, {}, {}]},
         {
           "type": "TOWN_HALL",
           "slots": [
@@ -848,6 +850,7 @@
         }
       ],
       "constructions": [
+        {"type": "CHAPEL", "slots": [{}, {}, {}]},
         {
           "type": "TOWN_HALL",
           "slots": [

@@ -36,7 +36,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 0),
+        assertEquals(Goods.of(GoodsType.CROSS, 1),
                 ret.getProducedGoods().get());
     }
 
@@ -51,7 +51,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 5),
+        assertEquals(Goods.of(GoodsType.CROSS, 6),
                 ret.getProducedGoods().get());
     }
 
@@ -66,7 +66,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 10),
+        assertEquals(Goods.of(GoodsType.CROSS, 11),
                 ret.getProducedGoods().get());
     }
 

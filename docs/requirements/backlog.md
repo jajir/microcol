@@ -52,6 +52,19 @@ refined before implementation. [Execution evidence](../functional-tests.md#r-005
 and [worker measurements](../ai/local-qwen.md#cloud-sol-low-batch-2026-10-16)
 record acceptance and limitations; this batch does not start R-0062 or later work.
 
+## Continuing cloud implementation — 2026-10-16
+
+The user subsequently authorized implementation of **all remaining requirements**,
+currently R-0062–R-0111, with hourly progress reports. This renewed authorization
+supersedes the earlier run's cutoff and the five-item trial limit; it does not
+reopen completed or canceled work. Refine one requirement at a time and follow
+dependencies. Use Astra medium for caller analysis/review and bounded Sol low
+assignments for suitable implementation; escalate only for diagnosed difficulties.
+This run uses cloud workers instead of the local model. Preserve all mandatory
+acceptance and publication checks. Record actual model settings and usage, not
+assumed quota savings. The hourly thread heartbeat is configured; completion
+requires verified delivery of the remaining scope, not merely a progress report.
+
 ## How to read the set
 
 - **Remainder**: an unfinished outcome already owned by an old requirement.

@@ -2686,3 +2686,29 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 11. Code commit [0b0cb059](https://github.com/jajir/microcol/commit/0b0cb0593df4326754f1111f60ad63f1fde64f09) was pushed to `main`. [Development CI](https://github.com/jajir/microcol/actions/runs/38904142512) passed all three native packages; downloaded XML independently confirms **1325 game and 33 packaging checks per platform**, and **32 launcher/publication checks**, all zero failures/errors/skips. All four Windows/Linux × Java 11/17 jobs passed in [compatibility CI](https://github.com/jajir/microcol/actions/runs/38904142589). [Pages](https://github.com/jajir/microcol/actions/runs/38904142420) built and deployed successfully. Functional CI and channel promotion subsequently completed; final release evidence follows below. Native reports are retained under `target/r57-r61/ci-evidence/`.
 
 12. Final downloaded functional CI XML independently confirms **1325 game and 187 UI checks**, zero failures/errors/skips. Publication succeeded and the downloaded development manifest identifies [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4), source commit `0b0cb0593df4326754f1111f60ad63f1fde64f09`, and all three platform archives. GitHub release-asset SHA-256 digests match every manifest entry. Evidence is in `target/r57-r61/published/` and `target/r57-r61/ci-evidence/`. R-0057–R-0061 are complete and moved to `requirements/done/`; UC-034/035 are accepted, while UC-037/038 retain only the verified smith-house slice. No local model was invoked, and every worker remained Sol low under Astra high review. The documentation-only closure must separately verify Pages deployment, intended game-job skips and the unchanged game manifest.
+
+
+## R-0062 automatic cross production — 2026-10-16
+
+1. `Construction.getProduction()` now includes the declared unattended cross
+   contribution once, shared by forecast and actual colony accounting. It retains
+   worker output and existing bell behavior. Bundled buildArmy/thrive colonies
+   missing any religious building now explicitly contain an unstaffed chapel;
+   no user save is migrated or changed on opening. Tier increases remain R-0110.
+2. Sol low supplied the model change and tests; caller review strengthened exact
+   staffed/bell expectations, upgrade accounting and the national-round boundary.
+   The caller added fixture and UI coverage and applied the shared formatter to
+   six Java files, with code-token preservation and idempotence passing.
+3. Local macOS model regression passed **1329 tests, zero failures/errors/skips**
+   (`mvn -q -pl microcol-game -am test`, `target/r62/model-full.log`). The final
+   review assertions passed a separate four-case `ColonyCrossProductionTest`
+   rerun (`target/r62/model-review.log`). Earlier focused selection passed 111.
+4. Docker/Xvfb/Openbox run `target/docker-ui/run-Ums7nw` passed **8 model and
+   6 UI-module checks**, zero failures/errors/skips: `Construction_CHURCH_Test`,
+   `ColonyCrossProductionTest`, `TC_02_F02_founding_colony_test`, both scenarios
+   of `TC_07_F07_producing_gooods_test` and `PageVerificationContractTest`.
+   TC02 verifies the new colony's visible +1; TC07 verifies visible unstaffed
+   output, repeated opening, two colonies, Continue and exact stocks over two
+   rounds. Existing corn/tobacco expectations remain unchanged.
+5. Full UI regression and CI/publication are pending. These selected passes do
+   not close all of UC-040, religious upgrades or national immigration.

@@ -144,7 +144,13 @@ public class Construction {
         Preconditions.checkArgument(
                 !getType().getConsumptionPerTurn().isPresent(),
                 "This construction consume something. Construction: %s", this);
-        ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
+        ConstructionTurnProduction out = getType().getProductionPerTurn().get()
+                .getType() == GoodsType.CROSS
+                        ? new ConstructionTurnProduction(null,
+                                Goods.of(GoodsType.CROSS,
+                                        getType().getBaseProductionPerTurn()),
+                                null)
+                        : ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
             final ConstructionTurnProduction tmp = slot.getProduction();
             out = out.add(tmp);

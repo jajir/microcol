@@ -179,6 +179,7 @@
         }
       ],
       "constructions": [
+        {"type": "CHAPEL", "slots": [{}, {}, {}]},
         {
           "type": "TOWN_HALL",
           "slots": [

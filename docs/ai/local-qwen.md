@@ -3094,3 +3094,21 @@ repair context; it does not establish that every new task will be cheaper.
 own the acceptance results. Full integrated regression passed (1325 game and 187 UI checks, zero failures/errors/skips); the same counts passed in CI, and [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4) was published and verified. Raw counters and CLI call evidence are retained
 locally in `target/r57-r61/`; no new worker infrastructure or default setting was
 committed for this experiment.
+
+
+## Continuing cloud run — 2026-10-16
+
+1. The user authorized all remaining R-0062–R-0111, adopting Astra medium with
+   bounded Sol low implementation and hourly reports. The current main session
+   still reported `gpt-6-astra`/`high` when inspected; the user was asked to switch
+   the thread setting. Do not report medium usage until observed. The hourly
+   thread heartbeat `microcol-hodinov-postup` is active.
+2. R-0062 model work used `gpt-6-sol`/`low` in isolated worktree
+   `2026-10-16-r62`, based on `f15adba0`. One worker was active; no local model
+   was invoked. Caller-owned UI/fixture work did not duplicate its implementation.
+   Two targeted review follow-ups strengthened worker-count, upgrade, national
+   boundary and exact bell assertions; no execution failure occurred in the
+   selected model checks. Actual caller verification is in the
+   [functional evidence](../functional-tests.md#r-0062-automatic-cross-production-2026-10-16).
+3. Token/quota savings for this run have not been measured. The workflow choice
+   is an economy hypothesis, not a verified percentage saving.

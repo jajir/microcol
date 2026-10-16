@@ -227,6 +227,14 @@ public class ColonyScreen extends AbstractScreen {
                 .getGoods(expectedGoods.getType()).getAmount());
     }
 
+    public void verifyCrossProduction(final int expectedAmount) {
+        final Labeled output = getNodeFinder()
+                .lookup("#id_church .production .diffPositive").queryLabeled();
+        assertTrue(output.isVisible());
+        assertEquals("+" + expectedAmount, output.getText());
+        verifyThatProductionIs(GoodsType.CROSS, expectedAmount);
+    }
+
     public void verifyFamineForecast() {
         final Labeled forecast = getLabeledById(
                 PanelColonyGood.FAMINE_FORECAST_ID);

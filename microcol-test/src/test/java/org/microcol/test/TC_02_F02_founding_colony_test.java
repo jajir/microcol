@@ -51,6 +51,8 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         naming.verifyDraft("Leiden");
         naming.save();
         final ColonyScreen opened = ColonyScreen.of(getContext(), "Leiden");
+        // The new colony produces its base cross without a preacher.
+        opened.verifyCrossProduction(1);
         gamePage = opened.close();
 
         // verify that option build colony is not here
