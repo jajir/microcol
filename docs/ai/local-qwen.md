@@ -2916,3 +2916,136 @@ should reuse existing validation and a focused audit before proposing new toolin
 19. Isolated Docker `run-Ki7iFq` passed all **43 model checks**, including the six worker boundary tests, with zero failures/errors/skips. The overall runner still failed because the caller's selection included no UI-module tests; this is a selection error, not a passing full command. The caller copies only `SharedColonyFieldBoundaryTest.java` to current `main` and reruns verification with the page source contract and affected player paths included, alongside the current saved-field and founding checks. No old production files are integrated from the worker baseline.
 
 20. Current-main Docker `run-gAixgo` passed **106 model/controller and 12 UI-module checks**, zero failures/errors/skips, verified from XML. The six new boundary tests retain every intended case; caller changes fix the saved-turn receiver and invalid enemy-stack setup and improve test names. The shared formatter passed token preservation/idempotence. This completes local acceptance of the one test file; full CI/publication and R-0055 closure remain pending. The worker job ends with its original **10416.026-second** cumulative inference record and exhausted repair allowance; no new job resets this task.
+
+### R-0056 indoor admission — 2026-10-16
+
+1. After R-0055 publication, the caller dispatched the independent
+   `2026-10-16-r56-indoor-boundaries` job from `main` revision
+   `d0dbb37b1eba22f5a36b0806c32fc985d3daffd6`, using the default medium/64k
+   profile and its unchanged 7200/14400-second limits and two-repair allowance.
+   Seven caller-owned anchors cover four model files and one new real-model test
+   class. Scope is shared indoor/outdoor worker admission and atomic equipment
+   rejection, preserving founding and saved-job restoration. This is one part of
+   [R-0056](../requirements/R-0056.md), not acceptance of its job picker.
+2. Dispatch observed Codex CLI **0.162.1**, rather than the historical 0.142.3
+   installation above. The CLI reports the retired
+   `model_supports_reasoning_summaries` setting as ignored and emits telemetry
+   warnings for the local alias. The expected local model digest and 98304
+   context are loaded, and the request's output stream remains active. These
+   warnings alone do not establish an inference failure; no restart or profile
+   change was made. Preserve the actual outcome before deciding on a tooling
+   repair.
+3. Generation, caller review and model acceptance are pending. The caller
+   separately prepared the small English/Czech picker text and traced its three
+   UI entry points; these do not duplicate the worker's model implementation.
+   Java formatting and Docker verification wait until inference unloads. Logs,
+   frozen prompt, anchors and eventual result belong to
+   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-16-r56-indoor-boundaries/`.
+   No runtime or token-savings result is claimed for this unfinished attempt.
+
+4. Attempt 0 finished with exit 0 and successful unload after **1030.897
+   seconds**. Atomic application rejected the unchanged `colony-admission`
+   replacement, so no worker source was applied. Static review also found
+   missing shared predicates, a literal invalid `package-private` Java modifier,
+   dropped field guards and calls to undefined test methods instead of the eight
+   requested cases. **No Java tests ran on this rejected batch.** The failure is
+   incomplete source generation, not established runtime failure. The caller
+   preserved the response and diagnosis in `attempt-0/caller-review.txt`.
+5. The first repair uses the documented medium-to-high transition in the same
+   job, with exact source anchors and the same acceptance scope. Its focused
+   prompt requires complete shared predicates, retained field/crop guards and
+   eight real test methods; the caller again supplies the actual saved-turn and
+   valid wrong-owner fixture APIs. Prior worker time remains **1030.897
+   seconds**, leaving **13369.103 seconds** of the original task budget. The
+   repair is capped at 7200 seconds, with one further repair available after it;
+   no budget or baseline was reset. Application and verification remain pending.
+
+6. Attempt 1 reached its 7200-second deadline without a response file. The
+   launcher terminated it with exit -15 and unloaded successfully: **7200.745
+   seconds**, cumulative **8231.642 seconds**. Events contain startup warnings
+   and `turn.started`, but no completed response; the telemetry stream remained
+   active until termination. There is no returned source to diagnose as a Java
+   error, and the internal generation cause is unknown. No patch or Java test
+   result was produced. The caller preserves this distinction in
+   `attempt-1/caller-review.txt`.
+7. The final repair narrows generation to the four production files and six
+   anchors. The caller takes over the eight boundary tests because the combined
+   source-and-test repair did not return within two hours; the final worker
+   prompt explicitly excludes that test file, avoiding duplicate implementation.
+   Test coverage and the original acceptance selection are unchanged. The same
+   high profile, job and baseline retain **6168.358 seconds** of task budget,
+   which caps this final attempt; no repair allowance remains after it. The
+   caller has written all eight real-model cases in the isolated tree, with
+   formatting and execution pending worker unload. This is authored source,
+   not passing acceptance evidence.
+
+8. Attempt 2 returned with exit 0 and successful unload after **5529.990
+   seconds**, cumulative **13761.632 seconds**. Its six replacements passed
+   atomic application, but static review found nonexistent `colony` variables in
+   `Colony` and `ConstructionSlot`, an incorrect field wrapper in place of the
+   shared actor predicate, and a missing place-kind check in the field identity
+   helper. Application validation therefore did not establish usable Java or
+   correct behavior. The generated diff and diagnosis are preserved in
+   `attempt-2/generated.diff` and `attempt-2/caller-review.txt`.
+9. Both repair allowances are exhausted. The caller corrects those specific
+   source errors in the same isolated tree and retains its eight independent
+   boundary tests. The shared formatter passes exact-token preservation and
+   idempotence for all five changed/new Java files. The required Docker test
+   selection is running; no passing Java acceptance is claimed yet. There is no
+   new job or budget reset for this work, and no measured savings claim.
+
+10. Caller verification passed in Docker after unload: the focused selection
+    (`run-5jiemY`) ran **186 model and 3 page-contract tests**; the broader
+    `-Dtest=*Test` regression (`run-Zy6A7s`) ran **1279 game and 9 UI/control
+    tests**, all with zero failures, errors or skips and exit 0. All eight new
+    indoor-boundary cases ran. The latter selection does not include `TC_...`
+    player scenarios and is not acceptance of the picker. Reviewed and formatted
+    changes in four production files and the new test were integrated into main;
+    the owned lock was released. The caller retains the subsequent state-sensitive
+    choice design/implementation because this boundary task exhausted both repairs
+    with incomplete validation code; suitably bounded presentation work remains
+    eligible for local delegation. Full R-0056 acceptance is still pending.
+
+
+### R-0056 additional player scenarios — 2026-10-16, in progress
+
+1. After the first seven picker scenarios passed, the caller dispatched
+   `2026-10-16-r56-choice-player-scenarios` from main baseline `d0dbb37b` with the
+   current uncommitted R-0056 sources, tests and docs explicitly copied into its
+   isolated tree and recorded in `copied-inputs.json`. This distinct task authors
+   four linear TC40 cases using fixed page APIs: unavailable outdoor work, full
+   indoor building, current-job no-op and building-body drag fallback. It does
+   not retry or reset the exhausted indoor-boundary job.
+2. One replacement anchor permits only those four test methods. Production,
+   page objects, fixture and existing tests are caller-owned; no duplicate
+   implementation is assigned. Default medium/64k, 7200-second attempt,
+   14400-second task and two repairs apply. Generation, review, formatting and
+   actual acceptance remain pending. Java/Docker verification is serialized after
+   inference unload; the caller continues documentation and source review.
+
+3. Attempt 0 returned the four intended player scenarios after **905.722 seconds**,
+   exit 0 and unload 0. Application rejected a missing final outer JSON brace
+   (EOF at character 3728), so no generated source was applied and no Java
+   acceptance ran. Diagnostic parsing confirmed complete Java bodies and normal
+   newlines; the defect is the response envelope. The caller mistakenly invoked
+   formatting after rejection; this formatted only the copied scaffold, not the
+   generated patch. An initial stale-anchor repair preflight was rejected before
+   dispatch; no attempt or inference was consumed. The caller corrected the full
+   current method anchor. Repair 1 requests only a valid complete envelope with
+   the same four methods, retaining medium/64k and the original job and limits.
+
+4. Repair 1 completed after **395.005 seconds**, exit 0 and unload 0; cumulative
+   worker time **1300.727 seconds**, one repair used. Atomic application succeeded.
+   The Java differs from the initial response only by a trailing newline; all four
+   scenarios remain intact. Shared formatting passed token preservation and
+   idempotence (18 files checked, one changed). Caller Docker acceptance is running
+   in the isolated tree; integration and final R-0056 acceptance remain pending.
+
+5. Caller Docker acceptance `run-PuzAgH` passed **40 model and 14 UI tests**
+   (11 TC40 player scenarios and three page-contract checks), zero failures,
+   errors or skips, exit 0. Only worker-authored TC40/08–11 were integrated into
+   main, preserving the caller's subsequent drag-race tests and source fixes.
+   The owned lock was released. Main formatting passed; integration acceptance
+   and complete R-0056 regression/publication remain separate checks. The local
+   job used one repair and **1300.727 seconds** of inference; no measured
+   cloud-token saving is claimed.

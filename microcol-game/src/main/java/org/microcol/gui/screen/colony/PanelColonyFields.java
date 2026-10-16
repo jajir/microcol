@@ -132,6 +132,11 @@ public final class PanelColonyFields implements JavaFxComponent {
                     });
                     contextMenu.getItems().add(item);
                 });
+        final MenuItem work = new MenuItem(i18n.get(ColonyMsg.jobOpen));
+        work.setId("chooseWork");
+        work.setOnAction(action -> eventBus
+                .post(new ShowColonyJobChoicesEvent(expectedWorker)));
+        contextMenu.getItems().add(work);
         contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
     }
 

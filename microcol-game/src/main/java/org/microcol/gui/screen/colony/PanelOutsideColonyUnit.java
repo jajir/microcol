@@ -73,9 +73,9 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         mainPane.setId("colonyUnit-" + unit.getId());
         mainPane.setFocusTraversable(unit instanceof UnitFreeColonist);
         if (unit instanceof UnitFreeColonist) {
-            mainPane.setAccessibleText(i18n.get(ColonyMsg.equipmentOpen));
+            mainPane.setAccessibleText(i18n.get(ColonyMsg.jobContext));
             Tooltip.install(mainPane,
-                    new Tooltip(i18n.get(ColonyMsg.equipmentOpen)));
+                    new Tooltip(i18n.get(ColonyMsg.jobContext)));
         }
         mainPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.CONTEXT_MENU || (event.isShiftDown()
@@ -114,6 +114,11 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         addEquipmentChoice(colonist, GoodsType.HORSE, !colonist.isMounted());
         addEquipmentChoice(colonist, GoodsType.TOOLS,
                 !colonist.isHoldingTools());
+        final MenuItem work = new MenuItem(i18n.get(ColonyMsg.jobOpen));
+        work.setId("chooseWork");
+        work.setOnAction(
+                event -> eventBus.post(new ShowColonyJobChoicesEvent(unit)));
+        contextMenu.getItems().add(work);
         contextMenu.show(mainPane, Side.BOTTOM, 0, 0);
     }
 

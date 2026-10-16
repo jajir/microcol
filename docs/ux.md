@@ -249,3 +249,28 @@ výsledek uživatelského výzkumu.
    klávesové zaměření na menu kolonií. Bez aktivního náhledu Escape nadále
    zavírá menu. Přijetí a regresní ověření opravy spotřebované klávesy eviduje
    [R-0054](requirements/done/R-0054.md); automatický průchod není uživatelská studie.
+
+
+## Volba práce kolonisty — R-0056
+
+1. Cílem hráče je porovnat dostupná zaměstnání před přesunem pracovníka.
+   Kontextová nabídka pracovníka na poli, v budově i uprostřed kolonie nabízí
+   „Vybrat práci…“. Uprostřed kolonie zůstává také Shift+F10 / klávesa kontextové
+   nabídky a původní volby vybavení. Stávající přetažení a nabídka plodin zůstávají.
+2. Dialog odděluje ponechání současného pole od výslovného přesunu na zobrazené
+   nejlepší pole. Vnitřní práce ukazuje možnou produkci, potřebné vstupy,
+   současnou zásobu a textový nedostatek; nejde o slib růstu skladu. Nedostupná
+   práce má důvod a zakázané potvrzení. Pravidla vlastní
+   [náhled zaměstnání](gap-analysis.md#colony-job-choices-and-yield-previews).
+3. Šipky vybírají, Enter potvrzuje výběr v seznamu, Escape nebo Zrušit zavírá
+   bez změny. Stejně jako u stavební fronty musí dialog zachytit klávesu dříve,
+   než ji spotřebuje seznam. První TC40 běhy odhalily spotřebované Escape i Enter;
+   opravená cesta včetně hraničních případů prošla 15 hráčskými scénáři 16. října 2026.
+4. Změna pracovníka nebo místa před potvrzením zobrazí odmítnutí a obnoví nabídku;
+   jiná práce se sama nepřidělí. Odmítnuté přetažení do budovy otevře stejný dialog
+   s vysvětlením a obnovenými možnostmi; hráč znovu potvrdí nebo výběr zruší.
+   Zpráva tak přežije překreslení budovy i návrat ukazatele po přetažení.
+   Úspěch překreslí kolonii. Anglické a české
+   snímky byly zkontrolované: popisky, výnosy i upozornění se vejdou do dialogu.
+   Jde o automatizované ověření, nikoli pozorování skutečných hráčů; úplná přejímka
+   stále pokračuje v [evidenci R-0056](functional-tests.md#r-0056-job-choice-implementation-2026-10-16-acceptance-in-progress).

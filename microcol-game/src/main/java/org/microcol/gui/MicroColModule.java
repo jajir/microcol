@@ -209,6 +209,8 @@ public final class MicroColModule extends AbstractModule {
         bind(QueueDialog.class).in(Singleton.class);
         bind(QueueController.class).in(Singleton.class);
         bind(ShowQueueDialogListener.class).asEagerSingleton();
+        bind(org.microcol.gui.screen.colony.DialogColonyJobChoices.class)
+                .asEagerSingleton();
 
         /**
          * Europe dialog

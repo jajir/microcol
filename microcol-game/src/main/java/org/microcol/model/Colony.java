@@ -15,6 +15,7 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitWithCargo;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -524,6 +525,49 @@ public class Colony {
 
     public boolean isValid() {
         return model.isExists(this);
+    }
+
+    public List<ColonyJobChoice> getJobChoices(final Unit worker) {
+        return ColonyJobChoice.forWorker(model, this, worker);
+    }
+
+    boolean canWorkerActHere(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist) || !isValid()
+                || !model.isGameRunning() || model.getCurrentPlayer() != owner
+                || unit.getOwner() != owner
+                || model.getPlayers().stream()
+                        .noneMatch(player -> player == unit.getOwner())
+                || model.tryGetUnitById(unit.getId()).orElse(null) != unit) {
+            return false;
+        }
+        if (unit.isAtPlaceColonyField()) {
+            return getColonyFields().stream()
+                    .anyMatch(field -> field.isWorkedBy(unit));
+        }
+        if (unit.isAtPlaceConstructionSlot()) {
+            final ConstructionSlot slot = unit.getPlaceConstruction()
+                    .getConstructionSlot();
+            return !slot.isEmpty() && slot.getUnit() == unit
+                    && getConstructions().stream()
+                            .flatMap(construction -> construction
+                                    .getConstructionSlots().stream())
+                            .anyMatch(candidate -> candidate == slot);
+        }
+        return unit.isAtPlaceLocation()
+                && unit.getLocation().equals(getLocation());
+    }
+
+    boolean canAcceptWorker(final Unit unit) {
+        if (!canWorkerActHere(unit)) {
+            return false;
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return (!colonist.isHoldingGuns() || colonist
+                .getEquipmentProblem(GoodsType.MUSKET, false).isEmpty())
+                && (!colonist.isHoldingTools() || colonist
+                        .getEquipmentProblem(GoodsType.TOOLS, false).isEmpty())
+                && (!colonist.isMounted() || colonist
+                        .getEquipmentProblem(GoodsType.HORSE, false).isEmpty());
     }
 
     /**

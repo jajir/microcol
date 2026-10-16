@@ -907,6 +907,8 @@ public abstract class AbstractUnit implements Unit {
                 "Unit can't be placed to non empty colony structure");
         Preconditions.checkState(structureSlot.isValid(),
                 "Unit can't be placed to already destroyed colony");
+        Preconditions.checkState(structureSlot.canAccept(this),
+                "Unit can't be placed to structure that cannot accept worker");
     }
 
     protected void validateColonyField(final ColonyField colonyField,

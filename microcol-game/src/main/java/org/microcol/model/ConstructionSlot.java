@@ -101,8 +101,7 @@ public class ConstructionSlot {
                     type.getProductionPerTurn().get().getEmpty(), null);
         } else {
             // construction consume goods
-            final Goods turnProduction = type.getProductionPerTurn().get()
-                    .multiply(getProductionModifier());
+            final Goods turnProduction = getPotentialProduction(getUnit());
             final Goods consumed = type.getConsumptionPerTurn().get();
             if (sourceGoods.isGreaterOrEqualsThan(consumed)) {
                 // There is enough source to produce all goods.
@@ -138,10 +137,18 @@ public class ConstructionSlot {
                 "Construction doesn't produce any goods.");
         Preconditions.checkArgument(!type.getConsumptionPerTurn().isPresent(),
                 "Construction consume some goods.");
-        final Goods turnProduction = type.getProductionPerTurn().get();
-        return new ConstructionTurnProduction(null,
-                turnProduction.multiply(getProductionModifier()), null);
+        final Goods turnProduction = isEmpty()
+                ? type.getProductionPerTurn().get().getEmpty()
+                : getPotentialProduction(getUnit());
+        return new ConstructionTurnProduction(null, turnProduction, null);
 
+    }
+
+    Goods getPotentialProduction(final Unit worker) {
+        final Goods base = getConstructionType().getProductionPerTurn()
+                .orElseThrow();
+        return base.multiply(
+                worker.getType().getProductionModifier(base.getType()));
     }
 
     private ConstructionType getConstructionType() {
@@ -150,6 +157,13 @@ public class ConstructionSlot {
 
     public boolean isValid() {
         return construction.isValid();
+    }
+
+    public boolean canAccept(final Unit unit) {
+        return isValid()
+                && getColony().getConstructions().contains(construction)
+                && construction.getConstructionSlots().contains(this)
+                && isEmpty() && getColony().canAcceptWorker(unit);
     }
 
 }

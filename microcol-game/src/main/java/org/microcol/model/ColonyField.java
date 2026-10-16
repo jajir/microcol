@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.turnevent.TurnEventProvider;
-import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -52,48 +51,26 @@ public final class ColonyField {
     }
 
     public boolean canAccept(final Unit unit, final GoodsType goodsType) {
-        if (!canWorkerActHere(unit) || goodsType == null || !isEmpty()
-                || !canProduce(goodsType)
+        if (!isValid() || !colony.getColonyFields().contains(this)
+                || goodsType == null || !isEmpty() || !canProduce(goodsType)
                 || !model.isColonyFieldAvailable(colony.getOwner(),
                         getLocation())) {
             return false;
         }
-        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
-        return (!colonist.isHoldingGuns() || colonist
-                .getEquipmentProblem(GoodsType.MUSKET, false).isEmpty())
-                && (!colonist.isHoldingTools() || colonist
-                        .getEquipmentProblem(GoodsType.TOOLS, false).isEmpty())
-                && (!colonist.isMounted() || colonist
-                        .getEquipmentProblem(GoodsType.HORSE, false).isEmpty());
+        return colony.canAcceptWorker(unit);
     }
 
     private boolean canWorkerActHere(final Unit unit) {
-        if (!(unit instanceof UnitFreeColonist) || !isValid()
-                || !colony.getColonyFields().contains(this)
-                || !model.isGameRunning()
-                || model.getCurrentPlayer() != colony.getOwner()
-                || unit.getOwner() != colony.getOwner()
-                || model.getPlayers().stream()
-                        .noneMatch(player -> player == unit.getOwner())
-                || model.tryGetUnitById(unit.getId()).orElse(null) != unit) {
+        if (!isValid() || !colony.getColonyFields().contains(this)) {
             return false;
         }
-        if (unit.isAtPlaceColonyField()) {
-            return colony.getColonyFields().stream()
-                    .anyMatch(field -> field.placeColonyField == unit
-                            .getPlaceColonyField());
-        }
-        if (unit.isAtPlaceConstructionSlot()) {
-            final ConstructionSlot slot = unit.getPlaceConstruction()
-                    .getConstructionSlot();
-            return !slot.isEmpty() && slot.getUnit() == unit
-                    && colony.getConstructions().stream()
-                            .flatMap(construction -> construction
-                                    .getConstructionSlots().stream())
-                            .anyMatch(candidate -> candidate == slot);
-        }
-        return unit.isAtPlaceLocation()
-                && unit.getLocation().equals(colony.getLocation());
+        return colony.canWorkerActHere(unit);
+    }
+
+    boolean isWorkedBy(final Unit unit) {
+        return unit != null && unit.isAtPlaceColonyField()
+                && placeColonyField != null
+                && placeColonyField == unit.getPlaceColonyField();
     }
 
     public Direction getDirection() {
@@ -161,8 +138,8 @@ public final class ColonyField {
             return Optional.empty();
         } else {
             final GoodsType producing = placeColonyField.getProducedGoodsType();
-            return Optional.of(Goods.of(producing,
-                    getTerrain().canProduceAmmount(producing)));
+            return Optional.of(getPotentialProduction(
+                    placeColonyField.getUnit(), producing));
         }
     }
 
@@ -178,6 +155,11 @@ public final class ColonyField {
         } else {
             return Optional.of(placeColonyField.getUnit());
         }
+    }
+
+    Goods getPotentialProduction(final Unit worker, final GoodsType goodsType) {
+        return Goods.of(goodsType, getGoodsTypeProduction(goodsType))
+                .multiply(worker.getType().getProductionModifier(goodsType));
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {

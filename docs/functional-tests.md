@@ -2551,3 +2551,82 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 1. A temporary audit worktree at `3c521c5d` loaded the proposed F32 fixture through the real `Model.make`, checked exact save/load round-trip and unchanged snapshots after read-only queries. The current lumber field yields 1; free alternatives yield 2 and 3; the better shared field yields 6 but rejects assignment. The master blacksmith's existing production rule yields 6 tools for 3 ore, or 2 tools for the fixture's available 1 ore. This establishes test-data expectations for [R-0056](requirements/R-0056.md), not implementation of its picker or preview API.
 2. Docker `run-oZMALr` passed **one fixture-preparation test and three page source-contract checks**, zero failures/errors/skips, confirmed from XML. Shared formatting passed token preservation/idempotence. Local probe source and artifacts remain under `target/r56/runtime-audit/`; the candidate scenario remains under `target/r56/` until formal integration. No gameplay code or production formula changed, and no new player journey is claimed as verified.
+
+
+### R-0056 indoor assignment boundary — 2026-10-16
+
+1. Shared colony admission now checks registered worker/owner/source identity,
+   running owner turn and equipment-return capacity for indoor placement as well
+   as outdoor placement. Restoration setters remain separate. Eight new
+   `IndoorColonyJobAssignmentTest` cases cover read-only queries, last-resident
+   transfers, stale/wrong-role/wrong-owner/remote workers, invalid targets and
+   atomic gun/horse/tool returns at warehouse capacity.
+2. Docker focused run `run-5jiemY` passed 186 model and 3 page-contract tests.
+   Broader `-Dtest=*Test` run `run-Zy6A7s` passed 1279 game and 9 UI/control tests,
+   with zero failures/errors/skips and exit 0 in both runs. Evidence is retained
+   under the `2026-10-16-r56-indoor-boundaries` local-worker tree and main's
+   `target/r56/indoor-{boundary-acceptance,full-model-regression}.log`.
+3. These checks verify the shared admission foundation, including founding and
+   persistence regressions. They do not run `TC_...` player scenarios or verify
+   the pending job picker; [R-0056](requirements/R-0056.md) remains in progress.
+
+
+### R-0056 job choice implementation — 2026-10-16, acceptance in progress
+
+1. `ColonyJobChoiceTest` now verifies 19 real-model cases: read-only immutable
+   offers, current-field crop preservation, explicit best relocation, center and
+   indoor sources, stable ties, unavailable destinations, stale source/target/
+   output/ownership, exact destinations, expert output, advisory input stock,
+   current-job no-ops and atomic equipment rejection. The existing turn-preparation
+   suite adds job confirmation to its guarded commands (22 cases).
+2. The first focused run found five old `ColonyFieldTest` mocks without a worker
+   after production began sharing the worker-aware preview helper. Supplying an
+   ordinary worker and valid map preserved their original expected yields; a
+   subsequent compile caught an ambiguous Mockito `any()` overload, corrected
+   to `any(Location.class)`. The failed runs remain in `target/r56`; neither is
+   counted as passing evidence.
+3. Successful broader model/control regression recorded in
+   `target/r56/choice-full-model-regression-retry.log` passed **1297 game and 9
+   UI/control tests**, zero failures/errors/skips. It predates the added
+   turn-preparation choice case and the final keyboard fixes, so final full
+   acceptance remains required.
+4. Initial TC40 player runs `run-MEx62g` and `run-qMjGMf` exposed ListView consuming
+   Escape and Enter. A dialog-local key filter now closes on Escape and confirms
+   the selected available action on Enter when the list has focus. Failures in
+   subsequent game entry were downstream of the open modal; game-entry assertions
+   were preserved. Prairie corn expectation was corrected to the existing yield 4.
+5. Docker run `run-nhbBmh` passed **40 model tests and 10 UI tests** (seven
+   `TC_40_F32_colony_job_choices_test` player scenarios plus three page-contract
+   checks), zero failures/errors/skips, exit 0. It covers all three entry points,
+   field comparisons, explicit movement, ordinary/expert input shortage labels,
+   cancel/Escape/Enter, stale destination/source crop rejection and explicit-slot
+   dragging. English/Czech screenshots in the run's `warehouse-qa` directory were
+   inspected: names and numeric details fit and shortage feedback is visible.
+6. The local scenario worker added TC40/08–11 (no available outdoor field,
+   full indoor building, current-job no-op and building-body manual drop).
+   Isolated Docker run `run-PuzAgH` passed 40 model and 14 UI checks, including
+   all eleven player scenarios and three page-contract checks. The four cases
+   were reviewed and integrated; complete regression/publication remain pending.
+
+7. Subsequent source review found that resolving the indoor destination again at
+   release could silently choose another slot after the hovered slot became busy.
+   The handler now retains the slot admitted during hover and rechecks that exact
+   slot on release. Caller-owned TC40/12–15 cover capacity changes and slot
+   occupation during explicit-slot and building-body drops. The first main run passed all 49 selected model cases and the first eleven
+   player cases but failed the four rejection-message assertions. Diagnostic
+   run `run-1AaYr8` confirmed the native drag completion replaced the rejection
+   with the building's hover name. An initial hover-message retention fix passed
+   the stock cases but `run-QNyJTj` still failed TC40/14–15 because slot assignment
+   repaints and replaces the building itself. The final approach reuses the job
+   picker after native drag completion: it shows the localized rejection and
+   refreshed choices, requires explicit confirmation, and supports cancellation.
+   The temporary hover-state change was removed. All four scenarios retain their
+   atomic world-state/equipment assertions and additionally cancel the refreshed
+   picker and verify no mutation. Rerun evidence follows below.
+
+8. Main Docker run `run-jdlQYs` passed **49 focused model checks** (19 job-choice,
+   22 turn-preparation and eight indoor-boundary cases) plus **18 UI checks**
+   (all 15 TC40 player scenarios and three page-contract cases), with zero
+   failures/errors/skips and exit 0. This includes the direct center-to-field
+   path, all four stale-drop variants, refreshed-picker cancellation and exact
+   world-state preservation. Full regression and publication follow separately.

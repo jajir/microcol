@@ -26,7 +26,8 @@ class TurnPreparationActionTest {
                 "queue-building", "queue-unit", "queue-remove", "queue-before",
                 "queue-end", "cargo-buy", "cargo-sell", "cargo-transfer",
                 "warehouse-load", "warehouse-unload", "field", "indoor",
-                "outside", "crop", "action", "move", "move-as-far");
+                "outside", "crop", "job-choice", "action", "move",
+                "move-as-far");
     }
 
     private Model fixture(final boolean beforePreparation) {
@@ -111,6 +112,11 @@ class TurnPreparationActionTest {
             return () -> unit.placeToColonyStructureSlot(
                     colony.getConstructionByType(ConstructionType.TOWN_HALL)
                             .getFirstEmptySlot().orElseThrow());
+        case "job-choice":
+            return colony.getJobChoices(unit).stream().filter(
+                    choice -> choice.getKind() == ColonyJobChoice.Kind.INDOOR
+                            && choice.getGoodsType() == GoodsType.TOOLS)
+                    .findFirst().orElseThrow()::execute;
         case "outside":
             return () -> model.getUnitById(0).placeToMap(colony.getLocation());
         case "crop":

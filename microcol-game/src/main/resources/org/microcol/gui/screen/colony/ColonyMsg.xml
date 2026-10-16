@@ -44,4 +44,30 @@
     <entry key="equipmentSTORAGE_FULL">Returned equipment will not fit in the warehouse. Cancel and free storage first.</entry>
     <entry key="fieldWorked">Another colony works this square. Free it there first.</entry>
     <entry key="fieldChanged">This worker or square is unavailable. Check the job and equipment storage, then try again.</entry>
+
+    <entry key="jobOpen">Choose work…</entry>
+    <entry key="jobTitle">Choose work for this colonist</entry>
+    <entry key="jobContext">Colonist work and equipment: right-click or Shift+F10</entry>
+    <entry key="jobConfirm">Assign work</entry>
+    <entry key="jobCancel">Cancel</entry>
+    <entry key="jobCurrentField">Keep this field: %s</entry>
+    <entry key="jobBestField">Use the best field: %s</entry>
+    <entry key="jobIndoor">Work in: %s</entry>
+    <entry key="jobCurrentYield">Current field: %s per turn</entry>
+    <entry key="jobBestYield">Best eligible field: %s per turn</entry>
+    <entry key="jobTarget">Field coordinates: %s, %s</entry>
+    <entry key="jobPotential">Potential output: %s %s per turn</entry>
+    <entry key="jobInput">Required each turn: %s %s; in warehouse: %s</entry>
+    <entry key="jobShortage">Not enough input goods. Actual output may be lower.</entry>
+    <entry key="jobStockNote">Warehouse totals also depend on consumption and other workers.</entry>
+    <entry key="jobSpecialty">Specialty: %s</entry>
+    <entry key="jobUnavailable">Unavailable: %s</entry>
+    <entry key="jobACTOR_UNAVAILABLE">This colonist is not available in this colony on your turn.</entry>
+    <entry key="jobEQUIPMENT_BLOCKED">Returned equipment will not fit or cannot be returned here. Free storage and try again.</entry>
+    <entry key="jobCROP_UNSUPPORTED">This crop cannot be produced on the current field. Choose another crop or use a different field.</entry>
+    <entry key="jobNO_ELIGIBLE_FIELD">No eligible field is available for this crop.</entry>
+    <entry key="jobBUILDING_FULL">All jobs in this building are occupied.</entry>
+    <entry key="jobChanged">The worker or job changed. Nothing was assigned. Review the refreshed choices and confirm again or cancel.</entry>
+    <entry key="jobNoChoices">No jobs are available for this colonist here.</entry>
+    <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>
 </properties>

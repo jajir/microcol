@@ -44,4 +44,30 @@
     <entry key="equipmentSTORAGE_FULL">Vracené vybavení se nevejde do skladu. Zrušte volbu a nejprve uvolněte místo.</entry>
     <entry key="fieldWorked">Na tomto poli pracuje jiná kolonie. Nejprve ho v ní uvolněte.</entry>
     <entry key="fieldChanged">Tento pracovník nebo pole není k dispozici. Zkontrolujte práci a místo pro vybavení ve skladu a zkuste to znovu.</entry>
+
+    <entry key="jobOpen">Vybrat práci…</entry>
+    <entry key="jobTitle">Vyberte práci pro tohoto kolonistu</entry>
+    <entry key="jobContext">Práce a vybavení kolonisty: pravé tlačítko nebo Shift+F10</entry>
+    <entry key="jobConfirm">Přidělit práci</entry>
+    <entry key="jobCancel">Zrušit</entry>
+    <entry key="jobCurrentField">Ponechat toto pole: %s</entry>
+    <entry key="jobBestField">Použít nejlepší pole: %s</entry>
+    <entry key="jobIndoor">Pracovat v budově: %s</entry>
+    <entry key="jobCurrentYield">Současné pole: %s za tah</entry>
+    <entry key="jobBestYield">Nejlepší dostupné pole: %s za tah</entry>
+    <entry key="jobTarget">Souřadnice pole: %s, %s</entry>
+    <entry key="jobPotential">Možná produkce: %s %s za tah</entry>
+    <entry key="jobInput">Potřeba za tah: %s %s; ve skladu: %s</entry>
+    <entry key="jobShortage">Nedostatek vstupních surovin. Skutečná produkce může být nižší.</entry>
+    <entry key="jobStockNote">Stav skladu závisí také na spotřebě a ostatních pracovnících.</entry>
+    <entry key="jobSpecialty">Specializace: %s</entry>
+    <entry key="jobUnavailable">Nedostupné: %s</entry>
+    <entry key="jobACTOR_UNAVAILABLE">Tento kolonista nyní není v této kolonii dostupný ve vašem tahu.</entry>
+    <entry key="jobEQUIPMENT_BLOCKED">Vrácené vybavení se nevejde do skladu nebo je zde nelze vrátit. Uvolněte sklad a zkuste to znovu.</entry>
+    <entry key="jobCROP_UNSUPPORTED">Tuto surovinu nelze na současném poli vyrábět. Vyberte jinou surovinu nebo jiné pole.</entry>
+    <entry key="jobNO_ELIGIBLE_FIELD">Pro tuto surovinu není k dispozici žádné vhodné volné pole.</entry>
+    <entry key="jobBUILDING_FULL">Všechna pracovní místa v této budově jsou obsazena.</entry>
+    <entry key="jobChanged">Pracovník nebo pracovní místo se změnili. Práce nebyla přidělena. Zkontrolujte obnovené možnosti a znovu potvrďte nebo zrušte výběr.</entry>
+    <entry key="jobNoChoices">Pro tohoto kolonistu zde není dostupná žádná práce.</entry>
+    <entry key="jobDropRejected">Tento pracovník nyní nemůže přijmout danou práci. Zkontrolujte tah, dostupnost místa a prostor pro vybavení ve skladu.</entry>
 </properties>

@@ -2,7 +2,7 @@ package org.microcol.gui.screen.colony;
 
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,6 +28,8 @@ import com.google.common.eventbus.EventBus;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -72,8 +74,10 @@ abstract class AbstractPanelConstructionWithSlots
                     SLOT_POSITION_Y) };
 
     private final ColonyProductionStats colonyStats;
-    private final Map<Rectangle, ConstructionSlot> slots = new HashMap<>();
+    private final Map<Rectangle, ConstructionSlot> slots = new LinkedHashMap<>();
     private final Model model;
+
+    private ConstructionSlot offeredDropSlot;
 
     public AbstractPanelConstructionWithSlots(final EventBus eventBus,
             final I18n i18n, final ImageProvider imageProvider,
@@ -85,6 +89,20 @@ abstract class AbstractPanelConstructionWithSlots
         getMainPane().setOnDragOver(this::onDragOver);
         getMainPane().setOnDragDropped(this::onDragDropped);
         getMainPane().setOnDragDetected(this::onDragDetected);
+        getMainPane().setOnContextMenuRequested(event -> {
+            findConstructionSlot(Point.of(event.getX(), event.getY()))
+                    .filter(slot -> !slot.isEmpty()).ifPresent(slot -> {
+                        final Unit worker = slot.getUnit();
+                        final MenuItem work = new MenuItem(
+                                getI18n().get(ColonyMsg.jobOpen));
+                        work.setId("chooseWork");
+                        work.setOnAction(action -> getEventBus()
+                                .post(new ShowColonyJobChoicesEvent(worker)));
+                        new ContextMenu(work).show(getMainPane(),
+                                event.getScreenX(), event.getScreenY());
+                    });
+            event.consume();
+        });
     }
 
     void paintWorkingSlots(final GraphicsContext gc) {
@@ -149,28 +167,36 @@ abstract class AbstractPanelConstructionWithSlots
                 || goodsStats.getBlockedProduction() != 0;
     }
 
+    private Optional<ConstructionSlot> dropTarget(final Point point) {
+        return findConstructionSlot(point).filter(ConstructionSlot::isEmpty)
+                .or(() -> getConstruction().getFirstEmptySlot());
+    }
+
     private void onDragDropped(final DragEvent event) {
-        logger.debug("Drag dropped");
-        final Point point = Point.of(event.getX(), event.getY());
-        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-        if (loc.isPresent() && loc.get().isEmpty()) {
-            final ConstructionSlot slot = loc.get();
-            ClipboardEval.make(model, event.getDragboard())
-                    .tryReadUnit((unit, transferFrom) -> {
+        event.setDropCompleted(false);
+        final Optional<ConstructionSlot> target = Optional
+                .ofNullable(offeredDropSlot);
+        offeredDropSlot = null;
+        ClipboardEval.make(model, event.getDragboard())
+                .tryReadUnit((unit, transferFrom) -> {
+                    try {
+                        final ConstructionSlot slot = target.orElseThrow(
+                                () -> new IllegalStateException("No free job"));
+                        if (!slot.canAccept(unit)) {
+                            throw new IllegalStateException(
+                                    "Worker cannot take this job");
+                        }
                         unit.placeToColonyStructureSlot(slot);
                         event.setDropCompleted(true);
-                    });
-        } else {
-            final Optional<ConstructionSlot> oSlot = getConstruction()
-                    .getFirstEmptySlot();
-            if (oSlot.isPresent()) {
-                ClipboardEval.make(model, event.getDragboard())
-                        .tryReadUnit((unit, transferFrom) -> {
-                            unit.placeToColonyStructureSlot(oSlot.get());
-                            event.setDropCompleted(true);
-                        });
-            }
-        }
+                    } catch (IllegalStateException
+                            | IllegalArgumentException rejected) {
+                        // A repaint can replace the drop target and its hover
+                        // status.
+                        javafx.application.Platform.runLater(() -> getEventBus()
+                                .post(new ShowColonyJobChoicesEvent(unit,
+                                        true)));
+                    }
+                });
         event.consume();
     }
 
@@ -190,15 +216,15 @@ abstract class AbstractPanelConstructionWithSlots
     }
 
     private void onDragOver(final DragEvent event) {
-        logger.debug("Drag Over");
-        final Point point = Point.of(event.getX(), event.getY());
-        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-        if (loc.isPresent() && loc.get().isEmpty()) {
-            event.acceptTransferModes(TransferMode.MOVE);
-            logger.debug("was clicked at: " + loc.get());
-        } else {
-            event.acceptTransferModes(TransferMode.MOVE);
-        }
+        offeredDropSlot = null;
+        dropTarget(Point.of(event.getX(), event.getY())).ifPresent(
+                slot -> ClipboardEval.make(model, event.getDragboard())
+                        .tryReadUnit((unit, transferFrom) -> {
+                            if (slot.canAccept(unit)) {
+                                offeredDropSlot = slot;
+                                event.acceptTransferModes(TransferMode.MOVE);
+                            }
+                        }));
         event.consume();
     }
 

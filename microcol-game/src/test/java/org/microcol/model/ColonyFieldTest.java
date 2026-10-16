@@ -164,6 +164,10 @@ public class ColonyFieldTest {
 
     @BeforeEach
     void setup() {
+        final Unit worker = mock(Unit.class);
+        when(worker.getType()).thenReturn(UnitType.COLONIST);
+        when(placeColonyField.getUnit()).thenReturn(worker);
+        when(map.isValid(any(Location.class))).thenReturn(true);
         field = new ColonyField(model, direction, colony);
         field.setPlaceColonyField(placeColonyField);
     }
