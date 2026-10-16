@@ -99,6 +99,26 @@ public class ColonyWarehouse {
         setGoods(getGoods(goods.getType()).add(goods));
     }
 
+    /** Stage turn production until construction and exports have spent it. */
+    void stageProducedGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        Preconditions.checkArgument(goods.getAmount() >= 0);
+        warehouse.put(goods.getType(), Math.addExact(
+                getGoods(goods.getType()).getAmount(), goods.getAmount()));
+    }
+
+    /** Apply ordinary storage limits after the turn's spending and exports. */
+    void clampProducedOverflow(final Consumer<Goods> thrownAway) {
+        for (final GoodsType type : GoodsType.GOOD_TYPES) {
+            final int amount = getGoods(type).getAmount();
+            final int capacity = getStorageCapacity(type).getAmount();
+            if (amount > capacity) {
+                setGoods(Goods.of(type, capacity));
+                thrownAway.accept(Goods.of(type, amount - capacity));
+            }
+        }
+    }
+
     /**
      * Validate the source and preview the amount that fits, without changing
      * either inventory. A full warehouse returns zero; invalid requests throw
@@ -200,7 +220,10 @@ public class ColonyWarehouse {
                 "Can't remove %s of %s, because in warehouse is currently just %s of %s",
                 goods.getAmount(), goods.getType(), current.getAmount(),
                 goods.getType());
-        setGoods(current.substract(goods));
+        // Production may temporarily exceed storage until the colony's final
+        // clamp, so a legitimate same-turn withdrawal can still leave an
+        // above-capacity intermediate balance.
+        warehouse.put(goods.getType(), current.getAmount() - goods.getAmount());
     }
 
     void setGoodsToZero(final GoodsType goodsType) {

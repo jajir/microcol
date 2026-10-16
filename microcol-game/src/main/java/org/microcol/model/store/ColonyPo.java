@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.GoodsType;
 
 public final class ColonyPo {
 
@@ -33,6 +34,16 @@ public final class ColonyPo {
     private List<ColonyBuildingQueueItemPo> buildingQueue = new ArrayList<>();
 
     private Map<String, Integer> colonyWarehouse = new HashMap<>();
+
+    private List<GoodsType> exportGoods;
+
+    public List<GoodsType> getExportGoods() {
+        return exportGoods;
+    }
+
+    public void setExportGoods(final List<GoodsType> exportGoods) {
+        this.exportGoods = exportGoods;
+    }
 
     public ColonyPo() {
         Direction.getVectors().forEach(direction -> {

@@ -286,6 +286,7 @@
             ]
           }
         ],
+        "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
           "COAT": 0,

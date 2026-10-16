@@ -118,6 +118,7 @@
     {
       "id": 0,
       "name": "New Amsterdam",
+      "exportGoods": [],
       "ownerName": "Dutch",
       "location": {
         "x": 25,

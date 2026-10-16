@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Vývoz celnicí…</entry>
+  <entry key="title">Celnice — %s</entry>
+  <entry key="rule">Vyberte zboží k automatickému prodeji po výrobě a stavbě. Z každého vybraného druhu zůstane 100 kusů; přebytek se prodá za aktuální evropskou cenu po zdanění.</entry>
+  <entry key="revolution">Během revoluce celnice získá polovinu běžného čistého příjmu.</entry>
+  <entry key="confirm">Uložit výběr vývozu</entry>
+  <entry key="cancel">Zrušit</entry>
+  <entry key="unavailable">Pro automatický vývoz nejprve postavte celnici.</entry>
+  <entry key="changed">Kolonie nebo výběr vývozu se změnily. Zavřete okno a otevřete je znovu.</entry>
+  <entry key="exported">%s vyvezla celnicí %s × %s za %s zlatých.</entry>
+</properties>

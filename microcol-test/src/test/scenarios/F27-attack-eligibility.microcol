@@ -316,6 +316,7 @@
             ]
           }
         ],
+        "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
           "COAT": 0,
@@ -469,6 +470,7 @@
             ]
           }
         ],
+        "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
           "COAT": 0,

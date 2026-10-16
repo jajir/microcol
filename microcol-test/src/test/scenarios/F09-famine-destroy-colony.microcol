@@ -630,6 +630,7 @@
           "slots": []
         }
       ],
+      "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
         "COAT": 0,
@@ -789,6 +790,7 @@
           "slots": []
         }
       ],
+      "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
         "COAT": 0,
@@ -948,6 +950,7 @@
           "slots": []
         }
       ],
+      "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
         "COAT": 0,

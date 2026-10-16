@@ -3792,3 +3792,52 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    dialog: founder name, costs, stock and disabled confirmation are readable.
 6. Nine documentation tests and strict MkDocs passed. Full CI and publication
    remain separate gates; R-0084 stays ready while they are pending.
+
+### R-0085 custom-house export — 2026-10-16
+
+1. Scope: BUILD-014 / TRADE-009, UC-048/081. The existing bounded Sol low
+   worker owns model export selection, staged production, export accounting,
+   saved events and boundary tests. Main owns UI, current-schema JSON fixtures,
+   F49/TC58, review and actual checks. No local model or duplicate implementation.
+2. Initial build failed because the worker used EnumSet with GoodsType, which
+   is a class rather than an enum. The worker repaired it to HashSet.
+   The next full run had **1620 tests, three failures**, zero errors/skips:
+   new corn/tobacco tests assumed productive workers not present in the chosen
+   fixture. The same worker receives the failures for targeted setup repair.
+   The actual France-to-Dutch capture/treasury test passed in that run.
+3. Review keeps R-0102's boycott lifecycle as an explicit unfinished dependency;
+   ordinary and revolution exports alone do not complete R-0085. UI and final
+   model verification are running; publication is not claimed.
+4. Older R-0083 CI `38954893144` failed with **237 UI/support tests, two errors**:
+   the known TC53 job-popup issue (repaired in R-0104) and TC10 JavaFX
+   PulseReceiver NullPointerException during animation. The latter is included
+   in current targeted regression; this observation does not establish a root
+   cause or claim it is fixed. Log: `target/r85/r83-ci-failed.log`.
+5. The worker repaired the fixture setup to use productive lumber work and
+   controlled food surplus, and asserted explicit 7-price/10%-tax net income
+   6 (3 during revolution). Review also removed a spurious treasury write
+   when no goods are sold. The final full model suite passed **1620 tests**,
+   zero failures/errors/skips. Eighteen Java files passed shared formatting
+   with exact-token preservation and idempotence; packaging/Javadoc passed.
+6. Docker `run-UmGBkj` passed **16 tests**, zero failures/errors/skips: TC58
+   (four custom-house journeys), TC57 (three founder gates), TC50 (three
+   production cases), TC54, TC10, TC14 and three page-contract checks.
+   TC10's earlier animation error did not reproduce; this does not prove its
+   underlying cause fixed. TC14 is colony-spacing coverage, not warehouse
+   unloading; main corrected the regression selection to TC19 for the final run.
+   Main inspected the export dialog: all 16 commodities, reserve rule and
+   confirm/cancel controls are readable.
+7. The first Docker snapshot preceded the no-sale treasury-write removal;
+   final-source TC58/TC19/page-contract verification is running separately.
+   Nine documentation tests and strict MkDocs passed before this final
+   evidence update. Boycott and full publication acceptance remain open.
+8. Final-source Docker `run-csqhIb` passed **25 tests**, zero failures/errors/skips:
+   TC19 (18 warehouse transfers), TC58 (four export journeys) and three
+   page-contract checks. Across both runs, all **34 distinct selected tests**
+   passed. Exported fresh production was 103 tobacco → 231 gold after 25% tax,
+   plus 30 ore → 90; unselected silver remained. Revolution delivered 115+45.
+   Continue retained balances and choices without repeating the sale.
+9. Main retained the trivial final persisted-event validation: reject
+   non-tradable goods in a saved export report, with a focused malformed-event
+   assertion. Its focused rerun passed all **seven model tests**, zero failures/errors/skips,
+   separately from the earlier full suite. This does not change the valid player journey.

@@ -27,6 +27,16 @@ public final class TurnEventPo {
 
     private Founder founder;
 
+    private Integer income;
+
+    public Integer getIncome() {
+        return income;
+    }
+
+    public void setIncome(final Integer income) {
+        this.income = income;
+    }
+
     public Founder getFounder() {
         return founder;
     }

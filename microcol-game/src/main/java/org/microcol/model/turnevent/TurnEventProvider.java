@@ -19,6 +19,13 @@ public final class TurnEventProvider {
     private TurnEventProvider() {
     }
 
+    /** Persist one completed custom-house sale with its colony identity. */
+    public static TurnEvent getCustomHouseExport(final Player owner,
+            final Colony colony, final Goods goods, final int income) {
+        return new TurnEventCustomHouseExport(owner.getName(), colony.getId(),
+                colony.getName(), goods, income);
+    }
+
     /**
      * Get new turn event when ship come to Europe port.
      *

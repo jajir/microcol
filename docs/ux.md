@@ -466,3 +466,16 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
    pozastavení. Dokoupení není dostupné a zásoby zůstanou zachované.
    Hotové stavby při změně vlastníka nezmizí. Ověření vede
    [evidence R-0084](functional-tests.md#r-0084-founder-construction-2026-10-16).
+
+### Vývoz celnicí — R-0085
+
+1. Z kolonie otevřít „Vývoz celnicí…“. Bez hotové celnice je tlačítko
+   nedostupné s vysvětlením podmínky.
+2. Zaškrtnout obchodovatelné druhy a výslovně uložit výběr. Okno vysvětluje
+   rezervu 100, pořadí po výrobě a stavbě, evropskou cenu po dani a za
+   revoluce poloviční příjem. Zrušení a Escape návrh zahodí.
+3. Samotné uložení zboží neprodává. Příští běžný tah uvede v přehledu
+   kolonii, prodané množství, druh a skutečný příjem. Pokračovat zachová
+   nastavení a neopakuje dokončený prodej. Zastaralé potvrzení se odmítne
+   s pokynem okno znovu otevřít. Stav ověření vede
+   [evidence R-0085](functional-tests.md#r-0085-custom-house-export-2026-10-16).

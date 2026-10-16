@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Custom-house exports…</entry>
+  <entry key="title">Custom house — %s</entry>
+  <entry key="rule">Select goods to sell automatically after production and construction. Keep 100 of each selected good; sell the excess at the current European price after tax.</entry>
+  <entry key="revolution">During revolution the custom house receives half the normal net income.</entry>
+  <entry key="confirm">Save export choices</entry>
+  <entry key="cancel">Cancel</entry>
+  <entry key="unavailable">Build a custom house to choose automatic exports.</entry>
+  <entry key="changed">The colony or export choices changed. Close this window and open it again.</entry>
+  <entry key="exported">%s exported %s × %s through its custom house for %s gold.</entry>
+</properties>

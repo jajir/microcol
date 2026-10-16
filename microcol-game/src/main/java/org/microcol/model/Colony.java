@@ -2,11 +2,13 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,8 @@ public class Colony {
     private final ColonyWarehouse warehouse;
 
     private final ColonyBuildingQueue colonyBuildingQueue;
+
+    private final Set<GoodsType> exportGoods = new HashSet<>();
 
     private final Model model;
 
@@ -135,7 +139,54 @@ public class Colony {
         out.setColonyWarehouse(warehouse.save());
         out.setConstructions(saveCostructions());
         out.setBuildingQueue(colonyBuildingQueue.save());
+        out.setExportGoods(GoodsType.GOOD_TYPES.stream()
+                .filter(exportGoods::contains).collect(Collectors.toList()));
         return out;
+    }
+
+    /** @return an immutable snapshot of the selected export commodities */
+    public Set<GoodsType> getExportGoods() {
+        return Set.copyOf(exportGoods);
+    }
+
+    void restoreExportGoods(final List<GoodsType> saved) {
+        Preconditions
+                .checkArgument(
+                        saved != null
+                                && saved.stream()
+                                        .noneMatch(type -> type == null)
+                                && new HashSet<>(saved).size() == saved.size()
+                                && GoodsType.BUYABLE_GOOD_TYPES
+                                        .containsAll(saved),
+                        "Invalid saved custom-house export selection");
+        exportGoods.clear();
+        exportGoods.addAll(saved);
+    }
+
+    /** Replace a current export selection after checking its saved snapshot. */
+    public void configureExportGoods(final Set<GoodsType> expected,
+            final Set<GoodsType> selected) {
+        model.checkTurnPreparationComplete();
+        Preconditions
+                .checkArgument(
+                        expected != null && selected != null
+                                && selected.stream()
+                                        .noneMatch(type -> type == null)
+                                && GoodsType.BUYABLE_GOOD_TYPES
+                                        .containsAll(selected),
+                        "Invalid export selection");
+        Preconditions.checkState(
+                model.isGameRunning() && isValid()
+                        && model.getColonyById(id).orElse(null) == this
+                        && model.getPlayers().contains(owner)
+                        && model.getCurrentPlayer() == owner
+                        && wasConstructionBuilded(
+                                ConstructionType.CUSTOM_HOUSE),
+                "Custom house is unavailable");
+        Preconditions.checkState(exportGoods.equals(expected),
+                "Export selection changed");
+        exportGoods.clear();
+        exportGoods.addAll(selected);
     }
 
     boolean canBeCapturedBy(final Unit force) {
@@ -297,13 +348,8 @@ public class Colony {
                     return;
                 }
                 if (stats.getDiff() > 0) {
-                    warehouse.addGoodsWithThrowingAway(
-                            Goods.of(goodsType, stats.getDiff()),
-                            thrownAwayGoods -> {
-                                model.addTurnEvent(
-                                        TurnEventProvider.getGoodsWasThrowsAway(
-                                                owner, thrownAwayGoods, this));
-                            });
+                    warehouse.stageProducedGoods(
+                            Goods.of(goodsType, stats.getDiff()));
 
                 } else {
                     warehouse
@@ -317,10 +363,51 @@ public class Colony {
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
             }
             colonyBuildingQueue.startTurn();
+            exportSelectedSurplus();
+            warehouse.clampProducedOverflow(thrownAwayGoods -> model
+                    .addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
+                            thrownAwayGoods, this)));
         }
         if (famineVictim != null) {
             model.addTurnEvent(TurnEventProvider.getFaminePlagueColony(owner,
                     this, famineVictim));
+        }
+    }
+
+    private void exportSelectedSurplus() {
+        if (!wasConstructionBuilded(ConstructionType.CUSTOM_HOUSE)
+                || exportGoods.isEmpty()) {
+            return;
+        }
+        final List<Goods> sales = new ArrayList<>();
+        final List<Integer> incomes = new ArrayList<>();
+        int finalGold = owner.getGold();
+        for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
+            if (!exportGoods.contains(type)) {
+                continue;
+            }
+            final int amount = warehouse.getGoods(type).getAmount() - 100;
+            if (amount <= 0) {
+                continue;
+            }
+            final Goods goods = Goods.of(type, amount);
+            final int marketIncome = owner.quoteEuropeTrade(goods, false)
+                    .getTotal();
+            final int income = owner.isDeclaredIndependence() ? marketIncome / 2
+                    : marketIncome;
+            finalGold = Math.addExact(finalGold, income);
+            sales.add(goods);
+            incomes.add(income);
+        }
+        if (sales.isEmpty()) {
+            return;
+        }
+        owner.setGold(finalGold);
+        for (int index = 0; index < sales.size(); index++) {
+            final Goods goods = sales.get(index);
+            warehouse.removeGoods(goods);
+            model.addTurnEvent(TurnEventProvider.getCustomHouseExport(owner,
+                    this, goods, incomes.get(index)));
         }
     }
 

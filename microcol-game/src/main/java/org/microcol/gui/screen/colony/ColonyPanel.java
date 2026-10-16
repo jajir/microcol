@@ -40,6 +40,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final PanelOutsideColony panelOutsideColony;
 
     private Colony colony;
+    private final ColonyButtonsPanel buttons;
 
     private final EventBus eventBus;
 
@@ -51,6 +52,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final ColonyButtonsPanel colonyButtonsPanel,
             final PanelDockColony panelDockColony,
             final PanelColonyName panelColonyName, final EventBus eventBus) {
+        this.buttons = colonyButtonsPanel;
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions
@@ -116,6 +118,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 eventBus.post(new ShowScreenEvent(Screen.GAME));
                 return;
             }
+            buttons.setColony(colony);
             colonyFields.setColony(colony);
             goods.repaint();
             panelDock.repaint();

@@ -189,6 +189,7 @@ public class Model {
                         });
                         return constructions;
                     }, colonyPo.getColonyWarehouse(), buildingQueue);
+            col.restoreExportGoods(colonyPo.getExportGoods());
             colonies.add(col);
         });
 

@@ -644,3 +644,16 @@ vlastníka při zařazení i dokončení, včetně placeného dokončení. Chyb�
 se tímto pravidlem neodstraňují. GUI překládá společný důvod a váže
 potvrzení také na snímek členství. Nevzniká další uložený příznak odemčení.
 Rozsah a přejímku vede [R-0084](requirements/R-0084.md).
+
+### Automatický vývoz celnicí (R-0085)
+
+`Colony` vlastní výběr obchodovatelného zboží, ověření potvrzeného snímku
+a automatický prodej přebytku nad 100. `ColonyPo.exportGoods` je povinný
+explicitní seznam; nové kolonie začínají prázdné. Výroba může během přípravy
+tahu dočasně přesáhnout sklad. Po spotřebě, chovu a stavbě následuje export
+a až potom ořez kapacity s hlášením ztrát; běžné hráčské přesuny zůstávají
+omezené kapacitou. Export před změnou ověří celou dávku a výslednou pokladnu,
+použije sdílenou evropskou čistou cenu a za revoluce její polovinu.
+`TurnEventCustomHouseExport` ukládá skutečné množství a příjem; GUI pouze
+potvrzuje výběr a překládá uloženou zprávu. Bojkoty z R-0102 zatím nejsou
+propojené; úplnou přejímku vede [R-0085](requirements/R-0085.md).

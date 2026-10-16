@@ -393,6 +393,7 @@
     {
       "id": 0,
       "name": "New Amsterdam",
+      "exportGoods": [],
       "ownerName": "Dutch",
       "location": {
         "x": 25,
@@ -546,6 +547,7 @@
     {
       "id": 1,
       "name": "Delft",
+      "exportGoods": [],
       "ownerName": "Dutch",
       "location": {
         "x": 22,
@@ -699,6 +701,7 @@
     {
       "id": 2,
       "name": "Haarlem",
+      "exportGoods": [],
       "ownerName": "Dutch",
       "location": {
         "x": 23,
