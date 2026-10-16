@@ -47,6 +47,31 @@ public class BuyUnitScreen extends AbstractScreen {
         return EuropePortScreen.of(getContext());
     }
 
+    public void verifyShipOffer(org.microcol.model.UnitType type, String name,
+            int price, boolean affordable) {
+        Button button = getButtonById("buy-unit-" + type.name());
+        org.junit.jupiter.api.Assertions.assertEquals(!affordable,
+                button.isDisabled());
+        org.junit.jupiter.api.Assertions
+                .assertTrue(button.getText().endsWith(" " + price));
+        org.junit.jupiter.api.Assertions.assertTrue(
+                getNodeFinder().lookup(name).queryLabeled().isVisible());
+        javafx.scene.Parent panel = button.getParent();
+        javafx.scene.image.ImageView image = panel.getChildrenUnmodifiable()
+                .stream()
+                .filter(node -> node instanceof javafx.scene.image.ImageView)
+                .map(node -> (javafx.scene.image.ImageView) node).findFirst()
+                .orElseThrow();
+        org.junit.jupiter.api.Assertions.assertNotNull(image.getImage());
+        org.junit.jupiter.api.Assertions
+                .assertFalse(image.getImage().isError());
+    }
+
+    public void verifyRoyalShipNotOffered() {
+        org.junit.jupiter.api.Assertions.assertTrue(getNodeFinder()
+                .lookup("#buy-unit-MAN_OF_WAR").queryAll().isEmpty());
+    }
+
     public EuropePortScreen close() {
         final Button buttonNextTurn = getButtonById(
                 EuropeButtonsPanel.CLOSE_BUTTON_ID);

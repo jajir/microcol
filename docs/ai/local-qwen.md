@@ -3119,3 +3119,32 @@ committed for this experiment.
    and added bundled-default coverage. Worker model tests passed; caller test
    failures and repairs are separately recorded in the
    [R-0064 evidence](../functional-tests.md#r-0064-difficulty-profile-2026-10-16).
+
+5. After the user confirmed the switch on 2026-10-16, the current session's
+   `turn_context` was inspected and reported `gpt-6-astra`/`medium`. R-0108
+   continues with this main setting and one bounded `gpt-6-sol`/`low` worker
+   in `2026-10-16-r108`, based on `db946d43`. Main owns GUI and actual checks;
+   worker owns the model roster and focused tests. A review follow-up added
+   exact voyage/passenger and rejection coverage before acceptance.
+6. R-0108's first worker test execution found a scenario-terrain setup error
+   (six of seven roster tests passed). A targeted repair in the same worktree
+   applied the terrain and exercised the model command; the complete model
+   rerun passed. The caller separately repaired its unsupported UI parameter
+   annotations. Details and remaining acceptance belong to the
+   [R-0108 evidence](../functional-tests.md#r-0108-six-ship-roster-2026-10-16).
+7. The R-0062 full-CI failure received one bounded `gpt-6-sol`/`low`
+   diagnosis in `2026-10-16-ci-colony-jobs`, based on `db946d43`. The worker
+   identified the first missing native drag completion and subsequent failures,
+   but correctly retained uncertainty about the cause and made no speculative
+   edits. Main owns the selected reproduction and any eventual repair.
+8. Main reproduced the TC40 native-drag failure in Docker and sent the evidence
+   back to the same Sol low worker. The worker proposed deferring construction
+   repaint until the event returns; main integrated that one-line production
+   change without changing the stale-state tests. Verification is pending.
+   Caller-authored ship UI checks also needed corrections for existing closed
+   crate placeholders and the three-turn voyage; those are separate from worker
+   implementation failures.
+9. The caller's Docker `run-uo1009` passed all 15 unchanged TC40 cases, the
+   full specialist-to-smithy journey and three source-contract checks after
+   the worker's deferred-repaint repair. Complete CI remains necessary;
+   neither this local pass nor the adopted model setting measures quota savings.

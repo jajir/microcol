@@ -21,4 +21,18 @@
 	<entry key="WAGON_name_7">povozem</entry>
 	<entry key="WAGON_name_7pl">povozy</entry>
 
+	<entry key="CARAVEL_name">karavela</entry>
+	<entry key="CARAVEL_name_7">karavelou</entry>
+	<entry key="CARAVEL_name_7pl">karavelami</entry>
+	<entry key="MERCHANTMAN_name">obchodní loď</entry>
+	<entry key="MERCHANTMAN_name_7">obchodní lodí</entry>
+	<entry key="MERCHANTMAN_name_7pl">obchodními loděmi</entry>
+	<entry key="PRIVATEER_name">korzárská loď</entry>
+	<entry key="PRIVATEER_name_7">korzárskou lodí</entry>
+	<entry key="PRIVATEER_name_7pl">korzárskými loděmi</entry>
+	<entry key="MAN_OF_WAR_name">řadová loď</entry>
+	<entry key="MAN_OF_WAR_name_7">řadovou lodí</entry>
+	<entry key="MAN_OF_WAR_name_7pl">řadovými loděmi</entry>
+	<entry key="FRIGATE_name_7pl">frigatami</entry>
+
 </properties>

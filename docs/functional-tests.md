@@ -2747,3 +2747,32 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    final Czech game screenshot also shows the selected Governor label fully
    visible below the unit panel, above the gold/calendar bar.
    Full CI and publication remain pending; no complete R-0064 acceptance yet.
+
+
+## R-0108 six-ship roster — 2026-10-16
+
+1. Implementation uses the shared ship/cargo/voyage paths and existing transport/warship artwork. [R-0108](requirements/R-0108.md) owns the acceptance boundary; naval combat outcomes, the privateer diplomatic exception and complete royal-force lifecycle remain separate requirements.
+2. Initial full model run executed 1332 tests, with one failure: the frigate visibility test still expected the old four-move radius. The existing visibility rule uses speed plus one; six moves cover 225 squares rather than 121. The exact expectation was updated without changing visibility code.
+3. The worker's added seven-case roster suite initially had six passes and one failure: its terrain setup modified a returned map without applying `setTerrainType`. Targeted worker repair applied the terrain and used `Model.moveUnit`; the caller then reran all 1339 model tests successfully (zero failures, errors or skips). The full-hold player scenario now fills and verifies the new sixth galleon hold, preserving the original rejection assertions.
+4. First selected Docker attempt failed during UI test compilation because the caller used JUnit parameter annotations without that module's parameter dependency. No UI tests executed. The caller reused ordinary scenario loops instead of introducing a dependency. A local compile then found an ambiguous TestFX lookup lambda; direct child-node selection fixed that helper. Local UI compilation passed; the Docker rerun is pending. New TC30 cases cover all six rendered carriers, visible hold counts, passenger boarding, Atlantic departure and Continue, plus new ship purchases and Czech offer text. Existing TC23, TC28, TC29 and TC30 journeys remain selected.
+5. Full UI acceptance, CI and publication are pending. This is implementation evidence, not a completed requirement.
+
+
+### R-0062 full CI follow-up — 2026-10-16
+
+1. Run [38910438258](https://github.com/jajir/microcol/actions/runs/38910438258) failed full UI acceptance: 188 UI/support tests, five failures and one error, zero skips. All six were in TC40 colony-job choices: TC01/05/09/10/11 could not observe the status bar and TC14 failed during its stale explicit-slot drag. The artifact `tests-functional`, Docker run `run-82omTk`, was downloaded and inspected. Targeted R-0062 cases passed, but this complete acceptance failure blocks publication/closure.
+2. A bounded Sol low diagnosis in an isolated `db946d43` worktree is underway. No retry or repair is claimed successful yet. The earlier targeted results remain valid within their stated scope.
+
+
+### R-0108 selected UI follow-up — 2026-10-16
+
+1. Docker `run-TJfnwQ` executed 23 UI/support tests: 21 passed and two new TC30 cases failed at the caller's hold-count observation. The dock intentionally retains six crate nodes and depicts unavailable holds as closed; counting nodes did not measure available capacity. `EuropePortScreen.verifyAvailableHoldCount` now checks each open/closed crate image against the expected capacity. Existing player assertions were retained. A targeted rerun of TC30 TC08/09 and the TC40 CI failure group is underway.
+2. TC23's two Atlantic scenarios, TC28's two western-voyage scenarios, all six TC29 passenger scenarios, eight other TC30 cases and all three page-contract tests passed. The Czech purchase capture `ship-roster-czech.png` was visually inspected: all seven named offers, prices, insufficient-funds explanation and close control fit within the 378-by-649 dialog. New ship types reuse existing transport/warship artwork.
+3. CI TC40 diagnosis found TC14's missing native `DRAG_DONE` before the five later status-bar failures. Synchronous repaint during its stale-slot mutation is a hypothesis, not a proven production cause; the previous full CI had passed the unchanged scenario. No speculative code change was applied. The selected rerun retains its stale-state and status-bar assertions.
+
+4. The local reproduction `run-6Fmt4y` confirmed TC40's first native-drag timeout (TC15), followed by setup failures: 15 TC40 cases, 12 failures and two errors. The worker's targeted production repair queues `ColonyPanel`'s construction-move repaint with `Platform.runLater`, retaining the exact stale-drop tests. Its selected verification is pending.
+5. The same run passed TC30 TC09 for all three new purchases. TC08 then exposed a second caller assumption: existing Atlantic travel begins at three turns, not two. The scenario now verifies three, advances one turn before saving, verifies two after Continue, and completes the remaining voyage. Docker `run-S9fkry` passed that scenario for all six types plus three page-contract tests (four tests, no failures/errors/skips).
+6. R-0064 full CI [38911836474](https://github.com/jajir/microcol/actions/runs/38911836474) also failed only the same six TC40 cases: 191 UI/support tests, five failures and one error, zero skips. Publication remains blocked until the repair and complete acceptance pass.
+
+7. Docker `run-uo1009` verified the deferred repaint repair: all 15 unchanged TC40 scenarios passed, including both stale slot/body drops; TC30/04's hire/equip/voyage/smithy/Continue path and three page-contract checks also passed (19 UI/support tests, zero failures/errors/skips). The attempted TC07 selector used a misspelled class name and selected no TC07 case; it is not counted as fresh evidence. Full CI will include the correctly named existing scenario.
+8. Final local model evidence is 1339 passing cases; all selected ship scenarios passed across `run-TJfnwQ`, `run-6Fmt4y` and `run-S9fkry` after the documented caller corrections. Shared formatter checked 17 changed Java files with exact-token preservation and idempotence. Complete CI/publication is still required. The live development manifest inspected on 2026-10-16 still identifies `dev-109-0b0cb0593df4`, so no new game build is claimed.

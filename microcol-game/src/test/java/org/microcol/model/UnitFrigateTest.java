@@ -74,7 +74,9 @@ public class UnitFrigateTest {
         final List<Location> visible = unit.getVisibleLocations();
 
         Preconditions.checkNotNull(visible);
-        assertEquals(121, visible.size());
+        // Six moves plus the existing visibility increment cover a 15-by-15
+        // square.
+        assertEquals(225, visible.size());
     }
 
     @BeforeEach

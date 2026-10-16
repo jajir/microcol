@@ -37,6 +37,14 @@ public class UnitImageProvider {
         Preconditions.checkNotNull(imageCache);
 
         unitImageMap = ImmutableMap.<UnitType, Image>builder()
+                .put(UnitType.CARAVEL,
+                        imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
+                .put(UnitType.MERCHANTMAN,
+                        imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
+                .put(UnitType.PRIVATEER,
+                        imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
+                .put(UnitType.MAN_OF_WAR,
+                        imageCache.getImage(IMG_UNIT_SHIP_FRIGATE))
                 .put(UnitType.GALLEON,
                         imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.FRIGATE,
@@ -51,11 +59,13 @@ public class UnitImageProvider {
 
         unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
                 Lists.newArrayList(request -> {
-                    if (UnitType.GALLEON == request.getUnitType()) {
+                    if (UnitType.GALLEON == request.getUnitType()
+                            || UnitType.CARAVEL == request.getUnitType()
+                            || UnitType.MERCHANTMAN == request.getUnitType()) {
                         if (Direction.west == request.getOrientation()) {
                             return imageCache.getImage(
                                     ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_WEST);
-                        } else if (Direction.east == request.getOrientation()) {
+                        } else {
                             return imageCache.getImage(
                                     ImageLoaderUnit.IMG_UNIT_SHIP_GALEON_EAST);
                         }
@@ -99,7 +109,9 @@ public class UnitImageProvider {
                         return imageCache
                                 .getImage(ImageLoaderUnit.IMG_UNIT_WAGON);
                     }
-                    if (UnitType.FRIGATE == request.getUnitType()) {
+                    if (UnitType.FRIGATE == request.getUnitType()
+                            || UnitType.PRIVATEER == request.getUnitType()
+                            || UnitType.MAN_OF_WAR == request.getUnitType()) {
                         return imageCache.getImage(IMG_UNIT_SHIP_FRIGATE);
                     }
                     return null;

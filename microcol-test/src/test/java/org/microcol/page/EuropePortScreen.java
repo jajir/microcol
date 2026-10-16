@@ -87,6 +87,39 @@ public class EuropePortScreen extends AbstractScreen {
                 .verifyCargoSlotEmpty(cargoSlotIndex);
     }
 
+    public void verifyShip(int id, org.microcol.model.UnitType type,
+            int holds) {
+        UnitWithCargo ship = (UnitWithCargo) getModel().getUnitById(id);
+        assertSame(type, ship.getType());
+        assertSame(getModel().getPlayerByName("Dutch"), ship.getOwner());
+        assertEquals(holds, ship.getCargo().getSlots().size());
+        javafx.scene.control.ToggleButton button = pageComponentPanelDock
+                .getUnitsInPort().stream()
+                .filter(node -> node.getUserData() == ship).findFirst()
+                .orElseThrow();
+        assertTrue(button.isVisible());
+        assertFalse(button.getBackground().getImages().isEmpty());
+        assertFalse(
+                button.getBackground().getImages().get(0).getImage().isError());
+    }
+
+    public void verifyAvailableHoldCount(int holds) {
+        org.microcol.gui.image.ImageProvider images = getContext()
+                .getClassFromGuice(org.microcol.gui.image.ImageProvider.class);
+        List<javafx.scene.layout.StackPane> crates = pageComponentPanelDock
+                .getListOfCrates();
+        assertEquals(6, crates.size());
+        for (int index = 0; index < crates.size(); index++) {
+            javafx.scene.image.ImageView crate = getNodeFinder()
+                    .from(crates.get(index)).lookup(".crate")
+                    .queryAs(javafx.scene.image.ImageView.class);
+            assertSame(images.getImage(index < holds
+                    ? org.microcol.gui.image.ImageProvider.IMG_CRATE_OPEN
+                    : org.microcol.gui.image.ImageProvider.IMG_CRATE_CLOSED),
+                    crate.getImage());
+        }
+    }
+
     public BuyUnitScreen openBuyUnitScreen() {
         final Button buttonNextTurn = getButtonById(
                 EuropeButtonsPanel.BUY_BUTTON_ID);

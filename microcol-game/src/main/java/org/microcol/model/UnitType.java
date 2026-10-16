@@ -36,7 +36,7 @@ public final class UnitType {
     /**
      * Default frigate speed.
      */
-    private static final int DEFAULT_FRIGATE_SPEED = 4;
+    private static final int DEFAULT_FRIGATE_SPEED = 6;
 
     /**
      * Default frigate price in Europe port.
@@ -46,7 +46,7 @@ public final class UnitType {
     /**
      * Default galleon cargo capacity.
      */
-    private static final int DEFAULT_GALLEON_CARGO_CAPACITY = 5;
+    private static final int DEFAULT_GALLEON_CARGO_CAPACITY = 6;
 
     /**
      * Default galleon speed.
@@ -169,7 +169,7 @@ public final class UnitType {
             .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
             .setSpeed(DEFAULT_FRIGATE_SPEED)
             .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
-            .setCargoCapacity(1).setStorable(false)
+            .setCargoCapacity(4).setStorable(false)
             .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE).setRequiredTools(100)
             .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
                 return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
@@ -185,11 +185,38 @@ public final class UnitType {
                 return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
             }).build();
 
+    public static final UnitType CARAVEL = UnitType.make().setName("CARAVEL")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(4)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(1_000)
+            .build();
+
+    public static final UnitType MERCHANTMAN = UnitType.make()
+            .setName("MERCHANTMAN")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(5)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(4).setStorable(false).setEuropePrice(2_000)
+            .build();
+
+    public static final UnitType PRIVATEER = UnitType.make()
+            .setName("PRIVATEER")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(8)
+            .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(2_000)
+            .build();
+
+    public static final UnitType MAN_OF_WAR = UnitType.make()
+            .setName("MAN_OF_WAR")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(6)
+            .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
+            .setCargoCapacity(6).setStorable(false).setEuropePrice(0).build();
+
     /**
      * List of all available unit types.
      */
     public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST,
-            FRIGATE, GALLEON, WAGON, MASTER_BLACKSMITH);
+            FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER, MAN_OF_WAR,
+            WAGON, MASTER_BLACKSMITH);
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES
             .stream().collect(ImmutableMap.toImmutableMap(UnitType::name,
@@ -478,7 +505,9 @@ public final class UnitType {
      *         otherwise return <code>false</code>.
      */
     public boolean isShip() {
-        return this == UnitType.FRIGATE || this == UnitType.GALLEON;
+        return this == UnitType.FRIGATE || this == UnitType.GALLEON
+                || this == UnitType.CARAVEL || this == UnitType.MERCHANTMAN
+                || this == UnitType.PRIVATEER || this == UnitType.MAN_OF_WAR;
     }
 
     /**

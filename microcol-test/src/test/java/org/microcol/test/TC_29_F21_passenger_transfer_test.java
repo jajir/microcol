@@ -278,7 +278,8 @@ public class TC_29_F21_passenger_transfer_test extends AbstractMicroColTest {
             } else if (unit.get("id").getAsInt() == 3) {
                 com.google.gson.JsonArray slots = unit.getAsJsonObject("cargo")
                         .getAsJsonArray("slots");
-                for (int index : new int[] { 1, 3, 4 }) {
+                slots.add(new com.google.gson.JsonObject());
+                for (int index : new int[] { 1, 3, 4, 5 }) {
                     com.google.gson.JsonObject goods = new com.google.gson.JsonObject();
                     goods.addProperty("goodsType", "TOOLS");
                     goods.addProperty("amount", 100);
@@ -304,6 +305,8 @@ public class TC_29_F21_passenger_transfer_test extends AbstractMicroColTest {
         passengers.verifyCargoGoods(3, 3, org.microcol.model.Goods
                 .of(org.microcol.model.GoodsType.TOOLS, 100));
         passengers.verifyCargoGoods(3, 4, org.microcol.model.Goods
+                .of(org.microcol.model.GoodsType.TOOLS, 100));
+        passengers.verifyCargoGoods(3, 5, org.microcol.model.Goods
                 .of(org.microcol.model.GoodsType.TOOLS, 100));
     }
 

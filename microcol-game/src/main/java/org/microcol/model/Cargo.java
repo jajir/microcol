@@ -17,6 +17,12 @@ public class Cargo {
 
     public Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
         this.owner = Preconditions.checkNotNull(owner);
+        Preconditions.checkArgument(
+                cargoPo.getSlots().stream().skip(capacity)
+                        .noneMatch(slot -> slot.getUnitId() != null
+                                || slot.getGoodsType() != null
+                                || slot.getAmount() != null),
+                "Cargo exceeds unit capacity");
 
         final ImmutableList.Builder<CargoSlot> builder = ImmutableList
                 .builder();

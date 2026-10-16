@@ -300,4 +300,141 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.verifyReplacedGameUntouched(previous, 4400);
         purchase.verifyTreasuryAndPierExperts(4400, List.of());
     }
+
+    @Test
+    @Tag("local")
+    void TC_08_each_ship_renders_boards_and_continues_its_voyage()
+            throws Exception {
+        String[] types = { "CARAVEL", "MERCHANTMAN", "GALLEON", "PRIVATEER",
+                "FRIGATE", "MAN_OF_WAR" };
+        int[] capacities = { 2, 4, 6, 2, 4, 6 };
+        for (int i = 0; i < types.length; i++) {
+            String typeName = types[i];
+            int holds = capacities[i];
+            // Prepare the same port journey for each supported carrier, with
+            // one
+            // goods hold.
+            org.microcol.model.UnitType type = org.microcol.model.UnitType
+                    .valueOf(typeName);
+            com.google.gson.JsonObject saved = new com.google.gson.Gson()
+                    .fromJson(java.nio.file.Files.readString(FIXTURE.toPath()),
+                            com.google.gson.JsonObject.class);
+            for (com.google.gson.JsonElement value : saved
+                    .getAsJsonObject("model").getAsJsonArray("units")) {
+                com.google.gson.JsonObject unit = value.getAsJsonObject();
+                if (unit.get("id").getAsInt() == 102) {
+                    unit.addProperty("type", typeName);
+                    unit.addProperty("availableMoves", type.getSpeed());
+                    com.google.gson.JsonArray slots = new com.google.gson.JsonArray();
+                    for (int index = 0; index < holds; index++) {
+                        com.google.gson.JsonObject slot = new com.google.gson.JsonObject();
+                        if (index == 1) {
+                            slot.addProperty("goodsType", "ORE");
+                            slot.addProperty("amount", 7);
+                        }
+                        slots.add(slot);
+                    }
+                    unit.getAsJsonObject("cargo").add("slots", slots);
+                }
+            }
+            File fixture = new File(System.getProperty("user.home"),
+                    "ship-roster-" + typeName + ".microcol");
+            java.nio.file.Files.writeString(fixture.toPath(), saved.toString());
+            org.mockito.Mockito.when(getContext()
+                    .getClassFromGuice(
+                            org.microcol.gui.FileSelectingService.class)
+                    .loadFile(org.mockito.ArgumentMatchers.any(File.class)))
+                    .thenReturn(fixture);
+            EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                    .openEuroperPort();
+            europe.verifyShip(102, type, holds);
+            europe.selectUnitFromPort(0);
+            europe.verifyAvailableHoldCount(holds);
+            EuropeEquipmentPage equipment = new EuropeEquipmentPage(
+                    getContext());
+            equipment.embark(100);
+            equipment.verifyPassenger(100, 102);
+
+            // Depart through the visible Europe panel, then save and continue
+            // in
+            // transit.
+            equipment.depart(102);
+            equipment.verifyVoyage(102, 3);
+            GamePage game = europe.close();
+            game.nextTurnAndCloseDialogs();
+            game.exitToMenu();
+            game = new FreePlayAuditPage(getContext()).continueGame();
+            equipment.verifyPassenger(100, 102);
+            equipment.verifyVoyage(102, 2);
+            game.nextTurnAndCloseDialogs();
+            game.nextTurnAndCloseDialogs();
+            equipment.verifyArrived(102);
+            equipment.verifyPassenger(100, 102);
+            game.exitToMenu();
+        }
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_buy_new_ship_and_preserve_it_after_continue() throws Exception {
+        String[] types = { "CARAVEL", "MERCHANTMAN", "PRIVATEER" };
+        String[] names = { "Caravel", "Merchantman", "Privateer" };
+        int[] prices = { 1000, 2000, 2000 };
+        int[] capacities = { 2, 4, 2 };
+        for (int i = 0; i < types.length; i++) {
+            String typeName = types[i];
+            String name = names[i];
+            int price = prices[i];
+            int holds = capacities[i];
+            // The offer exposes the named ship and its exact price, with no
+            // royal
+            // ship for sale.
+            org.microcol.model.UnitType type = org.microcol.model.UnitType
+                    .valueOf(typeName);
+            EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
+                    .openEuroperPort();
+            org.microcol.page.BuyUnitScreen offer = europe.openBuyUnitScreen();
+            offer.verifyShipOffer(type, name, price, true);
+            offer.verifyRoyalShipNotOffered();
+            europe = offer.buyUnitByName(name);
+            europe.verifyGold(4400 - price);
+            europe.verifyShip(103, type, holds);
+            europe.selectUnitFromPort(1);
+            europe.verifyAvailableHoldCount(holds);
+
+            // Menu and Continue retain the purchased identity and the single
+            // charge.
+            europe.close().exitToMenu();
+            europe = new FreePlayAuditPage(getContext()).continueGame()
+                    .openEuroperPort();
+            europe.verifyGold(4400 - price);
+            europe.verifyShip(103, type, holds);
+            europe.close().exitToMenu();
+        }
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_czech_ship_offers_are_named_and_royal_ship_is_absent()
+            throws Exception {
+        // The expanded offer keeps localized names, prices and accessible
+        // confirmation controls.
+        org.microcol.page.SettingPage settings = WelcomePage.of(getContext())
+                .openSetting();
+        settings.setCzechLanguage();
+        EuropePortScreen europe = settings.goBack().loadGame()
+                .openEuroperPort("Evropa");
+        org.microcol.page.BuyUnitScreen offer = europe.openBuyUnitScreen();
+        offer.verifyShipOffer(org.microcol.model.UnitType.CARAVEL, "karavela",
+                1000, true);
+        offer.verifyShipOffer(org.microcol.model.UnitType.MERCHANTMAN,
+                "obchodní loď", 2000, true);
+        offer.verifyShipOffer(org.microcol.model.UnitType.PRIVATEER,
+                "korzárská loď", 2000, true);
+        offer.verifyRoyalShipNotOffered();
+        new ExpertPurchasePage(getContext()).captureDialog("mainVbox",
+                "ship-roster-czech.png");
+        new ExpertPurchasePage(getContext()).escape();
+        europe.verifyGold(4400);
+    }
 }

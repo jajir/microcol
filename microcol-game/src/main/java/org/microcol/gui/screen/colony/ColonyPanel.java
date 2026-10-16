@@ -81,7 +81,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     @Subscribe
     private void onUnitMovedToConstruction(
             final UnitMovedToConstructionEvent event) {
-        repaint();
+        // Keep the native drop target attached until its event finishes.
+        javafx.application.Platform.runLater(this::repaint);
     }
 
     @SuppressWarnings("unused")

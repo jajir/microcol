@@ -574,12 +574,14 @@ public class Model {
      */
     public UnitWithCargo createCargoShipForKing(final Player king) {
         Preconditions.checkNotNull(king);
-        Preconditions.checkNotNull(king.isComputer(),
-                "king have to be computer player");
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == king)
+                        && king.isKing() && king.isComputer(),
+                "Expected a registered computer king");
         return (UnitWithCargo) unitStorage.createUnit(
-                unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()),
+                unit -> new Cargo(unit, UnitType.MAN_OF_WAR.getCargoCapacity()),
                 this, unit -> new PlaceHighSea(unit, false, 3),
-                UnitType.GALLEON, king, UnitType.GALLEON.getSpeed(),
+                UnitType.MAN_OF_WAR, king, UnitType.MAN_OF_WAR.getSpeed(),
                 new UnitActionNoAction());
     }
 

@@ -37,6 +37,20 @@ public class UnitFactory {
                 }
                 return null;
             }, request -> {
+                if (UnitType.CARAVEL == request.getUnitType()) {
+                    return makeCaravel(request);
+                }
+                if (UnitType.MERCHANTMAN == request.getUnitType()) {
+                    return makeMerchantman(request);
+                }
+                if (UnitType.PRIVATEER == request.getUnitType()) {
+                    return makePrivateer(request);
+                }
+                if (UnitType.MAN_OF_WAR == request.getUnitType()) {
+                    return makeManOfWar(request);
+                }
+                return null;
+            }, request -> {
                 if (UnitType.WAGON == request.getUnitType()) {
                     return makeWagon(request);
                 }
@@ -77,6 +91,34 @@ public class UnitFactory {
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getAvailableMoves(), request.getAction());
         return out;
+    }
+
+    private Unit makeCaravel(final UnitCreateRequest request) {
+        return new UnitCaravel(request.getCargoBuilder(), request.getModel(),
+                request.getUnitId(), request.getPlaceBuilder(),
+                request.getOwner(), request.getAvailableMoves(),
+                request.getAction());
+    }
+
+    private Unit makeMerchantman(final UnitCreateRequest request) {
+        return new UnitMerchantman(request.getCargoBuilder(),
+                request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction());
+    }
+
+    private Unit makePrivateer(final UnitCreateRequest request) {
+        return new UnitPrivateer(request.getCargoBuilder(), request.getModel(),
+                request.getUnitId(), request.getPlaceBuilder(),
+                request.getOwner(), request.getAvailableMoves(),
+                request.getAction());
+    }
+
+    private Unit makeManOfWar(final UnitCreateRequest request) {
+        return new UnitManOfWar(request.getCargoBuilder(), request.getModel(),
+                request.getUnitId(), request.getPlaceBuilder(),
+                request.getOwner(), request.getAvailableMoves(),
+                request.getAction());
     }
 
     private Unit makeWagon(final UnitCreateRequest request) {

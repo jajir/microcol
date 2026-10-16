@@ -271,7 +271,7 @@ Mapování je v [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gu
 | `(5,6)` | `free-colonist-mounted-muskets` | Ozbrojený kolonista na koni |
 | `(1,6)` | `wagon` | R-0024: obraz typu i instance vozu, stejný výřez pro oba směry |
 
-U kolonisty má nejprve význam kůň, potom zbraně a u pěšího nástroje. Orientace nemění jeho sprite. Galeona má zvláštní větev pro východ a západ; fregata vždy dostává základní variantu. Jednotka mimo mapovou lokaci používá při běžném dotazu výchozí orientaci east.
+U kolonisty má nejprve význam kůň, potom zbraně a u pěšího nástroje. Orientace nemění jeho sprite. Galeona, karavela a obchodní loď používají západní nebo výchozí východní podobu transportní lodi; fregata, korzárská a řadová loď používají základní bojovou variantu. R-0108 znovu používá tyto dvě rodiny obrázků, nikoli šest samostatných ilustrací; typy rozlišují přeložené názvy. Stav ověření vede [R-0108](requirements/R-0108.md). Jednotka mimo mapovou lokaci používá při běžném dotazu výchozí orientaci east.
 
 Tytéž obrázky se používají na mapě, v přístavu, v docích, v nákladových slotech a seznamech. [PaintService](../microcol-game/src/main/java/org/microcol/gui/util/PaintService.java) kreslí jednotku i mapovou kolonii s posunem **(2,4)** od levého horního rohu mapového políčka, bez zmenšení. Obrázek proto může přesáhnout hranici svého políčka. Vlajku, jméno kolonie a znak akce jednotky kreslí kód zvlášť.
 
