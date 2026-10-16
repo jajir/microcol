@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Map;
 import java.util.Set;
+import org.microcol.model.store.RecruitmentPo;
 
 /**
  * Human player class.
@@ -12,7 +13,16 @@ public class PlayerHuman extends Player {
             final int initialGold, final Model model,
             final boolean declaredIndependence,
             final Map<String, Object> extraData, Set<Location> visible) {
+        this(name, computer, initialGold, model, declaredIndependence,
+                extraData, visible, null);
+    }
+
+    protected PlayerHuman(final String name, final boolean computer,
+            final int initialGold, final Model model,
+            final boolean declaredIndependence,
+            final Map<String, Object> extraData, Set<Location> visible,
+            final RecruitmentPo recruitment) {
         super(name, computer, initialGold, model, declaredIndependence,
-                extraData, visible);
+                extraData, visible, recruitment);
     }
 }

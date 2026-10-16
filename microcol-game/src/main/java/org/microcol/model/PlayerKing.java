@@ -25,7 +25,7 @@ public class PlayerKing extends Player {
             final Map<String, Object> extraData, Set<Location> visible,
             final int kingsTaxPercentage) {
         super(name, computer, initialGold, model, declaredIndependence,
-                extraData, visible);
+                extraData, visible, null);
         this.whosKingThisPlayerIs = Preconditions
                 .checkNotNull(whosKingThisPlayerIs);
         this.kingsTaxPercentage = kingsTaxPercentage;

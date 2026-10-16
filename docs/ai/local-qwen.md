@@ -3277,3 +3277,19 @@ committed for this experiment.
     and full acceptance remain separately tracked in
     [R-0074 evidence](../functional-tests.md#r-0074-specialist-roster-2026-10-16).
     No measured cloud-token saving is claimed.
+
+
+18. R-0075 uses one Sol low model/test assignment in `2026-10-16-r75`,
+    based on `7717124e`; main independently owns GUI, fixture migration and
+    functional scenarios. Main full-run evidence found plain-Gson candidate
+    serialization errors and one old incomplete player fixture. The same
+    worker repaired those causes; main's rerun passed 1473 tests.
+    Review requested identity/counter boundaries and found a prospective-price
+    overflow that could invalidate the next saved state, plus the shared gold
+    subtraction overflow. The worker supplied narrow repairs and regression
+    cases; main's final full run passed 1478 tests. TC46/TC30 plus the source
+    contract passed 21 checks; the final arithmetic revision passed TC46 again.
+    Main repaired stale TC22 menu/roster expectations and verified all five
+    scenarios plus three source-contract cases. CI and dependent
+    integration evidence remains in [R-0075](../functional-tests.md#r-0075-persistent-recruitment-2026-10-16).
+    No token-saving percentage is inferred from these results.

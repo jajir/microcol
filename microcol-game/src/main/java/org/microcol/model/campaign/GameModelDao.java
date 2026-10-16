@@ -10,6 +10,7 @@ import org.microcol.model.GameOverResult;
 import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.RecruitmentPool;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.po.PersistingTool;
@@ -73,6 +74,10 @@ public final class GameModelDao {
                     .create(source.getModel().getMap(), nation, difficulty));
         } else {
             source.getModel().setDifficulty(difficulty);
+            source.getModel().getGameManager().getPlayers().stream()
+                    .filter(player -> player.getWhosKingThisPlayerIs() == null)
+                    .forEach(player -> player
+                            .setRecruitment(RecruitmentPool.initial()));
         }
         final GameModel game = makeFromModelPo(source, eventBus);
         game.getModel().getPlayers().stream().filter(Player::isHuman)

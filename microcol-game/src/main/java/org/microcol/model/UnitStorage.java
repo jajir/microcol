@@ -64,6 +64,10 @@ public final class UnitStorage {
         return unit;
     }
 
+    boolean canAllocateUnit() {
+        return idManager.canAllocate();
+    }
+
     private void checkUnitLocations(final List<Unit> units) {
         Map<Location, Player> owners = new HashMap<>();
         units.forEach(unit -> {

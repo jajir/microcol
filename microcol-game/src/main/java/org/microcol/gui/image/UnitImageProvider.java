@@ -56,6 +56,10 @@ public class UnitImageProvider {
                         imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON));
         UnitType.EUROPEAN_SPECIALISTS.forEach(type -> images.put(type,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
+        images.put(UnitType.INDENTURED_SERVANT,
+                imageCache.getImage(IMG_UNIT_FREE_COLONIST));
+        images.put(UnitType.PETTY_CRIMINAL,
+                imageCache.getImage(IMG_UNIT_FREE_COLONIST));
         unitImageMap = images.build();
 
         unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
@@ -74,6 +78,9 @@ public class UnitImageProvider {
                     return null;
                 }, request -> {
                     if (UnitType.COLONIST == request.getUnitType()
+                            || UnitType.INDENTURED_SERVANT == request
+                                    .getUnitType()
+                            || UnitType.PETTY_CRIMINAL == request.getUnitType()
                             || UnitType.EUROPEAN_SPECIALISTS
                                     .contains(request.getUnitType())) {
                         if (request.getUnit() instanceof UnitFreeColonist) {

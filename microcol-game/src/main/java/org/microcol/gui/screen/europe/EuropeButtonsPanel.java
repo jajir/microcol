@@ -21,6 +21,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
 
     public static final String BUY_BUTTON_ID = "buyButtonId";
 
+    private final Button buttonRecruit = new Button();
+
     private final Button buttonClose;
     private final Button buttonBuyUnit;
 
@@ -39,6 +41,9 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
                 Europe.buttonBuyUnit);
         buttonBuyUnit.setId(BUY_BUTTON_ID);
 
+        buttonRecruit.setId("recruitButtonId");
+        updateLanguage(i18n);
+        getButtonPanel().getChildren().add(buttonRecruit);
         getButtonPanel().getChildren().add(buttonBuyUnit);
         getButtonPanel().getChildren().add(buttonClose);
     }
@@ -46,6 +51,14 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     /**
      * @return the buttonExit
      */
+    public void updateLanguage(final I18n i18n) {
+        buttonRecruit.setText(i18n.get(Europe.recruitOpen));
+    }
+
+    public Button getButtonRecruit() {
+        return buttonRecruit;
+    }
+
     public Button getButtonClose() {
         return buttonClose;
     }

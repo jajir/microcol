@@ -13,6 +13,9 @@
  * Sentry is serialized as an explicit action and restored without replaying
  * boarding.
  *
+ * Colonial players require explicit candidate pools and immigration counters;
+ * loading never redraws candidates. Crown players cannot have a pool.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

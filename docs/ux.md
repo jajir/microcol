@@ -346,3 +346,16 @@ TC30/11–12 ověřily všechny názvy a ceny v EN/CZ, viditelnost po posunutí,
 klávesový nákup a Continue. Snímky obou jazyků byly zkontrolovány;
 nejde o uživatelskou studii ani přejímku všech neprodukčních schopností.
 Podrobnosti uvádí [evidence R-0074](functional-tests.md#r-0074-specialist-roster-2026-10-16).
+
+
+### Nábor tří kandidátů — 16. října 2026
+
+Evropská obrazovka má samostatné textové tlačítko Nábor/Recruit vedle nákupu.
+Dialog ukazuje tři uložené kandidáty, jejich jména a cenu placené cesty.
+Nedostatek peněz znepřístupní potvrzení a zobrazí důvod; Escape nebo OK zavře
+nabídku bez změny kandidátů. Tab/mezerník dovoluje vybrat libovolného kandidáta.
+Úspěch vrátí hráče na molo s novým člověkem a aktualizovaným zlatem;
+zastaralá cena vyžaduje nové otevření nabídky.
+Snímky EN/CZ v TC46/F37 byly zkontrolovány: všechny tři názvy a ceny jsou
+čitelné bez posouvání. Jde o automatizované ověření, ne uživatelskou studii.
+Výsledky a závislosti vede [evidence R-0075](functional-tests.md#r-0075-persistent-recruitment-2026-10-16).

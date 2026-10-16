@@ -13,8 +13,9 @@ class PlayerDisplayNameTest {
     private final Model model = mock(Model.class);
 
     private Player player() {
+        when(model.getDifficulty()).thenReturn(Difficulty.CONQUISTADOR);
         return new PlayerHuman("Dutch", false, 2108, model, false,
-                new HashMap<>(), new HashSet<>());
+                new HashMap<>(), new HashSet<>(), RecruitmentPool.initial());
     }
 
     @Test

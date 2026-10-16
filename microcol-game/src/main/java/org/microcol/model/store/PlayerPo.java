@@ -21,6 +21,16 @@ public final class PlayerPo {
 
     private int kingsTaxPercentage;
 
+    private RecruitmentPo recruitment;
+
+    public RecruitmentPo getRecruitment() {
+        return recruitment;
+    }
+
+    public void setRecruitment(final RecruitmentPo recruitment) {
+        this.recruitment = recruitment;
+    }
+
     /**
      * @return the name
      */

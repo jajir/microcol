@@ -48,6 +48,9 @@
  * Validated sentry commands preserve movement; departure boarding and
  * visible-movement wake-up use shared model rules.
  *
+ * RecruitmentPool owns three persistent candidate tokens, paid-passage quotes
+ * and counters; Player validates live offers before a single pier arrival.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

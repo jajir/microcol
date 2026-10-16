@@ -89,4 +89,10 @@
 	<entry key="JESUIT_MISSIONARY_name">jezuitský misionář</entry>
 	<entry key="JESUIT_MISSIONARY_name_7">jezuitským misionářem</entry>
 	<entry key="JESUIT_MISSIONARY_name_7pl">jezuitskými misionáři</entry>
+	<entry key="INDENTURED_SERVANT_name">smluvní služebník</entry>
+	<entry key="INDENTURED_SERVANT_name_7">smluvním služebníkem</entry>
+	<entry key="INDENTURED_SERVANT_name_7pl">smluvními služebníky</entry>
+	<entry key="PETTY_CRIMINAL_name">drobný trestanec</entry>
+	<entry key="PETTY_CRIMINAL_name_7">drobným trestancem</entry>
+	<entry key="PETTY_CRIMINAL_name_7pl">drobnými trestanci</entry>
 </properties>

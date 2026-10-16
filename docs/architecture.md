@@ -126,6 +126,22 @@ před výměnou rozehrané hry. Referenční profil přijímá všechny čtyři 
 Jméno hráče zůstává nezávislé na interním národním klíči. Stav ověření uvádí
 [evidence R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16).
 
+### Kandidáti a placená cesta do kolonií (R-0075)
+
+`RecruitmentPool` patří jednomu koloniálnímu hráči a drží tři tokeny
+kandidátů, jejich typy a samostatné počty placených a získaných přistěhovalců.
+`RecruitmentOffer` je neměnný snímek konkrétního poolu a ceny; `Player.recruit`
+před jedinou změnou ověřuje živou hru, vlastníka, kandidáta, cenu, peníze
+a dostupnost nových identit. Výsledkem je jedna jednotka na molu a výměna
+jediného kandidáta. Nákup odborníka používá nadále oddělenou operaci `buy`.
+`RecruitmentPo` a `RecruitmentCandidatePo` ukládají explicitní stav;
+načtení nikdy nelosuje náhradní kandidáty. Novou nabídku vytvářejí pouze
+cesty zahájení nové hry. `UnitLaborer` zachovává služebníka/trestance přes
+vybavení a přepravu; `ConstructionSlot` sdílí jejich výrobní úpravu mezi
+náhledem, skutečným výstupem a spotřebou vstupů.
+Přičítání křížů a získané příchody patří R-0076; Brewsterův účinek
+vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/R-0075.md).
+
 ### Evropské odbornosti (R-0074)
 
 `UnitType.EUROPEAN_SPECIALISTS` je společný registr 19 evropsky dostupných

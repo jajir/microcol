@@ -39,13 +39,13 @@ public class TC_22_F15_free_play_capability_audit_test
         // Both primary and context click expose the same equipment choices.
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         audit.clickPierColonist(MouseButton.PRIMARY);
-        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses",
-                "Buy 100 tools");
+        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
+                "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         audit.clickPierColonist(MouseButton.SECONDARY);
-        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses",
-                "Buy 100 tools");
+        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
+                "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         europe.verifyGold(10000);
@@ -54,7 +54,8 @@ public class TC_22_F15_free_play_capability_audit_test
 
     @Test
     @Tag("local")
-    void TC_02_purchase_roster_excludes_expert_blacksmith() throws Exception {
+    void TC_02_purchase_roster_includes_eligible_specialists()
+            throws Exception {
         // Reach the purchase dialog through Europe, not a model factory.
         EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
                 .openEuroperPort();
@@ -62,7 +63,13 @@ public class TC_22_F15_free_play_capability_audit_test
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyPurchaseOffers(java.util.List.of("Free Colonist", "Frigate",
                 "Galleon", "Caravel", "Merchantman", "Privateer",
-                "Master Blacksmith"));
+                "Expert Farmer", "Expert Fisherman", "Expert Fur Trapper",
+                "Expert Silver Miner", "Expert Lumberjack", "Expert Ore Miner",
+                "Master Carpenter", "Master Distiller", "Master Weaver",
+                "Master Tobacconist", "Master Fur Trader", "Master Blacksmith",
+                "Master Gunsmith", "Firebrand Preacher", "Elder Statesman",
+                "Seasoned Scout", "Hardy Pioneer", "Veteran Soldier",
+                "Jesuit Missionary"));
         // Cancel the offer list without spending money.
         audit.closePurchaseDialog();
         europe.verifyGold(10000);

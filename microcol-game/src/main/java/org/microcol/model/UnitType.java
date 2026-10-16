@@ -136,6 +136,22 @@ public final class UnitType {
             .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
             .build();
 
+    public static final UnitType INDENTURED_SERVANT = UnitType.make()
+            .setName("INDENTURED_SERVANT")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(0)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
+            .build();
+
+    public static final UnitType PETTY_CRIMINAL = UnitType.make()
+            .setName("PETTY_CRIMINAL")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(0)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
+            .build();
+
     public static final UnitType EXPERT_ORE_MINER = UnitType.make()
             .setName("EXPERT_ORE_MINER")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
@@ -274,8 +290,9 @@ public final class UnitType {
             SEASONED_SCOUT, HARDY_PIONEER, VETERAN_SOLDIER, JESUIT_MISSIONARY);
 
     public static final List<UnitType> UNIT_TYPES = ImmutableList
-            .<UnitType>builder().add(COLONIST, FRIGATE, GALLEON, CARAVEL,
-                    MERCHANTMAN, PRIVATEER, MAN_OF_WAR, WAGON)
+            .<UnitType>builder()
+            .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, FRIGATE, GALLEON,
+                    CARAVEL, MERCHANTMAN, PRIVATEER, MAN_OF_WAR, WAGON)
             .addAll(EUROPEAN_SPECIALISTS).build();
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES

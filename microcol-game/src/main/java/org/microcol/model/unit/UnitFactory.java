@@ -61,6 +61,10 @@ public class UnitFactory {
                         .contains(request.getUnitType())) {
                     return makeSpecialist(request);
                 }
+                if (request.getUnitType() == UnitType.INDENTURED_SERVANT
+                        || request.getUnitType() == UnitType.PETTY_CRIMINAL) {
+                    return makeLaborer(request);
+                }
                 return null;
             }));
 
@@ -83,6 +87,14 @@ public class UnitFactory {
 
     private Unit makeSpecialist(final UnitCreateRequest request) {
         return new UnitSpecialist(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction(),
+                request.getTools(), request.isHoldingGuns(),
+                request.isMounted(), request.getUnitType());
+    }
+
+    private Unit makeLaborer(final UnitCreateRequest request) {
+        return new UnitLaborer(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getAvailableMoves(), request.getAction(),
                 request.getTools(), request.isHoldingGuns(),

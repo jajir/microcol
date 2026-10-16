@@ -3258,3 +3258,67 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    outcomes, scout native/rumor effects and remaining improvement actions need
    their real integrations. Current scout radius and hardy plow timing do not
    substitute for those outcomes. Full CI/publication is also pending.
+
+
+### R-0073 full CI finding — 2026-10-16
+
+1. Run [38935767290](https://github.com/jajir/microcol/actions/runs/38935767290)
+   completed its UI/support suite with **209 tests, one failure**, no errors or
+   skips. TC22/01 expected the old three-entry pier equipment menu; the actual
+   menu correctly added `Sentry`. This was outside the earlier selected suite.
+   All three native packages, compatibility and Pages passed, but no complete
+   game publication is claimed for this revision.
+2. Main updated both primary/context-click expectations to the exact four-entry
+   menu, preserving equipment and unchanged-unit checks. The final complete
+   TC22 rerun passed five scenarios; see the baseline repair evidence below.
+
+<a id="r-0075-persistent-recruitment-2026-10-16"></a>
+## R-0075 persistent paid recruitment — 2026-10-16
+
+1. A single Sol low model/test assignment in an isolated worktree based on
+   `7717124e` implements persistent candidate tokens, weighted replacement,
+   checked passage prices, guarded confirmation, explicit save schema and
+   servant/criminal production. Main owns the Europe action/dialog, EN/CZ
+   labels, fixture migration and TC46/F37. No token-saving percentage is measured.
+2. First full model run executed **1473 tests, zero failures, 48 errors**.
+   Older player-copy tests used plain Gson; the new candidate type needed its
+   explicit field adapter. One display-name roundtrip fixture constructed a
+   player without the newly required pool. The worker supplied the field
+   adapter and an explicit pool/difficulty in that fixture, preserving validation.
+   The full rerun passed **1473 tests**, zero failures/errors/skips.
+3. Main requested additional identity-exhaustion, monetary/threshold-overflow
+   and plain-Gson regression cases; the focused eight-case run passed.
+   Review then found that the next paid-passage price could overflow even when
+   the current price was valid, leaving an unloadable counter after charging.
+   The worker added prospective-price preflight and a regression at p=107374172.
+   The shared treasury check now compares gold with price directly, avoiding
+   subtraction overflow for Integer.MIN_VALUE. A final complete rerun passed
+   **1478 tests**, zero failures/errors/skips, including both new boundaries.
+   Main formatter checked 35 Java files with exact-token preservation and
+   idempotence.
+   Docker `run-2QwwJl` passed TC46 (6), TC30 (12) and the page contract (3):
+   **21 passed**, zero failures/errors/skips. EN/CZ recruitment screenshots were
+   inspected: all three names/prices and confirmation controls are readable.
+   After the arithmetic repairs, the next selection again passed all six TC46
+   cases and the contract, but TC22 exposed two failures described below.
+4. The current stage does not claim cross-earned arrivals (R-0076) or Brewster's
+   real founder integration (R-0104). Saved progress already affects the quote;
+   a reached earned threshold blocks paid offers until that subsystem settles
+   it. Full CI, publication and final dependent acceptance remain open.
+
+
+### TC22 baseline repair after R-0074/R-0075 — 2026-10-16
+
+1. The follow-up selection executed **14 tests, two failures**, no errors or
+   skips. TC22/02 still expected only the pre-R-0074 purchase list. Its assertion
+   left the modal offer open; the following TC22/01 did not log a fixture load
+   and instead logged a 10000→5000 gold change in the previous game before
+   failing to find the game status bar. This evidence identifies a cascade
+   from the unclosed failed offer, not a reason to weaken gameplay assertions.
+2. Main updated the complete expected roster to all six purchasable ordinary/
+   ship entries plus 19 specialists, keeping the exact-list comparison and
+   cancellation/treasury checks. Both Sentry menu expectations remain explicit.
+   The complete TC22 plus source-contract rerun passed **eight tests**, zero
+   failures/errors/skips. No test was skipped, no retry was added and no
+   assertion was removed. Nine documentation tests and strict MkDocs passed;
+   complete CI/publication remain separate gates.

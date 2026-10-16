@@ -19,8 +19,8 @@
 	<entry key="buyUnitDialog_title">Koupit jednotku</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Koupit za</entry>
 	<entry key="goodsPanelTitle">Zboží</entry>
-	<entry key="recruitUnitDialogTitle">Přispět na cestu</entry>
-	<entry key="recruitUnitDialogButton">Přispět</entry>
+	<entry key="recruitUnitDialogTitle">Nábor v Evropě</entry>
+	<entry key="recruitUnitDialogButton">Zaplatit cestu:</entry>
 	<entry key="statusBarEuropeDock">Evropský přístav, zde mohou být lodě nakládány a vykládány</entry>
 	<entry key="statusBarShipsToNewWorld">Lodě plující do nového světa</entry>
 	<entry key="statusBarShipsToEurope">Lodě plující do Evropy</entry>
@@ -55,4 +55,7 @@ Celkem: %s zlatých</entry>
 	<entry key="buyUnitDialog_unavailable">Tento nákup už není dostupný. Otevřete nabídku znovu ve svém tahu, dokud máte přístup do Evropy.</entry>
 
     <entry key="pierOrders">Rozkazy a vybavení cestujícího</entry>
+	<entry key="recruitOpen">Nábor</entry>
+	<entry key="recruitChanged">Kandidát nebo cena cesty se změnili. Otevřete nábor znovu.</entry>
+	<entry key="recruitUnavailable">V tomto tahu není nábor dostupný.</entry>
 </properties>

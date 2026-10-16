@@ -590,3 +590,10 @@ R-0071 rozšiřuje UC-027/113 o jednorázově vylosované počasí a uloženou p
 délku plavby. Modelová sada (1386) a vybrané UI scénáře TC23/27/28/30
 s kontraktem (26) prošly 2026-10-16; [evidence](functional-tests.md#r-0071-voyage-duration-2026-10-16)
 odlišuje ověřené cesty od čekajícího úplného CI a účinku Magellana.
+
+
+Rozpracované R-0075 doplňuje UC-054/055 o přesně tři uložené kandidáty a
+samostatnou cenu placené cesty. TC46/F37 ověřuje zrušení, jedinou výměnu,
+Continue, nedostatek peněz, zastaralou cenu, český klávesový nábor s přepravou
+a nezávislost nákupu odborníka. Skutečné výsledky a otevřené návaznosti
+vede [evidence R-0075](functional-tests.md#r-0075-persistent-recruitment-2026-10-16).

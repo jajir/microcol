@@ -317,17 +317,14 @@ public class Model {
                 Preconditions.checkArgument(jobWorkers.add(workerId),
                         "Saved worker has multiple colony jobs");
                 final UnitPo worker = units.get(workerId);
-                Preconditions
-                        .checkArgument(
-                                worker != null && colony
-                                        .getOwnerName()
-                                        .equals(worker.getOwnerId())
-                                        && (worker
-                                                .getType() == UnitType.COLONIST
-                                                || UnitType.EUROPEAN_SPECIALISTS
-                                                        .contains(worker
-                                                                .getType())),
-                                "Invalid saved field worker identity, owner or role");
+                Preconditions.checkArgument(worker != null
+                        && colony.getOwnerName().equals(worker.getOwnerId())
+                        && (worker.getType() == UnitType.COLONIST || worker
+                                .getType() == UnitType.INDENTURED_SERVANT
+                                || worker.getType() == UnitType.PETTY_CRIMINAL
+                                || UnitType.EUROPEAN_SPECIALISTS
+                                        .contains(worker.getType())),
+                        "Invalid saved field worker identity, owner or role");
                 Preconditions.checkArgument(
                         worker.getPlaceColonyField() != null
                                 && worker.getPlaceMap() == null
@@ -671,8 +668,14 @@ public class Model {
      * @param unitType required unit type
      * @param owner    required unit owner
      */
-    void addUnitInEurope(final UnitType unitType, final Player owner) {
-        unitStorage.createUnit(
+    boolean canAddUnitInEurope() {
+        return unitStorage.canAllocateUnit();
+    }
+
+    Unit addUnitInEurope(final UnitType unitType, final Player owner) {
+        Preconditions.checkState(unitStorage.canAllocateUnit(),
+                "No unit IDs remain");
+        return unitStorage.createUnit(
                 unit -> new Cargo(unit, unitType.getCargoCapacity()), this,
                 unit -> {
                     if (unitType.isShip()) {

@@ -17,7 +17,10 @@ public class EuropeButtonsPanelController {
     @Inject
     public EuropeButtonsPanelController(
             final EuropeButtonsPanel europeButtonsPanel,
-            final BuyUnitsDialog buyUnitsDialog) {
+            final BuyUnitsDialog buyUnitsDialog,
+            final RecruiteUnitsDialog recruitment) {
+        europeButtonsPanel.getButtonRecruit()
+                .setOnAction(event -> recruitment.showAndWait());
         this.buyUnitsDialog = Preconditions.checkNotNull(buyUnitsDialog);
         europeButtonsPanel.getButtonBuyUnit()
                 .setOnAction(this::onBuyUnitAction);

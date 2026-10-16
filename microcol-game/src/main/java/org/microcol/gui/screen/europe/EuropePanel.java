@@ -26,6 +26,8 @@ import javafx.scene.layout.StackPane;
 public final class EuropePanel
         implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
+    private final EuropeButtonsPanel europeButtonsPanel;
+
     private final StackPane mainPanel;
 
     private final Label labelTitle;
@@ -51,6 +53,7 @@ public final class EuropePanel
             final EuropeButtonsPanel europeButtonsPanel,
             final EventBus eventBus, final I18n i18n,
             final PanelDockEurope panelDockEurope) {
+        this.europeButtonsPanel = europeButtonsPanel;
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(gameModelController);
         this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
@@ -98,6 +101,7 @@ public final class EuropePanel
     @Override
     public void updateLanguage(final I18n i18n) {
         labelTitle.setText(i18n.get(Europe.title));
+        europeButtonsPanel.updateLanguage(i18n);
         shipsTravelingToNewWorld.updateLanguage(i18n);
         shipsTravelingToEurope.updateLanguage(i18n);
         panelGoods.updateLanguage(i18n);

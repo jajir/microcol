@@ -17,6 +17,9 @@
  * Persistent sentry suppresses automatic activation until explicit activation,
  * boarding or visible adjacent foreign movement.
  *
+ * Servant and criminal types preserve their class through equipment and cargo;
+ * production penalties remain in the shared model job calculation.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

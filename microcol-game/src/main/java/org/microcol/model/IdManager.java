@@ -37,4 +37,8 @@ public class IdManager {
         return nextId++;
     }
 
+    boolean canAllocate() {
+        return nextId >= 0 && nextId < Integer.MAX_VALUE;
+    }
+
 }

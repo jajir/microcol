@@ -9,9 +9,11 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
-import org.microcol.model.UnitType;
+import org.microcol.model.Model;
+import org.microcol.model.Player;
+import org.microcol.model.RecruitmentOffer;
+import org.microcol.model.NotEnoughtGoldException;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
@@ -19,56 +21,108 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-/**
- * Show Europe port.
- */
+/** Paid passage uses saved candidates independently of university hiring. */
 public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
-    private final Label labelCaption;
+    private final Label caption = new Label();
+    private final HBox candidates = new HBox(16);
+    private final ImageProvider images;
+    private final GameModelController controller;
+    private final LocalizationHelper names;
+    private final DialogNotEnoughGold insufficientGold;
+    private final DialogMessage rejection;
+    private final I18n i18n;
+    private final EuropeCallback europe;
+    private Player buyer;
+    private Model openedModel;
+    private boolean actionTaken;
 
     @Inject
     public RecruiteUnitsDialog(final ViewUtil viewUtil,
-            final ImageProvider imageProvider,
-            final GameModelController gameModelController,
-            final LocalizationHelper localizationHelper,
-            final DialogNotEnoughGold dialogNotEnoughGold, final I18n i18n,
-            final DialogMessage rejection) {
+            final ImageProvider images, final GameModelController controller,
+            final LocalizationHelper names,
+            final DialogNotEnoughGold insufficientGold, final I18n i18n,
+            final DialogMessage rejection, final EuropeCallback europe) {
         super(viewUtil, i18n);
-        Preconditions.checkNotNull(imageProvider);
-        Preconditions.checkNotNull(gameModelController);
-        labelCaption = new Label();
-
-        final VBox root = new VBox();
-        root.setId("mainVbox");
+        this.images = images;
+        this.controller = controller;
+        this.names = names;
+        this.insufficientGold = insufficientGold;
+        this.i18n = i18n;
+        this.rejection = rejection;
+        this.europe = europe;
+        final VBox root = new VBox(12);
+        root.setId("recruitment-dialog");
+        candidates.setPadding(new Insets(10));
+        final ButtonBarOk buttons = new ButtonBarOk(i18n);
+        buttons.getButtonOk().setOnAction(event -> close());
+        root.getChildren().addAll(caption, candidates, buttons.getContent());
         init(root);
+    }
 
-        final HBox gridWithUnits = new HBox();
+    @Override
+    public void showAndWait() {
+        buyer = controller.getHumanPlayer();
+        openedModel = controller.getModel();
+        actionTaken = false;
+        try {
+            refresh();
+        } catch (IllegalStateException e) {
+            showRejection(Europe.recruitUnavailable);
+            buyer = null;
+            openedModel = null;
+            return;
+        }
+        try {
+            super.showAndWait();
+        } finally {
+            buyer = null;
+            openedModel = null;
+        }
+    }
 
-        UnitType.UNIT_TYPES.stream()
-                .filter(unitType -> unitType.getEuropePrice() > 0
-                        && !UnitType.EUROPEAN_SPECIALISTS.contains(unitType))
-                .forEach(unitType -> {
-                    final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(
-                            unitType, imageProvider, gameModelController,
-                            localizationHelper, i18n, this, dialogNotEnoughGold,
-                            rejection);
-                    HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
-                    gridWithUnits.getChildren().add(buyUnitPanel);
-                });
+    private void refresh() {
+        candidates.getChildren().clear();
+        buyer.getRecruitmentOffers()
+                .forEach(offer -> candidates.getChildren()
+                        .add(new RecruiteUnitPanel(offer, buyer, images, names,
+                                i18n, this)));
+    }
 
-        final ButtonBarOk buttonBar = new ButtonBarOk(i18n);
-        buttonBar.getButtonOk().setOnAction(e -> {
+    void recruit(final RecruitmentOffer offer) {
+        if (buyer == null || actionTaken) {
+            return;
+        }
+        actionTaken = true;
+        try {
+            if (controller.getModel() != openedModel) {
+                throw new IllegalStateException(
+                        "Recruitment belongs to a replaced game");
+            }
+            buyer.recruit(offer);
+        } catch (NotEnoughtGoldException e) {
+            insufficientGold.showAndWait();
+            actionTaken = false;
+            refresh();
+            return;
+        } catch (IllegalStateException e) {
+            showRejection(Europe.recruitChanged);
             close();
-        });
+            return;
+        }
+        europe.repaint();
+        close();
+    }
 
-        root.getChildren().addAll(labelCaption, gridWithUnits,
-                buttonBar.getContent());
+    private void showRejection(final Europe text) {
+        rejection.setTitle(i18n.get(Europe.recruitUnitDialogTitle));
+        rejection.setText(i18n.get(text));
+        rejection.showAndWait();
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
         setTitle(i18n.get(Europe.recruitUnitDialogTitle));
-        labelCaption.setText(i18n.get(Europe.recruitUnitDialogTitle));
+        caption.setText(i18n.get(Europe.recruitUnitDialogTitle));
     }
-
 }

@@ -787,6 +787,7 @@
           "kingsTaxPercentage": 0
         },
         {
+          "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
           "name": "France",
           "computer": true,
           "gold": 10000,
@@ -876,6 +877,7 @@
           "kingsTaxPercentage": 0
         },
         {
+          "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
           "name": "England",
           "computer": true,
           "gold": 10000,
@@ -965,6 +967,7 @@
           "kingsTaxPercentage": 0
         },
         {
+          "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
           "name": "Spain",
           "computer": true,
           "gold": 10000,
@@ -1010,6 +1013,7 @@
           "kingsTaxPercentage": 0
         },
         {
+          "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
           "name": "Dutch",
           "computer": false,
           "gold": 10000,

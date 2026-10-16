@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.RecruitmentPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.Ship;
@@ -38,10 +39,13 @@ public abstract class Player {
 
     private final Visibility visibility;
 
+    private final RecruitmentPool recruitment;
+
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
             final boolean declaredIndependence,
-            final Map<String, Object> extraData, Set<Location> visible) {
+            final Map<String, Object> extraData, Set<Location> visible,
+            final RecruitmentPo recruitmentPo) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.computer = computer;
@@ -53,6 +57,17 @@ public abstract class Player {
         }
         this.visibility = new Visibility(
                 Preconditions.checkNotNull(visible, "Visible is null"));
+        this.recruitment = recruitmentPo == null ? null
+                : new RecruitmentPool(recruitmentPo);
+        if (recruitment != null) {
+            try {
+                recruitment.price(model.getDifficulty(), name);
+            } catch (final ArithmeticException overflow) {
+                throw new IllegalArgumentException(
+                        "Recruitment counters exceed supported range",
+                        overflow);
+            }
+        }
     }
 
     public static Player make(final PlayerPo playerPo, final Model model,
@@ -60,11 +75,16 @@ public abstract class Player {
         Preconditions.checkNotNull(playerPo.getVisible(),
                 "Visible is null during creating '%s'", playerPo.getName());
         if (playerPo.getWhosKingThisPlayerIs() == null) {
+            Preconditions.checkArgument(playerPo.getRecruitment() != null,
+                    "Missing colonial recruitment pool");
             return new PlayerHuman(playerPo.getName(), playerPo.isComputer(),
                     playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
-                    playerPo.getVisible().getVisibilitySet());
+                    playerPo.getVisible().getVisibilitySet(),
+                    playerPo.getRecruitment());
         } else {
+            Preconditions.checkArgument(playerPo.getRecruitment() == null,
+                    "Kings cannot have recruitment pools");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
             return new PlayerKing(playerPo.getName(), playerPo.isComputer(),
@@ -101,6 +121,9 @@ public abstract class Player {
         out.setDeclaredIndependence(declaredIndependence);
         out.getExtraData().putAll(extraData);
         out.setVisible(new VisibilityPo());
+        if (recruitment != null) {
+            out.setRecruitment(recruitment.save());
+        }
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),
                 model.getMap().getMaxLocationY());
         return out;
@@ -358,6 +381,57 @@ public abstract class Player {
                 && gold >= unitType.getEuropePrice();
     }
 
+    /**
+     * Current immutable three-candidate snapshots; reopening does not redraw.
+     */
+    public List<RecruitmentOffer> getRecruitmentOffers() {
+        Preconditions.checkState(recruitment != null,
+                "Kings cannot recruit in Europe");
+        Preconditions.checkState(
+                model.isGameRunning() && model.getCurrentPlayer() == this
+                        && !isKing() && canTradeInEurope()
+                        && model.getPlayerStore().getPlayers().stream()
+                                .anyMatch(player -> player == this),
+                "Recruitment is unavailable for this player");
+        Preconditions.checkState(
+                !recruitment.hasReachedTarget(model.getDifficulty(), name),
+                "Earned immigrant is pending");
+        return recruitment.offers(model.getDifficulty(), name);
+    }
+
+    public boolean canRecruit(final RecruitmentOffer offer) {
+        return isRecruitmentOfferCurrent(offer) && offer.getPrice() <= gold;
+    }
+
+    private boolean isRecruitmentOfferCurrent(final RecruitmentOffer offer) {
+        if (offer == null || recruitment == null || !model.isGameRunning()
+                || model.getCurrentPlayer() != this || isKing()
+                || !canTradeInEurope() || model.getPlayerStore().getPlayers()
+                        .stream().noneMatch(player -> player == this)) {
+            return false;
+        }
+        try {
+            return !recruitment.hasReachedTarget(model.getDifficulty(), name)
+                    && recruitment.isCurrent(offer, model.getDifficulty(), name)
+                    && recruitment.canAdvance(model.getDifficulty(), name)
+                    && model.canAddUnitInEurope();
+        } catch (final ArithmeticException overflow) {
+            return false;
+        }
+    }
+
+    public Unit recruit(final RecruitmentOffer offer) {
+        Preconditions.checkNotNull(offer, "Recruitment offer is null");
+        checkTurnPreparationComplete();
+        Preconditions.checkState(isRecruitmentOfferCurrent(offer),
+                "Recruitment offer is unavailable or stale");
+        verifyAvailibilityOFGold(offer.getPrice());
+        final Unit recruited = model.addUnitInEurope(offer.getType(), this);
+        recruitment.replace(offer.getSlot());
+        setGold(gold - offer.getPrice());
+        return recruited;
+    }
+
     private boolean isUnitPurchaseAvailable(final UnitType unitType) {
         return unitType != null && UnitType.UNIT_TYPES.contains(unitType)
                 && unitType.getEuropePrice() > 0 && model.isGameRunning()
@@ -382,7 +456,7 @@ public abstract class Player {
     }
 
     private void verifyAvailibilityOFGold(final int price) {
-        if (getGold() - price < 0) {
+        if (getGold() < price) {
             throw new NotEnoughtGoldException(String.format(
                     "You can't buy this item. You need %s and you have %s",
                     price, getGold()));

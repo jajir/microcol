@@ -1,49 +1,42 @@
 package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.dialog.DialogNotEnoughGold;
-import org.microcol.gui.dialog.DialogMessage;
-import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
-import org.microcol.model.NotEnoughtGoldException;
-import org.microcol.model.UnitType;
+import org.microcol.model.Player;
+import org.microcol.model.RecruitmentOffer;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+/** One of the model's three saved candidates, with its passage quote. */
 public final class RecruiteUnitPanel extends VBox {
 
-    public RecruiteUnitPanel(final UnitType unitType,
-            final ImageProvider imageProvider,
-            final GameModelController gameModelController,
-            final LocalizationHelper localizationHelper, final I18n i18n,
-            final RecruiteUnitsDialog buyUnitsDialog,
-            final DialogNotEnoughGold dialogNotEnoughGold,
-            final DialogMessage rejection) {
-        final ImageView image = new ImageView(
-                imageProvider.getUnitImage(unitType));
-        final Label labelName = new Label(
-                localizationHelper.getUnitName(unitType));
-        final Button buttonBuy = new Button(
+    public RecruiteUnitPanel(final RecruitmentOffer offer, final Player buyer,
+            final ImageProvider images, final LocalizationHelper names,
+            final I18n i18n, final RecruiteUnitsDialog dialog) {
+        setId("recruit-candidate-" + offer.getSlot());
+        setSpacing(8);
+        setPrefWidth(180);
+        final Label name = new Label(names.getUnitName(offer.getType()));
+        name.setId("recruit-name-" + offer.getSlot());
+        name.setWrapText(true);
+        final Button confirm = new Button(
                 i18n.get(Europe.recruitUnitDialogButton) + " "
-                        + unitType.getEuropePrice());
-        buttonBuy.setOnAction(event -> {
-            try {
-                gameModelController.getHumanPlayer().buy(unitType);
-                buyUnitsDialog.close();
-            } catch (NotEnoughtGoldException e) {
-                dialogNotEnoughGold.showAndWait();
-            } catch (IllegalStateException e) {
-                rejection.setTitle(i18n.get(Europe.recruitUnitDialogTitle));
-                rejection.setText(i18n.get(Europe.buyUnitDialog_unavailable));
-                rejection.showAndWait();
-                buyUnitsDialog.close();
-            }
-        });
-        getChildren().addAll(image, labelName, buttonBuy);
+                        + offer.getPrice());
+        confirm.setId("recruit-confirm-" + offer.getSlot());
+        final boolean available = buyer.canRecruit(offer);
+        confirm.setDisable(!available);
+        confirm.setOnAction(event -> dialog.recruit(offer));
+        final Label reason = new Label(buyer.getGold() < offer.getPrice()
+                ? i18n.get(Europe.buyUnitDialog_notEnoughGold)
+                : available ? "" : i18n.get(Europe.recruitUnavailable));
+        reason.setId("recruit-reason-" + offer.getSlot());
+        reason.setWrapText(true);
+        getChildren().addAll(
+                new ImageView(images.getUnitImage(offer.getType())), name,
+                confirm, reason);
     }
-
 }

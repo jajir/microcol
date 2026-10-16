@@ -19,8 +19,8 @@
 	<entry key="buyUnitDialog_title">Buy unit</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Buy for</entry>
 	<entry key="goodsPanelTitle">Goods</entry>
-	<entry key="recruitUnitDialogTitle">Recruite unit</entry>
-	<entry key="recruitUnitDialogButton">Pay</entry>
+	<entry key="recruitUnitDialogTitle">Recruit from Europe</entry>
+	<entry key="recruitUnitDialogButton">Pay passage:</entry>
 	<entry key="statusBarEuropeDock">Europe dock, ships could be loaded with goods and units.</entry>
 	<entry key="statusBarShipsToNewWorld">Ships heading to New World</entry>
 	<entry key="statusBarShipsToEurope">Ships heading to Europe</entry>
@@ -55,4 +55,7 @@ Total: %s gold</entry>
 	<entry key="buyUnitDialog_unavailable">This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.</entry>
 
     <entry key="pierOrders">Passenger orders and equipment</entry>
+	<entry key="recruitOpen">Recruit</entry>
+	<entry key="recruitChanged">The candidate or passage price changed. Reopen recruitment.</entry>
+	<entry key="recruitUnavailable">Recruitment is not available on this turn.</entry>
 </properties>

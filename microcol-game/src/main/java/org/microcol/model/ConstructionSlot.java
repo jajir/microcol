@@ -138,8 +138,7 @@ public class ConstructionSlot {
     Goods getPotentialProduction(final Unit worker) {
         final Goods base = getConstructionType().getProductionPerTurn()
                 .orElseThrow();
-        return base.multiply(
-                worker.getType().getProductionModifier(base.getType()));
+        return potentialProduction(base, worker);
     }
 
     Goods getPotentialInput(final Unit worker) {
@@ -150,10 +149,19 @@ public class ConstructionSlot {
             final Unit worker) {
         final Goods baseInput = type.getConsumptionPerTurn().orElseThrow();
         final Goods baseOutput = type.getProductionPerTurn().orElseThrow();
-        final Goods potential = baseOutput.multiply(
-                worker.getType().getProductionModifier(baseOutput.getType()));
+        final Goods potential = potentialProduction(baseOutput, worker);
         return baseInput.setAmount((int) Math
                 .ceil(potential.getAmount() / type.getProductionRatio()));
+    }
+
+    private static Goods potentialProduction(final Goods base,
+            final Unit worker) {
+        final UnitType type = worker.getType();
+        final int penalty = type == UnitType.INDENTURED_SERVANT ? 1
+                : type == UnitType.PETTY_CRIMINAL ? 2 : 0;
+        final Goods ordinary = base
+                .setAmount(Math.max(0, base.getAmount() - penalty));
+        return ordinary.multiply(type.getProductionModifier(base.getType()));
     }
 
     private ConstructionType getConstructionType() {
