@@ -177,17 +177,22 @@ public final class DialogFight extends AbstractMessageWindow {
     public boolean showAndWait(final AttackOrder order) {
         userChooseFight = false;
         checkBoxShowNextTime.setSelected(false);
-        checkBoxShowNextTime.setVisible(!order.isDeclarationRequired());
-        checkBoxShowNextTime.setManaged(!order.isDeclarationRequired());
-        declaration.setVisible(order.isDeclarationRequired());
-        declaration.setManaged(order.isDeclarationRequired());
+        final boolean mandatoryReview = order.isDeclarationRequired()
+                || order.isPrivateerException();
+        checkBoxShowNextTime.setVisible(!mandatoryReview);
+        checkBoxShowNextTime.setManaged(!mandatoryReview);
+        declaration.setVisible(mandatoryReview);
+        declaration.setManaged(mandatoryReview);
         declaration
                 .setText(
                         order.isDeclarationRequired()
                                 ? i18n.get(Dialog.fight_declaration,
                                         order.getDefender().getOwner()
                                                 .getDisplayName())
-                                : "");
+                                : order.isPrivateerException()
+                                        ? i18n.get(
+                                                Dialog.fight_privateerException)
+                                        : "");
         final boolean hasStrengths = order.getCombatStrengths().isPresent();
         attackerStrength.setVisible(hasStrengths);
         attackerStrength.setManaged(hasStrengths);

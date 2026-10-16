@@ -3402,3 +3402,18 @@ committed for this experiment.
    unescaped percent message and incorrect price-order expectation. These were
    corrected without blaming or rerunning the model implementation. Detailed
    attempts and publication status remain in [R-0097 evidence](../functional-tests.md#r-0097-naval-combat-2026-10-17).
+
+
+### Cloud Sol follow-up R-0099 — 2026-10-17
+
+1. Reused the naval model worker for one bounded privateer exception and
+   stale-relation contract, while Astra medium owned GUI, player tests and
+   acceptance. The local model was not used and no duplicate implementation
+   ran in parallel. Main requested an explicit Crown boundary so the exception
+   did not accidentally change existing king combat.
+2. Worker focused checks passed 33/33. Main full model suite passed 1722/1722;
+   Java formatter and package passed. The first GUI attempt exposed an off-FX
+   TestFX visibility/layout race while closing the result. Main fixed that
+   test helper and reran the affected journeys. Actual results and publication
+   remain in [R-0099 evidence](../functional-tests.md#r-0099-privateer-hostilities-2026-10-17).
+3. No comparative token savings have been measured for this individual task.

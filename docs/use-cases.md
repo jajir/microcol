@@ -695,3 +695,10 @@ poškození s přehledem oprav a pokračování uloženého výsledku. Ověřuje
 odmítnutí nákladu změněného během potvrzení. Stav běhu a jeho výsledky vede
 [evidence R-0097](functional-tests.md#r-0097-naval-combat-2026-10-17).
 Samostatná blokáda ani soukromnická diplomacie tím nejsou přijaty.
+
+### UC-069/UC-072: korzárská výjimka R-0099
+
+TC65 pokrývá povinnou informaci o zachování vztahů, zrušení a potvrzení útoku
+korzára i útoku proti korzárovi, Continue a odmítnutí změněného vztahu.
+TC35/TC64 nadále ověřují běžné vyhlášení války a námořní následky.
+Výsledky běhů se evidují [samostatně](functional-tests.md#r-0099-privateer-hostilities-2026-10-17).

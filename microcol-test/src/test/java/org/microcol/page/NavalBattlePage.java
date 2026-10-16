@@ -38,8 +38,13 @@ public final class NavalBattlePage extends AbstractScreen {
                 getButtonById("buttonOk").getScene().getWindow().isShowing());
     }
 
-    public void closeOutcome() {
-        clickOnButtonWithId("buttonOk");
+    public void closeOutcome() throws Exception {
+        var window = WaitForAsyncUtils.waitForAsyncFx(5000,
+                () -> getLabeledById("navalBattleOutcome").getScene()
+                        .getWindow());
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> WaitForAsyncUtils
+                .waitForAsyncFx(5000, () -> !window.isShowing()));
     }
 
     public void verifyAttackerPrizeAndSinking() {

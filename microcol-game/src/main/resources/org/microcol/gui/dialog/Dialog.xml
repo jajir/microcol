@@ -73,4 +73,5 @@
     <entry key="fight_navalLost">Lost passengers: %s. Lost goods: %s.</entry>
     <entry key="fight_navalPreserved">Passengers remaining aboard: %s. Goods remaining aboard: %s.</entry>
     <entry key="fight_none">None</entry>
+    <entry key="fight_privateerException">This privateer action does not declare war. Existing relations stay unchanged. Fight?</entry>
 </properties>

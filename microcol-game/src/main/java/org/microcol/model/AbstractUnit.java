@@ -544,7 +544,8 @@ public abstract class AbstractUnit implements Unit {
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
                 .filter(unit -> allowDeclaration
-                        || model.areHostile(owner, unit.getOwner()))
+                        || model.areHostile(owner, unit.getOwner())
+                        || model.isPrivateerNavalException(this, unit))
                 .filter(unit -> peacefulColony.isEmpty()
                         || peacefulColony.get().getOwner() == unit.getOwner())
                 // An existing enemy takes priority over breaking another
@@ -727,11 +728,17 @@ public abstract class AbstractUnit implements Unit {
                         "The selected attack is no longer legal"));
         Preconditions.checkState(selected == order.getDefender(),
                 "The selected defender changed");
-        Preconditions
-                .checkState(
-                        order.isDeclarationRequired() == !model
-                                .areHostile(owner, selected.getOwner()),
-                        "The diplomatic state changed");
+        final boolean privateerException = model.isPrivateerNavalException(this,
+                selected);
+        final EuropeanRelationState currentRelation = owner.isKing()
+                || selected.getOwner().isKing() ? null
+                        : model.getEuropeanRelation(owner, selected.getOwner());
+        Preconditions.checkState(order
+                .isPrivateerException() == privateerException
+                && order.getOriginalRelation() == currentRelation
+                && order.isDeclarationRequired() == (!privateerException
+                        && !model.areHostile(owner, selected.getOwner())),
+                "The diplomatic state changed");
         final Optional<CombatStrengths> strengths = CombatStrengths
                 .forBattle(model, this, selected);
         Preconditions.checkState(strengths.equals(order.getCombatStrengths()),

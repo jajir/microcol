@@ -4215,5 +4215,50 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    text and acknowledgement control are visible without clipping. TC22's
    preceding corrected run passed 5/5; TC35 12/12 and TC63 4/4 passed on the
    same production Java snapshot (before the naval-only message escape fix).
-9. Source integration and full CI/publication remain pending. Model boundaries,
-   chosen player journeys and package/docs checks do not replace full acceptance.
+9. Integrated and pushed as `695a54a7`; full CI/publication run 38977696381
+   remains in progress. Model boundaries, chosen player journeys and package/docs
+   checks do not replace full acceptance.
+
+## R-0099 privateer hostilities — 2026-10-17
+
+1. Scope: DIP-002, COMBAT-002/003, UC-069/072. A legal privateer attack or
+   counterattack against a privateer preserves the European relation. Other
+   attacks retain ordinary treaty confirmation and validation.
+2. Focused model acceptance passed 33/33 (PrivateerExceptionTest 6,
+   NavalCombatTest 11, AttackOrderTest 16). Main full model suite then passed
+   **1722 tests**, zero failures/errors/skips (`/tmp/r99-model.log`).
+   Coverage includes both privateer directions, peace/war preservation, stale
+   relation rejection with a whole saved-state comparison, ordinary declaration,
+   excluded merchant attacks and existing Crown hostility.
+3. `TC_65_F56_privateer_test` and TC35/TC64 regression are running in Docker.
+   Acceptance covers English/Czech mandatory explanation with hidden advisor,
+   cancel, both combat directions, Continue and changed relation rejection.
+   Source implementation, model checks and passing strict docs do not yet claim
+   complete UI acceptance or CI/publication.
+
+4. First TC65 run reached and verified the Czech counterattack outcome, then
+   TestFX's selector-based close encountered `PrismTextLayout.lines == null`
+   while computing visibility off the FX thread. The modal remained open and
+   following TC65 setup failed. `NavalBattlePage.closeOutcome` now resolves
+   the button's screen center on the FX thread before an actual robot click;
+   no retry, longer timeout or weakened assertion was introduced. Rerun pending.
+
+5. The first combined run completed 21 cases with two failures and one error,
+   all in the interrupted TC65 class; TC35 12/12, TC64 3/3 and source contract
+   3/3 passed. The corrected helper is being checked with TC65, TC64 and the
+   source contract. Package/Javadoc passed, as did 9 documentation tests and
+   the strict MkDocs build; no production model change followed the full suite.
+6. The second run passed the Czech TC65 case but subsequent TC65 setup still
+   failed (9 total cases, two failures, zero errors/skips; TC64 3/3 and source
+   contract 3/3 passed). Coordinate-based closing removed the JavaFX exception
+   but did not establish reliable modal teardown. Replaced that approach with
+   the existing Escape action and an explicit wait for the captured dialog's
+   window to stop showing. This also avoids querying text layout from TestFX's
+   background visibility filter. The final affected run is pending.
+7. Final Docker `run-zYoFo4` passed **9/9**, zero failures/errors/skips:
+   TC65 3, TC64 3 and source contract 3. Main inspected both English/Czech
+   review screenshots: strengths, chance, naval consequences, explicit unchanged
+   relations and both controls fit visibly. Escape plus observed window closure
+   passed in both classes; no production change followed model acceptance.
+8. Integration and full CI/publication remain pending. Last verified published
+   game remains `dev-131-d8bff42a1962`; later pushes are not publication evidence.

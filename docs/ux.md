@@ -595,3 +595,12 @@ ztracené nebo zachované pasažéry a zboží a případný cíl opravy.
 Poškozenou vlastní loď hráč najde v existujícím přehledu oprav v Evropě.
 Pokračování uložené hry boj ani kořist neopakuje. Jde o implementovaný návrh;
 výsledky hráčských scénářů vede [evidence testů](functional-tests.md).
+
+### Korzár a diplomatické potvrzení — R-0099
+
+Při útoku korzára na cizí loď i bojové lodi proti korzárovi hráč předem vidí,
+že akce nevyhlašuje válku a zachová dosavadní vztahy. Vypnutí běžného bojového
+poradce tuto diplomatickou informaci nepřeskočí. Zrušení nic nespotřebuje;
+při změně vztahů během potvrzení hra vyžádá novou volbu útoku. Výsledek,
+kořist a opravy sdílejí cestu R-0097. Nejde o ochranu korzára před napadením.
+Přejímka hráčských scénářů je vedená v [R-0099](requirements/R-0099.md).

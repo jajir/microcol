@@ -1069,6 +1069,29 @@ public class Model {
                         .get(first, second) == EuropeanRelationState.WAR);
     }
 
+    /**
+     * Whether this ship pair may fight without changing its European treaty.
+     * Ordinary attack placement, movement and visibility rules still apply.
+     *
+     * @param attacker registered attacking unit
+     * @param defender registered foreign target
+     * @return whether the privateer naval exception applies
+     */
+    public boolean isPrivateerNavalException(final Unit attacker,
+            final Unit defender) {
+        return attacker != null && defender != null && attacker != defender
+                && tryGetUnitById(attacker.getId()).orElse(null) == attacker
+                && tryGetUnitById(defender.getId()).orElse(null) == defender
+                && attacker.isShip() && defender.isShip()
+                && attacker.getOwner() != defender.getOwner()
+                && !attacker.getOwner().isKing()
+                && !defender.getOwner().isKing() && attacker.canAttack()
+                && attacker.getType().getAttackableUnitType()
+                        .contains(defender.getType())
+                && (attacker.getType() == UnitType.PRIVATEER
+                        || defender.getType() == UnitType.PRIVATEER);
+    }
+
     private void checkRegisteredPlayers(final Player first,
             final Player second) {
         Preconditions.checkArgument(

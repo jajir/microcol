@@ -73,4 +73,5 @@
     <entry key="fight_navalLost">Ztracení pasažéři: %s. Ztracené zboží: %s.</entry>
     <entry key="fight_navalPreserved">Pasažéři na palubě: %s. Zboží na palubě: %s.</entry>
     <entry key="fight_none">Žádné</entry>
+    <entry key="fight_privateerException">Tento korzárský útok nevyhlašuje válku. Dosavadní vztahy zůstanou beze změny. Bojovat?</entry>
 </properties>

@@ -13,6 +13,8 @@ public final class AttackOrder {
     private final Location origin;
     private final Location target;
     private final boolean declarationRequired;
+    private final boolean privateerException;
+    private final EuropeanRelationState originalRelation;
     private final Optional<CombatStrengths> combatStrengths;
     private final Optional<NavalCombatPreview> navalPreview;
 
@@ -23,8 +25,14 @@ public final class AttackOrder {
         defendingPlayer = defender.getOwner();
         origin = attacker.getLocation();
         target = defender.getLocation();
-        declarationRequired = !attacker.model.areHostile(attackingPlayer,
-                defendingPlayer);
+        privateerException = attacker.model.isPrivateerNavalException(attacker,
+                defender);
+        originalRelation = attackingPlayer.isKing() || defendingPlayer.isKing()
+                ? null
+                : attacker.model.getEuropeanRelation(attackingPlayer,
+                        defendingPlayer);
+        declarationRequired = !privateerException
+                && !attacker.model.areHostile(attackingPlayer, defendingPlayer);
         combatStrengths = CombatStrengths.forBattle(attacker.model, attacker,
                 defender);
         navalPreview = attacker.isShip() && defender.isShip()
@@ -48,6 +56,15 @@ public final class AttackOrder {
 
     public boolean isDeclarationRequired() {
         return declarationRequired;
+    }
+
+    /** @return whether this battle preserves the relation by privateer rule */
+    public boolean isPrivateerException() {
+        return privateerException;
+    }
+
+    EuropeanRelationState getOriginalRelation() {
+        return originalRelation;
     }
 
     public Optional<CombatStrengths> getCombatStrengths() {

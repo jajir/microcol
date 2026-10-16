@@ -728,3 +728,12 @@ kořist a původní polohy; GUI je nemusí dopočítávat z odstraněné jednotk
 Animace používá původní souřadnice a následné hlášení sděluje osud nákladu
 včetně pasažérů. Soukromnické diplomatické výjimky vlastní R-0099.
 Přejímka je vedená v [R-0097](requirements/R-0097.md).
+
+### Korzárská výjimka (R-0099)
+
+Námořní oprávnění k útoku proti korzárovi nebo korzárem patří do modelu;
+nevytváří nepřátelský evropský vztah ani neotevírá útoky na pozemní jednotky.
+Příkaz si pamatuje skutečný vztah zvlášť od nutnosti vyhlášení války a před
+bojem jej znovu ověří. GUI jen vysvětluje výjimku a používá stejný potvrzovací
+a výsledkový dialog jako ostatní útoky. Stav přejímky vede
+[R-0099](requirements/R-0099.md).
