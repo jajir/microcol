@@ -42,9 +42,20 @@ class CoastalPortMovementTest {
         }
         terrain.put(water, TerrainType.OCEAN);
         data.getModel().getMap().setTerrainType(terrain);
-        if (water.equals(Location.of(26, 14)))
-            data.getModel().getColonies().stream().filter(c -> c.getId() == 1)
-                    .findFirst().orElseThrow().setLocation(INLAND);
+        if (water.equals(Location.of(26, 14))) {
+            final var inland = data.getModel().getColonies().stream()
+                    .filter(c -> c.getId() == 1).findFirst().orElseThrow();
+            inland.setLocation(INLAND);
+            // Keep the moved colony's worker clear of the port's worked square.
+            for (final var field : inland.getColonyFields()) {
+                field.setWorkerId(
+                        field.getDirection().equals(Direction.north.getVector())
+                                ? 6
+                                : null);
+                field.setProducedGoodsType(
+                        field.getWorkerId() == null ? null : GoodsType.CORN);
+            }
+        }
         final java.util.Set<Location> trees = data.getModel().getMap()
                 .getTreeSet();
         trees.remove(water);

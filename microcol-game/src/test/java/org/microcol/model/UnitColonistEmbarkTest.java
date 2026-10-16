@@ -207,6 +207,10 @@ public class UnitColonistEmbarkTest {
         data.getModel().getColonies().stream()
                 .filter(c -> c.getLocation().equals(port)).findFirst()
                 .orElseThrow().setOwnerName("Dutch's King");
+        // The foreign colony and its residents must have the same owner.
+        data.getModel().getUnits().stream().filter(
+                u -> java.util.Set.of(0, 1, 2, 4, 5).contains(u.getId()))
+                .forEach(u -> u.setOwnerId("Dutch's King"));
         Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         terrain.put(Location.of(26, 14), TerrainType.OCEAN);
