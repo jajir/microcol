@@ -33,8 +33,8 @@ import com.google.gson.Gson;
  * Real turn events drive the same rival and Crown players used in free play.
  */
 class FirstColonyJourneyTest {
-    private static final int FOUNDING_ROUND = 2;
-    private static final Location COLONY_SITE = Location.of(26, 15);
+    private static final int FOUNDING_ROUND = 3;
+    private static final Location COLONY_SITE = Location.of(21, 2);
 
     @TempDir
     Path directory;
@@ -56,7 +56,7 @@ class FirstColonyJourneyTest {
 
     private Colony reachColony(final Game game) throws Exception {
         if (game.model.getCalendar().getNumberOfPlayedTurns() == 0) {
-            assertEquals(Location.of(29, 12),
+            assertEquals(Location.of(29, 4),
                     game.model.getUnitById(5).getLocation());
             assertTrue(game.model.getUnitById(4).isAtCargoSlot());
         }
@@ -66,7 +66,12 @@ class FirstColonyJourneyTest {
             game.nextTurn();
             final int round = game.model.getCalendar().getNumberOfPlayedTurns();
             if (round == 1) {
-                assertEquals(Location.of(27, 14),
+                assertEquals(Location.of(23, 4),
+                        game.model.getUnitById(5).getLocation());
+                assertTrue(game.model.getUnitById(4).isAtCargoSlot());
+                assertTrue(game.model.getColonies().isEmpty());
+            } else if (round == 2) {
+                assertEquals(Location.of(21, 3),
                         game.model.getUnitById(5).getLocation());
                 assertTrue(game.model.getUnitById(4).isAtPlaceLocation());
                 assertEquals(COLONY_SITE,
@@ -81,6 +86,10 @@ class FirstColonyJourneyTest {
                 "The reference expedition must found its colony");
         assertEquals(COLONY_SITE,
                 game.model.getColonies().get(0).getLocation());
+        assertTrue(game.model.getMap().getTerrainTypeAt(COLONY_SITE).isLand());
+        assertTrue(COLONY_SITE.getNeighbors().stream()
+                .filter(game.model.getMap()::isValid).anyMatch(at -> game.model
+                        .getMap().getTerrainTypeAt(at).isSea()));
         return game.model.getColonies().get(0);
     }
 
@@ -170,18 +179,30 @@ class FirstColonyJourneyTest {
     void humanOccupationDuringTravelMakesTheNextTurnChooseAnotherSite()
             throws Exception {
         try (Game game = new Game(load(expedition()))) {
-            // The player occupies the intended shore before the rival's next
-            // turn.
+            // The rival has travelled north; occupy its selected shore before
+            // the landing turn.
+            game.nextTurn();
+            assertEquals(Location.of(23, 4),
+                    game.model.getUnitById(5).getLocation());
             game.model.getUnitById(0).placeToLocation(COLONY_SITE);
             final String humanBefore = humanUnits(game.model);
-            game.nextTurn();
             final Unit founder = game.model.getUnitById(4);
-            assertTrue(founder.isAtPlaceLocation());
-            assertNotEquals(COLONY_SITE, founder.getLocation());
-            game.nextTurn();
+            while (game.model.getCalendar().getNumberOfPlayedTurns() < 8
+                    && game.model.getColonies().isEmpty()) {
+                game.nextTurn();
+                if (founder.isAtPlaceLocation()) {
+                    assertNotEquals(COLONY_SITE, founder.getLocation());
+                }
+            }
             assertEquals(1, game.model.getColonies().size());
             final Colony colony = game.model.getColonies().get(0);
             assertNotEquals(COLONY_SITE, colony.getLocation());
+            assertTrue(game.model.getMap()
+                    .getTerrainTypeAt(colony.getLocation()).isLand());
+            assertTrue(colony.getLocation().getNeighbors().stream()
+                    .filter(game.model.getMap()::isValid)
+                    .anyMatch(at -> game.model.getMap().getTerrainTypeAt(at)
+                            .isSea()));
             assertEquals(List.of(founder), colony.getUnitsInsideColony());
             assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
                     .getNetProduction() >= 0);

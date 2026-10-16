@@ -54,24 +54,49 @@ public class GamePage extends AbstractScreen {
 
     public void moveMouseAtLocation(final Location location) {
         verifyThatTileIsVisible(location);
-        final Point p = getContext().getArea().convertToCanvasPoint(location)
-                .add(getPrimaryStage().getX(), getPrimaryStage().getY())
-                .add(TILE_CENTER);
+        final javafx.geometry.Point2D p = screenPoint(location);
         getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
+        WaitForAsyncUtils.waitForFxEvents();
         verifyThatStatusBarContains(String.valueOf(location.getX()));
         verifyThatStatusBarContains(String.valueOf(location.getY()));
     }
 
     public void dragMouseAtLocation(final Location location) throws Exception {
         verifyThatTileIsVisible(location);
-        final Point p = getContext().getArea().convertToCanvasPoint(location)
-                .add(getPrimaryStage().getX(), getPrimaryStage().getY())
-                .add(TILE_CENTER);
+        final javafx.geometry.Point2D p = screenPoint(location);
         getRobot().drag(MouseButton.PRIMARY).drag(p.getX(), p.getY())
                 .release(MouseButton.PRIMARY);
         waitWhileMoving();
         verifyThatStatusBarContains(String.valueOf(location.getX()));
         verifyThatStatusBarContains(String.valueOf(location.getY()));
+    }
+
+    private javafx.geometry.Point2D screenPoint(final Location location) {
+        final Point tile = getContext().getArea()
+                .convertToCanvasPoint(location);
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final double x = tile.getX() + TILE_CENTER.getX();
+        final double centerY = tile.getY() + TILE_CENTER.getY();
+        final javafx.scene.Node controls = getNodeFinder()
+                .lookup(".buttonPanel").query();
+        final javafx.geometry.Bounds controlsBounds = controls
+                .localToScreen(controls.getBoundsInLocal());
+        final javafx.geometry.Point2D center = canvas.localToScreen(x, centerY);
+        if (!controlsBounds.contains(center)) {
+            return center;
+        }
+        final double canvasTop = canvas.localToScreen(canvas.getBoundsInLocal())
+                .getMinY();
+        final int offset = (int) Math
+                .ceil(controlsBounds.getMaxY() - canvasTop - tile.getY() + 5);
+        if (offset >= org.microcol.gui.Tile.TILE_WIDTH_IN_PX) {
+            throw new IllegalStateException(
+                    "The tile remains covered by the game controls");
+        }
+        return canvas.localToScreen(x, tile.getY() + offset);
     }
 
     public void dragMouseAtLocationAndClosePossibleDialog(
@@ -111,6 +136,54 @@ public class GamePage extends AbstractScreen {
         Preconditions.checkNotNull(location);
         moveMouseAtLocation(location);
         getRobot().clickOn(MouseButton.PRIMARY);
+    }
+
+    public void panToTile(final Location location) throws Exception {
+        Preconditions.checkNotNull(location);
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final int tileSize = org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+        final int topInset = Math.min(tileSize,
+                Math.max(0, location.getY() - 1) * tileSize);
+        final java.util.function.BooleanSupplier verticallyVisible = () -> {
+            final double y = getContext().getArea()
+                    .convertToCanvasPoint(location).getY();
+            return y >= topInset && y <= canvas.getHeight() - tileSize;
+        };
+        if (!verticallyVisible.getAsBoolean()) {
+            final KeyCode direction = getContext().getArea()
+                    .convertToCanvasPoint(location).getY() < topInset
+                            ? KeyCode.W
+                            : KeyCode.S;
+            getRobot().press(direction);
+            try {
+                WaitForAsyncUtils.waitFor(20, TimeUnit.SECONDS,
+                        verticallyVisible::getAsBoolean);
+            } finally {
+                getRobot().release(direction);
+            }
+        }
+        final java.util.function.BooleanSupplier horizontallyVisible = () -> {
+            final double x = getContext().getArea()
+                    .convertToCanvasPoint(location).getX();
+            return x >= 0 && x <= canvas.getWidth()
+                    - org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+        };
+        if (!horizontallyVisible.getAsBoolean()) {
+            final KeyCode direction = getContext().getArea()
+                    .convertToCanvasPoint(location).getX() < 0 ? KeyCode.A
+                            : KeyCode.D;
+            getRobot().press(direction);
+            try {
+                WaitForAsyncUtils.waitFor(20, TimeUnit.SECONDS,
+                        horizontallyVisible::getAsBoolean);
+            } finally {
+                getRobot().release(direction);
+            }
+        }
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void saveGame() {

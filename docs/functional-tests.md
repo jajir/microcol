@@ -2970,3 +2970,84 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    TC34 scenarios and three page-contract checks: **10 passed**, zero
    failures/errors/skips. Shared formatter checked the changed Java file with
    exact-token preservation and idempotence. Full CI remains required.
+2. The subsequent full run [38919368189](https://github.com/jajir/microcol/actions/runs/38919368189)
+   on `241f3584` completed all 196 UI/support checks with only that same TC34
+   note failure (one failure, zero errors/skips). TC22, TC26 and all TC40
+   scenarios passed. The corrected note is included in `3b518aac`; its own full
+   CI remains the publication gate.
+
+<a id="r-0069-explicit-sight-2026-10-16"></a>
+## R-0069 explicit unit sight — 2026-10-16
+
+1. The bounded implementation replaces speed-derived exploration with clipped
+   Chebyshev sight: current ships/scout roles two squares, ordinary land roles
+   one. Equipment gains reveal immediately on-map; nested dragoon disarming
+   must not expose a transient scout radius. Missing seasoned-scout/De Soto
+   owners remain explicit integration dependencies in the requirement.
+2. Initial full model execution ran **1382 tests: five failures, one error**,
+   zero skips. Two old expedition assertions expected an enemy five/six squares
+   away to be discovered; three AI journey assertions assumed the previous
+   wider exploration route. A new transient-role fixture incorrectly returned
+   equipment into a full warehouse and was correctly rejected. Repairs retain
+   validation and real colony viability/conservation checks.
+3. An observational probe using the existing real-turn test runner confirmed
+   the revised rival journey: human boundaries 0/1 at ship (29,4)/(23,4),
+   landing at (21,2) on boundary 2, colony there on boundary 3. This explains
+   the changed route; it does not substitute for the required corrected tests.
+4. Initial Docker UI execution stopped at test compilation: a changed fog
+   diagnostic signature missed AttackPage/TC38 callers. The worker retained
+   the shared no-argument empty-path check and made only the fog diagnostic
+   target-specific. No UI test passed in that attempt. Acceptance is pending.
+
+5. After targeted repairs the full model suite passed **1382 tests**, zero
+   failures/errors/skips. Journey assertions now retain the original founder,
+   legal coastal site, nonnegative food, unchanged human fleet, disk Continue
+   and an occupied-site alternative using the actual narrower-sight route.
+   Docker `run-T1yA85` passed TC25 (5), TC26 (3) and page contract (3):
+   **11 passed**, zero failures/errors/skips. The discovered/continued fog
+   screenshot was inspected; the hidden/revealed overlay checks remain intact.
+6. Docker `run-Gs8OWx` executed TC34/TC38/page-contract: **14 checks, one
+   failure**, zero errors/skips. TC38 and six TC34 scenarios passed. TC34/06
+   tried to select the new northern colony outside the current viewport; its
+   model founding/viability checks had already passed. The targeted repair
+   pans the map before checking that this undiscovered colony stays hidden;
+   no map knowledge or unit position may be changed to satisfy that assertion.
+   Full acceptance and CI remain pending.
+7. Docker `run-7rp2IC` ran TC34/page-contract: **10 checks, one failure**,
+   zero errors/skips. Panning brought the tile into the viewport, but mouse
+   movement left the status bar empty. Replacing the helper's stage-offset
+   conversion with canvas `localToScreen` did not resolve it: focused Docker
+   `run-X1dkND` again failed TC34/06 (**4 checks, one failure**, no errors/skips).
+   The preselection screenshot was inspected; further input diagnostics are
+   required. Neither attempted repair is recorded as a verified fix.
+
+8. Focused diagnostic Docker `run-yLOju0` reproduced the failure (**4 checks,
+   one failure**, no errors/skips): target (21,2) was at canvas (27,67), while
+   the observed mouse tile remained (32,8). The shared test helper now uses
+   actual toolbar bounds to select an uncovered point within the same tile.
+   It retains real mouse input and all status assertions; temporary diagnostics
+   were removed. Docker `run-wbwye3` passed TC34 (7), TC38 (4), TC26 (3), and
+   page contract (3): **17 passed**, zero failures/errors/skips. The resulting
+   screenshot was inspected: selected (21,2) remains Unknown with the hidden
+   status, while the human fleet remains unchanged. The shared formatter
+   checked 15 Java files with exact-token preservation and idempotence.
+   Full CI and specialist/founder integration remain separate gates.
+
+### Full-suite follow-up on R-0068 — 2026-10-16
+
+1. Full run [38923947897](https://github.com/jajir/microcol/actions/runs/38923947897)
+   on `3b518aac` ran **202 UI/support checks: seven failures, three errors**,
+   zero skips. TC21/05 still read Latest position after a fresh-turn save,
+   which now writes Latest turn. TC40/13 reached its stale-drop stock mutation
+   but timed out waiting for native drag completion; subsequent TC40 failures
+   encountered the wrong screen. Modal rejection timing is a diagnostic
+   hypothesis, not a verified cause. Packaging, compatibility and Pages passed;
+   game publication was skipped and remains unverified.
+2. The building-drop rejection now follows the existing goods-drop pattern:
+   wait for source `DRAG_DONE`, then queue the modal dialog. TC21 establishes
+   Latest position through menu save/Continue before testing the subsequent
+   changed save. Docker `run-zj1syb` passed TC21 (9), TC40 (15), and the page
+   contract (3): **27 passed**, zero failures/errors/skips. Existing stale
+   destination, equipment/stock and native-drag checks remain unchanged.
+   The shared formatter checked both changed Java files with exact-token
+   preservation and idempotence. A new full CI run remains required.

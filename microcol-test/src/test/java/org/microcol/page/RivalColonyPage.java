@@ -37,10 +37,9 @@ public final class RivalColonyPage extends AbstractScreen {
         assertEquals(expectedHumanShip,
                 getModel().getUnitById(3).getLocation());
         assertEquals(expectedRivalShip, ship.getLocation());
-        assertTrue(human.isVisible(expectedRivalShip));
+        assertFalse(human.isVisible(expectedRivalShip));
         assertTrue(rival.isVisible(expectedRivalShip));
-        assertEquals(expectedShoreVisible,
-                rival.isVisible(Location.of(26, 15)));
+        assertEquals(expectedShoreVisible, rival.isVisible(Location.of(21, 2)));
         assertEquals(EuropeanRelationState.PEACE,
                 getModel().getEuropeanRelation(human, rival));
     }
@@ -134,6 +133,10 @@ public final class RivalColonyPage extends AbstractScreen {
         final org.microcol.model.Colony colony = getModel()
                 .getColonyById(expectedColonyId).orElseThrow();
         assertSame(getModel().getPlayerByName("France"), colony.getOwner());
+        assertTrue(getModel().getMap().getTerrainTypeAt(expectedSite).isLand());
+        assertTrue(expectedSite.getNeighbors().stream()
+                .filter(getModel().getMap()::isValid).anyMatch(at -> getModel()
+                        .getMap().getTerrainTypeAt(at).isSea()));
         assertTrue(colony.getGoodsStats()
                 .getStatsByType(org.microcol.model.GoodsType.CORN)
                 .getNetProduction() >= 0);
@@ -142,6 +145,12 @@ public final class RivalColonyPage extends AbstractScreen {
                 "A rival founding must leave the human on the game map");
         assertFalse(getNodeFinder().lookup("#colonyNameInput").tryQuery()
                 .isPresent());
+    }
+
+    public void verifyRivalColonyUndiscovered(final Location expectedSite) {
+        final Player human = getModel().getPlayerByName("Dutch");
+        assertFalse(human.isVisible(expectedSite));
+        assertFalse(human.isVisible(getModel().getUnitById(5).getLocation()));
     }
 
 }

@@ -109,15 +109,23 @@ public final class FogPage extends AbstractScreen {
                 getContext().getClassFromGuice(MoveModeSupport.class)
                         .getMoveLocations().isEmpty(),
                 () -> "Preview path: "
+                        + getContext().getClassFromGuice(MoveModeSupport.class)
+                                .getMoveLocations());
+    }
+
+    public void verifyPreviewEmpty(final Location hidden) {
+        assertTrue(
+                getContext().getClassFromGuice(MoveModeSupport.class)
+                        .getMoveLocations().isEmpty(),
+                () -> "Preview path: "
                         + getContext().getClassFromGuice(
                                 MoveModeSupport.class).getMoveLocations()
                         + "; pointer: "
                         + getContext().getClassFromGuice(
                                 org.microcol.gui.screen.game.gamepanel.MouseOverTileManager.class)
                                 .getMouseOverTile()
-                        + "; explored enemy: "
-                        + getModel().getPlayerByName("Dutch")
-                                .isVisible(Location.of(33, 16)));
+                        + "; explored enemy: " + getModel()
+                                .getPlayerByName("Dutch").isVisible(hidden));
     }
 
     public void verifyPreviewIncludes(final Location destination) {

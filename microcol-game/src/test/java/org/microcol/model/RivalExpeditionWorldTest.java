@@ -47,7 +47,9 @@ class RivalExpeditionWorldTest {
         assertTrue(france.isVisible(ship.getLocation()),
                 "A rival knows the tile occupied by its own ship");
         assertFalse(france.isVisible(Location.of(26, 15)));
-        assertTrue(dutch.isVisible(ship.getLocation()));
+        assertFalse(dutch.isVisible(ship.getLocation()),
+                "The rival starts beyond the Dutch fleet's two-tile sight");
+        assertTrue(dutch.isVisible(model.getUnitById(3).getLocation()));
     }
 
     @Test

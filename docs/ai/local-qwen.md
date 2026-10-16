@@ -3204,3 +3204,20 @@ committed for this experiment.
     expectation; this targeted test repair was returned to the same Sol low
     worker. Full model checks passed 1357; actual UI results remain in the
     linked evidence, without an unmeasured token-saving claim.
+
+13. R-0069 uses the same Sol low worker in `2026-10-16-r69`, based on
+    `3b518aac`. Main keeps architecture, checks and integration; the worker owns
+    bounded sight/role changes and related tests. Main execution exposed stale
+    expedition-route assertions, a warehouse-full test setup and an incomplete
+    diagnostic-signature update; targeted repairs went back to the worker.
+    [Evidence](../functional-tests.md#r-0069-explicit-sight-2026-10-16) distinguishes
+    the observed new AI route from passing acceptance. No token savings are
+    claimed without measurement.
+
+    A further bounded Sol low assignment in `2026-10-16-ci-modal-save`
+    diagnosed the first TC40 drag failure and the independent TC21 obsolete
+    save-slot expectation from full CI. This separate repair avoids repeating
+    the large CI log in the main implementation context; actual token savings
+    are unmeasured. Main reviews, formats and executes all acceptance checks.
+    R-0069 hover diagnostics remain with its original worker after two
+    unsuccessful coordinate/panning repairs; failures are retained in evidence.

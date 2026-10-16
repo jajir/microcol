@@ -113,9 +113,10 @@ public class TC_21_F15_free_play_screen_navigation_test
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyFreePlayButtonEnabled(true);
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        // Save at the existing human-turn boundary, then move the ship.
-        game.nextTurnAndCloseDialogs();
+        // Establish a latest-position save through the ordinary menu path.
+        game.exitToMenu().verifyMainScreen();
         byte[] saved = audit.readAutosave();
+        game = audit.continueGame();
         game.moveMouseAtLocation(Location.of(25, 16));
         game.dragMouseAtLocation(COLONY);
         game.verifyNumberOfUnitsAt(Location.of(25, 16), 0);

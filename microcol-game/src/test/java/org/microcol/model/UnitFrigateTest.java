@@ -70,13 +70,17 @@ public class UnitFrigateTest {
     @Test
     public void test_visibleArea_visibility_1() throws Exception {
         when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
+        when(model.getMap()).thenReturn(map);
+        when(map.isValid(any(Location.class))).thenReturn(true);
 
         final List<Location> visible = unit.getVisibleLocations();
 
         Preconditions.checkNotNull(visible);
-        // Six moves plus the existing visibility increment cover a 15-by-15
-        // square.
-        assertEquals(225, visible.size());
+        assertEquals(2, unit.getSightRadius());
+        assertEquals(25, visible.size());
+        assertTrue(visible.contains(Location.of(28, 28)));
+        assertTrue(visible.contains(Location.of(32, 32)));
+        assertFalse(visible.contains(Location.of(33, 30)));
     }
 
     @BeforeEach

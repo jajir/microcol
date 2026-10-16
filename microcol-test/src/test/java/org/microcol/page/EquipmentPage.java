@@ -80,4 +80,9 @@ public final class EquipmentPage extends AbstractScreen {
         assertEquals(10000, unit.getOwner().getGold());
         assertEquals(18, getModel().getCalendar().getNumberOfPlayedTurns());
     }
+
+    public void verifySightRadius(final int expectedRadius) {
+        assertEquals(expectedRadius,
+                getModel().getUnitById(4).getSightRadius());
+    }
 }

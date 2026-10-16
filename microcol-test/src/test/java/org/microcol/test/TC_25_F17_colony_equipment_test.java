@@ -40,6 +40,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.verifySightRadius(1);
         equipment.open("Equip with muskets");
         equipment.verifyChoice("Equip with muskets", false, MISSING);
         equipment.verifyCostContains("50");
@@ -65,11 +66,13 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         equipment.open("Mount horses");
         equipment.confirm();
         equipment.verifyState(50, 50, 80, true, true, 0);
+        equipment.verifySightRadius(1);
         equipment.open("Equip with tools");
         equipment.verifyCostContains("80");
         equipment.captureDialog("equipmentDialog", "equipment-returns.png");
         equipment.confirm();
         equipment.verifyState(100, 100, 0, false, false, 80);
+        equipment.verifySightRadius(1);
     }
 
     @Test
@@ -153,6 +156,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         settings.setCzechLanguage();
         settings.goBack().loadGame().openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.verifySightRadius(1);
         equipment.open("Vybavit mušketami");
         equipment.verifyChoice("Vybavit mušketami", false,
                 "Ve skladu není dostatek zboží. Zrušte volbu a obstarejte potřebné zboží.");
@@ -164,6 +168,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         equipment.captureDialog("equipmentDialog", "equipment-czech.png");
         equipment.confirmWithEnter();
         equipment.verifyState(49, 50, 80, false, true, 0);
+        equipment.verifySightRadius(2);
     }
 
 }

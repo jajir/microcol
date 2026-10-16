@@ -47,14 +47,14 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         final RivalColonyPage rival = new RivalColonyPage(getContext());
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(29, 12), 4, 5, true);
+                Location.of(29, 4), 4, 5, false);
 
         // Continue preserves the actual new fleet, not either settled world.
         game.exitToMenu().verifyMainScreen();
         new FreePlayAuditPage(getContext()).continueGame();
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Anna", Location.of(29, 15),
-                Location.of(29, 12), 4, 5, true);
+                Location.of(29, 4), 4, 5, false);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         final RivalColonyPage rival = new RivalColonyPage(getContext());
         rival.waitForHumanRound(0);
         rival.verifyStartingExpeditions("Jiří", Location.of(29, 15),
-                Location.of(29, 12), 4, 5, true);
+                Location.of(29, 4), 4, 5, false);
     }
 
     @Test
@@ -168,36 +168,43 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
 
         // France acts before the first Dutch turn; Continue preserves that
         // journey.
-        rival.verifyRivalTravel(0, Location.of(29, 12), true, null);
+        rival.verifyRivalTravel(0, Location.of(29, 4), true, null);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        rival.verifyRivalTravel(0, Location.of(29, 12), true, null);
+        rival.verifyRivalTravel(0, Location.of(29, 4), true, null);
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
 
-        // Two more sea steps permit landing, which spends the founder's point.
+        // The rival sails toward a northern shore beyond Dutch sight.
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(1);
-        rival.verifyRivalTravel(1, Location.of(27, 14), false,
-                Location.of(26, 15));
+        rival.verifyRivalTravel(1, Location.of(23, 4), true, null);
 
-        // The third rival turn founds with the original settler at the visible
-        // coast.
+        // Landing spends the founder's point; founding follows next turn.
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(2);
-        rival.verifyRivalColonyViable(2, 0, Location.of(26, 15));
-        game.selectTile(Location.of(26, 15));
-        game.verifyThatStatusBarContains("colony New Amsterdam");
+        rival.verifyRivalTravel(2, Location.of(21, 3), false,
+                Location.of(21, 2));
+        game.nextTurnAndCloseDialogs();
+        rival.waitForHumanRound(3);
+        rival.verifyRivalColonyViable(3, 0, Location.of(21, 2));
+        rival.verifyRivalColonyUndiscovered(Location.of(21, 2));
+        game.panToTile(Location.of(21, 2));
+        game.captureDialog("nextTurn",
+                "rival-first-colony-before-selection.png");
+        game.selectTile(Location.of(21, 2));
+        game.verifyThatStatusBarContains("This area is still hidden");
         game.captureDialog("nextTurn", "rival-first-colony-map.png");
 
         // Food sustains that resident; the first-colony objective does not
         // expand again.
         game.nextTurnAndCloseDialogs();
-        rival.waitForHumanRound(3);
-        game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(4);
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(5);
-        rival.verifyRivalColonyViable(5, 0, Location.of(26, 15));
+        game.nextTurnAndCloseDialogs();
+        rival.waitForHumanRound(6);
+        rival.verifyRivalColonyViable(6, 0, Location.of(21, 2));
+        rival.verifyRivalColonyUndiscovered(Location.of(21, 2));
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
     }
 

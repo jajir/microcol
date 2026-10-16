@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.ContextMenu;
@@ -190,11 +192,20 @@ abstract class AbstractPanelConstructionWithSlots
                         event.setDropCompleted(true);
                     } catch (IllegalStateException
                             | IllegalArgumentException rejected) {
-                        // A repaint can replace the drop target and its hover
-                        // status.
-                        javafx.application.Platform.runLater(() -> getEventBus()
-                                .post(new ShowColonyJobChoicesEvent(unit,
-                                        true)));
+                        // A modal dialog must wait for the native drag to end.
+                        final Node source = (Node) event.getGestureSource();
+                        source.addEventHandler(DragEvent.DRAG_DONE,
+                                new EventHandler<DragEvent>() {
+                                    @Override
+                                    public void handle(final DragEvent done) {
+                                        source.removeEventHandler(
+                                                DragEvent.DRAG_DONE, this);
+                                        javafx.application.Platform.runLater(
+                                                () -> getEventBus().post(
+                                                        new ShowColonyJobChoicesEvent(
+                                                                unit, true)));
+                                    }
+                                });
                     }
                 });
         event.consume();

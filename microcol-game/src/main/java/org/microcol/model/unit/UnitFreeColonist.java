@@ -201,14 +201,14 @@ public class UnitFreeColonist extends CanMount {
             checkEquipmentChange(GoodsType.TOOLS, false);
         if (isMounted())
             checkEquipmentChange(GoodsType.HORSE, false);
+        if (isMounted()) {
+            unequipWithHorses();
+        }
         if (isHoldingGuns()) {
             unequipWithMuskets();
         }
         if (isHoldingTools()) {
             unequipWithTools();
-        }
-        if (isMounted()) {
-            unequipWithHorses();
         }
     }
 
@@ -223,6 +223,17 @@ public class UnitFreeColonist extends CanMount {
             return 5;
         } else {
             return 1;
+        }
+    }
+
+    @Override
+    public int getSightRadius() {
+        return mounted && !holdingGuns ? 2 : 1;
+    }
+
+    private void revealExpandedSight(final int previousRadius) {
+        if (isAtPlaceLocation() && getSightRadius() > previousRadius) {
+            getOwner().revealMapForUnit(this);
         }
     }
 
@@ -244,6 +255,7 @@ public class UnitFreeColonist extends CanMount {
     }
 
     public void equipWithHorses() {
+        final int previousRadius = getSightRadius();
         checkEquipmentChange(GoodsType.HORSE, true);
         final Colony colony = verifyThatUnitIsOutsideColony();
         final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE)
@@ -257,6 +269,7 @@ public class UnitFreeColonist extends CanMount {
         colony.getWarehouse().removeGoods(
                 Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = true;
+        revealExpandedSight(previousRadius);
     }
 
     public void unequipWithHorses() {
@@ -284,11 +297,13 @@ public class UnitFreeColonist extends CanMount {
     }
 
     public void unequipWithMuskets() {
+        final int previousRadius = getSightRadius();
         checkEquipmentChange(GoodsType.MUSKET, false);
         final Colony colony = verifyThatUnitIsOutsideColony();
         colony.getWarehouse().addGoods(
                 Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = false;
+        revealExpandedSight(previousRadius);
     }
 
     public void equipWithTools() {
@@ -298,11 +313,11 @@ public class UnitFreeColonist extends CanMount {
                 .getAmount();
         Preconditions.checkState(totalTools > 0,
                 "In colony (%s) is not ane tools", colony);
-        if (isHoldingGuns()) {
-            unequipWithMuskets();
-        }
         if (isMounted()) {
             unequipWithHorses();
+        }
+        if (isHoldingGuns()) {
+            unequipWithMuskets();
         }
         final int removeTools = Math.min(totalTools, MAXIMAL_NUMBER_OF_TOOLS);
         colony.getWarehouse()
@@ -464,7 +479,9 @@ public class UnitFreeColonist extends CanMount {
      * @param holdingGuns the holdingGuns to set
      */
     public void setHoldingGuns(boolean holdingGuns) {
+        final int previousRadius = getSightRadius();
         this.holdingGuns = holdingGuns;
+        revealExpandedSight(previousRadius);
     }
 
     /**
@@ -478,7 +495,9 @@ public class UnitFreeColonist extends CanMount {
      * @param mounted the mounted to set
      */
     public void setMounted(boolean mounted) {
+        final int previousRadius = getSightRadius();
         this.mounted = mounted;
+        revealExpandedSight(previousRadius);
     }
 
 }

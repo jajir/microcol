@@ -160,6 +160,9 @@ public interface Unit {
 
     List<Location> getVisibleLocations();
 
+    /** Effective map sight in tiles, independent of remaining movement. */
+    int getSightRadius();
+
     List<UnitWithCargo> getNeighborUnitsWithFreeSlot();
 
     Optional<List<Location>> getPath(Location destination);

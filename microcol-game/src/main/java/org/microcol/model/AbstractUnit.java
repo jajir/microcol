@@ -3,10 +3,8 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -29,12 +27,6 @@ import com.google.common.collect.Lists;
  * All units can attack with muskets except wagon.
  */
 public abstract class AbstractUnit implements Unit {
-
-    /**
-     * Unit will see all tiles accessible by it's speed. This define how many
-     * tiles further will unit see.
-     */
-    private final static int VISIBILITY_INCREASE = 1;
 
     /**
      * Number is probability than attacker will win. When it's bigger than 0.5
@@ -312,22 +304,24 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Visible location can be determined just when unit is on map. Unit is at '%s'",
                 place.getName());
-        int maxMoves = getSpeed() + VISIBILITY_INCREASE;
-        Map<Location, Integer> movePrice = new HashMap<>();
-        movePrice.put(getLocation(), maxMoves);
-        while (maxMoves > 0) {
-            final Integer valToCheck = maxMoves;
-            List<Location> toCheck = movePrice.entrySet().stream()
-                    .filter(entry -> entry.getValue() == valToCheck)
-                    .map(entry -> entry.getKey())
-                    .collect(ImmutableList.toImmutableList());
-            maxMoves--;
-            final Integer valToAdd = maxMoves;
-            toCheck.forEach(location -> location.getNeighbors()
-                    .forEach(loc -> movePrice.put(loc, valToAdd)));
+        final Location center = getLocation();
+        final int radius = getSightRadius();
+        final List<Location> visible = new ArrayList<>();
+        for (int x = center.getX() - radius; x <= center.getX() + radius; x++) {
+            for (int y = center.getY() - radius; y <= center.getY()
+                    + radius; y++) {
+                final Location candidate = Location.of(x, y);
+                if (model.getMap().isValid(candidate)) {
+                    visible.add(candidate);
+                }
+            }
         }
-        return movePrice.entrySet().stream().map(entry -> entry.getKey())
-                .collect(ImmutableList.toImmutableList());
+        return ImmutableList.copyOf(visible);
+    }
+
+    @Override
+    public int getSightRadius() {
+        return isShip() ? 2 : 1;
     }
 
     @Override
