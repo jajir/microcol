@@ -50,8 +50,10 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         new AtlanticAuditPage(getContext()).verifyReturnedTo(LANE);
         game.moveMouseAtLocation(LANE);
         game.dragMouseAtLocation(OUTWARD);
-        new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
-        new AtlanticAuditPage(getContext()).verifyShipMapPainting(false);
+        final AtlanticAuditPage voyage = new AtlanticAuditPage(getContext());
+        final int duration = voyage.verifyVoyageSample(true, false);
+        final int weather = voyage.getVoyageWeather();
+        voyage.verifyShipMapPainting(false);
 
         // Menu entry saves departure; Continue restores the same voyage and
         // cargo.
@@ -60,8 +62,8 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         audit.verifyContinueButtonEnabled(true);
         game = audit.continueGame();
         game.verifyNumberOfUnitsAt(START, 0);
-        new AtlanticAuditPage(getContext()).verifyVoyage(3, true);
-        new AtlanticAuditPage(getContext()).verifyCargo();
+        voyage.verifyVoyageMetadata(weather, duration, duration, true);
+        voyage.verifyCargo();
     }
 
     @Test
@@ -77,21 +79,25 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         audit.verifyCargo();
         game.moveMouseAtLocation(LANE);
         game.dragMouseAtLocation(OUTWARD);
-        audit.verifyVoyage(3, true);
+        final int outwardDuration = audit.verifyVoyageSample(true, false);
+        final int outwardWeather = audit.getVoyageWeather();
         audit.verifyCargo();
 
-        // Continue from the automatic turn snapshot while the ship is at sea.
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(2, true);
+        // Continue at departure preserves the exact sampled weather and time.
         game.exitToMenu().verifyMainScreen();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        audit.verifyVoyage(2, true);
+        audit.verifyVoyageMetadata(outwardWeather, outwardDuration,
+                outwardDuration, true);
         audit.verifyCargo();
 
-        // The saved voyage completes after the remaining two turns.
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(1, true);
-        game.nextTurnAndCloseDialogs();
+        // Advance only the sampled number of owner updates.
+        for (int remaining = outwardDuration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            if (remaining > 0) {
+                audit.verifyVoyageMetadata(outwardWeather, outwardDuration,
+                        remaining, true);
+            }
+        }
         audit.verifyInEurope();
         audit.verifyCargo();
 
@@ -100,13 +106,16 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
         europe.verifyNumberOfShipsInPort(1);
         europe.selectUnitFromPort(0);
         audit.sendShipBack();
-        audit.verifyVoyage(3, false);
+        final int returnDuration = audit.verifyVoyageSample(false, false);
+        final int returnWeather = audit.getVoyageWeather();
         game = europe.close();
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(2, false);
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(1, false);
-        game.nextTurnAndCloseDialogs();
+        for (int remaining = returnDuration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            if (remaining > 0) {
+                audit.verifyVoyageMetadata(returnWeather, returnDuration,
+                        remaining, false);
+            }
+        }
 
         // Return to the recorded source lane square with the same cargo.
         audit.verifyReturnedTo(LANE);

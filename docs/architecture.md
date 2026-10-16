@@ -126,6 +126,18 @@ před výměnou rozehrané hry. Referenční profil přijímá všechny čtyři 
 Jméno hráče zůstává nezávislé na interním národním klíči. Stav ověření uvádí
 [evidence R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16).
 
+### Délka plavby přes Atlantik (R-0071)
+
+`model.AtlanticVoyageDuration` vlastní výpočet běžné délky plavby z počasí,
+směru, odjezdového okraje a základní rychlosti lodi. `AbstractUnit` losuje
+počasí až po ověření odjezdu; královský transport používá stejný výpočet.
+`PlaceHighSea` drží neměnné počasí a původní délku vedle zbývajících tahů.
+`PlaceHighSeasPo` tyto hodnoty ukládá a `PlaceBuilderPo` odmítá neúplná nebo
+nekonzistentní data. Načtení nelosuje znovu. Počet zbývajících tahů dál
+zobrazuje existující evropská obrazovka; změna nevytváří druhý GUI výpočet.
+[R-0071](requirements/R-0071.md) sleduje ověření; obrácení plavby a Magellan
+mají vlastní navazující požadavky.
+
 ### Pořadí národních tahů (R-0052)
 
 `GameManager` řadí kopii aktuálního registru podle interních národních klíčů;

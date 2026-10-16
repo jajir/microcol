@@ -30,13 +30,15 @@
  * terrain after movement or role loss. GameManager orders registered nation
  * identities and associated Crowns. Player prepares voyages/immigration,
  * colonies and then unit work; individual rule owners retain their own
- * accounting. Model serializes turn transitions and snapshots; incomplete
- * preparation rejects player commands and snapshots, including after failure.
- * Unit work completes internally, independently of commands submitted at an
- * action boundary. Normal unit cycling excludes continuing work; Skip turn
- * validates current registered identities and spends movement through the
- * existing no-action operation. Saved movement and ordinary owner-turn
- * restoration need no standing order.
+ * accounting. AtlanticVoyageDuration owns the ordinary crossing formula;
+ * PlaceHighSea retains sampled weather and original duration across saves.
+ * Model serializes turn transitions and snapshots; incomplete preparation
+ * rejects player commands and snapshots, including after failure. Unit work
+ * completes internally, independently of commands submitted at an action
+ * boundary. Normal unit cycling excludes continuing work; Skip turn validates
+ * current registered identities and spends movement through the existing
+ * no-action operation. Saved movement and ordinary owner-turn restoration need
+ * no standing order.
  *
  * Attack proposals bind confirmation to registered participants, positions and
  * diplomatic state. Execution revalidates before declaring war and consumes

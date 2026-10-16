@@ -3051,3 +3051,36 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    destination, equipment/stock and native-drag checks remain unchanged.
    The shared formatter checked both changed Java files with exact-token
    preservation and idempotence. A new full CI run remains required.
+
+<a id="r-0071-voyage-duration-2026-10-16"></a>
+## R-0071 sampled Atlantic duration — 2026-10-16
+
+1. The selected implementation samples weather once after valid departure,
+   calculates ordinary duration from the agreed direction/edge/base-speed
+   factors, and persists weather, original duration and remaining turns.
+   Loading validates those factors without rerolling. Royal carrier creation
+   uses the same calculation and validates its arrival lane before creation.
+2. Initial full model execution stopped at test compilation: a new diagnostic
+   called nonexistent `UnitType.getName()`. No tests executed in that attempt.
+   The same Sol low worker corrected the call, supplied independent explicit
+   expected-duration tables, and added a deterministic partly completed voyage
+   roundtrip plus royal no-lane rejection. Main review and execution continue;
+   these changes are not yet acceptance evidence.
+3. The first completed full model run executed **1386 tests: zero failures,
+   one error**, no skips. A ship-roster fixture substituted a slow ship while
+   retaining a fast ship's weather/duration combination. The targeted repair
+   keeps valid voyage factors for both the full-hold and over-capacity rejection
+   fixtures, so those tests still exercise cargo rules rather than failing
+   prematurely on voyage validation. The full rerun passed **1386 tests**,
+   zero failures/errors/skips, including all-weather explicit tables,
+   partly completed voyage roundtrip and royal no-lane rejection. Main formatter
+   checked 17 Java files with exact-token preservation and idempotence.
+   Player-journey acceptance and full CI remain pending.
+4. Docker `run-xTTfIF` passed TC23 (2), TC27 (9), TC28 (2), TC30 (10), and
+   page contract (3): **26 passed**, zero failures/errors/skips. The journeys
+   retain the sampled duration/weather through menu save/Continue, reach the
+   destination after exactly the sampled number of owner updates, and retain
+   cargo/equipment identities. The western blocked-arrival path waits at zero
+   through Continue and retries successfully after its obstruction leaves.
+   Nine documentation checks and strict MkDocs passed before final evidence
+   recording; full CI and Magellan integration remain separate gates.

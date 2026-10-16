@@ -56,22 +56,26 @@ public class TC_28_F20_western_voyage_test extends AbstractMicroColTest {
         audit.verifyMovement(2);
         audit.verifyCargo();
 
-        // Confirm the outward gesture; this western crossing takes four turns.
+        // Confirm the outward gesture and retain its sampled duration.
         game.moveMouseAtLocation(Location.of(2, 17));
         game.dragMouseAtLocation(Location.of(1, 17));
-        audit.verifyVoyage(4, true);
+        final int outwardDuration = audit.verifyVoyageSample(true, true);
+        final int outwardWeather = audit.getVoyageWeather();
         audit.verifyMovement(1);
         EuropePortScreen europe = game.openEuroperPort();
-        audit.verifyVoyageText("Turns remaining: 4");
+        audit.verifyVoyageText("Turns remaining: " + outwardDuration);
         game = europe.close();
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(3, true);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        audit.verifyVoyage(3, true);
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
+        audit.verifyVoyageMetadata(outwardWeather, outwardDuration,
+                outwardDuration, true);
+        for (int remaining = outwardDuration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            if (remaining > 0) {
+                audit.verifyVoyageMetadata(outwardWeather, outwardDuration,
+                        remaining, true);
+            }
+        }
         audit.verifyInEurope();
         audit.verifyCargo();
 
@@ -79,14 +83,17 @@ public class TC_28_F20_western_voyage_test extends AbstractMicroColTest {
         europe = game.openEuroperPort();
         europe.selectUnitFromPort(0);
         audit.sendShipBack();
-        audit.verifyVoyageText("Turns remaining: 3");
+        final int returnDuration = audit.verifyVoyageSample(false, true);
+        final int returnWeather = audit.getVoyageWeather();
+        audit.verifyVoyageText("Turns remaining: " + returnDuration);
         WaitForAsyncUtils.asyncFx(() -> getModel().getUnitById(1000)
                 .placeToLocation(Location.of(2, 17))).get();
         game = europe.close();
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(0, false);
+        for (int remaining = returnDuration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            audit.verifyVoyageMetadata(returnWeather, returnDuration, remaining,
+                    false);
+        }
         audit.verifyCargo();
         europe = game.openEuroperPort();
         audit.verifyVoyageText("Waiting: the arrival square is occupied.");
@@ -97,9 +104,9 @@ public class TC_28_F20_western_voyage_test extends AbstractMicroColTest {
         // Continue preserves the wait; further turns never make it negative.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        audit.verifyVoyage(0, false);
+        audit.verifyVoyageMetadata(returnWeather, returnDuration, 0, false);
         game.nextTurnAndCloseDialogs();
-        audit.verifyVoyage(0, false);
+        audit.verifyVoyageMetadata(returnWeather, returnDuration, 0, false);
         audit.verifyCargo();
 
         // Once that concurrent obstruction leaves, the next owner turn arrives.

@@ -577,3 +577,8 @@ funkčními/kontrolními případy; build `dev-52-2a464170c54d` je publikovaný.
 Výše uvedený poměr rudy a nástrojů je současná implementace; jeho opravu
 vlastní samostatné [R-0009](requirements/canceled/R-0009.md). Tím není
 přijat celý UC-055 s imigračním poolem a dalšími profesemi.
+
+R-0071 rozšiřuje UC-027/113 o jednorázově vylosované počasí a uloženou původní
+délku plavby. Modelová sada (1386) a vybrané UI scénáře TC23/27/28/30
+s kontraktem (26) prošly 2026-10-16; [evidence](functional-tests.md#r-0071-voyage-duration-2026-10-16)
+odlišuje ověřené cesty od čekajícího úplného CI a účinku Magellana.

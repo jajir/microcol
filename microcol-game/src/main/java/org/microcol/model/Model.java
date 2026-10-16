@@ -578,9 +578,14 @@ public class Model {
                 getPlayers().stream().anyMatch(player -> player == king)
                         && king.isKing() && king.isComputer(),
                 "Expected a registered computer king");
+        getHighSea().getDefaultArrivalLocation()
+                .orElseThrow(() -> new IllegalStateException(
+                        "No eastern sea-lane arrival is available"));
         return (UnitWithCargo) unitStorage.createUnit(
                 unit -> new Cargo(unit, UnitType.MAN_OF_WAR.getCargoCapacity()),
-                this, unit -> new PlaceHighSea(unit, false, 3),
+                this,
+                unit -> ((AbstractUnit) unit).createVoyage(false,
+                        Direction.east),
                 UnitType.MAN_OF_WAR, king, UnitType.MAN_OF_WAR.getSpeed(),
                 new UnitActionNoAction());
     }

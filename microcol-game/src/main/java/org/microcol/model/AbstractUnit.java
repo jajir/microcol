@@ -840,20 +840,22 @@ public abstract class AbstractUnit implements Unit {
                             "No eastern sea-lane arrival is available")));
             direction = model.getHighSea().getDepartureDirection(origin);
         }
-        final int requiredTurns = isTravelToEurope
-                && direction == Direction.west ? TRAVEL_TO_EUROPE_FROM_WEST
-                        : TRAVEL_TO_EUROPE;
+        final PlaceHighSea voyage = createVoyage(isTravelToEurope, direction);
         ship.rememberDeparture(origin, direction);
         if (isTravelToEurope) {
             actionPoints--;
         }
         place.destroy();
-        place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
+        place = voyage;
     }
 
-    private final static int TRAVEL_TO_EUROPE = 3;
-
-    private final static int TRAVEL_TO_EUROPE_FROM_WEST = 4;
+    PlaceHighSea createVoyage(final boolean toEurope,
+            final Direction direction) {
+        final int weather = random.nextInt(3) - 1;
+        final int duration = AtlanticVoyageDuration.calculate(weather, toEurope,
+                direction, getType().getSpeed());
+        return new PlaceHighSea(this, toEurope, weather, duration, duration);
+    }
 
     @Override
     public void placeToEuropePortPier() {

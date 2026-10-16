@@ -159,6 +159,33 @@ public final class EuropeEquipmentPage extends AbstractScreen {
         assertEquals(turns, sea.getRemainigTurns());
     }
 
+    public int getVoyageWeather(final int shipId) {
+        return ((PlaceHighSea) getModel().getUnitById(shipId).getPlace())
+                .getWeather();
+    }
+
+    public int verifyVoyageSample(final int shipId) {
+        final org.microcol.model.Unit ship = getModel().getUnitById(shipId);
+        final PlaceHighSea voyage = (PlaceHighSea) ship.getPlace();
+        assertFalse(voyage.isTravelToEurope());
+        assertTrue(voyage.getWeather() >= -1 && voyage.getWeather() <= 1);
+        final int expected = Math.max(1, Math.min(4, 3 + voyage.getWeather()
+                - (ship.getType().getSpeed() >= 6 ? 1 : 0)));
+        assertEquals(expected, voyage.getOriginalTurns());
+        assertEquals(expected, voyage.getRemainigTurns());
+        return expected;
+    }
+
+    public void verifyVoyageMetadata(final int shipId, final int weather,
+            final int originalTurns, final int remainingTurns) {
+        final PlaceHighSea voyage = (PlaceHighSea) getModel()
+                .getUnitById(shipId).getPlace();
+        assertFalse(voyage.isTravelToEurope());
+        assertEquals(weather, voyage.getWeather());
+        assertEquals(originalTurns, voyage.getOriginalTurns());
+        assertEquals(remainingTurns, voyage.getRemainigTurns());
+    }
+
     public void showSeaRoute(org.microcol.model.Location from,
             org.microcol.model.Location to) throws Exception {
         javafx.scene.canvas.Canvas canvas = getContext().getClassFromGuice(

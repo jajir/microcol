@@ -162,7 +162,7 @@ class UnitSightTest {
 
         final UnitFrigate atAtlantic = new UnitFrigate(
                 unit -> mock(Cargo.class), model, 4,
-                unit -> new PlaceHighSea(unit, false, 2), offMapOwner, 1,
+                unit -> new PlaceHighSea(unit, false, 0, 2, 2), offMapOwner, 1,
                 new UnitActionNoAction());
         assertThrows(IllegalStateException.class,
                 atAtlantic::getVisibleLocations);

@@ -73,6 +73,7 @@ class ShipRosterTest {
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
             ship.setType(type);
+            ship.getPlaceHighSeas().setWeather(type.getSpeed() >= 6 ? 1 : 0);
             saved.getUnits().removeIf(unit -> unit.getId() == 15
                     || unit.getId() == 14 || unit.getId() == 13);
             for (int slot = 1; slot < 4; slot++) {
@@ -88,6 +89,8 @@ class ShipRosterTest {
                     loaded.getCargo().getSlots().size());
             assertEquals(3,
                     ((PlaceHighSea) loaded.getPlace()).getRemainigTurns());
+            assertEquals(3,
+                    ((PlaceHighSea) loaded.getPlace()).getOriginalTurns());
             assertEquals(Location.of(49, 15),
                     loaded.getDepartureLocation().orElseThrow());
             assertEquals(Direction.east,
@@ -102,6 +105,8 @@ class ShipRosterTest {
             assertEquals("Dutch", roundTrip.getOwner().getName());
             assertEquals(3,
                     ((PlaceHighSea) roundTrip.getPlace()).getRemainigTurns());
+            assertEquals(((PlaceHighSea) loaded.getPlace()).getWeather(),
+                    ((PlaceHighSea) roundTrip.getPlace()).getWeather());
             assertEquals(Location.of(49, 15),
                     roundTrip.getDepartureLocation().orElseThrow());
             assertEquals(Direction.east,
@@ -147,6 +152,7 @@ class ShipRosterTest {
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
             ship.setType(type);
+            ship.getPlaceHighSeas().setWeather(type.getSpeed() >= 6 ? 1 : 0);
             saved.getUnits()
                     .removeIf(unit -> unit.getId() == 16 || unit.getId() == 15
                             || unit.getId() == 14 || unit.getId() == 13);
@@ -220,6 +226,7 @@ class ShipRosterTest {
         UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                 .findFirst().orElseThrow();
         ship.setType(UnitType.CARAVEL);
+        ship.getPlaceHighSeas().setWeather(0);
         assertThrows(IllegalArgumentException.class, () -> load(saved));
     }
 

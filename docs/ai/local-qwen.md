@@ -3221,3 +3221,12 @@ committed for this experiment.
     are unmeasured. Main reviews, formats and executes all acceptance checks.
     R-0069 hover diagnostics remain with its original worker after two
     unsuccessful coordinate/panning repairs; failures are retained in evidence.
+
+14. R-0071 is assigned to the same Sol low worker in `2026-10-16-r71`, based
+    on `ba651749`, after main refined the agreed duration formula, persistence
+    and acceptance boundaries. The worker owns bounded implementation and test
+    authoring; main retains architecture, execution, formatting and integration.
+    Early review explicitly checks royal-carrier voyage metadata as well as
+    ordinary departures. Random one-turn crossings must not make UI tests
+    assume that every voyage remains at sea after its first update. No local
+    model or additional implementation agent is used for this assignment.

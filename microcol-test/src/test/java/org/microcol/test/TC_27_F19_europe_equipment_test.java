@@ -222,20 +222,24 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
                 PlaceCargoSlot.class);
         equipment.verifyPassenger(100, 102);
         equipment.depart(102);
-        equipment.verifyVoyage(102, 3);
+        final int duration = equipment.verifyVoyageSample(102);
+        final int weather = equipment.getVoyageWeather(102);
         GamePage game = europe.close();
-        game.nextTurnAndCloseDialogs();
-        equipment.verifyVoyage(102, 2);
 
-        // Save the voyage through the main menu and reload its exact passenger.
+        // Save at departure so any sampled duration remains in transit.
         game.exitToMenu().verifyMainScreen();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        equipment.verifyVoyage(102, 2);
+        equipment.verifyVoyageMetadata(102, weather, duration, duration);
         equipment.verifyState(100, 766, false, false, 100,
                 PlaceCargoSlot.class);
         equipment.verifyPassenger(100, 102);
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
+        for (int remaining = duration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            if (remaining > 0) {
+                equipment.verifyVoyageMetadata(102, weather, duration,
+                        remaining);
+            }
+        }
         equipment.verifyArrived(102);
         equipment.verifyState(100, 766, false, false, 100,
                 PlaceCargoSlot.class);

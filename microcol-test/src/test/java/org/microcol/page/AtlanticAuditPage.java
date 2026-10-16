@@ -30,6 +30,41 @@ public final class AtlanticAuditPage extends AbstractScreen {
         assertEquals(toEurope, place.isTravelToEurope());
     }
 
+    public int getVoyageWeather() {
+        return ((PlaceHighSea) getModel().getUnitById(3).getPlace())
+                .getWeather();
+    }
+
+    public int verifyVoyageSample(final boolean toEurope,
+            final boolean westernEdge) {
+        final Unit ship = getModel().getUnitById(3);
+        final PlaceHighSea voyage = (PlaceHighSea) ship.getPlace();
+        final int weather = voyage.getWeather();
+        assertTrue(weather >= -1 && weather <= 1);
+        assertEquals(toEurope, voyage.isTravelToEurope());
+        assertEquals(westernEdge ? Direction.west : Direction.east,
+                ((org.microcol.model.unit.Ship) ship).getDepartureDirection()
+                        .orElseThrow());
+        final int expected = Math.max(1,
+                Math.min(4,
+                        2 + weather + (toEurope ? 0 : 1)
+                                + (toEurope && westernEdge ? 1 : 0)
+                                - (ship.getType().getSpeed() >= 6 ? 1 : 0)));
+        assertEquals(expected, voyage.getOriginalTurns());
+        assertEquals(expected, voyage.getRemainigTurns());
+        return expected;
+    }
+
+    public void verifyVoyageMetadata(final int weather, final int originalTurns,
+            final int remainingTurns, final boolean toEurope) {
+        final PlaceHighSea voyage = (PlaceHighSea) getModel().getUnitById(3)
+                .getPlace();
+        assertEquals(weather, voyage.getWeather());
+        assertEquals(originalTurns, voyage.getOriginalTurns());
+        assertEquals(remainingTurns, voyage.getRemainigTurns());
+        assertEquals(toEurope, voyage.isTravelToEurope());
+    }
+
     public void verifyShipMapPainting(final boolean expectedVisible) {
         getRobot().interact(() -> {
             final Canvas canvas = new Canvas(Tile.TILE_WIDTH_IN_PX,

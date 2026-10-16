@@ -24,15 +24,35 @@ public class PlaceHighSea extends AbstractPlace {
      */
     private int remainigTurns;
 
+    private final int weather;
+
+    private final int originalTurns;
+
     public PlaceHighSea(final Unit unit, final boolean isTravelToEurope,
-            final int requiredTurns) {
+            final int weather, final int originalTurns,
+            final int remainingTurns) {
         super(unit);
         Preconditions.checkArgument(unit.getType().isShip(),
                 "Only ships could be placed to high sea.");
-        Preconditions.checkArgument(requiredTurns >= 0,
-                "Remaining turns cannot be negative");
+        Preconditions.checkArgument(weather >= -1 && weather <= 1,
+                "Invalid voyage weather");
+        Preconditions.checkArgument(originalTurns >= 1 && originalTurns <= 4,
+                "Invalid original voyage duration");
+        Preconditions.checkArgument(
+                remainingTurns >= 0 && remainingTurns <= originalTurns,
+                "Invalid remaining voyage duration");
         this.isTravelToEurope = isTravelToEurope;
-        this.remainigTurns = requiredTurns;
+        this.weather = weather;
+        this.originalTurns = originalTurns;
+        this.remainigTurns = remainingTurns;
+    }
+
+    public int getWeather() {
+        return weather;
+    }
+
+    public int getOriginalTurns() {
+        return originalTurns;
     }
 
     public int getRemainigTurns() {
@@ -40,8 +60,9 @@ public class PlaceHighSea extends AbstractPlace {
     }
 
     public void setRemainigTurns(int remainigTurns) {
-        Preconditions.checkArgument(remainigTurns >= 0,
-                "Remaining turns cannot be negative");
+        Preconditions.checkArgument(
+                remainigTurns >= 0 && remainigTurns <= originalTurns,
+                "Invalid remaining voyage duration");
         this.remainigTurns = remainigTurns;
     }
 
@@ -69,6 +90,7 @@ public class PlaceHighSea extends AbstractPlace {
         return MoreObjects.toStringHelper(PlaceHighSea.class)
                 .add("unit id", getUnit().getId())
                 .add("isTravelToEurope", isTravelToEurope)
+                .add("weather", weather).add("originalTurns", originalTurns)
                 .add("remainigTurns", remainigTurns).toString();
     }
 
@@ -76,6 +98,8 @@ public class PlaceHighSea extends AbstractPlace {
     public PlacePo save(final UnitPo unitPo) {
         final PlaceHighSeasPo out = new PlaceHighSeasPo();
         out.setTravelToEurope(isTravelToEurope);
+        out.setWeather(weather);
+        out.setOriginalTurns(originalTurns);
         out.setRemainigTurns(remainigTurns);
         unitPo.setPlaceHighSeas(out);
         return out;

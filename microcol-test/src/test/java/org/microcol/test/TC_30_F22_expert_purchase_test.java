@@ -148,18 +148,24 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         equipment.verifyPassenger(103, 102);
         purchase.verifyExpertState(103, 2025, true, PlaceCargoSlot.class);
         equipment.depart(102);
-        equipment.verifyVoyage(102, 3);
+        final int voyageDuration = equipment.verifyVoyageSample(102);
+        final int voyageWeather = equipment.getVoyageWeather(102);
         game = europe.close();
-        game.nextTurnAndCloseDialogs();
 
-        // Continue keeps the identity, equipment and remaining voyage together.
+        // Continue keeps the identity, equipment and sampled voyage together.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        equipment.verifyVoyage(102, 2);
+        equipment.verifyVoyageMetadata(102, voyageWeather, voyageDuration,
+                voyageDuration);
         equipment.verifyPassenger(103, 102);
         purchase.verifyExpertState(103, 2025, true, PlaceCargoSlot.class);
-        game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
+        for (int remaining = voyageDuration - 1; remaining >= 0; remaining--) {
+            game.nextTurnAndCloseDialogs();
+            if (remaining > 0) {
+                equipment.verifyVoyageMetadata(102, voyageWeather,
+                        voyageDuration, remaining);
+            }
+        }
         equipment.verifyArrived(102);
 
         // Sail from the actual eastern arrival through four ordinary sea turns.
@@ -359,15 +365,22 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
             // in
             // transit.
             equipment.depart(102);
-            equipment.verifyVoyage(102, 3);
+            final int voyageDuration = equipment.verifyVoyageSample(102);
+            final int voyageWeather = equipment.getVoyageWeather(102);
             GamePage game = europe.close();
-            game.nextTurnAndCloseDialogs();
             game.exitToMenu();
             game = new FreePlayAuditPage(getContext()).continueGame();
             equipment.verifyPassenger(100, 102);
-            equipment.verifyVoyage(102, 2);
-            game.nextTurnAndCloseDialogs();
-            game.nextTurnAndCloseDialogs();
+            equipment.verifyVoyageMetadata(102, voyageWeather, voyageDuration,
+                    voyageDuration);
+            for (int remaining = voyageDuration
+                    - 1; remaining >= 0; remaining--) {
+                game.nextTurnAndCloseDialogs();
+                if (remaining > 0) {
+                    equipment.verifyVoyageMetadata(102, voyageWeather,
+                            voyageDuration, remaining);
+                }
+            }
             equipment.verifyArrived(102);
             equipment.verifyPassenger(100, 102);
             game.exitToMenu();

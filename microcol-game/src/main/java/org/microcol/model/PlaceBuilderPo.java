@@ -37,9 +37,22 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceHighSeas() != null) {
-                    return new PlaceHighSea(unit,
-                            unitPo.getPlaceHighSeas().isTravelToEurope(),
-                            unitPo.getPlaceHighSeas().getRemainigTurns());
+                    final var voyage = unitPo.getPlaceHighSeas();
+                    Preconditions.checkArgument(
+                            voyage.getWeather() != null
+                                    && voyage.getOriginalTurns() != null
+                                    && unitPo.getDepartureDirection() != null,
+                            "Missing saved voyage metadata");
+                    Preconditions.checkArgument(
+                            voyage.getOriginalTurns() == AtlanticVoyageDuration
+                                    .calculate(voyage.getWeather(),
+                                            voyage.isTravelToEurope(),
+                                            unitPo.getDepartureDirection(),
+                                            unitPo.getType().getSpeed()),
+                            "Saved voyage duration disagrees with its factors");
+                    return new PlaceHighSea(unit, voyage.isTravelToEurope(),
+                            voyage.getWeather(), voyage.getOriginalTurns(),
+                            voyage.getRemainigTurns());
                 }
                 return null;
             }, (context) -> {

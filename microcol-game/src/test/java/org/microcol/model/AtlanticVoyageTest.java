@@ -109,27 +109,36 @@ class AtlanticVoyageTest {
         ship().moveOneStep(Location.of(outer, 16));
         assertTrue(ship().isAtHighSea());
         assertEquals(moves - 1, ship().getActionPoints());
-        int duration = west ? 4 : 3;
+        PlaceHighSea outward = (PlaceHighSea) ship().getPlace();
+        int duration = outward.getOriginalTurns();
+        assertEquals(AtlanticVoyageDuration.calculate(outward.getWeather(),
+                true, west ? Direction.west : Direction.east,
+                ship().getType().getSpeed()), duration);
+        assertEquals(duration, outward.getRemainigTurns());
+        assertCargo();
+        reload();
         assertEquals(duration,
                 ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
-        assertCargo();
-        nextOwnerTurn();
-        assertEquals(duration - 1,
-                ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
-        reload();
-        assertEquals(duration - 1,
-                ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
-        for (int turn = 1; turn < duration; turn++)
+        assertEquals(outward.getWeather(),
+                ((PlaceHighSea) ship().getPlace()).getWeather());
+        for (int turn = 0; turn < duration; turn++)
             nextOwnerTurn();
         assertTrue(ship().isAtEuropePort());
         assertCargo();
         reload();
         ship().placeToHighSeas(false);
-        nextOwnerTurn();
+        PlaceHighSea inbound = (PlaceHighSea) ship().getPlace();
+        int returnDuration = inbound.getOriginalTurns();
+        assertEquals(AtlanticVoyageDuration.calculate(inbound.getWeather(),
+                false, west ? Direction.west : Direction.east,
+                ship().getType().getSpeed()), returnDuration);
         reload();
-        assertEquals(2, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
-        nextOwnerTurn();
-        nextOwnerTurn();
+        assertEquals(returnDuration,
+                ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
+        assertEquals(inbound.getWeather(),
+                ((PlaceHighSea) ship().getPlace()).getWeather());
+        for (int turn = 0; turn < returnDuration; turn++)
+            nextOwnerTurn();
         assertEquals(Location.of(inner, 16), ship().getLocation());
         assertEquals(west ? Direction.east : Direction.west,
                 ship().save().getPlaceMap().getOrientation());
@@ -140,10 +149,10 @@ class AtlanticVoyageTest {
     void firstEuropeanDepartureUsesStableEasternProfileAndKeepsCargo() {
         prepare(false, true);
         ship().placeToHighSeas(false);
-        nextOwnerTurn();
+        int duration = ((PlaceHighSea) ship().getPlace()).getOriginalTurns();
         reload();
-        nextOwnerTurn();
-        nextOwnerTurn();
+        for (int turn = 0; turn < duration; turn++)
+            nextOwnerTurn();
         assertEquals(Location.of(49, 15), ship().getLocation());
         assertCargo();
     }
@@ -204,7 +213,8 @@ class AtlanticVoyageTest {
         Location arrival = Location.of(49, 15);
         addShip("Dutch's King", arrival);
         ship().placeToHighSeas(false);
-        for (int turn = 0; turn < 3; turn++)
+        int duration = ((PlaceHighSea) ship().getPlace()).getOriginalTurns();
+        for (int turn = 0; turn < duration; turn++)
             nextOwnerTurn();
         assertTrue(ship().isAtHighSea());
         assertEquals(0, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
@@ -225,7 +235,8 @@ class AtlanticVoyageTest {
         Location arrival = Location.of(49, 15);
         addShip("Dutch", arrival);
         ship().placeToHighSeas(false);
-        for (int turn = 0; turn < 3; turn++)
+        int duration = ((PlaceHighSea) ship().getPlace()).getOriginalTurns();
+        for (int turn = 0; turn < duration; turn++)
             nextOwnerTurn();
         assertEquals(arrival, ship().getLocation());
         assertEquals(2, model.getUnitsAt(arrival).size());
@@ -268,6 +279,62 @@ class AtlanticVoyageTest {
     }
 
     @Test
+    void missingOrInconsistentVoyageFactorsAreRejected() {
+        prepare(false, true);
+        ship().placeToHighSeas(false);
+        data.setModel(model.save());
+        final var voyage = data.getModel().getUnits().stream()
+                .filter(unit -> unit.getId() == 3).findFirst().orElseThrow()
+                .getPlaceHighSeas();
+        final int weather = voyage.getWeather();
+        final int total = voyage.getOriginalTurns();
+        voyage.setWeather(null);
+        assertInvalidVoyage();
+        voyage.setWeather(2);
+        assertInvalidVoyage();
+        voyage.setWeather(weather);
+        voyage.setOriginalTurns(null);
+        assertInvalidVoyage();
+        voyage.setOriginalTurns(5);
+        assertInvalidVoyage();
+        voyage.setOriginalTurns(total);
+        voyage.setRemainigTurns(total + 1);
+        assertInvalidVoyage();
+        voyage.setRemainigTurns(total);
+        voyage.setOriginalTurns(total == 4 ? 3 : total + 1);
+        assertInvalidVoyage();
+    }
+
+    private void assertInvalidVoyage() {
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(data.getModel(),
+                        MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @Test
+    void savedMidVoyageRetainsWeatherOriginalAndRemainingUntilArrival() {
+        data = dao.loadFromClassPath(
+                "/maps/default-campaign-mission-2-thrive.microcol");
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final PlaceHighSea departure = (PlaceHighSea) ship().getPlace();
+        assertEquals(1, departure.getWeather());
+        assertEquals(3, departure.getOriginalTurns());
+        assertEquals(3, departure.getRemainigTurns());
+        nextOwnerTurn();
+        assertEquals(2, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
+        reload();
+        final PlaceHighSea resumed = (PlaceHighSea) ship().getPlace();
+        assertEquals(1, resumed.getWeather());
+        assertEquals(3, resumed.getOriginalTurns());
+        assertEquals(2, resumed.getRemainigTurns());
+        nextOwnerTurn();
+        assertEquals(1, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
+        nextOwnerTurn();
+        assertEquals(Location.of(49, 15), ship().getLocation());
+    }
+
+    @Test
     void missingDefaultDestinationRejectsBeforeLeavingEurope() {
         prepare(false, true);
         data.setModel(model.save());
@@ -294,12 +361,12 @@ class AtlanticVoyageTest {
         assertTrue(ship().isAtEuropePort());
         model.endTurn();
         ship().placeToHighSeas(false);
-        nextOwnerTurn();
         Place voyage = ship().getPlace();
         assertThrows(IllegalStateException.class,
                 () -> ship().placeToHighSeas(false));
         assertSame(voyage, ship().getPlace());
-        assertEquals(2, ((PlaceHighSea) voyage).getRemainigTurns());
+        assertEquals(((PlaceHighSea) voyage).getOriginalTurns(),
+                ((PlaceHighSea) voyage).getRemainigTurns());
         assertCargo();
     }
 
@@ -315,7 +382,29 @@ class AtlanticVoyageTest {
         Ship restored = (Ship) model.getUnitById(id);
         assertEquals(royal.getDepartureLocation(),
                 restored.getDepartureLocation());
-        assertEquals(3,
-                ((PlaceHighSea) restored.getPlace()).getRemainigTurns());
+        final PlaceHighSea voyage = (PlaceHighSea) restored.getPlace();
+        assertEquals(voyage.getOriginalTurns(), voyage.getRemainigTurns());
+        assertEquals(
+                AtlanticVoyageDuration.calculate(voyage.getWeather(), false,
+                        restored.getDepartureDirection().orElseThrow(),
+                        restored.getType().getSpeed()),
+                voyage.getOriginalTurns());
+    }
+
+    @Test
+    void royalCarrierWithoutArrivalLaneDoesNotCreateAUnit() {
+        prepare(false, true);
+        data.setModel(model.save());
+        final Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        terrain.entrySet()
+                .removeIf(entry -> entry.getValue() == TerrainType.HIGH_SEA);
+        data.getModel().getMap().setTerrainType(terrain);
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final int before = model.getAllUnits().size();
+        assertThrows(IllegalStateException.class, () -> model
+                .createCargoShipForKing(model.getPlayerByName("Dutch's King")));
+        assertEquals(before, model.getAllUnits().size());
     }
 }
