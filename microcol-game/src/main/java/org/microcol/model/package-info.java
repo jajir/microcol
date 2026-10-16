@@ -53,7 +53,9 @@
  * revalidates the whole quote before drawing from persisted combat random
  * state, declaring war or spending movement. Ordinary armed land losers retain
  * identity and position while losing horses or muskets; other combat families
- * retain their separate outcome rules.
+ * retain their separate outcome rules. Eligible land victories advance social
+ * rank or veteran status through one saved draw, with immutable promotion facts
+ * sent alongside the resolved combat event.
  *
  * Validated sentry commands preserve movement; departure boarding and
  * visible-movement wake-up use shared model rules.

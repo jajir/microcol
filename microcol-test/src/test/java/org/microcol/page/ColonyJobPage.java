@@ -65,28 +65,61 @@ public final class ColonyJobPage extends AbstractScreen {
     public void openFromIndoor(final String buildingId, final int index)
             throws Exception {
         final Point2D target = slotPoint(buildingId, index);
-        getRobot().clickOn(target, MouseButton.SECONDARY);
-        // Native drag cleanup and context-menu creation need separate event
-        // cycles.
-        WaitForAsyncUtils.waitForFxEvents();
+        final Parent building = getNodeFinder().lookup("#" + buildingId)
+                .queryAs(Parent.class);
+        final javafx.scene.Scene scene = building.getScene();
+        final java.util.concurrent.atomic.AtomicReference<String> press = new java.util.concurrent.atomic.AtomicReference<>(
+                "absent");
+        final java.util.concurrent.atomic.AtomicReference<String> menu = new java.util.concurrent.atomic.AtomicReference<>(
+                "absent");
+        final java.util.concurrent.atomic.AtomicBoolean reachedBuilding = new java.util.concurrent.atomic.AtomicBoolean();
+        final javafx.event.EventHandler<javafx.scene.input.MouseEvent> pressed = event -> press
+                .set("target=" + event.getTarget() + "; picked="
+                        + (event.getPickResult() == null ? "none"
+                                : event.getPickResult().getIntersectedNode())
+                        + "; scene=" + event.getSceneX() + ","
+                        + event.getSceneY());
+        final javafx.event.EventHandler<javafx.scene.input.ContextMenuEvent> requested = event -> menu
+                .set("target=" + event.getTarget() + "; picked="
+                        + (event.getPickResult() == null ? "none"
+                                : event.getPickResult().getIntersectedNode())
+                        + "; scene=" + event.getSceneX() + ","
+                        + event.getSceneY());
+        final javafx.event.EventHandler<javafx.scene.input.ContextMenuEvent> received = event -> reachedBuilding
+                .set(true);
+        getRobot().interact(() -> {
+            scene.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
+                    pressed);
+            scene.addEventFilter(
+                    javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
+                    requested);
+            building.addEventFilter(
+                    javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
+                    received);
+        });
         try {
+            getRobot().clickOn(target, MouseButton.SECONDARY);
+            // Native drag cleanup and context-menu creation need separate
+            // event cycles.
+            WaitForAsyncUtils.waitForFxEvents();
             WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getNodeFinder()
                     .lookup("#chooseWork").tryQuery().isPresent());
         } catch (java.util.concurrent.TimeoutException timeout) {
-            final Parent building = getNodeFinder().lookup("#" + buildingId)
-                    .queryAs(Parent.class);
             final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
                     .stream().filter(node -> node instanceof Canvas).findFirst()
                     .orElseThrow();
             final String details = "Indoor context menu absent at " + target
+                    + "; sceneTarget="
+                    + building.localToScene(building.screenToLocal(target))
                     + "; canvas="
                     + canvas.localToScreen(canvas.getBoundsInLocal())
                     + "; building="
                     + building.localToScreen(building.getBoundsInLocal())
-                    + "; scene=" + building.getScene().getWidth() + "x"
-                    + building.getScene().getHeight() + "; menuPresent="
-                    + getNodeFinder().lookup("#chooseWork").tryQuery()
-                            .isPresent();
+                    + "; scene=" + scene.getWidth() + "x" + scene.getHeight()
+                    + "; press=" + press.get() + "; contextRequested="
+                    + menu.get() + "; reachedBuilding=" + reachedBuilding.get()
+                    + "; menuPresent=" + getNodeFinder().lookup("#chooseWork")
+                            .tryQuery().isPresent();
             try {
                 captureDialog(buildingId, "indoor-context-menu-timeout.png");
             } catch (Exception captureError) {
@@ -96,6 +129,17 @@ public final class ColonyJobPage extends AbstractScreen {
                     details);
             diagnosed.initCause(timeout);
             throw diagnosed;
+        } finally {
+            getRobot().interact(() -> {
+                scene.removeEventFilter(
+                        javafx.scene.input.MouseEvent.MOUSE_PRESSED, pressed);
+                scene.removeEventFilter(
+                        javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
+                        requested);
+                building.removeEventFilter(
+                        javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
+                        received);
+            });
         }
         getRobot().clickOn("#chooseWork");
         WaitForAsyncUtils.waitForFxEvents();

@@ -225,6 +225,11 @@ public final class DialogFight extends AbstractMessageWindow {
 
     private String unitName(final Unit unit) {
         final String name = localizationHelper.getUnitName(unit.getType());
+        if (unit instanceof org.microcol.model.unit.UnitFreeColonist
+                && ((org.microcol.model.unit.UnitFreeColonist) unit).isVeteran()
+                && unit.getType() != org.microcol.model.UnitType.VETERAN_SOLDIER) {
+            return i18n.get(Dialog.fight_veteranName, name);
+        }
         return unit instanceof org.microcol.model.unit.UnitArtillery
                 && ((org.microcol.model.unit.UnitArtillery) unit).isDamaged()
                         ? i18n.get(Dialog.fight_damagedName, name)

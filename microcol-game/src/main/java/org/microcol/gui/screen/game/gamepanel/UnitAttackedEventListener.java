@@ -33,7 +33,24 @@ public final class UnitAttackedEventListener {
 
     @Subscribe
     private void onUnitAttacked(final UnitAttackedEvent event) {
-        final String message = outcomeMessage(event);
+        final String lossMessage = outcomeMessage(event);
+        final String promotionMessage = event.getPromotion().map(promotion -> {
+            final org.microcol.model.Unit winner = promotion
+                    .getUnitId() == event.getAttacker().getId()
+                            ? event.getAttacker()
+                            : event.getDefender();
+            final String status = promotion.isVeteran()
+                    ? i18n.get(
+                            org.microcol.gui.dialog.Dialog.fight_veteranStatus)
+                    : i18n.get(org.microcol.gui.UnitTypes
+                            .getUnitName(promotion.getToType()));
+            return i18n.get(org.microcol.gui.dialog.Dialog.fight_promoted,
+                    winner.getOwner().getDisplayName(), promotion.getUnitId(),
+                    status);
+        }).orElse(null);
+        final String message = lossMessage == null ? promotionMessage
+                : promotionMessage == null ? lossMessage
+                        : lossMessage + "\n" + promotionMessage;
         gamePanelView.addFightAnimation(
                 event.getOriginalAttackerLocation()
                         .orElseGet(() -> event.getAttacker().getLocation()),

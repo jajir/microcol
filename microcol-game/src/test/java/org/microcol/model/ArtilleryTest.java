@@ -13,6 +13,7 @@ import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.event.UnitAttackedEvent;
 
 import com.google.gson.Gson;
 
@@ -45,7 +46,13 @@ class ArtilleryTest {
     }
 
     private Model model(boolean damaged) {
-        Model model = Model.make(scenario(damaged),
+        return model(damaged, 3L);
+    }
+
+    private Model model(boolean damaged, long randomState) {
+        final ModelPo data = scenario(damaged);
+        data.setCombatRandomState(randomState);
+        Model model = Model.make(data,
                 MissionImpl.getPredefinedGameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
@@ -90,6 +97,45 @@ class ArtilleryTest {
         secondAttacker.prepareAttack(TARGET, true).orElseThrow().execute();
         assertTrue(
                 second.getAllUnits().stream().noneMatch(u -> u.getId() == 6));
+    }
+
+    @Test
+    void armedWinnerAgainstFullOrDamagedArtilleryCanPromote() throws Exception {
+        for (final boolean alreadyDamaged : new boolean[] { false, true }) {
+            final Model battle = model(alreadyDamaged, 7L);
+            final UnitFreeColonist soldier = (UnitFreeColonist) battle
+                    .getUnitById(0);
+            final java.util.List<UnitAttackedEvent> events = new java.util.ArrayList<>();
+            battle.addListener(new ModelListenerAdapter() {
+                @Override
+                public void onUnitAttacked(final UnitAttackedEvent event) {
+                    events.add(event);
+                }
+            });
+            soldier.prepareAttack(TARGET, true).orElseThrow().execute();
+            assertSame(soldier, battle.getUnitById(0));
+            assertTrue(soldier.isVeteran());
+            assertTrue(soldier.isHoldingGuns());
+            assertEquals(0, soldier.getActionPoints());
+            assertEquals(7L + 2 * 0x9E3779B97F4A7C15L,
+                    battle.save().getCombatRandomState());
+            assertEquals(1, events.size());
+            assertEquals(0,
+                    events.get(0).getPromotion().orElseThrow().getUnitId());
+            assertEquals(alreadyDamaged, events.get(0).wasDestroyed());
+            if (alreadyDamaged) {
+                assertTrue(battle.getAllUnits().stream()
+                        .noneMatch(unit -> unit.getId() == 6));
+            } else {
+                assertTrue(((UnitArtillery) battle.getUnitById(6)).isDamaged());
+            }
+            assertTrue(
+                    ((UnitFreeColonist) Model
+                            .make(battle.save(),
+                                    MissionImpl
+                                            .getPredefinedGameOverEvaluators())
+                            .getUnitById(0)).isVeteran());
+        }
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.EuropeTradeQuote;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
+import org.microcol.model.MilitaryPromotion;
 import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
@@ -36,6 +37,8 @@ public class UnitFreeColonist extends CanMount {
 
     private boolean mounted;
 
+    private boolean veteran;
+
     public UnitFreeColonist(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction unitAction,
@@ -52,7 +55,38 @@ public class UnitFreeColonist extends CanMount {
         out.setTools(tools);
         out.setMounted(mounted);
         out.setHoldingGuns(holdingGuns);
+        out.setVeteran(isVeteran());
         return out;
+    }
+
+    /** @return whether this person's military rank is veteran */
+    public boolean isVeteran() {
+        return veteran || getType() == UnitType.VETERAN_SOLDIER;
+    }
+
+    void restoreVeteran(final boolean value) {
+        veteran = value;
+    }
+
+    /**
+     * Advance one earned military step after a resolved, eligible victory. The
+     * registered unit and its equipment remain unchanged.
+     *
+     * @return immutable facts of the actual step
+     */
+    public MilitaryPromotion promoteAfterCombatVictory() {
+        Preconditions.checkState(
+                isHoldingGuns() && !isVeteran() && isAtPlaceLocation(),
+                "Unit cannot gain military rank");
+        final UnitType previous = getType();
+        final UnitType next = advanceMilitaryRank();
+        return new MilitaryPromotion(getId(), previous, next, false,
+                isVeteran());
+    }
+
+    protected UnitType advanceMilitaryRank() {
+        veteran = true;
+        return getType();
     }
 
     @Override
@@ -244,13 +278,13 @@ public class UnitFreeColonist extends CanMount {
     public double getMilitaryStrenght() {
         if (isMounted()) {
             if (isHoldingGuns()) {
-                return 2;
+                return isVeteran() ? 4.5 : 2;
             } else {
                 return 1.5;
             }
         } else {
             if (isHoldingGuns()) {
-                return 1.5;
+                return isVeteran() ? 3 : 1.5;
             } else {
                 return 1;
             }

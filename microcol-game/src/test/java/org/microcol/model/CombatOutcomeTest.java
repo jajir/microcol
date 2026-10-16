@@ -94,7 +94,7 @@ class CombatOutcomeTest {
         assertEquals(3L, model.save().getCombatRandomState());
         assertEquals(0, events.size());
         order.execute();
-        assertEquals(3L + STEP, model.save().getCombatRandomState());
+        assertEquals(3L + 2 * STEP, model.save().getCombatRandomState());
         assertEquals(1, events.size());
         assertSame(defender, events.get(0).getDefeated());
         assertFalse(events.get(0).wasDestroyed());
@@ -119,14 +119,14 @@ class CombatOutcomeTest {
         attacker.prepareAttack(TARGET, true).orElseThrow().execute();
         assertFalse(attacker.isHoldingGuns());
         assertTrue(defender.isHoldingGuns());
-        assertEquals(0L + STEP, model.save().getCombatRandomState());
+        assertEquals(0L + 2 * STEP, model.save().getCombatRandomState());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         restored.startGame();
         assertFalse(
                 ((UnitFreeColonist) restored.getUnitById(0)).isHoldingGuns());
         assertEquals(0, restored.getUnitById(0).getActionPoints());
-        assertEquals(0L + STEP, restored.save().getCombatRandomState());
+        assertEquals(0L + 2 * STEP, restored.save().getCombatRandomState());
     }
 
     @Test

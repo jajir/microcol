@@ -702,3 +702,11 @@ TC65 pokrývá povinnou informaci o zachování vztahů, zrušení a potvrzení 
 korzára i útoku proti korzárovi, Continue a odmítnutí změněného vztahu.
 TC35/TC64 nadále ověřují běžné vyhlášení války a námořní následky.
 Výsledky běhů se evidují [samostatně](functional-tests.md#r-0099-privateer-hostilities-2026-10-17).
+
+### UC-074: vojenské povýšení R-0111
+
+TC66 pokrývá zrušení a potvrzení útoku, běžné povýšení i jeho neúspěšný los,
+Washingtonovo zaručené povýšení se zachovanou odborností, viditelný stav,
+Continue a další bojové potvrzení s novou silou. Modelové hranice doplňují
+postup trestance/sluhy, obranné vítězství a zachování hodnosti po odzbrojení.
+Výsledky se vedou v [evidenci R-0111](functional-tests.md#r-0111-military-promotion-2026-10-17).

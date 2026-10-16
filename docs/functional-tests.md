@@ -4262,3 +4262,90 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    passed in both classes; no production change followed model acceptance.
 8. Integration and full CI/publication remain pending. Last verified published
    game remains `dev-131-d8bff42a1962`; later pushes are not publication evidence.
+
+## R-0111 military promotion — 2026-10-17
+
+1. Scope: COMBAT-008 / UC-074 veteran acquisition. Ordinary eligible armed
+   winners have one 25% promotion draw; Washington guarantees one step.
+   Specialty, identity and rank persist; veteran bases are 3/4.5 and are not
+   multiplied twice. Continental/revolutionary promotions remain separate scope.
+2. Model implementation and TC66 player paths are in progress. Planned checks
+   cover cancel, ordinary promotion/nonpromotion, Washington/expert retention,
+   persistent information and the next actual strength review after Continue.
+   Test results, integration and publication are not yet claimed.
+
+3. Initial model snapshot passed 1729 full-suite tests with zero failures,
+   errors or skips. Main review then corrected an over-restriction in its own
+   refinement: an eligible soldier defeating artillery can promote; only an
+   artillery winner is ineligible. A targeted worker repair and regression
+   test are in progress; the prior full-suite result does not certify that
+   changed production snapshot. Initial Docker player acceptance is still running.
+4. Targeted correction passed 23 focused cases (artillery 11, promotion 7,
+   ordinary outcome 5), including promotion against full/damaged artillery,
+   unchanged defeated/destroyed event facts and saved draw count. First Docker
+   attempt stopped at test compilation: main called `setActionPoints` through
+   the Unit interface instead of its colonist implementation. Corrected the
+   test-only fixture helper; no UI case ran in that attempt. Full model and
+   Docker acceptance are rerunning on the corrected production snapshot.
+
+5. Final model snapshot passed **1730 tests**, zero failures/errors/skips
+   (`/tmp/r111-model-final.log`); package/Javadoc passed. Main reviewed promotion
+   timing, unchanged unit identity, persisted rank, artillery event facts and
+   frozen eligibility/founder inputs. Shared formatter passed for 24 changed
+   Java files. Docker player acceptance remains in progress.
+
+### R-0098 full CI follow-up — 2026-10-17
+
+1. Run 38976061239 on `55b4da3f` failed with 269 UI/support cases, two failures,
+   one error and zero skips. TC22's expected purchase roster still lacked
+   Artillery in that older snapshot; this and its following setup cascade were
+   addressed in `695a54a7`, with all five TC22 cases passing locally.
+2. TC53/01 again timed out opening the indoor job menu. Failure diagnostics show
+   the click inside the canvas/slot and no matching menu. Screenshot and source
+   review did not establish occlusion or invalid geometry. Pointer-event delivery
+   remains unproven; additional failure-only event/pick diagnostics are being
+   added, with no retry or increased timeout. No root-cause correction is claimed.
+3. Native packages, compatibility and Pages passed, but publication was skipped.
+   Last verified game remains `dev-131-d8bff42a1962`.
+
+### R-0111 player verification corrections — 2026-10-17
+
+1. The next Docker run executed 22 cases: TC35 (12), TC62 (4) and the
+   source contract (3) passed; TC66 had one pass and two lookup errors. Both
+   promotion cases had already verified the model rank and feedback text,
+   but the selected tile's unit panel retained its pre-combat contents.
+   Clicking the same selected tile does not emit a new selection event.
+2. Refresh the existing right panel when combat resolves. Screenshot inspection
+   also exposed the second feedback line outside the scene: the status label
+   was in a non-layout Pane. A wrapping VBox now lays out the complete message;
+   TC66 checks its preferred height and scene bounds as well as both languages.
+   The corrected TC66 and shared TC40/TC53 paths are being rerun in Docker.
+3. An additional model boundary case independently seeds the saved generator
+   to produce just below 0.25 and exactly 0.25 after a winning combat draw.
+   Only the first promotes; both consume exactly two draws. The focused
+   promotion suite passed 8/8; no production model change followed the
+   1730-case full-suite result.
+
+4. The corrected run executed 23 cases: TC40 15, TC53 2 and source-contract
+   3 passed; TC66 passed its nonpromotion case but both promotion cases failed
+   the new text-height assertion. Screenshots confirmed the stale panel was
+   refreshed, while the surrounding VBox still shrank the status bar and the
+   narrow unit label truncated its rank. Preserve preferred text height in the
+   status bar and wrap the veteran label; rerun TC66 with ordinary combat TC35.
+   The visibility failures remain recorded, not replaced by text-only checks.
+
+5. Docker `run-JSaUOj` passed **18 cases**, zero failures/errors/skips: TC66
+   3, ordinary combat TC35 12 and source-contract 3. Main viewed English/Czech
+   screenshots: both complete outcome lines and the wrapped veteran rank fit.
+   Continue preserves the expert and next combat bases 3/4.5. The earlier
+   TC40 15 and TC53 2 passing cases also verify the shared menu diagnostics.
+   A final Czech wording correction is checked separately before integration.
+
+6. Final packaging/Javadoc and documentation (9 tests and strict MkDocs) passed.
+   Shared Java formatting checked 27 files with unchanged code tokens and
+   idempotent output. Complete CI/publication is still a separate gate;
+   R-0111 remains ready for development until that acceptance is established.
+
+7. Final Czech wording verification `run-Ef7V2M` passed 4/4 (TC66 Czech
+   Washington/expert/Continue plus three source-contract checks); the final
+   screenshot was viewed and both feedback lines remain readable.

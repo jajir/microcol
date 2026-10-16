@@ -40,6 +40,16 @@ public class UnitCreateRequest {
 
     private boolean artilleryDamaged;
 
+    private boolean veteran;
+
+    public boolean isVeteran() {
+        return veteran;
+    }
+
+    public void setVeteran(final boolean veteran) {
+        this.veteran = veteran;
+    }
+
     public boolean isArtilleryDamaged() {
         return artilleryDamaged;
     }

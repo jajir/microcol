@@ -262,6 +262,15 @@ final class ListenerManager {
 
     void fireUnitAttacked(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final MilitaryPromotion promotion) {
+        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
+                defender, defeated, wasDestroyed, promotion);
+        logger.info("Unit attacked: {}.", event);
+        executeInSameThread(listener -> listener.onUnitAttacked(event));
+    }
+
+    void fireUnitAttacked(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
             final NavalCombatOutcome outcome) {
         final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
                 defender, defeated, outcome.isSunk(), outcome);

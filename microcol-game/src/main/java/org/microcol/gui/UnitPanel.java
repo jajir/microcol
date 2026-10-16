@@ -67,6 +67,15 @@ class UnitPanel {
                 localizationHelper.getUnitName(unit.getType()));
         labelUnitType.getStyleClass().add("unitType");
         box.getChildren().add(labelUnitType);
+        if (unit instanceof org.microcol.model.unit.UnitFreeColonist
+                && ((org.microcol.model.unit.UnitFreeColonist) unit)
+                        .isVeteran()) {
+            final Label veteran = new Label(i18n.get(Loc.unitsPanel_veteran));
+            veteran.setId("unitVeteran-" + unit.getId());
+            veteran.setWrapText(true);
+            veteran.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(veteran);
+        }
 
         if (isUnitOwnedBy(unit, humanPlayer)) {
             final Label labelMoves = new Label(

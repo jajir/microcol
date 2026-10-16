@@ -206,7 +206,16 @@ public class UnitFactory {
         unitCreateRequest.setArtilleryDamaged(
                 Boolean.TRUE.equals(unitPo.getArtilleryDamaged()));
 
+        unitCreateRequest.setVeteran(unitPo.isVeteran());
+
         final Unit unit = unitResolver.apply(unitCreateRequest);
+        Preconditions.checkArgument(
+                !unitPo.isVeteran() || unit instanceof UnitFreeColonist,
+                "Only colonists can be veterans");
+        if (unit instanceof UnitFreeColonist) {
+            ((UnitFreeColonist) unit)
+                    .restoreVeteran(unitCreateRequest.isVeteran());
+        }
         if (unit.getAction().getType() == UnitActionType.fortify) {
             Preconditions.checkArgument((unit instanceof UnitFreeColonist
                     && ((UnitFreeColonist) unit).isHoldingGuns()

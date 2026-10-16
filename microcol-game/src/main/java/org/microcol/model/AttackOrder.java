@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import java.util.Optional;
 
+import org.microcol.model.unit.UnitFreeColonist;
+
 /**
  * A proposed battle bound to the participants and state shown for confirmation.
  */
@@ -17,6 +19,8 @@ public final class AttackOrder {
     private final EuropeanRelationState originalRelation;
     private final Optional<CombatStrengths> combatStrengths;
     private final Optional<NavalCombatPreview> navalPreview;
+
+    private final String promotionInputs;
 
     AttackOrder(final AbstractUnit attacker, final Unit defender) {
         this.attacker = attacker;
@@ -40,6 +44,7 @@ public final class AttackOrder {
                         (org.microcol.model.unit.Ship) attacker,
                         (org.microcol.model.unit.Ship) defender))
                 : Optional.empty();
+        promotionInputs = promotionInputs(attacker, defender);
     }
 
     public Unit getAttacker() {
@@ -85,6 +90,26 @@ public final class AttackOrder {
                 && attacker.isAtPlaceLocation() && defender.isAtPlaceLocation()
                 && origin.equals(attacker.getLocation())
                 && target.equals(defender.getLocation());
+    }
+
+    boolean matchesPromotionInputs() {
+        return promotionInputs.equals(promotionInputs(attacker, defender));
+    }
+
+    private static String promotionInputs(final Unit attacker,
+            final Unit defender) {
+        return promotionInput(attacker) + '/' + promotionInput(defender);
+    }
+
+    private static String promotionInput(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist)) {
+            return unit.getType().name();
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return unit.getType().name() + ':' + colonist.isVeteran() + ':'
+                + colonist.isHoldingGuns() + ':' + colonist.isMounted() + ':'
+                + unit.getOwner().getCongressMembers()
+                        .contains(Founder.GEORGE_WASHINGTON);
     }
 
     /**

@@ -52,6 +52,16 @@ public class UnitPo {
 
     private boolean mounted;
 
+    private boolean veteran;
+
+    public boolean isVeteran() {
+        return veteran;
+    }
+
+    public void setVeteran(final boolean veteran) {
+        this.veteran = veteran;
+    }
+
     private Boolean artilleryDamaged;
 
     public Boolean getArtilleryDamaged() {

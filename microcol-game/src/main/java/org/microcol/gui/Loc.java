@@ -15,12 +15,13 @@ public enum Loc implements MessageKeyResource {
     statusBar_status_description, statusBar_season_spring,
     statusBar_season_summer, statusBar_season_autumn, statusBar_season_winter,
     unitsPanel_description, unitsPanel_unexplored, unitsPanel_units,
-    unitsPanel_availableMoves, unitsPanel_owner, unitsPanel_currentUser,
-    unitsPanel_with, unitsPanel_empty, rightPanel_description, turnReport_title,
-    turnReport_caption, turnReport_noEvents, no_2_7p, no_3_7p, no_4_7p, no_5_7p,
-    and, withColony, adjustAmountOfGoods, moveCost, difficulty,
-    difficulty_discoverer, difficulty_explorer, difficulty_conquistador,
-    difficulty_governor, difficulty_viceroy,;
+    unitsPanel_veteran, unitsPanel_availableMoves, unitsPanel_owner,
+    unitsPanel_currentUser, unitsPanel_with, unitsPanel_empty,
+    rightPanel_description, turnReport_title, turnReport_caption,
+    turnReport_noEvents, no_2_7p, no_3_7p, no_4_7p, no_5_7p, and, withColony,
+    adjustAmountOfGoods, moveCost, difficulty, difficulty_discoverer,
+    difficulty_explorer, difficulty_conquistador, difficulty_governor,
+    difficulty_viceroy,;
 
     private final static String SEASON_PREFIX = "statusBar_season_";
 

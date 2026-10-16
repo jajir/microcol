@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
@@ -26,7 +26,10 @@ public final class StatusBarView implements JavaFxComponent {
     public StatusBarView() {
         statusBarDescription = new Label();
         statusBarDescription.setId(STATUS_BAR_LABEL_ID);
-        final Pane pane = new Pane(statusBarDescription);
+        statusBarDescription.setWrapText(true);
+        statusBarDescription.setMinHeight(Region.USE_PREF_SIZE);
+        final VBox pane = new VBox(statusBarDescription);
+        pane.setMinWidth(0);
         pane.setId("description");
         HBox.setHgrow(pane, Priority.ALWAYS);
 
@@ -37,6 +40,7 @@ public final class StatusBarView implements JavaFxComponent {
         labelGold.setId("labelGold");
 
         statusBar = new HBox();
+        statusBar.setMinHeight(Region.USE_PREF_SIZE);
         statusBar.getChildren().addAll(pane, labelGold, labelEra);
         statusBar.setId("statusBar");
     }

@@ -728,6 +728,8 @@ public abstract class AbstractUnit implements Unit {
                         "The selected attack is no longer legal"));
         Preconditions.checkState(selected == order.getDefender(),
                 "The selected defender changed");
+        Preconditions.checkState(order.matchesPromotionInputs(),
+                "The combat experience inputs changed");
         final boolean privateerException = model.isPrivateerNavalException(this,
                 selected);
         final EuropeanRelationState currentRelation = owner.isKing()
@@ -771,7 +773,9 @@ public abstract class AbstractUnit implements Unit {
             final AbstractUnit loser = winnerAttacker ? defender : this;
             if (loser instanceof UnitArtillery
                     && ((UnitArtillery) loser).isDamaged()) {
-                model.fireUnitAttacked(this, defender, loser, true);
+                final Unit winner = winnerAttacker ? this : defender;
+                model.fireUnitAttacked(this, defender, loser, true,
+                        promoteWinningColonist(winner));
                 model.destroyUnit(loser);
                 if (loser == defender && canOccupyWonTile(order.getTarget())) {
                     placeToLocation(order.getTarget());
@@ -781,12 +785,15 @@ public abstract class AbstractUnit implements Unit {
                 return;
             }
             loser.loseCombatEquipment();
-            model.fireUnitAttacked(this, defender, loser, false);
+            final Unit winner = winnerAttacker ? this : defender;
+            model.fireUnitAttacked(this, defender, loser, false,
+                    promoteWinningColonist(winner));
             return;
         }
         final Unit winner = winnerAttacker ? this : defender;
         if (winner == this) {
-            model.fireUnitAttacked(this, defender, defender, true);
+            model.fireUnitAttacked(this, defender, defender, true,
+                    promoteWinningColonist(this));
             model.destroyUnit(defender);
             if (canOccupyWonTile(order.getTarget())) {
                 placeToLocation(order.getTarget());
@@ -800,9 +807,26 @@ public abstract class AbstractUnit implements Unit {
                 model.fireUnitAttacked(this, defender, this, false);
                 return;
             }
-            model.fireUnitAttacked(this, defender, this, true);
+            model.fireUnitAttacked(this, defender, this, true,
+                    promoteWinningColonist(defender));
             model.destroyUnit(this);
         }
+    }
+
+    private MilitaryPromotion promoteWinningColonist(final Unit winner) {
+        if (!(winner instanceof UnitFreeColonist)) {
+            return null;
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) winner;
+        if (!colonist.isHoldingGuns() || colonist.isVeteran()) {
+            return null;
+        }
+        final boolean washington = winner.getOwner().getCongressMembers()
+                .contains(Founder.GEORGE_WASHINGTON);
+        if (!washington && model.nextCombatRandom() >= 0.25) {
+            return null;
+        }
+        return colonist.promoteAfterCombatVictory();
     }
 
     private void executeNavalAttack(final AttackOrder order,

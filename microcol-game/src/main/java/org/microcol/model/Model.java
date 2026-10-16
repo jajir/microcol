@@ -1929,6 +1929,13 @@ public class Model {
     }
 
     void fireUnitAttacked(final Unit attacker, final Unit defender,
+            final Unit defeated, final boolean wasDestroyed,
+            final MilitaryPromotion promotion) {
+        listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
+                wasDestroyed, promotion);
+    }
+
+    void fireUnitAttacked(final Unit attacker, final Unit defender,
             final Unit defeated, final NavalCombatOutcome outcome) {
         listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
                 outcome);

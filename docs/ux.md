@@ -604,3 +604,11 @@ poradce tuto diplomatickou informaci nepřeskočí. Zrušení nic nespotřebuje;
 při změně vztahů během potvrzení hra vyžádá novou volbu útoku. Výsledek,
 kořist a opravy sdílejí cestu R-0097. Nejde o ochranu korzára před napadením.
 Přejímka hráčských scénářů je vedená v [R-0099](requirements/R-0099.md).
+
+### Povýšení vítězného vojáka — R-0111
+
+Po boji hráč uvidí vedle ztráty vybavení poraženého také skutečný krok povýšení
+vítěze. Informace o jednotce trvale ukazují veteránský stav odděleně od civilní
+odbornosti. Následující bojové potvrzení již používá vyšší základní sílu.
+Zrušení útoku nepovyšuje; Continue zachová výsledek bez dalšího losování.
+Stav hráčské přejímky vede [R-0111](requirements/R-0111.md).

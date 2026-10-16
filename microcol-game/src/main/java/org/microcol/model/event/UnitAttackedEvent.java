@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.microcol.model.Location;
 import org.microcol.model.NavalCombatOutcome;
 import org.microcol.model.Model;
+import org.microcol.model.MilitaryPromotion;
 import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
@@ -17,17 +18,35 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
     private final Unit defeated;
     private final NavalCombatOutcome navalOutcome;
 
+    private final MilitaryPromotion promotion;
+
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed) {
-        this(model, attacker, defender, defeated, wasDestroyed, null);
+        this(model, attacker, defender, defeated, wasDestroyed, null, null);
     }
 
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed, final NavalCombatOutcome navalOutcome) {
+        this(model, attacker, defender, defeated, wasDestroyed, navalOutcome,
+                null);
+    }
+
+    public UnitAttackedEvent(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final MilitaryPromotion promotion) {
+        this(model, attacker, defender, defeated, wasDestroyed, null,
+                promotion);
+    }
+
+    private UnitAttackedEvent(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final NavalCombatOutcome navalOutcome,
+            final MilitaryPromotion promotion) {
         super(model);
         this.navalOutcome = navalOutcome;
+        this.promotion = promotion;
         this.attacker = Preconditions.checkNotNull(attacker);
         this.defender = Preconditions.checkNotNull(defender);
         this.defeated = Preconditions.checkNotNull(defeated);
@@ -36,6 +55,10 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
 
     public Optional<NavalCombatOutcome> getNavalOutcome() {
         return Optional.ofNullable(navalOutcome);
+    }
+
+    public Optional<MilitaryPromotion> getPromotion() {
+        return Optional.ofNullable(promotion);
     }
 
     public Optional<Location> getOriginalAttackerLocation() {

@@ -51,4 +51,5 @@
 	<entry key="difficulty_conquistador">Conquistador</entry>
 	<entry key="difficulty_governor">Governor</entry>
 	<entry key="difficulty_viceroy">Viceroy</entry>
+    <entry key="unitsPanel_veteran">Military status: Veteran</entry>
 </properties>

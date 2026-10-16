@@ -110,7 +110,9 @@ public final class CombatStrengths {
             return ((UnitArtillery) unit).isDamaged() ? attack ? 5 : 3
                     : attack ? 7 : 5;
         }
-        return ((UnitFreeColonist) unit).isMounted() ? 3 : 2;
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return colonist.isVeteran() ? colonist.isMounted() ? 4.5 : 3
+                : colonist.isMounted() ? 3 : 2;
     }
 
     private static String state(Unit unit) {
@@ -118,7 +120,8 @@ public final class CombatStrengths {
             return Boolean.toString(((UnitArtillery) unit).isDamaged());
         }
         UnitFreeColonist colonist = (UnitFreeColonist) unit;
-        return colonist.isMounted() + ":" + colonist.isHoldingGuns();
+        return colonist.isMounted() + ":" + colonist.isHoldingGuns() + ':'
+                + colonist.isVeteran();
     }
 
     private static int artilleryPenalty(Model model, Unit unit) {

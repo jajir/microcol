@@ -737,3 +737,15 @@ Příkaz si pamatuje skutečný vztah zvlášť od nutnosti vyhlášení války 
 bojem jej znovu ověří. GUI jen vysvětluje výjimku a používá stejný potvrzovací
 a výsledkový dialog jako ostatní útoky. Stav přejímky vede
 [R-0099](requirements/R-0099.md).
+
+### Vojenské povýšení (R-0111)
+
+Civilní odbornost a veteránský vojenský stav jsou oddělené. Kolonista ukládá
+veteránský příznak, zakoupený typ veterána jej má přirozeně; vybavení jej
+nemaže. Sociální postup trestance a sluhy zachová registrovaný objekt a ID.
+Po platném pozemním boji model vyhodnotí jediný další uložený los pro způsobilého
+vítěze; Washington tento postup zaručí bez dalšího losu. Námořní a děloví
+vítězové tuto větev nepoužívají; způsobilý voják porážející dělo ano. Příkaz znovu ověří vstupy hodnosti a Washingtona
+před účinky. `MilitaryPromotion` zmrazí skutečný krok pro událost boje;
+GUI hlásí výsledek po animaci a nevypočítává povýšení. Přesný rozsah a stav
+ověření vede [R-0111](requirements/R-0111.md).

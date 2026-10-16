@@ -66,6 +66,12 @@ public final class RightPanelPresenter {
     }
 
     @Subscribe
+    private void onUnitAttacked(
+            final org.microcol.model.event.UnitAttackedEvent event) {
+        display.refreshView(lastFocusedTileEvent);
+    }
+
+    @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         logger.debug("Turn started for player {}", event.getPlayer());
         display.setOnMovePlayer(event.getPlayer());

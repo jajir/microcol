@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 /** Servants and criminals retain ordinary colonist movement and equipment. */
 public final class UnitLaborer extends UnitFreeColonist {
 
-    private final UnitType type;
+    private UnitType type;
 
     public UnitLaborer(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
@@ -29,6 +29,18 @@ public final class UnitLaborer extends UnitFreeColonist {
 
     @Override
     public UnitType getType() {
+        return type;
+    }
+
+    @Override
+    protected UnitType advanceMilitaryRank() {
+        if (type == UnitType.PETTY_CRIMINAL) {
+            type = UnitType.INDENTURED_SERVANT;
+        } else if (type == UnitType.INDENTURED_SERVANT) {
+            type = UnitType.COLONIST;
+        } else {
+            return super.advanceMilitaryRank();
+        }
         return type;
     }
 }

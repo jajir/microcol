@@ -20,7 +20,9 @@
  * Servant and criminal types preserve their class through equipment and cargo;
  * production penalties remain in the shared model job calculation. Artillery
  * preserves its damage state independently of its purchase type; shared model
- * combat owns strength calculation and loss resolution.
+ * combat owns strength calculation and loss resolution. Laborer promotion
+ * changes its type on the same registered unit; specialist promotion retains
+ * its type and persists veteran status independently of equipment.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
