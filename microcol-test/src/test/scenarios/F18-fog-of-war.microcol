@@ -148,7 +148,7 @@
         "ownerId": "France",
         "placeMap": {
           "location": {
-            "x": 31,
+            "x": 33,
             "y": 16
           },
           "orientation": "west"
@@ -333,7 +333,7 @@
         "name": "Hidden Quebec",
         "ownerName": "France",
         "location": {
-          "x": 31,
+          "x": 33,
           "y": 17
         },
         "colonyFields": [

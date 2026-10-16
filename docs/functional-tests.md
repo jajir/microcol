@@ -2834,3 +2834,27 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and idempotence passing. Nine documentation tests and strict MkDocs passed.
    The Czech reference setup screenshot shows the real nation label/note and
    unobscured Start/Back controls. Full CI and publication remain pending.
+
+### Full regression follow-up after R-0108 — 2026-10-16
+
+1. CI [38915559041](https://github.com/jajir/microcol/actions/runs/38915559041)
+   at `57d0db52` passed **1339 model tests**, all build checks and three native
+   packages. The 194 UI/support tests had **8 failures**, no errors/skips;
+   publication was skipped. The downloaded XML confirms failures only in TC22
+   (five) and TC26 (three). All 15 TC40 cases passed, verifying the deferred
+   native-drop repaint fix in the full suite.
+2. TC22's purchase roster still expected only the original ship offers. The
+   explicit expected list now includes Caravel, Merchantman and Privateer;
+   the failed dialog assertion also left later TC22 setups without a visible
+   status bar. TC26's original hidden frontier is inside the faster frigate's
+   existing speed-derived sight radius. A bounded Sol low task adjusts the
+   scenario geometry while retaining hidden/reveal/Continue/pixel assertions.
+   Repairs require fresh targeted and full validation before acceptance.
+
+3. Targeted Docker `run-ot9pGv` passed all five TC22 and three TC26 scenarios
+   plus three page-contract checks: **11 passed**, zero failures/errors/skips.
+   F18 moves the enemy/colony to x=33: distance eight from the initial frigate,
+   seven after one eastward step, preserving the unchanged hidden/reveal/return/
+   Continue assertions under its sight radius of seven. Shared formatter checked
+   all three changed Java files, with token preservation and idempotence passing.
+   Full CI and publication still require the corrected revision.

@@ -3166,3 +3166,11 @@ committed for this experiment.
    the targeted retry used the real DAO, preserving production boundaries.
    Main review kept AI-turn evolution separate from initial-roster assertions.
    See [actual results](../functional-tests.md#r-0063-nation-selection-2026-10-16).
+
+10. Full CI at `57d0db52` confirmed all TC40 cases pass, but exposed two R-0108
+    test integration omissions: the old TC22 purchase roster and TC26 frontier
+    geometry under frigate sight. Main updates the explicit offer list; one
+    bounded Sol low repair owns fog-fixture geometry in `2026-10-16-ci-fog`.
+    This independent review is for concrete regression correctness, without
+    duplicating the R-0067 worker's load-boundary implementation. See the
+    [full-regression follow-up](../functional-tests.md#full-regression-follow-up-after-r-0108-2026-10-16).

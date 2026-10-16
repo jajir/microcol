@@ -22,8 +22,8 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
             "src/test/scenarios/F18-fog-of-war.microcol");
     private static final Location START = Location.of(25, 16);
     private static final Location STEP = Location.of(26, 16);
-    private static final Location ENEMY = Location.of(31, 16);
-    private static final Location COLONY = Location.of(31, 17);
+    private static final Location ENEMY = Location.of(33, 16);
+    private static final Location COLONY = Location.of(33, 17);
 
     @Start
     private void start(final Stage stage) throws Exception {

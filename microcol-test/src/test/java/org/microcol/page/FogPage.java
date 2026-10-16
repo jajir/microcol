@@ -117,7 +117,7 @@ public final class FogPage extends AbstractScreen {
                                 .getMouseOverTile()
                         + "; explored enemy: "
                         + getModel().getPlayerByName("Dutch")
-                                .isVisible(Location.of(31, 16)));
+                                .isVisible(Location.of(33, 16)));
     }
 
     public void verifyPreviewIncludes(final Location destination) {
