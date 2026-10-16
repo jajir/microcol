@@ -4,15 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.api.io.TempDir;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.turnevent.TurnEventNewUnitInColony;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -39,6 +44,82 @@ class NationalTurnPreparationTest {
         model.endTurn();
         model.endTurn();
         assertEquals("Dutch", model.getCurrentPlayer().getName());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "199,199,0", "200,0,1", "201,1,1" })
+    void foodBoundaryCreatesAtMostOneOutsideColonistAndSurvivesResume(
+            final int effectiveFood, final int remainingFood,
+            final int births) {
+        final GameModelPo data = fixture();
+        final Model model = make(data);
+        final Colony colony = model.getColonyById(1).orElseThrow();
+        for (int index = 0; index < 2; index++) {
+            model.addUnitOutSideColony(colony).placeToColonyField(
+                    colony.getEmptyFieldsWithMaxCornProduction().get(0),
+                    GoodsType.CORN);
+        }
+        model.addUnitOutSideColony(colony);
+        model.addUnitOutSideColony(colony);
+        data.setModel(model.save());
+        final Player owner = colony.getOwner();
+        final int consumed = colony.getRequiredFoodPerTurn();
+        assertEquals(3, colony.getUnitsInsideColony().size());
+        assertEquals(6, consumed);
+        final int initialOutside = colony.getUnitsOutSideColony().size();
+        assertEquals(2, initialOutside);
+        final List<Integer> visitorIds = colony.getUnitsOutSideColony().stream()
+                .map(Unit::getId).collect(Collectors.toList());
+        final int initialUnits = owner.getAllUnits().size();
+        final int highestId = model.save().getUnits().stream()
+                .mapToInt(UnitPo::getId).max().orElseThrow();
+        final int productionDiff = colony.getGoodsStats()
+                .getStatsByType(GoodsType.CORN).getDiff();
+        final var savedColony = data.getModel().getColonies().get(1);
+        final var warehouse = new HashMap<>(savedColony.getColonyWarehouse());
+        warehouse.put("CORN", effectiveFood - productionDiff);
+        savedColony.setColonyWarehouse(warehouse);
+        final Model prepared = make(data);
+        assertEquals(effectiveFood,
+                prepared.getColonyById(1).orElseThrow().getGoodsStats()
+                        .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+        assertEquals(consumed, colony.getRequiredFoodPerTurn());
+
+        data.setModel(prepared.save());
+        final Model before = make(data);
+        assertEquals(effectiveFood,
+                before.getColonyById(1).orElseThrow().getGoodsStats()
+                        .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+        nextOwnerTurn(before);
+        final Colony updated = before.getColonyById(1).orElseThrow();
+        final Player updatedOwner = updated.getOwner();
+        assertEquals(remainingFood,
+                updated.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+        assertEquals(initialUnits + births, updatedOwner.getAllUnits().size());
+        assertEquals(initialOutside + births,
+                updated.getUnitsOutSideColony().size());
+        assertTrue(updated.getUnitsOutSideColony().stream().map(Unit::getId)
+                .collect(Collectors.toList()).containsAll(visitorIds));
+        assertEquals(births,
+                before.getTurnEventStore().getForPlayer(updatedOwner).stream()
+                        .filter(TurnEventNewUnitInColony.class::isInstance)
+                        .count());
+        if (births == 1) {
+            final Unit newborn = before.getUnitById(highestId + 1);
+            assertSame(updatedOwner, newborn.getOwner());
+            assertTrue(updated.getUnitsOutSideColony().contains(newborn));
+            assertEquals(consumed, updated.getRequiredFoodPerTurn());
+        }
+
+        data.setModel(before.save());
+        final Model resumed = make(data);
+        final JsonElement saved = new Gson().toJsonTree(resumed.save());
+        resumed.startGame();
+        assertEquals(saved, new Gson().toJsonTree(resumed.save()));
+        assertEquals(births, resumed.getTurnEventStore()
+                .getForPlayer(resumed.getColonyById(1).orElseThrow().getOwner())
+                .stream().filter(TurnEventNewUnitInColony.class::isInstance)
+                .count());
     }
 
     @Test

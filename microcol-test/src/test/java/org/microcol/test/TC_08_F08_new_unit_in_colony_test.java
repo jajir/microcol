@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
+import org.microcol.page.ColonyJobPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -34,6 +35,16 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         // Verify that in colony is 167 food.
         verifyCornInColony(gamePage, 167);
 
+        // Reopening the colony does not run its food update.
+        ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12),
+                "Delft");
+        colonyScreen.rememberWorld();
+        final ColonyScreen rememberedScreen = colonyScreen;
+        gamePage = colonyScreen.close();
+        colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
+        rememberedScreen.verifyWorldUnchanged();
+        gamePage = colonyScreen.close();
+
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
@@ -60,6 +71,17 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
 
         // Verify that new unit was born and placed outside colony.
         verifyNumberOfUnitsOutsideColony(gamePage, 3);
+
+        // The newborn's job choices can be opened and canceled at the pier.
+        colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
+        final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.rememberWorld();
+        jobs.openFromCenter(27);
+        jobs.verifyOpen();
+        jobs.cancel();
+        jobs.verifyClosed();
+        jobs.verifyWorldUnchanged();
+        colonyScreen.close();
 
     }
 

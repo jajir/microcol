@@ -2659,3 +2659,12 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     equipment atomicity and preserved manual dragging. This closes R-0056,
     PROD-011 and UC-033. The documentation-only closure must separately verify
     Pages deployment, intentional game-job skips and an unchanged game manifest.
+
+
+## R-0057–R-0061 cloud Sol batch — 2026-10-16
+
+1. The user selected these five requirements and explicitly replaced the local worker with economical cloud Sol assignments for this batch. Main-agent reasoning is Astra high; one Sol low worker operates in an isolated tree, with targeted repairs and main-agent review. This is an experiment, not a measured subscription-saving claim.
+
+2. R-0057 adds the 199/200/201 effective-food matrix to `NationalTurnPreparationTest`: three residents consume six food, two outside visitors survive, newborn identity/owner/outside placement and one report agree, and loading the completed boundary does not repeat accounting. TC08 reopens the colony without mutation and opens/cancels newborn 27's job chooser. No game code needed repair. Shared Java formatting preserved code tokens and was idempotent.
+
+3. Docker `run-WMZvXr` passed 5 model checks, TC17 and 3 page-contract checks but failed TC08 because the worker compared a snapshot held by another page-object instance. Targeted repair fixed that error; `run-KPAz0p` retained those passes but exposed an unsuitable focus assertion. The second repair used the actual job-choice interaction; Docker `run-bScZIQ` passed TC08 (1 test, no failures/errors/skips). Main reviewed final source and parsed the XML. Logs remain under the isolated tree `~/Library/Application Support/Microcol/cloud-worker/worktrees/2026-10-16-r57/target/`. These focused results do not yet establish full batch regression or publication.

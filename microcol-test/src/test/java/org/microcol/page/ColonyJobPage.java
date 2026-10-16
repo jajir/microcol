@@ -137,6 +137,10 @@ public final class ColonyJobPage extends AbstractScreen {
         assertFalse(isCssIdVisible("jobDialog"));
     }
 
+    public void verifyOpen() {
+        assertTrue(isCssIdVisible("jobDialog"));
+    }
+
     public void verifyFieldJob(final int workerId, final Location at,
             final Goods expected) {
         final ColonyField field = colony().getColonyFields().stream().filter(
