@@ -70,10 +70,10 @@ class ColonyCrossProductionTest {
         assertEquals(4, forecast(colony, GoodsType.BELL));
         chapel.upgrade();
         assertEquals(ConstructionType.CHURCH, chapel.getType());
-        assertEquals(1, forecast(colony, GoodsType.CROSS));
+        assertEquals(2, forecast(colony, GoodsType.CROSS));
         chapel.upgrade();
         assertEquals(ConstructionType.CATHEDRAL, chapel.getType());
-        assertEquals(1, forecast(colony, GoodsType.CROSS));
+        assertEquals(3, forecast(colony, GoodsType.CROSS));
         assertEquals(1, colony.getConstructions().stream().filter(
                 building -> building.getType() == ConstructionType.CATHEDRAL)
                 .count());
@@ -81,7 +81,7 @@ class ColonyCrossProductionTest {
                 building -> building.getType() == ConstructionType.CHAPEL
                         || building.getType() == ConstructionType.CHURCH));
         colony.startTurn();
-        assertEquals(3,
+        assertEquals(5,
                 colony.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
     }
 

@@ -749,3 +749,13 @@ vítězové tuto větev nepoužívají; způsobilý voják porážející dělo 
 před účinky. `MilitaryPromotion` zmrazí skutečný krok pro událost boje;
 GUI hlásí výsledek po animaci a nevypočítává povýšení. Přesný rozsah a stav
 ověření vede [R-0111](requirements/R-0111.md).
+
+### Náboženská produkce (R-0110)
+
+`ConstructionType` určuje náhradní základ kaple/kostela/katedrály a výstup
+pracovního místa. `ConstructionSlot` použije existující odbornost;
+`Construction.getProduction` sečte základ a pracovníky a jednou aplikuje
+Pennových 150 % se zaokrouhlením dolů. Náhled kolonie i skutečný tah používají
+stejný výpočet. Dokončení stavby následuje po produkci: nový náhled je okamžitý,
+skutečný přírůstek nového stupně přijde v dalším tahu. Národní imigrační fond
+přebírá skutečné vyprodukované kříže. [Přejímka](requirements/R-0110.md).

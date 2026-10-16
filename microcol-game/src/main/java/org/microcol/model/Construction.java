@@ -172,6 +172,15 @@ public class Construction {
             return new ConstructionTurnProduction(null,
                     Goods.of(GoodsType.BELL, improved), null);
         }
+        if (out.getProducedGoods().isPresent()
+                && out.getProducedGoods().get().getType() == GoodsType.CROSS
+                && colony.getOwner().getCongressMembers()
+                        .contains(Founder.WILLIAM_PENN)) {
+            final int base = out.getProducedGoods().get().getAmount();
+            return new ConstructionTurnProduction(null, Goods
+                    .of(GoodsType.CROSS, Math.toIntExact((long) base * 3 / 2)),
+                    null);
+        }
         return out;
     }
 

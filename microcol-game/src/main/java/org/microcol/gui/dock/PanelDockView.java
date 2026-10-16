@@ -52,6 +52,8 @@ public class PanelDockView implements JavaFxComponent {
         panelShips.getStyleClass().add("ships");
 
         mainPanel = new VBox(panelShips, panelDockCratesPresenter.getContent());
+        // Empty dock space must not intercept the colony buildings below it.
+        mainPanel.setPickOnBounds(false);
         mainPanel.getStyleClass().add("panel-dock");
     }
 

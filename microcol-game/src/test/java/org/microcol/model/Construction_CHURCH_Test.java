@@ -2,6 +2,9 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +39,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 1),
+        assertEquals(Goods.of(GoodsType.CROSS, 2),
                 ret.getProducedGoods().get());
     }
 
@@ -51,7 +54,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 6),
+        assertEquals(Goods.of(GoodsType.CROSS, 7),
                 ret.getProducedGoods().get());
     }
 
@@ -66,7 +69,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 11),
+        assertEquals(Goods.of(GoodsType.CROSS, 12),
                 ret.getProducedGoods().get());
     }
 
@@ -82,6 +85,9 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @BeforeEach
     void setup() {
+        final Player owner = mock(Player.class);
+        when(colony.getOwner()).thenReturn(owner);
+        when(owner.getCongressMembers()).thenReturn(List.of());
         construction = new Construction(model, colony, ConstructionType.CHURCH,
                 construction -> Lists.newArrayList(slot1, slot2, slot3));
     }

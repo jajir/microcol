@@ -710,3 +710,9 @@ Washingtonovo zaručené povýšení se zachovanou odborností, viditelný stav,
 Continue a další bojové potvrzení s novou silou. Modelové hranice doplňují
 postup trestance/sluhy, obranné vítězství a zachování hodnosti po odzbrojení.
 Výsledky se vedou v [evidenci R-0111](functional-tests.md#r-0111-military-promotion-2026-10-17).
+
+### UC-040 — R-0110 (2026-10-17)
+
+Model sdílí náhradní základ 1/2/3, výstup běžného/odborného kazatele a Pennův
+bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cesty TC_67_F58 prošly; úplné CI zatím čeká. Podrobné výsledky vede
+[evidence](functional-tests.md#r-0110-religious-production-2026-10-17).

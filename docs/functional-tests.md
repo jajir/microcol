@@ -4349,3 +4349,87 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 7. Final Czech wording verification `run-Ef7V2M` passed 4/4 (TC66 Czech
    Washington/expert/Continue plus three source-contract checks); the final
    screenshot was viewed and both feedback lines remain readable.
+
+## R-0110 religious production — 2026-10-17
+
+1. Scope: PROD-009 / FATHER-019 / UC-040. Church/cathedral unattended and
+   staffed output follows the agreed totals; Penn floors 150% of aggregate
+   crosses once. No new production formula in GUI or save migration.
+2. Same Sol low worker implemented only model/tests. Initial focused failures
+   came from a null owner in the old mocked church and an invalid four-category
+   Congress offer after adding Penn. Repairing those fixtures produced 42
+   passing focused tests. Review strengthened the second-colony Penn assertion
+   and added expert cathedral 15→22; the promotion-independent religious suite
+   then passed 17/17. Logs are retained in the R110 worktree's target directory.
+3. Main full model suite passed **1739 tests**, zero failures/errors/skips,
+   on base `4436fe19` with the R110 changes (`/tmp/r110-model-full.log`).
+   This snapshot does not yet include the separately staged R111 changes.
+   The shared formatter passed for all seven changed Java files.
+4. TC67/F58 player journeys are prepared for actual upgrades, unattended and
+   ordinary/expert output, Penn rounding, next-turn national cross credit and
+   Continue in English/Czech. Docker acceptance, integration and publication
+   remain pending; no player success is claimed yet.
+
+5. Initial Docker acceptance was interrupted after TC67 exposed two distinct
+   issues. The English journey reached the cathedral but could not open its
+   worker menu: screenshot inspection showed the building absent because the
+   legacy `#id_church` CSS explicitly hid every religious tier. Remove that
+   rule and require every building ancestor to be visible in the page check.
+   The Czech helper then supplied two military Congress candidates and no
+   religious candidate after inserting Penn; the save was rejected by the
+   existing validation dialog. Replace Penn's offer with Sepulveda. These were
+   main-agent GUI/fixture corrections; no completed test count or success is
+   claimed for the interrupted run (`/tmp/r110-ui.log`).
+
+6. Retry executed 9 cases: Czech TC67, both TC47 immigration cases, both TC52
+   printing cases and three source-contract checks passed. English TC67 still
+   timed out opening the visible cathedral worker menu after completing the
+   upgrade; additional event-target diagnostics now investigate this shared
+   interaction. The error remains open. Main started a root Maven clean while
+   this Docker run was exporting, deleting its mounted result directory;
+   `/tmp/r110-ui-retry.log` retains the counts, but that run's screenshots/XML
+   were not retained. A fresh Docker run preserves its output separately.
+7. Combining R110 with `f9ad9fb9` initially hit 11 missing-resource errors:
+   Maven retained an older compiled Loc.xml without the new veteran label.
+   Source resources were correct; a clean build passed **1748 model tests**,
+   zero failures/errors/skips (`/tmp/r110-model-clean.log`). No production
+   model correction was needed. Avoid cleaning a worktree while Docker uses
+   its result directory.
+
+8. Combined Docker `run-aS2oM7` executed five cases: Czech TC67 and three
+   source-contract checks passed; English TC67 again timed out. The new trace
+   proved both the press and context-menu request picked the empty
+   `panel-dock` VBox at scene (321,303), and never reached the cathedral.
+   The dock is drawn after the buildings; its empty bounding rectangle blocked
+   the intended worker. Disable bounds picking on that shared VBox, leaving
+   ship/crate children interactive, and verify colony and Europe dock paths.
+   This does not establish the cause of the separate TC53 CI failure.
+
+
+9. After the shared dock picking correction, Docker `run-E1JUBf` passed
+   **9 cases**, zero failures/errors/skips: TC67 English/Czech, TC19/01
+   confirmed unloading, TC16 embark/disembark, both TC53 cases and the three
+   source-contract checks. Main viewed both religious production screenshots:
+   the staffed cathedral preview reads +15 and Penn's ordinary preview +13.
+   Actual credit and Continue pass. The requested TC06 method filter matched
+   no method (its stable names begin TC_06), so Europe trading is explicitly
+   rerun using the whole TC06 class rather than counted as covered here.
+10. Packaging/Javadoc and documentation (9 tests and strict MkDocs) passed
+    after the dock fix; shared formatting checked all eight changed Java files.
+    Complete CI/publication remains pending.
+
+11. Europe trading regression passed 5/5 (both TC06 buy/sell/cargo-transfer
+    cases and three source-contract checks), with zero failures/errors/skips.
+    The final shared dock implementation now has colony and Europe interaction
+    acceptance (`/tmp/r110-ui-europe.log`).
+
+### R-0097 complete CI follow-up — 2026-10-17
+
+1. Development run 38977696381 on `695a54a7` failed with 272 UI/support cases,
+   zero failures, one error and zero skips: TC53/01 again could not open the
+   indoor worker menu after rejected departure. The older trace lacks the new
+   event-target instrumentation. TC22's corrected artillery roster no longer
+   fails. Compatibility and Pages passed; no new game publication is claimed.
+2. The complete log is retained at `/tmp/r97-ci-failed.log`. New event-target
+   diagnostics are published in `f9ad9fb9`; use that evidence before attributing
+   TC53 to the now-diagnosed religious-building dock overlap.

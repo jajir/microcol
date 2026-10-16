@@ -270,14 +270,14 @@ public class ConstructionType {
 
     public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder
             .make().setName("CATHEDRAL").setRequiredHammers(176)
-            .setRequiredTools(100).setProductionPerTurn(Goods.of(CROSS, 3))
-            .setBaseProductionPerTurn(1).setSlotsForWorkers(3)
+            .setRequiredTools(100).setProductionPerTurn(Goods.of(CROSS, 6))
+            .setBaseProductionPerTurn(3).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType CHURCH = ConstructionTypeBuilder.make()
             .setName("CHURCH").setRequiredHammers(52).setRequiredTools(0)
             .setProductionPerTurn(Goods.of(CROSS, 3))
-            .setBaseProductionPerTurn(1).setSlotsForWorkers(3)
+            .setBaseProductionPerTurn(2).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CHAPEL = ConstructionTypeBuilder.make()

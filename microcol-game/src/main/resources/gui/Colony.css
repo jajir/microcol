@@ -143,7 +143,6 @@
 #id_church {
   -fx-translate-x: 110;
   -fx-translate-y: -145;
-  visibility: hidden;
 }
 
 #id_weaver {

@@ -612,3 +612,13 @@ vítěze. Informace o jednotce trvale ukazují veteránský stav odděleně od c
 odbornosti. Následující bojové potvrzení již používá vyšší základní sílu.
 Zrušení útoku nepovyšuje; Continue zachová výsledek bez dalšího losování.
 Stav hráčské přejímky vede [R-0111](requirements/R-0111.md).
+
+### Kostel, katedrála a kazatelé — R-0110
+
+Hráč zvolí náboženské rozšíření v běžné stavební nabídce, která ověří populaci
+a materiál; zrušení nemění frontu. Po dokončení vidí vyšší výrobu u kostela.
+Přes nabídku práce přidělí běžného nebo odborného kazatele; odebrání pracovníka
+ponechá základ budovy. Penn upraví společný součet a zobrazený přírůstek
+odpovídá příštímu skutečnému tahu i národnímu imigračnímu fondu. Continue
+nevytvoří další kříže. Návrh ověřuje TC67; výsledky jsou v
+[evidenci testů](functional-tests.md#r-0110-religious-production-2026-10-17).
