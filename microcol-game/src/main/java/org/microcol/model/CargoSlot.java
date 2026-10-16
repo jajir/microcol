@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.Optional;
 
 import org.microcol.model.store.CargoSlotPo;
+import org.microcol.model.unit.Ship;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -101,6 +102,7 @@ public class CargoSlot {
     }
 
     public void removeCargo(final Goods goods) {
+        requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         Preconditions.checkArgument(isLoadedGood(),
                 "Cargo slot (%s) doesn't contains any good.", this);
@@ -127,6 +129,7 @@ public class CargoSlot {
      * @param unit required unit
      */
     public void store(final Unit unit) {
+        requireOperationalCarrier();
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(),
                 "Cargo slot (%s) is already loaded.", this);
@@ -165,6 +168,7 @@ public class CargoSlot {
      * @return how much of goods was transferred
      */
     public Goods buyAndStoreFromEuropePort(final Goods goods) {
+        requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         verifyThatItCouldStored(goods);
         if (getGoods().isPresent()) {
@@ -195,6 +199,7 @@ public class CargoSlot {
     }
 
     void sellAndEmpty(final Goods goods) {
+        requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         Preconditions.checkState(!isEmpty(),
                 "Cargo slot (%s) is already empty.", this);
@@ -224,6 +229,9 @@ public class CargoSlot {
      */
     public Goods storeFromCargoSlot(final Goods transferredGoods,
             final CargoSlot sourceCargoSlot) {
+        requireOperationalCarrier();
+        Preconditions.checkNotNull(sourceCargoSlot);
+        sourceCargoSlot.requireOperationalCarrier();
         verifyThatItCouldStored(transferredGoods);
         getOwnerPlayer().checkTurnPreparationComplete();
         Preconditions.checkNotNull(sourceCargoSlot,
@@ -257,6 +265,7 @@ public class CargoSlot {
      */
     public void storeFromColonyWarehouse(final Goods transferredGoods,
             final Colony colony) {
+        requireOperationalCarrier();
         verifyThatItCouldStored(transferredGoods);
         getOwnerPlayer().checkTurnPreparationComplete();
         Preconditions.checkNotNull(colony, "colony is null");
@@ -312,6 +321,7 @@ public class CargoSlot {
      * @param transferredGoods required transferred goods amount
      */
     private void verifyThatItCouldStored(final Goods transferredGoods) {
+        requireOperationalCarrier();
         Preconditions.checkNotNull(transferredGoods);
         if (isLoadedUnit()) {
             throw new IllegalArgumentException(
@@ -324,6 +334,13 @@ public class CargoSlot {
                     "Tranfered cargo is diffrent type this is stored in slot. Stored=(%s), transfered=(%s)",
                     getGoods().get(), cargoGoods);
         }
+    }
+
+    private void requireOperationalCarrier() {
+        final Unit carrier = getOwnerUnit();
+        Preconditions.checkState(
+                !(carrier instanceof Ship) || !((Ship) carrier).isDamaged(),
+                "Damaged ship cargo is inaccessible");
     }
 
     /**

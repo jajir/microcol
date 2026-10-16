@@ -84,6 +84,10 @@ final class GameManager {
         return started;
     }
 
+    boolean isPreparing() {
+        return preparing;
+    }
+
     boolean isRunning() {
         return started && !stopped && !isFinished() && !preparing;
     }

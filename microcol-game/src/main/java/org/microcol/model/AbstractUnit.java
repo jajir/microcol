@@ -155,6 +155,10 @@ public abstract class AbstractUnit implements Unit {
      * It's called before turn starts.
      */
     public void startTurn() {
+        if (this instanceof Ship && ((Ship) this).isDamaged()) {
+            actionPoints = 0;
+            return;
+        }
         actionPoints = getSpeed();
         if (unitAction.startTurn(model, this)) {
             setAction(UnitActionType.noAction.make());
@@ -191,6 +195,9 @@ public abstract class AbstractUnit implements Unit {
             final boolean ignoreEnemies) {
         Preconditions.checkNotNull(location);
 
+        if (this instanceof Ship && ((Ship) this).isDamaged()) {
+            return false;
+        }
         if (!model.getMap().isValid(location)) {
             return false;
         }
@@ -358,6 +365,11 @@ public abstract class AbstractUnit implements Unit {
     }
 
     private boolean canTransferPassenger(final boolean departureSentry) {
+        if (isAtCargoSlot()
+                && getPlaceCargoSlot().getOwnerUnit() instanceof Ship
+                && ((Ship) getPlaceCargoSlot().getOwnerUnit()).isDamaged()) {
+            return false;
+        }
         return model.isGameRunning() && model.getCurrentPlayer() == owner
                 && isLiveOwnedUnit(this) && isStorable()
                 && (getAction().getType() == UnitActionType.noAction
@@ -399,7 +411,9 @@ public abstract class AbstractUnit implements Unit {
             return false;
         }
         final Unit carrier = slot.getOwnerUnit();
-        if (!carrier.isShip() || !isLiveOwnedUnit(carrier)
+        if (!carrier.isShip()
+                || carrier instanceof Ship && ((Ship) carrier).isDamaged()
+                || !isLiveOwnedUnit(carrier)
                 || !((UnitWithCargo) carrier).getCargo().getSlots().stream()
                         .anyMatch(actual -> actual == slot)) {
             return false;
@@ -869,8 +883,32 @@ public abstract class AbstractUnit implements Unit {
         model.fireUnitEmbarked(this, slot);
     }
 
+    void beginShipRepair(final PlaceShipRepair repair) {
+        Preconditions.checkState(isAtPlaceLocation(),
+                "A ship must be on the map to become damaged");
+        place.destroy();
+        place = repair;
+        actionPoints = 0;
+        setAction(UnitActionType.noAction.make());
+    }
+
+    void completeShipRepair(final Location location) {
+        Preconditions.checkState(place instanceof PlaceShipRepair);
+        place.destroy();
+        place = new PlaceLocation(this, location, getDefaultOrintation());
+    }
+
+    void completeShipRepair(final EuropePort port) {
+        Preconditions.checkState(place instanceof PlaceShipRepair);
+        place.destroy();
+        place = new PlaceEuropePort(this, port);
+    }
+
     @Override
     public void placeToEuropePort(final EuropePort port) {
+        Preconditions.checkState(
+                !(this instanceof Ship) || !((Ship) this).isDamaged(),
+                "Ship is damaged");
         Preconditions.checkState(canLeaveColony(),
                 "Fortified colony needs three residents");
         place.destroy();
@@ -895,6 +933,9 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToLocation(final Location target,
             final Direction orientation) {
+        Preconditions.checkState(
+                !(this instanceof Ship) || !((Ship) this).isDamaged(),
+                "Ship is damaged");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before moving");
         Preconditions.checkState(canLeaveColony(),
@@ -921,6 +962,7 @@ public abstract class AbstractUnit implements Unit {
                 owner.getAllUnits().stream().anyMatch(unit -> unit == this),
                 "Ship is no longer in this game");
         final Ship ship = (Ship) this;
+        Preconditions.checkState(!ship.isDamaged(), "Ship is damaged");
         final Location origin;
         final Direction direction;
         if (isTravelToEurope) {

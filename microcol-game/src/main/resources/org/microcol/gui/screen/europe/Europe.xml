@@ -60,4 +60,17 @@ Total: %s gold</entry>
 	<entry key="recruitUnavailable">Recruitment is not available on this turn.</entry>
     <entry key="immigrationProgress">Immigration: %s / %s crosses</entry>
     <entry key="immigrationPending">An earned immigrant arrives at the start of your next turn. Paid passage is unavailable until then.</entry>
+    <entry key="repairsOpen">Ship repairs</entry>
+    <entry key="repairsEmpty">No ships are being repaired.</entry>
+    <entry key="repairsRestriction">Damaged ships cannot move, fight or transfer cargo. Cargo and passengers remain aboard. Repairs are free; progress advances only at the start of the owning nation’s turn.</entry>
+    <entry key="repairsRow">%s #%s — %s
+%s; your turns until operational: %s</entry>
+    <entry key="repairsTransfer">Transfer</entry>
+    <entry key="repairsRepair">Repair</entry>
+    <entry key="repairsDestinationLost">Destination lost; a new destination will be selected next turn.</entry>
+    <entry key="repairsClose">Close</entry>
+    <entry key="repairARRIVED">%s #%s arrived for repair at %s.</entry>
+    <entry key="repairCOMPLETED">Repairs to %s #%s at %s are complete.</entry>
+    <entry key="repairREROUTED">%s #%s was rerouted for repair to %s.</entry>
+    <entry key="repairSUNK">%s #%s sank: no repair destination. Lost passengers: %s. Lost goods: %s.</entry>
 </properties>

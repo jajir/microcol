@@ -3354,3 +3354,32 @@ committed for this experiment.
    evidence, preserving the original assertions. These outcomes show usable
    bounded work plus necessary caller review, not measured quota savings.
    Counts and publication status belong to [execution evidence](../functional-tests.md#r-0095-artillery-lifecycle-2026-10-17).
+
+### Cloud Sol follow-up R-0098 — 2026-10-17
+
+1. The authorized run continued without the local worker. The existing Sol low
+   agent implemented the bounded ship-repair model and model tests; the main
+   agent owned requirements, GUI, player scenarios, review and acceptance.
+   This division avoids duplicate implementation; no measured token saving
+   is claimed.
+2. Main review returned concrete gaps before acceptance: initial no-destination
+   loss notification, a removed original coastal port, a distance-zero local
+   yard, public progression gating, valid ship ID zero and typed Europe identity
+   in saved messages. Sol corrected them and reported 12 focused tests passing.
+3. Main full verification then ran 1705 model cases with zero assertion failures
+   and two errors in existing `UnitTest` passenger tests: an unguarded new cast
+   from a carrier to `Ship` rejected their `UnitWithCargo` test doubles. The same
+   worker received the exact failing checks for targeted repair; this attempt
+   is not recorded as passing. Final results belong in the
+   [R-0098 evidence](../functional-tests.md#r-0098-ship-repair-2026-10-17).
+4. Main-owned UI preparation also needed a caller correction: the Czech test
+   used the English default Europe-screen expectation. The existing explicit
+   Czech-name overload fixes the test without relaxing its assertions. A shell
+   invocation initially left Maven's wildcard selector unquoted; zsh rejected
+   it before Docker started. The corrected selector is quoted.
+
+5. After the targeted carrier correction, main reran the complete model suite:
+   1705 passed with zero failures/errors/skips. Final TC63 had four passing
+   journeys; main corrected final modal closure between its own UI cases.
+   The same Sol agent added failure-only diagnostics for an earlier TC53
+   context-menu timeout. TC53 passed locally, but that is not a diagnosed fix.

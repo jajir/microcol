@@ -175,6 +175,21 @@ public class UnitFactory {
                         : unitPo.getArtilleryDamaged() == null,
                 "Invalid saved artillery state");
 
+        if (unitPo.getPlaceShipRepair() != null) {
+            Preconditions
+                    .checkArgument(
+                            unitPo.getType().isShip()
+                                    && unitPo.getAvailableMoves() == 0
+                                    && unitPo.getPlaceMap() == null
+                                    && unitPo.getPlaceHighSeas() == null
+                                    && unitPo.getPlaceEuropePort() == null
+                                    && unitPo.getPlaceCargoSlot() == null
+                                    && unitPo.getPlaceColonyField() == null
+                                    && unitPo
+                                            .getPlaceConstructionSlot() == null,
+                            "Invalid saved ship repair placement");
+        }
+
         final Function<Unit, Place> placeBuilderModelPo = new PlaceBuilderPo(
                 unitPo, modelPo, model);
 

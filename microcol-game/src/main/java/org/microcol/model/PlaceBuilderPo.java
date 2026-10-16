@@ -72,6 +72,25 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 }
                 return null;
             }, (context) -> {
+                final var repair = context.getUnitPo().getPlaceShipRepair();
+                if (repair == null) {
+                    return null;
+                }
+                Preconditions.checkArgument(
+                        repair.isEuropeDestination() != null
+                                && repair.isOriginWasPort() != null
+                                && repair.getPhase() != null
+                                && repair.getRemainingPhaseUpdates() != null
+                                && repair.getRepairDuration() != null,
+                        "Missing ship repair metadata");
+                return new PlaceShipRepair(context.getUnit(),
+                        repair.getOrigin(), repair.isOriginWasPort(),
+                        repair.isEuropeDestination(),
+                        repair.getDestinationColonyId(),
+                        PlaceShipRepair.Phase.valueOf(repair.getPhase()),
+                        repair.getRemainingPhaseUpdates(),
+                        repair.getRepairDuration());
+            }, (context) -> {
                 /**
                  * Europe port
                  */

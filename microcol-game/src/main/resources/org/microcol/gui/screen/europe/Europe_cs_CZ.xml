@@ -60,4 +60,17 @@ Celkem: %s zlatých</entry>
 	<entry key="recruitUnavailable">V tomto tahu není nábor dostupný.</entry>
     <entry key="immigrationProgress">Přistěhovalectví: %s / %s křížů</entry>
     <entry key="immigrationPending">Získaný přistěhovalec dorazí na začátku vašeho příštího tahu. Do té doby nelze zaplatit cestu.</entry>
+    <entry key="repairsOpen">Opravy lodí</entry>
+    <entry key="repairsEmpty">Žádné lodě se neopravují.</entry>
+    <entry key="repairsRestriction">Poškozené lodě se nemohou pohybovat, bojovat ani převádět náklad. Náklad a pasažéři zůstávají na palubě. Opravy jsou zdarma; postupují pouze na začátku tahu vlastnícího národa.</entry>
+    <entry key="repairsRow">%s #%s — %s
+%s; do zprovoznění zbývá tahů vlastníka: %s</entry>
+    <entry key="repairsTransfer">Přeprava</entry>
+    <entry key="repairsRepair">Oprava</entry>
+    <entry key="repairsDestinationLost">Cíl ztracen; nový se vybere v příštím tahu.</entry>
+    <entry key="repairsClose">Zavřít</entry>
+    <entry key="repairARRIVED">%s #%s dorazila k opravě: %s.</entry>
+    <entry key="repairCOMPLETED">Oprava lodi %s #%s je dokončena: %s.</entry>
+    <entry key="repairREROUTED">%s #%s má nový cíl opravy: %s.</entry>
+    <entry key="repairSUNK">%s #%s se potopila: není dostupný cíl opravy. Ztracení pasažéři: %s. Ztracené zboží: %s.</entry>
 </properties>

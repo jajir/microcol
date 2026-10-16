@@ -4116,3 +4116,54 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    to 24 changed Java files with exact-token and idempotence checks. Integration
    and publication remain pending; these local results do not identify a new
    published game build.
+
+## R-0098 ship repair — 2026-10-17
+
+1. Scope: COMBAT-014, BUILD-010/011, UC-076/046. A saved damaged ship
+   follows transfer and repair owner updates while its cargo remains aboard
+   and inaccessible. The battle trigger and loot remain R-0097.
+2. Implementation in progress: `ShipRepairTest` covers model selection,
+   progression and rejection; `TC_63_F54_ship_repair_test` covers actual turns,
+   Europe/drydock, EN/CZ progress, Continue and restored passenger access.
+   No checks or publication are claimed by this preparation record.
+3. Selected regression: TC01/04/23/28/29 and
+   `PageVerificationContractTest`. Full CI remains independently required.
+
+4. Main model acceptance: the first full run had 1705 cases, zero failures
+   and two errors from the new carrier cast in existing `UnitTest`. Sol repaired
+   the cast with a type-safe damage check; the two original tests and all 12
+   repair cases passed. The final full run passed **1705 cases**, zero failures,
+   errors or skips (173 XML suites independently counted). Package/Javadoc
+   and the shared formatter for 25 changed Java files also passed.
+5. Docker `run-IwzCEt`: five cases, one failure; the English repair journey and
+   three source-contract cases passed, but the Czech test called the English
+   screen-name overload. Main selected the existing Czech-name overload.
+   Docker `run-YM6sqX`: 19 cases, one failure, zero errors/skips. TC01/04/23/28/29,
+   the contract and three TC63 journeys passed. TC63/03 could not open the game
+   because the prior Czech test left its modal open. Explicit final closes
+   repaired the test lifecycle without weakening any assertion. Final checks
+   use the completed repair schema, including saved original port/sea kind.
+
+6. Final Docker `run-bYLOKN` passed **16 cases**, zero failures/errors/skips:
+   all four TC63 journeys, both TC53 population scenarios, seven additional
+   TC37 calendar scenarios and three source-contract checks. Main visually
+   inspected both EN/CZ repair screenshots: full explanations and progress
+   fit without clipping, and the close control remains visible. The separate TC40 run passed all **15 job-choice scenarios**, zero failures/errors/skips,
+   verifying the shared job-menu helper.
+7. Source integration/publication remains pending. R-0098's saved repair
+   journey does not claim R-0097's not-yet-connected naval battle trigger.
+
+### Earlier R-0093/R-0094 CI follow-up — 2026-10-17
+
+1. Full run [38971531376](https://github.com/jajir/microcol/actions/runs/38971531376)
+   on `0d027e62` failed: 261 UI/support cases, one assertion failure, one error,
+   zero skips. TC21/08 was the already diagnosed tile-coordinate issue repaired
+   in `fbfd421b`. TC53/01 timed out opening an indoor job menu after a rejected
+   departure; its model state and preceding population checks were unchanged.
+2. TC53's current diagnostic run passed both cases without reproducing that
+   timeout. Failure-only bounds/target/screenshot capture was added to
+   `ColonyJobPage`; there is no retry, longer wait or relaxed assertion. This
+   is diagnostic evidence, not a root-cause fix or successful earlier CI.
+3. Native packages, compatibility and documentation succeeded for `0d027e62`,
+   but no game release was published from that failed run. Publication of
+   `fbfd421b` remains separately pending.

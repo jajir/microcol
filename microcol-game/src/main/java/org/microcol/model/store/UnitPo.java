@@ -24,6 +24,16 @@ public class UnitPo {
 
     private PlaceHighSeasPo placeHighSeas;
 
+    private PlaceShipRepairPo placeShipRepair;
+
+    public PlaceShipRepairPo getPlaceShipRepair() {
+        return placeShipRepair;
+    }
+
+    public void setPlaceShipRepair(final PlaceShipRepairPo value) {
+        placeShipRepair = value;
+    }
+
     private PlaceConstructionSlotPo placeConstructionSlot;
 
     private PlaceColonyFieldPo placeColonyField;

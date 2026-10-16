@@ -243,7 +243,10 @@ public abstract class Player {
         final boolean hadFranklin = getCongressMembers()
                 .contains(Founder.BENJAMIN_FRANKLIN);
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
-                .forEach(Ship::advanceVoyage);
+                .collect(java.util.stream.Collectors.toList()).forEach(ship -> {
+                    ship.advanceVoyage();
+                    ship.advanceRepair();
+                });
         settleEarnedImmigrants();
         if (congress != null && !getColonies().isEmpty()) {
             congress.activate();

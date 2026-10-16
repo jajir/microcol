@@ -1051,6 +1051,12 @@ rules; implementation and acceptance are tracked by that requirement.
    by the same rule. With none available the damaged ship sinks and reports its
    losses. Existing captured-port ships retain their earlier escape/capture rule;
    this procedure applies only to ships damaged in battle.
+   Continuation detail selected under the authorized run (2026-10-17): check
+   destination eligibility before each transfer/repair progress step. Reroute
+   from the original damage location; a changed destination starts a fresh
+   one-update transfer and its full repair interval. Arrival does not also
+   spend the first repair update. An upgrade at an otherwise eligible current
+   destination does not shorten its already-started repair interval.
 7. An armed hostile patrol adjacent to a moved ship checks once per mover step,
    using the strongest patrol then ID: 50% undetected, 25% loses one remaining
    move, 25% loses all. No automatic battle. A hostile coastal fort/fortress fires

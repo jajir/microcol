@@ -8,6 +8,70 @@ import org.microcol.model.Founder;
 
 public final class TurnEventPo {
 
+    private String repairKind;
+    private Integer repairShipId;
+    private UnitType repairShipType;
+    private String repairDestinationName;
+    private Boolean repairEuropeDestination;
+    private Integer repairLostPassengers;
+    private List<Goods> repairLostGoods;
+
+    public String getRepairKind() {
+        return repairKind;
+    }
+
+    public void setRepairKind(String value) {
+        repairKind = value;
+    }
+
+    public Integer getRepairShipId() {
+        return repairShipId;
+    }
+
+    public void setRepairShipId(Integer value) {
+        repairShipId = value;
+    }
+
+    public UnitType getRepairShipType() {
+        return repairShipType;
+    }
+
+    public void setRepairShipType(UnitType value) {
+        repairShipType = value;
+    }
+
+    public Boolean isRepairEuropeDestination() {
+        return repairEuropeDestination;
+    }
+
+    public void setRepairEuropeDestination(Boolean value) {
+        repairEuropeDestination = value;
+    }
+
+    public String getRepairDestinationName() {
+        return repairDestinationName;
+    }
+
+    public void setRepairDestinationName(String value) {
+        repairDestinationName = value;
+    }
+
+    public Integer getRepairLostPassengers() {
+        return repairLostPassengers;
+    }
+
+    public void setRepairLostPassengers(Integer value) {
+        repairLostPassengers = value;
+    }
+
+    public List<Goods> getRepairLostGoods() {
+        return repairLostGoods;
+    }
+
+    public void setRepairLostGoods(List<Goods> value) {
+        repairLostGoods = value;
+    }
+
     private String playerName;
 
     private String type;

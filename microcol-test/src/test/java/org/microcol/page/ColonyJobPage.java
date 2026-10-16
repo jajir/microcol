@@ -64,12 +64,39 @@ public final class ColonyJobPage extends AbstractScreen {
 
     public void openFromIndoor(final String buildingId, final int index)
             throws Exception {
-        getRobot().clickOn(slotPoint(buildingId, index), MouseButton.SECONDARY);
+        final Point2D target = slotPoint(buildingId, index);
+        getRobot().clickOn(target, MouseButton.SECONDARY);
         // Native drag cleanup and context-menu creation need separate event
         // cycles.
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getNodeFinder()
-                .lookup("#chooseWork").tryQuery().isPresent());
+        try {
+            WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getNodeFinder()
+                    .lookup("#chooseWork").tryQuery().isPresent());
+        } catch (java.util.concurrent.TimeoutException timeout) {
+            final Parent building = getNodeFinder().lookup("#" + buildingId)
+                    .queryAs(Parent.class);
+            final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
+                    .stream().filter(node -> node instanceof Canvas).findFirst()
+                    .orElseThrow();
+            final String details = "Indoor context menu absent at " + target
+                    + "; canvas="
+                    + canvas.localToScreen(canvas.getBoundsInLocal())
+                    + "; building="
+                    + building.localToScreen(building.getBoundsInLocal())
+                    + "; scene=" + building.getScene().getWidth() + "x"
+                    + building.getScene().getHeight() + "; menuPresent="
+                    + getNodeFinder().lookup("#chooseWork").tryQuery()
+                            .isPresent();
+            try {
+                captureDialog(buildingId, "indoor-context-menu-timeout.png");
+            } catch (Exception captureError) {
+                timeout.addSuppressed(captureError);
+            }
+            final java.util.concurrent.TimeoutException diagnosed = new java.util.concurrent.TimeoutException(
+                    details);
+            diagnosed.initCause(timeout);
+            throw diagnosed;
+        }
         getRobot().clickOn("#chooseWork");
         WaitForAsyncUtils.waitForFxEvents();
     }

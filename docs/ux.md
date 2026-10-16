@@ -571,3 +571,17 @@ po animaci boje. Zrušení ponechá svět beze změny, Continue poškození neop
 Jde o implementovaný návrh s probíhající přejímkou v
 [evidenci R-0095](functional-tests.md#r-0095-artillery-lifecycle-2026-10-17),
 nikoli o poznatek z uživatelské studie.
+
+### Přehled oprav lodí — R-0098
+
+Hráč najde tlačítko **Opravy lodí** v Evropě i pro opravy v koloniích.
+Přehled ukazuje vlastní lodě, jejich cíl, přepravu/opravu a počet tahů
+vlastníka do zprovoznění. Vysvětluje bezplatnost i nedostupnost pohybu,
+boje a nákladu; nezobrazuje ovládání, které by opravu obešlo. Zavřít nebo
+Escape vrátí hráče do Evropy bez změny průběhu. Prázdný seznam má výslovnou
+zprávu. Příjezd, dokončení, změna cíle a potopení se ztrátami se oznamují
+v běžném hlášení tahu. Nejde o nové zvukové události.
+
+Čtyři scénáře TC63 i vizuální kontrola EN/CZ přehledu prošly 17. října
+2026. Přesné výsledky a samostatnou publikaci vede [evidence](functional-tests.md#r-0098-ship-repair-2026-10-17).
+Pozorování hráčů zatím neproběhlo.

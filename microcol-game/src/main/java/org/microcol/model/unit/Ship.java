@@ -9,6 +9,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceHighSea;
+import org.microcol.model.PlaceShipRepair;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.turnevent.TurnEventProvider;
@@ -69,6 +70,26 @@ public abstract class Ship extends UnitWithCargo {
     @Override
     public boolean isShip() {
         return true;
+    }
+
+    @Override
+    public boolean canAttack() {
+        return !isDamaged() && super.canAttack();
+    }
+
+    public boolean isDamaged() {
+        return getPlace() instanceof PlaceShipRepair;
+    }
+
+    public Optional<PlaceShipRepair> getRepair() {
+        return isDamaged() ? Optional.of((PlaceShipRepair) getPlace())
+                : Optional.empty();
+    }
+
+    public void advanceRepair() {
+        if (isDamaged()) {
+            model.advanceShipRepair(this);
+        }
     }
 
     /**

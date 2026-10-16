@@ -18,6 +18,9 @@ public enum Europe implements MessageKeyResource {
     voyageUnavailable, voyageReverse, voyageReverseTitle, voyageReverseQuestion,
     voyageDestinationEurope, voyageDestinationNewWorld, voyageReverseStale,
     pierOrders, recruitOpen, recruitChanged, recruitUnavailable,
-    immigrationProgress, immigrationPending;
+    immigrationProgress, immigrationPending, repairsOpen, repairsEmpty,
+    repairsRestriction, repairsRow, repairsTransfer, repairsRepair,
+    repairsDestinationLost, repairsClose, repairARRIVED, repairCOMPLETED,
+    repairREROUTED, repairSUNK;
 
 }

@@ -703,3 +703,16 @@ modelové operace. `CombatStrengths` připojuje současné poškození a venkovn
 postih ke stejnému snímku boje; GUI výsledek pouze překládá a vybírá obrázek.
 Chybějící domorodá role není nahrazena kontrolou příznaku počítačového hráče.
 Přejímka a její dosud chybějící návaznosti jsou vedené v [R-0095](requirements/R-0095.md).
+
+### Oprava poškozené lodi (R-0098)
+
+`PlaceShipRepair` je jediným zdrojem poškození lodi: drží původní místo,
+cíl, fázi přepravy/opravy a zbývající aktualizace vlastníka. `Model` vybírá
+opravnu podle průchodné vodní cesty a při ztrátě cíle znovu rozhodne;
+`Player.startTurn` posouvá opravu před běžným obnovením pohybu jednotek.
+`model.store` uchovává průběh bez jeho posunu při načtení.
+`CargoSlot` a společné operace pasažérů brání manipulaci s nedostupným
+nákladem. GUI pouze čte průběh v evropském přehledu a překládá uložené
+`TurnEventShipRepair`; otevření přehledu ani zprávy neprovádí opravu.
+Napojení poškození na námořní boj vlastní R-0097. Stav přejímky vede
+[R-0098](requirements/R-0098.md).

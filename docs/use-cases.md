@@ -677,3 +677,13 @@ zbytek fronty a Continue bez další platby. Druhý scénář ověří nedostate
 zlata, odmítnutí zastaralé nabídky po změně materiálů a novou cenu.
 Model doplňuje nulovou cenu, přebytky, jednotky a neplatné předpoklady.
 Výsledky vede [R-0083](requirements/R-0083.md).
+
+### UC-076/UC-046: průběh oprav lodí R-0098
+
+`TC_63_F54_ship_repair_test` začíná uloženou poškozenou lodí. Přes Evropu
+čte stav opravy, zavře přehled bez změny, pokračuje po načtení a postupuje
+skutečnými tahy vlastníka. Ověřuje jednu aktualizaci přepravy a dvě další
+v Evropě nebo tři v suchém doku, zachovaný náklad a znovu dostupné vyložení
+pasažéra po opravě. EN/CZ obraz se kontroluje samostatně. Námořní bojový
+spouštěč a kořist zůstávají v R-0097; samotný test uložené opravy je
+nenahrazuje. Výsledky: [evidence R-0098](functional-tests.md#r-0098-ship-repair-2026-10-17).

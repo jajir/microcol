@@ -778,6 +778,259 @@ public class Model {
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
     }
 
+    private void finishShipRepair(final Ship ship,
+            final PlaceShipRepair repair) {
+        addShipRepairEvent(ship,
+                org.microcol.model.turnevent.TurnEventShipRepair.Kind.COMPLETED,
+                repair);
+        if (repair.isEuropeDestination()) {
+            ((AbstractUnit) ship).completeShipRepair(getEurope().getPort());
+        } else {
+            final Colony colony = getColonyById(repair.getDestinationColonyId())
+                    .orElseThrow();
+            ((AbstractUnit) ship).completeShipRepair(colony.getLocation());
+        }
+    }
+
+    private void addShipRepairEvent(final Ship ship,
+            final org.microcol.model.turnevent.TurnEventShipRepair.Kind kind,
+            final PlaceShipRepair repair) {
+        final String destinationName = repair.isEuropeDestination() ? "Europe"
+                : getColonyById(repair.getDestinationColonyId())
+                        .map(Colony::getName).orElse("Lost repair port");
+        final List<Goods> goods = new ArrayList<>();
+        int passengers = 0;
+        if (kind == org.microcol.model.turnevent.TurnEventShipRepair.Kind.SUNK) {
+            for (final CargoSlot slot : ship.getCargo().getSlots()) {
+                if (slot.isLoadedUnit()) {
+                    passengers++;
+                }
+                slot.getGoods().ifPresent(goods::add);
+            }
+        }
+        getTurnEventStore()
+                .add(new org.microcol.model.turnevent.TurnEventShipRepair(
+                        ship.getOwner().getName(), kind, ship.getId(),
+                        ship.getType(), destinationName,
+                        repair.isEuropeDestination(), passengers, goods));
+    }
+
+    /**
+     * Finds the closest reachable owned repair yard, or an open European port.
+     */
+    public Optional<ShipRepairDestination> planShipRepair(final Ship ship) {
+        Preconditions.checkNotNull(ship);
+        Preconditions.checkState(
+                tryGetUnitById(ship.getId()).orElse(null) == ship,
+                "Ship is no longer registered");
+        Preconditions.checkState(ship.isAtPlaceLocation() || ship.isDamaged(),
+                "Ship has no water repair origin");
+        final Location origin = ship.isDamaged()
+                ? ship.getRepair().get().getOrigin()
+                : ship.getLocation();
+        return chooseShipRepair(ship.getOwner(), origin);
+    }
+
+    private Optional<ShipRepairDestination> chooseShipRepair(final Player owner,
+            final Location origin) {
+        Preconditions.checkArgument(
+                getMap().isValid(origin)
+                        && (getMap().getTerrainTypeAt(origin).isSea() || origin
+                                .getNeighbors().stream()
+                                .filter(getMap()::isValid)
+                                .anyMatch(next -> getMap()
+                                        .getTerrainTypeAt(next).isSea())),
+                "Repair origin must be sea or owned port");
+        final java.util.ArrayDeque<Location> queue = new java.util.ArrayDeque<>();
+        final java.util.Map<Location, Integer> distances = new java.util.HashMap<>();
+        if (getMap().getTerrainTypeAt(origin).isSea()) {
+            queue.add(origin);
+            distances.put(origin, 0);
+        } else {
+            for (final Location neighbor : origin.getNeighbors()) {
+                if (getMap().isValid(neighbor)
+                        && getMap().getTerrainTypeAt(neighbor).isSea()
+                        && owner.getEnemyUnitsAt(neighbor).isEmpty()) {
+                    queue.add(neighbor);
+                    distances.put(neighbor, 1);
+                }
+            }
+        }
+        ShipRepairDestination best = getColonyAt(origin).filter(
+                colony -> colony.getOwner() == owner && isRepairYard(colony))
+                .map(colony -> ShipRepairDestination.colony(colony, 0))
+                .orElse(null);
+        while (!queue.isEmpty()) {
+            final Location current = queue.remove();
+            for (final Location next : current.getNeighbors()) {
+                if (!getMap().isValid(next)) {
+                    continue;
+                }
+                final Optional<Colony> port = getColonyAt(next);
+                if (port.isPresent()) {
+                    final Colony colony = port.get();
+                    if (colony.getOwner() == owner && isRepairYard(colony)) {
+                        final int distance = distances.get(current) + 1;
+                        final ShipRepairDestination candidate = ShipRepairDestination
+                                .colony(colony, distance);
+                        if (best == null
+                                || candidate.getSeaDistance() < best
+                                        .getSeaDistance()
+                                || candidate.getSeaDistance() == best
+                                        .getSeaDistance()
+                                        && candidate.getColonyId() < best
+                                                .getColonyId()) {
+                            best = candidate;
+                        }
+                    }
+                }
+                if (getMap().getTerrainTypeAt(next).isSea()
+                        && owner.getEnemyUnitsAt(next).isEmpty()
+                        && !distances.containsKey(next)) {
+                    distances.put(next, distances.get(current) + 1);
+                    queue.add(next);
+                }
+            }
+        }
+        if (best != null) {
+            return Optional.of(best);
+        }
+        return owner.canTradeInEurope()
+                ? Optional.of(ShipRepairDestination.europe())
+                : Optional.empty();
+    }
+
+    private boolean isRepairYard(final Colony colony) {
+        return isOwnedCoastalPort(colony.getOwner(), colony.getLocation())
+                && (colony.wasConstructionBuilded(ConstructionType.DRYDOCK)
+                        || colony.wasConstructionBuilded(
+                                ConstructionType.SHIPYARD));
+    }
+
+    private boolean isRepairDestinationValid(final Player owner,
+            final PlaceShipRepair repair) {
+        if (repair.isEuropeDestination()) {
+            return owner.canTradeInEurope();
+        }
+        return getColonyById(repair.getDestinationColonyId())
+                .filter(colony -> colony.getOwner() == owner
+                        && isRepairYard(colony) && canReachRepairYard(owner,
+                                repair.getOrigin(), colony.getLocation()))
+                .isPresent();
+    }
+
+    private boolean canReachRepairYard(final Player owner,
+            final Location origin, final Location yard) {
+        if (origin.equals(yard)) {
+            return true;
+        }
+        final java.util.ArrayDeque<Location> queue = new java.util.ArrayDeque<>();
+        final java.util.Set<Location> seen = new java.util.HashSet<>();
+        if (getMap().getTerrainTypeAt(origin).isSea()) {
+            queue.add(origin);
+            seen.add(origin);
+        } else {
+            for (final Location next : origin.getNeighbors()) {
+                if (getMap().isValid(next)
+                        && getMap().getTerrainTypeAt(next).isSea()
+                        && owner.getEnemyUnitsAt(next).isEmpty()
+                        && seen.add(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+        while (!queue.isEmpty()) {
+            for (final Location next : queue.remove().getNeighbors()) {
+                if (!getMap().isValid(next)) {
+                    continue;
+                }
+                if (next.equals(yard)) {
+                    return true;
+                }
+                if (getMap().getTerrainTypeAt(next).isSea()
+                        && owner.getEnemyUnitsAt(next).isEmpty()
+                        && seen.add(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Damages a registered map ship after the caller has resolved combat. */
+    public void damageShip(final Ship ship) {
+        Preconditions.checkNotNull(ship);
+        checkGameRunning();
+        Preconditions.checkState(
+                tryGetUnitById(ship.getId()).orElse(null) == ship
+                        && ship.isAtPlaceLocation() && !ship.isDamaged(),
+                "Ship cannot enter repair");
+        final Location origin = ship.getLocation();
+        Preconditions.checkArgument(
+                getMap().getTerrainTypeAt(origin).isSea()
+                        || isOwnedCoastalPort(ship.getOwner(), origin),
+                "Damage transition requires sea or owned coastal port");
+        final Optional<ShipRepairDestination> destination = chooseShipRepair(
+                ship.getOwner(), origin);
+        if (destination.isPresent()) {
+            ((AbstractUnit) ship).beginShipRepair(
+                    new PlaceShipRepair(ship, origin, destination.get()));
+        } else {
+            final List<Goods> goods = new ArrayList<>();
+            int passengers = 0;
+            for (final CargoSlot slot : ship.getCargo().getSlots()) {
+                if (slot.isLoadedUnit()) {
+                    passengers++;
+                }
+                slot.getGoods().ifPresent(goods::add);
+            }
+            getTurnEventStore()
+                    .add(new org.microcol.model.turnevent.TurnEventShipRepair(
+                            ship.getOwner().getName(),
+                            org.microcol.model.turnevent.TurnEventShipRepair.Kind.SUNK,
+                            ship.getId(), ship.getType(), "No repair port",
+                            false, passengers, goods));
+            destroyUnit(ship);
+        }
+    }
+
+    /**
+     * Advances only the current owner's damaged ship during turn preparation.
+     */
+    public void advanceShipRepair(final Ship ship) {
+        Preconditions.checkState(gameManager.isPreparing()
+                && getCurrentPlayer() == ship.getOwner()
+                && tryGetUnitById(ship.getId()).orElse(null) == ship,
+                "Repair advances only during the owner's turn preparation");
+        final PlaceShipRepair repair = ship.getRepair().orElseThrow(
+                () -> new IllegalStateException("Ship is not damaged"));
+        if (isRepairDestinationValid(ship.getOwner(), repair)) {
+            if (repair.advance()) {
+                finishShipRepair(ship, repair);
+            } else if (repair.getPhase() == PlaceShipRepair.Phase.REPAIR
+                    && repair.getRemainingPhaseUpdates() == repair
+                            .getRepairDuration()) {
+                addShipRepairEvent(ship,
+                        org.microcol.model.turnevent.TurnEventShipRepair.Kind.ARRIVED,
+                        repair);
+            }
+            return;
+        }
+        final Optional<ShipRepairDestination> destination = chooseShipRepair(
+                ship.getOwner(), repair.getOrigin());
+        if (destination.isEmpty()) {
+            addShipRepairEvent(ship,
+                    org.microcol.model.turnevent.TurnEventShipRepair.Kind.SUNK,
+                    repair);
+            destroyUnit(ship);
+            return;
+        }
+        repair.reroute(destination.get());
+        addShipRepairEvent(ship,
+                org.microcol.model.turnevent.TurnEventShipRepair.Kind.REROUTED,
+                repair);
+    }
+
     /**
      * A port uses eight-direction water adjacency, without an
      * ocean-connectivity rule.
