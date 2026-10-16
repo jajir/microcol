@@ -146,14 +146,31 @@ public class Construction {
                 "This construction consume something. Construction: %s", this);
         ConstructionTurnProduction out = getType().getProductionPerTurn().get()
                 .getType() == GoodsType.CROSS
-                        ? new ConstructionTurnProduction(null,
-                                Goods.of(GoodsType.CROSS,
+                || getType().getProductionPerTurn().get()
+                        .getType() == GoodsType.BELL
+                                ? new ConstructionTurnProduction(null, Goods.of(
+                                        getType().getProductionPerTurn().get()
+                                                .getType(),
                                         getType().getBaseProductionPerTurn()),
-                                null)
-                        : ConstructionTurnProduction.EMPTY;
+                                        null)
+                                : ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
             final ConstructionTurnProduction tmp = slot.getProduction();
             out = out.add(tmp);
+        }
+        if (getType() == ConstructionType.TOWN_HALL
+                && out.getProducedGoods().isPresent()) {
+            final int base = out.getProducedGoods().get().getAmount();
+            final int improved = colony
+                    .wasConstructionBuilded(ConstructionType.NEWSPAPER)
+                            ? Math.multiplyExact(base, 2)
+                            : colony.wasConstructionBuilded(
+                                    ConstructionType.PRINTING_PRESS)
+                                            ? Math.toIntExact(
+                                                    (long) base * 3 / 2)
+                                            : base;
+            return new ConstructionTurnProduction(null,
+                    Goods.of(GoodsType.BELL, improved), null);
         }
         return out;
     }

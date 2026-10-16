@@ -67,7 +67,7 @@ class ColonyCrossProductionTest {
                 colony.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getSlotAt(0));
         assertEquals(1, forecast(colony, GoodsType.CROSS));
-        assertEquals(3, forecast(colony, GoodsType.BELL));
+        assertEquals(4, forecast(colony, GoodsType.BELL));
         chapel.upgrade();
         assertEquals(ConstructionType.CHURCH, chapel.getType());
         assertEquals(1, forecast(colony, GoodsType.CROSS));
@@ -86,14 +86,14 @@ class ColonyCrossProductionTest {
     }
 
     @Test
-    void twoColoniesProduceIndependentlyAndBellsStayUnchanged() {
+    void twoColoniesProduceIndependentlyAndChapelsDoNotChangeBells() {
         final Model model = model();
         final Colony first = model.getColonyById(0).orElseThrow();
         final Colony second = model.getColonyById(1).orElseThrow();
         final int firstBells = forecast(first, GoodsType.BELL);
         final int secondBells = forecast(second, GoodsType.BELL);
-        assertEquals(0, firstBells);
-        assertEquals(0, secondBells);
+        assertEquals(1, firstBells);
+        assertEquals(1, secondBells);
         final int firstBellStock = first.getWarehouse().getGoods(GoodsType.BELL)
                 .getAmount();
         final int secondBellStock = second.getWarehouse()

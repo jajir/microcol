@@ -14,9 +14,9 @@ public enum ColonyMsg implements MessageKeyResource {
     equipmentMISSING_GOODS, equipmentSTORAGE_FULL, fieldWorked, fieldChanged,
     fieldMissingDock, jobOpen, jobTitle, jobContext, jobConfirm, jobCancel,
     jobCurrentField, jobBestField, jobIndoor, jobCurrentYield, jobBestYield,
-    jobTarget, jobPotential, jobInput, jobShortage, jobStockNote, jobSpecialty,
-    jobUnavailable, jobACTOR_UNAVAILABLE, jobEQUIPMENT_BLOCKED,
-    jobCROP_UNSUPPORTED, jobNO_ELIGIBLE_FIELD, jobBUILDING_FULL, jobChanged,
-    jobNoChoices, jobDropRejected;
+    jobTarget, jobPotential, jobBellContribution, jobInput, jobShortage,
+    jobStockNote, jobSpecialty, jobUnavailable, jobACTOR_UNAVAILABLE,
+    jobEQUIPMENT_BLOCKED, jobCROP_UNSUPPORTED, jobNO_ELIGIBLE_FIELD,
+    jobBUILDING_FULL, jobChanged, jobNoChoices, jobDropRejected;
 
 }

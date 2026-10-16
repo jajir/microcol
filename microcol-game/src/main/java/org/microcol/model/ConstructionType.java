@@ -287,14 +287,12 @@ public class ConstructionType {
 
     public final static ConstructionType NEWSPAPER = ConstructionTypeBuilder
             .make().setName("NEWSPAPER").setRequiredHammers(120)
-            .setRequiredTools(50).setProductionPerTurn(Goods.of(BELL, 6))
-            .setSlotsForWorkers(0).setUpgradeTo(null)
+            .setRequiredTools(50).setSlotsForWorkers(0).setUpgradeTo(null)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType PRINTING_PRESS = ConstructionTypeBuilder
             .make().setName("PRINTING_PRESS").setRequiredHammers(80)
-            .setRequiredTools(0).setProductionPerTurn(Goods.of(BELL, 9))
-            .setSlotsForWorkers(0).setUpgradeTo(NEWSPAPER)
+            .setRequiredTools(0).setSlotsForWorkers(0).setUpgradeTo(NEWSPAPER)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType CUSTOM_HOUSE = ConstructionTypeBuilder

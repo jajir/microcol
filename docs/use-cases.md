@@ -642,3 +642,13 @@ nabídky a Pokračovat chrání pracovníky, frontu a skutečné lodě.
 Testy modelu doplňují vnitrozemské a uložené neplatné stavy.
 Výsledky zaznamenává [R-0080](requirements/R-0080.md); tato mapa sama
 nepotvrzuje průchod scénářů ani úplné přijetí UC.
+
+### UC-047: tiskové bonusy R-0081
+
+`TC_52_F43_printing_production_test` objedná a dokončí tiskárnu a noviny,
+se stejnými dvěma státníky ověří náhled 7 → 10 → 14 zvonů a skutečné
+přírůstky skladu. Druhý scénář přesune státníky do jiných profesí a ověří
+základ bez obsluhy 1 → 1 → 2. Oba projdou Continue bez opakování produkce;
+první kontroluje i zrušení objednávky a popisek příspěvku pracovníka.
+Výsledky vede [evidence R-0081](functional-tests.md#r-0081-printing-production-2026-10-16).
+Obranná část UC-047 zůstává samostatným rozsahem.

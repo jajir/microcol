@@ -579,3 +579,14 @@ loděnici a stávající pobřežní pravidlo `Model.isOwnedCoastalPort`; fronta
 ověřuje podmínku při přijetí i dokončení. UI překládá konkrétní modelový
 důvod a nepřevádí pracovníka ani materiál při odmítnutí.
 Rozsah a přejímku vede [R-0080](requirements/R-0080.md).
+
+### Tisk a společná produkce zvonů (R-0081)
+
+`Construction.getProduction()` počítá jeden základní zvon radnice i bez
+pracovníků, přičítá příspěvky státníků a aplikuje tiskárnu (+50 %) nebo
+noviny (+100 %, nahrazují tiskárnu). Zaokrouhluje dolů jednou nad celým
+součtem. Stejný výsledek používá náhled i změna skladu. Dokončení stavby
+probíhá po produkci, takže nový bonus platí od následující aktualizace.
+Tiskové budovy nejsou dalšími producenty a nepotřebují nové schéma uložení.
+Další politické a otcovské bonusy zůstávají samostatnými požadavky.
+Viz [R-0081](requirements/R-0081.md).

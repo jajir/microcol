@@ -406,3 +406,13 @@ rybolov; vyšší zařízení tuto možnost zachovají. Stavební nabídka ponec
 lodní projekty viditelné s vysvětlením chybějící loděnice nebo pobřeží.
 Zrušení nabídky nemění stav a potvrzení znovu kontroluje aktuální podmínky.
 Přejímku hráčských cest a jejich výsledky vede [R-0080](requirements/R-0080.md).
+
+### Tisk a příspěvek státníka (R-0081)
+
+Hráč vybírá tiskárnu a noviny ve stávající stavební nabídce; zrušení výběru
+nemění frontu. Radnice ukazuje společný výstup včetně základního zvonu
+a tiskového bonusu. Výběr práce označuje jednotlivý příspěvek státníka
+jako hodnotu před bonusy kolonie, aby jej hráč nezaměňoval za celý výstup.
+Dokončená stavba zvyšuje další produkci bez přesunu pracovníků.
+Automatické hráčské ověření zaznamenává [R-0081](requirements/R-0081.md);
+nejde o pozorování skutečných hráčů.

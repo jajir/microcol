@@ -3567,3 +3567,35 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Its repair preserves crop and field assertions, updates both colonies'
    expected food, and checks 52 horses explicitly. Local TC39 rerun passed all eight cases in `run-0Ivuau`; subsequent full CI
    remains the acceptance gate. No failed build is a published result.
+
+
+### R-0081 printing production — 2026-10-16
+
+1. Scope: BUILD-013 / UC-047 printing only. A bounded Sol low worker
+   implemented model calculations/tests in an isolated worktree; main owns
+   the job-picker text, F43/TC52 player paths, review and actual verification.
+   No local model or duplicate implementation was used.
+2. Initial full model run: **1567 tests, one failure, zero errors/skips**.
+   All new printing cases passed; the older cross-production test still
+   expected zero bells in its unattended second town hall. The accepted
+   economy rule requires one. This expectation was returned to the same
+   worker for targeted repair; cross-production checks must be preserved.
+3. Repaired full model rerun passed **1567 tests**, zero failures/errors/skips.
+   The shared formatter checked eight Java files with exact-token preservation
+   and idempotence; packaging including Javadoc passed.
+4. Initial Docker `run-wyfqeK`: the unattended TC52 scenario passed. The
+   staffed scenario stopped at main's incorrect English goods-name expectation
+   (“Bells” instead of the existing “Bell of liberty”). Main corrected only
+   that expectation; the full staffed journey still requires a fresh rerun.
+5. Initial Docker regression completed: all 15 TC40 job cases, seven TC32
+   construction cases and three page-contract checks passed. Across the run
+   there were 27 cases, one failure described above, zero errors/skips.
+   A fresh TC52/page-contract run checks the corrected expectation.
+6. Fresh Docker `run-oW0RxV` passed **five tests**: both TC52 player
+   scenarios and three page-contract checks, zero failures/errors/skips.
+   Both real upgrades, unchanged workers, odd-total rounding, unattended
+   output and Continue passed. Main inspected the captured town-hall output
+   showing +14 with the two original statesmen. All selected player paths
+   have now passed; no failed run is counted as acceptance.
+7. Nine documentation tests and strict MkDocs passed. Full CI and publication
+   remain pending; the requirement stays ready until those gates complete.
