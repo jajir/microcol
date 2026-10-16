@@ -22,6 +22,13 @@ public enum UnitActionType {
         }
     },
 
+    fortify("f") {
+        @Override
+        public UnitActionFortify make() {
+            return new UnitActionFortify(false);
+        }
+    },
+
     plowField("p") {
         @Override
         public UnitActionPlowField make() {

@@ -171,6 +171,16 @@ public class UnitFactory {
         unitCreateRequest.setTools(unitPo.getTools());
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
+        if (unit.getAction().getType() == UnitActionType.fortify) {
+            Preconditions.checkArgument(unit instanceof UnitFreeColonist
+                    && ((UnitFreeColonist) unit).isHoldingGuns()
+                    && unit.isAtPlaceLocation()
+                    && model.getMap().getTerrainTypeAt(unit.getLocation())
+                            .isLand()
+                    && (((UnitActionFortify) unit.getAction()).isFortified()
+                            || unit.getActionPoints() == 0),
+                    "Invalid saved fortification");
+        }
         final boolean hasLocation = unitPo.getDepartureLocation() != null;
         final boolean hasDirection = unitPo.getDepartureDirection() != null;
         Preconditions.checkArgument(hasLocation == hasDirection,

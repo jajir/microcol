@@ -12,7 +12,7 @@ import com.google.common.eventbus.EventBus;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -31,7 +31,7 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     private final I18n i18n;
 
     private final VBox mainPanel;
-    private final HBox buttonPanel;
+    private final FlowPane buttonPanel;
 
     protected AbstractButtonsPanel(final ImageProvider imageProvider,
             final EventBus eventBus, final Source source, final I18n i18n) {
@@ -40,7 +40,8 @@ public class AbstractButtonsPanel implements JavaFxComponent {
         this.source = Preconditions.checkNotNull(source);
         this.i18n = Preconditions.checkNotNull(i18n);
 
-        buttonPanel = new HBox();
+        // Wrap controls before shrinking their labels into unreadable text.
+        buttonPanel = new FlowPane();
         buttonPanel.getStyleClass().add("buttonPanel");
 
         mainPanel = new VBox();
@@ -75,7 +76,7 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     /**
      * @return the buttonPanel
      */
-    public HBox getButtonPanel() {
+    public FlowPane getButtonPanel() {
         return buttonPanel;
     }
 

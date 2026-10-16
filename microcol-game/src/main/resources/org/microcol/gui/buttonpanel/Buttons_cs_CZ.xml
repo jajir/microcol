@@ -28,4 +28,10 @@
     <entry key="buttonActivateSentry">Aktivovat</entry>
     <entry key="sentryExplanation">Čekat na hlídce; vhodní cestující nastoupí na odplouvající loď.</entry>
     <entry key="activateSentryExplanation">Ukončit hlídku a zachovat zbývající pohyb.</entry>
+    <entry key="buttonFortify">Opevnit</entry>
+    <entry key="buttonCancelFortifying">Zrušit opevňování</entry>
+    <entry key="buttonCancelFortified">Zrušit opevnění</entry>
+    <entry key="fortifyExplanation">Spotřebuje zbývající pohyb; opevnění začne platit příští vlastní tah.</entry>
+    <entry key="fortifyingExplanation">Opevňování: zatím bez obranného bonusu. Zrušení nevrací spotřebovaný pohyb.</entry>
+    <entry key="fortifiedExplanation">Opevněno: před pohybem či útokem zrušte rozkaz. Spotřebovaný pohyb se nevrací.</entry>
 </properties>

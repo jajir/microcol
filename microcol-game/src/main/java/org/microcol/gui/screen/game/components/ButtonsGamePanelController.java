@@ -60,6 +60,7 @@ public class ButtonsGamePanelController {
         this.selectedUnitManager = Preconditions
                 .checkNotNull(selectedUnitManager);
         view.setSentryAction(this::changeSentryOrder);
+        view.setFortifyAction(this::changeFortifyOrder);
     }
 
     @SuppressWarnings("unused")
@@ -146,8 +147,8 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateMoveButton(final Unit unit) {
-        view.setVisibleButtonMove(unit.getActionPoints() > 0
-                && unit.getAction().getType() != UnitActionType.sentry);
+        view.setVisibleButtonMove(
+                unit.getActionPoints() > 0 && unit.getAction().isNoAction());
     }
 
     private void evaluateDeclareIndependenceButton() {
@@ -192,6 +193,13 @@ public class ButtonsGamePanelController {
                     ready && selected != null
                             && (sentry ? getModel().canActivateSentry(selected)
                                     : getModel().canSetSentry(selected)));
+            final boolean fortify = selected != null
+                    && selected.getAction().getType() == UnitActionType.fortify;
+            view.setFortifyOrder(fortify,
+                    fortify && getModel().isFortified(selected),
+                    ready && selected != null
+                            && (fortify ? getModel().canCancelFortify(selected)
+                                    : getModel().canFortify(selected)));
             view.setUnitOrdersEnabled(
                     ready && getModel().getFirstSelectableUnit().isPresent(),
                     ready && selectedUnitManager.getSelectedUnit()
@@ -209,6 +217,25 @@ public class ButtonsGamePanelController {
                 getModel().activateSentry(unit);
             } else {
                 getModel().setSentry(unit);
+            }
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.unitOrderUnavailable),
+                    StatusBarMessageEvent.Source.GAME));
+        }
+        updateUnitOrders();
+    }
+
+    private void changeFortifyOrder() {
+        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        if (unit == null) {
+            return;
+        }
+        try {
+            if (unit.getAction().getType() == UnitActionType.fortify) {
+                getModel().cancelFortify(unit);
+            } else {
+                getModel().fortify(unit);
             }
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             eventBus.post(new StatusBarMessageEvent(

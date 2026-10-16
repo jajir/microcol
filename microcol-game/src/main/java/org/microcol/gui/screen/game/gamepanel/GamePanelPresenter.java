@@ -177,6 +177,16 @@ public final class GamePanelPresenter {
                             org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
             return;
         }
+        if (unit.getAction()
+                .getType() == org.microcol.model.unit.UnitActionType.fortify) {
+            eventBus.post(
+                    new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
+                            i18n.get(gameModelController.getModel().isFortified(
+                                    unit) ? org.microcol.gui.buttonpanel.Buttons.fortifiedExplanation
+                                            : org.microcol.gui.buttonpanel.Buttons.fortifyingExplanation),
+                            org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
+            return;
+        }
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         moveModeController.setMoveModeOn();

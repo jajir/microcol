@@ -240,6 +240,8 @@ public abstract class Player {
     }
 
     void startTurn() {
+        final boolean hadFranklin = getCongressMembers()
+                .contains(Founder.BENJAMIN_FRANKLIN);
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
                 .forEach(Ship::advanceVoyage);
         settleEarnedImmigrants();
@@ -266,6 +268,9 @@ public abstract class Player {
         getColonies().forEach(colony -> colony.startTurn());
         settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
+        if (hadFranklin) {
+            model.prepareFranklinPeaceOffers(this);
+        }
     }
 
     void activateCongressAfterFirstColony() {

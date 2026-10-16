@@ -58,6 +58,15 @@ public class ScreenGame implements GameScreen {
 
         mainBox = new VBox();
         mainBox.setId("mainPanel");
+        // Reserve every wrapped toolbar row so northern map tiles remain
+        // reachable.
+        mainBox.paddingProperty()
+                .bind(javafx.beans.binding.Bindings
+                        .createObjectBinding(
+                                () -> new javafx.geometry.Insets(buttonGamePanel
+                                        .getButtonPanel().getHeight(), 0, 0, 0),
+                                buttonGamePanel.getButtonPanel()
+                                        .heightProperty()));
         mainBox.getChildren().add(hBox);
         mainBox.getChildren().add(statusBar.getContent());
 

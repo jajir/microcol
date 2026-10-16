@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -822,6 +823,8 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToLocation(final Location target,
             final Direction orientation) {
+        Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
+                "Cancel fortification before moving");
         Preconditions.checkState(canLeaveColony(),
                 "Fortified colony needs three residents");
         if (place instanceof PlaceLocation) {
@@ -974,6 +977,8 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
+        Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
+                "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(structureSlot);
         Preconditions.checkState(
                 canLeaveColony()
@@ -996,6 +1001,8 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
+        Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
+                "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(
                 canLeaveColony()
@@ -1220,6 +1227,20 @@ public abstract class AbstractUnit implements Unit {
         setWaitingOrder(UnitActionType.noAction);
     }
 
+    void startFortifying() {
+        Preconditions.checkState(unitAction.isNoAction());
+        setAction(new UnitActionFortify(false));
+        actionPoints = 0;
+        model.fireActionWasStarted(this);
+    }
+
+    void cancelFortifying() {
+        Preconditions
+                .checkState(unitAction.getType() == UnitActionType.fortify);
+        setAction(UnitActionType.noAction.make());
+        model.fireActionWasStarted(this);
+    }
+
     /**
      * Define action supported by unit.
      *
@@ -1231,10 +1252,14 @@ public abstract class AbstractUnit implements Unit {
     public void setActionType(final UnitActionType actionType) {
         model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(actionType, "Unit action is null");
-        Preconditions.checkState(
-                unitAction.getType() != UnitActionType.sentry
-                        && actionType != UnitActionType.sentry,
-                "Use the sentry or activate command for this order");
+        Preconditions
+                .checkState(
+                        unitAction.getType() != UnitActionType.sentry
+                                && actionType != UnitActionType.sentry
+                                && unitAction
+                                        .getType() != UnitActionType.fortify
+                                && actionType != UnitActionType.fortify,
+                        "Use the dedicated command for this order");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
                 this);

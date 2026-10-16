@@ -28,4 +28,10 @@
     <entry key="buttonActivateSentry">Activate</entry>
     <entry key="sentryExplanation">Wait on sentry; eligible passengers board a departing ship.</entry>
     <entry key="activateSentryExplanation">End sentry and keep remaining movement.</entry>
+    <entry key="buttonFortify">Fortify</entry>
+    <entry key="buttonCancelFortifying">Cancel fortifying</entry>
+    <entry key="buttonCancelFortified">Cancel fortification</entry>
+    <entry key="fortifyExplanation">Spend remaining movement; defense becomes fortified next owner turn.</entry>
+    <entry key="fortifyingExplanation">Fortifying: no defense bonus yet. Cancel without restoring spent movement.</entry>
+    <entry key="fortifiedExplanation">Fortified: cancel to move or attack. No spent movement is restored.</entry>
 </properties>

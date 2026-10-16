@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Negotiate peace…</entry>
+  <entry key="resume">Resume peace offer…</entry>
+  <entry key="contactRequired">Move a colonist next to a visible rival unit or colony to negotiate.</entry>
+  <entry key="title">Peace negotiation</entry>
+  <entry key="offer">%s offers peace for %s gold.
+Your treasury: %s gold.
+After payment: %s gold.</entry>
+  <entry key="offerUnaffordable">%s offers peace for %s gold.
+Your treasury when quoted: %s gold.</entry>
+  <entry key="visitor">Contact: %s at (%s, %s).</entry>
+  <entry key="visitorUnavailable">The original contact is no longer available.</entry>
+  <entry key="confirm">Pay and accept peace</entry>
+  <entry key="cancel">Cancel proposal</entry>
+  <entry key="later">Decide later</entry>
+  <entry key="insufficient">You do not have enough gold to accept this offer.</entry>
+  <entry key="changed">The contact or offer changed. Cancel this proposal and request a new one.</entry>
+  <entry key="accepted">%s and %s are now at peace.</entry>
+  <entry key="turnOffer">%s offers peace for %s gold. Review the proposal in European relations.</entry>
+</properties>

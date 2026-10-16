@@ -2,6 +2,7 @@ package org.microcol.model.unit;
 
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.store.UnitActionPlowFieldPo;
+import org.microcol.model.store.UnitActionFortifyPo;
 import org.microcol.model.store.UnitActionPo;
 
 import com.google.common.base.Preconditions;
@@ -28,6 +29,14 @@ public final class UnitActionConverter {
             }, po -> {
                 if (UnitActionType.sentry.equals(po.getType())) {
                     return new UnitActionSentry();
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.fortify.equals(po.getType())) {
+                    final UnitActionFortifyPo saved = (UnitActionFortifyPo) po;
+                    Preconditions.checkArgument(saved.getFortified() != null,
+                            "Fortification state is missing");
+                    return new UnitActionFortify(saved.getFortified());
                 }
                 return null;
             }, po -> {

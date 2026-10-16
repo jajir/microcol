@@ -38,6 +38,18 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
 
     public void verifyLabelsAndLayout() {
         WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.Node controls = getNodeFinder()
+                .lookup(".buttonPanel").query();
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final javafx.geometry.Bounds controlsBounds = controls
+                .localToScreen(controls.getBoundsInLocal());
+        final javafx.geometry.Bounds mapBounds = canvas
+                .localToScreen(canvas.getBoundsInLocal());
+        assertTrue(mapBounds.getMinY() >= controlsBounds.getMaxY(),
+                "All toolbar rows must be outside the playable map");
         final Button wait = getButtonById("waitUnit");
         final Button skip = getButtonById("skipUnitTurn");
         assertEquals("Wait\n(Tab)", wait.getText());
@@ -52,7 +64,9 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
                 getButtonById("nextTurn"), getButtonById("exit") }) {
             assertTrue(button.isVisible());
             assertTrue(button.getWidth() >= button.prefWidth(-1),
-                    "Label must fit");
+                    "Label must fit: " + button.getId() + " width="
+                            + button.getWidth() + " preferred="
+                            + button.prefWidth(-1));
             final javafx.geometry.Bounds bounds = button
                     .localToScene(button.getBoundsInLocal());
             assertTrue(

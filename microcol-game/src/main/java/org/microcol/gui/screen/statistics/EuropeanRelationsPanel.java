@@ -87,6 +87,43 @@ final class EuropeanRelationsPanel extends VBox {
                     declare.setOnAction(event -> review(model, actor, target));
                     row.getChildren().add(declare);
                 }
+                if (actor.isHuman() && (actor == first || actor == second)
+                        && state == EuropeanRelationState.WAR) {
+                    final Player target = actor == first ? second : first;
+                    final boolean pending = model
+                            .getPendingPeaceOffer(actor, target).isPresent();
+                    final Button peace = new Button(i18n
+                            .get(pending ? PeaceText.resume : PeaceText.open));
+                    peace.setId("peace-" + i + "-" + j);
+                    peace.setDisable(!model.isGameRunning() || (!pending
+                            && model.getPeaceVisitors(actor, target)
+                                    .isEmpty()));
+                    peace.setTooltip(new javafx.scene.control.Tooltip(
+                            i18n.get(PeaceText.contactRequired)));
+                    peace.setOnAction(event -> negotiate(model, actor, target));
+                    row.getChildren().add(peace);
+                }
+                if (actor.isHuman() && (actor == first || actor == second)) {
+                    final Player target = actor == first ? second : first;
+                    final boolean pending = model
+                            .getPendingTributeDemand(actor, target).isPresent();
+                    final int remaining = model.getTributeTurnsRemaining(actor,
+                            target);
+                    final Button tribute = new Button(i18n.get(
+                            pending ? TributeText.resume : TributeText.open));
+                    tribute.setId("tribute-" + i + "-" + j);
+                    tribute.setDisable(!model.isGameRunning()
+                            || (!pending && (remaining > 0
+                                    || model.getTributeVisitors(actor, target)
+                                            .isEmpty())));
+                    tribute.setTooltip(
+                            new javafx.scene.control.Tooltip(remaining > 0
+                                    ? i18n.get(TributeText.cooldown, remaining)
+                                    : i18n.get(TributeText.contactRequired)));
+                    tribute.setOnAction(
+                            event -> demandTribute(model, actor, target));
+                    row.getChildren().add(tribute);
+                }
                 rows.getChildren().add(row);
             }
         }
@@ -143,6 +180,64 @@ final class EuropeanRelationsPanel extends VBox {
         feedback.setText(
                 i18n.get(Stats.declarationDone, actorLabel, targetLabel));
         feedback.requestFocus();
+    }
+
+    private void negotiate(Model original, Player actor, Player target) {
+        try {
+            if (!game.isGameModelReady() || game.getModel() != original
+                    || original.getCurrentPlayer() != actor)
+                throw new IllegalStateException("Relations view changed");
+            final org.microcol.model.PeaceOffer offer = original
+                    .getPendingPeaceOffer(actor, target)
+                    .orElseGet(() -> original.preparePeaceOffer(
+                            original.getPeaceVisitors(actor, target).stream()
+                                    .findFirst().orElseThrow(
+                                            () -> new IllegalStateException(
+                                                    "Contact unavailable")),
+                            target));
+            boolean accepted = new PeaceDialog(viewUtil, i18n, game, original,
+                    offer).review();
+            refresh();
+            if (accepted)
+                feedback.setText(i18n.get(PeaceText.accepted, label(actor),
+                        label(target)));
+        } catch (IllegalArgumentException | IllegalStateException
+                | ArithmeticException rejected) {
+            refresh();
+            feedback.setText(i18n.get(PeaceText.changed));
+        }
+    }
+
+    private void demandTribute(Model original, Player actor, Player target) {
+        try {
+            if (!game.isGameModelReady() || game.getModel() != original
+                    || original.getCurrentPlayer() != actor)
+                throw new IllegalStateException("Relations view changed");
+            final org.microcol.model.TributeDemand offer = original
+                    .getPendingTributeDemand(actor, target)
+                    .orElseGet(() -> original.prepareTributeDemand(
+                            original.getTributeVisitors(actor, target).stream()
+                                    .findFirst().orElseThrow(
+                                            () -> new IllegalStateException(
+                                                    "Contact unavailable")),
+                            target));
+            boolean confirmed = new TributeDialog(viewUtil, i18n, game,
+                    original, offer).review();
+            refresh();
+            if (confirmed)
+                feedback.setText(
+                        offer.getAmount() > 0
+                                ? i18n.get(TributeText.paid, label(target),
+                                        offer.getAmount(), label(actor))
+                                : i18n.get(
+                                        offer.isAccepted() ? TributeText.empty
+                                                : TributeText.refused,
+                                        label(target)));
+        } catch (IllegalArgumentException | IllegalStateException
+                | ArithmeticException rejected) {
+            refresh();
+            feedback.setText(i18n.get(TributeText.changed));
+        }
     }
 
     private void stale() {

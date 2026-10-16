@@ -29,6 +29,25 @@ public final class TurnEventPo {
 
     private Integer income;
 
+    private String rivalName;
+    private Integer peacePrice;
+
+    public String getRivalName() {
+        return rivalName;
+    }
+
+    public void setRivalName(final String value) {
+        rivalName = value;
+    }
+
+    public Integer getPeacePrice() {
+        return peacePrice;
+    }
+
+    public void setPeacePrice(final Integer value) {
+        peacePrice = value;
+    }
+
     public Integer getIncome() {
         return income;
     }

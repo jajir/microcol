@@ -21,6 +21,7 @@ import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
+import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -120,7 +121,8 @@ public class Model {
 
         this.playerStore = PlayerStore.makePlayers(this, modelPo);
         europeanRelations = new EuropeanRelations(playerStore.getPlayers(),
-                modelPo.getEuropeanRelations());
+                modelPo.getEuropeanRelations(),
+                calendar.getNumberOfPlayedTurns());
         turnEventStore = new TurnEventStore(modelPo, playerStore);
 
         colonyNames = new ColonyNames(this);
@@ -826,6 +828,320 @@ public class Model {
                 EuropeanRelationState.PEACE);
     }
 
+    /** Eligible on-map colonists adjacent to a visible rival contact. */
+    public List<Unit> getPeaceVisitors(final Player actor, final Player rival) {
+        return findPeaceVisitors(actor, rival, false);
+    }
+
+    private List<Unit> findPeaceVisitors(final Player actor, final Player rival,
+            final boolean duringPreparation) {
+        if ((!duringPreparation && !isGameRunning())
+                || (duringPreparation && (!isGameStarted() || isGameFinished()))
+                || actor == null || rival == null || getCurrentPlayer() != actor
+                || actor.isKing() || rival.isKing() || !rival.isComputer()
+                || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival) || actor == rival
+                || europeanRelations.get(actor,
+                        rival) != EuropeanRelationState.WAR) {
+            return List.of();
+        }
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == actor
+                        && unit instanceof UnitFreeColonist
+                        && unit.isAtPlaceLocation())
+                .filter(unit -> hasVisiblePeaceContact(unit, rival))
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /** Prepare new Franklin offers after an ordinary owner update. */
+    void prepareFranklinPeaceOffers(final Player actor) {
+        Preconditions.checkState(
+                actor != null && getCurrentPlayer() == actor && isGameStarted()
+                        && !isGameFinished()
+                        && actor.getCongressMembers()
+                                .contains(Founder.BENJAMIN_FRANKLIN),
+                "Franklin peace prompt is unavailable");
+        final List<PeaceOffer> newOffers = new ArrayList<>();
+        for (final Player rival : getPlayers()) {
+            if (rival == actor || rival.isKing() || !rival.isComputer()
+                    || europeanRelations.get(actor,
+                            rival) != EuropeanRelationState.WAR
+                    || europeanRelations.hasPendingPeace(actor, rival)) {
+                continue;
+            }
+            final List<Unit> visitors = findPeaceVisitors(actor, rival, true);
+            if (visitors.isEmpty()) {
+                continue;
+            }
+            final PeaceOffer offer = quotePeace(visitors.get(0), rival);
+            newOffers.add(offer);
+        }
+        for (final PeaceOffer offer : newOffers) {
+            europeanRelations.putPending(offer);
+            turnEventStore.add(TurnEventProvider.getPeaceOffer(actor,
+                    offer.getRival().getDisplayName(), offer.getPrice()));
+        }
+    }
+
+    private boolean hasVisiblePeaceContact(final Unit visitor,
+            final Player rival) {
+        final Location location = visitor.getLocation();
+        return getAllUnits().stream()
+                .anyMatch(other -> other.getOwner() == rival
+                        && other.isAtPlaceLocation()
+                        && location.isNeighbor(other.getLocation())
+                        && visitor.getOwner().isVisible(other.getLocation()))
+                || colonies.stream()
+                        .anyMatch(colony -> colony.getOwner() == rival
+                                && location.isNeighbor(colony.getLocation())
+                                && visitor.getOwner()
+                                        .isVisible(colony.getLocation()));
+    }
+
+    private double armedLandStrength(final Player owner) {
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && !unit.getType().isShip() && unit.canAttack())
+                .mapToDouble(Unit::getMilitaryStrenght).sum();
+    }
+
+    /** Eligible armed or mounted visitors with visible adjacent contact. */
+    public List<Unit> getTributeVisitors(final Player actor,
+            final Player rival) {
+        if (!isGameRunning() || actor == null || rival == null
+                || getCurrentPlayer() != actor || actor.isKing()
+                || rival.isKing() || !rival.isComputer()
+                || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival) || actor == rival
+                || getTributeTurnsRemaining(actor, rival) > 0) {
+            return List.of();
+        }
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == actor
+                        && unit instanceof UnitFreeColonist
+                        && unit.isAtPlaceLocation())
+                .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT
+                        || ((UnitFreeColonist) unit).isHoldingGuns()
+                        || ((UnitFreeColonist) unit).isMounted())
+                .filter(unit -> hasVisiblePeaceContact(unit, rival))
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /** Remaining pair-level cooldown rounds, zero when eligible again. */
+    public int getTributeTurnsRemaining(final Player actor,
+            final Player rival) {
+        checkRegisteredPlayers(actor, rival);
+        Preconditions.checkArgument(
+                actor != rival && !actor.isKing() && !rival.isKing(),
+                "Invalid tribute participants");
+        return europeanRelations.tributeTurnsRemaining(actor, rival,
+                calendar.getNumberOfPlayedTurns());
+    }
+
+    private TributeDemand quoteTribute(final Unit visitor, final Player rival) {
+        final Player actor = visitor.getOwner();
+        final double actorStrength = armedLandStrength(actor);
+        final double rivalStrength = armedLandStrength(rival);
+        final boolean accepted = actorStrength >= 2d * rivalStrength;
+        final int amount = accepted ? Math.min(200, rival.getGold()) : 0;
+        return new TributeDemand(actor, rival, visitor.getId(), amount,
+                actor.getGold(), rival.getGold(), actorStrength, rivalStrength,
+                calendar.getNumberOfPlayedTurns(),
+                europeanRelations.get(actor, rival), accepted);
+    }
+
+    /** Freeze one demand for later confirmation or cancellation. */
+    public TributeDemand prepareTributeDemand(final Unit visitor,
+            final Player rival) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(rival);
+        final Player actor = visitor.getOwner();
+        Preconditions.checkState(
+                getTributeVisitors(actor, rival).contains(visitor),
+                "Visitor has no eligible tribute contact");
+        final Optional<TributeDemand> pending = europeanRelations
+                .getPendingTribute(actor, rival);
+        if (pending.isPresent()) {
+            return pending.get();
+        }
+        final TributeDemand demand = quoteTribute(visitor, rival);
+        Preconditions.checkState(
+                (long) demand.getActorGold()
+                        + demand.getAmount() <= Integer.MAX_VALUE,
+                "Tribute exceeds treasury capacity");
+        europeanRelations.putPendingTribute(demand);
+        return demand;
+    }
+
+    public Optional<TributeDemand> getPendingTributeDemand(final Player actor,
+            final Player rival) {
+        if (actor == null || rival == null || actor == rival || actor.isKing()
+                || rival.isKing() || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival)) {
+            return Optional.empty();
+        }
+        return europeanRelations.getPendingTribute(actor, rival);
+    }
+
+    /** Discard a pending demand without starting a cooldown. */
+    public void cancelTributeDemand(final TributeDemand demand) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(demand);
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == demand.getActor()
+                        && getPendingTributeDemand(demand.getActor(),
+                                demand.getRival()).orElse(null) == demand,
+                "Tribute demand is obsolete");
+        europeanRelations.clearPendingTribute(demand);
+    }
+
+    /** Confirm reviewed terms once; returns the amount actually received. */
+    public int confirmTributeDemand(final TributeDemand demand) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(demand);
+        final Player actor = demand.getActor();
+        final Player rival = demand.getRival();
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == actor
+                        && getPendingTributeDemand(actor, rival)
+                                .orElse(null) == demand
+                        && getTributeTurnsRemaining(actor, rival) == 0,
+                "Tribute demand is obsolete");
+        final Unit visitor = tryGetUnitById(demand.getVisitorId()).orElseThrow(
+                () -> new IllegalStateException("Visitor no longer exists"));
+        Preconditions.checkState(
+                getTributeVisitors(actor, rival).contains(visitor),
+                "Tribute contact was lost");
+        final TributeDemand now = quoteTribute(visitor, rival);
+        Preconditions.checkState(
+                now.getQuotedRound() == demand.getQuotedRound()
+                        && now.getRelation() == demand.getRelation()
+                        && now.getActorGold() == demand.getActorGold()
+                        && now.getRivalGold() == demand.getRivalGold()
+                        && Double.compare(now.getActorStrength(),
+                                demand.getActorStrength()) == 0
+                        && Double.compare(now.getRivalStrength(),
+                                demand.getRivalStrength()) == 0
+                        && now.isAccepted() == demand.isAccepted()
+                        && now.getAmount() == demand.getAmount(),
+                "Tribute terms changed");
+        Preconditions.checkState(
+                (long) actor.getGold()
+                        + demand.getAmount() <= Integer.MAX_VALUE,
+                "Tribute exceeds treasury capacity");
+        final int actorAfter = demand.getActorGoldAfter();
+        final int rivalAfter = demand.getRivalGoldAfter();
+        if (demand.getAmount() > 0) {
+            actor.setGold(actorAfter);
+            rival.setGold(rivalAfter);
+        }
+        europeanRelations.confirmTribute(demand,
+                calendar.getNumberOfPlayedTurns());
+        return demand.getAmount();
+    }
+
+    private PeaceOffer quotePeace(final Unit visitor, final Player rival) {
+        final Player actor = visitor.getOwner();
+        final double actorStrength = armedLandStrength(actor);
+        final double rivalStrength = armedLandStrength(rival);
+        final double ratio = Math.max(1d,
+                rivalStrength / Math.max(1d, actorStrength));
+        final double raw = Math.ceil(200d * ratio);
+        Preconditions.checkState(
+                Double.isFinite(raw) && raw <= Integer.MAX_VALUE,
+                "Peace price exceeds supported range");
+        final boolean franklin = actor.getCongressMembers()
+                .contains(Founder.BENJAMIN_FRANKLIN);
+        final int normal = (int) raw;
+        final int price = franklin ? normal / 2 + normal % 2 : normal;
+        return new PeaceOffer(actor, rival, visitor.getId(), price,
+                actorStrength, rivalStrength, actor.getGold(), rival.getGold(),
+                franklin);
+    }
+
+    /** Create a saved proposal, or reopen the same pair's pending proposal. */
+    public PeaceOffer preparePeaceOffer(final Unit visitor,
+            final Player rival) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(rival);
+        final Player actor = visitor.getOwner();
+        Preconditions.checkState(
+                getPeaceVisitors(actor, rival).contains(visitor),
+                "Visitor has no eligible peace contact");
+        final Optional<PeaceOffer> pending = europeanRelations.getPending(actor,
+                rival);
+        if (pending.isPresent()) {
+            return pending.get();
+        }
+        final PeaceOffer offer = quotePeace(visitor, rival);
+        europeanRelations.putPending(offer);
+        return offer;
+    }
+
+    public Optional<PeaceOffer> getPendingPeaceOffer(final Player actor,
+            final Player rival) {
+        if (actor == null || rival == null || actor == rival || actor.isKing()
+                || rival.isKing() || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival)) {
+            return Optional.empty();
+        }
+        return europeanRelations.getPending(actor, rival);
+    }
+
+    /** Cancel a live proposal without changing the war. */
+    public void cancelPeaceOffer(final PeaceOffer offer) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == offer.getActor()
+                        && getPendingPeaceOffer(offer.getActor(),
+                                offer.getRival()).orElse(null) == offer,
+                "Peace offer is obsolete");
+        europeanRelations.clearPending(offer);
+    }
+
+    /** Revalidate every quoted input, then pay once and establish peace. */
+    public void acceptPeaceOffer(final PeaceOffer offer) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        final Player actor = offer.getActor();
+        final Player rival = offer.getRival();
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == actor
+                        && getPendingPeaceOffer(actor, rival)
+                                .orElse(null) == offer
+                        && europeanRelations.get(actor,
+                                rival) == EuropeanRelationState.WAR,
+                "Peace offer is obsolete");
+        final Unit visitor = tryGetUnitById(offer.getVisitorId()).orElseThrow(
+                () -> new IllegalStateException("Visitor no longer exists"));
+        Preconditions.checkState(
+                getPeaceVisitors(actor, rival).contains(visitor),
+                "Peace contact was lost");
+        final PeaceOffer now = quotePeace(visitor, rival);
+        Preconditions.checkState(
+                now.getPrice() == offer.getPrice()
+                        && Double.compare(now.getActorStrength(),
+                                offer.getActorStrength()) == 0
+                        && Double.compare(now.getRivalStrength(),
+                                offer.getRivalStrength()) == 0
+                        && now.getActorGold() == offer.getActorGold()
+                        && now.getRivalGold() == offer.getRivalGold()
+                        && now.hasFranklin() == offer.hasFranklin(),
+                "Peace offer terms changed");
+        Preconditions.checkState(offer.getActorGoldAfter() >= 0,
+                "Not enough gold for peace");
+        final int rivalAfter = offer.getRivalGoldAfter();
+        actor.setGold(offer.getActorGoldAfter());
+        rival.setGold(rivalAfter);
+        europeanRelations.transition(actor, rival, EuropeanRelationState.WAR,
+                EuropeanRelationState.PEACE);
+    }
+
     private void changeEuropeanRelation(final Player actor, final Player target,
             final EuropeanRelationState expected,
             final EuropeanRelationState next) {
@@ -914,6 +1230,48 @@ public class Model {
                 "Unit is not a current sentry");
         checkTurnPreparationComplete();
         ((AbstractUnit) unit).setWaitingOrder(UnitActionType.noAction);
+    }
+
+    /** Whether a current armed land unit can begin fortifying. */
+    public boolean canFortify(final Unit unit) {
+        return unit instanceof UnitFreeColonist && isGameRunning()
+                && !endingTurn && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.isAtPlaceLocation()
+                && map.getTerrainTypeAt(unit.getLocation()).isLand()
+                && ((UnitFreeColonist) unit).isHoldingGuns()
+                && unit.getActionPoints() > 0
+                && unit.getAction().getType() == UnitActionType.noAction;
+    }
+
+    /** Spend this turn's movement and record a pending fortification. */
+    public void fortify(final Unit unit) {
+        Preconditions.checkState(canFortify(unit), "Unit cannot fortify");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).startFortifying();
+    }
+
+    public boolean canCancelFortify(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction().getType() == UnitActionType.fortify;
+    }
+
+    /** Clear either stage without refunding movement. */
+    public void cancelFortify(final Unit unit) {
+        Preconditions.checkState(canCancelFortify(unit),
+                "Unit is not a current fortification order");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelFortifying();
+    }
+
+    /** Whether this live unit's order has crossed its owner-turn boundary. */
+    public boolean isFortified(final Unit unit) {
+        return unit != null
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction() instanceof UnitActionFortify
+                && ((UnitActionFortify) unit.getAction()).isFortified();
     }
 
     void wakeSentriesForMovement(final Unit mover, final Location destination) {

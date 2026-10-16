@@ -67,6 +67,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonSentry = new Button();
     private final Tooltip sentryTooltip = new Tooltip();
     private boolean sentryActive;
+    private final Button buttonFortify = new Button();
+    private final Tooltip fortifyTooltip = new Tooltip();
+    private boolean fortifying;
+    private boolean fortified;
     private I18n currentI18n;
 
     private final Button buttonCongress = new Button();
@@ -103,6 +107,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
         buttonCongress.setOnAction(event -> congressDialog.showCongress());
+        buttonFortify.setId("fortifyUnit");
+        buttonFortify.setTooltip(fortifyTooltip);
+        buttonFortify.setDisable(true);
         buttonSentry.setId("sentryUnit");
         buttonSentry.setTooltip(sentryTooltip);
         buttonSentry.setDisable(true);
@@ -183,6 +190,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonWait);
         getButtonPanel().getChildren().add(buttonSkipUnitTurn);
         getButtonPanel().getChildren().add(buttonSentry);
+        getButtonPanel().getChildren().add(buttonFortify);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCongress);
@@ -217,6 +225,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         currentI18n = i18n;
         buttonCongress.setText(i18n.get(CongressText.title));
         updateSentryText();
+        updateFortifyText();
         buttonWait.setText(i18n.get(Buttons.buttonWait));
         buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
         waitTooltip.setText(i18n.get(Buttons.waitExplanation));
@@ -247,9 +256,33 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                         : Buttons.sentryExplanation));
     }
 
+    void setFortifyAction(final Runnable action) {
+        buttonFortify.setOnAction(event -> action.run());
+    }
+
+    void setFortifyOrder(final boolean ordered, final boolean effective,
+            final boolean enabled) {
+        fortifying = ordered;
+        fortified = effective;
+        buttonFortify.setDisable(!enabled);
+        updateFortifyText();
+    }
+
+    private void updateFortifyText() {
+        buttonFortify.setText(currentI18n.get(fortifying
+                ? (fortified ? Buttons.buttonCancelFortified
+                        : Buttons.buttonCancelFortifying)
+                : Buttons.buttonFortify));
+        fortifyTooltip.setText(currentI18n.get(fortifying
+                ? (fortified ? Buttons.fortifiedExplanation
+                        : Buttons.fortifyingExplanation)
+                : Buttons.fortifyExplanation));
+    }
+
     private void setDisable(final boolean disable) {
         buttonCongress.setDisable(disable);
         buttonSentry.setDisable(disable);
+        buttonFortify.setDisable(disable);
         buttonWait.setDisable(disable);
         buttonSkipUnitTurn.setDisable(disable);
         buttonCenter.setDisable(disable);

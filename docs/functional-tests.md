@@ -3841,3 +3841,180 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    non-tradable goods in a saved export report, with a focused malformed-event
    assertion. Its focused rerun passed all **seven model tests**, zero failures/errors/skips,
    separately from the earlier full suite. This does not change the valid player journey.
+
+### R-0087 peace negotiation — 2026-10-16
+
+1. Scope: UC-069 / DIP-003/004. The existing Sol low worker supplies the model,
+   optional per-pair pending-offer persistence and boundary tests. Main owns
+   the existing report UI, F50/TC59 journeys, review and actual verification.
+   No local model or parallel duplicate implementation is used.
+2. Offers bind the actor, rival, visitor, price, armed land strengths, both
+   treasuries and Franklin membership. Explicit acceptance validates the live
+   contact and unchanged terms before one transfer and symmetric peace.
+   Cancel leaves war; postponement and Continue retain the pending proposal.
+3. First full model run: **1628 tests, one failure**, zero errors/skips.
+   The worker expected 200 gold in an insufficient-funds fixture containing
+   existing French armed strength 1.5; the correct price was 300. After that
+   correction, the same test exposed a second fixture mistake: setting guns
+   to true did not change an already armed unit. These failed runs are not
+   acceptance; the same worker handles targeted correction.
+4. Previous R-0104 CI `38957291472` failed with **239 UI/support tests, one
+   failure and one error**: TC53's indoor work popup still timed out after
+   the bounded-wait change, and TC11's button-width assertion failed. The
+   earlier local TC53 pass did not establish a durable fix. Both are included
+   in the current regression selection and remain publication blockers.
+5. Corrected final model run passed **1628 tests**, zero failures/errors/skips.
+   The stale-strength setup now changes the unarmed Dutch visitor rather than
+   rearming the already armed French unit; all unchanged-world assertions remain.
+   Packaging including Javadoc and nine documentation tests plus strict MkDocs
+   passed before the later toolbar repair.
+6. Docker `run-puTaEk` ran **20 UI/support tests: one failure**, zero errors/skips.
+   All four new TC59 journeys, seven TC33 regressions, two TC53 cases and the
+   three page-contract checks passed; TC11 reproduced its label-fit failure.
+   Main inspected the peace-offer screenshot: rival, price, treasury, contact
+   and all three actions are readable. Final-source keyboard acceptance/cancel
+   verification is running separately.
+7. Follow-up repair replaces the shared toolbar's HBox with FlowPane: controls
+   wrap at their preferred widths while retaining the right-side reservation.
+   No labels or assertions are shortened. The protected-drag test also waits
+   for its source's actual `DRAG_DONE` before another mouse gesture; the previous
+   FX-queue wait alone did not guarantee native drag completion. TC53 passed
+   locally before this change, so its CI race remains a hypothesis pending
+   verification. Final targeted and full UI acceptance remain open.
+8. The added hidden-contact case initially failed because `Model.make` correctly
+   restores current unit sight (R-0069); clearing saved visibility while loading
+   an adjacent visitor cannot hide the contact. The worker moved the visitor
+   adjacent only after loading, before explicitly revealing its sight. The
+   other ten focused cases passed, including ordinary AI attack eligibility
+   becoming false after accepted peace; the corrected focused rerun passed all **11 cases**, zero failures/errors/skips.
+9. R-0084 CI `38958675524` also failed on the same two checks: **242
+   UI/support tests, one failure (TC11) and one error (TC53)**, zero skips.
+   Native packages, compatibility and Pages succeeded, but game publication
+   was skipped. This corroborates the open shared UI blockers; it does not
+   invalidate the already passing model and focused gameplay results.
+10. Final targeted Docker `run-aEKtDp` passed **30 tests**, zero failures,
+    errors or skips: TC59 (four, including Enter acceptance and Escape cancel),
+    TC11 (four), TC40 (15), TC52 (two), TC53 (two) and three page-contract
+    checks. Main inspected the toolbar screenshot: labels retain full width,
+    overflow wraps below and the right-side information remains unobscured.
+    Full model and UI verification is now running in Docker with no selection
+    filter; its result and publication remain required.
+
+11. Franklin automatic proposals and saved report notices were added in the
+    isolated R-0088 worktree. Review found a reverse-direction pending-offer
+    collision; the worker added an unordered-pair guard and a fresh-turn AI
+    regression. The first focused run had **26 tests, one failure**: the test
+    incorrectly expected the previous-turn notice to remain after a new turn.
+    `GameManager` clears that report as designed; main corrected the expectation
+    without changing gameplay. The subsequent full model run passed **1646 tests**,
+    zero failures/errors/skips, including six Franklin cases. Game/player-test
+    compilation, shared formatting (31 Java files, exact tokens and idempotence),
+    nine documentation checks and strict MkDocs passed. The new TC59 automatic
+    offer journey and tribute UI remain unverified; the older Docker snapshot
+    cannot establish acceptance for these later changes.
+
+### R-0088 European tribute — 2026-10-16
+
+1. Scope: UC-069 / DIP-004. The same bounded Sol low worker supplies model,
+   persistence and rule tests in an isolated worktree based on main 92c5b806
+   plus the reviewed R-0087 model dependency. Main supplies the report action,
+   localized proposal dialog, F51/TC60 journeys, review and actual verification.
+2. Confirmed demands transfer at most 200 gold only when the actor's armed
+   land strength is at least twice the rival's. Paid, refused and empty-treasury
+   outcomes start the pair's ten-round wait without changing its relation.
+   Cancel/preview/stale confirmation do not. Pending and resolved state persist.
+3. Initial focused check passed **19 tests**, zero failures/errors/skips:
+   eight tribute cases and eleven peace regressions. Main reviewed the missing
+   operational cooldown boundary and low nonzero treasury case; the worker
+   added actual rejection at round nine, confirmation at round ten for the
+   remaining 117 gold, treasury conservation and stale strength/role rejection.
+   The final focused rerun passed **20 tests**, zero failures/errors/skips.
+   The later combined full model run passed **1646 tests**, including nine
+   tribute cases; no UI acceptance or publication is claimed.
+4. Main compiled all game and player-test sources successfully. F51/TC60 covers
+   keyboard cancel, postponed Continue, one-time confirmed payment, unchanged
+   war/peace, visible refusal, stale treasury rejection and a zero-gold rival.
+   These player scenarios have not yet run. No local model was used.
+
+### R-0106 Fortification order timing — 2026-10-16
+
+1. In an isolated worktree based on `92c5b806`, Sol low implemented the shared
+   order/persistence and initial rule tests; main implemented toolbar/status,
+   F52/TC61 and the AI order-preservation guard. No local model was used.
+2. Initial full model run passed **1624 tests**, zero failures/errors/skips,
+   including three `FortifyOrderTest` cases and one `FortifiedUnitAiTest`.
+   Main compiled all game/player-test sources. The shared formatter checked
+   twenty Java files with exact-token and idempotence checks passing.
+3. Review requested additional unchanged-state boundary tests for stopped,
+   wrong-owner/stale units, invalid placement and other orders, effective-stage
+   cancellation and intervening owner turns. The expanded focused rerun passed **seven tests**, zero failures/errors/skips.
+   Main added an otherwise legal attack before and after explicit cancellation;
+   its first two runs failed because the fixture was not started and then had
+   zero movement. Correcting those fixture conditions produced the passing
+   result. Production code was unchanged by these test corrections.
+4. F52/TC61 contains issue/inspect/cancel and Continue before/after activation,
+   keyboard confirmation, visible stage, unchanged rejected drag and restored
+   movement after effective-stage cancellation. These UI scenarios have not run.
+   Shared toolbar, sentry and plowing regressions and publication remain open.
+
+
+### Combined peace, tribute and fortification verification — 2026-10-16
+
+1. The reviewed R-0106 source changes were applied to the isolated R-0088
+   worktree, which already contains R-0087 and the Franklin follow-up. Main
+   remains unchanged by this integration; the older full Docker run uses its
+   earlier R-0087 snapshot.
+2. The combined full model suite passed **1653 tests**, zero failures/errors/skips.
+   All player-test sources compiled, packaging/Javadoc passed, and the shared
+   formatter checked **49 Java files** with exact tokens and idempotence intact.
+   Nine documentation tests and strict MkDocs also passed before this evidence
+   paragraph was added.
+3. A targeted Docker run is queued behind successful completion of the existing
+   full baseline: TC59/60/61, TC33, TC45, TC11, TC15/18, TC36, TC56/57 and the
+   page-verification contract. Neither the queued selection nor the older
+   snapshot proves acceptance of the new player journeys. Publication remains
+   pending.
+
+4. The older full Docker snapshot subsequently exposed TC34/06 failing with
+   `The tile remains covered by the game controls`: its northern hidden tile
+   lay entirely beneath the wrapped toolbar. The captured screenshot confirms
+   two rows over the map; this is a layout defect, not a relaxed gameplay check.
+   Main bound the game content's top padding to the toolbar's actual height,
+   so the map canvas begins below all rows, and added a geometry assertion to
+   TC11's existing layout verification. The repair is in the combined isolated
+   tree only. The pending exit-zero-gated Docker command will not start after
+   this failed baseline; its eventual terminal state must be observed before
+   launching the repaired selection, including all TC34 scenarios.
+
+5. The older full Docker `run-GmgnNe` finished with **1631 model tests passing**
+   and **250 UI/support tests, zero failures, one error, zero skips**. The only
+   error was TC34/06's covered northern tile. TC11 and TC53 passed in this full
+   snapshot, alongside the existing manual peace journeys. No game publication
+   follows from this failed run.
+6. The original gated follow-up correctly ended without running. Repaired
+   combined Docker `run-jSb6yX` now runs the above selection plus all TC34 cases.
+   The layout repair compiled and its documentation checks passed before this
+   result note. New peace/tribute/fortification UI acceptance remains pending.
+
+7. Interim combined-run evidence: all five TC59 peace cases (including the
+   Franklin automatic offer), all five TC60 tribute cases and all four TC11
+   toolbar cases passed. TC61/02 reached the restored effective order but its
+   hover helper expected a new hover event while the cursor was already on the
+   selected tile. The test now moves to an adjacent tile first, then returns
+   before the real rejected drag; location, order and movement assertions remain
+   unchanged. That correction is outside the running snapshot and requires a
+   rerun. Main visually inspected `r106-fortified-order.png`: both toolbar rows
+   remain above the map and the full cancellation label is visible. These interim
+   observations do not close combined acceptance or publication.
+
+8. Final local acceptance: `run-jSb6yX` completed 46 UI/support tests with
+   one failure (the TC61 hover setup above), zero errors and zero skips. All
+   seven TC34 northern-map/regression cases passed. After the test-only
+   correction, Docker `run-A5oBhI` passed both TC61 journeys and all three
+   `PageVerificationContractTest` checks: five tests, zero failures/errors/skips.
+   The combined production model had already passed all 1653 tests; subsequent
+   production changes were limited to the verified toolbar/map layout.
+   The shared formatter checked 50 Java files with exact code-token preservation
+   and idempotence; nine documentation tests and strict MkDocs also passed.
+   Main integrated the reviewed sources on 2026-10-16 after checking original
+   file hashes. Full CI and publication remain pending.

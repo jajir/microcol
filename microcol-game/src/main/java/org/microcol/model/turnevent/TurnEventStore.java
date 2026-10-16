@@ -30,6 +30,7 @@ public final class TurnEventStore {
                     TurnEventNewUnitInColony::tryLoad,
                     TurnEventNewUnitInEurope::tryLoad,
                     TurnEventFounderArrived::tryLoad,
+                    TurnEventPeaceOffer::tryLoad,
                     TurnEventCustomHouseExport::tryLoad,
                     TurnEventShipComeToEuropePort::tryLoad,
                     TurnEventShipComeToHighSeas::tryLoad));

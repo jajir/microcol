@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Vyjednat mír…</entry>
+  <entry key="resume">Pokračovat v jednání…</entry>
+  <entry key="contactRequired">Pro jednání přesuňte kolonistu vedle viditelné cizí jednotky nebo kolonie.</entry>
+  <entry key="title">Vyjednávání míru</entry>
+  <entry key="offer">%s nabízí mír za %s zlatých.
+Vaše pokladnice: %s zlatých.
+Po zaplacení: %s zlatých.</entry>
+  <entry key="offerUnaffordable">%s nabízí mír za %s zlatých.
+Vaše pokladna při nabídce: %s zlatých.</entry>
+  <entry key="visitor">Kontakt: %s na (%s, %s).</entry>
+  <entry key="visitorUnavailable">Původní kontakt již není dostupný.</entry>
+  <entry key="confirm">Zaplatit a přijmout mír</entry>
+  <entry key="cancel">Zrušit návrh</entry>
+  <entry key="later">Rozhodnout později</entry>
+  <entry key="insufficient">Na přijetí nabídky nemáte dost zlata.</entry>
+  <entry key="changed">Kontakt nebo nabídka se změnily. Zrušte návrh a vyžádejte novou nabídku.</entry>
+  <entry key="accepted">%s a %s nyní žijí v míru.</entry>
+  <entry key="turnOffer">%s nabízí mír za %s zlatých. Prohlédněte si návrh v přehledu evropských vztahů.</entry>
+</properties>

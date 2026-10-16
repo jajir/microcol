@@ -479,3 +479,68 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
    nastavení a neopakuje dokončený prodej. Zastaralé potvrzení se odmítne
    s pokynem okno znovu otevřít. Stav ověření vede
    [evidence R-0085](functional-tests.md#r-0085-custom-house-export-2026-10-16).
+
+### Vyjednání míru — R-0087
+
+1. Hráč najde vyjednání v přehledu evropských vztahů u válečného soupeře.
+   Bez viditelného sousedního kontaktu kolonisty je akce nedostupná; tooltip
+   vysvětluje potřebný kontakt. Základní přehled vztahů zůstává viditelný.
+2. Nabídka ukáže soupeře, kontaktní jednotku, cenu a výsledek platby.
+   Nedostatek zlata zakáže potvrzení. Potvrdit, zrušit návrh a rozhodnout
+   později jsou oddělené akce; Escape návrh ruší, odložení jej zachová.
+3. Continue obnoví původní návrh. Změněné podmínky model odmítne před platbou
+   a dialog vysvětlí možnost zrušit návrh a vyžádat nový. Po přijetí přehled
+   ukáže mír; další porušení smlouvy používá stávající varování.
+4. Implementace 2026-10-16; hráčské ověření a snímek se evidují v
+   [R-0087](functional-tests.md#r-0087-peace-negotiation-2026-10-16).
+   Nejde o výsledek pozorování skutečných hráčů.
+
+### Šířka horní lišty — ověření 2026-10-16
+
+1. Po přidání dalších akcí se horní řada v úzkém okně stlačila a TC11
+   zachytil nedostatečnou šířku popisků. Lišta nyní zalamuje celé ovládací
+   prvky při zachování jejich preferované šířky a rezervy pravého panelu.
+2. Rozměry a dostupnost akcí ověřuje TC11; dopad společné lišty na ostatní
+   obrazovky vyžaduje celou funkční sadu. Aktuální výsledky jsou v
+   [evidenci R-0087](functional-tests.md#r-0087-peace-negotiation-2026-10-16).
+
+### Požadavek tributu — R-0088
+
+1. Hráč otevře přehled evropských vztahů a zvolí tribut u sousedního kontaktu
+   vojáka, dragouna nebo průzkumníka. Nedostupná akce vysvětlí potřebný kontakt
+   nebo počet zbývajících tahů do dalšího požadavku.
+2. Dialog před potvrzením ukáže soupeře, kontakt, očekávanou platbu, pokladnu
+   a předpokládané odmítnutí či prázdnou pokladnu. Výslovně upozorní, že
+   potvrzený požadavek zahájí deset tahů čekání i při odmítnutí.
+3. Potvrzení, zrušení a odložení jsou oddělené. Continue zachová nabídku;
+   změněné podmínky se odmítnou bez převodu. Výsledek rozlišuje platbu,
+   odmítnutí a chybějící zlato a potvrzuje, že vztahy zůstaly stejné.
+4. Implementace je připravena v izolovaném worktree; skutečnou přejímku vede
+   [evidence R-0088](functional-tests.md#r-0088-european-tribute-2026-10-16).
+
+
+### Franklinova nabídka míru při aktualizaci tahu
+
+1. Nové hlášení uvádí soupeře, cenu a místo, kde lze návrh prohlédnout: evropské vztahy. Samotné hlášení mír neuzavře.
+2. Odložený návrh zůstane dostupný po Continue; další tah nevytváří duplicitní nabídku ani nové hlášení k témuž návrhu. Potvrzení znovu ověří původní podmínky.
+3. Implementace je připravena v izolovaném pracovním stromu; hráčskou cestu ověřuje nový pátý scénář TC59. Jeho spuštění zatím čeká na dokončení běžící úplné UI sady.
+
+### R-0106 — Opevňování a účinné opevnění
+
+1. Hráč vybere vojáka či dragouna na mapě a použije tlačítko Opevnit.
+   Vysvětlení uvádí spotřebu zbývajícího pohybu a účinnost až příští vlastní tah.
+2. Popisek se změní na Zrušit opevňování; po aktualizaci na Zrušit opevnění.
+   Výběr jiné jednotky, návrat ani Continue rozkaz nezruší a neurychlí.
+3. Výslovné zrušení dovolí další dostupné akce, ale neobnoví již utracený pohyb.
+   Pokus táhnout opevněnou jednotku vysvětlí nutnost nejprve zrušit rozkaz.
+4. F52/TC61 jsou připravené hráčské scénáře; jejich spuštění a vizuální kontrola
+   zatím neproběhly. Nejde o výsledek uživatelské studie.
+
+
+### Viditelnost mapy pod zalomenou lištou
+
+1. Úplný běh 2026-10-16 odhalil, že dvě řady tlačítek zakryly celé severní
+   políčko mapy v TC34/06. Zkrácení popisků ani posun kliknutí není opravou.
+2. Herní obsah proto rezervuje skutečnou výšku celé lišty a mapa začíná až
+   pod ní. Kontrola geometrie doplňuje čitelnost popisků; severní okraj a
+   návrat z Continue musí projít skutečnou hráčskou cestou. Ověření opravy čeká.

@@ -9,6 +9,8 @@ public enum Buttons implements MessageKeyResource {
     buttonEurope, buttonMove, buttonPlowField, buttonBuildColony,
     buttonDeclareIndependence, buttonWait, buttonSkipUnitTurn, waitExplanation,
     skipUnitTurnExplanation, unitOrderUnavailable, buttonSentry,
-    buttonActivateSentry, sentryExplanation, activateSentryExplanation;
+    buttonActivateSentry, sentryExplanation, activateSentryExplanation,
+    buttonFortify, buttonCancelFortifying, buttonCancelFortified,
+    fortifyExplanation, fortifyingExplanation, fortifiedExplanation;
 
 }

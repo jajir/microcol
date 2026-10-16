@@ -67,6 +67,19 @@ hru, aktuálního aktéra a registrované objekty hráčů; `EuropeanRelations` 
 úplnost dvojic a očekávaný předchozí stav. `model.store` uchovává interní klíče
 hráčů, nikoli upravitelné zobrazované názvy. Královské hráče určuje jejich role.
 Chybějící vztahy se při načítání nedoplňují odhadem.
+R-0087 přidává uloženou nepotvrzenou mírovou nabídku v téže dvojici.
+`Model` určuje viditelný sousední kontakt kolonisty, sílu armád a cenu;
+`PeaceOffer` drží podmínky nabídky. Potvrzení znovu ověří kontakt, válku,
+síly, pokladny a Franklina před jediným převodem zlata a uzavřením míru.
+Členství Franklina při vstupu do běžné aktualizace hráče připraví nabídky
+až po aktualizaci kolonií a jednotek. Existující nabídku v libovolném směru
+zachová. Uložený `TurnEventPeaceOffer` pouze oznamuje novou nabídku;
+zobrazení hlášení ani Continue nevyjednává a nepřevádí zlato.
+GUI nabízí potvrzení, zrušení a odložení; načtení samo nabídku nepřijme.
+R-0088 používá stejný kontakt a vojenskou sílu pro tribut. `EuropeanRelations`
+ukládá samostatný návrh tributu a poslední potvrzený požadavek dvojice;
+`Model` před platbou ověří roli, deset tahů čekání i nezměněné podmínky.
+Potvrzené odmítnutí zahájí stejné čekání, ale nemění zlato ani vztah.
 Sdílený dotaz `Model.areHostile` odděluje diplomatické oprávnění od obsazení
 polí cizími jednotkami. Cizí mírová jednotka nadále brání vstupu a vylodění.
 Králové nemají evropský záznam míru/války; dotaz pro ně zachovává dosavadní
@@ -657,3 +670,12 @@ použije sdílenou evropskou čistou cenu a za revoluce její polovinu.
 `TurnEventCustomHouseExport` ukládá skutečné množství a příjem; GUI pouze
 potvrzuje výběr a překládá uloženou zprávu. Bojkoty z R-0102 zatím nejsou
 propojené; úplnou přejímku vede [R-0085](requirements/R-0085.md).
+
+### Rozkaz opevnění jednotky (R-0106)
+
+`model.unit.UnitAction` vlastní přechod z opevňování na účinné opevnění
+v příští běžné aktualizaci vlastníka. `model.store` uchovává fázi; načtení ji
+neposouvá. `Model` ověřuje vydání a zrušení rozkazu před změnou pohybu.
+GUI používá tytéž dotazy pro povolení tlačítka a rozlišení obou fází.
+Výběr jednotky neruší rozkaz. Zrušení nevrací spotřebovaný pohyb.
+Implementace je rozpracovaná; výslednou bojovou sílu vlastní R-0093/R-0094.

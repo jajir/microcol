@@ -231,7 +231,10 @@ public final class EuropeanRelationsPage extends AbstractScreen {
         }
         assertEquals(declarationCount,
                 rows.stream().flatMap(row -> row.getChildren().stream())
-                        .filter(Button.class::isInstance).count());
+                        .filter(Button.class::isInstance)
+                        .filter(node -> node.getId() != null
+                                && node.getId().startsWith("declare-"))
+                        .count());
         assertTrue(getListOfNodes(".chart").isEmpty());
     }
 

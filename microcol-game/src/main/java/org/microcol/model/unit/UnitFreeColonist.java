@@ -110,6 +110,7 @@ public class UnitFreeColonist extends CanMount {
                 "Unsupported equipment type: %s", type);
 
         if (!getModel().isGameRunning()
+                || getAction().getType() == UnitActionType.fortify
                 || getModel().getCurrentPlayer() != getOwner()
                 || !isAtEuropePier() || getOwner().getAllUnits().stream()
                         .noneMatch(u -> u == this)) {
@@ -347,6 +348,7 @@ public class UnitFreeColonist extends CanMount {
                 "Unsupported GoodsType: %s", type);
 
         if (!getModel().isGameRunning()
+                || getAction().getType() == UnitActionType.fortify
                 || !getModel().getCurrentPlayer().equals(getOwner())
                 || !isAtPlaceLocation()
                 || !getOwner().getAllUnits().stream().anyMatch(u -> u == this)
@@ -467,6 +469,10 @@ public class UnitFreeColonist extends CanMount {
      * @param tools the tools to set
      */
     public void setTools(int tools) {
+        Preconditions.checkState(
+                getAction().getType() != UnitActionType.fortify
+                        || this.tools == tools,
+                "Cancel fortification before equipping");
         this.tools = tools;
     }
 
@@ -481,6 +487,10 @@ public class UnitFreeColonist extends CanMount {
      * @param holdingGuns the holdingGuns to set
      */
     public void setHoldingGuns(boolean holdingGuns) {
+        Preconditions.checkState(
+                getAction().getType() != UnitActionType.fortify
+                        || this.holdingGuns == holdingGuns,
+                "Cancel fortification before equipping");
         final int previousRadius = getSightRadius();
         this.holdingGuns = holdingGuns;
         revealExpandedSight(previousRadius);
@@ -497,6 +507,10 @@ public class UnitFreeColonist extends CanMount {
      * @param mounted the mounted to set
      */
     public void setMounted(boolean mounted) {
+        Preconditions.checkState(
+                getAction().getType() != UnitActionType.fortify
+                        || this.mounted == mounted,
+                "Cancel fortification before equipping");
         final int previousRadius = getSightRadius();
         this.mounted = mounted;
         revealExpandedSight(previousRadius);

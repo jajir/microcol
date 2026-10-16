@@ -124,6 +124,12 @@ public final class TurnEventProvider {
         return new TurnEventFounderArrived(player.getName(), founder);
     }
 
+    /** Notice of a newly frozen Franklin proposal for the turn report. */
+    public static TurnEvent getPeaceOffer(final Player player,
+            final String rivalName, final int price) {
+        return new TurnEventPeaceOffer(player.getName(), rivalName, price);
+    }
+
     /**
      * Get new turn event when new unit appears in colony.
      *

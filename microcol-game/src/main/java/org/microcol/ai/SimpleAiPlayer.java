@@ -40,6 +40,9 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     @Override
     void moveUnit(final Unit unit) {
+        if (!unit.getAction().isNoAction()) {
+            return;
+        }
         if (unit == founder || unit == carrier) {
             pursueFirstColony(unit);
             return;

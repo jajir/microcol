@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Požadovat tribut…</entry>
+  <entry key="resume">Pokračovat v požadavku tributu…</entry>
+  <entry key="contactRequired">Přesuňte vojáka, dragouna nebo průzkumníka vedle viditelné cizí jednotky či kolonie.</entry>
+  <entry key="cooldown">Další požadavek bude možný za %s tahů.</entry>
+  <entry key="title">Požadavek tributu</entry>
+  <entry key="offer">Požadovat tribut od %s.
+Očekávaná platba: %s zlatých.
+Vaše pokladna při nabídce: %s zlatých.
+Po platbě: %s zlatých.</entry>
+  <entry key="acceptedPreview">Vaše ozbrojené síly splňují podmínku síly. Potvrzení požadavku zahájí deset tahů čekání na další požadavek.</entry>
+  <entry key="refusedPreview">Vaše ozbrojené síly jsou příliš slabé: soupeř odmítne. Potvrzení přesto zahájí deset tahů čekání; vztahy se nezmění.</entry>
+  <entry key="emptyPreview">Soupeř nemá zlato na zaplacení. Potvrzení přesto zahájí deset tahů čekání; vztahy se nezmění.</entry>
+  <entry key="visitor">Kontakt: %s na (%s, %s).</entry>
+  <entry key="visitorUnavailable">Původní kontakt již není dostupný.</entry>
+  <entry key="confirm">Potvrdit požadavek</entry>
+  <entry key="cancel">Zrušit návrh</entry>
+  <entry key="later">Rozhodnout později</entry>
+  <entry key="changed">Kontakt nebo podmínky se změnily. Zrušte návrh a vyžádejte nový.</entry>
+  <entry key="paid">%s zaplatil %s zlatých hráči %s. Vztahy se nezměnily.</entry>
+  <entry key="refused">%s odmítl požadavek. Zlato ani vztahy se nezměnily.</entry>
+  <entry key="empty">%s neměl zlato na zaplacení. Vztahy se nezměnily.</entry>
+</properties>

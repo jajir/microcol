@@ -17,17 +17,33 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         return getModel().getColonyById(0).orElseThrow();
     }
 
-    public void dragIndoorOutside(String buildingId, int index) {
+    public void dragIndoorOutside(String buildingId, int index)
+            throws Exception {
         Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
         Canvas canvas = (Canvas) building.getChildrenUnmodifiable().stream()
                 .filter(n -> n instanceof Canvas).findFirst().orElseThrow();
-        getRobot()
-                .drag(canvas.localToScreen(10 + 31 * index, 82),
-                        MouseButton.PRIMARY)
-                .dropTo(getNodeFinder().lookup(".outside")
-                        .queryAs(javafx.scene.Node.class));
-        WaitForAsyncUtils.waitForFxEvents();
+        java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(
+                1);
+        javafx.event.EventHandler<javafx.scene.input.DragEvent> completed = event -> done
+                .countDown();
+        getRobot().interact(() -> canvas.addEventHandler(
+                javafx.scene.input.DragEvent.DRAG_DONE, completed));
+        try {
+            getRobot()
+                    .drag(canvas.localToScreen(10 + 31 * index, 82),
+                            MouseButton.PRIMARY)
+                    .dropTo(getNodeFinder().lookup(".outside")
+                            .queryAs(javafx.scene.Node.class));
+            // Rejected native drags must finish before the next mouse gesture.
+            if (!done.await(5, java.util.concurrent.TimeUnit.SECONDS))
+                throw new java.util.concurrent.TimeoutException(
+                        "Indoor drag did not finish");
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            getRobot().interact(() -> canvas.removeEventHandler(
+                    javafx.scene.input.DragEvent.DRAG_DONE, completed));
+        }
     }
 
     public void exhaustFood() {

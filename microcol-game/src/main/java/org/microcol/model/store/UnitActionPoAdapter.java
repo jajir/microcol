@@ -55,6 +55,22 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
                 }
                 return null;
             }, read -> {
+                if (UnitActionType.fortify.equals(read.type)) {
+                    try {
+                        Preconditions.checkArgument(read.in.hasNext(),
+                                "Fortification state is missing");
+                        Preconditions.checkArgument(
+                                "fortified".equals(read.in.nextName()),
+                                "Invalid fortification state field");
+                        final UnitActionFortifyPo out = new UnitActionFortifyPo();
+                        out.setFortified(read.in.nextBoolean());
+                        return out;
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                return null;
+            }, read -> {
                 if (UnitActionType.plowField.equals(read.type)) {
                     try {
                         final UnitActionPlowFieldPo out = new UnitActionPlowFieldPo();
@@ -97,6 +113,17 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
      */
     private final ChainOfCommandOptionalStrategy<WriteParameters, Boolean> write = new ChainOfCommandOptionalStrategy<>(
             Lists.newArrayList(write -> {
+                if (UnitActionType.fortify.equals(write.value.getType())) {
+                    final UnitActionFortifyPo ua = (UnitActionFortifyPo) write.value;
+                    try {
+                        write.out.name("fortified").value(ua.getFortified());
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                    return true;
+                }
+                return null;
+            }, write -> {
                 if (UnitActionType.plowField.equals(write.value.getType())) {
                     final UnitActionPlowFieldPo ua = (UnitActionPlowFieldPo) write.value;
                     try {

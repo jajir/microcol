@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Demand tribute…</entry>
+  <entry key="resume">Resume tribute demand…</entry>
+  <entry key="contactRequired">Move a soldier, dragoon or scout next to a visible rival unit or colony.</entry>
+  <entry key="cooldown">Another demand is available in %s turns.</entry>
+  <entry key="title">Tribute demand</entry>
+  <entry key="offer">Demand tribute from %s.
+Expected payment: %s gold.
+Your treasury when quoted: %s gold.
+After payment: %s gold.</entry>
+  <entry key="acceptedPreview">Your armed forces meet the strength requirement. Confirming the demand starts a ten-turn wait before the next demand.</entry>
+  <entry key="refusedPreview">Your armed forces are too weak: the rival will refuse. Confirming still starts a ten-turn wait; relations stay unchanged.</entry>
+  <entry key="emptyPreview">The rival has no gold to pay. Confirming still starts a ten-turn wait; relations stay unchanged.</entry>
+  <entry key="visitor">Contact: %s at (%s, %s).</entry>
+  <entry key="visitorUnavailable">The original contact is no longer available.</entry>
+  <entry key="confirm">Confirm demand</entry>
+  <entry key="cancel">Cancel proposal</entry>
+  <entry key="later">Decide later</entry>
+  <entry key="changed">The contact or terms changed. Cancel this proposal and request a new one.</entry>
+  <entry key="paid">%s paid %s gold to %s. Relations are unchanged.</entry>
+  <entry key="refused">%s refused the demand. No gold moved and relations are unchanged.</entry>
+  <entry key="empty">%s had no gold to pay. Relations are unchanged.</entry>
+</properties>
