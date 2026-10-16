@@ -18,6 +18,11 @@ public class Cargo {
     public Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
         this.owner = Preconditions.checkNotNull(owner);
         Preconditions.checkArgument(
+                cargoPo != null && cargoPo.getSlots() != null
+                        && cargoPo.getSlots().stream()
+                                .allMatch(slot -> slot != null),
+                "Invalid cargo slots");
+        Preconditions.checkArgument(
                 cargoPo.getSlots().stream().skip(capacity)
                         .noneMatch(slot -> slot.getUnitId() != null
                                 || slot.getGoodsType() != null

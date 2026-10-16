@@ -12,6 +12,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -41,6 +42,8 @@ public final class GameModelDao {
     }
 
     public GameModel loadFromFile(final File file, final EventBus eventBus) {
+        Preconditions.checkNotNull(file, "Save file is null");
+        Preconditions.checkNotNull(eventBus, "Event bus is null");
         return makeFromModelPo(gameModelPoDao.loadFromFile(file), eventBus);
     }
 
@@ -77,12 +80,47 @@ public final class GameModelDao {
 
     private GameModel makeFromModelPo(final GameModelPo gameModelPo,
             final EventBus eventBus) {
+        Preconditions.checkArgument(
+                gameModelPo != null && gameModelPo.getModel() != null
+                        && gameModelPo.getMissionName() != null,
+                "Incomplete saved game");
+        final ModelPo saved = gameModelPo.getModel();
+        Preconditions.checkArgument(saved.getCalendar() != null
+                && saved.getMap() != null && saved.getGameManager() != null
+                && saved.getUnits() != null && saved.getColonies() != null
+                && saved.getEuropeanRelations() != null,
+                "Incomplete saved game model");
+        Preconditions
+                .checkArgument(
+                        saved.getGameManager().getPlayers() != null
+                                && saved.getGameManager().getPlayers().stream()
+                                        .allMatch(player -> player != null
+                                                && player.getName() != null
+                                                && player.getVisible() != null
+                                                && player.getVisible()
+                                                        .getVisible() != null),
+                        "Incomplete saved player");
+        Preconditions.checkArgument(
+                saved.getColonies().stream().allMatch(colony -> colony != null),
+                "Invalid saved colony");
+        Preconditions
+                .checkArgument(
+                        saved.getUnits().stream().allMatch(unit -> unit != null
+                                && unit.getId() != null
+                                && unit.getType() != null
+                                && unit.getOwnerId() != null
+                                && unit.getAction() != null
+                                && unit.getCargo() != null
+                                && unit.getCargo().getSlots() != null
+                                && (unit.getPlaceMap() == null || unit
+                                        .getPlaceMap().getLocation() != null)),
+                        "Incomplete saved unit");
         final ExternalGameOver makeGameOver = new ExternalGameOver(
                 MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE);
         final List<Function<Model, GameOverResult>> evaluators = MissionImpl
                 .getPredefinedGameOverEvaluators();
         evaluators.add(makeGameOver);
-        final Model model = Model.make(gameModelPo.getModel(), evaluators);
+        final Model model = Model.make(saved, evaluators);
 
         final Campaign campaign = campaignManager
                 .getCampaignByName(resolve(gameModelPo.getCampaignName()));

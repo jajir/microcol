@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.microcol.model.Difficulty;
 import org.microcol.model.EuropeanNation;
+import org.microcol.model.MicroColException;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignMission;
@@ -17,6 +18,7 @@ import org.microcol.model.campaign.MissionName;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.gson.JsonParseException;
 
 /**
  * Responsible for loading and storing game. Class knows about state of default
@@ -49,10 +51,12 @@ public final class GameController {
     }
 
     public boolean loadModelFromFile(final File sourceFile) {
+        Preconditions.checkNotNull(sourceFile, "Save file is null");
         final GameModel loaded;
         try {
             loaded = gameModelDao.loadFromFile(sourceFile, eventBus);
-        } catch (IllegalArgumentException rejected) {
+        } catch (IllegalArgumentException | IllegalStateException
+                | MicroColException | JsonParseException rejected) {
             gameModelController.showInvalidSavedGame();
             return false;
         }

@@ -225,6 +225,36 @@ public final class FreePlayAuditPage extends AbstractScreen {
         chooseLoadFile(invalidSave);
     }
 
+    public void prepareMalformedLoadFile(final String contents)
+            throws Exception {
+        invalidSave = Files.createTempFile("malformed-game-", ".microcol")
+                .toFile();
+        Files.writeString(invalidSave.toPath(), contents);
+        invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
+        previousGame = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel();
+        previousWorld = previousGame == null ? null
+                : new com.google.gson.Gson()
+                        .toJsonTree(previousGame.getModel().save());
+        chooseLoadFile(invalidSave);
+    }
+
+    public void prepareMalformedContinueWithoutGame() throws Exception {
+        final File save = getContext().getClassFromGuice(PersistingTool.class)
+                .getAutoSaveFile();
+        Files.writeString(save.toPath(), "{");
+        invalidSave = save;
+        invalidSaveBytes = Files.readAllBytes(save.toPath());
+        previousGame = null;
+        previousWorld = null;
+        getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.preferences.GamePreferences.class)
+                .setGameInProgressSaveFile(save.getName());
+    }
+
     public void attemptInvalidSavedGameWhilePlaying() {
         javafx.application.Platform.runLater(() -> getContext()
                 .getClassFromGuice(
@@ -256,6 +286,22 @@ public final class FreePlayAuditPage extends AbstractScreen {
             assertEquals(previousWorld, new com.google.gson.Gson()
                     .toJsonTree(previousGame.getModel().save()));
         }
+    }
+
+    public void verifyRejectedSourceUnchanged() throws Exception {
+        assertArrayEquals(invalidSaveBytes,
+                Files.readAllBytes(invalidSave.toPath()));
+    }
+
+    public void verifyValidRetryReplacedGame() {
+        assertNotNull(getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel());
+        assertNotSame(previousGame,
+                getContext().getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                        .getGameModel());
     }
 
     public void cancelLoadChooser() {

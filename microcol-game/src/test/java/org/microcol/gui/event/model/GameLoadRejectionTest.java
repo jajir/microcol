@@ -17,6 +17,7 @@ import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.store.CampaignsDao;
 import org.microcol.model.campaign.store.CampaignsPo;
+import org.microcol.model.store.PlaceMapPo;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
@@ -59,6 +60,143 @@ class GameLoadRejectionTest {
 
         verify(current).showInvalidSavedGame();
         verify(current, never()).setAndStartModel(any());
+        assertArrayEquals(before, Files.readAllBytes(source.toPath()));
+    }
+
+    @Test
+    void malformedAndEmptyJsonPreserveTheSourceAndAllowValidRetry()
+            throws Exception {
+        final byte[] valid = Files.readAllBytes(source.toPath());
+        for (final String broken : new String[] { "{", "", "null", "{}" }) {
+            Files.writeString(source.toPath(), broken);
+            final byte[] before = Files.readAllBytes(source.toPath());
+            assertFalse(controller.loadModelFromFile(source));
+            assertArrayEquals(before, Files.readAllBytes(source.toPath()));
+        }
+        verify(current, times(4)).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+
+        Files.write(source.toPath(), valid);
+        assertTrue(controller.loadModelFromFile(source));
+        verify(current).setAndStartModel(any());
+    }
+
+    @Test
+    void missingAndNonFileSourcesShowFailureWithoutStarting() {
+        assertFalse(controller.loadModelFromFile(
+                directory.resolve("missing.microcol").toFile()));
+        assertFalse(controller.loadModelFromFile(directory.toFile()));
+        verify(current, times(2)).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void missingIdentityAndInvalidReferencesDoNotReplaceTheGame()
+            throws Exception {
+        data.getModel().getGameManager().getPlayers().get(0).setName(null);
+        files.saveToFile(source.getAbsolutePath(), data);
+        assertRejectedSource();
+
+        data = files.loadFromClassPath(
+                "/maps/default-campaign-mission-2-thrive.microcol");
+        data.getModel().getUnits().get(0).setOwnerId("unknown participant");
+        files.saveToFile(source.getAbsolutePath(), data);
+        assertRejectedSource();
+
+        verify(current, times(2)).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void missingNestedLocationRejectsBeforeReplacingTheCurrentGame()
+            throws Exception {
+        data.getModel().getUnits().get(0).setPlaceMap(new PlaceMapPo());
+        files.saveToFile(source.getAbsolutePath(), data);
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void nullShipCargoSlotRejectsWithoutReplacingTheCurrentGame()
+            throws Exception {
+        data = files.loadFromClassPath("/maps/free-play.microcol");
+        data.getModel().getUnits().stream()
+                .filter(unit -> unit.getType().isShip()
+                        && !unit.getCargo().getSlots().isEmpty())
+                .findFirst().orElseThrow().getCargo().getSlots().set(0, null);
+        files.saveToFile(source.getAbsolutePath(), data);
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void truncatedTerrainRowsRejectWithoutReplacingTheCurrentGame()
+            throws Exception {
+        final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
+                .parse(Files.readString(source.toPath())).getAsJsonObject();
+        final com.google.gson.JsonArray rows = root.getAsJsonObject("model")
+                .getAsJsonObject("map").getAsJsonArray("tiles");
+        rows.remove(rows.size() - 1);
+        Files.writeString(source.toPath(), root.toString());
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void nullTerrainRowRejectsWithoutReplacingTheCurrentGame()
+            throws Exception {
+        final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
+                .parse(Files.readString(source.toPath())).getAsJsonObject();
+        root.getAsJsonObject("model").getAsJsonObject("map")
+                .getAsJsonArray("tiles")
+                .set(1, com.google.gson.JsonNull.INSTANCE);
+        Files.writeString(source.toPath(), root.toString());
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void shortTerrainRowRejectsWithoutReplacingTheCurrentGame()
+            throws Exception {
+        final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
+                .parse(Files.readString(source.toPath())).getAsJsonObject();
+        root.getAsJsonObject("model").getAsJsonObject("map")
+                .getAsJsonArray("tiles")
+                .set(1, new com.google.gson.JsonPrimitive("row-0001:_"));
+        Files.writeString(source.toPath(), root.toString());
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void unknownCampaignAndMissionDoNotReplaceTheGame() throws Exception {
+        data.setCampaignName("unknown campaign");
+        files.saveToFile(source.getAbsolutePath(), data);
+        assertRejectedSource();
+
+        data = files.loadFromClassPath(
+                "/maps/default-campaign-mission-2-thrive.microcol");
+        data.setMissionName("unknown mission");
+        files.saveToFile(source.getAbsolutePath(), data);
+        assertRejectedSource();
+
+        verify(current, times(2)).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    private void assertRejectedSource() throws Exception {
+        final byte[] before = Files.readAllBytes(source.toPath());
+        assertFalse(controller.loadModelFromFile(source));
         assertArrayEquals(before, Files.readAllBytes(source.toPath()));
     }
 

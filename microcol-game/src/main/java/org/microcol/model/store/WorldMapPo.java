@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
+
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 
@@ -67,6 +69,19 @@ public final class WorldMapPo extends AbstractMapStore {
     }
 
     public Map<Location, TerrainType> getTerrainMap() {
+        Preconditions.checkArgument(
+                tiles != null && tiles.length == maxY + 1 && tiles[0] != null,
+                "Invalid terrain row count");
+        for (int y = 1; y <= maxY; y++) {
+            final String row = tiles[y];
+            Preconditions.checkArgument(
+                    row != null
+                            && row.startsWith(
+                                    String.format("row-%04d:", y % 10000))
+                            && row.substring("row-0001:".length()).split(",",
+                                    -1).length == maxX,
+                    "Invalid terrain row %s", y);
+        }
         final Map<Location, TerrainType> out = new HashMap<>();
         iterate(tiles, (location, charCode) -> {
             final TerrainType terrainType = TerrainType.valueOfCode(charCode);

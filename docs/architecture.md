@@ -100,6 +100,18 @@ Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výc
 hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
 [R-0064](requirements/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
 
+### Bezpečné odmítnutí načítané hry (R-0067)
+
+`GameModelPoDao` čte soubor bez oprav a zápisu. `GameModelDao` kontroluje
+povinnou strukturu; `Cargo` odmítá prázdné položky a `WorldMapPo` neúplnou
+či nesprávně rozměrnou mřížku terénu. DAO sestaví kandidáta běžným modelovým načtením ještě před
+výměnou rozehrané hry. `GameController` převádí chyby čtení, JSON a odmítnutá
+data na existující lokalizovaný dialog a neúspěšný výsledek. Načíst/Pokračovat
+pak ponechají předchozí obrazovku a umožní další pokus. Chyby spuštění již
+sestaveného kandidáta leží mimo tento blok; nejsou hlášené jako vadný soubor.
+[Evidence R-0067](functional-tests.md#r-0067-load-recovery-2026-10-16) odlišuje
+ověřené případy od úplné přejímky.
+
 ### Referenční výpravy (R-0066)
 
 `model.campaign.ReferenceExpedition` sestavuje nový model ze samotného terénu,

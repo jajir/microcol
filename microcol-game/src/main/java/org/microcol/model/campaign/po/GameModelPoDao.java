@@ -105,7 +105,7 @@ public final class GameModelPoDao {
             final GameModelPo loaded = gson.fromJson(
                     new InputStreamReader(fis, StandardCharsets.UTF_8),
                     GameModelPo.class);
-            Preconditions.checkNotNull(loaded,
+            Preconditions.checkArgument(loaded != null,
                     "Unable to load data from file %s", file.getAbsolutePath());
             return loaded;
         } catch (IOException e) {

@@ -3174,3 +3174,19 @@ committed for this experiment.
     This independent review is for concrete regression correctness, without
     duplicating the R-0067 worker's load-boundary implementation. See the
     [full-regression follow-up](../functional-tests.md#full-regression-follow-up-after-r-0108-2026-10-16).
+
+11. R-0067 reused Sol low in `2026-10-16-r67` for the load boundary and focused
+    recovery tests. Main review requested explicit empty-root/nested-location
+    rejection and verified the existing required-relations contract. The first
+    executed model test failed in fixture setup (no on-map unit); the targeted
+    repair created that malformed placement. Main also required an actually
+    active-game UI check instead of checking after the menu had stopped it.
+    [Evidence](../functional-tests.md#r-0067-load-recovery-2026-10-16) records
+    actual results; no measured cloud-token saving is claimed.
+
+    Further targeted probes found two actual loader gaps (null cargo row and
+    truncated terrain accepted as ocean). Worker repairs added explicit shared
+    validation; a full run then exposed the malformed tenth-row label in one
+    old 10×10 test fixture. Correcting that fixture yielded 1351 passing model
+    checks and 24 passing selected UI/support checks. No acceptance checks were
+    omitted to save tokens.

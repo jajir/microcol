@@ -298,3 +298,12 @@ a vysvětlený poznámkou; přepnutí zpět na scénář volbu národa resetuje.
 Pokračovat obnoví identity a vybavení výprav. Generování terénu má vlastní požadavek. Automatizované ověření je v
 [evidenci R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16);
 nejde o uživatelskou studii.
+
+### Odmítnutí poškozené uložené hry — R-0067
+
+Načíst i Pokračovat při nečitelném nebo poškozeném souboru zobrazí existující
+dialog s vysvětlením, že se hra nepodařila načíst a předchozí hra ani soubor
+nebyly změněny. Potvrzení zprávy vrací hráče k předchozí obrazovce; může vybrat
+jiný soubor. Zrušení výběru je bez účinku. Dialog nenabízí automatickou opravu,
+která by změnila hráčova data. Aktuální ověření uvádí
+[evidence R-0067](functional-tests.md#r-0067-load-recovery-2026-10-16).

@@ -2858,3 +2858,44 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Continue assertions under its sight radius of seven. Shared formatter checked
    all three changed Java files, with token preservation and idempotence passing.
    Full CI and publication still require the corrected revision.
+
+<a id="r-0067-load-recovery-2026-10-16"></a>
+## R-0067 failed-load recovery — 2026-10-16
+
+1. File loading rejects read/parse/required-shape/data failures before replacing
+   the active model, reusing the existing localized dialog and false return.
+   Null caller arguments and errors while starting an already constructed game
+   remain outside the data-rejection catch. Empty decoded JSON roots are rejected
+   explicitly. Existing authored resources remain current-schema data.
+2. Sol low supplied the bounded implementation and recovery tests; main review
+   added empty-root and nested-location cases. The first full model run had
+   1347 tests with one fixture error: its chosen campaign had no on-map unit.
+   The targeted repair now creates a malformed on-map placement explicitly.
+   Main also corrected the test journey: exiting to menu stops the game, so
+   active-state preservation must be checked before exit. The picker-cancel
+   check is a separate menu action.
+3. Full CI's functional-job budget is raised from 25 to 45 minutes. The previous
+   complete UI run alone took 22 minutes 21 seconds; the new nation/recovery
+   scenarios need headroom in addition to build/setup. No tests or assertions
+   are removed and existing local command limits remain unchanged.
+4. The first corrected full model run passed **1347 tests**, zero failures/errors/
+   skips. Additional malformed-data probes then exposed two real gaps: a null
+   ship cargo slot escaped as `NullPointerException`, and a truncated terrain
+   row array loaded successfully by treating missing terrain as ocean. The
+   focused 11-test run had one failure and one error. These are open defects
+   until explicit cargo/grid validation and fresh checks pass.
+5. Explicit cargo-slot validation and exact serialized terrain grid validation
+   close both observed gaps. Null/short rows are also covered. The first full
+   grid-validation run exposed 20 constructor errors from one legacy test fixture:
+   the tenth row of `test-map-ocean-10x10.json` was mislabeled `row-0000`.
+   Correcting its terrain/tree labels to `row-0010` preserves the same geometry.
+   Final full model run passed **1351 tests**, zero failures/errors/skips.
+   Thirteen CI-script tests, nine documentation tests and strict MkDocs passed.
+6. Final Docker `run-12Niyj` passed **24 UI/support checks**: TC24 (11), TC39
+   (8), TC42 (2) and page contract (3), zero failures/errors/skips. TC42 verifies
+   malformed Continue without an active game, malformed Load while a game is
+   active, preserved instance/world/source bytes, picker cancel and valid retry.
+   The earlier 24-pass run preceded the corrected active-game assertion and is
+   not used as evidence for that assertion. Shared formatter checked eight Java
+   files with exact-token preservation and idempotence passing.
+7. Full CI and publication remain pending.
