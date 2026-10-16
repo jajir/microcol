@@ -53,6 +53,9 @@
  * Colony credits new cross production once; Player settles earned immigration
  * in the next Europe phase before processing that turn's colonies.
  *
+ * Player owns confirmed per-type European purchase quotes and counts; ship
+ * demand advances only after a validated purchase.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

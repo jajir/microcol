@@ -14,7 +14,9 @@
  * boarding.
  *
  * Colonial players require explicit candidate pools and immigration counters;
- * loading never redraws candidates. Crown players cannot have a pool.
+ * loading never redraws candidates. Crown players cannot have a pool. Player
+ * purchase history uses a sparse type-name/count map, independent of
+ * recruitment; the model rejects unsupported types and invalid counts.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

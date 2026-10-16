@@ -23,6 +23,17 @@ public final class PlayerPo {
 
     private RecruitmentPo recruitment;
 
+    private Map<String, Integer> unitPurchaseCounts = new HashMap<>();
+
+    public Map<String, Integer> getUnitPurchaseCounts() {
+        return unitPurchaseCounts;
+    }
+
+    public void setUnitPurchaseCounts(
+            final Map<String, Integer> unitPurchaseCounts) {
+        this.unitPurchaseCounts = unitPurchaseCounts;
+    }
+
     public RecruitmentPo getRecruitment() {
         return recruitment;
     }

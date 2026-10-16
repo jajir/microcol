@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 public final class BuyUnitPanel extends VBox {
 
     private final UnitType unitType;
+    private int quotedPrice;
     private final LocalizationHelper localizationHelper;
     private final I18n i18n;
     private final Label labelName = new Label();
@@ -34,7 +35,8 @@ public final class BuyUnitPanel extends VBox {
         labelName.getStyleClass().add("name");
         buttonBuy.getStyleClass().add("buttonBuy");
         buttonBuy.setId("buy-unit-" + unitType.name());
-        buttonBuy.setOnAction(event -> buyUnitsDialog.buy(unitType));
+        buttonBuy.setOnAction(
+                event -> buyUnitsDialog.buy(unitType, quotedPrice));
         unavailable.setId("buy-unit-reason-" + unitType.name());
         unavailable.setWrapText(true);
         unavailable.setMaxWidth(240);
@@ -42,16 +44,17 @@ public final class BuyUnitPanel extends VBox {
     }
 
     void refresh(final Player buyer) {
+        quotedPrice = buyer.getUnitPurchasePrice(unitType);
         labelName.setText(localizationHelper.getUnitName(unitType));
         buttonBuy.setText(i18n
                 .get(UnitType.EUROPEAN_SPECIALISTS.contains(unitType)
                         ? Europe.buyUnitDialog_buttonHire
                         : Europe.buyUnitDialog_buttonBuyUnit)
-                + " " + unitType.getEuropePrice());
+                + " " + quotedPrice);
         final boolean available = buyer.canBuyUnit(unitType);
         buttonBuy.setDisable(!available);
         unavailable.setText(available ? ""
-                : i18n.get(buyer.getGold() < unitType.getEuropePrice()
+                : i18n.get(buyer.getGold() < quotedPrice
                         ? Europe.buyUnitDialog_notEnoughGold
                         : Europe.buyUnitDialog_unavailable));
         unavailable.setVisible(!available);

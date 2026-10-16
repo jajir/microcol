@@ -41,6 +41,8 @@ public abstract class Player {
 
     private final RecruitmentPool recruitment;
 
+    private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
+
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
             final boolean declaredIndependence,
@@ -74,17 +76,24 @@ public abstract class Player {
             final PlayerStore playerStore) {
         Preconditions.checkNotNull(playerPo.getVisible(),
                 "Visible is null during creating '%s'", playerPo.getName());
+        Preconditions.checkArgument(playerPo.getUnitPurchaseCounts() != null,
+                "Missing unit purchase counts");
         if (playerPo.getWhosKingThisPlayerIs() == null) {
             Preconditions.checkArgument(playerPo.getRecruitment() != null,
                     "Missing colonial recruitment pool");
-            return new PlayerHuman(playerPo.getName(), playerPo.isComputer(),
-                    playerPo.getGold(), model,
+            final Player player = new PlayerHuman(playerPo.getName(),
+                    playerPo.isComputer(), playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
                     playerPo.getVisible().getVisibilitySet(),
                     playerPo.getRecruitment());
+            player.loadUnitPurchaseCounts(playerPo.getUnitPurchaseCounts());
+            return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
                     "Kings cannot have recruitment pools");
+            Preconditions.checkArgument(
+                    playerPo.getUnitPurchaseCounts().isEmpty(),
+                    "Kings cannot have purchase counts");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
             return new PlayerKing(playerPo.getName(), playerPo.isComputer(),
@@ -124,6 +133,10 @@ public abstract class Player {
         if (recruitment != null) {
             out.setRecruitment(recruitment.save());
         }
+        final Map<String, Integer> counts = new HashMap<>();
+        unitPurchaseCounts
+                .forEach((type, count) -> counts.put(type.name(), count));
+        out.setUnitPurchaseCounts(counts);
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),
                 model.getMap().getMaxLocationY());
         return out;
@@ -412,8 +425,71 @@ public abstract class Player {
      * @return whether this live player can currently afford and acquire it
      */
     public boolean canBuyUnit(final UnitType unitType) {
-        return isUnitPurchaseAvailable(unitType)
-                && gold >= unitType.getEuropePrice();
+        if (!isUnitPurchaseAvailable(unitType)) {
+            return false;
+        }
+        try {
+            final int price = getUnitPurchasePrice(unitType);
+            checkNextUnitPurchasePrice(unitType);
+            return gold >= price;
+        } catch (final ArithmeticException overflow) {
+            return false;
+        }
+    }
+
+    private static boolean hasEscalatingPrice(final UnitType type) {
+        return type != null && UnitType.UNIT_TYPES.contains(type)
+                && type.isShip() && type.getEuropePrice() > 0;
+    }
+
+    private static int unitPurchasePrice(final UnitType type,
+            final int previousPurchases) {
+        final int base = type.getEuropePrice();
+        final long increment = (base + 9L) / 10L;
+        return Math.toIntExact(Math.addExact((long) base,
+                Math.multiplyExact((long) previousPurchases, increment)));
+    }
+
+    private void loadUnitPurchaseCounts(
+            final Map<String, Integer> savedCounts) {
+        for (final Map.Entry<String, Integer> entry : savedCounts.entrySet()) {
+            Preconditions.checkArgument(
+                    entry.getKey() != null && entry.getValue() != null
+                            && entry.getValue() >= 0,
+                    "Invalid unit purchase count");
+            final UnitType type = UnitType.valueOf(entry.getKey());
+            Preconditions.checkArgument(hasEscalatingPrice(type),
+                    "Only purchasable ships track demand");
+            try {
+                unitPurchasePrice(type, entry.getValue());
+            } catch (final ArithmeticException overflow) {
+                throw new IllegalArgumentException(
+                        "Unit purchase count exceeds supported price",
+                        overflow);
+            }
+            unitPurchaseCounts.put(type, entry.getValue());
+        }
+    }
+
+    /** Current untaxed European quote for a registered purchasable unit. */
+    public int getUnitPurchasePrice(final UnitType unitType) {
+        Preconditions.checkNotNull(unitType, "Unit type is null");
+        Preconditions.checkArgument(
+                UnitType.UNIT_TYPES.contains(unitType)
+                        && unitType.getEuropePrice() > 0,
+                "This unit type cannot be bought in Europe");
+        return hasEscalatingPrice(unitType)
+                ? unitPurchasePrice(unitType,
+                        unitPurchaseCounts.getOrDefault(unitType, 0))
+                : unitType.getEuropePrice();
+    }
+
+    private void checkNextUnitPurchasePrice(final UnitType unitType) {
+        if (hasEscalatingPrice(unitType)) {
+            final int nextCount = Math
+                    .addExact(unitPurchaseCounts.getOrDefault(unitType, 0), 1);
+            unitPurchasePrice(unitType, nextCount);
+        }
     }
 
     /**
@@ -473,10 +549,14 @@ public abstract class Player {
                 && model.getPlayerStore().getPlayers().stream()
                         .anyMatch(player -> player == this)
                 && model.getCurrentPlayer() == this && !isKing()
-                && canTradeInEurope();
+                && canTradeInEurope() && model.canAddUnitInEurope();
     }
 
     public void buy(final UnitType unitType) {
+        buy(unitType, getUnitPurchasePrice(unitType));
+    }
+
+    public void buy(final UnitType unitType, final int expectedPrice) {
         Preconditions.checkNotNull(unitType);
         Preconditions.checkArgument(
                 UnitType.UNIT_TYPES.contains(unitType)
@@ -484,9 +564,23 @@ public abstract class Player {
                 "This unit type cannot be bought in Europe");
         Preconditions.checkState(isUnitPurchaseAvailable(unitType),
                 "Unit purchase is unavailable for this player");
-        final int price = unitType.getEuropePrice();
+        final int price;
+        try {
+            price = getUnitPurchasePrice(unitType);
+            Preconditions.checkState(expectedPrice == price,
+                    "Unit purchase quote has changed");
+            checkNextUnitPurchasePrice(unitType);
+        } catch (final ArithmeticException overflow) {
+            throw new IllegalStateException(
+                    "Next unit purchase quote exceeds supported range",
+                    overflow);
+        }
         verifyAvailibilityOFGold(price);
         model.addUnitInEurope(unitType, this);
+        if (hasEscalatingPrice(unitType)) {
+            unitPurchaseCounts.put(unitType,
+                    unitPurchaseCounts.getOrDefault(unitType, 0) + 1);
+        }
         setGold(getGold() - price);
     }
 

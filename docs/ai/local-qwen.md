@@ -3307,3 +3307,12 @@ committed for this experiment.
     prospective target-overflow and computer/closed-Europe boundaries.
     [Execution evidence](../functional-tests.md#r-0076-national-cross-immigration-2026-10-16)
     retains full CI/publication gates; no token saving is claimed.
+
+20. R-0077 reuses Sol low in `2026-10-16-r77` at `2a5dbac6` for the
+    per-type purchase count model, confirmed-price transaction and model
+    tests. Main prepares requirements, dialog integration, TC48/F39 and actual
+    verification. Model suite passed 1495 tests; Docker passed 24 selected
+    UI/support tests, with no failed attempts in this stage. No implementation
+    is duplicated and no local model is used in this user-selected experiment.
+    These outcomes do not establish token savings. Full acceptance, including the R-0095
+    artillery dependency, remains in [R-0077](../requirements/R-0077.md).

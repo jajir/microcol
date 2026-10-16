@@ -120,7 +120,7 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
         }
     }
 
-    void buy(final UnitType type) {
+    void buy(final UnitType type, final int quotedPrice) {
         if (buyer == null || actionTaken) {
             return;
         }
@@ -129,7 +129,7 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
             Preconditions.checkState(
                     gameModelController.getModel() == openedModel,
                     "Purchase belongs to a replaced game");
-            buyer.buy(type);
+            buyer.buy(type, quotedPrice);
         } catch (NotEnoughtGoldException e) {
             actionTaken = false;
             dialogNotEnoughGold.showAndWait();

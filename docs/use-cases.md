@@ -606,3 +606,11 @@ tahu; obrazovka Evropy ukazuje čekání a blokuje placenou cestu do vyřízení
 příchodu. `TC_47_F38_immigration_test` ověřuje skutečnou výrobu, příchozího
 na molu a Pokračovat před i po příchodu; stav provedení je vedený v
 [R-0076](requirements/R-0076.md), nikoli potvrzen touto mapou scénáře.
+
+### UC-055: opakované nákupy R-0077
+
+`TC_48_F39_ship_purchase_prices_test` mapuje zrušení nabídky, dvě potvrzené
+karavely za 1000 a 1100, nedostupnou třetí za 1200, Pokračovat a odmítnutí
+změněné nabídky nebo nedostatku peněz po otevření. Růst cen skutečného
+dělostřelectva zůstává integrační závislostí R-0095. Provedení a přejímku
+vede [R-0077](requirements/R-0077.md); samotná mapa není důkazem průchodu.

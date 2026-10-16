@@ -3369,3 +3369,27 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    `38940319281` succeeded. Full development/publication and the new platform
    matrix still require verification; Pages success does not establish game
    publication.
+
+### R-0077 repeated ship purchase prices — 2026-10-16
+
+1. `Player` owns the checked per-type quote and persisted purchase counts.
+   The dialog passes the displayed price; stale confirmation rejects before
+   payment, count changes or unit creation. Future-price and identity limits
+   are validated before a successful purchase. Existing specialist and paid
+   recruitment prices remain independent. Artillery requires its real R-0095
+   type and remains an explicit acceptance dependency.
+2. Complete model suite: **1495 passed**, zero failures/errors/skips. The new
+   seven model tests cover successive purchases, independent types/players,
+   fixed specialists, quote-only reads, stale and insufficient funds, disk
+   Continue, malformed counters, current/next price overflow and exhausted
+   unit identities. The main-owned `TC_48_F39_ship_purchase_prices_test`
+   covers cancel, duplicate confirmation, two purchases, unaffordable third,
+   Continue, stale quote and an expense after the offer opens.
+3. Docker `run-u37N7u` passed **24 tests**, zero failures/errors/skips:
+   TC48 (3), TC30 (12), TC46 (6) and the page contract (3). The player paths
+   verified prices 1000→1100→1200, exact treasury changes, independent types,
+   two real ships and persisted history, and unchanged state after rejected
+   stale/insufficient confirmation. Formatter checked nine Java files with
+   exact-token preservation and idempotence; packaging including Javadoc
+   passed. Nine documentation tests and strict MkDocs passed. Complete CI
+   and publication remain separate gates.

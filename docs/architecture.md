@@ -146,6 +146,17 @@ kumulovaný obsah se znovu nepřičítá. Čtecí dotazy UI příchozí nevytvá
 Brewsterův účinek
 vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/R-0075.md).
 
+### Ceny opakovaných nákupů (R-0077)
+
+`Player` vlastní počty nákupů podle typu a výpočet aktuální ceny; `UnitType`
+zůstává zdrojem základní ceny. `PlayerPo.unitPurchaseCounts` ukládá řídkou mapu
+jmen typů na počty, prázdná mapa znamená žádný nákup. Dialog předává zobrazenou
+cenu do modelové operace, která ji znovu porovná před vytvořením jednotky,
+změnou pokladny a počtu. Předem se ověřuje i rozsah příští ceny a identita nové
+jednotky. Lodě používají růst ceny nyní; skutečný typ dělostřelectva musí při
+R-0095 vstoupit do stejného pravidla. Stav ověření vede
+[R-0077](requirements/R-0077.md).
+
 ### Evropské odbornosti (R-0074)
 
 `UnitType.EUROPEAN_SPECIALISTS` je společný registr 19 evropsky dostupných

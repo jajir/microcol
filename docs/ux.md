@@ -368,3 +368,13 @@ zaplatit cestu před tímto příchodem. Výroba v koloniích probíhá až po f
 příchodů. Příchod oznamuje běžný přehled tahu a člověk je dostupný na molu.
 Otevření Evropy ani Pokračovat nevyrábí kříže a nevytváří další přistěhovalce.
 Aktuální stav přejímky vede [R-0076](requirements/R-0076.md).
+
+### Cena opakovaného nákupu (R-0077)
+
+Nabídka v Evropě ukazuje aktuální celkovou cenu před potvrzením. Další nákup
+stejného typu lodě zvýší jeho další cenu; cena jiného typu se nemění. Zrušení
+nabídky nic neúčtuje. Pokud se nabídka změní před potvrzením, dialog nákup
+odmítne a vyzve k opětovnému otevření. Neúčtuje automaticky vyšší cenu.
+Nedostatek peněz ponechá nabídku otevřenou s nedostupným tlačítkem a vysvětlením.
+Historie cen přetrvá přes Pokračovat; stav přejímky vede
+[R-0077](requirements/R-0077.md).
