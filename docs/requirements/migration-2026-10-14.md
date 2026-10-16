@@ -87,7 +87,7 @@ only to the described bounded delivery.
 | [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](done/R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
 | [R-0004](canceled/R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](done/R-0054.md) |
 | [R-0005](canceled/R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](done/R-0055.md), [R-0082](R-0082.md) |
-| [R-0006](canceled/R-0006.md) | canceled | The ordinary-worker job/yield choice remains an unimplemented outcome. | [R-0056](R-0056.md), [R-0074](R-0074.md) |
+| [R-0006](canceled/R-0006.md) | canceled | The ordinary-worker job/yield choice remains an unimplemented outcome. | [R-0056](done/R-0056.md), [R-0074](R-0074.md) |
 | [R-0007](canceled/R-0007.md) | canceled | Food consumption and births exist; boundary acceptance and import policy remain open. | [R-0057](R-0057.md), [R-0058](R-0058.md) |
 | [R-0008](canceled/R-0008.md) | canceled | Famine exists; complete boundary and final-resident acceptance remains open. | [R-0059](R-0059.md), [R-0060](R-0060.md), [R-0082](R-0082.md) |
 | [R-0009](canceled/R-0009.md) | canceled | The expert can now be purchased, but proportional ore consumption remains unfinished. | [R-0061](R-0061.md), [R-0079](R-0079.md) |

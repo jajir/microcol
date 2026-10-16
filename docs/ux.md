@@ -272,5 +272,6 @@ výsledek uživatelského výzkumu.
    Zpráva tak přežije překreslení budovy i návrat ukazatele po přetažení.
    Úspěch překreslí kolonii. Anglické a české
    snímky byly zkontrolované: popisky, výnosy i upozornění se vejdou do dialogu.
-   Jde o automatizované ověření, nikoli pozorování skutečných hráčů; úplná přejímka
-   stále pokračuje v [evidenci R-0056](functional-tests.md#r-0056-job-choice-implementation-2026-10-16-acceptance-in-progress).
+   Snímek odmítnutého přetažení také potvrzuje čitelnou zprávu a dostupné Zrušit.
+   Jde o automatizované ověření, nikoli pozorování skutečných hráčů. Úplná přejímka
+   a publikace jsou doložené v [evidenci R-0056](functional-tests.md#r-0056-job-choice-implementation-2026-10-16).

@@ -2926,7 +2926,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    Seven caller-owned anchors cover four model files and one new real-model test
    class. Scope is shared indoor/outdoor worker admission and atomic equipment
    rejection, preserving founding and saved-job restoration. This is one part of
-   [R-0056](../requirements/R-0056.md), not acceptance of its job picker.
+   [R-0056](../requirements/done/R-0056.md), not acceptance of its job picker.
 2. Dispatch observed Codex CLI **0.162.1**, rather than the historical 0.142.3
    installation above. The CLI reports the retired
    `model_supports_reasoning_summaries` setting as ignored and emits telemetry

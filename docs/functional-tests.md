@@ -2549,7 +2549,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0056 fixture preparation — 2026-10-16
 
-1. A temporary audit worktree at `3c521c5d` loaded the proposed F32 fixture through the real `Model.make`, checked exact save/load round-trip and unchanged snapshots after read-only queries. The current lumber field yields 1; free alternatives yield 2 and 3; the better shared field yields 6 but rejects assignment. The master blacksmith's existing production rule yields 6 tools for 3 ore, or 2 tools for the fixture's available 1 ore. This establishes test-data expectations for [R-0056](requirements/R-0056.md), not implementation of its picker or preview API.
+1. A temporary audit worktree at `3c521c5d` loaded the proposed F32 fixture through the real `Model.make`, checked exact save/load round-trip and unchanged snapshots after read-only queries. The current lumber field yields 1; free alternatives yield 2 and 3; the better shared field yields 6 but rejects assignment. The master blacksmith's existing production rule yields 6 tools for 3 ore, or 2 tools for the fixture's available 1 ore. This establishes test-data expectations for [R-0056](requirements/done/R-0056.md), not implementation of its picker or preview API.
 2. Docker `run-oZMALr` passed **one fixture-preparation test and three page source-contract checks**, zero failures/errors/skips, confirmed from XML. Shared formatting passed token preservation/idempotence. Local probe source and artifacts remain under `target/r56/runtime-audit/`; the candidate scenario remains under `target/r56/` until formal integration. No gameplay code or production formula changed, and no new player journey is claimed as verified.
 
 
@@ -2568,10 +2568,10 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    `target/r56/indoor-{boundary-acceptance,full-model-regression}.log`.
 3. These checks verify the shared admission foundation, including founding and
    persistence regressions. They do not run `TC_...` player scenarios or verify
-   the pending job picker; [R-0056](requirements/R-0056.md) remains in progress.
+   the pending job picker; [R-0056](requirements/done/R-0056.md) remains in progress.
 
 
-### R-0056 job choice implementation — 2026-10-16, acceptance in progress
+### R-0056 job choice implementation — 2026-10-16
 
 1. `ColonyJobChoiceTest` now verifies 19 real-model cases: read-only immutable
    offers, current-field crop preservation, explicit best relocation, center and
@@ -2630,3 +2630,32 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    failures/errors/skips and exit 0. This includes the direct center-to-field
    path, all four stale-drop variants, refreshed-picker cancellation and exact
    world-state preservation. Full regression and publication follow separately.
+
+9. Final local Docker run `run-DQiA2M` completed with exit 0: **1298 game tests
+   and 185 UI-module checks**, zero failures/errors/skips. Its XML includes all
+   15 TC40 scenarios and all eight TC39 shared-field regressions. The English,
+   Czech and expert preview captures were inspected, as was `job-stale-drop.png`:
+   the rejection remains readable after repaint, with explicit Assign/Cancel.
+   The shared Java formatter passed exact-token and idempotence checks for all
+   18 changed Java files. The 21 launcher tests, nine documentation tests and
+   strict MkDocs build also passed.
+10. Source [`75341b36bcc2d1e760fe6b6c0e7405007fdb3c67`](https://github.com/jajir/microcol/commit/75341b36bcc2d1e760fe6b6c0e7405007fdb3c67) passed
+    [full development CI](https://github.com/jajir/microcol/actions/runs/38890512391).
+    Downloaded functional XML independently confirms **1298 game and 185 UI
+    checks**, zero failures/errors/skips. Each of the three native reports has
+    **1298 game and 33 packaging checks**; launcher evidence has **32 checks**,
+    all passing. All four Windows/Linux × Java 11/17 jobs passed in
+    [compatibility CI](https://github.com/jajir/microcol/actions/runs/38890512440).
+    [Pages](https://github.com/jajir/microcol/actions/runs/38890512406) built and
+    deployed successfully; the live rule page pins its code links to this source.
+11. The downloaded channel manifest identifies
+    [dev-107-75341b36bcc2](https://github.com/jajir/microcol/releases/tag/dev-107-75341b36bcc2), that exact
+    source commit and all three platform archives. Their release-asset SHA-256
+    digests match the manifest. Evidence is under `target/r56/ci-evidence/` and
+    `target/r56/published/`. Acceptance covers each R-0056 behavior: all three
+    entry points, eligible/tied/shared fields, crop preservation, exact moves,
+    ordinary/expert potential versus actual production, advisory shortages,
+    unavailable/full jobs, read-only cancellation, stale sources/destinations,
+    equipment atomicity and preserved manual dragging. This closes R-0056,
+    PROD-011 and UC-033. The documentation-only closure must separately verify
+    Pages deployment, intentional game-job skips and an unchanged game manifest.
