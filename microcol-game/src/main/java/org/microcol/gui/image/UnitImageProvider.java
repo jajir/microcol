@@ -57,6 +57,8 @@ public class UnitImageProvider {
                         imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON));
         UnitType.EUROPEAN_SPECIALISTS.forEach(type -> images.put(type,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
+        UnitType.SCHOOL_ONLY_SPECIALISTS.forEach(type -> images.put(type,
+                imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
         images.put(UnitType.INDENTURED_SERVANT,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST));
         images.put(UnitType.PETTY_CRIMINAL,
@@ -83,6 +85,8 @@ public class UnitImageProvider {
                                     .getUnitType()
                             || UnitType.PETTY_CRIMINAL == request.getUnitType()
                             || UnitType.EUROPEAN_SPECIALISTS
+                                    .contains(request.getUnitType())
+                            || UnitType.SCHOOL_ONLY_SPECIALISTS
                                     .contains(request.getUnitType())) {
                         if (request.getUnit() instanceof UnitFreeColonist) {
                             final UnitFreeColonist fc = (UnitFreeColonist) request

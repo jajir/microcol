@@ -37,6 +37,7 @@ public class PlaceColonyField extends AbstractPlace {
 
     @Override
     public void destroy() {
+        getColony().onResidentLeaving(getUnit());
         colonyField.empty(true);
     }
 

@@ -622,3 +622,18 @@ ponechá základ budovy. Penn upraví společný součet a zobrazený přírůst
 odpovídá příštímu skutečnému tahu i národnímu imigračnímu fondu. Continue
 nevytvoří další kříže. Návrh ověřuje TC67; výsledky jsou v
 [evidenci testů](functional-tests.md#r-0110-religious-production-2026-10-17).
+
+### Školní výuka a odborná praxe — R-0107
+
+Tlačítko Vzdělávání v kolonii otevírá přehled učitelů, žáků, dovedností
+a uloženého pokroku. Nabídku určuje model podle školy a dostupného místa.
+Před potvrzením hráč vidí minimální stupeň školy, délku a příští sociální
+nebo odborný krok. Zavření návrhu nic nepřidělí. Potvrzení přesune učitele
+do školy, žákovi ponechá práci. Zrušení vybraného kurzu smaže pokrok,
+učitel zůstane dostupný ve škole pro jiného žáka. Při výměně hráč nejprve
+přesune původního učitele na jinou práci; přehled ukáže pozastavení.
+Stejná dovednost s novým učitelem pokračuje v zachovaném pokroku.
+Změněné účastníky model při potvrzení odmítne bez částečného přiřazení.
+Dokončení výuky či odborné praxe se objeví ve hlášení tahu; jeho opětovné
+zobrazení ani Continue nepřidává pokrok. Návrh hráčské cesty a výsledky
+TC68 jsou odděleny v [evidenci](functional-tests.md#r-0107-education-work-2026-10-17).

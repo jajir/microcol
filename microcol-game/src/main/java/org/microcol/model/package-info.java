@@ -1,4 +1,7 @@
 /**
+ * School courses and productive-work learning preserve registered identities;
+ * Colony validates assignments and credits actual production once per update.
+ * Immutable education previews and completion events are consumed by GUI/AI.
  * Shared world, player, unit, colony, economy and turn state, with legal
  * operations for both human and computer players. New gameplay rules belong
  * here; UI and AI use these operations. Invalid actions must throw before

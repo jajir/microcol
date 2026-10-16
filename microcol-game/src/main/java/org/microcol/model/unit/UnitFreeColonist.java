@@ -9,6 +9,7 @@ import org.microcol.model.ColonyField;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.EuropeTradeQuote;
+import org.microcol.model.EducationSkills;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.MilitaryPromotion;
@@ -39,6 +40,12 @@ public class UnitFreeColonist extends CanMount {
 
     private boolean veteran;
 
+    private UnitType learnedType;
+
+    private UnitType workSkill;
+
+    private int workUpdates;
+
     public UnitFreeColonist(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction unitAction,
@@ -56,6 +63,8 @@ public class UnitFreeColonist extends CanMount {
         out.setMounted(mounted);
         out.setHoldingGuns(holdingGuns);
         out.setVeteran(isVeteran());
+        out.setWorkSkill(workSkill);
+        out.setWorkUpdates(workUpdates);
         return out;
     }
 
@@ -66,6 +75,70 @@ public class UnitFreeColonist extends CanMount {
 
     void restoreVeteran(final boolean value) {
         veteran = value;
+    }
+
+    /** @return a newly learned specialty, if this instance started unskilled */
+    protected Optional<UnitType> getLearnedType() {
+        return Optional.ofNullable(learnedType);
+    }
+
+    /** Change expertise without replacing the registered unit or equipment. */
+    public void completeEducation(final UnitType skill) {
+        Preconditions.checkArgument(
+                skill != null && EducationSkills.isTeachingSkill(skill));
+        if (skill == UnitType.VETERAN_SOLDIER) {
+            Preconditions.checkState(!isVeteran());
+            veteran = true;
+        } else {
+            Preconditions.checkState(getType() == UnitType.COLONIST);
+            learnedType = skill;
+        }
+        workSkill = null;
+        workUpdates = 0;
+    }
+
+    public void restoreWorkExperience(final UnitType skill,
+            final Integer updates) {
+        Preconditions.checkArgument(updates != null && updates >= 0
+                && updates < 20 && (skill != null || updates == 0)
+                && (skill == null || EducationSkills.isWorkSkill(skill))
+                && (updates == 0 || getType() == UnitType.COLONIST));
+        workSkill = skill;
+        workUpdates = updates;
+    }
+
+    /** @return current productive-job progress, without advancing it */
+    public int getWorkUpdates() {
+        return workUpdates;
+    }
+
+    /** @return the tracked productive specialty, when a job has begun */
+    public Optional<UnitType> getWorkSkill() {
+        return Optional.ofNullable(workSkill);
+    }
+
+    /** Credit one committed productive owner update. */
+    public boolean recordWork(final UnitType job, final boolean productive,
+            final boolean schoolCompleted) {
+        Preconditions
+                .checkArgument(job == null || EducationSkills.isWorkSkill(job));
+        if (getType() != UnitType.COLONIST || job == null) {
+            workSkill = null;
+            workUpdates = 0;
+            return false;
+        }
+        if (workSkill != job) {
+            workSkill = job;
+            workUpdates = 0;
+        }
+        if (productive && !schoolCompleted) {
+            workUpdates++;
+            if (workUpdates == 20) {
+                completeEducation(job);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -107,7 +180,7 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public UnitType getType() {
-        return UnitType.COLONIST;
+        return learnedType == null ? UnitType.COLONIST : learnedType;
     }
 
     /**

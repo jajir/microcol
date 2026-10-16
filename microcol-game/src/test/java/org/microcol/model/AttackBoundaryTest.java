@@ -31,6 +31,8 @@ class AttackBoundaryTest {
         final UnitPo target = data.getUnits().stream()
                 .filter(u -> u.getId() == 6).findFirst().orElseThrow();
         target.setType(targetType);
+        target.setWorkUpdates(targetType == UnitType.COLONIST
+                || targetType == UnitType.MASTER_BLACKSMITH ? 0 : null);
         target.getPlaceMap().setLocation(TARGET);
         final UnitPo force = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol").getModel()
@@ -39,6 +41,10 @@ class AttackBoundaryTest {
         force.setId(20);
         force.setOwnerId("Dutch");
         force.setType(role);
+        force.setWorkUpdates(
+                role == UnitType.COLONIST || role == UnitType.MASTER_BLACKSMITH
+                        ? 0
+                        : null);
         force.setHoldingGuns(true);
         force.getPlaceMap().setLocation(ORIGIN);
         data.getUnits().add(force);

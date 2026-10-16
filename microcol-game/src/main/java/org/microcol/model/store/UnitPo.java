@@ -52,6 +52,26 @@ public class UnitPo {
 
     private boolean mounted;
 
+    private Integer workUpdates;
+
+    private UnitType workSkill;
+
+    public Integer getWorkUpdates() {
+        return workUpdates;
+    }
+
+    public void setWorkUpdates(final Integer value) {
+        workUpdates = value;
+    }
+
+    public UnitType getWorkSkill() {
+        return workSkill;
+    }
+
+    public void setWorkSkill(final UnitType value) {
+        workSkill = value;
+    }
+
     private boolean veteran;
 
     public boolean isVeteran() {

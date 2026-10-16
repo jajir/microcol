@@ -21,6 +21,6 @@ public final class UnitMasterBlacksmith extends UnitFreeColonist {
 
     @Override
     public UnitType getType() {
-        return UnitType.MASTER_BLACKSMITH;
+        return getLearnedType().orElse(UnitType.MASTER_BLACKSMITH);
     }
 }

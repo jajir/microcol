@@ -43,6 +43,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 0,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -59,6 +60,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 1,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -75,6 +77,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 2,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -91,6 +94,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 4,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -107,6 +111,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -123,6 +128,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 6,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -139,6 +145,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 7,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -155,6 +162,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 8,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -171,6 +179,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 9,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -187,6 +196,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 10,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -203,6 +213,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 11,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -219,6 +230,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 12,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -235,6 +247,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 13,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -251,6 +264,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 14,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -267,6 +281,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 15,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -283,6 +298,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 16,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -299,6 +315,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 17,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -315,6 +332,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 18,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -331,6 +349,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 19,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -347,6 +366,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 20,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -363,6 +383,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 21,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -379,6 +400,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 22,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -395,6 +417,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -411,6 +434,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 24,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -433,6 +457,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 25,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -455,6 +480,7 @@
       "mounted": false
     },
     {
+      "workUpdates": 0,
       "id": 26,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -474,6 +500,7 @@
   "nextColonyId": 3,
   "colonies": [
     {
+      "educationCourses": [],
       "id": 0,
       "name": "New Amsterdam",
       "ownerName": "Dutch",
@@ -629,6 +656,7 @@
       }
     },
     {
+      "educationCourses": [],
       "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
@@ -785,6 +813,7 @@
       }
     },
     {
+      "educationCourses": [],
       "id": 2,
       "name": "Haarlem",
       "ownerName": "Dutch",

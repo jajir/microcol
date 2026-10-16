@@ -42,7 +42,8 @@ public final class NavalBattlePage extends AbstractScreen {
         var window = WaitForAsyncUtils.waitForAsyncFx(5000,
                 () -> getLabeledById("navalBattleOutcome").getScene()
                         .getWindow());
-        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        getRobot().clickOn(getLabeledById("navalBattleOutcome").getScene()
+                .lookup("#buttonOk"));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> WaitForAsyncUtils
                 .waitForAsyncFx(5000, () -> !window.isShowing()));
     }

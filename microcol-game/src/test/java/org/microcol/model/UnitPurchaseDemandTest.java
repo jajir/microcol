@@ -209,6 +209,7 @@ class UnitPurchaseDemandTest {
         finalId.setId(Integer.MAX_VALUE - 1);
         finalId.setOwnerId("Dutch");
         finalId.setType(UnitType.COLONIST);
+        finalId.setWorkUpdates(0);
         finalId.setAction(new UnitActionNoActionPo());
         finalId.setAvailableMoves(1);
         finalId.setPlaceEuropePort(new PlaceEuropePortPo());

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Vzdělávání…</entry>
+  <entry key="title">Vzdělávání — %s</entry>
+  <entry key="rule">Vyberte učitele a žáka. Učitel přejde do školy; žák si ponechá práci. Vybranou výuku můžete zrušit. Při výměně nejprve přesuňte učitele na jinou práci a pak zvolte stejného žáka a dovednost. Po zrušení výuky učitel zůstává ve škole pro dalšího žáka.</entry>
+  <entry key="teacher">Učitel</entry>
+  <entry key="student">Žák</entry>
+  <entry key="skill">Dovednost</entry>
+  <entry key="preview">Potřebná budova: %s. Počet tahů: %s. Další krok: %s.</entry>
+  <entry key="veteran">Veterán</entry>
+  <entry key="active">Probíhá</entry>
+  <entry key="paused">Pozastaveno</entry>
+  <entry key="course">Učitel #%s → žák #%s: %s; %s/%s — %s</entry>
+  <entry key="assign">Zahájit výuku</entry>
+  <entry key="cancelCourse">Zrušit vybranou výuku</entry>
+  <entry key="close">Zavřít</entry>
+  <entry key="changed">Účastníci nebo kolonie se změnili. Zavřete a znovu otevřete okno.</entry>
+  <entry key="none">Vyberte účastníky s dostupnou výukou. Je nutná odpovídající škola a volné místo učitele.</entry>
+  <entry key="graduated">%s: žák #%s dokončil výuku: %s → %s.</entry>
+  <entry key="learned">%s: pracovník #%s získal praxí odbornost: %s → %s.</entry>
+</properties>

@@ -21,16 +21,21 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
 
     private final Button buttonClose;
     private final Button exports = new Button();
+    private final Button education = new Button();
     private final I18n i18n;
     private org.microcol.model.Colony colony;
 
     @Inject
     ColonyButtonsPanel(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
-            final DialogCustomHouse customHouse) {
+            final DialogCustomHouse customHouse, final DialogEducation school) {
         super(imageProvider, eventBus, Source.COLONY, i18n);
 
         this.i18n = i18n;
+        getButtonPanel().setId("colonyButtons");
+        education.setId("educationOpen");
+        education.setOnAction(event -> school.showFor(colony));
+        education.setDisable(true);
         exports.setId("customHouseOpen");
         exports.setOnAction(event -> customHouse.showFor(colony));
         exports.setDisable(true);
@@ -40,11 +45,13 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
-        getButtonPanel().getChildren().addAll(buttonClose, exports);
+        getButtonPanel().getChildren().addAll(buttonClose, exports, education);
     }
 
     void setColony(org.microcol.model.Colony colony) {
         this.colony = colony;
+        education.setText(i18n.get(EducationText.open));
+        education.setDisable(false);
         exports.setText(i18n.get(CustomHouseText.open));
         exports.setDisable(!colony.isContainsConstructionByType(
                 org.microcol.model.ConstructionType.CUSTOM_HOUSE));

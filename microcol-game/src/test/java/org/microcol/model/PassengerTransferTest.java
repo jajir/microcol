@@ -112,6 +112,12 @@ class PassengerTransferTest {
         UnitPo unit = new UnitPo();
         unit.setId(100);
         unit.setType(type);
+        if (type == UnitType.COLONIST || type == UnitType.INDENTURED_SERVANT
+                || type == UnitType.PETTY_CRIMINAL
+                || UnitType.EUROPEAN_SPECIALISTS.contains(type)
+                || UnitType.SCHOOL_ONLY_SPECIALISTS.contains(type)) {
+            unit.setWorkUpdates(0);
+        }
         unit.setOwnerId(owner);
         unit.setAvailableMoves(3);
         unit.setAction(new UnitActionNoAction().save());

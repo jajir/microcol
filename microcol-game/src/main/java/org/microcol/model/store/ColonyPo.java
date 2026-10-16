@@ -37,6 +37,16 @@ public final class ColonyPo {
 
     private List<GoodsType> exportGoods;
 
+    private List<EducationCoursePo> educationCourses;
+
+    public List<EducationCoursePo> getEducationCourses() {
+        return educationCourses;
+    }
+
+    public void setEducationCourses(final List<EducationCoursePo> value) {
+        educationCourses = value;
+    }
+
     public List<GoodsType> getExportGoods() {
         return exportGoods;
     }

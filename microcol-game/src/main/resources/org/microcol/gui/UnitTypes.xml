@@ -98,4 +98,13 @@
 	<entry key="ARTILLERY_name">Artillery</entry>
 	<entry key="ARTILLERY_name_7">artillery</entry>
 	<entry key="ARTILLERY_name_7pl">artillery</entry>
+  <entry key="MASTER_SUGAR_PLANTER_name">Master sugar planter</entry>
+  <entry key="MASTER_SUGAR_PLANTER_name_7">Master sugar planter</entry>
+  <entry key="MASTER_SUGAR_PLANTER_name_7pl">Master sugar planters</entry>
+  <entry key="MASTER_COTTON_PLANTER_name">Master cotton planter</entry>
+  <entry key="MASTER_COTTON_PLANTER_name_7">Master cotton planter</entry>
+  <entry key="MASTER_COTTON_PLANTER_name_7pl">Master cotton planters</entry>
+  <entry key="MASTER_TOBACCO_PLANTER_name">Master tobacco planter</entry>
+  <entry key="MASTER_TOBACCO_PLANTER_name_7">Master tobacco planter</entry>
+  <entry key="MASTER_TOBACCO_PLANTER_name_7pl">Master tobacco planters</entry>
 </properties>

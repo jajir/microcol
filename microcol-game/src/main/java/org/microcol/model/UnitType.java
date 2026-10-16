@@ -185,6 +185,13 @@ public final class UnitType {
             "EXPERT_SILVER_MINER", 1_000, GoodsType.SILVER);
     public static final UnitType EXPERT_LUMBERJACK = specialist(
             "EXPERT_LUMBERJACK", 1_000, GoodsType.LUMBER);
+    /** Native/school skills are intentionally unavailable for Europe buying. */
+    public static final UnitType MASTER_SUGAR_PLANTER = specialist(
+            "MASTER_SUGAR_PLANTER", 0, GoodsType.SUGAR);
+    public static final UnitType MASTER_COTTON_PLANTER = specialist(
+            "MASTER_COTTON_PLANTER", 0, GoodsType.COTTON);
+    public static final UnitType MASTER_TOBACCO_PLANTER = specialist(
+            "MASTER_TOBACCO_PLANTER", 0, GoodsType.TOBACCO);
 
     public static final UnitType MASTER_CARPENTER = specialist(
             "MASTER_CARPENTER", 1_000, GoodsType.HAMMERS);
@@ -305,12 +312,17 @@ public final class UnitType {
             MASTER_GUNSMITH, FIREBRAND_PREACHER, ELDER_STATESMAN,
             SEASONED_SCOUT, HARDY_PIONEER, VETERAN_SOLDIER, JESUIT_MISSIONARY);
 
+    public static final List<UnitType> SCHOOL_ONLY_SPECIALISTS = ImmutableList
+            .of(MASTER_SUGAR_PLANTER, MASTER_COTTON_PLANTER,
+                    MASTER_TOBACCO_PLANTER);
+
     public static final List<UnitType> UNIT_TYPES = ImmutableList
             .<UnitType>builder()
             .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
                     FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
                     MAN_OF_WAR, WAGON)
-            .addAll(EUROPEAN_SPECIALISTS).build();
+            .addAll(EUROPEAN_SPECIALISTS).addAll(SCHOOL_ONLY_SPECIALISTS)
+            .build();
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES
             .stream().collect(ImmutableMap.toImmutableMap(UnitType::name,

@@ -25,12 +25,13 @@ public final class UnitSpecialist extends UnitFreeColonist {
         super(model, id, placeBuilder, owner, availableMoves, action, tools,
                 holdingGuns, mounted);
         Preconditions.checkArgument(UnitType.EUROPEAN_SPECIALISTS.contains(type)
-                && type != UnitType.MASTER_BLACKSMITH);
+                && type != UnitType.MASTER_BLACKSMITH
+                || UnitType.SCHOOL_ONLY_SPECIALISTS.contains(type));
         this.type = type;
     }
 
     @Override
     public UnitType getType() {
-        return type;
+        return getLearnedType().orElse(type);
     }
 }

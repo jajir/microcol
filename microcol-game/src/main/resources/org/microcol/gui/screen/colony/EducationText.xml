@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="open">Education…</entry>
+  <entry key="title">Education — %s</entry>
+  <entry key="rule">Choose a teacher and student. The teacher moves into a school; the student keeps their job. Select an existing course to cancel it. To replace a teacher, first move the old teacher to another job, then choose the same student and skill. Canceling a course leaves the teacher at school for another student.</entry>
+  <entry key="teacher">Teacher</entry>
+  <entry key="student">Student</entry>
+  <entry key="skill">Skill</entry>
+  <entry key="preview">Required facility: %s. Next step: %s turns → %s.</entry>
+  <entry key="veteran">Veteran</entry>
+  <entry key="active">Active</entry>
+  <entry key="paused">Paused</entry>
+  <entry key="course">Teacher #%s → student #%s: %s; %s/%s — %s</entry>
+  <entry key="assign">Assign teaching</entry>
+  <entry key="cancelCourse">Cancel selected course</entry>
+  <entry key="close">Close</entry>
+  <entry key="changed">The participants or colony changed. Close and reopen this window.</entry>
+  <entry key="none">Choose participants with an available teaching option. A suitable school and a free teacher slot are required.</entry>
+  <entry key="graduated">%s: student #%s completed education: %s → %s.</entry>
+  <entry key="learned">%s: worker #%s learned through productive work: %s → %s.</entry>
+</properties>

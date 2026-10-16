@@ -64,7 +64,9 @@ public class UnitFactory {
                     return makeMasterBlacksmith(request);
                 }
                 if (UnitType.EUROPEAN_SPECIALISTS
-                        .contains(request.getUnitType())) {
+                        .contains(request.getUnitType())
+                        || UnitType.SCHOOL_ONLY_SPECIALISTS
+                                .contains(request.getUnitType())) {
                     return makeSpecialist(request);
                 }
                 if (request.getUnitType() == UnitType.INDENTURED_SERVANT
@@ -212,9 +214,17 @@ public class UnitFactory {
         Preconditions.checkArgument(
                 !unitPo.isVeteran() || unit instanceof UnitFreeColonist,
                 "Only colonists can be veterans");
+        Preconditions.checkArgument(
+                unit instanceof UnitFreeColonist
+                        ? unitPo.getWorkUpdates() != null
+                        : unitPo.getWorkUpdates() == null
+                                && unitPo.getWorkSkill() == null,
+                "Invalid saved work history owner");
         if (unit instanceof UnitFreeColonist) {
             ((UnitFreeColonist) unit)
                     .restoreVeteran(unitCreateRequest.isVeteran());
+            ((UnitFreeColonist) unit).restoreWorkExperience(
+                    unitPo.getWorkSkill(), unitPo.getWorkUpdates());
         }
         if (unit.getAction().getType() == UnitActionType.fortify) {
             Preconditions.checkArgument((unit instanceof UnitFreeColonist

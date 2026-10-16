@@ -197,6 +197,7 @@ class CombatStrengthTest {
         second.setId(20);
         second.setOwnerId("France");
         second.setType(UnitType.COLONIST);
+        second.setWorkUpdates(0);
         second.setAction(new UnitActionNoActionPo());
         second.setAvailableMoves(1);
         final PlaceMapPo place = new PlaceMapPo();

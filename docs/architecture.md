@@ -759,3 +759,18 @@ Pennových 150 % se zaokrouhlením dolů. Náhled kolonie i skutečný tah použ
 stejný výpočet. Dokončení stavby následuje po produkci: nový náhled je okamžitý,
 skutečný přírůstek nového stupně přijde v dalším tahu. Národní imigrační fond
 přebírá skutečné vyprodukované kříže. [Přejímka](requirements/R-0110.md).
+
+### Výuka a odborná praxe
+
+R-0107 přidává do `model.Colony` ověřené přiřazení učitele a žáka,
+neměnné přehledy kurzů a nabídky dalšího kroku. `EducationSkills` vlastní
+přijatou matici škol; GUI pouze zobrazuje nabídku modelu. Učitel obsazuje
+školní místo, žák zůstává na své práci. Zrušení kurzu ponechá učitele ve
+škole pro dalšího žáka; výměna učitele vyžaduje uvolnění místa.
+Pokrok se připisuje jednou při aktualizaci kolonie po skutečné produkci,
+výuka před odbornou praxí. Výroba s omezenými vstupy rozděluje již
+vyúčtovaný výstup stabilním pořadím pracovníků. Nová odbornost zachovává
+identitu objektu a vojenskou hodnost. `model.store` ukládá kurzy a historii
+práce; `TurnEventEducationCompleted` uchovává dokončený výsledek pro hlášení
+bez opakování výuky při zobrazení či Continue.
+Implementace a skutečné kontroly jsou odděleny v [evidenci](functional-tests.md#r-0107-education-work-2026-10-17).

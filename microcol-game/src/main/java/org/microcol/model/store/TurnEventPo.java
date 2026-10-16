@@ -96,6 +96,61 @@ public final class TurnEventPo {
     private String rivalName;
     private Integer peacePrice;
 
+    private Integer educationStudentId;
+    private UnitType educationBeforeType;
+    private UnitType educationAfterType;
+    private Boolean educationWasVeteran;
+    private Boolean educationVeteran;
+    private Boolean educationWorkExperience;
+
+    public Integer getEducationStudentId() {
+        return educationStudentId;
+    }
+
+    public void setEducationStudentId(final Integer value) {
+        educationStudentId = value;
+    }
+
+    public UnitType getEducationBeforeType() {
+        return educationBeforeType;
+    }
+
+    public void setEducationBeforeType(final UnitType value) {
+        educationBeforeType = value;
+    }
+
+    public UnitType getEducationAfterType() {
+        return educationAfterType;
+    }
+
+    public void setEducationAfterType(final UnitType value) {
+        educationAfterType = value;
+    }
+
+    public Boolean getEducationWasVeteran() {
+        return educationWasVeteran;
+    }
+
+    public void setEducationWasVeteran(final Boolean value) {
+        educationWasVeteran = value;
+    }
+
+    public Boolean getEducationVeteran() {
+        return educationVeteran;
+    }
+
+    public void setEducationVeteran(final Boolean value) {
+        educationVeteran = value;
+    }
+
+    public Boolean getEducationWorkExperience() {
+        return educationWorkExperience;
+    }
+
+    public void setEducationWorkExperience(final Boolean value) {
+        educationWorkExperience = value;
+    }
+
     public String getRivalName() {
         return rivalName;
     }

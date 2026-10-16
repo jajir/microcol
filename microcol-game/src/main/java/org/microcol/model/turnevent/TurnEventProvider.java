@@ -124,6 +124,19 @@ public final class TurnEventProvider {
         return new TurnEventFounderArrived(player.getName(), founder);
     }
 
+    /** Report one actual school or productive-work graduation. */
+    public static TurnEvent getEducationCompleted(final Player player,
+            final Colony colony, final Unit student,
+            final org.microcol.model.UnitType before,
+            final boolean veteranBefore, final boolean workExperience) {
+        return new TurnEventEducationCompleted(player.getName(), colony.getId(),
+                colony.getName(), student.getId(), before, student.getType(),
+                veteranBefore,
+                ((org.microcol.model.unit.UnitFreeColonist) student)
+                        .isVeteran(),
+                workExperience);
+    }
+
     /** Notice of a newly frozen Franklin proposal for the turn report. */
     public static TurnEvent getPeaceOffer(final Player player,
             final String rivalName, final int price) {

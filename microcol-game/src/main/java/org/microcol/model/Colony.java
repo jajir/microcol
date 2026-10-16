@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
+import org.microcol.model.store.EducationCoursePo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitLaborer;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -50,6 +52,8 @@ public class Colony {
     private final ColonyBuildingQueue colonyBuildingQueue;
 
     private final Set<GoodsType> exportGoods = new HashSet<>();
+
+    private final List<EducationCourse> educationCourses = new ArrayList<>();
 
     private final Model model;
 
@@ -141,7 +145,294 @@ public class Colony {
         out.setBuildingQueue(colonyBuildingQueue.save());
         out.setExportGoods(GoodsType.GOOD_TYPES.stream()
                 .filter(exportGoods::contains).collect(Collectors.toList()));
+        out.setEducationCourses(educationCourses.stream()
+                .map(EducationCourse::save).collect(Collectors.toList()));
         return out;
+    }
+
+    /** @return immutable education progress with current pause state */
+    public List<EducationCourse> getEducationCourses() {
+        return educationCourses.stream()
+                .map(course -> new EducationCourse(course.getTeacherId(),
+                        course.getStudentId(), course.getSkill(),
+                        course.getCompletedUpdates(),
+                        course.getRequiredUpdates(), !isTeaching(course)))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /** @return skills this registered resident is qualified to teach */
+    public List<UnitType> getTeachingSkills(final Unit teacher) {
+        if (!isResident(teacher) || !(teacher instanceof UnitFreeColonist)) {
+            return List.of();
+        }
+        final List<UnitType> out = new ArrayList<>();
+        if (EducationSkills.tier(teacher.getType()) > 0) {
+            out.add(teacher.getType());
+        }
+        if (((UnitFreeColonist) teacher).isVeteran()
+                && !out.contains(UnitType.VETERAN_SOLDIER)) {
+            out.add(UnitType.VETERAN_SOLDIER);
+        }
+        return List.copyOf(out);
+    }
+
+    /** @return current, read-only choices including the next social step */
+    public List<EducationOption> getEducationOptions(final Unit teacher,
+            final Unit student) {
+        if (!isValid() || !model.isGameRunning()
+                || model.getCurrentPlayer() != owner || teacher == student
+                || !isResident(teacher) || !isResident(student)
+                || !(student instanceof UnitFreeColonist)
+                || educationCourses.stream()
+                        .anyMatch(course -> Integer.valueOf(teacher.getId())
+                                .equals(course.getTeacherId())
+                                && course.getStudentId() != student.getId()
+                                || course.getStudentId() == teacher.getId()
+                                || Integer.valueOf(student.getId())
+                                        .equals(course.getTeacherId()))) {
+            return List.of();
+        }
+        final UnitFreeColonist pupil = (UnitFreeColonist) student;
+        final List<EducationOption> out = new ArrayList<>();
+        for (final UnitType skill : getTeachingSkills(teacher)) {
+            if (pupil.isVeteran() && skill == UnitType.VETERAN_SOLDIER) {
+                continue;
+            }
+            if (student.getType() != UnitType.PETTY_CRIMINAL
+                    && student.getType() != UnitType.INDENTURED_SERVANT
+                    && student.getType() != UnitType.COLONIST
+                    && skill != UnitType.VETERAN_SOLDIER) {
+                continue;
+            }
+            final ConstructionSlot current = teacher.isAtPlaceConstructionSlot()
+                    ? teacher.getPlaceConstruction().getConstructionSlot()
+                    : null;
+            final boolean currentSchool = current != null
+                    && current.getColony() == this
+                    && EducationSkills.tier(
+                            current.getConstructionType()) >= EducationSkills
+                                    .tier(skill);
+            final boolean available = currentSchool || constructions.stream()
+                    .filter(con -> EducationSkills
+                            .tier(con.getType()) >= EducationSkills.tier(skill))
+                    .flatMap(con -> con.getConstructionSlots().stream())
+                    .anyMatch(slot -> slot.canAccept(teacher));
+            if (available) {
+                final UnitType next = student
+                        .getType() == UnitType.PETTY_CRIMINAL
+                                ? UnitType.INDENTURED_SERVANT
+                                : student
+                                        .getType() == UnitType.INDENTURED_SERVANT
+                                                ? UnitType.COLONIST
+                                                : skill == UnitType.VETERAN_SOLDIER
+                                                        ? student.getType()
+                                                        : skill;
+                out.add(new EducationOption(skill, EducationSkills.tier(skill),
+                        EducationSkills.requiredUpdates(skill,
+                                student.getType()),
+                        next, skill == UnitType.VETERAN_SOLDIER
+                                && next == student.getType()));
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    public boolean canAssignEducation(final Unit teacher, final Unit student,
+            final UnitType skill) {
+        return skill != null && getEducationOptions(teacher, student).stream()
+                .anyMatch(option -> option.getSkill() == skill);
+    }
+
+    boolean canAcceptSchoolTeacher(final ConstructionSlot slot,
+            final Unit unit) {
+        final int tier = EducationSkills.tier(slot.getConstructionType());
+        return tier == 0 || slot.getConstruction().getConstructionSlots()
+                .indexOf(slot) < tier
+                && getTeachingSkills(unit).stream()
+                        .anyMatch(skill -> EducationSkills.tier(skill) <= tier);
+    }
+
+    private boolean isResident(final Unit unit) {
+        return unit != null && unit.getOwner() == owner
+                && model.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && getUnitsInsideColony().contains(unit);
+    }
+
+    private boolean isTeaching(final EducationCourse course) {
+        if (course.getTeacherId() == null) {
+            return false;
+        }
+        final Unit teacher = model.tryGetUnitById(course.getTeacherId())
+                .orElse(null);
+        if (!isResident(teacher)
+                || !getTeachingSkills(teacher).contains(course.getSkill())
+                || !teacher.isAtPlaceConstructionSlot()) {
+            return false;
+        }
+        final ConstructionSlot slot = teacher.getPlaceConstruction()
+                .getConstructionSlot();
+        return slot.getColony() == this && EducationSkills
+                .tier(slot.getConstructionType()) >= EducationSkills
+                        .tier(course.getSkill());
+    }
+
+    /** Assign one teacher to a student, placing that teacher at school. */
+    public void assignEducation(final Unit teacher, final Unit student,
+            final UnitType skill) {
+        model.checkTurnPreparationComplete();
+        Preconditions.checkState(
+                isValid() && model.isGameRunning()
+                        && model.getCurrentPlayer() == owner,
+                "Education is unavailable on this turn");
+        Preconditions.checkArgument(
+                teacher != null && student != null && teacher != student
+                        && skill != null && isResident(teacher)
+                        && isResident(student)
+                        && canAssignEducation(teacher, student, skill),
+                "Invalid teacher or student");
+        final UnitFreeColonist pupil = (UnitFreeColonist) student;
+        Preconditions.checkArgument(
+                student.getType() == UnitType.COLONIST
+                        || student.getType() == UnitType.INDENTURED_SERVANT
+                        || student.getType() == UnitType.PETTY_CRIMINAL
+                        || skill == UnitType.VETERAN_SOLDIER
+                                && !pupil.isVeteran(),
+                "Student already has a specialty");
+        Preconditions.checkArgument(
+                skill != UnitType.VETERAN_SOLDIER || !pupil.isVeteran(),
+                "Student is already a veteran");
+        Preconditions.checkState(
+                educationCourses.stream()
+                        .noneMatch(course -> Integer.valueOf(teacher.getId())
+                                .equals(course.getTeacherId())
+                                && course.getStudentId() != student.getId()),
+                "Teacher has another student");
+        final ConstructionSlot current = teacher.isAtPlaceConstructionSlot()
+                ? teacher.getPlaceConstruction().getConstructionSlot()
+                : null;
+        final ConstructionSlot schoolSlot = current != null
+                && current.getColony() == this
+                && EducationSkills.tier(current
+                        .getConstructionType()) >= EducationSkills.tier(skill)
+                                ? current
+                                : constructions.stream()
+                                        .filter(con -> EducationSkills.tier(con
+                                                .getType()) >= EducationSkills
+                                                        .tier(skill))
+                                        .flatMap(con -> con
+                                                .getConstructionSlots()
+                                                .stream())
+                                        .filter(slot -> slot.canAccept(teacher))
+                                        .findFirst().orElse(null);
+        Preconditions.checkState(schoolSlot != null,
+                "No eligible school teacher slot");
+        final EducationCourse previous = educationCourses.stream()
+                .filter(course -> course.getStudentId() == student.getId())
+                .findFirst().orElse(null);
+        if (schoolSlot != current) {
+            teacher.placeToColonyStructureSlot(schoolSlot);
+        }
+        if (previous != null) {
+            educationCourses.remove(previous);
+        }
+        educationCourses.add(new EducationCourse(teacher.getId(),
+                student.getId(), skill,
+                previous != null && previous.getSkill() == skill
+                        ? previous.getCompletedUpdates()
+                        : 0,
+                EducationSkills.requiredUpdates(skill, student.getType()),
+                false));
+    }
+
+    /** Cancel a student's course without changing its earned skill. */
+    public void cancelEducation(final Unit student) {
+        model.checkTurnPreparationComplete();
+        Preconditions.checkState(isValid() && model.isGameRunning()
+                && model.getCurrentPlayer() == owner && isResident(student),
+                "Education is unavailable on this turn");
+        Preconditions.checkState(
+                educationCourses.removeIf(
+                        course -> course.getStudentId() == student.getId()),
+                "Student has no course");
+    }
+
+    void onResidentLeaving(final Unit unit) {
+        educationCourses
+                .removeIf(course -> course.getStudentId() == unit.getId());
+        for (int index = 0; index < educationCourses.size(); index++) {
+            final EducationCourse course = educationCourses.get(index);
+            if (Integer.valueOf(unit.getId()).equals(course.getTeacherId())) {
+                educationCourses.set(index,
+                        new EducationCourse(null, course.getStudentId(),
+                                course.getSkill(), course.getCompletedUpdates(),
+                                course.getRequiredUpdates(), true));
+            }
+        }
+    }
+
+    void restoreEducationCourses(final List<EducationCoursePo> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Missing saved education courses");
+        for (final Construction building : constructions) {
+            final int tier = EducationSkills.tier(building.getType());
+            if (tier == 0) {
+                continue;
+            }
+            for (int index = 0; index < building.getConstructionSlots()
+                    .size(); index++) {
+                final ConstructionSlot slot = building.getSlotAt(index);
+                Preconditions.checkArgument(
+                        slot.isEmpty() || index < tier
+                                && getTeachingSkills(slot.getUnit()).stream()
+                                        .anyMatch(skill -> EducationSkills
+                                                .tier(skill) <= tier),
+                        "Invalid saved school staff");
+            }
+        }
+        final Set<Integer> students = new HashSet<>();
+        final Set<Integer> teachers = new HashSet<>();
+        for (final EducationCoursePo po : saved) {
+            Preconditions.checkArgument(
+                    po != null && po.getStudentId() != null
+                            && po.getSkill() != null
+                            && EducationSkills.tier(po.getSkill()) > 0
+                            && po.getCompletedUpdates() != null
+                            && po.getCompletedUpdates() >= 0
+                            && students.add(po.getStudentId()),
+                    "Invalid saved education course");
+            final Unit student = model.tryGetUnitById(po.getStudentId())
+                    .orElse(null);
+            Preconditions.checkArgument(isResident(student)
+                    && student instanceof UnitFreeColonist
+                    && (student.getType() == UnitType.COLONIST
+                            || student.getType() == UnitType.PETTY_CRIMINAL
+                            || student.getType() == UnitType.INDENTURED_SERVANT
+                            || po.getSkill() == UnitType.VETERAN_SOLDIER
+                                    && !((UnitFreeColonist) student)
+                                            .isVeteran())
+                    && po.getCompletedUpdates() < EducationSkills
+                            .requiredUpdates(po.getSkill(), student.getType()),
+                    "Invalid saved education student or progress");
+            if (po.getTeacherId() != null) {
+                final Unit teacher = model.tryGetUnitById(po.getTeacherId())
+                        .orElse(null);
+                Preconditions.checkArgument(
+                        !po.getTeacherId().equals(po.getStudentId())
+                                && teachers.add(po.getTeacherId())
+                                && isResident(teacher)
+                                && getTeachingSkills(teacher)
+                                        .contains(po.getSkill()),
+                        "Invalid saved education teacher");
+            }
+            educationCourses.add(new EducationCourse(
+                    po.getTeacherId(), po.getStudentId(), po.getSkill(),
+                    po.getCompletedUpdates(), EducationSkills
+                            .requiredUpdates(po.getSkill(), student.getType()),
+                    po.getTeacherId() == null));
+        }
+        Preconditions.checkArgument(
+                students.stream().noneMatch(teachers::contains),
+                "Education participant has two roles");
     }
 
     /** @return an immutable snapshot of the selected export commodities */
@@ -358,6 +649,7 @@ public class Colony {
             });
             owner.creditProducedCrosses(producedCrosses);
             owner.creditProducedBells(producedBells);
+            advanceEducationAndExperience(colonyStats);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
@@ -371,6 +663,132 @@ public class Colony {
         if (famineVictim != null) {
             model.addTurnEvent(TurnEventProvider.getFaminePlagueColony(owner,
                     this, famineVictim));
+        }
+    }
+
+    private void advanceEducationAndExperience(
+            final ColonyProductionStats committed) {
+        final Set<Integer> schoolCompletions = new HashSet<>();
+        final Map<Unit, UnitType> jobs = new LinkedHashMap<>();
+        final Set<Unit> productive = new HashSet<>();
+        for (final ColonyField field : colonyFields) {
+            if (field.getUnit().isEmpty() || field.getProduction().isEmpty()) {
+                continue;
+            }
+            final Goods goods = field.getProduction().get();
+            EducationSkills
+                    .forProduction(goods.getType(),
+                            goods.getType() == GoodsType.CORN
+                                    && field.getTerrainType().isSea())
+                    .ifPresent(skill -> jobs.put(field.getUnit().get(), skill));
+            if (goods.getAmount() > 0) {
+                productive.add(field.getUnit().get());
+            }
+        }
+        for (final Construction building : constructions) {
+            if (building.getType().getProductionPerTurn().isEmpty()) {
+                continue;
+            }
+            final GoodsType goods = building.getType().getProductionPerTurn()
+                    .get().getType();
+            final Optional<UnitType> skill = EducationSkills
+                    .forProduction(goods, false);
+            if (skill.isEmpty()) {
+                continue;
+            }
+            int remaining = building.getType().getConsumptionPerTurn()
+                    .isPresent()
+                            ? committed.getStatsByType(goods).getRowProduction()
+                            : Integer.MAX_VALUE;
+            for (final ConstructionSlot slot : building.getOrderedSlots()) {
+                if (slot.isEmpty()) {
+                    continue;
+                }
+                final Unit worker = slot.getUnit();
+                jobs.put(worker, skill.get());
+                final int potential = slot.getPotentialProduction(worker)
+                        .getAmount();
+                final int assigned = Math.min(potential, remaining);
+                remaining -= assigned;
+                if (assigned > 0) {
+                    productive.add(worker);
+                }
+            }
+        }
+        for (int index = 0; index < educationCourses.size();) {
+            EducationCourse course = educationCourses.get(index);
+            final Unit student = model.tryGetUnitById(course.getStudentId())
+                    .orElse(null);
+            if (!isResident(student) || !(student instanceof UnitFreeColonist)
+                    || student.getType() != UnitType.COLONIST
+                            && student.getType() != UnitType.PETTY_CRIMINAL
+                            && student.getType() != UnitType.INDENTURED_SERVANT
+                            && course.getSkill() != UnitType.VETERAN_SOLDIER
+                    || course.getSkill() == UnitType.VETERAN_SOLDIER
+                            && ((UnitFreeColonist) student).isVeteran()) {
+                educationCourses.remove(index);
+                continue;
+            }
+            final int required = EducationSkills
+                    .requiredUpdates(course.getSkill(), student.getType());
+            if (course.getRequiredUpdates() != required) {
+                course = new EducationCourse(course.getTeacherId(),
+                        course.getStudentId(), course.getSkill(), 0, required,
+                        !isTeaching(course));
+                educationCourses.set(index, course);
+            }
+            if (!isTeaching(course)) {
+                index++;
+                continue;
+            }
+            final int next = course.getCompletedUpdates() + 1;
+            if (next < course.getRequiredUpdates()) {
+                educationCourses.set(index,
+                        new EducationCourse(course.getTeacherId(),
+                                course.getStudentId(), course.getSkill(), next,
+                                course.getRequiredUpdates(), false));
+                index++;
+                continue;
+            }
+            final UnitFreeColonist pupil = (UnitFreeColonist) student;
+            final UnitType before = student.getType();
+            final boolean veteranBefore = pupil.isVeteran();
+            if (pupil instanceof UnitLaborer
+                    && (before == UnitType.PETTY_CRIMINAL
+                            || before == UnitType.INDENTURED_SERVANT)) {
+                ((UnitLaborer) pupil).advanceEducationStage();
+                educationCourses.set(index,
+                        new EducationCourse(course.getTeacherId(),
+                                course.getStudentId(), course.getSkill(), 0,
+                                EducationSkills.requiredUpdates(
+                                        course.getSkill(), student.getType()),
+                                false));
+                index++;
+            } else {
+                pupil.completeEducation(course.getSkill());
+                educationCourses.remove(index);
+            }
+            schoolCompletions.add(student.getId());
+            model.addTurnEvent(TurnEventProvider.getEducationCompleted(owner,
+                    this, student, before, veteranBefore, false));
+        }
+
+        for (final Unit resident : getUnitsInsideColony()) {
+            if (resident instanceof UnitFreeColonist) {
+                final UnitFreeColonist worker = (UnitFreeColonist) resident;
+                final UnitType before = worker.getType();
+                final boolean veteranBefore = worker.isVeteran();
+                if (worker.recordWork(jobs.get(resident),
+                        productive.contains(resident),
+                        schoolCompletions.contains(resident.getId()))) {
+                    educationCourses.removeIf(course -> course
+                            .getStudentId() == resident.getId()
+                            && course.getSkill() != UnitType.VETERAN_SOLDIER);
+                    model.addTurnEvent(
+                            TurnEventProvider.getEducationCompleted(owner, this,
+                                    resident, before, veteranBefore, true));
+                }
+            }
         }
     }
 

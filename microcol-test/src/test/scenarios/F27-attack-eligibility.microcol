@@ -12,6 +12,7 @@
     },
     "units": [
       {
+        "workUpdates": 0,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -34,6 +35,7 @@
         }
       },
       {
+        "workUpdates": 0,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -56,6 +58,7 @@
         }
       },
       {
+        "workUpdates": 0,
         "id": 2,
         "type": "MASTER_BLACKSMITH",
         "ownerId": "Dutch",
@@ -106,6 +109,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "France",
@@ -122,6 +126,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 5,
         "type": "COLONIST",
         "ownerId": "France",
@@ -138,6 +143,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 6,
         "type": "COLONIST",
         "ownerId": "France",
@@ -188,6 +194,7 @@
     "nextColonyId": 2,
     "colonies": [
       {
+        "educationCourses": [],
         "id": 0,
         "name": "Quebec",
         "ownerName": "France",
@@ -342,6 +349,7 @@
         }
       },
       {
+        "educationCourses": [],
         "id": 1,
         "name": "Montreal",
         "ownerName": "France",

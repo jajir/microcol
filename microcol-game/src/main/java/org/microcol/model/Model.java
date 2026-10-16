@@ -286,6 +286,10 @@ public class Model {
         }
 
         model.checkUnits();
+        for (final ColonyPo savedColony : modelPo.getColonies()) {
+            model.getColonyById(savedColony.getId()).orElseThrow()
+                    .restoreEducationCourses(savedColony.getEducationCourses());
+        }
         model.assureDefaultVisibility();
         return model;
     }

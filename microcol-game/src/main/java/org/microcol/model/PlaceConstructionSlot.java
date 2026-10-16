@@ -35,6 +35,7 @@ public class PlaceConstructionSlot extends AbstractPlace {
 
     @Override
     public void destroy() {
+        getColony().onResidentLeaving(getUnit());
         constructionSlot.clear(true);
     }
 

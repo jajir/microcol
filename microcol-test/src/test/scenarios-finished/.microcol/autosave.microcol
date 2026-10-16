@@ -46,6 +46,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -62,6 +63,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -78,6 +80,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 2,
         "type": "COLONIST",
         "ownerId": "Dutch",

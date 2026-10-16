@@ -181,8 +181,12 @@ public class ConstructionSlot {
         return ordinary.multiply(type.getProductionModifier(base.getType()));
     }
 
-    private ConstructionType getConstructionType() {
+    public ConstructionType getConstructionType() {
         return construction.getType();
+    }
+
+    Construction getConstruction() {
+        return construction;
     }
 
     public boolean isValid() {
@@ -193,7 +197,8 @@ public class ConstructionSlot {
         return isValid()
                 && getColony().getConstructions().contains(construction)
                 && construction.getConstructionSlots().contains(this)
-                && isEmpty() && getColony().canAcceptWorker(unit);
+                && isEmpty() && getColony().canAcceptWorker(unit)
+                && getColony().canAcceptSchoolTeacher(this, unit);
     }
 
 }

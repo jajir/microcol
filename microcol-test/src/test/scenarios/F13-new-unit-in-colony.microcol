@@ -46,6 +46,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -62,6 +63,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -78,6 +80,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -94,6 +97,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 5,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -110,6 +114,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 6,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -126,6 +131,7 @@
         "mounted": false
       },
       {
+        "workUpdates": 0,
         "id": 7,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -147,6 +153,7 @@
     "nextColonyId": 1,
     "colonies": [
       {
+        "educationCourses": [],
         "id": 0,
         "name": "New Amsterdam",
         "ownerName": "Dutch",

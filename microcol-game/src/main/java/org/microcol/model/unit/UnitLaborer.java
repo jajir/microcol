@@ -29,7 +29,15 @@ public final class UnitLaborer extends UnitFreeColonist {
 
     @Override
     public UnitType getType() {
-        return type;
+        return getLearnedType().orElse(type);
+    }
+
+    /** Advance only the current social stage without replacing this unit. */
+    public void advanceEducationStage() {
+        Preconditions.checkState(type == UnitType.PETTY_CRIMINAL
+                || type == UnitType.INDENTURED_SERVANT);
+        type = type == UnitType.PETTY_CRIMINAL ? UnitType.INDENTURED_SERVANT
+                : UnitType.COLONIST;
     }
 
     @Override

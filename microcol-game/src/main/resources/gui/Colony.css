@@ -163,7 +163,6 @@
 #id_school {
   -fx-translate-x: 240;
   -fx-translate-y: 1;
-  visibility: hidden;
 }
 
 #id_armory {
@@ -210,4 +209,9 @@
 #id_fort {
   -fx-translate-x: 370;
   -fx-translate-y: 1;
+}
+
+/* Keep the close control outside the rename label's bounds. */
+#colonyButtons {
+  -fx-alignment: top-right;
 }

@@ -4433,3 +4433,95 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. The complete log is retained at `/tmp/r97-ci-failed.log`. New event-target
    diagnostics are published in `f9ad9fb9`; use that evidence before attributing
    TC53 to the now-diagnosed religious-building dock overlap.
+
+### R-0107 education work — 2026-10-17
+
+1. In progress on `codex/r107-school-education`, based on `8c1c1bb6`.
+   Astra medium owns GUI, fixtures, review and acceptance; the reused Sol low
+   worker owns bounded model changes and model tests. No local model is used.
+   School assignments and productive-work learning implement UC-050/051.
+   TC_68/F59 covers visible assignment, preview-only close, self-teaching
+   rejection, explicit cancel, mid-course Continue, four-update graduation
+   and the twentieth productive update, including English/Czech feedback.
+   Further cases cover paused teaching, same-skill replacement and stale
+   confirmation without moving the teacher.
+   These are planned checks until a passing result is recorded below.
+2. Current-schema shipped/test scenarios gain explicit `educationCourses: []`
+   and colonist `workUpdates: 0`. Sixty-six existing fixture files were updated
+   with additive edits; semantic comparison against the intended JSON passed.
+   No player's save is modified, and no backward-compatibility migration is added.
+3. Initial main GUI compilation missed the `UnitFreeColonist` import; corrected
+   before the worker's focused retry. First Docker attempt failed test compilation
+   because the main page object called package-private `getSlotAt`; use the
+   public construction-slot list. Retry captured an unfinished worker test
+   calling nonexistent `Unit.isAtPlaceMap`. No player tests ran in either
+   attempt (`/tmp/r107-ui-first.log`, `/tmp/r107-ui-retry.log`). Wait for the
+   stable model handoff before taking the next Docker source snapshot.
+4. Independent main review requested cross-role participant validation, integer
+   value comparison for saved self-teaching IDs and reconciliation after an
+   externally earned specialty/social step. Worker repairs and boundary checks
+   remain in progress. Full acceptance/publication is not yet claimed.
+
+5. The frozen model handoff passed 36 focused EducationTest cases; main started
+   the full suite and Docker against that snapshot. Full model result: 1784
+   tests, zero failures, 28 errors, zero skips. The errors are newly strict
+   work-history loading in older Java fixture mutations/new UnitPo objects
+   and initial expedition assembly. The worker is correcting those callers
+   while retaining strict current-schema validation. No full-model success
+   is claimed (`/tmp/r107-model-full.log`).
+
+6. The worker repaired eight Java test builders and the production
+   `ReferenceExpedition` colonist constructor; the nine affected suites passed
+   104/104. Main reran the full model suite: **1784/1784 passed**, no
+   failures/errors/skips (`/tmp/r107-model-final.log`). Packaging/Javadoc also
+   passed (`/tmp/r107-package.log`). The 36 new education tests include the
+   skill matrix, staffing capacities, malformed saves and same-colony transfers.
+7. Docker `run-2LHVDp` executed 15 UI/support cases: six naval/privateer cases
+   and three contract checks passed; four TC68 and two TC53 cases failed. The
+   first failure in each colony class was the close-colony action, with later
+   cases cascading from a remaining modal. Diagnostic `run-KZYPxA` retained a
+   screenshot; a further single-case trace proves the close click was picked
+   by `Label[id=colonyName]`, opening rename instead of the map. The invisible
+   label bounds overlapped the newly centered button row. Main aligns only
+   colony buttons to the right, preserving rename and the real close action.
+   Temporary event tracing was removed after capturing
+   `/tmp/r107-ui-click-trace.log`; normal screenshots remain. A new TC68/53/40
+   run verifies the fix. Czech education dialog was visually inspected: complete
+   instructions, participants, school requirement and progress are readable.
+
+8. Header repair acceptance passed **24/24** UI/support cases in Docker
+   `run-7Mw5il`: TC68 four, TC40 fifteen, TC53 two and source contract three,
+   zero failures/errors/skips (`/tmp/r107-ui-header-fix.log`). School progress,
+   mid-course Continue, graduation feedback, productive-work feedback, explicit
+   cancel, same-skill replacement and stale confirmation all pass. English
+   and Czech education dialogs were visually inspected; labels, course progress
+   and all controls are readable. Final wording uses player-facing “turns”
+   rather than “colony updates”; TC68 English/Czech and TC58 export controls
+   are being rerun against that final wording and header. Shared formatter
+   verified **43 changed Java files**, exact code tokens/idempotence pass.
+
+9. Final text/header/export selection passed **9/9** cases in Docker
+   `run-ZUpP7o` (TC68 two, TC58 four, contract three), zero failures/errors/skips
+   (`/tmp/r107-ui-final.log`). The final colony screenshot confirms separate
+   close/export/education controls outside the rename label. English/Czech
+   course dialogs are readable; a final Czech grammar correction makes the
+   duration label independent of singular/plural. Complete CI/publication is
+   still required before marking this requirement done.
+10. Czech grammar follow-up passed **4/4** (TC68 Czech plus three source
+    contract checks) in `run-R1R4dy`, zero failures/errors/skips
+    (`/tmp/r107-ui-czech-final.log`). Documentation validation passed nine
+    tests and strict MkDocs; rendered architecture, UX and evidence text was
+    inspected. Sources are ready for integration, with complete CI still pending.
+
+### R-0099 complete CI follow-up — 2026-10-17
+
+1. Development run 38978586721 failed with 275 UI/support cases, two failures,
+   two errors, zero skips. TC53 repeats the older uninstrumented indoor-menu
+   timeout. TC65/02 sees the naval outcome window but Escape does not close
+   it; subsequent TC65/01 and /03 fail setup with that modal still open.
+   The log does not prove which window received Escape.
+2. The reused Sol low quality worker traced the first failure read-only. Main
+   changes `NavalBattlePage.closeOutcome` to click that dialog's own OK control
+   and retains the same window-closed wait and gameplay assertions. TC64/65
+   regression is required; this is not yet a verified fix.
+   Compatibility/Pages passed, but this failed game build was not published.

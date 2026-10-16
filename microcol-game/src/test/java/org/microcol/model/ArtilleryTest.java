@@ -34,6 +34,8 @@ class ArtilleryTest {
         UnitPo defender = po.getUnits().stream()
                 .filter(unit -> unit.getId() == 6).findFirst().orElseThrow();
         defender.setType(UnitType.ARTILLERY);
+        defender.setWorkUpdates(null);
+        defender.setWorkSkill(null);
         defender.setArtilleryDamaged(damaged);
         defender.setHoldingGuns(false);
         defender.setMounted(false);
@@ -286,9 +288,12 @@ class ArtilleryTest {
                     .filter(unit -> unit.getId() == 6).findFirst()
                     .orElseThrow();
             attacking.setType(UnitType.ARTILLERY);
+            attacking.setWorkUpdates(null);
+            attacking.setWorkSkill(null);
             attacking.setArtilleryDamaged(damaged);
             attacking.setHoldingGuns(false);
             defending.setType(UnitType.COLONIST);
+            defending.setWorkUpdates(0);
             defending.setArtilleryDamaged(null);
             defending.setHoldingGuns(true);
             Model battle = Model.make(data,
@@ -315,9 +320,12 @@ class ArtilleryTest {
         UnitPo defending = data.getUnits().stream()
                 .filter(unit -> unit.getId() == 6).findFirst().orElseThrow();
         attacking.setType(UnitType.ARTILLERY);
+        attacking.setWorkUpdates(null);
+        attacking.setWorkSkill(null);
         attacking.setArtilleryDamaged(false);
         attacking.setHoldingGuns(false);
         defending.setType(UnitType.COLONIST);
+        defending.setWorkUpdates(0);
         defending.setArtilleryDamaged(null);
         defending.setHoldingGuns(false);
         Model battle = Model.make(data,

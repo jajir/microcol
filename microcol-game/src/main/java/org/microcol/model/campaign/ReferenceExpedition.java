@@ -177,6 +177,9 @@ public final class ReferenceExpedition {
         unit.setId(id);
         unit.setOwnerId(owner);
         unit.setType(type);
+        if (type == UnitType.COLONIST) {
+            unit.setWorkUpdates(0);
+        }
         unit.setAction(new UnitActionNoActionPo());
         unit.setAvailableMoves(type.getSpeed());
         return unit;

@@ -114,6 +114,7 @@
       "availableMoves": 6
     },
     {
+      "workUpdates": 0,
       "id": 0,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -127,6 +128,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 1,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -140,6 +142,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 2,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -153,6 +156,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 4,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -166,6 +170,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -179,6 +184,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 6,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -192,6 +198,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 7,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -205,6 +212,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 8,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -218,6 +226,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 9,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -231,6 +240,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 10,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -244,6 +254,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 11,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -257,6 +268,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 12,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -270,6 +282,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 13,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -283,6 +296,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 14,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -296,6 +310,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 15,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -309,6 +324,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 16,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -322,6 +338,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 17,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -335,6 +352,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 18,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -348,6 +366,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 19,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -361,6 +380,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 20,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -374,6 +394,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 21,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -387,6 +408,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 22,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -400,6 +422,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -413,6 +436,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 24,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -432,6 +456,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 25,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -451,6 +476,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 26,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -464,6 +490,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 28,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -477,6 +504,7 @@
       "availableMoves": 1
     },
     {
+      "workUpdates": 0,
       "id": 29,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -497,6 +525,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 30,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -517,6 +546,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 31,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -537,6 +567,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 32,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -557,6 +588,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 33,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -577,6 +609,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 35,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -597,6 +630,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 36,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -617,6 +651,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 37,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -637,6 +672,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 38,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -657,6 +693,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 39,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -677,6 +714,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 40,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -697,6 +735,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 42,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -717,6 +756,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 43,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -737,6 +777,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 44,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -757,6 +798,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 45,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -777,6 +819,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 46,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -797,6 +840,7 @@
       "availableMoves": 0
     },
     {
+      "workUpdates": 0,
       "id": 47,
       "type": "COLONIST",
       "holdingGuns": true,
@@ -820,6 +864,7 @@
   "nextColonyId": 3,
   "colonies": [
     {
+      "educationCourses": [],
       "id": 0,
       "name": "New Amsterdam",
       "exportGoods": [],
@@ -977,6 +1022,7 @@
       }
     },
     {
+      "educationCourses": [],
       "id": 1,
       "name": "Delft",
       "exportGoods": [],
@@ -1131,6 +1177,7 @@
       }
     },
     {
+      "educationCourses": [],
       "id": 2,
       "name": "Haarlem",
       "exportGoods": [],
