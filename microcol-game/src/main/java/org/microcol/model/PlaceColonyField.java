@@ -61,7 +61,7 @@ public class PlaceColonyField extends AbstractPlace {
         return producedGoodsType;
     }
 
-    public void setProducedGoodsType(final GoodsType producedGoodsType) {
+    void setProducedGoodsType(final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(producedGoodsType);
         Preconditions.checkArgument(colonyField.canProduce(producedGoodsType),
                 "Given good (%s) can't be produced at (%s)",

@@ -77,8 +77,7 @@ public class PersistingService {
         } else {
             if (isSecretOptionEnabled) {
                 eventBus.post(new ShowScreenEvent(Screen.EDITOR, saveFile));
-            } else {
-                loadFromFile(saveFile);
+            } else if (loadFromFile(saveFile)) {
                 eventBus.post(new ShowScreenEvent(Screen.GAME));
             }
         }
@@ -90,10 +89,10 @@ public class PersistingService {
         writeModelToFile(file);
     }
 
-    private void loadFromFile(final File sourceFile) {
+    private boolean loadFromFile(final File sourceFile) {
         final File file = correctFileNameExtension(sourceFile);
         logger.debug("Loading game from file '{}' ", file.getAbsolutePath());
-        loadModelFromFile(file);
+        return gameController.loadModelFromFile(file);
     }
 
     /**
@@ -138,10 +137,6 @@ public class PersistingService {
         } catch (TurnPreparationException rejected) {
             gameModelController.showTurnPreparationUnavailable();
         }
-    }
-
-    private void loadModelFromFile(final File sourceFile) {
-        gameController.loadModelFromFile(sourceFile);
     }
 
 }

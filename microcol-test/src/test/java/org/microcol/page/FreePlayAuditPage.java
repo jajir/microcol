@@ -165,6 +165,52 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .thenReturn(file);
     }
 
+    private File invalidSave;
+    private byte[] invalidSaveBytes;
+    private org.microcol.model.campaign.GameModel previousGame;
+
+    public void prepareInvalidSavedGame(final boolean autosave)
+            throws Exception {
+        final org.microcol.model.campaign.po.GameModelPoDao files = new org.microcol.model.campaign.po.GameModelPoDao();
+        final org.microcol.model.campaign.po.GameModelPo data = files
+                .loadFromClassPath(
+                        "/maps/default-campaign-mission-2-thrive.microcol");
+        data.getModel().getColonies().get(1)
+                .setName(data.getModel().getColonies().get(0).getName());
+        invalidSave = autosave
+                ? getContext().getClassFromGuice(PersistingTool.class)
+                        .getAutoSaveFile()
+                : Files.createTempFile("invalid-game-", ".microcol").toFile();
+        files.saveToFile(invalidSave.getAbsolutePath(), data);
+        invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
+        previousGame = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel();
+        if (!autosave) {
+            chooseLoadFile(invalidSave);
+        }
+    }
+
+    public void attemptInvalidSavedGame(final boolean autosave) {
+        clickOnButtonWithId(autosave ? "buttonContinue" : "buttonLoad");
+    }
+
+    public void verifyInvalidSavedGameMessage(final String expectedMessage) {
+        assertEquals(expectedMessage, getNodeFinder().lookup(expectedMessage)
+                .queryAs(Label.class).getText());
+    }
+
+    public void verifyRejectedLoadPreservedGameAndFile() throws Exception {
+        assertSame(previousGame,
+                getContext().getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                        .getGameModel());
+        assertArrayEquals(invalidSaveBytes,
+                Files.readAllBytes(invalidSave.toPath()));
+        WelcomePage.of(getContext()).verifyMainScreen();
+    }
+
     public void cancelLoadChooser() {
         org.mockito.Mockito
                 .when(getContext()

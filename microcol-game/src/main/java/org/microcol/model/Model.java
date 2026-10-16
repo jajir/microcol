@@ -450,10 +450,14 @@ public class Model {
                 && map.isValid(at) && getColonyAt(at).isEmpty()
                 && getUnitsAt(at).stream()
                         .noneMatch(unit -> unit.getOwner() != owner)
-                && colonies.stream()
-                        .flatMap(colony -> colony.getColonyFields().stream())
-                        .noneMatch(field -> field.isNotEmpty()
-                                && field.getLocation().equals(at));
+                && !isColonyFieldWorked(at);
+    }
+
+    boolean isColonyFieldWorked(final Location at) {
+        return colonies.stream()
+                .flatMap(colony -> colony.getColonyFields().stream())
+                .anyMatch(field -> field.isNotEmpty()
+                        && field.getLocation().equals(at));
     }
 
     public int getKingsTaxForPlayer(final Player subduedPlayer) {

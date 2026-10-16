@@ -924,6 +924,8 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkNotNull(producedGoodsType);
         Preconditions.checkArgument(colonyField.canProduce(producedGoodsType),
                 "Field cannot produce requested goods");
+        Preconditions.checkState(colonyField.canAccept(this, producedGoodsType),
+                "Worker or colony field is no longer available");
     }
 
     private boolean isAlreadyInSameColony(

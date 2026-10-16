@@ -70,6 +70,14 @@ public class ColonyScreen extends AbstractScreen {
                         expectedNamePart, labeled.getText()));
     }
 
+    public void verifyThatStatusBarContains(final String expectedText) {
+        final Labeled label = getLabeledById(
+                org.microcol.gui.screen.game.components.StatusBarView.STATUS_BAR_LABEL_ID);
+        assertTrue(label.getText().contains(expectedText),
+                () -> "Expected status: " + expectedText + "; actual: "
+                        + label.getText());
+    }
+
     public GamePage close() {
         final Button buttonNextTurn = getButtonById(
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);

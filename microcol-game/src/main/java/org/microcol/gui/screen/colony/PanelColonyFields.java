@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.i18n.I18n;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
@@ -70,10 +73,14 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final VBox mainPanel = new VBox();
 
+    private final I18n i18n;
+
     @Inject
     PanelColonyFields(final ImageProvider imageProvider,
             final GameModelController gameModelController,
-            final PaintService paintService, final EventBus eventBus) {
+            final PaintService paintService, final EventBus eventBus,
+            final I18n i18n) {
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
@@ -106,6 +113,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void showContextMenuAtColonyField(final ColonyField colonyField,
             final ContextMenuEvent event) {
+        final Unit expectedWorker = colonyField.getUnit().orElseThrow();
         contextMenu.getItems().clear();
         colonyField.getTerrain().getProduction().stream()
                 .forEach(production -> {
@@ -113,9 +121,14 @@ public final class PanelColonyFields implements JavaFxComponent {
                             production.getGoodsType().name() + "   "
                                     + production.getProduction());
                     item.setOnAction(evt -> {
-                        colonyField.setProducedGoodsType(
-                                production.getGoodsType());
-                        eventBus.post(new RepaintColonyEvent());
+                        try {
+                            colonyField.setProducedGoodsType(expectedWorker,
+                                    production.getGoodsType());
+                            eventBus.post(new RepaintColonyEvent());
+                        } catch (IllegalArgumentException
+                                | IllegalStateException rejected) {
+                            showFieldProblem(ColonyMsg.fieldChanged);
+                        }
                     });
                     contextMenu.getItems().add(item);
                 });
@@ -151,55 +164,58 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void onDragOver(final DragEvent event) {
-        logger.debug("Drag Over");
-        if (isItUnit(event.getDragboard())) {
-            final Optional<Direction> oLoc = clickableArea
-                    .getDirection(Point.of(event.getX(), event.getY()));
-            if (canFieldAcceptDraggedUnit(oLoc)) {
-                event.acceptTransferModes(TransferMode.MOVE);
-                event.consume();
-                return;
+        final Optional<Unit> unit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
+        final Optional<ColonyField> field = clickableArea
+                .getDirection(Point.of(event.getX(), event.getY()))
+                .map(colony::getColonyFieldInDirection);
+        if (unit.isPresent() && field.isPresent()
+                && field.get().canAccept(unit.get(), GoodsType.CORN)) {
+            event.acceptTransferModes(TransferMode.MOVE);
+            eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+        } else {
+            event.acceptTransferModes(TransferMode.NONE);
+            if (unit.isPresent() && field.isPresent()) {
+                showFieldProblem(field.get().isWorkedByAnotherColony()
+                        ? ColonyMsg.fieldWorked
+                        : ColonyMsg.fieldChanged);
             }
-
         }
-        event.acceptTransferModes(TransferMode.NONE);
         event.consume();
-    }
-
-    private boolean canFieldAcceptDraggedUnit(final Optional<Direction> oLoc) {
-        return oLoc.map(colony::getColonyFieldInDirection)
-                .map(field -> field.isEmpty() && field.isValid()
-                        && field.canProduce(GoodsType.CORN))
-                .orElse(false);
     }
 
     private void onDragDropped(final DragEvent event) {
-        logger.debug("Drag dropped");
+        event.setDropCompleted(false);
+        final Optional<Unit> unit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
         clickableArea.getDirection(Point.of(event.getX(), event.getY()))
-                .map(loc -> colony.getColonyFieldInDirection(loc))
-                .filter(field -> field.isEmpty() && field.isValid()
-                        && field.canProduce(GoodsType.CORN))
-                .ifPresent(colonyField -> dragDropped(colonyField, event));
+                .map(colony::getColonyFieldInDirection).ifPresent(field -> {
+                    if (unit.isEmpty()) {
+                        return;
+                    }
+                    try {
+                        unit.get().placeToColonyField(field, GoodsType.CORN);
+                        event.setDropCompleted(true);
+                        eventBus.post(new RepaintColonyEvent());
+                    } catch (IllegalArgumentException
+                            | IllegalStateException rejected) {
+                        showFieldProblem(field.isWorkedByAnotherColony()
+                                ? ColonyMsg.fieldWorked
+                                : ColonyMsg.fieldChanged);
+                    }
+                });
         event.consume();
     }
 
-    private void dragDropped(final ColonyField colonyField,
-            final DragEvent event) {
-        ClipboardEval.make(gameModelController.getModel(), event.getDragboard())
-                .getUnit().ifPresent(unit -> {
-                    unit.placeToColonyField(colonyField, GoodsType.CORN);
-                    event.setDropCompleted(true);
-                    eventBus.post(new RepaintColonyEvent());
-                });
-    }
-
-    private boolean isItUnit(final Dragboard db) {
-        logger.debug("Drag over unit id '" + db.getString() + "'.");
-        return ClipboardEval.make(gameModelController.getModel(), db).getUnit()
-                .isPresent();
+    private void showFieldProblem(final ColonyMsg message) {
+        eventBus.post(
+                new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
     }
 
     public void setColony(final Colony colony) {
+        contextMenu.hide();
         this.colony = Preconditions.checkNotNull(colony);
         paint(canvas.getGraphicsContext2D());
     }

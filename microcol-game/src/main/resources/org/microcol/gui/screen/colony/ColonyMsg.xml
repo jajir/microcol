@@ -42,4 +42,6 @@
     <entry key="equipmentALREADY_SET">This equipment state has already changed. Nothing was changed. Cancel and choose again.</entry>
     <entry key="equipmentMISSING_GOODS">Not enough goods in the warehouse. Cancel and obtain the required goods.</entry>
     <entry key="equipmentSTORAGE_FULL">Returned equipment will not fit in the warehouse. Cancel and free storage first.</entry>
+    <entry key="fieldWorked">Another colony works this square. Free it there first.</entry>
+    <entry key="fieldChanged">This worker or square is unavailable. Check the job and equipment storage, then try again.</entry>
 </properties>

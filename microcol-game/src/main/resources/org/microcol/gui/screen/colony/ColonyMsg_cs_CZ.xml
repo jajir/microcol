@@ -42,4 +42,6 @@
     <entry key="equipmentALREADY_SET">Stav vybavení se již změnil. Nic se nezměnilo. Zrušte volbu a vyberte znovu.</entry>
     <entry key="equipmentMISSING_GOODS">Ve skladu není dostatek zboží. Zrušte volbu a obstarejte potřebné zboží.</entry>
     <entry key="equipmentSTORAGE_FULL">Vracené vybavení se nevejde do skladu. Zrušte volbu a nejprve uvolněte místo.</entry>
+    <entry key="fieldWorked">Na tomto poli pracuje jiná kolonie. Nejprve ho v ní uvolněte.</entry>
+    <entry key="fieldChanged">Tento pracovník nebo pole není k dispozici. Zkontrolujte práci a místo pro vybavení ve skladu a zkuste to znovu.</entry>
 </properties>

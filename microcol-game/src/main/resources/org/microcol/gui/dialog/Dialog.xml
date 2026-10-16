@@ -47,4 +47,5 @@
 	<entry key="fight_unavailable">The attack is no longer available. No battle was started. Check the units, positions, equipment and remaining movement, then choose the attack again.</entry>
 	<entry key="turnPreparation_title">Turn could not finish</entry>
 	<entry key="turnPreparation_unavailable">The turn could not finish. No saved game was overwritten. Continue or load a saved game to play again.</entry>
+	<entry key="loadGame_invalid">The saved game contains invalid data and could not be loaded. The current game and save file were not changed.</entry>
 </properties>

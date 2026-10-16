@@ -46,8 +46,16 @@ public final class GameController {
                 gameModelController.getGameModel());
     }
 
-    public void loadModelFromFile(final File sourceFile) {
-        startMission(gameModelDao.loadFromFile(sourceFile, eventBus));
+    public boolean loadModelFromFile(final File sourceFile) {
+        final GameModel loaded;
+        try {
+            loaded = gameModelDao.loadFromFile(sourceFile, eventBus);
+        } catch (IllegalArgumentException rejected) {
+            gameModelController.showInvalidSavedGame();
+            return false;
+        }
+        startMission(loaded);
+        return true;
     }
 
     public void startFreePlay(final FreePlayMap map, final String playerName) {

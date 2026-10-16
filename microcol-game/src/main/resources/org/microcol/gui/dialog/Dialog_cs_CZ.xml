@@ -47,4 +47,5 @@
 	<entry key="fight_unavailable">Útok už nelze provést. Boj nezačal. Zkontrolujte jednotky, polohu, vybavení a zbývající pohyb a zvolte útok znovu.</entry>
 	<entry key="turnPreparation_title">Tah nebyl dokončen</entry>
 	<entry key="turnPreparation_unavailable">Tah se nepodařilo dokončit. Žádná uložená hra nebyla přepsána. Pokračujte nebo načtěte uloženou hru.</entry>
+	<entry key="loadGame_invalid">Uložená hra obsahuje neplatné údaje a nelze ji načíst. Současná hra ani uložený soubor se nezměnily.</entry>
 </properties>

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -43,6 +44,56 @@ public final class ColonyField {
     public boolean canProduce(final GoodsType goodsType) {
         return getMap().isValid(getLocation())
                 && getTerrainType().canProduce(goodsType);
+    }
+
+    public boolean isWorkedByAnotherColony() {
+        return isEmpty() && isValid()
+                && model.isColonyFieldWorked(getLocation());
+    }
+
+    public boolean canAccept(final Unit unit, final GoodsType goodsType) {
+        if (!canWorkerActHere(unit) || goodsType == null || !isEmpty()
+                || !canProduce(goodsType)
+                || !model.isColonyFieldAvailable(colony.getOwner(),
+                        getLocation())) {
+            return false;
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return (!colonist.isHoldingGuns() || colonist
+                .getEquipmentProblem(GoodsType.MUSKET, false).isEmpty())
+                && (!colonist.isHoldingTools() || colonist
+                        .getEquipmentProblem(GoodsType.TOOLS, false).isEmpty())
+                && (!colonist.isMounted() || colonist
+                        .getEquipmentProblem(GoodsType.HORSE, false).isEmpty());
+    }
+
+    private boolean canWorkerActHere(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist) || !isValid()
+                || !colony.getColonyFields().contains(this)
+                || !model.isGameRunning()
+                || model.getCurrentPlayer() != colony.getOwner()
+                || unit.getOwner() != colony.getOwner()
+                || model.getPlayers().stream()
+                        .noneMatch(player -> player == unit.getOwner())
+                || model.tryGetUnitById(unit.getId()).orElse(null) != unit) {
+            return false;
+        }
+        if (unit.isAtPlaceColonyField()) {
+            return colony.getColonyFields().stream()
+                    .anyMatch(field -> field.placeColonyField == unit
+                            .getPlaceColonyField());
+        }
+        if (unit.isAtPlaceConstructionSlot()) {
+            final ConstructionSlot slot = unit.getPlaceConstruction()
+                    .getConstructionSlot();
+            return !slot.isEmpty() && slot.getUnit() == unit
+                    && colony.getConstructions().stream()
+                            .flatMap(construction -> construction
+                                    .getConstructionSlots().stream())
+                            .anyMatch(candidate -> candidate == slot);
+        }
+        return unit.isAtPlaceLocation()
+                && unit.getLocation().equals(colony.getLocation());
     }
 
     public Direction getDirection() {
@@ -137,8 +188,26 @@ public final class ColonyField {
 
     public void setProducedGoodsType(final GoodsType producedGoodsType) {
         model.checkTurnPreparationComplete();
-        Preconditions.checkNotNull(placeColonyField,
-                "There in no unit placed at field");
+        Preconditions.checkState(placeColonyField != null,
+                "There is no unit placed at field");
+        setProducedGoodsType(placeColonyField.getUnit(), producedGoodsType);
+    }
+
+    public void setProducedGoodsType(final Unit expectedWorker,
+            final GoodsType producedGoodsType) {
+        model.checkTurnPreparationComplete();
+        Preconditions.checkNotNull(expectedWorker);
+        Preconditions.checkNotNull(producedGoodsType);
+        Preconditions.checkArgument(canProduce(producedGoodsType),
+                "Field cannot produce requested goods");
+        Preconditions.checkState(
+                placeColonyField != null
+                        && placeColonyField.getUnit() == expectedWorker
+                        && canWorkerActHere(expectedWorker)
+                        && expectedWorker.isAtPlaceColonyField()
+                        && expectedWorker
+                                .getPlaceColonyField() == placeColonyField,
+                "Worker or colony job is no longer available");
         placeColonyField.setProducedGoodsType(producedGoodsType);
     }
 
@@ -160,7 +229,7 @@ public final class ColonyField {
         }
     }
 
-    public void setPlaceColonyField(final PlaceColonyField placeColonyField) {
+    void setPlaceColonyField(final PlaceColonyField placeColonyField) {
         this.placeColonyField = Preconditions.checkNotNull(placeColonyField);
         model.fireUnitMovedToColonyField(placeColonyField.getUnit());
     }

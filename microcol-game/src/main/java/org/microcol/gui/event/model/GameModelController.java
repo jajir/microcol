@@ -197,6 +197,13 @@ public class GameModelController {
                 && getRealCurrentPlayer().isHuman();
     }
 
+    public void showInvalidSavedGame() {
+        final DialogMessage message = passengerMessage.get();
+        message.setTitle(i18n.get(Dialog.loadGame_title));
+        message.setText(i18n.get(Dialog.loadGame_invalid));
+        message.showAndWait();
+    }
+
     public void showTurnPreparationUnavailable() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.turnPreparation_title));

@@ -74,8 +74,10 @@ public final class ButtonsPanelPresenter {
 
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
-        gameController.loadModelFromFile(persistingTool.getAutoSaveFile());
-        eventBus.post(new ShowScreenEvent(Screen.GAME));
+        if (gameController
+                .loadModelFromFile(persistingTool.getAutoSaveFile())) {
+            eventBus.post(new ShowScreenEvent(Screen.GAME));
+        }
     }
 
     public void refresh() {
