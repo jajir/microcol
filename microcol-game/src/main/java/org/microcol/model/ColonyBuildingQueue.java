@@ -47,6 +47,8 @@ public class ColonyBuildingQueue {
 
     private final List<ColonyBuildingItemProgress<?>> buildingQueue;
 
+    private int revision;
+
     ColonyBuildingQueue(final Model model, final Colony colony,
             final List<ColonyBuildingItemProgress<?>> buildingQueue) {
         this.model = Preconditions.checkNotNull(model);
@@ -103,6 +105,7 @@ public class ColonyBuildingQueue {
         if (movingItem != beforeItem) {
             buildingQueue.remove(movingItem);
             buildingQueue.add(buildingQueue.indexOf(beforeItem), movingItem);
+            revision++;
         }
     }
 
@@ -114,6 +117,7 @@ public class ColonyBuildingQueue {
         logger.debug("Moving item '{}' at the end of the queue.", movingItem);
         buildingQueue.remove(movingItem);
         buildingQueue.add(movingItem);
+        revision++;
     }
 
     @Override
@@ -240,6 +244,7 @@ public class ColonyBuildingQueue {
                 new ColonyBuildingItemConstruction(constructionType),
                 getNextId());
         buildingQueue.add(item);
+        revision++;
         return item;
     }
 
@@ -250,6 +255,7 @@ public class ColonyBuildingQueue {
         final ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
                 new ColonyBuildingItemUnit(unitType), getNextId());
         buildingQueue.add(item);
+        revision++;
         return item;
     }
 
@@ -279,6 +285,7 @@ public class ColonyBuildingQueue {
         Preconditions.checkArgument(buildingQueue.contains(item),
                 "Queue item is no longer present");
         buildingQueue.remove(item);
+        revision++;
     }
 
     private void validateEditable() {
@@ -360,6 +367,83 @@ public class ColonyBuildingQueue {
         }
     }
 
+    /**
+     * Quote the current head without changing treasury, stock, or queue.
+     *
+     * @return the current offer, or empty while play or completion is
+     *         unavailable
+     */
+    public Optional<ConstructionRushQuote> getRushQuote() {
+        if (!model.isGameRunning() || buildingQueue.isEmpty()
+                || getCompletionUnavailableReason().isPresent()) {
+            return Optional.empty();
+        }
+        final Player owner = colony.getOwner();
+        if (owner.isKing() || !owner.canTradeInEurope()) {
+            return Optional.empty();
+        }
+        final ColonyBuildingItemProgress<?> head = buildingQueue.get(0);
+        if (head instanceof ColonyBuildingItemProgressUnit
+                && !model.getUnitStorage().canAllocateUnit()) {
+            return Optional.empty();
+        }
+        final int hammersStock = colony.getWarehouse()
+                .getGoods(GoodsType.HAMMERS).getAmount();
+        final int toolsStock = colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                .getAmount();
+        final int hammersUsed = Math.min(hammersStock,
+                head.getRequiredHammers());
+        final int toolsUsed = Math.min(toolsStock, head.getRequiredTools());
+        final int missingHammers = head.getRequiredHammers() - hammersUsed;
+        final int missingTools = head.getRequiredTools() - toolsUsed;
+        try {
+            final EuropeTradeQuote toolsQuote = owner.quoteEuropeTrade(
+                    Goods.of(GoodsType.TOOLS, missingTools), true);
+            final int price = Math.addExact(
+                    Math.multiplyExact(2, missingHammers),
+                    toolsQuote.getTotal());
+            return Optional.of(new ConstructionRushQuote(this, head,
+                    buildingQueue, owner, revision, hammersStock, toolsStock,
+                    owner.getGold(), toolsQuote, hammersUsed, toolsUsed,
+                    missingHammers, missingTools, price));
+        } catch (final ArithmeticException overflow) {
+            return Optional.empty();
+        }
+    }
+
+    /** Complete one quoted head after rechecking every quoted input. */
+    public void rush(final ConstructionRushQuote quote) {
+        Preconditions.checkNotNull(quote);
+        model.checkTurnPreparationComplete();
+        Preconditions.checkState(quote.belongsTo(this),
+                "Rush quote belongs to another queue");
+        final ConstructionRushQuote current = getRushQuote().orElseThrow(
+                () -> new IllegalStateException("Rush is unavailable"));
+        Preconditions.checkState(quote.matches(current), "Rush quote is stale");
+        if (current.getGoldAfter() < 0) {
+            throw new NotEnoughtGoldException(
+                    "Not enough gold to rush project");
+        }
+        final ColonyBuildingItemProgress<?> head = buildingQueue.get(0);
+        // All completion, capacity, market, identity and resource checks
+        // precede
+        // these mutations. Purchased materials go directly into completion.
+        colony.getWarehouse().removeGoods(
+                Goods.of(GoodsType.HAMMERS, current.getHammersUsed()));
+        colony.getWarehouse()
+                .removeGoods(Goods.of(GoodsType.TOOLS, current.getToolsUsed()));
+        if (head instanceof ColonyBuildingItemProgressUnit) {
+            createUnit(((ColonyBuildingItemProgressUnit) head).getUnitType());
+        } else {
+            colony.createConstruction(
+                    ((ColonyBuildingItemProgressConstruction) head)
+                            .getConstructionType());
+        }
+        buildingQueue.remove(0);
+        revision++;
+        colony.getOwner().setGold(current.getGoldAfter());
+    }
+
     void startTurn() {
         if (getActualyBuilding().isPresent()
                 && getCompletionUnavailableReason().isEmpty()) {
@@ -394,6 +478,7 @@ public class ColonyBuildingQueue {
                         String.format("Unknown class '%s'.", item.getItem()));
             }
             buildingQueue.remove(0);
+            revision++;
         }
     }
 

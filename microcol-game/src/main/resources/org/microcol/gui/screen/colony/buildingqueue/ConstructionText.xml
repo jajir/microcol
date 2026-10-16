@@ -29,4 +29,16 @@
 <entry key="hammerPool">Shared work: %s hammers.</entry>
     <entry key="coastalRequired">A coastal colony is required.</entry>
     <entry key="missingShipyard">Build a shipyard before constructing ships.</entry>
+<entry key="rush">Buy completion…</entry>
+<entry key="rushConfirm">Pay and complete</entry>
+<entry key="rushCancel">Cancel purchase</entry>
+<entry key="rushDetail">Complete: %s
+Use from colony: %s hammers, %s tools.
+Buy for this project: %s hammers, %s tools.
+Total including tax: %s gold.
+Treasury after purchase: %s gold.</entry>
+<entry key="rushUnavailable">Completion cannot be bought now. It requires a valid current project and access to home Europe.</entry>
+<entry key="rushNoGold">Not enough gold.</entry>
+<entry key="rushChanged">The offer changed. Nothing was spent. Close this window and request a new quote.</entry>
+<entry key="rushCompleted">The current project was completed and paid once.</entry>
 </properties>

@@ -589,7 +589,7 @@ součtem. Stejný výsledek používá náhled i změna skladu. Dokončení stav
 probíhá po produkci, takže nový bonus platí od následující aktualizace.
 Tiskové budovy nejsou dalšími producenty a nepotřebují nové schéma uložení.
 Další politické a otcovské bonusy zůstávají samostatnými požadavky.
-Viz [R-0081](requirements/R-0081.md).
+Viz [R-0081](requirements/done/R-0081.md).
 
 ### Dobrovolný odchod z opevněné kolonie (R-0082)
 
@@ -612,3 +612,14 @@ nic neutratí; platné dokončení odečte přesnou cenu a zachová přebytek.
 Za aktualizaci dokončí nejvýše první projekt. Změna, odstranění i prázdná
 fronta ponechává práci ve skladu. [R-0083](requirements/R-0083.md) naváže
 nákupem chybějících materiálů na tento společný stav.
+
+### Zaplacené dokončení projektu (R-0083)
+
+`ColonyBuildingQueue` vlastní neměnnou nabídku `ConstructionRushQuote`
+a její potvrzení. Chybějící kladiva stojí dvě zlaté za kus; nástroje
+používají společnou nákupní nabídku Evropy včetně daně. Stávající zásoby
+se spotřebují pouze do ceny projektu, dokoupené materiály nejdou přes sklad.
+Před změnou pokladnice, materiálů nebo fronty se znovu ověří vazba nabídky
+a frontu, její stav, vlastník, zdroje, cena i předpoklady dokončení.
+UI zobrazuje modelovou nabídku a vyžaduje výslovné potvrzení; samo cenu
+nepočítá. Viz [R-0083](requirements/R-0083.md).

@@ -49,6 +49,8 @@ public class QueueDialog extends AbstractMessageWindow {
     private final Button down = new Button();
     private final Button remove = new Button();
     private final Button cancel = new Button();
+    private final Button rush = new Button();
+    private final ConstructionRushDialog rushDialog;
     private List<?> selectionState = List.of();
 
     @Inject
@@ -58,6 +60,7 @@ public class QueueDialog extends AbstractMessageWindow {
         this.i18n = i18n;
         this.eventBus = eventBus;
         this.controller = controller;
+        this.rushDialog = new ConstructionRushDialog(viewUtil, i18n);
         projects.setId("constructionProjects");
         queue.setId("constructionQueue");
         hammerPool.setId("constructionHammerPool");
@@ -69,6 +72,13 @@ public class QueueDialog extends AbstractMessageWindow {
         down.setId("constructionDown");
         remove.setId("constructionRemove");
         cancel.setId("constructionCancel");
+        rush.setId("constructionRush");
+        rush.setOnAction(event -> {
+            boolean purchased = rushDialog.showFor(controller);
+            refresh();
+            if (purchased)
+                feedback.setText(i18n.get(ConstructionText.rushCompleted));
+        });
         projects.setCellFactory(list -> new ListCell<ColonyBuildingItem>() {
             @Override
             protected void updateItem(final ColonyBuildingItem item,
@@ -116,7 +126,7 @@ public class QueueDialog extends AbstractMessageWindow {
         feedback.setMinHeight(48);
         final VBox choices = new VBox(8, projectsTitle, projects, detail, add);
         final VBox current = new VBox(8, queueTitle, hammerPool, queue,
-                new HBox(8, up, down), remove);
+                new HBox(8, up, down), remove, rush);
         choices.setPrefWidth(420);
         current.setPrefWidth(310);
         VBox.setVgrow(projects, Priority.ALWAYS);
@@ -161,6 +171,7 @@ public class QueueDialog extends AbstractMessageWindow {
         down.setText(language.get(ConstructionText.down));
         remove.setText(language.get(ConstructionText.remove));
         cancel.setText(language.get(ConstructionText.cancel));
+        rush.setText(language.get(ConstructionText.rush));
         projects.refresh();
         queue.refresh();
     }
@@ -284,6 +295,7 @@ public class QueueDialog extends AbstractMessageWindow {
         down.setDisable(index < 0 || index >= queue.getItems().size() - 1
                 || !controller.isCurrent());
         remove.setDisable(index < 0 || !controller.isCurrent());
+        rush.setDisable(queue.getItems().isEmpty() || !controller.isCurrent());
     }
 
     @Override

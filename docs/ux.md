@@ -414,7 +414,7 @@ nemění frontu. Radnice ukazuje společný výstup včetně základního zvonu
 a tiskového bonusu. Výběr práce označuje jednotlivý příspěvek státníka
 jako hodnotu před bonusy kolonie, aby jej hráč nezaměňoval za celý výstup.
 Dokončená stavba zvyšuje další produkci bez přesunu pracovníků.
-Automatické hráčské ověření zaznamenává [R-0081](requirements/R-0081.md);
+Automatické hráčské ověření zaznamenává [R-0081](requirements/done/R-0081.md);
 nejde o pozorování skutečných hráčů.
 
 ### Odchod třetího obyvatele z opevnění (R-0082)
@@ -433,3 +433,12 @@ U jednotlivých projektů zobrazuje jejich ceny, aby nevypadaly jako
 nezávisle rozpracované stavby se stejnými kladivy. Změna či odstranění projektu
 zásobu ponechá. Dokončení spotřebuje pouze
 cenu prvního projektu a přebytek je dostupný pro další.
+
+### Potvrzení nákupu dokončení (R-0083)
+
+Ve stavební nabídce hráč otevře „Koupit dokončení…“ pro první projekt
+fronty. Samostatné okno jmenuje projekt, použitá a dokoupená kladiva
+a nástroje, celkovou cenu včetně daně a zbývající pokladnici. Platba
+vyžaduje „Zaplatit a dokončit“; zrušení a Escape nic neutratí.
+Nedostatek zlata zakáže potvrzení. Změněná nabídka vysvětlí odmítnutí
+a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.

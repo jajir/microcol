@@ -3601,6 +3601,8 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    remain pending; the requirement stays ready until those gates complete.
 
 
+8. Full CI on `d8bff42a1962` passed **1567 model and 232 UI/support tests**, zero failures/errors/skips; native packaging, compatibility and Pages succeeded. Release [dev-131-d8bff42a1962](https://github.com/jajir/microcol/releases/tag/dev-131-d8bff42a1962) has all ten expected assets. The publisher explicitly kept the automatic channel unchanged. R-0081 is done.
+
 ### R-0082 fortified population — 2026-10-16
 
 1. Scope: BUILD-015 / UC-047 voluntary departures and forced famine.
@@ -3696,3 +3698,26 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    preservation and formatter idempotence.
 6. Packaging/Javadoc, shared formatting and nine documentation tests plus
    strict MkDocs passed. Full CI/publication remain separate gates.
+
+
+### R-0083 rush completion — 2026-10-16
+
+1. Scope: BUILD-004 / UC-044. A bounded Sol low worker owns model quote,
+   transaction and boundary tests in an isolated worktree. Main owns the
+   confirmation dialog, F46/TC55, review and actual verification. No local
+   model or duplicate model implementation was used.
+2. Review requested an explicit turn-preparation guard at confirmation and
+   a real preparation-callback regression. The quote already hides unavailable
+   games through `isGameRunning`; confirmation now also uses the shared guard.
+3. All **1586 model tests passed**, zero failures/errors/skips. The shared
+   formatter checked eight Java files with exact-token preservation and
+   idempotence; packaging including Javadoc, nine documentation tests and
+   strict MkDocs passed.
+4. Docker `run-uYYmGH` passed **13 tests**, zero failures/errors/skips:
+   TC55 (two rush journeys), TC32 (seven construction regressions), TC54
+   (shared-pool journey) and three page-contract checks. Actual taxed price
+   76, cancellation, insufficient gold, changed-stock rejection, one completion
+   and Continue all passed. Main inspected the captured quote: full material,
+   total and remaining-treasury text and both buttons are readable.
+5. Full CI and publication remain pending; R-0083 stays ready until those
+   gates finish. No failed or skipped check is counted as acceptance.

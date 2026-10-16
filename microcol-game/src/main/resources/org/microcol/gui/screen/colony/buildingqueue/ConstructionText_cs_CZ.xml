@@ -29,4 +29,16 @@
 <entry key="hammerPool">Společná práce: %s kladiv.</entry>
     <entry key="coastalRequired">Je nutná pobřežní kolonie.</entry>
     <entry key="missingShipyard">Před stavbou lodí postavte loděnici.</entry>
+<entry key="rush">Koupit dokončení…</entry>
+<entry key="rushConfirm">Zaplatit a dokončit</entry>
+<entry key="rushCancel">Zrušit nákup</entry>
+<entry key="rushDetail">Dokončit: %s
+Použít z kolonie: %s kladiv, %s nástrojů.
+Koupit pro tento projekt: %s kladiv, %s nástrojů.
+Celkem včetně daně: %s zlata.
+Pokladnice po nákupu: %s zlata.</entry>
+<entry key="rushUnavailable">Dokončení nyní nelze koupit. Je potřeba platný aktuální projekt a přístup do domovské Evropy.</entry>
+<entry key="rushNoGold">Nedostatek zlata.</entry>
+<entry key="rushChanged">Nabídka se změnila. Nic nebylo utraceno. Zavřete okno a vyžádejte si novou cenu.</entry>
+<entry key="rushCompleted">Aktuální projekt byl dokončen a jednou zaplacen.</entry>
 </properties>

@@ -160,7 +160,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0078](done/R-0078.md) | Breed horses in colonies and improve breeding with stables | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0079](done/R-0079.md) | Apply industrial upgrades to real inputs and outputs | Follow-up | [R-0009](canceled/R-0009.md), [R-0025](done/R-0025.md) |
 | [R-0080](done/R-0080.md) | Make docks and shipyards unlock their actual coastal functions | Follow-up | [R-0025](done/R-0025.md) |
-| [R-0081](R-0081.md) | Apply printing improvements to existing bell production | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
+| [R-0081](done/R-0081.md) | Apply printing improvements to existing bell production | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
 | [R-0082](R-0082.md) | Prevent voluntary abandonment below a fortified colony’s minimum | Follow-up | [R-0025](done/R-0025.md), [R-0005](canceled/R-0005.md), [R-0008](canceled/R-0008.md) |
 | [R-0083](R-0083.md) | Buy completion of the current construction project | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0084](R-0084.md) | Gate factories and custom houses on the required founder | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |

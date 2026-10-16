@@ -668,3 +668,12 @@ zkontroluje zrušení výběru a poté dokončí pilu, sklad a vůz přes skute�
 tahy. Kontroluje přebytky, jen jedno dokončení za tah, prázdnou frontu
 a Continue. TC32 zachovává kontrolu chybějících nástrojů a předchůdce
 s kladivy ve společném skladu. Výsledky vede [R-0109](requirements/R-0109.md).
+
+### UC-044: zaplacení dokončení R-0083
+
+`TC_55_F46_rush_construction_test` otevře cenu aktuální kovárny, zruší
+nákup beze změny, poté zaplatí 76 zlatých a ověří hotovou stavbu,
+zbytek fronty a Continue bez další platby. Druhý scénář ověří nedostatek
+zlata, odmítnutí zastaralé nabídky po změně materiálů a novou cenu.
+Model doplňuje nulovou cenu, přebytky, jednotky a neplatné předpoklady.
+Výsledky vede [R-0083](requirements/R-0083.md).
