@@ -199,6 +199,32 @@ public final class FreePlayAuditPage extends AbstractScreen {
         clickOnButtonWithId(autosave ? "buttonContinue" : "buttonLoad");
     }
 
+    public void prepareInvalidDifficultySave(final String difficulty)
+            throws Exception {
+        final File source = getContext().getClassFromGuice(PersistingTool.class)
+                .getAutoSaveFile();
+        final com.google.gson.JsonObject data = new com.google.gson.JsonParser()
+                .parse(Files.readString(source.toPath())).getAsJsonObject();
+        final com.google.gson.JsonObject model = data.getAsJsonObject("model");
+        if (difficulty == null) {
+            model.remove("difficulty");
+        } else {
+            model.addProperty("difficulty", difficulty);
+        }
+        invalidSave = Files.createTempFile("invalid-difficulty-", ".microcol")
+                .toFile();
+        Files.writeString(invalidSave.toPath(), data.toString());
+        invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
+        previousGame = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel();
+        previousWorld = previousGame == null ? null
+                : new com.google.gson.Gson()
+                        .toJsonTree(previousGame.getModel().save());
+        chooseLoadFile(invalidSave);
+    }
+
     public void attemptInvalidSavedGameWhilePlaying() {
         javafx.application.Platform.runLater(() -> getContext()
                 .getClassFromGuice(

@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
 import org.microcol.i18n.I18n;
+import org.microcol.model.Difficulty;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 
@@ -24,6 +25,12 @@ public final class LocalizationHelper {
 
     public String getTerrainName(final TerrainType terrainType) {
         return i18n.get(TerrainTypes.getTerrainName(terrainType));
+    }
+
+    public String getDifficultyName(final Difficulty difficulty) {
+        Preconditions.checkNotNull(difficulty);
+        return i18n.get(Loc.valueOf("difficulty_"
+                + difficulty.name().toLowerCase(java.util.Locale.ROOT)));
     }
 
     public String getUnitName(final UnitType unitType) {

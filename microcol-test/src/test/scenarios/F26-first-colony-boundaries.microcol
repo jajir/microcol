@@ -3,6 +3,7 @@
   "missionName": "freePlay",
   "goalData": {},
   "model": {
+    "difficulty": "CONQUISTADOR",
     "calendar": {
       "startYear": 1490,
       "endYear": 1800,

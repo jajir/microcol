@@ -3112,3 +3112,10 @@ committed for this experiment.
    [functional evidence](../functional-tests.md#r-0062-automatic-cross-production-2026-10-16).
 3. Token/quota savings for this run have not been measured. The workflow choice
    is an economy hypothesis, not a verified percentage saving.
+
+4. R-0064 used one `gpt-6-sol`/`low` worker in `2026-10-16-r64`, based on
+   `6cf31ea5`. Main handled fixtures, UI tests, requirements and verification.
+   A targeted review follow-up made queued UI text use a captured model value
+   and added bundled-default coverage. Worker model tests passed; caller test
+   failures and repairs are separately recorded in the
+   [R-0064 evidence](../functional-tests.md#r-0064-difficulty-profile-2026-10-16).

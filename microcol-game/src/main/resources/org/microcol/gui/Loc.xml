@@ -45,4 +45,10 @@
 	<entry key="adjustAmountOfGoods">To choose the amount of goods, hold Ctrl while dragging on macOS, or Ctrl+Shift on Linux and Windows.</entry>
 	<entry key="moveCost">Move cost: </entry>
 
+	<entry key="difficulty">Difficulty</entry>
+	<entry key="difficulty_discoverer">Discoverer</entry>
+	<entry key="difficulty_explorer">Explorer</entry>
+	<entry key="difficulty_conquistador">Conquistador</entry>
+	<entry key="difficulty_governor">Governor</entry>
+	<entry key="difficulty_viceroy">Viceroy</entry>
 </properties>

@@ -89,6 +89,17 @@ instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento po
 není potvrzením dokončení celého požadavku.
 
 
+### Uložená obtížnost (R-0064)
+
+`model.Difficulty` a neměnná hodnota v `Model` jsou společným zdrojem obtížnosti
+pro všechny národy a budoucí pravidla. `ModelPo` ukládá její identitu;
+chybějící nebo neznámá hodnota se odmítá před výměnou rozehrané hry.
+`GameModelDao` nastaví volbu nové partie před sestavením modelu, zatímco
+`LocalizationHelper` pouze překládá názvy pro nastavení a herní panel.
+Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výchozí
+hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
+[R-0064](requirements/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
+
 ### Pořadí národních tahů (R-0052)
 
 `GameManager` řadí kopii aktuálního registru podle interních národních klíčů;

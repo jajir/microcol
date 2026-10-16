@@ -275,3 +275,15 @@ výsledek uživatelského výzkumu.
    Snímek odmítnutého přetažení také potvrzuje čitelnou zprávu a dostupné Zrušit.
    Jde o automatizované ověření, nikoli pozorování skutečných hráčů. Úplná přejímka
    a publikace jsou doložené v [evidenci R-0056](functional-tests.md#r-0056-job-choice-implementation-2026-10-16).
+
+
+### Volba obtížnosti — R-0064
+
+Nastavení nové volné hry nabízí pojmenovaný výběr pěti obtížností vedle mapy,
+ve stejném stylu jako ostatní volby. Výchozí volba je Dobyvatel (Conquistador).
+Start použije vybranou identitu; Zpět a Escape zahodí pouze rozpracované spuštění
+bez změny rozehrané nebo uložené partie. Název obtížnosti je viditelný také
+v herním panelu a po Pokračovat. Změna jazyka nemění vybranou úroveň.
+Jde o implementaci profilu; jednotlivé číselné dopady zůstávají u svých
+požadavků. [R-0064](requirements/R-0064.md) rozlišuje ověření od návrhu.
+Tento popis není záznam uživatelské studie.

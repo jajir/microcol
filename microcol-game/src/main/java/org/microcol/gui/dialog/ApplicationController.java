@@ -5,6 +5,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.model.Difficulty;
 import org.microcol.model.campaign.FreePlayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +49,9 @@ public final class ApplicationController {
         musicController.start(gamePreferences.getVolume());
     }
 
-    public void startNewFreeGame(final FreePlayMap map,
-            final String playerName) {
-        gameController.startFreePlay(map, playerName);
+    public void startNewFreeGame(final FreePlayMap map, final String playerName,
+            final Difficulty difficulty) {
+        gameController.startFreePlay(map, playerName, difficulty);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 

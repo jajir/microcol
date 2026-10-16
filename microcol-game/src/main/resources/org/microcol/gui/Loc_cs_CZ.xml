@@ -45,4 +45,10 @@
 	<entry key="adjustAmountOfGoods">Pro výběr množství zboží při přetahování podrž na macOS Ctrl, na Linuxu a Windows Ctrl+Shift.</entry>
 	<entry key="moveCost">Pohyb: </entry>
 
+	<entry key="difficulty">Obtížnost</entry>
+	<entry key="difficulty_discoverer">Objevitel</entry>
+	<entry key="difficulty_explorer">Průzkumník</entry>
+	<entry key="difficulty_conquistador">Dobyvatel</entry>
+	<entry key="difficulty_governor">Guvernér</entry>
+	<entry key="difficulty_viceroy">Místokrál</entry>
 </properties>

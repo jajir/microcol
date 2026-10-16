@@ -2712,3 +2712,38 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    rounds. Existing corn/tobacco expectations remain unchanged.
 5. Full UI regression and CI/publication are pending. These selected passes do
    not close all of UC-040, religious upgrades or national immigration.
+
+
+## R-0064 difficulty profile — 2026-10-16
+
+1. The selected difficulty is an immutable model value and required save field.
+   Setup defaults new choices to Conquistador; all five names are localized in
+   setup and the game panel. Start assembles the selected profile before replacing
+   the game. Missing/unknown saved identities are rejected without migration.
+   Forty-two tracked bundled/test scenarios explicitly declare Conquistador.
+2. Sol low supplied the model/start path, production UI and profile tests. Caller
+   review moved model reads outside a queued UI callback and added bundled
+   default coverage. The caller supplied fixtures and TC24/page-object coverage.
+   Shared formatting checked 14 changed Java files, code tokens and idempotence.
+3. The local model regression passed **1332 tests**, zero failures/errors/skips
+   (`target/r64/model-full.log`). The Docker model selection also passed all
+   three `DifficultyProfileTest` cases (five-value disk round trip, invalid
+   identity rejection and bundled defaults), plus two `FreePlayMapsTest` cases.
+4. Initial Docker run `run-5ekXkv` failed UI compilation because the caller's
+   new helper used unavailable `JsonParser.parseString` in the installed Gson.
+   Replacing it with the supported instance parser fixed that compilation error.
+   Retry `run-bRNwur` passed nine TC21 navigation scenarios, three page-contract
+   checks and seven of eight TC24 scenarios, but TC24's five-level selection
+   failed: the inherited Home/Down helper selected Governor when Conquistador
+   was expected. The caller changed difficulty selection to click its named
+   popup item; acceptance values remain unchanged. These failures were in
+   caller-authored test code, not worker implementation.
+5. Final Docker run `run-qMWN4a` passed **3 model and 12 UI-module checks**,
+   zero failures/errors/skips: all nine TC24 scenarios and three page-contract
+   checks, including every difficulty through Start/Continue, unchanged recovery
+   files after missing/unknown profile rejection, and language-change identity.
+   The Czech setup screenshot from `run-bRNwur` was inspected: the complete
+   form, difficulty choice and Start/Back controls fit the test window. The
+   final Czech game screenshot also shows the selected Governor label fully
+   visible below the unit panel, above the gold/calendar bar.
+   Full CI and publication remain pending; no complete R-0064 acceptance yet.

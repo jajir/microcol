@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.model.Difficulty;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
@@ -37,6 +38,8 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         FreePlaySetupPage setup = WelcomePage.of(getContext())
                 .openFreePlaySetup();
         setup.verifySetup(0);
+        setup.verifyDifficultySelection(Difficulty.CONQUISTADOR,
+                "Conquistador");
         setup.verifyNoActiveGame();
         setup.enterName("  Jan Dvořák  ");
         setup.captureDialog("freePlaySetup", "free-play-original.png");
@@ -83,16 +86,19 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         FreePlaySetupPage setup = WelcomePage.of(getContext())
                 .openFreePlaySetup();
         setup.selectMap(0);
+        setup.selectDifficulty(Difficulty.DISCOVERER);
         setup.back().verifyMainScreen();
         audit.verifyAutosaveUnchanged(saved);
 
         // Escape from the other selection likewise does not create a world.
         setup = WelcomePage.of(getContext()).openFreePlaySetup();
         setup.selectMap(1);
+        setup.selectDifficulty(Difficulty.VICEROY);
         setup.escape().verifyMainScreen();
         setup.verifyNoActiveGame();
         audit.verifyAutosaveUnchanged(saved);
         GamePage game = audit.continueGame();
+        setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
         game.openEuroperPort().verifyGold(10000);
     }
 
@@ -144,9 +150,78 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         setup.selectMap(1);
         setup.verifySetupLanguage("Začít hru",
                 "Pouze náhled. Hrát budete za Nizozemsko.");
+        setup.verifyDifficultySelection(Difficulty.CONQUISTADOR, "Dobyvatel");
         setup.captureDialog("freePlaySetup", "free-play-czech.png");
         setup.escape().verifyMainScreen();
         setup.verifyNoActiveGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_all_difficulties_persist_through_continue() throws Exception {
+        final String[] names = { "Discoverer", "Explorer", "Conquistador",
+                "Governor", "Viceroy" };
+        for (final Difficulty difficulty : Difficulty.values()) {
+            // Choose the level through the actual setup control and start.
+            final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                    .openFreePlaySetup();
+            setup.selectDifficulty(difficulty);
+            setup.verifyDifficultySelection(difficulty,
+                    names[difficulty.ordinal()]);
+            GamePage game = setup.start();
+            setup.verifyGameDifficulty(difficulty, names[difficulty.ordinal()]);
+
+            // The menu recovery file stores the same identity, then Continue
+            // restores the visible level and the model's rule-facing value.
+            game.exitToMenu();
+            setup.verifySavedDifficulty(difficulty);
+            game = new FreePlayAuditPage(getContext()).continueGame();
+            setup.verifyGameDifficulty(difficulty, names[difficulty.ordinal()]);
+            game.exitToMenu();
+        }
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_invalid_difficulty_preserves_game_and_save() throws Exception {
+        // Establish a valid continuation before choosing an invalid file.
+        WelcomePage.of(getContext()).loadGame().exitToMenu();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final byte[] continuation = audit.readAutosave();
+
+        for (final String invalid : new String[] { null, "IMPOSSIBLE" }) {
+            // Missing and unknown identities are rejected without guessing.
+            audit.prepareInvalidDifficultySave(invalid);
+            audit.attemptInvalidSavedGame(false);
+            audit.verifyInvalidSavedGameMessage(
+                    "The saved game contains invalid data and could not be loaded. The current game and save file were not changed.");
+            org.microcol.page.DialogMessagePage.of(getContext()).close();
+            audit.verifyRejectedLoadPreservedGameAndFile();
+            audit.verifyAutosaveUnchanged(continuation);
+            WelcomePage.of(getContext()).verifyMainScreen();
+        }
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_language_change_preserves_selected_difficulty()
+            throws Exception {
+        // Select a nondefault profile, then change the application language.
+        FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectDifficulty(Difficulty.GOVERNOR);
+        setup.back();
+        final org.microcol.page.SettingPage settings = WelcomePage
+                .of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack();
+
+        // Reopening translates the choice without resetting its identity.
+        setup = WelcomePage.of(getContext()).openFreePlaySetup();
+        setup.verifyDifficultySelection(Difficulty.GOVERNOR, "Guvernér");
+        setup.start();
+        setup.verifyGameDifficulty(Difficulty.GOVERNOR, "Guvernér");
+        setup.captureDialog("rightPanel", "difficulty-czech-game.png");
     }
 
 }

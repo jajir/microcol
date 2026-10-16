@@ -3,11 +3,22 @@ package org.microcol.model.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.Difficulty;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
 public class ModelPo {
+
+    private Difficulty difficulty;
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(final Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
     private List<EuropeanRelationPo> europeanRelations;
 

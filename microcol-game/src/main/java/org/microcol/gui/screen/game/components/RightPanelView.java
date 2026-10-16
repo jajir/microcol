@@ -45,6 +45,8 @@ public final class RightPanelView implements JavaFxComponent {
 
     private final Label labelOnMove;
 
+    private final Label difficultyLabel;
+
     private final Label tileName;
 
     private final Label unitsLabel;
@@ -79,6 +81,10 @@ public final class RightPanelView implements JavaFxComponent {
         // Y=0
         labelOnMove = new Label();
         gridPane.add(labelOnMove, 0, 0, 2, 1);
+
+        difficultyLabel = new Label();
+        difficultyLabel.setId("gameDifficulty");
+        gridPane.add(difficultyLabel, 0, 4, 2, 1);
 
         // Y=1
         final Pane tileImagePane = new Pane(tilePainter.getCanvas());
@@ -164,8 +170,13 @@ public final class RightPanelView implements JavaFxComponent {
         sb.append(i18n.get(Loc.unitsPanel_currentUser));
         sb.append(" ");
         sb.append(player.getDisplayName());
+        final String playerText = sb.toString();
+        final String difficultyText = i18n.get(Loc.difficulty) + ": "
+                + localizationHelper
+                        .getDifficultyName(getModel().getDifficulty());
         Platform.runLater(() -> {
-            labelOnMove.setText(sb.toString());
+            labelOnMove.setText(playerText);
+            difficultyLabel.setText(difficultyText);
         });
     }
 

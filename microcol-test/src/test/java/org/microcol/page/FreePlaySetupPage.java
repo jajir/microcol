@@ -3,6 +3,7 @@ package org.microcol.page;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.model.Difficulty;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -23,6 +24,60 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     public void selectNationPreview(final int index) {
         select("freePlayNation", index);
+    }
+
+    public void selectDifficulty(final Difficulty difficulty) {
+        final String name = getContext()
+                .getClassFromGuice(org.microcol.gui.LocalizationHelper.class)
+                .getDifficultyName(difficulty);
+        getRobot().clickOn("#freePlayDifficulty");
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.Node item = getListOfNodes(".context-menu .label")
+                .stream()
+                .filter(node -> name.equals(
+                        ((javafx.scene.control.Labeled) node).getText()))
+                .findFirst().orElseThrow();
+        getRobot().clickOn(item);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyDifficultySelection(final Difficulty expected,
+            final String expectedLabel) {
+        final ChoiceBox<?> choice = getNodeFinder()
+                .lookup("#freePlayDifficulty").queryAs(ChoiceBox.class);
+        assertTrue(choice.isVisible());
+        assertEquals(5, choice.getItems().size());
+        assertEquals(expected.ordinal(),
+                choice.getSelectionModel().getSelectedIndex());
+        final String selected = choice.getConverter() == null
+                ? String.valueOf(choice.getSelectionModel().getSelectedItem())
+                : difficultyLabel(choice);
+        assertEquals(expectedLabel, selected);
+    }
+
+    private <T> String difficultyLabel(final ChoiceBox<T> choice) {
+        return choice.getConverter()
+                .toString(choice.getSelectionModel().getSelectedItem());
+    }
+
+    public void verifyGameDifficulty(final Difficulty expected,
+            final String expectedLabel) {
+        assertEquals(expected, getModel().getDifficulty());
+        assertEquals(expected, getModel().save().getDifficulty());
+        final javafx.scene.control.Labeled label = getLabeledById(
+                "gameDifficulty");
+        assertTrue(label.isVisible());
+        assertTrue(label.getText().contains(expectedLabel), label.getText());
+    }
+
+    public void verifySavedDifficulty(final Difficulty expected) {
+        final java.io.File file = getContext()
+                .getClassFromGuice(
+                        org.microcol.model.campaign.po.PersistingTool.class)
+                .getAutoSaveFile();
+        final org.microcol.model.campaign.po.GameModelPo data = new org.microcol.model.campaign.po.GameModelPoDao()
+                .loadFromFile(file);
+        assertEquals(expected, data.getModel().getDifficulty());
     }
 
     private void select(final String id, final int index) {

@@ -5,12 +5,15 @@ import static org.microcol.gui.screen.AbstractScreenMenu.STYLE_SHEET_GAME_MENU;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.microcol.gui.Loc;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.screen.AbstractScreenMenu;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
+import org.microcol.model.Difficulty;
 import org.microcol.model.Player;
 import org.microcol.model.campaign.FreePlayMap;
 import com.google.common.eventbus.EventBus;
@@ -24,6 +27,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 /** Menu-styled setup with real map selection and a nation preview. */
 @Singleton
@@ -31,6 +35,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         implements GameScreen {
 
     private static final String ID_MAP = "freePlayMap";
+    private static final String ID_DIFFICULTY = "freePlayDifficulty";
     private static final String ID_NATION = "freePlayNation";
     private static final String ID_NATION_NOTE = "freePlayNationNote";
     private static final String ID_PLAYER_NAME = "freePlayPlayerName";
@@ -43,10 +48,13 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     private final ApplicationController applicationController;
     private final EventBus eventBus;
     private final I18n i18n;
+    private final LocalizationHelper localizationHelper;
 
     private final VBox form;
     private final Label mapLabel;
     private final ChoiceBox<String> mapChoiceBox;
+    private final Label difficultyLabel;
+    private final ChoiceBox<Difficulty> difficultyChoiceBox;
     private final Label nameLabel;
     private final Label nationLabel;
     private final ChoiceBox<String> nationChoiceBox;
@@ -61,11 +69,12 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     @Inject
     public ScreenFreePlay(MenuHolderPanel holder,
             ApplicationController applicationController, EventBus eventBus,
-            I18n i18n) {
+            I18n i18n, LocalizationHelper localizationHelper) {
         this.holder = holder;
         this.applicationController = applicationController;
         this.eventBus = eventBus;
         this.i18n = i18n;
+        this.localizationHelper = localizationHelper;
 
         form = new VBox(10);
         form.setId(ID_FORM);
@@ -80,6 +89,24 @@ public final class ScreenFreePlay extends AbstractScreenMenu
                 i18n.get(GameMenu.setupMapTwoIslands),
                 i18n.get(GameMenu.setupMapRivalExpedition));
         mapChoiceBox.getSelectionModel().selectFirst();
+
+        difficultyLabel = new Label();
+        difficultyLabel.setLabelFor(difficultyChoiceBox = new ChoiceBox<>());
+        difficultyChoiceBox.setId(ID_DIFFICULTY);
+        difficultyChoiceBox.getItems().addAll(Difficulty.values());
+        difficultyChoiceBox.getSelectionModel().select(Difficulty.CONQUISTADOR);
+        difficultyChoiceBox.setConverter(new StringConverter<Difficulty>() {
+            @Override
+            public String toString(final Difficulty value) {
+                return value == null ? ""
+                        : localizationHelper.getDifficultyName(value);
+            }
+
+            @Override
+            public Difficulty fromString(final String text) {
+                throw new UnsupportedOperationException();
+            }
+        });
 
         nationLabel = new Label();
         nationLabel.setLabelFor(nationChoiceBox = new ChoiceBox<>());
@@ -119,9 +146,9 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         HBox buttonBox = new HBox(10, startButton, backButton);
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
-        form.getChildren().addAll(mapLabel, mapChoiceBox, nationLabel,
-                nationChoiceBox, nationNoteLabel, nameLabel, nameField,
-                errorLabel, buttonBox);
+        form.getChildren().addAll(mapLabel, mapChoiceBox, difficultyLabel,
+                difficultyChoiceBox, nationLabel, nationChoiceBox,
+                nationNoteLabel, nameLabel, nameField, errorLabel, buttonBox);
 
         form.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ESCAPE) {
@@ -162,6 +189,10 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         holder.setTitle(i18n.get(GameMenu.setupTitle));
         mapLabel.setText(i18n.get(GameMenu.setupMap));
         nationLabel.setText(i18n.get(GameMenu.setupNation));
+        difficultyLabel.setText(i18n.get(Loc.difficulty));
+        final Difficulty selectedDifficulty = difficultyChoiceBox.getValue();
+        difficultyChoiceBox.getSelectionModel().clearSelection();
+        difficultyChoiceBox.getSelectionModel().select(selectedDifficulty);
         nameLabel.setText(i18n.get(GameMenu.setupPlayerName));
         nationNoteLabel.setText(i18n.get(GameMenu.setupNationNote));
         startButton.setText(i18n.get(GameMenu.setupStart));
@@ -204,7 +235,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         startButton.setDisable(true);
         FreePlayMap map = FreePlayMap.values()[mapChoiceBox.getSelectionModel()
                 .getSelectedIndex()];
-        applicationController.startNewFreeGame(map, nameField.getText());
+        applicationController.startNewFreeGame(map, nameField.getText(),
+                difficultyChoiceBox.getValue());
     }
 
     private void onBack() {

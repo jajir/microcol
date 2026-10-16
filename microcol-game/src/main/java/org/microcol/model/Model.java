@@ -35,6 +35,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Model {
 
+    private final Difficulty difficulty;
     private final ColonyNames colonyNames;
     private int nextColonyId;
     private final ListenerManager listenerManager;
@@ -86,6 +87,9 @@ public class Model {
             final UnitStorage unitStorage,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         Preconditions.checkNotNull(modelPo);
+        Preconditions.checkArgument(modelPo.getDifficulty() != null,
+                "Unsupported save: missing or invalid difficulty");
+        difficulty = modelPo.getDifficulty();
         Preconditions.checkArgument(
                 modelPo.getNextColonyId() != null
                         && modelPo.getNextColonyId() >= 0,
@@ -867,9 +871,14 @@ public class Model {
         return unitStorage.getUnitsAt(location);
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
     public synchronized ModelPo save() {
         gameManager.checkTurnPreparationComplete();
         final ModelPo out = new ModelPo();
+        out.setDifficulty(difficulty);
         out.setNextColonyId(nextColonyId);
         map.save(out);
         unitStorage.save(out);
