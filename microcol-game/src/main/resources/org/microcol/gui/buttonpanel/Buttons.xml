@@ -24,4 +24,8 @@
     <entry key="waitExplanation">Select the next available unit without spending movement.</entry>
     <entry key="skipUnitTurnExplanation">Spend all remaining movement for this unit until its next turn.</entry>
     <entry key="unitOrderUnavailable">This unit cannot skip now. Select an available unit.</entry>
+    <entry key="buttonSentry">Sentry</entry>
+    <entry key="buttonActivateSentry">Activate</entry>
+    <entry key="sentryExplanation">Wait on sentry; eligible passengers board a departing ship.</entry>
+    <entry key="activateSentryExplanation">End sentry and keep remaining movement.</entry>
 </properties>

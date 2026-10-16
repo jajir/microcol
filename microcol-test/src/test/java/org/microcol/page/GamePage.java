@@ -71,6 +71,16 @@ public class GamePage extends AbstractScreen {
         verifyThatStatusBarContains(String.valueOf(location.getY()));
     }
 
+    public void dragMouseAtLocationWithFeedback(final Location location,
+            final String expectedFeedback) throws Exception {
+        verifyThatTileIsVisible(location);
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().drag(MouseButton.PRIMARY).drag(point.getX(), point.getY())
+                .release(MouseButton.PRIMARY);
+        waitWhileMoving();
+        verifyThatStatusBarContains(expectedFeedback);
+    }
+
     private javafx.geometry.Point2D screenPoint(final Location location) {
         final Point tile = getContext().getArea()
                 .convertToCanvasPoint(location);

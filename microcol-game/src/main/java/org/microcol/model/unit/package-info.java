@@ -14,6 +14,9 @@
  * Continuing actions report completion to AbstractUnit without invoking a
  * guarded player command.
  *
+ * Persistent sentry suppresses automatic activation until explicit activation,
+ * boarding or visible adjacent foreign movement.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

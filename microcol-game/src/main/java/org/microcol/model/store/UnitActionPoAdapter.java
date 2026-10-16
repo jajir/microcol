@@ -50,6 +50,11 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
                 }
                 return null;
             }, read -> {
+                if (UnitActionType.sentry.equals(read.type)) {
+                    return new UnitActionSentryPo();
+                }
+                return null;
+            }, read -> {
                 if (UnitActionType.plowField.equals(read.type)) {
                     try {
                         final UnitActionPlowFieldPo out = new UnitActionPlowFieldPo();

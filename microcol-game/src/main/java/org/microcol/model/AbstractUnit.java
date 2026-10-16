@@ -351,9 +351,15 @@ public abstract class AbstractUnit implements Unit {
     }
 
     private boolean canTransferPassenger() {
+        return canTransferPassenger(false);
+    }
+
+    private boolean canTransferPassenger(final boolean departureSentry) {
         return model.isGameRunning() && model.getCurrentPlayer() == owner
                 && isLiveOwnedUnit(this) && isStorable()
-                && getAction().getType() == UnitActionType.noAction;
+                && (getAction().getType() == UnitActionType.noAction
+                        || departureSentry && getAction()
+                                .getType() == UnitActionType.sentry);
     }
 
     private boolean hasValidCarrier() {
@@ -375,8 +381,18 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean canEmbark(final CargoSlot slot) {
+        return canEmbark(slot, false);
+    }
+
+    boolean canEmbarkSentry(final CargoSlot slot) {
+        return getAction().getType() == UnitActionType.sentry
+                && canEmbark(slot, true);
+    }
+
+    private boolean canEmbark(final CargoSlot slot,
+            final boolean departureSentry) {
         Preconditions.checkNotNull(slot);
-        if (!canTransferPassenger() || !slot.isEmpty()) {
+        if (!canTransferPassenger(departureSentry) || !slot.isEmpty()) {
             return false;
         }
         final Unit carrier = slot.getOwnerUnit();
@@ -603,12 +619,16 @@ public abstract class AbstractUnit implements Unit {
             placeToHighSeas(true);
             model.fireUnitMovedToHighSeas(this);
         } else {
-            actionPoints--;
             final Location start = getLocation();
             final Direction orientation = findOrintationForMove(moveTo);
             model.fireUnitMovedStepStarted(this, start, moveTo, orientation);
+            if (isShip()) {
+                boardDepartureSentries(collectDepartureSentries((Ship) this));
+            }
+            actionPoints--;
             placeToLocation(moveTo, orientation);
             owner.revealMapForUnit(this);
+            model.wakeSentriesForMovement(this, moveTo);
             // if it's necessary fire event about captured city
             tryToCaptureColony(moveTo);
             model.fireUnitMovedStepFinished(this, start, moveTo);
@@ -688,6 +708,7 @@ public abstract class AbstractUnit implements Unit {
             model.destroyUnit(defender);
             if (owner.getEnemyUnitsAt(order.getTarget()).isEmpty()) {
                 placeToLocation(order.getTarget());
+                model.wakeSentriesForMovement(this, order.getTarget());
                 tryToCaptureColony(order.getTarget());
             }
         } else {
@@ -834,19 +855,69 @@ public abstract class AbstractUnit implements Unit {
         } else {
             Preconditions.checkState(isAtEuropePort(),
                     "Return departure requires the European port");
+            Preconditions.checkState(
+                    getAction().getType() == UnitActionType.noAction,
+                    "Ship must be activated before departing Europe");
             origin = ship.getDepartureLocation().orElseGet(() -> model
                     .getHighSea().getDefaultArrivalLocation()
                     .orElseThrow(() -> new IllegalStateException(
                             "No eastern sea-lane arrival is available")));
             direction = model.getHighSea().getDepartureDirection(origin);
         }
+        final java.util.List<Boarding> boarding = collectDepartureSentries(
+                ship);
         final PlaceHighSea voyage = createVoyage(isTravelToEurope, direction);
+        boardDepartureSentries(boarding);
         ship.rememberDeparture(origin, direction);
         if (isTravelToEurope) {
             actionPoints--;
         }
         place.destroy();
         place = voyage;
+    }
+
+    private void boardDepartureSentries(
+            final java.util.List<Boarding> boarding) {
+        for (final Boarding assignment : boarding) {
+            assignment.passenger.setAction(UnitActionType.noAction.make());
+            assignment.passenger.placeToCargoSlot(
+                    new PlaceCargoSlot(assignment.passenger, assignment.slot));
+        }
+    }
+
+    private static final class Boarding {
+        private final AbstractUnit passenger;
+        private final CargoSlot slot;
+
+        private Boarding(final AbstractUnit passenger, final CargoSlot slot) {
+            this.passenger = passenger;
+            this.slot = slot;
+        }
+    }
+
+    private java.util.List<Boarding> collectDepartureSentries(final Ship ship) {
+        final java.util.List<Boarding> result = new java.util.ArrayList<>();
+        final java.util.List<CargoSlot> free = ship.getCargo().getSlots()
+                .stream().filter(CargoSlot::isEmpty)
+                .collect(Collectors.toList());
+        final java.util.List<Unit> candidates = owner.getAllUnits().stream()
+                .filter(unit -> unit != ship)
+                .filter(unit -> unit.isAtPlaceLocation()
+                        || unit.isAtEuropePier())
+                .filter(unit -> unit.getAction()
+                        .getType() == UnitActionType.sentry)
+                .sorted(java.util.Comparator.comparingInt(Unit::getId))
+                .collect(Collectors.toList());
+        for (final Unit candidate : candidates) {
+            for (final CargoSlot slot : free) {
+                if (((AbstractUnit) candidate).canEmbarkSentry(slot)) {
+                    result.add(new Boarding((AbstractUnit) candidate, slot));
+                    free.remove(slot);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     PlaceHighSea createVoyage(final boolean toEurope,
@@ -894,6 +965,8 @@ public abstract class AbstractUnit implements Unit {
     protected void validateColonyStructureSlot(
             final ConstructionSlot structureSlot) {
         model.checkTurnPreparationComplete();
+        Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
+                "Activate sentry before assigning colony work");
         Preconditions.checkNotNull(structureSlot);
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
@@ -910,6 +983,8 @@ public abstract class AbstractUnit implements Unit {
     protected void validateColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         model.checkTurnPreparationComplete();
+        Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
+                "Activate sentry before assigning colony work");
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
@@ -1003,6 +1078,7 @@ public abstract class AbstractUnit implements Unit {
             this.actionPoints--;
             placeToLocation(targetLocation, orientation);
             owner.revealMapForUnit(this);
+            model.wakeSentriesForMovement(this, targetLocation);
             model.fireUnitMovedStepFinished(this, startLocation,
                     targetLocation);
             model.fireUnitMovedFinished(this, path);
@@ -1117,6 +1193,18 @@ public abstract class AbstractUnit implements Unit {
                 this);
     }
 
+    void setWaitingOrder(final UnitActionType actionType) {
+        Preconditions.checkArgument(actionType == UnitActionType.sentry
+                || actionType == UnitActionType.noAction);
+        setAction(actionType.make());
+        model.fireActionWasStarted(this);
+    }
+
+    void wakeSentry() {
+        Preconditions.checkState(unitAction.getType() == UnitActionType.sentry);
+        setWaitingOrder(UnitActionType.noAction);
+    }
+
     /**
      * Define action supported by unit.
      *
@@ -1128,6 +1216,10 @@ public abstract class AbstractUnit implements Unit {
     public void setActionType(final UnitActionType actionType) {
         model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(actionType, "Unit action is null");
+        Preconditions.checkState(
+                unitAction.getType() != UnitActionType.sentry
+                        && actionType != UnitActionType.sentry,
+                "Use the sentry or activate command for this order");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
                 this);
@@ -1149,7 +1241,8 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public boolean canPlowFiled() {
         if (getSupportedActions().contains(UnitActionType.plowField)
-                && actionPoints > 0 && isAtPlaceLocation()) {
+                && actionPoints > 0 && isAtPlaceLocation()
+                && unitAction.getType() == UnitActionType.noAction) {
             final TerrainType targetTerrain = model.getMap()
                     .getTerrainTypeAt(getLocation());
             return TerrainType.GRASSLAND.equals(targetTerrain)

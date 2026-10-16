@@ -1,6 +1,11 @@
 package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.event.model.GameModelController;
+import org.microcol.model.unit.UnitActionType;
+import javafx.scene.control.Label;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.i18n.I18n;
 import org.microcol.model.GoodsType;
@@ -27,10 +32,16 @@ public final class PanelPortPierUnit extends HBox {
     private final DialogEuropeEquipment equipmentDialog;
     private final I18n i18n;
     private final EuropeCallback callback;
+    private final GameModelController gameModelController;
+    private final DialogMessage orderMessage;
 
     public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
             final DialogEuropeEquipment equipmentDialog, final I18n i18n,
-            final EuropeCallback callback) {
+            final EuropeCallback callback,
+            final GameModelController gameModelController,
+            final DialogMessage orderMessage) {
+        this.gameModelController = gameModelController;
+        this.orderMessage = orderMessage;
         this.unit = unit;
         this.equipmentDialog = equipmentDialog;
         this.i18n = i18n;
@@ -40,12 +51,9 @@ public final class PanelPortPierUnit extends HBox {
         paneImage = new Pane(imageIcon);
         paneImage.getStyleClass().add("unit-icon");
         paneImage.setId("europe-pier-unit-" + unit.getId());
-        paneImage.setFocusTraversable(unit instanceof UnitFreeColonist);
-        if (unit instanceof UnitFreeColonist) {
-            paneImage.setAccessibleText(i18n.get(Europe.equipmentOpen));
-            Tooltip.install(paneImage,
-                    new Tooltip(i18n.get(Europe.equipmentOpen)));
-        }
+        paneImage.setFocusTraversable(true);
+        paneImage.setAccessibleText(i18n.get(Europe.pierOrders));
+        Tooltip.install(paneImage, new Tooltip(i18n.get(Europe.pierOrders)));
         paneImage.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY
                     && event.isStillSincePress()) {
@@ -74,20 +82,54 @@ public final class PanelPortPierUnit extends HBox {
             e.consume();
         });
         getChildren().addAll(paneImage);
+        if (unit.getAction().getType() == UnitActionType.sentry) {
+            final Label marker = new Label("S");
+            marker.setId("sentry-marker-" + unit.getId());
+            marker.setMinSize(javafx.scene.layout.Region.USE_PREF_SIZE,
+                    javafx.scene.layout.Region.USE_PREF_SIZE);
+            marker.getStyleClass().add("sentry-marker");
+            marker.setAccessibleText(i18n.get(Buttons.buttonSentry));
+            marker.setTooltip(new Tooltip(i18n.get(Buttons.sentryExplanation)));
+            getChildren().add(marker);
+        }
     }
 
     private void showEquipmentMenu() {
-        if (!(unit instanceof UnitFreeColonist)) {
-            return;
-        }
         paneImage.requestFocus();
-        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
         equipmentMenu.getItems().clear();
-        addEquipmentChoice(colonist, GoodsType.MUSKET,
-                !colonist.isHoldingGuns());
-        addEquipmentChoice(colonist, GoodsType.HORSE, !colonist.isMounted());
-        addEquipmentChoice(colonist, GoodsType.TOOLS,
-                !colonist.isHoldingTools());
+        if (unit instanceof UnitFreeColonist) {
+            final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+            addEquipmentChoice(colonist, GoodsType.MUSKET,
+                    !colonist.isHoldingGuns());
+            addEquipmentChoice(colonist, GoodsType.HORSE,
+                    !colonist.isMounted());
+            addEquipmentChoice(colonist, GoodsType.TOOLS,
+                    !colonist.isHoldingTools());
+        }
+        final boolean sentry = unit.getAction()
+                .getType() == UnitActionType.sentry;
+        final MenuItem order = new MenuItem(i18n.get(
+                sentry ? Buttons.buttonActivateSentry : Buttons.buttonSentry));
+        order.setId("europe-sentry-" + unit.getId());
+        order.setDisable(!(sentry
+                ? gameModelController.getModel().canActivateSentry(unit)
+                : gameModelController.getModel().canSetSentry(unit)));
+        order.setOnAction(event -> {
+            try {
+                if (sentry) {
+                    gameModelController.getModel().activateSentry(unit);
+                } else {
+                    gameModelController.getModel().setSentry(unit);
+                }
+            } catch (IllegalStateException
+                    | IllegalArgumentException rejected) {
+                orderMessage.setTitle(i18n.get(Europe.title));
+                orderMessage.setText(i18n.get(Buttons.unitOrderUnavailable));
+                orderMessage.showAndWait();
+            }
+            callback.repaintAfterGoodMoving();
+        });
+        equipmentMenu.getItems().add(order);
         equipmentMenu.show(paneImage, Side.BOTTOM, 0, 0);
     }
 

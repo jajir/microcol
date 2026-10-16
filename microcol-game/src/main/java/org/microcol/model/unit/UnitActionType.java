@@ -15,6 +15,13 @@ public enum UnitActionType {
         }
     },
 
+    sentry("s") {
+        @Override
+        public UnitActionSentry make() {
+            return new UnitActionSentry();
+        }
+    },
+
     plowField("p") {
         @Override
         public UnitActionPlowField make() {

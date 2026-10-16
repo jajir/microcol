@@ -5,6 +5,7 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -50,6 +51,7 @@ public final class PanelPortPier
     private final I18n i18n;
 
     private final DialogEuropeEquipment equipmentDialog;
+    private final DialogMessage orderMessage;
 
     private final Pane panelUnits;
 
@@ -57,7 +59,9 @@ public final class PanelPortPier
     public PanelPortPier(final GameModelController gameModelController,
             final EuropeCallback europeDialogCallback,
             final ImageProvider imageProvider, final EventBus eventBus,
-            final I18n i18n, final DialogEuropeEquipment equipmentDialog) {
+            final I18n i18n, final DialogEuropeEquipment equipmentDialog,
+            final DialogMessage orderMessage) {
+        this.orderMessage = orderMessage;
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
@@ -96,7 +100,8 @@ public final class PanelPortPier
                 .getUnits(gameModelController.getHumanPlayer())
                 .forEach(unit -> panelUnits.getChildren()
                         .add(new PanelPortPierUnit(unit, imageProvider,
-                                equipmentDialog, i18n, europeDialog)));
+                                equipmentDialog, i18n, europeDialog,
+                                gameModelController, orderMessage)));
     }
 
     @Override

@@ -54,4 +54,5 @@ Total: %s gold</entry>
 	<entry key="buyUnitDialog_notEnoughGold">Not enough gold.</entry>
 	<entry key="buyUnitDialog_unavailable">This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.</entry>
 
+    <entry key="pierOrders">Passenger orders and equipment</entry>
 </properties>

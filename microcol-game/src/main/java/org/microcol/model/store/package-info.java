@@ -10,6 +10,9 @@
  * require an explicit complete pair set, excluding Crown players. The game
  * manager also persists whether a game-over result has been reached.
  *
+ * Sentry is serialized as an explicit action and restored without replaying
+ * boarding.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

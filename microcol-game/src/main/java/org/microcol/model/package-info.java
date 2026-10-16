@@ -45,6 +45,9 @@
  * diplomatic state. Execution revalidates before declaring war and consumes
  * both participants' current movement; current equipment owns attack ability.
  *
+ * Validated sentry commands preserve movement; departure boarding and
+ * visible-movement wake-up use shared model rules.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

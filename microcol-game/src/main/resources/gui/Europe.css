@@ -57,3 +57,9 @@
 	-fx-min-width:50px;
 }
 
+
+.sentry-marker {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-padding: 1 3;
+}

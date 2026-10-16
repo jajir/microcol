@@ -98,7 +98,7 @@ chybějící nebo neznámá hodnota se odmítá před výměnou rozehrané hry.
 `LocalizationHelper` pouze překládá názvy pro nastavení a herní panel.
 Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výchozí
 hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
-[R-0064](requirements/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
+[R-0064](requirements/done/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
 
 ### Bezpečné odmítnutí načítané hry (R-0067)
 
@@ -135,7 +135,7 @@ počasí až po ověření odjezdu; královský transport používá stejný vý
 `PlaceHighSeasPo` tyto hodnoty ukládá a `PlaceBuilderPo` odmítá neúplná nebo
 nekonzistentní data. Načtení nelosuje znovu. Počet zbývajících tahů dál
 zobrazuje existující evropská obrazovka; změna nevytváří druhý GUI výpočet.
-[R-0071](requirements/R-0071.md) sleduje ověření; obrácení plavby a Magellan
+[R-0071](requirements/done/R-0071.md) sleduje ověření; obrácení plavby a Magellan
 mají vlastní navazující požadavky.
 
 ### Obrácení plavby (R-0072)
@@ -491,3 +491,14 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    a 114 funkčními/kontrolními případy; build `dev-54-13001e6ac6b8` je publikovaný.
    Aktuální důkazy vlastní
    [evidence R-0024](functional-tests.md#wagon-unloading-implementation-2026-10-13).
+
+### Hlídka a nalodění při odjezdu
+
+Rozpracované [R-0073](requirements/R-0073.md) přidává do `model` kontrolované
+příkazy Hlídka/Aktivovat. Trvající rozkaz vlastní `model.unit`, jeho přenos do
+uložené hry `model.store`. Automatický výběr vynechává hlídku, výslovný výběr
+rozkaz neruší. `AbstractUnit` propojuje odjezd lodě se stávajícími pravidly
+nastoupení; kapacita, pořadí podle ID i cena pohybu zůstávají modelové operace.
+Model také probouzí hlídku při viditelném cizím pohybu do sousedního pole.
+Mapa a evropské molo pouze nabízejí platný příkaz a zobrazují jeho výsledek.
+Stav ověření je v [evidenci](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16).

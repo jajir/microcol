@@ -24,4 +24,8 @@
     <entry key="waitExplanation">Vybrat další dostupnou jednotku bez spotřeby pohybu.</entry>
     <entry key="skipUnitTurnExplanation">Vyčerpat zbývající pohyb této jednotky do jejího příštího tahu.</entry>
     <entry key="unitOrderUnavailable">Tato jednotka nyní nemůže vynechat tah. Vyberte dostupnou jednotku.</entry>
+    <entry key="buttonSentry">Hlídka</entry>
+    <entry key="buttonActivateSentry">Aktivovat</entry>
+    <entry key="sentryExplanation">Čekat na hlídce; vhodní cestující nastoupí na odplouvající loď.</entry>
+    <entry key="activateSentryExplanation">Ukončit hlídku a zachovat zbývající pohyb.</entry>
 </properties>

@@ -2751,7 +2751,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0108 six-ship roster — 2026-10-16
 
-1. Implementation uses the shared ship/cargo/voyage paths and existing transport/warship artwork. [R-0108](requirements/R-0108.md) owns the acceptance boundary; naval combat outcomes, the privateer diplomatic exception and complete royal-force lifecycle remain separate requirements.
+1. Implementation uses the shared ship/cargo/voyage paths and existing transport/warship artwork. [R-0108](requirements/done/R-0108.md) owns the acceptance boundary; naval combat outcomes, the privateer diplomatic exception and complete royal-force lifecycle remain separate requirements.
 2. Initial full model run executed 1332 tests, with one failure: the frigate visibility test still expected the old four-move radius. The existing visibility rule uses speed plus one; six moves cover 225 squares rather than 121. The exact expectation was updated without changing visibility code.
 3. The worker's added seven-case roster suite initially had six passes and one failure: its terrain setup modified a returned map without applying `setTerrainType`. Targeted worker repair applied the terrain and used `Model.moveUnit`; the caller then reran all 1339 model tests successfully (zero failures, errors or skips). The full-hold player scenario now fills and verifies the new sixth galleon hold, preserving the original rejection assertions.
 4. First selected Docker attempt failed during UI test compilation because the caller used JUnit parameter annotations without that module's parameter dependency. No UI tests executed. The caller reused ordinary scenario loops instead of introducing a dependency. A local compile then found an ambiguous TestFX lookup lambda; direct child-node selection fixed that helper. Local UI compilation passed; the Docker rerun is pending. New TC30 cases cover all six rendered carriers, visible hold counts, passenger boarding, Atlantic departure and Continue, plus new ship purchases and Czech offer text. Existing TC23, TC28, TC29 and TC30 journeys remain selected.
@@ -3136,3 +3136,85 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    build 120. The complete run verifies the integrated R-0062/63/64/66/67/68,
    current-type R-0069 and R-0108 changes; individual requirement closure still
    requires checking each requirement's remaining scope and dependencies.
+
+## R-0073 sentry and automatic boarding — 2026-10-16
+
+1. Preparation: the model assignment owns persistent sentry state, explicit
+   activation, visible adjacent foreign-movement wake-up and departure boarding
+   through existing passenger rules. Main owns map/pier controls, localized
+   labels and the player scenarios in `TC_45_F36_sentry_boarding_test`.
+2. Planned acceptance: stable-ID capacity selection on the European pier,
+   cancellation and activation, Continue without boarding, adjacent pioneer
+   boarding with its movement cost and tools preserved, and Czech controls.
+   Existing TC29 passenger and TC27/30 equipment/expert paths remain regression
+   gates. These are authored checks, not passing results; execution is pending.
+3. Initial full model execution ran **1400 tests**, with two failures and no
+   errors/skips. Both failures were new `SentryOrderTest` expectations that a
+   map passenger had boarded; all other 1398 checks passed. The same worker is
+   diagnosing fixture/capacity/eligibility and repairing the actual cause.
+   Main review also requested explicit rejection of Europe departure by a
+   sentry ship. These issues remain open until rerun evidence is recorded.
+
+### R-0071 full publication acceptance — 2026-10-16
+
+1. Full run [38930310720](https://github.com/jajir/microcol/actions/runs/38930310720)
+   on `b1695549` passed **1386 model and 202 UI/support tests**, zero failures,
+   errors or skips. All three native packages and publication gates passed;
+   compatibility 38930310741 and Pages 38930310767 had already passed.
+2. Verified release
+   [dev-121-b1695549d14d](https://github.com/jajir/microcol/releases/tag/dev-121-b1695549d14d)
+   contains all three platform archives/installers, launchers, manifest and
+   checksums. The publication log explicitly left the automatic development
+   channel unchanged because a newer main revision was present; this immutable
+   build does not establish that the launcher channel advanced.
+
+### R-0073 repair and model acceptance — 2026-10-16
+
+1. The first two model failures came from passengers with zero remaining moves.
+   After correcting the intended eligible fixture, seven of eight focused tests
+   passed. The remaining capacity test still allowed both passengers aboard:
+   the old five-slot scenario was expanded to the current six-slot Galleon.
+   Its fixture now fills the sixth hold and asserts exactly one free hold
+   before departure. The zero-move rejection case remains explicit.
+2. Full model rerun passed **1401 tests**, zero failures/errors/skips, including
+   the new disk roundtrip, tools conservation and departure rejection checks.
+3. Main's initial UI test compilation failed because the project JUnit version
+   lacks `assertInstanceOf`. The page verification now uses the existing
+   `assertTrue(instanceof)` style with the same assertion meaning. Docker
+   player execution is running; no UI pass is claimed yet.
+4. First player execution ran six checks: five passed, while map boarding
+   failed because main's new fixture put the ship on a grassland tile. Europe
+   stable-ID/capacity/cancellation/Continue and Czech keyboard controls passed.
+   Changing that tile to ocean initially left its old trees, so the following
+   run could not load the scenario (three player failures; page contract passed).
+   Direct `GameModelPoDao`/`Model.make` diagnosis reported trees on ocean at
+   (25,15). Removing that tree made the same direct loader pass. The next
+   Docker run uses this validated fixture; no acceptance is inferred from
+   the fixture fix alone.
+5. Main inspected the first run's Czech map and Europe screenshots. The map
+   Activate control and S flag were readable. The pier marker needed explicit
+   minimum size and contrasting background; its corrected rendering still
+   requires fresh inspection. A map drag guard now directs a sentry user to
+   Activate without silently clearing the order, with a player assertion.
+6. Validated-fixture run `run-gb4quw` passed five of six checks. The remaining
+   map test reached the correct sentry-drag rejection but its generic drag
+   helper expected coordinate feedback instead of the intentional activation
+   message. A separate explicit-feedback drag action preserves the old helper's
+   assertions and verifies the actual expected message. The test still requires
+   unchanged location/order/moves and subsequent legal boarding. Main inspected
+   the updated pier screenshot: both S markers are visible on contrasting
+   backgrounds. The combined TC45/29/27/30 and page-contract run is in progress.
+7. Main review strengthened automatic-selection acceptance: the scenario now
+   has exactly one eligible map unit, proves it is first before Sentry, proves
+   no automatic candidate remains during Sentry and after disk restore, then
+   proves Activate restores that same candidate. All **8 SentryOrderTest cases**
+   passed after this test-only improvement. Production model code is unchanged
+   from the passing 1401-test full run.
+8. Combined Docker run `run-qnXGmJ` passed **31 checks**, zero failures/errors/
+   skips: TC27 equipment (9), TC30 expert purchase (10), TC29 passenger transfer
+   (6), TC45 sentry (3), and page contract (3). Main inspected the final Czech
+   map screenshot: Activate and the S flag remain readable, and the corrected
+   water fixture renders consistently. The pier marker was separately inspected
+   after its contrast fix. Shared formatting passed for all 23 changed Java
+   files; nine documentation tests and strict MkDocs passed before publication.
+   Full CI/publication for R-0073 remain pending.

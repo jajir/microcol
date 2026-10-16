@@ -811,6 +811,49 @@ public class Model {
         return unitStorage.getUnits();
     }
 
+    private boolean canChangeSentry(final Unit unit,
+            final UnitActionType from) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && (unit.isAtPlaceLocation()
+                        || unit.isAtEuropePier() && unit.isStorable())
+                && unit.getAction().getType() == from;
+    }
+
+    public boolean canSetSentry(final Unit unit) {
+        return canChangeSentry(unit, UnitActionType.noAction);
+    }
+
+    public void setSentry(final Unit unit) {
+        Preconditions.checkState(canSetSentry(unit),
+                "Unit cannot enter sentry");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).setWaitingOrder(UnitActionType.sentry);
+    }
+
+    public boolean canActivateSentry(final Unit unit) {
+        return canChangeSentry(unit, UnitActionType.sentry);
+    }
+
+    public void activateSentry(final Unit unit) {
+        Preconditions.checkState(canActivateSentry(unit),
+                "Unit is not a current sentry");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).setWaitingOrder(UnitActionType.noAction);
+    }
+
+    void wakeSentriesForMovement(final Unit mover, final Location destination) {
+        for (final Unit unit : unitStorage.getUnits()) {
+            if (unit.getOwner() != mover.getOwner() && unit.isAtPlaceLocation()
+                    && unit.getAction().getType() == UnitActionType.sentry
+                    && unit.getLocation().isNeighbor(destination)
+                    && unit.getVisibleLocations().contains(destination)) {
+                ((AbstractUnit) unit).wakeSentry();
+            }
+        }
+    }
+
     public Unit getUnitById(final int id) {
         return unitStorage.getUnitById(id);
     }

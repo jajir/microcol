@@ -91,10 +91,10 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0063](R-0063.md) | Start and continue a game as the selected nation | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md) |
-| [R-0064](R-0064.md) | Keep the selected difficulty in the game profile | Follow-up | [R-0014](done/R-0014.md) |
+| [R-0063](done/R-0063.md) | Start and continue a game as the selected nation | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md) |
+| [R-0064](done/R-0064.md) | Keep the selected difficulty in the game profile | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0065](R-0065.md) | Create a playable new-world map from setup choices | Follow-up | [R-0014](done/R-0014.md) |
-| [R-0066](R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
+| [R-0066](done/R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
 
 ## A03
 
@@ -113,8 +113,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | --- | --- | --- | --- |
 | [R-0051](done/R-0051.md) | Use one agreed calendar for the reference game | Remainder | [R-0002](canceled/R-0002.md), [R-0014](done/R-0014.md), [R-0015](done/R-0015.md) |
 | [R-0052](done/R-0052.md) | Process each national turn once in the agreed order | Remainder | [R-0002](canceled/R-0002.md) |
-| [R-0067](R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
-| [R-0068](R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
+| [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
+| [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 
 ## A05
 
@@ -134,14 +134,14 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0071](R-0071.md) | Vary Atlantic crossing time by the agreed voyage factors | Follow-up | [R-0021](done/R-0021.md) |
+| [R-0071](done/R-0071.md) | Vary Atlantic crossing time by the agreed voyage factors | Follow-up | [R-0021](done/R-0021.md) |
 | [R-0072](R-0072.md) | Reverse a ship during an Atlantic crossing | Follow-up | [R-0021](done/R-0021.md) |
 | [R-0073](R-0073.md) | Board waiting passengers automatically under a sentry order | Follow-up | [R-0022](done/R-0022.md), [R-0003](canceled/R-0003.md) |
 | [R-0074](R-0074.md) | Purchase the remaining eligible European specialists | Follow-up | [R-0023](done/R-0023.md), [R-0006](canceled/R-0006.md) |
 | [R-0075](R-0075.md) | Recruit from three persistent European candidates | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0076](R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
-| [R-0108](R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
+| [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
 
 ## A07
 
@@ -156,7 +156,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0059](done/R-0059.md) | Resolve famine without inconsistent surviving production | Remainder | [R-0008](canceled/R-0008.md) |
 | [R-0060](done/R-0060.md) | Verify colony removal after its last resident is lost | Acceptance | [R-0008](canceled/R-0008.md), [R-0027](done/R-0027.md) |
 | [R-0061](done/R-0061.md) | Consume ore in proportion to expert tool output | Remainder | [R-0009](canceled/R-0009.md), [R-0023](done/R-0023.md) |
-| [R-0062](R-0062.md) | Produce one automatic base cross per colony | Remainder | [R-0010](canceled/R-0010.md) |
+| [R-0062](done/R-0062.md) | Produce one automatic base cross per colony | Remainder | [R-0010](canceled/R-0010.md) |
 | [R-0078](R-0078.md) | Breed horses in colonies and improve breeding with stables | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0079](R-0079.md) | Apply industrial upgrades to real inputs and outputs | Follow-up | [R-0009](canceled/R-0009.md), [R-0025](done/R-0025.md) |
 | [R-0080](R-0080.md) | Make docks and shipyards unlock their actual coastal functions | Follow-up | [R-0025](done/R-0025.md) |
@@ -215,7 +215,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 The selected R-0057–R-0061 cloud trial is complete and published; its
 acceptance and publication evidence is linked above. [R-0055](done/R-0055.md) established the
-shared assignment boundary. [R-0062](R-0062.md) remains a separate candidate
+shared assignment boundary. [R-0062](done/R-0062.md) remains a separate candidate
 for the missing automatic cross; this five-requirement trial does not begin it.
 
 Calendar, probability, political formulas and the proposed live-visibility policy

@@ -1,6 +1,9 @@
 package org.microcol.gui.screen.game.components;
 
 import org.microcol.gui.buttonpanel.NextTurnEvent;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.i18n.I18n;
+import com.google.common.eventbus.EventBus;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
@@ -38,12 +41,17 @@ public class ButtonsGamePanelController {
 
     private final ButtonsGamePanel view;
     private final GamePanelController gamePanelController;
+    private final EventBus eventBus;
+    private final I18n i18n;
 
     @Inject
     ButtonsGamePanelController(final ButtonsGamePanel buttonGamePanel,
             final GameModelController gameModelController,
             final SelectedUnitManager selectedUnitManager,
-            final GamePanelController gamePanelController) {
+            final GamePanelController gamePanelController,
+            final EventBus eventBus, final I18n i18n) {
+        this.eventBus = eventBus;
+        this.i18n = i18n;
         this.gamePanelController = Preconditions
                 .checkNotNull(gamePanelController);
         this.view = Preconditions.checkNotNull(buttonGamePanel);
@@ -51,6 +59,7 @@ public class ButtonsGamePanelController {
                 .checkNotNull(gameModelController);
         this.selectedUnitManager = Preconditions
                 .checkNotNull(selectedUnitManager);
+        view.setSentryAction(this::changeSentryOrder);
     }
 
     @SuppressWarnings("unused")
@@ -118,7 +127,7 @@ public class ButtonsGamePanelController {
     private void onActionWasStarted(
             @SuppressWarnings("unused") final ActionWasStartedEvent event) {
         selectedUnitManager.getSelectedUnit()
-                .ifPresent(selectedUnit -> evaluatePlowField(selectedUnit));
+                .ifPresent(this::evaluateAllButtonsForSelectedUnit);
         updateUnitOrders();
     }
 
@@ -137,7 +146,8 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateMoveButton(final Unit unit) {
-        view.setVisibleButtonMove(unit.getActionPoints() > 0);
+        view.setVisibleButtonMove(unit.getActionPoints() > 0
+                && unit.getAction().getType() != UnitActionType.sentry);
     }
 
     private void evaluateDeclareIndependenceButton() {
@@ -165,18 +175,47 @@ public class ButtonsGamePanelController {
 
     private void evaluateBuildColony(final Unit unit) {
         view.setVisibleButtonBuildColony(
-                gameModelController.getModel().canUnitBuildColony(unit));
+                unit.getAction().getType() != UnitActionType.sentry
+                        && gameModelController.getModel()
+                                .canUnitBuildColony(unit));
     }
 
     private void updateUnitOrders() {
         Platform.runLater(() -> {
             final boolean ready = gameModelController.isHumanTurnReady()
                     && !gamePanelController.isUnitMoving();
+            final Unit selected = selectedUnitManager.getSelectedUnit()
+                    .orElse(null);
+            final boolean sentry = selected != null
+                    && selected.getAction().getType() == UnitActionType.sentry;
+            view.setSentryOrder(sentry,
+                    ready && selected != null
+                            && (sentry ? getModel().canActivateSentry(selected)
+                                    : getModel().canSetSentry(selected)));
             view.setUnitOrdersEnabled(
                     ready && getModel().getFirstSelectableUnit().isPresent(),
                     ready && selectedUnitManager.getSelectedUnit()
                             .map(getModel()::canSkipUnitTurn).orElse(false));
         });
+    }
+
+    private void changeSentryOrder() {
+        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        if (unit == null) {
+            return;
+        }
+        try {
+            if (unit.getAction().getType() == UnitActionType.sentry) {
+                getModel().activateSentry(unit);
+            } else {
+                getModel().setSentry(unit);
+            }
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.unitOrderUnavailable),
+                    StatusBarMessageEvent.Source.GAME));
+        }
+        updateUnitOrders();
     }
 
     private Model getModel() {

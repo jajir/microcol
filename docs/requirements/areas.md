@@ -42,7 +42,7 @@ chybové stavy mají vlastní malé požadavky.
 A02 vlastní nastavení a vytvořenou partii, A04 obnovu pozice a A10 význam
 odchodu se skóre. Společné ovládací prvky a texty přebíráme z A03.
 Dodané menu: [R-0001](done/R-0001.md)/[R-0012](done/R-0012.md); další obnova po
-neúspěšném načtení patří do A04, [R-0067](R-0067.md).
+neúspěšném načtení patří do A04, [R-0067](done/R-0067.md).
 
 ### A02
 

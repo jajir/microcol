@@ -168,6 +168,15 @@ public final class GamePanelPresenter {
         Preconditions.checkState(!units.isEmpty(),
                 "There is no moveable unit or other entity to interact with.");
         final Unit unit = selectedUnitManager.getSelectedUnit().get();
+        if (unit.getAction()
+                .getType() == org.microcol.model.unit.UnitActionType.sentry) {
+            eventBus.post(
+                    new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
+                            i18n.get(
+                                    org.microcol.gui.buttonpanel.Buttons.activateSentryExplanation),
+                            org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
+            return;
+        }
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         moveModeController.setMoveModeOn();

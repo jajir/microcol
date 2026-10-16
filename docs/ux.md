@@ -285,7 +285,7 @@ Start použije vybranou identitu; Zpět a Escape zahodí pouze rozpracované spu
 bez změny rozehrané nebo uložené partie. Název obtížnosti je viditelný také
 v herním panelu a po Pokračovat. Změna jazyka nemění vybranou úroveň.
 Jde o implementaci profilu; jednotlivé číselné dopady zůstávají u svých
-požadavků. [R-0064](requirements/R-0064.md) rozlišuje ověření od návrhu.
+požadavků. [R-0064](requirements/done/R-0064.md) rozlišuje ověření od návrhu.
 Tento popis není záznam uživatelské studie.
 
 ### Referenční výprava — R-0066
@@ -321,3 +321,16 @@ která by změnila hráčova data. Aktuální ověření uvádí
 3. [R-0072](requirements/R-0072.md) a [testová evidence](functional-tests.md#r-0072-voyage-reversal-2026-10-16)
    rozlišují implementaci, automatické ověření a dosud neprovedené uživatelské
    pozorování. Popis není výsledkem uživatelské studie.
+
+### R-0073 — Hlídka a automatické nalodění
+
+1. Rozpracováno 2026-10-16: vybraná jednotka na mapě nabízí rozkaz Hlídka,
+   po jeho zadání Aktivovat. Na evropském molu jsou stejné rozkazy v nabídce
+   jednotky vedle vybavení; Escape nabídku zavře beze změny. Zbývající pohyb
+   se samotným přepnutím rozkazu nemění.
+2. Značka S označuje hlídku. Odplouvající loď nabere vhodné čekající jednotky
+   podle ID do volných míst; ostatní zůstanou viditelné na břehu či molu se
+   zachovaným rozkazem. Oprávnění i cenu nastoupení určuje model. Neplatný
+   rozkaz zobrazí existující zpětnou vazbu a ovládání se obnoví.
+3. [R-0073](requirements/R-0073.md) a [testová evidence](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16)
+   rozlišují návrh, implementaci a skutečné ověření. Nejde o pozorování hráčů.

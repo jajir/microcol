@@ -62,6 +62,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
+    private final Button buttonSentry = new Button();
+    private final Tooltip sentryTooltip = new Tooltip();
+    private boolean sentryActive;
+    private I18n currentI18n;
+
     private final Button buttonWait = new Button();
     private final Button buttonSkipUnitTurn = new Button();
     private final Tooltip waitTooltip = new Tooltip();
@@ -90,6 +95,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             final I18n i18n, final ColoniesMenu coloniesMenu) {
         super(imageProvider, eventBus, Source.GAME, i18n);
 
+        buttonSentry.setId("sentryUnit");
+        buttonSentry.setTooltip(sentryTooltip);
+        buttonSentry.setDisable(true);
         buttonWait.setId("waitUnit");
         buttonWait.setTooltip(waitTooltip);
         buttonWait
@@ -166,6 +174,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonMove);
         getButtonPanel().getChildren().add(buttonWait);
         getButtonPanel().getChildren().add(buttonSkipUnitTurn);
+        getButtonPanel().getChildren().add(buttonSentry);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCenter);
@@ -196,6 +205,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        currentI18n = i18n;
+        updateSentryText();
         buttonWait.setText(i18n.get(Buttons.buttonWait));
         buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
         waitTooltip.setText(i18n.get(Buttons.waitExplanation));
@@ -207,7 +218,27 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonSkipUnitTurn.setDisable(!skip);
     }
 
+    void setSentryAction(final Runnable action) {
+        buttonSentry.setOnAction(event -> action.run());
+    }
+
+    void setSentryOrder(final boolean active, final boolean enabled) {
+        sentryActive = active;
+        buttonSentry.setDisable(!enabled);
+        updateSentryText();
+    }
+
+    private void updateSentryText() {
+        buttonSentry.setText(
+                currentI18n.get(sentryActive ? Buttons.buttonActivateSentry
+                        : Buttons.buttonSentry));
+        sentryTooltip.setText(
+                currentI18n.get(sentryActive ? Buttons.activateSentryExplanation
+                        : Buttons.sentryExplanation));
+    }
+
     private void setDisable(final boolean disable) {
+        buttonSentry.setDisable(disable);
         buttonWait.setDisable(disable);
         buttonSkipUnitTurn.setDisable(disable);
         buttonCenter.setDisable(disable);

@@ -26,6 +26,11 @@ public final class UnitActionConverter {
                 }
                 return null;
             }, po -> {
+                if (UnitActionType.sentry.equals(po.getType())) {
+                    return new UnitActionSentry();
+                }
+                return null;
+            }, po -> {
                 if (UnitActionType.plowField.equals(po.getType())) {
                     final UnitActionPlowField out = new UnitActionPlowField();
                     out.setRemainingTurns(

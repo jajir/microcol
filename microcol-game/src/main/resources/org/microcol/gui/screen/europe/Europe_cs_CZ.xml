@@ -54,4 +54,5 @@ Celkem: %s zlatých</entry>
 	<entry key="buyUnitDialog_notEnoughGold">Nedostatek zlata.</entry>
 	<entry key="buyUnitDialog_unavailable">Tento nákup už není dostupný. Otevřete nabídku znovu ve svém tahu, dokud máte přístup do Evropy.</entry>
 
+    <entry key="pierOrders">Rozkazy a vybavení cestujícího</entry>
 </properties>

@@ -72,7 +72,7 @@ public abstract class UnitWithCargo extends AbstractUnit {
     }
 
     protected List<UnitActionType> getSupportedActions() {
-        return ImmutableList.of(UnitActionType.noAction);
+        return ImmutableList.of(UnitActionType.noAction, UnitActionType.sentry);
     }
 
 }

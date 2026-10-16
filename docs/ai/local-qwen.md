@@ -3251,3 +3251,16 @@ committed for this experiment.
     Czech UI navigation failure was repaired by using the localized port title;
     its rerun passed. [R-0072 evidence](../functional-tests.md#r-0072-voyage-reversal-2026-10-16)
     records test counts; no quota-saving percentage was measured.
+
+16. R-0073 uses one bounded Sol low model/test assignment in
+    `2026-10-16-r73`, based on `79248aa4`. Main agreed the Sentry/Activate API
+    before independently implementing GUI controls and player tests; the two
+    scopes do not duplicate implementation. Main retains execution, formatting,
+    review and publication. No token-saving percentage is inferred.
+
+    Initial model failures were diagnosed as zero-movement passengers and an
+    outdated five-hold Galleon fixture. The worker repaired those preconditions
+    while retaining rejection checks, then strengthened the sole-candidate
+    selection test after review. Main verified 1401 full model tests and eight
+    focused cases. Main-owned UI fixture/helper failures and the final 31-pass
+    Docker regression are recorded in [R-0073 evidence](../functional-tests.md#r-0073-repair-and-model-acceptance-2026-10-16).
