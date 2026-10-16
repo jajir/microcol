@@ -301,6 +301,7 @@ class AtlanticVoyageTest {
         voyage.setRemainigTurns(total + 1);
         assertInvalidVoyage();
         voyage.setRemainigTurns(total);
+        voyage.setPosition(0);
         voyage.setOriginalTurns(total == 4 ? 3 : total + 1);
         assertInvalidVoyage();
     }

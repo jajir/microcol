@@ -130,6 +130,7 @@ class NationalTurnPreparationTest {
         final UnitPo shipData = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         shipData.getPlaceHighSeas().setRemainigTurns(1);
+        shipData.getPlaceHighSeas().setPosition(2);
         shipData.setAvailableMoves(0);
         data.getModel().getColonies().get(1).getColonyWarehouse().put("CORN",
                 200);

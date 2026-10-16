@@ -17,6 +17,8 @@ import org.microcol.i18n.I18n;
 import org.microcol.i18n.MessageKeyResource;
 import org.microcol.model.Unit;
 import org.microcol.model.PlaceHighSea;
+import org.microcol.model.VoyageReversalOffer;
+import org.microcol.model.unit.Ship;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -24,6 +26,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -59,6 +62,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final DialogMessage dialogMessage;
 
+    private final VoyageReversalDialog reversalDialog;
+
     private T titleKey;
 
     private T onMouseEnteredKey;
@@ -68,7 +73,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
             final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final EventBus eventBus, final I18n i18n,
-            final DialogMessage dialogMessage) {
+            final DialogMessage dialogMessage,
+            final VoyageReversalDialog reversalDialog) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
@@ -76,6 +82,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
+        this.reversalDialog = Preconditions.checkNotNull(reversalDialog);
 
         shipsContainer = new HBox();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
@@ -173,12 +180,36 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     remaining.setWrapText(true);
                     remaining.setMinHeight(Region.USE_PREF_SIZE);
                     remaining.setMaxWidth(140);
+                    final Button reverse = new Button(
+                            i18n.get(Europe.voyageReverse));
+                    reverse.setId("voyage-reverse-" + unit.getId());
+                    reverse.setDisable(!gameModelController.getModel()
+                            .isGameRunning()
+                            || gameModelController.getModel()
+                                    .getCurrentPlayer() != unit.getOwner());
+                    reverse.setOnAction(event -> reverseCourse((Ship) unit));
                     shipsContainer.getChildren()
                             .add(new VBox(
                                     new ImageView(
                                             imageProvider.getUnitImage(unit)),
-                                    remaining));
+                                    remaining, reverse));
                 });
+    }
+
+    private void reverseCourse(final Ship ship) {
+        try {
+            final VoyageReversalOffer offer = gameModelController.getModel()
+                    .offerVoyageReversal(ship);
+            if (reversalDialog.confirm(offer)) {
+                gameModelController.getModel().reverseVoyage(offer);
+                europeDialog.repaint();
+            }
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            europeDialog.repaint();
+            dialogMessage.setTitle(i18n.get(Europe.title));
+            dialogMessage.setText(i18n.get(Europe.voyageReverseStale));
+            dialogMessage.showAndWait();
+        }
     }
 
     /**

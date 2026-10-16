@@ -8,6 +8,12 @@
 	<entry key="voyageTurns">Turns remaining: %s</entry>
 	<entry key="voyageWaiting">Waiting: the arrival square is occupied.</entry>
 	<entry key="voyageUnavailable">This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.</entry>
+	<entry key="voyageReverse">Reverse course</entry>
+	<entry key="voyageReverseTitle">Reverse course</entry>
+	<entry key="voyageReverseQuestion">Send this ship to %s? Turns remaining: %s.</entry>
+	<entry key="voyageDestinationEurope">Europe</entry>
+	<entry key="voyageDestinationNewWorld">New World</entry>
+	<entry key="voyageReverseStale">This voyage changed. Review the ship and try again.</entry>
 	<entry key="shipsTravelingToNewWorld">Ships traveling to New World</entry>
 	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>

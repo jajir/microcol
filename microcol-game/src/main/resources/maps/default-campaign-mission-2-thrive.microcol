@@ -19,6 +19,8 @@
       "ownerId": "Dutch",
       "placeHighSeas": {
         "isTravelToEurope": false,
+        "originalToEurope": false,
+        "position": 0,
         "weather": 1,
         "originalTurns": 3,
         "remainigTurns": 3

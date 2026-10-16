@@ -82,26 +82,31 @@ public abstract class Ship extends UnitWithCargo {
                     "departureLocation and departureDirection must be set");
             place.decreaseRemainingTurns();
             if (place.getRemainigTurns() == 0) {
-                if (place.isTravelToEurope()) {
-                    model.getEurope().getPort().placeShipToPort(this);
-                    model.getTurnEventStore().add(TurnEventProvider
-                            .getShipComeEuropePort(getOwner()));
-                } else {
-                    if (isPossibleToMoveAt(departureLocation)) {
-                        Direction inward = (departureDirection == Direction.east)
-                                ? Direction.west
-                                : Direction.east;
-                        placeToLocation(departureLocation, inward);
-                        getOwner().revealMapForUnit(this);
-                        model.getTurnEventStore().add(TurnEventProvider
-                                .getShipComeToHighSeas(getOwner()));
-                        model.fireUnitArrivedToColonies(this);
-                    }
-                    // otherwise blocked; ship remains on the same high‑sea
-                    // place
-                }
+                tryArriveFromHighSea();
             }
         }
+    }
+
+    /** Reuses the ordinary endpoint and blocked-square arrival policy. */
+    public void tryArriveFromHighSea() {
+        final PlaceHighSea place = (PlaceHighSea) getPlace();
+        Preconditions.checkState(place.getRemainigTurns() == 0,
+                "The ship has not reached its destination");
+        if (place.isTravelToEurope()) {
+            model.getEurope().getPort().placeShipToPort(this);
+            model.getTurnEventStore()
+                    .add(TurnEventProvider.getShipComeEuropePort(getOwner()));
+        } else if (isPossibleToMoveAt(departureLocation)) {
+            final Direction inward = departureDirection == Direction.east
+                    ? Direction.west
+                    : Direction.east;
+            placeToLocation(departureLocation, inward);
+            getOwner().revealMapForUnit(this);
+            model.getTurnEventStore()
+                    .add(TurnEventProvider.getShipComeToHighSeas(getOwner()));
+            model.fireUnitArrivedToColonies(this);
+        }
+        // An occupied map square leaves the ship at zero for a later retry.
     }
 
 }

@@ -3230,3 +3230,24 @@ committed for this experiment.
     ordinary departures. Random one-turn crossings must not make UI tests
     assume that every voyage remains at sea after its first update. No local
     model or additional implementation agent is used for this assignment.
+
+15. R-0072 uses one bounded Sol low assignment in `2026-10-16-r72`, based
+    on `b1695549`, for route-position reversal, confirmation UI and regression
+    authoring. Main refined cancellation/stale-offer semantics and keeps
+    execution and integration. Early review identified the house yes/no
+    dialog's retained result as a reuse risk; the new confirmation must reset
+    its result on each opening and cancellation, with a confirm-then-Escape
+    scenario. This is a task-specific requirement, not a parallel rewrite of
+    the dialog framework.
+
+    Main review also rejected an offer check based only on position and
+    destination: two reversals can restore both and incorrectly revive an old
+    confirmation. The worker must bind a voyage revision or replaced transit
+    identity and cover that repeated-reversal case explicitly. Persisted
+    direction/source/position must reject missing values and inconsistent
+    derived remaining time.
+
+    Both review issues were corrected and verified in model/UI checks. The
+    Czech UI navigation failure was repaired by using the localized port title;
+    its rerun passed. [R-0072 evidence](../functional-tests.md#r-0072-voyage-reversal-2026-10-16)
+    records test counts; no quota-saving percentage was measured.

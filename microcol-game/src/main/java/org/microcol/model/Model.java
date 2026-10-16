@@ -590,6 +590,43 @@ public class Model {
                 new UnitActionNoAction());
     }
 
+    public VoyageReversalOffer offerVoyageReversal(
+            final org.microcol.model.unit.Ship ship) {
+        checkVoyageReversalShip(ship);
+        return new VoyageReversalOffer(this, ship,
+                (PlaceHighSea) ship.getPlace());
+    }
+
+    public void reverseVoyage(final VoyageReversalOffer offer) {
+        Preconditions.checkNotNull(offer);
+        Preconditions.checkArgument(offer.model == this,
+                "Voyage offer belongs to another game");
+        checkVoyageReversalShip(offer.ship);
+        final PlaceHighSea voyage = (PlaceHighSea) offer.ship.getPlace();
+        Preconditions.checkState(
+                offer.owner == offer.ship.getOwner() && offer.voyage == voyage
+                        && offer.revision == voyage.getRevision()
+                        && offer.position == voyage.getPosition()
+                        && offer.toEurope == voyage.isTravelToEurope(),
+                "Voyage offer is no longer current");
+        voyage.reverse();
+        if (voyage.getRemainigTurns() == 0) {
+            offer.ship.tryArriveFromHighSea();
+        }
+    }
+
+    private void checkVoyageReversalShip(
+            final org.microcol.model.unit.Ship ship) {
+        Preconditions.checkNotNull(ship);
+        checkGameRunning();
+        checkTurnPreparationComplete();
+        checkCurrentPlayer(ship.getOwner());
+        Preconditions.checkState(
+                tryGetUnitById(ship.getId()).orElse(null) == ship
+                        && ship.isAtHighSea(),
+                "Ship is not a registered in-transit unit");
+    }
+
     public boolean isValid(final Location location) {
         return map.isValid(location);
     }

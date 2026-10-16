@@ -138,6 +138,19 @@ zobrazuje existující evropská obrazovka; změna nevytváří druhý GUI výpo
 [R-0071](requirements/R-0071.md) sleduje ověření; obrácení plavby a Magellan
 mají vlastní navazující požadavky.
 
+### Obrácení plavby (R-0072)
+
+`Model.offerVoyageReversal` připraví potvrzovanou nabídku z registrované lodi,
+aktuální plavby, polohy, směru a provozní revize. `Model.reverseVoyage` před
+změnou znovu ověří běžící hru, připravený tah, vlastníka a celý snímek.
+Revize brání opětovnému použití staré nabídky i po dvou otočeních. Uložený
+`PlaceHighSea` odděluje původní směr od současného cíle a drží polohu na trase;
+zbývající dobu odvozuje z polohy a délky. Načtení kontroluje původní faktory
+R-0071 a shodu odvozeného času. `Ship.tryArriveFromHighSea` sdílí příchod
+po běžném tahu i okamžitý návrat po otočení u počátku. Obsazené pobřeží dál
+znamená čekání, bez dodatečného tahu nebo změny nákladu. Ověření sleduje
+[R-0072](requirements/R-0072.md).
+
 ### Pořadí národních tahů (R-0052)
 
 `GameManager` řadí kopii aktuálního registru podle interních národních klíčů;

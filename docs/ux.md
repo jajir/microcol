@@ -307,3 +307,17 @@ nebyly změněny. Potvrzení zprávy vrací hráče k předchozí obrazovce; mů
 jiný soubor. Zrušení výběru je bez účinku. Dialog nenabízí automatickou opravu,
 která by změnila hráčova data. Aktuální ověření uvádí
 [evidence R-0067](functional-tests.md#r-0067-load-recovery-2026-10-16).
+
+### Obrácení plavby — R-0072
+
+1. V evropském přehledu plujících lodí je vedle zbývající doby pojmenované
+   tlačítko **Obrátit směr**. Akce patří konkrétní lodi a je dostupná během
+   připraveného vlastního tahu. Je ovladatelná klávesnicí.
+2. Potvrzení ukáže nový cíl a počet zbývajících tahů podle modelu. Zrušit/Escape
+   nezmění směr, čas ani náklad, ani po dříve potvrzeném obrácení. Po potvrzení
+   se loď zobrazí v odpovídajícím směru nebo v přístavu; obsazené pobřeží
+   ponechá srozumitelný stav čekání. Zastaralá nabídka zobrazí odmítnutí a
+   přehled se obnoví.
+3. [R-0072](requirements/R-0072.md) a [testová evidence](functional-tests.md#r-0072-voyage-reversal-2026-10-16)
+   rozlišují implementaci, automatické ověření a dosud neprovedené uživatelské
+   pozorování. Popis není výsledkem uživatelské studie.

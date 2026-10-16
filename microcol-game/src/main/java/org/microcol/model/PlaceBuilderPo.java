@@ -41,18 +41,34 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                     Preconditions.checkArgument(
                             voyage.getWeather() != null
                                     && voyage.getOriginalTurns() != null
+                                    && voyage.isOriginalToEurope() != null
+                                    && voyage.isTravelToEurope() != null
+                                    && voyage.getPosition() != null
                                     && unitPo.getDepartureDirection() != null,
                             "Missing saved voyage metadata");
                     Preconditions.checkArgument(
+                            voyage.getPosition() >= 0 && voyage
+                                    .getPosition() <= voyage.getOriginalTurns(),
+                            "Invalid saved voyage position");
+                    final int remaining = voyage.isOriginalToEurope()
+                            .booleanValue() == voyage.isTravelToEurope()
+                                    .booleanValue()
+                                            ? voyage.getOriginalTurns()
+                                                    - voyage.getPosition()
+                                            : voyage.getPosition();
+                    Preconditions.checkArgument(
+                            voyage.getRemainigTurns() == remaining,
+                            "Saved voyage remaining time disagrees with position");
+                    Preconditions.checkArgument(
                             voyage.getOriginalTurns() == AtlanticVoyageDuration
                                     .calculate(voyage.getWeather(),
-                                            voyage.isTravelToEurope(),
+                                            voyage.isOriginalToEurope(),
                                             unitPo.getDepartureDirection(),
                                             unitPo.getType().getSpeed()),
                             "Saved voyage duration disagrees with its factors");
-                    return new PlaceHighSea(unit, voyage.isTravelToEurope(),
-                            voyage.getWeather(), voyage.getOriginalTurns(),
-                            voyage.getRemainigTurns());
+                    return new PlaceHighSea(unit, voyage.isOriginalToEurope(),
+                            voyage.isTravelToEurope(), voyage.getWeather(),
+                            voyage.getOriginalTurns(), voyage.getPosition());
                 }
                 return null;
             }, (context) -> {

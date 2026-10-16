@@ -65,6 +65,8 @@ class TurnPreparationBoundaryTest {
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().getPlaceHighSeas()
                 .setRemainigTurns(1);
+        data.getModel().getUnits().stream().filter(unit -> unit.getId() == 3)
+                .findFirst().orElseThrow().getPlaceHighSeas().setPosition(2);
         final java.util.Set<Location> fields = data.getModel().getMap()
                 .getFieldSet();
         fields.remove(Location.of(24, 14));

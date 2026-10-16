@@ -9,8 +9,10 @@
  * departure coast across places and resolve arrival on the owner's turn; an
  * occupied return square keeps the same voyage waiting. Ship.advanceVoyage runs
  * before colony processing; inherited unit activation refreshes movement
- * afterward without advancing the voyage again. Continuing actions report
- * completion to AbstractUnit without invoking a guarded player command.
+ * afterward without advancing the voyage again. Its shared arrival operation
+ * also resolves a model-validated zero-distance reversal without another turn.
+ * Continuing actions report completion to AbstractUnit without invoking a
+ * guarded player command.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

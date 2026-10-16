@@ -4,7 +4,11 @@ import com.google.common.base.MoreObjects;
 
 public final class PlaceHighSeasPo extends PlacePo {
 
-    private boolean isTravelToEurope;
+    private Boolean isTravelToEurope;
+
+    private Boolean originalToEurope;
+
+    private Integer position;
 
     private int remainigTurns;
 
@@ -12,12 +16,28 @@ public final class PlaceHighSeasPo extends PlacePo {
 
     private Integer originalTurns;
 
-    public boolean isTravelToEurope() {
+    public Boolean isTravelToEurope() {
         return isTravelToEurope;
     }
 
-    public void setTravelToEurope(boolean isTravelToEurope) {
+    public void setTravelToEurope(final Boolean isTravelToEurope) {
         this.isTravelToEurope = isTravelToEurope;
+    }
+
+    public Boolean isOriginalToEurope() {
+        return originalToEurope;
+    }
+
+    public void setOriginalToEurope(final Boolean originalToEurope) {
+        this.originalToEurope = originalToEurope;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(final Integer position) {
+        this.position = position;
     }
 
     public int getRemainigTurns() {
@@ -48,7 +68,9 @@ public final class PlaceHighSeasPo extends PlacePo {
     public String toString() {
         return MoreObjects.toStringHelper(this.getClass())
                 .add("isTravelToEurope", isTravelToEurope)
-                .add("weather", weather).add("originalTurns", originalTurns)
+                .add("originalToEurope", originalToEurope)
+                .add("position", position).add("weather", weather)
+                .add("originalTurns", originalTurns)
                 .add("remainigTurns", remainigTurns).toString();
     }
 

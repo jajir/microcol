@@ -3084,3 +3084,55 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    through Continue and retries successfully after its obstruction leaves.
    Nine documentation checks and strict MkDocs passed before final evidence
    recording; full CI and Magellan integration remain separate gates.
+
+<a id="r-0072-voyage-reversal-2026-10-16"></a>
+## R-0072 Atlantic course reversal — 2026-10-16
+
+1. The model keeps original source/direction, sampled weather/duration and
+   current route position/destination. Reversal offers bind live ownership,
+   transit state and revision; an obsolete offer stays invalid after two
+   reversals restore the same position and destination. Endpoint arrival is
+   shared with ordinary turn advancement, including zero-distance return and
+   blocked coast waiting. Missing route metadata and inconsistent derived
+   remaining time are rejected when loading.
+2. The initial full model suite passed **1391 tests**, zero failures/errors/
+   skips. Main review then added explicit single-reversal disk roundtrips in
+   both original directions, immediate return to both sources, and stale
+   confirmation after real owner progress. All **7 VoyageReversalTest cases**
+   passed in the focused rerun, including the strengthened comparison of serialized
+   cargo, passenger identities and pioneer tools before/after disk reload and
+   return to the source. Full CI for R-0072 remains pending.
+3. Docker run `run-VHA3jL` ran 11 checks: ten passed and the Czech TC44 case
+   failed because its navigation helper expected the English port title. The
+   correction supplies the actual Czech title without changing gameplay checks;
+   rerun `run-ctlkVN` passed that case and all three page-contract checks
+   (**4 passed**, zero failures/errors/skips). The initial run also passed TC23,
+   TC28 and the three English TC44 cases: cancellation, keyboard/Escape after a
+   prior confirmation, reversal/Continue/source arrival, stale confirmation and
+   blocked-source retry.
+4. Main inspected the Czech confirmation and reversed-ship screenshots from
+   those runs: destination/time and both buttons were readable, and the new
+   action remained visible next to the remaining time. This is visual inspection,
+   not a player study.
+5. Docker regression run `run-is3XJV` passed **22 checks**: TC27 equipment
+   (9), TC30 expert purchase (10), and page contract (3), zero failures/errors/
+   skips. The shared formatter passed for all 18 changed Java files; the nine
+   documentation tests and strict MkDocs build passed. Full CI and publication
+   for this change remain pending.
+
+### Integrated acceptance through R-0069 — 2026-10-16
+
+1. Full run [38928383156](https://github.com/jajir/microcol/actions/runs/38928383156)
+   on `ba651749` passed **1382 model and 202 UI/support tests**, zero failures,
+   errors or skips. All three native packages and publication checks passed;
+   compatibility run 38928383106 and Pages run 38928383189 also passed. The
+   live R-0069 page was fetched and its current acceptance note verified.
+2. Published immutable build
+   [dev-120-ba6517498c2d](https://github.com/jajir/microcol/releases/tag/dev-120-ba6517498c2d)
+   contains the expected platform archives/installers, launchers, manifest and
+   checksums. Publication retained the development channel because main already
+   contained the newer R-0071 revision. The fetched `dev` manifest still names
+   `dev-109-0b0cb0593df4`; this is not evidence that the launcher has updated to
+   build 120. The complete run verifies the integrated R-0062/63/64/66/67/68,
+   current-type R-0069 and R-0108 changes; individual requirement closure still
+   requires checking each requirement's remaining scope and dependencies.
