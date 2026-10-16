@@ -4150,8 +4150,9 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    inspected both EN/CZ repair screenshots: full explanations and progress
    fit without clipping, and the close control remains visible. The separate TC40 run passed all **15 job-choice scenarios**, zero failures/errors/skips,
    verifying the shared job-menu helper.
-7. Source integration/publication remains pending. R-0098's saved repair
-   journey does not claim R-0097's not-yet-connected naval battle trigger.
+7. Integrated and pushed as `55b4da3f`. Compatibility and Pages passed;
+   complete game acceptance/publication run 38976061239 remains in progress.
+   R-0098's saved repair journey does not by itself accept R-0097's battle trigger.
 
 ### Earlier R-0093/R-0094 CI follow-up — 2026-10-17
 
@@ -4167,3 +4168,52 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 3. Native packages, compatibility and documentation succeeded for `0d027e62`,
    but no game release was published from that failed run. Publication of
    `fbfd421b` remains separately pending.
+
+## R-0097 naval combat — 2026-10-17
+
+1. Scope: COMBAT-014 / UC-076. Six naval strengths, two saved combat draws,
+   capacity-limited market-value loot, explicit passenger fate, sinking or the
+   R-0098 repair path. Privateer diplomacy and blockade remain separate scope.
+2. Model snapshot: `NavalCombatTest` 9/9 and the full model suite 1714 tests,
+   zero failures/errors/skips (`/tmp/r97-model-full.log`). Main reviewed the
+   preflight checks, deterministic goods transfers and immutable result event;
+   package/Javadoc passed (`/tmp/r97-package.log`). The two additional stale-market and repair-duration checks passed
+   in the focused 11/11 suite (`/tmp/r97-focused-boundaries.log`); production
+   model code did not change after the full suite.
+3. Docker player acceptance is running for `TC_64_F55_naval_combat_test`,
+   TC63 repair, TC35 shared confirmation and `PageVerificationContractTest`.
+   TC64 covers cancel, English sinking/prizes, Czech damage/repair overview,
+   Continue and cargo changes during review. Results and screenshot inspection
+   remain pending; source existence is not acceptance.
+4. First Docker run: TC35 12/12 and source contract 3/3 passed. TC64 failed
+   at loading its new fixture: main authored an invalid `FURS` goods identity
+   instead of `FUR`. Corrected the fixture and independently loaded the model
+   successfully. Also corrected the expected stale-offer text to the existing
+   localized rejection and the Czech ship name. Rerun remains pending.
+5. The second TC64 run reached the real fight review and exposed an unescaped
+   percent sign in the new English/Czech naval warning. `I18n` formats messages
+   with `String.format`; changed the literal to `50%%`. This was a GUI resource
+   defect, not a worker/model failure. The next run includes TC64, the source
+   contract and TC22; all results remain pending.
+6. Prior R95 CI run 38973979651 completed with 265 UI/support cases, two
+   failures and one error, zero skips. TC22's exhaustive purchase roster omitted
+   the newly implemented Artillery; corrected its expected list. Its following
+   status-bar failure followed the unclosed failed purchase dialog. TC53's
+   indoor context-menu timeout recurred; R98 diagnostics are pending and no
+   root-cause fix is claimed. All native packages, compatibility and Pages passed;
+   game publication was skipped.
+7. Third run: TC22 5/5 and source contract passed; TC64 cargo-staleness
+   passed. Its sinking assertion incorrectly assumed silver was the most valuable
+   good. Actual current sale prices are Fur/Ore 4 and Silver 3; the correct
+   capacity-limited prize is 60 Fur and 7 Ore, leaving 150 Silver to sink.
+   Updated UI assertions to those existing prices; no production rules changed.
+   The failed English modal prevented the following Czech setup. Final TC64
+   rerun is pending.
+8. Final Docker `run-qQ2zCB`: **6/6 passed**, zero failures/errors/skips:
+   all three TC64 journeys and three source-contract checks. Main inspected
+   both English/Czech screenshots: complete loss/prize/passenger/destination
+   text and acknowledgement control are visible without clipping. TC22's
+   preceding corrected run passed 5/5; TC35 12/12 and TC63 4/4 passed on the
+   same production Java snapshot (before the naval-only message escape fix).
+9. Source integration and full CI/publication remain pending. Model boundaries,
+   chosen player journeys and package/docs checks do not replace full acceptance.

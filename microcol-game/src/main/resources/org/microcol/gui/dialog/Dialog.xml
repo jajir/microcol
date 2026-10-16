@@ -65,4 +65,12 @@
 	<entry key="fight_artilleryDamaged">%s: artillery was damaged; attack/defense strength is now 5/3.</entry>
 	<entry key="fight_artilleryDestroyed">%s: damaged artillery was destroyed.</entry>
 	<entry key="fight_damagedName">%s (damaged)</entry>
+    <entry key="fight_navalLoss">The defeated ship has a 50%% chance to sink; otherwise it needs repair. Without a repair destination it sinks. The victor takes goods that fit; passengers are never captured. Both ships spend their remaining movement.</entry>
+    <entry key="fight_navalTitle">Naval battle result</entry>
+    <entry key="fight_navalSunk">%s sank.</entry>
+    <entry key="fight_navalDamaged">%s was damaged and sent for repair to %s.</entry>
+    <entry key="fight_navalCaptured">%s, ship #%s, captured: %s.</entry>
+    <entry key="fight_navalLost">Lost passengers: %s. Lost goods: %s.</entry>
+    <entry key="fight_navalPreserved">Passengers remaining aboard: %s. Goods remaining aboard: %s.</entry>
+    <entry key="fight_none">None</entry>
 </properties>

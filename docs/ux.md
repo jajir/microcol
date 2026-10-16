@@ -585,3 +585,13 @@ v běžném hlášení tahu. Nejde o nové zvukové události.
 Čtyři scénáře TC63 i vizuální kontrola EN/CZ přehledu prošly 17. října
 2026. Přesné výsledky a samostatnou publikaci vede [evidence](functional-tests.md#r-0098-ship-repair-2026-10-17).
 Pozorování hráčů zatím neproběhlo.
+
+### Námořní bitva — R-0097
+
+Hráč táhne svou bojeschopnou loď na cizí loď. Sdílené potvrzení ukáže
+síly, šanci a riziko potopení, opravy a ztráty nákladu; zrušení nic nespotřebuje.
+Po animaci samostatné hlášení pojmenuje poraženou loď, kořist vítěze,
+ztracené nebo zachované pasažéry a zboží a případný cíl opravy.
+Poškozenou vlastní loď hráč najde v existujícím přehledu oprav v Evropě.
+Pokračování uložené hry boj ani kořist neopakuje. Jde o implementovaný návrh;
+výsledky hráčských scénářů vede [evidence testů](functional-tests.md).

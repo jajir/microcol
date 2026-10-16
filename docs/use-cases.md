@@ -687,3 +687,11 @@ v Evropě nebo tři v suchém doku, zachovaný náklad a znovu dostupné vylože
 pasažéra po opravě. EN/CZ obraz se kontroluje samostatně. Námořní bojový
 spouštěč a kořist zůstávají v R-0097; samotný test uložené opravy je
 nenahrazuje. Výsledky: [evidence R-0098](functional-tests.md#r-0098-ship-repair-2026-10-17).
+
+### UC-076: námořní boj R-0097
+
+TC64 doplňuje skutečné potvrzení lodního útoku, zrušení, kořist při potopení,
+poškození s přehledem oprav a pokračování uloženého výsledku. Ověřuje také
+odmítnutí nákladu změněného během potvrzení. Stav běhu a jeho výsledky vede
+[evidence R-0097](functional-tests.md#r-0097-naval-combat-2026-10-17).
+Samostatná blokáda ani soukromnická diplomacie tím nejsou přijaty.

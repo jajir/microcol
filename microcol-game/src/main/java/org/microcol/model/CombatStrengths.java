@@ -25,6 +25,17 @@ public final class CombatStrengths {
 
     static Optional<CombatStrengths> forBattle(Model model, Unit attacker,
             Unit defender) {
+        if (attacker.isShip() && defender.isShip()
+                && attacker.isAtPlaceLocation()
+                && defender.isAtPlaceLocation()) {
+            final CombatStrength attack = new CombatStrength(
+                    shipBase(attacker.getType()), 50, 0, 0, 0);
+            final CombatStrength defense = new CombatStrength(
+                    shipBase(defender.getType()), 0, 0, 0, 0);
+            return Optional.of(new CombatStrengths(attack, defense,
+                    "NAVAL:" + attacker.getType().name() + ':'
+                            + defender.getType().name()));
+        }
         if (!isArmedLand(attacker) || !isArmedLand(defender)
                 || !attacker.isAtPlaceLocation()
                 || !defender.isAtPlaceLocation()) {
@@ -71,6 +82,22 @@ public final class CombatStrengths {
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
                 + ':' + colonyBonus;
         return Optional.of(new CombatStrengths(attack, defense, inputs));
+    }
+
+    private static int shipBase(final UnitType type) {
+        if (type == UnitType.CARAVEL)
+            return 2;
+        if (type == UnitType.MERCHANTMAN)
+            return 6;
+        if (type == UnitType.GALLEON)
+            return 10;
+        if (type == UnitType.PRIVATEER)
+            return 8;
+        if (type == UnitType.FRIGATE)
+            return 16;
+        if (type == UnitType.MAN_OF_WAR)
+            return 24;
+        throw new IllegalArgumentException("Unsupported naval combatant");
     }
 
     private static boolean isArmedLand(Unit unit) {

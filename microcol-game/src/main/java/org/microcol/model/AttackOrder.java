@@ -14,6 +14,7 @@ public final class AttackOrder {
     private final Location target;
     private final boolean declarationRequired;
     private final Optional<CombatStrengths> combatStrengths;
+    private final Optional<NavalCombatPreview> navalPreview;
 
     AttackOrder(final AbstractUnit attacker, final Unit defender) {
         this.attacker = attacker;
@@ -26,6 +27,11 @@ public final class AttackOrder {
                 defendingPlayer);
         combatStrengths = CombatStrengths.forBattle(attacker.model, attacker,
                 defender);
+        navalPreview = attacker.isShip() && defender.isShip()
+                ? Optional.of(new NavalCombatPreview(attacker.model,
+                        (org.microcol.model.unit.Ship) attacker,
+                        (org.microcol.model.unit.Ship) defender))
+                : Optional.empty();
     }
 
     public Unit getAttacker() {
@@ -46,6 +52,10 @@ public final class AttackOrder {
 
     public Optional<CombatStrengths> getCombatStrengths() {
         return combatStrengths;
+    }
+
+    public Optional<NavalCombatPreview> getNavalPreview() {
+        return navalPreview;
     }
 
     Location getTarget() {

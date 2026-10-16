@@ -716,3 +716,15 @@ nákladem. GUI pouze čte průběh v evropském přehledu a překládá uložen�
 `TurnEventShipRepair`; otevření přehledu ani zprávy neprovádí opravu.
 Napojení poškození na námořní boj vlastní R-0097. Stav přejímky vede
 [R-0098](requirements/R-0098.md).
+
+### Námořní výsledek (R-0097)
+
+`CombatStrengths` vlastní šest lodních základů a útočný bonus.
+`AttackOrder` zmrazí `NavalCombatPreview`: náklad, tržní ceny a možné opravy.
+Před dvěma uloženými bojovými losy se živý stav znovu ověří. Model přesune
+jen plánovanou kořist do skutečně volných podpalubí a poté odstraní poraženou
+loď nebo použije opravu R-0098. `NavalCombatOutcome` uchová výsledné ztráty,
+kořist a původní polohy; GUI je nemusí dopočítávat z odstraněné jednotky.
+Animace používá původní souřadnice a následné hlášení sděluje osud nákladu
+včetně pasažérů. Soukromnické diplomatické výjimky vlastní R-0099.
+Přejímka je vedená v [R-0097](requirements/R-0097.md).

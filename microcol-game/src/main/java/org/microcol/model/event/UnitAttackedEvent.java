@@ -1,5 +1,9 @@
 package org.microcol.model.event;
 
+import java.util.Optional;
+
+import org.microcol.model.Location;
+import org.microcol.model.NavalCombatOutcome;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 
@@ -11,16 +15,35 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
     private final Unit defender;
     private final Unit destroyed;
     private final Unit defeated;
+    private final NavalCombatOutcome navalOutcome;
 
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed) {
-        super(model);
+        this(model, attacker, defender, defeated, wasDestroyed, null);
+    }
 
+    public UnitAttackedEvent(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final NavalCombatOutcome navalOutcome) {
+        super(model);
+        this.navalOutcome = navalOutcome;
         this.attacker = Preconditions.checkNotNull(attacker);
         this.defender = Preconditions.checkNotNull(defender);
         this.defeated = Preconditions.checkNotNull(defeated);
         this.destroyed = wasDestroyed ? defeated : null;
+    }
+
+    public Optional<NavalCombatOutcome> getNavalOutcome() {
+        return Optional.ofNullable(navalOutcome);
+    }
+
+    public Optional<Location> getOriginalAttackerLocation() {
+        return getNavalOutcome().map(NavalCombatOutcome::getAttackerLocation);
+    }
+
+    public Optional<Location> getOriginalDefenderLocation() {
+        return getNavalOutcome().map(NavalCombatOutcome::getDefenderLocation);
     }
 
     public Unit getAttacker() {

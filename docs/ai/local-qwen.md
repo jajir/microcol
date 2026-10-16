@@ -3383,3 +3383,22 @@ committed for this experiment.
    journeys; main corrected final modal closure between its own UI cases.
    The same Sol agent added failure-only diagnostics for an earlier TC53
    context-menu timeout. TC53 passed locally, but that is not a diagnosed fix.
+
+
+### Cloud Sol follow-up R-0097 — 2026-10-17
+
+1. This continuing run uses Astra medium for requirements, GUI, actual review
+   and integration, with one bounded Sol low worker for naval model operations
+   and tests. The local worker was not used. Reusing the model worker's context
+   for two stale-input tests avoided repeating its fixture setup; this is a
+   workflow choice, not a measured token-saving percentage.
+2. Worker delivered nine focused passing cases and a full 1714-case passing
+   model suite. Main requested two additional market/repair confirmation
+   boundaries; the resulting focused suite passed 11/11 without production
+   changes. Main inspected the report files: 174 XML suites currently represent
+   1716 passing cases in aggregate, combining the full run with the later test
+   supplement; this is not a separate fresh full-suite run.
+3. Main's GUI acceptance caught its own invalid fixture goods identity,
+   unescaped percent message and incorrect price-order expectation. These were
+   corrected without blaming or rerunning the model implementation. Detailed
+   attempts and publication status remain in [R-0097 evidence](../functional-tests.md#r-0097-naval-combat-2026-10-17).

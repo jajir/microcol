@@ -740,7 +740,18 @@ public abstract class AbstractUnit implements Unit {
                 strengths.isEmpty()
                         || strengths.get().getAttacker().getTotal() > 0,
                 "Attacker has no combat strength");
+        final Optional<NavalCombatPreview> naval = isShip() && selected.isShip()
+                ? Optional.of(new NavalCombatPreview(model, (Ship) this,
+                        (Ship) selected))
+                : Optional.empty();
+        Preconditions.checkState(naval.equals(order.getNavalPreview()),
+                "The naval cargo, market or repair destination changed");
         final AbstractUnit defender = (AbstractUnit) selected;
+        if (naval.isPresent()) {
+            executeNavalAttack(order, (Ship) selected, strengths.orElseThrow(),
+                    naval.get());
+            return;
+        }
         final boolean winnerAttacker = strengths.isPresent()
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
@@ -785,6 +796,50 @@ public abstract class AbstractUnit implements Unit {
             model.fireUnitAttacked(this, defender, this, true);
             model.destroyUnit(this);
         }
+    }
+
+    private void executeNavalAttack(final AttackOrder order,
+            final Ship defender, final CombatStrengths strengths,
+            final NavalCombatPreview preview) {
+        // Both saved draws are consumed exactly once after all preflight
+        // checks.
+        final boolean winnerAttacker = strengths
+                .attackerWins(model.nextCombatRandom());
+        final boolean drawSinks = model.nextCombatRandom() < 0.5;
+        final Ship winner = winnerAttacker ? (Ship) this : defender;
+        final Ship loser = winnerAttacker ? defender : (Ship) this;
+        final boolean noRepair = (winnerAttacker
+                ? preview.getDefenderRepairDestination()
+                : preview.getAttackerRepairDestination()).isEmpty();
+        final boolean sunk = drawSinks || noRepair;
+        if (order.isDeclarationRequired()) {
+            model.declareHostilities(owner, defender.getOwner());
+        }
+        actionPoints = 0;
+        ((AbstractUnit) defender).actionPoints = 0;
+        final List<Goods> captured = new ArrayList<>();
+        for (final NavalCombatPreview.Transfer transfer : preview
+                .loot(winnerAttacker)) {
+            final CargoSlot source = loser.getCargo()
+                    .getSlotByIndex(transfer.source);
+            final CargoSlot target = winner.getCargo()
+                    .getSlotByIndex(transfer.destination);
+            source.removeCargo(transfer.goods);
+            target.addGoods(transfer.goods);
+            captured.add(transfer.goods);
+        }
+        final NavalCombatOutcome outcome = new NavalCombatOutcome(model,
+                preview, winner, loser, sunk, captured);
+        if (sunk) {
+            if (noRepair && !drawSinks) {
+                model.damageShip(loser);
+            } else {
+                model.destroyUnit(loser);
+            }
+        } else {
+            model.damageShip(loser);
+        }
+        model.fireUnitAttacked(this, defender, loser, outcome);
     }
 
     private boolean canOccupyWonTile(final Location target) {

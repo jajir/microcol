@@ -188,24 +188,25 @@ public final class DialogFight extends AbstractMessageWindow {
                                         order.getDefender().getOwner()
                                                 .getDisplayName())
                                 : "");
-        final boolean ordinary = order.getCombatStrengths().isPresent();
-        attackerStrength.setVisible(ordinary);
-        attackerStrength.setManaged(ordinary);
-        defenderStrength.setVisible(ordinary);
-        defenderStrength.setManaged(ordinary);
-        combatChance.setVisible(ordinary);
-        combatChance.setManaged(ordinary);
+        final boolean hasStrengths = order.getCombatStrengths().isPresent();
+        attackerStrength.setVisible(hasStrengths);
+        attackerStrength.setManaged(hasStrengths);
+        defenderStrength.setVisible(hasStrengths);
+        defenderStrength.setManaged(hasStrengths);
+        combatChance.setVisible(hasStrengths);
+        combatChance.setManaged(hasStrengths);
         order.getCombatStrengths().ifPresent(strengths -> {
             attackerStrength.setText(describe(strengths.getAttacker()));
             defenderStrength.setText(describe(strengths.getDefender()));
             combatChance.setText(i18n.get(Dialog.fight_chance,
                     number(100 * strengths.getAttackerWinProbability()))
                     + "\n"
-                    + i18n.get(order
-                            .getAttacker() instanceof org.microcol.model.unit.UnitArtillery
-                            || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
-                                    ? Dialog.fight_artilleryLoss
-                                    : Dialog.fight_equipmentLoss));
+                    + i18n.get(order.getNavalPreview().isPresent()
+                            ? Dialog.fight_navalLoss
+                            : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
+                                    || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
+                                            ? Dialog.fight_artilleryLoss
+                                            : Dialog.fight_equipmentLoss));
         });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();

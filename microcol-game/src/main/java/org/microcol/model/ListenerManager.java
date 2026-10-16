@@ -260,6 +260,15 @@ final class ListenerManager {
         executeInSameThread(listener -> listener.onUnitAttacked(event));
     }
 
+    void fireUnitAttacked(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final NavalCombatOutcome outcome) {
+        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
+                defender, defeated, outcome.isSunk(), outcome);
+        logger.info("Unit attacked: {}.", event);
+        executeInSameThread(listener -> listener.onUnitAttacked(event));
+    }
+
     void fireUnitEmbarked(final Model model, final Unit unit,
             final CargoSlot slot) {
         final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit,

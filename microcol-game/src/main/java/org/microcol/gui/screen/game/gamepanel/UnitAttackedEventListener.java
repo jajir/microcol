@@ -18,11 +18,14 @@ public final class UnitAttackedEventListener {
 
     private final com.google.common.eventbus.EventBus eventBus;
     private final org.microcol.i18n.I18n i18n;
+    private final org.microcol.gui.dialog.DialogNavalOutcome navalDialog;
 
     @Inject
     public UnitAttackedEventListener(final GamePanelPainter gamePanelView,
             final com.google.common.eventbus.EventBus eventBus,
-            final org.microcol.i18n.I18n i18n) {
+            final org.microcol.i18n.I18n i18n,
+            final org.microcol.gui.dialog.DialogNavalOutcome navalDialog) {
+        this.navalDialog = navalDialog;
         this.eventBus = eventBus;
         this.i18n = i18n;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
@@ -31,8 +34,21 @@ public final class UnitAttackedEventListener {
     @Subscribe
     private void onUnitAttacked(final UnitAttackedEvent event) {
         final String message = outcomeMessage(event);
-        gamePanelView.addFightAnimation(event.getAttacker(),
-                event.getDefender(), () -> {
+        gamePanelView.addFightAnimation(
+                event.getOriginalAttackerLocation()
+                        .orElseGet(() -> event.getAttacker().getLocation()),
+                event.getOriginalDefenderLocation().orElseGet(
+                        () -> event.getDefender().getLocation()),
+                () -> {
+                    if (event.getNavalOutcome().isPresent() && (event
+                            .getAttacker().getOwner().isHuman()
+                            || event.getDefender().getOwner().isHuman())) {
+                        javafx.application.Platform.runLater(() -> {
+                            if (event.getModel().isGameRunning()) {
+                                navalDialog.showOutcome(event);
+                            }
+                        });
+                    }
                     if (message != null) {
                         javafx.application.Platform.runLater(() -> eventBus
                                 .post(new org.microcol.gui.screen.game.components.StatusBarMessageEvent(

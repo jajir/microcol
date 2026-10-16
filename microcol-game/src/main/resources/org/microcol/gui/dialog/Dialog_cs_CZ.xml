@@ -65,4 +65,12 @@
 	<entry key="fight_artilleryDamaged">%s: dělo bylo poškozeno; síla útoku/obrany je nyní 5/3.</entry>
 	<entry key="fight_artilleryDestroyed">%s: poškozené dělo bylo zničeno.</entry>
 	<entry key="fight_damagedName">%s (poškozené)</entry>
+    <entry key="fight_navalLoss">Poražená loď má 50%% šanci na potopení, jinak potřebuje opravu. Bez dostupné opravny se potopí. Vítěz získá zboží do volného prostoru; pasažéry nepřebírá. Obě lodě spotřebují zbývající pohyb.</entry>
+    <entry key="fight_navalTitle">Výsledek námořní bitvy</entry>
+    <entry key="fight_navalSunk">%s se potopila.</entry>
+    <entry key="fight_navalDamaged">%s byla poškozena a odeslána k opravě: %s.</entry>
+    <entry key="fight_navalCaptured">%s, loď #%s, získala: %s.</entry>
+    <entry key="fight_navalLost">Ztracení pasažéři: %s. Ztracené zboží: %s.</entry>
+    <entry key="fight_navalPreserved">Pasažéři na palubě: %s. Zboží na palubě: %s.</entry>
+    <entry key="fight_none">Žádné</entry>
 </properties>

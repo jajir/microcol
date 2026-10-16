@@ -1905,6 +1905,12 @@ public class Model {
                 wasDestroyed);
     }
 
+    void fireUnitAttacked(final Unit attacker, final Unit defender,
+            final Unit defeated, final NavalCombatOutcome outcome) {
+        listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
+                outcome);
+    }
+
     void fireUnitEmbarked(final Unit unit, final CargoSlot slot) {
         listenerManager.fireUnitEmbarked(this, unit, slot);
     }
