@@ -544,3 +544,18 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
 2. Herní obsah proto rezervuje skutečnou výšku celé lišty a mapa začíná až
    pod ní. Kontrola geometrie doplňuje čitelnost popisků; severní okraj a
    návrat z Continue musí projít skutečnou hráčskou cestou. Ověření opravy čeká.
+
+### Náhled obyčejného pozemního boje — R-0093/R-0094
+
+1. Dialog při přetažení ozbrojené jednotky na protivníka ukáže
+   skutečně vybraného obránce, základ a nenulové bonusy obou stran, výsledné
+   síly a odpovídající šanci útočníka. Zaokrouhlení je jen pro zobrazení.
+2. Potvrzení předem vysvětlí, že poražený ztratí koně nebo muškety, oba
+   účastníci spotřebují pohyb a přeživší zůstanou na původních místech.
+   Změněné vybavení během dialogu původní nabídku zneplatní bez boje.
+3. Zrušení, Escape a zavření okna svět ani náhodný stav nemění. Po boji
+   stavový řádek oznámí ztracené vybavení. Continue výsledek neopakuje.
+4. Lokální TC35 průchody a kontrola anglických/českých snímků prošly;
+   nejde o uživatelskou studii ani dokončení celého bojového UC.
+   [Evidence](functional-tests.md#r-0093r-0094-ordinary-land-combat-2026-10-16)
+   rozlišuje opravenou chybu GUI vlákna, lokální výsledky a publikaci.

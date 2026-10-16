@@ -123,11 +123,93 @@ public final class AttackPage extends AbstractScreen {
 
     public void chooseExistingOutcome(final int attacker, final boolean wins)
             throws Exception {
-        final java.lang.reflect.Field random = org.microcol.model.AbstractUnit.class
-                .getDeclaredField("random");
+        final java.lang.reflect.Field random = org.microcol.model.Model.class
+                .getDeclaredField("combatRandomState");
         random.setAccessible(true);
-        ((java.util.Random) random.get(getModel().getUnitById(attacker)))
-                .setSeed(wins ? 4096L : 0L);
+        random.setLong(getModel(), wins ? 3L : 0L);
+    }
+
+    public void loadFortifiedForestFixture(final java.io.File source)
+            throws Exception {
+        final com.google.gson.JsonObject game = gson.fromJson(
+                java.nio.file.Files.readString(source.toPath()),
+                com.google.gson.JsonObject.class);
+        final com.google.gson.JsonObject model = game.getAsJsonObject("model");
+        for (final JsonElement element : model.getAsJsonArray("units")) {
+            final com.google.gson.JsonObject unit = element.getAsJsonObject();
+            if (unit.get("id").getAsInt() == 6) {
+                final com.google.gson.JsonObject action = new com.google.gson.JsonObject();
+                action.addProperty("type", "fortify");
+                action.addProperty("fortified", true);
+                unit.add("action", action);
+            }
+        }
+        final com.google.gson.JsonArray trees = model.getAsJsonObject("map")
+                .getAsJsonArray("trees");
+        final String row = trees.get(11).getAsString();
+        final String[] cells = row.substring(row.indexOf(':') + 1).split(",");
+        cells[16] = "t";
+        trees.set(11, new com.google.gson.JsonPrimitive(
+                "row-0011:" + String.join(",", cells)));
+        final java.nio.file.Path fixture = java.nio.file.Files
+                .createTempFile("combat-forest-", ".microcol");
+        try {
+            java.nio.file.Files.writeString(fixture, gson.toJson(game));
+            replaceGame(fixture.toFile());
+        } finally {
+            java.nio.file.Files.deleteIfExists(fixture);
+        }
+    }
+
+    public void simulateMountedDefender() {
+        getRobot().interact(
+                () -> ((org.microcol.model.unit.UnitFreeColonist) getModel()
+                        .getUnitById(6)).setMounted(true));
+    }
+
+    public void verifyStrengths(final String attacker, final String defender,
+            final String chance) {
+        assertEquals(attacker,
+                getLabeledById("fightAttackerStrength").getText());
+        assertEquals(defender,
+                getLabeledById("fightDefenderStrength").getText());
+        assertTrue(getLabeledById("fightChance").getText().startsWith(chance));
+    }
+
+    public void verifyEquipmentOutcome(final int attackerId,
+            final int defeatedId, final boolean guns, final boolean mounted,
+            final Location attackerAt, final String feedback) throws Exception {
+        WaitForAsyncUtils.waitFor(10, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().getUnitById(attackerId)
+                        .getActionPoints() == 0);
+        GamePage.of(getContext()).waitWhileMoving();
+        final org.microcol.model.unit.UnitFreeColonist defeated = (org.microcol.model.unit.UnitFreeColonist) getModel()
+                .getUnitById(defeatedId);
+        assertEquals(guns, defeated.isHoldingGuns());
+        assertEquals(mounted, defeated.isMounted());
+        assertEquals(attackerAt,
+                getModel().getUnitById(attackerId).getLocation());
+        assertEquals(org.microcol.model.Location.of(17, 11),
+                getModel().getUnitById(6).getLocation());
+        assertEquals(0, getModel().getUnitById(attackerId).getActionPoints());
+        assertEquals(0, getModel().getUnitById(6).getActionPoints());
+        assertEquals(org.microcol.model.EuropeanRelationState.WAR,
+                getModel().getEuropeanRelation(
+                        getModel().getPlayerByName("Dutch"),
+                        getModel().getPlayerByName("France")));
+        if (feedback != null) {
+            assertTrue(getListOfNodes(".label").stream()
+                    .filter(javafx.scene.control.Label.class::isInstance)
+                    .map(node -> ((javafx.scene.control.Label) node).getText())
+                    .anyMatch(text -> text.contains(feedback)));
+        }
+    }
+
+    public void verifyPerson(final int unitId,
+            final org.microcol.model.UnitType type, final String owner) {
+        final org.microcol.model.Unit unit = getModel().getUnitById(unitId);
+        assertEquals(type, unit.getType());
+        assertEquals(owner, unit.getOwner().getName());
     }
 
     public void verifyReview(final String attacker, final String defender,
@@ -174,17 +256,4 @@ public final class AttackPage extends AbstractScreen {
         assertEquals(before, gameplay(original));
     }
 
-    public void verifyBattle(final int survivor, final int lost,
-            final Location at) throws Exception {
-        WaitForAsyncUtils.waitFor(10, java.util.concurrent.TimeUnit.SECONDS,
-                () -> getModel().tryGetUnitById(lost).isEmpty());
-        GamePage.of(getContext()).waitWhileMoving();
-        assertTrue(getModel().tryGetUnitById(lost).isEmpty());
-        assertEquals(at, getModel().getUnitById(survivor).getLocation());
-        assertEquals(0, getModel().getUnitById(survivor).getActionPoints());
-        assertEquals(org.microcol.model.EuropeanRelationState.WAR,
-                getModel().getEuropeanRelation(
-                        getModel().getPlayerByName("Dutch"),
-                        getModel().getPlayerByName("France")));
-    }
 }

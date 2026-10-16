@@ -7,6 +7,7 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.AttackOrder;
+import org.microcol.model.CombatStrength;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -33,6 +34,10 @@ public final class DialogFight extends AbstractMessageWindow {
     private final I18n i18n;
 
     private final Label declaration = new Label();
+
+    private final Label attackerStrength = new Label();
+    private final Label defenderStrength = new Label();
+    private final Label combatChance = new Label();
 
     private final CheckBox checkBoxShowNextTime;
 
@@ -125,6 +130,19 @@ public final class DialogFight extends AbstractMessageWindow {
         defenderImageView.setId("fightDefenderImage");
         root.add(defenderImageView, 2, 3);
 
+        attackerStrength.setId("fightAttackerStrength");
+        defenderStrength.setId("fightDefenderStrength");
+        combatChance.setId("fightChance");
+        attackerStrength.setWrapText(true);
+        defenderStrength.setWrapText(true);
+        attackerStrength.setMaxWidth(230);
+        defenderStrength.setMaxWidth(230);
+        combatChance.setWrapText(true);
+        combatChance.setMaxWidth(460);
+        root.add(attackerStrength, 0, 4);
+        root.add(defenderStrength, 2, 4);
+        root.add(combatChance, 0, 5, 3, 1);
+
         // Y=3
         // checkbox with question
         declaration.setId("fightDeclaration");
@@ -170,6 +188,20 @@ public final class DialogFight extends AbstractMessageWindow {
                                         order.getDefender().getOwner()
                                                 .getDisplayName())
                                 : "");
+        final boolean ordinary = order.getCombatStrengths().isPresent();
+        attackerStrength.setVisible(ordinary);
+        attackerStrength.setManaged(ordinary);
+        defenderStrength.setVisible(ordinary);
+        defenderStrength.setManaged(ordinary);
+        combatChance.setVisible(ordinary);
+        combatChance.setManaged(ordinary);
+        order.getCombatStrengths().ifPresent(strengths -> {
+            attackerStrength.setText(describe(strengths.getAttacker()));
+            defenderStrength.setText(describe(strengths.getDefender()));
+            combatChance.setText(i18n.get(Dialog.fight_chance,
+                    number(100 * strengths.getAttackerWinProbability())) + "\n"
+                    + i18n.get(Dialog.fight_equipmentLoss));
+        });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();
         attackerLabelName
@@ -180,6 +212,32 @@ public final class DialogFight extends AbstractMessageWindow {
         defenderImageView.setImage(imageProvider.getUnitImage(defender));
         showAndWait();
         return userChooseFight;
+    }
+
+    private String describe(final CombatStrength strength) {
+        final StringBuilder out = new StringBuilder(
+                i18n.get(Dialog.fight_base, number(strength.getBase())));
+        appendBonus(out, Dialog.fight_attackBonus, strength.getAttackBonus());
+        appendBonus(out, Dialog.fight_terrainBonus, strength.getTerrainBonus());
+        appendBonus(out, Dialog.fight_fortifyBonus,
+                strength.getFortificationBonus());
+        appendBonus(out, Dialog.fight_colonyBonus, strength.getColonyBonus());
+        return out.append("\n").append(
+                i18n.get(Dialog.fight_total, number(strength.getTotal())))
+                .toString();
+    }
+
+    private void appendBonus(final StringBuilder out, final Dialog label,
+            final int percent) {
+        if (percent != 0) {
+            out.append("\n").append(i18n.get(label, percent));
+        }
+    }
+
+    private String number(final double value) {
+        return java.math.BigDecimal.valueOf(value)
+                .setScale(2, java.math.RoundingMode.HALF_UP)
+                .stripTrailingZeros().toPlainString();
     }
 
     @Override

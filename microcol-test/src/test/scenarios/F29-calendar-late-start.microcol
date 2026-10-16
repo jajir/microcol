@@ -3,6 +3,7 @@
   "missionName": "freePlay",
   "goalData": {},
   "model": {
+    "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",
     "calendar": {
       "startYear": 1630,

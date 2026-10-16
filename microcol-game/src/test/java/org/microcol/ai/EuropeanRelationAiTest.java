@@ -92,11 +92,13 @@ class EuropeanRelationAiTest {
         model.declareHostilities(france(), dutch());
         final int count = model.getAllUnits().size();
         moveWithRealAi();
-        assertEquals(count - 1, model.getAllUnits().size());
-        assertNotEquals(model.tryGetUnitById(human.getId()).isPresent(),
-                model.tryGetUnitById(rival.getId()).isPresent());
-        model.tryGetUnitById(rival.getId())
-                .ifPresent(unit -> assertEquals(0, unit.getActionPoints()));
+        assertEquals(count, model.getAllUnits().size());
+        assertSame(human, model.getUnitById(human.getId()));
+        assertSame(rival, model.getUnitById(rival.getId()));
+        assertEquals(0, human.getActionPoints());
+        assertEquals(0, rival.getActionPoints());
+        assertTrue(!((UnitFreeColonist) human).isHoldingGuns()
+                || !((UnitFreeColonist) rival).isHoldingGuns());
         assertEquals(EuropeanRelationState.WAR,
                 model.getEuropeanRelation(france(), dutch()));
     }
@@ -177,9 +179,11 @@ class EuropeanRelationAiTest {
             assertEquals(defenderBefore, new Gson().toJson(human.save()));
             return;
         }
-        assertEquals(count - 1, model.getAllUnits().size());
-        assertNotEquals(model.tryGetUnitById(human.getId()).isPresent(),
-                model.tryGetUnitById(rival.getId()).isPresent());
+        assertEquals(count, model.getAllUnits().size());
+        assertSame(human, model.getUnitById(human.getId()));
+        assertSame(rival, model.getUnitById(rival.getId()));
+        assertTrue(!((UnitFreeColonist) human).isHoldingGuns()
+                || !((UnitFreeColonist) rival).isMounted());
         assertEquals(0, rival.getActionPoints());
         assertEquals(0, human.getActionPoints());
     }

@@ -75,6 +75,7 @@ public final class GameModelDao {
                     .create(source.getModel().getMap(), nation, difficulty));
         } else {
             source.getModel().setDifficulty(difficulty);
+            source.getModel().setCombatRandomState(0L);
             source.getModel().getGameManager().getPlayers().stream()
                     .filter(player -> player.getWhosKingThisPlayerIs() == null)
                     .forEach(player -> {

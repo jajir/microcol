@@ -40,6 +40,17 @@ public class Model {
     private final Difficulty difficulty;
     private final ColonyNames colonyNames;
     private int nextColonyId;
+    private long combatRandomState;
+
+    double nextCombatRandom() {
+        combatRandomState += 0x9E3779B97F4A7C15L;
+        long z = combatRandomState;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= z >>> 31;
+        return (z >>> 11) * 0x1.0p-53;
+    }
+
     private final ListenerManager listenerManager;
     private final Calendar calendar;
     private final WorldMap map;
@@ -89,6 +100,9 @@ public class Model {
             final UnitStorage unitStorage,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         Preconditions.checkNotNull(modelPo);
+        Preconditions.checkArgument(modelPo.getCombatRandomState() != null,
+                "Unsupported save: missing combat random state");
+        combatRandomState = modelPo.getCombatRandomState();
         Preconditions.checkArgument(modelPo.getDifficulty() != null,
                 "Unsupported save: missing or invalid difficulty");
         difficulty = modelPo.getDifficulty();
@@ -1396,6 +1410,7 @@ public class Model {
     public synchronized ModelPo save() {
         gameManager.checkTurnPreparationComplete();
         final ModelPo out = new ModelPo();
+        out.setCombatRandomState(combatRandomState);
         out.setDifficulty(difficulty);
         out.setNextColonyId(nextColonyId);
         map.save(out);
@@ -1629,8 +1644,9 @@ public class Model {
     }
 
     void fireUnitAttacked(final Unit attacker, final Unit defender,
-            final Unit destroyed) {
-        listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
+            final Unit defeated, final boolean wasDestroyed) {
+        listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
+                wasDestroyed);
     }
 
     void fireUnitEmbarked(final Unit unit, final CargoSlot slot) {

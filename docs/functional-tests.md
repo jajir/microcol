@@ -4018,3 +4018,57 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and idempotence; nine documentation tests and strict MkDocs also passed.
    Main integrated the reviewed sources on 2026-10-16 after checking original
    file hashes. Full CI and publication remain pending.
+
+### R-0093/R-0094 ordinary land combat — 2026-10-16
+
+1. Preparation uses isolated branch `codex/r93-combat`, based on `1f56c85b`.
+   The bounded Sol low worker owns model calculation, quote validation,
+   persisted combat RNG, equipment-loss outcomes and model tests. Main owns
+   the localized dialog, status feedback, TC35/player helpers and acceptance.
+2. TC35 retains the existing legal-selection, cancellation, stale-command and
+   Continue journeys. Its former destruction expectations change to the agreed
+   surviving loser, exact equipment, both movement allowances and original
+   locations; this is a gameplay rule change, not a weakened assertion.
+   Additional cases cover a mounted defender changing after the quote, a
+   defeated dragoon retaining muskets through Continue, and the exact forest
+   plus effective-fortification example (3 against 4, displayed 42.86%).
+3. Production code and new tests are in progress. No new model/UI pass or
+   publication is claimed; main `1f56c85b` CI is a separate earlier snapshot.
+
+4. First completed model acceptance: `mvn -pl microcol-game -am test -q`
+   passed **1681 tests, zero failures/errors/skips** across 171 report files.
+   Main independently totaled the XML reports. An earlier run exposed three
+   obsolete destruction expectations, updated to assert the agreed survivor
+   identity, equipment and movement. Main review found a multiplier-floor bug;
+   the worker repaired it and covered the boundary before this full pass.
+   Additional real fortified-loss boundary tests are being added separately.
+5. Main applied the shared formatter to all 23 changed Java files: exact code
+   tokens and idempotence passed. Nine docs tests and strict MkDocs passed
+   before this evidence note. Docker now runs TC35, TC33, TC61, TC42/43, TC59/60
+   and the page verification contract; this selection is not yet accepted.
+
+6. Docker `run-5mxmy1` finished **40 tests: zero failures, three errors, zero
+   skips**. TC35/07, /09 and /11 exposed the new battle-status notification
+   updating a JavaFX label from the model's combat thread. The main-owned
+   listener now captures the resolved message and posts it through
+   `Platform.runLater`. All other selected scenarios passed, including both
+   localized strength previews and the 3-vs-4 forest/fortification case.
+   A fresh TC35 plus page-contract run is checking the repair.
+7. Main visually inspected English, Czech and forest/fortification dialog
+   screenshots: strengths, percentages, equipment-loss explanation, war warning
+   and both buttons are visible without clipping. A later focused model run
+   passed all five `CombatOutcomeTest` cases, including both fortified-loss
+   continuations; it added two tests after the 1681-test full run.
+
+8. Repair acceptance: Docker `run-J2f73p` passed all **12 TC35 cases and
+   three page-contract checks**, zero failures/errors/skips. This verifies
+   the FX-thread repair through actual accepted attacks, including the status
+   message and save/Continue. All remaining cases from the earlier 40-test
+   selection had passed without source changes. Full CI/publication remain
+   independent gates; the earlier 1681-test model run predates only the two
+   additional model tests and GUI notification scheduling correction.
+
+9. Packaging/Javadoc (`mvn -pl microcol-test -am package -DskipTests`)
+   passed after the repair. Main integrated 85 reviewed source/fixture files
+   with unchanged-original hash checks; unrelated R-0070 remained untouched.
+   The final integrated documentation checks and publication are tracked below.

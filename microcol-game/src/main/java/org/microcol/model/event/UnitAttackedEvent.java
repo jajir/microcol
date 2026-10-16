@@ -10,14 +10,17 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
     private final Unit attacker;
     private final Unit defender;
     private final Unit destroyed;
+    private final Unit defeated;
 
     public UnitAttackedEvent(final Model model, final Unit attacker,
-            final Unit defender, final Unit destroyed) {
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed) {
         super(model);
 
         this.attacker = Preconditions.checkNotNull(attacker);
         this.defender = Preconditions.checkNotNull(defender);
-        this.destroyed = Preconditions.checkNotNull(destroyed);
+        this.defeated = Preconditions.checkNotNull(defeated);
+        this.destroyed = wasDestroyed ? defeated : null;
     }
 
     public Unit getAttacker() {
@@ -30,6 +33,14 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
 
     public Unit getDestroyed() {
         return destroyed;
+    }
+
+    public Unit getDefeated() {
+        return defeated;
+    }
+
+    public boolean wasDestroyed() {
+        return destroyed != null;
     }
 
     @Override

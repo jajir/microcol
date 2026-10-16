@@ -679,3 +679,17 @@ neposouvá. `Model` ověřuje vydání a zrušení rozkazu před změnou pohybu.
 GUI používá tytéž dotazy pro povolení tlačítka a rozlišení obou fází.
 Výběr jednotky neruší rozkaz. Zrušení nevrací spotřebovaný pohyb.
 Implementace je rozpracovaná; výslednou bojovou sílu vlastní R-0093/R-0094.
+
+### Výpočet obyčejného pozemního boje (R-0093/R-0094)
+
+Implementace používá `model.CombatStrengths`
+jako neměnný rozpis obou stran nabídky `AttackOrder`. Potvrzení znovu ověří
+její vstupy před změnou diplomacie, pohybu a uloženého náhodného stavu. GUI
+pouze překládá jednotlivé členy a zaokrouhluje jejich zobrazení. Metrika
+`getMilitaryStrenght` pro diplomacii/statistiky se tím nepřeceňuje.
+
+`Model` vlastní jediný uložený stav SplitMix64 pro boj; `model.store.ModelPo`
+jej vyžaduje i při načtení. Počasí plaveb zůstává nezávislé. Prohra obyčejného
+vojáka či dragouna mění vybavení, nikoli jeho identitu či polohu. Událost
+rozlišuje poraženou a skutečně zničenou jednotku. Lokální přejímku a nezávislý stav publikace vede
+[evidence R-0093/R-0094](functional-tests.md#r-0093r-0094-ordinary-land-combat-2026-10-16).

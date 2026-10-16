@@ -195,11 +195,13 @@ class EuropeanHostilityTest {
         assertTrue(attacker.isPossibleToAttackAt(defender.getLocation()));
         final int count = model.getAllUnits().size();
         attacker.attack(defender.getLocation());
-        assertEquals(count - 1, model.getAllUnits().size());
-        assertNotEquals(model.tryGetUnitById(attacker.getId()).isPresent(),
-                model.tryGetUnitById(defender.getId()).isPresent());
-        model.tryGetUnitById(attacker.getId())
-                .ifPresent(unit -> assertEquals(0, unit.getActionPoints()));
+        assertEquals(count, model.getAllUnits().size());
+        assertSame(attacker, model.getUnitById(attacker.getId()));
+        assertSame(defender, model.getUnitById(defender.getId()));
+        assertEquals(0, attacker.getActionPoints());
+        assertEquals(0, defender.getActionPoints());
+        assertTrue(!((UnitFreeColonist) attacker).isHoldingGuns()
+                || !((UnitFreeColonist) defender).isHoldingGuns());
         assertEquals(EuropeanRelationState.WAR,
                 model.getEuropeanRelation(player("Dutch"), player("France")));
     }

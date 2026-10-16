@@ -250,9 +250,10 @@ final class ListenerManager {
     }
 
     void fireUnitAttacked(final Model model, final Unit attacker,
-            final Unit defender, final Unit destroyed) {
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed) {
         final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
-                defender, destroyed);
+                defender, defeated, wasDestroyed);
 
         logger.info("Unit attacked: {}.", event);
 

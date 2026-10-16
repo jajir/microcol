@@ -257,6 +257,18 @@ public class UnitFreeColonist extends CanMount {
         }
     }
 
+    @Override
+    protected void loseCombatEquipment() {
+        if (mounted) {
+            mounted = false;
+        } else if (holdingGuns) {
+            holdingGuns = false;
+            clearFortificationAfterDefeat();
+        } else {
+            throw new IllegalStateException("Unarmed ordinary loser");
+        }
+    }
+
     public void equipWithHorses() {
         final int previousRadius = getSightRadius();
         checkEquipmentChange(GoodsType.HORSE, true);

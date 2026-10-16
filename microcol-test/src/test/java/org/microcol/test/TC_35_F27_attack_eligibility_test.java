@@ -50,6 +50,8 @@ public class TC_35_F27_attack_eligibility_test extends AbstractMicroColTest {
         attack.chooseAttack(Location.of(18, 12), DEFENDER);
         attack.verifyReview("Master Blacksmith", "Free Colonist",
                 "declares war", 2, 6);
+        attack.verifyStrengths("Base: 3\nAttack: +50%\nFinal strength: 4.5",
+                "Base: 2\nFinal strength: 2", "Attacker win chance: 69.23%");
         attack.captureDialog("fightReview", "attack-english.png");
         attack.cancel();
         attack.verifyReviewClosed();
@@ -138,10 +140,12 @@ public class TC_35_F27_attack_eligibility_test extends AbstractMicroColTest {
         attack.chooseExistingOutcome(2, true);
         attack.chooseAttack(Location.of(18, 12), DEFENDER);
         attack.confirm();
-        attack.verifyBattle(2, 6, DEFENDER);
+        attack.verifyEquipmentOutcome(2, 6, false, false, Location.of(18, 12),
+                null);
         org.microcol.page.GamePage.of(getContext()).exitToMenu();
         new org.microcol.page.FreePlayAuditPage(getContext()).continueGame();
-        attack.verifyBattle(2, 6, DEFENDER);
+        attack.verifyEquipmentOutcome(2, 6, false, false, Location.of(18, 12),
+                null);
         // The same dialog instance must not retain its prior accepted choice.
         attack.replaceGame(FIXTURE);
         attack.rememberWorld();
@@ -162,6 +166,9 @@ public class TC_35_F27_attack_eligibility_test extends AbstractMicroColTest {
         attack.chooseAttack(Location.of(18, 12), DEFENDER);
         attack.verifyReview("mistr kovář", "svobodný kolonista",
                 "vyhlásíte válku", 2, 6);
+        attack.verifyStrengths("Základ: 3\nÚtok: +50%\nVýsledná síla: 4.5",
+                "Základ: 2\nVýsledná síla: 2",
+                "Šance útočníka na vítězství: 69.23%");
         attack.captureDialog("fightReview", "attack-czech.png");
         attack.escape();
         attack.verifyReviewClosed();
@@ -188,9 +195,72 @@ public class TC_35_F27_attack_eligibility_test extends AbstractMicroColTest {
         attack.preview(SOLDIER, DEFENDER);
         attack.verifyAttackPreview(DEFENDER);
         attack.release();
-        attack.verifyBattle(6, 0, DEFENDER);
+        attack.verifyEquipmentOutcome(0, 0, false, false, SOLDIER, null);
         org.microcol.page.GamePage.of(getContext()).exitToMenu();
         new org.microcol.page.FreePlayAuditPage(getContext()).continueGame();
-        attack.verifyBattle(6, 0, DEFENDER);
+        attack.verifyEquipmentOutcome(0, 0, false, false, SOLDIER, null);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_changed_defender_equipment_invalidates_the_quoted_strength()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final AttackPage attack = new AttackPage(getContext());
+        attack.chooseAttack(SOLDIER, DEFENDER);
+        attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
+                "Base: 2\nFinal strength: 2", "Attacker win chance: 60%");
+        // A mounted defender has different strength; the old quote cannot
+        // execute.
+        attack.simulateMountedDefender();
+        attack.rememberWorld();
+        attack.confirm();
+        attack.verifyRejection("No battle was started");
+        attack.verifyGameplayUnchanged();
+        attack.closeMessage();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_11_defeated_dragoon_loses_only_horses_and_continue_preserves_it()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final AttackPage attack = new AttackPage(getContext());
+        attack.chooseExistingOutcome(2, false);
+        attack.chooseAttack(Location.of(18, 12), DEFENDER);
+        attack.confirm();
+        // Defeat preserves this specialist and his muskets on the original
+        // tile.
+        attack.verifyEquipmentOutcome(2, 2, true, false, Location.of(18, 12),
+                "lost its horses");
+        attack.verifyPerson(2, org.microcol.model.UnitType.MASTER_BLACKSMITH,
+                "Dutch");
+        org.microcol.page.GamePage.of(getContext()).exitToMenu();
+        new org.microcol.page.FreePlayAuditPage(getContext()).continueGame();
+        attack.verifyEquipmentOutcome(2, 2, true, false, Location.of(18, 12),
+                null);
+        attack.verifyPerson(2, org.microcol.model.UnitType.MASTER_BLACKSMITH,
+                "Dutch");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_forest_and_effective_fortification_explain_three_against_four()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final AttackPage attack = new AttackPage(getContext());
+        attack.loadFortifiedForestFixture(FIXTURE);
+        attack.rememberWorld();
+        attack.chooseAttack(SOLDIER, DEFENDER);
+        // The same immutable model quote drives the explanation and eventual
+        // odds.
+        attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
+                "Base: 2\nTerrain: +50%\nFortified unit: +50%\nFinal strength: 4",
+                "Attacker win chance: 42.86%");
+        attack.captureDialog("fightReview",
+                "combat-strengths-forest-fortified.png");
+        attack.escape();
+        attack.verifyReviewClosed();
+        attack.verifyGameplayUnchanged();
     }
 }

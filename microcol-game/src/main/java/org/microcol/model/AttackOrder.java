@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.Optional;
+
 /**
  * A proposed battle bound to the participants and state shown for confirmation.
  */
@@ -11,6 +13,7 @@ public final class AttackOrder {
     private final Location origin;
     private final Location target;
     private final boolean declarationRequired;
+    private final Optional<CombatStrengths> combatStrengths;
 
     AttackOrder(final AbstractUnit attacker, final Unit defender) {
         this.attacker = attacker;
@@ -21,6 +24,8 @@ public final class AttackOrder {
         target = defender.getLocation();
         declarationRequired = !attacker.model.areHostile(attackingPlayer,
                 defendingPlayer);
+        combatStrengths = CombatStrengths.forBattle(attacker.model, attacker,
+                defender);
     }
 
     public Unit getAttacker() {
@@ -37,6 +42,10 @@ public final class AttackOrder {
 
     public boolean isDeclarationRequired() {
         return declarationRequired;
+    }
+
+    public Optional<CombatStrengths> getCombatStrengths() {
+        return combatStrengths;
     }
 
     Location getTarget() {

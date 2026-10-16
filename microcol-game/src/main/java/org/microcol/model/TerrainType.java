@@ -68,8 +68,8 @@ public final class TerrainType {
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP")
             .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(1)
-            .setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setMoveCostWithTree(2).setDefenseBonus(25)
+            .setDefenseBonusWithTree(75).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.SUGAR).setBase(3)
             .build().setProduction(GoodsType.TOBACCO).setBase(1).build()
             .setProduction(GoodsType.LUMBER).setBase(4).build().build();
@@ -99,15 +99,15 @@ public final class TerrainType {
 
     public final static TerrainType HILL = TerrainType.make().setName("HILL")
             .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(1)
-            .setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setMoveCostWithTree(2).setDefenseBonus(100)
+            .setDefenseBonusWithTree(100).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.ORE).setBase(4).build()
             .build();
 
     public final static TerrainType MOUNTAIN = TerrainType.make()
             .setName("MOUNTAIN").setCode("m").setCanHaveTree(false)
             .setSea(false).setMoveCost(1).setMoveCostWithTree(2)
-            .setDefenseBonus(0).setDefenseBonusWithTree(50)
+            .setDefenseBonus(150).setDefenseBonusWithTree(150)
             .setProduction(GoodsType.ORE).setBase(3).build()
             .setProduction(GoodsType.SILVER).setBase(1).build().build();
 

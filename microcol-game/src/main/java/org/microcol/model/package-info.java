@@ -48,9 +48,12 @@
  * identities and spends movement through the existing no-action operation.
  * Saved movement and ordinary owner-turn restoration need no standing order.
  *
- * Attack proposals bind confirmation to registered participants, positions and
- * diplomatic state. Execution revalidates before declaring war and consumes
- * both participants' current movement; current equipment owns attack ability.
+ * Attack proposals bind confirmation to registered participants, positions,
+ * diplomacy and an immutable ordinary-land strength explanation. The model
+ * revalidates the whole quote before drawing from persisted combat random
+ * state, declaring war or spending movement. Ordinary armed land losers retain
+ * identity and position while losing horses or muskets; other combat families
+ * retain their separate outcome rules.
  *
  * Validated sentry commands preserve movement; departure boarding and
  * visible-movement wake-up use shared model rules.

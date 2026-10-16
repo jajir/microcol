@@ -6,6 +6,7 @@
       "declareIndependence": "false"
   },
   "model": {
+    "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",
   "calendar": {
     "startYear": 1490,

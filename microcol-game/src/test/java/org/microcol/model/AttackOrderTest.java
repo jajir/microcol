@@ -2,9 +2,6 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Field;
-import java.util.Random;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
@@ -134,22 +132,29 @@ class AttackOrderTest {
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
     void acceptedBattleDeclaresOnceAndExhaustsEitherSurvivorThroughRestore(
-            final boolean attackerWins) throws Exception {
-        // Control both existing outcome branches without changing the
-        // algorithm.
-        final Field field = AbstractUnit.class.getDeclaredField("random");
-        field.setAccessible(true);
-        ((Random) field.get(attacker)).setSeed(attackerWins ? 4096L : 0L);
+            final boolean attackerWins) {
+        final ModelPo controlled = model.save();
+        controlled.setCombatRandomState(attackerWins ? 3L : 0L);
+        model = Model.make(controlled,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        attacker = (UnitFreeColonist) model.getUnitById(0);
+        defender = (UnitFreeColonist) model.getUnitById(6);
         final AttackOrder order = proposal();
         final int units = model.getAllUnits().size();
+        final Location origin = attacker.getLocation();
+        final Location target = defender.getLocation();
         order.execute();
         assertEquals(EuropeanRelationState.WAR, model
                 .getEuropeanRelation(attacker.getOwner(), defender.getOwner()));
-        assertEquals(units - 1, model.getAllUnits().size());
+        assertEquals(units, model.getAllUnits().size());
         final Unit survivor = attackerWins ? attacker : defender;
         final Unit lost = attackerWins ? defender : attacker;
         assertSame(survivor, model.getUnitById(survivor.getId()));
-        assertTrue(model.tryGetUnitById(lost.getId()).isEmpty());
+        assertSame(lost, model.getUnitById(lost.getId()));
+        assertEquals(origin, attacker.getLocation());
+        assertEquals(target, defender.getLocation());
+        assertEquals(0, lost.getActionPoints());
+        assertFalse(((UnitFreeColonist) lost).isHoldingGuns());
         assertEquals(0, survivor.getActionPoints());
         final String after = snapshot();
         assertThrows(IllegalStateException.class, order::execute);
@@ -159,6 +164,8 @@ class AttackOrderTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Unit continued = restored.getUnitById(survivor.getId());
         assertEquals(0, continued.getActionPoints());
+        assertFalse(((UnitFreeColonist) restored.getUnitById(lost.getId()))
+                .isHoldingGuns());
         assertEquals(EuropeanRelationState.WAR,
                 restored.getEuropeanRelation(restored.getPlayerByName("Dutch"),
                         restored.getPlayerByName("France")));

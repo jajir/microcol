@@ -10,6 +10,16 @@ import com.google.common.base.Preconditions;
 
 public class ModelPo {
 
+    private Long combatRandomState;
+
+    public Long getCombatRandomState() {
+        return combatRandomState;
+    }
+
+    public void setCombatRandomState(final Long combatRandomState) {
+        this.combatRandomState = combatRandomState;
+    }
+
     private Difficulty difficulty;
 
     public Difficulty getDifficulty() {

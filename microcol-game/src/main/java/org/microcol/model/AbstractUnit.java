@@ -534,9 +534,28 @@ public abstract class AbstractUnit implements Unit {
                         || peacefulColony.get().getOwner() == unit.getOwner())
                 // An existing enemy takes priority over breaking another
                 // treaty.
-                .sorted(Comparator.comparing(
-                        unit -> !model.areHostile(owner, unit.getOwner())))
-                .findFirst();
+                .sorted((left, right) -> {
+                    final int hostility = Boolean.compare(
+                            !model.areHostile(owner, left.getOwner()),
+                            !model.areHostile(owner, right.getOwner()));
+                    if (hostility != 0) {
+                        return hostility;
+                    }
+                    final Optional<CombatStrengths> leftValues = CombatStrengths
+                            .forBattle(model, this, left);
+                    final Optional<CombatStrengths> rightValues = CombatStrengths
+                            .forBattle(model, this, right);
+                    if (leftValues.isPresent() != rightValues.isPresent()) {
+                        return leftValues.isPresent() ? -1 : 1;
+                    }
+                    final int strength = leftValues.isPresent()
+                            ? Double.compare(
+                                    rightValues.get().getDefender().getTotal(),
+                                    leftValues.get().getDefender().getTotal())
+                            : 0;
+                    return strength != 0 ? strength
+                            : Integer.compare(left.getId(), right.getId());
+                }).findFirst();
     }
 
     /**
@@ -698,15 +717,32 @@ public abstract class AbstractUnit implements Unit {
                         order.isDeclarationRequired() == !model
                                 .areHostile(owner, selected.getOwner()),
                         "The diplomatic state changed");
+        final Optional<CombatStrengths> strengths = CombatStrengths
+                .forBattle(model, this, selected);
+        Preconditions.checkState(strengths.equals(order.getCombatStrengths()),
+                "The battle strength changed");
+        Preconditions.checkState(
+                strengths.isEmpty()
+                        || strengths.get().getAttacker().getTotal() > 0,
+                "Attacker has no combat strength");
         final AbstractUnit defender = (AbstractUnit) selected;
+        final boolean winnerAttacker = strengths.isPresent()
+                ? strengths.get().attackerWins(model.nextCombatRandom())
+                : isWinnerAttacker();
         if (order.isDeclarationRequired()) {
             model.declareHostilities(owner, defender.getOwner());
         }
         actionPoints = 0;
         defender.actionPoints = 0;
-        final Unit winner = isWinnerAttacker() ? this : defender;
+        if (strengths.isPresent()) {
+            final AbstractUnit loser = winnerAttacker ? defender : this;
+            loser.loseCombatEquipment();
+            model.fireUnitAttacked(this, defender, loser, false);
+            return;
+        }
+        final Unit winner = winnerAttacker ? this : defender;
         if (winner == this) {
-            model.fireUnitAttacked(this, defender, defender);
+            model.fireUnitAttacked(this, defender, defender, true);
             model.destroyUnit(defender);
             if (owner.getEnemyUnitsAt(order.getTarget()).isEmpty()) {
                 placeToLocation(order.getTarget());
@@ -714,8 +750,19 @@ public abstract class AbstractUnit implements Unit {
                 tryToCaptureColony(order.getTarget());
             }
         } else {
-            model.fireUnitAttacked(this, defender, this);
+            model.fireUnitAttacked(this, defender, this, true);
             model.destroyUnit(this);
+        }
+    }
+
+    protected void loseCombatEquipment() {
+        throw new IllegalStateException("Unsupported combat equipment loss");
+    }
+
+    protected void clearFortificationAfterDefeat() {
+        if (unitAction.getType() == UnitActionType.fortify) {
+            setAction(UnitActionType.noAction.make());
+            model.fireActionWasStarted(this);
         }
     }
 

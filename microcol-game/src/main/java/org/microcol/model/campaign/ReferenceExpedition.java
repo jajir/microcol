@@ -87,6 +87,7 @@ public final class ReferenceExpedition {
                 .thenComparingInt(Location::getX));
 
         final ModelPo model = new ModelPo();
+        model.setCombatRandomState(0L);
         model.setDifficulty(difficulty);
         model.setNextColonyId(0);
         model.getCalendar().setStartYear(1490);
