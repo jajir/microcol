@@ -1,6 +1,10 @@
 package org.microcol.gui.screen.turnreport;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.UnitTypes;
 
 import org.microcol.i18n.I18n;
 import org.microcol.model.turnevent.TurnEvent;
@@ -23,13 +27,25 @@ public class TeProcessorFaminePlagueColony extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventFaminePlagueColony) {
             final TurnEventFaminePlagueColony te = (TurnEventFaminePlagueColony) turnEvent;
-            return new TeItemSimple(getMessage(te.getColonyName()));
+            if (te.getStocks().isEmpty()) {
+                return new TeItemSimple(getI18n().get(
+                        TurnEvents.faminePlagueColonyDestroyed,
+                        te.getColonyName(),
+                        getI18n().get(UnitTypes.getUnitName(te.getVictim()))));
+            }
+            return new TeItemSimple(getI18n().get(TurnEvents.faminePlagueColony,
+                    te.getColonyName(),
+                    getI18n().get(UnitTypes.getUnitName(te.getVictim())),
+                    te.getStocks().stream().filter(
+                            goods -> goods.isNotZero() || goods.getType()
+                                    .equals(org.microcol.model.GoodsType.CORN))
+                            .map(goods -> getI18n()
+                                    .get(GoodsTypeName.getNameForGoodsType(
+                                            goods.getType()))
+                                    + ": " + goods.getAmount())
+                            .collect(Collectors.joining(", "))));
         }
         return null;
-    }
-
-    private String getMessage(final String colonyName) {
-        return getI18n().get(TurnEvents.faminePlagueColony, colonyName);
     }
 
 }

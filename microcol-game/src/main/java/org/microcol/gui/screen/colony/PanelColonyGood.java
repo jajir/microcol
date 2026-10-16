@@ -19,6 +19,7 @@ import com.google.common.eventbus.EventBus;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
@@ -35,6 +36,8 @@ import javafx.scene.layout.VBox;
 public final class PanelColonyGood implements JavaFxComponent {
 
     public static final String IMAGE_GOODS_CLASS = "imageGoods";
+
+    public static final String FAMINE_FORECAST_ID = "famineForecast";
 
     private final Label labelAmount;
 
@@ -67,6 +70,9 @@ public final class PanelColonyGood implements JavaFxComponent {
         labelAmount = new Label();
         labelAmount.getStyleClass().add("amount");
         labelDiff = new Label();
+        if (GoodsType.CORN.equals(goodsType)) {
+            labelDiff.setId(FAMINE_FORECAST_ID);
+        }
         labelDiff.getStyleClass().add("diff");
         final HBox hlabels = new HBox(labelAmount, labelDiff);
         hlabels.setAlignment(Pos.CENTER);
@@ -132,6 +138,16 @@ public final class PanelColonyGood implements JavaFxComponent {
         } else {
             labelDiff.getStyleClass().clear();
             labelDiff.setText("");
+        }
+        if (GoodsType.CORN.equals(goodsType)
+                && goodsStats.getInWarehouseAfter() < 0) {
+            labelDiff.setText(labelDiff.getText() + " ⚠");
+            final String warning = i18n.get(ColonyMsg.faminePreview);
+            labelDiff.setTooltip(new Tooltip(warning));
+            labelDiff.setAccessibleText(warning);
+        } else {
+            labelDiff.setTooltip(null);
+            labelDiff.setAccessibleText(null);
         }
     }
 

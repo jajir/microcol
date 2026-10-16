@@ -6,7 +6,8 @@
 	
 	<entry key="shipComeToEuropePort">Loď prijela do Evropského přístavu, nenech ji dlouho čekat.</entry>
 	<entry key="shipComeToHighSeas">Loď se vrátila z Evrop zpět.</entry>
-	<entry key="faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>
+	<entry key="faminePlagueColonyDestroyed">Hladomor v kolonii %s usmrtil jednoho kolonistu (%s). Kolonie zanikla a žádné zásoby nezůstaly.</entry>
+	<entry key="faminePlagueColony">Hladomor v kolonii %s usmrtil jednoho kolonistu (%s). Konečné zásoby: %s.</entry>
 	<entry key="famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
 	<entry key="colonyWasDestroyed">Kolonie %s byla zničena.</entry>
 	<entry key="newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>

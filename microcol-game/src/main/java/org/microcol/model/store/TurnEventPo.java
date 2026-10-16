@@ -1,6 +1,9 @@
 package org.microcol.model.store;
 
+import java.util.List;
+
 import org.microcol.model.Goods;
+import org.microcol.model.UnitType;
 
 public final class TurnEventPo {
 
@@ -12,7 +15,37 @@ public final class TurnEventPo {
 
     private String colonyName;
 
+    private UnitType famineVictim;
+
+    private Integer famineVictimId;
+
+    private List<Goods> famineStocks;
+
     private Integer colonyId;
+
+    public Integer getFamineVictimId() {
+        return famineVictimId;
+    }
+
+    public void setFamineVictimId(final Integer famineVictimId) {
+        this.famineVictimId = famineVictimId;
+    }
+
+    public UnitType getFamineVictim() {
+        return famineVictim;
+    }
+
+    public void setFamineVictim(final UnitType famineVictim) {
+        this.famineVictim = famineVictim;
+    }
+
+    public List<Goods> getFamineStocks() {
+        return famineStocks;
+    }
+
+    public void setFamineStocks(final List<Goods> famineStocks) {
+        this.famineStocks = famineStocks;
+    }
 
     public Integer getColonyId() {
         return colonyId;

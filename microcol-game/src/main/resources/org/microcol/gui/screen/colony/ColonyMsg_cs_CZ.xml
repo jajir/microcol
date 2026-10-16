@@ -4,6 +4,7 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
+	<entry key="faminePreview">Hladomor usmrtí jednoho náhodného obyvatele. Konečná výroba a zásoby závisí na tom, kdo zemře.</entry>
 	<entry key="goods"> ve skladu</entry>
 	<entry key="colonyName">Kliknutím přejmenujete kolonii.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>

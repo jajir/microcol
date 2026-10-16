@@ -227,6 +227,16 @@ public class ColonyScreen extends AbstractScreen {
                 .getGoods(expectedGoods.getType()).getAmount());
     }
 
+    public void verifyFamineForecast() {
+        final Labeled forecast = getLabeledById(
+                PanelColonyGood.FAMINE_FORECAST_ID);
+        assertTrue(forecast.getText().contains("⚠"));
+        assertTrue(forecast.getTooltip().getText()
+                .contains("Final production and stocks depend"));
+        assertEquals(forecast.getTooltip().getText(),
+                forecast.getAccessibleText());
+    }
+
     public void verifyFoodAccounting(final int produced, final int consumed) {
         final GoodsProductionStats food = colony.getGoodsStats()
                 .getStatsByType(GoodsType.CORN);

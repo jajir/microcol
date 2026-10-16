@@ -4,6 +4,7 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
+	<entry key="faminePreview">Famine will kill one random resident. Final production and stocks depend on who dies.</entry>
 	<entry key="goods"> in warehouse</entry>
 	<entry key="colonyName">Click to rename this colony.</entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>

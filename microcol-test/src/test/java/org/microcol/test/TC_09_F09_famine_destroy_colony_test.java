@@ -1,6 +1,7 @@
 package org.microcol.test;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -34,13 +36,18 @@ public class TC_09_F09_famine_destroy_colony_test extends AbstractMicroColTest {
         // Verify that in colony is 3 food.
         verifyCornInColony(gamePage, 3);
 
-        // Perform next turn and ignore turn events dialog.
-        gamePage.nextTurnAndCloseDialogs();
+        // End the turn and verify the recorded famine outcome.
+        final Optional<ScreenTurnReport> report = gamePage.nextTurn();
+        gamePage.verifyTurnReportPresent(report);
+        report.get().verifyFamineLossCount(1);
+        report.get().verifyThatAtLeastOneEventMessageContains(
+                "Famine in colony Delft killed one");
+        report.get().verifyThatAtLeastOneEventMessageContains("Final stocks:");
+        report.get().close();
 
         /*
-         * From now on, can't verify number of corn in colony. Unit whom die
-         * because of famine is random. It could be unit from field and even
-         * from factory.
+         * The victim is random. The report records the loss and final stocks;
+         * later turns continue until the colony disappears.
          */
 
         // Perform next turn and ignore turn events dialog.

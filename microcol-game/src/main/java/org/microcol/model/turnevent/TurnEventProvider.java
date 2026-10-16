@@ -3,6 +3,9 @@ package org.microcol.model.turnevent;
 import org.microcol.model.Colony;
 import org.microcol.model.Goods;
 import org.microcol.model.Player;
+import org.microcol.model.Unit;
+import org.microcol.model.GoodsType;
+import java.util.stream.Collectors;
 
 /**
  * Class simplify creating of turn events.
@@ -43,9 +46,14 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFaminePlagueColony(final Player player,
-            final Colony colony) {
+            final Colony colony, final Unit victim) {
         return new TurnEventFaminePlagueColony(player.getName(), colony.getId(),
-                colony.getName());
+                colony.getName(), victim.getId(), victim.getType(),
+                colony.isValid()
+                        ? GoodsType.GOOD_TYPES.stream()
+                                .map(colony.getWarehouse()::getGoods)
+                                .collect(Collectors.toList())
+                        : java.util.Collections.emptyList());
     }
 
     /**

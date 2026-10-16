@@ -49,6 +49,11 @@ public class TC_10_F10_famine_will_plague_colony_test
         dialogTurnReport.verifyThatAtLeastOneEventMessageContains(
                 "Famine is coming in colony Delft. In next turn colonist will die.");
 
+        // Confirm that the next colony forecast marks the variable outcome.
+        dialogTurnReport.close();
+        gamePage.openColonyAt(Location.of(22, 12), "Delft")
+                .verifyFamineForecast();
+
     }
 
     private GamePage verifyCornInColony(final GamePage gamePage,

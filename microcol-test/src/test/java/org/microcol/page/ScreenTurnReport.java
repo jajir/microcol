@@ -47,6 +47,15 @@ public class ScreenTurnReport extends AbstractScreen {
                         getEventPanels().size(), expectedNumberOfEvents));
     }
 
+    public void verifyFamineLossCount(final int expectedCount) {
+        final long actualCount = getEventPanels().stream()
+                .map(panel -> (Label) panel.getChildren().get(1))
+                .map(Label::getText)
+                .filter(message -> message.startsWith("Famine in colony "))
+                .count();
+        assertEquals(expectedCount, actualCount);
+    }
+
     private List<TurnEventPanel> getEventPanels() {
         final String cssClass = ".turn-event";
         final Set<TurnEventPanel> panels = getNodeFinder().lookup(cssClass)

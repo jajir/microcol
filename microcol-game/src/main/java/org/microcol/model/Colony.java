@@ -266,12 +266,16 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        eatFoodAndOptionallyMakeNewColonist();
+        final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
         // from now colony could be destroyed by famine.
         if (isValid()) {
             final ColonyProductionStats colonyStats = getGoodsStats();
             colonyStats.forEach((goodsType, stats) -> {
                 if (GoodsType.CORN.equals(goodsType)) {
+                    if (famineVictim != null) {
+                        warehouse.setGoods(Goods.of(GoodsType.CORN,
+                                Math.max(0, stats.getInWarehouseAfter())));
+                    }
                     if (stats.getInWarehouseAfter() < 0) {
                         model.addTurnEvent(TurnEventProvider
                                 .getFamineWillPlagueColony(owner, this));
@@ -294,15 +298,20 @@ public class Colony {
             });
             colonyBuildingQueue.startTurn();
         }
+        if (famineVictim != null) {
+            model.addTurnEvent(TurnEventProvider.getFaminePlagueColony(owner,
+                    this, famineVictim));
+        }
     }
 
-    private void eatFoodAndOptionallyMakeNewColonist() {
+    private Unit eatFoodAndOptionallyMakeNewColonist() {
         final ColonyProductionStats stats = getGoodsStats();
         final GoodsProductionStats cornStats = stats
                 .getStatsByType(GoodsType.CORN);
         if (cornStats.getInWarehouseAfter() < 0) {
-            killOneRandomUnit();
+            final Unit victim = killOneRandomUnit();
             warehouse.setGoods(Goods.of(GoodsType.CORN, 0));
+            return victim;
         } else {
             final int foodAfterConsumption = cornStats.getInWarehouseAfter();
             if (foodAfterConsumption >= FOOD_LEVEL_TO_FREE_COLONIST) {
@@ -328,6 +337,7 @@ public class Colony {
                 }
             }
         }
+        return null;
     }
 
     /**
@@ -340,13 +350,12 @@ public class Colony {
         model.fireNewUnitWasBorn(newUnit);
     }
 
-    private void killOneRandomUnit() {
+    private Unit killOneRandomUnit() {
         int index = random.nextInt(getUnitsInsideColony().size());
         final Unit u = getUnitsInsideColony().get(index);
         u.getPlace().destroy();
         model.destroyUnit(u);
-        model.addTurnEvent(
-                TurnEventProvider.getFaminePlagueColony(getOwner(), this));
+        return u;
     }
 
     public Integer getRequiredFoodPerTurn() {
