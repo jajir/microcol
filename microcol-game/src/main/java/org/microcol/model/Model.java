@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1154,8 +1155,35 @@ public class Model {
 
     void destroyColony(final Colony colony) {
         Preconditions.checkNotNull(colony);
+        if (!colonies.contains(colony)) {
+            return;
+        }
+        int lostShips = 0;
+        for (final Unit unit : new ArrayList<>(
+                getUnitsAt(colony.getLocation()))) {
+            if (!(unit instanceof Ship)
+                    || unit.getOwner() != colony.getOwner()) {
+                continue;
+            }
+            final Ship ship = (Ship) unit;
+            final Optional<Location> destination = colony.getLocation()
+                    .getNeighbors().stream().filter(map::isValid)
+                    .filter(target -> ship.getType()
+                            .canMoveAtTerrain(map.getTerrainTypeAt(target)))
+                    .filter(target -> getEnemyUnitsAt(ship.getOwner(), target)
+                            .isEmpty())
+                    .sorted(Comparator.comparingInt(Location::getX)
+                            .thenComparingInt(Location::getY))
+                    .findFirst();
+            if (destination.isPresent()) {
+                ship.placeToLocation(destination.get());
+            } else {
+                destroyUnit(ship);
+                lostShips++;
+            }
+        }
         getTurnEventStore().add(TurnEventProvider
-                .getColonyWasDestroyed(getCurrentPlayer(), colony));
+                .getColonyWasDestroyed(colony.getOwner(), colony, lostShips));
         colonies.remove(colony);
     }
 

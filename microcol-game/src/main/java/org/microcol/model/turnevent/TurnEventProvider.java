@@ -78,8 +78,13 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getColonyWasDestroyed(final Player player,
             final Colony colony) {
+        return getColonyWasDestroyed(player, colony, 0);
+    }
+
+    public static TurnEvent getColonyWasDestroyed(final Player player,
+            final Colony colony, final int lostShips) {
         return new TurnEventColonyWasDestroyed(player.getName(), colony.getId(),
-                colony.getName());
+                colony.getName(), lostShips);
     }
 
     /**

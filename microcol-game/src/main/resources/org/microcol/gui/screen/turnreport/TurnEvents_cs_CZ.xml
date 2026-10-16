@@ -10,6 +10,7 @@
 	<entry key="faminePlagueColony">Hladomor v kolonii %s usmrtil jednoho kolonistu (%s). Konečné zásoby: %s.</entry>
 	<entry key="famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
 	<entry key="colonyWasDestroyed">Kolonie %s byla zničena.</entry>
+	<entry key="shipsLostWithColony">Se zničenou kolonií bylo ztraceno lodí: %s, včetně nákladu.</entry>
 	<entry key="newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
 	<entry key="newUnitIsInColony">V kolonii %s se objevila nová jednotka.</entry>
 	<entry key="colonyWasLost">Přišel jsi o kolonii %s.</entry>

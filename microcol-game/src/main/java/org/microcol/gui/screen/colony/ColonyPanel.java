@@ -1,6 +1,8 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -11,6 +13,7 @@ import org.microcol.model.event.UnitMovedToConstructionEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.layout.Region;
@@ -38,6 +41,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private Colony colony;
 
+    private final EventBus eventBus;
+
     @Inject
     public ColonyPanel(final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
@@ -45,7 +50,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyGoods panelColonyGoods,
             final ColonyButtonsPanel colonyButtonsPanel,
             final PanelDockColony panelDockColony,
-            final PanelColonyName panelColonyName) {
+            final PanelColonyName panelColonyName, final EventBus eventBus) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions
                 .checkNotNull(panelColonyStructures);
@@ -104,6 +110,11 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     void repaint() {
         if (colony != null) {
+            if (!colony.isValid()) {
+                colony = null;
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+                return;
+            }
             colonyFields.setColony(colony);
             goods.repaint();
             panelDock.repaint();

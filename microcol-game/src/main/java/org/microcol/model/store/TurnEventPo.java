@@ -22,6 +22,15 @@ public final class TurnEventPo {
     private List<Goods> famineStocks;
 
     private Integer colonyId;
+    private Integer lostShips;
+
+    public Integer getLostShips() {
+        return lostShips;
+    }
+
+    public void setLostShips(final Integer lostShips) {
+        this.lostShips = lostShips;
+    }
 
     public Integer getFamineVictimId() {
         return famineVictimId;

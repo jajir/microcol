@@ -219,6 +219,7 @@ public final class SelectedUnitManager {
             return;
         }
         final Model model = gameModelController.getModel();
+        getSelectedUnit();
         final Optional<Unit> next = selectedUnit == null
                 || selectedUnit.getOwner() != model.getCurrentPlayer()
                         ? model.getFirstSelectableUnit()
@@ -229,6 +230,7 @@ public final class SelectedUnitManager {
     @Subscribe
     private void onSkipUnitTurn(final SkipUnitTurnEvent event) {
         Preconditions.checkNotNull(event);
+        getSelectedUnit();
         if (!gameModelController.isHumanTurnReady()
                 || gamePanelController.isUnitMoving() || selectedUnit == null) {
             return;
@@ -262,6 +264,11 @@ public final class SelectedUnitManager {
     }
 
     public Optional<Unit> getSelectedUnit() {
+        if (selectedUnit != null && gameModelController.isGameModelReady()
+                && !gameModelController.getModel().getAllUnits()
+                        .contains(selectedUnit)) {
+            unselectUnit();
+        }
         return Optional.ofNullable(selectedUnit);
     }
 

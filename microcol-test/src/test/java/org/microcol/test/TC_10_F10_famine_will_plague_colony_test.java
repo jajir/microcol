@@ -34,8 +34,8 @@ public class TC_10_F10_famine_will_plague_colony_test
         // open MicroCol and load defined game
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-        // Verify that in colony is 3 food.
-        verifyCornInColony(gamePage, 6);
+        // One town-hall resident has two food, enough for this turn only.
+        verifyCornInColony(gamePage, 2);
 
         // Perform next turn and ignore turn events dialog.
         Optional<ScreenTurnReport> oTurnDialog = gamePage.nextTurn();
@@ -51,8 +51,27 @@ public class TC_10_F10_famine_will_plague_colony_test
 
         // Confirm that the next colony forecast marks the variable outcome.
         dialogTurnReport.close();
-        gamePage.openColonyAt(Location.of(22, 12), "Delft")
-                .verifyFamineForecast();
+        final ColonyScreen colonyAfterWarning = gamePage
+                .openColonyAt(Location.of(22, 12), "Delft");
+        colonyAfterWarning.verifyFamineForecast();
+        colonyAfterWarning.close();
+
+        // The next turn starves that final resident and removes the port.
+        final Optional<ScreenTurnReport> lossReport = gamePage.nextTurn();
+        gamePage.verifyTurnReportPresent(lossReport);
+        lossReport.get().verifyFamineLossCount(1);
+        lossReport.get().verifyThatAtLeastOneEventMessageContains(
+                "Colony Delft was destroyed.");
+        lossReport.get().close();
+
+        gamePage.verifyThatThereIsNoColonyAt(Location.of(22, 12));
+        gamePage.verifyNumberOfUnitsAt(Location.of(22, 12), 3);
+        gamePage.verifyNumberOfUnitsAt(Location.of(21, 11), 1);
+        gamePage.selectTile(Location.of(22, 12));
+        gamePage.verifyNumberOfUnitInRightPanel(3);
+        gamePage.pressTab();
+        gamePage.verifyOneUnitIsSelected();
+        gamePage.nextTurnAndCloseDialogs();
 
     }
 

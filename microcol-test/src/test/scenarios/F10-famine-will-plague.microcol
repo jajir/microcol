@@ -121,22 +121,6 @@
       "mounted": false
     },
     {
-      "id": 6,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
       "id": 7,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -297,90 +281,10 @@
       "mounted": false
     },
     {
-      "id": 17,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
       "id": 18,
       "type": "COLONIST",
       "ownerId": "Dutch",
       "placeConstructionSlot": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
-      "id": 19,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
-      "id": 20,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
-      "id": 21,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
-      "id": 22,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeColonyField": {},
       "cargo": {
         "slots": []
       },
@@ -441,22 +345,6 @@
         },
         "orientation": "east"
       },
-      "cargo": {
-        "slots": []
-      },
-      "action": {
-        "type": "noAction"
-      },
-      "availableMoves": 1,
-      "tools": 0,
-      "holdingGuns": false,
-      "mounted": false
-    },
-    {
-      "id": 26,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeConstructionSlot": {},
       "cargo": {
         "slots": []
       },
@@ -677,49 +565,37 @@
           "direction": {
             "x": 1,
             "y": 0
-          },
-          "workerId": 22,
-          "producedGoodsType": "TOBACCO"
+          }
         },
         {
           "direction": {
             "x": 1,
             "y": 1
-          },
-          "workerId": 21,
-          "producedGoodsType": "TOBACCO"
+          }
         },
         {
           "direction": {
             "x": 0,
             "y": 1
-          },
-          "workerId": 6,
-          "producedGoodsType": "TOBACCO"
+          }
         },
         {
           "direction": {
             "x": -1,
             "y": 1
-          },
-          "workerId": 17,
-          "producedGoodsType": "CORN"
+          }
         },
         {
           "direction": {
             "x": -1,
             "y": 0
-          },
-          "workerId": 19,
-          "producedGoodsType": "TOBACCO"
+          }
         },
         {
           "direction": {
             "x": -1,
             "y": -1
-          },
-          "workerId": 20,
-          "producedGoodsType": "CORN"
+          }
         }
       ],
       "constructions": [
@@ -752,9 +628,7 @@
         {
           "type": "TOBACCONISTS_HOUSE",
           "slots": [
-            {
-              "workerId": 26
-            },
+            {},
             {},
             {}
           ]
@@ -803,7 +677,7 @@
         "SILK": 0,
         "MUSKET": 0,
         "CROSS": 0,
-        "CORN": 6,
+        "CORN": 2,
         "CIGARS": 100,
         "GOODS": 0,
         "BELL": 151,

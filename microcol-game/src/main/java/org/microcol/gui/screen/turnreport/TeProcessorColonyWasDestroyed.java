@@ -23,7 +23,13 @@ public class TeProcessorColonyWasDestroyed extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventColonyWasDestroyed) {
             final TurnEventColonyWasDestroyed te = (TurnEventColonyWasDestroyed) turnEvent;
-            return new TeItemSimple(getMessage(te.getColonyName()));
+            final String message = getMessage(te.getColonyName());
+            return new TeItemSimple(
+                    te.getLostShips() == 0 ? message
+                            : message + " "
+                                    + getI18n().get(
+                                            TurnEvents.shipsLostWithColony,
+                                            te.getLostShips()));
         }
         return null;
     }

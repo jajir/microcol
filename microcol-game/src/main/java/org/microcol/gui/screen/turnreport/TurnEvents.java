@@ -13,8 +13,9 @@ public enum TurnEvents implements MessageKeyResource {
      */
     shipComeToEuropePort, shipComeToHighSeas, faminePlagueColony,
     faminePlagueColonyDestroyed, famineWillPlagueColony, colonyWasDestroyed,
-    newUnitIsInEurope, newUnitIsInColony, colonyWasLost, goodsWasThrowsAway1,
-    goodsWasThrowsAway2, goodsWasThrowsAway3, goodsWasThrowsAway4,
+    shipsLostWithColony, newUnitIsInEurope, newUnitIsInColony, colonyWasLost,
+    goodsWasThrowsAway1, goodsWasThrowsAway2, goodsWasThrowsAway3,
+    goodsWasThrowsAway4,
 
     /*
      * Rest of resources.

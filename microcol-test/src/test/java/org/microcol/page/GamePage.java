@@ -279,6 +279,12 @@ public class GamePage extends AbstractScreen {
         }
     }
 
+    public void verifyOneUnitIsSelected() {
+        assertEquals(1, getListOfUnitsInRightPanel().stream().filter(
+                unit -> RightPanelUnit.of(getContext(), unit).isSelected())
+                .count());
+    }
+
     public void verifyThatSelectedTileIs(final Location expectedSelectedTile) {
         final SelectedTileManager selectedTileManager = getContext()
                 .getClassFromGuice(SelectedTileManager.class);

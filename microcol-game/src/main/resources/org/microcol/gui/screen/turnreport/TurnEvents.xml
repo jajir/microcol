@@ -10,6 +10,7 @@
 	<entry key="faminePlagueColony">Famine in colony %s killed one %s. Final stocks: %s.</entry>
 	<entry key="famineWillPlagueColony">Famine is coming in colony %s. In next turn colonist will die.</entry>
 	<entry key="colonyWasDestroyed">Colony %s was destroyed.</entry>
+	<entry key="shipsLostWithColony">%s ship(s) and their cargo were lost with the colony.</entry>
 	<entry key="newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
 	<entry key="colonyWasLost">Colony %s was lost.</entry>
