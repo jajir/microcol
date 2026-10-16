@@ -46,6 +46,9 @@ public final class Goods {
         Preconditions.checkArgument(goodsType.equals(goods.getType()),
                 "Added goods have differet type (%s) from current one (%s)",
                 goods, this);
+        Preconditions.checkArgument(
+                goods.getAmount() <= Integer.MAX_VALUE - amount,
+                "Goods amount exceeds the representable limit");
         return new Goods(goodsType, amount + goods.getAmount());
     }
 

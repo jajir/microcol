@@ -143,6 +143,7 @@ public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
 
         // Drag corn from ship cargo slot to warehouse
         colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
+        DialogChooseGoodsAmount.of(getContext()).clickOnOk();
 
         // Verify that just 0 corn is in first cargo slot.
         colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
@@ -183,6 +184,7 @@ public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
 
         // Drag corn from ship cargo slot to warehouse.
         colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
+        DialogChooseGoodsAmount.of(getContext()).clickOnOk();
 
         // All 100 corn should reach the warehouse; the ship's slot should be
         // empty.

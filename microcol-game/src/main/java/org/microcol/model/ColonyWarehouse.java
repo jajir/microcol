@@ -48,6 +48,8 @@ public class ColonyWarehouse {
             final GoodsType type = entry.getKey();
             final Integer amount = entry.getValue();
             final Goods capacity = getStorageCapacity(type);
+            Preconditions.checkArgument(amount != null && amount >= 0,
+                    "Invalid stored amount for %s", type);
             Preconditions.checkArgument(amount <= capacity.getAmount(),
                     "Can't create warehouse with %s of %s goods because capacity is %s",
                     amount, type, capacity.getAmount());
@@ -228,7 +230,7 @@ public class ColonyWarehouse {
         Preconditions.checkNotNull(constructionType);
         if (GoodsType.BUYABLE_GOOD_TYPES.contains(goodsType)) {
             if (goodsType == GoodsType.CORN) {
-                return 200;
+                return Integer.MAX_VALUE;
             }
             if (constructionType.equals(ConstructionType.WAREHOUSE_BASIC)) {
                 return 100;

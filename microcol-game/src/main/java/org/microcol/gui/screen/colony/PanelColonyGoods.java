@@ -162,8 +162,9 @@ public final class PanelColonyGoods implements JavaFxComponent {
                 break;
             }
             try {
-                if (target.getUnloadableGoods(chosen, fromCargoSlot)
-                        .equals(chosen)) {
+                if (requested.equals(fromCargoSlot.getGoods().orElse(null))
+                        && target.getUnloadableGoods(chosen, fromCargoSlot)
+                                .equals(chosen)) {
                     target.moveToWarehouse(chosen, fromCargoSlot);
                     break;
                 }
@@ -190,9 +191,13 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private Goods adjustedAmount(final Goods originalAmount,
             final Goods available, final boolean specialOperationWasSelected) {
-        if (specialOperationWasSelected || !available.equals(originalAmount)) {
-            chooseGoods.init(available, available.equals(originalAmount) ? ""
-                    : i18n.get(ColonyMsg.unloadLimited, available.getAmount()));
+        if (specialOperationWasSelected || !available.equals(originalAmount)
+                || available.getType() == GoodsType.CORN) {
+            chooseGoods.init(available, available.getType() == GoodsType.CORN
+                    ? i18n.get(ColonyMsg.unloadFood, available.getAmount())
+                    : available.equals(originalAmount) ? ""
+                            : i18n.get(ColonyMsg.unloadLimited,
+                                    available.getAmount()));
             return chooseGoods.getActualValue();
         } else {
             return originalAmount;

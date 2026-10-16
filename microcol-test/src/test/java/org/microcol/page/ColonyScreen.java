@@ -227,6 +227,20 @@ public class ColonyScreen extends AbstractScreen {
                 .getGoods(expectedGoods.getType()).getAmount());
     }
 
+    public void verifyFoodAccounting(final int produced, final int consumed) {
+        final GoodsProductionStats food = colony.getGoodsStats()
+                .getStatsByType(GoodsType.CORN);
+        assertEquals(produced, food.getRowProduction());
+        assertEquals(consumed, food.getConsumed());
+    }
+
+    public void reduceCarrierCargoForStaleOffer(final int unitId,
+            final Goods amount) {
+        final org.microcol.model.unit.UnitWithCargo carrier = (org.microcol.model.unit.UnitWithCargo) getModel()
+                .getUnitById(unitId);
+        carrier.getCargo().getSlotByIndex(0).removeCargo(amount);
+    }
+
     public void verifyGoodsInShip(final int cargoSlotIndex,
             final Goods expectedGoods) {
         final List<Unit> ships = getModel().getUnitsAt(colony.getLocation())
@@ -236,6 +250,15 @@ public class ColonyScreen extends AbstractScreen {
         assertEquals(1, ships.size());
         new ShipWrapper((UnitGalleon) ships.get(0))
                 .verifyCargoGoods(cargoSlotIndex, expectedGoods);
+    }
+
+    public void verifyCarrierGoods(final int unitId, final int cargoSlotIndex,
+            final Goods expectedGoods) {
+        final org.microcol.model.unit.UnitWithCargo carrier = (org.microcol.model.unit.UnitWithCargo) getModel()
+                .getUnitById(unitId);
+        assertEquals(expectedGoods,
+                carrier.getCargo().getSlotByIndex(cargoSlotIndex).getGoods()
+                        .orElse(Goods.of(expectedGoods.getType())));
     }
 
     public void verifyColonyValid(final boolean expectedValid) {

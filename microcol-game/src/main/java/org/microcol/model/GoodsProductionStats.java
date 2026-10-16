@@ -121,7 +121,7 @@ public final class GoodsProductionStats {
      * @return the inWarehouseAfter
      */
     public int getInWarehouseAfter() {
-        return getInWarehouseBefore() + getNetProduction();
+        return Math.addExact(getInWarehouseBefore(), getNetProduction());
     }
 
     /**

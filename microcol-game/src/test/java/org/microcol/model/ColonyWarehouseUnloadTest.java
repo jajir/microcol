@@ -50,6 +50,38 @@ class ColonyWarehouseUnloadTest {
         assertEquals(Goods.of(GoodsType.TOBACCO, 100), source.getGoods().get());
     }
 
+    @Test
+    void foodAboveTwoHundredAcceptsExactCargoAndRejectsStaleSource() {
+        warehouse = new ColonyWarehouse(colony, Map.of("CORN", 190));
+        source = new CargoSlot(cargo, Goods.of(GoodsType.CORN, 30));
+        final Goods requested = Goods.of(GoodsType.CORN, 30);
+        assertEquals(requested,
+                warehouse.getUnloadableGoods(requested, source));
+        assertEquals(190, warehouse.getGoods(GoodsType.CORN).getAmount());
+
+        when(carrier.getOwner()).thenReturn(mock(Player.class));
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.moveToWarehouse(requested, source));
+        assertEquals(190, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertEquals(requested, source.getGoods().orElseThrow());
+        when(carrier.getOwner()).thenReturn(owner);
+
+        when(carrier.getLocation()).thenReturn(Location.of(21, 12));
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.moveToWarehouse(requested, source));
+        assertEquals(190, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertEquals(requested, source.getGoods().orElseThrow());
+
+        when(carrier.getLocation()).thenReturn(Location.of(22, 12));
+        source.removeCargo(Goods.of(GoodsType.CORN, 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.moveToWarehouse(requested, source));
+        assertEquals(190, warehouse.getGoods(GoodsType.CORN).getAmount());
+        warehouse.moveToWarehouse(Goods.of(GoodsType.CORN, 29), source);
+        assertEquals(219, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertTrue(source.isEmpty());
+    }
+
     static Stream<Arguments> warehouseBoundaries() {
         return GoodsType.BUYABLE_GOOD_TYPES.stream()
                 .filter(type -> type != GoodsType.CORN)

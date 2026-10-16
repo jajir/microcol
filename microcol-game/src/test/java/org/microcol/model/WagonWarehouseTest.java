@@ -136,6 +136,30 @@ class WagonWarehouseTest {
     }
 
     @Test
+    void wagonFoodImportCrossesGrowthThresholdAndSurvivesSave() {
+        source.empty();
+        source.addGoods(Goods.of(GoodsType.CORN, 30));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 190));
+        final String before = snapshot();
+        assertEquals(Goods.of(GoodsType.CORN, 30), colony.getWarehouse()
+                .getUnloadableGoods(Goods.of(GoodsType.CORN, 30), source));
+        assertEquals(before, snapshot());
+
+        colony.getWarehouse().moveToWarehouse(Goods.of(GoodsType.CORN, 30),
+                source);
+        assertEquals(220,
+                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+        assertTrue(source.isEmpty());
+        data.setModel(model.save());
+        final Model resumed = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(220, resumed.getColonyByName("Delft").orElseThrow()
+                .getWarehouse().getGoods(GoodsType.CORN).getAmount());
+        assertTrue(((UnitWithCargo) resumed.getUnitById(WAGON_ID)).getCargo()
+                .getSlotByIndex(0).isEmpty());
+    }
+
+    @Test
     void remoteForeignAndRemovedWagonsCannotSupplyTheColony() {
         assertEquals(List.of(wagon), colony.getUnitsInPort());
         wagon.placeToLocation(REMOTE);

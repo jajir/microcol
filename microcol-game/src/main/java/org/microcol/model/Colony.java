@@ -304,12 +304,15 @@ public class Colony {
             killOneRandomUnit();
             warehouse.setGoods(Goods.of(GoodsType.CORN, 0));
         } else {
-            if (cornStats
-                    .getInWarehouseAfter() >= FOOD_LEVEL_TO_FREE_COLONIST) {
-                produceNewColonist();
-                warehouse.setGoods(
-                        Goods.of(GoodsType.CORN, cornStats.getInWarehouseAfter()
-                                - FOOD_LEVEL_TO_FREE_COLONIST));
+            final int foodAfterConsumption = cornStats.getInWarehouseAfter();
+            if (foodAfterConsumption >= FOOD_LEVEL_TO_FREE_COLONIST) {
+                final int births = foodAfterConsumption
+                        / FOOD_LEVEL_TO_FREE_COLONIST;
+                warehouse.setGoods(Goods.of(GoodsType.CORN,
+                        foodAfterConsumption % FOOD_LEVEL_TO_FREE_COLONIST));
+                for (int index = 0; index < births; index++) {
+                    produceNewColonist();
+                }
             } else {
                 if (cornStats.getDiff() < 0) {
                     warehouse.removeGoods(

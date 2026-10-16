@@ -93,6 +93,16 @@ public class GoodsTest {
     }
 
     @Test
+    void foodAdditionRejectsUnrepresentableAmount() {
+        assertEquals(Integer.MAX_VALUE,
+                Goods.of(GoodsType.CORN, Integer.MAX_VALUE - 1)
+                        .add(Goods.of(GoodsType.CORN, 1)).getAmount());
+        assertThrows(IllegalArgumentException.class,
+                () -> Goods.of(GoodsType.CORN, Integer.MAX_VALUE)
+                        .add(Goods.of(GoodsType.CORN, 1)));
+    }
+
+    @Test
     void verify_that_different_goods_cant_be_add() throws Exception {
         final Goods corn1 = Goods.of(GoodsType.CORN, 34);
         final Goods corn2 = Goods.of(GoodsType.TOBACCO, 5);

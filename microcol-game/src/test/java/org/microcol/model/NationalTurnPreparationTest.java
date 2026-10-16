@@ -47,8 +47,9 @@ class NationalTurnPreparationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "199,199,0", "200,0,1", "201,1,1" })
-    void foodBoundaryCreatesAtMostOneOutsideColonistAndSurvivesResume(
+    @CsvSource({ "199,199,0", "200,0,1", "201,1,1", "399,199,1", "400,0,2",
+            "401,1,2" })
+    void foodBoundaryCreatesOutsideColonistsAndSurvivesResume(
             final int effectiveFood, final int remainingFood,
             final int births) {
         final GameModelPo data = fixture();
@@ -104,8 +105,8 @@ class NationalTurnPreparationTest {
                 before.getTurnEventStore().getForPlayer(updatedOwner).stream()
                         .filter(TurnEventNewUnitInColony.class::isInstance)
                         .count());
-        if (births == 1) {
-            final Unit newborn = before.getUnitById(highestId + 1);
+        for (int index = 1; index <= births; index++) {
+            final Unit newborn = before.getUnitById(highestId + index);
             assertSame(updatedOwner, newborn.getOwner());
             assertTrue(updated.getUnitsOutSideColony().contains(newborn));
             assertEquals(consumed, updated.getRequiredFoodPerTurn());
