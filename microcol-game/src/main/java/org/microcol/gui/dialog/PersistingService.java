@@ -136,6 +136,8 @@ public class PersistingService {
             gameController.writeModelToFile(targetFile);
         } catch (TurnPreparationException rejected) {
             gameModelController.showTurnPreparationUnavailable();
+        } catch (MicroColException failed) {
+            gameModelController.showRecoverySaveFailure();
         }
     }
 

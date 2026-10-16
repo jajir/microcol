@@ -10,10 +10,12 @@ public enum GameMenu implements MessageKeyResource {
     setupMapRivalExpedition, setupMapReference, setupNation, setupNationDutch,
     setupNationFrench, setupNationEnglish, setupNationSpanish, setupNationNote,
     setupNationReferenceNote, setupPlayerName, setupNameError, setupStart,
-    mainMenu, buttonContinue, buttonLoadSave, buttonPlayCampaign,
+    mainMenu, buttonContinue, buttonRecovery, recoveryTitle,
+    recoveryLatestPosition, recoveryLatestTurn, recoveryPreviousDecade,
+    recoveryMissing, recoveryCorrupt, buttonLoadSave, buttonPlayCampaign,
     buttonFreeGame, buttonExitMicroCol, buttonSetting, settingTitle, buttonBack,
     campaignTitle, settingLanguage, settingLanguageCz, settingLanguageEn,
-    settingShowGrid, settingShowFightAdvisor, settingVersion,
+    settingShowGrid, settingShowFightAdvisor, settingAutosave, settingVersion,
     campaignPanelButtonBack, campaignPanel_default_findNewWorld,
     campaignPanel_default_buildArmy, campaignPanel_default_thrive;
 

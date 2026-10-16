@@ -2923,3 +2923,50 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    checks: **18 passed**, zero failures/errors/skips. Shared formatter checked
    the one Java file with exact tokens and idempotence passing. Complete CI on
    the repaired revision is still required to establish stable acceptance.
+
+<a id="r-0068-recovery-checkpoints-2026-10-16"></a>
+## R-0068 separate recovery checkpoints — 2026-10-16
+
+1. The first bounded stage implements atomic sibling-temp replacement with no
+   destructive fallback, typed Latest position/Latest turn/Previous decade
+   paths and fresh-human-turn checkpoint policy. Focused execution passed
+   **18 checks**: checkpoint policy (3), atomic persistence (2) and retained
+   failed-load rejection (13), zero failures/errors/skips. The injected move
+   failure preserves prior destination bytes and removes the temporary file.
+2. Boundary coverage includes initial 1490, 1499→1500, later decades, seasonal
+   1609→1610 and later seasons, nonfresh resume, nonhuman turns and autosave off.
+   Main formatter checked six core Java files with token preservation and
+   idempotence passing. Menu/settings/listener integration remains under work;
+   this core result does not establish player-facing completion or publication.
+3. Integrated menu/settings/listener implementation passed the full model suite:
+   **1357 passed**, zero failures/errors/skips. The main review corrected the
+   menu-exit failure path to retain the active game, reused the shared dialog
+   controls, and required exact saved-state comparisons for both recovery slots.
+   Docker `run-bYWf42` executed 34 UI/support checks: **33 passed, one failed**,
+   zero errors/skips. All three new TC43 scenarios passed (both complete saved
+   states, no rewrite on resume/cancel, autosave off, corrupt retry and same
+   active game after failed menu save). TC24/39/42 and the source contract also
+   passed. TC37/04 still expected the historical shared autosave destination;
+   the fresh-turn contract now targets Latest turn. A targeted correction and
+   rerun were performed as recorded below.
+4. Docker `run-58IaxN` passed the corrected TC37 (7), TC43 including Czech
+   controls (4), and page contract (3): **14 passed**, zero failures/errors/skips.
+   Fresh turns write Latest turn; resumed/nonhuman notifications leave all
+   three slots untouched. Both saved-state comparisons, failed-write retention
+   and corrupt-load retry pass. Czech settings and recovery-chooser screenshots
+   were inspected: labels and controls are visible without overlap or clipping.
+   The main formatter checked 27 Java files with exact tokens and idempotence;
+   nine documentation checks and strict MkDocs passed. Full CI/publication remain
+   pending; whole UC-113 coverage is not claimed.
+
+### R-0063 Czech note regression follow-up — 2026-10-16
+
+1. Full run [38918709719](https://github.com/jajir/microcol/actions/runs/38918709719)
+   on `695d767e` completed with 196 UI/support checks: nine failures, no errors
+   or skips. Eight were the already corrected TC22/TC26 cases; TC34/02 still
+   expected the former preview-only Czech note. The assertion now checks the
+   intended fixed-scenario note, matching TC24 and the shipped translation.
+   Gameplay assertions remain unchanged. Docker `run-C5pjVe` passed all seven
+   TC34 scenarios and three page-contract checks: **10 passed**, zero
+   failures/errors/skips. Shared formatter checked the changed Java file with
+   exact-token preservation and idempotence. Full CI remains required.

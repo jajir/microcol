@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.setting;
 
 import org.microcol.gui.screen.menu.GameMenu;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
@@ -12,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -33,6 +35,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final SettingVolumeView settingVolumeView;
     private final SettingAnimationSpeedView settingAnimationSpeedView;
     private final SettingVersionView settingVersionView;
+    private final CheckBox autosaveCheckBox;
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
@@ -40,7 +43,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingShowFightAdvisorView settingShowFightAdvisorView,
             final SettingVolumeView settingVolumeView,
             final SettingAnimationSpeedView settingAnimationSpeedView,
-            final SettingVersionView settingVersionView, final I18n i18n) {
+            final SettingVersionView settingVersionView,
+            final GamePreferences gamePreferences, final I18n i18n) {
         this.settingLanguageView = Preconditions
                 .checkNotNull(settingLanguageView);
         this.settingShowGridView = Preconditions
@@ -52,6 +56,11 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
                 .checkNotNull(settingAnimationSpeedView);
         this.settingVersionView = Preconditions
                 .checkNotNull(settingVersionView);
+        autosaveCheckBox = new CheckBox();
+        autosaveCheckBox.setId("autosaveEnabled");
+        autosaveCheckBox.setSelected(gamePreferences.isAutosaveEnabled());
+        autosaveCheckBox.setOnAction(event -> gamePreferences
+                .setAutosaveEnabled(autosaveCheckBox.isSelected()));
 
         buttonBack = new Button();
         buttonBack.setId(BUTTON_BACK_ID);
@@ -61,6 +70,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingLanguageView.getContent());
         buttonsBox.getChildren().add(settingShowGridView.getContent());
         buttonsBox.getChildren().add(settingShowFightAdvisorView.getContent());
+        buttonsBox.getChildren().add(autosaveCheckBox);
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
         buttonsBox.getChildren().add(settingVersionView.getContent());
@@ -81,6 +91,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingLanguageView.updateLanguage(i18n);
         this.settingShowGridView.updateLanguage(i18n);
         this.settingShowFightAdvisorView.updateLanguage(i18n);
+        autosaveCheckBox.setText(i18n.get(GameMenu.settingAutosave));
         this.settingVolumeView.updateLanguage(i18n);
         this.settingAnimationSpeedView.updateLanguage(i18n);
         this.settingVersionView.updateLanguage(i18n);

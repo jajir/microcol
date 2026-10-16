@@ -18,6 +18,14 @@
 	<entry key="settingLanguageCz">Česky</entry>
 	<entry key="settingLanguageEn">Anglicky</entry>
 	<entry key="settingShowGrid">Zobrazit síť</entry>
+	<entry key="settingAutosave">Automaticky ukládat body obnovy tahů</entry>
+	<entry key="buttonRecovery">Body obnovy</entry>
+	<entry key="recoveryTitle">Vyberte bod obnovy</entry>
+	<entry key="recoveryLatestPosition">Poslední pozice</entry>
+	<entry key="recoveryLatestTurn">Poslední tah</entry>
+	<entry key="recoveryPreviousDecade">Předchozí desetiletí</entry>
+	<entry key="recoveryMissing">Nedostupné</entry>
+	<entry key="recoveryCorrupt">Datum není dostupné</entry>
 	<entry key="settingShowFightAdvisor">Použít náhled před bojem</entry>
 	<entry key="settingVersion">Verze: </entry>
 	<entry key="campaignPanelButtonBack">Zpět</entry>

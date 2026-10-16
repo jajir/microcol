@@ -50,6 +50,17 @@ public class SettingDaoTest extends AbstractPreferencesTest {
         assertEquals(settingOriginal, oSettingLoaded.get());
     }
 
+    @Test
+    public void autosave_choice_persists_and_old_setting_defaults_on()
+            throws Exception {
+        final Setting setting = new Setting();
+        assertTrue(setting.isAutosaveEnabled());
+        setting.setAutosaveEnabled(false);
+        settingDao.saveToFile(setting, SETTING_FILE);
+        assertEquals(false, settingDao.loadFromFile(SETTING_FILE).orElseThrow()
+                .isAutosaveEnabled());
+    }
+
     private void printOutStoredSetting() throws IOException {
         try (BufferedReader reader = Files.newReader(SETTING_FILE,
                 Charset.defaultCharset())) {

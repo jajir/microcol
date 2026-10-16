@@ -2,12 +2,14 @@ package org.microcol.model.campaign.po;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
@@ -41,11 +43,25 @@ import com.google.inject.Singleton;
 @Singleton
 public final class GameModelPoDao {
 
+    @FunctionalInterface
+    interface AtomicMove {
+        void move(Path source, Path target) throws IOException;
+    }
+
+    private final AtomicMove atomicMove;
+
     private Logger logger = LoggerFactory.getLogger(GameModelPoDao.class);
 
     private final Gson gson;
 
     public GameModelPoDao() {
+        this((source, target) -> Files.move(source, target,
+                StandardCopyOption.ATOMIC_MOVE,
+                StandardCopyOption.REPLACE_EXISTING));
+    }
+
+    GameModelPoDao(final AtomicMove atomicMove) {
+        this.atomicMove = Preconditions.checkNotNull(atomicMove);
         gson = new GsonBuilder()
                 .registerTypeAdapter(ConstructionType.class,
                         new GsonConstructionTypeAdapter())
@@ -119,11 +135,27 @@ public final class GameModelPoDao {
         if (logger.isTraceEnabled()) {
             logger.trace(str);
         }
-        try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-                new FileOutputStream(fileName), StandardCharsets.UTF_8);) {
-            outputStreamWriter.write(str);
+        final Path destination = new File(fileName).toPath().toAbsolutePath();
+        Path temporary = null;
+        try {
+            temporary = Files.createTempFile(destination.getParent(),
+                    destination.getFileName().toString() + ".", ".tmp");
+            try (final OutputStreamWriter writer = new OutputStreamWriter(
+                    Files.newOutputStream(temporary), StandardCharsets.UTF_8)) {
+                writer.write(str);
+            }
+            atomicMove.move(temporary, destination);
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
+        } finally {
+            if (temporary != null) {
+                try {
+                    Files.deleteIfExists(temporary);
+                } catch (IOException cleanupFailure) {
+                    logger.warn("Unable to remove unfinished save {}",
+                            temporary, cleanupFailure);
+                }
+            }
         }
     }
 

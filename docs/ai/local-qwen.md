@@ -3190,3 +3190,17 @@ committed for this experiment.
     old 10×10 test fixture. Correcting that fixture yielded 1351 passing model
     checks and 24 passing selected UI/support checks. No acceptance checks were
     omitted to save tokens.
+
+12. R-0068 uses the same Sol low worker in `2026-10-16-r68`, based on
+    `188755b1`, with two bounded stages: atomic persistence/checkpoint policy,
+    then menu/settings/listener integration and UI scenarios. Main reviewed
+    and executed the first-stage checks (18 passing), and requested FX-thread
+    dispatch for save-failure feedback before continuing integration. Actual
+    verification is recorded in the [R-0068 evidence](../functional-tests.md#r-0068-recovery-checkpoints-2026-10-16).
+
+    Main review also corrected failed menu-exit handling to preserve the active
+    game, required full saved-state comparisons for both slots, and added Czech
+    visual checks. The first integrated UI run exposed TC37's stale single-file
+    expectation; this targeted test repair was returned to the same Sol low
+    worker. Full model checks passed 1357; actual UI results remain in the
+    linked evidence, without an unmeasured token-saving claim.

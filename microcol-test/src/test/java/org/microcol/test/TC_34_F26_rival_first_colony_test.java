@@ -75,7 +75,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).openFreePlaySetup();
         setup.verifySelectedMap(2, "Soupeřova výprava");
         setup.verifySetupLanguage("Začít hru",
-                "Pouze náhled. Hrát budete za Nizozemsko.");
+                "V tomto scénáři hrajete za Nizozemsko.");
         setup.enterName("Jiří");
         setup.captureDialog("freePlaySetup", "rival-expedition-czech.png");
         setup.startWithEnter();

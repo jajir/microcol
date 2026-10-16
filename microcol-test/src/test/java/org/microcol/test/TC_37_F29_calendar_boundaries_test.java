@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
+import org.microcol.model.campaign.po.RecoverySlot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -25,6 +26,10 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractMicroColTest {
     private void start(final Stage stage) throws Exception {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
                 ".microcol", "autosave.microcol"));
+        Files.deleteIfExists(Path.of(System.getProperty("user.home"),
+                ".microcol", "latest-turn.microcol"));
+        Files.deleteIfExists(Path.of(System.getProperty("user.home"),
+                ".microcol", "previous-decade.microcol"));
         initialize(stage, getClass(), FIXTURE);
     }
 
@@ -91,49 +96,62 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_04_fresh_human_turn_writes_recovery() throws Exception {
-        // Load without a recovery file, then observe the actual turn
-        // notification.
+        // A fresh human turn writes Latest turn without changing Latest
+        // position or creating a decade point in 1599.
         WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.deliverTurnStartedNotification(true, true);
-        audit.verifyAutosaveExists(true);
+        audit.verifyRecoveryTurn(RecoverySlot.LATEST_TURN, 109);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }
 
     @Test
     @Tag("local")
     void TC_05_resumed_human_turn_does_not_write_recovery() throws Exception {
-        // Load without a recovery file, then observe the actual turn
-        // notification.
+        // A resumed human turn leaves all recovery slots unchanged.
         WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.deliverTurnStartedNotification(false, true);
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }
 
     @Test
     @Tag("local")
     void TC_06_fresh_computer_turn_does_not_write_recovery() throws Exception {
-        // Load without a recovery file, then observe the actual turn
-        // notification.
+        // A fresh computer turn leaves all recovery slots unchanged.
         WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.deliverTurnStartedNotification(true, false);
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }
 
     @Test
     @Tag("local")
     void TC_07_resumed_computer_turn_does_not_write_recovery()
             throws Exception {
-        // Load without a recovery file, then observe the actual turn
-        // notification.
+        // A resumed computer turn leaves all recovery slots unchanged.
         WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.deliverTurnStartedNotification(false, false);
-        audit.verifyAutosaveExists(false);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }
 }

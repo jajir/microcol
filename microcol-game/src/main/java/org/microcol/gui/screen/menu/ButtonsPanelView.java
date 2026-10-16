@@ -20,6 +20,8 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_CONTINUE_ID = "buttonContinue";
 
+    public static final String BUTTON_RECOVERY_ID = "buttonRecovery";
+
     public static final String BUTTON_LOAD_ID = "buttonLoad";
 
     public static final String BUTTON_PLAY_CAMPAIGN_ID = "buttonCampaign";
@@ -29,6 +31,8 @@ public final class ButtonsPanelView
     public static final String BUTTON_EXIT_ID = "buttonExit";
 
     private final Button buttonContinue = new Button();
+
+    private final Button buttonRecovery = new Button();
 
     private final Button buttonLoad = new Button();
 
@@ -45,6 +49,7 @@ public final class ButtonsPanelView
     @Inject
     ButtonsPanelView() {
         buttonContinue.setId(BUTTON_CONTINUE_ID);
+        buttonRecovery.setId(BUTTON_RECOVERY_ID);
         buttonLoad.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
@@ -52,6 +57,7 @@ public final class ButtonsPanelView
         buttonExitMicroCol.setId(BUTTON_EXIT_ID);
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);
+        buttonsBox.getChildren().add(buttonRecovery);
         buttonsBox.getChildren().add(buttonLoad);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
@@ -70,6 +76,7 @@ public final class ButtonsPanelView
     @Override
     public void updateLanguage(final I18n i18n) {
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
+        buttonRecovery.setText(i18n.get(GameMenu.buttonRecovery));
         buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
@@ -91,6 +98,10 @@ public final class ButtonsPanelView
      */
     public Button getButtonContinue() {
         return buttonContinue;
+    }
+
+    public Button getButtonRecovery() {
+        return buttonRecovery;
     }
 
     /**

@@ -12,6 +12,8 @@ import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
@@ -147,6 +149,21 @@ public final class GameModelDao {
 
     public void saveToFile(final String fileName, final GameModel gameMode) {
         gameModelPoDao.saveToFile(fileName, gameMode.getModelPo());
+    }
+
+    public void saveRecoverySlots(final GameModel game,
+            final PersistingTool paths, final List<RecoverySlot> slots) {
+        Preconditions.checkNotNull(game);
+        Preconditions.checkNotNull(paths);
+        Preconditions.checkNotNull(slots);
+        if (slots.isEmpty()) {
+            return;
+        }
+        final GameModelPo snapshot = game.getModelPo();
+        for (final RecoverySlot slot : slots) {
+            gameModelPoDao.saveToFile(
+                    paths.getRecoveryFile(slot).getAbsolutePath(), snapshot);
+        }
     }
 
 }

@@ -18,6 +18,14 @@
 	<entry key="settingLanguageCz">Czech</entry>
 	<entry key="settingLanguageEn">English</entry>
 	<entry key="settingShowGrid">Show Grid</entry>
+	<entry key="settingAutosave">Save turn recovery points automatically</entry>
+	<entry key="buttonRecovery">Recovery points</entry>
+	<entry key="recoveryTitle">Choose a recovery point</entry>
+	<entry key="recoveryLatestPosition">Latest position</entry>
+	<entry key="recoveryLatestTurn">Latest turn</entry>
+	<entry key="recoveryPreviousDecade">Previous decade</entry>
+	<entry key="recoveryMissing">Unavailable</entry>
+	<entry key="recoveryCorrupt">Date unavailable</entry>
 	<entry key="settingShowFightAdvisor">Use Fight Advisor</entry>
 	<entry key="settingVersion">Version: </entry>
 	

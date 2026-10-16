@@ -30,6 +30,8 @@ public class Setting {
 
     private boolean showFightAdvisor;
 
+    private Boolean autosaveEnabled;
+
     private String version;
 
     private String gameInProgressSaveFile;
@@ -38,7 +40,7 @@ public class Setting {
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
                 volume, animationSpeed, showGrid, showFightAdvisor, version,
-                gameInProgressSaveFile);
+                gameInProgressSaveFile, autosaveEnabled);
     }
 
     @Override
@@ -57,6 +59,7 @@ public class Setting {
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
                 && Objects.equal(this.showGrid, other.showGrid)
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
+                && Objects.equal(this.autosaveEnabled, other.autosaveEnabled)
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.gameInProgressSaveFile,
                         other.gameInProgressSaveFile);
@@ -71,7 +74,7 @@ public class Setting {
                 .add("volume", volume).add("animationSpeed", animationSpeed)
                 .add("showGrid", showGrid)
                 .add("showFightAdvisor", showFightAdvisor)
-                .add("version", version)
+                .add("autosaveEnabled", autosaveEnabled).add("version", version)
                 .add("gameInProgressSaveFile", gameInProgressSaveFile)
                 .toString();
     }
@@ -130,6 +133,14 @@ public class Setting {
 
     public void setShowFightAdvisor(boolean showFightAdvisor) {
         this.showFightAdvisor = showFightAdvisor;
+    }
+
+    public boolean isAutosaveEnabled() {
+        return autosaveEnabled == null || autosaveEnabled;
+    }
+
+    public void setAutosaveEnabled(final boolean enabled) {
+        autosaveEnabled = enabled;
     }
 
     public String getGameInProgressSaveFile() {

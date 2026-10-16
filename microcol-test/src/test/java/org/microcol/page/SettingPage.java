@@ -26,4 +26,31 @@ public class SettingPage extends AbstractMenuScreen {
         clickOnButtonWithId(SettingLanguageView.RB_ENGLISH_ID);
     }
 
+    public void setAutosaveEnabled(final boolean enabled) {
+        final javafx.scene.control.CheckBox check = getNodeFinder()
+                .lookup("#autosaveEnabled")
+                .queryAs(javafx.scene.control.CheckBox.class);
+        if (check.isSelected() != enabled) {
+            getRobot().clickOn(check);
+            org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    public void verifyAutosaveEnabled(final boolean expected) {
+        final javafx.scene.control.CheckBox check = getNodeFinder()
+                .lookup("#autosaveEnabled")
+                .queryAs(javafx.scene.control.CheckBox.class);
+        org.junit.jupiter.api.Assertions.assertEquals(expected,
+                check.isSelected());
+        org.junit.jupiter.api.Assertions.assertEquals(expected,
+                getContext().getClassFromGuice(
+                        org.microcol.gui.preferences.GamePreferences.class)
+                        .isAutosaveEnabled());
+    }
+
+    public void verifyAutosaveLabel(final String expected) {
+        org.junit.jupiter.api.Assertions.assertEquals(expected,
+                getLabeledById("autosaveEnabled").getText());
+    }
+
 }

@@ -157,6 +157,14 @@ public class GamePreferences {
         return settingService.load().isShowGrid();
     }
 
+    public void setAutosaveEnabled(final boolean enabled) {
+        settingService.update(setting -> setting.setAutosaveEnabled(enabled));
+    }
+
+    public boolean isAutosaveEnabled() {
+        return settingService.load().isAutosaveEnabled();
+    }
+
     public void setGameInProgressSaveFile(final String gameInProgressSaveFile) {
         settingService.update(setting -> setting
                 .setGameInProgressSaveFile(gameInProgressSaveFile));

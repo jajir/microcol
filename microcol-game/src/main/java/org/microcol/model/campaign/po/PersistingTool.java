@@ -25,8 +25,6 @@ public class PersistingTool {
 
     private final static String EXTENSION = "." + SAVE_FILE_EXTENSION;
 
-    private final static String AUTOSAVE_FILE_NAME = "autosave.microcol";
-
     @Inject
     public PersistingTool() {
     }
@@ -56,7 +54,12 @@ public class PersistingTool {
     }
 
     public File getAutoSaveFile() {
-        return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME)
+        return getRecoveryFile(RecoverySlot.LATEST_POSITION);
+    }
+
+    public File getRecoveryFile(final RecoverySlot slot) {
+        return getRootSaveDirectory().toPath()
+                .resolve(Preconditions.checkNotNull(slot).getFileName())
                 .toFile();
     }
 

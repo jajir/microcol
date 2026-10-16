@@ -204,6 +204,13 @@ public class GameModelController {
         message.showAndWait();
     }
 
+    public void showRecoverySaveFailure() {
+        final DialogMessage message = passengerMessage.get();
+        message.setTitle(i18n.get(Dialog.recoverySave_title));
+        message.setText(i18n.get(Dialog.recoverySave_failed));
+        message.showAndWait();
+    }
+
     public void showTurnPreparationUnavailable() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.turnPreparation_title));

@@ -2,6 +2,7 @@ package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.model.TurnPreparationException;
+import org.microcol.model.MicroColException;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.campaign.po.PersistingTool;
@@ -53,6 +54,9 @@ public final class ExitGameListener {
                 gamePreferences.setGameInProgressSaveFile("true");
             } catch (TurnPreparationException rejected) {
                 incompleteTurn = true;
+            } catch (MicroColException failed) {
+                gameModelController.showRecoverySaveFailure();
+                return;
             }
         }
         eventBus.post(new ShowScreenEvent(Screen.MENU));

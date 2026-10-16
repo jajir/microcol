@@ -16,6 +16,7 @@ import org.microcol.model.PlaceEuropePier;
 import org.microcol.model.PlaceCargoSlot;
 import org.microcol.model.Unit;
 import org.microcol.model.Colony;
+import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.testfx.util.WaitForAsyncUtils;
@@ -154,6 +155,169 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public GamePage continueGame() {
         clickOnButtonWithId("buttonContinue");
         return GamePage.of(getContext());
+    }
+
+    public void openRecoveryChooser() {
+        clickOnButtonWithId("buttonRecovery");
+    }
+
+    public void verifyRecoveryMenuLabel(final String expected) {
+        assertEquals(expected, getLabeledById("buttonRecovery").getText());
+    }
+
+    public void verifyRecoveryChooserLabels(final String title,
+            final String load, final String cancel) {
+        assertEquals(title,
+                getNodeFinder().lookup(title).queryAs(Label.class).getText());
+        assertEquals(load, getLabeledById("recoveryLoad").getText());
+        assertEquals(cancel, getLabeledById("recoveryCancel").getText());
+    }
+
+    private java.util.Map<RecoverySlot, byte[]> recoveryBytes;
+
+    public void rememberRecoveryBytes() throws Exception {
+        recoveryBytes = new java.util.EnumMap<>(RecoverySlot.class);
+        for (RecoverySlot slot : RecoverySlot.values()) {
+            final File file = getContext()
+                    .getClassFromGuice(PersistingTool.class)
+                    .getRecoveryFile(slot);
+            if (file.isFile()) {
+                recoveryBytes.put(slot, Files.readAllBytes(file.toPath()));
+            }
+        }
+    }
+
+    public void verifyRecoveryBytesUnchanged() throws Exception {
+        for (var entry : recoveryBytes.entrySet()) {
+            final File file = getContext()
+                    .getClassFromGuice(PersistingTool.class)
+                    .getRecoveryFile(entry.getKey());
+            assertArrayEquals(entry.getValue(),
+                    Files.readAllBytes(file.toPath()));
+        }
+    }
+
+    public void verifyRecoveryOption(final RecoverySlot slot,
+            final boolean available, final String date) {
+        final javafx.scene.control.RadioButton option = getNodeFinder()
+                .lookup("#recovery" + slot.name())
+                .queryAs(javafx.scene.control.RadioButton.class);
+        assertEquals(available, !option.isDisabled());
+        assertTrue(option.getText().contains(date), option.getText());
+        if (available) {
+            final java.io.File file = getContext()
+                    .getClassFromGuice(PersistingTool.class)
+                    .getRecoveryFile(slot);
+            final String modified = java.time.format.DateTimeFormatter
+                    .ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
+                    .withLocale(getContext()
+                            .getClassFromGuice(org.microcol.i18n.I18n.class)
+                            .getCurrentLocale())
+                    .format(file.toPath().toFile().lastModified() > 0
+                            ? java.time.Instant
+                                    .ofEpochMilli(file.lastModified())
+                                    .atZone(java.time.ZoneId.systemDefault())
+                            : java.time.Instant.EPOCH
+                                    .atZone(java.time.ZoneId.systemDefault()));
+            assertTrue(option.getText().contains(modified), option.getText());
+        }
+    }
+
+    public void chooseRecovery(final RecoverySlot slot) {
+        getRobot().clickOn("#recovery" + slot.name());
+        clickOnButtonWithId("recoveryLoad");
+    }
+
+    public void cancelRecovery() {
+        clickOnButtonWithId("recoveryCancel");
+    }
+
+    public void verifyRecoveryTurn(final RecoverySlot slot,
+            final int expectedTurn) {
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final org.microcol.model.campaign.po.GameModelPo saved = new org.microcol.model.campaign.po.GameModelPoDao()
+                .loadFromFile(file);
+        assertEquals(expectedTurn,
+                saved.getModel().getCalendar().getNumberOfPlayedTurns());
+    }
+
+    public void verifyLoadedRecoveryMatchesSlot(final RecoverySlot slot)
+            throws Exception {
+        final File source = getContext().getClassFromGuice(PersistingTool.class)
+                .getRecoveryFile(slot);
+        final var files = new org.microcol.model.campaign.po.GameModelPoDao();
+        final var expected = files.loadFromFile(source);
+        final java.nio.file.Path actualFile = Files
+                .createTempFile("restored-recovery-", ".microcol");
+        try {
+            getContext()
+                    .getClassFromGuice(
+                            org.microcol.model.campaign.GameModelDao.class)
+                    .saveToFile(actualFile.toString(),
+                            getContext().getClassFromGuice(
+                                    org.microcol.gui.event.model.GameModelController.class)
+                                    .getGameModel());
+            final var actual = files.loadFromFile(actualFile.toFile());
+            final var gson = new com.google.gson.Gson();
+            assertEquals(gson.toJsonTree(expected), gson.toJsonTree(actual));
+        } finally {
+            Files.deleteIfExists(actualFile);
+        }
+    }
+
+    public void verifyRecoveryAbsent(final RecoverySlot slot) {
+        assertFalse(getContext().getClassFromGuice(PersistingTool.class)
+                .getRecoveryFile(slot).exists());
+    }
+
+    public void verifyCurrentTurn(final int expectedTurn) {
+        assertEquals(expectedTurn,
+                getModel().getCalendar().getNumberOfPlayedTurns());
+    }
+
+    public void corruptRecovery(final RecoverySlot slot) throws Exception {
+        java.nio.file.Files.writeString(
+                getContext().getClassFromGuice(PersistingTool.class)
+                        .getRecoveryFile(slot).toPath(),
+                "{");
+    }
+
+    public void obstructLatestPositionSave() throws Exception {
+        java.nio.file.Files.createDirectory(getContext()
+                .getClassFromGuice(PersistingTool.class)
+                .getRecoveryFile(RecoverySlot.LATEST_POSITION).toPath());
+    }
+
+    public void removeLatestPositionObstruction() throws Exception {
+        java.nio.file.Files.delete(getContext()
+                .getClassFromGuice(PersistingTool.class)
+                .getRecoveryFile(RecoverySlot.LATEST_POSITION).toPath());
+    }
+
+    public void attemptExitToMenu() {
+        clickOnButtonWithId("exit");
+    }
+
+    private org.microcol.model.campaign.GameModel activeGameBeforeSaveFailure;
+    private com.google.gson.JsonElement stateBeforeSaveFailure;
+
+    public void rememberActiveGameBeforeSaveFailure() {
+        activeGameBeforeSaveFailure = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel();
+        stateBeforeSaveFailure = new com.google.gson.Gson()
+                .toJsonTree(activeGameBeforeSaveFailure.getModel().save());
+    }
+
+    public void verifyActiveGameUnchangedAfterSaveFailure() {
+        assertSame(activeGameBeforeSaveFailure,
+                getContext().getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                        .getGameModel());
+        assertEquals(stateBeforeSaveFailure,
+                new com.google.gson.Gson().toJsonTree(getModel().save()));
     }
 
     public void chooseLoadFile(final File file) {

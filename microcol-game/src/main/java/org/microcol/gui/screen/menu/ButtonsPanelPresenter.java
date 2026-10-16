@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.dialog.PersistingService;
+import org.microcol.gui.dialog.RecoveryDialog;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
@@ -36,13 +37,16 @@ public final class ButtonsPanelPresenter {
 
     private final EventBus eventBus;
 
+    private final RecoveryDialog recoveryDialog;
+
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final PersistingService persistingService,
             final GamePreferences gamePreferences,
             final PersistingTool persistingTool,
             final GameController gameController,
-            final SecretOption secretOption, final EventBus eventBus) {
+            final SecretOption secretOption, final EventBus eventBus,
+            final RecoveryDialog recoveryDialog) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingService = Preconditions.checkNotNull(persistingService);
@@ -50,7 +54,9 @@ public final class ButtonsPanelPresenter {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.secretOption = Preconditions.checkNotNull(secretOption);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.recoveryDialog = Preconditions.checkNotNull(recoveryDialog);
         view.getButtonContinue().setOnAction(this::onGameContinue);
+        view.getButtonRecovery().setOnAction(this::onRecovery);
         view.getButtonLoad().setOnAction(this::onLoadWasPressed);
         view.getButtonPlayCampaign().setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
@@ -78,6 +84,15 @@ public final class ButtonsPanelPresenter {
                 .loadModelFromFile(persistingTool.getAutoSaveFile())) {
             eventBus.post(new ShowScreenEvent(Screen.GAME));
         }
+    }
+
+    private void onRecovery(final ActionEvent actionEvent) {
+        recoveryDialog.choose().ifPresent(slot -> {
+            if (gameController
+                    .loadModelFromFile(persistingTool.getRecoveryFile(slot))) {
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+            }
+        });
     }
 
     public void refresh() {

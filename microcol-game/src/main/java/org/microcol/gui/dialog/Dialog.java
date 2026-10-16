@@ -15,6 +15,7 @@ public enum Dialog implements MessageKeyResource {
     colonyWasCaptured_text2, about_caption, about_version, saveGame_title,
     loadGame_title, loadGame_invalid, buildingQueueDialog_caption,
     passenger_title, passenger_destination, passenger_hold, passenger_confirm,
-    passenger_unavailable, turnPreparation_title, turnPreparation_unavailable;
+    passenger_unavailable, turnPreparation_title, turnPreparation_unavailable,
+    recoverySave_title, recoverySave_failed;
 
 }

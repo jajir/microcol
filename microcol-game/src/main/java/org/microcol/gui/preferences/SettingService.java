@@ -158,6 +158,7 @@ public class SettingService {
         out.setAnimationSpeed(GamePreferences.DEFAULT_ANIMATION_SPEED);
         out.setShowGrid(GamePreferences.DEFAULT_SHOW_GRID);
         out.setShowFightAdvisor(GamePreferences.DEFAULT_SHOW_FIGHT_ADVISOR);
+        out.setAutosaveEnabled(true);
         out.setVersion(Setting.CURRENT_VERSION);
         out.setLocale(Locale.getDefault());
         return out;

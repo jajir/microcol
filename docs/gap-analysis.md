@@ -976,6 +976,11 @@ rules; implementation and acceptance are tracked by that requirement.
    start is not a previous-decade checkpoint. Keep one file per checkpoint,
    atomically replacing only its own prior valid file. Autosave off suppresses
    the turn/decade writes; retain the separately agreed menu recovery behavior.
+   The persisted setting defaults to on. Inspection/cancel never writes a slot;
+   retain its prior valid snapshot even after starting another game and show its
+   actual game date and file modification time. A failed menu-exit write reports
+   failure and keeps the current game playable for retry (R-0068 refinement,
+   2026-10-16).
 2. Use existing map/colony/Europe/report navigation and shared controls. Advisors
    use labeled tables, numerical values and text alongside color. Support under
    50% is labeled Tory majority, exactly 50% Balanced, above 50% Rebel majority;
