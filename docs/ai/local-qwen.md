@@ -3157,3 +3157,12 @@ committed for this experiment.
    Main corrected its UI helper type and a misspelled test selector. Results are
    in the [R-0066 evidence](../functional-tests.md#r-0066-reference-expeditions-2026-10-16).
    No measured quota saving is claimed.
+
+9. R-0063 reused one Sol low worker in isolated `2026-10-16-r63` based on
+   `d407a393`. It owned the nation plumbing and focused model/UI tests; main
+   retained architecture review, documentation, formatter and actual execution.
+   The first test build used an unavailable Mockito method, returned as a
+   targeted compatibility repair. Its next fixture tried to mock a final DAO;
+   the targeted retry used the real DAO, preserving production boundaries.
+   Main review kept AI-turn evolution separate from initial-roster assertions.
+   See [actual results](../functional-tests.md#r-0063-nation-selection-2026-10-16).

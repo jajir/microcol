@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -22,8 +23,8 @@ public final class FreePlaySetupPage extends AbstractScreen {
         select("freePlayMap", index);
     }
 
-    public void selectNationPreview(final int index) {
-        select("freePlayNation", index);
+    public void selectNation(final EuropeanNation nation) {
+        select("freePlayNation", nation.ordinal());
     }
 
     public void selectDifficulty(final Difficulty difficulty) {
@@ -132,8 +133,19 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertEquals(4, map.getItems().size());
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
-        assertEquals("Preview only. You will play as the Netherlands.",
+        assertEquals("This scenario is fixed to the Netherlands.",
                 getLabeledById("freePlayNationNote").getText());
+        verifyNationSelection(EuropeanNation.DUTCH, false);
+    }
+
+    public void verifyNationSelection(final EuropeanNation expected,
+            final boolean enabled) {
+        final ChoiceBox<?> nation = getNodeFinder().lookup("#freePlayNation")
+                .queryAs(ChoiceBox.class);
+        assertEquals(4, nation.getItems().size());
+        assertEquals(expected.ordinal(),
+                nation.getSelectionModel().getSelectedIndex());
+        assertEquals(enabled, !nation.isDisabled());
     }
 
     public void verifySelectedMap(final int expectedIndex,
@@ -158,9 +170,10 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 getLabeledById("freePlayNameError").getText().isEmpty());
     }
 
-    public void verifyReferenceExpedition(final String playerName,
-            final int gold) throws Exception {
-        final Player human = getModel().getPlayerByName("Dutch");
+    public void verifyReferenceExpedition(final EuropeanNation selected,
+            final String playerName, final int gold) throws Exception {
+        final Player human = getModel()
+                .getPlayerByName(selected.getPlayerName());
         WaitForAsyncUtils.waitFor(15, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().isGameRunning()
                         && getModel().getCurrentPlayer() == human);
@@ -191,32 +204,45 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 }
             }
         }
-        org.microcol.model.unit.Ship ship = (org.microcol.model.unit.Ship) human
-                .getAllUnits().stream().filter(org.microcol.model.Unit::isShip)
-                .findFirst().orElseThrow();
-        assertSame(org.microcol.model.UnitType.MERCHANTMAN, ship.getType());
-        assertEquals(4, ship.getCargo().getSlots().size());
-        assertEquals(TerrainType.HIGH_SEA,
-                getModel().getMap().getTerrainTypeAt(ship.getLocation()));
-        java.util.List<org.microcol.model.unit.UnitFreeColonist> passengers = ship
-                .getCargo().getSlots().stream()
-                .flatMap(slot -> slot.getUnit().stream())
-                .map(org.microcol.model.unit.UnitFreeColonist.class::cast)
-                .collect(java.util.stream.Collectors.toList());
-        assertEquals(2, passengers.size());
-        assertEquals(1,
-                passengers.stream().filter(
-                        org.microcol.model.unit.UnitFreeColonist::isHoldingGuns)
-                        .count());
-        assertEquals(1, passengers.stream()
-                .filter(unit -> unit.getTools() == 100).count());
-        for (org.microcol.model.unit.UnitFreeColonist unit : passengers) {
-            assertSame(human, unit.getOwner());
-            assertSame(org.microcol.model.UnitType.COLONIST, unit.getType());
-            assertFalse(unit.isMounted());
+        for (final EuropeanNation nation : EuropeanNation.values()) {
+            final Player participant = getModel()
+                    .getPlayerByName(nation.getPlayerName());
+            if (nation != selected) {
+                continue;
+            }
+            final org.microcol.model.unit.Ship ship = (org.microcol.model.unit.Ship) participant
+                    .getAllUnits().stream()
+                    .filter(org.microcol.model.Unit::isShip).findFirst()
+                    .orElseThrow();
+            assertSame(
+                    nation == EuropeanNation.DUTCH
+                            ? org.microcol.model.UnitType.MERCHANTMAN
+                            : org.microcol.model.UnitType.CARAVEL,
+                    ship.getType());
+            assertEquals(ship.getType().getCargoCapacity(),
+                    ship.getCargo().getSlots().size());
+            assertEquals(TerrainType.HIGH_SEA,
+                    getModel().getMap().getTerrainTypeAt(ship.getLocation()));
+            final java.util.List<org.microcol.model.unit.UnitFreeColonist> passengers = ship
+                    .getCargo().getSlots().stream()
+                    .flatMap(slot -> slot.getUnit().stream())
+                    .map(org.microcol.model.unit.UnitFreeColonist.class::cast)
+                    .collect(java.util.stream.Collectors.toList());
+            assertEquals(2, passengers.size());
+            assertEquals(1, passengers.stream().filter(
+                    org.microcol.model.unit.UnitFreeColonist::isHoldingGuns)
+                    .count());
+            assertEquals(1, passengers.stream()
+                    .filter(unit -> unit.getTools() == 100).count());
+            for (final org.microcol.model.unit.UnitFreeColonist unit : passengers) {
+                assertSame(participant, unit.getOwner());
+                assertSame(org.microcol.model.UnitType.COLONIST,
+                        unit.getType());
+                assertFalse(unit.isMounted());
+            }
+            assertTrue(ship.getCargo().getSlots().stream()
+                    .noneMatch(slot -> slot.isLoadedGood()));
         }
-        assertTrue(ship.getCargo().getSlots().stream()
-                .noneMatch(slot -> slot.isLoadedGood()));
     }
 
     public java.util.List<Integer> referenceUnitIds() {

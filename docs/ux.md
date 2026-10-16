@@ -292,9 +292,9 @@ Tento popis není záznam uživatelské studie.
 
 Volba mapy obsahuje samostatné „Výpravy čtyř národů“ vedle tří autorských
 scénářů. Start sestaví čerstvou partii na známém terénu se čtyřmi výpravami;
-obtížnost určuje jejich počáteční zlato. Hráč zatím ovládá Nizozemsko, jak
-uvádí existující upozornění u národa. Zpět zachová rozehranou i uloženou hru,
-Pokračovat obnoví identity a vybavení výprav. Generování terénu a skutečný
-výběr národa mají vlastní požadavky. Automatizované ověření je v
+obtížnost určuje jejich počáteční zlato. R-0063 zpřístupňuje volbu všech čtyř národů
+u referenčního profilu. U autorských scénářů je národ zamčený na Nizozemsko
+a vysvětlený poznámkou; přepnutí zpět na scénář volbu národa resetuje. Zpět zachová rozehranou i uloženou hru,
+Pokračovat obnoví identity a vybavení výprav. Generování terénu má vlastní požadavek. Automatizované ověření je v
 [evidenci R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16);
 nejde o uživatelskou studii.

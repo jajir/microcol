@@ -6,6 +6,7 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.campaign.FreePlayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +51,8 @@ public final class ApplicationController {
     }
 
     public void startNewFreeGame(final FreePlayMap map, final String playerName,
-            final Difficulty difficulty) {
-        gameController.startFreePlay(map, playerName, difficulty);
+            final Difficulty difficulty, final EuropeanNation nation) {
+        gameController.startFreePlay(map, playerName, difficulty, nation);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 

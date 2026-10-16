@@ -2804,3 +2804,33 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    existing nation-preview notice fit, with Start/Back visible.
 5. Full CI and publication remain pending. This is local implementation evidence,
    not completed acceptance.
+
+<a id="r-0063-nation-selection-2026-10-16"></a>
+## R-0063 actual nation selection — 2026-10-16
+
+1. The reference setup passes the selected `EuropeanNation` through the normal
+   application/game controllers into the fresh expedition factory. Authored
+   scenarios retain their existing Dutch identity; the disabled selector and
+   English/Czech note explain that restriction. The DAO rejects incompatible
+   authored requests and null setup inputs before reading a scenario.
+2. TC24 retains the original authored-world paths and extends reference
+   Start/Continue to all four nations, independent player name, exact human
+   equipment, ownership and saved unit identities. Map switching resets the
+   fixed scenario to Dutch; canceling a nation draft preserves the saved game.
+   The R-0066 model matrix remains the all-20-profile initial-state check.
+3. The first model/Docker attempts failed to compile the new boundary test:
+   `verifyNoInteractions` is unavailable in the repository's Mockito version.
+   This worker test error was returned for targeted repair without changing
+   dependencies. No tests from these failed attempts count as passed.
+4. The retry exposed an unsupported mock of final `GameModelPoDao`; the worker
+   replaced it with the real DAO and observable boundary assertions. Final full
+   model verification passed **1342 tests**, zero failures/errors/skips. Docker
+   `run-unKRlD` passed all 11 TC24 scenarios plus three page-contract checks:
+   **14 passed**, zero failures/errors/skips; TC24/10 cycles all four nations.
+   The selected UI check does not freeze AI ship positions after their turns;
+   the human expedition is exact, all ownership remains checked, and the model
+   matrix verifies every initial expedition before turns.
+5. The shared formatter checked eight Java files with exact-token preservation
+   and idempotence passing. Nine documentation tests and strict MkDocs passed.
+   The Czech reference setup screenshot shows the real nation label/note and
+   unobscured Start/Back controls. Full CI and publication remain pending.

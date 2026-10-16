@@ -108,8 +108,10 @@ zdrojového scénáře. Před sestavením ověří čtyři odlišné východní 
 s vodní cestou k pobřeží. Vlastnictví, vybavení, náklad a mírové vztahy používají
 běžné modelové struktury; pořadí tahů a AI zůstávají společné.
 `GameModelDao` tuto cestu vybírá pouze pro `FreePlayMap.REFERENCE`.
-Tři autorské scénáře se načítají dál beze změny. Nabídka zatím volí lidské
-Nizozemsko; skutečný výběr národa patří R-0063. Stav ověření uvádí
+Tři autorské scénáře se načítají dál beze změny. R-0063 předává z nabídky typovaný národ přes aplikační a herní řadič do DAO.
+Autorské scénáře přijímají pouze Nizozemsko; nekompatibilní volba se odmítne
+před výměnou rozehrané hry. Referenční profil přijímá všechny čtyři národy.
+Jméno hráče zůstává nezávislé na interním národním klíči. Stav ověření uvádí
 [evidence R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16).
 
 ### Pořadí národních tahů (R-0052)

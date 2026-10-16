@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
@@ -56,12 +57,13 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_02_two_islands_and_mock_nation_survive_continue() throws Exception {
-        // Map selection is real; the clearly marked nation preview is not.
+    void TC_02_two_islands_and_fixed_nation_survive_continue()
+            throws Exception {
+        // Authored maps keep the Dutch human participant.
         FreePlaySetupPage setup = WelcomePage.of(getContext())
                 .openFreePlaySetup();
         setup.selectMap(1);
-        setup.selectNationPreview(1);
+        setup.verifyNationSelection(EuropeanNation.DUTCH, false);
         setup.enterName("Éva");
         setup.verifySetup(1);
         setup.captureDialog("freePlaySetup", "free-play-two-islands.png");
@@ -138,9 +140,9 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_06_czech_setup_explains_preview_and_can_be_cancelled()
+    void TC_06_czech_setup_explains_fixed_nation_and_can_be_cancelled()
             throws Exception {
-        // Czech players see the same honest preview and reversible setup.
+        // Czech players see the fixed nation and reversible setup.
         final org.microcol.page.SettingPage settings = WelcomePage
                 .of(getContext()).openSetting();
         settings.setCzechLanguage();
@@ -149,7 +151,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
                 .openFreePlaySetup();
         setup.selectMap(1);
         setup.verifySetupLanguage("Začít hru",
-                "Pouze náhled. Hrát budete za Nizozemsko.");
+                "V tomto scénáři hrajete za Nizozemsko.");
         setup.verifyDifficultySelection(Difficulty.CONQUISTADOR, "Dobyvatel");
         setup.captureDialog("freePlaySetup", "free-play-czech.png");
         setup.escape().verifyMainScreen();
@@ -228,33 +230,42 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_10_reference_expeditions_start_and_survive_continue()
             throws Exception {
-        // Select the new reference profile while retaining authored-world
-        // choices.
-        FreePlaySetupPage setup = WelcomePage.of(getContext())
-                .openFreePlaySetup();
-        setup.selectMap(3);
-        setup.verifySelectedMap(3, "Reference expedition (four nations)");
-        setup.enterName("  Jan Výprava  ");
-        GamePage game = setup.start();
-        setup.verifyReferenceExpedition("Jan Výprava", 500);
-        setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
-        java.util.List<Integer> units = setup.referenceUnitIds();
-        setup.captureDialog("gameDifficulty", "reference-expedition.png");
+        // Each selected nation gets its own expedition and survives Continue.
+        FreePlaySetupPage setup = null;
+        for (final EuropeanNation nation : EuropeanNation.values()) {
+            setup = WelcomePage.of(getContext()).openFreePlaySetup();
+            setup.selectMap(3);
+            setup.verifySelectedMap(3, "Reference expedition (four nations)");
+            setup.selectNation(nation);
+            setup.verifyNationSelection(nation, true);
+            setup.enterName("  Jan Výprava  ");
+            GamePage game = setup.start();
+            setup.verifyReferenceExpedition(nation, "Jan Výprava", 500);
+            setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
+            final java.util.List<Integer> units = setup.referenceUnitIds();
+            if (nation == EuropeanNation.DUTCH) {
+                setup.captureDialog("gameDifficulty",
+                        "reference-expedition.png");
+            }
+            game.exitToMenu();
+            game = new FreePlayAuditPage(getContext()).continueGame();
+            setup.verifyReferenceExpedition(nation, "Jan Výprava", 500);
+            setup.verifyReferenceUnitIds(units);
+            game.exitToMenu();
+        }
 
-        // Continue restores the same participants and cargo rather than
-        // creating another expedition.
-        game.exitToMenu();
-        game = new FreePlayAuditPage(getContext()).continueGame();
-        setup.verifyReferenceExpedition("Jan Výprava", 500);
-        setup.verifyReferenceUnitIds(units);
-
-        // Leaving another reference setup keeps the saved continuation
-        // unchanged.
-        game.exitToMenu();
+        // Cancelling a selected draft leaves the last recovery save intact.
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         byte[] saved = audit.readAutosave();
         setup = WelcomePage.of(getContext()).openFreePlaySetup();
         setup.selectMap(3);
+        setup.selectNation(EuropeanNation.FRENCH);
+        setup.verifyNationSelection(EuropeanNation.FRENCH, true);
+        setup.selectMap(0);
+        setup.verifyNationSelection(EuropeanNation.DUTCH, false);
+        setup.selectMap(3);
+        setup.verifyNationSelection(EuropeanNation.DUTCH, true);
+        setup.selectNation(EuropeanNation.SPANISH);
         setup.back();
         audit.verifyAutosaveUnchanged(saved);
     }
@@ -271,11 +282,15 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         FreePlaySetupPage setup = settings.goBack().openFreePlaySetup();
         setup.selectMap(3);
         setup.verifySelectedMap(3, "Výpravy čtyř národů");
+        setup.verifySetupLanguage("Začít hru",
+                "Vyberte národ, za který budete hrát.");
+        setup.verifyNationSelection(EuropeanNation.DUTCH, true);
         setup.selectDifficulty(Difficulty.DISCOVERER);
         setup.enterName("Česká výprava");
         setup.captureDialog("freePlaySetup", "reference-setup-czech.png");
         setup.start();
-        setup.verifyReferenceExpedition("Česká výprava", 1000);
+        setup.verifyReferenceExpedition(EuropeanNation.DUTCH, "Česká výprava",
+                1000);
         setup.verifyGameDifficulty(Difficulty.DISCOVERER, "Objevitel");
     }
 }

@@ -52,15 +52,20 @@ public final class GameModelDao {
 
     public GameModel createFreePlay(final FreePlayMap map,
             final String playerName, final Difficulty difficulty,
-            final EventBus eventBus) {
+            final EuropeanNation nation, final EventBus eventBus) {
         final String name = Player.normalizeDisplayName(playerName);
-        final GameModelPo source = gameModelPoDao.loadFromClassPath(
-                Preconditions.checkNotNull(map).getResource());
-        Preconditions.checkNotNull(difficulty);
+        Preconditions.checkNotNull(map, "Map is null");
+        Preconditions.checkNotNull(difficulty, "Difficulty is null");
+        Preconditions.checkNotNull(nation, "Nation is null");
+        Preconditions.checkNotNull(eventBus, "Event bus is null");
+        Preconditions.checkArgument(
+                map == FreePlayMap.REFERENCE || nation == EuropeanNation.DUTCH,
+                "Authored maps support the Dutch nation only");
+        final GameModelPo source = gameModelPoDao
+                .loadFromClassPath(map.getResource());
         if (map == FreePlayMap.REFERENCE) {
-            source.setModel(
-                    ReferenceExpedition.create(source.getModel().getMap(),
-                            EuropeanNation.DUTCH, difficulty));
+            source.setModel(ReferenceExpedition
+                    .create(source.getModel().getMap(), nation, difficulty));
         } else {
             source.getModel().setDifficulty(difficulty);
         }

@@ -3,6 +3,7 @@ package org.microcol.gui.event.model;
 import java.io.File;
 
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignMission;
@@ -60,9 +61,9 @@ public final class GameController {
     }
 
     public void startFreePlay(final FreePlayMap map, final String playerName,
-            final Difficulty difficulty) {
+            final Difficulty difficulty, final EuropeanNation nation) {
         startMission(gameModelDao.createFreePlay(map, playerName, difficulty,
-                eventBus));
+                nation, eventBus));
     }
 
     public void startCampaignMission(final CampaignName campaignName,

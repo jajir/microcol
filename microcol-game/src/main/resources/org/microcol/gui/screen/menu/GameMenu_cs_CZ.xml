@@ -32,12 +32,13 @@
     <entry key="setupMapOriginal">Původní svět</entry>
     <entry key="setupMapTwoIslands">Dva ostrovy</entry>
     <entry key="setupMapRivalExpedition">Soupeřova výprava</entry>
-    <entry key="setupNation">Národ – náhled</entry>
+    <entry key="setupNation">Národ</entry>
     <entry key="setupNationDutch">Nizozemsko</entry>
     <entry key="setupNationFrench">Francie</entry>
     <entry key="setupNationEnglish">Anglie</entry>
     <entry key="setupNationSpanish">Španělsko</entry>
-    <entry key="setupNationNote">Pouze náhled. Hrát budete za Nizozemsko.</entry>
+    <entry key="setupNationNote">V tomto scénáři hrajete za Nizozemsko.</entry>
+    <entry key="setupNationReferenceNote">Vyberte národ, za který budete hrát.</entry>
     <entry key="setupPlayerName">Jméno hráče</entry>
     <entry key="setupNameError">Zadejte 1–64 znaků bez řídicích znaků.</entry>
     <entry key="setupStart">Začít hru</entry>

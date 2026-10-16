@@ -14,6 +14,7 @@ import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.Player;
 import org.microcol.model.campaign.FreePlayMap;
 import com.google.common.eventbus.EventBus;
@@ -29,7 +30,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-/** Menu-styled setup with real map selection and a nation preview. */
+/** Menu setup for authored maps and selectable reference expeditions. */
 @Singleton
 public final class ScreenFreePlay extends AbstractScreenMenu
         implements GameScreen {
@@ -90,6 +91,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
                 i18n.get(GameMenu.setupMapRivalExpedition),
                 i18n.get(GameMenu.setupMapReference));
         mapChoiceBox.getSelectionModel().selectFirst();
+        mapChoiceBox.getSelectionModel().selectedIndexProperty()
+                .addListener((obs, old, value) -> updateNationAvailability());
 
         difficultyLabel = new Label();
         difficultyLabel.setLabelFor(difficultyChoiceBox = new ChoiceBox<>());
@@ -195,7 +198,6 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         difficultyChoiceBox.getSelectionModel().clearSelection();
         difficultyChoiceBox.getSelectionModel().select(selectedDifficulty);
         nameLabel.setText(i18n.get(GameMenu.setupPlayerName));
-        nationNoteLabel.setText(i18n.get(GameMenu.setupNationNote));
         startButton.setText(i18n.get(GameMenu.setupStart));
         backButton.setText(i18n.get(GameMenu.buttonBack));
 
@@ -212,8 +214,21 @@ public final class ScreenFreePlay extends AbstractScreenMenu
                 Math.min(mapIndex, mapChoiceBox.getItems().size() - 1)));
         nationChoiceBox.getSelectionModel().select(Math.max(0,
                 Math.min(nationIndex, nationChoiceBox.getItems().size() - 1)));
+        updateNationAvailability();
 
         validateName();
+    }
+
+    private void updateNationAvailability() {
+        final boolean reference = mapChoiceBox.getSelectionModel()
+                .getSelectedIndex() == FreePlayMap.REFERENCE.ordinal();
+        nationChoiceBox.setDisable(!reference);
+        if (!reference) {
+            nationChoiceBox.getSelectionModel().selectFirst();
+        }
+        nationNoteLabel
+                .setText(i18n.get(reference ? GameMenu.setupNationReferenceNote
+                        : GameMenu.setupNationNote));
     }
 
     private boolean validateName() {
@@ -238,7 +253,9 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         FreePlayMap map = FreePlayMap.values()[mapChoiceBox.getSelectionModel()
                 .getSelectedIndex()];
         applicationController.startNewFreeGame(map, nameField.getText(),
-                difficultyChoiceBox.getValue());
+                difficultyChoiceBox.getValue(),
+                EuropeanNation.values()[nationChoiceBox.getSelectionModel()
+                        .getSelectedIndex()]);
     }
 
     private void onBack() {
