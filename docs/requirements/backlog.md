@@ -128,7 +128,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0055](R-0055.md) | Assign only one worker to a shared world square | Remainder | [R-0005](canceled/R-0005.md), [R-0027](done/R-0027.md) |
+| [R-0055](done/R-0055.md) | Assign only one worker to a shared world square | Remainder | [R-0005](canceled/R-0005.md), [R-0027](done/R-0027.md) |
 | [R-0056](R-0056.md) | Choose a colony job with understandable yield information | Remainder | [R-0006](canceled/R-0006.md) |
 | [R-0057](R-0057.md) | Verify food consumption and the single-birth boundary | Acceptance | [R-0007](canceled/R-0007.md) |
 | [R-0058](R-0058.md) | Handle food imports and large growth surpluses consistently | Remainder | [R-0007](canceled/R-0007.md), [R-0024](done/R-0024.md) |
@@ -194,7 +194,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 A useful small economic starting point is [R-0061](R-0061.md), because the expert
 already exists and the ore/output discrepancy is concrete, or [R-0062](R-0062.md),
-which isolates the missing automatic cross. [R-0055](R-0055.md) is a shared
+which isolates the missing automatic cross. [R-0055](done/R-0055.md) is a shared
 assignment boundary worth resolving before richer job choices. These are
 recommendations for discussion, not selected or running implementations.
 
