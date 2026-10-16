@@ -71,6 +71,15 @@ public final class ImageLoaderBuilding extends AbstractTiledImageLoader {
         imageCache.registerImage(makeKey(ConstructionType.IRON_WORKS),
                 "building_3_3");
 
+        // shortcut: reuse metalworking art until dedicated military building
+        // art exists.
+        imageCache.registerImage(makeKey(ConstructionType.ARMORY),
+                "building_1_3");
+        imageCache.registerImage(makeKey(ConstructionType.MAGAZINE),
+                "building_2_3");
+        imageCache.registerImage(makeKey(ConstructionType.ARSENAL),
+                "building_3_3");
+
         imageCache.registerImage(makeKey(ConstructionType.RUM_DISTILLERS_HOUSE),
                 "building_5_3");
         imageCache.registerImage(makeKey(ConstructionType.RUM_DISTILLERY),

@@ -84,7 +84,7 @@ only to the described bounded delivery.
 | --- | --- | --- | --- |
 | [R-0001](done/R-0001.md) | done | The player can start free play without completing the campaign. | No further work within this bounded scope. |
 | [R-0002](canceled/R-0002.md) | canceled | Turn ordering and calendar semantics were not completed by the draft. | [R-0051](done/R-0051.md), [R-0052](done/R-0052.md) |
-| [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](done/R-0053.md), [R-0073](R-0073.md), [R-0106](R-0106.md) |
+| [R-0003](canceled/R-0003.md) | canceled | Wait-like unit cycling exists; a separate skip action remains missing. | [R-0053](done/R-0053.md), [R-0073](done/R-0073.md), [R-0106](R-0106.md) |
 | [R-0004](canceled/R-0004.md) | canceled | The shared coastal-port predicate was implemented in R-0022; full R-0004 movement acceptance remains unproven. | [R-0054](done/R-0054.md) |
 | [R-0005](canceled/R-0005.md) | canceled | Assignment safety improved, but shared-square occupation is not uniformly enforced. | [R-0055](done/R-0055.md), [R-0082](R-0082.md) |
 | [R-0006](canceled/R-0006.md) | canceled | The ordinary-worker job/yield choice remains an unimplemented outcome. | [R-0056](done/R-0056.md), [R-0074](R-0074.md) |
@@ -103,7 +103,7 @@ only to the described bounded delivery.
 | [R-0019](done/R-0019.md) | done | Unexplored terrain is visually distinct and does not leak hidden content. | [R-0069](R-0069.md), [R-0070](R-0070.md) |
 | [R-0020](done/R-0020.md) | done | European equipment purchase and sale are implemented and published. | [R-0102](R-0102.md) |
 | [R-0021](done/R-0021.md) | done | Outward sea-lane departure and return to the recorded coast are delivered. | [R-0071](done/R-0071.md), [R-0072](done/R-0072.md) |
-| [R-0022](done/R-0022.md) | done | Individual passenger embark/disembark is implemented with explicit selection. | [R-0054](done/R-0054.md), [R-0073](R-0073.md) |
+| [R-0022](done/R-0022.md) | done | Individual passenger embark/disembark is implemented with explicit selection. | [R-0054](done/R-0054.md), [R-0073](done/R-0073.md) |
 | [R-0023](done/R-0023.md) | done | The master blacksmith can be hired and brought home. | [R-0061](done/R-0061.md), [R-0074](R-0074.md), [R-0075](R-0075.md), [R-0076](R-0076.md), [R-0077](R-0077.md), [R-0107](R-0107.md), [R-0108](done/R-0108.md), [R-0111](R-0111.md) |
 | [R-0024](done/R-0024.md) | done | Wagon unloading uses the shared nonfood warehouse limit. | [R-0058](done/R-0058.md), [R-0091](R-0091.md) |
 | [R-0025](done/R-0025.md) | done | Represented building projects have validated admission, queue operations and completion. | [R-0078](R-0078.md), [R-0079](R-0079.md), [R-0080](R-0080.md), [R-0081](R-0081.md), [R-0082](R-0082.md), [R-0083](R-0083.md), [R-0084](R-0084.md), [R-0085](R-0085.md), [R-0086](R-0086.md), [R-0095](R-0095.md), [R-0098](R-0098.md), [R-0104](R-0104.md), [R-0107](R-0107.md), [R-0108](done/R-0108.md), [R-0109](R-0109.md), [R-0110](R-0110.md) |

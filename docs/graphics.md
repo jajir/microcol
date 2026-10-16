@@ -520,3 +520,12 @@ Existující [ImageCacheTest](../microcol-game/src/test/java/org/microcol/gui/Im
    ověřilo skutečné ovládání vozu a zásoby. Snímek `wagon-colony.png`
    potvrzuje rozpoznatelný vůz vedle lodi. Úplnou regresi a publikaci vede
    [testová evidence](functional-tests.md#wagon-unloading-implementation-2026-10-13).
+
+### Zobrazení zbrojního řetězce (R-0079)
+
+Od 16. 10. 2026 používají Armory, Magazine a Arsenal existující obrázky
+kovozpracujících staveb `(1,3)`, `(2,3)` a `(3,3)`. Doplněné aliasy opravují
+pád při otevření kolonie s těmito budovami. Vlastní vojenská kresba zůstává
+výtvarným omezením; název a ikona produkovaných mušket rozlišují funkci.
+Rastrové podklady se nemění; hráčské ověření vede
+[evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).

@@ -95,25 +95,18 @@ public class ConstructionSlot {
         Preconditions.checkArgument(sourceGoods != null,
                 "Source goods is required, but it's null.");
 
-        final Goods baseInput = type.getConsumptionPerTurn().get();
         // Validate the source type even when this slot is empty.
-        sourceGoods.isGreaterOrEqualsThan(baseInput.getEmpty());
+        sourceGoods.isGreaterOrEqualsThan(
+                type.getConsumptionPerTurn().get().getEmpty());
         if (isEmpty()) {
-            return new ConstructionTurnProduction(baseInput.getEmpty(),
+            return new ConstructionTurnProduction(
+                    type.getConsumptionPerTurn().get().getEmpty(),
                     type.getProductionPerTurn().get().getEmpty(), null);
         }
 
-        final Goods potential = getPotentialProduction(getUnit());
-        final int availableOutput = (int) (sourceGoods.getAmount()
-                * type.getProductionRatio());
-        final int actualAmount = Math.min(potential.getAmount(),
-                availableOutput);
-        final Goods produced = potential.setAmount(actualAmount);
-        final Goods consumed = baseInput.setAmount(
-                (int) Math.ceil(actualAmount / type.getProductionRatio()));
-        final Goods blocked = actualAmount == potential.getAmount() ? null
-                : potential.substract(produced);
-        return new ConstructionTurnProduction(consumed, produced, blocked);
+        return productionForBudget(type,
+                getPotentialProduction(getUnit()).getAmount(),
+                sourceGoods.getAmount());
     }
 
     /**
@@ -150,8 +143,32 @@ public class ConstructionSlot {
         final Goods baseInput = type.getConsumptionPerTurn().orElseThrow();
         final Goods baseOutput = type.getProductionPerTurn().orElseThrow();
         final Goods potential = potentialProduction(baseOutput, worker);
-        return baseInput.setAmount((int) Math
-                .ceil(potential.getAmount() / type.getProductionRatio()));
+        return baseInput.setAmount(inputForOutput(type, potential.getAmount()));
+    }
+
+    static ConstructionTurnProduction productionForBudget(
+            final ConstructionType type, final int outputBudget,
+            final int availableInput) {
+        Preconditions.checkArgument(outputBudget >= 0 && availableInput >= 0);
+        final Goods baseInput = type.getConsumptionPerTurn().orElseThrow();
+        final Goods baseOutput = type.getProductionPerTurn().orElseThrow();
+        final long possibleOutput = (long) availableInput
+                * baseOutput.getAmount() / baseInput.getAmount();
+        final int actual = (int) Math.min(outputBudget, possibleOutput);
+        final int consumed = inputForOutput(type, actual);
+        return new ConstructionTurnProduction(baseInput.setAmount(consumed),
+                baseOutput.setAmount(actual), actual == outputBudget ? null
+                        : baseOutput.setAmount(outputBudget - actual));
+    }
+
+    private static int inputForOutput(final ConstructionType type,
+            final int output) {
+        final int baseInput = type.getConsumptionPerTurn().orElseThrow()
+                .getAmount();
+        final int baseOutput = type.getProductionPerTurn().orElseThrow()
+                .getAmount();
+        return Math.toIntExact(
+                ((long) output * baseInput + baseOutput - 1) / baseOutput);
     }
 
     private static Goods potentialProduction(final Goods base,

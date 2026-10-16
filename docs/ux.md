@@ -332,7 +332,7 @@ která by změnila hráčova data. Aktuální ověření uvádí
    podle ID do volných míst; ostatní zůstanou viditelné na břehu či molu se
    zachovaným rozkazem. Oprávnění i cenu nastoupení určuje model. Neplatný
    rozkaz zobrazí existující zpětnou vazbu a ovládání se obnoví.
-3. [R-0073](requirements/R-0073.md) a [testová evidence](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16)
+3. [R-0073](requirements/done/R-0073.md) a [testová evidence](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16)
    rozlišují návrh, implementaci a skutečné ověření. Nejde o pozorování hráčů.
 
 
@@ -388,3 +388,12 @@ nejprve použije pro obyvatele a narození kolonistů, teprve zbytek pro koně.
 Plný sklad ani chybějící jídlo nezpůsobí záporné zásoby nebo zbytečné odečty.
 Zavření kolonie či Pokračovat samo nic nechová. Stav ověření vede
 [R-0078](requirements/R-0078.md).
+
+### Výrobní upgrade a nedostatek vstupů (R-0079)
+
+Hráč volí upgrade ve stávající stavební frontě. Po dokončení zůstává
+pracovník na svém místě a skladový náhled ukáže novou spotřebu i produkci.
+Při nedostatku se náhled omezuje dostupnými surovinami celé budovy;
+železárna může ve stejném tahu dodat nástroje zbrojnici. Otevření kolonie
+ani Pokračovat výrobu nespouští. Konkrétní hráčské kroky a jejich ověření
+vede [evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).

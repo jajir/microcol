@@ -538,7 +538,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 
 ### Hlídka a nalodění při odjezdu
 
-Rozpracované [R-0073](requirements/R-0073.md) přidává do `model` kontrolované
+Rozpracované [R-0073](requirements/done/R-0073.md) přidává do `model` kontrolované
 příkazy Hlídka/Aktivovat. Trvající rozkaz vlastní `model.unit`, jeho přenos do
 uložené hry `model.store`. Automatický výběr vynechává hlídku, výslovný výběr
 rozkaz neruší. `AbstractUnit` propojuje odjezd lodě se stávajícími pravidly
@@ -558,3 +558,13 @@ proto ovlivní další tah. Při hladomoru se nechová, zatímco ostatní produk
 přeživších zachovává svůj dosavadní postup. UI čte společnou bilanci bez
 mutace; uložené zboží a stavby nepotřebují další schéma. Přejímku vede
 [R-0078](requirements/R-0078.md).
+
+### Průmyslové vstupy a výstupy (R-0079)
+
+`ConstructionType` určuje poměr každého stupně. `ConstructionSlot` sdílí
+celočíselný výpočet vstupního omezení a zaokrouhlení s celou budovou;
+`Construction` nejprve sečte rozpočty všech pracovníků. Nedostatek se tak
+zaokrouhlí jednou za budovu, nikoli zvlášť za každého pracovníka. Stávající
+pořadí zdrojů v `Colony` zpřístupní vyrobené nástroje zbrojnímu řetězci
+ve stejném tahu. Náhled i skutečný sklad používají stejné pravidlo;
+načtení nevyžaduje nové schéma. Přejímku vede [R-0079](requirements/R-0079.md).

@@ -174,15 +174,17 @@ public class Construction {
         Preconditions.checkArgument(
                 getType().getConsumptionPerTurn().isPresent(),
                 "This construction doesn't consume anything.");
-        Goods remaining = sourceGoods;
-        ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
+        sourceGoods.isGreaterOrEqualsThan(
+                getType().getConsumptionPerTurn().get().getEmpty());
+        int outputBudget = 0;
         for (final ConstructionSlot slot : getConstructionSlots()) {
-            final ConstructionTurnProduction tmp = slot
-                    .getProduction(remaining);
-            out = out.add(tmp);
-            remaining = remaining.substract(tmp.getConsumedGoods().get());
+            if (!slot.isEmpty()) {
+                outputBudget = Math.addExact(outputBudget, slot
+                        .getPotentialProduction(slot.getUnit()).getAmount());
+            }
         }
-        return out;
+        return ConstructionSlot.productionForBudget(getType(), outputBudget,
+                sourceGoods.getAmount());
     }
 
     /**

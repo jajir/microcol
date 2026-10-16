@@ -3436,3 +3436,64 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    publication remain pending. Normal final-stock forecasts include births
    and breeding; famine keeps its pre-loss deficit warning and produces no
    horses, preserving the existing survivor recalculation contract.
+
+### R-0079 industrial production — 2026-10-16
+
+1. Astra main assigned the production model and rule tests to the existing
+   Sol low worker in the isolated R79 worktree. Main reviewed the shared
+   arithmetic, integrated it and authored F41/TC50 plus its page object.
+   No local model or duplicate implementation was used; token savings were
+   not measured.
+2. The first full model run had 1543 cases with five errors: Mockito slots
+   defaulted to occupied without production budgets, and a modified hill
+   retained a plowed-field marker. The worker repaired those test fixtures.
+   A second run exposed one remaining invalid empty field with production;
+   the worker cleared both parts of the vacated assignment. The final full
+   run passed **1543 tests**, zero failures/errors/skips. The 20-tier table
+   covers ordinary/expert input budgets and scarce/zero input, with separate
+   aggregate rounding and same-turn source-chain checks. Production code
+   needed no repair in these retries.
+3. Main formatted eight Java files using the shared profile with exact-token
+   preservation and idempotence checks. Packaging including Javadoc passed.
+   The player results follow below; no local model pass alone establishes
+   complete CI or publication.
+
+4. Initial Docker run `run-KNrb2t` exposed a real missing image alias for
+   Arsenal: all three TC50 cases failed when opening the colony. The existing
+   specialist (12), construction (7) and page-contract (3) cases passed.
+   Main registered the three military production tiers using existing
+   metalworking artwork and documented that visual limitation. The assertions
+   and player paths remain intact; TC50 is rerun after the fix.
+
+5. The alias repair run `run-SxmD7M` passed the factory and ironworks/arsenal
+   journeys plus the page contract. The lumber-mill test alone failed because
+   main expected excess project hammers to remain in stock, whereas the
+   existing queue moves all available hammers into the project. Main changed
+   the fixture to 49 initial hammers plus three produced, exactly the 52 cost,
+   and explicitly checks three versus six hammer production and the subsequent
+   six stored hammers. This keeps the upgrade check independent of overflow
+   policy. The captured colony image confirms visible military building and
+   worker panels, musket output and warehouse forecasts; the reused industrial
+   artwork remains a documented visual limitation.
+
+6. Final Docker run `run-FY5oFR` passed **six tests**: all three TC50 journeys
+   and all three page-contract checks, zero failures/errors/skips. Together
+   with the unchanged 12 specialist and seven construction cases from the
+   earlier run, the selected player acceptance passed. Final packaging,
+   formatter (eight Java files), nine documentation tests and strict MkDocs
+   passed. Full CI and R79 publication remain separate pending gates.
+
+
+### R-0076 complete CI and Sentry closure — 2026-10-16
+
+1. [Run 38941685067](https://github.com/jajir/microcol/actions/runs/38941685067)
+   passed at `2a5dbac6bb124d369cc79a8ae6b27f9f58ab644a`: **1488 model and
+   219 UI/support tests**, zero failures/errors/skips, all three native
+   packages and publication. Compatibility and Pages passed separately.
+2. [Release dev-126-2a5dbac6bb12](https://github.com/jajir/microcol/releases/tag/dev-126-2a5dbac6bb12)
+   contains Linux/macOS archives, installers, launchers, manifest and checksums.
+   The publisher explicitly retained the current automatic development channel;
+   this immutable release does not prove that channel advanced.
+3. This verifies the repaired TC22 roster/Sentry expectations and native Javadoc
+   packaging together. R-0073 is now done. R-0074/0075/0076 retain their explicit
+   remaining gameplay dependencies; passing CI does not remove those scopes.

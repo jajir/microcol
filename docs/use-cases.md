@@ -622,3 +622,13 @@ a zdvojený přírůstek, zobrazený náhled skladu, kapacitní limit a přednos
 narození kolonisty při efektivních 201 jednotkách jídla. Po uložení se
 zásoby ani stavba neopakují. Modelové a hráčské výsledky jsou vedené v
 [R-0078](requirements/R-0078.md); tato mapa sama nepotvrzuje průchod.
+
+### UC-045: průmyslová výroba R-0079
+
+`TC_50_F41_industrial_production_test` propojuje skutečné dokončení pily
+se zdvojnásobením produkce stejného tesaře, společné zaokrouhlení nedostatku
+pro dva pracovníky továrny a přidělení pracovníků železárně a zbrojnici.
+Kontroluje zobrazené změny zásob, skutečný další tah a Pokračovat.
+Modelová tabulka pokrývá všech 20 průmyslových stupňů. Přijetí továren
+podle otce zůstává v R-0084; tyto scénáře neuzavírají celé UC-045.
+Výsledky vede [evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).
