@@ -2899,3 +2899,27 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    not used as evidence for that assertion. Shared formatter checked eight Java
    files with exact-token preservation and idempotence passing.
 7. Full CI and publication remain pending.
+
+### Native drag follow-up from the next full run — 2026-10-16
+
+1. R-0066 CI [38917618848](https://github.com/jajir/microcol/actions/runs/38917618848)
+   at `d407a393` passed 1341 model tests, but its 196 UI/support checks had
+   21 failures and two errors, zero skips. Besides the already corrected old
+   TC22/TC26 expectations, TC40 first failed TC12's native-drag completion guard,
+   then subsequent scenarios cascaded. Downloaded XML/logs confirm this result.
+2. The earlier full run's passing TC40 result therefore does not establish
+   stable completion. A bounded Sol low follow-up investigates the remaining
+   drag lifecycle with all original stale-state assertions retained. Publication
+   and affected requirement acceptance remain open until a corrected full run.
+
+3. TC12's warehouse-stock callback emits no repaint; the exact missing drag
+   stage was not instrumented in the failed run. The page helper now uses the
+   explicit native gesture already used by field-drag tests: press/move through
+   hysteresis, verify drag detection, move/release and verify completion, with
+   mouse release on setup failure. The same dropped-event mutation and outcome
+   assertions remain. This is a test-gesture reliability repair, not evidence
+   of another production repaint defect.
+4. Docker `run-z0p0ke` passed all 15 TC40 scenarios plus three page-contract
+   checks: **18 passed**, zero failures/errors/skips. Shared formatter checked
+   the one Java file with exact tokens and idempotence passing. Complete CI on
+   the repaired revision is still required to establish stable acceptance.

@@ -225,29 +225,52 @@ public final class ColonyJobPage extends AbstractScreen {
         };
         final javafx.scene.Node source = getNodeFinder()
                 .lookup("#colonyUnit-" + workerId).query();
+        final Point2D start = source.localToScreen(
+                source.getBoundsInLocal().getCenterX(),
+                source.getBoundsInLocal().getCenterY());
+        final java.util.concurrent.CountDownLatch started = new java.util.concurrent.CountDownLatch(
+                1);
         final java.util.concurrent.CountDownLatch finished = new java.util.concurrent.CountDownLatch(
                 1);
+        final javafx.event.EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
+                .runLater(started::countDown);
         final javafx.event.EventHandler<javafx.scene.input.DragEvent> done = event -> finished
                 .countDown();
         getRobot().interact(() -> {
             building.addEventFilter(javafx.scene.input.DragEvent.DRAG_DROPPED,
                     change);
+            source.addEventHandler(javafx.scene.input.MouseEvent.DRAG_DETECTED,
+                    detected);
             source.addEventHandler(javafx.scene.input.DragEvent.DRAG_DONE,
                     done);
         });
+        boolean released = false;
         try {
-            getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
-                    .dropTo(buildingBody ? canvas.localToScreen(50, 30)
-                            : slotPoint(buildingId, 1));
+            getRobot().moveTo(start.add(0, -8)).moveTo(start);
+            getRobot().press(MouseButton.PRIMARY);
+            getRobot().moveTo(start.add(15, 0));
+            if (!started.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException(
+                        "The native indoor drag must start");
+            }
+            getRobot().moveTo(buildingBody ? canvas.localToScreen(50, 30)
+                    : slotPoint(buildingId, 1));
+            getRobot().release(MouseButton.PRIMARY);
+            released = true;
             if (!finished.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException(
                         "The native indoor drag must finish");
             }
             WaitForAsyncUtils.waitForFxEvents();
         } finally {
+            if (!released) {
+                getRobot().release(MouseButton.PRIMARY);
+            }
             getRobot().interact(() -> {
                 building.removeEventFilter(
                         javafx.scene.input.DragEvent.DRAG_DROPPED, change);
+                source.removeEventHandler(
+                        javafx.scene.input.MouseEvent.DRAG_DETECTED, detected);
                 source.removeEventHandler(
                         javafx.scene.input.DragEvent.DRAG_DONE, done);
             });
