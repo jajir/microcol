@@ -2776,3 +2776,31 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 7. Docker `run-uo1009` verified the deferred repaint repair: all 15 unchanged TC40 scenarios passed, including both stale slot/body drops; TC30/04's hire/equip/voyage/smithy/Continue path and three page-contract checks also passed (19 UI/support tests, zero failures/errors/skips). The attempted TC07 selector used a misspelled class name and selected no TC07 case; it is not counted as fresh evidence. Full CI will include the correctly named existing scenario.
 8. Final local model evidence is 1339 passing cases; all selected ship scenarios passed across `run-TJfnwQ`, `run-6Fmt4y` and `run-S9fkry` after the documented caller corrections. Shared formatter checked 17 changed Java files with exact-token preservation and idempotence. Complete CI/publication is still required. The live development manifest inspected on 2026-10-16 still identifies `dev-109-0b0cb0593df4`, so no new game build is claimed.
+
+<a id="r-0066-reference-expeditions-2026-10-16"></a>
+## R-0066 reference expeditions — 2026-10-16
+
+1. The new reference profile creates four colonial nations and four Crowns,
+   peaceful pairs, legal distinct eastern starts and two equipped colonists per
+   carrier. The model matrix covers all 20 nation/difficulty combinations,
+   deterministic placement, source isolation, invalid maps and save/load.
+   The visible profile currently uses Dutch; R-0063 owns nation selection.
+2. Initial model checks exposed test setup mistakes: saving before starting the
+   game, then expecting the human to take the first turn instead of England.
+   Both were returned to Sol low for targeted test repairs; ordinary turn order
+   was preserved. The second full run had 1341 tests with one assertion failure,
+   no errors/skips. Final full retry passed **1341 tests**, zero failures/errors/skips.
+3. Main-agent UI compilation initially used equipment methods on generic `Unit`;
+   the helper now checks the known `UnitFreeColonist` type. Docker `run-mCzRV7`
+   passed all 11 TC24 scenarios and three page-contract checks: **14 passed**,
+   zero failures/errors/skips. This includes reference Start, Continue, canceled
+   setup/save preservation and Czech labels. The command misspelled TC34's class,
+   so that run provides no TC34 evidence. The correctly named Docker retry
+   `run-lWIEIy` passed all seven TC34 scenarios and three page-contract checks:
+   **10 passed**, zero failures/errors/skips.
+4. Shared formatter checked all ten changed Java files, with token-preservation
+   and idempotence passing. Nine documentation checks and strict MkDocs passed.
+   The Czech setup screenshot was visually checked: the reference label and
+   existing nation-preview notice fit, with Start/Back visible.
+5. Full CI and publication remain pending. This is local implementation evidence,
+   not completed acceptance.

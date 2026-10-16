@@ -41,4 +41,5 @@
     <entry key="setupPlayerName">Jméno hráče</entry>
     <entry key="setupNameError">Zadejte 1–64 znaků bez řídicích znaků.</entry>
     <entry key="setupStart">Začít hru</entry>
+    <entry key="setupMapReference">Výpravy čtyř národů</entry>
 </properties>

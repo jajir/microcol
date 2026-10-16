@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.microcol.model.Difficulty;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
@@ -55,7 +56,14 @@ public final class GameModelDao {
         final String name = Player.normalizeDisplayName(playerName);
         final GameModelPo source = gameModelPoDao.loadFromClassPath(
                 Preconditions.checkNotNull(map).getResource());
-        source.getModel().setDifficulty(Preconditions.checkNotNull(difficulty));
+        Preconditions.checkNotNull(difficulty);
+        if (map == FreePlayMap.REFERENCE) {
+            source.setModel(
+                    ReferenceExpedition.create(source.getModel().getMap(),
+                            EuropeanNation.DUTCH, difficulty));
+        } else {
+            source.getModel().setDifficulty(difficulty);
+        }
         final GameModel game = makeFromModelPo(source, eventBus);
         game.getModel().getPlayers().stream().filter(Player::isHuman)
                 .findFirst().orElseThrow().setDisplayName(name);

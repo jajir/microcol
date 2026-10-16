@@ -87,7 +87,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         mapChoiceBox.setId(ID_MAP);
         mapChoiceBox.getItems().addAll(i18n.get(GameMenu.setupMapOriginal),
                 i18n.get(GameMenu.setupMapTwoIslands),
-                i18n.get(GameMenu.setupMapRivalExpedition));
+                i18n.get(GameMenu.setupMapRivalExpedition),
+                i18n.get(GameMenu.setupMapReference));
         mapChoiceBox.getSelectionModel().selectFirst();
 
         difficultyLabel = new Label();
@@ -200,7 +201,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
 
         mapChoiceBox.getItems().setAll(i18n.get(GameMenu.setupMapOriginal),
                 i18n.get(GameMenu.setupMapTwoIslands),
-                i18n.get(GameMenu.setupMapRivalExpedition));
+                i18n.get(GameMenu.setupMapRivalExpedition),
+                i18n.get(GameMenu.setupMapReference));
         nationChoiceBox.getItems().setAll(i18n.get(GameMenu.setupNationDutch),
                 i18n.get(GameMenu.setupNationFrench),
                 i18n.get(GameMenu.setupNationEnglish),

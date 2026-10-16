@@ -4,7 +4,8 @@ package org.microcol.model.campaign;
 public enum FreePlayMap {
     ORIGINAL("/maps/free-play.microcol"),
     TWO_ISLANDS("/maps/free-play-two-islands.microcol"),
-    RIVAL_EXPEDITION("/maps/free-play-rival-expedition.microcol");
+    RIVAL_EXPEDITION("/maps/free-play-rival-expedition.microcol"),
+    REFERENCE("/maps/free-play.microcol");
 
     private final String resource;
 

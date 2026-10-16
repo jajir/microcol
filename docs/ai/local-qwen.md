@@ -3148,3 +3148,12 @@ committed for this experiment.
    full specialist-to-smithy journey and three source-contract checks after
    the worker's deferred-repaint repair. Complete CI remains necessary;
    neither this local pass nor the adopted model setting measures quota savings.
+
+8. R-0066 uses one bounded Sol low worker for model assembly and tests; the main
+   Astra medium owns menu/DAO integration, UI checks and documentation. Review
+   corrected missing initial actions/moves/focus and an unnecessary immediate
+   ocean-neighbor restriction. Failed test attempts were returned for targeted
+   repairs (start before save, preserve canonical England-first turn order).
+   Main corrected its UI helper type and a misspelled test selector. Results are
+   in the [R-0066 evidence](../functional-tests.md#r-0066-reference-expeditions-2026-10-16).
+   No measured quota saving is claimed.

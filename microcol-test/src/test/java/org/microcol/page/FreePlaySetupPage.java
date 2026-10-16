@@ -81,11 +81,17 @@ public final class FreePlaySetupPage extends AbstractScreen {
     }
 
     private void select(final String id, final int index) {
-        getRobot().clickOn("#" + id).push(KeyCode.HOME);
-        for (int i = 0; i < index; i++) {
-            getRobot().push(KeyCode.DOWN);
-        }
-        getRobot().push(KeyCode.ENTER);
+        final ChoiceBox<?> choice = getNodeFinder().lookup("#" + id)
+                .queryAs(ChoiceBox.class);
+        final String label = String.valueOf(choice.getItems().get(index));
+        getRobot().clickOn(choice);
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.Node item = getListOfNodes(".context-menu .label")
+                .stream()
+                .filter(node -> label.equals(
+                        ((javafx.scene.control.Labeled) node).getText()))
+                .findFirst().orElseThrow();
+        getRobot().clickOn(item);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -123,7 +129,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(isCssIdVisible("freePlaySetup"));
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(3, map.getItems().size());
+        assertEquals(4, map.getItems().size());
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
         assertEquals("Preview only. You will play as the Netherlands.",
@@ -134,7 +140,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
             final String expectedName) {
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(3, map.getItems().size());
+        assertEquals(4, map.getItems().size());
         assertEquals(expectedIndex, map.getSelectionModel().getSelectedIndex());
         assertEquals(expectedName, map.getSelectionModel().getSelectedItem());
     }
@@ -150,6 +156,77 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertEquals(expected, !getButtonById("freePlayStart").isDisabled());
         assertEquals(expected,
                 getLabeledById("freePlayNameError").getText().isEmpty());
+    }
+
+    public void verifyReferenceExpedition(final String playerName,
+            final int gold) throws Exception {
+        final Player human = getModel().getPlayerByName("Dutch");
+        WaitForAsyncUtils.waitFor(15, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().isGameRunning()
+                        && getModel().getCurrentPlayer() == human);
+        assertEquals(playerName, human.getDisplayName());
+        assertTrue(human.isHuman());
+        assertEquals(gold, human.getGold());
+        assertEquals(8, getModel().getPlayers().size());
+        assertEquals(12, getModel().getAllUnits().size());
+        assertEquals(1, getModel().getPlayers().stream().filter(Player::isHuman)
+                .count());
+        for (org.microcol.model.EuropeanNation nation : org.microcol.model.EuropeanNation
+                .values()) {
+            Player participant = getModel()
+                    .getPlayerByName(nation.getPlayerName());
+            assertEquals(3, participant.getAllUnits().size());
+            assertEquals(gold, participant.getGold());
+            assertEquals(participant != human, participant.isComputer());
+            org.microcol.model.PlayerKing crown = (org.microcol.model.PlayerKing) getModel()
+                    .getPlayerByName(nation.getPlayerName() + "'s King");
+            assertSame(participant, crown.getWhosKingThisPlayerIs());
+            for (org.microcol.model.EuropeanNation other : org.microcol.model.EuropeanNation
+                    .values()) {
+                if (other != nation) {
+                    assertEquals(org.microcol.model.EuropeanRelationState.PEACE,
+                            getModel().getEuropeanRelation(participant,
+                                    getModel().getPlayerByName(
+                                            other.getPlayerName())));
+                }
+            }
+        }
+        org.microcol.model.unit.Ship ship = (org.microcol.model.unit.Ship) human
+                .getAllUnits().stream().filter(org.microcol.model.Unit::isShip)
+                .findFirst().orElseThrow();
+        assertSame(org.microcol.model.UnitType.MERCHANTMAN, ship.getType());
+        assertEquals(4, ship.getCargo().getSlots().size());
+        assertEquals(TerrainType.HIGH_SEA,
+                getModel().getMap().getTerrainTypeAt(ship.getLocation()));
+        java.util.List<org.microcol.model.unit.UnitFreeColonist> passengers = ship
+                .getCargo().getSlots().stream()
+                .flatMap(slot -> slot.getUnit().stream())
+                .map(org.microcol.model.unit.UnitFreeColonist.class::cast)
+                .collect(java.util.stream.Collectors.toList());
+        assertEquals(2, passengers.size());
+        assertEquals(1,
+                passengers.stream().filter(
+                        org.microcol.model.unit.UnitFreeColonist::isHoldingGuns)
+                        .count());
+        assertEquals(1, passengers.stream()
+                .filter(unit -> unit.getTools() == 100).count());
+        for (org.microcol.model.unit.UnitFreeColonist unit : passengers) {
+            assertSame(human, unit.getOwner());
+            assertSame(org.microcol.model.UnitType.COLONIST, unit.getType());
+            assertFalse(unit.isMounted());
+        }
+        assertTrue(ship.getCargo().getSlots().stream()
+                .noneMatch(slot -> slot.isLoadedGood()));
+    }
+
+    public java.util.List<Integer> referenceUnitIds() {
+        return getModel().getAllUnits().stream()
+                .map(org.microcol.model.Unit::getId).sorted()
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    public void verifyReferenceUnitIds(final java.util.List<Integer> expected) {
+        assertEquals(expected, referenceUnitIds());
     }
 
     public void verifyNoActiveGame() {

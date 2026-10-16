@@ -100,6 +100,18 @@ Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výc
 hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
 [R-0064](requirements/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
 
+### Referenční výpravy (R-0066)
+
+`model.campaign.ReferenceExpedition` sestavuje nový model ze samotného terénu,
+obtížnosti a identity `EuropeanNation`. Nepřebírá jednotky, kolonie ani průzkum
+zdrojového scénáře. Před sestavením ověří čtyři odlišné východní námořní starty
+s vodní cestou k pobřeží. Vlastnictví, vybavení, náklad a mírové vztahy používají
+běžné modelové struktury; pořadí tahů a AI zůstávají společné.
+`GameModelDao` tuto cestu vybírá pouze pro `FreePlayMap.REFERENCE`.
+Tři autorské scénáře se načítají dál beze změny. Nabídka zatím volí lidské
+Nizozemsko; skutečný výběr národa patří R-0063. Stav ověření uvádí
+[evidence R-0066](functional-tests.md#r-0066-reference-expeditions-2026-10-16).
+
 ### Pořadí národních tahů (R-0052)
 
 `GameManager` řadí kopii aktuálního registru podle interních národních klíčů;

@@ -224,4 +224,58 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         setup.captureDialog("rightPanel", "difficulty-czech-game.png");
     }
 
+    @Test
+    @Tag("local")
+    void TC_10_reference_expeditions_start_and_survive_continue()
+            throws Exception {
+        // Select the new reference profile while retaining authored-world
+        // choices.
+        FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(3);
+        setup.verifySelectedMap(3, "Reference expedition (four nations)");
+        setup.enterName("  Jan Výprava  ");
+        GamePage game = setup.start();
+        setup.verifyReferenceExpedition("Jan Výprava", 500);
+        setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
+        java.util.List<Integer> units = setup.referenceUnitIds();
+        setup.captureDialog("gameDifficulty", "reference-expedition.png");
+
+        // Continue restores the same participants and cargo rather than
+        // creating another expedition.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        setup.verifyReferenceExpedition("Jan Výprava", 500);
+        setup.verifyReferenceUnitIds(units);
+
+        // Leaving another reference setup keeps the saved continuation
+        // unchanged.
+        game.exitToMenu();
+        FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        byte[] saved = audit.readAutosave();
+        setup = WelcomePage.of(getContext()).openFreePlaySetup();
+        setup.selectMap(3);
+        setup.back();
+        audit.verifyAutosaveUnchanged(saved);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_11_czech_reference_profile_uses_selected_difficulty()
+            throws Exception {
+        // The reference option has a Czech label and uses the selected treasury
+        // profile.
+        org.microcol.page.SettingPage settings = WelcomePage.of(getContext())
+                .openSetting();
+        settings.setCzechLanguage();
+        FreePlaySetupPage setup = settings.goBack().openFreePlaySetup();
+        setup.selectMap(3);
+        setup.verifySelectedMap(3, "Výpravy čtyř národů");
+        setup.selectDifficulty(Difficulty.DISCOVERER);
+        setup.enterName("Česká výprava");
+        setup.captureDialog("freePlaySetup", "reference-setup-czech.png");
+        setup.start();
+        setup.verifyReferenceExpedition("Česká výprava", 1000);
+        setup.verifyGameDifficulty(Difficulty.DISCOVERER, "Objevitel");
+    }
 }

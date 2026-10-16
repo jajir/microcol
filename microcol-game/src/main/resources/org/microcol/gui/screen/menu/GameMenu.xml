@@ -42,4 +42,5 @@
     <entry key="setupPlayerName">Player name</entry>
     <entry key="setupNameError">Enter 1–64 characters without control characters.</entry>
     <entry key="setupStart">Start game</entry>
+    <entry key="setupMapReference">Reference expedition (four nations)</entry>
 </properties>
