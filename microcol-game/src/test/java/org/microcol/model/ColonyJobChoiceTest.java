@@ -288,7 +288,7 @@ class ColonyJobChoiceTest {
                     GoodsType.TOOLS);
             assertEquals(Goods.of(GoodsType.TOOLS, expert ? 6 : 3),
                     offer.getPotential().orElseThrow());
-            assertEquals(Goods.of(GoodsType.ORE, 3),
+            assertEquals(Goods.of(GoodsType.ORE, expert ? 6 : 3),
                     offer.getInputNeeded().orElseThrow());
             assertEquals(Goods.of(GoodsType.ORE, 1),
                     offer.getCurrentStock().orElseThrow());
@@ -297,11 +297,14 @@ class ColonyJobChoiceTest {
             final ConstructionSlot slot = model.getUnitById(4)
                     .getPlaceConstruction().getConstructionSlot();
             assertEquals(offer.getPotential(),
-                    slot.getProduction(Goods.of(GoodsType.ORE, 3))
+                    slot.getProduction(Goods.of(GoodsType.ORE, expert ? 6 : 3))
                             .getProducedGoods());
-            assertEquals(Goods.of(GoodsType.TOOLS, expert ? 2 : 1),
+            assertEquals(Goods.of(GoodsType.TOOLS, 1),
                     slot.getProduction(Goods.of(GoodsType.ORE, 1))
                             .getProducedGoods().orElseThrow());
+            assertEquals(Goods.of(GoodsType.ORE, 1),
+                    slot.getProduction(Goods.of(GoodsType.ORE, 1))
+                            .getConsumedGoods().orElseThrow());
             final String before = snapshot(model);
             choice(model, 4, Kind.INDOOR, GoodsType.TOOLS).execute();
             assertEquals(before, snapshot(model));
@@ -439,6 +442,85 @@ class ColonyJobChoiceTest {
         model.endTurn();
         assertNotSame(colony(model).getOwner(), model.getCurrentPlayer());
         rejected(model, offer);
+    }
+
+    @Test
+    void twoSmithsShareOreWithoutDoubleSpendingAndPreviewMatchesTurn() {
+        for (int ore : new int[] { 0, 3, 6, 9 }) {
+            final GameModelPo data = data();
+            final ColonyPo saved = data.getModel().getColonies().get(0);
+            saved.getColonyWarehouse().put("CORN", 100);
+            saved.getColonyWarehouse().put("ORE", ore);
+            saved.getColonyWarehouse().put("TOOLS", 0);
+            unit(data, 4).setType(UnitType.MASTER_BLACKSMITH);
+            final Model model = load(data);
+            assertEquals("Dutch", model.getCurrentPlayer().getName());
+            choice(model, 4, Kind.INDOOR, GoodsType.TOOLS).execute();
+            choice(model, 5, Kind.INDOOR, GoodsType.TOOLS).execute();
+            final Colony smithColony = colony(model);
+            final Construction smithy = smithColony
+                    .getConstructionByType(ConstructionType.BLACKSMITHS_HOUSE);
+            final ConstructionTurnProduction production = smithy
+                    .getProduction(Goods.of(GoodsType.ORE, ore));
+            final int expectedTools = Math.min(ore, 9);
+            assertEquals(Goods.of(GoodsType.ORE, expectedTools),
+                    production.getConsumedGoods().orElseThrow());
+            assertEquals(Goods.of(GoodsType.TOOLS, expectedTools),
+                    production.getProducedGoods().orElseThrow());
+            final ColonyProductionStats preview = smithColony.getGoodsStats();
+            assertEquals(expectedTools,
+                    preview.getStatsByType(GoodsType.ORE).getConsumed());
+            assertEquals(expectedTools,
+                    preview.getStatsByType(GoodsType.TOOLS).getRowProduction());
+            final int previewOre = preview.getStatsByType(GoodsType.ORE)
+                    .getInWarehouseAfter();
+            final int previewTools = preview.getStatsByType(GoodsType.TOOLS)
+                    .getInWarehouseAfter();
+            assertEquals(ore - expectedTools, previewOre);
+            assertEquals(expectedTools, previewTools);
+            model.endTurn();
+            model.endTurn();
+            assertEquals("Dutch", model.getCurrentPlayer().getName());
+            assertEquals(Goods.of(GoodsType.ORE, previewOre),
+                    smithColony.getWarehouse().getGoods(GoodsType.ORE));
+            assertEquals(Goods.of(GoodsType.TOOLS, previewTools),
+                    smithColony.getWarehouse().getGoods(GoodsType.TOOLS));
+        }
+    }
+
+    @Test
+    void savedCompletedBoundaryDoesNotRepeatSmithyProduction() {
+        final GameModelPo data = data();
+        final ColonyPo saved = data.getModel().getColonies().get(0);
+        saved.getColonyWarehouse().put("CORN", 100);
+        saved.getColonyWarehouse().put("ORE", 9);
+        saved.getColonyWarehouse().put("TOOLS", 0);
+        unit(data, 4).setType(UnitType.MASTER_BLACKSMITH);
+        final Model model = load(data);
+        choice(model, 4, Kind.INDOOR, GoodsType.TOOLS).execute();
+        choice(model, 5, Kind.INDOOR, GoodsType.TOOLS).execute();
+        final ColonyProductionStats preview = colony(model).getGoodsStats();
+        assertEquals(0,
+                preview.getStatsByType(GoodsType.ORE).getInWarehouseAfter());
+        assertEquals(9,
+                preview.getStatsByType(GoodsType.TOOLS).getInWarehouseAfter());
+        model.endTurn();
+        model.endTurn();
+        assertEquals("Dutch", model.getCurrentPlayer().getName());
+        assertEquals(Goods.of(GoodsType.ORE, 0),
+                colony(model).getWarehouse().getGoods(GoodsType.ORE));
+        assertEquals(Goods.of(GoodsType.TOOLS, 9),
+                colony(model).getWarehouse().getGoods(GoodsType.TOOLS));
+        data.setModel(model.save());
+        final Model resumed = load(data);
+        final String completed = snapshot(resumed);
+        resumed.startGame();
+        resumed.startGame();
+        assertEquals(completed, snapshot(resumed));
+        assertEquals(Goods.of(GoodsType.ORE, 0),
+                colony(resumed).getWarehouse().getGoods(GoodsType.ORE));
+        assertEquals(Goods.of(GoodsType.TOOLS, 9),
+                colony(resumed).getWarehouse().getGoods(GoodsType.TOOLS));
     }
 
 }

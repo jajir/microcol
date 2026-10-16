@@ -224,7 +224,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.verifySmithyWorker(103, 0, 90);
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
-        purchase.verifySmithyWorker(103, 6, 87);
+        purchase.verifySmithyWorker(103, 6, 84);
         purchase.hoverSmithy();
         purchase.verifyWorkplaceDescription(
                 "Blacksmith house: Master Blacksmith");

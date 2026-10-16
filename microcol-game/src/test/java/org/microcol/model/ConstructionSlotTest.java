@@ -37,9 +37,7 @@ public class ConstructionSlotTest {
 
     @Test
     void test_getProductionModifier_empty() throws Exception {
-
         assertEquals(0, slot.getProductionModifier());
-
     }
 
     @Test
@@ -48,7 +46,6 @@ public class ConstructionSlotTest {
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getProductionPerTurn())
                 .thenReturn(Optional.empty());
-
         assertEquals(0, slot.getProductionModifier());
     }
 
@@ -62,7 +59,6 @@ public class ConstructionSlotTest {
         when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
         when(placeConstructionSlot.getUnit()).thenReturn(unit);
         when(unit.getType()).thenReturn(UnitType.MASTER_BLACKSMITH);
-
         assertEquals(1, slot.getProductionModifier());
     }
 
@@ -73,7 +69,6 @@ public class ConstructionSlotTest {
         when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
         when(placeConstructionSlot.getUnit()).thenReturn(unit);
         when(unit.getType()).thenReturn(UnitType.MASTER_BLACKSMITH);
-
         assertEquals(2, slot.getProductionModifier());
     }
 
@@ -83,10 +78,8 @@ public class ConstructionSlotTest {
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getProductionPerTurn())
                 .thenReturn(Optional.empty());
-
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> slot.getProduction());
-
         assertEquals("Construction doesn't produce any goods.",
                 exception.getMessage());
     }
@@ -102,10 +95,8 @@ public class ConstructionSlotTest {
         when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
         when(constructionType.getConsumptionPerTurn())
                 .thenReturn(altConsumption);
-
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> slot.getProduction());
-
         assertEquals("Construction consume some goods.",
                 exception.getMessage());
     }
@@ -118,14 +109,11 @@ public class ConstructionSlotTest {
         when(constructionType.getConsumptionPerTurn())
                 .thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
-
         final ConstructionTurnProduction ret = slot.getProduction();
-
         assertNotNull(ret);
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-
         assertEquals(GoodsType.BELL, ret.getProducedGoods().get().getType());
         assertEquals(0, ret.getProducedGoods().get().getAmount());
     }
@@ -139,14 +127,11 @@ public class ConstructionSlotTest {
                 .thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
         mockUnitForProductionModifier(UnitType.COLONIST);
-
         final ConstructionTurnProduction ret = slot.getProduction();
-
         assertNotNull(ret);
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-
         assertEquals(GoodsType.BELL, ret.getProducedGoods().get().getType());
         assertEquals(5, ret.getProducedGoods().get().getAmount());
     }
@@ -161,9 +146,7 @@ public class ConstructionSlotTest {
                 .thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
         mockUnitForProductionModifier(UnitType.EXPERT_ORE_MINER);
-
         final ConstructionTurnProduction ret = slot.getProduction();
-
         assertNotNull(ret);
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
@@ -174,111 +157,105 @@ public class ConstructionSlotTest {
 
     @Test
     void test_getProduction_withConsumption_with_noUnit() throws Exception {
-        when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
-        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
-
+        configureSmithy(5);
         final ConstructionTurnProduction ret = slot
                 .getProduction(Goods.of(GoodsType.ORE, 78));
-
         assertNotNull(ret);
-        assertTrue(ret.getConsumedGoods().isPresent());
-        assertTrue(ret.getProducedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.ORE, 0),
+                ret.getConsumedGoods().orElseThrow());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0),
+                ret.getProducedGoods().orElseThrow());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.ORE, ret.getConsumedGoods().get().getType());
-        assertEquals(0, ret.getConsumedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getProducedGoods().get().getType());
-        assertEquals(0, ret.getProducedGoods().get().getAmount());
     }
 
     @Test
     void test_getProduction_withConsumption_with_freeColonist()
             throws Exception {
-        when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
-        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
+        configureSmithy(5);
         mockUnitForProductionModifier(UnitType.COLONIST);
-
-        final ConstructionTurnProduction ret = slot
-                .getProduction(Goods.of(GoodsType.ORE, 78));
-
-        assertNotNull(ret);
-        assertTrue(ret.getConsumedGoods().isPresent());
-        assertTrue(ret.getProducedGoods().isPresent());
-        assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.ORE, ret.getConsumedGoods().get().getType());
-        assertEquals(5, ret.getConsumedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getProducedGoods().get().getType());
-        assertEquals(5, ret.getProducedGoods().get().getAmount());
+        assertProduction(78, 5, 5, 0);
     }
 
     @Test
     void test_getProduction_withConsumption_with_freeColonist_notEnoughResources()
             throws Exception {
-        when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
-        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
-        when(constructionType.getProductionRatio()).thenReturn(1F);
+        configureSmithy(5);
         mockUnitForProductionModifier(UnitType.COLONIST);
-
-        final ConstructionTurnProduction ret = slot
-                .getProduction(Goods.of(GoodsType.ORE, 2));
-
-        assertNotNull(ret);
-        assertTrue(ret.getConsumedGoods().isPresent());
-        assertTrue(ret.getProducedGoods().isPresent());
-        assertTrue(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.ORE, ret.getConsumedGoods().get().getType());
-        assertEquals(2, ret.getConsumedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getProducedGoods().get().getType());
-        assertEquals(2, ret.getProducedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getBlockedGoods().get().getType());
-        assertEquals(3, ret.getBlockedGoods().get().getAmount());
+        assertProduction(2, 2, 2, 3);
     }
 
     @Test
     void test_getProduction_withConsumption_with_masterBlacksmith()
             throws Exception {
-        when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
-        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
+        configureSmithy(5);
         mockUnitForProductionModifier(UnitType.MASTER_BLACKSMITH);
-
-        final ConstructionTurnProduction ret = slot
-                .getProduction(Goods.of(GoodsType.ORE, 78));
-
-        assertNotNull(ret);
-        assertTrue(ret.getConsumedGoods().isPresent());
-        assertTrue(ret.getProducedGoods().isPresent());
-        assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.ORE, ret.getConsumedGoods().get().getType());
-        assertEquals(5, ret.getConsumedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getProducedGoods().get().getType());
-        assertEquals(10, ret.getProducedGoods().get().getAmount());
+        assertProduction(78, 10, 10, 0);
     }
 
     @Test
     void test_getProduction_withConsumption_with_masterBlacksmith_notEnoughResources()
             throws Exception {
-        when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
-        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
-        when(constructionType.getProductionRatio()).thenReturn(1F);
+        configureSmithy(5);
         mockUnitForProductionModifier(UnitType.MASTER_BLACKSMITH);
+        assertProduction(3, 3, 3, 7);
+    }
 
-        final ConstructionTurnProduction ret = slot
-                .getProduction(Goods.of(GoodsType.ORE, 3));
+    @Test
+    void ordinarySmithHouseUsesNoMoreThanThreeOre() {
+        configureSmithy(3);
+        mockUnitForProductionModifier(UnitType.COLONIST);
+        assertEquals(Goods.of(GoodsType.ORE, 3), slot.getPotentialInput(unit));
+        assertProduction(0, 0, 0, 3);
+        assertProduction(1, 1, 1, 2);
+        assertProduction(2, 2, 2, 1);
+        assertProduction(3, 3, 3, 0);
+        assertProduction(6, 3, 3, 0);
+    }
 
-        assertNotNull(ret);
-        assertTrue(ret.getConsumedGoods().isPresent());
-        assertTrue(ret.getProducedGoods().isPresent());
-        assertTrue(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.ORE, ret.getConsumedGoods().get().getType());
-        assertEquals(3, ret.getConsumedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getProducedGoods().get().getType());
-        assertEquals(6, ret.getProducedGoods().get().getAmount());
-        assertEquals(GoodsType.TOOLS, ret.getBlockedGoods().get().getType());
-        assertEquals(4, ret.getBlockedGoods().get().getAmount());
+    @Test
+    void masterBlacksmithPaysForEveryToolAtSmithHouse() {
+        configureSmithy(3);
+        mockUnitForProductionModifier(UnitType.MASTER_BLACKSMITH);
+        assertEquals(Goods.of(GoodsType.ORE, 6), slot.getPotentialInput(unit));
+        assertProduction(0, 0, 0, 6);
+        assertProduction(3, 3, 3, 3);
+        assertProduction(6, 6, 6, 0);
+        assertProduction(9, 6, 6, 0);
+    }
+
+    @Test
+    void wrongSourceTypeIsRejectedForOccupiedAndEmptySlots() {
+        configureSmithy(3);
+        assertThrows(IllegalArgumentException.class,
+                () -> slot.getProduction(Goods.of(GoodsType.SUGAR, 3)));
+        mockUnitForProductionModifier(UnitType.COLONIST);
+        assertThrows(IllegalArgumentException.class,
+                () -> slot.getProduction(Goods.of(GoodsType.SUGAR, 3)));
+    }
+
+    private void configureSmithy(final int perTurn) {
+        when(construction.getType()).thenReturn(constructionType);
+        when(constructionType.getProductionPerTurn())
+                .thenReturn(Optional.of(Goods.of(GoodsType.TOOLS, perTurn)));
+        when(constructionType.getConsumptionPerTurn())
+                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, perTurn)));
+        when(constructionType.getProductionRatio()).thenReturn(1F);
+    }
+
+    private void assertProduction(final int available, final int consumed,
+            final int produced, final int blocked) {
+        final ConstructionTurnProduction result = slot
+                .getProduction(Goods.of(GoodsType.ORE, available));
+        assertEquals(Goods.of(GoodsType.ORE, consumed),
+                result.getConsumedGoods().orElseThrow());
+        assertEquals(Goods.of(GoodsType.TOOLS, produced),
+                result.getProducedGoods().orElseThrow());
+        if (blocked == 0) {
+            assertFalse(result.getBlockedGoods().isPresent());
+        } else {
+            assertEquals(Goods.of(GoodsType.TOOLS, blocked),
+                    result.getBlockedGoods().orElseThrow());
+        }
     }
 
     private void mockUnitForProductionModifier(final UnitType unitType) {

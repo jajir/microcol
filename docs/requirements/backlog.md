@@ -44,6 +44,14 @@ Do not start another requirement after the end of October 17: **2026-10-18
 in progress, including verification and publication, then stop this run. The
 remaining scope is not silently canceled or marked done.
 
+## Selected cloud trial — 2026-10-16
+
+The user selected exactly R-0057–R-0061 for this trial, using Astra high as main
+agent and economical cloud Sol workers instead of local inference. Each was
+refined before implementation. [Execution evidence](../functional-tests.md#r-0057r-0061-cloud-sol-batch-2026-10-16)
+and [worker measurements](../ai/local-qwen.md#cloud-sol-low-batch-2026-10-16)
+record acceptance and limitations; this batch does not start R-0062 or later work.
+
 ## How to read the set
 
 - **Remainder**: an unfinished outcome already owned by an old requirement.

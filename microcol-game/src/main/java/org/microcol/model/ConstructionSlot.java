@@ -95,34 +95,25 @@ public class ConstructionSlot {
         Preconditions.checkArgument(sourceGoods != null,
                 "Source goods is required, but it's null.");
 
+        final Goods baseInput = type.getConsumptionPerTurn().get();
+        // Validate the source type even when this slot is empty.
+        sourceGoods.isGreaterOrEqualsThan(baseInput.getEmpty());
         if (isEmpty()) {
-            return new ConstructionTurnProduction(
-                    type.getConsumptionPerTurn().get().getEmpty(),
+            return new ConstructionTurnProduction(baseInput.getEmpty(),
                     type.getProductionPerTurn().get().getEmpty(), null);
-        } else {
-            // construction consume goods
-            final Goods turnProduction = getPotentialProduction(getUnit());
-            final Goods consumed = type.getConsumptionPerTurn().get();
-            if (sourceGoods.isGreaterOrEqualsThan(consumed)) {
-                // There is enough source to produce all goods.
-                return new ConstructionTurnProduction(consumed, turnProduction,
-                        null);
-            } else {
-                // There is not enough source to produce everything.
-                final Goods partialProduction = Goods.of(
-                        turnProduction.getType(), (int) (sourceGoods.getAmount()
-                                * type.getProductionRatio()));
-                final Goods finalProduction = partialProduction
-                        .multiply(getProductionModifier());
-                final Goods wastedProduction = turnProduction
-                        .substract(finalProduction);
-                final Goods partialConsumed = Goods.of(consumed.getType(),
-                        partialProduction.divide(type.getProductionRatio())
-                                .getAmount());
-                return new ConstructionTurnProduction(partialConsumed,
-                        finalProduction, wastedProduction);
-            }
         }
+
+        final Goods potential = getPotentialProduction(getUnit());
+        final int availableOutput = (int) (sourceGoods.getAmount()
+                * type.getProductionRatio());
+        final int actualAmount = Math.min(potential.getAmount(),
+                availableOutput);
+        final Goods produced = potential.setAmount(actualAmount);
+        final Goods consumed = baseInput.setAmount(
+                (int) Math.ceil(actualAmount / type.getProductionRatio()));
+        final Goods blocked = actualAmount == potential.getAmount() ? null
+                : potential.substract(produced);
+        return new ConstructionTurnProduction(consumed, produced, blocked);
     }
 
     /**
@@ -149,6 +140,20 @@ public class ConstructionSlot {
                 .orElseThrow();
         return base.multiply(
                 worker.getType().getProductionModifier(base.getType()));
+    }
+
+    Goods getPotentialInput(final Unit worker) {
+        return getPotentialInput(getConstructionType(), worker);
+    }
+
+    static Goods getPotentialInput(final ConstructionType type,
+            final Unit worker) {
+        final Goods baseInput = type.getConsumptionPerTurn().orElseThrow();
+        final Goods baseOutput = type.getProductionPerTurn().orElseThrow();
+        final Goods potential = baseOutput.multiply(
+                worker.getType().getProductionModifier(baseOutput.getType()));
+        return baseInput.setAmount((int) Math
+                .ceil(potential.getAmount() / type.getProductionRatio()));
     }
 
     private ConstructionType getConstructionType() {

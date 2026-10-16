@@ -3049,3 +3049,48 @@ should reuse existing validation and a focused audit before proposing new toolin
    and complete R-0056 regression/publication remain separate checks. The local
    job used one repair and **1300.727 seconds** of inference; no measured
    cloud-token saving is claimed.
+
+
+## Cloud Sol low batch — 2026-10-16
+
+The user explicitly selected R-0057–R-0061 and replaced local inference with
+cloud Sol for this batch. The main agent remained **Astra high**; every worker
+used **gpt-6-sol / low**, sequentially in one isolated worktree. No medium/high
+worker escalation or local model call was needed. This override does not change
+the ordinary local medium/64k → high/64k policy.
+
+| Assignment | Input tokens | Cached input (included) | Uncached input | Output tokens | Worker elapsed time |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| R-0057 + R-0058, interactive | 11,373,434 | 11,216,256 | 157,178 | 31,173 | 998 s |
+| R-0059, interactive | 9,179,147 | 9,078,016 | 101,131 | 28,140 | 566 s |
+| R-0060, interactive | 16,006,459 | 15,871,744 | 134,715 | 36,016 | 724 s |
+| R-0061, four text-only calls including context corrections and review repair | 143,341 | 4,224 | 139,117 | 11,517 | 119.315 s |
+
+These are measured worker counters, not subscription charges or a comparison of
+equivalent tasks. Cached input is part of input, not an additional total, and
+is not assumed free. Interactive elapsed time spans first-to-last worker events
+and includes its tools; text-only time measures calls and excludes main-agent
+application, review and tests. Main-agent tokens and CI time are additional.
+At the main-agent checkpoint **12:34:22 UTC**, Astra's delta since the saved
+baseline was **16,384,034 input** (16,160,512 cached; 223,522 uncached) and
+**52,071 output tokens**. That checkpoint excludes initial reads before the
+baseline and later acceptance/publication work, so it is a lower bound for main
+orchestration, not a complete task bill. Main review and verification are a
+material part of this experiment's cloud use.
+There is no Astra-only control run, quota-per-task counter or measured saving
+percentage. Other concurrent threads share account limits.
+
+Sol low delivered useful implementation and tests but needed caller review and
+targeted repairs. The interactive workers repeatedly carried large cached
+contexts. R-0061's bounded text-only approach avoided that repeated interactive
+history, but two initially incomplete caller packets cost calls without code:
+one omitted permission to update contradictory existing assertions, another
+omitted fixture and warehouse/statistics context. A complete packet produced the
+patch; a short review repair centralized the input calculation. This supports
+trying bounded Sol low assignments with explicit APIs, acceptance and limited
+repair context; it does not establish that every new task will be cheaper.
+
+[Functional evidence and diagnosed failures](../functional-tests.md#r-0057r-0061-cloud-sol-batch-2026-10-16)
+own the acceptance results. Full integrated regression passed (1325 game and 187 UI checks, zero failures/errors/skips); publication remains pending at this checkpoint. Raw counters and CLI call evidence are retained
+locally in `target/r57-r61/`; no new worker infrastructure or default setting was
+committed for this experiment.

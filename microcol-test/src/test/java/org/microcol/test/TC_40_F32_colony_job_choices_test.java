@@ -121,7 +121,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
         jobs.openFromIndoor("id_blacksmith", 0);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails("Potential output: 6 Tools per turn", true);
-        jobs.verifyDetails("Required each turn: 3 Ore; in warehouse: 1", true);
+        jobs.verifyDetails("Required each turn: 6 Ore; in warehouse: 1", true);
         jobs.verifyDetails("Not enough input goods", true);
         jobs.verifyDetails("Specialty: Tools", true);
         jobs.captureDialog("jobDialog", "job-expert-shortage.png");
