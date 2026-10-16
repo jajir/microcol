@@ -56,6 +56,9 @@
  * Player owns confirmed per-type European purchase quotes and counts; ship
  * demand advances only after a validated purchase.
  *
+ * Colony shares post-growth horse breeding between preview and execution,
+ * limited by food, storage and the stable present before the update.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

@@ -614,3 +614,11 @@ karavely za 1000 a 1100, nedostupnou třetí za 1200, Pokračovat a odmítnutí
 změněné nabídky nebo nedostatku peněz po otevření. Růst cen skutečného
 dělostřelectva zůstává integrační závislostí R-0095. Provedení a přejímku
 vede [R-0077](requirements/R-0077.md); samotná mapa není důkazem průchodu.
+
+### UC-041: chov koní R-0078
+
+`TC_49_F40_horse_breeding_test` mapuje skutečné postavení stájí, obyčejný
+a zdvojený přírůstek, zobrazený náhled skladu, kapacitní limit a přednost
+narození kolonisty při efektivních 201 jednotkách jídla. Po uložení se
+zásoby ani stavba neopakují. Modelové a hráčské výsledky jsou vedené v
+[R-0078](requirements/R-0078.md); tato mapa sama nepotvrzuje průchod.

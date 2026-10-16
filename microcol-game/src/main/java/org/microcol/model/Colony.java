@@ -266,15 +266,17 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
+        final ColonyProductionStats initialProduction = getRawGoodsStats();
+        final int breeding = getBreedingCount(initialProduction);
         // Validate national progress before famine, births or warehouse
         // changes.
-        final int possibleCrosses = Math.max(0, getGoodsStats()
+        final int possibleCrosses = Math.max(0, initialProduction
                 .getStatsByType(GoodsType.CROSS).getRowProduction());
         owner.checkCanCreditProducedCrosses(possibleCrosses);
         final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
         // from now colony could be destroyed by famine.
         if (isValid()) {
-            final ColonyProductionStats colonyStats = getGoodsStats();
+            final ColonyProductionStats colonyStats = getRawGoodsStats();
             final int producedCrosses = Math.max(0, colonyStats
                     .getStatsByType(GoodsType.CROSS).getRowProduction());
             colonyStats.forEach((goodsType, stats) -> {
@@ -304,6 +306,10 @@ public class Colony {
                 }
             });
             owner.creditProducedCrosses(producedCrosses);
+            if (breeding > 0) {
+                warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
+                warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
+            }
             colonyBuildingQueue.startTurn();
         }
         if (famineVictim != null) {
@@ -313,7 +319,7 @@ public class Colony {
     }
 
     private Unit eatFoodAndOptionallyMakeNewColonist() {
-        final ColonyProductionStats stats = getGoodsStats();
+        final ColonyProductionStats stats = getRawGoodsStats();
         final GoodsProductionStats cornStats = stats
                 .getStatsByType(GoodsType.CORN);
         if (cornStats.getInWarehouseAfter() < 0) {
@@ -615,6 +621,45 @@ public class Colony {
      * @return Return colony production statistics per turn.
      */
     public ColonyProductionStats getGoodsStats() {
+        final ColonyProductionStats preview = getRawGoodsStats();
+        final GoodsProductionStats food = preview
+                .getStatsByType(GoodsType.CORN);
+        final int afterResidents = food.getInWarehouseAfter();
+        if (afterResidents >= 0) {
+            final int births = afterResidents / FOOD_LEVEL_TO_FREE_COLONIST;
+            final int breeding = getBreedingCount(preview);
+            food.addConsumed(Math.addExact(
+                    Math.multiplyExact(births, FOOD_LEVEL_TO_FREE_COLONIST),
+                    breeding));
+            preview.getStatsByType(GoodsType.HORSE).addRowProduction(breeding);
+        }
+        return preview;
+    }
+
+    private int getBreedingCount(final ColonyProductionStats raw) {
+        final int foodAfterResidents = raw.getStatsByType(GoodsType.CORN)
+                .getInWarehouseAfter();
+        if (foodAfterResidents < 0) {
+            return 0;
+        }
+        final int remainingFood = foodAfterResidents
+                % FOOD_LEVEL_TO_FREE_COLONIST;
+        final int horses = warehouse.getGoods(GoodsType.HORSE).getAmount();
+        if (horses < 2) {
+            return 0;
+        }
+        final int base = Math.min(2, horses / 2);
+        final int rate = wasConstructionBuilded(ConstructionType.STABLES)
+                || wasConstructionBuilded(ConstructionType.LARGE_STABLES)
+                        ? base * 2
+                        : base;
+        final int freeCapacity = warehouse.getStorageCapacity(GoodsType.HORSE)
+                .getAmount() - horses;
+        return Math.max(0,
+                Math.min(rate, Math.min(remainingFood, freeCapacity)));
+    }
+
+    ColonyProductionStats getRawGoodsStats() {
         final ColonyProductionStats out = new ColonyProductionStats();
         // set initial warehouse stack
         GoodsType.GOOD_TYPES.forEach(goodsType -> {

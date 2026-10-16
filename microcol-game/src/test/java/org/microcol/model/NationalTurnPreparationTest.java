@@ -74,7 +74,7 @@ class NationalTurnPreparationTest {
         final int initialUnits = owner.getAllUnits().size();
         final int highestId = model.save().getUnits().stream()
                 .mapToInt(UnitPo::getId).max().orElseThrow();
-        final int productionDiff = colony.getGoodsStats()
+        final int productionDiff = colony.getRawGoodsStats()
                 .getStatsByType(GoodsType.CORN).getDiff();
         final var savedColony = data.getModel().getColonies().get(1);
         final var warehouse = new HashMap<>(savedColony.getColonyWarehouse());
@@ -82,14 +82,14 @@ class NationalTurnPreparationTest {
         savedColony.setColonyWarehouse(warehouse);
         final Model prepared = make(data);
         assertEquals(effectiveFood,
-                prepared.getColonyById(1).orElseThrow().getGoodsStats()
+                prepared.getColonyById(1).orElseThrow().getRawGoodsStats()
                         .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
         assertEquals(consumed, colony.getRequiredFoodPerTurn());
 
         data.setModel(prepared.save());
         final Model before = make(data);
         assertEquals(effectiveFood,
-                before.getColonyById(1).orElseThrow().getGoodsStats()
+                before.getColonyById(1).orElseThrow().getRawGoodsStats()
                         .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
         nextOwnerTurn(before);
         final Colony updated = before.getColonyById(1).orElseThrow();
@@ -144,7 +144,7 @@ class NationalTurnPreparationTest {
         final long immigrants = human.getAllUnits().stream()
                 .filter(Unit::isAtEuropePier).count();
         final int expectedCorn = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 200;
+                .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
         final List<String> stages = new ArrayList<>();
         model.addListener(new ModelListenerAdapter() {
             @Override

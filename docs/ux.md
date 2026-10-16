@@ -378,3 +378,13 @@ odmítne a vyzve k opětovnému otevření. Neúčtuje automaticky vyšší cenu
 Nedostatek peněz ponechá nabídku otevřenou s nedostupným tlačítkem a vysvětlením.
 Historie cen přetrvá přes Pokračovat; stav přejímky vede
 [R-0077](requirements/R-0077.md).
+
+### Chov koní v kolonii (R-0078)
+
+Hráč sleduje koně a jídlo ve stávajícím skladu kolonie. Náhled přírůstku koní
+zahrnuje dostupné jídlo i volnou kapacitu; stáje postaví běžnou stavební
+frontou. Jejich účinek se projeví v následujícím výrobním tahu. Jídlo se
+nejprve použije pro obyvatele a narození kolonistů, teprve zbytek pro koně.
+Plný sklad ani chybějící jídlo nezpůsobí záporné zásoby nebo zbytečné odečty.
+Zavření kolonie či Pokračovat samo nic nechová. Stav ověření vede
+[R-0078](requirements/R-0078.md).

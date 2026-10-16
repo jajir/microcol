@@ -3393,3 +3393,46 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    exact-token preservation and idempotence; packaging including Javadoc
    passed. Nine documentation tests and strict MkDocs passed. Complete CI
    and publication remain separate gates.
+
+### R-0075 complete CI outcome — 2026-10-16
+
+1. Run [38940319431](https://github.com/jajir/microcol/actions/runs/38940319431)
+   at `11c53f15` completed: **1478 model and 217 UI/support tests passed**, zero
+   failures/errors/skips. This includes all three TC45 Sentry scenarios and
+   the repaired TC22 roster assertions, so the earlier UI regression is resolved.
+2. All three native package jobs failed solely on the invalid Javadoc `@return`
+   in `EuropeButtonsPanel.updateLanguage`; publication was skipped. The repair
+   is in `2a5dbac6`. Its run `38941685067` has already passed all three native
+   packages, while its complete functional job remains in progress. Do not
+   infer a new downloadable game build from these intermediate results.
+
+### R-0078 horse breeding — 2026-10-16
+
+1. `Colony` freezes the shared breeding calculation before mutation, applies
+   it once after resident food and colonist births, and before construction
+   completion. Preview includes actual horse output and all growth/breeding
+   food use; raw production remains separate for execution and famine. Existing
+   saves already hold all required goods and building state.
+2. Main review caught a transposed expected horse/food value for 201 effective
+   food; the same worker corrected it before execution. First complete run:
+   **1522 tests, one failure**, no errors/skips. The final-resident famine test
+   accidentally retained a food-producing worker, so its own negative-food
+   precondition failed. The worker repaired that fixture using the existing
+   nonfood-worker pattern, preserving famine/destruction assertions. The full
+   rerun passed **1522 tests**, zero failures/errors/skips, including all 27
+   breeding cases and the existing food/turn-preparation checks.
+3. First Docker attempt stopped during test compilation because main's setup
+   called package-private `ColonyWarehouse.setGoods`. Main changed setup to
+   the existing public add/remove operations; no production API was expanded.
+   The repaired Docker run `run-lBqiU0` passed **17 tests**, zero failures,
+   errors or skips: TC49 (3), TC41 food import (2), TC32 construction (7),
+   TC09/10 famine (1 each) and page contract (3). The new journey builds real
+   Stables, verifies two horses in that update and four in the following one,
+   checks the visible horse preview, saved stocks, capacity-one/full limits
+   and a birth followed by exactly one horse from 201 effective food.
+4. Seven Java files passed shared formatting, exact-token preservation and
+   idempotence. Packaging including Javadoc passed; nine documentation tests
+   and strict MkDocs are checked after final evidence updates. Full CI and
+   publication remain pending. Normal final-stock forecasts include births
+   and breeding; famine keeps its pre-loss deficit warning and produces no
+   horses, preserving the existing survivor recalculation contract.

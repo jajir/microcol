@@ -546,3 +546,15 @@ nastoupení; kapacita, pořadí podle ID i cena pohybu zůstávají modelové op
 Model také probouzí hlídku při viditelném cizím pohybu do sousedního pole.
 Mapa a evropské molo pouze nabízejí platný příkaz a zobrazují jeho výsledek.
 Stav ověření je v [evidenci](functional-tests.md#r-0073-sentry-and-automatic-boarding-2026-10-16).
+
+### Chov koní a pořadí produkce (R-0078)
+
+`Colony` sdílí výpočet chovu mezi náhledem a provedením. Výpočet používá
+původní stav koní a stájí, volné místo skladu a jídlo zbývající po spotřebě
+obyvatel a narození kolonistů. Syrová výrobní bilance zůstává oddělená od
+konečného náhledu, aby se odečty růstu a chovu při provedení neopakovaly.
+Chov se zapíše jednou před dokončením stavební fronty; nově dokončené stáje
+proto ovlivní další tah. Při hladomoru se nechová, zatímco ostatní produkce
+přeživších zachovává svůj dosavadní postup. UI čte společnou bilanci bez
+mutace; uložené zboží a stavby nepotřebují další schéma. Přejímku vede
+[R-0078](requirements/R-0078.md).

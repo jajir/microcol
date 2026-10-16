@@ -3316,3 +3316,18 @@ committed for this experiment.
     is duplicated and no local model is used in this user-selected experiment.
     These outcomes do not establish token savings. Full acceptance, including the R-0095
     artillery dependency, remains in [R-0077](../requirements/R-0077.md).
+
+21. R-0078 reuses Sol low in `2026-10-16-r78`, based on `d9e9615d`, for
+    shared horse-breeding accounting and model tests. Main owns requirement
+    refinement, TC49/F40 construction-to-breeding journeys and actual checks.
+    The shared calculation must retain food-before-birth-before-breeding
+    ordering, famine behavior and next-update stable activation. This is a
+    bounded model assignment with no parallel duplicate implementation.
+    Main review returned a transposed 201-food expected value to the worker
+    before execution. The first full model run had one failure out of 1522:
+    the last-resident fixture retained a food producer and did not meet its
+    famine precondition. The same worker repaired the fixture; full rerun
+    passed 1522. Main repaired its own UI setup compilation (package-private
+    setter) with existing public stock operations; Docker then passed 17.
+    [Execution evidence](../functional-tests.md#r-0078-horse-breeding-2026-10-16)
+    distinguishes these repairs from the remaining CI/publication gates.

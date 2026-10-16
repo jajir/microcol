@@ -86,7 +86,7 @@ public final class GoodsProductionStats {
      * @param consumed the consumed to set
      */
     public void addConsumed(int consumed) {
-        this.consumed += consumed;
+        this.consumed = Math.addExact(this.consumed, consumed);
     }
 
     /**
