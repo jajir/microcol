@@ -233,6 +233,15 @@ Zprávy tahu nesou ID i historický text jména. Samotná shoda čísel z různ�
 her neznamená totožnost objektů; objektové equality se tímto řezem nemění.
 Přetrvávající souborové čtení/zápis zůstává v `model.campaign.po`.
 
+U [sdílených pracovních polí](gap-analysis.md#shared-colony-working-squares)
+`ColonyField` poskytuje dotaz na přípustnost a ověření očekávaného pracovníka;
+`AbstractUnit` ověřuje přesun před změnou místa a vybavení. `Model.make`
+kontroluje jednoznačnost uložených pracovních vazeb před vytvořením živých
+jednotek, nezávisle na oprávnění hráče v právě probíhajícím tahu.
+`GameController` nahrazuje současnou hru až po úspěšném sestavení nové;
+načítací UI zachová původní obrazovku a vysvětlí odmítnutí. Validace sama
+nesmí upravovat vstupní DTO ani uložený soubor.
+
 Textové vstupy hráče jsou Unicode a mají oříznuté krajní Unicode mezery.
 Dohoda z 13. října 2026 stanoví výchozí limit **64 Unicode code points** pro
 jméno hráče i další budoucí textové vstupy; na délku se znovu neptáme, pokud
