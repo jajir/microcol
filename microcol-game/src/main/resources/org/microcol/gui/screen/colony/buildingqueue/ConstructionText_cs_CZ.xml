@@ -41,4 +41,5 @@ Pokladnice po nákupu: %s zlata.</entry>
 <entry key="rushNoGold">Nedostatek zlata.</entry>
 <entry key="rushChanged">Nabídka se změnila. Nic nebylo utraceno. Zavřete okno a vyžádejte si novou cenu.</entry>
 <entry key="rushCompleted">Aktuální projekt byl dokončen a jednou zaplacen.</entry>
+<entry key="missingFounder">Vyžaduje otce zakladatele: %s.</entry>
 </properties>

@@ -454,3 +454,15 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
    Staré potvrzení po změně modelu nebo nabídky odmítnout s pokynem znovu otevřít.
 4. Ověření vede [R-0104](requirements/R-0104.md); popis není samostatným
    tvrzením o provedené hráčské studii.
+
+### Stavby vyžadující otce — R-0084
+
+1. Nabídka staveb při splněné populaci a předchůdci jmenuje chybějícího
+   otce: Smitha pro továrny, Stuyvesanta pro celnici. Hráč jej získá
+   obvyklým výběrem a výrobou zvonů v Kongresu.
+2. Členství zpřístupní pouze jinak dovolený projekt. Zařazení vyžaduje
+   samostatné potvrzení; zavření nabídky nic nezařadí.
+3. Rozpracovaná stavba bez potřebného členství zobrazí stejný důvod
+   pozastavení. Dokoupení není dostupné a zásoby zůstanou zachované.
+   Hotové stavby při změně vlastníka nezmizí. Ověření vede
+   [evidence R-0084](functional-tests.md#r-0084-founder-construction-2026-10-16).

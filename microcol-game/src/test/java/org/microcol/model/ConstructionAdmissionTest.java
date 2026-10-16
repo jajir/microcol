@@ -22,6 +22,16 @@ class ConstructionAdmissionTest {
             final String currentPlayer) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
+        type.getRequiredFounder().ifPresent(founder -> {
+            final var congress = data.getModel().getGameManager().getPlayers()
+                    .stream().filter(player -> player.getName().equals("Dutch"))
+                    .findFirst().orElseThrow().getCongress();
+            congress.setMembers(List.of(founder));
+            congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
+                    Founder.THOMAS_JEFFERSON, Founder.JAKOB_FUGGER,
+                    Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
+            congress.setGeneration(2);
+        });
         data.getModel().getGameManager().setCurrentPlayer(currentPlayer);
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());

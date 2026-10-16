@@ -3760,3 +3760,35 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 6. Packaging including Javadoc, nine documentation tests and strict MkDocs
    passed. Full CI and publication remain pending; R-0104 stays ready until
    delivery gates finish. This does not certify the other 24 founder effects.
+
+### R-0084 founder construction — 2026-10-16
+
+1. Scope: BUILD-007/014 and FATHER-011/014; UC-042/045/048/096/099.
+   The existing Sol low worker owns founder metadata, shared queue validation
+   and boundary tests in an isolated worktree. Main owns translated reasons,
+   confirmation snapshots, F48/TC57, review and actual verification.
+   No local model or duplicate implementation is used.
+2. Review requested real ownership-transfer coverage in addition to the
+   worker's saved-membership scenario, plus stale rush rejection, unrelated
+   founders and preservation of the other prerequisites. The same worker
+   supplies these focused additions. The full model suite passed **1613 tests**,
+   zero failures/errors/skips, including capture/recapture and preserved buildings.
+3. Initial Docker run `run-4NEZkM` rejected the new F48 fixture before any
+   player scenario: 200 tools exceeded its 100-unit warehouse capacity
+   (food also exceeded capacity). Main corrected both initial stocks to 100
+   and verified direct loading through the model; no production code changed.
+   The failed TC57 cases are rerun separately; initial failure is not acceptance.
+4. In the first Docker run, TC32 (seven), TC50 (three), TC56 (two) and
+   the three page-contract checks passed; all three TC57 cases failed at load.
+   Shared formatting checked eight Java files with exact-token preservation
+   and idempotence. Packaging including Javadoc passed.
+5. Corrected Docker `run-OZLW9Q` passed **six tests**, zero failures/errors/skips:
+   all three TC57 journeys and the three page-contract checks. Smith recruitment
+   unlocks all six otherwise eligible factories; Stuyvesant unlocks only the
+   custom house. Actual normal completion and Continue passed for ironworks
+   and custom house; the retained founder-less head preserves tools/work and
+   cannot be rushed. Together with the prior passing regressions, all 18
+   distinct selected tests passed. Main inspected the captured construction
+   dialog: founder name, costs, stock and disabled confirmation are readable.
+6. Nine documentation tests and strict MkDocs passed. Full CI and publication
+   remain separate gates; R-0084 stays ready while they are pending.

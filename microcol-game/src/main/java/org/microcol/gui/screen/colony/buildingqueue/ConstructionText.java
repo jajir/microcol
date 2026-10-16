@@ -17,7 +17,7 @@ public enum ConstructionText implements MessageKeyResource {
     remove, cancel, changed, added, empty, hammers, hammerPool, tools,
     waitingTools, waitingHammers, ready, coastalRequired, missingShipyard, rush,
     rushConfirm, rushCancel, rushDetail, rushUnavailable, rushNoGold,
-    rushChanged, rushCompleted;
+    rushChanged, rushCompleted, missingFounder;
 
     public static String name(final I18n i18n, final ColonyBuildingItem item) {
         if (item instanceof ColonyBuildingItemConstruction) {
@@ -32,6 +32,12 @@ public enum ConstructionText implements MessageKeyResource {
     public static String reason(final I18n i18n, final UnavailableReason reason,
             final ConstructionType type, final Colony colony) {
         switch (reason) {
+        case MISSING_FOUNDER:
+            return type == null ? i18n.get(unavailable)
+                    : i18n.get(missingFounder,
+                            org.microcol.gui.screen.congress.CongressText.name(
+                                    i18n,
+                                    type.getRequiredFounder().orElseThrow()));
         case COASTAL_REQUIRED:
             return i18n.get(coastalRequired);
         case MISSING_SHIPYARD:

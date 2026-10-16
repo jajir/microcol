@@ -41,4 +41,5 @@ Treasury after purchase: %s gold.</entry>
 <entry key="rushNoGold">Not enough gold.</entry>
 <entry key="rushChanged">The offer changed. Nothing was spent. Close this window and request a new quote.</entry>
 <entry key="rushCompleted">The current project was completed and paid once.</entry>
+<entry key="missingFounder">Requires founder: %s.</entry>
 </properties>

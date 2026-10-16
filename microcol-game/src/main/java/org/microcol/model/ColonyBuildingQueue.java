@@ -157,7 +157,7 @@ public class ColonyBuildingQueue {
     public enum UnavailableReason {
         UNKNOWN_TYPE, COLONY_UNAVAILABLE, NOT_A_PROJECT, ALREADY_BUILT,
         ALREADY_QUEUED, MISSING_PREDECESSOR, POPULATION, MISSING_SHIPYARD,
-        COASTAL_REQUIRED
+        COASTAL_REQUIRED, MISSING_FOUNDER
     }
 
     public Optional<UnavailableReason> getUnitUnavailableReason(
@@ -224,6 +224,11 @@ public class ColonyBuildingQueue {
         if (colony.getUnitsInsideColony().size() < type
                 .getRequiredColonyPopulation()) {
             return Optional.of(UnavailableReason.POPULATION);
+        }
+        if (type.getRequiredFounder().isPresent()
+                && !colony.getOwner().getCongressMembers()
+                        .contains(type.getRequiredFounder().get())) {
+            return Optional.of(UnavailableReason.MISSING_FOUNDER);
         }
         return Optional.empty();
     }
@@ -356,6 +361,11 @@ public class ColonyBuildingQueue {
                         .noneMatch(c -> c.getType() == predecessor)) {
                     return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
                 }
+            }
+            if (type.getRequiredFounder().isPresent()
+                    && !colony.getOwner().getCongressMembers()
+                            .contains(type.getRequiredFounder().get())) {
+                return Optional.of(UnavailableReason.MISSING_FOUNDER);
             }
             return Optional.empty();
         } else if (first instanceof ColonyBuildingItemProgressUnit) {

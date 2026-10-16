@@ -233,7 +233,9 @@ public class QueueDialog extends AbstractMessageWindow {
     // snapshot.
     private List<?> currentState() {
         final Colony colony = controller.getColony();
-        return List.of(colony.getOwner(), colony.getUnitsInsideColony().size(),
+        return List.of(colony.getOwner(),
+                colony.getOwner().getCongressMembers(),
+                colony.getUnitsInsideColony().size(),
                 colony.getConstructions().stream().map(c -> c.getType())
                         .collect(Collectors.toList()),
                 colony.getColonyBuildingQueue().getBuildingQueue().stream()

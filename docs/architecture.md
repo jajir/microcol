@@ -634,3 +634,13 @@ nejvýše jeden cíl a zachová přebytek. `FounderOffer` váže potvrzení na
 původního hráče a generaci nabídky. Model vytváří odměnu a uloženou zprávu
 příchodu; rozhraní pouze překládá a zobrazuje. Continue neopakuje aktualizaci.
 Rozsah a přejímku vede [R-0104](requirements/R-0104.md).
+
+### Stavební podmínky otců (R-0084)
+
+`ConstructionType.getRequiredFounder` určuje Smitha pro šest továren a
+Stuyvesanta pro celnici. `ColonyBuildingQueue` ověřuje členství současného
+vlastníka při zařazení i dokončení, včetně placeného dokončení. Chybějící
+členství pozastaví rozpracovaný projekt bez spotřeby zásob; hotové budovy
+se tímto pravidlem neodstraňují. GUI překládá společný důvod a váže
+potvrzení také na snímek členství. Nevzniká další uložený příznak odemčení.
+Rozsah a přejímku vede [R-0084](requirements/R-0084.md).

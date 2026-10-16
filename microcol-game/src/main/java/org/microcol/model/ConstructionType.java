@@ -300,6 +300,19 @@ public class ConstructionType {
             .setRequiredTools(50).setSlotsForWorkers(0).setUpgradeTo(null)
             .setRequiredColonyPopulation(0).build();
 
+    /**
+     * @return the founder required to build this construction, if any
+     */
+    public Optional<Founder> getRequiredFounder() {
+        if (this == IRON_WORKS || this == CIGAR_FACTORY || this == TEXTILE_MILL
+                || this == RUM_FACTORY || this == FUR_FACTORY
+                || this == ARSENAL) {
+            return Optional.of(Founder.ADAM_SMITH);
+        }
+        return this == CUSTOM_HOUSE ? Optional.of(Founder.PETER_STUYVESANT)
+                : Optional.empty();
+    }
+
     public final static List<ConstructionType> ALL = ImmutableList.of(TOWN_HALL,
             LUMBER_MILL, CARPENTERS_STAND, IRON_WORKS, BLACKSMITHS_SHOP,
             BLACKSMITHS_HOUSE, FORTRESS, FORT, STOCKADE, CIGAR_FACTORY,
