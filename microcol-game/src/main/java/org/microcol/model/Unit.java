@@ -61,6 +61,13 @@ public interface Unit {
 
     boolean isAtPlaceColonyField();
 
+    /**
+     * Whether a voluntary order may remove this resident from its colony.
+     *
+     * @return true for nonresidents or when the colony permits departure
+     */
+    boolean canLeaveColony();
+
     List<TerrainType> getMoveableTerrainTypes();
 
     boolean canMount();

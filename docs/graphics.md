@@ -529,3 +529,15 @@ pád při otevření kolonie s těmito budovami. Vlastní vojenská kresba zůst
 výtvarným omezením; název a ikona produkovaných mušket rozlišují funkci.
 Rastrové podklady se nemění; hráčské ověření vede
 [evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).
+
+### Zobrazení opevnění — R-0082, 2026-10-16
+
+Při skutečném otevření kolonie s palisádou chybějící registrace způsobila
+pád obrazovky. `STOCKADE`, `FORT` a `FORTRESS` nyní používají existující
+výřez `building_3_3`; jde o dočasně sdílenou kresbu zděné budovy.
+Název stavby rozlišuje typ, samostatná kresba jednotlivých stupňů není
+součástí této funkční opravy. Zdrojový atlas se nemění.
+
+Vizuální kontrola zachytila chybějící pozici `id_fort`, která panel
+překrývala s tabákovou dílnou. CSS i zdroj SCSS nyní umísťují opevnění
+do volného místa vedle prostřední řady; TC53 kontroluje nepřekrytí sousedů.

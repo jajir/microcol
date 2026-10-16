@@ -416,3 +416,12 @@ jako hodnotu před bonusy kolonie, aby jej hráč nezaměňoval za celý výstup
 Dokončená stavba zvyšuje další produkci bez přesunu pracovníků.
 Automatické hráčské ověření zaznamenává [R-0081](requirements/R-0081.md);
 nejde o pozorování skutečných hráčů.
+
+### Odchod třetího obyvatele z opevnění (R-0082)
+
+Při tažení chráněného obyvatele ven rozhraní nepovolí přesun a ve stavovém
+řádku vysvětlí minimum tří obyvatel i možnost změnit práci uvnitř kolonie.
+Kontrola se opakuje při dokončení akce; model zůstává autoritou. Čtvrtý
+obyvatel může odejít běžným tažením a potom nastoupit na loď. Hlad může
+snížit populaci pod minimum, aniž by odstranil opevnění. Automatické
+hráčské ověření vede [R-0082](requirements/R-0082.md).

@@ -74,4 +74,5 @@
     <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>
     <entry key="fieldMissingDock">Build a dock before assigning fishing work.</entry>
     <entry key="jobBellContribution">Worker contribution before colony bonuses: %s %s per turn</entry>
+    <entry key="fortifiedMinimum">A fortified colony must keep at least 3 residents. You can change their jobs inside the colony.</entry>
 </properties>

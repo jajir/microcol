@@ -553,6 +553,13 @@ public class Colony {
         return model.isExists(this);
     }
 
+    boolean canVoluntarilyLoseResident() {
+        return (!wasConstructionBuilded(ConstructionType.STOCKADE)
+                && !wasConstructionBuilded(ConstructionType.FORT)
+                && !wasConstructionBuilded(ConstructionType.FORTRESS))
+                || getUnitsInsideColony().size() > 3;
+    }
+
     public List<ColonyJobChoice> getJobChoices(final Unit worker) {
         return ColonyJobChoice.forWorker(model, this, worker);
     }

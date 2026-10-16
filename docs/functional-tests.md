@@ -3599,3 +3599,53 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    have now passed; no failed run is counted as acceptance.
 7. Nine documentation tests and strict MkDocs passed. Full CI and publication
    remain pending; the requirement stays ready until those gates complete.
+
+
+### R-0082 fortified population — 2026-10-16
+
+1. Scope: BUILD-015 / UC-047 voluntary departures and forced famine.
+   A bounded Sol low worker implemented model guards/tests in an isolated
+   worktree; main owns UI feedback, F44/TC53, review and actual checks.
+   No local model or duplicate model implementation was used.
+2. Initial full model suite passed **1573 tests**, zero failures/errors/skips.
+   The final expanded suite passed **1575 tests**, zero failures/errors/skips,
+   including departure at four residents for all three tiers and forced
+   capture/reload of a two-resident fortified colony.
+3. Initial Docker attempt stopped before test execution: main's new page
+   helper passed an untyped lookup to overloaded `dropTo`. Explicitly selecting
+   `Node.class` repairs the compile error without changing gameplay. The full
+   selected Docker run was repeated.
+4. Docker `run-ngvE1j`: 22 cases, zero assertion failures, two errors in
+   TC53 because `ImageLoaderBuilding` had no STOCKADE image mapping; opening
+   the actual colony threw before either scenario could proceed. TC40 (15),
+   TC01 (1), TC09 (1) and the page contract (3) passed. Main registered all
+   three defensive tiers with existing art, documented the visual reuse and
+   reruns both new player scenarios. No gameplay assertion was weakened.
+5. Docker `run-T1WQ71`: TC53 famine/Continue and page-contract checks passed.
+   TC53 departure passed rejection, feedback, internal reassignment and the
+   fourth resident leaving, but main then dragged the passenger into F44's
+   occupied cargo slot 0 (one tool). The existing boarding rule correctly
+   rejected it. Main changed the destination to empty slot 1, preserving all
+   assertions and cargo rules; both scenarios are rerun.
+6. Docker `run-5vnQgP` passed both TC53 scenarios and three page-contract
+   checks. Main's screenshot review then found the fort panel overlapping
+   the tobacco workshop: no `id_fort` position existed in CSS. Main assigned
+   an unused middle-row position in both CSS and SCSS and added a visible
+   non-overlap assertion against neighboring panels.
+7. Final Docker `run-Xdymlw` passed **five tests**: both TC53 scenarios and
+   three page-contract checks, zero failures/errors/skips. Main inspected the
+   fresh screenshot: the fort occupies its own space and neighbors remain
+   accessible. Across the recorded runs every selected new/regression player
+   path passed. Nine changed Java files passed shared formatting with token
+   preservation/idempotence; packaging/Javadoc, nine documentation tests and
+   strict MkDocs passed. Full CI/publication remain pending.
+
+### R-0079 full CI regression — 2026-10-16
+
+1. [Run 38946246170](https://github.com/jajir/microcol/actions/runs/38946246170)
+   completed with **228 UI/support cases, one failure, zero errors/skips**.
+   TC39/06 retained the old 98-food expectation instead of 96 after horse
+   breeding. This is the same failure recorded for R-0078; the repair was
+   already committed in `165e83a8` and passed the local TC39 rerun.
+2. Native packages, compatibility and Pages passed; game publication was
+   blocked. The subsequent R-0080 full CI gate remains independently pending.

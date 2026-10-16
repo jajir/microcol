@@ -7,6 +7,9 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.i18n.I18n;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -46,12 +49,16 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     private Colony colony;
 
+    private final I18n i18n;
+
     @Inject
     public PanelOutsideColony(final GameModelController gameModelController,
             final ColonyDialogCallback colonyDialog,
             final DialogDestroyColony dialogDestroyColony,
             final EventBus eventBus,
-            final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory) {
+            final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory,
+            final I18n i18n) {
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
@@ -85,7 +92,13 @@ final class PanelOutsideColony implements JavaFxComponent {
     }
 
     private void onDragOver(final DragEvent event) {
-        if (isItUnit(event.getDragboard())) {
+        final Optional<Unit> unit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard())
+                .getUnit();
+        if (unit.isPresent() && !unit.get().canLeaveColony()) {
+            showDepartureProblem(ColonyMsg.fortifiedMinimum);
+            event.consume();
+        } else if (isItUnit(event.getDragboard())) {
             event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
         }
@@ -93,8 +106,9 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     private boolean isItUnit(final Dragboard db) {
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterUnit(unit -> !unit.isAtCargoSlot()
-                        || unit.canUnitDisembarkAt(colony.getLocation()))
+                .filterUnit(unit -> unit.canLeaveColony()
+                        && (!unit.isAtCargoSlot() || unit
+                                .canUnitDisembarkAt(colony.getLocation())))
                 .getUnit().isPresent();
     }
 
@@ -105,31 +119,54 @@ final class PanelOutsideColony implements JavaFxComponent {
                 .getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
-            if (unit.isAtCargoSlot()) {
-                try {
-                    unit.disembarkToLocation(colony.getLocation());
-                } catch (IllegalStateException rejected) {
-                    event.setDropCompleted(false);
-                    event.consume();
-                    gameModelController.showPassengerTransferRejection();
-                    return;
-                }
-                eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
-            } else if (colony.isLastUnitIncolony(unit)) {
-                if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
+            if (!unit.canLeaveColony()) {
+                event.setDropCompleted(false);
+                event.consume();
+                showDepartureProblem(ColonyMsg.fortifiedMinimum);
+                return;
+            }
+            try {
+                if (unit.isAtCargoSlot()) {
+                    try {
+                        unit.disembarkToLocation(colony.getLocation());
+                    } catch (IllegalStateException rejected) {
+                        event.setDropCompleted(false);
+                        event.consume();
+                        gameModelController.showPassengerTransferRejection();
+                        return;
+                    }
+                    eventBus.post(
+                            new UnitMovedOutsideColonyEvent(unit, colony));
+                } else if (colony.isLastUnitIncolony(unit)) {
+                    if (dialogDestroyColony
+                            .showWaitAndReturnIfYesWasSelected()) {
+                        unit.placeToMap(colony.getLocation());
+                        eventBus.post(
+                                new UnitMovedOutsideColonyEvent(unit, colony));
+                        colonyDialog.close();
+                    }
+                } else {
                     unit.placeToMap(colony.getLocation());
                     eventBus.post(
                             new UnitMovedOutsideColonyEvent(unit, colony));
-                    colonyDialog.close();
                 }
-            } else {
-                unit.placeToMap(colony.getLocation());
-                eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
+            } catch (IllegalStateException rejected) {
+                event.setDropCompleted(false);
+                event.consume();
+                showDepartureProblem(
+                        unit.canLeaveColony() ? ColonyMsg.jobChanged
+                                : ColonyMsg.fortifiedMinimum);
+                return;
             }
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         }
+    }
+
+    private void showDepartureProblem(final ColonyMsg message) {
+        eventBus.post(
+                new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
     }
 
     @Override

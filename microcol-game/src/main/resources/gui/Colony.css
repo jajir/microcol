@@ -207,3 +207,8 @@
     -fx-font-size: 12;
     -fx-padding: 3 8 3 8;
 }
+
+#id_fort {
+  -fx-translate-x: 370;
+  -fx-translate-y: 1;
+}

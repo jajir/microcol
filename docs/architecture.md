@@ -590,3 +590,14 @@ probíhá po produkci, takže nový bonus platí od následující aktualizace.
 Tiskové budovy nejsou dalšími producenty a nepotřebují nové schéma uložení.
 Další politické a otcovské bonusy zůstávají samostatnými požadavky.
 Viz [R-0081](requirements/R-0081.md).
+
+### Dobrovolný odchod z opevněné kolonie (R-0082)
+
+`Colony.canVoluntarilyLoseResident()` vlastní pravidlo minimálně tří
+vnitřních obyvatel pro palisádu, pevnost a vyšší opevnění. `Unit.canLeaveColony()`
+je společný dotaz pro rozhraní a validační kontroly umístění jednotky.
+Přesun mezi pracemi téže kolonie nesnižuje populaci; vnější jednotky se
+nezapočítávají. Dobrovolné operace ověřují pravidlo před změnou místa či
+výbavy. Hlad a boj používají vlastní vynucené ztráty; nepoužívají tento zákaz.
+Přeživší kolonie si ponechá opevnění i při méně než třech obyvatelích,
+včetně uložení a načtení. Viz [R-0082](requirements/R-0082.md).

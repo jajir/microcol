@@ -652,3 +652,11 @@ základ bez obsluhy 1 → 1 → 2. Oba projdou Continue bez opakování produkce
 první kontroluje i zrušení objednávky a popisek příspěvku pracovníka.
 Výsledky vede [evidence R-0081](functional-tests.md#r-0081-printing-production-2026-10-16).
 Obranná část UC-047 zůstává samostatným rozsahem.
+
+### UC-047: minimum obyvatel opevněné kolonie R-0082
+
+`TC_53_F44_fortified_population_test` táhne třetího obyvatele ven a
+kontroluje odmítnutí, vysvětlení a nezměněný svět. Přidělení jiné vnitřní práce
+zůstává povolené; čtvrtý obyvatel může odejít a nastoupit na loď. Druhý
+scénář projde skutečným hladověním na dva obyvatele a zachováním palisády.
+Oba ověřují Continue. Výsledky vede [R-0082](requirements/R-0082.md).

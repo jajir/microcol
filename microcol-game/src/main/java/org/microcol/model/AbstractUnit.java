@@ -775,6 +775,8 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
+        Preconditions.checkState(canLeaveColony(),
+                "Fortified colony needs three residents");
         Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
         Preconditions.checkArgument(
                 owner.equals(placeCargoSlot.getCargoSlotOwner()),
@@ -796,6 +798,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public void placeToEuropePort(final EuropePort port) {
+        Preconditions.checkState(canLeaveColony(),
+                "Fortified colony needs three residents");
         place.destroy();
         place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
     }
@@ -818,6 +822,8 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToLocation(final Location target,
             final Direction orientation) {
+        Preconditions.checkState(canLeaveColony(),
+                "Fortified colony needs three residents");
         if (place instanceof PlaceLocation) {
             place.destroy();
             place = new PlaceLocation(this, Preconditions.checkNotNull(target),
@@ -969,6 +975,10 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
         Preconditions.checkNotNull(structureSlot);
+        Preconditions.checkState(
+                canLeaveColony()
+                        || isAlreadyInSameColony(structureSlot.getColony()),
+                "Fortified colony needs three residents");
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(),
@@ -987,6 +997,10 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
         Preconditions.checkNotNull(colonyField);
+        Preconditions.checkState(
+                canLeaveColony()
+                        || isAlreadyInSameColony(colonyField.getColony()),
+                "Fortified colony needs three residents");
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(),
@@ -1004,14 +1018,14 @@ public abstract class AbstractUnit implements Unit {
 
     private boolean isAlreadyInSameColony(
             final Colony colonyWhereWillBeUnitPlaced) {
-        final Optional<Colony> oColony = getColony();
-        if (oColony.isPresent()) {
-            final Colony colony = oColony.get();
-            if (colony.getUnitsInsideColony().size() == 1) {
-                return colony.equals(colonyWhereWillBeUnitPlaced);
-            }
-        }
-        return false;
+        return getColony()
+                .filter(colony -> colony == colonyWhereWillBeUnitPlaced)
+                .isPresent();
+    }
+
+    @Override
+    public boolean canLeaveColony() {
+        return getColony().map(Colony::canVoluntarilyLoseResident).orElse(true);
     }
 
     /**

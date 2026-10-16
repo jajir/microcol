@@ -80,6 +80,15 @@ public final class ImageLoaderBuilding extends AbstractTiledImageLoader {
         imageCache.registerImage(makeKey(ConstructionType.ARSENAL),
                 "building_3_3");
 
+        // shortcut: reuse the existing walled building until dedicated
+        // fortification art exists.
+        imageCache.registerImage(makeKey(ConstructionType.STOCKADE),
+                "building_3_3");
+        imageCache.registerImage(makeKey(ConstructionType.FORT),
+                "building_3_3");
+        imageCache.registerImage(makeKey(ConstructionType.FORTRESS),
+                "building_3_3");
+
         imageCache.registerImage(makeKey(ConstructionType.RUM_DISTILLERS_HOUSE),
                 "building_5_3");
         imageCache.registerImage(makeKey(ConstructionType.RUM_DISTILLERY),

@@ -74,4 +74,5 @@
     <entry key="jobDropRejected">Tento pracovník nyní nemůže přijmout danou práci. Zkontrolujte tah, dostupnost místa a prostor pro vybavení ve skladu.</entry>
     <entry key="fieldMissingDock">Před přidělením rybolovu postavte dok.</entry>
     <entry key="jobBellContribution">Příspěvek pracovníka před bonusy kolonie: %s %s za tah</entry>
+    <entry key="fortifiedMinimum">Opevněná kolonie musí mít alespoň 3 obyvatele. Jejich práci uvnitř kolonie můžete měnit.</entry>
 </properties>
