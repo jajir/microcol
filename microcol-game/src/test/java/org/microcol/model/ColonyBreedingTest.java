@@ -48,7 +48,6 @@ class ColonyBreedingTest {
             queued.setId(100);
             queued.setType(QueueItemType.CONSTRUCTION);
             queued.setConstructionType(ConstructionType.STABLES);
-            queued.setBuildHammers(0);
             saved.getBuildingQueue().add(queued);
             saved.getColonyWarehouse().put("HAMMERS", 64);
         }

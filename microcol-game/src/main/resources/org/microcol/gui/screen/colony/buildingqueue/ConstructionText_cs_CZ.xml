@@ -26,7 +26,7 @@
     <entry key="waitingTools">Čeká na %s nástrojů.</entry>
     <entry key="waitingHammers">Čeká na kladiva.</entry>
     <entry key="ready">Připraveno na příští fázi stavění.</entry>
-<entry key="queueProgress">Přidělená kladiva: %s / %s</entry>
+<entry key="hammerPool">Společná práce: %s kladiv.</entry>
     <entry key="coastalRequired">Je nutná pobřežní kolonie.</entry>
     <entry key="missingShipyard">Před stavbou lodí postavte loděnici.</entry>
 </properties>

@@ -143,8 +143,7 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void verifyQueue(final List<String> expectedNames,
-            final List<Integer> expectedIds,
-            final List<Integer> expectedProgress) {
+            final List<Integer> expectedIds, final int expectedHammerPool) {
         final List<ColonyBuildingItemProgress<?>> entries = colony()
                 .getColonyBuildingQueue().getBuildingQueue();
         assertEquals(expectedNames,
@@ -153,10 +152,19 @@ public final class ConstructionPage extends AbstractScreen {
         assertEquals(expectedIds,
                 entries.stream().map(ColonyBuildingItemProgress::getId)
                         .collect(Collectors.toList()));
-        assertEquals(expectedProgress,
-                entries.stream()
-                        .map(ColonyBuildingItemProgress::getBuildHammers)
-                        .collect(Collectors.toList()));
+        assertEquals(expectedHammerPool, colony().getWarehouse()
+                .getGoods(GoodsType.HAMMERS).getAmount());
+    }
+
+    public void verifyOutsideUnits(final org.microcol.model.UnitType type,
+            final long expected) {
+        assertEquals(expected, getModel().getUnitsAt(colony().getLocation())
+                .stream().filter(unit -> unit.getType() == type).count());
+    }
+
+    public void verifySharedHammerDisplay(final int expected) {
+        assertEquals("Shared work: " + expected + " hammers.",
+                getLabeledById("constructionHammerPool").getText());
     }
 
     public void verifyStocksAndPopulation(final int hammers, final int tools,

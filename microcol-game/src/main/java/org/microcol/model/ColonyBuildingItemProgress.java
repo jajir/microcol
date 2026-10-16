@@ -3,7 +3,7 @@ package org.microcol.model;
 import com.google.common.base.Preconditions;
 
 /**
- * Hold how far is building of some item.
+ * A project in the colony's construction queue.
  *
  * @param <I> type of item being built
  */
@@ -13,22 +13,12 @@ public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
 
     private final I item;
 
-    private int buildHammers;
-
     private boolean visible;
 
     ColonyBuildingItemProgress(final I item, final int id) {
         this.item = Preconditions.checkNotNull(item);
         this.id = id;
         visible = true;
-    }
-
-    public void addHammers(final int hammers) {
-        buildHammers += hammers;
-    }
-
-    public boolean isHammersProvided() {
-        return buildHammers >= getRequiredHammers();
     }
 
     public String getName() {
@@ -41,20 +31,6 @@ public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
 
     public int getRequiredTools() {
         return item.getRequiredTools();
-    }
-
-    /**
-     * @return the buildHammers
-     */
-    public int getBuildHammers() {
-        return buildHammers;
-    }
-
-    /**
-     * @param buildHammers the buildHammers to set
-     */
-    public void setBuildHammers(int buildHammers) {
-        this.buildHammers = buildHammers;
     }
 
     /**

@@ -9,8 +9,6 @@ public class ColonyBuildingQueueItemPo {
 
     private Integer id;
 
-    private Integer buildHammers;
-
     private UnitType unitType;
 
     private ConstructionType constructionType;
@@ -41,20 +39,6 @@ public class ColonyBuildingQueueItemPo {
      */
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /**
-     * @return the buildHammers
-     */
-    public Integer getBuildHammers() {
-        return buildHammers;
-    }
-
-    /**
-     * @param buildHammers the buildHammers to set
-     */
-    public void setBuildHammers(Integer buildHammers) {
-        this.buildHammers = buildHammers;
     }
 
     /**

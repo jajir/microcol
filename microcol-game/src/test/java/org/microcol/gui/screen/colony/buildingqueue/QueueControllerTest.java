@@ -44,14 +44,17 @@ class QueueControllerTest {
         controller.addAtEnd(new ColonyBuildingItemUnit(UnitType.WAGON));
         final ColonyBuildingItemProgress<?> first = controller
                 .getObservableList().get(0);
-        first.addHammers(17);
+        colony.getWarehouse()
+                .removeGoods(colony.getWarehouse().getGoods(GoodsType.HAMMERS));
+        colony.getWarehouse().addGoods(Goods.of(GoodsType.HAMMERS, 17));
         controller.moveItem(first, 1);
         assertEquals(List.of(1, 0, 2), ids());
         controller.moveItem(first, 1);
         assertEquals(List.of(1, 2, 0), ids());
         controller.moveItem(first, -1);
         assertEquals(List.of(1, 0, 2), ids());
-        assertEquals(17, first.getBuildHammers());
+        assertEquals(17,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(colony.getColonyBuildingQueue().getBuildingQueue(),
                 controller.getObservableList());
     }

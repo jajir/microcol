@@ -50,7 +50,7 @@ public class TC_32_F24_construction_eligibility_test
                 "construction-unavailable.png");
         construction.escape();
         construction.verifyPickerClosed();
-        construction.verifyQueue(List.of(), List.of(), List.of());
+        construction.verifyQueue(List.of(), List.of(), 58);
         construction.verifyStocksAndPopulation(58, 19, 3);
 
         // Assign the fourth resident through the colony's carpenter workplace.
@@ -61,7 +61,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyOffer(true, "Available.", 64, 20);
         construction.cancel();
         construction.verifyPickerClosed();
-        construction.verifyQueue(List.of(), List.of(), List.of());
+        construction.verifyQueue(List.of(), List.of(), 58);
         construction.verifyStocksAndPopulation(58, 19, 4);
 
         // Explicit confirmation queues exactly once, without spending
@@ -69,8 +69,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.open();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirmTwice();
-        construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0),
-                List.of(0));
+        construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 58);
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(false, "already queued", 64, 20);
         construction.escape();
@@ -99,8 +98,8 @@ public class TC_32_F24_construction_eligibility_test
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
-                List.of(0, 1), List.of(64, 0));
-        construction.verifyStocksAndPopulation(0, 19, 4);
+                List.of(0, 1), 64);
+        construction.verifyStocksAndPopulation(64, 19, 4);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 1);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
         construction.verifyStatus("Waiting for tools: 1.");
@@ -113,13 +112,13 @@ public class TC_32_F24_construction_eligibility_test
         construction.escape();
         construction.verifyPickerClosed();
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
-                List.of(0, 1), List.of(64, 0));
+                List.of(0, 1), 64);
         game = colony.close();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
-                List.of(0, 1), List.of(64, 0));
+                List.of(0, 1), 64);
         construction.verifyStatus("Waiting for tools: 1.");
 
         // Bring the final tool; the turn completes only the first project
@@ -131,7 +130,7 @@ public class TC_32_F24_construction_eligibility_test
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), List.of(0));
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 6);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
@@ -142,7 +141,7 @@ public class TC_32_F24_construction_eligibility_test
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
-        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), List.of(0));
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 6);
     }
 
     @Test
@@ -168,14 +167,14 @@ public class TC_32_F24_construction_eligibility_test
         construction.select("WAREHOUSE");
         construction.confirm();
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
-                List.of(0, 0));
+                9);
         construction.selectQueue(1);
         construction.moveUp();
         construction.verifyQueue(List.of("WAREHOUSE", "WAGON"), List.of(1, 0),
-                List.of(0, 0));
+                9);
         construction.moveDown();
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
-                List.of(0, 0));
+                9);
         construction.cancel();
         construction.verifyPickerClosed();
         game = colony.close();
@@ -183,14 +182,14 @@ public class TC_32_F24_construction_eligibility_test
         game = new FreePlayAuditPage(getContext()).continueGame();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
-                List.of(0, 0));
+                9);
         construction.open();
         construction.selectQueue(0);
         construction.remove();
-        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), List.of(0));
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 9);
         construction.cancel();
         construction.verifyPickerClosed();
-        construction.verifyStocksAndPopulation(0, 19, 3);
+        construction.verifyStocksAndPopulation(9, 19, 3);
     }
 
     @Test
@@ -208,7 +207,7 @@ public class TC_32_F24_construction_eligibility_test
                 () -> getModel().getUnitById(200).placeToLocation(COLONY));
         construction.confirm();
         construction.verifyChangedOffer();
-        construction.verifyQueue(List.of(), List.of(), List.of());
+        construction.verifyQueue(List.of(), List.of(), 58);
         construction.select("LUMBER_MILL");
         construction.verifyOffer(false, "Requires 3 residents; currently 2.",
                 52, 0);
@@ -232,8 +231,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.captureDialog("constructionProjects",
                 "construction-czech.png");
         construction.confirmWithKeyboard();
-        construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0),
-                List.of(0));
+        construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
         construction.escape();
         construction.verifyPickerClosed();
     }
@@ -275,10 +273,10 @@ public class TC_32_F24_construction_eligibility_test
         com.google.gson.JsonObject entry = new com.google.gson.JsonObject();
         entry.addProperty("type", "CONSTRUCTION");
         entry.addProperty("id", 9);
-        entry.addProperty("buildHammers", 240);
         entry.addProperty("constructionType", "IRON_WORKS");
         colonyData.getAsJsonArray("buildingQueue").add(entry);
-        colonyData.getAsJsonObject("colonyWarehouse").addProperty("HAMMERS", 0);
+        colonyData.getAsJsonObject("colonyWarehouse").addProperty("HAMMERS",
+                240);
         colonyData.getAsJsonObject("colonyWarehouse").addProperty("TOOLS", 100);
         File paused = new File(System.getProperty("user.home"),
                 "construction-paused.microcol");
@@ -293,17 +291,15 @@ public class TC_32_F24_construction_eligibility_test
                 .openColonyAt(COLONY, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.verifyStatus("Requires: Blacksmith shop.");
-        construction.verifyQueue(List.of("IRON_WORKS"), List.of(9),
-                List.of(240));
-        construction.verifyStocksAndPopulation(0, 100, 3);
+        construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 240);
+        construction.verifyStocksAndPopulation(240, 100, 3);
         // A real turn must preserve progress and tools while reporting the
         // missing shop.
         GamePage game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyStatus("Requires: Blacksmith shop.");
-        construction.verifyQueue(List.of("IRON_WORKS"), List.of(9),
-                List.of(240));
+        construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 243);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
         construction.verifyBuilding(ConstructionType.IRON_WORKS, 0);
     }

@@ -3649,3 +3649,50 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    already committed in `165e83a8` and passed the local TC39 rerun.
 2. Native packages, compatibility and Pages passed; game publication was
    blocked. The subsequent R-0080 full CI gate remains independently pending.
+
+
+### R-0078–R-0080 complete acceptance — 2026-10-16
+
+1. [Full run 38948579264](https://github.com/jajir/microcol/actions/runs/38948579264)
+   on `165e83a8` passed **1550 model tests and 230 UI/support tests**, zero
+   failures/errors/skips. This includes repaired TC39 food expectations and
+   the horse-breeding, industrial and coastal-facility player journeys.
+2. All three native packages, compatibility and Pages passed. Release
+   [dev-130-165e83a83a79](https://github.com/jajir/microcol/releases/tag/dev-130-165e83a83a79)
+   was verified with Linux and both macOS archives/installers, launchers,
+   manifest and checksums. The publisher explicitly kept the automatic
+   development channel unchanged. R-0078, R-0079 and R-0080 are now done.
+
+
+### R-0109 shared hammers — 2026-10-16
+
+1. Selected before R-0083 because rush purchase requires the accepted shared
+   hammer balance. A bounded Sol low worker changed model/serialization/tests;
+   main updated the construction picker, TC32, F45/TC54 and actual verification.
+   No local model or duplicate implementation was used.
+2. Full model suite passed **1576 tests**, zero failures/errors/skips.
+   Per-entry progress assertions were replaced with shared warehouse-balance
+   checks, preserving queue identity/order and completion boundary assertions.
+   Current-schema entries no longer contain personal hammer progress; bundled
+   static fixtures contained no such fields. No migration was added.
+3. Initial Docker `run-L6ynrt` passed TC52 (2), TC50 (3), TC51 (2),
+   TC49 (3) and the page contract (3). TC54 passed queue edits, saved
+   continuation and shared balances through wagon completion, then main's
+   helper incorrectly counted wagons via `getUnitsOutSideColony`, a list
+   intentionally excluding cargo carriers. Main corrected the helper to count
+   units at the actual colony location; assertions and gameplay are unchanged.
+   All seven TC32 cases also passed. The initial run totaled 21 cases, one
+   failed helper assertion, zero errors/skips. The fresh TC54 rerun remains
+   pending. Screenshot inspection confirmed the pool and per-project costs;
+   main shortened the shared-pool label to avoid ellipsis in the narrow panel.
+4. Fresh Docker `run-AFXN3N` passed all **four tests**: TC54 and three
+   page-contract checks, zero failures/errors/skips. The wagon count repair
+   is verified and the entire shared-pool/Continue journey passed. A final
+   run verifies the shortened visible label.
+5. Final Docker `run-r7ZZ6W` passed all **four tests** with the final label.
+   Main inspected the screenshot: the shared 131-hammer balance and each
+   project's costs are fully readable. All selected player scenarios passed
+   across the recorded runs; the 15 changed Java files passed exact-token
+   preservation and formatter idempotence.
+6. Packaging/Javadoc, shared formatting and nine documentation tests plus
+   strict MkDocs passed. Full CI/publication remain separate gates.

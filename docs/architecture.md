@@ -557,7 +557,7 @@ Chov se zapíše jednou před dokončením stavební fronty; nově dokončené s
 proto ovlivní další tah. Při hladomoru se nechová, zatímco ostatní produkce
 přeživších zachovává svůj dosavadní postup. UI čte společnou bilanci bez
 mutace; uložené zboží a stavby nepotřebují další schéma. Přejímku vede
-[R-0078](requirements/R-0078.md).
+[R-0078](requirements/done/R-0078.md).
 
 ### Průmyslové vstupy a výstupy (R-0079)
 
@@ -567,7 +567,7 @@ celočíselný výpočet vstupního omezení a zaokrouhlení s celou budovou;
 zaokrouhlí jednou za budovu, nikoli zvlášť za každého pracovníka. Stávající
 pořadí zdrojů v `Colony` zpřístupní vyrobené nástroje zbrojnímu řetězci
 ve stejném tahu. Náhled i skutečný sklad používají stejné pravidlo;
-načtení nevyžaduje nové schéma. Přejímku vede [R-0079](requirements/R-0079.md).
+načtení nevyžaduje nové schéma. Přejímku vede [R-0079](requirements/done/R-0079.md).
 
 ### Pobřežní výrobní předpoklady (R-0080)
 
@@ -578,7 +578,7 @@ rybáře. `UnitType` a `ColonyBuildingQueue` vyžadují pro galeonu a fregatu
 loděnici a stávající pobřežní pravidlo `Model.isOwnedCoastalPort`; fronta
 ověřuje podmínku při přijetí i dokončení. UI překládá konkrétní modelový
 důvod a nepřevádí pracovníka ani materiál při odmítnutí.
-Rozsah a přejímku vede [R-0080](requirements/R-0080.md).
+Rozsah a přejímku vede [R-0080](requirements/done/R-0080.md).
 
 ### Tisk a společná produkce zvonů (R-0081)
 
@@ -601,3 +601,14 @@ nezapočítávají. Dobrovolné operace ověřují pravidlo před změnou místa
 výbavy. Hlad a boj používají vlastní vynucené ztráty; nepoužívají tento zákaz.
 Přeživší kolonie si ponechá opevnění i při méně než třech obyvatelích,
 včetně uložení a načtení. Viz [R-0082](requirements/R-0082.md).
+
+### Společná stavební práce (R-0109)
+
+Jedinou zásobu práce vlastní sklad kolonie jako `HAMMERS`. Položky fronty
+uchovávají identitu, typ a pořadí; nemají vlastní kladiva ani takové pole
+v aktuálním formátu uložení. `ColonyBuildingQueue` používá stejný skladový
+součet pro náhled a dokončení. Při chybějících nástrojích či předpokladech
+nic neutratí; platné dokončení odečte přesnou cenu a zachová přebytek.
+Za aktualizaci dokončí nejvýše první projekt. Změna, odstranění i prázdná
+fronta ponechává práci ve skladu. [R-0083](requirements/R-0083.md) naváže
+nákupem chybějících materiálů na tento společný stav.

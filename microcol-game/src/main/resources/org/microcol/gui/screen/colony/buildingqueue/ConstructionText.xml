@@ -26,7 +26,7 @@
     <entry key="waitingTools">Waiting for tools: %s.</entry>
     <entry key="waitingHammers">Waiting for hammers.</entry>
     <entry key="ready">Ready for the next construction phase.</entry>
-<entry key="queueProgress">Assigned hammers: %s / %s</entry>
+<entry key="hammerPool">Shared work: %s hammers.</entry>
     <entry key="coastalRequired">A coastal colony is required.</entry>
     <entry key="missingShipyard">Build a shipyard before constructing ships.</entry>
 </properties>

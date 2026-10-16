@@ -387,7 +387,7 @@ frontou. Jejich účinek se projeví v následujícím výrobním tahu. Jídlo s
 nejprve použije pro obyvatele a narození kolonistů, teprve zbytek pro koně.
 Plný sklad ani chybějící jídlo nezpůsobí záporné zásoby nebo zbytečné odečty.
 Zavření kolonie či Pokračovat samo nic nechová. Stav ověření vede
-[R-0078](requirements/R-0078.md).
+[R-0078](requirements/done/R-0078.md).
 
 ### Výrobní upgrade a nedostatek vstupů (R-0079)
 
@@ -405,7 +405,7 @@ vysvětlí potřebnou stavbu. Po dokončení doku lze stejným gestem přidělit
 rybolov; vyšší zařízení tuto možnost zachovají. Stavební nabídka ponechává
 lodní projekty viditelné s vysvětlením chybějící loděnice nebo pobřeží.
 Zrušení nabídky nemění stav a potvrzení znovu kontroluje aktuální podmínky.
-Přejímku hráčských cest a jejich výsledky vede [R-0080](requirements/R-0080.md).
+Přejímku hráčských cest a jejich výsledky vede [R-0080](requirements/done/R-0080.md).
 
 ### Tisk a příspěvek státníka (R-0081)
 
@@ -425,3 +425,11 @@ Kontrola se opakuje při dokončení akce; model zůstává autoritou. Čtvrtý
 obyvatel může odejít běžným tažením a potom nastoupit na loď. Hlad může
 snížit populaci pod minimum, aniž by odstranil opevnění. Automatické
 hráčské ověření vede [R-0082](requirements/R-0082.md).
+
+### Společná zásoba kladiv (R-0109)
+
+Stavební nabídka ukazuje jednu společnou zásobu práce nad frontou.
+U jednotlivých projektů zobrazuje jejich ceny, aby nevypadaly jako
+nezávisle rozpracované stavby se stejnými kladivy. Změna či odstranění projektu
+zásobu ponechá. Dokončení spotřebuje pouze
+cenu prvního projektu a přebytek je dostupný pro další.

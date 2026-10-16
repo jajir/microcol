@@ -16,7 +16,6 @@ public class ColonyBuildingItemProgressUnit
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass()).add("id", getId())
-                .add("buildHammers", getBuildHammers())
                 .add("visible", isVisible()).add("unitType", getUnitType())
                 .toString();
     }

@@ -134,10 +134,8 @@ public class Model {
                 Preconditions.checkArgument(
                         itemPo != null && itemPo.getType() != null
                                 && itemPo.getId() != null && itemPo.getId() >= 0
-                                && queueIds.add(itemPo.getId())
-                                && itemPo.getBuildHammers() != null
-                                && itemPo.getBuildHammers() >= 0,
-                        "Invalid construction queue identity, kind or progress");
+                                && queueIds.add(itemPo.getId()),
+                        "Invalid construction queue identity or kind");
                 if (itemPo.getType() == QueueItemType.CONSTRUCTION) {
                     final ConstructionType type = itemPo.getConstructionType();
                     Preconditions
@@ -160,7 +158,6 @@ public class Model {
                             new ColonyBuildingItemConstruction(
                                     itemPo.getConstructionType()),
                             itemPo.getId());
-                    item.setBuildHammers(itemPo.getBuildHammers());
                     buildingQueue.add(item);
                 } else if (itemPo.getType() == QueueItemType.UNIT) {
                     Preconditions.checkArgument(
@@ -173,7 +170,6 @@ public class Model {
                     ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
                             new ColonyBuildingItemUnit(itemPo.getUnitType()),
                             itemPo.getId());
-                    item.setBuildHammers(itemPo.getBuildHammers());
                     buildingQueue.add(item);
                 } else {
                     throw new IllegalArgumentException(

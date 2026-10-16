@@ -27,29 +27,31 @@ class ConstructionQueueSaveTest {
 
     static Stream<String> malformedQueues() {
         return Stream.of("null", "[null]",
-                "[{\"type\": \"CONSTRUCTION\", \"id\": 0, \"constructionType\": \"WAREHOUSE\"}]",
-                "[{\"type\": \"CONSTRUCTION\", \"id\": 0, \"constructionType\": \"WAREHOUSE\", \"buildHammers\": null}]",
-                "[{\"type\": \"UNIT\", \"id\": 0, \"unitType\": \"WAGON\", \"constructionType\": \"WAREHOUSE\", \"buildHammers\": 0}]",
-                "[{\"type\": \"UNIT\", \"id\": 0, \"unitType\": \"INVALID\", \"buildHammers\": 0}]",
+                "[{\"type\": \"UNIT\", \"id\": 0, \"unitType\": \"WAGON\", \"constructionType\": \"WAREHOUSE\"}]",
+                "[{\"type\": \"UNIT\", \"id\": 0, \"unitType\": \"INVALID\"}]",
 
-                "[{\"id\":0,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"INVALID\",\"id\":0,\"buildHammers\":0}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"INVALID\"}]",
-                "[{\"type\":\"UNIT\",\"id\":0,\"buildHammers\":0}]",
-                "[{\"type\":\"UNIT\",\"id\":0,\"buildHammers\":0,\"unitType\":\"COLONIST\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":null,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":-1,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":-1,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"TOWN_HALL\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\",\"unitType\":\"WAGON\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"UNIT\",\"id\":0,\"buildHammers\":0,\"unitType\":\"WAGON\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"CONSTRUCTION\",\"id\":1,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"}]",
-                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"CONSTRUCTION\",\"id\":1,\"buildHammers\":0,\"constructionType\":\"WAREHOUSE_EXPANSION\"}]");
+                "[{\"id\":0,\"constructionType\":\"WAREHOUSE\"}]",
+                "[{\"type\":\"INVALID\",\"id\":0}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"INVALID\"}]",
+                "[{\"type\":\"UNIT\",\"id\":0}]",
+                "[{\"type\":\"UNIT\",\"id\":0,\"unitType\":\"COLONIST\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"constructionType\":\"WAREHOUSE\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":null,\"constructionType\":\"WAREHOUSE\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":-1,\"constructionType\":\"WAREHOUSE\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"TOWN_HALL\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"WAREHOUSE\",\"unitType\":\"WAGON\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"UNIT\",\"id\":0,\"unitType\":\"WAGON\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"CONSTRUCTION\",\"id\":1,\"constructionType\":\"WAREHOUSE\"}]",
+                "[{\"type\":\"CONSTRUCTION\",\"id\":0,\"constructionType\":\"WAREHOUSE\"},{\"type\":\"CONSTRUCTION\",\"id\":1,\"constructionType\":\"WAREHOUSE_EXPANSION\"}]");
     }
 
     private Path saveWithQueue(final String queueJson) throws Exception {
+        return saveWithQueue(queueJson, 0);
+    }
+
+    private Path saveWithQueue(final String queueJson, final int hammers)
+            throws Exception {
         final Path file = directory.resolve("construction.microcol");
         dao.saveToFile(file.toString(), dao.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol"));
@@ -62,6 +64,8 @@ class ConstructionQueueSaveTest {
             if (colony.get("name").getAsString().equals("Delft")) {
                 colony.add("buildingQueue",
                         gson.fromJson(queueJson, JsonElement.class));
+                colony.getAsJsonObject("colonyWarehouse").addProperty("HAMMERS",
+                        hammers);
             }
         }
         Files.writeString(file, gson.toJson(json));
@@ -86,7 +90,8 @@ class ConstructionQueueSaveTest {
     void priorProjectWithMissingPredecessorAndLowerPopulationRestoresWithoutCompletion()
             throws Exception {
         final Path file = saveWithQueue(
-                "[{\"type\":\"CONSTRUCTION\",\"id\":23,\"buildHammers\":120,\"constructionType\":\"FORT\"}]");
+                "[{\"type\":\"CONSTRUCTION\",\"id\":23,\"constructionType\":\"FORT\"}]",
+                120);
         final byte[] before = Files.readAllBytes(file);
         final GameModelPo data = dao.loadFromFile(file.toFile());
         final Model model = Model.make(data.getModel(),
@@ -99,7 +104,8 @@ class ConstructionQueueSaveTest {
         final ColonyBuildingItemProgress<?> item = colony
                 .getColonyBuildingQueue().getBuildingQueue().get(0);
         assertEquals(23, item.getId());
-        assertEquals(120, item.getBuildHammers());
+        assertEquals(120,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(ConstructionType.FORT,
                 ((ColonyBuildingItemProgressConstruction) item)
                         .getConstructionType());
@@ -109,7 +115,8 @@ class ConstructionQueueSaveTest {
     @Test
     void loadingAFullySuppliedProjectDoesNotRunConstruction() throws Exception {
         final Path file = saveWithQueue(
-                "[{\"type\":\"CONSTRUCTION\",\"id\":23,\"buildHammers\":80,\"constructionType\":\"WAREHOUSE\"}]");
+                "[{\"type\":\"CONSTRUCTION\",\"id\":23,\"constructionType\":\"WAREHOUSE\"}]",
+                80);
         final byte[] before = Files.readAllBytes(file);
         final GameModelPo data = dao.loadFromFile(file.toFile());
         final Model model = Model.make(data.getModel(),
@@ -126,7 +133,8 @@ class ConstructionQueueSaveTest {
         final ColonyBuildingItemProgress<?> item = colony
                 .getColonyBuildingQueue().getBuildingQueue().get(0);
         assertEquals(23, item.getId());
-        assertEquals(80, item.getBuildHammers());
+        assertEquals(80,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(turns, model.getCalendar().getNumberOfPlayedTurns());
         assertArrayEquals(before, Files.readAllBytes(file));
     }

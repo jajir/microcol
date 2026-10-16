@@ -14,7 +14,7 @@ import org.microcol.model.ConstructionType;
 public enum ConstructionText implements MessageKeyResource {
     open, title, projects, queue, choose, cost, available, population,
     predecessor, alreadyBuilt, alreadyQueued, unavailable, add, up, down,
-    remove, cancel, changed, added, empty, hammers, queueProgress, tools,
+    remove, cancel, changed, added, empty, hammers, hammerPool, tools,
     waitingTools, waitingHammers, ready, coastalRequired, missingShipyard;
 
     public static String name(final I18n i18n, final ColonyBuildingItem item) {

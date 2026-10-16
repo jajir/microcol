@@ -66,10 +66,8 @@ public class ColonyBuildingQueue {
     public Optional<BuildingStatus<ColonyBuildingItem>> getActuallyBuildingStat() {
         if (getActualyBuilding().isPresent()) {
             final ColonyBuildingItem pok = getActualyBuilding().get().getItem();
-            final int alreadyHaveHammers = Math.addExact(
-                    getActualyBuilding().get().getBuildHammers(),
-                    colony.getWarehouse().getGoods(GoodsType.HAMMERS)
-                            .getAmount());
+            final int alreadyHaveHammers = colony.getWarehouse()
+                    .getGoods(GoodsType.HAMMERS).getAmount();
             final int productionHammers = colony.getGoodsStats()
                     .getStatsByType(GoodsType.HAMMERS).getNetProduction();
             final int alreadyHaveTools = colony.getWarehouse()
@@ -305,7 +303,6 @@ public class ColonyBuildingQueue {
         for (final ColonyBuildingItemProgress<?> item : getBuildingQueue()) {
             final ColonyBuildingQueueItemPo stored = new ColonyBuildingQueueItemPo();
             stored.setId(item.getId());
-            stored.setBuildHammers(item.getBuildHammers());
             if (item instanceof ColonyBuildingItemProgressConstruction) {
                 stored.setType(QueueItemType.CONSTRUCTION);
                 stored.setConstructionType(
@@ -366,37 +363,37 @@ public class ColonyBuildingQueue {
     void startTurn() {
         if (getActualyBuilding().isPresent()
                 && getCompletionUnavailableReason().isEmpty()) {
-            final int wasDone = colony.getWarehouse()
-                    .getGoods(GoodsType.HAMMERS).getAmount();
             final ColonyBuildingItemProgress<?> item = getActualyBuilding()
                     .get();
-            colony.getWarehouse().setGoodsToZero(GoodsType.HAMMERS);
-            item.addHammers(wasDone);
-            if (item.isHammersProvided()) {
-                // check if there is enough tools
-                if (colony.getWarehouse().getGoods(GoodsType.TOOLS)
-                        .getAmount() >= item.getRequiredTools()) {
-                    colony.getWarehouse().removeGoods(
-                            Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
-                    if (item.getItem() instanceof ColonyBuildingItemUnit) {
-                        final ColonyBuildingItemUnit i = (ColonyBuildingItemUnit) item
-                                .getItem();
-                        createUnit(i.getUnitType());
-                    } else if (item
-                            .getItem() instanceof ColonyBuildingItemConstruction) {
-                        final ColonyBuildingItemConstruction i = (ColonyBuildingItemConstruction) item
-                                .getItem();
-                        colony.createConstruction(i.getConstructionType());
-                    } else {
-                        throw new IllegalArgumentException(String
-                                .format("Unknown class '%s'.", item.getItem()));
-                    }
-                    // remove actually builded item
-                    buildingQueue.remove(0);
-                } else {
-                    // TODO send notification to player, there are missing tools
-                }
+            if (colony.getWarehouse().getGoods(GoodsType.HAMMERS)
+                    .getAmount() < item.getRequiredHammers()
+                    || colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                            .getAmount() < item.getRequiredTools()) {
+                return;
             }
+            if (item instanceof ColonyBuildingItemProgressUnit) {
+                Preconditions.checkState(
+                        model.getUnitStorage().canAllocateUnit(),
+                        "Unit identity space is exhausted");
+            }
+            colony.getWarehouse().removeGoods(
+                    Goods.of(GoodsType.HAMMERS, item.getRequiredHammers()));
+            colony.getWarehouse().removeGoods(
+                    Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
+            if (item.getItem() instanceof ColonyBuildingItemUnit) {
+                final ColonyBuildingItemUnit unit = (ColonyBuildingItemUnit) item
+                        .getItem();
+                createUnit(unit.getUnitType());
+            } else if (item
+                    .getItem() instanceof ColonyBuildingItemConstruction) {
+                final ColonyBuildingItemConstruction construction = (ColonyBuildingItemConstruction) item
+                        .getItem();
+                colony.createConstruction(construction.getConstructionType());
+            } else {
+                throw new IllegalArgumentException(
+                        String.format("Unknown class '%s'.", item.getItem()));
+            }
+            buildingQueue.remove(0);
         }
     }
 

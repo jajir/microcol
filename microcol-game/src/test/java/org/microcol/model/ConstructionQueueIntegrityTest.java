@@ -47,10 +47,10 @@ class ConstructionQueueIntegrityTest {
     }
 
     @Test
-    void missingMoveAnchorPreservesMembershipProgressAndOrder() {
+    void missingMoveAnchorPreservesMembershipStockAndOrder() {
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        item.addHammers(17);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 17));
         final ColonyBuildingItemProgressConstruction foreign = new ColonyBuildingItemProgressConstruction(
                 new ColonyBuildingItemConstruction(ConstructionType.DOCK), 999);
         final String before = snapshot();
@@ -66,7 +66,7 @@ class ConstructionQueueIntegrityTest {
     void duplicateProjectIsAnExplicitRejectionWithoutMutation() {
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        item.addHammers(17);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 17));
         final String before = snapshot();
         assertThrows(IllegalArgumentException.class,
                 () -> queue.addAtEnd(ConstructionType.WAREHOUSE));
@@ -74,13 +74,12 @@ class ConstructionQueueIntegrityTest {
     }
 
     @Test
-    void mixedQueueRetainsOrderIdentityAndProgressOnReload() {
+    void mixedQueueRetainsOrderIdentityAndSharedStockOnReload() {
         final ColonyBuildingItemProgressUnit wagon = queue
                 .addAtEnd(UnitType.WAGON);
         final ColonyBuildingItemProgressConstruction warehouse = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        wagon.addHammers(7);
-        warehouse.addHammers(17);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 24));
         assertEquals(List.of(QueueItemType.UNIT, QueueItemType.CONSTRUCTION),
                 queue.save().stream().map(item -> item.getType())
                         .collect(Collectors.toList()));
@@ -92,9 +91,8 @@ class ConstructionQueueIntegrityTest {
         assertEquals(2, items.size());
         assertEquals(List.of(wagon.getId(), warehouse.getId()), items.stream()
                 .map(item -> item.getId()).collect(Collectors.toList()));
-        assertEquals(List.of(7, 17),
-                items.stream().map(item -> item.getBuildHammers())
-                        .collect(Collectors.toList()));
+        assertEquals(24, restored.getColonyByName("Delft").orElseThrow()
+                .getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(UnitType.WAGON,
                 ((ColonyBuildingItemProgressUnit) items.get(0)).getUnitType());
         assertEquals(ConstructionType.WAREHOUSE,
@@ -131,11 +129,11 @@ class ConstructionQueueIntegrityTest {
                 .addAtEnd(ConstructionType.BLACKSMITHS_SHOP);
         final ColonyBuildingItemProgressConstruction following = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        following.addHammers(17);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 64));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 19));
         queue.startTurn();
-        assertEquals(64, item.getBuildHammers());
+        assertEquals(64,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(19,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertTrue(colony.isContainsConstructionByType(
@@ -159,7 +157,8 @@ class ConstructionQueueIntegrityTest {
                                 .getType() == ConstructionType.BLACKSMITHS_SHOP)
                         .count());
         assertEquals(List.of(following), queue.getBuildingQueue());
-        assertEquals(17, following.getBuildHammers());
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         final String completed = snapshot();
         queue.startTurn();
         assertEquals(completed, snapshot());
@@ -170,8 +169,7 @@ class ConstructionQueueIntegrityTest {
         growToFourResidents();
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.BLACKSMITHS_SHOP);
-        item.addHammers(64);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 64));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 20));
         colony.getConstructions().remove(colony
                 .getConstructionByType(ConstructionType.BLACKSMITHS_HOUSE));
@@ -182,13 +180,12 @@ class ConstructionQueueIntegrityTest {
     }
 
     @Test
-    void reorderAndRemovalPreserveOtherProjectProgress() {
+    void reorderAndRemovalPreserveSharedHammers() {
         final ColonyBuildingItemProgressUnit wagon = queue
                 .addAtEnd(UnitType.WAGON);
         final ColonyBuildingItemProgressConstruction warehouse = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        wagon.addHammers(7);
-        warehouse.addHammers(17);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 24));
         queue.moveItemBefore(warehouse, wagon);
         assertEquals(List.of(warehouse, wagon), queue.getBuildingQueue());
         final String before = snapshot();
@@ -198,11 +195,91 @@ class ConstructionQueueIntegrityTest {
         assertEquals(List.of(wagon, warehouse), queue.getBuildingQueue());
         queue.removeItem(wagon);
         assertEquals(List.of(warehouse), queue.getBuildingQueue());
-        assertEquals(17, warehouse.getBuildHammers());
+        assertEquals(24,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         final String removed = snapshot();
         assertThrows(IllegalArgumentException.class,
                 () -> queue.removeItem(wagon));
         assertEquals(removed, snapshot());
+    }
+
+    @Test
+    void reorderAwayAndBackKeepsOneSharedPool() {
+        final ColonyBuildingItemProgressConstruction warehouse = queue
+                .addAtEnd(ConstructionType.WAREHOUSE);
+        final ColonyBuildingItemProgressConstruction stables = queue
+                .addAtEnd(ConstructionType.STABLES);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 70));
+        queue.moveItemBefore(stables, warehouse);
+        assertEquals(List.of(stables, warehouse), queue.getBuildingQueue());
+        queue.moveItemBefore(warehouse, stables);
+        assertEquals(List.of(warehouse, stables), queue.getBuildingQueue());
+        assertEquals(70,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(70, queue.getActuallyBuildingStat().orElseThrow()
+                .getHammers().getAlreadyHave());
+    }
+
+    @Test
+    void emptyQueueAndRemovalLeaveProducedHammersInWarehouse() {
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 91));
+        final String empty = snapshot();
+        queue.startTurn();
+        assertEquals(empty, snapshot());
+        final ColonyBuildingItemProgressConstruction warehouse = queue
+                .addAtEnd(ConstructionType.WAREHOUSE);
+        queue.removeItem(warehouse);
+        assertEquals(91,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertTrue(queue.getBuildingQueue().isEmpty());
+    }
+
+    @Test
+    void enoughHammersForTwoHeadsCompletesOnlyOnePerUpdate() {
+        final ColonyBuildingItemProgressConstruction warehouse = queue
+                .addAtEnd(ConstructionType.WAREHOUSE);
+        final ColonyBuildingItemProgressConstruction stables = queue
+                .addAtEnd(ConstructionType.STABLES);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 160));
+        queue.startTurn();
+        assertTrue(colony
+                .isContainsConstructionByType(ConstructionType.WAREHOUSE));
+        assertFalse(
+                colony.isContainsConstructionByType(ConstructionType.STABLES));
+        assertEquals(List.of(stables), queue.getBuildingQueue());
+        assertEquals(80,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        queue.startTurn();
+        assertTrue(
+                colony.isContainsConstructionByType(ConstructionType.STABLES));
+        assertTrue(queue.getBuildingQueue().isEmpty());
+        assertEquals(16,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(0, warehouse.getId());
+        assertEquals(1, stables.getId());
+    }
+
+    @Test
+    void mixedUnitAndBuildingSpendOnlyTheirOwnCosts() {
+        final ColonyBuildingItemProgressUnit wagon = queue
+                .addAtEnd(UnitType.WAGON);
+        final ColonyBuildingItemProgressConstruction warehouse = queue
+                .addAtEnd(ConstructionType.WAREHOUSE);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 93));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 40));
+        final int unitsBefore = model.getAllUnits().size();
+        queue.startTurn();
+        assertEquals(unitsBefore + 1, model.getAllUnits().size());
+        assertEquals(List.of(warehouse), queue.getBuildingQueue());
+        assertEquals(93,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+        queue.startTurn();
+        assertEquals(13,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertTrue(queue.getBuildingQueue().isEmpty());
+        assertEquals(0, wagon.getId());
     }
 
     @Test
@@ -230,26 +307,25 @@ class ConstructionQueueIntegrityTest {
                 Integer.MAX_VALUE);
         final ColonyBuildingQueue fullIds = new ColonyBuildingQueue(model,
                 colony, List.of(item));
-        item.addHammers(17);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 17));
         assertThrows(IllegalArgumentException.class,
                 () -> fullIds.addAtEnd(UnitType.WAGON));
         assertEquals(List.of(item), fullIds.getBuildingQueue());
-        assertEquals(17, item.getBuildHammers());
+        assertEquals(17,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
         assertEquals(Integer.MAX_VALUE, item.getId());
     }
 
     @Test
-    void progressDisplayIncludesWorkAlreadyAssignedToTheProject() {
+    void progressDisplayUsesWarehouseHammers() {
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        item.addHammers(70);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 10));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 80));
         final BuildingStatus<ColonyBuildingItem> status = queue
                 .getActuallyBuildingStat().orElseThrow();
         assertEquals(80, status.getHammers().getAlreadyHave());
         assertEquals(java.util.Optional.of(0), status.getTurnsToComplete());
-        assertEquals(70, item.getBuildHammers());
-        assertEquals(10,
+        assertEquals(80,
                 colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
     }
 
@@ -257,7 +333,7 @@ class ConstructionQueueIntegrityTest {
     void targetBuiltElsewhereLeavesItsQueuedProjectWaiting() {
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        item.addHammers(80);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 80));
         colony.createConstruction(ConstructionType.WAREHOUSE);
         final String before = snapshot();
         assertEquals(ColonyBuildingQueue.UnavailableReason.ALREADY_BUILT,
@@ -271,7 +347,7 @@ class ConstructionQueueIntegrityTest {
     void abandonedColonyCannotSpendResourcesOnItsOldQueue() {
         final ColonyBuildingItemProgressConstruction item = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        item.addHammers(80);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 80));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 20));
         model.destroyColony(colony);
         final String before = snapshot();

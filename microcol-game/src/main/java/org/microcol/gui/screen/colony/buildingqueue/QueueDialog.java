@@ -39,6 +39,7 @@ public class QueueDialog extends AbstractMessageWindow {
     private final Label title = new Label();
     private final Label projectsTitle = new Label();
     private final Label queueTitle = new Label();
+    private final Label hammerPool = new Label();
     private final Label detail = new Label();
     private final Label feedback = new Label();
     private final ListView<ColonyBuildingItem> projects = new ListView<>();
@@ -59,6 +60,8 @@ public class QueueDialog extends AbstractMessageWindow {
         this.controller = controller;
         projects.setId("constructionProjects");
         queue.setId("constructionQueue");
+        hammerPool.setId("constructionHammerPool");
+        hammerPool.setWrapText(true);
         detail.setId("constructionDetail");
         feedback.setId("constructionFeedback");
         add.setId("constructionAdd");
@@ -91,10 +94,9 @@ public class QueueDialog extends AbstractMessageWindow {
                         setText(empty || item == null ? null
                                 : ConstructionText.name(i18n, item.getItem())
                                         + "\n"
-                                        + i18n.get(
-                                                ConstructionText.queueProgress,
-                                                item.getBuildHammers(),
-                                                item.getRequiredHammers()));
+                                        + i18n.get(ConstructionText.cost,
+                                                item.getRequiredHammers(),
+                                                item.getRequiredTools()));
                     }
                 });
         projects.getSelectionModel().selectedItemProperty()
@@ -113,7 +115,7 @@ public class QueueDialog extends AbstractMessageWindow {
         detail.setMinHeight(78);
         feedback.setMinHeight(48);
         final VBox choices = new VBox(8, projectsTitle, projects, detail, add);
-        final VBox current = new VBox(8, queueTitle, queue,
+        final VBox current = new VBox(8, queueTitle, hammerPool, queue,
                 new HBox(8, up, down), remove);
         choices.setPrefWidth(420);
         current.setPrefWidth(310);
@@ -151,6 +153,9 @@ public class QueueDialog extends AbstractMessageWindow {
         setTitle(title.getText());
         projectsTitle.setText(language.get(ConstructionText.projects));
         queueTitle.setText(language.get(ConstructionText.queue));
+        hammerPool.setText(language.get(ConstructionText.hammerPool,
+                controller.getColony().getWarehouse()
+                        .getGoods(GoodsType.HAMMERS).getAmount()));
         add.setText(language.get(ConstructionText.add));
         up.setText(language.get(ConstructionText.up));
         down.setText(language.get(ConstructionText.down));
@@ -163,6 +168,9 @@ public class QueueDialog extends AbstractMessageWindow {
     private void refresh() {
         projects.getSelectionModel().clearSelection();
         controller.repaint();
+        hammerPool.setText(i18n.get(ConstructionText.hammerPool,
+                controller.getColony().getWarehouse()
+                        .getGoods(GoodsType.HAMMERS).getAmount()));
         final List<ColonyBuildingItem> offers = new ArrayList<>();
         ConstructionType.ALL.stream().filter(ConstructionType::canBeConstructed)
                 .forEach(type -> offers
@@ -218,8 +226,7 @@ public class QueueDialog extends AbstractMessageWindow {
                 colony.getConstructions().stream().map(c -> c.getType())
                         .collect(Collectors.toList()),
                 colony.getColonyBuildingQueue().getBuildingQueue().stream()
-                        .map(item -> List.of(item.getId(), item.getName(),
-                                item.getBuildHammers()))
+                        .map(item -> List.of(item.getId(), item.getName()))
                         .collect(Collectors.toList()),
                 colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount(),
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());

@@ -621,7 +621,7 @@ vede [R-0077](requirements/R-0077.md); samotná mapa není důkazem průchodu.
 a zdvojený přírůstek, zobrazený náhled skladu, kapacitní limit a přednost
 narození kolonisty při efektivních 201 jednotkách jídla. Po uložení se
 zásoby ani stavba neopakují. Modelové a hráčské výsledky jsou vedené v
-[R-0078](requirements/R-0078.md); tato mapa sama nepotvrzuje průchod.
+[R-0078](requirements/done/R-0078.md); tato mapa sama nepotvrzuje průchod.
 
 ### UC-045: průmyslová výroba R-0079
 
@@ -640,7 +640,7 @@ suchého doku a loděnice, odmítá rybolov bez zařízení a zachovává rybá�
 přes obě vylepšení. Galeonu a fregatu dokončuje až s loděnicí; zrušení
 nabídky a Pokračovat chrání pracovníky, frontu a skutečné lodě.
 Testy modelu doplňují vnitrozemské a uložené neplatné stavy.
-Výsledky zaznamenává [R-0080](requirements/R-0080.md); tato mapa sama
+Výsledky zaznamenává [R-0080](requirements/done/R-0080.md); tato mapa sama
 nepotvrzuje průchod scénářů ani úplné přijetí UC.
 
 ### UC-047: tiskové bonusy R-0081
@@ -660,3 +660,11 @@ kontroluje odmítnutí, vysvětlení a nezměněný svět. Přidělení jiné vn
 zůstává povolené; čtvrtý obyvatel může odejít a nastoupit na loď. Druhý
 scénář projde skutečným hladověním na dva obyvatele a zachováním palisády.
 Oba ověřují Continue. Výsledky vede [R-0082](requirements/R-0082.md).
+
+### UC-043: zachování kladiv R-0109
+
+`TC_54_F45_shared_hammers_test` mění A→B→A, odstraní oba projekty,
+zkontroluje zrušení výběru a poté dokončí pilu, sklad a vůz přes skutečné
+tahy. Kontroluje přebytky, jen jedno dokončení za tah, prázdnou frontu
+a Continue. TC32 zachovává kontrolu chybějících nástrojů a předchůdce
+s kladivy ve společném skladu. Výsledky vede [R-0109](requirements/R-0109.md).
