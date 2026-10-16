@@ -217,20 +217,55 @@ public abstract class Player {
     void startTurn() {
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
                 .forEach(Ship::advanceVoyage);
-        if (isHuman()) {
-            optionallyAddNewUnitInEuropePort();
-        }
+        settleEarnedImmigrants();
         getColonies().forEach(colony -> colony.startTurn());
         getAllUnits().forEach(unit -> unit.startTurn());
     }
 
-    private void optionallyAddNewUnitInEuropePort() {
-        final int turnNo = model.getCalendar().getNumberOfPlayedTurns();
-        if (turnNo > 6 && turnNo <= 70 && turnNo % 11 == 0) {
-            // add free colonist to Europe port.
-            model.addUnitInEurope(UnitType.COLONIST, this);
+    private void settleEarnedImmigrants() {
+        if (recruitment == null || !canTradeInEurope()) {
+            return;
+        }
+        while (hasPendingImmigrant()) {
+            final int threshold = recruitment
+                    .checkCanSettleEarned(model.getDifficulty(), name);
+            Preconditions.checkState(model.canAddUnitInEurope(),
+                    "No unit IDs remain for an earned immigrant");
+            final int slot = recruitment.chooseEarnedSlot();
+            final UnitType type = recruitment.getCandidateType(slot);
+            model.addUnitInEurope(type, this);
+            recruitment.settleEarned(slot, threshold);
             model.getTurnEventStore()
                     .add(TurnEventProvider.getNewUnitInEurope(this));
+        }
+    }
+
+    public int getImmigrationCrosses() {
+        Preconditions.checkState(recruitment != null,
+                "Kings have no immigration pool");
+        return recruitment.getCrosses();
+    }
+
+    public int getImmigrationTarget() {
+        Preconditions.checkState(recruitment != null,
+                "Kings have no immigration pool");
+        return recruitment.getTarget(model.getDifficulty(), name);
+    }
+
+    public boolean hasPendingImmigrant() {
+        return recruitment != null
+                && recruitment.hasReachedTarget(model.getDifficulty(), name);
+    }
+
+    void checkCanCreditProducedCrosses(final int produced) {
+        if (recruitment != null) {
+            recruitment.checkCanCreditCrosses(produced);
+        }
+    }
+
+    void creditProducedCrosses(final int produced) {
+        if (recruitment != null) {
+            recruitment.creditCrosses(produced);
         }
     }
 

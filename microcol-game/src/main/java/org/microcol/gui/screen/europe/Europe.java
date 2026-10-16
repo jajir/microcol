@@ -17,6 +17,7 @@ public enum Europe implements MessageKeyResource {
     equipmentTRADE_RESTRICTED, equipmentGOLD_LIMIT, voyageTurns, voyageWaiting,
     voyageUnavailable, voyageReverse, voyageReverseTitle, voyageReverseQuestion,
     voyageDestinationEurope, voyageDestinationNewWorld, voyageReverseStale,
-    pierOrders, recruitOpen, recruitChanged, recruitUnavailable;
+    pierOrders, recruitOpen, recruitChanged, recruitUnavailable,
+    immigrationProgress, immigrationPending;
 
 }

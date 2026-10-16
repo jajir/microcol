@@ -3322,3 +3322,50 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    failures/errors/skips. No test was skipped, no retry was added and no
    assertion was removed. Nine documentation tests and strict MkDocs passed;
    complete CI/publication remain separate gates.
+
+### R-0076 national cross immigration — 2026-10-16
+
+1. `RecruitmentPool` consumes increasing thresholds and carries surplus;
+   `Player` creates the selected saved candidate on the pier before colony
+   production. Each colony adds its actual new crosses once to the national
+   pool. Existing local warehouse accounting is preserved. The fixed-turn gift
+   is removed; human and computer colonial players share the rule, subject to
+   Europe access. Existing persistence fields suffice.
+2. The first complete model run executed **1485 tests, one failure**, no errors
+   or skips: `NationalTurnPreparationTest` still expected the old turn-11 gift.
+   The same Sol low worker seeded the actual threshold in that test, preserving
+   arrival/birth/movement/Continue assertions, and added identity, next-target
+   overflow and computer/closed-Europe boundaries. The final complete model
+   run passed **1488 tests**, zero failures/errors/skips.
+3. The first Docker attempt stopped at test compilation: main used
+   `assertInstanceOf`, unavailable in this project's JUnit version. Main changed
+   it to the existing `assertTrue(... instanceof ...)` style without weakening
+   the place assertion. Docker `run-47Uj09` then passed **11 tests**: TC47 (2),
+   TC46 (6) and `PageVerificationContractTest` (3), zero failures/errors/skips.
+   TC47 runs real colony production to 100 crosses, checks the pending passage
+   explanation, saves/Continues before arrival, advances the national turn,
+   verifies the notification, chosen candidate type and one pier unit, and
+   saves/Continues again without duplication. Czech progress and English
+   pending screenshots were inspected: text and controls remain readable.
+4. Shared formatter checked **13 Java files**, exact-token preservation and
+   idempotence passed. `mvn -q -pl microcol-game -am -DskipTests package`
+   passed, including Javadoc; this packaging command does not repeat tests.
+   Documentation checks and strict MkDocs are run before commit. Complete CI,
+   platform compatibility and publication remain separate pending gates.
+   Actual Brewster selection still requires R-0104; no placeholder founder flag
+   was introduced. [R-0076](requirements/R-0076.md) retains acceptance status.
+
+### R-0074/R-0075 CI follow-up — 2026-10-16
+
+1. R-0074 development run `38937895895` failed with **211 UI/support tests,
+   two failures**, no errors/skips: TC22's obsolete seven-entry purchase roster
+   and the following modal-state cascade. Both were repaired in `11c53f15`;
+   the local full TC22 rerun is recorded above. This failed run did not publish
+   a game build.
+2. R-0075 compatibility run `38940319283` failed Javadoc on Java 11/17 and
+   Linux/Windows: `EuropeButtonsPanel.updateLanguage` inherited an invalid
+   `@return` tag although it returns void. Main corrected that comment in the
+   R-0076 change; local packaging including Javadoc passed. R-0075 Pages run
+   `38940319281` succeeded. Full development/publication and the new platform
+   matrix still require verification; Pages success does not establish game
+   publication.

@@ -359,3 +359,12 @@ zastaralá cena vyžaduje nové otevření nabídky.
 Snímky EN/CZ v TC46/F37 byly zkontrolovány: všechny tři názvy a ceny jsou
 čitelné bez posouvání. Jde o automatizované ověření, ne uživatelskou studii.
 Výsledky a závislosti vede [evidence R-0075](functional-tests.md#r-0075-persistent-recruitment-2026-10-16).
+
+### Národní postup přistěhovalectví (R-0076)
+
+Evropa ukazuje národní počet křížů a další práh. Po dosažení prahu vysvětlí,
+že přistěhovalec dorazí na začátku příštího tahu; stejnou zprávu ukáže pokus
+zaplatit cestu před tímto příchodem. Výroba v koloniích probíhá až po fázi
+příchodů. Příchod oznamuje běžný přehled tahu a člověk je dostupný na molu.
+Otevření Evropy ani Pokračovat nevyrábí kříže a nevytváří další přistěhovalce.
+Aktuální stav přejímky vede [R-0076](requirements/R-0076.md).

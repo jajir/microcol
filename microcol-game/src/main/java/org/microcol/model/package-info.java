@@ -50,6 +50,8 @@
  *
  * RecruitmentPool owns three persistent candidate tokens, paid-passage quotes
  * and counters; Player validates live offers before a single pier arrival.
+ * Colony credits new cross production once; Player settles earned immigration
+ * in the next Europe phase before processing that turn's colonies.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

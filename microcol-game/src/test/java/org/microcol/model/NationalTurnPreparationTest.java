@@ -127,6 +127,9 @@ class NationalTurnPreparationTest {
     void arrivalsAndImmigrationPrecedeBirthAndMovementThenContinuePreservesState() {
         final GameModelPo data = fixture();
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
+        data.getModel().getGameManager().getPlayers().stream()
+                .filter(player -> "Dutch".equals(player.getName())).findFirst()
+                .orElseThrow().getRecruitment().setCrosses(100);
         final UnitPo shipData = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         shipData.getPlaceHighSeas().setRemainigTurns(1);

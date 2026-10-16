@@ -48,9 +48,7 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonClose);
     }
 
-    /**
-     * @return the buttonExit
-     */
+    /** Update the text of the recruitment action. */
     public void updateLanguage(final I18n i18n) {
         buttonRecruit.setText(i18n.get(Europe.recruitOpen));
     }

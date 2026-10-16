@@ -58,4 +58,6 @@ Total: %s gold</entry>
 	<entry key="recruitOpen">Recruit</entry>
 	<entry key="recruitChanged">The candidate or passage price changed. Reopen recruitment.</entry>
 	<entry key="recruitUnavailable">Recruitment is not available on this turn.</entry>
+    <entry key="immigrationProgress">Immigration: %s / %s crosses</entry>
+    <entry key="immigrationPending">An earned immigrant arrives at the start of your next turn. Paid passage is unavailable until then.</entry>
 </properties>

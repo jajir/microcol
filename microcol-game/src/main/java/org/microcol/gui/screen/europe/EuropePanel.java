@@ -32,6 +32,12 @@ public final class EuropePanel
 
     private final Label labelTitle;
 
+    private final Label immigration = new Label();
+
+    private final GameModelController controller;
+
+    private final I18n i18n;
+
     private final PanelDockEurope europeDock;
 
     private final PanelHighSeas<Europe> shipsTravelingToNewWorld;
@@ -54,6 +60,8 @@ public final class EuropePanel
             final EventBus eventBus, final I18n i18n,
             final PanelDockEurope panelDockEurope) {
         this.europeButtonsPanel = europeButtonsPanel;
+        this.controller = gameModelController;
+        this.i18n = i18n;
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(gameModelController);
         this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
@@ -90,6 +98,10 @@ public final class EuropePanel
         mainPanel = new StackPane();
         mainPanel.getStyleClass().add("main-panel");
         mainPanel.getChildren().add(labelTitle);
+        immigration.setId("immigration-progress");
+        immigration.setWrapText(true);
+        immigration.getStyleClass().add("immigration-progress");
+        mainPanel.getChildren().add(immigration);
         mainPanel.getChildren().add(shipsTravelingToNewWorld.getContent());
         mainPanel.getChildren().add(shipsTravelingToEurope.getContent());
         mainPanel.getChildren().add(panelPortPier.getContent());
@@ -111,6 +123,12 @@ public final class EuropePanel
 
     @Override
     public void repaint() {
+        final org.microcol.model.Player player = controller.getHumanPlayer();
+        immigration.setText(i18n.get(Europe.immigrationProgress,
+                player.getImmigrationCrosses(), player.getImmigrationTarget())
+                + (player.hasPendingImmigrant()
+                        ? "\n" + i18n.get(Europe.immigrationPending)
+                        : ""));
         europeDock.repaint();
         shipsTravelingToEurope.repaint();
         shipsTravelingToNewWorld.repaint();

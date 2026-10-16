@@ -139,7 +139,11 @@ načtení nikdy nelosuje náhradní kandidáty. Novou nabídku vytvářejí pouz
 cesty zahájení nové hry. `UnitLaborer` zachovává služebníka/trestance přes
 vybavení a přepravu; `ConstructionSlot` sdílí jejich výrobní úpravu mezi
 náhledem, skutečným výstupem a spotřebou vstupů.
-Přičítání křížů a získané příchody patří R-0076; Brewsterův účinek
+R-0076 doplňuje přičítání skutečného přírůstku křížů z `Colony.startTurn`
+do národního poolu a vyřízení dosažených prahů v evropské fázi příštího
+`Player.startTurn`. Místní sklad křížů zůstává evidencí produkce; jeho
+kumulovaný obsah se znovu nepřičítá. Čtecí dotazy UI příchozí nevytvářejí.
+Brewsterův účinek
 vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/R-0075.md).
 
 ### Evropské odbornosti (R-0074)

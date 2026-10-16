@@ -597,3 +597,12 @@ samostatnou cenu placené cesty. TC46/F37 ověřuje zrušení, jedinou výměnu,
 Continue, nedostatek peněz, zastaralou cenu, český klávesový nábor s přepravou
 a nezávislost nákupu odborníka. Skutečné výsledky a otevřené návaznosti
 vede [evidence R-0075](functional-tests.md#r-0075-persistent-recruitment-2026-10-16).
+
+### UC-054: národní přistěhovalectví R-0076
+
+R-0076 doplňuje národní postup a příchody z uložených kandidátů. Kříže
+z právě dokončené výroby se projeví při následující evropské fázi národního
+tahu; obrazovka Evropy ukazuje čekání a blokuje placenou cestu do vyřízení
+příchodu. `TC_47_F38_immigration_test` ověřuje skutečnou výrobu, příchozího
+na molu a Pokračovat před i po příchodu; stav provedení je vedený v
+[R-0076](requirements/R-0076.md), nikoli potvrzen touto mapou scénáře.

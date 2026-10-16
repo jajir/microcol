@@ -58,4 +58,6 @@ Celkem: %s zlatých</entry>
 	<entry key="recruitOpen">Nábor</entry>
 	<entry key="recruitChanged">Kandidát nebo cena cesty se změnili. Otevřete nábor znovu.</entry>
 	<entry key="recruitUnavailable">V tomto tahu není nábor dostupný.</entry>
+    <entry key="immigrationProgress">Přistěhovalectví: %s / %s křížů</entry>
+    <entry key="immigrationPending">Získaný přistěhovalec dorazí na začátku vašeho příštího tahu. Do té doby nelze zaplatit cestu.</entry>
 </properties>

@@ -266,10 +266,17 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
+        // Validate national progress before famine, births or warehouse
+        // changes.
+        final int possibleCrosses = Math.max(0, getGoodsStats()
+                .getStatsByType(GoodsType.CROSS).getRowProduction());
+        owner.checkCanCreditProducedCrosses(possibleCrosses);
         final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
         // from now colony could be destroyed by famine.
         if (isValid()) {
             final ColonyProductionStats colonyStats = getGoodsStats();
+            final int producedCrosses = Math.max(0, colonyStats
+                    .getStatsByType(GoodsType.CROSS).getRowProduction());
             colonyStats.forEach((goodsType, stats) -> {
                 if (GoodsType.CORN.equals(goodsType)) {
                     if (famineVictim != null) {
@@ -296,6 +303,7 @@ public class Colony {
                             .removeGoods(Goods.of(goodsType, -stats.getDiff()));
                 }
             });
+            owner.creditProducedCrosses(producedCrosses);
             colonyBuildingQueue.startTurn();
         }
         if (famineVictim != null) {

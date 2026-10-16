@@ -33,7 +33,7 @@ public final class GoodsProductionStats {
     }
 
     public void addRowProduction(final int add) {
-        rowProduction += add;
+        rowProduction = Math.addExact(rowProduction, add);
     }
 
     /**

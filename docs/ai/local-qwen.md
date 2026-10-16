@@ -3293,3 +3293,17 @@ committed for this experiment.
     scenarios plus three source-contract cases. CI and dependent
     integration evidence remains in [R-0075](../functional-tests.md#r-0075-persistent-recruitment-2026-10-16).
     No token-saving percentage is inferred from these results.
+
+19. R-0076 reuses the same Sol low worker in `2026-10-16-r76`, based on
+    `11c53f15`, for bounded model accounting, earned arrivals and rule tests.
+    Main owns the Europe progress display, player journey, formatting, actual
+    checks and integration; implementation is not duplicated. The first actual
+    full run executed 1485 tests with one failure and no errors/skips: the
+    national-turn ordering test still relied on the removed turn-11 grant.
+    Its fixture repair was returned to the same worker, preserving the
+    arrival/birth/movement and Continue assertions. Final full model rerun
+    passed 1488 tests; main-owned Docker selection passed 11 after repairing
+    its own unsupported JUnit assertion. Review added worker-authored unit-ID,
+    prospective target-overflow and computer/closed-Europe boundaries.
+    [Execution evidence](../functional-tests.md#r-0076-national-cross-immigration-2026-10-16)
+    retains full CI/publication gates; no token saving is claimed.

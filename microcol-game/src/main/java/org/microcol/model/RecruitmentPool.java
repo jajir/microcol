@@ -151,18 +151,80 @@ public final class RecruitmentPool {
 
     private int priceAt(final Difficulty difficulty, final String nation,
             final int passages) {
+        return priceAt(difficulty, nation, passages, earnedImmigrants, crosses);
+    }
+
+    private int priceAt(final Difficulty difficulty, final String nation,
+            final int passages, final int immigrants, final int progress) {
         final int factor = factor(difficulty);
-        final int target = target(difficulty, nation, earnedImmigrants);
+        final int target = target(difficulty, nation, immigrants);
         final int base = ceilDivide(Math.multiplyExact(
                 Math.addExact(200L, Math.multiplyExact(20L, passages)), factor),
                 100);
-        final int distance = target - Math.min(crosses, target);
+        final int distance = target - Math.min(progress, target);
         return Math.max(50,
                 ceilDivide(Math.multiplyExact((long) base, distance), target));
     }
 
     boolean hasReachedTarget(final Difficulty difficulty, final String nation) {
         return crosses >= target(difficulty, nation, earnedImmigrants);
+    }
+
+    int getCrosses() {
+        return crosses;
+    }
+
+    int getTarget(final Difficulty difficulty, final String nation) {
+        return target(difficulty, nation, earnedImmigrants);
+    }
+
+    void checkCanCreditCrosses(final int produced) {
+        Preconditions.checkArgument(produced >= 0,
+                "Cross production cannot be negative");
+        Math.addExact(crosses, produced);
+    }
+
+    void creditCrosses(final int produced) {
+        checkCanCreditCrosses(produced);
+        crosses += produced;
+    }
+
+    /** Validate the next persistent state before materializing a unit. */
+    int checkCanSettleEarned(final Difficulty difficulty, final String nation) {
+        final int currentTarget = getTarget(difficulty, nation);
+        Preconditions.checkState(crosses >= currentTarget,
+                "No earned immigrant is pending");
+        Preconditions.checkState(
+                nextCandidateId < Integer.MAX_VALUE
+                        && earnedImmigrants < Integer.MAX_VALUE,
+                "No recruitment identities remain");
+        try {
+            final int followingTarget = target(difficulty, nation,
+                    earnedImmigrants + 1);
+            final int remaining = crosses - currentTarget;
+            priceAt(difficulty, nation, paidPassages, earnedImmigrants + 1,
+                    remaining);
+            Preconditions.checkState(followingTarget > 0);
+        } catch (final ArithmeticException overflow) {
+            throw new IllegalStateException(
+                    "Next immigration threshold exceeds supported range",
+                    overflow);
+        }
+        return currentTarget;
+    }
+
+    int chooseEarnedSlot() {
+        return random.nextInt(candidates.size());
+    }
+
+    UnitType getCandidateType(final int slot) {
+        return candidates.get(slot).getType();
+    }
+
+    void settleEarned(final int slot, final int currentTarget) {
+        crosses -= currentTarget;
+        earnedImmigrants++;
+        candidates.set(slot, candidate(nextCandidateId++, draw(random)));
     }
 
     List<RecruitmentOffer> offers(final Difficulty difficulty,

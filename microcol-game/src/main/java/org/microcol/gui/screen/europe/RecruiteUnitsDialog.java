@@ -66,6 +66,12 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
         openedModel = controller.getModel();
         actionTaken = false;
         try {
+            if (buyer.hasPendingImmigrant()) {
+                showRejection(Europe.immigrationPending);
+                buyer = null;
+                openedModel = null;
+                return;
+            }
             refresh();
         } catch (IllegalStateException e) {
             showRejection(Europe.recruitUnavailable);
