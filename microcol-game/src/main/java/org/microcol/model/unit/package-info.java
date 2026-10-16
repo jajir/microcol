@@ -18,7 +18,9 @@
  * boarding or visible adjacent foreign movement.
  *
  * Servant and criminal types preserve their class through equipment and cargo;
- * production penalties remain in the shared model job calculation.
+ * production penalties remain in the shared model job calculation. Artillery
+ * preserves its damage state independently of its purchase type; shared model
+ * combat owns strength calculation and loss resolution.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

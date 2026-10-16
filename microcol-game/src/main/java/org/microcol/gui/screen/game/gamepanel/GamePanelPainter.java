@@ -204,10 +204,13 @@ public final class GamePanelPainter {
         }
     }
 
-    void addFightAnimation(final Unit attacker, final Unit defender) {
-        animationManager.addAnimation(new AnimationFight(attacker.getLocation(),
-                defender.getLocation(), imageProvider,
-                gamePreferences.getAnimationSpeed()));
+    void addFightAnimation(final Unit attacker, final Unit defender,
+            final Runnable onFinished) {
+        animationManager.addAnimation(
+                new AnimationFight(attacker.getLocation(),
+                        defender.getLocation(), imageProvider,
+                        gamePreferences.getAnimationSpeed()),
+                animation -> onFinished.run());
     }
 
     boolean performFightDialog(final AttackOrder order) {

@@ -60,4 +60,9 @@
 	<entry key="fight_equipmentLoss">Poražený ztratí koně, pokud je má, jinak muškety. Obě jednotky zůstanou na místě a spotřebují zbývající pohyb.</entry>
 	<entry key="fight_lostHorses">%s: jednotka ztratila koně a přežila jako voják.</entry>
 	<entry key="fight_lostMuskets">%s: jednotka ztratila muškety a přežila neozbrojená.</entry>
+	<entry key="fight_artilleryBonus">Dělostřelectvo mimo opevněnou kolonii: %s%%</entry>
+	<entry key="fight_artilleryLoss">Poražené nepoškozené dělo se poškodí; již poškozené se zničí. Poražený voják ztratí koně, jinak muškety. Oba účastníci spotřebují zbývající pohyb.</entry>
+	<entry key="fight_artilleryDamaged">%s: dělo bylo poškozeno; síla útoku/obrany je nyní 5/3.</entry>
+	<entry key="fight_artilleryDestroyed">%s: poškozené dělo bylo zničeno.</entry>
+	<entry key="fight_damagedName">%s (poškozené)</entry>
 </properties>

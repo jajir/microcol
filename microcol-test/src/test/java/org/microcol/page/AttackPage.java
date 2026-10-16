@@ -198,6 +198,13 @@ public final class AttackPage extends AbstractScreen {
                         getModel().getPlayerByName("Dutch"),
                         getModel().getPlayerByName("France")));
         if (feedback != null) {
+            WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils.asyncFx(() -> getListOfNodes(
+                            ".label").stream()
+                            .filter(javafx.scene.control.Label.class::isInstance)
+                            .map(node -> ((javafx.scene.control.Label) node)
+                                    .getText())
+                            .anyMatch(text -> text.contains(feedback))).get());
             assertTrue(getListOfNodes(".label").stream()
                     .filter(javafx.scene.control.Label.class::isInstance)
                     .map(node -> ((javafx.scene.control.Label) node).getText())

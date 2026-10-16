@@ -223,6 +223,18 @@ public final class UnitType {
                         .wasConstructionBuilded(ConstructionType.LUMBER_MILL);
             }).build();
 
+    public static final UnitType ARTILLERY = UnitType.make()
+            .setName("ARTILLERY")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(500)
+            .setRequiredHammers(200).setRequiredTools(100)
+            .setCanByBuildInColony((model, colony) -> colony
+                    .wasConstructionBuilded(ConstructionType.ARMORY)
+                    || colony.wasConstructionBuilded(ConstructionType.MAGAZINE)
+                    || colony.wasConstructionBuilded(ConstructionType.ARSENAL))
+            .build();
+
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
             .setName("MASTER_BLACKSMITH")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
@@ -295,8 +307,9 @@ public final class UnitType {
 
     public static final List<UnitType> UNIT_TYPES = ImmutableList
             .<UnitType>builder()
-            .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, FRIGATE, GALLEON,
-                    CARAVEL, MERCHANTMAN, PRIVATEER, MAN_OF_WAR, WAGON)
+            .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
+                    FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
+                    MAN_OF_WAR, WAGON)
             .addAll(EUROPEAN_SPECIALISTS).build();
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES

@@ -38,6 +38,7 @@ public class UnitImageProvider {
 
         final ImmutableMap.Builder<UnitType, Image> images = ImmutableMap
                 .<UnitType, Image>builder()
+                .put(UnitType.ARTILLERY, imageCache.getImage("artillery.png"))
                 .put(UnitType.CARAVEL,
                         imageCache.getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.MERCHANTMAN,
@@ -113,6 +114,13 @@ public class UnitImageProvider {
                     }
                     return null;
                 }, request -> {
+                    if (UnitType.ARTILLERY == request.getUnitType()) {
+                        final org.microcol.model.unit.UnitArtillery artillery = (org.microcol.model.unit.UnitArtillery) request
+                                .getUnit();
+                        return imageCache.getImage(
+                                artillery.isDamaged() ? "artillery-damaged.png"
+                                        : "artillery.png");
+                    }
                     if (UnitType.WAGON == request.getUnitType()) {
                         return imageCache
                                 .getImage(ImageLoaderUnit.IMG_UNIT_WAGON);

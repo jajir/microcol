@@ -559,3 +559,15 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
    nejde o uživatelskou studii ani dokončení celého bojového UC.
    [Evidence](functional-tests.md#r-0093r-0094-ordinary-land-combat-2026-10-16)
    rozlišuje opravenou chybu GUI vlákna, lokální výsledky a publikaci.
+
+
+### Dělostřelectvo R-0095 (2026-10-17)
+
+Hráč najde dělo v běžné nabídce evropských jednotek a kolonijních projektů.
+Nedostupná stavba vysvětlí chybějící zbrojnici; nákup ukáže aktuální cenu.
+Bojový náhled uvádí venkovní postih a následky prohry ještě před potvrzením.
+Poškozené dělo má zlomenou hlaveň i textové označení; zpětná vazba se zobrazí
+po animaci boje. Zrušení ponechá svět beze změny, Continue poškození neopraví.
+Jde o implementovaný návrh s probíhající přejímkou v
+[evidenci R-0095](functional-tests.md#r-0095-artillery-lifecycle-2026-10-17),
+nikoli o poznatek z uživatelské studie.

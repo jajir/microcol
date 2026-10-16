@@ -565,7 +565,8 @@ public abstract class Player {
 
     private static boolean hasEscalatingPrice(final UnitType type) {
         return type != null && UnitType.UNIT_TYPES.contains(type)
-                && type.isShip() && type.getEuropePrice() > 0;
+                && (type.isShip() || type == UnitType.ARTILLERY)
+                && type.getEuropePrice() > 0;
     }
 
     private static int unitPurchasePrice(final UnitType type,

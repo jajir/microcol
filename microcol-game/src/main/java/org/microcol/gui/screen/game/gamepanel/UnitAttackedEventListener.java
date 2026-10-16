@@ -30,22 +30,36 @@ public final class UnitAttackedEventListener {
 
     @Subscribe
     private void onUnitAttacked(final UnitAttackedEvent event) {
+        final String message = outcomeMessage(event);
         gamePanelView.addFightAnimation(event.getAttacker(),
-                event.getDefender());
+                event.getDefender(), () -> {
+                    if (message != null) {
+                        javafx.application.Platform.runLater(() -> eventBus
+                                .post(new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
+                                        message,
+                                        org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME)));
+                    }
+                });
+    }
+
+    private String outcomeMessage(final UnitAttackedEvent event) {
+        if (event
+                .getDefeated() instanceof org.microcol.model.unit.UnitArtillery) {
+            return i18n.get(event.wasDestroyed()
+                    ? org.microcol.gui.dialog.Dialog.fight_artilleryDestroyed
+                    : org.microcol.gui.dialog.Dialog.fight_artilleryDamaged,
+                    event.getDefeated().getOwner().getDisplayName());
+        }
         if (!event.wasDestroyed() && event
                 .getDefeated() instanceof org.microcol.model.unit.UnitFreeColonist) {
             final org.microcol.model.unit.UnitFreeColonist defeated = (org.microcol.model.unit.UnitFreeColonist) event
                     .getDefeated();
-            final String message = i18n.get(
+            return i18n.get(
                     defeated.isHoldingGuns()
                             ? org.microcol.gui.dialog.Dialog.fight_lostHorses
                             : org.microcol.gui.dialog.Dialog.fight_lostMuskets,
                     defeated.getOwner().getDisplayName());
-            javafx.application.Platform.runLater(() -> eventBus.post(
-                    new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
-                            message,
-                            org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME)));
         }
+        return null;
     }
-
 }

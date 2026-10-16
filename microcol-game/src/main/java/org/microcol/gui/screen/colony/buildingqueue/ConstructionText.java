@@ -17,7 +17,7 @@ public enum ConstructionText implements MessageKeyResource {
     remove, cancel, changed, added, empty, hammers, hammerPool, tools,
     waitingTools, waitingHammers, ready, coastalRequired, missingShipyard, rush,
     rushConfirm, rushCancel, rushDetail, rushUnavailable, rushNoGold,
-    rushChanged, rushCompleted, missingFounder;
+    rushChanged, rushCompleted, missingFounder, missingArmory;
 
     public static String name(final I18n i18n, final ColonyBuildingItem item) {
         if (item instanceof ColonyBuildingItemConstruction) {
@@ -40,6 +40,8 @@ public enum ConstructionText implements MessageKeyResource {
                                     type.getRequiredFounder().orElseThrow()));
         case COASTAL_REQUIRED:
             return i18n.get(coastalRequired);
+        case MISSING_ARMORY:
+            return i18n.get(missingArmory);
         case MISSING_SHIPYARD:
             return i18n.get(missingShipyard);
         case POPULATION:

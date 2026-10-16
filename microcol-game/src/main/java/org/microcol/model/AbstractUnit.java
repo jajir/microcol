@@ -17,6 +17,7 @@ import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.Ship;
 
@@ -736,6 +737,17 @@ public abstract class AbstractUnit implements Unit {
         defender.actionPoints = 0;
         if (strengths.isPresent()) {
             final AbstractUnit loser = winnerAttacker ? defender : this;
+            if (loser instanceof UnitArtillery
+                    && ((UnitArtillery) loser).isDamaged()) {
+                model.fireUnitAttacked(this, defender, loser, true);
+                model.destroyUnit(loser);
+                if (loser == defender && canOccupyWonTile(order.getTarget())) {
+                    placeToLocation(order.getTarget());
+                    model.wakeSentriesForMovement(this, order.getTarget());
+                    tryToCaptureColony(order.getTarget());
+                }
+                return;
+            }
             loser.loseCombatEquipment();
             model.fireUnitAttacked(this, defender, loser, false);
             return;
@@ -744,15 +756,28 @@ public abstract class AbstractUnit implements Unit {
         if (winner == this) {
             model.fireUnitAttacked(this, defender, defender, true);
             model.destroyUnit(defender);
-            if (owner.getEnemyUnitsAt(order.getTarget()).isEmpty()) {
+            if (canOccupyWonTile(order.getTarget())) {
                 placeToLocation(order.getTarget());
                 model.wakeSentriesForMovement(this, order.getTarget());
                 tryToCaptureColony(order.getTarget());
             }
         } else {
+            if (this instanceof UnitArtillery
+                    && !((UnitArtillery) this).isDamaged()) {
+                loseCombatEquipment();
+                model.fireUnitAttacked(this, defender, this, false);
+                return;
+            }
             model.fireUnitAttacked(this, defender, this, true);
             model.destroyUnit(this);
         }
+    }
+
+    private boolean canOccupyWonTile(final Location target) {
+        return owner.getEnemyUnitsAt(target).isEmpty() && model
+                .getColonyAt(target).map(colony -> colony.getOwner() == owner
+                        || colony.canBeCapturedBy(this))
+                .orElse(true);
     }
 
     protected void loseCombatEquipment() {

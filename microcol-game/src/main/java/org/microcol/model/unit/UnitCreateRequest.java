@@ -38,6 +38,16 @@ public class UnitCreateRequest {
 
     private boolean mounted;
 
+    private boolean artilleryDamaged;
+
+    public boolean isArtilleryDamaged() {
+        return artilleryDamaged;
+    }
+
+    public void setArtilleryDamaged(final boolean damaged) {
+        artilleryDamaged = damaged;
+    }
+
     public UnitCreateRequest(final Model model,
             final Function<Unit, Place> placeBuilder, final Integer unitId,
             final UnitType unitType, final Player owner,

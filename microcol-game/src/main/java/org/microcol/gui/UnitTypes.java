@@ -8,12 +8,13 @@ import org.microcol.model.UnitType;
  */
 public enum UnitTypes implements MessageKeyResource {
 
-    CARAVEL_name, CARAVEL_name_7, CARAVEL_name_7pl, MERCHANTMAN_name,
-    MERCHANTMAN_name_7, MERCHANTMAN_name_7pl, PRIVATEER_name, PRIVATEER_name_7,
-    PRIVATEER_name_7pl, MAN_OF_WAR_name, MAN_OF_WAR_name_7, MAN_OF_WAR_name_7pl,
-    FRIGATE_name, FRIGATE_name_7, FRIGATE_name_7pl, GALLEON_name,
-    GALLEON_name_7, GALLEON_name_7pl, COLONIST_name, COLONIST_name_7,
-    COLONIST_name_7pl, MASTER_BLACKSMITH_name, MASTER_BLACKSMITH_name_7,
+    ARTILLERY_name, ARTILLERY_name_7, ARTILLERY_name_7pl, CARAVEL_name,
+    CARAVEL_name_7, CARAVEL_name_7pl, MERCHANTMAN_name, MERCHANTMAN_name_7,
+    MERCHANTMAN_name_7pl, PRIVATEER_name, PRIVATEER_name_7, PRIVATEER_name_7pl,
+    MAN_OF_WAR_name, MAN_OF_WAR_name_7, MAN_OF_WAR_name_7pl, FRIGATE_name,
+    FRIGATE_name_7, FRIGATE_name_7pl, GALLEON_name, GALLEON_name_7,
+    GALLEON_name_7pl, COLONIST_name, COLONIST_name_7, COLONIST_name_7pl,
+    MASTER_BLACKSMITH_name, MASTER_BLACKSMITH_name_7,
     MASTER_BLACKSMITH_name_7pl, WAGON_name, WAGON_name_7, WAGON_name_7pl,
     EXPERT_FARMER_name, EXPERT_FARMER_name_7, EXPERT_FARMER_name_7pl,
     EXPERT_FISHERMAN_name, EXPERT_FISHERMAN_name_7, EXPERT_FISHERMAN_name_7pl,

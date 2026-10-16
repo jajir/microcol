@@ -4072,3 +4072,47 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    passed after the repair. Main integrated 85 reviewed source/fixture files
    with unchanged-original hash checks; unrelated R-0070 remained untouched.
    The final integrated documentation checks and publication are tracked below.
+
+
+## R-0095 artillery lifecycle — 2026-10-17
+
+1. Isolated implementation based on `0d027e62` adds artillery construction,
+   European price history, one-hold transport, fortify eligibility and persistent
+   full/damaged states. `ArtilleryTest` has ten passing cases; the complete
+   game suite has **1,693 tests, zero failures/errors/skips**, independently
+   counted from 172 XML reports. Logs are in `target/r95/model-full.log` and
+   `model-focused.log` in the R-0095 worktree. The native-raid bonus has no
+   runtime role to exercise and remains pending; ordinary civilian combat
+   strength/capture still belongs to R-0096.
+2. Main review corrected an omitted +50% artillery attack bonus. The first
+   Docker run `run-wgScNc` passed all twelve TC35 cases; TC62 failed its first
+   strength assertion, leaving the modal open and causing two later failures.
+   Retry `run-KoWgYd` passed purchase/one-hold/Continue and construction paths,
+   but failed destruction feedback. An explicit wait also timed out, ruling out
+   a simple delayed FX notification. Outcome feedback now follows completion
+   of the fight animation. Combined `run-sj4d02` passed all four TC62 cases,
+   all nine TC21 cases and three source-contract cases; eleven of twelve TC35
+   cases passed. TC35/11 checked its message before the new animation-completion
+   notification. Its existing verification now awaits the actual message,
+   keeping every equipment/location/Continue assertion. Rerun `run-ldP8ag`
+   passed all twelve TC35 cases and three source-contract checks, zero failures,
+   errors or skips. Thus all selected player paths passed; the combined first
+   run is retained as a failure rather than relabeled successful.
+3. `TC_62_F53_artillery_test` covers English/Czech strength previews and cancel,
+   two defeats separated by Continue, European 500→550 pricing, shipment in one
+   hold, armory admission and construction. Page assertions remain in named
+   verification methods. The source contract passed three checks. The English
+   battle screenshot was visually checked: strengths, penalty, consequences and
+   both buttons are readable. The Czech screenshot from `run-sj4d02` was also
+   visually checked: the long outdoor penalty wraps without clipping.
+4. Prior full CI `38969438804` at `1f56c85b` completed with 258 UI/support tests,
+   one failure and no errors/skips: TC21/08 targeted tile `[24,13]` instead of
+   `[24,16]`. `FreePlayAuditPage.hoverTileDirectly` incorrectly added stage
+   coordinates to a canvas-local point. It now uses `Canvas.localToScreen`,
+   preserving both original same-tile description assertions. Verification of
+   this correction passed all nine TC21 cases in the combined Docker run.
+5. Packaging/Javadoc, nine documentation checks and strict MkDocs passed after
+   the implementation and test corrections. Main applied the shared formatter
+   to 24 changed Java files with exact-token and idempotence checks. Integration
+   and publication remain pending; these local results do not identify a new
+   published game build.

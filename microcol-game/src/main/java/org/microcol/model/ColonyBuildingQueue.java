@@ -157,7 +157,7 @@ public class ColonyBuildingQueue {
     public enum UnavailableReason {
         UNKNOWN_TYPE, COLONY_UNAVAILABLE, NOT_A_PROJECT, ALREADY_BUILT,
         ALREADY_QUEUED, MISSING_PREDECESSOR, POPULATION, MISSING_SHIPYARD,
-        COASTAL_REQUIRED, MISSING_FOUNDER
+        COASTAL_REQUIRED, MISSING_FOUNDER, MISSING_ARMORY
     }
 
     public Optional<UnavailableReason> getUnitUnavailableReason(
@@ -172,6 +172,9 @@ public class ColonyBuildingQueue {
         if (!type.canBeBuildInColony()) {
             return Optional.of(UnavailableReason.NOT_A_PROJECT);
         }
+        if (type == UnitType.ARTILLERY && !hasArtilleryWorkshop()) {
+            return Optional.of(UnavailableReason.MISSING_ARMORY);
+        }
         if (type == UnitType.GALLEON || type == UnitType.FRIGATE) {
             if (!colony.wasConstructionBuilded(ConstructionType.SHIPYARD)) {
                 return Optional.of(UnavailableReason.MISSING_SHIPYARD);
@@ -184,6 +187,12 @@ public class ColonyBuildingQueue {
         return type.getCanByBuildInColony().apply(model, colony)
                 ? Optional.empty()
                 : Optional.of(UnavailableReason.MISSING_PREDECESSOR);
+    }
+
+    private boolean hasArtilleryWorkshop() {
+        return colony.wasConstructionBuilded(ConstructionType.ARMORY)
+                || colony.wasConstructionBuilded(ConstructionType.MAGAZINE)
+                || colony.wasConstructionBuilded(ConstructionType.ARSENAL);
     }
 
     public Optional<UnavailableReason> getUnavailableReason(

@@ -199,19 +199,30 @@ public final class DialogFight extends AbstractMessageWindow {
             attackerStrength.setText(describe(strengths.getAttacker()));
             defenderStrength.setText(describe(strengths.getDefender()));
             combatChance.setText(i18n.get(Dialog.fight_chance,
-                    number(100 * strengths.getAttackerWinProbability())) + "\n"
-                    + i18n.get(Dialog.fight_equipmentLoss));
+                    number(100 * strengths.getAttackerWinProbability()))
+                    + "\n"
+                    + i18n.get(order
+                            .getAttacker() instanceof org.microcol.model.unit.UnitArtillery
+                            || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
+                                    ? Dialog.fight_artilleryLoss
+                                    : Dialog.fight_equipmentLoss));
         });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();
-        attackerLabelName
-                .setText(localizationHelper.getUnitName(attacker.getType()));
+        attackerLabelName.setText(unitName(attacker));
         attackerImageView.setImage(imageProvider.getUnitImage(attacker));
-        defenderLabelName
-                .setText(localizationHelper.getUnitName(defender.getType()));
+        defenderLabelName.setText(unitName(defender));
         defenderImageView.setImage(imageProvider.getUnitImage(defender));
         showAndWait();
         return userChooseFight;
+    }
+
+    private String unitName(final Unit unit) {
+        final String name = localizationHelper.getUnitName(unit.getType());
+        return unit instanceof org.microcol.model.unit.UnitArtillery
+                && ((org.microcol.model.unit.UnitArtillery) unit).isDamaged()
+                        ? i18n.get(Dialog.fight_damagedName, name)
+                        : name;
     }
 
     private String describe(final CombatStrength strength) {
@@ -222,6 +233,8 @@ public final class DialogFight extends AbstractMessageWindow {
         appendBonus(out, Dialog.fight_fortifyBonus,
                 strength.getFortificationBonus());
         appendBonus(out, Dialog.fight_colonyBonus, strength.getColonyBonus());
+        appendBonus(out, Dialog.fight_artilleryBonus,
+                strength.getArtilleryBonus());
         return out.append("\n").append(
                 i18n.get(Dialog.fight_total, number(strength.getTotal())))
                 .toString();

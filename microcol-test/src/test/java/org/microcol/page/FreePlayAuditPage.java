@@ -102,12 +102,16 @@ public final class FreePlayAuditPage extends AbstractScreen {
     }
 
     public void hoverTileDirectly(final Location location) {
-        final org.microcol.gui.Point point = getContext().getArea()
-                .convertToCanvasPoint(location)
-                .add(getPrimaryStage().getX(), getPrimaryStage().getY())
-                .add(org.microcol.gui.Tile.TILE_CENTER);
-        getRobot().robotContext().getMouseRobot()
-                .move(new javafx.geometry.Point2D(point.getX(), point.getY()));
+        final org.microcol.gui.Point tile = getContext().getArea()
+                .convertToCanvasPoint(location);
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final javafx.geometry.Point2D point = canvas.localToScreen(
+                tile.getX() + org.microcol.gui.Tile.TILE_CENTER.getX(),
+                tile.getY() + org.microcol.gui.Tile.TILE_CENTER.getY());
+        getRobot().robotContext().getMouseRobot().move(point);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

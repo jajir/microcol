@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitArtillery;
 
 /** Frozen attacker and defender ordinary-land strengths. */
 public final class CombatStrengths {
@@ -24,10 +25,7 @@ public final class CombatStrengths {
 
     static Optional<CombatStrengths> forBattle(Model model, Unit attacker,
             Unit defender) {
-        if (!(attacker instanceof UnitFreeColonist)
-                || !(defender instanceof UnitFreeColonist)
-                || !((UnitFreeColonist) attacker).isHoldingGuns()
-                || !((UnitFreeColonist) defender).isHoldingGuns()
+        if (!isArmedLand(attacker) || !isArmedLand(defender)
                 || !attacker.isAtPlaceLocation()
                 || !defender.isAtPlaceLocation()) {
             return Optional.empty();
@@ -40,8 +38,6 @@ public final class CombatStrengths {
                 || !defendTerrain.getTerrainType().isLand()) {
             return Optional.empty();
         }
-        final UnitFreeColonist attacking = (UnitFreeColonist) attacker;
-        final UnitFreeColonist defending = (UnitFreeColonist) defender;
         int colonyBonus = 0;
         final Optional<Colony> colony = model
                 .getColonyAt(defender.getLocation())
@@ -61,22 +57,55 @@ public final class CombatStrengths {
         final int terrainBonus = defendTerrain.isHasTrees()
                 ? defendTerrain.getTerrainType().getDefenseBonusWithTree()
                 : defendTerrain.getTerrainType().getDefenseBonus();
-        final CombatStrength attack = new CombatStrength(
-                attacking.isMounted() ? 3 : 2, 50, 0, 0, 0);
-        final CombatStrength defense = new CombatStrength(
-                defending.isMounted() ? 3 : 2, 0, terrainBonus,
-                model.isFortified(defender) ? 50 : 0, colonyBonus);
+        final CombatStrength attack = new CombatStrength(base(attacker, true),
+                50, 0, 0, 0, artilleryPenalty(model, attacker));
+        final CombatStrength defense = new CombatStrength(base(defender, false),
+                0, terrainBonus, model.isFortified(defender) ? 50 : 0,
+                colonyBonus, artilleryPenalty(model, defender));
         // Identity matters even when two changed inputs yield the same sum.
-        final String inputs = attacker.getType().name() + ':'
-                + attacking.isMounted() + ':' + attacking.isHoldingGuns() + ':'
-                + attackTerrain.getTerrainType().name() + ':'
+        final String inputs = attacker.getType().name() + ':' + state(attacker)
+                + ':' + attackTerrain.getTerrainType().name() + ':'
                 + attackTerrain.isHasTrees() + ':' + model.isFortified(attacker)
-                + ':' + defender.getType().name() + ':' + defending.isMounted()
-                + ':' + defending.isHoldingGuns() + ':'
+                + ':' + defender.getType().name() + ':' + state(defender) + ':'
                 + defendTerrain.getTerrainType().name() + ':'
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
                 + ':' + colonyBonus;
         return Optional.of(new CombatStrengths(attack, defense, inputs));
+    }
+
+    private static boolean isArmedLand(Unit unit) {
+        return unit instanceof UnitArtillery || unit instanceof UnitFreeColonist
+                && ((UnitFreeColonist) unit).isHoldingGuns();
+    }
+
+    private static double base(Unit unit, boolean attack) {
+        if (unit instanceof UnitArtillery) {
+            return ((UnitArtillery) unit).isDamaged() ? attack ? 5 : 3
+                    : attack ? 7 : 5;
+        }
+        return ((UnitFreeColonist) unit).isMounted() ? 3 : 2;
+    }
+
+    private static String state(Unit unit) {
+        if (unit instanceof UnitArtillery) {
+            return Boolean.toString(((UnitArtillery) unit).isDamaged());
+        }
+        UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return colonist.isMounted() + ":" + colonist.isHoldingGuns();
+    }
+
+    private static int artilleryPenalty(Model model, Unit unit) {
+        if (!(unit instanceof UnitArtillery)) {
+            return 0;
+        }
+        return model.getColonyAt(unit.getLocation())
+                .filter(colony -> colony.getOwner() == unit.getOwner())
+                .filter(colony -> colony
+                        .wasConstructionBuilded(ConstructionType.STOCKADE)
+                        || colony.wasConstructionBuilded(ConstructionType.FORT)
+                        || colony.wasConstructionBuilded(
+                                ConstructionType.FORTRESS))
+                .isPresent() ? 0 : -75;
     }
 
     public CombatStrength getAttacker() {

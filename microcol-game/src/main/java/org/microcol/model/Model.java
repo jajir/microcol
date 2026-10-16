@@ -25,6 +25,7 @@ import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
@@ -1248,12 +1249,14 @@ public class Model {
 
     /** Whether a current armed land unit can begin fortifying. */
     public boolean canFortify(final Unit unit) {
-        return unit instanceof UnitFreeColonist && isGameRunning()
+        return (unit instanceof UnitFreeColonist
+                || unit instanceof UnitArtillery) && isGameRunning()
                 && !endingTurn && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
                 && unit.isAtPlaceLocation()
                 && map.getTerrainTypeAt(unit.getLocation()).isLand()
-                && ((UnitFreeColonist) unit).isHoldingGuns()
+                && (unit instanceof UnitArtillery
+                        || ((UnitFreeColonist) unit).isHoldingGuns())
                 && unit.getActionPoints() > 0
                 && unit.getAction().getType() == UnitActionType.noAction;
     }

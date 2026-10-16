@@ -9,14 +9,22 @@ public final class CombatStrength {
     private final int terrainBonus;
     private final int fortificationBonus;
     private final int colonyBonus;
+    private final int artilleryBonus;
 
     CombatStrength(double base, int attackBonus, int terrainBonus,
             int fortificationBonus, int colonyBonus) {
+        this(base, attackBonus, terrainBonus, fortificationBonus, colonyBonus,
+                0);
+    }
+
+    CombatStrength(double base, int attackBonus, int terrainBonus,
+            int fortificationBonus, int colonyBonus, int artilleryBonus) {
         this.base = base;
         this.attackBonus = attackBonus;
         this.terrainBonus = terrainBonus;
         this.fortificationBonus = fortificationBonus;
         this.colonyBonus = colonyBonus;
+        this.artilleryBonus = artilleryBonus;
     }
 
     public double getBase() {
@@ -39,13 +47,15 @@ public final class CombatStrength {
         return colonyBonus;
     }
 
+    public int getArtilleryBonus() {
+        return artilleryBonus;
+    }
+
     public double getTotal() {
         return base <= 0 ? 0
-                : base * Math
-                        .max(0.1,
-                                (100 + attackBonus + terrainBonus
-                                        + fortificationBonus + colonyBonus)
-                                        / 100.0);
+                : base * Math.max(0.1,
+                        (100 + attackBonus + terrainBonus + fortificationBonus
+                                + colonyBonus + artilleryBonus) / 100.0);
     }
 
     @Override
@@ -57,12 +67,13 @@ public final class CombatStrength {
                 && attackBonus == that.attackBonus
                 && terrainBonus == that.terrainBonus
                 && fortificationBonus == that.fortificationBonus
-                && colonyBonus == that.colonyBonus;
+                && colonyBonus == that.colonyBonus
+                && artilleryBonus == that.artilleryBonus;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(base, attackBonus, terrainBonus, fortificationBonus,
-                colonyBonus);
+                colonyBonus, artilleryBonus);
     }
 }

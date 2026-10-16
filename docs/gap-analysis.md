@@ -1028,6 +1028,14 @@ rules; implementation and acceptance are tracked by that requirement.
    when defending a fortified colony against native raids. Retain the card's
    full 7/5 strengths. Civilian defense is 1; Revere uses [founder details](#founder-details). Ordinary capture
    does not delete unrelated passengers, residents or full warehouses.
+   Under the continuing run's delegated balance decisions (2026-10-16), use
+   200 hammers and 100 tools to build artillery and one movement point per
+   owner turn, unchanged by damage. These are provisional project values,
+   not values verified in the manual. An artillery piece takes one ship hold,
+   cannot work or carry cargo, and has no automatic damage repair. The outdoor
+   penalty uses each participant's current tile and its own colony's
+   stockade/fort/fortress; a personal fortify order is not colony protection.
+   Native-raid bonus acceptance waits for an actual native combat role.
 5. Naval combat uses the same probability calculation, then a separate draw:
    a defeated ship sinks with probability 50%, otherwise is damaged. Sinking
    destroys passengers and unplundered goods; damage preserves people. The

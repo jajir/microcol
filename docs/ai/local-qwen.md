@@ -3331,3 +3331,26 @@ committed for this experiment.
     setter) with existing public stock operations; Docker then passed 17.
     [Execution evidence](../functional-tests.md#r-0078-horse-breeding-2026-10-16)
     distinguishes these repairs from the remaining CI/publication gates.
+
+
+### Artillery and CI repair with Sol low — 2026-10-17
+
+1. The continuing authorized cloud run reused the existing Sol low agent for
+   a bounded R-0095 model assignment in `2026-10-16-r95`, based on `0d027e62`.
+   Main owned refinement, GUI, artwork, player tests, review and verification.
+   No local model and no parallel duplicate implementation were used.
+2. Main review found omitted artillery attack +50%, loss handling that destroyed
+   full artillery against an unsupported civilian opponent, insufficient saved
+   cargo/placement validation, unsafe post-win occupation and an unjustified
+   wagon target exclusion. Corrections went to the same worker with focused
+   regressions. A proposed neutral-stack fixture was invalid under the existing
+   world invariant and was removed; the runtime occupancy guard still checks
+   every foreign occupant. Native combat was explicitly left pending, without
+   inventing a native-role predicate.
+3. Main's first UI tests exposed the missing attack bonus; later tests showed
+   destruction feedback being overwritten during animation. Main corrected the
+   notification timing and reran the affected player paths. Separately, the
+   worker repaired TC21's canvas-to-screen coordinate conversion after full CI
+   evidence, preserving the original assertions. These outcomes show usable
+   bounded work plus necessary caller review, not measured quota savings.
+   Counts and publication status belong to [execution evidence](../functional-tests.md#r-0095-artillery-lifecycle-2026-10-17).

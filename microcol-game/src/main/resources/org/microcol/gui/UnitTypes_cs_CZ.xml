@@ -95,4 +95,7 @@
 	<entry key="PETTY_CRIMINAL_name">drobný trestanec</entry>
 	<entry key="PETTY_CRIMINAL_name_7">drobným trestancem</entry>
 	<entry key="PETTY_CRIMINAL_name_7pl">drobnými trestanci</entry>
+	<entry key="ARTILLERY_name">Dělostřelectvo</entry>
+	<entry key="ARTILLERY_name_7">dělem</entry>
+	<entry key="ARTILLERY_name_7pl">děly</entry>
 </properties>

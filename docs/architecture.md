@@ -693,3 +693,13 @@ jej vyžaduje i při načtení. Počasí plaveb zůstává nezávislé. Prohra o
 vojáka či dragouna mění vybavení, nikoli jeho identitu či polohu. Událost
 rozlišuje poraženou a skutečně zničenou jednotku. Lokální přejímku a nezávislý stav publikace vede
 [evidence R-0093/R-0094](functional-tests.md#r-0093r-0094-ordinary-land-combat-2026-10-16).
+
+### Dělostřelectvo (R-0095)
+
+`model.unit.UnitArtillery` vlastní poškození jedné jednotky; nemění se její
+identita ani nákupní typ. `UnitPo.artilleryDamaged` je povinný pouze pro dělo.
+Výroba, cenová historie, nákladní prostor a rozkaz opevnění používají stávající
+modelové operace. `CombatStrengths` připojuje současné poškození a venkovní
+postih ke stejnému snímku boje; GUI výsledek pouze překládá a vybírá obrázek.
+Chybějící domorodá role není nahrazena kontrolou příznaku počítačového hráče.
+Přejímka a její dosud chybějící návaznosti jsou vedené v [R-0095](requirements/R-0095.md).

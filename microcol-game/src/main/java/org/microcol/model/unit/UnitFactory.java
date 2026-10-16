@@ -22,6 +22,12 @@ public class UnitFactory {
 
     private final ChainOfCommandStrategy<UnitCreateRequest, Unit> unitResolver = new ChainOfCommandStrategy<UnitCreateRequest, Unit>(
             Lists.newArrayList(request -> {
+                if (UnitType.ARTILLERY == request.getUnitType()) {
+                    return new UnitArtillery(request.getModel(),
+                            request.getUnitId(), request.getPlaceBuilder(),
+                            request.getOwner(), request.getAvailableMoves(),
+                            request.getAction(), request.isArtilleryDamaged());
+                }
                 if (UnitType.COLONIST == request.getUnitType()) {
                     return makeFreeColonist(request);
                 }
@@ -156,6 +162,19 @@ public class UnitFactory {
     public Unit createUnit(final Model model, final ModelPo modelPo,
             final UnitPo unitPo) {
 
+        Preconditions.checkArgument(
+                unitPo.getType() == UnitType.ARTILLERY
+                        ? unitPo.getArtilleryDamaged() != null
+                                && !unitPo.isHoldingGuns()
+                                && !unitPo.isMounted() && unitPo.getTools() == 0
+                                && unitPo.getPlaceColonyField() == null
+                                && unitPo.getPlaceConstructionSlot() == null
+                                && unitPo.getCargo() != null
+                                && unitPo.getCargo().getSlots() != null
+                                && unitPo.getCargo().getSlots().isEmpty()
+                        : unitPo.getArtilleryDamaged() == null,
+                "Invalid saved artillery state");
+
         final Function<Unit, Place> placeBuilderModelPo = new PlaceBuilderPo(
                 unitPo, modelPo, model);
 
@@ -169,11 +188,14 @@ public class UnitFactory {
         unitCreateRequest.setHoldingGuns(unitPo.isHoldingGuns());
         unitCreateRequest.setMounted(unitPo.isMounted());
         unitCreateRequest.setTools(unitPo.getTools());
+        unitCreateRequest.setArtilleryDamaged(
+                Boolean.TRUE.equals(unitPo.getArtilleryDamaged()));
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
         if (unit.getAction().getType() == UnitActionType.fortify) {
-            Preconditions.checkArgument(unit instanceof UnitFreeColonist
+            Preconditions.checkArgument((unit instanceof UnitFreeColonist
                     && ((UnitFreeColonist) unit).isHoldingGuns()
+                    || unit instanceof UnitArtillery)
                     && unit.isAtPlaceLocation()
                     && model.getMap().getTerrainTypeAt(unit.getLocation())
                             .isLand()

@@ -42,6 +42,16 @@ public class UnitPo {
 
     private boolean mounted;
 
+    private Boolean artilleryDamaged;
+
+    public Boolean getArtilleryDamaged() {
+        return artilleryDamaged;
+    }
+
+    public void setArtilleryDamaged(final Boolean artilleryDamaged) {
+        this.artilleryDamaged = artilleryDamaged;
+    }
+
     private Location departureLocation;
 
     private Direction departureDirection;

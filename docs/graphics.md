@@ -22,6 +22,16 @@ Přesná paleta, způsob obrysů, stínování, proporce a další podrobnosti t
 
 ## Jak obrázek projde od kresby do hry
 
+### Dělostřelectvo R-0095 (2026-10-16)
+
+Nové vektorové podklady [artillery.svg](../microcol-game/src/graphics/artillery.svg)
+a [artillery-damaged.svg](../microcol-game/src/graphics/artillery-damaged.svg)
+mají samostatné exporty 45 × 45 px v `resources/images`. `UnitImageProvider`
+vybírá poškozené dělo podle modelového stavu; nabídka nákupu používá celé dělo.
+Poškození znázorňuje zlomená hlaveň a zároveň je popsáno textem v náhledu boje
+a výsledném hlášení. Export používá `rsvg-convert -o <výstup.png> <zdroj.svg>`.
+Atlas se nemění. Hráčská přejímka patří do evidence R-0095.
+
 **SVG → export v Inkscape nebo `images.groovy` → rastrový soubor v `resources/images` → načtení ve hře → zobrazení.**
 
 Po načtení přes `ImageCache` a `ImageProvider` se použije buď celý obrázek, nebo výřez atlasu podle souřadnic. Výřez může dostat alias a projít otočením či složením; výsledný obrázek se vykreslí na canvas nebo vloží do `ImageView`. Některé rastry načítá přímo JavaFX CSS nebo spouštěcí obrazovka JVM.
