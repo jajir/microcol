@@ -309,6 +309,33 @@ public class ColonyScreen extends AbstractScreen {
     public void dragFieldWorkerTo(final int unitId,
             final org.microcol.model.Direction target)
             throws InterruptedException {
+        dragFieldWorkerTo(unitId, target, false, () -> {
+        });
+    }
+
+    public void cancelFieldWorkerDrag(final int unitId,
+            final org.microcol.model.Direction target)
+            throws InterruptedException {
+        dragFieldWorkerTo(unitId, target, true, () -> {
+        });
+    }
+
+    public void dragFieldWorkerAfterNeighborTakesSquare(final int unitId,
+            final org.microcol.model.Direction target)
+            throws InterruptedException {
+        dragFieldWorkerTo(unitId, target, false, () -> {
+            getModel().getUnitById(1).placeToColonyField(
+                    getModel().getColonyById(1).orElseThrow()
+                            .getColonyFieldInDirection(
+                                    org.microcol.model.Direction.west),
+                    GoodsType.CORN);
+            rememberWorld();
+        });
+    }
+
+    private void dragFieldWorkerTo(final int unitId,
+            final org.microcol.model.Direction target, final boolean cancel,
+            final Runnable beforeDrop) throws InterruptedException {
         final ColonyField source = colony.getColonyFields().stream().filter(
                 field -> field.getUnit().map(Unit::getId).orElse(-1) == unitId)
                 .findFirst().orElseThrow();
@@ -334,6 +361,7 @@ public class ColonyScreen extends AbstractScreen {
         final EventHandler<javafx.scene.input.MouseEvent> detected = event -> javafx.application.Platform
                 .runLater(started::countDown);
         final EventHandler<DragEvent> done = event -> finished.countDown();
+        final EventHandler<DragEvent> change = event -> beforeDrop.run();
         getRobot().interact(() -> {
             canvas.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_MOVED,
                     moved);
@@ -344,6 +372,7 @@ public class ColonyScreen extends AbstractScreen {
             canvas.addEventHandler(javafx.scene.input.MouseEvent.DRAG_DETECTED,
                     detected);
             canvas.addEventHandler(DragEvent.DRAG_DONE, done);
+            canvas.addEventFilter(DragEvent.DRAG_DROPPED, change);
         });
         boolean released = false;
         try {
@@ -365,7 +394,11 @@ public class ColonyScreen extends AbstractScreen {
             if (!started.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("The field drag must start");
             }
-            getRobot().moveTo(destination).release(MouseButton.PRIMARY);
+            getRobot().moveTo(destination);
+            if (cancel) {
+                getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+            }
+            getRobot().release(MouseButton.PRIMARY);
             released = true;
             if (!finished.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("The field drag must finish");
@@ -385,6 +418,7 @@ public class ColonyScreen extends AbstractScreen {
                 canvas.removeEventHandler(
                         javafx.scene.input.MouseEvent.DRAG_DETECTED, detected);
                 canvas.removeEventHandler(DragEvent.DRAG_DONE, done);
+                canvas.removeEventFilter(DragEvent.DRAG_DROPPED, change);
             });
         }
     }
@@ -400,6 +434,73 @@ public class ColonyScreen extends AbstractScreen {
                 field.getProduction().orElseThrow().getAmount());
         assertEquals(GoodsType.CORN,
                 field.getProduction().orElseThrow().getType());
+        assertEquals(1, colony.getColonyFields().stream()
+                .filter(ColonyField::isNotEmpty).count());
+    }
+
+    private com.google.gson.JsonElement previousWorld;
+
+    public void rememberWorld() {
+        previousWorld = new com.google.gson.Gson()
+                .toJsonTree(getModel().save());
+    }
+
+    public void verifyWorldUnchanged() {
+        assertEquals(previousWorld,
+                new com.google.gson.Gson().toJsonTree(getModel().save()));
+    }
+
+    public void openCropMenu(final int unitId) {
+        final ColonyField field = colony.getColonyFields().stream()
+                .filter(f -> f.getUnit().map(Unit::getId).orElse(-1) == unitId)
+                .findFirst().orElseThrow();
+        getRobot().clickOn(findPlaceOfField(field), MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void cancelCropMenu() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCropMenuShowing(final boolean expected) {
+        assertEquals(expected,
+                javafx.stage.Window.getWindows().stream().anyMatch(
+                        w -> w instanceof javafx.scene.control.ContextMenu
+                                && w.isShowing()));
+    }
+
+    public void chooseCrop(final GoodsType crop, final int displayedYield) {
+        getRobot().clickOn(crop.name() + "   " + displayedYield);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveWorkerWhenCropIsConfirmed(final int unitId) {
+        final javafx.scene.control.ContextMenu menu = javafx.stage.Window
+                .getWindows().stream()
+                .filter(w -> w instanceof javafx.scene.control.ContextMenu
+                        && w.isShowing())
+                .map(w -> (javafx.scene.control.ContextMenu) w).findFirst()
+                .orElseThrow();
+        getRobot().interact(() -> menu
+                .addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    getModel().getUnitById(unitId).placeToColonyField(
+                            colony.getColonyFieldInDirection(
+                                    org.microcol.model.Direction.north),
+                            GoodsType.CORN);
+                    rememberWorld();
+                }));
+    }
+
+    public void verifyFieldProduction(final int expectedUnitId,
+            final Location expectedLocation, final GoodsType expectedCrop,
+            final int expectedYield) {
+        final ColonyField field = colony.getColonyFields().stream().filter(
+                f -> f.getUnit().map(Unit::getId).orElse(-1) == expectedUnitId)
+                .findFirst().orElseThrow();
+        assertEquals(expectedLocation, field.getLocation());
+        assertEquals(Goods.of(expectedCrop, expectedYield),
+                field.getProduction().orElseThrow());
         assertEquals(1, colony.getColonyFields().stream()
                 .filter(ColonyField::isNotEmpty).count());
     }

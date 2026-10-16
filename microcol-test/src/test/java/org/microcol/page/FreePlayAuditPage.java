@@ -168,6 +168,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     private File invalidSave;
     private byte[] invalidSaveBytes;
     private org.microcol.model.campaign.GameModel previousGame;
+    private com.google.gson.JsonElement previousWorld;
 
     public void prepareInvalidSavedGame(final boolean autosave)
             throws Exception {
@@ -175,8 +176,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         final org.microcol.model.campaign.po.GameModelPo data = files
                 .loadFromClassPath(
                         "/maps/default-campaign-mission-2-thrive.microcol");
-        data.getModel().getColonies().get(1)
-                .setName(data.getModel().getColonies().get(0).getName());
+        data.getModel().getColonies().get(1).setLocation(Location.of(24, 13));
         invalidSave = autosave
                 ? getContext().getClassFromGuice(PersistingTool.class)
                         .getAutoSaveFile()
@@ -187,6 +187,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .getClassFromGuice(
                         org.microcol.gui.event.model.GameModelController.class)
                 .getGameModel();
+        previousWorld = previousGame == null ? null
+                : new com.google.gson.Gson()
+                        .toJsonTree(previousGame.getModel().save());
         if (!autosave) {
             chooseLoadFile(invalidSave);
         }
@@ -196,9 +199,24 @@ public final class FreePlayAuditPage extends AbstractScreen {
         clickOnButtonWithId(autosave ? "buttonContinue" : "buttonLoad");
     }
 
-    public void verifyInvalidSavedGameMessage(final String expectedMessage) {
-        assertEquals(expectedMessage, getNodeFinder().lookup(expectedMessage)
-                .queryAs(Label.class).getText());
+    public void attemptInvalidSavedGameWhilePlaying() {
+        javafx.application.Platform.runLater(() -> getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameController.class)
+                .loadModelFromFile(invalidSave));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyInvalidSavedGameMessage(final String expectedMessage)
+            throws Exception {
+        final Label message = getNodeFinder().lookup(expectedMessage)
+                .queryAs(Label.class);
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> message.getWidth() > 0
+                        && message.getScene().getWidth() > 100
+                        && message.getScene().getWindow().isShowing());
+        assertEquals(expectedMessage, message.getText());
+        assertTrue(message.isVisible());
     }
 
     public void verifyRejectedLoadPreservedGameAndFile() throws Exception {
@@ -208,7 +226,10 @@ public final class FreePlayAuditPage extends AbstractScreen {
                         .getGameModel());
         assertArrayEquals(invalidSaveBytes,
                 Files.readAllBytes(invalidSave.toPath()));
-        WelcomePage.of(getContext()).verifyMainScreen();
+        if (previousGame != null) {
+            assertEquals(previousWorld, new com.google.gson.Gson()
+                    .toJsonTree(previousGame.getModel().save()));
+        }
     }
 
     public void cancelLoadChooser() {

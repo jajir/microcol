@@ -27,6 +27,7 @@ public final class ContinentTool {
 
     private Continent createContinent(final Location loc, final Model model) {
         final Continent out = new Continent(model);
+        out.add(loc);
         tryToAdd(loc, model.getMap(), out);
         return out;
     }

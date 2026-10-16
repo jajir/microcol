@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
@@ -224,6 +225,7 @@ public class Model {
                 "Game over evaluators are null");
         final Calendar calendar = Calendar.make(modelPo.getCalendar());
         final WorldMap worldMap = new WorldMap(modelPo);
+        validateSavedColonyFields(modelPo, worldMap);
         final UnitStorage unitStorage = new UnitStorage(
                 IdManager.makeFromModelPo(modelPo));
 
@@ -266,6 +268,94 @@ public class Model {
         model.checkUnits();
         model.assureDefaultVisibility();
         return model;
+    }
+
+    private static void validateSavedColonyFields(final ModelPo data,
+            final WorldMap map) {
+        Preconditions.checkArgument(
+                data.getUnits() != null && data.getColonies() != null,
+                "Missing saved units or colonies");
+        final Map<Integer, UnitPo> units = new HashMap<>();
+        for (final UnitPo unit : data.getUnits()) {
+            Preconditions
+                    .checkArgument(
+                            unit != null && unit.getId() != null
+                                    && units.putIfAbsent(unit.getId(),
+                                            unit) == null,
+                            "Missing or duplicate saved unit identity");
+        }
+        final Set<Location> occupiedSquares = new HashSet<>();
+        final Set<Integer> jobWorkers = new HashSet<>();
+        final Set<Integer> outdoorWorkers = new HashSet<>();
+        for (final ColonyPo colony : data.getColonies()) {
+            Preconditions.checkArgument(
+                    colony != null && colony.getLocation() != null
+                            && colony.getOwnerName() != null
+                            && colony.getColonyFields() != null
+                            && colony.getConstructions() != null,
+                    "Incomplete saved colony assignments");
+            final Set<Location> directions = new HashSet<>();
+            for (final ColonyFieldPo field : colony.getColonyFields()) {
+                Preconditions.checkArgument(
+                        field != null
+                                && Direction.getVectors()
+                                        .contains(field.getDirection())
+                                && directions.add(field.getDirection()),
+                        "Invalid or duplicate saved field direction");
+                final Integer workerId = field.getWorkerId();
+                if (workerId == null) {
+                    Preconditions.checkArgument(
+                            field.getProducedGoodsType() == null,
+                            "Empty saved field has production");
+                    continue;
+                }
+                Preconditions.checkArgument(jobWorkers.add(workerId),
+                        "Saved worker has multiple colony jobs");
+                final UnitPo worker = units.get(workerId);
+                Preconditions.checkArgument(worker != null
+                        && colony.getOwnerName().equals(worker.getOwnerId())
+                        && (worker.getType() == UnitType.COLONIST || worker
+                                .getType() == UnitType.MASTER_BLACKSMITH),
+                        "Invalid saved field worker identity, owner or role");
+                Preconditions.checkArgument(
+                        worker.getPlaceColonyField() != null
+                                && worker.getPlaceMap() == null
+                                && worker.getPlaceConstructionSlot() == null
+                                && worker.getPlaceCargoSlot() == null
+                                && worker.getPlaceHighSeas() == null
+                                && worker.getPlaceEuropePort() == null,
+                        "Saved field worker has a conflicting place");
+                final Location at = colony.getLocation()
+                        .add(field.getDirection());
+                Preconditions.checkArgument(
+                        field.getProducedGoodsType() != null && map.isValid(at)
+                                && map.getTerrainTypeAt(at).canProduce(
+                                        field.getProducedGoodsType()),
+                        "Invalid saved field crop or location");
+                Preconditions.checkArgument(occupiedSquares.add(at),
+                        "Multiple colonies work the same saved world square");
+                outdoorWorkers.add(workerId);
+            }
+            for (final var construction : colony.getConstructions()) {
+                Preconditions.checkArgument(
+                        construction != null && construction.getSlots() != null,
+                        "Missing saved construction slots");
+                for (final var slot : construction.getSlots()) {
+                    Preconditions.checkArgument(slot != null,
+                            "Missing saved construction slot");
+                    Preconditions.checkArgument(
+                            slot.getWorkerId() == null
+                                    || jobWorkers.add(slot.getWorkerId()),
+                            "Saved worker has multiple colony jobs");
+                }
+            }
+        }
+        for (final UnitPo unit : units.values()) {
+            Preconditions.checkArgument(
+                    unit.getPlaceColonyField() == null
+                            || outdoorWorkers.contains(unit.getId()),
+                    "Saved outdoor worker has no field assignment");
+        }
     }
 
     public Colony buildColony(final Player player, final Unit unit,
