@@ -3071,12 +3071,12 @@ equivalent tasks. Cached input is part of input, not an additional total, and
 is not assumed free. Interactive elapsed time spans first-to-last worker events
 and includes its tools; text-only time measures calls and excludes main-agent
 application, review and tests. Main-agent tokens and CI time are additional.
-At the main-agent checkpoint **12:34:22 UTC**, Astra's delta since the saved
-baseline was **16,384,034 input** (16,160,512 cached; 223,522 uncached) and
-**52,071 output tokens**. That checkpoint excludes initial reads before the
-baseline and later acceptance/publication work, so it is a lower bound for main
-orchestration, not a complete task bill. Main review and verification are a
-material part of this experiment's cloud use.
+At the main-agent checkpoint **2026-10-16 13:20:12 UTC**, Astra's delta since the saved
+baseline was **24,446,861 input** (24,176,256 cached; 270,605 uncached) and
+**75,364 output tokens**. It includes main review, verification and CI
+monitoring up to that checkpoint; initial reads and final documentation closure
+are excluded. This is a lower bound for main orchestration, not a task bill.
+Main-agent work is a material part of this experiment's cloud use.
 There is no Astra-only control run, quota-per-task counter or measured saving
 percentage. Other concurrent threads share account limits.
 
@@ -3091,6 +3091,6 @@ trying bounded Sol low assignments with explicit APIs, acceptance and limited
 repair context; it does not establish that every new task will be cheaper.
 
 [Functional evidence and diagnosed failures](../functional-tests.md#r-0057r-0061-cloud-sol-batch-2026-10-16)
-own the acceptance results. Full integrated regression passed (1325 game and 187 UI checks, zero failures/errors/skips); publication remains pending at this checkpoint. Raw counters and CLI call evidence are retained
+own the acceptance results. Full integrated regression passed (1325 game and 187 UI checks, zero failures/errors/skips); the same counts passed in CI, and [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4) was published and verified. Raw counters and CLI call evidence are retained
 locally in `target/r57-r61/`; no new worker infrastructure or default setting was
 committed for this experiment.
