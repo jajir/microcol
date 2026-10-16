@@ -55,6 +55,11 @@ class SpecialistProductionTest {
         final GameModelPo data = scenario();
         worker(data).setType(type);
         final var savedColony = data.getModel().getColonies().get(0);
+        if (terrain.isSea()) {
+            final ConstructionPo dock = new ConstructionPo();
+            dock.setType(ConstructionType.DOCK);
+            savedColony.getConstructions().add(dock);
+        }
         final var west = savedColony.getColonyFields().stream()
                 .filter(field -> field.getDirection()
                         .equals(Direction.west.getVector()))

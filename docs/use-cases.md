@@ -632,3 +632,13 @@ Kontroluje zobrazené změny zásob, skutečný další tah a Pokračovat.
 Modelová tabulka pokrývá všech 20 průmyslových stupňů. Přijetí továren
 podle otce zůstává v R-0084; tyto scénáře neuzavírají celé UC-045.
 Výsledky vede [evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).
+
+### UC-046: doky, rybolov a loděnice R-0080
+
+`TC_51_F42_coastal_facilities_test` provádí skutečné dokončení doku,
+suchého doku a loděnice, odmítá rybolov bez zařízení a zachovává rybáře
+přes obě vylepšení. Galeonu a fregatu dokončuje až s loděnicí; zrušení
+nabídky a Pokračovat chrání pracovníky, frontu a skutečné lodě.
+Testy modelu doplňují vnitrozemské a uložené neplatné stavy.
+Výsledky zaznamenává [R-0080](requirements/R-0080.md); tato mapa sama
+nepotvrzuje průchod scénářů ani úplné přijetí UC.

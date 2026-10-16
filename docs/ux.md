@@ -397,3 +397,12 @@ Při nedostatku se náhled omezuje dostupnými surovinami celé budovy;
 železárna může ve stejném tahu dodat nástroje zbrojnici. Otevření kolonie
 ani Pokračovat výrobu nespouští. Konkrétní hráčské kroky a jejich ověření
 vede [evidence R-0079](functional-tests.md#r-0079-industrial-production-2026-10-16).
+
+### Chybějící dok nebo loděnice (R-0080)
+
+Tažení kolonisty na vodní pole bez doku zůstává odmítnuté a stavový řádek
+vysvětlí potřebnou stavbu. Po dokončení doku lze stejným gestem přidělit
+rybolov; vyšší zařízení tuto možnost zachovají. Stavební nabídka ponechává
+lodní projekty viditelné s vysvětlením chybějící loděnice nebo pobřeží.
+Zrušení nabídky nemění stav a potvrzení znovu kontroluje aktuální podmínky.
+Přejímku hráčských cest a jejich výsledky vede [R-0080](requirements/R-0080.md).

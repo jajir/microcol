@@ -14,6 +14,7 @@ import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.Ship;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
@@ -33,6 +34,11 @@ class CoastalPortMovementTest {
     private void prepare(final Location water) {
         data = dao.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
+        data.getModel().getColonies().forEach(colony -> {
+            final ConstructionPo dock = new ConstructionPo();
+            dock.setType(ConstructionType.DOCK);
+            colony.getConstructions().add(dock);
+        });
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();

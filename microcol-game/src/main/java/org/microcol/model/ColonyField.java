@@ -41,8 +41,16 @@ public final class ColonyField {
     }
 
     public boolean canProduce(final GoodsType goodsType) {
-        return getMap().isValid(getLocation())
+        return getMap().isValid(getLocation()) && !isMissingDock()
                 && getTerrainType().canProduce(goodsType);
+    }
+
+    /** Whether this water square needs a completed port facility. */
+    public boolean isMissingDock() {
+        return getMap().isValid(getLocation()) && getTerrainType().isSea()
+                && !colony.wasConstructionBuilded(ConstructionType.DOCK)
+                && !colony.wasConstructionBuilded(ConstructionType.DRYDOCK)
+                && !colony.wasConstructionBuilded(ConstructionType.SHIPYARD);
     }
 
     public boolean isWorkedByAnotherColony() {
@@ -164,7 +172,7 @@ public final class ColonyField {
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {
-        return getMap().isValid(getLocation())
+        return getMap().isValid(getLocation()) && !isMissingDock()
                 ? getTerrain().canProduceAmmount(goodsType)
                 : 0;
     }

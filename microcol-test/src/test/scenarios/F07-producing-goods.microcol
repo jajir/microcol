@@ -702,6 +702,7 @@
         }
       ],
       "constructions": [
+        {"type": "DOCK", "slots": []},
         {"type": "CHAPEL", "slots": [{}, {}, {}]},
         {
           "type": "TOWN_HALL",

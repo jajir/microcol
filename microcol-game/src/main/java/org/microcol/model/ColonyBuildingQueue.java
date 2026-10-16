@@ -149,17 +149,39 @@ public class ColonyBuildingQueue {
     }
 
     private boolean canUnitBeBuild(final UnitType unitType) {
-        return unitType != null && UnitType.UNIT_TYPES.contains(unitType)
-                && colony.isValid()
-                && model.getPlayers().contains(colony.getOwner())
-                && colony.getOwner().equals(model.getCurrentPlayer())
-                && unitType.canBeBuildInColony()
-                && unitType.getCanByBuildInColony().apply(model, colony);
+        return getUnitUnavailableReason(unitType).isEmpty();
     }
 
     public enum UnavailableReason {
         UNKNOWN_TYPE, COLONY_UNAVAILABLE, NOT_A_PROJECT, ALREADY_BUILT,
-        ALREADY_QUEUED, MISSING_PREDECESSOR, POPULATION
+        ALREADY_QUEUED, MISSING_PREDECESSOR, POPULATION, MISSING_SHIPYARD,
+        COASTAL_REQUIRED
+    }
+
+    public Optional<UnavailableReason> getUnitUnavailableReason(
+            final UnitType type) {
+        if (type == null || !UnitType.UNIT_TYPES.contains(type)) {
+            return Optional.of(UnavailableReason.UNKNOWN_TYPE);
+        }
+        if (!colony.isValid() || !model.getPlayers().contains(colony.getOwner())
+                || model.getCurrentPlayer() != colony.getOwner()) {
+            return Optional.of(UnavailableReason.COLONY_UNAVAILABLE);
+        }
+        if (!type.canBeBuildInColony()) {
+            return Optional.of(UnavailableReason.NOT_A_PROJECT);
+        }
+        if (type == UnitType.GALLEON || type == UnitType.FRIGATE) {
+            if (!colony.wasConstructionBuilded(ConstructionType.SHIPYARD)) {
+                return Optional.of(UnavailableReason.MISSING_SHIPYARD);
+            }
+            if (!model.isOwnedCoastalPort(colony.getOwner(),
+                    colony.getLocation())) {
+                return Optional.of(UnavailableReason.COASTAL_REQUIRED);
+            }
+        }
+        return type.getCanByBuildInColony().apply(model, colony)
+                ? Optional.empty()
+                : Optional.of(UnavailableReason.MISSING_PREDECESSOR);
     }
 
     public Optional<UnavailableReason> getUnavailableReason(
@@ -170,6 +192,12 @@ public class ColonyBuildingQueue {
         if (!colony.isValid() || !model.getPlayers().contains(colony.getOwner())
                 || model.getCurrentPlayer() != colony.getOwner()) {
             return Optional.of(UnavailableReason.COLONY_UNAVAILABLE);
+        }
+        if ((type == ConstructionType.DOCK || type == ConstructionType.DRYDOCK
+                || type == ConstructionType.SHIPYARD)
+                && !model.isOwnedCoastalPort(colony.getOwner(),
+                        colony.getLocation())) {
+            return Optional.of(UnavailableReason.COASTAL_REQUIRED);
         }
         if (!type.canBeConstructed()) {
             return Optional.of(UnavailableReason.NOT_A_PROJECT);
@@ -307,6 +335,13 @@ public class ColonyBuildingQueue {
         if (first instanceof ColonyBuildingItemProgressConstruction) {
             ColonyBuildingItemProgressConstruction construction = (ColonyBuildingItemProgressConstruction) first;
             ConstructionType type = construction.getConstructionType();
+            if ((type == ConstructionType.DOCK
+                    || type == ConstructionType.DRYDOCK
+                    || type == ConstructionType.SHIPYARD)
+                    && !model.isOwnedCoastalPort(colony.getOwner(),
+                            colony.getLocation())) {
+                return Optional.of(UnavailableReason.COASTAL_REQUIRED);
+            }
             if (colony.isContainsConstructionByType(type)) {
                 return Optional.of(UnavailableReason.ALREADY_BUILT);
             }
@@ -322,10 +357,7 @@ public class ColonyBuildingQueue {
         } else if (first instanceof ColonyBuildingItemProgressUnit) {
             ColonyBuildingItemProgressUnit unitProgress = (ColonyBuildingItemProgressUnit) first;
             UnitType unitType = unitProgress.getUnitType();
-            if (!canUnitBeBuild(unitType)) {
-                return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
-            }
-            return Optional.empty();
+            return getUnitUnavailableReason(unitType);
         } else {
             return Optional.of(UnavailableReason.UNKNOWN_TYPE);
         }

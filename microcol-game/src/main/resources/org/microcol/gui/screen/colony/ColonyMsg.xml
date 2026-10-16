@@ -72,4 +72,5 @@
     <entry key="jobChanged">The worker or job changed. Nothing was assigned. Review the refreshed choices and confirm again or cancel.</entry>
     <entry key="jobNoChoices">No jobs are available for this colonist here.</entry>
     <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>
+    <entry key="fieldMissingDock">Build a dock before assigning fishing work.</entry>
 </properties>

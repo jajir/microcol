@@ -568,3 +568,14 @@ zaokrouhlí jednou za budovu, nikoli zvlášť za každého pracovníka. Stávaj
 pořadí zdrojů v `Colony` zpřístupní vyrobené nástroje zbrojnímu řetězci
 ve stejném tahu. Náhled i skutečný sklad používají stejné pravidlo;
 načtení nevyžaduje nové schéma. Přejímku vede [R-0079](requirements/R-0079.md).
+
+### Pobřežní výrobní předpoklady (R-0080)
+
+`ColonyField` vlastní dotaz na chybějící dok pro vodní práci, společný pro
+nabídku, náhled i změnu pracovního místa. Dok, suchý dok a loděnice poskytují
+stejnou rybářskou způsobilost. `Model` kontroluje tentýž předpoklad uloženého
+rybáře. `UnitType` a `ColonyBuildingQueue` vyžadují pro galeonu a fregatu
+loděnici a stávající pobřežní pravidlo `Model.isOwnedCoastalPort`; fronta
+ověřuje podmínku při přijetí i dokončení. UI překládá konkrétní modelový
+důvod a nepřevádí pracovníka ani materiál při odmítnutí.
+Rozsah a přejímku vede [R-0080](requirements/R-0080.md).

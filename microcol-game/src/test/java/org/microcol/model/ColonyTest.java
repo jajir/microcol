@@ -242,9 +242,14 @@ public class ColonyTest {
     }
 
     private Colony makeDefaultColony() {
-        return makeColony(col -> ConstructionType.NEW_COLONY_CONSTRUCTIONS
-                .stream().map(type -> Construction.build(model, col, type))
-                .collect(Collectors.toList()));
+        return makeColony(col -> {
+            final List<Construction> buildings = ConstructionType.NEW_COLONY_CONSTRUCTIONS
+                    .stream().map(type -> Construction.build(model, col, type))
+                    .collect(Collectors.toList());
+            buildings
+                    .add(Construction.build(model, col, ConstructionType.DOCK));
+            return buildings;
+        });
     }
 
     private Colony makeColony(

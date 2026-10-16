@@ -14,6 +14,7 @@ import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
@@ -275,6 +276,11 @@ class PassengerTransferTest {
         for (Location water : PORT.getNeighbors()) {
             prepare(PORT, 0);
             data.setModel(model.save());
+            data.getModel().getColonies().forEach(colony -> {
+                final ConstructionPo dock = new ConstructionPo();
+                dock.setType(ConstructionType.DOCK);
+                colony.getConstructions().add(dock);
+            });
             Map<Location, TerrainType> terrain = data.getModel().getMap()
                     .getTerrainMap();
             PORT.getNeighbors().forEach(

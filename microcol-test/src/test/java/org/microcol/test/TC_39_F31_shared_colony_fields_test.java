@@ -180,14 +180,16 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         game = colony.close();
 
         // One completed round adds one crop yield and consumes food for the one
-        // resident.
+        // resident plus two new horses in each colony.
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 98));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 96));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.HORSE, 52));
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 3));
         game = colony.close();
         colony = game.openColonyAt(Location.of(26, 16), "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 102));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.HORSE, 52));
         colony.verifyFieldWorker(1, Location.of(25, 16), 4);
     }
 

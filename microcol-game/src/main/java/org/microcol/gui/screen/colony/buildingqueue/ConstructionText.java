@@ -15,7 +15,7 @@ public enum ConstructionText implements MessageKeyResource {
     open, title, projects, queue, choose, cost, available, population,
     predecessor, alreadyBuilt, alreadyQueued, unavailable, add, up, down,
     remove, cancel, changed, added, empty, hammers, queueProgress, tools,
-    waitingTools, waitingHammers, ready;
+    waitingTools, waitingHammers, ready, coastalRequired, missingShipyard;
 
     public static String name(final I18n i18n, final ColonyBuildingItem item) {
         if (item instanceof ColonyBuildingItemConstruction) {
@@ -30,10 +30,17 @@ public enum ConstructionText implements MessageKeyResource {
     public static String reason(final I18n i18n, final UnavailableReason reason,
             final ConstructionType type, final Colony colony) {
         switch (reason) {
+        case COASTAL_REQUIRED:
+            return i18n.get(coastalRequired);
+        case MISSING_SHIPYARD:
+            return i18n.get(missingShipyard);
         case POPULATION:
             return i18n.get(population, type.getRequiredColonyPopulation(),
                     colony.getUnitsInsideColony().size());
         case MISSING_PREDECESSOR:
+            if (type == null) {
+                return i18n.get(unavailable);
+            }
             return i18n.get(predecessor, i18n.get(ConstructionTypeName
                     .getNameForType(type.getUpgradeFrom().get())));
         case ALREADY_BUILT:
@@ -58,7 +65,7 @@ public enum ConstructionText implements MessageKeyResource {
                                         ((ColonyBuildingItemConstruction) item)
                                                 .getConstructionType(),
                                         colony)
-                                : i18n.get(unavailable);
+                                : reason(i18n, reason.get(), null, colony);
                     }
                     if (stats.getTools().getAlreadyHave() < stats.getTools()
                             .getRequired()) {

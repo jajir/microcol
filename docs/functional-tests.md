@@ -3497,3 +3497,73 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 3. This verifies the repaired TC22 roster/Sentry expectations and native Javadoc
    packaging together. R-0073 is now done. R-0074/0075/0076 retain their explicit
    remaining gameplay dependencies; passing CI does not remove those scopes.
+
+### R-0077 complete CI — 2026-10-16
+
+1. [Run 38942912137](https://github.com/jajir/microcol/actions/runs/38942912137)
+   passed at `d9e9615de799fd0438d3a86e2e1a5ff5eb930f05`: **1495 model and
+   222 UI/support tests**, zero failures/errors/skips. Native packages,
+   compatibility and Pages passed.
+2. [Release dev-127-d9e9615de799](https://github.com/jajir/microcol/releases/tag/dev-127-d9e9615de799)
+   has all platform archives/installers, launchers, manifest and checksums.
+   The publisher explicitly left the automatic development channel unchanged.
+   R-0077 still awaits its explicitly linked artillery integration in R-0095.
+
+### R-0080 coastal facilities — 2026-10-16
+
+1. Astra main assigned the bounded model/test scope to the existing Sol low
+   worker in the isolated R80 worktree. Main owns the requirement, localized
+   field/project feedback, F42/TC51 and actual verification. No local model
+   or duplicate implementation was used; cloud-token savings were not measured.
+2. Initial full model run had 1548 cases, three failures and eight errors.
+   Existing terrain-editing and specialist fixtures placed workers on water
+   without a dock; the old colony mock similarly assumed fishing everywhere.
+   The worker added explicit completed docks to preserve those tests' original
+   assertions, restored the existing missing-predecessor queue reason, and
+   strengthened new rejection checks to compare the complete saved state.
+   The final full model run passed **1550 tests**, zero failures/errors/skips.
+   Tests include equipped-worker rejection, all three facility tiers, enclosed
+   water, shared-square exclusion, inland projects, completion and saved work.
+3. Main added a dock to the existing F04/F06/F07/F08/F13 colonies that already
+   contain fishermen. This is current-schema fixture maintenance, not a runtime
+   save migration. Player scenarios, packaging and complete CI/publication
+   remain pending and are recorded below once observed.
+4. Additional model acceptance queues a valid coastal ship and dock, reloads
+   each after the adjacent water becomes land, and verifies the full saved
+   state remains unchanged when completion is refused. The full 1550-case run
+   includes this check.
+5. Initial Docker run `run-ckCkdK` passed TC51 (2), TC40 (15), TC32 (7) and
+   the page contract (3). TC39 had one failed food assertion: its old expected
+   98/102 food omitted the two food consumed by R-0078 horse breeding in each
+   colony. The log confirms both horse stocks changed 50→52. Main corrected
+   expected food to 96/100 and added explicit horse-stock assertions; crop,
+   worker and turn assertions are preserved. The affected scenarios and the
+   five dock-maintained fixtures are rerun below.
+6. During Docker run `run-Wt0uh3` (25 cases), main briefly inserted the new 52-horse
+   assertion into TC39/01 before its first turn as well as TC39/06. The source
+   was corrected, but that run had already compiled the intermediate version:
+   TC39/01 correctly reported 50 rather than 52 horses. TC39/06 passed its
+   repaired full food/horse/crop balance. A fresh TC39 run is required; the
+   incorrect extra assertion was not an existing gameplay expectation. TC04 (1),
+   TC06 (2), TC07 (2), TC08 (1), TC17 (1), TC32 (7) and the page contract (3)
+   all passed in this run.
+
+7. Fresh Docker run `run-0Ivuau` passed **11 tests**: all eight TC39 cases
+   and all three page-contract checks, zero failures/errors/skips. Across the
+   recorded runs, every selected new and regression player scenario passed.
+   The shared formatter checked 16 changed Java files with exact-token
+   preservation and idempotence. Packaging including Javadoc, nine documentation
+   tests and strict MkDocs passed. Full CI/publication remain pending.
+
+
+### R-0078 complete CI regression — 2026-10-16
+
+1. [Run 38944235418](https://github.com/jajir/microcol/actions/runs/38944235418)
+   at `1ce545c1` failed its full UI gate: **225 UI/support cases, one failure,
+   zero errors/skips**. TC39/06 expected 98 food but received 96, omitting
+   the two food consumed by the newly implemented horse breeding. Publication
+   was blocked. Compatibility and Pages passed separately.
+2. The same failure was reproduced during R-0080's targeted regression.
+   Its repair preserves crop and field assertions, updates both colonies'
+   expected food, and checks 52 horses explicitly. Local TC39 rerun passed all eight cases in `run-0Ivuau`; subsequent full CI
+   remains the acceptance gate. No failed build is a published result.

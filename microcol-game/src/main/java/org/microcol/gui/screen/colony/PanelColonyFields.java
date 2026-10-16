@@ -182,9 +182,11 @@ public final class PanelColonyFields implements JavaFxComponent {
         } else {
             event.acceptTransferModes(TransferMode.NONE);
             if (unit.isPresent() && field.isPresent()) {
-                showFieldProblem(field.get().isWorkedByAnotherColony()
-                        ? ColonyMsg.fieldWorked
-                        : ColonyMsg.fieldChanged);
+                showFieldProblem(
+                        field.get().isMissingDock() ? ColonyMsg.fieldMissingDock
+                                : field.get().isWorkedByAnotherColony()
+                                        ? ColonyMsg.fieldWorked
+                                        : ColonyMsg.fieldChanged);
             }
         }
         event.consume();
@@ -206,9 +208,11 @@ public final class PanelColonyFields implements JavaFxComponent {
                         eventBus.post(new RepaintColonyEvent());
                     } catch (IllegalArgumentException
                             | IllegalStateException rejected) {
-                        showFieldProblem(field.isWorkedByAnotherColony()
-                                ? ColonyMsg.fieldWorked
-                                : ColonyMsg.fieldChanged);
+                        showFieldProblem(field.isMissingDock()
+                                ? ColonyMsg.fieldMissingDock
+                                : field.isWorkedByAnotherColony()
+                                        ? ColonyMsg.fieldWorked
+                                        : ColonyMsg.fieldChanged);
                     }
                 });
         event.consume();

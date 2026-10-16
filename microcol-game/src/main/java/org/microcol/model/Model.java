@@ -336,9 +336,19 @@ public class Model {
                 final Location at = colony.getLocation()
                         .add(field.getDirection());
                 Preconditions.checkArgument(
-                        field.getProducedGoodsType() != null && map.isValid(at)
-                                && map.getTerrainTypeAt(at).canProduce(
-                                        field.getProducedGoodsType()),
+                        field.getProducedGoodsType() != null
+                                && map.isValid(at) && map
+                                        .getTerrainTypeAt(at).canProduce(
+                                                field.getProducedGoodsType())
+                                && (!map.getTerrainTypeAt(at).isSea() || colony
+                                        .getConstructions().stream().anyMatch(
+                                                construction -> construction != null
+                                                        && (construction
+                                                                .getType() == ConstructionType.DOCK
+                                                                || construction
+                                                                        .getType() == ConstructionType.DRYDOCK
+                                                                || construction
+                                                                        .getType() == ConstructionType.SHIPYARD))),
                         "Invalid saved field crop or location");
                 Preconditions.checkArgument(occupiedSquares.add(at),
                         "Multiple colonies work the same saved world square");

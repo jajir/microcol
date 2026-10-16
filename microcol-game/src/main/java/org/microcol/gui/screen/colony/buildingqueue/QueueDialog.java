@@ -187,10 +187,9 @@ public class QueueDialog extends AbstractMessageWindow {
                             colony));
         }
         final UnitType type = ((ColonyBuildingItemUnit) item).getUnitType();
-        return colony.getColonyBuildingQueue().getBuildigItemsUnit().stream()
-                .anyMatch(offer -> offer.getUnitType() == type)
-                        ? Optional.empty()
-                        : Optional.of(i18n.get(ConstructionText.unavailable));
+        return colony.getColonyBuildingQueue().getUnitUnavailableReason(type)
+                .map(reason -> ConstructionText.reason(i18n, reason, null,
+                        colony));
     }
 
     private void select(final ColonyBuildingItem item) {

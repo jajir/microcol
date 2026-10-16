@@ -239,7 +239,9 @@ public final class UnitType {
             .setCargoCapacity(4).setStorable(false)
             .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE).setRequiredTools(100)
             .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
-                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+                return colony.wasConstructionBuilded(ConstructionType.SHIPYARD)
+                        && model.isOwnedCoastalPort(colony.getOwner(),
+                                colony.getLocation());
             }).build();
 
     public static final UnitType GALLEON = UnitType.make().setName("GALLEON")
@@ -249,7 +251,9 @@ public final class UnitType {
             .setCargoCapacity(DEFAULT_GALLEON_CARGO_CAPACITY).setStorable(false)
             .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE).setRequiredTools(100)
             .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
-                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+                return colony.wasConstructionBuilded(ConstructionType.SHIPYARD)
+                        && model.isOwnedCoastalPort(colony.getOwner(),
+                                colony.getLocation());
             }).build();
 
     public static final UnitType CARAVEL = UnitType.make().setName("CARAVEL")
