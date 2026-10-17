@@ -478,3 +478,25 @@ documentation in APT just to make it visible on the web.
    tests, strict MkDocs and six rendered status/four-chapter/capture checks.
    The separately completed R-0086 closure is already in baseline `abb80ef0`.
    Publication and the unchanged automatic game channel are checked after push.
+3. Checkpoint `eb0fc95d` passed Pages build/deploy in
+   [39036058555](https://github.com/jajir/microcol/actions/runs/39036058555).
+   Development run 39036058660 and compatibility run 39036058593 passed
+   change filters and intentionally skipped game jobs. Live R-0172/coverage
+   and commit-pinned catalogue links were verified. The automatic `dev`
+   manifest stayed byte-identical at `dev-109-0b0cb0593df4`.
+
+## Remaining combat requirement capture — 2026-10-17
+
+1. R-0173–R-0179 capture native combat/conquest/treasure, naval patrols,
+   coastal batteries, royal combat roles and Drake. Existing requirement
+   dependencies now identify the actual owners. All seven remain `new`.
+2. Shared ambush and treasure transport text was reconciled with the existing
+   manual extraction (`target/r19-r31/manual.txt`, PDF pages 37, 82 and 135).
+   This is review of an earlier extraction, not a fresh rendered-PDF inspection.
+   It resolves the printed terrain values and two treasure transport routes;
+   battlefield selection, reward deductions and other unstated policies remain
+   explicit questions with one authoritative requirement owner.
+3. Local validation passed 21 launcher tests without inference, 9 documentation
+   tests, strict MkDocs and seven rendered status/four-chapter/capture checks.
+   No gameplay code or runtime acceptance changed. Publication is checked
+   separately after push.

@@ -79,7 +79,15 @@
    [R-0171](R-0171.md) naval military objectives and [R-0172](R-0172.md)
    multi-colony scheduling. R-0090–R-0092 retain their existing policies and
    unresolved proposals; this capture does not approve new strategic thresholds.
-10. Remaining area-by-area ownership is being reconciled with existing work.
+10. Combat residuals are [R-0173](R-0173.md) native roles/ambush,
+    [R-0174](R-0174.md) settlement conquest and Spain,
+    [R-0175](R-0175.md) treasure identity/reward with Cortes,
+    [R-0176](R-0176.md) naval patrol interception,
+    [R-0177](R-0177.md) coastal batteries,
+    [R-0178](R-0178.md) royal/Continental combat roles and ambush,
+    and [R-0179](R-0179.md) Drake. Existing ordinary/naval resolution,
+    artillery lifecycle and colony-capture owners remain authoritative.
+11. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -90,7 +98,7 @@
 | A06 transport and Europe | R-0132–R-0145 cargo, routes, markets and accounts; existing transport/purchase/shared quotes retained | Final cargo/trade matrix and cross-area dependency audit |
 | A07 economy | R-0146–R-0149 and existing food, work, construction and education owners | Complete profession/building/economy matrices and native dependency links |
 | A08 relations and AI | R-0150–R-0172 native and European interactions, reports and actor objectives, plus existing diplomacy owners | Conquest dependencies, royal deployment and final acceptance |
-| A09 combat | Delivered ordinary/naval slices retained | Native/royal roles, patrol, coastal fire and national modifier |
+| A09 combat | R-0173–R-0179 residuals; delivered ordinary/naval slices retained | Actual REF/intervention delivery dependencies and complete unit/combat acceptance |
 | A10 politics and end | Existing support, Congress and declaration owners retained | Remaining founders, revolution, dates and scoring |
 | A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |
 

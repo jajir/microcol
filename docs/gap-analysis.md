@@ -1037,7 +1037,16 @@ rules; implementation and acceptance are tracked by that requirement.
    it twice). Add applicable percentage modifiers on each side, multiply base
    once, and keep exact fractional strength. Terrain and fortification combine;
    use only the highest colony fortification. Respect the manual's native and
-   revolutionary ambush exceptions. Floor total multiplier at 0.1 for positive
+   revolutionary ambush exceptions. The manual's PDF p. 37 and terrain card
+   PDF p. 135 specify that ordinary forest/hill/mountain defender terrain
+   bonuses apply against Europeans only; natives receive that terrain bonus
+   when attacking or defending in suitable terrain, and colonial units receive
+   the analogous bonus against the King's regular army during independence war
+   outside a colony. Use the terrain card's defense entries: forest normally
+   +50% (swamp +75%), hills +100%, mountains +150%. Bare marsh/swamp and
+   other terrain grant no native or rebel ambush; any applicable ordinary
+   defense rule remains separate. This is the accepted
+   source rule, not a newly selected numeric policy. Floor total multiplier at 0.1 for positive
    base strength; base zero stays zero. Example: ordinary attacking soldier
    2 × 1.5 = 3; ordinary defending soldier in forest and fortified is
    2 × (1+0.5+0.5) = 4. Show rounding only in the display.
@@ -1165,7 +1174,11 @@ rules; implementation and acceptance are tracked by that requirement.
    skip without banking a convert. No combat conversion is added. Persist native
    affiliation and eight-turn unassigned expiry (PROD-007). Conquest treasure
    without Cortes has 50% chance of 500 gold (capital 1000); Cortes guarantees
-   double. Native tribute yields min(100, treasury), capital cap 200, once per
+   double. The manual's printed p. 76/PDF p. 82 gives two treasure transport
+   routes: fill six galleon holds and take the train to Europe, or leave it in
+   an owned coastal colony for the King's galleon to collect at a price.
+   Royal price/collection timing and independence closure consequences remain
+   unanswered for [R-0175](requirements/R-0175.md). Native tribute yields min(100, treasury), capital cap 200, once per
    10 turns per European/settlement if eligible armed force strength is at least
    the settlement's defenders; otherwise refuses.
 8. European contact requires a visible adjacent foreign unit or colony; use

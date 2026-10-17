@@ -334,6 +334,13 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0098](done/R-0098.md) | Send a damaged ship to a valid repair destination | Follow-up | [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
 | [R-0099](done/R-0099.md) | Apply the privateer exception to European hostilities | Follow-up | [R-0026](done/R-0026.md), [R-0028](done/R-0028.md) |
 | [R-0111](done/R-0111.md) | Promote eligible soldiers to veterans | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0029](canceled/R-0029.md) |
+| [R-0173](R-0173.md) | Resolve native roles and terrain ambush in land combat | Remainder | COMBAT-003/004/006/007/011; R-0093/0094/0095 delivered/active slices |
+| [R-0174](R-0174.md) | Attack and conquer a defended native settlement | Remainder | NAT-016/SETUP-006; tribute R-0162 separate |
+| [R-0175](R-0175.md) | Create and redeem native-conquest treasure with Cortes | Remainder | NAT-016/FATHER-001; six-hold transport R-0134 separate |
+| [R-0176](R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
+| [R-0177](R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |
+| [R-0178](R-0178.md) | Apply royal bombardment and rebel countryside ambush | Remainder | COMBAT-007/009, GOV-015/017; A10 roster/deployment pending |
+| [R-0179](R-0179.md) | Increase privateer combat strength with Francis Drake | Remainder | FATHER-002; naval outcome R-0097 and diplomacy R-0099 complete |
 
 ## A10
 
