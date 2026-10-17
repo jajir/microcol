@@ -11,6 +11,10 @@ public enum Buttons implements MessageKeyResource {
     skipUnitTurnExplanation, unitOrderUnavailable, buttonSentry,
     buttonActivateSentry, sentryExplanation, activateSentryExplanation,
     buttonFortify, buttonCancelFortifying, buttonCancelFortified,
-    fortifyExplanation, fortifyingExplanation, fortifiedExplanation;
+    fortifyExplanation, fortifyingExplanation, fortifiedExplanation,
+    buttonCancelPlowField, plowProblemUnavailable, plowProblemNotPioneer,
+    plowProblemNotEnoughTools, plowProblemBusy, plowProblemNoMoves,
+    plowProblemColony, plowProblemUnsuitableTerrain, plowProblemForest,
+    plowProblemAlreadyPlowed;
 
 }

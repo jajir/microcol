@@ -34,4 +34,14 @@
     <entry key="fortifyExplanation">Spend remaining movement; defense becomes fortified next owner turn.</entry>
     <entry key="fortifyingExplanation">Fortifying: no defense bonus yet. Cancel without restoring spent movement.</entry>
     <entry key="fortifiedExplanation">Fortified: cancel to move or attack. No spent movement is restored.</entry>
+    <entry key="buttonCancelPlowField">Cancel plowing. Progress is lost; no movement or tools are restored.</entry>
+    <entry key="plowProblemUnavailable">This unit cannot plow now. Select an available unit on your turn.</entry>
+    <entry key="plowProblemNotPioneer">Only a pioneer can plow.</entry>
+    <entry key="plowProblemNotEnoughTools">Plowing needs a pioneer with at least 20 tools.</entry>
+    <entry key="plowProblemBusy">This unit is already busy with an order.</entry>
+    <entry key="plowProblemNoMoves">This unit has no movement left to start plowing.</entry>
+    <entry key="plowProblemColony">Fields cannot be plowed inside a colony.</entry>
+    <entry key="plowProblemUnsuitableTerrain">This terrain cannot be plowed. Use grassland, prairie or savannah.</entry>
+    <entry key="plowProblemForest">Clear the forest before plowing.</entry>
+    <entry key="plowProblemAlreadyPlowed">This square is already plowed.</entry>
 </properties>

@@ -60,6 +60,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private final static String BUTTON_PLOW_FIELD_ID = "plowField";
 
+    private final static String BUTTON_CANCEL_PLOW_FIELD_ID = "cancelPlowField";
+
     private final static String BUTTON_BUILD_COLONY_ID = "buildColony";
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
@@ -95,6 +97,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
      */
     private final Button buttonMove;
     private final Button buttonPlowField;
+    private final Button buttonCancelPlowField;
     private final Button buttonBuildColony;
     private final Button buttonDeclareIndependence;
 
@@ -172,6 +175,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonPlowField
                 .setOnAction(event -> eventBus.post(new PlowFieldEvent()));
         buttonPlowField.setId(BUTTON_PLOW_FIELD_ID);
+        buttonCancelPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
+                Buttons.buttonCancelPlowField);
+        buttonCancelPlowField.setId(BUTTON_CANCEL_PLOW_FIELD_ID);
         buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
                 Buttons.buttonBuildColony);
         buttonBuildColony
@@ -302,6 +308,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
         buttonMove.setDisable(disable);
         buttonPlowField.setDisable(disable);
+        buttonCancelPlowField.setDisable(disable);
         buttonBuildColony.setDisable(disable);
         buttonDeclareIndependence.setDisable(disable);
     }
@@ -312,6 +319,14 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void setVisibleButtonPlowField(final boolean isVisible) {
         setVisibleNode(buttonPlowField, isVisible);
+    }
+
+    void setCancelPlowFieldAction(final Runnable action) {
+        buttonCancelPlowField.setOnAction(event -> action.run());
+    }
+
+    public void setVisibleButtonCancelPlowField(final boolean isVisible) {
+        setVisibleNode(buttonCancelPlowField, isVisible);
     }
 
     public void setVisibleButtonBuildColony(final boolean isVisible) {

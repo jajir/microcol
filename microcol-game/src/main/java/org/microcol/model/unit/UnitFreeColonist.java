@@ -215,6 +215,15 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
+     * Every free colonist is a passenger. Answering without the unit type keeps
+     * cargo restoration valid while a subclass is still constructed.
+     */
+    @Override
+    public boolean isStorable() {
+        return true;
+    }
+
+    /**
      * @param type muskets, horses or tools
      * @param buy  true for a purchase, false for sale of carried equipment
      * @return current market quote without changing this colonist
@@ -625,6 +634,16 @@ public class UnitFreeColonist extends CanMount {
                         || this.tools == tools,
                 "Cancel fortification before equipping");
         this.tools = tools;
+    }
+
+    /** Spend the pioneer work load; only the plow lifecycle calls this. */
+    void consumePlowTools(final int amount) {
+        Preconditions.checkState(
+                getAction().getType() == UnitActionType.plowField,
+                "Tools are consumed only by plowing");
+        Preconditions.checkArgument(amount > 0 && amount <= tools,
+                "Cannot consume %s of %s tools", amount, tools);
+        tools -= amount;
     }
 
     /**

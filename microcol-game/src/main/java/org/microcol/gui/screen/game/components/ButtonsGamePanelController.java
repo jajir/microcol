@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
+import java.util.Optional;
+
 import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.i18n.I18n;
@@ -13,7 +15,8 @@ import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
-import org.microcol.model.Terrain;
+import org.microcol.gui.event.PlowFieldEventListener;
+import org.microcol.model.PlowProblem;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -62,6 +65,7 @@ public class ButtonsGamePanelController {
                 .checkNotNull(selectedUnitManager);
         view.setSentryAction(this::changeSentryOrder);
         view.setFortifyAction(this::changeFortifyOrder);
+        view.setCancelPlowFieldAction(this::cancelPlowField);
     }
 
     @SuppressWarnings("unused")
@@ -96,6 +100,7 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonMove(false);
                 view.setVisibleButtonBuildColony(false);
                 view.setVisibleButtonPlowField(false);
+                view.setVisibleButtonCancelPlowField(false);
             }
         }
         updateUnitOrders();
@@ -133,6 +138,7 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonMove(false);
             view.setVisibleButtonBuildColony(false);
             view.setVisibleButtonPlowField(false);
+            view.setVisibleButtonCancelPlowField(false);
         }
         evaluateDeclareIndependenceButton();
         updateUnitOrders();
@@ -171,21 +177,28 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluatePlowField(final Unit unit) {
-        if (getModel().getColonyAt(unit.getLocation()).isPresent()) {
-            view.setVisibleButtonPlowField(false);
+        // An equipped idle pioneer keeps the control; a rejected start
+        // explains the reason through the status bar.
+        final Optional<PlowProblem> problem = getModel().getPlowProblem(unit);
+        view.setVisibleButtonPlowField(
+                problem.isEmpty() || PlowFieldEventListener
+                        .isExplainedOnControl(problem.get(), unit));
+        view.setVisibleButtonCancelPlowField(getModel().canCancelPlow(unit));
+    }
+
+    private void cancelPlowField() {
+        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        if (unit == null) {
             return;
         }
-        if (!unit.canPlowFiled()) {
-            view.setVisibleButtonPlowField(false);
-            return;
+        try {
+            getModel().cancelPlow(unit);
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.plowProblemUnavailable),
+                    StatusBarMessageEvent.Source.GAME));
         }
-        if (!unit.getAction().getType().equals(UnitActionType.noAction)) {
-            view.setVisibleButtonPlowField(false);
-            return;
-        }
-        final Terrain terrain = getModel().getMap()
-                .getTerrainAt(unit.getLocation());
-        view.setVisibleButtonPlowField(!terrain.isHasField());
+        updateUnitOrders();
     }
 
     private void evaluateBuildColony(final Unit unit) {

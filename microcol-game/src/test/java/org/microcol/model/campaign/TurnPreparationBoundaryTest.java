@@ -36,9 +36,12 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.store.ModelPo;
-import org.microcol.model.unit.UnitActionPlowField;
+import org.microcol.model.Direction;
+import org.microcol.model.UnitType;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitActionPlowFieldPo;
+import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitActionType;
-import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -54,6 +57,8 @@ class TurnPreparationBoundaryTest {
             new CampaignManager(List.of(), mock(CampaignsDao.class)),
             mock(MissionFactoryManager.class));
     private final Gson gson = new Gson();
+
+    private static final int PIONEER_ID = 900;
 
     private Model preparedFixture() {
         final GameModelPo data = files.loadFromClassPath(
@@ -71,14 +76,28 @@ class TurnPreparationBoundaryTest {
                 .getFieldSet();
         fields.remove(Location.of(24, 14));
         data.getModel().getMap().setFields(fields);
-        final Model model = make(data.getModel());
-        final UnitFreeColonist pioneer = (UnitFreeColonist) model
-                .getUnitById(16);
-        pioneer.placeToLocation(Location.of(24, 14));
+        final java.util.Set<Location> trees = data.getModel().getMap()
+                .getTreeSet();
+        trees.remove(Location.of(24, 14));
+        data.getModel().getMap().setTrees(trees);
+        // The game is not started yet, so the pioneer is saved already
+        // working: one owner update remains before the field completes.
+        final PlaceMapPo place = new PlaceMapPo();
+        place.setLocation(Location.of(24, 14));
+        place.setOrientation(Direction.east);
+        final UnitActionPlowFieldPo work = new UnitActionPlowFieldPo();
+        work.setRemainingTurns(1);
+        final UnitPo pioneer = new UnitPo();
+        pioneer.setId(PIONEER_ID);
+        pioneer.setType(UnitType.COLONIST);
+        pioneer.setOwnerId("Dutch");
+        pioneer.setPlaceMap(place);
+        pioneer.setAction(work);
+        pioneer.setAvailableMoves(0);
         pioneer.setTools(100);
-        pioneer.setActionType(UnitActionType.plowField);
-        ((UnitActionPlowField) pioneer.getAction()).setRemainingTurns(1);
-        return model;
+        pioneer.setWorkUpdates(0);
+        data.getModel().getUnits().add(pioneer);
+        return make(data.getModel());
     }
 
     private Model make(final ModelPo state) {
@@ -193,7 +212,7 @@ class TurnPreparationBoundaryTest {
             assertEquals("Dutch", model.getCurrentPlayer().getName());
             assertEquals(11, model.getCalendar().getNumberOfPlayedTurns());
             assertEquals(UnitActionType.noAction,
-                    model.getUnitById(16).getAction().getType());
+                    model.getUnitById(PIONEER_ID).getAction().getType());
         } finally {
             release.countDown();
             threads.shutdownNow();

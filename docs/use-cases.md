@@ -754,3 +754,8 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    zrušení/Escape, zachování práce, vybavení a vojenské hodnosti, odmítnutí
    neplatného učitele i změněného stavu a Continue. Cílené modelové i UI kontroly
    prošly; další učení používá stávající školu a praxi. Úplná regrese dávky čeká.
+7. UC-019/UC-016: R-0119 má cíleně ověřené orání za 20 nástrojů,
+   čtyři/dvě pozdější aktualizace, zrušení bez vrácení pohybu, důvody odmítnutí
+   a Continue. TC15_06 ověřuje dva pionýry a jednu spotřebu; TC18_02–07
+   neplatné vybavení, dokončení a uložení. Vyšší výnos začíná až následující
+   aktualizací kolonie. Úplná regrese dávky čeká.

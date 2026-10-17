@@ -164,10 +164,8 @@ public class ScreenGamePresenter {
 
     private void onKeyPWasPressed() {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
-            final Unit unit = selectedUnitManager.getSelectedUnit().get();
-            if (unit.canPlowFiled()) {
-                eventBus.post(new PlowFieldEvent());
-            }
+            // The listener explains why an eligible unit cannot start.
+            eventBus.post(new PlowFieldEvent());
         }
     }
 

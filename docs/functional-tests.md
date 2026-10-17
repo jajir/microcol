@@ -4874,3 +4874,21 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    foreign-owner rejection, school/work relearning and real disk roundtrips.
    Shared Java formatting passed; reports/screenshots remain under
    `target/docker-ui/run-aZpHYU/`. Full batch regression/publication are pending.
+8. R-0119: `run-YFvZ6F` had 181 model checks, two failures and 30 errors.
+   Diagnosis/repairs are recorded in the [Claude batch operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+   `run-vGuYyP` passed 279 model checks, TC18's seven scenarios and three
+   source-contract checks, but TC15_06 confused UI selection with model order.
+   Final `run-D7bgbV` exits 0: **280 model + nine UI + three source-contract = 292
+   passed**, no failures/errors/skips. Selected model suites: PlowField,
+   AttackBoundary, EuropeanSpecialist, NationalTurnPreparation,
+   TurnPreparationAction, TurnPreparationBoundary, UnitTurnOrders, FortifyOrder,
+   Terrain, TerrainType, SpecialistProduction, NationalTurnOrder,
+   PassengerTransfer, CargoSlot and UnitColonistEmbark. TC15_06 checks two
+   pioneers sharing one field and only one 20-tool charge; TC18_02–07 cover
+   missing/19 tools, cancellation, four/two-update completion, unfinished and
+   completed Continue, exact 20-tool exhaustion and visible rejection reason.
+   Model coverage includes old/canceled/foreign callbacks, saved countdown and
+   following-colony-update output. Earlier R-0133 specialist cargo reload was
+   fixed through the shared colonist storable capability, retaining carrier
+   rejection. Shared formatter passed; reports/screenshots remain under
+   `target/docker-ui/run-D7bgbV/`. Full batch regression/publication are pending.

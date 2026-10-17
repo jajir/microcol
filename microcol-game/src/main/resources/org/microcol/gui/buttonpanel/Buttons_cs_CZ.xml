@@ -31,6 +31,16 @@
     <entry key="buttonFortify">Opevnit</entry>
     <entry key="buttonCancelFortifying">Zrušit opevňování</entry>
     <entry key="buttonCancelFortified">Zrušit opevnění</entry>
+    <entry key="buttonCancelPlowField">Zrušit orání. Postup se ztratí; pohyb ani nářadí se nevrací.</entry>
+    <entry key="plowProblemUnavailable">Tato jednotka nyní nemůže orat. Vyberte dostupnou jednotku ve svém tahu.</entry>
+    <entry key="plowProblemNotPioneer">Orat může jen průkopník.</entry>
+    <entry key="plowProblemNotEnoughTools">Orání vyžaduje průkopníka s alespoň 20 kusy nářadí.</entry>
+    <entry key="plowProblemBusy">Tato jednotka již plní rozkaz.</entry>
+    <entry key="plowProblemNoMoves">Jednotce nezbývá pohyb pro zahájení orání.</entry>
+    <entry key="plowProblemColony">V kolonii nelze orat pole.</entry>
+    <entry key="plowProblemUnsuitableTerrain">Tento terén nelze orat. Použijte louku, prérii nebo savanu.</entry>
+    <entry key="plowProblemForest">Před oráním je nutné vykácet les.</entry>
+    <entry key="plowProblemAlreadyPlowed">Toto pole je již zorané.</entry>
     <entry key="fortifyExplanation">Spotřebuje zbývající pohyb; opevnění začne platit příští vlastní tah.</entry>
     <entry key="fortifyingExplanation">Opevňování: zatím bez obranného bonusu. Zrušení nevrací spotřebovaný pohyb.</entry>
     <entry key="fortifiedExplanation">Opevněno: před pohybem či útokem zrušte rozkaz. Spotřebovaný pohyb se nevrací.</entry>

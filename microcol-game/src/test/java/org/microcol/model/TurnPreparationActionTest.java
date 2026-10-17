@@ -13,6 +13,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.NewUnitWasBornEvent;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitActionNoActionPo;
+import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
@@ -21,6 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 class TurnPreparationActionTest {
+
+    private static final int PLOWER_ID = 901;
+
     private static Stream<String> commands() {
         return Stream.of("buy", "sell", "rename", "independence",
                 "queue-building", "queue-unit", "queue-remove", "queue-before",
@@ -39,6 +45,28 @@ class TurnPreparationActionTest {
                 200);
         data.getModel().getColonies().get(0).getColonyWarehouse().put("TOOLS",
                 0);
+        final java.util.Set<Location> trees = data.getModel().getMap()
+                .getTreeSet();
+        trees.remove(Location.of(24, 14));
+        data.getModel().getMap().setTrees(trees);
+        final java.util.Set<Location> fields = data.getModel().getMap()
+                .getFieldSet();
+        fields.remove(Location.of(24, 14));
+        data.getModel().getMap().setFields(fields);
+        // A pioneer ready to plow clear land outside the colony.
+        final PlaceMapPo place = new PlaceMapPo();
+        place.setLocation(Location.of(24, 14));
+        place.setOrientation(Direction.east);
+        final UnitPo plower = new UnitPo();
+        plower.setId(PLOWER_ID);
+        plower.setType(UnitType.COLONIST);
+        plower.setOwnerId("Dutch");
+        plower.setPlaceMap(place);
+        plower.setAction(new UnitActionNoActionPo());
+        plower.setAvailableMoves(1);
+        plower.setTools(100);
+        plower.setWorkUpdates(0);
+        data.getModel().getUnits().add(plower);
         final Model model = make(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         final UnitFreeColonist pioneer = (UnitFreeColonist) model
@@ -123,7 +151,8 @@ class TurnPreparationActionTest {
             return () -> colony.getColonyFieldInDirection(Direction.west)
                     .setProducedGoodsType(GoodsType.CORN);
         case "action":
-            return () -> unit.setActionType(UnitActionType.plowField);
+            return () -> model.getUnitById(PLOWER_ID)
+                    .setActionType(UnitActionType.plowField);
         case "move":
             return () -> model.moveUnit(unit,
                     Path.of(List.of(Location.of(24, 14))));

@@ -196,6 +196,7 @@ class NationalTurnPreparationTest {
                 .addUnitOutSideColony(colony);
         pioneer.placeToLocation(field);
         pioneer.setTools(100);
+        pioneer.setActionPoints(pioneer.getSpeed());
         pioneer.setActionType(UnitActionType.plowField);
         ((UnitActionPlowField) pioneer.getAction()).setRemainingTurns(1);
         final int firstStock = colony.getGoodsStats()

@@ -156,6 +156,7 @@ class EuropeanSpecialistTest {
         final int id = hardy.getId();
         hardy.placeToLocation(field);
         hardy.setTools(100);
+        hardy.setActionPoints(hardy.getSpeed());
         hardy.setActionType(UnitActionType.plowField);
         assertEquals(2,
                 ((UnitActionPlowField) hardy.getAction()).getRemainingTurns());
@@ -178,6 +179,7 @@ class EuropeanSpecialistTest {
         model.endTurn();
         model.endTurn();
         assertTrue(model.getMap().getTerrainAt(field).isHasField());
+        assertEquals(80, ((UnitFreeColonist) reloaded).getTools());
         assertEquals(UnitActionType.noAction, reloaded.getAction().getType());
     }
 

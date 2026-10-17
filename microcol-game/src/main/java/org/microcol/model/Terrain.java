@@ -15,15 +15,16 @@ public class Terrain {
 
     private static final int FOOD_TREE_FACTOR = 3;
 
-    private static final int FOOD_FIELD_FACTOR = 2;
+    /** Added to an already positive crop output on plowed, cleared land. */
+    private static final int PLOW_BONUS = 1;
 
-    private static final int TREE_AT_FIELD_FACTOR = 3;
+    private static final List<GoodsType> PLOW_CROPS = ImmutableList.of(
+            GoodsType.CORN, GoodsType.SUGAR, GoodsType.COTTON,
+            GoodsType.TOBACCO);
 
     private static final int TREE_NOMINAL_PRODUCTION = 7;
 
     private static final int FURS_NOMINAL_PRODUCTION = 5;
-
-    private static final int FURS_AT_FIELD_NOMINAL_PRODUCTION = 1;
 
     private final Location location;
 
@@ -53,18 +54,11 @@ public class Terrain {
                 }
                 return prod;
             }, prod -> {
-                if (prod.getTerrain().isHasField()) {
-                    if (GoodsType.CORN.equals(prod.getGoodsType())) {
-                        return prod.modify(
-                                prod.getProduction() * FOOD_FIELD_FACTOR);
-                    }
-                    if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
-                        return prod.modify(
-                                prod.getProduction() / TREE_AT_FIELD_FACTOR);
-                    }
-                    if (GoodsType.FUR.equals(prod.getGoodsType())) {
-                        return prod.modify(FURS_AT_FIELD_NOMINAL_PRODUCTION);
-                    }
+                if (prod.getTerrain().isHasField()
+                        && !prod.getTerrain().isHasTrees()
+                        && prod.getProduction() > 0
+                        && PLOW_CROPS.contains(prod.getGoodsType())) {
+                    return prod.modify(prod.getProduction() + PLOW_BONUS);
                 }
                 return prod;
             });

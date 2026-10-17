@@ -3542,7 +3542,7 @@ committed for this experiment.
    The main agent owns review, formatting, local checkpoint commits, integration
    and each batch's verified publication; workers never commit or push.
 3. Selected first batch order: R-0118, R-0133, R-0132, R-0179, R-0184, R-0147,
-   R-0119, R-0120, R-0136 and R-0089. Second batch candidates: R-0070, R-0090,
+   R-0119, R-0120, R-0136 and R-0090. Second batch candidates: R-0070, R-0089,
    R-0096, R-0100, R-0101, R-0102, R-0103, R-0085, R-0105 and R-0123.
    Refine one at a time and recheck actual prerequisites; open gameplay questions
    are not permission to guess. Completed predecessor work remains intact.
@@ -3674,3 +3674,37 @@ committed for this experiment.
     $1.96879260. These estimates are not an invoice or measured Pro quota.
     R-0119 starts Sonnet medium with the traced action, yield and fixture callers;
     escalate only after diagnosing an inadequate result.
+19. R-0119 initial Sonnet medium authoring took 582.853 seconds. Shared
+    formatting passed. Docker `run-YFvZ6F` ran 181 model checks with two failures
+    and 30 errors; UI was not reached. Diagnosis: 19 specialist cargo reloads
+    exposed R-0133's early `getType()` call during specialist construction; 11
+    turn-boundary fixtures issued plow before the game started; one action
+    fixture mutated placement inside the command expected to reject atomically;
+    one new test expected an already-plowed reason while movement was still zero.
+    Review additionally found missing required work history in the hardy UI
+    fixture, an old work callback able to consume movement after cancellation,
+    and no discoverable reason control for a partial 19-tool load. Escalated
+    the same job/session to Sonnet high for repair, retaining its time and
+    two-repair budget. No Opus or extra cloud worker was used. The repair must
+    retain all acceptance assertions and rerun the affected cargo checks too.
+20. Batch sequencing refinement: use R-0090 (bounded AI food-first/lumber
+    workforce through existing job choices) as the tenth task and move R-0089
+    (alliances, passage and Crown-war transitions) into its second-batch slot.
+    The same 20 outcomes remain selected. This keeps the first integration
+    boundary focused and leaves the larger diplomacy change for the next batch.
+21. R-0119 first high repair took 191.413 seconds. `run-vGuYyP` passed all
+    279 model checks and seven TC18 scenarios plus the three source-contract
+    checks; one of the two TC15 cases failed because its selected UI unit was
+    not model-list index zero. The last high repair (26.427 seconds)
+    made both UI selections explicit and retained both identity/action/tool checks.
+    Review also corrected foreign/wrong-unit callbacks so they cannot terminate
+    the original valid order; a new test proves its later normal completion.
+    Caller renamed the older callback test to reflect its actual no-effect check.
+    Final `run-D7bgbV` passes **292 checks** (280 model, nine UI, three contract),
+    zero failures/errors/skips. Shared formatter and strict docs validation pass.
+    Total worker time 800.693 seconds. Final cumulative session: 182
+    input, 239,660 cache-create, 12,471,460 cache-read,
+    98,059 output (32,911 thinking), list estimate
+    $3.18674000. Start R-0120 on Sonnet high because completion combines
+    terrain, current recipient, warehouse capacity and persisted loss feedback;
+    plan a cheaper Haiku trial for the narrower R-0136 arrival hook.

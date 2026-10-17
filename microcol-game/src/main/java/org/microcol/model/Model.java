@@ -22,6 +22,7 @@ import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitActionFortify;
+import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -1585,6 +1586,71 @@ public class Model {
                 "Unit is not a current fortification order");
         checkTurnPreparationComplete();
         ((AbstractUnit) unit).cancelFortifying();
+    }
+
+    /**
+     * Authoritative plow admission for the current player's live pioneer.
+     *
+     * @param unit required unit
+     * @return the first reason plowing cannot start, or empty when it can
+     */
+    public Optional<PlowProblem> getPlowProblem(final Unit unit) {
+        if (unit == null || !isGameRunning() || endingTurn
+                || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId()).orElse(null) != unit
+                || !unit.isAtPlaceLocation()) {
+            return Optional.of(PlowProblem.UNAVAILABLE);
+        }
+        if (!(unit instanceof UnitFreeColonist)
+                || !unit.getType().isCanPlowField()) {
+            return Optional.of(PlowProblem.NOT_PIONEER);
+        }
+        if (((UnitFreeColonist) unit)
+                .getTools() < UnitActionPlowField.REQUIRED_TOOLS) {
+            return Optional.of(PlowProblem.NOT_ENOUGH_TOOLS);
+        }
+        if (unit.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(PlowProblem.BUSY);
+        }
+        if (unit.getActionPoints() <= 0) {
+            return Optional.of(PlowProblem.NO_MOVES);
+        }
+        final Location at = unit.getLocation();
+        if (getColonyAt(at).isPresent()) {
+            return Optional.of(PlowProblem.COLONY);
+        }
+        final Terrain terrain = map.getTerrainAt(at);
+        if (!terrain.getTerrainType().isCanHaveField()) {
+            return Optional.of(PlowProblem.UNSUITABLE_TERRAIN);
+        }
+        if (terrain.isHasTrees()) {
+            return Optional.of(PlowProblem.FOREST);
+        }
+        if (terrain.isHasField()) {
+            return Optional.of(PlowProblem.ALREADY_PLOWED);
+        }
+        return Optional.empty();
+    }
+
+    /** Whether a current pioneer may start plowing where it stands. */
+    public boolean canPlowField(final Unit unit) {
+        return getPlowProblem(unit).isEmpty();
+    }
+
+    /** Whether this live unit has unfinished plow work that can be dropped. */
+    public boolean canCancelPlow(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction().getType() == UnitActionType.plowField;
+    }
+
+    /** Discard plow progress without refunding movement, tools or terrain. */
+    public void cancelPlow(final Unit unit) {
+        Preconditions.checkState(canCancelPlow(unit),
+                "Unit is not doing plow work");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelPlowing();
     }
 
     /** Whether this live unit's order has crossed its owner-turn boundary. */

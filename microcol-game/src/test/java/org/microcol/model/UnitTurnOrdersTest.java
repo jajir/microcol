@@ -16,6 +16,7 @@ import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -36,6 +37,14 @@ class UnitTurnOrdersTest {
         final GameModelPo data = dao.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
+        final java.util.Set<Location> trees = data.getModel().getMap()
+                .getTreeSet();
+        trees.remove(Location.of(24, 14));
+        data.getModel().getMap().setTrees(trees);
+        final java.util.Set<Location> fields = data.getModel().getMap()
+                .getFieldSet();
+        fields.remove(Location.of(24, 14));
+        data.getModel().getMap().setFields(fields);
         final Model model = make(data.getModel());
         model.getAllUnits()
                 .forEach(unit -> ((AbstractUnit) unit).setActionPoints(0));
@@ -213,6 +222,9 @@ class UnitTurnOrdersTest {
         model.skipUnitTurn(spent);
         verifyRejectedWithoutMutation(model, spent);
         final Unit busy = model.getUnitById(1);
+        // Plowing needs a pioneer outside the colony on clear land.
+        busy.placeToLocation(Location.of(24, 14));
+        ((UnitFreeColonist) busy).setTools(100);
         busy.setActionType(UnitActionType.plowField);
         ((AbstractUnit) busy).setActionPoints(busy.getSpeed());
         verifyRejectedWithoutMutation(model, busy);

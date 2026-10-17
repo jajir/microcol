@@ -53,6 +53,13 @@ class AttackBoundaryTest {
         terrainMap.put(ORIGIN, terrain);
         terrainMap.put(TARGET, terrain);
         data.getMap().setTerrainType(terrainMap);
+        // Keep the origin a clear, unplowed square for the working boundary.
+        final java.util.Set<Location> trees = data.getMap().getTreeSet();
+        trees.remove(ORIGIN);
+        data.getMap().setTrees(trees);
+        final java.util.Set<Location> fields = data.getMap().getFieldSet();
+        fields.remove(ORIGIN);
+        data.getMap().setFields(fields);
         model = Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
         while (!model.getCurrentPlayer().getName().equals("Dutch")) {
@@ -124,6 +131,8 @@ class AttackBoundaryTest {
             ((UnitFreeColonist) attacker).setTools(100);
             break;
         case "working":
+            ((UnitFreeColonist) attacker).setTools(100);
+            ((AbstractUnit) attacker).setActionPoints(attacker.getSpeed());
             ((AbstractUnit) attacker).setActionType(UnitActionType.plowField);
             break;
         case "aboard":

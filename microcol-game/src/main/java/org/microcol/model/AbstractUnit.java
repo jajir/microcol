@@ -1451,6 +1451,13 @@ public abstract class AbstractUnit implements Unit {
         model.fireActionWasStarted(this);
     }
 
+    void cancelPlowing() {
+        Preconditions
+                .checkState(unitAction.getType() == UnitActionType.plowField);
+        setAction(UnitActionType.noAction.make());
+        model.fireActionWasStarted(this);
+    }
+
     /**
      * Define action supported by unit.
      *
@@ -1473,10 +1480,16 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
                 this);
+        if (actionType == UnitActionType.plowField) {
+            final Optional<PlowProblem> problem = model.getPlowProblem(this);
+            Preconditions.checkState(problem.isEmpty(), "Unit cannot plow: %s",
+                    problem.orElse(null));
+        }
         final UnitAction next = actionType.make();
         if (actionType == UnitActionType.plowField
                 && getType() == UnitType.HARDY_PIONEER) {
-            ((UnitActionPlowField) next).setRemainingTurns(2);
+            ((UnitActionPlowField) next).setRemainingTurns(
+                    UnitActionPlowField.HARDY_TURNS_TO_PLOW_FIELD);
         }
         setAction(next);
         actionPoints = 0;
@@ -1495,17 +1508,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean canPlowFiled() {
-        if (getSupportedActions().contains(UnitActionType.plowField)
-                && actionPoints > 0 && isAtPlaceLocation()
-                && unitAction.getType() == UnitActionType.noAction) {
-            final TerrainType targetTerrain = model.getMap()
-                    .getTerrainTypeAt(getLocation());
-            return TerrainType.GRASSLAND.equals(targetTerrain)
-                    || TerrainType.PRAIRIE.equals(targetTerrain)
-                    || TerrainType.SAVANNAH.equals(targetTerrain);
-        } else {
-            return false;
-        }
+        return getSupportedActions().contains(UnitActionType.plowField)
+                && model.canPlowField(this);
     }
 
     /**
