@@ -4836,3 +4836,14 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    rejection and valid/invalid disk restoration. Naval loot remains verified.
    Reports/screenshots: `target/docker-ui/run-GSzhm6/` in the batch worktree.
    Full batch regression and publication remain pending.
+5. R-0179: after one Haiku authoring repair, the caller applied shared
+   formatting to six Java files (exact-token/idempotence passed) and corrected
+   the Czech name inflection in the new label. Docker `run-N5F3WJ` exited 0:
+   NavalCombat 18, CombatStrength 25, AttackOrder 16, PrivateerException 6,
+   TC64 4, TC65 3 and PageVerificationContract 3: **75 passed**, no failures,
+   errors or skips. Model checks verify Drake attack 16/defense 12, ordinary
+   privateer 12/8, owner isolation, other ships, controlled actual resolution,
+   disk roundtrip without stacking and stale order rejection before any draw.
+   TC64_04 verifies the named bonus, 61.54% odds against a galleon, cancel and
+   Continue; original TC64/65 outcomes remain intact. Reports/screenshots:
+   `target/docker-ui/run-N5F3WJ/`. Full batch regression/publication pending.

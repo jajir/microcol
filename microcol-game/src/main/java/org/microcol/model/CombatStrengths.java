@@ -29,9 +29,11 @@ public final class CombatStrengths {
                 && attacker.isAtPlaceLocation()
                 && defender.isAtPlaceLocation()) {
             final CombatStrength attack = new CombatStrength(
-                    shipBase(attacker.getType()), 50, 0, 0, 0);
+                    shipBase(attacker.getType()), 50, 0, 0, 0, 0,
+                    privateerFounderBonus(attacker));
             final CombatStrength defense = new CombatStrength(
-                    shipBase(defender.getType()), 0, 0, 0, 0);
+                    shipBase(defender.getType()), 0, 0, 0, 0, 0,
+                    privateerFounderBonus(defender));
             return Optional.of(new CombatStrengths(attack, defense,
                     "NAVAL:" + attacker.getType().name() + ':'
                             + defender.getType().name()));
@@ -98,6 +100,15 @@ public final class CombatStrengths {
         if (type == UnitType.MAN_OF_WAR)
             return 24;
         throw new IllegalArgumentException("Unsupported naval combatant");
+    }
+
+    /**
+     * Francis Drake adds +50% to privateers owned by a player who has recruited
+     * him; opponents' Drake and other ships receive nothing.
+     */
+    private static int privateerFounderBonus(final Unit unit) {
+        return unit.getType() == UnitType.PRIVATEER && unit.getOwner()
+                .getCongressMembers().contains(Founder.FRANCIS_DRAKE) ? 50 : 0;
     }
 
     private static boolean isArmedLand(Unit unit) {

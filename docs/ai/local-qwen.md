@@ -3621,3 +3621,18 @@ committed for this experiment.
     UI errors and completed the repeated missing Continue check. Next R-0179
     uses Haiku medium for a smaller additive combat modifier; no Opus fallback
     has been needed in this batch so far.
+13. R-0179 Haiku medium initial authoring took 182.063 seconds. Shared
+    additive strength/breakdown and model cases were written, but the required
+    UI, runtime stale-order and disk-roundtrip cases were omitted. Caller
+    requested one same-model repair using concrete existing TC31 temporary
+    fixture preparation, CongressTest membership and disk-save patterns. This
+    was incomplete authoring, not an unavailable runtime. No acceptance is claimed
+    until the full targeted selection passes.
+14. R-0179 Haiku medium repair took 204.530 seconds, 386.593 total across
+    both attempts. All 75 targeted checks passed. Final cumulative session
+    reports 102 input, 173,659 cache-create, 4,350,405 cache-read and 82,128
+    output tokens (54,173 thinking), list-price estimate $0.36277049. No runtime
+    repair was needed after the missing authoring was completed. Next R-0184
+    starts Sonnet high because founder join, population and capture must share
+    an exactly-once rule; this scope has more state transitions than the
+    successful small strength modifier and earlier medium work omitted checks.

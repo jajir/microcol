@@ -742,3 +742,6 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    prostor při nákupu a odmítá již neplatné potvrzení. TC05/TC06 ověřují
    přesuny, zrušení, změněný prostor, přesné zlato a Continue; cílené kontroly
    prošly po opravě dvou nových UI scénářů. Celá dávka ještě není ověřena.
+4. UC-087: R-0179 ověřuje Drakeův bonus korzárů v útoku i obraně, bez
+   přenosu mezi vlastníky nebo násobení po načtení. TC64_04 ukazuje rozklad
+   síly a šanci, zrušení i Continue; společná cílená regrese boje prošla.

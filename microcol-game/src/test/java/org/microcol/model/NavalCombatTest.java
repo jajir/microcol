@@ -2,12 +2,18 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.microcol.model.campaign.MissionImpl;
+import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.CongressPo;
+import org.microcol.model.store.PlayerPo;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.store.CargoPo;
 import org.microcol.model.store.CargoSlotPo;
@@ -23,6 +29,8 @@ class NavalCombatTest {
     private static final Location ATTACKER = Location.of(45, 15);
     private static final Location DEFENDER = Location.of(44, 15);
     private static final long STEP = 0x9E3779B97F4A7C15L;
+    @TempDir
+    Path directory;
 
     private Model game(final long state, final UnitType attackerType,
             final UnitType defenderType) {
@@ -44,12 +52,34 @@ class NavalCombatTest {
     private Model game(final long state, final UnitType attackerType,
             final UnitType defenderType, final boolean passenger,
             final boolean franceIndependent, final UnitType secondDefender) {
-        final ModelPo data = new GameModelPoDao()
-                .loadFromClassPath("/maps/free-play.microcol").getModel();
+        return game(state, attackerType, defenderType, passenger,
+                franceIndependent, secondDefender, List.of(), List.of());
+    }
+
+    private Model game(final long state, final UnitType attackerType,
+            final UnitType defenderType, final boolean passenger,
+            final boolean franceIndependent, final UnitType secondDefender,
+            final List<Founder> dutchMembers,
+            final List<Founder> franceMembers) {
+        return start(prepared(state, attackerType, defenderType, passenger,
+                franceIndependent, secondDefender, dutchMembers,
+                franceMembers));
+    }
+
+    private GameModelPo prepared(final long state, final UnitType attackerType,
+            final UnitType defenderType, final boolean passenger,
+            final boolean franceIndependent, final UnitType secondDefender,
+            final List<Founder> dutchMembers,
+            final List<Founder> franceMembers) {
+        final GameModelPo wrapper = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.microcol");
+        final ModelPo data = wrapper.getModel();
         data.setCombatRandomState(state);
         data.getGameManager().getPlayers().stream()
                 .filter(player -> player.getName().equals("France")).findFirst()
                 .orElseThrow().setDeclaredIndependence(franceIndependent);
+        setCongressMembers(data, "Dutch", dutchMembers);
+        setCongressMembers(data, "France", franceMembers);
         final UnitPo original = data.getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         original.setType(attackerType);
@@ -102,7 +132,11 @@ class NavalCombatTest {
             cargo.getSlots().get(0).setUnitId(101);
             data.getUnits().add(originalPassenger);
         }
-        final Model model = Model.make(data,
+        return wrapper;
+    }
+
+    private Model start(final GameModelPo wrapper) {
+        final Model model = Model.make(wrapper.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
@@ -112,6 +146,168 @@ class NavalCombatTest {
         ((Ship) model.getUnitById(3)).getOwner()
                 .revealMapForUnit(model.getUnitById(3));
         return model;
+    }
+
+    private static void setCongressMembers(final ModelPo data,
+            final String playerName, final List<Founder> members) {
+        if (members.isEmpty()) {
+            return;
+        }
+        playerNamed(data, playerName).setCongress(congress(members, null));
+    }
+
+    private static PlayerPo playerNamed(final ModelPo data, final String name) {
+        return data.getGameManager().getPlayers().stream()
+                .filter(player -> player.getName().equals(name)).findFirst()
+                .orElseThrow();
+    }
+
+    /**
+     * Valid activated Congress: one candidate per category, never a member. The
+     * military candidate is the selected founder, otherwise John Paul Jones.
+     */
+    private static CongressPo congress(final List<Founder> members,
+            final Founder selected) {
+        final CongressPo po = Congress.initial();
+        po.setActivated(true);
+        po.setBells(0);
+        po.setMembers(members);
+        po.setCandidates(
+                List.of(selected == null ? Founder.JOHN_PAUL_JONES : selected,
+                        Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
+                        Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
+        po.setSelected(selected);
+        po.setGeneration(1);
+        return po;
+    }
+
+    private static CombatStrengths battle(final Model model, final int attacker,
+            final int defender) {
+        return CombatStrengths.forBattle(model, model.getUnitById(attacker),
+                model.getUnitById(defender)).orElseThrow();
+    }
+
+    @Test
+    void drakeAddsPrivateerBonusToOwnerAttackAndDefense() {
+        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+                false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
+        final CombatStrengths asAttacker = battle(model, 3, 100);
+        assertEquals(16, asAttacker.getAttacker().getTotal());
+        assertEquals(50, asAttacker.getAttacker().getFounderBonus());
+        assertEquals(8, asAttacker.getDefender().getTotal());
+        assertEquals(2.0 / 3.0, asAttacker.getAttackerWinProbability());
+        final CombatStrengths asDefender = battle(model, 100, 3);
+        assertEquals(12, asDefender.getAttacker().getTotal());
+        assertEquals(12, asDefender.getDefender().getTotal());
+        assertEquals(50, asDefender.getDefender().getFounderBonus());
+        assertEquals(0.5, asDefender.getAttackerWinProbability());
+    }
+
+    @Test
+    void privateerWithoutDrakeKeepsOrdinaryStrengths() {
+        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER);
+        final CombatStrengths values = battle(model, 3, 100);
+        assertEquals(12, values.getAttacker().getTotal());
+        assertEquals(0, values.getAttacker().getFounderBonus());
+        assertEquals(8, values.getDefender().getTotal());
+        assertEquals(0.6, values.getAttackerWinProbability());
+    }
+
+    @Test
+    void opponentDrakeDoesNotStrengthenAttackingPrivateer() {
+        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+                false, false, null, List.of(), List.of(Founder.FRANCIS_DRAKE));
+        final CombatStrengths values = battle(model, 3, 100);
+        assertEquals(12, values.getAttacker().getTotal());
+        assertEquals(0, values.getAttacker().getFounderBonus());
+        assertEquals(12, values.getDefender().getTotal());
+    }
+
+    @Test
+    void drakeDoesNotChangeNonPrivateerShips() {
+        final UnitType[] types = { UnitType.CARAVEL, UnitType.MERCHANTMAN,
+                UnitType.GALLEON, UnitType.FRIGATE, UnitType.MAN_OF_WAR };
+        for (final UnitType type : types) {
+            final Model plain = game(3L, type, type);
+            final Model drake = game(3L, type, type, false, false, null,
+                    List.of(Founder.FRANCIS_DRAKE), List.of());
+            assertEquals(battle(plain, 3, 100), battle(drake, 3, 100),
+                    type.name());
+            assertEquals(0,
+                    battle(drake, 3, 100).getAttacker().getFounderBonus());
+        }
+    }
+
+    @Test
+    void drakeBonusSurvivesDiskRoundtripWithoutStacking() {
+        final GameModelPo data = prepared(3L, UnitType.PRIVATEER,
+                UnitType.PRIVATEER, false, false, null,
+                List.of(Founder.FRANCIS_DRAKE), List.of());
+        final Model model = start(data);
+        data.setModel(model.save());
+        final GameModelPoDao dao = new GameModelPoDao();
+        final Path file = directory.resolve("drake-privateer.microcol");
+        dao.saveToFile(file.toString(), data);
+        final GameModelPo loaded = dao.loadFromFile(file.toFile());
+        final Model reloaded = Model.make(loaded.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        reloaded.startGame();
+        final CombatStrengths values = battle(reloaded, 3, 100);
+        assertEquals(50, values.getAttacker().getFounderBonus());
+        assertEquals(16, values.getAttacker().getTotal());
+        assertEquals(8, values.getDefender().getTotal());
+        assertEquals(battle(model, 3, 100), values);
+    }
+
+    @Test
+    void staleDrakeMembershipRejectsFrozenOrderBeforeRandomDraw() {
+        final GameModelPo data = prepared(3L, UnitType.PRIVATEER,
+                UnitType.PRIVATEER, false, false, null, List.of(), List.of());
+        playerNamed(data.getModel(), "Dutch")
+                .setCongress(congress(List.of(), Founder.FRANCIS_DRAKE));
+        final Model model = start(data);
+        final Player owner = model.getPlayerByName("Dutch");
+        final AttackOrder order = ((Ship) model.getUnitById(3))
+                .prepareAttack(DEFENDER, true).orElseThrow();
+        assertEquals(12, order.getCombatStrengths().orElseThrow().getAttacker()
+                .getTotal());
+        // The frozen review is kept while the same owner joins Drake through
+        // the production path.
+        owner.creditProducedBells(owner.getCongressTarget());
+        owner.startTurn();
+        assertEquals(List.of(Founder.FRANCIS_DRAKE),
+                owner.getCongressMembers());
+        final String before = new Gson().toJson(model.save());
+        final long randomState = model.save().getCombatRandomState();
+        final IllegalStateException rejected = assertThrows(
+                IllegalStateException.class, order::execute);
+        assertEquals("The battle strength changed", rejected.getMessage());
+        assertEquals(before, new Gson().toJson(model.save()));
+        assertEquals(randomState, model.save().getCombatRandomState());
+        assertEquals(16, battle(model, 3, 100).getAttacker().getTotal());
+    }
+
+    @Test
+    void drakeOddsDecideActualNavalResolution() {
+        final Model probe = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+                false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
+        final boolean attackerWins = probe.nextCombatRandom() < 2.0 / 3.0;
+        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+                false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
+        final List<UnitAttackedEvent> events = new ArrayList<>();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitAttacked(final UnitAttackedEvent event) {
+                events.add(event);
+            }
+        });
+        final AttackOrder order = ((Ship) model.getUnitById(3))
+                .prepareAttack(DEFENDER, true).orElseThrow();
+        assertEquals(2.0 / 3.0, order.getCombatStrengths().orElseThrow()
+                .getAttackerWinProbability());
+        order.execute();
+        assertEquals(attackerWins ? 3 : 100,
+                events.get(0).getNavalOutcome().orElseThrow().getWinnerId());
     }
 
     @Test

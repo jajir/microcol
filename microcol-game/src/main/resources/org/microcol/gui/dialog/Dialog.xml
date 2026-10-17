@@ -62,6 +62,7 @@
 	<entry key="fight_lostHorses">%s: the unit lost its horses and survives as a soldier.</entry>
 	<entry key="fight_lostMuskets">%s: the unit lost its muskets and survives unarmed.</entry>
 	<entry key="fight_artilleryBonus">Artillery outside a fortified colony: %s%%</entry>
+	<entry key="fight_drakeBonus">Privateers under Francis Drake: +%s%%</entry>
 	<entry key="fight_artilleryLoss">Defeated full artillery is damaged; damaged artillery is destroyed. A defeated soldier loses horses, otherwise muskets. Both participants spend their remaining movement.</entry>
 	<entry key="fight_artilleryDamaged">%s: artillery was damaged; attack/defense strength is now 5/3.</entry>
 	<entry key="fight_artilleryDestroyed">%s: damaged artillery was destroyed.</entry>

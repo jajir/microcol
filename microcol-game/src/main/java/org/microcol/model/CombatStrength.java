@@ -10,6 +10,7 @@ public final class CombatStrength {
     private final int fortificationBonus;
     private final int colonyBonus;
     private final int artilleryBonus;
+    private final int founderBonus;
 
     CombatStrength(double base, int attackBonus, int terrainBonus,
             int fortificationBonus, int colonyBonus) {
@@ -19,12 +20,20 @@ public final class CombatStrength {
 
     CombatStrength(double base, int attackBonus, int terrainBonus,
             int fortificationBonus, int colonyBonus, int artilleryBonus) {
+        this(base, attackBonus, terrainBonus, fortificationBonus, colonyBonus,
+                artilleryBonus, 0);
+    }
+
+    CombatStrength(double base, int attackBonus, int terrainBonus,
+            int fortificationBonus, int colonyBonus, int artilleryBonus,
+            int founderBonus) {
         this.base = base;
         this.attackBonus = attackBonus;
         this.terrainBonus = terrainBonus;
         this.fortificationBonus = fortificationBonus;
         this.colonyBonus = colonyBonus;
         this.artilleryBonus = artilleryBonus;
+        this.founderBonus = founderBonus;
     }
 
     public double getBase() {
@@ -51,11 +60,17 @@ public final class CombatStrength {
         return artilleryBonus;
     }
 
+    /** @return named founder modifier, such as Francis Drake's privateers */
+    public int getFounderBonus() {
+        return founderBonus;
+    }
+
     public double getTotal() {
         return base <= 0 ? 0
                 : base * Math.max(0.1,
                         (100 + attackBonus + terrainBonus + fortificationBonus
-                                + colonyBonus + artilleryBonus) / 100.0);
+                                + colonyBonus + artilleryBonus + founderBonus)
+                                / 100.0);
     }
 
     @Override
@@ -68,12 +83,13 @@ public final class CombatStrength {
                 && terrainBonus == that.terrainBonus
                 && fortificationBonus == that.fortificationBonus
                 && colonyBonus == that.colonyBonus
-                && artilleryBonus == that.artilleryBonus;
+                && artilleryBonus == that.artilleryBonus
+                && founderBonus == that.founderBonus;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(base, attackBonus, terrainBonus, fortificationBonus,
-                colonyBonus, artilleryBonus);
+                colonyBonus, artilleryBonus, founderBonus);
     }
 }

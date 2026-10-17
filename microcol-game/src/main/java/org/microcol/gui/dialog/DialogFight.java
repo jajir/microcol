@@ -246,6 +246,7 @@ public final class DialogFight extends AbstractMessageWindow {
         appendBonus(out, Dialog.fight_colonyBonus, strength.getColonyBonus());
         appendBonus(out, Dialog.fight_artilleryBonus,
                 strength.getArtilleryBonus());
+        appendBonus(out, Dialog.fight_drakeBonus, strength.getFounderBonus());
         return out.append("\n").append(
                 i18n.get(Dialog.fight_total, number(strength.getTotal())))
                 .toString();
