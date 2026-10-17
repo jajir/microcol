@@ -567,3 +567,28 @@ documentation in APT just to make it visible on the web.
    The automatic `dev` manifest remained byte-identical at
    [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4).
    This evidence-only follow-up does not change the captured scope.
+
+## Claude batch 1 publication — 2026-10-17
+
+1. The first ten requirements were integrated on `main` as
+   [`333de9b6bf8f`](https://github.com/jajir/microcol/commit/333de9b6bf8f33b3b0fc73b936051d216c9728b0):
+   R-0118, R-0133, R-0132, R-0179, R-0184, R-0147, R-0119, R-0120,
+   R-0136 and R-0090. [Local acceptance](functional-tests.md#claude-batch-1-integrated-acceptance-2026-10-17)
+   records the initial legacy failures and their passing corrections.
+2. [Development run 171](https://github.com/jajir/microcol/actions/runs/39066465318)
+   completed successfully: **2,072 model tests and 320 functional/contract
+   checks**, zero failures/errors/skips. All three native platforms, launcher
+   checks and publication passed.
+   [Documentation](https://github.com/jajir/microcol/actions/runs/39066465226)
+   and [dependency compatibility](https://github.com/jajir/microcol/actions/runs/39066465348)
+   also passed for the same source revision.
+3. The downloaded `dev/manifest.tsv` names **`dev-171-333de9b6bf8f`** and
+   the exact source SHA above. The [immutable release](https://github.com/jajir/microcol/releases/tag/dev-171-333de9b6bf8f)
+   contains nonempty macOS ARM64/Intel and Linux distributions. The existing
+   [macOS Dev launcher](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-macos.zip)
+   selects this build at its next startup. This verification did not launch a
+   native desktop play session; native packaging/smoke evidence belongs to CI.
+4. R-0070 and later second-batch work are excluded from this build. A later
+   documentation-only commit recording this evidence does not replace the game
+   distribution; its Pages deployment and intentionally skipped game jobs are
+   checked separately under the filtering contract.
