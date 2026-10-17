@@ -370,3 +370,20 @@ documentation in APT just to make it visible on the web.
    MkDocs and rendered R-0120 structure/behavior checks. No game implementation
    or gameplay test run is claimed. Pages and docs-only skips are checked after
    publication; this documentation change requests no new game distribution.
+
+## Remaining-scope capture: world and orders — 2026-10-17
+
+1. The user requested capture of the whole remaining documented scope, followed
+   by consolidated open points. The [coverage checkpoint](requirements/coverage.md)
+   explicitly remains incomplete. R-0123–R-0131 capture terrain identity/output,
+   shared movement cost, rivers, resources/depletion, rumors, go-to and disband.
+   All nine remain `new`; no gameplay implementation or readiness is implied.
+2. One reused Sol medium worker drafted bounded batches; main review removed
+   duplicate cancellation scope and credited R-0093's delivered terrain defense.
+   The rule catalogue now distinguishes that correction from its older audit.
+   Existing active requirements only gain dependency links; statuses are retained.
+3. Local checks passed 21 launcher tests without model inference and nine
+   documentation tests. Strict MkDocs and rendered structure/link checks cover
+   this capture. These are documentation checks, not gameplay acceptance.
+   Publication checks Pages and intentional documentation-only game-job skips;
+   this checkpoint requests no new game build.

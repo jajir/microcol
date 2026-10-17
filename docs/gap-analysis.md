@@ -202,6 +202,8 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
 | Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
 
+Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
+
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. Plowed land currently doubles food and changes lumber/fur through generic formulas; the manual supports improvement effects but does not provide a complete numerical improvement matrix.
 
 ### Movement and persistent orders

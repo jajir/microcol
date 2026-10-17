@@ -65,6 +65,16 @@ acceptance and publication checks. Record actual model settings and usage, not
 assumed quota savings. The hourly thread heartbeat is configured; completion
 requires verified delivery of the remaining scope, not merely a progress report.
 
+## Full documented-scope preparation — 2026-10-17
+
+The user authorized continuing the same small-requirement capture process until
+all currently documented scope has an owner, with a final list of open points.
+The [coverage map](coverage.md) records the source boundaries and reconciliation.
+New captures remain `new`; this request does not authorize their gameplay
+implementation or extend the earlier migrated-set implementation run. Preserve
+existing decisions and completed slices. Main owns scope and review; bounded
+preparation uses Sol medium, without local inference.
+
 ## How to read the set
 
 - **Remainder**: an unfinished outcome already owned by an old requirement.
@@ -132,6 +142,15 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0120](R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
+| [R-0123](R-0123.md) | Represent every terrain and legal forest variant | New capture | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
+| [R-0124](R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
+| [R-0125](R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
+| [R-0126](R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
+| [R-0127](R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
+| [R-0128](R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
+| [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
+| [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
+| [R-0131](R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
 
 The five A05/P07 analyses above were captured on **2026-10-17** as preparation
 only. Earlier authorization to implement the migrated R-0051–R-0113 set does
@@ -146,6 +165,21 @@ cross-operation acceptance under R-0119–R-0121 using the already accepted
 hardy-pioneer durations: the existing plow action has its two-update countdown,
 while clearing and road work still need the accepted two- and one-update cases.
 This note allocates no sixth requirement or gameplay implementation.
+
+The additional A05/P04–P06 analyses R-0123–R-0127 were captured on
+**2026-10-17** as preparation only. They do not select or authorize gameplay
+implementation. They divide the terrain identity, baseline yield, common
+movement cost, river and resource-overlay outcomes; MAP-006 depletion and
+remaining map/order gaps retain separate scope. Existing delivered visibility,
+coastal movement and combat slices are preserved at their original IDs.
+
+The next A05 capture on **2026-10-17** adds R-0128–R-0131 as preparation only:
+finite mineral reserves, lost-city rumors, persistent go-to and the player
+Disband command. MOVE-008 has no separate R: sentry activation is delivered by
+R-0073, fortify activation by R-0106, pioneer-work cancellation belongs to
+R-0119–R-0121, go-to cancellation to R-0130 and route cancellation to the
+future route owner. This classification does not assert that whole UC-016 is
+verified or authorize implementation.
 
 ## A06
 
