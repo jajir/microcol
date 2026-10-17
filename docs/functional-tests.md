@@ -4626,3 +4626,63 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    25 changed Java files, including exact code-token preservation and
    idempotence. Packaging/Javadoc, nine documentation tests and strict MkDocs
    passed. Full CI/publication remain independently pending.
+
+### R-0104 Magellan integration — 2026-10-17
+
+1. Inspection at `3fe0c884` found Congress membership and ordinary bounded
+   Atlantic durations, but no runtime Magellan bonus. The refined R-0104
+   integration applies the accepted +1 ship movement and west-edge-to-Europe
+   rounding-up half duration; it preserves R-0071's archived ordinary evidence.
+2. Main authored TC71/F63 for actual Congress arrival, higher movement,
+   save/Continue with spent movement, an unchanged existing four-turn voyage,
+   actual western departure and visible remaining duration, and an ordinary
+   return crossing with cargo. TC23/TC28 and TC44 remain regressions. These
+   scenarios are planned acceptance, not passing results yet. Sol low owns
+   model code/tests; main independently verifies model, GUI paths and packaging.
+
+3. The first independent full model run executed **1,823 tests with 33 errors,
+   zero assertion failures and zero skips**. The new global movement-limit
+   load guard rejected existing synthetic land-unit fixtures (31 cases) and
+   two ship-roster fixtures that changed type without resetting movement.
+   Main returned this to Sol low: keep the new validation scoped to ships,
+   preserve existing land loading behavior, and give the two roster fixtures
+   valid per-type movement while retaining all cargo/departure checks. A full
+   rerun and final Docker acceptance remain required.
+
+4. Sol low corrected the scope of the load guard and the two roster fixtures.
+   Its 50 targeted regressions and full model suite passed; independent main
+   `package` verification also passed **1,823 model tests in 180 suites** and
+   Javadoc/packaging. Initial Docker `run-gEx4Wx` passed TC44 (4), TC28 (2),
+   TC23 (2) and the page contract (3). TC71 passed founder/movement/saved-voyage
+   and western-duration checks, then timed out dragging the ship home.
+   Inspection found `AtlanticAuditPage` selected `TitledPanel`'s first empty
+   `HBox`, rather than the sibling containing the actual drop handler. Main
+   corrected the shared selector to that drop target; existing journeys and
+   their cargo/timing assertions remain unchanged. A final regression rerun is
+   required before integration.
+
+5. Diagnostic rerun `run-I3Y0rL` reproduced the return-drag timeout. Main viewed
+   the exported scene: the existing inbound voyage's Reverse course control
+   also overlapped the outbound area's title. The outbound region moves down
+   40 pixels within the existing Europe layout; TC71 now checks that the two
+   regions do not intersect before using the corrected real drop target.
+   Temporary diagnostic captures were removed from the final scenario.
+
+6. During this integration, R-0107's complete CI (`38984101141`) finished with
+   284 UI/support tests and four TC29 failures. Sol low's read-only diagnosis
+   found the first failed load in TC29/05: its fixture converts a colonist to
+   a galleon but retained colonist-only `workUpdates`. The load rejection
+   caused the following three hidden-status-bar failures. Main removes
+   `workUpdates` and `workSkill` only from that converted ship; all boarding,
+   ownership and equipment checks remain. TC29's six scenarios join the final
+   Docker selection to verify both the root correction and the apparent cascade.
+
+7. Final Docker `run-7wH6Lo` passed **18 tests, zero failures/errors/skips**:
+   TC71 (1), TC23 (2), TC28 (2), TC29 (6), TC44 (4) and the page contract (3).
+   Main checked exported XML and viewed the Magellan scene: the outbound title
+   is visible below incoming voyage controls. The final run proves the actual
+   drag, non-overlapping regions and all passenger regressions. Model/package
+   verification passed 1,823 tests in 180 suites; final resource packaging,
+   Javadoc, shared formatting of 13 changed Java files, nine documentation tests
+   and strict MkDocs passed. Complete CI/publication remain pending; the earlier
+   R-0107 failed build was not published.

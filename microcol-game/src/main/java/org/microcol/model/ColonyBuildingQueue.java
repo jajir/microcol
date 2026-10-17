@@ -508,7 +508,8 @@ public class ColonyBuildingQueue {
                 unit, colony.getLocation(), unit.getDefaultOrintation());
 
         model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder,
-                unitType, colony.getOwner(), unitType.getSpeed(),
+                unitType, colony.getOwner(),
+                colony.getOwner().getEffectiveSpeed(unitType),
                 new UnitActionNoAction());
     }
 

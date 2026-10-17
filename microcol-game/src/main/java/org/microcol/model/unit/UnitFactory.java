@@ -212,6 +212,10 @@ public class UnitFactory {
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
         Preconditions.checkArgument(
+                !unit.isShip() || unit.getActionPoints() >= 0
+                        && unit.getActionPoints() <= unit.getSpeed(),
+                "Invalid saved unit movement allowance");
+        Preconditions.checkArgument(
                 !unitPo.isVeteran() || unit instanceof UnitFreeColonist,
                 "Only colonists can be veterans");
         Preconditions.checkArgument(

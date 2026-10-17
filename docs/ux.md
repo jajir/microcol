@@ -649,3 +649,11 @@ uložení a návrat do nabídky zůstávají dostupné. Po poslední volbě hra 
 tah a ohlásí skutečné příchody. Jde o implementované zamýšlené chování,
 nikoli uživatelskou studii; přejímku vede
 [testová evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17).
+
+### Současně přijíždějící a odjíždějící lodě
+
+Při ověřování Magellana (2026-10-17) snímek Evropy ukázal překrytí nadpisu
+odjezdu tlačítkem obrácení přijíždějící lodi. Oblast odjezdu je posunutá níž,
+aby zůstal čitelný směr i dostupný cíl přetažení. TC71 kontroluje oddělení
+oblastí i skutečný odjezd; jde o technické ověření cesty, nikoli uživatelskou
+studii. Výsledky vede [evidence](functional-tests.md#r-0104-magellan-integration-2026-10-17).

@@ -21,4 +21,14 @@ final class AtlanticVoyageDuration {
         return Math.max(1,
                 Math.min(4, 2 + weather + westward + westernEdge - fast));
     }
+
+    static int calculate(final int weather, final boolean toEurope,
+            final Direction departureDirection, final int baseSpeed,
+            final boolean magellan) {
+        final int ordinary = calculate(weather, toEurope, departureDirection,
+                baseSpeed);
+        return magellan && toEurope && departureDirection == Direction.west
+                ? Math.max(1, (ordinary + 1) / 2)
+                : ordinary;
+    }
 }

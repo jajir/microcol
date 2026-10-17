@@ -228,6 +228,8 @@ public class TC_29_F21_passenger_transfer_test extends AbstractMicroColTest {
                 unit.add("placeMap", place);
             } else if (id == 1000) {
                 unit.addProperty("type", "GALLEON");
+                unit.remove("workUpdates");
+                unit.remove("workSkill");
                 unit.addProperty("holdingGuns", false);
                 unit.getAsJsonObject("placeMap").getAsJsonObject("location")
                         .addProperty("x", WATER.getX());

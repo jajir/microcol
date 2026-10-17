@@ -41,15 +41,18 @@
  * bell account and durable membership; colony production credits it once per
  * update. Founder effects remain in their respective rule owners, with Jones's
  * one-time frigate delivered at the existing Europe or reachable coastal-port
- * boundary. PlaceHighSea retains sampled weather, original route and position
- * across saves. Model validates reversal offers against live ownership and
- * voyage revision before changing destination. Model serializes turn
- * transitions and snapshots; incomplete preparation rejects player commands and
- * snapshots, including after failure. A deliberate Brewster choice boundary
- * permits snapshots while gameplay remains blocked; choosing the last earned
- * immigrant resumes the remaining preparation exactly once. Unit work completes
- * internally, independently of commands submitted at an action boundary. Normal
- * unit cycling excludes continuing work; Skip turn validates current registered
+ * boundary. Magellan membership raises effective ship movement through the
+ * shared unit allowance; new western departures halve their sampled ordinary
+ * duration, while saved voyages retain their original timing. PlaceHighSea
+ * retains sampled weather, original route and position across saves. Model
+ * validates reversal offers against live ownership and voyage revision before
+ * changing destination. Model serializes turn transitions and snapshots;
+ * incomplete preparation rejects player commands and snapshots, including after
+ * failure. A deliberate Brewster choice boundary permits snapshots while
+ * gameplay remains blocked; choosing the last earned immigrant resumes the
+ * remaining preparation exactly once. Unit work completes internally,
+ * independently of commands submitted at an action boundary. Normal unit
+ * cycling excludes continuing work; Skip turn validates current registered
  * identities and spends movement through the existing no-action operation.
  * Saved movement and ordinary owner-turn restoration need no standing order.
  *

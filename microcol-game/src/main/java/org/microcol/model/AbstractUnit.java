@@ -148,7 +148,7 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public int getSpeed() {
-        return getType().getSpeed();
+        return owner.getEffectiveSpeed(getType());
     }
 
     /**
@@ -1141,7 +1141,8 @@ public abstract class AbstractUnit implements Unit {
             final Direction direction) {
         final int weather = random.nextInt(3) - 1;
         final int duration = AtlanticVoyageDuration.calculate(weather, toEurope,
-                direction, getType().getSpeed());
+                direction, getType().getSpeed(), getOwner().getCongressMembers()
+                        .contains(Founder.FERDINAND_MAGELLAN));
         return new PlaceHighSea(this, toEurope, weather, duration, duration);
     }
 

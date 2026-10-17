@@ -192,8 +192,13 @@ počasí až po ověření odjezdu; královský transport používá stejný vý
 `PlaceHighSeasPo` tyto hodnoty ukládá a `PlaceBuilderPo` odmítá neúplná nebo
 nekonzistentní data. Načtení nelosuje znovu. Počet zbývajících tahů dál
 zobrazuje existující evropská obrazovka; změna nevytváří druhý GUI výpočet.
-[R-0071](requirements/done/R-0071.md) sleduje ověření; obrácení plavby a Magellan
-mají vlastní navazující požadavky.
+[R-0071](requirements/done/R-0071.md) uchovává ověření běžného výpočtu.
+Navazující Magellanův účinek používá skutečné členství v Kongresu: efektivní
+mapový příděl lodí získá +1, ale běžná délka stále používá základní rychlost.
+Pouze nový odjezd ze západního okraje do Evropy půlí vypočtenou délku nahoru.
+Již probíhající plavba si zachová původní délku i po příchodu otce; načítání
+musí přijmout takovou dřívější běžnou délku. Stav nové přejímky vede
+[evidence integrace](functional-tests.md#r-0104-magellan-integration-2026-10-17).
 
 ### Obrácení plavby (R-0072)
 

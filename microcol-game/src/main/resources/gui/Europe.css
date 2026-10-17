@@ -28,7 +28,7 @@
 	-fx-max-width: 600;
 	-fx-max-height: 40;
 	-fx-translate-x: -150;
-	-fx-translate-y: -40;	
+	-fx-translate-y: 0;
 }
 
 .panel-dock {

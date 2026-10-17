@@ -713,7 +713,7 @@ public class Model {
                     } else {
                         return new PlaceEuropePier(unit);
                     }
-                }, unitType, owner, unitType.getSpeed(),
+                }, unitType, owner, owner.getEffectiveSpeed(unitType),
                 new UnitActionNoAction());
     }
 
@@ -766,7 +766,8 @@ public class Model {
                         this,
                         created -> new PlaceLocation(created, location,
                                 created.getDefaultOrintation()),
-                        UnitType.FRIGATE, owner, UnitType.FRIGATE.getSpeed(),
+                        UnitType.FRIGATE, owner,
+                        owner.getEffectiveSpeed(UnitType.FRIGATE),
                         new UnitActionNoAction());
         owner.revealMapForUnit(unit);
         return Optional.of(unit);

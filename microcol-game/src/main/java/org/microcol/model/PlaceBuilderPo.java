@@ -59,12 +59,22 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                     Preconditions.checkArgument(
                             voyage.getRemainigTurns() == remaining,
                             "Saved voyage remaining time disagrees with position");
-                    Preconditions.checkArgument(
-                            voyage.getOriginalTurns() == AtlanticVoyageDuration
-                                    .calculate(voyage.getWeather(),
-                                            voyage.isOriginalToEurope(),
-                                            unitPo.getDepartureDirection(),
-                                            unitPo.getType().getSpeed()),
+                    final int ordinary = AtlanticVoyageDuration.calculate(
+                            voyage.getWeather(), voyage.isOriginalToEurope(),
+                            unitPo.getDepartureDirection(),
+                            unitPo.getType().getSpeed());
+                    final boolean magellan = unit.getOwner()
+                            .getCongressMembers()
+                            .contains(Founder.FERDINAND_MAGELLAN);
+                    Preconditions.checkArgument(voyage
+                            .getOriginalTurns() == ordinary
+                            || magellan && voyage
+                                    .getOriginalTurns() == AtlanticVoyageDuration
+                                            .calculate(voyage.getWeather(),
+                                                    voyage.isOriginalToEurope(),
+                                                    unitPo.getDepartureDirection(),
+                                                    unitPo.getType().getSpeed(),
+                                                    true),
                             "Saved voyage duration disagrees with its factors");
                     return new PlaceHighSea(unit, voyage.isOriginalToEurope(),
                             voyage.isTravelToEurope(), voyage.getWeather(),

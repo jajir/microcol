@@ -73,6 +73,7 @@ class ShipRosterTest {
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
             ship.setType(type);
+            ship.setAvailableMoves(type.getSpeed());
             ship.getPlaceHighSeas().setWeather(type.getSpeed() >= 6 ? 1 : 0);
             saved.getUnits().removeIf(unit -> unit.getId() == 15
                     || unit.getId() == 14 || unit.getId() == 13);
@@ -152,6 +153,7 @@ class ShipRosterTest {
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
             ship.setType(type);
+            ship.setAvailableMoves(type.getSpeed());
             ship.getPlaceHighSeas().setWeather(type.getSpeed() >= 6 ? 1 : 0);
             saved.getUnits()
                     .removeIf(unit -> unit.getId() == 16 || unit.getId() == 15

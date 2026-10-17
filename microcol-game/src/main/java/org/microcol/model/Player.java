@@ -309,6 +309,12 @@ public abstract class Player {
         return congress == null ? List.of() : congress.members();
     }
 
+    int getEffectiveSpeed(final UnitType type) {
+        return type.getSpeed() + (type.isShip()
+                && getCongressMembers().contains(Founder.FERDINAND_MAGELLAN) ? 1
+                        : 0);
+    }
+
     public int getCongressBells() {
         return congress == null ? 0 : congress.bells();
     }

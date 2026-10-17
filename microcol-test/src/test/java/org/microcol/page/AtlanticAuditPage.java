@@ -45,14 +45,32 @@ public final class AtlanticAuditPage extends AbstractScreen {
         assertEquals(westernEdge ? Direction.west : Direction.east,
                 ((org.microcol.model.unit.Ship) ship).getDepartureDirection()
                         .orElseThrow());
-        final int expected = Math.max(1,
+        final int ordinary = Math.max(1,
                 Math.min(4,
                         2 + weather + (toEurope ? 0 : 1)
                                 + (toEurope && westernEdge ? 1 : 0)
                                 - (ship.getType().getSpeed() >= 6 ? 1 : 0)));
+        final int expected = toEurope && westernEdge
+                && ship.getOwner().getCongressMembers()
+                        .contains(Founder.FERDINAND_MAGELLAN)
+                                ? (ordinary + 1) / 2
+                                : ordinary;
         assertEquals(expected, voyage.getOriginalTurns());
         assertEquals(expected, voyage.getRemainigTurns());
         return expected;
+    }
+
+    public void verifyMagellanArrival(final int existingRemaining) {
+        final Player owner = getModel().getPlayerByName("Dutch");
+        assertTrue(owner.getCongressMembers()
+                .contains(Founder.FERDINAND_MAGELLAN));
+        assertEquals(UnitType.GALLEON.getSpeed() + 1,
+                getModel().getUnitById(3).getSpeed());
+        final PlaceHighSea existing = (PlaceHighSea) getModel()
+                .getUnitById(1001).getPlace();
+        assertEquals(4, existing.getOriginalTurns());
+        assertEquals(existingRemaining, existing.getRemainigTurns());
+        assertEquals(1, existing.getWeather());
     }
 
     public void verifyVoyageMetadata(final int weather, final int originalTurns,
@@ -119,6 +137,17 @@ public final class AtlanticAuditPage extends AbstractScreen {
                 "The visible voyage reason must not be truncated");
     }
 
+    public void verifyVoyagePanelsSeparated() {
+        final Parent inbound = getNodeFinder().lookup(".to-europe")
+                .queryAs(Parent.class);
+        final Parent outbound = getNodeFinder().lookup(".to-new-world")
+                .queryAs(Parent.class);
+        final var incoming = inbound.localToScene(inbound.getBoundsInLocal());
+        final var outgoing = outbound.localToScene(outbound.getBoundsInLocal());
+        assertTrue(incoming.getMaxY() <= outgoing.getMinY(),
+                "Incoming voyage controls must not cover the departure area");
+    }
+
     public void sendShipBack() throws Exception {
         attemptSendShipBack();
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
@@ -130,7 +159,9 @@ public final class AtlanticAuditPage extends AbstractScreen {
         final Parent panel = getNodeFinder().lookup(".to-new-world")
                 .queryAs(Parent.class);
         final HBox target = (HBox) panel.getChildrenUnmodifiable().stream()
-                .filter(node -> node instanceof HBox).findFirst().get();
+                .filter(node -> node instanceof HBox
+                        && node.getOnDragDropped() != null)
+                .findFirst().orElseThrow();
         getRobot().drag(
                 PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
                 MouseButton.PRIMARY).dropTo(target);
