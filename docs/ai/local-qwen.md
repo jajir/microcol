@@ -3875,3 +3875,34 @@ committed for this experiment.
     All nine original full-run failures have passing reruns. Production code
     was unchanged during those legacy corrections. Complete requirement
     archival/link checks and publish on main; CI/publication remain pending.
+
+45. Batch one was integrated and pushed as `333de9b6` on 2026-10-17.
+    Publication remains pending. Batch two starts R-0070 with Sonnet high: its
+    model-owned observation snapshots, persistence and GUI disclosure boundaries
+    justify the higher effort directly. The worker uses the same bounded tool
+    contract and cannot run tests or publish. No Opus is requested.
+
+46. First-ten provisional model totals (final cumulative session usage counted
+    once): Haiku handled three requirements in seven attempts / 1,408 worker
+    seconds; Sonnet handled seven in 18 attempts / 3,914 seconds. CLI list-price
+    estimates were $1.271 and $17.426 respectively, **not Pro charges or measured
+    quota savings**. Task difficulty differs, so these are not controlled model
+    benchmarks. R-0119/R-0136 legacy fixture corrections and R-0090 fixture
+    repairs required caller takeover after repair budgets were exhausted. The
+    caller's review/test effort is not included in worker time or price.
+
+47. R-0070 Sonnet high attempt 1 completed in 894.143 seconds. Compilation
+    and 130 selected model checks passed; TC26 passed six of seven scenarios
+    and all three source-contract checks passed. TC26_07 timed out moving the
+    player after a synthetic foreign-step start without the matching completion
+    lifecycle. Review also found missing colony-only terrain exploration and
+    foreign-fight disclosure when only one participant is in sight. Targeted
+    repair 1 uses Sonnet medium in the same session and budget, with tests for
+    both boundaries; no acceptance is claimed for the failed attempt.
+
+48. R-0070 repair 1 completed on Sonnet medium in 111.509 seconds, same
+    session. The worker balanced diagnostic movement events, explored owned
+    colony surroundings and required both foreign fighters in sight. Docker
+    `run-9WkN2C` passes all 142 selected checks; see
+    [acceptance](../functional-tests.md#r-0070-current-sight-2026-10-17).
+    No caller implementation takeover or Opus was needed.

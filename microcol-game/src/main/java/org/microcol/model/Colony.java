@@ -609,8 +609,13 @@ public class Colony {
                     .add(TurnEventProvider.getColonyWasLost(owner, this));
         }
 
+        final Player previousOwner = owner;
         owner = player;
         grantLaSalleStockade();
+        // The former owner is told about the loss, so it remembers the new
+        // owner even though it no longer sees the colony.
+        previousOwner.recordColony(this);
+        model.refreshObservations();
         model.fireColonyWasCaptured(model, capturingUnit, this);
     }
 

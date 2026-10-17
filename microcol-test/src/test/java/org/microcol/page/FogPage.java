@@ -2,15 +2,22 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
+import org.microcol.gui.event.model.ForeignStepProbe;
 import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport;
+import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
+import org.microcol.model.Player;
+import org.microcol.model.Unit;
+import org.microcol.model.event.UnitAttackedEvent;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.geometry.Point2D;
@@ -23,7 +30,10 @@ import javafx.scene.input.MouseButton;
 /** Inspect exploration through the actual map and its information controls. */
 public final class FogPage extends AbstractScreen {
     private Location previewOrigin;
+    private Integer rememberedActionPoints;
+    private String rememberedObservation;
     private final org.microcol.gui.screen.game.gamepanel.FogFrameProbe probe = new org.microcol.gui.screen.game.gamepanel.FogFrameProbe();
+    private final ForeignStepProbe stepProbe = new ForeignStepProbe();
 
     public FogPage(final TestContext context) {
         super(context);
@@ -88,6 +98,161 @@ public final class FogPage extends AbstractScreen {
             final boolean expected) {
         assertEquals(expected,
                 getModel().getPlayerByName("Dutch").isVisible(location));
+    }
+
+    /** Teleport a unit through the model, as the owner's own turn would. */
+    public void placeUnit(final int unitId, final Location location) {
+        getRobot().interact(
+                () -> getModel().getUnitById(unitId).placeToLocation(location));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** The royal force takes a colony while the player cannot see it. */
+    public void captureColonyByKing(final Location colony,
+            final int forceUnitId) {
+        getRobot().interact(() -> {
+            final Unit force = getModel().getUnitById(forceUnitId);
+            force.placeToLocation(colony);
+            force.takeOver(getModel().getPlayerByName("Dutch's King"));
+            getModel().getColonyAt(colony).orElseThrow().captureColony(force);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Erase the player's accumulated exploration to start from nothing. */
+    public void forgetExploration() {
+        getRobot().interact(() -> {
+            try {
+                final java.lang.reflect.Field owned = Player.class
+                        .getDeclaredField("visibility");
+                owned.setAccessible(true);
+                final Object visibility = owned
+                        .get(getModel().getPlayerByName("Dutch"));
+                final java.lang.reflect.Field explored = visibility.getClass()
+                        .getDeclaredField("visible");
+                explored.setAccessible(true);
+                ((java.util.Set<?>) explored.get(visibility)).clear();
+            } catch (final ReflectiveOperationException failure) {
+                throw new IllegalStateException(failure);
+            }
+        });
+    }
+
+    /** Let the model observe from a unit, as after any completed move. */
+    public void observeFromUnit(final int unitId) {
+        getRobot().interact(() -> {
+            final Unit unit = getModel().getUnitById(unitId);
+            unit.getOwner().revealMapForUnit(unit);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void rememberActionPoints(final int unitId) {
+        rememberedActionPoints = getModel().getUnitById(unitId)
+                .getActionPoints();
+    }
+
+    public void rememberColonyObservation(final Location location) {
+        rememberedObservation = describeKnownColony(location);
+    }
+
+    public void listenForForeignSteps() {
+        stepProbe.listen(getContext());
+    }
+
+    public void announceForeignStep(final int unitId, final Location from,
+            final Location to) {
+        stepProbe.announce(getContext(), getModel().getUnitById(unitId), from,
+                to);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void announceForeignFight(final int attackerId,
+            final int defenderId) {
+        final Unit defender = getModel().getUnitById(defenderId);
+        stepProbe.announceFight(new UnitAttackedEvent(getModel(),
+                getModel().getUnitById(attackerId), defender, defender, false));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyForeignFights(final int expectedFights) {
+        assertEquals(expectedFights, stepProbe.getFights());
+    }
+
+    private String describeKnownColony(final Location location) {
+        return getModel().getPlayerByName("Dutch").getKnownColonyAt(location)
+                .map(known -> known.getColonyName() + "|"
+                        + known.getOwner().getName() + "|"
+                        + known.getObservedTurn() + "|"
+                        + known.getObservedYear())
+                .orElse("none");
+    }
+
+    public void verifyCurrentSight(final Location location,
+            final boolean expected) {
+        assertEquals(expected, getModel().getPlayerByName("Dutch")
+                .isCurrentlyVisible(location));
+    }
+
+    public void verifyObservedUnits(final Location location,
+            final int expected) {
+        assertEquals(expected, getModel().getPlayerByName("Dutch")
+                .getObservedUnitsAt(location).size());
+    }
+
+    public void verifyKnownColony(final Location location,
+            final String expectedName, final String expectedOwner,
+            final boolean expectedCurrent) {
+        final Player dutch = getModel().getPlayerByName("Dutch");
+        final Optional<ColonySighting> known = dutch.getKnownColonyAt(location);
+        assertTrue(known.isPresent(), "Known colony at " + location);
+        assertEquals(expectedName, known.get().getColonyName());
+        assertEquals(expectedOwner, known.get().getOwner().getName());
+        assertEquals(expectedCurrent, dutch.isCurrentlyVisible(location));
+    }
+
+    public void verifyNoKnownColony(final Location location) {
+        assertTrue(getModel().getPlayerByName("Dutch")
+                .getKnownColonyAt(location).isEmpty(),
+                "No colony should be known at " + location);
+    }
+
+    public void verifyColonyObservationUnchanged(final Location location) {
+        assertEquals(rememberedObservation, describeKnownColony(location));
+    }
+
+    public void verifyColonyObservationRefreshed(final Location location,
+            final String expectedOwner) {
+        final String actual = describeKnownColony(location);
+        assertNotEquals(rememberedObservation, actual);
+        assertEquals(expectedOwner, actual.split("\\|")[1]);
+    }
+
+    public void verifyAttackRefused(final int unitId, final Location target) {
+        final Unit unit = getModel().getUnitById(unitId);
+        assertFalse(unit.isPossibleToAttackAt(target));
+        assertTrue(unit.prepareAttack(target, true).isEmpty());
+        assertEquals(rememberedActionPoints.intValue(), unit.getActionPoints());
+    }
+
+    public void verifyStatusBarOmits(final String hiddenText) {
+        final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
+        assertFalse(label.getText().contains(hiddenText),
+                () -> "Status bar discloses '" + hiddenText + "': "
+                        + label.getText());
+    }
+
+    public void verifyRightPanelContains(final String expectedText) {
+        assertTrue(getNodeFinder().lookup("#rightPanel").lookup(
+                (java.util.function.Predicate<javafx.scene.Node>) node -> node instanceof Labeled
+                        && ((Labeled) node).getText().contains(expectedText))
+                .tryQuery().isPresent(), expectedText);
+    }
+
+    public void verifyForeignSteps(final int expectedEvents,
+            final int expectedAnimations) {
+        assertEquals(expectedEvents, stepProbe.getStepEvents());
+        assertEquals(expectedAnimations, stepProbe.getAnimations());
     }
 
     public void verifyUnknownInformation(final String expectedText,

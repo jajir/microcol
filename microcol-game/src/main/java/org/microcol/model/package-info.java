@@ -34,6 +34,10 @@
  * for every owner's on-map units, including rivals. Unit sight is independent
  * of movement points, follows current type and equipment, and clips to map
  * boundaries. Visibility retains explored terrain after movement or role loss.
+ * Player owns present sight and immutable last-observed colony snapshots;
+ * observation updates follow model changes, while GUI knowledge queries are
+ * read-only. Owned colonies explore their radius-one surroundings. Foreign
+ * object disclosure and attack targets use present sight, not exploration.
  * GameManager orders registered nation identities and associated Crowns. Player
  * prepares voyages/immigration, colonies and then unit work; individual rule
  * owners retain their own accounting. AtlanticVoyageDuration owns the ordinary

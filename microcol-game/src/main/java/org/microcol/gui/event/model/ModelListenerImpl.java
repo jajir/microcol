@@ -122,7 +122,9 @@ final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onUnitAttacked(final UnitAttackedEvent event) {
-        eventBus.post(event);
+        if (event.canPlayerSeeAttack(gameModelController.getHumanPlayer())) {
+            eventBus.post(event);
+        }
     }
 
     @Override

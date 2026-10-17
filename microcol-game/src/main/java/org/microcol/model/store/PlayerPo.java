@@ -1,6 +1,8 @@
 package org.microcol.model.store;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class PlayerPo {
@@ -24,6 +26,20 @@ public final class PlayerPo {
     private RecruitmentPo recruitment;
 
     private CongressPo congress;
+
+    private List<ColonySightingPo> colonySightings = new ArrayList<>();
+
+    /**
+     * @return colonies this player remembers from actual observation
+     */
+    public List<ColonySightingPo> getColonySightings() {
+        return colonySightings;
+    }
+
+    public void setColonySightings(
+            final List<ColonySightingPo> colonySightings) {
+        this.colonySightings = colonySightings;
+    }
 
     public CongressPo getCongress() {
         return congress;

@@ -56,12 +56,17 @@ public class StatusBarMessageService {
             buff.append("] - ");
         }
         if (player.isVisible(where)) {
+            // Terrain is remembered; units and colonies are shown only while
+            // the tile is in present sight, otherwise a stale colony note.
+            final boolean current = player.isCurrentlyVisible(where);
             buff.append(i18n.get(Loc.statusBar_tile_start));
             buff.append(localizationHelper.getTerrainName(terrain));
 
             final List<SbPart> parts = new ArrayList<>();
-            addPartColony(parts, oColony);
-            addPartUnits(parts, units);
+            if (current) {
+                addPartColony(parts, oColony);
+                addPartUnits(parts, units);
+            }
 
             if (!parts.isEmpty()) {
                 buff.append(" ");
@@ -82,6 +87,14 @@ public class StatusBarMessageService {
                 }
             }
             buff.append(".");
+            if (!current) {
+                player.getKnownColonyAt(where)
+                        .ifPresent(sighting -> buff.append(" ")
+                                .append(i18n.get(Loc.colonyLastSeen,
+                                        sighting.getColonyName(),
+                                        sighting.getOwner().getDisplayName(),
+                                        sighting.getObservedYear())));
+            }
         } else {
             buff.append(i18n.get(Loc.statusBar_tile_notExplored));
         }

@@ -10,6 +10,9 @@
  * require an explicit complete pair set, excluding Crown players. The game
  * manager also persists whether a game-over result has been reached.
  *
+ * ColonySightingPo stores last-observed colony identity, owner and turn; hidden
+ * observations restore without consulting the live colony.
+ *
  * Sentry is serialized as an explicit action and restored without replaying
  * boarding.
  *

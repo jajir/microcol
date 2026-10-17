@@ -79,8 +79,10 @@ public final class UnitMovedStepStartedEvent extends AbstractModelEvent {
     }
 
     /**
-     * Return <code>true</code> when player can see move. Player can see move
-     * when start location or end location is in explored part of world.
+     * Return <code>true</code> when player can see move. Player sees the whole
+     * step only when start and end locations are both in the player's present
+     * sight; explored but unobserved terrain shows no foreign movement, and a
+     * unit leaving or entering sight simply disappears or appears.
      *
      * @param player required player
      * @return return <code>true</code> when user can see move otherwise return
@@ -88,7 +90,8 @@ public final class UnitMovedStepStartedEvent extends AbstractModelEvent {
      */
     public boolean canPlayerSeeMove(final Player player) {
         Preconditions.checkNotNull(player);
-        return player.isVisible(start) || player.isVisible(end);
+        return player.isCurrentlyVisible(start)
+                && player.isCurrentlyVisible(end);
     }
 
     /**

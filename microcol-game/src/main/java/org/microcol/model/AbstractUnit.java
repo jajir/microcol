@@ -580,6 +580,7 @@ public abstract class AbstractUnit implements Unit {
                 || !model.getMap().isValid(targetLocation)
                 || !getLocation().isNeighbor(targetLocation)
                 || !owner.isVisible(targetLocation)
+                || !owner.isCurrentlyVisible(targetLocation)
                 || !getType().canMoveAtTerrain(
                         model.getMap().getTerrainTypeAt(targetLocation))) {
             return Optional.empty();

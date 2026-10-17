@@ -775,3 +775,11 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
     TC34_08/09 ověřují deset tahů po založení, skutečné zásoby a Continue.
     Model chrání cizí obsazení a ukončení tahu při nedostatku; AI zásoby nevytváří.
     Nejde o úplnou ekonomickou ani vojenskou strategii. Regrese dávky ještě čeká.
+
+### UC-006: současný dohled — 2026-10-17
+
+1. R-0070 zachovává prozkoumaný terén, skrývá cizí jednotky mimo současný
+   dohled a ukládá poslední pozorování kolonie. TC26_04–07 ověřují odchod,
+   návrat, zastaralé údaje, Continue, dohled vlastní kolonie a skryté animace.
+   [Cílená evidence](functional-tests.md#r-0070-current-sight-2026-10-17)
+   uvádí 142 úspěšných kontrol; úplná regrese druhé dávky teprve následuje.

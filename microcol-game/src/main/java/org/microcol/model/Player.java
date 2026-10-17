@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.ColonySightingPo;
 import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.RecruitmentPo;
 import org.microcol.model.store.VisibilityPo;
@@ -45,6 +46,12 @@ public abstract class Player {
     private final Congress congress;
 
     private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
+
+    /**
+     * Colonies remembered from actual observation, by location. Concurrent
+     * because the interface paints while the model thread observes.
+     */
+    private final Map<Location, ColonySighting> colonySightings = new java.util.concurrent.ConcurrentHashMap<>();
 
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
@@ -116,9 +123,135 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Accumulated exploration of terrain. It stays true after the player's
+     * units leave; use {@link #isCurrentlyVisible(Location)} for foreign units
+     * and colonies.
+     *
+     * @param location required location
+     * @return whether the player has ever seen the terrain at the location
+     */
     public boolean isVisible(final Location location) {
         model.isValid(location);
         return visibility.isVisible(location);
+    }
+
+    /**
+     * Present sight: the effective sight of every own unit on the map and the
+     * owned colony tile with its eight neighbors, even when all residents are
+     * inside. It is computed from live ownership and positions, so losing a
+     * unit or colony removes its sight immediately.
+     *
+     * @param location required location
+     * @return whether the player observes the location right now
+     */
+    public boolean isCurrentlyVisible(final Location location) {
+        Preconditions.checkNotNull(location);
+        if (!model.isValid(location)) {
+            return false;
+        }
+        return model.getAllUnits().stream()
+                .anyMatch(unit -> unit.getOwner().equals(this)
+                        && unit.isAtPlaceLocation()
+                        && unit.getVisibleLocations().contains(location))
+                || model.getColonies(this).stream().anyMatch(colony -> colony
+                        .getLocation().getDistanceChebyshev(location) <= 1);
+    }
+
+    /**
+     * @param location required location
+     * @return units at the location when it is in present sight, otherwise
+     *         empty list
+     */
+    public List<Unit> getObservedUnitsAt(final Location location) {
+        return isCurrentlyVisible(location) ? model.getUnitsAt(location)
+                : List.of();
+    }
+
+    /**
+     * Colony known at the location: the live colony inside present sight,
+     * otherwise the remembered snapshot of the last observation.
+     *
+     * @param location required location
+     * @return known colony or empty when none was ever observed there
+     */
+    public Optional<ColonySighting> getKnownColonyAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        if (isCurrentlyVisible(location)) {
+            return model.getColonyAt(location).map(this::sightingOf);
+        }
+        return Optional.ofNullable(colonySightings.get(location));
+    }
+
+    /**
+     * @return every colony known to the player: live inside present sight and
+     *         remembered snapshots outside it
+     */
+    public List<ColonySighting> getKnownColonies() {
+        final Map<Location, ColonySighting> known = new HashMap<>();
+        colonySightings.forEach((location, sighting) -> {
+            if (!isCurrentlyVisible(location)) {
+                known.put(location, sighting);
+            }
+        });
+        model.getColonies().stream()
+                .filter(colony -> isCurrentlyVisible(colony.getLocation()))
+                .forEach(colony -> known.put(colony.getLocation(),
+                        sightingOf(colony)));
+        return List.copyOf(known.values());
+    }
+
+    private ColonySighting sightingOf(final Colony colony) {
+        return ColonySighting.of(colony, model.getCalendar());
+    }
+
+    /**
+     * Record colonies inside present sight and forget remembered ones that are
+     * observed to be gone. Colonies outside present sight are untouched.
+     */
+    void observeColonies() {
+        for (final Colony colony : model.getColonies()) {
+            if (colony.getOwner().equals(this)) {
+                // Own colonies are always live; nothing stale to remember.
+                colonySightings.remove(colony.getLocation());
+                // Colony sight is explored terrain too, and stays so after
+                // the colony is lost.
+                final List<Location> around = new java.util.ArrayList<>(
+                        colony.getLocation().getNeighbors());
+                around.add(colony.getLocation());
+                visibility.reveal(around.stream().filter(model::isValid)
+                        .collect(java.util.stream.Collectors.toList()));
+            } else if (isCurrentlyVisible(colony.getLocation())) {
+                colonySightings.put(colony.getLocation(), sightingOf(colony));
+            }
+        }
+        colonySightings.keySet()
+                .removeIf(location -> isCurrentlyVisible(location)
+                        && model.getColonyAt(location).isEmpty());
+    }
+
+    /** Remember a colony the player was directly told about. */
+    void recordColony(final Colony colony) {
+        colonySightings.put(colony.getLocation(), sightingOf(colony));
+    }
+
+    /** Forget a colony the player was directly told is gone. */
+    void forgetColony(final Location location) {
+        colonySightings.remove(location);
+    }
+
+    void restoreColonyKnowledge(final List<ColonySightingPo> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Missing remembered colonies");
+        colonySightings.clear();
+        for (final ColonySightingPo po : saved) {
+            final ColonySighting sighting = ColonySighting.restore(po, model);
+            Preconditions
+                    .checkArgument(
+                            colonySightings.put(sighting.getLocation(),
+                                    sighting) == null,
+                            "Duplicate remembered colony");
+        }
     }
 
     /**
@@ -131,6 +264,7 @@ public abstract class Player {
         Preconditions.checkState(unit.getOwner().equals(this),
                 "Unit's owher '%s' is to same as '%s'", unit.getOwner(), this);
         visibility.makeVisibleMapForUnit(unit);
+        observeColonies();
     }
 
     public PlayerPo save() {
@@ -151,6 +285,12 @@ public abstract class Player {
         unitPurchaseCounts
                 .forEach((type, count) -> counts.put(type.name(), count));
         out.setUnitPurchaseCounts(counts);
+        colonySightings.values().stream().sorted(java.util.Comparator
+                .comparingInt((ColonySighting sighting) -> sighting
+                        .getLocation().getX())
+                .thenComparingInt(sighting -> sighting.getLocation().getY()))
+                .forEach(sighting -> out.getColonySightings()
+                        .add(sighting.save()));
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),
                 model.getMap().getMaxLocationY());
         return out;

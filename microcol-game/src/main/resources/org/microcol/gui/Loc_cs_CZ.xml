@@ -42,6 +42,7 @@
 	<entry key="no_5_7p">pěti</entry>
 	<entry key="and">a</entry>
 	<entry key="withColony">kolonií</entry>
+	<entry key="colonyLastSeen">Naposledy spatřeno: kolonie %s hráče %s v roce %s.</entry>
 	<entry key="adjustAmountOfGoods">Pro výběr množství zboží při přetahování podrž na macOS Ctrl, na Linuxu a Windows Ctrl+Shift.</entry>
 	<entry key="moveCost">Pohyb: </entry>
 

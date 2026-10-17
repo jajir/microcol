@@ -4969,3 +4969,21 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    CI runs the full suite again for the pushed revision. Publication remains
    independently pending until its actual workflows and downloadable build are
    verified; local acceptance alone is not a publication claim.
+
+## R-0070 current sight — 2026-10-17
+
+1. Docker `run-aegEQ7` compiled and passed 130 selected model checks, six of
+   seven TC26 scenarios and three source-contract checks. TC26_07 timed out
+   after an unbalanced synthetic movement event; it was not accepted. Review
+   also required colony-only terrain exploration and half-visible fight guards.
+2. Sonnet medium repaired those boundaries and the diagnostic event lifecycle.
+   Docker `run-9WkN2C` passes **142 checks: 132 model, seven TC26 and three
+   source-contract**, zero failures/errors/skips. Selection includes current
+   sight, legacy visibility, attack boundaries/orders/roles, peace, tribute,
+   reference expedition, first-colony planning/journey, load rejection and
+   status-bar disclosure. TC26_04–07 cover departure/re-entry, stale colony
+   owner/date and Continue, colony-only sight and capture, hidden movement and
+   partial/fully hidden foreign fights. Shared formatter passes.
+3. This is targeted requirement-11 acceptance. Full second-batch regression and
+   publication remain pending. Worker attempts and caller review are recorded
+   in the [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).

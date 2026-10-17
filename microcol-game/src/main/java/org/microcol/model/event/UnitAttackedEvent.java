@@ -6,6 +6,7 @@ import org.microcol.model.Location;
 import org.microcol.model.NavalCombatOutcome;
 import org.microcol.model.Model;
 import org.microcol.model.MilitaryPromotion;
+import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
@@ -67,6 +68,31 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
 
     public Optional<Location> getOriginalDefenderLocation() {
         return getNavalOutcome().map(NavalCombatOutcome::getDefenderLocation);
+    }
+
+    /**
+     * A player always knows about its own fights; other fights are visible only
+     * when both original fighting locations are in present sight, so a
+     * half-visible fight discloses nothing about the hidden participant.
+     *
+     * @param player required observer
+     * @return whether the observer may be shown this fight
+     */
+    public boolean canPlayerSeeAttack(final Player player) {
+        Preconditions.checkNotNull(player);
+        return attacker.getOwner().equals(player)
+                || defender.getOwner().equals(player)
+                || isInSight(player, getOriginalAttackerLocation(), attacker)
+                        && isInSight(player, getOriginalDefenderLocation(),
+                                defender);
+    }
+
+    private static boolean isInSight(final Player player,
+            final Optional<Location> original, final Unit unit) {
+        final Optional<Location> location = original.isPresent() ? original
+                : unit.isAtPlaceLocation() ? Optional.of(unit.getLocation())
+                        : Optional.empty();
+        return location.filter(player::isCurrentlyVisible).isPresent();
     }
 
     public Unit getAttacker() {

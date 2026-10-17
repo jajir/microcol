@@ -102,6 +102,20 @@ instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento po
 není potvrzením dokončení celého požadavku.
 
 
+### Prozkoumaný terén a současný dohled (R-0070)
+
+`Visibility` uchovává trvale prozkoumaný terén. `Player.isCurrentlyVisible`
+odvozuje současný dohled ze živých vlastních jednotek a okolí vlastních kolonií;
+`Player` vlastní poslední pozorování cizích kolonií v neměnném `ColonySighting`.
+`Model` aktualizuje pozorování při herních změnách, zatímco dotazy GUI jsou
+jen pro čtení. `model.store.ColonySightingPo` ukládá polohu, název, vlastníka
+a tah pozorování; načtení nepřepisuje údaje o skrytých koloniích živým stavem.
+Mapa, panel a tooltip používají stejný povolený pohled. Cizí jednotky se mimo
+dohled nezobrazují; zapamatovaná kolonie má označení posledního pozorování.
+Filtrování událostí brání skrytým pohybům a cizím bojům prozradit neviditelná
+místa animací. Útočný dotaz modelu požaduje současný dohled.
+Stav ověření vede [R-0070](requirements/R-0070.md).
+
 ### Uložená obtížnost (R-0064)
 
 `model.Difficulty` a neměnná hodnota v `Model` jsou společným zdrojem obtížnosti

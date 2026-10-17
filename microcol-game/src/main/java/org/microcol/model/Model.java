@@ -14,6 +14,7 @@ import java.util.function.Function;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
@@ -292,8 +293,25 @@ public class Model {
             model.getColonyById(savedColony.getId()).orElseThrow()
                     .restoreEducationCourses(savedColony.getEducationCourses());
         }
+        // Remembered colonies are restored verbatim first; only locations in
+        // present sight are then refreshed from permitted observation.
+        for (final PlayerPo savedPlayer : modelPo.getGameManager()
+                .getPlayers()) {
+            model.getPlayerByName(savedPlayer.getName())
+                    .restoreColonyKnowledge(savedPlayer.getColonySightings());
+        }
         model.assureDefaultVisibility();
+        model.refreshObservations();
         return model;
+    }
+
+    /**
+     * Let every player record the colonies inside its present sight. Called
+     * after colony founding, capture, removal and turn starts; colonies outside
+     * present sight keep their remembered snapshot.
+     */
+    void refreshObservations() {
+        playerStore.getPlayers().forEach(Player::observeColonies);
     }
 
     private static void validateSavedColonyFields(final ModelPo data,
@@ -459,6 +477,7 @@ public class Model {
         } else {
             unit.placeToColonyField(fields.get(0), GoodsType.CORN);
         }
+        refreshObservations();
         listenerManager.fireColonyWasFounded(this, col);
         return col;
     }
@@ -2100,6 +2119,7 @@ public class Model {
     }
 
     void fireTurnStarted(final Player player, final boolean isFreshStart) {
+        refreshObservations();
         listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
@@ -2236,6 +2256,8 @@ public class Model {
         getTurnEventStore().add(TurnEventProvider
                 .getColonyWasDestroyed(colony.getOwner(), colony, lostShips));
         colonies.remove(colony);
+        colony.getOwner().forgetColony(colony.getLocation());
+        refreshObservations();
     }
 
     boolean isExists(final Colony colony) {
