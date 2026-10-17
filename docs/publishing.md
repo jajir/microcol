@@ -559,3 +559,11 @@ documentation in APT just to make it visible on the web.
    checked for the new analyses and ledger/index pages. No gameplay code
    changed, and no gameplay/UI runtime acceptance or Steam action is claimed.
    Publication is checked separately after push.
+4. Final capture `c3859fe4` passed Pages build/deploy in
+   [39037824530](https://github.com/jajir/microcol/actions/runs/39037824530).
+   Development run 39037824639 and compatibility run 39037824591 passed
+   filters and intentionally skipped game jobs. Seven live pages verified the
+   coverage, open-point index, three ledgers, R-0241 and commit-pinned catalogue.
+   The automatic `dev` manifest remained byte-identical at
+   [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4).
+   This evidence-only follow-up does not change the captured scope.
