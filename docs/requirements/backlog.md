@@ -282,12 +282,29 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0154](R-0154.md) | Apply native provocation and reconciliation events | New capture | [NAT-007/008](../gap-analysis.md#native-nations-settlements-and-relations) event effects, UC-061/065 |
 | [R-0155](R-0155.md) | Explain native settlement alarm without color alone | New capture | [NAT-006](../gap-analysis.md#native-nations-settlements-and-relations), UC-061 |
 | [R-0156](R-0156.md) | Let hostile native braves raid and calmer braves stand down | New capture | [NAT-008](../gap-analysis.md#native-nations-settlements-and-relations) AI / DIP-001 native portion, UC-061/068 |
+| [R-0157](R-0157.md) | Choose a legal action on entering a native settlement | New capture | [NAT-009](../gap-analysis.md#native-nations-settlements-and-relations), UC-062–067 |
+| [R-0158](R-0158.md) | Resolve one chief encounter for a scout | New capture | [NAT-010](../gap-analysis.md#native-nations-settlements-and-relations), UC-062 |
+| [R-0159](R-0159.md) | Maintain native settlement stock and admit legal traders | New capture | [NAT-011/014](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
+| [R-0160](R-0160.md) | Sell or gift cargo to a native settlement | New capture | [NAT-012](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
+| [R-0161](R-0161.md) | Buy one of three offered native goods | New capture | [NAT-013](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
+| [R-0162](R-0162.md) | Demand native tribute without duplicating gold or anger | New capture | [NAT-016](../gap-analysis.md#native-nations-settlements-and-relations) tribute, UC-065 |
+| [R-0163](R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | New capture | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
+| [R-0164](R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
+| [R-0165](R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
+| [R-0166](R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
 as preparation only; no native gameplay implementation is selected. R-0052
 already delivers the common turn boundary. European AI slices R-0027/R-0090–0092
 are preserved; R-0156 owns only native raid/patrol behavior. Native trade,
-mission, interaction and conquest outcomes remain separate captures.
+mission and interaction are captured below; conquest remains a separate outcome.
+
+The A08 interaction analyses R-0157–R-0166 were captured on **2026-10-17**
+as preparation only. R-0157 supplies one visitor choice and R-0159 one native
+market state for R-0160/R-0161. R-0163 owns Brebeuf's effective expertise for
+old and new missionaries, consumed by mission, contest, incitement and
+conversion; R-0104's delivered founder membership is retained. Native
+conquest/treasure and European AI remain outside this batch.
 
 ## A09
 

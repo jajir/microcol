@@ -443,3 +443,21 @@ documentation in APT just to make it visible on the web.
    Concurrent R-0086 closure is separate. Pages deployment and intentional
    documentation-only game-job skips are checked after publication; no new
    gameplay or gameplay-test evidence is claimed.
+4. Checkpoint `80b0e180` passed Pages build/deploy in
+   [39035436604](https://github.com/jajir/microcol/actions/runs/39035436604).
+   Development run 39035436577 and compatibility run 39035436625 passed their
+   change filters and intentionally skipped game jobs. Live R-0156/coverage
+   and rule-catalogue commit links were verified. The downloaded automatic
+   `dev` manifest is unchanged (`dev-109-0b0cb0593df4`). Only this task's
+   source changes were committed; concurrent R-0086 closure and link moves
+   were left in the worktree for their owner.
+
+## Native interaction requirement capture — 2026-10-17
+
+1. R-0157–R-0166 capture native visits, trade, tribute and missionary actions.
+   Existing teaching, conversion and expert-role requirements link to their
+   new owners. All ten remain `new`; unresolved policies remain explicit.
+2. Local validation passed 21 launcher tests without inference, 9 documentation
+   tests and strict MkDocs. All ten rendered pages were checked for status,
+   four chapters and capture-only qualification. No gameplay code changed;
+   no gameplay acceptance is claimed. Publication is verified after push.

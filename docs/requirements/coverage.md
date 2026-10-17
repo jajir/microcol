@@ -66,7 +66,14 @@
    and Pocahontas, [R-0154](R-0154.md) provocation/reconciliation events,
    [R-0155](R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
    These do not stand in for native trade, missions or real native combat.
-8. Remaining area-by-area ownership is being reconciled with existing work.
+8. Native interactions are [R-0157](R-0157.md) action selection,
+   [R-0158](R-0158.md) chief encounters, [R-0159](R-0159.md) market/admission,
+   [R-0160](R-0160.md) sale/gift and [R-0161](R-0161.md) reverse purchase.
+   [R-0162](R-0162.md) owns tribute; [R-0163](R-0163.md) ordination and
+   Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
+   denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
+   and treasure remain separate combat/reward outcomes.
+9. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -76,7 +83,7 @@
 | A05 world and units | R-0118–R-0131 plus existing sight, ship, sentry and combat owners | Final unit/terrain matrix and cross-area dependency audit |
 | A06 transport and Europe | R-0132–R-0145 cargo, routes, markets and accounts; existing transport/purchase/shared quotes retained | Final cargo/trade matrix and cross-area dependency audit |
 | A07 economy | R-0146–R-0149 and existing food, work, construction and education owners | Complete profession/building/economy matrices and native dependency links |
-| A08 relations and AI | R-0150–R-0156 foundations plus existing diplomacy and rival colony owners | Native visits/trade/missions/conquest dependencies, European/royal actor policies and final acceptance |
+| A08 relations and AI | R-0150–R-0166 foundations, visits, trade and missions plus existing diplomacy and rival colony owners | Conquest dependencies, foreign trade, European/royal actor policies and final acceptance |
 | A09 combat | Delivered ordinary/naval slices retained | Native/royal roles, patrol, coastal fire and national modifier |
 | A10 politics and end | Existing support, Congress and declaration owners retained | Remaining founders, revolution, dates and scoring |
 | A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |
