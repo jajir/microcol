@@ -534,3 +534,28 @@ documentation in APT just to make it visible on the web.
    tests and strict MkDocs. The 24 rendered requirements retain their four
    chapters, status and capture-only qualification. No gameplay code changed
    and no runtime acceptance is claimed. Publication is verified after push.
+3. Checkpoint `c38aec86` passed Pages build/deploy in
+   [39037366417](https://github.com/jajir/microcol/actions/runs/39037366417).
+   Development run 39037366487 and compatibility run 39037366504 passed
+   filters and intentionally skipped game jobs. Live R-0221 was fetched and
+   the automatic `dev` manifest remained byte-identical at
+   `dev-109-0b0cb0593df4`.
+
+## Final remaining-scope capture — 2026-10-17
+
+1. R-0222–R-0241 capture shared UX, graphics, audio, quality and stable/Steam
+   delivery. Together R-0123–R-0241 add 119 requirements, all `new`;
+   implementation remains separately selected. Existing delivered slices and
+   the five pioneer captures are retained.
+2. Final semantic reconciliation assigns 230 rule IDs, 119 UCs (116 Hra,
+   two Nastavení, one Regrese), nine matrices, nine report families, four
+   journeys and P01–P32. The coverage ledgers distinguish existing behavior,
+   missing acceptance and new outcomes. The index groups 56 active refinement
+   topics, deduplicating generator placement and other shared questions.
+3. Local verification: 21 launcher tests without inference and 9 documentation
+   tests passed during this capture; final strict MkDocs and checks of all
+   119 new analyses' status, four chapters and sequential numbering passed.
+   Source catalogue IDs and public ledger counts match. Rendered output was
+   checked for the new analyses and ledger/index pages. No gameplay code
+   changed, and no gameplay/UI runtime acceptance or Steam action is claimed.
+   Publication is checked separately after push.

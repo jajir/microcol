@@ -21,6 +21,10 @@ in [done](done/README.md), [deferred](deferred/README.md) and
 The catalogue retains origin and process links even when their records move.
 
 Each requirement owns its current `Status`, scope, acceptance and open questions.
+
+Remaining-scope capture completed on **2026-10-17**: [coverage and ownership](coverage.md)
+for R-0123–R-0241 and [56 open refinement topics](open-points.md).
+Capture does not change readiness or authorize gameplay implementation.
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)
 now provide provisional formulas; dependencies and individual readiness still
@@ -95,6 +99,22 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0114](done/R-0114.md) | Keep inactive requirements in status directories. | User request, 2026-10-15 |
 | [R-0115](done/R-0115.md) | Adopt provisional shared rules and remove Q decision blockers. | User request, 2026-10-15 |
 
+## A01
+
+[Application menu, entry and delivery](areas.md#a01).
+
+| Requirement | Outcome | Kind | Origin |
+| --- | --- | --- | --- |
+| [R-0232](R-0232.md) | Provide a first-release player quickstart and help path | New capture | P32 player documentation; in-game help R-0206/0207 separate |
+| [R-0233](R-0233.md) | Freeze and verify the first-release runtime baseline | New capture | P32 runtime/dependency acceptance; development builds credited |
+| [R-0234](R-0234.md) | Distribute a signed and notarized macOS release | New capture | P32 public Mac release; development ARM/Intel artifacts credited |
+| [R-0235](R-0235.md) | Verify the supported Linux release runtime matrix | New capture | P32 native dependency/platform acceptance |
+| [R-0236](R-0236.md) | Promote a verified development build to stable release | New capture | P32 stable publication; Dev channel credited |
+| [R-0237](R-0237.md) | Prepare the Steam product and rights checklist | New capture | P32 publisher/store/rights scope |
+| [R-0239](R-0239.md) | Upload runnable Steam depots and launch options | New capture | P32 SteamPipe technical scope |
+| [R-0240](R-0240.md) | Verify Steam install, offline play and update recovery | New capture | P32 Steam-installed customer paths |
+| [R-0241](R-0241.md) | Review, launch and support the Steam release | New capture | P32 publisher operations and initial support |
+
 ## A02
 
 [New-game setup](areas.md#a02).
@@ -129,6 +149,14 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0205](R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
 | [R-0206](R-0206.md) | Navigate the game-rule encyclopedia | New capture | SUPPORT-004; existing help shell credited |
 | [R-0207](R-0207.md) | Keep the opening tutorial accurate for free play | New capture | SUPPORT-004; existing guided instructions credited |
+| [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |
+| [R-0223](R-0223.md) | Observe real players completing core game tasks | New capture | P28/P31 real-player evidence, not automation |
+| [R-0224](R-0224.md) | Complete and inspect runtime graphics coverage | New capture | P29 visual coverage and readability |
+| [R-0225](R-0225.md) | Reproduce the source-to-runtime graphics export | New capture | P29 export/manifest traceability |
+| [R-0226](R-0226.md) | Play event effects without disrupting music or gameplay | New capture | P30 event audio service; existing music credited |
+| [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
+| [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
+| [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
 
 ## A04
 
@@ -140,6 +168,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0052](done/R-0052.md) | Process each national turn once in the agreed order | Remainder | [R-0002](canceled/R-0002.md) |
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
+| [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
+| [R-0231](R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
 
@@ -396,6 +426,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0214](R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
 | [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
 | [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
+| [R-0230](R-0230.md) | Evaluate balance and pace across full campaigns | New capture | P31 observed whole-game balancing |
 
 ## Choosing further work
 
