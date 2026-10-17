@@ -4912,3 +4912,17 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     notices while retaining unrelated events and all stock/tool checks.
     Shared formatter passes. Reports remain under `target/docker-ui/run-tfx9Qq/`.
     Full batch regression and publication remain pending.
+11. R-0136 final `run-t7AO4q` exits 0: **127 model + 11 UI + three
+    source-contract = 141 passed**, no failures/errors/skips. Suites:
+    CoastalPortMovement 18, PassengerTransfer 28, CargoSlot 56,
+    UnitColonistEmbark 17 and SentryOrder 8; TC38/F30 five and TC29/F21 six.
+    Real owned-port arrival unloads outside, preserves goods/equipment/passenger
+    points, frees holds and survives Continue; merely loading a ship in port
+    does not unload it. Model cases cover zero points, stale port/action,
+    invalid later passenger and departure sentries before any arrival mutation.
+    TC38 retains preview cancellation and ordinary-shore selective landing;
+    TC38_05 adds zero-point arrival with empty passenger holds and retained ore.
+    Earlier fixture and UI setup failures and repairs are recorded in the
+    [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+    Shared formatter passed; reports remain in `target/docker-ui/run-t7AO4q/`.
+    Full batch regression/publication remain pending.

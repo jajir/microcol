@@ -158,6 +158,11 @@ public final class PassengerTransferPage extends AbstractScreen {
                 .noneMatch(CargoSlot::isEmpty));
     }
 
+    public void verifyCargoSlotEmpty(int shipId, int slotIndex) {
+        UnitWithCargo ship = (UnitWithCargo) getModel().getUnitById(shipId);
+        assertTrue(ship.getCargo().getSlotByIndex(slotIndex).isEmpty());
+    }
+
     public void verifyCargoGoods(int shipId, int slotIndex, Goods expected) {
         UnitWithCargo ship = (UnitWithCargo) getModel().getUnitById(shipId);
         assertEquals(expected, ship.getCargo().getSlotByIndex(slotIndex)

@@ -765,3 +765,8 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    přebytek skladu, jednu zprávu o ztrátě, Continue a neopakování v dalším tahu.
    Model pokrývá aktuálního příjemce, kapacitu a neplatná uložená data.
    Úplná regrese dávky zůstává před námi.
+9. UC-025: R-0136 má cíleně ověřené automatické vystoupení při skutečném
+   příjezdu do vlastní pobřežní kolonie. TC38 zachovává ruční vylodění na pobřeží
+   a zrušení, doplňuje nulový pohyb, uvolněné prostory, zachovanou rudu a Continue.
+   TC29 potvrzuje stávající ruční přesuny. Pouhé načtení loď nevykládá; model
+   odmítá změněný cíl před přesunem. Úplná regrese dávky ještě čeká.

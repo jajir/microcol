@@ -3751,3 +3751,29 @@ committed for this experiment.
     list estimate $5.99333850. This is not a Pro charge or quota estimate.
     R-0136 will trial Haiku low on the traced arrival hook and existing test
     patterns; diagnose and repair/escalate within the same job if inadequate.
+27. R-0136 Haiku low authoring took 212.532 seconds. Review found missing
+    post-callback movement validation and passenger checks after departure-sentry
+    mutation; required stale/zero-point player coverage was incomplete. Docker
+    `run-i3mvs5` ran 122 model checks: 121 passed and one new fixture errored by
+    giving a speed-one colonist three action points; UI was not reached.
+    Caller also corrected its TC29 selector from F23 to the actual F21.
+    Escalate the same session to Haiku medium for the concrete code/fixture and
+    coverage repair, retaining budgets and all assertions. Low is not accepted.
+28. R-0136 medium repair took 171.362 seconds. `run-KOKfO7` passes 125 model,
+    six TC29 and three source-contract checks; TC38 has one failure and one
+    error among five cases. Diagnosis: the new empty-hold helper included F30's
+    ore-filled slot zero, and reboarding was attempted while the colony UI was
+    closed. The last same-session medium repair corrects these concrete setup
+    errors and adds focused departure-sentry arrival coverage; no rollback
+    framework or weaker acceptance is requested.
+29. R-0136 final medium repair took 217.464 seconds; total worker time
+    601.358 seconds across low, medium and medium. Final `run-t7AO4q` passes
+    **141 checks** with no failures/errors/skips. Shared Java formatter passed.
+    Cumulative session usage: 146 input,
+    176,101 cache-create, 8,194,868
+    cache-read, 101,991 output (70,363 thinking),
+    list estimate $0.62215598; not an invoice or measured Pro quota.
+    Haiku low needed both repairs to meet acceptance on this movement task.
+    Keep Sonnet medium as the provisional default for broader behavior changes;
+    cheap Haiku remains a candidate for narrower tasks with concrete fixtures.
+    Nine requirements are targeted-accepted; full batch acceptance is pending.

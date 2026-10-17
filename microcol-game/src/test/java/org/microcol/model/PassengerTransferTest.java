@@ -3,7 +3,9 @@ package org.microcol.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -15,12 +17,14 @@ import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.UnitMoveStartedEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.store.PlaceCargoSlotPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
+import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 
@@ -30,11 +34,13 @@ class PassengerTransferTest {
     private static final Location WATER = Location.of(49, 15);
     private static final Location SHORE = Location.of(48, 15);
     private static final Location PORT = Location.of(25, 14);
+    private static final Location LANDING = Location.of(26, 13);
     @TempDir
     Path directory;
     private final GameModelPoDao dao = new GameModelPoDao();
     private GameModelPo data;
     private Model model;
+    private String afterCallback;
 
     private void prepare(Location shipAt, int moves) {
         data = dao.loadFromClassPath(
@@ -490,6 +496,192 @@ class PassengerTransferTest {
         assertThrows(IllegalStateException.class,
                 () -> Model.make(data.getModel(),
                         MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @Test
+    void arrivalUnloadsEveryPassengerOnceAndKeepsIdentityGoodsAndPoints() {
+        prepare(Location.of(25, 13), 1);
+        for (int id = 13; id <= 16; id++) {
+            ((AbstractUnit) model.getUnitById(id)).setActionPoints(1);
+        }
+        ((AbstractUnit) ship()).setActionPoints(2);
+        model.moveUnit(ship(), org.microcol.model.Path.of(List.of(PORT)));
+        assertEquals(PORT, ship().getLocation());
+        assertEquals(1, ship().getActionPoints());
+        for (int id = 13; id <= 16; id++) {
+            Unit landed = model.getUnitById(id);
+            assertEquals(id, landed.getId());
+            assertTrue(landed.isAtPlaceLocation());
+            assertEquals(PORT, landed.getLocation());
+            assertEquals(1, landed.getActionPoints());
+        }
+        assertEquals(80, ((UnitFreeColonist) passenger()).getTools());
+        for (int index = 0; index < 4; index++) {
+            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
+        }
+        assertEquals(Goods.of(GoodsType.ORE, 7),
+                ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
+        reload();
+        for (int id = 13; id <= 16; id++) {
+            Unit landed = model.getUnitById(id);
+            assertTrue(landed.isAtPlaceLocation());
+            assertEquals(PORT, landed.getLocation());
+            assertEquals(1, landed.getActionPoints());
+        }
+        assertEquals(80, ((UnitFreeColonist) passenger()).getTools());
+        assertEquals(PORT, ship().getLocation());
+        for (int index = 0; index < 4; index++) {
+            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
+        }
+    }
+
+    @Test
+    void notCurrentOwnersArrivalIsRejectedAndPassengersStayAboard() {
+        prepare(Location.of(25, 13), 3);
+        model.endTurn();
+        String before = snapshot();
+        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
+                org.microcol.model.Path.of(List.of(PORT))));
+        assertEquals(before, snapshot());
+        otherCargoUnchanged();
+    }
+
+    private void onceAfterShipStep(final Runnable callback) {
+        final AtomicBoolean fired = new AtomicBoolean();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitMovedStepStarted(
+                    final UnitMovedStepStartedEvent event) {
+                if (event.getUnit() == ship()
+                        && fired.compareAndSet(false, true)) {
+                    callback.run();
+                }
+            }
+        });
+    }
+
+    @Test
+    void staleOwnPortDestinationIsRejectedAfterCallbackBeforeAnyMutation() {
+        prepare(Location.of(25, 13), 1);
+        ((AbstractUnit) ship()).setActionPoints(2);
+        onceAfterShipStep(() -> {
+            addUnit(UnitType.COLONIST, "Dutch's King", PORT);
+            afterCallback = snapshot();
+        });
+        assertThrows(IllegalArgumentException.class, () -> model
+                .moveUnit(ship(), org.microcol.model.Path.of(List.of(PORT))));
+        assertEquals(afterCallback, snapshot());
+        assertEquals(Location.of(25, 13), ship().getLocation());
+        assertEquals(2, ship().getActionPoints());
+        otherCargoUnchanged();
+    }
+
+    @Test
+    void callbackChangingShipActionCancelsArrivalWithoutMutation() {
+        prepare(Location.of(25, 13), 1);
+        ((AbstractUnit) ship()).setActionPoints(2);
+        onceAfterShipStep(() -> {
+            ((AbstractUnit) ship()).setWaitingOrder(UnitActionType.sentry);
+            afterCallback = snapshot();
+        });
+        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
+                org.microcol.model.Path.of(List.of(PORT))));
+        assertEquals(afterCallback, snapshot());
+        assertEquals(Location.of(25, 13), ship().getLocation());
+        assertEquals(2, ship().getActionPoints());
+        otherCargoUnchanged();
+    }
+
+    @Test
+    void laterInvalidPassengerRejectsArrivalBeforeEarlierPassengersLand() {
+        prepare(Location.of(25, 13), 1);
+        ((AbstractUnit) ship()).setActionPoints(2);
+        // Slot order lands 16, 15 and 14 before 13, so 13 is the late failure.
+        onceAfterShipStep(() -> {
+            ((AbstractUnit) model.getUnitById(13))
+                    .setWaitingOrder(UnitActionType.sentry);
+            afterCallback = snapshot();
+        });
+        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
+                org.microcol.model.Path.of(List.of(PORT))));
+        assertEquals(afterCallback, snapshot());
+        assertEquals(Location.of(25, 13), ship().getLocation());
+        assertEquals(2, ship().getActionPoints());
+        for (int id = 13; id <= 16; id++) {
+            assertTrue(model.getUnitById(id).isAtCargoSlot());
+        }
+    }
+
+    /**
+     * Ship waits at sea next to the port with three passengers aboard.
+     * Passenger 13 stands on the shore beside the ship as a sentry that may
+     * board on the way into the port.
+     */
+    private void prepareSentryOnShore() {
+        prepare(Location.of(25, 13), 1);
+        data.setModel(model.save());
+        Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        terrain.put(LANDING, TerrainType.GRASSLAND);
+        data.getModel().getMap().setTerrainType(terrain);
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        for (int id = 13; id <= 16; id++) {
+            ((AbstractUnit) model.getUnitById(id)).setActionPoints(1);
+        }
+        ((AbstractUnit) ship()).setActionPoints(2);
+        Unit sentry = model.getUnitById(13);
+        sentry.disembarkToLocation(LANDING);
+        ((AbstractUnit) sentry).setActionPoints(1);
+        ((AbstractUnit) sentry).setWaitingOrder(UnitActionType.sentry);
+        assertTrue(sentry.isAtPlaceLocation());
+        assertEquals(LANDING, sentry.getLocation());
+    }
+
+    @Test
+    void adjacentDepartureSentryBoardsAndLandsWithTheArrivingShip() {
+        prepareSentryOnShore();
+        Unit sentry = model.getUnitById(13);
+        int tools = ((UnitFreeColonist) sentry).getTools();
+        model.moveUnit(ship(), org.microcol.model.Path.of(List.of(PORT)));
+        assertEquals(PORT, ship().getLocation());
+        assertEquals(1, ship().getActionPoints());
+        assertEquals(13, sentry.getId());
+        assertTrue(sentry.isAtPlaceLocation());
+        assertEquals(PORT, sentry.getLocation());
+        assertEquals(UnitActionType.noAction, sentry.getAction().getType());
+        assertEquals(0, sentry.getActionPoints());
+        assertEquals(tools, ((UnitFreeColonist) sentry).getTools());
+        for (int id = 14; id <= 16; id++) {
+            Unit landed = model.getUnitById(id);
+            assertTrue(landed.isAtPlaceLocation());
+            assertEquals(PORT, landed.getLocation());
+            assertEquals(1, landed.getActionPoints());
+        }
+        for (int index = 0; index < 4; index++) {
+            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
+        }
+        assertEquals(Goods.of(GoodsType.ORE, 7),
+                ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
+    }
+
+    @Test
+    void invalidCarriedPassengerRejectsArrivalBeforeSentryBoardsOrMoves() {
+        prepareSentryOnShore();
+        ((AbstractUnit) model.getUnitById(14))
+                .setWaitingOrder(UnitActionType.sentry);
+        Unit sentry = model.getUnitById(13);
+        String before = snapshot();
+        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
+                org.microcol.model.Path.of(List.of(PORT))));
+        assertEquals(before, snapshot());
+        assertEquals(Location.of(25, 13), ship().getLocation());
+        assertEquals(2, ship().getActionPoints());
+        assertTrue(sentry.isAtPlaceLocation());
+        assertEquals(LANDING, sentry.getLocation());
+        assertEquals(UnitActionType.sentry, sentry.getAction().getType());
+        assertEquals(1, sentry.getActionPoints());
+        assertTrue(ship().getCargo().getSlotByIndex(3).isEmpty());
     }
 
 }

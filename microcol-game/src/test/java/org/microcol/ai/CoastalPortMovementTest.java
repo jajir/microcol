@@ -141,6 +141,28 @@ class CoastalPortMovementTest {
         }
     }
 
+    private List<Integer> passengerPoints() {
+        return List.of(model.getUnitById(13).getActionPoints(),
+                model.getUnitById(14).getActionPoints(),
+                model.getUnitById(15).getActionPoints(),
+                model.getUnitById(16).getActionPoints());
+    }
+
+    private void verifyAshoreAtPort(final List<Integer> expectedPoints) {
+        for (int slot = 0; slot < 4; slot++) {
+            assertTrue(ship().getCargo().getSlotByIndex(slot).isEmpty());
+        }
+        assertEquals(Goods.of(GoodsType.ORE, 7),
+                ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
+        for (int id = 13; id <= 16; id++) {
+            final Unit passenger = model.getUnitById(id);
+            assertTrue(passenger.isAtPlaceLocation());
+            assertEquals(PORT, passenger.getLocation());
+            assertEquals(expectedPoints.get(id - 13).intValue(),
+                    passenger.getActionPoints());
+        }
+    }
+
     private Unit prepareGround() {
         prepare(Location.of(26, 14));
         data.setModel(model.save());
@@ -181,15 +203,15 @@ class CoastalPortMovementTest {
         assertEquals(List.of(PORT), path);
         assertTrue(ship().getAvailableLocations().contains(PORT));
         assertEquals(beforeSnapshot, snapshot());
-        String beforePayload = payload();
+        List<Integer> beforePoints = passengerPoints();
         step(PORT);
         assertEquals(PORT, ship().getLocation());
         assertEquals(5, ship().getActionPoints());
-        verifyPayload(beforePayload);
+        verifyAshoreAtPort(beforePoints);
         step(water);
         assertEquals(water, ship().getLocation());
         assertEquals(4, ship().getActionPoints());
-        verifyPayload(beforePayload);
+        verifyAshoreAtPort(beforePoints);
     }
 
     @Test
@@ -215,18 +237,75 @@ class CoastalPortMovementTest {
     @Test
     void testReloadAfterMovement() {
         prepare(Location.of(26, 14));
+        List<Integer> beforePoints = passengerPoints();
         step(PORT);
         String shipJson = gson.toJson(ship().save());
-        String beforePayload = payload();
+        verifyAshoreAtPort(beforePoints);
         reload();
         assertEquals(PORT, ship().getLocation());
         assertEquals(5, ship().getActionPoints());
         assertEquals(shipJson, gson.toJson(ship().save()));
-        verifyPayload(beforePayload);
+        verifyAshoreAtPort(beforePoints);
         step(Location.of(26, 14));
         assertEquals(Location.of(26, 14), ship().getLocation());
         assertEquals(4, ship().getActionPoints());
+        verifyAshoreAtPort(beforePoints);
+    }
+
+    @Test
+    void testPreArrivalPassengersStayAboard() {
+        prepare(Location.of(26, 14));
+        String beforePayload = payload();
+        assertEquals(Location.of(26, 14), ship().getLocation());
+        reload();
+        assertEquals(Location.of(26, 14), ship().getLocation());
         verifyPayload(beforePayload);
+    }
+
+    @Test
+    void testShipAlreadyInPortKeepsPassengersAboardOnReload() {
+        prepare(Location.of(26, 14));
+        ship().placeToLocation(PORT);
+        String beforePayload = payload();
+        reload();
+        assertEquals(PORT, ship().getLocation());
+        verifyPayload(beforePayload);
+    }
+
+    @Test
+    void testBlockedArrivalKeepsPassengersAboard() {
+        prepare(Location.of(26, 14));
+        UnitPo enemy = ship().save();
+        enemy.setId(900);
+        enemy.setOwnerId("Dutch's King");
+        enemy.setType(UnitType.FRIGATE);
+        enemy.setAvailableMoves(1);
+        enemy.setCargo(new org.microcol.model.store.CargoPo());
+        PlaceMapPo place = new PlaceMapPo();
+        place.setLocation(PORT);
+        place.setOrientation(Direction.west);
+        enemy.setPlaceMap(place);
+
+        data.setModel(model.save());
+        data.getModel().getUnits().add(enemy);
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+
+        String beforePayload = payload();
+        verifyRejectedStep(ship(), PORT);
+        verifyPayload(beforePayload);
+    }
+
+    @Test
+    void testZeroPointPassengersLandWithoutSpendingPoints() {
+        prepare(Location.of(26, 14));
+        for (int id = 13; id <= 16; id++) {
+            ((AbstractUnit) model.getUnitById(id)).setActionPoints(0);
+        }
+        List<Integer> beforePoints = passengerPoints();
+        step(PORT);
+        assertEquals(5, ship().getActionPoints());
+        verifyAshoreAtPort(beforePoints);
     }
 
     @Test
@@ -288,11 +367,11 @@ class CoastalPortMovementTest {
     void testAiRouteToCoastalPort() {
         prepare(Location.of(26, 14));
         ((AbstractUnit) ship()).setActionPoints(1);
-        String beforePayload = payload();
+        List<Integer> beforePoints = passengerPoints();
         runAi();
         assertEquals(PORT, ship().getLocation());
         assertEquals(0, ship().getActionPoints());
-        verifyPayload(beforePayload);
+        verifyAshoreAtPort(beforePoints);
     }
 
     @Test

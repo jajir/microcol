@@ -5,12 +5,15 @@ import java.util.Map;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.PlaceEuropePortPo;
 import org.microcol.model.store.UnitPo;
+import org.microcol.page.ColonyScreen;
 import org.microcol.page.CoastalPortPage;
 import org.microcol.page.FogPage;
 import org.microcol.page.FreePlayAuditPage;
@@ -55,21 +58,23 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
         port.cancelPreview();
         port.verifyPreviewCanceled();
         port.verifyWorldUnchanged();
-
-        // Sail into the colony with all goods and equipped passengers still
-        // aboard.
-        map.move(WATER, PORT, 3);
-        passengers.verifyShip(PORT, 5);
         passengers.verifyAboard(4, 1, 1, 80);
         passengers.verifyAboard(5, 2, 5, 0);
 
-        // Continue retains the legal port position, movement and exact cargo
-        // slots.
+        // Sailing into the owned colony lands every passenger outside, with
+        // identity, equipment and points unchanged, while goods stay aboard.
+        map.move(WATER, PORT, 3);
+        passengers.verifyShip(PORT, 5);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAshore(5, PORT, 5, 0);
+
+        // Continue retains the legal port position and the outside passengers
+        // without duplicating anyone.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAboard(4, 1, 1, 80);
-        passengers.verifyAboard(5, 2, 5, 0);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAshore(5, PORT, 5, 0);
 
         // Escape closes the colony menu normally and leaves that control
         // focused.
@@ -79,6 +84,15 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
         audit.press(javafx.scene.input.KeyCode.ESCAPE);
         port.verifyColoniesMenuShowing(false);
         port.verifyColoniesMenuFocused();
+
+        // Re-board both passengers from the colony screen, which spends no
+        // movement, so the ordinary shore-landing path below keeps a choice.
+        final ColonyScreen colony = game.openColonyAt(PORT, "New Amsterdam");
+        passengers.embarkInPort(4, 1, false);
+        passengers.embarkInPort(5, 2, false);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
+        game = colony.close();
 
         // Leaving the port spends one further ship point, without unloading
         // anyone.
@@ -133,8 +147,8 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
         passengers.closeRejection();
         port.verifyWorldUnchanged();
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAboard(4, 1, 1, 80);
-        passengers.verifyAboard(5, 2, 5, 0);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAshore(5, PORT, 5, 0);
     }
 
     @Test
@@ -186,12 +200,42 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
         port.verifyPreviewCanceled();
         map.move(lake, PORT, 3);
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAboard(4, 1, 1, 80);
-        passengers.verifyAboard(5, 2, 5, 0);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAshore(5, PORT, 5, 0);
         map.move(PORT, lake, 3);
         passengers.verifyShip(lake, 4);
-        passengers.verifyAboard(4, 1, 1, 80);
-        passengers.verifyAboard(5, 2, 5, 0);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAshore(5, PORT, 5, 0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_zero_point_passengers_land_outside_and_continue()
+            throws Exception {
+        // Passengers without movement points still step ashore on a legal
+        // arrival, while the ship keeps its normal movement cost.
+        useZeroPointVariant();
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final FogPage map = new FogPage(getContext());
+        final PassengerTransferPage passengers = new PassengerTransferPage(
+                getContext());
+        map.move(WATER, PORT, 3);
+        passengers.verifyShip(PORT, 5);
+        passengers.verifyAshore(4, PORT, 0, 80);
+        passengers.verifyAshore(5, PORT, 0, 0);
+        passengers.verifyCargoSlotEmpty(3, 1);
+        passengers.verifyCargoSlotEmpty(3, 2);
+        passengers.verifyCargoGoods(3, 0, Goods.of(GoodsType.ORE, 7));
+
+        // Continue keeps the same outside passengers and free holds.
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        passengers.verifyShip(PORT, 5);
+        passengers.verifyAshore(4, PORT, 0, 80);
+        passengers.verifyAshore(5, PORT, 0, 0);
+        passengers.verifyCargoSlotEmpty(3, 1);
+        passengers.verifyCargoSlotEmpty(3, 2);
+        passengers.verifyCargoGoods(3, 0, Goods.of(GoodsType.ORE, 7));
     }
 
     private void useVariant(final Location water, final boolean empty)
@@ -220,6 +264,22 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
                 unit.setPlaceEuropePort(pier);
             }
         }
+        useSavedVariant(dao, data);
+    }
+
+    private void useZeroPointVariant() throws Exception {
+        final GameModelPoDao dao = new GameModelPoDao();
+        final GameModelPo data = dao.loadFromFile(FIXTURE);
+        for (final UnitPo unit : data.getModel().getUnits()) {
+            if (unit.getId() == 4 || unit.getId() == 5) {
+                unit.setAvailableMoves(0);
+            }
+        }
+        useSavedVariant(dao, data);
+    }
+
+    private void useSavedVariant(final GameModelPoDao dao,
+            final GameModelPo data) throws Exception {
         final File file = new File(System.getProperty("user.home"),
                 "coastal-port.microcol");
         dao.saveToFile(file.toString(), data);

@@ -402,6 +402,49 @@ public abstract class AbstractUnit implements Unit {
                 && model.isOwnedCoastalPort(owner, carrier.getLocation());
     }
 
+    private List<Unit> getPassengersSnapshot() {
+        return ((UnitWithCargo) this).getCargo().getSlots().stream()
+                .flatMap(slot -> slot.getUnit().stream())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Verify before any mutation that the complete arrival plan can land at the
+     * owned coastal port this ship is about to enter. The plan contains the
+     * passengers already aboard and departure sentries that would board in the
+     * same step. Boarding sentries are not in a cargo slot yet, so only their
+     * terrain eligibility is checked here.
+     *
+     * @param port     required destination of the ship
+     * @param boarding required departure sentries planned for this step
+     */
+    private void verifyArrivalPlan(final Location port,
+            final List<Boarding> boarding) {
+        for (final Unit passenger : getPassengersSnapshot()) {
+            Preconditions.checkState(passenger.canUnitDisembarkAt(port, false),
+                    "Passenger %s cannot land at port %s", passenger, port);
+        }
+        final TerrainType terrain = model.getMap().getTerrainTypeAt(port);
+        for (final Boarding assignment : boarding) {
+            Preconditions.checkState(
+                    assignment.passenger.getType().canMoveAtTerrain(terrain),
+                    "Passenger %s cannot land at port %s", assignment.passenger,
+                    port);
+        }
+    }
+
+    /**
+     * Unload all passengers of the ship that has just entered its owned coastal
+     * port. Passengers keep their identity, equipment and action points.
+     *
+     * @param port required port where the ship is located
+     */
+    private void unloadPassengersAt(final Location port) {
+        for (final Unit passenger : getPassengersSnapshot()) {
+            passenger.disembarkToLocation(port);
+        }
+    }
+
     @Override
     public boolean canEmbark(final CargoSlot slot) {
         return canEmbark(slot, false);
@@ -640,6 +683,45 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void moveOneStep(final Location moveTo) {
+        verifyCanMoveOneStep(moveTo);
+
+        if (isShip() && model.getHighSea().isDepartureMove(this, moveTo)) {
+            placeToHighSeas(true);
+            model.fireUnitMovedToHighSeas(this);
+        } else {
+            final Location start = getLocation();
+            final Direction orientation = findOrintationForMove(moveTo);
+            model.fireUnitMovedStepStarted(this, start, moveTo, orientation);
+            // Pre-move listeners may change this unit, its cargo, its owner's
+            // colonies or the destination. Validate the live step again before
+            // the first mutation, including boarding and passenger landing.
+            Preconditions.checkState(getLocation().equals(start),
+                    "Unit %s changed location before its step", this);
+            verifyCanMoveOneStep(moveTo);
+            final List<Boarding> boarding = new ArrayList<>();
+            if (isShip()) {
+                boarding.addAll(collectDepartureSentries((Ship) this));
+            }
+            final boolean arrivesAtOwnedPort = isShip()
+                    && model.isOwnedCoastalPort(owner, moveTo);
+            if (arrivesAtOwnedPort) {
+                verifyArrivalPlan(moveTo, boarding);
+            }
+            boardDepartureSentries(boarding);
+            actionPoints--;
+            placeToLocation(moveTo, orientation);
+            owner.revealMapForUnit(this);
+            model.wakeSentriesForMovement(this, moveTo);
+            if (arrivesAtOwnedPort) {
+                unloadPassengersAt(moveTo);
+            }
+            // if it's necessary fire event about captured city
+            tryToCaptureColony(moveTo);
+            model.fireUnitMovedStepFinished(this, start, moveTo);
+        }
+    }
+
+    private void verifyCanMoveOneStep(final Location moveTo) {
         verifyThatUnitIsAtMap();
 
         model.checkGameRunning();
@@ -659,25 +741,6 @@ public abstract class AbstractUnit implements Unit {
                 UnitActionType.noAction.equals(getAction().getType()),
                 "Unit can't move because already doing something else. Unit %s",
                 this);
-
-        if (isShip() && model.getHighSea().isDepartureMove(this, moveTo)) {
-            placeToHighSeas(true);
-            model.fireUnitMovedToHighSeas(this);
-        } else {
-            final Location start = getLocation();
-            final Direction orientation = findOrintationForMove(moveTo);
-            model.fireUnitMovedStepStarted(this, start, moveTo, orientation);
-            if (isShip()) {
-                boardDepartureSentries(collectDepartureSentries((Ship) this));
-            }
-            actionPoints--;
-            placeToLocation(moveTo, orientation);
-            owner.revealMapForUnit(this);
-            model.wakeSentriesForMovement(this, moveTo);
-            // if it's necessary fire event about captured city
-            tryToCaptureColony(moveTo);
-            model.fireUnitMovedStepFinished(this, start, moveTo);
-        }
     }
 
     /**
