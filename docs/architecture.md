@@ -820,4 +820,4 @@ se neukládá. `TurnEventConstructionWaitingForTools` zachovává kolonii,
 typ projektu a tehdejší nedostatek. Načtení ani zobrazení hlášení nespouští
 stavební fázi. GUI překládá snímek a před otevřením kolonie znovu ověří hru
 a současné vlastnictví; otevření nemění zásoby. Stav přejímky vede
-[R-0086](requirements/R-0086.md).
+[R-0086](requirements/done/R-0086.md).

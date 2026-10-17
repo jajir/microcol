@@ -4723,7 +4723,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ### R-0086 construction waiting notice — 2026-10-17
 
-1. Selected [R-0086](requirements/R-0086.md), BUILD-019 and UC-043 on
+1. Selected [R-0086](requirements/done/R-0086.md), BUILD-019 and UC-043 on
    baseline `3942b5de`. The final user decision is one reminder **each owner
    turn**, as defined by the shared
    [rule](gap-analysis.md#recovery-and-presentation). The queue emits an immutable
@@ -4745,7 +4745,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 4. Earlier targeted passes and the canceled full regression used the superseded
    once-per-episode policy and are not final acceptance. Their failures, repairs
    and actual counts remain in [worker evidence](ai/local-qwen.md#claude-code-subscription-trial-2026-10-17).
-   Final targeted/full verification and publication are pending.
+   Final-policy acceptance follows; publication is verified separately.
 
 5. Final-policy targeted Docker `run-6Psd2R` passed **87 cases**, zero failures,
    errors or skips: 26 waiting-report, 18 queue-integrity, 20 queue-save, ten
@@ -4756,3 +4756,40 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Shared formatting passed for 15 changed Java files with no changes, exact
    code tokens and idempotence. This is automated application/visual evidence,
    not a player study or a native macOS input check.
+
+6. Caller full Docker `run-lOI2O1` exited **0**. Fresh XML reports contain
+   **1,849 model tests in 181 suites and 292 player/support tests in 74 suites**,
+   with zero failures, errors or skips. All ten TC32 scenarios and the three
+   source-contract checks are present. The integrated source/resource/test files
+   were compared by SHA-256 with the tested worktree and are byte-identical;
+   intervening main commits changed documentation only. Reports, logs and
+   screenshots from all trial runs are preserved in the primary checkout's
+   `target/docker-ui/`, and invocation logs remain under
+   `~/Library/Logs/Microcol/claude/2026-10-17-r0086/`.
+7. The integration commit is `3c0342c4260b5141ba38be1dfc5143c1692bcf67`.
+   Local documentation acceptance passed 21 worker-launcher checks, nine
+   documentation checks and strict MkDocs. The rendered requirement shows the
+   final per-turn rule. CI/publication evidence follows below.
+
+8. Independent [development CI 39033123358](https://github.com/jajir/microcol/actions/runs/39033123358)
+   passed for that exact source: downloaded fresh `tests-functional` XML reports
+   confirm **1,849 model tests / 181 suites and 292 player/support tests / 74
+   suites**, zero failures/errors/skips. All three native packaging jobs and
+   build-tool checks passed. [Java compatibility](https://github.com/jajir/microcol/actions/runs/39033123365)
+   and [Pages deployment](https://github.com/jajir/microcol/actions/runs/39033123329)
+   succeeded. Live Pages showed the final per-turn rule and revision-pinned
+   architecture source links. CI evidence is retained under `target/r86-ci/`.
+9. Published [dev-158-3c0342c4260b](https://github.com/jajir/microcol/releases/tag/dev-158-3c0342c4260b)
+   is a public immutable prerelease with all ten expected assets. The three-platform
+   manifest names the exact source above. `SHA256SUMS` agrees with GitHub asset
+   digests, the downloaded manifest and the downloaded Mac ARM application ZIP.
+   Release metadata, the publish log and verified downloads are retained under
+   `target/r86-publication/`.
+10. The publisher intentionally retained the automatic `dev` channel because
+    `main` had advanced through concurrent documentation-only commits. Its
+    downloaded manifest still identifies **dev-109-0b0cb0593df4**; the launcher
+    does not automatically receive build 158. Use the immutable release's
+    [Mac ARM download](https://github.com/jajir/microcol/releases/download/dev-158-3c0342c4260b/MicroCol-macos-arm64-dev-158-3c0342c4260b.zip).
+    R-0086's status/link closure is a separate documentation-only publication,
+    not another game build. The Claude worktree was archived after all run
+    evidence was copied to the primary checkout.

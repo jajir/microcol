@@ -56,7 +56,8 @@ R-0086 follow-up, 2026-10-17: the missing-tools report now identifies the
 colony, project and current shortage each owner turn and offers guarded colony
 navigation. Loading or viewing the report adds no reminder. The
 [functional evidence](functional-tests.md#r-0086-construction-waiting-notice-2026-10-17)
-records passing targeted checks; full regression/publication remain pending.
+records passing targeted checks and full Docker regression; publication is
+verified separately.
 This supersedes the historical BUILD-019 notification gap, without reclassifying
 unrelated building rules or claiming whole-UC acceptance.
 
@@ -1018,7 +1019,7 @@ rules; implementation and acceptance are tracked by that requirement.
    Critical rejection, famine, lost colony and endgame outcomes remain visible
    even with routine summaries off. A report offers Open location and Close,
    without spending moves or changing state. User decision (2026-10-17;
-   [R-0086](requirements/R-0086.md)): report a project waiting for tools once
+   [R-0086](requirements/done/R-0086.md)): report a project waiting for tools once
    every owner turn while its hammers are complete and its tools are short.
    Identify the colony, project and current shortage each time. Opening or
    dismissing reports and Continue do not generate another report for that

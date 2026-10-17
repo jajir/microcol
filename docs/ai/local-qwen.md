@@ -3517,3 +3517,13 @@ committed for this experiment.
     not a measured Codex quota saving; the reported list-price estimate is not
     a charge against an API account. All gameplay code and test changes came
     from Claude; the main agent retained analysis, review and acceptance.
+
+14. The caller's complete Docker regression and independent Linux CI both passed
+    **1,849 model + 292 player/support tests**, with no failures/errors/skips.
+    The accepted code was committed to main as `3c0342c4` and published as
+    `dev-158-3c0342c4260b`; the release and checksum verification, unchanged
+    automatic channel and separate documentation closure are recorded in the
+    [functional evidence](../functional-tests.md#r-0086-construction-waiting-notice-2026-10-17).
+    The managed worktree was archived after preserving all trial reports in the
+    primary checkout. This completes one supervised Claude Pro handoff through
+    implementation, repair, review, full acceptance and publication.

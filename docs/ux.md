@@ -661,7 +661,7 @@ studii. Výsledky vede [evidence](functional-tests.md#r-0104-magellan-integratio
 
 ### Hlášení čekající stavby — 17. října 2026
 
-[R-0086](requirements/R-0086.md) přidává k hlášení chybějících nástrojů
+[R-0086](requirements/done/R-0086.md) přidává k hlášení chybějících nástrojů
 akci Otevřít kolonii. Hráč zjistí projekt i chybějící množství v přehledu tahu;
 myš nebo Tab/mezerník jej přenesou k zásobám a stavební frontě beze změny
 herních zdrojů. Zavření přehledu nic nepotvrzuje ani nespotřebovává. Po ztrátě

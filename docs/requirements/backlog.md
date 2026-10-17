@@ -248,7 +248,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0083](done/R-0083.md) | Buy completion of the current construction project | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0084](done/R-0084.md) | Gate factories and custom houses on the required founder | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
 | [R-0085](R-0085.md) | Export selected goods automatically through a custom house | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
-| [R-0086](R-0086.md) | Report a construction project waiting for tools | Follow-up | [R-0025](done/R-0025.md) |
+| [R-0086](done/R-0086.md) | Report a construction project waiting for tools | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0107](done/R-0107.md) | Teach colonists through functioning school buildings | Follow-up | [R-0025](done/R-0025.md), [R-0023](done/R-0023.md) |
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0110](done/R-0110.md) | Increase religious production through church and cathedral upgrades | Follow-up | [R-0010](canceled/R-0010.md), [R-0025](done/R-0025.md) |

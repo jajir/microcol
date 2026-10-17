@@ -294,7 +294,7 @@ documentation in APT just to make it visible on the web.
 ## Five gameplay decisions incorporated — 2026-10-17
 
 1. The user answered [R-0070](requirements/R-0070.md),
-   [R-0086](requirements/R-0086.md), [R-0089](requirements/R-0089.md),
+   [R-0086](requirements/done/R-0086.md), [R-0089](requirements/R-0089.md),
    [R-0090](requirements/R-0090.md) and [R-0096](requirements/R-0096.md).
    Their shared rule topics, behavior, design and UC acceptance descriptions
    now incorporate the answers; all five open-question chapters contain None.
