@@ -3596,3 +3596,28 @@ committed for this experiment.
    execution. Keep Haiku available for a further small trial; select Sonnet
    medium for R-0132 because shared transfer admission also affects purchase
    charges and changed-state UI confirmation. This remains observational evidence.
+10. R-0132 Sonnet medium first attempt took 128.369 seconds and produced the
+    cap/admission and changed-purchase UI handling, but explicitly omitted
+    required stale-purchase, real-model conservation and saved-roundtrip checks.
+    Caller review returned this incomplete authoring to the same model for one
+    bounded repair; a missing page helper is within the assignment, not a blocker.
+    No successful acceptance is claimed for that attempt.
+11. R-0132 first repair (same Sonnet medium) took 132.320 seconds. Actual
+    Docker `run-cO7Ogt` compiled and passed all 104 selected model tests;
+    UI/support ran 10 with two errors, zero assertion failures/skips. Both
+    new stale-purchase cases queried `#labelGold` while the market screen
+    was open, causing `EmptyNodeQueryException`. Review also found the requested
+    Continue check still omitted. Final bounded repair escalates effort to high
+    on the same Sonnet/session/worktree, retaining 260.689 elapsed seconds and
+    the two-repair limit. Fix expected fixture gold, add Continue, and narrow
+    invalid-restore assertions; then rerun the same targeted acceptance.
+12. R-0132 final Sonnet-high repair took 84.176 seconds; total worker time
+    is 344.865 seconds across three attempts. All 115 selected checks now pass
+    ([evidence](../functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17));
+    full batch acceptance remains pending. Final cumulative resumed-session
+    totals: 84 input, 130,411 cache-create, 3,298,761 cache-read and 42,124 output
+    tokens (12,783 thinking reported), list-price estimate $1.2729281. Do not
+    sum earlier cumulative reports again. The high repair fixed the two actual
+    UI errors and completed the repeated missing Continue check. Next R-0179
+    uses Haiku medium for a smaller additive combat modifier; no Opus fallback
+    has been needed in this batch so far.

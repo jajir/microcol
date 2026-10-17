@@ -707,6 +707,114 @@ public class CargoSlotTest {
                 ret.getMessage());
     }
 
+    @Test
+    public void test_buyAndStoreFromEuropePort_empty_clamps_to_hold_capacity()
+            throws Exception {
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
+        final Goods requested = new Goods(GoodsType.CIGARS, 101);
+
+        final Goods ret = slot.buyAndStoreFromEuropePort(requested);
+
+        assertEquals(requested.setAmount(100), ret);
+        assertEquals(requested.setAmount(100), slot.getGoods().get());
+        verify(player).buyGoods(requested.setAmount(100));
+        verify(player, never()).buyGoods(requested);
+    }
+
+    @Test
+    public void test_buyAndStoreFromEuropePort_empty_99_and_100_are_not_clamped()
+            throws Exception {
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
+
+        final Goods ret = slot
+                .buyAndStoreFromEuropePort(new Goods(GoodsType.CIGARS, 99));
+
+        assertEquals(new Goods(GoodsType.CIGARS, 99), ret);
+        assertEquals(1, slot.getAvailableCapacity());
+
+        slot = new CargoSlot(cargo);
+        slot.buyAndStoreFromEuropePort(new Goods(GoodsType.CIGARS, 100));
+        assertEquals(new Goods(GoodsType.CIGARS, 100), slot.getGoods().get());
+    }
+
+    @Test
+    public void test_buyAndStoreFromEuropePort_empty_over_capacity_not_enough_gold()
+            throws Exception {
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
+        doThrow(new NotEnoughtGoldException(NOT_ENOUGH_GOLD)).when(player)
+                .buyGoods(new Goods(GoodsType.CIGARS, 100));
+
+        assertThrows(NotEnoughtGoldException.class, () -> slot
+                .buyAndStoreFromEuropePort(new Goods(GoodsType.CIGARS, 150)));
+
+        assertTrue(slot.isEmpty());
+    }
+
+    @Test
+    public void test_buyAndStoreFromEuropePort_zero_is_noop() throws Exception {
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
+
+        final Goods ret = slot
+                .buyAndStoreFromEuropePort(new Goods(GoodsType.CIGARS, 0));
+
+        assertTrue(ret.isZero());
+        assertTrue(slot.isEmpty());
+        verify(player, never()).buyGoods(any());
+    }
+
+    @Test
+    public void test_addGoods_over_capacity_is_rejected_without_change()
+            throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 60));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> slot.addGoods(Goods.of(GoodsType.CORN, 41)));
+
+        assertEquals(Goods.of(GoodsType.CORN, 60), slot.getGoods().get());
+        slot.addGoods(Goods.of(GoodsType.CORN, 40));
+        assertEquals(0, slot.getAvailableCapacity());
+    }
+
+    @Test
+    public void test_addGoods_empty_slot_over_capacity_is_rejected()
+            throws Exception {
+        assertThrows(IllegalArgumentException.class,
+                () -> slot.addGoods(Goods.of(GoodsType.CORN, 101)));
+
+        assertTrue(slot.isEmpty());
+    }
+
+    @Test
+    public void test_addGoods_different_type_is_rejected() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 10));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> slot.addGoods(Goods.of(GoodsType.CIGARS, 1)));
+
+        assertEquals(Goods.of(GoodsType.CORN, 10), slot.getGoods().get());
+    }
+
+    @Test
+    public void test_addGoods_zero_does_not_occupy_empty_slot()
+            throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 0));
+
+        assertTrue(slot.isEmpty());
+    }
+
+    @Test
+    public void test_constructor_restored_goods_over_capacity_is_rejected()
+            throws Exception {
+        assertThrows(IllegalArgumentException.class,
+                () -> new CargoSlot(cargo, new Goods(GoodsType.CORN, 101)));
+        assertEquals(100, new CargoSlot(cargo, new Goods(GoodsType.CORN, 100))
+                .getGoods().get().getAmount());
+    }
+
     private void loadUnit(final Unit unit) {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);

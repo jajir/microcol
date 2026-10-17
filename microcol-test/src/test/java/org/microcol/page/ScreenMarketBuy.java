@@ -17,4 +17,8 @@ public class ScreenMarketBuy extends AbstractScreenMarket {
         clickOnButtonWithId("buttonYes");
     }
 
+    public void clickOnCancel() {
+        clickOnButtonWithId("buttonNo");
+    }
+
 }

@@ -738,3 +738,7 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    Modelové kontroly a TC29/TC31 prošly; TC31_07 nově ověřuje odmítnutí vozu
    v lodním prostoru a zachování stavu po Continue. Poklad a další části UC-024
    tím nejsou označeny za hotové. Úplná regrese dávky zůstává před námi.
+3. UC-023/UC-036: R-0132 doplňuje modelový limit 100 kusů i pro prázdný
+   prostor při nákupu a odmítá již neplatné potvrzení. TC05/TC06 ověřují
+   přesuny, zrušení, změněný prostor, přesné zlato a Continue; cílené kontroly
+   prošly po opravě dvou nových UI scénářů. Celá dávka ještě není ověřena.

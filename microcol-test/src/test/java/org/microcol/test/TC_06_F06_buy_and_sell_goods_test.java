@@ -9,6 +9,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.page.BuyUnitScreen;
 import org.microcol.page.EuropePortScreen;
+import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.ScreenMarketBuy;
 import org.microcol.page.ScreenMarketSell;
@@ -58,6 +59,12 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Verify that ship is empty.
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
 
+        // Cancel a purchase choice; hold and treasury stay unchanged.
+        europePort.buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0)
+                .clickOnCancel();
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGold(95000);
+
         /*
          * Buy food, with pressed control, limit food to 63, verify that food is
          * in cargo slot.
@@ -95,6 +102,104 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.verifyGold(94802);
 
         // Close Europe port
+        gamePage = europePort.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_moving_goods_stale_purchase_reduced_capacity() throws Exception {
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Open Europe port and buy a ship.
+        EuropePortScreen europePort = gamePage.openEuroperPort();
+        europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+
+        // Open the purchase choice; the offer is the full 100 units.
+        ScreenMarketBuy screenMarketBuy = europePort
+                .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
+        screenMarketBuy.verifySelectedMarketQuantity(100);
+
+        // Another action fills half of the hold while the choice is open.
+        europePort.competingPurchase(0, GoodsType.CORN, 50);
+
+        // Confirming the stale 100 units is rejected without any charge.
+        screenMarketBuy.clickOnBuy();
+        europePort.verifyGoodsTransferChangedWarning(
+                "The cargo hold changed and the purchase was not made. Nothing was charged.");
+        europePort.closeGoodsTransferWarning();
+
+        // Europe is shown again: 50 corn at 4 gold were charged to the
+        // competing purchase only (95000 - 200).
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 50));
+        europePort.verifyGold(94800);
+
+        // Choose again; only the current free space of 50 is offered.
+        screenMarketBuy = europePort
+                .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
+        screenMarketBuy.verifySelectedMarketQuantity(50);
+        screenMarketBuy.verifyQuotedPrice("4 gold", "200 gold");
+        screenMarketBuy.clickOnBuy();
+
+        // Exactly the offered quantity was bought and charged.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGold(94600);
+
+        // Close Europe port, save through the menu and continue the game.
+        gamePage = europePort.close();
+        gamePage.exitToMenu();
+        gamePage = new FreePlayAuditPage(getContext()).continueGame();
+        europePort = gamePage.openEuroperPort();
+
+        // The continued game keeps the exact cargo and treasury.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGold(94600);
+        gamePage = europePort.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_moving_goods_stale_purchase_incompatible_commodity()
+            throws Exception {
+        // open MicroCol and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Open Europe port and buy a ship.
+        EuropePortScreen europePort = gamePage.openEuroperPort();
+        europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+
+        // Open the corn purchase choice for the empty first slot.
+        ScreenMarketBuy screenMarketBuy = europePort
+                .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
+        screenMarketBuy.verifySelectedMarketQuantity(100);
+
+        // Another action stores different goods in that slot.
+        europePort.competingPurchase(0, GoodsType.CIGARS, 10);
+
+        // Confirming corn is rejected; hold and treasury stay unchanged.
+        screenMarketBuy.clickOnBuy();
+        europePort.verifyGoodsTransferChangedWarning(
+                "The cargo hold changed and the purchase was not made. Nothing was charged.");
+        europePort.closeGoodsTransferWarning();
+
+        // Only the competing purchase of 10 cigars at 12 gold was charged
+        // (95000 - 120).
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CIGARS, 10));
+        europePort.verifyGold(94880);
+
+        // Close Europe port, save through the menu and continue the game.
+        gamePage = europePort.close();
+        gamePage.exitToMenu();
+        gamePage = new FreePlayAuditPage(getContext()).continueGame();
+        europePort = gamePage.openEuroperPort();
+
+        // The continued game keeps the exact cargo and treasury.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CIGARS, 10));
+        europePort.verifyGold(94880);
         gamePage = europePort.close();
     }
 

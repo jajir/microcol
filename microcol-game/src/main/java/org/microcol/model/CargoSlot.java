@@ -37,6 +37,10 @@ public class CargoSlot {
     CargoSlot(final Cargo cargo, final Goods goods) {
         this.cargo = Preconditions.checkNotNull(cargo);
         this.cargoGoods = Preconditions.checkNotNull(goods);
+        Preconditions.checkArgument(
+                goods.getAmount() <= MAX_CARGO_SLOT_CAPACITY,
+                "Cargo slot can't contain more than %s goods, but was %s.",
+                MAX_CARGO_SLOT_CAPACITY, goods.getAmount());
     }
 
     CargoSlotPo save() {
@@ -183,31 +187,16 @@ public class CargoSlot {
         requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         verifyThatItCouldStored(goods);
-        if (getGoods().isPresent()) {
-            final Goods storedGoods = getGoods().get();
-            final Goods maxGoods = storedGoods
-                    .setAmount(MAX_CARGO_SLOT_CAPACITY);
-            final Goods freeGoods = maxGoods.substract(storedGoods);
-            if (freeGoods.isZero()) {
-                // no space to store
-                return storedGoods.setAmount(0);
-            }
-            if (freeGoods.isGreaterOrEqualsThan(goods)) {
-                // all could be stored
-                getOwnerPlayer().buyGoods(goods);
-                addGoods(goods);
-                return goods;
-            } else {
-                // just part will be stored
-                getOwnerPlayer().buyGoods(freeGoods);
-                addGoods(freeGoods);
-                return freeGoods;
-            }
-        } else {
-            getOwnerPlayer().buyGoods(goods);
-            addGoods(goods);
-            return goods;
+        // Clamp to free space before charging, so admission can't fail after
+        // gold was spent.
+        final Goods toBuy = maxPossibleGoodsToMoveHere(goods);
+        if (toBuy.isZero()) {
+            // nothing requested or no space to store
+            return toBuy;
         }
+        getOwnerPlayer().buyGoods(toBuy);
+        addGoods(toBuy);
+        return toBuy;
     }
 
     void sellAndEmpty(final Goods goods) {
@@ -264,6 +253,9 @@ public class CargoSlot {
 
         final Goods toTransfer = maxPossibleGoodsToMoveHere(sourceGoods,
                 transferredGoods);
+        if (toTransfer.isZero()) {
+            return toTransfer;
+        }
         sourceCargoSlot.removeCargo(toTransfer);
         addGoods(toTransfer);
         return toTransfer;
@@ -291,6 +283,9 @@ public class CargoSlot {
 
         final Goods toTransfer = maxPossibleGoodsToMoveHere(warehouseGoods,
                 transferredGoods);
+        if (toTransfer.isZero()) {
+            return;
+        }
         warehouse.removeGoods(toTransfer);
         addGoods(toTransfer);
     }
@@ -374,6 +369,14 @@ public class CargoSlot {
 
     void addGoods(final Goods goods) {
         Preconditions.checkNotNull(goods);
+        verifyThatItCouldStored(goods);
+        Preconditions.checkArgument(goods.getAmount() <= getAvailableCapacity(),
+                "Can't store %s goods into %s, free capacity is %s.",
+                goods.getAmount(), this, getAvailableCapacity());
+        if (goods.isZero()) {
+            // Never create an occupied hold with zero goods.
+            return;
+        }
         if (cargoGoods == null) {
             cargoGoods = goods;
         } else {

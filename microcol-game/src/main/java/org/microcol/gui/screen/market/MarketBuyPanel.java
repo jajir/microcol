@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.market;
 
+import org.microcol.gui.dialog.DialogGoodsTransferChanged;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
@@ -42,6 +43,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final DialogNotEnoughGold dialogNotEnoughGold;
 
+    private final DialogGoodsTransferChanged dialogGoodsTransferChanged;
+
     private final Label labelHowMuch = new Label();
 
     private final Label labelPricePerPiece = new Label();
@@ -69,7 +72,10 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     @Inject
     MarketBuyPanel(final I18n i18n, final EventBus eventBus,
             final GameModelController gameModelController,
-            final DialogNotEnoughGold dialogNotEnoughGold) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final DialogGoodsTransferChanged dialogGoodsTransferChanged) {
+        this.dialogGoodsTransferChanged = Preconditions
+                .checkNotNull(dialogGoodsTransferChanged);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameModelController = Preconditions
@@ -128,11 +134,35 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         final CargoSlot targetCargoSlot = screenMarketContext
                 .getTargetCargoSlot();
         try {
-            targetCargoSlot.buyAndStoreFromEuropePort(getActualValue());
+            if (getActualValue().isZero()) {
+                // nothing selected, nothing to buy
+                eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+                return;
+            }
+            if (isOfferStillValid(targetCargoSlot)) {
+                targetCargoSlot.buyAndStoreFromEuropePort(getActualValue());
+            } else {
+                dialogGoodsTransferChanged.showAndWait();
+            }
         } catch (NotEnoughtGoldException e) {
             dialogNotEnoughGold.showAndWait();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            // hold changed since the quantity was chosen, nothing was charged
+            dialogGoodsTransferChanged.showAndWait();
         }
         eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+    }
+
+    /**
+     * The chosen quantity must still fit exactly into the target hold; a
+     * different (clamped) quantity is never bought silently.
+     */
+    private boolean isOfferStillValid(final CargoSlot targetCargoSlot) {
+        final Goods chosen = getActualValue();
+        return targetCargoSlot.getGoods()
+                .map(stored -> stored.getType().equals(chosen.getType()))
+                .orElse(true)
+                && targetCargoSlot.getAvailableCapacity() >= chosen.getAmount();
     }
 
     void init(final ScreenMarketBuyContext screenMarketContext) {

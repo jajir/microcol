@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.microcol.gui.screen.europe.EuropeButtonsPanel;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Player;
 import org.microcol.model.unit.UnitGalleon;
 import org.microcol.model.unit.UnitWithCargo;
@@ -63,6 +64,31 @@ public class EuropePortScreen extends AbstractScreen {
         assertEquals(expectedAmountOfGold, realGold,
                 String.format("Expected gold was '%s' but really is '%s'",
                         expectedAmountOfGold, realGold));
+    }
+
+    /**
+     * Simulate another action buying goods into the first ship's hold while a
+     * purchase choice is open.
+     */
+    public void competingPurchase(final int cargoSlotIndex,
+            final GoodsType goodsType, final int amount) throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            getShipsInPort().get(0).getCargo().getSlotByIndex(cargoSlotIndex)
+                    .buyAndStoreFromEuropePort(Goods.of(goodsType, amount));
+        }).get(5, java.util.concurrent.TimeUnit.SECONDS);
+    }
+
+    public void verifyGoodsTransferChangedWarning(final String expectedText) {
+        final List<javafx.scene.Node> labels = getListOfNodes(".label");
+        assertTrue(
+                labels.stream().filter(node -> node instanceof Labeled)
+                        .anyMatch(node -> expectedText
+                                .equals(((Labeled) node).getText())),
+                String.format("Warning '%s' was not shown", expectedText));
+    }
+
+    public void closeGoodsTransferWarning() {
+        clickOnButtonWithId("buttonOk");
     }
 
     private List<UnitWithCargo> getShipsInPort() {

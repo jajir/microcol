@@ -196,7 +196,7 @@ verified or authorize implementation.
 | [R-0076](done/R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
-| [R-0132](R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
+| [R-0132](R-0132.md) | Enforce the 100-goods hold cap on every transfer | Ready; targeted checks passed, batch acceptance pending | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
 | [R-0133](R-0133.md) | Reject ships and wagons as ordinary passengers | Ready; targeted checks passed, batch acceptance pending | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |

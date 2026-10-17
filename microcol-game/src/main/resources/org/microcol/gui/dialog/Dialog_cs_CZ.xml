@@ -17,6 +17,7 @@
 	<entry key="unitCantFightWarning_caption">Tato jednotka neumí bojovat.</entry>
 	
 	<entry key="notEnoughGold_caption">K dokončení operace nemáte dost zlata.</entry>
+	<entry key="goodsTransfer_changed">Nákladový prostor se změnil a nákup neproběhl. Nic nebylo odečteno.</entry>
 
 
 	<entry key="unitCantMoveHere_caption">Sem neni možné jednotku přesunout.</entry>

@@ -4821,3 +4821,18 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    restoration, valid passenger identity/movement restoration and slot relation.
    Reports/screenshots: `target/docker-ui/run-LjAQb2/` in the batch worktree.
    Full batch acceptance and publication remain pending.
+4. R-0132: first targeted Docker `run-cO7Ogt` passed 104 model checks but
+   had two UI errors (absent `#labelGold` during a market choice), with 10
+   UI/support checks total and no skips. After the final Sonnet-high repair,
+   shared formatting passed on nine Java files and Docker `run-GSzhm6` exited
+   0: CargoSlot 56, CargoCapacity 34, NavalCombat 11, EuropeTradeQuote 4,
+   TC05 3, TC06 4 and PageVerificationContract 3: **115 passed**, no failures,
+   errors or skips. TC06 retains its existing IDs and adds named
+   `TC_06_moving_goods_stale_purchase_reduced_capacity` and
+   `TC_06_moving_goods_stale_purchase_incompatible_commodity`: invalidated
+   purchases show a rejection without charge, renewed offers use current space,
+   exact fixture gold/cargo survives Continue. Model checks cover 99/100/101
+   requests across three transfer routes, conservation/tax, passenger/mixed
+   rejection and valid/invalid disk restoration. Naval loot remains verified.
+   Reports/screenshots: `target/docker-ui/run-GSzhm6/` in the batch worktree.
+   Full batch regression and publication remain pending.
