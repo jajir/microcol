@@ -273,3 +273,20 @@ documentation in APT just to make it visible on the web.
    to its actual execution. This is not a fresh audit of the whole catalogue.
    Pages deployment and documentation-only game-job skips are verified after
    pushing; the game build from `57e16d91` has its independent CI gate.
+
+## Capture affiliation decision — 2026-10-17
+
+1. The user accepted [R-0100](requirements/R-0100.md)'s proposed capture rule.
+   The [shared support rule](gap-analysis.md#support-production-and-congress)
+   now assigns preserved liberty to the European colonial conqueror and uses
+   that nation's Bolivar bonus; Crown occupation retains the last colonial
+   affiliation. R-0096, R-0101, R-0102 and R-0105 incorporate the answer.
+   R-0100's answered question is removed; requirement statuses stay unchanged.
+2. Local validation passed 21 local-worker launcher tests without inference,
+   nine documentation tests and strict MkDocs. Browser review confirmed the
+   rendered R-0100 decision, topical links and empty open-question chapter.
+   This is documentation acceptance; no gameplay implementation or runtime
+   verification is claimed. Unrelated R-0070 edits are excluded from publication.
+3. Publication is checked separately in [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
+   and the [documentation-only CI contract](development-builds.md#ci-filtering);
+   this change does not request a new game distribution.

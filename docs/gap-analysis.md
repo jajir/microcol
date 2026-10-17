@@ -828,7 +828,14 @@ rules; implementation and acceptance are tracked by that requirement.
    22% displayed, national remains 30%. Population loss can discard excess L at
    the cap; it cannot export bells. Occupation preserves L but Crown-produced
    bells subtract from it down to zero, strengthening Tories; liberation resumes
-   additions. Bolivar's modifier follows the rebel nation, not the occupier.
+   additions. User decision (2026-10-17): capture by another European colonial
+   nation preserves L but transfers the colony's national support contribution
+   to the new nation and applies that nation's Bolivar bonus. Crown occupation
+   retains the last colonial affiliation and uses that nation's Bolivar bonus,
+   not the Crown's. For example, after France captures an English colony, its
+   liberty counts toward France; subsequent Crown occupation retains the French
+   affiliation. This is agreed behavior for [R-0100](requirements/R-0100.md),
+   not verified runtime behavior.
 3. At production start snapshot the exact support. Each staffed productive job
    gets +1 at at least 50%, +2 at 100%, otherwise zero. Tory count is
    `N − floor(N × rebel fraction)`; at [difficulty and national effects](#difficulty-and-national-effects)'s critical count apply −1 per job.
