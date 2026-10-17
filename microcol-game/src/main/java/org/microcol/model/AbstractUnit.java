@@ -331,7 +331,14 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public int getSightRadius() {
-        return isShip() ? 2 : 1;
+        return withFounderSight(isShip() ? 2 : 1);
+    }
+
+    /** Apply the owner's current exploration bonus to an ordinary role. */
+    protected final int withFounderSight(final int ordinaryRadius) {
+        return owner.getCongressMembers().contains(Founder.HERNANDO_DE_SOTO)
+                ? Math.max(ordinaryRadius, 2)
+                : ordinaryRadius;
     }
 
     @Override

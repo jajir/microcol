@@ -336,9 +336,10 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public int getSightRadius() {
-        return getType() == UnitType.SEASONED_SCOUT || mounted && !holdingGuns
-                ? 2
-                : 1;
+        return withFounderSight(
+                getType() == UnitType.SEASONED_SCOUT || mounted && !holdingGuns
+                        ? 2
+                        : 1);
     }
 
     private void revealExpandedSight(final int previousRadius) {

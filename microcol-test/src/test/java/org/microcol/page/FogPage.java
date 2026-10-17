@@ -133,6 +133,39 @@ public final class FogPage extends AbstractScreen {
                 .getMoveLocations().contains(destination));
     }
 
+    public void verifyNoFogBorder(final Location interior) {
+        assertNull(
+                getContext().getClassFromGuice(
+                        org.microcol.gui.screen.game.gamepanel.MapManager.class)
+                        .getHiddenImageCoast(interior),
+                "An explored interior tile must not keep an obsolete fog border");
+    }
+
+    public void verifySightRadius(final int unitId, final int expected) {
+        assertEquals(expected, getModel().getUnitById(unitId).getSightRadius());
+    }
+
+    public void verifyRevealedPixels(final Location location) throws Exception {
+        final Image actual = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final Image hidden = getContext().getClassFromGuice(ImageProvider.class)
+                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
+        final Point point = getContext().getArea()
+                .convertToCanvasPoint(location);
+        boolean different = false;
+        for (int y = 12; y < Tile.TILE_WIDTH_IN_PX - 12; y += 8) {
+            for (int x = 12; x < Tile.TILE_WIDTH_IN_PX - 12; x += 8) {
+                different |= hidden.getPixelReader().getArgb(x, y) != actual
+                        .getPixelReader()
+                        .getArgb(point.getX() + x, point.getY() + y);
+            }
+        }
+        assertTrue(different,
+                "Revealed terrain must replace fog at " + location);
+    }
+
     public void verifyUnitLocation(final int unitId, final Location expected) {
         assertEquals(expected, getModel().getUnitById(unitId).getLocation());
     }

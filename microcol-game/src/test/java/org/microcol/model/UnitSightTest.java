@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.CongressPo;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitCreateRequest;
 import org.microcol.model.unit.UnitFactory;
@@ -24,7 +26,11 @@ class UnitSightTest {
 
     private static Stream<Arguments> currentTypes() {
         return Stream.of(Arguments.of(UnitType.COLONIST, 1),
+                Arguments.of(UnitType.INDENTURED_SERVANT, 1),
+                Arguments.of(UnitType.PETTY_CRIMINAL, 1),
                 Arguments.of(UnitType.MASTER_BLACKSMITH, 1),
+                Arguments.of(UnitType.SEASONED_SCOUT, 2),
+                Arguments.of(UnitType.ARTILLERY, 1),
                 Arguments.of(UnitType.WAGON, 1),
                 Arguments.of(UnitType.CARAVEL, 2),
                 Arguments.of(UnitType.MERCHANTMAN, 2),
@@ -36,6 +42,11 @@ class UnitSightTest {
 
     private Unit unit(final UnitType type, final Location center,
             final boolean guns, final boolean horses) {
+        return unit(type, center, guns, horses, false);
+    }
+
+    private Unit unit(final UnitType type, final Location center,
+            final boolean guns, final boolean horses, final boolean deSoto) {
         final Model model = mock(Model.class);
         final WorldMap map = mock(WorldMap.class);
         when(model.getMap()).thenReturn(map);
@@ -45,6 +56,8 @@ class UnitSightTest {
                     && location.getY() >= 1 && location.getY() <= 5;
         });
         final Player owner = mock(Player.class);
+        when(owner.getCongressMembers()).thenReturn(
+                deSoto ? List.of(Founder.HERNANDO_DE_SOTO) : List.of());
         final UnitCreateRequest request = new UnitCreateRequest(model,
                 unit -> new PlaceLocation(unit, center, Direction.east), 1,
                 type, owner, new UnitActionNoAction(), 1);
@@ -52,6 +65,75 @@ class UnitSightTest {
         request.setHoldingGuns(guns);
         request.setMounted(horses);
         return new UnitFactory().createUnit(request);
+    }
+
+    @ParameterizedTest
+    @MethodSource("currentTypes")
+    void deSotoGivesEveryOnMapFamilyMinimumTwoClippedTiles(final UnitType type,
+            final int ordinaryRadius) {
+        final Unit unit = unit(type, Location.of(1, 1), false, false, true);
+        assertTrue(ordinaryRadius <= 2);
+        assertEquals(2, unit.getSightRadius());
+        assertEquals(9, unit.getVisibleLocations().size());
+        assertTrue(unit.getVisibleLocations().contains(Location.of(3, 3)));
+    }
+
+    @Test
+    void deSotoKeepsRoleTransitionsAtTwo() {
+        final UnitFreeColonist scout = (UnitFreeColonist) unit(
+                UnitType.COLONIST, Location.of(3, 3), false, false, true);
+        assertEquals(2, scout.getSightRadius());
+        scout.setMounted(true);
+        assertEquals(2, scout.getSightRadius());
+        scout.setHoldingGuns(true);
+        assertEquals(2, scout.getSightRadius());
+        scout.setMounted(false);
+        assertEquals(2, scout.getSightRadius());
+        assertEquals(25, scout.getVisibleLocations().size());
+    }
+
+    @Test
+    void actualDeSotoArrivalRevealsOnlyOwnedOnMapUnitsAndPersists() {
+        final var data = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.microcol");
+        final var po = data.getModel();
+        for (final var player : po.getGameManager().getPlayers()) {
+            player.getVisible().setVisibility(Set.of(), po.getMap().getMaxX(),
+                    po.getMap().getMaxY());
+            if ("France".equals(player.getName())) {
+                final CongressPo congress = Congress.initial();
+                congress.setActivated(true);
+                congress.setBells(99);
+                congress.setGeneration(1);
+                congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
+                        Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
+                        Founder.WILLIAM_PENN, Founder.HERNANDO_DE_SOTO));
+                congress.setSelected(Founder.HERNANDO_DE_SOTO);
+                player.setCongress(congress);
+            }
+        }
+        final Model model = Model.make(po,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Player france = model.getPlayerByName("France");
+        final Player dutch = model.getPlayerByName("Dutch");
+        final Location frontier = Location.of(19, 12);
+        final Location interiorOnly = Location.of(19, 23);
+        assertFalse(france.isVisible(frontier));
+        assertFalse(france.isVisible(interiorOnly));
+        final Set<Location> dutchBefore = dutch.save().getVisible()
+                .getVisibilitySet();
+        model.startGame();
+        assertTrue(
+                france.getCongressMembers().contains(Founder.HERNANDO_DE_SOTO));
+        assertEquals(2, model.getUnitById(6).getSightRadius());
+        assertTrue(france.isVisible(frontier));
+        assertFalse(france.isVisible(interiorOnly));
+        assertEquals(dutchBefore, dutch.save().getVisible().getVisibilitySet());
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(france.save().getVisible().getVisibilitySet(),
+                restored.getPlayerByName("France").save().getVisible()
+                        .getVisibilitySet());
     }
 
     @ParameterizedTest

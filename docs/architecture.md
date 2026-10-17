@@ -774,3 +774,15 @@ identitu objektu a vojenskou hodnost. `model.store` ukládá kurzy a historii
 práce; `TurnEventEducationCompleted` uchovává dokončený výsledek pro hlášení
 bez opakování výuky při zobrazení či Continue.
 Implementace a skutečné kontroly jsou odděleny v [evidenci](functional-tests.md#r-0107-education-work-2026-10-17).
+
+
+### Dohled po příchodu De Sota (R-0069)
+
+Společný dotaz jednotky odvozuje minimální dohled dvě pole ze skutečného
+členství současného vlastníka v Kongresu. Specializovaný dotaz kolonisty
+používá stejnou úpravu, takže vybavení nemůže bonus obejít. `Player` při
+skutečném příchodu otce ihned odhalí okolí všech vlastních jednotek přímo
+na mapě. Pasažéři, pracovníci a jednotky mimo mapu neodhalují samostatně.
+Nevzniká další uložený bonus: členství a již objevený terén používají stávající
+uložení. `MapManager` po přípravě lidského tahu obnoví vykreslené okraje
+mlhy, aby nezůstaly na nově odkrytých polích. Výsledky přejímky vede [evidence R-0069](functional-tests.md#r-0069-de-soto-sight-integration-2026-10-17).

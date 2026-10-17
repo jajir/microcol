@@ -4525,3 +4525,50 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and retains the same window-closed wait and gameplay assertions. TC64/65
    regression is required; this is not yet a verified fix.
    Compatibility/Pages passed, but this failed game build was not published.
+
+
+### R-0069 De Soto sight integration — 2026-10-17
+
+1. Selected after inspection at `b2403f3d`: Congress membership existed, but
+   neither the base nor colonist sight query applied De Soto and his arrival
+   did not reveal the second ring. This is the remaining founder integration
+   explicitly required by R-0069, not completion of lost-city or live-visibility
+   rules.
+2. Planned player acceptance: TC69/F60 chooses De Soto, preserves hidden terrain
+   through pre-arrival Continue, produces the last required bell through the
+   ordinary turn, and checks unchanged observer position, actual revealed map
+   pixels, hidden third ring and post-arrival Continue. TC26 and TC56 retain
+   existing exploration, hidden-information and Congress checks. Actual results
+   will be recorded after execution; no passing result is claimed here.
+3. Sol low changed only the base/colonist sight query, the actual Congress
+   arrival boundary and `UnitSightTest`. All **48 focused sight checks passed**.
+   Main reviewed the complete diff and independently ran the full model suite:
+   **1,807 tests, zero failures/errors/skips** (`/tmp/r69-desoto-model-full.log`).
+   Shared formatting passed for model and main-authored test files. Docker
+   TC69/TC26/TC56 and the page contract are still running.
+4. Initial Docker run `run-LIQG4n` passed **9 tests** (TC69 one,
+   TC26 three, TC56 two, page contract three), but main's screenshot review
+   found obsolete black fog borders after the stationary reveal. The existing
+   `MapManager` rebuilt the border cache on movement, arrival and game load,
+   but not after Congress changed explored terrain during turn preparation.
+   Added a check for the newly interior tile's absent fog border; the initial
+   green run alone is not accepted as completed visual behavior.
+5. The stronger TC69 check reproduced the border defect in `run-pLcKXW`:
+   **4 tests, one failure, zero errors/skips**, specifically the stale cached
+   border at the now-interior tile (30,16). `MapManager` now rebuilds hidden
+   coast images when a human turn starts, after preparation can reveal terrain
+   through founder arrival. Model sight and stored exploration remain the sole
+   authority. Final packaging/Javadoc passed after this GUI correction.
+6. Older R-0110 CI `38981740046` completed with **280 UI/support tests,
+   one failure and one error**. The first error is TC65/01 in
+   `NavalBattlePage.closeOutcome` (Escape timeout), followed by TC65/03's
+   blocked status-bar setup. This revision predates the actual OK-button repair
+   in `b2403f3d`; that newer complete CI remains pending. Log:
+   `/tmp/r110-ci-failed.log`. This is not evidence of a new De Soto failure.
+7. Final corrected Docker run `run-L6HLc6` passed **all 9 tests**, zero
+   failures/errors/skips (TC69 one, TC26 three, TC56 two, contract three).
+   Main checked exported XML counts and viewed the arrival screenshot: the
+   obsolete inner black border is gone, the second ring is revealed and the
+   third ring remains hidden. The scenario checks the same boundary after
+   Continue. Model suite remains **1,807 passing tests**; model code did not
+   change after that run. Complete CI/publication remain pending.

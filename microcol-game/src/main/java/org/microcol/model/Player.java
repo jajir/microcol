@@ -345,6 +345,10 @@ public abstract class Player {
                         "No unit IDs remain for Jones's frigate");
             }
             final Founder arrived = congress.join(model.getDifficulty());
+            if (arrived == Founder.HERNANDO_DE_SOTO) {
+                getAllUnits().stream().filter(Unit::isAtPlaceLocation)
+                        .forEach(this::revealMapForUnit);
+            }
             model.getTurnEventStore()
                     .add(TurnEventProvider.getFounderArrived(this, arrived));
         }

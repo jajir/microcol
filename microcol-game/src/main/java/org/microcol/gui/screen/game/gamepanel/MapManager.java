@@ -10,6 +10,7 @@ import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 
@@ -55,6 +56,15 @@ public final class MapManager {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
+    }
+
+    @Subscribe
+    private void onTurnStarted(final TurnStartedEvent event) {
+        if (event.getPlayer().isHuman()) {
+            // Founder arrival can reveal terrain without any unit movement.
+            hiddenCoastMapGenerator
+                    .setMap(gameModelController.getModel().getMap());
+        }
     }
 
     @Subscribe
