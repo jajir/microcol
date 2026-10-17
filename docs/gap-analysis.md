@@ -270,7 +270,7 @@ This matrix does not establish the implementation of terrain defense in combat, 
 - Roads, rivers, special resources, persistent movement orders, and trade routes require new persistent state as well as UI/actions. A label, flag, or image asset does not establish that the rule exists.
 - Existing model tests cited above were inspected as implementation evidence. Their execution status belongs to the consolidated validation log; their current expectations do not certify agreement with the manual. Every acceptance scenario labeled “Proposed” still needs a rule-derived test or gameplay check.
 
-The [accepted rules](#accepted-game-rules) now settle the audit's numeric movement, work, resource, voyage and exploration choices, including clearing lumber and road eligibility. The remaining pioneer decision is how clearing handles a recipient colony that disappears or changes owner before completion; see [R-0120](requirements/R-0120.md). Check each other audited gap against its current rule topic during individual refinement rather than treating this historical list as open decisions.
+The [accepted rules](#accepted-game-rules) now settle the audit's numeric movement, work, resource, voyage and exploration choices, including clearing lumber, changing recipients and road eligibility. Check each audited gap against its current rule topic during individual refinement rather than treating this historical list as open decisions.
 
 ### Colony workforce, food and storage
 
@@ -1395,15 +1395,18 @@ rules; implementation and acceptance are tracked by that requirement.
    current movement, and first progress is the next owner update. Deduct 20
    tools only on completion. Explicit cancel discards incomplete progress,
    changes no terrain/tools and restores no spent movement. Completed effects
-   remain; save/load keeps progress. Clearing delivers 20 lumber to nearest
-   owned colony within two squares, tie ID; no recipient means no stored lumber.
-   Confirm the expected result before starting, with cancel leaving the unit
-   unchanged. User decision on 2026-10-17: check warehouse capacity at work
-   completion, store what fits then discard any excess and generate a notification
-   for the next turn. A later capacity increase can fit lumber still awaiting
-   completion; it never restores discarded lumber. Persist the notification
-   across Continue without repeating disposal. A recipient that disappears or
-   changes owner before completion still needs a rule in [R-0120](requirements/R-0120.md).
+   remain; save/load keeps progress. Confirm an expected lumber result before
+   starting, with cancel leaving the unit unchanged. User decisions on
+   2026-10-17: at clearing completion, select the nearest **current** owned
+   colony within two squares, tie by ID, even if the previewed colony was lost
+   or changed owner. Store up to its current warehouse capacity and discard
+   any excess; if no owned colony qualifies, discard all 20 lumber. Clear the
+   forest and spend 20 tools normally in either case, without a second
+   confirmation or pause. A capacity increase before completion can fit more
+   lumber; it never restores discarded lumber afterward. Generate a discarded-
+   lumber notification for the next turn and persist it across Continue without
+   repeating disposal. This is accepted MicroCol behavior, not verified
+   original Colonization parity.
    User decision on 2026-10-17: roads may be built on every terrain except sea,
    including coastal colony tiles; sea tiles reject road work. The current
    `TerrainType.isSea` distinction marks `HIGH_SEA` and `OCEAN` as sea; no

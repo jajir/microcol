@@ -354,3 +354,19 @@ documentation in APT just to make it visible on the web.
 3. Concurrent R-0086 work remains outside this change, including separate hunks
    in the shared rule and use-case catalogues. Publication verifies Pages and
    documentation-only game-job skips separately; no new game build is requested.
+
+## Clearing recipient decision — 2026-10-17
+
+1. The user accepted resolving the recipient at completion in
+   [R-0120](requirements/R-0120.md): choose the nearest currently owned colony
+   within two squares, tie by ID; if none qualifies, clear the forest and spend
+   tools normally, discard all lumber and notify next turn. The starting preview
+   is an expectation, with no second confirmation at completion. The shared
+   work rule and UC-020 now agree; the last question is removed, status stays
+   `new`. This is an accepted MicroCol rule, not verified original-game parity.
+2. A bounded Sol medium edit and caller review retained existing terrain-yield,
+   cancellation, capacity and persistence acceptance. Local checks passed 21
+   launcher unit tests without inference, nine documentation tests, strict
+   MkDocs and rendered R-0120 structure/behavior checks. No game implementation
+   or gameplay test run is claimed. Pages and docs-only skips are checked after
+   publication; this documentation change requests no new game distribution.
