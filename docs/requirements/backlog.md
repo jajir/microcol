@@ -354,6 +354,24 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0103](R-0103.md) | Pay back taxes to lift a commodity boycott | Follow-up | [R-0030](canceled/R-0030.md) |
 | [R-0104](done/R-0104.md) | Recruit a founder and retain Congress membership | Follow-up | [R-0031](canceled/R-0031.md), [R-0025](done/R-0025.md) |
 | [R-0105](R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
+| [R-0180](R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
+| [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
+| [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
+| [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
+| [R-0184](R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
+| [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
+| [R-0186](R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
+| [R-0187](R-0187.md) | Close home Europe and secure its assets on declaration | Remainder | GOV-011; current trade guards and R-0072 reversal credited |
+| [R-0188](R-0188.md) | Apply cause support to revolutionary colony attacks | Remainder | GOV-010; R-0100 affiliation/occupied bell direction credited |
+| [R-0189](R-0189.md) | Announce and earn the foreign-intervention bell target | Remainder | GOV-016 target; unit delivery R-0190 separate |
+| [R-0190](R-0190.md) | Deliver earned intervention forces once | Remainder | GOV-017; target R-0189 separate |
+| [R-0191](R-0191.md) | Recognize a complete revolution victory | Remainder | GOV-019; loss R-0192 evaluated first |
+| [R-0192](R-0192.md) | Apply every revolution loss condition before victory | Remainder | GOV-020/021/022; victory R-0191 separate |
+| [R-0193](R-0193.md) | Apply the 1600, 1800 and 1850 game boundaries | Remainder | END-001/002/003; calendar R-0051 credited |
+| [R-0194](R-0194.md) | Distinguish Exit, Retire and unscored Continue | Remainder | END-004; safe Exit R-0013 credited |
+| [R-0195](R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
+| [R-0196](R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
+| [R-0197](R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
 
 ## Choosing further work
 

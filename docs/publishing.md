@@ -500,3 +500,21 @@ documentation in APT just to make it visible on the web.
    tests, strict MkDocs and seven rendered status/four-chapter/capture checks.
    No gameplay code or runtime acceptance changed. Publication is checked
    separately after push.
+4. Checkpoint `b0e57cac` passed Pages build/deploy in
+   [39036373656](https://github.com/jajir/microcol/actions/runs/39036373656).
+   Development run 39036373586 and compatibility run 39036373800 passed
+   filters and intentionally skipped game jobs. Live R-0179/coverage and
+   commit-pinned catalogue/treasure text were verified (the first phrase probe
+   used a curly apostrophe; corrected HTML-decoded text matched). The automatic
+   `dev` manifest stayed identical at `dev-109-0b0cb0593df4`.
+
+## Political and end-game requirement capture — 2026-10-17
+
+1. R-0180–R-0197 capture remaining founder effects, the REF and intervention,
+   Europe closure, revolutionary outcomes, dates and score/Hall-of-Fame work.
+   All eighteen remain `new`; existing founder and political owners are reused.
+   Native/royal defeat outcomes remain explicit questions in their combat owners,
+   since ordinary colonist downgrade rules do not establish these new roles.
+2. Local verification passed 21 launcher tests without inference, 9 documentation
+   tests, strict MkDocs and eighteen rendered status/four-chapter/capture checks.
+   Publication is checked after push. No gameplay code or acceptance changed.

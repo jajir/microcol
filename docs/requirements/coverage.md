@@ -87,7 +87,18 @@
     [R-0178](R-0178.md) royal/Continental combat roles and ambush,
     and [R-0179](R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
-11. Remaining area-by-area ownership is being reconciled with existing work.
+11. Remaining founder effects are [R-0180](R-0180.md) production modifiers,
+    [R-0181](R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
+    [R-0183](R-0183.md) Coronado and [R-0184](R-0184.md) La Salle.
+    Effects already owned by other requirements are not captured again.
+12. Revolution has separate owners for [REF growth](R-0185.md),
+    [deployment](R-0186.md), [Europe closure](R-0187.md),
+    [attack support](R-0188.md), [intervention target](R-0189.md),
+    [delivery](R-0190.md), [victory](R-0191.md) and [loss](R-0192.md).
+    [R-0193](R-0193.md) owns date boundaries, [R-0194](R-0194.md)
+    Exit/Retire/Continue, [R-0195](R-0195.md) and [R-0196](R-0196.md)
+    score components, and [R-0197](R-0197.md) the Hall of Fame.
+13. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -99,7 +110,7 @@
 | A07 economy | R-0146–R-0149 and existing food, work, construction and education owners | Complete profession/building/economy matrices and native dependency links |
 | A08 relations and AI | R-0150–R-0172 native and European interactions, reports and actor objectives, plus existing diplomacy owners | Conquest dependencies, royal deployment and final acceptance |
 | A09 combat | R-0173–R-0179 residuals; delivered ordinary/naval slices retained | Actual REF/intervention delivery dependencies and complete unit/combat acceptance |
-| A10 politics and end | Existing support, Congress and declaration owners retained | Remaining founders, revolution, dates and scoring |
+| A10 politics and end | R-0180–R-0197 residuals; existing support, Congress and declaration owners retained | Full founder/end matrices, political report and integrated revolution acceptance |
 | A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |
 
 This table is a preparation checkpoint, not completed coverage or an implementation
