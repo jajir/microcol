@@ -4793,3 +4793,18 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     R-0086's status/link closure is a separate documentation-only publication,
     not another game build. The Claude worktree was archived after all run
     evidence was copied to the primary checkout.
+
+
+## Claude batch 20 targeted acceptance — 2026-10-17
+
+1. The user authorized two ten-requirement batches. Targeted checks are recorded
+   below; full functional acceptance and CI remain pending until each batch boundary.
+   Model operating evidence is in the [batch record](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+2. R-0118: shared formatter passed for four Java files (exact tokens and
+   idempotence). Docker `run-8Gp9HE` exited 0: `ColonistEquipmentTest` 21,
+   `EuropeEquipmentTest` 22, `TC_25_F17_colony_equipment_test` 8 and
+   `PageVerificationContractTest` 3; all **54 passed**, no failures/errors/skips.
+   New TC25 cases 06–08 cover 19-tool rejection/cancel, exact 20-tool equipment
+   retained by Continue, and stock dropping below 20 with the choice open.
+   Existing TC01–05 and European equipment outcomes remain intact.
+   Reports/screenshots are in the batch worktree's `target/docker-ui/run-8Gp9HE/`.

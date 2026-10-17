@@ -3527,3 +3527,50 @@ committed for this experiment.
     The managed worktree was archived after preserving all trial reports in the
     primary checkout. This completes one supervised Claude Pro handoff through
     implementation, repair, review, full acceptance and publication.
+
+
+## Claude model-selection batch — 2026-10-17
+
+1. The user authorized implementation of 20 requirements through Claude Code,
+   searching for a cheaper adequate model by stepping down and escalating when
+   evidence warrants it. This supersedes the ordinary worker choice for this goal.
+   Use bounded sequential assignments; no additional cloud subagents are needed.
+2. Validation override: author and run affected model and targeted UI tests per
+   requirement. Run the full visual/functional regression and wait for CI only
+   after each batch of ten. Keep intermediate work in the isolated batch worktree
+   so concurrent main documentation pushes do not publish an unfinished batch.
+   The main agent owns review, formatting, local checkpoint commits, integration
+   and each batch's verified publication; workers never commit or push.
+3. Selected first batch order: R-0118, R-0133, R-0132, R-0179, R-0184, R-0147,
+   R-0119, R-0120, R-0136 and R-0089. Second batch candidates: R-0070, R-0090,
+   R-0096, R-0100, R-0101, R-0102, R-0103, R-0085, R-0105 and R-0123.
+   Refine one at a time and recheck actual prerequisites; open gameplay questions
+   are not permission to guess. Completed predecessor work remains intact.
+4. Model experiment: start with explicit `claude-sonnet-5-5` at `medium`, then
+   try `claude-haiku-5-5` on an appropriate bounded task after a successful
+   Sonnet assignment. Reduce effort only after an adequate model baseline;
+   change one setting at a time. Diagnose setup errors separately. A simple
+   defect gets one targeted same-model repair; repeated logic failures or an
+   unsuitable scope justify escalating effort/model before exhausting the task
+   budget. Keep the worktree, task ID, elapsed time and repair counts on escalation.
+   Limits per requirement remain 7200 seconds per attempt, 14400 cumulative,
+   and two requested repairs. Model switching does not reset them.
+5. Record exact model/effort, actual output changes, checks, repairs, wall time
+   and usage categories per requirement. Compare total cost of accepted work
+   including repairs; different tasks are observational evidence, not a controlled
+   benchmark. Report list-price estimates separately from subscription usage;
+   do not equate them to an invoice or percentage quota saved. Recommend a
+   practical default and escalation rule after both batches, not a universal optimum.
+6. Sonnet preflight returned OK with actual `claude-sonnet-5-5` identity. No
+   global Claude settings were changed. Baseline, handoffs and run data are under
+   `~/Library/Logs/Microcol/claude/2026-10-17-batch20/`; the managed worktree is
+   `~/.codex/worktrees/claude-batch20/microcol`. The previous R-0086 Opus trial
+   is historical comparison, not a same-task benchmark.
+
+7. R-0118: actual `claude-sonnet-5-5`, medium, one attempt, 57.762 seconds,
+   no requested repair. Caller review/formatting and all 54 targeted checks passed
+   ([evidence](../functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17));
+   full batch acceptance is pending. Usage: 24 uncached input, 35,083 cache-create,
+   321,295 cache-read, 7,670 output tokens (1,044 thinking reported); list-price
+   estimate $0.2492095, not subscription charges or measured quota savings.
+   Next selected trial is Haiku medium for the bounded R-0133 carrier admission gap.

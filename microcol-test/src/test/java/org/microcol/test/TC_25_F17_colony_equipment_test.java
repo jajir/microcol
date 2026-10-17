@@ -171,4 +171,67 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         equipment.verifySightRadius(2);
     }
 
+    @Test
+    @Tag("local")
+    void TC_06_nineteen_tools_are_rejected_and_cancel_changes_nothing()
+            throws Exception {
+        // The warehouse holds one tool less than the minimum.
+        WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
+                "New Amsterdam");
+        final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.setWarehouseTools(19);
+        equipment.open("Equip with tools");
+        equipment.verifyChoice("Equip with tools", false, MISSING);
+        equipment.cancel();
+        equipment.verifyState(49, 100, 19, false, false, 0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_twenty_tools_equip_partial_load_and_continue_keeps_it()
+            throws Exception {
+        // Exactly the minimum is offered; cancel first changes nothing.
+        final org.microcol.page.GamePage game = WelcomePage.of(getContext())
+                .loadGame();
+        final org.microcol.page.ColonyScreen colony = game.openColonyAt(COLONY,
+                "New Amsterdam");
+        final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.setWarehouseTools(20);
+        equipment.open("Equip with tools");
+        equipment.verifyChoice("Equip with tools", true, "");
+        equipment.verifyCostContains("20");
+        equipment.cancel();
+        equipment.verifyState(49, 100, 20, false, false, 0);
+
+        // Confirmation moves all 20 tools to the same colonist.
+        equipment.open("Equip with tools");
+        equipment.confirm();
+        equipment.verifyState(49, 100, 0, false, false, 20);
+
+        // The partial load survives leaving the game and Continue.
+        colony.close();
+        org.microcol.page.GamePage.of(getContext()).exitToMenu();
+        new org.microcol.page.FreePlayAuditPage(getContext()).continueGame()
+                .openColonyAt(COLONY, "New Amsterdam");
+        equipment.verifyState(49, 100, 0, false, false, 20);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_stock_dropping_below_twenty_rejects_open_choice()
+            throws Exception {
+        // The choice is opened with enough tools.
+        WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
+                "New Amsterdam");
+        final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.open("Equip with tools");
+        equipment.verifyChoice("Equip with tools", true, "");
+
+        // A competing action leaves 19 tools before confirmation.
+        equipment.setWarehouseTools(19);
+        equipment.confirm();
+        equipment.verifyChoice("Equip with tools", false, MISSING);
+        equipment.cancel();
+        equipment.verifyState(49, 100, 19, false, false, 0);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -177,6 +178,46 @@ class ColonistEquipmentTest {
         unit.equipWithTools();
         assertEquals(100, unit.getTools());
         assertEquals(50, stock(GoodsType.TOOLS));
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "0,0", "1,0", "19,0", "20,20", "99,99", "100,100", "101,100" })
+    void toolsBoundaryTransfersExactlyOrRejectsAtomically(final int stock,
+            final int expected) {
+        when(colony.getWarehouseType()).thenReturn(ConstructionType.WAREHOUSE);
+        warehouse.setGoods(Goods.of(GoodsType.TOOLS, stock));
+        unit.equipWithMuskets();
+        unit.equipWithHorses();
+        if (expected == 0) {
+            assertEquals(Optional.of(EquipmentProblem.MISSING_GOODS),
+                    unit.getEquipmentProblem(GoodsType.TOOLS, true));
+            assertThrows(IllegalStateException.class, unit::equipWithTools);
+            assertEquals(stock, stock(GoodsType.TOOLS));
+            assertEquals(50, stock(GoodsType.MUSKET));
+            assertEquals(50, stock(GoodsType.HORSE));
+            assertTrue(unit.isHoldingGuns());
+            assertTrue(unit.isMounted());
+            assertEquals(0, unit.getTools());
+        } else {
+            assertTrue(
+                    unit.getEquipmentProblem(GoodsType.TOOLS, true).isEmpty());
+            assertEquals(
+                    Map.of(GoodsType.TOOLS, -expected, GoodsType.MUSKET, 50,
+                            GoodsType.HORSE, 50),
+                    unit.getEquipmentGoodsChange(GoodsType.TOOLS, true));
+            unit.equipWithTools();
+            assertEquals(expected, unit.getTools());
+            assertEquals(stock - expected, stock(GoodsType.TOOLS));
+            assertEquals(100, stock(GoodsType.MUSKET));
+            assertEquals(100, stock(GoodsType.HORSE));
+            assertFalse(unit.isHoldingGuns());
+            assertFalse(unit.isMounted());
+            assertEquals(4, unit.getId());
+            assertEquals(UnitType.COLONIST, unit.getType());
+            unit.unequipWithTools();
+            assertEquals(stock, stock(GoodsType.TOOLS));
+            assertEquals(0, unit.getTools());
+        }
     }
 
     @Test

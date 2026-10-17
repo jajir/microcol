@@ -31,6 +31,7 @@ public class UnitFreeColonist extends CanMount {
     public final static int REQUIRED_MUSKETS_FOR_ARMED_UNIT = 50;
 
     private final static int MAXIMAL_NUMBER_OF_TOOLS = CargoSlot.MAX_CARGO_SLOT_CAPACITY;
+    private final static int MINIMAL_NUMBER_OF_TOOLS = 20;
 
     private int tools;
 
@@ -434,8 +435,8 @@ public class UnitFreeColonist extends CanMount {
         final Colony colony = verifyThatUnitIsOutsideColony();
         final int totalTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
                 .getAmount();
-        Preconditions.checkState(totalTools > 0,
-                "In colony (%s) is not ane tools", colony);
+        Preconditions.checkState(totalTools >= MINIMAL_NUMBER_OF_TOOLS,
+                "In colony (%s) are not enough tools", colony);
         if (isMounted()) {
             unequipWithHorses();
         }
@@ -499,7 +500,7 @@ public class UnitFreeColonist extends CanMount {
             Colony colony = getModel().getColonyAt(getLocation()).get();
             int availableTools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
                     .getAmount();
-            if (availableTools <= 0)
+            if (availableTools < MINIMAL_NUMBER_OF_TOOLS)
                 return java.util.Optional.of(EquipmentProblem.MISSING_GOODS);
         }
 
@@ -543,9 +544,9 @@ public class UnitFreeColonist extends CanMount {
             if (equip && tools > 0)
                 changes.put(GoodsType.TOOLS, tools);
         } else if (type == GoodsType.TOOLS) {
-            int consume = Math.max(1, Math.min(
+            int consume = Math.min(
                     colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount(),
-                    toolsMax));
+                    toolsMax);
             changes.put(GoodsType.TOOLS, equip ? -consume : tools);
             if (equip && holdingGuns)
                 changes.put(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT);

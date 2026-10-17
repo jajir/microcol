@@ -30,6 +30,23 @@ public final class EquipmentPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Simulate another colony action leaving exactly this many tools. */
+    public void setWarehouseTools(final int amount) throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final org.microcol.model.ColonyWarehouse warehouse = getModel()
+                    .getColonyAt(Location.of(24, 16)).orElseThrow()
+                    .getWarehouse();
+            final int delta = amount
+                    - warehouse.getGoods(GoodsType.TOOLS).getAmount();
+            if (delta > 0)
+                warehouse.addGoods(
+                        org.microcol.model.Goods.of(GoodsType.TOOLS, delta));
+            else if (delta < 0)
+                warehouse.removeGoods(
+                        org.microcol.model.Goods.of(GoodsType.TOOLS, -delta));
+        }).get(5, java.util.concurrent.TimeUnit.SECONDS);
+    }
+
     public void confirm() {
         clickOnButtonWithId("equipmentConfirm");
     }
