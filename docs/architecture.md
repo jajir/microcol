@@ -157,7 +157,7 @@ do národního poolu a vyřízení dosažených prahů v evropské fázi příš
 `Player.startTurn`. Místní sklad křížů zůstává evidencí produkce; jeho
 kumulovaný obsah se znovu nepřičítá. Čtecí dotazy UI příchozí nevytvářejí.
 Brewsterův účinek
-vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/R-0075.md).
+vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/done/R-0075.md).
 
 ### Ceny opakovaných nákupů (R-0077)
 
@@ -168,7 +168,7 @@ cenu do modelové operace, která ji znovu porovná před vytvořením jednotky,
 změnou pokladny a počtu. Předem se ověřuje i rozsah příští ceny a identita nové
 jednotky. Lodě používají růst ceny nyní; skutečný typ dělostřelectva musí při
 R-0095 vstoupit do stejného pravidla. Stav ověření vede
-[R-0077](requirements/R-0077.md).
+[R-0077](requirements/done/R-0077.md).
 
 ### Evropské odbornosti (R-0074)
 
@@ -619,7 +619,7 @@ Přesun mezi pracemi téže kolonie nesnižuje populaci; vnější jednotky se
 nezapočítávají. Dobrovolné operace ověřují pravidlo před změnou místa či
 výbavy. Hlad a boj používají vlastní vynucené ztráty; nepoužívají tento zákaz.
 Přeživší kolonie si ponechá opevnění i při méně než třech obyvatelích,
-včetně uložení a načtení. Viz [R-0082](requirements/R-0082.md).
+včetně uložení a načtení. Viz [R-0082](requirements/done/R-0082.md).
 
 ### Společná stavební práce (R-0109)
 
@@ -629,7 +629,7 @@ v aktuálním formátu uložení. `ColonyBuildingQueue` používá stejný sklad
 součet pro náhled a dokončení. Při chybějících nástrojích či předpokladech
 nic neutratí; platné dokončení odečte přesnou cenu a zachová přebytek.
 Za aktualizaci dokončí nejvýše první projekt. Změna, odstranění i prázdná
-fronta ponechává práci ve skladu. [R-0083](requirements/R-0083.md) naváže
+fronta ponechává práci ve skladu. [R-0083](requirements/done/R-0083.md) naváže
 nákupem chybějících materiálů na tento společný stav.
 
 ### Zaplacené dokončení projektu (R-0083)
@@ -641,7 +641,7 @@ se spotřebují pouze do ceny projektu, dokoupené materiály nejdou přes sklad
 Před změnou pokladnice, materiálů nebo fronty se znovu ověří vazba nabídky
 a frontu, její stav, vlastník, zdroje, cena i předpoklady dokončení.
 UI zobrazuje modelovou nabídku a vyžaduje výslovné potvrzení; samo cenu
-nepočítá. Viz [R-0083](requirements/R-0083.md).
+nepočítá. Viz [R-0083](requirements/done/R-0083.md).
 
 ### Kongres a příchod otce (R-0104)
 
@@ -651,7 +651,7 @@ výrobu zvonů nezávisle na místním skladu. Po aktualizaci kolonií hráč do
 nejvýše jeden cíl a zachová přebytek. `FounderOffer` váže potvrzení na
 původního hráče a generaci nabídky. Model vytváří odměnu a uloženou zprávu
 příchodu; rozhraní pouze překládá a zobrazuje. Continue neopakuje aktualizaci.
-Rozsah a přejímku vede [R-0104](requirements/R-0104.md).
+Rozsah a přejímku vede [R-0104](requirements/done/R-0104.md).
 
 ### Stavební podmínky otců (R-0084)
 
@@ -661,7 +661,7 @@ vlastníka při zařazení i dokončení, včetně placeného dokončení. Chyb�
 členství pozastaví rozpracovaný projekt bez spotřeby zásob; hotové budovy
 se tímto pravidlem neodstraňují. GUI překládá společný důvod a váže
 potvrzení také na snímek členství. Nevzniká další uložený příznak odemčení.
-Rozsah a přejímku vede [R-0084](requirements/R-0084.md).
+Rozsah a přejímku vede [R-0084](requirements/done/R-0084.md).
 
 ### Automatický vývoz celnicí (R-0085)
 
@@ -720,7 +720,7 @@ opravnu podle průchodné vodní cesty a při ztrátě cíle znovu rozhodne;
 nákladem. GUI pouze čte průběh v evropském přehledu a překládá uložené
 `TurnEventShipRepair`; otevření přehledu ani zprávy neprovádí opravu.
 Napojení poškození na námořní boj vlastní R-0097. Stav přejímky vede
-[R-0098](requirements/R-0098.md).
+[R-0098](requirements/done/R-0098.md).
 
 ### Námořní výsledek (R-0097)
 
@@ -732,7 +732,7 @@ loď nebo použije opravu R-0098. `NavalCombatOutcome` uchová výsledné ztrát
 kořist a původní polohy; GUI je nemusí dopočítávat z odstraněné jednotky.
 Animace používá původní souřadnice a následné hlášení sděluje osud nákladu
 včetně pasažérů. Soukromnické diplomatické výjimky vlastní R-0099.
-Přejímka je vedená v [R-0097](requirements/R-0097.md).
+Přejímka je vedená v [R-0097](requirements/done/R-0097.md).
 
 ### Korzárská výjimka (R-0099)
 
@@ -741,7 +741,7 @@ nevytváří nepřátelský evropský vztah ani neotevírá útoky na pozemní j
 Příkaz si pamatuje skutečný vztah zvlášť od nutnosti vyhlášení války a před
 bojem jej znovu ověří. GUI jen vysvětluje výjimku a používá stejný potvrzovací
 a výsledkový dialog jako ostatní útoky. Stav přejímky vede
-[R-0099](requirements/R-0099.md).
+[R-0099](requirements/done/R-0099.md).
 
 ### Vojenské povýšení (R-0111)
 
@@ -753,7 +753,7 @@ vítěze; Washington tento postup zaručí bez dalšího losu. Námořní a děl
 vítězové tuto větev nepoužívají; způsobilý voják porážející dělo ano. Příkaz znovu ověří vstupy hodnosti a Washingtona
 před účinky. `MilitaryPromotion` zmrazí skutečný krok pro událost boje;
 GUI hlásí výsledek po animaci a nevypočítává povýšení. Přesný rozsah a stav
-ověření vede [R-0111](requirements/R-0111.md).
+ověření vede [R-0111](requirements/done/R-0111.md).
 
 ### Náboženská produkce (R-0110)
 
@@ -763,7 +763,7 @@ pracovního místa. `ConstructionSlot` použije existující odbornost;
 Pennových 150 % se zaokrouhlením dolů. Náhled kolonie i skutečný tah používají
 stejný výpočet. Dokončení stavby následuje po produkci: nový náhled je okamžitý,
 skutečný přírůstek nového stupně přijde v dalším tahu. Národní imigrační fond
-přebírá skutečné vyprodukované kříže. [Přejímka](requirements/R-0110.md).
+přebírá skutečné vyprodukované kříže. [Přejímka](requirements/done/R-0110.md).
 
 ### Výuka a odborná praxe
 

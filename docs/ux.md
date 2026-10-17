@@ -367,7 +367,7 @@ Evropa ukazuje národní počet křížů a další práh. Po dosažení prahu v
 zaplatit cestu před tímto příchodem. Výroba v koloniích probíhá až po fázi
 příchodů. Příchod oznamuje běžný přehled tahu a člověk je dostupný na molu.
 Otevření Evropy ani Pokračovat nevyrábí kříže a nevytváří další přistěhovalce.
-Aktuální stav přejímky vede [R-0076](requirements/R-0076.md).
+Aktuální stav přejímky vede [R-0076](requirements/done/R-0076.md).
 
 ### Cena opakovaného nákupu (R-0077)
 
@@ -377,7 +377,7 @@ nabídky nic neúčtuje. Pokud se nabídka změní před potvrzením, dialog ná
 odmítne a vyzve k opětovnému otevření. Neúčtuje automaticky vyšší cenu.
 Nedostatek peněz ponechá nabídku otevřenou s nedostupným tlačítkem a vysvětlením.
 Historie cen přetrvá přes Pokračovat; stav přejímky vede
-[R-0077](requirements/R-0077.md).
+[R-0077](requirements/done/R-0077.md).
 
 ### Chov koní v kolonii (R-0078)
 
@@ -424,7 +424,7 @@ Při tažení chráněného obyvatele ven rozhraní nepovolí přesun a ve stavo
 Kontrola se opakuje při dokončení akce; model zůstává autoritou. Čtvrtý
 obyvatel může odejít běžným tažením a potom nastoupit na loď. Hlad může
 snížit populaci pod minimum, aniž by odstranil opevnění. Automatické
-hráčské ověření vede [R-0082](requirements/R-0082.md).
+hráčské ověření vede [R-0082](requirements/done/R-0082.md).
 
 ### Společná zásoba kladiv (R-0109)
 
@@ -452,7 +452,7 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
 3. Po potvrzení zobrazit zvolený cíl; po příchodu členství a zprávu v přehledu
    tahu. Jonesova odměna rozlišuje doručení a čekání na bezpečný přístav.
    Staré potvrzení po změně modelu nebo nabídky odmítnout s pokynem znovu otevřít.
-4. Ověření vede [R-0104](requirements/R-0104.md); popis není samostatným
+4. Ověření vede [R-0104](requirements/done/R-0104.md); popis není samostatným
    tvrzením o provedené hráčské studii.
 
 ### Stavby vyžadující otce — R-0084
@@ -603,7 +603,7 @@ Při útoku korzára na cizí loď i bojové lodi proti korzárovi hráč přede
 poradce tuto diplomatickou informaci nepřeskočí. Zrušení nic nespotřebuje;
 při změně vztahů během potvrzení hra vyžádá novou volbu útoku. Výsledek,
 kořist a opravy sdílejí cestu R-0097. Nejde o ochranu korzára před napadením.
-Přejímka hráčských scénářů je vedená v [R-0099](requirements/R-0099.md).
+Přejímka hráčských scénářů je vedená v [R-0099](requirements/done/R-0099.md).
 
 ### Povýšení vítězného vojáka — R-0111
 
@@ -611,7 +611,7 @@ Po boji hráč uvidí vedle ztráty vybavení poraženého také skutečný krok
 vítěze. Informace o jednotce trvale ukazují veteránský stav odděleně od civilní
 odbornosti. Následující bojové potvrzení již používá vyšší základní sílu.
 Zrušení útoku nepovyšuje; Continue zachová výsledek bez dalšího losování.
-Stav hráčské přejímky vede [R-0111](requirements/R-0111.md).
+Stav hráčské přejímky vede [R-0111](requirements/done/R-0111.md).
 
 ### Kostel, katedrála a kazatelé — R-0110
 

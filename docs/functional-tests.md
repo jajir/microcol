@@ -3353,7 +3353,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Documentation checks and strict MkDocs are run before commit. Complete CI,
    platform compatibility and publication remain separate pending gates.
    Actual Brewster selection still requires R-0104; no placeholder founder flag
-   was introduced. [R-0076](requirements/R-0076.md) retains acceptance status.
+   was introduced. [R-0076](requirements/done/R-0076.md) retains acceptance status.
 
 ### R-0074/R-0075 CI follow-up — 2026-10-16
 
@@ -4686,3 +4686,36 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Javadoc, shared formatting of 13 changed Java files, nine documentation tests
    and strict MkDocs passed. Complete CI/publication remain pending; the earlier
    R-0107 failed build was not published.
+
+### R-0069–R-0111 combined acceptance — 2026-10-17
+
+1. The complete [development run 38987733946](https://github.com/jajir/microcol/actions/runs/38987733946) for source `57e16d9110297edf2fec33150e5f1ef84875d658` passed: **1,823 model tests in 180 suites and 289 player/support tests in 74 suites**, with zero failures, errors or skips. Counts were checked against the downloaded `tests-functional` XML reports, not inferred from a green summary. All three native packaging jobs and build-tool checks passed; compatibility run `38987733942` and Pages run `38987733978` also succeeded.
+2. This combined run includes all six TC29 passenger scenarios, three TC70 Brewster scenarios and TC71 Magellan. It verifies the stale colonist-to-ship fixture repair after the earlier R-0107, De Soto and Brewster runs failed only on TC29. The earlier failures remain historical evidence, not successful releases. The source, model and targeted player acceptance for each bounded outcome remain in their existing dated sections; this record supplies the final common regression gate.
+3. The following requirements now have their whole selected outcome accepted. The listed TC groups are present and passing in the full run; model boundaries and earlier localized/visual checks remain documented with each requirement. This does not imply that an entire UC or every founder effect is complete.
+
+| Requirement | Passing player groups (scenario counts) | Accepted outcome |
+| --- | --- | --- |
+| [R-0069](requirements/done/R-0069.md) | TC26 (3), TC69 (1) | Explicit sight and actual De Soto integration |
+| [R-0075](requirements/done/R-0075.md) | TC46 (6), TC70 (3) | Persistent paid recruitment and Brewster choices |
+| [R-0076](requirements/done/R-0076.md) | TC47 (2), TC70 (3) | Cross-based earned immigration and resumable choices |
+| [R-0077](requirements/done/R-0077.md) | TC48 (3), TC62 (4) | Ship and artillery purchase escalation |
+| [R-0082](requirements/done/R-0082.md) | TC53 (2) | Fortified population minimum for voluntary departure |
+| [R-0083](requirements/done/R-0083.md) | TC55 (2) | Quoted construction completion purchase |
+| [R-0084](requirements/done/R-0084.md) | TC57 (3) | Actual founder gates for factories/custom house |
+| [R-0087](requirements/done/R-0087.md) | TC59 (5) | Peace negotiation and Franklin timing |
+| [R-0088](requirements/done/R-0088.md) | TC60 (5) | European tribute choices and cooldown |
+| [R-0093](requirements/done/R-0093.md) | TC35 (12) | Shared ordinary land strength explanation |
+| [R-0094](requirements/done/R-0094.md) | TC35 (12) | Strength-based ordinary land resolution |
+| [R-0097](requirements/done/R-0097.md) | TC64 (3) | Naval outcomes and cargo/passenger fate |
+| [R-0098](requirements/done/R-0098.md) | TC63 (4) | Damage destinations, repair timing and continuation |
+| [R-0099](requirements/done/R-0099.md) | TC65 (3) | Privateer hostility exception |
+| [R-0104](requirements/done/R-0104.md) | TC56 (2), TC71 (1) | Congress acquisition, Jones and selected Magellan integration |
+| [R-0106](requirements/done/R-0106.md) | TC61 (2) | Next-turn effective fortification |
+| [R-0107](requirements/done/R-0107.md) | TC68 (4) | School teaching and agreed experience progression |
+| [R-0109](requirements/done/R-0109.md) | TC54 (1) | Single retained hammer balance across queue changes |
+| [R-0110](requirements/done/R-0110.md) | TC67 (2) | Religious building production |
+| [R-0111](requirements/done/R-0111.md) | TC66 (3) | Veteran promotion and demotion preserving specialty |
+
+4. Publication is verified as [dev-149-57e16d911029](https://github.com/jajir/microcol/releases/tag/dev-149-57e16d911029): the public immutable prerelease has all ten expected assets. The downloaded three-platform `manifest.tsv` names the exact source above; `SHA256SUMS`, the downloaded manifest and GitHub asset digests agree for every asset. Evidence is retained locally under `target/r149-publication/`; the full CI log is `/tmp/r104-magellan-ci-complete.log`.
+5. The automatic `dev` channel is **unchanged at dev-109-0b0cb0593df4**, confirmed from its downloaded manifest. Publication explicitly retained the channel because main had advanced. The new build is available through its immutable release link; do not claim that the launcher automatically receives it. Documentation-only commits and their successful Pages deployments are separate from this game build.
+6. The complete R-0062–R-0111 objective remains unfinished: 34 requirements are now done and 16 remain active. R-0074/R-0095 still require actual native integration; R-0085 still requires boycott integration. R-0065, R-0070, R-0086, R-0089–R-0092, R-0096 and R-0100–R-0103/R-0105 retain their remaining decisions or implementation. A passing common regression does not remove these requirements.

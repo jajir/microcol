@@ -605,7 +605,7 @@ z právě dokončené výroby se projeví při následující evropské fázi n�
 tahu; obrazovka Evropy ukazuje čekání a blokuje placenou cestu do vyřízení
 příchodu. `TC_47_F38_immigration_test` ověřuje skutečnou výrobu, příchozího
 na molu a Pokračovat před i po příchodu; stav provedení je vedený v
-[R-0076](requirements/R-0076.md), nikoli potvrzen touto mapou scénáře.
+[R-0076](requirements/done/R-0076.md), nikoli potvrzen touto mapou scénáře.
 
 ### UC-055: opakované nákupy R-0077
 
@@ -613,7 +613,7 @@ na molu a Pokračovat před i po příchodu; stav provedení je vedený v
 karavely za 1000 a 1100, nedostupnou třetí za 1200, Pokračovat a odmítnutí
 změněné nabídky nebo nedostatku peněz po otevření. Růst cen skutečného
 dělostřelectva zůstává integrační závislostí R-0095. Provedení a přejímku
-vede [R-0077](requirements/R-0077.md); samotná mapa není důkazem průchodu.
+vede [R-0077](requirements/done/R-0077.md); samotná mapa není důkazem průchodu.
 
 ### UC-041: chov koní R-0078
 
@@ -659,7 +659,7 @@ Obranná část UC-047 zůstává samostatným rozsahem.
 kontroluje odmítnutí, vysvětlení a nezměněný svět. Přidělení jiné vnitřní práce
 zůstává povolené; čtvrtý obyvatel může odejít a nastoupit na loď. Druhý
 scénář projde skutečným hladověním na dva obyvatele a zachováním palisády.
-Oba ověřují Continue. Výsledky vede [R-0082](requirements/R-0082.md).
+Oba ověřují Continue. Výsledky vede [R-0082](requirements/done/R-0082.md).
 
 ### UC-043: zachování kladiv R-0109
 
@@ -667,7 +667,7 @@ Oba ověřují Continue. Výsledky vede [R-0082](requirements/R-0082.md).
 zkontroluje zrušení výběru a poté dokončí pilu, sklad a vůz přes skutečné
 tahy. Kontroluje přebytky, jen jedno dokončení za tah, prázdnou frontu
 a Continue. TC32 zachovává kontrolu chybějících nástrojů a předchůdce
-s kladivy ve společném skladu. Výsledky vede [R-0109](requirements/R-0109.md).
+s kladivy ve společném skladu. Výsledky vede [R-0109](requirements/done/R-0109.md).
 
 ### UC-044: zaplacení dokončení R-0083
 
@@ -676,7 +676,7 @@ nákup beze změny, poté zaplatí 76 zlatých a ověří hotovou stavbu,
 zbytek fronty a Continue bez další platby. Druhý scénář ověří nedostatek
 zlata, odmítnutí zastaralé nabídky po změně materiálů a novou cenu.
 Model doplňuje nulovou cenu, přebytky, jednotky a neplatné předpoklady.
-Výsledky vede [R-0083](requirements/R-0083.md).
+Výsledky vede [R-0083](requirements/done/R-0083.md).
 
 ### UC-076/UC-046: průběh oprav lodí R-0098
 

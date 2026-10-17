@@ -3315,7 +3315,7 @@ committed for this experiment.
     UI/support tests, with no failed attempts in this stage. No implementation
     is duplicated and no local model is used in this user-selected experiment.
     These outcomes do not establish token savings. Full acceptance, including the R-0095
-    artillery dependency, remains in [R-0077](../requirements/R-0077.md).
+    artillery dependency, remains in [R-0077](../requirements/done/R-0077.md).
 
 21. R-0078 reuses Sol low in `2026-10-16-r78`, based on `d9e9615d`, for
     shared horse-breeding accounting and model tests. Main owns requirement
