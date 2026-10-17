@@ -252,6 +252,16 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0107](done/R-0107.md) | Teach colonists through functioning school buildings | Follow-up | [R-0025](done/R-0025.md), [R-0023](done/R-0023.md) |
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0110](done/R-0110.md) | Increase religious production through church and cathedral upgrades | Follow-up | [R-0010](canceled/R-0010.md), [R-0025](done/R-0025.md) |
+| [R-0146](R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
+| [R-0147](R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
+| [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
+| [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
+
+The four A07 analyses R-0146–R-0149 were captured on **2026-10-17** as
+preparation only; they do not select or authorize gameplay implementation.
+R-0107 already delivers school/work education and R-0074 already delivers the
+production-expert roster. Native settlement, relations and mission state are
+specific pending A08 prerequisites for R-0148/R-0149.
 
 ## A08
 
@@ -265,6 +275,19 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0090](R-0090.md) | Keep the rival’s first colony fed and productive | Follow-up | [R-0027](done/R-0027.md) |
 | [R-0091](R-0091.md) | Let the rival transport supplies and sell its production | Follow-up | [R-0027](done/R-0027.md), [R-0024](done/R-0024.md) |
 | [R-0092](R-0092.md) | Let a rival expand from its first colony to a second | Follow-up | [R-0027](done/R-0027.md) |
+| [R-0150](R-0150.md) | Represent eight native nations and their settlement classes | New capture | [NAT-001/002](../gap-analysis.md#native-nations-settlements-and-relations), UC-060 |
+| [R-0151](R-0151.md) | Give native braves a home and a national turn | New capture | [NAT-001](../gap-analysis.md#native-nations-settlements-and-relations), TURN-001/002, UC-005/060 |
+| [R-0152](R-0152.md) | Claim and buy native homeland tiles | New capture | [NAT-003](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-013](../gap-analysis.md#founding-father-effects), UC-060/098 |
+| [R-0153](R-0153.md) | Maintain tribal anger and local alarm separately | New capture | [NAT-004/005](../gap-analysis.md#native-nations-settlements-and-relations)/[SETUP-005](../gap-analysis.md#setup-and-turn-sequence)/[FATHER-010](../gap-analysis.md#founding-father-effects), UC-003/061/095 |
+| [R-0154](R-0154.md) | Apply native provocation and reconciliation events | New capture | [NAT-007/008](../gap-analysis.md#native-nations-settlements-and-relations) event effects, UC-061/065 |
+| [R-0155](R-0155.md) | Explain native settlement alarm without color alone | New capture | [NAT-006](../gap-analysis.md#native-nations-settlements-and-relations), UC-061 |
+| [R-0156](R-0156.md) | Let hostile native braves raid and calmer braves stand down | New capture | [NAT-008](../gap-analysis.md#native-nations-settlements-and-relations) AI / DIP-001 native portion, UC-061/068 |
+
+The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
+as preparation only; no native gameplay implementation is selected. R-0052
+already delivers the common turn boundary. European AI slices R-0027/R-0090–0092
+are preserved; R-0156 owns only native raid/patrol behavior. Native trade,
+mission, interaction and conquest outcomes remain separate captures.
 
 ## A09
 

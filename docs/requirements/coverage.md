@@ -54,7 +54,19 @@
    the Dutch response and [R-0145](R-0145.md) trade accounts plus the economy
    report. TRADE-004/005 share the delivered R-0020 quote/affordability path
    and its dated evidence; they receive no duplicate implementation task.
-6. Remaining area-by-area ownership is being reconciled with existing work.
+6. Economy captures assign commons to [R-0146](R-0146.md), clearing a
+   civilian specialty to [R-0147](R-0147.md), native teaching to
+   [R-0148](R-0148.md) and the convert lifecycle, including Sepulveda, to
+   [R-0149](R-0149.md). Delivered specialist production, building constants
+   and mountain/sea founding guards are preserved; complete matrix acceptance
+   remains separate.
+7. Native foundations are [R-0150](R-0150.md) nation/settlement identity,
+   [R-0151](R-0151.md) braves and turn participation, [R-0152](R-0152.md)
+   homeland purchase with Minuit, [R-0153](R-0153.md) anger/alarm with France
+   and Pocahontas, [R-0154](R-0154.md) provocation/reconciliation events,
+   [R-0155](R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
+   These do not stand in for native trade, missions or real native combat.
+8. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -63,8 +75,8 @@
 | --- | --- | --- |
 | A05 world and units | R-0118–R-0131 plus existing sight, ship, sentry and combat owners | Final unit/terrain matrix and cross-area dependency audit |
 | A06 transport and Europe | R-0132–R-0145 cargo, routes, markets and accounts; existing transport/purchase/shared quotes retained | Final cargo/trade matrix and cross-area dependency audit |
-| A07 economy | Existing food, work, construction and education owners retained | Terrain-independent production, specialists, native learning/converts and complete matrices |
-| A08 relations and AI | Existing diplomacy and rival colony owners retained | Native state/interactions, missions, trade and remaining actor policies |
+| A07 economy | R-0146–R-0149 and existing food, work, construction and education owners | Complete profession/building/economy matrices and native dependency links |
+| A08 relations and AI | R-0150–R-0156 foundations plus existing diplomacy and rival colony owners | Native visits/trade/missions/conquest dependencies, European/royal actor policies and final acceptance |
 | A09 combat | Delivered ordinary/naval slices retained | Native/royal roles, patrol, coastal fire and national modifier |
 | A10 politics and end | Existing support, Congress and declaration owners retained | Remaining founders, revolution, dates and scoring |
 | A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |

@@ -416,3 +416,30 @@ documentation in APT just to make it visible on the web.
    checks for all fourteen analyses. No gameplay implementation or fresh
    gameplay acceptance is claimed. Pages and documentation-only CI filtering
    are verified independently after push.
+4. Checkpoint `8f3ce118` passed Pages build/deploy in
+   [39034817496](https://github.com/jajir/microcol/actions/runs/39034817496).
+   Development run 39034817498 and compatibility run 39034817524 passed their
+   change filters with game jobs intentionally skipped. Live R-0145/coverage
+   pages and the rule catalogue's commit-pinned links were verified. The first
+   live-text probe used an inaccurate expected phrase; checking the actual
+   published quote-correction text passed. The downloaded automatic `dev`
+   manifest remains byte-identical to the pre-capture manifest, identifying
+   `dev-109-0b0cb0593df4`; this documentation publication created no game build.
+
+## Remaining-scope capture: economy and native foundations — 2026-10-17
+
+1. R-0146–R-0156 capture eleven outcomes: commons, skill clearing, native
+   teaching/converts, native identities/turns, homeland rights, relations,
+   accessible alarm and raid policy. All remain `new`. Minuit, Pocahontas,
+   Sepulveda and France belong to the affected rule owners, with explicit
+   before/after acceptance, rather than duplicate modifier implementations.
+2. Main reviewed two Sol medium batches against shared decisions, added the
+   arms-sale fractional counter, removed circular land/state preparation and
+   retained the unmet real-native-combat prerequisite. Existing production,
+   building constants and founding guards are credited. Questions retain only
+   missing policy; capture does not authorize native gameplay implementation.
+3. Local documentation checks passed 21 launcher tests without inference, nine
+   catalogue/link tests, strict MkDocs and rendered status/four-chapter checks.
+   Concurrent R-0086 closure is separate. Pages deployment and intentional
+   documentation-only game-job skips are checked after publication; no new
+   gameplay or gameplay-test evidence is claimed.
