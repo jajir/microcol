@@ -215,6 +215,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonExit.setDisable(false);
     }
 
+    void allowPendingImmigrationNavigation() {
+        disableTurnCommands();
+        buttonEurope.setDisable(false);
+    }
+
     void enableAllButtons() {
         LOGGER.debug("Enabling buttons bar");
         setDisable(false);

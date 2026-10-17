@@ -1454,6 +1454,27 @@ public class Model {
         return gameManager.isRunning();
     }
 
+    /** @return whether the current human owner must choose a free immigrant */
+    public boolean isAwaitingImmigrationChoice() {
+        return gameManager.isAwaitingImmigrationChoice();
+    }
+
+    void finishImmigrationChoice(final Player player) {
+        gameManager.finishImmigrationChoice(player);
+    }
+
+    void beginImmigrationChoice(final Player player) {
+        gameManager.beginImmigrationChoice(player);
+    }
+
+    void continueImmigrationChoice() {
+        gameManager.continueImmigrationChoice();
+    }
+
+    void fireImmigrationChoiceRequired(final Player player) {
+        listenerManager.fireImmigrationChoiceRequired(this, player);
+    }
+
     public boolean isGameFinished() {
         return gameManager.isFinished();
     }
@@ -1691,7 +1712,7 @@ public class Model {
     }
 
     public synchronized ModelPo save() {
-        gameManager.checkTurnPreparationComplete();
+        gameManager.checkSaveBoundary();
         final ModelPo out = new ModelPo();
         out.setCombatRandomState(combatRandomState);
         out.setDifficulty(difficulty);
@@ -1826,7 +1847,8 @@ public class Model {
     public synchronized void startGame() {
         Preconditions.checkState(!endingTurn,
                 "Cannot start or end game while ending a turn.");
-        if (gameManager.isRunning()) {
+        if (gameManager.isRunning()
+                || gameManager.isAwaitingImmigrationChoice()) {
             gameManager.continueGame();
         } else {
             gameManager.startGame();

@@ -124,11 +124,25 @@ public final class EuropePanel
     @Override
     public void repaint() {
         final org.microcol.model.Player player = controller.getHumanPlayer();
-        immigration.setText(i18n.get(Europe.immigrationProgress,
-                player.getImmigrationCrosses(), player.getImmigrationTarget())
-                + (player.hasPendingImmigrant()
-                        ? "\n" + i18n.get(Europe.immigrationPending)
-                        : ""));
+        final boolean pendingChoice = controller.getModel()
+                .isAwaitingImmigrationChoice();
+        europeDock.getContent().setDisable(pendingChoice);
+        shipsTravelingToEurope.getContent().setDisable(pendingChoice);
+        shipsTravelingToNewWorld.getContent().setDisable(pendingChoice);
+        panelPortPier.getContent().setDisable(pendingChoice);
+        panelGoods.getContent().setDisable(pendingChoice);
+        europeButtonsPanel.getButtonBuyUnit().setDisable(pendingChoice);
+        europeButtonsPanel.getButtonRecruit().setText(i18n
+                .get(pendingChoice ? Europe.earnedOpen : Europe.recruitOpen));
+        immigration
+                .setText(i18n.get(Europe.immigrationProgress,
+                        player.getImmigrationCrosses(),
+                        player.getImmigrationTarget())
+                        + (player.hasPendingImmigrant()
+                                ? "\n" + i18n.get(
+                                        pendingChoice ? Europe.earnedPending
+                                                : Europe.immigrationPending)
+                                : ""));
         europeDock.repaint();
         shipsTravelingToEurope.repaint();
         shipsTravelingToNewWorld.repaint();

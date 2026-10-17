@@ -69,6 +69,8 @@ public abstract class Player {
         if (recruitment != null) {
             try {
                 recruitment.price(model.getDifficulty(), name);
+                recruitment.validateBrewsterPool(getCongressMembers()
+                        .contains(Founder.WILLIAM_BREWSTER));
             } catch (final ArithmeticException overflow) {
                 throw new IllegalArgumentException(
                         "Recruitment counters exceed supported range",
@@ -239,7 +241,7 @@ public abstract class Player {
         return model.getEnemyUnitsAt(this, location);
     }
 
-    void startTurn() {
+    boolean startTurn() {
         final boolean hadFranklin = getCongressMembers()
                 .contains(Founder.BENJAMIN_FRANKLIN);
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
@@ -247,7 +249,19 @@ public abstract class Player {
                     ship.advanceVoyage();
                     ship.advanceRepair();
                 });
-        settleEarnedImmigrants();
+        if (!settleEarnedImmigrants()) {
+            return false;
+        }
+        finishTurnPreparation(hadFranklin);
+        return true;
+    }
+
+    void finishTurnPreparation() {
+        finishTurnPreparation(
+                getCongressMembers().contains(Founder.BENJAMIN_FRANKLIN));
+    }
+
+    private void finishTurnPreparation(final boolean hadFranklin) {
         if (congress != null && !getColonies().isEmpty()) {
             congress.activate();
         }
@@ -266,6 +280,11 @@ public abstract class Player {
                             model.getDifficulty())) {
                 Preconditions.checkState(model.canAddUnitInEurope(),
                         "No unit IDs remain for Jones's frigate");
+            }
+            if (congress.selected().orElse(null) == Founder.WILLIAM_BREWSTER
+                    && congress.willJoinAfter(projectedBells,
+                            model.getDifficulty())) {
+                recruitment.checkBrewsterJoin();
             }
         }
         getColonies().forEach(colony -> colony.startTurn());
@@ -345,6 +364,9 @@ public abstract class Player {
                         "No unit IDs remain for Jones's frigate");
             }
             final Founder arrived = congress.join(model.getDifficulty());
+            if (arrived == Founder.WILLIAM_BREWSTER) {
+                recruitment.applyBrewster();
+            }
             if (arrived == Founder.HERNANDO_DE_SOTO) {
                 getAllUnits().stream().filter(Unit::isAtPlaceLocation)
                         .forEach(this::revealMapForUnit);
@@ -368,21 +390,91 @@ public abstract class Player {
         }
     }
 
-    private void settleEarnedImmigrants() {
+    private boolean settleEarnedImmigrants() {
         if (recruitment == null || !canTradeInEurope()) {
-            return;
+            return true;
         }
         while (hasPendingImmigrant()) {
             final int threshold = recruitment
                     .checkCanSettleEarned(model.getDifficulty(), name);
             Preconditions.checkState(model.canAddUnitInEurope(),
                     "No unit IDs remain for an earned immigrant");
+            if (isBrewster() && !isComputer()) {
+                recruitment.markPendingEarnedChoice(model.getDifficulty(),
+                        name);
+                return false;
+            }
             final int slot = recruitment.chooseEarnedSlot();
-            final UnitType type = recruitment.getCandidateType(slot);
-            model.addUnitInEurope(type, this);
-            recruitment.settleEarned(slot, threshold);
-            model.getTurnEventStore()
-                    .add(TurnEventProvider.getNewUnitInEurope(this));
+            settleEarnedChoice(slot, threshold);
+        }
+        return true;
+    }
+
+    private void settleEarnedChoice(final int slot, final int threshold) {
+        final UnitType type = recruitment.getCandidateType(slot);
+        model.addUnitInEurope(type, this);
+        recruitment.settleEarned(slot, threshold, isBrewster());
+        model.getTurnEventStore()
+                .add(TurnEventProvider.getNewUnitInEurope(this));
+    }
+
+    private boolean isBrewster() {
+        return getCongressMembers().contains(Founder.WILLIAM_BREWSTER);
+    }
+
+    boolean hasFrozenEarnedChoice() {
+        return recruitment != null && recruitment.isPendingEarnedChoice();
+    }
+
+    void validateFrozenEarnedChoice() {
+        Preconditions.checkArgument(
+                hasFrozenEarnedChoice() && isBrewster() && !isComputer()
+                        && canTradeInEurope() && hasPendingImmigrant(),
+                "Invalid saved earned immigration choice");
+    }
+
+    /** @return the three frozen free candidates during an earned choice */
+    public List<EarnedImmigrationOffer> getEarnedImmigrationOffers() {
+        return model.isAwaitingImmigrationChoice()
+                && model.getCurrentPlayer() == this && hasFrozenEarnedChoice()
+                        ? recruitment.earnedOffers(this, model.getDifficulty(),
+                                name)
+                        : List.of();
+    }
+
+    public boolean canChooseEarnedImmigrant(
+            final EarnedImmigrationOffer offer) {
+        if (offer == null || !model.isAwaitingImmigrationChoice()
+                || model.getCurrentPlayer() != this
+                || model.getPlayers().stream().noneMatch(p -> p == this)
+                || !hasFrozenEarnedChoice() || !model.canAddUnitInEurope()) {
+            return false;
+        }
+        try {
+            recruitment.checkCanSettleEarned(model.getDifficulty(), name);
+            return recruitment.isCurrentEarnedOffer(offer, this,
+                    model.getDifficulty(), name);
+        } catch (final ArithmeticException | IllegalStateException invalid) {
+            return false;
+        }
+    }
+
+    public void chooseEarnedImmigrant(final EarnedImmigrationOffer offer) {
+        synchronized (model) {
+            Preconditions.checkNotNull(offer);
+            Preconditions.checkState(canChooseEarnedImmigrant(offer),
+                    "Earned immigration choice is unavailable or stale");
+            final int threshold = recruitment
+                    .checkCanSettleEarned(model.getDifficulty(), name);
+            model.beginImmigrationChoice(this);
+            settleEarnedChoice(offer.getSlot(), threshold);
+            if (hasPendingImmigrant()) {
+                recruitment.markPendingEarnedChoice(model.getDifficulty(),
+                        name);
+                model.continueImmigrationChoice();
+            } else {
+                model.finishImmigrationChoice(this);
+            }
         }
     }
 
@@ -672,7 +764,7 @@ public abstract class Player {
                 "Recruitment offer is unavailable or stale");
         verifyAvailibilityOFGold(offer.getPrice());
         final Unit recruited = model.addUnitInEurope(offer.getType(), this);
-        recruitment.replace(offer.getSlot());
+        recruitment.replace(offer.getSlot(), isBrewster());
         setGold(gold - offer.getPrice());
         return recruited;
     }

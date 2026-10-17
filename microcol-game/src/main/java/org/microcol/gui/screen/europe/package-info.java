@@ -7,5 +7,8 @@
  * through the model command; canceled or stale offers do not mutate the route.
  * The repair summary reads model destinations and remaining owner updates; it
  * never advances repairs or exposes damaged ships for cargo manipulation.
+ * Brewster earned arrivals reuse the recruitment dialog with frozen model
+ * offers; deferring preserves the pending choice and disables ordinary port
+ * actions until the model completes turn preparation.
  */
 package org.microcol.gui.screen.europe;

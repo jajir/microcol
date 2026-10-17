@@ -73,4 +73,9 @@ Total: %s gold</entry>
     <entry key="repairCOMPLETED">Repairs to %s #%s at %s are complete.</entry>
     <entry key="repairREROUTED">%s #%s was rerouted for repair to %s.</entry>
     <entry key="repairSUNK">%s #%s sank: no repair destination. Lost passengers: %s. Lost goods: %s.</entry>
+  <entry key="earnedTitle">Choose an earned immigrant</entry>
+  <entry key="earnedExplanation">Crosses: %s / %s. Choose one immigrant for free. The turn continues after all earned arrivals are chosen. Closing this window postpones your choice.</entry>
+  <entry key="earnedChoose">Choose for free</entry>
+  <entry key="earnedOpen">Choose immigrant</entry>
+  <entry key="earnedPending">An earned immigrant is waiting for your choice. Open recruitment to continue the turn.</entry>
 </properties>

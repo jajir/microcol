@@ -696,7 +696,7 @@
             "generation": 1,
             "jonesDeliveryPending": false
           },
-          "recruitment": {"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
           "name": "Dutch",
           "computer": false,
           "gold": 2108,

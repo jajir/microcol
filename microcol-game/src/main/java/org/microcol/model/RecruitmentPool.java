@@ -29,6 +29,8 @@ public final class RecruitmentPool {
 
     private int earnedImmigrants;
 
+    private boolean pendingEarnedChoice;
+
     RecruitmentPool(final RecruitmentPo po) {
         Preconditions.checkArgument(po != null, "Missing recruitment pool");
         Preconditions.checkArgument(
@@ -38,7 +40,8 @@ public final class RecruitmentPool {
                 && po.getNextCandidateId() > 0 && po.getPaidPassages() != null
                 && po.getPaidPassages() >= 0 && po.getCrosses() != null
                 && po.getCrosses() >= 0 && po.getEarnedImmigrants() != null
-                && po.getEarnedImmigrants() >= 0,
+                && po.getEarnedImmigrants() >= 0
+                && po.getPendingEarnedChoice() != null,
                 "Invalid recruitment counters");
         final Set<Integer> ids = new HashSet<>();
         for (final RecruitmentCandidatePo candidate : po.getCandidates()) {
@@ -59,6 +62,7 @@ public final class RecruitmentPool {
         paidPassages = po.getPaidPassages();
         crosses = po.getCrosses();
         earnedImmigrants = po.getEarnedImmigrants();
+        pendingEarnedChoice = po.getPendingEarnedChoice();
     }
 
     public static RecruitmentPo initial() {
@@ -70,6 +74,7 @@ public final class RecruitmentPool {
         po.setPaidPassages(0);
         po.setCrosses(0);
         po.setEarnedImmigrants(0);
+        po.setPendingEarnedChoice(false);
         return po;
     }
 
@@ -82,15 +87,29 @@ public final class RecruitmentPool {
     }
 
     static UnitType draw(final Random random) {
+        return draw(random, false);
+    }
+
+    static UnitType draw(final Random random, final boolean brewster) {
         final int roll = random.nextInt(100);
         return draw(roll,
                 roll >= 90
                         ? random.nextInt(UnitType.EUROPEAN_SPECIALISTS.size())
-                        : 0);
+                        : 0,
+                brewster);
     }
 
     static UnitType draw(final int roll, final int specialistIndex) {
+        return draw(roll, specialistIndex, false);
+    }
+
+    static UnitType draw(final int roll, final int specialistIndex,
+            final boolean brewster) {
         Preconditions.checkArgument(roll >= 0 && roll < 100);
+        if (brewster) {
+            return roll < 90 ? UnitType.COLONIST
+                    : UnitType.EUROPEAN_SPECIALISTS.get(specialistIndex);
+        }
         if (roll < 60) {
             return UnitType.COLONIST;
         }
@@ -170,6 +189,49 @@ public final class RecruitmentPool {
         return crosses >= target(difficulty, nation, earnedImmigrants);
     }
 
+    boolean isPendingEarnedChoice() {
+        return pendingEarnedChoice;
+    }
+
+    void markPendingEarnedChoice(final Difficulty difficulty,
+            final String nation) {
+        Preconditions.checkState(hasReachedTarget(difficulty, nation));
+        pendingEarnedChoice = true;
+    }
+
+    void clearPendingEarnedChoice() {
+        pendingEarnedChoice = false;
+    }
+
+    void validateBrewsterPool(final boolean brewster) {
+        Preconditions.checkArgument(!brewster || candidates.stream().noneMatch(
+                candidate -> candidate.getType() == UnitType.INDENTURED_SERVANT
+                        || candidate.getType() == UnitType.PETTY_CRIMINAL),
+                "Brewster pool contains excluded candidates");
+    }
+
+    void checkBrewsterJoin() {
+        final long replacements = candidates.stream().filter(
+                candidate -> candidate.getType() == UnitType.INDENTURED_SERVANT
+                        || candidate.getType() == UnitType.PETTY_CRIMINAL)
+                .count();
+        Preconditions.checkState(
+                (long) nextCandidateId + replacements <= Integer.MAX_VALUE,
+                "No candidate IDs remain for Brewster");
+    }
+
+    void applyBrewster() {
+        checkBrewsterJoin();
+        for (int slot = 0; slot < candidates.size(); slot++) {
+            final UnitType type = candidates.get(slot).getType();
+            if (type == UnitType.INDENTURED_SERVANT
+                    || type == UnitType.PETTY_CRIMINAL) {
+                candidates.set(slot,
+                        candidate(nextCandidateId++, draw(random, true)));
+            }
+        }
+    }
+
     int getCrosses() {
         return crosses;
     }
@@ -221,10 +283,47 @@ public final class RecruitmentPool {
         return candidates.get(slot).getType();
     }
 
-    void settleEarned(final int slot, final int currentTarget) {
+    List<EarnedImmigrationOffer> earnedOffers(final Player player,
+            final Difficulty difficulty, final String nation) {
+        if (!pendingEarnedChoice) {
+            return List.of();
+        }
+        final int threshold = getTarget(difficulty, nation);
+        final List<EarnedImmigrationOffer> out = new ArrayList<>(3);
+        for (int slot = 0; slot < candidates.size(); slot++) {
+            final RecruitmentCandidatePo candidate = candidates.get(slot);
+            out.add(new EarnedImmigrationOffer(this, player, slot,
+                    candidate.getId(), candidate.getType(), threshold, crosses,
+                    earnedImmigrants));
+        }
+        return List.copyOf(out);
+    }
+
+    boolean isCurrentEarnedOffer(final EarnedImmigrationOffer offer,
+            final Player player, final Difficulty difficulty,
+            final String nation) {
+        if (!pendingEarnedChoice || offer == null || offer.getPool() != this
+                || offer.getPlayer() != player || offer.getSlot() < 0
+                || offer.getSlot() >= candidates.size()
+                || offer.getCrosses() != crosses
+                || offer.getEarnedImmigrants() != earnedImmigrants
+                || offer.getThreshold() != getTarget(difficulty, nation)
+                || !hasReachedTarget(difficulty, nation)) {
+            return false;
+        }
+        final RecruitmentCandidatePo candidate = candidates
+                .get(offer.getSlot());
+        return candidate.getId() == offer.getCandidateId()
+                && candidate.getType() == offer.getType();
+    }
+
+    void settleEarned(final int slot, final int currentTarget,
+            final boolean brewster) {
         crosses -= currentTarget;
         earnedImmigrants++;
-        candidates.set(slot, candidate(nextCandidateId++, draw(random)));
+        candidates.set(slot,
+                candidate(nextCandidateId++, draw(random, brewster)));
+        pendingEarnedChoice = false;
     }
 
     List<RecruitmentOffer> offers(final Difficulty difficulty,
@@ -255,8 +354,9 @@ public final class RecruitmentPool {
                 && price(difficulty, nation) == offer.getPrice();
     }
 
-    void replace(final int slot) {
-        candidates.set(slot, candidate(nextCandidateId++, draw(random)));
+    void replace(final int slot, final boolean brewster) {
+        candidates.set(slot,
+                candidate(nextCandidateId++, draw(random, brewster)));
         paidPassages++;
     }
 
@@ -283,6 +383,7 @@ public final class RecruitmentPool {
         po.setPaidPassages(paidPassages);
         po.setCrosses(crosses);
         po.setEarnedImmigrants(earnedImmigrants);
+        po.setPendingEarnedChoice(pendingEarnedChoice);
         return po;
     }
 }

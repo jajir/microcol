@@ -13,6 +13,7 @@ import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
+import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
@@ -33,6 +34,11 @@ import org.microcol.model.event.UnitMovedToLocationEvent;
  * Evens called from model to registered listeners.
  */
 public interface ModelListener {
+
+    /** A free immigrant needs a choice before this owner's turn can begin. */
+    default void onImmigrationChoiceRequired(
+            final ImmigrationChoiceRequiredEvent event) {
+    }
 
     void onGameStarted(GameStartedEvent event);
 

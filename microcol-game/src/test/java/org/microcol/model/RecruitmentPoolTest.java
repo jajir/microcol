@@ -25,6 +25,7 @@ class RecruitmentPoolTest {
         po.setPaidPassages(0);
         po.setCrosses(0);
         po.setEarnedImmigrants(0);
+        po.setPendingEarnedChoice(false);
         return po;
     }
 
@@ -53,6 +54,35 @@ class RecruitmentPoolTest {
         assertEquals(19, experts.size());
         assertThrows(IllegalArgumentException.class,
                 () -> RecruitmentPool.draw(100, 0));
+    }
+
+    @Test
+    void brewsterDrawExcludesBothLaborerClassesAtEveryBoundary() {
+        assertSame(UnitType.COLONIST, RecruitmentPool.draw(0, 0, true));
+        assertSame(UnitType.COLONIST, RecruitmentPool.draw(89, 0, true));
+        final Set<UnitType> experts = new HashSet<>();
+        for (int i = 0; i < 19; i++) {
+            final UnitType type = RecruitmentPool.draw(90, i, true);
+            assertSame(UnitType.EUROPEAN_SPECIALISTS.get(i), type);
+            experts.add(type);
+        }
+        assertEquals(19, experts.size());
+    }
+
+    @Test
+    void brewsterJoinReplacesOnlyExcludedCandidateSlotsWithNewTokens() {
+        final RecruitmentPool pool = new RecruitmentPool(
+                state(UnitType.COLONIST));
+        pool.applyBrewster();
+        final RecruitmentPo saved = pool.save();
+        assertEquals(1, saved.getCandidates().get(0).getId());
+        assertEquals(4, saved.getCandidates().get(1).getId());
+        assertEquals(5, saved.getCandidates().get(2).getId());
+        assertEquals(6, saved.getNextCandidateId());
+        pool.validateBrewsterPool(true);
+        assertEquals(0, saved.getPaidPassages());
+        assertEquals(0, saved.getCrosses());
+        assertEquals(0, saved.getEarnedImmigrants());
     }
 
     @Test

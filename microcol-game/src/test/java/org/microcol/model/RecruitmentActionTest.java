@@ -46,6 +46,7 @@ class RecruitmentActionTest {
         po.setPaidPassages(0);
         po.setCrosses(0);
         po.setEarnedImmigrants(0);
+        po.setPendingEarnedChoice(false);
         return po;
     }
 

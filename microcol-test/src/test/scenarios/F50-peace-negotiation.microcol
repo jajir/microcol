@@ -580,7 +580,7 @@
             "generation": 0,
             "jonesDeliveryPending": false
           },
-          "recruitment": {
+          "recruitment": {"pendingEarnedChoice": false,
             "candidates": [
               {
                 "id": 1,
@@ -671,7 +671,7 @@
             "generation": 1,
             "jonesDeliveryPending": false
           },
-          "recruitment": {
+          "recruitment": {"pendingEarnedChoice": false,
             "candidates": [
               {
                 "id": 1,
@@ -724,7 +724,7 @@
             "generation": 0,
             "jonesDeliveryPending": false
           },
-          "recruitment": {
+          "recruitment": {"pendingEarnedChoice": false,
             "candidates": [
               {
                 "id": 1,

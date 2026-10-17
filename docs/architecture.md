@@ -786,3 +786,22 @@ na mapě. Pasažéři, pracovníci a jednotky mimo mapu neodhalují samostatně.
 Nevzniká další uložený bonus: členství a již objevený terén používají stávající
 uložení. `MapManager` po přípravě lidského tahu obnoví vykreslené okraje
 mlhy, aby nezůstaly na nově odkrytých polích. Výsledky přejímky vede [evidence R-0069](functional-tests.md#r-0069-de-soto-sight-integration-2026-10-17).
+
+
+### Brewster a přerušená příprava přistěhovalectví
+
+Rozpracovaná návaznost R-0075/R-0076 používá členství v Kongresu jako jediný
+zdroj Brewsterova účinku. `RecruitmentPool` vlastní současné tři identity,
+počty a uložený příznak čekající volby. `Player` při skutečném příchodu otce
+mění pouze nevhodné kandidáty; již existující lidé se nemění. Další losování
+používá přijatých 90 % svobodných kolonistů a 10 % odborníků.
+
+`GameManager` řídí výslovnou uložitelnou hranici před výrobou kolonií.
+Dosavadní příprava plaveb se při Continue neopakuje; po poslední potvrzené
+volbě pokračují zbývající etapy právě jednou. Běžný `TurnStartedEvent`
+následuje až po dokončení, zatímco `ImmigrationChoiceRequiredEvent` žádá
+jen rozhodnutí. Ostatní herní příkazy zůstávají zablokované. Uložení smí
+zachytit celou čekající volbu, nikoli mezistav účtování či probíhající přípravu.
+GUI používá stejné náborové okno, odlišuje bezplatnou volbu od placené cesty
+a umožňuje odložení s návratem přes Evropu. Skutečné ověření vede
+[evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17).

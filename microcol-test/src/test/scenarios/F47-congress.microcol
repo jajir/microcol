@@ -745,7 +745,7 @@
     "gameManager": {
       "players": [
         {
-          "recruitment": {
+          "recruitment": {"pendingEarnedChoice": false,
             "candidates": [
               {
                 "id": 1,

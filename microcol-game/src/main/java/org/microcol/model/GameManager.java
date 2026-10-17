@@ -29,6 +29,8 @@ final class GameManager {
     private volatile boolean finished;
     private volatile Player currentPlayer;
 
+    private volatile boolean awaitingImmigrationChoice;
+
     GameManager(final Model model,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,
             final boolean alreadyStarted, final boolean alreadyFinished,
@@ -38,6 +40,15 @@ final class GameManager {
         this.finished = alreadyFinished;
         this.currentPlayer = currentPlayer;
         this.model = Preconditions.checkNotNull(model);
+        final List<Player> pending = model.getPlayers().stream()
+                .filter(Player::hasFrozenEarnedChoice)
+                .collect(java.util.stream.Collectors.toList());
+        Preconditions.checkArgument(
+                pending.size() <= 1 && (pending.isEmpty() || alreadyStarted
+                        && !alreadyFinished && pending.get(0) == currentPlayer),
+                "Invalid saved immigration choice boundary");
+        pending.forEach(Player::validateFrozenEarnedChoice);
+        awaitingImmigrationChoice = !pending.isEmpty();
     }
 
     public static GameManager make(final Model model, final ModelPo modelPo,
@@ -89,10 +100,22 @@ final class GameManager {
     }
 
     boolean isRunning() {
-        return started && !stopped && !isFinished() && !preparing;
+        return started && !stopped && !isFinished() && !preparing
+                && !awaitingImmigrationChoice;
+    }
+
+    boolean isAwaitingImmigrationChoice() {
+        return started && !stopped && !isFinished() && awaitingImmigrationChoice
+                && !preparing;
     }
 
     void checkTurnPreparationComplete() {
+        if (preparing || awaitingImmigrationChoice) {
+            throw new TurnPreparationException();
+        }
+    }
+
+    void checkSaveBoundary() {
         if (preparing) {
             throw new TurnPreparationException();
         }
@@ -139,25 +162,29 @@ final class GameManager {
         currentPlayer = players.get(0);
         model.fireGameStarted();
         model.fireRoundStarted();
-        currentPlayer.startTurn();
+        final boolean completed = currentPlayer.startTurn();
         model.getStatistics().countNextTurn(model);
         preparing = false;
-        model.fireTurnStarted(currentPlayer, true);
+        announcePreparation(completed);
     }
 
     /**
      * When game is loaded from file this should start it.
      */
     void continueGame() {
-        Preconditions.checkState(isRunning(),
-                "Only a running game can continue.");
+        Preconditions.checkState(isRunning() || isAwaitingImmigrationChoice(),
+                "Only an active game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         checkCurrentPlayer(currentPlayer);
         preparing = true;
         model.fireGameStarted();
         model.fireRoundStarted();
         preparing = false;
-        model.fireTurnStarted(currentPlayer, false);
+        if (awaitingImmigrationChoice) {
+            model.fireImmigrationChoiceRequired(currentPlayer);
+        } else {
+            model.fireTurnStarted(currentPlayer, false);
+        }
     }
 
     /** Finish one actor and advance through nations, then their Crowns. */
@@ -173,9 +200,9 @@ final class GameManager {
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
         if (index < players.size() - 1) {
             currentPlayer = players.get(index + 1);
-            currentPlayer.startTurn();
+            final boolean completed = currentPlayer.startTurn();
             preparing = false;
-            model.fireTurnStarted(currentPlayer, true);
+            announcePreparation(completed);
         } else {
             model.getCalendar().endRound();
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator
@@ -188,11 +215,44 @@ final class GameManager {
                 currentPlayer = players.get(0);
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
-                currentPlayer.startTurn();
+                final boolean completed = currentPlayer.startTurn();
                 preparing = false;
-                model.fireTurnStarted(currentPlayer, true);
+                announcePreparation(completed);
             }
         }
+    }
+
+    private void announcePreparation(final boolean completed) {
+        awaitingImmigrationChoice = !completed;
+        if (completed) {
+            model.fireTurnStarted(currentPlayer, true);
+        } else {
+            model.fireImmigrationChoiceRequired(currentPlayer);
+        }
+    }
+
+    void beginImmigrationChoice(final Player player) {
+        Preconditions.checkState(
+                isAwaitingImmigrationChoice() && currentPlayer == player,
+                "Immigration choice is not current");
+        preparing = true;
+    }
+
+    void continueImmigrationChoice() {
+        Preconditions.checkState(preparing && awaitingImmigrationChoice,
+                "Immigration choice is not in progress");
+        preparing = false;
+        model.fireImmigrationChoiceRequired(currentPlayer);
+    }
+
+    void finishImmigrationChoice(final Player player) {
+        Preconditions.checkState(preparing && awaitingImmigrationChoice
+                && currentPlayer == player && !player.hasFrozenEarnedChoice(),
+                "Immigration choice is not complete");
+        player.finishTurnPreparation();
+        preparing = false;
+        awaitingImmigrationChoice = false;
+        model.fireTurnStarted(player, true);
     }
 
     void save(final ModelPo modelPo) {

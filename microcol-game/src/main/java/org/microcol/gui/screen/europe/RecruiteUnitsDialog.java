@@ -12,6 +12,7 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.RecruitmentOffer;
+import org.microcol.model.EarnedImmigrationOffer;
 import org.microcol.model.NotEnoughtGoldException;
 
 import com.google.inject.Inject;
@@ -21,7 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-/** Paid passage uses saved candidates independently of university hiring. */
+/** Paid and earned arrivals use the same saved pool and model-owned offers. */
 public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
     private final Label caption = new Label();
@@ -36,6 +37,8 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
     private Player buyer;
     private Model openedModel;
     private boolean actionTaken;
+    private boolean earnedMode;
+    private boolean open;
 
     @Inject
     public RecruiteUnitsDialog(final ViewUtil viewUtil,
@@ -65,8 +68,9 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
         buyer = controller.getHumanPlayer();
         openedModel = controller.getModel();
         actionTaken = false;
+        earnedMode = openedModel.isAwaitingImmigrationChoice();
         try {
-            if (buyer.hasPendingImmigrant()) {
+            if (!earnedMode && buyer.hasPendingImmigrant()) {
                 showRejection(Europe.immigrationPending);
                 buyer = null;
                 openedModel = null;
@@ -80,15 +84,30 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
             return;
         }
         try {
+            open = true;
             super.showAndWait();
         } finally {
+            open = false;
+            earnedMode = false;
             buyer = null;
             openedModel = null;
         }
     }
 
+    public boolean isOpen() {
+        return open;
+    }
+
     private void refresh() {
         candidates.getChildren().clear();
+        if (earnedMode) {
+            buyer.getEarnedImmigrationOffers()
+                    .forEach(offer -> candidates.getChildren()
+                            .add(new RecruiteUnitPanel(offer, buyer, images,
+                                    names, i18n, this)));
+            updateLanguage(i18n);
+            return;
+        }
         buyer.getRecruitmentOffers()
                 .forEach(offer -> candidates.getChildren()
                         .add(new RecruiteUnitPanel(offer, buyer, images, names,
@@ -120,6 +139,31 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
         close();
     }
 
+    void chooseEarned(final EarnedImmigrationOffer offer) {
+        if (buyer == null || actionTaken) {
+            return;
+        }
+        actionTaken = true;
+        try {
+            if (controller.getModel() != openedModel) {
+                throw new IllegalStateException(
+                        "Immigration belongs to a replaced game");
+            }
+            buyer.chooseEarnedImmigrant(offer);
+        } catch (IllegalStateException rejected) {
+            showRejection(Europe.recruitChanged);
+            close();
+            return;
+        }
+        europe.repaint();
+        if (openedModel.isAwaitingImmigrationChoice()) {
+            actionTaken = false;
+            refresh();
+        } else {
+            close();
+        }
+    }
+
     private void showRejection(final Europe text) {
         rejection.setTitle(i18n.get(Europe.recruitUnitDialogTitle));
         rejection.setText(i18n.get(text));
@@ -128,7 +172,14 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        setTitle(i18n.get(Europe.recruitUnitDialogTitle));
-        caption.setText(i18n.get(Europe.recruitUnitDialogTitle));
+        setTitle(i18n.get(earnedMode ? Europe.earnedTitle
+                : Europe.recruitUnitDialogTitle));
+        caption.setText(earnedMode && buyer != null
+                ? i18n.get(Europe.earnedExplanation,
+                        buyer.getImmigrationCrosses(),
+                        buyer.getImmigrationTarget())
+                : i18n.get(Europe.recruitUnitDialogTitle));
+        caption.setWrapText(true);
+        caption.setMaxWidth(580);
     }
 }

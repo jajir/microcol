@@ -23,6 +23,7 @@ import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -110,6 +111,13 @@ final class ListenerManager {
         logger.info("Turn started: {}.", event);
 
         executeInSeparateThread(listener -> listener.onTurnStarted(event));
+    }
+
+    void fireImmigrationChoiceRequired(final Model model, final Player player) {
+        final ImmigrationChoiceRequiredEvent event = new ImmigrationChoiceRequiredEvent(
+                model, player);
+        executeInSeparateThread(
+                listener -> listener.onImmigrationChoiceRequired(event));
     }
 
     void fireTurnFinished(final Model model, final Player player) {

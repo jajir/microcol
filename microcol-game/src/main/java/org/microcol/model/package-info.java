@@ -45,9 +45,11 @@
  * across saves. Model validates reversal offers against live ownership and
  * voyage revision before changing destination. Model serializes turn
  * transitions and snapshots; incomplete preparation rejects player commands and
- * snapshots, including after failure. Unit work completes internally,
- * independently of commands submitted at an action boundary. Normal unit
- * cycling excludes continuing work; Skip turn validates current registered
+ * snapshots, including after failure. A deliberate Brewster choice boundary
+ * permits snapshots while gameplay remains blocked; choosing the last earned
+ * immigrant resumes the remaining preparation exactly once. Unit work completes
+ * internally, independently of commands submitted at an action boundary. Normal
+ * unit cycling excludes continuing work; Skip turn validates current registered
  * identities and spends movement through the existing no-action operation.
  * Saved movement and ordinary owner-turn restoration need no standing order.
  *
@@ -66,7 +68,9 @@
  * RecruitmentPool owns three persistent candidate tokens, paid-passage quotes
  * and counters; Player validates live offers before a single pier arrival.
  * Colony credits new cross production once; Player settles earned immigration
- * in the next Europe phase before processing that turn's colonies.
+ * in the next Europe phase before processing that turn's colonies. Brewster
+ * filters the pool on actual Congress arrival and allows human choices from
+ * frozen earned offers; the pool persists that pending boundary.
  *
  * Player owns confirmed per-type European purchase quotes and counts; ship
  * demand advances only after a validated purchase.

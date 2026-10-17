@@ -4572,3 +4572,57 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    third ring remains hidden. The scenario checks the same boundary after
    Continue. Model suite remains **1,807 passing tests**; model code did not
    change after that run. Complete CI/publication remain pending.
+
+
+### R-0075/R-0076 Brewster integration — 2026-10-17
+
+1. Inspection at `176aedf4` found real Congress membership but no Brewster
+   recruitment filtering or earned-immigrant choice. This is an explicit
+   integration dependency in R-0075/R-0076. The selected implementation retains
+   the accepted Europe-arrival phase before colony production; it does not
+   defer accounting until ordinary gameplay has already started.
+2. Main authored TC70/F61/F62: actual founder arrival filters candidate tokens
+   without changing an existing servant; two earned choices from 230 crosses
+   retain the unchanged colony through deferred save/Continue before and between
+   choices; the final choice resumes production once. A Czech keyboard path
+   exercises the same choices. TC46, TC47, TC56 and preparation/recovery tests
+   remain regressions. These are planned checks, not passing results.
+3. Main migrated 68 existing JSON fixtures with explicit
+   `pendingEarnedChoice: false` and added the two scenario fixtures. No existing
+   saved game is rewritten by opening it. The shared formatter covers GUI and
+   test changes. Sol low owns only model/event/store code and model tests;
+   main reviews, verifies and integrates independently.
+
+4. Independent full model verification passed **1,815 tests, zero failures,
+   errors or skips**. The initial Docker run stopped during test compilation:
+   the new page object called package-private `Colony.save`. Main corrected the
+   test to snapshot colonies through public `Model.save`; no model visibility
+   was widened. The selected Docker rerun remains pending. Packaging including
+   Javadoc passed; nine documentation tests and strict MkDocs passed before
+   this evidence update.
+
+5. The selected Docker rerun reached all new player paths. TC70/01 passed;
+   TC70/02 and TC70/03 failed only on the final cross assertion (expected 7,
+   actual 6). F62 has an unstaffed **chapel**, whose accepted output is one,
+   not a church's two. Main corrected the test's expected total to
+   `230 - 100 - 125 + 1 = 6`; pending-state colony equality, candidate IDs,
+   Continue checks, keyboard choices and arrival assertions remain intact.
+   This is a test-fixture expectation correction, not a changed production rule.
+
+6. The next TC70 rerun passed accounting and identity checks, then exposed a
+   second page-object mistake: it checked `isAtEuropePort` (ship berths) for
+   immigrants. `Model.addUnitInEurope` correctly places people on
+   `PlaceEuropePier`. Main corrected both checks to `isAtEuropePier` and added
+   explicit reopen-after-deferral coverage; no gameplay assertion was removed.
+
+7. Final verification: **1,817 model tests** in 179 exported suites passed,
+   including AI Brewster and first-start pending/Continue coverage added by
+   Sol low after main review. Docker `run-fPMBjH` passed TC46 (6), TC47 (2),
+   TC56 (2) and the page contract (3); its two TC70 test-authoring failures are
+   explained above. Corrected Docker `run-75XPG6` passed **all three TC70 player
+   scenarios plus three contract checks**, with zero failures, errors or skips.
+   Main checked the exported XML and viewed English/Czech screenshots; text,
+   choices and deferral instructions are legible. The shared formatter passed
+   25 changed Java files, including exact code-token preservation and
+   idempotence. Packaging/Javadoc, nine documentation tests and strict MkDocs
+   passed. Full CI/publication remain independently pending.

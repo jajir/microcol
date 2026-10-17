@@ -15,6 +15,16 @@ public final class RecruitmentPo {
 
     private Integer earnedImmigrants;
 
+    private Boolean pendingEarnedChoice;
+
+    public Boolean getPendingEarnedChoice() {
+        return pendingEarnedChoice;
+    }
+
+    public void setPendingEarnedChoice(final Boolean value) {
+        pendingEarnedChoice = value;
+    }
+
     public List<RecruitmentCandidatePo> getCandidates() {
         return candidates;
     }

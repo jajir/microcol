@@ -17,6 +17,7 @@ import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.unit.UnitActionType;
@@ -68,6 +69,19 @@ public class ButtonsGamePanelController {
     private void onNextTurn(final NextTurnEvent event) {
         LOGGER.debug("Next turn was triggered");
         view.disableTurnCommands();
+    }
+
+    @Subscribe
+    private void onImmigrationChoiceRequired(
+            final ImmigrationChoiceRequiredEvent event) {
+        if (event.getPlayer().isHuman()) {
+            Platform.runLater(() -> {
+                if (gameModelController.getModel() == event.getModel()
+                        && event.getModel().isAwaitingImmigrationChoice()) {
+                    view.allowPendingImmigrationNavigation();
+                }
+            });
+        }
     }
 
     @Subscribe

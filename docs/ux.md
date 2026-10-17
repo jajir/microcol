@@ -637,3 +637,15 @@ Změněné účastníky model při potvrzení odmítne bez částečného přiř
 Dokončení výuky či odborné praxe se objeví ve hlášení tahu; jeho opětovné
 zobrazení ani Continue nepřidává pokrok. Návrh hráčské cesty a výsledky
 TC68 jsou odděleny v [evidenci](functional-tests.md#r-0107-education-work-2026-10-17).
+
+
+### Čekající výběr přistěhovalce (R-0075/R-0076)
+
+Brewsterova získaná imigrace nabízí tři konkrétní lidi s tlačítkem „Vybrat
+zdarma“. Vysvětlení ukazuje kříže a další hranici, odlišuje výběr od placeného
+náboru a říká, že zavření pouze odkládá rozhodnutí. Přes Evropu lze nabídku
+znovu otevřít. Během čekání nelze obchodovat ani pokračovat dalším tahem;
+uložení a návrat do nabídky zůstávají dostupné. Po poslední volbě hra dokončí
+tah a ohlásí skutečné příchody. Jde o implementované zamýšlené chování,
+nikoli uživatelskou studii; přejímku vede
+[testová evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17).

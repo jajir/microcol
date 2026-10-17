@@ -21,6 +21,7 @@ public enum Europe implements MessageKeyResource {
     immigrationProgress, immigrationPending, repairsOpen, repairsEmpty,
     repairsRestriction, repairsRow, repairsTransfer, repairsRepair,
     repairsDestinationLost, repairsClose, repairARRIVED, repairCOMPLETED,
-    repairREROUTED, repairSUNK;
+    repairREROUTED, repairSUNK, earnedTitle, earnedExplanation, earnedChoose,
+    earnedOpen, earnedPending;
 
 }

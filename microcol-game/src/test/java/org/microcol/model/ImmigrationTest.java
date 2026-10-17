@@ -286,11 +286,11 @@ class ImmigrationTest {
         final int first = pool.checkCanSettleEarned(Difficulty.CONQUISTADOR,
                 "Dutch");
         assertEquals(100, first);
-        pool.settleEarned(pool.chooseEarnedSlot(), first);
+        pool.settleEarned(pool.chooseEarnedSlot(), first, false);
         final int second = pool.checkCanSettleEarned(Difficulty.CONQUISTADOR,
                 "Dutch");
         assertEquals(125, second);
-        pool.settleEarned(pool.chooseEarnedSlot(), second);
+        pool.settleEarned(pool.chooseEarnedSlot(), second, false);
         assertEquals(5, pool.getCrosses());
         assertEquals(150, pool.getTarget(Difficulty.CONQUISTADOR, "Dutch"));
         assertFalse(pool.hasReachedTarget(Difficulty.CONQUISTADOR, "Dutch"));
