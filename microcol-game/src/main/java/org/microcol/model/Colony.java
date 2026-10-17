@@ -548,6 +548,7 @@ public class Colony {
         }
 
         owner = player;
+        grantLaSalleStockade();
         model.fireColonyWasCaptured(model, capturingUnit, this);
     }
 
@@ -974,6 +975,20 @@ public class Colony {
         } else {
             constructions
                     .add(Construction.build(model, this, constructionType));
+        }
+    }
+
+    /**
+     * Grant once after gameplay transitions, never while restoring a colony.
+     */
+    void grantLaSalleStockade() {
+        if (isValid()
+                && owner.getCongressMembers()
+                        .contains(Founder.SIEUR_DE_LA_SALLE)
+                && getUnitsInsideColony().size() >= ConstructionType.STOCKADE
+                        .getRequiredColonyPopulation()
+                && !isContainsConstructionByType(ConstructionType.STOCKADE)) {
+            createConstruction(ConstructionType.STOCKADE);
         }
     }
 

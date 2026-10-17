@@ -373,6 +373,9 @@ public abstract class Player {
             if (arrived == Founder.WILLIAM_BREWSTER) {
                 recruitment.applyBrewster();
             }
+            if (arrived == Founder.SIEUR_DE_LA_SALLE) {
+                getColonies().forEach(Colony::grantLaSalleStockade);
+            }
             if (arrived == Founder.HERNANDO_DE_SOTO) {
                 getAllUnits().stream().filter(Unit::isAtPlaceLocation)
                         .forEach(this::revealMapForUnit);

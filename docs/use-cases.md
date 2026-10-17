@@ -745,3 +745,8 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
 4. UC-087: R-0179 ověřuje Drakeův bonus korzárů v útoku i obraně, bez
    přenosu mezi vlastníky nebo násobení po načtení. TC64_04 ukazuje rozklad
    síly a šanci, zrušení i Continue; společná cílená regrese boje prošla.
+5. UC-108: R-0184 používá nový TC72/F64 pro La Salleho: zrušení výběru,
+   získání při dvou obyvatelích a pozdější třetí obyvatel, již způsobilá kolonie,
+   viditelná palisáda zdarma, blokovaný odchod při třech a Continue. Modelová
+   sada pokrývá také změnu vlastníka a vyšší opevnění. Cíleně ověřeno po opravě
+   indexu taženého pracovního místa; úplná regrese dávky čeká.

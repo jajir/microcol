@@ -3636,3 +3636,19 @@ committed for this experiment.
     starts Sonnet high because founder join, population and capture must share
     an exactly-once rule; this scope has more state transitions than the
     successful small strength modifier and earlier medium work omitted checks.
+15. R-0184 Sonnet high completed the initial authoring in 684.465 seconds.
+    Caller review shortened one explanatory comment and applied shared
+    formatting. Docker `run-WFtFHk` passed all 50 model tests, but both new
+    TC72 cases dragged an empty carpenter slot and timed out (nine UI/support
+    tests total, two errors, no assertion failures/skips). `assignCarpenter`
+    drops at slot 1; the new cases tried slot 0. One same-model high repair
+    changed only those two indices in 13.063 seconds, preserving all assertions
+    and timeouts. The same targeted selection is being rerun.
+16. R-0184 now passes all 59 targeted checks. Total worker time is 697.528
+    seconds (684.465 initial + 13.063 repair). Final cumulative session totals:
+    82 input, 298,389 cache-create, 6,819,218 cache-read and 104,727 output
+    tokens (56,483 thinking), list-price estimate $2.9229118. Higher effort
+    completed the requested authoring initially but did not prevent a small UI
+    fixture mistake. For R-0147 return to Sonnet medium with concrete existing
+    role, dialog and fixture patterns; escalate only on diagnosed need. This
+    is a practical trial, not evidence that effort alone caused the time/cost gap.

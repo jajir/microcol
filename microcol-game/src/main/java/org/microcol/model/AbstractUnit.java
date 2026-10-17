@@ -1165,6 +1165,7 @@ public abstract class AbstractUnit implements Unit {
         }
         place = new PlaceConstructionSlot(this, structureSlot);
         structureSlot.set((PlaceConstructionSlot) place);
+        structureSlot.getColony().grantLaSalleStockade();
     }
 
     @Override
@@ -1178,6 +1179,7 @@ public abstract class AbstractUnit implements Unit {
         }
         place = new PlaceColonyField(this, colonyField, producedGoodsType);
         colonyField.setPlaceColonyField((PlaceColonyField) place);
+        colonyField.getColony().grantLaSalleStockade();
     }
 
     protected void validateColonyStructureSlot(

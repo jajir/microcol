@@ -4847,3 +4847,17 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    TC64_04 verifies the named bonus, 61.54% odds against a galleon, cancel and
    Continue; original TC64/65 outcomes remain intact. Reports/screenshots:
    `target/docker-ui/run-N5F3WJ/`. Full batch regression/publication pending.
+6. R-0184: Docker `run-WFtFHk` initially passed 50 model checks but had two
+   errors among nine UI/support checks: TC72 dragged empty carpenter slot 0
+   after `assignCarpenter` placed worker 4 into slot 1. The targeted worker
+   repair changed only those two indices, retaining every assertion/timeout.
+   Shared formatting passed on six Java files. Rerun `run-VoE0Pb` exited 0:
+   LaSalleStockade 15, Congress 16, FounderConstruction 11, FortifiedPopulation 8,
+   new TC72/F64 2, existing TC53 2, TC56 2 and PageVerificationContract 3:
+   **59 passed**, no failures/errors/skips. TC72 verifies cancel, joining below
+   threshold, later third-resident grant, existing eligible colony grant, visible
+   stockade, unchanged resources, blocked departure at three, no duplicate and
+   Continue. Model coverage includes fields/buildings, capture/new owner, higher
+   defenses, forced resident loss, queue/resource preservation and disk/load
+   behavior. Reports/screenshots: `target/docker-ui/run-VoE0Pb/`.
+   Full batch regression/publication remain pending.
