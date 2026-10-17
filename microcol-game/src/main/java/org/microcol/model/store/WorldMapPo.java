@@ -27,6 +27,12 @@ public final class WorldMapPo extends AbstractMapStore {
      */
     private String[] fields;
 
+    /**
+     * Hold information where pioneers permanently cleared a forest. A missing
+     * block means no square was cleared.
+     */
+    private String[] cleared;
+
     private VisibilityPo visibility;
 
     private int maxX;
@@ -66,6 +72,11 @@ public final class WorldMapPo extends AbstractMapStore {
                 return "-";
             }
         }, maxX, maxY);
+    }
+
+    public void setCleared(final Set<Location> clearedSet) {
+        cleared = generateString(loc -> clearedSet.contains(loc) ? "c" : "-",
+                maxX, maxY);
     }
 
     public Map<Location, TerrainType> getTerrainMap() {
@@ -109,6 +120,34 @@ public final class WorldMapPo extends AbstractMapStore {
         if (fields != null) {
             iterate(fields, (location, charCode) -> {
                 if (charCode.equals("f")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
+    }
+
+    public Set<Location> getClearedSet() {
+        final Set<Location> out = new HashSet<>();
+        // A missing block means nothing was cleared; a present one must be
+        // complete and use only the known codes.
+        if (cleared != null) {
+            Preconditions.checkArgument(
+                    cleared.length == maxY + 1 && cleared[0] != null,
+                    "Invalid cleared row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = cleared[y];
+                Preconditions.checkArgument(row != null
+                        && row.startsWith(String.format("row-%04d:", y % 10000))
+                        && row.substring("row-0001:".length()).split(",",
+                                -1).length == maxX,
+                        "Invalid cleared row %s", y);
+            }
+            iterate(cleared, (location, charCode) -> {
+                Preconditions.checkArgument(
+                        charCode.equals("c") || charCode.equals("-"),
+                        "Unknown cleared code '%s'", charCode);
+                if (charCode.equals("c")) {
                     out.add(location);
                 }
             });
@@ -178,6 +217,14 @@ public final class WorldMapPo extends AbstractMapStore {
 
     public void setFields(final String[] fields) {
         this.fields = fields;
+    }
+
+    public String[] getCleared() {
+        return cleared;
+    }
+
+    public void setCleared(final String[] cleared) {
+        this.cleared = cleared;
     }
 
 }

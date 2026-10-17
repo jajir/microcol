@@ -4892,3 +4892,23 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    fixed through the shared colonist storable capability, retaining carrier
    rejection. Shared formatter passed; reports/screenshots remain under
    `target/docker-ui/run-D7bgbV/`. Full batch regression/publication are pending.
+9. R-0120 partial verification after the Pro quota interruption: Docker
+   `run-mIaLGe` exits 0, **122 passed** (ClearForest 43, PlowField 22, Terrain 5,
+   SpecialistProduction 21, NationalTurnPreparation 8, NationalTurnOrder 11,
+   existing TC18 7, TC15 2, PageVerificationContract 3), no failures/errors/skips.
+   Shared formatter passed. This verifies the written model and existing plow
+   regressions only. TC73/F65 clearing controls, confirmation, loss feedback and
+   Continue have not yet been authored or accepted. R-0120 remains incomplete;
+   do not count it among the seven targeted-accepted batch requirements.
+10. R-0120 final `run-tfx9Qq` exits 0: **112 model/architecture + 15 UI +
+    three source-contract = 130 passed**, zero failures/errors/skips. Model suites:
+    ClearForest 44, PlowField 22, Terrain 5, SpecialistProduction 21,
+    NationalTurnPreparation 8, NationalTurnOrder 11 and ModelArchitecture 1.
+    TC73/F65 has six scenarios: confirmed four-update completion, cancel/Escape,
+    stale confirmation, hardy two-update completion, explicit work cancellation,
+    and overflow with one persisted notice and no repeat next turn. TC15's two
+    and TC18's seven plow scenarios also pass. Earlier `run-ODgwPv` had one
+    overly broad next-turn report assertion; the repair checks zero lumber-loss
+    notices while retaining unrelated events and all stock/tool checks.
+    Shared formatter passes. Reports remain under `target/docker-ui/run-tfx9Qq/`.
+    Full batch regression and publication remain pending.

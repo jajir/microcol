@@ -85,6 +85,21 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
                     }
                 }
                 return null;
+            }, read -> {
+                if (UnitActionType.clearForest.equals(read.type)) {
+                    try {
+                        final UnitActionClearForestPo out = new UnitActionClearForestPo();
+                        Preconditions.checkState(read.in.hasNext(),
+                                "There should be remainingTurns key value");
+                        final String name = read.in.nextName();
+                        Preconditions.checkState("remainingTurns".equals(name));
+                        out.setRemainingTurns(read.in.nextInt());
+                        return out;
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                return null;
             }));
 
     /**
@@ -126,6 +141,18 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
             }, write -> {
                 if (UnitActionType.plowField.equals(write.value.getType())) {
                     final UnitActionPlowFieldPo ua = (UnitActionPlowFieldPo) write.value;
+                    try {
+                        write.out.name("remainingTurns")
+                                .value(ua.getRemainingTurns());
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                    return true;
+                }
+                return null;
+            }, write -> {
+                if (UnitActionType.clearForest.equals(write.value.getType())) {
+                    final UnitActionClearForestPo ua = (UnitActionClearForestPo) write.value;
                     try {
                         write.out.name("remainingTurns")
                                 .value(ua.getRemainingTurns());

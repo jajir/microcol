@@ -5,6 +5,7 @@ import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
+import org.microcol.gui.event.ClearForestEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.SkipUnitTurnEvent;
@@ -137,6 +138,10 @@ public class ScreenGamePresenter {
             onKeyPWasPressed();
             return;
         }
+        if (KeyCode.F == event.getCode()) {
+            onKeyFWasPressed();
+            return;
+        }
         if (KeyCode.B == event.getCode()) {
             eventBus.post(new BuildColonyEvent());
         }
@@ -166,6 +171,13 @@ public class ScreenGamePresenter {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
             // The listener explains why an eligible unit cannot start.
             eventBus.post(new PlowFieldEvent());
+        }
+    }
+
+    private void onKeyFWasPressed() {
+        if (selectedUnitManager.getSelectedUnit().isPresent()) {
+            // The listener explains why an eligible unit cannot start.
+            eventBus.post(new ClearForestEvent());
         }
     }
 

@@ -15,6 +15,12 @@ public enum Buttons implements MessageKeyResource {
     buttonCancelPlowField, plowProblemUnavailable, plowProblemNotPioneer,
     plowProblemNotEnoughTools, plowProblemBusy, plowProblemNoMoves,
     plowProblemColony, plowProblemUnsuitableTerrain, plowProblemForest,
-    plowProblemAlreadyPlowed;
+    plowProblemAlreadyPlowed, buttonClearForest, buttonCancelClearForest,
+    clearForestProblemUnavailable, clearForestProblemNotPioneer,
+    clearForestProblemNotEnoughTools, clearForestProblemBusy,
+    clearForestProblemNoMoves, clearForestProblemColony,
+    clearForestProblemNoForest, clearForestTitle, clearForestQuestion,
+    clearForestQuestionNoColony, clearForestConfirm, clearForestCancel,
+    clearForestChanged;
 
 }

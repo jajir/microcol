@@ -38,7 +38,8 @@ public class TeService {
             final TeProcessorPeaceOffer teProcessorPeaceOffer,
             final TeProcessorShipRepair teProcessorShipRepair,
             final TeProcessorEducation education,
-            final TeProcessorConstructionWaitingForTools constructionWaitingForTools) {
+            final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
+            final TeProcessorForestLumberLost forestLumberLost) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
 
@@ -46,6 +47,7 @@ public class TeService {
                 .newArrayList(Preconditions.checkNotNull(teProcessorShipRepair),
                         Preconditions.checkNotNull(education),
                         Preconditions.checkNotNull(constructionWaitingForTools),
+                        Preconditions.checkNotNull(forestLumberLost),
                         Preconditions.checkNotNull(teProcessorPeaceOffer),
                         Preconditions
                                 .checkNotNull(teProcessorCustomHouseExport),

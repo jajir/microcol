@@ -10,6 +10,7 @@ import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameEvent;
+import org.microcol.gui.event.ClearForestEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageLoaderButtons;
@@ -62,6 +63,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private final static String BUTTON_CANCEL_PLOW_FIELD_ID = "cancelPlowField";
 
+    private final static String BUTTON_CLEAR_FOREST_ID = "clearForest";
+
+    private final static String BUTTON_CANCEL_CLEAR_FOREST_ID = "cancelClearForest";
+
     private final static String BUTTON_BUILD_COLONY_ID = "buildColony";
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
@@ -98,6 +103,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonMove;
     private final Button buttonPlowField;
     private final Button buttonCancelPlowField;
+    private final Button buttonClearForest;
+    private final Button buttonCancelClearForest;
     private final Button buttonBuildColony;
     private final Button buttonDeclareIndependence;
 
@@ -178,6 +185,14 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCancelPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
                 Buttons.buttonCancelPlowField);
         buttonCancelPlowField.setId(BUTTON_CANCEL_PLOW_FIELD_ID);
+        buttonClearForest = makeButon(ImageLoaderButtons.BUTTON_CUT_TREE,
+                Buttons.buttonClearForest);
+        buttonClearForest
+                .setOnAction(event -> eventBus.post(new ClearForestEvent()));
+        buttonClearForest.setId(BUTTON_CLEAR_FOREST_ID);
+        buttonCancelClearForest = makeButon(ImageLoaderButtons.BUTTON_CUT_TREE,
+                Buttons.buttonCancelClearForest);
+        buttonCancelClearForest.setId(BUTTON_CANCEL_CLEAR_FOREST_ID);
         buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
                 Buttons.buttonBuildColony);
         buttonBuildColony
@@ -309,6 +324,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonMove.setDisable(disable);
         buttonPlowField.setDisable(disable);
         buttonCancelPlowField.setDisable(disable);
+        buttonClearForest.setDisable(disable);
+        buttonCancelClearForest.setDisable(disable);
         buttonBuildColony.setDisable(disable);
         buttonDeclareIndependence.setDisable(disable);
     }
@@ -327,6 +344,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void setVisibleButtonCancelPlowField(final boolean isVisible) {
         setVisibleNode(buttonCancelPlowField, isVisible);
+    }
+
+    public void setVisibleButtonClearForest(final boolean isVisible) {
+        setVisibleNode(buttonClearForest, isVisible);
+    }
+
+    void setCancelClearForestAction(final Runnable action) {
+        buttonCancelClearForest.setOnAction(event -> action.run());
+    }
+
+    public void setVisibleButtonCancelClearForest(final boolean isVisible) {
+        setVisibleNode(buttonCancelClearForest, isVisible);
     }
 
     public void setVisibleButtonBuildColony(final boolean isVisible) {

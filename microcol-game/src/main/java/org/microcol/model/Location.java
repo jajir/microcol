@@ -71,6 +71,19 @@ public final class Location {
         return Math.abs(x - location.x) + Math.abs(y - location.y);
     }
 
+    /**
+     * Return distance in squares when diagonal steps count as one, so every
+     * square of the eight-neighbor ring is at distance one.
+     *
+     * @param location required location
+     * @return the larger of the horizontal and vertical differences
+     */
+    public int getDistanceChebyshev(final Location location) {
+        Preconditions.checkNotNull(location);
+
+        return Math.max(Math.abs(x - location.x), Math.abs(y - location.y));
+    }
+
     public Location add(final Location location) {
         Preconditions.checkNotNull(location);
 

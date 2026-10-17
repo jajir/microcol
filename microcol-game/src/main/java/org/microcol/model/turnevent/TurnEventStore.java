@@ -27,6 +27,7 @@ public final class TurnEventStore {
                     TurnEventFaminePlagueColony::tryLoad,
                     TurnEventFamineWillPlagueColony::tryLoad,
                     TurnEventGoodsWasThrownAway::tryLoad,
+                    TurnEventForestLumberLost::tryLoad,
                     TurnEventNewUnitInColony::tryLoad,
                     TurnEventNewUnitInEurope::tryLoad,
                     TurnEventFounderArrived::tryLoad,

@@ -15,7 +15,9 @@ import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
+import org.microcol.gui.event.ClearForestEventListener;
 import org.microcol.gui.event.PlowFieldEventListener;
+import org.microcol.model.ClearForestProblem;
 import org.microcol.model.PlowProblem;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ActionWasStartedEvent;
@@ -66,6 +68,7 @@ public class ButtonsGamePanelController {
         view.setSentryAction(this::changeSentryOrder);
         view.setFortifyAction(this::changeFortifyOrder);
         view.setCancelPlowFieldAction(this::cancelPlowField);
+        view.setCancelClearForestAction(this::cancelClearForest);
     }
 
     @SuppressWarnings("unused")
@@ -101,6 +104,8 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonBuildColony(false);
                 view.setVisibleButtonPlowField(false);
                 view.setVisibleButtonCancelPlowField(false);
+                view.setVisibleButtonClearForest(false);
+                view.setVisibleButtonCancelClearForest(false);
             }
         }
         updateUnitOrders();
@@ -139,6 +144,8 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonBuildColony(false);
             view.setVisibleButtonPlowField(false);
             view.setVisibleButtonCancelPlowField(false);
+            view.setVisibleButtonClearForest(false);
+            view.setVisibleButtonCancelClearForest(false);
         }
         evaluateDeclareIndependenceButton();
         updateUnitOrders();
@@ -164,6 +171,7 @@ public class ButtonsGamePanelController {
         evaluateMoveButton(unit);
         evaluateBuildColony(unit);
         evaluatePlowField(unit);
+        evaluateClearForest(unit);
     }
 
     private void evaluateMoveButton(final Unit unit) {
@@ -184,6 +192,38 @@ public class ButtonsGamePanelController {
                 problem.isEmpty() || PlowFieldEventListener
                         .isExplainedOnControl(problem.get(), unit));
         view.setVisibleButtonCancelPlowField(getModel().canCancelPlow(unit));
+    }
+
+    private void evaluateClearForest(final Unit unit) {
+        // An equipped idle pioneer in a forest keeps the control; a rejected
+        // start explains the reason through the status bar.
+        final Optional<ClearForestProblem> problem = getModel()
+                .getClearForestProblem(unit);
+        view.setVisibleButtonClearForest(problem.isEmpty()
+                || ClearForestEventListener.isExplainedOnControl(problem.get(),
+                        unit, isInForest(unit)));
+        view.setVisibleButtonCancelClearForest(
+                getModel().canCancelClearForest(unit));
+    }
+
+    private boolean isInForest(final Unit unit) {
+        return unit.isAtPlaceLocation() && getModel().getMap()
+                .getTerrainAt(unit.getLocation()).isHasTrees();
+    }
+
+    private void cancelClearForest() {
+        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        if (unit == null) {
+            return;
+        }
+        try {
+            getModel().cancelClearForest(unit);
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.clearForestProblemUnavailable),
+                    StatusBarMessageEvent.Source.GAME));
+        }
+        updateUnitOrders();
     }
 
     private void cancelPlowField() {

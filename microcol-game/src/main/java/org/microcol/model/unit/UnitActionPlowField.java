@@ -91,7 +91,7 @@ public final class UnitActionPlowField implements UnitAction {
             return false;
         }
         finished = true;
-        ((UnitFreeColonist) unit).consumePlowTools(REQUIRED_TOOLS);
+        ((UnitFreeColonist) unit).consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().plowFiled(unit.getLocation());
         return true;
     }

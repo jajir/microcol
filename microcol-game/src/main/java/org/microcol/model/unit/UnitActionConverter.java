@@ -1,6 +1,7 @@
 package org.microcol.model.unit;
 
 import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.store.UnitActionClearForestPo;
 import org.microcol.model.store.UnitActionPlowFieldPo;
 import org.microcol.model.store.UnitActionFortifyPo;
 import org.microcol.model.store.UnitActionPo;
@@ -44,6 +45,14 @@ public final class UnitActionConverter {
                     final UnitActionPlowField out = new UnitActionPlowField();
                     out.setRemainingTurns(
                             ((UnitActionPlowFieldPo) po).getRemainingTurns());
+                    return out;
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.clearForest.equals(po.getType())) {
+                    final UnitActionClearForest out = new UnitActionClearForest();
+                    out.setRemainingTurns(
+                            ((UnitActionClearForestPo) po).getRemainingTurns());
                     return out;
                 }
                 return null;

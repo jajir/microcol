@@ -11,6 +11,7 @@ import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerFileChooser;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.DeclareIndependenceListener;
+import org.microcol.gui.event.ClearForestEventListener;
 import org.microcol.gui.event.PlowFieldEventListener;
 import org.microcol.gui.event.QuitGameListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
@@ -288,6 +289,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
         bind(DeclareIndependenceListener.class).asEagerSingleton();
         bind(PlowFieldEventListener.class).asEagerSingleton();
+        bind(ClearForestEventListener.class).asEagerSingleton();
         bind(BuildColonyListener.class).in(Singleton.class);
 
         bind(MusicPlayer.class).in(Singleton.class);

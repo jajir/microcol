@@ -22,6 +22,10 @@ public class Terrain {
             GoodsType.CORN, GoodsType.SUGAR, GoodsType.COTTON,
             GoodsType.TOBACCO);
 
+    /** Goods that a permanently cleared square never produces again. */
+    private static final List<GoodsType> CLEARED_BARREN_GOODS = ImmutableList
+            .of(GoodsType.LUMBER, GoodsType.FUR);
+
     private static final int TREE_NOMINAL_PRODUCTION = 7;
 
     private static final int FURS_NOMINAL_PRODUCTION = 5;
@@ -33,6 +37,8 @@ public class Terrain {
     private boolean hasTrees;
 
     private boolean hasField;
+
+    private boolean cleared;
 
     /**
      * List of function that based on terrain properties like trees and field
@@ -59,6 +65,13 @@ public class Terrain {
                         && prod.getProduction() > 0
                         && PLOW_CROPS.contains(prod.getGoodsType())) {
                     return prod.modify(prod.getProduction() + PLOW_BONUS);
+                }
+                return prod;
+            }, prod -> {
+                if (prod.getTerrain().isCleared()
+                        && !prod.getTerrain().isHasTrees()
+                        && CLEARED_BARREN_GOODS.contains(prod.getGoodsType())) {
+                    return prod.modify(0);
                 }
                 return prod;
             });
@@ -196,6 +209,28 @@ public class Terrain {
                 "this terrain type (%s) at (%s) can't have field.", terrainType,
                 location);
         this.hasField = hasField;
+    }
+
+    /**
+     * Provide information if a pioneer permanently cleared a forest here.
+     *
+     * @return <code>true</code> when the square never produces lumber or fur
+     *         again
+     */
+    public boolean isCleared() {
+        return cleared;
+    }
+
+    /**
+     * Allows to mark a square whose forest was permanently cleared.
+     *
+     * @param cleared if the forest was cleared
+     */
+    public void setCleared(final boolean cleared) {
+        Preconditions.checkArgument(terrainType.isCanHaveTree() || !cleared,
+                "this terrain type (%s) at (%s) can't be cleared.", terrainType,
+                location);
+        this.cleared = cleared;
     }
 
 }

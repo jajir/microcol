@@ -26,8 +26,8 @@ public abstract class CanMount extends AbstractUnit {
 
     protected List<UnitActionType> getSupportedActions() {
         return ImmutableList.of(UnitActionType.plowField,
-                UnitActionType.noAction, UnitActionType.sentry,
-                UnitActionType.fortify);
+                UnitActionType.clearForest, UnitActionType.noAction,
+                UnitActionType.sentry, UnitActionType.fortify);
     }
 
 }

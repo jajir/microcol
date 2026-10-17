@@ -35,6 +35,14 @@ public enum UnitActionType {
             return new UnitActionPlowField();
         }
 
+    },
+
+    clearForest("c") {
+        @Override
+        public UnitActionClearForest make() {
+            return new UnitActionClearForest();
+        }
+
     };
 
     private final String sign;

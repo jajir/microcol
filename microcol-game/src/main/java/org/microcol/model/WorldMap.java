@@ -21,6 +21,8 @@ public class WorldMap {
 
     private final Set<Location> fields;
 
+    private final Set<Location> cleared;
+
     private final Integer seed;
 
     public WorldMap(final ModelPo gamePo) {
@@ -34,8 +36,13 @@ public class WorldMap {
         this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
         this.trees = worldMapPo.getTreeSet();
         this.fields = worldMapPo.getFieldSet();
+        this.cleared = worldMapPo.getClearedSet();
         this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(),
                 "Seed value is null");
+        for (final Location at : cleared) {
+            Preconditions.checkArgument(!trees.contains(at),
+                    "Cleared square (%s) still has a forest.", at);
+        }
         verifyThatMapIsComplete();
     }
 
@@ -91,6 +98,7 @@ public class WorldMap {
         final Terrain out = new Terrain(location, getTerrainTypeAt(location));
         out.setHasTrees(trees.contains(location));
         out.setHasField(fields.contains(location));
+        out.setCleared(cleared.contains(location));
         return out;
     }
 
@@ -121,6 +129,7 @@ public class WorldMap {
         gamePo.getMap().setTerrainType(terrainMap);
         gamePo.getMap().setTrees(trees);
         gamePo.getMap().setFields(fields);
+        gamePo.getMap().setCleared(cleared);
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
     }
@@ -130,6 +139,19 @@ public class WorldMap {
                 "Terrain '%s' at '%s' can have field.", getTerrainTypeAt(at),
                 at);
         fields.add(at);
+    }
+
+    /**
+     * Remove the forest at a square for good. The square keeps its bare terrain
+     * yields except that it never again produces lumber or fur.
+     *
+     * @param at forested square
+     */
+    public void clearForest(final Location at) {
+        Preconditions.checkArgument(trees.contains(at),
+                "There is no forest to clear at '%s'.", at);
+        trees.remove(at);
+        cleared.add(at);
     }
 
     /**

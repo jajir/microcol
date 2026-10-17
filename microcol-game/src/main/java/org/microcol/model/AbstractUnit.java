@@ -15,6 +15,7 @@ import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitArtillery;
@@ -1458,6 +1459,25 @@ public abstract class AbstractUnit implements Unit {
         model.fireActionWasStarted(this);
     }
 
+    void startClearingForest() {
+        Preconditions.checkState(unitAction.isNoAction());
+        final UnitActionClearForest next = new UnitActionClearForest();
+        if (getType() == UnitType.HARDY_PIONEER) {
+            next.setRemainingTurns(
+                    UnitActionClearForest.HARDY_TURNS_TO_CLEAR_FOREST);
+        }
+        setAction(next);
+        actionPoints = 0;
+        model.fireActionWasStarted(this);
+    }
+
+    void cancelClearingForest() {
+        Preconditions
+                .checkState(unitAction.getType() == UnitActionType.clearForest);
+        setAction(UnitActionType.noAction.make());
+        model.fireActionWasStarted(this);
+    }
+
     /**
      * Define action supported by unit.
      *
@@ -1475,7 +1495,8 @@ public abstract class AbstractUnit implements Unit {
                                 && actionType != UnitActionType.sentry
                                 && unitAction
                                         .getType() != UnitActionType.fortify
-                                && actionType != UnitActionType.fortify,
+                                && actionType != UnitActionType.fortify
+                                && actionType != UnitActionType.clearForest,
                         "Use the dedicated command for this order");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),

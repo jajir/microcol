@@ -5,6 +5,7 @@ import org.microcol.model.ColonyBuildingItemProgress;
 import org.microcol.model.ColonyBuildingItemProgressConstruction;
 import org.microcol.model.ColonyBuildingItemProgressUnit;
 import org.microcol.model.Goods;
+import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.GoodsType;
@@ -182,6 +183,23 @@ public final class TurnEventProvider {
             final Colony colony) {
         return new TurnEventNewUnitInColony(player.getName(), colony.getId(),
                 colony.getName());
+    }
+
+    /**
+     * Report lumber from a cleared forest that no warehouse took.
+     *
+     * @param player    required owner of the pioneer
+     * @param lost      the discarded lumber
+     * @param location  the square whose forest was cleared
+     * @param recipient the colony whose warehouse was full, or null when no
+     *                  colony was within reach
+     * @return turn event object
+     */
+    public static TurnEvent getForestLumberLost(final Player player,
+            final Goods lost, final Location location, final Colony recipient) {
+        return new TurnEventForestLumberLost(player.getName(), lost, location,
+                recipient == null ? null : recipient.getId(),
+                recipient == null ? null : recipient.getName());
     }
 
     /**

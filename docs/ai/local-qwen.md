@@ -3708,3 +3708,46 @@ committed for this experiment.
     $3.18674000. Start R-0120 on Sonnet high because completion combines
     terrain, current recipient, warehouse capacity and persisted loss feedback;
     plan a cheaper Haiku trial for the narrower R-0136 arrival hook.
+22. R-0120 Sonnet high was interrupted by the Claude Pro session limit on
+    2026-10-17 at about 17:28 Europe/Prague. The CLI reports reset at 20:20
+    that day. Exit 1, session `cafedc07-6f8f-4939-916f-8231bb8e9e8c`, elapsed
+    878.070 seconds; this is an incomplete attempt, not accepted delivery.
+    It authored model/map state, clearing controls, loss notifications and
+    `ClearForestTest`, but no TC73/F65 player scenarios. Final reported usage:
+    138 input, 337,442 cache-create, 14,431,124 cache-read, 111,661 output
+    (45,190 thinking), list estimate $3.90976640. This is not a Pro charge.
+    Preserve the same worktree/session and remaining two attempts; do not
+    immediately retry against the exhausted quota or silently use this account
+    for the missing implementation. After availability returns, resume the
+    bounded UI/test completion on Sonnet medium. Its architecture is already
+    written; high effort is not justified merely because the first attempt ended
+    on an account limit. The caller is validating the existing partial change.
+23. Partial R-0120 Docker `run-mIaLGe` exits 0 with 122 checks: 110 model,
+    nine existing plow UI scenarios and three contract checks. No failures,
+    errors or skips; missing new clearing UI acceptance remains an explicit
+    blocker. Seven requirements are targeted-accepted, none yet full-batch
+    accepted or published in this experiment. The provisional choice is Sonnet
+    medium for bounded implementation, Haiku for small changes with concrete
+    test patterns, and Sonnet high only for diagnosed complexity. The requested
+    20-task trial and optimum assessment are not finished.
+24. User resumed the batch on 2026-10-17 at 20:21 Europe/Prague. The same
+    R-0120 session resumed on Sonnet medium; actual assistant responses and an
+    `allowed` rate-limit event confirm availability returned. No new session,
+    worktree or task budget was substituted. The remaining authoring is the
+    clearing player path and narrow validation of the new saved map state.
+25. R-0120 resumed Sonnet medium authoring completed in 95.984 seconds.
+    Docker `run-ODgwPv` ran 130 checks: 129 passed and TC73_06 failed because
+    it required the entire next-turn report to be absent, although F01 produces
+    unrelated warehouse events. All 44 clearing model tests and the other five
+    new UI cases passed. The final same-session medium repair (16.736 seconds)
+    replaced that broad assumption with zero messages containing `lumber lost:`;
+    prior single-notice, exact stock/tool and Continue checks remain. This is a
+    test correction, not acceptance evidence until the rerun passes.
+26. Final R-0120 `run-tfx9Qq` passes all 130 checks, zero failures/errors/skips.
+    Eight requirements are targeted-accepted. Total worker time 990.790 seconds;
+    final cumulative session usage: 164 input,
+    708,675 cache-create, 18,769,905
+    cache-read, 128,132 output (47,698 thinking),
+    list estimate $5.99333850. This is not a Pro charge or quota estimate.
+    R-0136 will trial Haiku low on the traced arrival hook and existing test
+    patterns; diagnose and repair/escalate within the same job if inadequate.

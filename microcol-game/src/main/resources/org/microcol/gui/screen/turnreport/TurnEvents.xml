@@ -20,6 +20,8 @@
 	<entry key="goodsWasThrowsAway4">In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
 	<entry key="constructionWaitingForTools">Colony %s: %s has enough hammers but is waiting for tools (%s missing).</entry>
 	<entry key="openColony">Open colony</entry>
+	<entry key="forestLumberLostFull">Forest cleared at (%s, %s): lumber lost: %s. The warehouse of colony %s is full.</entry>
+	<entry key="forestLumberLostNoColony">Forest cleared at (%s, %s): lumber lost: %s. No colony of yours is within two squares.</entry>
 	
 	<entry key="buttonBack">Back</entry>
 

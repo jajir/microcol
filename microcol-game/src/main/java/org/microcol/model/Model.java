@@ -22,6 +22,7 @@ import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitActionFortify;
+import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
@@ -1651,6 +1652,126 @@ public class Model {
                 "Unit is not doing plow work");
         checkTurnPreparationComplete();
         ((AbstractUnit) unit).cancelPlowing();
+    }
+
+    /**
+     * Authoritative forest-clearing admission for the current player's live
+     * pioneer.
+     *
+     * @param unit required unit
+     * @return the first reason clearing cannot start, or empty when it can
+     */
+    public Optional<ClearForestProblem> getClearForestProblem(final Unit unit) {
+        if (unit == null || !isGameRunning() || endingTurn
+                || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId()).orElse(null) != unit
+                || !unit.isAtPlaceLocation()) {
+            return Optional.of(ClearForestProblem.UNAVAILABLE);
+        }
+        if (!(unit instanceof UnitFreeColonist)
+                || !unit.getType().isCanCutTrees()) {
+            return Optional.of(ClearForestProblem.NOT_PIONEER);
+        }
+        if (((UnitFreeColonist) unit)
+                .getTools() < UnitActionClearForest.REQUIRED_TOOLS) {
+            return Optional.of(ClearForestProblem.NOT_ENOUGH_TOOLS);
+        }
+        if (unit.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(ClearForestProblem.BUSY);
+        }
+        if (unit.getActionPoints() <= 0) {
+            return Optional.of(ClearForestProblem.NO_MOVES);
+        }
+        final Location at = unit.getLocation();
+        if (getColonyAt(at).isPresent()) {
+            return Optional.of(ClearForestProblem.COLONY);
+        }
+        if (!map.getTerrainAt(at).isHasTrees()) {
+            return Optional.of(ClearForestProblem.NO_FOREST);
+        }
+        return Optional.empty();
+    }
+
+    /** Whether a current pioneer may start clearing the forest it stands in. */
+    public boolean canClearForest(final Unit unit) {
+        return getClearForestProblem(unit).isEmpty();
+    }
+
+    /**
+     * Terms the player must confirm before a pioneer starts clearing.
+     *
+     * @param unit required unit
+     * @return the current terms, or empty when clearing cannot start
+     */
+    public Optional<ClearForestOffer> getClearForestOffer(final Unit unit) {
+        if (!canClearForest(unit)) {
+            return Optional.empty();
+        }
+        return Optional.of(new ClearForestOffer(unit.getId(),
+                unit.getLocation(),
+                unit.getType() == UnitType.HARDY_PIONEER
+                        ? UnitActionClearForest.HARDY_TURNS_TO_CLEAR_FOREST
+                        : UnitActionClearForest.REQUIRED_TURNS_TO_CLEAR_FOREST,
+                UnitActionClearForest.REQUIRED_TOOLS,
+                UnitActionClearForest.LUMBER_YIELD));
+    }
+
+    /**
+     * Start clearing after the player confirmed the offered terms. Movement is
+     * spent now; tools, forest and lumber change only at completion.
+     *
+     * @param unit      required unit
+     * @param confirmed the exact offer the player confirmed
+     * @throws IllegalStateException when the unit or terrain no longer allow
+     *                               the work or the terms changed
+     */
+    public void clearForest(final Unit unit, final ClearForestOffer confirmed) {
+        Preconditions.checkNotNull(confirmed, "Confirmed offer is required");
+        Preconditions.checkState(
+                getClearForestOffer(unit).filter(confirmed::equals).isPresent(),
+                "Forest clearing offer is no longer valid");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).startClearingForest();
+    }
+
+    /**
+     * Preview the colony that would receive the lumber if the work finished
+     * now: the nearest colony of the owner within two squares, then the lowest
+     * colony ID. Distance counts diagonal steps as one. Completion resolves the
+     * recipient again, so the answer can change before then.
+     *
+     * @param owner required owner of the pioneer
+     * @param at    forested square
+     * @return the colony that would receive the lumber, if any
+     */
+    public Optional<Colony> getForestClearingRecipient(final Player owner,
+            final Location at) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(at);
+        final Comparator<Colony> nearestThenId = Comparator
+                .comparingInt((Colony colony) -> colony.getLocation()
+                        .getDistanceChebyshev(at))
+                .thenComparingInt(Colony::getId);
+        return getColonies(owner).stream()
+                .filter(colony -> colony.getLocation().getDistanceChebyshev(
+                        at) <= UnitActionClearForest.RECIPIENT_RADIUS)
+                .min(nearestThenId);
+    }
+
+    /** Whether this live unit has unfinished clearing that can be dropped. */
+    public boolean canCancelClearForest(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction().getType() == UnitActionType.clearForest;
+    }
+
+    /** Discard clearing progress without refunding movement or tools. */
+    public void cancelClearForest(final Unit unit) {
+        Preconditions.checkState(canCancelClearForest(unit),
+                "Unit is not clearing a forest");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelClearingForest();
     }
 
     /** Whether this live unit's order has crossed its owner-turn boundary. */

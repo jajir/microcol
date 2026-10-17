@@ -44,4 +44,19 @@
     <entry key="plowProblemUnsuitableTerrain">This terrain cannot be plowed. Use grassland, prairie or savannah.</entry>
     <entry key="plowProblemForest">Clear the forest before plowing.</entry>
     <entry key="plowProblemAlreadyPlowed">This square is already plowed.</entry>
+    <entry key="buttonClearForest">Clear forest. (F)</entry>
+    <entry key="buttonCancelClearForest">Cancel forest clearing. Progress is lost; no movement or tools are restored.</entry>
+    <entry key="clearForestProblemUnavailable">This unit cannot clear a forest now. Select an available unit on your turn.</entry>
+    <entry key="clearForestProblemNotPioneer">Only a pioneer can clear a forest.</entry>
+    <entry key="clearForestProblemNotEnoughTools">Clearing a forest needs a pioneer with at least 20 tools.</entry>
+    <entry key="clearForestProblemBusy">This unit is already busy with an order.</entry>
+    <entry key="clearForestProblemNoMoves">This unit has no movement left to start clearing a forest.</entry>
+    <entry key="clearForestProblemColony">A forest cannot be cleared inside a colony.</entry>
+    <entry key="clearForestProblemNoForest">There is no forest to clear on this square.</entry>
+    <entry key="clearForestTitle">Clear forest</entry>
+    <entry key="clearForestQuestion">Clear the forest here? Work takes %s owner updates and spends %s tools when it finishes. Expected result: %s lumber, probably stored in colony %s. The colony is chosen when the work finishes and a full warehouse loses the lumber it cannot hold. Spent movement is not restored if you cancel later.</entry>
+    <entry key="clearForestQuestionNoColony">Clear the forest here? Work takes %s owner updates and spends %s tools when it finishes. Expected result: %s lumber, but no colony of yours is within two squares now. The colony is chosen when the work finishes, and without one the lumber is lost. Spent movement is not restored if you cancel later.</entry>
+    <entry key="clearForestConfirm">Clear forest</entry>
+    <entry key="clearForestCancel">Cancel</entry>
+    <entry key="clearForestChanged">The situation changed, so forest clearing was not started.</entry>
 </properties>

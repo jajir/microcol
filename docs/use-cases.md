@@ -759,3 +759,9 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    a Continue. TC15_06 ověřuje dva pionýry a jednu spotřebu; TC18_02–07
    neplatné vybavení, dokončení a uložení. Vyšší výnos začíná až následující
    aktualizací kolonie. Úplná regrese dávky čeká.
+8. UC-020/UC-016: R-0120 má cíleně ověřené kácení: potvrzení 20 dřeva,
+   zrušení/Escape, změněný stav, čtyři/dvě aktualizace, zrušení práce, spotřebu
+   20 nástrojů a trvalý konec výnosu dřeva/kožešin. TC73/F65 ověřuje také
+   přebytek skladu, jednu zprávu o ztrátě, Continue a neopakování v dalším tahu.
+   Model pokrývá aktuálního příjemce, kapacitu a neplatná uložená data.
+   Úplná regrese dávky zůstává před námi.

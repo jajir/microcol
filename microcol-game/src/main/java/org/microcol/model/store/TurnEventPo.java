@@ -127,6 +127,25 @@ public final class TurnEventPo {
     private Integer colonyId;
     private Integer lostShips;
 
+    private Integer clearedX;
+    private Integer clearedY;
+
+    public Integer getClearedX() {
+        return clearedX;
+    }
+
+    public void setClearedX(final Integer value) {
+        clearedX = value;
+    }
+
+    public Integer getClearedY() {
+        return clearedY;
+    }
+
+    public void setClearedY(final Integer value) {
+        clearedY = value;
+    }
+
     private Founder founder;
 
     private Integer income;
