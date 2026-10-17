@@ -138,7 +138,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0069](done/R-0069.md) | Give each unit an explicit sight range | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0070](R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0106](done/R-0106.md) | Make fortification take effect on the following turn | Follow-up | [R-0003](canceled/R-0003.md), [R-0029](canceled/R-0029.md) |
-| [R-0118](R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
+| [R-0118](R-0118.md) | Equip a colony pioneer only with at least 20 tools | Ready; targeted checks passed, batch acceptance pending | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
 | [R-0119](R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
 | [R-0120](R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
@@ -197,7 +197,7 @@ verified or authorize implementation.
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
 | [R-0132](R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
-| [R-0133](R-0133.md) | Reject ships and wagons as ordinary passengers | New capture | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0133](R-0133.md) | Reject ships and wagons as ordinary passengers | Ready; targeted checks passed, batch acceptance pending | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0136](R-0136.md) | Unload passengers on arrival in an owned coastal colony | New capture | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |

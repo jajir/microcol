@@ -4808,3 +4808,16 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    retained by Continue, and stock dropping below 20 with the choice open.
    Existing TC01–05 and European equipment outcomes remain intact.
    Reports/screenshots are in the batch worktree's `target/docker-ui/run-8Gp9HE/`.
+3. R-0133: after one bounded Haiku repair, all six changed Java files passed
+   the shared formatter's exact-token/idempotence checks. Docker `run-LjAQb2`
+   exited 0: PassengerTransfer 21, CargoSlot 47, ColonyWarehouseUnload 59,
+   WagonWarehouse 8, ShipRoster 7, UnitColonistEmbark 17, SentryOrder 8,
+   TC29 6, TC31 8 and PageVerificationContract 3: **184 passed**, no failures,
+   errors or skips. The first attempt's non-enum parameter-source compilation
+   failure is fixed and the actual failed compilation plus all selected checks
+   now pass. TC31_07 additionally rejects dragging a wagon into a ship and
+   verifies unchanged wagon cargo, colony stock and Continue. Model checks
+   cover four nested-carrier combinations, direct/embark paths, invalid
+   restoration, valid passenger identity/movement restoration and slot relation.
+   Reports/screenshots: `target/docker-ui/run-LjAQb2/` in the batch worktree.
+   Full batch acceptance and publication remain pending.

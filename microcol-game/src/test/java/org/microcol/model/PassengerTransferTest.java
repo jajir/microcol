@@ -4,21 +4,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.UnitMoveStartedEvent;
+import org.microcol.model.store.PlaceCargoSlotPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.gson.Gson;
 
@@ -109,8 +113,13 @@ class PassengerTransferTest {
     }
 
     private Unit addUnit(UnitType type, String owner, Location location) {
+        return addUnit(100, type, owner, location);
+    }
+
+    private Unit addUnit(int id, UnitType type, String owner,
+            Location location) {
         UnitPo unit = new UnitPo();
-        unit.setId(100);
+        unit.setId(id);
         unit.setType(type);
         if (type == UnitType.COLONIST || type == UnitType.INDENTURED_SERVANT
                 || type == UnitType.PETTY_CRIMINAL
@@ -358,6 +367,129 @@ class PassengerTransferTest {
         assertEquals(SHORE, passenger().getLocation());
         assertEquals(1, passenger().getActionPoints());
         assertTrue(removedSlot.isEmpty());
+    }
+
+    @Test
+    void placeCargoSlotMustDescribeTheTargetSlot() {
+        prepare(WATER, 3);
+        passenger().disembarkToLocation(SHORE);
+        CargoSlot other = ship().getCargo().getSlotByIndex(1);
+        String before = snapshot();
+        assertThrows(IllegalArgumentException.class,
+                () -> slot().store(new PlaceCargoSlot(passenger(), other)));
+        assertEquals(before, snapshot());
+        assertTrue(slot().isEmpty());
+        otherCargoUnchanged();
+    }
+
+    static Stream<UnitType> nestedCarrierTypes() {
+        return Stream.of(UnitType.CARAVEL, UnitType.WAGON);
+    }
+
+    @ParameterizedTest
+    @MethodSource("nestedCarrierTypes")
+    void nestedCarrierCannotBoardShipThroughAnyPathWithoutMutation(
+            UnitType carrierType) {
+        prepare(WATER, 3);
+        passenger().disembarkToLocation(SHORE);
+        Unit nested = addUnit(carrierType, ship().getOwner().getName(), SHORE);
+        CargoSlot target = slot();
+        String before = snapshot();
+        int nestedMoves = nested.getActionPoints();
+        int shipMoves = ship().getActionPoints();
+        assertFalse(nested.canEmbark(target));
+        assertThrows(IllegalStateException.class, () -> target.store(nested));
+        IllegalStateException rejected = assertThrows(
+                IllegalStateException.class,
+                () -> target.store(new PlaceCargoSlot(nested, target)));
+        assertTrue(rejected.getMessage().contains("cannot be passenger"));
+        assertThrows(IllegalStateException.class,
+                () -> nested.embarkFromLocation(target));
+        assertEquals(before, snapshot());
+        assertEquals(SHORE, nested.getLocation());
+        assertEquals(nestedMoves, nested.getActionPoints());
+        assertEquals(shipMoves, ship().getActionPoints());
+        assertTrue(target.isEmpty());
+        otherCargoUnchanged();
+    }
+
+    @ParameterizedTest
+    @MethodSource("nestedCarrierTypes")
+    void nestedCarrierCannotBoardWagonThroughAnyPathWithoutMutation(
+            UnitType carrierType) {
+        prepare(WATER, 3);
+        passenger().disembarkToLocation(SHORE);
+        addUnit(101, UnitType.WAGON, ship().getOwner().getName(), SHORE);
+        Unit nested = addUnit(carrierType, ship().getOwner().getName(), SHORE);
+        CargoSlot target = ((UnitWithCargo) model.getUnitById(101)).getCargo()
+                .getSlotByIndex(0);
+        String before = snapshot();
+        int nestedMoves = nested.getActionPoints();
+        assertFalse(nested.canEmbark(target));
+        assertThrows(IllegalStateException.class, () -> target.store(nested));
+        IllegalStateException rejected = assertThrows(
+                IllegalStateException.class,
+                () -> target.store(new PlaceCargoSlot(nested, target)));
+        assertTrue(rejected.getMessage().contains("cannot be passenger"));
+        assertThrows(IllegalStateException.class,
+                () -> nested.embarkFromLocation(target));
+        assertEquals(before, snapshot());
+        assertEquals(SHORE, nested.getLocation());
+        assertEquals(nestedMoves, nested.getActionPoints());
+        assertTrue(target.isEmpty());
+        otherCargoUnchanged();
+    }
+
+    @Test
+    void savedPassengerInShipHoldRestoresIdentityAndPoints() {
+        prepare(WATER, 3);
+        passenger().disembarkToLocation(SHORE);
+        passenger().embarkFromLocation(slot());
+        reload();
+        assertSame(passenger(), slot().getUnit().orElseThrow());
+        assertSame(slot(), passenger().getPlaceCargoSlot().getCargoSlot());
+        assertEquals(1, passenger().getActionPoints());
+        otherCargoUnchanged();
+    }
+
+    @Test
+    void savedColonistInWagonHoldIsRejectedOnRestore() {
+        prepare(WATER, 3);
+        passenger().disembarkToLocation(SHORE);
+        addUnit(101, UnitType.WAGON, ship().getOwner().getName(), SHORE);
+        data.setModel(model.save());
+        UnitPo passengerPo = data.getModel().getUnits().stream()
+                .filter(u -> u.getId() == 16).findFirst().orElseThrow();
+        passengerPo.setPlaceMap(null);
+        passengerPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 101)
+                .findFirst().orElseThrow().getCargo().getSlots().get(0)
+                .setUnitId(16);
+        assertThrows(IllegalStateException.class,
+                () -> Model.make(data.getModel(),
+                        MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("nestedCarrierTypes")
+    void savedNestedCarrierInShipHoldIsRejectedOnRestore(UnitType carrierType) {
+        prepare(WATER, 3);
+        addUnit(carrierType, ship().getOwner().getName(), SHORE);
+        data.setModel(model.save());
+        UnitPo passengerPo = data.getModel().getUnits().stream()
+                .filter(u -> u.getId() == 16).findFirst().orElseThrow();
+        passengerPo.setPlaceCargoSlot(null);
+        passengerPo.setPlaceMap(at(SHORE));
+        UnitPo nestedPo = data.getModel().getUnits().stream()
+                .filter(u -> u.getId() == 100).findFirst().orElseThrow();
+        nestedPo.setPlaceMap(null);
+        nestedPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 3)
+                .findFirst().orElseThrow().getCargo().getSlots().get(0)
+                .setUnitId(100);
+        assertThrows(IllegalStateException.class,
+                () -> Model.make(data.getModel(),
+                        MissionImpl.getPredefinedGameOverEvaluators()));
     }
 
 }

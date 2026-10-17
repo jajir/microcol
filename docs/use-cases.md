@@ -726,3 +726,15 @@ Výsledky se vedou v [evidenci R-0111](functional-tests.md#r-0111-military-promo
 Model sdílí náhradní základ 1/2/3, výstup běžného/odborného kazatele a Pennův
 bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cesty TC_67_F58 prošly; úplné CI zatím čeká. Podrobné výsledky vede
 [evidence](functional-tests.md#r-0110-religious-production-2026-10-17).
+
+
+### Dávka Claude — cílené ověření 17. října 2026
+
+1. UC-017: R-0118 doplňuje mez 20 nástrojů. Modelové mezní případy a TC25
+   (včetně nových TC06–08: 19/20 nástrojů, zrušení, změněný sklad a Continue)
+   prošly cíleným během. Úplná regrese čeká na hranici deseti požadavků;
+   nejde zatím o úplné ověření celé dávky. Viz [počty a výsledky](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17).
+2. UC-024: R-0133 uzavírá zákaz lodí a vozů jako cestujících i při načítání.
+   Modelové kontroly a TC29/TC31 prošly; TC31_07 nově ověřuje odmítnutí vozu
+   v lodním prostoru a zachování stavu po Continue. Poklad a další části UC-024
+   tím nejsou označeny za hotové. Úplná regrese dávky zůstává před námi.

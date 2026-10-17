@@ -12,12 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.microcol.model.unit.Ship;
 
 class ColonyWarehouseUnloadTest {
 
     private final Colony colony = mock(Colony.class);
     private final Player owner = mock(Player.class);
-    private final Unit carrier = mock(Unit.class);
+    private final Ship carrier = mock(Ship.class);
     private final Cargo cargo = mock(Cargo.class);
     private ColonyWarehouse warehouse;
     private CargoSlot source;
@@ -180,6 +181,7 @@ class ColonyWarehouseUnloadTest {
 
         final Unit passenger = mock(Unit.class);
         when(passenger.getOwner()).thenReturn(owner);
+        when(passenger.isStorable()).thenReturn(true);
         source.store(new PlaceCargoSlot(passenger, source));
         assertInvalidSource();
         assertSame(passenger, source.getUnit().get());

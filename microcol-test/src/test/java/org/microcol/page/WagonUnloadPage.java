@@ -60,6 +60,15 @@ public final class WagonUnloadPage extends AbstractScreen {
         org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void verifyWagonNotAboard(final int shipId, final int wagonId) {
+        final UnitWithCargo ship = (UnitWithCargo) getModel()
+                .getUnitById(shipId);
+        final Unit wagon = getModel().getUnitById(wagonId);
+        assertTrue(ship.getCargo().getSlots().stream()
+                .noneMatch(slot -> slot.getUnit().orElse(null) == wagon));
+        assertTrue(ship.getCargo().getSlotByIndex(2).isEmpty());
+    }
+
     public void verifyColonistOutside(final int id, final String owner,
             final Location location) {
         final Unit unit = getModel().getUnitById(id);

@@ -144,7 +144,10 @@ public class CargoSlot {
 
     /**
      * This simply put some other unit to cargo store. It should not be used for
-     * unit at map.
+     * unit at map. Only storable passengers can be placed, and only into a ship
+     * hold; ships and wagons are carriers and never passengers. This structural
+     * check is independent of turn state, so restoration and royal soldier
+     * creation can use this overload.
      *
      * @param placeCargoSlot required place describing relation to unit
      */
@@ -152,7 +155,16 @@ public class CargoSlot {
         Preconditions.checkNotNull(placeCargoSlot);
         Preconditions.checkState(isEmpty(),
                 "Cargo slot (%s) is already loaded.", this);
+        Preconditions.checkArgument(placeCargoSlot.getCargoSlot() == this,
+                "Place cargo slot (%s) describes different cargo slot than (%s).",
+                placeCargoSlot, this);
         final Unit unit = placeCargoSlot.getUnit();
+        Preconditions.checkState(unit.isStorable(),
+                "Unit (%s) is carrier and cannot be passenger of cargo slot (%s).",
+                unit, this);
+        Preconditions.checkState(getOwnerUnit() instanceof Ship,
+                "Passenger (%s) can be stored only in ship hold, not in (%s).",
+                unit, getOwnerUnit());
         Preconditions.checkState(
                 getOwnerUnit().getOwner().equals(unit.getOwner()),
                 "Owners must be same (%s - %s).", getOwnerUnit().getOwner(),

@@ -3574,3 +3574,25 @@ committed for this experiment.
    321,295 cache-read, 7,670 output tokens (1,044 thinking reported); list-price
    estimate $0.2492095, not subscription charges or measured quota savings.
    Next selected trial is Haiku medium for the bounded R-0133 carrier admission gap.
+
+8. R-0133 first Haiku medium attempt was stopped by the caller after 301.387
+   seconds (exit 143). It introduced `EnumSource` for non-enum `UnitType`; its
+   unauthorized Maven attempt confirmed three compilation errors. It also
+   searched the whole filesystem for a formatter despite the author-only task;
+   the caller terminated that search before stopping the worker. No acceptance
+   or successful token/cost total is claimed for this incomplete attempt. Logs
+   and diagnosis remain in `R-0133/` under the batch log directory.
+   Recovery retains the same task/worktree/budgets and Haiku medium for one
+   targeted repair. The runner now exposes only Read/Edit/Write/Glob/Grep:
+   command execution, formatting and actual verification remain with the caller.
+   This is an instruction-following/code error, not a missing runtime.
+9. R-0133 repair completed in 118.165 seconds on the same Haiku medium session,
+   for 419.552 seconds across both attempts. Caller review and all 184 targeted
+   checks passed; full batch acceptance remains pending. The resumed session
+   reports 120 input, 134,982 cache-create, 5,117,526 cache-read and 58,540
+   output tokens (33,766 thinking reported), list-price estimate $0.28575678.
+   These are the resumed-session totals as reported, not added again to an
+   inferred first-attempt total. The narrower tool set prevented more command
+   execution. Keep Haiku available for a further small trial; select Sonnet
+   medium for R-0132 because shared transfer admission also affects purchase
+   charges and changed-state UI confirmation. This remains observational evidence.

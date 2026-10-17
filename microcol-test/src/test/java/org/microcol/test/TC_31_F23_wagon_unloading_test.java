@@ -296,6 +296,23 @@ public class TC_31_F23_wagon_unloading_test extends AbstractMicroColTest {
         wagon.verifyCarriers(List.of(3, 103), 103);
         wagon.verifyWagon(103, "Dutch", COLONY, 30);
         colony.verifyNumberOfGoodsInWrehouse(ORE_INDEX, 90);
+
+        // A wagon is a carrier, not a passenger: the empty hold of the port
+        // ship does not accept the wagon icon either.
+        colony.selectUnitFromPort(0);
+        wagon.verifyCarriers(List.of(3, 103), 3);
+        wagon.dragWagonIconToEmptyCargoSlot(1, 2);
+        wagon.verifyCarriers(List.of(3, 103), 3);
+        wagon.verifyWagon(103, "Dutch", COLONY, 30);
+        wagon.verifyWagonNotAboard(3, 103);
+        colony.verifyNumberOfGoodsInWrehouse(ORE_INDEX, 90);
+
+        // Continue keeps the wagon and the colonist unchanged outside.
+        colony.close().exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        wagon.verifyWagon(103, "Dutch", COLONY, 30);
+        wagon.verifyWagonNotAboard(3, 103);
+        wagon.verifyColonistOutside(104, "Dutch", COLONY);
     }
 
     @Test

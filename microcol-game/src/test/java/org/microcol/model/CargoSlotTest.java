@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.microcol.model.unit.Ship;
 
 public class CargoSlotTest {
 
@@ -19,7 +20,7 @@ public class CargoSlotTest {
 
     private final Player player = mock(Player.class);
 
-    private final Unit ownerUnit = mock(Unit.class);
+    private final Ship ownerUnit = mock(Ship.class);
 
     private final CargoSlot sourceCargoSlot = mock(CargoSlot.class);
 
@@ -717,6 +718,8 @@ public class CargoSlotTest {
     @BeforeEach
     private void beforeEach() {
         slot = new CargoSlot(cargo);
+        // Passengers are storable units; the slot owner is a ship hold.
+        when(unit.isStorable()).thenReturn(true);
         // The real passenger now installs both sides before publishing its
         // event.
         doAnswer(invocation -> {
