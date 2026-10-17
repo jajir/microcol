@@ -290,3 +290,24 @@ documentation in APT just to make it visible on the web.
 3. Publication is checked separately in [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
    and the [documentation-only CI contract](development-builds.md#ci-filtering);
    this change does not request a new game distribution.
+
+## Five gameplay decisions incorporated — 2026-10-17
+
+1. The user answered [R-0070](requirements/R-0070.md),
+   [R-0086](requirements/R-0086.md), [R-0089](requirements/R-0089.md),
+   [R-0090](requirements/R-0090.md) and [R-0096](requirements/R-0096.md).
+   Their shared rule topics, behavior, design and UC acceptance descriptions
+   now incorporate the answers; all five open-question chapters contain None.
+   R-0091/R-0092 inherit the workforce decision and R-0100 the Revere resident-exit
+   consequence. R-0091's separate trade choice remains open.
+2. All requirement statuses match the starting working copy. R-0070's existing
+   local refinement draft is included with its answer; no requirement becomes
+   ready or done through this documentation update. Archived requirements and
+   historical evidence remain unchanged.
+3. Local acceptance passed 21 local-worker launcher tests without inference,
+   nine documentation tests and strict MkDocs. Browser review checked the five
+   rendered behavior sections and cleared questions; a direct audit checked
+   status preservation and R-0091's remaining decision. No gameplay code or
+   fixtures changed and no gameplay verification is claimed. Publication is
+   checked separately through [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
+   and the [docs-only filtering contract](development-builds.md#ci-filtering).

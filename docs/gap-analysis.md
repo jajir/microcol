@@ -261,7 +261,7 @@ This matrix does not establish the implementation of terrain defense in combat, 
 - Roads, rivers, special resources, persistent movement orders, and trade routes require new persistent state as well as UI/actions. A label, flag, or image asset does not establish that the rule exists.
 - Existing model tests cited above were inspected as implementation evidence. Their execution status belongs to the consolidated validation log; their current expectations do not certify agreement with the manual. Every acceptance scenario labeled “Proposed” still needs a rule-derived test or gameplay check.
 
-Open decisions: precise line-of-sight radii; terrain entry when cost exceeds an entire movement allowance; river/road/plow/resource bonus quantities; ore/silver reserves and depletion; clearing lumber yield/destination; base/expert improvement durations; rumor outcome distributions; Atlantic duration factors; reversal timing; and handling an occupied return square. Do not silently use the existing implementation as the answer to these questions.
+Sight radii are agreed in [exploration, work and transport](#exploration-work-and-transport). Remaining decisions in this movement audit: terrain entry when cost exceeds an entire movement allowance; river/road/plow/resource bonus quantities; ore/silver reserves and depletion; clearing lumber yield/destination; base/expert improvement durations; rumor outcome distributions; Atlantic duration factors; reversal timing; and handling an occupied return square. Do not silently use the existing implementation as the answer to these questions.
 
 ### Colony workforce, food and storage
 
@@ -488,7 +488,7 @@ All acceptance items in these tables are proposed checks. Inspection establishes
 | DIP-005 | 82 / 88 | With a substantial treasury (described as around 5, 000), foreign powers may offer a package of veteran mercenaries; accept/reject the whole group, with future offers possible after rejection. | [Player.startTurn](../microcol-game/src/main/java/org/microcol/model/Player.java) adds periodic immigrants but has no mercenary offers; [UnitFactory](../microcol-game/src/main/java/org/microcol/model/unit/UnitFactory.java) lacks the veteran/artillery roster. | Missing | Test offered bundle, insufficient gold, full acceptance, rejection without payment, and eligibility for a later offer. Exact threshold/chance remain open. |
 | DIP-006 | 82 / 88 | Jan de Witt enables trade with peaceful rival colonies by loaded ship/wagon; the visitor offers cargo for barter or sale to the rival. | [AbstractUnit.moveOneStep](../microcol-game/src/main/java/org/microcol/model/AbstractUnit.java) attempts foreign-colony capture; [Model.sellGoods](../microcol-game/src/main/java/org/microcol/model/Model.java) handles Europe only. | Missing | Founder absent/present × peace/war matrix; accepted barter or sale updates both parties without capturing the colony. |
 | DIP-007 | 68, 79 / 74, 85 | Advisors expose known native information, diplomatic war/peace status, and a naval inventory of cargo/location/destination; de Witt expands foreign comparative statistics. | [Screen](../microcol-game/src/main/java/org/microcol/gui/screen/Screen.java) has generic statistics/turn-report screens, while the inspected model lacks native/diplomatic state and foreign report unlocks. No equivalent advisor flow was found in the inspected UI routes. | Missing | Verify reports use only eligible/known information, list fleet cargo/destinations, and expand foreign statistics after the founder condition. |
-| DIP-008 | 91 / 97 | Before Franklin, royal European wars can affect relations between colonial powers; Franklin removes that influence. This baseline is an inference from the manual's stated exemption. | [PlayerPo](../microcol-game/src/main/java/org/microcol/model/store/PlayerPo.java) has no diplomatic state and [Player.startTurn](../microcol-game/src/main/java/org/microcol/model/Player.java) processes no European war events. | Missing | Proposed under the accepted [relations policy](#native-and-european-relations): a royal-war event affects eligible colonial relations before Franklin, and cannot force that change after recruitment. Crown-war event frequency and target selection remain unspecified; the accepted rule only establishes their diplomatic effect. |
+| DIP-008 | 91 / 97 | Before Franklin, royal European wars can affect relations between colonial powers; Franklin removes that influence. This baseline is an inference from the manual's stated exemption. | [PlayerPo](../microcol-game/src/main/java/org/microcol/model/store/PlayerPo.java) has no diplomatic state and [Player.startTurn](../microcol-game/src/main/java/org/microcol/model/Player.java) processes no European war events. | Missing | Proposed under the accepted [relations policy](#native-and-european-relations): a royal-war event affects eligible colonial relations before Franklin, and cannot force that change after recruitment. The user accepted the 20-round cadence and eligible-pair selection on 2026-10-17 in that policy; runtime acceptance remains pending. |
 
 ### Land combat, naval combat, and capture
 
@@ -935,7 +935,12 @@ rules; implementation and acceptance are tracked by that requirement.
    arrives at the home port before rebellion, otherwise uses [revolution and intervention](#revolution-and-intervention)'s port
    delivery rule. Revere arms one eligible worker with 50 stored muskets only
    if no armed defender exists; choose the strongest resulting defender then
-   unit ID, and do not create free equipment.
+   unit ID, and do not create free equipment. User decision (2026-10-17;
+   [R-0096](requirements/R-0096.md)): after victory the emergency defender
+   keeps its muskets and joins the outside garrison on the colony tile,
+   vacating its job. If it is the last resident, it instead stays inside
+   with its muskets so victory cannot remove the colony. This placement is
+   agreed behavior awaiting implementation and acceptance.
 6. Jefferson, Paine, Penn and Hudson use [economy, production and education](#economy-production-and-education)'s common production order, with
    the catalogue's stated effect scope. Newspaper replaces the press modifier.
    Fugger clears existing arrears/boycotts once, not future protests. Minuit
@@ -1001,7 +1006,12 @@ rules; implementation and acceptance are tracked by that requirement.
    notices until the human turn; never interrupt an attack/equipment confirmation.
    Critical rejection, famine, lost colony and endgame outcomes remain visible
    even with routine summaries off. A report offers Open location and Close,
-   without spending moves or changing state.
+   without spending moves or changing state. User decision (2026-10-17;
+   [R-0086](requirements/R-0086.md)): report a project waiting for tools once
+   every owner turn while its hammers are complete and its tools are short.
+   Identify the colony, project and current shortage each time. Opening or
+   dismissing reports and Continue do not generate another report for that
+   same update; stop reminders when the project no longer waits for tools.
 4. Combat confirmation displays the actual participants, strengths, modifiers
    and win chance when the resolver consumes them, with Confirm and Cancel.
    R-0093 and R-0094 must ship together for that strength-based preview; do not
@@ -1161,8 +1171,28 @@ rules; implementation and acceptance are tracked by that requirement.
    against an aggressor attacking either; no free units, cargo or map disclosure.
    Explicit termination yields peace, with a 5-turn wait before declaring war.
    Crown-forced wars occur only through the separate event, suppressed by Franklin;
-   they end conflicting alliances before applying war. Player attacks retain the
+   they end conflicting alliances before applying war. User decision (2026-10-17;
+   [R-0089](requirements/R-0089.md)): once every 20 complete rounds, select
+   one random non-warring European colonial pair whose members are both before
+   independence and both without Franklin. Skip the event if no pair qualifies.
+   Count rounds, not each nation's turn; save/Continue must not repeat the event.
+   Player attacks retain the
    existing explicit treaty-breaking confirmation and model validation.
+
+### Rival colony workforce
+
+1. User decision (2026-10-17; [R-0090](requirements/R-0090.md)): after founding,
+   the rival prioritizes food sufficient to sustain its colony, then assigns
+   spare workers to legal lumber jobs. Use only its known world and the same
+   job, ownership and shared-square rules as a human. If food cannot be
+   sustained, use the best available legal food jobs and finish the turn
+   without creating supplies; no famine immunity or optimal strategy is promised.
+2. The reference acceptance horizon is ten turns after founding: in a suitable
+   deterministic scenario the colony survives and produces real food and lumber.
+   Save/Continue preserves actual workers and stocks. This is an agreed AI
+   policy and acceptance target, not a verified result. Trade and second-colony
+   expansion retain their separate decisions in [R-0091](requirements/R-0091.md)
+   and [R-0092](requirements/R-0092.md).
 
 ### Economy, production and education
 
@@ -1314,7 +1344,12 @@ rules; implementation and acceptance are tracked by that requirement.
 ### Exploration, work and transport
 
 1. Sight uses Chebyshev distance (all eight neighbors): ordinary land units 1,
-   scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2. Reveal only
+   scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2 for units.
+   User decision (2026-10-17; [R-0070](requirements/R-0070.md)): an owned colony
+   supplies present sight over its own tile and all eight neighboring tiles
+   even when every resident is inside and no unit stands on the map. Colony
+   sight belongs to its current owner; explored terrain remains remembered
+   after that sight is lost. Reveal only
    the initial expedition's surroundings. Retain explored terrain; current
    foreign units are visible only within present sight, no hidden updates to
    remembered intelligence. Remember a discovered colony location and last-seen
