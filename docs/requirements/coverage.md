@@ -41,7 +41,7 @@
    cancellation, and [R-0131](R-0131.md) player disband. MOVE-008 is traced
    through each order owner rather than duplicated as a universal rewrite:
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
-   the forthcoming route-edit/cancel capture.
+   route edit/cancel [R-0142](R-0142.md).
 4. Cargo residuals have seven owners: [R-0132](R-0132.md) shared hold cap,
    [R-0133](R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
    reservation, [R-0135](R-0135.md) immigrant boarding choice/priority,
@@ -98,7 +98,25 @@
     [R-0193](R-0193.md) owns date boundaries, [R-0194](R-0194.md)
     Exit/Retire/Continue, [R-0195](R-0195.md) and [R-0196](R-0196.md)
     score components, and [R-0197](R-0197.md) the Hall of Fame.
-13. Remaining area-by-area ownership is being reconciled with existing work.
+13. Remaining report families are [labor](R-0198.md), [religion](R-0199.md),
+    [colonies](R-0200.md), [natives](R-0201.md), [navy](R-0202.md),
+    [Congress/REF](R-0203.md) and [notices/results](R-0204.md).
+    [R-0205](R-0205.md) owns local inspection, [R-0206](R-0206.md)
+    the rules encyclopedia and [R-0207](R-0207.md) existing tutorial updates.
+    Together with R-0145 and R-0168, all nine report families have owners.
+14. Nine verification-only captures own the mandatory matrices:
+    [profiles](R-0208.md), [New Game controls](R-0209.md),
+    [terrain](R-0210.md), [units](R-0211.md), [skills](R-0212.md),
+    [buildings](R-0213.md), [founders](R-0214.md),
+    [production/trade](R-0215.md) and [endings](R-0216.md).
+    Four separate integrated acceptance captures [R-0217](R-0217.md)–[R-0220](R-0220.md)
+    own UC-115–118. These are pending verification, not new implementations
+    of already delivered behavior or claims that the full matrices have passed.
+15. The setup reconciliation identified a separate missing geographic America
+    map, now captured by [R-0221](R-0221.md). Delivered bundled-map selection
+    and R-0065's random/customized generation do not establish that geographic
+    world. Native identity/placement dependencies are explicit in world setup.
+16. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -111,7 +129,7 @@
 | A08 relations and AI | R-0150–R-0172 native and European interactions, reports and actor objectives, plus existing diplomacy owners | Conquest dependencies, royal deployment and final acceptance |
 | A09 combat | R-0173–R-0179 residuals; delivered ordinary/naval slices retained | Actual REF/intervention delivery dependencies and complete unit/combat acceptance |
 | A10 politics and end | R-0180–R-0197 residuals; existing support, Congress and declaration owners retained | Full founder/end matrices, political report and integrated revolution acceptance |
-| A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |
+| A01–A04 and shared work | Existing setup/menu/save/turn owners plus R-0198–R-0220 reports, help, nine matrices and four journeys | UX/assets/audio, quality and release scope; final rule/UC/package reconciliation |
 
 This table is a preparation checkpoint, not completed coverage or an implementation
 priority. The final consolidated open-point list follows reconciliation of all areas.

@@ -518,3 +518,19 @@ documentation in APT just to make it visible on the web.
 2. Local verification passed 21 launcher tests without inference, 9 documentation
    tests, strict MkDocs and eighteen rendered status/four-chapter/capture checks.
    Publication is checked after push. No gameplay code or acceptance changed.
+3. Checkpoint `03d086ea` passed Pages build/deploy in
+   [39036745472](https://github.com/jajir/microcol/actions/runs/39036745472).
+   Development run 39036745479 and compatibility run 39036745471 passed
+   filters and intentionally skipped game jobs. Live R-0197/coverage and
+   commit-pinned catalogue links were verified. The automatic `dev` manifest
+   remained byte-identical at `dev-109-0b0cb0593df4`.
+
+## Reports and acceptance capture — 2026-10-17
+
+1. R-0198–R-0221 capture remaining reports, details/help/tutorial, nine
+   verification matrices, four integrated journeys and the geographic America
+   world. All remain `new`; existing delivered behavior is preserved.
+2. Local verification passed 21 launcher tests without inference, 9 documentation
+   tests and strict MkDocs. The 24 rendered requirements retain their four
+   chapters, status and capture-only qualification. No gameplay code changed
+   and no runtime acceptance is claimed. Publication is verified after push.

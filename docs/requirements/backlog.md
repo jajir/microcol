@@ -105,6 +105,10 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0064](done/R-0064.md) | Keep the selected difficulty in the game profile | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0065](R-0065.md) | Create a playable new-world map from setup choices | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0066](done/R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
+| [R-0208](R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
+| [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
+| [R-0217](R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
+| [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
 
 ## A03
 
@@ -115,6 +119,16 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
 | [R-0168](R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
+| [R-0198](R-0198.md) | Show labor and available-colonist information | New capture | UC-114 labor report |
+| [R-0199](R-0199.md) | Show religious progress and immigrant choices | New capture | UC-114 religion report |
+| [R-0200](R-0200.md) | Show own-colony overview and production status | New capture | UC-114 colony report |
+| [R-0201](R-0201.md) | Show known native nations and relations | New capture | UC-114 native report |
+| [R-0202](R-0202.md) | Show own navy and transport state | New capture | UC-114 navy report |
+| [R-0203](R-0203.md) | Show Congress, support and known REF state | New capture | UC-114 Congress/REF report; SUPPORT-002 |
+| [R-0204](R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
+| [R-0205](R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
+| [R-0206](R-0206.md) | Navigate the game-rule encyclopedia | New capture | SUPPORT-004; existing help shell credited |
+| [R-0207](R-0207.md) | Keep the opening tutorial accurate for free play | New capture | SUPPORT-004; existing guided instructions credited |
 
 ## A04
 
@@ -152,6 +166,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
 | [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
 | [R-0131](R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
+| [R-0210](R-0210.md) | Verify every terrain and overlay reference row | Verification | UC-119 terrain matrix; individual A05 rules remain owners |
+| [R-0211](R-0211.md) | Verify unit roles and six ship classes | Verification | UC-119 role/ship matrix; individual A05/A09 rules remain owners |
 
 The five A05/P07 analyses above were captured on **2026-10-17** as preparation
 only. Earlier authorization to implement the migrated R-0051–R-0113 set does
@@ -257,6 +273,10 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0147](R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
 | [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
+| [R-0212](R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
+| [R-0213](R-0213.md) | Verify all building rows and upgrades | Verification | UC-119 building matrix |
+| [R-0215](R-0215.md) | Verify production, storage and trade reference rows | Verification | UC-119 production/trade matrix |
+| [R-0218](R-0218.md) | Verify two colonies sustain a production network | Verification | UC-116 integrated Hra journey |
 
 The four A07 analyses R-0146–R-0149 were captured on **2026-10-17** as
 preparation only; they do not select or authorize gameplay implementation.
@@ -298,6 +318,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0170](R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
 | [R-0171](R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
 | [R-0172](R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
+| [R-0219](R-0219.md) | Verify diplomacy changes trade, AI and ownership | Verification | UC-117 integrated Hra journey |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
 as preparation only; no native gameplay implementation is selected. R-0052
@@ -372,6 +393,9 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0195](R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
 | [R-0196](R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
 | [R-0197](R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
+| [R-0214](R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
+| [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
+| [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
 
 ## Choosing further work
 
