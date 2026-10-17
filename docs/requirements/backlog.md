@@ -114,6 +114,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | --- | --- | --- | --- |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
+| [R-0168](R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
 
 ## A04
 
@@ -292,6 +293,11 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0164](R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
 | [R-0165](R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0166](R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
+| [R-0167](R-0167.md) | Trade real goods with a peaceful rival colony under de Witt | New capture | [DIP-006](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) trade effect, UC-071/081/100/117 |
+| [R-0169](R-0169.md) | Offer and deliver a paid veteran mercenary group | New capture | [DIP-005](../gap-analysis.md#european-diplomacy-and-rivalry)/[GOV-018](../gap-analysis.md#government-taxation-and-independence), UC-070 |
+| [R-0170](R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
+| [R-0171](R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
+| [R-0172](R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
 as preparation only; no native gameplay implementation is selected. R-0052
@@ -305,6 +311,14 @@ market state for R-0160/R-0161. R-0163 owns Brebeuf's effective expertise for
 old and new missionaries, consumed by mission, contest, incitement and
 conversion; R-0104's delivered founder membership is retained. Native
 conquest/treasure and European AI remain outside this batch.
+
+The European diplomacy/AI analyses R-0167–R-0172 were captured on
+**2026-10-17** as preparation only. R-0167 owns de Witt's real foreign trade,
+while A03 [R-0168](R-0168.md) owns his comparative report; R-0104 already
+owns founder membership. R-0169 owns both peacetime and agreed rebel mercenary
+offers. R-0170/R-0171 split land/naval strategy and R-0172 coordinates
+established colonies without changing R-0090–R-0092's pending policies or
+statuses. Native raid AI remains R-0156; royal deployment remains A10.
 
 ## A09
 

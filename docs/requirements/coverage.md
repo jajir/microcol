@@ -73,7 +73,13 @@
    Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
    denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.
-9. Remaining area-by-area ownership is being reconciled with existing work.
+9. European residuals are [R-0167](R-0167.md) de Witt foreign trade,
+   [R-0168](R-0168.md) his comparative report, [R-0169](R-0169.md)
+   mercenary offers, [R-0170](R-0170.md) land military objectives,
+   [R-0171](R-0171.md) naval military objectives and [R-0172](R-0172.md)
+   multi-colony scheduling. R-0090–R-0092 retain their existing policies and
+   unresolved proposals; this capture does not approve new strategic thresholds.
+10. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -83,7 +89,7 @@
 | A05 world and units | R-0118–R-0131 plus existing sight, ship, sentry and combat owners | Final unit/terrain matrix and cross-area dependency audit |
 | A06 transport and Europe | R-0132–R-0145 cargo, routes, markets and accounts; existing transport/purchase/shared quotes retained | Final cargo/trade matrix and cross-area dependency audit |
 | A07 economy | R-0146–R-0149 and existing food, work, construction and education owners | Complete profession/building/economy matrices and native dependency links |
-| A08 relations and AI | R-0150–R-0166 foundations, visits, trade and missions plus existing diplomacy and rival colony owners | Conquest dependencies, foreign trade, European/royal actor policies and final acceptance |
+| A08 relations and AI | R-0150–R-0172 native and European interactions, reports and actor objectives, plus existing diplomacy owners | Conquest dependencies, royal deployment and final acceptance |
 | A09 combat | Delivered ordinary/naval slices retained | Native/royal roles, patrol, coastal fire and national modifier |
 | A10 politics and end | Existing support, Congress and declaration owners retained | Remaining founders, revolution, dates and scoring |
 | A01–A04 and shared work | Existing setup, menus, save and turn work retained | Reports/help, nine mandatory matrices, four integrated journeys, UX/assets/audio and release scope |

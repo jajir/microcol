@@ -461,3 +461,20 @@ documentation in APT just to make it visible on the web.
    tests and strict MkDocs. All ten rendered pages were checked for status,
    four chapters and capture-only qualification. No gameplay code changed;
    no gameplay acceptance is claimed. Publication is verified after push.
+3. Checkpoint `c16c9a76` passed Pages build/deploy in
+   [39035869043](https://github.com/jajir/microcol/actions/runs/39035869043).
+   Development run 39035868935 and compatibility run 39035868921 passed
+   their change filters and intentionally skipped game jobs. Live R-0166,
+   coverage and commit-pinned rule links were verified. The automatic `dev`
+   manifest remains byte-identical (`dev-109-0b0cb0593df4`).
+
+## European diplomacy and AI requirement capture — 2026-10-17
+
+1. R-0167–R-0172 capture foreign trade/reporting, mercenaries and bounded
+   land, naval and continuing colony objectives. R-0090–R-0092 keep their
+   original scope and unresolved policy decisions. All six new records remain
+   `new`; this is documentation preparation, not gameplay implementation.
+2. Local verification passed 21 launcher tests without inference, 9 documentation
+   tests, strict MkDocs and six rendered status/four-chapter/capture checks.
+   The separately completed R-0086 closure is already in baseline `abb80ef0`.
+   Publication and the unchanged automatic game channel are checked after push.
