@@ -177,6 +177,19 @@ public final class ConstructionPage extends AbstractScreen {
         assertEquals(10000, colony().getOwner().getGold());
     }
 
+    /** Verify the colony at the fixture location in the given game. */
+    public void verifyOwnerAndStocks(final org.microcol.model.Model model,
+            final String ownerName, final int hammers, final int tools) {
+        final Colony checked = model.getColonyAt(Location.of(24, 16))
+                .orElseThrow();
+        assertEquals(ownerName, checked.getOwner().getName());
+        assertEquals(hammers,
+                checked.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(tools,
+                checked.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+        assertEquals(10000, model.getPlayerByName("Dutch").getGold());
+    }
+
     public void verifyBuilding(final ConstructionType type, final int count) {
         assertEquals(count, colony().getConstructions().stream()
                 .filter(c -> c.getType() == type).count());

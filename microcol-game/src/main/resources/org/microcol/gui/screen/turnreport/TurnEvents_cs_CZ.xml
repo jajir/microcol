@@ -18,6 +18,8 @@
 	<entry key="goodsWasThrowsAway2">V kolonii %s došlo místo, proto se musel jeden %s vyhodit.</entry>
 	<entry key="goodsWasThrowsAway3">V kolonii %s došlo místo, proto se musela jedna %s vyhodit.</entry>
 	<entry key="goodsWasThrowsAway4">V kolonii %s došlo místo, proto se muselo jedno %s vyhodit.</entry>
+	<entry key="constructionWaitingForTools">Kolonie %s: %s má dost kladiv, ale čeká na nástroje (chybí %s).</entry>
+	<entry key="openColony">Otevřít kolonii</entry>
 
 	<entry key="buttonBack">Zpět</entry>
 	

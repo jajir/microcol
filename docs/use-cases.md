@@ -669,6 +669,16 @@ tahy. Kontroluje přebytky, jen jedno dokončení za tah, prázdnou frontu
 a Continue. TC32 zachovává kontrolu chybějících nástrojů a předchůdce
 s kladivy ve společném skladu. Výsledky vede [R-0109](requirements/done/R-0109.md).
 
+### UC-043: hlášení chybějících nástrojů R-0086
+
+TC32/TC02 prochází hlášením do kolonie klávesnicí, uloží čekající projekt,
+po Continue ověří další tah s novým hlášením aktuálního nedostatku a dodá
+poslední nástroj. Samotné Continue ani opětovné zobrazení hlášení nic nepřidává.
+TC08 kontroluje češtinu a myš; TC09/TC10 odmítnutí odkazu po ztrátě kolonie
+či výměně hry. Model doplňuje opakování v dalších tazích, hranice dokončení a neplatná
+uložená data. Přesné běhy a rozsah přejímky vede
+[evidence R-0086](functional-tests.md#r-0086-construction-waiting-notice-2026-10-17).
+
 ### UC-044: zaplacení dokončení R-0083
 
 `TC_55_F46_rush_construction_test` otevře cenu aktuální kovárny, zruší

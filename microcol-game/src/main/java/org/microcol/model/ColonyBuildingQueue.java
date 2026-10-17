@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import org.microcol.model.store.ColonyBuildingQueueItemPo;
 import org.microcol.model.store.QueueItemType;
+import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -468,10 +469,18 @@ public class ColonyBuildingQueue {
                 && getCompletionUnavailableReason().isEmpty()) {
             final ColonyBuildingItemProgress<?> item = getActualyBuilding()
                     .get();
-            if (colony.getWarehouse().getGoods(GoodsType.HAMMERS)
-                    .getAmount() < item.getRequiredHammers()
-                    || colony.getWarehouse().getGoods(GoodsType.TOOLS)
-                            .getAmount() < item.getRequiredTools()) {
+            final int hammers = colony.getWarehouse()
+                    .getGoods(GoodsType.HAMMERS).getAmount();
+            final int tools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
+                    .getAmount();
+            if (hammers < item.getRequiredHammers()) {
+                return;
+            }
+            if (tools < item.getRequiredTools()) {
+                // Remind the owner of the current shortage every update.
+                model.addTurnEvent(TurnEventProvider
+                        .getConstructionWaitingForTools(colony.getOwner(),
+                                colony, item, item.getRequiredTools() - tools));
                 return;
             }
             if (item instanceof ColonyBuildingItemProgressUnit) {

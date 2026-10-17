@@ -2,6 +2,7 @@ package org.microcol.test;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.microcol.page.ColonyScreen;
 import org.microcol.page.ConstructionPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -26,6 +28,12 @@ public class TC_32_F24_construction_eligibility_test
     private static final File FIXTURE = new File(
             "src/test/scenarios/F24-construction-eligibility.microcol");
     private static final Location COLONY = Location.of(24, 16);
+    private static final int COLONY_ID = 0;
+    private static final String WAITING_NOTICE = "Colony New Amsterdam: "
+            + "Blacksmith shop has enough hammers but is waiting for tools "
+            + "(1 missing).";
+    private static final String CZECH_WAITING_NOTICE = "Kolonie New Amsterdam: "
+            + "Kovářství má dost kladiv, ale čeká na nástroje (chybí 1).";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -95,8 +103,15 @@ public class TC_32_F24_construction_eligibility_test
         construction.cancel();
         construction.verifyPickerClosed();
         game = colony.close();
-        game.nextTurnAndCloseDialogs();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        Optional<ScreenTurnReport> report = game.nextTurn();
+
+        // The turn report names the colony, project and missing tool, and
+        // opens the colony with the keyboard without spending anything.
+        game.verifyTurnReportPresent(report);
+        ScreenTurnReport turnReport = report.get();
+        turnReport.verifyEventMessageCount(WAITING_NOTICE, 1);
+        turnReport.verifyOpenColonyAction(COLONY_ID, "Open colony");
+        colony = turnReport.openColonyWithKeyboard(COLONY_ID, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 64);
         construction.verifyStocksAndPopulation(64, 19, 4);
@@ -121,6 +136,31 @@ public class TC_32_F24_construction_eligibility_test
                 List.of(0, 1), 64);
         construction.verifyStatus("Waiting for tools: 1.");
 
+        // Continue, opening and rebuilding the report add no reminder.
+        game = colony.close();
+        ScreenTurnReport restoredReport = game.openTurnReport();
+        restoredReport.verifyEventMessageCount(WAITING_NOTICE, 1);
+        restoredReport.close();
+        game = GamePage.of(getContext());
+        restoredReport = game.openTurnReport();
+        restoredReport.verifyEventMessageCount(WAITING_NOTICE, 1);
+        restoredReport.close();
+        game = GamePage.of(getContext());
+
+        // The next waiting turn reminds again with the current shortage.
+        Optional<ScreenTurnReport> repeated = game.nextTurn();
+        game.verifyTurnReportPresent(repeated);
+        ScreenTurnReport repeatedReport = repeated.get();
+        repeatedReport.verifyEventMessageCount(WAITING_NOTICE, 1);
+        repeatedReport.verifyOpenColonyAction(COLONY_ID, "Open colony");
+        repeatedReport.close();
+        game = GamePage.of(getContext());
+        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
+                List.of(0, 1), 70);
+        construction.verifyStocksAndPopulation(70, 19, 4);
+        construction.verifyStatus("Waiting for tools: 1.");
+
         // Bring the final tool; the turn completes only the first project
         // and preserves the queued warehouse.
         colony.selectUnitFromPort(0);
@@ -130,7 +170,7 @@ public class TC_32_F24_construction_eligibility_test
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 6);
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 12);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
@@ -141,7 +181,7 @@ public class TC_32_F24_construction_eligibility_test
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
-        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 6);
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 12);
     }
 
     @Test
@@ -302,5 +342,120 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 243);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
         construction.verifyBuilding(ConstructionType.IRON_WORKS, 0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_czech_missing_tools_report_opens_colony_with_mouse()
+            throws Exception {
+        // Switch to Czech, then let the shop reach its hammers one tool short.
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        GamePage game = settings.goBack().loadGame();
+        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.assignCarpenter(4);
+        construction.open();
+        construction.select("BLACKSMITHS_SHOP");
+        construction.confirm();
+        construction.cancel();
+        construction.verifyPickerClosed();
+        game = colony.close();
+        Optional<ScreenTurnReport> report = game.nextTurn();
+
+        // The Czech report names colony, project and shortage, and the mouse
+        // opens the colony with unchanged progress and resources.
+        game.verifyTurnReportPresent(report);
+        ScreenTurnReport turnReport = report.get();
+        turnReport
+                .verifyThatAtLeastOneEventMessageContains(CZECH_WAITING_NOTICE);
+        turnReport.verifyOpenColonyAction(COLONY_ID, "Otevřít kolonii");
+        turnReport.captureDialog("turnEventOpenColony-" + COLONY_ID,
+                "turn-report-waiting-tools-czech.png");
+        colony = turnReport.openColonyWithMouse(COLONY_ID, "New Amsterdam");
+        construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 64);
+        construction.verifyStocksAndPopulation(64, 19, 4);
+        construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
+        construction.verifyStatus("Čeká na 1 nástrojů.");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_report_action_rejects_a_colony_lost_after_the_report()
+            throws Exception {
+        // Produce the missing-tools report for a waiting shop.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.assignCarpenter(4);
+        construction.open();
+        construction.select("BLACKSMITHS_SHOP");
+        construction.confirm();
+        construction.cancel();
+        construction.verifyPickerClosed();
+        game = colony.close();
+        Optional<ScreenTurnReport> report = game.nextTurn();
+        game.verifyTurnReportPresent(report);
+        ScreenTurnReport turnReport = report.get();
+        turnReport.verifyThatAtLeastOneEventMessageContains(WAITING_NOTICE);
+        turnReport.retainOpenColonyAction(COLONY_ID);
+
+        // The galleon sails out and the king captures the colony while the
+        // report is still open; no escape animation is needed.
+        getContext().getRobot().interact(() -> {
+            getModel().getUnitById(3).placeToLocation(Location.of(25, 16));
+            org.microcol.model.Unit force = getModel().getUnitById(200);
+            force.placeToLocation(COLONY);
+            force.takeOver(getModel().getPlayerByName("Dutch's King"));
+            getModel().getColonyAt(COLONY).orElseThrow().captureColony(force);
+        });
+
+        // Clicking the retained action refuses navigation and spends nothing.
+        turnReport.clickRetainedOpenColonyAction();
+        turnReport.verifyColonyScreenNotShown();
+        turnReport.verifyShown();
+        turnReport.verifyOpenColonyActionAbsent(COLONY_ID);
+        turnReport.verifyThatAtLeastOneEventMessageContains(WAITING_NOTICE);
+        turnReport.verifyThatAtLeastOneEventMessageContains(
+                "Colony New Amsterdam was lost.");
+        construction.verifyOwnerAndStocks(getModel(), "Dutch's King", 64, 19);
+        construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 64);
+        construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_report_action_from_a_replaced_game_returns_to_the_map()
+            throws Exception {
+        // Produce the missing-tools report for a waiting shop.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.assignCarpenter(4);
+        construction.open();
+        construction.select("BLACKSMITHS_SHOP");
+        construction.confirm();
+        construction.cancel();
+        construction.verifyPickerClosed();
+        game = colony.close();
+        Optional<ScreenTurnReport> report = game.nextTurn();
+        game.verifyTurnReportPresent(report);
+        ScreenTurnReport turnReport = report.get();
+        turnReport.retainOpenColonyAction(COLONY_ID);
+
+        // Loading another game makes the retained action stale.
+        org.microcol.model.Model previous = getModel();
+        getContext().getRobot()
+                .interact(() -> getContext().getClassFromGuice(
+                        org.microcol.gui.event.model.GameController.class)
+                        .loadModelFromFile(FIXTURE));
+
+        // The stale action opens neither colony and leaves a usable map.
+        turnReport.fireRetainedOpenColonyAction();
+        turnReport.verifyColonyScreenNotShown();
+        game = GamePage.of(getContext());
+        construction.verifyOwnerAndStocks(previous, "Dutch", 64, 19);
+        construction.verifyOwnerAndStocks(getModel(), "Dutch", 58, 19);
+        construction.verifyQueue(List.of(), List.of(), 58);
     }
 }

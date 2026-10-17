@@ -27,6 +27,10 @@
 	-fx-wrap-text: true;
 }
 
+.turnEventPanel .turn-event-action > .label {
+	-fx-max-width: 300;
+}
+
 .turn-event {
 	-fx-translate-x: 15;
 	-fx-padding: 5 0 5 0;

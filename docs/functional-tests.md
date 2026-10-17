@@ -4719,3 +4719,40 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 4. Publication is verified as [dev-149-57e16d911029](https://github.com/jajir/microcol/releases/tag/dev-149-57e16d911029): the public immutable prerelease has all ten expected assets. The downloaded three-platform `manifest.tsv` names the exact source above; `SHA256SUMS`, the downloaded manifest and GitHub asset digests agree for every asset. Evidence is retained locally under `target/r149-publication/`; the full CI log is `/tmp/r104-magellan-ci-complete.log`.
 5. The automatic `dev` channel is **unchanged at dev-109-0b0cb0593df4**, confirmed from its downloaded manifest. Publication explicitly retained the channel because main had advanced. The new build is available through its immutable release link; do not claim that the launcher automatically receives it. Documentation-only commits and their successful Pages deployments are separate from this game build.
 6. The complete R-0062–R-0111 objective remains unfinished: 34 requirements are now done and 16 remain active. R-0074/R-0095 still require actual native integration; R-0085 still requires boycott integration. R-0065, R-0070, R-0086, R-0089–R-0092, R-0096 and R-0100–R-0103/R-0105 retain their remaining decisions or implementation. A passing common regression does not remove these requirements.
+
+
+### R-0086 construction waiting notice — 2026-10-17
+
+1. Selected [R-0086](requirements/R-0086.md), BUILD-019 and UC-043 on
+   baseline `3942b5de`. The final user decision is one reminder **each owner
+   turn**, as defined by the shared
+   [rule](gap-analysis.md#recovery-and-presentation). The queue emits an immutable
+   colony/project/shortage snapshot during construction processing with enough
+   hammers and insufficient tools. Viewing, dismissal and Continue do not execute
+   that phase or append another reminder; the next turn reports the current shortage.
+2. Final acceptance requires model coverage for hammer/tool boundaries, consecutive
+   updates, current shortage, exact spending/completion, unit projects, immutable
+   event roundtrip and malformed events. TC32/TC02 follows the report by keyboard,
+   retains the 64 hammers/19 tools wait, saves/continues, then advances to 70 hammers
+   with a new reminder and delivers the last tool. Completion leaves 12 hammers,
+   zero tools and the following warehouse project; Continue cannot complete or
+   debit it twice.
+3. TC32/TC08 covers Czech text and mouse navigation; TC09 clicks a retained action
+   after capture and checks no colony screen or resource mutation; TC10 fires a
+   retained action after game replacement and checks a usable map and unchanged
+   games. Page assertions belong in named `verify...` methods. Screenshot and
+   geometry checks caught and repaired a clipped/out-of-page action.
+4. Earlier targeted passes and the canceled full regression used the superseded
+   once-per-episode policy and are not final acceptance. Their failures, repairs
+   and actual counts remain in [worker evidence](ai/local-qwen.md#claude-code-subscription-trial-2026-10-17).
+   Final targeted/full verification and publication are pending.
+
+5. Final-policy targeted Docker `run-6Psd2R` passed **87 cases**, zero failures,
+   errors or skips: 26 waiting-report, 18 queue-integrity, 20 queue-save, ten
+   rush, ten TC32 and three source-contract cases. The caller inspected fresh
+   Surefire results and the Czech screenshot at
+   `target/docker-ui/run-6Psd2R/microcol-test/warehouse-qa/turn-report-waiting-tools-czech.png`:
+   the full action remains inside the paper, with readable text and no overlap.
+   Shared formatting passed for 15 changed Java files with no changes, exact
+   code tokens and idempotence. This is automated application/visual evidence,
+   not a player study or a native macOS input check.

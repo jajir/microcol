@@ -2,6 +2,7 @@ package org.microcol.model.store;
 
 import java.util.List;
 
+import org.microcol.model.ConstructionType;
 import org.microcol.model.Goods;
 import org.microcol.model.UnitType;
 import org.microcol.model.Founder;
@@ -70,6 +71,43 @@ public final class TurnEventPo {
 
     public void setRepairLostGoods(List<Goods> value) {
         repairLostGoods = value;
+    }
+
+    private QueueItemType projectKind;
+    private ConstructionType projectConstructionType;
+    private UnitType projectUnitType;
+    private Integer missingTools;
+
+    public QueueItemType getProjectKind() {
+        return projectKind;
+    }
+
+    public void setProjectKind(final QueueItemType value) {
+        projectKind = value;
+    }
+
+    public ConstructionType getProjectConstructionType() {
+        return projectConstructionType;
+    }
+
+    public void setProjectConstructionType(final ConstructionType value) {
+        projectConstructionType = value;
+    }
+
+    public UnitType getProjectUnitType() {
+        return projectUnitType;
+    }
+
+    public void setProjectUnitType(final UnitType value) {
+        projectUnitType = value;
+    }
+
+    public Integer getMissingTools() {
+        return missingTools;
+    }
+
+    public void setMissingTools(final Integer value) {
+        missingTools = value;
     }
 
     private String playerName;

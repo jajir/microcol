@@ -1,12 +1,19 @@
 package org.microcol.model.turnevent;
 
 import org.microcol.model.Colony;
+import org.microcol.model.ColonyBuildingItemProgress;
+import org.microcol.model.ColonyBuildingItemProgressConstruction;
+import org.microcol.model.ColonyBuildingItemProgressUnit;
 import org.microcol.model.Goods;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Founder;
 import java.util.stream.Collectors;
+
+import org.microcol.model.store.QueueItemType;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Class simplify creating of turn events.
@@ -24,6 +31,27 @@ public final class TurnEventProvider {
             final Colony colony, final Goods goods, final int income) {
         return new TurnEventCustomHouseExport(owner.getName(), colony.getId(),
                 colony.getName(), goods, income);
+    }
+
+    /** Report one construction phase blocked only by missing tools. */
+    public static TurnEvent getConstructionWaitingForTools(final Player owner,
+            final Colony colony, final ColonyBuildingItemProgress<?> project,
+            final int missingTools) {
+        if (project instanceof ColonyBuildingItemProgressConstruction) {
+            return new TurnEventConstructionWaitingForTools(owner.getName(),
+                    colony.getId(), colony.getName(),
+                    QueueItemType.CONSTRUCTION,
+                    ((ColonyBuildingItemProgressConstruction) project)
+                            .getConstructionType(),
+                    null, missingTools);
+        }
+        Preconditions.checkArgument(
+                project instanceof ColonyBuildingItemProgressUnit,
+                "Unknown queue item kind");
+        return new TurnEventConstructionWaitingForTools(owner.getName(),
+                colony.getId(), colony.getName(), QueueItemType.UNIT, null,
+                ((ColonyBuildingItemProgressUnit) project).getUnitType(),
+                missingTools);
     }
 
     /**

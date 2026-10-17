@@ -657,3 +657,16 @@ odjezdu tlačítkem obrácení přijíždějící lodi. Oblast odjezdu je posunu
 aby zůstal čitelný směr i dostupný cíl přetažení. TC71 kontroluje oddělení
 oblastí i skutečný odjezd; jde o technické ověření cesty, nikoli uživatelskou
 studii. Výsledky vede [evidence](functional-tests.md#r-0104-magellan-integration-2026-10-17).
+
+
+### Hlášení čekající stavby — 17. října 2026
+
+[R-0086](requirements/R-0086.md) přidává k hlášení chybějících nástrojů
+akci Otevřít kolonii. Hráč zjistí projekt i chybějící množství v přehledu tahu;
+myš nebo Tab/mezerník jej přenesou k zásobám a stavební frontě beze změny
+herních zdrojů. Zavření přehledu nic nepotvrzuje ani nespotřebovává. Po ztrátě
+kolonie se akce odstraní; odkaz ze staré hry neotevře kolonii v nové hře.
+Český automatický průchod a kontrola screenshotu odhalily zkrácený popisek
+a přesah tlačítka. Řádek s akcí nyní ponechává místo celému tlačítku a zalamuje
+text hlášení. [Testová evidence](functional-tests.md#r-0086-construction-waiting-notice-2026-10-17)
+rozlišuje ověření v aplikaci od dosud neprovedeného ověření s hráči.

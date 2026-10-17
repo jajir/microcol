@@ -52,6 +52,15 @@ gates are implemented. The historical assessment table below remains distinct
 from these bounded acceptance results.
 
 
+R-0086 follow-up, 2026-10-17: the missing-tools report now identifies the
+colony, project and current shortage each owner turn and offers guarded colony
+navigation. Loading or viewing the report adds no reminder. The
+[functional evidence](functional-tests.md#r-0086-construction-waiting-notice-2026-10-17)
+records passing targeted checks; full regression/publication remain pending.
+This supersedes the historical BUILD-019 notification gap, without reclassifying
+unrelated building rules or claiming whole-UC acceptance.
+
+
 R-0026 follow-up, 2026-10-14: [European relations](requirements/done/R-0026.md)
 now have complete persisted bilateral state, model declarations/accepted peace,
 routine hostility gates and a localized political report. These implement parts

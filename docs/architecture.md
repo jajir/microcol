@@ -810,3 +810,14 @@ zachytit celou čekající volbu, nikoli mezistav účtování či probíhajíc�
 GUI používá stejné náborové okno, odlišuje bezplatnou volbu od placené cesty
 a umožňuje odložení s návratem přes Evropu. Skutečné ověření vede
 [evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17).
+
+### Hlášení stavby čekající na nástroje (R-0086)
+
+`ColonyBuildingQueue` při běžné stavební fázi připraví hlášení pro jinak
+způsobilý projekt s dostatkem kladiv a nedostatkem nástrojů. Každý tah
+vlastníka hlásí současný nedostatek znovu; žádný samostatný stav potlačování
+se neukládá. `TurnEventConstructionWaitingForTools` zachovává kolonii,
+typ projektu a tehdejší nedostatek. Načtení ani zobrazení hlášení nespouští
+stavební fázi. GUI překládá snímek a před otevřením kolonie znovu ověří hru
+a současné vlastnictví; otevření nemění zásoby. Stav přejímky vede
+[R-0086](requirements/R-0086.md).

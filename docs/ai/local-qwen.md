@@ -3417,3 +3417,103 @@ committed for this experiment.
    test helper and reran the affected journeys. Actual results and publication
    remain in [R-0099 evidence](../functional-tests.md#r-0099-privateer-hostilities-2026-10-17).
 3. No comparative token savings have been measured for this individual task.
+
+## Claude Code subscription trial — 2026-10-17
+
+1. The user explicitly selected Claude Code through their Claude Pro subscription
+   for one small backlog implementation trial, overriding the local-worker choice
+   for this assignment only. The caller selected R-0086 after identifying that the
+   sole `ready for development` item, R-0085, still needed the real boycott lifecycle.
+   The user settled R-0086's notification policy before refinement and dispatch.
+   This does not change ordinary worker defaults or start another requirement.
+2. Baseline `3942b5de`; isolated managed worktree
+   `~/.codex/worktrees/claude-r0086/microcol`. The unrelated main-checkout edit in
+   R-0070 was excluded and preserved. Caller owns refinement, review, acceptance,
+   integration and publication; Claude owns implementation and test authoring.
+   No additional cloud subagents or local inference were used.
+3. Preflight verified native Claude Code 2.1.302, `claude.ai` authentication and
+   subscription type `pro`, with no API-key/auth-token/base-URL environment
+   override. The default selected model reported `claude-opus-5-5`; the caller
+   did not force a model. A first shell dispatch failed before inference because
+   the worktree shell did not include `~/.local/bin` on PATH. The caller corrected
+   it to the verified absolute executable path; this is a setup failure, not a
+   model implementation failure.
+4. The direct `claude -p` invocation used Read/Edit/Write/Glob/Grep/Bash with normal
+   edit permission, explicit denial of commit/push/reset/clean tools and no MCP
+   servers. The bounded task prohibited delegation, other checkouts, credential
+   access, installations and native desktop control. Worktree isolation is not a
+   filesystem sandbox. A caller process enforced 7200 seconds per invocation,
+   14400 seconds cumulative and at most two caller-requested repairs. Logs and
+   handoffs are under `~/Library/Logs/Microcol/claude/2026-10-17-r0086/`.
+5. Initial invocation completed in **739.596 seconds**. Its first Docker run,
+   `run-K2zc8M`, ran 78 model cases with one error and no skips; UI did not run.
+   The new unit-project test directly replaced a construction while a worker
+   retained its old slot, yielding an invalid saved fixture. Claude diagnosed and
+   repaired its test setup, checked the model on the host without UI, then reran
+   Docker. `run-q8X6le` passed **78 model + 10 UI/source-contract cases**, with
+   zero failures/errors/skips. Caller review then requested missing Czech/mouse/
+   screenshot and stale-navigation UI coverage in the same session, repair 1/2.
+6. The initial invocation reported 122 uncached input, 140089 cache-creation input,
+   5558263 cache-read input and 47746 output tokens (13116 reported thinking).
+   These are provider-reported categories, not Codex tokens saved or a subscription
+   quota percentage. JSON list-price cost estimates are not an API invoice.
+   The following repair/final evidence keeps these categories separate.
+
+7. The same-session caller-requested repair took **1118.692 seconds**, making
+   **1858.288 seconds (30.97 minutes)** across both invocations. `run-aiaj3I`
+   deadlocked in the new lost-colony UI fixture: capture was called on the FX
+   thread and waited for the galleon's escape animation on that same thread.
+   Caller captured the Java thread dump, requested a JVM dump and terminated
+   only that stuck test JVM; Maven exported the failed run. Claude independently
+   diagnosed the exported stack and moved the galleon out of the fixture port
+   before simulated capture, retaining all rejection assertions. `run-ttXe0j`
+   then passed 78 model + 13 UI/source-contract cases.
+8. Screenshot review found a clipped Czech action label. An initial layout fix
+   exposed real row overflow: `run-BFR9GO` passed 78 model cases but failed two
+   of 13 UI/source-contract cases. Diagnostic TC32-only `run-uosIaN` passed ten
+   cases, but its screenshot still showed the button outside the paper; it was
+   not accepted as visual completion. Claude corrected the action-row CSS and
+   retained text-width/report-width assertions. Final targeted `run-EmWEIf`
+   passed **78 model + 13 UI/source-contract cases**, zero failures/errors/skips.
+   Caller inspected the final Czech screenshot and reapplied the shared formatter:
+   19 Java files, no changes, exact code tokens and idempotence passed.
+9. Repair usage reported 82 uncached input, 60968 cache-creation input, 7112955
+   cache-read input and 31607 output tokens. Its `modelUsage` is cumulative for
+   the resumed session: 204 uncached input, 201057 cache-creation input,
+   12671218 cache-read input, 79353 output and 26796 thinking tokens. Do not add
+   the initial `modelUsage` to that cumulative total. Both invocations used the
+   same default `claude-opus-5-5`; no permission denials or extra subagents were
+   reported. This proves a supervised implementation/repair route, not a measured
+   Codex quota saving or general autonomous reliability. Caller added no gameplay
+   implementation or test repair; caller-authored work is refinement, docs,
+   diagnosis, review, formatting, acceptance and integration.
+10. Full-suite acceptance and publication are recorded in the
+    [R-0086 functional evidence](../functional-tests.md#r-0086-construction-waiting-notice-2026-10-17).
+
+11. While caller full regression `run-rYyVo5` was running, concurrent main commits
+    `54fb81bc`/`f10e3f49` published other requirement decisions, including a
+    conflicting per-turn policy for R-0086. The caller asked which choice was
+    final; the user explicitly chose **every turn**. The caller canceled that
+    superseded regression after 1853 game tests passed (UI incomplete); it is
+    not final acceptance. Repair 2/2 in the same session removes the now-unneeded
+    episode state and updates reminders/tests. This is a user scope correction,
+    not an implementation failure. Concurrent unrelated documentation is retained.
+
+12. Final-policy repair 2 completed in **280.502 seconds**, cumulative
+    **2138.790 seconds (35.65 minutes)**. Fresh Docker `run-6Psd2R` passed
+    **74 model + 13 UI/source-contract cases**, zero failures/errors/skips.
+    Removing episode persistence returned `Colony`, `Model`, `ColonyPo` and
+    obsolete `GamePage` helpers to baseline. The 26 waiting-report cases now
+    verify reminders on successive updates, current shortage and load/view
+    non-mutation; TC32/TC02 exercises actual consecutive turns and repeated
+    report views after Continue. Caller reviewed the diff and screenshot,
+    reapplied the shared formatter to 15 Java files (no changes, token equality
+    and idempotence passed), and started full regression of this final policy.
+13. Repair 2 usage: 26 uncached input, 26288 cache-creation input, 2858506
+    cache-read input and 14062 output tokens. Final cumulative session totals:
+    **230 uncached input, 227345 cache-creation input, 15529724 cache-read input,
+    93415 output** (29403 reported thinking) tokens. Same model, no permission
+    denials or subagents. These measured Claude categories establish execution,
+    not a measured Codex quota saving; the reported list-price estimate is not
+    a charge against an API account. All gameplay code and test changes came
+    from Claude; the main agent retained analysis, review and acceptance.

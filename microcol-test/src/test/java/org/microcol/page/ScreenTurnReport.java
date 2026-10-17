@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.microcol.gui.screen.colony.PanelColonyName;
 import org.microcol.gui.screen.turnreport.TurnEventPanel;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 /**
@@ -22,6 +24,8 @@ public class ScreenTurnReport extends AbstractScreen {
         return new ScreenTurnReport(context);
 
     }
+
+    private Button retainedAction;
 
     private ScreenTurnReport(final TestContext context) {
         super(context);
@@ -54,6 +58,99 @@ public class ScreenTurnReport extends AbstractScreen {
                 .filter(message -> message.startsWith("Famine in colony "))
                 .count();
         assertEquals(expectedCount, actualCount);
+    }
+
+    public void verifyEventMessageCount(final String expectedPart,
+            final int expectedCount) {
+        final long count = getEventPanels().stream()
+                .map(panel -> ((Label) panel.getChildren().get(1)).getText())
+                .filter(message -> message.contains(expectedPart)).count();
+        assertEquals(expectedCount, count,
+                String.format(
+                        "Unexpected number of turn events containing '%s'",
+                        expectedPart));
+    }
+
+    public void verifyOpenColonyAction(final int colonyId,
+            final String expectedText) {
+        final Button button = getOpenColonyButton(colonyId);
+        assertEquals(expectedText, button.getText());
+        assertTrue(button.isVisible() && !button.isDisabled(),
+                "Open colony action must be available");
+        assertTrue(button.getWidth() >= button.prefWidth(-1),
+                "Open colony label must not be truncated");
+        final javafx.scene.layout.Region row = (javafx.scene.layout.Region) button
+                .getParent();
+        final javafx.scene.layout.Region report = (javafx.scene.layout.Region) row
+                .getParent();
+        assertTrue(row.getWidth() <= report.getMaxWidth(),
+                String.format(
+                        "Open colony row width %s must fit the report width %s",
+                        row.getWidth(), report.getMaxWidth()));
+    }
+
+    /**
+     * Reach the report's Open colony action with Tab and activate it with
+     * Space.
+     */
+    public ColonyScreen openColonyWithKeyboard(final int colonyId,
+            final String expectedColonyName) {
+        final Button button = getOpenColonyButton(colonyId);
+        for (int i = 0; i < 40 && !button.isFocused(); i++) {
+            getRobot().push(KeyCode.TAB);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        if (!button.isFocused()) {
+            throw new IllegalStateException(
+                    "Open colony action is not keyboard reachable");
+        }
+        getRobot().push(KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ColonyScreen.of(getContext(), expectedColonyName);
+    }
+
+    public ColonyScreen openColonyWithMouse(final int colonyId,
+            final String expectedColonyName) {
+        getRobot().clickOn(getOpenColonyButton(colonyId), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ColonyScreen.of(getContext(), expectedColonyName);
+    }
+
+    /** Keep the shown action so it can be used after the game changes. */
+    public void retainOpenColonyAction(final int colonyId) {
+        retainedAction = getOpenColonyButton(colonyId);
+    }
+
+    public void clickRetainedOpenColonyAction() {
+        getRobot().clickOn(retainedAction, MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Fire the retained action even if its old report is no longer shown. */
+    public void fireRetainedOpenColonyAction() {
+        getRobot().interact(retainedAction::fire);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyShown() {
+        assertTrue(isButtonBackVisible(), "The turn report must stay shown");
+    }
+
+    public void verifyOpenColonyActionAbsent(final int colonyId) {
+        assertTrue(
+                getNodeFinder().lookup("#turnEventOpenColony-" + colonyId)
+                        .tryQuery().isEmpty(),
+                "Open colony action must not be offered");
+    }
+
+    public void verifyColonyScreenNotShown() {
+        assertFalse(isCssIdVisible(PanelColonyName.COLONY_NAME_ID),
+                "The inaccessible colony must not be opened");
+    }
+
+    private Button getOpenColonyButton(final int colonyId) {
+        return getNodeFinder().lookup("#turnEventOpenColony-" + colonyId)
+                .queryAs(Button.class);
     }
 
     private List<TurnEventPanel> getEventPanels() {
