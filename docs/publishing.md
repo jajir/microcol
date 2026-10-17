@@ -387,3 +387,32 @@ documentation in APT just to make it visible on the web.
    this capture. These are documentation checks, not gameplay acceptance.
    Publication checks Pages and intentional documentation-only game-job skips;
    this checkpoint requests no new game build.
+4. Checkpoint `ffae3396` published successfully: Pages run
+   [39034409915](https://github.com/jajir/microcol/actions/runs/39034409915)
+   passed build/deploy; development run 39034409863 and compatibility run
+   39034409842 passed their change filters and intentionally skipped game jobs.
+   Live R-0131/coverage pages contain the new text and the live rule catalogue
+   pins repository links to that exact commit. The downloaded `dev` manifest
+   was byte-identical before/after and still identifies
+   [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4),
+   source `0b0cb0593df4326754f1111f60ad63f1fde64f09`. Newer recorded game-release
+   evidence does not change that observed automatic-channel value.
+
+## Remaining-scope capture: cargo, routes and markets — 2026-10-17
+
+1. R-0132–R-0145 capture fourteen A06 outcomes: seven cargo residuals,
+   four route stages, national price pressure, the Dutch factor and economic
+   trade accounts/report. All remain `new`; [coverage](requirements/coverage.md)
+   still explicitly requires the other areas and complete acceptance matrices.
+2. The same Sol medium worker drafted bounded batches. Main review retained
+   delivered sentry, wagon and artillery slices, removed a hypothetical future
+   passenger question, limited each quick load to one hold, and checked route
+   no-movement cycles and fractional Dutch pressure. Targeted current source
+   and R-0020 evidence showed TRADE-004/005 already fixed, so no duplicate
+   quote implementation requirements were allocated. The catalogue credits
+   those delivered paths; whole trade-matrix acceptance is still separate.
+3. Documentation validation covers 21 launcher tests without inference, nine
+   catalogue/link tests, strict MkDocs and rendered four-chapter/new-status
+   checks for all fourteen analyses. No gameplay implementation or fresh
+   gameplay acceptance is claimed. Pages and documentation-only CI filtering
+   are verified independently after push.

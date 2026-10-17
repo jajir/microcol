@@ -195,6 +195,36 @@ verified or authorize implementation.
 | [R-0076](done/R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
+| [R-0132](R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
+| [R-0133](R-0133.md) | Reject ships and wagons as ordinary passengers | New capture | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
+| [R-0136](R-0136.md) | Unload passengers on arrival in an owned coastal colony | New capture | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
+| [R-0137](R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
+| [R-0138](R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
+| [R-0139](R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
+| [R-0140](R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
+| [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
+| [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
+| [R-0143](R-0143.md) | Apply national and cross-port market pressure | New capture | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
+| [R-0144](R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
+| [R-0145](R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
+
+The seven A06/P08 analyses R-0132–R-0138 were captured on **2026-10-17** as
+preparation only; they do not select or authorize gameplay implementation.
+They preserve R-0024 wagon passenger/UI behavior, R-0073 sentry selection,
+R-0095 artillery's one-hold behavior and the existing goods-removal operation.
+Treasure creation and queue precedence remain explicit dependencies/questions,
+not hidden implementations in these cargo slices.
+
+The route/market analyses R-0139–R-0145 were captured on **2026-10-17** as
+preparation only; no gameplay implementation is selected. R-0139 supplies one
+shared route structure, R-0140–R-0142 own stop processing, recurring assignment
+and edits/cancel respectively. R-0143 owns the common national-market response,
+R-0144 its Dutch factor and R-0145 the transaction accounts **and** economic
+advisor report. TRADE-004/005 were corrected in the catalogue using current
+R-0020 quote/affordability evidence; no duplicate implementation R was allocated.
+Full UC-057 verification remains part of the trade acceptance matrix.
 
 ## A07
 

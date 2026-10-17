@@ -42,7 +42,19 @@
    through each order owner rather than duplicated as a universal rewrite:
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
    the forthcoming route-edit/cancel capture.
-4. Remaining area-by-area ownership is being reconciled with existing work.
+4. Cargo residuals have seven owners: [R-0132](R-0132.md) shared hold cap,
+   [R-0133](R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
+   reservation, [R-0135](R-0135.md) immigrant boarding choice/priority,
+   [R-0136](R-0136.md) arrival unloading, [R-0137](R-0137.md) cargo shortcuts
+   and [R-0138](R-0138.md) jettison. Existing manual transfer, sentry boarding
+   and artillery transport remain credited to their original requirements.
+5. Routes have separate owners for [creation](R-0139.md), [stop transfers](R-0140.md),
+   [recurring execution](R-0141.md) and [edit/cancel/delete](R-0142.md).
+   [R-0143](R-0143.md) owns national market pressure, [R-0144](R-0144.md)
+   the Dutch response and [R-0145](R-0145.md) trade accounts plus the economy
+   report. TRADE-004/005 share the delivered R-0020 quote/affordability path
+   and its dated evidence; they receive no duplicate implementation task.
+6. Remaining area-by-area ownership is being reconciled with existing work.
    This incomplete map is not a claim that the documented scope is covered.
 
 ## Preparation checkpoints
@@ -50,7 +62,7 @@
 | Area | Capture progress | Remaining reconciliation |
 | --- | --- | --- |
 | A05 world and units | R-0118–R-0131 plus existing sight, ship, sentry and combat owners | Final unit/terrain matrix and cross-area dependency audit |
-| A06 transport and Europe | Existing bounded transport and purchase work retained | Cargo residuals, routes, market prices, quotes and accounts |
+| A06 transport and Europe | R-0132–R-0145 cargo, routes, markets and accounts; existing transport/purchase/shared quotes retained | Final cargo/trade matrix and cross-area dependency audit |
 | A07 economy | Existing food, work, construction and education owners retained | Terrain-independent production, specialists, native learning/converts and complete matrices |
 | A08 relations and AI | Existing diplomacy and rival colony owners retained | Native state/interactions, missions, trade and remaining actor policies |
 | A09 combat | Delivered ordinary/naval slices retained | Native/royal roles, patrol, coastal fire and national modifier |
