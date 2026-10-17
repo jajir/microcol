@@ -770,3 +770,8 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    a zrušení, doplňuje nulový pohyb, uvolněné prostory, zachovanou rudu a Continue.
    TC29 potvrzuje stávající ruční přesuny. Pouhé načtení loď nevykládá; model
    odmítá změněný cíl před přesunem. Úplná regrese dávky ještě čeká.
+10. UC-068: R-0090 má cíleně ověřenou správu vlastní kolonie: dostupní
+    civilní pracovníci zajistí nejprve jídlo, další legální práci se dřevem.
+    TC34_08/09 ověřují deset tahů po založení, skutečné zásoby a Continue.
+    Model chrání cizí obsazení a ukončení tahu při nedostatku; AI zásoby nevytváří.
+    Nejde o úplnou ekonomickou ani vojenskou strategii. Regrese dávky ještě čeká.

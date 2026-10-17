@@ -3,11 +3,31 @@ package org.microcol.test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.gui.FileSelectingService;
+import org.microcol.gui.screen.game.gamepanel.CursorService;
+import org.microcol.mock.CursorServiceNoOpp;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
+import org.microcol.model.Player;
+import org.microcol.model.TerrainType;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.microcol.model.campaign.MissionImpl;
+import org.microcol.model.campaign.po.GameModelPo;
+import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitPo;
+import org.mockito.Mockito;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
@@ -24,11 +44,84 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F26-first-colony-boundaries.microcol");
 
+    private static final Location SITE = Location.of(21, 2);
+
+    /** The saved game the Load command opens; one scenario swaps it. */
+    private volatile File loadTarget = FIXTURE;
+
     @Start
     private void start(final Stage stage) throws Exception {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
                 ".microcol", "autosave.microcol"));
-        initialize(stage, getClass(), FIXTURE);
+        initialize(stage, getClass(), binder -> {
+            binder.bind(CursorService.class)
+                    .toInstance(new CursorServiceNoOpp());
+            final FileSelectingService selecting = Mockito
+                    .mock(FileSelectingService.class);
+            Mockito.when(selecting.loadFile(Mockito.any(File.class)))
+                    .thenAnswer(invocation -> loadTarget);
+            binder.bind(FileSelectingService.class).toInstance(selecting);
+        });
+    }
+
+    /**
+     * Scoped reference: the expedition's own founder founds the colony through
+     * the model at the usual site, two ordinary colonists stand beside it and
+     * the surrounding land is grassland. No stock is added.
+     */
+    private static File spareWorkerFixture() throws Exception {
+        final GameModelPoDao dao = new GameModelPoDao();
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/free-play-rival-expedition.microcol");
+        final UnitPo founder = data.getModel().getUnits().stream()
+                .filter(unit -> unit.getId() == 4).findFirst().orElseThrow();
+        founder.setAvailableMoves(1);
+        final List<UnitPo> units = new ArrayList<>(data.getModel().getUnits());
+        for (int id = 6; id <= 7; id++) {
+            final UnitPo spare = new UnitPo();
+            spare.setId(id);
+            spare.setType(UnitType.COLONIST);
+            spare.setOwnerId("France");
+            spare.setAction(founder.getAction());
+            spare.setWorkUpdates(0);
+            final PlaceMapPo place = new PlaceMapPo();
+            place.setLocation(SITE);
+            place.setOrientation(Direction.west);
+            spare.setPlaceMap(place);
+            spare.setAvailableMoves(1);
+            units.add(spare);
+        }
+        data.getModel().setUnits(units);
+        final Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        SITE.getNeighbors().stream().filter(
+                at -> terrain.containsKey(at) && terrain.get(at).isLand())
+                .forEach(at -> terrain.put(at, TerrainType.GRASSLAND));
+        data.getModel().getMap().setTerrainType(terrain);
+        data.getModel().getMap().setTrees(Collections.emptySet());
+
+        // France founds with the ordinary model operation, then yields.
+        final Model model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        try {
+            model.startGame();
+            final Player france = model.getPlayerByName("France");
+            if (model.getCurrentPlayer() != france) {
+                model.getCurrentPlayer().endTurn();
+            }
+            final Unit settler = model.getUnitById(4);
+            settler.placeToLocation(SITE);
+            model.buildColony(france, settler,
+                    model.suggestColonyName(Set.of()));
+            france.endTurn();
+            data.setModel(model.save());
+        } finally {
+            model.stop();
+        }
+        final Path file = Files.createDirectories(Path.of("target", "fixtures"))
+                .resolve("F26-spare-workers.microcol");
+        dao.saveToFile(file.toString(), data);
+        return file.toFile();
     }
 
     @Test
@@ -205,6 +298,90 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         rival.waitForHumanRound(6);
         rival.verifyRivalColonyViable(6, 0, Location.of(21, 2));
         rival.verifyRivalColonyUndiscovered(Location.of(21, 2));
+        rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_rival_colony_keeps_producing_food_for_ten_turns_after_founding()
+            throws Exception {
+        // Start the ordinary expedition and let France found its colony.
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(2);
+        setup.enterName("Anna");
+        GamePage game = setup.startWithEnter();
+        final RivalColonyPage rival = new RivalColonyPage(getContext());
+        rival.waitForHumanRound(0);
+        for (int round = 1; round <= 3; round++) {
+            game.nextTurnAndCloseDialogs();
+            rival.waitForHumanRound(round);
+        }
+        rival.verifyRivalColonyViable(3, 0, Location.of(21, 2));
+        final String humanFleet = rival.captureHumanExpedition();
+        final int foodAtFounding = rival.readRivalFood(0);
+
+        // Five turns later the settlement is still fed by its one resident.
+        for (int round = 4; round <= 8; round++) {
+            game.nextTurnAndCloseDialogs();
+            rival.waitForHumanRound(round);
+        }
+        rival.verifyRivalColonyKeepsProducing(8, 0, Location.of(21, 2),
+                foodAtFounding);
+        final int foodMidway = rival.readRivalFood(0);
+
+        // Continue while the settlement is active keeps its stock and workers.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        rival.verifyRivalColonyKeepsProducing(8, 0, Location.of(21, 2),
+                foodMidway);
+
+        // Five more turns return control each time and keep producing.
+        for (int round = 9; round <= 13; round++) {
+            game.nextTurnAndCloseDialogs();
+            rival.waitForHumanRound(round);
+        }
+        rival.verifyRivalColonyKeepsProducing(13, 0, Location.of(21, 2),
+                foodMidway);
+        rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_spare_workers_make_food_and_lumber_for_ten_turns_after_founding()
+            throws Exception {
+        // Open the scoped save: France's colony has its founder and two idle
+        // colonists.
+        loadTarget = spareWorkerFixture();
+        final GamePage game0 = WelcomePage.of(getContext()).loadGame();
+        final RivalColonyPage rival = new RivalColonyPage(getContext());
+        final int start = rival.readRound();
+        rival.verifyScopedColonyWithIdleWorkers(0, SITE, 4, 6, 2);
+        final String humanFleet = rival.captureHumanExpedition();
+
+        // Each real France turn returns control; its workers feed and cut.
+        GamePage game = game0;
+        for (int turn = 1; turn <= 5; turn++) {
+            game.nextTurnAndCloseDialogs();
+            rival.waitForHumanRound(start + turn);
+        }
+        rival.verifyRivalWorkforceProducing(start + 5, 0, 4, 3, 1, 1);
+        final int foodMidway = rival.readRivalFood(0);
+        final int lumberMidway = rival.readRivalLumber(0);
+
+        // Continue while the settlement is active keeps workers and stocks.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        rival.verifyRivalWorkforceProducing(start + 5, 0, 4, 3, foodMidway,
+                lumberMidway);
+
+        // Five more turns keep growing both stocks, and the human is untouched.
+        for (int turn = 6; turn <= 10; turn++) {
+            game.nextTurnAndCloseDialogs();
+            rival.waitForHumanRound(start + turn);
+        }
+        rival.verifyRivalWorkforceProducing(start + 10, 0, 4, 3, foodMidway,
+                lumberMidway + 1);
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
     }
 

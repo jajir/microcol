@@ -1,12 +1,17 @@
 package org.microcol.ai;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.game.gamepanel.AnimationLock;
+import org.microcol.model.Colony;
+import org.microcol.model.ColonyJobChoice;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.FounderOffer;
@@ -14,6 +19,7 @@ import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 
@@ -147,7 +153,13 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                 getPlayer().chooseFounder(offer);
             }
         }
-        if (getPlayer().isKing() || !getPlayer().getColonies().isEmpty()) {
+        if (getPlayer().isKing()) {
+            return;
+        }
+        if (!getPlayer().getColonies().isEmpty()) {
+            getPlayer().getColonies().stream()
+                    .sorted(Comparator.comparingInt(Colony::getId))
+                    .forEach(this::assignColonyWorkforce);
             return;
         }
         founder = getPlayer().getAllUnits().stream()
@@ -166,6 +178,118 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         if (founder != null && founder.isAtCargoSlot()) {
             carrier = founder.getPlaceCargoSlot().getOwnerUnit();
         }
+    }
+
+    /**
+     * One bounded pass over the colony's available workers: food first, then
+     * spare workers on lumber. Offers and execution stay model-validated.
+     */
+    private void assignColonyWorkforce(final Colony colony) {
+        final Set<Integer> teaching = new HashSet<>();
+        colony.getEducationCourses().forEach(course -> {
+            teaching.add(course.getStudentId());
+            if (course.getTeacherId() != null) {
+                teaching.add(course.getTeacherId());
+            }
+        });
+        final List<Unit> workers = new ArrayList<>();
+        workers.addAll(colony.getUnitsInsideColony());
+        getModel().getUnitsAt(colony.getLocation()).stream().filter(
+                unit -> unit.isAtPlaceLocation() && !workers.contains(unit))
+                .forEach(workers::add);
+        workers.sort(Comparator.comparingInt(Unit::getId));
+        for (final Unit worker : workers) {
+            if (!isActiveTurn() || !colony.isValid()) {
+                return;
+            }
+            if (!isOrdinaryWorker(worker)
+                    || teaching.contains(worker.getId())) {
+                continue;
+            }
+            try {
+                assignWorker(colony, worker);
+            } catch (IllegalArgumentException | IllegalStateException stale) {
+                // The model rejected a stale offer; keep the worker as is.
+                org.slf4j.LoggerFactory.getLogger(SimpleAiPlayer.class)
+                        .debug("Colony job was rejected", stale);
+            }
+        }
+    }
+
+    /** Own, unordered civilian colonists; armed or mounted units keep duty. */
+    private boolean isOrdinaryWorker(final Unit unit) {
+        return unit instanceof UnitFreeColonist
+                && unit.getOwner() == getPlayer()
+                && unit.getAction().isNoAction()
+                && !((UnitFreeColonist) unit).isHoldingGuns()
+                && !((UnitFreeColonist) unit).isMounted();
+    }
+
+    private void assignWorker(final Colony colony, final Unit worker) {
+        final boolean resident = colony.getUnitsInsideColony().contains(worker);
+        final GoodsType current = worker.isAtPlaceColonyField()
+                ? worker.getPlaceColonyField().getProducedGoodsType()
+                : null;
+        final List<ColonyJobChoice> choices = colony.getJobChoices(worker)
+                .stream()
+                .filter(choice -> choice.getUnavailableReason().isEmpty()
+                        && choice.getPotential().isPresent()
+                        && choice.getPotential().get().getAmount() > 0
+                        && choice.getKind() != ColonyJobChoice.Kind.INDOOR)
+                .collect(Collectors.toList());
+        final Optional<ColonyJobChoice> food = bestChoice(choices,
+                GoodsType.CORN);
+        final Optional<ColonyJobChoice> lumber = bestChoice(choices,
+                GoodsType.LUMBER);
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+                .getNetProduction();
+        final int eaten = resident ? 0 : worker.getType().getAteFoodPerTurn();
+        final int produced = current == GoodsType.CORN
+                ? choices.stream()
+                        .filter(choice -> choice
+                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                                && choice.getGoodsType() == GoodsType.CORN)
+                        .mapToInt(choice -> choice.getPotential().get()
+                                .getAmount())
+                        .findFirst().orElse(0)
+                : 0;
+        if (current == GoodsType.CORN) {
+            if (net < 0) {
+                // Short of food: move only to a strictly better legal field.
+                if (food.isPresent() && food.get().getPotential().get()
+                        .getAmount() > produced) {
+                    food.get().execute();
+                }
+            } else if (lumber.isPresent() && net - produced >= 0) {
+                // Clear surplus: this food worker is spare.
+                lumber.get().execute();
+            }
+        } else if (resident) {
+            if (net < 0 && food.isPresent()) {
+                food.get().execute();
+            } else if (net >= 0 && current != GoodsType.LUMBER
+                    && lumber.isPresent()) {
+                lumber.get().execute();
+            }
+        } else if (lumber.isPresent() && net - eaten >= 0) {
+            lumber.get().execute();
+        } else if (food.isPresent()) {
+            food.get().execute();
+        }
+    }
+
+    /** Highest yield wins; the current field, then offer order, break ties. */
+    private Optional<ColonyJobChoice> bestChoice(
+            final List<ColonyJobChoice> choices, final GoodsType goods) {
+        ColonyJobChoice best = null;
+        for (final ColonyJobChoice choice : choices) {
+            if (choice.getGoodsType() == goods && (best == null
+                    || choice.getPotential().get().getAmount() > best
+                            .getPotential().get().getAmount())) {
+                best = choice;
+            }
+        }
+        return Optional.ofNullable(best);
     }
 
     private void pursueFirstColony(final Unit mover) {

@@ -4926,3 +4926,16 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
     Shared formatter passed; reports remain in `target/docker-ui/run-t7AO4q/`.
     Full batch regression/publication remain pending.
+12. R-0090 final `run-aNzXVw` exits 0: **92 model + nine UI + three
+    source-contract = 104 passed**, zero failures/errors/skips. Suites:
+    FirstColonyJourney 11, FirstColonyPlanner 12, ColonyJobChoice 21,
+    ColonyFamine 8, SharedColonyFieldAssignment 7, Boundary 6 and Persistence 27.
+    TC34_08 extends the original founder to ten post-founding turns; TC34_09
+    uses two available workers and verifies actual food/lumber, ten turns and
+    Continue. Model cases cover better legal food, indoor workers, foreign
+    occupation and a barren bounded fallback. Failure/repair evidence is in the
+    [operating record](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+    Starting food in focused reassignment/occupation boundary fixtures prevents
+    starvation before the AI's first decision; production references do not
+    receive runtime supplies. Shared formatter passed. Reports remain under
+    `target/docker-ui/run-aNzXVw/`; full batch regression/publication are pending.

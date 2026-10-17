@@ -147,6 +147,97 @@ public final class RivalColonyPage extends AbstractScreen {
                 .isPresent());
     }
 
+    public int readRivalFood(final int colonyId) {
+        return getModel().getColonyById(colonyId).orElseThrow().getWarehouse()
+                .getGoods(org.microcol.model.GoodsType.CORN).getAmount();
+    }
+
+    public void verifyRivalColonyKeepsProducing(final int expectedRound,
+            final int expectedColonyId, final Location expectedSite,
+            final int expectedMinimumFood) {
+        assertEquals(expectedRound,
+                getModel().getCalendar().getNumberOfPlayedTurns());
+        final org.microcol.model.Colony colony = getModel()
+                .getColonyById(expectedColonyId).orElseThrow();
+        assertEquals(1, getModel().getColonies().size());
+        assertEquals(expectedSite, colony.getLocation());
+        assertSame(getModel().getPlayerByName("France"), colony.getOwner());
+        assertEquals(java.util.List.of(getModel().getUnitById(4)),
+                colony.getUnitsInsideColony());
+        assertTrue(readRivalFood(expectedColonyId) >= expectedMinimumFood);
+        assertEquals(0, colony.getWarehouse()
+                .getGoods(org.microcol.model.GoodsType.LUMBER).getAmount());
+        assertTrue(colony.getGoodsStats()
+                .getStatsByType(org.microcol.model.GoodsType.CORN)
+                .getNetProduction() >= 0);
+        assertSame(getModel().getPlayerByName("Dutch"),
+                getModel().getCurrentPlayer());
+        assertTrue(getNodeFinder().lookup("#nextTurn").tryQuery().isPresent(),
+                "Control must return to the human after each rival turn");
+    }
+
+    public int readRound() {
+        return getModel().getCalendar().getNumberOfPlayedTurns();
+    }
+
+    public int readRivalLumber(final int colonyId) {
+        return getModel().getColonyById(colonyId).orElseThrow().getWarehouse()
+                .getGoods(org.microcol.model.GoodsType.LUMBER).getAmount();
+    }
+
+    public void verifyScopedColonyWithIdleWorkers(final int expectedColonyId,
+            final Location expectedSite, final int expectedFounderId,
+            final int expectedFirstSpareId, final int expectedSpareCount) {
+        final org.microcol.model.Colony colony = getModel()
+                .getColonyById(expectedColonyId).orElseThrow();
+        assertEquals(expectedSite, colony.getLocation());
+        assertSame(getModel().getPlayerByName("France"), colony.getOwner());
+        assertEquals(
+                java.util.List.of(getModel().getUnitById(expectedFounderId)),
+                colony.getUnitsInsideColony());
+        for (int i = 0; i < expectedSpareCount; i++) {
+            final Unit spare = getModel().getUnitById(expectedFirstSpareId + i);
+            assertSame(colony.getOwner(), spare.getOwner());
+            assertTrue(spare.isAtPlaceLocation());
+            assertEquals(expectedSite, spare.getLocation());
+        }
+        assertSame(getModel().getPlayerByName("Dutch"),
+                getModel().getCurrentPlayer());
+    }
+
+    public void verifyRivalWorkforceProducing(final int expectedRound,
+            final int expectedColonyId, final int expectedFirstWorkerId,
+            final int expectedWorkerCount, final int expectedMinimumFood,
+            final int expectedMinimumLumber) {
+        assertEquals(expectedRound, readRound());
+        final org.microcol.model.Colony colony = getModel()
+                .getColonyById(expectedColonyId).orElseThrow();
+        final java.util.List<Unit> residents = colony.getUnitsInsideColony();
+        assertEquals(expectedWorkerCount, residents.size());
+        long food = 0;
+        long lumber = 0;
+        for (final Unit worker : residents) {
+            assertSame(colony.getOwner(), worker.getOwner());
+            assertTrue(worker.getId() >= expectedFirstWorkerId);
+            assertTrue(worker.isAtPlaceColonyField());
+            final org.microcol.model.GoodsType goods = worker
+                    .getPlaceColonyField().getProducedGoodsType();
+            food += goods == org.microcol.model.GoodsType.CORN ? 1 : 0;
+            lumber += goods == org.microcol.model.GoodsType.LUMBER ? 1 : 0;
+        }
+        assertTrue(food >= 1, "Food comes first");
+        assertTrue(lumber >= 1, "Spare workers cut lumber");
+        assertTrue(readRivalFood(expectedColonyId) >= expectedMinimumFood);
+        assertTrue(readRivalLumber(expectedColonyId) >= expectedMinimumLumber);
+        assertTrue(colony.getGoodsStats()
+                .getStatsByType(org.microcol.model.GoodsType.CORN)
+                .getNetProduction() >= 0);
+        assertSame(getModel().getPlayerByName("Dutch"),
+                getModel().getCurrentPlayer());
+        assertTrue(getNodeFinder().lookup("#nextTurn").tryQuery().isPresent(),
+                "Control must return to the human after each rival turn");
+    }
+
     public void verifyRivalColonyUndiscovered(final Location expectedSite) {
         final Player human = getModel().getPlayerByName("Dutch");
         assertFalse(human.isVisible(expectedSite));

@@ -3777,3 +3777,44 @@ committed for this experiment.
     Keep Sonnet medium as the provisional default for broader behavior changes;
     cheap Haiku remains a candidate for narrower tasks with concrete fixtures.
     Nine requirements are targeted-accepted; full batch acceptance is pending.
+30. R-0090 Sonnet medium authoring took 225.587 seconds. Review found an
+    incorrect `canAttack()` worker filter (ordinary colonists also have that
+    capability), incomplete food/job selection and missing spare-worker UI and
+    shared-field/foreign-worker coverage. Docker `run-tsR1yN` ran 88 model checks:
+    86 passed and two new fixtures failed because raw Gson cannot clone
+    `UnitType` predicates. UI was not reached. Escalate the same session to
+    Sonnet high for diagnosed policy and coverage gaps, preserving budgets;
+    reuse the configured scenario loader instead of introducing a serializer.
+31. R-0090 Sonnet high repair took 265.352 seconds and corrected worker
+    eligibility/food choices plus missing scenarios. `run-wwKSyB` ran 92 model
+    checks: 86 passed, six new fixtures errored in one shared helper by assuming
+    every map coordinate is stored explicitly. Missing terrain entries represent
+    ocean in the existing model. The final same-session repair uses medium for
+    this narrow fixture correction and audits the new fixture boundaries;
+    UI acceptance has not yet run. No assertions are removed.
+32. Final R-0090 worker repair took 28.739 seconds. `run-8RXahW` ran 92
+    model checks with three assertion failures: two boundary fixtures let the
+    resident starve in the owner update before its first AI decision, and the
+    foreign-unit snapshot compared initial zero movement with the normal next
+    turn's one point. Both worker repairs are exhausted, so the caller takes
+    over these small fixture corrections explicitly: starting food only in
+    the focused reassignment/occupation fixtures and a normal initial movement
+    allowance for the foreign unit. Ten-turn production references retain their
+    original stocks; no runtime supplies or production changes are introduced.
+    The foreign test additionally checks that its resident still exists.
+    Required targeted acceptance will be rerun; this is not yet a pass.
+33. Caller fixture correction first hit immutable saved warehouse maps:
+    `run-0ieCze` had 92 model checks, three setup errors. Use a copied map and
+    the existing PO setter; preserve the exact checks and rerun. This failure
+    belongs to caller setup, not Claude model quality.
+34. R-0090 final `run-aNzXVw` passes **104 checks** (92 model, nine TC34,
+    three source-contract), zero failures/errors/skips. Shared formatter passes.
+    Total worker authoring time 519.678 seconds; caller fixture repair is
+    separately recorded above. Cumulative Claude usage: 102
+    input, 156,482 cache-create,
+    4,924,461 cache-read, 71,314 output
+    (35,569 thinking), list estimate $1.83171810.
+    This is not a Pro bill or measured quota savings. All first ten selected
+    requirements now have targeted acceptance. Next: merge current main docs,
+    complete shared batch regression, then publication; no full-batch acceptance
+    or published build is claimed yet.
