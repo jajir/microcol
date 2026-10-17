@@ -276,7 +276,7 @@ jeho prostor je zejména technická příprava a zapojení podkladů.
 
 | Balík | Co zadávat workeru po malých částech | Co připravit před předáním |
 | --- | --- | --- |
-| P01 Pravidla | Schválené datové tabulky, validátory a nezávislé testovací příklady. | Rozhodnutí příslušné Q, zdroj hodnot a očekávané výsledky. |
+| P01 Pravidla | [R-0117](requirements/done/R-0117.md) opravuje zastaralé současné popisy podle dodaného kódu. Schválené datové tabulky, validátory a nezávislé testovací příklady. | Rozhodnutí příslušné Q, zdroj hodnot a očekávané výsledky. |
 | P02 Nová hra | Jednotlivé volby, uložené nastavení, inicializace a testy profilů. | Rozhraní nastavení, počáteční hodnoty a návrh obrazovky. |
 | P03 Tahy | Jedna fáze či přechod, ukládaný stav a testy pořadí. | Kalendář, pořadí událostí a rozhraní průchodu tahem. |
 | P04 Mapa | Terénní data, výnos/cena pole, generátorový krok a testy. | Model mapy, přijatá pravidla a reprodukovatelné příklady. |

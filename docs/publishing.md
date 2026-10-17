@@ -256,3 +256,20 @@ documentation in APT just to make it visible on the web.
    This observed result closes R-0113; future documentation commits retain the
    same distinction between their published documentation revision and the
    unchanged game build. Local logs/downloads are under `target/r113/`.
+
+## Current catalogue correction — 2026-10-17
+
+1. [R-0117](requirements/done/R-0117.md) reconciles eleven named rows against
+   source `57e16d91` and existing dated functional evidence. It removes claims
+   that delivered setup, immigration, fortification, production and purchase
+   behavior is absent, while retaining native and dependent-rule gaps.
+2. Nine documentation tests and the strict MkDocs build passed. The launcher
+   unit checks also passed without inference. Rendered HTML text checks confirmed
+   the correction notice, remaining Tory/tax scope, unattended church output,
+   ship/artillery pricing and historical-count distinction. All 230 catalogue
+   IDs and their expected-rule text remain unchanged.
+3. No gameplay code, fixtures or settings changed. No game tests were rerun
+   for this documentation correction; linked gameplay evidence remains dated
+   to its actual execution. This is not a fresh audit of the whole catalogue.
+   Pages deployment and documentation-only game-job skips are verified after
+   pushing; the game build from `57e16d91` has its independent CI gate.
