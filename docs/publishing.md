@@ -335,3 +335,22 @@ documentation in APT just to make it visible on the web.
 4. No Java, fixtures or game configuration changed; game tests were not rerun.
    Publication is verified separately through Pages and the documentation-only
    CI filtering contract; this change requests no new game distribution.
+
+## Pioneer capacity and road decisions — 2026-10-17
+
+1. The user's answers now govern [R-0120](requirements/R-0120.md),
+   [R-0121](requirements/R-0121.md) and the related road-yield boundary in
+   [R-0122](requirements/R-0122.md), with matching shared work rules and
+   UC-020/021 acceptance. Clearing uses capacity at completion, permanently
+   discards excess and queues a next-turn notification; expansion permits
+   subsequent lumber to fit, without restoring discarded goods. Roads allow
+   all non-sea terrain. Only the recipient colony's disappearance or ownership
+   change remains unanswered in R-0120. Requirement statuses stay `new`.
+2. One Sol medium worker incorporated the decisions; caller review preserved
+   the existing UC-020 yield acceptance and manual rule wording. Local checks
+   passed 21 launcher unit tests without inference, nine documentation tests,
+   strict MkDocs and rendered decision/structure checks for the three analyses.
+   These are documentation checks, not gameplay acceptance.
+3. Concurrent R-0086 work remains outside this change, including separate hunks
+   in the shared rule and use-case catalogues. Publication verifies Pages and
+   documentation-only game-job skips separately; no new game build is requested.
