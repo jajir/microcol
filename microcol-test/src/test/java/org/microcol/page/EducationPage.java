@@ -96,6 +96,33 @@ public final class EducationPage extends AbstractScreen {
         assertEquals(type, getModel().getUnitById(id).getType());
     }
 
+    public void verifyCourseFor(int studentId, UnitType skill, int completed) {
+        var courses = getModel().getColonyById(0).orElseThrow()
+                .getEducationCourses();
+        assertEquals(1, courses.size());
+        assertEquals(studentId, courses.get(0).getStudentId());
+        assertEquals(skill, courses.get(0).getSkill());
+        assertEquals(completed, courses.get(0).getCompletedUpdates());
+    }
+
+    public void verifyEquippedColonist(int id, UnitType role, boolean veteran,
+            int tools, Location at) {
+        var unit = (org.microcol.model.unit.UnitFreeColonist) getModel()
+                .getUnitById(id);
+        assertEquals(role, unit.getType());
+        assertEquals(veteran, unit.isVeteran());
+        assertEquals(tools, unit.getTools());
+        assertFalse(unit.isHoldingGuns());
+        assertFalse(unit.isMounted());
+        assertTrue(unit.isAtPlaceLocation());
+        assertEquals(at, unit.getLocation());
+    }
+
+    public void verifyWarehouseTools(int expected) {
+        assertEquals(expected, getModel().getColonyById(0).orElseThrow()
+                .getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+    }
+
     public void verifyStudentKeptJob() {
         assertEquals(0,
                 getModel().getColonyById(0).orElseThrow()

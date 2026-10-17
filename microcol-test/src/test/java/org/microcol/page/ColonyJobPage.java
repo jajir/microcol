@@ -218,6 +218,47 @@ public final class ColonyJobPage extends AbstractScreen {
         assertTrue(isCssIdVisible("jobDialog"));
     }
 
+    public void openClearSpecialty() {
+        clickOnButtonWithId("jobClearSpecialty");
+    }
+
+    /** Remove the specialty through the model while the dialog is open. */
+    public void clearSpecialtyBehindDialog(final int workerId) {
+        getRobot().interact(() -> {
+            colony().clearSpecialty(getModel().getUnitById(workerId));
+            rememberWorld();
+        });
+    }
+
+    public void verifyClearSpecialtyOffered(final boolean expected) {
+        assertEquals(expected, getButtonById("jobClearSpecialty").isVisible());
+    }
+
+    public void verifyClearPrompt(final int workerId, final String currentRole,
+            final String resultingRole) {
+        verifyOpen();
+        final String text = getLabeledById("jobDetails").getText();
+        assertTrue(text.contains(currentRole + " (unit " + workerId
+                + ") will become " + resultingRole), text);
+        assertEquals("Clear specialty", getButtonById("jobConfirm").getText());
+        assertFalse(getButtonById("jobConfirm").isDisabled());
+        assertEquals("", getLabeledById("jobMessage").getText());
+    }
+
+    public void verifyClearBlocked(final String expectedReasonPart) {
+        verifyOpen();
+        assertTrue(
+                getLabeledById("jobMessage").getText()
+                        .contains(expectedReasonPart),
+                () -> getLabeledById("jobMessage").getText());
+        assertTrue(getButtonById("jobConfirm").isDisabled());
+    }
+
+    public void verifyClearRejectedAsChanged(final String expectedReasonPart) {
+        verifyClearBlocked("The colonist changed");
+        verifyClearBlocked(expectedReasonPart);
+    }
+
     public void verifyFieldJob(final int workerId, final Location at,
             final Goods expected) {
         final ColonyField field = colony().getColonyFields().stream().filter(

@@ -74,5 +74,13 @@
     <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>
     <entry key="fieldMissingDock">Build a dock before assigning fishing work.</entry>
     <entry key="jobBellContribution">Worker contribution before colony bonuses: %s %s per turn</entry>
+    <entry key="clearOpen">Clear specialty…</entry>
+    <entry key="clearSummary">Clear specialty? %s (unit %s) will become %s. The same person keeps identity, equipment, military rank and current work. The expertise and its training progress are lost.</entry>
+    <entry key="clearConfirm">Clear specialty</entry>
+    <entry key="clearChanged">The colonist changed. The specialty was not cleared. Cancel, or review this message and try again.</entry>
+    <entry key="clearUNAVAILABLE">This colonist is not available in this colony on your turn.</entry>
+    <entry key="clearNO_CIVILIAN_SPECIALTY">This colonist has no civilian specialty to clear.</entry>
+    <entry key="clearTEACHER_COURSE">This colonist teaches a course that a free colonist cannot teach. Remove the teacher or the course in Education first.</entry>
+    <entry key="clearSCHOOL_SLOT">This colonist holds a school place that a free colonist cannot hold. Move the colonist out of the school in Education first.</entry>
     <entry key="fortifiedMinimum">A fortified colony must keep at least 3 residents. You can change their jobs inside the colony.</entry>
 </properties>

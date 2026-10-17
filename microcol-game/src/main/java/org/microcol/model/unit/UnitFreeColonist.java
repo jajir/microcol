@@ -98,6 +98,36 @@ public class UnitFreeColonist extends CanMount {
         workUpdates = 0;
     }
 
+    /**
+     * @return whether the current role is a civilian specialty; military-only
+     *         veteran status is not one
+     */
+    public boolean hasCivilianSpecialty() {
+        final UnitType type = getType();
+        return type != UnitType.VETERAN_SOLDIER
+                && (UnitType.EUROPEAN_SPECIALISTS.contains(type)
+                        || UnitType.SCHOOL_ONLY_SPECIALISTS.contains(type));
+    }
+
+    /**
+     * Turn this person into a free colonist without replacing the registered
+     * unit. Military rank, equipment and placement stay; civilian work progress
+     * is cleared.
+     *
+     * @param colony the colony that validates turn, ownership, identity and
+     *               teaching or school assignments before anything changes
+     */
+    public void clearCivilianSpecialty(final Colony colony) {
+        Preconditions.checkNotNull(colony, "Colony is required");
+        colony.validateClearSpecialty(this);
+        Preconditions.checkState(hasCivilianSpecialty(),
+                "Colonist has no civilian specialty");
+        veteran = isVeteran();
+        learnedType = UnitType.COLONIST;
+        workSkill = null;
+        workUpdates = 0;
+    }
+
     public void restoreWorkExperience(final UnitType skill,
             final Integer updates) {
         Preconditions.checkArgument(updates != null && updates >= 0

@@ -342,6 +342,8 @@ public class Model {
                                 .getType() == UnitType.INDENTURED_SERVANT
                                 || worker.getType() == UnitType.PETTY_CRIMINAL
                                 || UnitType.EUROPEAN_SPECIALISTS
+                                        .contains(worker.getType())
+                                || UnitType.SCHOOL_ONLY_SPECIALISTS
                                         .contains(worker.getType())),
                         "Invalid saved field worker identity, owner or role");
                 Preconditions.checkArgument(

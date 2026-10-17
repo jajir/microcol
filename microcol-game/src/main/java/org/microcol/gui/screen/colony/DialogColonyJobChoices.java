@@ -2,19 +2,24 @@ package org.microcol.gui.screen.colony;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.UnitTypes;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.ClearSpecialtyProblem;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyJobChoice;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -43,9 +48,11 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
     private final Label message = new Label();
     private final Button confirm = new Button();
     private final Button cancel = new Button();
+    private final Button clear = new Button();
     private Colony colony;
     private Model model;
     private Unit worker;
+    private boolean clearing;
 
     @Inject
     public DialogColonyJobChoices(final ViewUtil viewUtil, final I18n i18n,
@@ -57,7 +64,7 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         this.controller = controller;
         this.callback = callback;
         final VBox root = new VBox(10, caption, choices, details, message,
-                new HBox(10, confirm, cancel));
+                new HBox(10, confirm, clear, cancel));
         root.setPadding(new Insets(16));
         root.setPrefWidth(640);
         root.setId("jobDialog");
@@ -66,6 +73,7 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         message.setId("jobMessage");
         confirm.setId("jobConfirm");
         cancel.setId("jobCancel");
+        clear.setId("jobClearSpecialty");
         caption.setWrapText(true);
         details.setWrapText(true);
         message.setWrapText(true);
@@ -101,12 +109,16 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         });
         choices.getSelectionModel().selectedItemProperty()
                 .addListener((observable, old, choice) -> {
+                    if (clearing) {
+                        return;
+                    }
                     details.setText(choice == null ? "" : describe(choice));
                     confirm.setDisable(choice == null
                             || choice.getUnavailableReason().isPresent());
                 });
         confirm.setDefaultButton(true);
         confirm.setOnAction(event -> confirm());
+        clear.setOnAction(event -> beginClearing());
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
         init(root);
@@ -134,6 +146,13 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         choices.setAccessibleText(caption.getText());
         confirm.setText(i18n.get(ColonyMsg.jobConfirm));
         cancel.setText(i18n.get(ColonyMsg.jobCancel));
+        clear.setText(i18n.get(ColonyMsg.clearOpen));
+        clearing = false;
+        choices.setDisable(false);
+        final boolean specialist = worker instanceof UnitFreeColonist
+                && ((UnitFreeColonist) worker).hasCivilianSpecialty();
+        clear.setVisible(specialist);
+        clear.setManaged(specialist);
         message.setText(
                 event.isRejectedDrop() ? i18n.get(ColonyMsg.jobDropRejected)
                         : "");
@@ -161,7 +180,53 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         }
     }
 
+    private void beginClearing() {
+        clearing = true;
+        choices.setDisable(true);
+        clear.setVisible(false);
+        clear.setManaged(false);
+        confirm.setText(i18n.get(ColonyMsg.clearConfirm));
+        showClearing(false);
+        Platform.runLater(confirm::requestFocus);
+    }
+
+    private void showClearing(final boolean changed) {
+        final Optional<ClearSpecialtyProblem> problem = sameContext()
+                ? colony.getClearSpecialtyProblem(worker)
+                : Optional.of(ClearSpecialtyProblem.UNAVAILABLE);
+        details.setText(i18n.get(ColonyMsg.clearSummary,
+                i18n.get(UnitTypes.getUnitName(worker.getType())),
+                worker.getId(),
+                i18n.get(UnitTypes.getUnitName(UnitType.COLONIST))));
+        message.setText(
+                (changed ? i18n.get(ColonyMsg.clearChanged) : "") + problem
+                        .map(reason -> (changed ? "\n" : "") + i18n.get(
+                                ColonyMsg.valueOf("clear" + reason.name())))
+                        .orElse(""));
+        confirm.setDisable(problem.isPresent());
+    }
+
+    private void confirmClearing() {
+        try {
+            if (!sameContext()) {
+                throw new IllegalStateException(
+                        "Displayed colony or game changed");
+            }
+            colony.clearSpecialty(worker);
+            close();
+            eventBus.post(new RepaintColonyEvent());
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            showClearing(true);
+        }
+    }
+
     private void confirm() {
+        if (clearing) {
+            if (!confirm.isDisable()) {
+                confirmClearing();
+            }
+            return;
+        }
         final ColonyJobChoice selected = choices.getSelectionModel()
                 .getSelectedItem();
         if (selected == null || selected.getUnavailableReason().isPresent()) {

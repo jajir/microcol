@@ -750,3 +750,7 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    viditelná palisáda zdarma, blokovaný odchod při třech a Continue. Modelová
    sada pokrývá také změnu vlastníka a vyšší opevnění. Cíleně ověřeno po opravě
    indexu taženého pracovního místa; úplná regrese dávky čeká.
+6. UC-052: R-0147 přidává TC68_05–08 pro zrušení odbornosti: potvrzení,
+   zrušení/Escape, zachování práce, vybavení a vojenské hodnosti, odmítnutí
+   neplatného učitele i změněného stavu a Continue. Cílené modelové i UI kontroly
+   prošly; další učení používá stávající školu a praxi. Úplná regrese dávky čeká.

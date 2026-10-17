@@ -74,5 +74,13 @@
     <entry key="jobDropRejected">Tento pracovník nyní nemůže přijmout danou práci. Zkontrolujte tah, dostupnost místa a prostor pro vybavení ve skladu.</entry>
     <entry key="fieldMissingDock">Před přidělením rybolovu postavte dok.</entry>
     <entry key="jobBellContribution">Příspěvek pracovníka před bonusy kolonie: %s %s za tah</entry>
+    <entry key="clearOpen">Zrušit specializaci…</entry>
+    <entry key="clearSummary">Zrušit specializaci? %s (jednotka %s) se stane: %s. Stejná osoba si ponechá identitu, vybavení, vojenskou hodnost i současnou práci. Odbornost a postup výcviku se ztratí.</entry>
+    <entry key="clearConfirm">Zrušit specializaci</entry>
+    <entry key="clearChanged">Kolonista se změnil. Specializace nebyla zrušena. Zrušte dialog, nebo si přečtěte tuto zprávu a zkuste to znovu.</entry>
+    <entry key="clearUNAVAILABLE">Tento kolonista nyní není v této kolonii dostupný ve vašem tahu.</entry>
+    <entry key="clearNO_CIVILIAN_SPECIALTY">Tento kolonista nemá civilní specializaci, kterou lze zrušit.</entry>
+    <entry key="clearTEACHER_COURSE">Tento kolonista vyučuje kurz, který svobodný kolonista vyučovat nemůže. Nejprve odeberte učitele nebo kurz ve Vzdělávání.</entry>
+    <entry key="clearSCHOOL_SLOT">Tento kolonista zaujímá místo ve škole, které svobodný kolonista zastávat nemůže. Nejprve ho přesuňte ze školy ve Vzdělávání.</entry>
     <entry key="fortifiedMinimum">Opevněná kolonie musí mít alespoň 3 obyvatele. Jejich práci uvnitř kolonie můžete měnit.</entry>
 </properties>

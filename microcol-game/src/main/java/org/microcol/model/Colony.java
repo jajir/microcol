@@ -237,6 +237,68 @@ public class Colony {
         return List.copyOf(out);
     }
 
+    /**
+     * @param unit a colonist working in, or standing at, this colony
+     * @return the reason its civilian specialty cannot be cleared now, or empty
+     *         when {@link #clearSpecialty(Unit)} would succeed
+     */
+    public Optional<ClearSpecialtyProblem> getClearSpecialtyProblem(
+            final Unit unit) {
+        if (unit == null || !canWorkerActHere(unit)) {
+            return Optional.of(ClearSpecialtyProblem.UNAVAILABLE);
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        if (!colonist.hasCivilianSpecialty()) {
+            return Optional.of(ClearSpecialtyProblem.NO_CIVILIAN_SPECIALTY);
+        }
+        // Only separate military rank can still qualify as a teaching skill.
+        final List<UnitType> remaining = colonist.isVeteran()
+                ? List.of(UnitType.VETERAN_SOLDIER)
+                : List.of();
+        if (educationCourses.stream()
+                .anyMatch(course -> Integer.valueOf(unit.getId())
+                        .equals(course.getTeacherId())
+                        && !remaining.contains(course.getSkill()))) {
+            return Optional.of(ClearSpecialtyProblem.TEACHER_COURSE);
+        }
+        if (unit.isAtPlaceConstructionSlot()) {
+            final ConstructionSlot slot = unit.getPlaceConstruction()
+                    .getConstructionSlot();
+            final int tier = EducationSkills.tier(slot.getConstructionType());
+            if (tier > 0 && (slot.getConstruction().getConstructionSlots()
+                    .indexOf(slot) >= tier
+                    || remaining.stream().noneMatch(
+                            skill -> EducationSkills.tier(skill) <= tier))) {
+                return Optional.of(ClearSpecialtyProblem.SCHOOL_SLOT);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Turn a specialist into a free colonist in place. Every precondition is
+     * validated before the first change.
+     */
+    public void clearSpecialty(final Unit unit) {
+        validateClearSpecialty(unit);
+        ((UnitFreeColonist) unit).clearCivilianSpecialty(this);
+    }
+
+    /**
+     * Authoritative pre-mutation check for clearing a specialty.
+     *
+     * @throws IllegalStateException when the turn is not ready or the target is
+     *                               stale, foreign, unspecialized or holds an
+     *                               incompatible teaching or school place
+     */
+    public void validateClearSpecialty(final Unit unit) {
+        model.checkTurnPreparationComplete();
+        final Optional<ClearSpecialtyProblem> problem = getClearSpecialtyProblem(
+                unit);
+        Preconditions.checkState(problem.isEmpty(),
+                "Specialty cannot be cleared: %s", problem.orElse(null));
+    }
+
     public boolean canAssignEducation(final Unit teacher, final Unit student,
             final UnitType skill) {
         return skill != null && getEducationOptions(teacher, student).stream()

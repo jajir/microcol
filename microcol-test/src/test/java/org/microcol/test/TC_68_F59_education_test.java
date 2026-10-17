@@ -1,6 +1,13 @@
 package org.microcol.test;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
+import java.nio.file.Files;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.microcol.gui.FileSelectingService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -170,5 +177,177 @@ public class TC_68_F59_education_test extends AbstractMicroColTest {
         education.assign();
         education.verifyStaleAssignmentRejected(200);
         education.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_clear_specialty_cancel_escape_confirm_continue_and_relearn()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        EducationPage education = new EducationPage(getContext());
+        ColonyJobPage jobs = new ColonyJobPage(getContext());
+        // Canceling the named confirmation leaves the specialist unchanged.
+        jobs.rememberWorld();
+        jobs.openFromIndoor("id_town_hall", 2);
+        jobs.verifyClearSpecialtyOffered(true);
+        jobs.openClearSpecialty();
+        jobs.verifyClearPrompt(201, "Master Carpenter", "Free Colonist");
+        jobs.cancel();
+        jobs.verifyClosed();
+        jobs.verifyWorldUnchanged();
+        education.verifyUnitType(201, UnitType.MASTER_CARPENTER);
+        // Escape from the confirmation is equally harmless.
+        jobs.openFromIndoor("id_town_hall", 2);
+        jobs.openClearSpecialty();
+        jobs.verifyClearPrompt(201, "Master Carpenter", "Free Colonist");
+        jobs.escape();
+        jobs.verifyClosed();
+        jobs.verifyWorldUnchanged();
+        // An ordinary colonist has nothing to clear.
+        jobs.openFromIndoor("id_town_hall", 0);
+        jobs.verifyClearSpecialtyOffered(false);
+        jobs.cancel();
+        // Confirming keeps the same person in the same job.
+        jobs.openFromIndoor("id_town_hall", 2);
+        jobs.openClearSpecialty();
+        jobs.confirm();
+        jobs.verifyClosed();
+        education.verifyUnitType(201, UnitType.COLONIST);
+        jobs.verifyIndoorJob(201, ConstructionType.TOWN_HALL, 2);
+        // Continue retains the cleared role without reviving the skill.
+        game = colony.close();
+        game.nextTurnAndCloseDialogs();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        education.verifyUnitType(201, UnitType.COLONIST);
+        jobs.verifyIndoorJob(201, ConstructionType.TOWN_HALL, 2);
+        // The existing school path can teach the person again.
+        education.open();
+        education.chooseTeacher(200);
+        education.chooseStudent(201);
+        education.verifyPreview("School", 4, "Master Carpenter");
+        education.assign();
+        education.verifyCourseFor(201, UnitType.MASTER_CARPENTER, 0);
+        education.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_clear_veteran_expert_keeps_rank_equipment_and_place()
+            throws Exception {
+        prepareEquippedVeteranExpert();
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        EducationPage education = new EducationPage(getContext());
+        ColonyJobPage jobs = new ColonyJobPage(getContext());
+        education.verifyEquippedColonist(4, UnitType.EXPERT_FARMER, true, 100,
+                COLONY);
+        // The prompt names the exact person and both roles.
+        jobs.openFromCenter(4);
+        jobs.openClearSpecialty();
+        jobs.verifyClearPrompt(4, "Expert Farmer", "Free Colonist");
+        jobs.confirm();
+        jobs.verifyClosed();
+        // Rank, tools and the warehouse are untouched.
+        education.verifyEquippedColonist(4, UnitType.COLONIST, true, 100,
+                COLONY);
+        education.verifyWarehouseTools(100);
+        game = colony.close();
+        game.nextTurnAndCloseDialogs();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        game.openColonyAt(COLONY, "New Amsterdam");
+        education.verifyEquippedColonist(4, UnitType.COLONIST, true, 100,
+                COLONY);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_teacher_course_and_school_slot_block_clear_until_removed()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.openColonyAt(COLONY, "New Amsterdam");
+        EducationPage education = new EducationPage(getContext());
+        ColonyJobPage jobs = new ColonyJobPage(getContext());
+        education.open();
+        education.chooseTeacher(200);
+        education.chooseStudent(0);
+        education.assign();
+        education.close();
+        // A teacher with an active course cannot become a free colonist.
+        jobs.rememberWorld();
+        jobs.openFromIndoor("id_school", 0);
+        jobs.openClearSpecialty();
+        jobs.verifyClearBlocked("teaches a course");
+        jobs.cancel();
+        jobs.verifyWorldUnchanged();
+        education.verifyUnitType(200, UnitType.MASTER_CARPENTER);
+        // Without the course, the school place itself is still incompatible.
+        education.open();
+        education.cancelFirstCourse();
+        education.close();
+        jobs.rememberWorld();
+        jobs.openFromIndoor("id_school", 0);
+        jobs.openClearSpecialty();
+        jobs.verifyClearBlocked("school place");
+        jobs.escape();
+        jobs.verifyWorldUnchanged();
+        education.verifyUnitType(200, UnitType.MASTER_CARPENTER);
+        // Existing job selection moves the teacher out of the school.
+        jobs.openFromIndoor("id_school", 0);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TOOLS);
+        jobs.confirm();
+        jobs.verifyIndoorJob(200, ConstructionType.BLACKSMITHS_HOUSE, 1);
+        jobs.openFromIndoor("id_blacksmith", 1);
+        jobs.openClearSpecialty();
+        jobs.verifyClearPrompt(200, "Master Carpenter", "Free Colonist");
+        jobs.confirm();
+        jobs.verifyClosed();
+        education.verifyUnitType(200, UnitType.COLONIST);
+        jobs.verifyIndoorJob(200, ConstructionType.BLACKSMITHS_HOUSE, 1);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_stale_specialist_is_rejected_without_changes() throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.openColonyAt(COLONY, "New Amsterdam");
+        EducationPage education = new EducationPage(getContext());
+        ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.openFromIndoor("id_blacksmith", 0);
+        jobs.openClearSpecialty();
+        jobs.verifyClearPrompt(300, "Firebrand Preacher", "Free Colonist");
+        // The specialty disappears before the player confirms.
+        jobs.clearSpecialtyBehindDialog(300);
+        jobs.confirm();
+        jobs.verifyClearRejectedAsChanged("no civilian specialty");
+        jobs.verifyWorldUnchanged();
+        education.verifyUnitType(300, UnitType.COLONIST);
+        jobs.cancel();
+        jobs.verifyClosed();
+        jobs.verifyIndoorJob(300, ConstructionType.BLACKSMITHS_HOUSE, 0);
+    }
+
+    /** Make the outside colonist a veteran farmer carrying tools. */
+    private void prepareEquippedVeteranExpert() throws Exception {
+        final JsonObject saved = new Gson().fromJson(Files.readString(
+                new File("src/test/scenarios/F59-education.microcol").toPath()),
+                JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonArray("units")
+                .forEach(value -> {
+                    final JsonObject unit = value.getAsJsonObject();
+                    if (unit.get("id").getAsInt() == 4) {
+                        unit.addProperty("type", "EXPERT_FARMER");
+                        unit.addProperty("veteran", true);
+                        unit.addProperty("tools", 100);
+                    }
+                });
+        final File prepared = new File(System.getProperty("user.home"),
+                "clear-specialty-prepared.microcol");
+        Files.writeString(prepared.toPath(), saved.toString());
+        when(getContext().getClassFromGuice(FileSelectingService.class)
+                .loadFile(any(File.class))).thenReturn(prepared);
     }
 }

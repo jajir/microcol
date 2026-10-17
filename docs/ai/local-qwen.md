@@ -3652,3 +3652,25 @@ committed for this experiment.
     fixture mistake. For R-0147 return to Sonnet medium with concrete existing
     role, dialog and fixture patterns; escalate only on diagnosed need. This
     is a practical trial, not evidence that effort alone caused the time/cost gap.
+17. R-0147 Sonnet medium authored the clear-specialty operation, confirmation
+    and model/UI coverage in 427.134 seconds. Caller review found that its new
+    public unit mutation could bypass colony validation. Docker `run-lpElKF`
+    ran 108 model checks with three errors: saved field-worker validation omitted
+    the three existing school-only planter roles. UI checks were not reached.
+    The first same-model repair (62.513 seconds) closed the public mutation path,
+    retained all role checks, corrected saved-role admission and added direct-entry,
+    foreign-owner and real disk coverage. `run-GSs2a1` then passed 111 of 112
+    model checks; its new foreign-owner fixture used raw Gson to clone a domain
+    type containing a Predicate, causing deserialization failure. A second
+    medium repair (12.667 seconds) reused the configured scenario loader instead,
+    preserving assertions. Total worker time: 502.314 seconds; both repairs are
+    used. These failures and the final rerun are retained in the task log folder.
+18. R-0147 final `run-aZpHYU` passes all 123 targeted checks (112 model,
+    eight TC68 scenarios and three source-contract checks), no failures, errors
+    or skips. Shared formatting and strict documentation validation passed.
+    Final cumulative Sonnet session: 106 input,
+    177,511 cache-create, 5,979,966 cache-read,
+    66,054 output (27,256 thinking), list-price estimate
+    $1.96879260. These estimates are not an invoice or measured Pro quota.
+    R-0119 starts Sonnet medium with the traced action, yield and fixture callers;
+    escalate only after diagnosing an inadequate result.

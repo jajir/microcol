@@ -4861,3 +4861,16 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    defenses, forced resident loss, queue/resource preservation and disk/load
    behavior. Reports/screenshots: `target/docker-ui/run-VoE0Pb/`.
    Full batch regression/publication remain pending.
+7. R-0147: `run-lpElKF` stopped after 108 model checks with three errors:
+   loading supported sugar/cotton/tobacco planters as field workers failed.
+   Review also closed the new public specialty mutation's validation bypass.
+   `run-GSs2a1` then had 112 model checks with one error in the new foreign-owner
+   fixture's raw Gson clone. The second repair reused the configured loader.
+   Final `run-aZpHYU` exits 0: ClearSpecialty 55, Education 36, ColonyJobChoice 21,
+   TC68 8 and PageVerificationContract 3 — **123 passed**, no failures/errors/skips.
+   New TC68_05–08 cover cancel/Escape, confirmed clear, retained job, veteran/tools,
+   teaching/course rejection and recovery, stale confirmation and Continue.
+   Model checks cover all 21 supported civilian roles, atomic direct-entry and
+   foreign-owner rejection, school/work relearning and real disk roundtrips.
+   Shared Java formatting passed; reports/screenshots remain under
+   `target/docker-ui/run-aZpHYU/`. Full batch regression/publication are pending.
