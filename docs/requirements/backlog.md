@@ -127,6 +127,25 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0069](done/R-0069.md) | Give each unit an explicit sight range | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0070](R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0106](done/R-0106.md) | Make fortification take effect on the following turn | Follow-up | [R-0003](canceled/R-0003.md), [R-0029](canceled/R-0029.md) |
+| [R-0118](R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
+| [R-0119](R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
+| [R-0120](R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
+| [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
+| [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
+
+The five A05/P07 analyses above were captured on **2026-10-17** as preparation
+only. Earlier authorization to implement the migrated R-0051–R-0113 set does
+not select or authorize these new requirements. Their source is the
+[pioneer rule catalogue](../gap-analysis.md#equipment-and-pioneers) and
+[UC-017/019/020/021](../use-cases.md#vybaveni-a-upravy-krajiny): PION-001/002
+currently differ from the intended behavior, while PION-003/004/005 are
+missing. [R-0020](done/R-0020.md) already owns European pier equipment;
+[R-0052](done/R-0052.md) owns turn order, not pioneer completion rules; and
+[R-0074](R-0074.md) owns the purchasable specialist roster. PION-006 remains
+cross-operation acceptance under R-0119–R-0121 using the already accepted
+hardy-pioneer durations: the existing plow action has its two-update countdown,
+while clearing and road work still need the accepted two- and one-update cases.
+This note allocates no sixth requirement or gameplay implementation.
 
 ## A06
 

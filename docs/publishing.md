@@ -311,3 +311,27 @@ documentation in APT just to make it visible on the web.
    fixtures changed and no gameplay verification is claimed. Publication is
    checked separately through [Pages](https://github.com/jajir/microcol/actions/workflows/docs.yml)
    and the [docs-only filtering contract](development-builds.md#ci-filtering).
+
+## First five pioneer requirement captures — 2026-10-17
+
+1. [R-0118](requirements/R-0118.md)–[R-0122](requirements/R-0122.md)
+   capture five A05 outcomes: colony tools, plowing, clearing, road construction
+   and road production bonuses. The [backlog coverage note](requirements/backlog.md#a05)
+   distinguishes existing ownership and prerequisites. All five remain `new`;
+   this preparation does not authorize gameplay implementation. Clearing's
+   changed recipient/capacity and road terrain eligibility remain refinement
+   questions. Existing agreed quantities and timings are retained.
+2. One Sol medium agent prepared the bounded drafts; the caller reviewed scope,
+   source observations and acceptance, requested targeted corrections and added
+   the clearing continuity question. No local inference or additional cloud
+   agents were used. No Codex quota saving is claimed from this single batch.
+3. Local acceptance passed 21 launcher unit tests without inference, nine
+   documentation tests and strict MkDocs. A direct audit checked unique IDs,
+   all four chapters, `new` status, rendered HTML content for all five pages,
+   and unchanged contents of every pre-existing requirement. The initial HTML
+   audit used directory URLs; rerunning against the configured `.html` outputs
+   passed. PION-006's source assessment now credits existing hardy-pioneer plow
+   timing; no gameplay or UC verification is claimed by that correction.
+4. No Java, fixtures or game configuration changed; game tests were not rerun.
+   Publication is verified separately through Pages and the documentation-only
+   CI filtering contract; this change requests no new game distribution.
