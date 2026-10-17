@@ -182,9 +182,9 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0069](done/R-0069.md) | Give each unit an explicit sight range | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0070](R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0106](done/R-0106.md) | Make fortification take effect on the following turn | Follow-up | [R-0003](canceled/R-0003.md), [R-0029](canceled/R-0029.md) |
-| [R-0118](R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
-| [R-0119](R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
-| [R-0120](R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
+| [R-0118](done/R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
+| [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
+| [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
 | [R-0123](R-0123.md) | Represent every terrain and legal forest variant | New capture | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
@@ -242,11 +242,11 @@ verified or authorize implementation.
 | [R-0076](done/R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
-| [R-0132](R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
-| [R-0133](R-0133.md) | Reject ships and wagons as ordinary passengers | New capture | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0132](done/R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
+| [R-0133](done/R-0133.md) | Reject ships and wagons as ordinary passengers | New capture | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
-| [R-0136](R-0136.md) | Unload passengers on arrival in an owned coastal colony | New capture | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
+| [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | New capture | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0137](R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0138](R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0139](R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
@@ -300,7 +300,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0110](done/R-0110.md) | Increase religious production through church and cathedral upgrades | Follow-up | [R-0010](canceled/R-0010.md), [R-0025](done/R-0025.md) |
 | [R-0146](R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
-| [R-0147](R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
+| [R-0147](done/R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
 | [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
 | [R-0212](R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
@@ -323,7 +323,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0087](done/R-0087.md) | Negotiate peace through a real diplomatic choice | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0088](done/R-0088.md) | Ask a European rival for tribute during contact | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0089](R-0089.md) | Form and end a European alliance explicitly | Follow-up | [R-0026](done/R-0026.md) |
-| [R-0090](R-0090.md) | Keep the rival’s first colony fed and productive | Follow-up | [R-0027](done/R-0027.md) |
+| [R-0090](done/R-0090.md) | Keep the rival’s first colony fed and productive | Follow-up | [R-0027](done/R-0027.md) |
 | [R-0091](R-0091.md) | Let the rival transport supplies and sell its production | Follow-up | [R-0027](done/R-0027.md), [R-0024](done/R-0024.md) |
 | [R-0092](R-0092.md) | Let a rival expand from its first colony to a second | Follow-up | [R-0027](done/R-0027.md) |
 | [R-0150](R-0150.md) | Represent eight native nations and their settlement classes | New capture | [NAT-001/002](../gap-analysis.md#native-nations-settlements-and-relations), UC-060 |
@@ -391,7 +391,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0176](R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
 | [R-0177](R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |
 | [R-0178](R-0178.md) | Apply royal bombardment and rebel countryside ambush | Remainder | COMBAT-007/009, GOV-015/017; A10 roster/deployment pending |
-| [R-0179](R-0179.md) | Increase privateer combat strength with Francis Drake | Remainder | FATHER-002; naval outcome R-0097 and diplomacy R-0099 complete |
+| [R-0179](done/R-0179.md) | Increase privateer combat strength with Francis Drake | Remainder | FATHER-002; naval outcome R-0097 and diplomacy R-0099 complete |
 
 ## A10
 
@@ -409,7 +409,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
 | [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
 | [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
-| [R-0184](R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
+| [R-0184](done/R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
 | [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
 | [R-0186](R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
 | [R-0187](R-0187.md) | Close home Europe and secure its assets on declaration | Remainder | GOV-011; current trade guards and R-0072 reversal credited |

@@ -95,8 +95,8 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
         // Open colony Delft at [22,12].
         colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 176.
-        colonyScreen.verifyNumberOfGoodsInWrehouse(0, 176);
+        // Verify number of corn is 170.
+        colonyScreen.verifyNumberOfGoodsInWrehouse(0, 170);
 
         // Verify number of corn is 63.
         colonyScreen.verifyNumberOfGoodsInWrehouse(2, 63);
@@ -110,8 +110,8 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
         // Open colony Delft at [22,12].
         colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 185.
-        colonyScreen.verifyNumberOfGoodsInWrehouse(0, 185);
+        // Verify number of corn is 173.
+        colonyScreen.verifyNumberOfGoodsInWrehouse(0, 173);
 
         // Verify number of corn is 72.
         colonyScreen.verifyNumberOfGoodsInWrehouse(2, 72);

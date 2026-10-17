@@ -27,7 +27,7 @@
 
 ## Coverage map
 
-1. The existing five pioneer captures [R-0118](R-0118.md)–[R-0122](R-0122.md)
+1. The existing five pioneer captures [R-0118](done/R-0118.md)–[R-0122](R-0122.md)
    own tool admission, plowing, clearing, road construction and road production.
    Their linked shared decisions remain authoritative.
 2. The next A05 captures assign terrain identity and missing defense cells to
@@ -42,10 +42,10 @@
    through each order owner rather than duplicated as a universal rewrite:
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
    route edit/cancel [R-0142](R-0142.md).
-4. Cargo residuals have seven owners: [R-0132](R-0132.md) shared hold cap,
-   [R-0133](R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
+4. Cargo residuals have seven owners: [R-0132](done/R-0132.md) shared hold cap,
+   [R-0133](done/R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
    reservation, [R-0135](R-0135.md) immigrant boarding choice/priority,
-   [R-0136](R-0136.md) arrival unloading, [R-0137](R-0137.md) cargo shortcuts
+   [R-0136](done/R-0136.md) arrival unloading, [R-0137](R-0137.md) cargo shortcuts
    and [R-0138](R-0138.md) jettison. Existing manual transfer, sentry boarding
    and artillery transport remain credited to their original requirements.
 5. Routes have separate owners for [creation](R-0139.md), [stop transfers](R-0140.md),
@@ -55,7 +55,7 @@
    report. TRADE-004/005 share the delivered R-0020 quote/affordability path
    and its dated evidence; they receive no duplicate implementation task.
 6. Economy captures assign commons to [R-0146](R-0146.md), clearing a
-   civilian specialty to [R-0147](R-0147.md), native teaching to
+   civilian specialty to [R-0147](done/R-0147.md), native teaching to
    [R-0148](R-0148.md) and the convert lifecycle, including Sepulveda, to
    [R-0149](R-0149.md). Delivered specialist production, building constants
    and mountain/sea founding guards are preserved; complete matrix acceptance
@@ -85,11 +85,11 @@
     [R-0176](R-0176.md) naval patrol interception,
     [R-0177](R-0177.md) coastal batteries,
     [R-0178](R-0178.md) royal/Continental combat roles and ambush,
-    and [R-0179](R-0179.md) Drake. Existing ordinary/naval resolution,
+    and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
 11. Remaining founder effects are [R-0180](R-0180.md) production modifiers,
     [R-0181](R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
-    [R-0183](R-0183.md) Coronado and [R-0184](R-0184.md) La Salle.
+    [R-0183](R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
 12. Revolution has separate owners for [REF growth](R-0185.md),
     [deployment](R-0186.md), [Europe closure](R-0187.md),

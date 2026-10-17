@@ -272,12 +272,11 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(Location.of(24, 16));
-        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 2);
         org.microcol.page.ColonyScreen colony = game
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
-        colony.selectUnitFromPort(0);
-        new org.microcol.page.PassengerTransferPage(getContext())
-                .disembarkInPort(100, 0, false);
+        // Arrival already landed the passenger; no manual unload is needed.
+        colony.verifyNumberOfUnitsAtPier(1);
         equipment.verifyState(100, 766, false, false, 100, PlaceLocation.class);
         equipment.verifyLandedPassenger(100, 102, Location.of(24, 16));
         game = colony.close();

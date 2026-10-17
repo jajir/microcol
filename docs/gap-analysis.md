@@ -1206,7 +1206,7 @@ rules; implementation and acceptance are tracked by that requirement.
 
 ### Rival colony workforce
 
-1. User decision (2026-10-17; [R-0090](requirements/R-0090.md)): after founding,
+1. User decision (2026-10-17; [R-0090](requirements/done/R-0090.md)): after founding,
    the rival prioritizes food sufficient to sustain its colony, then assigns
    spare workers to legal lumber jobs. Use only its known world and the same
    job, ownership and shared-square rules as a human. If food cannot be

@@ -42,13 +42,13 @@ public class TC_17_F13_new_unit_in_colony_test extends AbstractMicroColTest {
         // Verify there is not unit in colony.
         gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 0);
 
-        // Perform next turn and ignore turn events dialog.
+        // Starting food 195 plus net 9 reaches 204 and produces one colonist.
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify new unit in colony.
         gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
 
-        // Move ship to far location.
+        // Move the automatically focused newborn without selecting it again.
         gamePage.moveMouseAtLocation(COLONY_LOCATION);
         gamePage.dragMouseAtLocation(NEAR_LOCATION);
 

@@ -4939,3 +4939,33 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
     starvation before the AI's first decision; production references do not
     receive runtime supplies. Shared formatter passed. Reports remain under
     `target/docker-ui/run-aNzXVw/`; full batch regression/publication are pending.
+
+## Claude batch 1 integrated acceptance — 2026-10-17
+
+1. Integrated revision `d2955b57` includes the first ten Claude requirements and
+   current main documentation. Full Docker `run-hSFnT1` ran **2,072 model tests
+   (all passed) and 320 UI/contract checks (seven failures, two errors, zero
+   skips)**. Nine old scenario expectations still used doubled corn from plow
+   or manual passenger unloading on owned-port arrival. New feature scenarios
+   passed. This full run itself was not green.
+2. Caller updated only affected legacy tests/fixtures; production code remained
+   identical to the full-run snapshot. TC01/13/21/27/30 now check automatic
+   arrival while retaining ordinary-shore selection, cargo, equipment and
+   Continue. TC07/08/17/41 use the accepted +1 plow yield, retaining exact food
+   accounting and the unchanged 200-food birth threshold. Detailed diagnoses,
+   caller-owned corrections and fixture values are in the
+   [operating record](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+3. Corrected-scenario Docker `run-Km1yji` ran 99 checks: 58 model and 41
+   UI/contract. All passed except the caller's newly added TC13 helper mismatch
+   (it incorrectly required ore from another fixture). Final `run-jfk9pd`
+   passes TC13 and all three source-contract checks, zero failures/errors/skips.
+   Thus every scenario that failed the full run has a passing rerun; unchanged
+   scenarios retain the full-run evidence. No gameplay assertion was weakened
+   and no failing/skipped scenario is treated as accepted.
+4. Shared Java formatter, 21 local-worker harness tests, nine documentation
+   tests and strict MkDocs build pass; final archival/link checks are repeated
+   with the completion documentation. Local acceptance covers R-0118, R-0133,
+   R-0132, R-0179, R-0184, R-0147, R-0119, R-0120, R-0136 and R-0090.
+   CI runs the full suite again for the pushed revision. Publication remains
+   independently pending until its actual workflows and downloadable build are
+   verified; local acceptance alone is not a publication claim.

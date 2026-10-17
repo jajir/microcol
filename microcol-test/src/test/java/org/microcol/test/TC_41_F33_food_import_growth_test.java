@@ -39,7 +39,7 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 190));
         colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 20));
         colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.CORN, 20));
-        colony.verifyFoodAccounting(16, 16);
+        colony.verifyFoodAccounting(10, 16);
 
         // Cancel the ship import after reading its accepted quantity and
         // timing.
@@ -82,7 +82,7 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         gamePage = colony.close();
         gamePage.nextTurnAndCloseDialogs();
         colony = gamePage.openColonyAt(DELFT, "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 30));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 24));
         colony.verifyNumberOfUnitsAtPier(3);
         colony.close();
     }

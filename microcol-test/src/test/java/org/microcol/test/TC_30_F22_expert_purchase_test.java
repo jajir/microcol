@@ -195,12 +195,11 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(Location.of(24, 16));
-        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 2);
         ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
-        colony.selectUnitFromPort(0);
-        new org.microcol.page.PassengerTransferPage(getContext())
-                .disembarkInPort(103, 0, false);
+        // The purchased expert already stepped ashore on arrival.
+        colony.verifyNumberOfUnitsAtPier(1);
         purchase.verifyExpertState(103, 2025, true, PlaceLocation.class);
         equipment.verifyLandedPassenger(103, 102, Location.of(24, 16));
         game = colony.close();

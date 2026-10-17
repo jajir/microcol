@@ -32,8 +32,8 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         // open MicroCol and load defined game
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-        // Verify that in colony is 167 food.
-        verifyCornInColony(gamePage, 167);
+        // Verify that in colony is 190 food.
+        verifyCornInColony(gamePage, 190);
 
         // Reopening the colony does not run its food update.
         ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12),
@@ -48,26 +48,26 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
-        // Verify that in colony is 176 food.
-        verifyCornInColony(gamePage, 176);
+        // Verify that in colony is 193 food.
+        verifyCornInColony(gamePage, 193);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
-        // Verify that in colony is 185 food.
-        verifyCornInColony(gamePage, 185);
+        // Verify that in colony is 196 food.
+        verifyCornInColony(gamePage, 196);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
-        // Verify that in colony is 194 food.
-        verifyCornInColony(gamePage, 194);
+        // Verify that in colony is 199 food.
+        verifyCornInColony(gamePage, 199);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
-        // Verify that in colony is 3 food.
-        verifyCornInColony(gamePage, 3);
+        // Four +3 updates cross 200 food; the birth leaves exactly 2.
+        verifyCornInColony(gamePage, 2);
 
         // Verify that new unit was born and placed outside colony.
         verifyNumberOfUnitsOutsideColony(gamePage, 3);
@@ -92,7 +92,7 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         final ColonyScreen colonyScreen = gamePage
                 .openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 185.
+        // Verify the expected food stock.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, expectedFood);
 
         // Close colony screen.

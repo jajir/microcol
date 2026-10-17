@@ -3818,3 +3818,60 @@ committed for this experiment.
     requirements now have targeted acceptance. Next: merge current main docs,
     complete shared batch regression, then publication; no full-batch acceptance
     or published build is claimed yet.
+35. First full batch run found TC08's food stock still assuming the former
+    doubled plow yield. F07/F08 have two ordinary workers on plowed grassland:
+    each now makes five instead of eight corn, so net food is +3, not +9.
+    Tobacco fields are unplowed and remain +9. Caller repairs the narrow old
+    fixture/expectations because R-0119's worker repairs are exhausted: TC07
+    expects 167/170/173 corn; F08 starts at 190 and TC08 checks
+    190/193/196/199/2 with birth on the fourth update at the unchanged 200
+    threshold. The full container uses its source snapshot and continues;
+    these corrected scenarios must be rerun before batch acceptance.
+36. The same full run exposed TC27_07's pre-R-0136 arrival expectation:
+    it waited for one map unit and then manually unloaded the passenger. Real
+    arrival now correctly leaves the ship and its passenger outside (two map
+    units). With R-0136 repairs exhausted, caller updates that narrow player
+    path: wait for two, verify the single outside passenger in the colony UI,
+    retain all equipment, identity, empty cargo and Continue checks. Production
+    behavior is unchanged. Rerun TC27 with the other affected legacy scenarios.
+37. TC41's import/growth reference has the same two plowed corn fields.
+    Its expected production becomes 10 rather than 16, consumption stays 16,
+    and 230 imported food settles to 24 after one 200-food birth. Caller updates
+    those two exact assertions only; cancellation, transfer totals, no immediate
+    birth and newborn placement remain unchanged. Include TC41 in the rerun.
+38. Source review during the same run found the identical manual-arrival
+    assumption in TC30's purchased-expert voyage. Caller applies the same
+    two-map-unit/one-outside-person expectation and keeps specialist identity,
+    equipment, cargo, Continue and subsequent smithy assignment assertions.
+    Other manual-disembark callers either start in port or land on ordinary
+    shore and are retained. TC30 joins the targeted legacy rerun.
+39. TC13's basic arrival case likewise expected only the carrier on the
+    colony tile. Caller updates it to two map units and strengthens explicit
+    checks for the same passenger, unchanged movement/tools, normal ship cost
+    and the freed hold. Add TC13 to the legacy rerun; preserve its stable ID.
+40. TC21_05's recovery-save check also assumed a carrier alone after its
+    port arrival. Caller updates the count to two and explicitly verifies the
+    same outside passenger and free hold after Continue; autosave-change and
+    empty-origin assertions remain. Include TC21 in the targeted rerun.
+41. TC17's newborn-focus fixture also used the former two plowed-field
+    yields. Its net food becomes +9 instead of +15. Caller changes initial
+    F13 corn from 189 to 195, retaining the same 204 before the 200-food birth.
+    The scenario still checks first-update birth and immediate movement of the
+    automatically focused newborn without reselection. Include TC17 in rerun.
+42. TC01's ordinary-shore embark/disembark journey passes until its final
+    return to the owned colony. Caller updates only that final arrival from one
+    to three map units and asserts zero occupied holds. Both prior selective
+    landings, boarding operations and cargo/shore checks remain. Add TC01 to
+    the targeted legacy rerun.
+43. The legacy rerun exposed a caller helper mismatch in the new TC13
+    pre-arrival assertion: `PassengerTransferPage.verifyAboard` also requires
+    seven ore in F21/F30's slot zero, absent in F12. Use the existing occupied-
+    hold count for the initial ship instead; retain exact passenger identity,
+    movement/tools and freed-slot checks after arrival. No gameplay change.
+    Rerun TC13 and the source-contract check after this correction.
+44. First-batch local acceptance is complete across full `run-hSFnT1`,
+    corrected-scenario `run-Km1yji` and final TC13 `run-jfk9pd`; see the
+    [integrated evidence](../functional-tests.md#claude-batch-1-integrated-acceptance-2026-10-17).
+    All nine original full-run failures have passing reruns. Production code
+    was unchanged during those legacy corrections. Complete requirement
+    archival/link checks and publish on main; CI/publication remain pending.

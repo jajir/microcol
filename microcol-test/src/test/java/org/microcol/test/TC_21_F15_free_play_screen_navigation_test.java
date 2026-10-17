@@ -127,7 +127,11 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.verifyContinueButtonEnabled(true);
         game = audit.continueGame();
         game.verifyNumberOfUnitsAt(Location.of(25, 16), 0);
-        game.verifyNumberOfUnitsAt(COLONY, 1);
+        game.verifyNumberOfUnitsAt(COLONY, 2);
+        final org.microcol.page.PassengerTransferPage passengers = new org.microcol.page.PassengerTransferPage(
+                getContext());
+        passengers.verifyAshore(4, COLONY, 1, 80);
+        passengers.verifyCargoSlotEmpty(3, 1);
     }
 
     @Test

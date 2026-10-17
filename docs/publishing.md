@@ -295,7 +295,7 @@ documentation in APT just to make it visible on the web.
 
 1. The user answered [R-0070](requirements/R-0070.md),
    [R-0086](requirements/done/R-0086.md), [R-0089](requirements/R-0089.md),
-   [R-0090](requirements/R-0090.md) and [R-0096](requirements/R-0096.md).
+   [R-0090](requirements/done/R-0090.md) and [R-0096](requirements/R-0096.md).
    Their shared rule topics, behavior, design and UC acceptance descriptions
    now incorporate the answers; all five open-question chapters contain None.
    R-0091/R-0092 inherit the workforce decision and R-0100 the Revere resident-exit
@@ -314,7 +314,7 @@ documentation in APT just to make it visible on the web.
 
 ## First five pioneer requirement captures — 2026-10-17
 
-1. [R-0118](requirements/R-0118.md)–[R-0122](requirements/R-0122.md)
+1. [R-0118](requirements/done/R-0118.md)–[R-0122](requirements/R-0122.md)
    capture five A05 outcomes: colony tools, plowing, clearing, road construction
    and road production bonuses. The [backlog coverage note](requirements/backlog.md#a05)
    distinguishes existing ownership and prerequisites. All five remain `new`;
@@ -338,7 +338,7 @@ documentation in APT just to make it visible on the web.
 
 ## Pioneer capacity and road decisions — 2026-10-17
 
-1. The user's answers now govern [R-0120](requirements/R-0120.md),
+1. The user's answers now govern [R-0120](requirements/done/R-0120.md),
    [R-0121](requirements/R-0121.md) and the related road-yield boundary in
    [R-0122](requirements/R-0122.md), with matching shared work rules and
    UC-020/021 acceptance. Clearing uses capacity at completion, permanently
@@ -358,7 +358,7 @@ documentation in APT just to make it visible on the web.
 ## Clearing recipient decision — 2026-10-17
 
 1. The user accepted resolving the recipient at completion in
-   [R-0120](requirements/R-0120.md): choose the nearest currently owned colony
+   [R-0120](requirements/done/R-0120.md): choose the nearest currently owned colony
    within two squares, tie by ID; if none qualifies, clear the forest and spend
    tools normally, discard all lumber and notify next turn. The starting preview
    is an expectation, with no second confirmation at completion. The shared

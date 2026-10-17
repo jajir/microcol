@@ -117,8 +117,9 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(COLONY_LOCATION);
 
-        // Verify that just one unit is in colony.
-        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
+        // Arrival lands both passengers outside; the carrier's holds are free.
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 3);
+        gamePage.getShipAt(COLONY_LOCATION).verifyNumberOfOccupiedCargoSlots(0);
     }
 
 }
