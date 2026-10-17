@@ -21,6 +21,10 @@ in [done](done/README.md), [deferred](deferred/README.md) and
 The catalogue retains origin and process links even when their records move.
 
 Each requirement owns its current `Status`, scope, acceptance and open questions.
+
+Remaining-scope capture completed on **2026-10-17**: [coverage and ownership](coverage.md)
+for R-0123–R-0241 and [56 open refinement topics](open-points.md).
+Capture does not change readiness or authorize gameplay implementation.
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)
 now provide provisional formulas; dependencies and individual readiness still
@@ -95,6 +99,22 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0114](done/R-0114.md) | Keep inactive requirements in status directories. | User request, 2026-10-15 |
 | [R-0115](done/R-0115.md) | Adopt provisional shared rules and remove Q decision blockers. | User request, 2026-10-15 |
 
+## A01
+
+[Application menu, entry and delivery](areas.md#a01).
+
+| Requirement | Outcome | Kind | Origin |
+| --- | --- | --- | --- |
+| [R-0232](R-0232.md) | Provide a first-release player quickstart and help path | New capture | P32 player documentation; in-game help R-0206/0207 separate |
+| [R-0233](R-0233.md) | Freeze and verify the first-release runtime baseline | New capture | P32 runtime/dependency acceptance; development builds credited |
+| [R-0234](R-0234.md) | Distribute a signed and notarized macOS release | New capture | P32 public Mac release; development ARM/Intel artifacts credited |
+| [R-0235](R-0235.md) | Verify the supported Linux release runtime matrix | New capture | P32 native dependency/platform acceptance |
+| [R-0236](R-0236.md) | Promote a verified development build to stable release | New capture | P32 stable publication; Dev channel credited |
+| [R-0237](R-0237.md) | Prepare the Steam product and rights checklist | New capture | P32 publisher/store/rights scope |
+| [R-0239](R-0239.md) | Upload runnable Steam depots and launch options | New capture | P32 SteamPipe technical scope |
+| [R-0240](R-0240.md) | Verify Steam install, offline play and update recovery | New capture | P32 Steam-installed customer paths |
+| [R-0241](R-0241.md) | Review, launch and support the Steam release | New capture | P32 publisher operations and initial support |
+
 ## A02
 
 [New-game setup](areas.md#a02).
@@ -105,6 +125,10 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0064](done/R-0064.md) | Keep the selected difficulty in the game profile | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0065](R-0065.md) | Create a playable new-world map from setup choices | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0066](done/R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
+| [R-0208](R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
+| [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
+| [R-0217](R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
+| [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
 
 ## A03
 
@@ -115,6 +139,24 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
 | [R-0168](R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
+| [R-0198](R-0198.md) | Show labor and available-colonist information | New capture | UC-114 labor report |
+| [R-0199](R-0199.md) | Show religious progress and immigrant choices | New capture | UC-114 religion report |
+| [R-0200](R-0200.md) | Show own-colony overview and production status | New capture | UC-114 colony report |
+| [R-0201](R-0201.md) | Show known native nations and relations | New capture | UC-114 native report |
+| [R-0202](R-0202.md) | Show own navy and transport state | New capture | UC-114 navy report |
+| [R-0203](R-0203.md) | Show Congress, support and known REF state | New capture | UC-114 Congress/REF report; SUPPORT-002 |
+| [R-0204](R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
+| [R-0205](R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
+| [R-0206](R-0206.md) | Navigate the game-rule encyclopedia | New capture | SUPPORT-004; existing help shell credited |
+| [R-0207](R-0207.md) | Keep the opening tutorial accurate for free play | New capture | SUPPORT-004; existing guided instructions credited |
+| [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |
+| [R-0223](R-0223.md) | Observe real players completing core game tasks | New capture | P28/P31 real-player evidence, not automation |
+| [R-0224](R-0224.md) | Complete and inspect runtime graphics coverage | New capture | P29 visual coverage and readability |
+| [R-0225](R-0225.md) | Reproduce the source-to-runtime graphics export | New capture | P29 export/manifest traceability |
+| [R-0226](R-0226.md) | Play event effects without disrupting music or gameplay | New capture | P30 event audio service; existing music credited |
+| [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
+| [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
+| [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
 
 ## A04
 
@@ -126,6 +168,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0052](done/R-0052.md) | Process each national turn once in the agreed order | Remainder | [R-0002](canceled/R-0002.md) |
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
+| [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
+| [R-0231](R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
 
@@ -152,6 +196,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
 | [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
 | [R-0131](R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
+| [R-0210](R-0210.md) | Verify every terrain and overlay reference row | Verification | UC-119 terrain matrix; individual A05 rules remain owners |
+| [R-0211](R-0211.md) | Verify unit roles and six ship classes | Verification | UC-119 role/ship matrix; individual A05/A09 rules remain owners |
 
 The five A05/P07 analyses above were captured on **2026-10-17** as preparation
 only. Earlier authorization to implement the migrated R-0051–R-0113 set does
@@ -257,6 +303,10 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0147](R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
 | [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
+| [R-0212](R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
+| [R-0213](R-0213.md) | Verify all building rows and upgrades | Verification | UC-119 building matrix |
+| [R-0215](R-0215.md) | Verify production, storage and trade reference rows | Verification | UC-119 production/trade matrix |
+| [R-0218](R-0218.md) | Verify two colonies sustain a production network | Verification | UC-116 integrated Hra journey |
 
 The four A07 analyses R-0146–R-0149 were captured on **2026-10-17** as
 preparation only; they do not select or authorize gameplay implementation.
@@ -298,6 +348,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0170](R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
 | [R-0171](R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
 | [R-0172](R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
+| [R-0219](R-0219.md) | Verify diplomacy changes trade, AI and ownership | Verification | UC-117 integrated Hra journey |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
 as preparation only; no native gameplay implementation is selected. R-0052
@@ -354,7 +405,28 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0103](R-0103.md) | Pay back taxes to lift a commodity boycott | Follow-up | [R-0030](canceled/R-0030.md) |
 | [R-0104](done/R-0104.md) | Recruit a founder and retain Congress membership | Follow-up | [R-0031](canceled/R-0031.md), [R-0025](done/R-0025.md) |
 | [R-0105](R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
-| [R-0184](R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; founder membership and fortified population already delivered |
+| [R-0180](R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
+| [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
+| [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
+| [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
+| [R-0184](R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
+| [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
+| [R-0186](R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
+| [R-0187](R-0187.md) | Close home Europe and secure its assets on declaration | Remainder | GOV-011; current trade guards and R-0072 reversal credited |
+| [R-0188](R-0188.md) | Apply cause support to revolutionary colony attacks | Remainder | GOV-010; R-0100 affiliation/occupied bell direction credited |
+| [R-0189](R-0189.md) | Announce and earn the foreign-intervention bell target | Remainder | GOV-016 target; unit delivery R-0190 separate |
+| [R-0190](R-0190.md) | Deliver earned intervention forces once | Remainder | GOV-017; target R-0189 separate |
+| [R-0191](R-0191.md) | Recognize a complete revolution victory | Remainder | GOV-019; loss R-0192 evaluated first |
+| [R-0192](R-0192.md) | Apply every revolution loss condition before victory | Remainder | GOV-020/021/022; victory R-0191 separate |
+| [R-0193](R-0193.md) | Apply the 1600, 1800 and 1850 game boundaries | Remainder | END-001/002/003; calendar R-0051 credited |
+| [R-0194](R-0194.md) | Distinguish Exit, Retire and unscored Continue | Remainder | END-004; safe Exit R-0013 credited |
+| [R-0195](R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
+| [R-0196](R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
+| [R-0197](R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
+| [R-0214](R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
+| [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
+| [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
+| [R-0230](R-0230.md) | Evaluate balance and pace across full campaigns | New capture | P31 observed whole-game balancing |
 
 ## Choosing further work
 

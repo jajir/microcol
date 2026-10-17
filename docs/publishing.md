@@ -500,3 +500,70 @@ documentation in APT just to make it visible on the web.
    tests, strict MkDocs and seven rendered status/four-chapter/capture checks.
    No gameplay code or runtime acceptance changed. Publication is checked
    separately after push.
+4. Checkpoint `b0e57cac` passed Pages build/deploy in
+   [39036373656](https://github.com/jajir/microcol/actions/runs/39036373656).
+   Development run 39036373586 and compatibility run 39036373800 passed
+   filters and intentionally skipped game jobs. Live R-0179/coverage and
+   commit-pinned catalogue/treasure text were verified (the first phrase probe
+   used a curly apostrophe; corrected HTML-decoded text matched). The automatic
+   `dev` manifest stayed identical at `dev-109-0b0cb0593df4`.
+
+## Political and end-game requirement capture — 2026-10-17
+
+1. R-0180–R-0197 capture remaining founder effects, the REF and intervention,
+   Europe closure, revolutionary outcomes, dates and score/Hall-of-Fame work.
+   All eighteen remain `new`; existing founder and political owners are reused.
+   Native/royal defeat outcomes remain explicit questions in their combat owners,
+   since ordinary colonist downgrade rules do not establish these new roles.
+2. Local verification passed 21 launcher tests without inference, 9 documentation
+   tests, strict MkDocs and eighteen rendered status/four-chapter/capture checks.
+   Publication is checked after push. No gameplay code or acceptance changed.
+3. Checkpoint `03d086ea` passed Pages build/deploy in
+   [39036745472](https://github.com/jajir/microcol/actions/runs/39036745472).
+   Development run 39036745479 and compatibility run 39036745471 passed
+   filters and intentionally skipped game jobs. Live R-0197/coverage and
+   commit-pinned catalogue links were verified. The automatic `dev` manifest
+   remained byte-identical at `dev-109-0b0cb0593df4`.
+
+## Reports and acceptance capture — 2026-10-17
+
+1. R-0198–R-0221 capture remaining reports, details/help/tutorial, nine
+   verification matrices, four integrated journeys and the geographic America
+   world. All remain `new`; existing delivered behavior is preserved.
+2. Local verification passed 21 launcher tests without inference, 9 documentation
+   tests and strict MkDocs. The 24 rendered requirements retain their four
+   chapters, status and capture-only qualification. No gameplay code changed
+   and no runtime acceptance is claimed. Publication is verified after push.
+3. Checkpoint `c38aec86` passed Pages build/deploy in
+   [39037366417](https://github.com/jajir/microcol/actions/runs/39037366417).
+   Development run 39037366487 and compatibility run 39037366504 passed
+   filters and intentionally skipped game jobs. Live R-0221 was fetched and
+   the automatic `dev` manifest remained byte-identical at
+   `dev-109-0b0cb0593df4`.
+
+## Final remaining-scope capture — 2026-10-17
+
+1. R-0222–R-0241 capture shared UX, graphics, audio, quality and stable/Steam
+   delivery. Together R-0123–R-0241 add 119 requirements, all `new`;
+   implementation remains separately selected. Existing delivered slices and
+   the five pioneer captures are retained.
+2. Final semantic reconciliation assigns 230 rule IDs, 119 UCs (116 Hra,
+   two Nastavení, one Regrese), nine matrices, nine report families, four
+   journeys and P01–P32. The coverage ledgers distinguish existing behavior,
+   missing acceptance and new outcomes. The index groups 56 active refinement
+   topics, deduplicating generator placement and other shared questions.
+3. Local verification: 21 launcher tests without inference and 9 documentation
+   tests passed during this capture; final strict MkDocs and checks of all
+   119 new analyses' status, four chapters and sequential numbering passed.
+   Source catalogue IDs and public ledger counts match. Rendered output was
+   checked for the new analyses and ledger/index pages. No gameplay code
+   changed, and no gameplay/UI runtime acceptance or Steam action is claimed.
+   Publication is checked separately after push.
+4. Final capture `c3859fe4` passed Pages build/deploy in
+   [39037824530](https://github.com/jajir/microcol/actions/runs/39037824530).
+   Development run 39037824639 and compatibility run 39037824591 passed
+   filters and intentionally skipped game jobs. Seven live pages verified the
+   coverage, open-point index, three ledgers, R-0241 and commit-pinned catalogue.
+   The automatic `dev` manifest remained byte-identical at
+   [dev-109-0b0cb0593df4](https://github.com/jajir/microcol/releases/tag/dev-109-0b0cb0593df4).
+   This evidence-only follow-up does not change the captured scope.
