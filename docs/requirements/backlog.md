@@ -447,6 +447,13 @@ the local model remain available when explicitly selected in the request, under
 the [shared policy](../ai/local-qwen.md#execution-choice-2026-10-18). Existing
 acceptance gates, model preferences and local repair budgets remain intact.
 
+## Full functional regression budget — 2026-10-19
+
+[R-0247](R-0247.md) repairs the publication blocker exposed by two 45-minute
+full-suite timeouts after R-0245. It preserves all tests and publication gates,
+with the [budget and diagnosis](../development-builds.md#full-functional-regression-budget)
+recorded in the operating documentation. It selects no gameplay work.
+
 ## Choosing further work
 
 The selected R-0057–R-0061 cloud trial is complete and published; its

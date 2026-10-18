@@ -48,17 +48,17 @@ Application of replacements, review, tests and lock release remain caller-owned.
 ## Docker tests
 
 ```sh
-python3 scripts/codex/run.py --thread TASK_UUID --timeout 2700 docker
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 3600 docker
 ```
 
 For an already justified targeted selection, forward the same Maven arguments:
 
 ```sh
-python3 scripts/codex/run.py --thread TASK_UUID --timeout 2700 docker -- \
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 3600 docker -- \
   -Dtest=PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
-The 45-minute watchdog matches the functional CI job. It does not justify accepting
+The 60-minute watchdog matches the [full functional CI budget](../development-builds.md#full-functional-regression-budget). It does not justify accepting
 partial results or shrinking a required suite. The runner owns one uniquely named
 container. Timeout/cancellation stops that container as well as its Docker client;
 other containers, images and volumes are untouched. Available reports remain in
@@ -132,3 +132,29 @@ recorded in [worker operations](local-qwen.md#completion-callbacks-2026-10-18).
 The isolated pre-implementation desktop probe on 2026-10-18 verified both installed
 CLI versions and a callback after exit 7. Production-runner acceptance is recorded
 separately; this probe does not prove the later integration.
+
+## Full-suite timeout diagnosis — 2026-10-19
+
+1. [R-0247](../requirements/R-0247.md) follows two timed-out attempts of
+   [development #178](https://github.com/jajir/microcol/actions/runs/39165485395)
+   for `39ed716c3ec9cc2b5ffd990c2f7b3546b5082089`. GitHub annotated both with
+   the 45-minute job deadline. Tests continued up to cancellation: completed-suite
+   logs contain 2,691 checks in attempt 1 and 2,696 in attempt 2, with no reported
+   failures/errors/skips. These partial log counts are not full-suite acceptance;
+   cancellation also prevented complete report export.
+2. [Development #177](https://github.com/jajir/microcol/actions/runs/39164417874)
+   passed 2,720 checks on the identical game code in about 44 minutes. Changes
+   between that source and #178 only concerned documentation and agent guidance.
+   Attempt 1's shared UI suites were 9.2% slower at the median. One bounded rerun
+   retained all tests and the deadline; its second timeout justified increasing
+   the full-suite budget to 60 minutes. No third run of the old workflow is used
+   as a substitute for the repair.
+3. The correction changes no scenario, assertion, test selection, native-package
+   deadline, targeted stability campaign or publication gate. Completion remains
+   separate from acceptance. Local diagnostic files are under `target/r245/`;
+   the original completion records and their failed results remain intact.
+4. Local verification on 2026-10-19 passed 62 existing checks: 19 completion,
+   21 worker-launcher tests without inference, 13 change-classifier tests and nine
+   documentation tests, plus strict MkDocs. Parsed before/after workflow comparison
+   confirms that only `jobs.functional.timeout-minutes` changes from 45 to 60.
+   Live full-suite acceptance and publication are still pending for the repair.

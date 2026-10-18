@@ -97,6 +97,17 @@ For agent-driven publication, use the [completion watcher](ai/completion-callbac
 for each exact pushed-commit run. Its callback resumes verification; it never
 replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 
+## Full functional regression budget
+
+[R-0247](requirements/R-0247.md) gives the complete Docker/Xvfb functional job
+**60 minutes**. The suite previously passed in about 44 minutes, but two later
+runs exceeded the old 45-minute limit while tests were still progressing; see
+[the dated diagnosis](ai/completion-callbacks.md#full-suite-timeout-diagnosis-2026-10-19).
+The extra margin covers observed runner-speed variation. It does not remove any
+scenario, assertion, report requirement or publication dependency. A timeout or
+incomplete suite remains a blocker. Native packaging and the separate targeted
+stability campaign keep their own existing budgets.
+
 ## CI filtering
 
 [R-0113](requirements/done/R-0113.md) defines this contract, selected on 2026-10-15.
