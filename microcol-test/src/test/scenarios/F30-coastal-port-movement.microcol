@@ -145,6 +145,8 @@
         "id": 0,
         "name": "New Amsterdam",
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 24,
           "y": 16
@@ -302,6 +304,8 @@
         "id": 1,
         "name": "Delft",
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 23,
           "y": 16

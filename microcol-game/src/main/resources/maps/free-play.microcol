@@ -161,6 +161,8 @@
         "id": 0,
         "name": "Quebec",
         "ownerName": "France",
+        "liberty": 0,
+        "lastColonialAffiliation": "France",
         "location": {
           "x": 17,
           "y": 10
@@ -316,6 +318,8 @@
         "id": 1,
         "name": "Montreal",
         "ownerName": "France",
+        "liberty": 0,
+        "lastColonialAffiliation": "France",
         "location": {
           "x": 17,
           "y": 21

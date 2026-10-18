@@ -25,6 +25,17 @@ public final class ColonyPo {
 
     private String ownerName;
 
+    /**
+     * Accumulated colony liberty, required and never negative. Wrapper type so
+     * a missing value is detected on load instead of becoming zero.
+     */
+    private Long liberty;
+
+    /**
+     * Name of the last non-Crown player this colony belonged to; required.
+     */
+    private String lastColonialAffiliation;
+
     private Location location;
 
     private List<ColonyFieldPo> colonyFields = new ArrayList<>();
@@ -89,6 +100,23 @@ public final class ColonyPo {
      */
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public Long getLiberty() {
+        return liberty;
+    }
+
+    public void setLiberty(final Long liberty) {
+        this.liberty = liberty;
+    }
+
+    public String getLastColonialAffiliation() {
+        return lastColonialAffiliation;
+    }
+
+    public void setLastColonialAffiliation(
+            final String lastColonialAffiliation) {
+        this.lastColonialAffiliation = lastColonialAffiliation;
     }
 
     /**

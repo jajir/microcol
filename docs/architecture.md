@@ -666,6 +666,20 @@ a frontu, její stav, vlastník, zdroje, cena i předpoklady dokončení.
 UI zobrazuje modelovou nabídku a vyžaduje výslovné potvrzení; samo cenu
 nepočítá. Viz [R-0083](requirements/done/R-0083.md).
 
+### Podpora nezávislosti (R-0100)
+
+`Colony` vlastní uloženou místní svobodu a poslední koloniální příslušnost.
+Skutečnou produkci zvonů připíše při aktualizaci kolonie; dokončený odchod
+obyvatele upraví limit podle zbývajících pracovníků. Přesun mezi pracemi uvnitř
+stejné kolonie limit nemění. Dobytí Evropanem mění příslušnost, královská okupace
+ji zachovává a vyrobené zvony odečítá. `model.store.ColonyPo` vyžaduje obě hodnoty;
+načítání nedoplňuje chybějící údaje ani neopravuje neplatný limit.
+`RebelSupport` představuje přesný celočíselný zlomek včetně počtu obyvatel,
+`Player` sčítá příspěvky příslušných kolonií. Bolivarův bonus pochází z jejich
+koloniální příslušnosti. GUI pouze zobrazuje modelové hodnoty v politickém
+přehledu a v informaci názvu kolonie; zaokrouhlení patří jen do zobrazení.
+Produkční bonusy R-0101 a vyhlášení nezávislosti R-0105 mají tento výpočet použít.
+
 ### Kongres a příchod otce (R-0104)
 
 `Player` vlastní uložený `Congress`: nabídku kandidátů, zvolený cíl, národní

@@ -5012,3 +5012,32 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
 4. This is targeted requirement-12 acceptance. Full second-batch regression,
    CI and publication remain pending; this does not close all of UC-069.
+
+## R-0100 rebel support — 2026-10-18
+
+1. Docker `run-kPlLaY` passes **2,153 checks: all 2,141 model tests and 12
+   functional/contract checks**, zero failures/errors/skips, exit 0. Selection
+   `*Test,TC_75_*` includes TC75 (3), `SimpleOperationsTest` (5),
+   `PageVerificationContractTest` (3) and `EnvironmentTest` (1).
+   Production code was unchanged since `run-Qx6F1u`, which additionally passed
+   TC36 (3), TC39 (8) and TC56 (2); its complete selection had 18 passing checks.
+   `run-l7vcIM` also verified all three final TC75 journeys before the last
+   model-test fixture repair. Full second-batch visual regression/CI is pending.
+2. TC75 verifies the read-only national/local report, completed resident-exit
+   cap, actual bell credit and Continue, and the 2/8-resident transfer through
+   real exit, map movement and a new job. The 1/9 result keeps liberty 200/400,
+   displays local 100%/22% and national 30%, including after Continue. The local
+   colony tooltip is checked. Czech strings are provided, but TC75 runs in
+   English; no Czech player-path acceptance is claimed.
+3. Model tests cover exact weighting/thresholds, zero residents, transient
+   same-colony reassignment versus completed exit, required saved fields,
+   Bolivar, European conquest and subsequent Crown occupation with differing
+   founder membership, liberty preservation and roundtrip affiliation.
+   Existing famine, birth, Congress and turn regressions pass. Actual Revere
+   battle placement remains R-0096, using the shared resident-exit accounting.
+4. Diagnostic `run-ZIKsKS` had three model failures; `run-KRtFY7` had two
+   failures and one error. Final acceptance reran all model tests after repair.
+   The [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17)
+   separates worker attempts, medium-to-high escalation, main fixture-schema
+   edits and inherited movement-mock fixes. Shared formatter, nine documentation
+   tests and strict MkDocs build pass. This is targeted requirement-13 acceptance.

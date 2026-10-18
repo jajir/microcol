@@ -76,6 +76,7 @@ public final class AlliancePage extends AbstractScreen {
                 final JsonObject colony = element.getAsJsonObject();
                 if (colony.get("id").getAsInt() == 1) {
                     colony.addProperty("ownerName", "Dutch");
+                    colony.addProperty("lastColonialAffiliation", "Dutch");
                 }
             }
             for (final JsonElement element : model.getAsJsonArray("units")) {

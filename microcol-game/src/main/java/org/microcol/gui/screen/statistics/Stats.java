@@ -15,6 +15,7 @@ public enum Stats implements MessageKeyResource {
     allianceConfirm, allianceCancel, allianceLater, allianceInsufficient,
     allianceChanged, allianceFormed, allianceEndOpen, allianceEndTitle,
     allianceEndMessage, allianceEndCancel, allianceEndConfirm, allianceEnded,
-    allianceEndStale, turnCrownWar, turnCrownWarAlliance, turnAllyDefense;
+    allianceEndStale, turnCrownWar, turnCrownWarAlliance, turnAllyDefense,
+    supportNational, supportNone, supportColonyRow;
 
 }

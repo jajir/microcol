@@ -115,7 +115,7 @@ public class ColonyConstructorTest {
             final Function<Colony, List<Construction>> constructionsBuilder) {
         return new Colony(model, 0, "Prague", owner, Location.of(2, 2),
                 constructionsBuilder, new HashMap<String, Integer>(),
-                new ArrayList<>());
+                new ArrayList<>(), 0L, owner);
     }
 
 }

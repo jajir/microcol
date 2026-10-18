@@ -75,7 +75,8 @@ public class PanelColonyName implements JavaFxComponent {
     private void onMouseEntered(
             @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(ColonyMsg.colonyName, colony.getName()),
+                i18n.get(ColonyMsg.colonyName, colony.getName()) + " — "
+                        + localSupportText(colony),
                 Source.COLONY));
     }
 
@@ -88,7 +89,15 @@ public class PanelColonyName implements JavaFxComponent {
         this.colony = colony;
         label.setText(colony.getName());
         label.setTooltip(new Tooltip(
-                colony.getName() + " — " + i18n.get(ColonyMsg.nameRename)));
+                colony.getName() + " — " + i18n.get(ColonyMsg.nameRename) + "\n"
+                        + localSupportText(colony)));
+    }
+
+    /** Read-only values from the model; nothing is produced or clamped. */
+    private String localSupportText(final Colony colony) {
+        return i18n.get(ColonyMsg.localSupport, colony.getPopulation(),
+                colony.getLiberty(),
+                colony.getRebelSupport().getDisplayPercent());
     }
 
     @Override

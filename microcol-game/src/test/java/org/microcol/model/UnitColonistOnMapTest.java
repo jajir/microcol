@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.Lists;
-
 public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
 
     private PlaceLocation placeLocation = mock(PlaceLocation.class);
@@ -140,8 +138,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(worldMap.isValid(moveAt)).thenReturn(true);
         when(worldMap.getTerrainTypeAt(moveAt))
                 .thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(moveAt))
-                .thenReturn(Lists.newArrayList(unit));
+        when(model.isPassageBlockedAt(owner, moveAt)).thenReturn(true);
 
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, () -> {

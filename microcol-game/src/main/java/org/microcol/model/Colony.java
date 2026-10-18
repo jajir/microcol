@@ -41,6 +41,26 @@ public class Colony {
 
     private Player owner;
 
+    /**
+     * Largest liberty a save may hold; keeps values exactly representable in
+     * JSON consumers.
+     */
+    private static final long MAX_LIBERTY = 9_007_199_254_740_991L;
+
+    /**
+     * Accumulated colony liberty, between zero and
+     * {@link RebelSupport#POINTS_PER_RESIDENT} times the resident count after
+     * every completed update.
+     */
+    private long liberty;
+
+    /**
+     * Last non-Crown nation this colony belonged to. It owns the colony's
+     * national contribution and Bolivar bonus, also while the Crown occupies
+     * it.
+     */
+    private Player lastColonialAffiliation;
+
     private final Location location;
 
     private final List<ColonyField> colonyFields;
@@ -63,12 +83,24 @@ public class Colony {
             final Player owner, final Location location,
             final Function<Colony, List<Construction>> constructionsBuilder,
             final Map<String, Integer> initialGoods,
-            final List<ColonyBuildingItemProgress<?>> buildingQueue) {
+            final List<ColonyBuildingItemProgress<?>> buildingQueue,
+            final long liberty, final Player lastColonialAffiliation) {
         this.model = Preconditions.checkNotNull(model);
         Preconditions.checkArgument(id >= 0, "Invalid colony id");
         this.id = id;
         this.name = Preconditions.checkNotNull(name);
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
+        Preconditions.checkArgument(liberty >= 0 && liberty <= MAX_LIBERTY,
+                "Invalid colony liberty");
+        this.liberty = liberty;
+        Preconditions.checkArgument(
+                lastColonialAffiliation != null
+                        && !lastColonialAffiliation.isKing(),
+                "Colony needs a registered non-Crown colonial affiliation");
+        Preconditions.checkArgument(
+                owner.isKing() || owner == lastColonialAffiliation,
+                "Colonial owner must be the colony's affiliation");
+        this.lastColonialAffiliation = lastColonialAffiliation;
         this.location = Preconditions.checkNotNull(location);
         colonyFields = new ArrayList<>();
         Direction.getAll().forEach(
@@ -138,6 +170,8 @@ public class Colony {
         out.setId(id);
         out.setName(name);
         out.setOwnerName(owner.getName());
+        out.setLiberty(liberty);
+        out.setLastColonialAffiliation(lastColonialAffiliation.getName());
         out.setLocation(location);
         out.setColonyFields(saveColonyFields());
         out.setColonyWarehouse(warehouse.save());
@@ -148,6 +182,75 @@ public class Colony {
         out.setEducationCourses(educationCourses.stream()
                 .map(EducationCourse::save).collect(Collectors.toList()));
         return out;
+    }
+
+    /** @return stored colony liberty; read-only, never clamped here */
+    public long getLiberty() {
+        return liberty;
+    }
+
+    /**
+     * @return the last non-Crown nation of this colony, also under occupation
+     */
+    public Player getLastColonialAffiliation() {
+        return lastColonialAffiliation;
+    }
+
+    /**
+     * @return number of residents working in fields or buildings; outside
+     *         garrisons, passengers and Europe are excluded
+     */
+    public int getPopulation() {
+        return getUnitsInsideColony().size();
+    }
+
+    /**
+     * Exact local support: {@code min(liberty + bonus, 200 * N)} out of
+     * {@code 200 * N}, where the bonus is 40 per resident when the affiliated
+     * nation has Simon Bolivar. Read-only; no bells are created.
+     */
+    public RebelSupport getRebelSupport() {
+        final long population = getPopulation();
+        final long capacity = Math.multiplyExact(population,
+                (long) RebelSupport.POINTS_PER_RESIDENT);
+        final long bonus = lastColonialAffiliation.getCongressMembers()
+                .contains(Founder.SIMON_BOLIVAR)
+                        ? Math.multiplyExact(population,
+                                (long) RebelSupport.BOLIVAR_POINTS_PER_RESIDENT)
+                        : 0;
+        return new RebelSupport(
+                Math.min(Math.addExact(liberty, bonus), capacity), capacity);
+    }
+
+    /** Apply the population cap once a resident exit has completed. */
+    private void capLibertyToPopulation() {
+        liberty = Math.min(liberty, Math.multiplyExact((long) getPopulation(),
+                (long) RebelSupport.POINTS_PER_RESIDENT));
+    }
+
+    /**
+     * Reject a loaded colony whose liberty exceeds its population capacity.
+     * Called once all residents have been restored.
+     */
+    void checkRestoredLiberty() {
+        Preconditions.checkArgument(
+                liberty <= Math.multiplyExact((long) getPopulation(),
+                        (long) RebelSupport.POINTS_PER_RESIDENT),
+                "Unsupported save: colony liberty exceeds its population");
+    }
+
+    /**
+     * Add produced bells to local liberty, or remove them under Crown
+     * occupation; liberty never leaves zero to 200 per resident.
+     */
+    private void applyProducedBells(final int producedBells) {
+        if (owner.isKing()) {
+            liberty = Math.max(0, liberty - producedBells);
+        } else {
+            liberty = Math.min(Math.addExact(liberty, producedBells),
+                    Math.multiplyExact((long) getPopulation(),
+                            (long) RebelSupport.POINTS_PER_RESIDENT));
+        }
     }
 
     /** @return immutable education progress with current pause state */
@@ -611,6 +714,11 @@ public class Colony {
 
         final Player previousOwner = owner;
         owner = player;
+        // A European conqueror keeps liberty and becomes the affiliation; the
+        // Crown leaves the last colonial affiliation untouched.
+        if (!player.isKing()) {
+            lastColonialAffiliation = player;
+        }
         grantLaSalleStockade();
         // The former owner is told about the loss, so it remembers the new
         // owner even though it no longer sees the colony.
@@ -717,6 +825,7 @@ public class Colony {
             });
             owner.creditProducedCrosses(producedCrosses);
             owner.creditProducedBells(producedBells);
+            applyProducedBells(producedBells);
             advanceEducationAndExperience(colonyStats);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
@@ -1141,6 +1250,10 @@ public class Colony {
     void verifyNumberOfUnitsOptionallyDestroyColony() {
         if (getUnitsInsideColony().isEmpty()) {
             model.destroyColony(this);
+        } else {
+            // Completed resident exit; same-colony reassignment never gets
+            // here.
+            capLibertyToPopulation();
         }
     }
 

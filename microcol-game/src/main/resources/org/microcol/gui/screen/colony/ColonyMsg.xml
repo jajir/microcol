@@ -20,6 +20,7 @@
 	<entry key="nameCancel">Cancel</entry>
 	<entry key="nameFound">Found colony</entry>
 	<entry key="nameRename">Rename colony</entry>
+	<entry key="localSupport">Population %s, stored liberty %s, local rebel support %s%%</entry>
 	<entry key="nameSave">Save</entry>
 	<entry key="nameEMPTY">Enter a colony name.</entry>
 	<entry key="nameTOO_LONG">Use at most 64 characters.</entry>

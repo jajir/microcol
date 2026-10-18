@@ -455,6 +455,24 @@ public abstract class Player {
                         : 0);
     }
 
+    /**
+     * Exact population-weighted rebel support of this nation. Includes every
+     * colony whose last colonial affiliation is this player, also while the
+     * Crown occupies it. Read-only; the Crown itself has none.
+     */
+    public RebelSupport getNationalRebelSupport() {
+        RebelSupport out = RebelSupport.NONE;
+        if (isKing()) {
+            return out;
+        }
+        for (final Colony colony : model.getColonies()) {
+            if (colony.getLastColonialAffiliation() == this) {
+                out = out.plus(colony.getRebelSupport());
+            }
+        }
+        return out;
+    }
+
     public int getCongressBells() {
         return congress == null ? 0 : congress.bells();
     }

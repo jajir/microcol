@@ -3999,3 +3999,56 @@ committed for this experiment.
     repaired cases, not merely the worker report; full second-batch acceptance
     remains pending. Sonnet medium handled both targeted repairs, with the
     caller's seven test-call adaptation explicitly separated above.
+
+59. R-0100 starts on Sonnet medium after R-0089 targeted commit `3fc8f9bd`.
+    It owns liberty, exact local/national support, occupation affiliation and
+    reports; R-0096 will supply actual Revere battle placement. Main owns the
+    repetitive current-schema fixture update after field names are fixed,
+    avoiding worker rewrites of 68 existing colony-bearing scenario files.
+    No R-0100 implementation or acceptance is yet claimed.
+
+60. Main updated the fixed `liberty`/`lastColonialAffiliation` schema in 68
+    existing scenario files containing 114 colonies. A JSON comparison against
+    HEAD verifies only those two additions; existing liberty starts at zero,
+    ordinary affiliation equals the stated colonial owner, and occupied New
+    Amsterdam in F04/F06 explicitly retains Dutch affiliation. The caller's
+    script first encountered the intentionally malformed `test-currupted-file`
+    fixture and a directory named `.microcol`; its scan was corrected to leave
+    malformed fixtures intact and process files only. These were caller setup
+    issues, not Claude failures. The final field-only equivalence check passes.
+
+61. R-0100 attempt 1 completed on Sonnet medium in 428.263 seconds, exit 0,
+    no denied tools. It reported missing real cross-colony transfer acceptance.
+    Main formatted 16 Java files (nine changed; token/idempotence checks pass).
+    Docker `run-ZIKsKS` ran all 2,139 model tests: 2,136 passed, three failed,
+    no errors/skips. Two old R-0089 movement tests stubbed the replaced enemy
+    query instead of `Model.isPassageBlockedAt`; main adapted those two mocks,
+    preserving rejection assertions, because R-0089's repair budget was exhausted.
+    R-0100's conqueror fixture also failed its real capture precondition.
+    Separate UI diagnostic `run-Qx6F1u` passes all 18 selected checks (TC75/36/39/56
+    and source contract), exit 0. Attempt 2 resumes the same Sonnet medium
+    session to repair the capture fixture and add actual two-colony transfer
+    plus conqueror/Bolivar/Crown-chain acceptance; no requirement acceptance
+    is claimed yet. Original time and repair budgets are retained.
+
+62. R-0100 attempt 2 on Sonnet medium completed in 213.519 seconds, exit 0.
+    Docker `run-KRtFY7` ran 2,141 model tests: 2,138 passed, two failures and
+    one error, no skips. The three new fixture problems are an ineligible
+    cross-colony worker during free-slot selection, Quebec's assumed two
+    residents versus one actual resident, and incomplete Congress activation/
+    category state when assigning Bolivar. Existing model regressions pass,
+    including the two corrected movement mocks. Separate `run-l7vcIM` passes
+    all six checks: three TC75 scenarios, including real cross-colony movement,
+    plus three source-contract tests. Repeated medium fixture mistakes justify
+    Sonnet high for final attempt 3 in the same session; prior 641.782 seconds
+    and the original budget are retained. No production validation or expected
+    reference values are relaxed.
+
+63. R-0100 final attempt on Sonnet high completed in 70.765 seconds, exit 0,
+    without denied tools. It changed only model-test fixtures, preserving the
+    expected 2/8→1/9 values and 50/70% capture cases. Total worker time is
+    712.547 seconds across three attempts. Docker `run-kPlLaY` passes all
+    2,141 model tests and 12 selected functional/contract checks, zero failures,
+    errors or skips. High repaired the diagnosed fixture mistakes; this does
+    not prove it is always needed. R-0096 starts high because its interacting
+    combat/worker/ownership/save boundaries are more complex; Opus remains unused.

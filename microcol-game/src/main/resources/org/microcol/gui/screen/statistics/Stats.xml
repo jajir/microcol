@@ -58,5 +58,8 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="allianceEndStale">The game or alliance changed. Nothing was ended. Review the updated relations.</entry>
 	<entry key="turnCrownWar">The Crown forced a war with %s.</entry>
 	<entry key="turnCrownWarAlliance">The Crown ended your alliance and forced a war with %s.</entry>
+	<entry key="supportNational">National rebel support: %s%% (%s residents)</entry>
+	<entry key="supportNone">You have no colonies with rebel support yet.</entry>
+	<entry key="supportColonyRow">%s — population %s, stored liberty %s, local support %s%%</entry>
 	<entry key="turnAllyDefense">Your alliance with %2$s obliged you to go to war against %1$s, who attacked your ally.</entry>
 </properties>

@@ -20,6 +20,7 @@
 	<entry key="nameCancel">Zrušit</entry>
 	<entry key="nameFound">Založit kolonii</entry>
 	<entry key="nameRename">Přejmenovat kolonii</entry>
+	<entry key="localSupport">Obyvatelé %s, nashromážděná svoboda %s, místní podpora povstání %s %%</entry>
 	<entry key="nameSave">Uložit</entry>
 	<entry key="nameEMPTY">Zadejte jméno kolonie.</entry>
 	<entry key="nameTOO_LONG">Použijte nejvýše 64 znaků.</entry>

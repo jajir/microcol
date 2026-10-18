@@ -252,6 +252,8 @@
         "id": 0,
         "name": "New Amsterdam",
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 24,
           "y": 16

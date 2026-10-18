@@ -212,6 +212,15 @@ public class Model {
                             "Unknown construction queue kind");
                 }
             });
+            Preconditions.checkArgument(
+                    colonyPo.getLiberty() != null && colonyPo.getLiberty() >= 0
+                            && colonyPo.getLastColonialAffiliation() != null,
+                    "Unsupported save: missing or invalid colony liberty or affiliation");
+            final Player affiliation = playerStore.getPlayers().stream()
+                    .filter(player -> player.getName()
+                            .equals(colonyPo.getLastColonialAffiliation()))
+                    .findAny().orElseThrow(() -> new IllegalArgumentException(
+                            "Unsupported save: unknown colony affiliation"));
             final Colony col = new Colony(this, colonyPo.getId(),
                     colonyPo.getName(),
                     playerStore.getPlayerByName(colonyPo.getOwnerName()),
@@ -223,7 +232,8 @@ public class Model {
                             constructions.add(c);
                         });
                         return constructions;
-                    }, colonyPo.getColonyWarehouse(), buildingQueue);
+                    }, colonyPo.getColonyWarehouse(), buildingQueue,
+                    colonyPo.getLiberty(), affiliation);
             col.restoreExportGoods(colonyPo.getExportGoods());
             colonies.add(col);
         });
@@ -314,8 +324,10 @@ public class Model {
         model.checkUnits();
         model.europeanRelations.checkRetainedOverlaps(model::isOverlapLive);
         for (final ColonyPo savedColony : modelPo.getColonies()) {
-            model.getColonyById(savedColony.getId()).orElseThrow()
-                    .restoreEducationCourses(savedColony.getEducationCourses());
+            final Colony restored = model.getColonyById(savedColony.getId())
+                    .orElseThrow();
+            restored.checkRestoredLiberty();
+            restored.restoreEducationCourses(savedColony.getEducationCourses());
         }
         // Remembered colonies are restored verbatim first; only locations in
         // present sight are then refreshed from permitted observation.
@@ -468,7 +480,8 @@ public class Model {
                                 constructions.add(c);
                             });
                     return constructions;
-                }, new HashMap<String, Integer>(), new ArrayList<>());
+                }, new HashMap<String, Integer>(), new ArrayList<>(), 0L,
+                player);
         final List<ColonyField> fields = col
                 .getEmptyFieldsWithMaxCornProduction();
         final ConstructionSlot indoorWork = col

@@ -793,3 +793,12 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    prošly. Viz [evidence R-0089](functional-tests.md#r-0089-european-alliances-2026-10-18).
 2. Plná regrese a publikace druhé dávky zatím čekají; evropské spojenectví
    neuzavírá domorodé ani další dosud nepokryté části UC-069.
+
+### UC-078: místní a národní podpora R-0100
+
+1. TC75 cíleně ověřuje přehled podpory, limit po odchodu obyvatele, skutečné
+   připsání zvonů a přesun obyvatele mezi koloniemi s přesným národním součtem,
+   včetně Continue. Model ověřuje i Bolivara a příslušnost po dobytí/okupaci.
+   Viz [evidence R-0100](functional-tests.md#r-0100-rebel-support-2026-10-18).
+2. Produkční bonusy a Tory postih vlastní R-0101. Celý UC-078 ani druhá dávka
+   zatím nejsou uzavřené; česká hráčská cesta TC75 není ověřena.

@@ -21,6 +21,7 @@ final class EuropeanRelationsPanel extends VBox {
     private final ViewUtil viewUtil;
     private final I18n i18n;
     private final VBox rows = new VBox(12);
+    private final VBox support = new VBox(4);
     private final Label feedback = new Label();
 
     EuropeanRelationsPanel(final GameModelController game,
@@ -37,7 +38,38 @@ final class EuropeanRelationsPanel extends VBox {
         scroll.setPrefViewportWidth(400);
         feedback.setId("relationsFeedback");
         feedback.setWrapText(true);
-        getChildren().addAll(scroll, feedback);
+        support.setId("rebelSupport");
+        getChildren().addAll(support, scroll, feedback);
+    }
+
+    /** Read-only own support values; no rival or hidden colony is listed. */
+    private void refreshSupport(final Model model) {
+        support.getChildren().clear();
+        final Player own = game.getHumanPlayer();
+        final org.microcol.model.RebelSupport national = own
+                .getNationalRebelSupport();
+        final Label nationalLabel = new Label(i18n.get(Stats.supportNational,
+                national.getDisplayPercent(), national.getPopulation()));
+        nationalLabel.setId("nationalSupport");
+        nationalLabel.setWrapText(true);
+        nationalLabel.setMaxWidth(380);
+        support.getChildren().add(nationalLabel);
+        final List<org.microcol.model.Colony> colonies = model.getColonies(own);
+        if (colonies.isEmpty()) {
+            final Label none = new Label(i18n.get(Stats.supportNone));
+            none.setId("supportNone");
+            support.getChildren().add(none);
+        }
+        for (final org.microcol.model.Colony colony : colonies) {
+            final Label row = new Label(
+                    i18n.get(Stats.supportColonyRow, colony.getName(),
+                            colony.getPopulation(), colony.getLiberty(),
+                            colony.getRebelSupport().getDisplayPercent()));
+            row.setId("supportColony-" + colony.getId());
+            row.setWrapText(true);
+            row.setMaxWidth(380);
+            support.getChildren().add(row);
+        }
     }
 
     void showReport() {
@@ -47,11 +79,13 @@ final class EuropeanRelationsPanel extends VBox {
 
     private void refresh() {
         rows.getChildren().clear();
+        support.getChildren().clear();
         if (!game.isGameModelReady()) {
             feedback.setText(i18n.get(Stats.relationsUnavailable));
             return;
         }
         final Model model = game.getModel();
+        refreshSupport(model);
         final Player actor = model.getCurrentPlayer();
         final List<Player> players = model.getPlayers().stream()
                 .filter(player -> !player.isKing())

@@ -193,8 +193,10 @@ class EuropeanRelationAiTest {
                 .loadFromClassPath("/maps/free-play.microcol");
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
-        data.getModel().getColonies().stream().filter(c -> c.getId() == 0)
-                .findFirst().orElseThrow().setOwnerName("Dutch");
+        final var colonyPo = data.getModel().getColonies().stream()
+                .filter(c -> c.getId() == 0).findFirst().orElseThrow();
+        colonyPo.setOwnerName("Dutch");
+        colonyPo.setLastColonialAffiliation("Dutch");
         data.getModel().getUnits().stream().filter(u -> u.getId() == 4)
                 .findFirst().orElseThrow().setOwnerId("Dutch");
         model = Model.make(data.getModel(),

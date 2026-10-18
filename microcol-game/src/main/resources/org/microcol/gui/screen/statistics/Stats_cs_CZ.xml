@@ -58,5 +58,8 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="allianceEndStale">Hra nebo spojenectví se změnily. Nic nebylo ukončeno. Zkontrolujte aktuální vztahy.</entry>
 	<entry key="turnCrownWar">Koruna vynutila válku s hráčem %s.</entry>
 	<entry key="turnCrownWarAlliance">Koruna ukončila vaše spojenectví a vynutila válku s hráčem %s.</entry>
+	<entry key="supportNational">Celostátní podpora povstání: %s %% (%s obyvatel)</entry>
+	<entry key="supportNone">Zatím nemáte žádné kolonie s podporou povstání.</entry>
+	<entry key="supportColonyRow">%s — obyvatelé %s, nashromážděná svoboda %s, místní podpora %s %%</entry>
 	<entry key="turnAllyDefense">Spojenectví s hráčem %2$s vás zavázalo vstoupit do války proti hráči %1$s, který napadl vašeho spojence.</entry>
 </properties>

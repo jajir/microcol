@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.Lists;
-
 public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
 
     protected PlaceLocation placeLocation = mock(PlaceLocation.class);
@@ -54,7 +52,7 @@ public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(loc)).thenReturn(true);
         when(worldMap.getTerrainTypeAt(loc)).thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(loc)).thenReturn(Lists.newArrayList(unit));
+        when(model.isPassageBlockedAt(owner, loc)).thenReturn(true);
 
         assertFalse(unit.isPossibleToMoveAt(loc));
     }
