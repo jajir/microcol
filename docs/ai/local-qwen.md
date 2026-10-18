@@ -4567,3 +4567,34 @@ committed for this experiment.
    `docs/`, so the existing classifier requires full development/Java CI as well
    as Pages. Completion watchers retain the exact pushed revision; a push alone
    does not establish a newly published game build.
+
+
+## Claude batch publication verified — 2026-10-18
+
+1. Final source `ea552be4d534b13f30d092b4774fa89a5448a10e` passes
+   [development CI](https://github.com/jajir/microcol/actions/runs/39164417874),
+   [Java compatibility](https://github.com/jajir/microcol/actions/runs/39164417893)
+   and [Pages deployment](https://github.com/jajir/microcol/actions/runs/39164417878).
+   Downloaded `tests-functional` Surefire XML confirms **2,348 model and 372
+   microcol-test checks**, zero failures, errors or skips. All three native
+   packaging jobs and the publication job succeed. Live documentation contains
+   the acceptance record and source links for the exact source commit.
+2. Published build [dev-177-ea552be4d534](https://github.com/jajir/microcol/releases/tag/dev-177-ea552be4d534)
+   has a verified manifest naming that source commit and all three platform
+   archives. The Apple Silicon archive is available through
+   [this direct download](https://github.com/jajir/microcol/releases/download/dev-177-ea552be4d534/MicroCol-macos-arm64-dev-177-ea552be4d534.zip).
+   Its manifest SHA-256 agrees with the GitHub asset digest
+   `001c661cb599dbd6f4bf2e33aad4fb7d7c984053d62f16e2420424459230d4dc`;
+   the download endpoint succeeds.
+3. The immutable release is published, but the automatic `dev` channel remains
+   `dev-175-cffcd9a39f44`. Later commits reached main during the build, so the
+   publisher's exact-current-main guard intentionally declined promotion.
+   This is not a claim that the launcher offers build 177. Use the direct
+   archive above for this accepted batch; a later current-main game publication
+   can advance the channel under the existing delivery contract. No guard was
+   bypassed and no redundant full build was started just to change the channel.
+4. All twenty selected requirements are accepted and committed on main.
+   The practical model recommendation in the preceding conclusion remains
+   Sonnet medium by default, Sonnet high for complex rules/diagnosed repairs,
+   and Haiku medium for narrow assignments. No Opus or measured Codex savings
+   are claimed. Subsequent graphics work in another task is outside this batch.
