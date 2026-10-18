@@ -80,6 +80,19 @@ public final class RebelSupport {
     }
 
     /**
+     * Exact share of a head count: {@code floor(count * numerator /
+     * denominator)}, never the rounded display percentage.
+     *
+     * @param count nonnegative number of people
+     * @return the rounded-down share; zero with no residents
+     */
+    public long floorShare(final long count) {
+        Preconditions.checkArgument(count >= 0, "Negative count");
+        return denominator == 0 ? 0
+                : Math.multiplyExact(count, numerator) / denominator;
+    }
+
+    /**
      * @return support in percent rounded down, for display only; zero with no
      *         residents
      */

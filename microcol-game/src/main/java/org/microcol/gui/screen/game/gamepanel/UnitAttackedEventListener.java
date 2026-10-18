@@ -115,6 +115,12 @@ public final class UnitAttackedEventListener {
                     : org.microcol.gui.dialog.Dialog.fight_artilleryDamaged,
                     event.getDefeated().getOwner().getDisplayName());
         }
+        if (event.wasDestroyed() && event
+                .getDefeated() instanceof org.microcol.model.unit.UnitFreeColonist) {
+            // A defeated Continental or royal soldier leaves nothing behind.
+            return i18n.get(org.microcol.gui.dialog.Dialog.fight_roleDestroyed,
+                    event.getDefeated().getOwner().getDisplayName());
+        }
         if (!event.wasDestroyed() && event
                 .getDefeated() instanceof org.microcol.model.unit.UnitFreeColonist) {
             final org.microcol.model.unit.UnitFreeColonist defeated = (org.microcol.model.unit.UnitFreeColonist) event

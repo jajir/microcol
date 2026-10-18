@@ -891,8 +891,7 @@ public abstract class AbstractUnit implements Unit {
         defender.actionPoints = 0;
         if (strengths.isPresent()) {
             final AbstractUnit loser = winnerAttacker ? defender : this;
-            if (loser instanceof UnitArtillery
-                    && ((UnitArtillery) loser).isDamaged()) {
+            if (isDestroyedByDefeat(loser)) {
                 final Unit winner = winnerAttacker ? this : defender;
                 model.fireUnitAttacked(this, defender, loser, true,
                         promoteWinningColonist(winner));
@@ -985,11 +984,13 @@ public abstract class AbstractUnit implements Unit {
         final AbstractUnit loser = winnerAttacker ? defender : this;
         final boolean militiaExits = !winnerAttacker
                 && kind == ColonyDefense.Kind.REVERE && defense.isRevereExit();
+        final boolean destroyed = isDestroyedByDefeat(loser);
         final ColonyBattleOutcome.Result result = winnerAttacker
-                ? ColonyBattleOutcome.Result.DEFENDER_EQUIPMENT_LOST
-                : ColonyBattleOutcome.Result.ATTACKER_EQUIPMENT_LOST;
-        if (loser instanceof UnitArtillery
-                && ((UnitArtillery) loser).isDamaged()) {
+                ? destroyed ? ColonyBattleOutcome.Result.DEFENDER_DESTROYED
+                        : ColonyBattleOutcome.Result.DEFENDER_EQUIPMENT_LOST
+                : destroyed ? ColonyBattleOutcome.Result.ATTACKER_DESTROYED
+                        : ColonyBattleOutcome.Result.ATTACKER_EQUIPMENT_LOST;
+        if (destroyed) {
             model.fireUnitAttacked(this, defender, loser, true, promotion,
                     new ColonyBattleOutcome(colony, battlefield, kind, result,
                             false));
@@ -1014,7 +1015,8 @@ public abstract class AbstractUnit implements Unit {
             return null;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) winner;
-        if (!colonist.isHoldingGuns() || colonist.isVeteran()) {
+        if (!colonist.isHoldingGuns() || colonist.isVeteran()
+                || colonist.getMilitaryRole().isSpecial()) {
             return null;
         }
         final boolean washington = winner.getOwner().getCongressMembers()
@@ -1106,6 +1108,20 @@ public abstract class AbstractUnit implements Unit {
 
     protected void loseCombatEquipment() {
         throw new IllegalStateException("Unsupported combat equipment loss");
+    }
+
+    /**
+     * @return whether losing a land battle removes this unit with its equipment
+     *         instead of the ordinary equipment loss
+     */
+    protected boolean isDestroyedWhenDefeated() {
+        return false;
+    }
+
+    private static boolean isDestroyedByDefeat(final AbstractUnit loser) {
+        return loser instanceof UnitArtillery
+                && ((UnitArtillery) loser).isDamaged()
+                || loser.isDestroyedWhenDefeated();
     }
 
     protected void clearFortificationAfterDefeat() {

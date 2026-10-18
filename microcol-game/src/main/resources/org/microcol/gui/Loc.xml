@@ -53,4 +53,6 @@
 	<entry key="difficulty_governor">Governor</entry>
 	<entry key="difficulty_viceroy">Viceroy</entry>
     <entry key="unitsPanel_veteran">Military status: Veteran</entry>
+    <entry key="unitsPanel_continental">Military role: Continental</entry>
+    <entry key="unitsPanel_royal">Military role: Royal regular</entry>
 </properties>

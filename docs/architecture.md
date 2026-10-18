@@ -912,3 +912,16 @@ hodnoty; `ColonyJobChoice` zahrne přírůstek obyvatel při příchodu pracovn�
 zvenčí. GUI pouze zobrazí společný rozpis. Ukládají se vstupy podpory,
 nikoli opakovaně přičítaný bonus. Stav ověření vede
 [evidence R-0101](functional-tests.md#r-0101-political-production-2026-10-18).
+
+### Nezávislost a vojenské role
+
+R-0105 ponechává pravidla vyhlášení a plán mobilizace v `Player` a přesné
+podíly v `RebelSupport`. `MilitaryRole` určuje základ síly; `UnitFreeColonist`
+uchovává roli odděleně od civilní odbornosti a veteránství. `UnitPo` a
+`UnitFactory` ukládají a ověřují příslušnost role a umístění jednotky.
+Vstup do kolonijní práce obnoví civilní roli před oznámením přesunu.
+`AttackOrder` a obrana kolonie zahrnují roli do kontroly aktuálnosti boje;
+`AbstractUnit` provádí zničení a `ColonyBattleOutcome` rozlišuje zničení od
+ztráty výstroje. GUI používá modelový výhled mobilizace, potvrzení a stejné
+bojové výsledky. [Cílené ověření](functional-tests.md#r-0105-independence-and-military-roles-2026-10-18)
+nenahrazuje dosud čekající přijetí celé druhé dávky.

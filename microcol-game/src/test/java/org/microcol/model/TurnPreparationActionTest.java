@@ -53,6 +53,25 @@ class TurnPreparationActionTest {
                 .getFieldSet();
         fields.remove(Location.of(24, 14));
         data.getModel().getMap().setFields(fields);
+        // Independence needs a coastal colony and full national support: one
+        // idle field beside the first colony becomes water.
+        final Location water = Location.of(26, 13);
+        final java.util.Map<Location, TerrainType> terrain = data.getModel()
+                .getMap().getTerrainMap();
+        terrain.put(water, TerrainType.OCEAN);
+        data.getModel().getMap().setTerrainType(terrain);
+        trees.remove(water);
+        data.getModel().getMap().setTrees(trees);
+        fields.remove(water);
+        data.getModel().getMap().setFields(fields);
+        data.getModel().getColonies()
+                .forEach(colony -> colony.setLiberty(200L * (colony
+                        .getColonyFields().stream()
+                        .filter(field -> field.getWorkerId() != null).count()
+                        + colony.getConstructions().stream().flatMap(
+                                building -> building.getSlots().stream())
+                                .filter(slot -> slot.getWorkerId() != null)
+                                .count())));
         // A pioneer ready to plow clear land outside the colony.
         final PlaceMapPo place = new PlaceMapPo();
         place.setLocation(Location.of(24, 14));

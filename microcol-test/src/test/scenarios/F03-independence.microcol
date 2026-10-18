@@ -680,7 +680,7 @@
       "name": "New Amsterdam",
       "exportGoods": [],
       "ownerName": "Dutch",
-      "liberty": 0,
+      "liberty": 1600,
       "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 25,
@@ -837,7 +837,7 @@
       "name": "Delft",
       "exportGoods": [],
       "ownerName": "Dutch",
-      "liberty": 0,
+      "liberty": 1600,
       "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 22,
@@ -994,7 +994,7 @@
       "name": "Haarlem",
       "exportGoods": [],
       "ownerName": "Dutch",
-      "liberty": 0,
+      "liberty": 1600,
       "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 23,
@@ -1151,7 +1151,7 @@
       "name": "Leiden",
       "exportGoods": [],
       "ownerName": "Dutch",
-      "liberty": 0,
+      "liberty": 1600,
       "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 19,

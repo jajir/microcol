@@ -9,7 +9,8 @@ public enum Dialog implements MessageKeyResource {
 
     ok, cancel, fight_title, fight_attacker, fight_defender, fight_buttonFight,
     fight_buttonCancel, fight_hideOption, fight_declaration, fight_veteranName,
-    fight_veteranStatus, fight_promoted, fight_privateerException,
+    fight_veteranStatus, fight_continentalName, fight_royalName, fight_roleLoss,
+    fight_roleDestroyed, fight_promoted, fight_privateerException,
     fight_unavailable, fight_base, fight_attackBonus, fight_terrainBonus,
     fight_fortifyBonus, fight_colonyBonus, fight_total, fight_chance,
     fight_equipmentLoss, fight_artilleryBonus, fight_artilleryLoss,

@@ -6,7 +6,7 @@ import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.i18n.I18n;
 import com.google.common.eventbus.EventBus;
-import org.microcol.gui.event.DeclareIndependenceEvent;
+import org.microcol.gui.event.DeclareIndependenceResolvedEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -21,6 +21,11 @@ import org.microcol.model.ClearForestProblem;
 import org.microcol.model.PlowProblem;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ActionWasStartedEvent;
+import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.ColonyWasFoundEvent;
+import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
+import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
@@ -109,6 +114,8 @@ public class ButtonsGamePanelController {
         LOGGER.debug("Turn started event {}", event);
         if (event.getPlayer().isHuman()) {
             view.enableAllButtons();
+            // Production changes support at the start of the national round.
+            refreshDeclareIndependenceButton();
             if (selectedUnitManager.getSelectedUnit().isPresent()) {
                 final Unit unit = selectedUnitManager.getSelectedUnit().get();
                 evaluateAllButtonsForSelectedUnit(unit);
@@ -172,10 +179,48 @@ public class ButtonsGamePanelController {
         updateUnitOrders();
     }
 
+    /**
+     * The button follows the model rule, not the click: a canceled or rejected
+     * confirmation keeps it, a declaration hides it.
+     */
     @Subscribe
     private void onIndependenceWasDeclared(
-            @SuppressWarnings("unused") final DeclareIndependenceEvent event) {
-        view.setVisibleButtonDeclareIndependence(false);
+            @SuppressWarnings("unused") final IndependenceWasDeclaredEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    @Subscribe
+    private void onDeclareIndependenceResolved(
+            @SuppressWarnings("unused") final DeclareIndependenceResolvedEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    @Subscribe
+    private void onGameStarted(
+            @SuppressWarnings("unused") final GameStartedEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    @Subscribe
+    private void onColonyWasFound(
+            @SuppressWarnings("unused") final ColonyWasFoundEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    @Subscribe
+    private void onColonyWasCaptured(
+            @SuppressWarnings("unused") final ColonyWasCapturedEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    @Subscribe
+    private void onUnitAttacked(
+            @SuppressWarnings("unused") final UnitAttackedEvent event) {
+        refreshDeclareIndependenceButton();
+    }
+
+    private void refreshDeclareIndependenceButton() {
+        Platform.runLater(this::evaluateDeclareIndependenceButton);
     }
 
     private void evaluateAllButtonsForSelectedUnit(final Unit unit) {
@@ -193,6 +238,10 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateDeclareIndependenceButton() {
+        // A replaced or stopped game has no button state to maintain.
+        if (!gameModelController.isGameModelReady()) {
+            return;
+        }
         view.setVisibleButtonDeclareIndependence(gameModelController
                 .getHumanPlayer().isPossibleToDecalareIndependence());
     }

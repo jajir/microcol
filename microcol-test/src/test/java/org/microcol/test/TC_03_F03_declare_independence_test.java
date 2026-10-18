@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.DialogMessagePage;
 import org.microcol.page.GamePage;
+import org.microcol.page.IndependencePage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -27,12 +28,24 @@ public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_03_declare_independence() throws Exception {
-        // open MicroCol and load defined game
+        // open MicroCol and load defined game; all four colonies are fully
+        // supportive and the year is before 1800
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-        // declare independence
-        final DialogMessagePage dialogMessagePage = gamePage
-                .declareIndependence();
+        // the declare button opens the confirmation and changes nothing yet
+        final IndependencePage independence = gamePage.declareIndependence();
+        independence.verifyConfirmationShown(
+                "National support for independence: 100%.",
+                "No armed veteran will be mustered now. Only veterans standing in colonies with at least 50% local support are mustered.");
+        independence.verifyDeclared(false);
+
+        // confirm the declaration
+        independence.confirm();
+        independence.verifyConfirmationClosed();
+
+        // the mission messages follow the declaration
+        final DialogMessagePage dialogMessagePage = DialogMessagePage
+                .of(getContext());
         dialogMessagePage.verifyReady();
 
         // close first dialog
@@ -40,6 +53,8 @@ public class TC_03_F03_declare_independence_test extends AbstractMicroColTest {
 
         // close second dialog
         dialogMessagePage.close();
+        independence.verifyDeclared(true);
+        independence.verifyDeclareButtonVisible(false);
 
         gamePage = GamePage.of(getContext());
         gamePage.nextTurnAndCloseDialogs();

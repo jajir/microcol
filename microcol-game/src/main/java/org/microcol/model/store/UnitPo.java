@@ -1,5 +1,6 @@
 package org.microcol.model.store;
 
+import org.microcol.model.MilitaryRole;
 import org.microcol.model.UnitType;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
@@ -80,6 +81,20 @@ public class UnitPo {
 
     public void setVeteran(final boolean veteran) {
         this.veteran = veteran;
+    }
+
+    /**
+     * Combat role; an absent value means the ordinary colonial role and an
+     * explicit null is rejected on load.
+     */
+    private MilitaryRole militaryRole = MilitaryRole.COLONIAL;
+
+    public MilitaryRole getMilitaryRole() {
+        return militaryRole;
+    }
+
+    public void setMilitaryRole(final MilitaryRole militaryRole) {
+        this.militaryRole = militaryRole;
     }
 
     private Boolean artilleryDamaged;

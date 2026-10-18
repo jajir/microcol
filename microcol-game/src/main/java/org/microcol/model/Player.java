@@ -1,10 +1,13 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.ColonySightingPo;
@@ -14,6 +17,7 @@ import org.microcol.model.store.TaxPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.Ship;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -24,9 +28,11 @@ import com.google.common.base.Preconditions;
  */
 public abstract class Player {
 
-    public static final int CANT_DECLARE_INDEPENDENCE_BEFORE_YEAR = 1700;
+    /** Independence must be declared before spring of this year. */
+    public static final int INDEPENDENCE_DEADLINE_YEAR = 1800;
 
-    public static final int REQUIRED_NUMBER_OF_COLONYES = 3;
+    /** Exact national and local support percentage needed for the revolt. */
+    public static final int REQUIRED_SUPPORT_PERCENT = 50;
 
     private final Model model;
 
@@ -35,6 +41,9 @@ public abstract class Player {
     private final boolean computer;
 
     private boolean declaredIndependence;
+
+    /** Guards the declaration against reentrant calls from callbacks. */
+    private boolean declaringIndependence;
 
     private int gold;
 
@@ -1411,31 +1420,119 @@ public abstract class Player {
         return declaredIndependence;
     }
 
+    /**
+     * Declare independence once and muster the eligible veterans of every
+     * supporting colony. The live rules are checked before the first change,
+     * again after the veto callbacks, and the whole result is in place before
+     * the after-declaration listeners run. A veto leaves everything unchanged.
+     */
     public void declareIndependence() {
         checkTurnPreparationComplete();
-        Preconditions.checkState(isPossibleToDecalareIndependence(),
-                "It's not possible to declare independence");
-        if (model.fireBeforeDeclaringIndependence(this)) {
+        model.checkGameRunning();
+        model.checkCurrentPlayer(this);
+        Preconditions.checkState(!declaringIndependence,
+                "Independence is already being declared");
+        checkIndependenceEligible();
+        declaringIndependence = true;
+        try {
+            if (!model.fireBeforeDeclaringIndependence(this)) {
+                return;
+            }
+            // A callback may have changed the world, paused the turn
+            // preparation or declared reentrantly.
+            checkTurnPreparationComplete();
+            model.checkGameRunning();
+            model.checkCurrentPlayer(this);
+            checkIndependenceEligible();
+            final List<UnitFreeColonist> muster = planIndependenceMuster();
             declaredIndependence = true;
-            model.fireIndependenceWasDeclared(this);
+            muster.forEach(
+                    unit -> unit.assignMilitaryRole(MilitaryRole.CONTINENTAL));
+        } finally {
+            declaringIndependence = false;
         }
+        model.fireIndependenceWasDeclared(this);
+    }
+
+    private void checkIndependenceEligible() {
+        final Optional<IndependenceProblem> problem = getIndependenceProblem();
+        Preconditions.checkState(problem.isEmpty(),
+                "It's not possible to declare independence: %s",
+                problem.orElse(null));
+    }
+
+    /**
+     * Live independence rule: a registered colonial nation with exact national
+     * support of at least 50 percent, before spring 1800, with at least one
+     * owned coastal colony.
+     *
+     * @return the first failing rule, or empty when declaring is allowed
+     */
+    public Optional<IndependenceProblem> getIndependenceProblem() {
+        if (isKing() || model.getPlayers().stream().noneMatch(p -> p == this)) {
+            return Optional.of(IndependenceProblem.UNAVAILABLE);
+        }
+        if (isDeclaredIndependence()) {
+            return Optional.of(IndependenceProblem.ALREADY_DECLARED);
+        }
+        if (model.getCalendar()
+                .getCurrentYear() >= INDEPENDENCE_DEADLINE_YEAR) {
+            return Optional.of(IndependenceProblem.TOO_LATE);
+        }
+        if (model.getColonies(this).stream().noneMatch(colony -> model
+                .isOwnedCoastalPort(this, colony.getLocation()))) {
+            return Optional.of(IndependenceProblem.NO_COASTAL_COLONY);
+        }
+        if (!getNationalRebelSupport()
+                .isAtLeastPercent(REQUIRED_SUPPORT_PERCENT)) {
+            return Optional.of(IndependenceProblem.INSUFFICIENT_SUPPORT);
+        }
+        return Optional.empty();
     }
 
     public boolean isPossibleToDecalareIndependence() {
-        if (isDeclaredIndependence()) {
-            // Already was declared.
-            return false;
+        return getIndependenceProblem().isEmpty();
+    }
+
+    /**
+     * Read-only forecast of the veterans a declaration would muster now.
+     *
+     * @return the units in the order they would be converted, empty when the
+     *         declaration is not allowed
+     */
+    public List<Unit> getIndependenceMusterPreview() {
+        if (getIndependenceProblem().isPresent()) {
+            return List.of();
         }
-        if (model.getCalendar()
-                .getCurrentYear() < CANT_DECLARE_INDEPENDENCE_BEFORE_YEAR) {
-            // Too early to declare independence.
-            return false;
+        return List.copyOf(planIndependenceMuster());
+    }
+
+    /**
+     * Per owned colony with exact local support of at least 50 percent, the
+     * first {@code floor(V * local support)} armed veterans standing on the
+     * colony tile by ascending unit ID. Internal workers, cargo and other
+     * owners' units are not counted.
+     */
+    private List<UnitFreeColonist> planIndependenceMuster() {
+        final List<UnitFreeColonist> out = new ArrayList<>();
+        for (final Colony colony : model.getColonies(this)) {
+            final RebelSupport local = colony.getRebelSupport();
+            if (!local.isAtLeastPercent(REQUIRED_SUPPORT_PERCENT)) {
+                continue;
+            }
+            final List<UnitFreeColonist> veterans = model
+                    .getUnitsAt(colony.getLocation()).stream()
+                    .filter(unit -> unit.getOwner() == this
+                            && unit instanceof UnitFreeColonist)
+                    .map(UnitFreeColonist.class::cast)
+                    .filter(unit -> unit.isHoldingGuns() && unit.isVeteran()
+                            && unit.getMilitaryRole() == MilitaryRole.COLONIAL)
+                    .sorted(Comparator.comparingInt(Unit::getId))
+                    .collect(Collectors.toList());
+            out.addAll(veterans.subList(0,
+                    (int) local.floorShare(veterans.size())));
         }
-        if (model.getColonies(this).size() < REQUIRED_NUMBER_OF_COLONYES) {
-            // Not enough colonies.
-            return false;
-        }
-        return true;
+        return out;
     }
 
     /**

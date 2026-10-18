@@ -17,7 +17,14 @@ public final class ColonyBattleOutcome {
         /** The attacker took the whole colony with all its workers. */
         COLONY_CAPTURED,
         /** The attacker took one unarmed field worker; the colony stands. */
-        WORKER_CAPTURED
+        WORKER_CAPTURED,
+        /**
+         * An armed defender was destroyed with its equipment (a Continental or
+         * royal soldier, or damaged artillery); the colony stands.
+         */
+        DEFENDER_DESTROYED,
+        /** The attacker was destroyed with its equipment; the colony stands. */
+        ATTACKER_DESTROYED
     }
 
     private final Colony colony;

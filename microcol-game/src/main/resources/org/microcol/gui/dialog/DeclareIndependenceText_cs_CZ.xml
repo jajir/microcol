@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Vyhlásit nezávislost</entry>
+    <entry key="support">Národní podpora nezávislosti: %s%%.</entry>
+    <entry key="muster">%s ozbrojených veteránů stojících v koloniích s alespoň 50%% místní podporou se stane kontinentálními vojáky. Zachovají si výstroj a zůstanou toutéž jednotkou.</entry>
+    <entry key="musterNone">Nyní nebude povolán žádný ozbrojený veterán. Povolávají se jen veteráni stojící v koloniích s alespoň 50%% místní podporou.</entry>
+    <entry key="europe">Vaše domovská Evropa se vám uzavře a koruna proti vám vyšle královskou výpravu.</entry>
+    <entry key="irreversible">Vyhlášení nelze vzít zpět. Zrušením zůstane současný stav.</entry>
+    <entry key="confirm">Vyhlásit nezávislost</entry>
+    <entry key="cancel">Zrušit</entry>
+    <entry key="changed">Nezávislost už nelze vyhlásit: podmínky se změnily. Nic se nezměnilo.</entry>
+    <entry key="rejected">Nezávislost nebyla vyhlášena, protože se podmínky změnily.</entry>
+</properties>

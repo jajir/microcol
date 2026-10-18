@@ -53,4 +53,6 @@
 	<entry key="difficulty_governor">Guvernér</entry>
 	<entry key="difficulty_viceroy">Místokrál</entry>
     <entry key="unitsPanel_veteran">Vojenská hodnost: veterán</entry>
+    <entry key="unitsPanel_continental">Vojenská role: kontinentální</entry>
+    <entry key="unitsPanel_royal">Vojenská role: královský voják</entry>
 </properties>

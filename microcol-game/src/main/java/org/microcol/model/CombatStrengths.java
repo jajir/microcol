@@ -192,6 +192,10 @@ public final class CombatStrengths {
                     : attack ? 7 : 5;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        // A special role carries its own chart base; it adds no veteran bonus.
+        if (colonist.getMilitaryRole().isSpecial()) {
+            return colonist.getMilitaryRole().getBase(colonist.isMounted());
+        }
         return colonist.isVeteran() ? colonist.isMounted() ? 4.5 : 3
                 : colonist.isMounted() ? 3 : 2;
     }
@@ -202,7 +206,7 @@ public final class CombatStrengths {
         }
         UnitFreeColonist colonist = (UnitFreeColonist) unit;
         return colonist.isMounted() + ":" + colonist.isHoldingGuns() + ':'
-                + colonist.isVeteran();
+                + colonist.isVeteran() + ':' + colonist.getMilitaryRole();
     }
 
     private static int artilleryPenalty(Model model, Unit unit) {

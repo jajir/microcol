@@ -862,7 +862,8 @@ public class Colony {
             out.append(':').append(colonist.isHoldingGuns())
                     .append(colonist.isMounted())
                     .append(colonist.isHoldingTools())
-                    .append(colonist.isVeteran());
+                    .append(colonist.isVeteran())
+                    .append(colonist.getMilitaryRole());
         } else if (unit instanceof UnitArtillery) {
             out.append(':').append(((UnitArtillery) unit).isDamaged());
         }

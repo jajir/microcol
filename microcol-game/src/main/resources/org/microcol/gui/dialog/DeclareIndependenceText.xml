@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Declare independence</entry>
+    <entry key="support">National support for independence: %s%%.</entry>
+    <entry key="muster">%s armed veteran(s) standing in colonies with at least 50%% local support will become Continental troops. They keep their equipment and remain the same units.</entry>
+    <entry key="musterNone">No armed veteran will be mustered now. Only veterans standing in colonies with at least 50%% local support are mustered.</entry>
+    <entry key="europe">Your home Europe will be closed to you, and the Crown will send a royal expedition against you.</entry>
+    <entry key="irreversible">The declaration cannot be undone. Cancel to keep the current state.</entry>
+    <entry key="confirm">Declare independence</entry>
+    <entry key="cancel">Cancel</entry>
+    <entry key="changed">Independence can no longer be declared: the conditions changed. Nothing was changed.</entry>
+    <entry key="rejected">Independence was not declared because the conditions changed.</entry>
+</properties>

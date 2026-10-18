@@ -78,6 +78,10 @@
     <entry key="fight_privateerException">This privateer action does not declare war. Existing relations stay unchanged. Fight?</entry>
     <entry key="fight_veteranName">%s (veteran)</entry>
     <entry key="fight_veteranStatus">veteran</entry>
+    <entry key="fight_continentalName">%s (Continental)</entry>
+    <entry key="fight_royalName">%s (royal)</entry>
+    <entry key="fight_roleDestroyed">%s: a Continental or royal soldier was destroyed together with its equipment.</entry>
+    <entry key="fight_roleLoss">A defeated Continental or royal soldier is destroyed together with its equipment. An ordinary defeated soldier loses equipment as usual. The winner keeps its equipment. Both participants spend their remaining movement.</entry>
     <entry key="fight_promoted">%s: unit #%s was promoted to %s.</entry>
     <entry key="fight_colonyArmed">Armed defenders of %s fight first, strongest first. Winning does not capture the colony while other defenders remain. The loser loses horses if mounted, otherwise muskets.</entry>
     <entry key="fight_colonyCivilians">No armed defender is left, so all colonists of %s defend together with base strength 1. Winning captures the whole colony with every worker in the fields and buildings. Losing costs the attacker its horses or muskets.</entry>

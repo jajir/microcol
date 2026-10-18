@@ -987,4 +987,78 @@ class ColonyDefenseTest {
         assertEquals(400L, restored.getLiberty());
         assertTrue(restored.wasConstructionBuilded(ConstructionType.STOCKADE));
     }
+
+    // ------------------------------------------- Continental and royal roles
+
+    private void declareIndependence(final ModelPo data, final String nation) {
+        data.getGameManager().getPlayers().stream()
+                .filter(player -> nation.equals(player.getName()))
+                .forEach(player -> player.setDeclaredIndependence(true));
+    }
+
+    @Test
+    void aDefeatedContinentalDefenderIsDestroyedWithItsEquipment()
+            throws ReflectiveOperationException {
+        final ModelPo data = data(civilians(1, 0).withGarrison());
+        declareIndependence(data, "France");
+        data.getUnits().stream().filter(unit -> unit.getId() == 6).findFirst()
+                .orElseThrow().setMilitaryRole(MilitaryRole.CONTINENTAL);
+        build(data);
+        final UnitFreeColonist continental = (UnitFreeColonist) model
+                .getUnitById(6);
+        assertTrue(continental.isHoldingGuns());
+        assertEquals(4.0, quote().getCombatStrengths().orElseThrow()
+                .getDefender().getBase());
+        final int people = model.getAllUnits().size();
+        final int muskets = quebec.getWarehouse().getGoods(GoodsType.MUSKET)
+                .getAmount();
+        fight(true);
+        // Neither a downgraded colonist nor dropped gear remains.
+        assertTrue(model.getAllUnits().stream()
+                .noneMatch(unit -> unit.getId() == 6));
+        assertEquals(people - 1, model.getAllUnits().size());
+        assertEquals(muskets,
+                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertSame(france, quebec.getOwner());
+        assertTrue(captures.isEmpty());
+        assertTrue(attacker.isHoldingGuns());
+        assertEquals(1, attacks.size());
+        assertTrue(attacks.get(0).wasDestroyed());
+        assertSame(continental, attacks.get(0).getDestroyed());
+        assertEquals(ColonyBattleOutcome.Result.DEFENDER_DESTROYED,
+                attacks.get(0).getColonyOutcome().orElseThrow().getResult());
+        assertTrue(reloaded().getAllUnits().stream()
+                .noneMatch(unit -> unit.getId() == 6));
+    }
+
+    @Test
+    void aDefeatedContinentalAttackerIsDestroyedWithItsEquipment()
+            throws ReflectiveOperationException {
+        final ModelPo data = data(civilians(2, 1));
+        declareIndependence(data, "Dutch");
+        build(data);
+        attacker.assignMilitaryRole(MilitaryRole.CONTINENTAL);
+        assertEquals(4.0, quote().getCombatStrengths().orElseThrow()
+                .getAttacker().getBase());
+        final List<Unit> residents = new ArrayList<>(
+                quebec.getUnitsInsideColony());
+        final int people = model.getAllUnits().size();
+        final int muskets = quebec.getWarehouse().getGoods(GoodsType.MUSKET)
+                .getAmount();
+        fight(false);
+        assertTrue(model.getAllUnits().stream()
+                .noneMatch(unit -> unit.getId() == 0));
+        assertEquals(people - 1, model.getAllUnits().size());
+        assertEquals(muskets,
+                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertSame(france, quebec.getOwner());
+        assertEquals(residents, quebec.getUnitsInsideColony());
+        assertEquals(1, attacks.size());
+        assertTrue(attacks.get(0).wasDestroyed());
+        assertSame(attacker, attacks.get(0).getDestroyed());
+        assertEquals(ColonyBattleOutcome.Result.ATTACKER_DESTROYED,
+                attacks.get(0).getColonyOutcome().orElseThrow().getResult());
+        assertTrue(reloaded().getAllUnits().stream()
+                .noneMatch(unit -> unit.getId() == 0));
+    }
 }

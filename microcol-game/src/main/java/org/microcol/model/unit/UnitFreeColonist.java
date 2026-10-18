@@ -1,6 +1,7 @@
 package org.microcol.model.unit;
 
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 
 import org.microcol.model.CargoSlot;
@@ -13,6 +14,7 @@ import org.microcol.model.EducationSkills;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.MilitaryPromotion;
+import org.microcol.model.MilitaryRole;
 import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
@@ -41,6 +43,8 @@ public class UnitFreeColonist extends CanMount {
 
     private boolean veteran;
 
+    private MilitaryRole militaryRole = MilitaryRole.COLONIAL;
+
     private UnitType learnedType;
 
     private UnitType workSkill;
@@ -64,6 +68,7 @@ public class UnitFreeColonist extends CanMount {
         out.setMounted(mounted);
         out.setHoldingGuns(holdingGuns);
         out.setVeteran(isVeteran());
+        out.setMilitaryRole(militaryRole);
         out.setWorkSkill(workSkill);
         out.setWorkUpdates(workUpdates);
         return out;
@@ -76,6 +81,69 @@ public class UnitFreeColonist extends CanMount {
 
     void restoreVeteran(final boolean value) {
         veteran = value;
+    }
+
+    /** @return the persistent combat role; never null */
+    public MilitaryRole getMilitaryRole() {
+        return militaryRole;
+    }
+
+    /**
+     * Check that a role fits the owner: Continental service belongs to a
+     * colonial nation that declared independence, a royal role to a Crown.
+     *
+     * @param role  required role
+     * @param owner required owner of the unit
+     */
+    static void validateRoleOwner(final MilitaryRole role, final Player owner) {
+        Preconditions.checkArgument(role != null, "Missing military role");
+        Preconditions.checkArgument(
+                role != MilitaryRole.CONTINENTAL
+                        || !owner.isKing() && owner.isDeclaredIndependence(),
+                "Continental role needs a rebel nation");
+        Preconditions.checkArgument(
+                role != MilitaryRole.ROYAL || owner.isKing(),
+                "Royal role needs a Crown owner");
+    }
+
+    /** Restore a saved role; the loader validates its placement. */
+    void restoreMilitaryRole(final MilitaryRole role) {
+        validateRoleOwner(role, getOwner());
+        militaryRole = role;
+    }
+
+    /**
+     * Give an ordinary armed colonist a special combat role without replacing
+     * the registered unit. Identity, equipment, people, expertise and veteran
+     * status stay; only the combat base changes.
+     *
+     * @param role required special role that fits the owner
+     */
+    public void assignMilitaryRole(final MilitaryRole role) {
+        Preconditions.checkArgument(role != null && role.isSpecial(),
+                "A special role is required");
+        validateRoleOwner(role, getOwner());
+        Preconditions.checkState(
+                militaryRole == MilitaryRole.COLONIAL && isHoldingGuns()
+                        && isAtPlaceLocation(),
+                "Only an armed ordinary colonist on the map takes a role");
+        militaryRole = role;
+    }
+
+    @Override
+    public void takeOver(final Player player) {
+        // A captured person no longer serves the former force.
+        // The new owner is validated first, so a rejected call keeps the role.
+        final boolean changesOwner = player != getOwner();
+        super.takeOver(player);
+        if (changesOwner) {
+            militaryRole = MilitaryRole.COLONIAL;
+        }
+    }
+
+    @Override
+    protected boolean isDestroyedWhenDefeated() {
+        return militaryRole.isSpecial();
     }
 
     /** @return a newly learned specialty, if this instance started unskilled */
@@ -182,7 +250,7 @@ public class UnitFreeColonist extends CanMount {
         // A defender fighting from its colony job is promoted like a unit on
         // the map; the registered unit and its place stay.
         Preconditions.checkState(
-                isHoldingGuns() && !isVeteran()
+                isHoldingGuns() && !isVeteran() && !militaryRole.isSpecial()
                         && (isAtPlaceLocation() || isAtPlaceColonyField()
                                 || isAtPlaceConstructionSlot()),
                 "Unit cannot gain military rank");
@@ -202,7 +270,29 @@ public class UnitFreeColonist extends CanMount {
             final GoodsType producedGoodsType) {
         validateColonyField(colonyField, producedGoodsType);
         unequipAll();
-        super.placeToColonyField(colonyField, producedGoodsType);
+        becomeCivilianWhile(
+                () -> super.placeToColonyField(colonyField, producedGoodsType),
+                this::isAtPlaceColonyField);
+    }
+
+    /**
+     * A resident worker is a civilian again. The role is cleared before the
+     * placement can announce itself, so a listener never sees a special role in
+     * a job; if the placement itself fails before the unit moved, the role
+     * returns.
+     */
+    private void becomeCivilianWhile(final Runnable placement,
+            final BooleanSupplier placed) {
+        final MilitaryRole previous = militaryRole;
+        militaryRole = MilitaryRole.COLONIAL;
+        try {
+            placement.run();
+        } catch (final RuntimeException | Error failure) {
+            if (!placed.getAsBoolean()) {
+                militaryRole = previous;
+            }
+            throw failure;
+        }
     }
 
     @Override
@@ -210,7 +300,9 @@ public class UnitFreeColonist extends CanMount {
             final ConstructionSlot structureSlot) {
         validateColonyStructureSlot(structureSlot);
         unequipAll();
-        super.placeToColonyStructureSlot(structureSlot);
+        becomeCivilianWhile(
+                () -> super.placeToColonyStructureSlot(structureSlot),
+                this::isAtPlaceConstructionSlot);
     }
 
     @Override
@@ -398,6 +490,9 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public double getMilitaryStrenght() {
+        if (militaryRole.isSpecial() && isHoldingGuns()) {
+            return militaryRole.getBase(isMounted());
+        }
         if (isMounted()) {
             if (isHoldingGuns()) {
                 return isVeteran() ? 4.5 : 2;
@@ -415,6 +510,8 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     protected void loseCombatEquipment() {
+        Preconditions.checkState(!militaryRole.isSpecial(),
+                "A defeated special role is destroyed, not downgraded");
         if (mounted) {
             mounted = false;
         } else if (holdingGuns) {

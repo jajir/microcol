@@ -224,7 +224,17 @@ public class UnitFactory {
                         : unitPo.getWorkUpdates() == null
                                 && unitPo.getWorkSkill() == null,
                 "Invalid saved work history owner");
+        Preconditions.checkArgument(unitPo.getMilitaryRole() != null,
+                "Missing saved military role");
+        Preconditions.checkArgument(
+                !unitPo.getMilitaryRole().isSpecial()
+                        || unit instanceof UnitFreeColonist
+                                && unitPo.getPlaceColonyField() == null
+                                && unitPo.getPlaceConstructionSlot() == null,
+                "Only a colonist outside a colony job can have a special role");
         if (unit instanceof UnitFreeColonist) {
+            ((UnitFreeColonist) unit)
+                    .restoreMilitaryRole(unitPo.getMilitaryRole());
             ((UnitFreeColonist) unit)
                     .restoreVeteran(unitCreateRequest.isVeteran());
             ((UnitFreeColonist) unit).restoreWorkExperience(

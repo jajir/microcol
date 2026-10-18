@@ -245,12 +245,12 @@ public class GamePage extends AbstractScreen {
         }
     }
 
-    public DialogMessagePage declareIndependence() throws Exception {
-        final Button buttonNextTurn = getButtonById(
-                ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
-        getRobot().clickOn(buttonNextTurn);
-        WaitForAsyncUtils.waitForFxEvents();
-        return DialogMessagePage.of(getContext());
+    /** Press the declare button; the page then observes the confirmation. */
+    public IndependencePage declareIndependence() throws Exception {
+        final IndependencePage independence = new IndependencePage(
+                getContext());
+        independence.openConfirmation();
+        return independence;
     }
 
     public ScreenTurnReport openTurnReport() throws Exception {

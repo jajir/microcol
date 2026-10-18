@@ -5238,3 +5238,45 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [the operating record](ai/local-qwen.md#completion-callbacks-2026-10-18).
    The full Docker suite, native packaging and publication gates remain required
    in CI; the targeted local run does not replace them.
+
+## R-0105 independence and military roles — 2026-10-18
+
+1. `Player` validates exact national support of at least 50%, the pre-1800
+   deadline and an owned coastal colony, including revalidation after veto
+   callbacks. Mobilization uses exact local support and stable unit IDs once.
+   Continental/royal roles retain identity, expertise and equipment, persist
+   across Continue, use the agreed 4/5 and 5/6 bases, and are destroyed on defeat.
+   Full REF deployment, intervention and R-0178 situational bonuses remain open.
+2. Docker `run-0D4uNt` passes **2,349 model tests and 52 checks in microcol-test**,
+   zero failures, errors or skips. The latter are 43 named player scenarios,
+   six basic/environment checks and three source-contract checks. Selection:
+   `*Test,TC_81*,TC_82*,TC_03*,TC_33*,TC_35*,TC_76*,TC_77*,TC_58*`.
+   TC81/F73 covers 49/50%, the date boundary, stale confirmation, cancel/Escape,
+   unequal-colony muster and Continue. TC03 preserves actual Crown landings.
+   TC82/F57 verifies role strength, the loss warning, actual destruction and
+   persistence. Capture-affiliation tests exercise one owned coastal colony,
+   the conqueror's Bolivar bonus, eligibility and exact muster.
+3. The first repaired model run, `run-1xHpkM`, had one error among 2,337 tests:
+   its full warehouse correctly rejected returning a soldier's muskets. The
+   final fixture provides room; separate field/building tests preserve full
+   warehouse rejection without mutation and verify loadable state in callbacks.
+   Earlier UI diagnostic `run-HCNtv9` passed 45 checks; it did not establish
+   model acceptance. The final run above actually reruns the failed paths.
+4. Shared formatting checked 36 Java files, changed six, with identical code
+   tokens and an idempotent result. Main then clarified the English/Czech
+   battle warning for an ordinary loser opposing a special-role unit. That
+   text change is included in the pending full second-batch regression;
+   the targeted result predates that wording correction. Batch acceptance,
+   integration and publication are still pending. Worker attempts and budget
+   evidence are recorded in [operations](ai/local-qwen.md).
+
+5. Full batch run `run-u9GsTq` reaches the 2,700-second watchdog; cleanup
+   succeeds, exit 130. Its Maven log records 272 completed microcol-test checks
+   with three failures and no errors/skips. Forced termination did not export
+   Surefire XML, so this is partial log evidence, not a successful full run.
+   TC07, TC08 and TC41 expose old fixtures with eight Delft residents and zero
+   liberty: CONQUISTADOR's eight-Tory threshold now reduces each eligible job.
+   Main sets Delft liberty to 200 in F07/F08/F33: one rebel leaves seven Tories,
+   below the penalty threshold and below the 50% bonus. Production, food, birth
+   and import assertions are unchanged. The other 29 incomplete/failed suites
+   are scheduled in full with the source contract; acceptance is still pending.

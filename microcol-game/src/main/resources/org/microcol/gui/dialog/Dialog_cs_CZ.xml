@@ -78,6 +78,10 @@
     <entry key="fight_privateerException">Tento korzárský útok nevyhlašuje válku. Dosavadní vztahy zůstanou beze změny. Bojovat?</entry>
     <entry key="fight_veteranName">%s (veterán)</entry>
     <entry key="fight_veteranStatus">veterán</entry>
+    <entry key="fight_continentalName">%s (kontinentální)</entry>
+    <entry key="fight_royalName">%s (královský)</entry>
+    <entry key="fight_roleDestroyed">%s: kontinentální nebo královský voják byl zničen i s výstrojí.</entry>
+    <entry key="fight_roleLoss">Poražený kontinentální nebo královský voják je zničen i s výstrojí. Běžný poražený voják ztrácí výstroj podle obvyklých pravidel. Vítěz si výstroj ponechá. Oba účastníci spotřebují zbývající pohyb.</entry>
     <entry key="fight_promoted">%s: jednotka #%s byla povýšena: %s.</entry>
     <entry key="fight_colonyArmed">Ozbrojení obránci kolonie %s bojují jako první, nejsilnější napřed. Vítězství nedobude kolonii, dokud zbývají další obránci. Poražený ztratí koně, pokud je má, jinak muškety.</entry>
     <entry key="fight_colonyCivilians">Nezbývá žádný ozbrojený obránce, proto se kolonie %s brání všichni kolonisté společně se základní silou 1. Vítězství dobude celou kolonii se všemi pracovníky na polích i v budovách. Porážka stojí útočníka koně nebo muškety.</entry>

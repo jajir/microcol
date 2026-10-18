@@ -204,17 +204,25 @@ public final class DialogFight extends AbstractMessageWindow {
         order.getCombatStrengths().ifPresent(strengths -> {
             attackerStrength.setText(describe(strengths.getAttacker()));
             defenderStrength.setText(describe(strengths.getDefender()));
-            combatChance.setText(i18n.get(Dialog.fight_chance,
-                    number(100 * strengths.getAttackerWinProbability()))
-                    + "\n"
-                    + (order.getColonyDefense().isPresent()
-                            ? colonyNote(order.getColonyDefense().get())
-                            : i18n.get(order.getNavalPreview().isPresent()
-                                    ? Dialog.fight_navalLoss
-                                    : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
-                                            || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
-                                                    ? Dialog.fight_artilleryLoss
-                                                    : Dialog.fight_equipmentLoss)));
+            combatChance
+                    .setText(i18n.get(Dialog.fight_chance,
+                            number(100 * strengths.getAttackerWinProbability()))
+                            + "\n"
+                            + (order.getColonyDefense().isPresent()
+                                    ? isArmedRoleBattle(
+                                            order) ? i18n.get(Dialog.fight_roleLoss) : colonyNote(order.getColonyDefense().get())
+                                    : i18n.get(
+                                            order.getNavalPreview().isPresent()
+                                                    ? Dialog.fight_navalLoss
+                                                    : hasSpecialRole(
+                                                            order.getAttacker())
+                                                            || hasSpecialRole(
+                                                                    order.getDefender())
+                                                                            ? Dialog.fight_roleLoss
+                                                                            : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
+                                                                                    || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
+                                                                                            ? Dialog.fight_artilleryLoss
+                                                                                            : Dialog.fight_equipmentLoss)));
         });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();
@@ -260,8 +268,32 @@ public final class DialogFight extends AbstractMessageWindow {
         }
     }
 
+    /**
+     * An armed-defender battle of a colony where a Continental or royal soldier
+     * fights: the loser is destroyed, not stripped of horses or muskets.
+     */
+    private static boolean isArmedRoleBattle(final AttackOrder order) {
+        final ColonyDefense defense = order.getColonyDefense().orElseThrow();
+        return defense.getKind() == ColonyDefense.Kind.ARMED
+                && (hasSpecialRole(order.getAttacker())
+                        || hasSpecialRole(defense.getDefender()));
+    }
+
+    private static boolean hasSpecialRole(final Unit unit) {
+        return unit instanceof org.microcol.model.unit.UnitFreeColonist
+                && ((org.microcol.model.unit.UnitFreeColonist) unit)
+                        .getMilitaryRole().isSpecial();
+    }
+
     private String unitName(final Unit unit) {
         final String name = localizationHelper.getUnitName(unit.getType());
+        if (hasSpecialRole(unit)) {
+            return i18n.get(((org.microcol.model.unit.UnitFreeColonist) unit)
+                    .getMilitaryRole() == org.microcol.model.MilitaryRole.CONTINENTAL
+                            ? Dialog.fight_continentalName
+                            : Dialog.fight_royalName,
+                    name);
+        }
         if (unit instanceof org.microcol.model.unit.UnitFreeColonist
                 && ((org.microcol.model.unit.UnitFreeColonist) unit).isVeteran()
                 && unit.getType() != org.microcol.model.UnitType.VETERAN_SOLDIER) {

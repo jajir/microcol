@@ -76,6 +76,19 @@ class UnitPanel {
             veteran.setMinHeight(Region.USE_PREF_SIZE);
             box.getChildren().add(veteran);
         }
+        if (unit instanceof org.microcol.model.unit.UnitFreeColonist
+                && ((org.microcol.model.unit.UnitFreeColonist) unit)
+                        .getMilitaryRole().isSpecial()) {
+            final Label role = new Label(
+                    i18n.get(((org.microcol.model.unit.UnitFreeColonist) unit)
+                            .getMilitaryRole() == org.microcol.model.MilitaryRole.CONTINENTAL
+                                    ? Loc.unitsPanel_continental
+                                    : Loc.unitsPanel_royal));
+            role.setId("unitRole-" + unit.getId());
+            role.setWrapText(true);
+            role.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(role);
+        }
 
         if (isUnitOwnedBy(unit, humanPlayer)) {
             final Label labelMoves = new Label(

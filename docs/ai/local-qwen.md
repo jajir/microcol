@@ -4369,6 +4369,32 @@ committed for this experiment.
     R-0105 acceptance is recorded, and no new worker budget is started.
 
 
+92. R-0105 resumes the same Sonnet high session after quota. Attempt 2 takes
+    192.796 seconds, exit 0, no denied tools. It repairs the weighted fixture
+    and callback/ownership validation and adds TC81. Docker `run-1xHpkM`
+    reports 2,336 passing model tests and one error: returning 50 muskets to
+    the fixture's full 100-capacity warehouse is correctly refused. Separate
+    UI diagnostic `run-HCNtv9` passes 45 checks without failures/errors/skips.
+93. Final original attempt 3 takes 332.055 seconds, exit 0, no denied tools;
+    total worker time is 1,588.505 seconds. It corrects the stock fixture,
+    covers valid/rejected field and building transitions, captured affiliation,
+    single-colony eligibility, truthful colony destruction outcomes and TC82.
+    All three original attempts are consumed; no fresh budget is created.
+    Main formats 36 Java files (six changed, token/idempotence pass).
+    Docker `run-0D4uNt` passes 2,349 model and 52 microcol-test checks with no
+    failures/errors/skips. Main directly clarifies one English/Czech battle
+    warning: ordinary defeated soldiers still lose equipment. This small
+    wording repair follows review after the worker budget, rather than a new
+    worker attempt. Full batch acceptance and publication remain pending.
+94. Long attempts and Docker checks now use the shared completion supervisor
+    with originating task `01a148f8-ab9b-7c53-943c-4486a3bf6e59`. Final worker
+    evidence is `20261018T191917Z-93a4236ce245`; final targeted Docker evidence
+    is `20261018T192517Z-7f19acbd9fbb` under the host completion log directory.
+    Successful callbacks trigger inspection, not automatic acceptance. The
+    final batch regression is dispatched as `20261018T193358Z-f794bf5d87a9`,
+    supervisor PID 22942, with the existing 2,700-second limit.
+
+
 ## Completion callbacks — 2026-10-18
 
 1. [R-0243](../requirements/done/R-0243.md) adds host-side completion delivery;
