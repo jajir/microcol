@@ -440,6 +440,13 @@ and Claude Code sessions. The [operating page](../ai/headroom.md) records the
 first A/B pair, actual rollout checks, bypass and scope limits. Existing model,
 test and review choices remain in force; no gameplay work is selected.
 
+## Execution choice — 2026-10-18
+
+[R-0245](done/R-0245.md) makes Codex the default for new requests. Claude Code and
+the local model remain available when explicitly selected in the request, under
+the [shared policy](../ai/local-qwen.md#execution-choice-2026-10-18). Existing
+acceptance gates, model preferences and local repair budgets remain intact.
+
 ## Choosing further work
 
 The selected R-0057–R-0061 cloud trial is complete and published; its

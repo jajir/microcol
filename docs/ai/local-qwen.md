@@ -1,39 +1,58 @@
-# Codex and a local development worker
+# Codex, Claude Code and the local development worker
 
-Status as of **2026-10-14: new ordinary jobs use GPT-OSS 20B medium,
+## Execution choice — 2026-10-18
+
+[R-0245](../requirements/done/R-0245.md) records the current user decision:
+**use Codex by default**. The available choices are:
+
+| Choice | When to use it |
+| --- | --- |
+| Codex | Default for a request without an explicit alternative; preserve the user's selected model and reasoning. |
+| Claude Code | When the user requests Claude for that task, using the existing Claude workflow and selected model. |
+| Local model | When the user requests local execution, using the configured GPT-OSS worker and the limits below. |
+
+For example, “implement R-NNNN” selects Codex; “use Claude for R-NNNN” selects
+Claude Code; “use the local model for R-NNNN” selects the local worker. The choice
+continues through that task and its follow-ups. A task-specific choice does not
+change the default for later new requests. Only an explicit general policy change
+does that. Do not switch to another option silently after a failure or install a
+missing runtime as an implicit fallback.
+
+Every choice retains the same requirements, required tests, caller review,
+repair limits, [completion callbacks](completion-callbacks.md) and publication.
+Choosing an executor does not request parallel agents or change its model/effort
+settings. Use the selected route efficiently; token savings never weaken
+acceptance. This policy supersedes the older local-first recommendations below
+and in R-0039; their measurements, local profiles and repair budgets remain valid
+within their recorded scope.
+
+[Headroom](headroom.md) is separate from this choice: it is configured and verified
+for the supported Codex CLI and Claude Code routes. Routing of the already open
+Codex desktop task remains unverified. The local Ollama worker keeps its separate
+provider. The host is the **16 GB Mac mini**; the page and log directory retain
+`local-qwen` in their paths to preserve existing links and evidence.
+
+When the local model is selected, ordinary jobs use **GPT-OSS 20B medium,
 context 98304 and a 65536-token generation allowance**, under
-[R-0039](../requirements/done/R-0039.md). After diagnosed medium failure, the caller
-may escalate the same job to high/64k with unchanged time and repair budgets.
-This is the user's operating policy, not evidence that medium/64k has better
-coding quality. Earlier trials and their recommendations below remain dated
-historical evidence; R-0039 supersedes their default-selection policy.
-Qwen2.5-Coder 14B Instruct Q4_K_M is installed as another explicit profile. Astra remains the main
-agent and supervises a separate local Codex CLI process, checks the result and
-owns integration and publication. The current operating profile below replaces
-Qwen3.5-9B for new assignments; dated Qwen results remain historical evidence.
+[R-0039](../requirements/done/R-0039.md). A diagnosed medium failure may escalate
+the same job to high/64k with unchanged budgets. Qwen2.5-Coder 14B Instruct
+Q4_K_M remains an explicitly selectable historical alternative profile; the
+current profile replaces Qwen3.5-9B for new local assignments. These settings
+are not a claim of general coding quality or measured cloud-token savings.
 
-The host is the **16 GB Mac mini**. Preserve the main agent's model and reasoning
-settings. The goal is more correctly completed work within the same Codex budget;
-no general reliability improvement or Codex-budget savings percentage has been
-measured. The operating page and
-log directory retain their `local-qwen` names to preserve existing links and
-artifacts; they are not model selectors.
-
-The default [time budgets](#time-budget-2026-10-14) are two hours per
-attempt, four hours cumulative per task and at most two repairs across medium
-and high combined. The [64k-output experiment](#explicit-gpt-oss-high-with-64k-output)
-established the installed alias used by both reasoning levels.
-The user explicitly accepts slower inference for this model trial. A completed
-smoke test is not evidence of general Java coding quality or sufficient capacity
-for larger assignments.
-
-Supported Codex and Claude Code sessions on this host use the
-[Headroom setup](headroom.md) by default as of 2026-10-18. It preserves model/authentication choices and all acceptance
-gates; the local Ollama worker keeps its separate provider.
+Local [time budgets](#time-budget-2026-10-14) remain two hours per attempt,
+four hours cumulative per task and at most two repairs across medium and high.
+The [64k-output experiment](#explicit-gpt-oss-high-with-64k-output) established
+the installed alias. The caller owns actual acceptance, integration and
+publication; a worker's smoke test alone does not establish Java coding quality.
 
 ## Cloud-token priority and medium-to-high policy — 2026-10-14
 
-1. [AGENTS.md](../../AGENTS.md#local-worker) owns the project priority: saving
+The local-first selection statements in this dated policy are superseded by the
+[2026-10-18 execution choice](#execution-choice-2026-10-18). The local escalation
+procedure and budgets below apply when the user selects the local model.
+
+1. [AGENTS.md](../../AGENTS.md#ai-execution-choice) owns the project priority: saving
    cloud tokens takes precedence over speed and unnecessary parallel cloud work.
    Apply it in the current task, not only future sessions. Use local workers for
    suitable bounded work; do trivial edits directly when delegation costs more.
@@ -551,6 +570,11 @@ installation, configuration changes or a cloud fallback when the worker fails.
 
 
 ## Default development workflow — 2026-10-11
+
+This is the historical local-first policy. The [current execution choice](#execution-choice-2026-10-18)
+now defaults to Codex. Use the bounded handoff and acceptance procedure below
+when the user selects local work; the historical preference does not select it
+for a new request.
 
 User and main agent agree player goal, rules, edge cases, cancellation/failure
 behavior, and observable acceptance criteria before implementation. Main agent
@@ -4526,3 +4550,20 @@ committed for this experiment.
    No percentage saving is claimed. Retain targeted checks per change and
    full regression/CI at the agreed ten-requirement boundaries; a timeout
    requires explicit reconciliation of incomplete and failed suites.
+
+## Codex-default policy verification — 2026-10-18
+
+1. [R-0245](../requirements/done/R-0245.md) aligns the current choice across AGENTS.md,
+   this page, the local-worker skill, requirement instructions and implementation
+   handoff. Review covered five cases: no choice uses Codex; explicit Claude uses
+   Claude; explicit local uses the local worker; a follow-up retains the task's
+   choice; a later new request without a choice returns to Codex. Dated local-first
+   history is explicitly superseded, not rewritten as a new runtime result.
+2. All 49 existing portable checks passed: 19 completion-runner checks, 21 worker
+   launcher checks without inference and nine documentation checks. Strict MkDocs
+   passed. No runtime, model, profile, gameplay code, fixture, test assertion or CI
+   classifier changed. This policy edit needs no new model benchmark.
+3. Publication remains an independent check. AGENTS.md and the skill are outside
+   `docs/`, so the existing classifier requires full development/Java CI as well
+   as Pages. Completion watchers retain the exact pushed revision; a push alone
+   does not establish a newly published game build.

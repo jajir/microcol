@@ -219,7 +219,7 @@ rozhodnutí. Žádný velký balík se nepředává jako jediný neurčitý úko
 | **P28 Ovládání a přístupnost** | Použít společný [UX brief](ux.md#kratke-zadani-ux-pro-novou-funkci): objevitelnost, podmínky, náhled, provedení/zrušení, návazný výběr, klávesnice a čitelnost. | Ověřená skutečná obrazovka, relevantní velikosti okna a texty, význam dostupný bez zvuku i barvy. Hráčská pozorování evidovat odděleně od automatických testů. |
 | **P29 Grafika** | Mapa pokrytí pro jednotky, role, výstroj, stavby, terény, rozkazy a politické obrazovky; doplnit chybějící prvky a reprodukovatelný export. Použít [minimalistický grafický manuál](graphics.md#minimalisticky-graficky-manual), jehož zápis vede [R-0242](requirements/done/R-0242.md). | Zdroj, runtime výstup, alias a spotřebitel jsou dohledatelné; kontrola v reálné velikosti mapy a ikon, variantách a živé obrazovce. Jednotlivé assety vznikají s funkcí. |
 | **P30 Zvuková odezva** | Podle [zvukových pravidel](audio.md) připravit krátké efekty, souběh s hudbou, nastavení a vybrané herní události. Rozsah další hudby určit samostatně. | Katalog určí událost, výsledek, příjemce a okamžik; zvuk se nespustí při pouhém náhledu nebo načtení reportu. Vše podstatné zůstane pochopitelné při ztlumení. |
-| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/done/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/done/R-0032.md). [R-0033: UI testy v Dockeru](requirements/done/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/done/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/done/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/done/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/done/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/done/R-0039.md). [R-0243: probuzení Codexu po dokončení workeru, Dockeru a CI](requirements/done/R-0243.md). [R-0244: Headroom pro Codex a Claude Code](requirements/done/R-0244.md). [R-0040: struktura a stavy požadavků](requirements/done/R-0040.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
+| **P31 Celková kvalita a vyvážení** | [R-0011: automatická hranice modelu](requirements/done/R-0011.md). [R-0032: oprava JavaDoc a validačních hlášení](requirements/done/R-0032.md). [R-0033: UI testy v Dockeru](requirements/done/R-0033.md). [R-0034: lokální worker GPT-OSS 20B](requirements/done/R-0034.md). [R-0035: výstupní rozpočet a sdílené spouštění workeru](requirements/done/R-0035.md). [R-0036: GPT-OSS high a porovnání s Qwen2.5-Coder](requirements/done/R-0036.md). [R-0038: GPT-OSS high s výstupním limitem 64k](requirements/done/R-0038.md). [R-0039: úspora cloudových tokenů a medium → high/64k](requirements/done/R-0039.md). [R-0243: probuzení Codexu po dokončení workeru, Dockeru a CI](requirements/done/R-0243.md). [R-0244: Headroom pro Codex a Claude Code](requirements/done/R-0244.md). [R-0245: výchozí Codex a volba alternativ v zadání](requirements/done/R-0245.md). [R-0040: struktura a stavy požadavků](requirements/done/R-0040.md). Průběžné pravidlové a integrační kontroly, vybrané UI cesty, dlouhá partie, národy/obtížnosti, výkon a skutečné hráčské zkoušky. | Dohledatelné výsledky na dané revizi, regresní scénáře a otevřené vady. Průchod UI skriptu se nevydává za důkaz, že ovládání nový hráč pochopí. |
 | **P32 Předání a vydání** | Používat existující CI, launcher a Mac/Linux balíčky; průběžně ověřovat aktualizaci a dokumentaci. Zbývající první vydání a Steam vést podle samostatného odhadu. | Úspěšné kontroly i publikace stejného commitu, odkaz na stažení a postup ověření; připravený plán zacházení s uloženými hrami. Nevytvářet již hotový distribuční systém znovu. |
 
 P31 dělí povinnou ověřovací matici na profily [R-0208](requirements/R-0208.md), oddělené nastavení nové hry [R-0209](requirements/R-0209.md), terény [R-0210](requirements/R-0210.md), jednotky a lodě [R-0211](requirements/R-0211.md), profese [R-0212](requirements/R-0212.md), stavby [R-0213](requirements/R-0213.md), zakladatele [R-0214](requirements/R-0214.md), výrobu/obchod [R-0215](requirements/R-0215.md) a všechny konce [R-0216](requirements/R-0216.md). Souvislé průchody mají samostatné vlastníky: výprava [R-0217](requirements/R-0217.md), dvě kolonie [R-0218](requirements/R-0218.md), diplomacie [R-0219](requirements/R-0219.md) a nezávislost [R-0220](requirements/R-0220.md). Jde o ověřovací rozsah; jednotlivé herní změny zůstávají u příslušných funkčních R.
@@ -486,8 +486,11 @@ Technické rozdělení práce nemění přijaté chování; jeho změna vyžaduj
 do refinementu. Podrobná zadání a průběžné výsledky nekopírujeme do analýzy.
 
 Balík vybírá hlavní agent spolu s vlastníkem hry. Rozpad na úkol má mít jeden
-pozorovatelný výsledek. Výchozím zpracovatelem vhodné implementace je lokální
-worker. Připravené zadání může vypadat takto:
+pozorovatelný výsledek. Výchozím zpracovatelem je **Codex**. Uživatel může v zadání
+zvolit **Claude Code** nebo **lokální model**; volba platí pro daný požadavek a
+jeho pokračování, nikoli automaticky pro další nové požadavky. Platí společná
+[pravidla volby](ai/local-qwen.md#execution-choice-2026-10-18).
+Připravené zadání může vypadat takto:
 
 ```text
 Úkol: [R-NNNN / související Z a P – konkrétní výsledek]
@@ -495,8 +498,8 @@ Analýza: [odkaz na docs/requirements/R-NNNN.md s dohodnutým chováním a akcep
 Status požadavku: ready for development
 Oblast: [jedna hlavní A01–A10; odkaz na společný základ a konkrétní závislosti na dalších oblastech]
 Výchozí revize: [commit main]
-Zpracovatel: [lokální worker; případnou výjimku zdůvodnit níže]
-Dílčí úkol pro workera: [jeden konkrétní výstup a hranice změny]
+Zpracovatel: [Codex; nebo uživatelem zvolený Claude Code / lokální model]
+Dílčí úkol: [jeden konkrétní výstup a hranice změny]
 Příprava hlavního agenta: [potřebné rozhodnutí, rozhraní, data a návrh UX]
 Připravenost: [připraveno / k dopracování kontraktu / blokováno]
 Blokace: [konkrétní závislost, vlastník a podmínka odblokování; nebo žádná]
@@ -515,7 +518,7 @@ Grafika a zvuk: [existující prvky / konkrétní nové podklady a spotřebitel�
 Akceptace: [počáteční stav → akce → přesný výsledek; také chyba/zrušení]
 Ověření: [konkrétní ID TC scénářů, změněná očekávání, modelové testy, save/load a kontrola obrazu]
 Ověření hlavním agentem: [přesné příkazy, prostředí, UI postup a očekávané výsledky]
-Výjimka z delegace: [důvod a rozsah práce ponechané hlavnímu agentovi; nebo žádná]
+Delegace: [jen v rámci zvolené varianty; rozsah předání a práce hlavního agenta, nebo žádná]
 Časový rámec: [rozpočet práce a kontrolní bod; co předat při nedokončení]
 Předání: [diff, výsledek kontrol, dokumentace, zbývající vady, build ke stažení]
 ```
@@ -528,9 +531,9 @@ akceptace, plán ověření a výchozí revize. Velký balík se předává po o
 nezávislou připravenou práci lze zadat dál. Již dohodnutý rozsah nevyžaduje
 další souhlas pro každé dílčí zadání.
 
-Worker standardně píše vhodný kód a testy, opravuje chyby, provádí opakované
-refaktoringy a mění dokumentaci či konfiguraci. Patří sem také UI podle
-konkrétního návrhu a integrace grafických a zvukových podkladů. Hlavní agent
+Pokud uživatel zvolí variantu s workerem, worker píše vhodný kód a testy,
+opravuje chyby, provádí opakované refaktoringy a mění dokumentaci či konfiguraci.
+Patří sem také UI podle konkrétního návrhu a integrace grafických a zvukových podkladů. Hlavní agent
 drží architekturu, nejasná pravidla, návrh UX a výtvarné řešení, skutečné
 kontroly, revizi, integraci a publikaci. Stejnou implementaci souběžně nepíše.
 

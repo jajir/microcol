@@ -128,9 +128,10 @@ required before a small delivery.
    why they can wait. Unknown numeric rules are not implementation choices.
 5. **Implement within authorization:** use the existing
    [handoff](../implementation-plan.md#sablona-predani-prace) for detailed assignments.
-   Suitable implementation uses the local worker; requirements, review and
-   actual acceptance remain caller-owned. Keep worker limits and run history out
-   of the requirement. Follow the [functional test contract](../functional-tests.md).
+   Use Codex by default or the user's explicitly selected Claude/local option
+   under the [execution-choice policy](../ai/local-qwen.md#execution-choice-2026-10-18);
+   requirements, review and actual acceptance remain caller-owned. Keep worker
+   limits and run history out of the requirement. Follow the [functional test contract](../functional-tests.md).
 6. **Complete and deliver:** record a short current result in chapter 3 and link
    dated acceptance evidence and delivery. Detailed test runs belong in the
    test record, worker failures in [worker evidence](../ai/local-qwen.md).

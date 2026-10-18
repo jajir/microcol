@@ -6,6 +6,10 @@ not a dependency of the game, Docker tests or GitHub Actions. Required tests,
 review, repair budgets and [completion callbacks](completion-callbacks.md) stay
 in place.
 
+The [execution-choice policy](local-qwen.md#execution-choice-2026-10-18) selects
+Codex by default, or Claude/the local model when requested. Headroom routing
+does not choose the executor or authorize switching between these options.
+
 ## Configured scope
 
 1. Headroom **0.41.0**, installed with the `proxy,code` extras in

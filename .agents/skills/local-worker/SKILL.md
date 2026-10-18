@@ -1,6 +1,6 @@
 ---
 name: local-worker
-description: Delegate a small implementation, test, or repair task to a configured local worker, then review its changes and runner evidence. Use for bounded work with clear acceptance criteria; this skill does not install or configure the worker.
+description: When the user selects the local model, delegate a small implementation, test, or repair task to the configured local worker, then review its changes and runner evidence. Codex is the project default; this skill does not install or configure the worker.
 ---
 
 # Local worker
@@ -8,9 +8,11 @@ description: Delegate a small implementation, test, or repair task to a configur
 The main agent owns the task definition, required behavior, and acceptance of the
 result. The worker implements the assigned task without further delegation.
 
-Apply the project's cloud-token priority in `AGENTS.md`: prefer suitable local
-work over unnecessary parallel cloud agents, keep the handoff and returned
-evidence concise, and retain all required checks. Start new ordinary jobs with
+Use this skill when the user selects the local model for the request, under
+the [execution-choice policy](../../../docs/ai/local-qwen.md#execution-choice-2026-10-18).
+Codex is the default; this skill's availability is not a request to delegate.
+Keep the handoff and returned evidence concise and retain all required checks.
+Do not add unnecessary parallel cloud agents. Start new ordinary local jobs with
 medium/64k; follow the operating document for a diagnosed high/64k escalation
 within the same job and cumulative time/repair budget.
 

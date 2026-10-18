@@ -202,7 +202,15 @@ Preserve all required tests, review, repair budgets and publication checks.
 A delivery failure requires diagnosis from the saved notification record, not
 blind retries or silent success. Keep the app and host available as documented.
 
-# Local worker
+# AI execution choice
+
+Use Codex by default for new requests, preserving the user's selected model and
+reasoning settings. The available alternatives are Claude Code and the configured
+local model. Use an alternative when the user selects it for the request; a
+task-specific choice does not change the default for later requests. Do not
+automatically delegate to another option or silently switch after a failure.
+Follow the [execution-choice policy](docs/ai/local-qwen.md#execution-choice-2026-10-18).
+All options retain the same required tests, review and publication gates.
 
 Cloud-token savings take priority over speed and unnecessary parallel cloud
 work in this project. Apply this rule immediately in the current task as well
@@ -213,17 +221,19 @@ Keep handoffs, tool output and reports focused; reuse known source context and
 verification evidence instead of repeating broad discovery or duplicate reviews.
 Never weaken required tests, validation or acceptance to save tokens.
 
-Prefer the configured local GPT-OSS 20B worker for the maximum suitable
-development work once the user and main agent agree the use case and acceptance
-criteria. The main agent decomposes
-larger features into bounded assignments and uses the
+# Local worker
+
+When the user selects the local model, use the configured GPT-OSS 20B worker for
+suitable development work once the use case and acceptance criteria are agreed.
+The main agent decomposes larger features into bounded assignments and uses the
 [local-worker skill](.agents/skills/local-worker/SKILL.md) for implementation,
 test authoring, bug fixes, repetitive refactoring, and documentation or
 configuration changes within agreed interfaces. No separate user approval is
-needed for each assignment. Do trivial edits directly when delegation and review
-would cost more; briefly explain other work retained by the main agent.
+needed for each assignment within that selected scope. Do trivial edits directly
+when delegation and review would cost more; briefly explain work retained by the
+main agent in a request that selected the local model.
 
-Start new ordinary jobs with medium/64k, then use high/64k when diagnosed medium
+Start new ordinary local jobs with medium/64k, then use high/64k when diagnosed medium
 failure warrants escalation. Both use a 96k context. Correct caller/setup or
 ambiguous-instruction errors first; send simple code errors for targeted repair.
 Escalate before exhausting the shared time/repair budget, record why, and retain
