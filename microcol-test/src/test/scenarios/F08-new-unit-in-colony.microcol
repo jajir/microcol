@@ -662,7 +662,7 @@
       "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
-      "liberty": 0,
+      "liberty": 200,
       "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 22,

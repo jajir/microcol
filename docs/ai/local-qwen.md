@@ -4442,3 +4442,23 @@ committed for this experiment.
 10. Strict MkDocs and rendered-page/link inspection passed. The rejected worker
     worktree was archived with a recoverable snapshot; job/attempt evidence remains
     in the operator logs. Publication remains independently pending.
+11. Commit `d829993d293fa6cbab138f38a271c7f4b7cd847d` was pushed to `main`.
+    All three production CI callbacks reached the originating desktop task:
+    Pages success (`20261018T185343Z-d877fb214b0a`), Java compatibility success
+    (`20261018T185342Z-4633e4b64c4a`) and development failure
+    (`20261018T185342Z-93631e663f79`). Pages build/deployment and the live page's
+    source link match that commit. Each of the four Windows/Linux Java 11/17
+    combinations passes 2,299 tests without failures/errors/skips. The failed
+    callback also resumed this task with the exact run/commit identity retained.
+12. Development #174 passes 32 launcher/publication tests and 2,332 tests on each
+    of three native platforms, all without failures/errors/skips. Full Docker
+    regression finds five older-fixture failures described in
+    [R-0101's evidence](../functional-tests.md#r-0101-political-production-2026-10-18).
+    CI correctly skips publication. The downloaded channel manifest still names
+    `dev-171-333de9b6bf8f`; no #174 release exists. Codex owns the bounded fixture
+    repair and reruns; no local worker is restarted and no gate is weakened.
+13. The fixture repair passes all 45 targeted checks in Docker `run-LdfWrZ`
+    and delivers its success callback to the original desktop task. Detailed
+    counts and unchanged assertions are recorded with R-0101's functional
+    evidence. Documentation checks and strict MkDocs pass; full CI on the
+    repaired source remains required before publishing a new game build.
