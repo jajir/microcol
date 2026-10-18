@@ -38,7 +38,7 @@ plnou barvou. Kresba je živá, ovládání přehledné a přesné.**
 | --- | --- |
 | Čáry | Tmavý inkoust, mírně nepravidelná cesta, měkká zakončení a spoje. Nepravidelnost není roztřesení ani náhodně různá tloušťka mezi obrázky. Rozlišovat detail, běžný obrys a zvýraznění. |
 | Výplně | Jednobarevné plochy; část kresby zůstává nevybarvená. Výchozí vzhled bez přechodů, lesku a plastických efektů. |
-| Tlačítka | Světlý papírový podklad a kreslený obrys. Hlavní akce dostává barevnou výplň s čitelným textem; společná rodina tvarů napříč obrazovkami. |
+| Tlačítka | Běžná tlačítka používají vybranou [dřevěnou tabulku bez bočních zářezů](#drevena-tlacitka-bez-bocnich-zarezu). Dosavadní individuálně upravené prvky zachovávají vlastní vzhled. |
 | Stavy | Rozlišit běžný stav, najetí, stisk, klávesnicový fokus, výběr a nedostupnost. Fokus a výběr označit také tvarem či další linkou; nedostupnost má dohledatelný důvod. |
 | Typografie | Čitelné rukopisné písmo pro názvy a krátké popisky. Delší texty, tabulky a čísla upřednostňují čitelnost v malé velikosti. Nejvýše dvě rodiny; konkrétní fonty vybrat až na vzorku s českou diakritikou a čísly. |
 | Oddělení obsahu | Přednostně volným místem; kde nestačí, jemnou kreslenou linkou. Silný rám jen pro hlavní skupiny. |
@@ -66,6 +66,37 @@ stávajícího `colors.properties`; zápis nemění konfiguraci ani pixely PNG.
 Barva světa automaticky není vhodné pozadí tlačítka. Každou kombinaci
 textu, výplně a stavu ověřit samostatně; důležitý význam nesmí záviset
 jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a-prebarvovani).
+
+### Dřevěná tlačítka bez bočních zářezů
+
+1. **Dohoda 18. října 2026, [R-0246](requirements/done/R-0246.md):** vybrána
+   varianta „Bez bočních zářezů“. Černý obrys `#000000`, hladké mírně
+   nepravidelné boky a několik vnitřních tahů naznačují dřevo. Světlý okraj
+   `#FFF9EC` zůstává částečně nevybarvený. Nejde o pozdější variantu bez
+   vnitřních čárek.
+2. Výplně běžná / pod myší / stisknutá jsou `#DFBD91` / `#EFC68F` /
+   `#C69B6B`. Při stisku se kresba a text posunou o 2 logické px dolů
+   a zmizí spodní hrana. Klávesnicový fokus má černý přerušovaný rámeček;
+   vybraný přepínač také krátkou spodní linku. Nedostupné tlačítko má
+   neutrální výplň `#DED5C7` a sníženou neprůhlednost.
+3. Popisky zůstávají textem standardních JavaFX tlačítek, používají
+   přibalené [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat)
+   a licenci OFL v `resources/fonts/Caveat`. Font se načítá offline;
+   ostatní texty hry se tímto nemění. Šířka vychází z obsahu a dosavadních
+   omezení rozložení, nikoli ze zvětšování hotového obrázku.
+4. Implementace používá `WoodenButtonSkin`, `WoodenToggleButtonSkin`
+   a společný `WoodenButtonDrawing` v `gui.util`. Křivky se kreslí přímo
+   ve výsledných logických souřadnicích JavaFX Canvas: obrys 2 px,
+   detail 1 px, spodní hrana 1,5 px. Jde o procedurální výjimku z cesty
+   SVG → PNG; nevzniká raster, který by se roztahoval podle délky popisku.
+5. `WoodenButtons.css` sdílí hlavní okno i modální dialogy. Výslovné výjimky:
+   obrázkové `ButtonImage` (`image-button`), přepínače lodí `paneShip`,
+   malé tlačítko stavební nabídky a statistické odkazy s vlastním stylem.
+   Jejich dosavadní grafika zůstává zachována. Ostatní kontroly, systémový
+   výběr souboru, obsah dialogů a herní pravidla nejsou předmětem změny.
+6. Konkrétní přejímku a omezení uvádí
+   [evidence R-0246](functional-tests.md#r-0246-drevena-tlacitka-2026-10-18).
+   Dohoda ani přítomnost skinu samy neprokazují úspěšnou regresi či publikaci.
 
 ### Materiály a jejich význam
 

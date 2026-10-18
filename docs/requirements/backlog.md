@@ -464,3 +464,7 @@ claim to allocate all 230 manual rules or close all 119 UCs. Remaining wider
 work—such as native societies, full trade routes, all 25 founder effects,
 REF/intervention, endgame and scoring—stays visible in the authoritative
 [use cases](../use-cases.md) and [work packages](../implementation-plan.md).
+
+## Selected button appearance
+
+[R-0246](done/R-0246.md) implements the selected wooden buttons while preserving existing custom controls. It does not start the wider graphics or accessibility audits.

@@ -8,6 +8,12 @@ Výtvarné provedení společných prvků od **18. října 2026** určuje
 [minimalistický grafický manuál](graphics.md#minimalisticky-graficky-manual),
 včetně stavů ovládání a tloušťky čar při výsledné velikosti UI.
 
+Pro běžná tlačítka uživatel vybral [dřevěnou tabulku bez bočních zářezů](graphics.md#drevena-tlacitka-bez-bocnich-zarezu).
+[R-0246](requirements/done/R-0246.md) zachovává existující umístění akcí,
+potvrzení a zrušení i vlastní vzhled individuálně upravených tlačítek.
+Nejde o uživatelskou studii ani přepracování modalit; skutečné ověření
+myši, klávesnice a výsledků vede [funkční evidence](functional-tests.md#r-0246-drevena-tlacitka-2026-10-18).
+
 ## Společná pravidla pro další změny
 
 | Pravidlo | Jak se projeví ve hře |

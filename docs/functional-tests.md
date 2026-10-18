@@ -5,6 +5,77 @@ ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
 nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
 
+## R-0246 — Dřevěná tlačítka — 2026-10-18
+
+1. [R-0246](requirements/done/R-0246.md) mění vzhled standardních tlačítek;
+   individuálně upravené ovládání zachovává. TC83 ověřuje menu, návrat
+   z nastavení, původní ikonové ovládání a lodě, různé délky českých popisků,
+   tři stavy, fokus, Space/Enter/Escape, nedostupnost a přepínač v modálním
+   vzorku s produkčním dialogovým stylem. TC21 a celá sada chrání dosavadní
+   hráčské výsledky; samotný vzorek nenahrazuje reálné cesty dialogy.
+2. Diagnostické běhy `run-7IOQJA` a `run-pZ0rX8` spustily po 15 kontrolách:
+   14 prošlo a modální vzorek TC83 selhal na zkráceném `OK`. Následující
+   cílené běhy `run-UnCFZ0`, `run-WtfLhz`, `run-HiXF0S` a `run-XTvCHd`
+   upřesnily příčinu: dekorované testovací okno změnilo po zobrazení šířku
+   na 200 px. Původní hypotéza o pozdních CSS metrikách nebyla potvrzena.
+   Vzorek nyní používá stejný `UNDECORATED` Stage jako produkční dialogy.
+   `run-HiXF0S` navíc selhal při návratu z Kongresu; cesta nyní používá
+   skutečné zavírací tlačítko. Žádný z těchto běhů není přejímkou.
+3. Review doplnilo obnovu kresby při změně textu/graphic ve standardním
+   skinu a TC83 ověřuje změnu popisku. Neplatné CSS `inherit` u fontu
+   výjimek bylo nahrazeno původní rodinou a relativní velikostí; následné
+   běhy už původní konverzní varování nehlásily.
+4. `run-y0UNru` prošel dvěma scénáři ze tří; třetí ověřil rozměry, obrys,
+   výplně, kliknutí a Space, ale selhal na Enter. Test omylem očekával
+   výchozí akci při fokusu jiného tlačítka. Oprava před Enter přesune fokus
+   na netlačítkový obsah dialogu; standardní handlery hry se nemění.
+   Opravený cílený běh `run-hw4Gw3` (completion
+   `20261018T213003Z-e9840a5d8913`) prošel všemi 3 scénáři TC83:
+   0 selhání, 0 chyb, 0 přeskočených.
+5. Snímky menu, hry, Kongresu a modálního vzorku byly vizuálně zkontrolovány:
+   popisky jsou čitelné, ikonové ovládání zůstalo původní. Myš, klávesnice
+   i výběr prošly cíleným během. Nativní HiDPI monitor nebyl součástí
+   těchto kontrol.
+6. Úplný běh `run-enzXJ1` (completion `20261018T213052Z-259b33b9d1ce`)
+   19. října v místním čase dosáhl limitu 45 minut při pokračujícím TC34;
+   nešlo o zamrznutí. Log dokládá 2 348 úspěšných modelových/podpůrných
+   kontrol a 275 dokončených UI/podpůrných kontrol v 60 třídách
+   (274 prošlo, 1 selhala, 0 chyb a přeskočených). Úplná UI přejímka
+   chybí a export XML po ukončení není dostupný.
+   TC71 odhalil překrytí příchozího a odchozího panelu plavby kvůli vyšším
+   tlačítkům. Odchozí panel se v existujícím rozložení posouvá o 20 px dolů;
+   TC71 zachovává kontrolu nepřekrývání a skutečný návrat lodi a ukládá snímek.
+   Cílená oprava `run-hw7nu5` (completion
+   `20261018T221716Z-65bbb7d8dff2`) prošla: TC71 (1) a TC83 (3),
+   0 selhání/chyb/přeskočených. Snímek potvrzuje volný prostor mezi
+   příchozím tlačítkem Reverse course a odchozím panelem.
+   Celá sada musí následně projít po částech se shodným úplným výběrem;
+   časový limit není důvodem k vynechání scénáře. Rozdělení zachovává
+   všechny modelové testy, 83 TC tříd a 3 podpůrné UI třídy:
+   model + TC01–30 + podpůrné; TC31–60; TC61–83.
+7. První část `run-MMqOoO` (completion `20261018T221835Z-725cf5d05b47`)
+   prošla. Exportované XML dokládá **2 349 testů v 202 třídách microcol-game**
+   a **138 UI/podpůrných testů v 33 třídách**, vždy 0 selhání/chyb/přeskočených.
+   Explicitní výběr zahrnul navíc úspěšný integrační `ConnectorTest`, který
+   původní běh nevybíral.
+8. Druhá část `run-J4UAZF` (completion `20261018T224314Z-63d79df7e0f7`)
+   prošla: exportované XML potvrzuje **147 testů v 30 třídách TC31–60**,
+   0 selhání/chyb/přeskočených.
+9. Třetí část `run-hbl3f2` (completion `20261018T230444Z-23dede859e0f`)
+   prošla: **90 testů v 23 třídách TC61–83**, 0 selhání/chyb/přeskočených.
+   Kontrola seznamů tříd proti rozdělení nepotvrdila žádné chybějící ani
+   opakované výběry mezi částmi. Úplná místní přejímka tak obsahuje
+   **2 349 modelových/integračních a 375 UI/podpůrných testů**, bez selhání,
+   chyb či přeskočení. Jde o pracovní změny nad `6cf0d0dd`, nikoli ještě
+   o důkaz publikované distribuce.
+10. Závěrečná kontrola změn ověřila zachování nativních handlerů a vlastních
+    obrazových skinů, obnovu kresby při změně textu a konstantní logické
+    tloušťky tahů. Sdílený formatter ověřil 8 změněných Java souborů
+    (shodné kódové tokeny, idempotence). Prošlo 19 kontrol completion runneru,
+    21 kontrol launcheru workeru bez inference, 9 kontrol dokumentace,
+    přísný MkDocs build a kontrola whitespace. Publikace a CI pro výsledný
+    commit se ověřují samostatně.
+
 Pracovní pravidla platí od **11. října 2026**. Vzorem čitelné struktury je
 [TC_18_F01_plow_field_test](../microcol-test/src/test/java/org/microcol/test/TC_18_F01_plow_field_test.java).
 Testy chrání konkrétní ověřené cesty; nejsou důkazem úplnosti pravidel podle

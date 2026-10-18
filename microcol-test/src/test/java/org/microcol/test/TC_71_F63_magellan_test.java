@@ -67,6 +67,7 @@ public class TC_71_F63_magellan_test extends AbstractMicroColTest {
         voyage.verifyCargo();
         // Returning to the map uses the unchanged ordinary duration formula.
         europe = game.openEuroperPort();
+        voyage.captureDialog("closeButtonId", "wooden-voyage-panels.png");
         voyage.verifyVoyagePanelsSeparated();
         europe.selectUnitFromPort(0);
         voyage.sendShipBack();

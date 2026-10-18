@@ -40,6 +40,7 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource>
         this.source = Preconditions.checkNotNull(source);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.buttonKey = Preconditions.checkNotNull(buttonKey);
+        button.getStyleClass().add("image-button");
 
         final BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,

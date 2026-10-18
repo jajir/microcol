@@ -41,6 +41,7 @@ public final class FontService {
      */
     @Inject
     public FontService() {
+        load("Caveat/Caveat.ttf", 20);
         load(FONT_CARDO_BOLD, 10);
         load(FONT_CARDO_ITALIC, 10);
 
