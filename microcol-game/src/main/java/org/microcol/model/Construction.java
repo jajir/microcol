@@ -138,6 +138,20 @@ public class Construction {
      * @return construction production statistics per turn
      */
     ConstructionTurnProduction getProduction() {
+        return getProduction(colony.getPoliticalProduction());
+    }
+
+    /**
+     * Same as {@link #getProduction()} for the political snapshot of one
+     * update. Only staffed slots receive the political change; unattended base
+     * bells and crosses do not.
+     *
+     * @param political support bonus and Tory penalty to apply per job
+     * @return construction production statistics per turn
+     */
+    ConstructionTurnProduction getProduction(
+            final PoliticalProduction political) {
+        Preconditions.checkNotNull(political);
         Preconditions.checkArgument(
                 getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
@@ -155,7 +169,8 @@ public class Construction {
                                         null)
                                 : ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
-            final ConstructionTurnProduction tmp = slot.getProduction();
+            final ConstructionTurnProduction tmp = slot
+                    .getProduction(political);
             out = out.add(tmp);
         }
         if (getType() == ConstructionType.TOWN_HALL
@@ -193,7 +208,22 @@ public class Construction {
      * @return construction production statistics per turn
      */
     ConstructionTurnProduction getProduction(final Goods sourceGoods) {
+        return getProduction(sourceGoods, colony.getPoliticalProduction());
+    }
+
+    /**
+     * Same as {@link #getProduction(Goods)} for the political snapshot of one
+     * update. The political change raises each staffed job's output budget
+     * before the real input limits the total.
+     *
+     * @param sourceGoods required source goods
+     * @param political   support bonus and Tory penalty to apply per job
+     * @return construction production statistics per turn
+     */
+    ConstructionTurnProduction getProduction(final Goods sourceGoods,
+            final PoliticalProduction political) {
         Preconditions.checkNotNull(sourceGoods);
+        Preconditions.checkNotNull(political);
         Preconditions.checkArgument(
                 getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
@@ -205,8 +235,9 @@ public class Construction {
         int outputBudget = 0;
         for (final ConstructionSlot slot : getConstructionSlots()) {
             if (!slot.isEmpty()) {
-                outputBudget = Math.addExact(outputBudget, slot
-                        .getPotentialProduction(slot.getUnit()).getAmount());
+                outputBudget = Math.addExact(outputBudget,
+                        slot.getPotentialProduction(slot.getUnit(), political)
+                                .getAmount());
             }
         }
         return ConstructionSlot.productionForBudget(getType(), outputBudget,

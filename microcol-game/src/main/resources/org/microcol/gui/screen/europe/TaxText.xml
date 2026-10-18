@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Crown tax demand</entry>
+    <entry key="rates">Current tax: %s%%. The Crown demands %s%%.</entry>
+    <entry key="acceptExplain">Accepting raises the tax to %s%% and destroys nothing.</entry>
+    <entry key="protestDetail">Protest destroys %s %s in %s (stock %s), adds %s liberty there, boycotts that commodity and records %s gold of arrears. The tax stays %s%%.</entry>
+    <entry key="protestNone">No protest consequence is available now, so only acceptance is possible.</entry>
+    <entry key="accept">Accept</entry>
+    <entry key="protest">Protest</entry>
+    <entry key="later">Decide later</entry>
+    <entry key="laterExplain">Your actions stay paused until you answer. Reopen this demand from Europe.</entry>
+    <entry key="changed">The demand changed. Nothing was changed.</entry>
+    <entry key="protestUnavailable">Protest is no longer possible. Nothing was changed.</entry>
+</properties>

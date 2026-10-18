@@ -231,6 +231,8 @@ public class ColonyTest {
     @BeforeEach
     private void beforeEach() {
         model = mock(Model.class);
+        // The real bundled profile: every loaded model has a difficulty.
+        when(model.getDifficulty()).thenReturn(Difficulty.CONQUISTADOR);
         map = mock(WorldMap.class);
         owner = mock(Player.class);
     }
@@ -256,6 +258,6 @@ public class ColonyTest {
             final Function<Colony, List<Construction>> constructionsBuilder) {
         return new Colony(model, 0, "Prague", owner, Location.of(25, 35),
                 constructionsBuilder, new HashMap<String, Integer>(),
-                new ArrayList<>());
+                new ArrayList<>(), 0L, owner);
     }
 }

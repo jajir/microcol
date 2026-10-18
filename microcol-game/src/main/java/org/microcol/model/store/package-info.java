@@ -10,6 +10,9 @@
  * require an explicit complete pair set, excluding Crown players. The game
  * manager also persists whether a game-over result has been reached.
  *
+ * ColonySightingPo stores last-observed colony identity, owner and turn; hidden
+ * observations restore without consulting the live colony.
+ *
  * Sentry is serialized as an explicit action and restored without replaying
  * boarding.
  *
@@ -21,6 +24,10 @@
  * Congress stores the frozen offer, selected objective, separate bell account,
  * membership and pending Jones delivery. Colonial state is required; loading
  * restores it without rerolling candidates or dispatching an arrival.
+ *
+ * TaxPo stores one colonial tax rate, cadence, frozen pending demand and
+ * commodity arrears. Loading requires explicit valid state and never answers a
+ * pending demand or replays its consequences.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

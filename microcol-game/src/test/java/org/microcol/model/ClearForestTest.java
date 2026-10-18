@@ -556,7 +556,7 @@ class ClearForestTest {
         final Player king = model.getPlayerByName("Dutch's King");
         final Unit force = model.addUnitOutSideColony(previewed);
         force.takeOver(king);
-        previewed.captureColony(force);
+        ColonyBattles.capture(model, previewed, force);
         assertSame(king, previewed.getOwner());
         final int capturedBefore = lumber(model, 0);
         final int before1 = lumber(model, 1);

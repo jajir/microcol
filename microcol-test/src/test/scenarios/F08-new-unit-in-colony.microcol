@@ -504,6 +504,8 @@
       "id": 0,
       "name": "New Amsterdam",
       "ownerName": "Dutch",
+      "liberty": 0,
+      "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 25,
         "y": 14
@@ -660,6 +662,8 @@
       "id": 1,
       "name": "Delft",
       "ownerName": "Dutch",
+      "liberty": 0,
+      "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 22,
         "y": 12
@@ -817,6 +821,8 @@
       "id": 2,
       "name": "Haarlem",
       "ownerName": "Dutch",
+      "liberty": 0,
+      "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 23,
         "y": 17
@@ -4270,6 +4276,13 @@
   "gameManager": {
     "players": [
       {
+        "tax": {
+          "rate": 0,
+          "activated": false,
+          "updates": 0,
+          "issued": 0,
+          "arrears": {}
+        },
         "congress": {
           "activated": true,
           "bells": 0,
@@ -4327,6 +4340,13 @@
         }
       },
       {
+        "tax": {
+          "rate": 0,
+          "activated": false,
+          "updates": 0,
+          "issued": 0,
+          "arrears": {}
+        },
         "congress": {
           "activated": false,
           "bells": 0,

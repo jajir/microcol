@@ -8,11 +8,10 @@ import org.microcol.model.store.PlayerPo;
 import com.google.common.base.Preconditions;
 
 /**
- * King player.
+ * King player. The Crown has no tax state of its own; it reports and adjusts
+ * the single rate of the colonial nation it rules.
  */
 public class PlayerKing extends Player {
-
-    private int kingsTaxPercentage;
 
     /**
      * If it's not null than it's king player.
@@ -22,21 +21,31 @@ public class PlayerKing extends Player {
     PlayerKing(final String name, final boolean computer, final int initialGold,
             final Model model, final boolean declaredIndependence,
             final Player whosKingThisPlayerIs,
-            final Map<String, Object> extraData, Set<Location> visible,
-            final int kingsTaxPercentage) {
+            final Map<String, Object> extraData, Set<Location> visible) {
         super(name, computer, initialGold, model, declaredIndependence,
-                extraData, visible, null, null);
+                extraData, visible, null, null, null);
         this.whosKingThisPlayerIs = Preconditions
                 .checkNotNull(whosKingThisPlayerIs);
-        this.kingsTaxPercentage = kingsTaxPercentage;
     }
 
+    /** @return the colonial nation's tax percentage */
     public int getKingsTaxPercentage() {
-        return kingsTaxPercentage;
+        return getTaxRate();
     }
 
+    /**
+     * Controlled-test access to the ruled nation's rate; gameplay changes it
+     * only through an answered demand.
+     *
+     * @param kingsTaxPercentage percentage from 0 to 75
+     */
     public void setKingsTaxPercentage(int kingsTaxPercentage) {
-        this.kingsTaxPercentage = kingsTaxPercentage;
+        whosKingThisPlayerIs.setTaxRate(kingsTaxPercentage);
+    }
+
+    @Override
+    public int getTaxRate() {
+        return whosKingThisPlayerIs.getTaxRate();
     }
 
     /**
@@ -48,7 +57,6 @@ public class PlayerKing extends Player {
 
     public PlayerPo save() {
         final PlayerPo out = super.save();
-        out.setKingsTaxPercentage(kingsTaxPercentage);
         out.setWhosKingThisPlayerIs(whosKingThisPlayerIs.getName());
         return out;
     }

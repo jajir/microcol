@@ -1,9 +1,12 @@
 package org.microcol.gui.screen.market;
 
+import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.screen.europe.ChooseGoods;
+import org.microcol.gui.screen.europe.Europe;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.util.ButtonsBarYesNo;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -120,8 +123,21 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     private void onUserClickSell(final ActionEvent event) {
         final CargoSlot sourceCargoSlot = screenMarketContext
                 .getSourceCargoSlot();
-        gameModelController.getModel().sellGoods(sourceCargoSlot,
-                getActualValue());
+        try {
+            gameModelController.getModel().sellGoods(sourceCargoSlot,
+                    getActualValue());
+        } catch (final IllegalStateException rejected) {
+            // A boycott that began after the quantity was chosen sells nothing.
+            if (!gameModelController.getHumanPlayer()
+                    .isBoycotted(getActualValue().getType())) {
+                throw rejected;
+            }
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Europe.goodsBoycotted,
+                            i18n.get(GoodsTypeName.getNameForGoodsType(
+                                    getActualValue().getType()))),
+                    StatusBarMessageEvent.Source.EUROPE));
+        }
         eventBus.post(new ShowScreenEvent(Screen.EUROPE));
     }
 

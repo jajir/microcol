@@ -17,6 +17,7 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.EducationCoursePo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitLaborer;
@@ -41,6 +42,26 @@ public class Colony {
 
     private Player owner;
 
+    /**
+     * Largest liberty a save may hold; keeps values exactly representable in
+     * JSON consumers.
+     */
+    private static final long MAX_LIBERTY = 9_007_199_254_740_991L;
+
+    /**
+     * Accumulated colony liberty, between zero and
+     * {@link RebelSupport#POINTS_PER_RESIDENT} times the resident count after
+     * every completed update.
+     */
+    private long liberty;
+
+    /**
+     * Last non-Crown nation this colony belonged to. It owns the colony's
+     * national contribution and Bolivar bonus, also while the Crown occupies
+     * it.
+     */
+    private Player lastColonialAffiliation;
+
     private final Location location;
 
     private final List<ColonyField> colonyFields;
@@ -63,12 +84,24 @@ public class Colony {
             final Player owner, final Location location,
             final Function<Colony, List<Construction>> constructionsBuilder,
             final Map<String, Integer> initialGoods,
-            final List<ColonyBuildingItemProgress<?>> buildingQueue) {
+            final List<ColonyBuildingItemProgress<?>> buildingQueue,
+            final long liberty, final Player lastColonialAffiliation) {
         this.model = Preconditions.checkNotNull(model);
         Preconditions.checkArgument(id >= 0, "Invalid colony id");
         this.id = id;
         this.name = Preconditions.checkNotNull(name);
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
+        Preconditions.checkArgument(liberty >= 0 && liberty <= MAX_LIBERTY,
+                "Invalid colony liberty");
+        this.liberty = liberty;
+        Preconditions.checkArgument(
+                lastColonialAffiliation != null
+                        && !lastColonialAffiliation.isKing(),
+                "Colony needs a registered non-Crown colonial affiliation");
+        Preconditions.checkArgument(
+                owner.isKing() || owner == lastColonialAffiliation,
+                "Colonial owner must be the colony's affiliation");
+        this.lastColonialAffiliation = lastColonialAffiliation;
         this.location = Preconditions.checkNotNull(location);
         colonyFields = new ArrayList<>();
         Direction.getAll().forEach(
@@ -138,6 +171,8 @@ public class Colony {
         out.setId(id);
         out.setName(name);
         out.setOwnerName(owner.getName());
+        out.setLiberty(liberty);
+        out.setLastColonialAffiliation(lastColonialAffiliation.getName());
         out.setLocation(location);
         out.setColonyFields(saveColonyFields());
         out.setColonyWarehouse(warehouse.save());
@@ -148,6 +183,119 @@ public class Colony {
         out.setEducationCourses(educationCourses.stream()
                 .map(EducationCourse::save).collect(Collectors.toList()));
         return out;
+    }
+
+    /** @return stored colony liberty; read-only, never clamped here */
+    public long getLiberty() {
+        return liberty;
+    }
+
+    /**
+     * @return the last non-Crown nation of this colony, also under occupation
+     */
+    public Player getLastColonialAffiliation() {
+        return lastColonialAffiliation;
+    }
+
+    /**
+     * @return number of residents working in fields or buildings; outside
+     *         garrisons, passengers and Europe are excluded
+     */
+    public int getPopulation() {
+        return getUnitsInsideColony().size();
+    }
+
+    /**
+     * Exact local support: {@code min(liberty + bonus, 200 * N)} out of
+     * {@code 200 * N}, where the bonus is 40 per resident when the affiliated
+     * nation has Simon Bolivar. Read-only; no bells are created.
+     */
+    public RebelSupport getRebelSupport() {
+        return getRebelSupport(getPopulation());
+    }
+
+    private RebelSupport getRebelSupport(final long population) {
+        final long capacity = Math.multiplyExact(population,
+                (long) RebelSupport.POINTS_PER_RESIDENT);
+        final long bonus = lastColonialAffiliation.getCongressMembers()
+                .contains(Founder.SIMON_BOLIVAR)
+                        ? Math.multiplyExact(population,
+                                (long) RebelSupport.BOLIVAR_POINTS_PER_RESIDENT)
+                        : 0;
+        return new RebelSupport(
+                Math.min(Math.addExact(liberty, bonus), capacity), capacity);
+    }
+
+    /**
+     * Fresh political production change from the current support and residents.
+     * Read-only; used for previews and for the snapshot taken at update start.
+     *
+     * @return support bonus and Tory penalty of this colony right now
+     */
+    public PoliticalProduction getPoliticalProduction() {
+        return PoliticalProduction.of(getRebelSupport(), model.getDifficulty());
+    }
+
+    /**
+     * Political production change that applies to the given worker's job. A
+     * resident keeps the current resident count; an outside worker would
+     * increase it by one, which changes the exact support fraction.
+     *
+     * @param worker resident or prospective worker
+     * @return fresh read-only political production change
+     */
+    PoliticalProduction getPoliticalProductionFor(final Unit worker) {
+        if (isResident(worker)) {
+            return getPoliticalProduction();
+        }
+        return PoliticalProduction.of(getRebelSupport(getPopulation() + 1L),
+                model.getDifficulty());
+    }
+
+    /** Apply the population cap once a resident exit has completed. */
+    private void capLibertyToPopulation() {
+        liberty = Math.min(liberty, Math.multiplyExact((long) getPopulation(),
+                (long) RebelSupport.POINTS_PER_RESIDENT));
+    }
+
+    /**
+     * Reject a loaded colony whose liberty exceeds its population capacity.
+     * Called once all residents have been restored.
+     */
+    void checkRestoredLiberty() {
+        Preconditions.checkArgument(
+                liberty <= Math.multiplyExact((long) getPopulation(),
+                        (long) RebelSupport.POINTS_PER_RESIDENT),
+                "Unsupported save: colony liberty exceeds its population");
+    }
+
+    /**
+     * Add produced bells to local liberty, or remove them under Crown
+     * occupation; liberty never leaves zero to 200 per resident.
+     */
+    private void applyProducedBells(final int producedBells) {
+        if (owner.isKing()) {
+            liberty = Math.max(0, liberty - producedBells);
+        } else {
+            liberty = Math.min(Math.addExact(liberty, producedBells),
+                    Math.multiplyExact((long) getPopulation(),
+                            (long) RebelSupport.POINTS_PER_RESIDENT));
+        }
+    }
+
+    /**
+     * @param points requested liberty
+     * @return the liberty that fits below 200 per resident right now
+     */
+    long previewProtestLiberty(final long points) {
+        final long capacity = Math.multiplyExact((long) getPopulation(),
+                (long) RebelSupport.POINTS_PER_RESIDENT);
+        return Math.max(0, Math.min(points, capacity - liberty));
+    }
+
+    /** Add protest liberty to this colony, capped by its residents. */
+    void addProtestLiberty(final long points) {
+        liberty = Math.addExact(liberty, previewProtestLiberty(points));
     }
 
     /** @return immutable education progress with current pause state */
@@ -542,20 +690,228 @@ public class Colony {
         exportGoods.addAll(selected);
     }
 
-    boolean canBeCapturedBy(final Unit force) {
-        return planCapture(force).isPresent();
+    /**
+     * @param at world square
+     * @return whether a resident of this colony works the field on that square
+     */
+    boolean hasWorkerAt(final Location at) {
+        return colonyFields.stream().anyMatch(
+                field -> field.isNotEmpty() && field.getLocation().equals(at));
     }
 
-    private Optional<Map<Unit, Location>> planCapture(final Unit force) {
+    /**
+     * Plan the defense of one worker of a field that is attacked on its own
+     * field tile. Reads only.
+     *
+     * @param attacker required attacking land unit
+     * @param target   required field tile the attacker is adjacent to
+     * @return frozen defense, or empty when no foreign worker works that tile
+     */
+    Optional<ColonyDefense> planFieldDefense(final Unit attacker,
+            final Location target) {
+        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+            return Optional.empty();
+        }
+        final Optional<Unit> worker = colonyFields.stream()
+                .filter(field -> field.isNotEmpty()
+                        && field.getLocation().equals(target))
+                .map(field -> field.getUnit().get()).findFirst();
+        if (worker.isEmpty() || !(worker.get() instanceof UnitFreeColonist)
+                || !attacker.getType().getAttackableUnitType()
+                        .contains(worker.get().getType())) {
+            return Optional.empty();
+        }
+        final List<Unit> roster = List.of(worker.get());
+        return Optional.of(new ColonyDefense(this, target,
+                ColonyDefense.Kind.FIELD, worker.get(), roster, Map.of(), 0,
+                false, describeDefense(target, ColonyDefense.Kind.FIELD,
+                        worker.get(), roster, Map.of(), 0, false)));
+    }
+
+    /**
+     * Plan what a colony defense quote would do to this colony's defenders if
+     * the attacker wins: the armed tier first, then the inhabitants as one
+     * group, optionally led by a Paul Revere emergency militiaman. Reads only.
+     *
+     * @param attacker   required attacking land unit
+     * @param candidates required map units on the colony tile that this
+     *                   attacker may legally fight
+     * @return frozen defense, or empty when nothing defends or the capture that
+     *         victory would cause has no safe atomic outcome
+     */
+    Optional<ColonyDefense> planDefense(final Unit attacker,
+            final List<Unit> candidates) {
+        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+            return Optional.empty();
+        }
+        final List<Unit> armed = new ArrayList<>();
+        candidates.stream().filter(
+                unit -> !unit.isShip() && CombatStrengths.isArmedLand(unit))
+                .forEach(armed::add);
+        getUnitsInsideColony().stream().filter(CombatStrengths::isArmedLand)
+                .forEach(armed::add);
+        if (!armed.isEmpty()) {
+            armed.sort(Comparator
+                    .comparing((Unit unit) -> !model
+                            .areHostile(attacker.getOwner(), unit.getOwner()))
+                    .thenComparingDouble(
+                            unit -> -CombatStrengths
+                                    .colonyDefenderStrength(model, unit, this,
+                                            location, ColonyDefense.Kind.ARMED)
+                                    .getTotal())
+                    .thenComparingInt(Unit::getId));
+            return Optional.of(new ColonyDefense(this, location,
+                    ColonyDefense.Kind.ARMED, armed.get(0), armed, Map.of(), 0,
+                    false, describeDefense(location, ColonyDefense.Kind.ARMED,
+                            armed.get(0), armed, Map.of(), 0, false)));
+        }
+        final List<Unit> civilians = new ArrayList<>();
+        getUnitsInsideColony().stream()
+                .filter(unit -> unit instanceof UnitFreeColonist)
+                .forEach(civilians::add);
+        candidates.stream()
+                .filter(unit -> unit.getOwner() == owner && !unit.isShip()
+                        && unit instanceof UnitFreeColonist)
+                .forEach(civilians::add);
+        if (civilians.isEmpty()) {
+            return Optional.empty();
+        }
+        civilians.sort(Comparator.comparingInt(Unit::getId));
+        // Victory transfers the whole colony: decide before any draw whether
+        // ships and peaceful occupants allow one atomic outcome.
+        final Optional<Map<Unit, Location>> transfer = planOccupantTransfer(
+                attacker, !model.areHostile(attacker.getOwner(), owner));
+        if (transfer.isEmpty()) {
+            return Optional.empty();
+        }
+        ColonyDefense.Kind kind = ColonyDefense.Kind.CIVILIANS;
+        Unit representative = civilians.get(0);
+        int muskets = 0;
+        boolean exits = false;
+        if (owner.getCongressMembers().contains(Founder.PAUL_REVERE)
+                && warehouse.getGoods(GoodsType.MUSKET)
+                        .getAmount() >= UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT) {
+            final Optional<Unit> militia = getUnitsInsideColony().stream()
+                    .filter(this::isEmergencyEligible)
+                    .min(Comparator
+                            .<Unit>comparingDouble(unit -> -CombatStrengths
+                                    .colonyDefenderStrength(model, unit, this,
+                                            location, ColonyDefense.Kind.REVERE)
+                                    .getTotal())
+                            .thenComparingInt(Unit::getId));
+            if (militia.isPresent()) {
+                kind = ColonyDefense.Kind.REVERE;
+                representative = militia.get();
+                muskets = UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT;
+                // Only the last resident stays inside. A victory is a forced
+                // exit, so the voluntary fortified-colony minimum is not
+                // consulted.
+                exits = getPopulation() > 1;
+            }
+        }
+        return Optional.of(new ColonyDefense(this, location, kind,
+                representative, civilians, transfer.get(), muskets, exits,
+                describeDefense(location, kind, representative, civilians,
+                        transfer.get(), muskets, exits)));
+    }
+
+    private boolean isEmergencyEligible(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist)) {
+            return false;
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return !colonist.isHoldingGuns() && !colonist.isMounted()
+                && !colonist.isHoldingTools();
+    }
+
+    /**
+     * Everything a confirmed battle depends on, as text: the complete roster
+     * with actual places and equipment, the occupants of the tile, the ship
+     * escape plan and the Revere inputs.
+     */
+    private String describeDefense(final Location battlefield,
+            final ColonyDefense.Kind kind, final Unit representative,
+            final List<Unit> roster, final Map<Unit, Location> escapes,
+            final int muskets, final boolean exits) {
+        final StringBuilder out = new StringBuilder();
+        out.append(id).append('@').append(battlefield).append('/')
+                .append(owner.getName()).append('/').append(kind)
+                .append("/rep=").append(representative.getId()).append("/exit=")
+                .append(exits).append("/muskets=").append(muskets)
+                .append("/stock=")
+                .append(warehouse.getGoods(GoodsType.MUSKET).getAmount())
+                .append("/revere=")
+                .append(owner.getCongressMembers()
+                        .contains(Founder.PAUL_REVERE))
+                .append("/pop=").append(getPopulation());
+        roster.forEach(unit -> out.append('|').append(describeUnit(unit)));
+        model.getUnitsAt(battlefield)
+                .forEach(unit -> out.append('#').append(describeUnit(unit)));
+        escapes.forEach((ship, target) -> out.append('>').append(ship.getId())
+                .append("->").append(target));
+        return out.toString();
+    }
+
+    private String describeUnit(final Unit unit) {
+        final StringBuilder out = new StringBuilder().append(unit.getId())
+                .append(':').append(unit.getType().name()).append(':')
+                .append(unit.getOwner().getName()).append(':')
+                .append(describePlace(unit));
+        if (unit instanceof UnitFreeColonist) {
+            final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+            out.append(':').append(colonist.isHoldingGuns())
+                    .append(colonist.isMounted())
+                    .append(colonist.isHoldingTools())
+                    .append(colonist.isVeteran());
+        } else if (unit instanceof UnitArtillery) {
+            out.append(':').append(((UnitArtillery) unit).isDamaged());
+        }
+        return out.append(':').append(model.isFortified(unit)).toString();
+    }
+
+    private String describePlace(final Unit unit) {
+        if (unit.isAtPlaceLocation()) {
+            return "MAP" + unit.getLocation();
+        }
+        if (unit.isAtPlaceColonyField()) {
+            return "FIELD" + colonyFields.stream()
+                    .filter(field -> field.isWorkedBy(unit))
+                    .map(field -> String.valueOf(field.getDirection()))
+                    .findFirst().orElse("?");
+        }
+        if (unit.isAtPlaceConstructionSlot()) {
+            final ConstructionSlot slot = unit.getPlaceConstruction()
+                    .getConstructionSlot();
+            return "JOB" + slot.getConstructionType() + slot.getConstruction()
+                    .getConstructionSlots().indexOf(slot);
+        }
+        return "OTHER";
+    }
+
+    /**
+     * Plan the transfer of units standing on the colony tile. Peaceful
+     * occupants and armed units stop the capture, and every ship needs its own
+     * safe adjacent water. It never changes anything.
+     *
+     * @param force    required capturing unit
+     * @param declared whether the colony owner becomes hostile by the same
+     *                 battle's declaration
+     */
+    private Optional<Map<Unit, Location>> planOccupantTransfer(final Unit force,
+            final boolean declared) {
         final Player attacker = force.getOwner();
-        if (!model.areHostile(attacker, owner) || !force.getType()
+        if (!(declared || model.areHostile(attacker, owner)) || !force.getType()
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             return Optional.empty();
         }
         final List<Unit> occupants = model.getEnemyUnitsAt(attacker, location);
         if (occupants.stream()
-                .anyMatch(unit -> !model.areHostile(attacker, unit.getOwner())
-                        || (!unit.isShip() && unit.getType().canAttack()))) {
+                .anyMatch(unit -> !(model.areHostile(attacker, unit.getOwner())
+                        || declared && unit.getOwner() == owner)
+                        || (!unit.isShip()
+                                && CombatStrengths.isArmedLand(unit)))
+                || getUnitsInsideColony().stream()
+                        .anyMatch(CombatStrengths::isArmedLand)) {
             return Optional.empty();
         }
         final Map<Unit, Location> escapes = new LinkedHashMap<>();
@@ -585,15 +941,28 @@ public class Colony {
         return Optional.of(escapes);
     }
 
-    public void captureColony(final Unit capturingUnit) {
+    /**
+     * Take the whole colony after the capturer won the defense battle. Only the
+     * battle in {@link AbstractUnit} calls this, with the defense quote it was
+     * confirmed against; there is no other way to take a colony. The ship
+     * escapes were validated in that quote, before the first draw.
+     *
+     * @param capturingUnit required victor, already on the colony tile
+     * @param defense       required frozen defense that was just defeated
+     */
+    void captureAfterWonBattle(final Unit capturingUnit,
+            final ColonyDefense defense) {
         final Player player = capturingUnit.getOwner();
         Preconditions.checkState(
-                capturingUnit.isAtPlaceLocation()
+                defense.getColony() == this && defense.capturesColony()
+                        && capturingUnit.isAtPlaceLocation()
                         && location.equals(capturingUnit.getLocation()),
-                "Capturing force must be on the colony tile");
-        final Map<Unit, Location> escapes = planCapture(capturingUnit)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Colony cannot be captured"));
+                "Capturing force must have won the battle on the colony tile");
+        final Map<Unit, Location> escapes = defense.getEscapes();
+        Preconditions.checkState(
+                planOccupantTransfer(capturingUnit, false)
+                        .filter(escapes::equals).isPresent(),
+                "The planned colony capture changed");
         escapes.forEach(this::escapeOneStep);
         model.getEnemyUnitsAt(player, location).stream()
                 .filter(unit -> !unit.getType().isShip())
@@ -609,8 +978,18 @@ public class Colony {
                     .add(TurnEventProvider.getColonyWasLost(owner, this));
         }
 
+        final Player previousOwner = owner;
         owner = player;
+        // A European conqueror keeps liberty and becomes the affiliation; the
+        // Crown leaves the last colonial affiliation untouched.
+        if (!player.isKing()) {
+            lastColonialAffiliation = player;
+        }
         grantLaSalleStockade();
+        // The former owner is told about the loss, so it remembers the new
+        // owner even though it no longer sees the colony.
+        previousOwner.recordColony(this);
+        model.refreshObservations();
         model.fireColonyWasCaptured(model, capturingUnit, this);
     }
 
@@ -671,7 +1050,11 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        final ColonyProductionStats initialProduction = getRawGoodsStats();
+        // One snapshot for food, births, famine and post-famine output; bells
+        // credited below affect the next update only.
+        final PoliticalProduction political = getPoliticalProduction();
+        final ColonyProductionStats initialProduction = getRawGoodsStats(
+                political);
         final int breeding = getBreedingCount(initialProduction);
         // Validate national progress before famine, births or warehouse
         // changes.
@@ -681,10 +1064,12 @@ public class Colony {
         final int possibleBells = Math.max(0, initialProduction
                 .getStatsByType(GoodsType.BELL).getRowProduction());
         owner.checkCanCreditProducedBells(possibleBells);
-        final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
+        final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist(
+                political);
         // from now colony could be destroyed by famine.
         if (isValid()) {
-            final ColonyProductionStats colonyStats = getRawGoodsStats();
+            final ColonyProductionStats colonyStats = getRawGoodsStats(
+                    political);
             final int producedCrosses = Math.max(0, colonyStats
                     .getStatsByType(GoodsType.CROSS).getRowProduction());
             final int producedBells = Math.max(0, colonyStats
@@ -712,7 +1097,8 @@ public class Colony {
             });
             owner.creditProducedCrosses(producedCrosses);
             owner.creditProducedBells(producedBells);
-            advanceEducationAndExperience(colonyStats);
+            applyProducedBells(producedBells);
+            advanceEducationAndExperience(colonyStats, political);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
@@ -730,15 +1116,17 @@ public class Colony {
     }
 
     private void advanceEducationAndExperience(
-            final ColonyProductionStats committed) {
+            final ColonyProductionStats committed,
+            final PoliticalProduction political) {
         final Set<Integer> schoolCompletions = new HashSet<>();
         final Map<Unit, UnitType> jobs = new LinkedHashMap<>();
         final Set<Unit> productive = new HashSet<>();
         for (final ColonyField field : colonyFields) {
-            if (field.getUnit().isEmpty() || field.getProduction().isEmpty()) {
+            if (field.getUnit().isEmpty()
+                    || field.getProduction(political).isEmpty()) {
                 continue;
             }
-            final Goods goods = field.getProduction().get();
+            final Goods goods = field.getProduction(political).get();
             EducationSkills
                     .forProduction(goods.getType(),
                             goods.getType() == GoodsType.CORN
@@ -769,8 +1157,8 @@ public class Colony {
                 }
                 final Unit worker = slot.getUnit();
                 jobs.put(worker, skill.get());
-                final int potential = slot.getPotentialProduction(worker)
-                        .getAmount();
+                final int potential = slot
+                        .getPotentialProduction(worker, political).getAmount();
                 final int assigned = Math.min(potential, remaining);
                 remaining -= assigned;
                 if (assigned > 0) {
@@ -867,6 +1255,11 @@ public class Colony {
             if (!exportGoods.contains(type)) {
                 continue;
             }
+            // A boycott closes ordinary exports; the revolutionary custom
+            // house bypasses it.
+            if (owner.isBoycotted(type) && !owner.isDeclaredIndependence()) {
+                continue;
+            }
             final int amount = warehouse.getGoods(type).getAmount() - 100;
             if (amount <= 0) {
                 continue;
@@ -892,8 +1285,9 @@ public class Colony {
         }
     }
 
-    private Unit eatFoodAndOptionallyMakeNewColonist() {
-        final ColonyProductionStats stats = getRawGoodsStats();
+    private Unit eatFoodAndOptionallyMakeNewColonist(
+            final PoliticalProduction political) {
+        final ColonyProductionStats stats = getRawGoodsStats(political);
         final GoodsProductionStats cornStats = stats
                 .getStatsByType(GoodsType.CORN);
         if (cornStats.getInWarehouseAfter() < 0) {
@@ -963,7 +1357,9 @@ public class Colony {
     }
 
     public List<Unit> getUnitsOutSideColony() {
+        // Allied passage never gives a colony control of a visitor.
         return model.getUnitsAt(location).stream()
+                .filter(unit -> unit.getOwner().equals(owner))
                 .filter(unit -> !unit.getType().canHoldCargo())
                 .collect(ImmutableList.toImmutableList());
     }
@@ -1134,6 +1530,10 @@ public class Colony {
     void verifyNumberOfUnitsOptionallyDestroyColony() {
         if (getUnitsInsideColony().isEmpty()) {
             model.destroyColony(this);
+        } else {
+            // Completed resident exit; same-colony reassignment never gets
+            // here.
+            capLibertyToPopulation();
         }
     }
 
@@ -1255,6 +1655,11 @@ public class Colony {
     }
 
     ColonyProductionStats getRawGoodsStats() {
+        return getRawGoodsStats(getPoliticalProduction());
+    }
+
+    private ColonyProductionStats getRawGoodsStats(
+            final PoliticalProduction political) {
         final ColonyProductionStats out = new ColonyProductionStats();
         // set initial warehouse stack
         GoodsType.GOOD_TYPES.forEach(goodsType -> {
@@ -1265,8 +1670,8 @@ public class Colony {
 
         // get production from all fields
         colonyFields.forEach(field -> {
-            if (field.getProduction().isPresent()) {
-                final Goods production = field.getProduction().get();
+            if (field.getProduction(political).isPresent()) {
+                final Goods production = field.getProduction(political).get();
                 final GoodsProductionStats goodsStats = out
                         .getStatsByType(production.getType());
                 goodsStats.addRowProduction(production.getAmount());
@@ -1280,7 +1685,8 @@ public class Colony {
         ConstructionType.SOURCE_1.forEach(goodsType -> {
             getConstructionProducing(goodsType).ifPresent(con -> {
                 GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
-                ConstructionTurnProduction turnProd = con.getProduction();
+                ConstructionTurnProduction turnProd = con
+                        .getProduction(political);
                 goodsStats.setRowProduction(
                         turnProd.getProducedGoods().get().getAmount());
             });
@@ -1288,19 +1694,20 @@ public class Colony {
 
         // get production from town factories that consume some primary sources
         ConstructionType.SOURCE_2.forEach(goodsType -> {
-            computeSecondaryProduction(out, goodsType);
+            computeSecondaryProduction(out, goodsType, political);
         });
 
         // get production from town factories that consume secondary sources
         ConstructionType.SOURCE_3.forEach(goodsType -> {
-            computeSecondaryProduction(out, goodsType);
+            computeSecondaryProduction(out, goodsType, political);
         });
 
         return out;
     }
 
     private void computeSecondaryProduction(final ColonyProductionStats out,
-            final GoodsType goodsTypeProduced) {
+            final GoodsType goodsTypeProduced,
+            final PoliticalProduction political) {
         if (getConstructionProducing(goodsTypeProduced).isPresent()) {
             final Construction producedAt = getConstructionProducing(
                     goodsTypeProduced).get();
@@ -1318,7 +1725,7 @@ public class Colony {
 
             final ConstructionTurnProduction turnProd = producedAt
                     .getProduction(Goods.of(goodsTypeConsumed,
-                            numberOfavailableInputGoods));
+                            numberOfavailableInputGoods), political);
             goodConsumedStats
                     .addConsumed(turnProd.getConsumedGoods().get().getAmount());
             goodProdStats.setRowProduction(

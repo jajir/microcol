@@ -86,6 +86,15 @@ public class ConstructionSlot {
      * @return how much could be produced and consumed per turn
      */
     public ConstructionTurnProduction getProduction(final Goods sourceGoods) {
+        return getProduction(sourceGoods, getCurrentPolitical());
+    }
+
+    /**
+     * Same as {@link #getProduction(Goods)} for the political snapshot of one
+     * update.
+     */
+    ConstructionTurnProduction getProduction(final Goods sourceGoods,
+            final PoliticalProduction political) {
         final ConstructionType type = construction.getType();
 
         Preconditions.checkArgument(type.getProductionPerTurn().isPresent(),
@@ -105,8 +114,13 @@ public class ConstructionSlot {
         }
 
         return productionForBudget(type,
-                getPotentialProduction(getUnit()).getAmount(),
+                getPotentialProduction(getUnit(), political).getAmount(),
                 sourceGoods.getAmount());
+    }
+
+    private PoliticalProduction getCurrentPolitical() {
+        return isEmpty() ? PoliticalProduction.NONE
+                : getColony().getPoliticalProduction();
     }
 
     /**
@@ -116,6 +130,15 @@ public class ConstructionSlot {
      * @return Return production for slot which do not consume any goods.
      */
     public ConstructionTurnProduction getProduction() {
+        return getProduction(getCurrentPolitical());
+    }
+
+    /**
+     * Same as {@link #getProduction()} for the political snapshot of one
+     * update.
+     */
+    ConstructionTurnProduction getProduction(
+            final PoliticalProduction political) {
         final ConstructionType type = construction.getType();
         Preconditions.checkArgument(type.getProductionPerTurn().isPresent(),
                 "Construction doesn't produce any goods.");
@@ -123,26 +146,38 @@ public class ConstructionSlot {
                 "Construction consume some goods.");
         final Goods turnProduction = isEmpty()
                 ? type.getProductionPerTurn().get().getEmpty()
-                : getPotentialProduction(getUnit());
+                : getPotentialProduction(getUnit(), political);
         return new ConstructionTurnProduction(null, turnProduction, null);
 
     }
 
+    /**
+     * Fresh read-only production of the worker. An outside worker is previewed
+     * as a new resident, which changes the support fraction.
+     */
     Goods getPotentialProduction(final Unit worker) {
+        return getPotentialProduction(worker,
+                getColony().getPoliticalProductionFor(worker));
+    }
+
+    Goods getPotentialProduction(final Unit worker,
+            final PoliticalProduction political) {
         final Goods base = getConstructionType().getProductionPerTurn()
                 .orElseThrow();
-        return potentialProduction(base, worker);
+        return potentialProduction(base, worker, political);
     }
 
     Goods getPotentialInput(final Unit worker) {
-        return getPotentialInput(getConstructionType(), worker);
+        return getPotentialInput(getConstructionType(), worker,
+                getColony().getPoliticalProductionFor(worker));
     }
 
     static Goods getPotentialInput(final ConstructionType type,
-            final Unit worker) {
+            final Unit worker, final PoliticalProduction political) {
         final Goods baseInput = type.getConsumptionPerTurn().orElseThrow();
         final Goods baseOutput = type.getProductionPerTurn().orElseThrow();
-        final Goods potential = potentialProduction(baseOutput, worker);
+        final Goods potential = potentialProduction(baseOutput, worker,
+                political);
         return baseInput.setAmount(inputForOutput(type, potential.getAmount()));
     }
 
@@ -172,13 +207,15 @@ public class ConstructionSlot {
     }
 
     private static Goods potentialProduction(final Goods base,
-            final Unit worker) {
+            final Unit worker, final PoliticalProduction political) {
         final UnitType type = worker.getType();
         final int penalty = type == UnitType.INDENTURED_SERVANT ? 1
                 : type == UnitType.PETTY_CRIMINAL ? 2 : 0;
         final Goods ordinary = base
                 .setAmount(Math.max(0, base.getAmount() - penalty));
-        return ordinary.multiply(type.getProductionModifier(base.getType()));
+        final Goods worked = ordinary
+                .multiply(type.getProductionModifier(base.getType()));
+        return political.apply(base, worked);
     }
 
     public ConstructionType getConstructionType() {

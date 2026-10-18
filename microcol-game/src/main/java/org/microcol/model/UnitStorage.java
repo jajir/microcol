@@ -68,19 +68,36 @@ public final class UnitStorage {
         return idManager.canAllocate();
     }
 
+    /** Decides whether two owners may lawfully share a square. */
+    @FunctionalInterface
+    interface SharedSquarePolicy {
+        boolean permits(Player first, Player second, Location at);
+    }
+
+    private SharedSquarePolicy sharedSquarePolicy = (first, second,
+            at) -> false;
+
+    void setSharedSquarePolicy(final SharedSquarePolicy policy) {
+        sharedSquarePolicy = Preconditions.checkNotNull(policy);
+    }
+
     private void checkUnitLocations(final List<Unit> units) {
-        Map<Location, Player> owners = new HashMap<>();
+        final Map<Location, List<Player>> owners = new HashMap<>();
         units.forEach(unit -> {
             if (unit.isAtPlaceLocation()) {
-                Player owner = owners.get(unit.getLocation());
-                if (owner != null) {
-                    if (!owner.equals(unit.getOwner())) {
+                final List<Player> present = owners.computeIfAbsent(
+                        unit.getLocation(), at -> new java.util.ArrayList<>());
+                for (final Player other : present) {
+                    if (!other.equals(unit.getOwner())
+                            && !sharedSquarePolicy.permits(other,
+                                    unit.getOwner(), unit.getLocation())) {
                         throw new IllegalArgumentException(String.format(
                                 "There is an enemy unit at the same location (%s).",
                                 unit.getLocation()));
                     }
-                } else {
-                    owners.put(unit.getLocation(), unit.getOwner());
+                }
+                if (!present.contains(unit.getOwner())) {
+                    present.add(unit.getOwner());
                 }
             }
         });

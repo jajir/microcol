@@ -268,6 +268,12 @@ public class ConstructionSlotTest {
     @BeforeEach
     void beforeEach() {
         slot = new ConstructionSlot(model, construction);
+        final Colony colony = mock(Colony.class);
+        when(construction.getColony()).thenReturn(colony);
+        when(colony.getPoliticalProduction())
+                .thenReturn(PoliticalProduction.NONE);
+        when(colony.getPoliticalProductionFor(unit))
+                .thenReturn(PoliticalProduction.NONE);
     }
 
     @AfterEach

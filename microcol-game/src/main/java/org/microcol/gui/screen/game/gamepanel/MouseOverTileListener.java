@@ -60,10 +60,11 @@ public final class MouseOverTileListener {
      */
     private void setStatusMessageForTile(final Player player,
             final TerrainType terrain, final Location where) {
+        // Hover is read-only: only objects in present sight are passed on.
         final String message = statusBarMessageService.getStatusMessage(where,
-                player, terrain,
-                gameModelController.getModel().getUnitsAt(where),
-                gameModelController.getModel().getColonyAt(where));
+                player, terrain, player.getObservedUnitsAt(where),
+                gameModelController.getModel().getColonyAt(where)
+                        .filter(colony -> player.isCurrentlyVisible(where)));
         eventBus.post(new StatusBarMessageEvent(message, Source.GAME));
     }
 }

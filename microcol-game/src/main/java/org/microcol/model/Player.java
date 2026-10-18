@@ -7,8 +7,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.ColonySightingPo;
 import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.RecruitmentPo;
+import org.microcol.model.store.TaxPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.Ship;
@@ -44,13 +46,23 @@ public abstract class Player {
 
     private final Congress congress;
 
+    /** Null for a Crown, which only reads its nation's state. */
+    private final TaxState tax;
+
     private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
+
+    /**
+     * Colonies remembered from actual observation, by location. Concurrent
+     * because the interface paints while the model thread observes.
+     */
+    private final Map<Location, ColonySighting> colonySightings = new java.util.concurrent.ConcurrentHashMap<>();
 
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
             final boolean declaredIndependence,
             final Map<String, Object> extraData, Set<Location> visible,
-            final RecruitmentPo recruitmentPo, final CongressPo congressPo) {
+            final RecruitmentPo recruitmentPo, final CongressPo congressPo,
+            final TaxPo taxPo) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.computer = computer;
@@ -66,6 +78,8 @@ public abstract class Player {
                 : new RecruitmentPool(recruitmentPo);
         this.congress = congressPo == null ? null
                 : new Congress(congressPo, model.getDifficulty());
+        this.tax = taxPo == null ? null
+                : new TaxState(taxPo, model.getDifficulty());
         if (recruitment != null) {
             try {
                 recruitment.price(model.getDifficulty(), name);
@@ -90,11 +104,14 @@ public abstract class Player {
                     "Missing colonial recruitment pool");
             Preconditions.checkArgument(playerPo.getCongress() != null,
                     "Missing colonial Congress");
+            Preconditions.checkArgument(playerPo.getTax() != null,
+                    "Missing colonial tax state");
             final Player player = new PlayerHuman(playerPo.getName(),
                     playerPo.isComputer(), playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
                     playerPo.getVisible().getVisibilitySet(),
-                    playerPo.getRecruitment(), playerPo.getCongress());
+                    playerPo.getRecruitment(), playerPo.getCongress(),
+                    playerPo.getTax());
             player.loadUnitPurchaseCounts(playerPo.getUnitPurchaseCounts());
             return player;
         } else {
@@ -102,6 +119,8 @@ public abstract class Player {
                     "Kings cannot have recruitment pools");
             Preconditions.checkArgument(playerPo.getCongress() == null,
                     "Kings cannot have Congress");
+            Preconditions.checkArgument(playerPo.getTax() == null,
+                    "Kings cannot have their own tax state");
             Preconditions.checkArgument(
                     playerPo.getUnitPurchaseCounts().isEmpty(),
                     "Kings cannot have purchase counts");
@@ -111,14 +130,139 @@ public abstract class Player {
                     playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), subdued,
                     playerPo.getExtraData(),
-                    playerPo.getVisible().getVisibilitySet(),
-                    playerPo.getKingsTaxPercentage());
+                    playerPo.getVisible().getVisibilitySet());
         }
     }
 
+    /**
+     * Accumulated exploration of terrain. It stays true after the player's
+     * units leave; use {@link #isCurrentlyVisible(Location)} for foreign units
+     * and colonies.
+     *
+     * @param location required location
+     * @return whether the player has ever seen the terrain at the location
+     */
     public boolean isVisible(final Location location) {
         model.isValid(location);
         return visibility.isVisible(location);
+    }
+
+    /**
+     * Present sight: the effective sight of every own unit on the map and the
+     * owned colony tile with its eight neighbors, even when all residents are
+     * inside. It is computed from live ownership and positions, so losing a
+     * unit or colony removes its sight immediately.
+     *
+     * @param location required location
+     * @return whether the player observes the location right now
+     */
+    public boolean isCurrentlyVisible(final Location location) {
+        Preconditions.checkNotNull(location);
+        if (!model.isValid(location)) {
+            return false;
+        }
+        return model.getAllUnits().stream()
+                .anyMatch(unit -> unit.getOwner().equals(this)
+                        && unit.isAtPlaceLocation()
+                        && unit.getVisibleLocations().contains(location))
+                || model.getColonies(this).stream().anyMatch(colony -> colony
+                        .getLocation().getDistanceChebyshev(location) <= 1);
+    }
+
+    /**
+     * @param location required location
+     * @return units at the location when it is in present sight, otherwise
+     *         empty list
+     */
+    public List<Unit> getObservedUnitsAt(final Location location) {
+        return isCurrentlyVisible(location) ? model.getUnitsAt(location)
+                : List.of();
+    }
+
+    /**
+     * Colony known at the location: the live colony inside present sight,
+     * otherwise the remembered snapshot of the last observation.
+     *
+     * @param location required location
+     * @return known colony or empty when none was ever observed there
+     */
+    public Optional<ColonySighting> getKnownColonyAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        if (isCurrentlyVisible(location)) {
+            return model.getColonyAt(location).map(this::sightingOf);
+        }
+        return Optional.ofNullable(colonySightings.get(location));
+    }
+
+    /**
+     * @return every colony known to the player: live inside present sight and
+     *         remembered snapshots outside it
+     */
+    public List<ColonySighting> getKnownColonies() {
+        final Map<Location, ColonySighting> known = new HashMap<>();
+        colonySightings.forEach((location, sighting) -> {
+            if (!isCurrentlyVisible(location)) {
+                known.put(location, sighting);
+            }
+        });
+        model.getColonies().stream()
+                .filter(colony -> isCurrentlyVisible(colony.getLocation()))
+                .forEach(colony -> known.put(colony.getLocation(),
+                        sightingOf(colony)));
+        return List.copyOf(known.values());
+    }
+
+    private ColonySighting sightingOf(final Colony colony) {
+        return ColonySighting.of(colony, model.getCalendar());
+    }
+
+    /**
+     * Record colonies inside present sight and forget remembered ones that are
+     * observed to be gone. Colonies outside present sight are untouched.
+     */
+    void observeColonies() {
+        for (final Colony colony : model.getColonies()) {
+            if (colony.getOwner().equals(this)) {
+                // Own colonies are always live; nothing stale to remember.
+                colonySightings.remove(colony.getLocation());
+                // Colony sight is explored terrain too, and stays so after
+                // the colony is lost.
+                final List<Location> around = new java.util.ArrayList<>(
+                        colony.getLocation().getNeighbors());
+                around.add(colony.getLocation());
+                visibility.reveal(around.stream().filter(model::isValid)
+                        .collect(java.util.stream.Collectors.toList()));
+            } else if (isCurrentlyVisible(colony.getLocation())) {
+                colonySightings.put(colony.getLocation(), sightingOf(colony));
+            }
+        }
+        colonySightings.keySet()
+                .removeIf(location -> isCurrentlyVisible(location)
+                        && model.getColonyAt(location).isEmpty());
+    }
+
+    /** Remember a colony the player was directly told about. */
+    void recordColony(final Colony colony) {
+        colonySightings.put(colony.getLocation(), sightingOf(colony));
+    }
+
+    /** Forget a colony the player was directly told is gone. */
+    void forgetColony(final Location location) {
+        colonySightings.remove(location);
+    }
+
+    void restoreColonyKnowledge(final List<ColonySightingPo> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Missing remembered colonies");
+        colonySightings.clear();
+        for (final ColonySightingPo po : saved) {
+            final ColonySighting sighting = ColonySighting.restore(po, model);
+            Preconditions
+                    .checkArgument(
+                            colonySightings.put(sighting.getLocation(),
+                                    sighting) == null,
+                            "Duplicate remembered colony");
+        }
     }
 
     /**
@@ -131,6 +275,7 @@ public abstract class Player {
         Preconditions.checkState(unit.getOwner().equals(this),
                 "Unit's owher '%s' is to same as '%s'", unit.getOwner(), this);
         visibility.makeVisibleMapForUnit(unit);
+        observeColonies();
     }
 
     public PlayerPo save() {
@@ -147,10 +292,19 @@ public abstract class Player {
         if (congress != null) {
             out.setCongress(congress.save());
         }
+        if (tax != null) {
+            out.setTax(tax.save());
+        }
         final Map<String, Integer> counts = new HashMap<>();
         unitPurchaseCounts
                 .forEach((type, count) -> counts.put(type.name(), count));
         out.setUnitPurchaseCounts(counts);
+        colonySightings.values().stream().sorted(java.util.Comparator
+                .comparingInt((ColonySighting sighting) -> sighting
+                        .getLocation().getX())
+                .thenComparingInt(sighting -> sighting.getLocation().getY()))
+                .forEach(sighting -> out.getColonySightings()
+                        .add(sighting.save()));
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),
                 model.getMap().getMaxLocationY());
         return out;
@@ -252,13 +406,133 @@ public abstract class Player {
         if (!settleEarnedImmigrants()) {
             return false;
         }
+        if (!settleTaxCheckpoint()) {
+            return false;
+        }
         finishTurnPreparation(hadFranklin);
+        return true;
+    }
+
+    /**
+     * Continue a preparation that paused for an earned-immigrant choice: the
+     * tax checkpoint follows, then the remaining production and unit work.
+     *
+     * @return false when a tax demand now waits for the player's answer
+     */
+    boolean continueAfterImmigration() {
+        if (!settleTaxCheckpoint()) {
+            return false;
+        }
+        finishTurnPreparation();
         return true;
     }
 
     void finishTurnPreparation() {
         finishTurnPreparation(
                 getCongressMembers().contains(Founder.BENJAMIN_FRANKLIN));
+    }
+
+    /**
+     * Count one own update toward the next Crown demand. A computer player
+     * accepts through the same state change; a human demand is frozen and waits
+     * for an explicit answer.
+     *
+     * @return false when a human demand is pending
+     */
+    private boolean settleTaxCheckpoint() {
+        if (tax == null || declaredIndependence) {
+            return true;
+        }
+        Preconditions.checkState(!tax.isPending(),
+                "A tax demand is already pending");
+        if (!tax.advance(!getColonies().isEmpty(), model.getDifficulty())
+                || tax.getRate() >= TaxState.MAX_RATE) {
+            return true;
+        }
+        final int serial = tax.issue();
+        tax.setPending(freezeTaxDemand(quoteTaxDemand(serial)));
+        if (isComputer()) {
+            // The computer answers through the very operation a human uses.
+            applyTaxAcceptance();
+            return true;
+        }
+        return false;
+    }
+
+    /** Raise the rate to the pending proposal once and clear the demand. */
+    private void applyTaxAcceptance() {
+        tax.setRate(tax.getPending().getProposedRate());
+        tax.clearPending();
+    }
+
+    private static TaxState.Frozen freezeTaxDemand(final TaxDemand demand) {
+        final TaxProtest protest = demand.getProtest().orElse(null);
+        return protest == null
+                ? new TaxState.Frozen(demand.getProposedRate(), null, -1, 0, 0)
+                : new TaxState.Frozen(demand.getProposedRate(),
+                        protest.getGoods(), protest.getColonyId(),
+                        protest.getQuantity(), protest.getBid());
+    }
+
+    /** Quote a demand from the live rate, stock and market. */
+    private TaxDemand quoteTaxDemand(final int serial) {
+        return new TaxDemand(this, serial, tax.getRate(), tax.nextRate(),
+                selectProtest().orElse(null));
+    }
+
+    /**
+     * Greatest full-stock value, whole stock times the quoted bid before tax,
+     * among tradable stock of commodities that are not yet boycotted in owned
+     * colonies; ties go to the lower goods order, then the lower colony
+     * identity.
+     */
+    private Optional<TaxProtest> selectProtest() {
+        Colony bestColony = null;
+        GoodsType bestType = null;
+        long bestValue = -1;
+        for (final Colony colony : getColonies()) {
+            for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
+                final int stock = colony.getWarehouse().getGoods(type)
+                        .getAmount();
+                if (stock <= 0 || isBoycotted(type)) {
+                    continue;
+                }
+                final long value = (long) stock * model.getEurope()
+                        .getGoodsTradeForType(type).getSellPrice();
+                if (bestColony == null || value > bestValue
+                        || value == bestValue && isStableBefore(type, colony,
+                                bestType, bestColony)) {
+                    bestColony = colony;
+                    bestType = type;
+                    bestValue = value;
+                }
+            }
+        }
+        if (bestColony == null) {
+            return Optional.empty();
+        }
+        // Only the winner is described. If its arrears cannot be represented
+        // there is no protest; another commodity is never substituted.
+        try {
+            return Optional.of(new TaxProtest(bestType, bestColony.getId(),
+                    bestColony.getName(),
+                    bestColony.getWarehouse().getGoods(bestType).getAmount(),
+                    model.getEurope().getGoodsTradeForType(bestType)
+                            .getSellPrice(),
+                    bestColony
+                            .previewProtestLiberty(TaxProtest.LIBERTY_POINTS)));
+        } catch (final ArithmeticException overflow) {
+            return Optional.empty();
+        }
+    }
+
+    private static boolean isStableBefore(final GoodsType type,
+            final Colony colony, final GoodsType other,
+            final Colony otherColony) {
+        final int byGoods = Integer.compare(GoodsType.GOOD_TYPES.indexOf(type),
+                GoodsType.GOOD_TYPES.indexOf(other));
+        return byGoods != 0 ? byGoods < 0
+                : colony.getId() < otherColony.getId();
     }
 
     private void finishTurnPreparation(final boolean hadFranklin) {
@@ -313,6 +587,24 @@ public abstract class Player {
         return type.getSpeed() + (type.isShip()
                 && getCongressMembers().contains(Founder.FERDINAND_MAGELLAN) ? 1
                         : 0);
+    }
+
+    /**
+     * Exact population-weighted rebel support of this nation. Includes every
+     * colony whose last colonial affiliation is this player, also while the
+     * Crown occupies it. Read-only; the Crown itself has none.
+     */
+    public RebelSupport getNationalRebelSupport() {
+        RebelSupport out = RebelSupport.NONE;
+        if (isKing()) {
+            return out;
+        }
+        for (final Colony colony : model.getColonies()) {
+            if (colony.getLastColonialAffiliation() == this) {
+                out = out.plus(colony.getRebelSupport());
+            }
+        }
+        return out;
     }
 
     public int getCongressBells() {
@@ -375,6 +667,11 @@ public abstract class Player {
             }
             if (arrived == Founder.SIEUR_DE_LA_SALLE) {
                 getColonies().forEach(Colony::grantLaSalleStockade);
+            }
+            if (arrived == Founder.JAKOB_FUGGER && tax != null) {
+                // Only the arrears that exist at this arrival are removed;
+                // later protests are boycotted as usual.
+                tax.clearArrears();
             }
             if (arrived == Founder.HERNANDO_DE_SOTO) {
                 getAllUnits().stream().filter(Unit::isAtPlaceLocation)
@@ -516,6 +813,279 @@ public abstract class Player {
         }
     }
 
+    /**
+     * @return the single tax percentage of this nation; a Crown reports the
+     *         rate of the nation it rules
+     */
+    public int getTaxRate() {
+        return tax.getRate();
+    }
+
+    /** Controlled-test and Crown-adapter write access to the nation's rate. */
+    void setTaxRate(final int percentage) {
+        Preconditions.checkState(tax != null, "Only a nation has a tax rate");
+        tax.setRate(percentage);
+    }
+
+    /**
+     * Controlled-test access: record arrears, which boycott the commodity.
+     * Gameplay creates arrears only through an answered protest.
+     */
+    void addTaxArrears(final GoodsType type, final int owed) {
+        Preconditions.checkState(tax != null, "Only a nation owes arrears");
+        Preconditions.checkArgument(
+                GoodsType.BUYABLE_GOOD_TYPES.contains(type)
+                        && owed >= TaxProtest.MIN_ARREARS,
+                "Invalid tax arrears");
+        tax.addArrears(type, owed);
+    }
+
+    /** @return whether the commodity is boycotted for this nation */
+    public boolean isBoycotted(final GoodsType type) {
+        return tax != null && tax.isBoycotted(type);
+    }
+
+    /**
+     * @return gold owed per boycotted commodity, in stable goods order; empty
+     *         for a Crown or a nation without boycotts
+     */
+    public Map<GoodsType, Integer> getTaxArrears() {
+        return tax == null ? Map.of() : tax.getArrears();
+    }
+
+    /**
+     * Quote the frozen back taxes of one boycotted commodity.
+     *
+     * @param type the commodity the player wants to pay for
+     * @return the exact amount and demand generation, or empty when the
+     *         commodity is not boycotted
+     */
+    public Optional<TaxArrearsQuote> quoteTaxArrears(final GoodsType type) {
+        Preconditions.checkNotNull(type);
+        if (tax == null || !tax.isBoycotted(type)) {
+            return Optional.empty();
+        }
+        return Optional.of(new TaxArrearsQuote(this, type,
+                tax.getArrears().get(type), tax.getIssued()));
+    }
+
+    /** @return whether paying this exact quote is possible right now */
+    public boolean canPayTaxArrears(final TaxArrearsQuote quote) {
+        try {
+            checkTaxArrearsPayable(quote);
+            return true;
+        } catch (final IllegalStateException | NullPointerException stale) {
+            return false;
+        }
+    }
+
+    /**
+     * Pay the frozen arrears of one commodity once and lift only its boycott.
+     * Tax rate, other arrears and Congress stay as they are. A stale or
+     * repeated quote changes nothing.
+     *
+     * @param quote the snapshot the player reviewed
+     * @throws IllegalStateException when the quote is stale or gold is short
+     */
+    public void payTaxArrears(final TaxArrearsQuote quote) {
+        synchronized (model) {
+            checkTaxArrearsPayable(quote);
+            // Lift the boycott before the gold event, so listeners see both
+            // completed changes and a reentrant confirmation finds no debt.
+            tax.removeArrears(quote.getGoods());
+            setGold(getGold() - quote.getAmount());
+        }
+    }
+
+    private void checkTaxArrearsPayable(final TaxArrearsQuote quote) {
+        Preconditions.checkNotNull(quote, "Tax arrears quote is null");
+        model.checkGameRunning();
+        model.checkTurnPreparationComplete();
+        model.checkCurrentPlayer(this);
+        Preconditions.checkState(quote.getPlayer() == this && tax != null,
+                "The arrears quote belongs to another nation");
+        Preconditions.checkState(canTradeInEurope(),
+                "European trade is unavailable");
+        final Integer owed = tax.getArrears().get(quote.getGoods());
+        Preconditions.checkState(
+                owed != null && owed == quote.getAmount()
+                        && tax.getIssued() == quote.getGeneration(),
+                "The back taxes changed");
+        Preconditions.checkState(getGold() >= quote.getAmount(),
+                "Not enough gold to pay %s", quote.getAmount());
+    }
+
+    boolean hasPendingTaxDemand() {
+        return tax != null && tax.isPending();
+    }
+
+    /**
+     * Check a loaded unresolved demand against the whole position. Called once
+     * the colonies exist.
+     */
+    void validateFrozenTaxDemand() {
+        Preconditions.checkArgument(
+                hasPendingTaxDemand() && !isComputer() && !declaredIndependence
+                        && !hasFrozenEarnedChoice() && !hasPendingImmigrant(),
+                "Invalid saved tax demand");
+        final TaxState.Frozen frozen = tax.getPending();
+        if (frozen.hasProtest()) {
+            final Colony colony = getColonies().stream().filter(
+                    candidate -> candidate.getId() == frozen.getColonyId())
+                    .findAny().orElse(null);
+            Preconditions.checkArgument(colony != null && colony.isValid(),
+                    "Saved tax protest names an unavailable colony");
+            final int stock = colony.getWarehouse().getGoods(frozen.getGoods())
+                    .getAmount();
+            Preconditions.checkArgument(
+                    stock > 0 && Math.min(TaxProtest.MAX_DESTROYED,
+                            stock) == frozen.getQuantity(),
+                    "Saved tax protest disagrees with the colony stock");
+        }
+    }
+
+    /**
+     * @return the unresolved demand the player must answer, with its frozen
+     *         consequence, or empty when none is waiting for this player now
+     */
+    public Optional<TaxDemand> getTaxDemand() {
+        if (!isTaxDecisionCurrent()) {
+            return Optional.empty();
+        }
+        final TaxState.Frozen frozen = tax.getPending();
+        TaxProtest protest = null;
+        if (frozen.hasProtest()) {
+            protest = resolveProtest(frozen).orElse(null);
+        }
+        return Optional.of(new TaxDemand(this, tax.getIssued(), tax.getRate(),
+                frozen.getProposedRate(), protest));
+    }
+
+    private boolean isTaxDecisionCurrent() {
+        return tax != null && tax.isPending() && model.isAwaitingTaxDecision()
+                && model.getCurrentPlayer() == this
+                && model.getPlayers().stream().anyMatch(p -> p == this)
+                && !declaredIndependence;
+    }
+
+    private Optional<TaxProtest> resolveProtest(final TaxState.Frozen frozen) {
+        final Colony colony = getColonies().stream()
+                .filter(candidate -> candidate.getId() == frozen.getColonyId())
+                .findAny().orElse(null);
+        if (colony == null || !colony.isValid()
+                || isBoycotted(frozen.getGoods())) {
+            return Optional.empty();
+        }
+        final int stock = colony.getWarehouse().getGoods(frozen.getGoods())
+                .getAmount();
+        // The frozen consequence only holds while it destroys the same amount.
+        if (stock <= 0 || Math.min(TaxProtest.MAX_DESTROYED, stock) != frozen
+                .getQuantity()) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(new TaxProtest(frozen.getGoods(), colony.getId(),
+                    colony.getName(), stock, frozen.getBid(),
+                    colony.previewProtestLiberty(TaxProtest.LIBERTY_POINTS)));
+        } catch (final ArithmeticException overflow) {
+            return Optional.empty();
+        }
+    }
+
+    private void checkAcceptable(final TaxDemand demand) {
+        Preconditions.checkNotNull(demand, "Tax demand is null");
+        Preconditions.checkState(isTaxDecisionCurrent(),
+                "No tax demand is waiting for this player");
+        final TaxState.Frozen frozen = tax.getPending();
+        Preconditions
+                .checkState(
+                        demand.getPlayer() == this
+                                && demand.getSerial() == tax.getIssued()
+                                && demand.getCurrentRate() == tax.getRate()
+                                && demand.getProposedRate() == frozen
+                                        .getProposedRate(),
+                        "The tax demand changed");
+    }
+
+    private TaxProtest checkProtestable(final TaxDemand demand) {
+        checkAcceptable(demand);
+        final TaxState.Frozen frozen = tax.getPending();
+        final TaxProtest quoted = demand.getProtest().orElseThrow(
+                () -> new IllegalStateException("There is nothing to protest"));
+        Preconditions.checkState(frozen.hasProtest(),
+                "There is nothing to protest");
+        final TaxProtest resolved = resolveProtest(frozen).orElseThrow(
+                () -> new IllegalStateException("The protested stock is gone"));
+        final TaxProtest live = selectProtest().orElse(null);
+        Preconditions.checkState(
+                quoted.equals(resolved) && resolved.equals(live),
+                "The protest consequence changed");
+        Preconditions.checkState(
+                tax.canAddArrears(resolved.getGoods(), resolved.getArrears()),
+                "Tax arrears exceed the supported range");
+        return resolved;
+    }
+
+    /** @return whether accepting this exact demand is possible right now */
+    public boolean canAcceptTaxDemand(final TaxDemand demand) {
+        try {
+            checkAcceptable(demand);
+            return true;
+        } catch (final IllegalStateException | NullPointerException stale) {
+            return false;
+        }
+    }
+
+    /** @return whether protesting this exact demand is possible right now */
+    public boolean canProtestTaxDemand(final TaxDemand demand) {
+        try {
+            checkProtestable(demand);
+            return true;
+        } catch (final IllegalStateException | NullPointerException stale) {
+            return false;
+        }
+    }
+
+    /**
+     * Accept the demand: the rate rises once and the paused preparation
+     * continues. A stale or repeated demand changes nothing.
+     *
+     * @param demand the snapshot the player reviewed
+     * @throws IllegalStateException when the demand is stale or not current
+     */
+    public void acceptTaxDemand(final TaxDemand demand) {
+        synchronized (model) {
+            checkAcceptable(demand);
+            model.beginTaxChoice(this);
+            applyTaxAcceptance();
+            model.finishTaxChoice(this);
+        }
+    }
+
+    /**
+     * Protest the demand: the quoted stock is destroyed, the colony gains
+     * liberty, the commodity is boycotted with frozen arrears and the rate is
+     * unchanged. A stale or repeated demand changes nothing.
+     *
+     * @param demand the snapshot the player reviewed
+     * @throws IllegalStateException when the consequence changed or is missing
+     */
+    public void protestTaxDemand(final TaxDemand demand) {
+        synchronized (model) {
+            final TaxProtest protest = checkProtestable(demand);
+            final Colony colony = getColonies().stream().filter(
+                    candidate -> candidate.getId() == protest.getColonyId())
+                    .findAny().orElseThrow();
+            model.beginTaxChoice(this);
+            colony.getWarehouse().removeGoods(
+                    Goods.of(protest.getGoods(), protest.getQuantity()));
+            colony.addProtestLiberty(TaxProtest.LIBERTY_POINTS);
+            tax.addArrears(protest.getGoods(), protest.getArrears());
+            tax.clearPending();
+            model.finishTaxChoice(this);
+        }
+    }
+
     public void endTurn() {
         model.checkGameRunning();
         model.checkCurrentPlayer(this);
@@ -558,7 +1128,7 @@ public abstract class Player {
      */
     public boolean isPossibleToSailAt(final Location target) {
         final TerrainType t = model.getMap().getTerrainTypeAt(target);
-        if (t == TerrainType.OCEAN) {
+        if (t.isOrdinaryWater()) {
             return isItPlayersUnits(model.getUnitsAt(target));
         } else {
             return false;
@@ -599,6 +1169,7 @@ public abstract class Player {
         final int price = quoteEuropeTrade(goods, true).getTotal();
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
+        checkNotBoycotted(goods.getType());
         verifyAvailibilityOFGold(price);
         setGold(getGold() - price);
     }
@@ -608,7 +1179,13 @@ public abstract class Player {
         final int price = quoteEuropeTrade(goods, false).getTotal();
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
+        checkNotBoycotted(goods.getType());
         setGold(Math.addExact(getGold(), price));
+    }
+
+    private void checkNotBoycotted(final GoodsType type) {
+        Preconditions.checkState(!isBoycotted(type),
+                "%s is boycotted until its arrears are cleared", type);
     }
 
     /** @return whether this player still has access to the home market */
@@ -638,7 +1215,7 @@ public abstract class Player {
      * @return an affordable cargo-slot quantity including purchase tax
      */
     public Goods getMaxBuyableGoods(final GoodsType type) {
-        if (!canTradeInEurope()) {
+        if (!canTradeInEurope() || isBoycotted(type)) {
             return Goods.of(type, 0);
         }
         for (int amount = CargoSlot.MAX_CARGO_SLOT_CAPACITY; amount > 0; amount--) {

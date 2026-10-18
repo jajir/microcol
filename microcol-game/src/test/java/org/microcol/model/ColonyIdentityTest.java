@@ -163,9 +163,8 @@ class ColonyIdentityTest {
         final Player oldOwner = colony.getOwner();
         final Unit capturing = model.getUnitById(0);
         final Player king = model.getPlayerByName("Dutch's King");
-        capturing.placeToLocation(colony.getLocation());
         capturing.takeOver(king);
-        colony.captureColony(capturing);
+        ColonyBattles.capture(model, colony, capturing);
         assertSame(king, colony.getOwner());
         assertEquals(2, colony.getId());
         assertEquals("Haarlem", colony.getName());

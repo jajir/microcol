@@ -78,4 +78,10 @@ Total: %s gold</entry>
   <entry key="earnedChoose">Choose for free</entry>
   <entry key="earnedOpen">Choose immigrant</entry>
   <entry key="earnedPending">An earned immigrant is waiting for your choice. Open recruitment to continue the turn.</entry>
+  <entry key="equipmentBOYCOTTED">This commodity is boycotted by the Crown. Nothing was changed.</entry>
+  <entry key="goodsBoycottedMark">boycotted</entry>
+  <entry key="goodsBoycotted">%s is boycotted. It can neither be bought nor sold.</entry>
+  <entry key="taxOpen">Tax demand</entry>
+  <entry key="taxPending">The Crown's tax demand is waiting for your answer. Open it to continue the turn.</entry>
+  <entry key="backTaxOpen">Back taxes</entry>
 </properties>

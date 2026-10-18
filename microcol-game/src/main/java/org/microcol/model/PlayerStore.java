@@ -15,11 +15,6 @@ import com.google.common.collect.ImmutableList;
 
 public final class PlayerStore {
 
-    /**
-     * When player doesn't have king. than this tax percentage is used.
-     */
-    private final static int DEFAULT_KINGS_TAX_PERCENTAGE = 3;
-
     private final List<Player> players;
 
     PlayerStore() {
@@ -78,10 +73,13 @@ public final class PlayerStore {
                 .findAny();
     }
 
+    /**
+     * @param subduedPlayer a colonial nation
+     * @return its single tax rate, which its Crown merely reports
+     */
     int getKingsTaxForPlayer(final Player subduedPlayer) {
-        return getKingForPlayer(subduedPlayer)
-                .map(PlayerKing::getKingsTaxPercentage)
-                .orElse(DEFAULT_KINGS_TAX_PERCENTAGE);
+        Preconditions.checkNotNull(subduedPlayer);
+        return subduedPlayer.getTaxRate();
     }
 
     @Override

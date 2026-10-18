@@ -196,6 +196,13 @@
     "gameManager": {
       "players": [
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "congress": {
             "activated": false,
             "bells": 0,
@@ -212,8 +219,7 @@
           "extraData": {},
           "visible": {
             "visible": []
-          },
-          "kingsTaxPercentage": 0
+          }
         },
         {
           "name": "Dutch\u0027s King",
@@ -224,8 +230,7 @@
           "extraData": {},
           "visible": {
             "visible": []
-          },
-          "kingsTaxPercentage": 0
+          }
         }
       ],
       "gameStarted": false

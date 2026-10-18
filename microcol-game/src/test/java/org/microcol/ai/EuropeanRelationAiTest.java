@@ -193,22 +193,48 @@ class EuropeanRelationAiTest {
                 .loadFromClassPath("/maps/free-play.microcol");
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
-        data.getModel().getColonies().stream().filter(c -> c.getId() == 0)
-                .findFirst().orElseThrow().setOwnerName("Dutch");
+        final var colonyPo = data.getModel().getColonies().stream()
+                .filter(c -> c.getId() == 0).findFirst().orElseThrow();
+        colonyPo.setOwnerName("Dutch");
+        colonyPo.setLastColonialAffiliation("Dutch");
         data.getModel().getUnits().stream().filter(u -> u.getId() == 4)
                 .findFirst().orElseThrow().setOwnerId("Dutch");
+        // A saved state whose first draw wins an ordinary land battle.
+        data.getModel().setCombatRandomState(winningCombatState());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         rival = model.getUnitById(6);
         rival.placeToLocation(Location.of(18, 10));
+        rival.getOwner().revealMapForUnit(rival);
         return model.getColonyById(0).orElseThrow();
+    }
+
+    /**
+     * First saved state whose first draw is below 0.3 and whose second draw
+     * promotes nobody; mirrors the model's generator.
+     */
+    private static long winningCombatState() {
+        final long gamma = 0x9E3779B97F4A7C15L;
+        for (long state = 0;; state++) {
+            if (draw(state + gamma) < 0.3 && draw(state + 2 * gamma) >= 0.25) {
+                return state;
+            }
+        }
+    }
+
+    private static double draw(final long advanced) {
+        long z = advanced;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= z >>> 31;
+        return (z >>> 11) * 0x1.0p-53;
     }
 
     @Test
     void routineCaptureCannotTakeAPeacefulUnguardedColony() {
         final Colony colony = undefendedHumanColony();
         final String before = snapshot();
-        behavior.tryToCaptureColony(model, rival, colony.getLocation());
+        behavior.tryToFight(rival);
         assertEquals(before, snapshot());
     }
 
@@ -216,18 +242,20 @@ class EuropeanRelationAiTest {
     void acceptedPeaceClosesTheRoutineCapturePathAgain() {
         final Colony colony = undefendedHumanColony();
         model.declareHostilities(france(), dutch());
-        assertTrue(rival.isPossibleToCaptureColonyAt(colony.getLocation()));
+        // Stepping in is never enough; the inhabitants' battle is offered.
+        assertFalse(rival.isPossibleToMoveAt(colony.getLocation()));
+        assertTrue(rival.isPossibleToAttackAt(colony.getLocation()));
         model.acceptPeace(france(), dutch());
         final String before = snapshot();
-        behavior.tryToCaptureColony(model, rival, colony.getLocation());
+        behavior.tryToFight(rival);
         assertEquals(before, snapshot());
     }
 
     @Test
-    void wartimeRoutineCaptureRetainsTheArmedForceAndNewOwnership() {
+    void wartimeRoutineAttackWinsTheCivilianBattleAndRetainsTheArmedForce() {
         final Colony colony = undefendedHumanColony();
         model.declareHostilities(france(), dutch());
-        behavior.tryToCaptureColony(model, rival, colony.getLocation());
+        behavior.tryToFight(rival);
         assertSame(france(), colony.getOwner());
         assertSame(france(), model.getUnitById(4).getOwner());
         assertSame(rival, model.getUnitById(6));
@@ -244,7 +272,8 @@ class EuropeanRelationAiTest {
         // The reference settlement has no adjacent sea for this vessel.
         model.getUnitById(3).placeToLocation(colony.getLocation());
         final String before = snapshot();
-        behavior.tryToCaptureColony(model, rival, colony.getLocation());
+        // The conquest would be non-atomic, so not even the battle starts.
+        behavior.tryToFight(rival);
         assertEquals(before, snapshot());
     }
 }

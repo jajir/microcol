@@ -336,6 +336,48 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
+    void TC_10_protested_muskets_stay_closed_while_horses_keep_their_quote()
+            throws Exception {
+        // A real protest destroys the muskets and boycotts them; the rate
+        // stays 17%.
+        org.microcol.page.TaxDemandPage taxes = new org.microcol.page.TaxDemandPage(
+                getContext());
+        taxes.prepare(new org.microcol.page.TaxDemandPage.Fixture(FIXTURE,
+                "tax-equipment").due()
+                .warehouse(java.util.Map.of(GoodsType.MUSKET, 100,
+                        GoodsType.CORN, 40)));
+        WelcomePage.of(getContext()).loadGame();
+        taxes.startUpdate();
+        taxes.protest();
+        taxes.finishUpdate();
+        taxes.verifyTax(17, java.util.Map.of(GoodsType.MUSKET, 400));
+        // The pier refuses to buy the closed commodity and changes nothing.
+        EuropePortScreen europe = GamePage.of(getContext()).openEuroperPort();
+        EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
+        taxes.verifyBoycottMarked(GoodsType.MUSKET, true);
+        taxes.verifyBoycottMarked(GoodsType.HORSE, false);
+        equipment.open(100, "Buy 50 muskets");
+        equipment.verifyChoice("Buy 50 muskets", false,
+                "This commodity is boycotted by the Crown. Nothing was changed.");
+        equipment.cancel();
+        equipment.verifyState(100, 1000, false, false, 0,
+                PlaceEuropePier.class);
+        // Another commodity keeps the unchanged taxed quote.
+        equipment.open(100, "Buy 50 horses");
+        equipment.verifyQuote(
+                "50 Horses\nUnit price: 5 gold\nTax: 17% (42 gold)\nTotal: 292 gold");
+        equipment.confirm();
+        equipment.verifyState(100, 708, false, true, 0, PlaceEuropePier.class);
+        europe.verifyGold(708);
+        // Continue keeps the closed commodity without asking again.
+        europe.close().exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame().openEuroperPort();
+        taxes.verifyTax(17, java.util.Map.of(GoodsType.MUSKET, 400));
+        equipment.verifyState(100, 708, false, true, 0, PlaceEuropePier.class);
+    }
+
+    @Test
+    @Tag("local")
     void TC_09_czech_offer_is_readable_and_keyboard_confirmation_works()
             throws Exception {
         // Select Czech through the existing settings and open Europe with E.

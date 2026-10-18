@@ -30,9 +30,9 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_no_workers() throws Exception {
-        when(slot1.getProduction()).thenReturn(empty());
-        when(slot2.getProduction()).thenReturn(empty());
-        when(slot3.getProduction()).thenReturn(empty());
+        when(slot1.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
+        when(slot2.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
+        when(slot3.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
 
         final ConstructionTurnProduction ret = construction.getProduction();
 
@@ -45,9 +45,9 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_1_worker() throws Exception {
-        when(slot1.getProduction()).thenReturn(empty());
-        when(slot2.getProduction()).thenReturn(full());
-        when(slot3.getProduction()).thenReturn(empty());
+        when(slot1.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
+        when(slot2.getProduction(PoliticalProduction.NONE)).thenReturn(full());
+        when(slot3.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
 
         final ConstructionTurnProduction ret = construction.getProduction();
 
@@ -60,9 +60,9 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_2_worker() throws Exception {
-        when(slot1.getProduction()).thenReturn(full());
-        when(slot2.getProduction()).thenReturn(empty());
-        when(slot3.getProduction()).thenReturn(full());
+        when(slot1.getProduction(PoliticalProduction.NONE)).thenReturn(full());
+        when(slot2.getProduction(PoliticalProduction.NONE)).thenReturn(empty());
+        when(slot3.getProduction(PoliticalProduction.NONE)).thenReturn(full());
 
         final ConstructionTurnProduction ret = construction.getProduction();
 

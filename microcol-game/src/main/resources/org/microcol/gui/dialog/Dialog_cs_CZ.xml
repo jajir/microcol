@@ -79,4 +79,14 @@
     <entry key="fight_veteranName">%s (veterán)</entry>
     <entry key="fight_veteranStatus">veterán</entry>
     <entry key="fight_promoted">%s: jednotka #%s byla povýšena: %s.</entry>
+    <entry key="fight_colonyArmed">Ozbrojení obránci kolonie %s bojují jako první, nejsilnější napřed. Vítězství nedobude kolonii, dokud zbývají další obránci. Poražený ztratí koně, pokud je má, jinak muškety.</entry>
+    <entry key="fight_colonyCivilians">Nezbývá žádný ozbrojený obránce, proto se kolonie %s brání všichni kolonisté společně se základní silou 1. Vítězství dobude celou kolonii se všemi pracovníky na polích i v budovách. Porážka stojí útočníka koně nebo muškety.</entry>
+    <entry key="fight_colonyRevere">Nezbývá žádný ozbrojený obránce, proto Paul Revere vyzbrojí jednoho pracovníka kolonie %s ze skladovaných mušket (spotřebuje se jich %s). Vítězství stále dobude celou kolonii. Pokud pracovník zvítězí, ponechá si muškety a připojí se k posádce venku, ledaže je posledním obyvatelem.</entry>
+    <entry key="fight_colonistsName">Kolonisté: %s</entry>
+    <entry key="fight_revereName">%s (vyzbrojen Paulem Reverem)</entry>
+    <entry key="fight_colonyCaptured">%s: kolonie %s byla dobyta se všemi pracovníky.</entry>
+    <entry key="fight_colonyField">Pracovník kolonie %s na tomto poli se brání sám (základní síla 1, je-li neozbrojený). Vítězství nad neozbrojeným pracovníkem zajme jen jeho; kolonie a ostatní práce zůstanou. Poražený v ozbrojeném boji ztratí koně nebo muškety.</entry>
+    <entry key="fight_workerName">Polní pracovník: %s</entry>
+    <entry key="fight_workerCaptured">%s: polní pracovník kolonie %s byl zajat.</entry>
+    <entry key="fight_revereExit">%s: vyzbrojený pracovník si ponechal muškety a připojil se k posádce mimo kolonii.</entry>
 </properties>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Požadavek Koruny na daň</entry>
+    <entry key="rates">Současná daň: %s%%. Koruna požaduje %s%%.</entry>
+    <entry key="acceptExplain">Přijetí zvýší daň na %s%% a nic se nezničí.</entry>
+    <entry key="protestDetail">Protest zničí %s %s v kolonii %s (zásoba %s), přidá tam %s svobody, bojkotuje tuto komoditu a zapíše %s zlata dluhu. Daň zůstane %s%%.</entry>
+    <entry key="protestNone">Nyní není k dispozici žádný důsledek protestu, takže lze jen přijmout.</entry>
+    <entry key="accept">Přijmout</entry>
+    <entry key="protest">Protestovat</entry>
+    <entry key="later">Rozhodnout později</entry>
+    <entry key="laterExplain">Vaše akce zůstanou pozastaveny, dokud neodpovíte. Požadavek znovu otevřete v Evropě.</entry>
+    <entry key="changed">Požadavek se změnil. Nic se nezměnilo.</entry>
+    <entry key="protestUnavailable">Protest už není možný. Nic se nezměnilo.</entry>
+</properties>

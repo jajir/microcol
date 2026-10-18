@@ -369,21 +369,21 @@ class LaSalleStockadeTest {
         assertDefenseOnly(colony, null);
         final Unit force = model.addUnitOutSideColony(colony);
         force.takeOver(king);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertSame(king, colony.getOwner());
         // The new owner has no La Salle, whatever the previous owner had.
         assertDefenseOnly(colony, null);
         force.takeOver(dutch);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertSame(dutch, colony.getOwner());
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
         // Existing defense stays in both directions; no second building.
         force.takeOver(king);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertSame(king, colony.getOwner());
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
         force.takeOver(dutch);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
     }
 
@@ -398,9 +398,9 @@ class LaSalleStockadeTest {
             final Colony colony = colony(model, id);
             final Unit force = model.addUnitOutSideColony(colony);
             force.takeOver(king);
-            colony.captureColony(force);
+            ColonyBattles.capture(model, colony, force);
             force.takeOver(dutch);
-            colony.captureColony(force);
+            ColonyBattles.capture(model, colony, force);
             assertSame(dutch, colony.getOwner());
         }
         // One resident is below the threshold; a fortress is never lowered.

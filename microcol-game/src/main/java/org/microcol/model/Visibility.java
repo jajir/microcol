@@ -35,6 +35,15 @@ public final class Visibility {
         visible.addAll(unit.getVisibleLocations());
     }
 
+    /**
+     * Mark terrain as explored, for example around an owned colony.
+     *
+     * @param locations required valid map locations
+     */
+    void reveal(final java.util.Collection<Location> locations) {
+        visible.addAll(Preconditions.checkNotNull(locations));
+    }
+
     void store(final VisibilityPo visibilityPo, final int maxX,
             final int maxY) {
         visibilityPo.setVisibility(visible, maxX, maxY);

@@ -87,12 +87,79 @@ class CombatStrengthTest {
     @CsvSource({ "GRASSLAND,false,0", "GRASSLAND,true,50", "PRAIRIE,false,0",
             "PRAIRIE,true,50", "SAVANNAH,false,0", "SAVANNAH,true,50",
             "DESERT,false,0", "DESERT,true,50", "SWAMP,false,25",
-            "SWAMP,true,75", "TUNDRA,false,0", "ARCTIC,false,0",
-            "HILL,false,100", "MOUNTAIN,false,150" })
+            "SWAMP,true,75", "PLAINS,false,0", "PLAINS,true,50",
+            "MARSH,false,25", "MARSH,true,50", "TUNDRA,false,0",
+            "TUNDRA,true,50", "ARCTIC,false,0", "HILL,false,100",
+            "MOUNTAIN,false,150" })
     void everyCurrentLegalTerrainUsesSharedMetadata(String name, boolean trees,
             int bonus) {
         final Model model = model(scenario(TerrainType.valueOf(name), trees));
         assertEquals(bonus, quote(model).getDefender().getTerrainBonus());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "PLAINS,50,0", "MARSH,50,25", "TUNDRA,50,0", "SWAMP,75,25" })
+    void clearingForestChangesSharedDefenseOnce(String name, int forested,
+            int bare) {
+        final Model model = model(scenario(TerrainType.valueOf(name), true));
+        assertEquals(forested, quote(model).getDefender().getTerrainBonus());
+        model.getMap().clearForest(DEFENDER);
+        assertEquals(bare, quote(model).getDefender().getTerrainBonus());
+        assertThrows(IllegalArgumentException.class,
+                () -> model.getMap().clearForest(DEFENDER));
+        assertEquals(bare, quote(model).getDefender().getTerrainBonus());
+    }
+
+    private static void setCombatState(final Model model, final long state)
+            throws ReflectiveOperationException {
+        final Field field = Model.class.getDeclaredField("combatRandomState");
+        field.setAccessible(true);
+        field.setLong(model, state);
+    }
+
+    /**
+     * The actual resolver draws against the shared preview odds, so one saved
+     * draw that loses against the forested defender wins once the forest is
+     * cleared and the shared defense drops.
+     */
+    @ParameterizedTest
+    @CsvSource({ "PLAINS", "MARSH", "TUNDRA" })
+    void actualResolverUsesForestedThenClearedDefense(final String name)
+            throws ReflectiveOperationException {
+        final TerrainType type = TerrainType.valueOf(name);
+        final double forested = quote(model(scenario(type, true)))
+                .getAttackerWinProbability();
+        final double bare = quote(model(scenario(type, false)))
+                .getAttackerWinProbability();
+        assertTrue(forested < bare, name);
+        long state = 0;
+        while (!(CombatDraws.draw(state, 1) >= forested
+                && CombatDraws.draw(state, 1) < bare
+                && CombatDraws.draw(state, 2) >= 0.25)) {
+            state++;
+        }
+
+        final Model withForest = model(scenario(type, true));
+        final AttackOrder forestOrder = withForest.getUnitById(0)
+                .prepareAttack(DEFENDER, true).orElseThrow();
+        assertEquals(forested, forestOrder.getCombatStrengths().orElseThrow()
+                .getAttackerWinProbability());
+        setCombatState(withForest, state);
+        forestOrder.execute();
+        assertFalse(
+                ((UnitFreeColonist) withForest.getUnitById(0)).isHoldingGuns(),
+                "attacker loses against " + name + " forest");
+
+        final Model cleared = model(scenario(type, true));
+        cleared.getMap().clearForest(DEFENDER);
+        final AttackOrder bareOrder = cleared.getUnitById(0)
+                .prepareAttack(DEFENDER, true).orElseThrow();
+        assertEquals(bare, bareOrder.getCombatStrengths().orElseThrow()
+                .getAttackerWinProbability());
+        setCombatState(cleared, state);
+        bareOrder.execute();
+        assertFalse(((UnitFreeColonist) cleared.getUnitById(6)).isHoldingGuns(),
+                "defender loses once " + name + " is bare");
     }
 
     @Test

@@ -24,6 +24,13 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
     private static final Location STEP = Location.of(26, 16);
     private static final Location ENEMY = Location.of(28, 16);
     private static final Location COLONY = Location.of(28, 17);
+    private static final Location OWN_COLONY = Location.of(24, 16);
+    private static final Location SHORE = Location.of(25, 16);
+    private static final Location OUTSIDE = Location.of(27, 16);
+    /** Sees the galleon at the enemy tile but not the colony tile below. */
+    private static final Location HALF_SIGHT = Location.of(26, 14);
+    private static final Location FAR_SEA = Location.of(40, 16);
+    private static final String LAST_SEEN = "Last seen: colony Hidden Quebec of France";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -112,5 +119,168 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.inspect(COLONY);
         game.verifyThatStatusBarContains("Hidden Quebec");
         fog.captureDialog("rightPanel", "fog-discovered-continued.png");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_foreign_units_follow_present_sight_and_hidden_targets_are_refused()
+            throws Exception {
+        // Beyond sight the galleon is unknown and cannot be attacked.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        FogPage fog = new FogPage(getContext());
+        fog.centerFrontier();
+        fog.verifyObservedUnits(ENEMY, 0);
+        fog.rememberActionPoints(3);
+        fog.verifyAttackRefused(3, ENEMY);
+
+        // Sailing closer shows the galleon in the tile information.
+        fog.move(START, STEP, 3);
+        fog.verifyObservedUnits(ENEMY, 1);
+        fog.centerFrontier();
+        fog.inspect(ENEMY);
+        game.verifyNumberOfUnitInRightPanel(1);
+
+        // Sailing away keeps the explored sea but removes the galleon.
+        fog.move(STEP, START, 3);
+        fog.verifyExplored(ENEMY, true);
+        fog.verifyObservedUnits(ENEMY, 0);
+        fog.centerFrontier();
+        fog.inspect(ENEMY);
+        game.verifyNumberOfUnitInRightPanel(0);
+        game.verifyThatStatusBarContains("This is ");
+        fog.verifyStatusBarOmits("with");
+
+        // Returning shows the galleon again, still beyond attack range.
+        fog.move(START, STEP, 3);
+        fog.verifyObservedUnits(ENEMY, 1);
+        fog.rememberActionPoints(3);
+        fog.verifyAttackRefused(3, ENEMY);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_colony_knowledge_is_remembered_stale_and_survives_continue()
+            throws Exception {
+        // A colony nobody has seen is unknown.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        FogPage fog = new FogPage(getContext());
+        fog.centerFrontier();
+        fog.verifyNoKnownColony(COLONY);
+
+        // Seeing it records its name and owner.
+        fog.move(START, STEP, 3);
+        fog.verifyKnownColony(COLONY, "Hidden Quebec", "France", true);
+        fog.rememberColonyObservation(COLONY);
+
+        // Out of sight it is shown as the stale last observation.
+        fog.move(STEP, START, 3);
+        fog.verifyKnownColony(COLONY, "Hidden Quebec", "France", false);
+        fog.centerFrontier();
+        fog.inspect(COLONY);
+        game.verifyThatStatusBarContains(LAST_SEEN);
+        fog.verifyRightPanelContains(LAST_SEEN);
+
+        // A hidden change is neither shown nor stored.
+        fog.captureColonyByKing(COLONY, 4);
+        fog.verifyKnownColony(COLONY, "Hidden Quebec", "France", false);
+        fog.verifyColonyObservationUnchanged(COLONY);
+        fog.inspect(COLONY);
+        fog.verifyStatusBarOmits("Dutch's King");
+
+        // Continue restores the same memory without refreshing it.
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.verifyUnitLocation(3, START);
+        fog.verifyColonyObservationUnchanged(COLONY);
+        fog.centerFrontier();
+        fog.inspect(COLONY);
+        game.verifyThatStatusBarContains(LAST_SEEN);
+        fog.verifyStatusBarOmits("Dutch's King");
+
+        // Seeing the colony again updates the memory.
+        fog.move(START, STEP, 3);
+        fog.verifyKnownColony(COLONY, "Hidden Quebec", "Dutch's King", true);
+        fog.verifyColonyObservationRefreshed(COLONY, "Dutch's King");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_owned_colony_sees_its_neighbors_and_capture_transfers_the_sight()
+            throws Exception {
+        // With the ship far away only the colony watches its neighbors.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        FogPage fog = new FogPage(getContext());
+        fog.placeUnit(3, FAR_SEA);
+        fog.forgetExploration();
+        fog.verifyExplored(SHORE, false);
+        fog.observeFromUnit(3);
+        fog.verifyExplored(SHORE, true);
+        fog.verifyExplored(Location.of(23, 15), true);
+        fog.verifyExplored(OUTSIDE, false);
+        fog.centerFrontier();
+        fog.verifyCurrentSight(SHORE, true);
+        fog.verifyCurrentSight(OUTSIDE, false);
+
+        // A foreign galleon entering the neighborhood is shown, then hidden.
+        fog.placeUnit(106, SHORE);
+        fog.verifyObservedUnits(SHORE, 1);
+        fog.inspect(SHORE);
+        game.verifyNumberOfUnitInRightPanel(1);
+        fog.placeUnit(106, OUTSIDE);
+        fog.verifyObservedUnits(OUTSIDE, 0);
+        fog.verifyExplored(OUTSIDE, false);
+        fog.inspect(OUTSIDE);
+        game.verifyNumberOfUnitInRightPanel(0);
+
+        // The king takes the colony: its sight ends, the terrain stays known.
+        fog.placeUnit(106, SHORE);
+        fog.captureColonyByKing(OWN_COLONY, 4);
+        fog.verifyCurrentSight(SHORE, false);
+        fog.verifyObservedUnits(SHORE, 0);
+        fog.verifyExplored(SHORE, true);
+        fog.verifyKnownColony(OWN_COLONY, "New Amsterdam", "Dutch's King",
+                false);
+        fog.inspect(SHORE);
+        game.verifyNumberOfUnitInRightPanel(0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_foreign_steps_outside_present_sight_schedule_no_animation()
+            throws Exception {
+        // Sail until the galleon is in sight, then watch the interface.
+        WelcomePage.of(getContext()).loadGame();
+        FogPage fog = new FogPage(getContext());
+        fog.centerFrontier();
+        fog.move(START, STEP, 3);
+        fog.listenForForeignSteps();
+
+        // A step between two observed tiles is animated.
+        fog.announceForeignStep(106, ENEMY, OUTSIDE);
+        fog.verifyForeignSteps(1, 1);
+
+        // A step leaving sight and a step far away produce no frames.
+        fog.announceForeignStep(106, ENEMY, Location.of(29, 16));
+        fog.announceForeignStep(106, Location.of(30, 16), Location.of(31, 16));
+        fog.verifyForeignSteps(1, 1);
+
+        // After sailing away the same step is no longer shown.
+        fog.move(STEP, START, 3);
+        fog.listenForForeignSteps();
+        fog.announceForeignStep(106, OUTSIDE, ENEMY);
+        fog.verifyForeignSteps(0, 0);
+
+        // A foreign fight is shown only when both fighters are in sight.
+        fog.captureColonyByKing(COLONY, 4);
+        fog.placeUnit(3, STEP);
+        fog.listenForForeignSteps();
+        fog.announceForeignFight(106, 4);
+        fog.verifyForeignFights(1);
+        fog.placeUnit(3, HALF_SIGHT);
+        fog.announceForeignFight(106, 4);
+        fog.verifyForeignFights(1);
+        fog.placeUnit(3, START);
+        fog.announceForeignFight(106, 4);
+        fog.verifyForeignFights(1);
     }
 }

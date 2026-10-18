@@ -37,7 +37,7 @@ Use from colony: %s hammers, %s tools.
 Buy for this project: %s hammers, %s tools.
 Total including tax: %s gold.
 Treasury after purchase: %s gold.</entry>
-<entry key="rushUnavailable">Completion cannot be bought now. It requires a valid current project and access to home Europe.</entry>
+<entry key="rushUnavailable">Completion cannot be bought now. It requires a valid current project and access to home Europe; missing tools cannot be bought while tools are boycotted.</entry>
 <entry key="rushNoGold">Not enough gold.</entry>
 <entry key="rushChanged">The offer changed. Nothing was spent. Close this window and request a new quote.</entry>
 <entry key="rushCompleted">The current project was completed and paid once.</entry>

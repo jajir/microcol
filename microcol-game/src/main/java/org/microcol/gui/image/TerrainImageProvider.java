@@ -46,6 +46,26 @@ public class TerrainImageProvider {
                 .put(TerrainType.HIGH_SEA,
                         imageCache
                                 .getImage(ImageLoaderTerrain.IMG_TILE_HIGH_SEA))
+                // Types without dedicated artwork reuse the closest existing
+                // tile; their identity is shown by the localized name.
+                .put(TerrainType.SAVANNAH,
+                        imageCache.getImage(
+                                ImageLoaderTerrain.IMG_TILE_PRAIRIE_2))
+                .put(TerrainType.PLAINS,
+                        imageCache.getImage(
+                                ImageLoaderTerrain.IMG_TILE_PRAIRIE_1))
+                .put(TerrainType.SWAMP,
+                        imageCache.getImage(
+                                ImageLoaderTerrain.IMG_TILE_GRASSLAND))
+                .put(TerrainType.MARSH,
+                        imageCache.getImage(
+                                ImageLoaderTerrain.IMG_TILE_GRASSLAND))
+                .put(TerrainType.DESERT,
+                        imageCache
+                                .getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_2))
+                .put(TerrainType.LAKE,
+                        imageCache
+                                .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1))
                 .build();
     }
 

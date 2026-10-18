@@ -203,10 +203,14 @@ public abstract class AbstractUnit implements Unit {
             return false;
         }
         final Optional<Colony> optColony = model.getColonyAt(location);
+        boolean hostileColony = false;
         if (optColony.isPresent()) {
             final Colony colony = optColony.get();
-            if (!owner.equals(colony.getOwner())
-                    && !model.areHostile(owner, colony.getOwner())) {
+            hostileColony = !owner.equals(colony.getOwner())
+                    && model.areHostile(owner, colony.getOwner());
+            // An ally's colony grants passage only; it is never captured.
+            if (!owner.equals(colony.getOwner()) && !hostileColony
+                    && !model.areAllied(owner, colony.getOwner())) {
                 return false;
             }
         }
@@ -215,13 +219,18 @@ public abstract class AbstractUnit implements Unit {
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             if (isPossibleToGoToPort(location)) {
                 return ignoreEnemies
-                        || owner.getEnemyUnitsAt(location).isEmpty();
+                        || !model.isPassageBlockedAt(owner, location);
             }
             return false;
         }
 
-        return ignoreEnemies || owner.getEnemyUnitsAt(location).isEmpty()
-                || isPossibleToCaptureColonyAt(location);
+        if (hostileColony) {
+            // Ordinary movement, even ignoring enemies and even from a square
+            // kept after a former alliance, never enters a hostile colony: its
+            // defense battle is the only way to take it.
+            return false;
+        }
+        return ignoreEnemies || !model.isPassageBlockedAt(owner, location);
     }
 
     /**
@@ -346,21 +355,6 @@ public abstract class AbstractUnit implements Unit {
     public boolean isPossibleToGoToPort(final Location moveToLocation) {
         return isShip() ? model.isOwnedCoastalPort(owner, moveToLocation)
                 : model.getColoniesAt(moveToLocation, owner).isPresent();
-    }
-
-    /**
-     * Verify that unit can move at target location and there is colony without
-     * units to defend it.
-     *
-     * @param targetLocation required location where should be captured colony
-     * @return Return <code>true</code> when target location contains enemy
-     *         colony without military units to defend it.
-     */
-    @Override
-    public boolean isPossibleToCaptureColonyAt(final Location targetLocation) {
-        return model.getMap().isValid(targetLocation) && model
-                .getColonyAt(targetLocation)
-                .map(colony -> colony.canBeCapturedBy(this)).orElse(false);
     }
 
     private boolean isLiveOwnedUnit(final Unit unit) {
@@ -561,17 +555,37 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean isPossibleToAttackAt(final Location targetLocation) {
-        return findAttackTarget(targetLocation, false).isPresent();
+        return findBattle(targetLocation, false).isPresent();
     }
 
     @Override
     public Optional<AttackOrder> prepareAttack(final Location targetLocation,
             final boolean allowDeclaration) {
-        return findAttackTarget(targetLocation, allowDeclaration)
-                .map(defender -> new AttackOrder(this, defender));
+        return findBattle(targetLocation, allowDeclaration)
+                .map(battle -> new AttackOrder(this, battle.defender,
+                        battle.defense));
     }
 
-    private Optional<Unit> findAttackTarget(final Location targetLocation,
+    /** The selected defender and, for a colony tile, its frozen defense. */
+    private static final class Battle {
+        private final Unit defender;
+        private final Optional<ColonyDefense> defense;
+
+        private Battle(final Unit defender,
+                final Optional<ColonyDefense> defense) {
+            this.defender = defender;
+            this.defense = defense;
+        }
+    }
+
+    private Optional<Battle> colonyBattle(final ColonyDefense defense) {
+        return CombatStrengths.forColonyBattle(model, this, defense).isPresent()
+                ? Optional.of(
+                        new Battle(defense.getDefender(), Optional.of(defense)))
+                : Optional.empty();
+    }
+
+    private Optional<Battle> findBattle(final Location targetLocation,
             final boolean allowDeclaration) {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
@@ -580,25 +594,54 @@ public abstract class AbstractUnit implements Unit {
                 || !model.getMap().isValid(targetLocation)
                 || !getLocation().isNeighbor(targetLocation)
                 || !owner.isVisible(targetLocation)
+                || !owner.isCurrentlyVisible(targetLocation)
                 || !getType().canMoveAtTerrain(
                         model.getMap().getTerrainTypeAt(targetLocation))) {
             return Optional.empty();
         }
-        final Optional<Colony> peacefulColony = model
-                .getColonyAt(targetLocation)
-                .filter(colony -> colony.getOwner() != owner
-                        && !model.areHostile(owner, colony.getOwner()));
-        if (peacefulColony.isPresent() && !allowDeclaration) {
+        // The target tile is a foreign colony center, or the field tile one of
+        // its workers works; the worker has no map location of its own.
+        final Optional<Colony> centerColony = model.getColonyAt(targetLocation)
+                .filter(colony -> colony.getOwner() != owner);
+        final Optional<Colony> fieldColony = centerColony.isPresent()
+                ? Optional.empty()
+                : model.getColonies().stream()
+                        .filter(colony -> colony.getOwner() != owner
+                                && colony.hasWorkerAt(targetLocation))
+                        .findFirst();
+        final Optional<Colony> peacefulColony = centerColony
+                .or(() -> fieldColony)
+                .filter(colony -> !model.areHostile(owner, colony.getOwner()));
+        if (peacefulColony.isPresent() && (!allowDeclaration || model
+                .isAttackRestrained(owner, peacefulColony.get().getOwner()))) {
             return Optional.empty();
         }
-        return owner.getEnemyUnitsAt(targetLocation).stream()
+        final List<Unit> eligible = owner.getEnemyUnitsAt(targetLocation)
+                .stream()
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
+                // Allies, and former allies during the war wait, are never
+                // attacked, not even by declaration or privateer exception.
+                .filter(unit -> !model.isAttackRestrained(owner,
+                        unit.getOwner()))
                 .filter(unit -> allowDeclaration
                         || model.areHostile(owner, unit.getOwner())
                         || model.isPrivateerNavalException(this, unit))
                 .filter(unit -> peacefulColony.isEmpty()
                         || peacefulColony.get().getOwner() == unit.getOwner())
+                .collect(Collectors.toList());
+        if (centerColony.isPresent() && !isShip()) {
+            // Residents of fields and buildings defend too, so the colony
+            // roster, not the map-only occupant list, selects the defender. A
+            // peaceful colony needs the ordinary declaration review first.
+            return centerColony.get().planDefense(this, eligible)
+                    .flatMap(this::colonyBattle);
+        }
+        if (fieldColony.isPresent() && !isShip() && eligible.isEmpty()) {
+            return fieldColony.get().planFieldDefense(this, targetLocation)
+                    .flatMap(this::colonyBattle);
+        }
+        return eligible.stream()
                 // An existing enemy takes priority over breaking another
                 // treaty.
                 .sorted((left, right) -> {
@@ -622,7 +665,8 @@ public abstract class AbstractUnit implements Unit {
                             : 0;
                     return strength != 0 ? strength
                             : Integer.compare(left.getId(), right.getId());
-                }).findFirst();
+                }).findFirst()
+                .map(defender -> new Battle(defender, Optional.empty()));
     }
 
     /**
@@ -715,8 +759,6 @@ public abstract class AbstractUnit implements Unit {
             if (arrivesAtOwnedPort) {
                 unloadPassengersAt(moveTo);
             }
-            // if it's necessary fire event about captured city
-            tryToCaptureColony(moveTo);
             model.fireUnitMovedStepFinished(this, start, moveTo);
         }
     }
@@ -757,21 +799,6 @@ public abstract class AbstractUnit implements Unit {
         }
     }
 
-    /**
-     * When unit moves or attack than unit could capture colony.
-     *
-     * @param newLocation required new location
-     */
-    private void tryToCaptureColony(final Location newLocation) {
-        final Optional<Colony> oColony = model.getColonyAt(newLocation);
-        if (oColony.isPresent()) {
-            final Colony col = oColony.get();
-            if (!col.getOwner().equals(owner)) {
-                col.captureColony(this);
-            }
-        }
-    }
-
     private boolean isWinnerAttacker() {
         return random.nextDouble() < PROBABILITY_OF_ATTACKER_WIN;
     }
@@ -793,12 +820,18 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(
                 order.getAttacker() == this && order.matchesParticipants(),
                 "The selected battle changed");
-        final Unit selected = findAttackTarget(order.getTarget(),
+        final Battle battle = findBattle(order.getTarget(),
                 order.isDeclarationRequired())
                 .orElseThrow(() -> new IllegalStateException(
                         "The selected attack is no longer legal"));
+        final Unit selected = battle.defender;
         Preconditions.checkState(selected == order.getDefender(),
                 "The selected defender changed");
+        // The live roster, actual places, Revere inputs and ship escapes must
+        // equal the quote; nothing has changed yet when this rejects.
+        Preconditions.checkState(
+                battle.defense.equals(order.getColonyDefense()),
+                "The colony defense changed");
         Preconditions.checkState(order.matchesPromotionInputs(),
                 "The combat experience inputs changed");
         final boolean privateerException = model.isPrivateerNavalException(this,
@@ -812,8 +845,21 @@ public abstract class AbstractUnit implements Unit {
                 && order.isDeclarationRequired() == (!privateerException
                         && !model.areHostile(owner, selected.getOwner())),
                 "The diplomatic state changed");
-        final Optional<CombatStrengths> strengths = CombatStrengths
-                .forBattle(model, this, selected);
+        // Actual aggression, not the declaration alone, is recorded and
+        // obliges the victim's allies. Plan it before any random draw, combat
+        // or action-point change; it is applied where the declaration was.
+        final Set<Player> victims = new HashSet<>();
+        victims.add(selected.getOwner());
+        model.getColonyAt(order.getTarget())
+                .filter(colony -> colony.getOwner() != owner
+                        && model.areHostile(owner, colony.getOwner()))
+                .ifPresent(colony -> victims.add(colony.getOwner()));
+        final AggressionPlan aggression = model.planAggression(owner, victims,
+                privateerException);
+        final Optional<CombatStrengths> strengths = battle.defense.isPresent()
+                ? CombatStrengths.forColonyBattle(model, this,
+                        battle.defense.get())
+                : CombatStrengths.forBattle(model, this, selected);
         Preconditions.checkState(strengths.equals(order.getCombatStrengths()),
                 "The battle strength changed");
         Preconditions.checkState(
@@ -827,17 +873,20 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(naval.equals(order.getNavalPreview()),
                 "The naval cargo, market or repair destination changed");
         final AbstractUnit defender = (AbstractUnit) selected;
+        if (battle.defense.isPresent()) {
+            executeColonyAttack(battle.defense.get(), strengths.orElseThrow(),
+                    aggression);
+            return;
+        }
         if (naval.isPresent()) {
             executeNavalAttack(order, (Ship) selected, strengths.orElseThrow(),
-                    naval.get());
+                    naval.get(), aggression);
             return;
         }
         final boolean winnerAttacker = strengths.isPresent()
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
-        if (order.isDeclarationRequired()) {
-            model.declareHostilities(owner, defender.getOwner());
-        }
+        model.applyAggression(aggression);
         actionPoints = 0;
         defender.actionPoints = 0;
         if (strengths.isPresent()) {
@@ -851,7 +900,6 @@ public abstract class AbstractUnit implements Unit {
                 if (loser == defender && canOccupyWonTile(order.getTarget())) {
                     placeToLocation(order.getTarget());
                     model.wakeSentriesForMovement(this, order.getTarget());
-                    tryToCaptureColony(order.getTarget());
                 }
                 return;
             }
@@ -869,7 +917,6 @@ public abstract class AbstractUnit implements Unit {
             if (canOccupyWonTile(order.getTarget())) {
                 placeToLocation(order.getTarget());
                 model.wakeSentriesForMovement(this, order.getTarget());
-                tryToCaptureColony(order.getTarget());
             }
         } else {
             if (this instanceof UnitArtillery
@@ -884,7 +931,85 @@ public abstract class AbstractUnit implements Unit {
         }
     }
 
+    /**
+     * Resolves a battle for a colony tile after every precondition, the ship
+     * escape plan included, was validated against the frozen quote. Nothing
+     * before the first draw changes the model.
+     */
+    private void executeColonyAttack(final ColonyDefense defense,
+            final CombatStrengths strengths, final AggressionPlan aggression) {
+        final Colony colony = defense.getColony();
+        final Location battlefield = defense.getBattlefield();
+        final ColonyDefense.Kind kind = defense.getKind();
+        final AbstractUnit defender = (AbstractUnit) defense.getDefender();
+        final boolean winnerAttacker = strengths
+                .attackerWins(model.nextCombatRandom());
+        model.applyAggression(aggression);
+        actionPoints = 0;
+        defender.actionPoints = 0;
+        if (kind == ColonyDefense.Kind.REVERE) {
+            // The emergency militia costs stored muskets only now that the
+            // battle is confirmed; it is never free equipment.
+            colony.getWarehouse().removeGoods(
+                    Goods.of(GoodsType.MUSKET, defense.getRevereMuskets()));
+            ((UnitFreeColonist) defender).setHoldingGuns(true);
+        }
+        final MilitaryPromotion promotion = promoteWinningColonist(
+                winnerAttacker ? this : defender);
+        if (winnerAttacker && defense.capturesColony()) {
+            // The civilian group or the emergency militia lost: the whole
+            // colony, every job included, changes hands once.
+            if (kind == ColonyDefense.Kind.REVERE) {
+                defender.loseCombatEquipment();
+            }
+            model.fireUnitAttacked(this, defender, defender, false, promotion,
+                    new ColonyBattleOutcome(colony, battlefield, kind,
+                            ColonyBattleOutcome.Result.COLONY_CAPTURED, false));
+            placeToLocation(battlefield);
+            model.wakeSentriesForMovement(this, battlefield);
+            colony.captureAfterWonBattle(this, defense);
+            return;
+        }
+        if (winnerAttacker && kind == ColonyDefense.Kind.FIELD
+                && !CombatStrengths.isArmedLand(defender)) {
+            // An unarmed field worker is captured on its own; the colony and
+            // every other job stay. If it was the last resident, the colony
+            // is removed by the shared completed-exit rules.
+            model.fireUnitAttacked(this, defender, defender, false, promotion,
+                    new ColonyBattleOutcome(colony, battlefield, kind,
+                            ColonyBattleOutcome.Result.WORKER_CAPTURED, false));
+            defender.takeOver(owner);
+            defender.leaveJobAfterBattle(getLocation(), false);
+            return;
+        }
+        final AbstractUnit loser = winnerAttacker ? defender : this;
+        final boolean militiaExits = !winnerAttacker
+                && kind == ColonyDefense.Kind.REVERE && defense.isRevereExit();
+        final ColonyBattleOutcome.Result result = winnerAttacker
+                ? ColonyBattleOutcome.Result.DEFENDER_EQUIPMENT_LOST
+                : ColonyBattleOutcome.Result.ATTACKER_EQUIPMENT_LOST;
+        if (loser instanceof UnitArtillery
+                && ((UnitArtillery) loser).isDamaged()) {
+            model.fireUnitAttacked(this, defender, loser, true, promotion,
+                    new ColonyBattleOutcome(colony, battlefield, kind, result,
+                            false));
+            model.destroyUnit(loser);
+            return;
+        }
+        loser.loseCombatEquipment();
+        model.fireUnitAttacked(this, defender, loser, false, promotion,
+                new ColonyBattleOutcome(colony, battlefield, kind, result,
+                        militiaExits));
+        if (militiaExits) {
+            // A victory over an attacker is a forced, completed exit of the
+            // armed worker (liberty cap applied once); only the last resident
+            // stays inside with its muskets.
+            defender.leaveJobAfterBattle(colony.getLocation(), true);
+        }
+    }
+
     private MilitaryPromotion promoteWinningColonist(final Unit winner) {
+        // A resident in a job fights and is promoted like a unit on the map.
         if (!(winner instanceof UnitFreeColonist)) {
             return null;
         }
@@ -902,7 +1027,7 @@ public abstract class AbstractUnit implements Unit {
 
     private void executeNavalAttack(final AttackOrder order,
             final Ship defender, final CombatStrengths strengths,
-            final NavalCombatPreview preview) {
+            final NavalCombatPreview preview, final AggressionPlan aggression) {
         // Both saved draws are consumed exactly once after all preflight
         // checks.
         final boolean winnerAttacker = strengths
@@ -914,9 +1039,7 @@ public abstract class AbstractUnit implements Unit {
                 ? preview.getDefenderRepairDestination()
                 : preview.getAttackerRepairDestination()).isEmpty();
         final boolean sunk = drawSinks || noRepair;
-        if (order.isDeclarationRequired()) {
-            model.declareHostilities(owner, defender.getOwner());
-        }
+        model.applyAggression(aggression);
         actionPoints = 0;
         ((AbstractUnit) defender).actionPoints = 0;
         final List<Goods> captured = new ArrayList<>();
@@ -944,11 +1067,41 @@ public abstract class AbstractUnit implements Unit {
         model.fireUnitAttacked(this, defender, loser, outcome);
     }
 
+    /**
+     * A won ordinary battle may be followed by stepping onto the emptied tile.
+     * A foreign colony tile is never entered that way: its defense battle has
+     * its own capture.
+     */
     private boolean canOccupyWonTile(final Location target) {
-        return owner.getEnemyUnitsAt(target).isEmpty() && model
-                .getColonyAt(target).map(colony -> colony.getOwner() == owner
-                        || colony.canBeCapturedBy(this))
-                .orElse(true);
+        return owner.getEnemyUnitsAt(target).isEmpty()
+                && model.getColonyAt(target)
+                        .map(colony -> colony.getOwner() == owner).orElse(true);
+    }
+
+    /**
+     * Completed exit of a resident from its job after a colony battle. The
+     * place is replaced through the shared completed-exit accounting (liberty
+     * cap, teaching, removal of a colony left without residents), without the
+     * voluntary fortified minimum, because a battle result is not a voluntary
+     * choice.
+     *
+     * @param target               required tile the resident stands on
+     *                             afterwards
+     * @param requireOtherResident whether another resident must stay behind
+     */
+    private void leaveJobAfterBattle(final Location target,
+            final boolean requireOtherResident) {
+        Preconditions.checkState(
+                isAtPlaceColonyField() || isAtPlaceConstructionSlot(),
+                "Only a resident leaves a job");
+        Preconditions.checkState(
+                !requireOtherResident
+                        || getColony().orElseThrow().getPopulation() > 1,
+                "The last resident stays in the colony");
+        place.destroy();
+        place = new PlaceLocation(this, Preconditions.checkNotNull(target),
+                getDefaultOrintation());
+        model.fireUnitMovedToLocation(this);
     }
 
     protected void loseCombatEquipment() {

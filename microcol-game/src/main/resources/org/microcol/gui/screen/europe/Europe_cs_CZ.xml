@@ -78,4 +78,10 @@ Celkem: %s zlatých</entry>
   <entry key="earnedChoose">Vybrat zdarma</entry>
   <entry key="earnedOpen">Vybrat přistěhovalce</entry>
   <entry key="earnedPending">Získaný přistěhovalec čeká na váš výběr. Pokračujte v tahu přes nábor.</entry>
+  <entry key="equipmentBOYCOTTED">Koruna tuto komoditu bojkotuje. Nic se nezměnilo.</entry>
+  <entry key="goodsBoycottedMark">bojkot</entry>
+  <entry key="goodsBoycotted">Komodita %s je bojkotována. Nelze ji kupovat ani prodávat.</entry>
+  <entry key="taxOpen">Požadavek na daň</entry>
+  <entry key="taxPending">Požadavek Koruny na daň čeká na vaši odpověď. Otevřete jej a pokračujte v tahu.</entry>
+  <entry key="backTaxOpen">Dlužné daně</entry>
 </properties>

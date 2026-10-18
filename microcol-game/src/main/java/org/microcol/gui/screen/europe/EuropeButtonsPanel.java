@@ -23,6 +23,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
 
     private final Button buttonRecruit = new Button();
     private final Button buttonRepairs = new Button();
+    private final Button buttonTax = new Button();
+    private final Button buttonBackTax = new Button();
 
     private final Button buttonClose;
     private final Button buttonBuyUnit;
@@ -46,7 +48,15 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
         buttonRecruit.setId("recruitButtonId");
         buttonRepairs.setId("shipRepairsButton");
         buttonRepairs.setOnAction(event -> repairDialog.showRepairs());
+        buttonTax.setId("taxDemandButtonId");
+        buttonTax.setVisible(false);
+        buttonTax.setManaged(false);
+        buttonBackTax.setId("backTaxButtonId");
+        buttonBackTax.setVisible(false);
+        buttonBackTax.setManaged(false);
         updateLanguage(i18n);
+        getButtonPanel().getChildren().add(buttonTax);
+        getButtonPanel().getChildren().add(buttonBackTax);
         getButtonPanel().getChildren().add(buttonRecruit);
         getButtonPanel().getChildren().add(buttonBuyUnit);
         getButtonPanel().getChildren().add(buttonRepairs);
@@ -57,6 +67,18 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     public void updateLanguage(final I18n i18n) {
         buttonRecruit.setText(i18n.get(Europe.recruitOpen));
         buttonRepairs.setText(i18n.get(Europe.repairsOpen));
+        buttonTax.setText(i18n.get(Europe.taxOpen));
+        buttonBackTax.setText(i18n.get(Europe.backTaxOpen));
+    }
+
+    /** @return the action that reopens an unresolved Crown tax demand */
+    public Button getButtonTax() {
+        return buttonTax;
+    }
+
+    /** @return the action that pays the back taxes of boycotted goods */
+    public Button getButtonBackTax() {
+        return buttonBackTax;
     }
 
     public Button getButtonRecruit() {

@@ -7,6 +7,7 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.AttackOrder;
+import org.microcol.model.ColonyDefense;
 import org.microcol.model.CombatStrength;
 import org.microcol.model.Unit;
 
@@ -206,21 +207,57 @@ public final class DialogFight extends AbstractMessageWindow {
             combatChance.setText(i18n.get(Dialog.fight_chance,
                     number(100 * strengths.getAttackerWinProbability()))
                     + "\n"
-                    + i18n.get(order.getNavalPreview().isPresent()
-                            ? Dialog.fight_navalLoss
-                            : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
-                                    || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
-                                            ? Dialog.fight_artilleryLoss
-                                            : Dialog.fight_equipmentLoss));
+                    + (order.getColonyDefense().isPresent()
+                            ? colonyNote(order.getColonyDefense().get())
+                            : i18n.get(order.getNavalPreview().isPresent()
+                                    ? Dialog.fight_navalLoss
+                                    : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
+                                            || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
+                                                    ? Dialog.fight_artilleryLoss
+                                                    : Dialog.fight_equipmentLoss)));
         });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();
         attackerLabelName.setText(unitName(attacker));
         attackerImageView.setImage(imageProvider.getUnitImage(attacker));
-        defenderLabelName.setText(unitName(defender));
+        defenderLabelName
+                .setText(order.getColonyDefense().map(this::colonyDefenderName)
+                        .orElseGet(() -> unitName(defender)));
         defenderImageView.setImage(imageProvider.getUnitImage(defender));
         showAndWait();
         return userChooseFight;
+    }
+
+    /** Explains what the quoted colony battle can win and lose. */
+    private String colonyNote(final ColonyDefense defense) {
+        final String colony = defense.getColony().getName();
+        switch (defense.getKind()) {
+        case ARMED:
+            return i18n.get(Dialog.fight_colonyArmed, colony);
+        case REVERE:
+            return i18n.get(Dialog.fight_colonyRevere, colony,
+                    defense.getRevereMuskets());
+        case FIELD:
+            return i18n.get(Dialog.fight_colonyField, colony);
+        default:
+            return i18n.get(Dialog.fight_colonyCivilians, colony);
+        }
+    }
+
+    private String colonyDefenderName(final ColonyDefense defense) {
+        switch (defense.getKind()) {
+        case CIVILIANS:
+            return i18n.get(Dialog.fight_colonistsName,
+                    defense.getColony().getName());
+        case REVERE:
+            return i18n.get(Dialog.fight_revereName,
+                    unitName(defense.getDefender()));
+        case FIELD:
+            return i18n.get(Dialog.fight_workerName,
+                    defense.getColony().getName());
+        default:
+            return unitName(defense.getDefender());
+        }
     }
 
     private String unitName(final Unit unit) {

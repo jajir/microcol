@@ -9,6 +9,9 @@
  * never advances repairs or exposes damaged ships for cargo manipulation.
  * Brewster earned arrivals reuse the recruitment dialog with frozen model
  * offers; deferring preserves the pending choice and disables ordinary port
- * actions until the model completes turn preparation.
+ * actions until the model completes turn preparation. TaxDemandDialog likewise
+ * displays model-owned acceptance/protest consequences, preserves deferred
+ * decisions and exposes reopening through Europe; trade controls read the model
+ * boycott restrictions.
  */
 package org.microcol.gui.screen.europe;

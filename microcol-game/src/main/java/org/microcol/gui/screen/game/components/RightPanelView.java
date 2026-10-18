@@ -13,7 +13,7 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
-import org.microcol.model.Colony;
+import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -139,12 +139,23 @@ public final class RightPanelView implements JavaFxComponent {
                 sb.append("");
                 sb.append("\n");
                 sb.append(i18n.get(Loc.moveCost) + terrain.getMoveCost());
-                final Optional<Colony> oColony = getModel()
-                        .getColonyAt(location);
+                final Player player = gameModelController.getHumanPlayer();
+                // Objects come from the player's permitted view: live inside
+                // present sight, remembered snapshot (marked stale) outside.
+                final Optional<ColonySighting> oColony = player
+                        .getKnownColonyAt(location);
                 if (oColony.isPresent()) {
-                    tilePainter.paintColony(oColony.get());
+                    tilePainter.paintColony(oColony.get().getOwner(),
+                            oColony.get().getColonyName());
+                    if (!player.isCurrentlyVisible(location)) {
+                        sb.append("\n");
+                        sb.append(i18n.get(Loc.colonyLastSeen,
+                                oColony.get().getColonyName(),
+                                oColony.get().getOwner().getDisplayName(),
+                                oColony.get().getObservedYear()));
+                    }
                 }
-                final List<Unit> units = getModel().getUnitsAt(location);
+                final List<Unit> units = player.getObservedUnitsAt(location);
                 if (units.isEmpty()) {
                     unitsLabel.setText("");
                 } else {
@@ -153,8 +164,7 @@ public final class RightPanelView implements JavaFxComponent {
                      * Current player is not same as human player. For purposes
                      * of this method it will be sufficient.
                      */
-                    unitsPanel.setUnits(getModel().getCurrentPlayer(),
-                            getModel().getUnitsAt(location));
+                    unitsPanel.setUnits(getModel().getCurrentPlayer(), units);
                 }
             } else {
                 tilePainter.setImage(imageProvider

@@ -26,4 +26,40 @@
 	<entry key="declarationConfirm">Vyhlásit válku</entry>
 	<entry key="declarationDone">%s a %s jsou nyní ve válce.</entry>
 	<entry key="declarationStale">Hra nebo vybraní hráči se změnili. Válka nebyla vyhlášena. Zkontrolujte aktuální vztahy.</entry>
+
+	<entry key="relationAlliance">Spojenectví</entry>
+	<entry key="relationWarWait">Mír (válku nelze vyhlásit ještě %s kol)</entry>
+	<entry key="declarationWaiting">Po ukončení spojenectví nelze válku vyhlásit ještě %s kol.</entry>
+	<entry key="allianceOpen">Navrhnout spojenectví…</entry>
+	<entry key="allianceResume">Pokračovat v návrhu spojenectví…</entry>
+	<entry key="allianceContactRequired">Pro návrh spojenectví přesuňte kolonistu vedle viditelné cizí jednotky nebo kolonie.</entry>
+	<entry key="allianceBlocked">Spojenectví vyžaduje ještě %s kol bez tributu a útoků mezi těmito národy.</entry>
+	<entry key="allianceTitle">Návrh spojenectví</entry>
+	<entry key="allianceOffer">%s přijme spojenectví za %s zlatých.
+Vaše pokladnice: %s zlatých.
+Po zaplacení: %s zlatých.</entry>
+	<entry key="allianceOfferUnaffordable">%s přijme spojenectví za %s zlatých.
+Vaše pokladna při nabídce: %s zlatých.</entry>
+	<entry key="allianceObligations">Spojenci na sebe nesmějí útočit, ani kaperi, a mohou procházet jednotkami a koloniemi toho druhého bez jejich dobytí, bez využití jeho pracovníků, nákladu či rozhledu. Každý spojenec musí vyhlásit válku tomu, kdo napadne druhého. Žádné jednotky, zboží ani znalosti mapy se nepředávají. Kterákoli strana může spojenectví ukončit; mír zůstane a válku nelze 5 kol vyhlásit.</entry>
+	<entry key="allianceVisitor">Kontakt: %s na (%s, %s).</entry>
+	<entry key="allianceVisitorUnavailable">Původní kontakt již není dostupný.</entry>
+	<entry key="allianceConfirm">Zaplatit a uzavřít spojenectví</entry>
+	<entry key="allianceCancel">Zrušit návrh</entry>
+	<entry key="allianceLater">Rozhodnout později</entry>
+	<entry key="allianceInsufficient">Na přijetí návrhu nemáte dost zlata.</entry>
+	<entry key="allianceChanged">Kontakt, vztah nebo podmínky se změnily. Zrušte návrh a vyžádejte nový.</entry>
+	<entry key="allianceFormed">%s a %s jsou nyní spojenci.</entry>
+	<entry key="allianceEndOpen">Ukončit spojenectví…</entry>
+	<entry key="allianceEndTitle">Ukončení spojenectví</entry>
+	<entry key="allianceEndMessage">%s ukončí spojenectví s hráčem %s. Mír zůstane, ale žádná strana nemůže %s kol vyhlásit válku ani útočit. Ukončit spojenectví?</entry>
+	<entry key="allianceEndCancel">Ponechat spojenectví</entry>
+	<entry key="allianceEndConfirm">Ukončit spojenectví</entry>
+	<entry key="allianceEnded">Spojenectví mezi %s a %s skončilo. Válku nelze vyhlásit ještě %s kol.</entry>
+	<entry key="allianceEndStale">Hra nebo spojenectví se změnily. Nic nebylo ukončeno. Zkontrolujte aktuální vztahy.</entry>
+	<entry key="turnCrownWar">Koruna vynutila válku s hráčem %s.</entry>
+	<entry key="turnCrownWarAlliance">Koruna ukončila vaše spojenectví a vynutila válku s hráčem %s.</entry>
+	<entry key="supportNational">Celostátní podpora povstání: %s %% (%s obyvatel)</entry>
+	<entry key="supportNone">Zatím nemáte žádné kolonie s podporou povstání.</entry>
+	<entry key="supportColonyRow">%s — obyvatelé %s, nashromážděná svoboda %s, místní podpora %s %%</entry>
+	<entry key="turnAllyDefense">Spojenectví s hráčem %2$s vás zavázalo vstoupit do války proti hráči %1$s, který napadl vašeho spojence.</entry>
 </properties>

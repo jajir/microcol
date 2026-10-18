@@ -3,11 +3,14 @@ package org.microcol.gui.screen.europe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.market.ScreenMarketSellContext;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
@@ -58,6 +61,8 @@ public final class PanelEuropeGoods
 
     private final EventBus eventBus;
 
+    private final I18n i18n;
+
     @Inject
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController,
@@ -69,6 +74,7 @@ public final class PanelEuropeGoods
         this.europeDialogCallback = Preconditions
                 .checkNotNull(europeDialogCallback);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
         mainPanel = new HBox();
         mainPanel.setId("europeMarketGoods");
         tradeRestriction.setId("europeMarketRestriction");
@@ -132,6 +138,17 @@ public final class PanelEuropeGoods
         if (eval.getCargoSlot().isPresent() && eval.getGoods().isPresent()) {
             final Goods goodsToSell = eval.getGoods().get();
             final CargoSlot sourceCargoSlot = eval.getCargoSlot().get();
+            if (gameModelController.getHumanPlayer()
+                    .isBoycotted(goodsToSell.getType())) {
+                eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(Europe.goodsBoycotted,
+                                i18n.get(GoodsTypeName.getNameForGoodsType(
+                                        goodsToSell.getType()))),
+                        Source.EUROPE));
+                event.setDropCompleted(false);
+                event.consume();
+                return;
+            }
             if (specialOperatonWasSelected) {
                 // request showing screen with market sell
                 eventBus.post(new ShowScreenEvent(Screen.MARKET_SELL,

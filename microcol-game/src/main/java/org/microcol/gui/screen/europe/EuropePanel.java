@@ -124,24 +124,36 @@ public final class EuropePanel
     @Override
     public void repaint() {
         final org.microcol.model.Player player = controller.getHumanPlayer();
-        final boolean pendingChoice = controller.getModel()
+        final boolean earnedChoice = controller.getModel()
                 .isAwaitingImmigrationChoice();
+        final boolean taxChoice = controller.getModel().isAwaitingTaxDecision();
+        final boolean pendingChoice = earnedChoice || taxChoice;
         europeDock.getContent().setDisable(pendingChoice);
         shipsTravelingToEurope.getContent().setDisable(pendingChoice);
         shipsTravelingToNewWorld.getContent().setDisable(pendingChoice);
         panelPortPier.getContent().setDisable(pendingChoice);
         panelGoods.getContent().setDisable(pendingChoice);
         europeButtonsPanel.getButtonBuyUnit().setDisable(pendingChoice);
+        europeButtonsPanel.getButtonRecruit().setDisable(taxChoice);
+        europeButtonsPanel.getButtonTax().setVisible(taxChoice);
+        europeButtonsPanel.getButtonTax().setManaged(taxChoice);
+        final boolean backTaxes = !player.getTaxArrears().isEmpty();
+        europeButtonsPanel.getButtonBackTax().setVisible(backTaxes);
+        europeButtonsPanel.getButtonBackTax().setManaged(backTaxes);
+        europeButtonsPanel.getButtonBackTax()
+                .setDisable(pendingChoice || !player.canTradeInEurope());
         europeButtonsPanel.getButtonRecruit().setText(i18n
-                .get(pendingChoice ? Europe.earnedOpen : Europe.recruitOpen));
+                .get(earnedChoice ? Europe.earnedOpen : Europe.recruitOpen));
         immigration
                 .setText(i18n.get(Europe.immigrationProgress,
-                        player.getImmigrationCrosses(),
-                        player.getImmigrationTarget())
+                        player.getImmigrationCrosses(), player
+                                .getImmigrationTarget())
                         + (player.hasPendingImmigrant()
-                                ? "\n" + i18n.get(
-                                        pendingChoice ? Europe.earnedPending
+                                ? "\n" + i18n
+                                        .get(earnedChoice ? Europe.earnedPending
                                                 : Europe.immigrationPending)
+                                : "")
+                        + (taxChoice ? "\n" + i18n.get(Europe.taxPending)
                                 : ""));
         europeDock.repaint();
         shipsTravelingToEurope.repaint();

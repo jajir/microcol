@@ -18,7 +18,7 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.PaintService;
-import org.microcol.model.Colony;
+import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -39,6 +39,9 @@ import javafx.scene.paint.Color;
  */
 @Singleton
 final class GamePaintService {
+
+    /** Opacity of colonies remembered from an earlier observation. */
+    private final static double STALE_OPACITY = 0.55;
 
     private final static Point STEP_ICON_SIXE = Point.of(25, 25);
 
@@ -150,7 +153,8 @@ final class GamePaintService {
 
         final Map<Location, List<Unit>> units = ships.entrySet().stream()
                 .filter(entry -> area.isLocationVisible(entry.getKey()))
-                .filter(entry -> player.isVisible(entry.getKey()))
+                // Explored terrain shows no foreign unit outside present sight.
+                .filter(entry -> player.isCurrentlyVisible(entry.getKey()))
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
         units.forEach((location, list) -> paintUnits(graphics,
@@ -212,18 +216,23 @@ final class GamePaintService {
     public void paintColonies(final GraphicsContext graphics, final Model model,
             final Area area) {
         final Player player = gameModelController.getHumanPlayer();
-        final Map<Location, Colony> colonies = model.getColoniesAt().entrySet()
-                .stream()
-                .filter(entry -> area.isLocationVisible(entry.getKey()))
-                .filter(entry -> player.isVisible(entry.getKey()))
-                .collect(Collectors.toMap(entry -> entry.getKey(),
-                        entry -> entry.getValue()));
-
-        colonies.forEach((location, colony) -> {
+        // Known colonies are live inside present sight and remembered
+        // snapshots outside it; stale ones are drawn faded.
+        for (final ColonySighting sighting : player.getKnownColonies()) {
+            final Location location = sighting.getLocation();
+            if (!area.isLocationVisible(location)
+                    || !player.isVisible(location)) {
+                continue;
+            }
+            final boolean stale = !player.isCurrentlyVisible(location);
             final Point point = area.convertToCanvasPoint(location);
-            paintService.paintColony(graphics, point, colony, true);
-        });
-
+            if (stale) {
+                graphics.setGlobalAlpha(STALE_OPACITY);
+            }
+            paintService.paintColony(graphics, point, sighting.getOwner(),
+                    sighting.getColonyName(), true);
+            graphics.setGlobalAlpha(1.0);
+        }
     }
 
     public void paintGrid(final GraphicsContext graphics, final Area area,

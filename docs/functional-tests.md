@@ -4966,6 +4966,256 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    tests and strict MkDocs build pass; final archival/link checks are repeated
    with the completion documentation. Local acceptance covers R-0118, R-0133,
    R-0132, R-0179, R-0184, R-0147, R-0119, R-0120, R-0136 and R-0090.
-   CI runs the full suite again for the pushed revision. Publication remains
-   independently pending until its actual workflows and downloadable build are
-   verified; local acceptance alone is not a publication claim.
+   CI subsequently passed all 2,072 model and 320 functional/contract checks
+   for `333de9b6bf8f` and published `dev-171-333de9b6bf8f`; see the
+   [independent publication evidence](publishing.md#claude-batch-1-publication-2026-10-17).
+
+## R-0070 current sight — 2026-10-17
+
+1. Docker `run-aegEQ7` compiled and passed 130 selected model checks, six of
+   seven TC26 scenarios and three source-contract checks. TC26_07 timed out
+   after an unbalanced synthetic movement event; it was not accepted. Review
+   also required colony-only terrain exploration and half-visible fight guards.
+2. Sonnet medium repaired those boundaries and the diagnostic event lifecycle.
+   Docker `run-9WkN2C` passes **142 checks: 132 model, seven TC26 and three
+   source-contract**, zero failures/errors/skips. Selection includes current
+   sight, legacy visibility, attack boundaries/orders/roles, peace, tribute,
+   reference expedition, first-colony planning/journey, load rejection and
+   status-bar disclosure. TC26_04–07 cover departure/re-entry, stale colony
+   owner/date and Continue, colony-only sight and capture, hidden movement and
+   partial/fully hidden foreign fights. Shared formatter passes.
+3. This is targeted requirement-11 acceptance. Full second-batch regression and
+   publication remain pending. Worker attempts and caller review are recorded
+   in the [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+
+## R-0089 European alliances — 2026-10-18
+
+1. Docker `run-6JdvBs` passes **287 checks: 253 model and 34 functional/contract**,
+   zero failures, errors or skips, exit 0. Selection: `Alliance*Test`,
+   `European*Test`, `PeaceNegotiationTest`, `FranklinPeaceOfferTest`,
+   `TributeDemandTest`, `Attack*Test`, `CoastalPortMovementTest`,
+   `CurrentSightTest`, TC33 (7), TC59 (5), TC60 (5), TC74 (14) and
+   `PageVerificationContractTest` (3). Shared Java formatter, nine documentation
+   tests and strict MkDocs build pass.
+2. TC74 verifies proposal, cancel/refusal, saved pending offer, stale terms,
+   once-only payment, explicit termination/wait, allied passage without access,
+   no allied attack, mutual defense, Crown rounds 19/20/21 and Continue,
+   Czech labels and retained overlap across Continue before/after termination.
+   Model tests additionally cover Crown/defense-driven overlap, departure and
+   re-entry restrictions, adjacent combat after separation, malformed overlap
+   evidence and saved event randomness. Existing ownership and privateer
+   regression assertions remain intact.
+3. Earlier `run-4xcJ62` (one model error), `run-M5HEYR` (four UI failures and
+   one error) and `run-aH0VVY` (one UI failure) were diagnostics, not acceptance.
+   The final selection reruns their affected tests. Worker attempts, fixture
+   diagnosis and the main-agent test-call adjustment are recorded in the
+   [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+4. This is targeted requirement-12 acceptance. Full second-batch regression,
+   CI and publication remain pending; this does not close all of UC-069.
+
+## R-0100 rebel support — 2026-10-18
+
+1. Docker `run-kPlLaY` passes **2,153 checks: all 2,141 model tests and 12
+   functional/contract checks**, zero failures/errors/skips, exit 0. Selection
+   `*Test,TC_75_*` includes TC75 (3), `SimpleOperationsTest` (5),
+   `PageVerificationContractTest` (3) and `EnvironmentTest` (1).
+   Production code was unchanged since `run-Qx6F1u`, which additionally passed
+   TC36 (3), TC39 (8) and TC56 (2); its complete selection had 18 passing checks.
+   `run-l7vcIM` also verified all three final TC75 journeys before the last
+   model-test fixture repair. Full second-batch visual regression/CI is pending.
+2. TC75 verifies the read-only national/local report, completed resident-exit
+   cap, actual bell credit and Continue, and the 2/8-resident transfer through
+   real exit, map movement and a new job. The 1/9 result keeps liberty 200/400,
+   displays local 100%/22% and national 30%, including after Continue. The local
+   colony tooltip is checked. Czech strings are provided, but TC75 runs in
+   English; no Czech player-path acceptance is claimed.
+3. Model tests cover exact weighting/thresholds, zero residents, transient
+   same-colony reassignment versus completed exit, required saved fields,
+   Bolivar, European conquest and subsequent Crown occupation with differing
+   founder membership, liberty preservation and roundtrip affiliation.
+   Existing famine, birth, Congress and turn regressions pass. Actual Revere
+   battle placement remains R-0096, using the shared resident-exit accounting.
+4. Diagnostic `run-ZIKsKS` had three model failures; `run-KRtFY7` had two
+   failures and one error. Final acceptance reran all model tests after repair.
+   The [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17)
+   separates worker attempts, medium-to-high escalation, main fixture-schema
+   edits and inherited movement-mock fixes. Shared formatter, nine documentation
+   tests and strict MkDocs build pass. This is targeted requirement-13 acceptance.
+
+
+## R-0096 colony defense (2026-10-18)
+
+1. Targeted acceptance of [R-0096](requirements/R-0096.md), UC-075:
+   armed defenders are selected before the civilian group; residents keep their
+   actual field/building jobs until the result. Civilian victory transfers the
+   whole colony, including all eight fields, indoor workers, identity, liberty
+   and cargo-preserving ship escape. Independent field combat captures only
+   the worker. Peaceful colonies require declaration review; cancellation and
+   stale inputs leave the world and saved random state unchanged.
+2. `ColonyDefenseTest` covers frozen places, strongest/stable-ID selection,
+   armed-to-civilian transitions, blocked escape, full ownership transfer,
+   worker capture/last-resident removal, Revere's actual musket cost, forced
+   3→2 fortified exit versus voluntary refusal, last-resident retention,
+   military promotion and Save/Continue validation. Removed direct-capture
+   callers now use real battles in model/UI fixture helpers.
+3. Docker `run-F6cEP6` passes all **2,175 model tests**, zero failures/errors/
+   skips. Its selected UI run passes TC04 (1), TC26 (7), TC32 (10), TC35 (12),
+   TC76 (10), basic/environment checks (6) and source contract (3). TC33 had
+   one obsolete dialog assumption followed by four blocked scenarios; the
+   main-owned correction and its intermediate error are recorded in the
+   [worker evidence](ai/local-qwen.md), not treated as passing tests.
+4. Final focused Docker `run-QeRl9J` passes TC33 (7) and source contract (3).
+   Together the unchanged production code has **2,231 distinct passing
+   model/selected functional checks**, no remaining failures or skips.
+   TC76_01–TC76_10 cover civilian loss/win, armed-first defense, Revere win,
+   last-resident behavior and defeat, peaceful confirm/cancel, stale review,
+   independent field capture and fortified forced exit. Continuation checks
+   preserve workers, equipment, ownership and liberty. TC33 retains Czech
+   diplomacy and keyboard coverage; new TC76 journeys ran in English.
+5. Main applied the shared Java formatter (37 files; token/idempotence checks
+   pass), reviewed the changes and validated documentation. This is targeted
+   acceptance only: full Docker visual regression and publication/CI remain
+   at the second batch boundary, requirement 20. Status remains ready for
+   development until that required batch acceptance; no publication is claimed.
+
+
+## R-0101 political production (2026-10-18)
+
+1. Targeted acceptance of [R-0101](requirements/R-0101.md), UC-078: exact
+   support gives staffed positive-base jobs +1 at 50% and +2 at 100%; the
+   difficulty threshold gives a single −1 Tory penalty. One snapshot covers
+   food, famine, post-famine production and productive experience; newly
+   credited bells affect subsequent previews/updates. Prospective job choices
+   account for joining residents. The colony tooltip separates bonus, Tory
+   count/threshold and penalty, with English and Czech text.
+2. `PoliticalProductionTest` checks exact boundaries, all five thresholds,
+   combined/clamped output and prospective population. Integration checks
+   exercise staffed fields, zero-yield exclusion, unattended bells/crosses,
+   horse breeding, specialist then political then press/newspaper/Penn
+   percentages, limited and stocked manufacturing input, actual famine and
+   Bolivar affiliation through European capture/Crown occupation. The famine
+   test observes the actual victim and checks every survivor; it does not
+   claim exhaustive random-victim coverage.
+3. Final Docker `run-97pdNe` passes **2,210 model tests** and nine basic/
+   environment/source-contract checks, zero failures/errors/skips, exit 0.
+   Production code remained unchanged through the test repairs. UI diagnostic
+   `run-SAOYhq` passed TC50 (3), TC52 (2), TC68 (8), TC75 (3) and TC77_01;
+   its two TC67 failures were diagnosed as a Tory-induced construction delay.
+   F58 now explicitly uses Discoverer to isolate its religious rule; existing
+   expected outcomes were preserved. Final `run-2ymlLP` passes TC67 (2),
+   TC77 (2) and source contract (3), zero failures/errors/skips, exit 0.
+   Together these runs establish **2,239 distinct passing checks**.
+4. TC77_01 shows an exact 50% bonus, input-limited tools, population dilution,
+   actual output and Continue. TC77_02 shows Viceroy's six-Tory penalty,
+   removal below the threshold, changed tool production and Continue. TC75
+   retains support accounting; TC67 retains Czech Penn and upgrade paths.
+   New TC77 paths ran in English. Main's formatter checked 24 Java files
+   with code-token/idempotence checks, and documentation validation passed.
+5. [Worker evidence](ai/local-qwen.md) records the medium/medium/high attempts
+   and failed fixture assumptions. This is targeted acceptance, not full-batch
+   regression or publication. Status stays ready for development until the
+   agreed second-batch boundary checks; no additional CI run is claimed.
+
+## R-0102 tax demand and boycott — 2026-10-18
+
+1. R-0102 introduces national tax cadence, saved human decisions and commodity
+   boycotts. Model acceptance covers all difficulty thresholds, initial zero,
+   cap, stock-value/tie selection, bounded destruction, liberty without Congress
+   credit, arrears, stale choices, save/load, immigration ordering, AI acceptance
+   and Fugger's one-time clearing. Large full-stock values use long arithmetic;
+   an unrepresentable winning arrears quote offers no protest instead of choosing
+   a different commodity. Ordinary prices retain the agreed outcome.
+2. Docker `run-czrcJC` passes 2,248 model and 43 selected UI/basic/contract
+   checks. Final `run-oDcbjl` passes **2,250 model and 18 UI/basic/contract
+   checks**, zero failures/errors/skips. Final TC58 (6) and TC78 (3) plus
+   unchanged TC27 (10), TC55 (3), TC68 (8), TC70 (4), SimpleOperations (5),
+   Environment (1) and source contract (3) establish **2,293 distinct passing
+   checks**. Full second-batch regression and publication remain pending.
+3. TC78 verifies exact demand consequences, defer/Escape, reopening, blocked
+   actions, Continue, acceptance, protest and stale-stock rejection. TC27
+   exercises a real tools protest and equipment restrictions. TC58's real
+   protest leaves 200 ore above the 100 export threshold while tobacco sells
+   for the exact 231 gold; Continue repeats neither export nor destruction.
+   Its revolution case retains half-net export despite a seeded boycott.
+   TC55 tests missing-tools import versus stocked tools; TC70 joins earned
+   immigration to the tax pause before production. TC68's education journeys
+   remain passing. The English demand capture is readable; no separate Czech
+   visual capture or full visual regression was run.
+4. Main updated 72 current-schema fixture files, preserving nine controlled
+   positive rates, and applied the shared formatter with code-token/idempotence
+   checks. Initial diagnostic failures, caller path error and three worker
+   attempts are recorded in [operating evidence](ai/local-qwen.md). Payment
+   remains R-0103; R-0102 stays ready until the agreed batch acceptance boundary.
+
+## R-0103 back-tax payment — 2026-10-18
+
+1. R-0103 adds a quote-bound payment for one commodity's frozen arrears.
+   Player validates active actor, European access, amount, demand generation
+   and treasury before removing that debt and emitting the gold change.
+   A synchronous listener sees the completed result and cannot pay it twice.
+2. Docker `run-IdGG0D` passes **2,261 model checks** and 24 of 25 selected
+   UI/basic/contract checks; the remaining TC79_03 stale port mark was fixed
+   in the dialog's rejection refresh. Final `run-J1dNdH` passes TC79 (3) and
+   source contract (3), zero failures/errors/skips. Model code did not change
+   after its passing run. TC27 (10), TC78 (3), SimpleOperations (5),
+   Environment (1), contract (3) and TC79 (3) together establish **2,286
+   distinct passing checks**. Full second-batch acceptance remains pending.
+3. TC79 creates a real musket protest, cancels payment without charge, pays
+   exactly 400 gold, buys and sells two muskets through the existing cargo
+   dialogs and preserves the remaining silk boycott and accounting across
+   Continue. Separate paths verify one-gold-short rejection and a stale open
+   payment after another command settles the debt. Model tests include
+   duplicate/reentrant confirmation, wrong actor, pause, independence, saved
+   state, changed prices and exact buy/sell accounting. UI paths ran in English;
+   Czech strings were reviewed in source, without a separate visual capture.
+4. Haiku medium/medium/high completed the work with diagnosed UI repairs;
+   [operating evidence](ai/local-qwen.md) records failures and measured time.
+   Main formatted the 12 changed Java files, reviewed the diff and verified
+   docs. No main implementation takeover or Sonnet/Opus escalation occurred.
+
+## R-0085 real-boycott completion — 2026-10-18
+
+1. TC58_06 now creates the boycott through the actual tax protest: 300 ore
+   loses 100, the ordinary custom house preserves the remaining 200, and
+   tobacco export leaves exactly 1,231 gold. The test saves that game through
+   the normal action and changes only the independence flag in a controlled
+   copy. This isolates the export rule; it does not verify R-0105's declaration
+   or muster. No boycott or stock is invented after the protest.
+2. On the next update, 100 ore earns half its 300 ordinary net (150 gold),
+   and three tobacco earn half their six ordinary net (three gold). Exact
+   report text, stocks, 1,384 gold and unchanged 800 ore arrears are checked.
+   Continue repeats neither export nor payment. Unselected silver stays 150.
+3. Docker `run-kp4OXZ` passes **2,261 model and 15 UI/basic/contract checks**,
+   zero failures/errors/skips. TC58 contains six scenarios; basic/environment/
+   contract contribute nine. Haiku medium completed the test-only change in
+   one attempt; main formatter checked two Java files with token/idempotence
+   pass. Original [R-0085 evidence](#r-0085-custom-house-export-2026-10-16) and
+   [R-0102 evidence](#r-0102-tax-demand-and-boycott-2026-10-18) retain earlier
+   acceptance. Full second-batch regression/publication remains pending.
+
+## R-0123 terrain identities and lakes — 2026-10-18
+
+1. Plains, marsh and lake have distinct serialized identities; tundra permits
+   forest. Shared terrain defense covers the new bare/forested cells. All
+   fourteen types have English/Czech names and non-null existing artwork;
+   lake artwork uses the ocean tile without becoming an ocean identity or
+   Europe sea lane. Dedicated new terrain artwork is not part of this change.
+2. Model tests exercise strict unknown-code/illegal-forest loading, round trips,
+   occupied lake movement, land rejection, dock-gated fishing and actual stored
+   food after production. The same saved combat draw loses against forest and
+   wins after clearing plains/marsh/tundra, using the shared preview/resolver.
+   Docker `run-PinZB3` passes all **2,300 model checks**, zero failures/errors/skips.
+3. TC80/F72 uses a scoped F42 copy to verify visible names and forest state,
+   Save/Continue, actual lake ship movement, land rejection and fishing with
+   a completed dock. Final `run-KPhjW4` passes all three TC80 scenarios and three source-contract checks, zero failures/errors/skips.
+   Existing TC35 (12), TC38 (5), TC73 (6), basic/environment (6) and contract
+   (3) pass in `run-PinZB3`. TC51 (2) passes in `run-3A9YzG` after F42 starts
+   with 200 liberty: one rebel among eight residents avoids the R-0101 Tory
+   penalty without awarding a production bonus. Expected construction and
+   fishing output is unchanged. Together the selected runs establish **2,337
+   distinct passing checks** on the final implementation.
+4. Initial fixture and UI failures, all three Sonnet medium attempts, and
+   explicit main-owned test repairs are recorded in the
+   [operating evidence](ai/local-qwen.md). Full second-batch regression and
+   publication remain pending; R-0124 production and R-0125 movement matrices
+   are separate requirements. No full visual suite was run.

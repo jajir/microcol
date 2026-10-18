@@ -33,9 +33,9 @@ public final class ColonyField {
     ColonyFieldPo save() {
         final ColonyFieldPo out = new ColonyFieldPo();
         out.setDirection(direction.getVector());
-        if (getProduction().isPresent()) {
-            out.setWorkerId(getUnit().get().getId());
-            out.setProducedGoodsType(getProduction().get().getType());
+        if (placeColonyField != null) {
+            out.setWorkerId(placeColonyField.getUnit().getId());
+            out.setProducedGoodsType(placeColonyField.getProducedGoodsType());
         }
         return out;
     }
@@ -144,10 +144,23 @@ public final class ColonyField {
     public Optional<Goods> getProduction() {
         if (placeColonyField == null) {
             return Optional.empty();
+        }
+        return getProduction(colony.getPoliticalProduction());
+    }
+
+    /**
+     * Get turn production for the political snapshot of one update.
+     *
+     * @param political support bonus and Tory penalty to apply
+     * @return production at this colony field per turn, empty without a unit
+     */
+    Optional<Goods> getProduction(final PoliticalProduction political) {
+        if (placeColonyField == null) {
+            return Optional.empty();
         } else {
             final GoodsType producing = placeColonyField.getProducedGoodsType();
             return Optional.of(getPotentialProduction(
-                    placeColonyField.getUnit(), producing));
+                    placeColonyField.getUnit(), producing, political));
         }
     }
 
@@ -165,10 +178,22 @@ public final class ColonyField {
         }
     }
 
+    /**
+     * Fresh read-only production of the worker. An outside worker is previewed
+     * as a new resident, which changes the support fraction.
+     */
     Goods getPotentialProduction(final Unit worker, final GoodsType goodsType) {
-        return Goods.of(goodsType, getGoodsTypeProduction(goodsType))
-                .multiply(worker.getType().getFieldProductionModifier(goodsType,
-                        getTerrainType()));
+        return getPotentialProduction(worker, goodsType,
+                colony.getPoliticalProductionFor(worker));
+    }
+
+    Goods getPotentialProduction(final Unit worker, final GoodsType goodsType,
+            final PoliticalProduction political) {
+        final Goods base = Goods.of(goodsType,
+                getGoodsTypeProduction(goodsType));
+        final Goods worked = base.multiply(worker.getType()
+                .getFieldProductionModifier(goodsType, getTerrainType()));
+        return political.apply(base, worked);
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {

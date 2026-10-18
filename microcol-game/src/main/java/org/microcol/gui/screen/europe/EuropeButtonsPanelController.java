@@ -14,6 +14,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.TaxDemandRequiredEvent;
 
 @Singleton
 @Listener
@@ -21,6 +22,8 @@ public class EuropeButtonsPanelController {
 
     private final BuyUnitsDialog buyUnitsDialog;
     private final RecruiteUnitsDialog recruitment;
+    private final TaxDemandDialog taxDemand;
+    private final BackTaxDialog backTax;
     private final GameModelController controller;
     private final EventBus eventBus;
 
@@ -29,12 +32,19 @@ public class EuropeButtonsPanelController {
             final EuropeButtonsPanel europeButtonsPanel,
             final BuyUnitsDialog buyUnitsDialog,
             final RecruiteUnitsDialog recruitment,
+            final TaxDemandDialog taxDemand, final BackTaxDialog backTax,
             final GameModelController controller, final EventBus eventBus) {
         this.recruitment = recruitment;
+        this.taxDemand = taxDemand;
+        this.backTax = backTax;
         this.controller = controller;
         this.eventBus = eventBus;
         europeButtonsPanel.getButtonRecruit()
                 .setOnAction(event -> recruitment.showAndWait());
+        europeButtonsPanel.getButtonTax()
+                .setOnAction(event -> taxDemand.showAndWait());
+        europeButtonsPanel.getButtonBackTax()
+                .setOnAction(event -> backTax.showAndWait());
         this.buyUnitsDialog = Preconditions.checkNotNull(buyUnitsDialog);
         europeButtonsPanel.getButtonBuyUnit()
                 .setOnAction(this::onBuyUnitAction);
@@ -52,6 +62,21 @@ public class EuropeButtonsPanelController {
                     && !recruitment.isOpen()) {
                 eventBus.post(new ShowScreenEvent(Screen.EUROPE));
                 recruitment.showAndWait();
+            }
+        });
+    }
+
+    @Subscribe
+    private void onTaxDemandRequired(final TaxDemandRequiredEvent event) {
+        if (!event.getPlayer().isHuman()) {
+            return;
+        }
+        Platform.runLater(() -> {
+            if (controller.getModel() == event.getModel()
+                    && event.getModel().isAwaitingTaxDecision()
+                    && !taxDemand.isOpen()) {
+                eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+                taxDemand.showAndWait();
             }
         });
     }

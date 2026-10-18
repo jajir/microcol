@@ -6,6 +6,7 @@ import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
+import org.microcol.model.PoliticalProduction;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -75,7 +76,8 @@ public class PanelColonyName implements JavaFxComponent {
     private void onMouseEntered(
             @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(ColonyMsg.colonyName, colony.getName()),
+                i18n.get(ColonyMsg.colonyName, colony.getName()) + " — "
+                        + localSupportText(colony),
                 Source.COLONY));
     }
 
@@ -88,7 +90,24 @@ public class PanelColonyName implements JavaFxComponent {
         this.colony = colony;
         label.setText(colony.getName());
         label.setTooltip(new Tooltip(
-                colony.getName() + " — " + i18n.get(ColonyMsg.nameRename)));
+                colony.getName() + " — " + i18n.get(ColonyMsg.nameRename) + "\n"
+                        + localSupportText(colony) + "\n"
+                        + politicalProductionText(colony)));
+    }
+
+    /** Read-only values from the model; nothing is produced or clamped. */
+    private String localSupportText(final Colony colony) {
+        return i18n.get(ColonyMsg.localSupport, colony.getPopulation(),
+                colony.getLiberty(),
+                colony.getRebelSupport().getDisplayPercent());
+    }
+
+    /** Support bonus, Tory count, threshold, penalty and net change per job. */
+    private String politicalProductionText(final Colony colony) {
+        final PoliticalProduction political = colony.getPoliticalProduction();
+        return i18n.get(ColonyMsg.politicalProduction, political.getBonus(),
+                political.getToryCount(), political.getToryThreshold(),
+                political.getPenalty(), political.getNetChange());
     }
 
     @Override

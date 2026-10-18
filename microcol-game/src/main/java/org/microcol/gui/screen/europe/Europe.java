@@ -22,6 +22,7 @@ public enum Europe implements MessageKeyResource {
     repairsRestriction, repairsRow, repairsTransfer, repairsRepair,
     repairsDestinationLost, repairsClose, repairARRIVED, repairCOMPLETED,
     repairREROUTED, repairSUNK, earnedTitle, earnedExplanation, earnedChoose,
-    earnedOpen, earnedPending;
+    earnedOpen, earnedPending, equipmentBOYCOTTED, goodsBoycottedMark,
+    goodsBoycotted, taxOpen, taxPending, backTaxOpen;
 
 }

@@ -416,6 +416,10 @@ public class ColonyBuildingQueue {
         final int toolsUsed = Math.min(toolsStock, head.getRequiredTools());
         final int missingHammers = head.getRequiredHammers() - hammersUsed;
         final int missingTools = head.getRequiredTools() - toolsUsed;
+        // Missing tools are imported from Europe; stocked tools stay usable.
+        if (missingTools > 0 && owner.isBoycotted(GoodsType.TOOLS)) {
+            return Optional.empty();
+        }
         try {
             final EuropeTradeQuote toolsQuote = owner.quoteEuropeTrade(
                     Goods.of(GoodsType.TOOLS, missingTools), true);

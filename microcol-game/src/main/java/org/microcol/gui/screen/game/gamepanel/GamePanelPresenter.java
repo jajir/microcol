@@ -269,9 +269,6 @@ public final class GamePanelPresenter {
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (unitMove.requiredActionPoints() > movingUnit.getActionPoints()) {
             new DialogUnitCantMoveHere(viewUtil, i18n);
-        } else if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
-            // use can capture target colony
-            gameModelController.performMove(movingUnit, unitMove.getPath());
         } else if (unitMove.isOneTurnMove()) {
             // user will move
             if (!unitMove.getPath().isEmpty()) {

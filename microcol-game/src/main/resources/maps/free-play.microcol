@@ -161,6 +161,8 @@
         "id": 0,
         "name": "Quebec",
         "ownerName": "France",
+        "liberty": 0,
+        "lastColonialAffiliation": "France",
         "location": {
           "x": 17,
           "y": 10
@@ -316,6 +318,8 @@
         "id": 1,
         "name": "Montreal",
         "ownerName": "France",
+        "liberty": 0,
+        "lastColonialAffiliation": "France",
         "location": {
           "x": 17,
           "y": 21
@@ -557,6 +561,13 @@
     "gameManager": {
       "players": [
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "congress": {
             "activated": false,
             "bells": 0,
@@ -573,8 +584,7 @@
           "extraData": {},
           "visible": {
             "visible": []
-          },
-          "kingsTaxPercentage": 0
+          }
         },
         {
           "name": "Dutch's King",
@@ -585,10 +595,16 @@
           "extraData": {},
           "visible": {
             "visible": []
-          },
-          "kingsTaxPercentage": 0
+          }
         },
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "congress": {
             "activated": true,
             "bells": 0,
@@ -611,8 +627,7 @@
           "extraData": {},
           "visible": {
             "visible": []
-          },
-          "kingsTaxPercentage": 0
+          }
         },
         {
           "name": "France's King",
@@ -623,7 +638,6 @@
           "visible": {
             "visible": []
           },
-          "kingsTaxPercentage": 0,
           "whosKingThisPlayerIs": "France"
         }
       ],

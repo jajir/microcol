@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Zaplatit dlužné daně</entry>
+    <entry key="commodity">Bojkotovaná komodita</entry>
+    <entry key="arrears">Dluh k zaplacení: %s zlata.</entry>
+    <entry key="restore">Zaplacením se bojkot zruší: nákup a prodej komodity %s v Evropě bude opět možný. Ostatní bojkoty zůstanou.</entry>
+    <entry key="treasury">Pokladna: %s zlata. Platba: %s zlata.</entry>
+    <entry key="insufficient">Nedostatek zlata. Tato platba vyžaduje %s zlata.</entry>
+    <entry key="pay">Zaplatit</entry>
+    <entry key="cancel">Zrušit</entry>
+    <entry key="changed">Dlužné daně se změnily nebo platbu už nelze provést. Nic nebylo zaplaceno.</entry>
+</properties>

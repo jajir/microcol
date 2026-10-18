@@ -231,7 +231,7 @@ class FounderConstructionTest {
         final Player king = model.getPlayerByName("Dutch's King");
         final Unit capturing = model.addUnitOutSideColony(colony);
         capturing.takeOver(king);
-        colony.captureColony(capturing);
+        ColonyBattles.capture(model, colony, capturing);
         assertSame(king, colony.getOwner());
         final String captured = new Gson().toJson(model.save());
         assertThrows(IllegalStateException.class, () -> queue.rush(quote));
@@ -256,7 +256,7 @@ class FounderConstructionTest {
         final Unit returning = held.getUnitById(capturing.getId());
         final Player returningDutch = held.getPlayerByName(dutch.getName());
         returning.takeOver(returningDutch);
-        capturedColony.captureColony(returning);
+        ColonyBattles.capture(held, capturedColony, returning);
         final ModelPo returnedPo = held.save();
         returnedPo.getGameManager().setCurrentPlayer(dutch.getName());
         final Model returned = Model.make(returnedPo,
@@ -279,7 +279,7 @@ class FounderConstructionTest {
 
         final Unit recapturing = returned.getUnitById(capturing.getId());
         recapturing.takeOver(returned.getPlayerByName("Dutch's King"));
-        returnedColony.captureColony(recapturing);
+        ColonyBattles.capture(returned, returnedColony, recapturing);
         assertSame(returned.getPlayerByName("Dutch's King"),
                 returnedColony.getOwner());
         assertTrue(returnedColony

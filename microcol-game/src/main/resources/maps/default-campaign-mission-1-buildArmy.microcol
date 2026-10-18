@@ -128,6 +128,8 @@
       "name": "New Amsterdam",
       "exportGoods": [],
       "ownerName": "Dutch",
+      "liberty": 0,
+      "lastColonialAffiliation": "Dutch",
       "location": {
         "x": 25,
         "y": 14
@@ -395,6 +397,13 @@
   "gameManager": {
     "players": [
       {
+        "tax": {
+          "rate": 0,
+          "activated": false,
+          "updates": 0,
+          "issued": 0,
+          "arrears": {}
+        },
         "congress": {
           "activated": true,
           "bells": 0,

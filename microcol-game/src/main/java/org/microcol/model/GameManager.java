@@ -31,6 +31,8 @@ final class GameManager {
 
     private volatile boolean awaitingImmigrationChoice;
 
+    private volatile boolean awaitingTaxDecision;
+
     GameManager(final Model model,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,
             final boolean alreadyStarted, final boolean alreadyFinished,
@@ -49,6 +51,20 @@ final class GameManager {
                 "Invalid saved immigration choice boundary");
         pending.forEach(Player::validateFrozenEarnedChoice);
         awaitingImmigrationChoice = !pending.isEmpty();
+        final List<Player> taxPending = model.getPlayers().stream()
+                .filter(Player::hasPendingTaxDemand)
+                .collect(java.util.stream.Collectors.toList());
+        // A tax demand only follows a completed immigration phase, so the two
+        // saved choices may never overlap; without a tax demand there is
+        // nothing to reject here.
+        Preconditions.checkArgument(
+                taxPending.isEmpty()
+                        || taxPending.size() == 1 && !awaitingImmigrationChoice
+                                && alreadyStarted && !alreadyFinished
+                                && taxPending.get(0) == currentPlayer,
+                "Invalid saved tax decision boundary");
+        taxPending.forEach(Player::validateFrozenTaxDemand);
+        awaitingTaxDecision = !taxPending.isEmpty();
     }
 
     public static GameManager make(final Model model, final ModelPo modelPo,
@@ -101,7 +117,7 @@ final class GameManager {
 
     boolean isRunning() {
         return started && !stopped && !isFinished() && !preparing
-                && !awaitingImmigrationChoice;
+                && !awaitingImmigrationChoice && !awaitingTaxDecision;
     }
 
     boolean isAwaitingImmigrationChoice() {
@@ -109,8 +125,13 @@ final class GameManager {
                 && !preparing;
     }
 
+    boolean isAwaitingTaxDecision() {
+        return started && !stopped && !isFinished() && awaitingTaxDecision
+                && !preparing;
+    }
+
     void checkTurnPreparationComplete() {
-        if (preparing || awaitingImmigrationChoice) {
+        if (preparing || awaitingImmigrationChoice || awaitingTaxDecision) {
             throw new TurnPreparationException();
         }
     }
@@ -172,7 +193,9 @@ final class GameManager {
      * When game is loaded from file this should start it.
      */
     void continueGame() {
-        Preconditions.checkState(isRunning() || isAwaitingImmigrationChoice(),
+        Preconditions.checkState(
+                isRunning() || isAwaitingImmigrationChoice()
+                        || isAwaitingTaxDecision(),
                 "Only an active game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         checkCurrentPlayer(currentPlayer);
@@ -182,6 +205,8 @@ final class GameManager {
         preparing = false;
         if (awaitingImmigrationChoice) {
             model.fireImmigrationChoiceRequired(currentPlayer);
+        } else if (awaitingTaxDecision) {
+            model.fireTaxDemandRequired(currentPlayer);
         } else {
             model.fireTurnStarted(currentPlayer, false);
         }
@@ -205,6 +230,9 @@ final class GameManager {
             announcePreparation(completed);
         } else {
             model.getCalendar().endRound();
+            // Once per complete round, before the next player's preparation;
+            // start, continue and load never reach this boundary.
+            model.processCrownWar();
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator
                     .evaluate(model);
             if (oGameOverResult.isPresent()) {
@@ -223,9 +251,12 @@ final class GameManager {
     }
 
     private void announcePreparation(final boolean completed) {
-        awaitingImmigrationChoice = !completed;
+        awaitingTaxDecision = !completed && currentPlayer.hasPendingTaxDemand();
+        awaitingImmigrationChoice = !completed && !awaitingTaxDecision;
         if (completed) {
             model.fireTurnStarted(currentPlayer, true);
+        } else if (awaitingTaxDecision) {
+            model.fireTaxDemandRequired(currentPlayer);
         } else {
             model.fireImmigrationChoiceRequired(currentPlayer);
         }
@@ -249,9 +280,27 @@ final class GameManager {
         Preconditions.checkState(preparing && awaitingImmigrationChoice
                 && currentPlayer == player && !player.hasFrozenEarnedChoice(),
                 "Immigration choice is not complete");
-        player.finishTurnPreparation();
+        final boolean completed = player.continueAfterImmigration();
         preparing = false;
         awaitingImmigrationChoice = false;
+        announcePreparation(completed);
+    }
+
+    void beginTaxChoice(final Player player) {
+        Preconditions.checkState(
+                isAwaitingTaxDecision() && currentPlayer == player,
+                "Tax decision is not current");
+        preparing = true;
+    }
+
+    void finishTaxChoice(final Player player) {
+        Preconditions.checkState(
+                preparing && awaitingTaxDecision && currentPlayer == player
+                        && !player.hasPendingTaxDemand(),
+                "Tax decision is not complete");
+        player.finishTurnPreparation();
+        preparing = false;
+        awaitingTaxDecision = false;
         model.fireTurnStarted(player, true);
     }
 

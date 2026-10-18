@@ -203,6 +203,16 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
 | Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
 
+Accepted MicroCol decision (2026-10-18): fresh-water lakes retain their own
+terrain identity but otherwise use ordinary ocean water rules. Ships may sail
+on them under the same movement/access conditions and cost as ocean; land units
+need the same transport as on ocean. Colonial fishing uses the ocean baseline
+of three food (the existing `CORN` representation), with the same dock or
+higher-tier prerequisite and subsequent modifiers. A lake is not a sea-lane
+exit to Europe. Water restrictions, including no forests or roads, apply.
+This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
+not runtime acceptance.
+
 Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
@@ -574,19 +584,19 @@ Suggested first verification additions are a deterministic strength/modifier cal
 
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
-| GOV-001 | 84 / 90 | The Crown begins without tax and announces later increases, allowing acceptance or protest. | [PlayerKing](../microcol-game/src/main/java/org/microcol/model/PlayerKing.java) persists a rate; the free-play king starts at zero. No tax-increase/protest event path exists in [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn or [KingRobotPlayer](../microcol-game/src/main/java/org/microcol/ai/KingRobotPlayer.java).turnStarted; a missing king instead gives a 3% fallback. | Partial | Proposed: a controlled tax event changes the rate only after the player’s choice; verify initial zero tax. |
-| GOV-002 | 84–85 / 90–91 | Rejecting an increase destroys selected goods, increases rebel sentiment, and boycotts that commodity. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).buyGoods/sellGoods checks price and funds only; [PlayerPo](../microcol-game/src/main/java/org/microcol/model/store/PlayerPo.java) stores no boycotts, back taxes or sentiment. | Missing | Proposed: protest affects exactly the selected stock and commodity; both buying and selling it are blocked. |
-| GOV-003 | 85 / 91 | Paying back taxes restores trade in a boycotted commodity; Fugger removes existing boycotts. | No debt/commodity-boycott state or payment action in [Player](../microcol-game/src/main/java/org/microcol/model/Player.java), [PlayerPo](../microcol-game/src/main/java/org/microcol/model/store/PlayerPo.java), or [Europe](../microcol-game/src/main/java/org/microcol/model/Europe.java). | Missing | Proposed: insufficient funds preserves boycott; exact payment restores only the chosen commodity; Fugger clears existing bans. |
-| GOV-004 | 85 / 91 | Accumulated liberty bells and population determine national rebel sentiment and each colony’s Sons of Liberty membership. | [Colony](../microcol-game/src/main/java/org/microcol/model/Colony.java).getGoodsStats produces BELL goods, and [ColonyWarehouse](../microcol-game/src/main/java/org/microcol/model/ColonyWarehouse.java) stores them, but [Player](../microcol-game/src/main/java/org/microcol/model/Player.java)/[ColonyPo](../microcol-game/src/main/java/org/microcol/model/store/ColonyPo.java) have no sentiment calculation or population-weighted national aggregate. | Partial | Proposed: bells, immigration, growth and population transfers update the correct colony/nation sentiment; use the accepted formula in [support, production and congress](#support-production-and-congress). |
-| GOV-005 | 86 / 92 | Colony production gains one at 50% Sons of Liberty and a further one at 100%. | [Colony](../microcol-game/src/main/java/org/microcol/model/Colony.java).getGoodsStats and [Construction](../microcol-game/src/main/java/org/microcol/model/Construction.java).getProduction have no sentiment modifier. | Missing | Proposed: verify 49/50/99/100% boundaries across outdoor and indoor production; apply the accepted rounding and bonuses in [support, production and congress](#support-production-and-congress). |
-| GOV-006 | 86 / 92 | Reaching the critical Tory count reduces production by one; stated critical counts are 10 at Discoverer and 6 at Viceroy. | [Colony](../microcol-game/src/main/java/org/microcol/model/Colony.java) has no Tory state or difficulty-aware production penalty. | Missing | Proposed: test just below/at/above each threshold; apply the penalty at the stated threshold and use the accepted intermediate levels and accounting in [difficulty and national effects](#difficulty-and-national-effects)/[support, production and congress](#support-production-and-congress). |
+| GOV-001 | 84 / 90 | The Crown begins without tax and announces later increases, allowing acceptance or protest. | R-0102 stores one colonial rate and cadence with a paused, saved accept/protest checkpoint; new games start at zero. | Partial | Targeted tax checks pass; full batch acceptance remains separate. [Evidence](functional-tests.md#r-0102-tax-demand-and-boycott-2026-10-18). |
+| GOV-002 | 84–85 / 90–91 | Rejecting an increase destroys selected goods, increases rebel sentiment, and boycotts that commodity. | R-0102 destroys the quoted stock, credits local liberty and enforces commodity boycott on trade, equipment, rush imports and ordinary custom-house exports. | Partial | Targeted tax checks pass; full batch acceptance remains separate. [Evidence](functional-tests.md#r-0102-tax-demand-and-boycott-2026-10-18). |
+| GOV-003 | 85 / 91 | Paying back taxes restores trade in a boycotted commodity; Fugger removes existing boycotts. | R-0102 persists commodity arrears and Fugger clears existing boycotts on actual arrival. R-0103 adds exact quote-bound payment of one debt. | Partial | Targeted tax checks pass; full batch acceptance remains separate. [Evidence](functional-tests.md#r-0102-tax-demand-and-boycott-2026-10-18). |
+| GOV-004 | 85 / 91 | Accumulated liberty bells and population determine national rebel sentiment and each colony’s Sons of Liberty membership. | R-0100 stores colony liberty/last colonial affiliation and calculates exact local and population-weighted national support in the model, with read-only political/colony displays. | Partial | Targeted model and TC75 transfer/production/Continue acceptance passed on 2026-10-18; full second-batch regression/publication remains pending. See [R-0100 evidence](functional-tests.md#r-0100-rebel-support-2026-10-18). |
+| GOV-005 | 86 / 92 | Colony production gains one at 50% Sons of Liberty and a further one at 100%. | R-0101 applies exact support bonuses to staffed positive-base jobs through one update snapshot and shared previews. | Partial | Targeted boundary, famine, input and percentage-order checks pass; full batch regression/publication pending. [Evidence](functional-tests.md#r-0101-political-production-2026-10-18). |
+| GOV-006 | 86 / 92 | Reaching the critical Tory count reduces production by one; stated critical counts are 10 at Discoverer and 6 at Viceroy. | R-0101 derives exact Tory counts and the 10/9/8/7/6 threshold from support and difficulty, combining one −1 penalty with the bonus. | Partial | All difficulty boundaries and actual TC77 penalty/removal paths pass; full batch regression/publication pending. [Evidence](functional-tests.md#r-0101-political-production-2026-10-18). |
 | GOV-007 | 86 / 92 | After founding the first colony, accumulated bells recruit founding fathers across five categories. | `Player` owns a strict saved `Congress` with frozen five-category offers, selected objective, national bells and members. New colony production credits an independent account; at most one father joins per national update. The map Congress dialog exposes selection/progress/membership. | Partial | R-0104 implements acquisition and Jones delivery; other father effects remain separately owned below. Model and selected player acceptance passed; full CI/publication are pending. See [Congress evidence](functional-tests.md#r-0104-congress-recruitment-2026-10-16). |
 | GOV-008 | 85–86 / 91–92 | Declare independence at national rebel sentiment of at least 50%, before 1800; declaration is irrevocable. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).isPossibleToDecalareIndependence instead requires year >= 1700 and at least three colonies. It prevents a second declaration and persists the flag, but does not check sentiment. | Differs | Proposed: 49% rejects/50% permits, including before 1700 and with fewer than 3 colonies; declaration persists and cannot repeat. |
 | GOV-009 | 87 / 93 | Declaring independence musters veteran soldiers into Continental units based on each colony’s rebel support; below 50% musters none. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).declareIndependence sets a flag and emits an event; [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java) lacks veteran/Continental unit behavior and the event listeners do not muster troops. | Missing | Proposed: compare a Tory colony with 60% and 90–100% support; use the conversion counts in [support, production and congress](#support-production-and-congress). |
 | GOV-010 | 87 / 93 | During revolution, an attacker at a colony gains support proportional to its cause: rebel percentage for rebels, Tory percentage for the Crown. | [AbstractUnit.attack/isWinnerAttacker](../microcol-game/src/main/java/org/microcol/model/AbstractUnit.java) resolves actual battles but uses a fixed attacker-win probability without reading colony sentiment or declaration state. The missing rule is the support modifier, not battle execution. | Missing | Proposed: at 60% rebel support, verify rebel +60% and royal +40% modifiers independently of other bonuses. |
 | GOV-011 | 87 / 93 | Independence closes the home port and Europe display. | Only [KingRobotPlayer](../microcol-game/src/main/java/org/microcol/ai/KingRobotPlayer.java) and declaration eligibility consume isDeclaredIndependence in gameplay. [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).buyGoods/buy and ship/Europe arrival paths have no declaration guard. The campaign displays a port-closed message but does not enforce it. | Missing | Proposed: after declaration, Europe travel, trading, hiring and purchases are unavailable, including through model APIs and saved in-transit ships. |
 | GOV-012 | 87 / 93 | Custom houses continue overseas trade during revolution at 50% of normal income; Jan de Witt still permits foreign-colony trade. | R-0085 custom-house exports use half the ordinary integer tax-net sale proceeds during independence; the ordinary home market stays closed. Boycott integration and other independence/foreign-trade acceptance remain separate. | Partial | [R-0085 evidence](functional-tests.md#r-0085-custom-house-export-2026-10-16) records passing local model/player checks, with full CI/publication pending; this does not close the whole political or foreign-trade journey. |
-| GOV-013 | 88 / 94 | Bells in a Crown-occupied colony increase Tory rather than rebel sentiment. | Capture transfers colony ownership, but [Colony](../microcol-game/src/main/java/org/microcol/model/Colony.java) has no opposing sentiment or occupation-dependent bell use. | Missing | Proposed: capture and recapture a colony and check the direction of bell effects without losing persisted political state. |
+| GOV-013 | 88–89 / 94–95 | Bells in a Crown-occupied colony increase Tory rather than rebel sentiment. | R-0100 preserves liberty and last colonial affiliation on Crown occupation; actual produced bells subtract liberty down to zero, while colonial production adds it. | Partial | Capture/occupation/liberation and saved affiliation model tests pass. Full second-batch acceptance/publication remains pending; see [R-0100 evidence](functional-tests.md#r-0100-rebel-support-2026-10-18). |
 | GOV-014 | 5, 88 / 11, 94 | A royal expeditionary force exists before rebellion, grows, and includes regular infantry, cavalry, artillery and warships; its size is visible in Congress. | [KingRobotPlayer](../microcol-game/src/main/java/org/microcol/ai/KingRobotPlayer.java).createRoyalArmyForces creates the force only after declaration, sized as min(two-thirds of the player’s military-strength score, 15). [Model](../microcol-game/src/main/java/org/microcol/model/Model.java).createRoyalExpeditionForceUnit creates ordinary COLONIST units in GALLEONs. | Differs | Proposed: persist and display the prewar force, send the documented unit families, and use the growth rates in [revolution and intervention](#revolution-and-intervention). |
 | GOV-015 | 88 / 94 | Royal troops receive a 50% bombardment bonus attacking colonies; rebels can ambush them in the countryside. | No REF-specific bonuses or ambush path in attack resolution; [Model](../microcol-game/src/main/java/org/microcol/model/Model.java) does not create distinct royal troop types. | Missing | Proposed: distinguish colony assault from countryside battle and verify each modifier’s eligibility. |
 | GOV-016 | 88 / 94 | On the turn after declaration, announce a bell target for foreign intervention; reaching it brings an ally. | [KingRobotPlayer](../microcol-game/src/main/java/org/microcol/ai/KingRobotPlayer.java) handles only the royal invasion; [Player](../microcol-game/src/main/java/org/microcol/model/Player.java).startTurn and campaign listeners contain no intervention target or alliance state. | Missing | Proposed: announce once on the next turn, persist progress, and trigger intervention exactly once at the agreed target. |
@@ -608,7 +618,7 @@ These entries assess recruitment and the stated father-dependent effects. The so
 | FATHER-003 | 90 / 96 | **John Paul Jones:** Receive a free frigate when he joins. | Jones joining creates one free frigate at home Europe or retains a pending delivery to the lowest-ID reachable owned coastal colony after independence. Membership and pending delivery persist separately. | Partial | R-0104 model tests cover the actual ship, surplus, pending delivery retry and Continue; selected player acceptance passed, with full CI/publication pending. See [Congress evidence](functional-tests.md#r-0104-congress-recruitment-2026-10-16). |
 | FATHER-004 | 90 / 96 | **Paul Revere:** An undefended attacked colony automatically arms a worker from stored muskets; losing still allows capture. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Test available/no muskets and existing/no militia; check equipment consumption and capture outcome. |
 | FATHER-005 | 90 / 96 | **George Washington:** Winning non-veteran soldiers/dragoons always gain status. | R-0111 reads persisted Washington membership to guarantee one eligible victory step, preserving specialty and rank after disarming. | Partial | Model and Czech expert-promotion/Continue player acceptance passed; full publication remains pending. [Evidence](functional-tests.md#r-0111-military-promotion-2026-10-17). |
-| FATHER-006 | 91 / 97 | **Simon Bolivar:** Increase Sons of Liberty membership in every colony by 20%. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Check all colonies, cap behavior, and future colonies; apply the percentage-point rule in [founder details](#founder-details). |
+| FATHER-006 | 91 / 97 | **Simon Bolivar:** Increase Sons of Liberty membership in every colony by 20%. | R-0100 applies 20 percentage points from the last colonial affiliation, capped at 100%, without minting bells. | Partial | Model tests cover differing founder membership across European conquest and Crown occupation. Targeted acceptance passed; full batch acceptance remains pending. See [R-0100 evidence](functional-tests.md#r-0100-rebel-support-2026-10-18). |
 | FATHER-007 | 91 / 97 | **Benjamin Franklin:** European royal wars no longer force colonial relations; negotiation costs fall and Europeans offer peace. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Test forced-war immunity, cheaper negotiations and each rival’s peace offer separately. |
 | FATHER-008 | 91 / 97 | **Thomas Jefferson:** Statesmen produce 50% more liberty bells. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Compare ordinary and expert statesmen under the same building and other modifiers. |
 | FATHER-009 | 91 / 97 | **Thomas Paine:** All colonies gain a liberty-bell production percentage equal to the current tax rate. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Change the tax rate and check bell output updates; use the modifier order/rounding in [founder details](#founder-details). |
@@ -915,6 +925,13 @@ rules; implementation and acceptance are tracked by that requirement.
    Crown-seized assets and count neither as rebel resources nor destroyed REF.
    Warn before confirmation. Custom-house and de Witt trade use [economy, production and education](#economy-production-and-education)/[native and european relations](#native-and-european-relations).
 
+7. Accepted on 2026-10-18: a defeated Continental infantry/cavalry or royal
+   regular infantry/cavalry unit is destroyed, including its equipment. It
+   neither downgrades nor survives as a colonist, and leaves no separately
+   recoverable equipment. Apply this through the shared battle outcome and
+   retain destroyed REF identity for the separate roster/victory accounting.
+   This decision does not alter ordinary colonial veteran loss progression.
+
 ### Founder details
 
 1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes
@@ -951,8 +968,11 @@ rules; implementation and acceptance are tracked by that requirement.
    [R-0096](requirements/R-0096.md)): after victory the emergency defender
    keeps its muskets and joins the outside garrison on the colony tile,
    vacating its job. If it is the last resident, it instead stays inside
-   with its muskets so victory cannot remove the colony. This placement is
-   agreed behavior awaiting implementation and acceptance.
+   with its muskets so victory cannot remove the colony. This compulsory
+   combat outcome is distinct from a voluntary worker exit: the fortified-colony
+   minimum does not add another exception to the agreed last-resident rule.
+   Voluntary exit restrictions remain unchanged. This placement is agreed
+   behavior awaiting implementation and acceptance.
 6. Jefferson, Paine, Penn and Hudson use [economy, production and education](#economy-production-and-education)'s common production order, with
    the catalogue's stated effect scope. Newspaper replaces the press modifier.
    Fugger clears existing arrears/boycotts once, not future protests. Minuit
@@ -1104,8 +1124,9 @@ rules; implementation and acceptance are tracked by that requirement.
    2 per full artillery or 1 per damaged artillery on the colony tile. Use
    A/(A+D) against ship defense; a hit damages and sends it for repair, a miss
    does nothing. Stockades do not fire. Save/load does not repeat a shot.
-8. Privateers may attack foreign ships without changing peace/alliance to war;
-   either side may attack a foreign privateer on the same diplomatic exception.
+8. Privateers may attack non-allied foreign ships without changing peace to war;
+   either side may attack a non-allied foreign privateer on the same diplomatic exception.
+   Alliance and post-termination attack restrictions still apply.
    This is no immunity to ordinary combat. Retain observed owner information,
    but do not reveal an otherwise unknown national identity through the attack.
    Confirmation states that this privateer action does not declare war; normal
@@ -1201,6 +1222,13 @@ rules; implementation and acceptance are tracked by that requirement.
    one random non-warring European colonial pair whose members are both before
    independence and both without Franklin. Skip the event if no pair qualifies.
    Count rounds, not each nation's turn; save/Continue must not repeat the event.
+   User decision (2026-10-18): units already sharing a tile retain their positions
+   when an alliance ends, including Crown-forced war or mutual-defense changes.
+   They may depart; no new shared entry is permitted without an alliance.
+   Combat uses ordinary adjacent tiles after separation, never a same-tile attack.
+   Save/Continue preserves lawful existing overlap without relocation, deletion,
+   ownership changes or renewed passage privileges. This is agreed behavior,
+   pending implementation and acceptance in R-0089.
    Player attacks retain the
    existing explicit treaty-breaking confirmation and model validation.
 
@@ -1425,8 +1453,9 @@ rules; implementation and acceptance are tracked by that requirement.
    original Colonization parity.
    User decision on 2026-10-17: roads may be built on every terrain except sea,
    including coastal colony tiles; sea tiles reject road work. The current
-   `TerrainType.isSea` distinction marks `HIGH_SEA` and `OCEAN` as sea; no
-   separate lake rule is implied.
+   `TerrainType.isSea` distinction marks water; the accepted 2026-10-18
+   [lake rule](#terrain-reference-data-audit) includes lakes in the same
+   no-road restriction as ordinary ocean.
 6. Lost-city ordinary outcomes are empty 40%, gold 25%, recruit 15%, expedition
    lost 10%, burial site 10%. Seasoned scout: 30/35/25/5/5%. Gold is 200–500
    uniformly in whole gold; recruit is one free colonist on the explored tile;

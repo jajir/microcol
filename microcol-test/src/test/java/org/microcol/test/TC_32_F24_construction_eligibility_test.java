@@ -402,13 +402,10 @@ public class TC_32_F24_construction_eligibility_test
 
         // The galleon sails out and the king captures the colony while the
         // report is still open; no escape animation is needed.
-        getContext().getRobot().interact(() -> {
-            getModel().getUnitById(3).placeToLocation(Location.of(25, 16));
-            org.microcol.model.Unit force = getModel().getUnitById(200);
-            force.placeToLocation(COLONY);
-            force.takeOver(getModel().getPlayerByName("Dutch's King"));
-            getModel().getColonyAt(COLONY).orElseThrow().captureColony(force);
-        });
+        getContext().getRobot().interact(() -> getModel().getUnitById(3)
+                .placeToLocation(Location.of(25, 16)));
+        new org.microcol.page.RoyalBattlePage(getContext())
+                .captureColony(COLONY, 200);
 
         // Clicking the retained action refuses navigation and spends nothing.
         turnReport.clickRetainedOpenColonyAction();

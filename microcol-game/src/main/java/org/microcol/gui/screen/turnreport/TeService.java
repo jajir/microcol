@@ -36,6 +36,7 @@ public class TeService {
             final TeProcessorFounderArrived teProcessorFounderArrived,
             final TeProcessorCustomHouseExport teProcessorCustomHouseExport,
             final TeProcessorPeaceOffer teProcessorPeaceOffer,
+            final TeProcessorDiplomacy teProcessorDiplomacy,
             final TeProcessorShipRepair teProcessorShipRepair,
             final TeProcessorEducation education,
             final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
@@ -49,6 +50,7 @@ public class TeService {
                         Preconditions.checkNotNull(constructionWaitingForTools),
                         Preconditions.checkNotNull(forestLumberLost),
                         Preconditions.checkNotNull(teProcessorPeaceOffer),
+                        Preconditions.checkNotNull(teProcessorDiplomacy),
                         Preconditions
                                 .checkNotNull(teProcessorCustomHouseExport),
                         Preconditions.checkNotNull(teProcessorFounderArrived),

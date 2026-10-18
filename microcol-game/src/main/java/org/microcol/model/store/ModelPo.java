@@ -20,6 +20,17 @@ public class ModelPo {
         this.combatRandomState = combatRandomState;
     }
 
+    /** Last complete round already considered by the Crown-war event. */
+    private Integer crownWarRound;
+
+    public Integer getCrownWarRound() {
+        return crownWarRound;
+    }
+
+    public void setCrownWarRound(final Integer crownWarRound) {
+        this.crownWarRound = crownWarRound;
+    }
+
     private Difficulty difficulty;
 
     public Difficulty getDifficulty() {

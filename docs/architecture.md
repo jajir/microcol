@@ -76,6 +76,15 @@ až po aktualizaci kolonií a jednotek. Existující nabídku v libovolném smě
 zachová. Uložený `TurnEventPeaceOffer` pouze oznamuje novou nabídku;
 zobrazení hlášení ani Continue nevyjednává a nepřevádí zlato.
 GUI nabízí potvrzení, zrušení a odložení; načtení samo nabídku nepřijme.
+R-0089 rozšiřuje stejného vlastníka o spojenectví, nabídku za 200 zlata,
+historii skutečné agrese a čekání po ukončení. `Model` plánuje důsledky obrany
+spojence před mutací boje; událost královské války zpracuje `GameManager` po
+ukončení celého kola. Uložené číslo zpracovaného kola brání opakování při Continue.
+`EuropeanRelations` drží pro bývalé spojence doklad společného pole;
+`UnitStorage` ověřuje každou dvojici vlastníků přes pravidlo modelu. Doklad
+povoluje zachování existující pozice při načtení, nikoli nový vstup. Ukládání
+vynechá pole, kde již obě strany nestojí; načítání odmítne neplatné doklady.
+Tyto cesty se ověřují v cílených testech R-0089; plná regrese náleží hranici dávky.
 R-0088 používá stejný kontakt a vojenskou sílu pro tribut. `EuropeanRelations`
 ukládá samostatný návrh tributu a poslední potvrzený požadavek dvojice;
 `Model` před platbou ověří roli, deset tahů čekání i nezměněné podmínky.
@@ -89,8 +98,9 @@ příkaz. Potvrzené porušení smlouvy útokem propojuje rozpracované R-0028,
 jak je popsáno níže.
 Před vstupem do dobývaného přístavu `Colony` naplánuje únik všech cizích
 nepřátelských lodí. Neutrální obsazení nebo chybějící bezpečné sousední moře
-vstup odmítnou před spotřebou pohybu či změnou vlastníka. AI používá tentýž
-dotaz jako pohyb hráče. Dobývající jednotka zůstává vybavená na mapě.
+útok odmítnou před losem, spotřebou pohybu či změnou vlastníka. AI používá
+tentýž útočný dotaz jako hráč. Samotný pohyb cizí kolonii nedobývá;
+převzetí následuje pouze po vyhraném boji. Dobývající jednotka zůstává na mapě.
 
 
 `GameManager` odlišuje zahájení, dosažený herní konec a zahození instance přes
@@ -101,6 +111,41 @@ zahození instance se neukládá: běžnou rozehranou pozici lze načíst do nov
 instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento popis
 není potvrzením dokončení celého požadavku.
 
+
+### Daňové rozhodnutí a bojkot (R-0102)
+
+`Player` vlastní jediný `TaxState` kolonizačního národa: sazbu, četnost
+požadavků, čekající rozhodnutí a dluhy podle zboží. Královský adaptér čte
+stejnou sazbu. `TaxDemand` a `TaxProtest` popisují potvrzovaný výsledek;
+model znovu ověřuje jeho platnost před změnou zásoby, podpory a dluhu.
+`GameManager` rozlišuje uložitelnou pauzu po přistěhovalectví a před produkcí.
+Vyřešení daně pokračuje zbývající přípravou, neopakuje příchody ani aktualizace.
+`model.store` ukládá výslovná současná data; načtení nedoplňuje chybějící stav.
+
+Bojkot kontrolují skutečné operace nákupu/prodeje, vybavení a dovozu nástrojů
+pro dokončení stavby. Aritmetická cenová nabídka zůstává dostupná také pro
+revoluční výjimku celnice; běžný vývoz bojkot respektuje. GUI zobrazuje společné
+modelové možnosti, odložení a návrat k rozhodnutí. R-0103 přidává
+`TaxArrearsQuote` a modelovou platbu jediného dluhu: ověřuje aktéra, částku,
+generaci požadavku a pokladnu. Dluh odstraní před oznámením změny zlata,
+aby posluchač viděl úplný výsledek a nemohl stejnou platbu opakovat.
+`BackTaxDialog` zobrazuje nabídku, zrušení a očekávané zamítnutí; ceny trhu
+nemění již uloženou výši dluhu.
+Cílené ověření a hranice přijetí jsou vedené u [R-0102](requirements/R-0102.md).
+
+### Prozkoumaný terén a současný dohled (R-0070)
+
+`Visibility` uchovává trvale prozkoumaný terén. `Player.isCurrentlyVisible`
+odvozuje současný dohled ze živých vlastních jednotek a okolí vlastních kolonií;
+`Player` vlastní poslední pozorování cizích kolonií v neměnném `ColonySighting`.
+`Model` aktualizuje pozorování při herních změnách, zatímco dotazy GUI jsou
+jen pro čtení. `model.store.ColonySightingPo` ukládá polohu, název, vlastníka
+a tah pozorování; načtení nepřepisuje údaje o skrytých koloniích živým stavem.
+Mapa, panel a tooltip používají stejný povolený pohled. Cizí jednotky se mimo
+dohled nezobrazují; zapamatovaná kolonie má označení posledního pozorování.
+Filtrování událostí brání skrytým pohybům a cizím bojům prozradit neviditelná
+místa animací. Útočný dotaz modelu požaduje současný dohled.
+Stav ověření vede [R-0070](requirements/R-0070.md).
 
 ### Uložená obtížnost (R-0064)
 
@@ -643,6 +688,20 @@ a frontu, její stav, vlastník, zdroje, cena i předpoklady dokončení.
 UI zobrazuje modelovou nabídku a vyžaduje výslovné potvrzení; samo cenu
 nepočítá. Viz [R-0083](requirements/done/R-0083.md).
 
+### Podpora nezávislosti (R-0100)
+
+`Colony` vlastní uloženou místní svobodu a poslední koloniální příslušnost.
+Skutečnou produkci zvonů připíše při aktualizaci kolonie; dokončený odchod
+obyvatele upraví limit podle zbývajících pracovníků. Přesun mezi pracemi uvnitř
+stejné kolonie limit nemění. Dobytí Evropanem mění příslušnost, královská okupace
+ji zachovává a vyrobené zvony odečítá. `model.store.ColonyPo` vyžaduje obě hodnoty;
+načítání nedoplňuje chybějící údaje ani neopravuje neplatný limit.
+`RebelSupport` představuje přesný celočíselný zlomek včetně počtu obyvatel,
+`Player` sčítá příspěvky příslušných kolonií. Bolivarův bonus pochází z jejich
+koloniální příslušnosti. GUI pouze zobrazuje modelové hodnoty v politickém
+přehledu a v informaci názvu kolonie; zaokrouhlení patří jen do zobrazení.
+Produkční bonusy R-0101 a vyhlášení nezávislosti R-0105 mají tento výpočet použít.
+
 ### Kongres a příchod otce (R-0104)
 
 `Player` vlastní uložený `Congress`: nabídku kandidátů, zvolený cíl, národní
@@ -821,3 +880,35 @@ typ projektu a tehdejší nedostatek. Načtení ani zobrazení hlášení nespou
 stavební fázi. GUI překládá snímek a před otevřením kolonie znovu ověří hru
 a současné vlastnictví; otevření nemění zásoby. Stav přejímky vede
 [R-0086](requirements/done/R-0086.md).
+
+
+### Obrana kolonie a pracovníků (R-0096)
+
+`Colony` vybírá ozbrojenou obranu, civilní skupinu nebo Revereho milici;
+`ColonyDefense` a `AttackOrder` zmrazí skutečná pracovní místa, bojiště,
+vybavení a bezpečný únik lodí. `AbstractUnit` ověří nový plán před prvním
+losem a provede společné bojové účtování. Jen vyhraný boj s civilní skupinou
+nebo milicí volá interní převzetí kolonie. Veřejný přímý příkaz k obsazení
+byl odstraněn včetně jeho pohybových a AI volání.
+Samostatný útok na pracovní pole používá stejný rozkaz, ale převádí pouze
+poraženého neozbrojeného pracovníka. Dokončený odchod používá společné
+účtování obyvatel, vzdělávání, limitu liberty a případné prázdné kolonie.
+Revereho vítězný obránce opustí práci, pokud není posledním obyvatelem;
+tato vynucená událost nemění pravidlo dobrovolného odchodu z opevnění.
+`ColonyBattleOutcome` předává GUI výsledek a výslovné bojiště; animace
+nevyžaduje mapovou polohu pracovníka. Přejímku vede
+[R-0096](requirements/R-0096.md); plná regrese zůstává na hranici dávky.
+
+
+### Politické výrobní bonusy (R-0101)
+
+`PoliticalProduction` je neměnný rozpis odvozený z přesného `RebelSupport`
+a obtížnosti. `Colony.startTurn` předává jediný snímek výrobním výpočtům
+před i po hladomoru a účtování praxe. `ColonyField` a `ConstructionSlot`
+upravují pouze obsazená místa s kladným základem, po profesní úpravě;
+`Construction` následně zachová procentní bonusy a omezení vstupní surovinou.
+Neobsazená výroba ani chov nejsou pracovním místem. Náhledy počítají čerstvé
+hodnoty; `ColonyJobChoice` zahrne přírůstek obyvatel při příchodu pracovníka
+zvenčí. GUI pouze zobrazí společný rozpis. Ukládají se vstupy podpory,
+nikoli opakovaně přičítaný bonus. Stav ověření vede
+[evidence R-0101](functional-tests.md#r-0101-political-production-2026-10-18).

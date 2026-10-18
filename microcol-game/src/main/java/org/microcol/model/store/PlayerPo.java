@@ -1,6 +1,8 @@
 package org.microcol.model.store;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class PlayerPo {
@@ -19,11 +21,25 @@ public final class PlayerPo {
 
     private VisibilityPo visible;
 
-    private int kingsTaxPercentage;
+    private TaxPo tax;
 
     private RecruitmentPo recruitment;
 
     private CongressPo congress;
+
+    private List<ColonySightingPo> colonySightings = new ArrayList<>();
+
+    /**
+     * @return colonies this player remembers from actual observation
+     */
+    public List<ColonySightingPo> getColonySightings() {
+        return colonySightings;
+    }
+
+    public void setColonySightings(
+            final List<ColonySightingPo> colonySightings) {
+        this.colonySightings = colonySightings;
+    }
 
     public CongressPo getCongress() {
         return congress;
@@ -150,12 +166,16 @@ public final class PlayerPo {
         this.visible = visibility;
     }
 
-    public int getKingsTaxPercentage() {
-        return kingsTaxPercentage;
+    /**
+     * @return the colonial tax state; null for a Crown, which has no tax state
+     *         of its own
+     */
+    public TaxPo getTax() {
+        return tax;
     }
 
-    public void setKingsTaxPercentage(int kingsTaxPercentage) {
-        this.kingsTaxPercentage = kingsTaxPercentage;
+    public void setTax(final TaxPo tax) {
+        this.tax = tax;
     }
 
 }

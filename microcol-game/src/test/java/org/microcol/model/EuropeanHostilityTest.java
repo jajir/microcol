@@ -107,68 +107,67 @@ class EuropeanHostilityTest {
         final String before = snapshot();
         assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
         assertFalse(attacker.isPossibleToMoveAt(colony.getLocation(), true));
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
         assertTrue(attacker.getPath(colony.getLocation()).isEmpty());
         assertThrows(IllegalArgumentException.class, () -> model
                 .moveUnit(attacker, Path.of(List.of(colony.getLocation()))));
         assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
+                () -> attacker.attack(colony.getLocation()));
         assertEquals(before, snapshot());
     }
 
     @Test
-    void directCaptureOnTheColonyTileStillRejectsPeaceWithoutEffects() {
+    void colocatedForceUnderPeaceHasNoDirectCaptureCommand() {
         attacker.placeToLocation(colony.getLocation());
         final String before = snapshot();
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
+                () -> attacker.attack(colony.getLocation()));
         assertEquals(before, snapshot());
     }
 
     @Test
-    void directCaptureCannotTeleportAnAdjacentForceEvenAtWar() {
+    void colocatedForceAtWarCannotSkipTheDefenseBattleByAnyCommand() {
+        declareWar();
+        attacker.placeToLocation(colony.getLocation());
+        final String before = snapshot();
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
+        assertThrows(IllegalStateException.class,
+                () -> attacker.attack(colony.getLocation()));
+        assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToMoveAt(colony.getLocation(), true));
+        assertSame(player("France"), colony.getOwner());
+        assertEquals(before, snapshot());
+    }
+
+    @Test
+    void warLeavesAnUnguardedColonyToTheCivilianBattleNotToOrdinaryMovement() {
         declareWar();
         final String before = snapshot();
-        assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
+        // Its inhabitants defend as a group, so a step can never take it.
+        assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToMoveAt(colony.getLocation(), true));
+        assertThrows(IllegalArgumentException.class, () -> model
+                .moveUnit(attacker, Path.of(List.of(colony.getLocation()))));
         assertEquals(before, snapshot());
-    }
-
-    @Test
-    void warAllowsOneNormalStepToCaptureAnUnguardedColony() {
-        declareWar();
-        final int id = colony.getId();
-        final String name = colony.getName();
-        final Player formerOwner = colony.getOwner();
-        final String stores = gson.toJson(colony.save().getColonyWarehouse());
-        assertTrue(attacker.isPossibleToMoveAt(colony.getLocation()));
-        assertTrue(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
-        model.moveUnit(attacker, Path.of(List.of(colony.getLocation())));
-        assertSame(player("Dutch"), colony.getOwner());
-        assertEquals(id, colony.getId());
-        assertEquals(name, colony.getName());
-        assertEquals(0, attacker.getActionPoints());
-        assertTrue(attacker.isAtPlaceLocation());
-        assertEquals(colony.getLocation(), attacker.getLocation());
-        assertTrue(((UnitFreeColonist) attacker).isHoldingGuns());
-        assertSame(player("Dutch"), model.getUnitById(4).getOwner());
-        assertSame(formerOwner, defender.getOwner());
-        assertEquals(stores, gson.toJson(colony.save().getColonyWarehouse()));
-        assertEquals(EuropeanRelationState.WAR,
-                model.getEuropeanRelation(player("Dutch"), formerOwner));
+        final AttackOrder battle = attacker
+                .prepareAttack(colony.getLocation(), false).orElseThrow();
+        assertEquals(ColonyDefense.Kind.CIVILIANS,
+                battle.getColonyDefense().orElseThrow().getKind());
+        assertSame(player("France"), colony.getOwner());
+        assertEquals(before, snapshot());
     }
 
     @Test
     void acceptedPeaceClosesCaptureWithoutSpendingPointsOrChangingOwnership() {
         declareWar();
-        assertTrue(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        assertTrue(attacker.isPossibleToAttackAt(colony.getLocation()));
         model.acceptPeace(player("Dutch"), player("France"));
         final String before = snapshot();
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertThrows(IllegalArgumentException.class,
                 () -> attacker.moveOneStep(colony.getLocation()));
         assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
+                () -> attacker.attack(colony.getLocation()));
         assertEquals(before, snapshot());
     }
 
@@ -219,18 +218,35 @@ class EuropeanHostilityTest {
     }
 
     @Test
-    void peacefulColonyRejectsAttackEvenWhenItsOccupantIsAHostileThirdParty() {
+    void peacefulColonyWithArmedThirdPartyOffersNoAttackEvenWithDeclaration() {
         defender.takeOver(player("Spain"));
         defender.placeToLocation(colony.getLocation());
         model.declareHostilities(player("Dutch"), player("Spain"));
         final String before = snapshot();
+        // Without an explicit declaration review there is no attack at all.
         assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
-        assertTrue(
-                attacker.prepareAttack(colony.getLocation(), true).isEmpty());
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
         assertThrows(IllegalStateException.class,
                 () -> attacker.attack(colony.getLocation()));
+        // The armed third party prevents an atomic colony capture. Reviewing
+        // a declaration against France cannot bypass that defender.
+        assertTrue(((UnitFreeColonist) defender).isHoldingGuns());
+        assertTrue(
+                attacker.prepareAttack(colony.getLocation(), true).isEmpty());
         assertEquals(before, snapshot());
+    }
+
+    @Test
+    void peacefulColonyWithOnlyResidentsOffersTheDeclarationReview() {
+        final String before = snapshot();
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
+        final AttackOrder proposal = attacker
+                .prepareAttack(colony.getLocation(), true).orElseThrow();
+        assertTrue(proposal.isDeclarationRequired());
+        assertEquals(ColonyDefense.Kind.CIVILIANS,
+                proposal.getColonyDefense().orElseThrow().getKind());
+        // Reviewing and cancelling declare nothing.
+        assertEquals(before, snapshot());
+        assertFalse(model.areHostile(player("Dutch"), player("France")));
     }
 
     @Test
@@ -288,6 +304,7 @@ class EuropeanHostilityTest {
         attacker = model.getUnitById(0);
         colony = model.getColonyById(0).orElseThrow();
         declareWar();
+        attacker.getOwner().revealMapForUnit(attacker);
     }
 
     private Unit ship(final int id, final String owner, final Location at) {
@@ -314,17 +331,18 @@ class EuropeanHostilityTest {
                 .addGoods(Goods.of(GoodsType.ORE, 7));
         final String cargo = gson.toJson(vessel.save().getCargo());
         final String before = snapshot();
-        assertTrue(attacker.isPossibleToMoveAt(colony.getLocation()));
-        assertTrue(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        // The port ship has a safe retreat, so the civilian battle is
+        // offered; stepping in is not.
+        assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
+        assertTrue(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertEquals(before, snapshot());
-        attacker.moveOneStep(colony.getLocation());
+        // The retreat happens once, when the defense battle is won.
+        ColonyBattles.winFrom(model, attacker, colony);
         assertSame(player("Dutch"), colony.getOwner());
         assertSame(player("France"), vessel.getOwner());
         assertTrue(
                 List.of(WEST_WATER, EAST_WATER).contains(vessel.getLocation()));
         assertEquals(cargo, gson.toJson(vessel.save().getCargo()));
-        assertEquals(0, vessel.getActionPoints());
-        assertEquals(0, attacker.getActionPoints());
         assertEquals(colony.getLocation(), attacker.getLocation());
         assertTrue(((UnitFreeColonist) attacker).isHoldingGuns());
     }
@@ -336,16 +354,13 @@ class EuropeanHostilityTest {
         ship(101, "Dutch", WEST_WATER);
         ship(102, "Dutch", EAST_WATER);
         final String before = snapshot();
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
         assertThrows(IllegalArgumentException.class,
                 () -> attacker.moveOneStep(colony.getLocation()));
-        assertEquals(before, snapshot());
-        attacker.placeToLocation(colony.getLocation());
-        final String onTile = snapshot();
         assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
-        assertEquals(onTile, snapshot());
+                () -> attacker.attack(colony.getLocation()));
+        assertEquals(before, snapshot());
     }
 
     @Test
@@ -353,7 +368,7 @@ class EuropeanHostilityTest {
         prepareCoastalColony();
         ship(100, "Spain", colony.getLocation());
         final String before = snapshot();
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertFalse(attacker.isPossibleToMoveAt(colony.getLocation()));
         assertThrows(IllegalArgumentException.class,
                 () -> attacker.moveOneStep(colony.getLocation()));
@@ -366,7 +381,7 @@ class EuropeanHostilityTest {
         model.declareHostilities(player("Dutch"), player("Spain"));
         final Unit french = ship(100, "France", colony.getLocation());
         final Unit spanish = ship(101, "Spain", colony.getLocation());
-        attacker.moveOneStep(colony.getLocation());
+        ColonyBattles.winFrom(model, attacker, colony);
         assertTrue(
                 List.of(WEST_WATER, EAST_WATER).contains(french.getLocation()));
         assertTrue(List.of(WEST_WATER, EAST_WATER)
@@ -382,11 +397,10 @@ class EuropeanHostilityTest {
         ship(102, "Dutch", WEST_WATER);
         ship(100, "France", colony.getLocation());
         ship(101, "Spain", colony.getLocation());
-        attacker.placeToLocation(colony.getLocation());
         final String before = snapshot();
-        assertFalse(attacker.isPossibleToCaptureColonyAt(colony.getLocation()));
+        assertFalse(attacker.isPossibleToAttackAt(colony.getLocation()));
         assertThrows(IllegalStateException.class,
-                () -> colony.captureColony(attacker));
+                () -> attacker.attack(colony.getLocation()));
         assertEquals(before, snapshot());
     }
 
@@ -397,7 +411,7 @@ class EuropeanHostilityTest {
         ship(102, "France", EAST_WATER);
         final Unit french = ship(100, "France", colony.getLocation());
         final Unit spanish = ship(101, "Spain", colony.getLocation());
-        attacker.moveOneStep(colony.getLocation());
+        ColonyBattles.winFrom(model, attacker, colony);
         assertEquals(EAST_WATER, french.getLocation());
         assertEquals(WEST_WATER, spanish.getLocation());
         assertSame(player("Dutch"), colony.getOwner());

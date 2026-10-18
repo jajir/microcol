@@ -103,18 +103,28 @@ public final class PaintService {
 
     public void paintColony(final GraphicsContext graphics, final Point point,
             final Colony colony, final boolean drawColonyName) {
+        paintColony(graphics, point, colony.getOwner(), colony.getName(),
+                drawColonyName);
+    }
+
+    /**
+     * Paint a colony from an observed owner and name, so remembered colonies do
+     * not need the live colony object.
+     */
+    public void paintColony(final GraphicsContext graphics, final Point point,
+            final Player owner, final String colonyName,
+            final boolean drawColonyName) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
         graphics.drawImage(
                 imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN),
                 p.getX(), p.getY());
         if (drawColonyName) {
-            paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION),
-                    colony.getOwner());
+            paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), owner);
             graphics.setFont(colonyFont);
             graphics.setTextAlign(TextAlignment.CENTER);
             graphics.setTextBaseline(VPos.CENTER);
             graphics.setFill(Color.BLACK);
-            graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 55);
+            graphics.fillText(colonyName, p.getX() + 20, p.getY() + 55);
         }
     }
 

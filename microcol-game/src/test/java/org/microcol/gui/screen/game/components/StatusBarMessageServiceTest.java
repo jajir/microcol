@@ -80,6 +80,7 @@ public class StatusBarMessageServiceTest {
     public void verify_location_is_discovered_without_ships() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
 
         final String ret = service.getStatusMessage(where, player,
                 TerrainType.OCEAN, new ArrayList<>(), Optional.empty());
@@ -91,6 +92,7 @@ public class StatusBarMessageServiceTest {
     public void verify_one_ship_of_same_type() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
 
         final String ret = service.getStatusMessage(where, player,
@@ -103,6 +105,7 @@ public class StatusBarMessageServiceTest {
     public void verify_two_ship_of_same_type() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
 
@@ -117,6 +120,7 @@ public class StatusBarMessageServiceTest {
     public void verify_five_ship_of_same_type() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
@@ -135,6 +139,7 @@ public class StatusBarMessageServiceTest {
     public void verify_six_ship_of_same_type() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
@@ -155,6 +160,7 @@ public class StatusBarMessageServiceTest {
             throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.COLONIST);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
@@ -175,6 +181,7 @@ public class StatusBarMessageServiceTest {
             throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
         when(unit4.getType()).thenReturn(UnitType.FRIGATE);
@@ -190,6 +197,7 @@ public class StatusBarMessageServiceTest {
     public void verify_coloy() throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
 
         final String ret = service.getStatusMessage(where, player,
@@ -203,6 +211,7 @@ public class StatusBarMessageServiceTest {
             throws Exception {
         when(gamePreferences.isDevelopment()).thenReturn(false);
         when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
         when(unit3.getType()).thenReturn(UnitType.GALLEON);
@@ -215,6 +224,22 @@ public class StatusBarMessageServiceTest {
         assertEquals(
                 "Zde je Oceán s kolonií Kuchařovice, dvěmi galeonami a frigatou.",
                 ret);
+    }
+
+    @Test
+    public void verify_explored_tile_outside_present_sight_hides_objects()
+            throws Exception {
+        when(gamePreferences.isDevelopment()).thenReturn(false);
+        when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(false);
+        when(colony.getName()).thenReturn("Kuchařovice");
+        when(unit1.getType()).thenReturn(UnitType.GALLEON);
+
+        final String ret = service.getStatusMessage(where, player,
+                TerrainType.OCEAN, Lists.newArrayList(unit1),
+                Optional.of(colony));
+
+        assertEquals("Zde je Oceán.", ret);
     }
 
     @BeforeEach

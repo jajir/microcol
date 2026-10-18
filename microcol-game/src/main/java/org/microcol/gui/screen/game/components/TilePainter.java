@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.util.PaintService;
-import org.microcol.model.Colony;
 import org.microcol.model.Location;
+import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -45,9 +45,9 @@ class TilePainter {
         paintService.paintUnit(canvas.getGraphicsContext2D(), Point.ZERO, unit);
     }
 
-    void paintColony(final Colony colony) {
+    void paintColony(final Player owner, final String colonyName) {
         paintService.paintColony(canvas.getGraphicsContext2D(), Point.ZERO,
-                colony, true);
+                owner, colonyName, true);
     }
 
     void setImage(final Image image) {

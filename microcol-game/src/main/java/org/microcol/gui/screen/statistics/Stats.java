@@ -8,6 +8,14 @@ public enum Stats implements MessageKeyResource {
     statistics_year, titleRelations, relationPeace, relationWar, relationsEmpty,
     relationsUnavailable, relationsReadOnly, declarationReview,
     declarationTitle, declarationMessage, declarationCancel, declarationConfirm,
-    declarationDone, declarationStale;
+    declarationDone, declarationStale, relationAlliance, relationWarWait,
+    declarationWaiting, allianceOpen, allianceResume, allianceContactRequired,
+    allianceBlocked, allianceTitle, allianceOffer, allianceOfferUnaffordable,
+    allianceObligations, allianceVisitor, allianceVisitorUnavailable,
+    allianceConfirm, allianceCancel, allianceLater, allianceInsufficient,
+    allianceChanged, allianceFormed, allianceEndOpen, allianceEndTitle,
+    allianceEndMessage, allianceEndCancel, allianceEndConfirm, allianceEnded,
+    allianceEndStale, turnCrownWar, turnCrownWarAlliance, turnAllyDefense,
+    supportNational, supportNone, supportColonyRow;
 
 }

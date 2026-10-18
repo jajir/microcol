@@ -24,6 +24,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -118,6 +119,13 @@ final class ListenerManager {
                 model, player);
         executeInSeparateThread(
                 listener -> listener.onImmigrationChoiceRequired(event));
+    }
+
+    void fireTaxDemandRequired(final Model model, final Player player) {
+        final TaxDemandRequiredEvent event = new TaxDemandRequiredEvent(model,
+                player);
+        executeInSeparateThread(
+                listener -> listener.onTaxDemandRequired(event));
     }
 
     void fireTurnFinished(final Model model, final Player player) {
@@ -273,6 +281,16 @@ final class ListenerManager {
             final boolean wasDestroyed, final MilitaryPromotion promotion) {
         final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
                 defender, defeated, wasDestroyed, promotion);
+        logger.info("Unit attacked: {}.", event);
+        executeInSameThread(listener -> listener.onUnitAttacked(event));
+    }
+
+    void fireUnitAttacked(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final MilitaryPromotion promotion,
+            final ColonyBattleOutcome colonyOutcome) {
+        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker,
+                defender, defeated, wasDestroyed, promotion, colonyOutcome);
         logger.info("Unit attacked: {}.", event);
         executeInSameThread(listener -> listener.onUnitAttacked(event));
     }

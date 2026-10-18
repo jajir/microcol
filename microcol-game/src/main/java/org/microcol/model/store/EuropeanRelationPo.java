@@ -9,6 +9,45 @@ public class EuropeanRelationPo {
     private PeaceOfferPo peaceOffer;
     private TributeDemandPo tributeDemand;
     private Integer lastTributeRound;
+    private AllianceOfferPo allianceOffer;
+    private Integer lastAggressionRound;
+    private Integer allianceEndedRound;
+
+    private java.util.List<org.microcol.model.Location> retainedOverlaps;
+
+    /** Tiles where former allies lawfully still share a square. */
+    public java.util.List<org.microcol.model.Location> getRetainedOverlaps() {
+        return retainedOverlaps;
+    }
+
+    public void setRetainedOverlaps(
+            final java.util.List<org.microcol.model.Location> value) {
+        retainedOverlaps = value;
+    }
+
+    public AllianceOfferPo getAllianceOffer() {
+        return allianceOffer;
+    }
+
+    public void setAllianceOffer(final AllianceOfferPo value) {
+        allianceOffer = value;
+    }
+
+    public Integer getLastAggressionRound() {
+        return lastAggressionRound;
+    }
+
+    public void setLastAggressionRound(final Integer value) {
+        lastAggressionRound = value;
+    }
+
+    public Integer getAllianceEndedRound() {
+        return allianceEndedRound;
+    }
+
+    public void setAllianceEndedRound(final Integer value) {
+        allianceEndedRound = value;
+    }
 
     public TributeDemandPo getTributeDemand() {
         return tributeDemand;

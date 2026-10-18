@@ -172,6 +172,23 @@ public final class TurnEventProvider {
         return new TurnEventPeaceOffer(player.getName(), rivalName, price);
     }
 
+    /** Notice that the Crown forced a war, possibly ending an alliance. */
+    public static TurnEvent getCrownWar(final Player player,
+            final String rivalName, final boolean allianceEnded) {
+        return new TurnEventDiplomacy(player.getName(),
+                allianceEnded ? TurnEventDiplomacy.Kind.CROWN_WAR_ALLIANCE_ENDED
+                        : TurnEventDiplomacy.Kind.CROWN_WAR,
+                rivalName, null);
+    }
+
+    /** Notice that an alliance obliged the player to defend a victim. */
+    public static TurnEvent getAllyDefense(final Player player,
+            final String aggressorName, final String victimName) {
+        return new TurnEventDiplomacy(player.getName(),
+                TurnEventDiplomacy.Kind.ALLY_DEFENSE, aggressorName,
+                victimName);
+    }
+
     /**
      * Get new turn event when new unit appears in colony.
      *

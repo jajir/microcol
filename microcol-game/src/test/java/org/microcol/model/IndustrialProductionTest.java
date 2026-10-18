@@ -64,10 +64,12 @@ class IndustrialProductionTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Unit ordinary = workersModel.getUnitById(0);
         final Unit expert = workersModel.getUnitById(1);
-        assertEquals(input,
-                ConstructionSlot.getPotentialInput(type, ordinary).getAmount());
-        assertEquals(input * 2,
-                ConstructionSlot.getPotentialInput(type, expert).getAmount());
+        assertEquals(input, ConstructionSlot
+                .getPotentialInput(type, ordinary, PoliticalProduction.NONE)
+                .getAmount());
+        assertEquals(input * 2, ConstructionSlot
+                .getPotentialInput(type, expert, PoliticalProduction.NONE)
+                .getAmount());
         verify(type, output, input, input, output, 0);
         verify(type, output * 2, input * 2, input * 2, output * 2, 0);
         verify(type, output, 0, 0, 0, output);

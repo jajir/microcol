@@ -76,6 +76,38 @@ public final class UnitAttackedEventListener {
     }
 
     private String outcomeMessage(final UnitAttackedEvent event) {
+        final java.util.Optional<org.microcol.model.ColonyBattleOutcome> colony = event
+                .getColonyOutcome();
+        if (colony.isEmpty()) {
+            return equipmentMessage(event);
+        }
+        final org.microcol.model.ColonyBattleOutcome outcome = colony.get();
+        if (outcome
+                .getResult() == org.microcol.model.ColonyBattleOutcome.Result.COLONY_CAPTURED) {
+            // Not an equipment loss: the colony and all its workers changed
+            // hands.
+            return i18n.get(org.microcol.gui.dialog.Dialog.fight_colonyCaptured,
+                    event.getAttacker().getOwner().getDisplayName(),
+                    outcome.getColony().getName());
+        }
+        if (outcome
+                .getResult() == org.microcol.model.ColonyBattleOutcome.Result.WORKER_CAPTURED) {
+            // One worker changed hands; the colony and its other jobs stay.
+            return i18n.get(org.microcol.gui.dialog.Dialog.fight_workerCaptured,
+                    event.getAttacker().getOwner().getDisplayName(),
+                    outcome.getColony().getName());
+        }
+        final String equipment = equipmentMessage(event);
+        if (!outcome.isMilitiaExited()) {
+            return equipment;
+        }
+        final String exit = i18n.get(
+                org.microcol.gui.dialog.Dialog.fight_revereExit,
+                event.getDefender().getOwner().getDisplayName());
+        return equipment == null ? exit : equipment + "\n" + exit;
+    }
+
+    private String equipmentMessage(final UnitAttackedEvent event) {
         if (event
                 .getDefeated() instanceof org.microcol.model.unit.UnitArtillery) {
             return i18n.get(event.wasDestroyed()

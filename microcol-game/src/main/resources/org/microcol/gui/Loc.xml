@@ -42,6 +42,7 @@
 	<entry key="no_5_7p">five</entry>
 	<entry key="and">and</entry>
 	<entry key="withColony">colony</entry>
+	<entry key="colonyLastSeen">Last seen: colony %s of %s in %s.</entry>
 	<entry key="adjustAmountOfGoods">To choose the amount of goods, hold Ctrl while dragging on macOS, or Ctrl+Shift on Linux and Windows.</entry>
 	<entry key="moveCost">Move cost: </entry>
 

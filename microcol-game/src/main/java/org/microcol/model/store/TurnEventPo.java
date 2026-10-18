@@ -152,6 +152,24 @@ public final class TurnEventPo {
 
     private String rivalName;
     private Integer peacePrice;
+    private String diplomacyKind;
+    private String diplomacyVictimName;
+
+    public String getDiplomacyKind() {
+        return diplomacyKind;
+    }
+
+    public void setDiplomacyKind(final String value) {
+        diplomacyKind = value;
+    }
+
+    public String getDiplomacyVictimName() {
+        return diplomacyVictimName;
+    }
+
+    public void setDiplomacyVictimName(final String value) {
+        diplomacyVictimName = value;
+    }
 
     private Integer educationStudentId;
     private UnitType educationBeforeType;

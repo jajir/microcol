@@ -451,6 +451,8 @@
         "name": "New Amsterdam",
         "exportGoods": [],
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 25,
           "y": 14
@@ -606,6 +608,8 @@
         "name": "Delft",
         "exportGoods": [],
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 22,
           "y": 12
@@ -761,6 +765,8 @@
         "name": "Haarlem",
         "exportGoods": [],
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 23,
           "y": 17
@@ -4211,6 +4217,13 @@
     "gameManager": {
       "players": [
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "congress": {
             "activated": true,
             "bells": 0,
@@ -4268,6 +4281,13 @@
           }
         },
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "congress": {
             "activated": false,
             "bells": 0,

@@ -3875,3 +3875,490 @@ committed for this experiment.
     All nine original full-run failures have passing reruns. Production code
     was unchanged during those legacy corrections. Complete requirement
     archival/link checks and publish on main; CI/publication remain pending.
+
+45. Batch one was integrated and pushed as `333de9b6` on 2026-10-17.
+    Publication remains pending. Batch two starts R-0070 with Sonnet high: its
+    model-owned observation snapshots, persistence and GUI disclosure boundaries
+    justify the higher effort directly. The worker uses the same bounded tool
+    contract and cannot run tests or publish. No Opus is requested.
+
+46. First-ten provisional model totals (final cumulative session usage counted
+    once): Haiku handled three requirements in seven attempts / 1,408 worker
+    seconds; Sonnet handled seven in 18 attempts / 3,914 seconds. CLI list-price
+    estimates were $1.271 and $17.426 respectively, **not Pro charges or measured
+    quota savings**. Task difficulty differs, so these are not controlled model
+    benchmarks. R-0119/R-0136 legacy fixture corrections and R-0090 fixture
+    repairs required caller takeover after repair budgets were exhausted. The
+    caller's review/test effort is not included in worker time or price.
+
+47. R-0070 Sonnet high attempt 1 completed in 894.143 seconds. Compilation
+    and 130 selected model checks passed; TC26 passed six of seven scenarios
+    and all three source-contract checks passed. TC26_07 timed out moving the
+    player after a synthetic foreign-step start without the matching completion
+    lifecycle. Review also found missing colony-only terrain exploration and
+    foreign-fight disclosure when only one participant is in sight. Targeted
+    repair 1 uses Sonnet medium in the same session and budget, with tests for
+    both boundaries; no acceptance is claimed for the failed attempt.
+
+48. R-0070 repair 1 completed on Sonnet medium in 111.509 seconds, same
+    session. The worker balanced diagnostic movement events, explored owned
+    colony surroundings and required both foreign fighters in sight. Docker
+    `run-9WkN2C` passes all 142 selected checks; see
+    [acceptance](../functional-tests.md#r-0070-current-sight-2026-10-17).
+    No caller implementation takeover or Opus was needed.
+
+49. R-0089 starts with Sonnet high after R-0070 targeted acceptance. Shared
+    diplomacy, allied passage, attack atomicity and a persisted round event
+    make this a higher-effort assignment; the bounded repair/tool contract
+    remains unchanged. No Opus or additional cloud agent is used.
+
+50. R-0089 attempt 1 was interrupted by the Claude Pro five-hour limit after
+    1,183.421 seconds (exit 1, session
+    `e8bcd909-6732-49a3-938d-4319ff87de9b`). Last reported utilization reached
+    99%, then the CLI explicitly rejected further work until **2026-10-18
+    01:20 Europe/Prague**. Overage remained disabled. Partial production/model/UI
+    changes are retained in the isolated worktree and are not accepted or
+    published. Caller runs a diagnostic targeted build before preparing the
+    same-session medium continuation; no silent implementation fallback.
+51. First-batch publication is independently verified: build
+    `dev-171-333de9b6bf8f`, CI run `39066465318`, 2,072 model and 320
+    functional/contract checks all passed. Documentation-only evidence commit
+    `c20bf30e` passed Pages run `39069476049`; game run `39069476068` and
+    compatibility run `39069476096` intentionally skipped their game jobs.
+    Downloaded channel manifests before/after that documentation push were
+    identical. Primary main contains those sources; R-0070 and later work
+    remain isolated for the second batch.
+
+52. Diagnostic Docker `run-4xcJ62` compiled the interrupted R-0089 code and
+    ran 249 model checks: 248 passed, one error, zero skips.
+    `alliedPassageUsesTheColonyTileWithoutOwnershipOrWorkforceAccess` fails
+    loading a formerly shared tile after termination: `UnitStorage` rejects
+    every mixed-owner map stack. This is a real passage/persistence integration
+    gap, not permission to weaken the assertion. Existing overlap after alliance
+    termination or forced war needs an explicit rule; the user was asked to
+    choose retained positions with departure or automatic relocation. R-0089
+    returns to waiting for refinement until that answer is incorporated. A
+    separate UI diagnostic runs without treating the model failure as passed.
+
+53. Interrupted R-0089 UI diagnostic `run-M5HEYR` ran 16 checks: eight of
+    13 TC74 scenarios and all three source-contract checks passed; four failed
+    and one errored. TC74_12 uses a no-owned-colony fixture at round 19, and
+    the real end-round path correctly ends the game before its expected Crown
+    report (`Game over, no colonies`), producing the timeout. The four later
+    load/status-bar failures may be cascading from that game-over window; this
+    is a diagnosis to verify, not a passing result. The continuation handoff
+    requires a valid live colony fixture and reruns of every failed check plus
+    relevant regression, in the same Claude session after quota reset.
+
+54. Resumed on 2026-10-18 after the advertised quota reset. Claude Code
+    2.1.302 remains authenticated through claude.ai Pro. The mixed-owner
+    post-alliance placement decision is still pending and was asked again.
+    To make independent progress, attempt 2 resumes the same R-0089 session
+    on Sonnet medium for the TC74 Crown-event fixture only; production
+    passage/persistence policy is explicitly excluded. Prior elapsed time
+    1,183.421 seconds and the original three-attempt budget are retained.
+
+55. R-0089 attempt 2 completed on Sonnet medium in 41.437 seconds, exit 0,
+    without denied tools. Cumulative worker time is 1,224.858 seconds; one
+    original repair attempt remains. It added a scoped long-game fixture,
+    transferring Montreal and its corn worker to the Dutch together while
+    preserving stored food. Main applied the shared formatter (24 Java files
+    checked, one changed, code-token/idempotence checks passed). Docker
+    `run-aH0VVY` then ran all 13 TC74 scenarios and three source-contract
+    checks: 15 passed, one failed, zero errors/skips. TC74_12's Crown/Continue
+    path and previous TC05/06/09 failures now pass. TC74_10 still incorrectly
+    requires an empty movement preview towards an ally, conflicting with
+    allowed passage; its repair must prove no attack/declaration while retaining
+    legitimate movement, rather than dropping the gameplay check. This is not
+    R-0089 acceptance: the mixed-owner save error and pending termination
+    placement decision remain. The final original repair attempt should combine
+    both fixes after that decision. No full regression or CI was started.
+
+56. User approved retained positions on 2026-10-18. The authoritative relation
+    rule and R-0089 now specify departure, no new non-allied entry, ordinary
+    adjacent combat after separation and saved lawful overlap; R-0089 returns
+    to ready for development. Attempt 3 resumes the same Sonnet medium session
+    for the placement/save repair and TC74_10 correction, retaining 1,224.858
+    seconds of prior work and the original cumulative budget. This is the final
+    original attempt; acceptance remains pending targeted checks.
+
+57. Attempt 3 completed on Sonnet medium in 185.140 seconds, exit 0, no
+    denied tools; total R-0089 worker time is 1,409.998 seconds. It added
+    pair/tile retained-overlap evidence, load validation and transition tests,
+    corrected TC74_10 and added TC74_14 Continue coverage. Main review caught
+    seven older `EuropeanRelationsTest` calls not adapted to the new save
+    predicate. With the three-attempt budget exhausted, main updated those
+    calls explicitly for their no-overlap fixtures instead of starting another
+    worker attempt. The shared formatter checked 26 Java files, with token and
+    idempotence checks passing. All 253 selected model tests passed in the
+    subsequent Docker run; selected UI acceptance is still running.
+
+58. R-0089 targeted acceptance completed in Docker `run-6JdvBs`: 253 model
+    plus 34 functional/contract checks pass with zero failures/errors/skips,
+    exit 0. All 14 TC74 scenarios and prior TC33/59/60 pass. This verifies the
+    repaired cases, not merely the worker report; full second-batch acceptance
+    remains pending. Sonnet medium handled both targeted repairs, with the
+    caller's seven test-call adaptation explicitly separated above.
+
+59. R-0100 starts on Sonnet medium after R-0089 targeted commit `3fc8f9bd`.
+    It owns liberty, exact local/national support, occupation affiliation and
+    reports; R-0096 will supply actual Revere battle placement. Main owns the
+    repetitive current-schema fixture update after field names are fixed,
+    avoiding worker rewrites of 68 existing colony-bearing scenario files.
+    No R-0100 implementation or acceptance is yet claimed.
+
+60. Main updated the fixed `liberty`/`lastColonialAffiliation` schema in 68
+    existing scenario files containing 114 colonies. A JSON comparison against
+    HEAD verifies only those two additions; existing liberty starts at zero,
+    ordinary affiliation equals the stated colonial owner, and occupied New
+    Amsterdam in F04/F06 explicitly retains Dutch affiliation. The caller's
+    script first encountered the intentionally malformed `test-currupted-file`
+    fixture and a directory named `.microcol`; its scan was corrected to leave
+    malformed fixtures intact and process files only. These were caller setup
+    issues, not Claude failures. The final field-only equivalence check passes.
+
+61. R-0100 attempt 1 completed on Sonnet medium in 428.263 seconds, exit 0,
+    no denied tools. It reported missing real cross-colony transfer acceptance.
+    Main formatted 16 Java files (nine changed; token/idempotence checks pass).
+    Docker `run-ZIKsKS` ran all 2,139 model tests: 2,136 passed, three failed,
+    no errors/skips. Two old R-0089 movement tests stubbed the replaced enemy
+    query instead of `Model.isPassageBlockedAt`; main adapted those two mocks,
+    preserving rejection assertions, because R-0089's repair budget was exhausted.
+    R-0100's conqueror fixture also failed its real capture precondition.
+    Separate UI diagnostic `run-Qx6F1u` passes all 18 selected checks (TC75/36/39/56
+    and source contract), exit 0. Attempt 2 resumes the same Sonnet medium
+    session to repair the capture fixture and add actual two-colony transfer
+    plus conqueror/Bolivar/Crown-chain acceptance; no requirement acceptance
+    is claimed yet. Original time and repair budgets are retained.
+
+62. R-0100 attempt 2 on Sonnet medium completed in 213.519 seconds, exit 0.
+    Docker `run-KRtFY7` ran 2,141 model tests: 2,138 passed, two failures and
+    one error, no skips. The three new fixture problems are an ineligible
+    cross-colony worker during free-slot selection, Quebec's assumed two
+    residents versus one actual resident, and incomplete Congress activation/
+    category state when assigning Bolivar. Existing model regressions pass,
+    including the two corrected movement mocks. Separate `run-l7vcIM` passes
+    all six checks: three TC75 scenarios, including real cross-colony movement,
+    plus three source-contract tests. Repeated medium fixture mistakes justify
+    Sonnet high for final attempt 3 in the same session; prior 641.782 seconds
+    and the original budget are retained. No production validation or expected
+    reference values are relaxed.
+
+63. R-0100 final attempt on Sonnet high completed in 70.765 seconds, exit 0,
+    without denied tools. It changed only model-test fixtures, preserving the
+    expected 2/8→1/9 values and 50/70% capture cases. Total worker time is
+    712.547 seconds across three attempts. Docker `run-kPlLaY` passes all
+    2,141 model tests and 12 selected functional/contract checks, zero failures,
+    errors or skips. High repaired the diagnosed fixture mistakes; this does
+    not prove it is always needed. R-0096 starts high because its interacting
+    combat/worker/ownership/save boundaries are more complex; Opus remains unused.
+
+64. Reusable fixture lesson from R-0100: inspect actual saved workers and jobs
+    before assuming population from a scenario name. A cross-colony worker
+    must complete exit and reach the destination square before a destination
+    slot is eligible. Founder membership requires a complete valid Congress
+    state (activation, generation, one remaining candidate per category and
+    consistent selection), not a membership-list edit alone. Preserve these
+    preconditions in future handoffs; never weaken model validation to make
+    invented fixture states load.
+
+65. R-0096 attempt 1 on Sonnet high completed in 1,297.483 seconds, exit 0,
+    no denied tools. Formatter checked 21 Java files (11 changed; token and
+    idempotence checks pass). Diagnostic `run-EcLW0T` passes 2,159 of 2,160
+    model checks; `movedResidentMakesTheQuoteStale` errors because its opponent
+    worker assignment is attempted during the attacking player's turn. Separate
+    UI diagnostic `run-xxagH8` passes 36 checks (TC04/26/33/35/76 and source
+    contract), zero failures/errors/skips, exit 0. This is not acceptance:
+    worker-reported omissions include independent field-worker capture, a public
+    direct-capture bypass, declaration against an otherwise empty peaceful
+    colony, and resident/Revere promotion. Review also found an unapproved
+    fortified-minimum exception to Revere's compulsory exit. The agreed rule
+    excludes only the last resident; voluntary departure restrictions stay
+    intact. Attempt 2 resumes Sonnet high with those exact completion criteria,
+    preserving the original time/repair budget and existing passing assertions.
+
+66. R-0096 attempt 2 was interrupted by Claude Pro's session limit after
+    279.459 seconds, exit 1: advertised reset 2026-10-18 at 11:00 Europe/Prague.
+    No extra usage was enabled. Cumulative worker time is 1,576.942 seconds;
+    one original attempt remains in session
+    `e7958573-e09b-4935-a9b2-10ecef11d267`. Partial production edits are retained,
+    including changes to capture, field targeting, forced exit and promotion;
+    the complete implementation/test repair was not delivered. Main formatted
+    22 changed Java files (five changed; token/idempotence checks pass) and
+    started a diagnostic build to record the exact continuation state. Earlier
+    passing UI results do not verify these interrupted edits.
+
+67. Interrupted-state diagnostic `run-mzg0Tn` exits 1 during production
+    compilation, before any tests: `AbstractUnit` no longer implements
+    `Unit.isPossibleToCaptureColonyAt(Location)`, while the interface and callers
+    still require it. The compiler reports the same integration gap on nine
+    concrete unit classes. The continuation handoff records this exact state,
+    the unfinished caller/test adaptations and all remaining accepted behavior.
+    No repair is claimed, no partial R-0096 change is committed/pushed, and
+    no extra Claude attempt is spent before the advertised quota reset.
+
+68. R-0096 resumed after the user confirmed Claude availability on 2026-10-18.
+    Final original attempt 3 on Sonnet high completed in 518.782 seconds,
+    exit 0 with no denied tools; cumulative worker time is 2,095.724 seconds.
+    It completed the removed-interface callers and the five outstanding paths.
+    Main formatter checked 37 Java files (seven changed; token/idempotence pass).
+    Diagnostic `run-TIokit` compiled production and tests, then ran 2,175 model
+    checks: 2,173 passed, one failure and one error, no skips. UI did not run
+    because the model module failed. One test assumed two residents although
+    its fixture has three; another expected a capture quote despite an armed
+    third-party occupant blocking the atomic capture. Main corrected these
+    two expectations, preserving unchanged-state assertions and adding an
+    explicit armed-occupant assertion. Main takeover is limited to these
+    diagnosed test mistakes because the original three-attempt budget is
+    exhausted; no fourth worker attempt or budget reset was used. Acceptance
+    requires the rerun and selected UI paths, not the worker's completion report.
+
+69. R-0096 rerun `run-F6cEP6` passes all 2,175 model tests. Of 56 selected
+    functional/contract checks, 51 pass and five TC33 cases fail (three
+    failures, two errors; zero skips). The first error expects `buttonOk`
+    after a map gesture against a peaceful colony, although the accepted
+    behavior now opens the declaration/attack review. That open modal then
+    blocks four following cases. Main changed TC33_02 to verify and cancel
+    the ordinary attack review, then verify the complete world is unchanged
+    before its existing explicit declaration and successful capture journey.
+    Production code is unchanged. TC76 (10), TC26 (7), TC35 (12), TC32 (10),
+    TC04 (1), basic/environment checks (6) and source contract (3) all pass.
+    The TC33 repair was made after Docker had copied the tested sources;
+    its separate rerun is required. No additional worker attempt was used.
+
+70. The first main-owned TC33 repair rerun (`run-KOyAtj`) still fails five
+    cases: TC33_02 reaches `AttackPage.verifyReview` without initializing its
+    stored review window; four subsequent cases are blocked by the remaining
+    modal. Source contract passes. This is a caller/test adaptation error,
+    not a Claude attempt or a game failure. Main replaced both handwritten
+    gestures with the existing `AttackPage.chooseAttack` operation, which
+    performs the same player gesture and records the review window. Required
+    assertions and production code are unchanged; a second focused rerun
+    verifies the correction.
+
+71. R-0096 final focused rerun `run-QeRl9J` passes all seven TC33 scenarios
+    and the three source-contract checks, zero failures/errors/skips. Combined
+    targeted acceptance is 2,231 distinct checks with production unchanged
+    after the successful 2,175-model run. Final formatter checks 37 Java files
+    with code-token/idempotence equality. The high/high/high session used
+    2,095.724 worker seconds, including its quota interruption; main corrected
+    the explicitly recorded test adaptations after the original budget was
+    exhausted. This complex task does not justify high for every assignment.
+    R-0101 starts on Sonnet medium; Opus remains unused.
+
+72. R-0101 attempt 1 on Sonnet medium completed in 439.258 seconds, exit 0,
+    with no denied tools. Main formatter checked 19 Java files (11 changed;
+    token/idempotence checks pass). Docker `run-JU9QWf` compiled and ran 2,188
+    model checks: 2,187 pass, one error, zero skips. `ColonyTest` uses a mock
+    model without the difficulty required by the new political calculation;
+    the repair must supply a real profile, not relax production validation.
+    Separate UI diagnostic `run-SAOYhq` runs 22 checks: 20 pass, two TC67
+    failures, no errors/skips. F58 has eight zero-liberty residents on
+    Conquistador, so its new Tory penalty changes 3 hammers to 2; starting
+    stock 49 now reaches 51 rather than the church's required 52. The unchanged
+    chapel explains both failures. TC50/52/68/75/77 and source contract pass.
+    Review also requires direct famine/snapshot acceptance, a negative-Tory
+    player journey, and nonzero-support integration for unattended/breeding
+    exclusions, percentage ordering and captured affiliation. Attempt 2 stays
+    on Sonnet medium with this focused diagnosis and the original budget.
+
+73. R-0101 attempt 2 on Sonnet medium completed in 251.967 seconds, exit 0,
+    no denied tools; cumulative worker time is 691.225 seconds. Main formatter
+    checked 24 Java files (four changed; token/idempotence pass). Model run
+    `run-MhAec0` passes 2,206 of 2,209 checks, with three failures and no errors
+    or skips. The new blacksmith tests begin with 100 tools at storage capacity
+    100, then incorrectly expect 103/104 after the normal end-update trim.
+    Final repair must create free storage while retaining expected output and
+    input conservation. Famine and capture-affiliation checks pass. Review
+    still needs a nonzero-support Penn integration, and random famine repeats
+    must not be presented as guaranteed exhaustive victim coverage. The final
+    original attempt escalates to Sonnet high for these repeated fixture and
+    coverage misses; production has not changed since attempt 1.
+
+74. R-0101 final attempt on Sonnet high completed in 37.396 seconds, exit 0,
+    no denied tools; total worker time 728.621 seconds. It changed only model
+    tests: free warehouse capacity, six real Penn/support combinations and
+    one observed-victim famine check instead of six random repeats. Main
+    formatter checked 24 Java files (one changed; token/idempotence pass).
+    `run-97pdNe` passes 2,210 model and nine basic/contract checks. Unchanged
+    selected UI evidence plus final `run-2ymlLP` establishes 2,239 distinct
+    passing checks. Medium authored the implementation; high completed the
+    bounded fixture/coverage repair. No main implementation takeover or Opus
+    was used. Full batch acceptance/publication remains pending.
+
+75. The final R-0101 documentation check caught a main-owned R-0096 catalogue
+    edit missing the mandatory `I / V` prefix on UC-075. The earlier nine-test
+    documentation check preceded that row edit; strict MkDocs alone did not
+    detect it. Main restored `R / N` with the targeted evidence link and reran
+    the catalogue tests and strict build. No game or worker change was needed.
+
+76. R-0102 starts on Sonnet high because the agreed scope joins saved tax
+    decisions, national-update resumption, market restrictions and UI. Attempt
+    1 was interrupted by the Claude Pro session limit after 1,157.154 seconds,
+    exit 1, no denied tools; advertised reset is 2026-10-18 at 16:00
+    Europe/Prague. Session `c58cbe1f-fd86-430f-adc2-9cff54bd1737` retains two
+    original attempts within the same 14,400-second budget. No extra usage
+    was enabled. Model/GUI changes and three model-test classes are partial;
+    TC78 and the related UI adaptations were not completed. No acceptance or
+    publication is claimed.
+
+77. Main applied the pre-agreed current-schema fixture update after the quota
+    interruption: 72 tracked JSON files, 102 colonial tax states. It copies
+    explicit old Crown rates into each matching colonial state, starts cadence
+    counters at zero, removes the obsolete rate field and leaves the corrupt
+    fixture untouched. Nine price-specific scenarios retain rates 17, 10 or
+    25; ordinary game seeds remain zero. Dry-run and write-time self-checks
+    confirm exact semantic equality apart from these fields, including Unicode
+    preservation. Main formatter checked 36 Java files (nine changed; code-token
+    and idempotence checks pass). An interrupted-state diagnostic is recorded
+    separately; this mechanical work does not complete the worker assignment.
+
+78. Interrupted R-0102 diagnostic `run-w0EKQp` compiled production and tests,
+    then ran 2,245 model checks: 2,241 pass, one failure, three errors and no
+    skips. UI did not run. Three Brewster save/load checks fail because the new
+    GameManager tax-boundary condition rejects an immigration choice even when
+    no tax demand exists. The protest conservation check differs by one corn
+    after resuming production; repair must account for the protest's liberty
+    effect without weakening stock-loss assertions. These are diagnosed open
+    failures, not acceptance. The remaining worker scope includes TC78 and
+    related UI coverage, gross bid-value selection, existing-boycott exclusion,
+    shared AI acceptance and strict pending-state validation. Two original
+    attempts remain; no main implementation takeover or publication occurred.
+
+79. R-0102 resumed on 2026-10-18 after the advertised 16:00 Prague reset.
+    Attempt 2 on Sonnet high completed in 521.981 seconds, exit 0, no denied
+    tools; cumulative worker time is 1,679.135 seconds. Main formatter checked
+    43 Java files (eight changed; token/idempotence pass). The caller's resume
+    prompt named external evidence files without their absolute directory, so
+    the worker could not find them and used the inline diagnosis and retained
+    context. Future continuation prompts must contain exact absolute paths;
+    this discovery overhead is a caller error, not a model-quality failure.
+    Docker acceptance and review remain in progress; one original repair
+    remains, and the full-regression/publication boundary is still requirement 20.
+
+80. R-0102 run `run-czrcJC` passes all 2,248 model and 43 selected UI/basic/
+    contract checks, with no failures, errors or skips. Review still found a
+    weak custom-house proof: after protesting 100 of 200 ore, the remaining
+    100 would not export even without a boycott. The final original repair
+    strengthens it to 300 initial/200 remaining with exact gold, and selects
+    the highest-value stock before constructing its bounded arrears quote, so
+    overflow cannot silently substitute another commodity. Attempt 3 on Sonnet
+    high completes in 96.862 seconds, exit 0, no denied tools; total worker
+    time is 1,775.997 seconds. Main formatter checks 43 files (two changed;
+    token/idempotence pass). Final affected acceptance is pending.
+
+81. R-0103 starts on Haiku medium as a bounded payment flow over accepted
+    R-0102 state. Attempt 1 completes in 325.904 seconds, exit 0, no denied
+    tools. Formatter checks 12 Java files (six changed; token/idempotence pass).
+    Docker `run-ZJdy4f` passes all 2,260 model checks and 22 of 25 UI/basic/
+    contract checks, with one failure, two errors and no skips. All three TC79
+    paths fail because `BackTaxDialog.refresh` calls `List.copyOf(...).contains`
+    with a null initial selection, throwing on first opening; the missing-node
+    errors are consequences. Review additionally requires removing one debt
+    before emitting the gold-change event to prevent observable/reentrant partial
+    payment, removing an unrequested human-only model restriction, and proving
+    restored actual selling as well as buying. Attempt 2 stays on Haiku medium
+    with the diagnosed fixes and original budget. Existing TC27/TC78 pass.
+
+82. R-0103 attempt 2 on Haiku medium completes in 156.370 seconds, exit 0,
+    no denied tools; cumulative worker time is 482.274 seconds. The worker
+    guards the initial null selection, removes the debt before the synchronous
+    gold event, adds a reentrant listener regression, removes the human-only
+    restriction and extends TC79 to actual musket purchase/sale after a real
+    protest and payment. Formatter checks 12 Java files (four changed;
+    token/idempotence pass). All 2,261 model checks pass; UI acceptance is
+    pending. No main implementation takeover or model escalation was needed.
+
+83. R-0103 `run-IdGG0D` passes all 2,261 model and 24 of 25 UI/basic/
+    contract checks, with one failure and no errors/skips. Real payment followed
+    by purchase/sale and Continue passes, as does insufficient funds. TC79_03
+    reveals stale port boycott styling after a rejected payment while another
+    debt remains: `BackTaxDialog.reject` repaints Europe only when every debt
+    is gone. The final original repair raises Haiku effort to high for this
+    repeated UI-state omission, preserves all assertions, and repaints both
+    branches. This is not a Sonnet/Opus escalation or a main takeover.
+
+84. R-0103 final Haiku high repair completes in 11.484 seconds, exit 0,
+    no denied tools; total worker time is 493.758 seconds. It changes only
+    the dialog rejection repaint; formatter checks 12 Java files, none needing
+    changes, with token/idempotence pass. Final `run-J1dNdH` passes all six
+    TC79/source-contract checks. Combined unchanged model and UI evidence
+    establishes 2,286 distinct passing checks. Haiku handled the bounded task
+    with two repairs; this is an observed outcome, not a controlled cost
+    comparison with Sonnet. Full batch acceptance/publication remains pending.
+
+85. R-0085's remaining boycott/export proof completed on Haiku medium in one
+    153.574-second attempt, exit 0, no denied tools. It changes only TC58 and
+    its page fixture helpers, deriving the revolution case from an actual saved
+    protest without reseeding debts or stock. Main formatter checks two Java
+    files (one changed; token/idempotence pass). Docker `run-kp4OXZ` passes
+    2,261 model and 15 UI/basic/contract checks with no skips. No main
+    implementation takeover or production change was needed. The controlled
+    revolution flag does not establish R-0105 declaration/muster acceptance.
+
+86. R-0123 follows the user's 2026-10-18 lake decision: distinct identity,
+    ordinary ocean ship access and fishing. Sonnet medium completes three
+    attempts in 332.268, 140.895 and 43.416 seconds (516.579 total), exit 0
+    with no denied tools. Initial 2,296 model checks expose one invalid foreign
+    ship fixture assumption. Attempt 2 explicitly prepares the foreign ship
+    and adds actual fishing-turn and combat-after-clearing evidence. Docker
+    `run-PinZB3` passes all 2,300 model checks; 37 UI/basic/contract checks
+    contain four failures: hidden terrain fixture, an unconfirmed Load-click
+    problem, and two coastal construction cases. Attempt 3 reveals the scoped
+    fixture tiles; it does not invent a cause for the Load failure. A focused
+    rerun passes names/Continue and ships but repeats the pre-load failure.
+87. The coastal F42 fixture has eight residents, zero liberty and Conquistador
+    difficulty. R-0101 now correctly applies the eight-Tory production penalty,
+    so the fixture's expected three hammers and fish no longer apply. After
+    exhausting the original three worker attempts, main changes only its
+    initial liberty to 200: one rebel, seven Tories, no bonus or penalty.
+    This preserves the original expected output, construction and player
+    assertions. The fixture repair and remaining startup issue require an
+    actual rerun; no acceptance is claimed by this diagnosis.
+
+88. The focused coastal rerun `run-3A9YzG` passes both TC51 scenarios after
+    the F42 repair. TC80's third case still fails before loading. Two bounded
+    focus experiments time out; diagnostic `run-bWDVWC` confirms the button
+    is visible/enabled but its window cannot gain focus. Source tracing to
+    the existing TC38 land-rejection journey finds the actual cause: TC80_02
+    leaves the modal movement-rejection message open. Main removes the focus
+    experiments and extends TC80_02 to verify and close that message through
+    the existing `PassengerTransferPage`, preserving the ship-position check.
+    This is a test lifecycle repair after worker attempts were exhausted, not
+    a production workaround. Final TC80 and source-contract rerun is required.
+
+89. Final `run-KPhjW4` passes TC80 (3) and the source contract (3), zero
+    failures/errors/skips, including an actual fishing update and Continue.
+    Unchanged model evidence and the targeted coastal/clearing/combat controls
+    establish 2,337 distinct passing checks. Shared formatter checks all 13
+    changed Java files with code-token/idempotence pass. Sonnet medium needed
+    three attempts; main corrected the old F42 political fixture and the
+    modal cleanup after the attempt budget. No Sonnet-high or Opus escalation
+    occurred, and this mixed result is not evidence of autonomous completion
+    or measured savings. R-0123 is targeted-accepted as item 19; full batch
+    acceptance/publication and R-0105 remain pending.
+
+90. R-0105 resumes after the user resolves royal/Continental infantry and
+    cavalry defeat as destruction with equipment on 2026-10-18. Main records
+    the shared rule in R-0178 and the affected active REF requirements and
+    refines R-0105. Sonnet high is selected for declaration, exact muster,
+    persistent roles and shared combat integration. Attempt 1 stops at the
+    Claude Pro session limit after 1,063.654 seconds, exit 1, no denied tools;
+    the reported reset is 21:00 Europe/Prague on 2026-10-18. This is a quota
+    interruption, not a verified implementation failure. Two original attempts
+    remain, with the same worktree and session; the total budget stays 14,400
+    seconds. Partial implementation and model tests exist, but TC81/F73 has
+    not been written. Main applies the formatter (27 Java files, 13 changed,
+    token/idempotence pass) and runs a diagnostic model check. No main
+    implementation takeover, full UI regression or publication is authorized
+    by this partial result; the agreed batch remains 19 targeted-accepted.
+
+91. Diagnostic Docker `run-PRMDVb` compiles the interrupted production/model
+    tests and runs 2,335 checks: 2,334 pass, one fails, no errors/skips. The
+    new weighted-support test expects 48%, but its actual colony populations
+    are 5/1/6; seven residents at 78% and five at zero give 45.5%, displayed
+    as 45%. The refusal below 50% remains correct. The UI module is not reached.
+    Main prepares this arithmetic repair, completion of missing TC81/F73 and
+    review of callback/pause and role-transition atomicity for the same worker
+    session after quota reset. No failed check is called repaired, no partial
+    R-0105 acceptance is recorded, and no new worker budget is started.

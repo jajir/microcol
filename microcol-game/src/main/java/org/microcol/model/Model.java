@@ -14,6 +14,7 @@ import java.util.function.Function;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
@@ -44,6 +45,11 @@ public class Model {
     private final ColonyNames colonyNames;
     private int nextColonyId;
     private long combatRandomState;
+    /** Last complete round already processed by the Crown-war event. */
+    private int lastCrownWarRound;
+    private static final int CROWN_WAR_PERIOD = 20;
+    /** Rounds after ending an alliance before war may be declared. */
+    public static final int ALLIANCE_WAR_WAIT_ROUNDS = EuropeanRelations.WAR_WAIT_ROUNDS;
 
     double nextCombatRandom() {
         combatRandomState += 0x9E3779B97F4A7C15L;
@@ -132,8 +138,18 @@ public class Model {
         });
         listenerManager = new ListenerManager();
         this.focusedField = modelPo.getFocusedField();
-
         this.calendar = Preconditions.checkNotNull(calendar);
+        final int savedCrownRound = modelPo.getCrownWarRound() == null ? 0
+                : modelPo.getCrownWarRound();
+        Preconditions
+                .checkArgument(
+                        savedCrownRound >= 0
+                                && savedCrownRound <= calendar
+                                        .getNumberOfPlayedTurns()
+                                && savedCrownRound % CROWN_WAR_PERIOD == 0,
+                        "Unsupported save: invalid Crown-war round");
+        lastCrownWarRound = savedCrownRound;
+
         this.map = Preconditions.checkNotNull(map);
 
         this.playerStore = PlayerStore.makePlayers(this, modelPo);
@@ -196,6 +212,15 @@ public class Model {
                             "Unknown construction queue kind");
                 }
             });
+            Preconditions.checkArgument(
+                    colonyPo.getLiberty() != null && colonyPo.getLiberty() >= 0
+                            && colonyPo.getLastColonialAffiliation() != null,
+                    "Unsupported save: missing or invalid colony liberty or affiliation");
+            final Player affiliation = playerStore.getPlayers().stream()
+                    .filter(player -> player.getName()
+                            .equals(colonyPo.getLastColonialAffiliation()))
+                    .findAny().orElseThrow(() -> new IllegalArgumentException(
+                            "Unsupported save: unknown colony affiliation"));
             final Colony col = new Colony(this, colonyPo.getId(),
                     colonyPo.getName(),
                     playerStore.getPlayerByName(colonyPo.getOwnerName()),
@@ -207,7 +232,8 @@ public class Model {
                             constructions.add(c);
                         });
                         return constructions;
-                    }, colonyPo.getColonyWarehouse(), buildingQueue);
+                    }, colonyPo.getColonyWarehouse(), buildingQueue,
+                    colonyPo.getLiberty(), affiliation);
             col.restoreExportGoods(colonyPo.getExportGoods());
             colonies.add(col);
         });
@@ -222,6 +248,14 @@ public class Model {
 
         unitFactory = new UnitFactory();
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
+        // Owners may share a square only as allies or as former allies with
+        // saved evidence; nothing else is a lawful mixed-owner placement.
+        this.unitStorage.setSharedSquarePolicy(
+                (first, second, at) -> !first.isKing() && !second.isKing()
+                        && (europeanRelations.get(first,
+                                second) == EuropeanRelationState.ALLIANCE
+                                || europeanRelations.isRetainedOverlap(first,
+                                        second, at)));
 
         gameManager = GameManager.make(this, modelPo, gameOverEvaluators,
                 playerStore);
@@ -288,12 +322,32 @@ public class Model {
         }
 
         model.checkUnits();
+        model.europeanRelations.checkRetainedOverlaps(model::isOverlapLive);
         for (final ColonyPo savedColony : modelPo.getColonies()) {
-            model.getColonyById(savedColony.getId()).orElseThrow()
-                    .restoreEducationCourses(savedColony.getEducationCourses());
+            final Colony restored = model.getColonyById(savedColony.getId())
+                    .orElseThrow();
+            restored.checkRestoredLiberty();
+            restored.restoreEducationCourses(savedColony.getEducationCourses());
+        }
+        // Remembered colonies are restored verbatim first; only locations in
+        // present sight are then refreshed from permitted observation.
+        for (final PlayerPo savedPlayer : modelPo.getGameManager()
+                .getPlayers()) {
+            model.getPlayerByName(savedPlayer.getName())
+                    .restoreColonyKnowledge(savedPlayer.getColonySightings());
         }
         model.assureDefaultVisibility();
+        model.refreshObservations();
         return model;
+    }
+
+    /**
+     * Let every player record the colonies inside its present sight. Called
+     * after colony founding, capture, removal and turn starts; colonies outside
+     * present sight keep their remembered snapshot.
+     */
+    void refreshObservations() {
+        playerStore.getPlayers().forEach(Player::observeColonies);
     }
 
     private static void validateSavedColonyFields(final ModelPo data,
@@ -384,10 +438,25 @@ public class Model {
                 for (final var slot : construction.getSlots()) {
                     Preconditions.checkArgument(slot != null,
                             "Missing saved construction slot");
-                    Preconditions.checkArgument(
-                            slot.getWorkerId() == null
-                                    || jobWorkers.add(slot.getWorkerId()),
+                    final Integer workerId = slot.getWorkerId();
+                    if (workerId == null) {
+                        continue;
+                    }
+                    Preconditions.checkArgument(jobWorkers.add(workerId),
                             "Saved worker has multiple colony jobs");
+                    // A captured colony's building workers belong to its owner.
+                    final UnitPo worker = units.get(workerId);
+                    Preconditions.checkArgument(
+                            worker != null
+                                    && colony.getOwnerName()
+                                            .equals(worker.getOwnerId())
+                                    && worker.getPlaceConstructionSlot() != null
+                                    && worker.getPlaceMap() == null
+                                    && worker.getPlaceColonyField() == null
+                                    && worker.getPlaceCargoSlot() == null
+                                    && worker.getPlaceHighSeas() == null
+                                    && worker.getPlaceEuropePort() == null,
+                            "Invalid saved building worker identity, owner or place");
                 }
             }
         }
@@ -426,7 +495,8 @@ public class Model {
                                 constructions.add(c);
                             });
                     return constructions;
-                }, new HashMap<String, Integer>(), new ArrayList<>());
+                }, new HashMap<String, Integer>(), new ArrayList<>(), 0L,
+                player);
         final List<ColonyField> fields = col
                 .getEmptyFieldsWithMaxCornProduction();
         final ConstructionSlot indoorWork = col
@@ -459,6 +529,7 @@ public class Model {
         } else {
             unit.placeToColonyField(fields.get(0), GoodsType.CORN);
         }
+        refreshObservations();
         listenerManager.fireColonyWasFounded(this, col);
         return col;
     }
@@ -1079,6 +1150,80 @@ public class Model {
     }
 
     /**
+     * Alliance query. Allies receive reciprocal passage only; this never grants
+     * colony ownership, workforce, cargo access or shared sight.
+     *
+     * @param first  registered participant
+     * @param second registered participant
+     * @return whether two distinct colonizing players are allied
+     */
+    public boolean areAllied(final Player first, final Player second) {
+        checkRegisteredPlayers(first, second);
+        return first != second && !first.isKing() && !second.isKing()
+                && europeanRelations.get(first,
+                        second) == EuropeanRelationState.ALLIANCE;
+    }
+
+    /**
+     * Whether any attack, declaration or privateer exception between these
+     * players is forbidden: allies, or former allies during the war wait.
+     *
+     * @param first  registered participant
+     * @param second registered participant
+     * @return whether hostile action against each other is restrained
+     */
+    public boolean isAttackRestrained(final Player first, final Player second) {
+        checkRegisteredPlayers(first, second);
+        return first != second && !first.isKing() && !second.isKing()
+                && (europeanRelations.get(first,
+                        second) == EuropeanRelationState.ALLIANCE
+                        || europeanRelations.warWaitRemaining(first, second,
+                                calendar.getNumberOfPlayedTurns()) > 0);
+    }
+
+    /**
+     * Rounds before war may be declared after an alliance was ended.
+     *
+     * @param first  registered colonizing participant
+     * @param second registered colonizing participant
+     * @return remaining complete rounds, zero when no wait applies
+     */
+    public int getWarDeclarationWait(final Player first, final Player second) {
+        checkRegisteredPlayers(first, second);
+        return europeanRelations.warWaitRemaining(first, second,
+                calendar.getNumberOfPlayedTurns());
+    }
+
+    /** Whether units of both pair members stand on this square. */
+    private boolean isOverlapLive(final Set<String> pair, final Location at) {
+        final Set<String> owners = new HashSet<>();
+        getUnitsAt(at).forEach(unit -> owners.add(unit.getOwner().getName()));
+        return owners.containsAll(pair);
+    }
+
+    /**
+     * Keep lawful overlap evidence before an alliance between the pair ends.
+     */
+    private void retainSharedSquares(final Player first, final Player second) {
+        final List<Location> shared = new ArrayList<>();
+        getUnitsAt(first).keySet().forEach(at -> {
+            if (!getUnitsAt(second, at).isEmpty()) {
+                shared.add(at);
+            }
+        });
+        europeanRelations.retainOverlaps(first, second, shared);
+    }
+
+    /**
+     * Whether another player's unit at the location blocks this player's
+     * movement. Allied units grant passage and so never block.
+     */
+    boolean isPassageBlockedAt(final Player player, final Location location) {
+        return getEnemyUnitsAt(player, location).stream()
+                .anyMatch(unit -> !areAllied(player, unit.getOwner()));
+    }
+
+    /**
      * Whether this ship pair may fight without changing its European treaty.
      * Ordinary attack placement, movement and visibility rules still apply.
      *
@@ -1094,7 +1239,9 @@ public class Model {
                 && attacker.isShip() && defender.isShip()
                 && attacker.getOwner() != defender.getOwner()
                 && !attacker.getOwner().isKing()
-                && !defender.getOwner().isKing() && attacker.canAttack()
+                && !defender.getOwner().isKing()
+                && !isAttackRestrained(attacker.getOwner(), defender.getOwner())
+                && attacker.canAttack()
                 && attacker.getType().getAttackableUnitType()
                         .contains(defender.getType())
                 && (attacker.getType() == UnitType.PRIVATEER
@@ -1135,14 +1282,20 @@ public class Model {
 
     private List<Unit> findPeaceVisitors(final Player actor, final Player rival,
             final boolean duringPreparation) {
+        return findContactVisitors(actor, rival, duringPreparation,
+                EuropeanRelationState.WAR);
+    }
+
+    private List<Unit> findContactVisitors(final Player actor,
+            final Player rival, final boolean duringPreparation,
+            final EuropeanRelationState required) {
         if ((!duringPreparation && !isGameRunning())
                 || (duringPreparation && (!isGameStarted() || isGameFinished()))
                 || actor == null || rival == null || getCurrentPlayer() != actor
                 || actor.isKing() || rival.isKing() || !rival.isComputer()
                 || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival) || actor == rival
-                || europeanRelations.get(actor,
-                        rival) != EuropeanRelationState.WAR) {
+                || europeanRelations.get(actor, rival) != required) {
             return List.of();
         }
         return getAllUnits().stream()
@@ -1214,7 +1367,8 @@ public class Model {
                 || rival.isKing() || !rival.isComputer()
                 || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival) || actor == rival
-                || getTributeTurnsRemaining(actor, rival) > 0) {
+                || getTributeTurnsRemaining(actor, rival) > 0
+                || areAllied(actor, rival)) {
             return List.of();
         }
         return getAllUnits().stream()
@@ -1442,12 +1596,302 @@ public class Model {
                 EuropeanRelationState.PEACE);
     }
 
+    /**
+     * Rounds an alliance stays unavailable because of a recent confirmed
+     * tribute or actual attack/capture between the pair.
+     *
+     * @param actor registered colonizing player
+     * @param rival registered colonizing rival
+     * @return remaining complete rounds, zero when the history allows it
+     */
+    public int getAllianceBlockedRounds(final Player actor,
+            final Player rival) {
+        checkRegisteredPlayers(actor, rival);
+        Preconditions.checkArgument(
+                actor != rival && !actor.isKing() && !rival.isKing(),
+                "Invalid alliance participants");
+        final int round = calendar.getNumberOfPlayedTurns();
+        return Math.max(
+                europeanRelations.aggressionTurnsRemaining(actor, rival, round),
+                europeanRelations.tributeTurnsRemaining(actor, rival, round));
+    }
+
+    /** Eligible on-map colonists adjacent to a visible peaceful AI contact. */
+    public List<Unit> getAllianceVisitors(final Player actor,
+            final Player rival) {
+        if (actor == null || rival == null || actor == rival || actor.isKing()
+                || rival.isKing() || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival)
+                || getAllianceBlockedRounds(actor, rival) > 0) {
+            return List.of();
+        }
+        return findContactVisitors(actor, rival, false,
+                EuropeanRelationState.PEACE);
+    }
+
+    private AllianceOffer quoteAlliance(final Unit visitor,
+            final Player rival) {
+        final Player actor = visitor.getOwner();
+        return new AllianceOffer(actor, rival, visitor.getId(),
+                AllianceOffer.PRICE, actor.getGold(), rival.getGold());
+    }
+
+    /** Create a saved proposal, or reopen the same pair's pending proposal. */
+    public AllianceOffer prepareAllianceOffer(final Unit visitor,
+            final Player rival) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(rival);
+        final Player actor = visitor.getOwner();
+        Preconditions.checkState(
+                getAllianceVisitors(actor, rival).contains(visitor),
+                "Visitor has no eligible alliance contact");
+        final Optional<AllianceOffer> pending = europeanRelations
+                .getPendingAlliance(actor, rival);
+        if (pending.isPresent()) {
+            return pending.get();
+        }
+        Preconditions.checkState(
+                (long) rival.getGold()
+                        + AllianceOffer.PRICE <= Integer.MAX_VALUE,
+                "Alliance price exceeds the rival treasury capacity");
+        final AllianceOffer offer = quoteAlliance(visitor, rival);
+        europeanRelations.putPendingAlliance(offer);
+        return offer;
+    }
+
+    public Optional<AllianceOffer> getPendingAllianceOffer(final Player actor,
+            final Player rival) {
+        if (actor == null || rival == null || actor == rival || actor.isKing()
+                || rival.isKing() || !getPlayers().contains(actor)
+                || !getPlayers().contains(rival)) {
+            return Optional.empty();
+        }
+        return europeanRelations.getPendingAlliance(actor, rival);
+    }
+
+    /** Cancel a live proposal without charging or changing the relation. */
+    public void cancelAllianceOffer(final AllianceOffer offer) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == offer.getActor()
+                        && getPendingAllianceOffer(offer.getActor(),
+                                offer.getRival()).orElse(null) == offer,
+                "Alliance offer is obsolete");
+        europeanRelations.clearPendingAlliance(offer);
+    }
+
+    /** Revalidate every quoted input, then pay once and form the alliance. */
+    public void acceptAllianceOffer(final AllianceOffer offer) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        final Player actor = offer.getActor();
+        final Player rival = offer.getRival();
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == actor
+                        && getPendingAllianceOffer(actor, rival)
+                                .orElse(null) == offer
+                        && europeanRelations.get(actor,
+                                rival) == EuropeanRelationState.PEACE,
+                "Alliance offer is obsolete");
+        final Unit visitor = tryGetUnitById(offer.getVisitorId()).orElseThrow(
+                () -> new IllegalStateException("Visitor no longer exists"));
+        Preconditions.checkState(
+                getAllianceVisitors(actor, rival).contains(visitor),
+                "Alliance contact or history changed");
+        final AllianceOffer now = quoteAlliance(visitor, rival);
+        Preconditions.checkState(
+                now.getPrice() == offer.getPrice()
+                        && now.getActorGold() == offer.getActorGold()
+                        && now.getRivalGold() == offer.getRivalGold(),
+                "Alliance offer terms changed");
+        Preconditions.checkState(offer.getActorGoldAfter() >= 0,
+                "Not enough gold for alliance");
+        final int rivalAfter = offer.getRivalGoldAfter();
+        actor.setGold(offer.getActorGoldAfter());
+        rival.setGold(rivalAfter);
+        europeanRelations.transition(actor, rival, EuropeanRelationState.PEACE,
+                EuropeanRelationState.ALLIANCE);
+    }
+
+    /**
+     * Explicitly end an alliance. The pair returns to peace and neither side
+     * may declare war or attack until the wait expires.
+     *
+     * @param actor   current colonizing player
+     * @param partner registered ally
+     */
+    public void terminateAlliance(final Player actor, final Player partner) {
+        checkGameRunning();
+        checkRegisteredPlayers(actor, partner);
+        checkCurrentPlayer(actor);
+        europeanRelations.terminateAlliance(actor, partner,
+                calendar.getNumberOfPlayedTurns());
+        retainSharedSquares(actor, partner);
+    }
+
+    /**
+     * Plan the relation consequences of an actual attack or capture. Nothing
+     * changes until {@link #applyAggression(AggressionPlan)}; allies of a
+     * victim must enter war against the attacker, even if they were also allied
+     * with it. Mere war declarations are not aggression.
+     */
+    AggressionPlan planAggression(final Player attacker,
+            final Set<Player> victims, final boolean privateerException) {
+        checkGameRunning();
+        checkRegisteredPlayers(attacker, attacker);
+        checkCurrentPlayer(attacker);
+        final AggressionPlan plan = new AggressionPlan();
+        if (attacker.isKing()) {
+            return plan;
+        }
+        final List<Player> ordered = victims.stream()
+                .sorted(Comparator.comparing(Player::getName))
+                .collect(java.util.stream.Collectors.toList());
+        for (final Player victim : ordered) {
+            checkRegisteredPlayers(attacker, victim);
+            if (victim.isKing() || victim == attacker) {
+                continue;
+            }
+            final EuropeanRelationState state = europeanRelations.get(attacker,
+                    victim);
+            Preconditions.checkState(state != EuropeanRelationState.ALLIANCE,
+                    "Allies cannot attack each other");
+            boolean war = state == EuropeanRelationState.WAR;
+            if (state == EuropeanRelationState.PEACE && !privateerException) {
+                plan.addChange(attacker, victim, state);
+                war = true;
+            }
+            plan.addAggression(attacker, victim);
+            if (!war) {
+                continue;
+            }
+            for (final Player ally : getPlayers()) {
+                if (ally == attacker || ally == victim || ally.isKing()
+                        || ordered.contains(ally) || europeanRelations.get(ally,
+                                victim) != EuropeanRelationState.ALLIANCE) {
+                    continue;
+                }
+                final EuropeanRelationState current = europeanRelations
+                        .get(ally, attacker);
+                if (current != EuropeanRelationState.WAR) {
+                    plan.addChange(ally, attacker, current);
+                }
+                plan.addDefense(ally, attacker, victim);
+            }
+        }
+        return plan;
+    }
+
+    /** Apply a plan atomically; every planned expectation is checked first. */
+    void applyAggression(final AggressionPlan plan) {
+        Preconditions.checkNotNull(plan);
+        Preconditions.checkState(!plan.isApplied(),
+                "The aggression was already applied");
+        for (final AggressionPlan.Change change : plan.getChanges()) {
+            Preconditions.checkState(
+                    europeanRelations.get(change.first,
+                            change.second) == change.expected,
+                    "The diplomatic state changed");
+        }
+        final int round = calendar.getNumberOfPlayedTurns();
+        for (final AggressionPlan.Change change : plan.getChanges()) {
+            europeanRelations.transition(change.first, change.second,
+                    change.expected, EuropeanRelationState.WAR);
+            if (change.expected == EuropeanRelationState.ALLIANCE) {
+                retainSharedSquares(change.first, change.second);
+            }
+        }
+        for (final Player[] pair : plan.getAggressions()) {
+            europeanRelations.recordAggression(pair[0], pair[1], round);
+        }
+        for (final AggressionPlan.Defense defense : plan.getDefenses()) {
+            if (defense.ally.isHuman()) {
+                turnEventStore.add(TurnEventProvider.getAllyDefense(
+                        defense.ally, defense.aggressor.getDisplayName(),
+                        defense.victim.getDisplayName()));
+            }
+        }
+        plan.markApplied();
+    }
+
+    private boolean isCrownWarEligible(final Player first,
+            final Player second) {
+        return first != second && !first.isKing() && !second.isKing()
+                && !first.isDeclaredIndependence()
+                && !second.isDeclaredIndependence()
+                && !first.getCongressMembers()
+                        .contains(Founder.BENJAMIN_FRANKLIN)
+                && !second.getCongressMembers()
+                        .contains(Founder.BENJAMIN_FRANKLIN)
+                && europeanRelations.get(first,
+                        second) != EuropeanRelationState.WAR;
+    }
+
+    /**
+     * Crown-war event, run once per complete round boundary. Every 20th
+     * complete round one random non-warring colonial pair is forced into war;
+     * an alliance of that pair ends first. The round is recorded even when no
+     * pair qualifies, so a saved game never repeats it.
+     */
+    void processCrownWar() {
+        final int round = calendar.getNumberOfPlayedTurns();
+        if (round <= 0 || round % CROWN_WAR_PERIOD != 0
+                || round <= lastCrownWarRound) {
+            return;
+        }
+        lastCrownWarRound = round;
+        final List<Player> colonists = getPlayers().stream()
+                .filter(player -> !player.isKing())
+                .sorted(Comparator.comparing(Player::getName))
+                .collect(java.util.stream.Collectors.toList());
+        final List<Player[]> eligible = new ArrayList<>();
+        for (int first = 0; first < colonists.size(); first++) {
+            for (int second = first + 1; second < colonists.size(); second++) {
+                if (isCrownWarEligible(colonists.get(first),
+                        colonists.get(second))) {
+                    eligible.add(new Player[] { colonists.get(first),
+                            colonists.get(second) });
+                }
+            }
+        }
+        if (eligible.isEmpty()) {
+            return;
+        }
+        final Player[] selected = eligible
+                .get((int) (nextCombatRandom() * eligible.size()));
+        Preconditions.checkState(isCrownWarEligible(selected[0], selected[1]),
+                "The selected pair is no longer eligible");
+        final EuropeanRelationState before = europeanRelations.get(selected[0],
+                selected[1]);
+        // An existing alliance is ended by the same atomic change to war.
+        europeanRelations.transition(selected[0], selected[1], before,
+                EuropeanRelationState.WAR);
+        final boolean allianceEnded = before == EuropeanRelationState.ALLIANCE;
+        if (allianceEnded) {
+            retainSharedSquares(selected[0], selected[1]);
+        }
+        for (int index = 0; index < 2; index++) {
+            if (selected[index].isHuman()) {
+                turnEventStore.add(TurnEventProvider.getCrownWar(
+                        selected[index], selected[1 - index].getDisplayName(),
+                        allianceEnded));
+            }
+        }
+    }
+
     private void changeEuropeanRelation(final Player actor, final Player target,
             final EuropeanRelationState expected,
             final EuropeanRelationState next) {
         checkGameRunning();
         checkRegisteredPlayers(actor, target);
         checkCurrentPlayer(actor);
+        Preconditions.checkState(
+                next != EuropeanRelationState.WAR
+                        || europeanRelations.warWaitRemaining(actor, target,
+                                calendar.getNumberOfPlayedTurns()) == 0,
+                "War cannot be declared while the alliance wait lasts");
         europeanRelations.transition(actor, target, expected, next);
     }
 
@@ -1478,6 +1922,26 @@ public class Model {
 
     void fireImmigrationChoiceRequired(final Player player) {
         listenerManager.fireImmigrationChoiceRequired(this, player);
+    }
+
+    /**
+     * @return whether the current human nation must answer a Crown tax demand
+     *         before any action
+     */
+    public boolean isAwaitingTaxDecision() {
+        return gameManager.isAwaitingTaxDecision();
+    }
+
+    void beginTaxChoice(final Player player) {
+        gameManager.beginTaxChoice(player);
+    }
+
+    void finishTaxChoice(final Player player) {
+        gameManager.finishTaxChoice(player);
+    }
+
+    void fireTaxDemandRequired(final Player player) {
+        listenerManager.fireTaxDemandRequired(this, player);
     }
 
     public boolean isGameFinished() {
@@ -1912,7 +2376,9 @@ public class Model {
         out.setCalendar(calendar.save());
         gameManager.save(out);
         playerStore.save(out);
-        out.setEuropeanRelations(europeanRelations.save());
+        out.setEuropeanRelations(europeanRelations.save(this::isOverlapLive));
+        // Zero means no Crown-war round has been processed yet.
+        out.setCrownWarRound(lastCrownWarRound == 0 ? null : lastCrownWarRound);
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
@@ -2037,8 +2503,8 @@ public class Model {
     public synchronized void startGame() {
         Preconditions.checkState(!endingTurn,
                 "Cannot start or end game while ending a turn.");
-        if (gameManager.isRunning()
-                || gameManager.isAwaitingImmigrationChoice()) {
+        if (gameManager.isRunning() || gameManager.isAwaitingImmigrationChoice()
+                || gameManager.isAwaitingTaxDecision()) {
             gameManager.continueGame();
         } else {
             gameManager.startGame();
@@ -2100,6 +2566,7 @@ public class Model {
     }
 
     void fireTurnStarted(final Player player, final boolean isFreshStart) {
+        refreshObservations();
         listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
@@ -2149,6 +2616,14 @@ public class Model {
             final MilitaryPromotion promotion) {
         listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
                 wasDestroyed, promotion);
+    }
+
+    void fireUnitAttacked(final Unit attacker, final Unit defender,
+            final Unit defeated, final boolean wasDestroyed,
+            final MilitaryPromotion promotion,
+            final ColonyBattleOutcome colonyOutcome) {
+        listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
+                wasDestroyed, promotion, colonyOutcome);
     }
 
     void fireUnitAttacked(final Unit attacker, final Unit defender,
@@ -2236,6 +2711,8 @@ public class Model {
         getTurnEventStore().add(TurnEventProvider
                 .getColonyWasDestroyed(colony.getOwner(), colony, lostShips));
         colonies.remove(colony);
+        colony.getOwner().forgetColony(colony.getLocation());
+        refreshObservations();
     }
 
     boolean isExists(final Colony colony) {

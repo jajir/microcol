@@ -64,8 +64,10 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
         final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelPrice = new Label();
+        labelPrice.setWrapText(true);
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("panelGoods");
+        mainPanel.setId("europeGood" + goodsType.name());
         mainPanel.getChildren().addAll(paneImage, labelPrice);
         mainPanel.setOnMouseEntered(this::onMouseEntered);
         mainPanel.setOnMouseExited(this::onMouseExited);
@@ -87,6 +89,15 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
     }
 
     private void onDragDetected(final MouseEvent event) {
+        if (gameModelController.getHumanPlayer().isBoycotted(goodsType)) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Europe.goodsBoycotted,
+                            i18n.get(GoodsTypeName
+                                    .getNameForGoodsType(goodsType))),
+                    Source.EUROPE));
+            event.consume();
+            return;
+        }
         final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE,
                 TransferMode.LINK);
         final Goods goods = gameModelController.getMaxBuyableGoods(goodsType);
@@ -104,8 +115,17 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
     @Override
     public void repaint() {
         final GoodsTrade goodsTrade = getGoodsTrade();
+        final boolean boycotted = gameModelController.getHumanPlayer()
+                .isBoycotted(goodsType);
         labelPrice.setText(
-                goodsTrade.getSellPrice() + "/" + goodsTrade.getBuyPrice());
+                goodsTrade.getSellPrice() + "/" + goodsTrade.getBuyPrice()
+                        + (boycotted
+                                ? "\n" + i18n.get(Europe.goodsBoycottedMark)
+                                : ""));
+        mainPanel.getStyleClass().remove("boycotted");
+        if (boycotted) {
+            mainPanel.getStyleClass().add("boycotted");
+        }
     }
 
     private GoodsTrade getGoodsTrade() {

@@ -252,6 +252,8 @@
         "id": 0,
         "name": "New Amsterdam",
         "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
         "location": {
           "x": 24,
           "y": 16
@@ -848,6 +850,13 @@
     "gameManager": {
       "players": [
         {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
           "recruitment": {"pendingEarnedChoice": false,
             "candidates": [
               {
@@ -908,7 +917,6 @@
               "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
             ]
           },
-          "kingsTaxPercentage": 0,
           "congress": {
             "activated": true,
             "bells": 99,
@@ -965,8 +973,7 @@
               "row-0029:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
               "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
             ]
-          },
-          "kingsTaxPercentage": 0
+          }
         }
       ],
       "gameStarted": true,

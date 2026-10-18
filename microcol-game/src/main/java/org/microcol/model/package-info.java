@@ -34,25 +34,29 @@
  * for every owner's on-map units, including rivals. Unit sight is independent
  * of movement points, follows current type and equipment, and clips to map
  * boundaries. Visibility retains explored terrain after movement or role loss.
+ * Player owns present sight and immutable last-observed colony snapshots;
+ * observation updates follow model changes, while GUI knowledge queries are
+ * read-only. Owned colonies explore their radius-one surroundings. Foreign
+ * object disclosure and attack targets use present sight, not exploration.
  * GameManager orders registered nation identities and associated Crowns. Player
- * prepares voyages/immigration, colonies and then unit work; individual rule
- * owners retain their own accounting. AtlanticVoyageDuration owns the ordinary
- * crossing formula; Congress keeps frozen founder offers, a separate national
- * bell account and durable membership; colony production credits it once per
- * update. Founder effects remain in their respective rule owners, with Jones's
- * one-time frigate delivered at the existing Europe or reachable coastal-port
- * boundary. Magellan membership raises effective ship movement through the
- * shared unit allowance; new western departures halve their sampled ordinary
- * duration, while saved voyages retain their original timing. PlaceHighSea
- * retains sampled weather, original route and position across saves. Model
- * validates reversal offers against live ownership and voyage revision before
- * changing destination. Model serializes turn transitions and snapshots;
- * incomplete preparation rejects player commands and snapshots, including after
- * failure. A deliberate Brewster choice boundary permits snapshots while
- * gameplay remains blocked; choosing the last earned immigrant resumes the
- * remaining preparation exactly once. Unit work completes internally,
- * independently of commands submitted at an action boundary. Normal unit
- * cycling excludes continuing work; Skip turn validates current registered
+ * prepares voyages/immigration, tax decisions, colonies and then unit work;
+ * individual rule owners retain their own accounting. AtlanticVoyageDuration
+ * owns the ordinary crossing formula; Congress keeps frozen founder offers, a
+ * separate national bell account and durable membership; colony production
+ * credits it once per update. Founder effects remain in their respective rule
+ * owners, with Jones's one-time frigate delivered at the existing Europe or
+ * reachable coastal-port boundary. Magellan membership raises effective ship
+ * movement through the shared unit allowance; new western departures halve
+ * their sampled ordinary duration, while saved voyages retain their original
+ * timing. PlaceHighSea retains sampled weather, original route and position
+ * across saves. Model validates reversal offers against live ownership and
+ * voyage revision before changing destination. Model serializes turn
+ * transitions and snapshots; incomplete preparation rejects player commands and
+ * snapshots, including after failure. A deliberate Brewster choice boundary
+ * permits snapshots while gameplay remains blocked; choosing the last earned
+ * immigrant resumes the remaining preparation exactly once. Unit work completes
+ * internally, independently of commands submitted at an action boundary. Normal
+ * unit cycling excludes continuing work; Skip turn validates current registered
  * identities and spends movement through the existing no-action operation.
  * Saved movement and ordinary owner-turn restoration need no standing order.
  *

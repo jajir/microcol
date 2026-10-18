@@ -20,7 +20,7 @@ class EuropeanRelationsTest {
     private final Player french = player("France");
     private final Player spanish = player("Spain");
     private final Player crown = new PlayerKing("Crown", true, 0, model, false,
-            dutch, Map.of(), Set.of(), 0);
+            dutch, Map.of(), Set.of());
     private final List<Player> players = List.of(dutch, french, spanish, crown);
 
     private Player player(final String key) {
@@ -42,7 +42,7 @@ class EuropeanRelationsTest {
     }
 
     private String snapshot(final EuropeanRelations relations) {
-        return new Gson().toJson(relations.save());
+        return new Gson().toJson(relations.save((pair, at) -> false));
     }
 
     @Test
@@ -53,7 +53,7 @@ class EuropeanRelationsTest {
         assertEquals(WAR, relations.get(french, dutch));
         assertEquals(PEACE, relations.get(dutch, spanish));
         assertEquals(PEACE, relations.get(french, spanish));
-        assertEquals(3, relations.save().size());
+        assertEquals(3, relations.save((pair, at) -> false).size());
     }
 
     @Test
@@ -76,7 +76,8 @@ class EuropeanRelationsTest {
         french.setDisplayName("Žluťoučký  hráč");
         assertEquals("Žluťoučký  hráč", dutch.getDisplayName());
         assertEquals("Dutch", dutch.getName());
-        List<EuropeanRelationPo> saved = new ArrayList<>(relations.save());
+        List<EuropeanRelationPo> saved = new ArrayList<>(
+                relations.save((pair, at) -> false));
         Collections.reverse(saved);
         saved.forEach(r -> {
             String first = r.getFirstPlayer();
@@ -99,10 +100,11 @@ class EuropeanRelationsTest {
         source.clear();
         registry.clear();
         assertEquals(PEACE, relations.get(dutch, french));
-        List<EuropeanRelationPo> copy = new ArrayList<>(relations.save());
+        List<EuropeanRelationPo> copy = new ArrayList<>(
+                relations.save((pair, at) -> false));
         copy.get(0).setState(WAR);
         copy.clear();
-        assertEquals(3, relations.save().size());
+        assertEquals(3, relations.save((pair, at) -> false).size());
         assertEquals(PEACE, relations.get(dutch, french));
     }
 
@@ -141,10 +143,10 @@ class EuropeanRelationsTest {
 
     @Test
     void explicitEmptyPairsAreValidForFewerThanTwoColonizers() {
-        assertTrue(
-                new EuropeanRelations(List.of(), List.of()).save().isEmpty());
+        assertTrue(new EuropeanRelations(List.of(), List.of())
+                .save((pair, at) -> false).isEmpty());
         assertTrue(new EuropeanRelations(List.of(dutch, crown), List.of())
-                .save().isEmpty());
+                .save((pair, at) -> false).isEmpty());
         assertThrows(IllegalArgumentException.class,
                 () -> new EuropeanRelations(List.of(dutch, crown), null));
     }
