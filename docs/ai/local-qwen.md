@@ -4246,3 +4246,43 @@ committed for this experiment.
     high completes in 96.862 seconds, exit 0, no denied tools; total worker
     time is 1,775.997 seconds. Main formatter checks 43 files (two changed;
     token/idempotence pass). Final affected acceptance is pending.
+
+81. R-0103 starts on Haiku medium as a bounded payment flow over accepted
+    R-0102 state. Attempt 1 completes in 325.904 seconds, exit 0, no denied
+    tools. Formatter checks 12 Java files (six changed; token/idempotence pass).
+    Docker `run-ZJdy4f` passes all 2,260 model checks and 22 of 25 UI/basic/
+    contract checks, with one failure, two errors and no skips. All three TC79
+    paths fail because `BackTaxDialog.refresh` calls `List.copyOf(...).contains`
+    with a null initial selection, throwing on first opening; the missing-node
+    errors are consequences. Review additionally requires removing one debt
+    before emitting the gold-change event to prevent observable/reentrant partial
+    payment, removing an unrequested human-only model restriction, and proving
+    restored actual selling as well as buying. Attempt 2 stays on Haiku medium
+    with the diagnosed fixes and original budget. Existing TC27/TC78 pass.
+
+82. R-0103 attempt 2 on Haiku medium completes in 156.370 seconds, exit 0,
+    no denied tools; cumulative worker time is 482.274 seconds. The worker
+    guards the initial null selection, removes the debt before the synchronous
+    gold event, adds a reentrant listener regression, removes the human-only
+    restriction and extends TC79 to actual musket purchase/sale after a real
+    protest and payment. Formatter checks 12 Java files (four changed;
+    token/idempotence pass). All 2,261 model checks pass; UI acceptance is
+    pending. No main implementation takeover or model escalation was needed.
+
+83. R-0103 `run-IdGG0D` passes all 2,261 model and 24 of 25 UI/basic/
+    contract checks, with one failure and no errors/skips. Real payment followed
+    by purchase/sale and Continue passes, as does insufficient funds. TC79_03
+    reveals stale port boycott styling after a rejected payment while another
+    debt remains: `BackTaxDialog.reject` repaints Europe only when every debt
+    is gone. The final original repair raises Haiku effort to high for this
+    repeated UI-state omission, preserves all assertions, and repaints both
+    branches. This is not a Sonnet/Opus escalation or a main takeover.
+
+84. R-0103 final Haiku high repair completes in 11.484 seconds, exit 0,
+    no denied tools; total worker time is 493.758 seconds. It changes only
+    the dialog rejection repaint; formatter checks 12 Java files, none needing
+    changes, with token/idempotence pass. Final `run-J1dNdH` passes all six
+    TC79/source-contract checks. Combined unchanged model and UI evidence
+    establishes 2,286 distinct passing checks. Haiku handled the bounded task
+    with two repairs; this is an observed outcome, not a controlled cost
+    comparison with Sonnet. Full batch acceptance/publication remains pending.

@@ -290,6 +290,13 @@ public final class TaxState {
         arrears.merge(type, amount, Integer::sum);
     }
 
+    /** Remove exactly one commodity's arrears; the other boycotts stay. */
+    void removeArrears(final GoodsType type) {
+        Preconditions.checkState(arrears.containsKey(type),
+                "No arrears to pay for %s", type);
+        arrears.remove(type);
+    }
+
     /** @return the commodities whose boycott was removed */
     List<GoodsType> clearArrears() {
         final List<GoodsType> cleared = new ArrayList<>(arrears.keySet());

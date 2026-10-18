@@ -853,6 +853,68 @@ public abstract class Player {
         return tax == null ? Map.of() : tax.getArrears();
     }
 
+    /**
+     * Quote the frozen back taxes of one boycotted commodity.
+     *
+     * @param type the commodity the player wants to pay for
+     * @return the exact amount and demand generation, or empty when the
+     *         commodity is not boycotted
+     */
+    public Optional<TaxArrearsQuote> quoteTaxArrears(final GoodsType type) {
+        Preconditions.checkNotNull(type);
+        if (tax == null || !tax.isBoycotted(type)) {
+            return Optional.empty();
+        }
+        return Optional.of(new TaxArrearsQuote(this, type,
+                tax.getArrears().get(type), tax.getIssued()));
+    }
+
+    /** @return whether paying this exact quote is possible right now */
+    public boolean canPayTaxArrears(final TaxArrearsQuote quote) {
+        try {
+            checkTaxArrearsPayable(quote);
+            return true;
+        } catch (final IllegalStateException | NullPointerException stale) {
+            return false;
+        }
+    }
+
+    /**
+     * Pay the frozen arrears of one commodity once and lift only its boycott.
+     * Tax rate, other arrears and Congress stay as they are. A stale or
+     * repeated quote changes nothing.
+     *
+     * @param quote the snapshot the player reviewed
+     * @throws IllegalStateException when the quote is stale or gold is short
+     */
+    public void payTaxArrears(final TaxArrearsQuote quote) {
+        synchronized (model) {
+            checkTaxArrearsPayable(quote);
+            // Lift the boycott before the gold event, so listeners see both
+            // completed changes and a reentrant confirmation finds no debt.
+            tax.removeArrears(quote.getGoods());
+            setGold(getGold() - quote.getAmount());
+        }
+    }
+
+    private void checkTaxArrearsPayable(final TaxArrearsQuote quote) {
+        Preconditions.checkNotNull(quote, "Tax arrears quote is null");
+        model.checkGameRunning();
+        model.checkTurnPreparationComplete();
+        model.checkCurrentPlayer(this);
+        Preconditions.checkState(quote.getPlayer() == this && tax != null,
+                "The arrears quote belongs to another nation");
+        Preconditions.checkState(canTradeInEurope(),
+                "European trade is unavailable");
+        final Integer owed = tax.getArrears().get(quote.getGoods());
+        Preconditions.checkState(
+                owed != null && owed == quote.getAmount()
+                        && tax.getIssued() == quote.getGeneration(),
+                "The back taxes changed");
+        Preconditions.checkState(getGold() >= quote.getAmount(),
+                "Not enough gold to pay %s", quote.getAmount());
+    }
+
     boolean hasPendingTaxDemand() {
         return tax != null && tax.isPending();
     }

@@ -25,6 +25,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import javafx.scene.control.ComboBox;
+
 /**
  * The Crown's tax demand as the player meets it: a derived scenario one update
  * before the demand, the actual dialog, the Europe reopen action and the
@@ -44,6 +46,7 @@ public final class TaxDemandPage extends AbstractScreen {
         private List<GoodsType> exports;
         private boolean independence;
         private boolean expandedWarehouse;
+        private Integer gold;
 
         public Fixture(final File source, final String name) {
             this.source = source;
@@ -85,6 +88,12 @@ public final class TaxDemandPage extends AbstractScreen {
             expandedWarehouse = true;
             return this;
         }
+
+        /** The Dutch treasury starts with exactly this much gold. */
+        public Fixture gold(final int amount) {
+            gold = amount;
+            return this;
+        }
     }
 
     public TaxDemandPage(final TestContext context) {
@@ -119,6 +128,9 @@ public final class TaxDemandPage extends AbstractScreen {
         tax.add("arrears", owed);
         if (fixture.independence) {
             player.addProperty("declaredIndependence", true);
+        }
+        if (fixture.gold != null) {
+            player.addProperty("gold", fixture.gold);
         }
         final JsonObject colony = model.getAsJsonArray("colonies").get(0)
                 .getAsJsonObject();
@@ -227,6 +239,55 @@ public final class TaxDemandPage extends AbstractScreen {
     public void removeStockElsewhere(final GoodsType type, final int amount) {
         getRobot().interact(() -> colony().getWarehouse()
                 .removeGoods(org.microcol.model.Goods.of(type, amount)));
+    }
+
+    /** The Dutch treasury as the player currently holds it. */
+    public int gold() {
+        return dutch().getGold();
+    }
+
+    /**
+     * The exact total the model quotes for a market trade of the Dutch, used as
+     * the expected gold change of a real Europe trade.
+     */
+    public int quoteMarketPrice(final GoodsType type, final int amount,
+            final boolean purchase) {
+        return dutch().quoteEuropeTrade(
+                org.microcol.model.Goods.of(type, amount), purchase).getTotal();
+    }
+
+    /** Use the Europe action that pays back taxes of boycotted goods. */
+    public void openBackTaxes() throws Exception {
+        clickOnButtonWithId("backTaxButtonId");
+        WaitForAsyncUtils.waitFor(30, TimeUnit.SECONDS, () -> getNodeFinder()
+                .lookup("#backTaxDialog").tryQuery().isPresent());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Select the boycotted commodity shown by the payment dialog. */
+    @SuppressWarnings("unchecked")
+    public void chooseBackTaxCommodity(final GoodsType type) {
+        final ComboBox<GoodsType> commodity = (ComboBox<GoodsType>) getNodeFinder()
+                .lookup("#backTaxCommodity").queryAs(ComboBox.class);
+        getRobot().interact(() -> commodity.getSelectionModel().select(type));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void payBackTax() {
+        clickOnButtonWithId("backTaxPay");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Close the payment dialog without paying. */
+    public void cancelBackTax() {
+        clickOnButtonWithId("backTaxCancel");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Another command pays the same commodity while the dialog is open. */
+    public void payBackTaxElsewhere(final GoodsType type) {
+        getRobot().interact(() -> dutch()
+                .payTaxArrears(dutch().quoteTaxArrears(type).orElseThrow()));
     }
 
     // --- explicit observations --------------------------------------------
@@ -345,5 +406,43 @@ public final class TaxDemandPage extends AbstractScreen {
 
     public void verifyColonyLiberty(final long expected) {
         assertEquals(expected, colony().getLiberty());
+    }
+
+    /** The demand waits, and acceptance and protest are both offered. */
+    public void verifyDemandOffersProtest() {
+        assertTrue(getModel().isAwaitingTaxDecision());
+        assertFalse(getButtonById("taxDemandAccept").isDisabled());
+        assertFalse(getButtonById("taxDemandProtest").isDisabled());
+    }
+
+    public void verifyGold(final int expected) {
+        assertEquals(expected, dutch().getGold());
+    }
+
+    public void verifyBackTaxButton(final boolean visible,
+            final boolean disabled) {
+        assertEquals(visible, getButtonById("backTaxButtonId").isVisible());
+        assertEquals(disabled, getButtonById("backTaxButtonId").isDisabled());
+    }
+
+    public void verifyBackTaxDialogOpen(final boolean open) {
+        assertEquals(open, isCssIdVisible("backTaxDialog"));
+    }
+
+    /** The exact payment lines and whether the pay action may be used. */
+    public void verifyBackTaxDialog(final String arrears, final String restore,
+            final String treasury, final String insufficient,
+            final boolean payEnabled) {
+        assertEquals(arrears, getLabeledById("backTaxArrears").getText());
+        assertEquals(restore, getLabeledById("backTaxRestore").getText());
+        assertEquals(treasury, getLabeledById("backTaxTreasury").getText());
+        assertEquals(insufficient,
+                getLabeledById("backTaxInsufficient").getText());
+        assertEquals(!payEnabled, getButtonById("backTaxPay").isDisabled());
+        assertFalse(getButtonById("backTaxCancel").isDisabled());
+    }
+
+    public void verifyBackTaxFeedback(final String expected) {
+        assertEquals(expected, getLabeledById("backTaxFeedback").getText());
     }
 }

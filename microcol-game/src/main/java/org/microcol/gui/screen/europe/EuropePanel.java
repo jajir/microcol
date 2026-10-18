@@ -137,6 +137,11 @@ public final class EuropePanel
         europeButtonsPanel.getButtonRecruit().setDisable(taxChoice);
         europeButtonsPanel.getButtonTax().setVisible(taxChoice);
         europeButtonsPanel.getButtonTax().setManaged(taxChoice);
+        final boolean backTaxes = !player.getTaxArrears().isEmpty();
+        europeButtonsPanel.getButtonBackTax().setVisible(backTaxes);
+        europeButtonsPanel.getButtonBackTax().setManaged(backTaxes);
+        europeButtonsPanel.getButtonBackTax()
+                .setDisable(pendingChoice || !player.canTradeInEurope());
         europeButtonsPanel.getButtonRecruit().setText(i18n
                 .get(earnedChoice ? Europe.earnedOpen : Europe.recruitOpen));
         immigration

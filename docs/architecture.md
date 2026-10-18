@@ -125,7 +125,12 @@ Vyřešení daně pokračuje zbývající přípravou, neopakuje příchody ani 
 Bojkot kontrolují skutečné operace nákupu/prodeje, vybavení a dovozu nástrojů
 pro dokončení stavby. Aritmetická cenová nabídka zůstává dostupná také pro
 revoluční výjimku celnice; běžný vývoz bojkot respektuje. GUI zobrazuje společné
-modelové možnosti, odložení a návrat k rozhodnutí. Splacení dluhu vlastní R-0103.
+modelové možnosti, odložení a návrat k rozhodnutí. R-0103 přidává
+`TaxArrearsQuote` a modelovou platbu jediného dluhu: ověřuje aktéra, částku,
+generaci požadavku a pokladnu. Dluh odstraní před oznámením změny zlata,
+aby posluchač viděl úplný výsledek a nemohl stejnou platbu opakovat.
+`BackTaxDialog` zobrazuje nabídku, zrušení a očekávané zamítnutí; ceny trhu
+nemění již uloženou výši dluhu.
 Cílené ověření a hranice přijetí jsou vedené u [R-0102](requirements/R-0102.md).
 
 ### Prozkoumaný terén a současný dohled (R-0070)

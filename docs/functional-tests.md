@@ -5146,3 +5146,29 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    checks. Initial diagnostic failures, caller path error and three worker
    attempts are recorded in [operating evidence](ai/local-qwen.md). Payment
    remains R-0103; R-0102 stays ready until the agreed batch acceptance boundary.
+
+## R-0103 back-tax payment — 2026-10-18
+
+1. R-0103 adds a quote-bound payment for one commodity's frozen arrears.
+   Player validates active actor, European access, amount, demand generation
+   and treasury before removing that debt and emitting the gold change.
+   A synchronous listener sees the completed result and cannot pay it twice.
+2. Docker `run-IdGG0D` passes **2,261 model checks** and 24 of 25 selected
+   UI/basic/contract checks; the remaining TC79_03 stale port mark was fixed
+   in the dialog's rejection refresh. Final `run-J1dNdH` passes TC79 (3) and
+   source contract (3), zero failures/errors/skips. Model code did not change
+   after its passing run. TC27 (10), TC78 (3), SimpleOperations (5),
+   Environment (1), contract (3) and TC79 (3) together establish **2,286
+   distinct passing checks**. Full second-batch acceptance remains pending.
+3. TC79 creates a real musket protest, cancels payment without charge, pays
+   exactly 400 gold, buys and sells two muskets through the existing cargo
+   dialogs and preserves the remaining silk boycott and accounting across
+   Continue. Separate paths verify one-gold-short rejection and a stale open
+   payment after another command settles the debt. Model tests include
+   duplicate/reentrant confirmation, wrong actor, pause, independence, saved
+   state, changed prices and exact buy/sell accounting. UI paths ran in English;
+   Czech strings were reviewed in source, without a separate visual capture.
+4. Haiku medium/medium/high completed the work with diagnosed UI repairs;
+   [operating evidence](ai/local-qwen.md) records failures and measured time.
+   Main formatted the 12 changed Java files, reviewed the diff and verified
+   docs. No main implementation takeover or Sonnet/Opus escalation occurred.
