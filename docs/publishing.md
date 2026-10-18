@@ -277,7 +277,7 @@ documentation in APT just to make it visible on the web.
 
 ## Capture affiliation decision — 2026-10-17
 
-1. The user accepted [R-0100](requirements/R-0100.md)'s proposed capture rule.
+1. The user accepted [R-0100](requirements/done/R-0100.md)'s proposed capture rule.
    The [shared support rule](gap-analysis.md#support-production-and-congress)
    now assigns preserved liberty to the European colonial conqueror and uses
    that nation's Bolivar bonus; Crown occupation retains the last colonial
@@ -294,9 +294,9 @@ documentation in APT just to make it visible on the web.
 
 ## Five gameplay decisions incorporated — 2026-10-17
 
-1. The user answered [R-0070](requirements/R-0070.md),
-   [R-0086](requirements/done/R-0086.md), [R-0089](requirements/R-0089.md),
-   [R-0090](requirements/done/R-0090.md) and [R-0096](requirements/R-0096.md).
+1. The user answered [R-0070](requirements/done/R-0070.md),
+   [R-0086](requirements/done/R-0086.md), [R-0089](requirements/done/R-0089.md),
+   [R-0090](requirements/done/R-0090.md) and [R-0096](requirements/done/R-0096.md).
    Their shared rule topics, behavior, design and UC acceptance descriptions
    now incorporate the answers; all five open-question chapters contain None.
    R-0091/R-0092 inherit the workforce decision and R-0100 the Revere resident-exit

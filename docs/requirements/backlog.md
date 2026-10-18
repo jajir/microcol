@@ -180,14 +180,14 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0053](done/R-0053.md) | Wait for another unit or skip this turn explicitly | Remainder | [R-0003](canceled/R-0003.md) |
 | [R-0054](done/R-0054.md) | Verify coastal port movement through the complete player path | Acceptance | [R-0004](canceled/R-0004.md), [R-0022](done/R-0022.md) |
 | [R-0069](done/R-0069.md) | Give each unit an explicit sight range | Follow-up | [R-0019](done/R-0019.md) |
-| [R-0070](R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
+| [R-0070](done/R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0106](done/R-0106.md) | Make fortification take effect on the following turn | Follow-up | [R-0003](canceled/R-0003.md), [R-0029](canceled/R-0029.md) |
 | [R-0118](done/R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
 | [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
 | [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
-| [R-0123](R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
+| [R-0123](done/R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
 | [R-0124](R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
 | [R-0125](R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
 | [R-0126](R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
@@ -294,7 +294,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0082](done/R-0082.md) | Prevent voluntary abandonment below a fortified colony’s minimum | Follow-up | [R-0025](done/R-0025.md), [R-0005](canceled/R-0005.md), [R-0008](canceled/R-0008.md) |
 | [R-0083](done/R-0083.md) | Buy completion of the current construction project | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0084](done/R-0084.md) | Gate factories and custom houses on the required founder | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
-| [R-0085](R-0085.md) | Export selected goods automatically through a custom house | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
+| [R-0085](done/R-0085.md) | Export selected goods automatically through a custom house | Follow-up | [R-0025](done/R-0025.md), [R-0031](canceled/R-0031.md) |
 | [R-0086](done/R-0086.md) | Report a construction project waiting for tools | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0107](done/R-0107.md) | Teach colonists through functioning school buildings | Follow-up | [R-0025](done/R-0025.md), [R-0023](done/R-0023.md) |
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
@@ -322,7 +322,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | --- | --- | --- | --- |
 | [R-0087](done/R-0087.md) | Negotiate peace through a real diplomatic choice | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0088](done/R-0088.md) | Ask a European rival for tribute during contact | Follow-up | [R-0026](done/R-0026.md) |
-| [R-0089](R-0089.md) | Form and end a European alliance explicitly | Follow-up | [R-0026](done/R-0026.md) |
+| [R-0089](done/R-0089.md) | Form and end a European alliance explicitly | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0090](done/R-0090.md) | Keep the rival’s first colony fed and productive | Follow-up | [R-0027](done/R-0027.md) |
 | [R-0091](R-0091.md) | Let the rival transport supplies and sell its production | Follow-up | [R-0027](done/R-0027.md), [R-0024](done/R-0024.md) |
 | [R-0092](R-0092.md) | Let a rival expand from its first colony to a second | Follow-up | [R-0027](done/R-0027.md) |
@@ -380,7 +380,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0093](done/R-0093.md) | Explain ordinary land combat strength from shared rules | Remainder | [R-0029](canceled/R-0029.md), [R-0028](done/R-0028.md) |
 | [R-0094](done/R-0094.md) | Resolve ordinary land battles from their calculated strengths | Follow-up | [R-0029](canceled/R-0029.md), [R-0028](done/R-0028.md) |
 | [R-0095](R-0095.md) | Build artillery and resolve its damaged state | Follow-up | [R-0028](done/R-0028.md), [R-0029](canceled/R-0029.md), [R-0025](done/R-0025.md) |
-| [R-0096](R-0096.md) | Defend and capture a colony including civilian workers | Follow-up | [R-0026](done/R-0026.md), [R-0028](done/R-0028.md) |
+| [R-0096](done/R-0096.md) | Defend and capture a colony including civilian workers | Follow-up | [R-0026](done/R-0026.md), [R-0028](done/R-0028.md) |
 | [R-0097](done/R-0097.md) | Resolve naval battles with damage, sinking and captured cargo | Follow-up | [R-0028](done/R-0028.md), [R-0029](canceled/R-0029.md) |
 | [R-0098](done/R-0098.md) | Send a damaged ship to a valid repair destination | Follow-up | [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
 | [R-0099](done/R-0099.md) | Apply the privateer exception to European hostilities | Follow-up | [R-0026](done/R-0026.md), [R-0028](done/R-0028.md) |
@@ -399,12 +399,12 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0100](R-0100.md) | Track local and population-weighted national rebel support | Remainder | [R-0031](canceled/R-0031.md) |
-| [R-0101](R-0101.md) | Apply rebel production bonuses and Tory penalties | Follow-up | [R-0031](canceled/R-0031.md) |
-| [R-0102](R-0102.md) | Resolve a Crown tax demand and enforce its boycott | Remainder | [R-0030](canceled/R-0030.md), [R-0020](done/R-0020.md) |
-| [R-0103](R-0103.md) | Pay back taxes to lift a commodity boycott | Follow-up | [R-0030](canceled/R-0030.md) |
+| [R-0100](done/R-0100.md) | Track local and population-weighted national rebel support | Remainder | [R-0031](canceled/R-0031.md) |
+| [R-0101](done/R-0101.md) | Apply rebel production bonuses and Tory penalties | Follow-up | [R-0031](canceled/R-0031.md) |
+| [R-0102](done/R-0102.md) | Resolve a Crown tax demand and enforce its boycott | Remainder | [R-0030](canceled/R-0030.md), [R-0020](done/R-0020.md) |
+| [R-0103](done/R-0103.md) | Pay back taxes to lift a commodity boycott | Follow-up | [R-0030](canceled/R-0030.md) |
 | [R-0104](done/R-0104.md) | Recruit a founder and retain Congress membership | Follow-up | [R-0031](canceled/R-0031.md), [R-0025](done/R-0025.md) |
-| [R-0105](R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
+| [R-0105](done/R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
 | [R-0180](R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
 | [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
 | [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |

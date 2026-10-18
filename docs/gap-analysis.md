@@ -213,7 +213,7 @@ exit to Europe. Water restrictions, including no forests or roads, apply.
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 
-Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
+Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
 
@@ -856,7 +856,7 @@ rules; implementation and acceptance are tracked by that requirement.
    retains the last colonial affiliation and uses that nation's Bolivar bonus,
    not the Crown's. For example, after France captures an English colony, its
    liberty counts toward France; subsequent Crown occupation retains the French
-   affiliation. This is agreed behavior for [R-0100](requirements/R-0100.md),
+   affiliation. This is agreed behavior for [R-0100](requirements/done/R-0100.md),
    not verified runtime behavior.
 3. At production start snapshot the exact support. Each staffed productive job
    gets +1 at at least 50%, +2 at 100%, otherwise zero. Tory count is
@@ -965,7 +965,7 @@ rules; implementation and acceptance are tracked by that requirement.
    delivery rule. Revere arms one eligible worker with 50 stored muskets only
    if no armed defender exists; choose the strongest resulting defender then
    unit ID, and do not create free equipment. User decision (2026-10-17;
-   [R-0096](requirements/R-0096.md)): after victory the emergency defender
+   [R-0096](requirements/done/R-0096.md)): after victory the emergency defender
    keeps its muskets and joins the outside garrison on the colony tile,
    vacating its job. If it is the last resident, it instead stays inside
    with its muskets so victory cannot remove the colony. This compulsory
@@ -1218,7 +1218,7 @@ rules; implementation and acceptance are tracked by that requirement.
    Explicit termination yields peace, with a 5-turn wait before declaring war.
    Crown-forced wars occur only through the separate event, suppressed by Franklin;
    they end conflicting alliances before applying war. User decision (2026-10-17;
-   [R-0089](requirements/R-0089.md)): once every 20 complete rounds, select
+   [R-0089](requirements/done/R-0089.md)): once every 20 complete rounds, select
    one random non-warring European colonial pair whose members are both before
    independence and both without Franklin. Skip the event if no pair qualifies.
    Count rounds, not each nation's turn; save/Continue must not repeat the event.
@@ -1398,7 +1398,7 @@ rules; implementation and acceptance are tracked by that requirement.
 
 1. Sight uses Chebyshev distance (all eight neighbors): ordinary land units 1,
    scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2 for units.
-   User decision (2026-10-17; [R-0070](requirements/R-0070.md)): an owned colony
+   User decision (2026-10-17; [R-0070](requirements/done/R-0070.md)): an owned colony
    supplies present sight over its own tile and all eight neighboring tiles
    even when every resident is inside and no unit stands on the map. Colony
    sight belongs to its current owner; explored terrain remains remembered

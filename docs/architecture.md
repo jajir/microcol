@@ -131,7 +131,7 @@ generaci požadavku a pokladnu. Dluh odstraní před oznámením změny zlata,
 aby posluchač viděl úplný výsledek a nemohl stejnou platbu opakovat.
 `BackTaxDialog` zobrazuje nabídku, zrušení a očekávané zamítnutí; ceny trhu
 nemění již uloženou výši dluhu.
-Cílené ověření a hranice přijetí jsou vedené u [R-0102](requirements/R-0102.md).
+Cílené ověření a hranice přijetí jsou vedené u [R-0102](requirements/done/R-0102.md).
 
 ### Prozkoumaný terén a současný dohled (R-0070)
 
@@ -145,7 +145,7 @@ Mapa, panel a tooltip používají stejný povolený pohled. Cizí jednotky se m
 dohled nezobrazují; zapamatovaná kolonie má označení posledního pozorování.
 Filtrování událostí brání skrytým pohybům a cizím bojům prozradit neviditelná
 místa animací. Útočný dotaz modelu požaduje současný dohled.
-Stav ověření vede [R-0070](requirements/R-0070.md).
+Stav ověření vede [R-0070](requirements/done/R-0070.md).
 
 ### Uložená obtížnost (R-0064)
 
@@ -733,7 +733,7 @@ omezené kapacitou. Export před změnou ověří celou dávku a výslednou pokl
 použije sdílenou evropskou čistou cenu a za revoluce její polovinu.
 `TurnEventCustomHouseExport` ukládá skutečné množství a příjem; GUI pouze
 potvrzuje výběr a překládá uloženou zprávu. Bojkoty z R-0102 zatím nejsou
-propojené; úplnou přejímku vede [R-0085](requirements/R-0085.md).
+propojené; úplnou přejímku vede [R-0085](requirements/done/R-0085.md).
 
 ### Rozkaz opevnění jednotky (R-0106)
 
@@ -897,7 +897,7 @@ Revereho vítězný obránce opustí práci, pokud není posledním obyvatelem;
 tato vynucená událost nemění pravidlo dobrovolného odchodu z opevnění.
 `ColonyBattleOutcome` předává GUI výsledek a výslovné bojiště; animace
 nevyžaduje mapovou polohu pracovníka. Přejímku vede
-[R-0096](requirements/R-0096.md); plná regrese zůstává na hranici dávky.
+[R-0096](requirements/done/R-0096.md); plná regrese zůstává na hranici dávky.
 
 
 ### Politické výrobní bonusy (R-0101)

@@ -5050,7 +5050,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0096 colony defense (2026-10-18)
 
-1. Targeted acceptance of [R-0096](requirements/R-0096.md), UC-075:
+1. Targeted acceptance of [R-0096](requirements/done/R-0096.md), UC-075:
    armed defenders are selected before the civilian group; residents keep their
    actual field/building jobs until the result. Civilian victory transfers the
    whole colony, including all eight fields, indoor workers, identity, liberty
@@ -5086,7 +5086,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## R-0101 political production (2026-10-18)
 
-1. Targeted acceptance of [R-0101](requirements/R-0101.md), UC-078: exact
+1. Targeted acceptance of [R-0101](requirements/done/R-0101.md), UC-078: exact
    support gives staffed positive-base jobs +1 at 50% and +2 at 100%; the
    difficulty threshold gives a single −1 Tory penalty. One snapshot covers
    food, famine, post-famine production and productive experience; newly
@@ -5313,3 +5313,26 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    below the penalty threshold and below the 50% bonus. Production, food, birth
    and import assertions are unchanged. The other 29 incomplete/failed suites
    are scheduled in full with the source contract; acceptance is still pending.
+
+## Claude second-batch acceptance — 2026-10-18
+
+1. R-0070, R-0089, R-0096, R-0100–0103, R-0085, R-0105 and R-0123
+   complete the second ten selected requirements. Their earlier targeted
+   evidence remains above. Acceptance combines completed suites from
+   `run-u9GsTq`, the 108-check remainder `run-bakaPf`, and `run-QhdhWp`:
+   **2,348 default model tests and 372 distinct microcol-test checks pass**,
+   zero remaining failures, errors or skips. This is a reconciled regression,
+   not a claim that the initial timed-out invocation succeeded. The targeted
+   run also passed `ConnectorTest`, normally excluded by the default Maven
+   integration-test filter, explaining its 2,349-model-test count.
+2. The remainder identifies two TC57 failures (266/264 and 503/502 hammers).
+   Main reuses the exact F48 political fixture correction already committed
+   in `cffcd9a3`; TC57 and the source contract rerun in `run-QhdhWp` pass all
+   six checks. F07/F08/F33 repairs pass in `run-bakaPf`. All 85 runnable UI
+   suite classes have completed evidence; repeated classes count only once.
+   Assertions and intended production/birth/construction outcomes are preserved.
+3. R-0105 implementation is committed as `36073d96`. Integration of current
+   main brings documentation and the identical four fixture corrections only;
+   no tested gameplay source changes. Requirement status now records local
+   acceptance. GitHub Actions and development publication of this final batch
+   are pending and will be verified against the pushed commit.

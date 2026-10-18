@@ -4503,3 +4503,26 @@ committed for this experiment.
     [dev-175-cffcd9a39f44](https://github.com/jajir/microcol/releases/tag/dev-175-cffcd9a39f44),
     and the macOS launcher's SHA-256 matches the published checksum. Build #174
     remains a failed historical run; #175 establishes repaired publication.
+
+
+## Claude twenty-requirement conclusion — 2026-10-18
+
+1. All twenty selected requirements have local acceptance, including the
+   [second-batch regression](../functional-tests.md#claude-second-batch-acceptance-2026-10-18).
+   Publication of the final batch is checked separately. No Opus attempt was
+   needed in this batch. The worker wrote implementation and targeted tests;
+   caller-owned fixture repairs, review, formatting and actual verification
+   remain explicit in the individual records.
+2. Practical default for the user's Claude route: **Sonnet medium** for normal
+   bounded implementation; **Sonnet high** for complex shared rules or a
+   diagnosed medium failure. **Haiku medium** suits narrow work with stable
+   interfaces and concrete checks (including R-0085); it is not the default
+   for broad model/UI integration. The Haiku low trial needed escalation.
+   This is an observed operating recommendation, not a controlled same-task
+   model benchmark or proof of a globally cheapest model.
+3. Claude Pro quota interruptions occurred, and some tasks exhausted their
+   three-attempt repair budget. Runner list-price cost estimates are not an
+   additional Pro bill or a measured reduction in this Codex account's usage.
+   No percentage saving is claimed. Retain targeted checks per change and
+   full regression/CI at the agreed ten-requirement boundaries; a timeout
+   requires explicit reconciliation of incomplete and failed suites.

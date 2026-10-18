@@ -17,14 +17,14 @@
 | TURN-001 | [R-0052](done/R-0052.md), [R-0151](R-0151.md) | Shared turn order plus actual native actors. |
 | TURN-002 | [R-0052](done/R-0052.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SUPPORT-001 | [R-0068](done/R-0068.md), [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0001](done/R-0001.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| MAP-001 | [R-0123](R-0123.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| MAP-002 | [R-0123](R-0123.md), [R-0125](R-0125.md), [R-0093](done/R-0093.md), [R-0173](R-0173.md), [R-0178](R-0178.md) | Terrain identity/defense, movement and role-specific combat have separate owners. |
+| MAP-001 | [R-0123](done/R-0123.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| MAP-002 | [R-0123](done/R-0123.md), [R-0125](R-0125.md), [R-0093](done/R-0093.md), [R-0173](R-0173.md), [R-0178](R-0178.md) | Terrain identity/defense, movement and role-specific combat have separate owners. |
 | MAP-003 | [R-0124](R-0124.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-004 | [R-0125](R-0125.md), [R-0126](R-0126.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-005 | [R-0127](R-0127.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-006 | [R-0128](R-0128.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| MAP-007 | [R-0070](R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| MAP-008 | [R-0070](R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| MAP-007 | [R-0070](done/R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| MAP-008 | [R-0070](done/R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-009 | [R-0129](R-0129.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MOVE-001 | [R-0054](done/R-0054.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MOVE-002 | [R-0054](done/R-0054.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -80,7 +80,7 @@
 | TRADE-006 | [R-0143](R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-007 | [R-0143](R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-008 | [R-0145](R-0145.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-009 | [R-0085](R-0085.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-009 | [R-0085](done/R-0085.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-001 | [R-0146](R-0146.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-002 | [R-0055](done/R-0055.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-003 | [R-0055](done/R-0055.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -117,7 +117,7 @@
 | BUILD-011 | [R-0080](done/R-0080.md), [R-0098](done/R-0098.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-012 | [R-0095](R-0095.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-013 | [R-0081](done/R-0081.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| BUILD-014 | [R-0085](R-0085.md), [R-0084](done/R-0084.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| BUILD-014 | [R-0085](done/R-0085.md), [R-0084](done/R-0084.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-015 | [R-0082](done/R-0082.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-016 | [R-0025](done/R-0025.md), [R-0213](R-0213.md) | Accepted building chart constants corrected by R0025; complete chart matrix not newly implemented. |
 | BUILD-017 | [R-0079](done/R-0079.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -154,41 +154,41 @@
 | DIP-001 | [R-0170](R-0170.md), [R-0171](R-0171.md), [R-0172](R-0172.md), [R-0090](done/R-0090.md), [R-0091](R-0091.md), [R-0092](R-0092.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-002 | [R-0028](done/R-0028.md), [R-0026](done/R-0026.md), [R-0099](done/R-0099.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-003 | [R-0026](done/R-0026.md), [R-0087](done/R-0087.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| DIP-004 | [R-0089](R-0089.md), [R-0087](done/R-0087.md), [R-0088](done/R-0088.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| DIP-004 | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md), [R-0088](done/R-0088.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-005 | [R-0169](R-0169.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-006 | [R-0167](R-0167.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-007 | [R-0168](R-0168.md), [R-0201](R-0201.md), [R-0202](R-0202.md) | Foreign, native and fleet reports have distinct disclosure owners. |
-| DIP-008 | [R-0089](R-0089.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| DIP-008 | [R-0089](done/R-0089.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-006 | [R-0174](R-0174.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-001 | [R-0028](done/R-0028.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-002 | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-003 | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-004 | [R-0093](done/R-0093.md), [R-0095](R-0095.md), [R-0108](done/R-0108.md), [R-0173](R-0173.md), [R-0178](R-0178.md), [R-0211](R-0211.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-005 | [R-0094](done/R-0094.md), [R-0093](done/R-0093.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| COMBAT-006 | [R-0093](done/R-0093.md), [R-0123](R-0123.md), [R-0173](R-0173.md), [R-0178](R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| COMBAT-006 | [R-0093](done/R-0093.md), [R-0123](done/R-0123.md), [R-0173](R-0173.md), [R-0178](R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-007 | [R-0173](R-0173.md), [R-0178](R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-008 | [R-0111](done/R-0111.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-009 | [R-0178](R-0178.md), [R-0188](R-0188.md), [R-0190](R-0190.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-010 | [R-0093](done/R-0093.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-011 | [R-0095](R-0095.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| COMBAT-012 | [R-0096](R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| COMBAT-013 | [R-0096](R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| COMBAT-012 | [R-0096](done/R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| COMBAT-013 | [R-0096](done/R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-014 | [R-0097](done/R-0097.md), [R-0098](done/R-0098.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-015 | [R-0176](R-0176.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-016 | [R-0177](R-0177.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-001 | [R-0102](R-0102.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-002 | [R-0102](R-0102.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-003 | [R-0103](R-0103.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-004 | [R-0100](R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-005 | [R-0101](R-0101.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-006 | [R-0101](R-0101.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-001 | [R-0102](done/R-0102.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-002 | [R-0102](done/R-0102.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-003 | [R-0103](done/R-0103.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-004 | [R-0100](done/R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-005 | [R-0101](done/R-0101.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-006 | [R-0101](done/R-0101.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-007 | [R-0104](done/R-0104.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-008 | [R-0105](R-0105.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-009 | [R-0105](R-0105.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-008 | [R-0105](done/R-0105.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-009 | [R-0105](done/R-0105.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-010 | [R-0188](R-0188.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-011 | [R-0187](R-0187.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-012 | [R-0085](R-0085.md), [R-0167](R-0167.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| GOV-013 | [R-0100](R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-012 | [R-0085](done/R-0085.md), [R-0167](R-0167.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| GOV-013 | [R-0100](done/R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-014 | [R-0185](R-0185.md), [R-0186](R-0186.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-015 | [R-0178](R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | GOV-016 | [R-0189](R-0189.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -201,10 +201,10 @@
 | FATHER-001 | [R-0175](R-0175.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-002 | [R-0179](done/R-0179.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-003 | [R-0104](done/R-0104.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-004 | [R-0096](R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-004 | [R-0096](done/R-0096.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-005 | [R-0111](done/R-0111.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-006 | [R-0100](R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-007 | [R-0089](R-0089.md), [R-0087](done/R-0087.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-006 | [R-0100](done/R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-007 | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-008 | [R-0180](R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-009 | [R-0180](R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-010 | [R-0153](R-0153.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
