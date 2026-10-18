@@ -1,6 +1,8 @@
 package org.microcol.test;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -120,6 +122,69 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         exports.verifySelection(Set.of(GoodsType.ORE));
         exports.verifyStocks(200, 130, 150, 1000);
         exports.cancel();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_real_protest_closes_the_ordinary_export_of_that_goods_only()
+            throws Exception {
+        // Ore is the most valuable stock (300 * 4), so the demand quotes 100
+        // of it. The remaining 200 stay above the export threshold of 100.
+        TaxDemandPage taxes = new TaxDemandPage(getContext());
+        taxes.prepare(new TaxDemandPage.Fixture(
+                new File("src/test/scenarios/F49-custom-house.microcol"),
+                "tax-custom-house")
+                .due().expandedWarehouse()
+                .warehouse(Map.of(GoodsType.TOBACCO, 200, GoodsType.ORE, 300,
+                        GoodsType.SILVER, 150, GoodsType.CORN, 50))
+                .exports(List.of(GoodsType.TOBACCO, GoodsType.ORE)));
+        WelcomePage.of(getContext()).loadGame();
+        CustomHousePage exports = new CustomHousePage(getContext());
+        taxes.startUpdate();
+        taxes.verifyDemandDialog("Current tax: 25%. The Crown demands 27%.",
+                "Accepting raises the tax to 27% and destroys nothing.",
+                "Protest destroys 100 Ore in New Amsterdam (stock 300), adds 100 liberty there, boycotts that commodity and records 800 gold of arrears. The tax stays 25%.",
+                true);
+        taxes.protest();
+        taxes.finishUpdate();
+        // Tobacco is sold down to the retained 100 for 231 gold. The 200 ore
+        // left would be exported, but the boycotted ore is not, and the rate
+        // is unchanged.
+        taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
+        taxes.verifyBoycottedExportSkipped(GoodsType.TOBACCO, GoodsType.ORE,
+                200, 1231);
+        exports.verifySelection(Set.of(GoodsType.TOBACCO, GoodsType.ORE));
+        // Continue keeps the closed export and sells nothing again.
+        GamePage.of(getContext()).exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
+        taxes.verifyBoycottedExportSkipped(GoodsType.TOBACCO, GoodsType.ORE,
+                200, 1231);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_revolution_export_bypasses_the_boycott_with_half_net()
+            throws Exception {
+        // The revolutionary custom house exports the closed ore anyway.
+        TaxDemandPage taxes = new TaxDemandPage(getContext());
+        taxes.prepare(new TaxDemandPage.Fixture(
+                new File("src/test/scenarios/F49-custom-house.microcol"),
+                "tax-revolution").independence()
+                .arrears(Map.of(GoodsType.ORE, 800))
+                .exports(List.of(GoodsType.TOBACCO, GoodsType.ORE)));
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        CustomHousePage exports = new CustomHousePage(getContext());
+        exports.verifyHomeMarketClosed();
+        var report = game.nextTurn().orElseThrow();
+        // Half of each ordinary integer net, as without the boycott.
+        report.verifyThatAtLeastOneEventMessageContains("for 115 gold.");
+        report.verifyThatAtLeastOneEventMessageContains("for 45 gold.");
+        report.close();
+        game.openColonyAt(COLONY, "New Amsterdam");
+        exports.verifyStocks(100, 100, 150, 1160);
+        // The boycott itself is not lifted by the exception.
+        taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
     }
 
     @Test

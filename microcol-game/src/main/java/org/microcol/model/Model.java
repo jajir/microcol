@@ -1924,6 +1924,26 @@ public class Model {
         listenerManager.fireImmigrationChoiceRequired(this, player);
     }
 
+    /**
+     * @return whether the current human nation must answer a Crown tax demand
+     *         before any action
+     */
+    public boolean isAwaitingTaxDecision() {
+        return gameManager.isAwaitingTaxDecision();
+    }
+
+    void beginTaxChoice(final Player player) {
+        gameManager.beginTaxChoice(player);
+    }
+
+    void finishTaxChoice(final Player player) {
+        gameManager.finishTaxChoice(player);
+    }
+
+    void fireTaxDemandRequired(final Player player) {
+        listenerManager.fireTaxDemandRequired(this, player);
+    }
+
     public boolean isGameFinished() {
         return gameManager.isFinished();
     }
@@ -2483,8 +2503,8 @@ public class Model {
     public synchronized void startGame() {
         Preconditions.checkState(!endingTurn,
                 "Cannot start or end game while ending a turn.");
-        if (gameManager.isRunning()
-                || gameManager.isAwaitingImmigrationChoice()) {
+        if (gameManager.isRunning() || gameManager.isAwaitingImmigrationChoice()
+                || gameManager.isAwaitingTaxDecision()) {
             gameManager.continueGame();
         } else {
             gameManager.startGame();

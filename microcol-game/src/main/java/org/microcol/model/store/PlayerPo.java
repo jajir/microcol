@@ -21,7 +21,7 @@ public final class PlayerPo {
 
     private VisibilityPo visible;
 
-    private int kingsTaxPercentage;
+    private TaxPo tax;
 
     private RecruitmentPo recruitment;
 
@@ -166,12 +166,16 @@ public final class PlayerPo {
         this.visible = visibility;
     }
 
-    public int getKingsTaxPercentage() {
-        return kingsTaxPercentage;
+    /**
+     * @return the colonial tax state; null for a Crown, which has no tax state
+     *         of its own
+     */
+    public TaxPo getTax() {
+        return tax;
     }
 
-    public void setKingsTaxPercentage(int kingsTaxPercentage) {
-        this.kingsTaxPercentage = kingsTaxPercentage;
+    public void setTax(final TaxPo tax) {
+        this.tax = tax;
     }
 
 }

@@ -19,6 +19,7 @@ import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
@@ -63,6 +64,11 @@ final class ModelListenerImpl implements ModelListener {
     @Override
     public void onImmigrationChoiceRequired(
             final ImmigrationChoiceRequiredEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
+    public void onTaxDemandRequired(final TaxDemandRequiredEvent event) {
         eventBus.post(event);
     }
 

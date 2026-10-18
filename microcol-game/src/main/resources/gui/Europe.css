@@ -57,6 +57,12 @@
 	-fx-min-width:50px;
 }
 
+.panelGoods.boycotted{
+	-fx-border-color:#b00020;
+	-fx-border-width:2px;
+	-fx-background-color:rgba(176, 0, 32, 0.25);
+}
+
 
 .sentry-marker {
     -fx-background-color: white;

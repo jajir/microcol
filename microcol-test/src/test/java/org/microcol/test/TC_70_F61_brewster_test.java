@@ -93,6 +93,42 @@ public class TC_70_F61_brewster_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
+    void TC_04_earned_choices_come_before_the_tax_demand_and_production()
+            throws Exception {
+        // The same arrival checkpoint, but the nation is also due for a demand.
+        TaxDemandPage taxes = new TaxDemandPage(getContext());
+        taxes.prepare(new TaxDemandPage.Fixture(
+                new File("src/test/scenarios/F62-brewster-choice.microcol"),
+                "tax-brewster").due());
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        BrewsterPage brewster = new BrewsterPage(getContext());
+        RecruitmentPage recruitment = new RecruitmentPage(getContext());
+        brewster.rememberColony();
+        brewster.startArrival();
+        brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
+        recruitment.confirm(1);
+        brewster.verifyWaiting(130, 1, List.of(1, 4, 3), "Choose for free");
+        // The second arrival opens the demand, still before any production.
+        recruitment.confirm(2);
+        taxes.waitForDemand();
+        taxes.verifyEarnedArrivals(2, 5);
+        taxes.verifyPaused(0, 0);
+        // Continue restores the demand without repeating the two arrivals.
+        taxes.defer();
+        taxes.returnToMap();
+        game.exitToMenu();
+        taxes.continuePending();
+        taxes.verifyEarnedArrivals(2, 5);
+        taxes.verifyPaused(0, 0);
+        taxes.accept();
+        brewster.finishArrivalReport();
+        taxes.verifyTax(2, java.util.Map.of());
+        brewster.verifyCompleted(6, 2, 1, UnitType.MASTER_CARPENTER,
+                UnitType.EXPERT_FARMER);
+    }
+
+    @Test
+    @Tag("local")
     void TC_03_czech_earned_choice_is_keyboard_accessible() throws Exception {
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();

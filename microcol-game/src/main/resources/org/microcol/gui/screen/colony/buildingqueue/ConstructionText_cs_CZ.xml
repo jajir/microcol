@@ -37,7 +37,7 @@ Použít z kolonie: %s kladiv, %s nástrojů.
 Koupit pro tento projekt: %s kladiv, %s nástrojů.
 Celkem včetně daně: %s zlata.
 Pokladnice po nákupu: %s zlata.</entry>
-<entry key="rushUnavailable">Dokončení nyní nelze koupit. Je potřeba platný aktuální projekt a přístup do domovské Evropy.</entry>
+<entry key="rushUnavailable">Dokončení nyní nelze koupit. Je potřeba platný aktuální projekt a přístup do domovské Evropy; chybějící nářadí nelze koupit, dokud je obchod s nářadím bojkotován.</entry>
 <entry key="rushNoGold">Nedostatek zlata.</entry>
 <entry key="rushChanged">Nabídka se změnila. Nic nebylo utraceno. Zavřete okno a vyžádejte si novou cenu.</entry>
 <entry key="rushCompleted">Aktuální projekt byl dokončen a jednou zaplacen.</entry>

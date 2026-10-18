@@ -112,6 +112,22 @@ instance. Integrace AI/UI a výsledky ověření jsou vedené v R-0026; tento po
 není potvrzením dokončení celého požadavku.
 
 
+### Daňové rozhodnutí a bojkot (R-0102)
+
+`Player` vlastní jediný `TaxState` kolonizačního národa: sazbu, četnost
+požadavků, čekající rozhodnutí a dluhy podle zboží. Královský adaptér čte
+stejnou sazbu. `TaxDemand` a `TaxProtest` popisují potvrzovaný výsledek;
+model znovu ověřuje jeho platnost před změnou zásoby, podpory a dluhu.
+`GameManager` rozlišuje uložitelnou pauzu po přistěhovalectví a před produkcí.
+Vyřešení daně pokračuje zbývající přípravou, neopakuje příchody ani aktualizace.
+`model.store` ukládá výslovná současná data; načtení nedoplňuje chybějící stav.
+
+Bojkot kontrolují skutečné operace nákupu/prodeje, vybavení a dovozu nástrojů
+pro dokončení stavby. Aritmetická cenová nabídka zůstává dostupná také pro
+revoluční výjimku celnice; běžný vývoz bojkot respektuje. GUI zobrazuje společné
+modelové možnosti, odložení a návrat k rozhodnutí. Splacení dluhu vlastní R-0103.
+Cílené ověření a hranice přijetí jsou vedené u [R-0102](requirements/R-0102.md).
+
 ### Prozkoumaný terén a současný dohled (R-0070)
 
 `Visibility` uchovává trvale prozkoumaný terén. `Player.isCurrentlyVisible`

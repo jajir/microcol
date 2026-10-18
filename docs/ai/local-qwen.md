@@ -4191,3 +4191,58 @@ committed for this experiment.
     documentation check preceded that row edit; strict MkDocs alone did not
     detect it. Main restored `R / N` with the targeted evidence link and reran
     the catalogue tests and strict build. No game or worker change was needed.
+
+76. R-0102 starts on Sonnet high because the agreed scope joins saved tax
+    decisions, national-update resumption, market restrictions and UI. Attempt
+    1 was interrupted by the Claude Pro session limit after 1,157.154 seconds,
+    exit 1, no denied tools; advertised reset is 2026-10-18 at 16:00
+    Europe/Prague. Session `c58cbe1f-fd86-430f-adc2-9cff54bd1737` retains two
+    original attempts within the same 14,400-second budget. No extra usage
+    was enabled. Model/GUI changes and three model-test classes are partial;
+    TC78 and the related UI adaptations were not completed. No acceptance or
+    publication is claimed.
+
+77. Main applied the pre-agreed current-schema fixture update after the quota
+    interruption: 72 tracked JSON files, 102 colonial tax states. It copies
+    explicit old Crown rates into each matching colonial state, starts cadence
+    counters at zero, removes the obsolete rate field and leaves the corrupt
+    fixture untouched. Nine price-specific scenarios retain rates 17, 10 or
+    25; ordinary game seeds remain zero. Dry-run and write-time self-checks
+    confirm exact semantic equality apart from these fields, including Unicode
+    preservation. Main formatter checked 36 Java files (nine changed; code-token
+    and idempotence checks pass). An interrupted-state diagnostic is recorded
+    separately; this mechanical work does not complete the worker assignment.
+
+78. Interrupted R-0102 diagnostic `run-w0EKQp` compiled production and tests,
+    then ran 2,245 model checks: 2,241 pass, one failure, three errors and no
+    skips. UI did not run. Three Brewster save/load checks fail because the new
+    GameManager tax-boundary condition rejects an immigration choice even when
+    no tax demand exists. The protest conservation check differs by one corn
+    after resuming production; repair must account for the protest's liberty
+    effect without weakening stock-loss assertions. These are diagnosed open
+    failures, not acceptance. The remaining worker scope includes TC78 and
+    related UI coverage, gross bid-value selection, existing-boycott exclusion,
+    shared AI acceptance and strict pending-state validation. Two original
+    attempts remain; no main implementation takeover or publication occurred.
+
+79. R-0102 resumed on 2026-10-18 after the advertised 16:00 Prague reset.
+    Attempt 2 on Sonnet high completed in 521.981 seconds, exit 0, no denied
+    tools; cumulative worker time is 1,679.135 seconds. Main formatter checked
+    43 Java files (eight changed; token/idempotence pass). The caller's resume
+    prompt named external evidence files without their absolute directory, so
+    the worker could not find them and used the inline diagnosis and retained
+    context. Future continuation prompts must contain exact absolute paths;
+    this discovery overhead is a caller error, not a model-quality failure.
+    Docker acceptance and review remain in progress; one original repair
+    remains, and the full-regression/publication boundary is still requirement 20.
+
+80. R-0102 run `run-czrcJC` passes all 2,248 model and 43 selected UI/basic/
+    contract checks, with no failures, errors or skips. Review still found a
+    weak custom-house proof: after protesting 100 of 200 ore, the remaining
+    100 would not export even without a boycott. The final original repair
+    strengthens it to 300 initial/200 remaining with exact gold, and selects
+    the highest-value stock before constructing its bounded arrears quote, so
+    overflow cannot silently substitute another commodity. Attempt 3 on Sonnet
+    high completes in 96.862 seconds, exit 0, no denied tools; total worker
+    time is 1,775.997 seconds. Main formatter checks 43 files (two changed;
+    token/idempotence pass). Final affected acceptance is pending.

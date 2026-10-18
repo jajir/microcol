@@ -65,6 +65,39 @@ public class TC_55_F46_rush_construction_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
+    void TC_03_boycotted_tools_block_only_the_import_of_missing_tools()
+            throws Exception {
+        // The nation already owes arrears for tools, so none can be imported.
+        new TaxDemandPage(getContext()).prepare(new TaxDemandPage.Fixture(
+                new File("src/test/scenarios/F46-rush-construction.microcol"),
+                "tax-rush").arrears(java.util.Map.of(GoodsType.TOOLS, 100)));
+        ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage building = new ConstructionPage(getContext());
+        ConstructionRushPage rush = new ConstructionRushPage(getContext());
+        building.assignCarpenter(4);
+        building.open();
+        building.select("BLACKSMITHS_SHOP");
+        building.confirm();
+        colony.rememberWorld();
+        // Five tools are missing, so no offer exists and nothing changes.
+        rush.open();
+        rush.verifyUnavailable(
+                "Completion cannot be bought now. It requires a valid current project and access to home Europe; missing tools cannot be bought while tools are boycotted.");
+        rush.cancel();
+        colony.verifyWorldUnchanged();
+        // With the missing tools already stocked, only hammers are bought.
+        rush.addTools(5);
+        rush.open();
+        rush.verifyQuote("Blacksmith shop", 34, 20, 30, 0, 60, 9940, true);
+        rush.confirm();
+        rush.verifyStocks(9940, 0, 0);
+        building.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
+        building.cancel();
+    }
+
+    @Test
+    @Tag("local")
     void TC_02_insufficient_gold_and_stale_materials_do_not_charge()
             throws Exception {
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()

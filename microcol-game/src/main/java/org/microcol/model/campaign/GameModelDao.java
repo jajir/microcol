@@ -12,6 +12,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.RecruitmentPool;
 import org.microcol.model.Congress;
+import org.microcol.model.TaxState;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.po.PersistingTool;
@@ -81,6 +82,7 @@ public final class GameModelDao {
                     .forEach(player -> {
                         player.setRecruitment(RecruitmentPool.initial());
                         player.setCongress(Congress.initial());
+                        player.setTax(TaxState.initial());
                     });
         }
         final GameModel game = makeFromModelPo(source, eventBus);

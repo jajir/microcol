@@ -283,6 +283,21 @@ public class Colony {
         }
     }
 
+    /**
+     * @param points requested liberty
+     * @return the liberty that fits below 200 per resident right now
+     */
+    long previewProtestLiberty(final long points) {
+        final long capacity = Math.multiplyExact((long) getPopulation(),
+                (long) RebelSupport.POINTS_PER_RESIDENT);
+        return Math.max(0, Math.min(points, capacity - liberty));
+    }
+
+    /** Add protest liberty to this colony, capped by its residents. */
+    void addProtestLiberty(final long points) {
+        liberty = Math.addExact(liberty, previewProtestLiberty(points));
+    }
+
     /** @return immutable education progress with current pause state */
     public List<EducationCourse> getEducationCourses() {
         return educationCourses.stream()
@@ -1238,6 +1253,11 @@ public class Colony {
         int finalGold = owner.getGold();
         for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
             if (!exportGoods.contains(type)) {
+                continue;
+            }
+            // A boycott closes ordinary exports; the revolutionary custom
+            // house bypasses it.
+            if (owner.isBoycotted(type) && !owner.isDeclaredIndependence()) {
                 continue;
             }
             final int amount = warehouse.getGoods(type).getAmount() - 100;

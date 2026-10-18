@@ -5701,6 +5701,13 @@
   "gameManager": {
     "players": [
       {
+        "tax": {
+          "rate": 0,
+          "activated": false,
+          "updates": 0,
+          "issued": 0,
+          "arrears": {}
+        },
         "congress": {
           "activated": true,
           "bells": 0,

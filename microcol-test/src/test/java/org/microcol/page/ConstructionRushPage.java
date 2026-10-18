@@ -27,6 +27,11 @@ public final class ConstructionRushPage extends AbstractScreen {
                 .addGoods(Goods.of(GoodsType.HAMMERS, 1)));
     }
 
+    public void addTools(int amount) {
+        getRobot().interact(() -> colony().getWarehouse()
+                .addGoods(Goods.of(GoodsType.TOOLS, amount)));
+    }
+
     public void open() {
         clickOnButtonWithId("constructionRush");
     }
@@ -50,6 +55,13 @@ public final class ConstructionRushPage extends AbstractScreen {
                 getLabeledById("constructionRushDetail").getText());
         assertEquals(!enabled,
                 getButtonById("constructionRushConfirm").isDisabled());
+    }
+
+    /** No offer exists: the dialog explains why and cannot be confirmed. */
+    public void verifyUnavailable(String expected) {
+        assertEquals(expected,
+                getLabeledById("constructionRushDetail").getText());
+        assertTrue(getButtonById("constructionRushConfirm").isDisabled());
     }
 
     public void verifyFeedback(String expected, boolean enabled) {

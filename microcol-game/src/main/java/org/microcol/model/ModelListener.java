@@ -16,6 +16,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
@@ -38,6 +39,10 @@ public interface ModelListener {
     /** A free immigrant needs a choice before this owner's turn can begin. */
     default void onImmigrationChoiceRequired(
             final ImmigrationChoiceRequiredEvent event) {
+    }
+
+    /** A Crown tax demand needs an answer before this owner's turn begins. */
+    default void onTaxDemandRequired(final TaxDemandRequiredEvent event) {
     }
 
     void onGameStarted(GameStartedEvent event);

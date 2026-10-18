@@ -5115,3 +5115,34 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and failed fixture assumptions. This is targeted acceptance, not full-batch
    regression or publication. Status stays ready for development until the
    agreed second-batch boundary checks; no additional CI run is claimed.
+
+## R-0102 tax demand and boycott — 2026-10-18
+
+1. R-0102 introduces national tax cadence, saved human decisions and commodity
+   boycotts. Model acceptance covers all difficulty thresholds, initial zero,
+   cap, stock-value/tie selection, bounded destruction, liberty without Congress
+   credit, arrears, stale choices, save/load, immigration ordering, AI acceptance
+   and Fugger's one-time clearing. Large full-stock values use long arithmetic;
+   an unrepresentable winning arrears quote offers no protest instead of choosing
+   a different commodity. Ordinary prices retain the agreed outcome.
+2. Docker `run-czrcJC` passes 2,248 model and 43 selected UI/basic/contract
+   checks. Final `run-oDcbjl` passes **2,250 model and 18 UI/basic/contract
+   checks**, zero failures/errors/skips. Final TC58 (6) and TC78 (3) plus
+   unchanged TC27 (10), TC55 (3), TC68 (8), TC70 (4), SimpleOperations (5),
+   Environment (1) and source contract (3) establish **2,293 distinct passing
+   checks**. Full second-batch regression and publication remain pending.
+3. TC78 verifies exact demand consequences, defer/Escape, reopening, blocked
+   actions, Continue, acceptance, protest and stale-stock rejection. TC27
+   exercises a real tools protest and equipment restrictions. TC58's real
+   protest leaves 200 ore above the 100 export threshold while tobacco sells
+   for the exact 231 gold; Continue repeats neither export nor destruction.
+   Its revolution case retains half-net export despite a seeded boycott.
+   TC55 tests missing-tools import versus stocked tools; TC70 joins earned
+   immigration to the tax pause before production. TC68's education journeys
+   remain passing. The English demand capture is readable; no separate Czech
+   visual capture or full visual regression was run.
+4. Main updated 72 current-schema fixture files, preserving nine controlled
+   positive rates, and applied the shared formatter with code-token/idempotence
+   checks. Initial diagnostic failures, caller path error and three worker
+   attempts are recorded in [operating evidence](ai/local-qwen.md). Payment
+   remains R-0103; R-0102 stays ready until the agreed batch acceptance boundary.

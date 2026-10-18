@@ -20,7 +20,7 @@ class EuropeanRelationsTest {
     private final Player french = player("France");
     private final Player spanish = player("Spain");
     private final Player crown = new PlayerKing("Crown", true, 0, model, false,
-            dutch, Map.of(), Set.of(), 0);
+            dutch, Map.of(), Set.of());
     private final List<Player> players = List.of(dutch, french, spanish, crown);
 
     private Player player(final String key) {

@@ -272,6 +272,10 @@ public class UnitFreeColonist extends CanMount {
             return Optional.of(EquipmentProblem.TRADE_RESTRICTED);
         }
 
+        if (getOwner().isBoycotted(type)) {
+            return Optional.of(EquipmentProblem.BOYCOTTED);
+        }
+
         boolean present = false;
         if (type == GoodsType.MUSKET) {
             present = holdingGuns;
@@ -501,7 +505,8 @@ public class UnitFreeColonist extends CanMount {
 
     public enum EquipmentProblem {
         UNIT_UNAVAILABLE, ALREADY_SET, MISSING_GOODS, STORAGE_FULL,
-        INCOMPATIBLE_EQUIPMENT, NOT_ENOUGH_GOLD, TRADE_RESTRICTED, GOLD_LIMIT
+        INCOMPATIBLE_EQUIPMENT, NOT_ENOUGH_GOLD, TRADE_RESTRICTED, GOLD_LIMIT,
+        BOYCOTTED
     }
 
     public java.util.Optional<EquipmentProblem> getEquipmentProblem(
