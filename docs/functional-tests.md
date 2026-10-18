@@ -5120,6 +5120,39 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    and failed fixture assumptions. This is targeted acceptance, not full-batch
    regression or publication. Status stays ready for development until the
    agreed second-batch boundary checks; no additional CI run is claimed.
+6. Full development CI [#174](https://github.com/jajir/microcol/actions/runs/39156232241)
+   on `d829993d293fa6cbab138f38a271c7f4b7cd847d` ran all **2,299 model checks**
+   successfully and **367 UI/contract checks**, of which 362 passed and five
+   failed, with no errors or skips. Failures: TC07 food 165 instead of 170;
+   TC08 food 188 instead of 193; TC41 food production 8 instead of 10;
+   TC57 retained hammers 264 instead of 266 and 502 instead of 503.
+   All four tested colonies have eight residents and zero liberty on
+   Conquistador, so R-0101 correctly subtracts one per staffed job. These older
+   fixtures implicitly assumed neutral politics. Only their starting liberty
+   is changed to 200 (one rebel, seven Tories, 12.5% support); populations,
+   inventories, difficulty, production code and every expected result remain
+   unchanged. This follows the same neutral-state repair already used by F42.
+7. Codex performs this repair directly at the user's request. The diagnostic
+   selection includes TC07/TC08/TC41/TC57, TC77, `PoliticalProductionTest`,
+   `PoliticalProductionIntegrationTest` and `PageVerificationContractTest`.
+   Docker `run-LdfWrZ` passes all **45 checks**: 32 political model checks and
+   13 UI/source-contract checks, with zero failures/errors/skips, exit 0.
+   All five previously failing checks pass with their original assertions.
+   TC77 and the model boundary tests still verify the actual Tory penalty and
+   support bonuses. Callback `20261018T193907Z-fc0296fd8642` resumes the correct
+   desktop task after 165.903 seconds. Review confirms only four liberty values
+   changed in the fixtures; no Java formatting is needed. Full CI/publication
+   must still pass on the repaired commit.
+8. Repaired source `cffcd9a39f443f55cfe8f653cdb4cca7bf96160c` passes full
+   [development #175](https://github.com/jajir/microcol/actions/runs/39160063302):
+   **2,299 model and 367 UI/contract checks**, zero failures/errors/skips.
+   The downloaded XML reports also verify 32 build-tool checks and 2,332 checks
+   on each of macOS ARM64, macOS Intel and Linux. Java compatibility and Pages
+   pass on the same commit. The automatic channel manifest matches immutable
+   [dev-175-cffcd9a39f44](https://github.com/jajir/microcol/releases/tag/dev-175-cffcd9a39f44);
+   the downloaded macOS launcher matches its published SHA-256. This closes the
+   fixture-repair publication blocker without changing the earlier recorded
+   second-batch requirement boundaries.
 
 ## R-0102 tax demand and boycott — 2026-10-18
 

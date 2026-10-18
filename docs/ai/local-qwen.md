@@ -27,6 +27,10 @@ The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
 
+Supported Codex and Claude Code sessions on this host use the
+[Headroom setup](headroom.md) by default as of 2026-10-18. It preserves model/authentication choices and all acceptance
+gates; the local Ollama worker keeps its separate provider.
+
 ## Cloud-token priority and medium-to-high policy — 2026-10-14
 
 1. [AGENTS.md](../../AGENTS.md#local-worker) owns the project priority: saving
@@ -4468,3 +4472,34 @@ committed for this experiment.
 10. Strict MkDocs and rendered-page/link inspection passed. The rejected worker
     worktree was archived with a recoverable snapshot; job/attempt evidence remains
     in the operator logs. Publication remains independently pending.
+11. Commit `d829993d293fa6cbab138f38a271c7f4b7cd847d` was pushed to `main`.
+    All three production CI callbacks reached the originating desktop task:
+    Pages success (`20261018T185343Z-d877fb214b0a`), Java compatibility success
+    (`20261018T185342Z-4633e4b64c4a`) and development failure
+    (`20261018T185342Z-93631e663f79`). Pages build/deployment and the live page's
+    source link match that commit. Each of the four Windows/Linux Java 11/17
+    combinations passes 2,299 tests without failures/errors/skips. The failed
+    callback also resumed this task with the exact run/commit identity retained.
+12. Development #174 passes 32 launcher/publication tests and 2,332 tests on each
+    of three native platforms, all without failures/errors/skips. Full Docker
+    regression finds five older-fixture failures described in
+    [R-0101's evidence](../functional-tests.md#r-0101-political-production-2026-10-18).
+    CI correctly skips publication. The downloaded channel manifest still names
+    `dev-171-333de9b6bf8f`; no #174 release exists. Codex owns the bounded fixture
+    repair and reruns; no local worker is restarted and no gate is weakened.
+13. The fixture repair passes all 45 targeted checks in Docker `run-LdfWrZ`
+    and delivers its success callback to the original desktop task. Detailed
+    counts and unchanged assertions are recorded with R-0101's functional
+    evidence. Documentation checks and strict MkDocs pass; full CI on the
+    repaired source remains required before publishing a new game build.
+14. Repaired commit `cffcd9a39f443f55cfe8f653cdb4cca7bf96160c` passes
+    [development #175](https://github.com/jajir/microcol/actions/runs/39160063302):
+    2,299 model and 367 UI/contract checks, 32 build-tool checks and 2,332 checks
+    on each native platform, all with zero failures/errors/skips. Java compatibility
+    and Pages pass on the same commit. The completion notification record queues
+    success to the exact originating task; this later inspection does not claim
+    the queued message has already been consumed. The downloaded automatic
+    channel and immutable release manifests agree on
+    [dev-175-cffcd9a39f44](https://github.com/jajir/microcol/releases/tag/dev-175-cffcd9a39f44),
+    and the macOS launcher's SHA-256 matches the published checksum. Build #174
+    remains a failed historical run; #175 establishes repaired publication.

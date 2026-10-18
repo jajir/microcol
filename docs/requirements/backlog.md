@@ -433,6 +433,13 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 [R-0243](done/R-0243.md) implements worker, Docker and CI completion callbacks.
 It preserves existing test/review gates and does not select additional gameplay work.
 
+## Headroom adoption — 2026-10-18
+
+[R-0244](done/R-0244.md) configures local context compression for supported Codex
+and Claude Code sessions. The [operating page](../ai/headroom.md) records the
+first A/B pair, actual rollout checks, bypass and scope limits. Existing model,
+test and review choices remain in force; no gameplay work is selected.
+
 ## Choosing further work
 
 The selected R-0057–R-0061 cloud trial is complete and published; its
