@@ -113,11 +113,9 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
                     true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
                 getModel().moveUnitAsFarAsPossible(unit, Path.of(oPath.get()));
-            } else {
-                simpleUnitBehavior.tryToCaptureColony(getModel(), unit,
-                        oLoc.get());
             }
         }
+        // A colony is taken only by winning its defense battle.
         simpleUnitBehavior.tryToFight(unit);
     }
 

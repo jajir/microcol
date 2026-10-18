@@ -296,7 +296,7 @@ class ColonyLibertyTest {
         final RebelSupport before = colony.getRebelSupport();
         final Unit force = model.addUnitOutSideColony(colony);
         force.takeOver(king);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertSame(king, colony.getOwner());
         assertSame(dutch, colony.getLastColonialAffiliation());
         assertEquals(400L, colony.getLiberty());
@@ -318,7 +318,7 @@ class ColonyLibertyTest {
         // Liberation by the Dutch keeps liberty and the same affiliation.
         final long remaining = colony.getLiberty();
         force.takeOver(dutch);
-        colony.captureColony(force);
+        ColonyBattles.capture(model, colony, force);
         assertSame(dutch, colony.getOwner());
         assertSame(dutch, colony.getLastColonialAffiliation());
         assertEquals(remaining, colony.getLiberty());
@@ -376,8 +376,7 @@ class ColonyLibertyTest {
         // A European conqueror keeps liberty and takes the affiliation, so
         // its own Bolivar membership now decides the bonus.
         final Unit invader = armedForce(model, quebec, dutch);
-        assertTrue(quebec.canBeCapturedBy(invader));
-        quebec.captureColony(invader);
+        ColonyBattles.capture(model, quebec, invader);
         assertSame(dutch, quebec.getOwner());
         assertSame(dutch, quebec.getLastColonialAffiliation());
         assertEquals(200L, quebec.getLiberty());
@@ -392,8 +391,7 @@ class ColonyLibertyTest {
         model.destroyUnit(invader);
         final Unit royal = model.addUnitOutSideColony(quebec);
         royal.takeOver(king);
-        assertTrue(quebec.canBeCapturedBy(royal));
-        quebec.captureColony(royal);
+        ColonyBattles.capture(model, quebec, royal);
         assertSame(king, quebec.getOwner());
         assertSame(dutch, quebec.getLastColonialAffiliation());
         assertEquals(200L, quebec.getLiberty());

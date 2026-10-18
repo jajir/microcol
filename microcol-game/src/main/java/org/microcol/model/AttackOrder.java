@@ -22,13 +22,27 @@ public final class AttackOrder {
 
     private final String promotionInputs;
 
+    /**
+     * Frozen colony defense when the target tile is a colony fought by a land
+     * unit; the battlefield is then the colony center, not the defender's
+     * place.
+     */
+    private final Optional<ColonyDefense> colonyDefense;
+
     AttackOrder(final AbstractUnit attacker, final Unit defender) {
+        this(attacker, defender, Optional.empty());
+    }
+
+    AttackOrder(final AbstractUnit attacker, final Unit defender,
+            final Optional<ColonyDefense> colonyDefense) {
         this.attacker = attacker;
         this.defender = defender;
+        this.colonyDefense = colonyDefense;
         attackingPlayer = attacker.getOwner();
         defendingPlayer = defender.getOwner();
         origin = attacker.getLocation();
-        target = defender.getLocation();
+        target = colonyDefense.map(ColonyDefense::getBattlefield)
+                .orElseGet(defender::getLocation);
         privateerException = attacker.model.isPrivateerNavalException(attacker,
                 defender);
         originalRelation = attackingPlayer.isKing() || defendingPlayer.isKing()
@@ -37,8 +51,10 @@ public final class AttackOrder {
                         defendingPlayer);
         declarationRequired = !privateerException
                 && !attacker.model.areHostile(attackingPlayer, defendingPlayer);
-        combatStrengths = CombatStrengths.forBattle(attacker.model, attacker,
-                defender);
+        combatStrengths = colonyDefense.isPresent()
+                ? CombatStrengths.forColonyBattle(attacker.model, attacker,
+                        colonyDefense.get())
+                : CombatStrengths.forBattle(attacker.model, attacker, defender);
         navalPreview = attacker.isShip() && defender.isShip()
                 ? Optional.of(new NavalCombatPreview(attacker.model,
                         (org.microcol.model.unit.Ship) attacker,
@@ -80,16 +96,32 @@ public final class AttackOrder {
         return navalPreview;
     }
 
+    /**
+     * @return the frozen defense of the colony at the battlefield, present when
+     *         a land unit fights for a colony tile
+     */
+    public Optional<ColonyDefense> getColonyDefense() {
+        return colonyDefense;
+    }
+
+    /** @return the battlefield tile; the colony center for a colony battle */
+    public Location getBattlefield() {
+        return target;
+    }
+
     Location getTarget() {
         return target;
     }
 
     boolean matchesParticipants() {
+        // A resident defends from its job; the colony defense quote then
+        // verifies the actual place of every roster member instead.
         return attacker.getOwner() == attackingPlayer
                 && defender.getOwner() == defendingPlayer
-                && attacker.isAtPlaceLocation() && defender.isAtPlaceLocation()
+                && attacker.isAtPlaceLocation()
                 && origin.equals(attacker.getLocation())
-                && target.equals(defender.getLocation());
+                && (colonyDefense.isPresent() || defender.isAtPlaceLocation()
+                        && target.equals(defender.getLocation()));
     }
 
     boolean matchesPromotionInputs() {

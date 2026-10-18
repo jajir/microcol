@@ -68,9 +68,10 @@ class CurrentSightTest {
 
     private void captureMontrealByFrenchKing() {
         final Unit force = model.getUnitById(2);
-        force.placeToLocation(MONTREAL);
         force.takeOver(king);
-        model.getColonyAt(MONTREAL).orElseThrow().captureColony(force);
+        // The royal force wins the colony's defense battle next to it.
+        ColonyBattles.capture(model, model.getColonyAt(MONTREAL).orElseThrow(),
+                force);
     }
 
     @Test

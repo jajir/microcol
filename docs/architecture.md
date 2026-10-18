@@ -98,8 +98,9 @@ příkaz. Potvrzené porušení smlouvy útokem propojuje rozpracované R-0028,
 jak je popsáno níže.
 Před vstupem do dobývaného přístavu `Colony` naplánuje únik všech cizích
 nepřátelských lodí. Neutrální obsazení nebo chybějící bezpečné sousední moře
-vstup odmítnou před spotřebou pohybu či změnou vlastníka. AI používá tentýž
-dotaz jako pohyb hráče. Dobývající jednotka zůstává vybavená na mapě.
+útok odmítnou před losem, spotřebou pohybu či změnou vlastníka. AI používá
+tentýž útočný dotaz jako hráč. Samotný pohyb cizí kolonii nedobývá;
+převzetí následuje pouze po vyhraném boji. Dobývající jednotka zůstává na mapě.
 
 
 `GameManager` odlišuje zahájení, dosažený herní konec a zahození instance přes
@@ -858,3 +859,21 @@ typ projektu a tehdejší nedostatek. Načtení ani zobrazení hlášení nespou
 stavební fázi. GUI překládá snímek a před otevřením kolonie znovu ověří hru
 a současné vlastnictví; otevření nemění zásoby. Stav přejímky vede
 [R-0086](requirements/done/R-0086.md).
+
+
+### Obrana kolonie a pracovníků (R-0096)
+
+`Colony` vybírá ozbrojenou obranu, civilní skupinu nebo Revereho milici;
+`ColonyDefense` a `AttackOrder` zmrazí skutečná pracovní místa, bojiště,
+vybavení a bezpečný únik lodí. `AbstractUnit` ověří nový plán před prvním
+losem a provede společné bojové účtování. Jen vyhraný boj s civilní skupinou
+nebo milicí volá interní převzetí kolonie. Veřejný přímý příkaz k obsazení
+byl odstraněn včetně jeho pohybových a AI volání.
+Samostatný útok na pracovní pole používá stejný rozkaz, ale převádí pouze
+poraženého neozbrojeného pracovníka. Dokončený odchod používá společné
+účtování obyvatel, vzdělávání, limitu liberty a případné prázdné kolonie.
+Revereho vítězný obránce opustí práci, pokud není posledním obyvatelem;
+tato vynucená událost nemění pravidlo dobrovolného odchodu z opevnění.
+`ColonyBattleOutcome` předává GUI výsledek a výslovné bojiště; animace
+nevyžaduje mapovou polohu pracovníka. Přejímku vede
+[R-0096](requirements/R-0096.md); plná regrese zůstává na hranici dávky.

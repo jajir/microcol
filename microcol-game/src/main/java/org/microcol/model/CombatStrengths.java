@@ -51,25 +51,10 @@ public final class CombatStrengths {
                 || !defendTerrain.getTerrainType().isLand()) {
             return Optional.empty();
         }
-        int colonyBonus = 0;
-        final Optional<Colony> colony = model
-                .getColonyAt(defender.getLocation())
-                .filter(c -> c.getOwner() == defender.getOwner());
-        if (colony.isPresent()) {
-            if (colony.get()
-                    .wasConstructionBuilded(ConstructionType.FORTRESS)) {
-                colonyBonus = 200;
-            } else if (colony.get()
-                    .wasConstructionBuilded(ConstructionType.FORT)) {
-                colonyBonus = 150;
-            } else if (colony.get()
-                    .wasConstructionBuilded(ConstructionType.STOCKADE)) {
-                colonyBonus = 100;
-            }
-        }
-        final int terrainBonus = defendTerrain.isHasTrees()
-                ? defendTerrain.getTerrainType().getDefenseBonusWithTree()
-                : defendTerrain.getTerrainType().getDefenseBonus();
+        final int colonyBonus = model.getColonyAt(defender.getLocation())
+                .filter(c -> c.getOwner() == defender.getOwner())
+                .map(CombatStrengths::highestFortificationBonus).orElse(0);
+        final int terrainBonus = terrainBonus(defendTerrain);
         final CombatStrength attack = new CombatStrength(base(attacker, true),
                 50, 0, 0, 0, artilleryPenalty(model, attacker));
         final CombatStrength defense = new CombatStrength(base(defender, false),
@@ -84,6 +69,90 @@ public final class CombatStrengths {
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
                 + ':' + colonyBonus;
         return Optional.of(new CombatStrengths(attack, defense, inputs));
+    }
+
+    /**
+     * Frozen strengths of a land battle for a colony tile. The defender is the
+     * representative selected by the colony's defense roster: the strongest
+     * armed defender, the civilian group (base 1), or the Revere emergency
+     * militiaman, who is quoted as armed before the muskets are actually
+     * consumed.
+     *
+     * @param model    required model
+     * @param attacker required attacking unit
+     * @param defense  required frozen defense of the colony
+     * @return strengths, or empty when the attacker is not an armed land unit
+     */
+    static Optional<CombatStrengths> forColonyBattle(final Model model,
+            final Unit attacker, final ColonyDefense defense) {
+        if (!isArmedLand(attacker) || !attacker.isAtPlaceLocation()) {
+            return Optional.empty();
+        }
+        final Colony colony = defense.getColony();
+        final Terrain attackTerrain = model.getMap()
+                .getTerrainAt(attacker.getLocation());
+        final Terrain defendTerrain = model.getMap()
+                .getTerrainAt(defense.getBattlefield());
+        if (!attackTerrain.getTerrainType().isLand()
+                || !defendTerrain.getTerrainType().isLand()) {
+            return Optional.empty();
+        }
+        final Unit defender = defense.getDefender();
+        final CombatStrength attack = new CombatStrength(base(attacker, true),
+                50, 0, 0, 0, artilleryPenalty(model, attacker));
+        final CombatStrength defend = colonyDefenderStrength(model, defender,
+                colony, defense.getBattlefield(), defense.getKind());
+        final String inputs = "COLONY:" + defense.getKind() + ':'
+                + attacker.getType().name() + ':' + state(attacker) + ':'
+                + attackTerrain.getTerrainType().name() + ':'
+                + attackTerrain.isHasTrees() + ':' + model.isFortified(attacker)
+                + ':' + defender.getType().name() + ':' + state(defender) + ':'
+                + defendTerrain.getTerrainType().name() + ':'
+                + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
+                + ':' + defend.getColonyBonus() + ':' + defense.getInputs();
+        return Optional.of(new CombatStrengths(attack, defend, inputs));
+    }
+
+    /**
+     * One colony defender's strength on its battlefield. A civilian defender
+     * stands for the whole group with base 1, an unarmed field worker likewise;
+     * armed and emergency defenders use their own base. Terrain applies to
+     * every kind, the colony's highest fortification only at the colony center.
+     */
+    static CombatStrength colonyDefenderStrength(final Model model,
+            final Unit defender, final Colony colony,
+            final Location battlefield, final ColonyDefense.Kind kind) {
+        final int terrainBonus = terrainBonus(
+                model.getMap().getTerrainAt(battlefield));
+        final int colonyBonus = colony.getOwner() == defender.getOwner()
+                && battlefield.equals(colony.getLocation())
+                        ? highestFortificationBonus(colony)
+                        : 0;
+        if (kind == ColonyDefense.Kind.CIVILIANS
+                || kind == ColonyDefense.Kind.FIELD && !isArmedLand(defender)) {
+            return new CombatStrength(1, 0, terrainBonus, 0, colonyBonus);
+        }
+        return new CombatStrength(base(defender, false), 0, terrainBonus,
+                model.isFortified(defender) ? 50 : 0, colonyBonus,
+                artilleryPenalty(model, defender));
+    }
+
+    private static int terrainBonus(final Terrain terrain) {
+        return terrain.isHasTrees()
+                ? terrain.getTerrainType().getDefenseBonusWithTree()
+                : terrain.getTerrainType().getDefenseBonus();
+    }
+
+    /** Only the highest of stockade, fort and fortress counts. */
+    private static int highestFortificationBonus(final Colony colony) {
+        if (colony.wasConstructionBuilded(ConstructionType.FORTRESS)) {
+            return 200;
+        }
+        if (colony.wasConstructionBuilded(ConstructionType.FORT)) {
+            return 150;
+        }
+        return colony.wasConstructionBuilded(ConstructionType.STOCKADE) ? 100
+                : 0;
     }
 
     private static int shipBase(final UnitType type) {
@@ -111,7 +180,8 @@ public final class CombatStrengths {
                 .getCongressMembers().contains(Founder.FRANCIS_DRAKE) ? 50 : 0;
     }
 
-    private static boolean isArmedLand(Unit unit) {
+    /** Actual armed capability, not the type-level attack flag. */
+    static boolean isArmedLand(Unit unit) {
         return unit instanceof UnitArtillery || unit instanceof UnitFreeColonist
                 && ((UnitFreeColonist) unit).isHoldingGuns();
     }

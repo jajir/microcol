@@ -438,10 +438,25 @@ public class Model {
                 for (final var slot : construction.getSlots()) {
                     Preconditions.checkArgument(slot != null,
                             "Missing saved construction slot");
-                    Preconditions.checkArgument(
-                            slot.getWorkerId() == null
-                                    || jobWorkers.add(slot.getWorkerId()),
+                    final Integer workerId = slot.getWorkerId();
+                    if (workerId == null) {
+                        continue;
+                    }
+                    Preconditions.checkArgument(jobWorkers.add(workerId),
                             "Saved worker has multiple colony jobs");
+                    // A captured colony's building workers belong to its owner.
+                    final UnitPo worker = units.get(workerId);
+                    Preconditions.checkArgument(
+                            worker != null
+                                    && colony.getOwnerName()
+                                            .equals(worker.getOwnerId())
+                                    && worker.getPlaceConstructionSlot() != null
+                                    && worker.getPlaceMap() == null
+                                    && worker.getPlaceColonyField() == null
+                                    && worker.getPlaceCargoSlot() == null
+                                    && worker.getPlaceHighSeas() == null
+                                    && worker.getPlaceEuropePort() == null,
+                            "Invalid saved building worker identity, owner or place");
                 }
             }
         }
@@ -2581,6 +2596,14 @@ public class Model {
             final MilitaryPromotion promotion) {
         listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
                 wasDestroyed, promotion);
+    }
+
+    void fireUnitAttacked(final Unit attacker, final Unit defender,
+            final Unit defeated, final boolean wasDestroyed,
+            final MilitaryPromotion promotion,
+            final ColonyBattleOutcome colonyOutcome) {
+        listenerManager.fireUnitAttacked(this, attacker, defender, defeated,
+                wasDestroyed, promotion, colonyOutcome);
     }
 
     void fireUnitAttacked(final Unit attacker, final Unit defender,

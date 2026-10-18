@@ -5041,3 +5041,39 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    separates worker attempts, medium-to-high escalation, main fixture-schema
    edits and inherited movement-mock fixes. Shared formatter, nine documentation
    tests and strict MkDocs build pass. This is targeted requirement-13 acceptance.
+
+
+## R-0096 colony defense (2026-10-18)
+
+1. Targeted acceptance of [R-0096](requirements/R-0096.md), UC-075:
+   armed defenders are selected before the civilian group; residents keep their
+   actual field/building jobs until the result. Civilian victory transfers the
+   whole colony, including all eight fields, indoor workers, identity, liberty
+   and cargo-preserving ship escape. Independent field combat captures only
+   the worker. Peaceful colonies require declaration review; cancellation and
+   stale inputs leave the world and saved random state unchanged.
+2. `ColonyDefenseTest` covers frozen places, strongest/stable-ID selection,
+   armed-to-civilian transitions, blocked escape, full ownership transfer,
+   worker capture/last-resident removal, Revere's actual musket cost, forced
+   3→2 fortified exit versus voluntary refusal, last-resident retention,
+   military promotion and Save/Continue validation. Removed direct-capture
+   callers now use real battles in model/UI fixture helpers.
+3. Docker `run-F6cEP6` passes all **2,175 model tests**, zero failures/errors/
+   skips. Its selected UI run passes TC04 (1), TC26 (7), TC32 (10), TC35 (12),
+   TC76 (10), basic/environment checks (6) and source contract (3). TC33 had
+   one obsolete dialog assumption followed by four blocked scenarios; the
+   main-owned correction and its intermediate error are recorded in the
+   [worker evidence](ai/local-qwen.md), not treated as passing tests.
+4. Final focused Docker `run-QeRl9J` passes TC33 (7) and source contract (3).
+   Together the unchanged production code has **2,231 distinct passing
+   model/selected functional checks**, no remaining failures or skips.
+   TC76_01–TC76_10 cover civilian loss/win, armed-first defense, Revere win,
+   last-resident behavior and defeat, peaceful confirm/cancel, stale review,
+   independent field capture and fortified forced exit. Continuation checks
+   preserve workers, equipment, ownership and liberty. TC33 retains Czech
+   diplomacy and keyboard coverage; new TC76 journeys ran in English.
+5. Main applied the shared Java formatter (37 files; token/idempotence checks
+   pass), reviewed the changes and validated documentation. This is targeted
+   acceptance only: full Docker visual regression and publication/CI remain
+   at the second batch boundary, requirement 20. Status remains ready for
+   development until that required batch acceptance; no publication is claimed.

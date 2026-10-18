@@ -4052,3 +4052,96 @@ committed for this experiment.
     errors or skips. High repaired the diagnosed fixture mistakes; this does
     not prove it is always needed. R-0096 starts high because its interacting
     combat/worker/ownership/save boundaries are more complex; Opus remains unused.
+
+64. Reusable fixture lesson from R-0100: inspect actual saved workers and jobs
+    before assuming population from a scenario name. A cross-colony worker
+    must complete exit and reach the destination square before a destination
+    slot is eligible. Founder membership requires a complete valid Congress
+    state (activation, generation, one remaining candidate per category and
+    consistent selection), not a membership-list edit alone. Preserve these
+    preconditions in future handoffs; never weaken model validation to make
+    invented fixture states load.
+
+65. R-0096 attempt 1 on Sonnet high completed in 1,297.483 seconds, exit 0,
+    no denied tools. Formatter checked 21 Java files (11 changed; token and
+    idempotence checks pass). Diagnostic `run-EcLW0T` passes 2,159 of 2,160
+    model checks; `movedResidentMakesTheQuoteStale` errors because its opponent
+    worker assignment is attempted during the attacking player's turn. Separate
+    UI diagnostic `run-xxagH8` passes 36 checks (TC04/26/33/35/76 and source
+    contract), zero failures/errors/skips, exit 0. This is not acceptance:
+    worker-reported omissions include independent field-worker capture, a public
+    direct-capture bypass, declaration against an otherwise empty peaceful
+    colony, and resident/Revere promotion. Review also found an unapproved
+    fortified-minimum exception to Revere's compulsory exit. The agreed rule
+    excludes only the last resident; voluntary departure restrictions stay
+    intact. Attempt 2 resumes Sonnet high with those exact completion criteria,
+    preserving the original time/repair budget and existing passing assertions.
+
+66. R-0096 attempt 2 was interrupted by Claude Pro's session limit after
+    279.459 seconds, exit 1: advertised reset 2026-10-18 at 11:00 Europe/Prague.
+    No extra usage was enabled. Cumulative worker time is 1,576.942 seconds;
+    one original attempt remains in session
+    `e7958573-e09b-4935-a9b2-10ecef11d267`. Partial production edits are retained,
+    including changes to capture, field targeting, forced exit and promotion;
+    the complete implementation/test repair was not delivered. Main formatted
+    22 changed Java files (five changed; token/idempotence checks pass) and
+    started a diagnostic build to record the exact continuation state. Earlier
+    passing UI results do not verify these interrupted edits.
+
+67. Interrupted-state diagnostic `run-mzg0Tn` exits 1 during production
+    compilation, before any tests: `AbstractUnit` no longer implements
+    `Unit.isPossibleToCaptureColonyAt(Location)`, while the interface and callers
+    still require it. The compiler reports the same integration gap on nine
+    concrete unit classes. The continuation handoff records this exact state,
+    the unfinished caller/test adaptations and all remaining accepted behavior.
+    No repair is claimed, no partial R-0096 change is committed/pushed, and
+    no extra Claude attempt is spent before the advertised quota reset.
+
+68. R-0096 resumed after the user confirmed Claude availability on 2026-10-18.
+    Final original attempt 3 on Sonnet high completed in 518.782 seconds,
+    exit 0 with no denied tools; cumulative worker time is 2,095.724 seconds.
+    It completed the removed-interface callers and the five outstanding paths.
+    Main formatter checked 37 Java files (seven changed; token/idempotence pass).
+    Diagnostic `run-TIokit` compiled production and tests, then ran 2,175 model
+    checks: 2,173 passed, one failure and one error, no skips. UI did not run
+    because the model module failed. One test assumed two residents although
+    its fixture has three; another expected a capture quote despite an armed
+    third-party occupant blocking the atomic capture. Main corrected these
+    two expectations, preserving unchanged-state assertions and adding an
+    explicit armed-occupant assertion. Main takeover is limited to these
+    diagnosed test mistakes because the original three-attempt budget is
+    exhausted; no fourth worker attempt or budget reset was used. Acceptance
+    requires the rerun and selected UI paths, not the worker's completion report.
+
+69. R-0096 rerun `run-F6cEP6` passes all 2,175 model tests. Of 56 selected
+    functional/contract checks, 51 pass and five TC33 cases fail (three
+    failures, two errors; zero skips). The first error expects `buttonOk`
+    after a map gesture against a peaceful colony, although the accepted
+    behavior now opens the declaration/attack review. That open modal then
+    blocks four following cases. Main changed TC33_02 to verify and cancel
+    the ordinary attack review, then verify the complete world is unchanged
+    before its existing explicit declaration and successful capture journey.
+    Production code is unchanged. TC76 (10), TC26 (7), TC35 (12), TC32 (10),
+    TC04 (1), basic/environment checks (6) and source contract (3) all pass.
+    The TC33 repair was made after Docker had copied the tested sources;
+    its separate rerun is required. No additional worker attempt was used.
+
+70. The first main-owned TC33 repair rerun (`run-KOyAtj`) still fails five
+    cases: TC33_02 reaches `AttackPage.verifyReview` without initializing its
+    stored review window; four subsequent cases are blocked by the remaining
+    modal. Source contract passes. This is a caller/test adaptation error,
+    not a Claude attempt or a game failure. Main replaced both handwritten
+    gestures with the existing `AttackPage.chooseAttack` operation, which
+    performs the same player gesture and records the review window. Required
+    assertions and production code are unchanged; a second focused rerun
+    verifies the correction.
+
+71. R-0096 final focused rerun `run-QeRl9J` passes all seven TC33 scenarios
+    and the three source-contract checks, zero failures/errors/skips. Combined
+    targeted acceptance is 2,231 distinct checks with production unchanged
+    after the successful 2,175-model run. Final formatter checks 37 Java files
+    with code-token/idempotence equality. The high/high/high session used
+    2,095.724 worker seconds, including its quota interruption; main corrected
+    the explicitly recorded test adaptations after the original budget was
+    exhausted. This complex task does not justify high for every assignment.
+    R-0101 starts on Sonnet medium; Opus remains unused.

@@ -179,8 +179,12 @@ public class UnitFreeColonist extends CanMount {
      * @return immutable facts of the actual step
      */
     public MilitaryPromotion promoteAfterCombatVictory() {
+        // A defender fighting from its colony job is promoted like a unit on
+        // the map; the registered unit and its place stay.
         Preconditions.checkState(
-                isHoldingGuns() && !isVeteran() && isAtPlaceLocation(),
+                isHoldingGuns() && !isVeteran()
+                        && (isAtPlaceLocation() || isAtPlaceColonyField()
+                                || isAtPlaceConstructionSlot()),
                 "Unit cannot gain military rank");
         final UnitType previous = getType();
         final UnitType next = advanceMilitaryRank();

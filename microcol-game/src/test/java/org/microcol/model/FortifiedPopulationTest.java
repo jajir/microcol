@@ -183,7 +183,7 @@ class FortifiedPopulationTest {
         final Unit capturing = model.addUnitOutSideColony(colony);
         final Player king = model.getPlayerByName("Dutch's King");
         capturing.takeOver(king);
-        colony.captureColony(capturing);
+        ColonyBattles.capture(model, colony, capturing);
         assertSame(king, colony.getOwner());
         assertTrue(colony.wasConstructionBuilded(ConstructionType.FORT));
         assertEquals(2, colony.getUnitsInsideColony().size());

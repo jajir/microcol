@@ -305,8 +305,7 @@ class CustomHouseExportTest {
         model.declareHostilities(dutch, france);
         model.getUnitById(6).placeToLocation(Location.of(17, 11));
         final Unit attacker = model.getUnitById(0);
-        attacker.placeToLocation(colony.getLocation());
-        colony.captureColony(attacker);
+        ColonyBattles.capture(model, colony, attacker);
         assertSame(dutch, colony.getOwner());
         assertTrue(
                 colony.wasConstructionBuilded(ConstructionType.CUSTOM_HOUSE));

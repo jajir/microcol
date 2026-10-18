@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
+import org.microcol.page.AttackPage;
 import org.microcol.page.EuropeanRelationsPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
@@ -94,21 +95,26 @@ public class TC_33_F25_european_relations_test extends AbstractMicroColTest {
         EuropeanRelationsPage relations = new EuropeanRelationsPage(
                 getContext());
         relations.rememberWorld();
-        game.moveMouseAtLocation(START);
-        game.dragMouseAtLocation(COLONY);
-        relations.verifyMoveRejection();
-        relations.closeMapMessage();
+        final AttackPage attack = new AttackPage(getContext());
+        attack.chooseAttack(START, COLONY);
+        attack.verifyReview("Free Colonist", "Colonists of Quebec",
+                "declares war", 0, 4);
+        attack.cancel();
+        attack.verifyReviewClosed();
+        relations.verifyWorldUnchanged();
         relations.verifyPairs(PEACE, PEACE, PEACE);
         relations.verifyColonyAndForce("France", START, 1);
 
-        // An explicit declaration permits the same entry with normal movement
-        // cost.
+        // An explicit declaration does not make the entry a plain move: the
+        // colonists defend, so the same gesture opens the attack review and a
+        // won battle takes the colony.
         relations.open();
         relations.review("0-1");
         relations.confirm();
         game = relations.close();
-        game.moveMouseAtLocation(START);
-        game.dragMouseAtLocation(COLONY);
+        attack.chooseExistingOutcome(0, true);
+        attack.chooseAttack(START, COLONY);
+        attack.confirm();
         game.waitForNumberOfUnitsAt(COLONY, 1);
         relations.verifyCaptureFeedback("You captured colony 'Quebec'.");
         relations.closeMapMessage();

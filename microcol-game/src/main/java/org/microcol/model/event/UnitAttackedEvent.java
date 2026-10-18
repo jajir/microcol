@@ -2,6 +2,7 @@ package org.microcol.model.event;
 
 import java.util.Optional;
 
+import org.microcol.model.ColonyBattleOutcome;
 import org.microcol.model.Location;
 import org.microcol.model.NavalCombatOutcome;
 import org.microcol.model.Model;
@@ -21,33 +22,46 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
 
     private final MilitaryPromotion promotion;
 
+    private final ColonyBattleOutcome colonyOutcome;
+
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed) {
-        this(model, attacker, defender, defeated, wasDestroyed, null, null);
+        this(model, attacker, defender, defeated, wasDestroyed, null, null,
+                null);
     }
 
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed, final NavalCombatOutcome navalOutcome) {
         this(model, attacker, defender, defeated, wasDestroyed, navalOutcome,
-                null);
+                null, null);
     }
 
     public UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed, final MilitaryPromotion promotion) {
-        this(model, attacker, defender, defeated, wasDestroyed, null,
-                promotion);
+        this(model, attacker, defender, defeated, wasDestroyed, null, promotion,
+                null);
+    }
+
+    public UnitAttackedEvent(final Model model, final Unit attacker,
+            final Unit defender, final Unit defeated,
+            final boolean wasDestroyed, final MilitaryPromotion promotion,
+            final ColonyBattleOutcome colonyOutcome) {
+        this(model, attacker, defender, defeated, wasDestroyed, null, promotion,
+                colonyOutcome);
     }
 
     private UnitAttackedEvent(final Model model, final Unit attacker,
             final Unit defender, final Unit defeated,
             final boolean wasDestroyed, final NavalCombatOutcome navalOutcome,
-            final MilitaryPromotion promotion) {
+            final MilitaryPromotion promotion,
+            final ColonyBattleOutcome colonyOutcome) {
         super(model);
         this.navalOutcome = navalOutcome;
         this.promotion = promotion;
+        this.colonyOutcome = colonyOutcome;
         this.attacker = Preconditions.checkNotNull(attacker);
         this.defender = Preconditions.checkNotNull(defender);
         this.defeated = Preconditions.checkNotNull(defeated);
@@ -62,12 +76,26 @@ public final class UnitAttackedEvent extends AbstractModelEvent {
         return Optional.ofNullable(promotion);
     }
 
+    /** @return what a battle for a colony tile did, if this was one */
+    public Optional<ColonyBattleOutcome> getColonyOutcome() {
+        return Optional.ofNullable(colonyOutcome);
+    }
+
     public Optional<Location> getOriginalAttackerLocation() {
         return getNavalOutcome().map(NavalCombatOutcome::getAttackerLocation);
     }
 
+    /**
+     * @return the explicit battlefield: the colony center for a colony battle,
+     *         where a resident defender has no map location of its own, or the
+     *         naval defender's original location
+     */
     public Optional<Location> getOriginalDefenderLocation() {
-        return getNavalOutcome().map(NavalCombatOutcome::getDefenderLocation);
+        final Optional<Location> colony = getColonyOutcome()
+                .map(ColonyBattleOutcome::getBattlefield);
+        return colony.isPresent() ? colony
+                : getNavalOutcome()
+                        .map(NavalCombatOutcome::getDefenderLocation);
     }
 
     /**

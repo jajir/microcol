@@ -17,6 +17,7 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.EducationCoursePo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitLaborer;
@@ -645,20 +646,228 @@ public class Colony {
         exportGoods.addAll(selected);
     }
 
-    boolean canBeCapturedBy(final Unit force) {
-        return planCapture(force).isPresent();
+    /**
+     * @param at world square
+     * @return whether a resident of this colony works the field on that square
+     */
+    boolean hasWorkerAt(final Location at) {
+        return colonyFields.stream().anyMatch(
+                field -> field.isNotEmpty() && field.getLocation().equals(at));
     }
 
-    private Optional<Map<Unit, Location>> planCapture(final Unit force) {
+    /**
+     * Plan the defense of one worker of a field that is attacked on its own
+     * field tile. Reads only.
+     *
+     * @param attacker required attacking land unit
+     * @param target   required field tile the attacker is adjacent to
+     * @return frozen defense, or empty when no foreign worker works that tile
+     */
+    Optional<ColonyDefense> planFieldDefense(final Unit attacker,
+            final Location target) {
+        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+            return Optional.empty();
+        }
+        final Optional<Unit> worker = colonyFields.stream()
+                .filter(field -> field.isNotEmpty()
+                        && field.getLocation().equals(target))
+                .map(field -> field.getUnit().get()).findFirst();
+        if (worker.isEmpty() || !(worker.get() instanceof UnitFreeColonist)
+                || !attacker.getType().getAttackableUnitType()
+                        .contains(worker.get().getType())) {
+            return Optional.empty();
+        }
+        final List<Unit> roster = List.of(worker.get());
+        return Optional.of(new ColonyDefense(this, target,
+                ColonyDefense.Kind.FIELD, worker.get(), roster, Map.of(), 0,
+                false, describeDefense(target, ColonyDefense.Kind.FIELD,
+                        worker.get(), roster, Map.of(), 0, false)));
+    }
+
+    /**
+     * Plan what a colony defense quote would do to this colony's defenders if
+     * the attacker wins: the armed tier first, then the inhabitants as one
+     * group, optionally led by a Paul Revere emergency militiaman. Reads only.
+     *
+     * @param attacker   required attacking land unit
+     * @param candidates required map units on the colony tile that this
+     *                   attacker may legally fight
+     * @return frozen defense, or empty when nothing defends or the capture that
+     *         victory would cause has no safe atomic outcome
+     */
+    Optional<ColonyDefense> planDefense(final Unit attacker,
+            final List<Unit> candidates) {
+        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+            return Optional.empty();
+        }
+        final List<Unit> armed = new ArrayList<>();
+        candidates.stream().filter(
+                unit -> !unit.isShip() && CombatStrengths.isArmedLand(unit))
+                .forEach(armed::add);
+        getUnitsInsideColony().stream().filter(CombatStrengths::isArmedLand)
+                .forEach(armed::add);
+        if (!armed.isEmpty()) {
+            armed.sort(Comparator
+                    .comparing((Unit unit) -> !model
+                            .areHostile(attacker.getOwner(), unit.getOwner()))
+                    .thenComparingDouble(
+                            unit -> -CombatStrengths
+                                    .colonyDefenderStrength(model, unit, this,
+                                            location, ColonyDefense.Kind.ARMED)
+                                    .getTotal())
+                    .thenComparingInt(Unit::getId));
+            return Optional.of(new ColonyDefense(this, location,
+                    ColonyDefense.Kind.ARMED, armed.get(0), armed, Map.of(), 0,
+                    false, describeDefense(location, ColonyDefense.Kind.ARMED,
+                            armed.get(0), armed, Map.of(), 0, false)));
+        }
+        final List<Unit> civilians = new ArrayList<>();
+        getUnitsInsideColony().stream()
+                .filter(unit -> unit instanceof UnitFreeColonist)
+                .forEach(civilians::add);
+        candidates.stream()
+                .filter(unit -> unit.getOwner() == owner && !unit.isShip()
+                        && unit instanceof UnitFreeColonist)
+                .forEach(civilians::add);
+        if (civilians.isEmpty()) {
+            return Optional.empty();
+        }
+        civilians.sort(Comparator.comparingInt(Unit::getId));
+        // Victory transfers the whole colony: decide before any draw whether
+        // ships and peaceful occupants allow one atomic outcome.
+        final Optional<Map<Unit, Location>> transfer = planOccupantTransfer(
+                attacker, !model.areHostile(attacker.getOwner(), owner));
+        if (transfer.isEmpty()) {
+            return Optional.empty();
+        }
+        ColonyDefense.Kind kind = ColonyDefense.Kind.CIVILIANS;
+        Unit representative = civilians.get(0);
+        int muskets = 0;
+        boolean exits = false;
+        if (owner.getCongressMembers().contains(Founder.PAUL_REVERE)
+                && warehouse.getGoods(GoodsType.MUSKET)
+                        .getAmount() >= UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT) {
+            final Optional<Unit> militia = getUnitsInsideColony().stream()
+                    .filter(this::isEmergencyEligible)
+                    .min(Comparator
+                            .<Unit>comparingDouble(unit -> -CombatStrengths
+                                    .colonyDefenderStrength(model, unit, this,
+                                            location, ColonyDefense.Kind.REVERE)
+                                    .getTotal())
+                            .thenComparingInt(Unit::getId));
+            if (militia.isPresent()) {
+                kind = ColonyDefense.Kind.REVERE;
+                representative = militia.get();
+                muskets = UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT;
+                // Only the last resident stays inside. A victory is a forced
+                // exit, so the voluntary fortified-colony minimum is not
+                // consulted.
+                exits = getPopulation() > 1;
+            }
+        }
+        return Optional.of(new ColonyDefense(this, location, kind,
+                representative, civilians, transfer.get(), muskets, exits,
+                describeDefense(location, kind, representative, civilians,
+                        transfer.get(), muskets, exits)));
+    }
+
+    private boolean isEmergencyEligible(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist)) {
+            return false;
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        return !colonist.isHoldingGuns() && !colonist.isMounted()
+                && !colonist.isHoldingTools();
+    }
+
+    /**
+     * Everything a confirmed battle depends on, as text: the complete roster
+     * with actual places and equipment, the occupants of the tile, the ship
+     * escape plan and the Revere inputs.
+     */
+    private String describeDefense(final Location battlefield,
+            final ColonyDefense.Kind kind, final Unit representative,
+            final List<Unit> roster, final Map<Unit, Location> escapes,
+            final int muskets, final boolean exits) {
+        final StringBuilder out = new StringBuilder();
+        out.append(id).append('@').append(battlefield).append('/')
+                .append(owner.getName()).append('/').append(kind)
+                .append("/rep=").append(representative.getId()).append("/exit=")
+                .append(exits).append("/muskets=").append(muskets)
+                .append("/stock=")
+                .append(warehouse.getGoods(GoodsType.MUSKET).getAmount())
+                .append("/revere=")
+                .append(owner.getCongressMembers()
+                        .contains(Founder.PAUL_REVERE))
+                .append("/pop=").append(getPopulation());
+        roster.forEach(unit -> out.append('|').append(describeUnit(unit)));
+        model.getUnitsAt(battlefield)
+                .forEach(unit -> out.append('#').append(describeUnit(unit)));
+        escapes.forEach((ship, target) -> out.append('>').append(ship.getId())
+                .append("->").append(target));
+        return out.toString();
+    }
+
+    private String describeUnit(final Unit unit) {
+        final StringBuilder out = new StringBuilder().append(unit.getId())
+                .append(':').append(unit.getType().name()).append(':')
+                .append(unit.getOwner().getName()).append(':')
+                .append(describePlace(unit));
+        if (unit instanceof UnitFreeColonist) {
+            final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+            out.append(':').append(colonist.isHoldingGuns())
+                    .append(colonist.isMounted())
+                    .append(colonist.isHoldingTools())
+                    .append(colonist.isVeteran());
+        } else if (unit instanceof UnitArtillery) {
+            out.append(':').append(((UnitArtillery) unit).isDamaged());
+        }
+        return out.append(':').append(model.isFortified(unit)).toString();
+    }
+
+    private String describePlace(final Unit unit) {
+        if (unit.isAtPlaceLocation()) {
+            return "MAP" + unit.getLocation();
+        }
+        if (unit.isAtPlaceColonyField()) {
+            return "FIELD" + colonyFields.stream()
+                    .filter(field -> field.isWorkedBy(unit))
+                    .map(field -> String.valueOf(field.getDirection()))
+                    .findFirst().orElse("?");
+        }
+        if (unit.isAtPlaceConstructionSlot()) {
+            final ConstructionSlot slot = unit.getPlaceConstruction()
+                    .getConstructionSlot();
+            return "JOB" + slot.getConstructionType() + slot.getConstruction()
+                    .getConstructionSlots().indexOf(slot);
+        }
+        return "OTHER";
+    }
+
+    /**
+     * Plan the transfer of units standing on the colony tile. Peaceful
+     * occupants and armed units stop the capture, and every ship needs its own
+     * safe adjacent water. It never changes anything.
+     *
+     * @param force    required capturing unit
+     * @param declared whether the colony owner becomes hostile by the same
+     *                 battle's declaration
+     */
+    private Optional<Map<Unit, Location>> planOccupantTransfer(final Unit force,
+            final boolean declared) {
         final Player attacker = force.getOwner();
-        if (!model.areHostile(attacker, owner) || !force.getType()
+        if (!(declared || model.areHostile(attacker, owner)) || !force.getType()
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             return Optional.empty();
         }
         final List<Unit> occupants = model.getEnemyUnitsAt(attacker, location);
         if (occupants.stream()
-                .anyMatch(unit -> !model.areHostile(attacker, unit.getOwner())
-                        || (!unit.isShip() && unit.getType().canAttack()))) {
+                .anyMatch(unit -> !(model.areHostile(attacker, unit.getOwner())
+                        || declared && unit.getOwner() == owner)
+                        || (!unit.isShip()
+                                && CombatStrengths.isArmedLand(unit)))
+                || getUnitsInsideColony().stream()
+                        .anyMatch(CombatStrengths::isArmedLand)) {
             return Optional.empty();
         }
         final Map<Unit, Location> escapes = new LinkedHashMap<>();
@@ -688,15 +897,28 @@ public class Colony {
         return Optional.of(escapes);
     }
 
-    public void captureColony(final Unit capturingUnit) {
+    /**
+     * Take the whole colony after the capturer won the defense battle. Only the
+     * battle in {@link AbstractUnit} calls this, with the defense quote it was
+     * confirmed against; there is no other way to take a colony. The ship
+     * escapes were validated in that quote, before the first draw.
+     *
+     * @param capturingUnit required victor, already on the colony tile
+     * @param defense       required frozen defense that was just defeated
+     */
+    void captureAfterWonBattle(final Unit capturingUnit,
+            final ColonyDefense defense) {
         final Player player = capturingUnit.getOwner();
         Preconditions.checkState(
-                capturingUnit.isAtPlaceLocation()
+                defense.getColony() == this && defense.capturesColony()
+                        && capturingUnit.isAtPlaceLocation()
                         && location.equals(capturingUnit.getLocation()),
-                "Capturing force must be on the colony tile");
-        final Map<Unit, Location> escapes = planCapture(capturingUnit)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Colony cannot be captured"));
+                "Capturing force must have won the battle on the colony tile");
+        final Map<Unit, Location> escapes = defense.getEscapes();
+        Preconditions.checkState(
+                planOccupantTransfer(capturingUnit, false)
+                        .filter(escapes::equals).isPresent(),
+                "The planned colony capture changed");
         escapes.forEach(this::escapeOneStep);
         model.getEnemyUnitsAt(player, location).stream()
                 .filter(unit -> !unit.getType().isShip())

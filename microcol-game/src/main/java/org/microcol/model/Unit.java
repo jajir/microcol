@@ -142,8 +142,6 @@ public interface Unit {
     Optional<AttackOrder> prepareAttack(Location targetLocation,
             boolean allowDeclaration);
 
-    boolean isPossibleToCaptureColonyAt(Location targetLocation);
-
     boolean isPossibleToEmbarkAt(Location targetLocation);
 
     boolean isPossibleToGoToPort(Location moveToLocation);

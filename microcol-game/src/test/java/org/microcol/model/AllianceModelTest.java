@@ -743,6 +743,20 @@ class AllianceModelTest {
     }
 
     @Test
+    void allianceDeniesTheColonyAttackReviewEvenWithDeclaration() {
+        final ModelPo data = data("Dutch");
+        relate(data, "Dutch", "France", EuropeanRelationState.ALLIANCE);
+        final Model model = contact(data);
+        final Unit visitor = model.getUnitById(0);
+        ((org.microcol.model.unit.UnitFreeColonist) visitor)
+                .setHoldingGuns(true);
+        final String before = snapshot(model);
+        assertTrue(visitor.prepareAttack(COLONY, true).isEmpty());
+        assertFalse(visitor.isPossibleToAttackAt(COLONY));
+        assertEquals(before, snapshot(model));
+    }
+
+    @Test
     void declarationAloneNeitherRecordsAggressionNorDrawsAllies() {
         final ModelPo data = data("Dutch", "Spain");
         relate(data, "France", "Spain", EuropeanRelationState.ALLIANCE);
@@ -761,10 +775,15 @@ class AllianceModelTest {
         relate(data, "Dutch", "France", EuropeanRelationState.WAR);
         relate(data, "France", "Spain", EuropeanRelationState.ALLIANCE);
         data.getUnits().removeIf(unit -> unit.getId() == 6);
+        data.setCombatRandomState(CombatDraws.attackerWins());
         final Model model = contact(data);
         final Unit capturer = model.getUnitById(0);
-        assertTrue(capturer.isPossibleToCaptureColonyAt(COLONY));
-        capturer.moveOneStep(COLONY);
+        ((org.microcol.model.unit.UnitFreeColonist) capturer)
+                .setHoldingGuns(true);
+        // A step never takes a colony its inhabitants defend; the won battle
+        // is the actual aggression that obliges the victim's allies.
+        assertFalse(capturer.isPossibleToMoveAt(COLONY));
+        capturer.prepareAttack(COLONY, false).orElseThrow().execute();
         assertEquals("Dutch",
                 model.getColonyAt(COLONY).orElseThrow().getOwner().getName());
         assertRelation(model, "Dutch", "France", EuropeanRelationState.WAR);

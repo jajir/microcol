@@ -107,16 +107,13 @@ public final class FogPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** The royal force takes a colony while the player cannot see it. */
+    /**
+     * The royal force wins the colony's defense battle while the player cannot
+     * see it.
+     */
     public void captureColonyByKing(final Location colony,
             final int forceUnitId) {
-        getRobot().interact(() -> {
-            final Unit force = getModel().getUnitById(forceUnitId);
-            force.placeToLocation(colony);
-            force.takeOver(getModel().getPlayerByName("Dutch's King"));
-            getModel().getColonyAt(colony).orElseThrow().captureColony(force);
-        });
-        WaitForAsyncUtils.waitForFxEvents();
+        new RoyalBattlePage(getContext()).captureColony(colony, forceUnitId);
     }
 
     /** Erase the player's accumulated exploration to start from nothing. */
