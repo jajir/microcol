@@ -428,6 +428,11 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
 | [R-0230](R-0230.md) | Evaluate balance and pace across full campaigns | New capture | P31 observed whole-game balancing |
 
+## Completion callbacks — 2026-10-18
+
+[R-0243](done/R-0243.md) implements worker, Docker and CI completion callbacks.
+It preserves existing test/review gates and does not select additional gameplay work.
+
 ## Choosing further work
 
 The selected R-0057–R-0061 cloud trial is complete and published; its

@@ -35,6 +35,13 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 
 ## From game code to a distribution
 
+The [completion runner](../scripts/codex/run.py) is host-side development tooling,
+outside Maven and game packages. It supervises existing worker/Docker/CI commands
+and queues a result to the originating Codex task. Per-run request, logs, result
+and notification records remain in the operator log directory. Its standard-library
+tests run in documentation CI; [operations](ai/completion-callbacks.md) owns usage
+and limits. It does not perform acceptance, change model profiles or publish builds.
+
 The [local worker launcher](../scripts/local-worker/worker.py) is development
 tooling outside the Maven modules. Its [profile](../.codex/local-worker/profile.json)
 and [Modelfile](../.codex/local-worker/Modelfile) configure medium/64k execution.

@@ -48,6 +48,7 @@ From the repository root, with Python 3.9 or newer:
 ```sh
 python3 -m venv target/docs-venv
 target/docs-venv/bin/python -m pip install -r requirements-docs.txt
+target/docs-venv/bin/python -m unittest discover -s scripts/codex -p 'test_*.py'
 target/docs-venv/bin/python -m unittest discover -s scripts/local-worker -p 'test_*.py'
 target/docs-venv/bin/python -m unittest discover -s scripts/docs -p 'test_*.py'
 target/docs-venv/bin/python -m mkdocs build --strict
@@ -84,7 +85,7 @@ consistency checks, not gameplay acceptance tests.
   `main` when deployment is intended.
 
 The build uses Python 3.12, installs the pinned documentation tools, and executes
-the local worker launcher tests (without inference), the repository-link checks
+the completion-runner and local worker launcher tests (without inference), the repository-link checks
 and `python -m mkdocs build --strict`. It
 uploads `target/docs-site/` as the Pages artifact. The dependent deployment job
 publishes only successful builds from `main` at `/microcol/`. Source-code links in

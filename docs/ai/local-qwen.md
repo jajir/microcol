@@ -1030,6 +1030,11 @@ dispositions make compliance reviewable; they do not replace actual verification
 
 ### Prepare, invoke, verify
 
+For agent-driven attempts, dispatch the existing launcher through the
+[completion runner](completion-callbacks.md#worker). It reports completion to the
+originating task without repeated cloud-model status checks. The steps below,
+including actual acceptance and lock release, remain mandatory.
+
 1. Prepare a detached worktree at the agreed `main` revision. For a historical
    replay, use its recorded historical main revision and explicitly copy the
    original acceptance inputs. Never give the worker the main checkout.
@@ -4362,3 +4367,78 @@ committed for this experiment.
     review of callback/pause and role-transition atomicity for the same worker
     session after quota reset. No failed check is called repaired, no partial
     R-0105 acceptance is recorded, and no new worker budget is started.
+
+
+## Completion callbacks — 2026-10-18
+
+1. [R-0243](../requirements/done/R-0243.md) adds host-side completion delivery;
+   [operations](completion-callbacks.md) owns the commands and limits. The original
+   worker launcher, model profiles, cumulative budgets and caller acceptance
+   remain authoritative.
+2. Local implementation job: `2026-10-18-r243-completion`, isolated baseline
+   `288e3e91ca92d5b403c7bf3b8658b608556091e1`, medium/64k. The worker owns only
+   the new runner and its portable tests; the caller owns requirements, workflow
+   integration, documentation, actual checks and review. The candidate was not
+   integrated; the caller subsequently implemented the runner directly.
+3. Medium attempt 0 completed in 768.145 seconds (2,994 input / 5,568 output
+   tokens), with the expected 98,304-token context and successful unload. It
+   returned two code blocks rather than editing files. The caller matched the
+   original skeleton hashes before extracting the blocks into the isolated tree.
+   All six candidate tests failed; a direct CLI check raised `float.isfinite`
+   `AttributeError`. Review also found an invalid queue option, blocking dispatch,
+   ineffective test stubs, omitted Docker cleanup and CI identity/final-state
+   validation. This result is rejected, not accepted from launcher exit zero.
+4. Repair 1 used high/64k in the same job and worktree with unchanged budgets.
+   The diagnosed omissions justify escalation; explicit text-only anchors remove
+   the output-mode ambiguity. Actual checks and original acceptance remain
+   unchanged. With no reviewable output after nearly an hour, the caller stopped
+   the owned launcher with SIGTERM: 3,590.847 seconds, 4,358.992 cumulative worker
+   seconds, exit -15 and successful model unload. The host lock was released.
+   The broad multi-adapter assignment proved unsuitable for this worker; repeating
+   it was not justified. `takeover-decision.json` preserves that diagnosis. The
+   user then explicitly requested Codex for all remaining work. No further model
+   inference or local-worker repair is used for this requirement.
+5. Both attempt callbacks were enqueued to the originating desktop task; the
+   first resumed it. The second reports cancellation, not an accepted repair.
+   The caller's standard-library runner retains the original launchers and gates.
+   A fresh review checked argument forwarding, process ownership, source/run/task
+   identity, bounded cleanup and separate notification failure. The review changed
+   cleanup to stop the Docker client before removing its owned container, avoiding
+   a container-creation race; no test or gameplay assertion was weakened.
+6. Production-runner live probes on 2026-10-18 were acknowledged by the exact
+   isolated desktop task `01a15004-8364-7c93-baff-c384e0e07ebf`:
+   worker preflight failure `20261018T184529Z-31438392f5e1` (exit 1, missing job
+   metadata, no inference); Docker startup deadline `20261018T184529Z-62f86db22784`
+   (15-second deadline, 31.467 seconds including cleanup, no leftover container);
+   CI success `20261018T184549Z-0229709c7dc1` (existing Pages run 39124554783,
+   exact commit `eb4422281e71c7abdbdf415c6bd04016785a6f7f`). Per-run evidence is
+   retained under `~/Library/Logs/Microcol/completions/`. These prove callback
+   delivery, not acceptance of the new source or a new publication.
+7. The five existing Docker runner checks passed: success, test failure, export
+   failure, read-only clean source with quoted argument forwarding, and report
+   readability by an unprivileged Linux user. The final portable checks pass:
+   19 completion-runner, 21 worker-launcher (stubs, no inference), 13 CI-classifier
+   and 9 documentation tests. A first rerun exposed a 0.1-second stub-startup race
+   under compilation load; the timeout fixture now permits startup and the
+   detached-dispatch check uses explicit release-file synchronization. No required
+   assertion was removed.
+8. Successful production-runner Docker run `20261018T184842Z-f2fd9787ff77`
+   finished in 84.631 seconds and its callback was acknowledged by the probe task.
+   Report `run-P5uABi` contains 3 `PageVerificationContractTest` checks and 7
+   `TC_18_F01_plow_field_test` checks, all passing with no errors or skips.
+   No game source, fixture, page object or scenario assertion changed. The
+   [functional evidence](../functional-tests.md#r-0243-completion-runner-2026-10-18)
+   separates this targeted check from the unchanged full CI gate.
+9. Live active-container timeout `20261018T185033Z-c6f3b02ec2d4` exposed a
+   cleanup race: Docker's automatic removal was already in progress when explicit
+   removal ran. The container disappeared, but the first version reported an
+   error. The caller added a bounded retry for exactly that Docker response and
+   case-insensitive missing-container recognition, plus a regression that preserves
+   the command's failure result while checking successful cleanup. Replacement
+   `20261018T185152Z-bb726d0b41ed` observed the real running container, reached its
+   15-second deadline, completed cleanup in 25.467 seconds total, and confirmed
+   the container absent before acceptance, with no cleanup errors. Its partial
+   Maven log is retained; intentionally interrupted compilation is not a test pass.
+10. Strict MkDocs and rendered-page/link inspection passed. The rejected worker
+    worktree was archived with a recoverable snapshot; job/attempt evidence remains
+    in the operator logs. Publication remains independently pending.

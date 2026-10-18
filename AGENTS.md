@@ -190,6 +190,18 @@ and interaction details in page objects instead of weakening tests. Record actua
 test selection, counts and results; a skipped or failing scenario is an open
 blocker, not a verified change. Use the contract's completion checklist.
 
+# Completion callbacks
+
+For long worker attempts, Docker tests and CI watches, use the
+[completion runner](docs/ai/completion-callbacks.md) with the exact originating
+Codex task UUID and an explicit timeout. Record the returned run directory and
+supervisor PID, then continue independent work or end the turn to await its queued
+completion message. Do not spend model turns repeatedly polling or create a cloud
+monitor agent. Inspect saved evidence on callback; completion is not acceptance.
+Preserve all required tests, review, repair budgets and publication checks.
+A delivery failure requires diagnosis from the saved notification record, not
+blind retries or silent success. Keep the app and host available as documented.
+
 # Local worker
 
 Cloud-token savings take priority over speed and unnecessary parallel cloud

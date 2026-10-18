@@ -25,6 +25,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Requirement work areas](requirements/areas.md) | Ten areas covering the manual rules, their boundaries, and an area-first workflow beginning with menu structure. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |
 | [Local development worker](ai/local-qwen.md) | The configured local worker, delegation workflow, and verification evidence. |
+| [Completion callbacks](ai/completion-callbacks.md) | Resume the originating Codex task after worker, Docker or CI completion. |
 | [Writing and publishing documentation](publishing.md) | Where to edit, how to preview, and how automatic publication works. |
 
 The navigation includes all Markdown pages in `docs/`, including newly committed

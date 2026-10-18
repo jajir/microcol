@@ -148,6 +148,11 @@ platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odem�
 
 ### Docker UI tests
 
+Při práci agenta spouštět dlouhý běh přes
+[completion runner](ai/completion-callbacks.md#docker-tests) s UUID původního
+tasku. Po callbacku ověřit konkrétní reporty; watchdog ani oznámení nenahrazují
+přejímku. Níže uvedený foreground příkaz, výběr testů a CI zůstávají platné.
+
 Z kořene repozitáře spustit:
 
 ```sh
@@ -5219,3 +5224,17 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [operating evidence](ai/local-qwen.md). Full second-batch regression and
    publication remain pending; R-0124 production and R-0125 movement matrices
    are separate requirements. No full visual suite was run.
+
+## R-0243 completion runner — 2026-10-18
+
+1. Host-side completion delivery changes no gameplay, fixture, selector or test
+   assertion. The existing five Docker runner checks pass. Real Docker run
+   `run-P5uABi` through the completion runner passes **10 checks**: 3
+   `PageVerificationContractTest` and 7 `TC_18_F01_plow_field_test`, with zero
+   failures, errors or skips. Maven exit is 0; the exact desktop probe task
+   acknowledges the success callback.
+2. Intentional timeout probes verify cleanup and notification, not gameplay
+   acceptance. Their evidence and the diagnosed automatic-removal race are in
+   [the operating record](ai/local-qwen.md#completion-callbacks-2026-10-18).
+   The full Docker suite, native packaging and publication gates remain required
+   in CI; the targeted local run does not replace them.

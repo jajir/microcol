@@ -93,6 +93,10 @@ or interrupt a running game when another commit is published. The initial
 launcher is a separate bootstrap download; game updates do not silently replace
 its own code.
 
+For agent-driven publication, use the [completion watcher](ai/completion-callbacks.md#github-actions)
+for each exact pushed-commit run. Its callback resumes verification; it never
+replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
+
 ## CI filtering
 
 [R-0113](requirements/done/R-0113.md) defines this contract, selected on 2026-10-15.
