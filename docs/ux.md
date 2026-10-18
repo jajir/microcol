@@ -4,6 +4,10 @@ MicroCol má zachovat strategickou hloubku a současně hráči pomáhat pochopi
 
 Tato stránka je společným místem pro pravidla UX, popis současného ovládání a zjištění z jeho ověřování. Navazuje na [grafické zadání](graphics.md#soucasne-zadani-vzhledu) a [pravidla zvukové odezvy](audio.md). Platná pracovní dohoda z **11. října 2026**. Technická pozorování níže vycházejí z kódu na větvi `develop`, revize `77f75eb03c74f07ad0253595d14fb0b31ac6e78a`; nejsou výsledkem pozorování hráčů.
 
+Výtvarné provedení společných prvků od **18. října 2026** určuje
+[minimalistický grafický manuál](graphics.md#minimalisticky-graficky-manual),
+včetně stavů ovládání a tloušťky čar při výsledné velikosti UI.
+
 ## Společná pravidla pro další změny
 
 | Pravidlo | Jak se projeví ve hře |

@@ -2,9 +2,12 @@
 
 MicroCol používá SVG jako editovatelné výtvarné podklady. Za běhu načítá rastrové soubory z `microcol-game/src/main/resources/images`, z některých vyřezává malé obrázky a další skládá do pozadí obrazovek. Změna SVG se ve hře projeví až po exportu a zařazení odpovídajícího rastrového souboru mezi resources.
 
-Tento popis zachycuje všech **24 SVG** v `microcol-game/src/graphics`, všech **47 rastrových souborů** v `resources/images` a kód, který je používá. Vysvětluje současné technické vazby a platné obecné zadání vzhledu. Detailní pravidla stylu a historického zasazení zatím nejsou předmětem práce.
+Stránka vlastní [minimalistický grafický manuál](#minimalisticky-graficky-manual)
+dohodnutý 18. října 2026 a technické vazby obrázků. Historický inventář níže
+zachycuje **24 SVG** v `microcol-game/src/graphics`, **47 rastrových souborů**
+v `resources/images` a tehdejší spotřebitele; nejde o aktuální úplný počet.
 
-Stav k **11. říjnu 2026**, větev `develop`, revize `1854fa5446f54cbf99d4f6892d7f32aa4e3e5a00`. Rozměry níže jsou skutečné rozměry uložených obrázků v pixelech, pokud není výslovně uvedena velikost UI komponenty nebo souřadnice SVG.
+Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`, revize `1854fa5446f54cbf99d4f6892d7f32aa4e3e5a00`. Rozměry níže jsou skutečné rozměry uložených obrázků v pixelech, pokud není výslovně uvedena velikost UI komponenty nebo souřadnice SVG.
 
 ## Současné zadání vzhledu
 
@@ -12,13 +15,136 @@ Každá změna vzhledu musí zachovat herní výsledky podle
 [pravidel funkčních testů](functional-tests.md). Kontrola obrázku nenahrazuje
 provedení dotčených hráčských scénářů.
 
-Platná dohoda z **11. října 2026**: konkrétní výtvarné detaily nyní není potřeba předem specifikovat. Pro novou i upravovanou grafiku stačí tato pravidla:
+Platná dohoda z **18. října 2026** rozšiřuje obecné zadání z 11. října
+o minimalistický manuál. Pro novou i upravovanou grafiku platí:
 
 - Přibližně navazovat na současný vzhled hry, aby nové prvky působily jako její přirozená součást.
 - Držet vysoký kontrast a dobrou čitelnost objektů vůči pozadí i v malých zobrazovaných velikostech.
 - Usilovat o co nejhezčí a líbivý výsledek; konkrétní výtvarné řešení volí asistent podle vlastního estetického úsudku v rámci těchto pravidel.
 
-Přesná paleta, způsob obrysů, stínování, proporce a další podrobnosti teď nepotřebují samostatné schvalování. Chybějící detailní stylový manuál není důvod zastavovat funkční změnu ani si vyžadovat další zadání vzhledu. Technické požadavky na rozměry, výřezy, průhlednost a zapojení obrázků popsané níže platí dál.
+Rutinní výtvarné volby v rámci manuálu nevyžadují nové schválení. Zbývající
+optické doladění ani dosud nevytvořený vzorník neblokují funkční změny.
+Technické požadavky na výřezy, průhlednost a zapojení obrázků platí dál.
+Zápis dohody vede [R-0242](requirements/done/R-0242.md); nejde o provedený redesign hry.
+
+## Minimalistický grafický manuál
+
+**MicroCol vypadá jako svět nakreslený inkoustem na papíře, místy vybarvený
+plnou barvou. Kresba je živá, ovládání přehledné a přesné.**
+
+### Kresba a společné prvky
+
+| Prvek | Dohodnuté pravidlo |
+| --- | --- |
+| Čáry | Tmavý inkoust, mírně nepravidelná cesta, měkká zakončení a spoje. Nepravidelnost není roztřesení ani náhodně různá tloušťka mezi obrázky. Rozlišovat detail, běžný obrys a zvýraznění. |
+| Výplně | Jednobarevné plochy; část kresby zůstává nevybarvená. Výchozí vzhled bez přechodů, lesku a plastických efektů. |
+| Tlačítka | Světlý papírový podklad a kreslený obrys. Hlavní akce dostává barevnou výplň s čitelným textem; společná rodina tvarů napříč obrazovkami. |
+| Stavy | Rozlišit běžný stav, najetí, stisk, klávesnicový fokus, výběr a nedostupnost. Fokus a výběr označit také tvarem či další linkou; nedostupnost má dohledatelný důvod. |
+| Typografie | Čitelné rukopisné písmo pro názvy a krátké popisky. Delší texty, tabulky a čísla upřednostňují čitelnost v malé velikosti. Nejvýše dvě rodiny; konkrétní fonty vybrat až na vzorku s českou diakritikou a čísly. |
+| Oddělení obsahu | Přednostně volným místem; kde nestačí, jemnou kreslenou linkou. Silný rám jen pro hlavní skupiny. |
+| Ikony a ilustrace | Jednoduchá silueta, společný charakter obrysu, málo vnitřních detailů. Kontrolovat skutečnou zobrazovanou velikost. |
+| Rozložení | Pravidelné mezery a zarovnání. Kreslený okraj nesmí zasahovat do textu ani zmenšovat klikací plochu. |
+
+Texty a ovládání zůstávají skutečnými prvky UI kvůli překladům, zvětšení
+a klávesnici. SVG slouží ilustracím, ikonám, obrysům a dekoracím.
+Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-zmeny).
+
+### Výchozí paleta
+
+Paleta je výchozí návrh k vizuálnímu ověření. Barvy světa pocházejí ze
+stávajícího `colors.properties`; zápis nemění konfiguraci ani pixely PNG.
+
+| Role | Barva | Stav |
+| --- | --- | --- |
+| Inkoust | `#292824` | Návrh neutrálního základu |
+| Papír | `#F5F1E7` | Návrh neutrálního základu |
+| Moře | `#0084C9` | Současná `sea-1` |
+| Vegetace | `#489B4B` | Současná `grass-1` |
+| Zemina a základ dřeva | `#AD7141` | Současná `dirt-1`; použití pro dřevo je návrh |
+| Slunce a drobný akcent | `#D0D627` | Současná `sun-1`; použití pro akcent je návrh |
+
+Barva světa automaticky není vhodné pozadí tlačítka. Každou kombinaci
+textu, výplně a stavu ověřit samostatně; důležitý význam nesmí záviset
+jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a-prebarvovani).
+
+### Materiály a jejich význam
+
+| Materiál | Použití a způsob kresby |
+| --- | --- |
+| Papír | Dialogy, seznamy, zprávy. Klidná světlá plocha pod textem, kreslený okraj. |
+| Dřevo | Fyzické tabule, stavby a bedny. Několik tahů naznačí strukturu; bez husté textury pod popisky. |
+| Látka | Vlajky a příslušnost. Jednoduchý obrys a naznačený záhyb. |
+| Vosková pečeť | Potvrzení nebo splnění cíle. Rozpoznatelný symbol doprovázený textovým významem. |
+
+Příklady charakteru kresby už poskytují moře a horizont hlavního menu,
+bedny a pečeť v [katalogu podkladů](#katalog-vsech-svg-zdroju).
+Dosavadní šedá plastická tlačítka nejsou cílovým vzorem této dohody.
+Budoucí vizuální vzorník má ukázat paletu, písma, všechny stavy tlačítek,
+jeden dialog, oddělovací čáry, ikony a materiály. Ověřit jej na hlavním menu
+i informačně hustém dialogu; tento zápis samotný vzorník ani jeho přejímku nenahrazuje.
+
+### Stejná tloušťka čar na obrazovce
+
+1. **Dohodnutý cíl:** čáry stejné role mají stejnou jmenovitou tloušťku
+   při stejném měřítku UI, bez ohledu na velikost obrázku. Ruční charakter
+   vzniká hlavně tvarem cesty. Detail, běžný obrys a zvýraznění zůstávají
+   úmyslně odlišné role.
+2. Tloušťku definovat v **logických pixelech výsledného UI**, nikoli pouze
+   v jednotkách kreslicí plochy SVG. HiDPI/Retina a uživatelské zvětšení
+   škálují celé UI; nechceme jim bránit. Nejde o záruku stejného počtu
+   fyzických pixelů ani milimetrů na všech monitorech.
+3. **Pracovní návrh pro vzorník:** detail 1,5, běžný obrys 2 a zvýraznění
+   3 logické px při základním měřítku. Hodnoty ještě nejsou implementované
+   ani opticky ověřené. Drobné ikoně raději ubrat detail než automaticky
+   ztenčit všechny její čáry; pod 1 logický px nenavrhovat podstatný detail.
+4. Běžný tah se škáluje spolu s obrázkem: zmenšení 100 → 50 při tahu 2
+   vytvoří tah 1. Další zmenšení může čáru zesvětlit, rozmazat nebo potlačit;
+   naopak ponechaný silný tah může ve velmi malé ikoně slít sousední detaily.
+5. SVG nabízí `vector-effect="non-scaling-stroke"`, který u podporujícího
+   rendereru zachová šířku tahu při transformacích uvnitř SVG v souřadnicích
+   jeho viewportu. Atribut dát na jednotlivé kreslené prvky; nedědí se.
+   Nechrání následné zvětšení hotového rastru ani obecně transformaci jeho
+   vnějšího kontejneru. Viz [specifikace W3C](https://www.w3.org/TR/SVG2/coords.html#VectorEffects).
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="48" height="48" viewBox="0 0 96 96">
+  <path d="M12 48 Q36 45 48 48 T84 48"
+        fill="none" stroke="#292824" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"/>
+</svg>
+```
+
+Při viewportu 48 × 48 má tento příklad nominálně tah 2 viewportové px;
+bez `vector-effect` by měl 1 px. Jde o příklad standardu, ne o důkaz podpory
+v aktuálním exportéru hry. Tah musí zůstat tahem (`stroke`): po převodu
+na vyplněný obrys jde o geometrii, kterou `non-scaling-stroke` neochrání.
+
+### Export a kontrola výsledné velikosti
+
+1. MicroCol dnes používá cestu **SVG → PNG → UI**. Po exportu už PNG nezná
+   tahy ani `vector-effect`; jeho zmenšení zeslabí i čáry. Samotný atribut
+   v SVG proto stejnou tloušťku ve hře nezaručuje.
+2. Pro každý dotčený asset zapsat zdroj, exportní velikost, cílovou logickou
+   velikost v UI a roli tahu. Exportovat z SVG pro cílovou velikost; nevyrábět
+   malé ikony opakovaným zmenšováním velkého PNG. Potřebuje-li drobná varianta
+   méně detailů, upravit její kresbu.
+3. U rastrového podkladu platí přibližně: **tloušťka v UI = tloušťka v PNG ×
+   (zobrazená logická šířka / pixelová šířka PNG)** při rovnoměrném škálování.
+   Například PNG široké 96 px s tahem 4 px, zobrazené na 48 logických px,
+   dává tah 2 logické px. Export s `non-scaling-stroke` může ponechat pouze
+   2 px i ve větším PNG; pouhé zdvojení rozlišení tak není zárukou správného
+   HiDPI podkladu. Ověřit tah a nastavení konkrétního rendereru.
+4. Přejímka musí porovnat SVG, exportovaný PNG a skutečné UI vedle referenční
+   čáry stejné role. Zkontrolovat nejmenší používanou velikost, velkou variantu,
+   základní i HiDPI měřítko, relevantní velikosti okna, světlé/tmavé pozadí,
+   fokus a nedostupnost. Posoudit souvislost čáry, čitelnost a neslévání detailů;
+   samotná kontrola atributu v XML nestačí.
+5. Opakovatelnost exportu a evidence rozměrů patří do [R-0225](requirements/R-0225.md),
+   kontrola viditelného výsledku do [R-0224](requirements/R-0224.md) a kontrola
+   ovládání do [R-0222](requirements/R-0222.md). Tato dohoda je nezahajuje.
+   V nynějším zápisu nebyly přegenerovány herní obrázky ani ověřen runtime.
 
 ## Jak obrázek projde od kresby do hry
 
@@ -493,7 +619,7 @@ Technická kompatibilita současné hry vyžaduje zachovat souřadnice, rozměry
 6. Prohlédnout skutečné obrazovky v různých velikostech okna: návaznost krajů, umístění živých prvků, čitelnost, alfa překryvy a rámy kolem dynamického obsahu.
 7. Zařadit společně upravené SVG, výsledná PNG a případné změny mapování/CSS. Aktualizovat tento katalog, pokud se změnil technický význam, rozměr nebo použití.
 
-Pokud později vzniknou podrobná pravidla pro historické období, proporce, paletu, obrysy, světlo, přechody a textury, mohou na tento popis navázat. Do té doby se práce řídí [současným zadáním vzhledu](#soucasne-zadani-vzhledu). Technická omezení jako otáčení pobřeží, průhledné lesy nebo zmenšování produkčních ikon platí při každé úpravě.
+Výtvarné volby se řídí [minimalistickým manuálem](#minimalisticky-graficky-manual); případné další upřesnění historického období či proporcí na něj naváže. Technická omezení jako otáčení pobřeží, průhledné lesy nebo zmenšování produkčních ikon platí při každé úpravě.
 
 ## Nejasnosti a nesoulady k dalšímu řešení
 

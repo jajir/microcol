@@ -592,3 +592,23 @@ documentation in APT just to make it visible on the web.
    documentation-only commit recording this evidence does not replace the game
    distribution; its Pages deployment and intentionally skipped game jobs are
    checked separately under the filtering contract.
+
+
+## Minimal graphics manual — 2026-10-18
+
+1. [R-0242](requirements/done/R-0242.md) records the agreed hand-drawn visual
+   direction, initial palette, controls, typography, materials and consistent
+   final-size strokes in the existing [graphics manual](graphics.md#minimalisticky-graficky-manual).
+   R-0222/R-0224/R-0225 consume these decisions and remain `new`.
+2. Local acceptance passed **21 launcher tests** without model inference,
+   **nine documentation tests** and **strict MkDocs**. Browser preview inspection
+   checked the manual's table layout; rendered content and relative links were
+   reviewed. SVG semantics were checked against the linked W3C specification.
+3. Only documentation changed. No game artwork, font, Java, CSS or export tool
+   changed; runtime/HiDPI acceptance and a visual specimen sheet remain future
+   work. Main-agent editing kept the requirement and shared design decisions
+   together; no worker run or measured token saving is claimed.
+4. Publication is verified independently after push through Pages deployment
+   and the docs-only CI filters. The pre-change automatic game manifest names
+   [dev-171-333de9b6bf8f](https://github.com/jajir/microcol/releases/tag/dev-171-333de9b6bf8f);
+   this documentation change requests no new game distribution.
