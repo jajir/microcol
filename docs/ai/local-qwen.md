@@ -27,6 +27,10 @@ The user explicitly accepts slower inference for this model trial. A completed
 smoke test is not evidence of general Java coding quality or sufficient capacity
 for larger assignments.
 
+Supported Codex and Claude Code sessions on this host use the
+[Headroom setup](headroom.md) by default as of 2026-10-18. It preserves model/authentication choices and all acceptance
+gates; the local Ollama worker keeps its separate provider.
+
 ## Cloud-token priority and medium-to-high policy — 2026-10-14
 
 1. [AGENTS.md](../../AGENTS.md#local-worker) owns the project priority: saving
@@ -4462,3 +4466,14 @@ committed for this experiment.
     counts and unchanged assertions are recorded with R-0101's functional
     evidence. Documentation checks and strict MkDocs pass; full CI on the
     repaired source remains required before publishing a new game build.
+14. Repaired commit `cffcd9a39f443f55cfe8f653cdb4cca7bf96160c` passes
+    [development #175](https://github.com/jajir/microcol/actions/runs/39160063302):
+    2,299 model and 367 UI/contract checks, 32 build-tool checks and 2,332 checks
+    on each native platform, all with zero failures/errors/skips. Java compatibility
+    and Pages pass on the same commit. The completion notification record queues
+    success to the exact originating task; this later inspection does not claim
+    the queued message has already been consumed. The downloaded automatic
+    channel and immutable release manifests agree on
+    [dev-175-cffcd9a39f44](https://github.com/jajir/microcol/releases/tag/dev-175-cffcd9a39f44),
+    and the macOS launcher's SHA-256 matches the published checksum. Build #174
+    remains a failed historical run; #175 establishes repaired publication.

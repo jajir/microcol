@@ -5143,6 +5143,16 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    desktop task after 165.903 seconds. Review confirms only four liberty values
    changed in the fixtures; no Java formatting is needed. Full CI/publication
    must still pass on the repaired commit.
+8. Repaired source `cffcd9a39f443f55cfe8f653cdb4cca7bf96160c` passes full
+   [development #175](https://github.com/jajir/microcol/actions/runs/39160063302):
+   **2,299 model and 367 UI/contract checks**, zero failures/errors/skips.
+   The downloaded XML reports also verify 32 build-tool checks and 2,332 checks
+   on each of macOS ARM64, macOS Intel and Linux. Java compatibility and Pages
+   pass on the same commit. The automatic channel manifest matches immutable
+   [dev-175-cffcd9a39f44](https://github.com/jajir/microcol/releases/tag/dev-175-cffcd9a39f44);
+   the downloaded macOS launcher matches its published SHA-256. This closes the
+   fixture-repair publication blocker without changing the earlier recorded
+   second-batch requirement boundaries.
 
 ## R-0102 tax demand and boycott — 2026-10-18
 
