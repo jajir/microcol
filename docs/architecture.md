@@ -877,3 +877,17 @@ tato vynucená událost nemění pravidlo dobrovolného odchodu z opevnění.
 `ColonyBattleOutcome` předává GUI výsledek a výslovné bojiště; animace
 nevyžaduje mapovou polohu pracovníka. Přejímku vede
 [R-0096](requirements/R-0096.md); plná regrese zůstává na hranici dávky.
+
+
+### Politické výrobní bonusy (R-0101)
+
+`PoliticalProduction` je neměnný rozpis odvozený z přesného `RebelSupport`
+a obtížnosti. `Colony.startTurn` předává jediný snímek výrobním výpočtům
+před i po hladomoru a účtování praxe. `ColonyField` a `ConstructionSlot`
+upravují pouze obsazená místa s kladným základem, po profesní úpravě;
+`Construction` následně zachová procentní bonusy a omezení vstupní surovinou.
+Neobsazená výroba ani chov nejsou pracovním místem. Náhledy počítají čerstvé
+hodnoty; `ColonyJobChoice` zahrne přírůstek obyvatel při příchodu pracovníka
+zvenčí. GUI pouze zobrazí společný rozpis. Ukládají se vstupy podpory,
+nikoli opakovaně přičítaný bonus. Stav ověření vede
+[evidence R-0101](functional-tests.md#r-0101-political-production-2026-10-18).

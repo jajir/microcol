@@ -4145,3 +4145,49 @@ committed for this experiment.
     the explicitly recorded test adaptations after the original budget was
     exhausted. This complex task does not justify high for every assignment.
     R-0101 starts on Sonnet medium; Opus remains unused.
+
+72. R-0101 attempt 1 on Sonnet medium completed in 439.258 seconds, exit 0,
+    with no denied tools. Main formatter checked 19 Java files (11 changed;
+    token/idempotence checks pass). Docker `run-JU9QWf` compiled and ran 2,188
+    model checks: 2,187 pass, one error, zero skips. `ColonyTest` uses a mock
+    model without the difficulty required by the new political calculation;
+    the repair must supply a real profile, not relax production validation.
+    Separate UI diagnostic `run-SAOYhq` runs 22 checks: 20 pass, two TC67
+    failures, no errors/skips. F58 has eight zero-liberty residents on
+    Conquistador, so its new Tory penalty changes 3 hammers to 2; starting
+    stock 49 now reaches 51 rather than the church's required 52. The unchanged
+    chapel explains both failures. TC50/52/68/75/77 and source contract pass.
+    Review also requires direct famine/snapshot acceptance, a negative-Tory
+    player journey, and nonzero-support integration for unattended/breeding
+    exclusions, percentage ordering and captured affiliation. Attempt 2 stays
+    on Sonnet medium with this focused diagnosis and the original budget.
+
+73. R-0101 attempt 2 on Sonnet medium completed in 251.967 seconds, exit 0,
+    no denied tools; cumulative worker time is 691.225 seconds. Main formatter
+    checked 24 Java files (four changed; token/idempotence pass). Model run
+    `run-MhAec0` passes 2,206 of 2,209 checks, with three failures and no errors
+    or skips. The new blacksmith tests begin with 100 tools at storage capacity
+    100, then incorrectly expect 103/104 after the normal end-update trim.
+    Final repair must create free storage while retaining expected output and
+    input conservation. Famine and capture-affiliation checks pass. Review
+    still needs a nonzero-support Penn integration, and random famine repeats
+    must not be presented as guaranteed exhaustive victim coverage. The final
+    original attempt escalates to Sonnet high for these repeated fixture and
+    coverage misses; production has not changed since attempt 1.
+
+74. R-0101 final attempt on Sonnet high completed in 37.396 seconds, exit 0,
+    no denied tools; total worker time 728.621 seconds. It changed only model
+    tests: free warehouse capacity, six real Penn/support combinations and
+    one observed-victim famine check instead of six random repeats. Main
+    formatter checked 24 Java files (one changed; token/idempotence pass).
+    `run-97pdNe` passes 2,210 model and nine basic/contract checks. Unchanged
+    selected UI evidence plus final `run-2ymlLP` establishes 2,239 distinct
+    passing checks. Medium authored the implementation; high completed the
+    bounded fixture/coverage repair. No main implementation takeover or Opus
+    was used. Full batch acceptance/publication remains pending.
+
+75. The final R-0101 documentation check caught a main-owned R-0096 catalogue
+    edit missing the mandatory `I / V` prefix on UC-075. The earlier nine-test
+    documentation check preceded that row edit; strict MkDocs alone did not
+    detect it. Main restored `R / N` with the targeted evidence link and reran
+    the catalogue tests and strict build. No game or worker change was needed.

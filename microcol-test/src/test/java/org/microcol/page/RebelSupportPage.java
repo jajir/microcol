@@ -106,11 +106,14 @@ public final class RebelSupportPage extends AbstractScreen {
 
     /** The open colony view shows the same local values read-only. */
     public void verifyColonyTooltip(final String name, final int population,
-            final long liberty, final int percent) {
-        assertEquals(
-                name + " — Rename colony\nPopulation " + population
-                        + ", stored liberty " + liberty
-                        + ", local rebel support " + percent + "%",
+            final long liberty, final int percent, final int bonus,
+            final int tories, final int threshold, final int penalty) {
+        assertEquals(name + " — Rename colony\nPopulation " + population
+                + ", stored liberty " + liberty + ", local rebel support "
+                + percent + "%\n"
+                + "Political production per job: support bonus +" + bonus
+                + ", Tories " + tories + " (penalty from " + threshold
+                + "), Tory penalty " + penalty + ", net " + (bonus + penalty),
                 getNodeFinder().lookup("#colonyName")
                         .queryAs(javafx.scene.control.Label.class).getTooltip()
                         .getText());

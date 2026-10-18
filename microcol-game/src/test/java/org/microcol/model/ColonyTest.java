@@ -231,6 +231,8 @@ public class ColonyTest {
     @BeforeEach
     private void beforeEach() {
         model = mock(Model.class);
+        // The real bundled profile: every loaded model has a difficulty.
+        when(model.getDifficulty()).thenReturn(Difficulty.CONQUISTADOR);
         map = mock(WorldMap.class);
         owner = mock(Player.class);
     }

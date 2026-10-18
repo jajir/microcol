@@ -170,6 +170,8 @@ public class ColonyFieldTest {
         when(map.isValid(any(Location.class))).thenReturn(true);
         when(map.getTerrainTypeAt(any(Location.class)))
                 .thenReturn(TerrainType.GRASSLAND);
+        when(colony.getPoliticalProduction())
+                .thenReturn(PoliticalProduction.NONE);
         field = new ColonyField(model, direction, colony);
         field.setPlaceColonyField(placeColonyField);
     }

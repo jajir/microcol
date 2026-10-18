@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 /**
  * Build religious upgrades, assign preachers and retain actual cross credit.
+ * Fixture purpose: F58 isolates religious production from politics. It has 8
+ * residents and no liberty, so it uses the Discoverer profile (Tory line at 10)
+ * and the net political change stays zero; political effects are in TC_77.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_67_F58_religious_production_test extends AbstractMicroColTest {

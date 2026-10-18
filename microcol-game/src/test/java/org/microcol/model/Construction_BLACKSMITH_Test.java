@@ -25,7 +25,7 @@ class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         final Unit unit = mock(Unit.class);
         when(slot.isEmpty()).thenReturn(false);
         when(slot.getUnit()).thenReturn(unit);
-        when(slot.getPotentialProduction(unit))
+        when(slot.getPotentialProduction(unit, PoliticalProduction.NONE))
                 .thenReturn(Goods.of(GoodsType.TOOLS, budget));
     }
 

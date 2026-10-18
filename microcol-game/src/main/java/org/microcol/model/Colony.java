@@ -211,7 +211,10 @@ public class Colony {
      * nation has Simon Bolivar. Read-only; no bells are created.
      */
     public RebelSupport getRebelSupport() {
-        final long population = getPopulation();
+        return getRebelSupport(getPopulation());
+    }
+
+    private RebelSupport getRebelSupport(final long population) {
         final long capacity = Math.multiplyExact(population,
                 (long) RebelSupport.POINTS_PER_RESIDENT);
         final long bonus = lastColonialAffiliation.getCongressMembers()
@@ -221,6 +224,32 @@ public class Colony {
                         : 0;
         return new RebelSupport(
                 Math.min(Math.addExact(liberty, bonus), capacity), capacity);
+    }
+
+    /**
+     * Fresh political production change from the current support and residents.
+     * Read-only; used for previews and for the snapshot taken at update start.
+     *
+     * @return support bonus and Tory penalty of this colony right now
+     */
+    public PoliticalProduction getPoliticalProduction() {
+        return PoliticalProduction.of(getRebelSupport(), model.getDifficulty());
+    }
+
+    /**
+     * Political production change that applies to the given worker's job. A
+     * resident keeps the current resident count; an outside worker would
+     * increase it by one, which changes the exact support fraction.
+     *
+     * @param worker resident or prospective worker
+     * @return fresh read-only political production change
+     */
+    PoliticalProduction getPoliticalProductionFor(final Unit worker) {
+        if (isResident(worker)) {
+            return getPoliticalProduction();
+        }
+        return PoliticalProduction.of(getRebelSupport(getPopulation() + 1L),
+                model.getDifficulty());
     }
 
     /** Apply the population cap once a resident exit has completed. */
@@ -1006,7 +1035,11 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        final ColonyProductionStats initialProduction = getRawGoodsStats();
+        // One snapshot for food, births, famine and post-famine output; bells
+        // credited below affect the next update only.
+        final PoliticalProduction political = getPoliticalProduction();
+        final ColonyProductionStats initialProduction = getRawGoodsStats(
+                political);
         final int breeding = getBreedingCount(initialProduction);
         // Validate national progress before famine, births or warehouse
         // changes.
@@ -1016,10 +1049,12 @@ public class Colony {
         final int possibleBells = Math.max(0, initialProduction
                 .getStatsByType(GoodsType.BELL).getRowProduction());
         owner.checkCanCreditProducedBells(possibleBells);
-        final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist();
+        final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist(
+                political);
         // from now colony could be destroyed by famine.
         if (isValid()) {
-            final ColonyProductionStats colonyStats = getRawGoodsStats();
+            final ColonyProductionStats colonyStats = getRawGoodsStats(
+                    political);
             final int producedCrosses = Math.max(0, colonyStats
                     .getStatsByType(GoodsType.CROSS).getRowProduction());
             final int producedBells = Math.max(0, colonyStats
@@ -1048,7 +1083,7 @@ public class Colony {
             owner.creditProducedCrosses(producedCrosses);
             owner.creditProducedBells(producedBells);
             applyProducedBells(producedBells);
-            advanceEducationAndExperience(colonyStats);
+            advanceEducationAndExperience(colonyStats, political);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
@@ -1066,15 +1101,17 @@ public class Colony {
     }
 
     private void advanceEducationAndExperience(
-            final ColonyProductionStats committed) {
+            final ColonyProductionStats committed,
+            final PoliticalProduction political) {
         final Set<Integer> schoolCompletions = new HashSet<>();
         final Map<Unit, UnitType> jobs = new LinkedHashMap<>();
         final Set<Unit> productive = new HashSet<>();
         for (final ColonyField field : colonyFields) {
-            if (field.getUnit().isEmpty() || field.getProduction().isEmpty()) {
+            if (field.getUnit().isEmpty()
+                    || field.getProduction(political).isEmpty()) {
                 continue;
             }
-            final Goods goods = field.getProduction().get();
+            final Goods goods = field.getProduction(political).get();
             EducationSkills
                     .forProduction(goods.getType(),
                             goods.getType() == GoodsType.CORN
@@ -1105,8 +1142,8 @@ public class Colony {
                 }
                 final Unit worker = slot.getUnit();
                 jobs.put(worker, skill.get());
-                final int potential = slot.getPotentialProduction(worker)
-                        .getAmount();
+                final int potential = slot
+                        .getPotentialProduction(worker, political).getAmount();
                 final int assigned = Math.min(potential, remaining);
                 remaining -= assigned;
                 if (assigned > 0) {
@@ -1228,8 +1265,9 @@ public class Colony {
         }
     }
 
-    private Unit eatFoodAndOptionallyMakeNewColonist() {
-        final ColonyProductionStats stats = getRawGoodsStats();
+    private Unit eatFoodAndOptionallyMakeNewColonist(
+            final PoliticalProduction political) {
+        final ColonyProductionStats stats = getRawGoodsStats(political);
         final GoodsProductionStats cornStats = stats
                 .getStatsByType(GoodsType.CORN);
         if (cornStats.getInWarehouseAfter() < 0) {
@@ -1597,6 +1635,11 @@ public class Colony {
     }
 
     ColonyProductionStats getRawGoodsStats() {
+        return getRawGoodsStats(getPoliticalProduction());
+    }
+
+    private ColonyProductionStats getRawGoodsStats(
+            final PoliticalProduction political) {
         final ColonyProductionStats out = new ColonyProductionStats();
         // set initial warehouse stack
         GoodsType.GOOD_TYPES.forEach(goodsType -> {
@@ -1607,8 +1650,8 @@ public class Colony {
 
         // get production from all fields
         colonyFields.forEach(field -> {
-            if (field.getProduction().isPresent()) {
-                final Goods production = field.getProduction().get();
+            if (field.getProduction(political).isPresent()) {
+                final Goods production = field.getProduction(political).get();
                 final GoodsProductionStats goodsStats = out
                         .getStatsByType(production.getType());
                 goodsStats.addRowProduction(production.getAmount());
@@ -1622,7 +1665,8 @@ public class Colony {
         ConstructionType.SOURCE_1.forEach(goodsType -> {
             getConstructionProducing(goodsType).ifPresent(con -> {
                 GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
-                ConstructionTurnProduction turnProd = con.getProduction();
+                ConstructionTurnProduction turnProd = con
+                        .getProduction(political);
                 goodsStats.setRowProduction(
                         turnProd.getProducedGoods().get().getAmount());
             });
@@ -1630,19 +1674,20 @@ public class Colony {
 
         // get production from town factories that consume some primary sources
         ConstructionType.SOURCE_2.forEach(goodsType -> {
-            computeSecondaryProduction(out, goodsType);
+            computeSecondaryProduction(out, goodsType, political);
         });
 
         // get production from town factories that consume secondary sources
         ConstructionType.SOURCE_3.forEach(goodsType -> {
-            computeSecondaryProduction(out, goodsType);
+            computeSecondaryProduction(out, goodsType, political);
         });
 
         return out;
     }
 
     private void computeSecondaryProduction(final ColonyProductionStats out,
-            final GoodsType goodsTypeProduced) {
+            final GoodsType goodsTypeProduced,
+            final PoliticalProduction political) {
         if (getConstructionProducing(goodsTypeProduced).isPresent()) {
             final Construction producedAt = getConstructionProducing(
                     goodsTypeProduced).get();
@@ -1660,7 +1705,7 @@ public class Colony {
 
             final ConstructionTurnProduction turnProd = producedAt
                     .getProduction(Goods.of(goodsTypeConsumed,
-                            numberOfavailableInputGoods));
+                            numberOfavailableInputGoods), political);
             goodConsumedStats
                     .addConsumed(turnProd.getConsumedGoods().get().getAmount());
             goodProdStats.setRowProduction(

@@ -5077,3 +5077,41 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    acceptance only: full Docker visual regression and publication/CI remain
    at the second batch boundary, requirement 20. Status remains ready for
    development until that required batch acceptance; no publication is claimed.
+
+
+## R-0101 political production (2026-10-18)
+
+1. Targeted acceptance of [R-0101](requirements/R-0101.md), UC-078: exact
+   support gives staffed positive-base jobs +1 at 50% and +2 at 100%; the
+   difficulty threshold gives a single −1 Tory penalty. One snapshot covers
+   food, famine, post-famine production and productive experience; newly
+   credited bells affect subsequent previews/updates. Prospective job choices
+   account for joining residents. The colony tooltip separates bonus, Tory
+   count/threshold and penalty, with English and Czech text.
+2. `PoliticalProductionTest` checks exact boundaries, all five thresholds,
+   combined/clamped output and prospective population. Integration checks
+   exercise staffed fields, zero-yield exclusion, unattended bells/crosses,
+   horse breeding, specialist then political then press/newspaper/Penn
+   percentages, limited and stocked manufacturing input, actual famine and
+   Bolivar affiliation through European capture/Crown occupation. The famine
+   test observes the actual victim and checks every survivor; it does not
+   claim exhaustive random-victim coverage.
+3. Final Docker `run-97pdNe` passes **2,210 model tests** and nine basic/
+   environment/source-contract checks, zero failures/errors/skips, exit 0.
+   Production code remained unchanged through the test repairs. UI diagnostic
+   `run-SAOYhq` passed TC50 (3), TC52 (2), TC68 (8), TC75 (3) and TC77_01;
+   its two TC67 failures were diagnosed as a Tory-induced construction delay.
+   F58 now explicitly uses Discoverer to isolate its religious rule; existing
+   expected outcomes were preserved. Final `run-2ymlLP` passes TC67 (2),
+   TC77 (2) and source contract (3), zero failures/errors/skips, exit 0.
+   Together these runs establish **2,239 distinct passing checks**.
+4. TC77_01 shows an exact 50% bonus, input-limited tools, population dilution,
+   actual output and Continue. TC77_02 shows Viceroy's six-Tory penalty,
+   removal below the threshold, changed tool production and Continue. TC75
+   retains support accounting; TC67 retains Czech Penn and upgrade paths.
+   New TC77 paths ran in English. Main's formatter checked 24 Java files
+   with code-token/idempotence checks, and documentation validation passed.
+5. [Worker evidence](ai/local-qwen.md) records the medium/medium/high attempts
+   and failed fixture assumptions. This is targeted acceptance, not full-batch
+   regression or publication. Status stays ready for development until the
+   agreed second-batch boundary checks; no additional CI run is claimed.

@@ -125,7 +125,7 @@ public class TC_75_F67_rebel_support_test extends AbstractMicroColTest {
         game = relations.close();
         // One New Amsterdam resident leaves work and stays on the map square.
         ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 2, 200, 50);
+        support.verifyColonyTooltip(COLONY_NAME, 2, 200, 50, 1, 1, 8, 0);
         people.dragIndoorOutside("id_town_hall", 1);
         support.verifyResidentOutside(COLONY);
         support.verifyColonyLiberty(0, 200, 1);
@@ -133,7 +133,7 @@ public class TC_75_F67_rebel_support_test extends AbstractMicroColTest {
         // The resident walks to Delft and takes a carpenter job there.
         support.walkResident(COLONY, DELFT);
         colony = game.openColonyAt(DELFT, "Delft");
-        support.verifyColonyTooltip("Delft", 8, 400, 25);
+        support.verifyColonyTooltip("Delft", 8, 400, 25, 0, 6, 8, 0);
         work.assignCarpenter(17);
         support.verifyResidentWorksAt(1);
         game = colony.close();

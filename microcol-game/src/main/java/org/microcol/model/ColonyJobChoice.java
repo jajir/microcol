@@ -68,9 +68,11 @@ public final class ColonyJobChoice {
         bestFieldYield = bestField == null ? null
                 : bestField.getPotentialProduction(worker, goodsType);
         inputNeeded = constructionType == null
-                || constructionType.getConsumptionPerTurn().isEmpty() ? null
+                || constructionType.getConsumptionPerTurn().isEmpty()
+                        ? null
                         : ConstructionSlot.getPotentialInput(constructionType,
-                                worker);
+                                worker,
+                                colony.getPoliticalProductionFor(worker));
         currentStock = inputNeeded == null ? null
                 : colony.getWarehouse().getGoods(inputNeeded.getType());
         specialty = field == null

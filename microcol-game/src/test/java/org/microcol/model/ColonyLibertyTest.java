@@ -326,13 +326,18 @@ class ColonyLibertyTest {
 
     /** French Quebec (2 residents, liberty 200) at war with the Dutch. */
     private Model freePlayAtWar(final String bolivarNation) {
+        return freePlayAtWar(bolivarNation, 200L);
+    }
+
+    private Model freePlayAtWar(final String bolivarNation,
+            final long liberty) {
         final GameModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol");
         data.getModel().getColonies().forEach(colony -> {
             colony.setLiberty(0L);
             colony.setLastColonialAffiliation(colony.getOwnerName());
         });
-        savedColony(data, 0).setLiberty(200L);
+        savedColony(data, 0).setLiberty(liberty);
         giveBolivar(data, bolivarNation);
         data.getModel().getGameManager().setGameStarted(true);
         // France moves first so its own new resident can be given a job.
@@ -421,6 +426,83 @@ class ColonyLibertyTest {
     void conquerorWithoutBolivarLosesTheFormerOwnersBonusAndTheCrownKeepsNone() {
         // France has Bolivar: 70 %; the Dutch have none, so 50 % remain.
         conquerThenOccupy("France", 70, 50);
+    }
+
+    /**
+     * Production follows the support of the current affiliation: the exact
+     * bonus and the staffed jobs' real output change with Bolivar.
+     */
+    private void verifyProductionFollowsSupport(final Colony colony,
+            final int expectedBonus) {
+        assertEquals(colony.getRebelSupport(),
+                colony.getPoliticalProduction().getSupport());
+        assertEquals(expectedBonus, colony.getPoliticalProduction().getBonus());
+        int checked = 0;
+        for (final ColonyField field : colony.getColonyFields()) {
+            if (field.getUnit().isEmpty()) {
+                continue;
+            }
+            final Unit worker = field.getUnit().get();
+            final GoodsType goods = worker.getPlaceColonyField()
+                    .getProducedGoodsType();
+            if (field.getGoodsTypeProduction(goods) > 0) {
+                assertEquals(
+                        field.getPotentialProduction(worker, goods,
+                                PoliticalProduction.NONE).getAmount()
+                                + expectedBonus,
+                        field.getProduction().orElseThrow().getAmount());
+                checked++;
+            }
+        }
+        for (final Construction building : colony.getConstructions()) {
+            if (building.getType().getProductionPerTurn().isEmpty()) {
+                continue;
+            }
+            for (final ConstructionSlot slot : building
+                    .getConstructionSlots()) {
+                if (!slot.isEmpty()) {
+                    final Unit worker = slot.getUnit();
+                    assertEquals(
+                            slot.getPotentialProduction(worker,
+                                    PoliticalProduction.NONE).getAmount()
+                                    + expectedBonus,
+                            slot.getPotentialProduction(worker).getAmount());
+                    checked++;
+                }
+            }
+        }
+        assertTrue(checked > 0, "A staffed positive-base job is needed");
+    }
+
+    private void conquerThenOccupyForProduction(final String bolivarNation,
+            final int beforeBonus, final int afterBonus) {
+        // 160 of 400 points is 40 %; a Bolivar nation adds 20 points.
+        final Model model = freePlayAtWar(bolivarNation, 160L);
+        final Player dutch = model.getPlayerByName("Dutch");
+        final Player king = model.getPlayerByName("Dutch's King");
+        final Colony quebec = model.getColonyById(0).orElseThrow();
+        verifyProductionFollowsSupport(quebec, beforeBonus);
+        final Unit invader = armedForce(model, quebec, dutch);
+        ColonyBattles.capture(model, quebec, invader);
+        assertSame(dutch, quebec.getLastColonialAffiliation());
+        verifyProductionFollowsSupport(quebec, afterBonus);
+        invader.getPlace().destroy();
+        model.destroyUnit(invader);
+        final Unit royal = model.addUnitOutSideColony(quebec);
+        royal.takeOver(king);
+        ColonyBattles.capture(model, quebec, royal);
+        assertSame(king, quebec.getOwner());
+        verifyProductionFollowsSupport(quebec, afterBonus);
+    }
+
+    @Test
+    void productionGainsTheConquerorsBolivarBonusAndKeepsItUnderCrown() {
+        conquerThenOccupyForProduction("Dutch", 0, 1);
+    }
+
+    @Test
+    void productionLosesTheFormerOwnersBolivarBonusAndCrownKeepsNone() {
+        conquerThenOccupyForProduction("France", 1, 0);
     }
 
     @Test
