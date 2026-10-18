@@ -4337,3 +4337,28 @@ committed for this experiment.
     occurred, and this mixed result is not evidence of autonomous completion
     or measured savings. R-0123 is targeted-accepted as item 19; full batch
     acceptance/publication and R-0105 remain pending.
+
+90. R-0105 resumes after the user resolves royal/Continental infantry and
+    cavalry defeat as destruction with equipment on 2026-10-18. Main records
+    the shared rule in R-0178 and the affected active REF requirements and
+    refines R-0105. Sonnet high is selected for declaration, exact muster,
+    persistent roles and shared combat integration. Attempt 1 stops at the
+    Claude Pro session limit after 1,063.654 seconds, exit 1, no denied tools;
+    the reported reset is 21:00 Europe/Prague on 2026-10-18. This is a quota
+    interruption, not a verified implementation failure. Two original attempts
+    remain, with the same worktree and session; the total budget stays 14,400
+    seconds. Partial implementation and model tests exist, but TC81/F73 has
+    not been written. Main applies the formatter (27 Java files, 13 changed,
+    token/idempotence pass) and runs a diagnostic model check. No main
+    implementation takeover, full UI regression or publication is authorized
+    by this partial result; the agreed batch remains 19 targeted-accepted.
+
+91. Diagnostic Docker `run-PRMDVb` compiles the interrupted production/model
+    tests and runs 2,335 checks: 2,334 pass, one fails, no errors/skips. The
+    new weighted-support test expects 48%, but its actual colony populations
+    are 5/1/6; seven residents at 78% and five at zero give 45.5%, displayed
+    as 45%. The refusal below 50% remains correct. The UI module is not reached.
+    Main prepares this arithmetic repair, completion of missing TC81/F73 and
+    review of callback/pause and role-transition atomicity for the same worker
+    session after quota reset. No failed check is called repaired, no partial
+    R-0105 acceptance is recorded, and no new worker budget is started.

@@ -925,6 +925,13 @@ rules; implementation and acceptance are tracked by that requirement.
    Crown-seized assets and count neither as rebel resources nor destroyed REF.
    Warn before confirmation. Custom-house and de Witt trade use [economy, production and education](#economy-production-and-education)/[native and european relations](#native-and-european-relations).
 
+7. Accepted on 2026-10-18: a defeated Continental infantry/cavalry or royal
+   regular infantry/cavalry unit is destroyed, including its equipment. It
+   neither downgrades nor survives as a colonist, and leaves no separately
+   recoverable equipment. Apply this through the shared battle outcome and
+   retain destroyed REF identity for the separate roster/victory accounting.
+   This decision does not alter ordinary colonial veteran loss progression.
+
 ### Founder details
 
 1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes

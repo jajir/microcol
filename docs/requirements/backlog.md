@@ -23,7 +23,7 @@ The catalogue retains origin and process links even when their records move.
 Each requirement owns its current `Status`, scope, acceptance and open questions.
 
 Remaining-scope capture completed on **2026-10-17**: [coverage and ownership](coverage.md)
-for R-0123–R-0241 and [54 open refinement topics](open-points.md).
+for R-0123–R-0241 and [53 open refinement topics](open-points.md).
 Capture does not change readiness or authorize gameplay implementation.
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)

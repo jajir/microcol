@@ -1,10 +1,10 @@
 # Open points for refinement
 
-1. Snapshot: 2026-10-17, updated 2026-10-18 for the accepted lake rule. Questions are taken only from active requirements; done/deferred/canceled history is excluded. The linked chapter is authoritative. This index does not change readiness or authorize implementation.
+1. Snapshot: 2026-10-17, updated 2026-10-18 for the accepted lake and military defeat rules. Questions are taken only from active requirements; done/deferred/canceled history is excluded. The linked chapter is authoritative. This index does not change readiness or authorize implementation.
 2. Repeated questions share one owner: generated river/resource placement is R-0065; native settlement defense is R-0150; R-0074/R-0095 share one implementation-scope decision; release platform and public-save policy use their owning requirements.
 3. These are decisions for the relevant refinement, not a request to answer everything before selecting the next task. Investigations and routine implementation choices remain in chapter 3 instead of becoming product questions.
 
-Total: **54 requirement-level decision topics**, with multi-part questions kept together and the shared R-0074/R-0095 question counted once.
+Total: **53 requirement-level decision topics**, with multi-part questions kept together and the shared R-0074/R-0095 question counted once.
 
 ## A01 — Entry and release
 
@@ -124,7 +124,6 @@ Total: **54 requirement-level decision topics**, with multi-part questions kept 
 
 5. **[R-0177, chapter 4](R-0177.md#4-open-questions)** — If one ship enters a square adjacent to multiple hostile forts, do all fire in a specified order or does only one fire? If a patrol also intercepts that step, which event resolves first? The accepted single-fort rule does not order simultaneous events.
 
-6. **[R-0178, chapter 4](R-0178.md#4-open-questions)** — On defeat, are royal and Continental infantry/cavalry destroyed or downgraded into another military role, and does any equipment survive separately? The ordinary colonist loss progression does not establish these role outcomes; settle before REF survival acceptance.
 
 ## A10 — Politics, ending and balance
 
