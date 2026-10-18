@@ -23,7 +23,7 @@ The catalogue retains origin and process links even when their records move.
 Each requirement owns its current `Status`, scope, acceptance and open questions.
 
 Remaining-scope capture completed on **2026-10-17**: [coverage and ownership](coverage.md)
-for R-0123–R-0241 and [56 open refinement topics](open-points.md).
+for R-0123–R-0241 and [54 open refinement topics](open-points.md).
 Capture does not change readiness or authorize gameplay implementation.
 This index does not duplicate status values. Use the [workflow](README.md) to
 select one requirement, refine it, then authorize its development. The [shared game rules](../gap-analysis.md#accepted-game-rules)
@@ -187,7 +187,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
-| [R-0123](R-0123.md) | Represent every terrain and legal forest variant | New capture | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
+| [R-0123](R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
 | [R-0124](R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
 | [R-0125](R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
 | [R-0126](R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |

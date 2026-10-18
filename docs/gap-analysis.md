@@ -203,6 +203,16 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
 | Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
 
+Accepted MicroCol decision (2026-10-18): fresh-water lakes retain their own
+terrain identity but otherwise use ordinary ocean water rules. Ships may sail
+on them under the same movement/access conditions and cost as ocean; land units
+need the same transport as on ocean. Colonial fishing uses the ocean baseline
+of three food (the existing `CORN` representation), with the same dock or
+higher-tier prerequisite and subsequent modifiers. A lake is not a sea-lane
+exit to Europe. Water restrictions, including no forests or roads, apply.
+This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
+not runtime acceptance.
+
 Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
@@ -1436,8 +1446,9 @@ rules; implementation and acceptance are tracked by that requirement.
    original Colonization parity.
    User decision on 2026-10-17: roads may be built on every terrain except sea,
    including coastal colony tiles; sea tiles reject road work. The current
-   `TerrainType.isSea` distinction marks `HIGH_SEA` and `OCEAN` as sea; no
-   separate lake rule is implied.
+   `TerrainType.isSea` distinction marks water; the accepted 2026-10-18
+   [lake rule](#terrain-reference-data-audit) includes lakes in the same
+   no-road restriction as ordinary ocean.
 6. Lost-city ordinary outcomes are empty 40%, gold 25%, recruit 15%, expedition
    lost 10%, burial site 10%. Seasoned scout: 30/35/25/5/5%. Gold is 200–500
    uniformly in whole gold; recruit is one free colonist on the explored tile;

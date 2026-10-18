@@ -66,6 +66,29 @@ public final class TerrainType {
             .setProduction(GoodsType.FUR).setBase(4).build()
             .setProduction(GoodsType.LUMBER).setBase(6).build().build();
 
+    /**
+     * Aid-card plains. Only the bare outputs printed on the card are defined
+     * here; the forested production matrix belongs to the production owner.
+     */
+    public final static TerrainType PLAINS = TerrainType.make()
+            .setName("PLAINS").setCode("l").setCanHaveTree(true).setSea(false)
+            .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(1)
+            .build().setProduction(GoodsType.COTTON).setBase(2).build().build();
+
+    /**
+     * Aid-card marsh. Only the bare outputs printed on the card are defined
+     * here; the forested production matrix belongs to the production owner.
+     */
+    public final static TerrainType MARSH = TerrainType.make().setName("MARSH")
+            .setCode("r").setCanHaveTree(true).setSea(false).setMoveCost(2)
+            .setMoveCostWithTree(3).setDefenseBonus(25)
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(1)
+            .build().setProduction(GoodsType.TOBACCO).setBase(3).build()
+            .setProduction(GoodsType.ORE).setBase(3).build().build();
+
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP")
             .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(1)
             .setMoveCostWithTree(2).setDefenseBonus(25)
@@ -85,10 +108,10 @@ public final class TerrainType {
             .setProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType TUNDRA = TerrainType.make()
-            .setName("TUNDRA").setCode("t").setCanHaveTree(false).setSea(false)
+            .setName("TUNDRA").setCode("t").setCanHaveTree(true).setSea(false)
             .setMoveCost(2).setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
-            .build().setProduction(GoodsType.FUR).setBase(5).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setBase(3).build().setProduction(GoodsType.FUR).setBase(5).build()
             .setProduction(GoodsType.LUMBER).setBase(2).build()
             .setProduction(GoodsType.ORE).setBase(2).build().build();
 
@@ -123,9 +146,19 @@ public final class TerrainType {
             .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
             .build().build();
 
+    /**
+     * Fresh-water lake. It keeps its own saved identity but behaves like an
+     * ordinary ocean square for ships and fishing; it is not a sea-lane exit.
+     */
+    public final static TerrainType LAKE = TerrainType.make().setName("LAKE")
+            .setCode("k").setCanHaveTree(false).setSea(true).setMoveCost(1)
+            .setMoveCostWithTree(1).setDefenseBonus(0)
+            .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
+            .build().build();
+
     public final static List<TerrainType> TERRAINS = ImmutableList.of(GRASSLAND,
-            PRAIRIE, SAVANNAH, SWAMP, DESERT, TUNDRA, ARCTIC, HILL, MOUNTAIN,
-            OCEAN, HIGH_SEA);
+            PRAIRIE, SAVANNAH, PLAINS, MARSH, SWAMP, DESERT, TUNDRA, ARCTIC,
+            HILL, MOUNTAIN, OCEAN, LAKE, HIGH_SEA);
 
     private final static Map<String, TerrainType> TERRAINS_BY_NAME = TERRAINS
             .stream().collect(ImmutableMap.toImmutableMap(TerrainType::name,
@@ -393,6 +426,14 @@ public final class TerrainType {
 
     public boolean isSea() {
         return isSea;
+    }
+
+    /**
+     * @return {@code true} for ocean and fresh-water lake squares, which share
+     *         ordinary ship access and fishing; sea lanes are separate
+     */
+    public boolean isOrdinaryWater() {
+        return this.equals(OCEAN) || this.equals(LAKE);
     }
 
     public boolean isLand() {

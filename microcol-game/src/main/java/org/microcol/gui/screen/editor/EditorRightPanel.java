@@ -52,6 +52,26 @@ public class EditorRightPanel implements JavaFxComponent {
         mainPanel.getChildren().add(buttonOcean);
         mainPanel.getChildren().add(buttonMountain);
         mainPanel.getChildren().add(buttonHighSeas);
+
+        addTerrainButton("Plains", TerrainType.PLAINS, mouseOperationManager);
+        addTerrainButton("Marsh", TerrainType.MARSH, mouseOperationManager);
+        addTerrainButton("Lake", TerrainType.LAKE, mouseOperationManager);
+        addTerrainButton("Prairie", TerrainType.PRAIRIE, mouseOperationManager);
+        addTerrainButton("Savannah", TerrainType.SAVANNAH,
+                mouseOperationManager);
+        addTerrainButton("Swamp", TerrainType.SWAMP, mouseOperationManager);
+        addTerrainButton("Desert", TerrainType.DESERT, mouseOperationManager);
+        addTerrainButton("Tundra", TerrainType.TUNDRA, mouseOperationManager);
+        addTerrainButton("Arctic", TerrainType.ARCTIC, mouseOperationManager);
+    }
+
+    private void addTerrainButton(final String label,
+            final TerrainType terrainType,
+            final MouseOperationManager mouseOperationManager) {
+        final Button button = new Button(label);
+        button.setOnAction(
+                e -> mouseOperationManager.setterrainOperation(terrainType));
+        mainPanel.getChildren().add(button);
     }
 
     @Override

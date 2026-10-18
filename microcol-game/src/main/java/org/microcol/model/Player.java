@@ -1128,7 +1128,7 @@ public abstract class Player {
      */
     public boolean isPossibleToSailAt(final Location target) {
         final TerrainType t = model.getMap().getTerrainTypeAt(target);
-        if (t == TerrainType.OCEAN) {
+        if (t.isOrdinaryWater()) {
             return isItPlayersUnits(model.getUnitsAt(target));
         } else {
             return false;

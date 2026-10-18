@@ -20,5 +20,17 @@
 	<entry key="MOUNTAIN_description">Vysoké a nebezpečné hory</entry>
 	<entry key="HILL_name">Kopce</entry>
 	<entry key="HILL_description">Krásná velmi úrodná kopcovitá krajina krajina.</entry>
+		<entry key="SAVANNAH_name">Savana</entry>
+		<entry key="SAVANNAH_description">Teplá step s roztroušenými stromy</entry>
+		<entry key="SWAMP_name">Bažina</entry>
+		<entry key="SWAMP_description">Vlhká a obtížně schůdná nížina</entry>
+		<entry key="DESERT_name">Poušť</entry>
+		<entry key="DESERT_description">Suchá a neúrodná země</entry>
+		<entry key="PLAINS_name">Planiny</entry>
+		<entry key="PLAINS_description">Otevřené úrodné planiny</entry>
+		<entry key="MARSH_name">Močál</entry>
+		<entry key="MARSH_description">Podmáčená půda, která zpomaluje cestování</entry>
+		<entry key="LAKE_name">Jezero</entry>
+		<entry key="LAKE_description">Sladká voda, po které plují lodě a kde kolonie loví ryby</entry>
 
 </properties>

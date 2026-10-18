@@ -4295,3 +4295,45 @@ committed for this experiment.
     2,261 model and 15 UI/basic/contract checks with no skips. No main
     implementation takeover or production change was needed. The controlled
     revolution flag does not establish R-0105 declaration/muster acceptance.
+
+86. R-0123 follows the user's 2026-10-18 lake decision: distinct identity,
+    ordinary ocean ship access and fishing. Sonnet medium completes three
+    attempts in 332.268, 140.895 and 43.416 seconds (516.579 total), exit 0
+    with no denied tools. Initial 2,296 model checks expose one invalid foreign
+    ship fixture assumption. Attempt 2 explicitly prepares the foreign ship
+    and adds actual fishing-turn and combat-after-clearing evidence. Docker
+    `run-PinZB3` passes all 2,300 model checks; 37 UI/basic/contract checks
+    contain four failures: hidden terrain fixture, an unconfirmed Load-click
+    problem, and two coastal construction cases. Attempt 3 reveals the scoped
+    fixture tiles; it does not invent a cause for the Load failure. A focused
+    rerun passes names/Continue and ships but repeats the pre-load failure.
+87. The coastal F42 fixture has eight residents, zero liberty and Conquistador
+    difficulty. R-0101 now correctly applies the eight-Tory production penalty,
+    so the fixture's expected three hammers and fish no longer apply. After
+    exhausting the original three worker attempts, main changes only its
+    initial liberty to 200: one rebel, seven Tories, no bonus or penalty.
+    This preserves the original expected output, construction and player
+    assertions. The fixture repair and remaining startup issue require an
+    actual rerun; no acceptance is claimed by this diagnosis.
+
+88. The focused coastal rerun `run-3A9YzG` passes both TC51 scenarios after
+    the F42 repair. TC80's third case still fails before loading. Two bounded
+    focus experiments time out; diagnostic `run-bWDVWC` confirms the button
+    is visible/enabled but its window cannot gain focus. Source tracing to
+    the existing TC38 land-rejection journey finds the actual cause: TC80_02
+    leaves the modal movement-rejection message open. Main removes the focus
+    experiments and extends TC80_02 to verify and close that message through
+    the existing `PassengerTransferPage`, preserving the ship-position check.
+    This is a test lifecycle repair after worker attempts were exhausted, not
+    a production workaround. Final TC80 and source-contract rerun is required.
+
+89. Final `run-KPhjW4` passes TC80 (3) and the source contract (3), zero
+    failures/errors/skips, including an actual fishing update and Continue.
+    Unchanged model evidence and the targeted coastal/clearing/combat controls
+    establish 2,337 distinct passing checks. Shared formatter checks all 13
+    changed Java files with code-token/idempotence pass. Sonnet medium needed
+    three attempts; main corrected the old F42 political fixture and the
+    modal cleanup after the attempt budget. No Sonnet-high or Opus escalation
+    occurred, and this mixed result is not evidence of autonomous completion
+    or measured savings. R-0123 is targeted-accepted as item 19; full batch
+    acceptance/publication and R-0105 remain pending.

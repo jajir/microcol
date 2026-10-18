@@ -1,10 +1,10 @@
 # Open points for refinement
 
-1. Snapshot: 2026-10-17, after capture of the remaining documented scope. Questions are taken only from active requirements; done/deferred/canceled history is excluded. The linked chapter is authoritative. This index does not change readiness or authorize implementation.
+1. Snapshot: 2026-10-17, updated 2026-10-18 for the accepted lake rule. Questions are taken only from active requirements; done/deferred/canceled history is excluded. The linked chapter is authoritative. This index does not change readiness or authorize implementation.
 2. Repeated questions share one owner: generated river/resource placement is R-0065; native settlement defense is R-0150; R-0074/R-0095 share one implementation-scope decision; release platform and public-save policy use their owning requirements.
 3. These are decisions for the relevant refinement, not a request to answer everything before selecting the next task. Investigations and routine implementation choices remain in chapter 3 instead of becoming product questions.
 
-Total: **56 requirement-level decision topics**, with multi-part questions kept together and the shared R-0074/R-0095 question counted once.
+Total: **54 requirement-level decision topics**, with multi-part questions kept together and the shared R-0074/R-0095 question counted once.
 
 ## A01 — Entry and release
 
@@ -44,17 +44,15 @@ Total: **56 requirement-level decision topics**, with multi-part questions kept 
 
 ## A05 — World, units and orders
 
-1. **[R-0124, chapter 4](R-0124.md#4-open-questions)** — What baseline output, if any, applies to the fresh-water lake when the aid card does not provide a lake row? Decide this before accepting a production claim for that tile; the printed land/ocean cells need no new decision.
 
-2. **[R-0125, chapter 4](R-0125.md#4-open-questions)** — How does a unit enter or cross a fresh-water lake, and what cost applies when the aid card has no lake row? Decide this before lake-travel acceptance; the printed base costs and accepted expensive-step/thirds rules are settled.
 
-3. **[R-0128, chapter 4](R-0128.md#4-open-questions)** — When a mixed deposit offers ore and silver during one update, does its 200-unit reserve cover both bonuses together, and in what order are simultaneous bonus outputs capped? The accepted reserve quantity does not specify that allocation.
+1. **[R-0128, chapter 4](R-0128.md#4-open-questions)** — When a mixed deposit offers ore and silver during one update, does its 200-unit reserve cover both bonuses together, and in what order are simultaneous bonus outputs capped? The accepted reserve quantity does not specify that allocation.
 
-4. **[R-0129, chapter 4](R-0129.md#4-open-questions)** — If two native nations are equally near a burial tile, which receives the +30 anger? The accepted rule names the nearest nation but does not specify a tie-break.
+2. **[R-0129, chapter 4](R-0129.md#4-open-questions)** — If two native nations are equally near a burial tile, which receives the +30 anger? The accepted rule names the nearest nation but does not specify a tie-break.
 
-5. **[R-0130, chapter 4](R-0130.md#4-open-questions)** — When a saved route or friendly destination becomes inaccessible, should go-to pause for repair, seek another legal path, or cancel automatically? The documented UC requires safety and feedback but does not choose that recovery policy.
+3. **[R-0130, chapter 4](R-0130.md#4-open-questions)** — When a saved route or friendly destination becomes inaccessible, should go-to pause for repair, seek another legal path, or cancel automatically? The documented UC requires safety and feedback but does not choose that recovery policy.
 
-6. **[R-0131, chapter 4](R-0131.md#4-open-questions)** — When a non-carrier disbanded unit holds tools, horses or muskets, are those supplies lost or returned to an eligible colony? The accepted empty-carrier policy does not settle equipment recovery.
+4. **[R-0131, chapter 4](R-0131.md#4-open-questions)** — When a non-carrier disbanded unit holds tools, horses or muskets, are those supplies lost or returned to an eligible colony? The accepted empty-carrier policy does not settle equipment recovery.
 
 ## A06 — Transport, markets and routes
 

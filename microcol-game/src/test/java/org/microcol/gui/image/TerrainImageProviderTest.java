@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
+import org.microcol.model.TerrainType;
 
 import javafx.scene.image.Image;
 
@@ -26,6 +27,16 @@ public class TerrainImageProviderTest {
 
         assertThrows(NullPointerException.class,
                 () -> provider.getTerrainImage(null));
+    }
+
+    @Test
+    void test_every_terrain_type_has_an_image() {
+        when(imageCache.getImage(anyString())).thenReturn(image);
+        TerrainImageProvider provider = new TerrainImageProvider(imageCache);
+
+        for (final TerrainType type : TerrainType.TERRAINS) {
+            assertNotNull(provider.getTerrainImage(type), type.name());
+        }
     }
 
 }

@@ -28,4 +28,13 @@ public class LocalizationHelperTest {
         assertEquals("ocean", helper.getTerrainName(TerrainType.OCEAN));
     }
 
+    @Test
+    public void test_every_terrain_has_name_and_description_key() {
+        for (final TerrainType type : TerrainType.TERRAINS) {
+            assertNotNull(TerrainTypes.getTerrainName(type), type.name());
+            assertNotNull(TerrainTypes.getTerrainDescription(type),
+                    type.name());
+        }
+    }
+
 }

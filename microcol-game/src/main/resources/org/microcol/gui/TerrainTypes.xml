@@ -20,5 +20,17 @@
 	<entry key="MOUNTAIN_description">Huge and dangerous mountains</entry>
 	<entry key="HILL_name">Hill</entry>
 	<entry key="HILL_description">Nice and small hills makes landscape more pleasant </entry>
+		<entry key="SAVANNAH_name">Savannah</entry>
+		<entry key="SAVANNAH_description">Warm grassland with scattered trees</entry>
+		<entry key="SWAMP_name">Swamp</entry>
+		<entry key="SWAMP_description">Wet and difficult lowland</entry>
+		<entry key="DESERT_name">Desert</entry>
+		<entry key="DESERT_description">Dry and barren land</entry>
+		<entry key="PLAINS_name">Plains</entry>
+		<entry key="PLAINS_description">Open and fertile plains</entry>
+		<entry key="MARSH_name">Marsh</entry>
+		<entry key="MARSH_description">Wet ground that slows travel</entry>
+		<entry key="LAKE_name">Lake</entry>
+		<entry key="LAKE_description">Fresh water that ships can sail and colonies can fish</entry>
 
 </properties>

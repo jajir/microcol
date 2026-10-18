@@ -5192,3 +5192,30 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    pass. Original [R-0085 evidence](#r-0085-custom-house-export-2026-10-16) and
    [R-0102 evidence](#r-0102-tax-demand-and-boycott-2026-10-18) retain earlier
    acceptance. Full second-batch regression/publication remains pending.
+
+## R-0123 terrain identities and lakes — 2026-10-18
+
+1. Plains, marsh and lake have distinct serialized identities; tundra permits
+   forest. Shared terrain defense covers the new bare/forested cells. All
+   fourteen types have English/Czech names and non-null existing artwork;
+   lake artwork uses the ocean tile without becoming an ocean identity or
+   Europe sea lane. Dedicated new terrain artwork is not part of this change.
+2. Model tests exercise strict unknown-code/illegal-forest loading, round trips,
+   occupied lake movement, land rejection, dock-gated fishing and actual stored
+   food after production. The same saved combat draw loses against forest and
+   wins after clearing plains/marsh/tundra, using the shared preview/resolver.
+   Docker `run-PinZB3` passes all **2,300 model checks**, zero failures/errors/skips.
+3. TC80/F72 uses a scoped F42 copy to verify visible names and forest state,
+   Save/Continue, actual lake ship movement, land rejection and fishing with
+   a completed dock. Final `run-KPhjW4` passes all three TC80 scenarios and three source-contract checks, zero failures/errors/skips.
+   Existing TC35 (12), TC38 (5), TC73 (6), basic/environment (6) and contract
+   (3) pass in `run-PinZB3`. TC51 (2) passes in `run-3A9YzG` after F42 starts
+   with 200 liberty: one rebel among eight residents avoids the R-0101 Tory
+   penalty without awarding a production bonus. Expected construction and
+   fishing output is unchanged. Together the selected runs establish **2,337
+   distinct passing checks** on the final implementation.
+4. Initial fixture and UI failures, all three Sonnet medium attempts, and
+   explicit main-owned test repairs are recorded in the
+   [operating evidence](ai/local-qwen.md). Full second-batch regression and
+   publication remain pending; R-0124 production and R-0125 movement matrices
+   are separate requirements. No full visual suite was run.
