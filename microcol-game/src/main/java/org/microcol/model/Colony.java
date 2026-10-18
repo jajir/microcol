@@ -968,7 +968,9 @@ public class Colony {
     }
 
     public List<Unit> getUnitsOutSideColony() {
+        // Allied passage never gives a colony control of a visitor.
         return model.getUnitsAt(location).stream()
+                .filter(unit -> unit.getOwner().equals(owner))
                 .filter(unit -> !unit.getType().canHoldCargo())
                 .collect(ImmutableList.toImmutableList());
     }

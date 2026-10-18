@@ -1104,8 +1104,9 @@ rules; implementation and acceptance are tracked by that requirement.
    2 per full artillery or 1 per damaged artillery on the colony tile. Use
    A/(A+D) against ship defense; a hit damages and sends it for repair, a miss
    does nothing. Stockades do not fire. Save/load does not repeat a shot.
-8. Privateers may attack foreign ships without changing peace/alliance to war;
-   either side may attack a foreign privateer on the same diplomatic exception.
+8. Privateers may attack non-allied foreign ships without changing peace to war;
+   either side may attack a non-allied foreign privateer on the same diplomatic exception.
+   Alliance and post-termination attack restrictions still apply.
    This is no immunity to ordinary combat. Retain observed owner information,
    but do not reveal an otherwise unknown national identity through the attack.
    Confirmation states that this privateer action does not declare war; normal
@@ -1201,6 +1202,13 @@ rules; implementation and acceptance are tracked by that requirement.
    one random non-warring European colonial pair whose members are both before
    independence and both without Franklin. Skip the event if no pair qualifies.
    Count rounds, not each nation's turn; save/Continue must not repeat the event.
+   User decision (2026-10-18): units already sharing a tile retain their positions
+   when an alliance ends, including Crown-forced war or mutual-defense changes.
+   They may depart; no new shared entry is permitted without an alliance.
+   Combat uses ordinary adjacent tiles after separation, never a same-tile attack.
+   Save/Continue preserves lawful existing overlap without relocation, deletion,
+   ownership changes or renewed passage privileges. This is agreed behavior,
+   pending implementation and acceptance in R-0089.
    Player attacks retain the
    existing explicit treaty-breaking confirmation and model validation.
 

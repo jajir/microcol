@@ -205,8 +205,10 @@ public abstract class AbstractUnit implements Unit {
         final Optional<Colony> optColony = model.getColonyAt(location);
         if (optColony.isPresent()) {
             final Colony colony = optColony.get();
+            // An ally's colony grants passage only; it is never captured.
             if (!owner.equals(colony.getOwner())
-                    && !model.areHostile(owner, colony.getOwner())) {
+                    && !model.areHostile(owner, colony.getOwner())
+                    && !model.areAllied(owner, colony.getOwner())) {
                 return false;
             }
         }
@@ -215,12 +217,12 @@ public abstract class AbstractUnit implements Unit {
                 .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
             if (isPossibleToGoToPort(location)) {
                 return ignoreEnemies
-                        || owner.getEnemyUnitsAt(location).isEmpty();
+                        || !model.isPassageBlockedAt(owner, location);
             }
             return false;
         }
 
-        return ignoreEnemies || owner.getEnemyUnitsAt(location).isEmpty()
+        return ignoreEnemies || !model.isPassageBlockedAt(owner, location)
                 || isPossibleToCaptureColonyAt(location);
     }
 
@@ -589,12 +591,17 @@ public abstract class AbstractUnit implements Unit {
                 .getColonyAt(targetLocation)
                 .filter(colony -> colony.getOwner() != owner
                         && !model.areHostile(owner, colony.getOwner()));
-        if (peacefulColony.isPresent() && !allowDeclaration) {
+        if (peacefulColony.isPresent() && (!allowDeclaration || model
+                .isAttackRestrained(owner, peacefulColony.get().getOwner()))) {
             return Optional.empty();
         }
         return owner.getEnemyUnitsAt(targetLocation).stream()
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
+                // Allies, and former allies during the war wait, are never
+                // attacked, not even by declaration or privateer exception.
+                .filter(unit -> !model.isAttackRestrained(owner,
+                        unit.getOwner()))
                 .filter(unit -> allowDeclaration
                         || model.areHostile(owner, unit.getOwner())
                         || model.isPrivateerNavalException(this, unit))
@@ -699,6 +706,14 @@ public abstract class AbstractUnit implements Unit {
             Preconditions.checkState(getLocation().equals(start),
                     "Unit %s changed location before its step", this);
             verifyCanMoveOneStep(moveTo);
+            // A capture is an actual aggression: plan and apply every relation
+            // change, including defender alliances, before any unit mutation.
+            model.getColonyAt(moveTo)
+                    .filter(colony -> colony.getOwner() != owner
+                            && model.areHostile(owner, colony.getOwner()))
+                    .ifPresent(colony -> model
+                            .applyAggression(model.planAggression(owner,
+                                    Set.of(colony.getOwner()), false)));
             final List<Boarding> boarding = new ArrayList<>();
             if (isShip()) {
                 boarding.addAll(collectDepartureSentries((Ship) this));
@@ -767,7 +782,9 @@ public abstract class AbstractUnit implements Unit {
         final Optional<Colony> oColony = model.getColonyAt(newLocation);
         if (oColony.isPresent()) {
             final Colony col = oColony.get();
-            if (!col.getOwner().equals(owner)) {
+            // Only a hostile colony is captured; allied passage never is.
+            if (!col.getOwner().equals(owner)
+                    && model.areHostile(owner, col.getOwner())) {
                 col.captureColony(this);
             }
         }
@@ -813,6 +830,17 @@ public abstract class AbstractUnit implements Unit {
                 && order.isDeclarationRequired() == (!privateerException
                         && !model.areHostile(owner, selected.getOwner())),
                 "The diplomatic state changed");
+        // Actual aggression, not the declaration alone, is recorded and
+        // obliges the victim's allies. Plan it before any random draw, combat
+        // or action-point change; it is applied where the declaration was.
+        final Set<Player> victims = new HashSet<>();
+        victims.add(selected.getOwner());
+        model.getColonyAt(order.getTarget())
+                .filter(colony -> colony.getOwner() != owner
+                        && model.areHostile(owner, colony.getOwner()))
+                .ifPresent(colony -> victims.add(colony.getOwner()));
+        final AggressionPlan aggression = model.planAggression(owner, victims,
+                privateerException);
         final Optional<CombatStrengths> strengths = CombatStrengths
                 .forBattle(model, this, selected);
         Preconditions.checkState(strengths.equals(order.getCombatStrengths()),
@@ -830,15 +858,13 @@ public abstract class AbstractUnit implements Unit {
         final AbstractUnit defender = (AbstractUnit) selected;
         if (naval.isPresent()) {
             executeNavalAttack(order, (Ship) selected, strengths.orElseThrow(),
-                    naval.get());
+                    naval.get(), aggression);
             return;
         }
         final boolean winnerAttacker = strengths.isPresent()
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
-        if (order.isDeclarationRequired()) {
-            model.declareHostilities(owner, defender.getOwner());
-        }
+        model.applyAggression(aggression);
         actionPoints = 0;
         defender.actionPoints = 0;
         if (strengths.isPresent()) {
@@ -903,7 +929,7 @@ public abstract class AbstractUnit implements Unit {
 
     private void executeNavalAttack(final AttackOrder order,
             final Ship defender, final CombatStrengths strengths,
-            final NavalCombatPreview preview) {
+            final NavalCombatPreview preview, final AggressionPlan aggression) {
         // Both saved draws are consumed exactly once after all preflight
         // checks.
         final boolean winnerAttacker = strengths
@@ -915,9 +941,7 @@ public abstract class AbstractUnit implements Unit {
                 ? preview.getDefenderRepairDestination()
                 : preview.getAttackerRepairDestination()).isEmpty();
         final boolean sunk = drawSinks || noRepair;
-        if (order.isDeclarationRequired()) {
-            model.declareHostilities(owner, defender.getOwner());
-        }
+        model.applyAggression(aggression);
         actionPoints = 0;
         ((AbstractUnit) defender).actionPoints = 0;
         final List<Goods> captured = new ArrayList<>();

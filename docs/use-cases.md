@@ -783,3 +783,13 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    návrat, zastaralé údaje, Continue, dohled vlastní kolonie a skryté animace.
    [Cílená evidence](functional-tests.md#r-0070-current-sight-2026-10-17)
    uvádí 142 úspěšných kontrol; úplná regrese druhé dávky teprve následuje.
+
+### UC-069: evropské spojenectví R-0089
+
+1. Cíleně ověřeno 18. října 2026: nabídka a potvrzení, odmítnutí/odložení,
+   Continue, ukončení a čekání, průchod bez přístupu k cizí kolonii, zákaz útoku
+   spojence, vzájemná obrana a královská válka. Společné pozice zůstávají platné
+   při ukončení a následném načtení. TC74 má 14 scénářů; související TC33/59/60
+   prošly. Viz [evidence R-0089](functional-tests.md#r-0089-european-alliances-2026-10-18).
+2. Plná regrese a publikace druhé dávky zatím čekají; evropské spojenectví
+   neuzavírá domorodé ani další dosud nepokryté části UC-069.

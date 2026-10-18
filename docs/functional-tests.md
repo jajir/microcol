@@ -4966,9 +4966,9 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    tests and strict MkDocs build pass; final archival/link checks are repeated
    with the completion documentation. Local acceptance covers R-0118, R-0133,
    R-0132, R-0179, R-0184, R-0147, R-0119, R-0120, R-0136 and R-0090.
-   CI runs the full suite again for the pushed revision. Publication remains
-   independently pending until its actual workflows and downloadable build are
-   verified; local acceptance alone is not a publication claim.
+   CI subsequently passed all 2,072 model and 320 functional/contract checks
+   for `333de9b6bf8f` and published `dev-171-333de9b6bf8f`; see the
+   [independent publication evidence](publishing.md#claude-batch-1-publication-2026-10-17).
 
 ## R-0070 current sight — 2026-10-17
 
@@ -4987,3 +4987,28 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 3. This is targeted requirement-11 acceptance. Full second-batch regression and
    publication remain pending. Worker attempts and caller review are recorded
    in the [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+
+## R-0089 European alliances — 2026-10-18
+
+1. Docker `run-6JdvBs` passes **287 checks: 253 model and 34 functional/contract**,
+   zero failures, errors or skips, exit 0. Selection: `Alliance*Test`,
+   `European*Test`, `PeaceNegotiationTest`, `FranklinPeaceOfferTest`,
+   `TributeDemandTest`, `Attack*Test`, `CoastalPortMovementTest`,
+   `CurrentSightTest`, TC33 (7), TC59 (5), TC60 (5), TC74 (14) and
+   `PageVerificationContractTest` (3). Shared Java formatter, nine documentation
+   tests and strict MkDocs build pass.
+2. TC74 verifies proposal, cancel/refusal, saved pending offer, stale terms,
+   once-only payment, explicit termination/wait, allied passage without access,
+   no allied attack, mutual defense, Crown rounds 19/20/21 and Continue,
+   Czech labels and retained overlap across Continue before/after termination.
+   Model tests additionally cover Crown/defense-driven overlap, departure and
+   re-entry restrictions, adjacent combat after separation, malformed overlap
+   evidence and saved event randomness. Existing ownership and privateer
+   regression assertions remain intact.
+3. Earlier `run-4xcJ62` (one model error), `run-M5HEYR` (four UI failures and
+   one error) and `run-aH0VVY` (one UI failure) were diagnostics, not acceptance.
+   The final selection reruns their affected tests. Worker attempts, fixture
+   diagnosis and the main-agent test-call adjustment are recorded in the
+   [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
+4. This is targeted requirement-12 acceptance. Full second-batch regression,
+   CI and publication remain pending; this does not close all of UC-069.

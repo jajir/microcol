@@ -205,6 +205,9 @@ final class GameManager {
             announcePreparation(completed);
         } else {
             model.getCalendar().endRound();
+            // Once per complete round, before the next player's preparation;
+            // start, continue and load never reach this boundary.
+            model.processCrownWar();
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator
                     .evaluate(model);
             if (oGameOverResult.isPresent()) {

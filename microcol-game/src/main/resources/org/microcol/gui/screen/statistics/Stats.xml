@@ -26,4 +26,37 @@
 	<entry key="declarationConfirm">Declare war</entry>
 	<entry key="declarationDone">%s and %s are now at war.</entry>
 	<entry key="declarationStale">The game or selected players changed. Nothing was declared. Review the updated relations.</entry>
+
+	<entry key="relationAlliance">Alliance</entry>
+	<entry key="relationWarWait">Peace (war cannot be declared for %s more rounds)</entry>
+	<entry key="declarationWaiting">War cannot be declared for %s more rounds after an alliance ended.</entry>
+	<entry key="allianceOpen">Propose alliance…</entry>
+	<entry key="allianceResume">Resume alliance proposal…</entry>
+	<entry key="allianceContactRequired">Move a colonist next to a visible rival unit or colony to propose an alliance.</entry>
+	<entry key="allianceBlocked">An alliance needs %s more rounds without tribute or attacks between these nations.</entry>
+	<entry key="allianceTitle">Alliance proposal</entry>
+	<entry key="allianceOffer">%s accepts an alliance for %s gold.
+Your treasury: %s gold.
+After payment: %s gold.</entry>
+	<entry key="allianceOfferUnaffordable">%s accepts an alliance for %s gold.
+Your treasury when quoted: %s gold.</entry>
+	<entry key="allianceObligations">Allies cannot attack each other, including privateers, and may pass through each other's units and colonies without capturing them or using their workers, cargo or sight. Each ally must go to war against anyone who attacks the other. No units, goods or map knowledge are given. Either side may end the alliance; peace remains and war cannot be declared for 5 rounds.</entry>
+	<entry key="allianceVisitor">Contact: %s at (%s, %s).</entry>
+	<entry key="allianceVisitorUnavailable">The original contact is no longer available.</entry>
+	<entry key="allianceConfirm">Pay and form alliance</entry>
+	<entry key="allianceCancel">Cancel proposal</entry>
+	<entry key="allianceLater">Decide later</entry>
+	<entry key="allianceInsufficient">You do not have enough gold to accept this proposal.</entry>
+	<entry key="allianceChanged">The contact, relation or terms changed. Cancel this proposal and request a new one.</entry>
+	<entry key="allianceFormed">%s and %s are now allied.</entry>
+	<entry key="allianceEndOpen">End alliance…</entry>
+	<entry key="allianceEndTitle">End alliance</entry>
+	<entry key="allianceEndMessage">%s will end the alliance with %s. Peace remains, but neither side may declare war or attack for %s rounds. End the alliance?</entry>
+	<entry key="allianceEndCancel">Keep alliance</entry>
+	<entry key="allianceEndConfirm">End alliance</entry>
+	<entry key="allianceEnded">The alliance between %s and %s has ended. War cannot be declared for %s rounds.</entry>
+	<entry key="allianceEndStale">The game or alliance changed. Nothing was ended. Review the updated relations.</entry>
+	<entry key="turnCrownWar">The Crown forced a war with %s.</entry>
+	<entry key="turnCrownWarAlliance">The Crown ended your alliance and forced a war with %s.</entry>
+	<entry key="turnAllyDefense">Your alliance with %2$s obliged you to go to war against %1$s, who attacked your ally.</entry>
 </properties>

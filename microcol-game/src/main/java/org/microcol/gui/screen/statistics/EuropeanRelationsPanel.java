@@ -71,10 +71,16 @@ final class EuropeanRelationsPanel extends VBox {
                 names.setWrapText(true);
                 names.setMaxWidth(380);
                 names.getStyleClass().add("relation-names");
+                final int wait = model.getWarDeclarationWait(first, second);
                 final Label status = new Label(
-                        i18n.get(state == EuropeanRelationState.PEACE
-                                ? Stats.relationPeace
-                                : Stats.relationWar));
+                        state == EuropeanRelationState.PEACE
+                                ? (wait > 0
+                                        ? i18n.get(Stats.relationWarWait, wait)
+                                        : i18n.get(Stats.relationPeace))
+                                : i18n.get(
+                                        state == EuropeanRelationState.ALLIANCE
+                                                ? Stats.relationAlliance
+                                                : Stats.relationWar));
                 status.getStyleClass().add("relation-state");
                 row.getChildren().addAll(names, status);
                 if (actor.isHuman() && (actor == first || actor == second)
@@ -83,9 +89,46 @@ final class EuropeanRelationsPanel extends VBox {
                     final Button declare = new Button(
                             i18n.get(Stats.declarationReview));
                     declare.setId("declare-" + i + "-" + j);
-                    declare.setDisable(!model.isGameRunning());
+                    declare.setDisable(!model.isGameRunning() || wait > 0);
+                    if (wait > 0) {
+                        declare.setTooltip(new javafx.scene.control.Tooltip(
+                                i18n.get(Stats.declarationWaiting, wait)));
+                    }
                     declare.setOnAction(event -> review(model, actor, target));
                     row.getChildren().add(declare);
+                }
+                if (actor.isHuman() && (actor == first || actor == second)
+                        && state == EuropeanRelationState.PEACE) {
+                    final Player target = actor == first ? second : first;
+                    final boolean pending = model
+                            .getPendingAllianceOffer(actor, target).isPresent();
+                    final int blocked = model.getAllianceBlockedRounds(actor,
+                            target);
+                    final Button alliance = new Button(
+                            i18n.get(pending ? Stats.allianceResume
+                                    : Stats.allianceOpen));
+                    alliance.setId("alliance-" + i + "-" + j);
+                    alliance.setDisable(
+                            !model.isGameRunning() || (!pending && (blocked > 0
+                                    || model.getAllianceVisitors(actor, target)
+                                            .isEmpty())));
+                    alliance.setTooltip(
+                            new javafx.scene.control.Tooltip(blocked > 0
+                                    ? i18n.get(Stats.allianceBlocked, blocked)
+                                    : i18n.get(Stats.allianceContactRequired)));
+                    alliance.setOnAction(
+                            event -> propose(model, actor, target));
+                    row.getChildren().add(alliance);
+                }
+                if (actor.isHuman() && (actor == first || actor == second)
+                        && state == EuropeanRelationState.ALLIANCE) {
+                    final Player target = actor == first ? second : first;
+                    final Button end = new Button(
+                            i18n.get(Stats.allianceEndOpen));
+                    end.setId("allianceEnd-" + i + "-" + j);
+                    end.setDisable(!model.isGameRunning());
+                    end.setOnAction(event -> endAlliance(model, actor, target));
+                    row.getChildren().add(end);
                 }
                 if (actor.isHuman() && (actor == first || actor == second)
                         && state == EuropeanRelationState.WAR) {
@@ -147,7 +190,65 @@ final class EuropeanRelationsPanel extends VBox {
                 && original.isGameRunning()
                 && original.getCurrentPlayer() == actor
                 && original.getEuropeanRelation(actor,
-                        target) == EuropeanRelationState.PEACE;
+                        target) == EuropeanRelationState.PEACE
+                && original.getWarDeclarationWait(actor, target) == 0;
+    }
+
+    private void propose(Model original, Player actor, Player target) {
+        try {
+            if (!game.isGameModelReady() || game.getModel() != original
+                    || original.getCurrentPlayer() != actor)
+                throw new IllegalStateException("Relations view changed");
+            final org.microcol.model.AllianceOffer offer = original
+                    .getPendingAllianceOffer(actor, target)
+                    .orElseGet(() -> original.prepareAllianceOffer(
+                            original.getAllianceVisitors(actor, target).stream()
+                                    .findFirst().orElseThrow(
+                                            () -> new IllegalStateException(
+                                                    "Contact unavailable")),
+                            target));
+            boolean accepted = new AllianceDialog(viewUtil, i18n, game,
+                    original, offer).review();
+            refresh();
+            if (accepted)
+                feedback.setText(i18n.get(Stats.allianceFormed, label(actor),
+                        label(target)));
+        } catch (IllegalArgumentException | IllegalStateException
+                | ArithmeticException rejected) {
+            refresh();
+            feedback.setText(i18n.get(Stats.allianceChanged));
+        }
+    }
+
+    private void endAlliance(Model original, Player actor, Player target) {
+        final String actorLabel = label(actor);
+        final String targetLabel = label(target);
+        try {
+            if (!game.isGameModelReady() || game.getModel() != original
+                    || original.getCurrentPlayer() != actor
+                    || !original.areAllied(actor, target))
+                throw new IllegalStateException("Relations view changed");
+            feedback.setText("");
+            if (!new AllianceEndDialog(viewUtil, i18n, actorLabel, targetLabel,
+                    Model.ALLIANCE_WAR_WAIT_ROUNDS).confirm()) {
+                refresh();
+                return;
+            }
+            if (!game.isGameModelReady() || game.getModel() != original
+                    || original.getCurrentPlayer() != actor
+                    || !actorLabel.equals(label(actor))
+                    || !targetLabel.equals(label(target)))
+                throw new IllegalStateException("Relations view changed");
+            original.terminateAlliance(actor, target);
+            refresh();
+            feedback.setText(
+                    i18n.get(Stats.allianceEnded, actorLabel, targetLabel,
+                            original.getWarDeclarationWait(actor, target)));
+            feedback.requestFocus();
+        } catch (IllegalArgumentException | IllegalStateException rejected) {
+            refresh();
+            feedback.setText(i18n.get(Stats.allianceEndStale));
+        }
     }
 
     private void review(final Model original, final Player actor,

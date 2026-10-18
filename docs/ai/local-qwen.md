@@ -3906,3 +3906,96 @@ committed for this experiment.
     `run-9WkN2C` passes all 142 selected checks; see
     [acceptance](../functional-tests.md#r-0070-current-sight-2026-10-17).
     No caller implementation takeover or Opus was needed.
+
+49. R-0089 starts with Sonnet high after R-0070 targeted acceptance. Shared
+    diplomacy, allied passage, attack atomicity and a persisted round event
+    make this a higher-effort assignment; the bounded repair/tool contract
+    remains unchanged. No Opus or additional cloud agent is used.
+
+50. R-0089 attempt 1 was interrupted by the Claude Pro five-hour limit after
+    1,183.421 seconds (exit 1, session
+    `e8bcd909-6732-49a3-938d-4319ff87de9b`). Last reported utilization reached
+    99%, then the CLI explicitly rejected further work until **2026-10-18
+    01:20 Europe/Prague**. Overage remained disabled. Partial production/model/UI
+    changes are retained in the isolated worktree and are not accepted or
+    published. Caller runs a diagnostic targeted build before preparing the
+    same-session medium continuation; no silent implementation fallback.
+51. First-batch publication is independently verified: build
+    `dev-171-333de9b6bf8f`, CI run `39066465318`, 2,072 model and 320
+    functional/contract checks all passed. Documentation-only evidence commit
+    `c20bf30e` passed Pages run `39069476049`; game run `39069476068` and
+    compatibility run `39069476096` intentionally skipped their game jobs.
+    Downloaded channel manifests before/after that documentation push were
+    identical. Primary main contains those sources; R-0070 and later work
+    remain isolated for the second batch.
+
+52. Diagnostic Docker `run-4xcJ62` compiled the interrupted R-0089 code and
+    ran 249 model checks: 248 passed, one error, zero skips.
+    `alliedPassageUsesTheColonyTileWithoutOwnershipOrWorkforceAccess` fails
+    loading a formerly shared tile after termination: `UnitStorage` rejects
+    every mixed-owner map stack. This is a real passage/persistence integration
+    gap, not permission to weaken the assertion. Existing overlap after alliance
+    termination or forced war needs an explicit rule; the user was asked to
+    choose retained positions with departure or automatic relocation. R-0089
+    returns to waiting for refinement until that answer is incorporated. A
+    separate UI diagnostic runs without treating the model failure as passed.
+
+53. Interrupted R-0089 UI diagnostic `run-M5HEYR` ran 16 checks: eight of
+    13 TC74 scenarios and all three source-contract checks passed; four failed
+    and one errored. TC74_12 uses a no-owned-colony fixture at round 19, and
+    the real end-round path correctly ends the game before its expected Crown
+    report (`Game over, no colonies`), producing the timeout. The four later
+    load/status-bar failures may be cascading from that game-over window; this
+    is a diagnosis to verify, not a passing result. The continuation handoff
+    requires a valid live colony fixture and reruns of every failed check plus
+    relevant regression, in the same Claude session after quota reset.
+
+54. Resumed on 2026-10-18 after the advertised quota reset. Claude Code
+    2.1.302 remains authenticated through claude.ai Pro. The mixed-owner
+    post-alliance placement decision is still pending and was asked again.
+    To make independent progress, attempt 2 resumes the same R-0089 session
+    on Sonnet medium for the TC74 Crown-event fixture only; production
+    passage/persistence policy is explicitly excluded. Prior elapsed time
+    1,183.421 seconds and the original three-attempt budget are retained.
+
+55. R-0089 attempt 2 completed on Sonnet medium in 41.437 seconds, exit 0,
+    without denied tools. Cumulative worker time is 1,224.858 seconds; one
+    original repair attempt remains. It added a scoped long-game fixture,
+    transferring Montreal and its corn worker to the Dutch together while
+    preserving stored food. Main applied the shared formatter (24 Java files
+    checked, one changed, code-token/idempotence checks passed). Docker
+    `run-aH0VVY` then ran all 13 TC74 scenarios and three source-contract
+    checks: 15 passed, one failed, zero errors/skips. TC74_12's Crown/Continue
+    path and previous TC05/06/09 failures now pass. TC74_10 still incorrectly
+    requires an empty movement preview towards an ally, conflicting with
+    allowed passage; its repair must prove no attack/declaration while retaining
+    legitimate movement, rather than dropping the gameplay check. This is not
+    R-0089 acceptance: the mixed-owner save error and pending termination
+    placement decision remain. The final original repair attempt should combine
+    both fixes after that decision. No full regression or CI was started.
+
+56. User approved retained positions on 2026-10-18. The authoritative relation
+    rule and R-0089 now specify departure, no new non-allied entry, ordinary
+    adjacent combat after separation and saved lawful overlap; R-0089 returns
+    to ready for development. Attempt 3 resumes the same Sonnet medium session
+    for the placement/save repair and TC74_10 correction, retaining 1,224.858
+    seconds of prior work and the original cumulative budget. This is the final
+    original attempt; acceptance remains pending targeted checks.
+
+57. Attempt 3 completed on Sonnet medium in 185.140 seconds, exit 0, no
+    denied tools; total R-0089 worker time is 1,409.998 seconds. It added
+    pair/tile retained-overlap evidence, load validation and transition tests,
+    corrected TC74_10 and added TC74_14 Continue coverage. Main review caught
+    seven older `EuropeanRelationsTest` calls not adapted to the new save
+    predicate. With the three-attempt budget exhausted, main updated those
+    calls explicitly for their no-overlap fixtures instead of starting another
+    worker attempt. The shared formatter checked 26 Java files, with token and
+    idempotence checks passing. All 253 selected model tests passed in the
+    subsequent Docker run; selected UI acceptance is still running.
+
+58. R-0089 targeted acceptance completed in Docker `run-6JdvBs`: 253 model
+    plus 34 functional/contract checks pass with zero failures/errors/skips,
+    exit 0. All 14 TC74 scenarios and prior TC33/59/60 pass. This verifies the
+    repaired cases, not merely the worker report; full second-batch acceptance
+    remains pending. Sonnet medium handled both targeted repairs, with the
+    caller's seven test-call adaptation explicitly separated above.

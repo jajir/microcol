@@ -76,6 +76,15 @@ až po aktualizaci kolonií a jednotek. Existující nabídku v libovolném smě
 zachová. Uložený `TurnEventPeaceOffer` pouze oznamuje novou nabídku;
 zobrazení hlášení ani Continue nevyjednává a nepřevádí zlato.
 GUI nabízí potvrzení, zrušení a odložení; načtení samo nabídku nepřijme.
+R-0089 rozšiřuje stejného vlastníka o spojenectví, nabídku za 200 zlata,
+historii skutečné agrese a čekání po ukončení. `Model` plánuje důsledky obrany
+spojence před mutací boje; událost královské války zpracuje `GameManager` po
+ukončení celého kola. Uložené číslo zpracovaného kola brání opakování při Continue.
+`EuropeanRelations` drží pro bývalé spojence doklad společného pole;
+`UnitStorage` ověřuje každou dvojici vlastníků přes pravidlo modelu. Doklad
+povoluje zachování existující pozice při načtení, nikoli nový vstup. Ukládání
+vynechá pole, kde již obě strany nestojí; načítání odmítne neplatné doklady.
+Tyto cesty se ověřují v cílených testech R-0089; plná regrese náleží hranici dávky.
 R-0088 používá stejný kontakt a vojenskou sílu pro tribut. `EuropeanRelations`
 ukládá samostatný návrh tributu a poslední potvrzený požadavek dvojice;
 `Model` před platbou ověří roli, deset tahů čekání i nezměněné podmínky.

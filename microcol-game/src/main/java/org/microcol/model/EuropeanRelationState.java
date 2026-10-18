@@ -1,5 +1,5 @@
 package org.microcol.model;
 
 public enum EuropeanRelationState {
-    PEACE, WAR
+    PEACE, WAR, ALLIANCE
 }
