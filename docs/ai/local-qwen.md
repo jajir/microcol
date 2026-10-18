@@ -4286,3 +4286,12 @@ committed for this experiment.
     establishes 2,286 distinct passing checks. Haiku handled the bounded task
     with two repairs; this is an observed outcome, not a controlled cost
     comparison with Sonnet. Full batch acceptance/publication remains pending.
+
+85. R-0085's remaining boycott/export proof completed on Haiku medium in one
+    153.574-second attempt, exit 0, no denied tools. It changes only TC58 and
+    its page fixture helpers, deriving the revolution case from an actual saved
+    protest without reseeding debts or stock. Main formatter checks two Java
+    files (one changed; token/idempotence pass). Docker `run-kp4OXZ` passes
+    2,261 model and 15 UI/basic/contract checks with no skips. No main
+    implementation takeover or production change was needed. The controlled
+    revolution flag does not establish R-0105 declaration/muster acceptance.

@@ -155,15 +155,46 @@ public final class TaxDemandPage extends AbstractScreen {
             fixture.exports.forEach(type -> selected.add(type.name()));
             colony.add("exportGoods", selected);
         }
+        makeNextLoad(saved, fixture.name);
+    }
+
+    /**
+     * Write a saved game made by the game itself, changing only its
+     * independence flag, and make it the next game to load.
+     */
+    public void prepareRevolutionFrom(final File snapshot, final String name)
+            throws Exception {
+        final JsonObject saved = new Gson().fromJson(
+                Files.readString(snapshot.toPath()), JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonObject("gameManager")
+                .getAsJsonArray("players").get(0).getAsJsonObject()
+                .addProperty("declaredIndependence", true);
+        makeNextLoad(saved, name);
+    }
+
+    private void makeNextLoad(final JsonObject saved, final String name)
+            throws Exception {
         final Path directory = Path.of("target", "f70");
         Files.createDirectories(directory);
-        final File file = directory.resolve(fixture.name + ".microcol")
-                .toFile();
+        final File file = directory.resolve(name + ".microcol").toFile();
         Files.writeString(file.toPath(), saved.toString());
         org.mockito.Mockito
                 .when(getContext().getClassFromGuice(FileSelectingService.class)
                         .loadFile(org.mockito.ArgumentMatchers.any(File.class)))
                 .thenReturn(file);
+    }
+
+    /** Save the current game through the normal save action. */
+    public File saveSnapshot(final String name) throws Exception {
+        final File file = new File(System.getProperty("user.home"),
+                name + ".microcol");
+        org.mockito.Mockito
+                .when(getContext().getClassFromGuice(FileSelectingService.class)
+                        .saveFile(org.mockito.ArgumentMatchers.any(File.class),
+                                org.mockito.ArgumentMatchers.anyString()))
+                .thenReturn(file);
+        GamePage.of(getContext()).saveGame();
+        return file;
     }
 
     // --- player gestures ---------------------------------------------------
@@ -444,5 +475,10 @@ public final class TaxDemandPage extends AbstractScreen {
 
     public void verifyBackTaxFeedback(final String expected) {
         assertEquals(expected, getLabeledById("backTaxFeedback").getText());
+    }
+
+    public void verifySnapshotSaved(final File snapshot) {
+        assertTrue(snapshot.isFile(), "The saved game must exist");
+        assertTrue(snapshot.length() > 0, "The saved game must not be empty");
     }
 }

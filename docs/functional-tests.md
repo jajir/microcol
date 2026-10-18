@@ -5172,3 +5172,23 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [operating evidence](ai/local-qwen.md) records failures and measured time.
    Main formatted the 12 changed Java files, reviewed the diff and verified
    docs. No main implementation takeover or Sonnet/Opus escalation occurred.
+
+## R-0085 real-boycott completion — 2026-10-18
+
+1. TC58_06 now creates the boycott through the actual tax protest: 300 ore
+   loses 100, the ordinary custom house preserves the remaining 200, and
+   tobacco export leaves exactly 1,231 gold. The test saves that game through
+   the normal action and changes only the independence flag in a controlled
+   copy. This isolates the export rule; it does not verify R-0105's declaration
+   or muster. No boycott or stock is invented after the protest.
+2. On the next update, 100 ore earns half its 300 ordinary net (150 gold),
+   and three tobacco earn half their six ordinary net (three gold). Exact
+   report text, stocks, 1,384 gold and unchanged 800 ore arrears are checked.
+   Continue repeats neither export nor payment. Unselected silver stays 150.
+3. Docker `run-kp4OXZ` passes **2,261 model and 15 UI/basic/contract checks**,
+   zero failures/errors/skips. TC58 contains six scenarios; basic/environment/
+   contract contribute nine. Haiku medium completed the test-only change in
+   one attempt; main formatter checked two Java files with token/idempotence
+   pass. Original [R-0085 evidence](#r-0085-custom-house-export-2026-10-16) and
+   [R-0102 evidence](#r-0102-tax-demand-and-boycott-2026-10-18) retain earlier
+   acceptance. Full second-batch regression/publication remains pending.
