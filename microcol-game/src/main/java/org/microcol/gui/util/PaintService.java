@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import java.util.List;
+
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
 import org.microcol.gui.image.ImageLoaderTerrain;
@@ -11,6 +13,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
+import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -22,6 +25,8 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -57,6 +62,17 @@ public final class PaintService {
 
     private static final Color ROAD_EDGE_COLOR = Color.web("#4a3118");
 
+    /** River water; a blue that stands out on grass, sand and snow. */
+    public static final Color RIVER_COLOR = Color.web("#2f6fd0");
+
+    /** Width of a small river course, a share of one square. */
+    private static final double SMALL_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
+            * 0.12;
+
+    /** Width of a large river course, a share of one square. */
+    private static final double LARGE_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
+            * 0.28;
+
     private final ImageProvider imageProvider;
 
     private final MapManager mapManager;
@@ -86,6 +102,48 @@ public final class PaintService {
         graphics.setFill(ROAD_COLOR);
         graphics.fillRect(point.getX(), point.getY() + size * 0.44, size,
                 size * 0.12);
+    }
+
+    /**
+     * Draw the half of each river course that leaves a square. Every course
+     * reaches the midpoint between its two squares, and its width shows the
+     * size of this square. A square without a joined neighbour gets a round
+     * dot.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     * @param size     required river size of the square
+     * @param joined   required top-left corners of the joined neighbours
+     */
+    public void paintRiver(final GraphicsContext graphics, final Point point,
+            final RiverSize size, final List<Point> joined) {
+        final double width = size == RiverSize.LARGE ? LARGE_RIVER_WIDTH
+                : SMALL_RIVER_WIDTH;
+        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
+        final double centerX = point.getX() + half;
+        final double centerY = point.getY() + half;
+        // The grid is stroked later with the same canvas state, so restore it.
+        final Paint previousStroke = graphics.getStroke();
+        final Paint previousFill = graphics.getFill();
+        final double previousWidth = graphics.getLineWidth();
+        final StrokeLineCap previousCap = graphics.getLineCap();
+        graphics.setStroke(RIVER_COLOR);
+        graphics.setFill(RIVER_COLOR);
+        graphics.setLineWidth(width);
+        // A butt cap ends each half at its midpoint; the default square cap
+        // would reach half a width into the neighbour square.
+        graphics.setLineCap(StrokeLineCap.BUTT);
+        for (final Point neighbour : joined) {
+            graphics.strokeLine(centerX, centerY,
+                    (centerX + neighbour.getX() + half) / 2,
+                    (centerY + neighbour.getY() + half) / 2);
+        }
+        graphics.fillOval(centerX - width / 2, centerY - width / 2, width,
+                width);
+        graphics.setStroke(previousStroke);
+        graphics.setFill(previousFill);
+        graphics.setLineWidth(previousWidth);
+        graphics.setLineCap(previousCap);
     }
 
     /**

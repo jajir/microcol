@@ -32,7 +32,7 @@
    Their linked shared decisions remain authoritative.
 2. The next A05 captures assign terrain identity and missing defense cells to
    [R-0123](done/R-0123.md), baseline output to [R-0124](done/R-0124.md), exact movement
-   cost/path/range to [R-0125](done/R-0125.md), rivers to [R-0126](R-0126.md), and
+   cost/path/range to [R-0125](done/R-0125.md), rivers to [R-0126](done/R-0126.md), and
    special-resource overlays to [R-0127](R-0127.md). Existing R-0093 defense
    corrections are preserved. Lake output/travel and generator placement are
    explicit open points, not inferred ocean behavior.

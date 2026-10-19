@@ -119,7 +119,7 @@ final class RoadFixture {
     }
 
     /** Same row layout as the map, with every square empty. */
-    private static JsonArray emptyRows(final JsonArray template) {
+    static JsonArray emptyRows(final JsonArray template) {
         final JsonArray out = new JsonArray();
         for (int y = 0; y < template.size(); y++) {
             final String row = template.get(y).getAsString();
@@ -136,7 +136,7 @@ final class RoadFixture {
         return out;
     }
 
-    private static void set(final JsonArray rows, final Location location,
+    static void set(final JsonArray rows, final Location location,
             final String code) {
         final String row = rows.get(location.getY()).getAsString();
         final int colon = row.indexOf(':');

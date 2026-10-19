@@ -33,10 +33,12 @@ public class Terrain {
 
     private boolean hasRoad;
 
+    private RiverSize riverSize = RiverSize.NONE;
+
     /**
-     * List of function that based on terrain properties like field modify
-     * particular good production. Trees and clearing select the baseline table
-     * in {@link TerrainType} and need no modifier here.
+     * List of function that based on terrain properties like field or river
+     * modify particular good production. Trees and clearing select the baseline
+     * table in {@link TerrainType} and need no modifier here.
      */
     private final static List<Function<TerrainProduction, TerrainProduction>> PRODUCTION_MODIFIERS = Lists
             .newArrayList(prod -> {
@@ -45,6 +47,13 @@ public class Terrain {
                         && prod.getProduction() > 0
                         && PLOW_CROPS.contains(prod.getGoodsType())) {
                     return prod.modify(prod.getProduction() + PLOW_BONUS);
+                }
+                return prod;
+            }, prod -> {
+                // A river adds to output only when the square already yields.
+                if (prod.getProduction() > 0) {
+                    return prod.modify(prod.getProduction() + prod.getTerrain()
+                            .getRiverSize().getProductionBonus());
                 }
                 return prod;
             });
@@ -214,6 +223,29 @@ public class Terrain {
                 "this terrain type (%s) at (%s) can't have road.", terrainType,
                 location);
         this.hasRoad = hasRoad;
+    }
+
+    /**
+     * Provide the size of the river crossing this square.
+     *
+     * @return {@link RiverSize#NONE} when no river crosses the square
+     */
+    public RiverSize getRiverSize() {
+        return riverSize;
+    }
+
+    /**
+     * Allows to set the river crossing the square.
+     *
+     * @param riverSize size of the river, {@link RiverSize#NONE} for none
+     */
+    public void setRiverSize(final RiverSize riverSize) {
+        Preconditions.checkNotNull(riverSize);
+        Preconditions.checkArgument(
+                terrainType.isLand() || riverSize == RiverSize.NONE,
+                "this terrain type (%s) at (%s) can't have river.", terrainType,
+                location);
+        this.riverSize = riverSize;
     }
 
     /**

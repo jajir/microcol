@@ -2,12 +2,15 @@ package org.microcol.model.store;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 import org.microcol.model.Location;
+import org.microcol.model.RiverSize;
 import org.microcol.model.TerrainType;
 
 public final class WorldMapPo extends AbstractMapStore {
@@ -38,6 +41,18 @@ public final class WorldMapPo extends AbstractMapStore {
      * square has a road.
      */
     private String[] roads;
+
+    /**
+     * Hold size of the river on each land square. A missing block means no
+     * river.
+     */
+    private String[] rivers;
+
+    /**
+     * Hold course segments joining neighbouring river squares. A missing block
+     * means no course.
+     */
+    private List<RiverSegmentPo> riverSegments;
 
     private VisibilityPo visibility;
 
@@ -274,6 +289,54 @@ public final class WorldMapPo extends AbstractMapStore {
 
     public void setRoads(final String[] roads) {
         this.roads = roads;
+    }
+
+    public void setRivers(final Map<Location, RiverSize> riverMap) {
+        rivers = generateString(
+                loc -> riverMap.getOrDefault(loc, RiverSize.NONE).getCode(),
+                maxX, maxY);
+    }
+
+    /**
+     * @return size of the river on every square that has one
+     */
+    public Map<Location, RiverSize> getRiverMap() {
+        final Map<Location, RiverSize> out = new HashMap<>();
+        // A missing block means no river; a present one must be complete and
+        // use only the known codes.
+        if (rivers != null) {
+            Preconditions.checkArgument(
+                    rivers.length == maxY + 1 && rivers[0] != null,
+                    "Invalid river row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = rivers[y];
+                Preconditions.checkArgument(
+                        row != null
+                                && row.startsWith(
+                                        String.format("row-%04d:", y % 10000))
+                                && row.substring("row-0001:".length())
+                                        .split(",", -1).length == maxX,
+                        "Invalid river row %s", y);
+            }
+            iterate(rivers, (location, charCode) -> {
+                final RiverSize size = RiverSize.valueOfCode(charCode);
+                if (size != RiverSize.NONE) {
+                    out.put(location, size);
+                }
+            });
+        }
+        return out;
+    }
+
+    /**
+     * @return saved course segments, empty when the block is missing
+     */
+    public List<RiverSegmentPo> getRiverSegments() {
+        return riverSegments != null ? riverSegments : ImmutableList.of();
+    }
+
+    public void setRiverSegments(final List<RiverSegmentPo> riverSegments) {
+        this.riverSegments = riverSegments;
     }
 
 }

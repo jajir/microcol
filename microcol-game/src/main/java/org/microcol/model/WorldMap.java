@@ -1,14 +1,19 @@
 package org.microcol.model;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.RiverSegmentPo;
 import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.store.WorldMapPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 public class WorldMap {
 
@@ -25,6 +30,13 @@ public class WorldMap {
 
     private final Set<Location> roads;
 
+    private final ImmutableMap<Location, RiverSize> rivers;
+
+    /**
+     * Course segments; each one is the unordered pair of its two squares.
+     */
+    private final Set<Set<Location>> riverSegments;
+
     private final Integer seed;
 
     public WorldMap(final ModelPo gamePo) {
@@ -40,6 +52,8 @@ public class WorldMap {
         this.fields = worldMapPo.getFieldSet();
         this.cleared = worldMapPo.getClearedSet();
         this.roads = worldMapPo.getRoadSet();
+        this.rivers = ImmutableMap.copyOf(worldMapPo.getRiverMap());
+        this.riverSegments = new HashSet<>();
         this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(),
                 "Seed value is null");
         for (final Location at : cleared) {
@@ -50,7 +64,39 @@ public class WorldMap {
             Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
                     "Road square (%s) must be land.", at);
         }
+        for (final Location at : rivers.keySet()) {
+            Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
+                    "River square (%s) must be land.", at);
+        }
+        for (final RiverSegmentPo segment : worldMapPo.getRiverSegments()) {
+            verifyRiverSegment(segment);
+        }
         verifyThatMapIsComplete();
+    }
+
+    /**
+     * Check one saved course segment and remember it. Both ends must be known
+     * river squares on this map and must be distinct neighbours.
+     *
+     * @param segment required saved segment
+     */
+    private void verifyRiverSegment(final RiverSegmentPo segment) {
+        final Location from = segment.getFrom();
+        final Location to = segment.getTo();
+        Preconditions.checkArgument(from != null && to != null,
+                "River segment must name two squares.");
+        Preconditions.checkArgument(isValid(from) && isValid(to),
+                "River segment (%s, %s) must be part of this map.", from, to);
+        Preconditions.checkArgument(from.isNeighbor(to),
+                "River segment (%s, %s) must join neighbour squares.", from,
+                to);
+        Preconditions.checkArgument(
+                rivers.containsKey(from) && rivers.containsKey(to),
+                "River segment (%s, %s) must join squares with a river.", from,
+                to);
+        Preconditions.checkArgument(
+                riverSegments.add(ImmutableSet.of(from, to)),
+                "Duplicate river segment (%s, %s).", from, to);
     }
 
     private void verifyThatMapIsComplete() {
@@ -107,6 +153,7 @@ public class WorldMap {
         out.setHasField(fields.contains(location));
         out.setCleared(cleared.contains(location));
         out.setHasRoad(roads.contains(location));
+        out.setRiverSize(getRiverSizeAt(location));
         return out;
     }
 
@@ -127,6 +174,39 @@ public class WorldMap {
     public boolean hasRoadAt(final Location location) {
         Preconditions.checkNotNull(location);
         return roads.contains(location);
+    }
+
+    /**
+     * @param location required location
+     * @return size of the river on the square, {@link RiverSize#NONE} when none
+     */
+    public RiverSize getRiverSizeAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return rivers.getOrDefault(location, RiverSize.NONE);
+    }
+
+    /**
+     * @param from required square
+     * @param to   required neighbouring square
+     * @return {@code true} when a river course joins the two squares, in either
+     *         direction
+     */
+    public boolean hasRiverSegment(final Location from, final Location to) {
+        Preconditions.checkNotNull(from);
+        Preconditions.checkNotNull(to);
+        return riverSegments.contains(ImmutableSet.of(from, to));
+    }
+
+    /**
+     * @param location required location
+     * @return squares joined to this one by a river course
+     */
+    public Set<Location> getRiverLinksAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return riverSegments.stream()
+                .filter(segment -> segment.contains(location))
+                .flatMap(Set::stream).filter(other -> !other.equals(location))
+                .collect(ImmutableSet.toImmutableSet());
     }
 
     public boolean isValid(final Location location) {
@@ -158,8 +238,20 @@ public class WorldMap {
         gamePo.getMap().setFields(fields);
         gamePo.getMap().setCleared(cleared);
         gamePo.getMap().setRoads(roads);
+        gamePo.getMap().setRivers(rivers);
+        gamePo.getMap().setRiverSegments(riverSegmentsToSave());
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
+    }
+
+    /**
+     * Every course once, so a shared segment is not saved twice.
+     */
+    private List<RiverSegmentPo> riverSegmentsToSave() {
+        return riverSegments.stream().map(segment -> {
+            final List<Location> ends = ImmutableList.copyOf(segment);
+            return new RiverSegmentPo(ends.get(0), ends.get(1));
+        }).collect(ImmutableList.toImmutableList());
     }
 
     public void plowFiled(final Location at) {

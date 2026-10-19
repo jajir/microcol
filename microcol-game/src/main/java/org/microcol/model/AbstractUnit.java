@@ -736,11 +736,13 @@ public abstract class AbstractUnit implements Unit {
         if (isShip()) {
             return MovementPoints.THIRDS_PER_POINT;
         }
-        // A connected road needs a road on both squares of the step.
+        // A connected road needs a road on both squares of the step; a river
+        // course needs its own segment. Either one gives the same third.
         final boolean connectedRoad = model.getMap().hasRoadAt(from)
                 && model.getMap().hasRoadAt(to);
+        final boolean connectedRiver = model.getMap().hasRiverSegment(from, to);
         return model.getMap().getTerrainTypeAt(to).getMoveCostThirds(
-                model.getMap().hasTreesAt(to), connectedRoad);
+                model.getMap().hasTreesAt(to), connectedRoad || connectedRiver);
     }
 
     @Override
