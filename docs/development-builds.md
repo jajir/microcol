@@ -99,7 +99,7 @@ replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 
 ## Full functional regression budget
 
-[R-0247](requirements/R-0247.md) gives the complete Docker/Xvfb functional job
+[R-0247](requirements/done/R-0247.md) gives the complete Docker/Xvfb functional job
 **60 minutes**. The suite previously passed in about 44 minutes, but two later
 runs exceeded the old 45-minute limit while tests were still progressing; see
 [the dated diagnosis](ai/completion-callbacks.md#full-suite-timeout-diagnosis-2026-10-19).

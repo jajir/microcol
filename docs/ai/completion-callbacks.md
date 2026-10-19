@@ -135,7 +135,7 @@ separately; this probe does not prove the later integration.
 
 ## Full-suite timeout diagnosis — 2026-10-19
 
-1. [R-0247](../requirements/R-0247.md) follows two timed-out attempts of
+1. [R-0247](../requirements/done/R-0247.md) follows two timed-out attempts of
    [development #178](https://github.com/jajir/microcol/actions/runs/39165485395)
    for `39ed716c3ec9cc2b5ffd990c2f7b3546b5082089`. GitHub annotated both with
    the 45-minute job deadline. Tests continued up to cancellation: completed-suite
@@ -157,4 +157,20 @@ separately; this probe does not prove the later integration.
    21 worker-launcher tests without inference, 13 change-classifier tests and nine
    documentation tests, plus strict MkDocs. Parsed before/after workflow comparison
    confirms that only `jobs.functional.timeout-minutes` changes from 45 to 60.
-   Live full-suite acceptance and publication are still pending for the repair.
+   Full-suite acceptance and publication were pending at that local checkpoint.
+5. [Development #181](https://github.com/jajir/microcol/actions/runs/39176254760)
+   for `07bb1e0203442bd46ff88f7868fbc7e5489639c8` then passed **2,723 full
+   regression checks** in **47 minutes 51 seconds**, within the new deadline.
+   Downloaded XML reports verify zero failures/errors/skips, 32 build-tool checks
+   and 2,381 checks on each of macOS ARM64, macOS Intel and Linux. Java 11/17 on
+   Linux and Windows each passed 2,348 checks; Pages build and deployment passed
+   on the same commit. The callback arrived in the originating task and its saved
+   result was checked against the exact source and actual reports.
+6. The immutable release
+   [dev-181-07bb1e020344](https://github.com/jajir/microcol/releases/tag/dev-181-07bb1e020344)
+   is published. Its manifest matches the downloaded current `dev` channel;
+   all three platform archive digests match `SHA256SUMS`, and the downloaded
+   macOS launcher's checksum and ZIP integrity pass. Evidence is retained under
+   `target/r247/`, including `verified-test-counts.json` and
+   `publication-verified.json`. This closes the R-0245 publication blocker and
+   accepts R-0247; neither failed attempt of #178 is reclassified as passing.

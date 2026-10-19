@@ -4567,6 +4567,12 @@ committed for this experiment.
    `docs/`, so the existing classifier requires full development/Java CI as well
    as Pages. Completion watchers retain the exact pushed revision; a push alone
    does not establish a newly published game build.
+4. Publication completed on 2026-10-19 through
+   [R-0247](../requirements/done/R-0247.md): two #178 attempts had exceeded the
+   functional CI deadline; the repaired #181 passed all required gates and its
+   release/channel checks. [Dated evidence](completion-callbacks.md#full-suite-timeout-diagnosis-2026-10-19)
+   preserves both timeouts and the accepted full result. The Codex-default policy
+   was retained throughout; no model-selection change was needed for this repair.
 
 
 ## Claude batch publication verified — 2026-10-18
