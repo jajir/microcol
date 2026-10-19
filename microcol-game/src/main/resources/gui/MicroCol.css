@@ -1,3 +1,4 @@
+@import "Typography.css";
 @import "WoodenButtons.css";
 
 /*
@@ -36,10 +37,6 @@
 
 #statusBar #labelEra{
 	-fx-padding: 0 5px 0 5px;
-}
-
-.root {
-	 -fx-font-family: Tillana;
 }
 
 .label {

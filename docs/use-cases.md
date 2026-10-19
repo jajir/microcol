@@ -1,5 +1,9 @@
 # Use cases a přejímka pravidel hry
 
+Aktuální změna typografie: [R-0250](requirements/R-0250.md), UC-119,
+TC83/TC84/TC85 a plná regrese. [Průběžná evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
+
+
 **Migrace požadavků 2026-10-14:** aktuální zbytek R-0001–R-0040 a novější
 důkazy vlastní [mapa migrace](requirements/migration-2026-10-14.md), další práci
 vybíráme z [nové řady](requirements/backlog.md). Starší auditní pozorování níže

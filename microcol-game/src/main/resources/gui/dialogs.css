@@ -1,3 +1,4 @@
+@import "Typography.css";
 @import "WoodenButtons.css";
 
 /*
@@ -9,7 +10,6 @@
 
 .root{
 	-fx-padding: 30 30 15 30;
-	-fx-font-family: Tillana;
 }
 
 #caption{

@@ -13,6 +13,7 @@ import org.microcol.i18n.I18n;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
@@ -79,7 +80,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     PanelColonyFields(final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final PaintService paintService, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final FontService fontService) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
@@ -89,6 +90,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         final int size = 3 * TILE_WIDTH_IN_PX;
 
         canvas = new Canvas(size, size);
+        canvas.getGraphicsContext2D().setFont(fontService.getDefault(12));
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
         canvas.setOnDragDetected(this::onDragDetected);
