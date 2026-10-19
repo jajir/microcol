@@ -102,7 +102,7 @@
     [colonies](R-0200.md), [natives](R-0201.md), [navy](R-0202.md),
     [Congress/REF](R-0203.md) and [notices/results](R-0204.md).
     [R-0205](R-0205.md) owns local inspection, [R-0206](done/R-0206.md)
-    the rules encyclopedia and [R-0207](R-0207.md) existing tutorial updates.
+    the rules encyclopedia and [R-0207](deferred/R-0207.md) existing tutorial updates.
     Together with R-0145 and R-0168, all nine report families have owners.
 14. Nine verification-only captures own the mandatory matrices:
     [profiles](R-0208.md), [New Game controls](R-0209.md),

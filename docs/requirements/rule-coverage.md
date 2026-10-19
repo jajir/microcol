@@ -12,7 +12,7 @@
 | SETUP-008 | [R-0066](done/R-0066.md), [R-0051](done/R-0051.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SUPPORT-002 | [R-0203](R-0203.md) | One Congress/REF report owner, not duplicate SUPPORT002 and report candidate. |
 | SUPPORT-003 | [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](R-0145.md), [R-0201](R-0201.md), [R-0168](R-0168.md), [R-0202](R-0202.md), [R-0203](R-0203.md), [R-0204](R-0204.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| SUPPORT-004 | [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](R-0207.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SUPPORT-004 | [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-009 | [R-0051](done/R-0051.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TURN-001 | [R-0052](done/R-0052.md), [R-0151](R-0151.md) | Shared turn order plus actual native actors. |
 | TURN-002 | [R-0052](done/R-0052.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

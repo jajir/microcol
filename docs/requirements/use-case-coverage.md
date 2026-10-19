@@ -119,7 +119,7 @@
 | UC-111 | Hra | Ukončit nebo opustit partii | [R-0193](R-0193.md), [R-0194](R-0194.md) |
 | UC-112 | Hra | Spočítat skóre a zapsat Hall of Fame | [R-0195](R-0195.md), [R-0196](R-0196.md), [R-0197](R-0197.md) |
 | UC-113 | Hra | Uložit a obnovit rozpracovanou partii | [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0068](done/R-0068.md) |
-| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](R-0145.md), [R-0201](R-0201.md), [R-0168](R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](R-0207.md) |
+| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](R-0145.md), [R-0201](R-0201.md), [R-0168](R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
 | UC-115 | Hra | Expedice se uživí a začne obchodovat | [R-0217](R-0217.md) |
 | UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](R-0218.md) |
 | UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](R-0219.md) |
