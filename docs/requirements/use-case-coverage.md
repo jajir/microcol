@@ -71,7 +71,7 @@
 | UC-063 | Hra | Naučit se od domorodců | [R-0148](R-0148.md), [R-0157](R-0157.md) |
 | UC-064 | Hra | Obchodovat se sídlem | [R-0159](R-0159.md), [R-0160](R-0160.md), [R-0161](R-0161.md) |
 | UC-065 | Hra | Vyžádat tribut a dobýt sídlo | [R-0162](R-0162.md), [R-0174](R-0174.md), [R-0175](R-0175.md) |
-| UC-066 | Hra | Vyslat misionáře a založit misi | [R-0163](R-0163.md), [R-0164](R-0164.md), [R-0149](R-0149.md) |
+| UC-066 | Hra | Vyslat misionáře a založit misi | [R-0163](done/R-0163.md), [R-0164](R-0164.md), [R-0149](R-0149.md) |
 | UC-067 | Hra | Vypudit cizí misi nebo podnítit válku | [R-0165](R-0165.md), [R-0166](R-0166.md) |
 | UC-068 | Hra | Hrát proti fungujícímu soupeři | [R-0090](done/R-0090.md), [R-0091](R-0091.md), [R-0092](R-0092.md), [R-0170](R-0170.md), [R-0171](R-0171.md), [R-0172](R-0172.md), [R-0156](R-0156.md) |
 | UC-069 | Hra | Vyhlásit válku, vyjednat mír a alianci | [R-0028](done/R-0028.md), [R-0026](done/R-0026.md), [R-0099](done/R-0099.md), [R-0087](done/R-0087.md), [R-0089](done/R-0089.md) |
@@ -106,7 +106,7 @@
 | UC-098 | Hra | Peter Minuit | [R-0152](R-0152.md), [R-0214](R-0214.md) |
 | UC-099 | Hra | Peter Stuyvesant | [R-0084](done/R-0084.md), [R-0214](R-0214.md) |
 | UC-100 | Hra | Jan de Witt | [R-0167](R-0167.md), [R-0168](R-0168.md), [R-0214](R-0214.md) |
-| UC-101 | Hra | Jean de Brebeuf | [R-0163](R-0163.md), [R-0214](R-0214.md) |
+| UC-101 | Hra | Jean de Brebeuf | [R-0163](done/R-0163.md), [R-0214](R-0214.md) |
 | UC-102 | Hra | William Brewster | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md), [R-0214](R-0214.md) |
 | UC-103 | Hra | Bartolome de Las Casas | [R-0182](R-0182.md), [R-0214](R-0214.md) |
 | UC-104 | Hra | William Penn | [R-0110](done/R-0110.md), [R-0214](R-0214.md) |

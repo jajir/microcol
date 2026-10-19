@@ -60,6 +60,7 @@ final class IndependenceFixture {
             action.addProperty("type", "noAction");
             final JsonObject unit = new JsonObject();
             unit.addProperty("workUpdates", 0);
+            unit.addProperty("missionary", false);
             unit.addProperty("id", id);
             unit.addProperty("type", type);
             unit.addProperty("ownerId", "Dutch");

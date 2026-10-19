@@ -141,6 +141,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -155,6 +156,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 6,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -175,6 +177,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 8,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -195,6 +198,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 9,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -215,6 +219,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 10,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -235,6 +240,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 11,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -255,6 +261,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 12,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -269,6 +276,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 14,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -289,6 +297,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 15,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -309,6 +318,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 17,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -329,6 +339,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 19,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -343,6 +354,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 20,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -363,6 +375,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 21,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -383,6 +396,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 22,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -403,6 +417,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -423,6 +438,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 24,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -443,6 +459,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 25,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -457,6 +474,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 26,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -477,6 +495,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 27,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -497,6 +516,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 28,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -517,6 +537,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 29,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -537,6 +558,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 30,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -557,6 +579,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 31,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -577,6 +600,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 32,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -597,6 +621,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 33,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -617,6 +642,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 34,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -637,6 +663,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 36,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -657,6 +684,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 55,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",

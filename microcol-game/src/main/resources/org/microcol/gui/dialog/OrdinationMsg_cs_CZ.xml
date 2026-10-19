@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define keys for missionary ordination in Europe and colonies</comment>
+	<entry key="ordainMenu">Vysvětit misionáře…</entry>
+	<entry key="ordainTitle">Vysvěcení misionáře</entry>
+	<entry key="ordainSummary">Vysvěcení je zdarma a nespotřebuje pohyb. Kolonista si ponechá identitu, specializaci, vybavení i pohyb. Odborné účinky platí jen pro jezuitu nebo dokud váš národ drží Jeana de Brebeufa.</entry>
+	<entry key="ordainConfirm">Vysvětit</entry>
+	<entry key="ordainCancel">Zrušit</entry>
+	<entry key="ordainClose">Zavřít</entry>
+	<entry key="ordainDone">Tento kolonista je nyní misionář. Nic dalšího se nezměnilo.</entry>
+	<entry key="ordainChanged">Situace se změnila. Nic se nezměnilo. Zrušte dialog a zkuste to znovu.</entry>
+	<entry key="ordainUNAVAILABLE">Tento kolonista není ve vašem tahu pro vysvěcení dostupný. Nic se nezměnilo.</entry>
+	<entry key="ordainALREADY_MISSIONARY">Tento kolonista je už misionář. Nic se nezměnilo.</entry>
+	<entry key="ordainASSIGNED_WORKER">Tento kolonista pracuje na poli nebo v budově. Nejdříve ho z této práce uvolněte, potom jej lze vysvětit.</entry>
+	<entry key="ordainACTIVE_ORDER">Tento kolonista má aktivní rozkaz, například hlídku, opevnění nebo práci pionýra. Nejdříve jej zrušte.</entry>
+	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Vysvěcení vyžaduje, aby byl kolonista na evropském molu nebo venku mimo pole a budovy vaší kolonie.</entry>
+	<entry key="ordainNO_CHURCH">Tato kolonie potřebuje kostel nebo katedrálu. Samotná kaple nestačí.</entry>
+</properties>

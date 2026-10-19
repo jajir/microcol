@@ -98,6 +98,7 @@ final class RoadFixture {
                     unit.addProperty("type", unitType);
                     // A hardy pioneer keeps a valid, empty work history.
                     unit.addProperty("workUpdates", 0);
+                    unit.addProperty("missionary", false);
                     unit.remove("workSkill");
                 }
             }

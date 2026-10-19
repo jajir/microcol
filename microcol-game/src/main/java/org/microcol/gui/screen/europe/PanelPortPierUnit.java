@@ -3,6 +3,8 @@ package org.microcol.gui.screen.europe;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.dialog.DialogOrdainMissionary;
+import org.microcol.gui.dialog.OrdinationMsg;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.unit.UnitActionType;
 import javafx.scene.control.Label;
@@ -34,14 +36,17 @@ public final class PanelPortPierUnit extends HBox {
     private final EuropeCallback callback;
     private final GameModelController gameModelController;
     private final DialogMessage orderMessage;
+    private final DialogOrdainMissionary ordinationDialog;
 
     public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
             final DialogEuropeEquipment equipmentDialog, final I18n i18n,
             final EuropeCallback callback,
             final GameModelController gameModelController,
-            final DialogMessage orderMessage) {
+            final DialogMessage orderMessage,
+            final DialogOrdainMissionary ordinationDialog) {
         this.gameModelController = gameModelController;
         this.orderMessage = orderMessage;
+        this.ordinationDialog = ordinationDialog;
         this.unit = unit;
         this.equipmentDialog = equipmentDialog;
         this.i18n = i18n;
@@ -105,6 +110,7 @@ public final class PanelPortPierUnit extends HBox {
                     !colonist.isMounted());
             addEquipmentChoice(colonist, GoodsType.TOOLS,
                     !colonist.isHoldingTools());
+            addOrdinationChoice();
         }
         final boolean sentry = unit.getAction()
                 .getType() == UnitActionType.sentry;
@@ -131,6 +137,17 @@ public final class PanelPortPierUnit extends HBox {
         });
         equipmentMenu.getItems().add(order);
         equipmentMenu.show(paneImage, Side.BOTTOM, 0, 0);
+    }
+
+    private void addOrdinationChoice() {
+        final MenuItem ordain = new MenuItem(
+                i18n.get(OrdinationMsg.ordainMenu));
+        ordain.setId("europe-ordain-" + unit.getId());
+        ordain.setOnAction(event -> {
+            ordinationDialog.show(unit);
+            callback.repaintAfterGoodMoving();
+        });
+        equipmentMenu.getItems().add(ordain);
     }
 
     private void addEquipmentChoice(final UnitFreeColonist colonist,

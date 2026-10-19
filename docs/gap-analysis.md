@@ -938,6 +938,8 @@ rules; implementation and acceptance are tracked by that requirement.
 
 ### Founder details
 
+Ordination decision (2026-10-19): ordination is free and does not consume movement. Colonists, including indentured servants and petty criminals, may be ordained on the European pier or outside an owned colony with a church or cathedral. Assigned workers must first leave their job. Identity, specialty and equipment are preserved. Explicit specialty-clearing remains a separate player action.
+
 1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes
    guarantees treasure and doubles [native and european relations](#native-and-european-relations)'s base treasure amount. Bolivar gives
    a persistent **+20 percentage points**, including future colonies, capped

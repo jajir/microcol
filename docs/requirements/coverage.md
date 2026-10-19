@@ -69,7 +69,7 @@
 8. Native interactions are [R-0157](R-0157.md) action selection,
    [R-0158](R-0158.md) chief encounters, [R-0159](R-0159.md) market/admission,
    [R-0160](R-0160.md) sale/gift and [R-0161](R-0161.md) reverse purchase.
-   [R-0162](R-0162.md) owns tribute; [R-0163](R-0163.md) ordination and
+   [R-0162](R-0162.md) owns tribute; [R-0163](done/R-0163.md) ordination and
    Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
    denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.

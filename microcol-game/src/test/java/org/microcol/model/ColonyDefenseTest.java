@@ -120,6 +120,7 @@ class ColonyDefenseTest {
         po.setAction(new UnitActionNoAction().save());
         po.setAvailableMoves(1);
         po.setWorkUpdates(0);
+        po.setMissionary(false);
         if (field) {
             po.setPlaceColonyField(new PlaceColonyFieldPo());
         } else {

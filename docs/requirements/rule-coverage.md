@@ -146,7 +146,7 @@
 | NAT-014 | [R-0159](R-0159.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | NAT-015 | [R-0148](R-0148.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | NAT-016 | [R-0162](R-0162.md), [R-0174](R-0174.md), [R-0175](R-0175.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| NAT-017 | [R-0163](R-0163.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| NAT-017 | [R-0163](done/R-0163.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | NAT-018 | [R-0164](R-0164.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | NAT-019 | [R-0165](R-0165.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | NAT-020 | [R-0166](R-0166.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -213,7 +213,7 @@
 | FATHER-013 | [R-0152](R-0152.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-014 | [R-0084](done/R-0084.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-015 | [R-0167](R-0167.md), [R-0168](R-0168.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-016 | [R-0163](R-0163.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-016 | [R-0163](done/R-0163.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-017 | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-018 | [R-0182](R-0182.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-019 | [R-0110](done/R-0110.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

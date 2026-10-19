@@ -525,6 +525,17 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    -Dsurefire.failIfNoSpecifiedTests=false`. Pravidlo nemá seznam výjimek
    ani zmrazený seznam historických porušení.
 
+### Misionářská role a odbornost (R-0163)
+
+`UnitFreeColonist` ukládá misionářskou roli odděleně od vojenské role a civilní
+odbornosti; `UnitPo.missionary` je povinný u každého kolonisty. `Model` vlastní
+dotaz na přijetí i operaci vysvěcení: evropské molo nebo vlastní kolonie s
+kostelem či katedrálou, bez aktivního rozkazu a bez práce uvnitř kolonie.
+`UnitFreeColonist.hasEffectiveMissionaryExpertise` je jediný dotaz odbornosti
+pro budoucí misijní, sporné a podněcovací akce; konverzi a ostatní akce
+nevlastní. GUI pouze čte dotaz a zobrazuje důvod. Stav ověření vede
+[evidence R-0163](functional-tests.md#r-0163-missionary-ordination-2026-10-19).
+
 ## Jak udržet popis platný
 
 1. Před změnou určit vlastníka pravidla, vstup člověka/AI, ukládaný stav

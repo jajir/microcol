@@ -147,6 +147,7 @@ class IndoorColonyJobAssignmentTest {
         final GameModelPo wrongRoleData = fixture();
         savedUnit(wrongRoleData, 0).setType(UnitType.WAGON);
         savedUnit(wrongRoleData, 0).setWorkUpdates(null);
+        savedUnit(wrongRoleData, 0).setMissionary(null);
         final Model wrongRole = load(wrongRoleData);
         rejected(wrongRole, wrongRole.getUnitById(0), slot(wrongRole));
 

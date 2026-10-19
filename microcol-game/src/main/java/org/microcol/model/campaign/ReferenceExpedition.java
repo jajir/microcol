@@ -185,6 +185,7 @@ public final class ReferenceExpedition {
         unit.setType(type);
         if (type == UnitType.COLONIST) {
             unit.setWorkUpdates(0);
+            unit.setMissionary(false);
         }
         unit.setAction(new UnitActionNoActionPo());
         unit.setMovementThirds(MovementPoints.ofPoints(type.getSpeed()));

@@ -50,6 +50,7 @@ final class PlowFixture {
                     unit.addProperty("type", unitType);
                     // Every free colonist keeps a valid, empty work history.
                     unit.addProperty("workUpdates", 0);
+                    unit.addProperty("missionary", false);
                     unit.remove("workSkill");
                 }
             }

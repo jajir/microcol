@@ -135,6 +135,7 @@ class PassengerTransferTest {
                 || UnitType.EUROPEAN_SPECIALISTS.contains(type)
                 || UnitType.SCHOOL_ONLY_SPECIALISTS.contains(type)) {
             unit.setWorkUpdates(0);
+            unit.setMissionary(false);
         }
         unit.setOwnerId(owner);
         // A full allowance of the unit's own type is always a legal saved

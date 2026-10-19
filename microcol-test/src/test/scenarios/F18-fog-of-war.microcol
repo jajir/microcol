@@ -39,6 +39,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -56,6 +57,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -73,6 +75,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -90,6 +93,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "type": "COLONIST",
         "ownerId": "Dutch",
         "cargo": {
@@ -133,6 +137,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 104,
         "type": "COLONIST",
         "ownerId": "France",

@@ -441,6 +441,44 @@ nefunkční testovací prostředí uvést jako otevřenou překážku. Hlavní a
 ověřuje skutečný běh i u testů napsaných [místním workerem](ai/local-qwen.md).
 
 
+## R-0163 missionary ordination — 2026-10-19
+
+1. Přijato v izolované dávkové větvi, zatím nepublikováno. Vysvěcení je zdarma
+   a bez spotřeby pohybu na evropském molu nebo před vlastní kolonií s kostelem
+   či katedrálou. Zachovává identitu, specializaci a vybavení včetně sluhů a
+   trestanců. Přidělený pracovník musí nejprve opustit práci. Kaple nestačí.
+2. `Model.getOrdinationProblem` a `ordainMissionary` sdílejí ověření vlastníka,
+   živé hry, fáze, umístění a rozkazu před změnou. `UnitPo.missionary` ukládá
+   roli; scénáře a tvůrci dat byly aktualizovány bez migrace starých uložených her.
+   `hasEffectiveMissionaryExpertise` čte jezuitu nebo Brébeufa živého vlastníka.
+   Nativní mise, konverze, denunciace a podněcování zůstávají dalšími požadavky.
+3. Haiku připravilo a implementovalo model/UI, Sonnet doplnil chybějící TC96
+   a opravil neplatné použití EnumSource pro UnitType. Po třech pokusech uživatel
+   výslovně povolil dokončení Codexem: model nyní přijímá i katedrálu (kontrola
+   budovy porovnává přesný typ) a český UI test hledá správné „Vysvětit“.
+   Původní selhání zůstávají evidována v completion záznamech
+   `20261019T120849Z-54afc1dac06a`, `20261019T122151Z-c37ff019b993`
+   a `20261019T122354Z-fb3ea7d1e455`.
+4. Finální Docker/Xvfb běh `20261019T123100Z-deb767e1dafa`:
+   **2 551 modelových testů a 14 UI/provozních kontrol**, nula chyb, selhání
+   a přeskočení. Výběr `*Test,!RivalTradeCycleTest,TC_96*` zahrnuje 35 běhů
+   MissionaryOrdinationTest, fázi přípravy tahu a všech pět TC96 scénářů.
+   R-0091 RivalTradeCycleTest zůstává samostatným otevřeným blokátorem.
+5. Předchozí diagnostický běh ověřil dalších **30 souvisejících UI scénářů**
+   TC25/27/29/47/56/67 a tři kontroly zdrojového kontraktu. Finální oprava
+   změnila pouze přijetí katedrály a český očekávaný text TC96; související
+   vybavení, přeprava, imigrace, Kongres a náboženská produkce se nezměnily.
+6. `TC_96_F87_missionary_ordination_test` ověřuje skutečná menu a dialogy:
+   molo (zrušení, Escape, potvrzení, opakování, Continue), odmítnutí kaple,
+   kostel (změna přidělené práce před potvrzením), katedrálu a Brébeufa
+   před/po, český dialog a Enter. Modelové kontroly pokrývají sociální třídy,
+   vybavení a přesný pohyb, přidělenou práci, náklad, moře, rozkaz, změnu
+   vlastníka a persistence. Samostatná větev cizí kolonie pod vlastní jednotkou
+   nemá přímý scénář; vlastnictví kontroluje sdílená operace.
+7. Sdílený formatter: 48 Java souborů, shoda tokenů a idempotence PASS.
+   Devět dokumentačních testů a strict MkDocs prošly. Celá UI regrese a
+   publikace jsou odloženy na integraci deseti přijatých požadavků dávky.
+
 ## Z01 — bezpečné vyložení nákladu
 
 **Přijaté ověření — 11. října 2026:**

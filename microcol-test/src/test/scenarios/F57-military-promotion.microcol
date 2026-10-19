@@ -13,6 +13,7 @@
     "units": [
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -36,6 +37,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -59,6 +61,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 2,
         "type": "MASTER_BLACKSMITH",
         "ownerId": "Dutch",
@@ -110,6 +113,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "France",
@@ -127,6 +131,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 5,
         "type": "COLONIST",
         "ownerId": "France",
@@ -144,6 +149,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 6,
         "type": "COLONIST",
         "ownerId": "France",

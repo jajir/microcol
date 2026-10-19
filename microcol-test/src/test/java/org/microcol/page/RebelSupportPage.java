@@ -175,6 +175,7 @@ public final class RebelSupportPage extends AbstractScreen {
     private JsonObject resident(final int id) {
         final JsonObject unit = new JsonObject();
         unit.addProperty("workUpdates", 0);
+        unit.addProperty("missionary", false);
         unit.addProperty("id", id);
         unit.addProperty("type", "COLONIST");
         unit.addProperty("ownerId", "Dutch");

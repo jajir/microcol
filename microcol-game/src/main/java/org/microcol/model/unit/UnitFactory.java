@@ -228,6 +228,11 @@ public class UnitFactory {
                         : unitPo.getWorkUpdates() == null
                                 && unitPo.getWorkSkill() == null,
                 "Invalid saved work history owner");
+        Preconditions.checkArgument(
+                unit instanceof UnitFreeColonist
+                        ? unitPo.getMissionary() != null
+                        : unitPo.getMissionary() == null,
+                "Invalid saved missionary role owner");
         Preconditions.checkArgument(unitPo.getMilitaryRole() != null,
                 "Missing saved military role");
         Preconditions.checkArgument(
@@ -239,6 +244,7 @@ public class UnitFactory {
         if (unit instanceof UnitFreeColonist) {
             ((UnitFreeColonist) unit)
                     .restoreMilitaryRole(unitPo.getMilitaryRole());
+            ((UnitFreeColonist) unit).restoreMissionary(unitPo.getMissionary());
             ((UnitFreeColonist) unit)
                     .restoreVeteran(unitCreateRequest.isVeteran());
             ((UnitFreeColonist) unit).restoreWorkExperience(

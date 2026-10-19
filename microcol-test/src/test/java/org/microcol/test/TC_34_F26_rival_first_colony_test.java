@@ -84,6 +84,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
             spare.setOwnerId("France");
             spare.setAction(founder.getAction());
             spare.setWorkUpdates(0);
+            spare.setMissionary(false);
             final PlaceMapPo place = new PlaceMapPo();
             place.setLocation(SITE);
             place.setOrientation(Direction.west);

@@ -2022,6 +2022,71 @@ public class Model {
         ((AbstractUnit) unit).setWaitingOrder(UnitActionType.noAction);
     }
 
+    /**
+     * Authoritative missionary admission for a live colonist of the current
+     * owner. It is free, uses no movement and changes only the missionary role.
+     * Accepted places are the owner's European pier and an owned colony tile
+     * that has a church or cathedral. Workers in fields or buildings, cargo,
+     * sea, foreign or stale units and colonies are refused before any change.
+     *
+     * @param unit the unit the player or the UI wants to ordain
+     * @return the reason ordination is refused, or empty when it may proceed
+     */
+    public Optional<OrdinationProblem> getOrdinationProblem(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist) || !isGameRunning()
+                || endingTurn || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId())
+                        .orElse(null) != unit) {
+            return Optional.of(OrdinationProblem.UNAVAILABLE);
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        if (colonist.isMissionary()) {
+            return Optional.of(OrdinationProblem.ALREADY_MISSIONARY);
+        }
+        if (colonist.isAtPlaceColonyField()
+                || colonist.isAtPlaceConstructionSlot()) {
+            return Optional.of(OrdinationProblem.ASSIGNED_WORKER);
+        }
+        if (colonist.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(OrdinationProblem.ACTIVE_ORDER);
+        }
+        if (colonist.isAtEuropePier()) {
+            return Optional.empty();
+        }
+        if (!colonist.isAtPlaceLocation()) {
+            return Optional.of(OrdinationProblem.NOT_IN_EUROPE_OR_COLONY);
+        }
+        final Optional<Colony> colony = getColonyAt(colonist.getLocation());
+        if (colony.isEmpty()) {
+            return Optional.of(OrdinationProblem.NOT_IN_EUROPE_OR_COLONY);
+        }
+        if (!colony.get().isValid()
+                || colony.get().getOwner() != colonist.getOwner()) {
+            return Optional.of(OrdinationProblem.UNAVAILABLE);
+        }
+        if (!colony.get().wasConstructionBuilded(ConstructionType.CHURCH)
+                && !colony.get()
+                        .wasConstructionBuilded(ConstructionType.CATHEDRAL)) {
+            return Optional.of(OrdinationProblem.NO_CHURCH);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Ordain a colonist after the same validation as
+     * {@link #getOrdinationProblem}.
+     *
+     * @throws IllegalStateException when the live state refuses ordination; the
+     *                               unit and its state stay unchanged
+     */
+    public void ordainMissionary(final Unit unit) {
+        final Optional<OrdinationProblem> problem = getOrdinationProblem(unit);
+        Preconditions.checkState(problem.isEmpty(),
+                "Unit cannot be ordained: %s", problem.orElse(null));
+        checkTurnPreparationComplete();
+        ((UnitFreeColonist) unit).becomeMissionary();
+    }
+
     /** Whether a current armed land unit can begin fortifying. */
     public boolean canFortify(final Unit unit) {
         return (unit instanceof UnitFreeColonist

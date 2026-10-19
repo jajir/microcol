@@ -102,6 +102,21 @@ public class UnitPo {
         this.militaryRole = militaryRole;
     }
 
+    /**
+     * Missionary role of a free colonist. It is boxed and required for every
+     * colonist, so a missing value is rejected on load instead of becoming
+     * ordinary.
+     */
+    private Boolean missionary;
+
+    public Boolean getMissionary() {
+        return missionary;
+    }
+
+    public void setMissionary(final Boolean value) {
+        missionary = value;
+    }
+
     private Boolean artilleryDamaged;
 
     public Boolean getArtilleryDamaged() {

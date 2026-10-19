@@ -240,6 +240,7 @@ class FirstColonyJourneyTest {
         unit.setOwnerId(owner);
         unit.setAction(template.getAction());
         unit.setWorkUpdates(0);
+        unit.setMissionary(false);
         // The saved allowance is mandatory; a fresh spare starts exhausted.
         unit.setMovementThirds(0);
         final PlaceMapPo place = new PlaceMapPo();

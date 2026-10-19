@@ -159,6 +159,7 @@ class IndependenceDeclarationTest {
         out.setMounted(mounted);
         out.setVeteran(veteran);
         out.setWorkUpdates(0);
+        out.setMissionary(false);
         return out;
     }
 

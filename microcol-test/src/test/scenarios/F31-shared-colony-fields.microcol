@@ -46,6 +46,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -63,6 +64,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -80,6 +82,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -103,6 +106,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 5,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -120,6 +124,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 1000,
         "type": "COLONIST",
         "ownerId": "Dutch's King",

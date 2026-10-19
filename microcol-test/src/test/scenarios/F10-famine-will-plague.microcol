@@ -44,6 +44,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 0,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -61,6 +62,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 1,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -78,6 +80,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 2,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -95,6 +98,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 4,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -112,6 +116,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -129,6 +134,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 7,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -146,6 +152,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 8,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -163,6 +170,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 9,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -180,6 +188,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 10,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -197,6 +206,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 11,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -214,6 +224,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 12,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -231,6 +242,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 13,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -248,6 +260,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 14,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -265,6 +278,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 15,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -282,6 +296,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 16,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -299,6 +314,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 18,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -316,6 +332,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -333,6 +350,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 24,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -356,6 +374,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 25,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -379,6 +398,7 @@
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 27,
       "type": "COLONIST",
       "ownerId": "Dutch",

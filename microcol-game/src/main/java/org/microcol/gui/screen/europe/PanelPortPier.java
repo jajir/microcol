@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.dialog.DialogOrdainMissionary;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -52,6 +53,7 @@ public final class PanelPortPier
 
     private final DialogEuropeEquipment equipmentDialog;
     private final DialogMessage orderMessage;
+    private final DialogOrdainMissionary ordinationDialog;
 
     private final Pane panelUnits;
 
@@ -60,8 +62,10 @@ public final class PanelPortPier
             final EuropeCallback europeDialogCallback,
             final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final DialogEuropeEquipment equipmentDialog,
-            final DialogMessage orderMessage) {
+            final DialogMessage orderMessage,
+            final DialogOrdainMissionary ordinationDialog) {
         this.orderMessage = orderMessage;
+        this.ordinationDialog = Preconditions.checkNotNull(ordinationDialog);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
@@ -101,7 +105,8 @@ public final class PanelPortPier
                 .forEach(unit -> panelUnits.getChildren()
                         .add(new PanelPortPierUnit(unit, imageProvider,
                                 equipmentDialog, i18n, europeDialog,
-                                gameModelController, orderMessage)));
+                                gameModelController, orderMessage,
+                                ordinationDialog)));
     }
 
     @Override
