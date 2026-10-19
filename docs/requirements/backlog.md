@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+Selected 2026-10-19: [R-0251 — Button spacing and type sizes](R-0251.md).
+
+Previous typography work: [R-0250 — Playpen Sans throughout the game](R-0250.md).
+
 Captured on **2026-10-14**, from the [R-0001–R-0040 migration](migration-2026-10-14.md).
 **61 gameplay/setup requirements, R-0051–R-0111**, were captured as `new`;
 [R-0050](done/R-0050.md) records the migration itself. R-0041–R-0049 are deliberately

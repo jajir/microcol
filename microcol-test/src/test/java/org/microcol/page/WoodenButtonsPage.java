@@ -110,7 +110,10 @@ public final class WoodenButtonsPage extends AbstractScreen {
                     .lookup("#" + id).query();
             assertTrue(button.getSkin() instanceof WoodenButtonSkin
                     || button.getSkin() instanceof WoodenToggleButtonSkin);
-            assertEquals("Caveat", button.getFont().getFamily());
+            assertEquals("Playpen Sans Light", button.getFont().getFamily());
+            assertEquals(18, button.getFont().getSize());
+            assertEquals(new javafx.geometry.Insets(12, 24, 14, 24),
+                    button.getPadding());
             assertTrue(button.lookup(".wooden-button-drawing")
                     .isMouseTransparent());
             final Text text = (Text) button.lookup(".text");
@@ -123,6 +126,9 @@ public final class WoodenButtonsPage extends AbstractScreen {
                             + button.getScene().getWidth() + "; parent="
                             + button.getParent().getLayoutBounds());
             assertTrue(text.getBoundsInParent().getMaxX() <= button.getWidth());
+            assertTrue(text.getBoundsInParent().getMinY() >= 0);
+            assertTrue(
+                    text.getBoundsInParent().getMaxY() <= button.getHeight());
         });
     }
 

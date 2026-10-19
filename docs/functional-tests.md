@@ -1,5 +1,16 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0251 button spacing — 2026-10-19
+
+1. Dohoda: hlavní nadpis 36 px, běžný text 18 px a odsazení dřevěných tlačítek nahoře/vpravo/dole/vlevo 12/24/14/24 px. Dosavadní vlastní skiny, akce a mezery mezi tlačítky se nemění. TC83/TC84/TC85 a kontrakt page objects pokrývají menu, Nastavení a modální okna; úplná regrese a publikace čekají.
+2. Cílená Docker/Xvfb kontrola: completion `20261019T182810Z-a468ba3caaae`, supervisor PID 26171, limit 3 600 sekund, reporty `target/docker-ui/run-0KR9nf`. Výsledek: 9 kontrol (TC83: 3, TC84: 2, TC85: 1, kontrakt: 3), žádné chyby ani vynechání; XML a shoda kontrolovaného zdroje byly ověřeny. Java formatter ověřil tři upravené soubory (shoda tokenů i idempotence); devět dokumentačních kontrol a strict MkDocs prošly.
+3. Kontrola změny: společné CSS je importováno hlavním oknem i dialogy; změna zachovává pořadí specifických výjimek tlačítek. Nadpis kolonie je upraven zároveň ve výsledném CSS a zdrojovém SCSS. Produkční Java, herní pravidla, fontové soubory a SVG se v této návaznosti nemění.
+4. Prohlédnuty skutečné snímky menu a Nastavení při 900 × 750, kolonie a Evropy při 1280 × 900 a dialogů Kongresu, přejmenování a ukázky tlačítek. Ověřované popisky a tlačítka se vejdou; nový Unicode vstup zachovává i šipku. Toto pozorování nenahrazuje úplnou regresi ani kontrolu nativního HiDPI.
+5. Úplný Docker/Xvfb běh bez výběru testů: completion `20261019T182959Z-8a32f25bf510`, supervisor PID 26853, limit 5 400 sekund. Přejímka a publikace čekají na výsledek.
+6. Následný požadavek na Jazyk/Verzi řeší již kontrolovaná výchozí velikost v Typography.css: dříve tyto dva obyčejné Label dědily menší systémový základ, zatímco ostatní volby měly vlastní velikost. TC85 nyní přímo ověřuje 18 px a úplný text obou popisků v češtině i angličtině. Doplněná kontrola běží jako completion `20261019T183234Z-273c2afd1ad0`, supervisor PID 27931, limit 3 600 sekund. Produkční zdroj se od přijatého cíleného běhu ani od běžící úplné regrese nezměnil; přibyly jen tyto aserce.
+7. Na výslovný pokyn uživatele se všechny tyto změny odesílají do main již před úplnou přejímkou. CI a distribuční kontrola zůstávají povinné; samotný push nepotvrzuje publikaci herního balíčku.
+
+
 Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
 ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
@@ -26,6 +37,74 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
 3. Předchozí běhy odhalily neexistující GoodsType.values(), hledání řádku mimo viditelnou část seznamu, přístup k mapové poloze jednotky v Evropě a zachycení Escape seznamem. Haiku a dodatečný Sonnet opravily pomocné metody; uživatelem schválené dokončení Codex přidalo lokální filtr Escape a sjednotilo očekávaný text s opraveným obsahem. Kontroly zůstaly zachované; finální běh ověřil také scénáře dříve blokované otevřeným oknem.
 4. Sdílené formátování prošlo kontrolou tokenů a idempotence. Tato automatizovaná přejímka není hráčská studie. Celá regrese a publikace následují po dokončení dávky.
 
+## R-0250 — Playpen Sans — 2026-10-19
+
+1. Uživatel vybral tenčí Playpen Sans a autorizoval nasazení do main v celé
+   hře. [R-0250](requirements/R-0250.md) zachovává pravidla a individuální
+   skiny. FontTools ověřil 131 jedinečných znaků základních CZ/EN/DE/FR/NL
+   abeced, číslice a euro v statickém řezu 300; nejde o běhovou přejímku UI.
+2. Cílený Docker/Xvfb běh `20261019T175234Z-c26c8db601dc`, supervisor PID 17427,
+   zahrnuje TC83, TC84, nový TC85 a PageVerificationContractTest. Běh selhal při kompilaci nového testu: přístup k injektoru patří
+   TestContext, nikoli MicroColApplication. Opraveno bez změny herních očekávání;
+   cílený běh se opakuje. Následuje celá funkční regrese, vizuální kontrola
+   screenshotů a ověření publikace. Nativní HiDPI zatím nebylo ověřeno.
+3. Opravený cílený běh `20261019T175402Z-47b9719fa854`, supervisor PID 18172,
+   prošel: `run-eYhS2L`, 9 kontrol (TC83: 3, TC84: 2, TC85: 1, kontrakt: 3),
+   bez chyb či vynechání; XML a screenshoty byly zkontrolovány. Místní
+   formatter prošel pro šest Java souborů (shoda tokenů a
+   idempotence); devět dokumentačních kontrol a strict MkDocs prošly.
+
+4. Screenshoty menu, Nastavení, Kongresu, Evropy a kolonie ukazují nový řez.
+   Kolonie v okně 900 × 750 ořezává nadpis a dolní obsah; stejný problém je
+   vidět ve starším `run-LQjNin/warehouse-qa/education-colony-czech.png`
+   (skutečný soubor v podsložce `microcol-test`). Jde o původní pevné rozložení,
+   nikoli novou regresi fontu. Jeho redesign není součástí této změny.
+   TC85 navíc ověřuje úplný nadpis při 1280 × 900, tooltip a Unicode vstup
+   se zrušením bez změny názvu. Tento rozšířený běh:
+   `20261019T175722Z-7ce5f47941d9`, supervisor PID 19337; `run-Iuzsa0` prošel (TC85: 1, kontrakt: 3),
+   bez chyb/vynechání. XML a snímky celé kolonie a Unicode dialogu byly
+   prohlédnuty; potvrzený je také skutečně zobrazený tooltip.
+5. Inventář všech 64 XML jazykových bundles našel 103 různých znaků.
+   Playpen Sans pokrývá vše kromě symbolu `→`; pro něj JavaFX použije
+   systémový fallback. Ten je ponechán jako symbol, nikoli nahrazen jiným
+   textem. TC85 zahrnuje šipku v Unicode vstupu; nejde o chybějící diakritiku.
+
+6. Celá regrese beze změny výběru běží přes completion runner:
+   `20261019T175924Z-dcf977d615c7`, supervisor PID 19976, limit 5 400 sekund
+   podle R-0249. Stav `ready for development` zůstává do vyhodnocení úplných
+   XML reportů; commit/push a publikace zatím neproběhly. Otisky zdrojů
+   běhu jsou uložené v `target/r250/full-source-hashes.json`.
+
+7. Uživatel rozšířil zadání na SVG a přibalený font. Předchozí celá regrese
+   byla záměrně ukončena přes její supervisor (`cancelled`, exit 130, bez chyb
+   úklidu), protože nově změněný splash vyžaduje nový úplný běh. Není to
+   přejímka ani selhání testu.
+8. Pět textových SVG má vložený WOFF subset odvozený z přibaleného Light TTF.
+   Tři testy `scripts/graphics/test_svg_fonts.py` prošly: idempotence,
+   zachování znaků/řezu/licence, odmítnutí chybějícího znaku, izolovaný
+   výběr skutečného TTF a přenos návratového kódu exportéru. `svg-font.py --check`
+   potvrzuje všech pět aktuálních subsetů. Pomocný WOFF2 pokus nešel bez Brotli;
+   použit je WOFF s vestavěnou kompresí, bez nové závislosti.
+9. První export na macOS ukázal, že Pango CoreText ignoruje privátní Fontconfig
+   a použije jiné písmo. Wrapper proto výslovně vybírá backend `fc`; opakovaný
+   librsvg 2.61.4 export a vizuální kontrola potvrzují Playpen Sans v logu,
+   ikoně a referenčních diagramech. Samostatný `logo.svg` byl prohlédnut také
+   v prohlížeči bez instalace fontu. Systémová písma nebyla měněna.
+   Export atlasu před/po změně jeho skrytých popisků je bitově identický.
+   Nový `splash-screen.png` je 200 × 200; distribuční kostelové ikony se nemění.
+
+10. Nová úplná regrese finálních herních zdrojů včetně SVG/PNG:
+    `20261019T180643Z-7eb4a44c4e8b`, supervisor PID 21503, limit 5 400 sekund.
+    Aktualizované otisky jsou v `target/r250/full-source-hashes.json`.
+    Devět dokumentačních kontrol, strict MkDocs, tři exportní testy a Java
+    formatter prošly; úplné výsledky a publikace zatím čekají.
+
+11. Uživatel během běžící regrese výslovně požádal o push do main.
+    Změna se proto odesílá s R-0250 nadále `ready for development` a s úplnou
+    přejímkou označenou jako nedokončená. Cílené kontroly, exportní testy,
+    formatter a dokumentace prošly; otisky herních zdrojů odpovídají spuštěné
+    úplné regresi. Samotný push neprokazuje úspěch CI ani publikaci buildu;
+    ty zůstávají povinným pokračováním stejného úkolu.
 
 ## R-0248 — Rámečky a pravítko — 2026-10-19
 

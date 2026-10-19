@@ -1,0 +1,11 @@
+/* The static Light face is bundled; no system font or synthetic stroke. */
+.root, .tooltip, .context-menu {
+    -fx-font-family: "Playpen Sans Light";
+    -fx-font-size: 18;
+    -fx-font-weight: normal;
+    -fx-font-style: normal;
+}
+
+.axis {
+    -fx-tick-label-font: 12px "Playpen Sans Light";
+}

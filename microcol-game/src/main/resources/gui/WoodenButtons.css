@@ -3,9 +3,8 @@
 .toggle-button { -fx-skin: "org.microcol.gui.util.WoodenToggleButtonSkin"; }
 .button, .toggle-button {
     /* Set metrics before the first skin/layout pass, including new dialogs. */
-    -fx-padding: 8 16 10 16;
-    -fx-font-family: "Caveat";
-    -fx-font-size: 20;
+    -fx-padding: 12 24 14 24;
+    -fx-font-size: 18;
 }
 .button.image-button,
 .constructionPaneCarpenter .description .button {
@@ -14,7 +13,6 @@
 .toggle-button.paneShip { -fx-skin: "javafx.scene.control.skin.ToggleButtonSkin"; }
 .button.image-button, .toggle-button.paneShip,
 .constructionPaneCarpenter .description .button {
-    -fx-font-family: "Tillana";
     -fx-font-size: 1em;
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
 }

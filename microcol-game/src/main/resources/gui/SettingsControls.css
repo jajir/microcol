@@ -3,8 +3,7 @@
 .settings-controls .radio-button,
 .settings-controls .slider,
 .settings-controls .label-slider {
-    -fx-font-family: "Caveat";
-    -fx-font-size: 20;
+    -fx-font-size: 18;
     -fx-text-fill: black;
 }
 .settings-controls .check-box {
@@ -44,6 +43,6 @@
 }
 
 .settings-controls .slider .axis {
-    -fx-tick-label-font: 20px "Caveat";
+    -fx-tick-label-font: 18px "Playpen Sans Light";
     -fx-tick-label-fill: black;
 }

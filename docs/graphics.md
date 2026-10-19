@@ -40,7 +40,7 @@ plnou barvou. Kresba je živá, ovládání přehledné a přesné.**
 | Výplně | Jednobarevné plochy; část kresby zůstává nevybarvená. Výchozí vzhled bez přechodů, lesku a plastických efektů. |
 | Tlačítka | Běžná tlačítka používají vybranou [dřevěnou tabulku bez bočních zářezů](#drevena-tlacitka-bez-bocnich-zarezu). Dosavadní individuálně upravené prvky zachovávají vlastní vzhled. |
 | Stavy | Rozlišit běžný stav, najetí, stisk, klávesnicový fokus, výběr a nedostupnost. Fokus a výběr označit také tvarem či další linkou; nedostupnost má dohledatelný důvod. |
-| Typografie | Čitelné rukopisné písmo pro názvy a krátké popisky. Delší texty, tabulky a čísla upřednostňují čitelnost v malé velikosti. Nejvýše dvě rodiny; konkrétní fonty vybrat až na vzorku s českou diakritikou a čísly. |
+| Typografie | Čitelné rukopisné písmo pro názvy a krátké popisky. Delší texty, tabulky a čísla upřednostňují čitelnost v malé velikosti. Dne 19. října 2026 vybrán Playpen Sans Light pro všechny živé texty; viz [typografie](#typografie-playpen-sans). |
 | Oddělení obsahu | Přednostně volným místem; kde nestačí, jemnou kreslenou linkou. Silný rám jen pro hlavní skupiny. |
 | Ikony a ilustrace | Jednoduchá silueta, společný charakter obrysu, málo vnitřních detailů. Kontrolovat skutečnou zobrazovanou velikost. |
 | Rozložení | Pravidelné mezery a zarovnání. Kreslený okraj nesmí zasahovat do textu ani zmenšovat klikací plochu. |
@@ -48,6 +48,71 @@ plnou barvou. Kresba je živá, ovládání přehledné a přesné.**
 Texty a ovládání zůstávají skutečnými prvky UI kvůli překladům, zvětšení
 a klávesnici. SVG slouží ilustracím, ikonám, obrysům a dekoracím.
 Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-zmeny).
+
+### Typografie Playpen Sans
+
+1. **Dohoda 19. října 2026, [R-0250](requirements/R-0250.md):** uživatel vybral
+   `02-Playpen-Sans-tenci.png`. Všechny živé texty hry používají vzpřímený
+   Playpen Sans Light: menu, dialogy, tabulky, vstupní pole, tlačítka, Nastavení,
+   tooltipy, kontextová menu, názvy kolonií na mapě a produkční údaje na plátně.
+2. Náhled používal Regular 400 opticky ztenčený tahem barvy pozadí. Pro JavaFX
+   je připraven skutečný statický řez **300 (Light)** ze stejného variabilního
+   zdroje. Nepoužívá překrývání barvou pozadí ani syntetickou kurzívu; přesná
+   rasterizace prohlížeče a JavaFX se může lišit. Navazující [R-0251](requirements/R-0251.md) stanoví hlavní nadpisy 36 px a výchozí běžný text 18 px, včetně popisků Jazyk a Verze v Nastavení; místní drobné údaje kolonie a mapy zůstávají výjimkou.
+3. Soubor, licence OFL a reprodukční údaje jsou v
+   `microcol-game/src/main/resources/fonts/PlaypenSans`. Načtení nevyžaduje
+   síť ani instalaci fontu do systému. Zdroj obsahuje ověřené základní abecedy
+   češtiny, angličtiny, němčiny, francouzštiny a nizozemštiny, číslice a euro;
+   nejde o tvrzení o všech evropských jazycích ani nové překlady hry.
+   Symbol `→` obsažený v překladech není v rodině Playpen Sans; jeho kresbu
+   doplní obvyklý systémový fallback JavaFX. Totéž může platit pro jiné
+   symboly v hráčem zadaném textu.
+4. `FontService` registruje jeden řez pro CSS i Canvas. Společné
+   `Typography.css` platí pro hlavní scénu i dialogy; konkrétní ovládání
+   dědí rodinu. Zachovat černé obrysy, paletu a individuální skiny tlačítek.
+   Kontrolovat především kratší popisky bez ořezu, překlady a husté dialogy.
+   Skutečné výsledky a omezení vede [funkční evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
+
+### Přibalený font v SVG a exportu
+
+1. Podle doplnění z 19. října 2026 obsahuje všech pět SVG s textem
+   (`background.svg`, `logo.svg`, `icon.svg` a referenční `screen-flow.svg`,
+   `units.svg` v ponechaném `microcol-site`) Playpen Sans Light 300.
+   Každý soubor má vložený WOFF subset potřebných znaků v `@font-face`;
+   prohlížeč nepotřebuje systémovou instalaci ani stahování fontu.
+   Copyright a OFL zůstávají také uvnitř subsetu.
+2. Autoritativní plný TTF a licence jsou ve
+   [fonts/PlaypenSans](../microcol-game/src/main/resources/fonts/PlaypenSans/).
+   Po změně SVG textu obnovit subsety pomocí
+   [svg-font.py](../scripts/graphics/svg-font.py); `--check` zjistí zastaralý
+   subset a chybějící znaky jsou chyba, nikoli tichý fallback. Skript používá
+   fontTools 4.60.2 pouze při tvorbě podkladů. Hra ani otevření SVG ho nepotřebují.
+3. Některé grafické editory nepodporují vložený webfont. Pro nástroje používající
+   Fontconfig slouží [with-fonts.py](../scripts/graphics/with-fonts.py): dočasná
+   konfigurace obsahuje pouze projektový TTF, ověří jeho výběr a po exportu se
+   odstraní. Na macOS vynucuje `PANGOCAIRO_BACKEND=fc`, protože výchozí CoreText
+   v librsvg izolovaný Fontconfig ignoruje. Neinstaluje nic do systému.
+   Nativní Inkscape nebyl na tomto stroji ověřen; ověřen je librsvg 2.61.4.
+4. `logo.svg` má výslovnou oblast a rozměr 200 × 200; nápis se vejde bez
+   deformace znaků. Jeho nový export je skutečný `splash-screen.png` balený
+   do hry. `icon.svg` používá standardní SVG text místo nepřenositelného
+   `flowRoot`; není zdrojem distribuční ikony s kostelem. Skryté popisky atlasu
+   nemění bitmapu atlasu. U historických diagramů zůstává původní rozsah stránky.
+
+```sh
+python3 -m venv target/graphics-venv
+target/graphics-venv/bin/python -m pip install fonttools==4.60.2
+target/graphics-venv/bin/python scripts/graphics/svg-font.py
+target/graphics-venv/bin/python scripts/graphics/svg-font.py --check
+target/graphics-venv/bin/python -m unittest discover -s scripts/graphics -p 'test_*.py'
+python3 scripts/graphics/with-fonts.py rsvg-convert --width 200 --height 200 \
+  -o microcol-game/src/main/resources/images/splash-screen.png \
+  microcol-game/src/graphics/logo.svg
+```
+
+Poslední příkaz vyžaduje `fc-match` a `rsvg-convert`. Nový testovací/exportní
+postup doplňuje starší `images.groovy`; nespouští jeho nesouvisející exporty.
+Před publikací zkontrolovat obraz i [funkční přejímku](functional-tests.md#r-0250-playpen-sans-2026-10-19).
 
 ### Výchozí paleta
 
@@ -75,7 +140,7 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    označuje černá fajfka nebo tečka. Pravítko má jemné rysky a jezdec
    se špičkou a černou středovou ryskou.
 2. Platí paleta dřevěných tlačítek, černá linka 2 logické px, detaily 1 px
-   a Caveat 20. Tloušťka se nemění s délkou posuvníku. Najetí a stisk mění
+   a Playpen Sans Light 18 podle [aktuální typografie](#typografie-playpen-sans). Tloušťka se nemění s délkou posuvníku. Najetí a stisk mění
    výplň; přerušovaný černý obrys označuje fokus. Nedostupnost tlumí vzhled.
 3. Implementace přidává kresbu k nativním skinům a jejich skutečným oblastem;
    původní vstup, rozsahy, ukládání hodnot a překlady zůstávají. CSS se
@@ -83,6 +148,9 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    touto dohodou. Výsledky ověření patří do [funkční evidence](functional-tests.md).
 
 ### Dřevěná tlačítka bez bočních zářezů
+
+**Dohoda 19. října 2026 — [R-0251](requirements/R-0251.md):** varianta „Mírné zvětšení“ používá text 18 px a odsazení nahoře 12, dole 14 a po stranách 24 logických px. Platí pro všechna standardní dřevěná tlačítka; dosavadní výjimky vlastních skinů zůstávají. Mezi tlačítky se rozestupy nemění. Implementaci a skutečné ověření rozlišuje [evidence](functional-tests.md#r-0251-button-spacing-2026-10-19).
+
 
 1. **Dohoda 18. října 2026, [R-0246](requirements/done/R-0246.md):** vybrána
    varianta „Bez bočních zářezů“. Černý obrys `#000000`, hladké mírně
@@ -94,11 +162,10 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    a zmizí spodní hrana. Klávesnicový fokus má černý přerušovaný rámeček;
    vybraný přepínač také krátkou spodní linku. Nedostupné tlačítko má
    neutrální výplň `#DED5C7` a sníženou neprůhlednost.
-3. Popisky zůstávají textem standardních JavaFX tlačítek, používají
-   přibalené [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat)
-   a licenci OFL v `resources/fonts/Caveat`. Font se načítá offline;
-   ostatní texty hry se tímto nemění. Šířka vychází z obsahu a dosavadních
-   omezení rozložení, nikoli ze zvětšování hotového obrázku.
+3. Popisky zůstávají textem standardních JavaFX tlačítek. Původní Caveat
+   z R-0246 nahrazuje pro celou hru [Playpen Sans Light](#typografie-playpen-sans),
+   vybraný 19. října 2026. Šířka vychází z obsahu a dosavadních omezení
+   rozložení, nikoli ze zvětšování hotového obrázku.
 4. Implementace používá `WoodenButtonSkin`, `WoodenToggleButtonSkin`
    a společný `WoodenButtonDrawing` v `gui.util`. Křivky se kreslí přímo
    ve výsledných logických souřadnicích JavaFX Canvas: obrys 2 px,
@@ -273,8 +340,8 @@ Odkazy v této části otevírají editovatelné zdroje. **Skriptovaná vazba** 
 | [kings-seal.svg](../microcol-game/src/graphics/kings-seal.svg) | Skrytá vrstva `main` a viditelná `shadow`. | Dva samostatné exporty `kings-seal.png` a `kings-seal-shadow.png`, oba **40 × 41**. V přehledu cílů se vybírá plná pečeť pro splněný cíl a světlá varianta pro nesplněný. Hra je nevrství přes sebe jako objekt a jeho stín. |
 | [person.svg](../microcol-game/src/graphics/person.svg) | Tři kopie drobné postavy a větší otevřený rám, jedna vrstva s opacitou `0.94`. | Nemá skriptovaný výstup ani exportní metadata. Patnáct ze sedmnácti atributů cest `d` je doslova shodných s cestami v `background.svg`; dvě zbývající rámové cesty odpovídají `colony-frame.svg`. Dokládá sdílené kresby, ne automatické propojení. Herní kolonista se načítá z atlasu, nikoli z tohoto souboru. |
 | [wagon.svg](../microcol-game/src/graphics/wagon.svg) | Viditelná vektorová vrstva `draw`, skrytá vrstva `image` s vloženou rastrovou předlohou. | Všech 12 cest `d` je doslova obsaženo také v `background.svg`. Samostatný export ve skriptu není. Loader registruje `wagon` z buňky `(1,6)` atlasu; R-0024 jej nyní používá v `UnitImageProvider` pro typ i instanci vozu. Změna zdejšího vozu sama atlas neaktualizuje. |
-| [logo.svg](../microcol-game/src/graphics/logo.svg) | Kostel, pozadí a nápis MicroCol. Skrytá `background`, viditelné `background-2` a `logo`. | Metadata pro `splash-screen.png` **200 × 200**. Build jej vkládá do manifestu jako spouštěcí obrázek JVM a používá jej také argument `-splash`. Text zůstává textem, takže při novém exportu záleží i na dostupném písmu. |
-| [icon.svg](../microcol-game/src/graphics/icon.svg) | Černý text MicroCol v Inkscape `flowRoot`, nikoli ilustrace kostela. Rozměr dokumentu **1024 × 1024**. | Metadata ukazují na starou cestu `microcol-game/src/icon.png`, která v současném stromu není. Současná distribuční ikona s kostelem má odlišný obsah; tento SVG nelze označit za její doložený zdroj. Obecný SVG renderer nemusí podporovat `flowRoot` a může zobrazit prázdný náhled. |
+| [logo.svg](../microcol-game/src/graphics/logo.svg) | Kostel, pozadí a nápis MicroCol. Skrytá `background`, viditelné `background-2` a `logo`. | Metadata pro `splash-screen.png` **200 × 200**. Build jej vkládá do manifestu jako spouštěcí obrázek JVM a používá jej také argument `-splash`. Text zůstává editovatelný s vloženým fontem. Od R-0250 má zdroj stránku 200 × 200 a export používá přibalený TTF; viz [postup](#pribaleny-font-v-svg-a-exportu). |
+| [icon.svg](../microcol-game/src/graphics/icon.svg) | Černý standardní SVG text MicroCol s vloženým Playpen Sans Light, nikoli ilustrace kostela. Rozměr dokumentu **1024 × 1024**. | Metadata ukazují na starou cestu `microcol-game/src/icon.png`, která v současném stromu není. Současná distribuční ikona s kostelem má odlišný obsah; tento SVG nelze označit za její doložený zdroj. R-0250 nahradil historický `flowRoot` přenositelným textem; obsah je viditelný i v běžném SVG rendereru. |
 
 Pracovní SVG mají různě velké stránky, často A4, a kresby mohou sahat mimo stránku. Rozměr stránky není rozměr herního obrázku. Staré absolutní cesty, výběry objektů, skryté vrstvy a exportní DPI nejsou automatický exportní manifest. Zejména soubory s více návrhy vyžadují určení správné vrstvy a exportované oblasti.
 

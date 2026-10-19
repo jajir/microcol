@@ -121,7 +121,8 @@ public final class FramedSettingsPage extends AbstractScreen {
                 assertEquals(c.getWidth(), drawing.getWidth());
                 if (c instanceof Labeled) {
                     final Labeled label = (Labeled) c;
-                    assertEquals("Caveat", label.getFont().getFamily());
+                    assertEquals("Playpen Sans Light",
+                            label.getFont().getFamily());
                     assertEquals(label.getText(),
                             ((Text) c.lookup(".text")).getText(), id);
                 }
