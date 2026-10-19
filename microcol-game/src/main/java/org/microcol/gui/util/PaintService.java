@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import java.util.List;
+
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
 import org.microcol.gui.image.ImageLoaderTerrain;
@@ -11,6 +13,8 @@ import org.microcol.model.Location;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
+import org.microcol.model.ResourceOverlay;
+import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -22,6 +26,8 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -50,6 +56,38 @@ public final class PaintService {
      */
     private final Point UNIT_IMAGE_POSITION = Point.of(2, 4);
 
+    /**
+     * Road surface and its darker edge; both contrast with grass and sand.
+     */
+    public static final Color ROAD_COLOR = Color.web("#d8b26e");
+
+    private static final Color ROAD_EDGE_COLOR = Color.web("#4a3118");
+
+    /** River water; a blue that stands out on grass, sand and snow. */
+    public static final Color RIVER_COLOR = Color.web("#2f6fd0");
+
+    /** Width of a small river course, a share of one square. */
+    private static final double SMALL_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
+            * 0.12;
+
+    /** Width of a large river course, a share of one square. */
+    private static final double LARGE_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
+            * 0.28;
+
+    /** Ink outline of a special-resource marker, the same as the grid ink. */
+    private static final Color MARKER_INK = Color.web("#292824");
+
+    /** Share of a square's width used by a special-resource marker. */
+    private static final double RESOURCE_MARKER_SHARE = 0.28;
+
+    /**
+     * Outline shape of a special-resource marker. Kinds differ by shape and by
+     * colour, so the marker never depends on colour alone.
+     */
+    private enum MarkerShape {
+        CIRCLE, SQUARE, DIAMOND, TRIANGLE
+    }
+
     private final ImageProvider imageProvider;
 
     private final MapManager mapManager;
@@ -62,6 +100,170 @@ public final class PaintService {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.mapManager = Preconditions.checkNotNull(mapManager);
         this.colonyFont = fontService.getDefault(16);
+    }
+
+    /**
+     * Draw a road as a dark-edged tan band across the square. It is code
+     * drawing, so the overlay needs no image asset.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     */
+    private void paintRoad(final GraphicsContext graphics, final Point point) {
+        final double size = Tile.TILE_WIDTH_IN_PX;
+        graphics.setFill(ROAD_EDGE_COLOR);
+        graphics.fillRect(point.getX(), point.getY() + size * 0.36, size,
+                size * 0.28);
+        graphics.setFill(ROAD_COLOR);
+        graphics.fillRect(point.getX(), point.getY() + size * 0.44, size,
+                size * 0.12);
+    }
+
+    /**
+     * Draw the special resource of a known square as an outlined shape in its
+     * top-right corner, clear of roads and river courses. The fill, stroke and
+     * line width are restored afterwards, so the grid keeps its own state.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     * @param overlay  required resource other than {@link ResourceOverlay#NONE}
+     */
+    private void paintResource(final GraphicsContext graphics,
+            final Point point, final ResourceOverlay overlay) {
+        final double size = Tile.TILE_WIDTH_IN_PX * RESOURCE_MARKER_SHARE;
+        final double left = point.getX() + Tile.TILE_WIDTH_IN_PX * 0.66;
+        final double top = point.getY() + Tile.TILE_WIDTH_IN_PX * 0.06;
+        final Paint previousFill = graphics.getFill();
+        final Paint previousStroke = graphics.getStroke();
+        final double previousWidth = graphics.getLineWidth();
+        graphics.setFill(resourceMarkerColor(overlay));
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(1);
+        switch (resourceMarkerShape(overlay)) {
+        case CIRCLE:
+            graphics.fillOval(left, top, size, size);
+            graphics.strokeOval(left, top, size, size);
+            break;
+        case SQUARE:
+            graphics.fillRect(left, top, size, size);
+            graphics.strokeRect(left, top, size, size);
+            break;
+        case DIAMOND:
+            final double[] diamondX = { left + size / 2, left + size,
+                    left + size / 2, left };
+            final double[] diamondY = { top, top + size / 2, top + size,
+                    top + size / 2 };
+            graphics.fillPolygon(diamondX, diamondY, 4);
+            graphics.strokePolygon(diamondX, diamondY, 4);
+            break;
+        case TRIANGLE:
+            final double[] triangleX = { left, left + size, left + size / 2 };
+            final double[] triangleY = { top + size, top + size, top };
+            graphics.fillPolygon(triangleX, triangleY, 3);
+            graphics.strokePolygon(triangleX, triangleY, 3);
+            break;
+        default:
+            break;
+        }
+        graphics.setFill(previousFill);
+        graphics.setStroke(previousStroke);
+        graphics.setLineWidth(previousWidth);
+    }
+
+    /**
+     * @param overlay required resource other than {@link ResourceOverlay#NONE}
+     * @return fill colour of the marker of that kind
+     */
+    public static Color resourceMarkerColor(final ResourceOverlay overlay) {
+        switch (overlay) {
+        case SILVER:
+            return Color.web("#C9D1D9");
+        case ORE:
+            return Color.web("#AD7141");
+        case MIXED_MINERALS:
+            return Color.web("#7A6F9B");
+        case TRAPPING:
+            return Color.web("#E07B39");
+        case GAME:
+            return Color.web("#E9C46A");
+        case OASIS:
+            return Color.web("#0084C9");
+        case PRIME_COTTON:
+            return Color.web("#F5F1E7");
+        case PRIME_TOBACCO:
+            return Color.web("#7A4E2D");
+        case PRIME_SUGAR:
+            return Color.web("#D0D627");
+        case PRIME_TIMBER:
+            return Color.web("#2F5E2F");
+        case PRIME_FOOD:
+            return Color.web("#B5542A");
+        case FISHERY:
+            return Color.web("#F5F1E7");
+        default:
+            throw new IllegalArgumentException(
+                    "No marker for resource " + overlay);
+        }
+    }
+
+    private static MarkerShape resourceMarkerShape(
+            final ResourceOverlay overlay) {
+        switch (overlay) {
+        case SILVER:
+        case ORE:
+        case MIXED_MINERALS:
+            return MarkerShape.DIAMOND;
+        case TRAPPING:
+        case GAME:
+        case OASIS:
+            return MarkerShape.CIRCLE;
+        case FISHERY:
+            return MarkerShape.TRIANGLE;
+        default:
+            return MarkerShape.SQUARE;
+        }
+    }
+
+    /**
+     * Draw the half of each river course that leaves a square. Every course
+     * reaches the midpoint between its two squares, and its width shows the
+     * size of this square. A square without a joined neighbour gets a round
+     * dot.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     * @param size     required river size of the square
+     * @param joined   required top-left corners of the joined neighbours
+     */
+    public void paintRiver(final GraphicsContext graphics, final Point point,
+            final RiverSize size, final List<Point> joined) {
+        final double width = size == RiverSize.LARGE ? LARGE_RIVER_WIDTH
+                : SMALL_RIVER_WIDTH;
+        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
+        final double centerX = point.getX() + half;
+        final double centerY = point.getY() + half;
+        // The grid is stroked later with the same canvas state, so restore it.
+        final Paint previousStroke = graphics.getStroke();
+        final Paint previousFill = graphics.getFill();
+        final double previousWidth = graphics.getLineWidth();
+        final StrokeLineCap previousCap = graphics.getLineCap();
+        graphics.setStroke(RIVER_COLOR);
+        graphics.setFill(RIVER_COLOR);
+        graphics.setLineWidth(width);
+        // A butt cap ends each half at its midpoint; the default square cap
+        // would reach half a width into the neighbour square.
+        graphics.setLineCap(StrokeLineCap.BUTT);
+        for (final Point neighbour : joined) {
+            graphics.strokeLine(centerX, centerY,
+                    (centerX + neighbour.getX() + half) / 2,
+                    (centerY + neighbour.getY() + half) / 2);
+        }
+        graphics.fillOval(centerX - width / 2, centerY - width / 2, width,
+                width);
+        graphics.setStroke(previousStroke);
+        graphics.setFill(previousFill);
+        graphics.setLineWidth(previousWidth);
+        graphics.setLineCap(previousCap);
     }
 
     /**
@@ -217,6 +419,12 @@ public final class PaintService {
             graphics.drawImage(
                     imageProvider.getImage(ImageLoaderTerrain.IMG_FIELD),
                     point.getX(), point.getY());
+        }
+        if (terrain.isHasRoad()) {
+            paintRoad(graphics, point);
+        }
+        if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
+            paintResource(graphics, point, terrain.getResourceOverlay());
         }
         if (isHighlighted) {
             graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));

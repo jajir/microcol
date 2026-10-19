@@ -69,6 +69,10 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         game.openColonyAt(COLONY, "New Amsterdam");
+        // The first export sold 103 tobacco at bid 3 and pressed the Dutch
+        // market by +412 eighths (half of 824), less than one step, so the
+        // tobacco bid stays 3. The second update sells 3 at that bid:
+        // 9 gross, 25% tax, floor(6.75) = 6 net. Ore sells nothing this time.
         exports.verifyStocks(100, 100, 150, 1327);
     }
 
@@ -200,9 +204,12 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         exports.verifyStocks(100, 200, 150, 1231);
         taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
 
-        // Next update: tobacco is produced back to 103, so 3 are sold for half
-        // of 6 gold. The boycotted ore above 100 is sold for half of 300 gold,
-        // which the closed home market does not block.
+        // Next update: tobacco is produced back to 103, so 3 are sold. The
+        // protest update already sold 103 tobacco at bid 3 (+412 eighths, less
+        // than one step), so the saved Dutch tobacco bid is still 3: 9 gross,
+        // 25% tax, floor(6.75) = 6, half of which is 3 gold. The boycotted ore
+        // above 100 is still at bid 4 and is sold for half of 300 gold, which
+        // the closed home market does not block.
         var report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
                 "New Amsterdam exported 100 × Ore through its custom house for 150 gold.");

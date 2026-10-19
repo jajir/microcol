@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.MicroColException;
@@ -28,11 +30,15 @@ public final class TurnStartedListener {
 
     private final PersistingTool persistingTool;
 
+    private final DiagnosticLog diagnosticLog;
+
     @Inject
     TurnStartedListener(final GamePreferences gamePreferences,
             final GameModelDao gameModelDao,
             final GameModelController gameModelController,
-            final PersistingTool persistingTool) {
+            final PersistingTool persistingTool,
+            final DiagnosticLog diagnosticLog) {
+        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.gameModelDao = Preconditions.checkNotNull(gameModelDao);
         this.gameModelController = Preconditions
@@ -52,9 +58,13 @@ public final class TurnStartedListener {
                         gameModelController.getGameModel(), persistingTool,
                         slots);
             } catch (TurnPreparationException rejected) {
+                diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
+                        rejected);
                 showOnFxThread(
                         gameModelController::showTurnPreparationUnavailable);
             } catch (MicroColException failedWrite) {
+                diagnosticLog.record(DiagnosticEvent.RECOVERY_SAVE_FAILED,
+                        failedWrite);
                 showOnFxThread(gameModelController::showRecoverySaveFailure);
             }
         }

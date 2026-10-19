@@ -65,6 +65,7 @@ class MilitaryRoleCombatTest {
         out.setVeteran(veteran);
         out.setMilitaryRole(role);
         out.setWorkUpdates(0);
+        out.setMissionary(false);
         return out;
     }
 

@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Locale;
 
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.screen.Screen;
@@ -38,11 +40,15 @@ public class PersistingService {
     private final EventBus eventBus;
     private final GameModelController gameModelController;
 
+    private final DiagnosticLog diagnosticLog;
+
     @Inject
     public PersistingService(final GameController gameController,
             final EventBus eventBus, final PersistingTool persistingTool,
             final FileSelectingService fileSelectingService,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController,
+            final DiagnosticLog diagnosticLog) {
+        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gameController = Preconditions.checkNotNull(gameController);
@@ -53,9 +59,16 @@ public class PersistingService {
     }
 
     public void saveModel(final Model model) {
-        final File saveFile = fileSelectingService.saveFile(
-                persistingTool.getRootSaveDirectory(),
-                persistingTool.getSuggestedSaveFileName(model));
+        final File saveFile;
+        try {
+            saveFile = fileSelectingService.saveFile(
+                    persistingTool.getRootSaveDirectory(),
+                    persistingTool.getSuggestedSaveFileName(model));
+        } catch (MicroColException unavailable) {
+            diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, unavailable);
+            gameModelController.showRecoverySaveFailure();
+            return;
+        }
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
         } else {
@@ -70,8 +83,15 @@ public class PersistingService {
      *                              secret option
      */
     public void loadFromSavedGames(boolean isSecretOptionEnabled) {
-        final File saveFile = fileSelectingService
-                .loadFile(persistingTool.getRootSaveDirectory());
+        final File saveFile;
+        try {
+            saveFile = fileSelectingService
+                    .loadFile(persistingTool.getRootSaveDirectory());
+        } catch (MicroColException unavailable) {
+            diagnosticLog.record(DiagnosticEvent.LOAD_FAILED, unavailable);
+            gameModelController.showSaveFolderUnavailable();
+            return;
+        }
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
         } else {
@@ -135,8 +155,11 @@ public class PersistingService {
         try {
             gameController.writeModelToFile(targetFile);
         } catch (TurnPreparationException rejected) {
+            diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
+                    rejected);
             gameModelController.showTurnPreparationUnavailable();
         } catch (MicroColException failed) {
+            diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, failed);
             gameModelController.showRecoverySaveFailure();
         }
     }

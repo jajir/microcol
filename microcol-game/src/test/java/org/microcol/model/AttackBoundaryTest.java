@@ -33,6 +33,8 @@ class AttackBoundaryTest {
         target.setType(targetType);
         target.setWorkUpdates(targetType == UnitType.COLONIST
                 || targetType == UnitType.MASTER_BLACKSMITH ? 0 : null);
+        target.setMissionary(targetType == UnitType.COLONIST
+                || targetType == UnitType.MASTER_BLACKSMITH ? false : null);
         target.getPlaceMap().setLocation(TARGET);
         final UnitPo force = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol").getModel()
@@ -46,6 +48,10 @@ class AttackBoundaryTest {
                         ? 0
                         : null);
         force.setHoldingGuns(true);
+        force.setMissionary(
+                role == UnitType.COLONIST || role == UnitType.MASTER_BLACKSMITH
+                        ? false
+                        : null);
         force.getPlaceMap().setLocation(ORIGIN);
         data.getUnits().add(force);
         final Map<Location, TerrainType> terrainMap = data.getMap()

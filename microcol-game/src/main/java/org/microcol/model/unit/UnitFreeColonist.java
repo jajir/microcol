@@ -11,6 +11,7 @@ import org.microcol.model.ConstructionSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.EuropeTradeQuote;
 import org.microcol.model.EducationSkills;
+import org.microcol.model.Founder;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.MilitaryPromotion;
@@ -45,6 +46,9 @@ public class UnitFreeColonist extends CanMount {
 
     private MilitaryRole militaryRole = MilitaryRole.COLONIAL;
 
+    /** Missionary role, separate from military role and civilian specialty. */
+    private boolean missionary;
+
     private UnitType learnedType;
 
     private UnitType workSkill;
@@ -69,9 +73,47 @@ public class UnitFreeColonist extends CanMount {
         out.setHoldingGuns(holdingGuns);
         out.setVeteran(isVeteran());
         out.setMilitaryRole(militaryRole);
+        out.setMissionary(missionary);
         out.setWorkSkill(workSkill);
         out.setWorkUpdates(workUpdates);
         return out;
+    }
+
+    /** Restore a saved missionary role; the loader validates its presence. */
+    void restoreMissionary(final boolean value) {
+        missionary = value;
+    }
+
+    /**
+     * @return whether this colonist holds the missionary role, by ordination or
+     *         as a Jesuit
+     */
+    public boolean isMissionary() {
+        return missionary || getType() == UnitType.JESUIT_MISSIONARY;
+    }
+
+    /**
+     * Shared missionary expertise for mission, contest, incitement and
+     * conversion: a Jesuit, or any missionary while its live owner holds Jean
+     * de Brebeuf. The membership applies once; it is never a second multiplier.
+     *
+     * @return whether this missionary acts as an expert
+     */
+    public boolean hasEffectiveMissionaryExpertise() {
+        return isMissionary() && (getType() == UnitType.JESUIT_MISSIONARY
+                || getOwner().getCongressMembers()
+                        .contains(Founder.JEAN_DE_BREBEUF));
+    }
+
+    /**
+     * Give this colonist the missionary role. Identity, specialty, equipment,
+     * military role and movement stay unchanged. The caller validates place,
+     * owner, phase and assignment before this mutation.
+     */
+    public void becomeMissionary() {
+        Preconditions.checkState(!isMissionary(),
+                "Colonist is already a missionary");
+        missionary = true;
     }
 
     /** @return whether this person's military rank is veteran */
@@ -747,10 +789,14 @@ public class UnitFreeColonist extends CanMount {
      * call this.
      */
     void consumeWorkTools(final int amount) {
-        Preconditions.checkState(
-                getAction().getType() == UnitActionType.plowField
-                        || getAction().getType() == UnitActionType.clearForest,
-                "Tools are consumed only by pioneer work");
+        Preconditions
+                .checkState(
+                        getAction().getType() == UnitActionType.plowField
+                                || getAction()
+                                        .getType() == UnitActionType.clearForest
+                                || getAction()
+                                        .getType() == UnitActionType.buildRoad,
+                        "Tools are consumed only by pioneer work");
         Preconditions.checkArgument(amount > 0 && amount <= tools,
                 "Cannot consume %s of %s tools", amount, tools);
         tools -= amount;

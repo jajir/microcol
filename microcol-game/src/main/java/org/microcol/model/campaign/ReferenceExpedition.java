@@ -10,9 +10,11 @@ import java.util.Set;
 
 import org.microcol.model.Difficulty;
 import org.microcol.model.Direction;
+import org.microcol.model.Europe;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.EuropeanRelationState;
 import org.microcol.model.Location;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.RecruitmentPool;
 import org.microcol.model.Congress;
 import org.microcol.model.TaxState;
@@ -104,6 +106,8 @@ public final class ReferenceExpedition {
         mapVisibility.setVisibility(Set.of(), maxX, maxY);
         map.setVisibility(mapVisibility);
         model.setMap(map);
+        // A new expedition starts every national market at the catalogue state.
+        model.setEurope(Europe.initialPo());
         final EuropeanNation[] nations = EuropeanNation.values();
         int id = 1;
         for (int i = 0; i < nations.length; i++) {
@@ -181,9 +185,10 @@ public final class ReferenceExpedition {
         unit.setType(type);
         if (type == UnitType.COLONIST) {
             unit.setWorkUpdates(0);
+            unit.setMissionary(false);
         }
         unit.setAction(new UnitActionNoActionPo());
-        unit.setAvailableMoves(type.getSpeed());
+        unit.setMovementThirds(MovementPoints.ofPoints(type.getSpeed()));
         return unit;
     }
 

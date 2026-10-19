@@ -121,6 +121,7 @@ class SharedColonyFieldBoundaryTest {
         GameModelPo dataWrongRole = fixture();
         savedUnit(dataWrongRole, 0).setType(UnitType.WAGON);
         savedUnit(dataWrongRole, 0).setWorkUpdates(null);
+        savedUnit(dataWrongRole, 0).setMissionary(null);
         Model modelWrongRole = load(dataWrongRole);
         rejected(modelWrongRole, modelWrongRole.getUnitById(0),
                 east(modelWrongRole));

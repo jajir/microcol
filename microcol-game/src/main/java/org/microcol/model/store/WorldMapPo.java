@@ -2,12 +2,16 @@ package org.microcol.model.store;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 import org.microcol.model.Location;
+import org.microcol.model.ResourceOverlay;
+import org.microcol.model.RiverSize;
 import org.microcol.model.TerrainType;
 
 public final class WorldMapPo extends AbstractMapStore {
@@ -32,6 +36,30 @@ public final class WorldMapPo extends AbstractMapStore {
      * block means no square was cleared.
      */
     private String[] cleared;
+
+    /**
+     * Hold information where pioneers built a road. A missing block means no
+     * square has a road.
+     */
+    private String[] roads;
+
+    /**
+     * Hold size of the river on each land square. A missing block means no
+     * river.
+     */
+    private String[] rivers;
+
+    /**
+     * Hold course segments joining neighbouring river squares. A missing block
+     * means no course.
+     */
+    private List<RiverSegmentPo> riverSegments;
+
+    /**
+     * Hold the special resource on each square. A missing block means no square
+     * has one.
+     */
+    private String[] resources;
 
     private VisibilityPo visibility;
 
@@ -77,6 +105,11 @@ public final class WorldMapPo extends AbstractMapStore {
     public void setCleared(final Set<Location> clearedSet) {
         cleared = generateString(loc -> clearedSet.contains(loc) ? "c" : "-",
                 maxX, maxY);
+    }
+
+    public void setRoads(final Set<Location> roadSet) {
+        roads = generateString(loc -> roadSet.contains(loc) ? "r" : "-", maxX,
+                maxY);
     }
 
     public Map<Location, TerrainType> getTerrainMap() {
@@ -225,6 +258,127 @@ public final class WorldMapPo extends AbstractMapStore {
 
     public void setCleared(final String[] cleared) {
         this.cleared = cleared;
+    }
+
+    public Set<Location> getRoadSet() {
+        final Set<Location> out = new HashSet<>();
+        // A missing block means no road; a present one must be complete and
+        // use only the known codes.
+        if (roads != null) {
+            Preconditions.checkArgument(
+                    roads.length == maxY + 1 && roads[0] != null,
+                    "Invalid road row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = roads[y];
+                Preconditions.checkArgument(
+                        row != null
+                                && row.startsWith(
+                                        String.format("row-%04d:", y % 10000))
+                                && row.substring("row-0001:".length())
+                                        .split(",", -1).length == maxX,
+                        "Invalid road row %s", y);
+            }
+            iterate(roads, (location, charCode) -> {
+                Preconditions.checkArgument(
+                        charCode.equals("r") || charCode.equals("-"),
+                        "Unknown road code '%s'", charCode);
+                if (charCode.equals("r")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
+    }
+
+    public String[] getRoads() {
+        return roads;
+    }
+
+    public void setRoads(final String[] roads) {
+        this.roads = roads;
+    }
+
+    public void setRivers(final Map<Location, RiverSize> riverMap) {
+        rivers = generateString(
+                loc -> riverMap.getOrDefault(loc, RiverSize.NONE).getCode(),
+                maxX, maxY);
+    }
+
+    /**
+     * @return size of the river on every square that has one
+     */
+    public Map<Location, RiverSize> getRiverMap() {
+        final Map<Location, RiverSize> out = new HashMap<>();
+        // A missing block means no river; a present one must be complete and
+        // use only the known codes.
+        if (rivers != null) {
+            Preconditions.checkArgument(
+                    rivers.length == maxY + 1 && rivers[0] != null,
+                    "Invalid river row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = rivers[y];
+                Preconditions.checkArgument(
+                        row != null
+                                && row.startsWith(
+                                        String.format("row-%04d:", y % 10000))
+                                && row.substring("row-0001:".length())
+                                        .split(",", -1).length == maxX,
+                        "Invalid river row %s", y);
+            }
+            iterate(rivers, (location, charCode) -> {
+                final RiverSize size = RiverSize.valueOfCode(charCode);
+                if (size != RiverSize.NONE) {
+                    out.put(location, size);
+                }
+            });
+        }
+        return out;
+    }
+
+    /**
+     * @return saved course segments, empty when the block is missing
+     */
+    public List<RiverSegmentPo> getRiverSegments() {
+        return riverSegments != null ? riverSegments : ImmutableList.of();
+    }
+
+    public void setRiverSegments(final List<RiverSegmentPo> riverSegments) {
+        this.riverSegments = riverSegments;
+    }
+
+    public void setResources(final Map<Location, ResourceOverlay> resourceMap) {
+        resources = generateString(loc -> resourceMap
+                .getOrDefault(loc, ResourceOverlay.NONE).getCode(), maxX, maxY);
+    }
+
+    /**
+     * @return special resource of every square that has one
+     */
+    public Map<Location, ResourceOverlay> getResourceMap() {
+        final Map<Location, ResourceOverlay> out = new HashMap<>();
+        // A missing block means no resource; a present one must be complete and
+        // use only the known codes.
+        if (resources != null) {
+            Preconditions.checkArgument(
+                    resources.length == maxY + 1 && resources[0] != null,
+                    "Invalid resource row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = resources[y];
+                Preconditions.checkArgument(row != null
+                        && row.startsWith(String.format("row-%04d:", y % 10000))
+                        && row.substring("row-0001:".length()).split(",",
+                                -1).length == maxX,
+                        "Invalid resource row %s", y);
+            }
+            iterate(resources, (location, charCode) -> {
+                final ResourceOverlay overlay = ResourceOverlay
+                        .valueOfCode(charCode);
+                if (overlay != ResourceOverlay.NONE) {
+                    out.put(location, overlay);
+                }
+            });
+        }
+        return out;
     }
 
 }

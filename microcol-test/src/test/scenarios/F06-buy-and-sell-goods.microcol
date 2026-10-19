@@ -37,7 +37,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 35,
@@ -62,7 +62,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 42,
@@ -87,7 +87,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 48,
@@ -112,7 +112,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 54,
@@ -137,10 +137,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -151,10 +152,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 6,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -171,10 +173,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 8,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -191,10 +194,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 9,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -211,10 +215,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 10,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -231,10 +236,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 11,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -251,10 +257,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 12,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -265,10 +272,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 14,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -285,10 +293,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 15,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -305,10 +314,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 17,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -325,10 +335,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 19,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -339,10 +350,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 20,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -359,10 +371,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 21,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -379,10 +392,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 22,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -399,10 +413,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -419,10 +434,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 24,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -439,10 +455,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 25,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -453,10 +470,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 26,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -473,10 +491,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 27,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -493,10 +512,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 28,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -513,10 +533,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 29,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -533,10 +554,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 30,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -553,10 +575,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 31,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -573,10 +596,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 32,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -593,10 +617,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 33,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -613,10 +638,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 34,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -633,10 +659,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 36,
       "type": "COLONIST",
       "ownerId": "Dutch",
@@ -653,10 +680,11 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
+      "missionary": false,
       "id": 55,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
@@ -667,7 +695,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     }
   ],
   "nextColonyId": 4,
@@ -1354,7 +1382,7 @@
     "maxY": 30,
     "seed": 134
   },
-  "europe": {},
+  "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
   "campaign": {
     "name": "default",
     "mission": "thrive",

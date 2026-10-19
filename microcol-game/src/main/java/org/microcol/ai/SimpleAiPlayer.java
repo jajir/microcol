@@ -55,7 +55,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         }
         while (isActiveTurn()
                 && getModel().getCurrentPlayer() == unit.getOwner()
-                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
+                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0) {
             final List<Location> locations = computeMoveLocation(unit);
             if (!locations.isEmpty()) {
                 getModel().moveUnit(unit, Path.of(locations));
@@ -76,8 +76,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     private List<Location> computeMoveLocation(final Unit unit) {
         final List<Location> locations = new ArrayList<>();
         Location lastLocation = unit.getLocation();
-        while (locations.size() < 1
-                && locations.size() < unit.getActionPoints()) {
+        while (locations.size() < 1 && unit.getMovementThirds() > 0) {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
@@ -117,8 +116,10 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
      * @return return <code>true</code> when unit can move to given location
      */
     private boolean canMoveAt(final Unit unit, final Location location) {
-        return unit.isPossibleToMoveAt(location) && !getModel().getMap()
-                .getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
+        return unit.isPossibleToMoveAt(location)
+                && unit.canAffordStepTo(location)
+                && !getModel().getMap().getTerrainTypeAt(location)
+                        .equals(TerrainType.HIGH_SEA);
     }
 
     private boolean isPossibleToAttack(final Unit unit,
@@ -321,7 +322,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                     }
                     return;
                 }
-                if (mover.getActionPoints() <= 0) {
+                if (!mover.canAffordStepTo(target)) {
                     return;
                 }
                 final Location before = mover.getLocation();

@@ -15,7 +15,8 @@ public final class ConstructionRushPage extends AbstractScreen {
 
     public void setToolAsk(int price) {
         getRobot().interact(() -> getModel().getEurope()
-                .getGoodsTradeForType(GoodsType.TOOLS).setBuyPrice(price));
+                .getGoodsTradeForType(GoodsType.TOOLS, EuropeanNation.DUTCH)
+                .setBuyPrice(price));
     }
 
     public void setGold(int gold) {

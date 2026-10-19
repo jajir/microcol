@@ -13,6 +13,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Java package responsibilities](architecture.md) | Where rules, player state, AI, UI and persistence belong; existing exceptions and how to maintain the boundaries. |
 | [macOS and Linux distributions](distribution.md) | Maven commands, bundled runtimes, DMG/DEB/archive outputs, and verified build and launch results. |
 | [MicroCol Dev and automatic updates](development-builds.md) | Install the development launcher once and receive each successful build from `main`. |
+| [Local diagnostics](diagnostics.md) | Where the bounded local failure log is, what a record may contain, and how settings and the launcher behave when storage is lost. |
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Sound and player feedback](audio.md) | Current music playback, file formats, event feedback, and guidelines and a catalog for future sounds. |
 | [UX and interaction guidelines](ux.md) | Shared interaction rules, current controls, feature briefs, player journeys, and usability findings. |

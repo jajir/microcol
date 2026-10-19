@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.dialog.DialogOrdainMissionary;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
@@ -25,22 +26,26 @@ class PanelOutsideColonyUnitFactory {
 
     private final DialogEquipment equipmentDialog;
 
+    private final DialogOrdainMissionary ordinationDialog;
+
     private final I18n i18n;
 
     @Inject
     PanelOutsideColonyUnitFactory(final ImageProvider imageProvider,
             final EventBus eventBus, final PaintService paintService,
-            final DialogEquipment equipmentDialog, final I18n i18n) {
+            final DialogEquipment equipmentDialog, final I18n i18n,
+            final DialogOrdainMissionary ordinationDialog) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.equipmentDialog = equipmentDialog;
         this.i18n = i18n;
+        this.ordinationDialog = Preconditions.checkNotNull(ordinationDialog);
     }
 
     PanelOutsideColonyUnit make(final Unit unit, final Colony colony) {
         return new PanelOutsideColonyUnit(imageProvider, eventBus, paintService,
-                colony, unit, equipmentDialog, i18n);
+                colony, unit, equipmentDialog, i18n, ordinationDialog);
     }
 
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.event.NewUnitWasBornEvent;
+import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitPo;
@@ -33,7 +34,7 @@ class TurnPreparationActionTest {
                 "queue-end", "cargo-buy", "cargo-sell", "cargo-transfer",
                 "warehouse-load", "warehouse-unload", "field", "indoor",
                 "outside", "crop", "job-choice", "action", "move",
-                "move-as-far");
+                "move-as-far", "ordain");
     }
 
     private Model fixture(final boolean beforePreparation) {
@@ -85,7 +86,16 @@ class TurnPreparationActionTest {
         plower.setAvailableMoves(1);
         plower.setTools(100);
         plower.setWorkUpdates(0);
+        plower.setMissionary(false);
         data.getModel().getUnits().add(plower);
+        // A church lets the pioneer standing in the colony be ordained.
+        final var religion = data.getModel().getColonies().get(0)
+                .getConstructions();
+        religion.removeIf(
+                building -> building.getType() == ConstructionType.CHAPEL);
+        final ConstructionPo church = new ConstructionPo();
+        church.setType(ConstructionType.CHURCH);
+        religion.add(church);
         final Model model = make(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         final UnitFreeColonist pioneer = (UnitFreeColonist) model
@@ -178,6 +188,8 @@ class TurnPreparationActionTest {
         case "move-as-far":
             return () -> model.moveUnitAsFarAsPossible(unit,
                     Path.of(List.of(Location.of(24, 14))));
+        case "ordain":
+            return () -> model.ordainMissionary(unit);
         default:
             throw new IllegalArgumentException(name);
         }

@@ -41,8 +41,12 @@ public class UnitColonistEmbarkTest {
         carrier.setDepartureLocation(null);
         carrier.setDepartureDirection(null);
         carrier.setPlaceMap(at(WATER));
-        data.getModel().getUnits().stream().filter(u -> u.getId() == 16)
-                .findFirst().orElseThrow().setAvailableMoves(2);
+        // Two points need the five-point mounted colonist; a plain colonist
+        // has one, so a saved allowance of two would be over speed.
+        final UnitPo passenger = data.getModel().getUnits().stream()
+                .filter(u -> u.getId() == 16).findFirst().orElseThrow();
+        passenger.setMounted(true);
+        passenger.setAvailableMoves(2);
         Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         terrain.put(WATER, TerrainType.OCEAN);

@@ -96,6 +96,7 @@ class TurnPreparationBoundaryTest {
         pioneer.setAvailableMoves(0);
         pioneer.setTools(100);
         pioneer.setWorkUpdates(0);
+        pioneer.setMissionary(false);
         data.getModel().getUnits().add(pioneer);
         return make(data.getModel());
     }

@@ -6,8 +6,9 @@ or your own Applications folder. Open it to update and launch the game. The
 MicroCol Dev.command file is an alternative that shows progress in Terminal.
 The launcher and development game are unsigned. Use normal macOS approval if
 requested; the launcher never removes quarantine or bypasses Gatekeeper.
-Finder launch errors are recorded in:
-  ~/Library/Application Support/MicroCol Dev/launcher.log
+A failed Finder launch adds one short record (time and exit status, no console
+text) to the local diagnostic log, which keeps at most three files of 5 MiB:
+  ~/Library/Logs/MicroCol/microcol.log
 
 Linux x86-64: extract MicroCol-Dev-linux.tar.gz, then run:
   ./microcol-dev/install.sh

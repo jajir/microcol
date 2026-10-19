@@ -28,6 +28,7 @@ public enum Dialog implements MessageKeyResource {
     buildingQueueDialog_caption, passenger_title, passenger_destination,
     passenger_hold, passenger_confirm, passenger_unavailable,
     turnPreparation_title, turnPreparation_unavailable, recoverySave_title,
-    recoverySave_failed, goodsTransfer_changed;
+    recoverySave_failed, saveFolder_unavailable, diagnosticLog_folder,
+    goodsTransfer_changed, europePrice_changed;
 
 }

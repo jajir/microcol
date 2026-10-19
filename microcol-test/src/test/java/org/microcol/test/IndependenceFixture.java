@@ -9,6 +9,7 @@ import java.nio.file.Files;
 
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
+import org.microcol.model.MovementPoints;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -59,13 +60,14 @@ final class IndependenceFixture {
             action.addProperty("type", "noAction");
             final JsonObject unit = new JsonObject();
             unit.addProperty("workUpdates", 0);
+            unit.addProperty("missionary", false);
             unit.addProperty("id", id);
             unit.addProperty("type", type);
             unit.addProperty("ownerId", "Dutch");
             unit.add("placeMap", place);
             unit.add("cargo", cargo);
             unit.add("action", action);
-            unit.addProperty("availableMoves", 1);
+            unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
             unit.addProperty("holdingGuns", armed);
             unit.addProperty("mounted", mounted);
             unit.addProperty("veteran", veteran);

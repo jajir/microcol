@@ -23,6 +23,7 @@ import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitActionFortify;
+import org.microcol.model.unit.UnitActionBuildRoad;
 import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
@@ -262,7 +263,7 @@ public class Model {
 
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
-        this.europe = new Europe(this);
+        this.europe = new Europe(this, modelPo.getEurope());
     }
 
     /**
@@ -415,7 +416,7 @@ public class Model {
                 Preconditions.checkArgument(
                         field.getProducedGoodsType() != null
                                 && map.isValid(at) && map
-                                        .getTerrainTypeAt(at).canProduce(
+                                        .getTerrainAt(at).canProduce(
                                                 field.getProducedGoodsType())
                                 && (!map.getTerrainTypeAt(at).isSea() || colony
                                         .getConstructions().stream().anyMatch(
@@ -642,8 +643,7 @@ public class Model {
         Preconditions.checkNotNull(site);
         return site.getNeighbors().stream()
                 .filter(at -> isColonyFieldAvailable(owner, at))
-                .filter(at -> map.getTerrainTypeAt(at)
-                        .canProduce(GoodsType.CORN))
+                .filter(at -> map.getTerrainAt(at).canProduce(GoodsType.CORN))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -694,7 +694,8 @@ public class Model {
                 this,
                 unit -> ((AbstractUnit) unit).createVoyage(false,
                         Direction.east),
-                UnitType.MAN_OF_WAR, king, UnitType.MAN_OF_WAR.getSpeed(),
+                UnitType.MAN_OF_WAR, king,
+                MovementPoints.ofPoints(UnitType.MAN_OF_WAR.getSpeed()),
                 new UnitActionNoAction());
     }
 
@@ -760,7 +761,8 @@ public class Model {
         final Unit out = unitStorage.createUnit(
                 unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
                 this, unit -> new PlaceCargoSlot(unit, cargoSlot),
-                UnitType.COLONIST, king, UnitType.COLONIST.getSpeed(),
+                UnitType.COLONIST, king,
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
                 new UnitActionNoAction());
         ((UnitFreeColonist) out).setHoldingGuns(true);
         cargoSlot.store(out.getPlaceCargoSlot());
@@ -788,7 +790,8 @@ public class Model {
                     } else {
                         return new PlaceEuropePier(unit);
                     }
-                }, unitType, owner, owner.getEffectiveSpeed(unitType),
+                }, unitType, owner,
+                MovementPoints.ofPoints(owner.getEffectiveSpeed(unitType)),
                 new UnitActionNoAction());
     }
 
@@ -842,7 +845,8 @@ public class Model {
                         created -> new PlaceLocation(created, location,
                                 created.getDefaultOrintation()),
                         UnitType.FRIGATE, owner,
-                        owner.getEffectiveSpeed(UnitType.FRIGATE),
+                        MovementPoints.ofPoints(
+                                owner.getEffectiveSpeed(UnitType.FRIGATE)),
                         new UnitActionNoAction());
         owner.revealMapForUnit(unit);
         return Optional.of(unit);
@@ -855,7 +859,8 @@ public class Model {
                     return new PlaceLocation(unit, colony.getLocation(),
                             unit.getDefaultOrintation());
                 }, UnitType.COLONIST, colony.getOwner(),
-                UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
+                new UnitActionNoAction());
     }
 
     private void finishShipRepair(final Ship ship,
@@ -2017,6 +2022,71 @@ public class Model {
         ((AbstractUnit) unit).setWaitingOrder(UnitActionType.noAction);
     }
 
+    /**
+     * Authoritative missionary admission for a live colonist of the current
+     * owner. It is free, uses no movement and changes only the missionary role.
+     * Accepted places are the owner's European pier and an owned colony tile
+     * that has a church or cathedral. Workers in fields or buildings, cargo,
+     * sea, foreign or stale units and colonies are refused before any change.
+     *
+     * @param unit the unit the player or the UI wants to ordain
+     * @return the reason ordination is refused, or empty when it may proceed
+     */
+    public Optional<OrdinationProblem> getOrdinationProblem(final Unit unit) {
+        if (!(unit instanceof UnitFreeColonist) || !isGameRunning()
+                || endingTurn || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId())
+                        .orElse(null) != unit) {
+            return Optional.of(OrdinationProblem.UNAVAILABLE);
+        }
+        final UnitFreeColonist colonist = (UnitFreeColonist) unit;
+        if (colonist.isMissionary()) {
+            return Optional.of(OrdinationProblem.ALREADY_MISSIONARY);
+        }
+        if (colonist.isAtPlaceColonyField()
+                || colonist.isAtPlaceConstructionSlot()) {
+            return Optional.of(OrdinationProblem.ASSIGNED_WORKER);
+        }
+        if (colonist.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(OrdinationProblem.ACTIVE_ORDER);
+        }
+        if (colonist.isAtEuropePier()) {
+            return Optional.empty();
+        }
+        if (!colonist.isAtPlaceLocation()) {
+            return Optional.of(OrdinationProblem.NOT_IN_EUROPE_OR_COLONY);
+        }
+        final Optional<Colony> colony = getColonyAt(colonist.getLocation());
+        if (colony.isEmpty()) {
+            return Optional.of(OrdinationProblem.NOT_IN_EUROPE_OR_COLONY);
+        }
+        if (!colony.get().isValid()
+                || colony.get().getOwner() != colonist.getOwner()) {
+            return Optional.of(OrdinationProblem.UNAVAILABLE);
+        }
+        if (!colony.get().wasConstructionBuilded(ConstructionType.CHURCH)
+                && !colony.get()
+                        .wasConstructionBuilded(ConstructionType.CATHEDRAL)) {
+            return Optional.of(OrdinationProblem.NO_CHURCH);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Ordain a colonist after the same validation as
+     * {@link #getOrdinationProblem}.
+     *
+     * @throws IllegalStateException when the live state refuses ordination; the
+     *                               unit and its state stay unchanged
+     */
+    public void ordainMissionary(final Unit unit) {
+        final Optional<OrdinationProblem> problem = getOrdinationProblem(unit);
+        Preconditions.checkState(problem.isEmpty(),
+                "Unit cannot be ordained: %s", problem.orElse(null));
+        checkTurnPreparationComplete();
+        ((UnitFreeColonist) unit).becomeMissionary();
+    }
+
     /** Whether a current armed land unit can begin fortifying. */
     public boolean canFortify(final Unit unit) {
         return (unit instanceof UnitFreeColonist
@@ -2027,7 +2097,7 @@ public class Model {
                 && map.getTerrainTypeAt(unit.getLocation()).isLand()
                 && (unit instanceof UnitArtillery
                         || ((UnitFreeColonist) unit).isHoldingGuns())
-                && unit.getActionPoints() > 0
+                && unit.getMovementThirds() > 0
                 && unit.getAction().getType() == UnitActionType.noAction;
     }
 
@@ -2077,7 +2147,7 @@ public class Model {
         if (unit.getAction().getType() != UnitActionType.noAction) {
             return Optional.of(PlowProblem.BUSY);
         }
-        if (unit.getActionPoints() <= 0) {
+        if (unit.getMovementThirds() <= 0) {
             return Optional.of(PlowProblem.NO_MOVES);
         }
         final Location at = unit.getLocation();
@@ -2143,7 +2213,7 @@ public class Model {
         if (unit.getAction().getType() != UnitActionType.noAction) {
             return Optional.of(ClearForestProblem.BUSY);
         }
-        if (unit.getActionPoints() <= 0) {
+        if (unit.getMovementThirds() <= 0) {
             return Optional.of(ClearForestProblem.NO_MOVES);
         }
         final Location at = unit.getLocation();
@@ -2238,6 +2308,80 @@ public class Model {
         ((AbstractUnit) unit).cancelClearingForest();
     }
 
+    /**
+     * Authoritative road admission for the current player's live pioneer.
+     *
+     * @param unit required unit
+     * @return the first reason building cannot start, or empty when it can
+     */
+    public Optional<BuildRoadProblem> getBuildRoadProblem(final Unit unit) {
+        if (unit == null || !isGameRunning() || endingTurn
+                || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId()).orElse(null) != unit
+                || !unit.isAtPlaceLocation()) {
+            return Optional.of(BuildRoadProblem.UNAVAILABLE);
+        }
+        if (!(unit instanceof UnitFreeColonist)
+                || !unit.getType().isCanBuildRoad()) {
+            return Optional.of(BuildRoadProblem.NOT_PIONEER);
+        }
+        if (((UnitFreeColonist) unit)
+                .getTools() < UnitActionBuildRoad.REQUIRED_TOOLS) {
+            return Optional.of(BuildRoadProblem.NOT_ENOUGH_TOOLS);
+        }
+        if (unit.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(BuildRoadProblem.BUSY);
+        }
+        if (unit.getMovementThirds() <= 0) {
+            return Optional.of(BuildRoadProblem.NO_MOVES);
+        }
+        final Location at = unit.getLocation();
+        if (!map.getTerrainTypeAt(at).isLand()) {
+            return Optional.of(BuildRoadProblem.SEA);
+        }
+        if (map.hasRoadAt(at)) {
+            return Optional.of(BuildRoadProblem.ALREADY_ROAD);
+        }
+        return Optional.empty();
+    }
+
+    /** Whether a current pioneer may start building a road where it stands. */
+    public boolean canBuildRoad(final Unit unit) {
+        return getBuildRoadProblem(unit).isEmpty();
+    }
+
+    /**
+     * Start building a road. Movement is spent now; tools and the road change
+     * only at completion.
+     *
+     * @param unit required unit
+     * @throws IllegalStateException when the unit or square no longer allow the
+     *                               work
+     */
+    public void buildRoad(final Unit unit) {
+        Preconditions.checkState(canBuildRoad(unit),
+                "Unit cannot build road: %s",
+                getBuildRoadProblem(unit).orElse(null));
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).startBuildingRoad();
+    }
+
+    /** Whether this live unit has unfinished road work that can be dropped. */
+    public boolean canCancelBuildRoad(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction().getType() == UnitActionType.buildRoad;
+    }
+
+    /** Discard road progress without refunding movement or tools. */
+    public void cancelBuildRoad(final Unit unit) {
+        Preconditions.checkState(canCancelBuildRoad(unit),
+                "Unit is not building a road");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelBuildingRoad();
+    }
+
     /** Whether this live unit's order has crossed its owner-turn boundary. */
     public boolean isFortified(final Unit unit) {
         return unit != null
@@ -2311,7 +2455,7 @@ public class Model {
                 && getPlayers().stream()
                         .anyMatch(player -> player == unit.getOwner())
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0
+                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0
                 && unit.getLocation() != null && map.isValid(unit.getLocation())
                 && unit.getAction().isNoAction();
     }
@@ -2331,7 +2475,7 @@ public class Model {
     public List<Unit> getMoveableUnitAtOwnedBy(final Location location,
             final Player player) {
         return unitStorage.getUnitsAt(location).stream()
-                .filter(unit -> unit.getActionPoints() > 0
+                .filter(unit -> unit.getMovementThirds() > 0
                         && unit.getOwner().equals(player))
                 .collect(ImmutableList.toImmutableList());
     }
@@ -2377,6 +2521,7 @@ public class Model {
         gameManager.save(out);
         playerStore.save(out);
         out.setEuropeanRelations(europeanRelations.save(this::isOverlapLive));
+        out.setEurope(europe.save());
         // Zero means no Crown-war round has been processed yet.
         out.setCrownWarRound(lastCrownWarRound == 0 ? null : lastCrownWarRound);
         out.setColonies(getSaveColonies());
@@ -2443,6 +2588,15 @@ public class Model {
         checkTurnPreparationComplete();
         listenerManager.fireActionStarted(this);
         if (fireUnitMoveStarted(unit, path)) {
+            // The whole route is validated before the first step: an illegal
+            // step is an invalid argument, an unaffordable route a rejected
+            // state, and neither moves the unit part way.
+            if (unit.isAtPlaceLocation()) {
+                unit.verifyPathIsLegal(path.getLocations());
+                Preconditions.checkState(
+                        unit.canAffordPath(path.getLocations()),
+                        "Unit %s cannot afford the path", unit);
+            }
             path.getLocations().forEach(loc -> {
                 /*
                  * Unit could move to high seas. So could be out of map.
@@ -2486,16 +2640,17 @@ public class Model {
     public void moveUnitAsFarAsPossible(final Unit unit, final Path path) {
         checkTurnPreparationComplete();
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
-            path.getLocations().forEach(loc -> {
+            for (final Location loc : path.getLocations()) {
                 /*
                  * Check if unit is at place location is reasonable, because
                  * unit could in first step conquer city a be placed inside
-                 * city.
+                 * city. The first step it cannot pay ends the walk.
                  */
-                if (unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
-                    unit.moveOneStep(loc);
+                if (!unit.isAtPlaceLocation() || !unit.canAffordStepTo(loc)) {
+                    break;
                 }
-            });
+                unit.moveOneStep(loc);
+            }
             listenerManager.fireUnitMovedFinished(this, unit, path);
         }
     }
@@ -2554,6 +2709,16 @@ public class Model {
 
     public void sellGoods(final CargoSlot cargoSlot, final Goods goods) {
         cargoSlot.sellAndEmpty(goods);
+        listenerManager.fireGoodsWasSoldInEurope(this, goods);
+    }
+
+    /**
+     * Sell only when the price still matches the quote the player confirmed.
+     */
+    public void sellGoods(final CargoSlot cargoSlot, final Goods goods,
+            final EuropeTradeQuote offered) {
+        cargoSlot.sellAndEmpty(goods,
+                Preconditions.checkNotNull(offered, "Offered quote is null"));
         listenerManager.fireGoodsWasSoldInEurope(this, goods);
     }
 

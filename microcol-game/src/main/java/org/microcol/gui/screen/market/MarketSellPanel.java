@@ -7,11 +7,14 @@ import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.screen.europe.ChooseGoods;
 import org.microcol.gui.screen.europe.Europe;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.dialog.DialogEuropePriceChanged;
 import org.microcol.gui.util.ButtonsBarYesNo;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.EuropePriceChangedException;
+import org.microcol.model.EuropeTradeQuote;
 import org.microcol.model.Goods;
 
 import com.google.common.base.Preconditions;
@@ -41,6 +44,8 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final GameModelController gameModelController;
 
+    private final DialogEuropePriceChanged dialogEuropePriceChanged;
+
     private final Label labelHowMuch = new Label();
 
     private final Label labelPricePerPiece = new Label();
@@ -63,11 +68,17 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
     private Goods actualValue;
 
+    /** Quote shown for the actual value; confirmation must match it. */
+    private EuropeTradeQuote shownQuote;
+
     private ScreenMarketSellContext screenMarketContext;
 
     @Inject
     MarketSellPanel(final I18n i18n, final EventBus eventBus,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController,
+            final DialogEuropePriceChanged dialogEuropePriceChanged) {
+        this.dialogEuropePriceChanged = Preconditions
+                .checkNotNull(dialogEuropePriceChanged);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameModelController = Preconditions
@@ -125,7 +136,10 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
                 .getSourceCargoSlot();
         try {
             gameModelController.getModel().sellGoods(sourceCargoSlot,
-                    getActualValue());
+                    getActualValue(), shownQuote);
+        } catch (final EuropePriceChangedException changed) {
+            // the price moved after the quote was shown, nothing was sold
+            dialogEuropePriceChanged.showAndWait();
         } catch (final IllegalStateException rejected) {
             // A boycott that began after the quantity was chosen sells nothing.
             if (!gameModelController.getHumanPlayer()
@@ -147,6 +161,7 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
         actualValue = screenMarketContext.getMaxPossibleGoodsToBuy();
         slider.setMax(actualValue.getAmount());
         slider.setValue(actualValue.getAmount());
+        updateSelectedAmount();
     }
 
     @Override
@@ -157,6 +172,8 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void updateSelectedAmount() {
+        shownQuote = gameModelController.getHumanPlayer()
+                .quoteEuropeTrade(getActualValue(), false);
         labelPricePerPiece.setText(i18n.get(Market.pricePerPiece,
                 getPricePerPiece(), getPriceWithoutTax()));
         labelPricePerPieceValue

@@ -161,7 +161,7 @@ public class ScreenGamePresenter {
     private void onKeyMWasPressed() {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
             final Unit unit = selectedUnitManager.getSelectedUnit().get();
-            if (unit.getActionPoints() > 0) {
+            if (unit.getMovementThirds() > 0) {
                 eventBus.post(new StartMoveEvent());
             }
         }

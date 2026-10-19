@@ -240,6 +240,9 @@ class FirstColonyJourneyTest {
         unit.setOwnerId(owner);
         unit.setAction(template.getAction());
         unit.setWorkUpdates(0);
+        unit.setMissionary(false);
+        // The saved allowance is mandatory; a fresh spare starts exhausted.
+        unit.setMovementThirds(0);
         final PlaceMapPo place = new PlaceMapPo();
         place.setLocation(at);
         place.setOrientation(Direction.west);
@@ -393,8 +396,14 @@ class FirstColonyJourneyTest {
     @Test
     void spareWorkersFeedTheColonyThenCutLumberAcrossSaveAndLoad()
             throws Exception {
+        // Lumber exists only in forest: the first land square stays bare
+        // grassland for food, every other one is forested grassland.
         final GameModelPo restored = foundedWithSpares(2, TerrainType.GRASSLAND,
-                "spares.microcol");
+                "spares.microcol",
+                saved -> saved.getModel().getMap()
+                        .setTrees(landFields(saved).stream().skip(1)
+                                .map(FirstColonyJourneyTest::tile)
+                                .collect(Collectors.toSet())));
         final String humanBefore;
         final String franceMidway;
         final int foodMidway;
@@ -472,6 +481,9 @@ class FirstColonyJourneyTest {
                     setTerrain(saved, tile(land.get(0)), TerrainType.TUNDRA);
                     setTerrain(saved, tile(land.get(1)), TerrainType.TUNDRA);
                     setTerrain(saved, tile(land.get(2)), TerrainType.GRASSLAND);
+                    // The spare's tundra is forested: only forest has lumber.
+                    saved.getModel().getMap()
+                            .setTrees(java.util.Set.of(tile(land.get(1))));
                     better[0] = tile(land.get(2));
                     land.forEach(field -> {
                         if (Integer.valueOf(4).equals(field.getWorkerId())) {

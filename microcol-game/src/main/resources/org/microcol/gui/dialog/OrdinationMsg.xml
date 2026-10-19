@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define keys for missionary ordination in Europe and colonies</comment>
+	<entry key="ordainMenu">Ordain as missionary…</entry>
+	<entry key="ordainTitle">Ordain missionary</entry>
+	<entry key="ordainSummary">Ordination is free and uses no movement. The colonist keeps identity, specialty, equipment and movement. Expert effects apply only to a Jesuit or while your nation holds Jean de Brebeuf.</entry>
+	<entry key="ordainConfirm">Ordain</entry>
+	<entry key="ordainCancel">Cancel</entry>
+	<entry key="ordainClose">Close</entry>
+	<entry key="ordainDone">This colonist is now a missionary. Nothing else changed.</entry>
+	<entry key="ordainChanged">The situation changed. Nothing was changed. Cancel and try again.</entry>
+	<entry key="ordainUNAVAILABLE">This colonist is not available for ordination on your turn. Nothing was changed.</entry>
+	<entry key="ordainALREADY_MISSIONARY">This colonist is already a missionary. Nothing was changed.</entry>
+	<entry key="ordainASSIGNED_WORKER">This colonist works in a field or building. Leave that job first, then ordain.</entry>
+	<entry key="ordainACTIVE_ORDER">This colonist has an active order, such as sentry, fortification or pioneer work. Cancel that order first.</entry>
+	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Ordination needs this colonist on the European pier or standing outside the fields and buildings of your colony.</entry>
+	<entry key="ordainNO_CHURCH">This colony needs a church or cathedral. A chapel alone is not enough.</entry>
+</properties>

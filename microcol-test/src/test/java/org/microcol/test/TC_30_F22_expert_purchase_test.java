@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.PlaceCargoSlot;
 import org.microcol.model.PlaceEuropePier;
 import org.microcol.model.PlaceLocation;
@@ -329,7 +330,8 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
                 com.google.gson.JsonObject unit = value.getAsJsonObject();
                 if (unit.get("id").getAsInt() == 102) {
                     unit.addProperty("type", typeName);
-                    unit.addProperty("availableMoves", type.getSpeed());
+                    unit.addProperty("movementThirds",
+                            MovementPoints.ofPoints(type.getSpeed()));
                     com.google.gson.JsonArray slots = new com.google.gson.JsonArray();
                     for (int index = 0; index < holds; index++) {
                         com.google.gson.JsonObject slot = new com.google.gson.JsonObject();

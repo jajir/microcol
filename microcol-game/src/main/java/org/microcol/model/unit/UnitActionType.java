@@ -43,6 +43,14 @@ public enum UnitActionType {
             return new UnitActionClearForest();
         }
 
+    },
+
+    buildRoad("r") {
+        @Override
+        public UnitActionBuildRoad make() {
+            return new UnitActionBuildRoad();
+        }
+
     };
 
     private final String sign;

@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodsType;
+import org.microcol.model.MovementPoints;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -174,6 +175,7 @@ public final class RebelSupportPage extends AbstractScreen {
     private JsonObject resident(final int id) {
         final JsonObject unit = new JsonObject();
         unit.addProperty("workUpdates", 0);
+        unit.addProperty("missionary", false);
         unit.addProperty("id", id);
         unit.addProperty("type", "COLONIST");
         unit.addProperty("ownerId", "Dutch");
@@ -184,7 +186,7 @@ public final class RebelSupportPage extends AbstractScreen {
         final JsonObject action = new JsonObject();
         action.addProperty("type", "noAction");
         unit.add("action", action);
-        unit.addProperty("availableMoves", 5);
+        unit.addProperty("movementThirds", MovementPoints.ofPoints(5));
         unit.addProperty("tools", 0);
         unit.addProperty("holdingGuns", false);
         unit.addProperty("mounted", false);

@@ -31,9 +31,9 @@
    own tool admission, plowing, clearing, road construction and road production.
    Their linked shared decisions remain authoritative.
 2. The next A05 captures assign terrain identity and missing defense cells to
-   [R-0123](done/R-0123.md), baseline output to [R-0124](R-0124.md), exact movement
-   cost/path/range to [R-0125](R-0125.md), rivers to [R-0126](R-0126.md), and
-   special-resource overlays to [R-0127](R-0127.md). Existing R-0093 defense
+   [R-0123](done/R-0123.md), baseline output to [R-0124](done/R-0124.md), exact movement
+   cost/path/range to [R-0125](done/R-0125.md), rivers to [R-0126](done/R-0126.md), and
+   special-resource overlays to [R-0127](done/R-0127.md). Existing R-0093 defense
    corrections are preserved. Lake output/travel and generator placement are
    explicit open points, not inferred ocean behavior.
 3. [R-0128](R-0128.md) owns finite mineral depletion, [R-0129](R-0129.md)
@@ -50,7 +50,7 @@
    and artillery transport remain credited to their original requirements.
 5. Routes have separate owners for [creation](R-0139.md), [stop transfers](R-0140.md),
    [recurring execution](R-0141.md) and [edit/cancel/delete](R-0142.md).
-   [R-0143](R-0143.md) owns national market pressure, [R-0144](R-0144.md)
+   [R-0143](done/R-0143.md) owns national market pressure, [R-0144](done/R-0144.md)
    the Dutch response and [R-0145](R-0145.md) trade accounts plus the economy
    report. TRADE-004/005 share the delivered R-0020 quote/affordability path
    and its dated evidence; they receive no duplicate implementation task.
@@ -69,7 +69,7 @@
 8. Native interactions are [R-0157](R-0157.md) action selection,
    [R-0158](R-0158.md) chief encounters, [R-0159](R-0159.md) market/admission,
    [R-0160](R-0160.md) sale/gift and [R-0161](R-0161.md) reverse purchase.
-   [R-0162](R-0162.md) owns tribute; [R-0163](R-0163.md) ordination and
+   [R-0162](R-0162.md) owns tribute; [R-0163](done/R-0163.md) ordination and
    Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
    denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.
@@ -87,7 +87,7 @@
     [R-0178](R-0178.md) royal/Continental combat roles and ambush,
     and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
-11. Remaining founder effects are [R-0180](R-0180.md) production modifiers,
+11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
     [R-0181](R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
     [R-0183](R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
@@ -120,7 +120,7 @@
     [graphics coverage](R-0224.md), [reproducible export](R-0225.md),
     [audio service](R-0226.md), [audio settings](R-0227.md), [first cue](R-0228.md),
     [long-game stability](R-0229.md) and [balance evaluation](R-0230.md).
-17. Release residuals are [diagnostics](R-0231.md), [player guide](R-0232.md),
+17. Release residuals are [diagnostics](done/R-0231.md), [player guide](R-0232.md),
     [runtime baseline](R-0233.md), [signed Mac](R-0234.md), [Linux acceptance](R-0235.md),
     [stable promotion](R-0236.md), [Steam product/rights](R-0237.md),
     [store media](R-0238.md), [depots](R-0239.md), [installed-client acceptance](R-0240.md)

@@ -32,7 +32,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -50,6 +50,7 @@
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -60,13 +61,14 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 1,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -77,13 +79,14 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
       },
       {
         "workUpdates": 0,
+        "missionary": false,
         "id": 4,
         "type": "COLONIST",
         "ownerId": "Dutch",
@@ -94,7 +97,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 80,
         "holdingGuns": false,
         "mounted": false
@@ -122,7 +125,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 6
+        "movementThirds": 18
       }
     ],
     "nextColonyId": 1,
@@ -393,7 +396,7 @@
       "maxY": 30,
       "seed": 134
     },
-    "europe": {},
+    "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
     "focusedField": {
       "x": 3,
       "y": 16

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.microcol.model.ColonyJobChoice.Kind;
@@ -61,16 +62,25 @@ class ColonyJobChoiceTest {
                 .forEach(at -> terrain.put(at, TerrainType.ARCTIC));
         terrain.put(colony.getLocation(), TerrainType.GRASSLAND);
         terrain.put(neighbor.getLocation(), TerrainType.GRASSLAND);
-        terrain.put(colony.getLocation().add(Direction.west.getVector()),
-                TerrainType.PRAIRIE);
-        terrain.put(colony.getLocation().add(Direction.north.getVector()),
-                TerrainType.TUNDRA);
-        terrain.put(colony.getLocation().add(Direction.northWest.getVector()),
-                TerrainType.GRASSLAND);
-        terrain.put(colony.getLocation().add(Direction.east.getVector()),
-                TerrainType.DESERT);
+        // Lumber exists only in forest. The forested lumber levels of the aid
+        // card are 2 (desert), 4 (tundra) and 6 (grassland, plains): the
+        // current west field is the poorest, north is the next best and
+        // north-west is the best eligible one. The east square shared with the
+        // neighbor yields 6 as well; no legal square yields more.
+        final Location west = colony.getLocation()
+                .add(Direction.west.getVector());
+        final Location north = colony.getLocation()
+                .add(Direction.north.getVector());
+        final Location northWest = colony.getLocation()
+                .add(Direction.northWest.getVector());
+        final Location east = colony.getLocation()
+                .add(Direction.east.getVector());
+        terrain.put(west, TerrainType.DESERT);
+        terrain.put(north, TerrainType.TUNDRA);
+        terrain.put(northWest, TerrainType.GRASSLAND);
+        terrain.put(east, TerrainType.PLAINS);
         data.getModel().getMap().setTerrainType(terrain);
-        data.getModel().getMap().setTrees(Collections.emptySet());
+        data.getModel().getMap().setTrees(Set.of(west, north, northWest, east));
         data.getModel().getMap().setFields(Collections.emptySet());
         colony.getColonyWarehouse().put("ORE", 1);
         return data;
@@ -124,9 +134,9 @@ class ColonyJobChoiceTest {
         assertThrows(UnsupportedOperationException.class, choices::clear);
         final ColonyJobChoice best = choice(model, 0, Kind.BEST_FIELD,
                 GoodsType.LUMBER);
-        assertEquals(Goods.of(GoodsType.LUMBER, 1),
+        assertEquals(Goods.of(GoodsType.LUMBER, 2),
                 best.getCurrentFieldYield().orElseThrow());
-        assertEquals(Goods.of(GoodsType.LUMBER, 3),
+        assertEquals(Goods.of(GoodsType.LUMBER, 6),
                 best.getBestFieldYield().orElseThrow());
         assertEquals(field(model, Direction.northWest).getLocation(),
                 best.getTargetLocation().orElseThrow());
@@ -134,6 +144,35 @@ class ColonyJobChoiceTest {
                 .getGoodsTypeProduction(GoodsType.LUMBER));
         assertTrue(field(model, Direction.east).isWorkedByAnotherColony());
         assertEquals(before, snapshot(model));
+    }
+
+    @Test
+    void aStrictlyBetterSharedSquareIsNeverOfferedAsTheBestEligibleField() {
+        final GameModelPo data = data();
+        final Location center = data.getModel().getColonies().get(0)
+                .getLocation();
+        final Map<Location, TerrainType> terrain = data.getModel().getMap()
+                .getTerrainMap();
+        // Forested tundra yields 4 and forested desert 2 lumber, so the
+        // forested plains square shared with the neighbor (6) is strictly
+        // better than every square this colony may take.
+        terrain.put(center.add(Direction.northWest.getVector()),
+                TerrainType.TUNDRA);
+        terrain.put(center.add(Direction.north.getVector()),
+                TerrainType.DESERT);
+        data.getModel().getMap().setTerrainType(terrain);
+        final Model model = load(data);
+        assertEquals(6, field(model, Direction.east)
+                .getGoodsTypeProduction(GoodsType.LUMBER));
+        assertTrue(field(model, Direction.east).isWorkedByAnotherColony());
+        final ColonyJobChoice best = choice(model, 0, Kind.BEST_FIELD,
+                GoodsType.LUMBER);
+        assertEquals(Goods.of(GoodsType.LUMBER, 2),
+                best.getCurrentFieldYield().orElseThrow());
+        assertEquals(Goods.of(GoodsType.LUMBER, 4),
+                best.getBestFieldYield().orElseThrow());
+        assertEquals(field(model, Direction.northWest).getLocation(),
+                best.getTargetLocation().orElseThrow());
     }
 
     @Test
@@ -270,9 +309,21 @@ class ColonyJobChoiceTest {
 
     @Test
     void changedPotentialRejectsWithoutChangingTheCurrentJob() {
-        final Model model = model();
+        // Plowing adds food only on bare land, so the best corn square (bare
+        // grassland, 4) must not carry a forest.
+        final GameModelPo data = data();
+        final Location northWest = data.getModel().getColonies().get(0)
+                .getLocation().add(Direction.northWest.getVector());
+        final java.util.Set<Location> trees = new java.util.HashSet<>(
+                data.getModel().getMap().getTreeSet());
+        trees.remove(northWest);
+        data.getModel().getMap().setTrees(trees);
+        final Model model = load(data);
         final ColonyJobChoice offer = choice(model, 0, Kind.BEST_FIELD,
                 GoodsType.CORN);
+        assertEquals(northWest, offer.getTargetLocation().orElseThrow());
+        assertEquals(Goods.of(GoodsType.CORN, 4),
+                offer.getPotential().orElseThrow());
         model.getMap().plowFiled(offer.getTargetLocation().orElseThrow());
         rejected(model, offer);
     }

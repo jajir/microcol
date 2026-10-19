@@ -5,6 +5,7 @@ import java.util.function.Function;
 import org.microcol.model.Cargo;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Model;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceBuilderPo;
 import org.microcol.model.Unit;
@@ -25,7 +26,7 @@ public class UnitFactory {
                 if (UnitType.ARTILLERY == request.getUnitType()) {
                     return new UnitArtillery(request.getModel(),
                             request.getUnitId(), request.getPlaceBuilder(),
-                            request.getOwner(), request.getAvailableMoves(),
+                            request.getOwner(), request.getMovementThirds(),
                             request.getAction(), request.isArtilleryDamaged());
                 }
                 if (UnitType.COLONIST == request.getUnitType()) {
@@ -79,7 +80,7 @@ public class UnitFactory {
     private Unit makeFreeColonist(final UnitCreateRequest request) {
         final UnitFreeColonist out = new UnitFreeColonist(request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
-                request.getOwner(), request.getAvailableMoves(),
+                request.getOwner(), request.getMovementThirds(),
                 request.getAction(), request.getTools(),
                 request.isHoldingGuns(), request.isMounted());
         return out;
@@ -88,7 +89,7 @@ public class UnitFactory {
     private Unit makeMasterBlacksmith(final UnitCreateRequest request) {
         return new UnitMasterBlacksmith(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction(),
+                request.getMovementThirds(), request.getAction(),
                 request.getTools(), request.isHoldingGuns(),
                 request.isMounted());
     }
@@ -96,7 +97,7 @@ public class UnitFactory {
     private Unit makeSpecialist(final UnitCreateRequest request) {
         return new UnitSpecialist(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction(),
+                request.getMovementThirds(), request.getAction(),
                 request.getTools(), request.isHoldingGuns(),
                 request.isMounted(), request.getUnitType());
     }
@@ -104,7 +105,7 @@ public class UnitFactory {
     private Unit makeLaborer(final UnitCreateRequest request) {
         return new UnitLaborer(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction(),
+                request.getMovementThirds(), request.getAction(),
                 request.getTools(), request.isHoldingGuns(),
                 request.isMounted(), request.getUnitType());
     }
@@ -113,7 +114,7 @@ public class UnitFactory {
         final UnitGalleon out = new UnitGalleon(request.getCargoBuilder(),
                 request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction());
+                request.getMovementThirds(), request.getAction());
         return out;
     }
 
@@ -121,14 +122,14 @@ public class UnitFactory {
         final UnitFrigate out = new UnitFrigate(request.getCargoBuilder(),
                 request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction());
+                request.getMovementThirds(), request.getAction());
         return out;
     }
 
     private Unit makeCaravel(final UnitCreateRequest request) {
         return new UnitCaravel(request.getCargoBuilder(), request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
-                request.getOwner(), request.getAvailableMoves(),
+                request.getOwner(), request.getMovementThirds(),
                 request.getAction());
     }
 
@@ -136,20 +137,20 @@ public class UnitFactory {
         return new UnitMerchantman(request.getCargoBuilder(),
                 request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction());
+                request.getMovementThirds(), request.getAction());
     }
 
     private Unit makePrivateer(final UnitCreateRequest request) {
         return new UnitPrivateer(request.getCargoBuilder(), request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
-                request.getOwner(), request.getAvailableMoves(),
+                request.getOwner(), request.getMovementThirds(),
                 request.getAction());
     }
 
     private Unit makeManOfWar(final UnitCreateRequest request) {
         return new UnitManOfWar(request.getCargoBuilder(), request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
-                request.getOwner(), request.getAvailableMoves(),
+                request.getOwner(), request.getMovementThirds(),
                 request.getAction());
     }
 
@@ -157,7 +158,7 @@ public class UnitFactory {
         final UnitWagon out = new UnitWagon(request.getCargoBuilder(),
                 request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
-                request.getAvailableMoves(), request.getAction());
+                request.getMovementThirds(), request.getAction());
         return out;
     }
 
@@ -177,11 +178,13 @@ public class UnitFactory {
                         : unitPo.getArtilleryDamaged() == null,
                 "Invalid saved artillery state");
 
+        Preconditions.checkArgument(unitPo.getMovementThirds() != null,
+                "Saved unit has no movement allowance");
         if (unitPo.getPlaceShipRepair() != null) {
             Preconditions
                     .checkArgument(
                             unitPo.getType().isShip()
-                                    && unitPo.getAvailableMoves() == 0
+                                    && unitPo.getMovementThirds() == 0
                                     && unitPo.getPlaceMap() == null
                                     && unitPo.getPlaceHighSeas() == null
                                     && unitPo.getPlaceEuropePort() == null
@@ -199,7 +202,7 @@ public class UnitFactory {
                 placeBuilderModelPo, unitPo.getId(), unitPo.getType(),
                 model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()),
                 UnitActionConverter.convert(unitPo.getAction()),
-                unitPo.getAvailableMoves());
+                unitPo.getMovementThirds());
         unitCreateRequest.setCargoBuilder(unit -> new Cargo(unit,
                 unit.getType().getCargoCapacity(), unitPo.getCargo()));
         unitCreateRequest.setHoldingGuns(unitPo.isHoldingGuns());
@@ -212,8 +215,9 @@ public class UnitFactory {
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
         Preconditions.checkArgument(
-                !unit.isShip() || unit.getActionPoints() >= 0
-                        && unit.getActionPoints() <= unit.getSpeed(),
+                unit.getMovementThirds() >= 0
+                        && unit.getMovementThirds() <= MovementPoints
+                                .ofPoints(unit.getSpeed()),
                 "Invalid saved unit movement allowance");
         Preconditions.checkArgument(
                 !unitPo.isVeteran() || unit instanceof UnitFreeColonist,
@@ -224,6 +228,11 @@ public class UnitFactory {
                         : unitPo.getWorkUpdates() == null
                                 && unitPo.getWorkSkill() == null,
                 "Invalid saved work history owner");
+        Preconditions.checkArgument(
+                unit instanceof UnitFreeColonist
+                        ? unitPo.getMissionary() != null
+                        : unitPo.getMissionary() == null,
+                "Invalid saved missionary role owner");
         Preconditions.checkArgument(unitPo.getMilitaryRole() != null,
                 "Missing saved military role");
         Preconditions.checkArgument(
@@ -235,6 +244,7 @@ public class UnitFactory {
         if (unit instanceof UnitFreeColonist) {
             ((UnitFreeColonist) unit)
                     .restoreMilitaryRole(unitPo.getMilitaryRole());
+            ((UnitFreeColonist) unit).restoreMissionary(unitPo.getMissionary());
             ((UnitFreeColonist) unit)
                     .restoreVeteran(unitCreateRequest.isVeteran());
             ((UnitFreeColonist) unit).restoreWorkExperience(
@@ -248,7 +258,7 @@ public class UnitFactory {
                     && model.getMap().getTerrainTypeAt(unit.getLocation())
                             .isLand()
                     && (((UnitActionFortify) unit.getAction()).isFortified()
-                            || unit.getActionPoints() == 0),
+                            || unit.getMovementThirds() == 0),
                     "Invalid saved fortification");
         }
         final boolean hasLocation = unitPo.getDepartureLocation() != null;

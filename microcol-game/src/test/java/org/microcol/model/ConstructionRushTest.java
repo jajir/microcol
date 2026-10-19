@@ -57,7 +57,9 @@ class ConstructionRushTest {
                 .addAtEnd(ConstructionType.WAREHOUSE);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 34));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 15));
-        model.getEurope().getGoodsTradeForType(GoodsType.TOOLS).setBuyPrice(3);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.TOOLS, EuropeanNation.DUTCH)
+                .setBuyPrice(3);
         model.getPlayerStore().getKingForPlayer(owner).orElseThrow()
                 .setKingsTaxPercentage(10);
         owner.setGold(100);
@@ -88,6 +90,69 @@ class ConstructionRushTest {
         assertEquals(completed, new Gson().toJson(restored.save()));
         restored.startGame();
         assertEquals(completed, new Gson().toJson(restored.save()));
+    }
+
+    private GoodsTrade tools(final EuropeanNation nation) {
+        return model.getEurope().getGoodsTradeForType(GoodsType.TOOLS, nation);
+    }
+
+    private void prepareRushNeedingFiveImportedTools() {
+        growToFourResidents();
+        queue.addAtEnd(ConstructionType.BLACKSMITHS_SHOP);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 34));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 15));
+    }
+
+    @Test
+    void rushMovesToolPressureOnlyForImportedToolsAfterSettlement() {
+        prepareRushNeedingFiveImportedTools();
+        owner.setGold(1000);
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        assertEquals(5, quote.getMissingTools());
+        // Previewing and quoting twice only read the market.
+        queue.getRushQuote().orElseThrow();
+        assertEquals(0, tools(EuropeanNation.DUTCH).getPressure());
+        assertFalse(tools(EuropeanNation.FRENCH).isTradedSinceUpdate());
+
+        final int goldBefore = owner.getGold();
+        queue.rush(quote);
+
+        // Charged at the quoted price; then 5 purchased tools (stocked ones
+        // are not purchases) push the Dutch market by -20 (half of -40) and the
+        // others by -10 eighths, and mark every market as affected.
+        assertEquals(goldBefore - quote.getPrice(), owner.getGold());
+        assertEquals(-20, tools(EuropeanNation.DUTCH).getPressure());
+        assertEquals(-10, tools(EuropeanNation.FRENCH).getPressure());
+        assertEquals(-10, tools(EuropeanNation.ENGLISH).getPressure());
+        assertEquals(-10, tools(EuropeanNation.SPANISH).getPressure());
+        assertTrue(tools(EuropeanNation.SPANISH).isTradedSinceUpdate());
+        assertEquals(1, tools(EuropeanNation.DUTCH).getSellPrice());
+        // Hammers are not a market commodity and nothing else moved.
+        assertEquals(0, model.getEurope()
+                .getGoodsTradeForType(GoodsType.LUMBER, EuropeanNation.DUTCH)
+                .getPressure());
+    }
+
+    @Test
+    void staleAndUnaffordableRushesMoveNoMarket() {
+        prepareRushNeedingFiveImportedTools();
+        owner.setGold(1000);
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        queue.rush(quote);
+        final String completed = snapshot();
+        // The same quote cannot be replayed: nothing is charged or pressed.
+        assertThrows(IllegalStateException.class, () -> queue.rush(quote));
+        assertEquals(completed, snapshot());
+
+        // A rush the player cannot afford is rejected before any mutation.
+        queue.addAtEnd(ConstructionType.WAREHOUSE);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 0));
+        owner.setGold(1);
+        final ConstructionRushQuote costly = queue.getRushQuote().orElseThrow();
+        final String beforeRejection = snapshot();
+        assertThrows(NotEnoughtGoldException.class, () -> queue.rush(costly));
+        assertEquals(beforeRejection, snapshot());
     }
 
     @Test
@@ -212,7 +277,9 @@ class ConstructionRushTest {
         queue.removeItem(queue.getBuildingQueue().get(0));
         queue.addAtEnd(UnitType.WAGON);
         final ConstructionRushQuote market = queue.getRushQuote().orElseThrow();
-        model.getEurope().getGoodsTradeForType(GoodsType.TOOLS).setBuyPrice(7);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.TOOLS, EuropeanNation.DUTCH)
+                .setBuyPrice(7);
         final String changedMarket = snapshot();
         assertThrows(IllegalStateException.class, () -> queue.rush(market));
         assertEquals(changedMarket, snapshot());
@@ -221,7 +288,8 @@ class ConstructionRushTest {
     @Test
     void unavailableEuropeAndOverflowNeverOfferAQuote() {
         queue.addAtEnd(UnitType.WAGON);
-        model.getEurope().getGoodsTradeForType(GoodsType.TOOLS)
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.TOOLS, EuropeanNation.DUTCH)
                 .setBuyPrice(Integer.MAX_VALUE);
         final String overflow = snapshot();
         assertTrue(queue.getRushQuote().isEmpty());

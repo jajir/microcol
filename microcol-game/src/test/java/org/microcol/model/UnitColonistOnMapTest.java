@@ -170,8 +170,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
                 });
 
         assertTrue(
-                exception.getMessage().contains(
-                        "There is not enough available action points"),
+                exception.getMessage().contains("There is not enough movement"),
                 String.format("Invalid exception message '%s'.",
                         exception.getMessage()));
     }

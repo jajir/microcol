@@ -250,6 +250,7 @@ class ImmigrationTest {
         finalId.setOwnerId("Dutch");
         finalId.setType(UnitType.COLONIST);
         finalId.setWorkUpdates(0);
+        finalId.setMissionary(false);
         finalId.setAction(new UnitActionNoActionPo());
         finalId.setAvailableMoves(1);
         finalId.setPlaceEuropePort(new PlaceEuropePortPo());

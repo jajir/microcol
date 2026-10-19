@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
@@ -13,22 +14,12 @@ import com.google.common.collect.Lists;
  */
 public class Terrain {
 
-    private static final int FOOD_TREE_FACTOR = 3;
-
     /** Added to an already positive crop output on plowed, cleared land. */
     private static final int PLOW_BONUS = 1;
 
     private static final List<GoodsType> PLOW_CROPS = ImmutableList.of(
             GoodsType.CORN, GoodsType.SUGAR, GoodsType.COTTON,
             GoodsType.TOBACCO);
-
-    /** Goods that a permanently cleared square never produces again. */
-    private static final List<GoodsType> CLEARED_BARREN_GOODS = ImmutableList
-            .of(GoodsType.LUMBER, GoodsType.FUR);
-
-    private static final int TREE_NOMINAL_PRODUCTION = 7;
-
-    private static final int FURS_NOMINAL_PRODUCTION = 5;
 
     private final Location location;
 
@@ -40,26 +31,19 @@ public class Terrain {
 
     private boolean cleared;
 
+    private boolean hasRoad;
+
+    private RiverSize riverSize = RiverSize.NONE;
+
+    private ResourceOverlay resourceOverlay = ResourceOverlay.NONE;
+
     /**
-     * List of function that based on terrain properties like trees and field
-     * modify particular good production.
+     * List of function that based on terrain properties like field or river
+     * modify particular good production. Trees and clearing select the baseline
+     * table in {@link TerrainType} and need no modifier here.
      */
     private final static List<Function<TerrainProduction, TerrainProduction>> PRODUCTION_MODIFIERS = Lists
             .newArrayList(prod -> {
-                if (prod.getTerrain().isHasTrees()) {
-                    if (GoodsType.CORN.equals(prod.getGoodsType())) {
-                        return prod.modify(
-                                prod.getProduction() / FOOD_TREE_FACTOR);
-                    }
-                    if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
-                        return prod.modify(TREE_NOMINAL_PRODUCTION);
-                    }
-                    if (GoodsType.FUR.equals(prod.getGoodsType())) {
-                        return prod.modify(FURS_NOMINAL_PRODUCTION);
-                    }
-                }
-                return prod;
-            }, prod -> {
                 if (prod.getTerrain().isHasField()
                         && !prod.getTerrain().isHasTrees()
                         && prod.getProduction() > 0
@@ -68,10 +52,10 @@ public class Terrain {
                 }
                 return prod;
             }, prod -> {
-                if (prod.getTerrain().isCleared()
-                        && !prod.getTerrain().isHasTrees()
-                        && CLEARED_BARREN_GOODS.contains(prod.getGoodsType())) {
-                    return prod.modify(0);
+                // A river adds to output only when the square already yields.
+                if (prod.getProduction() > 0) {
+                    return prod.modify(prod.getProduction() + prod.getTerrain()
+                            .getRiverSize().getProductionBonus());
                 }
                 return prod;
             });
@@ -146,17 +130,32 @@ public class Terrain {
      */
     public TerrainProduction getTerrainProduction(
             final GoodsType producedGoodsType) {
-        if (terrainType.getBaseProduction(producedGoodsType).isPresent()) {
+        final Optional<TerrainType.Production> baseline = hasTrees
+                ? terrainType.getForestProduction(producedGoodsType)
+                : terrainType.getBaseProduction(producedGoodsType);
+        // A matching special resource joins the base before the flat modifiers
+        // below, and alone can introduce output on a zero baseline.
+        final int base = baseline.map(TerrainType.Production::getBase).orElse(0)
+                + resourceOverlay.getBonusFor(producedGoodsType);
+        if (base > 0) {
             TerrainProduction prod = new TerrainProduction(this,
-                    producedGoodsType,
-                    terrainType.getBaseProduction(producedGoodsType).get()
-                            .getBase());
+                    producedGoodsType, base);
             for (final Function<TerrainProduction, TerrainProduction> pm : PRODUCTION_MODIFIERS) {
                 prod = pm.apply(prod);
             }
             return prod;
         }
         return new TerrainProduction(this, producedGoodsType, 0);
+    }
+
+    /**
+     * Whether this square currently yields some of the goods.
+     *
+     * @param producedGoodsType required goods type
+     * @return {@code true} when the current output is above zero
+     */
+    public boolean canProduce(final GoodsType producedGoodsType) {
+        return canProduceAmmount(producedGoodsType) > 0;
     }
 
     /**
@@ -212,10 +211,77 @@ public class Terrain {
     }
 
     /**
+     * Provide information if a pioneer built a road here.
+     *
+     * @return <code>true</code> when the square carries a road
+     */
+    public boolean isHasRoad() {
+        return hasRoad;
+    }
+
+    /**
+     * Allows to set if a road is built at terrain.
+     *
+     * @param hasRoad whether there is a road
+     */
+    public void setHasRoad(final boolean hasRoad) {
+        Preconditions.checkArgument(terrainType.isLand() || !hasRoad,
+                "this terrain type (%s) at (%s) can't have road.", terrainType,
+                location);
+        this.hasRoad = hasRoad;
+    }
+
+    /**
+     * Provide the size of the river crossing this square.
+     *
+     * @return {@link RiverSize#NONE} when no river crosses the square
+     */
+    public RiverSize getRiverSize() {
+        return riverSize;
+    }
+
+    /**
+     * Allows to set the river crossing the square.
+     *
+     * @param riverSize size of the river, {@link RiverSize#NONE} for none
+     */
+    public void setRiverSize(final RiverSize riverSize) {
+        Preconditions.checkNotNull(riverSize);
+        Preconditions.checkArgument(
+                terrainType.isLand() || riverSize == RiverSize.NONE,
+                "this terrain type (%s) at (%s) can't have river.", terrainType,
+                location);
+        this.riverSize = riverSize;
+    }
+
+    /**
+     * Provide the special resource on this square.
+     *
+     * @return {@link ResourceOverlay#NONE} when the square has none
+     */
+    public ResourceOverlay getResourceOverlay() {
+        return resourceOverlay;
+    }
+
+    /**
+     * Allows to set the special resource on this square.
+     *
+     * @param resourceOverlay resource of the square,
+     *                        {@link ResourceOverlay#NONE} for none
+     */
+    public void setResourceOverlay(final ResourceOverlay resourceOverlay) {
+        Preconditions.checkNotNull(resourceOverlay);
+        Preconditions.checkArgument(resourceOverlay.canBeOn(terrainType),
+                "this terrain type (%s) at (%s) can't have resource (%s).",
+                terrainType, location, resourceOverlay);
+        this.resourceOverlay = resourceOverlay;
+    }
+
+    /**
      * Provide information if a pioneer permanently cleared a forest here.
      *
-     * @return <code>true</code> when the square never produces lumber or fur
-     *         again
+     * @return <code>true</code> when the square uses its bare output, which
+     *         never includes lumber or fur
      */
     public boolean isCleared() {
         return cleared;

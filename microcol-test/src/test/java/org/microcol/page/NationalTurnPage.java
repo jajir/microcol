@@ -143,8 +143,13 @@ public final class NationalTurnPage extends AbstractScreen {
         getRobot().clickOn("#exit");
     }
 
-    public void verifyRecoveryMessage(final String expectedText) {
-        assertEquals(expectedText, getNodeFinder().lookup(expectedText)
+    public void verifyRecoveryMessage(final String expectedMessage) {
+        final String expectedText = expectedMessage + "\n\n"
+                + new FreePlayAuditPage(getContext()).diagnosticFolderLine();
+        assertEquals(expectedText, getNodeFinder().lookup((
+                javafx.scene.Node node) -> node instanceof javafx.scene.control.Label
+                        && expectedText.equals(
+                                ((javafx.scene.control.Label) node).getText()))
                 .queryAs(javafx.scene.control.Label.class).getText());
     }
 

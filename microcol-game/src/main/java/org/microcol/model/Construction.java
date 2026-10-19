@@ -175,17 +175,11 @@ public class Construction {
         }
         if (getType() == ConstructionType.TOWN_HALL
                 && out.getProducedGoods().isPresent()) {
-            final int base = out.getProducedGoods().get().getAmount();
-            final int improved = colony
-                    .wasConstructionBuilded(ConstructionType.NEWSPAPER)
-                            ? Math.multiplyExact(base, 2)
-                            : colony.wasConstructionBuilded(
-                                    ConstructionType.PRINTING_PRESS)
-                                            ? Math.toIntExact(
-                                                    (long) base * 3 / 2)
-                                            : base;
             return new ConstructionTurnProduction(null,
-                    Goods.of(GoodsType.BELL, improved), null);
+                    Goods.of(GoodsType.BELL,
+                            getTownHallBells(
+                                    out.getProducedGoods().get().getAmount())),
+                    null);
         }
         if (out.getProducedGoods().isPresent()
                 && out.getProducedGoods().get().getType() == GoodsType.CROSS
@@ -197,6 +191,35 @@ public class Construction {
                     null);
         }
         return out;
+    }
+
+    /**
+     * Town-hall bells after the printing and founder percentages. The
+     * unattended base receives printing and Paine; staffed bells also receive
+     * Jefferson. Both portions are summed in wide arithmetic and floored once.
+     *
+     * @param totalBells bells after profession and political changes
+     * @return bells credited to the town hall for this update
+     */
+    private int getTownHallBells(final int totalBells) {
+        final int unattended = getType().getBaseProductionPerTurn();
+        final int staffed = totalBells - unattended;
+        final Player owner = colony.getOwner();
+        final List<Founder> members = owner.getCongressMembers();
+        final int printing = colony
+                .wasConstructionBuilded(ConstructionType.NEWSPAPER) ? 100
+                        : colony.wasConstructionBuilded(
+                                ConstructionType.PRINTING_PRESS) ? 50 : 0;
+        final int unattendedPercent = printing
+                + (members.contains(Founder.THOMAS_PAINE) ? owner.getTaxRate()
+                        : 0);
+        final int staffedPercent = unattendedPercent
+                + (members.contains(Founder.THOMAS_JEFFERSON) ? 50 : 0);
+        return Math
+                .toIntExact(Math.floorDiv(
+                        (long) unattended * (100 + unattendedPercent)
+                                + (long) staffed * (100 + staffedPercent),
+                        100L));
     }
 
     /**

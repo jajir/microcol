@@ -4,10 +4,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -84,6 +84,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
             spare.setOwnerId("France");
             spare.setAction(founder.getAction());
             spare.setWorkUpdates(0);
+            spare.setMissionary(false);
             final PlaceMapPo place = new PlaceMapPo();
             place.setLocation(SITE);
             place.setOrientation(Direction.west);
@@ -94,11 +95,15 @@ public class TC_34_F26_rival_first_colony_test extends AbstractMicroColTest {
         data.getModel().setUnits(units);
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
-        SITE.getNeighbors().stream().filter(
+        final List<Location> land = SITE.getNeighbors().stream().filter(
                 at -> terrain.containsKey(at) && terrain.get(at).isLand())
-                .forEach(at -> terrain.put(at, TerrainType.GRASSLAND));
+                .collect(Collectors.toList());
+        land.forEach(at -> terrain.put(at, TerrainType.GRASSLAND));
         data.getModel().getMap().setTerrainType(terrain);
-        data.getModel().getMap().setTrees(Collections.emptySet());
+        // Lumber exists only in forest: the first square stays bare grassland
+        // for food and every other one is forested grassland.
+        data.getModel().getMap()
+                .setTrees(land.stream().skip(1).collect(Collectors.toSet()));
 
         // France founds with the ordinary model operation, then yields.
         final Model model = Model.make(data.getModel(),

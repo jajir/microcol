@@ -40,6 +40,19 @@ public final class ApplicationInfo {
         return version + " (" + buildId + ")";
     }
 
+    /**
+     * Build identity for diagnostics. Missing metadata must not stop startup.
+     *
+     * @return build version, or <code>unknown</code> when it cannot be read
+     */
+    public String getDiagnosticVersion() {
+        try {
+            return getBuildVersion();
+        } catch (RuntimeException unavailable) {
+            return "unknown";
+        }
+    }
+
     public String getBuildVersion() {
         final Properties prop = new Properties();
         try (InputStream stream = getClass().getClassLoader()

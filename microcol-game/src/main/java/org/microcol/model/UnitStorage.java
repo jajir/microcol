@@ -51,12 +51,12 @@ public final class UnitStorage {
 
     Unit createUnit(final Function<Unit, Cargo> cargoBuilder, final Model model,
             final Function<Unit, Place> placeBuilder, final UnitType unitType,
-            final Player owner, final int availableMoves,
+            final Player owner, final int movementThirds,
             final UnitAction unitAction) {
 
         final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model,
                 placeBuilder, idManager.nextId(), unitType, owner, unitAction,
-                availableMoves);
+                movementThirds);
         unitCreateRequest.setCargoBuilder(cargoBuilder);
 
         final Unit unit = unitFactory.createUnit(unitCreateRequest);
@@ -223,7 +223,7 @@ public final class UnitStorage {
         final List<Unit> list = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getMovementThirds() > 0)
                 .filter(unit -> unit.getAction().isNoAction())
                 .collect(Collectors.toList());
         if (list.size() == 0) {
@@ -253,7 +253,7 @@ public final class UnitStorage {
         return units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getMovementThirds() > 0)
                 .filter(unit -> unit.getAction().isNoAction()).findFirst();
     }
 
@@ -278,7 +278,7 @@ public final class UnitStorage {
                 .collect(Collectors.toList());
 
         final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()
-                .filter(unit -> unit.getActionPoints() > 0).findFirst();
+                .filter(unit -> unit.getMovementThirds() > 0).findFirst();
         if (moveableUnit.isPresent()) {
             return moveableUnit;
         } else {

@@ -6,11 +6,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -97,6 +99,7 @@ class NativeDistributionIT {
                 runtime.output);
         if (!mac) {
             smokeLinux(extracted.resolve(launcher), evidence);
+            smokeLinuxStartupFailure(extracted.resolve(launcher), evidence);
         }
         Files.writeString(evidence.resolve("verified.txt"), "Verified "
                 + platform + " " + build
@@ -193,6 +196,8 @@ class NativeDistributionIT {
         builder.environment().remove("JAVA_HOME");
         builder.environment().remove("JDK_JAVA_OPTIONS");
         builder.environment().remove("_JAVA_OPTIONS");
+        builder.environment().put("XDG_STATE_HOME",
+                home.resolve("state").toString());
         builder.environment().put("HOME", home.toString());
         builder.environment().put("JAVA_TOOL_OPTIONS",
                 "-DsoundEnabled=false -Duser.home=\"" + home
@@ -219,6 +224,18 @@ class NativeDistributionIT {
                     assertTrue(process.isAlive(),
                             "Game died immediately after opening its window:\n"
                                     + Files.readString(log));
+                    Path diagnostics = home
+                            .resolve("state/microcol/logs/microcol.log");
+                    assertTrue(Files.exists(diagnostics),
+                            "Packaged game wrote no diagnostic log: "
+                                    + diagnostics);
+                    assertTrue(
+                            Files.readString(diagnostics)
+                                    .contains("event=STARTED"),
+                            "Diagnostic log lacks the start record");
+                    assertSafeDiagnostics(diagnostics, home);
+                    Files.copy(diagnostics, evidence.resolve("microcol.log"),
+                            StandardCopyOption.REPLACE_EXISTING);
                     Files.writeString(evidence.resolve("linux-window.txt"),
                             "Owned launch PID: " + process.pid()
                                     + "\nNew usable MicroCol windows: " + opened
@@ -231,6 +248,81 @@ class NativeDistributionIT {
                     + evidence);
         } finally {
             BuildTestSupport.stopOwnedProcess(process);
+        }
+    }
+
+    /**
+     * Launches the packaged game with a home directory that is a regular file.
+     * Startup then fails before any window opens; the failure must leave a safe
+     * record and must not print a raw stack trace or touch the blocked path.
+     */
+    private void smokeLinuxStartupFailure(Path launcher, Path evidence)
+            throws Exception {
+        Path home = Files.createDirectory(temporary.resolve("unusable-home"));
+        Path blockedHome = Files.writeString(home.resolve("home-is-a-file"),
+                "not a directory");
+        Path state = home.resolve("state");
+        Path console = evidence.resolve("startup-failure.log");
+        ProcessBuilder builder = new ProcessBuilder(launcher.toString())
+                .directory(home.toFile()).redirectErrorStream(true)
+                .redirectOutput(console.toFile());
+        builder.environment().remove("JAVA_HOME");
+        builder.environment().remove("JDK_JAVA_OPTIONS");
+        builder.environment().remove("_JAVA_OPTIONS");
+        builder.environment().put("XDG_STATE_HOME", state.toString());
+        builder.environment().put("HOME", home.toString());
+        builder.environment().put("JAVA_TOOL_OPTIONS",
+                "-DsoundEnabled=false -Duser.home=\"" + blockedHome
+                        + "\" -Djava.util.prefs.userRoot=\""
+                        + home.resolve("prefs") + "\"");
+        Process process = builder.start();
+        try {
+            assertTrue(process.waitFor(60, TimeUnit.SECONDS),
+                    "Packaged game did not stop after a startup failure");
+            assertNotEquals(0, process.exitValue(),
+                    "Startup failure must exit unsuccessfully");
+        } finally {
+            BuildTestSupport.stopOwnedProcess(process);
+        }
+        Path diagnostics = state.resolve("microcol/logs/microcol.log");
+        assertTrue(Files.exists(diagnostics),
+                "Startup failure wrote no diagnostic log: " + diagnostics);
+        assertTrue(
+                Files.readString(diagnostics).contains("event=STARTUP_FAILED"),
+                "Diagnostic log lacks the startup failure record");
+        assertSafeDiagnostics(diagnostics, home, blockedHome);
+        assertEquals("not a directory", Files.readString(blockedHome));
+        assertFalse(Files.readString(console).contains("\tat "),
+                "A raw stack trace reached the console");
+        Files.copy(diagnostics,
+                evidence.resolve("startup-failure-microcol.log"),
+                StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * A packaged diagnostic record is bounded ASCII with build and platform
+     * context, and has no JSON, message text or local path.
+     */
+    private static void assertSafeDiagnostics(Path diagnostics,
+            Path... forbiddenPaths) throws Exception {
+        byte[] bytes = Files.readAllBytes(diagnostics);
+        assertTrue(bytes.length <= 5L * 1024 * 1024, "Log exceeds 5 MiB");
+        for (byte value : bytes) {
+            assertTrue(value >= 0, "Diagnostic log contains non-ASCII data");
+        }
+        String record = new String(bytes, StandardCharsets.US_ASCII);
+        for (String field : new String[] { " build=", " os=\"", " arch=",
+                " java=" }) {
+            assertTrue(record.contains(field), "Record lacks " + field);
+        }
+        assertFalse(record.contains("{") || record.contains("}"),
+                "Record contains JSON-like data");
+        for (Path forbidden : forbiddenPaths) {
+            assertFalse(record.contains(forbidden.toString()),
+                    "Record contains a local path");
+        }
+        try (var files = Files.list(diagnostics.getParent())) {
+            assertTrue(files.count() <= 3, "More than three log files");
         }
     }
 

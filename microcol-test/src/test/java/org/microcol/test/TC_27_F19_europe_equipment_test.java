@@ -4,6 +4,7 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.PlaceCargoSlot;
@@ -84,6 +85,9 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.confirm();
         equipment.verifyState(100, 465, false, false, 100,
                 PlaceEuropePier.class);
+        // The 100 purchased tools press -400 eighths of Dutch pressure (half of
+        // the ordinary -800), which is below one step, so the tool bid stays 1:
+        // 100 gross, 17 tax, 83 net.
         equipment.open(100, "Sell remaining tools");
         equipment.verifyQuote(
                 "100 Tools\nUnit price: 1 gold\nTax: 17% (17 gold)\nTotal: 83 gold");
@@ -158,7 +162,8 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         // The market changes while the player is deciding on the old quote.
         equipment.open(100, "Buy 50 muskets");
         getContext().getRobot().interact(() -> getModel().getEurope()
-                .getGoodsTradeForType(GoodsType.MUSKET).setBuyPrice(4));
+                .getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
+                .setBuyPrice(4));
         equipment.confirm();
         equipment.verifyChoice("Buy 50 muskets", true, CHANGED);
         equipment.verifyQuote(

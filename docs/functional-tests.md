@@ -590,6 +590,44 @@ nefunkční testovací prostředí uvést jako otevřenou překážku. Hlavní a
 ověřuje skutečný běh i u testů napsaných [místním workerem](ai/local-qwen.md).
 
 
+## R-0163 missionary ordination — 2026-10-19
+
+1. Přijato v izolované dávkové větvi, zatím nepublikováno. Vysvěcení je zdarma
+   a bez spotřeby pohybu na evropském molu nebo před vlastní kolonií s kostelem
+   či katedrálou. Zachovává identitu, specializaci a vybavení včetně sluhů a
+   trestanců. Přidělený pracovník musí nejprve opustit práci. Kaple nestačí.
+2. `Model.getOrdinationProblem` a `ordainMissionary` sdílejí ověření vlastníka,
+   živé hry, fáze, umístění a rozkazu před změnou. `UnitPo.missionary` ukládá
+   roli; scénáře a tvůrci dat byly aktualizovány bez migrace starých uložených her.
+   `hasEffectiveMissionaryExpertise` čte jezuitu nebo Brébeufa živého vlastníka.
+   Nativní mise, konverze, denunciace a podněcování zůstávají dalšími požadavky.
+3. Haiku připravilo a implementovalo model/UI, Sonnet doplnil chybějící TC96
+   a opravil neplatné použití EnumSource pro UnitType. Po třech pokusech uživatel
+   výslovně povolil dokončení Codexem: model nyní přijímá i katedrálu (kontrola
+   budovy porovnává přesný typ) a český UI test hledá správné „Vysvětit“.
+   Původní selhání zůstávají evidována v completion záznamech
+   `20261019T120849Z-54afc1dac06a`, `20261019T122151Z-c37ff019b993`
+   a `20261019T122354Z-fb3ea7d1e455`.
+4. Finální Docker/Xvfb běh `20261019T123100Z-deb767e1dafa`:
+   **2 551 modelových testů a 14 UI/provozních kontrol**, nula chyb, selhání
+   a přeskočení. Výběr `*Test,!RivalTradeCycleTest,TC_96*` zahrnuje 35 běhů
+   MissionaryOrdinationTest, fázi přípravy tahu a všech pět TC96 scénářů.
+   R-0091 RivalTradeCycleTest zůstává samostatným otevřeným blokátorem.
+5. Předchozí diagnostický běh ověřil dalších **30 souvisejících UI scénářů**
+   TC25/27/29/47/56/67 a tři kontroly zdrojového kontraktu. Finální oprava
+   změnila pouze přijetí katedrály a český očekávaný text TC96; související
+   vybavení, přeprava, imigrace, Kongres a náboženská produkce se nezměnily.
+6. `TC_96_F87_missionary_ordination_test` ověřuje skutečná menu a dialogy:
+   molo (zrušení, Escape, potvrzení, opakování, Continue), odmítnutí kaple,
+   kostel (změna přidělené práce před potvrzením), katedrálu a Brébeufa
+   před/po, český dialog a Enter. Modelové kontroly pokrývají sociální třídy,
+   vybavení a přesný pohyb, přidělenou práci, náklad, moře, rozkaz, změnu
+   vlastníka a persistence. Samostatná větev cizí kolonie pod vlastní jednotkou
+   nemá přímý scénář; vlastnictví kontroluje sdílená operace.
+7. Sdílený formatter: 48 Java souborů, shoda tokenů a idempotence PASS.
+   Devět dokumentačních testů a strict MkDocs prošly. Celá UI regrese a
+   publikace jsou odloženy na integraci deseti přijatých požadavků dávky.
+
 ## Z01 — bezpečné vyložení nákladu
 
 **Přijaté ověření — 11. října 2026:**
@@ -5141,49 +5179,33 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    `run-mIaLGe` exits 0, **122 passed** (ClearForest 43, PlowField 22, Terrain 5,
    SpecialistProduction 21, NationalTurnPreparation 8, NationalTurnOrder 11,
    existing TC18 7, TC15 2, PageVerificationContract 3), no failures/errors/skips.
-   Shared formatter passed. This verifies the written model and existing plow
-   regressions only. TC73/F65 clearing controls, confirmation, loss feedback and
-   Continue have not yet been authored or accepted. R-0120 remains incomplete;
-   do not count it among the seven targeted-accepted batch requirements.
-10. R-0120 final `run-tfx9Qq` exits 0: **112 model/architecture + 15 UI +
-    three source-contract = 130 passed**, zero failures/errors/skips. Model suites:
-    ClearForest 44, PlowField 22, Terrain 5, SpecialistProduction 21,
-    NationalTurnPreparation 8, NationalTurnOrder 11 and ModelArchitecture 1.
-    TC73/F65 has six scenarios: confirmed four-update completion, cancel/Escape,
-    stale confirmation, hardy two-update completion, explicit work cancellation,
-    and overflow with one persisted notice and no repeat next turn. TC15's two
-    and TC18's seven plow scenarios also pass. Earlier `run-ODgwPv` had one
-    overly broad next-turn report assertion; the repair checks zero lumber-loss
-    notices while retaining unrelated events and all stock/tool checks.
-    Shared formatter passes. Reports remain under `target/docker-ui/run-tfx9Qq/`.
-    Full batch regression and publication remain pending.
-11. R-0136 final `run-t7AO4q` exits 0: **127 model + 11 UI + three
-    source-contract = 141 passed**, no failures/errors/skips. Suites:
-    CoastalPortMovement 18, PassengerTransfer 28, CargoSlot 56,
-    UnitColonistEmbark 17 and SentryOrder 8; TC38/F30 five and TC29/F21 six.
-    Real owned-port arrival unloads outside, preserves goods/equipment/passenger
-    points, frees holds and survives Continue; merely loading a ship in port
-    does not unload it. Model cases cover zero points, stale port/action,
-    invalid later passenger and departure sentries before any arrival mutation.
-    TC38 retains preview cancellation and ordinary-shore selective landing;
-    TC38_05 adds zero-point arrival with empty passenger holds and retained ore.
-    Earlier fixture and UI setup failures and repairs are recorded in the
-    [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
-    Shared formatter passed; reports remain in `target/docker-ui/run-t7AO4q/`.
-    Full batch regression/publication remain pending.
-12. R-0090 final `run-aNzXVw` exits 0: **92 model + nine UI + three
-    source-contract = 104 passed**, zero failures/errors/skips. Suites:
-    FirstColonyJourney 11, FirstColonyPlanner 12, ColonyJobChoice 21,
-    ColonyFamine 8, SharedColonyFieldAssignment 7, Boundary 6 and Persistence 27.
-    TC34_08 extends the original founder to ten post-founding turns; TC34_09
-    uses two available workers and verifies actual food/lumber, ten turns and
-    Continue. Model cases cover better legal food, indoor workers, foreign
-    occupation and a barren bounded fallback. Failure/repair evidence is in the
-    [operating record](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
-    Starting food in focused reassignment/occupation boundary fixtures prevents
-    starvation before the AI's first decision; production references do not
-    receive runtime supplies. Shared formatter passed. Reports remain under
-    `target/docker-ui/run-aNzXVw/`; full batch regression/publication are pending.
+
+## R-0180 founder production (2026-10-19)
+
+1. Přijato v izolované dávce, publikace dosud neproběhla. Jefferson přidává
+   50 procentních bodů pouze k obsazené radnici; Paine aktuální daň k obsazené
+   i neobsazené části. Tisk se sčítá, noviny nahrazují lis, součet se zaokrouhlí
+   jednou dolů. Hudson zdvojuje kožešiny po dosavadních úpravách, nikoli kabáty.
+   Sdílené výpočty v Construction a ColonyField používají současného vlastníka.
+2. Docker `20261019T124401Z-030c9bb6ea98` ověřil 2 561 modelových testů
+   a **18 UI/provozních kontrol**, bez selhání, chyb a přeskočení. TC97
+   ověřuje radnici, lis, noviny, výběr kožešinového pole, skutečný tah a Continue;
+   doprovázejí jej TC52/77/67/56 a zdrojový kontrakt.
+3. Haiku následně doplnilo modelové kontroly obou směrů změny vlastníka při
+   skutečném dobytí a výroby kabátů se vstupem 6/2/0. První běh
+   `20261019T125225Z-11bee4a3d0d0` měl 2 564/2 566 úspěchů: dvě testovací
+   mapy neměly kladný výnos kožešin. Uživatel povolil dokončení Codexem;
+   fixture dostala travnaté pole s bonusem lovu kožešin, aserce zůstaly zachované.
+4. Finální Docker `20261019T125745Z-e26736a9967a`:
+   **2 566 modelových testů a 9 provozních/kontraktních kontrol PASS**, nula
+   selhání/chyb/přeskočení. Výběr `*Test,!RivalTradeCycleTest` ponechává
+   rozpracované R-0091 samostatně otevřené. Dřívější UI výsledek se znovu
+   používá, protože následně se změnily pouze modelové testy a dokumentace.
+5. Sdílený formatter: 17 Java souborů, tokeny/idempotence PASS. Dokumentační
+   testy a strict MkDocs ověřeny při uzavření. Plná regrese a publikace čekají
+   na dokončení desetipoložkové dávky. Tax-demand UI není novým scénářem;
+   změnu aktuální daně a následný výnos pokrývá modelový test.
+
 
 ## Claude batch 1 integrated acceptance — 2026-10-17
 
@@ -5576,3 +5598,92 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    no tested gameplay source changes. Requirement status now records local
    acceptance. GitHub Actions and development publication of this final batch
    are pending and will be verified against the pushed commit.
+
+## R-0124 terrain production — 2026-10-19
+
+1. [R-0124](requirements/done/R-0124.md) implements all 22 legal bare/forested
+   terrain variants and 176 literal commodity cells from aid card 4. The main
+   agent visually rechecked the reference and corrected the old audit's omitted
+   swamp-fur zero. Terrain owns the current row; field choices, previews and
+   saved-job validation use the same model operation. Water retains CORN=3,
+   including lakes; plowing and political modifiers remain separate.
+2. `TerrainProductionMatrixTest` verifies every cell, forbidden forest variants,
+   zero-output choices, forest removal and actual field production. TC86 verifies
+   the player preview/cancel/assignment, the next turn's exact warehouse change,
+   and Save/Continue without extra stock. Its grassland-forest baseline is 6
+   lumber; Delft's existing political penalty makes the displayed and stored
+   output 5. TC40 preserves unavailable-current-crop rejection, exact field
+   choice and stale-state protection. A separate model case proves that a
+   strictly better neighbor-worked field is excluded (6 versus eligible 4).
+3. Haiku medium produced the table but left dependent fixtures incomplete.
+   Sonnet medium repaired them in two bounded attempts. Failed diagnostics
+   `run-D7DZwh` (3 failures/23 errors), `run-yho4et` (15 failures/1 error), and
+   `run-l1Cr0G` (5 UI failures/errors) are superseded only for the rerun checks.
+   Original player outcomes and rejection assertions remain; bare lumber jobs
+   now have legal forests, and expected effective yields account for modifiers.
+4. Final Docker/Xvfb/Openbox `run-u3rX4Y` passes **2,382 model tests and 34
+   microcol-test checks**, zero failures/errors/skips: TC40 (15), TC86 (1),
+   TC34 (9), SimpleOperationsTest (5), EnvironmentTest (1) and the page source
+   contract (3). Unchanged TC18 (7), TC73 (6), TC80 (3), TC50 (3), and TC07 (2)
+   passed in `run-l1Cr0G`. Together these prove 55 distinct selected UI checks.
+   The known unfinished `RivalTradeCycleTest` for R-0091 was explicitly excluded;
+   this is targeted R-0124 acceptance, **not full batch regression**.
+5. Main-agent formatting checked 29 changed Java files (including unchanged
+   pending R-0091 files): one changed, exact code tokens and idempotence passed.
+   Static audit of 71 bundled/test scenario files found all 318 occupied field
+   jobs valid under the new baseline. That audit does not establish every
+   runtime-generated fixture or all gameplay. Full batch regression and GitHub
+   publication remain pending; no new published build is claimed.
+
+
+## R-0125 terrain movement — 2026-10-19
+
+1. Base terrain movement is accepted on the isolated batch branch. Integer thirds are authoritative in the model and saved unit state; execution, weighted route/range and UI affordability share costs. Ships retain one point for water/port steps. The full-allowance expensive step ends at zero. Road/river connectivity is still owned by R-0121/R-0126.
+2. Docker completion `20261019T073410Z-ef358fc97804` passed **2,397 model tests** with zero failures/errors/skips. The unfinished R-0091 `RivalTradeCycleTest` was explicitly excluded. Selected TC01/11/18/23/28/29/38/50/87 and default supporting checks ran: 41 of 42 passed; TC87 first failed on a detached preview canvas. This is not full batch regression.
+3. Main-agent repair, explicitly selected by the user, cancels the preview with Escape before releasing the mouse. Completion `20261019T074343Z-32a398bf4ade` ran TC26/28/35/74/76/87 plus the page contract: 50 of 51 passed, with only TC87 reading its stale pre-move panel. Its later diagnostic runs exposed incorrect status/dialog expectations for zero movement. The final test reacquires the current panel, verifies zero movement cannot enter move mode, retains rejection-dialog checks for a positive insufficient allowance, and verifies unchanged state and Save/Continue.
+4. Final completion `20261019T075420Z-b1448cf4f8da` passes **all three TC87 scenarios and all three page-contract checks**, zero failures/errors/skips. Production code is unchanged since the passing model run; other selected player paths are unchanged since their passing checks. Tests cover the full-allowance mountain step, weighted reach/preview, zero/partial rejection and fresh-model fractional/zero persistence through Continue.
+5. Two Haiku medium attempts, a quota-interrupted Sonnet medium attempt and one user-authorized Haiku continuation produced the change. Initial schema-fixture and test-lifecycle failures were repaired and rerun. Main inspected and applied the worker's one-time conversion of 72 tracked files / 834 allowances; one deliberately malformed load-rejection fixture was preserved. Shared formatting checks all 53 changed Java files with exact code-token and idempotence checks passing. No full UI suite or publication is claimed here; ten-requirement batch integration remains pending.
+
+
+## R-0121 road construction and travel — 2026-10-19
+
+1. [R-0121](requirements/done/R-0121.md) is accepted on the isolated batch branch. Roads persist on non-sea squares; ordinary/hardy pioneers finish after two/one owner updates and spend 20 tools once. Cancel and stale work have no road/tool effect. UI offers build/cancel, localized remaining work and visible roads. Connected land-road endpoints cost one third in execution, path, range and preview; fractional movement remains selectable. Road production bonuses remain R-0122.
+2. Docker completion `20261019T091935Z-f6e579f233ea` passed **2,440 model checks**, zero failures/errors/skips, with unrelated unfinished R-0091 `RivalTradeCycleTest` excluded. Its 36 UI/environment/source-contract checks passed 35; TC88's final rendering setup moved the pioneer into a ship at the colony and then incorrectly expected a map location.
+3. The user-authorized main-agent repair changes only that TC88 destination to empty grassland `(24,12)`, preserving the location and rendered-road assertions. Completion `20261019T092652Z-967e9ee22106` passed **8 checks**: four TC88 construction scenarios, one TC89 road-travel scenario and three page-contract checks, zero failures/errors/skips. Together with unchanged passing TC11/15/18/73/87 and environment checks in the earlier run, all **36 distinct selected checks** pass. This is targeted acceptance, not a full-suite result.
+4. TC88 covers ordinary/hardy construction, visible countdown, cancellation, insufficient tools, completion, tools charged once, Continue and rendered road. TC89 covers both road directions, exact remaining thirds, final-third movement availability and Continue/rendering. BuildRoadTest and RoadMovementTest cover terrain/tool boundaries, stale/concurrent/repeated completion, persistence and connected/disconnected costs with route/range behavior. UC-021 road-output and UC-012 river scope remain open under their own requirements.
+5. Worker history: Haiku medium preparation, implementation and repair, followed by one user-authorized Sonnet medium repair. Compilation, lifecycle-test and UI-fixture errors were diagnosed from saved evidence; no failed run is reclassified as passing. Sonnet also fixed stale progress feedback after cancel. Main reviewed changes and applied the shared formatter: 46 Java files checked, exact-code-token and idempotence checks pass. No new package or layer dependency was introduced.
+6. Batch progress is three accepted requirements (R-0124, R-0125, R-0121). Integration, full batch regression and publication remain pending the agreed ten-requirement checkpoint. These attempts do not establish a measured token-cost optimum; Haiku required escalation for this combined model/UI task.
+
+
+## R-0126 rivers — 2026-10-19
+
+1. [R-0126](requirements/done/R-0126.md) is accepted on the isolated batch branch for authored maps. River size and reciprocal adjacent segments persist with validation. Connected land travel costs one third, without stacking a road discount; disconnected crossings keep terrain cost. Small/large rivers add +1/+2 only to positive output before job modifiers. Rendering distinguishes size and hides courses into unexplored neighbors. Generation and editor controls are not part of this acceptance.
+2. Completion `20261019T094445Z-25795a89db5b` passed **2,457 model checks**, zero failures/errors/skips, excluding unrelated unfinished R-0091 RivalTradeCycleTest. River tests cover positive/zero yields, plow composition, malformed courses, persistence, both travel directions, road overlap, exact thirds and route/range. Its UI run passed 18/20 checks; TC90 exposed a large river stroke cap extending into a small neighbor and an incorrect English commodity-label expectation.
+3. Haiku medium repaired the stroke to end at the shared midpoint and restored canvas stroke/fill/width/cap so later grid rendering retains its own state. The Sugar cane expectation preserves the numerical result. A third TC90 scenario checks that the known tile does not draw a course into an unknown neighbor. Completion `20261019T095309Z-4776c9cc0383` passed **15 checks**: TC86/87/88/89/90 and three page-contract checks, with zero failures/errors/skips. Model code is unchanged from the passing model run. The earlier environment checks remain separate; no full-suite claim is made.
+4. TC90 verifies small/large rendered courses, connected travel and exact remaining movement through Continue, field preview versus actual next-turn sugar and persistence, and fog suppression. Two Haiku medium attempts completed this slice; no Sonnet escalation or main-agent implementation repair was needed. Main reviewed the shared model/rendering boundaries and applied the Java formatter (28 files, exact-token and idempotence checks pass). No new package responsibility or layer dependency was introduced.
+5. Batch progress is four accepted requirements (R-0124, R-0125, R-0121, R-0126). Integration, full batch regression and publication remain pending the ten-requirement checkpoint. Whole UC-008 still includes the separate resource-overlay/depletion requirements. No token-cost optimum is claimed from these two attempts.
+
+
+## R-0127 resource overlays — 2026-10-19
+
+1. [R-0127](requirements/done/R-0127.md) is accepted on the isolated batch branch: twelve explicit resource kinds, +2 to each matching output (both ore and silver for mixed minerals), persisted identity, known-tile marker and English/Czech inspection names. Land kinds accept any land terrain; fishery accepts ocean/lake. Matching overlays can introduce a zero-baseline output before flat plow/river and later job modifiers; nonmatching output receives no bonus.
+2. Completion `20261019T101217Z-9b2389ea8b3d` passed **2,476 model/localization checks and 21 UI/environment/source-contract checks**, zero failures/errors/skips. Selection was `*Test,!RivalTradeCycleTest,TC_91*,TC_90*,TC_86*,TC_88*,TC_89*`; unrelated R-0091 trade tests remain excluded. TC91 checks resource marker/inspection and fog, prime-sugar preview against actual next-turn stock, and Continue without duplicate output. Model tests cover all resource identities, zero/nonmatching boundaries, modifier composition, invalid storage/terrain and persistence.
+3. Main reviewed the shared production boundary, load validation and known-only UI integration; applied the shared formatter (28 Java files, token preservation and idempotence pass). One Haiku medium preparation and one implementation attempt completed this slice; no repair was needed after the first actual test run. The preparation inspected local aid-card pages 132–135 and resource descriptions 24–25 without finding an explicit numerical overlay override; base terrain chart cells were not treated as overlay bonuses.
+4. Batch progress is five accepted requirements (R-0124, R-0125, R-0121, R-0126, R-0127). Full batch regression, main integration and publication remain pending. Depletion is R-0128, natural generated placement R-0065 and road-yield eligibility R-0122; this acceptance claims none of those. Measured token-cost optimum remains unestablished.
+
+
+## R-0143 national markets — 2026-10-19
+
+1. [R-0143](requirements/done/R-0143.md) is accepted on the isolated batch branch. Europe owns four national markets with exact pressure, bid/spread and affected-since-update flags. Confirmed sales/purchases settle their quote before applying full own and quarter cross-market pressure; equipment, rush tools and custom-house exports use that engine. Quiet recovery runs only at the national update boundary. R-0144's Dutch half-factor remains separate.
+2. Completion `20261019T111007Z-f048a4b027ae` passed **2,508 model checks and 39 UI/environment/source-contract checks**, zero failures/errors/skips. Selection: `*Test,!RivalTradeCycleTest,TC_94*,TC_06*,TC_27*,TC_55*,TC_58*,TC_78*,TC_79*`. Unfinished R-0091 tests remain excluded. Coverage includes fractions/thresholds/bounds, malformed saved pressure including integer extremes, actual rush/export/equipment pressure, cross-market quiet flags, ModelPo round trip and no replay on load, confirmed prices, UI stale offers and related tax/equipment/export journeys.
+3. Haiku prepared and implemented the slice; a bounded Sonnet repair corrected scripted non-national actor recovery, integer-bound validation/pressure arithmetic, partial-buy quoting and missing integration coverage. Existing equipment/custom-house expectations were recalculated from the specified trade thresholds rather than copied from failing output. Earlier runs (2,485/2,489 model and 28/33 UI) remain failed evidence. Final selected checks all pass.
+4. Main reviewed quote/settlement callers, saved-state validation and isolated Player market hunks from the unfinished rival-trade objective. Shared formatting checked 45 Java files with token-preservation and idempotence passing. Current-schema market state was added directly to bundled maps and scenario fixtures; deliberately corrupt input remains invalid. Full batch regression and publication are not established by this targeted run.
+5. Six requirements are accepted in the batch: R-0124, R-0125, R-0121, R-0126, R-0127 and R-0143. Main integration remains the ten-requirement checkpoint. This larger cross-cutting task required Sonnet repair; token-cost optimum is not yet measured.
+
+
+## R-0144 Dutch market pressure — 2026-10-19
+
+1. [R-0144](requirements/done/R-0144.md) is accepted on the isolated batch branch. Europe's common pressure engine applies the receiver's factor: Dutch own/cross trades contribute 4/1 eighths, other markets 8/2. Thresholds, bounds, spread, confirmed settlement and recovery remain shared. No second market store or new option was added.
+2. Completion `20261019T112955Z-563717256c54` passed **34 selected UI/source-contract checks**, zero failures/errors/skips: TC06/27/55/58/78/79/94/95 plus page verification. TC95 exercises actual Dutch purchases, the 100-versus-200-unit threshold, cross-market comparison and Continue. Model tests cover both signs, repeated single units, Dutch 200/800 versus ordinary 100/400 thresholds and saved fractions.
+3. The first model run passed 2,510/2,515; five old Dutch expectations in equipment and national-update tests still used the previous factor. Haiku's repair changed only EuropeEquipmentTest and NationalMarketUpdateTest, retaining shifted-price recovery coverage with 200-unit setup and independently calculated remainders. Completion `20261019T113746Z-541fe06c0e99` passed **2,515 model checks and nine environment/source-contract checks**, zero failures/errors/skips; unrelated R-0091 RivalTradeCycleTest remains excluded. Production/UI were unchanged, so the passing UI evidence above remains applicable.
+4. Main inspected the receiver-based calculation, repair file scope and exact threshold arithmetic, and applied the shared formatter (25 Java files, token-preservation/idempotence pass). Two Haiku medium attempts completed this slice. Seven requirements are accepted in the batch; full regression, main integration and publication remain pending the ten-requirement checkpoint. This is not a measured token-cost optimum.

@@ -6,6 +6,8 @@ import org.microcol.gui.Point;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
+import org.microcol.gui.dialog.DialogOrdainMissionary;
+import org.microcol.gui.dialog.OrdinationMsg;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
@@ -45,6 +47,8 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
 
     private final DialogEquipment equipmentDialog;
 
+    private final DialogOrdainMissionary ordinationDialog;
+
     private final I18n i18n;
 
     private final ContextMenu contextMenu;
@@ -58,11 +62,13 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
     PanelOutsideColonyUnit(final ImageProvider imageProvider,
             final EventBus eventBus, final PaintService paintService,
             final Colony colony, final Unit unit,
-            final DialogEquipment equipmentDialog, final I18n i18n) {
+            final DialogEquipment equipmentDialog, final I18n i18n,
+            final DialogOrdainMissionary ordinationDialog) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.colony = Preconditions.checkNotNull(colony);
         this.equipmentDialog = Preconditions.checkNotNull(equipmentDialog);
+        this.ordinationDialog = Preconditions.checkNotNull(ordinationDialog);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unit = Preconditions.checkNotNull(unit);
 
@@ -119,6 +125,18 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         work.setOnAction(
                 event -> eventBus.post(new ShowColonyJobChoicesEvent(unit)));
         contextMenu.getItems().add(work);
+        final MenuItem ordain = new MenuItem(
+                i18n.get(OrdinationMsg.ordainMenu));
+        ordain.setId("colony-ordain-" + unit.getId());
+        ordain.setOnAction(event -> {
+            ordinationDialog.show(unit);
+            if (colony.isValid()) {
+                eventBus.post(new RepaintColonyEvent());
+            } else {
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+            }
+        });
+        contextMenu.getItems().add(ordain);
         contextMenu.show(mainPane, Side.BOTTOM, 0, 0);
     }
 

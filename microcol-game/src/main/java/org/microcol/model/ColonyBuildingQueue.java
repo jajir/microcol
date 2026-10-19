@@ -466,6 +466,9 @@ public class ColonyBuildingQueue {
         buildingQueue.remove(0);
         revision++;
         colony.getOwner().setGold(current.getGoldAfter());
+        // Only imported tools are bought; stocked tools and hammers are not.
+        model.getEurope().applyTrade(colony.getOwner().getEuropeanNation(),
+                GoodsType.TOOLS, -current.getMissingTools());
     }
 
     void startTurn() {
@@ -522,7 +525,8 @@ public class ColonyBuildingQueue {
 
         model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder,
                 unitType, colony.getOwner(),
-                colony.getOwner().getEffectiveSpeed(unitType),
+                MovementPoints.ofPoints(
+                        colony.getOwner().getEffectiveSpeed(unitType)),
                 new UnitActionNoAction());
     }
 

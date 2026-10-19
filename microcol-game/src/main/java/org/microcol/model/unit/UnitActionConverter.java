@@ -1,6 +1,7 @@
 package org.microcol.model.unit;
 
 import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.store.UnitActionBuildRoadPo;
 import org.microcol.model.store.UnitActionClearForestPo;
 import org.microcol.model.store.UnitActionPlowFieldPo;
 import org.microcol.model.store.UnitActionFortifyPo;
@@ -53,6 +54,12 @@ public final class UnitActionConverter {
                     final UnitActionClearForest out = new UnitActionClearForest();
                     out.setRemainingTurns(
                             ((UnitActionClearForestPo) po).getRemainingTurns());
+                    return out;
+                }
+                if (UnitActionType.buildRoad.equals(po.getType())) {
+                    final UnitActionBuildRoad out = new UnitActionBuildRoad();
+                    out.setRemainingTurns(
+                            ((UnitActionBuildRoadPo) po).getRemainingTurns());
                     return out;
                 }
                 return null;

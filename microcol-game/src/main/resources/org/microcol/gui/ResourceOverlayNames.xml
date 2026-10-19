@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define names for special resources on known squares.</comment>
+
+	<entry key="SILVER_name">Silver deposit</entry>
+	<entry key="ORE_name">Ore deposit</entry>
+	<entry key="MIXED_MINERALS_name">Mineral deposit (ore and silver)</entry>
+	<entry key="TRAPPING_name">Trapping area</entry>
+	<entry key="GAME_name">Game area</entry>
+	<entry key="OASIS_name">Oasis</entry>
+	<entry key="PRIME_COTTON_name">Prime cotton land</entry>
+	<entry key="PRIME_TOBACCO_name">Prime tobacco land</entry>
+	<entry key="PRIME_SUGAR_name">Prime sugar cane land</entry>
+	<entry key="PRIME_TIMBER_name">Prime timber land</entry>
+	<entry key="PRIME_FOOD_name">Prime food land</entry>
+	<entry key="FISHERY_name">Fishery</entry>
+
+</properties>

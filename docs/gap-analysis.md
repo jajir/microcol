@@ -195,13 +195,17 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Prairie | `2/1` → `2/1` | `50/0` → `50/0` | Food `3/4` → `1/4`; tobacco `1/2` → `2/2`; cotton `1/3` → `3/3`; fur `2/0` → `5/3`; lumber `4/0` → `7/1`. |
 | Savannah | `2/1` → `2/1` | `50/0` → `50/0` | Food `3/4` → `1/4`; sugar `1/3` → `3/3`; tobacco `1/2` → `3/3`; cotton `1/3` → `3/3`; fur `2/0` → `5/4`; lumber `4/0` → `7/6`. |
 | Marsh | `3/2` → absent | `50/25` → absent | Entire row absent: food `2/3`, sugar `1/1`, tobacco `2/3`, cotton `0/0`, fur `2/0`, lumber `4/0`, ore `2/3`, silver `0/0`, fish `0/0`. |
-| Swamp | `3/2` → `2/1` | `75/25` → `50/0` | Food `2/3` → `0/2`; sugar `2/3` → `3/3`; tobacco `0/1` → `1/1`; lumber `4/0` → `7/4`. |
+| Swamp | `3/2` → `2/1` | `75/25` → `50/0` | Food `2/3` → `0/2`; sugar `2/3` → `3/3`; tobacco `0/1` → `1/1`; fur `0/0` → `5/0`; lumber `4/0` → `7/4`. |
 | Desert | `1/1` → `2/1` | `50/0` → `50/0` | Food `2/2` → `0/2`; tobacco `0/1` → `1/1`; fur `2/0` → `5/2`; lumber `2/0` → `7/6`; ore `1/2` → `2/2`. |
 | Tundra | `2/1` → forest absent / `2` | `50/0` → forest absent / `0` | Entire forested state absent: food 2, fur 3, lumber 4, ore 1, all other outputs 0. Bare tundra: fur `0` → `5`; lumber `0` → `2`; other bare outputs match. |
 | Arctic | `2` → `2` | `0` → `0` | None: all outputs zero. |
 | Hills | `2` → `1` | `100` → `0` | None: food 2 and ore 4, all others zero. |
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
 | Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
+
+Reference correction (2026-10-19): visual reinspection of aid card 4 / PDF 135
+confirms swamp fur `0/0`; the earlier audit omitted this difference from the
+generic forest yield of 5. R-0124 must preserve the printed zero.
 
 Accepted MicroCol decision (2026-10-18): fresh-water lakes retain their own
 terrain identity but otherwise use ordinary ocean water rules. Ships may sail
@@ -213,7 +217,7 @@ exit to Europe. Water restrictions, including no forests or roads, apply.
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 
-Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
+Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/done/R-0124.md) and [R-0125](requirements/done/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
 
@@ -620,8 +624,8 @@ These entries assess recruitment and the stated father-dependent effects. The so
 | FATHER-005 | 90 / 96 | **George Washington:** Winning non-veteran soldiers/dragoons always gain status. | R-0111 reads persisted Washington membership to guarantee one eligible victory step, preserving specialty and rank after disarming. | Partial | Model and Czech expert-promotion/Continue player acceptance passed; full publication remains pending. [Evidence](functional-tests.md#r-0111-military-promotion-2026-10-17). |
 | FATHER-006 | 91 / 97 | **Simon Bolivar:** Increase Sons of Liberty membership in every colony by 20%. | R-0100 applies 20 percentage points from the last colonial affiliation, capped at 100%, without minting bells. | Partial | Model tests cover differing founder membership across European conquest and Crown occupation. Targeted acceptance passed; full batch acceptance remains pending. See [R-0100 evidence](functional-tests.md#r-0100-rebel-support-2026-10-18). |
 | FATHER-007 | 91 / 97 | **Benjamin Franklin:** European royal wars no longer force colonial relations; negotiation costs fall and Europeans offer peace. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Test forced-war immunity, cheaper negotiations and each rival’s peace offer separately. |
-| FATHER-008 | 91 / 97 | **Thomas Jefferson:** Statesmen produce 50% more liberty bells. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Compare ordinary and expert statesmen under the same building and other modifiers. |
-| FATHER-009 | 91 / 97 | **Thomas Paine:** All colonies gain a liberty-bell production percentage equal to the current tax rate. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Change the tax rate and check bell output updates; use the modifier order/rounding in [founder details](#founder-details). |
+| FATHER-008 | 91 / 97 | **Thomas Jefferson:** Statesmen produce 50% more liberty bells. | [R-0180](requirements/done/R-0180.md) applies the accepted town-hall composition from the current owner's persisted membership (staffed statesmen, including laborers, only). Model and TC_97 targeted Docker acceptance passed on 2026-10-19; full batch regression/publication are pending ([evidence](functional-tests.md#r-0180-founder-production-2026-10-19)). | Partial | Proposed: Compare ordinary and expert statesmen under the same building and other modifiers. |
+| FATHER-009 | 91 / 97 | **Thomas Paine:** All colonies gain a liberty-bell production percentage equal to the current tax rate. | [R-0180](requirements/done/R-0180.md) adds the current owner's live tax percent to unattended and staffed town-hall bells; later tax changes affect the next credit. Model and TC_97 targeted Docker acceptance passed on 2026-10-19; full batch regression/publication are pending. | Partial | Proposed: Change the tax rate and check bell output updates; use the modifier order/rounding in [founder details](#founder-details). |
 | FATHER-010 | 91 / 97 | **Pocahontas:** Reset native tensions to content and halve subsequent alarm generation. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Recruit under high tension, then repeat the same provocation and verify the halved increment. |
 | FATHER-011 | 92 / 98 | **Adam Smith:** Permit factory-level industrial buildings. | `ConstructionType` declares the required founder; the shared queue checks the current owner at admission and normal/rush completion. Completed buildings remain intact. | Partial | R-0084 implements the gate; model and TC57 checks passed locally, with full CI/publication pending. See [evidence](functional-tests.md#r-0084-founder-construction-2026-10-16). Custom-house export remains R-0085. |
 | FATHER-012 | 92 / 98 | **Jakob Fugger:** Clear existing boycott/back-tax restrictions. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Recruit with multiple boycotts; restore trade without gold payment; distinguish later protests. |
@@ -634,7 +638,7 @@ These entries assess recruitment and the stated father-dependent effects. The so
 | FATHER-019 | 93 / 99 | **William Penn:** Increase cross production in all colonies by 50%. | R-0110 reads persisted Congress membership and floors 150% of aggregate crosses once, including unattended output. | Partial | Model examples, both-colony persistence and TC67 pass; complete CI/publication remain pending. [Evidence](functional-tests.md#r-0110-religious-production-2026-10-17). |
 | FATHER-020 | 93 / 99 | **Juan de Sepulveda:** Increase the probability that subjugated natives convert and join a colony. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Use controlled randomness and the resolved modifier; preserve the eligible event conditions. |
 | FATHER-021 | 94 / 100 | **Francisco de Coronado:** Reveal every currently existing colony and its immediate surroundings. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Recruit under fog; reveal current settlements once without continuously revealing later ones. |
-| FATHER-022 | 94 / 100 | **Henry Hudson:** Double all fur-trapper output. | R-0104 supplies recruitment and persisted membership. This effect still needs its own runtime rule and acceptance together with the corresponding subsystem (see GOV-007). | Missing | Proposed: Compare matched ordinary/expert trappers with identical terrain and other modifiers. |
+| FATHER-022 | 94 / 100 | **Henry Hudson:** Double all fur-trapper output. | [R-0180](requirements/done/R-0180.md) doubles positive fur output for the current owner's Hudson after the existing modifiers in the shared field calculation; coats and zero-yield jobs are unchanged. Model and TC_97 targeted Docker acceptance passed on 2026-10-19; full batch regression/publication are pending. | Partial | Proposed: Compare matched ordinary/expert trappers with identical terrain and other modifiers. |
 | FATHER-023 | 94 / 100 | **Sieur de La Salle:** New colonies receive a stockade automatically upon reaching population 3. | A single colony grant runs after La Salle joins, completed resident placement and capture into the new owner. It checks three internal residents, preserves higher defenses and spends no resources; restoration does not grant. | Partial | R-0184: all 59 targeted checks passed on 2026-10-17, including existing/future threshold, capture, no downgrade/duplicate and TC72 cancel/Continue. Full batch regression pending; [evidence](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17). |
 | FATHER-024 | 94 / 100 | **Ferdinand Magellan:** Naval movement increases by 1 and west-edge travel to Europe becomes much shorter. | Actual Congress membership adds one effective map movement point to every owned ship family, including fresh ships. New west-edge-to-Europe voyages halve the ordinary sampled duration, rounded up; other routes and ongoing voyages are unchanged. | Partial | Model and final TC71/Atlantic/layout checks passed locally; full CI/publication remain pending. See [integration evidence](functional-tests.md#r-0104-magellan-integration-2026-10-17). |
 | FATHER-025 | 94 / 100 | **Hernando de Soto:** Every unit sees two squares. | R-0069 now applies actual Congress membership to the shared sight query and reveals owned on-map units at arrival. The full local model suite and TC69/TC26/TC56 player checks pass, including corrected fog borders and Continue; full CI acceptance remains pending. | Partial | See [integration evidence](functional-tests.md#r-0069-de-soto-sight-integration-2026-10-17). The separate lost-city protection still requires its real exploration outcome owner. |
@@ -933,6 +937,8 @@ rules; implementation and acceptance are tracked by that requirement.
    This decision does not alter ordinary colonial veteran loss progression.
 
 ### Founder details
+
+Ordination decision (2026-10-19): ordination is free and does not consume movement. Colonists, including indentured servants and petty criminals, may be ordained on the European pier or outside an owned colony with a church or cathedral. Assigned workers must first leave their job. Identity, specialty and equipment are preserved. Explicit specialty-clearing remains a separate player action.
 
 1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes
    guarantees treasure and doubles [native and european relations](#native-and-european-relations)'s base treasure amount. Bolivar gives
@@ -1247,7 +1253,32 @@ rules; implementation and acceptance are tracked by that requirement.
    expansion retain their separate decisions in [R-0091](requirements/R-0091.md)
    and [R-0092](requirements/R-0092.md).
 
+### Rival trade and supplies
+
+1. Accepted by the user on 2026-10-19 for R-0091: retain 50 lumber in the
+   colony and depart only with at least 50 exportable lumber. Load no more
+   than actual surplus and legal hold capacity; sell through ordinary taxed
+   European trade. Buy tools toward a colony target of 50 while retaining
+   200 gold, counting tools already in transit. Return without invented
+   supplies if none is affordable.
+2. Revalidate colony/carrier ownership, trade permission, stock and capacity
+   before each operation. A blocked route or transfer ends the finite turn
+   and retries next owner turn; destroyed or captured objectives are retired.
+   Save/Continue preserves the objective and actual cargo without replaying
+   sales. This is agreed AI policy, not verified implementation.
+
+### Generated-world first version
+
+1. On 2026-10-19 the user approved preparing R-0065 with the reference map's
+   fixed dimensions, cold/temperate/warm climate, low/medium/high land share,
+   and an explicit reproducible seed. Terrain, river and resource frequencies
+   will be proposed as balance settings during refinement. Native population
+   depends on the existing native identity/home requirements. This decision
+   does not establish numerical distributions or completed generation.
+
 ### Economy, production and education
+
+Authored resource-overlay placement decision (2026-10-19): all land resource kinds may occur on any land terrain; fishery is valid only on ocean or lake, not the high-seas transit lane. Generated natural distribution remains R-0065. Food and fish use the existing CORN commodity; no separate fish inventory is introduced.
 
 1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
    and Newspaper population **4**, already accepted in R-0025. Use no smoothing
@@ -1639,3 +1670,7 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 5. Mark an expert’s own commodity with text as well as any icon. Opening, browsing or canceling is read-only. Assignment uses the same model boundaries as dragging, including owner/turn/identity, same-colony source, capacity and atomic equipment return. Ordinary producing buildings retain their existing slot capacity; this feature does not grant extra slots or move a worker between colonies.
 6. Offer the choice from occupied outdoor and indoor worker controls and colonists at the colony center. Preserve manual dragging and crop selection, use English/Czech localized names and feedback, and support dismissing the choice without action. Indoor dragging retains the job offered during hover: if that slot becomes unavailable before release, reject rather than move the worker to another slot. A rejected drop opens the existing job picker with an explanation and refreshed choices; only a new explicit confirmation can assign a replacement. These are adopted behavior decisions; R-0056 records their implementation and verified acceptance.
 7. Implemented and verified on 2026-10-16 in [R-0056](requirements/done/R-0056.md), published as `dev-107-75341b36bcc2`. All 15 player scenarios and the complete regression pass, including English/Czech previews, unavailable jobs, cancellation and stale menu/drop rejection. See [evidence](functional-tests.md#r-0056-job-choice-implementation-2026-10-16).
+
+### Local diagnostic logs
+
+1. Accepted on 2026-10-19: keep local diagnostic logs outside saved games, bounded to three files of at most 5 MB each. On macOS use ~/Library/Logs/MicroCol. Failure guidance identifies the log location. Do not include saved-game content or player-entered text in diagnostic reports, and do not transmit anything automatically.

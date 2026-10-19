@@ -9,6 +9,7 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.PathPlanning;
 import org.microcol.model.Location;
 import org.microcol.model.AttackOrder;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -146,6 +147,7 @@ public final class GamePanelPainter {
                 .make(visibleAreaService, gameModelController.getMapSize());
         gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter,
                 canvasInMapCoordinates, currentGameTick);
+        gamePaintService.paintRivers(g, area, canvasInMapCoordinates);
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
         gamePaintService.paintUnits(g, gameModelController.getModel(), area,
                 excludePainting, selectedUnitManager.getSelectedUnit());
@@ -191,16 +193,22 @@ public final class GamePanelPainter {
             }
             gamePaintService.paintCursor(graphics, area,
                     mouseOverTileManager.getMouseOverTile().get());
-            final StepCounter stepCounter = new StepCounter(5,
-                    selectedUnit.getActionPoints());
+            final StepCounter stepCounter = new StepCounter(
+                    MovementPoints.ofPoints(selectedUnit.getSpeed()),
+                    selectedUnit.getMovementThirds());
             /**
              * Here could be check if particular step in on screen, but draw few
              * images outside screen is not big deal.
              */
-            moveModeSupport.getMoveLocations().stream()
-                    .map(area::convertToCanvasPoint)
-                    .forEach(point -> gamePaintService.paintStep(graphics,
-                            point, stepCounter, moveModeSupport.getMoveMode()));
+            // Each step is priced from the square it leaves, as movement is.
+            Location from = selectedUnit.getLocation();
+            for (final Location location : moveModeSupport.getMoveLocations()) {
+                gamePaintService.paintStep(graphics,
+                        area.convertToCanvasPoint(location), stepCounter,
+                        moveModeSupport.getMoveMode(),
+                        selectedUnit.getEntryCostThirds(from, location));
+                from = location;
+            }
         }
     }
 

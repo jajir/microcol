@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignModule;
 import org.microcol.model.campaign.GameModelDao;
@@ -29,6 +30,7 @@ class GameLoadRejectionTest {
     private final GameModelController current = mock(GameModelController.class);
     private final GameModelPoDao files = new GameModelPoDao();
     private GameController controller;
+    private DiagnosticLog diagnostics;
     private File source;
     private GameModelPo data;
 
@@ -39,9 +41,12 @@ class GameLoadRejectionTest {
         final Injector injector = Guice.createInjector(new CampaignModule(),
                 binder -> binder.bind(CampaignsDao.class)
                         .toInstance(campaigns));
+        diagnostics = new DiagnosticLog(directory.resolve("logs"),
+                "test-build");
         controller = new GameController(current,
                 injector.getInstance(GameModelDao.class),
-                injector.getInstance(CampaignManager.class), new EventBus());
+                injector.getInstance(CampaignManager.class), new EventBus(),
+                diagnostics);
         data = files.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         source = directory.resolve("game.microcol").toFile();
@@ -79,6 +84,21 @@ class GameLoadRejectionTest {
         Files.write(source.toPath(), valid);
         assertTrue(controller.loadModelFromFile(source));
         verify(current).setAndStartModel(any());
+    }
+
+    @Test
+    void rejectedLoadIsRecordedWithoutMessagesOrSourceLocation()
+            throws Exception {
+        Files.writeString(source.toPath(), "{");
+
+        assertFalse(controller.loadModelFromFile(source));
+
+        final String record = Files.readString(diagnostics.getActiveFile());
+        assertTrue(record.contains("event=LOAD_FAILED"));
+        assertTrue(record.contains("build=test-build"));
+        assertFalse(record.contains("column"), "Parser message was recorded");
+        assertFalse(record.contains(directory.toString()),
+                "Source location was recorded");
     }
 
     @Test

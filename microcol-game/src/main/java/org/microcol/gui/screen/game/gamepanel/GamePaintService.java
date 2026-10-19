@@ -22,8 +22,10 @@ import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
+import org.microcol.model.WorldMap;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -99,6 +101,37 @@ final class GamePaintService {
                             gameTick);
                 } else {
                     paintHiddenTile(graphics, point);
+                }
+            }
+        }
+    }
+
+    /**
+     * Draw river courses over known terrain. A course is shown only toward a
+     * neighbour the player also knows, so unseen squares never reveal a river.
+     *
+     * @param graphics required {@link GraphicsContext}
+     * @param area     required visible area description
+     * @param coord    required object holding information about canvas in world
+     *                 map coordinates (Location)
+     */
+    public void paintRivers(final GraphicsContext graphics, final Area area,
+            final CanvasInMapCoordinates coord) {
+        final Player player = gameModelController.getHumanPlayer();
+        final WorldMap map = gameModelController.getModel().getMap();
+        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
+                .getX(); i++) {
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
+                    .getY(); j++) {
+                final Location location = Location.of(i, j);
+                final RiverSize size = map.getRiverSizeAt(location);
+                if (size != RiverSize.NONE && player.isVisible(location)) {
+                    final List<Point> joined = map.getRiverLinksAt(location)
+                            .stream().filter(player::isVisible)
+                            .map(area::convertToCanvasPoint)
+                            .collect(Collectors.toList());
+                    paintService.paintRiver(graphics,
+                            area.convertToCanvasPoint(location), size, joined);
                 }
             }
         }
@@ -300,11 +333,13 @@ final class GamePaintService {
      * @param point       required point where to draw image
      * @param stepCounter required step counter
      * @param moveMode    required move mode definition
+     * @param costThirds  required entry cost of this step in movement thirds
      */
     public void paintStep(final GraphicsContext graphics, final Point point,
-            final StepCounter stepCounter, final MoveMode moveMode) {
-        final Image image = imageProvider.getImage(
-                moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
+            final StepCounter stepCounter, final MoveMode moveMode,
+            final int costThirds) {
+        final Image image = imageProvider.getImage(moveMode.getImageForStep(
+                stepCounter.canMakeMoveInSameTurn(costThirds)));
         graphics.drawImage(image, point.getX() + STEP_ICON_POSITION.getX(),
                 point.getY() + STEP_ICON_POSITION.getY());
     }

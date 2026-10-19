@@ -2,6 +2,7 @@ package org.microcol.gui.event.model;
 
 import java.util.List;
 
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.dialog.DialogMessage;
@@ -49,12 +50,15 @@ public class GameModelController {
 
     private final Provider<DialogMessage> passengerMessage;
     private final I18n i18n;
+    private final DiagnosticLog diagnosticLog;
 
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
             final ArtifitialPlayersManager artifitialPlayersManager,
             final EventBus eventBus,
-            final Provider<DialogMessage> passengerMessage, final I18n i18n) {
+            final Provider<DialogMessage> passengerMessage, final I18n i18n,
+            final DiagnosticLog diagnosticLog) {
+        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.selectedTileManager = Preconditions
                 .checkNotNull(selectedTileManager);
         this.artifitialPlayersManager = Preconditions
@@ -120,7 +124,8 @@ public class GameModelController {
     }
 
     public GoodsTrade getEuropeGoodsTradeForType(final GoodsType goodsType) {
-        return getModel().getEurope().getGoodsTradeForType(goodsType);
+        return getModel().getEurope().getGoodsTradeForType(goodsType,
+                getHumanPlayer().getEuropeanNation());
     }
 
     /**
@@ -200,21 +205,37 @@ public class GameModelController {
     public void showInvalidSavedGame() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.loadGame_title));
-        message.setText(i18n.get(Dialog.loadGame_invalid));
+        message.setText(i18n.get(Dialog.loadGame_invalid) + "\n\n"
+                + diagnosticFolderText());
         message.showAndWait();
     }
 
     public void showRecoverySaveFailure() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.recoverySave_title));
-        message.setText(i18n.get(Dialog.recoverySave_failed));
+        message.setText(i18n.get(Dialog.recoverySave_failed) + "\n\n"
+                + diagnosticFolderText());
         message.showAndWait();
+    }
+
+    public void showSaveFolderUnavailable() {
+        final DialogMessage message = passengerMessage.get();
+        message.setTitle(i18n.get(Dialog.loadGame_title));
+        message.setText(i18n.get(Dialog.saveFolder_unavailable) + "\n\n"
+                + diagnosticFolderText());
+        message.showAndWait();
+    }
+
+    private String diagnosticFolderText() {
+        return i18n.get(Dialog.diagnosticLog_folder) + " "
+                + diagnosticLog.getDirectory();
     }
 
     public void showTurnPreparationUnavailable() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.turnPreparation_title));
-        message.setText(i18n.get(Dialog.turnPreparation_unavailable));
+        message.setText(i18n.get(Dialog.turnPreparation_unavailable) + "\n\n"
+                + diagnosticFolderText());
         message.showAndWait();
     }
 

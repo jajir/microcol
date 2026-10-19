@@ -4,11 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.event.TurnStartedEvent;
@@ -324,6 +328,81 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 new com.google.gson.Gson().toJsonTree(getModel().save()));
     }
 
+    public void replaceSaveFolderWithFile() throws Exception {
+        final Path folder = saveFolder();
+        java.nio.file.Files.move(folder, savedFolderBackup(folder));
+        java.nio.file.Files.writeString(folder, "not a directory");
+    }
+
+    public void restoreSaveFolder() throws Exception {
+        final Path folder = saveFolder();
+        java.nio.file.Files.delete(folder);
+        java.nio.file.Files.move(savedFolderBackup(folder), folder);
+    }
+
+    public void blockDiagnosticFolder() throws Exception {
+        final Path folder = diagnosticFolder();
+        if (java.nio.file.Files.exists(folder)) {
+            java.nio.file.Files.move(folder, savedFolderBackup(folder));
+        }
+        java.nio.file.Files.createDirectories(folder.getParent());
+        java.nio.file.Files.writeString(folder, "not a directory");
+    }
+
+    public void unblockDiagnosticFolder() throws Exception {
+        final Path folder = diagnosticFolder();
+        java.nio.file.Files.delete(folder);
+        if (java.nio.file.Files.exists(savedFolderBackup(folder))) {
+            java.nio.file.Files.move(savedFolderBackup(folder), folder);
+        }
+    }
+
+    public boolean isGridShown() {
+        return getContext().getClassFromGuice(GamePreferences.class)
+                .isGridShown();
+    }
+
+    public void verifyGridShown(final boolean expected) {
+        assertEquals(expected, isGridShown(),
+                "Settings were lost while the save location was unusable");
+    }
+
+    public String diagnosticFolderLine() {
+        return "Diagnostic log folder: " + diagnosticFolder();
+    }
+
+    public void verifyDiagnosticRecord(final DiagnosticEvent event,
+            final String forbiddenPlayerText) throws Exception {
+        final Path log = getContext().getClassFromGuice(DiagnosticLog.class)
+                .getActiveFile();
+        assertTrue(java.nio.file.Files.exists(log),
+                "Diagnostic log is missing: " + log);
+        final String record = java.nio.file.Files.readString(log);
+        assertTrue(record.contains(" build="), "Build identity is missing");
+        assertTrue(record.contains(" event=" + event.name()),
+                "Event " + event + " is missing");
+        assertTrue(record.contains("\n    at org.microcol."),
+                "MicroCol frame is missing");
+        assertFalse(record.contains("{"), "Raw JSON was recorded");
+        assertFalse(record.contains(forbiddenPlayerText),
+                "Player text was recorded");
+        assertFalse(record.contains(System.getProperty("user.home")),
+                "Home location was recorded");
+    }
+
+    private static Path saveFolder() {
+        return Path.of(System.getProperty("user.home"), ".microcol");
+    }
+
+    private static Path savedFolderBackup(final Path folder) {
+        return folder.resolveSibling(folder.getFileName() + ".saved");
+    }
+
+    private Path diagnosticFolder() {
+        return getContext().getClassFromGuice(DiagnosticLog.class)
+                .getDirectory();
+    }
+
     public void chooseLoadFile(final File file) {
         org.mockito.Mockito
                 .when(getContext()
@@ -433,13 +512,17 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void verifyInvalidSavedGameMessage(final String expectedMessage)
             throws Exception {
-        final Label message = getNodeFinder().lookup(expectedMessage)
+        final String expectedText = expectedMessage + "\n\n"
+                + diagnosticFolderLine();
+        final Label message = getNodeFinder()
+                .lookup((javafx.scene.Node node) -> node instanceof Label
+                        && expectedText.equals(((Label) node).getText()))
                 .queryAs(Label.class);
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
                 () -> message.getWidth() > 0
                         && message.getScene().getWidth() > 100
                         && message.getScene().getWindow().isShowing());
-        assertEquals(expectedMessage, message.getText());
+        assertEquals(expectedText, message.getText());
         assertTrue(message.isVisible());
     }
 

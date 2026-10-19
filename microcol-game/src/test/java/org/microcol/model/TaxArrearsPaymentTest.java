@@ -264,7 +264,9 @@ class TaxArrearsPaymentTest {
         final TaxArrearsQuote rum = dutch.quoteTaxArrears(GoodsType.RUM)
                 .orElseThrow();
         final int bells = dutch.getCongressBells();
-        model.getEurope().getGoodsTradeForType(GoodsType.RUM).setSellPrice(3);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.RUM, EuropeanNation.DUTCH)
+                .setSellPrice(3);
 
         assertEquals(200, rum.getAmount());
         assertTrue(dutch.canPayTaxArrears(rum));

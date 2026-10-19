@@ -43,11 +43,50 @@ public class SettingService {
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
     }
 
+    /**
+     * Last setting that was read from or written to storage. It is used only
+     * when the storage cannot be read, and is never written back.
+     */
+    private Setting lastKnown;
+
+    private boolean storageUnavailable;
+
     public synchronized void save(final Setting setting) {
         settingDao.saveToFile(setting, getSettingFile());
+        lastKnown = setting.copy();
     }
 
+    /**
+     * Read the current setting. When the storage cannot be read, for example
+     * because the save location was lost during play, return the last known
+     * setting (or defaults before any was known) so running gameplay is not
+     * interrupted. The next call retries the storage. Nothing is written or
+     * moved while the storage is unavailable; {@link #save(Setting)} and
+     * {@link #update(Consumer)} still report their failure.
+     *
+     * @return setting for the running application
+     */
     public synchronized Setting load() {
+        try {
+            final Setting out = loadFromStorage();
+            lastKnown = out.copy();
+            if (storageUnavailable) {
+                storageUnavailable = false;
+                logger.info("Setting storage is available again.");
+            }
+            return out;
+        } catch (MicroColException unavailable) {
+            if (!storageUnavailable) {
+                storageUnavailable = true;
+                logger.warn("Setting storage is unavailable ({}); using the"
+                        + " last known setting until it can be read again.",
+                        unavailable.getClass().getSimpleName());
+            }
+            return lastKnown == null ? getDefaultSetting() : lastKnown.copy();
+        }
+    }
+
+    private Setting loadFromStorage() {
         final Setting out = simpleLoad();
         if (Setting.CURRENT_VERSION.equals(out.getVersion())) {
             return out;
@@ -143,7 +182,8 @@ public class SettingService {
     }
 
     public synchronized void update(final Consumer<Setting> setter) {
-        final Setting setting = load();
+        // Strict read: a remembered fallback must never be written to storage.
+        final Setting setting = loadFromStorage();
         setter.accept(setting);
         save(setting);
     }

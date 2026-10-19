@@ -64,6 +64,7 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
         final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelPrice = new Label();
+        labelPrice.setId("europePrice" + goodsType.name());
         labelPrice.setWrapText(true);
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("panelGoods");
@@ -129,8 +130,7 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
     }
 
     private GoodsTrade getGoodsTrade() {
-        return gameModelController.getModel().getEurope()
-                .getGoodsTradeForType(goodsType);
+        return gameModelController.getEuropeGoodsTradeForType(goodsType);
     }
 
     @Override

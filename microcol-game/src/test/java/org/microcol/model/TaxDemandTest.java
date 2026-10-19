@@ -276,7 +276,9 @@ class TaxDemandTest {
         assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
 
         // A later price never changes the recorded arrears.
-        model.getEurope().getGoodsTradeForType(GoodsType.RUM).setSellPrice(3);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.RUM, EuropeanNation.DUTCH)
+                .setSellPrice(3);
         assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
 
         final Model reloaded = load(model.save());
@@ -352,7 +354,8 @@ class TaxDemandTest {
         final GameModelPo data = tieData();
         colonyPo(data, 0).getColonyWarehouse().put("CORN", stock);
         final Model model = load(data.getModel());
-        model.getEurope().getGoodsTradeForType(GoodsType.CORN)
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
                 .setSellPrice(bid);
         nextDutchTurn(model);
         assertTrue(model.isAwaitingTaxDecision());
@@ -550,7 +553,9 @@ class TaxDemandTest {
         final Model model = pending(tieData());
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxDemand demand = dutch.getTaxDemand().orElseThrow();
-        model.getEurope().getGoodsTradeForType(GoodsType.RUM).setSellPrice(12);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.RUM, EuropeanNation.DUTCH)
+                .setSellPrice(12);
         final Map<String, Integer> before = stocks(model);
         assertFalse(dutch.canProtestTaxDemand(demand));
         assertThrows(IllegalStateException.class,

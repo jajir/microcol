@@ -25,6 +25,7 @@
 	<entry key="unitsPanel_unexplored">Neprozkoumáno</entry>
 	<entry key="unitsPanel_units">Jednotky:</entry>
 	<entry key="unitsPanel_availableMoves">Tahů:</entry>
+	<entry key="unitsPanel_roadWork">Stavba silnice: zbývá %s tahů vlastníka</entry>
 	<entry key="unitsPanel_owner">Vlastník:</entry>
 	<entry key="unitsPanel_currentUser">Táhne:</entry>
 	<entry key="unitsPanel_with">S:</entry>

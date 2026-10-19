@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,12 +66,17 @@ class SpecialistProductionTest {
                         .equals(Direction.west.getVector()))
                 .findFirst().orElseThrow();
         west.setProducedGoodsType(goods);
+        final Location westSquare = savedColony.getLocation()
+                .add(Direction.west.getVector());
         final Map<Location, TerrainType> map = data.getModel().getMap()
                 .getTerrainMap();
-        map.put(savedColony.getLocation().add(Direction.west.getVector()),
-                terrain);
+        map.put(westSquare, terrain);
         data.getModel().getMap().setTerrainType(map);
-        data.getModel().getMap().setTrees(Collections.emptySet());
+        // Fur and lumber exist only on a forested square, so plant one there.
+        data.getModel().getMap()
+                .setTrees(goods == GoodsType.FUR || goods == GoodsType.LUMBER
+                        ? Set.of(westSquare)
+                        : Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
         final Model model = load(data);
         final ColonyField field = model.getColonyById(0).orElseThrow()

@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.i18n.I18n;
 import org.microcol.model.Difficulty;
+import org.microcol.model.ResourceOverlay;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 
@@ -25,6 +26,10 @@ public final class LocalizationHelper {
 
     public String getTerrainName(final TerrainType terrainType) {
         return i18n.get(TerrainTypes.getTerrainName(terrainType));
+    }
+
+    public String getResourceOverlayName(final ResourceOverlay overlay) {
+        return i18n.get(ResourceOverlayNames.getName(overlay));
     }
 
     public String getDifficultyName(final Difficulty difficulty) {

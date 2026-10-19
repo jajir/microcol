@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.model.TurnPreparationException;
 import org.microcol.model.MicroColException;
@@ -28,13 +30,16 @@ public final class ExitGameListener {
     private final GameModelController gameModelController;
     private final PersistingTool persistingTool;
     private final GamePreferences gamePreferences;
+    private final DiagnosticLog diagnosticLog;
 
     @Inject
     ExitGameListener(final EventBus eventBus,
             final GameController gameController,
             final GameModelController gameModelController,
             final PersistingTool persistingTool,
-            final GamePreferences gamePreferences) {
+            final GamePreferences gamePreferences,
+            final DiagnosticLog diagnosticLog) {
+        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.gameModelController = Preconditions
@@ -53,8 +58,11 @@ public final class ExitGameListener {
                         .writeModelToFile(persistingTool.getAutoSaveFile());
                 gamePreferences.setGameInProgressSaveFile("true");
             } catch (TurnPreparationException rejected) {
+                diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
+                        rejected);
                 incompleteTurn = true;
             } catch (MicroColException failed) {
+                diagnosticLog.record(DiagnosticEvent.EXIT_SAVE_FAILED, failed);
                 gameModelController.showRecoverySaveFailure();
                 return;
             }

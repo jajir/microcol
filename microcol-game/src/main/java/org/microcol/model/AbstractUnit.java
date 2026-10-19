@@ -15,6 +15,7 @@ import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.unit.UnitActionBuildRoad;
 import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -52,17 +53,20 @@ public abstract class AbstractUnit implements Unit {
 
     private Player owner;
     private Place place;
-    private int actionPoints;
+    /** Exact remaining movement; see {@link MovementPoints}. */
+    private int movementThirds;
     private UnitAction unitAction;
 
     public AbstractUnit(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
-            final int actionPoints, final UnitAction unitAction) {
+            final int movementThirds, final UnitAction unitAction) {
         Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
         this.owner = Preconditions.checkNotNull(owner);
         this.id = Preconditions.checkNotNull(id, "Id is null");
         this.model = Preconditions.checkNotNull(model, "Model is null");
-        this.actionPoints = actionPoints;
+        Preconditions.checkArgument(movementThirds >= 0,
+                "Movement cannot be negative (%s)", movementThirds);
+        this.movementThirds = movementThirds;
         this.place = Preconditions.checkNotNull(placeBuilder.apply(this),
                 "Place builder didn't created cargo");
         setAction(unitAction);
@@ -114,26 +118,67 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
-     * Get number of available actions points.
+     * Get number of whole action points left. A fraction of a point is not
+     * counted; whole-point actions need at least one point.
      *
-     * @return available action points.
+     * @return available whole action points.
      */
     @Override
     public int getActionPoints() {
-        return actionPoints;
+        return movementThirds / MovementPoints.THIRDS_PER_POINT;
     }
 
     /**
-     * Allows to set action points. It could be called just at this class. It's
-     * not exposed.
+     * Get exact remaining movement.
      *
-     * @param newActionPoints required new amount of action points
+     * @return remaining movement in thirds of a point
+     */
+    @Override
+    public int getMovementThirds() {
+        return movementThirds;
+    }
+
+    /**
+     * Allows to set whole action points, for example when a unit is prepared in
+     * a test or spends its allowance.
+     *
+     * @param newActionPoints required new amount of whole action points
      */
     public void setActionPoints(final int newActionPoints) {
-        Preconditions.checkArgument(newActionPoints <= getSpeed(),
-                "Unit %s can't have more action point than is it's speed.",
-                this);
-        this.actionPoints = newActionPoints;
+        setMovementThirds(MovementPoints.ofPoints(newActionPoints));
+    }
+
+    /**
+     * Allows to set exact remaining movement, for example when a saved unit is
+     * loaded.
+     *
+     * @param newMovementThirds required new movement in thirds of a point
+     */
+    public void setMovementThirds(final int newMovementThirds) {
+        Preconditions.checkArgument(newMovementThirds >= 0
+                && newMovementThirds <= MovementPoints.ofPoints(getSpeed()),
+                "Unit %s can't have more movement than is it's speed.", this);
+        this.movementThirds = newMovementThirds;
+    }
+
+    /**
+     * @return whether this unit still has its full allowance for the turn, so
+     *         that one step beyond that allowance is permitted
+     */
+    boolean hasFullMovement() {
+        return movementThirds > 0
+                && movementThirds == MovementPoints.ofPoints(getSpeed());
+    }
+
+    /**
+     * Whether the remaining movement pays this entry cost. A unit at its full
+     * allowance may take one step that costs more and finish at zero.
+     *
+     * @param costThirds required entry cost in thirds
+     * @return {@code true} when the step may be made
+     */
+    private boolean canPayEntryCost(final int costThirds) {
+        return costThirds <= movementThirds || hasFullMovement();
     }
 
     private void verifyThatUnitIsAtMap() {
@@ -157,13 +202,13 @@ public abstract class AbstractUnit implements Unit {
      */
     public void startTurn() {
         if (this instanceof Ship && ((Ship) this).isDamaged()) {
-            actionPoints = 0;
+            movementThirds = 0;
             return;
         }
-        actionPoints = getSpeed();
+        movementThirds = MovementPoints.ofPoints(getSpeed());
         if (unitAction.startTurn(model, this)) {
             setAction(UnitActionType.noAction.make());
-            actionPoints = 0;
+            movementThirds = 0;
             model.fireActionWasStarted(this);
         }
     }
@@ -244,7 +289,7 @@ public abstract class AbstractUnit implements Unit {
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
 
-        if (actionPoints == 0) {
+        if (movementThirds == 0) {
             return isShip()
                     ? getLocation().getNeighbors().stream()
                             .filter(location -> ((UnitWithCargo) this)
@@ -254,53 +299,18 @@ public abstract class AbstractUnit implements Unit {
         }
 
         /*
-         * Set will contains locations which should be inspected if could be
-         * visited.
+         * Terrain reach uses the same entry costs as moving, so the highlighted
+         * squares are the squares a move can actually end on.
          */
-        final Set<Location> openSet = new HashSet<>();
-        openSet.add(getLocation());
+        final Set<Location> returnSet = new PathFinder(this).findReachable();
 
         /*
-         * This set will be returned.
+         * Final actions such as embarking are checked from the current place.
          */
-        final Set<Location> returnSet = new HashSet<>();
-
-        /*
-         * Location that should be highlighted, but should not be counted as
-         * movement.
-         */
-        final Set<Location> finalSet = new HashSet<>();
-
-        for (int i = 0; i < actionPoints + 1; i++) {
-            /*
-             * Set of all locations that should be inspected.
-             */
-            final Set<Location> candidateSet = openSet.stream()
-                    .flatMap(location -> location.getNeighbors().stream())
-                    .filter(location -> !returnSet.contains(location))
-                    .filter(location -> model.getMap().isValid(location))
-                    .collect(Collectors.toSet());
-
-            finalSet.addAll(candidateSet.stream()
-                    .filter(location -> isPossibleToMakeFinalActionAt(location))
-                    .collect(Collectors.toSet()));
-
-            returnSet.addAll(openSet);
-
-            /*
-             * Prepare new set of border location for next iteration.
-             */
-            openSet.clear();
-            openSet.addAll(candidateSet.stream()
-                    .filter(location -> isPossibleToMoveAt(location))
-                    .collect(Collectors.toSet()));
-        }
-
-        // Returned set should not contain location where unit actually is.
-        returnSet.remove(getLocation());
-
-        // Returned set should contain all final location.
-        returnSet.addAll(finalSet);
+        returnSet.addAll(getLocation().getNeighbors().stream()
+                .filter(location -> model.getMap().isValid(location))
+                .filter(location -> isPossibleToMakeFinalActionAt(location))
+                .collect(Collectors.toSet()));
 
         return ImmutableList.copyOf(new ArrayList<Location>(returnSet));
     }
@@ -485,7 +495,7 @@ public abstract class AbstractUnit implements Unit {
         if (getLocation().equals(carrier.getLocation())) {
             return isPortTransfer(carrier);
         }
-        return actionPoints > 0
+        return getActionPoints() > 0
                 && getLocation().isNeighbor(carrier.getLocation());
     }
 
@@ -525,7 +535,7 @@ public abstract class AbstractUnit implements Unit {
             return isPortTransfer(carrier);
         }
         return carrier.getLocation().isNeighbor(targetLocation)
-                && (!inCurrentTurn || actionPoints > 0);
+                && (!inCurrentTurn || getActionPoints() > 0);
     }
 
     @Override
@@ -589,7 +599,7 @@ public abstract class AbstractUnit implements Unit {
             final boolean allowDeclaration) {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
-                || !canAttack() || actionPoints <= 0
+                || !canAttack() || getActionPoints() <= 0
                 || !getAction().isNoAction() || targetLocation == null
                 || !model.getMap().isValid(targetLocation)
                 || !getLocation().isNeighbor(targetLocation)
@@ -714,10 +724,81 @@ public abstract class AbstractUnit implements Unit {
             final boolean excludeDestination) {
         verifyThatUnitIsAtMap();
 
-        PathFinder finder = new PathFinder(this, getLocation(), destination,
-                excludeDestination);
+        return Optional.ofNullable(
+                new PathFinder(this).find(destination, excludeDestination));
+    }
 
-        return Optional.ofNullable(finder.find());
+    @Override
+    public int getEntryCostThirds(final Location from, final Location to) {
+        Preconditions.checkNotNull(from);
+        Preconditions.checkNotNull(to);
+        // Ships keep one whole point for every sea-lane, lake or port step.
+        if (isShip()) {
+            return MovementPoints.THIRDS_PER_POINT;
+        }
+        // A connected road needs a road on both squares of the step; a river
+        // course needs its own segment. Either one gives the same third.
+        final boolean connectedRoad = model.getMap().hasRoadAt(from)
+                && model.getMap().hasRoadAt(to);
+        final boolean connectedRiver = model.getMap().hasRiverSegment(from, to);
+        return model.getMap().getTerrainTypeAt(to).getMoveCostThirds(
+                model.getMap().hasTreesAt(to), connectedRoad || connectedRiver);
+    }
+
+    @Override
+    public boolean canAffordStepTo(final Location location) {
+        Preconditions.checkNotNull(location);
+        return isAtPlaceLocation() && model.getMap().isValid(location)
+                && getLocation().isNeighbor(location)
+                && canPayEntryCost(getEntryCostThirds(getLocation(), location));
+    }
+
+    @Override
+    public void verifyPathIsLegal(final List<Location> path) {
+        Preconditions.checkNotNull(path);
+        verifyThatUnitIsAtMap();
+        model.checkGameRunning();
+        model.checkCurrentPlayer(owner);
+        Location at = getLocation();
+        for (final Location step : path) {
+            Preconditions.checkNotNull(step);
+            Preconditions.checkArgument(at.isNeighbor(step),
+                    "Location (%s) must be neighbor to current location (%s).",
+                    step, at);
+            Preconditions.checkArgument(model.getMap().isValid(step),
+                    "Location (%s) must be valid.", step);
+            Preconditions.checkArgument(isPossibleToMoveAt(step),
+                    "It's not possible to move at (%s).", step);
+            at = step;
+        }
+    }
+
+    @Override
+    public boolean canAffordPath(final List<Location> path) {
+        Preconditions.checkNotNull(path);
+        if (!isAtPlaceLocation()) {
+            return false;
+        }
+        int remaining = movementThirds;
+        boolean firstStep = true;
+        Location at = getLocation();
+        for (final Location step : path) {
+            if (!at.isNeighbor(step) || !isPossibleToMoveAt(step)) {
+                return false;
+            }
+            final int cost = getEntryCostThirds(at, step);
+            if (cost <= remaining) {
+                remaining -= cost;
+            } else if (firstStep && hasFullMovement()) {
+                // The one expensive step of a full allowance ends the turn.
+                remaining = 0;
+            } else {
+                return false;
+            }
+            firstStep = false;
+            at = step;
+        }
+        return true;
     }
 
     /**
@@ -752,7 +833,10 @@ public abstract class AbstractUnit implements Unit {
                 verifyArrivalPlan(moveTo, boarding);
             }
             boardDepartureSentries(boarding);
-            actionPoints--;
+            // The full-turn exception may cost more than the allowance; it
+            // then finishes at zero.
+            movementThirds = Math.max(0,
+                    movementThirds - getEntryCostThirds(start, moveTo));
             placeToLocation(moveTo, orientation);
             owner.revealMapForUnit(this);
             model.wakeSentriesForMovement(this, moveTo);
@@ -777,8 +861,10 @@ public abstract class AbstractUnit implements Unit {
                 "Location (%s) must be valid.", moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(actionPoints > 0,
-                "There is not enough available action points (%s)", this);
+        Preconditions.checkState(
+                canPayEntryCost(getEntryCostThirds(getLocation(), moveTo)),
+                "There is not enough movement (%s) to enter (%s)", this,
+                moveTo);
         Preconditions.checkState(
                 UnitActionType.noAction.equals(getAction().getType()),
                 "Unit can't move because already doing something else. Unit %s",
@@ -887,8 +973,8 @@ public abstract class AbstractUnit implements Unit {
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
         model.applyAggression(aggression);
-        actionPoints = 0;
-        defender.actionPoints = 0;
+        movementThirds = 0;
+        defender.movementThirds = 0;
         if (strengths.isPresent()) {
             final AbstractUnit loser = winnerAttacker ? defender : this;
             if (isDestroyedByDefeat(loser)) {
@@ -944,8 +1030,8 @@ public abstract class AbstractUnit implements Unit {
         final boolean winnerAttacker = strengths
                 .attackerWins(model.nextCombatRandom());
         model.applyAggression(aggression);
-        actionPoints = 0;
-        defender.actionPoints = 0;
+        movementThirds = 0;
+        defender.movementThirds = 0;
         if (kind == ColonyDefense.Kind.REVERE) {
             // The emergency militia costs stored muskets only now that the
             // battle is confirmed; it is never free equipment.
@@ -1042,8 +1128,8 @@ public abstract class AbstractUnit implements Unit {
                 : preview.getAttackerRepairDestination()).isEmpty();
         final boolean sunk = drawSinks || noRepair;
         model.applyAggression(aggression);
-        actionPoints = 0;
-        ((AbstractUnit) defender).actionPoints = 0;
+        movementThirds = 0;
+        ((AbstractUnit) defender).movementThirds = 0;
         final List<Goods> captured = new ArrayList<>();
         for (final NavalCombatPreview.Transfer transfer : preview
                 .loot(winnerAttacker)) {
@@ -1200,11 +1286,12 @@ public abstract class AbstractUnit implements Unit {
                 placeCargoSlot.getUnit() == this && canEmbark(slot),
                 "Passenger cannot board this cargo slot");
         final int cost = isAtPlaceLocation()
-                && !getLocation().equals(slot.getOwnerUnit().getLocation()) ? 1
+                && !getLocation().equals(slot.getOwnerUnit().getLocation())
+                        ? MovementPoints.THIRDS_PER_POINT
                         : 0;
         place.destroy();
         place = placeCargoSlot;
-        actionPoints -= cost;
+        movementThirds -= cost;
         slot.store(placeCargoSlot);
         model.fireUnitEmbarked(this, slot);
     }
@@ -1214,7 +1301,7 @@ public abstract class AbstractUnit implements Unit {
                 "A ship must be on the map to become damaged");
         place.destroy();
         place = repair;
-        actionPoints = 0;
+        movementThirds = 0;
         setAction(UnitActionType.noAction.make());
     }
 
@@ -1297,7 +1384,7 @@ public abstract class AbstractUnit implements Unit {
                             getLocation()) == TerrainType.HIGH_SEA,
                     "Departure requires a ship in a sea lane");
             Preconditions.checkState(
-                    actionPoints > 0 && UnitActionType.noAction
+                    getActionPoints() > 0 && UnitActionType.noAction
                             .equals(getAction().getType()),
                     "Ship cannot depart without an available movement action");
             origin = getLocation();
@@ -1320,7 +1407,7 @@ public abstract class AbstractUnit implements Unit {
         boardDepartureSentries(boarding);
         ship.rememberDeparture(origin, direction);
         if (isTravelToEurope) {
-            actionPoints--;
+            movementThirds -= MovementPoints.THIRDS_PER_POINT;
         }
         place.destroy();
         place = voyage;
@@ -1540,7 +1627,7 @@ public abstract class AbstractUnit implements Unit {
                     "Passenger transfer changed before landing");
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation,
                     orientation);
-            this.actionPoints--;
+            movementThirds -= MovementPoints.THIRDS_PER_POINT;
             placeToLocation(targetLocation, orientation);
             owner.revealMapForUnit(this);
             model.wakeSentriesForMovement(this, targetLocation);
@@ -1588,14 +1675,14 @@ public abstract class AbstractUnit implements Unit {
         return MoreObjects.toStringHelper(this).add("id", id)
                 .add("type", getType()).add("owner", owner)
                 .add("place", place == null ? place : place.toString())
-                .add("availableMoves", actionPoints)
+                .add("movementThirds", movementThirds)
                 .add("unitAction", unitAction).toString();
     }
 
     public UnitPo save() {
         final UnitPo unitPo = new UnitPo();
         unitPo.setId(id);
-        unitPo.setAvailableMoves(actionPoints);
+        unitPo.setMovementThirds(movementThirds);
         unitPo.setOwnerId(owner.getName());
         unitPo.setType(getType());
         unitPo.setAction(unitAction.save());
@@ -1673,7 +1760,7 @@ public abstract class AbstractUnit implements Unit {
     void startFortifying() {
         Preconditions.checkState(unitAction.isNoAction());
         setAction(new UnitActionFortify(false));
-        actionPoints = 0;
+        movementThirds = 0;
         model.fireActionWasStarted(this);
     }
 
@@ -1699,13 +1786,32 @@ public abstract class AbstractUnit implements Unit {
                     UnitActionClearForest.HARDY_TURNS_TO_CLEAR_FOREST);
         }
         setAction(next);
-        actionPoints = 0;
+        movementThirds = 0;
         model.fireActionWasStarted(this);
     }
 
     void cancelClearingForest() {
         Preconditions
                 .checkState(unitAction.getType() == UnitActionType.clearForest);
+        setAction(UnitActionType.noAction.make());
+        model.fireActionWasStarted(this);
+    }
+
+    void startBuildingRoad() {
+        Preconditions.checkState(unitAction.isNoAction());
+        final UnitActionBuildRoad next = new UnitActionBuildRoad();
+        if (getType() == UnitType.HARDY_PIONEER) {
+            next.setRemainingTurns(
+                    UnitActionBuildRoad.HARDY_TURNS_TO_BUILD_ROAD);
+        }
+        setAction(next);
+        movementThirds = 0;
+        model.fireActionWasStarted(this);
+    }
+
+    void cancelBuildingRoad() {
+        Preconditions
+                .checkState(unitAction.getType() == UnitActionType.buildRoad);
         setAction(UnitActionType.noAction.make());
         model.fireActionWasStarted(this);
     }
@@ -1728,7 +1834,8 @@ public abstract class AbstractUnit implements Unit {
                                 && unitAction
                                         .getType() != UnitActionType.fortify
                                 && actionType != UnitActionType.fortify
-                                && actionType != UnitActionType.clearForest,
+                                && actionType != UnitActionType.clearForest
+                                && actionType != UnitActionType.buildRoad,
                         "Use the dedicated command for this order");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
@@ -1745,7 +1852,7 @@ public abstract class AbstractUnit implements Unit {
                     UnitActionPlowField.HARDY_TURNS_TO_PLOW_FIELD);
         }
         setAction(next);
-        actionPoints = 0;
+        movementThirds = 0;
         model.fireActionWasStarted(this);
     }
 

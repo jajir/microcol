@@ -169,7 +169,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
-| [R-0231](R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
+| [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
 
@@ -185,13 +185,13 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0118](done/R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
 | [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
 | [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
-| [R-0121](R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
+| [R-0121](done/R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
 | [R-0123](done/R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
-| [R-0124](R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
-| [R-0125](R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
-| [R-0126](R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
-| [R-0127](R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
+| [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
+| [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
+| [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
+| [R-0127](done/R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
 | [R-0128](R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
 | [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
@@ -253,8 +253,8 @@ verified or authorize implementation.
 | [R-0140](R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
 | [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
 | [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
-| [R-0143](R-0143.md) | Apply national and cross-port market pressure | New capture | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
-| [R-0144](R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
+| [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | New capture | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
+| [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
 | [R-0145](R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
 
 The seven A06/P08 analyses R-0132–R-0138 were captured on **2026-10-17** as
@@ -339,7 +339,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0160](R-0160.md) | Sell or gift cargo to a native settlement | New capture | [NAT-012](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0161](R-0161.md) | Buy one of three offered native goods | New capture | [NAT-013](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0162](R-0162.md) | Demand native tribute without duplicating gold or anger | New capture | [NAT-016](../gap-analysis.md#native-nations-settlements-and-relations) tribute, UC-065 |
-| [R-0163](R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | New capture | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
+| [R-0163](done/R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | New capture | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
 | [R-0164](R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
 | [R-0165](R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0166](R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
@@ -405,7 +405,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0103](done/R-0103.md) | Pay back taxes to lift a commodity boycott | Follow-up | [R-0030](canceled/R-0030.md) |
 | [R-0104](done/R-0104.md) | Recruit a founder and retain Congress membership | Follow-up | [R-0031](canceled/R-0031.md), [R-0025](done/R-0025.md) |
 | [R-0105](done/R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
-| [R-0180](R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
+| [R-0180](done/R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
 | [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
 | [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
 | [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
@@ -478,3 +478,29 @@ REF/intervention, endgame and scoring—stays visible in the authoritative
 
 [R-0248](done/R-0248.md) applies the selected frames and ruler controls to Settings,
 preserving native input, values and persistence. Other screens remain outside this change.
+
+## Continuous Claude batches — 2026-10-19
+
+1. The user authorized the remaining backlog until explicitly stopped,
+   including native requirements. On 2026-10-19 the user replaced numeric order
+   with: R-0194, R-0209, R-0231, R-0222, R-0227, R-0197, R-0206, R-0207,
+   R-0065, R-0221, R-0232, R-0216, R-0208, R-0217, R-0218, R-0229,
+   R-0204, R-0223. Skip items with unresolved decisions or missing dependencies,
+   ask in the originating chat and return when resolved. This does not redo
+   accepted work or waive acceptance checks.
+2. Implement through Claude Code with Headroom in an isolated worktree on
+   `codex/backlog-batch-01` and successor batch branches. Main remains available
+   for parallel user work. Commit each accepted requirement on the batch branch.
+   After ten, integrate current main, verify the batch, merge to main and check
+   CI plus publication before starting the next ten. Never overwrite unrelated
+   work. A smaller final batch is allowed when all remaining work is blocked
+   or the backlog is exhausted.
+3. Use Haiku medium for narrow bounded assignments, Sonnet medium for normal
+   cross-component work and higher effort after diagnosed complexity/failure.
+   This task-specific Claude selection does not change the project default.
+   Targeted tests run per task; broader regression and CI run at batch boundaries.
+4. At a Claude quota interruption retain job, session and worktree, record the
+   announced reset instant and schedule a thread wake-up shortly afterward.
+   Do not poll during the hours of waiting; waiting is not active worker time.
+   Required checks and original repair budgets remain intact. Ask and refine
+   decisions during waits; no guessed answer or quota reset counts as approval.

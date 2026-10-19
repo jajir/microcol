@@ -15,6 +15,9 @@ public final class TerrainType {
 
     final static int NO_VALUE = -1;
 
+    /** One third of a point, in movement thirds. */
+    private final static int ROAD_OR_RIVER_MOVE_COST_THIRDS = 1;
+
     private final String name;
 
     /**
@@ -36,6 +39,9 @@ public final class TerrainType {
 
     private final List<Production> productions;
 
+    /** Outputs of a forested square; a square without trees ignores them. */
+    private final List<Production> forestProductions;
+
     public final static TerrainType GRASSLAND = TerrainType.make()
             .setName("GRASSLAND").setCode("g").setCanHaveTree(true)
             .setSea(false).setMoveCost(1).setMoveCostWithTree(2)
@@ -44,8 +50,11 @@ public final class TerrainType {
             .setProduction(GoodsType.SUGAR).setBase(1).build()
             .setProduction(GoodsType.TOBACCO).setBase(3).build()
             .setProduction(GoodsType.COTTON).setBase(2).build()
-            .setProduction(GoodsType.FUR).setBase(3).build()
-            .setProduction(GoodsType.LUMBER).setBase(3).build().build();
+            .setForestProduction(GoodsType.CORN).setBase(3).build()
+            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
+            .setForestProduction(GoodsType.COTTON).setBase(1).build()
+            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(6).build().build();
 
     public final static TerrainType PRAIRIE = TerrainType.make()
             .setName("PRAIRIE").setCode("p").setCanHaveTree(true).setSea(false)
@@ -53,33 +62,43 @@ public final class TerrainType {
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(2)
             .build().setProduction(GoodsType.COTTON).setBase(3).build()
-            .setProduction(GoodsType.FUR).setBase(3).build()
-            .setProduction(GoodsType.LUMBER).setBase(1).build().build();
+            .setForestProduction(GoodsType.CORN).setBase(3).build()
+            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
+            .setForestProduction(GoodsType.COTTON).setBase(1).build()
+            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     public final static TerrainType SAVANNAH = TerrainType.make()
             .setName("SAVANNAH").setCode("s").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(4).build().setProduction(GoodsType.SUGAR).setBase(3)
-            .build().setProduction(GoodsType.TOBACCO).setBase(3).build()
+            .build().setProduction(GoodsType.TOBACCO).setBase(2).build()
             .setProduction(GoodsType.COTTON).setBase(3).build()
-            .setProduction(GoodsType.FUR).setBase(4).build()
-            .setProduction(GoodsType.LUMBER).setBase(6).build().build();
+            .setForestProduction(GoodsType.CORN).setBase(3).build()
+            .setForestProduction(GoodsType.SUGAR).setBase(1).build()
+            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
+            .setForestProduction(GoodsType.COTTON).setBase(1).build()
+            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     /**
-     * Aid-card plains. Only the bare outputs printed on the card are defined
-     * here; the forested production matrix belongs to the production owner.
+     * Aid-card plains with its bare and forested outputs.
      */
     public final static TerrainType PLAINS = TerrainType.make()
             .setName("PLAINS").setCode("l").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(1)
-            .build().setProduction(GoodsType.COTTON).setBase(2).build().build();
+            .build().setProduction(GoodsType.COTTON).setBase(2).build()
+            .setForestProduction(GoodsType.CORN).setBase(3).build()
+            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
+            .setForestProduction(GoodsType.COTTON).setBase(1).build()
+            .setForestProduction(GoodsType.FUR).setBase(3).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(6).build().build();
 
     /**
-     * Aid-card marsh. Only the bare outputs printed on the card are defined
-     * here; the forested production matrix belongs to the production owner.
+     * Aid-card marsh with its bare and forested outputs.
      */
     public final static TerrainType MARSH = TerrainType.make().setName("MARSH")
             .setCode("r").setCanHaveTree(true).setSea(false).setMoveCost(2)
@@ -87,33 +106,46 @@ public final class TerrainType {
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(1)
             .build().setProduction(GoodsType.TOBACCO).setBase(3).build()
-            .setProduction(GoodsType.ORE).setBase(3).build().build();
+            .setProduction(GoodsType.ORE).setBase(3).build()
+            .setForestProduction(GoodsType.CORN).setBase(2).build()
+            .setForestProduction(GoodsType.SUGAR).setBase(1).build()
+            .setForestProduction(GoodsType.TOBACCO).setBase(2).build()
+            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(4).build()
+            .setForestProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP")
-            .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(1)
-            .setMoveCostWithTree(2).setDefenseBonus(25)
+            .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(2)
+            .setMoveCostWithTree(3).setDefenseBonus(25)
             .setDefenseBonusWithTree(75).setProduction(GoodsType.CORN)
-            .setBase(2).build().setProduction(GoodsType.SUGAR).setBase(3)
+            .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(3)
             .build().setProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setProduction(GoodsType.LUMBER).setBase(4).build().build();
+            .setForestProduction(GoodsType.CORN).setBase(2).build()
+            .setForestProduction(GoodsType.SUGAR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     public final static TerrainType DESERT = TerrainType.make()
             .setName("DESERT").setCode("d").setCanHaveTree(true).setSea(false)
-            .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
+            .setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.TOBACCO).setBase(1)
             .build().setProduction(GoodsType.COTTON).setBase(1).build()
-            .setProduction(GoodsType.FUR).setBase(2).build()
-            .setProduction(GoodsType.LUMBER).setBase(6).build()
-            .setProduction(GoodsType.ORE).setBase(2).build().build();
+            .setProduction(GoodsType.ORE).setBase(2).build()
+            .setForestProduction(GoodsType.CORN).setBase(2).build()
+            .setForestProduction(GoodsType.COTTON).setBase(1).build()
+            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(2).build()
+            .setForestProduction(GoodsType.ORE).setBase(1).build().build();
 
     public final static TerrainType TUNDRA = TerrainType.make()
             .setName("TUNDRA").setCode("t").setCanHaveTree(true).setSea(false)
-            .setMoveCost(2).setMoveCostWithTree(2).setDefenseBonus(0)
+            .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(3).build().setProduction(GoodsType.FUR).setBase(5).build()
-            .setProduction(GoodsType.LUMBER).setBase(2).build()
-            .setProduction(GoodsType.ORE).setBase(2).build().build();
+            .setBase(3).build().setProduction(GoodsType.ORE).setBase(2).build()
+            .setForestProduction(GoodsType.CORN).setBase(2).build()
+            .setForestProduction(GoodsType.FUR).setBase(3).build()
+            .setForestProduction(GoodsType.LUMBER).setBase(4).build()
+            .setForestProduction(GoodsType.ORE).setBase(1).build().build();
 
     public final static TerrainType ARCTIC = TerrainType.make()
             .setName("ARCTIC").setCode("a").setCanHaveTree(false).setSea(false)
@@ -121,7 +153,7 @@ public final class TerrainType {
             .setDefenseBonusWithTree(0).build();
 
     public final static TerrainType HILL = TerrainType.make().setName("HILL")
-            .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(1)
+            .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(2)
             .setMoveCostWithTree(2).setDefenseBonus(100)
             .setDefenseBonusWithTree(100).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.ORE).setBase(4).build()
@@ -129,7 +161,7 @@ public final class TerrainType {
 
     public final static TerrainType MOUNTAIN = TerrainType.make()
             .setName("MOUNTAIN").setCode("m").setCanHaveTree(false)
-            .setSea(false).setMoveCost(1).setMoveCostWithTree(2)
+            .setSea(false).setMoveCost(3).setMoveCostWithTree(3)
             .setDefenseBonus(150).setDefenseBonusWithTree(150)
             .setProduction(GoodsType.ORE).setBase(3).build()
             .setProduction(GoodsType.SILVER).setBase(1).build().build();
@@ -180,6 +212,8 @@ public final class TerrainType {
 
         private final List<Production> productions = new ArrayList<>();
 
+        private final List<Production> forestProductions = new ArrayList<>();
+
         private String name = null;
 
         private String code;
@@ -199,7 +233,7 @@ public final class TerrainType {
         TerrainType build() {
             return new TerrainType(name, code, canHaveTree, isSea, moveCost,
                     moveCostWithTree, defenseBonus, defenseBonusWithTree,
-                    productions);
+                    productions, forestProductions);
         }
 
         TerrainTypeBuilder setName(String name) {
@@ -250,13 +284,30 @@ public final class TerrainType {
         }
 
         ProductionBuilder setProduction(final GoodsType goodsType) {
-            return new ProductionBuilder(this, goodsType);
+            return new ProductionBuilder(this, goodsType, false);
+        }
+
+        /**
+         * Output of the same terrain when it carries a forest. Goods missing
+         * here are zero on forested squares.
+         *
+         * @param goodsType produced goods
+         * @return production builder for the forested output
+         */
+        ProductionBuilder setForestProduction(final GoodsType goodsType) {
+            return new ProductionBuilder(this, goodsType, true);
         }
 
         void addProduction(final Production production) {
             Preconditions.checkArgument(!productions.contains(production),
                     "Production (%s) was already defined");
             productions.add(Preconditions.checkNotNull(production));
+        }
+
+        void addForestProduction(final Production production) {
+            Preconditions.checkArgument(!forestProductions.contains(production),
+                    "Forest production (%s) was already defined");
+            forestProductions.add(Preconditions.checkNotNull(production));
         }
 
     }
@@ -314,12 +365,15 @@ public final class TerrainType {
 
         private final GoodsType goodsType;
 
+        private final boolean forest;
+
         private int base = NO_VALUE;
 
         ProductionBuilder(final TerrainTypeBuilder terrainBuilder,
-                final GoodsType goodsType) {
+                final GoodsType goodsType, final boolean forest) {
             this.terrainBuilder = Preconditions.checkNotNull(terrainBuilder);
             this.goodsType = Preconditions.checkNotNull(goodsType);
+            this.forest = forest;
         }
 
         ProductionBuilder setBase(final int base) {
@@ -332,7 +386,12 @@ public final class TerrainType {
                 throw new IllegalStateException(String.format(
                         "Base production is not defined for '%s'", goodsType));
             }
-            terrainBuilder.addProduction(new Production(goodsType, base));
+            if (forest) {
+                terrainBuilder
+                        .addForestProduction(new Production(goodsType, base));
+            } else {
+                terrainBuilder.addProduction(new Production(goodsType, base));
+            }
             return terrainBuilder;
         }
 
@@ -345,7 +404,8 @@ public final class TerrainType {
     TerrainType(final String name, final String code, final boolean canHaveTree,
             final boolean isSee, final int moveCost, final int moveCostWithTree,
             final int defenseBonus, final int defenseBonusWithTree,
-            final List<Production> productions) {
+            final List<Production> productions,
+            final List<Production> forestProductions) {
         Preconditions.checkArgument(moveCost != NO_VALUE,
                 "move cost was not set.");
         Preconditions.checkArgument(moveCostWithTree != NO_VALUE,
@@ -364,6 +424,8 @@ public final class TerrainType {
         this.defenseBonusWithTree = defenseBonusWithTree;
         this.productions = ImmutableList
                 .copyOf(Preconditions.checkNotNull(productions));
+        this.forestProductions = ImmutableList
+                .copyOf(Preconditions.checkNotNull(forestProductions));
     }
 
     @Override
@@ -448,6 +510,24 @@ public final class TerrainType {
         return moveCostWithTree;
     }
 
+    /**
+     * Movement needed to enter a square of this terrain, in thirds of a point.
+     * A connected road or river segment, once one exists, replaces the terrain
+     * cost with one third of a point in either direction.
+     *
+     * @param hasTrees             whether the square carries a forest
+     * @param connectedRoadOrRiver whether a connected road or river segment
+     *                             applies to this entry
+     * @return entry cost in movement thirds
+     */
+    public int getMoveCostThirds(final boolean hasTrees,
+            final boolean connectedRoadOrRiver) {
+        if (connectedRoadOrRiver) {
+            return ROAD_OR_RIVER_MOVE_COST_THIRDS;
+        }
+        return MovementPoints.ofPoints(hasTrees ? moveCostWithTree : moveCost);
+    }
+
     public int getDefenseBonus() {
         return defenseBonus;
     }
@@ -456,14 +536,25 @@ public final class TerrainType {
         return defenseBonusWithTree;
     }
 
-    public boolean canProduce(final GoodsType goodsType) {
-        return productions.stream().map(Production::getGoodsType)
-                .filter(goodsType1 -> goodsType1.equals(goodsType)).findAny()
-                .isPresent();
+    /**
+     * @param goodsType required goods type
+     * @return output of a square without forest, empty when it is zero
+     */
+    public Optional<Production> getBaseProduction(final GoodsType goodsType) {
+        return findProduction(productions, goodsType);
     }
 
-    public Optional<Production> getBaseProduction(final GoodsType goodsType) {
-        return productions.stream().filter(
+    /**
+     * @param goodsType required goods type
+     * @return output of a square with forest, empty when it is zero
+     */
+    public Optional<Production> getForestProduction(final GoodsType goodsType) {
+        return findProduction(forestProductions, goodsType);
+    }
+
+    private static Optional<Production> findProduction(
+            final List<Production> table, final GoodsType goodsType) {
+        return table.stream().filter(
                 production -> production.getGoodsType().equals(goodsType))
                 .findAny();
     }

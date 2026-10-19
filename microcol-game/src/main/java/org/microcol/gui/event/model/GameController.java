@@ -2,6 +2,8 @@ package org.microcol.gui.event.model;
 
 import java.io.File;
 
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.model.Difficulty;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.MicroColException;
@@ -34,15 +36,19 @@ public final class GameController {
 
     private final EventBus eventBus;
 
+    private final DiagnosticLog diagnosticLog;
+
     @Inject
     GameController(final GameModelController gameModelController,
             final GameModelDao gameModelDao,
-            final CampaignManager campaignManager, final EventBus eventBus) {
+            final CampaignManager campaignManager, final EventBus eventBus,
+            final DiagnosticLog diagnosticLog) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gameModelDao = Preconditions.checkNotNull(gameModelDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
     }
 
     public void writeModelToFile(final File targetFile) {
@@ -57,6 +63,7 @@ public final class GameController {
             loaded = gameModelDao.loadFromFile(sourceFile, eventBus);
         } catch (IllegalArgumentException | IllegalStateException
                 | MicroColException | JsonParseException rejected) {
+            diagnosticLog.record(DiagnosticEvent.LOAD_FAILED, rejected);
             gameModelController.showInvalidSavedGame();
             return false;
         }
