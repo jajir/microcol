@@ -1281,6 +1281,8 @@ public class Colony {
         for (int index = 0; index < sales.size(); index++) {
             final Goods goods = sales.get(index);
             warehouse.removeGoods(goods);
+            model.getEurope().applyTrade(owner.getEuropeanNation(),
+                    goods.getType(), goods.getAmount());
             model.addTurnEvent(TurnEventProvider.getCustomHouseExport(owner,
                     this, goods, incomes.get(index)));
         }

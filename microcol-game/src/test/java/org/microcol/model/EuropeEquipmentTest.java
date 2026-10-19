@@ -44,9 +44,13 @@ class EuropeEquipmentTest {
     }
 
     static Stream<Arguments> equipmentLots() {
+        // The sale follows the purchase in the same national market. Buying a
+        // lot of n units adds -8n eighths of pressure and 800 eighths raise the
+        // bid by one: 50 muskets or horses (-400) keep bid 2, but 100 tools
+        // (-800) raise the tool bid from 1 to 2, so the sale pays 100 x 2.
         return Stream.of(Arguments.of(GoodsType.MUSKET, 50, 150, 100),
                 Arguments.of(GoodsType.HORSE, 50, 250, 100),
-                Arguments.of(GoodsType.TOOLS, 100, 200, 100));
+                Arguments.of(GoodsType.TOOLS, 100, 200, 200));
     }
 
     @ParameterizedTest
@@ -73,6 +77,39 @@ class EuropeEquipmentTest {
         assertEquals(4, unit.getId());
         assertEquals(UnitType.COLONIST, unit.getType());
         assertEquals(1, unit.getActionPoints());
+    }
+
+    @Test
+    void equipmentTradesPressTheMarketOnlyWhenAccepted() {
+        final GoodsTrade musket = europe.getGoodsTradeForType(GoodsType.MUSKET,
+                EuropeanNation.DUTCH);
+        final GoodsTrade frenchMusket = europe
+                .getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.FRENCH);
+        final EuropeTradeQuote offer = unit
+                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+        // The market moves under the open offer: rejected, nothing pressed.
+        musket.setBuyPrice(4);
+        assertThrows(IllegalStateException.class, () -> unit
+                .tradeEquipmentInEurope(GoodsType.MUSKET, true, offer));
+        assertEquals(1000, player.getGold());
+        assertEquals(0, equipment(GoodsType.MUSKET));
+        assertEquals(0, musket.getPressure());
+        assertFalse(frenchMusket.isTradedSinceUpdate());
+        musket.setBuyPrice(3);
+
+        // An accepted purchase of the 50-musket lot: -400 own, -100 elsewhere.
+        unit.tradeEquipmentInEurope(GoodsType.MUSKET, true,
+                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, true));
+        assertEquals(850, player.getGold());
+        assertEquals(-400, musket.getPressure());
+        assertEquals(-100, frenchMusket.getPressure());
+        assertTrue(frenchMusket.isTradedSinceUpdate());
+
+        // The sale of the same lot cancels the remainders exactly.
+        unit.tradeEquipmentInEurope(GoodsType.MUSKET, false,
+                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, false));
+        assertEquals(0, musket.getPressure());
+        assertEquals(0, frenchMusket.getPressure());
     }
 
     @Test
@@ -159,7 +196,8 @@ class EuropeEquipmentTest {
     void priceChangeRejectsOldOfferUntilNewOfferIsConfirmed() {
         final EuropeTradeQuote oldOffer = unit
                 .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
-        europe.getGoodsTradeForType(GoodsType.MUSKET).setBuyPrice(4);
+        europe.getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
+                .setBuyPrice(4);
         assertRejected(GoodsType.MUSKET, true, oldOffer, null);
         buy(GoodsType.MUSKET);
         assertEquals(800, player.getGold());
@@ -255,7 +293,7 @@ class EuropeEquipmentTest {
     void overflowingQuoteIsReportedBeforeEquipmentMutation() {
         final EuropeTradeQuote offer = unit
                 .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
-        europe.getGoodsTradeForType(GoodsType.MUSKET)
+        europe.getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
                 .setBuyPrice(Integer.MAX_VALUE);
         assertRejected(GoodsType.MUSKET, true, offer,
                 EquipmentProblem.GOLD_LIMIT);

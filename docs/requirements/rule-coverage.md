@@ -77,8 +77,8 @@
 | TRADE-003 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-004 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Main source and dated evidence review confirms delivered shared sale quote; full trade matrix is verification-only. |
 | TRADE-005 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Shared tax quote/max affordability delivered; unused legacy method is not a missing feature. |
-| TRADE-006 | [R-0143](R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-007 | [R-0143](R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-006 | [R-0143](done/R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-007 | [R-0143](done/R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-008 | [R-0145](R-0145.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-009 | [R-0085](done/R-0085.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-001 | [R-0146](R-0146.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

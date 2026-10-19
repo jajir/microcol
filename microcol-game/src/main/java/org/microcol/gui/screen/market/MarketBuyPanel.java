@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.market;
 
+import org.microcol.gui.dialog.DialogEuropePriceChanged;
 import org.microcol.gui.dialog.DialogGoodsTransferChanged;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
@@ -11,6 +12,8 @@ import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.EuropePriceChangedException;
+import org.microcol.model.EuropeTradeQuote;
 import org.microcol.model.Goods;
 import org.microcol.model.NotEnoughtGoldException;
 
@@ -45,6 +48,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final DialogGoodsTransferChanged dialogGoodsTransferChanged;
 
+    private final DialogEuropePriceChanged dialogEuropePriceChanged;
+
     private final Label labelHowMuch = new Label();
 
     private final Label labelPricePerPiece = new Label();
@@ -67,13 +72,19 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private Goods actualValue;
 
+    /** Quote shown for the actual value; confirmation must match it. */
+    private EuropeTradeQuote shownQuote;
+
     private ScreenMarketBuyContext screenMarketContext;
 
     @Inject
     MarketBuyPanel(final I18n i18n, final EventBus eventBus,
             final GameModelController gameModelController,
             final DialogNotEnoughGold dialogNotEnoughGold,
-            final DialogGoodsTransferChanged dialogGoodsTransferChanged) {
+            final DialogGoodsTransferChanged dialogGoodsTransferChanged,
+            final DialogEuropePriceChanged dialogEuropePriceChanged) {
+        this.dialogEuropePriceChanged = Preconditions
+                .checkNotNull(dialogEuropePriceChanged);
         this.dialogGoodsTransferChanged = Preconditions
                 .checkNotNull(dialogGoodsTransferChanged);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -140,12 +151,16 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
                 return;
             }
             if (isOfferStillValid(targetCargoSlot)) {
-                targetCargoSlot.buyAndStoreFromEuropePort(getActualValue());
+                targetCargoSlot.buyAndStoreFromEuropePort(getActualValue(),
+                        shownQuote);
             } else {
                 dialogGoodsTransferChanged.showAndWait();
             }
         } catch (NotEnoughtGoldException e) {
             dialogNotEnoughGold.showAndWait();
+        } catch (EuropePriceChangedException e) {
+            // the price moved after the quote was shown, nothing was charged
+            dialogEuropePriceChanged.showAndWait();
         } catch (IllegalArgumentException | IllegalStateException e) {
             // hold changed since the quantity was chosen, nothing was charged
             dialogGoodsTransferChanged.showAndWait();
@@ -171,6 +186,7 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         actualValue = screenMarketContext.getMaxPossibleGoodsToBuy();
         slider.setMax(actualValue.getAmount());
         slider.setValue(actualValue.getAmount());
+        updateSelectedAmount();
     }
 
     @Override
@@ -181,6 +197,8 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void updateSelectedAmount() {
+        shownQuote = gameModelController.getHumanPlayer()
+                .quoteEuropeTrade(getActualValue(), true);
         labelPricePerPiece.setText(i18n.get(Market.pricePerPiece,
                 getPricePerPiece(), getPriceWithoutTax()));
         labelPricePerPieceValue

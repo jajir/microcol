@@ -18,6 +18,7 @@
 	
 	<entry key="notEnoughGold_caption">K dokončení operace nemáte dost zlata.</entry>
 	<entry key="goodsTransfer_changed">Nákladový prostor se změnil a nákup neproběhl. Nic nebylo odečteno.</entry>
+	<entry key="europePrice_changed">Evropská cena se změnila a obchod neproběhl. Nic nebylo zaplaceno ani přesunuto.</entry>
 
 
 	<entry key="unitCantMoveHere_caption">Sem neni možné jednotku přesunout.</entry>

@@ -184,6 +184,25 @@ public class CargoSlot {
      * @return how much of goods was transferred
      */
     public Goods buyAndStoreFromEuropePort(final Goods goods) {
+        return storeFromEuropePort(goods, null);
+    }
+
+    /**
+     * Buy at the quote the player confirmed; a changed price buys nothing.
+     *
+     * @param goods   required goods, clamped to the free space before charging
+     * @param offered required purchase quote shown before confirmation
+     * @return how much of goods was transferred
+     */
+    public Goods buyAndStoreFromEuropePort(final Goods goods,
+            final EuropeTradeQuote offered) {
+        return storeFromEuropePort(goods,
+                Preconditions.checkNotNull(offered, "Offered quote is null"));
+    }
+
+    /** @param offered confirmed quote, or {@code null} for the live price */
+    private Goods storeFromEuropePort(final Goods goods,
+            final EuropeTradeQuote offered) {
         requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         verifyThatItCouldStored(goods);
@@ -194,12 +213,21 @@ public class CargoSlot {
             // nothing requested or no space to store
             return toBuy;
         }
-        getOwnerPlayer().buyGoods(toBuy);
+        if (offered == null) {
+            getOwnerPlayer().buyGoods(toBuy);
+        } else {
+            getOwnerPlayer().buyGoods(toBuy, offered);
+        }
         addGoods(toBuy);
         return toBuy;
     }
 
     void sellAndEmpty(final Goods goods) {
+        sellAndEmpty(goods, null);
+    }
+
+    /** @param offered confirmed quote, or {@code null} for the live price */
+    void sellAndEmpty(final Goods goods, final EuropeTradeQuote offered) {
         requireOperationalCarrier();
         Preconditions.checkNotNull(goods);
         Preconditions.checkState(!isEmpty(),
@@ -214,7 +242,11 @@ public class CargoSlot {
                 "Attempt to sell more goods %s than is stored in %s", goods,
                 this);
 
-        getOwnerPlayer().sellGoods(goods);
+        if (offered == null) {
+            getOwnerPlayer().sellGoods(goods);
+        } else {
+            getOwnerPlayer().sellGoods(goods, offered);
+        }
         cargoGoods = cargoGoods.substract(goods);
         if (cargoGoods.isZero()) {
             cargoGoods = null;

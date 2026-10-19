@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.microcol.model.Difficulty;
 import org.microcol.model.Direction;
+import org.microcol.model.Europe;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.EuropeanRelationState;
 import org.microcol.model.Location;
@@ -105,6 +106,8 @@ public final class ReferenceExpedition {
         mapVisibility.setVisibility(Set.of(), maxX, maxY);
         map.setVisibility(mapVisibility);
         model.setMap(map);
+        // A new expedition starts every national market at the catalogue state.
+        model.setEurope(Europe.initialPo());
         final EuropeanNation[] nations = EuropeanNation.values();
         int id = 1;
         for (int i = 0; i < nations.length; i++) {

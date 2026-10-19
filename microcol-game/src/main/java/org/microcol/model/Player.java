@@ -507,7 +507,8 @@ public abstract class Player {
                     continue;
                 }
                 final long value = (long) stock * model.getEurope()
-                        .getGoodsTradeForType(type).getSellPrice();
+                        .getGoodsTradeForType(type, getEuropeanNation())
+                        .getSellPrice();
                 if (bestColony == null || value > bestValue
                         || value == bestValue && isStableBefore(type, colony,
                                 bestType, bestColony)) {
@@ -526,7 +527,8 @@ public abstract class Player {
             return Optional.of(new TaxProtest(bestType, bestColony.getId(),
                     bestColony.getName(),
                     bestColony.getWarehouse().getGoods(bestType).getAmount(),
-                    model.getEurope().getGoodsTradeForType(bestType)
+                    model.getEurope()
+                            .getGoodsTradeForType(bestType, getEuropeanNation())
                             .getSellPrice(),
                     bestColony
                             .previewProtestLiberty(TaxProtest.LIBERTY_POINTS)));
@@ -571,6 +573,13 @@ public abstract class Player {
             }
         }
         getColonies().forEach(colony -> colony.startTurn());
+        if (!isKing()) {
+            // After colony production, so this update's custom-house sales
+            // count as trades affecting the national markets. A scripted
+            // actor that is not a real colonial nation has no market.
+            EuropeanNation.findByPlayerName(getName()).ifPresent(
+                    nation -> model.getEurope().recoverMarkets(nation));
+        }
         settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
         if (hadFranklin) {
@@ -1174,22 +1183,65 @@ public abstract class Player {
     }
 
     public void buyGoods(final Goods goods) {
+        buyGoods(goods, quoteEuropeTrade(goods, true));
+    }
+
+    /**
+     * Buy at the terms the player confirmed. Gold and cargo are settled first;
+     * the national market moves only after the complete price is charged.
+     *
+     * @param goods   required goods to buy
+     * @param offered required purchase quote the player confirmed
+     * @throws EuropePriceChangedException when the live price no longer matches
+     */
+    public void buyGoods(final Goods goods, final EuropeTradeQuote offered) {
         checkTurnPreparationComplete();
-        final int price = quoteEuropeTrade(goods, true).getTotal();
+        final EuropeTradeQuote quote = quoteEuropeTrade(goods, true);
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
         checkNotBoycotted(goods.getType());
-        verifyAvailibilityOFGold(price);
-        setGold(getGold() - price);
+        checkConfirmedTerms(offered, quote);
+        verifyAvailibilityOFGold(quote.getTotal());
+        setGold(getGold() - quote.getTotal());
+        model.getEurope().applyTrade(getEuropeanNation(), goods.getType(),
+                -goods.getAmount());
     }
 
     public void sellGoods(final Goods goods) {
+        sellGoods(goods, quoteEuropeTrade(goods, false));
+    }
+
+    /**
+     * Sell at the terms the player confirmed. Gold is settled first; the
+     * national market moves only after the complete price is credited.
+     *
+     * @param goods   required goods to sell
+     * @param offered required sale quote the player confirmed
+     * @throws EuropePriceChangedException when the live price no longer matches
+     */
+    public void sellGoods(final Goods goods, final EuropeTradeQuote offered) {
         checkTurnPreparationComplete();
-        final int price = quoteEuropeTrade(goods, false).getTotal();
+        final EuropeTradeQuote quote = quoteEuropeTrade(goods, false);
         Preconditions.checkState(canTradeInEurope(),
                 "European trade is unavailable");
         checkNotBoycotted(goods.getType());
-        setGold(Math.addExact(getGold(), price));
+        checkConfirmedTerms(offered, quote);
+        setGold(Math.addExact(getGold(), quote.getTotal()));
+        model.getEurope().applyTrade(getEuropeanNation(), goods.getType(),
+                goods.getAmount());
+    }
+
+    private static void checkConfirmedTerms(final EuropeTradeQuote offered,
+            final EuropeTradeQuote current) {
+        Preconditions.checkNotNull(offered, "Offered quote is null");
+        if (offered.isPurchase() != current.isPurchase()
+                || !offered.getGoods().getType()
+                        .equals(current.getGoods().getType())
+                || offered.getUnitPrice() != current.getUnitPrice()
+                || offered.getTaxPercentage() != current.getTaxPercentage()) {
+            throw new EuropePriceChangedException(
+                    "European price changed; nothing was traded");
+        }
     }
 
     private void checkNotBoycotted(final GoodsType type) {
@@ -1203,6 +1255,17 @@ public abstract class Player {
     }
 
     /**
+     * @return the national European market this player trades in; a Crown reads
+     *         the market of the nation it rules
+     */
+    public EuropeanNation getEuropeanNation() {
+        final Player nation = isKing()
+                ? ((PlayerKing) this).getWhosKingThisPlayerIs()
+                : this;
+        return EuropeanNation.fromPlayerName(nation.getName());
+    }
+
+    /**
      * Quote the same total used by cargo and pier-equipment transactions.
      *
      * @param goods    required goods, including zero for a slider preview
@@ -1213,7 +1276,7 @@ public abstract class Player {
             final boolean purchase) {
         Preconditions.checkNotNull(goods);
         final GoodsTrade trade = model.getEurope()
-                .getGoodsTradeForType(goods.getType());
+                .getGoodsTradeForType(goods.getType(), getEuropeanNation());
         return new EuropeTradeQuote(goods, purchase,
                 purchase ? trade.getBuyPrice() : trade.getSellPrice(),
                 model.getKingsTaxForPlayer(this));

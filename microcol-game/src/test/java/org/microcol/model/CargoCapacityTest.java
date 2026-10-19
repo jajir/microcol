@@ -141,9 +141,9 @@ class CargoCapacityTest {
             final int requested) {
         put(target, GoodsType.CORN, stored);
         final int expected = Math.min(requested, 100 - stored);
-        final int price = expected == 0 ? 0
-                : player.quoteEuropeTrade(Goods.of(GoodsType.CORN, expected),
-                        true).getTotal();
+        final EuropeTradeQuote accepted = player
+                .quoteEuropeTrade(Goods.of(GoodsType.CORN, expected), true);
+        final int price = expected == 0 ? 0 : accepted.getTotal();
         final int goldBefore = player.getGold();
 
         final Goods bought = target
@@ -151,12 +151,18 @@ class CargoCapacityTest {
 
         assertEquals(Goods.of(GoodsType.CORN, expected), bought);
         assertEquals(stored + expected, amountIn(target));
+        // Only the accepted amount is charged, at the quote read before the
+        // purchase; the unaccepted remainder never moves gold or the market.
         assertEquals(goldBefore - price, player.getGold());
         if (expected > 0) {
-            assertTrue(price >= player
-                    .quoteEuropeTrade(Goods.of(GoodsType.CORN, expected), true)
-                    .getGross());
+            assertTrue(price >= accepted.getGross());
         }
+        // Independent market expectation: -8 eighths per accepted unit and a
+        // bid step per 800, here from the Dutch corn bid 2.
+        final GoodsTrade corn = model.getEurope()
+                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH);
+        assertEquals(2 + 8 * expected / 800, corn.getSellPrice());
+        assertEquals(-(8 * expected % 800), corn.getPressure());
     }
 
     @Test

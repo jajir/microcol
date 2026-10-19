@@ -46,8 +46,9 @@ public final class NavalCombatPreview {
         defenderLoot = ImmutableList
                 .copyOf(planLoot(model, defender, attacker));
         inputs = cargoSignature(attacker) + ':' + cargoSignature(defender) + ':'
-                + marketSignature(model) + ':' + repairSignature(attackerRepair)
-                + ':' + repairSignature(defenderRepair);
+                + marketSignature(model, attacker, defender) + ':'
+                + repairSignature(attackerRepair) + ':'
+                + repairSignature(defenderRepair);
     }
 
     private static String cargoSignature(final Ship ship) {
@@ -76,11 +77,20 @@ public final class NavalCombatPreview {
                 .orElse("None");
     }
 
-    private static String marketSignature(final Model model) {
+    private static String marketSignature(final Model model,
+            final Ship attacker, final Ship defender) {
         final StringBuilder out = new StringBuilder();
         for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
-            out.append(type.name()).append('=').append(
-                    model.getEurope().getGoodsTradeForType(type).getSellPrice())
+            out.append(type.name()).append('=')
+                    .append(model.getEurope()
+                            .getGoodsTradeForType(type,
+                                    attacker.getOwner().getEuropeanNation())
+                            .getSellPrice())
+                    .append('/')
+                    .append(model.getEurope()
+                            .getGoodsTradeForType(type,
+                                    defender.getOwner().getEuropeanNation())
+                            .getSellPrice())
                     .append(';');
         }
         return out.toString();
@@ -98,8 +108,10 @@ public final class NavalCombatPreview {
         }
         ordered.sort(Comparator
                 .<Integer>comparingInt(index -> model.getEurope()
-                        .getGoodsTradeForType(source.get(index).getGoods()
-                                .orElseThrow().getType())
+                        .getGoodsTradeForType(
+                                source.get(index).getGoods().orElseThrow()
+                                        .getType(),
+                                winner.getOwner().getEuropeanNation())
                         .getSellPrice())
                 .reversed()
                 .thenComparing(index -> source.get(index).getGoods()

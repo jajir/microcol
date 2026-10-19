@@ -263,7 +263,7 @@ public class Model {
 
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
-        this.europe = new Europe(this);
+        this.europe = new Europe(this, modelPo.getEurope());
     }
 
     /**
@@ -2456,6 +2456,7 @@ public class Model {
         gameManager.save(out);
         playerStore.save(out);
         out.setEuropeanRelations(europeanRelations.save(this::isOverlapLive));
+        out.setEurope(europe.save());
         // Zero means no Crown-war round has been processed yet.
         out.setCrownWarRound(lastCrownWarRound == 0 ? null : lastCrownWarRound);
         out.setColonies(getSaveColonies());
@@ -2643,6 +2644,16 @@ public class Model {
 
     public void sellGoods(final CargoSlot cargoSlot, final Goods goods) {
         cargoSlot.sellAndEmpty(goods);
+        listenerManager.fireGoodsWasSoldInEurope(this, goods);
+    }
+
+    /**
+     * Sell only when the price still matches the quote the player confirmed.
+     */
+    public void sellGoods(final CargoSlot cargoSlot, final Goods goods,
+            final EuropeTradeQuote offered) {
+        cargoSlot.sellAndEmpty(goods,
+                Preconditions.checkNotNull(offered, "Offered quote is null"));
         listenerManager.fireGoodsWasSoldInEurope(this, goods);
     }
 

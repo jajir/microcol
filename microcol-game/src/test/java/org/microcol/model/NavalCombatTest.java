@@ -375,9 +375,14 @@ class NavalCombatTest {
         });
         final AttackOrder order = attacker.prepareAttack(DEFENDER, true)
                 .orElseThrow();
-        assertTrue(model.getEurope().getGoodsTradeForType(GoodsType.ORE)
-                .getSellPrice() > model.getEurope()
-                        .getGoodsTradeForType(GoodsType.SILVER).getSellPrice());
+        assertTrue(
+                model.getEurope()
+                        .getGoodsTradeForType(GoodsType.ORE,
+                                EuropeanNation.DUTCH)
+                        .getSellPrice() > model.getEurope()
+                                .getGoodsTradeForType(GoodsType.SILVER,
+                                        EuropeanNation.DUTCH)
+                                .getSellPrice());
         assertEquals(List.of(Goods.of(GoodsType.ORE, 10),
                 Goods.of(GoodsType.ORE, 10), Goods.of(GoodsType.SILVER, 100)),
                 order.getNavalPreview().orElseThrow()
@@ -544,7 +549,7 @@ class NavalCombatTest {
         final AttackOrder order = attacker.prepareAttack(DEFENDER, true)
                 .orElseThrow();
         final GoodsTrade ore = model.getEurope()
-                .getGoodsTradeForType(GoodsType.ORE);
+                .getGoodsTradeForType(GoodsType.ORE, EuropeanNation.DUTCH);
         ore.setSellPrice(ore.getSellPrice() + 1);
         assertRejectedWithoutBattleEffects(model, attacker, defender, order);
     }

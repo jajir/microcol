@@ -63,7 +63,7 @@
 | UC-055 | Hra | Zaplatit nábor, výcvik a nákup jednotky | [R-0075](done/R-0075.md), [R-0074](R-0074.md), [R-0023](done/R-0023.md), [R-0077](done/R-0077.md) |
 | UC-056 | Hra | Koupit a prodat přesné množství | [R-0020](done/R-0020.md), [R-0215](R-0215.md) |
 | UC-057 | Hra | Vidět správnou cenu a daň | [R-0020](done/R-0020.md), [R-0215](R-0215.md) |
-| UC-058 | Hra | Pohnout cenami a zkontrolovat účetnictví | [R-0143](R-0143.md), [R-0145](R-0145.md) |
+| UC-058 | Hra | Pohnout cenami a zkontrolovat účetnictví | [R-0143](done/R-0143.md), [R-0145](R-0145.md) |
 | UC-059 | Hra | Přijmout daň nebo protestovat | [R-0102](done/R-0102.md), [R-0103](done/R-0103.md) |
 | UC-060 | Hra | Rozpoznat národ a získat půdu | [R-0150](R-0150.md), [R-0151](R-0151.md), [R-0152](R-0152.md) |
 | UC-061 | Hra | Vyvolat a uklidnit napětí | [R-0153](R-0153.md), [R-0154](R-0154.md), [R-0155](R-0155.md), [R-0156](R-0156.md), [R-0160](R-0160.md), [R-0164](R-0164.md) |

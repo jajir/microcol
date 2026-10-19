@@ -91,6 +91,26 @@ public class EuropePortScreen extends AbstractScreen {
         clickOnButtonWithId("buttonOk");
     }
 
+    public void verifyEuropePriceChangedWarning(final String expectedText) {
+        final List<javafx.scene.Node> labels = getListOfNodes(".label");
+        assertTrue(
+                labels.stream().filter(node -> node instanceof Labeled)
+                        .anyMatch(node -> expectedText
+                                .equals(((Labeled) node).getText())),
+                String.format("Warning '%s' was not shown", expectedText));
+    }
+
+    /**
+     * @param goodsType    required tradable good shown in the port
+     * @param expectedText expected bid and ask, for example "3/5"
+     */
+    public void verifyGoodsBidAndAsk(final GoodsType goodsType,
+            final String expectedText) {
+        final Labeled price = getLabeledById("europePrice" + goodsType.name());
+        assertEquals(expectedText, price.getText().split("\n")[0],
+                String.format("Bid and ask of %s", goodsType.name()));
+    }
+
     private List<UnitWithCargo> getShipsInPort() {
         final Player human = getModel().getPlayers().stream()
                 .filter(Player::isHuman).findAny()

@@ -120,7 +120,8 @@ public class GameModelController {
     }
 
     public GoodsTrade getEuropeGoodsTradeForType(final GoodsType goodsType) {
-        return getModel().getEurope().getGoodsTradeForType(goodsType);
+        return getModel().getEurope().getGoodsTradeForType(goodsType,
+                getHumanPlayer().getEuropeanNation());
     }
 
     /**
