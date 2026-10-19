@@ -18,6 +18,19 @@ public class SettingPage extends AbstractMenuScreen {
         return WelcomePage.of(getContext());
     }
 
+    /**
+     * The settings screen replaces the menu after a short transition; the
+     * language choices are ready only when the Czech radio button is shown.
+     */
+    public void verifyLanguageOptionsShown() throws Exception {
+        org.testfx.util.WaitForAsyncUtils.waitFor(10,
+                java.util.concurrent.TimeUnit.SECONDS,
+                () -> isCssIdVisible(SettingLanguageView.RB_CZECH_ID));
+        org.junit.jupiter.api.Assertions.assertTrue(
+                isCssIdVisible(SettingLanguageView.RB_CZECH_ID),
+                "Language choices are not shown on the settings screen");
+    }
+
     public void setCzechLanguage() {
         clickOnButtonWithId(SettingLanguageView.RB_CZECH_ID);
     }

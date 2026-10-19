@@ -26,6 +26,7 @@ import org.microcol.gui.screen.campaign.CampaignPresenter;
 import org.microcol.gui.screen.campaign.CampaignView;
 import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.screen.colonizopedia.ShowHelpListener;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
@@ -297,6 +298,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
         bind(ChangeLanguageListenerFileChooser.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
+        bind(ShowHelpListener.class).asEagerSingleton();
         bind(DeclareIndependenceListener.class).asEagerSingleton();
         bind(PlowFieldEventListener.class).asEagerSingleton();
         bind(BuildRoadEventListener.class).asEagerSingleton();

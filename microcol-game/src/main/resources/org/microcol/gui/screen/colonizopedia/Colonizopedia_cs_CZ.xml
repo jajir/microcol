@@ -2,8 +2,37 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 
 <properties>
-	<comment>Define keys for Europe dialog</comment>
+	<comment>Define keys for Colonizopedia dialog</comment>
 
 	<entry key="title">Colonizopedia</entry>
+	<entry key="searchPrompt">Hledat v tématech</entry>
+	<entry key="noResults">Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.</entry>
+
+	<entry key="topic_movement_title">Pohyb</entry>
+	<entry key="topic_movement_body">Vyberte jednotku, která má ještě pohybové body. Stiskněte Pohyb, nebo stiskněte jednotku na mapě, a přetáhněte ji na cíl. Trasa a pole, kam jednotka dosáhne, se zvýrazní i s cenou terénu; puštěním myši se pohyb provede. Krok, který stojí víc než zbývající body, se odmítne a nic nezmění. Jednotka s plným přídělem může jeden drahý krok udělat, ale pak nemá žádné body. Klávesa Escape zruší náhled trasy a výběr jiné jednotky ho zruší také. Lodě překonávají Atlantik několik tahů a loď na moři lze během plavby otočit zpět.</entry>
+
+	<entry key="topic_cargo_title">Náklad a cestující</entry>
+	<entry key="topic_cargo_body">Každý nákladový prostor, tedy loď nebo vůz, unese nejvýše 100 kusů jednoho druhu zboží; převod nad tento limit se odmítne a nic nezmění. Sklad kolonie má vlastní limit pro zboží, které není jídlo, a vykládání vozu používá tentýž limit. Kolonisté nastupují na loď a vystupují z ní jednotlivě, podle výslovného výběru, v přístavu nebo u mola; lodě a vozy nejsou běžní cestující. Když loď zákonně vstoupí do pobřežní kolonie svého majitele, její cestující vystoupí na břeh, zachovají vybavení i pohyb a zboží zůstane na lodi.</entry>
+
+	<entry key="topic_colonies_title">Kolonie a práce</entry>
+	<entry key="topic_colonies_body">Zakladatel může založit kolonii na volné pevnině, která není hora, ve vzdálenosti od jiných kolonií a ne na poli obsazeném cizí jednotkou. Názvy kolonií musí být jedinečné; při porovnání se nerozlišují velká a malá písmena ani krajní mezery. Každé sdílené pole obhospodařuje v jednu chvíli jeden kolonista. Výběr práce ukáže současný a nejlepší očekávaný výnos dřív, než kolonistu přiřadíte. Budovu lze začít stavět jen tehdy, když kolonie má potřebné obyvatele a předchozí budovy, které budova vyžaduje.</entry>
+
+	<entry key="topic_production_title">Výroba a stavba</entry>
+	<entry key="topic_production_body">Terén určuje, co obdělané pole vyrobí. Stavební projekty používají kladiva a nástroje. Když je práce s kladivy hotová, ale chybějí nástroje, projekt čeká a hlášení tahu ho uvede. Změna současného projektu zachová už nashromážděná kladiva. Dokončení současného projektu lze zaplatit zlatem; cena se ukáže před potvrzením. Vylepšení kostela a katedrály mění skutečnou náboženskou produkci, nejen zobrazená čísla.</entry>
+
+	<entry key="topic_trade_title">Obchod, daně a bojkot</entry>
+	<entry key="topic_trade_body">V Evropě kupujete a prodáváte zboží za tržní ceny. Velký prodej nebo nákup posune ceny daného národa a klidné zboží se pozvolna vrací k výchozím cenám. Cena lodí a dělostřelectva po každém vašem nákupu vzroste. Celnice každý tah automaticky vyváží vybrané zboží. Daňový požadavek Koruny může zboží uvalit do bojkotu: nákup, prodej a dovoz nástrojů pro něj se odmítají, dokud nesplatíte dlužnou daň. Odmítnutý obchod ukáže důvod a nic nezmění.</entry>
+
+	<entry key="topic_diplomacy_title">Diplomacie</entry>
+	<entry key="topic_diplomacy_body">Každá dvojice evropských národů je ve míru nebo ve válce a vztah sdílejí obě strany. Mír se vyjednává za zlato a jeho cenu hra ukáže dřív, než se rozhodnete; přijetí uzavře mír, odmítnutí nebo zrušení nechá válku v platnosti. V kontaktu s evropským soupeřem můžete přes způsobilého vyslance požádat o tribut. Žádost a výsledek se ukážou před potvrzením a přijatý tribut převede dohodnutou částku jednou. Spojenectví se nabízí v kontaktu, před přijetím ukáže své povinnosti a výslovně se ukončuje.</entry>
+
+	<entry key="topic_combat_title">Boj</entry>
+	<entry key="topic_combat_body">Útok vede ze sousedního pole a musí být potvrzen; potvrzení uvádí vybraného obránce. Útok na soupeře ve míru nejdřív vyžaduje výslovné vyhlášení války. Pozemní bitvy používají konečnou sílu obou stran a ta určuje šanci na výhru. Námořní bitva může loď poškodit nebo potopit; pro cestující a zboží platí pravidla ztráty. Kolonie padne až po porážce ozbrojených obránců. Zůstanou-li jen civilisté, musí se porazit i jejich skupinová obrana, a pak celá kolonie s pracovníky přejde na útočníka. Přijatý útok spotřebuje pohyb obou stran; přeživší jej obnoví v dalším tahu.</entry>
+
+	<entry key="topic_independence_title">Nezávislost</entry>
+	<entry key="topic_independence_body">Vyhlášení nezávislosti je samostatné potvrzení. Vyžaduje dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Potvrzení nejdřív ukáže důsledky a zrušení nic nezmění. Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.</entry>
+
+	<entry key="topic_scoring_title">Statistiky a skóre</entry>
+	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a evropské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Kongres, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
 
 </properties>

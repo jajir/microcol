@@ -5,6 +5,14 @@ ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
 nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
 
+## R-0206 Colonizopedia help plan — 2026-10-19
+
+1. Ověřeno na pracovní větvi: finální běh `20261019T190413Z-03d858883082`, reporty `target/docker-ui/run-Qj42j0`, prošel všemi 28 kontrolami TC100/12/21/22/83/84 a PageVerificationContractTest, bez chyb a přeskočení. Dřívější běh `20261019T174752Z-1ba10b59d6c3` ověřil 2 586 modelových testů; model se následně nezměnil.
+2. TC100 ověřuje devět témat, EN/CZ hledání a prázdný výsledek, klávesnici i myš, posouvání textu, OK/Escape, opětovné otevření a zachování tahu, zlata, pohybu, nákladu a skladů. Nápověda rozlišuje aktuální statistiky od dosud nedodaného konečného skóre.
+3. Předchozí běhy odhalily neexistující GoodsType.values(), hledání řádku mimo viditelnou část seznamu, přístup k mapové poloze jednotky v Evropě a zachycení Escape seznamem. Haiku a dodatečný Sonnet opravily pomocné metody; uživatelem schválené dokončení Codex přidalo lokální filtr Escape a sjednotilo očekávaný text s opraveným obsahem. Kontroly zůstaly zachované; finální běh ověřil také scénáře dříve blokované otevřeným oknem.
+4. Sdílené formátování prošlo kontrolou tokenů a idempotence. Tato automatizovaná přejímka není hráčská studie. Celá regrese a publikace následují po dokončení dávky.
+
+
 ## R-0248 — Rámečky a pravítko — 2026-10-19
 
 1. [R-0248](requirements/done/R-0248.md) mění pouze kresbu checkboxů,

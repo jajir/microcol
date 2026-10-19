@@ -451,6 +451,12 @@ volbu po změně množství. TC21/TC23 nyní vyžadují poslední uloženou pozi
 nikoli původně pozorovanou ztrátu pohybu. Úplná regrese této implementace prošla;
 tyto omezené cesty neuzavírají celé UC ani matici národů a obtížností.
 
+Ověřené cílené pokrytí [R-0206](requirements/done/R-0206.md) (19. října 2026): nápověda
+[TC_100_F91](../microcol-test/src/test/java/org/microcol/test/TC_100_F91_colonizopedia_test.java)
+má TC_01–TC_05 pro tlačítko a H, všechna témata v EN/CZ, hledání a prázdný výsledek,
+rolování textu skóre, klávesový výběr, OK/Escape a stejný tah, zlato a pozice jednotek.
+Zápis neuzavírá UC-114 a nenahrazuje hlavní regresi.
+
 Historicky dne 12. října byly kontroly počtu lodí přesunuty z page component do samotných
 TC01 a obou scénářů TC06. TC01 souvisí s UC-024/025 (přeprava jednotek), TC06
 s UC-055/056 (nákup lodě a obchod). Tento přesun zachovává původní očekávání

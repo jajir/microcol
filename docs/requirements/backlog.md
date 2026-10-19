@@ -147,7 +147,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0203](R-0203.md) | Show Congress, support and known REF state | New capture | UC-114 Congress/REF report; SUPPORT-002 |
 | [R-0204](R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
 | [R-0205](R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
-| [R-0206](R-0206.md) | Navigate the game-rule encyclopedia | New capture | SUPPORT-004; existing help shell credited |
+| [R-0206](done/R-0206.md) | Navigate the game-rule encyclopedia | Done; targeted checks passed | SUPPORT-004; existing help shell credited |
 | [R-0207](R-0207.md) | Keep the opening tutorial accurate for free play | New capture | SUPPORT-004; existing guided instructions credited |
 | [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |
 | [R-0223](R-0223.md) | Observe real players completing core game tasks | New capture | P28/P31 real-player evidence, not automation |

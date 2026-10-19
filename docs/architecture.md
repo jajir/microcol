@@ -455,7 +455,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. |
 | [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |
-| [gui.screen.colonizopedia](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/) | Herní nápověda. |
+| [gui.screen.colonizopedia](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/) | Herní nápověda: tlačítko a klávesa H otevírají dialog s tématy pravidel, hledáním a texty z `i18n`. Obsah je statický; dialog nečte ani nemění model. |
 | [gui.screen.editor](../microcol-game/src/main/java/org/microcol/gui/screen/editor/) | Nástroje pro editaci mapového podkladu a jeho PO dat. Editor záměrně mění mapu mimo běžné herní tahy; tato cesta není vzorem provádění akcí hráče či AI. |
 
 ## Testy a ostatní adresáře

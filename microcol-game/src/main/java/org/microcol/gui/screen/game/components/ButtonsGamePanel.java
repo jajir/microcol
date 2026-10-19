@@ -44,7 +44,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
-    private final static String BUTTON_HELP_ID = "help";
+    public final static String BUTTON_HELP_ID = "help";
 
     private final static String BUTTON_CENTER_ID = "center";
 
@@ -236,7 +236,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);
         getButtonPanel().getChildren().add(buttonGoals);
-        // getButtonPanel().getChildren().add(buttonHelp);
+        getButtonPanel().getChildren().add(buttonHelp);
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonNextTurn);
         getButtonPanel().getChildren().add(buttonExit);

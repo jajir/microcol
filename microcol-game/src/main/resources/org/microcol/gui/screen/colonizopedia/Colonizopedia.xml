@@ -2,8 +2,37 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 
 <properties>
-	<comment>Define keys for Europe dialog</comment>
+	<comment>Define keys for Colonizopedia dialog</comment>
 
 	<entry key="title">Colonizopedia</entry>
+	<entry key="searchPrompt">Search topics</entry>
+	<entry key="noResults">No topic matches this search. Clear the search to see all topics.</entry>
+
+	<entry key="topic_movement_title">Movement</entry>
+	<entry key="topic_movement_body">Select a unit that still has movement points. Press Move or press on the unit, then drag it to the destination. The route and the squares the unit can reach are shown with their terrain costs, and releasing the mouse makes the move. A step that costs more than the points left is refused and changes nothing. A unit with its full allowance may take one expensive step and then has no points left. Escape cancels an active route preview, and selecting another unit cancels it too. Ships cross the Atlantic over several turns, and a ship at sea can be turned back while the crossing runs.</entry>
+
+	<entry key="topic_cargo_title">Cargo and passengers</entry>
+	<entry key="topic_cargo_body">Each goods hold, a ship or a wagon, carries at most 100 units of one commodity; a transfer above that limit is refused and changes nothing. A colony warehouse has its own limit for non-food goods, and wagon unloading uses that same limit. Colonists board and leave a ship one at a time, by explicit choice, in a port or at a pier; ships and wagons are not ordinary passengers. When a ship legally enters its owner's coastal colony, its passengers step ashore there and keep their equipment and movement, while the goods stay aboard.</entry>
+
+	<entry key="topic_colonies_title">Colonies and work</entry>
+	<entry key="topic_colonies_body">A founder can start a colony on free land that is not mountains, away from other colonies, and not on a square held by a foreign unit. Colony names must be unique; letter case and surrounding spaces do not count when names are compared. Each shared field is worked by one colonist at a time. Job choices show the current and the best expected yield before you assign a colonist. A building can be started only when the colony has the population and the prerequisite buildings it requires.</entry>
+
+	<entry key="topic_production_title">Production and construction</entry>
+	<entry key="topic_production_body">Terrain decides what a worked field produces. Construction projects use hammers and tools. When a project's hammer work is complete but tools are missing, the project waits, and the turn report lists it. Changing the current project keeps the hammers already collected. You can also pay gold to finish the current project; the price is shown before you confirm. Church and cathedral upgrades change the real religious output, not only the numbers shown.</entry>
+
+	<entry key="topic_trade_title">Trade, taxes and boycotts</entry>
+	<entry key="topic_trade_body">In Europe you buy and sell goods at market prices. Heavy sales or purchases move a nation's prices, and quiet goods slowly return toward their starting prices. Ships and artillery become more expensive after each of your purchases. A custom house exports its selected goods automatically each turn. A Crown tax demand can put a commodity under boycott: buying, selling and importing tools for it are refused until the back tax is paid. A refused trade shows its reason and changes nothing.</entry>
+
+	<entry key="topic_diplomacy_title">Diplomacy</entry>
+	<entry key="topic_diplomacy_body">Each pair of European nations is either at peace or at war, and both sides share that relation. Peace is negotiated for a price in gold that the game shows before you decide; accepting makes peace, while rejecting or cancelling leaves the war in force. During contact you can ask a rival for tribute through an eligible visitor. The request and its outcome are shown before you commit, and accepted tribute moves the agreed amount once. An alliance is offered through contact, shows its obligations before acceptance, and is ended explicitly.</entry>
+
+	<entry key="topic_combat_title">Combat</entry>
+	<entry key="topic_combat_body">Attacks come from an adjacent square and must be confirmed; the confirmation names the defender you selected. Attacking a rival at peace first needs an explicit declaration of war. Land battles use the final strengths of both sides, and those strengths set the chance of winning. A naval battle can damage or sink a ship, and passengers and goods follow the loss rules. A colony falls only after its armed defenders are beaten. If only civilians remain, their group defence must be beaten too, and then the whole colony with its workers passes to the attacker. An accepted attack uses the movement of both sides; survivors regain it on their next turn.</entry>
+
+	<entry key="topic_independence_title">Independence</entry>
+	<entry key="topic_independence_body">Declaring independence is a separate confirmation. It needs enough national support and at least one owned coastal colony. The confirmation shows the consequences first, and cancelling it changes nothing. After a declaration, colonies whose local support is at least half mobilize some of their armed veterans on their square for the new nation. Rebel support is shown for each colony and as a national value.</entry>
+
+	<entry key="topic_scoring_title">Statistics and score</entry>
+	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and European relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Congress parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
 
 </properties>
