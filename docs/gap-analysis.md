@@ -1276,6 +1276,8 @@ rules; implementation and acceptance are tracked by that requirement.
 
 ### Economy, production and education
 
+Authored resource-overlay placement decision (2026-10-19): all land resource kinds may occur on any land terrain; fishery is valid only on ocean or lake, not the high-seas transit lane. Generated natural distribution remains R-0065. Food and fish use the existing CORN commodity; no separate fish inventory is introduced.
+
 1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
    and Newspaper population **4**, already accepted in R-0025. Use no smoothing
    or inferred positive yield on barren terrain. For missing resource quantities

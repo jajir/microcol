@@ -17,6 +17,7 @@ import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.ResourceOverlay;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -92,6 +93,7 @@ public final class RightPanelView implements JavaFxComponent {
         gridPane.add(tileImagePane, 0, 1);
 
         tileName = new Label();
+        tileName.setId("tileName");
         gridPane.add(tileName, 1, 1);
 
         // Y=2
@@ -139,6 +141,12 @@ public final class RightPanelView implements JavaFxComponent {
                 sb.append("");
                 sb.append("\n");
                 sb.append(i18n.get(Loc.moveCost) + terrain.getMoveCost());
+                // Only a discovered square names its special resource.
+                if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
+                    sb.append("\n");
+                    sb.append(localizationHelper.getResourceOverlayName(
+                            terrain.getResourceOverlay()));
+                }
                 final Player player = gameModelController.getHumanPlayer();
                 // Objects come from the player's permitted view: live inside
                 // present sight, remembered snapshot (marked stale) outside.

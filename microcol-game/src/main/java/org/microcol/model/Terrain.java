@@ -35,6 +35,8 @@ public class Terrain {
 
     private RiverSize riverSize = RiverSize.NONE;
 
+    private ResourceOverlay resourceOverlay = ResourceOverlay.NONE;
+
     /**
      * List of function that based on terrain properties like field or river
      * modify particular good production. Trees and clearing select the baseline
@@ -131,9 +133,13 @@ public class Terrain {
         final Optional<TerrainType.Production> baseline = hasTrees
                 ? terrainType.getForestProduction(producedGoodsType)
                 : terrainType.getBaseProduction(producedGoodsType);
-        if (baseline.isPresent()) {
+        // A matching special resource joins the base before the flat modifiers
+        // below, and alone can introduce output on a zero baseline.
+        final int base = baseline.map(TerrainType.Production::getBase).orElse(0)
+                + resourceOverlay.getBonusFor(producedGoodsType);
+        if (base > 0) {
             TerrainProduction prod = new TerrainProduction(this,
-                    producedGoodsType, baseline.get().getBase());
+                    producedGoodsType, base);
             for (final Function<TerrainProduction, TerrainProduction> pm : PRODUCTION_MODIFIERS) {
                 prod = pm.apply(prod);
             }
@@ -246,6 +252,29 @@ public class Terrain {
                 "this terrain type (%s) at (%s) can't have river.", terrainType,
                 location);
         this.riverSize = riverSize;
+    }
+
+    /**
+     * Provide the special resource on this square.
+     *
+     * @return {@link ResourceOverlay#NONE} when the square has none
+     */
+    public ResourceOverlay getResourceOverlay() {
+        return resourceOverlay;
+    }
+
+    /**
+     * Allows to set the special resource on this square.
+     *
+     * @param resourceOverlay resource of the square,
+     *                        {@link ResourceOverlay#NONE} for none
+     */
+    public void setResourceOverlay(final ResourceOverlay resourceOverlay) {
+        Preconditions.checkNotNull(resourceOverlay);
+        Preconditions.checkArgument(resourceOverlay.canBeOn(terrainType),
+                "this terrain type (%s) at (%s) can't have resource (%s).",
+                terrainType, location, resourceOverlay);
+        this.resourceOverlay = resourceOverlay;
     }
 
     /**

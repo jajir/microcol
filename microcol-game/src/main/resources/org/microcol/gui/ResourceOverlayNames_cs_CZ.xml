@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define names for special resources on known squares.</comment>
+
+	<entry key="SILVER_name">Stříbrné ložisko</entry>
+	<entry key="ORE_name">Rudné ložisko</entry>
+	<entry key="MIXED_MINERALS_name">Smíšené ložisko (ruda a stříbro)</entry>
+	<entry key="TRAPPING_name">Lovecká oblast</entry>
+	<entry key="GAME_name">Oblast zvěře</entry>
+	<entry key="OASIS_name">Oáza</entry>
+	<entry key="PRIME_COTTON_name">Výborná půda pro bavlnu</entry>
+	<entry key="PRIME_TOBACCO_name">Výborná půda pro tabák</entry>
+	<entry key="PRIME_SUGAR_name">Výborná půda pro cukrovou třtinu</entry>
+	<entry key="PRIME_TIMBER_name">Výborný lesní porost</entry>
+	<entry key="PRIME_FOOD_name">Výborná půda pro potraviny</entry>
+	<entry key="FISHERY_name">Rybolov</entry>
+
+</properties>

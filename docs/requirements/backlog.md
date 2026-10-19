@@ -191,7 +191,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
 | [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
 | [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
-| [R-0127](R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
+| [R-0127](done/R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
 | [R-0128](R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
 | [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |

@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.microcol.model.store.ModelPo;
@@ -37,6 +38,8 @@ public class WorldMap {
      */
     private final Set<Set<Location>> riverSegments;
 
+    private final ImmutableMap<Location, ResourceOverlay> resources;
+
     private final Integer seed;
 
     public WorldMap(final ModelPo gamePo) {
@@ -70,6 +73,14 @@ public class WorldMap {
         }
         for (final RiverSegmentPo segment : worldMapPo.getRiverSegments()) {
             verifyRiverSegment(segment);
+        }
+        this.resources = ImmutableMap.copyOf(worldMapPo.getResourceMap());
+        for (final Map.Entry<Location, ResourceOverlay> entry : resources
+                .entrySet()) {
+            Preconditions.checkArgument(
+                    entry.getValue().canBeOn(getTerrainTypeAt(entry.getKey())),
+                    "Resource square (%s) can't carry %s.", entry.getKey(),
+                    entry.getValue());
         }
         verifyThatMapIsComplete();
     }
@@ -154,6 +165,7 @@ public class WorldMap {
         out.setCleared(cleared.contains(location));
         out.setHasRoad(roads.contains(location));
         out.setRiverSize(getRiverSizeAt(location));
+        out.setResourceOverlay(getResourceOverlayAt(location));
         return out;
     }
 
@@ -183,6 +195,16 @@ public class WorldMap {
     public RiverSize getRiverSizeAt(final Location location) {
         Preconditions.checkNotNull(location);
         return rivers.getOrDefault(location, RiverSize.NONE);
+    }
+
+    /**
+     * @param location required location
+     * @return special resource on the square, {@link ResourceOverlay#NONE} when
+     *         there is none
+     */
+    public ResourceOverlay getResourceOverlayAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return resources.getOrDefault(location, ResourceOverlay.NONE);
     }
 
     /**
@@ -240,6 +262,7 @@ public class WorldMap {
         gamePo.getMap().setRoads(roads);
         gamePo.getMap().setRivers(rivers);
         gamePo.getMap().setRiverSegments(riverSegmentsToSave());
+        gamePo.getMap().setResources(resources);
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
     }

@@ -93,7 +93,7 @@ final class RiverFixture {
      * Same placement as the terrain production fixture: the field loses its
      * worker and the worker is moved into the colony centre.
      */
-    private static void freeFieldAndStandInColony(final JsonObject model,
+    static void freeFieldAndStandInColony(final JsonObject model,
             final int workerId) {
         for (final JsonElement colony : model.getAsJsonArray("colonies")) {
             final JsonObject colonyObject = colony.getAsJsonObject();
