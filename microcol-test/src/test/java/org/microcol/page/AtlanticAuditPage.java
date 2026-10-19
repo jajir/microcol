@@ -145,7 +145,8 @@ public final class AtlanticAuditPage extends AbstractScreen {
         final var incoming = inbound.localToScene(inbound.getBoundsInLocal());
         final var outgoing = outbound.localToScene(outbound.getBoundsInLocal());
         assertTrue(incoming.getMaxY() <= outgoing.getMinY(),
-                "Incoming voyage controls must not cover the departure area");
+                "Incoming voyage controls must not cover the departure area: incoming="
+                        + incoming + "; outgoing=" + outgoing);
     }
 
     public void sendShipBack() throws Exception {

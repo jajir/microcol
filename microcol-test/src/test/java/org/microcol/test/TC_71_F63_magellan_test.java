@@ -71,6 +71,9 @@ public class TC_71_F63_magellan_test extends AbstractMicroColTest {
         voyage.verifyVoyagePanelsSeparated();
         europe.selectUnitFromPort(0);
         voyage.sendShipBack();
+        voyage.verifyVoyagePanelsSeparated();
+        voyage.captureDialog("closeButtonId",
+                "wooden-voyage-panels-both-directions.png");
         final int homeward = voyage.verifyVoyageSample(false, true);
         voyage.verifyVoyageText("Turns remaining: " + homeward);
         voyage.verifyCargo();

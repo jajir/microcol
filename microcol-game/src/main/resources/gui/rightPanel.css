@@ -17,8 +17,8 @@
 }
 
 #rightPanel{
-	-fx-pref-width: 170;
-	-fx-min-width: 170;
+	-fx-pref-width: 240;
+	-fx-min-width: 240;
 	-fx-padding: 0 0 0 10;
 }
 
@@ -35,7 +35,7 @@
 
 .unitPanel{
  	-fx-padding: 15px 10 10px 0;
- 	-fx-min-width: 150;
- 	-fx-max-width: 150;
+	-fx-min-width: 220;
+	-fx-max-width: 220;
 }
 

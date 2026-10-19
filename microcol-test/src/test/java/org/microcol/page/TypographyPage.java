@@ -89,6 +89,10 @@ public final class TypographyPage extends AbstractScreen {
                     ? ((Labeled) node).getFont()
                     : ((TextInputControl) node).getFont();
             assertEquals(expected, font.getSize(), selector);
+            if (node instanceof Labeled) {
+                assertEquals(((Labeled) node).getText(),
+                        ((Text) node.lookup(".text")).getText(), selector);
+            }
         });
     }
 

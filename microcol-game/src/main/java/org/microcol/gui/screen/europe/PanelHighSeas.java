@@ -179,7 +179,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     remaining.setId("voyage-remaining-" + unit.getId());
                     remaining.setWrapText(true);
                     remaining.setMinHeight(Region.USE_PREF_SIZE);
-                    remaining.setMaxWidth(140);
+                    remaining.setMaxWidth(200);
                     final Button reverse = new Button(
                             i18n.get(Europe.voyageReverse));
                     reverse.setId("voyage-reverse-" + unit.getId());
