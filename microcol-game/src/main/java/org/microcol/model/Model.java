@@ -415,7 +415,7 @@ public class Model {
                 Preconditions.checkArgument(
                         field.getProducedGoodsType() != null
                                 && map.isValid(at) && map
-                                        .getTerrainTypeAt(at).canProduce(
+                                        .getTerrainAt(at).canProduce(
                                                 field.getProducedGoodsType())
                                 && (!map.getTerrainTypeAt(at).isSea() || colony
                                         .getConstructions().stream().anyMatch(
@@ -642,8 +642,7 @@ public class Model {
         Preconditions.checkNotNull(site);
         return site.getNeighbors().stream()
                 .filter(at -> isColonyFieldAvailable(owner, at))
-                .filter(at -> map.getTerrainTypeAt(at)
-                        .canProduce(GoodsType.CORN))
+                .filter(at -> map.getTerrainAt(at).canProduce(GoodsType.CORN))
                 .collect(ImmutableList.toImmutableList());
     }
 

@@ -42,7 +42,7 @@ public final class ColonyField {
 
     public boolean canProduce(final GoodsType goodsType) {
         return getMap().isValid(getLocation()) && !isMissingDock()
-                && getTerrainType().canProduce(goodsType);
+                && getTerrain().canProduce(goodsType);
     }
 
     /** Whether this water square needs a completed port facility. */

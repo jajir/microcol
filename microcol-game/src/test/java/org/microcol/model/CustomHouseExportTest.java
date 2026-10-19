@@ -177,6 +177,10 @@ class CustomHouseExportTest {
                 .orElseThrow();
         colony.getConstructions().add(Construction.build(model, colony,
                 ConstructionType.CUSTOM_HOUSE));
+        // Lumber exists only in a forest, so plant one on the field.
+        final Location northWest = colony
+                .getColonyFieldInDirection(Direction.northWest).getLocation();
+        model.getMap().getTerrainAt(northWest).setHasTrees(true);
         model.getUnitById(0).placeToColonyField(
                 colony.getColonyFieldInDirection(Direction.northWest),
                 GoodsType.LUMBER);

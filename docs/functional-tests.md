@@ -5427,3 +5427,39 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    no tested gameplay source changes. Requirement status now records local
    acceptance. GitHub Actions and development publication of this final batch
    are pending and will be verified against the pushed commit.
+
+## R-0124 terrain production — 2026-10-19
+
+1. [R-0124](requirements/done/R-0124.md) implements all 22 legal bare/forested
+   terrain variants and 176 literal commodity cells from aid card 4. The main
+   agent visually rechecked the reference and corrected the old audit's omitted
+   swamp-fur zero. Terrain owns the current row; field choices, previews and
+   saved-job validation use the same model operation. Water retains CORN=3,
+   including lakes; plowing and political modifiers remain separate.
+2. `TerrainProductionMatrixTest` verifies every cell, forbidden forest variants,
+   zero-output choices, forest removal and actual field production. TC86 verifies
+   the player preview/cancel/assignment, the next turn's exact warehouse change,
+   and Save/Continue without extra stock. Its grassland-forest baseline is 6
+   lumber; Delft's existing political penalty makes the displayed and stored
+   output 5. TC40 preserves unavailable-current-crop rejection, exact field
+   choice and stale-state protection. A separate model case proves that a
+   strictly better neighbor-worked field is excluded (6 versus eligible 4).
+3. Haiku medium produced the table but left dependent fixtures incomplete.
+   Sonnet medium repaired them in two bounded attempts. Failed diagnostics
+   `run-D7DZwh` (3 failures/23 errors), `run-yho4et` (15 failures/1 error), and
+   `run-l1Cr0G` (5 UI failures/errors) are superseded only for the rerun checks.
+   Original player outcomes and rejection assertions remain; bare lumber jobs
+   now have legal forests, and expected effective yields account for modifiers.
+4. Final Docker/Xvfb/Openbox `run-u3rX4Y` passes **2,382 model tests and 34
+   microcol-test checks**, zero failures/errors/skips: TC40 (15), TC86 (1),
+   TC34 (9), SimpleOperationsTest (5), EnvironmentTest (1) and the page source
+   contract (3). Unchanged TC18 (7), TC73 (6), TC80 (3), TC50 (3), and TC07 (2)
+   passed in `run-l1Cr0G`. Together these prove 55 distinct selected UI checks.
+   The known unfinished `RivalTradeCycleTest` for R-0091 was explicitly excluded;
+   this is targeted R-0124 acceptance, **not full batch regression**.
+5. Main-agent formatting checked 29 changed Java files (including unchanged
+   pending R-0091 files): one changed, exact code tokens and idempotence passed.
+   Static audit of 71 bundled/test scenario files found all 318 occupied field
+   jobs valid under the new baseline. That audit does not establish every
+   runtime-generated fixture or all gameplay. Full batch regression and GitHub
+   publication remain pending; no new published build is claimed.

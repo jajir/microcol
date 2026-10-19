@@ -250,6 +250,9 @@ class ColonistEquipmentTest {
                 .thenReturn(true);
         when(map.getTerrainTypeAt(any(Location.class)))
                 .thenReturn(TerrainType.GRASSLAND);
+        when(map.getTerrainAt(any(Location.class))).thenReturn(
+                new Terrain(location.add(Direction.west.getVector()),
+                        TerrainType.GRASSLAND));
         final ColonyField field = new ColonyField(model, Direction.west,
                 colony);
         assertThrows(IllegalArgumentException.class,

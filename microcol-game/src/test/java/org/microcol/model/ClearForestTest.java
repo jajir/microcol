@@ -805,9 +805,9 @@ class ClearForestTest {
         final GameModelPo data = data(TARGET);
         Model model = make(data);
         final Terrain forest = model.getMap().getTerrainAt(TARGET);
-        assertEquals(7, forest.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(5, forest.canProduceAmmount(GoodsType.FUR));
-        assertEquals(1, forest.canProduceAmmount(GoodsType.CORN));
+        assertEquals(6, forest.canProduceAmmount(GoodsType.LUMBER));
+        assertEquals(2, forest.canProduceAmmount(GoodsType.FUR));
+        assertEquals(3, forest.canProduceAmmount(GoodsType.CORN));
         final UnitFreeColonist pioneer = pioneer(model, 100, TARGET);
         start(model, pioneer);
         completeNow(model, pioneer);
@@ -823,11 +823,13 @@ class ClearForestTest {
         assertEquals(1, cleared.canProduceAmmount(GoodsType.SUGAR));
         assertEquals(3, cleared.canProduceAmmount(GoodsType.TOBACCO));
         assertEquals(2, cleared.canProduceAmmount(GoodsType.COTTON));
-        // Unrelated natural bare squares keep their existing positive values.
+        // Unrelated natural bare grassland keeps its aid-card output, which has
+        // no lumber or fur.
         final Terrain natural = model.getMap().getTerrainAt(TIE);
         assertFalse(natural.isCleared());
-        assertEquals(3, natural.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(3, natural.canProduceAmmount(GoodsType.FUR));
+        assertEquals(0, natural.canProduceAmmount(GoodsType.LUMBER));
+        assertEquals(0, natural.canProduceAmmount(GoodsType.FUR));
+        assertEquals(4, natural.canProduceAmmount(GoodsType.CORN));
         // The output change is permanent, also across Continue and next update.
         model = reload(data, model);
         nextOwnerTurn(model);

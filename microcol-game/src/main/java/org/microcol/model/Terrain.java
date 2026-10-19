@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
@@ -13,22 +14,12 @@ import com.google.common.collect.Lists;
  */
 public class Terrain {
 
-    private static final int FOOD_TREE_FACTOR = 3;
-
     /** Added to an already positive crop output on plowed, cleared land. */
     private static final int PLOW_BONUS = 1;
 
     private static final List<GoodsType> PLOW_CROPS = ImmutableList.of(
             GoodsType.CORN, GoodsType.SUGAR, GoodsType.COTTON,
             GoodsType.TOBACCO);
-
-    /** Goods that a permanently cleared square never produces again. */
-    private static final List<GoodsType> CLEARED_BARREN_GOODS = ImmutableList
-            .of(GoodsType.LUMBER, GoodsType.FUR);
-
-    private static final int TREE_NOMINAL_PRODUCTION = 7;
-
-    private static final int FURS_NOMINAL_PRODUCTION = 5;
 
     private final Location location;
 
@@ -41,37 +32,17 @@ public class Terrain {
     private boolean cleared;
 
     /**
-     * List of function that based on terrain properties like trees and field
-     * modify particular good production.
+     * List of function that based on terrain properties like field modify
+     * particular good production. Trees and clearing select the baseline table
+     * in {@link TerrainType} and need no modifier here.
      */
     private final static List<Function<TerrainProduction, TerrainProduction>> PRODUCTION_MODIFIERS = Lists
             .newArrayList(prod -> {
-                if (prod.getTerrain().isHasTrees()) {
-                    if (GoodsType.CORN.equals(prod.getGoodsType())) {
-                        return prod.modify(
-                                prod.getProduction() / FOOD_TREE_FACTOR);
-                    }
-                    if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
-                        return prod.modify(TREE_NOMINAL_PRODUCTION);
-                    }
-                    if (GoodsType.FUR.equals(prod.getGoodsType())) {
-                        return prod.modify(FURS_NOMINAL_PRODUCTION);
-                    }
-                }
-                return prod;
-            }, prod -> {
                 if (prod.getTerrain().isHasField()
                         && !prod.getTerrain().isHasTrees()
                         && prod.getProduction() > 0
                         && PLOW_CROPS.contains(prod.getGoodsType())) {
                     return prod.modify(prod.getProduction() + PLOW_BONUS);
-                }
-                return prod;
-            }, prod -> {
-                if (prod.getTerrain().isCleared()
-                        && !prod.getTerrain().isHasTrees()
-                        && CLEARED_BARREN_GOODS.contains(prod.getGoodsType())) {
-                    return prod.modify(0);
                 }
                 return prod;
             });
@@ -146,17 +117,28 @@ public class Terrain {
      */
     public TerrainProduction getTerrainProduction(
             final GoodsType producedGoodsType) {
-        if (terrainType.getBaseProduction(producedGoodsType).isPresent()) {
+        final Optional<TerrainType.Production> baseline = hasTrees
+                ? terrainType.getForestProduction(producedGoodsType)
+                : terrainType.getBaseProduction(producedGoodsType);
+        if (baseline.isPresent()) {
             TerrainProduction prod = new TerrainProduction(this,
-                    producedGoodsType,
-                    terrainType.getBaseProduction(producedGoodsType).get()
-                            .getBase());
+                    producedGoodsType, baseline.get().getBase());
             for (final Function<TerrainProduction, TerrainProduction> pm : PRODUCTION_MODIFIERS) {
                 prod = pm.apply(prod);
             }
             return prod;
         }
         return new TerrainProduction(this, producedGoodsType, 0);
+    }
+
+    /**
+     * Whether this square currently yields some of the goods.
+     *
+     * @param producedGoodsType required goods type
+     * @return {@code true} when the current output is above zero
+     */
+    public boolean canProduce(final GoodsType producedGoodsType) {
+        return canProduceAmmount(producedGoodsType) > 0;
     }
 
     /**
@@ -214,8 +196,8 @@ public class Terrain {
     /**
      * Provide information if a pioneer permanently cleared a forest here.
      *
-     * @return <code>true</code> when the square never produces lumber or fur
-     *         again
+     * @return <code>true</code> when the square uses its bare output, which
+     *         never includes lumber or fur
      */
     public boolean isCleared() {
         return cleared;

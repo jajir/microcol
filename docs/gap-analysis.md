@@ -195,13 +195,17 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Prairie | `2/1` → `2/1` | `50/0` → `50/0` | Food `3/4` → `1/4`; tobacco `1/2` → `2/2`; cotton `1/3` → `3/3`; fur `2/0` → `5/3`; lumber `4/0` → `7/1`. |
 | Savannah | `2/1` → `2/1` | `50/0` → `50/0` | Food `3/4` → `1/4`; sugar `1/3` → `3/3`; tobacco `1/2` → `3/3`; cotton `1/3` → `3/3`; fur `2/0` → `5/4`; lumber `4/0` → `7/6`. |
 | Marsh | `3/2` → absent | `50/25` → absent | Entire row absent: food `2/3`, sugar `1/1`, tobacco `2/3`, cotton `0/0`, fur `2/0`, lumber `4/0`, ore `2/3`, silver `0/0`, fish `0/0`. |
-| Swamp | `3/2` → `2/1` | `75/25` → `50/0` | Food `2/3` → `0/2`; sugar `2/3` → `3/3`; tobacco `0/1` → `1/1`; lumber `4/0` → `7/4`. |
+| Swamp | `3/2` → `2/1` | `75/25` → `50/0` | Food `2/3` → `0/2`; sugar `2/3` → `3/3`; tobacco `0/1` → `1/1`; fur `0/0` → `5/0`; lumber `4/0` → `7/4`. |
 | Desert | `1/1` → `2/1` | `50/0` → `50/0` | Food `2/2` → `0/2`; tobacco `0/1` → `1/1`; fur `2/0` → `5/2`; lumber `2/0` → `7/6`; ore `1/2` → `2/2`. |
 | Tundra | `2/1` → forest absent / `2` | `50/0` → forest absent / `0` | Entire forested state absent: food 2, fur 3, lumber 4, ore 1, all other outputs 0. Bare tundra: fur `0` → `5`; lumber `0` → `2`; other bare outputs match. |
 | Arctic | `2` → `2` | `0` → `0` | None: all outputs zero. |
 | Hills | `2` → `1` | `100` → `0` | None: food 2 and ore 4, all others zero. |
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
 | Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
+
+Reference correction (2026-10-19): visual reinspection of aid card 4 / PDF 135
+confirms swamp fur `0/0`; the earlier audit omitted this difference from the
+generic forest yield of 5. R-0124 must preserve the printed zero.
 
 Accepted MicroCol decision (2026-10-18): fresh-water lakes retain their own
 terrain identity but otherwise use ordinary ocean water rules. Ships may sail
@@ -213,7 +217,7 @@ exit to Europe. Water restrictions, including no forests or roads, apply.
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 
-Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
+Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/done/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
 

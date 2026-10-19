@@ -19,7 +19,7 @@
 | SUPPORT-001 | [R-0068](done/R-0068.md), [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0001](done/R-0001.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-001 | [R-0123](done/R-0123.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-002 | [R-0123](done/R-0123.md), [R-0125](R-0125.md), [R-0093](done/R-0093.md), [R-0173](R-0173.md), [R-0178](R-0178.md) | Terrain identity/defense, movement and role-specific combat have separate owners. |
-| MAP-003 | [R-0124](R-0124.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| MAP-003 | [R-0124](done/R-0124.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-004 | [R-0125](R-0125.md), [R-0126](R-0126.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-005 | [R-0127](R-0127.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MAP-006 | [R-0128](R-0128.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

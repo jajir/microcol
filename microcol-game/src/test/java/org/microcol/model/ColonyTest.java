@@ -201,9 +201,10 @@ public class ColonyTest {
         // recordTerranAtPlace(Location.of(25, 35), TerrainType.GRASSLAND);
         recordTerranAtPlace(Location.of(26, 35), TerrainType.GRASSLAND);
 
-        recordTerranAtPlace(Location.of(24, 36), TerrainType.SWAMP);
-        recordTerranAtPlace(Location.of(25, 36), TerrainType.SWAMP);
-        recordTerranAtPlace(Location.of(26, 36), TerrainType.SWAMP);
+        // Bare desert gives 2 food, less than ocean (3) and grassland (4).
+        recordTerranAtPlace(Location.of(24, 36), TerrainType.DESERT);
+        recordTerranAtPlace(Location.of(25, 36), TerrainType.DESERT);
+        recordTerranAtPlace(Location.of(26, 36), TerrainType.DESERT);
     }
 
     private void recordTerranAtPlace(final Location loc,
