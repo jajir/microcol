@@ -34,12 +34,18 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         final WoodenButtonsPage buttons = new WoodenButtonsPage(getContext());
         // Menu and both Settings languages retain the same real bundled face.
         type.verifySceneTypography("buttonSetting");
+        type.verifyTextSize(".main-title", 36);
+        buttons.verifyWoodenButton("buttonSetting");
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         type.verifySceneTypography("settingGrid");
+        type.verifyTextSize(".main-title", 36);
+        type.verifyTextSize("#settingGrid", 18);
+        type.verifySettingsDefaultLabels(18, "Jazyk:", "Verze:");
         type.captureDialog("settingGrid", "playpen-settings-czech.png");
         settings.setEnglishLanguage();
         type.verifySceneTypography("settingGrid");
+        type.verifySettingsDefaultLabels(18, "Language:", "Version:");
         settings.goBack().verifyMainScreen();
         // The legacy colony layout needs room for its fixed-position artwork.
         type.resizeGameWindow(1280, 900);
@@ -48,6 +54,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         type.verifySceneTypography("europe");
         buttons.click("congress");
         type.verifySceneTypography("congressClose");
+        buttons.verifyWoodenButton("congressClose");
         type.captureDialog("congressClose", "playpen-congress.png");
         buttons.click("congressClose");
         final EuropePortScreen europe = game.openEuroperPort();
@@ -60,6 +67,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
                 "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
         type.verifyVisibleCaption("colonyName", "New Amsterdam");
+        type.verifyTextSize("#colonyName", 36);
         type.verifySceneTypography("closeButtonId");
         type.verifyCanvasTypography();
         type.captureDialog("closeButtonId", "playpen-colony.png");
@@ -71,6 +79,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         rename.enterName(draft);
         rename.verifyDraft(draft);
         type.verifySceneTypography("colonyNameInput");
+        type.verifyTextSize("#colonyNameInput", 18);
         type.captureDialog("colonyNameInput", "playpen-rename.png");
         rename.escape();
         colony.verifyColonyName("New Amsterdam");

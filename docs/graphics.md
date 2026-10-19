@@ -58,7 +58,7 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
 2. Náhled používal Regular 400 opticky ztenčený tahem barvy pozadí. Pro JavaFX
    je připraven skutečný statický řez **300 (Light)** ze stejného variabilního
    zdroje. Nepoužívá překrývání barvou pozadí ani syntetickou kurzívu; přesná
-   rasterizace prohlížeče a JavaFX se může lišit. Hierarchie velikostí zůstává.
+   rasterizace prohlížeče a JavaFX se může lišit. Navazující [R-0251](requirements/R-0251.md) stanoví hlavní nadpisy 36 px a výchozí běžný text 18 px, včetně popisků Jazyk a Verze v Nastavení; místní drobné údaje kolonie a mapy zůstávají výjimkou.
 3. Soubor, licence OFL a reprodukční údaje jsou v
    `microcol-game/src/main/resources/fonts/PlaypenSans`. Načtení nevyžaduje
    síť ani instalaci fontu do systému. Zdroj obsahuje ověřené základní abecedy
@@ -140,7 +140,7 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    označuje černá fajfka nebo tečka. Pravítko má jemné rysky a jezdec
    se špičkou a černou středovou ryskou.
 2. Platí paleta dřevěných tlačítek, černá linka 2 logické px, detaily 1 px
-   a Playpen Sans Light 20 podle [aktuální typografie](#typografie-playpen-sans). Tloušťka se nemění s délkou posuvníku. Najetí a stisk mění
+   a Playpen Sans Light 18 podle [aktuální typografie](#typografie-playpen-sans). Tloušťka se nemění s délkou posuvníku. Najetí a stisk mění
    výplň; přerušovaný černý obrys označuje fokus. Nedostupnost tlumí vzhled.
 3. Implementace přidává kresbu k nativním skinům a jejich skutečným oblastem;
    původní vstup, rozsahy, ukládání hodnot a překlady zůstávají. CSS se
@@ -148,6 +148,9 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    touto dohodou. Výsledky ověření patří do [funkční evidence](functional-tests.md).
 
 ### Dřevěná tlačítka bez bočních zářezů
+
+**Dohoda 19. října 2026 — [R-0251](requirements/R-0251.md):** varianta „Mírné zvětšení“ používá text 18 px a odsazení nahoře 12, dole 14 a po stranách 24 logických px. Platí pro všechna standardní dřevěná tlačítka; dosavadní výjimky vlastních skinů zůstávají. Mezi tlačítky se rozestupy nemění. Implementaci a skutečné ověření rozlišuje [evidence](functional-tests.md#r-0251-button-spacing-2026-10-19).
+
 
 1. **Dohoda 18. října 2026, [R-0246](requirements/done/R-0246.md):** vybrána
    varianta „Bez bočních zářezů“. Černý obrys `#000000`, hladké mírně

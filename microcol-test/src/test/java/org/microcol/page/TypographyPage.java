@@ -82,6 +82,32 @@ public final class TypographyPage extends AbstractScreen {
         });
     }
 
+    public void verifyTextSize(final String selector, final double expected) {
+        getRobot().interact(() -> {
+            final Node node = getNodeFinder().lookup(selector).query();
+            final Font font = node instanceof Labeled
+                    ? ((Labeled) node).getFont()
+                    : ((TextInputControl) node).getFont();
+            assertEquals(expected, font.getSize(), selector);
+        });
+    }
+
+    public void verifySettingsDefaultLabels(final double expectedSize,
+            final String... prefixes) {
+        getRobot().interact(() -> {
+            final java.util.List<Labeled> labels = getListOfNodes(
+                    ".settings-controls .label");
+            for (final String prefix : prefixes) {
+                final Labeled label = labels.stream()
+                        .filter(item -> item.getText().startsWith(prefix))
+                        .findFirst().orElseThrow();
+                assertEquals(expectedSize, label.getFont().getSize(), prefix);
+                assertEquals(label.getText(),
+                        ((Text) label.lookup(".text")).getText(), prefix);
+            }
+        });
+    }
+
     public void verifyCanvasTypography() {
         getRobot().interact(() -> {
             final Font font = getContext().getClassFromGuice(FontService.class)

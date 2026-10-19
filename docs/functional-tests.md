@@ -1,5 +1,16 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0251 button spacing — 2026-10-19
+
+1. Dohoda: hlavní nadpis 36 px, běžný text 18 px a odsazení dřevěných tlačítek nahoře/vpravo/dole/vlevo 12/24/14/24 px. Dosavadní vlastní skiny, akce a mezery mezi tlačítky se nemění. TC83/TC84/TC85 a kontrakt page objects pokrývají menu, Nastavení a modální okna; úplná regrese a publikace čekají.
+2. Cílená Docker/Xvfb kontrola: completion `20261019T182810Z-a468ba3caaae`, supervisor PID 26171, limit 3 600 sekund, reporty `target/docker-ui/run-0KR9nf`. Výsledek: 9 kontrol (TC83: 3, TC84: 2, TC85: 1, kontrakt: 3), žádné chyby ani vynechání; XML a shoda kontrolovaného zdroje byly ověřeny. Java formatter ověřil tři upravené soubory (shoda tokenů i idempotence); devět dokumentačních kontrol a strict MkDocs prošly.
+3. Kontrola změny: společné CSS je importováno hlavním oknem i dialogy; změna zachovává pořadí specifických výjimek tlačítek. Nadpis kolonie je upraven zároveň ve výsledném CSS a zdrojovém SCSS. Produkční Java, herní pravidla, fontové soubory a SVG se v této návaznosti nemění.
+4. Prohlédnuty skutečné snímky menu a Nastavení při 900 × 750, kolonie a Evropy při 1280 × 900 a dialogů Kongresu, přejmenování a ukázky tlačítek. Ověřované popisky a tlačítka se vejdou; nový Unicode vstup zachovává i šipku. Toto pozorování nenahrazuje úplnou regresi ani kontrolu nativního HiDPI.
+5. Úplný Docker/Xvfb běh bez výběru testů: completion `20261019T182959Z-8a32f25bf510`, supervisor PID 26853, limit 5 400 sekund. Přejímka a publikace čekají na výsledek.
+6. Následný požadavek na Jazyk/Verzi řeší již kontrolovaná výchozí velikost v Typography.css: dříve tyto dva obyčejné Label dědily menší systémový základ, zatímco ostatní volby měly vlastní velikost. TC85 nyní přímo ověřuje 18 px a úplný text obou popisků v češtině i angličtině. Doplněná kontrola běží jako completion `20261019T183234Z-273c2afd1ad0`, supervisor PID 27931, limit 3 600 sekund. Produkční zdroj se od přijatého cíleného běhu ani od běžící úplné regrese nezměnil; přibyly jen tyto aserce.
+7. Na výslovný pokyn uživatele se všechny tyto změny odesílají do main již před úplnou přejímkou. CI a distribuční kontrola zůstávají povinné; samotný push nepotvrzuje publikaci herního balíčku.
+
+
 Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
 ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
