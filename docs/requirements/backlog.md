@@ -127,7 +127,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0066](done/R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
 | [R-0208](R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
 | [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
-| [R-0217](R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
+| [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
 | [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
 
 ## A03

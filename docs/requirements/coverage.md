@@ -109,7 +109,7 @@
     [terrain](R-0210.md), [units](R-0211.md), [skills](R-0212.md),
     [buildings](R-0213.md), [founders](R-0214.md),
     [production/trade](R-0215.md) and [endings](R-0216.md).
-    Four separate integrated acceptance captures [R-0217](R-0217.md)–[R-0220](R-0220.md)
+    Four separate integrated acceptance captures [R-0217](done/R-0217.md)–[R-0220](R-0220.md)
     own UC-115–118. These are pending verification, not new implementations
     of already delivered behavior or claims that the full matrices have passed.
 15. The setup reconciliation identified a separate missing geographic America
