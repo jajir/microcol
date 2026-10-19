@@ -131,6 +131,29 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     Nativní HiDPI monitor nebyl testován, Docker používá Linux/JDK 17,
     Xvfb/Openbox a Glass.
 
+17. Publikace commitu
+    [`3894bdc3`](https://github.com/jajir/microcol/commit/3894bdc354dfca94e30932a9d5bad820d7523b8a)
+    je ověřena 19. října 2026. Vývojový
+    [běh 39211069004](https://github.com/jajir/microcol/actions/runs/39211069004)
+    dokončil funkční sadu, build-tool kontroly, všechny tři nativní balíčky
+    a publikaci. Stažené Surefire XML z `tests-functional` potvrzuje
+    **2 348 modelových a 377 UI/podpůrných testů**, bez selhání, chyb
+    a přeskočených. Samostatná
+    [kompatibilita 39211069052](https://github.com/jajir/microcol/actions/runs/39211069052)
+    má v každé ze čtyř kombinací Linux/Windows × Java 11/17 stejných
+    2 348 úspěšných modelových testů. Dokumentace prošla buildem a deployem
+    [39211069037](https://github.com/jajir/microcol/actions/runs/39211069037);
+    živá stránka R-0248 obsahuje stav `done`.
+18. Stabilní manifest `dev` ukazuje na
+    [dev-184-3894bdc354df](https://github.com/jajir/microcol/releases/tag/dev-184-3894bdc354df)
+    a přesný zdrojový commit `3894bdc354dfca94e30932a9d5bad820d7523b8a`.
+    Ověřeny jsou všechny tři platformy v manifestu a 9 kontrolních součtů
+    release assetů proti SHA-256 digestům GitHubu. Stažení a ZIP integrita
+    [macOS launcheru](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-macos.zip)
+    byly ověřeny; launcher při příštím spuštění nabídne aktuální build.
+    Tato přejímka nepředstírá ruční spuštění hry na všech třech systémech
+    ani kontrolu nativního HiDPI. Nové varianty fontů zůstávají návrhy.
+
 ## R-0246 — Dřevěná tlačítka — 2026-10-18
 
 1. [R-0246](requirements/done/R-0246.md) mění vzhled standardních tlačítek;
