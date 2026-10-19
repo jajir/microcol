@@ -48,7 +48,7 @@ Application of replacements, review, tests and lock release remain caller-owned.
 ## Docker tests
 
 ```sh
-python3 scripts/codex/run.py --thread TASK_UUID --timeout 3600 docker
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 5400 docker
 ```
 
 For an already justified targeted selection, forward the same Maven arguments:
@@ -58,7 +58,7 @@ python3 scripts/codex/run.py --thread TASK_UUID --timeout 3600 docker -- \
   -Dtest=PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
-The 60-minute watchdog matches the [full functional CI budget](../development-builds.md#full-functional-regression-budget). It does not justify accepting
+The 90-minute watchdog matches the [full functional CI budget](../development-builds.md#full-functional-regression-budget). It does not justify accepting
 partial results or shrinking a required suite. The runner owns one uniquely named
 container. Timeout/cancellation stops that container as well as its Docker client;
 other containers, images and volumes are untouched. Available reports remain in

@@ -103,10 +103,14 @@ replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 
 ## Full functional regression budget
 
-[R-0247](requirements/done/R-0247.md) gives the complete Docker/Xvfb functional job
-**60 minutes**. The suite previously passed in about 44 minutes, but two later
-runs exceeded the old 45-minute limit while tests were still progressing; see
-[the dated diagnosis](ai/completion-callbacks.md#full-suite-timeout-diagnosis-2026-10-19).
+[R-0249](requirements/R-0249.md) raises the full Docker/Xvfb functional job to
+**90 minutes**, as requested on 2026-10-19. The matching local completion
+watchdog is **5,400 seconds**. The ten-requirement integration run exceeded
+60 minutes while scenarios were still progressing; its three test failures are
+tracked separately and are not fixed by extending the deadline. Earlier
+[R-0247](requirements/done/R-0247.md) established the previous 60-minute limit;
+its historical acceptance remains unchanged.
+
 The extra margin covers observed runner-speed variation. It does not remove any
 scenario, assertion, report requirement or publication dependency. A timeout or
 incomplete suite remains a blocker. Native packaging and the separate targeted

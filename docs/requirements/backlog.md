@@ -504,3 +504,7 @@ preserving native input, values and persistence. Other screens remain outside th
    Do not poll during the hours of waiting; waiting is not active worker time.
    Required checks and original repair budgets remain intact. Ask and refine
    decisions during waits; no guessed answer or quota reset counts as approval.
+
+## Regression runtime follow-up
+
+[R-0249](R-0249.md) raises the full regression deadline to 90 minutes by explicit user request, without reducing checks.
