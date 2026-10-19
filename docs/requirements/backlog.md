@@ -475,3 +475,28 @@ REF/intervention, endgame and scoring—stays visible in the authoritative
 ## Selected button appearance
 
 [R-0246](done/R-0246.md) implements the selected wooden buttons while preserving existing custom controls. It does not start the wider graphics or accessibility audits.
+
+## Continuous Claude batches — 2026-10-19
+
+1. The user authorized the entire remaining backlog until explicitly stopped,
+   including the previously excluded native programme. This supersedes prior
+   run cutoffs/scope limits, not completed acceptance evidence. Select the
+   lowest active numeric ID that can be implemented with agreed behavior and
+   delivered dependencies; skip blocked requirements while asking decisions
+   in the originating chat. Revisit lower IDs when answers/dependencies arrive.
+2. Implement through Claude Code with Headroom in an isolated worktree on
+   `codex/backlog-batch-01` and successor batch branches. Main remains available
+   for parallel user work. Commit each accepted requirement on the batch branch.
+   After ten, integrate current main, verify the batch, merge to main and check
+   CI plus publication before starting the next ten. Never overwrite unrelated
+   work. A smaller final batch is allowed when all remaining work is blocked
+   or the backlog is exhausted.
+3. Use Haiku medium for narrow bounded assignments, Sonnet medium for normal
+   cross-component work and higher effort after diagnosed complexity/failure.
+   This task-specific Claude selection does not change the project default.
+   Targeted tests run per task; broader regression and CI run at batch boundaries.
+4. At a Claude quota interruption retain job, session and worktree, record the
+   announced reset instant and schedule a thread wake-up shortly afterward.
+   Do not poll during the hours of waiting; waiting is not active worker time.
+   Required checks and original repair budgets remain intact. Ask and refine
+   decisions during waits; no guessed answer or quota reset counts as approval.

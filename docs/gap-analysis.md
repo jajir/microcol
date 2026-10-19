@@ -1247,6 +1247,29 @@ rules; implementation and acceptance are tracked by that requirement.
    expansion retain their separate decisions in [R-0091](requirements/R-0091.md)
    and [R-0092](requirements/R-0092.md).
 
+### Rival trade and supplies
+
+1. Accepted by the user on 2026-10-19 for R-0091: retain 50 lumber in the
+   colony and depart only with at least 50 exportable lumber. Load no more
+   than actual surplus and legal hold capacity; sell through ordinary taxed
+   European trade. Buy tools toward a colony target of 50 while retaining
+   200 gold, counting tools already in transit. Return without invented
+   supplies if none is affordable.
+2. Revalidate colony/carrier ownership, trade permission, stock and capacity
+   before each operation. A blocked route or transfer ends the finite turn
+   and retries next owner turn; destroyed or captured objectives are retired.
+   Save/Continue preserves the objective and actual cargo without replaying
+   sales. This is agreed AI policy, not verified implementation.
+
+### Generated-world first version
+
+1. On 2026-10-19 the user approved preparing R-0065 with the reference map's
+   fixed dimensions, cold/temperate/warm climate, low/medium/high land share,
+   and an explicit reproducible seed. Terrain, river and resource frequencies
+   will be proposed as balance settings during refinement. Native population
+   depends on the existing native identity/home requirements. This decision
+   does not establish numerical distributions or completed generation.
+
 ### Economy, production and education
 
 1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
