@@ -23,6 +23,8 @@ public class WorldMap {
 
     private final Set<Location> cleared;
 
+    private final Set<Location> roads;
+
     private final Integer seed;
 
     public WorldMap(final ModelPo gamePo) {
@@ -37,11 +39,16 @@ public class WorldMap {
         this.trees = worldMapPo.getTreeSet();
         this.fields = worldMapPo.getFieldSet();
         this.cleared = worldMapPo.getClearedSet();
+        this.roads = worldMapPo.getRoadSet();
         this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(),
                 "Seed value is null");
         for (final Location at : cleared) {
             Preconditions.checkArgument(!trees.contains(at),
                     "Cleared square (%s) still has a forest.", at);
+        }
+        for (final Location at : roads) {
+            Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
+                    "Road square (%s) must be land.", at);
         }
         verifyThatMapIsComplete();
     }
@@ -99,6 +106,7 @@ public class WorldMap {
         out.setHasTrees(trees.contains(location));
         out.setHasField(fields.contains(location));
         out.setCleared(cleared.contains(location));
+        out.setHasRoad(roads.contains(location));
         return out;
     }
 
@@ -110,6 +118,15 @@ public class WorldMap {
     public boolean hasTreesAt(final Location location) {
         Preconditions.checkNotNull(location);
         return trees.contains(location);
+    }
+
+    /**
+     * @param location required location
+     * @return {@code true} when a road has been built on the square
+     */
+    public boolean hasRoadAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return roads.contains(location);
     }
 
     public boolean isValid(final Location location) {
@@ -140,6 +157,7 @@ public class WorldMap {
         gamePo.getMap().setTrees(trees);
         gamePo.getMap().setFields(fields);
         gamePo.getMap().setCleared(cleared);
+        gamePo.getMap().setRoads(roads);
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
     }
@@ -162,6 +180,20 @@ public class WorldMap {
                 "There is no forest to clear at '%s'.", at);
         trees.remove(at);
         cleared.add(at);
+    }
+
+    /**
+     * Record a finished road. Sea squares never take a road.
+     *
+     * @param at land square without a road
+     */
+    public void buildRoad(final Location at) {
+        Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
+                "Terrain '%s' at '%s' cannot have road.", getTerrainTypeAt(at),
+                at);
+        Preconditions.checkArgument(!roads.contains(at),
+                "There is already a road at '%s'.", at);
+        roads.add(at);
     }
 
     /**

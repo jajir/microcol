@@ -100,6 +100,21 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
                     }
                 }
                 return null;
+            }, read -> {
+                if (UnitActionType.buildRoad.equals(read.type)) {
+                    try {
+                        final UnitActionBuildRoadPo out = new UnitActionBuildRoadPo();
+                        Preconditions.checkState(read.in.hasNext(),
+                                "There should be remainingTurns key value");
+                        final String name = read.in.nextName();
+                        Preconditions.checkState("remainingTurns".equals(name));
+                        out.setRemainingTurns(read.in.nextInt());
+                        return out;
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                return null;
             }));
 
     /**
@@ -153,6 +168,18 @@ public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
             }, write -> {
                 if (UnitActionType.clearForest.equals(write.value.getType())) {
                     final UnitActionClearForestPo ua = (UnitActionClearForestPo) write.value;
+                    try {
+                        write.out.name("remainingTurns")
+                                .value(ua.getRemainingTurns());
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                    return true;
+                }
+                return null;
+            }, write -> {
+                if (UnitActionType.buildRoad.equals(write.value.getType())) {
+                    final UnitActionBuildRoadPo ua = (UnitActionBuildRoadPo) write.value;
                     try {
                         write.out.name("remainingTurns")
                                 .value(ua.getRemainingTurns());

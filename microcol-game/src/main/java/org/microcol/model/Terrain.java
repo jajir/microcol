@@ -31,6 +31,8 @@ public class Terrain {
 
     private boolean cleared;
 
+    private boolean hasRoad;
+
     /**
      * List of function that based on terrain properties like field modify
      * particular good production. Trees and clearing select the baseline table
@@ -191,6 +193,27 @@ public class Terrain {
                 "this terrain type (%s) at (%s) can't have field.", terrainType,
                 location);
         this.hasField = hasField;
+    }
+
+    /**
+     * Provide information if a pioneer built a road here.
+     *
+     * @return <code>true</code> when the square carries a road
+     */
+    public boolean isHasRoad() {
+        return hasRoad;
+    }
+
+    /**
+     * Allows to set if a road is built at terrain.
+     *
+     * @param hasRoad whether there is a road
+     */
+    public void setHasRoad(final boolean hasRoad) {
+        Preconditions.checkArgument(terrainType.isLand() || !hasRoad,
+                "this terrain type (%s) at (%s) can't have road.", terrainType,
+                location);
+        this.hasRoad = hasRoad;
     }
 
     /**

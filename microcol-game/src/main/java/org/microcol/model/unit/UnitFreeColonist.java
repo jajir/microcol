@@ -747,10 +747,14 @@ public class UnitFreeColonist extends CanMount {
      * call this.
      */
     void consumeWorkTools(final int amount) {
-        Preconditions.checkState(
-                getAction().getType() == UnitActionType.plowField
-                        || getAction().getType() == UnitActionType.clearForest,
-                "Tools are consumed only by pioneer work");
+        Preconditions
+                .checkState(
+                        getAction().getType() == UnitActionType.plowField
+                                || getAction()
+                                        .getType() == UnitActionType.clearForest
+                                || getAction()
+                                        .getType() == UnitActionType.buildRoad,
+                        "Tools are consumed only by pioneer work");
         Preconditions.checkArgument(amount > 0 && amount <= tools,
                 "Cannot consume %s of %s tools", amount, tools);
         tools -= amount;

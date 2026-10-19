@@ -33,6 +33,12 @@ public final class WorldMapPo extends AbstractMapStore {
      */
     private String[] cleared;
 
+    /**
+     * Hold information where pioneers built a road. A missing block means no
+     * square has a road.
+     */
+    private String[] roads;
+
     private VisibilityPo visibility;
 
     private int maxX;
@@ -77,6 +83,11 @@ public final class WorldMapPo extends AbstractMapStore {
     public void setCleared(final Set<Location> clearedSet) {
         cleared = generateString(loc -> clearedSet.contains(loc) ? "c" : "-",
                 maxX, maxY);
+    }
+
+    public void setRoads(final Set<Location> roadSet) {
+        roads = generateString(loc -> roadSet.contains(loc) ? "r" : "-", maxX,
+                maxY);
     }
 
     public Map<Location, TerrainType> getTerrainMap() {
@@ -225,6 +236,44 @@ public final class WorldMapPo extends AbstractMapStore {
 
     public void setCleared(final String[] cleared) {
         this.cleared = cleared;
+    }
+
+    public Set<Location> getRoadSet() {
+        final Set<Location> out = new HashSet<>();
+        // A missing block means no road; a present one must be complete and
+        // use only the known codes.
+        if (roads != null) {
+            Preconditions.checkArgument(
+                    roads.length == maxY + 1 && roads[0] != null,
+                    "Invalid road row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = roads[y];
+                Preconditions.checkArgument(
+                        row != null
+                                && row.startsWith(
+                                        String.format("row-%04d:", y % 10000))
+                                && row.substring("row-0001:".length())
+                                        .split(",", -1).length == maxX,
+                        "Invalid road row %s", y);
+            }
+            iterate(roads, (location, charCode) -> {
+                Preconditions.checkArgument(
+                        charCode.equals("r") || charCode.equals("-"),
+                        "Unknown road code '%s'", charCode);
+                if (charCode.equals("r")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
+    }
+
+    public String[] getRoads() {
+        return roads;
+    }
+
+    public void setRoads(final String[] roads) {
+        this.roads = roads;
     }
 
 }

@@ -15,6 +15,7 @@ import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.model.unit.UnitActionBuildRoad;
 import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -728,14 +729,18 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
-    public int getEntryCostThirds(final Location location) {
-        Preconditions.checkNotNull(location);
+    public int getEntryCostThirds(final Location from, final Location to) {
+        Preconditions.checkNotNull(from);
+        Preconditions.checkNotNull(to);
         // Ships keep one whole point for every sea-lane, lake or port step.
         if (isShip()) {
             return MovementPoints.THIRDS_PER_POINT;
         }
-        return model.getMap().getTerrainTypeAt(location)
-                .getMoveCostThirds(model.getMap().hasTreesAt(location), false);
+        // A connected road needs a road on both squares of the step.
+        final boolean connectedRoad = model.getMap().hasRoadAt(from)
+                && model.getMap().hasRoadAt(to);
+        return model.getMap().getTerrainTypeAt(to).getMoveCostThirds(
+                model.getMap().hasTreesAt(to), connectedRoad);
     }
 
     @Override
@@ -743,7 +748,7 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkNotNull(location);
         return isAtPlaceLocation() && model.getMap().isValid(location)
                 && getLocation().isNeighbor(location)
-                && canPayEntryCost(getEntryCostThirds(location));
+                && canPayEntryCost(getEntryCostThirds(getLocation(), location));
     }
 
     @Override
@@ -779,7 +784,7 @@ public abstract class AbstractUnit implements Unit {
             if (!at.isNeighbor(step) || !isPossibleToMoveAt(step)) {
                 return false;
             }
-            final int cost = getEntryCostThirds(step);
+            final int cost = getEntryCostThirds(at, step);
             if (cost <= remaining) {
                 remaining -= cost;
             } else if (firstStep && hasFullMovement()) {
@@ -829,7 +834,7 @@ public abstract class AbstractUnit implements Unit {
             // The full-turn exception may cost more than the allowance; it
             // then finishes at zero.
             movementThirds = Math.max(0,
-                    movementThirds - getEntryCostThirds(moveTo));
+                    movementThirds - getEntryCostThirds(start, moveTo));
             placeToLocation(moveTo, orientation);
             owner.revealMapForUnit(this);
             model.wakeSentriesForMovement(this, moveTo);
@@ -854,7 +859,8 @@ public abstract class AbstractUnit implements Unit {
                 "Location (%s) must be valid.", moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(canPayEntryCost(getEntryCostThirds(moveTo)),
+        Preconditions.checkState(
+                canPayEntryCost(getEntryCostThirds(getLocation(), moveTo)),
                 "There is not enough movement (%s) to enter (%s)", this,
                 moveTo);
         Preconditions.checkState(
@@ -1789,6 +1795,25 @@ public abstract class AbstractUnit implements Unit {
         model.fireActionWasStarted(this);
     }
 
+    void startBuildingRoad() {
+        Preconditions.checkState(unitAction.isNoAction());
+        final UnitActionBuildRoad next = new UnitActionBuildRoad();
+        if (getType() == UnitType.HARDY_PIONEER) {
+            next.setRemainingTurns(
+                    UnitActionBuildRoad.HARDY_TURNS_TO_BUILD_ROAD);
+        }
+        setAction(next);
+        movementThirds = 0;
+        model.fireActionWasStarted(this);
+    }
+
+    void cancelBuildingRoad() {
+        Preconditions
+                .checkState(unitAction.getType() == UnitActionType.buildRoad);
+        setAction(UnitActionType.noAction.make());
+        model.fireActionWasStarted(this);
+    }
+
     /**
      * Define action supported by unit.
      *
@@ -1807,7 +1832,8 @@ public abstract class AbstractUnit implements Unit {
                                 && unitAction
                                         .getType() != UnitActionType.fortify
                                 && actionType != UnitActionType.fortify
-                                && actionType != UnitActionType.clearForest,
+                                && actionType != UnitActionType.clearForest
+                                && actionType != UnitActionType.buildRoad,
                         "Use the dedicated command for this order");
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),

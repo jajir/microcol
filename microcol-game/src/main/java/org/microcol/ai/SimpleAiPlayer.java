@@ -55,7 +55,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         }
         while (isActiveTurn()
                 && getModel().getCurrentPlayer() == unit.getOwner()
-                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
+                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0) {
             final List<Location> locations = computeMoveLocation(unit);
             if (!locations.isEmpty()) {
                 getModel().moveUnit(unit, Path.of(locations));
@@ -76,8 +76,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     private List<Location> computeMoveLocation(final Unit unit) {
         final List<Location> locations = new ArrayList<>();
         Location lastLocation = unit.getLocation();
-        while (locations.size() < 1
-                && locations.size() < unit.getActionPoints()) {
+        while (locations.size() < 1 && unit.getMovementThirds() > 0) {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }

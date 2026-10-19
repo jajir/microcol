@@ -50,6 +50,13 @@ public final class PaintService {
      */
     private final Point UNIT_IMAGE_POSITION = Point.of(2, 4);
 
+    /**
+     * Road surface and its darker edge; both contrast with grass and sand.
+     */
+    public static final Color ROAD_COLOR = Color.web("#d8b26e");
+
+    private static final Color ROAD_EDGE_COLOR = Color.web("#4a3118");
+
     private final ImageProvider imageProvider;
 
     private final MapManager mapManager;
@@ -62,6 +69,23 @@ public final class PaintService {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.mapManager = Preconditions.checkNotNull(mapManager);
         this.colonyFont = fontService.getDefault(16);
+    }
+
+    /**
+     * Draw a road as a dark-edged tan band across the square. It is code
+     * drawing, so the overlay needs no image asset.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     */
+    private void paintRoad(final GraphicsContext graphics, final Point point) {
+        final double size = Tile.TILE_WIDTH_IN_PX;
+        graphics.setFill(ROAD_EDGE_COLOR);
+        graphics.fillRect(point.getX(), point.getY() + size * 0.36, size,
+                size * 0.28);
+        graphics.setFill(ROAD_COLOR);
+        graphics.fillRect(point.getX(), point.getY() + size * 0.44, size,
+                size * 0.12);
     }
 
     /**
@@ -217,6 +241,9 @@ public final class PaintService {
             graphics.drawImage(
                     imageProvider.getImage(ImageLoaderTerrain.IMG_FIELD),
                     point.getX(), point.getY());
+        }
+        if (terrain.isHasRoad()) {
+            paintRoad(graphics, point);
         }
         if (isHighlighted) {
             graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));

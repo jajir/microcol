@@ -21,6 +21,10 @@ public enum Buttons implements MessageKeyResource {
     clearForestProblemNoMoves, clearForestProblemColony,
     clearForestProblemNoForest, clearForestTitle, clearForestQuestion,
     clearForestQuestionNoColony, clearForestConfirm, clearForestCancel,
-    clearForestChanged;
+    clearForestChanged, buttonBuildRoad, buttonCancelBuildRoad,
+    buildRoadExplanation, buildRoadProblemUnavailable,
+    buildRoadProblemNotPioneer, buildRoadProblemNotEnoughTools,
+    buildRoadProblemBusy, buildRoadProblemNoMoves, buildRoadProblemSea,
+    buildRoadProblemAlreadyRoad;
 
 }

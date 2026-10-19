@@ -21,12 +21,12 @@
 | UC-013 | Hra | Dojít na vzdálené místo | [R-0130](R-0130.md) |
 | UC-014 | Hra | Počkat nebo vynechat pohyb | [R-0053](done/R-0053.md) |
 | UC-015 | Hra | Držet hlídku a opevnit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md) |
-| UC-016 | Hra | Zrušit práci nebo rozpustit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](R-0121.md), [R-0130](R-0130.md), [R-0131](R-0131.md), [R-0142](R-0142.md) |
+| UC-016 | Hra | Zrušit práci nebo rozpustit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](done/R-0121.md), [R-0130](R-0130.md), [R-0131](R-0131.md), [R-0142](R-0142.md) |
 | UC-017 | Hra | Vybavit kolonistu v kolonii | [R-0118](done/R-0118.md), [R-0211](R-0211.md) |
 | UC-018 | Hra | Změnit vybavení na evropském molu | [R-0020](done/R-0020.md) |
 | UC-019 | Hra | Dokončit orbu | [R-0119](done/R-0119.md) |
 | UC-020 | Hra | Vykácet les | [R-0120](done/R-0120.md) |
-| UC-021 | Hra | Postavit silnici a využít zkušeného pionýra | [R-0121](R-0121.md), [R-0122](R-0122.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md) |
+| UC-021 | Hra | Postavit silnici a využít zkušeného pionýra | [R-0121](done/R-0121.md), [R-0122](R-0122.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md) |
 | UC-022 | Hra | Provozovat všech šest lodí | [R-0108](done/R-0108.md), [R-0211](R-0211.md) |
 | UC-023 | Hra | Přesunout celé i částečné zboží | [R-0022](done/R-0022.md), [R-0024](done/R-0024.md), [R-0132](done/R-0132.md) |
 | UC-024 | Hra | Naložit jednotky a poklad | [R-0022](done/R-0022.md), [R-0133](done/R-0133.md), [R-0134](R-0134.md), [R-0175](R-0175.md), [R-0211](R-0211.md) |

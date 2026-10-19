@@ -61,7 +61,7 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
         imageCache.registerImage(BUTTON_EUROPE, getImagePrefix() + "3_1");
 
         imageCache.registerImage(BUTTON_MOVE, getImagePrefix() + "0_2");
-        imageCache.registerImage(BUTTON_CUT_TREE, getImagePrefix() + "3_2");
+        imageCache.registerImage(BUTTON_CUT_TREE, getImagePrefix() + "1_2");
         imageCache.registerImage(BUTTON_BUILD_COLONY, getImagePrefix() + "2_2");
         imageCache.registerImage(BUTTON_BUILD_ROAD, getImagePrefix() + "3_2");
 

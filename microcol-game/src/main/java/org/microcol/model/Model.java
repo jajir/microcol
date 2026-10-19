@@ -23,6 +23,7 @@ import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitActionFortify;
+import org.microcol.model.unit.UnitActionBuildRoad;
 import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
@@ -2031,7 +2032,7 @@ public class Model {
                 && map.getTerrainTypeAt(unit.getLocation()).isLand()
                 && (unit instanceof UnitArtillery
                         || ((UnitFreeColonist) unit).isHoldingGuns())
-                && unit.getActionPoints() > 0
+                && unit.getMovementThirds() > 0
                 && unit.getAction().getType() == UnitActionType.noAction;
     }
 
@@ -2081,7 +2082,7 @@ public class Model {
         if (unit.getAction().getType() != UnitActionType.noAction) {
             return Optional.of(PlowProblem.BUSY);
         }
-        if (unit.getActionPoints() <= 0) {
+        if (unit.getMovementThirds() <= 0) {
             return Optional.of(PlowProblem.NO_MOVES);
         }
         final Location at = unit.getLocation();
@@ -2147,7 +2148,7 @@ public class Model {
         if (unit.getAction().getType() != UnitActionType.noAction) {
             return Optional.of(ClearForestProblem.BUSY);
         }
-        if (unit.getActionPoints() <= 0) {
+        if (unit.getMovementThirds() <= 0) {
             return Optional.of(ClearForestProblem.NO_MOVES);
         }
         final Location at = unit.getLocation();
@@ -2242,6 +2243,80 @@ public class Model {
         ((AbstractUnit) unit).cancelClearingForest();
     }
 
+    /**
+     * Authoritative road admission for the current player's live pioneer.
+     *
+     * @param unit required unit
+     * @return the first reason building cannot start, or empty when it can
+     */
+    public Optional<BuildRoadProblem> getBuildRoadProblem(final Unit unit) {
+        if (unit == null || !isGameRunning() || endingTurn
+                || getCurrentPlayer() != unit.getOwner()
+                || unitStorage.tryGetUnitById(unit.getId()).orElse(null) != unit
+                || !unit.isAtPlaceLocation()) {
+            return Optional.of(BuildRoadProblem.UNAVAILABLE);
+        }
+        if (!(unit instanceof UnitFreeColonist)
+                || !unit.getType().isCanBuildRoad()) {
+            return Optional.of(BuildRoadProblem.NOT_PIONEER);
+        }
+        if (((UnitFreeColonist) unit)
+                .getTools() < UnitActionBuildRoad.REQUIRED_TOOLS) {
+            return Optional.of(BuildRoadProblem.NOT_ENOUGH_TOOLS);
+        }
+        if (unit.getAction().getType() != UnitActionType.noAction) {
+            return Optional.of(BuildRoadProblem.BUSY);
+        }
+        if (unit.getMovementThirds() <= 0) {
+            return Optional.of(BuildRoadProblem.NO_MOVES);
+        }
+        final Location at = unit.getLocation();
+        if (!map.getTerrainTypeAt(at).isLand()) {
+            return Optional.of(BuildRoadProblem.SEA);
+        }
+        if (map.hasRoadAt(at)) {
+            return Optional.of(BuildRoadProblem.ALREADY_ROAD);
+        }
+        return Optional.empty();
+    }
+
+    /** Whether a current pioneer may start building a road where it stands. */
+    public boolean canBuildRoad(final Unit unit) {
+        return getBuildRoadProblem(unit).isEmpty();
+    }
+
+    /**
+     * Start building a road. Movement is spent now; tools and the road change
+     * only at completion.
+     *
+     * @param unit required unit
+     * @throws IllegalStateException when the unit or square no longer allow the
+     *                               work
+     */
+    public void buildRoad(final Unit unit) {
+        Preconditions.checkState(canBuildRoad(unit),
+                "Unit cannot build road: %s",
+                getBuildRoadProblem(unit).orElse(null));
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).startBuildingRoad();
+    }
+
+    /** Whether this live unit has unfinished road work that can be dropped. */
+    public boolean canCancelBuildRoad(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.getAction().getType() == UnitActionType.buildRoad;
+    }
+
+    /** Discard road progress without refunding movement or tools. */
+    public void cancelBuildRoad(final Unit unit) {
+        Preconditions.checkState(canCancelBuildRoad(unit),
+                "Unit is not building a road");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelBuildingRoad();
+    }
+
     /** Whether this live unit's order has crossed its owner-turn boundary. */
     public boolean isFortified(final Unit unit) {
         return unit != null
@@ -2315,7 +2390,7 @@ public class Model {
                 && getPlayers().stream()
                         .anyMatch(player -> player == unit.getOwner())
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0
+                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0
                 && unit.getLocation() != null && map.isValid(unit.getLocation())
                 && unit.getAction().isNoAction();
     }
@@ -2335,7 +2410,7 @@ public class Model {
     public List<Unit> getMoveableUnitAtOwnedBy(final Location location,
             final Player player) {
         return unitStorage.getUnitsAt(location).stream()
-                .filter(unit -> unit.getActionPoints() > 0
+                .filter(unit -> unit.getMovementThirds() > 0
                         && unit.getOwner().equals(player))
                 .collect(ImmutableList.toImmutableList());
     }

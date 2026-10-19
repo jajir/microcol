@@ -223,7 +223,7 @@ public final class UnitStorage {
         final List<Unit> list = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getMovementThirds() > 0)
                 .filter(unit -> unit.getAction().isNoAction())
                 .collect(Collectors.toList());
         if (list.size() == 0) {
@@ -253,7 +253,7 @@ public final class UnitStorage {
         return units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0)
+                .filter(unit -> unit.getMovementThirds() > 0)
                 .filter(unit -> unit.getAction().isNoAction()).findFirst();
     }
 
@@ -278,7 +278,7 @@ public final class UnitStorage {
                 .collect(Collectors.toList());
 
         final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()
-                .filter(unit -> unit.getActionPoints() > 0).findFirst();
+                .filter(unit -> unit.getMovementThirds() > 0).findFirst();
         if (moveableUnit.isPresent()) {
             return moveableUnit;
         } else {

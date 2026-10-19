@@ -116,7 +116,7 @@ final class PathFinder {
                     continue;
                 }
                 final int cost = current.cost
-                        + unit.getEntryCostThirds(neighbor);
+                        + unit.getEntryCostThirds(current.location, neighbor);
                 if (cost <= allowance) {
                     open.add(new Node(neighbor, cost, current, false));
                 } else if (fullAllowance && current.parent == null) {

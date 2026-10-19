@@ -6,6 +6,7 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.MovementPoints;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitActionBuildRoad;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
@@ -97,6 +98,16 @@ class UnitPanel {
                             + formatMovement(unit.getMovementThirds()));
             labelMoves.getStyleClass().add("unitMoves");
             box.getChildren().add(labelMoves);
+        }
+        if (unit.getAction() instanceof UnitActionBuildRoad
+                && isUnitOwnedBy(unit, humanPlayer)) {
+            // Remaining owner updates of the road work, shown while it runs.
+            final Label roadWork = new Label(i18n.get(Loc.unitsPanel_roadWork,
+                    ((UnitActionBuildRoad) unit.getAction())
+                            .getRemainingTurns()));
+            roadWork.setId("unitRoadWork-" + unit.getId());
+            roadWork.setWrapText(true);
+            box.getChildren().add(roadWork);
         }
 
         final Label labelOwner = new Label(i18n.get(Loc.unitsPanel_owner) + " "

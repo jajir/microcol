@@ -10,6 +10,7 @@ import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameEvent;
+import org.microcol.gui.event.BuildRoadEvent;
 import org.microcol.gui.event.ClearForestEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.StartMoveEvent;
@@ -67,6 +68,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private final static String BUTTON_CANCEL_CLEAR_FOREST_ID = "cancelClearForest";
 
+    private final static String BUTTON_BUILD_ROAD_ID = "buildRoad";
+
+    private final static String BUTTON_CANCEL_BUILD_ROAD_ID = "cancelBuildRoad";
+
     private final static String BUTTON_BUILD_COLONY_ID = "buildColony";
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
@@ -86,6 +91,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonSkipUnitTurn = new Button();
     private final Tooltip waitTooltip = new Tooltip();
     private final Tooltip skipTooltip = new Tooltip();
+    private final Tooltip buildRoadTooltip = new Tooltip();
 
     private final Button buttonCenter;
     private final Button buttonHelp;
@@ -105,6 +111,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonCancelPlowField;
     private final Button buttonClearForest;
     private final Button buttonCancelClearForest;
+    private final Button buttonBuildRoad;
+    private final Button buttonCancelBuildRoad;
     private final Button buttonBuildColony;
     private final Button buttonDeclareIndependence;
 
@@ -193,6 +201,15 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCancelClearForest = makeButon(ImageLoaderButtons.BUTTON_CUT_TREE,
                 Buttons.buttonCancelClearForest);
         buttonCancelClearForest.setId(BUTTON_CANCEL_CLEAR_FOREST_ID);
+        buttonBuildRoad = makeButon(ImageLoaderButtons.BUTTON_BUILD_ROAD,
+                Buttons.buttonBuildRoad);
+        buttonBuildRoad
+                .setOnAction(event -> eventBus.post(new BuildRoadEvent()));
+        buttonBuildRoad.setId(BUTTON_BUILD_ROAD_ID);
+        buttonBuildRoad.setTooltip(buildRoadTooltip);
+        buttonCancelBuildRoad = makeButon(ImageLoaderButtons.BUTTON_BUILD_ROAD,
+                Buttons.buttonCancelBuildRoad);
+        buttonCancelBuildRoad.setId(BUTTON_CANCEL_BUILD_ROAD_ID);
         buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
                 Buttons.buttonBuildColony);
         buttonBuildColony
@@ -256,6 +273,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
         waitTooltip.setText(i18n.get(Buttons.waitExplanation));
         skipTooltip.setText(i18n.get(Buttons.skipUnitTurnExplanation));
+        buildRoadTooltip.setText(i18n.get(Buttons.buildRoadExplanation));
     }
 
     void setUnitOrdersEnabled(final boolean wait, final boolean skip) {
@@ -326,6 +344,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCancelPlowField.setDisable(disable);
         buttonClearForest.setDisable(disable);
         buttonCancelClearForest.setDisable(disable);
+        buttonBuildRoad.setDisable(disable);
+        buttonCancelBuildRoad.setDisable(disable);
         buttonBuildColony.setDisable(disable);
         buttonDeclareIndependence.setDisable(disable);
     }
@@ -356,6 +376,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void setVisibleButtonCancelClearForest(final boolean isVisible) {
         setVisibleNode(buttonCancelClearForest, isVisible);
+    }
+
+    public void setVisibleButtonBuildRoad(final boolean isVisible) {
+        setVisibleNode(buttonBuildRoad, isVisible);
+    }
+
+    void setCancelBuildRoadAction(final Runnable action) {
+        buttonCancelBuildRoad.setOnAction(event -> action.run());
+    }
+
+    public void setVisibleButtonCancelBuildRoad(final boolean isVisible) {
+        setVisibleNode(buttonCancelBuildRoad, isVisible);
     }
 
     public void setVisibleButtonBuildColony(final boolean isVisible) {

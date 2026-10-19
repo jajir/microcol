@@ -59,4 +59,14 @@
     <entry key="fortifyExplanation">Spotřebuje zbývající pohyb; opevnění začne platit příští vlastní tah.</entry>
     <entry key="fortifyingExplanation">Opevňování: zatím bez obranného bonusu. Zrušení nevrací spotřebovaný pohyb.</entry>
     <entry key="fortifiedExplanation">Opevněno: před pohybem či útokem zrušte rozkaz. Spotřebovaný pohyb se nevrací.</entry>
+    <entry key="buttonBuildRoad">Postavit silnici.</entry>
+    <entry key="buildRoadExplanation">Vyžaduje pionýra s alespoň 20 nástroji a zbývajícím pohybem na poli bez silnice, ne na moři. Trvá 2 tahy vlastníka (1 u zkušeného pionýra) a po dokončení spotřebuje 20 nástrojů. Zahájení spotřebuje aktuální pohyb; zrušení jej nevrátí.</entry>
+    <entry key="buttonCancelBuildRoad">Zrušit stavbu silnice. Postup se ztratí; pohyb ani nářadí se nevrací.</entry>
+    <entry key="buildRoadProblemUnavailable">Tato jednotka teď nemůže stavět silnici. Vyberte dostupnou jednotku na svém tahu.</entry>
+    <entry key="buildRoadProblemNotPioneer">Silnici může stavět jen pionýr.</entry>
+    <entry key="buildRoadProblemNotEnoughTools">Stavba silnice potřebuje pionýra s alespoň 20 nástroji.</entry>
+    <entry key="buildRoadProblemBusy">Tato jednotka už má rozkaz.</entry>
+    <entry key="buildRoadProblemNoMoves">Tato jednotka nemá pohyb na zahájení stavby silnice.</entry>
+    <entry key="buildRoadProblemSea">Silnici nelze postavit na vodě.</entry>
+    <entry key="buildRoadProblemAlreadyRoad">Toto pole už má silnici.</entry>
 </properties>

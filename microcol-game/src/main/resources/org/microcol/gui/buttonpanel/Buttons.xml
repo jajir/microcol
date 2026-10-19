@@ -59,4 +59,14 @@
     <entry key="clearForestConfirm">Clear forest</entry>
     <entry key="clearForestCancel">Cancel</entry>
     <entry key="clearForestChanged">The situation changed, so forest clearing was not started.</entry>
+    <entry key="buttonBuildRoad">Build road.</entry>
+    <entry key="buildRoadExplanation">Needs a pioneer with at least 20 tools and movement left, on a square without a road, not at sea. Takes 2 owner updates (1 for a hardy pioneer) and spends 20 tools when finished. Starting spends the current movement; cancelling does not restore it.</entry>
+    <entry key="buttonCancelBuildRoad">Cancel road building. Progress is lost; no movement or tools are restored.</entry>
+    <entry key="buildRoadProblemUnavailable">This unit cannot build a road now. Select an available unit on your turn.</entry>
+    <entry key="buildRoadProblemNotPioneer">Only a pioneer can build a road.</entry>
+    <entry key="buildRoadProblemNotEnoughTools">Building a road needs a pioneer with at least 20 tools.</entry>
+    <entry key="buildRoadProblemBusy">This unit is already busy with an order.</entry>
+    <entry key="buildRoadProblemNoMoves">This unit has no movement left to start building a road.</entry>
+    <entry key="buildRoadProblemSea">A road cannot be built on water.</entry>
+    <entry key="buildRoadProblemAlreadyRoad">This square already has a road.</entry>
 </properties>

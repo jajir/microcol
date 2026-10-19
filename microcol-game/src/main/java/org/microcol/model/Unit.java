@@ -45,13 +45,15 @@ public interface Unit {
     int getMovementThirds();
 
     /**
-     * Movement that entering an adjacent location costs this unit. It is the
-     * same value that moving, path planning and reach use.
+     * Movement that stepping from one adjacent location into another costs this
+     * unit. It is the same value that moving, path planning and reach use. A
+     * road discount needs a road on both squares.
      *
-     * @param location required location
+     * @param from required square the step starts on
+     * @param to   required adjacent square the step enters
      * @return entry cost in movement thirds
      */
-    int getEntryCostThirds(Location location);
+    int getEntryCostThirds(Location from, Location to);
 
     /**
      * Whether this unit may enter an adjacent location from its current place

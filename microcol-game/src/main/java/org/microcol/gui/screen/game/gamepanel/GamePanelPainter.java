@@ -199,11 +199,15 @@ public final class GamePanelPainter {
              * Here could be check if particular step in on screen, but draw few
              * images outside screen is not big deal.
              */
-            moveModeSupport.getMoveLocations()
-                    .forEach(location -> gamePaintService.paintStep(graphics,
-                            area.convertToCanvasPoint(location), stepCounter,
-                            moveModeSupport.getMoveMode(),
-                            selectedUnit.getEntryCostThirds(location)));
+            // Each step is priced from the square it leaves, as movement is.
+            Location from = selectedUnit.getLocation();
+            for (final Location location : moveModeSupport.getMoveLocations()) {
+                gamePaintService.paintStep(graphics,
+                        area.convertToCanvasPoint(location), stepCounter,
+                        moveModeSupport.getMoveMode(),
+                        selectedUnit.getEntryCostThirds(from, location));
+                from = location;
+            }
         }
     }
 

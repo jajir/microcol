@@ -340,7 +340,7 @@ documentation in APT just to make it visible on the web.
 ## Pioneer capacity and road decisions — 2026-10-17
 
 1. The user's answers now govern [R-0120](requirements/done/R-0120.md),
-   [R-0121](requirements/R-0121.md) and the related road-yield boundary in
+   [R-0121](requirements/done/R-0121.md) and the related road-yield boundary in
    [R-0122](requirements/R-0122.md), with matching shared work rules and
    UC-020/021 acceptance. Clearing uses capacity at completion, permanently
    discards excess and queues a next-turn notification; expansion permits

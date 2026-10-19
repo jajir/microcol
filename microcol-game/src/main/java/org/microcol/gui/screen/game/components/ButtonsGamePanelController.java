@@ -15,8 +15,11 @@ import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
+import org.microcol.gui.event.BuildRoadEventListener;
 import org.microcol.gui.event.ClearForestEventListener;
 import org.microcol.gui.event.PlowFieldEventListener;
+import org.microcol.gui.event.RefreshRightPanelEvent;
+import org.microcol.model.BuildRoadProblem;
 import org.microcol.model.ClearForestProblem;
 import org.microcol.model.PlowProblem;
 import org.microcol.model.Unit;
@@ -75,6 +78,7 @@ public class ButtonsGamePanelController {
         view.setFortifyAction(this::changeFortifyOrder);
         view.setCancelPlowFieldAction(this::cancelPlowField);
         view.setCancelClearForestAction(this::cancelClearForest);
+        view.setCancelBuildRoadAction(this::cancelBuildRoad);
     }
 
     @SuppressWarnings("unused")
@@ -126,6 +130,8 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonCancelPlowField(false);
                 view.setVisibleButtonClearForest(false);
                 view.setVisibleButtonCancelClearForest(false);
+                view.setVisibleButtonBuildRoad(false);
+                view.setVisibleButtonCancelBuildRoad(false);
             }
         }
         updateUnitOrders();
@@ -166,6 +172,8 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonCancelPlowField(false);
             view.setVisibleButtonClearForest(false);
             view.setVisibleButtonCancelClearForest(false);
+            view.setVisibleButtonBuildRoad(false);
+            view.setVisibleButtonCancelBuildRoad(false);
         }
         evaluateDeclareIndependenceButton();
         updateUnitOrders();
@@ -230,11 +238,12 @@ public class ButtonsGamePanelController {
         evaluateBuildColony(unit);
         evaluatePlowField(unit);
         evaluateClearForest(unit);
+        evaluateBuildRoad(unit);
     }
 
     private void evaluateMoveButton(final Unit unit) {
         view.setVisibleButtonMove(
-                unit.getActionPoints() > 0 && unit.getAction().isNoAction());
+                unit.getMovementThirds() > 0 && unit.getAction().isNoAction());
     }
 
     private void evaluateDeclareIndependenceButton() {
@@ -266,6 +275,35 @@ public class ButtonsGamePanelController {
                         unit, isInForest(unit)));
         view.setVisibleButtonCancelClearForest(
                 getModel().canCancelClearForest(unit));
+    }
+
+    private void evaluateBuildRoad(final Unit unit) {
+        // An equipped idle pioneer keeps the control; a rejected start
+        // explains the reason through the status bar.
+        final Optional<BuildRoadProblem> problem = getModel()
+                .getBuildRoadProblem(unit);
+        view.setVisibleButtonBuildRoad(
+                problem.isEmpty() || BuildRoadEventListener
+                        .isExplainedOnControl(problem.get(), unit));
+        view.setVisibleButtonCancelBuildRoad(
+                getModel().canCancelBuildRoad(unit));
+    }
+
+    private void cancelBuildRoad() {
+        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        if (unit == null) {
+            return;
+        }
+        try {
+            getModel().cancelBuildRoad(unit);
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(Buttons.buildRoadProblemUnavailable),
+                    StatusBarMessageEvent.Source.GAME));
+        }
+        updateUnitOrders();
+        // The unit panel stops showing the road progress at once.
+        eventBus.post(new RefreshRightPanelEvent());
     }
 
     private boolean isInForest(final Unit unit) {
