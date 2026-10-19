@@ -85,14 +85,15 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.confirm();
         equipment.verifyState(100, 465, false, false, 100,
                 PlaceEuropePier.class);
-        // The 100 purchased tools are -800 eighths of Dutch pressure, one full
-        // step, so the tool bid rose from 1 to 2: 200 gross, 34 tax, 166 net.
+        // The 100 purchased tools press -400 eighths of Dutch pressure (half of
+        // the ordinary -800), which is below one step, so the tool bid stays 1:
+        // 100 gross, 17 tax, 83 net.
         equipment.open(100, "Sell remaining tools");
         equipment.verifyQuote(
-                "100 Tools\nUnit price: 2 gold\nTax: 17% (34 gold)\nTotal: 166 gold");
+                "100 Tools\nUnit price: 1 gold\nTax: 17% (17 gold)\nTotal: 83 gold");
         equipment.confirm();
-        equipment.verifyState(100, 631, false, false, 0, PlaceEuropePier.class);
-        europe.verifyGold(631);
+        equipment.verifyState(100, 548, false, false, 0, PlaceEuropePier.class);
+        europe.verifyGold(548);
         europe.close();
     }
 

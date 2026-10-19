@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md), [R-0209](R-0209.md) |
 | UC-002 | Nastavení | Zvolit národ a obtížnost | [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0209](R-0209.md) |
-| UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](R-0153.md), [R-0174](R-0174.md), [R-0144](R-0144.md), [R-0208](R-0208.md) |
+| UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](R-0153.md), [R-0174](R-0174.md), [R-0144](done/R-0144.md), [R-0208](R-0208.md) |
 | UC-004 | Hra | Zachovat herní profil a postupovat kalendářem | [R-0051](done/R-0051.md), [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0208](R-0208.md) |
 | UC-005 | Hra | Dokončit tah ve správném pořadí | [R-0052](done/R-0052.md), [R-0151](R-0151.md) |
 | UC-006 | Hra | Odkrýt neznámý svět | [R-0070](done/R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) |

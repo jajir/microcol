@@ -46,8 +46,9 @@ public class TC_94_F85_national_market_pressure_test
         // The untouched Dutch market quotes corn at bid 2 and ask 4.
         europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "2/4");
 
-        // Buy 100 corn into the first hold at 4; afterwards the bid moves one
-        // step to 3 and the ask follows the same spread to 5.
+        // Buy 100 corn into the first hold at 4. The Dutch market takes half of
+        // the ordinary 800 eighths: 100 x 4 = 400, which is below one step, so
+        // the bid stays at 2.
         ScreenMarketBuy screenMarketBuy = europePort
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
         screenMarketBuy.verifySelectedMarketQuantity(100);
@@ -55,16 +56,17 @@ public class TC_94_F85_national_market_pressure_test
         screenMarketBuy.clickOnBuy();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
         europePort.verifyGold(94600);
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
+        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "2/4");
 
-        // Open a purchase choice for the second hold; it shows the ask 5.
+        // Open a purchase choice for the second hold; it shows the ask 4.
         screenMarketBuy = europePort
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 1);
         screenMarketBuy.verifySelectedMarketQuantity(100);
-        screenMarketBuy.verifyQuotedPrice("5 gold", "500 gold");
+        screenMarketBuy.verifyQuotedPrice("4 gold", "400 gold");
 
         // Another action buys 100 corn into the third hold while the choice is
-        // open; that purchase moves the market to 4/6.
+        // open. The Dutch pressure reaches -800 eighths (2 x 400), one step, so
+        // the market moves to 3/5 and the open choice is stale.
         europePort.competingPurchase(2, GoodsType.CORN, 100);
 
         // Confirming the stale price charges nothing and moves no goods.
@@ -73,18 +75,21 @@ public class TC_94_F85_national_market_pressure_test
                 "The European price changed and the trade was not made. Nothing was charged or moved.");
         europePort.closeGoodsTransferWarning();
         europePort.verifyCargoSlotEmpty(0, 1);
-        europePort.verifyGold(94100);
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "4/6");
+        // Only the competing purchase of 100 at ask 4 was charged (94600 -
+        // 400).
+        europePort.verifyGold(94200);
+        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
 
-        // A fresh choice shows the current price 6 and buys at that price; that
-        // purchase moves the market one more step, to 5/7.
+        // A fresh choice shows the current price 5 and buys at that price. The
+        // purchase adds -400 eighths, which stays below the next step; the bid
+        // remains 3.
         screenMarketBuy = europePort
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 1);
-        screenMarketBuy.verifyQuotedPrice("6 gold", "600 gold");
+        screenMarketBuy.verifyQuotedPrice("5 gold", "500 gold");
         screenMarketBuy.clickOnBuy();
         europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
-        europePort.verifyGold(93500);
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "5/7");
+        europePort.verifyGold(93700);
+        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
 
         // Save through the menu and continue; the market and treasury remain.
         gamePage = europePort.close();
@@ -92,9 +97,9 @@ public class TC_94_F85_national_market_pressure_test
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
         europePort = gamePage.openEuroperPort();
 
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "5/7");
+        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
         europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
-        europePort.verifyGold(93500);
+        europePort.verifyGold(93700);
         gamePage = europePort.close();
     }
 

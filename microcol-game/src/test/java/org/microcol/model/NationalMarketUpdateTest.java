@@ -52,7 +52,8 @@ class NationalMarketUpdateTest {
     void quietRecoveryRunsOncePerOwnerUpdate() {
         final Model model = make(fixture());
         final Player dutch = model.getPlayerByName("Dutch");
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 100));
+        // 200 Dutch units press 800 eighths: one step from bid 2 to 1.
+        dutch.sellGoods(Goods.of(GoodsType.CORN, 200));
         assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
         assertTrue(corn(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
 
@@ -72,19 +73,20 @@ class NationalMarketUpdateTest {
     @Test
     void anotherNationsTradeCountsAsAffectingTheOwnersUpdate() {
         final Model model = make(fixture());
-        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 100));
+        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 200));
         nextOwnerTurn(model);
         assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
 
-        // A single French purchase is only a quarter unit here (-2 eighths,
-        // inward at the bid floor so it is kept), but it still affects the
-        // Dutch market and suppresses this update's recovery.
+        // A single French purchase is an eighth of a unit to the Dutch market
+        // (-1 eighth, half of the ordinary quarter-unit -2), inward at the bid
+        // floor so it is kept. It still affects the Dutch market and suppresses
+        // this update's recovery.
         model.getEurope().applyTrade(EuropeanNation.FRENCH, GoodsType.CORN, -1);
-        assertEquals(-2, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(-1, corn(model, EuropeanNation.DUTCH).getPressure());
         assertTrue(corn(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
         nextOwnerTurn(model);
         assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(-2, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(-1, corn(model, EuropeanNation.DUTCH).getPressure());
 
         // With no further trade the following update recovers one step.
         nextOwnerTurn(model);
@@ -94,7 +96,7 @@ class NationalMarketUpdateTest {
     @Test
     void openingAndSavingNeverAdvanceRecovery() {
         final Model model = make(fixture());
-        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 100));
+        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 200));
         nextOwnerTurn(model);
         assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
         // Reading prices, quoting and saving are not updates.
@@ -111,7 +113,10 @@ class NationalMarketUpdateTest {
     void savedModelKeepsPricesPressureAndFlagWithoutReplay() {
         final GameModelPo data = fixture();
         final Model model = make(data);
+        // 37 Dutch own units press 37 x 4 = 148 eighths, below one step.
         model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 37));
+        // Five English sugar units press the English market by 5 x 8 = -40 and
+        // the Dutch sugar market by 5 x 1 = -5, a cross-market eighth per unit.
         model.getEurope().applyTrade(EuropeanNation.ENGLISH, GoodsType.SUGAR,
                 -5);
         data.setModel(model.save());
@@ -121,11 +126,15 @@ class NationalMarketUpdateTest {
         final Model restored = make(dao.loadFromFile(file.toFile()));
         final GoodsTrade savedCorn = corn(restored, EuropeanNation.DUTCH);
         assertEquals(2, savedCorn.getSellPrice());
-        assertEquals(296, savedCorn.getPressure());
+        assertEquals(148, savedCorn.getPressure());
         assertTrue(savedCorn.isTradedSinceUpdate());
+        // Each French unit of the Dutch sale is a quarter unit: 37 x 2 = 74.
         assertEquals(74, corn(restored, EuropeanNation.FRENCH).getPressure());
         assertEquals(-40, restored.getEurope()
                 .getGoodsTradeForType(GoodsType.SUGAR, EuropeanNation.ENGLISH)
+                .getPressure());
+        assertEquals(-5, restored.getEurope()
+                .getGoodsTradeForType(GoodsType.SUGAR, EuropeanNation.DUTCH)
                 .getPressure());
 
         // Continue resumes without recovery, export or any other replay.
@@ -134,10 +143,11 @@ class NationalMarketUpdateTest {
         assertEquals(saved, new Gson().toJsonTree(restored.save()));
         assertTrue(corn(restored, EuropeanNation.DUTCH).isTradedSinceUpdate());
 
-        // The restored remainder continues exactly: 63 more units finish the
-        // step that 37 units started.
+        // The restored remainder continues exactly: 148 + 4 x 163 = 800
+        // eighths,
+        // so 163 more Dutch units finish the step that 37 units started.
         restored.getPlayerByName("Dutch")
-                .sellGoods(Goods.of(GoodsType.CORN, 63));
+                .sellGoods(Goods.of(GoodsType.CORN, 163));
         assertEquals(1, corn(restored, EuropeanNation.DUTCH).getSellPrice());
         assertEquals(0, corn(restored, EuropeanNation.DUTCH).getPressure());
     }

@@ -38,6 +38,12 @@ public class Europe {
     /** A quarter of a unit in every other European market. */
     private static final int CROSS_EIGHTHS_PER_UNIT = 2;
 
+    /** Dutch market responds half as much: half a unit in its own market. */
+    private static final int DUTCH_OWN_EIGHTHS_PER_UNIT = 4;
+
+    /** Dutch market responds half as much: an eighth of a unit from others. */
+    private static final int DUTCH_CROSS_EIGHTHS_PER_UNIT = 1;
+
     private final EuropePort port;
 
     private final EuropePier pier;
@@ -81,7 +87,8 @@ public class Europe {
 
     /**
      * Applies one accepted and already settled trade to every national market:
-     * the full quantity to the actor's market and a quarter to each other.
+     * the full quantity to the actor's market and a quarter to each other; the
+     * Dutch market takes half of each of those shares.
      *
      * @param actor        nation whose player traded
      * @param goodsType    traded commodity
@@ -96,8 +103,9 @@ public class Europe {
         // Long pressure cannot overflow and addPressure cannot throw, so the
         // four markets never end up partly updated.
         for (final EuropeanNation nation : EuropeanNation.values()) {
-            getGoodsTradeForType(goodsType, nation).addPressure(
-                    (long) signedAmount * eighthsPerUnit(nation == actor));
+            getGoodsTradeForType(goodsType, nation)
+                    .addPressure((long) signedAmount
+                            * eighthsPerUnit(nation, nation == actor));
         }
     }
 
@@ -110,10 +118,16 @@ public class Europe {
     }
 
     /**
+     * @param receiver  nation whose market moves
      * @param ownMarket whether the market belongs to the trading actor
      * @return eighths of pressure per traded unit for that market
      */
-    private static int eighthsPerUnit(final boolean ownMarket) {
+    private static int eighthsPerUnit(final EuropeanNation receiver,
+            final boolean ownMarket) {
+        if (receiver == EuropeanNation.DUTCH) {
+            return ownMarket ? DUTCH_OWN_EIGHTHS_PER_UNIT
+                    : DUTCH_CROSS_EIGHTHS_PER_UNIT;
+        }
         return ownMarket ? OWN_EIGHTHS_PER_UNIT : CROSS_EIGHTHS_PER_UNIT;
     }
 

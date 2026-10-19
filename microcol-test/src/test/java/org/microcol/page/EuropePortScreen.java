@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.microcol.gui.screen.europe.EuropeButtonsPanel;
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Player;
 import org.microcol.model.unit.UnitGalleon;
@@ -109,6 +111,23 @@ public class EuropePortScreen extends AbstractScreen {
         final Labeled price = getLabeledById("europePrice" + goodsType.name());
         assertEquals(expectedText, price.getText().split("\n")[0],
                 String.format("Bid and ask of %s", goodsType.name()));
+    }
+
+    /**
+     * Model-backed check of a national market that this port does not show.
+     *
+     * @param nation       European nation whose market is compared
+     * @param goodsType    tradable good in that national market
+     * @param expectedText expected bid and ask, for example "2/4"
+     */
+    public void verifyNationalGoodsBidAndAsk(final EuropeanNation nation,
+            final GoodsType goodsType, final String expectedText) {
+        final GoodsTrade trade = getModel().getEurope()
+                .getGoodsTradeForType(goodsType, nation);
+        final String bidAndAsk = trade.getSellPrice() + "/"
+                + trade.getBuyPrice();
+        assertEquals(expectedText, bidAndAsk, String.format(
+                "Bid and ask of %s in %s market", goodsType.name(), nation));
     }
 
     private List<UnitWithCargo> getShipsInPort() {

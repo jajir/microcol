@@ -111,6 +111,101 @@ public class NationalMarketTest {
     }
 
     @Test
+    public void test_dutchOwnSalesStepOncePerTwoHundredUnits() {
+        // Each Dutch own unit is half a unit: 4 eighths. One-unit trades keep
+        // the exact remainder: 199 units are 796 eighths, still bid 2.
+        for (int sale = 0; sale < 199; sale++) {
+            europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 1);
+        }
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(796, corn(EuropeanNation.DUTCH).getPressure());
+        // The two-hundredth unit reaches 800 eighths: one full Dutch step.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 1);
+        assertEquals(1, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(3, corn(EuropeanNation.DUTCH).getBuyPrice());
+        assertEquals(0, corn(EuropeanNation.DUTCH).getPressure());
+    }
+
+    @Test
+    public void test_dutchPurchasesRaiseBidAtTwoHundredUnits() {
+        // Purchases press with the negative sign: -796 keeps bid 2, -800 raises
+        // it to 3.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, -199);
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(-796, corn(EuropeanNation.DUTCH).getPressure());
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, -1);
+        assertEquals(3, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(5, corn(EuropeanNation.DUTCH).getBuyPrice());
+        assertEquals(0, corn(EuropeanNation.DUTCH).getPressure());
+    }
+
+    @Test
+    public void test_dutchCrossMarketStepsOncePerEightHundredUnits() {
+        // Four hundred units of another nation step an ordinary French market,
+        // but the Dutch market has taken only half of its step: 400 eighths.
+        europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, 400);
+        assertEquals(1, corn(EuropeanNation.FRENCH).getSellPrice());
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(400, corn(EuropeanNation.DUTCH).getPressure());
+        // Eight hundred such units reach one full Dutch step.
+        europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, 400);
+        assertEquals(1, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(0, corn(EuropeanNation.DUTCH).getPressure());
+    }
+
+    @Test
+    public void test_dutchCrossPurchasesRaiseBidAtEightHundredUnits() {
+        europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, -799);
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(-799, corn(EuropeanNation.DUTCH).getPressure());
+        europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, -1);
+        assertEquals(3, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(0, corn(EuropeanNation.DUTCH).getPressure());
+    }
+
+    @Test
+    public void test_savedDutchRemaindersContinueExactly() {
+        // 37 Dutch own units leave 148 eighths; one English unit adds one more.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 37);
+        europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, 1);
+        final EuropePo saved = europe.save();
+        final Europe restored = new Europe(mock(Model.class), saved);
+        final GoodsTrade trade = restored.getGoodsTradeForType(GoodsType.CORN,
+                EuropeanNation.DUTCH);
+        assertEquals(149, trade.getPressure());
+        // 149 + 651 eighths from other nations reach exactly one step.
+        restored.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, 651);
+        assertEquals(1, trade.getSellPrice());
+        assertEquals(0, trade.getPressure());
+    }
+
+    @Test
+    public void test_dutchFloorDiscardsOutwardPressureAtBound() {
+        // 401 Dutch units press 1604 eighths: two steps from bid 2 would reach
+        // zero. The bid stops at 1 and the 4 outward eighths are discarded.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 401);
+        assertEquals(1, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(0, corn(EuropeanNation.DUTCH).getPressure());
+        // A later purchase of 200 moves the bid back up by one step only.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, -200);
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+    }
+
+    @Test
+    public void test_dutchQuietRecoveryUsesTheSameRule() {
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 200);
+        assertEquals(1, corn(EuropeanNation.DUTCH).getSellPrice());
+        // The trade affected this update, so the bid stays and the flag resets.
+        europe.recoverMarkets(EuropeanNation.DUTCH);
+        assertEquals(1, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertFalse(corn(EuropeanNation.DUTCH).isTradedSinceUpdate());
+        // A quiet update moves one step back toward the initial bid 2.
+        europe.recoverMarkets(EuropeanNation.DUTCH);
+        assertEquals(2, corn(EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(4, corn(EuropeanNation.DUTCH).getBuyPrice());
+    }
+
+    @Test
     public void test_savedStateRoundTripKeepsPressureAndFlag() {
         europe.applyTrade(EuropeanNation.ENGLISH, GoodsType.CORN, 37);
         final EuropePo saved = europe.save();

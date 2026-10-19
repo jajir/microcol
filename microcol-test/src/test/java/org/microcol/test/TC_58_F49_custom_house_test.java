@@ -69,10 +69,11 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         game.openColonyAt(COLONY, "New Amsterdam");
-        // The first export sold 103 tobacco (+824 eighths, one full step), so
-        // the tobacco bid is now 2. The second update sells 3 at that bid:
-        // 6 gross, 25% tax, floor(4.5) = 4 net. Ore sells nothing this time.
-        exports.verifyStocks(100, 100, 150, 1325);
+        // The first export sold 103 tobacco at bid 3 and pressed the Dutch
+        // market by +412 eighths (half of 824), less than one step, so the
+        // tobacco bid stays 3. The second update sells 3 at that bid:
+        // 9 gross, 25% tax, floor(6.75) = 6 net. Ore sells nothing this time.
+        exports.verifyStocks(100, 100, 150, 1327);
     }
 
     @Test
@@ -204,19 +205,19 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
 
         // Next update: tobacco is produced back to 103, so 3 are sold. The
-        // protest update already sold 103 tobacco (+824 eighths, one step), so
-        // the saved Dutch tobacco bid is 2: 6 gross, 25% tax, floor(4.5) = 4,
-        // half of which is 2 gold. The boycotted ore above 100 is still at bid
-        // 4 and is sold for half of 300 gold, which the closed home market does
-        // not block.
+        // protest update already sold 103 tobacco at bid 3 (+412 eighths, less
+        // than one step), so the saved Dutch tobacco bid is still 3: 9 gross,
+        // 25% tax, floor(6.75) = 6, half of which is 3 gold. The boycotted ore
+        // above 100 is still at bid 4 and is sold for half of 300 gold, which
+        // the closed home market does not block.
         var report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
                 "New Amsterdam exported 100 × Ore through its custom house for 150 gold.");
         report.verifyThatAtLeastOneEventMessageContains(
-                "New Amsterdam exported 3 × Tobacco through its custom house for 2 gold.");
+                "New Amsterdam exported 3 × Tobacco through its custom house for 3 gold.");
         report.close();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
-        exports.verifyStocks(100, 100, 150, 1383);
+        exports.verifyStocks(100, 100, 150, 1384);
         // The boycott itself is not lifted by the exception.
         taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
 
@@ -225,7 +226,7 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        exports.verifyStocks(100, 100, 150, 1383);
+        exports.verifyStocks(100, 100, 150, 1384);
         taxes.verifyTax(25, Map.of(GoodsType.ORE, 800));
     }
 

@@ -44,13 +44,15 @@ class EuropeEquipmentTest {
     }
 
     static Stream<Arguments> equipmentLots() {
-        // The sale follows the purchase in the same national market. Buying a
-        // lot of n units adds -8n eighths of pressure and 800 eighths raise the
-        // bid by one: 50 muskets or horses (-400) keep bid 2, but 100 tools
-        // (-800) raise the tool bid from 1 to 2, so the sale pays 100 x 2.
+        // The sale follows the purchase in the same Dutch national market.
+        // Buying a lot of n units adds -4n eighths of pressure (half of the
+        // ordinary -8n), and 800 eighths raise the bid by one: 50 muskets or
+        // horses (-200) keep bid 2, and 100 tools (-400) keep the tool bid at
+        // 1,
+        // so the sale pays 100 x 1.
         return Stream.of(Arguments.of(GoodsType.MUSKET, 50, 150, 100),
                 Arguments.of(GoodsType.HORSE, 50, 250, 100),
-                Arguments.of(GoodsType.TOOLS, 100, 200, 200));
+                Arguments.of(GoodsType.TOOLS, 100, 200, 100));
     }
 
     @ParameterizedTest
@@ -97,11 +99,12 @@ class EuropeEquipmentTest {
         assertFalse(frenchMusket.isTradedSinceUpdate());
         musket.setBuyPrice(3);
 
-        // An accepted purchase of the 50-musket lot: -400 own, -100 elsewhere.
+        // An accepted purchase of the 50-musket lot: -200 own (half of the
+        // ordinary -400 for the Dutch market), -100 elsewhere.
         unit.tradeEquipmentInEurope(GoodsType.MUSKET, true,
                 unit.getEuropeEquipmentQuote(GoodsType.MUSKET, true));
         assertEquals(850, player.getGold());
-        assertEquals(-400, musket.getPressure());
+        assertEquals(-200, musket.getPressure());
         assertEquals(-100, frenchMusket.getPressure());
         assertTrue(frenchMusket.isTradedSinceUpdate());
 

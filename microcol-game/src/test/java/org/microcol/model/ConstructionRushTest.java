@@ -118,10 +118,10 @@ class ConstructionRushTest {
         queue.rush(quote);
 
         // Charged at the quoted price; then 5 purchased tools (stocked ones
-        // are not purchases) push the Dutch market by -40 and the others by -10
-        // eighths, and mark every market as affected.
+        // are not purchases) push the Dutch market by -20 (half of -40) and the
+        // others by -10 eighths, and mark every market as affected.
         assertEquals(goldBefore - quote.getPrice(), owner.getGold());
-        assertEquals(-40, tools(EuropeanNation.DUTCH).getPressure());
+        assertEquals(-20, tools(EuropeanNation.DUTCH).getPressure());
         assertEquals(-10, tools(EuropeanNation.FRENCH).getPressure());
         assertEquals(-10, tools(EuropeanNation.ENGLISH).getPressure());
         assertEquals(-10, tools(EuropeanNation.SPANISH).getPressure());

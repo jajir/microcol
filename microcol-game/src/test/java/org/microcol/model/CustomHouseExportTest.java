@@ -169,10 +169,11 @@ class CustomHouseExportTest {
 
         colony.startTurn();
 
-        // Paid at the pre-trade bid 7; then +8 own and +2 cross eighths.
+        // Paid at the pre-trade bid 7; then +4 own (half of 8) and +2 cross
+        // eighths for the other nations.
         assertEquals(goldBefore + income, owner.getGold());
         assertEquals(7, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(8, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(4, corn(model, EuropeanNation.DUTCH).getPressure());
         for (final EuropeanNation other : new EuropeanNation[] {
                 EuropeanNation.FRENCH, EuropeanNation.ENGLISH,
                 EuropeanNation.SPANISH }) {
@@ -184,7 +185,7 @@ class CustomHouseExportTest {
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(saved, new Gson().toJson(restored.save()));
-        assertEquals(8, corn(restored, EuropeanNation.DUTCH).getPressure());
+        assertEquals(4, corn(restored, EuropeanNation.DUTCH).getPressure());
     }
 
     @Test
@@ -201,7 +202,7 @@ class CustomHouseExportTest {
 
         colony.startTurn();
 
-        assertEquals(8, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(4, corn(model, EuropeanNation.DUTCH).getPressure());
         assertEquals(2, corn(model, EuropeanNation.FRENCH).getPressure());
     }
 

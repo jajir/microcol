@@ -32,16 +32,19 @@ public class NationalMarketTradeTest {
 
     @Test
     public void test_saleSettlesAtQuoteBeforeMarketMoves() {
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 100));
+        // 200 Dutch units press 200 x 4 = 800 eighths, exactly one step.
+        dutch.sellGoods(Goods.of(GoodsType.CORN, 200));
         // Gold uses the bid of 2 for the whole sale, then the market moves.
-        assertEquals(1200, dutch.getGold());
+        assertEquals(1400, dutch.getGold());
         assertEquals(1, dutchCorn().getSellPrice());
+        assertEquals(0, dutchCorn().getPressure());
     }
 
     @Test
     public void test_purchaseChargesThenRaisesBid() {
-        dutch.buyGoods(Goods.of(GoodsType.CORN, 100));
-        assertEquals(600, dutch.getGold());
+        // 200 Dutch units at ask 4 cost 800; -800 eighths raise the bid by one.
+        dutch.buyGoods(Goods.of(GoodsType.CORN, 200));
+        assertEquals(200, dutch.getGold());
         assertEquals(3, dutchCorn().getSellPrice());
         assertEquals(5, dutchCorn().getBuyPrice());
     }
@@ -49,9 +52,10 @@ public class NationalMarketTradeTest {
     @Test
     public void test_tradeMovesEveryNationalMarketByItsShare() {
         dutch.sellGoods(Goods.of(GoodsType.CORN, 37));
-        // Own market: 37 x 8 eighths. Every other nation: a quarter of a unit
-        // per unit, 37 x 2. Every affected market has its flag set.
-        assertEquals(296, dutchCorn().getPressure());
+        // Dutch own market: 37 x 4 eighths, half the ordinary 37 x 8 = 296.
+        // Every other nation: a quarter of a unit per unit, 37 x 2. Every
+        // affected market has its flag set.
+        assertEquals(148, dutchCorn().getPressure());
         for (final EuropeanNation other : new EuropeanNation[] {
                 EuropeanNation.FRENCH, EuropeanNation.ENGLISH,
                 EuropeanNation.SPANISH }) {
@@ -106,7 +110,8 @@ public class NationalMarketTradeTest {
     public void test_staleOfferChangesNothing() {
         final EuropeTradeQuote offered = dutch
                 .quoteEuropeTrade(Goods.of(GoodsType.CORN, 10), false);
-        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 100);
+        // 200 x 4 eighths reach the Dutch step; 100 units would not move it.
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 200);
         assertThrows(EuropePriceChangedException.class,
                 () -> dutch.sellGoods(Goods.of(GoodsType.CORN, 10), offered));
         assertEquals(1000, dutch.getGold());

@@ -46,7 +46,7 @@
 | UNIT-003 | [R-0108](done/R-0108.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | UNIT-004 | [R-0108](done/R-0108.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-004 | [R-0076](done/R-0076.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| SETUP-007 | [R-0144](R-0144.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SETUP-007 | [R-0144](done/R-0144.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | CARGO-001 | [R-0132](done/R-0132.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | CARGO-002 | [R-0022](done/R-0022.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | CARGO-003 | [R-0133](done/R-0133.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

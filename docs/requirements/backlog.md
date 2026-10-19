@@ -254,7 +254,7 @@ verified or authorize implementation.
 | [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
 | [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
 | [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | New capture | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
-| [R-0144](R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
+| [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
 | [R-0145](R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
 
 The seven A06/P08 analyses R-0132–R-0138 were captured on **2026-10-17** as

@@ -157,12 +157,13 @@ class CargoCapacityTest {
         if (expected > 0) {
             assertTrue(price >= accepted.getGross());
         }
-        // Independent market expectation: -8 eighths per accepted unit and a
-        // bid step per 800, here from the Dutch corn bid 2.
+        // Independent market expectation: the Dutch own market takes -4 eighths
+        // per accepted unit (half of 8) and a bid step per 800, here from the
+        // Dutch corn bid 2.
         final GoodsTrade corn = model.getEurope()
                 .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH);
-        assertEquals(2 + 8 * expected / 800, corn.getSellPrice());
-        assertEquals(-(8 * expected % 800), corn.getPressure());
+        assertEquals(2 + 4 * expected / 800, corn.getSellPrice());
+        assertEquals(-(4 * expected % 800), corn.getPressure());
     }
 
     @Test
