@@ -51,14 +51,14 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
 
 ### Typografie Playpen Sans
 
-1. **Dohoda 19. října 2026, [R-0250](requirements/R-0250.md):** uživatel vybral
+1. **Dohoda 19. října 2026, [R-0250](requirements/done/R-0250.md):** uživatel vybral
    `02-Playpen-Sans-tenci.png`. Všechny živé texty hry používají vzpřímený
    Playpen Sans Light: menu, dialogy, tabulky, vstupní pole, tlačítka, Nastavení,
    tooltipy, kontextová menu, názvy kolonií na mapě a produkční údaje na plátně.
 2. Náhled používal Regular 400 opticky ztenčený tahem barvy pozadí. Pro JavaFX
    je připraven skutečný statický řez **300 (Light)** ze stejného variabilního
    zdroje. Nepoužívá překrývání barvou pozadí ani syntetickou kurzívu; přesná
-   rasterizace prohlížeče a JavaFX se může lišit. Navazující [R-0251](requirements/R-0251.md) stanoví hlavní nadpisy 36 px a výchozí běžný text 18 px, včetně popisků Jazyk a Verze v Nastavení; místní drobné údaje kolonie a mapy zůstávají výjimkou.
+   rasterizace prohlížeče a JavaFX se může lišit. Navazující [R-0251](requirements/done/R-0251.md) stanoví hlavní nadpisy 36 px a výchozí běžný text 18 px, včetně popisků Jazyk a Verze v Nastavení; místní drobné údaje kolonie a mapy zůstávají výjimkou.
 3. Soubor, licence OFL a reprodukční údaje jsou v
    `microcol-game/src/main/resources/fonts/PlaypenSans`. Načtení nevyžaduje
    síť ani instalaci fontu do systému. Zdroj obsahuje ověřené základní abecedy
@@ -149,7 +149,7 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
 
 ### Dřevěná tlačítka bez bočních zářezů
 
-**Dohoda 19. října 2026 — [R-0251](requirements/R-0251.md):** varianta „Mírné zvětšení“ používá text 18 px a odsazení nahoře 12, dole 14 a po stranách 24 logických px. Platí pro všechna standardní dřevěná tlačítka; dosavadní výjimky vlastních skinů zůstávají. Mezi tlačítky se rozestupy nemění. Implementaci a skutečné ověření rozlišuje [evidence](functional-tests.md#r-0251-button-spacing-2026-10-19).
+**Dohoda 19. října 2026 — [R-0251](requirements/done/R-0251.md):** varianta „Mírné zvětšení“ používá text 18 px a odsazení nahoře 12, dole 14 a po stranách 24 logických px. Platí pro všechna standardní dřevěná tlačítka; dosavadní výjimky vlastních skinů zůstávají. Mezi tlačítky se rozestupy nemění. Implementaci a skutečné ověření rozlišuje [evidence](functional-tests.md#r-0251-button-spacing-2026-10-19).
 
 
 1. **Dohoda 18. října 2026, [R-0246](requirements/done/R-0246.md):** vybrána

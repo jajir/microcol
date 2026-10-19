@@ -1,5 +1,10 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
+ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
+odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
+nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
+
 ## R-0251 button spacing — 2026-10-19
 
 1. Dohoda: hlavní nadpis 36 px, běžný text 18 px a odsazení dřevěných tlačítek nahoře/vpravo/dole/vlevo 12/24/14/24 px. Dosavadní vlastní skiny, akce a mezery mezi tlačítky se nemění. TC83/TC84/TC85 a kontrakt page objects pokrývají menu, Nastavení a modální okna; úplná regrese a publikace čekají.
@@ -11,15 +16,26 @@
 7. Na výslovný pokyn uživatele se všechny tyto změny odesílají do main již před úplnou přejímkou. CI a distribuční kontrola zůstávají povinné; samotný push nepotvrzuje publikaci herního balíčku.
 
 
-Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
-ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
-odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
-nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
+
+8. CI `39303494681` pro commit `f2ea8e6d` skončilo neúspěšně: 2 585 herních testů prošlo, 403 UI/podpůrných kontrol mělo tři selhání a jednu chybu. TC11/02 hlásí překrytí mapy panelem příkazů; TC71/01 překrytí oblastí plavby. TC30/09 kliká na nabídku lodi bez posunu scrollované nabídky; očekávané zlato se proto nezměnilo. Následující TC30/06 nenachází český přepínač po předchozím nedokončeném nákupním dialogu. Herní očekávání zůstávají. Balíčky tří platforem a podpůrné kontroly prošly, publikace byla správně přeskočena.
+9. Rozpracovaná oprava rozšiřuje popisek plavby, aby při 18 px nevytvářel zbytečný další řádek, a znovu používá existující posun nabídky před testovým kliknutím na nákup lodi. Prohlédnutí snímku navíc odhalilo krácení vlastníka v pravém panelu; jeho pevné šířky se přizpůsobují 18 px a TC85 přidává kontrolu celého popisku. TC11 ukládá snímek před původní asercí a vypisuje přesné meze; diagnostický běh `20261019T192602Z-dac2a5a6aa12`, PID 41767, limit 1 200 sekund. Žádná z těchto oprav zatím nemá přijatou regresi.
+
+10. Diagnostický TC11 dokončil sedm kontrol s jedním selháním: vykreslený panel končí na Y = 244, mapa začíná na Y = 243. Rezervovaný prostor proto nově sleduje skutečný vykreslený dolní okraj panelu místo jeho výšky rozložení; ověření překrytí se neuvolňuje. Cílená kontrola TC11/TC30/TC71/TC83/TC84/TC85 a kontraktu běží jako `20261019T193031Z-f41239439877`, PID 42461, limit 3 600 sekund. Přijetí opravy i úplná regrese zůstávají otevřené.
+
+11. Původní úplný lokální běh `20261019T182959Z-8a32f25bf510` dokončil stejná čtyři selhání/chyby jako CI: TC11/02, TC30/09, TC30/06 a TC71/01. Reporty `target/docker-ui/run-jKUbeg` potvrzují 2 585 herních kontrol bez chyb a 403 UI/podpůrných kontrol (tři selhání, jedna chyba, žádné přeskočené). Tento snímek zdrojů předchází výše uvedeným opravám; nepředstavuje jejich ověření.
+
+12. Cílený opravný běh `20261019T193031Z-f41239439877` (`run-vidXrT`) ověřil 25 z 26 kontrol: TC11 (4), TC30 (12), TC83 (3), TC84 (2), TC85 (1) a kontrakt (3) prošly. Zůstává jedno selhání TC71/01; chyb a přeskočených kontrol je nula. Snímek `wooden-game.png` potvrzuje celé popisky vlastníka, ceny pohybu i obtížnosti v rozšířeném pravém panelu. Diagnostický běh `20261019T193626Z-8c6b0fd8a464`, PID 43309, limit 1 200 sekund doplňuje přesné hranice plavebních panelů.
+
+13. Diagnostika plavebních panelů potvrdila přesah 2,2 logického px (příchozí dolní okraj 335,2; odchozí horní okraj 333). Odchozí panel má proto svislý posun 40 místo 20 px. TC71 nově zachovává kontrolu oddělení i po odeslání lodi zpět, kdy jsou obsazené oba směry, a ukládá další snímek. Opakovaná cílená kontrola běží jako `20261019T193748Z-4de14be27b6e`, PID 43441, limit 3 600 sekund.
+
+14. Opravný běh `20261019T193748Z-4de14be27b6e` (`run-EaDoqq`) prošel: XML potvrzuje 26 kontrol, žádná selhání, chyby ani přeskočení. Prohlédnuté snímky `wooden-voyage-panels-both-directions.png` a `unit-turn-orders.png` potvrzují oddělení obou směrů plavby, volnou mapu pod lištou a úplné popisky jednotek. Java formatter ověřil devět upravených Java souborů včetně shody tokenů a idempotence; kontrola zdrojů nezjistila další problém. Úplná regrese opraveného stavu běží jako `20261019T194355Z-b24b26a5bf04`, PID 43881, limit 5 400 sekund; identita 1 520 zdrojových souborů je uložená v `target/r251/repair-full-source-hashes.json`. Publikace opravy zatím neproběhla.
+
+15. Úplná opravená regrese `20261019T194355Z-b24b26a5bf04` prošla: `run-dOiiVo` obsahuje 223 herních reportů (2 585 testů) a 99 UI/podpůrných reportů (403 kontrol), bez selhání, chyb a přeskočení. Sada tříd přesně odpovídá předchozí úplné regresi a všech 1 520 zaznamenaných zdrojů zůstalo nezměněných. Přejímka R-0251 je dokončena; následná publikace opravy se ověřuje samostatně.
 
 ## R-0250 — Playpen Sans — 2026-10-19
 
 1. Uživatel vybral tenčí Playpen Sans a autorizoval nasazení do main v celé
-   hře. [R-0250](requirements/R-0250.md) zachovává pravidla a individuální
+   hře. [R-0250](requirements/done/R-0250.md) zachovává pravidla a individuální
    skiny. FontTools ověřil 131 jedinečných znaků základních CZ/EN/DE/FR/NL
    abeced, číslice a euro v statickém řezu 300; nejde o běhovou přejímku UI.
 2. Cílený Docker/Xvfb běh `20261019T175234Z-c26c8db601dc`, supervisor PID 17427,
@@ -84,6 +100,9 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     formatter a dokumentace prošly; otisky herních zdrojů odpovídají spuštěné
     úplné regresi. Samotný push neprokazuje úspěch CI ani publikaci buildu;
     ty zůstávají povinným pokračováním stejného úkolu.
+
+12. Dokončená přejímka R-0250: úplný běh `20261019T180643Z-7eb4a44c4e8b` (`run-f09nSq`) má 2 585 herních a 403 UI/podpůrných kontrol bez selhání, chyb a přeskočení. Všech 1 530 zaznamenaných souborů odpovídá commitu `6641828f2ce1b538fa79bbd4120ff6230a2f7cf4`. CI dokumentace `39300054785`, kompatibility `39300054462` a distribuce `39300054598` prošla; byly ověřeny XML, úplnost tříd i živá stránka dokumentace.
+13. [Build 189](https://github.com/jajir/microcol/releases/tag/dev-189-6641828f2ce1) obsahuje tento fontový commit a deset očekávaných souborů. Stažený macOS ARM64 ZIP odpovídá manifestu i SHA256SUMS (`067df535a9b0419abc015374e796bb8f2907248ed03be7658c14504da72b592d`). Přibalený TTF a OFL z modulárního runtime byly porovnány se zdrojem a jsou totožné. Stabilní kanál se tehdy záměrně neposunul, protože main již obsahoval novější R-0251; build 189 proto není publikací nových velikostí a odsazení. Nativní HiDPI zůstává neověřené.
 
 ## R-0248 — Rámečky a pravítko — 2026-10-19
 

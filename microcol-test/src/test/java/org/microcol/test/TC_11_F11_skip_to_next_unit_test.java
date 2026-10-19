@@ -66,8 +66,8 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        orders.verifyLabelsAndLayout();
         orders.captureDialog("waitUnit", "unit-turn-orders.png");
+        orders.verifyLabelsAndLayout();
         orders.verifyOrdersAvailable(true, true);
         orders.verifySelectedUnit(3);
 

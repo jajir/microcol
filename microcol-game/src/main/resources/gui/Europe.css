@@ -29,7 +29,7 @@
 	-fx-max-height: 40;
 	-fx-translate-x: -150;
 	/* Leave room for the taller shared voyage-action buttons above. */
-	-fx-translate-y: 20;
+	-fx-translate-y: 40;
 }
 
 .panel-dock {

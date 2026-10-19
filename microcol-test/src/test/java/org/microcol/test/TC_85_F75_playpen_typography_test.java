@@ -52,6 +52,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         // Loading, opening and cancelling a modal preserve the game state.
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         type.verifySceneTypography("europe");
+        type.verifyTextSize(".unitOwner", 18);
         buttons.click("congress");
         type.verifySceneTypography("congressClose");
         buttons.verifyWoodenButton("congressClose");

@@ -42,6 +42,8 @@ public class BuyUnitScreen extends AbstractScreen {
                                 unitNameToBuy)));
         final Button button = getNodeFinder().from(buyUnitPanel)
                 .lookup(".buttonBuy").queryButton();
+        new ExpertPurchasePage(getContext()).revealSpecialist(
+                button.getId().substring("buy-unit-".length()));
         getRobot().clickOn(button, MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
         return EuropePortScreen.of(getContext());

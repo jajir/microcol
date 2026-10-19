@@ -49,7 +49,8 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
         final javafx.geometry.Bounds mapBounds = canvas
                 .localToScreen(canvas.getBoundsInLocal());
         assertTrue(mapBounds.getMinY() >= controlsBounds.getMaxY(),
-                "All toolbar rows must be outside the playable map");
+                "All toolbar rows must be outside the playable map: controls="
+                        + controlsBounds + "; map=" + mapBounds);
         final Button wait = getButtonById("waitUnit");
         final Button skip = getButtonById("skipUnitTurn");
         assertEquals("Wait\n(Tab)", wait.getText());

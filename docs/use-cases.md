@@ -1,10 +1,10 @@
 # Use cases a přejímka pravidel hry
 
-Navazující rozměry UI: [R-0251](requirements/R-0251.md), UC-119, TC83/TC84/TC85; přejímka v [evidenci](functional-tests.md#r-0251-button-spacing-2026-10-19).
+Ověřené rozměry UI (2026-10-19): [R-0251](requirements/done/R-0251.md), UC-119, TC83/TC84/TC85; přejímka v [evidenci](functional-tests.md#r-0251-button-spacing-2026-10-19).
 
 
-Aktuální změna typografie: [R-0250](requirements/R-0250.md), UC-119,
-TC83/TC84/TC85 a plná regrese. [Průběžná evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
+Ověřená typografie (2026-10-19): [R-0250](requirements/done/R-0250.md), UC-119,
+TC83/TC84/TC85 a plná regrese. [Evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
 
 
 **Migrace požadavků 2026-10-14:** aktuální zbytek R-0001–R-0040 a novější
