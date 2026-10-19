@@ -15,6 +15,9 @@ public final class TerrainType {
 
     final static int NO_VALUE = -1;
 
+    /** One third of a point, in movement thirds. */
+    private final static int ROAD_OR_RIVER_MOVE_COST_THIRDS = 1;
+
     private final String name;
 
     /**
@@ -112,8 +115,8 @@ public final class TerrainType {
             .setForestProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP")
-            .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(1)
-            .setMoveCostWithTree(2).setDefenseBonus(25)
+            .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(2)
+            .setMoveCostWithTree(3).setDefenseBonus(25)
             .setDefenseBonusWithTree(75).setProduction(GoodsType.CORN)
             .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(3)
             .build().setProduction(GoodsType.TOBACCO).setBase(1).build()
@@ -123,7 +126,7 @@ public final class TerrainType {
 
     public final static TerrainType DESERT = TerrainType.make()
             .setName("DESERT").setCode("d").setCanHaveTree(true).setSea(false)
-            .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
+            .setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.TOBACCO).setBase(1)
             .build().setProduction(GoodsType.COTTON).setBase(1).build()
@@ -136,7 +139,7 @@ public final class TerrainType {
 
     public final static TerrainType TUNDRA = TerrainType.make()
             .setName("TUNDRA").setCode("t").setCanHaveTree(true).setSea(false)
-            .setMoveCost(2).setMoveCostWithTree(2).setDefenseBonus(0)
+            .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
             .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
             .setBase(3).build().setProduction(GoodsType.ORE).setBase(2).build()
             .setForestProduction(GoodsType.CORN).setBase(2).build()
@@ -150,7 +153,7 @@ public final class TerrainType {
             .setDefenseBonusWithTree(0).build();
 
     public final static TerrainType HILL = TerrainType.make().setName("HILL")
-            .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(1)
+            .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(2)
             .setMoveCostWithTree(2).setDefenseBonus(100)
             .setDefenseBonusWithTree(100).setProduction(GoodsType.CORN)
             .setBase(2).build().setProduction(GoodsType.ORE).setBase(4).build()
@@ -158,7 +161,7 @@ public final class TerrainType {
 
     public final static TerrainType MOUNTAIN = TerrainType.make()
             .setName("MOUNTAIN").setCode("m").setCanHaveTree(false)
-            .setSea(false).setMoveCost(1).setMoveCostWithTree(2)
+            .setSea(false).setMoveCost(3).setMoveCostWithTree(3)
             .setDefenseBonus(150).setDefenseBonusWithTree(150)
             .setProduction(GoodsType.ORE).setBase(3).build()
             .setProduction(GoodsType.SILVER).setBase(1).build().build();
@@ -505,6 +508,24 @@ public final class TerrainType {
 
     public int getMoveCostWithTree() {
         return moveCostWithTree;
+    }
+
+    /**
+     * Movement needed to enter a square of this terrain, in thirds of a point.
+     * A connected road or river segment, once one exists, replaces the terrain
+     * cost with one third of a point in either direction.
+     *
+     * @param hasTrees             whether the square carries a forest
+     * @param connectedRoadOrRiver whether a connected road or river segment
+     *                             applies to this entry
+     * @return entry cost in movement thirds
+     */
+    public int getMoveCostThirds(final boolean hasTrees,
+            final boolean connectedRoadOrRiver) {
+        if (connectedRoadOrRiver) {
+            return ROAD_OR_RIVER_MOVE_COST_THIRDS;
+        }
+        return MovementPoints.ofPoints(hasTrees ? moveCostWithTree : moveCost);
     }
 
     public int getDefenseBonus() {

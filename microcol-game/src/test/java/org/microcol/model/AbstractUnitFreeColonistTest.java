@@ -22,13 +22,15 @@ public abstract class AbstractUnitFreeColonistTest {
     protected void makeColonist(final Model model, final int id,
             final Place place, final Player owner, final int availableMoves) {
         unit = new UnitFreeColonist(model, id, unit -> place, owner,
-                availableMoves, new UnitActionNoAction(), 0, false, false);
+                MovementPoints.ofPoints(availableMoves),
+                new UnitActionNoAction(), 0, false, false);
     }
 
     protected UnitFrigate makeFrigate(final Model model, final int id,
             final Place place, final Player owner, final int availableMoves) {
         return new UnitFrigate(unit -> cargo, model, id, unit -> place, owner,
-                availableMoves, new UnitActionNoAction());
+                MovementPoints.ofPoints(availableMoves),
+                new UnitActionNoAction());
     }
 
     @AfterEach

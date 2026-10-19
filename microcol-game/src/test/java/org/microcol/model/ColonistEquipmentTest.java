@@ -38,7 +38,8 @@ class ColonistEquipmentTest {
         when(model.getColonyAt(location)).thenReturn(Optional.of(colony));
         unit = new UnitFreeColonist(model, 4,
                 value -> new PlaceLocation(value, location, Direction.east),
-                player, 1, new UnitActionNoAction(), 0, false, false);
+                player, MovementPoints.ofPoints(1), new UnitActionNoAction(), 0,
+                false, false);
         when(player.getAllUnits()).thenReturn(List.of(unit));
     }
 

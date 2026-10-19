@@ -38,8 +38,9 @@ class EuropeEquipmentTest {
     }
 
     private UnitFreeColonist makeUnit(Player owner) {
-        return new UnitFreeColonist(model, 4, PlaceEuropePier::new, owner, 1,
-                new UnitActionNoAction(), 0, false, false);
+        return new UnitFreeColonist(model, 4, PlaceEuropePier::new, owner,
+                MovementPoints.ofPoints(1), new UnitActionNoAction(), 0, false,
+                false);
     }
 
     static Stream<Arguments> equipmentLots() {

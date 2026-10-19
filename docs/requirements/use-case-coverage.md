@@ -12,12 +12,12 @@
 | UC-004 | Hra | Zachovat herní profil a postupovat kalendářem | [R-0051](done/R-0051.md), [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0208](R-0208.md) |
 | UC-005 | Hra | Dokončit tah ve správném pořadí | [R-0052](done/R-0052.md), [R-0151](R-0151.md) |
 | UC-006 | Hra | Odkrýt neznámý svět | [R-0070](done/R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) |
-| UC-007 | Hra | Použít všechny druhy terénu | [R-0123](done/R-0123.md), [R-0124](done/R-0124.md), [R-0125](R-0125.md), [R-0210](R-0210.md) |
+| UC-007 | Hra | Použít všechny druhy terénu | [R-0123](done/R-0123.md), [R-0124](done/R-0124.md), [R-0125](done/R-0125.md), [R-0210](R-0210.md) |
 | UC-008 | Hra | Využít řeky a zvláštní zdroje | [R-0126](R-0126.md), [R-0127](R-0127.md) |
 | UC-009 | Hra | Vyčerpat ložisko | [R-0128](R-0128.md) |
 | UC-010 | Hra | Prozkoumat zvěst o ztraceném městě | [R-0129](R-0129.md) |
 | UC-011 | Hra | Přesunout jednotku o pole | [R-0054](done/R-0054.md) |
-| UC-012 | Hra | Zaplatit pohyb podle terénu | [R-0125](R-0125.md) |
+| UC-012 | Hra | Zaplatit pohyb podle terénu | [R-0125](done/R-0125.md) |
 | UC-013 | Hra | Dojít na vzdálené místo | [R-0130](R-0130.md) |
 | UC-014 | Hra | Počkat nebo vynechat pohyb | [R-0053](done/R-0053.md) |
 | UC-015 | Hra | Držet hlídku a opevnit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md) |

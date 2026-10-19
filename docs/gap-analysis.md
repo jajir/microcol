@@ -217,7 +217,7 @@ exit to Europe. Water restrictions, including no forests or roads, apply.
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 
-Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/done/R-0124.md) and [R-0125](requirements/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
+Dated update (2026-10-17): [R-0093](requirements/done/R-0093.md) supersedes the historical defense discrepancies for supported terrain/forest variants, including swamp, hills and mountains. Missing plains, marsh and forested tundra remain owned by [R-0123](requirements/done/R-0123.md); baseline output and movement remain [R-0124](requirements/done/R-0124.md) and [R-0125](requirements/done/R-0125.md). The old comparison is retained as source history, not a claim that delivered corrections are still missing.
 
 This matrix does not establish the implementation of terrain defense in combat, nor river/road/plow/special-resource bonuses. Those are separate rules. R-0119 replaces the earlier generic plow formulas with the agreed +1 to already-positive corn, sugar, cotton and tobacco on suitable cleared land. Its targeted checks pass on 2026-10-17; the full base-terrain matrix remains separately owned by R-0124.
 

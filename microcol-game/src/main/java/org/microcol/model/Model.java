@@ -693,7 +693,8 @@ public class Model {
                 this,
                 unit -> ((AbstractUnit) unit).createVoyage(false,
                         Direction.east),
-                UnitType.MAN_OF_WAR, king, UnitType.MAN_OF_WAR.getSpeed(),
+                UnitType.MAN_OF_WAR, king,
+                MovementPoints.ofPoints(UnitType.MAN_OF_WAR.getSpeed()),
                 new UnitActionNoAction());
     }
 
@@ -759,7 +760,8 @@ public class Model {
         final Unit out = unitStorage.createUnit(
                 unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
                 this, unit -> new PlaceCargoSlot(unit, cargoSlot),
-                UnitType.COLONIST, king, UnitType.COLONIST.getSpeed(),
+                UnitType.COLONIST, king,
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
                 new UnitActionNoAction());
         ((UnitFreeColonist) out).setHoldingGuns(true);
         cargoSlot.store(out.getPlaceCargoSlot());
@@ -787,7 +789,8 @@ public class Model {
                     } else {
                         return new PlaceEuropePier(unit);
                     }
-                }, unitType, owner, owner.getEffectiveSpeed(unitType),
+                }, unitType, owner,
+                MovementPoints.ofPoints(owner.getEffectiveSpeed(unitType)),
                 new UnitActionNoAction());
     }
 
@@ -841,7 +844,8 @@ public class Model {
                         created -> new PlaceLocation(created, location,
                                 created.getDefaultOrintation()),
                         UnitType.FRIGATE, owner,
-                        owner.getEffectiveSpeed(UnitType.FRIGATE),
+                        MovementPoints.ofPoints(
+                                owner.getEffectiveSpeed(UnitType.FRIGATE)),
                         new UnitActionNoAction());
         owner.revealMapForUnit(unit);
         return Optional.of(unit);
@@ -854,7 +858,8 @@ public class Model {
                     return new PlaceLocation(unit, colony.getLocation(),
                             unit.getDefaultOrintation());
                 }, UnitType.COLONIST, colony.getOwner(),
-                UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
+                new UnitActionNoAction());
     }
 
     private void finishShipRepair(final Ship ship,
@@ -2442,6 +2447,15 @@ public class Model {
         checkTurnPreparationComplete();
         listenerManager.fireActionStarted(this);
         if (fireUnitMoveStarted(unit, path)) {
+            // The whole route is validated before the first step: an illegal
+            // step is an invalid argument, an unaffordable route a rejected
+            // state, and neither moves the unit part way.
+            if (unit.isAtPlaceLocation()) {
+                unit.verifyPathIsLegal(path.getLocations());
+                Preconditions.checkState(
+                        unit.canAffordPath(path.getLocations()),
+                        "Unit %s cannot afford the path", unit);
+            }
             path.getLocations().forEach(loc -> {
                 /*
                  * Unit could move to high seas. So could be out of map.
@@ -2485,16 +2499,17 @@ public class Model {
     public void moveUnitAsFarAsPossible(final Unit unit, final Path path) {
         checkTurnPreparationComplete();
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
-            path.getLocations().forEach(loc -> {
+            for (final Location loc : path.getLocations()) {
                 /*
                  * Check if unit is at place location is reasonable, because
                  * unit could in first step conquer city a be placed inside
-                 * city.
+                 * city. The first step it cannot pay ends the walk.
                  */
-                if (unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
-                    unit.moveOneStep(loc);
+                if (!unit.isAtPlaceLocation() || !unit.canAffordStepTo(loc)) {
+                    break;
                 }
-            });
+                unit.moveOneStep(loc);
+            }
             listenerManager.fireUnitMovedFinished(this, unit, path);
         }
     }

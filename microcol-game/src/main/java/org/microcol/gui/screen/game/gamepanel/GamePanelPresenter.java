@@ -267,7 +267,7 @@ public final class GamePanelPresenter {
             return;
         }
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
-        if (unitMove.requiredActionPoints() > movingUnit.getActionPoints()) {
+        if (!unitMove.isOneTurnMove()) {
             new DialogUnitCantMoveHere(viewUtil, i18n);
         } else if (unitMove.isOneTurnMove()) {
             // user will move

@@ -53,6 +53,9 @@ class PassengerTransferTest {
         ship.setPlaceMap(at(shipAt));
         UnitPo passenger = data.getModel().getUnits().stream()
                 .filter(u -> u.getId() == 16).findFirst().orElseThrow();
+        // A plain colonist has one point; boundary cases with more points need
+        // the five-point mounted colonist so the saved allowance is legal.
+        passenger.setMounted(moves > UnitType.COLONIST.getSpeed());
         passenger.setAvailableMoves(moves);
         passenger.setTools(80);
         ship.getCargo().getSlots().get(4).setGoodsType(GoodsType.ORE);
@@ -134,7 +137,9 @@ class PassengerTransferTest {
             unit.setWorkUpdates(0);
         }
         unit.setOwnerId(owner);
-        unit.setAvailableMoves(3);
+        // A full allowance of the unit's own type is always a legal saved
+        // value.
+        unit.setAvailableMoves(type.getSpeed());
         unit.setAction(new UnitActionNoAction().save());
         unit.setPlaceMap(at(location));
         return model.createUnit(model.save(), unit);

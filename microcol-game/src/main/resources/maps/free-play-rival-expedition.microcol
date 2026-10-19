@@ -23,7 +23,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -40,7 +40,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -57,7 +57,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -91,7 +91,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -107,7 +107,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -138,7 +138,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 0,
+        "movementThirds": 0,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false

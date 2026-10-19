@@ -313,7 +313,8 @@ class TaxBoycottTest {
                 new HashMap<>(), new HashSet<>(), null, Congress.initial(),
                 tax);
         colonist = new UnitFreeColonist(mockModel, 4, PlaceEuropePier::new,
-                pierOwner, 1, new UnitActionNoAction(), 0, false, false);
+                pierOwner, MovementPoints.ofPoints(1), new UnitActionNoAction(),
+                0, false, false);
         when(mockModel.isGameRunning()).thenReturn(true);
         when(mockModel.getCurrentPlayer()).thenReturn(pierOwner);
         when(mockModel.getUnitsOwnedBy(pierOwner, true))

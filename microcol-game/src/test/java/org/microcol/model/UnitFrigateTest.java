@@ -92,7 +92,7 @@ public class UnitFrigateTest {
         when(placeBuilder.apply((Unit) any())).thenReturn(placeMap);
 
         unit = new UnitFrigate(cargoProvider, model, id, placeBuilder, owner,
-                availableMoves, unitAction);
+                MovementPoints.ofPoints(availableMoves), unitAction);
     }
 
     @AfterEach

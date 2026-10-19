@@ -325,7 +325,7 @@ public class TC_29_F21_passenger_transfer_test extends AbstractMicroColTest {
                 .getAsJsonArray("units")) {
             com.google.gson.JsonObject unit = entry.getAsJsonObject();
             if (unit.get("id").getAsInt() == 4) {
-                unit.addProperty("availableMoves", 0);
+                unit.addProperty("movementThirds", 0);
             }
             if (unit.get("id").getAsInt() == 3) {
                 if (europe) {

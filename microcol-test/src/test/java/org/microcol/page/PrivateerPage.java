@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.UnitType;
 import org.microcol.model.unit.Ship;
 
@@ -28,14 +29,14 @@ public final class PrivateerPage extends AbstractScreen {
             JsonObject unit = element.getAsJsonObject();
             if (unit.get("id").getAsInt() == 0) {
                 unit.addProperty("type", "FRIGATE");
-                unit.addProperty("availableMoves", 6);
+                unit.addProperty("movementThirds", MovementPoints.ofPoints(6));
                 unit.getAsJsonObject("cargo").getAsJsonArray("slots")
                         .add(new JsonObject());
                 unit.getAsJsonObject("cargo").getAsJsonArray("slots")
                         .add(new JsonObject());
             } else if (unit.get("id").getAsInt() == 6) {
                 unit.addProperty("type", "PRIVATEER");
-                unit.addProperty("availableMoves", 8);
+                unit.addProperty("movementThirds", MovementPoints.ofPoints(8));
                 JsonArray slots = new JsonArray();
                 JsonObject goods = new JsonObject();
                 goods.addProperty("goodsType", "ORE");

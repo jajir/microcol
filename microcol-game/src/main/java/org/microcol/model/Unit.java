@@ -29,7 +29,59 @@ public interface Unit {
      */
     UnitType getType();
 
+    /**
+     * Whole action points left. A fraction of a point is not counted, so this
+     * is right for whole-point actions only.
+     *
+     * @return whole points of remaining movement
+     */
     int getActionPoints();
+
+    /**
+     * Exact remaining movement.
+     *
+     * @return remaining movement in thirds of a point
+     */
+    int getMovementThirds();
+
+    /**
+     * Movement that entering an adjacent location costs this unit. It is the
+     * same value that moving, path planning and reach use.
+     *
+     * @param location required location
+     * @return entry cost in movement thirds
+     */
+    int getEntryCostThirds(Location location);
+
+    /**
+     * Whether this unit may enter an adjacent location from its current place
+     * now. It does not check legality of the square itself.
+     *
+     * @param location required adjacent location
+     * @return {@code true} when the entry cost is affordable
+     */
+    boolean canAffordStepTo(Location location);
+
+    /**
+     * Verifies, without changing anything, that every step of the path is legal
+     * for this unit when walked in order from its current place. It does not
+     * check movement points.
+     *
+     * @param path required consecutive locations
+     * @throws IllegalArgumentException when a step is not adjacent, not on the
+     *                                  map or not enterable by this unit
+     * @throws IllegalStateException    when the game or the unit cannot act now
+     */
+    void verifyPathIsLegal(List<Location> path);
+
+    /**
+     * Whether the path can be walked from the current place in this turn, step
+     * by step with the same costs as moving.
+     *
+     * @param path required consecutive locations
+     * @return {@code true} when every step is legal and affordable
+     */
+    boolean canAffordPath(List<Location> path);
 
     Location getLocation();
 

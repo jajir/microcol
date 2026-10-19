@@ -27,21 +27,14 @@ final class UnitMove {
         }
     }
 
-    public int requiredActionPoints() {
-        if (path == null) {
-            return Integer.MAX_VALUE;
-        } else {
-            return path.size();
-        }
-    }
-
+    /**
+     * The model decides affordability, so terrain costs and the full-turn
+     * exception are the same here as when the unit moves.
+     *
+     * @return {@code true} when the whole route can be walked in this turn
+     */
     public boolean isOneTurnMove() {
-        if (path == null) {
-            return false;
-        } else {
-            final int actionPoint = unit.getActionPoints();
-            return path.size() <= actionPoint;
-        }
+        return path != null && unit.canAffordPath(path);
     }
 
     public List<Location> getPath() {

@@ -3,6 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
@@ -93,7 +94,7 @@ class UnitPanel {
         if (isUnitOwnedBy(unit, humanPlayer)) {
             final Label labelMoves = new Label(
                     i18n.get(Loc.unitsPanel_availableMoves) + " "
-                            + unit.getActionPoints());
+                            + formatMovement(unit.getMovementThirds()));
             labelMoves.getStyleClass().add("unitMoves");
             box.getChildren().add(labelMoves);
         }
@@ -103,6 +104,21 @@ class UnitPanel {
         labelOwner.getStyleClass().add("unitOwner");
         box.getChildren().add(labelOwner);
         return box;
+    }
+
+    /**
+     * Shows whole points, followed by the exact fraction when one is left.
+     *
+     * @param movementThirds remaining movement in thirds of a point
+     * @return text such as {@code 2} or {@code 1 1/3}
+     */
+    private static String formatMovement(final int movementThirds) {
+        final int points = movementThirds / MovementPoints.THIRDS_PER_POINT;
+        final int thirds = movementThirds % MovementPoints.THIRDS_PER_POINT;
+        if (thirds == 0) {
+            return String.valueOf(points);
+        }
+        return points + " " + thirds + "/" + MovementPoints.THIRDS_PER_POINT;
     }
 
     private boolean isUnitOwnedBy(final Unit unit, final Player player) {

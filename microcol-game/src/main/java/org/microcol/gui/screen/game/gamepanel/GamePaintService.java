@@ -300,11 +300,13 @@ final class GamePaintService {
      * @param point       required point where to draw image
      * @param stepCounter required step counter
      * @param moveMode    required move mode definition
+     * @param costThirds  required entry cost of this step in movement thirds
      */
     public void paintStep(final GraphicsContext graphics, final Point point,
-            final StepCounter stepCounter, final MoveMode moveMode) {
-        final Image image = imageProvider.getImage(
-                moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
+            final StepCounter stepCounter, final MoveMode moveMode,
+            final int costThirds) {
+        final Image image = imageProvider.getImage(moveMode.getImageForStep(
+                stepCounter.canMakeMoveInSameTurn(costThirds)));
         graphics.drawImage(image, point.getX() + STEP_ICON_POSITION.getX(),
                 point.getY() + STEP_ICON_POSITION.getY());
     }

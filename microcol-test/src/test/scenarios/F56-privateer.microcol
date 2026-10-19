@@ -29,7 +29,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 8,
+        "movementThirds": 24,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -52,7 +52,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -75,7 +75,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": true,
         "mounted": true,
@@ -110,7 +110,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 6,
+        "movementThirds": 18,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -127,7 +127,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -144,7 +144,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -180,7 +180,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 6,
+        "movementThirds": 18,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -205,7 +205,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false,
@@ -229,7 +229,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false
@@ -246,7 +246,7 @@
         "action": {
           "type": "noAction"
         },
-        "availableMoves": 1,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": false

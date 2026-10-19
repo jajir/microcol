@@ -37,7 +37,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 35,
@@ -62,7 +62,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 42,
@@ -87,7 +87,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 48,
@@ -112,7 +112,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "id": 54,
@@ -137,7 +137,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "workUpdates": 0,
@@ -151,7 +151,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -171,7 +171,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -191,7 +191,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -211,7 +211,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -231,7 +231,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -251,7 +251,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -265,7 +265,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -285,7 +285,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -305,7 +305,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -325,7 +325,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -339,7 +339,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -359,7 +359,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -379,7 +379,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -399,7 +399,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -419,7 +419,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -439,7 +439,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -453,7 +453,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -473,7 +473,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -493,7 +493,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -513,7 +513,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -533,7 +533,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -553,7 +553,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -573,7 +573,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -593,7 +593,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -613,7 +613,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -633,7 +633,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -653,7 +653,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -667,7 +667,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     }
   ],
   "nextColonyId": 4,

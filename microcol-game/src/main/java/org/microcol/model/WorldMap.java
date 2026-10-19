@@ -102,6 +102,16 @@ public class WorldMap {
         return out;
     }
 
+    /**
+     * @param location required location
+     * @return {@code true} when the square carries a forest, which changes its
+     *         movement cost
+     */
+    public boolean hasTreesAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return trees.contains(location);
+    }
+
     public boolean isValid(final Location location) {
         Preconditions.checkNotNull(location);
 

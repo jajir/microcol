@@ -28,7 +28,8 @@ public class UnitCreateRequest {
 
     private final UnitAction action;
 
-    private final int availableMoves;
+    /** Movement in thirds of a point; see MovementPoints. */
+    private final int movementThirds;
 
     private Function<Unit, Cargo> cargoBuilder;
 
@@ -61,14 +62,14 @@ public class UnitCreateRequest {
     public UnitCreateRequest(final Model model,
             final Function<Unit, Place> placeBuilder, final Integer unitId,
             final UnitType unitType, final Player owner,
-            final UnitAction action, final int availableMoves) {
+            final UnitAction action, final int movementThirds) {
         this.model = Preconditions.checkNotNull(model);
         this.modelPo = Preconditions.checkNotNull(placeBuilder);
         this.unitId = Preconditions.checkNotNull(unitId);
         this.unitType = Preconditions.checkNotNull(unitType);
         this.owner = Preconditions.checkNotNull(owner);
         this.action = Preconditions.checkNotNull(action);
-        this.availableMoves = Preconditions.checkNotNull(availableMoves);
+        this.movementThirds = movementThirds;
     }
 
     /**
@@ -156,10 +157,10 @@ public class UnitCreateRequest {
     }
 
     /**
-     * @return the availableMoves
+     * @return the movement in thirds of a point
      */
-    public int getAvailableMoves() {
-        return availableMoves;
+    public int getMovementThirds() {
+        return movementThirds;
     }
 
     /**

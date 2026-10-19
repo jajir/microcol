@@ -37,7 +37,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 3,
+      "movementThirds": 9,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -54,7 +54,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -71,7 +71,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -88,7 +88,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -105,7 +105,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -122,7 +122,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -139,7 +139,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -156,7 +156,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -173,7 +173,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -190,7 +190,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -207,7 +207,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -224,7 +224,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -241,7 +241,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -258,7 +258,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -275,7 +275,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -292,7 +292,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -309,7 +309,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -326,7 +326,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -343,7 +343,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -360,7 +360,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -377,7 +377,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -394,7 +394,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -411,7 +411,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -428,7 +428,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -451,7 +451,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -474,7 +474,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false
@@ -491,7 +491,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1,
+      "movementThirds": 3,
       "tools": 0,
       "holdingGuns": false,
       "mounted": false

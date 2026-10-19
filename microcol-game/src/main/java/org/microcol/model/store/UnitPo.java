@@ -1,6 +1,7 @@
 package org.microcol.model.store;
 
 import org.microcol.model.MilitaryRole;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.UnitType;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
@@ -45,7 +46,11 @@ public class UnitPo {
 
     private UnitActionPo action;
 
-    private int availableMoves;
+    /**
+     * Remaining movement in thirds of a point. It is boxed so that a missing
+     * value is rejected on load instead of becoming zero.
+     */
+    private Integer movementThirds;
 
     private int tools;
 
@@ -131,7 +136,7 @@ public class UnitPo {
     public String toString() {
         return MoreObjects.toStringHelper(UnitPo.class).add("id", id)
                 .add("type", type).add("ownerId", ownerId)
-                .add("availableMoves", availableMoves).add("placeMap", placeMap)
+                .add("movementThirds", movementThirds).add("placeMap", placeMap)
                 .add("placeEuropePort", placeEuropePort)
                 .add("placeHighSeas", placeHighSeas)
                 .add("placeCargoSlot", placeCargoSlot)
@@ -172,12 +177,31 @@ public class UnitPo {
         this.cargo = cargo;
     }
 
-    public int getAvailableMoves() {
-        return availableMoves;
+    public Integer getMovementThirds() {
+        return movementThirds;
     }
 
-    public void setAvailableMoves(int availableMoves) {
-        this.availableMoves = availableMoves;
+    public void setMovementThirds(final Integer movementThirds) {
+        this.movementThirds = movementThirds;
+    }
+
+    /**
+     * Whole points left, for code that counts points. The saved value stays in
+     * thirds.
+     *
+     * @return whole movement points
+     */
+    public int getAvailableMoves() {
+        return movementThirds / MovementPoints.THIRDS_PER_POINT;
+    }
+
+    /**
+     * Sets whole movement points, stored as thirds.
+     *
+     * @param availableMoves required whole movement points
+     */
+    public void setAvailableMoves(final int availableMoves) {
+        movementThirds = MovementPoints.ofPoints(availableMoves);
     }
 
     public PlaceMapPo getPlaceMap() {

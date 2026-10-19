@@ -53,7 +53,11 @@ class SentryOrderTest {
         ship.setPlaceMap(at(WATER));
         data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 15 || unit.getId() == 16)
-                .forEach(unit -> unit.setAvailableMoves(2));
+                .forEach(unit -> {
+                    // Two points need the five-point mounted colonist.
+                    unit.setMounted(true);
+                    unit.setAvailableMoves(2);
+                });
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         terrain.put(WATER, TerrainType.OCEAN);

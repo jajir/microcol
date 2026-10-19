@@ -46,7 +46,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 6
+      "movementThirds": 18
     },
     {
       "workUpdates": 0,
@@ -60,7 +60,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -74,7 +74,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -88,7 +88,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -102,7 +102,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -116,7 +116,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -130,7 +130,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -144,7 +144,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -158,7 +158,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -172,7 +172,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -186,7 +186,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -200,7 +200,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -214,7 +214,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 1
+      "movementThirds": 3
     },
     {
       "workUpdates": 0,
@@ -228,7 +228,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 0
+      "movementThirds": 0
     },
     {
       "workUpdates": 0,
@@ -242,7 +242,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 0
+      "movementThirds": 0
     },
     {
       "workUpdates": 0,
@@ -256,7 +256,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 0
+      "movementThirds": 0
     },
     {
       "workUpdates": 0,
@@ -270,7 +270,7 @@
       "action": {
         "type": "noAction"
       },
-      "availableMoves": 0
+      "movementThirds": 0
     }
   ],
   "nextColonyId": 3,

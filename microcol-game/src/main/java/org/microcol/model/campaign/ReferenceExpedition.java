@@ -13,6 +13,7 @@ import org.microcol.model.Direction;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.EuropeanRelationState;
 import org.microcol.model.Location;
+import org.microcol.model.MovementPoints;
 import org.microcol.model.RecruitmentPool;
 import org.microcol.model.Congress;
 import org.microcol.model.TaxState;
@@ -183,7 +184,7 @@ public final class ReferenceExpedition {
             unit.setWorkUpdates(0);
         }
         unit.setAction(new UnitActionNoActionPo());
-        unit.setAvailableMoves(type.getSpeed());
+        unit.setMovementThirds(MovementPoints.ofPoints(type.getSpeed()));
         return unit;
     }
 

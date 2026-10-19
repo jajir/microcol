@@ -123,7 +123,7 @@ class UnitTurnOrdersTest {
         for (final JsonElement entry : expected.getAsJsonObject()
                 .getAsJsonArray("units")) {
             if (entry.getAsJsonObject().get("id").getAsInt() == unit.getId()) {
-                entry.getAsJsonObject().addProperty("availableMoves", 0);
+                entry.getAsJsonObject().addProperty("movementThirds", 0);
             }
         }
         assertTrue(model.canSkipUnitTurn(unit));
@@ -166,7 +166,7 @@ class UnitTurnOrdersTest {
         ((AbstractUnit) ship).setActionPoints(ship.getSpeed());
         final JsonObject expected = gson.toJsonTree(ship.save())
                 .getAsJsonObject();
-        expected.addProperty("availableMoves", 0);
+        expected.addProperty("movementThirds", 0);
         final JsonElement passenger = gson
                 .toJsonTree(model.getUnitById(16).save());
         model.skipUnitTurn(ship);

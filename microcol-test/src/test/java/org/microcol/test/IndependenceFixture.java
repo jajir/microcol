@@ -9,6 +9,7 @@ import java.nio.file.Files;
 
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
+import org.microcol.model.MovementPoints;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -65,7 +66,7 @@ final class IndependenceFixture {
             unit.add("placeMap", place);
             unit.add("cargo", cargo);
             unit.add("action", action);
-            unit.addProperty("availableMoves", 1);
+            unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
             unit.addProperty("holdingGuns", armed);
             unit.addProperty("mounted", mounted);
             unit.addProperty("veteran", veteran);

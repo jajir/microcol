@@ -29,7 +29,6 @@ import javafx.scene.input.MouseButton;
 
 /** Inspect exploration through the actual map and its information controls. */
 public final class FogPage extends AbstractScreen {
-    private Location previewOrigin;
     private Integer rememberedActionPoints;
     private String rememberedObservation;
     private final org.microcol.gui.screen.game.gamepanel.FogFrameProbe probe = new org.microcol.gui.screen.game.gamepanel.FogFrameProbe();
@@ -68,7 +67,6 @@ public final class FogPage extends AbstractScreen {
 
     public void preview(final Location from, final Location target)
             throws Exception {
-        previewOrigin = from;
         getRobot().moveTo(screenPoint(from)).press(MouseButton.PRIMARY)
                 .moveTo(screenPoint(target));
         WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
@@ -79,8 +77,10 @@ public final class FogPage extends AbstractScreen {
     }
 
     public void cancelPreview() {
-        getRobot().moveTo(screenPoint(previewOrigin))
-                .release(MouseButton.PRIMARY);
+        // Releasing over the origin can open its colony instead of canceling.
+        getRobot().push(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

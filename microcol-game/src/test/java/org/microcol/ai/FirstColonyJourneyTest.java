@@ -240,6 +240,8 @@ class FirstColonyJourneyTest {
         unit.setOwnerId(owner);
         unit.setAction(template.getAction());
         unit.setWorkUpdates(0);
+        // The saved allowance is mandatory; a fresh spare starts exhausted.
+        unit.setMovementThirds(0);
         final PlaceMapPo place = new PlaceMapPo();
         place.setLocation(at);
         place.setOrientation(Direction.west);

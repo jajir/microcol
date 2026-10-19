@@ -522,7 +522,8 @@ public class ColonyBuildingQueue {
 
         model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder,
                 unitType, colony.getOwner(),
-                colony.getOwner().getEffectiveSpeed(unitType),
+                MovementPoints.ofPoints(
+                        colony.getOwner().getEffectiveSpeed(unitType)),
                 new UnitActionNoAction());
     }
 

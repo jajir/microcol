@@ -60,7 +60,8 @@ class UnitSightTest {
                 deSoto ? List.of(Founder.HERNANDO_DE_SOTO) : List.of());
         final UnitCreateRequest request = new UnitCreateRequest(model,
                 unit -> new PlaceLocation(unit, center, Direction.east), 1,
-                type, owner, new UnitActionNoAction(), 1);
+                type, owner, new UnitActionNoAction(),
+                MovementPoints.ofPoints(1));
         request.setCargoBuilder(unit -> mock(Cargo.class));
         request.setHoldingGuns(guns);
         request.setMounted(horses);
@@ -227,8 +228,8 @@ class UnitSightTest {
         final Model model = mock(Model.class);
         final Player offMapOwner = mock(Player.class);
         final UnitFreeColonist inEurope = new UnitFreeColonist(model, 2,
-                PlaceEuropePier::new, offMapOwner, 1, new UnitActionNoAction(),
-                0, false, false);
+                PlaceEuropePier::new, offMapOwner, MovementPoints.ofPoints(1),
+                new UnitActionNoAction(), 0, false, false);
         inEurope.setMounted(true);
         assertEquals(2, inEurope.getSightRadius());
         verify(offMapOwner, never()).revealMapForUnit(any());
@@ -237,15 +238,16 @@ class UnitSightTest {
 
         final UnitFreeColonist inCargo = new UnitFreeColonist(model, 3,
                 unit -> new PlaceCargoSlot(unit, mock(CargoSlot.class)),
-                offMapOwner, 1, new UnitActionNoAction(), 0, false, false);
+                offMapOwner, MovementPoints.ofPoints(1),
+                new UnitActionNoAction(), 0, false, false);
         inCargo.setMounted(true);
         verify(offMapOwner, never()).revealMapForUnit(any());
         assertThrows(IllegalStateException.class, inCargo::getVisibleLocations);
 
         final UnitFrigate atAtlantic = new UnitFrigate(
                 unit -> mock(Cargo.class), model, 4,
-                unit -> new PlaceHighSea(unit, false, 0, 2, 2), offMapOwner, 1,
-                new UnitActionNoAction());
+                unit -> new PlaceHighSea(unit, false, 0, 2, 2), offMapOwner,
+                MovementPoints.ofPoints(1), new UnitActionNoAction());
         assertThrows(IllegalStateException.class,
                 atAtlantic::getVisibleLocations);
         verify(offMapOwner, never()).revealMapForUnit(any());
