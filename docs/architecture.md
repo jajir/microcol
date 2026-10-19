@@ -381,6 +381,7 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 | [model.campaign.store](../microcol-game/src/main/java/org/microcol/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
 | [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
 | [i18n](../microcol-game/src/main/java/org/microcol/i18n/) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
+| [diagnostics](../microcol-game/src/main/java/org/microcol/diagnostics/) | Lokální omezený záznam obnovitelných chyb: pevné události, verze a platforma, bez zpráv výjimek a hráčského textu. Popis vlastní [diagnostika](diagnostics.md). Dialogy uložení, odchodu, načtení a nedokončeného tahu uvádějí složku záznamu. | Jen zápis záznamu; nesmí přerušit hru, uložení ani načtení. Model na něj nezávisí; volají ho GUI a spouštěcí kód. |
 
 ## Uživatelské rozhraní a podpůrné služby
 
@@ -428,7 +429,7 @@ mají povinné identifikátory. Podrobnosti a limity vlastní výše uvedený ko
 | [gui.event](../microcol-game/src/main/java/org/microcol/gui/event/) | Záměry UI a posluchače: založení kolonie, orání, jazyk, výběr a zobrazení. | Předat herní akci modelu; modelové události patří do `model.event`. |
 | [gui.event.model](../microcol-game/src/main/java/org/microcol/gui/event/model/) | Most mezi hrou a UI: `GameModelController`, `GameController`, `ModelListenerImpl`, zapojení robotů a reakce na mise. | Integrační balíček uvnitř GUI, nikoli druhý model. Nepřidávat sem strategie soupeřů a výpočty pravidel. |
 | [gui.image](../microcol-game/src/main/java/org/microcol/gui/image/) | Načítání, skládání a cache obrazů, pobřeží a kosmetických variant. | `WorldMapRandoms` vybírá obrazové varianty; negeneruje herní svět ani bojovou náhodu. |
-| [gui.preferences](../microcol-game/src/main/java/org/microcol/gui/preferences/) | Uživatelské nastavení a jeho JSON persistence: jazyk, hlasitost, okno, animace a zobrazení. | Rozehraná partie a její pravidla patří do modelové persistence. |
+| [gui.preferences](../microcol-game/src/main/java/org/microcol/gui/preferences/) | Uživatelské nastavení a jeho JSON persistence: jazyk, hlasitost, okno, animace a zobrazení. `SettingService.load` při nedostupném úložišti vrací poslední známé nastavení (nebo výchozí hodnoty), znovu zkouší čtení a nic nepřepisuje ani nepřesouvá; `save`/`update` selhání hlásí. | Rozehraná partie a její pravidla patří do modelové persistence. Nastavení nesmí při ztrátě umístění uložených her přerušit probíhající hru. |
 | [gui.util](../microcol-game/src/main/java/org/microcol/gui/util/) | Sdílené UI komponenty, dialogové základy, clipboard, fonty, animace a souborové pomůcky. | Nepřidávat nesouvisející obecné třídy. `PathPlanning` interpoluje pixely animace; herní cestu hledá `model.PathFinder`. |
 
 ## Obrazovky

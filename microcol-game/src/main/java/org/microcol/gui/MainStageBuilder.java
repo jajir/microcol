@@ -7,6 +7,7 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelView;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -60,26 +61,26 @@ public final class MainStageBuilder {
         primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
             final Rectangle rectangle = gamePreferences.getMainFramePosition();
             rectangle.x = newValue.intValue();
-            gamePreferences.setMainFramePosition(rectangle);
+            rememberFramePosition(rectangle);
         });
         primaryStage.yProperty().addListener((object, oldValue, newValue) -> {
             final Rectangle rectangle = gamePreferences.getMainFramePosition();
             rectangle.y = newValue.intValue();
-            gamePreferences.setMainFramePosition(rectangle);
+            rememberFramePosition(rectangle);
         });
         primaryStage.widthProperty()
                 .addListener((object, oldValue, newValue) -> {
                     final Rectangle rectangle = gamePreferences
                             .getMainFramePosition();
                     rectangle.width = newValue.intValue();
-                    gamePreferences.setMainFramePosition(rectangle);
+                    rememberFramePosition(rectangle);
                 });
         primaryStage.heightProperty()
                 .addListener((object, oldValue, newValue) -> {
                     final Rectangle rectangle = gamePreferences
                             .getMainFramePosition();
                     rectangle.height = newValue.intValue();
-                    gamePreferences.setMainFramePosition(rectangle);
+                    rememberFramePosition(rectangle);
                 });
         final Rectangle rectangle = gamePreferences.getMainFramePosition();
         if (isOnScreen(rectangle)) {
@@ -100,6 +101,21 @@ public final class MainStageBuilder {
         eventBus.post(new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
 
         primaryStage.setScene(scene);
+    }
+
+    /**
+     * Window geometry is cosmetic: when the setting storage is unavailable the
+     * window keeps working and the position is stored again by a later change
+     * once the storage can be written. Other failed saves are not hidden.
+     *
+     * @param rectangle required current window geometry
+     */
+    private void rememberFramePosition(final Rectangle rectangle) {
+        try {
+            gamePreferences.setMainFramePosition(rectangle);
+        } catch (MicroColException unavailable) {
+            // SettingService already reported the unavailable storage once.
+        }
     }
 
     /**

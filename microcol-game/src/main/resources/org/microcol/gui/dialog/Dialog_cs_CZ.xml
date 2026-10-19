@@ -52,6 +52,8 @@
 	<entry key="loadGame_invalid">Uložená hra obsahuje neplatné údaje a nelze ji načíst. Současná hra ani uložený soubor se nezměnily.</entry>
 	<entry key="recoverySave_title">Uložení bodu obnovy se nezdařilo</entry>
 	<entry key="recoverySave_failed">Hru se nepodařilo uložit. Dosavadní body obnovy zůstávají dostupné. Můžete pokračovat ve hře a zkusit to znovu.</entry>
+	<entry key="saveFolder_unavailable">Složku pro uložené hry nelze použít. Současná hra ani uložené hry se nezměnily. Můžete pokračovat ve hře a zkusit to znovu.</entry>
+	<entry key="diagnosticLog_folder">Složka diagnostického záznamu:</entry>
 	<entry key="fight_base">Základ: %s</entry>
 	<entry key="fight_attackBonus">Útok: +%s%%</entry>
 	<entry key="fight_terrainBonus">Terén: +%s%%</entry>

@@ -3,6 +3,7 @@ package org.microcol.model.campaign.po;
 import java.io.File;
 
 import org.microcol.model.Calendar;
+import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,22 +35,36 @@ public class PersistingTool {
      *
      * @return return root directory
      */
+    /**
+     * Get base directory where could be file saves. Unusable locations raise
+     * {@link MicroColException} so that save, exit and load report the failure
+     * like other rejected persistence.
+     *
+     * @return return root directory
+     */
     public File getRootSaveDirectory() {
         final File userDir = new File(
                 System.getProperty(SYSTEM_PROPERTY_USER_HOME));
-        Preconditions.checkState(userDir.exists());
-        Preconditions.checkState(userDir.isDirectory());
+        if (!userDir.isDirectory()) {
+            throw new MicroColException("User home is not a directory");
+        }
 
         final File out = userDir.toPath().resolve(SAVE_DIRECTORY).toFile();
         if (!out.exists()) {
             logger.info("creating microCol save directory at '{}'",
                     out.getAbsolutePath());
-            Preconditions.checkState(out.mkdir(), "Unable to create file (%s)",
-                    out.getAbsolutePath());
+            if (!out.mkdir()) {
+                throw new MicroColException(
+                        String.format("Unable to create save directory (%s)",
+                                out.getAbsolutePath()));
+            }
         }
 
-        Preconditions.checkState(out.exists());
-        Preconditions.checkState(out.isDirectory());
+        if (!out.isDirectory()) {
+            throw new MicroColException(
+                    String.format("Save directory is not a directory (%s)",
+                            out.getAbsolutePath()));
+        }
         return out;
     }
 

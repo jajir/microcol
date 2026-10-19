@@ -36,6 +36,27 @@ public class Setting {
 
     private String gameInProgressSaveFile;
 
+    /**
+     * Independent copy, so a remembered setting cannot be changed by callers.
+     *
+     * @return copy with the same values
+     */
+    Setting copy() {
+        final Setting out = new Setting();
+        out.mainFramePosition = mainFramePosition == null ? null
+                : new Rectangle(mainFramePosition);
+        out.mainFrameState = mainFrameState;
+        out.locale = locale;
+        out.volume = volume;
+        out.animationSpeed = animationSpeed;
+        out.showGrid = showGrid;
+        out.showFightAdvisor = showFightAdvisor;
+        out.autosaveEnabled = autosaveEnabled;
+        out.version = version;
+        out.gameInProgressSaveFile = gameInProgressSaveFile;
+        return out;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,

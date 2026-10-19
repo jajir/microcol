@@ -47,8 +47,12 @@ usual JavaFX desktop libraries, including GTK 3. Java is bundled with the game.
 
 The first start needs internet access and downloads roughly 60 MB. Later starts
 download a game archive only when its build ID changes. If a first download
-fails, reconnect and open the launcher again. On macOS, Finder launch errors
-are recorded in `~/Library/Application Support/MicroCol Dev/launcher.log`.
+fails, reconnect and open the launcher again. On macOS, a failed Finder launch
+shows a dialog and adds one short record (time and exit status, no console
+text) to `~/Library/Logs/MicroCol/microcol.log`; the launcher's console output
+is not kept, so no player or save text is copied. That log is bounded to three
+files of 5 MiB and also holds the game's own failure records, see
+[local diagnostics](diagnostics.md#macos-launcher).
 
 The command-line launcher supports:
 

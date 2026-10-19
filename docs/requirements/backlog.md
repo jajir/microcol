@@ -169,7 +169,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
-| [R-0231](R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
+| [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
 

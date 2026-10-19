@@ -87,6 +87,9 @@ import org.microcol.gui.screen.statistics.StatisticsButtonsPanelController;
 import org.microcol.gui.screen.turnreport.ScreenTurnReportPresenter;
 import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
 import org.microcol.gui.screen.turnreport.TurnReportButtonsPanelController;
+import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.diagnostics.DiagnosticSubscriberExceptionHandler;
+import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
@@ -114,14 +117,20 @@ public final class MicroColModule extends AbstractModule {
 
     private final EventBus eventBus;
 
+    private final DiagnosticLog diagnosticLog;
+
     public MicroColModule() {
-        eventBus = new EventBus("microCol");
+        diagnosticLog = new DiagnosticLog(DiagnosticLog.defaultDirectory(),
+                new ApplicationInfo().getDiagnosticVersion());
+        eventBus = new EventBus(
+                new DiagnosticSubscriberExceptionHandler(diagnosticLog));
     }
 
     @Override
     protected void configure() {
 
         bind(EventBus.class).toInstance(eventBus);
+        bind(DiagnosticLog.class).toInstance(diagnosticLog);
         bind(MainStageBuilder.class).in(Singleton.class);
         bind(UnitUtil.class).in(Singleton.class);
 

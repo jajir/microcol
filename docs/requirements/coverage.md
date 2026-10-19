@@ -120,7 +120,7 @@
     [graphics coverage](R-0224.md), [reproducible export](R-0225.md),
     [audio service](R-0226.md), [audio settings](R-0227.md), [first cue](R-0228.md),
     [long-game stability](R-0229.md) and [balance evaluation](R-0230.md).
-17. Release residuals are [diagnostics](R-0231.md), [player guide](R-0232.md),
+17. Release residuals are [diagnostics](done/R-0231.md), [player guide](R-0232.md),
     [runtime baseline](R-0233.md), [signed Mac](R-0234.md), [Linux acceptance](R-0235.md),
     [stable promotion](R-0236.md), [Steam product/rights](R-0237.md),
     [store media](R-0238.md), [depots](R-0239.md), [installed-client acceptance](R-0240.md)

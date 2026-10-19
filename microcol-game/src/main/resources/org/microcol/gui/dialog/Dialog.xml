@@ -52,6 +52,8 @@
 	<entry key="loadGame_invalid">The saved game contains invalid data and could not be loaded. The current game and save file were not changed.</entry>
 	<entry key="recoverySave_title">Recovery save failed</entry>
 	<entry key="recoverySave_failed">The game could not be saved. Existing recovery points remain available. You can keep playing and try again.</entry>
+	<entry key="saveFolder_unavailable">The save folder could not be used. The current game and saved games were not changed. You can keep playing and try again.</entry>
+	<entry key="diagnosticLog_folder">Diagnostic log folder:</entry>
 	<entry key="fight_base">Base: %s</entry>
 	<entry key="fight_attackBonus">Attack: +%s%%</entry>
 	<entry key="fight_terrainBonus">Terrain: +%s%%</entry>

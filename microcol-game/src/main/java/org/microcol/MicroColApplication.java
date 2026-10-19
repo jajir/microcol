@@ -2,10 +2,13 @@ package org.microcol;
 
 import org.fxmisc.cssfx.CSSFX;
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.diagnostics.DiagnosticEvent;
+import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.MicroColModule;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.image.ModuleImages;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.model.campaign.CampaignModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +73,8 @@ public final class MicroColApplication extends Application {
                     new ExternalModule(primaryStage), new CampaignModule(),
                     overridenModule);
             setDevelopmentMode();
+            injector.getInstance(DiagnosticLog.class)
+                    .record(DiagnosticEvent.STARTED, null);
 
             final MainStageBuilder mainStageBuilder = injector
                     .getInstance(MainStageBuilder.class);
@@ -79,12 +84,39 @@ public final class MicroColApplication extends Application {
             primaryStage.setOnShowing(e -> applicationController.startMusic());
             primaryStage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            recordStartupFailure(e);
             /**
              * When exception occurs during starting up it's probably fatal.
              */
             System.exit(1);
         }
+    }
+
+    /**
+     * Records a startup failure without the injector, which may not exist. The
+     * raw stack trace is not printed because exception messages can contain
+     * paths or player text. If even the log cannot be prepared, only the
+     * exception class is reported on the console.
+     *
+     * @param failure required startup failure
+     */
+    static void recordStartupFailure(final Exception failure) {
+        try {
+            recordStartupFailure(failure,
+                    new DiagnosticLog(DiagnosticLog.defaultDirectory(),
+                            new ApplicationInfo().getDiagnosticVersion()));
+        } catch (RuntimeException unavailable) {
+            System.err.println(
+                    "MicroCol failed to start (" + failure.getClass().getName()
+                            + "); the diagnostic log is unavailable.");
+        }
+    }
+
+    static void recordStartupFailure(final Exception failure,
+            final DiagnosticLog diagnosticLog) {
+        diagnosticLog.record(DiagnosticEvent.STARTUP_FAILED, failure);
+        System.err.println(
+                "MicroCol diagnostic log: " + diagnosticLog.getActiveFile());
     }
 
     @Override

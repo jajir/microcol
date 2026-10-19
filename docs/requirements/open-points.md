@@ -40,8 +40,6 @@ Total: **53 requirement-level decision topics**, with multi-part questions kept 
 
 1. **[R-0229, chapter 4](R-0229.md#4-open-questions)** — What supported map/load profile and turn, interaction, memory and crash thresholds constitute first-release acceptance? No numeric performance target is approved in the source docs.
 
-2. **[R-0231, chapter 4](R-0231.md#4-open-questions)** — What default retention/size and redaction policy should apply to player-shareable local diagnostics? The release estimate does not fix these values.
-
 ## A05 — World, units and orders
 
 
