@@ -73,8 +73,28 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     tloušťky tahů. Sdílený formatter ověřil 8 změněných Java souborů
     (shodné kódové tokeny, idempotence). Prošlo 19 kontrol completion runneru,
     21 kontrol launcheru workeru bez inference, 9 kontrol dokumentace,
-    přísný MkDocs build a kontrola whitespace. Publikace a CI pro výsledný
-    commit se ověřují samostatně.
+    přísný MkDocs build a kontrola whitespace vlastních zdrojů. Převzatá
+    licence Caveat OFL zůstává byte-for-byte včetně původního koncového whitespace.
+11. Commit vzhledu `f6e414cc2829bedef8f4abd4a9a8bee47a5909f6` byl odeslán
+    do main. Jeho [vývojový běh](https://github.com/jajir/microcol/actions/runs/39176195646)
+    zrušil starý 45minutový limit po 2 711 dokončených kontrolách bez chyby;
+    tato neúplná evidence sama není přejímkou. Následná oprava limitu
+    `07bb1e0203442bd46ff88f7868fbc7e5489639c8` mění pouze CI a dokumentaci,
+    zachovává tentýž herní kód a obsahuje tuto změnu tlačítek.
+12. [Vývojový běh 39176254760](https://github.com/jajir/microcol/actions/runs/39176254760)
+    19. října 2026 úspěšně dokončil všechny distribuční, funkční a publikační
+    kroky. Stažené XML potvrzuje **2 348 modelových testů v 201 třídách
+    a 375 UI/podpůrných testů v 86 třídách**, 0 selhání/chyb/přeskočených.
+    Rozdíl proti místnímu výběru je jediný dodatečný `ConnectorTest`.
+    [Kompatibilita](https://github.com/jajir/microcol/actions/runs/39176255209)
+    prošla pro Linux/Windows a Java 11/17; [Pages](https://github.com/jajir/microcol/actions/runs/39176254769)
+    úspěšně nasadily dokumentaci.
+13. Kanál `dev` i [vydání dev-181-07bb1e020344](https://github.com/jajir/microcol/releases/tag/dev-181-07bb1e020344)
+    obsahují přesný commit `07bb1e0203442bd46ff88f7868fbc7e5489639c8`.
+    Všechny tři archivy macOS ARM64/x86-64 a Linux x86-64 existují a jejich
+    GitHub SHA-256 digest souhlasí se staženým manifestem. Ověřené zdroje
+    jsou pod `target/r246/ci-final-functional` a `target/r246/published`;
+    completion `20261019T000902Z-5d2333283b08` není jediným podkladem závěru.
 
 Pracovní pravidla platí od **11. října 2026**. Vzorem čitelné struktury je
 [TC_18_F01_plow_field_test](../microcol-test/src/test/java/org/microcol/test/TC_18_F01_plow_field_test.java).
