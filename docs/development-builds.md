@@ -103,7 +103,7 @@ replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 
 ## Full functional regression budget
 
-[R-0249](requirements/R-0249.md) raises the full Docker/Xvfb functional job to
+[R-0249](requirements/done/R-0249.md) raises the full Docker/Xvfb functional job to
 **90 minutes**, as requested on 2026-10-19. The matching local completion
 watchdog is **5,400 seconds**. The ten-requirement integration run exceeded
 60 minutes while scenarios were still progressing; its three test failures are
@@ -296,3 +296,10 @@ The user subsequently confirmed that MicroCol Dev opened the game on their
 MacBook after approving it in macOS. This is a user-reported launch result;
 full gameplay and audio are not covered by the automated checks. The packages
 remain unsigned and unnotarized.
+
+## Backlog batch publication — 2026-10-19
+
+1. [Build 187](https://github.com/jajir/microcol/releases/tag/dev-187-d54d7ec69adc) publishes the ten-requirement batch at commit `d54d7ec69adc675bb74a2568b45059ba78bdd26d`, including the portable Windows diagnostic test fixture.
+2. [Run 39285105777](https://github.com/jajir/microcol/actions/runs/39285105777) passed checks, full functional scenarios, Linux x86-64 and both macOS architecture packages, and publication. The release contains all three archives, installers and checksums; the `dev` manifest names that exact build and commit.
+3. Compatibility run `39285105764` reports success; Windows/JDK 11 logs explicitly verify 2,585 passing model tests and packaging. Documentation run `39285105732` completed both build and deployment successfully.
+4. Build 186 remains available separately; its freshness guard correctly left the channel unchanged while the newer source was pending. A transient GitHub TLS timeout interrupted the build-187 watcher, not CI; reconnecting verified the same run without restarting it.
