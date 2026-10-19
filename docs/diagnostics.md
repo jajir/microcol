@@ -164,3 +164,8 @@ prints errors to the terminal.
    and JAVA_TOOL_OPTIONS contaminating the fake GitHub CLI stderr. The final
    harness uses the ordinary local label, actual game tests, and no injected
    JAVA_TOOL_OPTIONS. No failed run is counted as acceptance.
+
+## Windows compatibility follow-up — 2026-10-19
+
+1. Compatibility run `39282376020` failed one of 2,585 model checks on Windows/JDK 11: the startup fallback test assumed that a missing home property always rejects path construction. The Windows path provider did not trigger the intended failure.
+2. The fixture now uses a NUL-containing home path, invalid on both Windows and Unix, while preserving the exception-class, unavailable-log and privacy assertions. Production behavior is unchanged. Completion `20261019T162252Z-9579447e1e93` passed all 15 selected checks (3 startup fallback, 9 diagnostic log and 3 source-contract checks), with no failures, errors or skips; reports: `target/docker-ui/run-9vXHft`. Shared formatting and strict MkDocs passed. The preceding attempt passed all 12 diagnostic checks but failed because the caller selected no tests in the UI module; adding the source-contract selection corrected that command without changing code. Remote Windows verification remains pending.

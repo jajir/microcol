@@ -79,7 +79,8 @@ class MicroColApplicationStartupFailureTest {
         final String home = System.getProperty("user.home");
         try {
             System.setProperty("os.name", "Mac OS X");
-            System.clearProperty("user.home");
+            // A NUL is invalid on both Unix and Windows path providers.
+            System.setProperty("user.home", "\u0000");
 
             assertDoesNotThrow(() -> MicroColApplication
                     .recordStartupFailure(new IllegalStateException(SECRET)));
