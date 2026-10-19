@@ -1,0 +1,49 @@
+/* The selected frame/ruler appearance belongs only to Settings. */
+.settings-controls .check-box,
+.settings-controls .radio-button,
+.settings-controls .slider,
+.settings-controls .label-slider {
+    -fx-font-family: "Caveat";
+    -fx-font-size: 20;
+    -fx-text-fill: black;
+}
+.settings-controls .check-box {
+    -fx-skin: "org.microcol.gui.util.FramedCheckBoxSkin";
+}
+.settings-controls .radio-button {
+    -fx-skin: "org.microcol.gui.util.FramedRadioButtonSkin";
+}
+.settings-controls .check-box,
+.settings-controls .radio-button { -fx-padding: 3 4; }
+.settings-controls .check-box > .box,
+.settings-controls .radio-button > .radio {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.settings-controls .check-box > .box > .mark,
+.settings-controls .radio-button > .radio > .dot {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+}
+.settings-controls .slider {
+    -fx-skin: "org.microcol.gui.util.RulerSliderSkin";
+    -fx-pref-width: 200;
+    -fx-padding: 2;
+}
+.settings-controls .slider > .track {
+    -fx-padding: 10 0;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.settings-controls .slider > .thumb {
+    -fx-padding: 16 12;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: null;
+}
+
+.settings-controls .slider .axis {
+    -fx-tick-label-font: 20px "Caveat";
+    -fx-tick-label-fill: black;
+}

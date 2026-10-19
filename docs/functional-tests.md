@@ -5,6 +5,132 @@ ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
 nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
 
+## R-0248 — Rámečky a pravítko — 2026-10-19
+
+1. [R-0248](requirements/done/R-0248.md) mění pouze kresbu checkboxů,
+   radio buttons a dvou sliderů ve skutečném Nastavení. TC84 kontroluje
+   volby a jejich preference, češtinu/angličtinu, stav pod myší a stisk,
+   nedostupnost, krajní hodnoty a tažení; TC83 chrání přijatá tlačítka.
+2. První běh `run-DG8Z2r` (completion `20261019T042155Z-4eefc11868af`)
+   selhal při kompilaci TC84: test použil nesprávné názvy existujících
+   metod pro výběr jazyka. Oprava používá `setCzechLanguage` a
+   `setEnglishLanguage`; nejde o průchod funkčních kontrol.
+3. Review doplnilo sledování skutečné polohy nativního jezdce i při
+   animaci kliknutí na dráhu. TC84 navíc kliká na dráhu a porovnává
+   vybarvený jezdec s nativní polohou. Navazující cílený běh je completion
+   `20261019T042407Z-985fc6572333`. Plná regrese, vizuální kontrola
+   exportovaných snímků a publikace zatím čekají.
+4. `run-tQdWN7` (completion `20261019T042407Z-985fc6572333`) spustil
+   8 kontrol: kontrakt page objects a TC83 prošly (6); oba scénáře TC84
+   selhaly. Šipka vpravo u původního slideru rychlosti používá výchozí
+   `blockIncrement=10` a z hodnoty 0 dosáhne maxima 4; test nyní očekává
+   toto dosavadní chování, aplikace jej nemění. Druhý problém je neověřená
+   stisknutá výplň a chyby `NGCanvas` při renderování. Kresba nyní nezačíná
+   před přidělením kladných rozměrů; diagnostika kontroluje šířky, stisk,
+   hover a ukládá první snímek. Tato hypotéza zatím není potvrzená opravou.
+   Cílené opakování: completion `20261019T042607Z-91f1e59a078e`.
+
+5. `run-OmgJL7` (completion `20261019T042607Z-91f1e59a078e`) prošel
+   prvním scénářem TC84 včetně výplně stisku, preferencí, obou jazyků
+   a nedostupnosti. Snímek českého Nastavení byl prohlédnut: rámečky,
+   pravítka, popisky a Zpět jsou čitelné uvnitř okna 900 × 750.
+   Druhý scénář prošel hodnotami, klávesnicí, tažením a kliknutím na dráhu,
+   ale selhal až při snímku celé scény v Prism. Ochrana nulových rozměrů
+   tedy renderovací problém sama nevyřešila. Izolovaná diagnostika TC84/02
+   s rozměry a Prism pool statistikami je completion
+   `20261019T042750Z-926a98e964d2`; přejímka stále čeká.
+
+6. Diagnostika `20261019T042750Z-926a98e964d2` potvrdila scénu
+   **100 000 × 100 000**, zatímco plátna ovládacích prvků měla běžných
+   90–318 × 40 nebo 200 × 63 logických pixelů. Samostatné `Canvas.snapshot`
+   v nových kontrolách nechalo JavaFX přepočítat scénu podle velkého
+   preferovaného rozměru `CenteredPage`. Nové pixelové kontroly proto
+   používají existující `AbstractScreen.snapshotScene`, který zachovává
+   rozměry okna, a souřadnice kresby převádějí do scény. Kontrola vzhledu
+   také ověřuje, že scéna nepřesahuje okno. Nemění se produkční rozložení
+   ani nativní obsluha slideru. Popisky krajů pravítka nově používají Caveat.
+   Cílená přejímka TC84/TC83 a kontraktu page objects běží v completion
+   `20261019T043040Z-ca9ef18e6274` (supervisor 78615); výsledek zatím čeká.
+
+7. Cílený běh `run-VMG5Zo` (completion
+   `20261019T043040Z-ca9ef18e6274`) po opravě prošel: **8 kontrol,
+   0 selhání, 0 chyb, 0 přeskočených** — TC84 (2), TC83 (3) a
+   `PageVerificationContractTest` (3). Log neobsahuje původní výjimky Prism.
+   Prohlédnuté snímky `framed-settings-czech.png`,
+   `framed-settings-ruler-endpoints.png` a `framed-settings-disabled.png`
+   potvrzují čitelné rámečky, pravítka a Caveat v okně 900 × 750,
+   viditelný fokus i odlišenou nedostupnost. Původní anglické krajní popisky
+   sliderů zůstávají i při českém jazyce; změna nepřidává lokalizační chování.
+8. Úplná regrese modelu a UI v Dockeru/Xvfb/Openbox běží v completion
+   `20261019T043202Z-4b64f7418ec7` (supervisor 78887, limit 3 600 s).
+   Výsledek, dokončení R-0248 a publikace zatím čekají. Nativní HiDPI
+   monitor nebyl součástí dosavadního ověření.
+
+9. Úplný běh `run-9ycUac` (completion
+   `20261019T043202Z-4b64f7418ec7`) dosáhl limitu 60 minut během poslední
+   třídy TC73; log ukazuje pokračující hráčské kroky, nikoli zamrznutí.
+   Dokončilo se **2 348 modelových/podpůrných testů ve 201 třídách** a
+   **371 UI/podpůrných testů v 86 třídách**, všechny bez selhání, chyb
+   a přeskočení. Po ukončení zůstaly Maven/Xvfb/Openbox logy, export XML
+   není dostupný; počty pocházejí z dokončených tříd v Maven logu.
+   Porovnání s 87 současnými UI testovacími třídami našlo jedinou
+   nedokončenou třídu `TC_73_F65_clear_forest_test` se 6 scénáři.
+   Navazující běh dokončí celou TC73 a zopakuje TC84 na nezměněných
+   produkčních a testovacích zdrojích. Žádný scénář se nevynechává.
+10. Doplnění regrese TC73 + TC84 běží v completion
+    `20261019T053308Z-f3db4338df06` (supervisor 95522, limit 3 600 s).
+    Výsledek zatím čeká. Předchozí návrhy deseti fontů a jejich tenčích
+    variant jsou samostatné obrazové návrhy; v této implementaci se
+    ponechává Caveat a výběr jiného fontu zůstává na uživateli.
+
+11. Kontrolní seznam vyžaduje čerstvé Surefire XML; souhrny v logu
+    ukončeného běhu proto nejsou úplnou přejímkou. Po diagnostickém
+    dokončení TC73 se celá sada zopakuje ve třech částech: model + TC01–30
+    a podpůrné UI třídy; TC31–60; TC61–84. Manifest
+    `target/r248/full-partitions.json` obsahuje všech 288 tříd z úplného
+    výběru (201 modelových a 87 UI/podpůrných), bez vynechání a duplicity.
+    Výběr vychází ze skutečně spuštěných tříd posledního úplného běhu,
+    včetně nedokončené TC73. Limit ani požadavek na reporty se nesnižuje.
+
+12. Doplnění `run-0B3LYA` (completion
+    `20261019T053308Z-f3db4338df06`) prošlo: čerstvé XML potvrzuje **8 testů,
+    0 selhání, 0 chyb, 0 přeskočených** — TC73 (6) a TC84 (2).
+    První úplná část (201 modelových tříd, TC01–30 a 3 podpůrné UI třídy)
+    nyní běží v completion `20261019T053511Z-0ff68f273b7d`, supervisor 95823,
+    limit 3 600 s. Zbývající části navážou bez změny testovaného kódu.
+
+13. První úplná část `run-n8DyBO` (completion
+    `20261019T053511Z-0ff68f273b7d`) prošla. Exportované XML potvrzuje
+    **2 348 modelových testů ve 201 třídách a 138 UI/podpůrných kontrol
+    ve 33 třídách**, 0 selhání, chyb a přeskočených. Porovnání názvů
+    tříd s manifestem potvrdilo přesný výběr bez chybějících tříd.
+    Druhá část TC31–60 běží v completion `20261019T055917Z-103858cd4053`,
+    supervisor 98735, limit 3 600 s. Kód zůstává stejný.
+
+14. Druhá úplná část `run-vc21j9` (completion
+    `20261019T055917Z-103858cd4053`) prošla: XML potvrzuje **147 testů
+    ve 30 třídách TC31–60**, 0 selhání, chyb a přeskočených. Názvy tříd
+    přesně odpovídají manifestu. Poslední část TC61–84 běží v completion
+    `20261019T062023Z-cb7c0d3278b2`, supervisor 2946, limit 3 600 s.
+
+15. Poslední část `run-LQjNin` (completion
+    `20261019T062023Z-cb7c0d3278b2`) prošla: **92 testů ve 24 třídách
+    TC61–84**, 0 selhání, chyb a přeskočených. Souhrn tří čerstvých
+    exportů Surefire XML obsahuje **2 348 modelových a 377 UI/podpůrných
+    kontrol**, celkem 288 tříd bez chybějících či duplicitních tříd.
+    Tím je dokončen celý výchozí výběr, včetně TC21/TC38/TC83/TC84.
+16. Závěrečné review zkontrolovalo rozsah CSS pouze pro Nastavení,
+    průhlednost kresby vůči myši, převzetí skutečných oblastí nativních
+    skinů, obnovu kresby při změně hodnoty/stavu/jazyka a zachování
+    nativních vstupů i preferencí. Testy zachovávají herní očekávání;
+    pixelové kontroly používají stávající bezpečné snímkování scény.
+    Nebyl zjištěn zbývající blokující nález. Sdílený formatter prošel
+    všech 11 změněných Java souborů s kontrolou tokenů a idempotence;
+    dokumentace prošla 9 kontrolami a přísným MkDocs buildem.
+    R-0248 je `done`; zveřejnění přesného commitu a sestavení ještě čeká.
+    Nativní HiDPI monitor nebyl testován, Docker používá Linux/JDK 17,
+    Xvfb/Openbox a Glass.
+
 ## R-0246 — Dřevěná tlačítka — 2026-10-18
 
 1. [R-0246](requirements/done/R-0246.md) mění vzhled standardních tlačítek;

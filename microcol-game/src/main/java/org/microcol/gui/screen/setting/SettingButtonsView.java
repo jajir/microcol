@@ -67,6 +67,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
 
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
+        buttonsBox.getStyleClass().add("settings-controls");
         buttonsBox.getChildren().add(settingLanguageView.getContent());
         buttonsBox.getChildren().add(settingShowGridView.getContent());
         buttonsBox.getChildren().add(settingShowFightAdvisorView.getContent());

@@ -25,6 +25,7 @@ class SettingShowGridView implements JavaFxComponent, UpdatableLanguage {
             final I18n i18n) {
 
         checkBox = new CheckBox();
+        checkBox.setId("settingGrid");
         checkBox.setSelected(gamePreferences.isGridShown());
 
         mainPanel = new HBox();

@@ -31,6 +31,7 @@ class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLanguage {
         label.getStyleClass().add("label-slider");
 
         slider = new Slider();
+        slider.setId("settingAnimationSpeed");
         slider.setMin(PathPlanningService.ANIMATION_SPEED_MIN_VALUE);
         slider.setMax(PathPlanningService.ANIMATION_SPEED_MAX_VALUE - 1);
         slider.setSnapToTicks(true);

@@ -475,3 +475,6 @@ REF/intervention, endgame and scoring—stays visible in the authoritative
 ## Selected button appearance
 
 [R-0246](done/R-0246.md) implements the selected wooden buttons while preserving existing custom controls. It does not start the wider graphics or accessibility audits.
+
+[R-0248](done/R-0248.md) applies the selected frames and ruler controls to Settings,
+preserving native input, values and persistence. Other screens remain outside this change.

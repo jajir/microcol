@@ -31,6 +31,7 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
         label.getStyleClass().add("label-slider");
 
         slider = new Slider();
+        slider.setId("settingVolume");
         slider.setMin(MusicPlayer.MIN_VOLUME);
         slider.setMax(MusicPlayer.MAX_VOLUME);
         slider.setSnapToTicks(true);

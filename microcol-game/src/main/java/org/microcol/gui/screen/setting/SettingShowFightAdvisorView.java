@@ -27,6 +27,7 @@ public class SettingShowFightAdvisorView
             final I18n i18n) {
 
         checkBox = new CheckBox();
+        checkBox.setId("settingFightAdvisor");
         checkBox.setSelected(
                 preferencesProperties.getShowFightAdvisorProperty().get());
         preferencesProperties.getShowFightAdvisorProperty()

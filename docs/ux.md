@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+Nastavení podle [R-0248](requirements/done/R-0248.md) zachovává okamžité účinky
+voleb a návrat tlačítkem Zpět. Dřevěné rámečky rozlišují nezávislý výběr
+fajfkou a jedinou volbu tečkou; pravítko ukazuje hodnotu polohou jezdce.
+Klávesnice, fokus a čitelnost se ověřují na skutečné obrazovce, nikoli jen
+na návrhu; výsledky jsou ve [funkční evidenci](functional-tests.md).
+
 MicroCol má zachovat strategickou hloubku a současně hráči pomáhat pochopit jeho možnosti, ovládání a důsledky rozhodnutí. Při nové funkci proto řešíme také to, kde ji hráč najde, jak ji použije a jak pozná výsledek.
 
 Tato stránka je společným místem pro pravidla UX, popis současného ovládání a zjištění z jeho ověřování. Navazuje na [grafické zadání](graphics.md#soucasne-zadani-vzhledu) a [pravidla zvukové odezvy](audio.md). Platná pracovní dohoda z **11. října 2026**. Technická pozorování níže vycházejí z kódu na větvi `develop`, revize `77f75eb03c74f07ad0253595d14fb0b31ac6e78a`; nejsou výsledkem pozorování hráčů.

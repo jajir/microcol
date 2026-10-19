@@ -67,6 +67,21 @@ Barva světa automaticky není vhodné pozadí tlačítka. Každou kombinaci
 textu, výplně a stavu ověřit samostatně; důležitý význam nesmí záviset
 jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a-prebarvovani).
 
+### Rámečky a pravítko v Nastavení
+
+1. **Dohoda 19. října 2026, [R-0248](requirements/done/R-0248.md):** checkboxy,
+   radio buttons a oba slidery v Nastavení používají vybraný třetí návrh.
+   Čtvercový nebo kruhový dřevěný rámeček obklopuje světlý střed; výběr
+   označuje černá fajfka nebo tečka. Pravítko má jemné rysky a jezdec
+   se špičkou a černou středovou ryskou.
+2. Platí paleta dřevěných tlačítek, černá linka 2 logické px, detaily 1 px
+   a Caveat 20. Tloušťka se nemění s délkou posuvníku. Najetí a stisk mění
+   výplň; přerušovaný černý obrys označuje fokus. Nedostupnost tlumí vzhled.
+3. Implementace přidává kresbu k nativním skinům a jejich skutečným oblastem;
+   původní vstup, rozsahy, ukládání hodnot a překlady zůstávají. CSS se
+   vztahuje pouze na `.settings-controls`; jiné obrazovky nejsou převzaté
+   touto dohodou. Výsledky ověření patří do [funkční evidence](functional-tests.md).
+
 ### Dřevěná tlačítka bez bočních zářezů
 
 1. **Dohoda 18. října 2026, [R-0246](requirements/done/R-0246.md):** vybrána
