@@ -40,12 +40,12 @@ public class TC_22_F15_free_play_capability_audit_test
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         audit.clickPierColonist(MouseButton.PRIMARY);
         equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
-                "Sentry");
+                "Ordain as missionary…", "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         audit.clickPierColonist(MouseButton.SECONDARY);
         equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
-                "Sentry");
+                "Ordain as missionary…", "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         europe.verifyGold(10000);

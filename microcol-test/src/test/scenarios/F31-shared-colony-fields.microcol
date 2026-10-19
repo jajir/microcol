@@ -117,7 +117,7 @@
         "action": {
           "type": "noAction"
         },
-        "movementThirds": 15,
+        "movementThirds": 3,
         "tools": 0,
         "holdingGuns": false,
         "mounted": true

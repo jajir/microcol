@@ -144,6 +144,18 @@ public final class RebelSupportPage extends AbstractScreen {
                 units.remove(index);
             }
         }
+        // A connected road permits the two-tile transfer within a legal turn.
+        final Gson gson = new Gson();
+        final org.microcol.model.store.WorldMapPo map = gson.fromJson(
+                model.getAsJsonObject("map"),
+                org.microcol.model.store.WorldMapPo.class);
+        final java.util.Set<org.microcol.model.Location> roads = map
+                .getRoadSet();
+        for (int x = 24; x <= 26; x++) {
+            roads.add(org.microcol.model.Location.of(x, 16));
+        }
+        map.setRoads(roads);
+        model.add("map", gson.toJsonTree(map));
         final JsonObject newAmsterdam = model.getAsJsonArray("colonies").get(0)
                 .getAsJsonObject();
         final JsonObject delft = model.getAsJsonArray("colonies").get(1)
@@ -186,7 +198,7 @@ public final class RebelSupportPage extends AbstractScreen {
         final JsonObject action = new JsonObject();
         action.addProperty("type", "noAction");
         unit.add("action", action);
-        unit.addProperty("movementThirds", MovementPoints.ofPoints(5));
+        unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
         unit.addProperty("tools", 0);
         unit.addProperty("holdingGuns", false);
         unit.addProperty("mounted", false);
