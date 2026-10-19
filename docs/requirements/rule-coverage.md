@@ -205,8 +205,8 @@
 | FATHER-005 | [R-0111](done/R-0111.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-006 | [R-0100](done/R-0100.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-007 | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-008 | [R-0180](R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-009 | [R-0180](R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-008 | [R-0180](done/R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-009 | [R-0180](done/R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-010 | [R-0153](R-0153.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-011 | [R-0084](done/R-0084.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-012 | [R-0181](R-0181.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -219,7 +219,7 @@
 | FATHER-019 | [R-0110](done/R-0110.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-020 | [R-0149](R-0149.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-021 | [R-0183](R-0183.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| FATHER-022 | [R-0180](R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| FATHER-022 | [R-0180](done/R-0180.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-023 | [R-0184](done/R-0184.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-024 | [R-0104](done/R-0104.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | FATHER-025 | [R-0069](done/R-0069.md), [R-0129](R-0129.md) | Delivered sight effect retained; rumor protection belongs to exploration. |

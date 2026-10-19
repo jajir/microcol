@@ -193,7 +193,14 @@ public final class ColonyField {
                 getGoodsTypeProduction(goodsType));
         final Goods worked = base.multiply(worker.getType()
                 .getFieldProductionModifier(goodsType, getTerrainType()));
-        return political.apply(base, worked);
+        final Goods production = political.apply(base, worked);
+        if (goodsType == GoodsType.FUR && colony.getOwner().getCongressMembers()
+                .contains(Founder.HENRY_HUDSON)) {
+            // Zero yield stays zero, so doubling never creates furs.
+            return production
+                    .setAmount(Math.multiplyExact(production.getAmount(), 2));
+        }
+        return production;
     }
 
     public int getGoodsTypeProduction(final GoodsType goodsType) {

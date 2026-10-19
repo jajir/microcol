@@ -87,7 +87,7 @@
     [R-0178](R-0178.md) royal/Continental combat roles and ambush,
     and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
-11. Remaining founder effects are [R-0180](R-0180.md) production modifiers,
+11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
     [R-0181](R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
     [R-0183](R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.

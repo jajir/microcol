@@ -98,8 +98,8 @@
 | UC-090 | Hra | George Washington | [R-0111](done/R-0111.md), [R-0214](R-0214.md) |
 | UC-091 | Hra | Simon Bolivar | [R-0100](done/R-0100.md), [R-0214](R-0214.md) |
 | UC-092 | Hra | Benjamin Franklin | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md), [R-0214](R-0214.md) |
-| UC-093 | Hra | Thomas Jefferson | [R-0180](R-0180.md), [R-0214](R-0214.md) |
-| UC-094 | Hra | Thomas Paine | [R-0180](R-0180.md), [R-0214](R-0214.md) |
+| UC-093 | Hra | Thomas Jefferson | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
+| UC-094 | Hra | Thomas Paine | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
 | UC-095 | Hra | Pocahontas | [R-0153](R-0153.md), [R-0214](R-0214.md) |
 | UC-096 | Hra | Adam Smith | [R-0084](done/R-0084.md), [R-0214](R-0214.md) |
 | UC-097 | Hra | Jakob Fugger | [R-0181](R-0181.md), [R-0214](R-0214.md) |
@@ -112,7 +112,7 @@
 | UC-104 | Hra | William Penn | [R-0110](done/R-0110.md), [R-0214](R-0214.md) |
 | UC-105 | Hra | Juan de Sepulveda | [R-0149](R-0149.md), [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
 | UC-106 | Hra | Francisco de Coronado | [R-0183](R-0183.md), [R-0214](R-0214.md) |
-| UC-107 | Hra | Henry Hudson | [R-0180](R-0180.md), [R-0214](R-0214.md) |
+| UC-107 | Hra | Henry Hudson | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
 | UC-108 | Hra | Sieur de La Salle | [R-0184](done/R-0184.md), [R-0214](R-0214.md) |
 | UC-109 | Hra | Ferdinand Magellan | [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
 | UC-110 | Hra | Hernando de Soto | [R-0069](done/R-0069.md), [R-0214](R-0214.md) |

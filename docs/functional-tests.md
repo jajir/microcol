@@ -5030,49 +5030,33 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    `run-mIaLGe` exits 0, **122 passed** (ClearForest 43, PlowField 22, Terrain 5,
    SpecialistProduction 21, NationalTurnPreparation 8, NationalTurnOrder 11,
    existing TC18 7, TC15 2, PageVerificationContract 3), no failures/errors/skips.
-   Shared formatter passed. This verifies the written model and existing plow
-   regressions only. TC73/F65 clearing controls, confirmation, loss feedback and
-   Continue have not yet been authored or accepted. R-0120 remains incomplete;
-   do not count it among the seven targeted-accepted batch requirements.
-10. R-0120 final `run-tfx9Qq` exits 0: **112 model/architecture + 15 UI +
-    three source-contract = 130 passed**, zero failures/errors/skips. Model suites:
-    ClearForest 44, PlowField 22, Terrain 5, SpecialistProduction 21,
-    NationalTurnPreparation 8, NationalTurnOrder 11 and ModelArchitecture 1.
-    TC73/F65 has six scenarios: confirmed four-update completion, cancel/Escape,
-    stale confirmation, hardy two-update completion, explicit work cancellation,
-    and overflow with one persisted notice and no repeat next turn. TC15's two
-    and TC18's seven plow scenarios also pass. Earlier `run-ODgwPv` had one
-    overly broad next-turn report assertion; the repair checks zero lumber-loss
-    notices while retaining unrelated events and all stock/tool checks.
-    Shared formatter passes. Reports remain under `target/docker-ui/run-tfx9Qq/`.
-    Full batch regression and publication remain pending.
-11. R-0136 final `run-t7AO4q` exits 0: **127 model + 11 UI + three
-    source-contract = 141 passed**, no failures/errors/skips. Suites:
-    CoastalPortMovement 18, PassengerTransfer 28, CargoSlot 56,
-    UnitColonistEmbark 17 and SentryOrder 8; TC38/F30 five and TC29/F21 six.
-    Real owned-port arrival unloads outside, preserves goods/equipment/passenger
-    points, frees holds and survives Continue; merely loading a ship in port
-    does not unload it. Model cases cover zero points, stale port/action,
-    invalid later passenger and departure sentries before any arrival mutation.
-    TC38 retains preview cancellation and ordinary-shore selective landing;
-    TC38_05 adds zero-point arrival with empty passenger holds and retained ore.
-    Earlier fixture and UI setup failures and repairs are recorded in the
-    [operating evidence](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
-    Shared formatter passed; reports remain in `target/docker-ui/run-t7AO4q/`.
-    Full batch regression/publication remain pending.
-12. R-0090 final `run-aNzXVw` exits 0: **92 model + nine UI + three
-    source-contract = 104 passed**, zero failures/errors/skips. Suites:
-    FirstColonyJourney 11, FirstColonyPlanner 12, ColonyJobChoice 21,
-    ColonyFamine 8, SharedColonyFieldAssignment 7, Boundary 6 and Persistence 27.
-    TC34_08 extends the original founder to ten post-founding turns; TC34_09
-    uses two available workers and verifies actual food/lumber, ten turns and
-    Continue. Model cases cover better legal food, indoor workers, foreign
-    occupation and a barren bounded fallback. Failure/repair evidence is in the
-    [operating record](ai/local-qwen.md#claude-model-selection-batch-2026-10-17).
-    Starting food in focused reassignment/occupation boundary fixtures prevents
-    starvation before the AI's first decision; production references do not
-    receive runtime supplies. Shared formatter passed. Reports remain under
-    `target/docker-ui/run-aNzXVw/`; full batch regression/publication are pending.
+
+## R-0180 founder production (2026-10-19)
+
+1. Přijato v izolované dávce, publikace dosud neproběhla. Jefferson přidává
+   50 procentních bodů pouze k obsazené radnici; Paine aktuální daň k obsazené
+   i neobsazené části. Tisk se sčítá, noviny nahrazují lis, součet se zaokrouhlí
+   jednou dolů. Hudson zdvojuje kožešiny po dosavadních úpravách, nikoli kabáty.
+   Sdílené výpočty v Construction a ColonyField používají současného vlastníka.
+2. Docker `20261019T124401Z-030c9bb6ea98` ověřil 2 561 modelových testů
+   a **18 UI/provozních kontrol**, bez selhání, chyb a přeskočení. TC97
+   ověřuje radnici, lis, noviny, výběr kožešinového pole, skutečný tah a Continue;
+   doprovázejí jej TC52/77/67/56 a zdrojový kontrakt.
+3. Haiku následně doplnilo modelové kontroly obou směrů změny vlastníka při
+   skutečném dobytí a výroby kabátů se vstupem 6/2/0. První běh
+   `20261019T125225Z-11bee4a3d0d0` měl 2 564/2 566 úspěchů: dvě testovací
+   mapy neměly kladný výnos kožešin. Uživatel povolil dokončení Codexem;
+   fixture dostala travnaté pole s bonusem lovu kožešin, aserce zůstaly zachované.
+4. Finální Docker `20261019T125745Z-e26736a9967a`:
+   **2 566 modelových testů a 9 provozních/kontraktních kontrol PASS**, nula
+   selhání/chyb/přeskočení. Výběr `*Test,!RivalTradeCycleTest` ponechává
+   rozpracované R-0091 samostatně otevřené. Dřívější UI výsledek se znovu
+   používá, protože následně se změnily pouze modelové testy a dokumentace.
+5. Sdílený formatter: 17 Java souborů, tokeny/idempotence PASS. Dokumentační
+   testy a strict MkDocs ověřeny při uzavření. Plná regrese a publikace čekají
+   na dokončení desetipoložkové dávky. Tax-demand UI není novým scénářem;
+   změnu aktuální daně a následný výnos pokrývá modelový test.
+
 
 ## Claude batch 1 integrated acceptance — 2026-10-17
 
