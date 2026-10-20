@@ -65,6 +65,10 @@ public class UnitStorageTest {
         when(second.getId()).thenReturn(2);
         when(first.getLocation()).thenReturn(firstLocation);
         when(second.getLocation()).thenReturn(secondLocation);
+        when(first.getPlace()).thenReturn(
+                new PlaceLocation(first, firstLocation, Direction.east));
+        when(second.getPlace()).thenReturn(
+                new PlaceLocation(second, secondLocation, Direction.east));
         when(first.getOwner()).thenReturn(owner);
         when(second.getOwner()).thenReturn(owner);
         when(first.isAtPlaceLocation()).thenReturn(true);
@@ -73,10 +77,10 @@ public class UnitStorageTest {
 
         final CountDownLatch readerEntered = new CountDownLatch(1);
         final CountDownLatch releaseReader = new CountDownLatch(1);
-        when(first.isAtPlaceLocation()).thenAnswer(invocation -> {
+        when(first.getPlace()).thenAnswer(invocation -> {
             readerEntered.countDown();
             assertTrue(releaseReader.await(5, TimeUnit.SECONDS));
-            return true;
+            return new PlaceLocation(first, firstLocation, Direction.east);
         });
         final ExecutorService readerExecutor = Executors
                 .newSingleThreadExecutor();
@@ -95,6 +99,43 @@ public class UnitStorageTest {
             releaseReader.countDown();
             readerExecutor.shutdownNow();
         }
+    }
+
+    @Test
+    void mapQueriesUseOnePlaceSnapshotWhilePassengerBoards() {
+        final Player owner = mock(Player.class);
+        final Player other = mock(Player.class);
+        final Location location = Location.of(1, 1);
+        final PlaceLocation mapPlace = new PlaceLocation(unit, location,
+                Direction.east);
+        final Place cargoPlace = mock(PlaceCargoSlot.class);
+        when(unit.getOwner()).thenReturn(owner);
+        unitStorage.addUnit(unit);
+        // A fresh unit location query would now fail: only the captured place
+        // is safe.
+        when(unit.getLocation())
+                .thenThrow(new IllegalStateException("Already aboard"));
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(List.of(unit), unitStorage.getUnitsAt(location));
+        assertTrue(unitStorage.getUnitsAt(location).isEmpty());
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(List.of(unit), unitStorage.getUnitsAt(owner, location));
+        assertTrue(unitStorage.getUnitsAt(owner, location).isEmpty());
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(List.of(unit),
+                unitStorage.getEnemyUnitsAt(other, location));
+        assertTrue(unitStorage.getEnemyUnitsAt(other, location).isEmpty());
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(Map.of(location, List.of(unit)), unitStorage.getUnitsAt());
+        assertTrue(unitStorage.getUnitsAt().isEmpty());
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(Map.of(location, List.of(unit)),
+                unitStorage.getUnitsAt(owner));
+        assertTrue(unitStorage.getUnitsAt(owner).isEmpty());
+        when(unit.getPlace()).thenReturn(mapPlace, cargoPlace);
+        assertEquals(Map.of(location, List.of(unit)),
+                unitStorage.getEnemyUnitsAt(other));
+        assertTrue(unitStorage.getEnemyUnitsAt(other).isEmpty());
     }
 
     @BeforeEach

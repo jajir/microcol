@@ -5,6 +5,8 @@ import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PathPlanningService;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.slf4j.Logger;
+
+import javafx.application.Platform;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
@@ -42,6 +44,14 @@ public final class UnitMovedListener {
 
     @Subscribe
     private void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
+        if (Platform.isFxApplicationThread()) {
+            /*
+             * A go-to order can walk while a dialog on the FX thread completes
+             * turn preparation. Waiting here would block the thread that draws
+             * the animation, so the step is shown without one.
+             */
+            return;
+        }
         animationManager.addAnimation(
                 new AnimationWalk(pathPlanningService, event.getStart(),
                         event.getEnd(), event.getUnit(), paintService,

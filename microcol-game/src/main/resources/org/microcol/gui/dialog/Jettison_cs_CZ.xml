@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define keys for jettisoning goods from a ship</comment>
+
+	<entry key="title">Vyhodit náklad</entry>
+	<entry key="unavailable">Tato loď nyní nemůže vyhodit náklad. Musí to být vaše loď na moři během připraveného tahu.</entry>
+	<entry key="wrongPhase">Náklad nelze vyhodit během přípravy nebo ukončení tahu.</entry>
+	<entry key="noGoods">Tato loď nemá nákladový prostor se zbožím k vyhození. Pasažéři zůstanou na palubě.</entry>
+	<entry key="changed">Loď nebo její nákladový prostor se změnily, proto nebylo nic vyhozeno. Zkontrolujte loď a zkuste to znovu.</entry>
+	<entry key="holdTitle">Vyberte nákladový prostor</entry>
+	<entry key="holdQuestion">Z kterého nákladového prostoru lodi %s chcete částečně vyprázdnit zboží? Zatím se nic nemění.</entry>
+	<entry key="holdButton">Prostor %s: %s %s</entry>
+	<entry key="quantityReason">Vyhodit zboží z prostoru %s lodi %s. Loď zůstane na místě a nedostane žádné zlato.</entry>
+	<entry key="question">Vyhodit %s %s z prostoru %s lodi %s? Loď zůstane na místě a nedostane zlato. Pasažéři a ostatní prostory zůstanou beze změny.</entry>
+	<entry key="confirm">Vyhodit zboží</entry>
+</properties>

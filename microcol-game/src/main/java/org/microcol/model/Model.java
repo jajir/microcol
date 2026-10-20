@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ColonyFieldPo;
@@ -51,6 +52,9 @@ public class Model {
     private static final int CROWN_WAR_PERIOD = 20;
     /** Rounds after ending an alliance before war may be declared. */
     public static final int ALLIANCE_WAR_WAIT_ROUNDS = EuropeanRelations.WAR_WAIT_ROUNDS;
+    /** Equipment a disbanded colonist returns, in warehouse goods order. */
+    private static final List<GoodsType> DISBANDABLE_EQUIPMENT = List
+            .of(GoodsType.MUSKET, GoodsType.HORSE, GoodsType.TOOLS);
 
     double nextCombatRandom() {
         combatRandomState += 0x9E3779B97F4A7C15L;
@@ -234,7 +238,8 @@ public class Model {
                         });
                         return constructions;
                     }, colonyPo.getColonyWarehouse(), buildingQueue,
-                    colonyPo.getLiberty(), affiliation);
+                    colonyPo.getLiberty(), affiliation,
+                    TownCommons.parse(colonyPo.getTownCommonsGoods()));
             col.restoreExportGoods(colonyPo.getExportGoods());
             colonies.add(col);
         });
@@ -323,6 +328,8 @@ public class Model {
         }
 
         model.checkUnits();
+        model.checkSavedGoToOrders();
+        model.checkSavedBoardingPriorities();
         model.europeanRelations.checkRetainedOverlaps(model::isOverlapLive);
         for (final ColonyPo savedColony : modelPo.getColonies()) {
             final Colony restored = model.getColonyById(savedColony.getId())
@@ -497,7 +504,8 @@ public class Model {
                             });
                     return constructions;
                 }, new HashMap<String, Integer>(), new ArrayList<>(), 0L,
-                player);
+                player, TownCommons.chooseSecondCommodity(
+                        getMap().getTerrainAt(location)));
         final List<ColonyField> fields = col
                 .getEmptyFieldsWithMaxCornProduction();
         final ConstructionSlot indoorWork = col
@@ -626,6 +634,9 @@ public class Model {
             return false;
         if (unit.getActionPoints() <= 0)
             return false;
+        // An ordered unit first needs its go-to order canceled.
+        if (hasGoToOrder(unit))
+            return false;
         if (!canFoundColonyAt(unit, loc))
             return false;
         return true;
@@ -734,6 +745,116 @@ public class Model {
                 tryGetUnitById(ship.getId()).orElse(null) == ship
                         && ship.isAtHighSea(),
                 "Ship is not a registered in-transit unit");
+    }
+
+    /**
+     * Why the carrier may not jettison goods now. A ship at sea or on an
+     * Atlantic crossing may discard one goods hold; docks, Europe, land and
+     * damaged ships are refused.
+     *
+     * @param carrier required unit
+     * @return the first refused rule, or empty when some goods hold may be
+     *         jettisoned
+     */
+    public Optional<JettisonProblem> getJettisonProblem(final Unit carrier) {
+        Preconditions.checkNotNull(carrier, "Carrier is null");
+        if (!isGameRunning() || endingTurn || !hasPreparedTurn()) {
+            return Optional.of(JettisonProblem.WRONG_PHASE);
+        }
+        if (getCurrentPlayer() != carrier.getOwner()) {
+            return Optional.of(JettisonProblem.NOT_OWNER);
+        }
+        if (!(carrier instanceof org.microcol.model.unit.Ship) || unitStorage
+                .tryGetUnitById(carrier.getId()).orElse(null) != carrier) {
+            return Optional.of(JettisonProblem.UNAVAILABLE);
+        }
+        final org.microcol.model.unit.Ship ship = (org.microcol.model.unit.Ship) carrier;
+        if (ship.isDamaged() || !isAtSeaOrTransit(ship)) {
+            return Optional.of(JettisonProblem.NOT_AT_SEA);
+        }
+        if (ship.getCargo().getSlots().stream()
+                .noneMatch(slot -> slot.getGoods().isPresent())) {
+            return Optional.of(JettisonProblem.NO_GOODS);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Offer to discard goods from one hold of an owned ship. A refusal throws
+     * and changes nothing.
+     *
+     * @param ship      required ship
+     * @param slotIndex zero-based index of the hold
+     * @return the terms the player may confirm
+     * @throws IllegalStateException    when the ship may not jettison, or the
+     *                                  hold has no goods
+     * @throws IllegalArgumentException when the hold index is outside the ship
+     */
+    public JettisonOffer offerJettison(final org.microcol.model.unit.Ship ship,
+            final int slotIndex) {
+        Preconditions.checkNotNull(ship, "Ship is null");
+        final Optional<JettisonProblem> problem = getJettisonProblem(ship);
+        Preconditions.checkState(problem.isEmpty(),
+                "Jettison is not available: %s", problem.orElse(null));
+        Preconditions.checkArgument(
+                slotIndex >= 0 && slotIndex < ship.getCargo().getSlots().size(),
+                "Hold index %s is outside the ship", slotIndex);
+        final Goods held = ship.getCargo().getSlotByIndex(slotIndex).getGoods()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Hold does not contain goods to jettison"));
+        return new JettisonOffer(this, ship, slotIndex, held);
+    }
+
+    /**
+     * Discard the chosen quantity of the offered goods after the player
+     * confirmed it. Only that goods balance changes; the ship, its voyage,
+     * passengers, other holds and treasury stay unchanged.
+     *
+     * @param offer    required confirmed terms
+     * @param quantity required amount from one through the offered amount
+     * @throws IllegalStateException    when the terms changed or the phase
+     *                                  refuses the command
+     * @throws IllegalArgumentException when the quantity is outside the offer
+     */
+    public void jettison(final JettisonOffer offer, final int quantity) {
+        Preconditions.checkNotNull(offer, "Jettison offer is null");
+        Preconditions.checkArgument(offer.model == this,
+                "Jettison offer belongs to another game");
+        final Optional<JettisonProblem> problem = getJettisonProblem(
+                offer.ship);
+        Preconditions.checkState(problem.isEmpty(),
+                "Jettison is not available: %s", problem.orElse(null));
+        Preconditions.checkState(offer.isCurrent(),
+                "Jettison offer is no longer current");
+        Preconditions.checkArgument(
+                quantity >= 1 && quantity <= offer.goods.getAmount(),
+                "Quantity %s is outside 1 to %s", quantity,
+                offer.goods.getAmount());
+        offer.ship.getCargo().getSlotByIndex(offer.slotIndex)
+                .removeCargo(Goods.of(offer.goods.getType(), quantity));
+    }
+
+    /** Reads the ship's place once, so a concurrent move cannot throw. */
+    private boolean isAtSeaOrTransit(final org.microcol.model.unit.Ship ship) {
+        final Place place = ship.getPlace();
+        if (place instanceof PlaceHighSea) {
+            return true;
+        }
+        if (!(place instanceof PlaceLocation)) {
+            return false;
+        }
+        final Location at = ((PlaceLocation) place).getLocation();
+        return getColonyAt(at).isEmpty()
+                && getMap().getTerrainTypeAt(at).isSea();
+    }
+
+    private boolean hasPreparedTurn() {
+        try {
+            checkTurnPreparationComplete();
+            return true;
+        } catch (final TurnPreparationException busy) {
+            return false;
+        }
     }
 
     public boolean isValid(final Location location) {
@@ -1990,6 +2111,14 @@ public class Model {
         return unitStorage.getUnits();
     }
 
+    /**
+     * Whether the unit has a go-to order. Orders that need an idle unit refuse
+     * such a unit, so the UI never offers an operation that then throws.
+     */
+    boolean hasGoToOrder(final Unit unit) {
+        return goToOrderOf(unit).isPresent();
+    }
+
     private boolean canChangeSentry(final Unit unit,
             final UnitActionType from) {
         return unit != null && isGameRunning() && !endingTurn
@@ -1997,7 +2126,7 @@ public class Model {
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
                 && (unit.isAtPlaceLocation()
                         || unit.isAtEuropePier() && unit.isStorable())
-                && unit.getAction().getType() == from;
+                && unit.getAction().getType() == from && !hasGoToOrder(unit);
     }
 
     public boolean canSetSentry(final Unit unit) {
@@ -2020,6 +2149,65 @@ public class Model {
                 "Unit is not a current sentry");
         checkTurnPreparationComplete();
         ((AbstractUnit) unit).setWaitingOrder(UnitActionType.noAction);
+    }
+
+    /**
+     * Current player's live immigrant waiting on the European pier. Foreign,
+     * stale, moved or ordinary units are refused before any change.
+     */
+    private boolean canChangeBoarding(final Unit unit) {
+        return unit != null && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.isAtEuropePier() && unit.isImmigrant();
+    }
+
+    public boolean canOptOutOfBoarding(final Unit unit) {
+        return canChangeBoarding(unit) && unit.isWillingToBoard();
+    }
+
+    /**
+     * Withdraw a willing immigrant from the departing ship. The person stays on
+     * the pier and also loses any front-of-queue choice.
+     *
+     * @param unit required waiting immigrant of the current player
+     */
+    public void optOutOfBoarding(final Unit unit) {
+        Preconditions.checkState(canOptOutOfBoarding(unit),
+                "Immigrant cannot opt out of boarding");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).setBoardingOptOut(true);
+    }
+
+    public boolean canRestoreBoarding(final Unit unit) {
+        return canChangeBoarding(unit) && unit.isBoardingOptedOut();
+    }
+
+    public void restoreBoarding(final Unit unit) {
+        Preconditions.checkState(canRestoreBoarding(unit),
+                "Immigrant is not opted out of boarding");
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).setBoardingOptOut(false);
+    }
+
+    public boolean canPrioritizeBoarding(final Unit unit) {
+        return canChangeBoarding(unit) && unit.isWillingToBoard()
+                && !unit.isBoardingPriority();
+    }
+
+    /**
+     * Make a willing immigrant the owner's front-of-queue choice. It replaces
+     * any earlier choice of the same owner.
+     *
+     * @param unit required willing waiting immigrant of the current player
+     */
+    public void prioritizeBoarding(final Unit unit) {
+        Preconditions.checkState(canPrioritizeBoarding(unit),
+                "Immigrant cannot lead boarding");
+        checkTurnPreparationComplete();
+        unit.getOwner().getAllUnits().forEach(
+                owned -> ((AbstractUnit) owned).setBoardingPriority(false));
+        ((AbstractUnit) unit).setBoardingPriority(true);
     }
 
     /**
@@ -2047,7 +2235,8 @@ public class Model {
                 || colonist.isAtPlaceConstructionSlot()) {
             return Optional.of(OrdinationProblem.ASSIGNED_WORKER);
         }
-        if (colonist.getAction().getType() != UnitActionType.noAction) {
+        if (colonist.getAction().getType() != UnitActionType.noAction
+                || hasGoToOrder(colonist)) {
             return Optional.of(OrdinationProblem.ACTIVE_ORDER);
         }
         if (colonist.isAtEuropePier()) {
@@ -2098,7 +2287,8 @@ public class Model {
                 && (unit instanceof UnitArtillery
                         || ((UnitFreeColonist) unit).isHoldingGuns())
                 && unit.getMovementThirds() > 0
-                && unit.getAction().getType() == UnitActionType.noAction;
+                && unit.getAction().getType() == UnitActionType.noAction
+                && !hasGoToOrder(unit);
     }
 
     /** Spend this turn's movement and record a pending fortification. */
@@ -2124,6 +2314,190 @@ public class Model {
     }
 
     /**
+     * A live land unit of the current player that stands on the map, is idle
+     * and has no go-to order yet may take one.
+     */
+    private boolean isGoToCandidate(final Unit unit) {
+        return unit instanceof AbstractUnit && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && unit.isAtPlaceLocation() && unit.getAction().isNoAction()
+                && goToOrderOf(unit).isEmpty();
+    }
+
+    private static Optional<GoToOrder> goToOrderOf(final Unit unit) {
+        return unit instanceof AbstractUnit
+                ? ((AbstractUnit) unit).getGoToOrder()
+                : Optional.empty();
+    }
+
+    /**
+     * Whether the unit may take a go-to order to this map square. The square
+     * may lie beyond this turn's movement; the route uses the shared step
+     * costs.
+     *
+     * @param unit        required unit
+     * @param destination required map square
+     * @return {@code true} when a route exists and the order can be issued
+     */
+    public boolean canIssueGoTo(final Unit unit, final Location destination) {
+        // The route reads the unit's place once and is empty for its own
+        // square, so a unit that has just left the map gives no route.
+        return destination != null && isGoToCandidate(unit)
+                && getMap().isValid(destination)
+                && ((AbstractUnit) unit).findGoToRoute(destination).isPresent();
+    }
+
+    /**
+     * Give the unit a go-to order to a map square and advance it along the
+     * route as far as its movement allows in this turn. A rejected request
+     * changes nothing.
+     *
+     * @param unit        required unit
+     * @param destination required map square
+     */
+    public void issueGoTo(final Unit unit, final Location destination) {
+        Preconditions.checkState(canIssueGoTo(unit, destination),
+                "Unit %s cannot go to %s", unit, destination);
+        checkTurnPreparationComplete();
+        startGoToOrder(unit,
+                new GoToOrder(
+                        destination, null, String.format("%d, %d",
+                                destination.getX(), destination.getY()),
+                        false));
+    }
+
+    /**
+     * Named friendly colonies that the unit may take a go-to order to now.
+     *
+     * @param unit required unit
+     * @return reachable colonies of the unit's owner, empty when no order is
+     *         possible
+     */
+    public List<Colony> getGoToColonies(final Unit unit) {
+        if (!isGoToCandidate(unit)) {
+            return List.of();
+        }
+        return getColonies(unit.getOwner()).stream()
+                .filter(colony -> canIssueGoTo(unit, colony.getLocation()))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Give the unit a go-to order to a named friendly colony. The colony must
+     * still be the live colony that the model offers now, so a stale choice is
+     * rejected before anything changes.
+     *
+     * @param unit   required unit
+     * @param colony required colony chosen from {@link #getGoToColonies}
+     */
+    public void issueGoToColony(final Unit unit, final Colony colony) {
+        Preconditions.checkNotNull(colony, "Colony is null");
+        Preconditions.checkState(getGoToColonies(unit).contains(colony),
+                "Colony %s is no longer a go-to destination of unit %s", colony,
+                unit);
+        checkTurnPreparationComplete();
+        startGoToOrder(unit, new GoToOrder(colony.getLocation(), colony.getId(),
+                colony.getName(), false));
+    }
+
+    private void startGoToOrder(final Unit unit, final GoToOrder order) {
+        ((AbstractUnit) unit).startGoTo(order);
+        // The order is visible at once; the walk then reports its own steps.
+        fireActionWasStarted(unit);
+        ((AbstractUnit) unit).advanceGoTo();
+    }
+
+    /**
+     * Rejects, before the model is used, a saved go-to order whose named colony
+     * exists but is not at the saved destination. A colony that is gone or lost
+     * is not an error here: the order cancels at its owner's next turn.
+     */
+    /**
+     * A saved front-of-queue choice must be unique for its owner. Saved
+     * boarding flags are otherwise checked per unit by the factory.
+     */
+    private void checkSavedBoardingPriorities() {
+        unitStorage.getUnits().stream().filter(Unit::isBoardingPriority)
+                .collect(Collectors.groupingBy(Unit::getOwner,
+                        Collectors.counting()))
+                .values()
+                .forEach(count -> Preconditions.checkArgument(count == 1,
+                        "Saved boarding priority is not unique"));
+    }
+
+    private void checkSavedGoToOrders() {
+        for (final Unit unit : unitStorage.getUnits()) {
+            goToOrderOf(unit).filter(order -> order.getColonyId() != null)
+                    .ifPresent(order -> getColonyById(order.getColonyId())
+                            .ifPresent(colony -> Preconditions.checkArgument(
+                                    colony.getLocation()
+                                            .equals(order.getDestination()),
+                                    "Saved go-to colony %s is not at its destination",
+                                    colony.getId())));
+        }
+    }
+
+    /**
+     * Destination of the unit's go-to order. Reading it never changes the
+     * order.
+     *
+     * @param unit required unit
+     * @return destination square, or empty when the unit has no order
+     */
+    public Optional<Location> getGoToDestination(final Unit unit) {
+        return goToOrderOf(unit).map(GoToOrder::getDestination);
+    }
+
+    /**
+     * Name of the unit's go-to destination for display.
+     *
+     * @param unit required unit
+     * @return colony name or square coordinates, or empty without an order
+     */
+    public Optional<String> getGoToDestinationName(final Unit unit) {
+        return goToOrderOf(unit).map(GoToOrder::getDestinationName);
+    }
+
+    /**
+     * @param unit required unit
+     * @return whether the unit's go-to order is paused for lack of a route
+     */
+    public boolean isGoToPaused(final Unit unit) {
+        return goToOrderOf(unit).map(GoToOrder::isPaused).orElse(false);
+    }
+
+    /**
+     * @param unit required unit
+     * @return whether the unit may be sent somewhere by a new go-to order; the
+     *         destination itself is checked by {@link #canIssueGoTo}
+     */
+    public boolean canStartGoTo(final Unit unit) {
+        return isGoToCandidate(unit);
+    }
+
+    public boolean canCancelGoTo(final Unit unit) {
+        return unit instanceof AbstractUnit && isGameRunning() && !endingTurn
+                && getCurrentPlayer() == unit.getOwner()
+                && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && goToOrderOf(unit).isPresent();
+    }
+
+    /**
+     * Clear the go-to order without moving the unit or restoring its spent
+     * movement. Selecting or inspecting a unit never does this.
+     *
+     * @param unit required unit
+     */
+    public void cancelGoTo(final Unit unit) {
+        Preconditions.checkState(canCancelGoTo(unit),
+                "Unit %s has no current go-to order", unit);
+        checkTurnPreparationComplete();
+        ((AbstractUnit) unit).cancelGoTo();
+        fireActionWasStarted(unit);
+    }
+
+    /**
      * Authoritative plow admission for the current player's live pioneer.
      *
      * @param unit required unit
@@ -2144,7 +2518,8 @@ public class Model {
                 .getTools() < UnitActionPlowField.REQUIRED_TOOLS) {
             return Optional.of(PlowProblem.NOT_ENOUGH_TOOLS);
         }
-        if (unit.getAction().getType() != UnitActionType.noAction) {
+        if (unit.getAction().getType() != UnitActionType.noAction
+                || hasGoToOrder(unit)) {
             return Optional.of(PlowProblem.BUSY);
         }
         if (unit.getMovementThirds() <= 0) {
@@ -2210,7 +2585,8 @@ public class Model {
                 .getTools() < UnitActionClearForest.REQUIRED_TOOLS) {
             return Optional.of(ClearForestProblem.NOT_ENOUGH_TOOLS);
         }
-        if (unit.getAction().getType() != UnitActionType.noAction) {
+        if (unit.getAction().getType() != UnitActionType.noAction
+                || hasGoToOrder(unit)) {
             return Optional.of(ClearForestProblem.BUSY);
         }
         if (unit.getMovementThirds() <= 0) {
@@ -2329,7 +2705,8 @@ public class Model {
                 .getTools() < UnitActionBuildRoad.REQUIRED_TOOLS) {
             return Optional.of(BuildRoadProblem.NOT_ENOUGH_TOOLS);
         }
-        if (unit.getAction().getType() != UnitActionType.noAction) {
+        if (unit.getAction().getType() != UnitActionType.noAction
+                || hasGoToOrder(unit)) {
             return Optional.of(BuildRoadProblem.BUSY);
         }
         if (unit.getMovementThirds() <= 0) {
@@ -2450,14 +2827,21 @@ public class Model {
     }
 
     public boolean canSkipUnitTurn(final Unit unit) {
-        return unit != null && isGameRunning()
-                && unit.getOwner() == getCurrentPlayer()
+        if (unit == null) {
+            return false;
+        }
+        // One place read: a unit departing on the moving thread is refused
+        // instead of failing a second location query.
+        final Place place = unit.getPlace();
+        return isGameRunning() && unit.getOwner() == getCurrentPlayer()
                 && getPlayers().stream()
                         .anyMatch(player -> player == unit.getOwner())
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0
-                && unit.getLocation() != null && map.isValid(unit.getLocation())
-                && unit.getAction().isNoAction();
+                && place instanceof PlaceLocation
+                && unit.getMovementThirds() > 0
+                && ((PlaceLocation) place).getLocation() != null
+                && map.isValid(((PlaceLocation) place).getLocation())
+                && unit.getAction().isNoAction() && !hasGoToOrder(unit);
     }
 
     public void skipUnitTurn(final Unit unit) {
@@ -2465,6 +2849,147 @@ public class Model {
         Preconditions.checkState(canSkipUnitTurn(unit),
                 "Unit turn cannot be skipped");
         unit.setActionType(UnitActionType.noAction);
+    }
+
+    /**
+     * Why the given unit cannot be disbanded now. The same check runs again
+     * before the removal.
+     *
+     * @param unit unit the player selected, may be null
+     * @return the first reason, or empty when the unit may be disbanded
+     */
+    public Optional<DisbandProblem> getDisbandProblem(final Unit unit) {
+        if (unit == null || unitStorage.tryGetUnitById(unit.getId())
+                .orElse(null) != unit) {
+            return Optional.of(DisbandProblem.UNAVAILABLE);
+        }
+        if (!isGameRunning() || endingTurn) {
+            return Optional.of(DisbandProblem.WRONG_PHASE);
+        }
+        if (getCurrentPlayer() != unit.getOwner()) {
+            return Optional.of(DisbandProblem.NOT_OWNER);
+        }
+        final Place place = unit.getPlace();
+        if (place instanceof PlaceHighSea) {
+            return Optional.of(DisbandProblem.VOYAGE);
+        }
+        if (place instanceof PlaceShipRepair) {
+            return Optional.of(DisbandProblem.IN_REPAIR);
+        }
+        if (place instanceof PlaceCargoSlot) {
+            return Optional.of(DisbandProblem.ABOARD_CARRIER);
+        }
+        if (unit.canHoldCargo()
+                && !((UnitWithCargo) unit).getCargo().isEmpty()) {
+            return Optional.of(DisbandProblem.LOADED_CARRIER);
+        }
+        final Optional<Colony> residence = residenceOf(place);
+        if (residence.isPresent()) {
+            // The equipment goes only to a live colony of the same owner.
+            if (residence.get().getOwner() != unit.getOwner()
+                    || !residence.get().isValid()) {
+                return Optional.of(DisbandProblem.RECEIVING_COLONY_INVALID);
+            }
+            // Removing the last resident would destroy the colony and its
+            // warehouse as a side effect, so it is refused.
+            if (residence.get().getUnitsInsideColony().size() <= 1) {
+                return Optional.of(DisbandProblem.LAST_COLONY_RESIDENT);
+            }
+            if (!unit.canLeaveColony()) {
+                return Optional.of(DisbandProblem.MINIMUM_RESIDENTS);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Terms the player must confirm before a unit is disbanded: the equipment
+     * it carries, the part the colony keeps and the part that is lost.
+     *
+     * @param unit unit the player selected, may be null
+     * @return the current terms, or empty when disbanding is not allowed
+     */
+    public Optional<DisbandOffer> getDisbandOffer(final Unit unit) {
+        if (getDisbandProblem(unit).isPresent()) {
+            return Optional.empty();
+        }
+        final Optional<Colony> receiving = receivingColony(unit);
+        final Map<GoodsType, Integer> carried = unit instanceof UnitFreeColonist
+                ? ((UnitFreeColonist) unit).getCarriedEquipment()
+                : ImmutableMap.of(GoodsType.MUSKET, 0, GoodsType.HORSE, 0,
+                        GoodsType.TOOLS, 0);
+        final Map<GoodsType, Integer> retained = new HashMap<>();
+        final Map<GoodsType, Integer> lost = new HashMap<>();
+        final Map<GoodsType, Integer> capacity = new HashMap<>();
+        for (final GoodsType type : DISBANDABLE_EQUIPMENT) {
+            final int amount = carried.get(type);
+            final int kept = receiving
+                    .map(colony -> Math.min(amount,
+                            colony.getWarehouse().getFreeStorage(type)))
+                    .orElse(0);
+            retained.put(type, kept);
+            lost.put(type, amount - kept);
+            receiving.ifPresent(colony -> capacity.put(type, colony
+                    .getWarehouse().getStorageCapacity(type).getAmount()));
+        }
+        return Optional.of(new DisbandOffer(unit.getId(), unit.getPlace(),
+                receiving.orElse(null), carried, retained, lost, capacity));
+    }
+
+    /**
+     * Remove a unit the player chose to disband. Retained equipment goes to the
+     * receiving colony, the unit leaves its place and the registry once. No
+     * order runs, no turn advances and no voyage is settled. A rejected call
+     * changes nothing.
+     *
+     * @param unit               unit the player selected
+     * @param confirmed          exact terms the player confirmed
+     * @param excessAcknowledged whether the player accepted losing the excess
+     * @throws IllegalStateException when the unit, phase, terms or the
+     *                               acknowledgement do not match the offer
+     */
+    public void disband(final Unit unit, final DisbandOffer confirmed,
+            final boolean excessAcknowledged) {
+        Preconditions.checkNotNull(confirmed, "Confirmed offer is required");
+        Preconditions.checkState(
+                getDisbandOffer(unit).filter(confirmed::equals).isPresent(),
+                "Disband offer is no longer valid");
+        Preconditions.checkState(
+                excessAcknowledged || !confirmed.hasExcessLoss(),
+                "Excess warehouse loss must be acknowledged");
+        final Optional<Colony> receiving = confirmed.getReceivingColony();
+        unit.getPlace().destroy();
+        receiving.ifPresent(colony -> DISBANDABLE_EQUIPMENT.forEach(type -> {
+            final int kept = confirmed.getRetained(type);
+            if (kept > 0) {
+                colony.getWarehouse().addGoods(Goods.of(type, kept));
+            }
+        }));
+        destroyUnit(unit);
+    }
+
+    /**
+     * Colony that takes a unit's equipment: the colony of its resident place,
+     * or an owned colony on its own square. Other places have none.
+     */
+    private Optional<Colony> receivingColony(final Unit unit) {
+        final Place place = unit.getPlace();
+        if (place instanceof PlaceLocation) {
+            return getColonyAt(unit.getLocation())
+                    .filter(colony -> colony.getOwner() == unit.getOwner()
+                            && colony.isValid());
+        }
+        return residenceOf(place);
+    }
+
+    private static Optional<Colony> residenceOf(final Place place) {
+        if (place instanceof PlaceColonyField) {
+            return Optional.of(((PlaceColonyField) place).getColony());
+        }
+        if (place instanceof PlaceConstructionSlot) {
+            return Optional.of(((PlaceConstructionSlot) place).getColony());
+        }
+        return Optional.empty();
     }
 
     public Optional<Unit> getFirstSelectableUnitAt(final Location location) {
@@ -2586,6 +3111,8 @@ public class Model {
      */
     public void moveUnit(final Unit unit, final Path path) {
         checkTurnPreparationComplete();
+        Preconditions.checkState(!hasGoToOrder(unit),
+                "Cancel the go-to order before moving manually");
         listenerManager.fireActionStarted(this);
         if (fireUnitMoveStarted(unit, path)) {
             // The whole route is validated before the first step: an illegal
@@ -2639,6 +3166,8 @@ public class Model {
      */
     public void moveUnitAsFarAsPossible(final Unit unit, final Path path) {
         checkTurnPreparationComplete();
+        Preconditions.checkState(!hasGoToOrder(unit),
+                "Cancel the go-to order before moving manually");
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
             for (final Location loc : path.getLocations()) {
                 /*
@@ -2720,6 +3249,166 @@ public class Model {
         cargoSlot.sellAndEmpty(goods,
                 Preconditions.checkNotNull(offered, "Offered quote is null"));
         listenerManager.fireGoodsWasSoldInEurope(this, goods);
+    }
+
+    /** Goods that quick loading never moves, even when they are in stock. */
+    private static final List<GoodsType> QUICK_LOAD_EXCLUDED = ImmutableList
+            .of(GoodsType.HORSE, GoodsType.TOOLS, GoodsType.MUSKET);
+
+    /**
+     * Choose the one quick load or unload for a carrier at its own colony. Only
+     * the model ranks goods and selects a hold; a refusal explains the reason
+     * and changes nothing.
+     *
+     * @param carrier required unit, or {@code null} when none is selected
+     * @param action  required direction of the transfer
+     * @return the offer to confirm, or the reason the action is unavailable
+     */
+    public QuickCargoChoice getQuickCargoChoice(final Unit carrier,
+            final QuickCargoAction action) {
+        Preconditions.checkNotNull(action, "Quick cargo action is null");
+        if (!canUseQuickCargo(carrier)) {
+            return QuickCargoChoice.refused(QuickCargoProblem.UNAVAILABLE);
+        }
+        final UnitWithCargo cargoCarrier = (UnitWithCargo) carrier;
+        final Optional<Colony> colony = getColonyAt(carrier.getLocation())
+                .filter(candidate -> candidate.isValid()
+                        && candidate.getOwner() == carrier.getOwner()
+                        && candidate.getUnitsInPort().contains(carrier));
+        if (colony.isEmpty()) {
+            return QuickCargoChoice.refused(QuickCargoProblem.UNAVAILABLE);
+        }
+        return action == QuickCargoAction.LOAD
+                ? planQuickLoad(cargoCarrier, colony.get())
+                : planQuickUnload(cargoCarrier, colony.get());
+    }
+
+    /**
+     * Perform a quick load or unload after the player confirmed its offer. The
+     * live choice must still equal the confirmed terms; only then the existing
+     * carrier and warehouse operations move the goods, and they validate again.
+     * No treasury changes.
+     *
+     * @param confirmed the exact offer the player confirmed
+     * @throws IllegalStateException when the terms changed or the phase forbids
+     *                               the transfer
+     */
+    public void confirmQuickCargo(final QuickCargoOffer confirmed) {
+        Preconditions.checkNotNull(confirmed, "Confirmed offer is required");
+        Preconditions.checkState(
+                getQuickCargoChoice(confirmed.getCarrier(),
+                        confirmed.getAction()).getOffer()
+                        .filter(confirmed::equals).isPresent(),
+                "Quick cargo offer is no longer valid");
+        final CargoSlot hold = confirmed.getCarrier().getCargo()
+                .getSlotByIndex(confirmed.getSlotIndex());
+        if (confirmed.getAction() == QuickCargoAction.LOAD) {
+            hold.storeFromColonyWarehouse(confirmed.getGoods(),
+                    confirmed.getColony());
+        } else {
+            confirmed.getColony().getWarehouse()
+                    .moveToWarehouse(confirmed.getGoods(), hold);
+        }
+    }
+
+    /** Live phase, owner and placement checks shared by both directions. */
+    private boolean canUseQuickCargo(final Unit carrier) {
+        if (!(carrier instanceof UnitWithCargo) || !isGameRunning()
+                || endingTurn || getCurrentPlayer() != carrier.getOwner()
+                || unitStorage.tryGetUnitById(carrier.getId())
+                        .orElse(null) != carrier
+                || !carrier.isAtPlaceLocation()) {
+            return false;
+        }
+        if (carrier instanceof Ship && ((Ship) carrier).isDamaged()) {
+            return false;
+        }
+        try {
+            checkTurnPreparationComplete();
+            return true;
+        } catch (final TurnPreparationException busy) {
+            return false;
+        }
+    }
+
+    private QuickCargoChoice planQuickLoad(final UnitWithCargo carrier,
+            final Colony colony) {
+        final ColonyWarehouse warehouse = colony.getWarehouse();
+        final List<GoodsType> stocked = GoodsType.BUYABLE_GOOD_TYPES.stream()
+                .filter(type -> !QUICK_LOAD_EXCLUDED.contains(type))
+                .filter(type -> warehouse.getGoods(type).getAmount() > 0)
+                .sorted(Comparator.comparing(GoodsType::name))
+                .collect(ImmutableList.toImmutableList());
+        if (stocked.isEmpty()) {
+            return QuickCargoChoice.refused(QuickCargoProblem.NO_STOCK);
+        }
+        // Goods are sorted by name, so a tie keeps the lower goods ID.
+        Optional<EuropeTradeQuote> best = Optional.empty();
+        for (final GoodsType type : stocked) {
+            if (compatibleHold(carrier, type).isPresent()) {
+                final EuropeTradeQuote quote = carrier.getOwner()
+                        .quoteEuropeTrade(Goods.of(type, 1), false);
+                if (best.isEmpty()
+                        || quote.getTotal() > best.get().getTotal()) {
+                    best = Optional.of(quote);
+                }
+            }
+        }
+        if (best.isEmpty()) {
+            return QuickCargoChoice.refused(QuickCargoProblem.NO_FREE_HOLD);
+        }
+        final GoodsType type = best.get().getGoods().getType();
+        final CargoSlot hold = compatibleHold(carrier, type).orElseThrow();
+        final int stock = warehouse.getGoods(type).getAmount();
+        final int holdStock = hold.getGoods().map(Goods::getAmount).orElse(0);
+        return QuickCargoChoice.of(new QuickCargoOffer(carrier, colony,
+                QuickCargoAction.LOAD, carrier.getLocation(), hold.getIndex(),
+                Goods.of(type, Math.min(stock, hold.getAvailableCapacity())),
+                stock, warehouse.getFreeStorage(type), holdStock,
+                hold.getAvailableCapacity(), best.get()));
+    }
+
+    private QuickCargoChoice planQuickUnload(final UnitWithCargo carrier,
+            final Colony colony) {
+        final Optional<CargoSlot> hold = carrier.getCargo().getSlots().stream()
+                .filter(slot -> slot.getGoods().isPresent()).findFirst();
+        if (hold.isEmpty()) {
+            return QuickCargoChoice.refused(QuickCargoProblem.NO_GOODS);
+        }
+        final ColonyWarehouse warehouse = colony.getWarehouse();
+        final Goods held = hold.get().getGoods().get();
+        final Goods transfer;
+        try {
+            transfer = warehouse.getUnloadableGoods(held, hold.get());
+        } catch (final IllegalArgumentException rejected) {
+            // The warehouse accepts only cargo goods; anything else is refused.
+            return QuickCargoChoice.refused(QuickCargoProblem.UNAVAILABLE);
+        }
+        if (transfer.isZero()) {
+            return QuickCargoChoice.refused(QuickCargoProblem.WAREHOUSE_FULL);
+        }
+        return QuickCargoChoice.of(new QuickCargoOffer(carrier, colony,
+                QuickCargoAction.UNLOAD, carrier.getLocation(),
+                hold.get().getIndex(), transfer,
+                warehouse.getGoods(held.getType()).getAmount(),
+                warehouse.getFreeStorage(held.getType()), held.getAmount(),
+                hold.get().getAvailableCapacity(), null));
+    }
+
+    /**
+     * @return the partly filled hold of this goods with the lowest index, or
+     *         else the lowest empty hold; passenger holds never qualify
+     */
+    private static Optional<CargoSlot> compatibleHold(
+            final UnitWithCargo carrier, final GoodsType type) {
+        return carrier.getCargo().getSlots().stream()
+                .filter(slot -> slot.getAvailableCapacity() > 0)
+                .filter(slot -> slot.getGoods()
+                        .map(goods -> goods.getType().equals(type))
+                        .orElse(true))
+                .min(Comparator
+                        .comparing((CargoSlot slot) -> slot.isEmpty() ? 1 : 0)
+                        .thenComparingInt(CargoSlot::getIndex));
     }
 
     void fireGameStarted() {

@@ -111,6 +111,30 @@ public interface Unit {
 
     boolean isAtEuropePier();
 
+    /**
+     * Whether this unit is a waiting immigrant. Only a new paid or earned
+     * arrival on the European pier is one, until it boards.
+     *
+     * @return true for a waiting immigrant
+     */
+    boolean isImmigrant();
+
+    /**
+     * Whether a waiting immigrant is willing to board a departing ship.
+     *
+     * @return true for an immigrant that the player has not opted out
+     */
+    boolean isWillingToBoard();
+
+    boolean isBoardingOptedOut();
+
+    /**
+     * Whether this immigrant is the owner's single front-of-queue choice.
+     *
+     * @return true for the current front choice
+     */
+    boolean isBoardingPriority();
+
     boolean isAtPlaceConstructionSlot();
 
     boolean isAtPlaceColonyField();

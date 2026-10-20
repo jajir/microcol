@@ -26,6 +26,8 @@ import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.TaxPo;
 
+import com.google.gson.Gson;
+
 /**
  * The Crown's demand pauses one national update, is answered exactly once and
  * resumes only the remaining work.
@@ -749,31 +751,104 @@ class TaxDemandTest {
         assertTrue(owner.getImmigrationCrosses() >= 5);
     }
 
-    @Test
-    void fuggerArrivalClearsExistingArrearsOnceAndLaterProtestsStillBoycott() {
-        final GameModelPo data = data(Difficulty.CONQUISTADOR, 0, 5);
+    /**
+     * Dutch at a 17% rate owe rum and tobacco, and Congress holds {@code bells}
+     * toward Fugger's objective with {@code selected} chosen, if any. The
+     * Fugger objective is reached at the next update only when both the choice
+     * and the bells are present.
+     */
+    private GameModelPo fuggerData(final Founder selected, final int bells) {
+        final GameModelPo data = data(Difficulty.CONQUISTADOR, 17, 5);
         final PlayerPo dutchPo = player(data.getModel(), "Dutch");
         dutchPo.getTax().getArrears().put("RUM", 200);
         dutchPo.getTax().getArrears().put("TOBACCO", 100);
+        fuggerCongress(dutchPo, selected, bells);
+        return data;
+    }
+
+    /**
+     * Congress holds {@code bells} with Fugger offered and {@code selected}.
+     */
+    private static void fuggerCongress(final PlayerPo dutchPo,
+            final Founder selected, final int bells) {
         final CongressPo congress = Congress.initial();
         congress.setActivated(true);
-        congress.setBells(100);
+        congress.setBells(bells);
         congress.setMembers(List.of());
         congress.setCandidates(List.of(Founder.HERNAN_CORTES,
                 Founder.THOMAS_JEFFERSON, Founder.JAKOB_FUGGER,
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
-        congress.setSelected(Founder.JAKOB_FUGGER);
+        congress.setSelected(selected);
         congress.setGeneration(1);
         dutchPo.setCongress(congress);
-        final Model model = load(data.getModel());
+    }
+
+    /** The smallest debt a saved ledger accepts, so France's is valid. */
+    private static final int FRANCE_RUM_ARREARS = TaxProtest.MIN_ARREARS;
+
+    /**
+     * The free-play rival expedition: Dutch owe rum and tobacco at 17%, France
+     * owes its own rum, and Dutch's Congress is set as in {@link #fuggerData}.
+     */
+    private GameModelPo rivalData(final Founder selected) {
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play-rival-expedition.microcol");
+        data.getModel().setDifficulty(Difficulty.CONQUISTADOR);
+        data.getModel().getGameManager().setGameStarted(true);
+        data.getModel().getGameManager().setCurrentPlayer("Dutch");
+        final PlayerPo dutchPo = player(data.getModel(), "Dutch");
+        final TaxPo tax = dutchPo.getTax();
+        tax.setRate(17);
+        tax.setActivated(true);
+        tax.setUpdates(TaxState.interval(Difficulty.CONQUISTADOR) - 5);
+        tax.getArrears().put("RUM", 200);
+        tax.getArrears().put("TOBACCO", 100);
+        player(data.getModel(), "France").getTax().getArrears().put("RUM",
+                FRANCE_RUM_ARREARS);
+        fuggerCongress(dutchPo, selected, 100);
+        return data;
+    }
+
+    /**
+     * Ends Dutch's own turn, then the other nations' and Crowns' turns, until
+     * Dutch starts a new turn with nothing left pending.
+     */
+    private void nextDutchTurnAfterOthers(final Model model) {
+        assertTrue(model.isGameRunning());
+        assertEquals("Dutch", model.getCurrentPlayer().getName());
+        model.endTurn();
+        for (int turns = 0; turns < 8 && !"Dutch"
+                .equals(model.getCurrentPlayer().getName()); turns++) {
+            model.endTurn();
+        }
+        assertEquals("Dutch", model.getCurrentPlayer().getName());
+        assertTrue(model.isGameRunning());
+        assertFalse(model.isAwaitingTaxDecision());
+        assertFalse(model.isAwaitingImmigrationChoice());
+    }
+
+    @Test
+    void fuggerArrivalClearsExistingArrearsOnceAndLaterProtestsStillBoycott() {
+        final Model model = load(
+                fuggerData(Founder.JAKOB_FUGGER, 100).getModel());
         final Player dutch = model.getPlayerByName("Dutch");
         assertTrue(dutch.isBoycotted(GoodsType.RUM));
         assertTrue(dutch.isBoycotted(GoodsType.TOBACCO));
+        // The same position without the choice isolates what the arrival does.
+        final Model control = load(fuggerData(null, 100).getModel());
+        nextDutchTurn(control);
         nextDutchTurn(model);
         assertTrue(model.isGameRunning());
         assertTrue(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
         assertTrue(dutch.getTaxArrears().isEmpty());
         assertFalse(dutch.isBoycotted(GoodsType.RUM));
+        assertFalse(dutch.isBoycotted(GoodsType.TOBACCO));
+        // No payment is taken, and the rate and every stock, including the
+        // cleared commodities, match the position where Fugger did not arrive.
+        final Player unchanged = control.getPlayerByName("Dutch");
+        assertEquals(unchanged.getGold(), dutch.getGold());
+        assertEquals(17, dutch.getTaxRate());
+        assertEquals(stocks(control), stocks(model));
 
         // Reloading never replays the arrival, and the next protest is not
         // forgiven by the father who already joined.
@@ -797,6 +872,65 @@ class TaxDemandTest {
         assertTrue(reloaded.getPlayerByName("Dutch").isBoycotted(protested));
         assertEquals(1,
                 reloaded.getPlayerByName("Dutch").getTaxArrears().size());
+    }
+
+    /**
+     * A choice that is never confirmed, or one still short of the bells, joins
+     * no father at the update and clears nothing.
+     */
+    @Test
+    void canceledOrUnearnedFuggerChoiceKeepsEveryArrearBoycotted() {
+        assertArrearsRemainAfterTurn(load(fuggerData(null, 100).getModel()));
+        assertArrearsRemainAfterTurn(
+                load(fuggerData(Founder.JAKOB_FUGGER, 0).getModel()));
+    }
+
+    private void assertArrearsRemainAfterTurn(final Model model) {
+        final Player dutch = model.getPlayerByName("Dutch");
+        nextDutchTurn(model);
+        assertFalse(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
+        assertEquals(Map.of(GoodsType.RUM, 200, GoodsType.TOBACCO, 100),
+                dutch.getTaxArrears());
+        assertTrue(dutch.isBoycotted(GoodsType.RUM));
+        assertTrue(dutch.isBoycotted(GoodsType.TOBACCO));
+    }
+
+    /**
+     * Dutch's arrival forgives only Dutch's own arrears. France keeps its rum
+     * debt, its gold and its ledger through the arrival and a save and load,
+     * and every stock and unit matches the position without the choice.
+     */
+    @Test
+    void fuggerArrivalLeavesAForeignNationsArrearsUntouched() {
+        final Model model = load(rivalData(Founder.JAKOB_FUGGER).getModel());
+        final Player dutch = model.getPlayerByName("Dutch");
+        final Player france = model.getPlayerByName("France");
+        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+                france.getTaxArrears());
+        assertTrue(dutch.isBoycotted(GoodsType.RUM));
+        final Model control = load(rivalData(null).getModel());
+        nextDutchTurnAfterOthers(control);
+        nextDutchTurnAfterOthers(model);
+        final Player unchangedDutch = control.getPlayerByName("Dutch");
+        final Player unchangedFrance = control.getPlayerByName("France");
+        assertTrue(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
+        assertTrue(dutch.getTaxArrears().isEmpty());
+        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+                france.getTaxArrears());
+        assertEquals(unchangedFrance.getGold(), france.getGold());
+        assertEquals(unchangedDutch.getGold(), dutch.getGold());
+        assertEquals(17, dutch.getTaxRate());
+        assertEquals(stocks(control), stocks(model));
+        assertEquals(new Gson().toJson(control.save().getUnits()),
+                new Gson().toJson(model.save().getUnits()));
+
+        final Model restored = load(model.save());
+        restored.startGame();
+        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+                restored.getPlayerByName("France").getTaxArrears());
+        assertTrue(restored.getPlayerByName("Dutch").getTaxArrears().isEmpty());
+        assertTrue(restored.getPlayerByName("Dutch").getCongressMembers()
+                .contains(Founder.JAKOB_FUGGER));
     }
 
     private ModelPo savedPending() {

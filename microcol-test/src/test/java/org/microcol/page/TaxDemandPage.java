@@ -16,6 +16,7 @@ import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.model.Colony;
 import org.microcol.model.Difficulty;
+import org.microcol.model.Founder;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Player;
 import org.microcol.model.TaxState;
@@ -47,6 +48,8 @@ public final class TaxDemandPage extends AbstractScreen {
         private boolean independence;
         private boolean expandedWarehouse;
         private Integer gold;
+        private Integer congressBells;
+        private List<Founder> congressOffers;
 
         public Fixture(final File source, final String name) {
             this.source = source;
@@ -94,6 +97,16 @@ public final class TaxDemandPage extends AbstractScreen {
             gold = amount;
             return this;
         }
+
+        /**
+         * The Dutch Congress holds these bells and offers these founders, with
+         * no choice made yet.
+         */
+        public Fixture congress(final int bells, final List<Founder> offers) {
+            congressBells = bells;
+            congressOffers = List.copyOf(offers);
+            return this;
+        }
     }
 
     public TaxDemandPage(final TestContext context) {
@@ -131,6 +144,14 @@ public final class TaxDemandPage extends AbstractScreen {
         }
         if (fixture.gold != null) {
             player.addProperty("gold", fixture.gold);
+        }
+        if (fixture.congressBells != null) {
+            final JsonObject congress = player.getAsJsonObject("congress");
+            congress.addProperty("bells", fixture.congressBells);
+            final JsonArray offers = new JsonArray();
+            fixture.congressOffers
+                    .forEach(founder -> offers.add(founder.name()));
+            congress.add("candidates", offers);
         }
         final JsonObject colony = model.getAsJsonArray("colonies").get(0)
                 .getAsJsonObject();

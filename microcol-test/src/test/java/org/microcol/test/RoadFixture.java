@@ -47,7 +47,28 @@ final class RoadFixture {
     static void prepare(final TestContext context, final File source,
             final String name, final int tools, final Location... bareAt)
             throws IOException {
-        write(context, source, name, tools, null, new Location[0], bareAt);
+        write(context, source, name, tools, null, new Location[0], bareAt,
+                new Location[0], null);
+    }
+
+    /**
+     * Same as {@link #prepare(TestContext, File, String, int, Location...)} but
+     * the given square also carries a trapping resource, so bare grassland
+     * yields fur 2 before any road. The given worker of Delft leaves its east
+     * field and stands in the colony centre, as in the resource fixture.
+     *
+     * @param context  running application context
+     * @param source   shared scenario
+     * @param name     file name of the prepared copy
+     * @param tools    tools carried by each colonist
+     * @param workerId unit that worked the trapping square
+     * @param at       square with the trapping resource, bare and without road
+     */
+    static void prepareTrapping(final TestContext context, final File source,
+            final String name, final int tools, final int workerId,
+            final Location at) throws IOException {
+        write(context, source, name, tools, null, new Location[0],
+                new Location[] { at }, new Location[] { at }, workerId);
     }
 
     /**
@@ -64,7 +85,7 @@ final class RoadFixture {
             final String name, final int tools, final Location... bareAt)
             throws IOException {
         write(context, source, name, tools, HARDY_PIONEER_TYPE, new Location[0],
-                bareAt);
+                bareAt, new Location[0], null);
     }
 
     /**
@@ -80,12 +101,14 @@ final class RoadFixture {
     static void prepareWithRoads(final TestContext context, final File source,
             final String name, final int tools, final Location... roadsAt)
             throws IOException {
-        write(context, source, name, tools, null, roadsAt, roadsAt);
+        write(context, source, name, tools, null, roadsAt, roadsAt,
+                new Location[0], null);
     }
 
     private static void write(final TestContext context, final File source,
             final String name, final int tools, final String unitType,
-            final Location[] roadsAt, final Location[] bareAt)
+            final Location[] roadsAt, final Location[] bareAt,
+            final Location[] trappingAt, final Integer freedWorkerId)
             throws IOException {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
@@ -103,6 +126,9 @@ final class RoadFixture {
                 }
             }
         });
+        if (freedWorkerId != null) {
+            RiverFixture.freeFieldAndStandInColony(model, freedWorkerId);
+        }
         final JsonObject map = model.getAsJsonObject("map");
         final JsonArray roads = emptyRows(map.getAsJsonArray("trees"));
         for (final Location at : bareAt) {
@@ -113,6 +139,14 @@ final class RoadFixture {
             set(roads, at, "r");
         }
         map.add("roads", roads);
+        // Keep existing resources; only the requested squares change.
+        final JsonArray resources = map.has("resources")
+                ? map.getAsJsonArray("resources")
+                : emptyRows(map.getAsJsonArray("trees"));
+        for (final Location at : trappingAt) {
+            set(resources, at, "tr");
+        }
+        map.add("resources", resources);
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)

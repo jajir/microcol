@@ -147,6 +147,83 @@ public class UnitPo {
         this.departureDirection = departureDirection;
     }
 
+    /**
+     * Waiting immigrant on the European pier. An absent value means an ordinary
+     * unit, so no migration is needed.
+     */
+    private boolean immigrant;
+
+    /** Opt-out of a waiting immigrant; only meaningful with immigrant. */
+    private boolean boardingOptOut;
+
+    /** Front-of-queue choice; only meaningful for a willing immigrant. */
+    private boolean boardingPriority;
+
+    public boolean isImmigrant() {
+        return immigrant;
+    }
+
+    public void setImmigrant(final boolean immigrant) {
+        this.immigrant = immigrant;
+    }
+
+    public boolean isBoardingOptOut() {
+        return boardingOptOut;
+    }
+
+    public void setBoardingOptOut(final boolean boardingOptOut) {
+        this.boardingOptOut = boardingOptOut;
+    }
+
+    public boolean isBoardingPriority() {
+        return boardingPriority;
+    }
+
+    public void setBoardingPriority(final boolean boardingPriority) {
+        this.boardingPriority = boardingPriority;
+    }
+
+    /** Destination of a go-to order; absent means the unit has no order. */
+    private Location goToDestination;
+
+    private Integer goToColonyId;
+
+    private String goToDestinationName;
+
+    private boolean goToPaused;
+
+    public Location getGoToDestination() {
+        return goToDestination;
+    }
+
+    public void setGoToDestination(final Location goToDestination) {
+        this.goToDestination = goToDestination;
+    }
+
+    public Integer getGoToColonyId() {
+        return goToColonyId;
+    }
+
+    public void setGoToColonyId(final Integer goToColonyId) {
+        this.goToColonyId = goToColonyId;
+    }
+
+    public String getGoToDestinationName() {
+        return goToDestinationName;
+    }
+
+    public void setGoToDestinationName(final String goToDestinationName) {
+        this.goToDestinationName = goToDestinationName;
+    }
+
+    public boolean isGoToPaused() {
+        return goToPaused;
+    }
+
+    public void setGoToPaused(final boolean goToPaused) {
+        this.goToPaused = goToPaused;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(UnitPo.class).add("id", id)

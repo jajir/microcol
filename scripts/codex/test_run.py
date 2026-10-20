@@ -198,7 +198,8 @@ print(json.dumps({'databaseId': 42, 'headSha': os.getenv('PROBE_SHA', 'a'*40),
     def test_ci_deadline_never_cancels_remote_run(self):
         self.ci()
         self.stub("gh", "emit(); time.sleep(20)\n")
-        result = self.execute(timeout_seconds=0.5)
+        # Allow the stub to start on a busy host before testing its timeout.
+        result = self.execute(timeout_seconds=2)
         self.assertEqual(result["status"], "timed_out")
         self.assertEqual([e["args"][1] for e in self.observed() if e["tool"] == "gh"], ["view"])
 

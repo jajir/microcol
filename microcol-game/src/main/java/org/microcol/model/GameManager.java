@@ -254,6 +254,7 @@ final class GameManager {
         awaitingTaxDecision = !completed && currentPlayer.hasPendingTaxDemand();
         awaitingImmigrationChoice = !completed && !awaitingTaxDecision;
         if (completed) {
+            advanceGoToOrders(currentPlayer);
             model.fireTurnStarted(currentPlayer, true);
         } else if (awaitingTaxDecision) {
             model.fireTaxDemandRequired(currentPlayer);
@@ -301,7 +302,19 @@ final class GameManager {
         player.finishTurnPreparation();
         preparing = false;
         awaitingTaxDecision = false;
+        advanceGoToOrders(player);
         model.fireTurnStarted(player, true);
+    }
+
+    /**
+     * Continue the go-to orders of the player whose owner turn has just begun.
+     * It runs once per turn after preparation is complete, so each step is an
+     * ordinary move; start, continue and load never reach this boundary.
+     */
+    private void advanceGoToOrders(final Player player) {
+        for (final Unit unit : new ArrayList<>(player.getAllUnits())) {
+            ((AbstractUnit) unit).advanceGoTo();
+        }
     }
 
     void save(final ModelPo modelPo) {

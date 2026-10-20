@@ -2,6 +2,7 @@ package org.microcol.model.unit;
 
 import java.util.function.Function;
 
+import org.microcol.model.AbstractUnit;
 import org.microcol.model.Cargo;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Model;
@@ -272,6 +273,32 @@ public class UnitFactory {
         if (hasLocation) {
             ((Ship) unit).rememberDeparture(unitPo.getDepartureLocation(),
                     unitPo.getDepartureDirection());
+        }
+        // Waiting immigrants exist only on the pier; a front choice must also
+        // be willing. Such state is rejected rather than repaired.
+        Preconditions.checkArgument(
+                unitPo.isImmigrant()
+                        ? unit.isAtEuropePier() && !(unitPo.isBoardingOptOut()
+                                && unitPo.isBoardingPriority())
+                        : !unitPo.isBoardingOptOut()
+                                && !unitPo.isBoardingPriority(),
+                "Invalid saved immigrant boarding state");
+        if (unitPo.isImmigrant()) {
+            ((AbstractUnit) unit).restoreImmigrant(unitPo.isBoardingOptOut(),
+                    unitPo.isBoardingPriority());
+        }
+        // A saved order is restored only, never advanced: loading moves
+        // nothing.
+        if (unitPo.getGoToDestination() == null) {
+            Preconditions.checkArgument(
+                    unitPo.getGoToColonyId() == null
+                            && unitPo.getGoToDestinationName() == null
+                            && !unitPo.isGoToPaused(),
+                    "Incomplete saved go-to order");
+        } else {
+            ((AbstractUnit) unit).restoreGoTo(unitPo.getGoToDestination(),
+                    unitPo.getGoToColonyId(), unitPo.getGoToDestinationName(),
+                    unitPo.isGoToPaused());
         }
         return unit;
     }

@@ -189,8 +189,73 @@ public final class ColonyField {
 
     Goods getPotentialProduction(final Unit worker, final GoodsType goodsType,
             final PoliticalProduction political) {
-        final Goods base = Goods.of(goodsType,
-                getGoodsTypeProduction(goodsType));
+        final Goods without = getJobProduction(worker, goodsType,
+                getUnlimitedGoodsTypeProduction(goodsType, false), political);
+        return without.setAmount(without.getAmount()
+                + getDepositExtra(worker, goodsType, without, political));
+    }
+
+    /**
+     * Extra output that the job takes from a finite deposit, after the job and
+     * political modifiers and limited by the remaining units. The extra is
+     * measured on the job output, so a specialist never multiplies a last
+     * partial reserve.
+     *
+     * @param worker    worker of the square
+     * @param goodsType produced goods
+     * @param without   job output without the deposit bonus
+     * @param political political snapshot of the update
+     * @return extra units the reserve still allows, zero when none
+     */
+    private int getDepositExtra(final Unit worker, final GoodsType goodsType,
+            final Goods without, final PoliticalProduction political) {
+        final int extra = getJobProduction(worker, goodsType,
+                getUnlimitedGoodsTypeProduction(goodsType, true), political)
+                .getAmount() - without.getAmount();
+        // Only a usable square yields, so an empty extra needs no terrain.
+        return extra > 0 ? getTerrain().getLimitedDepositExtra(goodsType, extra)
+                : 0;
+    }
+
+    /**
+     * Goods that the current job takes from its finite deposit in one update.
+     * Previews never call this; the colony takes it once from the committed
+     * output. Output without a finite deposit takes nothing.
+     *
+     * @param political political snapshot of the update
+     * @return goods taken from the reserve, empty when nothing is taken
+     */
+    Optional<Goods> getDepositExtraction(final PoliticalProduction political) {
+        if (placeColonyField == null || !getMap().isValid(getLocation())
+                || isMissingDock()) {
+            return Optional.empty();
+        }
+        final GoodsType goodsType = placeColonyField.getProducedGoodsType();
+        if (getTerrain().getResourceOverlay()
+                .getInitialReserve(goodsType) == 0) {
+            return Optional.empty();
+        }
+        final Unit worker = placeColonyField.getUnit();
+        final Goods without = getJobProduction(worker, goodsType,
+                getUnlimitedGoodsTypeProduction(goodsType, false), political);
+        final int taken = getDepositExtra(worker, goodsType, without,
+                political);
+        return taken > 0 ? Optional.of(Goods.of(goodsType, taken))
+                : Optional.empty();
+    }
+
+    /**
+     * Output of one worker from the terrain output of this square.
+     *
+     * @param worker        worker of the square
+     * @param goodsType     produced goods
+     * @param terrainOutput output of the square before the job
+     * @param political     political snapshot of the update
+     * @return production of the job
+     */
+    private Goods getJobProduction(final Unit worker, final GoodsType goodsType,
+            final int terrainOutput, final PoliticalProduction political) {
+        final Goods base = Goods.of(goodsType, terrainOutput);
         final Goods worked = base.multiply(worker.getType()
                 .getFieldProductionModifier(goodsType, getTerrainType()));
         final Goods production = political.apply(base, worked);
@@ -206,6 +271,19 @@ public final class ColonyField {
     public int getGoodsTypeProduction(final GoodsType goodsType) {
         return getMap().isValid(getLocation()) && !isMissingDock()
                 ? getTerrain().canProduceAmmount(goodsType)
+                : 0;
+    }
+
+    /**
+     * Terrain output before the finite deposit limit, with or without the
+     * deposit bonus.
+     */
+    private int getUnlimitedGoodsTypeProduction(final GoodsType goodsType,
+            final boolean withDeposit) {
+        return getMap().isValid(getLocation()) && !isMissingDock()
+                ? getTerrain()
+                        .getUnlimitedTerrainProduction(goodsType, withDeposit)
+                        .getProduction()
                 : 0;
     }
 

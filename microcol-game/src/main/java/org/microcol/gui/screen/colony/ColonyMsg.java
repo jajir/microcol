@@ -20,6 +20,9 @@ public enum ColonyMsg implements MessageKeyResource {
     jobNO_ELIGIBLE_FIELD, jobBUILDING_FULL, jobChanged, jobNoChoices,
     jobDropRejected, clearOpen, clearSummary, clearConfirm, clearChanged,
     clearUNAVAILABLE, clearNO_CIVILIAN_SPECIALTY, clearTEACHER_COURSE,
-    clearSCHOOL_SLOT, fortifiedMinimum;
+    clearSCHOOL_SLOT, fortifiedMinimum, quickLoad, quickUnload,
+    quickLoadQuestion, quickUnloadQuestion, quickConfirm, quickCancel,
+    quickUNAVAILABLE, quickNO_STOCK, quickNO_HOLD, quickNO_GOODS, quickChanged,
+    townCommonsFood, townCommonsGoods;
 
 }

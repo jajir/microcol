@@ -3,6 +3,8 @@ package org.microcol.gui.event.model;
 import java.util.List;
 
 import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.dialog.DialogMessage;
@@ -12,6 +14,7 @@ import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.Colony;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
@@ -150,6 +153,35 @@ public class GameModelController {
     public void performMove(final Unit ship, final List<Location> path) {
         logger.debug("Start move ship: " + ship);
         new Thread(() -> getModel().moveUnit(ship, Path.of(path))).start();
+    }
+
+    /**
+     * Issue a go-to order and let the unit walk its first steps, like
+     * {@link #performMove}, on its own thread: the walk waits for animations. A
+     * request that became stale is rejected by the model without a change and
+     * explained in the status bar.
+     *
+     * @param unit        required selected unit
+     * @param destination required destination square
+     * @param colony      the named colony chosen as destination, or
+     *                    {@code null} for a plain map square
+     */
+    public void performGoTo(final Unit unit, final Location destination,
+            final Colony colony) {
+        new Thread(() -> {
+            try {
+                if (colony == null) {
+                    getModel().issueGoTo(unit, destination);
+                } else {
+                    getModel().issueGoToColony(unit, colony);
+                }
+            } catch (IllegalStateException
+                    | IllegalArgumentException rejected) {
+                Platform.runLater(() -> eventBus.post(
+                        new StatusBarMessageEvent(i18n.get(Buttons.goToChanged),
+                                StatusBarMessageEvent.Source.GAME)));
+            }
+        }).start();
     }
 
     public void performFight(final AttackOrder order) {

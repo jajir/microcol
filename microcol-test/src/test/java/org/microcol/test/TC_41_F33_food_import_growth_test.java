@@ -39,7 +39,8 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 190));
         colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 20));
         colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.CORN, 20));
-        colony.verifyFoodAccounting(10, 16);
+        // Staffed fields made 10; the grassland center adds 4 commons food.
+        colony.verifyFoodAccounting(14, 16);
 
         // Cancel the ship import after reading its accepted quantity and
         // timing.
@@ -82,7 +83,8 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         gamePage = colony.close();
         gamePage.nextTurnAndCloseDialogs();
         colony = gamePage.openColonyAt(DELFT, "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 24));
+        // 230 + 14 produced - 16 eaten = 228: one colonist (200), 28 left.
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 28));
         colony.verifyNumberOfUnitsAtPier(3);
         colony.close();
     }

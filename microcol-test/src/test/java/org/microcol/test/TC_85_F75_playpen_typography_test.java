@@ -52,19 +52,19 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         settings.setCzechLanguage();
         type.verifySceneTypography("settingGrid");
         type.verifyTextSize(".main-title", 36);
-        type.verifyTextSize("#settingGrid", 18);
-        type.verifySettingsDefaultLabels(18, "Jazyk:", "Verze:");
+        type.verifyTextSize("#settingGrid", 14);
+        type.verifySettingsDefaultLabels(14, "Jazyk:", "Verze:");
         type.captureDialog("settingGrid", "playpen-settings-czech.png");
         settings.setEnglishLanguage();
         type.verifySceneTypography("settingGrid");
-        type.verifySettingsDefaultLabels(18, "Language:", "Version:");
+        type.verifySettingsDefaultLabels(14, "Language:", "Version:");
         settings.goBack().verifyMainScreen();
         // The legacy colony layout needs room for its fixed-position artwork.
         type.resizeGameWindow(1280, 900);
         // Loading, opening and cancelling a modal preserve the game state.
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         type.verifySceneTypography("europe");
-        type.verifyTextSize(".unitOwner", 18);
+        type.verifyTextSize(".unitOwner", 14);
         buttons.click("congress");
         type.verifySceneTypography("congressClose");
         buttons.verifyWoodenButton("congressClose");
@@ -92,7 +92,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         rename.enterName(draft);
         rename.verifyDraft(draft);
         type.verifySceneTypography("colonyNameInput");
-        type.verifyTextSize("#colonyNameInput", 18);
+        type.verifyTextSize("#colonyNameInput", 14);
         type.captureDialog("colonyNameInput", "playpen-rename.png");
         rename.escape();
         colony.verifyColonyName("New Amsterdam");

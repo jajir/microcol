@@ -191,6 +191,7 @@
         "ownerName": "Dutch",
         "liberty": 0,
         "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
         "location": {
           "x": 24,
           "y": 16
@@ -350,6 +351,7 @@
         "ownerName": "France",
         "liberty": 0,
         "lastColonialAffiliation": "France",
+      "townCommonsGoods": "TOBACCO",
         "location": {
           "x": 28,
           "y": 17

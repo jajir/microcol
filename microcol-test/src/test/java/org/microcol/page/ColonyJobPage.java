@@ -34,7 +34,17 @@ public final class ColonyJobPage extends AbstractScreen {
     }
 
     public void openFromField(final int unitId) {
-        ColonyScreen.of(getContext(), "New Amsterdam").openCropMenu(unitId);
+        openFromField("New Amsterdam", unitId);
+    }
+
+    /**
+     * Open the job menu of a worker standing on a field of the named colony.
+     *
+     * @param colonyName name of the colony that owns the field
+     * @param unitId     worker on the field
+     */
+    public void openFromField(final String colonyName, final int unitId) {
+        ColonyScreen.of(getContext(), colonyName).openCropMenu(unitId);
         getRobot().clickOn("#chooseWork");
         WaitForAsyncUtils.waitForFxEvents();
     }

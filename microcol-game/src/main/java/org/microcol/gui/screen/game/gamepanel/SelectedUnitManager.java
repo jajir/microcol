@@ -189,6 +189,19 @@ public final class SelectedUnitManager {
         forcelySetSelectedUnit(null);
     }
 
+    /**
+     * Drops the selection when its unit has just left the game, so no control
+     * keeps acting on it.
+     *
+     * @param unit unit that was removed
+     */
+    public void forgetRemovedUnit(final Unit unit) {
+        Preconditions.checkNotNull(unit);
+        if (unit.equals(selectedUnit)) {
+            unselectUnit();
+        }
+    }
+
     private void evaluateLocation(final Location location) {
         if (selectedUnit == null) {
             selectedUnit(gameModelController.getModel()

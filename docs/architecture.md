@@ -937,3 +937,60 @@ Vstup do kolonijní práce obnoví civilní roli před oznámením přesunu.
 ztráty výstroje. GUI používá modelový výhled mobilizace, potvrzení a stejné
 bojové výsledky. [Cílené ověření](functional-tests.md#r-0105-independence-and-military-roles-2026-10-18)
 nenahrazuje dosud čekající přijetí celé druhé dávky.
+
+
+## Konečné zásoby ložisek (R-0128)
+
+`WorldMap` vlastní nezávislé zbývající zásoby stříbra a rudy pro každou konečnou
+surovinu; `MineralReserve` představuje jejich neměnnou hodnotu. `WorldMapPo`
+a `MineralReservePo` ukládají obě množství a při načtení odmítají chybějící,
+duplicitní či neplatné údaje ložiska. Zásoby se doplní pouze při vytvoření,
+nikoli načtením nebo uložením. Změna nerozšiřuje odpovědnosti GUI ani AI.
+
+`Terrain` a `ColonyField` počítají náhled bez mutace. Příspěvek ložiska se
+omezuje zbývající zásobou až po započtení profese a politických vlivů.
+`Colony.startTurn()` připraví odběr podle skutečné produkce po hladomoru před
+změnou dovedností a odečte jej právě jednou; celá mapa odběrů se validuje před
+změnou zásob. Spotřeba vytěžené rudy v navazující výrobě není důvodem zásobu
+vrátit. Vyčerpané ložisko zachová identitu i běžnou produkci podkladu.
+
+[Průběžné ověření z 20. října 2026](functional-tests.md#r-0128-mineral-depletion-2026-10-20)
+prošlo; úplná přejímka dávky zůstává samostatným krokem.
+
+## Trvalý přesun jednotky (R-0130)
+
+1. `Model` ověřuje zadání a zrušení rozkazu, živou identitu, vlastníka a dostupný pojmenovaný cíl. `AbstractUnit` drží cíl a stav přerušení; používá společný `PathFinder` a pravidla jednoho kroku. `GameManager` pokračuje po dokončení přípravy tahu právě aktuálního vlastníka. Načtení přes `UnitPo` pouze obnovuje a ověřuje stav; jednotkou nepohybuje.
+2. GUI používá nabídku modelu a společné ovládání. Přesun z GUI běží mimo FX vlákno kvůli animacím; při dokončení přípravy tahu přímo ve FX vlákně posluchač nečeká na animaci téhož vlákna. Oznámení přerušení a zrušení používají existující turnové události. [Cílené ověření z 2026-10-20](functional-tests.md#r-0130-persistent-go-to-2026-10-20) nenahrazuje úplnou akceptaci dávky.
+
+## Rozpuštění jednotky a čtení mapy (R-0131)
+
+1. `Model` poskytuje důvod odmítnutí a neměnnou nabídku rozpuštění. Před změnou znovu ověří jednotku, vlastníka, fázi tahu, umístění, prázdný náklad a přesné vrácené či ztracené vybavení. Skutečnou výbavu poskytuje kolonista, kapacitu skladu `ColonyWarehouse`. GUI pouze potvrzuje nabídku a ztrátu přebytku; bojové zničení používá původní samostatnou cestu.
+2. `UnitStorage` při mapových dotazech čte jedno zachycené umístění jednotky. Tím zamezuje chybě, kdy mezi ověřením mapového umístění a čtením souřadnic jednotka nastoupí do nákladu. Nejde o úplný transakční snímek světa. [Lokální regresní evidence](functional-tests.md#r-0131-disband-and-regression-repairs-2026-10-20) uvádí rozsah ověření a zbývající akceptaci dávky.
+
+## Přistěhovalci na molu (R-0135)
+
+1. `Player` označuje nové přistěhovalce pouze při placeném náboru a příchodu získaném kříži. Jednotka uchovává ochotu a případnou přednost, `Model` ověřuje změny a jedinou přednost na vlastníka. `EuropePier` poskytuje stejné pořadí jako společný sběr cestujících při odjezdu v `AbstractUnit`; GUI nevytváří vlastní pořadí ani další cestu změny nákladu.
+2. `UnitPo` ukládá volby a načtení je pouze ověřuje. Nástup zruší čekající přistěhovalecký stav, takže navrácený cestující není automaticky novým přistěhovalcem. [Cílené testy](functional-tests.md#r-0135-immigrant-boarding-2026-10-20) nenahrazují úplnou akceptaci dávky.
+
+## Rychlé převody nákladu (R-0137)
+
+1. `Model` vytváří a znovu ověřuje nabídku jednoho převodu podle živé kolonie, dopravce, prostoru, množství a aktuální prodejní nabídky. Pořadí nakládky i vykládky určuje model; `CargoSlot` a `ColonyWarehouse` zůstávají vlastníky skutečné změny zásob. Nabídka nepředstavuje prodej ani nákup.
+2. Ovládání kolonie ukazuje přesné podmínky a důvody odmítnutí. Rychlé příkazy mají vlastní řádek, aby neposouvaly zavírání pod název kolonie. [Lokální evidence](functional-tests.md#r-0137-quick-cargo-2026-10-20) uvádí cílené testy a zbývající akceptaci dávky.
+
+
+## Vyhození nákladu přes palubu (R-0138)
+
+1. `Model` vlastní způsobilost lodi a nabídku `JettisonOffer`, která váže konkrétní nákladový prostor, množství a polohu či stav plavby. Před odebráním přes `CargoSlot.removeCargo` znovu ověří nabídku; běžné vykládání a obchod nadále používají vlastní omezení.
+2. Sdílený `JettisonFlow` propojuje mapu a atlantické ovládání s výběrem množství a potvrzením. GUI nemění náklad přímo. Dotaz na trasu používá zachycenou polohu, aby souběžné odplutí nepřerušilo obnovu ovládání. [Cílené ověření](functional-tests.md#r-0138-jettison-2026-10-20) nenahrazuje úplnou akceptaci dávky.
+
+
+## Evropské obchodní účty (R-0145)
+
+1. `Europe` ukládá neměnné `EuropeTradeAccount` podle národa a komodity. `Player` započítává skutečně vypořádaný obchod, `Colony` vývoz celnice a `ColonyBuildingQueue` pouze dovezené nástroje při dokončení stavby. Nové hodnoty se vypočítají před změnou zásob či zlata; přetečení nesmí způsobit částečný obchod.
+2. `EuropeanTradePanel` čte účty v existující obrazovce statistik. Revoluční celnice je označená podmnožina prodejů, nikoli další příjem. Ukládání neprovádí obchod znovu a report neodhaluje cizí náklad. [Cílená evidence](functional-tests.md#r-0145-european-trade-accounts-2026-10-20) rozlišuje modelové kontroly, skutečnou UI cestu a kontrolu snímků.
+
+
+## Produkce středu kolonie (R-0146)
+
+1. `TownCommons` vybírá druhou surovinu ze sdíleného terénního základu a určuje její uloženou identitu. `Terrain` poskytuje základ a oprávněný bonus, `Colony` připojuje výstup k existujícímu výpočtu jídla, výroby a skladů. Střed není další pracovní místo; UI čte `getTownCommonsProduction()`.
+2. Výběr suroviny se při načtení neopakuje. Náhled nečerpá ložisko; při skutečné aktualizaci se čerpá pouze konečný minerální bonus. Obnovitelné zdroje ani Prime Timber nevstupují do čerpání rezerv. [Pravidlo a tabulka](gap-analysis.md#r-0146-refinement) a [cílené ověření](functional-tests.md#r-0146-town-commons-2026-10-20) rozlišují přijaté chování od dosud čekající úplné regrese dávky.

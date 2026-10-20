@@ -289,9 +289,14 @@ class PoliticalProductionIntegrationTest {
                     field.getProduction().orElseThrow().getAmount());
             expectedTobacco += expected;
         }
-        assertEquals(expectedTobacco, planned(colony, GoodsType.TOBACCO));
+        // The grassland center also yields its unattended tobacco: base 3, no
+        // forest and no overlay, with no worker or political bonus.
+        final int commonsTobacco = 3;
+        assertEquals(expectedTobacco + commonsTobacco,
+                planned(colony, GoodsType.TOBACCO));
         colony.startTurn();
-        assertEquals(expectedTobacco, stored(colony, GoodsType.TOBACCO));
+        assertEquals(expectedTobacco + commonsTobacco,
+                stored(colony, GoodsType.TOBACCO));
         // A good the terrain cannot yield gets nothing from the bonus.
         final Unit anyone = colony.getUnitsInsideColony().get(0);
         int zeroYield = 0;

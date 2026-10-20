@@ -5,6 +5,8 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="faminePreview">Hladomor usmrtí jednoho náhodného obyvatele. Konečná výroba a zásoby závisí na tom, kdo zemře.</entry>
+	<entry key="townCommonsFood">Obecní zdroje města, bez pracovníka: jídlo %s.</entry>
+	<entry key="townCommonsGoods">Obecní zdroje města, bez pracovníka: jídlo %s, %s %s.</entry>
 	<entry key="goods"> ve skladu</entry>
 	<entry key="colonyName">Kliknutím přejmenujete kolonii.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
@@ -85,4 +87,15 @@
     <entry key="clearTEACHER_COURSE">Tento kolonista vyučuje kurz, který svobodný kolonista vyučovat nemůže. Nejprve odeberte učitele nebo kurz ve Vzdělávání.</entry>
     <entry key="clearSCHOOL_SLOT">Tento kolonista zaujímá místo ve škole, které svobodný kolonista zastávat nemůže. Nejprve ho přesuňte ze školy ve Vzdělávání.</entry>
     <entry key="fortifiedMinimum">Opevněná kolonie musí mít alespoň 3 obyvatele. Jejich práci uvnitř kolonie můžete měnit.</entry>
+    <entry key="quickLoad">Rychlé naložení</entry>
+    <entry key="quickUnload">Rychlé vyložení</entry>
+    <entry key="quickLoadQuestion">Naložit %s %s do nákladového prostoru %s vybraného dopravce? Pokladna se nezmění.</entry>
+    <entry key="quickUnloadQuestion">Vyložit %s %s z nákladového prostoru %s do skladu? Co se nevejde, zůstane na palubě.</entry>
+    <entry key="quickConfirm">Potvrdit</entry>
+    <entry key="quickCancel">Zrušit</entry>
+    <entry key="quickUNAVAILABLE">Vyberte loď nebo vůz v přístavu této kolonie. Nic se nezměnilo.</entry>
+    <entry key="quickNO_STOCK">Ze skladu nelze právě rychle naložit žádné zboží. Nic se nezměnilo.</entry>
+    <entry key="quickNO_HOLD">Dostupné zboží se nevejde do volného ani částečně naplněného prostoru. Nic se nezměnilo.</entry>
+    <entry key="quickNO_GOODS">Vybraný dopravce nemá zboží k vyložení. Pasažéři zůstanou na palubě. Nic se nezměnilo.</entry>
+    <entry key="quickChanged">Náklad, sklad nebo cena se změnily. Nic se nepřevedlo. Zkontrolujte prostory a zkuste to znovu.</entry>
 </properties>

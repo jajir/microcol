@@ -71,7 +71,19 @@ public final class HighSea {
         if (!unit.isShip() || !unit.isAtPlaceLocation()) {
             return false;
         }
-        Location source = unit.getLocation();
+        return isDepartureStep(unit.getLocation(), target);
+    }
+
+    /**
+     * Determines whether a ship step between two squares is a departure step
+     * along the high sea coastline. Route planning uses it to avoid leaving the
+     * map without an explicit order.
+     *
+     * @param source the square the step starts at
+     * @param target the square the step enters
+     * @return {@code true} if a ship making the step would depart
+     */
+    boolean isDepartureStep(final Location source, final Location target) {
         WorldMap map = model.getMap();
         if (!map.isValid(source) || !map.isValid(target)) {
             return false;

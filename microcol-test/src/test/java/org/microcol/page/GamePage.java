@@ -63,9 +63,7 @@ public class GamePage extends AbstractScreen {
 
     public void dragMouseAtLocation(final Location location) throws Exception {
         verifyThatTileIsVisible(location);
-        final javafx.geometry.Point2D p = screenPoint(location);
-        getRobot().drag(MouseButton.PRIMARY).drag(p.getX(), p.getY())
-                .release(MouseButton.PRIMARY);
+        dragToLocation(location);
         waitWhileMoving();
         verifyThatStatusBarContains(String.valueOf(location.getX()));
         verifyThatStatusBarContains(String.valueOf(location.getY()));
@@ -74,14 +72,28 @@ public class GamePage extends AbstractScreen {
     public void dragMouseAtLocationWithFeedback(final Location location,
             final String expectedFeedback) throws Exception {
         verifyThatTileIsVisible(location);
-        final javafx.geometry.Point2D point = screenPoint(location);
-        getRobot().drag(MouseButton.PRIMARY).drag(point.getX(), point.getY())
-                .release(MouseButton.PRIMARY);
+        dragToLocation(location);
         waitWhileMoving();
         verifyThatStatusBarContains(expectedFeedback);
     }
 
+    private void dragToLocation(final Location location) {
+        getRobot().drag(MouseButton.PRIMARY);
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().drag(point.getX(), point.getY())
+                .release(MouseButton.PRIMARY);
+    }
+
     private javafx.geometry.Point2D screenPoint(final Location location) {
+        WaitForAsyncUtils.waitForFxEvents();
+        // Selecting a unit can wrap its toolbar and resize the map viewport.
+        getRobot().interact(() -> {
+            final javafx.scene.Parent root = getContext().getClassFromGuice(
+                    org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas().getScene().getRoot();
+            root.applyCss();
+            root.layout();
+        });
         final Point tile = getContext().getArea()
                 .convertToCanvasPoint(location);
         final javafx.scene.canvas.Canvas canvas = getContext()
@@ -146,6 +158,8 @@ public class GamePage extends AbstractScreen {
         Preconditions.checkNotNull(location);
         moveMouseAtLocation(location);
         getRobot().clickOn(MouseButton.PRIMARY);
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().moveTo(point.getX(), point.getY(), Motion.DEFAULT);
     }
 
     public void panToTile(final Location location) throws Exception {
@@ -265,6 +279,27 @@ public class GamePage extends AbstractScreen {
             final String expectedNamePart) {
         moveMouseAtLocation(colonyLocation);
         getRobot().clickOn(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ColonyScreen.of(getContext(), expectedNamePart);
+    }
+
+    /**
+     * Open a colony only with keys: O opens the colonies menu, arrow down walks
+     * to the colony by its position in the menu (ordered by colony id) and
+     * Enter opens it.
+     *
+     * @param menuIndex        zero-based position of the colony in the menu
+     * @param expectedNamePart text expected in the opened colony name
+     * @return the opened colony screen
+     */
+    public ColonyScreen openColonyWithKeyboard(final int menuIndex,
+            final String expectedNamePart) {
+        getRobot().push(KeyCode.O);
+        WaitForAsyncUtils.waitForFxEvents();
+        for (int index = 0; index <= menuIndex; index++) {
+            getRobot().push(KeyCode.DOWN);
+        }
+        getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
         return ColonyScreen.of(getContext(), expectedNamePart);
     }

@@ -36,6 +36,12 @@ public final class ColonyPo {
      */
     private String lastColonialAffiliation;
 
+    /**
+     * Saved town commons commodity name, or {@code NONE} for no second output;
+     * required, never guessed on load.
+     */
+    private String townCommonsGoods;
+
     private Location location;
 
     private List<ColonyFieldPo> colonyFields = new ArrayList<>();
@@ -117,6 +123,20 @@ public final class ColonyPo {
     public void setLastColonialAffiliation(
             final String lastColonialAffiliation) {
         this.lastColonialAffiliation = lastColonialAffiliation;
+    }
+
+    /**
+     * @return saved town commons commodity, or {@code NONE}
+     */
+    public String getTownCommonsGoods() {
+        return townCommonsGoods;
+    }
+
+    /**
+     * @param townCommonsGoods saved town commons commodity to set
+     */
+    public void setTownCommonsGoods(final String townCommonsGoods) {
+        this.townCommonsGoods = townCommonsGoods;
     }
 
     /**

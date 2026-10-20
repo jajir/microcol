@@ -295,10 +295,10 @@ public class TC_101_F92_four_nation_expedition_loop_test
                 previousColonyCount + 1);
         ColonyScreen colony = ColonyScreen.of(getContext(), route.colonyName);
         colony.verifyNumberOfUnitsOnFields(1);
-        colony.verifyThatProductionIs(GoodsType.CORN, 2);
+        colony.verifyThatProductionIs(GoodsType.CORN, 6);
         colony.verifyNumberOfUnitsAtPier(1);
 
-        // The second colonist grows tobacco, so food stays balanced at zero.
+        // The second colonist grows tobacco; commons keep net food at four.
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(worker);
         jobs.select(Kind.BEST_FIELD, GoodsType.TOBACCO);
@@ -306,8 +306,8 @@ public class TC_101_F92_four_nation_expedition_loop_test
         jobs.verifyClosed();
         trip.verifyWorkerOutput(route.colonyName, worker,
                 Goods.of(GoodsType.TOBACCO, 3));
-        colony.verifyThatProductionIs(GoodsType.CORN, 0);
-        colony.verifyThatProductionIs(GoodsType.TOBACCO, 3);
+        colony.verifyThatProductionIs(GoodsType.CORN, 4);
+        colony.verifyThatProductionIs(GoodsType.TOBACCO, 6);
         game = colony.close();
 
         // The ship enters the colony port so cargo can be loaded later.
@@ -325,12 +325,12 @@ public class TC_101_F92_four_nation_expedition_loop_test
             trip.verifyLedgerUnchanged();
         }
 
-        // First update: three tobacco are stored and no food is lost.
+        // First update: field and commons store six tobacco and four net food.
         game.nextTurnAndCloseDialogs();
         trip.verifyPlayedTurns(founded + 1);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 0));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 4));
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 3));
+                Goods.of(GoodsType.TOBACCO, 6));
         trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CIGARS, 0));
 
         // Move the second colonist into the tobacconist's house.
@@ -343,16 +343,17 @@ public class TC_101_F92_four_nation_expedition_loop_test
         trip.verifyWorkerIndoors(route.colonyName, worker,
                 ConstructionType.TOBACCONISTS_HOUSE);
         colony.verifyThatProductionIs(GoodsType.CIGARS, CIGARS);
-        colony.verifyThatProductionIs(GoodsType.TOBACCO, -CIGARS);
-        colony.verifyThatProductionIs(GoodsType.CORN, 0);
+        colony.verifyThatProductionIs(GoodsType.TOBACCO, 3 - CIGARS);
+        colony.verifyThatProductionIs(GoodsType.CORN, 4);
         game = colony.close();
 
-        // Second update: the tobacco became cigars; food is still balanced.
+        // Second update: commons replace the consumed tobacco and add four
+        // food.
         game.nextTurnAndCloseDialogs();
         trip.verifyPlayedTurns(founded + 2);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 0));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 8));
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 0));
+                Goods.of(GoodsType.TOBACCO, 6));
         trip.verifyColonyStock(route.colonyName,
                 Goods.of(GoodsType.CIGARS, CIGARS));
 
@@ -475,10 +476,13 @@ public class TC_101_F92_four_nation_expedition_loop_test
 
         // The balances at the end follow the ledger exactly.
         trip.verifyGold(START_GOLD + CIGARS * CIGAR_BID - passage);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 0));
+        final int colonyUpdates = back + route.homeward.size() - 1 - founded;
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 0));
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CIGARS, 0));
+                Goods.of(GoodsType.CORN, 4 * colonyUpdates));
+        trip.verifyColonyStock(route.colonyName,
+                Goods.of(GoodsType.TOBACCO, 6));
+        trip.verifyColonyStock(route.colonyName,
+                Goods.of(GoodsType.CIGARS, CIGARS * (colonyUpdates - 2)));
 
         // Checkpoint 5: Continue keeps the arrived recruit and the balances.
         if (saveAndContinue) {

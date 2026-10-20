@@ -54,6 +54,15 @@ public enum ResourceOverlay {
      */
     public static final int BONUS = 2;
 
+    /** Bonus units of a pure silver deposit before any mining. */
+    private static final int SILVER_RESERVE = 100;
+
+    /** Bonus units of a pure ore deposit before any mining. */
+    private static final int ORE_RESERVE = 200;
+
+    /** Silver units of each mixed deposit before any mining. */
+    private static final int MIXED_SILVER_RESERVE = 200;
+
     private final String code;
 
     private final List<GoodsType> outputs;
@@ -84,6 +93,35 @@ public enum ResourceOverlay {
     public int getBonusFor(final GoodsType goodsType) {
         Preconditions.checkNotNull(goodsType);
         return outputs.contains(goodsType) ? BONUS : 0;
+    }
+
+    /**
+     * @return {@code true} for silver, ore and mixed deposits, whose bonus
+     *         units run out; every other resource regenerates with its square
+     */
+    public boolean isFinite() {
+        return this == SILVER || this == ORE || this == MIXED_MINERALS;
+    }
+
+    /**
+     * Bonus units a new deposit holds for one output. A mixed deposit holds
+     * independent silver and ore units; each pure deposit holds its own kind.
+     *
+     * @param goodsType required goods type
+     * @return units before any mining, zero for an output that is not finite
+     */
+    public int getInitialReserve(final GoodsType goodsType) {
+        Preconditions.checkNotNull(goodsType);
+        if (goodsType == GoodsType.SILVER) {
+            if (this == SILVER) {
+                return SILVER_RESERVE;
+            }
+            return this == MIXED_MINERALS ? MIXED_SILVER_RESERVE : 0;
+        }
+        if (goodsType == GoodsType.ORE) {
+            return this == ORE || this == MIXED_MINERALS ? ORE_RESERVE : 0;
+        }
+        return 0;
     }
 
     /**

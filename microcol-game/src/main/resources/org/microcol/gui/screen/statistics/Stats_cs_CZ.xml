@@ -62,4 +62,12 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="supportNone">Zatím nemáte žádné kolonie s podporou povstání.</entry>
 	<entry key="supportColonyRow">%s — obyvatelé %s, nashromážděná svoboda %s, místní podpora %s %%</entry>
 	<entry key="turnAllyDefense">Spojenectví s hráčem %2$s vás zavázalo vstoupit do války proti hráči %1$s, který napadl vašeho spojence.</entry>
+	<entry key="titleTrade">Evropský obchod</entry>
+	<entry key="tradeEmpty">Zatím nebyl uzavřen žádný evropský obchod.</entry>
+	<entry key="tradeUnavailable">Není otevřena žádná hra. Vraťte se do menu a načtěte hru.</entry>
+	<entry key="tradeBought">Nakoupeno: %s ks</entry>
+	<entry key="tradeSpent">Utraceno zlata: %s</entry>
+	<entry key="tradeSold">Prodáno: %s ks</entry>
+	<entry key="tradeReceived">Přijato zlata: %s</entry>
+	<entry key="tradeRevolutionary">Revoluční celnice: %s ks, %s čistého zlata</entry>
 </properties>

@@ -14,6 +14,7 @@
 	<entry key="voyageDestinationEurope">Evropa</entry>
 	<entry key="voyageDestinationNewWorld">Nový svět</entry>
 	<entry key="voyageReverseStale">Cesta lodi se změnila. Zkontrolujte ji a zkuste to znovu.</entry>
+	<entry key="voyageJettison">Vyhodit náklad</entry>
 	<entry key="shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
 	<entry key="shipsTravelingToEurope">Lodě plující do Evropy</entry>
 	<entry key="buyUnitDialog_title">Koupit jednotku</entry>
@@ -73,6 +74,16 @@ Celkem: %s zlatých</entry>
     <entry key="repairCOMPLETED">Oprava lodi %s #%s je dokončena: %s.</entry>
     <entry key="repairREROUTED">%s #%s má nový cíl opravy: %s.</entry>
     <entry key="repairSUNK">%s #%s se potopila: není dostupný cíl opravy. Ztracení pasažéři: %s. Ztracené zboží: %s.</entry>
+    <entry key="goToPAUSED">%s #%s nemá cestu k cíli %s; rozkaz přesunu je pozastaven a v dalším tahu se znovu zkusí.</entry>
+    <entry key="goToCANCELLED_REMOVED">%s #%s: rozkaz přesunu zrušen, kolonie %s už neexistuje.</entry>
+    <entry key="goToCANCELLED_DAMAGED">%s #%s: rozkaz přesunu zrušen, loď je poškozená a nemůže plout do cíle %s.</entry>
+    <entry key="immigrantFrontMarker">První</entry>
+    <entry key="immigrantAshoreMarker">Na molu</entry>
+    <entry key="immigrantStayAshore">Nenastupovat na odplouvající loď</entry>
+    <entry key="immigrantBoardAgain">Nastoupit na odplouvající loď</entry>
+    <entry key="immigrantFrontOfQueue">Přednostně nastoupit</entry>
+    <entry key="immigrantBoardingUnavailable">Pořadí nástupu této osoby se změnilo. Nic se nezměnilo.</entry>
+    <entry key="goToCANCELLED_NOT_FRIENDLY">%s #%s: rozkaz přesunu zrušen, kolonie %s již není přátelská.</entry>
   <entry key="earnedTitle">Vyberte získaného přistěhovalce</entry>
   <entry key="earnedExplanation">Kříže: %s / %s. Vyberte jednoho přistěhovalce zdarma. Tah pokračuje po výběru všech získaných přistěhovalců. Zavřením okna výběr odložíte.</entry>
   <entry key="earnedChoose">Vybrat zdarma</entry>

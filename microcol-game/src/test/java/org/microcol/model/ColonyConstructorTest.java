@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -115,7 +116,7 @@ public class ColonyConstructorTest {
             final Function<Colony, List<Construction>> constructionsBuilder) {
         return new Colony(model, 0, "Prague", owner, Location.of(2, 2),
                 constructionsBuilder, new HashMap<String, Integer>(),
-                new ArrayList<>(), 0L, owner);
+                new ArrayList<>(), 0L, owner, Optional.empty());
     }
 
 }

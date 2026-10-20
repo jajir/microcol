@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import java.util.List;
+
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
@@ -12,7 +14,9 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.FlowPane;
 
 @Singleton
 public class ColonyButtonsPanel extends AbstractButtonsPanel {
@@ -65,6 +69,24 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
      */
     public Button getButtonClose() {
         return buttonClose;
+    }
+
+    /**
+     * Show the quick cargo commands on a second row. The colony's own row keeps
+     * its positions, because the rename label sits above it and covers the left
+     * part of that row.
+     *
+     * @param buttons required quick load and unload buttons
+     */
+    void addQuickCargoButtons(final List<Button> buttons) {
+        final FlowPane row = new FlowPane();
+        row.setId("quickCargoButtons");
+        row.getStyleClass().add("buttonPanel");
+        row.setAlignment(Pos.TOP_RIGHT);
+        // Empty space in this row must not hide the colony fields below it.
+        row.setPickOnBounds(false);
+        row.getChildren().addAll(buttons);
+        addButtonRow(row);
     }
 
 }

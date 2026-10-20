@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -176,6 +177,10 @@ public class PlayerTest {
     private void beforeEach() {
         player = new PlayerHuman("Dutch", false, 10000, model, false,
                 new HashMap<>(), new HashSet<>());
+        // Every national account starts with nothing settled; settlement itself
+        // is covered by the real-account tests in EuropeTradeAccountTest.
+        when(europe.getTradeAccount(any(), any()))
+                .thenReturn(EuropeTradeAccount.EMPTY);
     }
 
     @AfterEach

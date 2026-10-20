@@ -423,6 +423,11 @@ public class ColonyBuildingQueue {
         try {
             final EuropeTradeQuote toolsQuote = owner.quoteEuropeTrade(
                     Goods.of(GoodsType.TOOLS, missingTools), true);
+            // An import that could not be recorded in the national account is
+            // not offered, so rushing never fails after a partial change.
+            model.getEurope()
+                    .getTradeAccount(owner.getEuropeanNation(), GoodsType.TOOLS)
+                    .purchased(missingTools, toolsQuote.getTotal());
             final int price = Math.addExact(
                     Math.multiplyExact(2, missingHammers),
                     toolsQuote.getTotal());
@@ -448,6 +453,12 @@ public class ColonyBuildingQueue {
             throw new NotEnoughtGoldException(
                     "Not enough gold to rush project");
         }
+        // Only the imported tools are a European purchase; hammers are paid
+        // directly and stocked tools cost nothing. Computed before any change.
+        final EuropeanNation nation = colony.getOwner().getEuropeanNation();
+        final EuropeTradeAccount account = model.getEurope()
+                .getTradeAccount(nation, GoodsType.TOOLS)
+                .purchased(current.getMissingTools(), current.getToolsPrice());
         final ColonyBuildingItemProgress<?> head = buildingQueue.get(0);
         // All completion, capacity, market, identity and resource checks
         // precede
@@ -467,8 +478,9 @@ public class ColonyBuildingQueue {
         revision++;
         colony.getOwner().setGold(current.getGoldAfter());
         // Only imported tools are bought; stocked tools and hammers are not.
-        model.getEurope().applyTrade(colony.getOwner().getEuropeanNation(),
-                GoodsType.TOOLS, -current.getMissingTools());
+        model.getEurope().applyTrade(nation, GoodsType.TOOLS,
+                -current.getMissingTools());
+        model.getEurope().saveTradeAccount(nation, GoodsType.TOOLS, account);
     }
 
     void startTurn() {

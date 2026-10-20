@@ -5,11 +5,19 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.model.ColonyJobChoice.Kind;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.ResourceOverlay;
 import org.microcol.model.unit.UnitActionType;
+import org.microcol.page.ColonyJobPage;
+import org.microcol.page.ColonyScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.ResourcePage;
 import org.microcol.page.RoadPage;
+import org.microcol.page.TerrainProductionPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -21,13 +29,21 @@ import javafx.stage.Stage;
  * the unit panel shows the owner updates left, that the work takes two owner
  * updates (one for a hardy pioneer), spends 20 tools once and records the road,
  * that cancelling leaves no road and no charge, and that a pioneer with 19
- * tools is told why it cannot start.
+ * tools is told why it cannot start. A road on trapping land adds one fur to
+ * the tile output, the job preview and the next turn's stored fur, and survives
+ * Continue.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_88_F79_road_construction_test extends AbstractMicroColTest {
 
     private final static Location COLONY_LOCATION = Location.of(22, 12);
     private final static Location ROAD_LOCATION = Location.of(23, 12);
+
+    /** Delft: the colony whose east field is the road square. */
+    private final static int DELFT_ID = 1;
+
+    /** Delft worker that worked the road square before the fixture. */
+    private final static int WORKER_ID = 22;
 
     private final static File testFileName = new File(
             "src/test/scenarios/F01-embark-disembark.microcol");
@@ -186,5 +202,77 @@ public class TC_88_F79_road_construction_test extends AbstractMicroColTest {
         road.verifyRoadAt(ROAD_LOCATION, true);
         road.verifyUnitWork(ROAD_LOCATION, UnitActionType.noAction, 0, 80);
         road.verifyRoadProgressHidden();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_trapping_road_adds_one_fur_to_preview_and_production()
+            throws Exception {
+        // Load a copy with trapping land under the road square; the field
+        // worker stands in the colony centre.
+        RoadFixture.prepareTrapping(getContext(), testFileName,
+                "road-f79-trapping.microcol", 100, WORKER_ID, ROAD_LOCATION);
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        final RoadPage road = new RoadPage(getContext());
+        final ResourcePage resource = new ResourcePage(getContext());
+        final TerrainProductionPage production = new TerrainProductionPage(
+                getContext());
+
+        // Before any unit stands on the square, its trapping marker is painted;
+        // a unit sprite would cover the marker. The square yields fur 2 with no
+        // road.
+        resource.verifyMarkerPainted(ROAD_LOCATION, ResourceOverlay.TRAPPING);
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 2);
+        road.verifyRoadAt(ROAD_LOCATION, false);
+
+        // A tooled colonist moves onto the square and is captured there.
+        gamePage = moveToRoadSquare(gamePage);
+        road.captureUnit(ROAD_LOCATION);
+
+        // The colonist builds the road with the visible control over two
+        // updates.
+        road.useControl();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(ROAD_LOCATION);
+        road.verifyRoadAt(ROAD_LOCATION, true);
+
+        // The road adds exactly one fur to the tile output.
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 3);
+
+        // Preview the fur job of the freed worker; cancel it.
+        // The fur 3 minus the Tory penalty of -1 at zero liberty is 2.
+        ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
+        final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.openFromCenter(WORKER_ID);
+        jobs.select(Kind.BEST_FIELD, GoodsType.FUR);
+        jobs.verifyDetails("Field coordinates: 23, 12", true);
+        jobs.verifyDetails("Best eligible field: 2 Fur per turn", true);
+        jobs.cancel();
+        jobs.verifyClosed();
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 0));
+
+        // Confirm the same job; the field is worked, but nothing is stored yet.
+        jobs.openFromCenter(WORKER_ID);
+        jobs.select(Kind.BEST_FIELD, GoodsType.FUR);
+        jobs.confirm();
+        jobs.verifyClosed();
+        production.verifyFieldJob(DELFT_ID, WORKER_ID, ROAD_LOCATION,
+                Goods.of(GoodsType.FUR, 2));
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 0));
+
+        // The next normal turn stores exactly the previewed fur.
+        gamePage = colony.close();
+        gamePage.nextTurnAndCloseDialogs();
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 2));
+
+        // Save and Continue keep the road, the output and the stored fur, and
+        // add no fur on load.
+        gamePage.exitToMenu();
+        gamePage = new FreePlayAuditPage(getContext()).continueGame();
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 2));
+        gamePage.selectTile(ROAD_LOCATION);
+        road.verifyRoadAt(ROAD_LOCATION, true);
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 3);
     }
 }

@@ -12,6 +12,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.turnevent.TurnEventGoTo;
+import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionFortify;
 import org.microcol.model.unit.UnitActionType;
@@ -56,6 +58,16 @@ public abstract class AbstractUnit implements Unit {
     /** Exact remaining movement; see {@link MovementPoints}. */
     private int movementThirds;
     private UnitAction unitAction;
+    /** Persistent go-to order, or {@code null} when the unit has none. */
+    private GoToOrder goTo;
+    /** Waiting immigrant on the European pier; cleared when it boards. */
+    private boolean immigrant;
+    /** Player withdrew this waiting immigrant from departure boarding. */
+    private boolean boardingOptOut;
+    /**
+     * Player's single current front-of-queue choice among willing immigrants.
+     */
+    private boolean boardingPriority;
 
     public AbstractUnit(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
@@ -383,7 +395,7 @@ public abstract class AbstractUnit implements Unit {
             return false;
         }
         return model.isGameRunning() && model.getCurrentPlayer() == owner
-                && isLiveOwnedUnit(this) && isStorable()
+                && isLiveOwnedUnit(this) && isStorable() && goTo == null
                 && (getAction().getType() == UnitActionType.noAction
                         || departureSentry && getAction()
                                 .getType() == UnitActionType.sentry);
@@ -454,9 +466,18 @@ public abstract class AbstractUnit implements Unit {
         return canEmbark(slot, false);
     }
 
-    boolean canEmbarkSentry(final CargoSlot slot) {
-        return getAction().getType() == UnitActionType.sentry
-                && canEmbark(slot, true);
+    /**
+     * Whether this unit is a departure passenger candidate. A waiting immigrant
+     * depends only on its willingness, so an opt-out is not revived by a sentry
+     * order; other units need the sentry order.
+     */
+    private boolean isDepartureBoardingCandidate() {
+        return immigrant ? isWillingToBoard()
+                : getAction().getType() == UnitActionType.sentry;
+    }
+
+    boolean canEmbarkAsDeparture(final CargoSlot slot) {
+        return isDepartureBoardingCandidate() && canEmbark(slot, true);
     }
 
     private boolean canEmbark(final CargoSlot slot,
@@ -600,7 +621,8 @@ public abstract class AbstractUnit implements Unit {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
                 || !canAttack() || getActionPoints() <= 0
-                || !getAction().isNoAction() || targetLocation == null
+                || !getAction().isNoAction() || goTo != null
+                || targetLocation == null
                 || !model.getMap().isValid(targetLocation)
                 || !getLocation().isNeighbor(targetLocation)
                 || !owner.isVisible(targetLocation)
@@ -1291,6 +1313,9 @@ public abstract class AbstractUnit implements Unit {
                         : 0;
         place.destroy();
         place = placeCargoSlot;
+        // Boarding ends the waiting state, so a later return to the pier does
+        // not revive the immigrant's old willingness or front choice.
+        clearBoardingState();
         movementThirds -= cost;
         slot.store(placeCargoSlot);
         model.fireUnitEmbarked(this, slot);
@@ -1303,6 +1328,13 @@ public abstract class AbstractUnit implements Unit {
         place = repair;
         movementThirds = 0;
         setAction(UnitActionType.noAction.make());
+        if (goTo != null) {
+            // A damaged ship cannot sail; the order ends with a reason.
+            model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
+                    TurnEventGoTo.Kind.CANCELLED_DAMAGED, id, getType(),
+                    goTo.getDestinationName()));
+            goTo = null;
+        }
     }
 
     void completeShipRepair(final Location location) {
@@ -1437,17 +1469,20 @@ public abstract class AbstractUnit implements Unit {
         final java.util.List<CargoSlot> free = ship.getCargo().getSlots()
                 .stream().filter(CargoSlot::isEmpty)
                 .collect(Collectors.toList());
+        // The player's front choice goes first; the rest keep stable ID order.
         final java.util.List<Unit> candidates = owner.getAllUnits().stream()
                 .filter(unit -> unit != ship)
                 .filter(unit -> unit.isAtPlaceLocation()
                         || unit.isAtEuropePier())
-                .filter(unit -> unit.getAction()
-                        .getType() == UnitActionType.sentry)
-                .sorted(java.util.Comparator.comparingInt(Unit::getId))
+                .filter(unit -> ((AbstractUnit) unit)
+                        .isDepartureBoardingCandidate())
+                .sorted(java.util.Comparator
+                        .comparing((Unit unit) -> !unit.isBoardingPriority())
+                        .thenComparingInt(Unit::getId))
                 .collect(Collectors.toList());
         for (final Unit candidate : candidates) {
             for (final CargoSlot slot : free) {
-                if (((AbstractUnit) candidate).canEmbarkSentry(slot)) {
+                if (((AbstractUnit) candidate).canEmbarkAsDeparture(slot)) {
                     result.add(new Boarding((AbstractUnit) candidate, slot));
                     free.remove(slot);
                     break;
@@ -1507,6 +1542,8 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
+        Preconditions.checkState(goTo == null,
+                "Cancel go-to before assigning colony work");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(structureSlot);
@@ -1531,6 +1568,8 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
+        Preconditions.checkState(goTo == null,
+                "Cancel go-to before assigning colony work");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(colonyField);
@@ -1686,6 +1725,15 @@ public abstract class AbstractUnit implements Unit {
         unitPo.setOwnerId(owner.getName());
         unitPo.setType(getType());
         unitPo.setAction(unitAction.save());
+        unitPo.setImmigrant(immigrant);
+        unitPo.setBoardingOptOut(boardingOptOut);
+        unitPo.setBoardingPriority(boardingPriority);
+        if (goTo != null) {
+            unitPo.setGoToDestination(goTo.getDestination());
+            unitPo.setGoToColonyId(goTo.getColonyId());
+            unitPo.setGoToDestinationName(goTo.getDestinationName());
+            unitPo.setGoToPaused(goTo.isPaused());
+        }
         place.save(unitPo);
         return unitPo;
     }
@@ -1748,6 +1796,9 @@ public abstract class AbstractUnit implements Unit {
     void setWaitingOrder(final UnitActionType actionType) {
         Preconditions.checkArgument(actionType == UnitActionType.sentry
                 || actionType == UnitActionType.noAction);
+        Preconditions.checkState(
+                goTo == null || actionType != UnitActionType.sentry,
+                "Cancel go-to before sentry");
         setAction(actionType.make());
         model.fireActionWasStarted(this);
     }
@@ -1757,8 +1808,84 @@ public abstract class AbstractUnit implements Unit {
         setWaitingOrder(UnitActionType.noAction);
     }
 
+    /** Mark a unit created by paid recruitment or earned immigration. */
+    void becomeImmigrant() {
+        Preconditions.checkState(isAtEuropePier(),
+                "Immigrant must arrive on the European pier");
+        immigrant = true;
+        boardingOptOut = false;
+        boardingPriority = false;
+    }
+
+    /**
+     * Restore a saved waiting immigrant. The factory validates the saved place
+     * and flags; loading neither boards nor moves the unit.
+     *
+     * @param optOut   whether the immigrant was withdrawn from boarding
+     * @param priority whether it was the owner's front choice
+     */
+    public void restoreImmigrant(final boolean optOut, final boolean priority) {
+        immigrant = true;
+        boardingOptOut = optOut;
+        boardingPriority = priority;
+    }
+
+    private void clearBoardingState() {
+        immigrant = false;
+        boardingOptOut = false;
+        boardingPriority = false;
+    }
+
+    @Override
+    public boolean isImmigrant() {
+        return immigrant;
+    }
+
+    @Override
+    public boolean isWillingToBoard() {
+        return immigrant && !boardingOptOut;
+    }
+
+    @Override
+    public boolean isBoardingOptedOut() {
+        return boardingOptOut;
+    }
+
+    @Override
+    public boolean isBoardingPriority() {
+        return boardingPriority;
+    }
+
+    /**
+     * Set or clear the opt-out. Withdrawing a willing immigrant also drops its
+     * front choice.
+     *
+     * @param optOut required new opt-out state
+     */
+    void setBoardingOptOut(final boolean optOut) {
+        Preconditions.checkState(immigrant,
+                "Only an immigrant has boarding willingness");
+        boardingOptOut = optOut;
+        if (optOut) {
+            boardingPriority = false;
+        }
+    }
+
+    /**
+     * Set or clear the front-of-queue choice. The model keeps at most one
+     * choice per owner.
+     *
+     * @param priority required new front-of-queue state
+     */
+    void setBoardingPriority(final boolean priority) {
+        Preconditions.checkState(!priority || isWillingToBoard(),
+                "Only a willing immigrant can lead boarding");
+        boardingPriority = priority;
+    }
+
     void startFortifying() {
-        Preconditions.checkState(unitAction.isNoAction());
+        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+                "Cancel go-to before fortifying");
         setAction(new UnitActionFortify(false));
         movementThirds = 0;
         model.fireActionWasStarted(this);
@@ -1779,7 +1906,8 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startClearingForest() {
-        Preconditions.checkState(unitAction.isNoAction());
+        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+                "Cancel go-to before clearing forest");
         final UnitActionClearForest next = new UnitActionClearForest();
         if (getType() == UnitType.HARDY_PIONEER) {
             next.setRemainingTurns(
@@ -1798,7 +1926,8 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startBuildingRoad() {
-        Preconditions.checkState(unitAction.isNoAction());
+        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+                "Cancel go-to before building road");
         final UnitActionBuildRoad next = new UnitActionBuildRoad();
         if (getType() == UnitType.HARDY_PIONEER) {
             next.setRemainingTurns(
@@ -1817,6 +1946,178 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
+     * Go-to order of this unit, or empty when it has none.
+     *
+     * @return the order retained for later owner turns
+     */
+    Optional<GoToOrder> getGoToOrder() {
+        return Optional.ofNullable(goTo);
+    }
+
+    /**
+     * Stores a new go-to order. The model validates the request beforehand.
+     *
+     * @param order required order; the unit must not have another order
+     */
+    void startGoTo(final GoToOrder order) {
+        Preconditions.checkState(goTo == null, "Unit %s has a go-to order",
+                this);
+        goTo = Preconditions.checkNotNull(order);
+    }
+
+    /**
+     * Restores a saved go-to order. The saved unit must be on the map and not
+     * busy. A named colony is checked against the loaded colonies by the model
+     * and again when the order advances. Nothing moves during loading.
+     *
+     * @param destination     required saved destination square
+     * @param colonyId        identity of the named colony, or {@code null}
+     * @param destinationName required saved name for notices
+     * @param paused          whether the saved route was paused
+     */
+    public void restoreGoTo(final Location destination, final Integer colonyId,
+            final String destinationName, final boolean paused) {
+        Preconditions.checkArgument(
+                isAtPlaceLocation() && unitAction.isNoAction()
+                        && destination != null
+                        && model.getMap().isValid(destination)
+                        && !destination.equals(getLocation())
+                        && destinationName != null && !destinationName.isBlank()
+                        && (colonyId == null || colonyId >= 0),
+                "Invalid saved go-to order for unit %s", this);
+        startGoTo(
+                new GoToOrder(destination, colonyId, destinationName, paused));
+    }
+
+    /**
+     * Clears the order without moving the unit or refunding its movement.
+     */
+    void cancelGoTo() {
+        Preconditions.checkState(goTo != null, "Unit %s has no go-to order",
+                this);
+        goTo = null;
+    }
+
+    /**
+     * Walks the saved route as far as this turn's movement pays for it. Each
+     * step is an ordinary legal move, so costs and passage rules match manual
+     * movement. Arrival clears the order and keeps unused movement. A missing
+     * route pauses the order once; a named colony that is gone or no longer
+     * friendly cancels it. Blocked squares are never entered, so no enemy is
+     * attacked.
+     */
+    void advanceGoTo() {
+        if (goTo == null || !isAtPlaceLocation()) {
+            return;
+        }
+        if (goTo.getColonyId() != null && !isNamedDestinationFriendly()) {
+            model.fireActionWasStarted(this);
+            return;
+        }
+        final boolean wasPaused = goTo.isPaused();
+        final List<Location> walked = new ArrayList<>();
+        boolean blocked = false;
+        boolean refused = false;
+        // Every step replans from the live position, because a step can reveal
+        // an obstruction. Each pass either spends movement or ends the walk.
+        while (goTo != null && isAtPlaceLocation()) {
+            if (getLocation().equals(goTo.getDestination())) {
+                goTo = null;
+                break;
+            }
+            final Optional<List<Location>> route = findGoToRoute(
+                    goTo.getDestination());
+            if (route.isEmpty() || route.get().isEmpty()) {
+                blocked = true;
+                break;
+            }
+            final Location step = route.get().get(0);
+            if (!canAffordStepTo(step)) {
+                break;
+            }
+            try {
+                moveOneStep(step);
+            } catch (final IllegalStateException | IllegalArgumentException e) {
+                // The shared step rules refused it; nothing was changed.
+                blocked = true;
+                refused = true;
+                break;
+            }
+            walked.add(step);
+        }
+        if (goTo != null) {
+            goTo.setPaused(blocked);
+            if (blocked && !wasPaused) {
+                model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
+                        TurnEventGoTo.Kind.PAUSED, id, getType(),
+                        goTo.getDestinationName()));
+            }
+        }
+        if (!walked.isEmpty()) {
+            model.fireUnitMovedFinished(this, Path.of(walked));
+        } else if (refused && isAtPlaceLocation()) {
+            // A refused step may already have announced its start; the walk
+            // still ends, on the square where the unit stayed.
+            model.fireUnitMovedFinished(this, Path.of(List.of(getLocation())));
+        }
+        if (goTo == null || goTo.isPaused() != wasPaused) {
+            model.fireActionWasStarted(this);
+        }
+    }
+
+    /**
+     * Route of a go-to order from the live position. It is the cheapest route
+     * of the shared finder, and a ship's route never contains a high-sea
+     * departure step, so an order cannot send a ship to Europe. The place is
+     * read once: a unit that leaves the map during a user-interface query, for
+     * example by departing on the moving thread, has no route.
+     *
+     * @param destination required destination square
+     * @return the route without the start square, or empty when none exists
+     */
+    Optional<List<Location>> findGoToRoute(final Location destination) {
+        Preconditions.checkNotNull(destination);
+        final Place current = getPlace();
+        if (!(current instanceof PlaceLocation)) {
+            return Optional.empty();
+        }
+        final Location start = ((PlaceLocation) current).getLocation();
+        if (destination.equals(start)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(
+                new PathFinder(this, true).find(start, destination, false));
+    }
+
+    /**
+     * Verifies that the colony named by the order still exists at the saved
+     * destination and still belongs to the owner. Otherwise the order is
+     * canceled with its reason.
+     *
+     * @return {@code true} when the order may continue
+     */
+    private boolean isNamedDestinationFriendly() {
+        final Optional<Colony> colony = model.getColonyById(goTo.getColonyId())
+                .filter(Colony::isValid);
+        if (colony.isEmpty()
+                || !colony.get().getLocation().equals(goTo.getDestination())) {
+            cancelGoToWithNotice(TurnEventGoTo.Kind.CANCELLED_REMOVED);
+            return false;
+        }
+        if (colony.get().getOwner() != owner) {
+            cancelGoToWithNotice(TurnEventGoTo.Kind.CANCELLED_NOT_FRIENDLY);
+            return false;
+        }
+        return true;
+    }
+
+    private void cancelGoToWithNotice(final TurnEventGoTo.Kind kind) {
+        model.addTurnEvent(TurnEventProvider.getGoToOrder(owner, kind, id,
+                getType(), goTo.getDestinationName()));
+        goTo = null;
+    }
+
+    /**
      * Define action supported by unit.
      *
      * @return Return list of action types.
@@ -1827,6 +2128,8 @@ public abstract class AbstractUnit implements Unit {
     public void setActionType(final UnitActionType actionType) {
         model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(actionType, "Unit action is null");
+        Preconditions.checkState(goTo == null,
+                "Cancel go-to before giving this unit an order");
         Preconditions
                 .checkState(
                         unitAction.getType() != UnitActionType.sentry

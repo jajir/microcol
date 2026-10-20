@@ -331,4 +331,73 @@ class ConstructionRushTest {
         assertTrue(checked[0]);
         assertEquals(before, snapshot());
     }
+
+    @Test
+    void onlyImportedToolsAreCountedAtTheTaxedQuoteNotTheHammers() {
+        prepareRushNeedingFiveImportedTools();
+        model.getPlayerStore().getKingForPlayer(owner).orElseThrow()
+                .setKingsTaxPercentage(10);
+        owner.setGold(1000);
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        final int goldBefore = owner.getGold();
+
+        queue.rush(quote);
+
+        final EuropeTradeAccount tools = model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.TOOLS);
+        assertEquals(quote.getMissingTools(), tools.getBoughtQuantity());
+        assertEquals(quote.getToolsPrice(), tools.getBoughtGold());
+        assertEquals(0, tools.getSoldQuantity());
+        // The hammer part of the rush price is paid directly, not to Europe.
+        assertEquals(2 * quote.getMissingHammers(),
+                quote.getPrice() - quote.getToolsPrice());
+        assertEquals(goldBefore - quote.getPrice(), owner.getGold());
+        assertTrue(model.getEurope()
+                .getTradeAccount(EuropeanNation.FRENCH, GoodsType.TOOLS)
+                .isEmpty());
+    }
+
+    @Test
+    void stockedToolsAreNoEuropeanPurchase() {
+        growToFourResidents();
+        queue.addAtEnd(ConstructionType.BLACKSMITHS_SHOP);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 34));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 100));
+        owner.setGold(1000);
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        assertEquals(0, quote.getMissingTools());
+        assertEquals(0, quote.getToolsPrice());
+
+        queue.rush(quote);
+
+        assertTrue(model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.TOOLS)
+                .isEmpty());
+        assertEquals(0, tools(EuropeanNation.DUTCH).getPressure());
+        assertFalse(tools(EuropeanNation.DUTCH).isTradedSinceUpdate());
+    }
+
+    @Test
+    void importAccountOverflowRefusesTheRushBeforeAnyChange() {
+        prepareRushNeedingFiveImportedTools();
+        owner.setGold(1000);
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        // The national tools account is already at the integer limit.
+        model.getEurope().saveTradeAccount(EuropeanNation.DUTCH,
+                GoodsType.TOOLS,
+                EuropeTradeAccount.EMPTY.purchased(1, Integer.MAX_VALUE));
+        final String before = snapshot();
+
+        assertTrue(queue.getRushQuote().isEmpty());
+        assertThrows(IllegalStateException.class, () -> queue.rush(quote));
+
+        assertEquals(before, snapshot());
+        assertEquals(1000, owner.getGold());
+        assertEquals(15,
+                colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+        assertEquals(34,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(0, tools(EuropeanNation.DUTCH).getPressure());
+        assertEquals(1, queue.getBuildingQueue().size());
+    }
 }

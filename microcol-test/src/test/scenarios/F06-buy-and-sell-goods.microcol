@@ -708,6 +708,7 @@
       "ownerName": "Dutch\u0027s King",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 25,
         "y": 14
@@ -854,6 +855,7 @@
       "ownerName": "Dutch",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 22,
         "y": 12
@@ -997,6 +999,7 @@
       "ownerName": "Dutch",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 23,
         "y": 17
@@ -1140,6 +1143,7 @@
       "ownerName": "Dutch",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 19,
         "y": 11
@@ -1382,7 +1386,7 @@
     "maxY": 30,
     "seed": 134
   },
-  "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
+  "europe": {"accounts": {"ENGLISH": {"ORE": [2,10,3,12,0,0]}, "FRENCH": {"SILK": [4,48,10,110,6,60]}, "SPANISH": {"TOBACCO": [1,6,5,20,2,8]}}, "markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
   "campaign": {
     "name": "default",
     "mission": "thrive",

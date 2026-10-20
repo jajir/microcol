@@ -354,6 +354,9 @@ class FirstColonyJourneyTest {
         for (final ColonyFieldPo field : landFields(saved)) {
             setTerrain(saved, tile(field), around);
         }
+        // Arctic center: the unattended commons yield nothing, so food and
+        // urgency in these scenarios come only from the workers under test.
+        setTerrain(saved, COLONY_SITE, TerrainType.ARCTIC);
         saved.getModel().getMap().setTrees(java.util.Collections.emptySet());
         shape.accept(saved);
         new GameModelPoDao().saveToFile(directory.resolve(file).toString(),

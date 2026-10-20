@@ -247,6 +247,15 @@ public class ColonyWarehouse {
                 getStorageCapacity(goodsType, getConstructionType()));
     }
 
+    /**
+     * @param goodsType required goods type
+     * @return how many more goods of this type fit now, never negative
+     */
+    public int getFreeStorage(final GoodsType goodsType) {
+        return Math.max(0, getStorageCapacity(goodsType).getAmount()
+                - getGoods(goodsType).getAmount());
+    }
+
     int getStorageCapacity(final GoodsType goodsType,
             final ConstructionType constructionType) {
         Preconditions.checkNotNull(goodsType);

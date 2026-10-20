@@ -27,7 +27,7 @@
 
 ## Coverage map
 
-1. The existing five pioneer captures [R-0118](done/R-0118.md)–[R-0122](R-0122.md)
+1. The existing five pioneer captures [R-0118](done/R-0118.md)–[R-0122](done/R-0122.md)
    own tool admission, plowing, clearing, road construction and road production.
    Their linked shared decisions remain authoritative.
 2. The next A05 captures assign terrain identity and missing defense cells to
@@ -36,25 +36,25 @@
    special-resource overlays to [R-0127](done/R-0127.md). Existing R-0093 defense
    corrections are preserved. Lake output/travel and generator placement are
    explicit open points, not inferred ocean behavior.
-3. [R-0128](R-0128.md) owns finite mineral depletion, [R-0129](R-0129.md)
-   one-time rumor outcomes, [R-0130](R-0130.md) persistent go-to and its
-   cancellation, and [R-0131](R-0131.md) player disband. MOVE-008 is traced
+3. [R-0128](done/R-0128.md) owns finite mineral depletion, [R-0129](R-0129.md)
+   one-time rumor outcomes, [R-0130](done/R-0130.md) persistent go-to and its
+   cancellation, and [R-0131](done/R-0131.md) player disband. MOVE-008 is traced
    through each order owner rather than duplicated as a universal rewrite:
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
    route edit/cancel [R-0142](R-0142.md).
 4. Cargo residuals have seven owners: [R-0132](done/R-0132.md) shared hold cap,
    [R-0133](done/R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
-   reservation, [R-0135](R-0135.md) immigrant boarding choice/priority,
-   [R-0136](done/R-0136.md) arrival unloading, [R-0137](R-0137.md) cargo shortcuts
-   and [R-0138](R-0138.md) jettison. Existing manual transfer, sentry boarding
+   reservation, [R-0135](done/R-0135.md) immigrant boarding choice/priority,
+   [R-0136](done/R-0136.md) arrival unloading, [R-0137](done/R-0137.md) cargo shortcuts
+   and [R-0138](done/R-0138.md) jettison. Existing manual transfer, sentry boarding
    and artillery transport remain credited to their original requirements.
 5. Routes have separate owners for [creation](R-0139.md), [stop transfers](R-0140.md),
    [recurring execution](R-0141.md) and [edit/cancel/delete](R-0142.md).
    [R-0143](done/R-0143.md) owns national market pressure, [R-0144](done/R-0144.md)
-   the Dutch response and [R-0145](R-0145.md) trade accounts plus the economy
+   the Dutch response and [R-0145](done/R-0145.md) trade accounts plus the economy
    report. TRADE-004/005 share the delivered R-0020 quote/affordability path
    and its dated evidence; they receive no duplicate implementation task.
-6. Economy captures assign commons to [R-0146](R-0146.md), clearing a
+6. Economy captures assign commons to [R-0146](done/R-0146.md), clearing a
    civilian specialty to [R-0147](done/R-0147.md), native teaching to
    [R-0148](R-0148.md) and the convert lifecycle, including Sepulveda, to
    [R-0149](R-0149.md). Delivered specialist production, building constants
@@ -88,7 +88,7 @@
     and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
 11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
-    [R-0181](R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
+    [R-0181](done/R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
     [R-0183](R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
 12. Revolution has separate owners for [REF growth](R-0185.md),

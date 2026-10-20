@@ -70,6 +70,78 @@ public class ColonyScreen extends AbstractScreen {
                         expectedNamePart, labeled.getText()));
     }
 
+    public void verifyTownCommons(final String expectedText) {
+        assertEquals(expectedText, getLabeledById(
+                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID)
+                .getText());
+    }
+
+    /**
+     * The commons text is shown whole: the label shows exactly the expected
+     * text, its skin did not shorten it with an ellipsis and its width holds
+     * the full text.
+     */
+    public void verifyTownCommonsNotEllipsized(final String expectedText) {
+        final Labeled label = getLabeledById(
+                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID);
+        assertEquals(expectedText, label.getText());
+        final javafx.scene.text.Text shown = (javafx.scene.text.Text) label
+                .lookup(".text");
+        assertEquals(expectedText, shown.getText(),
+                "Commons text was shortened on screen");
+        assertTrue(label.getWidth() + 0.5 >= label.prefWidth(-1),
+                String.format("Commons label width %s is below its text %s",
+                        label.getWidth(), label.prefWidth(-1)));
+    }
+
+    /**
+     * The warehouse row keeps its expected number of goods side by side, each
+     * with a usable width, and the commons row lies wholly above them inside
+     * the window.
+     */
+    public void verifyWarehouseGoodsAndTownCommonsLayout(
+            final int expectedGoodsPanels, final double minimumGoodsWidth) {
+        final List<VBox> panels = new ArrayList<>(
+                this.<VBox>getListOfNodes(".warehouseGoods"));
+        assertEquals(expectedGoodsPanels, panels.size());
+        panels.sort(java.util.Comparator.comparingDouble(panel -> panel
+                .localToScene(panel.getBoundsInLocal()).getMinX()));
+        double previousMaxX = Double.NEGATIVE_INFINITY;
+        double goodsTop = Double.POSITIVE_INFINITY;
+        for (final VBox panel : panels) {
+            final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
+            assertTrue(bounds.getWidth() >= minimumGoodsWidth, String.format(
+                    "Goods panel is squeezed to width %s", bounds.getWidth()));
+            assertTrue(bounds.getMinX() + 1 >= previousMaxX,
+                    "Goods panels overlap each other");
+            previousMaxX = bounds.getMaxX();
+            goodsTop = Math.min(goodsTop, bounds.getMinY());
+        }
+        final Labeled label = getLabeledById(
+                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID);
+        final Bounds labelBounds = label.localToScene(label.getBoundsInLocal());
+        assertTrue(labelBounds.getMaxY() <= goodsTop + 1,
+                "Commons row overlaps the goods row");
+        assertTrue(
+                labelBounds.getMinX() >= 0 && labelBounds.getMinY() >= 0
+                        && labelBounds.getMaxX() <= label.getScene().getWidth()
+                        && labelBounds.getMaxY() <= label.getScene()
+                                .getHeight(),
+                "Commons row is outside the window");
+    }
+
+    /** @return warehouse amount of the goods now, without asserting */
+    public int stockOf(final org.microcol.model.GoodsType goodsType) {
+        return colony.getWarehouse().getGoods(goodsType).getAmount();
+    }
+
+    public void verifyWarehouseStock(
+            final org.microcol.model.GoodsType goodsType,
+            final int expectedAmount) {
+        assertEquals(expectedAmount, stockOf(goodsType), String.format(
+                "Warehouse %s should hold %s", goodsType, expectedAmount));
+    }
+
     public void verifyThatStatusBarContains(final String expectedText) {
         final Labeled label = getLabeledById(
                 org.microcol.gui.screen.game.components.StatusBarView.STATUS_BAR_LABEL_ID);
@@ -82,6 +154,13 @@ public class ColonyScreen extends AbstractScreen {
         final Button buttonNextTurn = getButtonById(
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);
         getRobot().clickOn(buttonNextTurn);
+        return GamePage.of(getContext());
+    }
+
+    /** Leave the colony screen with the Escape key, as a player would. */
+    public GamePage closeWithEscape() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
         return GamePage.of(getContext());
     }
 

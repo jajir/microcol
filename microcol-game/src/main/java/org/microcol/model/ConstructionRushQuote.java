@@ -67,6 +67,11 @@ public final class ConstructionRushQuote {
         return price;
     }
 
+    /** @return gold paid to Europe for the imported tools, tax included */
+    public int getToolsPrice() {
+        return toolsQuote.getTotal();
+    }
+
     public int getGoldAfter() {
         return gold - price;
     }

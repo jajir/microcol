@@ -5,6 +5,8 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="faminePreview">Famine will kill one random resident. Final production and stocks depend on who dies.</entry>
+	<entry key="townCommonsFood">Town commons, no worker: food %s.</entry>
+	<entry key="townCommonsGoods">Town commons, no worker: food %s, %s %s.</entry>
 	<entry key="goods"> in warehouse</entry>
 	<entry key="colonyName">Click to rename this colony.</entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
@@ -85,4 +87,15 @@
     <entry key="clearTEACHER_COURSE">This colonist teaches a course that a free colonist cannot teach. Remove the teacher or the course in Education first.</entry>
     <entry key="clearSCHOOL_SLOT">This colonist holds a school place that a free colonist cannot hold. Move the colonist out of the school in Education first.</entry>
     <entry key="fortifiedMinimum">A fortified colony must keep at least 3 residents. You can change their jobs inside the colony.</entry>
+    <entry key="quickLoad">Quick load</entry>
+    <entry key="quickUnload">Quick unload</entry>
+    <entry key="quickLoadQuestion">Load %s %s into hold %s of the selected carrier? The treasury does not change.</entry>
+    <entry key="quickUnloadQuestion">Unload %s %s from hold %s into the warehouse? Any amount that does not fit stays aboard.</entry>
+    <entry key="quickConfirm">Confirm</entry>
+    <entry key="quickCancel">Cancel</entry>
+    <entry key="quickUNAVAILABLE">Select a ship or wagon in this colony's port. Nothing was changed.</entry>
+    <entry key="quickNO_STOCK">No warehouse goods can be quick-loaded now. Nothing was changed.</entry>
+    <entry key="quickNO_HOLD">The available goods do not fit a free or partly filled hold. Nothing was changed.</entry>
+    <entry key="quickNO_GOODS">The selected carrier has no goods to unload. Passengers stay aboard. Nothing was changed.</entry>
+    <entry key="quickChanged">The cargo, warehouse or price changed. Nothing was transferred. Check the holds and try again.</entry>
 </properties>

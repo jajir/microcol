@@ -62,6 +62,12 @@ public class Colony {
      */
     private Player lastColonialAffiliation;
 
+    /**
+     * Second commodity of the unattended town commons, chosen at founding and
+     * saved; empty when the center had no positive second output.
+     */
+    private final Optional<GoodsType> townCommonsGoods;
+
     private final Location location;
 
     private final List<ColonyField> colonyFields;
@@ -85,7 +91,8 @@ public class Colony {
             final Function<Colony, List<Construction>> constructionsBuilder,
             final Map<String, Integer> initialGoods,
             final List<ColonyBuildingItemProgress<?>> buildingQueue,
-            final long liberty, final Player lastColonialAffiliation) {
+            final long liberty, final Player lastColonialAffiliation,
+            final Optional<GoodsType> townCommonsGoods) {
         this.model = Preconditions.checkNotNull(model);
         Preconditions.checkArgument(id >= 0, "Invalid colony id");
         this.id = id;
@@ -102,6 +109,8 @@ public class Colony {
                 owner.isKing() || owner == lastColonialAffiliation,
                 "Colonial owner must be the colony's affiliation");
         this.lastColonialAffiliation = lastColonialAffiliation;
+        this.townCommonsGoods = Preconditions.checkNotNull(townCommonsGoods,
+                "town commons is null");
         this.location = Preconditions.checkNotNull(location);
         colonyFields = new ArrayList<>();
         Direction.getAll().forEach(
@@ -173,6 +182,7 @@ public class Colony {
         out.setOwnerName(owner.getName());
         out.setLiberty(liberty);
         out.setLastColonialAffiliation(lastColonialAffiliation.getName());
+        out.setTownCommonsGoods(TownCommons.save(townCommonsGoods));
         out.setLocation(location);
         out.setColonyFields(saveColonyFields());
         out.setColonyWarehouse(warehouse.save());
@@ -1071,6 +1081,10 @@ public class Colony {
         if (isValid()) {
             final ColonyProductionStats colonyStats = getRawGoodsStats(
                     political);
+            // Deposits are planned from this committed output, before education
+            // can change any worker's skill.
+            final Map<Location, Goods> deposits = getDepositExtractions(
+                    political);
             final int producedCrosses = Math.max(0, colonyStats
                     .getStatsByType(GoodsType.CROSS).getRowProduction());
             final int producedBells = Math.max(0, colonyStats
@@ -1100,6 +1114,7 @@ public class Colony {
             owner.creditProducedBells(producedBells);
             applyProducedBells(producedBells);
             advanceEducationAndExperience(colonyStats, political);
+            model.getMap().extractMinerals(deposits);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
                 warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
@@ -1114,6 +1129,38 @@ public class Colony {
             model.addTurnEvent(TurnEventProvider.getFaminePlagueColony(owner,
                     this, famineVictim));
         }
+    }
+
+    /**
+     * Goods that each field takes from its finite deposit in one update.
+     *
+     * @param political political snapshot of the update
+     * @return deposit square and the goods taken there, fields without a take
+     *         are absent
+     */
+    private Map<Location, Goods> getDepositExtractions(
+            final PoliticalProduction political) {
+        final Map<Location, Goods> out = new LinkedHashMap<>();
+        for (final ColonyField field : colonyFields) {
+            field.getDepositExtraction(political)
+                    .ifPresent(goods -> out.put(field.getLocation(), goods));
+        }
+        // The center's commons draw from the same reserve rule, committed
+        // from the same owner update; no worker is involved. Only a finite
+        // output with a reserve is extracted; renewable bonuses are not.
+        final Terrain center = model.getMap().getTerrainAt(location);
+        getTownCommonsProduction().forEach(goods -> {
+            if (center.getResourceOverlay()
+                    .getInitialReserve(goods.getType()) == 0) {
+                return;
+            }
+            final int taken = center.getCommonsProduction(goods.getType())
+                    - center.getCommonsOutput(goods.getType(), false);
+            if (taken > 0) {
+                out.put(location, Goods.of(goods.getType(), taken));
+            }
+        });
+        return out;
     }
 
     private void advanceEducationAndExperience(
@@ -1251,6 +1298,10 @@ public class Colony {
         }
         final List<Goods> sales = new ArrayList<>();
         final List<Integer> incomes = new ArrayList<>();
+        final List<EuropeTradeAccount> accounts = new ArrayList<>();
+        final Europe europe = model.getEurope();
+        final EuropeanNation nation = owner.getEuropeanNation();
+        final boolean revolutionary = owner.isDeclaredIndependence();
         int finalGold = owner.getGold();
         for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
             if (!exportGoods.contains(type)) {
@@ -1273,6 +1324,10 @@ public class Colony {
             finalGold = Math.addExact(finalGold, income);
             sales.add(goods);
             incomes.add(income);
+            // Every account is computed before the first mutation, so one
+            // overflowing export refuses the whole batch.
+            accounts.add(europe.getTradeAccount(nation, type).sold(amount,
+                    income, revolutionary));
         }
         if (sales.isEmpty()) {
             return;
@@ -1281,8 +1336,9 @@ public class Colony {
         for (int index = 0; index < sales.size(); index++) {
             final Goods goods = sales.get(index);
             warehouse.removeGoods(goods);
-            model.getEurope().applyTrade(owner.getEuropeanNation(),
-                    goods.getType(), goods.getAmount());
+            europe.applyTrade(nation, goods.getType(), goods.getAmount());
+            europe.saveTradeAccount(nation, goods.getType(),
+                    accounts.get(index));
             model.addTurnEvent(TurnEventProvider.getCustomHouseExport(owner,
                     this, goods, incomes.get(index)));
         }
@@ -1582,7 +1638,7 @@ public class Colony {
     }
 
     boolean canAcceptWorker(final Unit unit) {
-        if (!canWorkerActHere(unit)) {
+        if (!canWorkerActHere(unit) || model.hasGoToOrder(unit)) {
             return false;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
@@ -1657,6 +1713,26 @@ public class Colony {
                 Math.min(rate, Math.min(remainingFood, freeCapacity)));
     }
 
+    /**
+     * Unattended town commons of the current center square. Read-only; the
+     * owner update settles this output once.
+     *
+     * @return food first, then the saved second commodity when one was chosen;
+     *         amounts may be zero
+     */
+    public List<Goods> getTownCommonsProduction() {
+        final List<Goods> out = new ArrayList<>();
+        out.add(getTownCommonsGoods(TownCommons.FOOD));
+        townCommonsGoods.ifPresent(
+                goodsType -> out.add(getTownCommonsGoods(goodsType)));
+        return ImmutableList.copyOf(out);
+    }
+
+    private Goods getTownCommonsGoods(final GoodsType goodsType) {
+        return Goods.of(goodsType, model.getMap().getTerrainAt(location)
+                .getCommonsProduction(goodsType));
+    }
+
     ColonyProductionStats getRawGoodsStats() {
         return getRawGoodsStats(getPoliticalProduction());
     }
@@ -1680,6 +1756,12 @@ public class Colony {
                 goodsStats.addRowProduction(production.getAmount());
             }
         });
+
+        // The center's commons need no worker; they join the same forecast
+        // before any building consumes a source or food is eaten.
+        getTownCommonsProduction()
+                .forEach(goods -> out.getStatsByType(goods.getType())
+                        .addRowProduction(goods.getAmount()));
 
         out.getStatsByType(GoodsType.CORN)
                 .addConsumed(getRequiredFoodPerTurn());

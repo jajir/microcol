@@ -58,6 +58,11 @@ class EducationTest {
         colony.getConstructions().add(building);
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 4)
                 .findFirst().orElseThrow().setType(teacherType);
+        // Arctic center: the unattended commons yield nothing, so shortages of
+        // staffed inputs stay the only source of the tested output.
+        final var terrain = data.getModel().getMap().getTerrainMap();
+        terrain.put(Location.of(25, 14), TerrainType.ARCTIC);
+        data.getModel().getMap().setTerrainType(terrain);
         return data;
     }
 

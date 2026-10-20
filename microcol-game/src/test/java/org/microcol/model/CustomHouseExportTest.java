@@ -413,4 +413,93 @@ class CustomHouseExportTest {
                         event -> event instanceof TurnEventCustomHouseExport)
                         .count());
     }
+
+    @Test
+    void normalExportIsCountedOnceAsOrdinarySale() {
+        final Model model = model();
+        final Colony colony = equipped(model);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
+        setCornAfterConsumption(colony, 101);
+        model.getEurope()
+                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .setSellPrice(7);
+        final int sold = colony.getRawGoodsStats()
+                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+        final int income = colony.getOwner()
+                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .getTotal();
+
+        colony.startTurn();
+
+        final EuropeTradeAccount account = model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN);
+        assertEquals(0, account.getBoughtQuantity());
+        assertEquals(sold, account.getSoldQuantity());
+        assertEquals(income, account.getSoldGold());
+        assertEquals(0, account.getRevolutionaryQuantity());
+        assertEquals(0, account.getRevolutionaryGold());
+    }
+
+    @Test
+    void revolutionaryExportIsASubsetOfTheSalesWithHalfNetRevenue() {
+        final GameModelPo data = data();
+        data.getModel().getGameManager().getPlayers().stream()
+                .filter(player -> player.getName().equals("Dutch")).findFirst()
+                .orElseThrow().setDeclaredIndependence(true);
+        final Model model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Colony colony = equipped(model);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
+        setCornAfterConsumption(colony, 101);
+        final int sold = colony.getRawGoodsStats()
+                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+        final int income = colony.getOwner()
+                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .getTotal() / 2;
+
+        colony.startTurn();
+
+        // The revolutionary export is part of the sales, not an extra sale.
+        final EuropeTradeAccount account = model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN);
+        assertEquals(sold, account.getSoldQuantity());
+        assertEquals(income, account.getSoldGold());
+        assertEquals(sold, account.getRevolutionaryQuantity());
+        assertEquals(income, account.getRevolutionaryGold());
+    }
+
+    @Test
+    void batchWithOverflowingAccountMovesNoGoodsOrGold() {
+        final Model model = model();
+        final Colony colony = equipped(model);
+        colony.configureExportGoods(Set.of(),
+                Set.of(GoodsType.SILVER, GoodsType.ORE));
+        colony.getWarehouse()
+                .stageProducedGoods(Goods.of(GoodsType.SILVER, 101));
+        colony.getWarehouse().stageProducedGoods(Goods.of(GoodsType.ORE, 101));
+        model.getEurope().saveTradeAccount(EuropeanNation.DUTCH, GoodsType.ORE,
+                EuropeTradeAccount.EMPTY.sold(1, Integer.MAX_VALUE, false));
+        final Player owner = colony.getOwner();
+        final int beforeGold = owner.getGold();
+
+        assertThrows(ArithmeticException.class, colony::startTurn);
+
+        assertEquals(beforeGold, owner.getGold());
+        assertEquals(101,
+                colony.getWarehouse().getGoods(GoodsType.SILVER).getAmount());
+        assertEquals(101,
+                colony.getWarehouse().getGoods(GoodsType.ORE).getAmount());
+        assertTrue(model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.SILVER)
+                .isEmpty());
+        // The pre-existing ORE account is still exactly what it was.
+        final EuropeTradeAccount ore = model.getEurope()
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.ORE);
+        assertEquals(1, ore.getSoldQuantity());
+        assertEquals(Integer.MAX_VALUE, ore.getSoldGold());
+        assertEquals(0,
+                model.getTurnEventStore().getForPlayer(owner).stream().filter(
+                        event -> event instanceof TurnEventCustomHouseExport)
+                        .count());
+    }
 }

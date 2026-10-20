@@ -1,5 +1,6 @@
 package org.microcol.model.store;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.MineralReserve;
 import org.microcol.model.ResourceOverlay;
 import org.microcol.model.RiverSize;
 import org.microcol.model.TerrainType;
@@ -60,6 +63,12 @@ public final class WorldMapPo extends AbstractMapStore {
      * has one.
      */
     private String[] resources;
+
+    /**
+     * Hold the remaining units of every finite deposit. A missing block means
+     * no square has a finite deposit.
+     */
+    private List<MineralReservePo> mineralReserves;
 
     private VisibilityPo visibility;
 
@@ -349,6 +358,53 @@ public final class WorldMapPo extends AbstractMapStore {
     public void setResources(final Map<Location, ResourceOverlay> resourceMap) {
         resources = generateString(loc -> resourceMap
                 .getOrDefault(loc, ResourceOverlay.NONE).getCode(), maxX, maxY);
+    }
+
+    /**
+     * Save remaining units in row order, one entry for each finite deposit.
+     *
+     * @param reserveMap remaining units of every finite deposit
+     */
+    public void setMineralReserves(
+            final Map<Location, MineralReserve> reserveMap) {
+        final List<MineralReservePo> out = new ArrayList<>();
+        for (int y = 1; y <= maxY; y++) {
+            for (int x = 1; x <= maxX; x++) {
+                final Location at = Location.of(x, y);
+                final MineralReserve reserve = reserveMap.get(at);
+                if (reserve != null) {
+                    out.add(new MineralReservePo(at,
+                            reserve.getRemaining(GoodsType.SILVER),
+                            reserve.getRemaining(GoodsType.ORE)));
+                }
+            }
+        }
+        mineralReserves = out;
+    }
+
+    /**
+     * Every saved entry must name its square and both counts. Its range is
+     * checked against the deposit when the world map is built.
+     *
+     * @return remaining units of every saved deposit, empty when the block is
+     *         missing
+     */
+    public Map<Location, MineralReserve> getMineralReserveMap() {
+        final Map<Location, MineralReserve> out = new HashMap<>();
+        if (mineralReserves != null) {
+            for (final MineralReservePo saved : mineralReserves) {
+                Preconditions.checkArgument(
+                        saved.getLocation() != null && saved.getSilver() != null
+                                && saved.getOre() != null,
+                        "Mineral reserve must name its square, silver and ore.");
+                Preconditions.checkArgument(
+                        !out.containsKey(saved.getLocation()),
+                        "Duplicate mineral reserve (%s).", saved.getLocation());
+                out.put(saved.getLocation(),
+                        MineralReserve.of(saved.getSilver(), saved.getOre()));
+            }
+        }
+        return out;
     }
 
     /**

@@ -157,6 +157,7 @@
         "ownerName": "Dutch",
         "liberty": 0,
         "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
         "location": {
           "x": 24,
           "y": 16

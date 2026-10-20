@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.dialog.JettisonFlow;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -64,6 +65,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final VoyageReversalDialog reversalDialog;
 
+    private final JettisonFlow jettisonFlow;
+
     private T titleKey;
 
     private T onMouseEnteredKey;
@@ -74,7 +77,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
             final GameModelController gameModelController,
             final EventBus eventBus, final I18n i18n,
             final DialogMessage dialogMessage,
-            final VoyageReversalDialog reversalDialog) {
+            final VoyageReversalDialog reversalDialog,
+            final JettisonFlow jettisonFlow) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
@@ -83,6 +87,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         this.i18n = Preconditions.checkNotNull(i18n);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
         this.reversalDialog = Preconditions.checkNotNull(reversalDialog);
+        this.jettisonFlow = Preconditions.checkNotNull(jettisonFlow);
 
         shipsContainer = new HBox();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
@@ -188,12 +193,29 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                             || gameModelController.getModel()
                                     .getCurrentPlayer() != unit.getOwner());
                     reverse.setOnAction(event -> reverseCourse((Ship) unit));
+                    final Button jettison = new Button(
+                            i18n.get(Europe.voyageJettison));
+                    jettison.setId("voyage-jettison-" + unit.getId());
+                    jettison.setDisable(!gameModelController.getModel()
+                            .isGameRunning()
+                            || gameModelController.getModel()
+                                    .getCurrentPlayer() != unit.getOwner());
+                    jettison.setOnAction(event -> jettisonCargo((Ship) unit));
                     shipsContainer.getChildren()
                             .add(new VBox(
                                     new ImageView(
                                             imageProvider.getUnitImage(unit)),
-                                    remaining, reverse));
+                                    remaining, new HBox(4, reverse, jettison)));
                 });
+    }
+
+    /**
+     * Discards goods through the shared flow. The list is redrawn afterwards
+     * even when the flow was canceled or refused, so it shows the live cargo.
+     */
+    private void jettisonCargo(final Ship ship) {
+        jettisonFlow.jettison(gameModelController.getModel(), ship);
+        europeDialog.repaint();
     }
 
     private void reverseCourse(final Ship ship) {

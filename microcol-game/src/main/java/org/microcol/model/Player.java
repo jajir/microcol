@@ -736,7 +736,7 @@ public abstract class Player {
 
     private void settleEarnedChoice(final int slot, final int threshold) {
         final UnitType type = recruitment.getCandidateType(slot);
-        model.addUnitInEurope(type, this);
+        addImmigrantInEurope(type);
         recruitment.settleEarned(slot, threshold, isBrewster());
         model.getTurnEventStore()
                 .add(TurnEventProvider.getNewUnitInEurope(this));
@@ -1202,9 +1202,16 @@ public abstract class Player {
         checkNotBoycotted(goods.getType());
         checkConfirmedTerms(offered, quote);
         verifyAvailibilityOFGold(quote.getTotal());
+        // Counted before gold moves, so an overflowing account refuses the
+        // trade.
+        final EuropeTradeAccount account = model.getEurope()
+                .getTradeAccount(getEuropeanNation(), goods.getType())
+                .purchased(goods.getAmount(), quote.getTotal());
         setGold(getGold() - quote.getTotal());
         model.getEurope().applyTrade(getEuropeanNation(), goods.getType(),
                 -goods.getAmount());
+        model.getEurope().saveTradeAccount(getEuropeanNation(), goods.getType(),
+                account);
     }
 
     public void sellGoods(final Goods goods) {
@@ -1226,9 +1233,16 @@ public abstract class Player {
                 "European trade is unavailable");
         checkNotBoycotted(goods.getType());
         checkConfirmedTerms(offered, quote);
+        // Counted before gold moves, so an overflowing account refuses the
+        // sale.
+        final EuropeTradeAccount account = model.getEurope()
+                .getTradeAccount(getEuropeanNation(), goods.getType())
+                .sold(goods.getAmount(), quote.getTotal(), false);
         setGold(Math.addExact(getGold(), quote.getTotal()));
         model.getEurope().applyTrade(getEuropeanNation(), goods.getType(),
                 goods.getAmount());
+        model.getEurope().saveTradeAccount(getEuropeanNation(), goods.getType(),
+                account);
     }
 
     private static void checkConfirmedTerms(final EuropeTradeQuote offered,
@@ -1415,13 +1429,26 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Add a new immigrant to the European pier. It starts willing to board, so
+     * only recruitment and earned arrivals call this helper.
+     *
+     * @param unitType required recruited unit type
+     * @return the new waiting immigrant
+     */
+    private Unit addImmigrantInEurope(final UnitType unitType) {
+        final Unit immigrant = model.addUnitInEurope(unitType, this);
+        ((AbstractUnit) immigrant).becomeImmigrant();
+        return immigrant;
+    }
+
     public Unit recruit(final RecruitmentOffer offer) {
         Preconditions.checkNotNull(offer, "Recruitment offer is null");
         checkTurnPreparationComplete();
         Preconditions.checkState(isRecruitmentOfferCurrent(offer),
                 "Recruitment offer is unavailable or stale");
         verifyAvailibilityOFGold(offer.getPrice());
-        final Unit recruited = model.addUnitInEurope(offer.getType(), this);
+        final Unit recruited = addImmigrantInEurope(offer.getType());
         recruitment.replace(offer.getSlot(), isBrewster());
         setGold(gold - offer.getPrice());
         return recruited;

@@ -1,6 +1,8 @@
 package org.microcol.model;
 
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,20 +55,27 @@ public class Europe {
     /** One complete market per nation, in buyable goods order. */
     private final Map<EuropeanNation, List<GoodsTrade>> markets;
 
+    /** Settled cumulative accounts; a missing pair is an empty account. */
+    private final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> accounts;
+
     /** New game: every national market starts at the catalogue state. */
     Europe(final Model model) {
-        this(model, initialMarkets());
+        this(model, initialMarkets(),
+                new EnumMap<EuropeanNation, Map<GoodsType, EuropeTradeAccount>>(
+                        EuropeanNation.class));
     }
 
     /** Saved game: the complete market state is validated before use. */
     Europe(final Model model, final EuropePo po) {
-        this(model, restoreMarkets(po));
+        this(model, restoreMarkets(po), restoreAccounts(po));
     }
 
     private Europe(final Model model,
-            final Map<EuropeanNation, List<GoodsTrade>> markets) {
+            final Map<EuropeanNation, List<GoodsTrade>> markets,
+            final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> accounts) {
         this.model = Preconditions.checkNotNull(model);
         this.markets = markets;
+        this.accounts = accounts;
         port = new EuropePort(this.model);
         pier = new EuropePier(this.model);
     }
@@ -83,6 +92,52 @@ public class Europe {
         return markets.get(nation).stream().filter(
                 goodsTrade -> goodsTrade.getGoodsType().equals(goodsType))
                 .findAny().orElseThrow();
+    }
+
+    /**
+     * @param nation    nation whose account is read
+     * @param goodsType commodity with a European market
+     * @return the settled cumulative account; a pair never traded is empty
+     */
+    public EuropeTradeAccount getTradeAccount(final EuropeanNation nation,
+            final GoodsType goodsType) {
+        Preconditions.checkNotNull(nation);
+        Preconditions.checkArgument(goodsType.isCanBeBought(),
+                "%s has no European market", goodsType);
+        return accounts.getOrDefault(nation, Map.of()).getOrDefault(goodsType,
+                EuropeTradeAccount.EMPTY);
+    }
+
+    /**
+     * @return an unmodifiable snapshot of every nonempty account, by nation and
+     *         in goods order of each nation
+     */
+    public Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> getTradeAccounts() {
+        final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> out = new EnumMap<>(
+                EuropeanNation.class);
+        accounts.forEach((nation, goods) -> out.put(nation,
+                Collections.unmodifiableMap(new LinkedHashMap<>(goods))));
+        return Collections.unmodifiableMap(out);
+    }
+
+    /**
+     * Stores an account after its settlement has been applied. The caller has
+     * already computed the account before any mutation, so this cannot fail on
+     * arithmetic.
+     *
+     * @param nation    nation whose market settled the trade
+     * @param goodsType traded commodity
+     * @param account   the complete account after the settlement
+     */
+    void saveTradeAccount(final EuropeanNation nation,
+            final GoodsType goodsType, final EuropeTradeAccount account) {
+        final Map<GoodsType, EuropeTradeAccount> nationAccounts = accounts
+                .computeIfAbsent(nation, key -> new HashMap<>());
+        if (account.isEmpty()) {
+            nationAccounts.remove(goodsType);
+        } else {
+            nationAccounts.put(goodsType, account);
+        }
     }
 
     /**
@@ -140,7 +195,72 @@ public class Europe {
     }
 
     EuropePo save() {
-        return save(markets);
+        final EuropePo po = save(markets);
+        po.setAccounts(savedAccounts());
+        return po;
+    }
+
+    /** Only nonempty accounts are written; each pair is six counters. */
+    private Map<String, Map<String, int[]>> savedAccounts() {
+        final Map<String, Map<String, int[]>> out = new LinkedHashMap<>();
+        accounts.forEach((nation, goods) -> {
+            if (goods.isEmpty()) {
+                return;
+            }
+            final Map<String, int[]> saved = new LinkedHashMap<>();
+            goods.forEach((goodsType, account) -> saved.put(goodsType.name(),
+                    savedValues(account)));
+            out.put(nation.name(), saved);
+        });
+        return out;
+    }
+
+    private static int[] savedValues(final EuropeTradeAccount account) {
+        return new int[] { account.getBoughtQuantity(), account.getBoughtGold(),
+                account.getSoldQuantity(), account.getSoldGold(),
+                account.getRevolutionaryQuantity(),
+                account.getRevolutionaryGold() };
+    }
+
+    /**
+     * Restores only canonical data: names must identify a nation and a buyable
+     * commodity, every pair has six counters, and an empty pair is absent.
+     */
+    private static Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> restoreAccounts(
+            final EuropePo po) {
+        Preconditions.checkArgument(po.getAccounts() != null,
+                "Missing European trade accounts");
+        final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> out = new EnumMap<>(
+                EuropeanNation.class);
+        for (final Map.Entry<String, Map<String, int[]>> nationEntry : po
+                .getAccounts().entrySet()) {
+            final Map<String, int[]> savedGoods = nationEntry.getValue();
+            Preconditions.checkArgument(
+                    savedGoods != null && !savedGoods.isEmpty(),
+                    "Empty trade accounts for %s", nationEntry.getKey());
+            final EuropeanNation nation = EuropeanNation
+                    .valueOf(nationEntry.getKey());
+            final Map<GoodsType, EuropeTradeAccount> goods = new HashMap<>();
+            for (final Map.Entry<String, int[]> goodsEntry : savedGoods
+                    .entrySet()) {
+                final GoodsType goodsType = GoodsType
+                        .valueOf(goodsEntry.getKey());
+                Preconditions.checkArgument(goodsType.isCanBeBought(),
+                        "%s has no European market", goodsType);
+                final int[] saved = goodsEntry.getValue();
+                Preconditions.checkArgument(saved != null && saved.length == 6,
+                        "Trade account for %s in %s must hold six counters",
+                        goodsType, nation);
+                final EuropeTradeAccount account = new EuropeTradeAccount(
+                        saved[0], saved[1], saved[2], saved[3], saved[4],
+                        saved[5]);
+                Preconditions.checkArgument(!account.isEmpty(),
+                        "Empty trade account for %s in %s", goodsType, nation);
+                goods.put(goodsType, account);
+            }
+            out.put(nation, goods);
+        }
+        return out;
     }
 
     private static EuropePo save(

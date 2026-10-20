@@ -8,6 +8,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Founder;
 import java.util.stream.Collectors;
@@ -25,6 +26,14 @@ public final class TurnEventProvider {
      * Hidden default constructor.
      */
     private TurnEventProvider() {
+    }
+
+    /** Report why a go-to order of a unit was paused or canceled. */
+    public static TurnEvent getGoToOrder(final Player owner,
+            final TurnEventGoTo.Kind kind, final int unitId,
+            final UnitType unitType, final String destinationName) {
+        return new TurnEventGoTo(owner.getName(), kind, unitId, unitType,
+                destinationName);
     }
 
     /** Persist one completed custom-house sale with its colony identity. */

@@ -149,7 +149,7 @@ public class ColonyFieldTest {
         when(colony.getLocation()).thenReturn(colonyLocation);
         when(map.getTerrainAt(colonyLocation.add(direction.getVector())))
                 .thenReturn(terrain);
-        when(terrain.canProduceAmmount(goodsType)).thenReturn(amount);
+        mockTerrainOutput(goodsType, amount);
     }
 
     private void mockTurnProduction_old(final GoodsType goodsType,
@@ -159,7 +159,19 @@ public class ColonyFieldTest {
         when(colony.getLocation()).thenReturn(colonyLocation);
         when(map.getTerrainAt(colonyLocation.add(direction.getVector())))
                 .thenReturn(terrain);
-        when(terrain.canProduceAmmount(goodsType)).thenReturn(amount);
+        mockTerrainOutput(goodsType, amount);
+    }
+
+    /**
+     * Square without a finite deposit: the output is the same with or without
+     * the deposit bonus, so no reserve limit applies.
+     */
+    private void mockTerrainOutput(final GoodsType goodsType,
+            final int amount) {
+        when(terrain.getUnlimitedTerrainProduction(goodsType, false))
+                .thenReturn(new TerrainProduction(terrain, goodsType, amount));
+        when(terrain.getUnlimitedTerrainProduction(goodsType, true))
+                .thenReturn(new TerrainProduction(terrain, goodsType, amount));
     }
 
     @BeforeEach

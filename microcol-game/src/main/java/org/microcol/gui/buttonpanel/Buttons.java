@@ -25,6 +25,18 @@ public enum Buttons implements MessageKeyResource {
     buildRoadExplanation, buildRoadProblemUnavailable,
     buildRoadProblemNotPioneer, buildRoadProblemNotEnoughTools,
     buildRoadProblemBusy, buildRoadProblemNoMoves, buildRoadProblemSea,
-    buildRoadProblemAlreadyRoad;
+    buildRoadProblemAlreadyRoad, buttonGoTo, buttonCancelGoTo, goToExplanation,
+    goToPickingHint, goToActiveExplanation, goToPausedExplanation,
+    goToCancelExplanation, goToChanged, goToStatusActive, goToStatusPaused,
+    buttonGoToColony, goToColonyExplanation, goToColonyTitle, goToColonyCaption,
+    goToColonyConfirm, goToColonyCancel, buttonDisband, disbandExplanation,
+    disbandProblemUnavailable, disbandProblemWrongPhase, disbandProblemNotOwner,
+    disbandProblemVoyage, disbandProblemInRepair, disbandProblemAboardCarrier,
+    disbandProblemLoadedCarrier, disbandProblemReceivingColony,
+    disbandProblemLastResident, disbandProblemMinimumResidents, disbandTitle,
+    disbandQuestion, disbandToColony, disbandNoColony, disbandToolsLine,
+    disbandHorsesLine, disbandMusketsLine, disbandOverflowAcknowledge,
+    disbandConfirm, disbandCancel, disbandChanged, buttonJettison,
+    jettisonExplanation;
 
 }

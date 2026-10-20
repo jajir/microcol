@@ -62,4 +62,12 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="supportNone">You have no colonies with rebel support yet.</entry>
 	<entry key="supportColonyRow">%s — population %s, stored liberty %s, local support %s%%</entry>
 	<entry key="turnAllyDefense">Your alliance with %2$s obliged you to go to war against %1$s, who attacked your ally.</entry>
+	<entry key="titleTrade">European trade</entry>
+	<entry key="tradeEmpty">No European trade has been settled yet.</entry>
+	<entry key="tradeUnavailable">No game is open. Return to the menu to load a game.</entry>
+	<entry key="tradeBought">Bought: %s units</entry>
+	<entry key="tradeSpent">Gold spent: %s</entry>
+	<entry key="tradeSold">Sold: %s units</entry>
+	<entry key="tradeReceived">Gold received: %s</entry>
+	<entry key="tradeRevolutionary">Revolutionary custom house: %s units, %s net gold</entry>
 </properties>

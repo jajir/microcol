@@ -267,6 +267,7 @@
         "ownerName": "France",
         "liberty": 0,
         "lastColonialAffiliation": "France",
+      "townCommonsGoods": "TOBACCO",
         "location": {
           "x": 17,
           "y": 10
@@ -424,6 +425,7 @@
         "ownerName": "France",
         "liberty": 0,
         "lastColonialAffiliation": "France",
+      "townCommonsGoods": "TOBACCO",
         "location": {
           "x": 17,
           "y": 21

@@ -56,9 +56,11 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         final HBox boxActualValue = new HBox();
         labelActualValue = new Label();
         final Label labelValue = new Label(String.valueOf(actualValue));
+        labelValue.setId("goodsTransferAmount");
         boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
         slider = new Slider();
+        slider.setId("goodsTransferSlider");
         slider.setLabelFormatter(
                 new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);

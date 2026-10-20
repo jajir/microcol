@@ -110,8 +110,8 @@ public final class WoodenButtonsPage extends AbstractScreen {
                     .lookup("#" + id).query();
             assertTrue(button.getSkin() instanceof WoodenButtonSkin
                     || button.getSkin() instanceof WoodenToggleButtonSkin);
-            assertEquals("Playpen Sans Light", button.getFont().getFamily());
-            assertEquals(18, button.getFont().getSize());
+            assertEquals("Playpen Sans Medium", button.getFont().getFamily());
+            assertEquals(14, button.getFont().getSize());
             assertEquals(new javafx.geometry.Insets(12, 24, 14, 24),
                     button.getPadding());
             assertTrue(button.lookup(".wooden-button-drawing")

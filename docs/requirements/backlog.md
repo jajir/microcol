@@ -196,16 +196,16 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | Done | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
 | [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | Done | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
 | [R-0121](done/R-0121.md) | Build a persistent road with a travel benefit | Done | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
-| [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
+| [R-0122](done/R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
 | [R-0123](done/R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
 | [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | Done | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
 | [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | Done | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
 | [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | Done | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
 | [R-0127](done/R-0127.md) | Show and apply special-resource overlays | Done | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
-| [R-0128](R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
+| [R-0128](done/R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
-| [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
-| [R-0131](R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
+| [R-0130](done/R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
+| [R-0131](done/R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
 | [R-0210](R-0210.md) | Verify every terrain and overlay reference row | Verification | UC-119 terrain matrix; individual A05 rules remain owners |
 | [R-0211](R-0211.md) | Verify unit roles and six ship classes | Verification | UC-119 role/ship matrix; individual A05/A09 rules remain owners |
 
@@ -255,17 +255,17 @@ verified or authorize implementation.
 | [R-0132](done/R-0132.md) | Enforce the 100-goods hold cap on every transfer | Done | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
 | [R-0133](done/R-0133.md) | Reject ships and wagons as ordinary passengers | Done | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
-| [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
+| [R-0135](done/R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | Done | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
-| [R-0137](R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
-| [R-0138](R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
+| [R-0137](done/R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
+| [R-0138](done/R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0139](R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
 | [R-0140](R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
 | [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
 | [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
 | [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | Done | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
 | [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | Done | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
-| [R-0145](R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
+| [R-0145](done/R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
 
 The seven A06/P08 analyses R-0132–R-0138 were captured on **2026-10-17** as
 preparation only; they do not select or authorize gameplay implementation.
@@ -309,7 +309,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0107](done/R-0107.md) | Teach colonists through functioning school buildings | Follow-up | [R-0025](done/R-0025.md), [R-0023](done/R-0023.md) |
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0110](done/R-0110.md) | Increase religious production through church and cathedral upgrades | Follow-up | [R-0010](canceled/R-0010.md), [R-0025](done/R-0025.md) |
-| [R-0146](R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
+| [R-0146](done/R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
 | [R-0147](done/R-0147.md) | Clear a colonist's civilian specialty | Done | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
 | [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
@@ -416,7 +416,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0104](done/R-0104.md) | Recruit a founder and retain Congress membership | Follow-up | [R-0031](canceled/R-0031.md), [R-0025](done/R-0025.md) |
 | [R-0105](done/R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
 | [R-0180](done/R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
-| [R-0181](R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
+| [R-0181](done/R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
 | [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
 | [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
 | [R-0184](done/R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
@@ -528,3 +528,15 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Local acceptance without CI waiting — 2026-10-20
 
 1. [R-0254](done/R-0254.md) applies the user-selected local completion policy; CI remains configured but remote verification is requested separately.
+
+
+## Authorized completion through R-0219 — 2026-10-20
+
+1. The user selected all remaining active requirements through R-0219 inclusive, with [R-0207](deferred/R-0207.md) explicitly excluded. The starting inventory is 85 active requirements, 112 done, 12 canceled and that one deferred requirement through this ID. Preserve completed behavior and archived history; this does not reopen canceled assignments or authorize unrelated higher IDs.
+2. Order work by actual dependencies, refining one requirement at a time before implementation. The first proposed batch is R-0122, R-0128, R-0130, R-0131, R-0135, R-0137, R-0138, R-0145, R-0146 and R-0181; dependency review may reorder it. R-0129 waits for its native prerequisites R-0150/R-0153/R-0154 and remains in the authorized scope. Count requirements, not worker subtasks, toward each ten-item acceptance boundary. R-0074 waits for its remaining native/skill consumers despite its accepted roster prerequisites.
+3. Use Claude Code through [Headroom](../ai/headroom.md) for bounded implementation, tests and suitable supporting edits. For the same task use Haiku medium, one targeted Haiku repair, Sonnet, then Opus; Codex may take over after four unsuccessful authoring attempts. Diagnose setup failures separately. A subscription-limit interruption waits for reset and is not an implementation failure or permission to switch executors. Preserve the task, evidence, work and cumulative execution budget.
+4. After each coherent implementation change or repair, run the complete unit/model JUnit selection and approximately five relevant UI scenarios in Docker/Xvfb. Include affected scenarios and stable player-path smoke coverage; five is not a cap when risk requires more. Record actual selections and counts. Required formatting, source-contract checks and documentation checks remain in force.
+5. After each ten implemented requirements and the final incomplete batch, run all required local suites on the final source state. Diagnose and repair failures; a complete rerun with zero failures, errors or skips is required for acceptance. Keep requirements pending until that acceptance, then mark done, commit and push `main`. This is the batch application of the [local acceptance policy](../publishing.md#local-acceptance-policy), not permission to treat targeted checks as final acceptance.
+6. Do not wait for, diagnose or repair remote CI or verify publication in this task. Existing workflows remain configured. This instruction supersedes earlier batch-specific CI-waiting language. Use the [completion runner](../ai/completion-callbacks.md) for long jobs and waits without repeated model polling; inspect actual evidence after the callback.
+
+5. First batch accepted locally on 2026-10-20: R-0122, R-0128, R-0130, R-0131, R-0135, R-0137, R-0138, R-0145, R-0146, R-0181. All ten are now `done`; [full test evidence](../functional-tests.md#first-ten-requirements-full-regression-repair-2026-10-20) records 2,742 model/unit and 440 UI/support checks with zero failures/errors/skips. Remaining authorized requirements continue in dependency order; R-0207 remains excluded.

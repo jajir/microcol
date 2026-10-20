@@ -27,6 +27,9 @@ class ColonyFamineTest {
         final java.util.Map<Location, TerrainType> terrain = data.getModel()
                 .getMap().getTerrainMap();
         terrain.put(Location.of(24, 14), foodTerrain);
+        // Arctic center: the unattended commons yield nothing, so these
+        // famine tests keep isolating the staffed field and building output.
+        terrain.put(Location.of(25, 14), TerrainType.ARCTIC);
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setFields(java.util.Collections.emptySet());
         return Model.make(data.getModel(),

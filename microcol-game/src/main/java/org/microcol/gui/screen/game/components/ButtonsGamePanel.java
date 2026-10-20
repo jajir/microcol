@@ -34,6 +34,7 @@ import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.SkipUnitTurnEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 @Singleton
 public class ButtonsGamePanel extends AbstractButtonsPanel
@@ -83,6 +84,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Tooltip fortifyTooltip = new Tooltip();
     private boolean fortifying;
     private boolean fortified;
+    private final Button buttonGoTo = new Button();
+    private final Tooltip goToTooltip = new Tooltip();
+    private final Button buttonGoToColony = new Button();
+    private final Tooltip goToColonyTooltip = new Tooltip();
+    private final Button buttonDisband = new Button();
+    private final Tooltip disbandTooltip = new Tooltip();
+    private final Button buttonJettison = new Button();
+    private final Tooltip jettisonTooltip = new Tooltip();
+    private final Label goToStatus = new Label();
+    private boolean goToOrdered;
+    private boolean goToPaused;
+    private String goToDestination;
     private I18n currentI18n;
 
     private final Button buttonCongress = new Button();
@@ -128,6 +141,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonFortify.setId("fortifyUnit");
         buttonFortify.setTooltip(fortifyTooltip);
         buttonFortify.setDisable(true);
+        buttonGoTo.setId("goToUnit");
+        buttonGoTo.setTooltip(goToTooltip);
+        buttonGoTo.setDisable(true);
+        buttonGoToColony.setId("goToColonyUnit");
+        buttonGoToColony.setTooltip(goToColonyTooltip);
+        buttonGoToColony.setDisable(true);
+        buttonDisband.setId("disbandUnit");
+        buttonDisband.setTooltip(disbandTooltip);
+        buttonDisband.setDisable(true);
+        buttonDisband.setVisible(false);
+        buttonDisband.setManaged(false);
+        buttonJettison.setId("jettisonUnit");
+        buttonJettison.setTooltip(jettisonTooltip);
+        buttonJettison.setDisable(true);
+        buttonJettison.setVisible(false);
+        buttonJettison.setManaged(false);
+        goToStatus.setId("goToStatus");
+        goToStatus.setVisible(false);
+        goToStatus.setManaged(false);
         buttonSentry.setId("sentryUnit");
         buttonSentry.setTooltip(sentryTooltip);
         buttonSentry.setDisable(true);
@@ -229,6 +261,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonSkipUnitTurn);
         getButtonPanel().getChildren().add(buttonSentry);
         getButtonPanel().getChildren().add(buttonFortify);
+        getButtonPanel().getChildren().add(buttonGoTo);
+        getButtonPanel().getChildren().add(buttonGoToColony);
+        getButtonPanel().getChildren().add(buttonDisband);
+        getButtonPanel().getChildren().add(buttonJettison);
+        getButtonPanel().getChildren().add(goToStatus);
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCongress);
@@ -269,10 +306,15 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCongress.setText(i18n.get(CongressText.title));
         updateSentryText();
         updateFortifyText();
+        updateGoToText();
         buttonWait.setText(i18n.get(Buttons.buttonWait));
         buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
         waitTooltip.setText(i18n.get(Buttons.waitExplanation));
         skipTooltip.setText(i18n.get(Buttons.skipUnitTurnExplanation));
+        buttonDisband.setText(i18n.get(Buttons.buttonDisband));
+        disbandTooltip.setText(i18n.get(Buttons.disbandExplanation));
+        buttonJettison.setText(i18n.get(Buttons.buttonJettison));
+        jettisonTooltip.setText(i18n.get(Buttons.jettisonExplanation));
         buildRoadTooltip.setText(i18n.get(Buttons.buildRoadExplanation));
     }
 
@@ -298,6 +340,97 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         sentryTooltip.setText(
                 currentI18n.get(sentryActive ? Buttons.activateSentryExplanation
                         : Buttons.sentryExplanation));
+    }
+
+    /**
+     * Starts a go-to order with the map pick, or cancels the order shown.
+     *
+     * @param action required action of the button
+     */
+    void setGoToAction(final Runnable action) {
+        buttonGoTo.setOnAction(event -> action.run());
+    }
+
+    /**
+     * Opens the list of the model's friendly colonies as go-to destinations.
+     *
+     * @param action required action of the button
+     */
+    void setGoToColonyAction(final Runnable action) {
+        buttonGoToColony.setOnAction(event -> action.run());
+    }
+
+    /**
+     * Shows the go-to state of the selected unit. A paused order keeps its
+     * destination visible and says so.
+     *
+     * @param ordered       whether the unit has a go-to order
+     * @param paused        whether the order is paused for lack of a route
+     * @param enabled       whether the button may be used now
+     * @param colonyEnabled whether the model offers at least one colony
+     * @param destination   destination name, or {@code null} without an order
+     */
+    void setGoToOrder(final boolean ordered, final boolean paused,
+            final boolean enabled, final boolean colonyEnabled,
+            final String destination) {
+        goToOrdered = ordered;
+        goToPaused = paused;
+        goToDestination = destination;
+        buttonGoTo.setDisable(!enabled);
+        buttonGoToColony.setDisable(!colonyEnabled);
+        buttonGoToColony.setVisible(!ordered);
+        buttonGoToColony.setManaged(!ordered);
+        updateGoToText();
+    }
+
+    private void updateGoToText() {
+        goToStatus.setVisible(goToOrdered);
+        goToStatus.setManaged(goToOrdered);
+        goToStatus.setText(
+                goToOrdered
+                        ? currentI18n.get(
+                                goToPaused ? Buttons.goToStatusPaused
+                                        : Buttons.goToStatusActive,
+                                goToDestination)
+                        : "");
+        buttonGoTo.setText(currentI18n.get(
+                goToOrdered ? Buttons.buttonCancelGoTo : Buttons.buttonGoTo));
+        buttonGoToColony.setText(currentI18n.get(Buttons.buttonGoToColony));
+        goToTooltip.setText(
+                currentI18n.get(goToOrdered ? Buttons.goToCancelExplanation
+                        : Buttons.goToExplanation));
+        goToColonyTooltip
+                .setText(currentI18n.get(Buttons.goToColonyExplanation));
+    }
+
+    void setDisbandAction(final Runnable action) {
+        buttonDisband.setOnAction(event -> action.run());
+    }
+
+    /**
+     * The control is shown for the selected own unit. It stays clickable while
+     * the human may act, so a refusal can explain its reason.
+     */
+    void setDisbandOrder(final boolean visible, final boolean enabled) {
+        // The button stays in the panel, like the go-to status; the shared
+        // setVisibleNode only adds or removes a node and never shows it.
+        buttonDisband.setVisible(visible);
+        buttonDisband.setManaged(visible);
+        buttonDisband.setDisable(!enabled);
+    }
+
+    void setJettisonAction(final Runnable action) {
+        buttonJettison.setOnAction(event -> action.run());
+    }
+
+    /**
+     * The control is shown for an owned ship that may offer goods at sea. It
+     * stays clickable while the human may act, so a refusal can explain itself.
+     */
+    void setJettisonOrder(final boolean visible, final boolean enabled) {
+        buttonJettison.setVisible(visible);
+        buttonJettison.setManaged(visible);
+        buttonJettison.setDisable(!enabled);
     }
 
     void setFortifyAction(final Runnable action) {
@@ -327,6 +460,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCongress.setDisable(disable);
         buttonSentry.setDisable(disable);
         buttonFortify.setDisable(disable);
+        buttonGoTo.setDisable(disable);
+        buttonGoToColony.setDisable(disable);
+        buttonDisband.setDisable(disable);
+        buttonJettison.setDisable(disable);
         buttonWait.setDisable(disable);
         buttonSkipUnitTurn.setDisable(disable);
         buttonCenter.setDisable(disable);

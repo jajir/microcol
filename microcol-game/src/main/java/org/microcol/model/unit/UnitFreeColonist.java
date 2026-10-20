@@ -23,6 +23,7 @@ import org.microcol.model.UnitType;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Unit Free Colonist.
@@ -771,6 +772,20 @@ public class UnitFreeColonist extends CanMount {
      */
     public int getTools() {
         return tools;
+    }
+
+    /**
+     * Equipment this colonist carries, as the goods it would return to a
+     * warehouse: muskets and horses at their fixed cost, tools at the remaining
+     * amount.
+     *
+     * @return immutable amounts of muskets, horses and tools
+     */
+    public java.util.Map<GoodsType, Integer> getCarriedEquipment() {
+        return ImmutableMap.of(GoodsType.MUSKET,
+                holdingGuns ? REQUIRED_MUSKETS_FOR_ARMED_UNIT : 0,
+                GoodsType.HORSE, mounted ? REQUIRED_HORSES_FOR_MOUNTED_UNIT : 0,
+                GoodsType.TOOLS, tools);
     }
 
     /**

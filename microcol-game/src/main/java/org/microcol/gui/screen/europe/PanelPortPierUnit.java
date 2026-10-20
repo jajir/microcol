@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.i18n.I18n;
 import org.microcol.model.GoodsType;
+import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitFreeColonist;
 
@@ -97,6 +98,16 @@ public final class PanelPortPierUnit extends HBox {
             marker.setTooltip(new Tooltip(i18n.get(Buttons.sentryExplanation)));
             getChildren().add(marker);
         }
+        if (unit.isBoardingPriority() || unit.isBoardingOptedOut()) {
+            final Label marker = new Label(i18n
+                    .get(unit.isBoardingPriority() ? Europe.immigrantFrontMarker
+                            : Europe.immigrantAshoreMarker));
+            marker.setId("immigrant-marker-" + unit.getId());
+            marker.setMinSize(javafx.scene.layout.Region.USE_PREF_SIZE,
+                    javafx.scene.layout.Region.USE_PREF_SIZE);
+            marker.getStyleClass().add("sentry-marker");
+            getChildren().add(marker);
+        }
     }
 
     private void showEquipmentMenu() {
@@ -111,6 +122,9 @@ public final class PanelPortPierUnit extends HBox {
             addEquipmentChoice(colonist, GoodsType.TOOLS,
                     !colonist.isHoldingTools());
             addOrdinationChoice();
+        }
+        if (unit.isImmigrant()) {
+            addBoardingChoices();
         }
         final boolean sentry = unit.getAction()
                 .getType() == UnitActionType.sentry;
@@ -137,6 +151,47 @@ public final class PanelPortPierUnit extends HBox {
         });
         equipmentMenu.getItems().add(order);
         equipmentMenu.show(paneImage, Side.BOTTOM, 0, 0);
+    }
+
+    /**
+     * Willingness and front-of-queue choices. Each choice is authoritative in
+     * the model; a rejected stale choice explains itself and changes nothing.
+     */
+    private void addBoardingChoices() {
+        final Model model = gameModelController.getModel();
+        final boolean willing = unit.isWillingToBoard();
+        final MenuItem boarding = new MenuItem(
+                i18n.get(willing ? Europe.immigrantStayAshore
+                        : Europe.immigrantBoardAgain));
+        boarding.setId("europe-boarding-" + unit.getId());
+        boarding.setDisable(!(willing ? model.canOptOutOfBoarding(unit)
+                : model.canRestoreBoarding(unit)));
+        boarding.setOnAction(event -> changeBoarding(() -> {
+            if (willing) {
+                model.optOutOfBoarding(unit);
+            } else {
+                model.restoreBoarding(unit);
+            }
+        }));
+        equipmentMenu.getItems().add(boarding);
+        final MenuItem front = new MenuItem(
+                i18n.get(Europe.immigrantFrontOfQueue));
+        front.setId("europe-boarding-front-" + unit.getId());
+        front.setDisable(!model.canPrioritizeBoarding(unit));
+        front.setOnAction(
+                event -> changeBoarding(() -> model.prioritizeBoarding(unit)));
+        equipmentMenu.getItems().add(front);
+    }
+
+    private void changeBoarding(final Runnable change) {
+        try {
+            change.run();
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            orderMessage.setTitle(i18n.get(Europe.title));
+            orderMessage.setText(i18n.get(Europe.immigrantBoardingUnavailable));
+            orderMessage.showAndWait();
+        }
+        callback.repaintAfterGoodMoving();
     }
 
     private void addOrdinationChoice() {

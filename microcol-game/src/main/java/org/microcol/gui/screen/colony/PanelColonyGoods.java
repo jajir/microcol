@@ -2,6 +2,7 @@ package org.microcol.gui.screen.colony;
 
 import java.util.List;
 
+import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -25,11 +26,13 @@ import com.google.inject.Singleton;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * Show list of all available goods.
@@ -53,6 +56,17 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private ColonyWarehouse colonyWarehouse;
 
+    private Colony colony;
+
+    /** Stable id of the town commons label for tests and captures. */
+    public static final String TOWN_COMMONS_ID = "townCommons";
+
+    /** Unattended town commons; a label only, with no worker control. */
+    private final Label townCommons = new Label();
+
+    /** Goods row above the full-width town commons row. */
+    private final VBox content = new VBox();
+
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
             final ImageProvider imageProvider,
@@ -72,6 +86,16 @@ public final class PanelColonyGoods implements JavaFxComponent {
                     mainPanel.getChildren().add(out.getContent());
                     return out;
                 }).collect(ImmutableList.toImmutableList());
+        // The commons get their own full-width row above the unchanged goods
+        // row, inside the top of the warehouse frame: the frame sits at the
+        // bottom of the window, so there is no room below the goods.
+        townCommons.setId(TOWN_COMMONS_ID);
+        townCommons.getStyleClass().add("town-commons");
+        townCommons.setMinWidth(Region.USE_PREF_SIZE);
+        townCommons.setMaxWidth(Double.MAX_VALUE);
+        content.getStyleClass().add("panel-colony-goods-column");
+        content.setPickOnBounds(false);
+        content.getChildren().addAll(townCommons, mainPanel);
 
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
                 mainPanel, this::isItGoods);
@@ -85,14 +109,32 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     public void setColony(final Colony colony) {
-        colonyWarehouse = Preconditions.checkNotNull(colony).getWarehouse();
+        this.colony = Preconditions.checkNotNull(colony);
+        colonyWarehouse = colony.getWarehouse();
         panelColonyGoods
                 .forEach(panelColonyGood -> panelColonyGood.setColony(colony));
     }
 
     void repaint() {
         panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.repaint());
+        repaintTownCommons();
     };
+
+    /** Show the model's commons forecast, labeled and without a worker. */
+    private void repaintTownCommons() {
+        final List<Goods> commons = colony.getTownCommonsProduction();
+        final Goods food = commons.get(0);
+        if (commons.size() == 1) {
+            townCommons.setText(
+                    i18n.get(ColonyMsg.townCommonsFood, food.getAmount()));
+            return;
+        }
+        final Goods second = commons.get(1);
+        townCommons.setText(i18n.get(ColonyMsg.townCommonsGoods,
+                food.getAmount(),
+                i18n.get(GoodsTypeName.getNameForGoodsType(second.getType())),
+                second.getAmount()));
+    }
 
     private void onDragOver(final DragEvent event) {
         if (isItGoods(event.getDragboard())) {
@@ -222,7 +264,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     @Override
     public Region getContent() {
-        return mainPanel;
+        return content;
     }
 
 }

@@ -39,6 +39,10 @@ final class StatisticsPanel implements GameScreen {
     private final EuropeanRelationsPanel relations;
     private final ToggleButton relationsButton = new ToggleButton();
 
+    private final static String KEY_TRADE = "trade";
+    private final EuropeanTradePanel trade;
+    private final ToggleButton tradeButton = new ToggleButton();
+
     private final static String KEY_GOLD = "gold";
     private final static String KEY_MILITARY = "military";
     private final static String KEY_WEALTH = "wealth";
@@ -83,6 +87,12 @@ final class StatisticsPanel implements GameScreen {
         relationsButton.setToggleGroup(toggleGroup);
         relationsButton.setUserData(KEY_RELATIONS);
 
+        trade = new EuropeanTradePanel(gameModelController, i18n);
+        tradeButton.setId("tradeTab");
+        tradeButton.getStyleClass().add("relations-tab");
+        tradeButton.setToggleGroup(toggleGroup);
+        tradeButton.setUserData(KEY_TRADE);
+
         toggleGroup.selectedToggleProperty()
                 .addListener(this::onToggleGroupWasChanged);
 
@@ -111,6 +121,7 @@ final class StatisticsPanel implements GameScreen {
         leftPanel.getChildren().add(tb3);
         leftPanel.getChildren().add(tb4);
         leftPanel.getChildren().add(relationsButton);
+        leftPanel.getChildren().add(tradeButton);
 
         final VBox rightPanel = new VBox();
         rightPanel.getStyleClass().add("right");
@@ -133,6 +144,12 @@ final class StatisticsPanel implements GameScreen {
             setTitle(Stats.titleRelations);
             relations.showReport();
             chartPanel.getChildren().setAll(relations);
+            return;
+        }
+        if (KEY_TRADE.equals(newValue.getUserData())) {
+            setTitle(Stats.titleTrade);
+            trade.showReport();
+            chartPanel.getChildren().setAll(trade);
             return;
         }
         final List<TurnPlayerStatistics> stats = gameModelController.getModel()
@@ -247,6 +264,7 @@ final class StatisticsPanel implements GameScreen {
         tb3.setText(i18n.get(Stats.titleWealth));
         tb4.setText(i18n.get(Stats.titleScore));
         relationsButton.setText(i18n.get(Stats.titleRelations));
+        tradeButton.setText(i18n.get(Stats.titleTrade));
     }
 
     @Override

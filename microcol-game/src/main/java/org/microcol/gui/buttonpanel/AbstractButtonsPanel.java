@@ -74,6 +74,16 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     }
 
     /**
+     * Add a further row below the first one. The first row keeps its positions,
+     * so its controls do not move when a screen adds more commands.
+     *
+     * @param row required row of controls
+     */
+    protected void addButtonRow(final FlowPane row) {
+        mainPanel.getChildren().add(Preconditions.checkNotNull(row));
+    }
+
+    /**
      * @return the buttonPanel
      */
     public FlowPane getButtonPanel() {

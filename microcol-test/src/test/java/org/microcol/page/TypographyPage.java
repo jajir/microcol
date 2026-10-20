@@ -40,7 +40,7 @@ public final class TypographyPage extends AbstractScreen {
 
     public void verifyColonyTooltip() {
         getRobot().interact(() -> {
-            assertEquals("Playpen Sans Light", getLabeledById("colonyName")
+            assertEquals("Playpen Sans Regular", getLabeledById("colonyName")
                     .getTooltip().getFont().getName());
         });
     }
@@ -72,7 +72,7 @@ public final class TypographyPage extends AbstractScreen {
                     font = ((Text) node).getFont();
                 }
                 if (font != null && node.isVisible()) {
-                    assertEquals("Playpen Sans Light", font.getName(),
+                    assertEquals(expectedFace(node), font.getName(),
                             node.getClass().getSimpleName() + " #"
                                     + node.getId());
                     checked++;
@@ -80,6 +80,19 @@ public final class TypographyPage extends AbstractScreen {
             }
             assertTrue(checked > 0, "Inspect actual scene text");
         });
+    }
+
+    private static String expectedFace(final Node node) {
+        // Wooden buttons select Medium in WoodenButtons.css; other text uses
+        // the Regular face from the root in Typography.css.
+        Node current = node;
+        while (current != null) {
+            if (current.getStyleClass().contains("wooden-button")) {
+                return "Playpen Sans Medium";
+            }
+            current = current.getParent();
+        }
+        return "Playpen Sans Regular";
     }
 
     public void verifyTextSize(final String selector, final double expected) {

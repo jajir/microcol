@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +19,20 @@ public final class EuropePier {
         this.model = Preconditions.checkNotNull(model);
     }
 
+    /**
+     * Units waiting on the pier in departure order: the player's front-of-queue
+     * choice first, then stable ID order as on a departing ship.
+     *
+     * @param player required owner of the pier units
+     * @return ordered waiting units of the player
+     */
     public List<Unit> getUnits(final Player player) {
         return model.getAllUnits().stream()
                 .filter(unit -> unit.isAtEuropePier())
                 .filter(unit -> unit.getOwner().equals(player))
+                .sorted(Comparator
+                        .comparing((Unit unit) -> !unit.isBoardingPriority())
+                        .thenComparingInt(Unit::getId))
                 .collect(Collectors.toList());
     }
 

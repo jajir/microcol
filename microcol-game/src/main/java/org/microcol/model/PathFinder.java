@@ -26,8 +26,21 @@ final class PathFinder {
 
     private final AbstractUnit unit;
 
+    /** Whether a ship route must not contain a high-sea departure step. */
+    private final boolean avoidDeparture;
+
     PathFinder(final AbstractUnit unit) {
+        this(unit, false);
+    }
+
+    /**
+     * @param unit           required moving unit
+     * @param avoidDeparture when {@code true}, a ship route never contains a
+     *                       step that would depart to the high sea
+     */
+    PathFinder(final AbstractUnit unit, final boolean avoidDeparture) {
         this.unit = Preconditions.checkNotNull(unit);
+        this.avoidDeparture = avoidDeparture;
     }
 
     /**
@@ -41,8 +54,25 @@ final class PathFinder {
      */
     List<Location> find(final Location destination,
             final boolean excludeDestination) {
+        return find(unit.getLocation(), destination, excludeDestination);
+    }
+
+    /**
+     * Find a route from a start square read once by the caller. The unit's
+     * place is not read again, so a concurrent move cannot change the start
+     * during the search.
+     *
+     * @param start              required square of the unit's place snapshot
+     * @param destination        required destination
+     * @param excludeDestination when {@code true}, a route to a square next to
+     *                           the destination is enough
+     * @return route without the start square, or {@code null} when there is
+     *         none
+     */
+    List<Location> find(final Location start, final Location destination,
+            final boolean excludeDestination) {
         final long startTime = System.currentTimeMillis();
-        final Location start = unit.getLocation();
+        Preconditions.checkNotNull(start);
         Preconditions.checkNotNull(destination);
         Preconditions.checkArgument(!start.equals(destination),
                 "Start and destination must be different (%s).", start);
@@ -55,10 +85,12 @@ final class PathFinder {
         final Predicate<Location> isTarget = location -> excludeDestination
                 && location.isNeighbor(destination)
                 || location.equals(destination);
-        final Optional<Node> affordable = search(unit.getMovementThirds(),
-                unit.hasFullMovement(), isTarget, new HashSet<>());
+        final Optional<Node> affordable = search(start,
+                unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
+                new HashSet<>());
         final Optional<Node> found = affordable.isPresent() ? affordable
-                : search(Integer.MAX_VALUE, false, isTarget, new HashSet<>());
+                : search(start, Integer.MAX_VALUE, false, isTarget,
+                        new HashSet<>());
         logger.debug("Path finding finished in {} ms.",
                 System.currentTimeMillis() - startTime);
         return found.map(this::createList).orElse(null);
@@ -72,8 +104,8 @@ final class PathFinder {
      */
     Set<Location> findReachable() {
         final Set<Location> reached = new HashSet<>();
-        search(unit.getMovementThirds(), unit.hasFullMovement(),
-                location -> false, reached);
+        search(unit.getLocation(), unit.getMovementThirds(),
+                unit.hasFullMovement(), location -> false, reached);
         return reached;
     }
 
@@ -81,6 +113,7 @@ final class PathFinder {
      * Dijkstra search by entry cost. A square costing more than the allowance
      * is entered only as a terminal step from a full allowance.
      *
+     * @param start         required square the search starts from
      * @param allowance     movement thirds that routes must not exceed
      * @param fullAllowance whether the unit may take one terminal expensive
      *                      step from its start
@@ -89,13 +122,13 @@ final class PathFinder {
      *                      start
      * @return the target node, or empty when no target was settled
      */
-    private Optional<Node> search(final int allowance,
+    private Optional<Node> search(final Location start, final int allowance,
             final boolean fullAllowance, final Predicate<Location> isTarget,
             final Set<Location> reached) {
         final PriorityQueue<Node> open = new PriorityQueue<>(
                 Comparator.comparingInt(node -> node.cost));
         final Set<Location> closed = new HashSet<>();
-        open.add(new Node(unit.getLocation(), 0, null, false));
+        open.add(new Node(start, 0, null, false));
         while (!open.isEmpty()) {
             final Node current = open.poll();
             if (!closed.add(current.location)) {
@@ -113,6 +146,10 @@ final class PathFinder {
             for (final Location neighbor : current.location.getNeighbors()) {
                 if (closed.contains(neighbor)
                         || !unit.isPossibleToMoveAt(neighbor)) {
+                    continue;
+                }
+                if (avoidDeparture && unit.isShip() && unit.model.getHighSea()
+                        .isDepartureStep(current.location, neighbor)) {
                     continue;
                 }
                 final int cost = current.cost

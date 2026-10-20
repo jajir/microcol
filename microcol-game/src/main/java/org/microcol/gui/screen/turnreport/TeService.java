@@ -38,6 +38,7 @@ public class TeService {
             final TeProcessorPeaceOffer teProcessorPeaceOffer,
             final TeProcessorDiplomacy teProcessorDiplomacy,
             final TeProcessorShipRepair teProcessorShipRepair,
+            final TeProcessorGoTo teProcessorGoTo,
             final TeProcessorEducation education,
             final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
             final TeProcessorForestLumberLost forestLumberLost) {
@@ -46,6 +47,7 @@ public class TeService {
 
         this.turnEventResolver = new ChainOfCommandStrategy<>(Lists
                 .newArrayList(Preconditions.checkNotNull(teProcessorShipRepair),
+                        Preconditions.checkNotNull(teProcessorGoTo),
                         Preconditions.checkNotNull(education),
                         Preconditions.checkNotNull(constructionWaitingForTools),
                         Preconditions.checkNotNull(forestLumberLost),

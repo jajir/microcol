@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,26 @@ class WorldMapResourceTest {
     private WorldMap resourceMap(final GameModelPo data,
             final Map<Location, ResourceOverlay> resources) {
         data.getModel().getMap().setResources(resources);
+        data.getModel().getMap().setMineralReserves(initialReserves(resources));
+        return new WorldMap(data.getModel());
+    }
+
+    /** A new deposit starts with every unit of its overlay. */
+    private static Map<Location, MineralReserve> initialReserves(
+            final Map<Location, ResourceOverlay> resources) {
+        final Map<Location, MineralReserve> out = new HashMap<>();
+        resources.forEach((at, overlay) -> {
+            if (overlay.isFinite()) {
+                out.put(at, MineralReserve.initial(overlay));
+            }
+        });
+        return out;
+    }
+
+    private WorldMap reserveMap(final GameModelPo data, final Location at,
+            final ResourceOverlay overlay, final MineralReserve reserve) {
+        data.getModel().getMap().setResources(Map.of(at, overlay));
+        data.getModel().getMap().setMineralReserves(Map.of(at, reserve));
         return new WorldMap(data.getModel());
     }
 
@@ -132,5 +153,99 @@ class WorldMapResourceTest {
                 .fromJson("{\"maxX\":2,\"maxY\":1,\"resources\":[\"" + header
                         + "\",\"row-0001:si\"]}", WorldMapPo.class);
         assertThrows(IllegalArgumentException.class, shortRow::getResourceMap);
+    }
+
+    @Test
+    void savedRemainingUnitsSurviveSaveIncludingZeroAndPartialReserves() {
+        final GameModelPo data = dao.loadFromClassPath(MAP);
+        final Location land = landSquare(data);
+        final WorldMap map = resourceMap(data,
+                Map.of(land, ResourceOverlay.MIXED_MINERALS));
+        // Silver is used up while the ore reserve stays full.
+        map.extractMinerals(Map.of(land, Goods.of(GoodsType.SILVER, 200)));
+        final ModelPo saved = new ModelPo();
+        map.save(saved);
+        final WorldMap reloaded = new WorldMap(saved);
+        assertEquals(0, reloaded.getMineralRemainingAt(land, GoodsType.SILVER));
+        assertEquals(200, reloaded.getMineralRemainingAt(land, GoodsType.ORE));
+        // A partial reserve survives too, and the loaded square is unchanged.
+        final WorldMap partial = reserveMap(data, land, ResourceOverlay.SILVER,
+                MineralReserve.of(37, 0));
+        final ModelPo partialSaved = new ModelPo();
+        partial.save(partialSaved);
+        assertEquals(37, new WorldMap(partialSaved).getMineralRemainingAt(land,
+                GoodsType.SILVER));
+    }
+
+    @Test
+    void rejectedExtractionPlanChangesNoReserve() {
+        final GameModelPo data = dao.loadFromClassPath(MAP);
+        final Location land = landSquare(data);
+        final Location sea = seaSquare(data);
+        final WorldMap map = resourceMap(data,
+                Map.of(land, ResourceOverlay.MIXED_MINERALS));
+        // The first entry is valid, but the second square has no deposit.
+        assertThrows(IllegalArgumentException.class,
+                () -> map.extractMinerals(
+                        Map.of(land, Goods.of(GoodsType.SILVER, 10), sea,
+                                Goods.of(GoodsType.ORE, 1))));
+        assertEquals(200, map.getMineralRemainingAt(land, GoodsType.SILVER));
+        // More than the reserve, and goods the deposit does not yield.
+        assertThrows(IllegalArgumentException.class, () -> map.extractMinerals(
+                Map.of(land, Goods.of(GoodsType.SILVER, 201))));
+        assertThrows(IllegalArgumentException.class, () -> map
+                .extractMinerals(Map.of(land, Goods.of(GoodsType.FUR, 1))));
+        assertEquals(200, map.getMineralRemainingAt(land, GoodsType.SILVER));
+        assertEquals(200, map.getMineralRemainingAt(land, GoodsType.ORE));
+    }
+
+    @Test
+    void mineralReserveMustFitItsDepositAndSquare() {
+        final GameModelPo data = dao.loadFromClassPath(MAP);
+        final Location land = landSquare(data);
+        // A pure silver deposit holds at most 100 units and no ore.
+        assertThrows(IllegalArgumentException.class, () -> reserveMap(data,
+                land, ResourceOverlay.SILVER, MineralReserve.of(101, 0)));
+        assertThrows(IllegalArgumentException.class, () -> reserveMap(data,
+                land, ResourceOverlay.SILVER, MineralReserve.of(-1, 0)));
+        assertThrows(IllegalArgumentException.class, () -> reserveMap(data,
+                land, ResourceOverlay.SILVER, MineralReserve.of(100, 1)));
+        // A mixed deposit holds at most 200 of each.
+        assertThrows(IllegalArgumentException.class,
+                () -> reserveMap(data, land, ResourceOverlay.MIXED_MINERALS,
+                        MineralReserve.of(201, 0)));
+        // A finite deposit must have its reserve, and a reserve needs one.
+        data.getModel().getMap()
+                .setResources(Map.of(land, ResourceOverlay.SILVER));
+        data.getModel().getMap().setMineralReserves(Map.of());
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorldMap(data.getModel()));
+        data.getModel().getMap().setResources(Map.of());
+        data.getModel().getMap()
+                .setMineralReserves(Map.of(land, MineralReserve.of(1, 0)));
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorldMap(data.getModel()));
+    }
+
+    @Test
+    void malformedSavedMineralReserveBlockIsRefused() {
+        assertTrue(new Gson().fromJson("{}", WorldMapPo.class)
+                .getMineralReserveMap().isEmpty());
+        // An entry without its ore count is incomplete.
+        final WorldMapPo missingOre = new Gson().fromJson(
+                "{\"maxX\":2,\"maxY\":1,\"mineralReserves\":[{\"location\":"
+                        + "{\"x\":1,\"y\":1},\"silver\":100}]}",
+                WorldMapPo.class);
+        assertThrows(IllegalArgumentException.class,
+                missingOre::getMineralReserveMap);
+        // The same square twice is ambiguous.
+        final WorldMapPo duplicate = new Gson().fromJson(
+                "{\"maxX\":2,\"maxY\":1,\"mineralReserves\":[{\"location\":"
+                        + "{\"x\":1,\"y\":1},\"silver\":100,\"ore\":0},"
+                        + "{\"location\":{\"x\":1,\"y\":1},\"silver\":5,"
+                        + "\"ore\":0}]}",
+                WorldMapPo.class);
+        assertThrows(IllegalArgumentException.class,
+                duplicate::getMineralReserveMap);
     }
 }

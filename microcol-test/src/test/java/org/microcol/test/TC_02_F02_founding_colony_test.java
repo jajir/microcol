@@ -69,15 +69,22 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         // verify that on filed is exactly one unit, the one that founded colony
         colonyScreen.verifyNumberOfUnitsOnFields(1);
 
-        // verify that action net production is.
-        colonyScreen.verifyThatProductionIs(GoodsType.CORN, 2);
+        // The grassland center adds its unattended commons, food 4 and tobacco
+        // 3 with no worker, to the founder's field: net food is the earlier 2
+        // plus the 4 from the commons.
+        colonyScreen.verifyTownCommons(
+                "Town commons, no worker: food 4, Tobacco 3.");
+        colonyScreen.verifyThatProductionIs(GoodsType.CORN, 6);
 
         colonyScreen.verifyNumberOfUnitsAtPier(1);
 
         int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
 
-        // unit will placed at field with production 4 or 3 randomly.
-        colonyScreen.verifyProductionInRange(cornProduction, 3, 4);
+        // The second unit lands on a random free corn field. The returned value
+        // is the colony's net food, not the worker's yield: it was 3 or 4
+        // before the town commons, and the same 4 commons food now raises it
+        // to 7 or 8.
+        colonyScreen.verifyProductionInRange(cornProduction, 7, 8);
     }
 
 }

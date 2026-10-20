@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,12 @@ public class WorldMap {
     private final Set<Set<Location>> riverSegments;
 
     private final ImmutableMap<Location, ResourceOverlay> resources;
+
+    /**
+     * Remaining units of every finite deposit. Only the owner of the map
+     * changes them, through {@link #extractMinerals(Map)}.
+     */
+    private final Map<Location, MineralReserve> mineralReserves;
 
     private final Integer seed;
 
@@ -82,7 +89,34 @@ public class WorldMap {
                     "Resource square (%s) can't carry %s.", entry.getKey(),
                     entry.getValue());
         }
+        this.mineralReserves = new HashMap<>(worldMapPo.getMineralReserveMap());
+        verifyMineralReserves();
         verifyThatMapIsComplete();
+    }
+
+    /**
+     * Every finite deposit needs exactly one saved reserve, and every saved
+     * reserve must belong to a finite deposit and fit its initial units.
+     */
+    private void verifyMineralReserves() {
+        for (final Map.Entry<Location, MineralReserve> entry : mineralReserves
+                .entrySet()) {
+            final ResourceOverlay overlay = getResourceOverlayAt(
+                    entry.getKey());
+            Preconditions.checkArgument(
+                    overlay.isFinite()
+                            && entry.getValue().isAllowedFor(overlay),
+                    "Mineral reserve of square (%s) does not fit its deposit.",
+                    entry.getKey());
+        }
+        for (final Map.Entry<Location, ResourceOverlay> entry : resources
+                .entrySet()) {
+            Preconditions.checkArgument(
+                    !entry.getValue().isFinite()
+                            || mineralReserves.containsKey(entry.getKey()),
+                    "Deposit square (%s) needs a saved mineral reserve.",
+                    entry.getKey());
+        }
     }
 
     /**
@@ -166,6 +200,8 @@ public class WorldMap {
         out.setHasRoad(roads.contains(location));
         out.setRiverSize(getRiverSizeAt(location));
         out.setResourceOverlay(getResourceOverlayAt(location));
+        out.setMineralReserve(
+                mineralReserves.getOrDefault(location, MineralReserve.EMPTY));
         return out;
     }
 
@@ -205,6 +241,48 @@ public class WorldMap {
     public ResourceOverlay getResourceOverlayAt(final Location location) {
         Preconditions.checkNotNull(location);
         return resources.getOrDefault(location, ResourceOverlay.NONE);
+    }
+
+    /**
+     * @param location  required location
+     * @param goodsType required goods type
+     * @return bonus units of that goods type left in the deposit on the square,
+     *         zero when there is no finite deposit
+     */
+    public int getMineralRemainingAt(final Location location,
+            final GoodsType goodsType) {
+        Preconditions.checkNotNull(location);
+        Preconditions.checkNotNull(goodsType);
+        return mineralReserves.getOrDefault(location, MineralReserve.EMPTY)
+                .getRemaining(goodsType);
+    }
+
+    /**
+     * Spend the finite deposit output of one update. Every extraction is
+     * checked before any reserve changes.
+     *
+     * @param extractions required map from deposit square to the goods taken
+     *                    from its reserve
+     */
+    void extractMinerals(final Map<Location, Goods> extractions) {
+        Preconditions.checkNotNull(extractions);
+        for (final Map.Entry<Location, Goods> entry : extractions.entrySet()) {
+            final Location at = entry.getKey();
+            final Goods goods = entry.getValue();
+            Preconditions.checkArgument(
+                    mineralReserves.containsKey(at)
+                            && getResourceOverlayAt(at).getOutputs()
+                                    .contains(goods.getType())
+                            && mineralReserves.get(at).canExtract(
+                                    goods.getType(), goods.getAmount()),
+                    "Square (%s) can't give %s from its mineral reserve.", at,
+                    goods);
+        }
+        for (final Map.Entry<Location, Goods> entry : extractions.entrySet()) {
+            final MineralReserve reserve = mineralReserves.get(entry.getKey());
+            mineralReserves.put(entry.getKey(), reserve.extract(
+                    entry.getValue().getType(), entry.getValue().getAmount()));
+        }
     }
 
     /**
@@ -263,6 +341,7 @@ public class WorldMap {
         gamePo.getMap().setRivers(rivers);
         gamePo.getMap().setRiverSegments(riverSegmentsToSave());
         gamePo.getMap().setResources(resources);
+        gamePo.getMap().setMineralReserves(mineralReserves);
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
     }

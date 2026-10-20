@@ -16,6 +16,10 @@ public final class TurnEventPo {
     private Boolean repairEuropeDestination;
     private Integer repairLostPassengers;
     private List<Goods> repairLostGoods;
+    private String goToKind;
+    private Integer goToUnitId;
+    private UnitType goToUnitType;
+    private String goToDestinationName;
 
     public String getRepairKind() {
         return repairKind;
@@ -71,6 +75,38 @@ public final class TurnEventPo {
 
     public void setRepairLostGoods(List<Goods> value) {
         repairLostGoods = value;
+    }
+
+    public String getGoToKind() {
+        return goToKind;
+    }
+
+    public void setGoToKind(String value) {
+        goToKind = value;
+    }
+
+    public Integer getGoToUnitId() {
+        return goToUnitId;
+    }
+
+    public void setGoToUnitId(Integer value) {
+        goToUnitId = value;
+    }
+
+    public UnitType getGoToUnitType() {
+        return goToUnitType;
+    }
+
+    public void setGoToUnitType(UnitType value) {
+        goToUnitType = value;
+    }
+
+    public String getGoToDestinationName() {
+        return goToDestinationName;
+    }
+
+    public void setGoToDestinationName(String value) {
+        goToDestinationName = value;
     }
 
     private QueueItemType projectKind;

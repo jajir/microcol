@@ -137,6 +137,21 @@ public final class ResourcePage extends AbstractScreen {
                 "Unexpected " + goods + " output at " + location);
     }
 
+    /**
+     * Remaining bonus units of a finite deposit in the shared model, the same
+     * reserve that the next update draws on.
+     *
+     * @param location square checked
+     * @param goods    silver or ore of the deposit
+     * @param expected units left
+     */
+    public void verifyMineralRemaining(final Location location,
+            final GoodsType goods, final int expected) {
+        assertEquals(expected,
+                getModel().getMap().getMineralRemainingAt(location, goods),
+                "Unexpected remaining " + goods + " units at " + location);
+    }
+
     private int markerRgb(final Location location) throws Exception {
         final Image canvas = captureCanvas();
         final Point tile = getContext().getArea()

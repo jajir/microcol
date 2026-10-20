@@ -17,12 +17,15 @@ public enum Europe implements MessageKeyResource {
     equipmentTRADE_RESTRICTED, equipmentGOLD_LIMIT, voyageTurns, voyageWaiting,
     voyageUnavailable, voyageReverse, voyageReverseTitle, voyageReverseQuestion,
     voyageDestinationEurope, voyageDestinationNewWorld, voyageReverseStale,
-    pierOrders, recruitOpen, recruitChanged, recruitUnavailable,
+    voyageJettison, pierOrders, recruitOpen, recruitChanged, recruitUnavailable,
     immigrationProgress, immigrationPending, repairsOpen, repairsEmpty,
     repairsRestriction, repairsRow, repairsTransfer, repairsRepair,
     repairsDestinationLost, repairsClose, repairARRIVED, repairCOMPLETED,
     repairREROUTED, repairSUNK, earnedTitle, earnedExplanation, earnedChoose,
     earnedOpen, earnedPending, equipmentBOYCOTTED, goodsBoycottedMark,
-    goodsBoycotted, taxOpen, taxPending, backTaxOpen;
+    goodsBoycotted, taxOpen, taxPending, backTaxOpen, goToPAUSED,
+    goToCANCELLED_REMOVED, goToCANCELLED_NOT_FRIENDLY, goToCANCELLED_DAMAGED,
+    immigrantFrontMarker, immigrantAshoreMarker, immigrantStayAshore,
+    immigrantBoardAgain, immigrantFrontOfQueue, immigrantBoardingUnavailable;
 
 }

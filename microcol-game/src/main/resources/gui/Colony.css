@@ -52,9 +52,31 @@
 
 .panel-colony-goods {
   -fx-translate-x: 60;
-  -fx-translate-y: -13;
+  -fx-pref-height: 70;
+  -fx-min-height: 70;
   -fx-max-height: 70;
   -fx-max-width: 720;
+}
+
+/*
+ * Town commons row (22) above the goods row (70) in the 137 px warehouse
+ * frame. The column is centered at top 22.5; moving it up 24 keeps the goods
+ * at frame top 20.5, exactly where the former -13 shift put them, and places
+ * the commons row in the free strip at the top of the frame.
+ */
+.panel-colony-goods-column {
+  -fx-max-width: 720;
+  -fx-max-height: 92;
+  -fx-translate-y: -24;
+}
+
+.town-commons {
+  -fx-font-size: 14;
+  -fx-pref-height: 22;
+  -fx-min-height: 22;
+  -fx-max-height: 22;
+  -fx-translate-x: 60;
+  -fx-padding: 0 0 0 6;
 }
 
 .diffPositive {

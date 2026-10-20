@@ -915,6 +915,7 @@
       "ownerName": "Dutch\u0027s King",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 25,
         "y": 14
@@ -1075,6 +1076,7 @@
       "ownerName": "Dutch",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 22,
         "y": 12
@@ -1232,6 +1234,7 @@
       "ownerName": "Dutch",
       "liberty": 0,
       "lastColonialAffiliation": "Dutch",
+      "townCommonsGoods": "TOBACCO",
       "location": {
         "x": 23,
         "y": 17

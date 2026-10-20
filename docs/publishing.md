@@ -337,7 +337,7 @@ documentation in APT just to make it visible on the web.
 
 ## First five pioneer requirement captures — 2026-10-17
 
-1. [R-0118](requirements/done/R-0118.md)–[R-0122](requirements/R-0122.md)
+1. [R-0118](requirements/done/R-0118.md)–[R-0122](requirements/done/R-0122.md)
    capture five A05 outcomes: colony tools, plowing, clearing, road construction
    and road production bonuses. The [backlog coverage note](requirements/backlog.md#a05)
    distinguishes existing ownership and prerequisites. All five remain `new`;
@@ -363,7 +363,7 @@ documentation in APT just to make it visible on the web.
 
 1. The user's answers now govern [R-0120](requirements/done/R-0120.md),
    [R-0121](requirements/done/R-0121.md) and the related road-yield boundary in
-   [R-0122](requirements/R-0122.md), with matching shared work rules and
+   [R-0122](requirements/done/R-0122.md), with matching shared work rules and
    UC-020/021 acceptance. Clearing uses capacity at completion, permanently
    discards excess and queues a next-turn notification; expansion permits
    subsequent lumber to fit, without restoring discarded goods. Roads allow

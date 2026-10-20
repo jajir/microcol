@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define keys for jettisoning goods from a ship</comment>
+
+	<entry key="title">Jettison goods</entry>
+	<entry key="unavailable">This ship cannot jettison goods now. It must be your ship at sea during your prepared turn.</entry>
+	<entry key="wrongPhase">Goods cannot be jettisoned while the turn is being prepared or ended.</entry>
+	<entry key="noGoods">This ship has no goods hold to jettison. Passengers stay aboard.</entry>
+	<entry key="changed">The ship or its hold changed, so nothing was discarded. Review the ship and try again.</entry>
+	<entry key="holdTitle">Choose the goods hold</entry>
+	<entry key="holdQuestion">Choose the goods hold of %s to empty in part. Nothing changes yet.</entry>
+	<entry key="holdButton">Hold %s: %s %s</entry>
+	<entry key="quantityReason">Discard goods from hold %s of %s. The ship stays at its place and receives no gold.</entry>
+	<entry key="question">Discard %s %s from hold %s of %s? The ship stays at its place and receives no gold. Passengers and other holds stay aboard.</entry>
+	<entry key="confirm">Discard goods</entry>
+</properties>

@@ -42,6 +42,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private Colony colony;
     private final ColonyButtonsPanel buttons;
 
+    private final ColonyQuickCargo quickCargo;
+
     private final EventBus eventBus;
 
     @Inject
@@ -51,9 +53,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyGoods panelColonyGoods,
             final ColonyButtonsPanel colonyButtonsPanel,
             final PanelDockColony panelDockColony,
-            final PanelColonyName panelColonyName, final EventBus eventBus) {
+            final PanelColonyName panelColonyName,
+            final ColonyQuickCargo colonyQuickCargo, final EventBus eventBus) {
         this.buttons = colonyButtonsPanel;
+        this.quickCargo = Preconditions.checkNotNull(colonyQuickCargo);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        colonyButtonsPanel.addQuickCargoButtons(quickCargo.getButtons());
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions
                 .checkNotNull(panelColonyStructures);
@@ -140,5 +145,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     @Override
     public void updateLanguage(final I18n i18n) {
         panelDock.updateLanguage(i18n);
+        quickCargo.updateLanguage(i18n);
     }
 }

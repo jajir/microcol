@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
@@ -125,17 +126,32 @@ public final class UnitStorage {
     }
 
     Map<Location, List<Unit>> getUnitsAt() {
-        return Multimaps
-                .asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
-                        .collect(ImmutableListMultimap.toImmutableListMultimap(
-                                Unit::getLocation, Function.identity())));
+        return mapUnits(unit -> true);
+    }
+
+    private Map<Location, List<Unit>> mapUnits(final Predicate<Unit> include) {
+        final ImmutableListMultimap.Builder<Location, Unit> result = ImmutableListMultimap
+                .builder();
+        for (final Unit unit : units) {
+            final Place place = unit.getPlace();
+            if (include.test(unit) && place instanceof PlaceLocation) {
+                result.put(((PlaceLocation) place).getLocation(), unit);
+            }
+        }
+        return Multimaps.asMap(result.build());
+    }
+
+    private static boolean isAt(final Unit unit, final Location location) {
+        // Boarding can replace the place while the GUI reads the map.
+        final Place place = unit.getPlace();
+        return place instanceof PlaceLocation
+                && ((PlaceLocation) place).getLocation().equals(location);
     }
 
     List<Unit> getUnitsAt(final Location location) {
         Preconditions.checkNotNull(location);
 
-        return units.stream().filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location))
+        return units.stream().filter(unit -> isAt(unit, location))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -150,12 +166,7 @@ public final class UnitStorage {
 
     Map<Location, List<Unit>> getUnitsAt(final Player player) {
         Preconditions.checkNotNull(player);
-
-        return Multimaps.asMap(
-                units.stream().filter(unit -> unit.getOwner().equals(player))
-                        .filter(unit -> unit.isAtPlaceLocation())
-                        .collect(ImmutableListMultimap.toImmutableListMultimap(
-                                Unit::getLocation, Function.identity())));
+        return mapUnits(unit -> unit.getOwner().equals(player));
     }
 
     List<Unit> getUnitsAt(final Player player, final Location location) {
@@ -163,8 +174,7 @@ public final class UnitStorage {
         Preconditions.checkNotNull(location);
 
         return units.stream().filter(unit -> unit.getOwner().equals(player))
-                .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location))
+                .filter(unit -> isAt(unit, location))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -178,12 +188,7 @@ public final class UnitStorage {
 
     Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
         Preconditions.checkNotNull(player);
-
-        return Multimaps.asMap(
-                units.stream().filter(unit -> !unit.getOwner().equals(player))
-                        .filter(unit -> unit.isAtPlaceLocation())
-                        .collect(ImmutableListMultimap.toImmutableListMultimap(
-                                Unit::getLocation, Function.identity())));
+        return mapUnits(unit -> !unit.getOwner().equals(player));
     }
 
     List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
@@ -191,8 +196,7 @@ public final class UnitStorage {
         Preconditions.checkNotNull(location);
 
         return units.stream().filter(unit -> !unit.getOwner().equals(player))
-                .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location))
+                .filter(unit -> isAt(unit, location))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -225,6 +229,7 @@ public final class UnitStorage {
                 .filter(unit -> unit.isAtPlaceLocation())
                 .filter(unit -> unit.getMovementThirds() > 0)
                 .filter(unit -> unit.getAction().isNoAction())
+                .filter(unit -> !hasGoToOrder(unit))
                 .collect(Collectors.toList());
         if (list.size() == 0) {
             return Optional.empty();
@@ -254,7 +259,14 @@ public final class UnitStorage {
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
                 .filter(unit -> unit.getMovementThirds() > 0)
-                .filter(unit -> unit.getAction().isNoAction()).findFirst();
+                .filter(unit -> unit.getAction().isNoAction())
+                .filter(unit -> !hasGoToOrder(unit)).findFirst();
+    }
+
+    /** A unit that follows a go-to order is not offered for manual orders. */
+    private static boolean hasGoToOrder(final Unit unit) {
+        return unit instanceof AbstractUnit
+                && ((AbstractUnit) unit).getGoToOrder().isPresent();
     }
 
     /**
@@ -273,8 +285,7 @@ public final class UnitStorage {
 
         final List<Unit> playersUnitAtLocation = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
-                .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location))
+                .filter(unit -> isAt(unit, location))
                 .collect(Collectors.toList());
 
         final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()

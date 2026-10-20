@@ -28,6 +28,8 @@ class ColonyPoliticalFamineTest {
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         terrain.put(Location.of(24, 14), TerrainType.TUNDRA);
+        // Arctic center: commons yield nothing, keeping staffed arithmetic.
+        terrain.put(Location.of(25, 14), TerrainType.ARCTIC);
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setFields(java.util.Collections.emptySet());
         data.getModel().getColonies().forEach(colony -> {

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -198,8 +199,12 @@ public class ColonyTest {
         recordTerranAtPlace(Location.of(26, 34), TerrainType.OCEAN);
 
         recordTerranAtPlace(Location.of(24, 35), TerrainType.GRASSLAND);
-        // recordTerranAtPlace(Location.of(25, 35), TerrainType.GRASSLAND);
         recordTerranAtPlace(Location.of(26, 35), TerrainType.GRASSLAND);
+
+        // The town center itself is arctic: its unattended commons yield
+        // nothing, so the field-only corn expectations hold.
+        when(map.getTerrainAt(Location.of(25, 35))).thenReturn(
+                new Terrain(Location.of(25, 35), TerrainType.ARCTIC));
 
         // Bare desert gives 2 food, less than ocean (3) and grassland (4).
         recordTerranAtPlace(Location.of(24, 36), TerrainType.DESERT);
@@ -259,6 +264,6 @@ public class ColonyTest {
             final Function<Colony, List<Construction>> constructionsBuilder) {
         return new Colony(model, 0, "Prague", owner, Location.of(25, 35),
                 constructionsBuilder, new HashMap<String, Integer>(),
-                new ArrayList<>(), 0L, owner);
+                new ArrayList<>(), 0L, owner, Optional.of(GoodsType.TOBACCO));
     }
 }

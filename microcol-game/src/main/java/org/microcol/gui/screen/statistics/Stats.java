@@ -16,6 +16,8 @@ public enum Stats implements MessageKeyResource {
     allianceChanged, allianceFormed, allianceEndOpen, allianceEndTitle,
     allianceEndMessage, allianceEndCancel, allianceEndConfirm, allianceEnded,
     allianceEndStale, turnCrownWar, turnCrownWarAlliance, turnAllyDefense,
-    supportNational, supportNone, supportColonyRow;
+    supportNational, supportNone, supportColonyRow, titleTrade, tradeEmpty,
+    tradeUnavailable, tradeBought, tradeSpent, tradeSold, tradeReceived,
+    tradeRevolutionary;
 
 }

@@ -14,6 +14,7 @@
 	<entry key="voyageDestinationEurope">Europe</entry>
 	<entry key="voyageDestinationNewWorld">New World</entry>
 	<entry key="voyageReverseStale">This voyage changed. Review the ship and try again.</entry>
+	<entry key="voyageJettison">Jettison goods</entry>
 	<entry key="shipsTravelingToNewWorld">Ships traveling to New World</entry>
 	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>
@@ -73,6 +74,16 @@ Total: %s gold</entry>
     <entry key="repairCOMPLETED">Repairs to %s #%s at %s are complete.</entry>
     <entry key="repairREROUTED">%s #%s was rerouted for repair to %s.</entry>
     <entry key="repairSUNK">%s #%s sank: no repair destination. Lost passengers: %s. Lost goods: %s.</entry>
+    <entry key="goToPAUSED">%s #%s has no route to %s; its go-to order is paused and will be retried next turn.</entry>
+    <entry key="goToCANCELLED_REMOVED">%s #%s go-to order canceled: %s no longer exists.</entry>
+    <entry key="goToCANCELLED_DAMAGED">%s #%s go-to order canceled: the ship was damaged and cannot sail to %s.</entry>
+    <entry key="immigrantFrontMarker">First</entry>
+    <entry key="immigrantAshoreMarker">Ashore</entry>
+    <entry key="immigrantStayAshore">Do not board departing ship</entry>
+    <entry key="immigrantBoardAgain">Board departing ship</entry>
+    <entry key="immigrantFrontOfQueue">Bring to front of boarding</entry>
+    <entry key="immigrantBoardingUnavailable">This passenger's boarding order changed. Nothing was changed.</entry>
+    <entry key="goToCANCELLED_NOT_FRIENDLY">%s #%s go-to order canceled: %s is no longer friendly.</entry>
   <entry key="earnedTitle">Choose an earned immigrant</entry>
   <entry key="earnedExplanation">Crosses: %s / %s. Choose one immigrant for free. The turn continues after all earned arrivals are chosen. Closing this window postpones your choice.</entry>
   <entry key="earnedChoose">Choose for free</entry>

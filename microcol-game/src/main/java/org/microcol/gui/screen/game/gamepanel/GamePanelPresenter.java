@@ -10,7 +10,10 @@ import org.microcol.gui.dialog.ChoosePassengerDialog;
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
 import org.microcol.gui.event.CenterViewEvent;
+import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.event.EndMoveEvent;
+import org.microcol.gui.event.StartGoToEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.preferences.GamePreferences;
@@ -23,6 +26,7 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -68,6 +72,8 @@ public final class GamePanelPresenter {
     private final UnitUtil unitUtil;
 
     private final MoveModeController moveModeController;
+    /** Whether the next normal map click chooses a go-to destination. */
+    private boolean goToPicking;
 
     private final ChoosePassengerDialog choosePassenger;
 
@@ -114,7 +120,31 @@ public final class GamePanelPresenter {
     private void onStartMove(
             @SuppressWarnings("unused") final StartMoveEvent event) {
         if (gameModelController.isHumanTurnReady()) {
+            goToPicking = false;
             swithToMoveMode();
+        }
+    }
+
+    /**
+     * The next map click chooses the go-to destination of the selected unit;
+     * Escape leaves the unit unchanged.
+     */
+    @Subscribe
+    private void onStartGoTo(
+            @SuppressWarnings("unused") final StartGoToEvent event) {
+        if (gameModelController.isHumanTurnReady()
+                && selectedUnitManager.getSelectedUnit()
+                        .map(gameModelController.getModel()::canStartGoTo)
+                        .orElse(false)) {
+            goToPicking = true;
+            swithToMoveMode();
+            if (modeController.isMoveMode()) {
+                eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(Buttons.goToPickingHint),
+                        StatusBarMessageEvent.Source.GAME));
+            } else {
+                goToPicking = false;
+            }
         }
     }
 
@@ -168,6 +198,17 @@ public final class GamePanelPresenter {
         Preconditions.checkState(!units.isEmpty(),
                 "There is no moveable unit or other entity to interact with.");
         final Unit unit = selectedUnitManager.getSelectedUnit().get();
+        if (gameModelController.getModel().getGoToDestination(unit)
+                .isPresent()) {
+            // An ordered unit is not moved by hand; cancel the order first.
+            final Model model = gameModelController.getModel();
+            eventBus.post(new StatusBarMessageEvent(i18n.get(
+                    model.isGoToPaused(unit) ? Buttons.goToPausedExplanation
+                            : Buttons.goToActiveExplanation,
+                    model.getGoToDestinationName(unit).get()),
+                    StatusBarMessageEvent.Source.GAME));
+            return;
+        }
         if (unit.getAction()
                 .getType() == org.microcol.model.unit.UnitActionType.sentry) {
             eventBus.post(
@@ -195,6 +236,7 @@ public final class GamePanelPresenter {
     @Subscribe
     private void onSelectedUnitWasChanged(
             @SuppressWarnings("unused") final SelectedUnitWasChangedEvent event) {
+        goToPicking = false;
         if (modeController.isMoveMode()) {
             moveModeController.setMoveModeOff();
         }
@@ -223,6 +265,15 @@ public final class GamePanelPresenter {
         logger.debug("Switching to normal mode, from " + moveFromLocation
                 + " to " + moveToLocation);
         final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+        if (goToPicking) {
+            // A click on the unit's own square chooses nothing: Escape or
+            // another square still ends the pick without changing the unit.
+            if (!moveFromLocation.equals(moveToLocation)) {
+                issueGoTo(movingUnit, moveToLocation);
+                disableMoveMode(movingUnit);
+            }
+            return;
+        }
 
         if (moveFromLocation.equals(moveToLocation)) {
             disableMoveMode(movingUnit);
@@ -298,7 +349,22 @@ public final class GamePanelPresenter {
         disableMoveMode(movingUnit);
     }
 
+    /**
+     * Sends the unit to a map square, or to the friendly colony standing on it,
+     * as chosen by the model. A destination that changed since it was offered
+     * is rejected without any change.
+     */
+    private void issueGoTo(final Unit unit, final Location destination) {
+        final Model model = gameModelController.getModel();
+        final Optional<Colony> colony = model.getGoToColonies(unit).stream()
+                .filter(candidate -> candidate.getLocation()
+                        .equals(destination))
+                .findFirst();
+        gameModelController.performGoTo(unit, destination, colony.orElse(null));
+    }
+
     public void disableMoveMode(final Unit movingUnit) {
+        goToPicking = false;
         moveModeController.setMoveModeOff();
         eventBus.post(new EndMoveEvent(movingUnit));
     }
