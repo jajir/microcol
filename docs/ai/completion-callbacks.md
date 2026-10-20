@@ -75,7 +75,9 @@ and container runner checks are unchanged.
 
 ## GitHub Actions
 
-After push, discover the runs for the **full pushed commit SHA**, for example:
+Only when the user requests CI work or verified publication, discover the runs
+for the **full pushed commit SHA**, for example. Ordinary task completion does not
+start CI watchers; see the [local acceptance policy](../publishing.md#local-acceptance-policy).
 
 ```sh
 gh run list --repo jajir/microcol --commit FULL_COMMIT_SHA --event push \

@@ -614,3 +614,8 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 ## Four-container regression experiment — 2026-10-20
 
 1. [R-0253](requirements/R-0253.md) measures four isolated serial UI groups using the existing runner; production CI remains unchanged pending evidence.
+
+
+## Local acceptance without CI waiting — 2026-10-20
+
+1. [R-0254](requirements/done/R-0254.md) applies the user-selected local completion policy; CI remains configured but remote verification is requested separately.

@@ -91,9 +91,10 @@ There is no separate in-progress, blocked, verified or published status.
 4. Move to `done` and its [file location](#file-locations) after implementation
    and required acceptance, including the appropriate checks for documentation-only
    work. Publication is separate
-   evidence, not another status: follow the [normal completion workflow](../publishing.md),
-   verify CI and delivery, and link the result. A local pass or push does not
-   establish publication; report a delivery failure explicitly.
+   evidence, not another status: follow the
+   [local acceptance policy](../publishing.md#local-acceptance-policy).
+   Verify CI and delivery only when requested; a local pass or push does not
+   establish publication.
 5. Unfinished work may become `deferred` or `canceled`, with the corresponding
    file move, by an explicit decision, not merely because it is difficult.
    Resume deferred work as `new` if it is

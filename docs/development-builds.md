@@ -97,7 +97,8 @@ or interrupt a running game when another commit is published. The initial
 launcher is a separate bootstrap download; game updates do not silently replace
 its own code.
 
-For agent-driven publication, use the [completion watcher](ai/completion-callbacks.md#github-actions)
+Ordinary tasks finish under the [local acceptance policy](publishing.md#local-acceptance-policy),
+without waiting for CI. When the user explicitly requests verified publication, use the [completion watcher](ai/completion-callbacks.md#github-actions)
 for each exact pushed-commit run. Its callback resumes verification; it never
 replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 

@@ -572,7 +572,13 @@ starých `target` adresářů a argument s mezerou. Výsledky nechá v
 ověří čtení reportů neprivilegovaným uživatelem; macOS bind mount tuto kontrolu
 oprávnění nenahrazuje. Nenahrazuje skutečné herní testy.
 
-Povinný CI job `functional` spouští stejný Compose příkaz. Nejprve ověří také
+Podle dohody z 20. října 2026 stačí pro dokončení běžného vývoje úplná úspěšná
+lokální přejímka včetně Docker UI testů; na CI se nečeká. Platí
+[pravidla lokální přejímky](publishing.md#local-acceptance-policy). Neúplný nebo
+neúspěšný lokální běh nestačí. Následující popis CI je konfigurace automatického
+vydávání, nikoli další povinnost při běžném dokončení úkolu.
+
+CI job `functional`, povinný pro automatické vydání, spouští stejný Compose příkaz. Nejprve ověří také
 runner. Artifact
 `tests-functional` obsahuje adresář nového kontejnerového běhu i při selhání;
 `publish` zůstává závislý na úspěšné úplné sadě. [Workflow](../.github/workflows/dev-builds.yml)

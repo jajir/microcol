@@ -8,17 +8,29 @@ The user has authorized the normal completion workflow: run the relevant checks,
 commit the completed task's changes, and push `main` to `origin` without a separate
 request each time. Preserve unrelated working-tree changes. Follow an explicit
 request to leave changes uncommitted or unpublished. Never force-push to complete
-this workflow. Check the resulting GitHub Actions runs and report the published
-build/commit and download link; a push alone does not prove publication. If checks
-or publication fail, fix issues within the task and report any remaining blocker.
+this workflow.
+
+As agreed on 2026-10-20, a complete successful local acceptance run is sufficient
+to finish ordinary development work. For game changes this includes the full
+model and Docker/Xvfb UI suites, with complete reports and zero failures, errors
+or skips, on the final source state. Targeted or incomplete runs do not suffice.
+Documentation-only changes require the documented local documentation checks and
+strict MkDocs build, not a game regression. See the authoritative
+[local acceptance policy](docs/publishing.md#local-acceptance-policy).
+
+After local acceptance, commit and push, then report the checked revision and
+actual results. Do not wait for, watch, rerun, diagnose or repair remote CI or
+Pages by default; do that only when the user explicitly requests CI work or
+verified publication. Remote failure does not reopen an accepted local task.
+CI workflows and their publication gates remain configured and may run in the
+background. A push or local pass does not prove publication: do not claim a new
+published build or download without verification. Existing failed local runs,
+including the four-container experiment, remain failed evidence.
 
 Pushes to `main` publish documentation and verified development distributions.
 See [development delivery](docs/development-builds.md) for the release channel,
 launcher behavior and acceptance checks. Do not maintain a separate `develop`
 promotion step for routine tasks.
-For changes only under `docs/`, verify successful Pages deployment and the
-intentional skipped game jobs under the documented CI filtering contract;
-report the unchanged published game build separately from the documentation commit.
 
 # Documentation
 
@@ -210,7 +222,8 @@ local model. Use an alternative when the user selects it for the request; a
 task-specific choice does not change the default for later requests. Do not
 automatically delegate to another option or silently switch after a failure.
 Follow the [execution-choice policy](docs/ai/local-qwen.md#execution-choice-2026-10-18).
-All options retain the same required tests, review and publication gates.
+All options retain the same required local tests and review. Remote publication
+verification follows the local acceptance policy above.
 
 Cloud-token savings take priority over speed and unnecessary parallel cloud
 work in this project. Apply this rule immediately in the current task as well

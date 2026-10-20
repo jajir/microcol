@@ -36,10 +36,32 @@ next deployed version.
 `main` is the single development, integration and publication branch. This
 replaces the earlier `develop` → `main` promotion workflow. Existing historical
 branches need not be deleted; they are not required for ordinary development.
-Never force-push to publish. After pushing, check the documentation deployment
-and the separate development distribution run. For `docs/`-only changes, verify
-its successful classifier and intentionally skipped game jobs, then report the
-unchanged published game build separately from the documentation commit.
+Never force-push to publish. Task completion follows the local acceptance policy below.
+
+## Local acceptance policy
+
+1. **Agreed on 2026-10-20:** ordinary development tasks finish after complete
+   successful local acceptance, review, commit and push. Waiting for GitHub CI,
+   Pages deployment or game publication is not part of ordinary completion.
+2. Game changes require the full local model and Docker/Xvfb UI suites on the
+   final source state, with complete reports and zero failures, errors or skips,
+   plus applicable formatting and other local checks. Targeted runs help during
+   development but do not replace complete acceptance. Missing reports, killed
+   JVMs and timeouts remain local blockers. The failed four-container experiment
+   does not establish an accepted local parallel runner.
+3. Documentation-only work requires the local documentation checks below and
+   strict MkDocs; it does not require an unrelated full game regression. Workflow
+   guidance in AGENTS.md follows the same rule when no executable behavior changes.
+4. Report the checked source revision and actual local results. Do not automatically
+   watch, rerun, investigate or repair remote CI. The user will explicitly request
+   CI work or verified publication when needed; a request to verify publication
+   includes the applicable remote checks and artifact verification.
+5. Existing workflows and their release gates remain unchanged. They can continue
+   automatically after push. Local acceptance is not proof that a downloadable
+   build or live website was published. If publication was not verified, say so;
+   do not claim a new build/download. Remote failures alone do not reopen a locally
+   accepted task. Historical evidence and known local failures remain unchanged.
+
 
 ## Local preview and validation
 
