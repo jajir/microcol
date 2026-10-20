@@ -1,6 +1,6 @@
 # Plán implementace MicroCol podle manuálu
 
-Typografie: [R-0252 — přibalené řezy Medium a SemiBold](requirements/R-0252.md).
+Typografie: [R-0252 — přibalené řezy Medium a SemiBold](requirements/done/R-0252.md).
 
 Tento plán rozděluje dokončení hry na pracovní balíky a hratelné etapy. Slouží
 k zadávání práce vývojáři nebo agentovi: vybereme výsledek, doplníme konkrétní

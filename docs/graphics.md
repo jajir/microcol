@@ -75,7 +75,7 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
 
 ### Volba silnějšího řezu v CSS
 
-Od 20. října 2026 [R-0252](requirements/R-0252.md) přidává skutečné statické
+Od 20. října 2026 [R-0252](requirements/done/R-0252.md) přidává skutečné statické
 řezy Regular 400, Medium 500 a SemiBold 600 ze stejného zdroje jako Light. Registrují se
 při startu bez instalace do systému. Přidání samo nemění výchozí vzhled.
 Dostupné rodiny pro CSS:
