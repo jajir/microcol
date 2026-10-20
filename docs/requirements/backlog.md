@@ -173,7 +173,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
-| [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | New capture | P32 diagnostics beyond delivered save/turn recovery |
+| [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
 
@@ -186,16 +186,16 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0069](done/R-0069.md) | Give each unit an explicit sight range | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0070](done/R-0070.md) | Distinguish explored terrain from current knowledge of foreign units | Follow-up | [R-0019](done/R-0019.md) |
 | [R-0106](done/R-0106.md) | Make fortification take effect on the following turn | Follow-up | [R-0003](canceled/R-0003.md), [R-0029](canceled/R-0029.md) |
-| [R-0118](done/R-0118.md) | Equip a colony pioneer only with at least 20 tools | New capture | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
-| [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | New capture | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
-| [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | New capture | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
-| [R-0121](done/R-0121.md) | Build a persistent road with a travel benefit | New capture | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
+| [R-0118](done/R-0118.md) | Equip a colony pioneer only with at least 20 tools | Done | [PION-001](../gap-analysis.md#equipment-and-pioneers), UC-017 |
+| [R-0119](done/R-0119.md) | Complete valid plowing with one tool charge | Done | [PION-002](../gap-analysis.md#equipment-and-pioneers), UC-019 |
+| [R-0120](done/R-0120.md) | Clear a forest without repeating its reward | Done | [PION-003](../gap-analysis.md#equipment-and-pioneers), UC-020 |
+| [R-0121](done/R-0121.md) | Build a persistent road with a travel benefit | Done | [PION-004](../gap-analysis.md#equipment-and-pioneers), UC-021/012 |
 | [R-0122](R-0122.md) | Apply road bonuses to the right resources | New capture | [PION-005](../gap-analysis.md#equipment-and-pioneers), UC-021 |
 | [R-0123](done/R-0123.md) | Represent every terrain and legal forest variant | Targeted checks pass; batch acceptance pending | [MAP-001/002](../gap-analysis.md#terrain-reference-data-audit), UC-007/073 |
-| [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | New capture | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
-| [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | New capture | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
-| [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | New capture | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
-| [R-0127](done/R-0127.md) | Show and apply special-resource overlays | New capture | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
+| [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | Done | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
+| [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | Done | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
+| [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | Done | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
+| [R-0127](done/R-0127.md) | Show and apply special-resource overlays | Done | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
 | [R-0128](R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
 | [R-0129](R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |
 | [R-0130](R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
@@ -246,19 +246,19 @@ verified or authorize implementation.
 | [R-0076](done/R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
-| [R-0132](done/R-0132.md) | Enforce the 100-goods hold cap on every transfer | New capture | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
-| [R-0133](done/R-0133.md) | Reject ships and wagons as ordinary passengers | New capture | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0132](done/R-0132.md) | Enforce the 100-goods hold cap on every transfer | Done | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
+| [R-0133](done/R-0133.md) | Reject ships and wagons as ordinary passengers | Done | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0135](R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
-| [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | New capture | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
+| [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | Done | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0137](R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0138](R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0139](R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
 | [R-0140](R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
 | [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
 | [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
-| [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | New capture | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
-| [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | New capture | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
+| [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | Done | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
+| [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | Done | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
 | [R-0145](R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
 
 The seven A06/P08 analyses R-0132–R-0138 were captured on **2026-10-17** as
@@ -304,7 +304,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0109](done/R-0109.md) | Retain accumulated hammers when changing construction | Follow-up | [R-0025](done/R-0025.md) |
 | [R-0110](done/R-0110.md) | Increase religious production through church and cathedral upgrades | Follow-up | [R-0010](canceled/R-0010.md), [R-0025](done/R-0025.md) |
 | [R-0146](R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
-| [R-0147](done/R-0147.md) | Clear a colonist's civilian specialty | New capture | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
+| [R-0147](done/R-0147.md) | Clear a colonist's civilian specialty | Done | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
 | [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
 | [R-0212](R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
@@ -343,7 +343,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0160](R-0160.md) | Sell or gift cargo to a native settlement | New capture | [NAT-012](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0161](R-0161.md) | Buy one of three offered native goods | New capture | [NAT-013](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0162](R-0162.md) | Demand native tribute without duplicating gold or anger | New capture | [NAT-016](../gap-analysis.md#native-nations-settlements-and-relations) tribute, UC-065 |
-| [R-0163](done/R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | New capture | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
+| [R-0163](done/R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | Done | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
 | [R-0164](R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
 | [R-0165](R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0166](R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
