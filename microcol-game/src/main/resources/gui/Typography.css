@@ -1,11 +1,34 @@
 /* The static Light face is bundled; no system font or synthetic stroke. */
-.root, .tooltip, .context-menu {
-    -fx-font-family: "Playpen Sans Light";
-    -fx-font-size: 18;
+
+/**
+
+dostupne řezy: Light, Regular, Medium, SemiBold
+
+Řez	Tloušťka	Název pro CSS
+Light	300	"Playpen Sans Light"
+Regular	400	"Playpen Sans"
+Medium	500	"Playpen Sans Medium"
+SemiBold	600	"Playpen Sans SemiBold"
+
+**/
+
+.root, .tooltip, .context-menu .label-slider {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
     -fx-font-weight: normal;
     -fx-font-style: normal;
+    -fx-text-fill: black;
 }
 
-.axis {
-    -fx-tick-label-font: 12px "Playpen Sans Light";
+.settings-controls .label,
+.settings-controls .check-box,
+.settings-controls .radio-button {
+    -fx-text-fill: black;
 }
+
+/* popisky u slideru */
+.settings-controls .slider .axis {
+    -fx-tick-label-font: 14px "Playpen Sans";
+    -fx-tick-label-fill: black;
+}
+
