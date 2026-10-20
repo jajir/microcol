@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Follow-up closure: [R-0256](done/R-0256.md) records the final three accepted answers; no recorded open questions remain through R-0219.
+
 Decision reconciliation: [R-0255](done/R-0255.md); [remaining questions](open-points.md).
 
 Completed 2026-10-20: [R-0252 — Additional Playpen Sans weights](done/R-0252.md).

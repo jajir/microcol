@@ -1,22 +1,8 @@
 # Open points for refinement
 
-1. Updated: 2026-10-20 after the user’s answers to all 38 topics through R-0219. Active requirement chapter 4 is authoritative; archived history is excluded.
+1. Updated: 2026-10-20 after the user’s answers to all 38 topics through R-0219 and all three follow-ups. Active requirement chapter 4 is authoritative; archived history is excluded.
 2. Accepted decisions live in the [shared game rules](../gap-analysis.md#refinement-decisions-2026-10-20). Earlier setup controls, R-0074/R-0095 implementation scope and R-0091 trade policy are already settled and are not questions again.
-3. Through R-0219 only the three narrow follow-ups below remain, owned by R-0131 and R-0166. Later topics are outside that answer batch. Answering questions alone does not change readiness or authorize implementation.
-
-## R-0131
-
-[Authoritative questions](R-0131.md#4-open-questions).
-
-1. Do tools also return to an owned colony on disbanding, like the explicitly named horses/muskets? Proposed: yes, all real equipment returns; outside an owned colony all is lost.
-
-2. If returned equipment exceeds warehouse capacity, may the player confirm losing only the excess, or must disbanding be blocked? Proposed: show exact returned/lost quantities and require explicit overflow confirmation; cancel changes nothing.
-
-## R-0166
-
-[Authoritative questions](R-0166.md#4-open-questions).
-
-1. Does paid incitement authorize travel toward known targets beyond the normal two-tile native raid radius? The user extended lifetime to 20 turns because travel may take longer than ten, while the initial proposal retained ordinary range. Proposed: pursue the nearest known reachable target of the paid nation for those 20 turns, without the ordinary home-patrol radius, using only known legal paths; with no reachable known target return to ordinary behavior.
+3. No recorded open questions remain through R-0219. The later topics below are outside that answer batch. Answering questions alone does not change readiness or authorize implementation.
 
 ## R-0221
 

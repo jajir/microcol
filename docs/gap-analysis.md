@@ -1159,8 +1159,9 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    add +5 T per complete 50 muskets/horses; retain partial counters.
 3. A trade reduces local alarm by 2, a gift by 5 per 100 goods, proportionally;
    at a capital double the reduction and apply it to tribal anger too. Native
-   hostile AI may attack the nearest reachable enemy within two tiles, otherwise
-   patrol its home; calmer states do not initiate attacks. Missions reduce
+   hostile AI normally attacks the nearest reachable enemy within two tiles, otherwise
+   patrols its home; [paid targeting](#r-0166-refinement) permits pursuit beyond
+   that radius for 20 native turns. Calmer states do not initiate attacks. Missions reduce
    owner-local alarm by 2/4 per update ordinary/expert; add 1 to each contacted
    rival's local alarm. Keep these effects separate from direct tribal anger.
 4. Preserve the catalogue's contact, role and repeated-commodity restrictions.
@@ -1545,7 +1546,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 
 #### R-0131 refinement
 
-1. Answer **6** — Disband equipment: On confirmed disbanding in an owned colony, return horses and muskets to that colony; outside an owned colony these supplies are lost. Confirmation describes the actual outcome. Carrier cargo/passengers must still be unloaded first. Treatment of tools inside a colony and warehouse overflow remain explicit follow-up questions; do not silently discard or invent equipment.
+1. Answer **6** — Disband equipment: On confirmed disbanding in an owned colony, return all actual equipment, including tools, horses and muskets, to that colony; outside an owned colony all equipment is lost. Confirmation shows exact quantities retained and lost. If warehouse capacity is exceeded, discard only the excess after explicit overflow confirmation; cancel changes nothing. Carrier cargo/passengers must still be unloaded first. Do not invent equipment.
 2. Owner: [R-0131](requirements/R-0131.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0135 refinement
@@ -1605,7 +1606,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 
 #### R-0156 refinement
 
-1. Answer **18** — Native ties and patrol: Among equally near reachable legal enemies, choose stable target ID. Without a target, return toward home and patrol reachable neighboring tiles in a fixed documented coordinate order, no farther than two tiles from home; without a legal step end the turn. Retain current hostility and knowledge restrictions. Paid targeting uses R-0166’s accepted lifetime/priority, with its pursuit-range follow-up still open.
+1. Answer **18** — Native ties and patrol: Among equally near reachable legal enemies, choose stable target ID. Without a target, return toward home and patrol reachable neighboring tiles in a fixed documented coordinate order, no farther than two tiles from home; without a legal step end the turn. Retain current hostility and knowledge restrictions. Paid targeting follows R-0166: for 20 native turns pursue the nearest known reachable target of the paid nation beyond the ordinary two-tile raid/home-patrol radius, using only known legal paths; without a reachable known paid target, use ordinary behavior.
 2. Owner: [R-0156](requirements/R-0156.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0157 refinement
@@ -1635,7 +1636,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 
 #### R-0166 refinement
 
-1. Answer **24** — Paid native target lifetime: A successful incitement target persists for 20 turns of that native nation, replacing the proposed ten-turn lifetime. Prefer legal known targets of the paid European power; if no eligible paid target exists, use ordinary hostile-target/patrol behavior. End the order when the target nation ceases to exist or relations fall below hostile; a new successful incitement replaces the old target. The user’s travel rationale leaves the pursuit radius as the narrow follow-up below, not an authorization for hidden-map knowledge.
+1. Answer **24** — Paid native target lifetime: A successful incitement target persists for 20 turns of that native nation, replacing the proposed ten-turn lifetime. Prefer legal known targets of the paid European power; if no eligible paid target exists, use ordinary hostile-target/patrol behavior. End the order when the target nation ceases to exist or relations fall below hostile; a new successful incitement replaces the old target. During those 20 native turns, pursue the nearest known reachable target of the paid nation beyond the ordinary two-tile raid/home-patrol radius, using only known legal paths. This grants no hidden-map knowledge; with no reachable known paid target, use ordinary behavior.
 2. Owner: [R-0166](requirements/R-0166.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0167 refinement

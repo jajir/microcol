@@ -1,5 +1,7 @@
 # Plán implementace MicroCol podle manuálu
 
+Follow-up closure: [R-0256](requirements/done/R-0256.md) records the final three accepted answers without changing gameplay readiness.
+
 Refinement 2026-10-20: [R-0255](requirements/done/R-0255.md) records the 38 answered topics through R-0219; gameplay implementation and existing readiness states remain separate.
 
 Typografie: [R-0252 — přibalené řezy Medium a SemiBold](requirements/done/R-0252.md).
