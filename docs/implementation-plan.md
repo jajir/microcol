@@ -1,5 +1,7 @@
 # Plán implementace MicroCol podle manuálu
 
+Refinement 2026-10-20: [R-0254](requirements/done/R-0254.md) records the 38 answered topics through R-0219; gameplay implementation and existing readiness states remain separate.
+
 Typografie: [R-0252 — přibalené řezy Medium a SemiBold](requirements/done/R-0252.md).
 
 Tento plán rozděluje dokončení hry na pracovní balíky a hratelné etapy. Slouží

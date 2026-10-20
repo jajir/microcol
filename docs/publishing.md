@@ -635,3 +635,9 @@ documentation in APT just to make it visible on the web.
    and the docs-only CI filters. The pre-change automatic game manifest names
    [dev-171-333de9b6bf8f](https://github.com/jajir/microcol/releases/tag/dev-171-333de9b6bf8f);
    this documentation change requests no new game distribution.
+
+## Requirement answer reconciliation — 2026-10-20
+
+1. [R-0254](requirements/done/R-0254.md) records the user’s answers to 38 topics through R-0219 in the authoritative rules and the behavior/design of their active consumers. Existing gameplay statuses and archived evidence remain unchanged. Only three narrow questions remain in that range: tools returned on disbanding, equipment overflow, and paid native pursuit range; the lifetime is already agreed at 20 native turns.
+2. Local verification passed 19 completion-runner tests, 21 worker-tool tests without inference, nine documentation checks and strict MkDocs. Source/render checks verified all 38 answer anchors, four chapters for each owner, preserved owner statuses and chapter-4 questions only in R-0131/R-0166 among those answered owners. No gameplay implementation, Java build or local UI test was run.
+3. Publication is verified separately for the resulting documentation commit through Pages and intentional docs-only game-job skips; this change does not request a new game distribution.

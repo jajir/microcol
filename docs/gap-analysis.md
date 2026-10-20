@@ -1165,7 +1165,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    rival's local alarm. Keep these effects separate from direct tribal anger.
 4. Preserve the catalogue's contact, role and repeated-commodity restrictions.
    Settlement treasury starts at 1000 (capital 2000), gains 20/40 each update
-   capped at twice its initial amount. Offer three goods available in local
+   capped at twice its initial amount. Offer up to three goods available in local
    production, ordered by surplus then goods ID, initial stock 100 each and
    restock 10/update capped at 200; demand is the three tradable goods with
    lowest local production (ties ID). Native buy price is `max(1, floor(Europe
@@ -1199,13 +1199,13 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    or 20% expert, doubled by Sepulveda. At most one convert per event, delivered
    to nearest owned colony by land distance then ID; without a reachable colony,
    skip without banking a convert. No combat conversion is added. Persist native
-   affiliation and eight-turn unassigned expiry (PROD-007). Conquest treasure
+   affiliation and eight cumulative unassigned turns to expiry, paused but not reset by work (PROD-007). Conquest treasure
    without Cortes has 50% chance of 500 gold (capital 1000); Cortes guarantees
    double. The manual's printed p. 76/PDF p. 82 gives two treasure transport
    routes: fill six galleon holds and take the train to Europe, or leave it in
    an owned coastal colony for the King's galleon to collect at a price.
-   Royal price/collection timing and independence closure consequences remain
-   unanswered for [R-0175](requirements/R-0175.md). Native tribute yields min(100, treasury), capital cap 200, once per
+   Royal deductions, collection timing and independence closure follow the
+   [accepted redemption rule](#r-0175-refinement). Native tribute yields min(100, treasury), capital cap 200, once per
    10 turns per European/settlement if eligible armed force strength is at least
    the settlement's defenders; otherwise refuses.
 8. European contact requires a visible adjacent foreign unit or colony; use
@@ -1272,9 +1272,9 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 1. On 2026-10-19 the user approved preparing R-0065 with the reference map's
    fixed dimensions, cold/temperate/warm climate, low/medium/high land share,
    and an explicit reproducible seed. Terrain, river and resource frequencies
-   will be proposed as balance settings during refinement. Native population
-   depends on the existing native identity/home requirements. This decision
-   does not establish numerical distributions or completed generation.
+   now follow the [accepted distribution bounds](#r-0065-refinement). Native population
+   depends on the existing native identity/home requirements. The original controls decision did not establish numerical distributions;
+   the linked 2026-10-20 refinement does. Neither establishes completed generation.
 
 ### Economy, production and education
 
@@ -1283,8 +1283,9 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
    and Newspaper population **4**, already accepted in R-0025. Use no smoothing
    or inferred positive yield on barren terrain. For missing resource quantities
-   use 100 bonus units for silver and 200 for ore/mixed deposits; only the bonus
-   extracted consumes that reserve, the last extraction is capped by it. Resource
+   use 100 bonus units for pure silver and 200 for pure ore; mixed deposits have
+   independent reserves of 200 silver and 200 ore under the [2026-10-20 decision](#r-0128-refinement). Only the matching bonus
+   extracted consumes its own reserve, and the last extraction is capped by it. Resource
    discovery/loading never replenishes it. Small/large rivers add +1/+2 to a
    tile's already positive output; roads add +1 to positive ore/furs/lumber and
    mountain silver only with a silver deposit. Plow adds +1 to positive food/
@@ -1491,14 +1492,14 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    lost 10%, burial site 10%. Seasoned scout: 30/35/25/5/5%. Gold is 200–500
    uniformly in whole gold; recruit is one free colonist on the explored tile;
    expedition lost removes only the explorer; burial site applies [native and european relations](#native-and-european-relations) anger
-   to the nearest native nation, none if absent. De Soto converts either bad
+   to the nation of the nearest native settlement, uniformly choosing one settlement on a distance tie with persisted game randomness, none if absent. De Soto converts either bad
    outcome to empty. Consume the rumor once; save/load never rerolls it.
 7. Quick load chooses highest current tax-net sale value per unit, excluding
    horses/tools/muskets, ties goods ID, fills compatible partial holds first,
    then empty holds in index order; no hidden future-price prediction. Jettison
    selects one hold and quantity with confirmation, never other holds/passengers.
    Disband requires an empty carrier; unload passengers/goods first. Cancel
-   preserves everything. Sentry boarding selects waiting passengers by stable
+   preserves everything. Explicit immigrant boarding priority precedes other eligible waiting passengers; select the rest by stable
    ID up to actual available holds and leaves the rest waiting. Sentry boarding
    uses R-0022 costs: same port/pier zero, adjacent land-to-ship one passenger
    move and no ship move, so an adjacent zero-move passenger cannot board.
@@ -1511,6 +1512,201 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    before loading, up to actual capacity and configured stock; full/empty
    transfers are explicit no-ops, failed market quotes do not consume resources.
    Persist current stop and pending edited route so Continue repeats no transfer.
+
+### Refinement decisions — 2026-10-20
+
+1. The user accepted the 38 numbered proposals in this chat, with explicit corrections for mixed reserves, burial ties, turn notifications, disband equipment and a 20-turn paid native target. These are agreed MicroCol rules and provisional balance choices, not original-game parity claims or runtime evidence. The numbers below preserve that answer mapping.
+2. This refinement does not change requirement readiness or start gameplay implementation. Technical implementation details explicitly delegated within the bounds remain in chapter 3; unresolved narrow choices remain in the owning requirement and [open-point index](requirements/open-points.md).
+
+#### R-0065 refinement
+
+1. Answer **1** — Generated geography: Use low/medium/high land shares of 25/40/55%, each with a tolerance of five percentage points, with most land in one to three large connected masses and remaining islands. Climate shifts cold/warm latitude bands; terrain forms coherent regions. Rivers run from uplands to water without loops; a main river has at least eight tiles, shorter rivers are small. Approximately 10% of suitable tiles receive a resource: minerals preferentially hills/mountains; timber/game/trapping forests; oasis desert; crops naturally productive terrain; fish coastal water or lakes. Exact terrain weights and generation algorithms are delegated implementation choices within these limits, checked with fixed seeds. Preserve already agreed dimensions, controls, seed reproducibility, legal arrival lanes and native-world dependencies.
+2. Owner: [R-0065](requirements/R-0065.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0092 refinement
+
+1. Answer **2** — Second-colony expansion: After releasing a founder, retain at least two residents (or the higher existing fortified-colony minimum), nonnegative food balance and food stock covering five turns of remaining residents’ consumption. Use a spare unarmed colonist, available legal transport and a known legal site. In a prepared reference scenario with site and transport available, establish the second colony within 20 owner turns; this is a test horizon, not a universal in-game deadline.
+2. Owner: [R-0092](requirements/R-0092.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0128 refinement
+
+1. Answer **3** — Independent mineral reserves: A pure silver deposit retains 100 bonus units and a pure ore deposit 200. A mixed deposit instead has two independent reserves: 200 silver and 200 ore. Extracting one resource never consumes the other: after all 200 silver bonus units are mined, all untouched 200 ore bonus units remain. Cap each actual bonus extraction by its own remaining reserve, retain baseline terrain production and persist both counts independently. No ore-first allocation of a shared reserve applies.
+2. Owner: [R-0128](requirements/R-0128.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0129 refinement
+
+1. Answer **4** — Burial-site distance ties: Find the nearest native settlement to the disturbed burial tile; if several settlements are equally near, choose one uniformly using the persisted game random state and apply the agreed anger to its nation. Select among settlements, not uniformly among nations. Record the one resolved choice so Continue or inspection cannot reroll it; with no native settlement apply no anger.
+2. Owner: [R-0129](requirements/R-0129.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0130 refinement
+
+1. Answer **5** — Interrupted go-to orders: Try another legal path to the same destination first. If none exists, pause the order, retain its destination and recheck on the next owner turn; allow explicit cancellation. A named destination that disappears or becomes hostile cancels the order. Report the pause/cancellation and its reason in persisted turn notifications, without restoring movement or advancing on load.
+2. Owner: [R-0130](requirements/R-0130.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0131 refinement
+
+1. Answer **6** — Disband equipment: On confirmed disbanding in an owned colony, return horses and muskets to that colony; outside an owned colony these supplies are lost. Confirmation describes the actual outcome. Carrier cargo/passengers must still be unloaded first. Treatment of tools inside a colony and warehouse overflow remain explicit follow-up questions; do not silently discard or invent equipment.
+2. Owner: [R-0131](requirements/R-0131.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0135 refinement
+
+1. Answer **7** — Boarding priority: A player-explicitly prioritized willing immigrant boards before other eligible waiting passengers. Then use stable-ID order for the remaining eligible waiting groups together, retaining normal movement and hold limits; an opted-out immigrant does not board automatically.
+2. Owner: [R-0135](requirements/R-0135.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0137 refinement
+
+1. Answer **8** — Quick-transfer locations: Initially offer quick load/unload only between an owned colony and a ship or wagon. Europe continues to use explicit purchase/sale, and carrier-to-carrier transfers remain manual. Quick loading therefore never implicitly spends gold; retain the accepted tax-net ranking and partial-hold order.
+2. Owner: [R-0137](requirements/R-0137.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0138 refinement
+
+1. Answer **9** — Atlantic jettison: Permit confirmed jettison of a selected hold quantity during an Atlantic crossing as well as on map sea tiles. Change only cargo, never crossing duration, direction or other holds/passengers.
+2. Owner: [R-0138](requirements/R-0138.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0139 refinement
+
+1. Answer **10** — Unique route names: Route names must be unique within one player under normalized case-insensitive comparison after trimming surrounding Unicode whitespace; different players may reuse a name. Preserve internal spaces, accents and punctuation and the shared 64-Unicode-code-point limit. Stable route identity remains independent of the name.
+2. Owner: [R-0139](requirements/R-0139.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0140 refinement
+
+1. Answer **11** — Route goods priority: Unload before loading, and process each configured goods list in the player-visible top-to-bottom order. Allow the player to reorder entries and label this order as priority when hold space, warehouse capacity or money is insufficient.
+2. Owner: [R-0140](requirements/R-0140.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0145 refinement
+
+1. Answer **12** — Revolutionary custom-house accounting: Count actual quantities and net revenue from revolutionary custom-house exports in that nation/commodity trade totals, with an explicit revolutionary-custom-house source label. This accounting does not reopen home Europe or alter the agreed export calculation.
+2. Owner: [R-0145](requirements/R-0145.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0146 refinement
+
+1. Answer **13** — Town commons yield: Explicitly reuse the ordinary-worker baseline of the actual center terrain as the commons rule: food plus its highest positive nonfood raw-resource output, without profession bonuses. Select and persist that second commodity at founding from terrain baseline, using a fixed commodity order for ties; if no positive second output exists, produce none. Then apply the matching eligible resource effect, retaining the Prime Timber exception; a resource does not create an unrelated output. Derive and publish the complete commons table from the shared baseline instead of introducing an independent formula. Exact tie-order enumeration remains an implementation detail to document before readiness.
+2. Owner: [R-0146](requirements/R-0146.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0149 refinement
+
+1. Answer **14** — Convert inactivity: Accumulate the convert’s unassigned turns across its lifetime up to the accepted eight-turn expiry. Assignment pauses the count but never resets it; a brief job cannot renew the deadline. Persist accumulated inactivity across Continue.
+2. Owner: [R-0149](requirements/R-0149.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0150 refinement
+
+1. Answer **15** — Settlement defense: Apply an additive settlement defense bonus to actual defenders: camp 0%, village 25%, city 50%, plus 25 percentage points for a capital. A capital city therefore gives 75%. This does not create nonexistent defenders; explain the settlement bonus separately in battle preview.
+2. Owner: [R-0150](requirements/R-0150.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0152 refinement
+
+1. Answer **16** — Overlapping homeland claims: Give each claimed tile one owning settlement: nearest settlement, then stable settlement ID. That owner receives purchase money and local effects. One purchase permanently satisfies that European player’s unpaid-use obligation on the tile, even if a later claim-owner change occurs; do not charge a hidden second claim.
+2. Owner: [R-0152](requirements/R-0152.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0155 refinement
+
+1. Answer **17** — Alarm rate legend: Show no exclamation mark for zero/decreasing alarm change, one for positive change up to 2 points per update, two for change above 2 through 5, and three above 5. Show a separate falling indication and the exact signed change in accessible text. This rate indication does not replace the agreed current-attitude thresholds.
+2. Owner: [R-0155](requirements/R-0155.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0156 refinement
+
+1. Answer **18** — Native ties and patrol: Among equally near reachable legal enemies, choose stable target ID. Without a target, return toward home and patrol reachable neighboring tiles in a fixed documented coordinate order, no farther than two tiles from home; without a legal step end the turn. Retain current hostility and knowledge restrictions. Paid targeting uses R-0166’s accepted lifetime/priority, with its pursuit-range follow-up still open.
+2. Owner: [R-0156](requirements/R-0156.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0157 refinement
+
+1. Answer **19** — Initial native teaching skill: At map creation prefer native-teachable skills matching locally productive resources and select uniformly among those candidates with the map seed. If no such candidate exists, choose uniformly from the complete accepted native-teachable list. Persist the selected skill; visits and reload never change it.
+2. Owner: [R-0157](requirements/R-0157.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0159 refinement
+
+1. Answer **20** — Native local production and expeditions: Compute local production potential from the center and eight neighboring tiles, using baseline yields and natural resource bonuses, without European professions, buildings or land improvements. Use the accepted supply/demand ranking. If fewer than three sale goods are naturally producible, show unavailable remaining slots rather than inventing stock. A trading expedition ends when that carrier physically leaves the settlement, not on closing a dialog or ending a turn; retain the village consecutive-good and muskets exception.
+2. Owner: [R-0159](requirements/R-0159.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0161 refinement
+
+1. Answer **21** — Haggling on native purchases: Allow one request for a 10% discount on the complete purchase quote: acceptance 50% at content and 25% at uneasy relations. Failure preserves the original offer. Round a positive final total upward to whole gold and persist the quote and draw so reopening cannot reroll. Keep ordinary admission, stock, capacity and gold checks.
+2. Owner: [R-0161](requirements/R-0161.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0162 refinement
+
+1. Answer **22** — Tribute force scope: Count the demander plus its own soldiers, dragoons and scouts on the eight adjacent settlement tiles, excluding passengers and allied or distant troops. Sum base combat strengths without offensive terrain bonuses. Compare with actual defenders inside the settlement including the agreed settlement defense bonus; retain cooldown, payment caps and provocation on either confirmed result.
+2. Owner: [R-0162](requirements/R-0162.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0164 refinement
+
+1. Answer **23** — Mission conversion interruptions: Pause the conversion clock during hostile updates and resume it when nonhostile. Three eligible updates, a hostile interruption and two eligible updates produce one fifth-update attempt. Do not reset progress or bank missed attempts; preserve the existing conversion probability and no-colony behavior.
+2. Owner: [R-0164](requirements/R-0164.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0166 refinement
+
+1. Answer **24** — Paid native target lifetime: A successful incitement target persists for 20 turns of that native nation, replacing the proposed ten-turn lifetime. Prefer legal known targets of the paid European power; if no eligible paid target exists, use ordinary hostile-target/patrol behavior. End the order when the target nation ceases to exist or relations fall below hostile; a new successful incitement replaces the old target. The user’s travel rationale leaves the pursuit radius as the narrow follow-up below, not an authorization for hidden-map knowledge.
+2. Owner: [R-0166](requirements/R-0166.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0167 refinement
+
+1. Answer **25** — Foreign-colony barter: One barter transaction exchanges one incoming commodity for one outgoing commodity at player-chosen quantities. Value incoming goods at the host’s Europe bid and outgoing goods at its Europe ask, settling the difference in actual gold paid by the appropriate side without the visitor’s home tax. Show both goods and the gold balance before confirmation; validate both stocks, capacities and treasuries before changing either side.
+2. Owner: [R-0167](requirements/R-0167.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0168 refinement
+
+1. Answer **26** — Foreign comparison metrics: Military strength is the sum of base strengths of living armed land units; naval strength is the sum of base strengths of armed ships; trade strength is net European-sale revenue over the last ten turns of that nation. De Witt reveals these actual aggregates only for contacted powers, not unknown nations or unit locations. Preserve the already agreed basic neutral relations overview before contact.
+2. Owner: [R-0168](requirements/R-0168.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0169 refinement
+
+1. Answer **27** — Peacetime mercenary offers: Every tenth own turn before rebellion, if treasury is at least 5000 gold, make one offer draw with probability 25%. Offer two veteran soldiers for ceil(1000 × difficulty coefficient), from the lowest-ID contacted European at peace. The offer expires at turn end; the player chooses an owned delivery port, and blocked delivery follows the accepted pending intervention-delivery policy. Keep the already accepted rebel offers unchanged.
+2. Owner: [R-0169](requirements/R-0169.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0170 refinement
+
+1. Answer **28** — European land strategy: A known wartime enemy within two tiles of a colony gives defense priority. Move available armed defenders without removing a worker necessary for food. Leave at least one defender in each threatened colony before sending an offensive force; attack only at a computed win probability of at least 60%. Rank reachable known targets by distance, then higher win probability, then stable ID. This policy does not initiate war against peaceful rivals. Prepared reference scenarios require defense response within three turns and an offensive battle within ten, without inventing resources or targets.
+2. Owner: [R-0170](requirements/R-0170.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0171 refinement
+
+1. Answer **29** — European naval strategy: Prefer visible unarmed hostile carriers, then armed legal targets with at least 60% win probability; break equal priority by distance and then stable ID. Without a target patrol known sea within five tiles of an owned port without knowledge of hidden cargo or routes. A prepared scenario with reachable commerce must produce an encounter within ten turns. Retain the existing privateer attack exception and alliance restrictions.
+2. Owner: [R-0171](requirements/R-0171.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0172 refinement
+
+1. Answer **30** — Multiple-colony scheduling: Priority is famine prevention, immediate defense, completion of ongoing transport, supplies, export, then expansion. Prepare at most one new colony concurrently, only when every existing colony has nonnegative food balance, five turns of food-consumption reserve and its agreed tool supply target met; retain R-0092 founder/population safeguards. Verify a 40-turn prepared multi-colony scenario with two colonies, one transport disruption/recovery and founding a third.
+2. Owner: [R-0172](requirements/R-0172.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0173 refinement
+
+1. Answer **31** — Native battlefield and defeat: Use the defender’s tile as the battlefield for both participants’ native ambush terrain calculation, retaining the accepted printed bonus values. A defeated native brave of any equipment variant is destroyed with its equipment, without a European-style downgrade or surviving colonist.
+2. Owner: [R-0173](requirements/R-0173.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0174 refinement
+
+1. Answer **32** — Native conquest dependents: Rehome surviving external braves to the nearest surviving settlement of the same nation, ties by stable ID; without one they remain living homeless braves and do not use a home patrol. End the mission and teaching; release the missionary and pupil without a completed skill to their nearest legal tile, using fixed coordinate ties, and report their death if no legal tile exists. Remove the destroyed settlement’s claim; another existing settlement may inherit an overlap, preserving previously purchased use rights.
+2. Owner: [R-0174](requirements/R-0174.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0175 refinement
+
+1. Answer **33** — Treasure redemption: Own-galleon delivery to home Europe pays the normal current tax but no transport fee. Royal pickup first deducts half the face value as transport charge, then applies normal tax to the remainder. Show the exact net proceeds for explicit confirmation in an owned coastal colony; collect on the next owner turn only if the train remains eligible. Declaration closes both redemption routes; existing trains remain movable but cannot be redeemed through an invented new buyer, and declaration warns of this consequence. Preserve the ordinary whole-transaction rounding convention and exactly-once removal/payment.
+2. Owner: [R-0175](requirements/R-0175.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0176 refinement
+
+1. Answer **34** — Privateer patrol eligibility: A privateer may passively intercept foreign nonallied shipping even at peace when it could legally attack that ship; interception itself does not declare war. Other armed vessels intercept only declared wartime enemies, retaining the single strongest-patrol/ID rule.
+2. Owner: [R-0176](requirements/R-0176.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0177 refinement
+
+1. Answer **35** — Coastal-event order: After a legal ship step, eligible coastal forts fire in stable colony-ID order, each under its own once-per-ship/round limit. Stop remaining events as soon as a hit sends the ship to repairs. If the ship remains, resolve one patrol interception under the accepted strength/ID selection; do not duplicate either event on Continue.
+2. Owner: [R-0177](requirements/R-0177.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0183 refinement
+
+1. Answer **36** — Coronado reveal radius: Reveal each currently existing colony tile and all eight immediate neighbors once when Coronado joins. Remember terrain under normal fog rules; this is not permanent surveillance of foreign units or later colonies.
+2. Owner: [R-0183](requirements/R-0183.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0186 refinement
+
+1. Answer **37** — Crown dispatch policy: On each royal turn fill all available transport-capable men-of-war from actual reserves, cycling infantry, cavalry, artillery within actual hold capacity. Target the nearest known rebel coastal colony with a legal landing, ties by stable ID and then coordinates. Recompute a blocked route at most once per turn; after three unsuccessful turns try another target, otherwise wait safely. A prepared clear-route scenario must demonstrate landing and attack within ten royal turns, without teleporting or duplicating reserves.
+2. Owner: [R-0186](requirements/R-0186.md); acceptance and unresolved follow-ups remain there.
+
+#### R-0196 refinement
+
+1. Answer **38** — Post-intervention scoring start: Begin eligible post-intervention score bells when the help target is earned, not when delayed allied forces physically arrive. Do not count the bells consumed to reach that target again; a blocked port does not delay subsequent score accumulation.
+2. Owner: [R-0196](requirements/R-0196.md); acceptance and unresolved follow-ups remain there.
 
 ### Review after playtesting
 

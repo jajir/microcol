@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Decision reconciliation: [R-0254](done/R-0254.md); [remaining questions](open-points.md).
+
 Completed 2026-10-20: [R-0252 — Additional Playpen Sans weights](done/R-0252.md).
 
 Completed acceptance 2026-10-19: [R-0251 — Button spacing and type sizes](done/R-0251.md).
