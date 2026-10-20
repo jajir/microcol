@@ -1,6 +1,6 @@
 # Current requirement backlog
 
-Decision reconciliation: [R-0254](done/R-0254.md); [remaining questions](open-points.md).
+Decision reconciliation: [R-0255](done/R-0255.md); [remaining questions](open-points.md).
 
 Completed 2026-10-20: [R-0252 — Additional Playpen Sans weights](done/R-0252.md).
 
