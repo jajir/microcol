@@ -609,3 +609,8 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 3. Stav implementace a dílčí důkazy jsou v [funkčním záznamu](functional-tests.md#free-play-implementation-2026-10-13).
    Závěrečná regrese prošla; publikaci potvrzuje vývojové workflow. Žádný další požadavek se tím
    automaticky neposouvá do implementace; R-0019 a vyšší zůstávají samostatné.
+
+
+## Four-container regression experiment — 2026-10-20
+
+1. [R-0253](requirements/R-0253.md) measures four isolated serial UI groups using the existing runner; production CI remains unchanged pending evidence.
