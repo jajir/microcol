@@ -9,3 +9,5 @@ Added 2026-10-20: static Medium (500) and SemiBold (600), from the identical sou
 Generated with fontTools 4.60.2 using the same instantiateVariableFont call with wght 500/600 and updateFontNames=True.
 Outputs: PlaypenSans-Medium.ttf, PlaypenSans-SemiBold.ttf. Original glyph repertoire and OFL retained.
 CSS family names: Playpen Sans Medium; Playpen Sans SemiBold.
+
+Added 2026-10-20: PlaypenSans-Regular.ttf, static weight 400 using the identical source hash and generation method above. CSS family: Playpen Sans; full face name: Playpen Sans Regular.

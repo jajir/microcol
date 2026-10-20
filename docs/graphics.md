@@ -67,7 +67,7 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
    Symbol `→` obsažený v překladech není v rodině Playpen Sans; jeho kresbu
    doplní obvyklý systémový fallback JavaFX. Totéž může platit pro jiné
    symboly v hráčem zadaném textu.
-4. `FontService` registruje Light, Medium a SemiBold pro CSS; Canvas nadále používá Light. Společné
+4. `FontService` registruje Light, Regular, Medium a SemiBold pro CSS; Canvas nadále používá Light. Společné
    `Typography.css` platí pro hlavní scénu i dialogy; konkrétní ovládání
    dědí rodinu. Zachovat černé obrysy, paletu a individuální skiny tlačítek.
    Kontrolovat především kratší popisky bez ořezu, překlady a husté dialogy.
@@ -76,8 +76,24 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
 ### Volba silnějšího řezu v CSS
 
 Od 20. října 2026 [R-0252](requirements/R-0252.md) přidává skutečné statické
-řezy Medium 500 a SemiBold 600 ze stejného zdroje jako Light. Registrují se
+řezy Regular 400, Medium 500 a SemiBold 600 ze stejného zdroje jako Light. Registrují se
 při startu bez instalace do systému. Přidání samo nemění výchozí vzhled.
+Dostupné rodiny pro CSS:
+
+| Řez | Váha | `-fx-font-family` |
+| --- | --- | --- |
+| Light | 300 | `"Playpen Sans Light"` |
+| Regular | 400 | `"Playpen Sans"` |
+| Medium | 500 | `"Playpen Sans Medium"` |
+| SemiBold | 600 | `"Playpen Sans SemiBold"` |
+
+Regular je tenčí než Medium a silnější než Light. Použijte
+`-fx-font-family: "Playpen Sans"; -fx-font-weight: normal;`.
+Pro stupnici použijte `-fx-tick-label-font: 14px "Playpen Sans";`.
+Zdroj nabízí také Thin 100, ExtraLight 200, Bold 700 a ExtraBold 800;
+tyto řezy nejsou přibalené. Variabilní zdroj dovoluje i meziváhy, ale hra
+načítá statické řezy, takže CSS nepřepočítává libovolnou tloušťku.
+
 Pro běžné prvky vyberte rodinu (pro mírnější zesílení nahraďte `SemiBold` za `Medium`):
 
 ```css

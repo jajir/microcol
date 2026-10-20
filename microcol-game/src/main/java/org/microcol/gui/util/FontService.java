@@ -12,6 +12,7 @@ public final class FontService {
     @Inject
     public FontService() {
         face = load("Light");
+        load("Regular");
         load("Medium");
         load("SemiBold");
     }
