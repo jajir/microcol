@@ -28,6 +28,15 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
+    void TC_02_additional_bundled_faces_are_selectable_in_css() {
+        final TypographyPage type = new TypographyPage(getContext());
+        // Startup registers both real weights without changing the default.
+        type.verifyBundledCssFace("Playpen Sans Medium");
+        type.verifyBundledCssFace("Playpen Sans SemiBold");
+    }
+
+    @Test
+    @Tag("local")
     void TC_01_light_font_survives_languages_navigation_and_dialogs()
             throws Exception {
         final TypographyPage type = new TypographyPage(getContext());

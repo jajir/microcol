@@ -112,6 +112,30 @@ public final class TypographyPage extends AbstractScreen {
         });
     }
 
+    public void verifyBundledCssFace(final String expectedName) {
+        getRobot().interact(() -> {
+            final javafx.scene.control.Label label = new javafx.scene.control.Label(
+                    "Příliš žluťoučký français Straße €");
+            label.setStyle("-fx-font-family: '" + expectedName
+                    + "'; -fx-font-size: 14;");
+            final javafx.scene.chart.NumberAxis axis = new javafx.scene.chart.NumberAxis(
+                    0, 100, 10);
+            axis.setStyle("-fx-tick-label-font: 14px '" + expectedName + "';");
+            final javafx.scene.layout.VBox root = new javafx.scene.layout.VBox(
+                    label, axis);
+            new javafx.scene.Scene(root);
+            root.applyCss();
+            root.layout();
+            assertEquals(expectedName, label.getFont().getName());
+            assertEquals(14, label.getFont().getSize());
+            assertEquals(expectedName, axis.getTickLabelFont().getName());
+            assertEquals(14, axis.getTickLabelFont().getSize());
+            assertEquals("Playpen Sans Light",
+                    getContext().getClassFromGuice(FontService.class)
+                            .getDefault(14).getName());
+        });
+    }
+
     public void verifyCanvasTypography() {
         getRobot().interact(() -> {
             final Font font = getContext().getClassFromGuice(FontService.class)

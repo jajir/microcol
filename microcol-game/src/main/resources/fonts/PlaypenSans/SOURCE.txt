@@ -4,3 +4,8 @@ Source SHA-256: e083f9da8be210e08ea982ab510894641aab37590e70620d6db73f8de881ec4a
 Generated with fontTools 4.60.2; instantiateVariableFont(TTFont(source), {"wght": 300}, updateFontNames=True).save("PlaypenSans-Light.ttf")
 License: OFL.txt. Original glyph repertoire retained.
 Selected 2026-10-19 from 02-Playpen-Sans-tenci.png; real light outlines replace the browser-only background-colored thinning effect.
+
+Added 2026-10-20: static Medium (500) and SemiBold (600), from the identical source SHA-256 above.
+Generated with fontTools 4.60.2 using the same instantiateVariableFont call with wght 500/600 and updateFontNames=True.
+Outputs: PlaypenSans-Medium.ttf, PlaypenSans-SemiBold.ttf. Original glyph repertoire and OFL retained.
+CSS family names: Playpen Sans Medium; Playpen Sans SemiBold.

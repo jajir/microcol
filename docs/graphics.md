@@ -67,11 +67,44 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
    Symbol `→` obsažený v překladech není v rodině Playpen Sans; jeho kresbu
    doplní obvyklý systémový fallback JavaFX. Totéž může platit pro jiné
    symboly v hráčem zadaném textu.
-4. `FontService` registruje jeden řez pro CSS i Canvas. Společné
+4. `FontService` registruje Light, Medium a SemiBold pro CSS; Canvas nadále používá Light. Společné
    `Typography.css` platí pro hlavní scénu i dialogy; konkrétní ovládání
    dědí rodinu. Zachovat černé obrysy, paletu a individuální skiny tlačítek.
    Kontrolovat především kratší popisky bez ořezu, překlady a husté dialogy.
    Skutečné výsledky a omezení vede [funkční evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
+
+### Volba silnějšího řezu v CSS
+
+Od 20. října 2026 [R-0252](requirements/R-0252.md) přidává skutečné statické
+řezy Medium 500 a SemiBold 600 ze stejného zdroje jako Light. Registrují se
+při startu bez instalace do systému. Přidání samo nemění výchozí vzhled.
+Pro běžné prvky vyberte rodinu (pro mírnější zesílení nahraďte `SemiBold` za `Medium`):
+
+```css
+.settings-controls .label,
+.settings-controls .check-box,
+.settings-controls .radio-button {
+    -fx-font-family: "Playpen Sans SemiBold";
+    -fx-font-weight: normal;
+    -fx-text-fill: black;
+}
+```
+
+Stupnice má vlastní vlastnost fontu:
+
+```css
+.settings-controls .slider .axis {
+    -fx-tick-label-font: 14px "Playpen Sans SemiBold";
+    -fx-tick-label-fill: black;
+}
+```
+
+`normal` zde ponechá skutečný vybraný řez bez požadavku na další tučné písmo.
+Pro společný výchozí font změňte rodinu v `Typography.css`; výslovné rodiny
+ve stupnici nebo jiných pravidlech je nutné změnit také. Uvedených 14 px je
+příklad CSS, nikoli změna dosavadní výchozí velikosti hry. Canvas a vložené SVG
+se změnou CSS nepřepnou. Dostupnost v JavaFX ověřuje TC85/02; výsledky vede
+[funkční evidence](functional-tests.md#r-0252-additional-font-weights-2026-10-20).
 
 ### Přibalený font v SVG a exportu
 

@@ -5824,3 +5824,12 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. Full Docker/Xvfb completion `20261019T221740Z-35a5ae1549c8` verified source revision `f15ba9ea33a0a15077982c7eb3b7785060a48dc4`, including R-0206, R-0217 and all UI corrections through `c4b39229`. Reports `target/docker-ui/run-4Rf0fx` contain 2,585 model tests and 413 UI/source-contract checks, zero failures/errors/skips. Runtime: 4,838.916 seconds, within the 90-minute budget.
 2. The preceding full run exposed typography integration failures in TC11, TC30 and TC71. The UI corrections passed 26 targeted checks (`20261019T221140Z-5e216e81880d`, `run-DRricF`) before the successful full rerun. No acceptance assertion was removed.
 3. Subsequent integration of `dacda01f` changed documentation only. Publication of the combined game is verified separately. User requested completion and publication of this work, then stopping backlog execution; no further requirements are started.
+
+## R-0252 additional font weights — 2026-10-20
+
+1. TC85/02 checks the exact Medium and SemiBold face names selected by JavaFX CSS on a Label and NumberAxis after game startup, including size 14 and unchanged Canvas default Light. PageVerificationContractTest retains verification-only assertions. Existing TC85/01 preserves the default player journey.
+2. Targeted Docker acceptance passed; full regression and publication remain pending. User-edited Typography.css and SettingsControls.css are not part of this change; their new size choices are not accepted by this requirement.
+
+3. First completion `20261020T015928Z-44d81efde141` failed before container startup: Docker daemon/socket unavailable. No tests ran; this is not a font failure or acceptance. Started the existing Docker Desktop before retrying.
+
+4. Retry completion `20261020T020015Z-6af42985fe55`, supervisor PID 16326, exported `target/docker-ui/run-KUV4KO`: **4 checks passed** (TC85/02: 1, page source contract: 3), zero failures/errors/skips. JavaFX selected both exact face names for Label and NumberAxis at 14 px and retained Light for Canvas. FontTools confirmed static weights 500/600 and identical character maps to Light. Shared Java formatting/idempotence, nine documentation checks and strict MkDocs passed. Existing TC85/01 and full regression remain CI gates; unrelated user CSS is excluded from the commit.
