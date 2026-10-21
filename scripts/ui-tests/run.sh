@@ -40,7 +40,7 @@ xvfb-run -e "$RESULT_DIR/xvfb.log" -a \
     openbox > "$RESULT_DIR/openbox.log" 2>&1 &
     pid=$!
     trap "kill $pid 2>/dev/null || true" EXIT
-    mvn -B -ntp -pl microcol-test -am clean test -P ci "$@" \
+    mvn -B -ntp -pl "${MICROCOL_TEST_MODULE:-microcol-test}" -am clean test -P ci "$@" \
         -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
         -DsoundEnabled=false
 ' bash "$@" 2>&1 | tee "$RESULT_DIR/maven.log"

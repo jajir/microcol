@@ -281,6 +281,13 @@ if sys.argv[1] == 'rm':
             record = run.request(args, "different-id")
         self.assertEqual(record["command"][-2:], ["ui-tests", "-Dsample=two words"])
         self.assertEqual(record["container"], "microcol-different-id")
+        args = run.parse_args(["--thread", THREAD, "--timeout", "10800", "verify", "--",
+                               "--workers", "2", "--timings", "path with spaces"])
+        with patch.object(run.subprocess, "check_output", return_value=SHA):
+            record = run.request(args, "verify-id")
+        self.assertEqual(record["command"][-4:], ["--workers", "2", "--timings", "path with spaces"])
+        self.assertEqual(Path(record["command"][1]).name, "verify.py")
+        self.assertNotIn("container", record)
 
     def test_dispatch_returns_before_command_finishes(self):
         release = self.root / "release-child"

@@ -190,6 +190,13 @@ does not create or validate game distributions.
 
 ## Distribution boundaries
 
+The full local verification command `scripts/ui-tests/verify.sh` orchestrates
+the existing `microcol-game` and `microcol-test` modules; it adds no Maven module
+or game package. Its frozen source snapshot, per-group logs/XML/screenshots and
+aggregate manifest/result are under `target/verification/run-*/`, separate from
+distributable artifacts. See the
+[verification contract](functional-tests.md#uplne-overeni-v-izolovanych-skupinach).
+
 Application sources and the module descriptor target Java 11, while native
 packaging uses JDK 17 and JavaFX 17.0.20. Packages are specific to the build OS and
 CPU architecture. A configured package format is not proof of compatibility with

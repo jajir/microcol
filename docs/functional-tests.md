@@ -1,5 +1,43 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0257 — Izolované úplné ověření — 2026-10-21
+
+1. [R-0257](requirements/done/R-0257.md) zavádí spouštěč podle
+   [kontraktu](#uplne-overeni-v-izolovanych-skupinach) v odděleném checkoutu
+   z `c50ff1b53e1280f54a06a9a237b2f25e2157af9f`. Nezahrnuje souběžně
+   rozpracované herní změny hlavního checkoutu.
+2. První ověření `run-r6objk2u`, completion
+   `20261021T055854Z-70e44e44d43e` (PID 91562), skončilo po 31,181 s na
+   30sekundovém timeoutu `docker info`, ještě před sestavením obrazu a testy.
+   Nula skupin není přejímka. Následný dotaz uspěl; příčina pomalé první
+   odpovědi není prokázaná. Limit úvodní kontroly je nyní 120 s, testovací
+   limity se nemění. Callback byl doručen.
+3. Samostatné kontroly původního entrypointu, completion
+   `20261021T055854Z-371a5eaf10cc` (PID 91555), prošly za 37,457 s:
+   úspěch, nenulový Maven, chyba exportu, read-only zdroje/čistá kopie/předání
+   argumentů a čitelnost reportů na Linuxu. To nejsou herní testy.
+4. Před první skutečnou regresí prošlo deset jednotkových kontrol orchestrace,
+   19 completion testů, devět dokumentačních kontrol a striktní MkDocs build.
+   Následně prošlo všech 11 jednotkových kontrol včetně preflight timeoutu
+   a znovu striktní MkDocs build.
+5. Úplný běh `run-bc5ponwe`, completion `20261021T060238Z-e5f7fdddfb87`
+   (PID 92694), prošel za **2 848,393 s (47 min 28 s)**. Model: **2 968 testů
+   ve 255 třídách**, 77,264 s. UI-01: **220 testů v 58 třídách**, 2 768,853 s;
+   UI-02: **245 testů v 62 třídách**, 2 740,215 s. Celkem **3 433 testů ve
+   375 různých XML reportech**, nula selhání, chyb a přeskočení. Samostatné
+   přepočítání XML potvrdilo počty i unikátnost a všechny SHA-256 souborů
+   odpovídaly testovanému snímku. Callback byl úspěšně doručen.
+6. Docker při přejímce hlásil 10 CPU, 8 319 504 384 B RAM a architekturu
+   aarch64; testovací image byl linux/amd64 s ID
+   `sha256:1d3b6b35662290f66dba63f6aeda119fde393e04953ec74e8223607de5b1e70f`.
+   Časy pro rozdělení pocházely z předchozího `run-uvxcbb`. Jeho log uvádí
+   přibližně 97 minut, ale nejde o řízený benchmark při shodném zatížení;
+   naměřených 47 minut není garance stejného zrychlení na jiném stroji.
+7. Pro předání platí [jediný ověřovací příkaz](#uplne-overeni-v-izolovanych-skupinach).
+   Výsledek zahrnuje zdroje `c50ff1b5` plus tuto infrastrukturu, nikoli nové
+   souběžně implementované požadavky. Jejich přejímka musí spouštěč spustit
+   znovu na finálním vlastním stavu. GitHub Actions ani publikace se neověřovaly.
+
 Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
 ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
@@ -511,6 +549,70 @@ Mac není překážkou těchto testů. Nativní macOS okno používat jen pro v�
 platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odemčení.
 
 ### Docker UI tests
+
+#### Úplné ověření v izolovaných skupinách
+
+[R-0257](requirements/done/R-0257.md) poskytuje jeden příkaz pro úplnou lokální
+přejímku; [úplný průchod byl ověřen 21. října 2026](#r-0257-izolovane-uplne-overeni-2026-10-21).
+Z kořene repozitáře:
+
+```sh
+bash scripts/ui-tests/verify.sh
+```
+
+1. Vyžaduje Git, Python 3.9+, Docker Engine a Compose v2. Vytvoří společný
+   snímek sledovaných a neignorovaných nových souborů, včetně lokálních změn,
+   bez `.git` a `target`. Změny během kopírování a symlinky odmítne. Pozdější
+   úpravy checkoutu běh neovlivní; výsledek platí pro uložený snímek, nikoli
+   automaticky pro novější práci.
+2. Jednou sestaví obraz a zaznamená jeho ID. Modelovou sadu spustí jednou;
+   po jejím úspěchu spustí dvě UI skupiny souběžně. Každá má vlastní workspace,
+   nastavení, Xvfb/Openbox a sériové JVM. Kompilace se opakuje. `--workers 1`
+   spustí jednu UI skupinu. Čtyři skupiny nejsou povolené: předchozí
+   [experiment](#four-isolated-containers-experiment-2026-10-20) neprošel.
+3. Inventář vychází z aktuálních konvenčně pojmenovaných JUnit zdrojů včetně
+   zděděných metod a podpůrných testů. Úplný explicitní modelový výběr zahrnuje
+   i `ConnectorTest`, který starý POM vylučuje. Dynamické/nested testy vyžadují
+   rozšíření inventáře a nyní skončí chybou. Metody parametrizovaných testů se
+   porovnávají se zdroji; počty jejich invokací určuje čerstvý Surefire report.
+4. `--timings CESTA_K_REPORTUM` volitelně použije předchozí XML časy pro vyvážení
+   celých tříd. Bez nich rozdělí třídy podle počtu. Časy nejsou inventář a nikdy
+   nevyřazují nové testy. `--timeout 5400` je výchozí limit každé přípravné či
+   testovací fáze, v sekundách. Nemění limit JVM ani prostředky Compose.
+5. Výstup je vždy unikátní `target/verification/run-*/`: `manifest.json` obsahuje
+   revizi, SHA-256 souborů, inventář, skupiny a image ID; `source/` uchovává snímek.
+   `build.log` a `docker-info.json` zachycují přípravu. `model/`, `ui-01/` a
+   případně `ui-02/` obsahují vlastní `request.json`, `console.log`, `result.json`,
+   `cleanup.log` a původní export `run-*/` s Maven logem, XML a screenshoty.
+   Souběžné invokace nesdílejí výstup ani tag obrazu; sdílejí Maven cache.
+6. Spouštěč čeká na ukončení každého procesu i export výsledků. Ověří třídy,
+   metody, duplicity, konzistenci počtů XML a nulové failures/errors/skips.
+   Chybějící proces, export, report či metoda znamená neúspěch. Finální
+   `summary.json` vznikne atomicky až po dokončení skupin a úklidu; kód 0 znamená
+   úplný průchod, 1 neúspěch. Samotná přítomnost XML neprokazuje dokončení.
+7. SIGINT/SIGTERM a timeout ukončí jen vlastní procesy a kontejnery. Graceful
+   stop se pokusí exportovat reporty, potom následuje vynucený úklid. SIGKILL či
+   výpadek hostitele nemůže garantovat úklid; chybějící `summary.json` znamená
+   nedokončený běh. Zachovat dostupné chybové důkazy.
+8. GitHub Actions může použít tentýž foreground příkaz na Linux runneru s
+   dostatkem paměti. V kroku `if: always()` uchovat `target/verification/`
+   (kopii `source/` lze při uploadu vynechat). Job potřebuje čas pro přípravu,
+   model a UI; na malém runneru použít `--workers 1`. Produkční workflow se
+   tímto požadavkem nemění; lokální průchod neprokazuje průchod CI.
+
+**Předání implementujícímu procesu:** po dokončení změn spustit tento příkaz,
+zkontrolovat konkrétní `summary.json` a shodu jeho snímku s přejímanými zdroji.
+Zachovat ostatní povinné formátovací a dokumentační kontroly. Agent používá
+[completion runner](ai/completion-callbacks.md#complete-local-verification)
+s UUID svého chatu. Spouštěč sám nic necommituje, nepushuje ani nepublikuje.
+
+Kontroly orchestrace bez Dockeru:
+
+```sh
+python3 -m unittest discover -s scripts/ui-tests -p 'test_*.py'
+```
+
+Dosavadní foreground a cílené příkazy zůstávají dostupné:
 
 Při práci agenta spouštět dlouhý běh přes
 [completion runner](ai/completion-callbacks.md#docker-tests) s UUID původního

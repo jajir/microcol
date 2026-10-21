@@ -73,6 +73,23 @@ The original foreground command remains available to human operators and CI.
 The [functional contract](../functional-tests.md#docker-ui-tests), named scenarios
 and container runner checks are unchanged.
 
+## Complete local verification
+
+Dispatch the [full-suite runner](../functional-tests.md#uplne-overeni-v-izolovanych-skupinach)
+once; it owns both UI containers and aggregates their results:
+
+```sh
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 16400 verify -- --workers 2 --timeout 5400
+```
+
+The outer deadline covers image preparation, one model phase, one concurrent UI
+phase and cleanup. Optional `--timings PATH` forwards previous Surefire XML for
+balancing. Record the returned supervisor PID and evidence directory. On callback,
+`command.log` identifies `target/verification/run-*/summary.json`; inspect that
+result, source manifest and reports before acceptance. SIGTERM lets the runner
+stop/remove only its owned containers. The handoff recipient must use their own
+originating chat UUID. A successful callback is not acceptance or publication.
+
 ## GitHub Actions
 
 Only when the user requests CI work or verified publication, discover the runs

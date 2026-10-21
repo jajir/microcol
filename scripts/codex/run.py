@@ -45,6 +45,7 @@ def parse_args(argv):
     worker.add_argument("--profile", type=Path)
     worker.add_argument("--escalate-reason")
     modes.add_parser("docker").add_argument("arguments", nargs=argparse.REMAINDER)
+    modes.add_parser("verify").add_argument("arguments", nargs=argparse.REMAINDER)
     ci = modes.add_parser("ci")
     ci.add_argument("run_id")
     ci.add_argument("--commit", required=True)
@@ -90,6 +91,10 @@ def request(args, run_id):
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         command = [record["docker"], "compose", "-f", str(ROOT / "compose.ui-tests.yml"),
                    "run", "--build", "--rm", "--name", record["container"], "ui-tests"] + arguments
+    elif args.kind == "verify":
+        arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
+        command = [sys.executable, str(ROOT / "scripts/ui-tests/verify.py")] + arguments
+        record["reports"] = str(ROOT / "target/verification")
     else:
         record.update(gh=installed("gh"), ci_run=args.run_id, ci_commit=args.commit, ci_repo=args.repo)
         command = [record["gh"], "run", "watch", args.run_id, "--repo", args.repo,
