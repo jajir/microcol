@@ -45,6 +45,8 @@ public class UnitPo {
 
     private PlaceCargoSlotPo placeCargoSlot;
 
+    private PlaceNativeCoursePo placeNativeCourse;
+
     private CargoPo cargo = new CargoPo();
 
     private UnitActionPo action;
@@ -131,6 +133,9 @@ public class UnitPo {
     /** Explicit homeless flag of a native brave; required only for braves. */
     private Boolean nativeHomeless;
 
+    /** Combat role name of a native brave; required only for braves. */
+    private String nativeRole;
+
     public Integer getNativeHomeSettlementId() {
         return nativeHomeSettlementId;
     }
@@ -146,6 +151,14 @@ public class UnitPo {
 
     public void setNativeHomeless(final Boolean nativeHomeless) {
         this.nativeHomeless = nativeHomeless;
+    }
+
+    public String getNativeRole() {
+        return nativeRole;
+    }
+
+    public void setNativeRole(final String nativeRole) {
+        this.nativeRole = nativeRole;
     }
 
     public Boolean getArtilleryDamaged() {
@@ -453,6 +466,21 @@ public class UnitPo {
     public void setPlaceConstructionSlot(
             PlaceConstructionSlotPo placeConstructionSlotPo) {
         this.placeConstructionSlot = placeConstructionSlotPo;
+    }
+
+    /**
+     * @return the saved native course place, or null when not learning
+     */
+    public PlaceNativeCoursePo getPlaceNativeCourse() {
+        return placeNativeCourse;
+    }
+
+    /**
+     * @param placeNativeCourse the native course place to set, or null
+     */
+    public void setPlaceNativeCourse(
+            final PlaceNativeCoursePo placeNativeCourse) {
+        this.placeNativeCourse = placeNativeCourse;
     }
 
     /**

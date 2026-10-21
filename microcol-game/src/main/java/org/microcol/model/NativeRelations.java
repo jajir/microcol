@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.microcol.model.store.NativeArmsSalePo;
 import org.microcol.model.store.NativeLocalAlarmPo;
 import org.microcol.model.store.NativeSettlementPo;
 import org.microcol.model.store.NativeTribalAngerPo;
@@ -28,6 +30,39 @@ public final class NativeRelations {
     /** Divisor of mean local alarm that is added to tribal anger. */
     static final double ALARM_TO_ANGER_DIVISOR = 20;
 
+    /** Tribal anger of an attack on a native unit. */
+    private static final double UNIT_ATTACK_ANGER = 10;
+
+    /** Local alarm of an attack on a native unit with a known home. */
+    private static final double UNIT_ATTACK_ALARM = 10;
+
+    /** Raise of both measures for an attack on a settlement. */
+    private static final double SETTLEMENT_ATTACK_RAISE = 20;
+
+    /** Extra raise of both measures when the attack destroys a settlement. */
+    private static final double DESTRUCTION_RAISE = 20;
+
+    /** Tribal anger of a disturbed burial site. */
+    private static final double BURIAL_ANGER = 30;
+
+    /** Raise of both measures for a tribute demand, paid or refused. */
+    private static final double TRIBUTE_RAISE = 10;
+
+    /** Local alarm reduction of a completed trade. */
+    private static final double TRADE_REDUCTION = 2;
+
+    /** Local alarm reduction of a gift per 100 goods. */
+    private static final double GIFT_REDUCTION_PER_HUNDRED = 5;
+
+    /** Multiplier of settlement raises and peaceful reductions at a capital. */
+    private static final double CAPITAL_MULTIPLIER = 2;
+
+    /** Muskets and horses sold per tribal anger step. */
+    private static final int ARMS_STEP = 50;
+
+    /** Tribal anger of each complete arms step. */
+    private static final double ARMS_STEP_ANGER = 5;
+
     private static final double MIN_VALUE = 0;
 
     private static final double MAX_VALUE = 100;
@@ -38,12 +73,30 @@ public final class NativeRelations {
 
     private final Map<Integer, Map<EuropeanNation, Double>> localAlarm;
 
+    /**
+     * Local alarm at the start of the European's last turn; the difference to
+     * {@link #localAlarm} is the alarm change the player sees.
+     */
+    private final Map<Integer, Map<EuropeanNation, Double>> previousLocalAlarm;
+
+    /** Muskets and horses sold below the next step, per pair; 0..49. */
+    private final Map<EuropeanNation, Map<NativeNation, Integer>> armsRemainders;
+
+    /** Origin action IDs already applied; never applied again. */
+    private final Set<Long> appliedOutcomes;
+
     private NativeRelations(final List<NativeSettlement> settlements,
             final Map<NativeNation, Map<EuropeanNation, Double>> tribalAnger,
-            final Map<Integer, Map<EuropeanNation, Double>> localAlarm) {
+            final Map<Integer, Map<EuropeanNation, Double>> localAlarm,
+            final Map<Integer, Map<EuropeanNation, Double>> previousLocalAlarm,
+            final Map<EuropeanNation, Map<NativeNation, Integer>> armsRemainders,
+            final Set<Long> appliedOutcomes) {
         this.settlements = settlements;
         this.tribalAnger = tribalAnger;
         this.localAlarm = localAlarm;
+        this.previousLocalAlarm = previousLocalAlarm;
+        this.armsRemainders = armsRemainders;
+        this.appliedOutcomes = appliedOutcomes;
     }
 
     /**
@@ -75,7 +128,8 @@ public final class NativeRelations {
         final List<NativeLocalAlarmPo> out = new ArrayList<>();
         for (final NativeSettlementPo settlement : settlements) {
             for (final EuropeanNation european : EuropeanNation.values()) {
-                out.add(alarmPo(settlement.getId(), european, MIN_VALUE));
+                out.add(alarmPo(settlement.getId(), european, MIN_VALUE,
+                        MIN_VALUE));
             }
         }
         return out;
@@ -84,16 +138,24 @@ public final class NativeRelations {
     /**
      * Build the relations from the saved tables. Both tables are required and
      * complete: every pair appears exactly once, with a finite value in 0..100.
-     * Unknown or duplicate keys are rejected; nothing is guessed.
+     * Unknown or duplicate keys are rejected; nothing is guessed. The previous
+     * alarm of a pair is optional: when absent it equals the saved alarm, so
+     * the change reads as zero until an update is observed. The arms remainders
+     * and applied outcome IDs are sparse: an absent list means none is retained
+     * or applied yet.
      *
-     * @param registry   required validated native settlements
-     * @param savedAnger required tribal anger table, possibly empty
-     * @param savedAlarm required local alarm table, possibly empty
+     * @param registry        required validated native settlements
+     * @param savedAnger      required tribal anger table, possibly empty
+     * @param savedAlarm      required local alarm table, possibly empty
+     * @param savedArms       arms remainders, nullable meaning none
+     * @param savedOutcomeIds applied outcome action IDs, nullable meaning none
      * @return validated relations
      */
     static NativeRelations make(final NativeSettlements registry,
             final List<NativeTribalAngerPo> savedAnger,
-            final List<NativeLocalAlarmPo> savedAlarm) {
+            final List<NativeLocalAlarmPo> savedAlarm,
+            final List<NativeArmsSalePo> savedArms,
+            final List<Long> savedOutcomeIds) {
         Preconditions.checkArgument(savedAnger != null,
                 "Unsupported save: missing native tribal anger");
         Preconditions.checkArgument(savedAlarm != null,
@@ -122,24 +184,56 @@ public final class NativeRelations {
         final Set<Integer> ids = new HashSet<>();
         all.forEach(settlement -> ids.add(settlement.getId()));
         final Map<Integer, Map<EuropeanNation, Double>> alarm = new HashMap<>();
+        final Map<Integer, Map<EuropeanNation, Double>> previous = new HashMap<>();
         for (final NativeLocalAlarmPo entry : savedAlarm) {
             Preconditions.checkArgument(
                     entry != null && entry.getSettlementId() != null
                             && ids.contains(entry.getSettlementId())
                             && entry.getEuropean() != null
-                            && isValid(entry.getValue()),
+                            && isValid(entry.getValue())
+                            && (entry.getPreviousValue() == null
+                                    || isValid(entry.getPreviousValue())),
                     "Unsupported save: invalid native local alarm");
             Preconditions.checkArgument(
                     alarm.computeIfAbsent(entry.getSettlementId(),
                             id -> new EnumMap<>(EuropeanNation.class))
                             .put(entry.getEuropean(), entry.getValue()) == null,
                     "Unsupported save: duplicate native local alarm");
+            previous.computeIfAbsent(entry.getSettlementId(),
+                    id -> new EnumMap<>(EuropeanNation.class))
+                    .put(entry.getEuropean(),
+                            entry.getPreviousValue() == null ? entry.getValue()
+                                    : entry.getPreviousValue());
         }
         Preconditions.checkArgument(
                 savedAlarm.size() == ids.size()
                         * EuropeanNation.values().length,
                 "Unsupported save: incomplete native local alarm");
-        return new NativeRelations(all, anger, alarm);
+        final Map<EuropeanNation, Map<NativeNation, Integer>> arms = new EnumMap<>(
+                EuropeanNation.class);
+        for (final EuropeanNation european : EuropeanNation.values()) {
+            arms.put(european, new EnumMap<>(NativeNation.class));
+        }
+        for (final NativeArmsSalePo entry : savedArms == null
+                ? List.<NativeArmsSalePo>of()
+                : savedArms) {
+            Preconditions.checkArgument(entry != null
+                    && entry.getNation() != null && entry.getEuropean() != null
+                    && entry.getQuantity() != null && entry.getQuantity() >= 0
+                    && entry.getQuantity() < ARMS_STEP,
+                    "Unsupported save: invalid native arms sale remainder");
+            Preconditions.checkArgument(
+                    arms.get(entry.getEuropean()).put(entry.getNation(),
+                            entry.getQuantity()) == null,
+                    "Unsupported save: duplicate native arms sale remainder");
+        }
+        final Set<Long> applied = new TreeSet<>();
+        for (final Long id : savedOutcomeIds == null ? List.<Long>of()
+                : savedOutcomeIds) {
+            Preconditions.checkArgument(id != null && id > 0 && applied.add(id),
+                    "Unsupported save: invalid or duplicate native relation outcome");
+        }
+        return new NativeRelations(all, anger, alarm, previous, arms, applied);
     }
 
     /**
@@ -164,10 +258,52 @@ public final class NativeRelations {
         for (final NativeSettlement settlement : settlements) {
             for (final EuropeanNation european : EuropeanNation.values()) {
                 out.add(alarmPo(settlement.getId(), european,
-                        localAlarm.get(settlement.getId()).get(european)));
+                        localAlarm.get(settlement.getId()).get(european),
+                        previousLocalAlarm.get(settlement.getId())
+                                .get(european)));
             }
         }
         return out;
+    }
+
+    /**
+     * @return saved nonzero arms remainders, in a fixed order
+     */
+    List<NativeArmsSalePo> saveArmsSales() {
+        final List<NativeArmsSalePo> out = new ArrayList<>();
+        for (final EuropeanNation european : EuropeanNation.values()) {
+            for (final NativeNation nation : NativeNation.values()) {
+                final int quantity = armsRemainders.get(european)
+                        .getOrDefault(nation, 0);
+                if (quantity > 0) {
+                    final NativeArmsSalePo po = new NativeArmsSalePo();
+                    po.setNation(nation);
+                    po.setEuropean(european);
+                    po.setQuantity(quantity);
+                    out.add(po);
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * @return saved IDs of applied outcomes, in ascending order
+     */
+    List<Long> saveAppliedOutcomes() {
+        return new ArrayList<>(appliedOutcomes);
+    }
+
+    /**
+     * Origin ID for a new completed outcome, above every applied ID so no
+     * producer reuses one. The caller applies the outcome in the same committed
+     * action; two IDs allocated before either is applied would collide.
+     *
+     * @return unused positive action ID
+     */
+    long nextOutcomeId() {
+        return appliedOutcomes.stream().mapToLong(Long::longValue).max()
+                .orElse(0L) + 1;
     }
 
     double getTribalAnger(final NativeNation nation,
@@ -191,6 +327,38 @@ public final class NativeRelations {
         return NativeHostility
                 .of(Math.max(getTribalAnger(settlement.getNation(), european),
                         getLocalAlarm(settlement, european)));
+    }
+
+    /**
+     * Local alarm change of one pair: the current alarm minus the alarm at the
+     * start of the European's last turn. Committed outcomes and the turn's own
+     * update move the current alarm, so their effect shows here until the next
+     * turn starts.
+     *
+     * @param settlement required settlement
+     * @param european   required European
+     * @return signed change, exact and fractional; zero when nothing moved
+     */
+    double getLocalAlarmChange(final NativeSettlement settlement,
+            final EuropeanNation european) {
+        return getLocalAlarm(settlement, european)
+                - previousLocalAlarm.get(settlement.getId()).get(european);
+    }
+
+    /**
+     * Start the alarm observation of one European at the start of its own turn,
+     * before congress settles and before its update. The change shown
+     * afterwards is measured from here, so an arrival that clears alarm still
+     * reads as a fall.
+     *
+     * @param european required European whose turn has started
+     */
+    void observeLocalAlarm(final EuropeanNation european) {
+        Preconditions.checkNotNull(european);
+        for (final NativeSettlement settlement : settlements) {
+            previousLocalAlarm.get(settlement.getId()).put(european,
+                    localAlarm.get(settlement.getId()).get(european));
+        }
     }
 
     /**
@@ -270,6 +438,150 @@ public final class NativeRelations {
         localAlarm.values().forEach(row -> row.put(european, MIN_VALUE));
     }
 
+    /**
+     * Whether {@link #applyOutcome} would accept this outcome now, without
+     * changing anything. A transaction checks all its outcomes with this before
+     * its first change, so a later refusal cannot leave a half-applied sale.
+     *
+     * @param european required colonial European whose action completed
+     * @param outcome  required outcome not yet applied
+     * @return whether its ID is unused and its references and amounts are valid
+     */
+    boolean canApply(final EuropeanNation european,
+            final NativeRelationOutcome outcome) {
+        Preconditions.checkNotNull(european);
+        Preconditions.checkNotNull(outcome);
+        if (appliedOutcomes.contains(outcome.getActionId())) {
+            return false;
+        }
+        final NativeSettlement settlement = outcome.getSettlement();
+        if (settlement != null && (!settlements.contains(settlement)
+                || settlement.getNation() != outcome.getNation())) {
+            return false;
+        }
+        return outcome.getKind() != NativeRelationOutcome.Kind.ARMS_SALE
+                || canAddArms(european, outcome);
+    }
+
+    private boolean canAddArms(final EuropeanNation european,
+            final NativeRelationOutcome outcome) {
+        final int remainder = armsRemainders.get(european)
+                .getOrDefault(outcome.getNation(), 0);
+        try {
+            Math.addExact(remainder, outcome.getQuantity());
+            return true;
+        } catch (final ArithmeticException overflow) {
+            return false;
+        }
+    }
+
+    /**
+     * Apply one completed outcome exactly once. Every reference and amount is
+     * checked before the first change, so a refused outcome leaves all
+     * measures, arms remainders and applied IDs unchanged. Raises of a
+     * settlement's local alarm take the national and founder factor; direct
+     * tribal changes and peaceful reductions never do.
+     *
+     * @param european    required colonial European whose action completed
+     * @param outcome     required completed outcome
+     * @param localFactor multiplier of positive local alarm of that European
+     */
+    void applyOutcome(final EuropeanNation european,
+            final NativeRelationOutcome outcome, final double localFactor) {
+        Preconditions.checkNotNull(european);
+        Preconditions.checkNotNull(outcome);
+        Preconditions.checkArgument(
+                !appliedOutcomes.contains(outcome.getActionId()),
+                "Native relation outcome already applied");
+        final NativeNation nation = outcome.getNation();
+        final NativeSettlement settlement = outcome.getSettlement();
+        if (settlement != null) {
+            Preconditions.checkArgument(settlements.contains(settlement),
+                    "Unknown native settlement");
+            Preconditions.checkArgument(settlement.getNation() == nation,
+                    "Native settlement belongs to another nation");
+        }
+        // All references are valid, so only the changes below remain.
+        final double multiplier = settlement != null && settlement.isCapital()
+                ? CAPITAL_MULTIPLIER
+                : 1;
+        switch (outcome.getKind()) {
+        case UNIT_ATTACK:
+            addTribalAnger(nation, european, UNIT_ATTACK_ANGER);
+            if (settlement != null) {
+                addLocalAlarm(settlement, european, UNIT_ATTACK_ALARM,
+                        localFactor);
+            }
+            break;
+        case SETTLEMENT_ATTACK:
+            raise(nation, settlement, european,
+                    SETTLEMENT_ATTACK_RAISE * multiplier, localFactor);
+            break;
+        case SETTLEMENT_DESTROYED:
+            raise(nation, settlement, european,
+                    (SETTLEMENT_ATTACK_RAISE + DESTRUCTION_RAISE) * multiplier,
+                    localFactor);
+            break;
+        case BURIAL:
+            addTribalAnger(nation, european, BURIAL_ANGER);
+            break;
+        case TRIBUTE:
+            raise(nation, settlement, european, TRIBUTE_RAISE, localFactor);
+            break;
+        case TRADE:
+            lower(nation, settlement, european, TRADE_REDUCTION);
+            break;
+        case GIFT:
+            lower(nation, settlement, european,
+                    GIFT_REDUCTION_PER_HUNDRED * outcome.getQuantity() / 100);
+            break;
+        case ARMS_SALE:
+            sellArms(nation, european, outcome.getQuantity());
+            break;
+        }
+        appliedOutcomes.add(outcome.getActionId());
+    }
+
+    /** Raise tribal anger directly and the settlement's local alarm. */
+    private void raise(final NativeNation nation,
+            final NativeSettlement settlement, final EuropeanNation european,
+            final double amount, final double localFactor) {
+        addTribalAnger(nation, european, amount);
+        addLocalAlarm(settlement, european, amount, localFactor);
+    }
+
+    /**
+     * Peaceful reduction of the settlement's local alarm; at a capital it is
+     * doubled and also reduces the nation's tribal anger.
+     */
+    private void lower(final NativeNation nation,
+            final NativeSettlement settlement, final EuropeanNation european,
+            final double reduction) {
+        final boolean capital = settlement.isCapital();
+        final double lowered = capital ? CAPITAL_MULTIPLIER * reduction
+                : reduction;
+        final Map<EuropeanNation, Double> alarmRow = localAlarm
+                .get(settlement.getId());
+        alarmRow.put(european, clamp(alarmRow.get(european) - lowered));
+        if (capital) {
+            final Map<EuropeanNation, Double> angerRow = tribalAnger
+                    .get(nation);
+            angerRow.put(european, clamp(angerRow.get(european) - lowered));
+        }
+    }
+
+    /**
+     * Sold muskets and horses join the retained remainder; each complete step
+     * adds tribal anger and the new remainder is kept below the step.
+     */
+    private void sellArms(final NativeNation nation,
+            final EuropeanNation european, final int quantity) {
+        final Map<NativeNation, Integer> row = armsRemainders.get(european);
+        final int total = Math.addExact(row.getOrDefault(nation, 0), quantity);
+        row.put(nation, total % ARMS_STEP);
+        addTribalAnger(nation, european, ARMS_STEP_ANGER * (total / ARMS_STEP));
+    }
+
     private double meanLocalAlarm(final NativeNation nation,
             final EuropeanNation european) {
         double sum = 0;
@@ -307,11 +619,13 @@ public final class NativeRelations {
     }
 
     private static NativeLocalAlarmPo alarmPo(final int settlementId,
-            final EuropeanNation european, final double value) {
+            final EuropeanNation european, final double value,
+            final double previous) {
         final NativeLocalAlarmPo po = new NativeLocalAlarmPo();
         po.setSettlementId(settlementId);
         po.setEuropean(european);
         po.setValue(value);
+        po.setPreviousValue(previous);
         return po;
     }
 

@@ -174,8 +174,8 @@ public class UnitFactory {
         return new UnitNativeBrave(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getMovementThirds(), request.getAction(),
-                request.getNativeHomeSettlementId(),
-                request.isNativeHomeless());
+                request.getNativeHomeSettlementId(), request.isNativeHomeless(),
+                request.getNativeRole());
     }
 
     /**
@@ -191,12 +191,17 @@ public class UnitFactory {
         Preconditions.checkArgument(brave == owner.isNative(),
                 "Invalid saved native unit owner");
         if (!brave) {
-            Preconditions.checkArgument(
-                    unitPo.getNativeHomeless() == null
-                            && unitPo.getNativeHomeSettlementId() == null,
-                    "Invalid saved native brave home");
+            Preconditions
+                    .checkArgument(
+                            unitPo.getNativeHomeless() == null
+                                    && unitPo
+                                            .getNativeHomeSettlementId() == null
+                                    && unitPo.getNativeRole() == null,
+                            "Invalid saved native brave home");
             return;
         }
+        Preconditions.checkArgument(unitPo.getNativeRole() != null,
+                "Invalid saved native brave role");
         Preconditions.checkArgument(
                 unitPo.getNativeHomeless() != null
                         && unitPo.getNativeHomeless() == (unitPo
@@ -264,6 +269,8 @@ public class UnitFactory {
                 .setNativeHomeSettlementId(unitPo.getNativeHomeSettlementId());
         unitCreateRequest.setNativeHomeless(
                 Boolean.TRUE.equals(unitPo.getNativeHomeless()));
+        unitCreateRequest.setNativeRole(unitPo.getNativeRole() == null ? null
+                : UnitNativeBrave.Role.valueOf(unitPo.getNativeRole()));
         checkSavedNativeUnit(model, unitPo, unitCreateRequest.getOwner());
 
         final Unit unit = unitResolver.apply(unitCreateRequest);

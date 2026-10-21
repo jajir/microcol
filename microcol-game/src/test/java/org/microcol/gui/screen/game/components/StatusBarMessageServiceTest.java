@@ -242,6 +242,38 @@ public class StatusBarMessageServiceTest {
         assertEquals("Zde je Oceán.", ret);
     }
 
+    @Test
+    public void verify_lost_city_rumor_is_named_in_present_sight_only()
+            throws Exception {
+        when(gamePreferences.isDevelopment()).thenReturn(false);
+        when(player.isVisible(where)).thenReturn(true);
+        when(player.isCurrentlyVisible(where)).thenReturn(true);
+
+        assertEquals(
+                "Zde je Zelená země. Pověst o ztraceném městě: zvěd, který sem vstoupí, zjistí, co skrývá.",
+                service.getStatusMessage(where, player, TerrainType.GRASSLAND,
+                        new ArrayList<>(), Optional.empty(), Optional.empty(),
+                        true));
+        assertEquals("Zde je Zelená země.",
+                service.getStatusMessage(where, player, TerrainType.GRASSLAND,
+                        new ArrayList<>(), Optional.empty(), Optional.empty(),
+                        false));
+
+        // A remembered square never tells whether its rumor still waits.
+        when(player.isCurrentlyVisible(where)).thenReturn(false);
+        assertEquals("Zde je Zelená země.",
+                service.getStatusMessage(where, player, TerrainType.GRASSLAND,
+                        new ArrayList<>(), Optional.empty(), Optional.empty(),
+                        true));
+
+        // An unexplored square says nothing about a rumor either.
+        when(player.isVisible(where)).thenReturn(false);
+        assertEquals("Tato oblast je neprozkoumaná.",
+                service.getStatusMessage(where, player, TerrainType.GRASSLAND,
+                        new ArrayList<>(), Optional.empty(), Optional.empty(),
+                        true));
+    }
+
     @BeforeEach
     private void startup() {
         service = new StatusBarMessageService(i18n, gamePreferences,

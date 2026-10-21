@@ -10,6 +10,7 @@ import org.microcol.model.AttackOrder;
 import org.microcol.model.ColonyDefense;
 import org.microcol.model.CombatStrength;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitNativeBrave;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -202,27 +203,33 @@ public final class DialogFight extends AbstractMessageWindow {
         combatChance.setVisible(hasStrengths);
         combatChance.setManaged(hasStrengths);
         order.getCombatStrengths().ifPresent(strengths -> {
-            attackerStrength.setText(describe(strengths.getAttacker()));
-            defenderStrength.setText(describe(strengths.getDefender()));
+            attackerStrength.setText(
+                    describe(strengths.getAttacker(), order.getAttacker()));
+            defenderStrength.setText(
+                    describe(strengths.getDefender(), order.getDefender()));
             combatChance
-                    .setText(i18n.get(Dialog.fight_chance,
-                            number(100 * strengths.getAttackerWinProbability()))
-                            + "\n"
-                            + (order.getColonyDefense().isPresent()
-                                    ? isArmedRoleBattle(
-                                            order) ? i18n.get(Dialog.fight_roleLoss) : colonyNote(order.getColonyDefense().get())
-                                    : i18n.get(
-                                            order.getNavalPreview().isPresent()
-                                                    ? Dialog.fight_navalLoss
-                                                    : hasSpecialRole(
-                                                            order.getAttacker())
-                                                            || hasSpecialRole(
-                                                                    order.getDefender())
-                                                                            ? Dialog.fight_roleLoss
-                                                                            : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
-                                                                                    || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
-                                                                                            ? Dialog.fight_artilleryLoss
-                                                                                            : Dialog.fight_equipmentLoss)));
+                    .setText(
+                            i18n.get(Dialog.fight_chance, number(100
+                                    * strengths.getAttackerWinProbability()))
+                                    + "\n"
+                                    + (isNativeBattle(order) ? nativeNote(order)
+                                            : order.getColonyDefense()
+                                                    .isPresent()
+                                                            ? isArmedRoleBattle(
+                                                                    order) ? i18n.get(Dialog.fight_roleLoss) : colonyNote(order.getColonyDefense().get())
+                                                            : i18n.get(order
+                                                                    .getNavalPreview()
+                                                                    .isPresent()
+                                                                            ? Dialog.fight_navalLoss
+                                                                            : hasSpecialRole(
+                                                                                    order.getAttacker())
+                                                                                    || hasSpecialRole(
+                                                                                            order.getDefender())
+                                                                                                    ? Dialog.fight_roleLoss
+                                                                                                    : order.getAttacker() instanceof org.microcol.model.unit.UnitArtillery
+                                                                                                            || order.getDefender() instanceof org.microcol.model.unit.UnitArtillery
+                                                                                                                    ? Dialog.fight_artilleryLoss
+                                                                                                                    : Dialog.fight_equipmentLoss)));
         });
         final Unit attacker = order.getAttacker();
         final Unit defender = order.getDefender();
@@ -286,6 +293,18 @@ public final class DialogFight extends AbstractMessageWindow {
     }
 
     private String unitName(final Unit unit) {
+        if (unit instanceof UnitNativeBrave) {
+            switch (((UnitNativeBrave) unit).getRole()) {
+            case ARMED_BRAVE:
+                return i18n.get(Dialog.fight_nativeArmedBrave);
+            case MOUNTED_BRAVE:
+                return i18n.get(Dialog.fight_nativeMountedBrave);
+            case MOUNTED_WARRIOR:
+                return i18n.get(Dialog.fight_nativeMountedWarrior);
+            default:
+                break;
+            }
+        }
         final String name = localizationHelper.getUnitName(unit.getType());
         if (hasSpecialRole(unit)) {
             return i18n.get(((org.microcol.model.unit.UnitFreeColonist) unit)
@@ -305,15 +324,43 @@ public final class DialogFight extends AbstractMessageWindow {
                         : name;
     }
 
-    private String describe(final CombatStrength strength) {
+    private static boolean isNativeBattle(final AttackOrder order) {
+        return order.getAttacker() instanceof UnitNativeBrave
+                || order.getDefender() instanceof UnitNativeBrave;
+    }
+
+    /**
+     * Explains what a battle with a native brave can win and lose, and its
+     * effect on the native nation when a European attacks.
+     */
+    private String nativeNote(final AttackOrder order) {
+        final String loss = i18n.get(Dialog.fight_nativeLoss);
+        return order.getDefender() instanceof UnitNativeBrave
+                ? loss + "\n" + i18n.get(Dialog.fight_nativeAnger)
+                : loss;
+    }
+
+    /**
+     * Strength lines of one participant. The model gives the numbers; only the
+     * names depend on who gets them: a brave's terrain line is the native
+     * ambush, and a positive artillery line is the native-raid defense of a
+     * fortified colony, not the outdoor penalty.
+     */
+    private String describe(final CombatStrength strength, final Unit unit) {
         final StringBuilder out = new StringBuilder(
                 i18n.get(Dialog.fight_base, number(strength.getBase())));
         appendBonus(out, Dialog.fight_attackBonus, strength.getAttackBonus());
-        appendBonus(out, Dialog.fight_terrainBonus, strength.getTerrainBonus());
+        appendBonus(out,
+                unit instanceof UnitNativeBrave ? Dialog.fight_ambushBonus
+                        : Dialog.fight_terrainBonus,
+                strength.getTerrainBonus());
         appendBonus(out, Dialog.fight_fortifyBonus,
                 strength.getFortificationBonus());
         appendBonus(out, Dialog.fight_colonyBonus, strength.getColonyBonus());
-        appendBonus(out, Dialog.fight_artilleryBonus,
+        appendBonus(out,
+                strength.getArtilleryBonus() > 0
+                        ? Dialog.fight_artilleryRaidBonus
+                        : Dialog.fight_artilleryBonus,
                 strength.getArtilleryBonus());
         appendBonus(out, Dialog.fight_drakeBonus, strength.getFounderBonus());
         return out.append("\n").append(

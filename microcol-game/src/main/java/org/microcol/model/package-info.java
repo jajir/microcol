@@ -94,7 +94,14 @@
  * prevents overlapping European founding and persists player-specific native
  * identity learned by actual sight; GUI reads only that remembered knowledge.
  * NativeRelations owns tribal anger per nation and local alarm per settlement
- * toward each European; Model runs its update once per completed European turn.
+ * toward each European, with the alarm before the last peaceful update as the
+ * observation for its change. Model runs that update once per completed
+ * European turn. NativeRelationView is the read-only presentation of a learned
+ * settlement: attitude, alarm change and a rival provoker from visible sources.
+ * NativeSettlement holds the one native course of a settlement (R-0148): its
+ * pupil, owner updates and offered skill. PlaceNativeCourse keeps the pupil off
+ * the map, so the colonist cannot move, work or fight meanwhile. Model starts,
+ * cancels and advances the course at the owner's update.
  *
  * NativeLandRights owns permanent European/tile payments and unpaid takings.
  * Model validates land purchases and founding together before mutation, and

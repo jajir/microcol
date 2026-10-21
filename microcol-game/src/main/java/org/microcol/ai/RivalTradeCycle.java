@@ -20,6 +20,7 @@ import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
+import org.microcol.model.RivalExpansionObjective;
 import org.microcol.model.RivalTradeObjective;
 import org.microcol.model.RivalTradeObjective.Stage;
 import org.microcol.model.TerrainType;
@@ -149,10 +150,17 @@ final class RivalTradeCycle {
         }
     }
 
-    /** Own ship in its colony port, idle, undamaged and with empty holds. */
+    /**
+     * Own ship in its colony port, idle, undamaged and with empty holds. A ship
+     * that carries an active second-colony founder belongs to that expansion.
+     */
     private boolean isEligibleCarrier(final Ship ship) {
         return ship.getOwner() == player() && ship.isAtPlaceLocation()
                 && ship.getAction().isNoAction() && !ship.isDamaged()
+                && player().getRivalExpansionObjective()
+                        .flatMap(RivalExpansionObjective::getCarrierId)
+                        .map(carrierId -> carrierId != ship.getId())
+                        .orElse(true)
                 && ship.getCargo().getSlots().stream()
                         .allMatch(CargoSlot::isEmpty);
     }

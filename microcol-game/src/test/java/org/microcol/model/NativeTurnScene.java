@@ -7,8 +7,10 @@ import java.util.Map;
 
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.unit.UnitNativeBrave;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.NativeSettlementPo;
+import org.microcol.model.store.NativeTribalAngerPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.UnitActionNoActionPo;
@@ -37,28 +39,31 @@ final class NativeTurnScene {
     private final List<NativeSettlementPo> settlements = new ArrayList<>();
     private int nextUnitId = 5000;
 
-    private NativeTurnScene() {
+    private NativeTurnScene(final boolean island) {
         po = new GameModelPoDao().loadFromClassPath("/maps/free-play.microcol")
                 .getModel();
         po.setDifficulty(Difficulty.CONQUISTADOR);
-        for (final var colony : po.getColonies()) {
-            Preconditions.checkState(
-                    colony.getLocation().getDistanceChebyshev(ORIGIN) > 8,
-                    "A saved colony would disturb the island");
-        }
-        for (final UnitPo unit : po.getUnits()) {
-            Preconditions.checkState(
-                    unit.getPlaceMap() == null || unit.getPlaceMap()
-                            .getLocation().getDistanceChebyshev(ORIGIN) > 8,
-                    "A saved unit would disturb the island");
-        }
-        final Map<Location, TerrainType> terrain = po.getMap().getTerrainMap();
-        for (int dx = -4; dx <= 4; dx++) {
-            for (int dy = -4; dy <= 4; dy++) {
-                terrain.put(at(dx, dy), TerrainType.GRASSLAND);
+        if (island) {
+            for (final var colony : po.getColonies()) {
+                Preconditions.checkState(
+                        colony.getLocation().getDistanceChebyshev(ORIGIN) > 8,
+                        "A saved colony would disturb the island");
             }
+            for (final UnitPo unit : po.getUnits()) {
+                Preconditions.checkState(
+                        unit.getPlaceMap() == null || unit.getPlaceMap()
+                                .getLocation().getDistanceChebyshev(ORIGIN) > 8,
+                        "A saved unit would disturb the island");
+            }
+            final Map<Location, TerrainType> terrain = po.getMap()
+                    .getTerrainMap();
+            for (int dx = -4; dx <= 4; dx++) {
+                for (int dy = -4; dy <= 4; dy++) {
+                    terrain.put(at(dx, dy), TerrainType.GRASSLAND);
+                }
+            }
+            po.getMap().setTerrainType(terrain);
         }
-        po.getMap().setTerrainType(terrain);
         po.setNativeSettlements(settlements);
         po.setNativeSettlementKnowledge(new ArrayList<>());
         po.setNativeTribalAnger(NativeRelations.freshTribalAnger());
@@ -68,7 +73,15 @@ final class NativeTurnScene {
 
     /** Free-play world with the island, no natives and the game not started. */
     static NativeTurnScene island() {
-        return new NativeTurnScene();
+        return new NativeTurnScene(true);
+    }
+
+    /**
+     * Free-play world exactly as saved, with the native bookkeeping but no
+     * island, for tests that need its saved colony.
+     */
+    static NativeTurnScene freePlay() {
+        return new NativeTurnScene(false);
     }
 
     /** Turn an island square into ocean, for placement-rejection cases. */
@@ -88,8 +101,24 @@ final class NativeTurnScene {
         settlement.setSettlementClass(nation.getSettlementClass());
         settlement.setCapital(capital);
         settlement.setTreasury(capital ? 2000 : 1000);
+        settlement.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        settlement.setOfferedGoods(List.of());
+        settlement.setWantedGoods(List.of());
+        settlement.setTrade(List.of());
         settlement.setLocation(at(dx, dy));
         settlements.add(settlement);
+        return this;
+    }
+
+    /** Saved tribal anger of a nation toward a European, as given. */
+    NativeTurnScene anger(final NativeNation nation,
+            final EuropeanNation european, final double value) {
+        for (final NativeTribalAngerPo entry : po.getNativeTribalAnger()) {
+            if (entry.getNation() == nation
+                    && entry.getEuropean() == european) {
+                entry.setValue(value);
+            }
+        }
         return this;
     }
 
@@ -146,6 +175,9 @@ final class NativeTurnScene {
         unit.setPlaceMap(place);
         unit.setNativeHomeSettlementId(homeId);
         unit.setNativeHomeless(homeless);
+        unit.setNativeRole(
+                type == UnitType.BRAVE ? UnitNativeBrave.Role.BRAVE.name()
+                        : null);
         if (type == UnitType.COLONIST) {
             unit.setWorkUpdates(0);
             unit.setMissionary(false);

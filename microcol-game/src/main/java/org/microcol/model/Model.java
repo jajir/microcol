@@ -10,16 +10,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ColonyFieldPo;
+import org.microcol.model.store.GeneratedWorldPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.NativeSettlementKnowledgePo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
+import org.microcol.model.turnevent.TurnEventNativeTeaching;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.Ship;
@@ -90,6 +93,9 @@ public class Model {
     private final EuropeanRelations europeanRelations;
     private final List<Colony> colonies;
     private final NativeSettlements nativeSettlements;
+
+    /** Land contacts of colonial Europeans with whole native tribes. */
+    private final NativeContacts nativeContacts;
     private final NativeRelations nativeRelations;
     private final NativeLandRights nativeLandRights;
     /** Player name to the settlement ids that player has learned by sight. */
@@ -106,6 +112,8 @@ public class Model {
     private final TradeRoutes tradeRoutes;
     private final TradeRouteRules tradeRouteRules;
     private final TradeRouteNavigator tradeRouteNavigator;
+    /** Settings of a generated New World, or null for a bundled world. */
+    private final GeneratedWorldPo generatedWorld;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -146,6 +154,11 @@ public class Model {
         Preconditions.checkArgument(modelPo.getDifficulty() != null,
                 "Unsupported save: missing or invalid difficulty");
         difficulty = modelPo.getDifficulty();
+        Preconditions.checkArgument(modelPo.getGeneratedWorld() == null
+                || (modelPo.getGeneratedWorld().isComplete() && modelPo
+                        .getGeneratedWorld().getSeed().equals(map.getSeed())),
+                "Unsupported save: incomplete or mismatched generated world settings");
+        generatedWorld = modelPo.getGeneratedWorld();
         Preconditions.checkArgument(
                 modelPo.getNextColonyId() != null
                         && modelPo.getNextColonyId() >= 0,
@@ -286,8 +299,11 @@ public class Model {
                 colonySites);
         learnedNativeSettlements = restoreLearnedNativeSettlements(
                 modelPo.getNativeSettlementKnowledge());
+        nativeContacts = NativeContacts.make(modelPo.getNativeContacts());
         nativeRelations = NativeRelations.make(nativeSettlements,
-                modelPo.getNativeTribalAnger(), modelPo.getNativeLocalAlarm());
+                modelPo.getNativeTribalAnger(), modelPo.getNativeLocalAlarm(),
+                modelPo.getNativeArmsSales(),
+                modelPo.getNativeRelationOutcomeIds());
         nativeLandRights = NativeLandRights.make(
                 location -> map.isValid(location)
                         && !map.getTerrainTypeAt(location).isSea(),
@@ -375,6 +391,8 @@ public class Model {
                 });
 
         model.validateSavedNativeBraveHomes();
+        model.validateSavedNativeTeaching();
+        model.validateSavedNativeMarkets();
         if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
             throw new MicroColException(String.format(
                     "In source data in %s units by in model is %s units.",
@@ -4010,6 +4028,7 @@ public class Model {
         final ModelPo out = new ModelPo();
         out.setCombatRandomState(combatRandomState);
         out.setDifficulty(difficulty);
+        out.setGeneratedWorld(generatedWorld);
         out.setNextColonyId(nextColonyId);
         tradeRoutes.save(out);
         map.save(out);
@@ -4022,12 +4041,16 @@ public class Model {
         // Zero means no Crown-war round has been processed yet.
         out.setCrownWarRound(lastCrownWarRound == 0 ? null : lastCrownWarRound);
         out.setColonies(getSaveColonies());
-        out.setNativeSettlements(nativeSettlements.toPo());
+        out.setNativeSettlements(
+                nativeSettlements.toPo(this::isOpenNativeExpedition));
         out.setNativeSettlementKnowledge(saveLearnedNativeSettlements());
         out.setNativeTribalAnger(nativeRelations.saveTribalAnger());
         out.setNativeLocalAlarm(nativeRelations.saveLocalAlarm());
+        out.setNativeArmsSales(nativeRelations.saveArmsSales());
+        out.setNativeRelationOutcomeIds(nativeRelations.saveAppliedOutcomes());
         out.setNativeLandRights(nativeLandRights.savePaid());
         out.setNativeLandTakings(nativeLandRights.saveTaken());
+        out.setNativeContacts(nativeContacts.save());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
         out.setStatistics(statistics.save());
@@ -4111,6 +4134,43 @@ public class Model {
     }
 
     /**
+     * Home of a native brave as its own nation knows it. Unlike
+     * {@link #getNativeBraveHomeKnownTo} no learned knowledge is needed,
+     * because the nation's own turn acts on its own settlements.
+     *
+     * @param brave required native brave
+     * @return the home settlement, empty for a homeless survivor
+     */
+    public Optional<NativeSettlement> getNativeBraveHome(
+            final UnitNativeBrave brave) {
+        Preconditions.checkNotNull(brave);
+        return brave.getHomeSettlementId()
+                .map(id -> nativeSettlements.getAll().stream()
+                        .filter(settlement -> settlement.getId() == id)
+                        .findAny().orElseThrow(() -> new IllegalStateException(
+                                "Native brave home is missing")));
+    }
+
+    /**
+     * Attitude of a native brave's nation toward a colonial European. A brave
+     * with a home reads that settlement's hostility; a homeless survivor reads
+     * the tribal anger of its nation alone. Pure read, so it advances nothing.
+     *
+     * @param brave  required native brave
+     * @param player required colonial player
+     * @return content, uneasy, angry or hostile
+     */
+    public NativeHostility getNativeBraveAttitude(final UnitNativeBrave brave,
+            final Player player) {
+        Preconditions.checkNotNull(brave);
+        final EuropeanNation european = nativeEuropean(player);
+        return getNativeBraveHome(brave)
+                .map(home -> nativeRelations.getHostility(home, european))
+                .orElseGet(() -> NativeHostility.of(nativeRelations
+                        .getTribalAnger(brave.getNation(), european)));
+    }
+
+    /**
      * Hostility of a native settlement toward a colonial European, read from
      * the larger of tribal anger and local alarm. Only the model computes it.
      *
@@ -4122,6 +4182,1335 @@ public class Model {
             final NativeSettlement settlement) {
         Preconditions.checkNotNull(settlement);
         return nativeRelations.getHostility(settlement, nativeEuropean(player));
+    }
+
+    /**
+     * Actions a visitor may choose at a native settlement, each with its limit
+     * (R-0157). Pure read: it changes no unit, relation, cargo, treasury, visit
+     * or random state, so cancelling the chooser has nothing to undo. An empty
+     * list means the visitor cannot enter the settlement now: it is not the
+     * current colonial player's registered unit on the map, not adjacent, or
+     * the player has not learned the settlement.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return one choice per action, or none when entry is not legal now
+     */
+    public List<NativeVisitChoice> getNativeVisitChoices(final Unit visitor,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isEntryAllowed(visitor, settlement)) {
+            return List.of();
+        }
+        return NativeVisitRules.choices(visitor,
+                getNativeHostility(visitor.getOwner(), settlement),
+                settlement.getTeachingPupilId().isPresent(),
+                isTradeOpen(visitor, settlement));
+    }
+
+    /**
+     * Gate shared by every native visit: the running game, the visitor's
+     * colonial owner on turn, the visitor itself registered on the map beside
+     * the settlement, and the settlement learned by that owner. Pure read.
+     *
+     * @param visitor    required unit
+     * @param settlement required native settlement
+     * @return whether the visitor may enter the settlement now
+     */
+    private boolean isEntryAllowed(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Player owner = visitor.getOwner();
+        return isGameRunning() && owner != null && getCurrentPlayer() == owner
+                && owner.isColonialNation() && getPlayers().contains(owner)
+                && tryGetUnitById(visitor.getId()).orElse(null) == visitor
+                && visitor.isAtPlaceLocation()
+                && visitor.getLocation().isNeighbor(settlement.getLocation())
+                && getNativeSettlementKnownTo(owner, settlement.getLocation())
+                        .filter(known -> known == settlement).isPresent();
+    }
+
+    /**
+     * Whether a land introduction has made a native tribe know a colonial
+     * European nation (R-0159). Pure read.
+     *
+     * @param european required colonial European nation
+     * @param nation   required native tribe
+     * @return whether the tribe is in contact with that nation
+     */
+    public boolean isNativeContacted(final EuropeanNation european,
+            final NativeNation nation) {
+        Preconditions.checkNotNull(european);
+        Preconditions.checkNotNull(nation);
+        return nativeContacts.isContacted(european, nation);
+    }
+
+    /**
+     * Market view of a visitor at a native settlement (R-0159). Pure read: it
+     * changes no unit, contact, expedition, stock, treasury or random state.
+     * The stock, wanted goods and treasury appear only when the visitor is
+     * admitted.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the view, empty when entry is not legal now
+     */
+    public Optional<NativeMarketView> getNativeMarketView(final Unit visitor,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isEntryAllowed(visitor, settlement)) {
+            return Optional.empty();
+        }
+        final EuropeanNation european = nativeEuropean(visitor.getOwner());
+        final boolean contacted = nativeContacts.isContacted(european,
+                settlement.getNation());
+        final NativeMarketView.Admission admission = admissionOf(visitor,
+                settlement, contacted);
+        final boolean open = settlement.findTrade(european)
+                .flatMap(state -> state.openExpedition(visitor)).isPresent();
+        return Optional.of(new NativeMarketView(contacted,
+                !contacted && !visitor.isShip(), admission, open,
+                admission == NativeMarketView.Admission.ADMITTED
+                        ? marketOf(visitor, settlement)
+                        : null,
+                purchaseOf(visitor, settlement)));
+    }
+
+    /**
+     * Introduce a colonial nation to a native tribe by land (R-0159). The unit
+     * stays where it is: no cargo, gold, movement or random state changes, and
+     * repeating an introduction reuses the same contact.
+     *
+     * @param introducer required land unit adjacent to the settlement
+     * @param settlement required native settlement
+     * @throws IllegalStateException when the visitor is not an eligible land
+     *                               unit
+     */
+    public void introduceNativeContact(final Unit introducer,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(introducer);
+        Preconditions.checkNotNull(settlement);
+        checkTurnPreparationComplete();
+        Preconditions.checkState(isEntryAllowed(introducer, settlement),
+                "Native introduction needs an adjacent unit of the current player");
+        Preconditions.checkState(!introducer.getType().isShip(),
+                "A ship cannot introduce its nation");
+        nativeContacts.introduce(nativeEuropean(introducer.getOwner()),
+                settlement.getNation());
+    }
+
+    /**
+     * Open or reuse the trading expedition of a carrier at a native settlement
+     * (R-0159). The admission must pass now. An expedition that is already open
+     * for this carrier at this square is reused, so reopening never starts a
+     * new one; any other start records the carrier, its square and its place.
+     *
+     * @param carrier    required wagon or ship adjacent to the settlement
+     * @param settlement required native settlement
+     * @throws IllegalStateException when the market is not open to the carrier
+     */
+    public void enterNativeMarket(final Unit carrier,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        checkTurnPreparationComplete();
+        Preconditions.checkState(isEntryAllowed(carrier, settlement),
+                "Native market needs an adjacent unit of the current player");
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        Preconditions.checkState(admissionOf(carrier, settlement,
+                nativeContacts.isContacted(european, settlement
+                        .getNation())) == NativeMarketView.Admission.ADMITTED,
+                "Native market is not open to this unit");
+        final NativeTradeState trade = settlement.tradeFor(european);
+        if (trade.openExpedition(carrier).isEmpty()) {
+            trade.startExpedition(carrier);
+        }
+    }
+
+    /**
+     * Whether a village refuses to take this good from the carrier now, because
+     * the expedition began right after the village received it from an earlier
+     * carrier (R-0159). Only the goods the village buys from the player are
+     * meant: the offered stock the player buys (R-0161) is not involved.
+     * Muskets are never refused. Pure read.
+     *
+     * @param carrier    required unit
+     * @param settlement required native settlement
+     * @param goods      required goods the carrier would deliver
+     * @return whether the repeated goods are refused
+     */
+    public boolean isRepeatedReceivedGoods(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(goods);
+        if (!isEntryAllowed(carrier, settlement)) {
+            return false;
+        }
+        return settlement.findTrade(nativeEuropean(carrier.getOwner()))
+                .flatMap(state -> state.openExpedition(carrier))
+                .map(expedition -> NativeMarketRules.repeatsPreviousGood(
+                        settlement.getSettlementClass(),
+                        expedition.getBlockedGoods().orElse(null), goods))
+                .orElse(false);
+    }
+
+    /**
+     * Record that the village received goods the carrier delivers, in its open
+     * expedition (R-0159). Shared with the transaction of R-0160, which moves
+     * the goods and gold itself; this changes no stock, gold or cargo.
+     *
+     * @param carrier    required unit with an open expedition and the goods
+     * @param settlement required native settlement
+     * @param goods      required goods delivered by the carrier
+     * @throws IllegalStateException when the delivery is not allowed now
+     */
+    void recordNativeGoodsReceived(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods) {
+        Preconditions.checkNotNull(goods);
+        checkTurnPreparationComplete();
+        Preconditions.checkState(isEntryAllowed(carrier, settlement),
+                "Native delivery needs an adjacent unit of the current player");
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        Preconditions.checkState(admissionOf(carrier, settlement,
+                nativeContacts.isContacted(european, settlement
+                        .getNation())) == NativeMarketView.Admission.ADMITTED,
+                "Native market is not open to this unit");
+        final NativeTradeState trade = settlement.findTrade(european)
+                .filter(state -> state.openExpedition(carrier).isPresent())
+                .orElseThrow(() -> new IllegalStateException(
+                        "Native delivery needs an open expedition"));
+        Preconditions.checkState(carries(carrier, goods),
+                "The carrier does not hold these goods");
+        Preconditions.checkState(
+                !isRepeatedReceivedGoods(carrier, settlement, goods),
+                "The village refuses the same goods on consecutive expeditions");
+        trade.recordReceived(goods);
+    }
+
+    /**
+     * Terms of one sale or gift of carried goods to a native settlement
+     * (R-0160). Pure read: no goods, gold, treasury, expedition, outcome or
+     * random state changes. The market must be open to the carrier now, the
+     * goods must be tradable, carried and not refused by the village, and the
+     * quantity must not exceed {@link #getNativeMaxSaleQuantity}.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param goods      required tradable goods
+     * @param quantity   required pieces
+     * @param gift       whether the goods are given without gold
+     * @return the terms, empty when the sale or gift is not legal now
+     */
+    public Optional<NativeSaleQuote> getNativeSaleQuote(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods,
+            final int quantity, final boolean gift) {
+        Preconditions.checkNotNull(goods);
+        if (quantity <= 0 || quantity > getNativeMaxSaleQuantity(carrier,
+                settlement, goods, gift)) {
+            return Optional.empty();
+        }
+        return Optional
+                .of(saleQuote(carrier, settlement, goods, quantity, gift));
+    }
+
+    /**
+     * Most pieces of carried goods that may be sold or given now (R-0160): the
+     * carried amount for a gift, and for a sale also the amount the
+     * settlement's treasury pays at the current terms. Zero when the market is
+     * not open to the carrier, the village refuses these goods, or the goods
+     * are not tradable. Pure read.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param goods      required goods
+     * @param gift       whether the goods are given without gold
+     * @return the largest legal quantity, zero when none is legal
+     */
+    public int getNativeMaxSaleQuantity(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods,
+            final boolean gift) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(goods);
+        final Optional<NativeExpedition> expedition = openSale(carrier,
+                settlement);
+        if (expedition.isEmpty() || !goods.isCanBeBought()
+                || isRepeatedReceivedGoods(carrier, settlement, goods)) {
+            return 0;
+        }
+        // A trade whose transaction revision is exhausted offers nothing: no
+        // further expedition, haggle or sale could be counted.
+        if (settlement.findTrade(nativeEuropean(carrier.getOwner()))
+                .filter(NativeTradeState::canAdvanceRevision).isEmpty()) {
+            return 0;
+        }
+        // The village can count only so many more pieces of these goods: the
+        // limit applies to a gift and a sale alike, before any change.
+        final int limit = Math.min(cargoAmount(carrier, goods),
+                settlement.getReceiveRoom(goods));
+        if (gift) {
+            return limit;
+        }
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        return NativeMarketRules.maxSaleQuantity(limit,
+                settlement.getTreasury(), europeBid(goods, european),
+                settlement.getWantedGoods().contains(goods),
+                carrier.getType().isShip(), haggleOf(expedition.get(), goods,
+                        false) == NativeSaleQuote.Haggle.ACCEPTED);
+    }
+
+    /**
+     * The one haggle of a carrier's expedition (R-0160): one request for +10%
+     * receipts on the complete quote, succeeding with 50% at content and 25% at
+     * uneasy natives. The shown offer must still be the live offer, with its
+     * haggle still open, and the raised price must still be payable; only then
+     * is the saved random state drawn. Every refusal happens before that draw,
+     * so it changes neither the state nor the random state. The result is saved
+     * with the expedition, so reopening, saving and continuing never rerolls. A
+     * failed haggle keeps the original offer; the haggle is spent either way.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param shown      required sale offer the player saw, with its haggle
+     *                   open
+     * @return whether the haggle succeeded
+     * @throws NativeTermsChangedException when the shown offer no longer holds
+     * @throws IllegalStateException       when the raised price cannot be paid
+     */
+    public boolean haggleNativeSale(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote shown) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        Preconditions.checkArgument(!shown.isGift(),
+                "A gift cannot be haggled");
+        final NativeSaleQuote live = getNativeSaleQuote(carrier, settlement,
+                shown.getGoods(), shown.getQuantity(), false)
+                .filter(current -> current.equals(shown))
+                .orElseThrow(() -> new NativeTermsChangedException(
+                        "Native terms changed or the market closed; nothing was haggled"));
+        Preconditions.checkState(
+                live.getHaggle() == NativeSaleQuote.Haggle.OFFERED,
+                "Native haggle was already used in this expedition");
+        Preconditions
+                .checkState(
+                        NativeMarketRules.saleTotal(live.getQuantity(),
+                                live.getEuropeBid(), live
+                                        .isWanted(),
+                                live.isShip(), true) <= live.getTreasury(),
+                        "The natives cannot pay the haggled price; nothing was drawn");
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        final NativeExpedition expedition = openSale(carrier, settlement)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Native trade is not open to this unit"));
+        final NativeTradeState trade = settlement.findTrade(european)
+                .orElseThrow();
+        // Checked before the draw, so a revision overflow never consumes the
+        // random state.
+        Preconditions.checkState(trade.canAdvanceRevision(),
+                "The native trade revision is exhausted; nothing was drawn");
+        final boolean accepted = NativeMarketRules
+                .haggleSucceeds(live.getHostility(), nextCombatRandom());
+        expedition.recordHaggle(shown.getGoods(), accepted,
+                shown.getQuantity());
+        trade.advanceRevision();
+        return accepted;
+    }
+
+    /**
+     * Sell carried goods to a native settlement at the terms the player was
+     * shown (R-0160). Every check runs before the first change: the quote must
+     * still match, the village must accept the goods, the outcome IDs must be
+     * usable and the gold must fit. Then the goods leave the carrier, the gold
+     * moves once, the treasury pays, the village records the goods and the
+     * trade and arms outcomes apply.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param offered    required sale quote the player confirmed
+     * @throws NativeTermsChangedException when the terms changed; nothing
+     *                                     traded
+     * @throws IllegalStateException       when the sale is not legal now
+     */
+    public void sellToNative(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote offered) {
+        Preconditions.checkNotNull(offered);
+        Preconditions.checkArgument(!offered.isGift(),
+                "A gift pays no gold; use giftToNative");
+        commitNativeTrade(carrier, settlement, offered);
+    }
+
+    /**
+     * Give carried goods to a native settlement without gold (R-0160). The same
+     * preflight as a sale applies, but the treasury is not checked, and the
+     * outcome is the proportional gift reduction. Muskets and horses given away
+     * are not sold, so they add no arms tribal anger.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param offered    required gift terms the player confirmed
+     * @throws NativeTermsChangedException when the terms changed; nothing given
+     * @throws IllegalStateException       when the gift is not legal now
+     */
+    public void giftToNative(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote offered) {
+        Preconditions.checkNotNull(offered);
+        Preconditions.checkArgument(offered.isGift(),
+                "A sale pays gold; use sellToNative");
+        commitNativeTrade(carrier, settlement, offered);
+    }
+
+    private void commitNativeTrade(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote offered) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        checkTurnPreparationComplete();
+        final GoodsType goods = offered.getGoods();
+        final NativeSaleQuote live = getNativeSaleQuote(carrier, settlement,
+                goods, offered.getQuantity(), offered.isGift())
+                .filter(current -> current.equals(offered))
+                .orElseThrow(() -> new NativeTermsChangedException(
+                        "Native terms changed or the market closed; nothing was traded"));
+        final Player owner = carrier.getOwner();
+        final EuropeanNation european = nativeEuropean(owner);
+        // Taken before any change: a sale may empty the carrier, and the open
+        // expedition then needs no goods to open the second stage (R-0161).
+        final NativeExpedition expedition = openSale(carrier, settlement)
+                .orElseThrow();
+        // Both IDs are above every applied one; the sale's arms outcome is
+        // applied after the trade, so its ID is the next one.
+        final long tradeId = nativeRelations.nextOutcomeId();
+        final NativeRelationOutcome trade = offered.isGift()
+                ? NativeRelationOutcome.gift(tradeId, settlement,
+                        offered.getQuantity())
+                : NativeRelationOutcome.trade(tradeId, settlement);
+        final boolean arms = !offered.isGift()
+                && (goods.equals(GoodsType.MUSKET)
+                        || goods.equals(GoodsType.HORSE));
+        final NativeRelationOutcome armsSale = arms
+                ? NativeRelationOutcome.armsSale(tradeId + 1,
+                        settlement.getNation(), offered.getQuantity())
+                : null;
+        // Every check runs before the first change: the village's room, the
+        // relation IDs, the gold and the village's refusal of repeated goods.
+        Preconditions.checkState(
+                settlement.getReceiveRoom(goods) >= offered.getQuantity(),
+                "The village cannot count these goods; nothing was traded");
+        Preconditions.checkState(
+                settlement.findTrade(european).orElseThrow()
+                        .canAdvanceRevision(),
+                "The native trade revision is exhausted; nothing was traded");
+        Preconditions.checkState(
+                nativeRelations.canApply(european, trade) && (armsSale == null
+                        || nativeRelations.canApply(european, armsSale)),
+                "Native relation outcome cannot be applied; nothing was traded");
+        Preconditions.checkState(addsFit(owner.getGold(), live.getGold()),
+                "Gold would exceed its limit; nothing was traded");
+        Preconditions.checkState(
+                !isRepeatedReceivedGoods(carrier, settlement, goods),
+                "The village refuses the same goods on consecutive expeditions");
+        // From here on each change is infallible: the checks above and the
+        // village's own delivery check have passed.
+        recordNativeGoodsReceived(carrier, settlement, goods);
+        final NativeTradeState tradeState = settlement.findTrade(european)
+                .orElseThrow();
+        tradeState.advanceRevision();
+        removeCargo(carrier, goods, offered.getQuantity());
+        owner.setGold(owner.getGold() + live.getGold());
+        settlement.setTreasury(settlement.getTreasury() - live.getGold());
+        settlement.addReceived(goods, offered.getQuantity());
+        applyNativeRelationOutcome(owner, trade);
+        if (armsSale != null) {
+            applyNativeRelationOutcome(owner, armsSale);
+        }
+        // The confirmed sale or gift opens the second stage of this expedition;
+        // the request result is only drawn when the player asks for it.
+        expedition.openPurchase(tradeState.getRevision());
+    }
+
+    /**
+     * Terms of the second stage (R-0161): one offered good bought from the
+     * settlement after a confirmed sale or gift of this expedition. Pure read:
+     * no goods, gold, stock, treasury, expedition or random state changes. The
+     * stage must still be pending, the market must admit the carrier apart from
+     * its goods, and the quantity must not exceed
+     * {@link #getNativeMaxPurchaseQuantity}.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param goods      required goods the settlement offers
+     * @param quantity   required pieces
+     * @return the terms, empty when the purchase is not legal now
+     */
+    public Optional<NativePurchaseQuote> getNativePurchaseQuote(
+            final Unit carrier, final NativeSettlement settlement,
+            final GoodsType goods, final int quantity) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(goods);
+        if (quantity <= 0 || quantity > getNativeMaxPurchaseQuantity(carrier,
+                settlement, goods)) {
+            return Optional.empty();
+        }
+        return Optional.of(purchaseQuote(carrier, settlement, goods, quantity));
+    }
+
+    /**
+     * Most pieces of an offered good that the second stage may buy now
+     * (R-0161): the stock, the room the carrier has for the goods, and the gold
+     * that the buyer and the native treasury can take at the current request
+     * result. Zero when the stage is not open, the goods are not offered, or
+     * the transaction revision is exhausted. Pure read.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param goods      required goods
+     * @return the largest legal quantity, zero when none is legal
+     */
+    public int getNativeMaxPurchaseQuantity(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(goods);
+        final Optional<NativeExpedition> expedition = openPurchase(carrier,
+                settlement);
+        if (expedition.isEmpty()) {
+            return 0;
+        }
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        final int limit = Math.min(settlement.getStock(goods),
+                cargoRoom(carrier, goods));
+        // The treasury receives the gold, so its integer room limits the sale
+        // as the buyer's own gold does.
+        final int payable = Math.min(carrier.getOwner().getGold(),
+                Integer.MAX_VALUE - settlement.getTreasury());
+        return NativeMarketRules.maxPurchaseQuantity(limit, payable,
+                askPrice(goods, european), expedition.get()
+                        .getPurchaseHaggle() == NativeSaleQuote.Haggle.ACCEPTED);
+    }
+
+    /**
+     * The one request of the second stage (R-0161): once per purchase stage it
+     * asks for 10% off the complete purchase quote, succeeding with 50% at
+     * content and 25% at uneasy natives. The shown quote must still be the live
+     * one, with its request still open. Every refusal happens before the draw,
+     * so it changes neither the state nor the random state. The result is kept
+     * with the stage, so reopening, changing the quantity or goods, and
+     * Save/Continue never reroll; a failed request keeps the original price.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param shown      required purchase quote the player saw, with its
+     *                   request open
+     * @return whether the request succeeded
+     * @throws NativeTermsChangedException when the shown quote no longer holds
+     * @throws IllegalStateException       when the request was already used
+     */
+    public boolean haggleNativePurchase(final Unit carrier,
+            final NativeSettlement settlement,
+            final NativePurchaseQuote shown) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final NativePurchaseQuote live = getNativePurchaseQuote(carrier,
+                settlement, shown.getGoods(), shown.getQuantity())
+                .filter(current -> current.equals(shown))
+                .orElseThrow(() -> new NativeTermsChangedException(
+                        "Native terms changed or the purchase closed; nothing was haggled"));
+        Preconditions.checkState(
+                live.getHaggle() == NativeSaleQuote.Haggle.OFFERED,
+                "Native purchase request was already used in this stage");
+        final NativeExpedition expedition = openPurchase(carrier, settlement)
+                .orElseThrow();
+        // The revision was checked by openPurchase, before the draw.
+        final NativeTradeState trade = settlement
+                .findTrade(nativeEuropean(carrier.getOwner())).orElseThrow();
+        final boolean accepted = NativeMarketRules
+                .haggleSucceeds(live.getHostility(), nextCombatRandom());
+        expedition.recordPurchaseHaggle(accepted, shown.getGoods(),
+                shown.getQuantity());
+        trade.advanceRevision();
+        return accepted;
+    }
+
+    /**
+     * Buy offered goods from the settlement at the terms the player confirmed
+     * (R-0161). Every check runs before the first change: the quote must still
+     * match, the carrier must have room for the goods, the buyer must pay the
+     * gold and the native treasury must hold it. Then the stock leaves the
+     * settlement, the cargo takes the goods through its own placement, the gold
+     * moves once, and the stage closes. A refused purchase changes nothing.
+     *
+     * @param carrier    required wagon or ship beside the settlement
+     * @param settlement required native settlement
+     * @param offered    required purchase quote the player confirmed
+     * @throws NativeTermsChangedException when the terms changed; nothing
+     *                                     bought
+     * @throws IllegalStateException       when the purchase is not legal now
+     */
+    public void buyFromNative(final Unit carrier,
+            final NativeSettlement settlement,
+            final NativePurchaseQuote offered) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(offered);
+        checkTurnPreparationComplete();
+        final GoodsType goods = offered.getGoods();
+        final NativePurchaseQuote live = getNativePurchaseQuote(carrier,
+                settlement, goods, offered.getQuantity())
+                .filter(current -> current.equals(offered))
+                .orElseThrow(() -> new NativeTermsChangedException(
+                        "Native terms changed or the purchase closed; nothing was bought"));
+        final Player owner = carrier.getOwner();
+        final NativeExpedition expedition = openPurchase(carrier, settlement)
+                .orElseThrow();
+        final NativeTradeState trade = settlement
+                .findTrade(nativeEuropean(owner)).orElseThrow();
+        // Every check runs before the first change.
+        Preconditions.checkState(
+                cargoRoom(carrier, goods) >= offered.getQuantity(),
+                "The carrier cannot hold these goods; nothing was bought");
+        Preconditions.checkState(
+                addsFit(settlement.getTreasury(), live.getGold()),
+                "Native treasury would exceed its limit; nothing was bought");
+        Preconditions.checkState(owner.getGold() >= live.getGold(),
+                "Not enough gold for these goods; nothing was bought");
+        // From here on each change is infallible: the checks above have passed,
+        // and the cargo placement refuses nothing that its room allows.
+        owner.setGold(owner.getGold() - live.getGold());
+        settlement.setTreasury(settlement.getTreasury() + live.getGold());
+        settlement.setStock(goods,
+                settlement.getStock(goods) - offered.getQuantity());
+        storeGoods(carrier, goods, offered.getQuantity());
+        expedition.closePurchase();
+        trade.advanceRevision();
+    }
+
+    /**
+     * Decline the pending second stage (R-0161). Nothing is bought, and the
+     * stage does not reopen without a new confirmed sale or gift. Closing the
+     * chooser instead keeps the stage pending, and it is never rerolled.
+     *
+     * @param carrier    required unit beside the settlement
+     * @param settlement required native settlement
+     * @throws IllegalStateException when no purchase is pending for this unit
+     */
+    public void rejectNativePurchase(final Unit carrier,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(carrier);
+        Preconditions.checkNotNull(settlement);
+        checkTurnPreparationComplete();
+        pendingPurchase(carrier, settlement)
+                .orElseThrow(() -> new IllegalStateException(
+                        "No native purchase is pending for this unit"))
+                .closePurchase();
+    }
+
+    /**
+     * @return the pending second stage of the carrier's open expedition, after
+     *         the shared entry gate; the goods and the relation gates do not
+     *         apply, so a pending stage can always be declined. Pure read.
+     */
+    private Optional<NativeExpedition> pendingPurchase(final Unit carrier,
+            final NativeSettlement settlement) {
+        if (!isEntryAllowed(carrier, settlement)) {
+            return Optional.empty();
+        }
+        return settlement.findTrade(nativeEuropean(carrier.getOwner()))
+                .flatMap(state -> state.openExpedition(carrier))
+                .filter(expedition -> expedition.getPurchaseRevision()
+                        .isPresent());
+    }
+
+    /**
+     * @return the pending second stage when its purchase may be confirmed now:
+     *         the admission gates other than the goods, an undamaged carrier
+     *         and a trade whose revision can still count one more transaction
+     */
+    private Optional<NativeExpedition> openPurchase(final Unit carrier,
+            final NativeSettlement settlement) {
+        final Optional<NativeExpedition> pending = pendingPurchase(carrier,
+                settlement);
+        if (pending.isEmpty()) {
+            return Optional.empty();
+        }
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        if (admissionOf(carrier, settlement,
+                nativeContacts.isContacted(european, settlement.getNation()),
+                false) != NativeMarketView.Admission.ADMITTED) {
+            return Optional.empty();
+        }
+        if (carrier instanceof Ship && ((Ship) carrier).isDamaged()) {
+            return Optional.empty();
+        }
+        if (settlement.findTrade(european)
+                .filter(NativeTradeState::canAdvanceRevision).isEmpty()) {
+            return Optional.empty();
+        }
+        return pending;
+    }
+
+    /**
+     * @return whether the market is open to the visitor now: admitted with its
+     *         goods, or a purchase stage can be confirmed (R-0161). Pure read.
+     */
+    private boolean isTradeOpen(final Unit visitor,
+            final NativeSettlement settlement) {
+        final boolean contacted = nativeContacts.isContacted(
+                nativeEuropean(visitor.getOwner()), settlement.getNation());
+        return admissionOf(visitor, settlement,
+                contacted) == NativeMarketView.Admission.ADMITTED
+                || openPurchase(visitor, settlement).isPresent();
+    }
+
+    /**
+     * @return the purchase view of a pending stage, or null when none is
+     *         pending
+     */
+    private NativeMarketView.Purchase purchaseOf(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Optional<NativeExpedition> pending = pendingPurchase(visitor,
+                settlement);
+        if (pending.isEmpty()) {
+            return null;
+        }
+        final EuropeanNation european = nativeEuropean(visitor.getOwner());
+        final List<NativeMarketView.PurchaseOffer> offers = new ArrayList<>();
+        for (final GoodsType goods : settlement.getOfferedGoods()) {
+            offers.add(new NativeMarketView.PurchaseOffer(goods,
+                    settlement.getStock(goods), askPrice(goods, european)));
+        }
+        return new NativeMarketView.Purchase(offers,
+                pending.get().getPurchaseHaggle(),
+                openPurchase(visitor, settlement).isPresent(),
+                pending.get().getPurchaseGoods().orElse(null),
+                pending.get().getPurchaseQuantity().orElse(0));
+    }
+
+    private NativePurchaseQuote purchaseQuote(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods,
+            final int quantity) {
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        final NativeExpedition expedition = openPurchase(carrier, settlement)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Native purchase is not open to this unit"));
+        final NativeSaleQuote.Haggle haggle = expedition.getPurchaseHaggle();
+        final int ask = askPrice(goods, european);
+        return new NativePurchaseQuote(carrier.getId(),
+                settlement.getLocation(), goods, quantity,
+                NativeMarketRules.purchaseTotal(quantity, ask,
+                        haggle == NativeSaleQuote.Haggle.ACCEPTED),
+                haggle, settlement.getStock(goods), settlement.getTreasury(),
+                carrier.getOwner().getGold(), cargoRoom(carrier, goods), ask,
+                nativeRelations.getHostility(settlement, european),
+                settlement.findTrade(european).orElseThrow().getRevision(),
+                expedition.getPurchaseRevision().orElseThrow());
+    }
+
+    /**
+     * @return Europe ask of one piece of the goods, the price the natives
+     *         charge for a purchase; no tax applies
+     */
+    private int askPrice(final GoodsType goods, final EuropeanNation european) {
+        return getEurope().getGoodsTradeForType(goods, european).getBuyPrice();
+    }
+
+    /**
+     * @return pieces of one goods type that the carrier's slots can still take:
+     *         the room of empty slots and of slots already holding that type;
+     *         zero for every other slot and for a passenger's slot. Pure read.
+     */
+    private static int cargoRoom(final Unit carrier, final GoodsType goods) {
+        if (!(carrier instanceof UnitWithCargo)) {
+            return 0;
+        }
+        int room = 0;
+        for (final CargoSlot slot : ((UnitWithCargo) carrier).getCargo()
+                .getSlots()) {
+            if (slot.getGoods().map(held -> held.getType().equals(goods))
+                    .orElse(slot.isEmpty())) {
+                room += slot.getAvailableCapacity();
+            }
+        }
+        return room;
+    }
+
+    /**
+     * Put goods into the carrier through the cargo's own placement: the slots
+     * already holding this type first, then the empty ones, in slot order. The
+     * caller has checked the room.
+     */
+    private static void storeGoods(final Unit carrier, final GoodsType goods,
+            final int amount) {
+        int left = amount;
+        final List<CargoSlot> slots = ((UnitWithCargo) carrier).getCargo()
+                .getSlots();
+        for (final CargoSlot slot : slots) {
+            if (slot.getGoods().map(held -> held.getType().equals(goods))
+                    .orElse(false)) {
+                left = addToSlot(slot, goods, left);
+            }
+        }
+        for (final CargoSlot slot : slots) {
+            if (slot.isEmpty()) {
+                left = addToSlot(slot, goods, left);
+            }
+        }
+    }
+
+    /**
+     * @return pieces still to store after this slot took what it can
+     */
+    private static int addToSlot(final CargoSlot slot, final GoodsType goods,
+            final int left) {
+        final int taken = Math.min(left, slot.getAvailableCapacity());
+        if (taken > 0) {
+            slot.addGoods(Goods.of(goods, taken));
+        }
+        return left - taken;
+    }
+
+    /**
+     * @return the open expedition when the market is open to this carrier for
+     *         sale or gift now: a legal visit, admission, an undamaged carrier
+     *         and an expedition open at its square; empty otherwise
+     */
+    private Optional<NativeExpedition> openSale(final Unit carrier,
+            final NativeSettlement settlement) {
+        if (!isEntryAllowed(carrier, settlement)) {
+            return Optional.empty();
+        }
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        if (admissionOf(carrier, settlement,
+                nativeContacts.isContacted(european, settlement
+                        .getNation())) != NativeMarketView.Admission.ADMITTED) {
+            return Optional.empty();
+        }
+        if (carrier instanceof Ship && ((Ship) carrier).isDamaged()) {
+            return Optional.empty();
+        }
+        return settlement.findTrade(european)
+                .flatMap(state -> state.openExpedition(carrier));
+    }
+
+    private NativeSaleQuote saleQuote(final Unit carrier,
+            final NativeSettlement settlement, final GoodsType goods,
+            final int quantity, final boolean gift) {
+        final EuropeanNation european = nativeEuropean(carrier.getOwner());
+        final NativeExpedition expedition = openSale(carrier, settlement)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Native trade is not open to this unit"));
+        final NativeSaleQuote.Haggle haggle = haggleOf(expedition, goods, gift);
+        final int bid = europeBid(goods, european);
+        final boolean wanted = settlement.getWantedGoods().contains(goods);
+        final boolean ship = carrier.getType().isShip();
+        final int gold = gift ? 0
+                : NativeMarketRules.saleTotal(quantity, bid, wanted, ship,
+                        haggle == NativeSaleQuote.Haggle.ACCEPTED);
+        final NativeTradeState trade = settlement.findTrade(european)
+                .orElseThrow();
+        return new NativeSaleQuote(carrier.getId(), settlement.getLocation(),
+                goods, quantity, gift, gold, haggle,
+                cargoAmount(carrier, goods), settlement.getTreasury(), bid,
+                wanted, ship,
+                nativeRelations.getHostility(settlement, european),
+                settlement.getReceiveRoom(goods), trade.getRevision());
+    }
+
+    /** @return the haggle state of goods in this expedition */
+    private static NativeSaleQuote.Haggle haggleOf(
+            final NativeExpedition expedition, final GoodsType goods,
+            final boolean gift) {
+        if (gift) {
+            return NativeSaleQuote.Haggle.UNAVAILABLE;
+        }
+        final Optional<GoodsType> haggled = expedition.getHaggledGoods();
+        if (haggled.isEmpty()) {
+            return NativeSaleQuote.Haggle.OFFERED;
+        }
+        if (!haggled.get().equals(goods)) {
+            return NativeSaleQuote.Haggle.UNAVAILABLE;
+        }
+        return expedition.isHaggleAccepted() ? NativeSaleQuote.Haggle.ACCEPTED
+                : NativeSaleQuote.Haggle.REFUSED;
+    }
+
+    /**
+     * @return Europe bid of the goods in the nation's market, the price the
+     *         settlement's base is taken from
+     */
+    private int europeBid(final GoodsType goods,
+            final EuropeanNation european) {
+        return getEurope().getGoodsTradeForType(goods, european).getSellPrice();
+    }
+
+    /**
+     * @return pieces of one good that the unit holds in its goods slots
+     */
+    private static int cargoAmount(final Unit unit, final GoodsType goods) {
+        if (!(unit instanceof UnitWithCargo)) {
+            return 0;
+        }
+        return ((UnitWithCargo) unit).getCargo().getSlots().stream()
+                .flatMap(slot -> slot.getGoods()
+                        .filter(held -> held.getType().equals(goods)).stream())
+                .mapToInt(Goods::getAmount).sum();
+    }
+
+    /**
+     * Take exactly this many pieces from the goods slots of the carrier, in
+     * slot order. The caller has checked that they are carried.
+     */
+    private static void removeCargo(final Unit carrier, final GoodsType goods,
+            final int amount) {
+        int left = amount;
+        for (final CargoSlot slot : ((UnitWithCargo) carrier).getCargo()
+                .getSlots()) {
+            final Optional<Goods> held = slot.getGoods();
+            if (left > 0 && held.isPresent()
+                    && held.get().getType().equals(goods)) {
+                final int taken = Math.min(left, held.get().getAmount());
+                slot.removeCargo(Goods.of(goods, taken));
+                left -= taken;
+            }
+        }
+    }
+
+    private static boolean addsFit(final int gold, final int received) {
+        try {
+            Math.addExact(gold, received);
+            return true;
+        } catch (final ArithmeticException overflow) {
+            return false;
+        }
+    }
+
+    /**
+     * @param unit  required unit
+     * @param goods required goods type
+     * @return whether a goods slot of the unit holds that goods type
+     */
+    private static boolean carries(final Unit unit, final GoodsType goods) {
+        return unit instanceof UnitWithCargo
+                && ((UnitWithCargo) unit).getCargo().getSlots().stream()
+                        .anyMatch(slot -> slot.getGoods()
+                                .filter(held -> held.getType().equals(goods))
+                                .isPresent());
+    }
+
+    /**
+     * Whether an expedition is open for its carrier now. Pure read, used when
+     * the settlements are saved: a carrier that left and came back is not open.
+     */
+    private boolean isOpenNativeExpedition(final NativeExpedition expedition) {
+        return tryGetUnitById(expedition.getCarrierId())
+                .filter(expedition::isOpenFor).isPresent();
+    }
+
+    /**
+     * Admission gates in their fixed order: the carrier role, prior contact,
+     * loaded goods, a coastal ship, then the attitude. Pure read.
+     */
+    private NativeMarketView.Admission admissionOf(final Unit visitor,
+            final NativeSettlement settlement, final boolean contacted) {
+        return admissionOf(visitor, settlement, contacted, true);
+    }
+
+    /**
+     * Admission gates of {@link #admissionOf(Unit, NativeSettlement, boolean)}.
+     * A second stage (R-0161) passes with the goods gate skipped, since the
+     * carrier may have sold everything; every other gate still applies.
+     *
+     * @param goodsRequired whether the carrier must hold loaded goods now
+     */
+    private NativeMarketView.Admission admissionOf(final Unit visitor,
+            final NativeSettlement settlement, final boolean contacted,
+            final boolean goodsRequired) {
+        final boolean ship = visitor.getType().isShip();
+        if (!ship && visitor.getType() != UnitType.WAGON) {
+            return NativeMarketView.Admission.NOT_A_TRADER;
+        }
+        if (!contacted) {
+            return NativeMarketView.Admission.NO_CONTACT;
+        }
+        if (goodsRequired && !hasLoadedGoods(visitor)) {
+            return NativeMarketView.Admission.NO_GOODS;
+        }
+        if (ship && !isCoastalTrade(visitor, settlement)) {
+            return NativeMarketView.Admission.SHIP_NOT_COASTAL;
+        }
+        final NativeHostility hostility = getNativeHostility(visitor.getOwner(),
+                settlement);
+        if (hostility == NativeHostility.ANGRY
+                || hostility == NativeHostility.HOSTILE) {
+            return NativeMarketView.Admission.RELATION_TENSE;
+        }
+        if (ship && hostility == NativeHostility.UNEASY) {
+            return NativeMarketView.Admission.SHIP_RELATION_UNEASY;
+        }
+        return NativeMarketView.Admission.ADMITTED;
+    }
+
+    /**
+     * @param unit required unit
+     * @return whether it carries at least one goods slot; passengers alone do
+     *         not
+     */
+    private static boolean hasLoadedGoods(final Unit unit) {
+        return unit instanceof UnitWithCargo
+                && ((UnitWithCargo) unit).getCargo().getSlots().stream()
+                        .anyMatch(CargoSlot::isLoadedGood);
+    }
+
+    /**
+     * A ship trades only from water beside a settlement that has water beside
+     * it.
+     */
+    private boolean isCoastalTrade(final Unit ship,
+            final NativeSettlement settlement) {
+        return getMap().getTerrainTypeAt(ship.getLocation()).isSea()
+                && settlement.getLocation().getNeighbors().stream()
+                        .anyMatch(at -> getMap().isValid(at)
+                                && getMap().getTerrainTypeAt(at).isSea());
+    }
+
+    private NativeMarketView.Market marketOf(final Unit visitor,
+            final NativeSettlement settlement) {
+        final List<NativeMarketView.Offer> offers = new ArrayList<>();
+        for (final GoodsType goods : settlement.getOfferedGoods()) {
+            offers.add(new NativeMarketView.Offer(goods,
+                    settlement.getStock(goods)));
+        }
+        final List<GoodsType> tradable = new ArrayList<>(
+                GoodsType.BUYABLE_GOOD_TYPES);
+        tradable.sort(Comparator.comparing(GoodsType::name));
+        final List<NativeMarketView.Carried> carried = new ArrayList<>();
+        for (final GoodsType goods : tradable) {
+            final int amount = cargoAmount(visitor, goods);
+            if (amount > 0) {
+                carried.add(new NativeMarketView.Carried(goods, amount));
+            }
+        }
+        // The offer a drawn haggle was made for is kept with the open
+        // expedition, so a reopened chooser shows the same offer.
+        final Optional<NativeExpedition> open = settlement
+                .findTrade(nativeEuropean(visitor.getOwner()))
+                .flatMap(state -> state.openExpedition(visitor));
+        return new NativeMarketView.Market(offers, settlement.getWantedGoods(),
+                settlement.getTreasury(), carried,
+                open.flatMap(NativeExpedition::getHaggledGoods).orElse(null),
+                open.flatMap(NativeExpedition::getHaggledQuantity).orElse(0));
+    }
+
+    /**
+     * Restore the expeditions of a loaded save (R-0159). An expedition whose
+     * carrier is gone, or no longer stands on its anchor, has already ended and
+     * is dropped. A carrier of another nation is refused.
+     */
+    void validateSavedNativeMarkets() {
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            for (final Map.Entry<EuropeanNation, NativeTradeState> entry : settlement
+                    .getTrades().entrySet()) {
+                final NativeTradeState state = entry.getValue();
+                for (final NativeExpedition expedition : List
+                        .copyOf(state.getExpeditions().values())) {
+                    final Optional<Unit> carrier = tryGetUnitById(
+                            expedition.getCarrierId());
+                    if (carrier.isPresent()) {
+                        Preconditions.checkArgument(
+                                nativeNationOf(carrier.get().getOwner())
+                                        .equals(Optional.of(entry.getKey())),
+                                "Unsupported save: native expedition belongs to another nation");
+                        Preconditions.checkArgument(
+                                carrier.get().getType() == UnitType.WAGON
+                                        || carrier.get().getType().isShip(),
+                                "Unsupported save: native expedition carrier is not a wagon or ship");
+                    }
+                    if (carrier.isEmpty() || !carrier.get().isAtPlaceLocation()
+                            || !carrier.get().getLocation()
+                                    .equals(expedition.getAnchor())) {
+                        state.removeExpedition(expedition.getCarrierId());
+                    } else {
+                        expedition.bindPlace(carrier.get().getPlace());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * One owner update of a native nation: its settlements gain treasury and
+     * restock their goods once. Called from the nation's own preparation only.
+     *
+     * @param nation required native nation whose update has run
+     */
+    void updateNativeMarkets(final NativeNation nation) {
+        Preconditions.checkNotNull(nation);
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            if (settlement.getNation() == nation) {
+                settlement.applyOwnerUpdate();
+            }
+        }
+    }
+
+    /**
+     * Start learning the settlement's offered skill (R-0148). The visit chooser
+     * must offer teaching now, and the offer must still be the settlement's
+     * current skill. The colonist leaves the map for the native course at once,
+     * with its identity and equipment; the skill comes after the required owner
+     * updates. Every check runs before the first change.
+     *
+     * @param visitor      required colonist adjacent to the settlement
+     * @param settlement   required native settlement
+     * @param offeredSkill required skill the chooser displayed
+     * @throws IllegalStateException when teaching is not available now or the
+     *                               offer went stale
+     */
+    public void startNativeTeaching(final Unit visitor,
+            final NativeSettlement settlement, final UnitType offeredSkill) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(offeredSkill);
+        checkTurnPreparationComplete();
+        final boolean available = getNativeVisitChoices(visitor, settlement)
+                .stream()
+                .anyMatch(choice -> choice
+                        .getAction() == NativeVisitAction.TEACHING
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+        Preconditions.checkState(available,
+                "Native teaching is not available for this visitor");
+        Preconditions.checkState(settlement.getTeachableSkill() == offeredSkill,
+                "Native teaching offer changed");
+        Preconditions.checkState(
+                nativeTeachingRoleAllows(visitor)
+                        && visitor.isAtPlaceLocation(),
+                "Native teaching needs an unskilled colonist on the map");
+        ((AbstractUnit) visitor).beginNativeCourse(settlement.getId());
+        settlement.startTeaching(visitor.getId());
+    }
+
+    /**
+     * Cancel the native course of a colonist by its own choice (R-0148). The
+     * colonist returns to a legal adjacent square and keeps its identity, but
+     * no skill is granted and the progress is discarded.
+     *
+     * @param pupil required colonist learning at a native settlement
+     * @throws IllegalStateException when the course is not the current player's
+     *                               or no legal square is free to return to
+     */
+    public void cancelNativeTeaching(final Unit pupil) {
+        Preconditions.checkNotNull(pupil);
+        checkTurnPreparationComplete();
+        final NativeSettlement settlement = getNativeTeachingSettlement(pupil)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Unit is not in a native course"));
+        Preconditions.checkState(
+                isGameRunning() && getCurrentPlayer() == pupil.getOwner(),
+                "Native teaching is unavailable on this turn");
+        final Location square = findNativeReleaseSquare(pupil, settlement)
+                .orElseThrow(() -> new IllegalStateException(
+                        "No free square to leave the native settlement"));
+        releaseNativePupil(pupil, square);
+        settlement.clearTeaching();
+    }
+
+    /**
+     * @param settlement required native settlement
+     * @return the course the settlement holds, empty when its place is free
+     */
+    public Optional<NativeTeachingCourse> getNativeTeachingCourse(
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(settlement);
+        return settlement.getTeachingPupilId()
+                .map(pupilId -> new NativeTeachingCourse(pupilId,
+                        settlement.getTeachableSkill(),
+                        settlement.getTeachingUpdates(),
+                        settlement.getTeachingStage().orElseThrow()));
+    }
+
+    /**
+     * Whether a finished or canceled colonist, or a learner who gives up, has a
+     * legal square to leave the settlement now. Pure read; the chooser and the
+     * settlement details use it before they offer a leave.
+     *
+     * @param pupil required unit
+     * @return whether a square is free to leave to
+     */
+    public boolean hasNativeTeachingExit(final Unit pupil) {
+        Preconditions.checkNotNull(pupil);
+        return getNativeTeachingSettlement(pupil).flatMap(
+                settlement -> findNativeReleaseSquare(pupil, settlement))
+                .isPresent();
+    }
+
+    /**
+     * @param pupil required unit
+     * @return the settlement whose course holds this unit, if any
+     */
+    public Optional<NativeSettlement> getNativeTeachingSettlement(
+            final Unit pupil) {
+        Preconditions.checkNotNull(pupil);
+        if (!pupil.isAtPlaceNativeCourse()) {
+            return Optional.empty();
+        }
+        final int settlementId = ((PlaceNativeCourse) pupil.getPlace())
+                .getSettlementId();
+        return nativeSettlements.getAll().stream()
+                .filter(settlement -> settlement.getId() == settlementId)
+                .findAny();
+    }
+
+    /**
+     * @param visitor required unit
+     * @return whether the unit's type may learn a native skill: an unskilled
+     *         free colonist or an indentured servant; criminals and specialists
+     *         may not
+     */
+    private static boolean nativeTeachingRoleAllows(final Unit visitor) {
+        return visitor.getType() == UnitType.COLONIST
+                || visitor.getType() == UnitType.INDENTURED_SERVANT;
+    }
+
+    /**
+     * First legal square around the settlement, in the fixed direction order. A
+     * square is legal for the pupil's type when ordinary entry would be
+     * allowed, so it never takes a hostile or blocked square.
+     *
+     * @param pupil      required pupil
+     * @param settlement required native settlement
+     * @return the release square, empty when every neighbour is blocked
+     */
+    private Optional<Location> findNativeReleaseSquare(final Unit pupil,
+            final NativeSettlement settlement) {
+        for (final Direction direction : Direction.values()) {
+            final Location square = settlement.getLocation()
+                    .add(direction.getVector());
+            if (MovementPolicy.isPossibleToEnter(this, pupil.getType(), false,
+                    pupil.getOwner(), square, false)) {
+                return Optional.of(square);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Put the pupil back on the map at a square already validated by
+     * {@link #findNativeReleaseSquare}; the course stays with the caller.
+     */
+    private static void releaseNativePupil(final Unit pupil,
+            final Location square) {
+        pupil.placeToLocation(square);
+    }
+
+    /**
+     * Owner update of a colonial player (R-0148), called once per completed
+     * update after its relations. A tense settlement cancels the course with
+     * feedback; otherwise each update counts and the fourth grants the skill to
+     * the same colonist. A blocked release waits without losing the colonist.
+     *
+     * @param owner required colonial player whose update completed
+     */
+    void advanceNativeTeaching(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            final Optional<Integer> pupilId = settlement.getTeachingPupilId();
+            if (pupilId.isEmpty()) {
+                continue;
+            }
+            final Unit pupil = tryGetUnitById(pupilId.get()).orElseThrow(
+                    () -> new IllegalStateException("Native pupil is missing"));
+            if (pupil.getOwner() != owner) {
+                continue;
+            }
+            final NativeHostility hostility = nativeRelations
+                    .getHostility(settlement, nativeEuropean(owner));
+            final boolean tense = hostility == NativeHostility.ANGRY
+                    || hostility == NativeHostility.HOSTILE;
+            if (settlement.getTeachingStage()
+                    .orElseThrow() == NativeTeachingCourse.Stage.LEARNING) {
+                if (tense) {
+                    // Hostility ends the learning now: no further update
+                    // counts.
+                    settlement.cancelTeaching();
+                    addTurnEvent(TurnEventProvider.getNativeTeaching(owner,
+                            TurnEventNativeTeaching.Kind.CANCELLED_HOSTILITY,
+                            settlement.getTeachableSkill()));
+                } else {
+                    settlement.addTeachingUpdate();
+                    if (settlement
+                            .getTeachingUpdates() == NativeTeachingCourse.REQUIRED_UPDATES) {
+                        // The grant happens once, here, whether or not the
+                        // colonist can leave yet.
+                        ((UnitFreeColonist) pupil).completeEducation(
+                                settlement.getTeachableSkill());
+                        settlement.completeTeaching();
+                        addTurnEvent(TurnEventProvider.getNativeTeaching(owner,
+                                TurnEventNativeTeaching.Kind.COMPLETED,
+                                settlement.getTeachableSkill()));
+                    }
+                }
+            }
+            // A finished or canceled colonist waits safely and leaves as soon
+            // as
+            // a legal square is free; leaving never grants anything again.
+            if (settlement.getTeachingStage()
+                    .orElseThrow() != NativeTeachingCourse.Stage.LEARNING) {
+                findNativeReleaseSquare(pupil, settlement).ifPresent(square -> {
+                    releaseNativePupil(pupil, square);
+                    settlement.clearTeaching();
+                });
+            }
+        }
+    }
+
+    /**
+     * A saved pupil fits its stage: a learner or a canceled one is still an
+     * unskilled colonist or servant, while a finished one already holds the
+     * granted skill.
+     */
+    private static boolean pupilFitsStage(final Unit pupil,
+            final NativeSettlement settlement) {
+        if (settlement.getTeachingStage()
+                .orElseThrow() == NativeTeachingCourse.Stage.COMPLETED) {
+            return pupil.getType() == settlement.getTeachableSkill();
+        }
+        return nativeTeachingRoleAllows(pupil);
+    }
+
+    /**
+     * Check saved native courses against the units after loading (R-0148): each
+     * pupil is a registered colonist of a colonial owner on its settlement's
+     * course, and each native-course unit has exactly one course.
+     */
+    void validateSavedNativeTeaching() {
+        final Set<Integer> pupils = new HashSet<>();
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            settlement.getTeachingPupilId().ifPresent(pupilId -> {
+                Preconditions.checkArgument(pupils.add(pupilId),
+                        "Unsupported save: a native pupil is in two courses");
+                final Unit pupil = tryGetUnitById(pupilId)
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Unsupported save: missing native pupil"));
+                Preconditions.checkArgument(
+                        pupil.getOwner().isColonialNation()
+                                && pupilFitsStage(pupil, settlement)
+                                && getNativeTeachingSettlement(pupil)
+                                        .filter(found -> found == settlement)
+                                        .isPresent(),
+                        "Unsupported save: native pupil does not match its course");
+            });
+        }
+        for (final Unit unit : unitStorage.getUnits()) {
+            Preconditions.checkArgument(
+                    !unit.isAtPlaceNativeCourse()
+                            || pupils.contains(unit.getId()),
+                    "Unsupported save: native course without a settlement");
+        }
     }
 
     /**
@@ -4152,6 +5541,48 @@ public class Model {
         Preconditions.checkNotNull(settlement);
         return nativeRelations.getLocalAlarm(settlement,
                 nativeEuropean(player));
+    }
+
+    /**
+     * What the player may read about a learned native settlement: attitude,
+     * local alarm change, and a rival provoker only from visible sources. Pure
+     * read; opening it advances no relation. The settlement must be learned by
+     * the player, and only a colonial European has a view.
+     *
+     * @param player     required player
+     * @param settlement required native settlement
+     * @return the view, empty for a king or a settlement the player has not
+     *         learned
+     */
+    public Optional<NativeRelationView> getNativeRelationView(
+            final Player player, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(settlement);
+        if (nativeNationOf(player).isEmpty()) {
+            return Optional.empty();
+        }
+        final Set<Integer> learned = learnedNativeSettlements
+                .getOrDefault(player.getName(), Set.of());
+        if (!learned.contains(settlement.getId())) {
+            return Optional.empty();
+        }
+        final EuropeanNation european = nativeEuropean(player);
+        return Optional.of(NativeRelationView.of(
+                nativeRelations.getHostility(settlement, european),
+                nativeRelations.getLocalAlarmChange(settlement, european),
+                visibleNativeProvoker(settlement, player)));
+    }
+
+    /**
+     * Start the alarm observation of a colonial European at the start of its
+     * own turn, before congress settles. A Crown or a scripted actor has none.
+     *
+     * @param european required player whose turn is starting
+     */
+    void observeNativeRelations(final Player european) {
+        Preconditions.checkNotNull(european);
+        nativeNationOf(european)
+                .ifPresent(nation -> nativeRelations.observeLocalAlarm(nation));
     }
 
     /**
@@ -4213,6 +5644,193 @@ public class Model {
      */
     void clearNativeRelationsAfterPocahontas(final Player owner) {
         nativeRelations.clearEuropean(nativeEuropean(owner));
+    }
+
+    /**
+     * Apply one completed native-relations outcome of a colonial European,
+     * exactly once. The owner must be colonial; the outcome's references and
+     * amounts are checked before any native relation changes.
+     *
+     * @param owner   required colonial player whose action has just completed
+     * @param outcome required completed outcome, created at that commit
+     */
+    void applyNativeRelationOutcome(final Player owner,
+            final NativeRelationOutcome outcome) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(outcome);
+        final EuropeanNation european = nativeEuropean(owner);
+        nativeRelations.applyOutcome(european, outcome,
+                nativeLocalFactor(european, owner));
+    }
+
+    /**
+     * Plan the native relation effect of a colonial attack on a native brave.
+     * Nothing changes: the outcome gets its origin ID here and is applied once
+     * by {@link #applyNativeRelationOutcome(Player, NativeRelationOutcome)}
+     * when the battle commits.
+     *
+     * @param owner required colonial attacker
+     * @param brave required native brave under attack
+     * @return outcome of the attack, not yet applied
+     */
+    NativeRelationOutcome planNativeUnitAttack(final Player owner,
+            final Unit brave) {
+        Preconditions.checkArgument(owner.isColonialNation(),
+                "Only a colonial European attacks a native brave");
+        Preconditions.checkArgument(brave instanceof UnitNativeBrave,
+                "Only a native brave has a native attack effect");
+        final UnitNativeBrave nativeBrave = (UnitNativeBrave) brave;
+        final NativeSettlement home = nativeBrave.getHomeSettlementId()
+                .flatMap(id -> nativeSettlements.getAll().stream()
+                        .filter(settlement -> settlement.getId() == id)
+                        .findAny())
+                .orElse(null);
+        return NativeRelationOutcome.unitAttack(nativeRelations.nextOutcomeId(),
+                nativeBrave.getNation(), home);
+    }
+
+    /**
+     * Resolve a lost-city rumor once, after a legal scout step onto its square.
+     * The entry is validated before anything changes. Then the marker is
+     * consumed, the outcome is drawn from the persisted random state and
+     * applied in this same action, and one turn notice records the actual
+     * result. Any other entry leaves the model and its random state unchanged.
+     *
+     * @param explorer required unit that has just stepped onto the square
+     * @param at       required square of that step
+     */
+    void resolveLostCityRumor(final Unit explorer, final Location at) {
+        Preconditions.checkNotNull(explorer);
+        Preconditions.checkNotNull(at);
+        if (!isLostCityRumorEntry(explorer, at)) {
+            return;
+        }
+        final Player owner = explorer.getOwner();
+        // Every random draw happens before the first change. The commits below
+        // are infallible once canCommitLostCityRumor accepted the drawn result;
+        // a refused result restores the random state, so nothing changed.
+        final long randomBefore = combatRandomState;
+        final LostCityRumorRules.Outcome drawn = LostCityRumorRules.draw(
+                explorer.getType() == UnitType.SEASONED_SCOUT,
+                nextCombatRandom());
+        final LostCityRumorRules.Outcome outcome = LostCityRumorRules
+                .withDeSoto(drawn, owner.getCongressMembers()
+                        .contains(Founder.HERNANDO_DE_SOTO));
+        final int gold = outcome == LostCityRumorRules.Outcome.GOLD
+                ? LostCityRumorRules.gold(nextCombatRandom())
+                : 0;
+        final Optional<NativeSettlement> nearest = outcome == LostCityRumorRules.Outcome.BURIAL
+                ? nearestNativeSettlement(at)
+                : Optional.empty();
+        final NativeNation nation = nearest.map(NativeSettlement::getNation)
+                .orElse(null);
+        if (!canCommitLostCityRumor(owner, outcome, gold,
+                nearest.isPresent())) {
+            combatRandomState = randomBefore;
+            return;
+        }
+        map.removeLostCityRumor(at);
+        if (outcome == LostCityRumorRules.Outcome.GOLD) {
+            owner.setGold(owner.getGold() + gold);
+        } else if (outcome == LostCityRumorRules.Outcome.RECRUIT) {
+            addFreeColonistAt(owner, at);
+        } else if (outcome == LostCityRumorRules.Outcome.EXPLORER_LOST) {
+            // A lost explorer keeps no go-to order and no square.
+            ((AbstractUnit) explorer).discardGoToOrder();
+            explorer.getPlace().destroy();
+            destroyUnit(explorer);
+        } else if (nearest.isPresent()) {
+            applyNativeRelationOutcome(owner, NativeRelationOutcome
+                    .burial(nativeRelations.nextOutcomeId(), nation));
+        }
+        getTurnEventStore().add(TurnEventProvider.getLostCityRumor(owner,
+                outcome, explorer.getId(), gold, nation, outcome != drawn));
+    }
+
+    /**
+     * A scout that stands on the square after its own step, belonging to a
+     * colonial player, resolves the unresolved rumor there once. Anything else,
+     * including a unit that is not live in this game, is not an entry and
+     * changes nothing.
+     */
+    private boolean isLostCityRumorEntry(final Unit explorer,
+            final Location at) {
+        return explorer instanceof UnitFreeColonist
+                && ((UnitFreeColonist) explorer).isScout()
+                && isUnitInGame(explorer) && explorer.isAtPlaceLocation()
+                && explorer.getLocation().equals(at)
+                && explorer.getOwner().isColonialNation()
+                && map.hasLostCityRumorAt(at);
+    }
+
+    /**
+     * Whether the drawn result can be applied completely. Only the result that
+     * needs a resource checks it: gold must fit the treasury, a recruit needs a
+     * free unit ID and a burial needs a European whose anger can change. The
+     * other results never depend on those.
+     */
+    private boolean canCommitLostCityRumor(final Player owner,
+            final LostCityRumorRules.Outcome outcome, final int gold,
+            final boolean angersNative) {
+        switch (outcome) {
+        case GOLD:
+            return owner.getGold() <= Integer.MAX_VALUE - gold;
+        case RECRUIT:
+            return unitStorage.canAllocateUnit();
+        case BURIAL:
+            return !angersNative || nativeNationOf(owner).isPresent();
+        default:
+            return true;
+        }
+    }
+
+    /**
+     * @param unit required unit
+     * @return whether this exact unit is still registered in the game, so a
+     *         unit lost in the middle of a path is never moved again
+     */
+    public boolean isUnitInGame(final Unit unit) {
+        Preconditions.checkNotNull(unit);
+        return unitStorage.tryGetUnitById(unit.getId())
+                .filter(found -> found == unit).isPresent();
+    }
+
+    /**
+     * Nearest native settlement by Chebyshev distance, among every settlement.
+     * A distance tie is decided uniformly with one draw from the persisted
+     * random state; no settlement at all means no nation is affected.
+     */
+    private Optional<NativeSettlement> nearestNativeSettlement(
+            final Location at) {
+        final List<NativeSettlement> settlements = nativeSettlements.getAll();
+        if (settlements.isEmpty()) {
+            return Optional.empty();
+        }
+        final int nearest = settlements.stream().mapToInt(
+                settlement -> settlement.getLocation().getDistanceChebyshev(at))
+                .min().getAsInt();
+        final List<NativeSettlement> tied = settlements.stream()
+                .filter(settlement -> settlement.getLocation()
+                        .getDistanceChebyshev(at) == nearest)
+                .collect(Collectors.toList());
+        if (tied.size() == 1) {
+            return Optional.of(tied.get(0));
+        }
+        return Optional.of(tied.get((int) (nextCombatRandom() * tied.size())));
+    }
+
+    /**
+     * Recruit: one free colonist on the explored square, owned by the owner.
+     */
+    private void addFreeColonistAt(final Player owner, final Location at) {
+        unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
+                this,
+                unit -> new PlaceLocation(unit, at,
+                        unit.getDefaultOrintation()),
+                UnitType.COLONIST, owner,
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
+                new UnitActionNoAction());
     }
 
     /**
@@ -4410,12 +6028,24 @@ public class Model {
      */
     private double nativeLocalPressure(final NativeSettlement settlement,
             final Player owner) {
+        return nativeSourcePressure(settlement, owner, square -> true)
+                + nativeUnpaidUsePressure(settlement, owner);
+    }
+
+    /**
+     * Visible pressure sources of one European, the units and colonies counted
+     * by {@link #nativeLocalPressure} without unpaid land. Only sources on a
+     * square accepted by {@code seen} count, so a rival's pressure is read from
+     * what the viewer can currently see.
+     */
+    private double nativeSourcePressure(final NativeSettlement settlement,
+            final Player owner, final Predicate<Location> seen) {
         final Location home = settlement.getLocation();
         final int radius = settlement.getSettlementClass().getHomeRadius();
         double pressure = 0;
         for (final Unit unit : owner.getAllUnits()) {
             final Optional<Location> square = nativeResidentSquare(unit, owner);
-            if (square.isEmpty()) {
+            if (square.isEmpty() || !seen.test(square.get())) {
                 continue;
             }
             final int distance = home.getDistanceChebyshev(square.get());
@@ -4427,8 +6057,9 @@ public class Model {
             }
         }
         for (final Colony colony : colonies) {
-            if (colony.getOwner() == owner && home
-                    .getDistanceChebyshev(colony.getLocation()) <= radius) {
+            if (colony.getOwner() == owner && seen.test(colony.getLocation())
+                    && home.getDistanceChebyshev(
+                            colony.getLocation()) <= radius) {
                 if (colony.wasConstructionBuilded(ConstructionType.FORTRESS)) {
                     pressure += 3;
                 } else if (colony
@@ -4437,8 +6068,30 @@ public class Model {
                 }
             }
         }
-        pressure += nativeUnpaidUsePressure(settlement, owner);
         return pressure;
+    }
+
+    /**
+     * The rival European whose currently visible sources press hardest on the
+     * settlement. Unpaid land is never counted, since its use is hidden. Ties
+     * keep the earlier player in the saved order; no visible source means none.
+     */
+    private Optional<Player> visibleNativeProvoker(
+            final NativeSettlement settlement, final Player viewer) {
+        Player provoker = null;
+        double strongest = 0;
+        for (final Player rival : playerStore.getPlayers()) {
+            if (rival == viewer || nativeNationOf(rival).isEmpty()) {
+                continue;
+            }
+            final double visible = nativeSourcePressure(settlement, rival,
+                    viewer::isCurrentlyVisible);
+            if (visible > strongest) {
+                strongest = visible;
+                provoker = rival;
+            }
+        }
+        return Optional.ofNullable(provoker);
     }
 
     /**
@@ -4641,14 +6294,16 @@ public class Model {
                         unit.canAffordPath(path.getLocations()),
                         "Unit %s cannot afford the path", unit);
             }
-            path.getLocations().forEach(loc -> {
+            for (final Location loc : path.getLocations()) {
                 /*
-                 * Unit could move to high seas. So could be out of map.
+                 * Unit could move to high seas, so could be out of map, or be
+                 * lost on a step to a lost-city rumor. Neither moves again.
                  */
-                if (unit.isAtPlaceLocation()) {
-                    unit.moveOneStep(loc);
+                if (!unit.isAtPlaceLocation() || !isUnitInGame(unit)) {
+                    break;
                 }
-            });
+                unit.moveOneStep(loc);
+            }
             fireUnitMovedFinished(unit, path);
         }
         listenerManager.fireActionEnded(this);
@@ -4693,7 +6348,8 @@ public class Model {
                  * unit could in first step conquer city a be placed inside
                  * city. The first step it cannot pay ends the walk.
                  */
-                if (!unit.isAtPlaceLocation() || !unit.canAffordStepTo(loc)) {
+                if (!unit.isAtPlaceLocation() || !isUnitInGame(unit)
+                        || !unit.canAffordStepTo(loc)) {
                     break;
                 }
                 unit.moveOneStep(loc);

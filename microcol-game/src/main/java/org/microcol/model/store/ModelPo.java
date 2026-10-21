@@ -97,6 +97,34 @@ public class ModelPo {
     private List<NativeSettlementPo> nativeSettlements;
 
     /**
+     * Land contacts of colonial Europeans with whole native tribes (R-0159).
+     * Absent means no European has introduced itself yet.
+     */
+    private List<NativeContactPo> nativeContacts;
+
+    public List<NativeContactPo> getNativeContacts() {
+        return nativeContacts;
+    }
+
+    public void setNativeContacts(final List<NativeContactPo> nativeContacts) {
+        this.nativeContacts = nativeContacts;
+    }
+
+    /**
+     * Settings of a generated New World. Absent for bundled worlds; when
+     * present every field is required.
+     */
+    private GeneratedWorldPo generatedWorld;
+
+    public GeneratedWorldPo getGeneratedWorld() {
+        return generatedWorld;
+    }
+
+    public void setGeneratedWorld(final GeneratedWorldPo generatedWorld) {
+        this.generatedWorld = generatedWorld;
+    }
+
+    /**
      * Native settlements each player has learned. Absent means nothing is
      * learned yet; no settlement identity is guessed from it.
      */
@@ -169,6 +197,36 @@ public class ModelPo {
     public void setNativeLocalAlarm(
             final List<NativeLocalAlarmPo> nativeLocalAlarm) {
         this.nativeLocalAlarm = nativeLocalAlarm;
+    }
+
+    /**
+     * Muskets and horses sold below the next native arms step, saved only when
+     * nonzero. Absent means none is retained.
+     */
+    private List<NativeArmsSalePo> nativeArmsSales;
+
+    public List<NativeArmsSalePo> getNativeArmsSales() {
+        return nativeArmsSales;
+    }
+
+    public void setNativeArmsSales(
+            final List<NativeArmsSalePo> nativeArmsSales) {
+        this.nativeArmsSales = nativeArmsSales;
+    }
+
+    /**
+     * Origin IDs of completed native-relation outcomes already applied, so a
+     * Continue never repeats them. Absent means none has been applied.
+     */
+    private List<Long> nativeRelationOutcomeIds;
+
+    public List<Long> getNativeRelationOutcomeIds() {
+        return nativeRelationOutcomeIds;
+    }
+
+    public void setNativeRelationOutcomeIds(
+            final List<Long> nativeRelationOutcomeIds) {
+        this.nativeRelationOutcomeIds = nativeRelationOutcomeIds;
     }
 
     private List<TurnEventPo> turnEvents = new ArrayList<>();

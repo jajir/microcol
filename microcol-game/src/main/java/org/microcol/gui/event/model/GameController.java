@@ -16,6 +16,7 @@ import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.GameModelDao;
 import org.microcol.model.campaign.FreePlayMap;
 import org.microcol.model.campaign.MissionName;
+import org.microcol.model.generation.GeneratedWorldSettings;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -75,6 +76,27 @@ public final class GameController {
             final Difficulty difficulty, final EuropeanNation nation) {
         startMission(gameModelDao.createFreePlay(map, playerName, difficulty,
                 nation, eventBus));
+    }
+
+    /**
+     * Start a generated New World. The active game is replaced only after the
+     * whole new world exists.
+     *
+     * @return {@code true} when the generated world is now the active game
+     */
+    public boolean startGeneratedFreePlay(final GeneratedWorldSettings settings,
+            final String playerName, final Difficulty difficulty,
+            final EuropeanNation nation) {
+        final GameModel generated;
+        try {
+            generated = gameModelDao.createGeneratedFreePlay(settings,
+                    playerName, difficulty, nation, eventBus);
+        } catch (IllegalArgumentException | IllegalStateException
+                | MicroColException rejected) {
+            return false;
+        }
+        startMission(generated);
+        return true;
     }
 
     public void startCampaignMission(final CampaignName campaignName,

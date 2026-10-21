@@ -36,7 +36,7 @@
    special-resource overlays to [R-0127](done/R-0127.md). Existing R-0093 defense
    corrections are preserved. Lake output/travel and generator placement are
    explicit open points, not inferred ocean behavior.
-3. [R-0128](done/R-0128.md) owns finite mineral depletion, [R-0129](R-0129.md)
+3. [R-0128](done/R-0128.md) owns finite mineral depletion, [R-0129](done/R-0129.md)
    one-time rumor outcomes, [R-0130](done/R-0130.md) persistent go-to and its
    cancellation, and [R-0131](done/R-0131.md) player disband. MOVE-008 is traced
    through each order owner rather than duplicated as a universal rewrite:
@@ -56,7 +56,7 @@
    and its dated evidence; they receive no duplicate implementation task.
 6. Economy captures assign commons to [R-0146](done/R-0146.md), clearing a
    civilian specialty to [R-0147](done/R-0147.md), native teaching to
-   [R-0148](R-0148.md) and the convert lifecycle, including Sepulveda, to
+   [R-0148](done/R-0148.md) and the convert lifecycle, including Sepulveda, to
    [R-0149](R-0149.md). Delivered specialist production, building constants
    and mountain/sea founding guards are preserved; complete matrix acceptance
    remains separate.
@@ -64,11 +64,11 @@
    [R-0151](done/R-0151.md) braves and turn participation, [R-0152](done/R-0152.md)
    homeland purchase with Minuit, [R-0153](done/R-0153.md) anger/alarm with France
    and Pocahontas, [R-0154](R-0154.md) provocation/reconciliation events,
-   [R-0155](R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
+   [R-0155](done/R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
    These do not stand in for native trade, missions or real native combat.
 8. Native interactions are [R-0157](R-0157.md) action selection,
-   [R-0158](R-0158.md) chief encounters, [R-0159](R-0159.md) market/admission,
-   [R-0160](R-0160.md) sale/gift and [R-0161](R-0161.md) reverse purchase.
+   [R-0158](R-0158.md) chief encounters, [R-0159](done/R-0159.md) market/admission,
+   [R-0160](done/R-0160.md) sale/gift and [R-0161](done/R-0161.md) reverse purchase.
    [R-0162](R-0162.md) owns tribute; [R-0163](done/R-0163.md) ordination and
    Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
    denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
@@ -79,7 +79,7 @@
    [R-0171](R-0171.md) naval military objectives and [R-0172](R-0172.md)
    multi-colony scheduling. R-0090–R-0092 retain their existing policies and
    unresolved proposals; this capture does not approve new strategic thresholds.
-10. Combat residuals are [R-0173](R-0173.md) native roles/ambush,
+10. Combat residuals are [R-0173](done/R-0173.md) native roles/ambush,
     [R-0174](R-0174.md) settlement conquest and Spain,
     [R-0175](R-0175.md) treasure identity/reward with Cortes,
     [R-0176](R-0176.md) naval patrol interception,

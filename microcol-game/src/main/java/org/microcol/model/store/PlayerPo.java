@@ -88,6 +88,18 @@ public final class PlayerPo {
         this.rivalTradeObjective = rivalTradeObjective;
     }
 
+    /** Active second-colony expansion of a rival; null when it has none. */
+    private RivalExpansionObjectivePo rivalExpansionObjective;
+
+    public RivalExpansionObjectivePo getRivalExpansionObjective() {
+        return rivalExpansionObjective;
+    }
+
+    public void setRivalExpansionObjective(
+            final RivalExpansionObjectivePo rivalExpansionObjective) {
+        this.rivalExpansionObjective = rivalExpansionObjective;
+    }
+
     public RecruitmentPo getRecruitment() {
         return recruitment;
     }

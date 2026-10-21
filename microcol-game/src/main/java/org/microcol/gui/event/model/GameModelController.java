@@ -3,6 +3,7 @@ package org.microcol.gui.event.model;
 import java.util.List;
 
 import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.gui.Loc;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
@@ -20,9 +21,13 @@ import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativePurchaseQuote;
+import org.microcol.model.NativeSaleQuote;
+import org.microcol.model.NativeSettlement;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 import org.microcol.model.WorldMap;
 import org.microcol.model.campaign.GameModel;
 import org.slf4j.Logger;
@@ -220,6 +225,217 @@ public class GameModelController {
                 Platform.runLater(this::showPassengerTransferRejection);
             }
         }).start();
+    }
+
+    /**
+     * Start learning the skill the player was shown (R-0148). The model checks
+     * the offer again, so a changed offer or situation is reported and nothing
+     * starts. The model call is quick, so it runs here and the caller learns
+     * whether the colonist left the map.
+     *
+     * @param offeredSkill the skill the confirmation displayed
+     * @return whether the course started
+     */
+    public boolean startNativeTeaching(final Unit visitor,
+            final NativeSettlement settlement, final UnitType offeredSkill) {
+        try {
+            getModel().startNativeTeaching(visitor, settlement, offeredSkill);
+            return true;
+        } catch (IllegalStateException rejected) {
+            showNativeTeachingRejection(Loc.nativeTeachingRejected);
+            return false;
+        }
+    }
+
+    /**
+     * Stop a native course by the player's choice, or let a finished or
+     * canceled colonist leave (R-0148). The colonist returns beside the
+     * settlement without a new grant. A blocked leave is explained and changes
+     * nothing.
+     */
+    public void cancelNativeTeaching(final Unit pupil) {
+        if (!getModel().hasNativeTeachingExit(pupil)) {
+            showNativeTeachingRejection(Loc.nativeTeachingNoSquare);
+            return;
+        }
+        try {
+            getModel().cancelNativeTeaching(pupil);
+        } catch (IllegalStateException rejected) {
+            showNativeTeachingRejection(Loc.nativeTeachingCancelRejected);
+        }
+    }
+
+    /**
+     * Introduce the player's nation to a native tribe by land (R-0159). The
+     * model checks the visitor again; a refused introduction is explained and
+     * changes nothing.
+     *
+     * @param introducer land unit beside the settlement
+     * @param settlement native settlement
+     */
+    public void introduceNativeContact(final Unit introducer,
+            final NativeSettlement settlement) {
+        try {
+            getModel().introduceNativeContact(introducer, settlement);
+        } catch (IllegalStateException rejected) {
+            showNativeMarketRejection();
+        }
+    }
+
+    /**
+     * Open or reuse the trading expedition of a carrier at a settlement
+     * (R-0159). The model re-checks admission, so a changed situation is
+     * explained and no expedition starts.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     */
+    public void enterNativeMarket(final Unit carrier,
+            final NativeSettlement settlement) {
+        try {
+            getModel().enterNativeMarket(carrier, settlement);
+        } catch (IllegalStateException rejected) {
+            showNativeMarketRejection();
+        }
+    }
+
+    /**
+     * Haggle once over the carried goods of a carrier at a settlement (R-0160).
+     * The model draws the result after its checks and keeps it with the
+     * expedition; a refused attempt is explained and changes nothing.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     * @param shown      the offer the chooser displayed, with its haggle open
+     */
+    public void haggleNativeSale(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote shown) {
+        try {
+            getModel().haggleNativeSale(carrier, settlement, shown);
+        } catch (IllegalStateException rejected) {
+            showNativeSaleRejection();
+        }
+    }
+
+    /**
+     * Sell goods at the terms the player confirmed (R-0160). Stale or illegal
+     * terms are explained and nothing is traded.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     * @param offered    sale terms the confirmation displayed
+     */
+    public void sellToNative(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote offered) {
+        try {
+            getModel().sellToNative(carrier, settlement, offered);
+        } catch (IllegalStateException rejected) {
+            showNativeSaleRejection();
+        }
+    }
+
+    /**
+     * Give goods at the terms the player confirmed (R-0160). Stale or illegal
+     * terms are explained and nothing is given.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     * @param offered    gift terms the confirmation displayed
+     */
+    public void giftToNative(final Unit carrier,
+            final NativeSettlement settlement, final NativeSaleQuote offered) {
+        try {
+            getModel().giftToNative(carrier, settlement, offered);
+        } catch (IllegalStateException rejected) {
+            showNativeSaleRejection();
+        }
+    }
+
+    /**
+     * Ask for the one discount of the second stage (R-0161). The model draws
+     * the result after its checks and keeps it with the stage; a refused
+     * attempt is explained and changes nothing.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     * @param shown      the purchase the chooser displayed, with its request
+     *                   open
+     */
+    public void haggleNativePurchase(final Unit carrier,
+            final NativeSettlement settlement,
+            final NativePurchaseQuote shown) {
+        try {
+            getModel().haggleNativePurchase(carrier, settlement, shown);
+        } catch (IllegalStateException rejected) {
+            showNativePurchaseRejection();
+        }
+    }
+
+    /**
+     * Buy offered goods at the terms the player confirmed (R-0161). Stale or
+     * illegal terms are explained and nothing is bought.
+     *
+     * @param carrier    wagon or ship beside the settlement
+     * @param settlement native settlement
+     * @param offered    purchase terms the confirmation displayed
+     * @return whether the goods were bought
+     */
+    public boolean buyFromNative(final Unit carrier,
+            final NativeSettlement settlement,
+            final NativePurchaseQuote offered) {
+        try {
+            getModel().buyFromNative(carrier, settlement, offered);
+            return true;
+        } catch (IllegalStateException rejected) {
+            showNativePurchaseRejection();
+            return false;
+        }
+    }
+
+    /**
+     * Decline the pending second stage (R-0161); nothing is bought.
+     *
+     * @param carrier    unit beside the settlement
+     * @param settlement native settlement
+     * @return whether the stage was declined
+     */
+    public boolean rejectNativePurchase(final Unit carrier,
+            final NativeSettlement settlement) {
+        try {
+            getModel().rejectNativePurchase(carrier, settlement);
+            return true;
+        } catch (IllegalStateException rejected) {
+            showNativePurchaseRejection();
+            return false;
+        }
+    }
+
+    private void showNativePurchaseRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeMarketTitle));
+        dialog.setText(i18n.get(Loc.nativePurchaseRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeMarketRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeMarketTitle));
+        dialog.setText(i18n.get(Loc.nativeMarketRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeSaleRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeMarketTitle));
+        dialog.setText(i18n.get(Loc.nativeSaleRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeTeachingRejection(final Loc message) {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeTeachingTitle));
+        dialog.setText(i18n.get(message));
+        dialog.showAndWait();
     }
 
     public void showPassengerTransferRejection() {

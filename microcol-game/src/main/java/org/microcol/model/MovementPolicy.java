@@ -5,9 +5,10 @@ import java.util.Optional;
 import com.google.common.base.Preconditions;
 
 /**
- * Shared step rule for a unit type and owner: terrain, colony ownership and
- * enemy occupancy. Units and trade route legality both call it. It reads the
- * model only through its getters, so no live unit is needed to decide a square.
+ * Shared step rule for a unit type and owner: native settlement squares,
+ * terrain, colony ownership and enemy occupancy. Units and trade route legality
+ * both call it. It reads the model only through its getters, so no live unit is
+ * needed to decide a square.
  */
 final class MovementPolicy {
 
@@ -32,6 +33,12 @@ final class MovementPolicy {
         Preconditions.checkNotNull(owner);
         Preconditions.checkNotNull(location);
         if (!model.getMap().isValid(location)) {
+            return false;
+        }
+        // A European enters a native settlement only through its visit chooser
+        // (R-0157) or conquest (R-0174), never by an ordinary step or route.
+        if (!owner.isNative() && model.getNativeSettlements().stream().anyMatch(
+                settlement -> settlement.getLocation().equals(location))) {
             return false;
         }
         final Optional<Colony> optColony = model.getColonyAt(location);

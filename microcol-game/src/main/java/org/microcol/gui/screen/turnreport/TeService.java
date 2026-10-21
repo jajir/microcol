@@ -40,8 +40,10 @@ public class TeService {
             final TeProcessorShipRepair teProcessorShipRepair,
             final TeProcessorGoTo teProcessorGoTo,
             final TeProcessorEducation education,
+            final TeProcessorNativeTeaching nativeTeaching,
             final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
-            final TeProcessorForestLumberLost forestLumberLost) {
+            final TeProcessorForestLumberLost forestLumberLost,
+            final TeProcessorLostCityRumor lostCityRumor) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
 
@@ -49,6 +51,7 @@ public class TeService {
                 .newArrayList(Preconditions.checkNotNull(teProcessorShipRepair),
                         Preconditions.checkNotNull(teProcessorGoTo),
                         Preconditions.checkNotNull(education),
+                        Preconditions.checkNotNull(nativeTeaching),
                         Preconditions.checkNotNull(constructionWaitingForTools),
                         Preconditions.checkNotNull(forestLumberLost),
                         Preconditions.checkNotNull(teProcessorPeaceOffer),
@@ -70,7 +73,8 @@ public class TeService {
                         Preconditions
                                 .checkNotNull(teProcessorShipComeToEuropePort),
                         Preconditions
-                                .checkNotNull(teProcessorShipComeToHighSeas)));
+                                .checkNotNull(teProcessorShipComeToHighSeas),
+                        Preconditions.checkNotNull(lostCityRumor)));
     }
 
     private Model getModel() {

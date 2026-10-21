@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="empty">The rumor led nowhere: the explorers found nothing.</entry>
+  <entry key="gold">The explorers found a treasure in a lost city: %s gold.</entry>
+  <entry key="recruit">A lost colonist joined the expedition: one free colonist now stands on the explored square.</entry>
+  <entry key="explorerLost">The expedition was lost: the explorer did not return.</entry>
+  <entry key="burial">The explorers disturbed a native burial site: the nearest native nation is angered.</entry>
+  <entry key="burialNoNation">The explorers disturbed a burial site, but no native settlement exists to be angered.</entry>
+  <entry key="deSotoAverted">De Soto's presence in the Congress averted the danger: the explorers found nothing.</entry>
+</properties>

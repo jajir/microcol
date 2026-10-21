@@ -47,6 +47,12 @@ public final class WorldMapPo extends AbstractMapStore {
     private String[] roads;
 
     /**
+     * Hold information where an unresolved lost-city rumor waits. A missing
+     * block means no rumor is left.
+     */
+    private String[] rumors;
+
+    /**
      * Hold size of the river on each land square. A missing block means no
      * river.
      */
@@ -119,6 +125,49 @@ public final class WorldMapPo extends AbstractMapStore {
     public void setRoads(final Set<Location> roadSet) {
         roads = generateString(loc -> roadSet.contains(loc) ? "r" : "-", maxX,
                 maxY);
+    }
+
+    public void setRumors(final Set<Location> rumorSet) {
+        rumors = generateString(loc -> rumorSet.contains(loc) ? "l" : "-", maxX,
+                maxY);
+    }
+
+    public String[] getRumors() {
+        return rumors;
+    }
+
+    public void setRumors(final String[] rumors) {
+        this.rumors = rumors;
+    }
+
+    public Set<Location> getRumorSet() {
+        final Set<Location> out = new HashSet<>();
+        // A missing block means no rumor is left; a present one must be
+        // complete and use only the known codes.
+        if (rumors != null) {
+            Preconditions.checkArgument(
+                    rumors.length == maxY + 1 && rumors[0] != null,
+                    "Invalid rumor row count");
+            for (int y = 1; y <= maxY; y++) {
+                final String row = rumors[y];
+                Preconditions.checkArgument(
+                        row != null
+                                && row.startsWith(
+                                        String.format("row-%04d:", y % 10000))
+                                && row.substring("row-0001:".length())
+                                        .split(",", -1).length == maxX,
+                        "Invalid rumor row %s", y);
+            }
+            iterate(rumors, (location, charCode) -> {
+                Preconditions.checkArgument(
+                        charCode.equals("l") || charCode.equals("-"),
+                        "Unknown rumor code '%s'", charCode);
+                if (charCode.equals("l")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
     }
 
     public Map<Location, TerrainType> getTerrainMap() {

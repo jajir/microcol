@@ -37,6 +37,10 @@ class NativeSettlementFoundingTest {
         po.setCapital(true);
         po.setLocation(at);
         po.setTreasury(2000);
+        po.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        po.setOfferedGoods(List.of());
+        po.setWantedGoods(List.of());
+        po.setTrade(List.of());
         return po;
     }
 

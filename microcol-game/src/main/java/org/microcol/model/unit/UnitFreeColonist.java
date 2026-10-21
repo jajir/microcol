@@ -202,7 +202,10 @@ public class UnitFreeColonist extends CanMount {
             Preconditions.checkState(!isVeteran());
             veteran = true;
         } else {
-            Preconditions.checkState(getType() == UnitType.COLONIST);
+            // A native course also teaches an indentured servant directly; a
+            // school course advances the servant one social stage first.
+            Preconditions.checkState(getType() == UnitType.COLONIST
+                    || getType() == UnitType.INDENTURED_SERVANT);
             learnedType = skill;
         }
         workSkill = null;
@@ -517,12 +520,20 @@ public class UnitFreeColonist extends CanMount {
         }
     }
 
+    /**
+     * Ordinary scouts are mounted colonists without muskets; seasoned scouts
+     * are the specialist of that name. Both see two squares further and enter
+     * lost-city rumors.
+     *
+     * @return whether this unit is an ordinary or seasoned scout
+     */
+    public boolean isScout() {
+        return getType() == UnitType.SEASONED_SCOUT || mounted && !holdingGuns;
+    }
+
     @Override
     public int getSightRadius() {
-        return withFounderSight(
-                getType() == UnitType.SEASONED_SCOUT || mounted && !holdingGuns
-                        ? 2
-                        : 1);
+        return withFounderSight(isScout() ? 2 : 1);
     }
 
     private void revealExpandedSight(final int previousRadius) {

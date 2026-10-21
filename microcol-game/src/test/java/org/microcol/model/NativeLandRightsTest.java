@@ -26,6 +26,10 @@ class NativeLandRightsTest {
         po.setSettlementClass(nation.getSettlementClass());
         po.setCapital(capital);
         po.setTreasury(capital ? 2000 : 1000);
+        po.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        po.setOfferedGoods(List.of());
+        po.setWantedGoods(List.of());
+        po.setTrade(List.of());
         po.setLocation(Location.of(x, y));
         return po;
     }

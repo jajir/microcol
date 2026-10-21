@@ -52,4 +52,17 @@
     <entry key="setupNameError">Enter 1–64 characters without control characters.</entry>
     <entry key="setupStart">Start game</entry>
     <entry key="setupMapReference">Reference expedition (four nations)</entry>
+    <entry key="setupMapGenerated">Generated new world</entry>
+    <entry key="setupGeneratedClimate">Climate</entry>
+    <entry key="setupGeneratedLand">Land share</entry>
+    <entry key="setupGeneratedSeed">Seed (0 to 999999999)</entry>
+    <entry key="setupClimateCold">Cold</entry>
+    <entry key="setupClimateTemperate">Temperate</entry>
+    <entry key="setupClimateWarm">Warm</entry>
+    <entry key="setupLandLow">Low (25 %%)</entry>
+    <entry key="setupLandMedium">Medium (40 %%)</entry>
+    <entry key="setupLandHigh">High (55 %%)</entry>
+    <entry key="setupGeneratedPreview">Preview: map %1$d × %2$d squares, %3$s climate, land %4$d %%, seed %5$s.</entry>
+    <entry key="setupGeneratedSeedError">Enter a whole seed from 0 to 999999999.</entry>
+    <entry key="setupGeneratedFailed">The new world could not be generated. The current game was not changed.</entry>
 </properties>

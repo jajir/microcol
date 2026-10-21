@@ -45,12 +45,12 @@ public final class AttackOrder {
                 .orElseGet(defender::getLocation);
         privateerException = attacker.model.isPrivateerNavalException(attacker,
                 defender);
-        originalRelation = attackingPlayer.isKing() || defendingPlayer.isKing()
-                ? null
-                : attacker.model.getEuropeanRelation(attackingPlayer,
-                        defendingPlayer);
-        declarationRequired = !privateerException
-                && !attacker.model.areHostile(attackingPlayer, defendingPlayer);
+        originalRelation = isEuropeanPair(attackingPlayer, defendingPlayer)
+                ? attacker.model.getEuropeanRelation(attackingPlayer,
+                        defendingPlayer)
+                : null;
+        declarationRequired = isDeclarationNeeded(attacker.model,
+                attackingPlayer, defendingPlayer, privateerException);
         combatStrengths = colonyDefense.isPresent()
                 ? CombatStrengths.forColonyBattle(attacker.model, attacker,
                         colonyDefense.get())
@@ -126,6 +126,24 @@ public final class AttackOrder {
 
     boolean matchesPromotionInputs() {
         return promotionInputs.equals(promotionInputs(attacker, defender));
+    }
+
+    /**
+     * @return whether both players are colonial nations, the only pair with a
+     *         European treaty state, declaration or aggression rules
+     */
+    static boolean isEuropeanPair(final Player first, final Player second) {
+        return first.isColonialNation() && second.isColonialNation();
+    }
+
+    /**
+     * A European declaration is needed only between colonial nations at peace.
+     * Natives take no declaration: the attack itself is their legal act.
+     */
+    static boolean isDeclarationNeeded(final Model model, final Player attacker,
+            final Player defender, final boolean privateerException) {
+        return isEuropeanPair(attacker, defender) && !privateerException
+                && !model.areHostile(attacker, defender);
     }
 
     private static String promotionInputs(final Unit attacker,

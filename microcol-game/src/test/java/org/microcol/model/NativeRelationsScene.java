@@ -11,6 +11,8 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.NativeContactPo;
+import org.microcol.model.store.NativeGoodsStockPo;
 import org.microcol.model.store.NativeLandRecordPo;
 import org.microcol.model.store.NativeSettlementPo;
 import org.microcol.model.store.PlaceMapPo;
@@ -129,6 +131,10 @@ final class NativeRelationsScene {
         settlement.setSettlementClass(nation.getSettlementClass());
         settlement.setCapital(true);
         settlement.setTreasury(2000);
+        settlement.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        settlement.setOfferedGoods(List.of());
+        settlement.setWantedGoods(List.of());
+        settlement.setTrade(List.of());
         settlement.setLocation(at);
         natives.add(settlement);
         po.setNativeSettlements(natives);
@@ -237,12 +243,20 @@ final class NativeRelationsScene {
         final NativeSettlementPo ordinary = natives.get(0);
         ordinary.setCapital(false);
         ordinary.setTreasury(1000);
+        ordinary.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        ordinary.setOfferedGoods(List.of());
+        ordinary.setWantedGoods(List.of());
+        ordinary.setTrade(List.of());
         final NativeSettlementPo capital = new NativeSettlementPo();
         capital.setId(1);
         capital.setNation(ordinary.getNation());
         capital.setSettlementClass(ordinary.getSettlementClass());
         capital.setCapital(true);
         capital.setTreasury(2000);
+        capital.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        capital.setOfferedGoods(List.of());
+        capital.setWantedGoods(List.of());
+        capital.setTrade(List.of());
         capital.setLocation(capitalAt);
         natives.add(capital);
         po.setNativeSettlements(natives);
@@ -253,6 +267,57 @@ final class NativeRelationsScene {
     /** Give the unit added last its full movement, so it may act now. */
     NativeRelationsScene withMovesForLastUnit() {
         po.getUnits().get(po.getUnits().size() - 1).setMovementThirds(3);
+        return this;
+    }
+
+    /**
+     * Set the market of the first settlement: each offered good at one stock,
+     * and the wanted goods in their order.
+     */
+    NativeRelationsScene market(final int stock, final List<GoodsType> offered,
+            final List<GoodsType> wanted) {
+        final List<NativeGoodsStockPo> stocks = new ArrayList<>();
+        for (final GoodsType goods : offered) {
+            final NativeGoodsStockPo entry = new NativeGoodsStockPo();
+            entry.setGoods(goods.name());
+            entry.setStock(stock);
+            stocks.add(entry);
+        }
+        final List<String> names = new ArrayList<>();
+        for (final GoodsType goods : wanted) {
+            names.add(goods.name());
+        }
+        natives.get(0).setOfferedGoods(stocks);
+        natives.get(0).setWantedGoods(names);
+        return this;
+    }
+
+    /** Set goods the first settlement has already bought, as saved. */
+    NativeRelationsScene receivedOfFirst(final GoodsType goods,
+            final int amount) {
+        final NativeGoodsStockPo entry = new NativeGoodsStockPo();
+        entry.setGoods(goods.name());
+        entry.setStock(amount);
+        natives.get(0).setReceivedGoods(new ArrayList<>(List.of(entry)));
+        return this;
+    }
+
+    /** Set the treasury of the first settlement, as saved. */
+    NativeRelationsScene treasuryOfFirst(final int amount) {
+        natives.get(0).setTreasury(amount);
+        return this;
+    }
+
+    /** Record a saved land introduction of a European to a tribe. */
+    NativeRelationsScene contact(final EuropeanNation european,
+            final NativeNation nation) {
+        if (po.getNativeContacts() == null) {
+            po.setNativeContacts(new ArrayList<>());
+        }
+        final NativeContactPo contact = new NativeContactPo();
+        contact.setEuropean(european);
+        contact.setNation(nation);
+        po.getNativeContacts().add(contact);
         return this;
     }
 

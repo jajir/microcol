@@ -1,6 +1,7 @@
 package org.microcol.gui.util;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
@@ -10,7 +11,9 @@ import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.NativeHostility;
 import org.microcol.model.NativeNation;
+import org.microcol.model.NativeRelationView;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceLocation;
@@ -88,6 +91,12 @@ public final class PaintService {
 
     /** Gold frame that marks a nation's capital, drawn over the square. */
     private static final Color CAPITAL_FRAME_COLOR = Color.web("#FFD60A");
+
+    /** Tint behind a settlement whose visible rival provokes it. */
+    private static final Color PROVOKED_BACKGROUND = Color.web("#7B1FA2", 0.35);
+
+    /** Side of the attitude badge in the lower right corner of the square. */
+    private static final double ATTITUDE_BADGE_SIZE = 12;
 
     /**
      * Outline shape of a special-resource marker. Kinds differ by shape and by
@@ -174,6 +183,38 @@ public final class PaintService {
         default:
             break;
         }
+        graphics.setFill(previousFill);
+        graphics.setStroke(previousStroke);
+        graphics.setLineWidth(previousWidth);
+    }
+
+    /** Fill of an unresolved lost-city rumor marker. */
+    private static final Color RUMOR_MARKER_COLOR = Color.web("#E8B84A");
+
+    /**
+     * Draw an unresolved lost-city rumor as an outlined triangle in the
+     * bottom-left corner, clear of the resource marker. Only the caller decides
+     * whether the square is currently visible; this method draws what it is
+     * given. Graphics state is restored afterwards.
+     *
+     * @param graphics required canvas
+     * @param point    required top-left corner of the tile
+     */
+    public void paintLostCityRumor(final GraphicsContext graphics,
+            final Point point) {
+        final double size = Tile.TILE_WIDTH_IN_PX * RESOURCE_MARKER_SHARE;
+        final double left = point.getX() + Tile.TILE_WIDTH_IN_PX * 0.04;
+        final double top = point.getY() + Tile.TILE_WIDTH_IN_PX * 0.62;
+        final double[] xs = { left, left + size, left + size / 2 };
+        final double[] ys = { top + size, top + size, top };
+        final Paint previousFill = graphics.getFill();
+        final Paint previousStroke = graphics.getStroke();
+        final double previousWidth = graphics.getLineWidth();
+        graphics.setFill(RUMOR_MARKER_COLOR);
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(1.5);
+        graphics.fillPolygon(xs, ys, 3);
+        graphics.strokePolygon(xs, ys, 3);
         graphics.setFill(previousFill);
         graphics.setStroke(previousStroke);
         graphics.setLineWidth(previousWidth);
@@ -344,18 +385,31 @@ public final class PaintService {
      * the fill carries the nation and a gold frame marks a capital, so no
      * single colour decides what the settlement is.
      *
+     * The attitude badge and the provoked tint come from the model's view, so
+     * the badge shape carries the attitude band and the tint marks a visible
+     * rival, without colour alone.
+     *
      * @param graphics   required canvas
      * @param point      required top-left corner of the tile
      * @param settlement required settlement already known to the player
+     * @param relation   required view of the settlement, empty when the player
+     *                   has no view
      */
     public void paintNativeSettlement(final GraphicsContext graphics,
-            final Point point, final NativeSettlement settlement) {
+            final Point point, final NativeSettlement settlement,
+            final Optional<NativeRelationView> relation) {
         final double size = Tile.TILE_WIDTH_IN_PX * NATIVE_SETTLEMENT_SHARE;
         final double left = point.getX() + (Tile.TILE_WIDTH_IN_PX - size) / 2;
         final double top = point.getY() + Tile.TILE_WIDTH_IN_PX * 0.3;
         final Paint previousFill = graphics.getFill();
         final Paint previousStroke = graphics.getStroke();
         final double previousWidth = graphics.getLineWidth();
+        if (relation.isPresent()
+                && relation.get().getProvokingRival().isPresent()) {
+            graphics.setFill(PROVOKED_BACKGROUND);
+            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                    Tile.TILE_WIDTH_IN_PX);
+        }
         graphics.setFill(nativeNationColor(settlement.getNation()));
         graphics.setStroke(MARKER_INK);
         graphics.setLineWidth(1.5);
@@ -387,9 +441,72 @@ public final class PaintService {
             graphics.strokeRect(point.getX() + 2, point.getY() + 2,
                     Tile.TILE_WIDTH_IN_PX - 4, Tile.TILE_WIDTH_IN_PX - 4);
         }
+        relation.ifPresent(view -> paintAttitude(graphics, point, view));
         graphics.setFill(previousFill);
         graphics.setStroke(previousStroke);
         graphics.setLineWidth(previousWidth);
+    }
+
+    /**
+     * Attitude badge in the lower right corner: the colour and the shape both
+     * name the band (circle content, triangle uneasy, square angry, diamond
+     * hostile). Exclamation marks above it show the rate of alarm change.
+     */
+    private static void paintAttitude(final GraphicsContext graphics,
+            final Point point, final NativeRelationView view) {
+        final double size = ATTITUDE_BADGE_SIZE;
+        final double left = point.getX() + Tile.TILE_WIDTH_IN_PX - size - 2;
+        final double top = point.getY() + Tile.TILE_WIDTH_IN_PX - size - 2;
+        graphics.setFill(attitudeColor(view.getAttitude()));
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(1);
+        switch (view.getAttitude()) {
+        case CONTENT:
+            graphics.fillOval(left, top, size, size);
+            graphics.strokeOval(left, top, size, size);
+            break;
+        case UNEASY:
+            final double[] triangleX = { left, left + size, left + size / 2 };
+            final double[] triangleY = { top + size, top + size, top };
+            graphics.fillPolygon(triangleX, triangleY, 3);
+            graphics.strokePolygon(triangleX, triangleY, 3);
+            break;
+        case ANGRY:
+            graphics.fillRect(left, top, size, size);
+            graphics.strokeRect(left, top, size, size);
+            break;
+        case HOSTILE:
+            final double[] diamondX = { left + size / 2, left + size,
+                    left + size / 2, left };
+            final double[] diamondY = { top, top + size / 2, top + size,
+                    top + size / 2 };
+            graphics.fillPolygon(diamondX, diamondY, 4);
+            graphics.strokePolygon(diamondX, diamondY, 4);
+            break;
+        default:
+            break;
+        }
+        final int marks = view.getExclamationMarks();
+        if (marks > 0) {
+            graphics.setFill(MARKER_INK);
+            graphics.fillText("!".repeat(marks), left, top - 2);
+        }
+    }
+
+    private static Color attitudeColor(final NativeHostility attitude) {
+        switch (attitude) {
+        case CONTENT:
+            return Color.web("#2E7D32");
+        case UNEASY:
+            return Color.web("#F9A825");
+        case ANGRY:
+            return Color.web("#E65100");
+        case HOSTILE:
+            return Color.web("#B71C1C");
+        default:
+            throw new IllegalArgumentException(
+                    "No colour for attitude " + attitude);
+        }
     }
 
     private static Color nativeNationColor(final NativeNation nation) {

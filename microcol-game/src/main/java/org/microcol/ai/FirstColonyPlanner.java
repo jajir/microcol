@@ -26,27 +26,80 @@ final class FirstColonyPlanner {
             .thenComparing(candidate -> candidate.site, COORDINATES)
             .thenComparing(candidate -> candidate.approach, COORDINATES);
 
+    /**
+     * First colony: the founder walks, or rides its carrier, and exploration
+     * reveals unknown ground when no known site exists.
+     *
+     * @return the next step, or empty when the owner already has a colony
+     */
     static Optional<Location> nextStep(final Model model, final Unit founder) {
         final Player owner = founder.getOwner();
-        if (model.getAllUnits().stream().noneMatch(unit -> unit == founder)
-                || !founder.getType().canBuildColony() || owner.isKing()
-                || model.getColonies().stream()
-                        .anyMatch(colony -> colony.getOwner() == owner)) {
+        if (model.getColonies().stream()
+                .anyMatch(colony -> colony.getOwner() == owner)) {
             return Optional.empty();
         }
-        final Unit mover;
+        return mover(founder).flatMap(unit -> route(model, founder, unit,
+                unit.getLocation(), Optional.empty(), true))
+                .flatMap(route -> route.step);
+    }
+
+    /**
+     * Second colony: the best known legal site for this mover, routed from the
+     * given square. A walking founder passes its colony square before release,
+     * and a carrier passes its port. Nothing moves and unknown ground is never
+     * explored for the choice.
+     *
+     * @param model   required model
+     * @param founder required spare founder
+     * @param mover   required unit that would carry or walk the founder
+     * @param start   required square the route begins from
+     * @return the site, or empty when no known legal site exists
+     */
+    static Optional<Location> chooseSite(final Model model, final Unit founder,
+            final Unit mover, final Location start) {
+        return route(model, founder, mover, start, Optional.empty(), false)
+                .flatMap(route -> route.site);
+    }
+
+    /**
+     * Second colony: the next step toward a site chosen earlier. Unknown ground
+     * is never explored, so a blocked site yields empty.
+     *
+     * @param model   required model
+     * @param founder required founder
+     * @param mover   required unit that would carry or walk the founder
+     * @param site    required site chosen earlier
+     * @return the next step, or empty when the site is not reachable now
+     */
+    static Optional<Location> nextStepToSite(final Model model,
+            final Unit founder, final Unit mover, final Location site) {
+        return route(model, founder, mover, mover.getLocation(),
+                Optional.of(site), false).flatMap(route -> route.step);
+    }
+
+    /** The unit that moves the founder: the founder itself or its carrier. */
+    private static Optional<Unit> mover(final Unit founder) {
         if (founder.isAtPlaceLocation()) {
-            mover = founder;
-        } else if (founder.isAtCargoSlot()) {
-            mover = founder.getPlaceCargoSlot().getOwnerUnit();
-            if (!mover.isShip() || mover.getOwner() != owner
-                    || !mover.isAtPlaceLocation()) {
-                return Optional.empty();
+            return Optional.of(founder);
+        }
+        if (founder.isAtCargoSlot()) {
+            final Unit carrier = founder.getPlaceCargoSlot().getOwnerUnit();
+            if (carrier.isShip() && carrier.getOwner() == founder.getOwner()
+                    && carrier.isAtPlaceLocation()) {
+                return Optional.of(carrier);
             }
-        } else {
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<Route> route(final Model model, final Unit founder,
+            final Unit mover, final Location start,
+            final Optional<Location> fixedSite, final boolean explore) {
+        final Player owner = founder.getOwner();
+        if (model.getAllUnits().stream().noneMatch(unit -> unit == founder)
+                || !founder.getType().canBuildColony() || owner.isKing()) {
             return Optional.empty();
         }
-        final Location start = mover.getLocation();
         if (!known(model, owner, start) || !mover.isPossibleToMoveAt(start)) {
             return Optional.empty();
         }
@@ -85,6 +138,9 @@ final class FirstColonyPlanner {
                     ? approach.getNeighbors()
                     : List.of(approach);
             for (final Location site : sites) {
+                if (fixedSite.isPresent() && !site.equals(fixedSite.get())) {
+                    continue;
+                }
                 final int food = foodYield(model, founder, site);
                 if (food < 0) {
                     continue;
@@ -98,8 +154,13 @@ final class FirstColonyPlanner {
             }
         }
         if (best != null) {
-            return Optional.of(best.approach.equals(start) ? best.site
-                    : firstStep.get(best.approach));
+            return Optional.of(new Route(
+                    Optional.of(best.approach.equals(start) ? best.site
+                            : firstStep.get(best.approach)),
+                    Optional.of(best.site)));
+        }
+        if (!explore) {
+            return Optional.empty();
         }
         return distance.keySet().stream().filter(at -> !at.equals(start))
                 .filter(at -> at.getNeighbors().stream()
@@ -107,7 +168,8 @@ final class FirstColonyPlanner {
                                 && !owner.isVisible(neighbor)))
                 .min(Comparator.comparingInt((Location at) -> distance.get(at))
                         .thenComparing(COORDINATES))
-                .map(firstStep::get);
+                .map(firstStep::get)
+                .map(step -> new Route(Optional.of(step), Optional.empty()));
     }
 
     private static boolean known(final Model model, final Player owner,
@@ -137,6 +199,18 @@ final class FirstColonyPlanner {
                         .canProduceAmmount(GoodsType.CORN))
                 .max().orElse(-1);
         return yield >= founder.getType().getAteFoodPerTurn() ? yield : -1;
+    }
+
+    /** A planned next step, and the known site it leads to when one is set. */
+    private static final class Route {
+        private final Optional<Location> step;
+        private final Optional<Location> site;
+
+        private Route(final Optional<Location> step,
+                final Optional<Location> site) {
+            this.step = step;
+            this.site = site;
+        }
     }
 
     private static final class Candidate {

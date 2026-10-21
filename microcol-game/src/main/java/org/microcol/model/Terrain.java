@@ -265,6 +265,18 @@ public class Terrain {
     }
 
     /**
+     * Natural output of a goods type: the terrain baseline with the matching
+     * deposit bonus. Plow, road, river, worker and building modifiers are not
+     * included, so the result is what the land yields without improvement.
+     *
+     * @param goodsType required goods type
+     * @return units the square yields naturally, zero when it yields none
+     */
+    public int getNaturalOutput(final GoodsType goodsType) {
+        return getCommonsOutput(Preconditions.checkNotNull(goodsType), true);
+    }
+
+    /**
      * Whether this square currently yields some of the goods.
      *
      * @param producedGoodsType required goods type

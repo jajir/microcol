@@ -112,6 +112,10 @@ public final class ReferenceExpedition {
         map.setTerrainType(types);
         map.setTrees(terrain.getTreeSet());
         map.setFields(terrain.getFieldSet());
+        map.setRivers(terrain.getRiverMap());
+        map.setRiverSegments(terrain.getRiverSegments());
+        map.setResources(terrain.getResourceMap());
+        map.setMineralReserves(terrain.getMineralReserveMap());
         final VisibilityPo mapVisibility = new VisibilityPo();
         mapVisibility.setVisibility(Set.of(), maxX, maxY);
         map.setVisibility(mapVisibility);

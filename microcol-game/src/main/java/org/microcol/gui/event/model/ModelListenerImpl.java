@@ -2,6 +2,7 @@ package org.microcol.gui.event.model;
 
 import java.util.Optional;
 
+import org.microcol.gui.event.NativeRelationsChangedEvent;
 import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
 import org.microcol.model.event.ActionEndedEvent;
@@ -75,6 +76,8 @@ final class ModelListenerImpl implements ModelListener {
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
         eventBus.post(event);
+        // A turn update may have moved native alarm and attitude.
+        eventBus.post(new NativeRelationsChangedEvent());
     }
 
     @Override
@@ -131,6 +134,8 @@ final class ModelListenerImpl implements ModelListener {
         if (event.canPlayerSeeAttack(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
+        // An attack changes native relations even when its view is hidden.
+        eventBus.post(new NativeRelationsChangedEvent());
     }
 
     @Override
@@ -198,6 +203,8 @@ final class ModelListenerImpl implements ModelListener {
     @Override
     public void onActionEnded(final ActionEndedEvent event) {
         eventBus.post(event);
+        // A committed action such as a trade or gift may change relations.
+        eventBus.post(new NativeRelationsChangedEvent());
     }
 
     @Override

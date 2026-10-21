@@ -7,10 +7,14 @@ import org.microcol.model.campaign.CampaignNames;
 public enum GameMenu implements MessageKeyResource {
 
     setupTitle, setupMap, setupMapOriginal, setupMapTwoIslands,
-    setupMapRivalExpedition, setupMapReference, setupNation, setupNationDutch,
-    setupNationFrench, setupNationEnglish, setupNationSpanish, setupNationNote,
-    setupNationReferenceNote, setupPlayerName, setupNameError, setupStart,
-    mainMenu, buttonContinue, buttonRecovery, recoveryTitle,
+    setupMapRivalExpedition, setupMapReference, setupMapGenerated,
+    setupGeneratedClimate, setupGeneratedLand, setupGeneratedSeed,
+    setupClimateCold, setupClimateTemperate, setupClimateWarm, setupLandLow,
+    setupLandMedium, setupLandHigh, setupGeneratedPreview,
+    setupGeneratedSeedError, setupGeneratedFailed, setupNation,
+    setupNationDutch, setupNationFrench, setupNationEnglish, setupNationSpanish,
+    setupNationNote, setupNationReferenceNote, setupPlayerName, setupNameError,
+    setupStart, mainMenu, buttonContinue, buttonRecovery, recoveryTitle,
     recoveryLatestPosition, recoveryLatestTurn, recoveryPreviousDecade,
     recoveryMissing, recoveryCorrupt, buttonLoadSave, buttonPlayCampaign,
     buttonFreeGame, buttonExitMicroCol, buttonSetting, settingTitle, buttonBack,

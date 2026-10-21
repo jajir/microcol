@@ -122,6 +122,25 @@ public abstract class AbstractScreen {
         return getNodeFinder().lookup(id).tryQuery().isPresent();
     }
 
+    /**
+     * Unlike {@link #isCssIdVisible(String)}, which only finds the node, this
+     * also requires the node and every parent to be visible, so a control
+     * hidden in place with setVisible(false) does not count as shown.
+     */
+    protected boolean isCssIdShown(final String cssId) {
+        final java.util.Optional<Node> found = getNodeFinder()
+                .lookup("#" + cssId).tryQuery();
+        if (found.isEmpty()) {
+            return false;
+        }
+        for (Node node = found.get(); node != null; node = node.getParent()) {
+            if (!node.isVisible()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected <T extends Node> List<T> getListOfNodes(final String cssClass) {
         final Set<T> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
         return new ArrayList<T>(cratesSet);

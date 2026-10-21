@@ -108,6 +108,24 @@ public final class UnitAttackedEventListener {
     }
 
     private String equipmentMessage(final UnitAttackedEvent event) {
+        // A defeated brave of any role is destroyed with its equipment.
+        if (event
+                .getDefeated() instanceof org.microcol.model.unit.UnitNativeBrave) {
+            return i18n.get(
+                    org.microcol.gui.dialog.Dialog.fight_nativeDestroyed,
+                    event.getDefeated().getOwner().getDisplayName());
+        }
+        // An unarmed colonist beaten by natives dies; it is not captured.
+        if (event.wasDestroyed() && event
+                .getDefeated() instanceof org.microcol.model.unit.UnitFreeColonist
+                && !((org.microcol.model.unit.UnitFreeColonist) event
+                        .getDefeated()).isHoldingGuns()
+                && (event
+                        .getAttacker() instanceof org.microcol.model.unit.UnitNativeBrave
+                        || event.getDefender() instanceof org.microcol.model.unit.UnitNativeBrave)) {
+            return i18n.get(org.microcol.gui.dialog.Dialog.fight_settlerKilled,
+                    event.getDefeated().getOwner().getDisplayName());
+        }
         if (event
                 .getDefeated() instanceof org.microcol.model.unit.UnitArtillery) {
             return i18n.get(event.wasDestroyed()

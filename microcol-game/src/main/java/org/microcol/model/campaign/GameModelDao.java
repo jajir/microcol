@@ -17,6 +17,8 @@ import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.campaign.po.RecoverySlot;
+import org.microcol.model.generation.GeneratedWorld;
+import org.microcol.model.generation.GeneratedWorldSettings;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
@@ -88,6 +90,40 @@ public final class GameModelDao {
                         player.setTax(TaxState.initial());
                     });
         }
+        return finishFreePlay(source, name, eventBus);
+    }
+
+    /**
+     * Create a New World from generated terrain with the reference expedition
+     * and the native nations. The complete state is built before it is
+     * returned, so a failed generation leaves the caller's active game as it
+     * was.
+     *
+     * @param settings   required generation settings
+     * @param playerName required player name
+     * @param difficulty required difficulty
+     * @param nation     required nation the player controls
+     * @param eventBus   required event bus of the new game
+     * @return new game in its start state
+     * @throws IllegalStateException when no valid world could be generated
+     */
+    public GameModel createGeneratedFreePlay(
+            final GeneratedWorldSettings settings, final String playerName,
+            final Difficulty difficulty, final EuropeanNation nation,
+            final EventBus eventBus) {
+        final String name = Player.normalizeDisplayName(playerName);
+        Preconditions.checkNotNull(settings, "Settings are null");
+        Preconditions.checkNotNull(difficulty, "Difficulty is null");
+        Preconditions.checkNotNull(nation, "Nation is null");
+        Preconditions.checkNotNull(eventBus, "Event bus is null");
+        final GameModelPo source = gameModelPoDao
+                .loadFromClassPath(FreePlayMap.REFERENCE.getResource());
+        source.setModel(GeneratedWorld.create(settings, nation, difficulty));
+        return finishFreePlay(source, name, eventBus);
+    }
+
+    private GameModel finishFreePlay(final GameModelPo source,
+            final String name, final EventBus eventBus) {
         final GameModel game = makeFromModelPo(source, eventBus);
         game.getModel().getPlayers().stream().filter(Player::isHuman)
                 .findFirst().orElseThrow().setDisplayName(name);

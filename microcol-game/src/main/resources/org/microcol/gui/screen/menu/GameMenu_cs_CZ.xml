@@ -51,4 +51,17 @@
     <entry key="setupNameError">Zadejte 1–64 znaků bez řídicích znaků.</entry>
     <entry key="setupStart">Začít hru</entry>
     <entry key="setupMapReference">Výpravy čtyř národů</entry>
+    <entry key="setupMapGenerated">Vygenerovaný nový svět</entry>
+    <entry key="setupGeneratedClimate">Podnebí</entry>
+    <entry key="setupGeneratedLand">Podíl pevniny</entry>
+    <entry key="setupGeneratedSeed">Semínko (0 až 999999999)</entry>
+    <entry key="setupClimateCold">Chladné</entry>
+    <entry key="setupClimateTemperate">Mírné</entry>
+    <entry key="setupClimateWarm">Teplé</entry>
+    <entry key="setupLandLow">Málo (25 %%)</entry>
+    <entry key="setupLandMedium">Střední (40 %%)</entry>
+    <entry key="setupLandHigh">Hodně (55 %%)</entry>
+    <entry key="setupGeneratedPreview">Náhled: mapa %1$d × %2$d polí, podnebí %3$s, pevnina %4$d %%, semínko %5$s.</entry>
+    <entry key="setupGeneratedSeedError">Zadejte celé semínko od 0 do 999999999.</entry>
+    <entry key="setupGeneratedFailed">Nový svět se nepodařilo vygenerovat. Aktuální hra nebyla změněna.</entry>
 </properties>

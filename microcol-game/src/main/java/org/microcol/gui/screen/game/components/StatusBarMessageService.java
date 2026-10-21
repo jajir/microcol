@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +15,10 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
+import org.microcol.model.NativeHostility;
 import org.microcol.model.NativeLandQuote;
 import org.microcol.model.NativeNation;
+import org.microcol.model.NativeRelationView;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.NativeSettlementClass;
 import org.microcol.model.Player;
@@ -32,6 +36,9 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class StatusBarMessageService {
+
+    /** Decimal places kept when removing binary floating-point noise. */
+    private static final int NOISE_DIGITS = 9;
 
     private final I18n i18n;
 
@@ -64,6 +71,22 @@ public class StatusBarMessageService {
             final TerrainType terrain, final List<Unit> units,
             final Optional<Colony> oColony,
             final Optional<NativeSettlement> oNativeSettlement) {
+        return getStatusMessage(where, player, terrain, units, oColony,
+                oNativeSettlement, false);
+    }
+
+    /**
+     * @param oNativeSettlement settlement the player may see on this square;
+     *                          the model passes it only in present sight
+     * @param lostCityRumor     whether an unresolved lost-city rumor waits on
+     *                          the square; it is named only in present sight,
+     *                          so a remembered square reveals nothing
+     */
+    public String getStatusMessage(final Location where, final Player player,
+            final TerrainType terrain, final List<Unit> units,
+            final Optional<Colony> oColony,
+            final Optional<NativeSettlement> oNativeSettlement,
+            final boolean lostCityRumor) {
         final StringBuilder buff = new StringBuilder();
         if (gamePreferences.isDevelopment()) {
             buff.append("[");
@@ -108,6 +131,10 @@ public class StatusBarMessageService {
             // colony.
             oNativeSettlement.ifPresent(settlement -> buff.append(" ")
                     .append(nativeSettlementText(settlement)));
+            // The marker's meaning in words, so it never depends on colour.
+            if (current && lostCityRumor) {
+                buff.append(" ").append(i18n.get(Loc.lostCityRumorStatus));
+            }
             if (!current) {
                 player.getKnownColonyAt(where)
                         .ifPresent(sighting -> buff.append(" ")
@@ -126,7 +153,7 @@ public class StatusBarMessageService {
      * Nation, class and capital status are stated in words, so the settlement
      * never depends on its marker colour alone.
      */
-    private String nativeSettlementText(final NativeSettlement settlement) {
+    public String nativeSettlementText(final NativeSettlement settlement) {
         return i18n.get(
                 settlement.isCapital() ? Loc.nativeCapitalStatus
                         : Loc.nativeSettlementStatus,
@@ -173,6 +200,108 @@ public class StatusBarMessageService {
                         : Loc.nativeLandClaimant,
                 i18n.get(nationLabel(settlement.getNation())),
                 i18n.get(classLabel(settlement.getSettlementClass())));
+    }
+
+    /**
+     * One sentence for a learned settlement's relation toward the player's own
+     * European: attitude band, signed alarm change with its direction, and the
+     * visible provoker or its absence. Each meaning is stated in words, so
+     * colour and the exclamation marks are never the only reading.
+     *
+     * @param view required view from {@code Model.getNativeRelationView}
+     * @return localized attitude, change, direction and provoker
+     */
+    public String nativeRelationText(final NativeRelationView view) {
+        return String.join(" ", nativeAttitudeText(view),
+                nativeAlarmChangeText(view), nativeRivalText(view));
+    }
+
+    /**
+     * Hover text of a learned settlement: the relation sentence and the key
+     * that opens the keyboard-reachable details.
+     *
+     * @param view required view from {@code Model.getNativeRelationView}
+     * @return localized relation text followed by the details hint
+     */
+    public String nativeRelationHoverText(final NativeRelationView view) {
+        return nativeRelationText(view) + " " + i18n.get(Loc.nativeDetailsHint);
+    }
+
+    /**
+     * @param view required view from {@code Model.getNativeRelationView}
+     * @return localized attitude band in words
+     */
+    public String nativeAttitudeText(final NativeRelationView view) {
+        return i18n.get(Loc.nativeAttitudeLine,
+                i18n.get(attitudeLabel(view.getAttitude())));
+    }
+
+    /**
+     * @param view required view from {@code Model.getNativeRelationView}
+     * @return localized exact signed alarm change with its rising, falling or
+     *         stable direction in words
+     */
+    public String nativeAlarmChangeText(final NativeRelationView view) {
+        return i18n.get(Loc.nativeAlarmChangeLine,
+                signedAlarmChange(view.getAlarmChange()),
+                i18n.get(trendLabel(view.getTrend())));
+    }
+
+    /**
+     * @param view required view from {@code Model.getNativeRelationView}
+     * @return localized name of the visible provoker, or that it is unknown
+     */
+    public String nativeRivalText(final NativeRelationView view) {
+        return view.getProvokingRival()
+                .map(player -> i18n.get(Loc.nativeRivalProvoker,
+                        player.getDisplayName()))
+                .orElseGet(() -> i18n.get(Loc.nativeRivalUnknown));
+    }
+
+    /**
+     * Exact signed change. Model changes are sums of quarters, halves and the
+     * mean term; only binary floating-point noise beyond the ninth decimal is
+     * removed, so every genuine fraction prints as itself. A negative zero
+     * reads as zero.
+     */
+    static String signedAlarmChange(final double change) {
+        if (change == 0) {
+            return "0";
+        }
+        final BigDecimal magnitude = BigDecimal.valueOf(Math.abs(change))
+                .setScale(NOISE_DIGITS, RoundingMode.HALF_UP)
+                .stripTrailingZeros();
+        if (magnitude.signum() == 0) {
+            return "0";
+        }
+        return (change > 0 ? "+" : "-") + magnitude.toPlainString();
+    }
+
+    private static Loc attitudeLabel(final NativeHostility attitude) {
+        switch (attitude) {
+        case CONTENT:
+            return Loc.nativeAttitudeContent;
+        case UNEASY:
+            return Loc.nativeAttitudeUneasy;
+        case ANGRY:
+            return Loc.nativeAttitudeAngry;
+        case HOSTILE:
+            return Loc.nativeAttitudeHostile;
+        default:
+            throw new IllegalArgumentException(
+                    "No label for attitude " + attitude);
+        }
+    }
+
+    private static Loc trendLabel(final NativeRelationView.AlarmTrend trend) {
+        switch (trend) {
+        case RISING:
+            return Loc.nativeTrendRising;
+        case FALLING:
+            return Loc.nativeTrendFalling;
+        default:
+            return Loc.nativeTrendStable;
+        }
     }
 
     /**

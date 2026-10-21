@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.RivalExpansionObjectivePo;
 import org.microcol.model.store.RivalTradeObjectivePo;
 import org.microcol.model.store.ColonySightingPo;
 import org.microcol.model.store.CongressPo;
@@ -63,6 +64,9 @@ public abstract class Player {
 
     /** Null unless a computer colony is running a supply cycle. */
     private RivalTradeObjective rivalTradeObjective;
+
+    /** Null unless a computer colony is expanding to a second colony. */
+    private RivalExpansionObjective rivalExpansionObjective;
 
     /**
      * Colonies remembered from actual observation, by location. Concurrent
@@ -121,7 +125,8 @@ public abstract class Player {
                             && playerPo.getCongress() == null
                             && playerPo.getTax() == null
                             && playerPo.getUnitPurchaseCounts().isEmpty()
-                            && playerPo.getRivalTradeObjective() == null,
+                            && playerPo.getRivalTradeObjective() == null
+                            && playerPo.getRivalExpansionObjective() == null,
                     "Native players have no European state");
             return new PlayerNative(playerPo.getName(),
                     playerPo.getNativeNation(), playerPo.getGold(), model,
@@ -146,7 +151,13 @@ public abstract class Player {
                     playerPo.getRivalTradeObjective() == null
                             || playerPo.isComputer(),
                     "Only computer colonies keep a trade objective");
+            Preconditions.checkArgument(
+                    playerPo.getRivalExpansionObjective() == null
+                            || playerPo.isComputer(),
+                    "Only computer colonies keep an expansion objective");
             player.loadRivalTradeObjective(playerPo.getRivalTradeObjective());
+            player.loadRivalExpansionObjective(
+                    playerPo.getRivalExpansionObjective());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
@@ -159,7 +170,8 @@ public abstract class Player {
                     playerPo.getUnitPurchaseCounts().isEmpty(),
                     "Kings cannot have purchase counts");
             Preconditions.checkArgument(
-                    playerPo.getRivalTradeObjective() == null,
+                    playerPo.getRivalTradeObjective() == null
+                            && playerPo.getRivalExpansionObjective() == null,
                     "Kings cannot have trade objectives");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
@@ -343,6 +355,9 @@ public abstract class Player {
         out.setUnitPurchaseCounts(counts);
         if (rivalTradeObjective != null) {
             out.setRivalTradeObjective(rivalTradeObjective.save());
+        }
+        if (rivalExpansionObjective != null) {
+            out.setRivalExpansionObjective(rivalExpansionObjective.save());
         }
         colonySightings.values().stream().sorted(java.util.Comparator
                 .comparingInt((ColonySighting sighting) -> sighting
@@ -633,10 +648,16 @@ public abstract class Player {
             EuropeanNation.findByPlayerName(getName()).ifPresent(
                     nation -> model.getEurope().recoverMarkets(nation));
         }
+        // Before congress: an arrival that clears native alarm must read as a
+        // fall.
+        model.observeNativeRelations(this);
         settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
         // Once per completed own update; load and Continue never reach here.
         model.updateNativeRelations(this);
+        // After relations, so a tense settlement cancels on its current
+        // attitude.
+        model.advanceNativeTeaching(this);
         if (hadFranklin) {
             model.prepareFranklinPeaceOffers(this);
         }
@@ -1473,6 +1494,41 @@ public abstract class Player {
     private void loadRivalTradeObjective(final RivalTradeObjectivePo saved) {
         if (saved != null) {
             rivalTradeObjective = RivalTradeObjective.load(saved);
+        }
+    }
+
+    /**
+     * @return the second-colony expansion this computer colony is running, when
+     *         one exists
+     */
+    public Optional<RivalExpansionObjective> getRivalExpansionObjective() {
+        return Optional.ofNullable(rivalExpansionObjective);
+    }
+
+    /**
+     * Store the expansion that the computer colony continues on its owner
+     * turns. Its identities are checked against live state before every use.
+     *
+     * @param objective required expansion
+     * @throws IllegalStateException when this player is not a computer colony
+     */
+    public void setRivalExpansionObjective(
+            final RivalExpansionObjective objective) {
+        Preconditions.checkNotNull(objective, "Expansion objective is null");
+        Preconditions.checkState(computer && !isKing() && !isNative(),
+                "Only computer colonies keep an expansion objective");
+        rivalExpansionObjective = objective;
+    }
+
+    /** Forget the expansion, for example when its founder is gone. */
+    public void clearRivalExpansionObjective() {
+        rivalExpansionObjective = null;
+    }
+
+    private void loadRivalExpansionObjective(
+            final RivalExpansionObjectivePo saved) {
+        if (saved != null) {
+            rivalExpansionObjective = RivalExpansionObjective.load(saved);
         }
     }
 

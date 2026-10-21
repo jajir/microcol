@@ -369,7 +369,8 @@ class NativePlayerTurnTest {
     }
 
     @Test
-    void nativeRobotTakesItsCallbackAndEndsAnActionlessTurn() throws Exception {
+    void nativeRobotTakesItsCallbackAndEndsItsTurnWithoutRaiding()
+            throws Exception {
         final Model model = baseline().model();
         final Finished finished = new Finished();
         final CountDownLatch europeanTurn = new CountDownLatch(1);
@@ -395,11 +396,12 @@ class NativePlayerTurnTest {
             assertEquals(List.of("ARAWAK", "INCA"), finished.snapshot());
             assertEquals(europeanOrder().get(0),
                     model.getCurrentPlayer().getName());
-            // Nothing moved: the braves keep their place and preparation.
-            assertEquals(NativeTurnScene.at(2, 0),
-                    braveOf(model, NativeNation.ARAWAK).getLocation());
-            assertEquals(FULL_FOOT_MOVEMENT_THIRDS,
-                    braveOf(model, NativeNation.INCA).getMovementThirds());
+            // No raid: calm braves take only the shared home patrol, so each
+            // stays within two squares of its own home (R-0156).
+            assertTrue(braveOf(model, NativeNation.ARAWAK).getLocation()
+                    .getDistanceChebyshev(NativeTurnScene.at(2, -2)) <= 2);
+            assertTrue(braveOf(model, NativeNation.INCA).getLocation()
+                    .getDistanceChebyshev(NativeTurnScene.at(0, -2)) <= 2);
         } finally {
             robots.forEach(NativeRobotPlayer::stop);
         }
@@ -528,10 +530,11 @@ class NativePlayerTurnTest {
         model.endTurn();
         assertEquals("INCA", model.getCurrentPlayer().getName());
         final UnitNativeBrave brave = braveOf(model, NativeNation.INCA);
-        // Shared ordinary foot movement; strength is the agreed role value.
+        // Shared ordinary foot movement; strength is the agreed role value and
+        // R-0173 lets a brave attack (the legal battle is tested separately).
         assertEquals(UnitType.COLONIST.getSpeed(), brave.getSpeed());
         assertEquals(1.0, brave.getMilitaryStrenght());
-        assertFalse(brave.canAttack());
+        assertTrue(brave.canAttack());
         final Location from = brave.getLocation();
         assertEquals(FULL_FOOT_MOVEMENT_THIRDS, brave.getMovementThirds());
         final Location sea = NativeTurnScene.at(0, 1);
@@ -547,7 +550,7 @@ class NativePlayerTurnTest {
     }
 
     @Test
-    void europeanUnitCannotEnterOrAttackABraveSquare() {
+    void europeanUnitCannotEnterButMayAttackABraveSquare() {
         // A Dutch musketeer beside the INCA brave.
         final NativeTurnScene scene = baseline().dutchColonist(1, 0);
         final List<UnitPo> saved = scene.po().getUnits();
@@ -567,11 +570,26 @@ class NativePlayerTurnTest {
         assertTrue(musketeer.getMovementThirds() > 0,
                 "The scene needs a unit that could act");
         assertTrue(musketeer.getLocation().isNeighbor(braveSquare));
+        // Ordinary movement still treats the foreign occupant as a blocker.
         assertFalse(musketeer.isPossibleToMoveAt(braveSquare),
                 "A foreign unit blocks the square");
+        // R-0173: the passive hostility query stays closed (no AI attack), but
+        // an explicit decision opens the shared battle without any declaration,
+        // and merely preparing it changes neither the unit nor the saved state.
+        final int movesBefore = musketeer.getMovementThirds();
+        final long randomBefore = model.save().getCombatRandomState();
+        final int outcomesBefore = model.save().getNativeRelationOutcomeIds()
+                .size();
         assertFalse(musketeer.isPossibleToAttackAt(braveSquare));
-        assertTrue(musketeer.prepareAttack(braveSquare, true).isEmpty(),
-                "Native combat belongs to a later requirement");
+        assertTrue(musketeer.prepareAttack(braveSquare, false).isEmpty());
+        final AttackOrder order = musketeer.prepareAttack(braveSquare, true)
+                .orElseThrow();
+        assertFalse(order.isDeclarationRequired());
+        assertEquals(movesBefore, musketeer.getMovementThirds());
+        assertEquals(randomBefore, model.save().getCombatRandomState());
+        assertEquals(outcomesBefore,
+                model.save().getNativeRelationOutcomeIds().size());
+        assertEquals(braveSquare, order.getBattlefield());
     }
 
 }

@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.microcol.model.NativeRelationsScene.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.store.ModelPo;
@@ -191,6 +193,10 @@ class NativeLandPurchaseTest {
         camp.setSettlementClass(NativeNation.TUPI.getSettlementClass());
         camp.setCapital(true);
         camp.setTreasury(2000);
+        camp.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        camp.setOfferedGoods(List.of());
+        camp.setWantedGoods(List.of());
+        camp.setTrade(List.of());
         camp.setLocation(at(2, 0));
         saved.getNativeSettlements().add(camp);
         saved.setNativeLocalAlarm(

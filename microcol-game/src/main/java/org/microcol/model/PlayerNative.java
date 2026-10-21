@@ -17,12 +17,16 @@ public final class PlayerNative extends Player {
 
     private final NativeNation nation;
 
+    /** Model whose settlements this nation's own updates maintain. */
+    private final Model nationModel;
+
     PlayerNative(final String name, final NativeNation nation,
             final int initialGold, final Model model,
             final Map<String, Object> extraData, final Set<Location> visible) {
         super(name, true, initialGold, model, false, extraData, visible, null,
                 null, null);
         this.nation = Preconditions.checkNotNull(nation);
+        this.nationModel = Preconditions.checkNotNull(model);
         Preconditions.checkArgument(name.equals(nation.name()),
                 "Native player name must be its nation");
     }
@@ -40,14 +44,16 @@ public final class PlayerNative extends Player {
     }
 
     /**
-     * Native preparation is the unit update only. Ships, Europe, colonies,
-     * relations, tax and immigration phases do not apply to a native nation.
+     * Native preparation is the unit update and one market update (R-0159), the
+     * latter once per nation turn. Ships, Europe, colonies, relations, tax and
+     * immigration phases do not apply to a native nation.
      *
      * @return always true: a native nation never waits for a European answer
      */
     @Override
     boolean startTurn() {
         getAllUnits().forEach(unit -> unit.startTurn());
+        nationModel.updateNativeMarkets(nation);
         return true;
     }
 

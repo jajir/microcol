@@ -443,7 +443,7 @@ Automatic dock boarding is CARGO-006; European equipment is UNIT-002 and mission
 | IMM-002 | 35, 65 / 41, 71 | The recruitment pool always holds three colonists; choosing/recruiting or an immigration event replaces the removed candidate immediately. | [RecruitmentPool](../microcol-game/src/main/java/org/microcol/model/RecruitmentPool.java) now persists three candidate tokens/types and counters; paid and earned recruitment replace their selected slot. Brewster now filters actual candidate draws and exposes frozen earned choices before colony production. | Partial | R-0075 model checks and TC46 cover base paid-passage replacement and disk continuation; see [execution evidence](functional-tests.md#r-0075-persistent-recruitment-2026-10-16). Brewster integration and remaining acceptance are recorded in [2026-10-17 evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17). |
 | IMM-003 | 35, 65 / 41, 71 | Pay passage to select a candidate immediately; debit treasury and move the chosen candidate to the docks. | [Player.recruit](../microcol-game/src/main/java/org/microcol/model/Player.java) validates candidate/price snapshots, charges once and creates one pier arrival. Europe exposes a separate three-entry recruitment dialog. | Partial | TC46 covers cancellation, duplicate confirmation, insufficient funds, stale price, Czech keyboard recruitment and saved cargo. Complete CI/publication and cross/founder integration remain tracked in [R-0075](requirements/done/R-0075.md). |
 | IMM-004 | 36, 66 / 42, 72 | Royal University training purchases a selected eligible expert independently of the recruitment pool. | The 19 eligible European experts are registered, factory-created, persistable and shown in a scrollable [BuyUnitsDialog](../microcol-game/src/main/java/org/microcol/gui/screen/europe/BuyUnitsDialog.java). Planters remain excluded; purchase is independent of the candidate pool. | Partial | TC30 verifies the full EN/CZ offer and shared purchase/transport flow; TC46 checks pool independence. Real non-production skill integrations and full acceptance remain in [R-0074](requirements/R-0074.md). |
-| IMM-007 | 66 / 72 | Repeated purchases of ships/artillery increase their European price according to demand. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java) persists per-type purchase counts and validates confirmed quotes for ships and artillery. Both use the agreed tenth-of-base increment; rejected purchases do not advance demand. | Matches | [R-0077 evidence](functional-tests.md#r-0077-repeated-ship-purchase-prices-2026-10-16) covers the purchase contract; [R-0095](requirements/R-0095.md) adds artillery and its verification. Remaining native artillery combat is separate from pricing. |
+| IMM-007 | 66 / 72 | Repeated purchases of ships/artillery increase their European price according to demand. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java) persists per-type purchase counts and validates confirmed quotes for ships and artillery. Both use the agreed tenth-of-base increment; rejected purchases do not advance demand. | Matches | [R-0077 evidence](functional-tests.md#r-0077-repeated-ship-purchase-prices-2026-10-16) covers the purchase contract; [R-0095](requirements/done/R-0095.md) adds artillery and its verification. Remaining native artillery combat is separate from pricing. |
 
 ### Trade and the European market
 
@@ -1252,7 +1252,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    Save/Continue preserves actual workers and stocks. This is an agreed AI
    policy and acceptance target, not a verified result. Trade and second-colony
    expansion retain their separate decisions in [R-0091](requirements/done/R-0091.md)
-   and [R-0092](requirements/R-0092.md).
+   and [R-0092](requirements/done/R-0092.md).
 
 ### Rival trade and supplies
 
@@ -1522,12 +1522,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0065 refinement
 
 1. Answer **1** — Generated geography: Use low/medium/high land shares of 25/40/55%, each with a tolerance of five percentage points, with most land in one to three large connected masses and remaining islands. Climate shifts cold/warm latitude bands; terrain forms coherent regions. Rivers run from uplands to water without loops; a main river has at least eight tiles, shorter rivers are small. Approximately 10% of suitable tiles receive a resource: minerals preferentially hills/mountains; timber/game/trapping forests; oasis desert; crops naturally productive terrain; fish coastal water or lakes. Exact terrain weights and generation algorithms are delegated implementation choices within these limits, checked with fixed seeds. Preserve already agreed dimensions, controls, seed reproducibility, legal arrival lanes and native-world dependencies.
-2. Owner: [R-0065](requirements/R-0065.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0065](requirements/done/R-0065.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0092 refinement
 
 1. Answer **2** — Second-colony expansion: After releasing a founder, retain at least two residents (or the higher existing fortified-colony minimum), nonnegative food balance and food stock covering five turns of remaining residents’ consumption. Use a spare unarmed colonist, available legal transport and a known legal site. In a prepared reference scenario with site and transport available, establish the second colony within 20 owner turns; this is a test horizon, not a universal in-game deadline.
-2. Owner: [R-0092](requirements/R-0092.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0092](requirements/done/R-0092.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0128 refinement
 
@@ -1537,7 +1537,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0129 refinement
 
 1. Answer **4** — Burial-site distance ties: Find the nearest native settlement to the disturbed burial tile; if several settlements are equally near, choose one uniformly using the persisted game random state and apply the agreed anger to its nation. Select among settlements, not uniformly among nations. Record the one resolved choice so Continue or inspection cannot reroll it; with no native settlement apply no anger.
-2. Owner: [R-0129](requirements/R-0129.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0129](requirements/done/R-0129.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0130 refinement
 
@@ -1621,7 +1621,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0155 refinement
 
 1. Answer **17** — Alarm rate legend: Show no exclamation mark for zero/decreasing alarm change, one for positive change up to 2 points per update, two for change above 2 through 5, and three above 5. Show a separate falling indication and the exact signed change in accessible text. This rate indication does not replace the agreed current-attitude thresholds.
-2. Owner: [R-0155](requirements/R-0155.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0155](requirements/done/R-0155.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0156 refinement
 
@@ -1636,12 +1636,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0159 refinement
 
 1. Answer **20** — Native local production and expeditions: Compute local production potential from the center and eight neighboring tiles, using baseline yields and natural resource bonuses, without European professions, buildings or land improvements. Use the accepted supply/demand ranking. If fewer than three sale goods are naturally producible, show unavailable remaining slots rather than inventing stock. A trading expedition ends when that carrier physically leaves the settlement, not on closing a dialog or ending a turn; retain the village consecutive-good and muskets exception.
-2. Owner: [R-0159](requirements/R-0159.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0159](requirements/done/R-0159.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0161 refinement
 
 1. Answer **21** — Haggling on native purchases: Allow one request for a 10% discount on the complete purchase quote: acceptance 50% at content and 25% at uneasy relations. Failure preserves the original offer. Round a positive final total upward to whole gold and persist the quote and draw so reopening cannot reroll. Keep ordinary admission, stock, capacity and gold checks.
-2. Owner: [R-0161](requirements/R-0161.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0161](requirements/done/R-0161.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0162 refinement
 
@@ -1691,7 +1691,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0173 refinement
 
 1. Answer **31** — Native battlefield and defeat: Use the defender’s tile as the battlefield for both participants’ native ambush terrain calculation, retaining the accepted printed bonus values. A defeated native brave of any equipment variant is destroyed with its equipment, without a European-style downgrade or surviving colonist.
-2. Owner: [R-0173](requirements/R-0173.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0173](requirements/done/R-0173.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0174 refinement
 

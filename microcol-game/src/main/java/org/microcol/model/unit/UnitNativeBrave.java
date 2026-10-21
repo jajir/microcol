@@ -21,20 +21,47 @@ import com.google.common.collect.ImmutableList;
  * Native brave owned by a {@link org.microcol.model.PlayerNative}. Its home is
  * the saved ID of a settlement of the owner's nation, or it is explicitly
  * homeless; the link is validated against the settlements when the model loads.
+ * Its role gives the combat strength of the native unit.
  */
 public final class UnitNativeBrave extends AbstractUnit {
+
+    /**
+     * Native combat role with its aid-card base strength (R-0173). A defeated
+     * brave of any role is destroyed with its equipment.
+     */
+    public enum Role {
+        BRAVE(1), ARMED_BRAVE(2), MOUNTED_BRAVE(2), MOUNTED_WARRIOR(3);
+
+        private final int base;
+
+        Role(final int base) {
+            this.base = base;
+        }
+
+        /**
+         * @return aid-card base strength of this role
+         */
+        public int getBase() {
+            return base;
+        }
+    }
 
     /** Home settlement ID; {@code null} exactly when the brave is homeless. */
     private final Integer homeSettlementId;
 
+    private final Role role;
+
     public UnitNativeBrave(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction action,
-            final Integer homeSettlementId, final boolean homeless) {
+            final Integer homeSettlementId, final boolean homeless,
+            final Role role) {
         super(model, id, placeBuilder, owner, availableMoves, action);
         Preconditions.checkArgument(homeless == (homeSettlementId == null),
                 "Native brave home state must match its home ID");
         this.homeSettlementId = homeSettlementId;
+        this.role = Preconditions.checkNotNull(role,
+                "Native brave needs a combat role");
     }
 
     @Override
@@ -66,11 +93,19 @@ public final class UnitNativeBrave extends AbstractUnit {
         return Optional.ofNullable(homeSettlementId);
     }
 
+    /**
+     * @return the combat role that sets this brave's strength and attack
+     */
+    public Role getRole() {
+        return role;
+    }
+
     @Override
     public UnitPo save() {
         final UnitPo out = super.save();
         out.setNativeHomeSettlementId(homeSettlementId);
         out.setNativeHomeless(homeSettlementId == null);
+        out.setNativeRole(role.name());
         return out;
     }
 
@@ -79,7 +114,13 @@ public final class UnitNativeBrave extends AbstractUnit {
      */
     @Override
     public double getMilitaryStrenght() {
-        return 1;
+        return role.getBase();
+    }
+
+    /** A native brave of any role is destroyed when it loses a battle. */
+    @Override
+    protected boolean isDestroyedWhenDefeated() {
+        return true;
     }
 
 }

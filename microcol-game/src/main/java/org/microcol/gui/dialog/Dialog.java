@@ -20,15 +20,18 @@ public enum Dialog implements MessageKeyResource {
     fight_damagedName, fight_lostHorses, fight_lostMuskets, fight_colonyArmed,
     fight_colonyCivilians, fight_colonyRevere, fight_colonistsName,
     fight_revereName, fight_colonyCaptured, fight_revereExit, fight_colonyField,
-    fight_workerName, fight_workerCaptured, unitCantFightWarning_caption,
-    notEnoughGold_caption, unitCantMoveHere_caption, gameOver_caption,
-    destroyColony_caption, destroyColony_question, colonyWasCaptured_caption,
-    colonyWasCaptured_text1, colonyWasCaptured_text2, about_caption,
-    about_version, saveGame_title, loadGame_title, loadGame_invalid,
-    buildingQueueDialog_caption, passenger_title, passenger_destination,
-    passenger_hold, passenger_confirm, passenger_unavailable,
-    turnPreparation_title, turnPreparation_unavailable, recoverySave_title,
-    recoverySave_failed, saveFolder_unavailable, diagnosticLog_folder,
-    goodsTransfer_changed, europePrice_changed;
+    fight_workerName, fight_workerCaptured, fight_ambushBonus,
+    fight_artilleryRaidBonus, fight_nativeLoss, fight_nativeAnger,
+    fight_nativeArmedBrave, fight_nativeMountedBrave,
+    fight_nativeMountedWarrior, fight_nativeDestroyed, fight_settlerKilled,
+    unitCantFightWarning_caption, notEnoughGold_caption,
+    unitCantMoveHere_caption, gameOver_caption, destroyColony_caption,
+    destroyColony_question, colonyWasCaptured_caption, colonyWasCaptured_text1,
+    colonyWasCaptured_text2, about_caption, about_version, saveGame_title,
+    loadGame_title, loadGame_invalid, buildingQueueDialog_caption,
+    passenger_title, passenger_destination, passenger_hold, passenger_confirm,
+    passenger_unavailable, turnPreparation_title, turnPreparation_unavailable,
+    recoverySave_title, recoverySave_failed, saveFolder_unavailable,
+    diagnosticLog_folder, goodsTransfer_changed, europePrice_changed;
 
 }

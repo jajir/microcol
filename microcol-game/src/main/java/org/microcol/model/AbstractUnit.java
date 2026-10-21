@@ -619,9 +619,12 @@ public abstract class AbstractUnit implements Unit {
                         .filter(colony -> colony.getOwner() != owner
                                 && colony.hasWorkerAt(targetLocation))
                         .findFirst();
-        final Optional<Colony> peacefulColony = centerColony
-                .or(() -> fieldColony)
-                .filter(colony -> !model.areHostile(owner, colony.getOwner()));
+        // A native raid has no colonial treaty to honour; it fights the unit
+        // standing on the tile instead of the colony roster.
+        final Optional<Colony> peacefulColony = owner.isNative()
+                ? Optional.empty()
+                : centerColony.or(() -> fieldColony).filter(
+                        colony -> !model.areHostile(owner, colony.getOwner()));
         if (peacefulColony.isPresent() && (!allowDeclaration || model
                 .isAttackRestrained(owner, peacefulColony.get().getOwner()))) {
             return Optional.empty();
@@ -630,27 +633,40 @@ public abstract class AbstractUnit implements Unit {
                 .stream()
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
-                // Native roles, terrain and ambush strengths belong to R-0173;
-                // until then a native unit is not an attackable target.
-                .filter(unit -> !unit.getOwner().isNative())
+                // Natives raid only colonial units. A colonial European attacks
+                // a native only as an explicit decision (allowDeclaration), so
+                // the passive hostility query and the European AI never start
+                // one; the Crown never fights natives.
+                .filter(unit -> owner.isNative()
+                        ? unit.getOwner().isColonialNation()
+                        : !unit.getOwner().isNative()
+                                || owner.isColonialNation() && allowDeclaration)
+                // A native battle always has quoted strengths; it never falls
+                // back to the legacy even-odds fight.
+                .filter(unit -> !(owner.isNative()
+                        || unit.getOwner().isNative())
+                        || CombatStrengths.forBattle(model, this, unit)
+                                .isPresent())
                 // Allies, and former allies during the war wait, are never
                 // attacked, not even by declaration or privateer exception.
                 .filter(unit -> !model.isAttackRestrained(owner,
                         unit.getOwner()))
                 .filter(unit -> allowDeclaration
-                        || model.areHostile(owner, unit.getOwner())
-                        || model.isPrivateerNavalException(this, unit))
+                        || !AttackOrder.isDeclarationNeeded(model, owner,
+                                unit.getOwner(),
+                                model.isPrivateerNavalException(this, unit)))
                 .filter(unit -> peacefulColony.isEmpty()
                         || peacefulColony.get().getOwner() == unit.getOwner())
                 .collect(Collectors.toList());
-        if (centerColony.isPresent() && !isShip()) {
+        if (centerColony.isPresent() && !isShip() && !owner.isNative()) {
             // Residents of fields and buildings defend too, so the colony
             // roster, not the map-only occupant list, selects the defender. A
             // peaceful colony needs the ordinary declaration review first.
             return centerColony.get().planDefense(this, eligible)
                     .flatMap(this::colonyBattle);
         }
-        if (fieldColony.isPresent() && !isShip() && eligible.isEmpty()) {
+        if (fieldColony.isPresent() && !isShip() && !owner.isNative()
+                && eligible.isEmpty()) {
             return fieldColony.get().planFieldDefense(this, targetLocation)
                     .flatMap(this::colonyBattle);
         }
@@ -847,6 +863,9 @@ public abstract class AbstractUnit implements Unit {
                 unloadPassengersAt(moveTo);
             }
             model.fireUnitMovedStepFinished(this, start, moveTo);
+            // A committed scout step may consume a lost-city rumor; the unit
+            // can be lost there, which stops the rest of its path.
+            model.resolveLostCityRumor(this, moveTo);
         }
     }
 
@@ -909,8 +928,10 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(
                 order.getAttacker() == this && order.matchesParticipants(),
                 "The selected battle changed");
+        // A confirmed order is the explicit decision a native target needs.
         final Battle battle = findBattle(order.getTarget(),
-                order.isDeclarationRequired())
+                order.isDeclarationRequired()
+                        || order.getDefender().getOwner().isNative())
                 .orElseThrow(() -> new IllegalStateException(
                         "The selected attack is no longer legal"));
         final Unit selected = battle.defender;
@@ -925,14 +946,17 @@ public abstract class AbstractUnit implements Unit {
                 "The combat experience inputs changed");
         final boolean privateerException = model.isPrivateerNavalException(this,
                 selected);
-        final EuropeanRelationState currentRelation = owner.isKing()
-                || selected.getOwner().isKing() ? null
-                        : model.getEuropeanRelation(owner, selected.getOwner());
-        Preconditions.checkState(order
-                .isPrivateerException() == privateerException
-                && order.getOriginalRelation() == currentRelation
-                && order.isDeclarationRequired() == (!privateerException
-                        && !model.areHostile(owner, selected.getOwner())),
+        final EuropeanRelationState currentRelation = AttackOrder
+                .isEuropeanPair(owner, selected.getOwner())
+                        ? model.getEuropeanRelation(owner, selected.getOwner())
+                        : null;
+        Preconditions.checkState(
+                order.isPrivateerException() == privateerException
+                        && order.getOriginalRelation() == currentRelation
+                        && order.isDeclarationRequired() == AttackOrder
+                                .isDeclarationNeeded(model, owner,
+                                        selected.getOwner(),
+                                        privateerException),
                 "The diplomatic state changed");
         // Actual aggression, not the declaration alone, is recorded and
         // obliges the victim's allies. Plan it before any random draw, combat
@@ -972,15 +996,26 @@ public abstract class AbstractUnit implements Unit {
                     naval.get(), aggression);
             return;
         }
+        // A native brave's relation effect is planned before the draw, applied
+        // once with the committed battle, and no later check can refuse it.
+        final Optional<NativeRelationOutcome> nativeEffect = selected.getOwner()
+                .isNative()
+                        ? Optional
+                                .of(model.planNativeUnitAttack(owner, selected))
+                        : Optional.empty();
+        final boolean nativeFight = owner.isNative()
+                || selected.getOwner().isNative();
         final boolean winnerAttacker = strengths.isPresent()
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
         model.applyAggression(aggression);
         movementThirds = 0;
         defender.movementThirds = 0;
+        nativeEffect.ifPresent(
+                outcome -> model.applyNativeRelationOutcome(owner, outcome));
         if (strengths.isPresent()) {
             final AbstractUnit loser = winnerAttacker ? defender : this;
-            if (isDestroyedByDefeat(loser)) {
+            if (isDestroyedByDefeat(loser, nativeFight)) {
                 final Unit winner = winnerAttacker ? this : defender;
                 model.fireUnitAttacked(this, defender, loser, true,
                         promoteWinningColonist(winner));
@@ -1164,7 +1199,10 @@ public abstract class AbstractUnit implements Unit {
      * its own capture.
      */
     private boolean canOccupyWonTile(final Location target) {
+        // Taking a native settlement square is conquest (R-0174), not a win.
         return owner.getEnemyUnitsAt(target).isEmpty()
+                && model.getNativeSettlements().stream().noneMatch(
+                        settlement -> settlement.getLocation().equals(target))
                 && model.getColonyAt(target)
                         .map(colony -> colony.getOwner() == owner).orElse(true);
     }
@@ -1211,6 +1249,17 @@ public abstract class AbstractUnit implements Unit {
         return loser instanceof UnitArtillery
                 && ((UnitArtillery) loser).isDamaged()
                 || loser.isDestroyedWhenDefeated();
+    }
+
+    /**
+     * A native battle destroys an unarmed European loser, such as a colonist or
+     * a wagon, instead of capturing it; armed soldiers and artillery keep their
+     * ordinary equipment loss.
+     */
+    private static boolean isDestroyedByDefeat(final AbstractUnit loser,
+            final boolean nativeFight) {
+        return isDestroyedByDefeat(loser)
+                || nativeFight && !CombatStrengths.isArmedLand(loser);
     }
 
     protected void clearFortificationAfterDefeat() {
@@ -1268,6 +1317,28 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public boolean isAtPlaceColonyField() {
         return place instanceof PlaceColonyField;
+    }
+
+    @Override
+    public boolean isAtPlaceNativeCourse() {
+        return place instanceof PlaceNativeCourse;
+    }
+
+    /**
+     * Move a unit from the map into the native course of a settlement (R-0148).
+     * Movement and any order are spent, so the learner cannot move, work or
+     * fight while the course lasts. Its equipment and identity stay unchanged.
+     *
+     * @param settlementId identity of the settlement that teaches
+     */
+    void beginNativeCourse(final int settlementId) {
+        Preconditions.checkState(isAtPlaceLocation(),
+                "Only a unit on the map can begin a native course");
+        place.destroy();
+        place = new PlaceNativeCourse(this, settlementId);
+        movementThirds = 0;
+        goTo = null;
+        setAction(UnitActionType.noAction.make());
     }
 
     /**
@@ -1721,6 +1792,7 @@ public abstract class AbstractUnit implements Unit {
             model.fireUnitMovedStepFinished(this, startLocation,
                     targetLocation);
             model.fireUnitMovedFinished(this, path);
+            model.resolveLostCityRumor(this, targetLocation);
         }
     }
 
@@ -2154,6 +2226,14 @@ public abstract class AbstractUnit implements Unit {
     void cancelGoTo() {
         Preconditions.checkState(goTo != null, "Unit %s has no go-to order",
                 this);
+        goTo = null;
+    }
+
+    /**
+     * Drop the go-to order of a unit the game has just removed. No pause or
+     * cancellation notice is due: the removal's own turn notice explains it.
+     */
+    void discardGoToOrder() {
         goTo = null;
     }
 

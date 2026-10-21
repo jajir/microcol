@@ -3,6 +3,7 @@ package org.microcol.gui.screen.game;
 import org.microcol.gui.WasdController;
 import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.ShowHelpEvent;
+import org.microcol.gui.event.ShowNativeSettlementsEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.ClearForestEvent;
@@ -121,6 +122,9 @@ public class ScreenGamePresenter {
         }
         if (KeyCode.H == event.getCode()) {
             eventBus.post(new ShowHelpEvent());
+        }
+        if (KeyCode.N == event.getCode()) {
+            eventBus.post(new ShowNativeSettlementsEvent());
         }
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));

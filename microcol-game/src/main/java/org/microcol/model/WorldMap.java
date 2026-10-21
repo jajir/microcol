@@ -32,6 +32,12 @@ public class WorldMap {
 
     private final Set<Location> roads;
 
+    /**
+     * Unresolved lost-city rumors. Only the owner of the map removes one, once,
+     * through {@link #removeLostCityRumor(Location)}.
+     */
+    private final Set<Location> lostCityRumors;
+
     private final ImmutableMap<Location, RiverSize> rivers;
 
     /**
@@ -62,6 +68,7 @@ public class WorldMap {
         this.fields = worldMapPo.getFieldSet();
         this.cleared = worldMapPo.getClearedSet();
         this.roads = worldMapPo.getRoadSet();
+        this.lostCityRumors = worldMapPo.getRumorSet();
         this.rivers = ImmutableMap.copyOf(worldMapPo.getRiverMap());
         this.riverSegments = new HashSet<>();
         this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(),
@@ -77,6 +84,11 @@ public class WorldMap {
         for (final Location at : rivers.keySet()) {
             Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
                     "River square (%s) must be land.", at);
+        }
+        for (final Location at : lostCityRumors) {
+            Preconditions.checkArgument(
+                    isValid(at) && getTerrainTypeAt(at).isLand(),
+                    "Lost-city rumor square (%s) must be land.", at);
         }
         for (final RiverSegmentPo segment : worldMapPo.getRiverSegments()) {
             verifyRiverSegment(segment);
@@ -244,6 +256,27 @@ public class WorldMap {
     }
 
     /**
+     * @param location required location
+     * @return whether an unresolved lost-city rumor waits on the square
+     */
+    public boolean hasLostCityRumorAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        return lostCityRumors.contains(location);
+    }
+
+    /**
+     * Consume the rumor of one square. Only the model calls it, after the legal
+     * scout entry has been validated, and the square keeps no rumor afterwards.
+     *
+     * @param location required square with an unresolved rumor
+     */
+    void removeLostCityRumor(final Location location) {
+        Preconditions.checkArgument(lostCityRumors.contains(location),
+                "No unresolved lost-city rumor at (%s)", location);
+        lostCityRumors.remove(location);
+    }
+
+    /**
      * @param location  required location
      * @param goodsType required goods type
      * @return bonus units of that goods type left in the deposit on the square,
@@ -338,6 +371,7 @@ public class WorldMap {
         gamePo.getMap().setFields(fields);
         gamePo.getMap().setCleared(cleared);
         gamePo.getMap().setRoads(roads);
+        gamePo.getMap().setRumors(lostCityRumors);
         gamePo.getMap().setRivers(rivers);
         gamePo.getMap().setRiverSegments(riverSegmentsToSave());
         gamePo.getMap().setResources(resources);

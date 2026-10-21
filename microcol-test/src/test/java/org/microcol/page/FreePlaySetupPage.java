@@ -8,6 +8,13 @@ import org.microcol.model.EuropeanNation;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
+import org.microcol.model.campaign.po.GameModelPo;
+import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.generation.GeneratedClimate;
+import org.microcol.model.generation.GeneratedLandShare;
+import org.microcol.model.generation.GeneratedWorld;
+import org.microcol.model.store.ModelPo;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.ChoiceBox;
@@ -81,10 +88,83 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertEquals(expected, data.getModel().getDifficulty());
     }
 
+    public void selectClimate(final GeneratedClimate climate) {
+        select("freePlayClimate", climate.ordinal());
+    }
+
+    public void selectLandShare(final GeneratedLandShare landShare) {
+        select("freePlayLandShare", landShare.ordinal());
+    }
+
+    public void enterSeed(final String value) {
+        final TextField input = getNodeFinder().lookup("#freePlaySeed")
+                .queryAs(TextField.class);
+        getRobot().clickOn(input).push(KeyCode.END)
+                .eraseText(input.getText().length()).write(value);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyGeneratedSetup(final String expectedPreview) {
+        assertTrue(isCssIdVisible("freePlayGenerated"));
+        verifySelectedMap(4, "Generated new world");
+        verifyNationSelection(EuropeanNation.DUTCH, true);
+        assertEquals("Choose the nation you will play.",
+                getLabeledById("freePlayNationNote").getText());
+        verifyPreview(expectedPreview);
+    }
+
+    public void verifyPreview(final String expectedPreview) {
+        assertEquals(expectedPreview,
+                getLabeledById("freePlayGeneratedPreview").getText());
+    }
+
+    public void verifyGeneratedControlsHidden() {
+        assertFalse(getNodeFinder().lookup("#freePlayGenerated")
+                .queryAs(javafx.scene.Node.class).isVisible());
+    }
+
+    public void verifySeedRejected(final String expectedError) {
+        assertEquals(expectedError,
+                getLabeledById("freePlayNameError").getText());
+        assertTrue(getButtonById("freePlayStart").isDisabled());
+    }
+
+    public void verifyGeneratedWorld(final int expectedSeed,
+            final GeneratedClimate expectedClimate,
+            final GeneratedLandShare expectedLandShare,
+            final String expectedPlayerName) throws Exception {
+        WaitForAsyncUtils.waitFor(15, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().isGameRunning());
+        final ModelPo saved = getModel().save();
+        assertEquals(expectedSeed,
+                saved.getGeneratedWorld().getSeed().intValue());
+        assertEquals(expectedClimate, saved.getGeneratedWorld().getClimate());
+        assertEquals(expectedLandShare,
+                saved.getGeneratedWorld().getLandShare());
+        assertEquals(GeneratedWorld.WIDTH,
+                getModel().getMap().getMaxLocationX());
+        assertEquals(GeneratedWorld.HEIGHT,
+                getModel().getMap().getMaxLocationY());
+        assertEquals(expectedPlayerName,
+                getModel().getPlayerByName("Dutch").getDisplayName());
+        assertTrue(saved.getNativeSettlements().size() >= 3);
+    }
+
+    public void verifySavedGeneratedWorld(final int expectedSeed)
+            throws Exception {
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
+        final GameModelPo data = new GameModelPoDao().loadFromFile(file);
+        assertEquals(expectedSeed,
+                data.getModel().getGeneratedWorld().getSeed().intValue());
+        assertArrayEquals(getModel().save().getMap().getTiles(),
+                data.getModel().getMap().getTiles());
+    }
+
     private void select(final String id, final int index) {
         final ChoiceBox<?> choice = getNodeFinder().lookup("#" + id)
                 .queryAs(ChoiceBox.class);
-        final String label = String.valueOf(choice.getItems().get(index));
+        final String label = labelOf(choice, choice.getItems().get(index));
         getRobot().clickOn(choice);
         WaitForAsyncUtils.waitForFxEvents();
         final javafx.scene.Node item = getListOfNodes(".context-menu .label")
@@ -94,6 +174,17 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 .findFirst().orElseThrow();
         getRobot().clickOn(item);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Localized text shown for an item; enum boxes have a converter. */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static String labelOf(final ChoiceBox<?> choice,
+            final Object item) {
+        if (choice.getConverter() == null) {
+            return String.valueOf(item);
+        }
+        return ((javafx.util.StringConverter) choice.getConverter())
+                .toString(item);
     }
 
     public void enterName(final String value) {
@@ -130,7 +221,8 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(isCssIdVisible("freePlaySetup"));
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(4, map.getItems().size());
+        assertEquals(5, map.getItems().size());
+        verifyGeneratedControlsHidden();
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
         assertEquals("This scenario is fixed to the Netherlands.",
@@ -152,7 +244,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
             final String expectedName) {
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(4, map.getItems().size());
+        assertEquals(5, map.getItems().size());
         assertEquals(expectedIndex, map.getSelectionModel().getSelectedIndex());
         assertEquals(expectedName, map.getSelectionModel().getSelectedItem());
     }

@@ -26,6 +26,8 @@ import org.microcol.gui.screen.campaign.CampaignPresenter;
 import org.microcol.gui.screen.campaign.CampaignView;
 import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.screen.nativesettlements.NativeSettlementsDialog;
+import org.microcol.gui.screen.nativesettlements.ShowNativeSettlementsListener;
 import org.microcol.gui.screen.colonizopedia.ShowHelpListener;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.screen.colony.ColonyPanel;
@@ -86,6 +88,7 @@ import org.microcol.gui.screen.setting.SettingVolumePresenter;
 import org.microcol.gui.screen.statistics.ScreenStatisticsPresenter;
 import org.microcol.gui.screen.statistics.StatisticsButtonsPanelController;
 import org.microcol.gui.screen.turnreport.ScreenTurnReportPresenter;
+import org.microcol.gui.screen.turnreport.ShowRumorReportAfterMove;
 import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
 import org.microcol.gui.screen.turnreport.TurnReportButtonsPanelController;
 import org.microcol.diagnostics.DiagnosticLog;
@@ -177,6 +180,7 @@ public final class MicroColModule extends AbstractModule {
         bind(GameFinishedListener.class).asEagerSingleton();
 
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
+        bind(ShowRumorReportAfterMove.class).asEagerSingleton();
 
         /**
          * Initialize MVP classes
@@ -291,6 +295,7 @@ public final class MicroColModule extends AbstractModule {
          * Rest of UI
          */
         bind(ColonizopediaDialog.class).in(Singleton.class);
+        bind(NativeSettlementsDialog.class).in(Singleton.class);
 
         /**
          * Load events manually
@@ -299,6 +304,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ChangeLanguageListenerFileChooser.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
         bind(ShowHelpListener.class).asEagerSingleton();
+        bind(ShowNativeSettlementsListener.class).asEagerSingleton();
         bind(DeclareIndependenceListener.class).asEagerSingleton();
         bind(PlowFieldEventListener.class).asEagerSingleton();
         bind(BuildRoadEventListener.class).asEagerSingleton();

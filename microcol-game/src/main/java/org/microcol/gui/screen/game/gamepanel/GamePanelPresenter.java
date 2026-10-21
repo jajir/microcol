@@ -7,8 +7,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.microcol.gui.dialog.ChoosePassengerDialog;
 
+import org.microcol.gui.Loc;
+import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
+import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
+import org.microcol.gui.screen.nativesettlements.DialogNativePurchase;
+import org.microcol.gui.screen.nativesettlements.DialogNativeSale;
+import org.microcol.gui.screen.nativesettlements.DialogNativeVisit;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.event.EndMoveEvent;
@@ -27,7 +33,13 @@ import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Model;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.NativeMarketView;
+import org.microcol.model.NativePurchaseQuote;
+import org.microcol.model.NativeSaleQuote;
+import org.microcol.model.NativeSettlement;
+import org.microcol.model.NativeVisitChoice;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -282,6 +294,18 @@ public final class GamePanelPresenter {
             return;
         }
 
+        // Entering a known adjacent native settlement opens its chooser first,
+        // so no move, embark or attack reaches the settlement square (R-0157).
+        final Optional<NativeSettlement> settlement = gameModelController
+                .getModel().getNativeSettlementKnownTo(
+                        gameModelController.getHumanPlayer(), moveToLocation);
+        if (settlement.isPresent() && movingUnit.isAtPlaceLocation()
+                && movingUnit.getLocation().isNeighbor(moveToLocation)) {
+            disableMoveMode(movingUnit);
+            showNativeVisit(movingUnit, settlement.get());
+            return;
+        }
+
         if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
             // embark
             final Optional<UnitWithCargo> oEmbartAtUnit = movingUnit
@@ -347,6 +371,182 @@ public final class GamePanelPresenter {
             new DialogUnitCantMoveHere(viewUtil, i18n);
         }
         disableMoveMode(movingUnit);
+    }
+
+    /**
+     * Open the chooser of a visitor beside a known native settlement (R-0157),
+     * with its land contact and market admission (R-0159). An introduction or
+     * market entry chosen in the chooser runs only after that window has closed
+     * and its button handler has returned; a new chooser then shows the new
+     * state. No chooser is opened from inside another chooser's handler.
+     */
+    private void showNativeVisit(final Unit visitor,
+            final NativeSettlement settlement) {
+        DialogNativeVisit.FollowUp followUp;
+        // Carried to the next chooser only after a backed-out confirmation.
+        DialogNativeVisit.Selection kept = null;
+        do {
+            final List<NativeVisitChoice> choices = gameModelController
+                    .getModel().getNativeVisitChoices(visitor, settlement);
+            if (choices.isEmpty()) {
+                return;
+            }
+            final NativeMarketView market = gameModelController.getModel()
+                    .getNativeMarketView(visitor, settlement).orElseThrow();
+            // The model checks this shown skill again on confirmation.
+            final org.microcol.model.UnitType shownSkill = settlement
+                    .getTeachableSkill();
+            final DialogNativeVisit dialog = new DialogNativeVisit(viewUtil,
+                    i18n, settlement, choices, visitor.getType(), market,
+                    nativeSaleTerms(visitor, settlement), () -> {
+                        if (gameModelController.startNativeTeaching(visitor,
+                                settlement, shownSkill)) {
+                            // The colonist left the map for the course.
+                            selectedUnitManager.forgetRemovedUnit(visitor);
+                        }
+                    }, kept);
+            dialog.showAndWait();
+            followUp = dialog.getFollowUp();
+            kept = null;
+            // A rejected command is explained by the controller and changes
+            // nothing; the next chooser then shows the unchanged state.
+            if (followUp == DialogNativeVisit.FollowUp.INTRODUCE) {
+                gameModelController.introduceNativeContact(visitor, settlement);
+            } else if (followUp == DialogNativeVisit.FollowUp.OPEN_MARKET) {
+                gameModelController.enterNativeMarket(visitor, settlement);
+            } else if (followUp == DialogNativeVisit.FollowUp.HAGGLE) {
+                gameModelController.haggleNativeSale(visitor, settlement,
+                        dialog.getPendingSale());
+            } else if (followUp == DialogNativeVisit.FollowUp.SELL
+                    || followUp == DialogNativeVisit.FollowUp.GIFT) {
+                if (confirmNativeSale(visitor, settlement, followUp,
+                        dialog.getPendingSale())) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.PURCHASE_HAGGLE) {
+                gameModelController.haggleNativePurchase(visitor, settlement,
+                        dialog.getPendingPurchase());
+            } else if (followUp == DialogNativeVisit.FollowUp.BUY) {
+                if (confirmNativePurchase(visitor, settlement,
+                        dialog.getPendingPurchase())) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.DECLINE_PURCHASE) {
+                if (gameModelController.rejectNativePurchase(visitor,
+                        settlement)) {
+                    showNativeMessage(Loc.nativePurchaseDeclined);
+                }
+            }
+        } while (followUp != DialogNativeVisit.FollowUp.NONE);
+    }
+
+    /**
+     * Model reads for the sale controls of the chooser (R-0160). They only ask
+     * the model, so nothing changes while the chooser is open.
+     */
+    private DialogNativeVisit.SaleTerms nativeSaleTerms(final Unit visitor,
+            final NativeSettlement settlement) {
+        return new DialogNativeVisit.SaleTerms() {
+
+            @Override
+            public int maxQuantity(final GoodsType goods, final boolean gift) {
+                return gameModelController.getModel().getNativeMaxSaleQuantity(
+                        visitor, settlement, goods, gift);
+            }
+
+            @Override
+            public Optional<NativeSaleQuote> quote(final GoodsType goods,
+                    final int quantity, final boolean gift) {
+                return gameModelController.getModel().getNativeSaleQuote(
+                        visitor, settlement, goods, quantity, gift);
+            }
+
+            @Override
+            public int maxPurchaseQuantity(final GoodsType goods) {
+                return gameModelController.getModel()
+                        .getNativeMaxPurchaseQuantity(visitor, settlement,
+                                goods);
+            }
+
+            @Override
+            public Optional<NativePurchaseQuote> purchaseQuote(
+                    final GoodsType goods, final int quantity) {
+                return gameModelController.getModel().getNativePurchaseQuote(
+                        visitor, settlement, goods, quantity);
+            }
+
+        };
+    }
+
+    /**
+     * Ask for an explicit confirmation of the exact sale or gift, after the
+     * chooser has closed. Only a confirmed choice reaches the model, which
+     * re-checks it; a closed or cancelled confirmation changes nothing.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativeSale(final Unit visitor,
+            final NativeSettlement settlement,
+            final DialogNativeVisit.FollowUp followUp,
+            final NativeSaleQuote offered) {
+        if (offered == null) {
+            return false;
+        }
+        final DialogNativeSale confirmation = new DialogNativeSale(viewUtil,
+                i18n, offered);
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        if (followUp == DialogNativeVisit.FollowUp.GIFT) {
+            gameModelController.giftToNative(visitor, settlement, offered);
+        } else {
+            gameModelController.sellToNative(visitor, settlement, offered);
+        }
+        return false;
+    }
+
+    /**
+     * Ask for an explicit confirmation of the exact purchase, after the chooser
+     * has closed (R-0161). Only a confirmed choice reaches the model, which
+     * re-checks it; a closed or cancelled confirmation changes nothing. A
+     * bought purchase is reported, and the chooser then reopens with the new
+     * state.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativePurchase(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativePurchaseQuote offered) {
+        if (offered == null) {
+            return false;
+        }
+        final DialogNativePurchase confirmation = new DialogNativePurchase(
+                viewUtil, i18n, offered);
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        if (gameModelController.buyFromNative(visitor, settlement, offered)) {
+            showNativeMessage(Loc.nativePurchaseBought, offered.getQuantity(),
+                    i18n.get(GoodsTypeName
+                            .getNameForGoodsType(offered.getGoods())),
+                    offered.getGold());
+        }
+        return false;
+    }
+
+    /**
+     * Report the outcome of a native market command in a plain message.
+     */
+    private void showNativeMessage(final Loc message,
+            final Object... arguments) {
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeMarketTitle));
+        dialog.setText(i18n.get(message, arguments));
+        dialog.showAndWait();
     }
 
     /**

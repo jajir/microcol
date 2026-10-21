@@ -48,6 +48,17 @@ public class UnitCreateRequest {
 
     private boolean nativeHomeless;
 
+    /** Combat role of a native brave; {@code null} for other units. */
+    private UnitNativeBrave.Role nativeRole;
+
+    public UnitNativeBrave.Role getNativeRole() {
+        return nativeRole;
+    }
+
+    public void setNativeRole(final UnitNativeBrave.Role nativeRole) {
+        this.nativeRole = nativeRole;
+    }
+
     public Integer getNativeHomeSettlementId() {
         return nativeHomeSettlementId;
     }

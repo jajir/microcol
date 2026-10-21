@@ -103,15 +103,30 @@ public final class NativeTurnsPage extends AbstractScreen {
                 "Braves must not be duplicated or lost");
     }
 
-    /** Braves stay where they are saved; the empty native turn moves no one. */
+    /** The brave stands on the given square. */
     public void verifyBraveLocation(final int unitId, final Location expected) {
         assertEquals(expected, brave(unitId).getLocation());
     }
 
-    /** The native turn prepared every brave once, giving full foot movement. */
+    /**
+     * The native turn prepared the brave once, giving full foot movement, and
+     * the brave spent none of it.
+     */
     public void verifyBravePrepared(final int unitId) {
         assertEquals(FULL_FOOT_MOVEMENT_THIRDS,
                 brave(unitId).getMovementThirds());
+    }
+
+    /**
+     * The native turn prepared the brave and it spent the whole allowance on
+     * one home-patrol step: it stands on the expected square with no movement
+     * left. A brave saved without movement and never prepared cannot have
+     * moved, and every land step costs at least the whole foot allowance.
+     */
+    public void verifyBravePatrolledTo(final int unitId,
+            final Location expected) {
+        assertEquals(expected, brave(unitId).getLocation());
+        assertEquals(0, brave(unitId).getMovementThirds());
     }
 
     /** Whether the Dutch currently see this brave on the given square. */

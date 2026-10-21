@@ -100,6 +100,13 @@ final class GamePaintService {
                             terrain,
                             oneTurnMoveHighlighter.isItHighlighted(location),
                             gameTick);
+                    // Only present sight shows a rumor: remembered or hidden
+                    // squares never reveal whether one still waits there.
+                    if (player.isCurrentlyVisible(location)
+                            && gameModelController.getModel().getMap()
+                                    .hasLostCityRumorAt(location)) {
+                        paintService.paintLostCityRumor(graphics, point);
+                    }
                 } else {
                     paintHiddenTile(graphics, point);
                 }
@@ -278,7 +285,8 @@ final class GamePaintService {
                     graphics.setGlobalAlpha(STALE_OPACITY);
                 }
                 paintService.paintNativeSettlement(graphics,
-                        area.convertToCanvasPoint(location), settlement);
+                        area.convertToCanvasPoint(location), settlement,
+                        model.getNativeRelationView(player, settlement));
                 graphics.setGlobalAlpha(1.0);
             }
         }

@@ -27,6 +27,9 @@ import javafx.stage.Stage;
  * Native nations take real turns before the Europeans. Their braves are real
  * units with a nation and a home, identified on the map only as far as the
  * Dutch have seen them, and the whole position survives Continue from disk.
+ * Every nation is content, so no brave raids (R-0156): a brave with a home
+ * takes one home-patrol step to its first reachable neighbor in ascending (y,
+ * x) order within two squares of home, and the homeless survivor stands.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_115_F106_native_turns_test extends AbstractMicroColTest {
@@ -55,6 +58,15 @@ public class TC_115_F106_native_turns_test extends AbstractMicroColTest {
     private static final int CHEROKEE_BRAVE_ID = 203;
     private static final Location CHEROKEE_BRAVE = Location.of(31, 18);
     private static final Location CHEROKEE_CAPITAL = Location.of(30, 18);
+
+    /**
+     * First home-patrol squares: open grass, the first in (y, x) order beside
+     * each brave and within two squares of its home. All three lie outside the
+     * sight of the Dutch frigate and colony, so the patrol discloses nothing.
+     */
+    private static final Location AZTEC_PATROL = Location.of(22, 15);
+    private static final Location INCA_PATROL = Location.of(15, 21);
+    private static final Location CHEROKEE_PATROL = Location.of(30, 17);
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -123,21 +135,31 @@ public class TC_115_F106_native_turns_test extends AbstractMicroColTest {
         audit.verifyCurrentTurn(19);
         audit.verifyDisplayedDate("Year 1509 AD");
 
-        // The empty native turns prepared each brave once and moved no one.
+        // Each native turn prepared its braves once. The content braves with a
+        // home spent the whole allowance on one home-patrol step; the homeless
+        // survivor has no home to patrol and keeps its full movement.
         natives.verifyBraveCount(4);
-        natives.verifyBravePrepared(AZTEC_BRAVE_ID);
+        natives.verifyBravePatrolledTo(AZTEC_BRAVE_ID, AZTEC_PATROL);
         natives.verifyBravePrepared(AZTEC_SURVIVOR_ID);
-        natives.verifyBravePrepared(INCA_BRAVE_ID);
-        natives.verifyBravePrepared(CHEROKEE_BRAVE_ID);
-        natives.verifyBraveLocation(AZTEC_BRAVE_ID, AZTEC_BRAVE);
-        natives.verifyBraveLocation(INCA_BRAVE_ID, INCA_BRAVE);
+        natives.verifyBraveLocation(AZTEC_SURVIVOR_ID, AZTEC_SURVIVOR);
+        natives.verifyBravePatrolledTo(INCA_BRAVE_ID, INCA_PATROL);
+        natives.verifyBravePatrolledTo(CHEROKEE_BRAVE_ID, CHEROKEE_PATROL);
         final JsonElement prepared = turns.readTurnState();
 
-        // The same identities are shown and the same ones stay hidden.
-        fog.hover(AZTEC_BRAVE);
-        fog.verifyStatusBarContains(
-                "Native brave: Aztec, home: city, capital.");
-        fog.hover(INCA_BRAVE);
+        // The same identities stay known and nothing hidden leaks: the survivor
+        // in sight is still named, while the Aztec brave has patrolled out of
+        // Dutch sight and is no longer shown, though its learned home stays
+        // known. The Inca brave stays hidden on its new square.
+        fog.hover(AZTEC_SURVIVOR);
+        natives.verifyBraveSeen(AZTEC_SURVIVOR, AZTEC_SURVIVOR_ID, true);
+        fog.verifyStatusBarContains("Native brave: Aztec, homeless.");
+        fog.hover(AZTEC_PATROL);
+        natives.verifyBraveSeen(AZTEC_PATROL, AZTEC_BRAVE_ID, false);
+        natives.verifyBraveHomeKnown(AZTEC_BRAVE_ID, true);
+        fog.verifyStatusBarOmits("Native brave");
+        fog.hover(INCA_PATROL);
+        natives.verifyBraveSeen(INCA_PATROL, INCA_BRAVE_ID, false);
+        natives.verifyBraveHomeKnown(INCA_BRAVE_ID, false);
         fog.verifyStatusBarOmits("Native brave");
         fog.verifyStatusBarOmits("Inca");
 
@@ -149,15 +171,20 @@ public class TC_115_F106_native_turns_test extends AbstractMicroColTest {
         fog.centerFrontier();
         audit.verifyCurrentTurn(19);
         audit.verifyDisplayedDate("Year 1509 AD");
+        // Continue neither prepares nor patrols again: the spent braves keep
+        // their squares with no movement, the survivor keeps its full one.
         natives.verifyBraveCount(4);
-        natives.verifyBravePrepared(CHEROKEE_BRAVE_ID);
-        fog.hover(AZTEC_BRAVE);
+        natives.verifyBravePatrolledTo(AZTEC_BRAVE_ID, AZTEC_PATROL);
+        natives.verifyBravePatrolledTo(CHEROKEE_BRAVE_ID, CHEROKEE_PATROL);
+        natives.verifyBravePrepared(AZTEC_SURVIVOR_ID);
+        fog.hover(AZTEC_PATROL);
+        natives.verifyBraveSeen(AZTEC_PATROL, AZTEC_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(AZTEC_BRAVE_ID, true);
-        fog.verifyStatusBarContains(
-                "Native brave: Aztec, home: city, capital.");
+        fog.verifyStatusBarOmits("Native brave");
         fog.hover(AZTEC_SURVIVOR);
         fog.verifyStatusBarContains("Native brave: Aztec, homeless.");
-        fog.hover(CHEROKEE_BRAVE);
+        fog.hover(CHEROKEE_PATROL);
+        natives.verifyBraveSeen(CHEROKEE_PATROL, CHEROKEE_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(CHEROKEE_BRAVE_ID, false);
         fog.verifyStatusBarOmits("Cherokee");
 

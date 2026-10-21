@@ -214,3 +214,5 @@ Native actors remain within `microcol-game`: the shared model owns native player
 Rival trade remains in `microcol-game`: AI selects the bounded objective, while the model owns persistent identity, voyage and trade transactions. `microcol-test` verifies the real rival cycle and Continue. No module or build output was added; see [R-0091 evidence](functional-tests.md#r-0091-rival-trade-and-supplies-2026-10-21).
 
 The production rival factory stays in `microcol-game`; the passive replacement exists only in `microcol-test` for TC101 human-expedition isolation. Default gameplay and AI-specific tests retain real rivals. See [regression evidence](functional-tests.md#second-batch-regression-repairs-2026-10-21).
+
+R-0065 work in progress (2026-10-21): `microcol-game` owns generated-world settings and geography/native population in `model.generation`, assembled through the existing scenario-loading path. `microcol-test` owns the setup/start/Continue scenario TC122. Targeted tests and visual review passed ([evidence](functional-tests.md#r-0065-generated-new-world-2026-10-21)); full batch regression remains pending. Build output responsibilities are unchanged.

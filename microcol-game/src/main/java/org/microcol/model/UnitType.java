@@ -137,13 +137,14 @@ public final class UnitType {
             .build();
 
     /**
-     * Native brave with its home link. Its strength (1) is the agreed value of
-     * R-0173; its walking speed is assumed equal to the colonist until a
-     * movement value is accepted. It cannot attack before native combat exists.
+     * Native brave with its home link. Its strength comes from its role
+     * (R-0173); its walking speed is assumed equal to the colonist until a
+     * movement value is accepted. It attacks land units like the other walking
+     * units.
      */
     public static final UnitType BRAVE = UnitType.make().setName("BRAVE")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
-            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
             .setCargoCapacity(0).setStorable(false).setEuropePrice(0).build();
 
     public static final UnitType INDENTURED_SERVANT = UnitType.make()
@@ -325,6 +326,17 @@ public final class UnitType {
     public static final List<UnitType> SCHOOL_ONLY_SPECIALISTS = ImmutableList
             .of(MASTER_SUGAR_PLANTER, MASTER_COTTON_PLANTER,
                     MASTER_TOBACCO_PLANTER);
+
+    /**
+     * Skills marked as teachable by natives on the skills card (R-0157). A
+     * settlement offers one of them, chosen at map creation. The order is
+     * fixed, because the map seed draws from it.
+     */
+    public static final List<UnitType> NATIVE_TEACHABLE_SKILLS = ImmutableList
+            .of(EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_FUR_TRAPPER,
+                    EXPERT_SILVER_MINER, MASTER_SUGAR_PLANTER,
+                    MASTER_COTTON_PLANTER, MASTER_TOBACCO_PLANTER,
+                    SEASONED_SCOUT);
 
     public static final List<UnitType> UNIT_TYPES = ImmutableList
             .<UnitType>builder()
@@ -725,6 +737,14 @@ public final class UnitType {
      */
     public boolean canBuildColony() {
         return !isShip() && !canHoldCargo();
+    }
+
+    /**
+     * @return the goods this type is an expert in producing, or {@code null}
+     *         when it is not a producing specialist, such as a scout
+     */
+    public GoodsType getExpertInProducing() {
+        return expertInProducing;
     }
 
     /**

@@ -194,8 +194,9 @@
       {
         "id": 0,
         "nation": "AZTEC",
+        "teachableSkill": "EXPERT_FARMER",
         "settlementClass": "CITY",
-        "capital": true, "treasury": 2000,
+        "capital": true, "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 23,
           "y": 15
@@ -204,8 +205,9 @@
       {
         "id": 1,
         "nation": "CHEROKEE",
+        "teachableSkill": "EXPERT_FUR_TRAPPER",
         "settlementClass": "VILLAGE",
-        "capital": true, "treasury": 2000,
+        "capital": true, "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 30,
           "y": 18
@@ -214,8 +216,9 @@
       {
         "id": 2,
         "nation": "CHEROKEE",
+        "teachableSkill": "SEASONED_SCOUT",
         "settlementClass": "VILLAGE",
-        "capital": false, "treasury": 1000,
+        "capital": false, "treasury": 1000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 30,
           "y": 19
@@ -224,8 +227,9 @@
       {
         "id": 3,
         "nation": "INCA",
+        "teachableSkill": "EXPERT_SILVER_MINER",
         "settlementClass": "CITY",
-        "capital": true, "treasury": 2000,
+        "capital": true, "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 15,
           "y": 22

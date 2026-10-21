@@ -77,6 +77,26 @@ public class GamePage extends AbstractScreen {
         verifyThatStatusBarContains(expectedFeedback);
     }
 
+    /**
+     * Drag the selected unit onto a tile whose entry opens the turn report. The
+     * report replaces the map, so the idle status bar is not waited for.
+     *
+     * @param location required tile the unit enters
+     * @return the report that the entry opened
+     * @throws Exception if the report does not appear
+     */
+    public ScreenTurnReport dragMouseAtLocationAndOpenReport(
+            final Location location) throws Exception {
+        verifyThatTileIsVisible(location);
+        dragToLocation(location);
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils
+                        .asyncFx(() -> getNodeFinder().lookup("#closeButtonId")
+                                .tryQuery().isPresent())
+                        .get(60, TimeUnit.SECONDS));
+        return ScreenTurnReport.of(getContext());
+    }
+
     private void dragToLocation(final Location location) {
         getRobot().drag(MouseButton.PRIMARY);
         final javafx.geometry.Point2D point = screenPoint(location);

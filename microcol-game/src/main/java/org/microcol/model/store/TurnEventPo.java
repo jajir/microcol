@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Goods;
+import org.microcol.model.NativeNation;
 import org.microcol.model.UnitType;
 import org.microcol.model.Founder;
 
@@ -205,6 +206,77 @@ public final class TurnEventPo {
 
     public void setDiplomacyVictimName(final String value) {
         diplomacyVictimName = value;
+    }
+
+    /** Lost-city rumor result, required for its own event type only. */
+    private String rumorOutcome;
+    private Integer rumorExplorerId;
+    private Integer rumorGold;
+    private NativeNation rumorNation;
+    private Boolean rumorDeSotoAverted;
+
+    public String getRumorOutcome() {
+        return rumorOutcome;
+    }
+
+    public void setRumorOutcome(final String value) {
+        rumorOutcome = value;
+    }
+
+    public Integer getRumorExplorerId() {
+        return rumorExplorerId;
+    }
+
+    public void setRumorExplorerId(final Integer value) {
+        rumorExplorerId = value;
+    }
+
+    public Integer getRumorGold() {
+        return rumorGold;
+    }
+
+    public void setRumorGold(final Integer value) {
+        rumorGold = value;
+    }
+
+    public NativeNation getRumorNation() {
+        return rumorNation;
+    }
+
+    public void setRumorNation(final NativeNation value) {
+        rumorNation = value;
+    }
+
+    public Boolean isRumorDeSotoAverted() {
+        return rumorDeSotoAverted;
+    }
+
+    public void setRumorDeSotoAverted(final Boolean value) {
+        rumorDeSotoAverted = value;
+    }
+
+    /**
+     * Kind of a native teaching notice, a TurnEventNativeTeaching.Kind name.
+     */
+    private String nativeTeachingKind;
+
+    /** Skill of a native teaching notice, a UnitType name. */
+    private String nativeTeachingSkill;
+
+    public String getNativeTeachingKind() {
+        return nativeTeachingKind;
+    }
+
+    public void setNativeTeachingKind(final String value) {
+        nativeTeachingKind = value;
+    }
+
+    public String getNativeTeachingSkill() {
+        return nativeTeachingSkill;
+    }
+
+    public void setNativeTeachingSkill(final String value) {
+        nativeTeachingSkill = value;
     }
 
     private Integer educationStudentId;

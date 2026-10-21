@@ -8,6 +8,7 @@ import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.Difficulty;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.campaign.FreePlayMap;
+import org.microcol.model.generation.GeneratedWorldSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,21 @@ public final class ApplicationController {
             final Difficulty difficulty, final EuropeanNation nation) {
         gameController.startFreePlay(map, playerName, difficulty, nation);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
+    }
+
+    /**
+     * @return {@code true} when the generated world started; otherwise the
+     *         active game is unchanged and the caller shows the failure
+     */
+    public boolean startNewGeneratedGame(final GeneratedWorldSettings settings,
+            final String playerName, final Difficulty difficulty,
+            final EuropeanNation nation) {
+        if (!gameController.startGeneratedFreePlay(settings, playerName,
+                difficulty, nation)) {
+            return false;
+        }
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
+        return true;
     }
 
 }

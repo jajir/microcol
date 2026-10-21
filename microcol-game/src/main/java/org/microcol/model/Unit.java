@@ -137,6 +137,11 @@ public interface Unit {
 
     boolean isAtPlaceConstructionSlot();
 
+    /**
+     * @return whether this unit is learning at a native settlement (R-0148)
+     */
+    boolean isAtPlaceNativeCourse();
+
     boolean isAtPlaceColonyField();
 
     /**

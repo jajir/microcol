@@ -26,6 +26,10 @@ class NativeSettlementsTest {
         po.setSettlementClass(nation.getSettlementClass());
         po.setCapital(capital);
         po.setTreasury(capital ? 2000 : 1000);
+        po.setTeachableSkill(UnitType.EXPERT_FARMER.name());
+        po.setOfferedGoods(List.of());
+        po.setWantedGoods(List.of());
+        po.setTrade(List.of());
         po.setLocation(Location.of(x, y));
         return po;
     }
@@ -184,7 +188,7 @@ class NativeSettlementsTest {
         final NativeSettlements original = make(
                 List.of(po(7, NativeNation.IROQUOIS, false, 3, 4),
                         po(9, NativeNation.IROQUOIS, true, 5, 6)));
-        final NativeSettlements restored = make(original.toPo());
+        final NativeSettlements restored = make(original.toPo(open -> true));
         assertEquals(original.getAll().size(), restored.getAll().size());
         for (int i = 0; i < original.getAll().size(); i++) {
             final NativeSettlement before = original.getAll().get(i);
@@ -195,7 +199,31 @@ class NativeSettlementsTest {
                     after.getSettlementClass());
             assertEquals(before.isCapital(), after.isCapital());
             assertEquals(before.getLocation(), after.getLocation());
+            assertEquals(before.getTeachableSkill(), after.getTeachableSkill());
         }
+    }
+
+    @Test
+    void teachableSkillIsRequiredAndMustBeAccepted() {
+        final NativeSettlementPo missing = po(0, NativeNation.TUPI, true, 1, 1);
+        missing.setTeachableSkill(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> make(List.of(missing)));
+        final NativeSettlementPo lumberjack = po(0, NativeNation.TUPI, true, 1,
+                1);
+        lumberjack.setTeachableSkill(UnitType.EXPERT_LUMBERJACK.name());
+        assertThrows(IllegalArgumentException.class,
+                () -> make(List.of(lumberjack)));
+    }
+
+    @Test
+    void teachableSkillRoundTripsUnchanged() {
+        final NativeSettlementPo po = po(0, NativeNation.TUPI, true, 1, 1);
+        po.setTeachableSkill(UnitType.SEASONED_SCOUT.name());
+        final NativeSettlements restored = make(
+                make(List.of(po)).toPo(open -> true));
+        assertEquals(UnitType.SEASONED_SCOUT,
+                restored.getAll().get(0).getTeachableSkill());
     }
 
 }

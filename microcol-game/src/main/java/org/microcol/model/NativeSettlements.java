@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.microcol.model.store.NativeExpeditionPo;
+import org.microcol.model.store.NativeGoodsStockPo;
 import org.microcol.model.store.NativeSettlementPo;
+import org.microcol.model.store.NativeTradePo;
 
 import com.google.common.base.Preconditions;
 
@@ -67,6 +72,7 @@ public final class NativeSettlements {
             Preconditions.checkArgument(
                     entry.getTreasury() != null && entry.getTreasury() >= 0,
                     "Unsupported save: missing or negative native treasury");
+            final UnitType skill = acceptedSkill(entry.getTeachableSkill());
             final Location location = entry.getLocation();
             Preconditions.checkArgument(location != null,
                     "Unsupported save: missing native settlement location");
@@ -79,8 +85,15 @@ public final class NativeSettlements {
             if (entry.getCapital()) {
                 capitals.merge(entry.getNation(), 1, Integer::sum);
             }
-            out.add(new NativeSettlement(entry.getId(), entry.getNation(),
-                    entry.getCapital(), location, entry.getTreasury()));
+            final NativeSettlement settlement = new NativeSettlement(
+                    entry.getId(), entry.getNation(), entry.getCapital(),
+                    location, entry.getTreasury(), skill,
+                    readOffer(entry.getOfferedGoods()),
+                    readWanted(entry.getWantedGoods()));
+            restoreTeaching(entry, settlement);
+            restoreTrade(entry, settlement);
+            restoreReceived(entry.getReceivedGoods(), settlement);
+            out.add(settlement);
         }
         for (final NativeSettlement settlement : out) {
             Preconditions.checkArgument(
@@ -88,6 +101,317 @@ public final class NativeSettlements {
                     "Unsupported save: a native nation with settlements needs exactly one capital");
         }
         return new NativeSettlements(out);
+    }
+
+    /**
+     * Restore the saved native course of one settlement (R-0148). A free place
+     * saves no pupil, skill or progress, so absent progress is zero there; a
+     * taken place needs its progress and names the settlement's own offered
+     * skill. The pupil itself is checked against the units later.
+     *
+     * @param entry      required saved settlement
+     * @param settlement required settlement built from the same entry
+     */
+    private static void restoreTeaching(final NativeSettlementPo entry,
+            final NativeSettlement settlement) {
+        if (entry.getTeachingPupilId() == null) {
+            Preconditions.checkArgument(
+                    (entry.getTeachingUpdates() == null
+                            || entry.getTeachingUpdates() == 0)
+                            && entry.getTeachingSkill() == null
+                            && entry.getTeachingStage() == null,
+                    "Unsupported save: native teaching progress without a pupil");
+            return;
+        }
+        Preconditions.checkArgument(entry.getTeachingUpdates() != null
+                && entry.getTeachingUpdates() >= 0
+                && entry.getTeachingUpdates() <= NativeTeachingCourse.REQUIRED_UPDATES,
+                "Unsupported save: missing or invalid native teaching progress");
+        Preconditions.checkArgument(
+                entry.getTeachingPupilId() >= 0
+                        && settlement.getTeachableSkill().name()
+                                .equals(entry.getTeachingSkill()),
+                "Unsupported save: native teaching skill does not match its settlement");
+        final NativeTeachingCourse.Stage stage = savedStage(
+                entry.getTeachingStage());
+        final int updates = entry.getTeachingUpdates();
+        // Each stage has one progress shape: learning counts up to three, a
+        // finished course counts four, a canceled one discards its count.
+        Preconditions.checkArgument(stage == NativeTeachingCourse.Stage.LEARNING
+                && updates < NativeTeachingCourse.REQUIRED_UPDATES
+                || stage == NativeTeachingCourse.Stage.COMPLETED
+                        && updates == NativeTeachingCourse.REQUIRED_UPDATES
+                || stage == NativeTeachingCourse.Stage.CANCELED && updates == 0,
+                "Unsupported save: native teaching stage does not match its progress");
+        settlement.restoreTeaching(entry.getTeachingPupilId(), updates, stage);
+    }
+
+    /**
+     * @param saved saved offered goods, required; at most the offer slots
+     * @return offered goods with their saved stock, in the saved order
+     */
+    private static Map<GoodsType, Integer> readOffer(
+            final List<NativeGoodsStockPo> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Unsupported save: missing native offered goods");
+        Preconditions.checkArgument(
+                saved.size() <= NativeMarketRules.OFFER_SLOTS,
+                "Unsupported save: too many native offered goods");
+        final Map<GoodsType, Integer> out = new LinkedHashMap<>();
+        for (final NativeGoodsStockPo entry : saved) {
+            Preconditions.checkArgument(
+                    entry != null && entry.getStock() != null,
+                    "Unsupported save: incomplete native offered goods");
+            Preconditions.checkArgument(
+                    out.put(tradableGoods(entry.getGoods()),
+                            entry.getStock()) == null,
+                    "Unsupported save: duplicate native offered goods");
+        }
+        Preconditions.checkArgument(NativeMarketRules.isValidStock(out),
+                "Unsupported save: native stock is out of range");
+        return out;
+    }
+
+    /**
+     * @param saved saved wanted goods names, required; at most the wanted slots
+     * @return wanted goods in the saved order
+     */
+    private static List<GoodsType> readWanted(final List<String> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Unsupported save: missing native wanted goods");
+        Preconditions.checkArgument(
+                saved.size() <= NativeMarketRules.WANTED_SLOTS,
+                "Unsupported save: too many native wanted goods");
+        final List<GoodsType> out = new ArrayList<>();
+        for (final String name : saved) {
+            final GoodsType goods = tradableGoods(name);
+            Preconditions.checkArgument(!out.contains(goods),
+                    "Unsupported save: duplicate native wanted goods");
+            out.add(goods);
+        }
+        return out;
+    }
+
+    /**
+     * Restore the saved trade of one settlement (R-0159). An expedition names
+     * its carrier and anchor together, and the anchor must be beside the
+     * settlement. The carrier is checked against the units later.
+     *
+     * @param entry      required saved settlement
+     * @param settlement required settlement built from the same entry
+     */
+    private static void restoreTrade(final NativeSettlementPo entry,
+            final NativeSettlement settlement) {
+        Preconditions.checkArgument(entry.getTrade() != null,
+                "Unsupported save: missing native trade");
+        for (final NativeTradePo saved : entry.getTrade()) {
+            Preconditions.checkArgument(
+                    saved != null && saved.getEuropean() != null,
+                    "Unsupported save: incomplete native trade");
+            Preconditions.checkArgument(
+                    settlement.findTrade(saved.getEuropean()).isEmpty(),
+                    "Unsupported save: duplicate native trade");
+            Preconditions.checkArgument(saved.getExpeditions() != null,
+                    "Unsupported save: missing native expeditions");
+            final NativeTradeState state = new NativeTradeState(
+                    saved.getLastReceivedGoods() == null ? null
+                            : tradableGoods(saved.getLastReceivedGoods()));
+            state.restoreRevision(
+                    saved.getRevision() == null ? 0 : saved.getRevision());
+            for (final NativeExpeditionPo expedition : saved.getExpeditions()) {
+                Preconditions.checkArgument(
+                        expedition != null && expedition.getCarrierId() != null
+                                && expedition.getAnchor() != null,
+                        "Unsupported save: incomplete native expedition");
+                Preconditions.checkArgument(
+                        settlement.getLocation()
+                                .isNeighbor(expedition.getAnchor()),
+                        "Unsupported save: native expedition is not beside its settlement");
+                Preconditions.checkArgument(
+                        state.getExpeditions()
+                                .get(expedition.getCarrierId()) == null,
+                        "Unsupported save: duplicate native expedition");
+                final NativeExpedition restored = new NativeExpedition(
+                        expedition.getCarrierId(), expedition.getAnchor(),
+                        expedition.getBlockedGoods() == null ? null
+                                : tradableGoods(expedition.getBlockedGoods()));
+                restoreHaggle(expedition, restored);
+                restorePurchase(expedition, restored, state.getRevision(),
+                        settlement);
+                state.restoreExpedition(restored);
+            }
+            settlement.restoreTrade(saved.getEuropean(), state);
+        }
+    }
+
+    /**
+     * Restore the one haggle drawn in an expedition (R-0160). The goods and the
+     * result belong together: a saved goods name needs its result, and a result
+     * without goods is refused.
+     *
+     * @param saved      required saved expedition
+     * @param expedition required expedition built from the same entry
+     */
+    private static void restoreHaggle(final NativeExpeditionPo saved,
+            final NativeExpedition expedition) {
+        if (saved.getHaggledGoods() == null) {
+            Preconditions.checkArgument(saved.getHaggleAccepted() == null,
+                    "Unsupported save: native haggle result without its goods");
+            Preconditions.checkArgument(saved.getHaggledQuantity() == null,
+                    "Unsupported save: native haggle pieces without its goods");
+            return;
+        }
+        Preconditions.checkArgument(saved.getHaggleAccepted() != null,
+                "Unsupported save: native haggle goods without its result");
+        // The pieces of the shown offer are optional presentation state.
+        Preconditions.checkArgument(
+                saved.getHaggledQuantity() == null
+                        || saved.getHaggledQuantity() > 0,
+                "Unsupported save: native haggle pieces must be positive");
+        expedition.restoreHaggle(tradableGoods(saved.getHaggledGoods()),
+                saved.getHaggleAccepted());
+        expedition.restoreHaggledQuantity(saved.getHaggledQuantity());
+    }
+
+    /**
+     * Restore the pending second stage of an expedition (R-0161). A saved stage
+     * names the revision of the sale or gift that opened it, which cannot be
+     * later than the trade's revision, and its one request result; a result
+     * without a stage is refused.
+     *
+     * @param saved         required saved expedition
+     * @param expedition    required expedition built from the same entry
+     * @param tradeRevision revision of the trade the expedition belongs to
+     * @param settlement    required settlement whose offered goods the stage
+     *                      may name
+     */
+    private static void restorePurchase(final NativeExpeditionPo saved,
+            final NativeExpedition expedition, final int tradeRevision,
+            final NativeSettlement settlement) {
+        if (saved.getPurchaseRevision() == null) {
+            Preconditions.checkArgument(
+                    saved.getPurchaseHaggle() == null
+                            && saved.getPurchaseGoods() == null
+                            && saved.getPurchaseQuantity() == null,
+                    "Unsupported save: native purchase result without its stage");
+            return;
+        }
+        Preconditions.checkArgument(
+                saved.getPurchaseRevision() >= 0
+                        && saved.getPurchaseRevision() <= tradeRevision,
+                "Unsupported save: native purchase stage is not in the trade history");
+        final NativeSaleQuote.Haggle haggle = savedPurchaseHaggle(
+                saved.getPurchaseHaggle());
+        // The offer a request was made for exists exactly once the request was
+        // drawn: an open request has no offer, a drawn one needs it.
+        if (haggle == NativeSaleQuote.Haggle.OFFERED) {
+            Preconditions.checkArgument(
+                    saved.getPurchaseGoods() == null
+                            && saved.getPurchaseQuantity() == null,
+                    "Unsupported save: native purchase offer before its request");
+            expedition.restorePurchase(saved.getPurchaseRevision(), haggle,
+                    null, null);
+            return;
+        }
+        Preconditions.checkArgument(
+                saved.getPurchaseGoods() != null
+                        && saved.getPurchaseQuantity() != null
+                        && saved.getPurchaseQuantity() > 0,
+                "Unsupported save: native purchase request without its offer");
+        final GoodsType goods = tradableGoods(saved.getPurchaseGoods());
+        Preconditions.checkArgument(
+                settlement.getOfferedStock().containsKey(goods),
+                "Unsupported save: native purchase offer names goods not sold here");
+        expedition.restorePurchase(saved.getPurchaseRevision(), haggle, goods,
+                saved.getPurchaseQuantity());
+    }
+
+    /**
+     * @param name saved request state name, possibly missing
+     * @return the request state with that name; an unavailable state is refused
+     */
+    private static NativeSaleQuote.Haggle savedPurchaseHaggle(
+            final String name) {
+        Preconditions.checkArgument(name != null,
+                "Unsupported save: native purchase stage without its request result");
+        final NativeSaleQuote.Haggle haggle;
+        try {
+            haggle = NativeSaleQuote.Haggle.valueOf(name);
+        } catch (final IllegalArgumentException unknown) {
+            throw new IllegalArgumentException(
+                    "Unsupported save: unknown native purchase request result",
+                    unknown);
+        }
+        Preconditions.checkArgument(
+                haggle != NativeSaleQuote.Haggle.UNAVAILABLE,
+                "Unsupported save: unknown native purchase request result");
+        return haggle;
+    }
+
+    /**
+     * Restore the goods a settlement has bought from carriers (R-0160). Absent
+     * means none has been bought; each saved amount must be positive.
+     *
+     * @param saved      saved goods, possibly null
+     * @param settlement required settlement built from the same entry
+     */
+    private static void restoreReceived(final List<NativeGoodsStockPo> saved,
+            final NativeSettlement settlement) {
+        if (saved == null) {
+            return;
+        }
+        for (final NativeGoodsStockPo entry : saved) {
+            Preconditions.checkArgument(
+                    entry != null && entry.getGoods() != null
+                            && entry.getStock() != null && entry.getStock() > 0,
+                    "Unsupported save: incomplete native received goods");
+            final GoodsType goods = tradableGoods(entry.getGoods());
+            Preconditions.checkArgument(
+                    settlement.getReceivedStock().get(goods) == null,
+                    "Unsupported save: duplicate native received goods");
+            settlement.restoreReceived(goods, entry.getStock());
+        }
+    }
+
+    /**
+     * @param name saved goods name, possibly missing
+     * @return the tradable goods type with that name
+     * @throws IllegalArgumentException when the name is missing or not tradable
+     */
+    private static GoodsType tradableGoods(final String name) {
+        Preconditions.checkArgument(name != null,
+                "Unsupported save: missing native goods");
+        return GoodsType.BUYABLE_GOOD_TYPES.stream()
+                .filter(goods -> goods.name().equals(name)).findAny()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Unsupported save: native goods are not tradable"));
+    }
+
+    /**
+     * @param name saved stage name, possibly missing
+     * @return the stage with that name
+     */
+    private static NativeTeachingCourse.Stage savedStage(final String name) {
+        Preconditions.checkArgument(name != null,
+                "Unsupported save: missing native teaching stage");
+        try {
+            return NativeTeachingCourse.Stage.valueOf(name);
+        } catch (final IllegalArgumentException unknown) {
+            throw new IllegalArgumentException(
+                    "Unsupported save: unknown native teaching stage", unknown);
+        }
+    }
+
+    /**
+     * @param name saved skill name, possibly missing
+     * @return the accepted native-teachable skill with that name
+     * @throws IllegalArgumentException when the name is missing or not accepted
+     */
+    private static UnitType acceptedSkill(final String name) {
+        return UnitType.NATIVE_TEACHABLE_SKILLS.stream()
+                .filter(skill -> skill.name().equals(name)).findAny()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Unsupported save: missing or unaccepted native teachable skill"));
     }
 
     /**
@@ -130,9 +454,61 @@ public final class NativeSettlements {
     }
 
     /**
+     * @param settlement required settlement
+     * @return saved form of its trades, in European order
+     */
+    private static List<NativeTradePo> saveTrades(
+            final NativeSettlement settlement,
+            final Predicate<NativeExpedition> open) {
+        final List<NativeTradePo> out = new ArrayList<>();
+        settlement.getTrades().forEach((european, state) -> {
+            final NativeTradePo po = new NativeTradePo();
+            po.setEuropean(european);
+            po.setLastReceivedGoods(
+                    state.getLastReceived().map(GoodsType::name).orElse(null));
+            po.setRevision(state.getRevision());
+            final List<NativeExpeditionPo> expeditions = new ArrayList<>();
+            for (final NativeExpedition expedition : state.getExpeditions()
+                    .values()) {
+                if (open.test(expedition)) {
+                    final NativeExpeditionPo expeditionPo = new NativeExpeditionPo();
+                    expeditionPo.setCarrierId(expedition.getCarrierId());
+                    expeditionPo.setAnchor(expedition.getAnchor());
+                    expeditionPo.setBlockedGoods(expedition.getBlockedGoods()
+                            .map(GoodsType::name).orElse(null));
+                    if (expedition.getHaggledGoods().isPresent()) {
+                        expeditionPo.setHaggledGoods(
+                                expedition.getHaggledGoods().get().name());
+                        expeditionPo.setHaggleAccepted(
+                                expedition.isHaggleAccepted());
+                        expeditionPo.setHaggledQuantity(
+                                expedition.getHaggledQuantity().orElse(null));
+                    }
+                    if (expedition.getPurchaseRevision().isPresent()) {
+                        expeditionPo.setPurchaseRevision(
+                                expedition.getPurchaseRevision().get());
+                        expeditionPo.setPurchaseHaggle(
+                                expedition.getPurchaseHaggle().name());
+                        expeditionPo
+                                .setPurchaseGoods(expedition.getPurchaseGoods()
+                                        .map(GoodsType::name).orElse(null));
+                        expeditionPo.setPurchaseQuantity(
+                                expedition.getPurchaseQuantity().orElse(null));
+                    }
+                    expeditions.add(expeditionPo);
+                }
+            }
+            po.setExpeditions(expeditions);
+            out.add(po);
+        });
+        return out;
+    }
+
+    /**
      * @return saved form of every settlement, in the same order
      */
-    public List<NativeSettlementPo> toPo() {
+    public List<NativeSettlementPo> toPo(
+            final Predicate<NativeExpedition> open) {
         final List<NativeSettlementPo> out = new ArrayList<>();
         for (final NativeSettlement settlement : settlements) {
             final NativeSettlementPo po = new NativeSettlementPo();
@@ -142,6 +518,35 @@ public final class NativeSettlements {
             po.setCapital(settlement.isCapital());
             po.setLocation(settlement.getLocation());
             po.setTreasury(settlement.getTreasury());
+            po.setTeachableSkill(settlement.getTeachableSkill().name());
+            po.setTeachingPupilId(settlement.getTeachingPupilId().orElse(null));
+            po.setTeachingUpdates(settlement.getTeachingUpdates());
+            po.setTeachingStage(
+                    settlement.getTeachingStage().map(Enum::name).orElse(null));
+            po.setTeachingSkill(settlement.getTeachingPupilId().isPresent()
+                    ? settlement.getTeachableSkill().name()
+                    : null);
+            final List<NativeGoodsStockPo> stock = new ArrayList<>();
+            settlement.getOfferedStock().forEach((goods, amount) -> {
+                final NativeGoodsStockPo goodsPo = new NativeGoodsStockPo();
+                goodsPo.setGoods(goods.name());
+                goodsPo.setStock(amount);
+                stock.add(goodsPo);
+            });
+            po.setOfferedGoods(stock);
+            final List<NativeGoodsStockPo> received = new ArrayList<>();
+            settlement.getReceivedStock().forEach((goods, amount) -> {
+                final NativeGoodsStockPo goodsPo = new NativeGoodsStockPo();
+                goodsPo.setGoods(goods.name());
+                goodsPo.setStock(amount);
+                received.add(goodsPo);
+            });
+            po.setReceivedGoods(received);
+            final List<String> wanted = new ArrayList<>();
+            settlement.getWantedGoods()
+                    .forEach(goods -> wanted.add(goods.name()));
+            po.setWantedGoods(wanted);
+            po.setTrade(saveTrades(settlement, open));
             out.add(po);
         }
         return out;

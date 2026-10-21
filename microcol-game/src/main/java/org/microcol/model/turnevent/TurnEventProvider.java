@@ -11,6 +11,8 @@ import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Founder;
+import org.microcol.model.LostCityRumorRules;
+import org.microcol.model.NativeNation;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.QueueItemType;
@@ -162,6 +164,12 @@ public final class TurnEventProvider {
         return new TurnEventFounderArrived(player.getName(), founder);
     }
 
+    /** Report a native course that granted its skill or ended in hostility. */
+    public static TurnEvent getNativeTeaching(final Player player,
+            final TurnEventNativeTeaching.Kind kind, final UnitType skill) {
+        return new TurnEventNativeTeaching(player.getName(), kind, skill);
+    }
+
     /** Report one actual school or productive-work graduation. */
     public static TurnEvent getEducationCompleted(final Player player,
             final Colony colony, final Unit student,
@@ -179,6 +187,25 @@ public final class TurnEventProvider {
     public static TurnEvent getPeaceOffer(final Player player,
             final String rivalName, final int price) {
         return new TurnEventPeaceOffer(player.getName(), rivalName, price);
+    }
+
+    /**
+     * Notice of one resolved lost-city rumor, with its actual result.
+     *
+     * @param player        required owner of the explorer
+     * @param outcome       required result after the De Soto substitution
+     * @param explorerId    ID of the explorer that entered the rumor
+     * @param gold          gold awarded, zero unless the result is gold
+     * @param nation        nation of the disturbed burial site, or null
+     * @param deSotoAverted whether De Soto turned a bad result into empty
+     * @return turn event object
+     */
+    public static TurnEvent getLostCityRumor(final Player player,
+            final LostCityRumorRules.Outcome outcome, final int explorerId,
+            final int gold, final NativeNation nation,
+            final boolean deSotoAverted) {
+        return new TurnEventLostCityRumor(player.getName(), outcome, explorerId,
+                gold, nation, deSotoAverted);
     }
 
     /** Notice that the Crown forced a war, possibly ending an alliance. */

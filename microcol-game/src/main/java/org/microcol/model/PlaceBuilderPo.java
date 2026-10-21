@@ -158,6 +158,20 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                             unitPo));
                 }
                 return null;
+            }, (context) -> {
+                /**
+                 * Native course (R-0148)
+                 */
+                final var course = context.getUnitPo().getPlaceNativeCourse();
+                if (course == null) {
+                    return null;
+                }
+                Preconditions.checkArgument(
+                        course.getSettlementId() != null
+                                && course.getSettlementId() >= 0,
+                        "Missing saved native course settlement");
+                return new PlaceNativeCourse(context.getUnit(),
+                        course.getSettlementId());
             }, this::tryToBuildPlaceCargoSlot));
 
     private final UnitPo unitPo;
