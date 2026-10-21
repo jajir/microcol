@@ -3,6 +3,8 @@ package org.microcol.gui.event;
 import java.util.Optional;
 
 import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.dialog.NativeLandDialog;
+import org.microcol.gui.dialog.NativeLandGuard;
 import org.microcol.gui.dialog.ClearForestDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
@@ -35,12 +37,15 @@ public final class ClearForestEventListener {
     private final GameModelController gameModelController;
     private final Provider<ClearForestDialog> dialog;
     private final I18n i18n;
+    private final NativeLandGuard nativeLand;
 
     @Inject
     ClearForestEventListener(final SelectedUnitManager selectedUnitManager,
             final EventBus eventBus,
             final GameModelController gameModelController,
-            final Provider<ClearForestDialog> dialog, final I18n i18n) {
+            final Provider<ClearForestDialog> dialog, final I18n i18n,
+            final NativeLandGuard nativeLand) {
+        this.nativeLand = Preconditions.checkNotNull(nativeLand);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.selectedUnitManager = Preconditions
@@ -123,11 +128,22 @@ public final class ClearForestEventListener {
             // Declined, closed or Escape: nothing was started or spent.
             return;
         }
+        // After the forest terms are accepted, claimed unpaid land is
+        // explained; canceling it starts nothing and spends nothing.
+        final NativeLandDialog.Result land = nativeLand.proceed(model,
+                gameModelController.getHumanPlayer(),
+                offer.get().getLocation());
+        if (land == NativeLandDialog.Result.CANCELED) {
+            return;
+        }
         try {
             model.clearForest(unit, offer.get());
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             // State changed between the offer and the confirmation.
-            reject(Buttons.clearForestChanged);
+            eventBus.post(new StatusBarMessageEvent(
+                    nativeLand.rejection(land,
+                            i18n.get(Buttons.clearForestChanged)),
+                    StatusBarMessageEvent.Source.GAME));
             return;
         }
         eventBus.post(new RefreshRightPanelEvent());

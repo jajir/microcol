@@ -1,7 +1,7 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,18 +46,23 @@ import com.google.common.collect.Lists;
 final class ListenerManager {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final List<ModelListener> listeners;
+    /**
+     * Listeners are added and removed from the UI, test and robot threads while
+     * model threads dispatch events. Each dispatch iterates over a snapshot: a
+     * listener added during it receives only later events, and one removed
+     * during it may still receive the event being dispatched.
+     */
+    private final CopyOnWriteArrayList<ModelListener> listeners;
 
     ListenerManager() {
-        listeners = new ArrayList<>();
+        listeners = new CopyOnWriteArrayList<>();
     }
 
     void addListener(final ModelListener listener) {
         Preconditions.checkNotNull(listener);
 
-        if (!listeners.contains(listener)) {
+        if (listeners.addIfAbsent(listener)) {
             logger.info("Added model listener {}.", listener);
-            listeners.add(listener);
         } else {
             logger.warn("Model listener {} already added.", listener);
         }

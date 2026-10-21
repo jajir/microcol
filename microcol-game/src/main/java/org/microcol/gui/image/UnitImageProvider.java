@@ -59,6 +59,8 @@ public class UnitImageProvider {
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
         UnitType.SCHOOL_ONLY_SPECIALISTS.forEach(type -> images.put(type,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
+        // No dedicated native artwork yet; the owner flag carries the nation.
+        images.put(UnitType.BRAVE, imageCache.getImage(IMG_UNIT_FREE_COLONIST));
         images.put(UnitType.INDENTURED_SERVANT,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST));
         images.put(UnitType.PETTY_CRIMINAL,
@@ -128,6 +130,10 @@ public class UnitImageProvider {
                     if (UnitType.WAGON == request.getUnitType()) {
                         return imageCache
                                 .getImage(ImageLoaderUnit.IMG_UNIT_WAGON);
+                    }
+                    if (UnitType.BRAVE == request.getUnitType()) {
+                        return imageCache.getImage(
+                                ImageLoaderUnit.IMG_UNIT_FREE_COLONIST);
                     }
                     if (UnitType.FRIGATE == request.getUnitType()
                             || UnitType.PRIVATEER == request.getUnitType()

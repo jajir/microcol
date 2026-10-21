@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.NativeSettlementKnowledgePo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
@@ -31,6 +32,7 @@ import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitArtillery;
+import org.microcol.model.unit.UnitNativeBrave;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
@@ -50,6 +52,22 @@ public class Model {
     /** Last complete round already processed by the Crown-war event. */
     private int lastCrownWarRound;
     private static final int CROWN_WAR_PERIOD = 20;
+
+    /** Squares around a native settlement in which armed units add alarm. */
+    private static final int NATIVE_ARMED_RADIUS = 2;
+
+    /** Local alarm per resident within the settlement's home radius. */
+    private static final double NATIVE_RESIDENT_PRESSURE = 0.25;
+
+    /** Local alarm per armed unit within {@link #NATIVE_ARMED_RADIUS}. */
+    private static final double NATIVE_ARMED_PRESSURE = 2;
+
+    /** Local alarm per unpaid square a European uses, every owner update. */
+    private static final double NATIVE_UNPAID_USE_PRESSURE = 2;
+
+    /** Local alarm charged once when a European first takes unpaid land. */
+    private static final double NATIVE_UNPAID_TAKING_ALARM = 5;
+
     /** Rounds after ending an alliance before war may be declared. */
     public static final int ALLIANCE_WAR_WAIT_ROUNDS = EuropeanRelations.WAR_WAIT_ROUNDS;
     /** Equipment a disbanded colonist returns, in warehouse goods order. */
@@ -71,6 +89,11 @@ public class Model {
     private final PlayerStore playerStore;
     private final EuropeanRelations europeanRelations;
     private final List<Colony> colonies;
+    private final NativeSettlements nativeSettlements;
+    private final NativeRelations nativeRelations;
+    private final NativeLandRights nativeLandRights;
+    /** Player name to the settlement ids that player has learned by sight. */
+    private final Map<String, Set<Integer>> learnedNativeSettlements;
     private final UnitStorage unitStorage;
     private final Europe europe;
     private final HighSea highSea;
@@ -80,6 +103,9 @@ public class Model {
     private final TurnEventStore turnEventStore;
     private final Statistics statistics;
     private final UnitFactory unitFactory;
+    private final TradeRoutes tradeRoutes;
+    private final TradeRouteRules tradeRouteRules;
+    private final TradeRouteNavigator tradeRouteNavigator;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -158,7 +184,12 @@ public class Model {
         this.map = Preconditions.checkNotNull(map);
 
         this.playerStore = PlayerStore.makePlayers(this, modelPo);
-        europeanRelations = new EuropeanRelations(playerStore.getPlayers(),
+        // Native nations have no European relation; only colonial nations and
+        // Crowns form the pairs of the European table.
+        europeanRelations = new EuropeanRelations(
+                playerStore.getPlayers().stream()
+                        .filter(player -> !player.isNative())
+                        .collect(java.util.stream.Collectors.toList()),
                 modelPo.getEuropeanRelations(),
                 calendar.getNumberOfPlayedTurns());
         turnEventStore = new TurnEventStore(modelPo, playerStore);
@@ -244,6 +275,24 @@ public class Model {
             colonies.add(col);
         });
 
+        // Settlements are checked against the finished colony list, so a saved
+        // settlement cannot take a European colony's square.
+        final Set<Location> colonySites = new HashSet<>();
+        colonies.forEach(colony -> colonySites.add(colony.getLocation()));
+        nativeSettlements = NativeSettlements.make(
+                modelPo.getNativeSettlements(),
+                location -> map.isValid(location)
+                        && !map.getTerrainTypeAt(location).isSea(),
+                colonySites);
+        learnedNativeSettlements = restoreLearnedNativeSettlements(
+                modelPo.getNativeSettlementKnowledge());
+        nativeRelations = NativeRelations.make(nativeSettlements,
+                modelPo.getNativeTribalAnger(), modelPo.getNativeLocalAlarm());
+        nativeLandRights = NativeLandRights.make(
+                location -> map.isValid(location)
+                        && !map.getTerrainTypeAt(location).isSea(),
+                modelPo.getNativeLandRights(), modelPo.getNativeLandTakings());
+
         for (final Colony colony : colonies) {
             Preconditions.checkArgument(
                     !colonyNames.getProblem(colony.getName(), colony)
@@ -257,7 +306,8 @@ public class Model {
         // Owners may share a square only as allies or as former allies with
         // saved evidence; nothing else is a lawful mixed-owner placement.
         this.unitStorage.setSharedSquarePolicy(
-                (first, second, at) -> !first.isKing() && !second.isKing()
+                (first, second, at) -> first.isColonialNation()
+                        && second.isColonialNation()
                         && (europeanRelations.get(first,
                                 second) == EuropeanRelationState.ALLIANCE
                                 || europeanRelations.isRetainedOverlap(first,
@@ -269,6 +319,9 @@ public class Model {
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
         this.europe = new Europe(this, modelPo.getEurope());
+        tradeRouteRules = new TradeRouteRules(this);
+        tradeRoutes = new TradeRoutes(this, modelPo);
+        tradeRouteNavigator = new TradeRouteNavigator(this, tradeRouteRules);
     }
 
     /**
@@ -321,6 +374,7 @@ public class Model {
                     }
                 });
 
+        model.validateSavedNativeBraveHomes();
         if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
             throw new MicroColException(String.format(
                     "In source data in %s units by in model is %s units.",
@@ -329,6 +383,11 @@ public class Model {
 
         model.checkUnits();
         model.checkSavedGoToOrders();
+        // Units exist only now; a processed visit must name a saved route.
+        model.unitStorage.getUnits().forEach(
+                unit -> model.tradeRoutes.checkProcessedVisit(model, unit));
+        model.unitStorage.getUnits()
+                .forEach(unit -> model.tradeRoutes.checkAssignment(unit));
         model.checkSavedBoardingPriorities();
         model.europeanRelations.checkRetainedOverlaps(model::isOverlapLive);
         for (final ColonyPo savedColony : modelPo.getColonies()) {
@@ -356,6 +415,7 @@ public class Model {
      */
     void refreshObservations() {
         playerStore.getPlayers().forEach(Player::observeColonies);
+        learnNativeSettlements();
     }
 
     private static void validateSavedColonyFields(final ModelPo data,
@@ -476,11 +536,37 @@ public class Model {
         }
     }
 
+    /**
+     * Found a colony without a native land decision, as the computer player
+     * does: claimed land it uses is taken unpaid.
+     */
     public Colony buildColony(final Player player, final Unit unit,
             final String name) {
+        return buildColony(player, unit, name, null, List.of());
+    }
+
+    /**
+     * Found a colony after the player decided about the native land it uses.
+     * Every founding and land condition is checked before the first change: the
+     * squares the colony would use must still be the previewed ones, and the
+     * chosen purchases must be payable together. Purchases are recorded before
+     * the founder starts working, so a paid square is never taken.
+     *
+     * @param player       required current player
+     * @param unit         required founder
+     * @param name         required colony name
+     * @param expectedLand squares from {@link #getFoundingLand}, or
+     *                     <code>null</code> to skip the preview check
+     * @param purchases    required unpaid quotes to buy, possibly empty
+     * @return the new colony
+     */
+    public Colony buildColony(final Player player, final Unit unit,
+            final String name, final List<Location> expectedLand,
+            final List<NativeLandQuote> purchases) {
         checkGameRunning();
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
+        Preconditions.checkNotNull(purchases);
         Preconditions.checkArgument(
                 player == getCurrentPlayer() && unit.getOwner() == player,
                 "Only the current owner may found a colony");
@@ -493,21 +579,18 @@ public class Model {
                 "Colony IDs exhausted");
         final Location location = unit.getLocation();
 
-        final Colony col = new Colony(this, nextColonyId,
-                ColonyNames.normalize(name), player, location, colony -> {
-                    final List<Construction> constructions = new ArrayList<>();
-                    ConstructionType.NEW_COLONY_CONSTRUCTIONS
-                            .forEach(constructionType -> {
-                                final Construction c = Construction.build(this,
-                                        colony, constructionType);
-                                constructions.add(c);
-                            });
-                    return constructions;
-                }, new HashMap<String, Integer>(), new ArrayList<>(), 0L,
-                player, TownCommons.chooseSecondCommodity(
-                        getMap().getTerrainAt(location)));
+        final Colony col = draftColony(player, location,
+                ColonyNames.normalize(name));
         final List<ColonyField> fields = col
                 .getEmptyFieldsWithMaxCornProduction();
+        final List<Location> land = foundingLand(location, fields);
+        Preconditions.checkArgument(
+                expectedLand == null || expectedLand.equals(land),
+                "Native land used by the founding changed");
+        final Map<NativeSettlement, Integer> treasuries = checkLandPurchases(
+                player, land, purchases);
+        final int goldAfter = player.getGold()
+                - purchases.stream().mapToInt(NativeLandQuote::getPrice).sum();
         final ConstructionSlot indoorWork = col
                 .getConstructionByType(ConstructionType.TOWN_HALL).getSlotAt(0);
         Preconditions.checkState(indoorWork.isEmpty(),
@@ -530,6 +613,13 @@ public class Model {
                                     .getStorageCapacity(type).getAmount(),
                             "Founder equipment does not fit in the new colony"));
         }
+        if (!purchases.isEmpty()) {
+            final EuropeanNation european = nativeEuropean(player);
+            purchases.forEach(quote -> nativeLandRights.addPaid(european,
+                    quote.getLocation()));
+            treasuries.forEach(NativeSettlement::setTreasury);
+            player.setGold(goldAfter);
+        }
         nextColonyId++;
         colonies.add(col);
         player.activateCongressAfterFirstColony();
@@ -538,9 +628,110 @@ public class Model {
         } else {
             unit.placeToColonyField(fields.get(0), GoodsType.CORN);
         }
+        recordNativeLandUse(player, location);
         refreshObservations();
         listenerManager.fireColonyWasFounded(this, col);
         return col;
+    }
+
+    /**
+     * Squares a founding by this unit would use now: the colony square, then
+     * the field the founder would start working, if any. It uses the same field
+     * choice as {@link #buildColony} and changes nothing.
+     *
+     * @param founder prospective founder
+     * @return used squares in that order, or empty when it cannot found now
+     */
+    public List<Location> getFoundingLand(final Unit founder) {
+        if (!canUnitBuildColony(founder)) {
+            return List.of();
+        }
+        final Location location = founder.getLocation();
+        return foundingLand(location,
+                draftColony(founder.getOwner(), location, "")
+                        .getEmptyFieldsWithMaxCornProduction());
+    }
+
+    /**
+     * Whether the chosen purchases of founding land can be paid together now:
+     * every quote is current, names a distinct square the founding would use,
+     * and gold and the claimants' treasuries allow the total.
+     *
+     * @param founder      required founder
+     * @param expectedLand squares from {@link #getFoundingLand}
+     * @param purchases    required unpaid quotes to buy
+     * @return whether {@link #buildColony} would accept these purchases
+     */
+    public boolean canPayFoundingLand(final Unit founder,
+            final List<Location> expectedLand,
+            final List<NativeLandQuote> purchases) {
+        Preconditions.checkNotNull(purchases);
+        if (founder == null || !getFoundingLand(founder).equals(expectedLand)) {
+            return false;
+        }
+        try {
+            checkLandPurchases(founder.getOwner(), expectedLand, purchases);
+            return true;
+        } catch (final IllegalArgumentException rejected) {
+            return false;
+        }
+    }
+
+    /** A colony object for checks and previews; it is not registered. */
+    private Colony draftColony(final Player player, final Location location,
+            final String name) {
+        return new Colony(this, nextColonyId, name, player, location,
+                colony -> {
+                    final List<Construction> constructions = new ArrayList<>();
+                    ConstructionType.NEW_COLONY_CONSTRUCTIONS
+                            .forEach(constructionType -> {
+                                final Construction c = Construction.build(this,
+                                        colony, constructionType);
+                                constructions.add(c);
+                            });
+                    return constructions;
+                }, new HashMap<String, Integer>(), new ArrayList<>(), 0L,
+                player, TownCommons.chooseSecondCommodity(
+                        getMap().getTerrainAt(location)));
+    }
+
+    private static List<Location> foundingLand(final Location site,
+            final List<ColonyField> fields) {
+        return fields.isEmpty() ? List.of(site)
+                : List.of(site, fields.get(0).getLocation());
+    }
+
+    /**
+     * Validate land purchases made together with another action. Each quote
+     * must be current and distinct and name one of the used squares; the total
+     * must fit the payer's gold and every claimant's treasury.
+     *
+     * @return treasury after payment for each credited settlement
+     */
+    private Map<NativeSettlement, Integer> checkLandPurchases(
+            final Player player, final List<Location> land,
+            final List<NativeLandQuote> purchases) {
+        final Set<Location> squares = new HashSet<>();
+        final Map<NativeSettlement, Integer> treasuries = new HashMap<>();
+        long total = 0;
+        for (final NativeLandQuote quote : purchases) {
+            Preconditions.checkArgument(
+                    quote != null && quote.getPlayer() == player
+                            && land.contains(quote.getLocation())
+                            && squares.add(quote.getLocation())
+                            && canBuyNativeLand(quote),
+                    "Native land cannot be bought now");
+            total += quote.getPrice();
+            final NativeSettlement claimant = quote.getClaimant();
+            final long after = (long) treasuries.getOrDefault(claimant,
+                    claimant.getTreasury()) + quote.getPrice();
+            Preconditions.checkArgument(after <= Integer.MAX_VALUE,
+                    "Native treasury cannot take the payment");
+            treasuries.put(claimant, (int) after);
+        }
+        Preconditions.checkArgument(total <= player.getGold(),
+                "Not enough gold for the native land");
+        return treasuries;
     }
 
     public Optional<ColonyNameProblem> getColonyNameProblem(final String name,
@@ -566,6 +757,717 @@ public class Model {
                 !colonyNames.getProblem(name, colony).isPresent(),
                 "Invalid colony name");
         colony.setName(ColonyNames.normalize(name));
+    }
+
+    /**
+     * @param player required owner
+     * @return the owner's saved trade routes in creation order
+     */
+    public List<TradeRoute> getTradeRoutes(final Player player) {
+        Preconditions.checkNotNull(player);
+        return tradeRoutes.getRoutes(player);
+    }
+
+    /**
+     * Stops the owner may add after the given ones, from the last stop or the
+     * starting colony. Reads only; nothing moves and no carrier is created.
+     *
+     * @param owner         required route owner
+     * @param kind          required transport kind
+     * @param startColonyId starting colony ID
+     * @param chosen        required stops already chosen, in order
+     * @return legal next stops; empty when none or the route is full
+     */
+    public List<TradeRouteStop> getTradeRouteStopOptions(final Player owner,
+            final TradeRouteKind kind, final int startColonyId,
+            final List<TradeRouteStop> chosen) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(kind);
+        Preconditions.checkNotNull(chosen);
+        final List<TradeRouteStop> options = new ArrayList<>();
+        if (owner != getCurrentPlayer() || !owner.isColonialNation()
+                || chosen.size() >= TradeRoutes.MAX_STOPS
+                || !isOwnedColony(owner, startColonyId)) {
+            return options;
+        }
+        final TradeRouteStop from = chosen.isEmpty()
+                ? TradeRouteStop.ofColony(startColonyId)
+                : chosen.get(chosen.size() - 1);
+        for (final Colony colony : colonies) {
+            final TradeRouteStop candidate = TradeRouteStop
+                    .ofColony(colony.getId());
+            if (colony.getOwner() == owner && !candidate.equals(from)
+                    && tradeRouteRules.isLegalLeg(owner, kind, from,
+                            candidate)) {
+                options.add(candidate);
+            }
+        }
+        final TradeRouteStop europe = TradeRouteStop.europe();
+        if (kind == TradeRouteKind.SEA && !europe.equals(from)
+                && tradeRouteRules.isLegalLeg(owner, kind, from, europe)) {
+            options.add(europe);
+        }
+        return options;
+    }
+
+    /**
+     * Checks every rule for a new route without changing anything. Only the
+     * current owner may create a route, and every stop must be a live owned
+     * colony or Europe, each leg reachable from the one before.
+     *
+     * @param owner         required route owner
+     * @param name          required player-entered name, not yet trimmed
+     * @param kind          required transport kind
+     * @param startColonyId starting colony ID
+     * @param stops         required stops in travel order
+     * @return the first problem, or empty when the route may be created
+     */
+    public Optional<TradeRouteProblem> getTradeRouteProblem(final Player owner,
+            final String name, final TradeRouteKind kind,
+            final int startColonyId, final List<TradeRouteStop> stops) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(name);
+        Preconditions.checkNotNull(kind);
+        Preconditions.checkNotNull(stops);
+        if (owner != getCurrentPlayer() || !owner.isColonialNation()) {
+            return Optional.of(TradeRouteProblem.NOT_OWNER);
+        }
+        final Optional<ColonyNameProblem> text = ColonyNames
+                .getTextProblem(name);
+        if (text.isPresent()) {
+            switch (text.get()) {
+            case EMPTY:
+                return Optional.of(TradeRouteProblem.NAME_EMPTY);
+            case TOO_LONG:
+                return Optional.of(TradeRouteProblem.NAME_TOO_LONG);
+            default:
+                return Optional.of(TradeRouteProblem.NAME_INVALID);
+            }
+        }
+        if (tradeRoutes.isNameTaken(owner, ColonyNames.normalize(name))) {
+            return Optional.of(TradeRouteProblem.NAME_DUPLICATE);
+        }
+        if (!tradeRoutes.hasIdCapacity()) {
+            return Optional.of(TradeRouteProblem.ID_EXHAUSTED);
+        }
+        if (!isOwnedColony(owner, startColonyId)) {
+            return Optional.of(TradeRouteProblem.START_UNAVAILABLE);
+        }
+        final Colony start = getColonyById(startColonyId).orElseThrow();
+        if (kind == TradeRouteKind.SEA
+                && !isOwnedCoastalPort(owner, start.getLocation())) {
+            return Optional.of(TradeRouteProblem.START_NOT_PORT);
+        }
+        if (stops.isEmpty() || stops.size() > TradeRoutes.MAX_STOPS) {
+            return Optional.of(TradeRouteProblem.STOP_COUNT);
+        }
+        TradeRouteStop from = TradeRouteStop.ofColony(startColonyId);
+        for (final TradeRouteStop to : stops) {
+            if (to == null) {
+                return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+            }
+            if (to.isEurope() && kind == TradeRouteKind.LAND) {
+                return Optional.of(TradeRouteProblem.EUROPE_BY_LAND);
+            }
+            if (!to.isEurope() && !isOwnedColony(owner, to.getColonyId())) {
+                return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+            }
+            if (to.equals(from)) {
+                return Optional.of(TradeRouteProblem.SAME_STOP);
+            }
+            if (!tradeRouteRules.isLegalLeg(owner, kind, from, to)) {
+                return Optional.of(TradeRouteProblem.STOP_NOT_REACHABLE);
+            }
+            from = to;
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Creates a named route after every check of {@link #getTradeRouteProblem}
+     * passes. Nothing is changed when it fails.
+     *
+     * @return the stored route
+     * @throws IllegalArgumentException when a rule rejects the route
+     */
+    public TradeRoute createTradeRoute(final Player owner, final String name,
+            final TradeRouteKind kind, final int startColonyId,
+            final List<TradeRouteStop> stops) {
+        checkGameRunning();
+        checkTurnPreparationComplete();
+        final Optional<TradeRouteProblem> problem = getTradeRouteProblem(owner,
+                name, kind, startColonyId, stops);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route cannot be created: " + problem.get());
+        }
+        // A new route starts with a blank cargo policy at every stop.
+        return tradeRoutes.add(owner, name, kind, startColonyId,
+                stops.stream()
+                        .map(stop -> stop.isEurope() ? TradeRouteStop.europe()
+                                : TradeRouteStop.ofColony(stop.getColonyId()))
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * Sets the ordered unload and load goods of one stop of a saved route. The
+     * route keeps its ID, name, owner, kind and stop order. Both lists are
+     * validated before the route is replaced.
+     *
+     * @param owner     required route owner
+     * @param route     required route as currently saved
+     * @param stopIndex index of the stop to configure
+     * @param unload    required goods to unload, in priority order
+     * @param load      required goods to load, in priority order
+     * @return the stored replacement route
+     * @throws IllegalArgumentException when the route or a list is invalid
+     */
+    public TradeRoute configureTradeRouteStopCargo(final Player owner,
+            final TradeRoute route, final int stopIndex,
+            final List<GoodsType> unload, final List<GoodsType> load) {
+        checkGameRunning();
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        Preconditions.checkArgument(route.getOwner() == owner,
+                "Trade route belongs to another player");
+        Preconditions.checkArgument(
+                tradeRoutes.find(route.getId())
+                        .filter(stored -> stored == route).isPresent(),
+                "Trade route %s is not current", route.getId());
+        Preconditions.checkElementIndex(stopIndex, route.getStops().size(),
+                "Trade route stop");
+        return tradeRoutes.replaceStop(route, stopIndex,
+                route.getStops().get(stopIndex).withCargo(unload, load));
+    }
+
+    /**
+     * Processes the configured goods of one stop for a carrier that is there
+     * now. Unload lists run before load lists, and each list runs top to
+     * bottom. Every transfer uses the existing atomic cargo, warehouse and
+     * European trade operations, so it moves only the stock, free space and
+     * funds that exist at that moment, with the live quote of each hold. All
+     * rules that do not depend on earlier transfers are checked before the
+     * first one. The result lists every configured entry with the quantity and
+     * reason; an empty source, full hold or unaffordable good is a reported
+     * no-op. An entry refused part-way keeps its settled quantity in the result
+     * and stops the later entries, which are reported as not attempted. The
+     * carrier's visit is marked when the first quantity settles, so the same
+     * visit cannot be processed again.
+     *
+     * @param carrier   required carrier, owned by the current player
+     * @param route     required route as currently saved
+     * @param stopIndex index of the stop the carrier is at
+     * @return the ordered entry results, or the reason nothing was processed
+     */
+    public TradeRouteStopResult processTradeRouteStop(final Unit carrier,
+            final TradeRoute route, final int stopIndex) {
+        Preconditions.checkNotNull(carrier, "Carrier is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        final Optional<TradeRouteStopProblem> problem = getTradeRouteStopProblem(
+                carrier, route, stopIndex);
+        if (problem.isPresent()) {
+            return TradeRouteStopResult.refused(problem.get());
+        }
+        final TradeRouteStop stop = route.getStops().get(stopIndex);
+        final TradeRouteVisit visit = new TradeRouteVisit(route.getId(),
+                stopIndex, stop.isEurope() ? null : carrier.getLocation());
+        return new TradeRouteStopProcessor(this, (UnitWithCargo) carrier, stop,
+                visit).run();
+    }
+
+    /**
+     * Lists the carriers of the player that stand at one stop of a route and
+     * are of the route's transport kind, whether or not they may be processed
+     * now. The player sees why each one is or is not ready from
+     * {@link #getTradeRouteStopProblem}.
+     *
+     * @param owner     required route owner
+     * @param route     required route
+     * @param stopIndex index of the stop
+     * @return carriers at the stop, ordered by unit ID; empty for a bad index
+     */
+    public List<UnitWithCargo> getTradeRouteCarriers(final Player owner,
+            final TradeRoute route, final int stopIndex) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        if (stopIndex < 0 || stopIndex >= route.getStops().size()
+                || route.getOwner() != owner) {
+            return ImmutableList.of();
+        }
+        final TradeRouteStop stop = route.getStops().get(stopIndex);
+        return unitStorage.getUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && unit instanceof UnitWithCargo)
+                .filter(unit -> isTradeRouteCarrierKind(unit, route.getKind()))
+                .filter(unit -> isCarrierAtStop(unit, stop))
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .map(unit -> (UnitWithCargo) unit)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    static boolean isTradeRouteCarrierKind(final Unit carrier,
+            final TradeRouteKind kind) {
+        return kind == TradeRouteKind.SEA ? carrier.getType().isShip()
+                : carrier.getType() == UnitType.WAGON;
+    }
+
+    /** Live position check: the carrier is in the colony or Europe port. */
+    private boolean isCarrierAtStop(final Unit carrier,
+            final TradeRouteStop stop) {
+        final boolean ship = carrier.getType().isShip();
+        if (stop.isEurope()) {
+            return ship && carrier.isAtEuropePort();
+        }
+        return carrier.isAtPlaceLocation() && getColonyById(stop.getColonyId())
+                .filter(colony -> colony.isValid()
+                        && colony.getOwner() == carrier.getOwner()
+                        && colony.getLocation().equals(carrier.getLocation())
+                        && (!ship || colony.getUnitsInPort().contains(carrier)))
+                .isPresent();
+    }
+
+    /**
+     * Live checks before any transfer: the carrier is a current owned,
+     * undamaged carrier of the route's kind, the route is the stored one, the
+     * carrier is at the stop and has not processed one since it left.
+     */
+    public Optional<TradeRouteStopProblem> getTradeRouteStopProblem(
+            final Unit carrier, final TradeRoute route, final int stopIndex) {
+        if (!(carrier instanceof UnitWithCargo) || !isGameRunning()
+                || endingTurn || getCurrentPlayer() != carrier.getOwner()
+                || unitStorage.tryGetUnitById(carrier.getId())
+                        .orElse(null) != carrier
+                || (carrier instanceof Ship && ((Ship) carrier).isDamaged())) {
+            return Optional.of(TradeRouteStopProblem.CARRIER_UNAVAILABLE);
+        }
+        final boolean ship = carrier.getType().isShip();
+        if (route.getKind() == TradeRouteKind.SEA ? !ship
+                : carrier.getType() != UnitType.WAGON) {
+            return Optional.of(TradeRouteStopProblem.CARRIER_UNAVAILABLE);
+        }
+        final Optional<TradeRoute> stored = tradeRoutes.find(route.getId());
+        if (stored.isEmpty() || stored.get() != route
+                || route.getOwner() != carrier.getOwner()) {
+            return Optional.of(TradeRouteStopProblem.ROUTE_UNAVAILABLE);
+        }
+        if (carrier.getProcessedTradeRouteVisit().isPresent()) {
+            return Optional.of(TradeRouteStopProblem.VISIT_ALREADY_PROCESSED);
+        }
+        if (stopIndex < 0 || stopIndex >= route.getStops().size()) {
+            return Optional.of(TradeRouteStopProblem.STOP_UNAVAILABLE);
+        }
+        if (!isCarrierAtStop(carrier, route.getStops().get(stopIndex))) {
+            return Optional.of(TradeRouteStopProblem.STOP_UNAVAILABLE);
+        }
+        try {
+            checkTurnPreparationComplete();
+        } catch (final TurnPreparationException busy) {
+            return Optional.of(TradeRouteStopProblem.TURN_BUSY);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Saved trade route assignment of a carrier. Reading it never changes it.
+     *
+     * @param unit required unit
+     * @return the assignment, or empty when the unit has none
+     */
+    public Optional<TradeRouteAssignment> getTradeRouteAssignment(
+            final Unit unit) {
+        Preconditions.checkNotNull(unit, "Unit is null");
+        return unit instanceof AbstractUnit
+                ? ((AbstractUnit) unit).getTradeRouteAssignment()
+                : Optional.empty();
+    }
+
+    /**
+     * The stop an assigned carrier is heading to or standing at now. A carrier
+     * that has not started its leg already counts the latest saved route; one
+     * on its way still heads to the stop it accepted, even if the route has
+     * since been edited. Reading never changes an assignment.
+     *
+     * @param carrier required unit
+     * @return the stop, or empty when the unit has no usable assignment
+     */
+    public Optional<TradeRouteStop> getTradeRouteHeadingStop(
+            final Unit carrier) {
+        Preconditions.checkNotNull(carrier, "Carrier is null");
+        return getTradeRouteAssignment(carrier)
+                .flatMap(assignment -> findTradeRoute(assignment.getRouteId())
+                        .filter(route -> assignment.getStopIndex() < route
+                                .getStops().size())
+                        .map(route -> (TradeRouteNavigator.takesLatestPlan(
+                                (AbstractUnit) carrier, assignment)
+                                        ? route.getStops()
+                                        : assignment.getStops())
+                                .get(assignment.getStopIndex())));
+    }
+
+    /**
+     * Carriers of the owner that currently follow one saved route, wherever
+     * they are, so the player sees where each is heading and why it waits.
+     * Reading never changes an assignment.
+     *
+     * @param owner required route owner
+     * @param route required route
+     * @return the assigned carriers ordered by unit ID
+     */
+    public List<UnitWithCargo> getTradeRouteAssignedCarriers(final Player owner,
+            final TradeRoute route) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        return unitStorage.getUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && unit instanceof UnitWithCargo)
+                .filter(unit -> getTradeRouteAssignment(unit).filter(
+                        assignment -> assignment.getRouteId() == route.getId())
+                        .isPresent())
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .map(unit -> (UnitWithCargo) unit)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /**
+     * Checks every rule for assigning a carrier to a route from one of its
+     * stops, without changing anything. The carrier must belong to the current
+     * player and match the route's transport kind, stand on the map or in
+     * Europe with no other order, and reach the first stop by the shared rules.
+     *
+     * @param carrier        required carrier
+     * @param route          required route as currently saved
+     * @param firstStopIndex index of the stop the carrier heads to first
+     * @return the first problem, or empty when the assignment may be made
+     */
+    public Optional<TradeRouteAssignmentProblem> getTradeRouteAssignmentProblem(
+            final Unit carrier, final TradeRoute route,
+            final int firstStopIndex) {
+        Preconditions.checkNotNull(carrier, "Carrier is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        if (!isGameRunning() || endingTurn) {
+            return Optional.of(TradeRouteAssignmentProblem.TURN_BUSY);
+        }
+        try {
+            checkTurnPreparationComplete();
+        } catch (final TurnPreparationException busy) {
+            return Optional.of(TradeRouteAssignmentProblem.TURN_BUSY);
+        }
+        if (getCurrentPlayer() != carrier.getOwner()
+                || route.getOwner() != carrier.getOwner()) {
+            return Optional.of(TradeRouteAssignmentProblem.NOT_OWNER);
+        }
+        if (!(carrier instanceof AbstractUnit)
+                || !(carrier instanceof UnitWithCargo)
+                || !isTradeRouteCarrierKind(carrier, route.getKind())
+                || unitStorage.tryGetUnitById(carrier.getId())
+                        .orElse(null) != carrier) {
+            return Optional.of(TradeRouteAssignmentProblem.NOT_CARRIER);
+        }
+        final Optional<TradeRoute> stored = tradeRoutes.find(route.getId());
+        if (stored.isEmpty() || stored.get() != route) {
+            return Optional.of(TradeRouteAssignmentProblem.ROUTE_UNAVAILABLE);
+        }
+        if (firstStopIndex < 0 || firstStopIndex >= route.getStops().size()) {
+            return Optional.of(TradeRouteAssignmentProblem.STOP_UNAVAILABLE);
+        }
+        final TradeRouteStop stop = route.getStops().get(firstStopIndex);
+        if (stop.isEurope() ? !carrier.getOwner().canTradeInEurope()
+                : !isOwnedColony(carrier.getOwner(), stop.getColonyId())) {
+            return Optional.of(TradeRouteAssignmentProblem.STOP_UNAVAILABLE);
+        }
+        if (hasGoToOrder(carrier) || !carrier.getAction().isNoAction()
+                || !carrier.isAtPlaceLocation() && !carrier.isAtEuropePort()
+                || carrier instanceof Ship && ((Ship) carrier).isDamaged()) {
+            return Optional.of(TradeRouteAssignmentProblem.CARRIER_BUSY);
+        }
+        final Location colonyLocation = stop.isEurope() ? null
+                : getColonyById(stop.getColonyId()).orElseThrow().getLocation();
+        if (!tradeRouteNavigator.canReachStop((AbstractUnit) carrier, stop,
+                colonyLocation)) {
+            return Optional.of(TradeRouteAssignmentProblem.STOP_NOT_REACHABLE);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Assigns a carrier to a saved route from a chosen first stop after every
+     * check of {@link #getTradeRouteAssignmentProblem} passes. The carrier does
+     * not move now; its owner's later turn advances it. A rejected request
+     * changes nothing.
+     *
+     * @param carrier        required carrier
+     * @param route          required route as currently saved
+     * @param firstStopIndex index of the stop the carrier heads to first
+     * @throws IllegalArgumentException when a rule rejects the assignment
+     */
+    public void assignTradeRoute(final Unit carrier, final TradeRoute route,
+            final int firstStopIndex) {
+        final Optional<TradeRouteAssignmentProblem> problem = getTradeRouteAssignmentProblem(
+                carrier, route, firstStopIndex);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route cannot be assigned: " + problem.get());
+        }
+        ((AbstractUnit) carrier).startTradeRouteAssignment(
+                new TradeRouteAssignment(route.getId(), firstStopIndex, null,
+                        route.getStops()));
+        fireActionWasStarted(carrier);
+    }
+
+    /**
+     * Checks replacing the identity of one stop of a saved route: the owner is
+     * the current player, the route is the stored one and each leg next to the
+     * stop stays legal. The stop keeps its place and its cargo policy. A
+     * carrier on its way to this stop keeps its current leg; the change reaches
+     * it at its next stop. Nothing is changed.
+     *
+     * @param owner     required route owner
+     * @param route     required route as currently saved
+     * @param stopIndex index of the stop to replace
+     * @param stop      required new identity; its cargo policy is ignored
+     * @return the first problem, or empty when the stop may be replaced
+     */
+    public Optional<TradeRouteProblem> getTradeRouteStopEditProblem(
+            final Player owner, final TradeRoute route, final int stopIndex,
+            final TradeRouteStop stop) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        Preconditions.checkNotNull(stop, "Stop is null");
+        if (!isGameRunning() || endingTurn || !isTurnPreparationComplete()) {
+            return Optional.of(TradeRouteProblem.TURN_BUSY);
+        }
+        if (owner != getCurrentPlayer() || route.getOwner() != owner) {
+            return Optional.of(TradeRouteProblem.NOT_OWNER);
+        }
+        if (tradeRoutes.find(route.getId()).filter(stored -> stored == route)
+                .isEmpty()) {
+            return Optional.of(TradeRouteProblem.ROUTE_UNAVAILABLE);
+        }
+        final List<TradeRouteStop> stops = route.getStops();
+        if (stopIndex < 0 || stopIndex >= stops.size()) {
+            return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+        }
+        if (stop.isEurope() && route.getKind() == TradeRouteKind.LAND) {
+            return Optional.of(TradeRouteProblem.EUROPE_BY_LAND);
+        }
+        if (!stop.isEurope() && !isOwnedColony(owner, stop.getColonyId())) {
+            return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+        }
+        final TradeRouteStop from = stopIndex == 0
+                ? TradeRouteStop.ofColony(route.getStartColonyId())
+                : stops.get(stopIndex - 1);
+        final boolean hasNext = stopIndex + 1 < stops.size();
+        if (stop.equals(from)
+                || hasNext && stop.equals(stops.get(stopIndex + 1))) {
+            return Optional.of(TradeRouteProblem.SAME_STOP);
+        }
+        // A leg to or from a lost colony cannot be judged; it stays visible as
+        // a lost stop that the player repairs next, so a route with several
+        // lost stops can be mended one stop at a time.
+        final boolean fromLost = isLostTradeRouteStop(owner, from);
+        final boolean nextLost = hasNext
+                && isLostTradeRouteStop(owner, stops.get(stopIndex + 1));
+        if (!fromLost
+                && !tradeRouteRules.isLegalLeg(owner, route.getKind(), from,
+                        stop)
+                || hasNext && !nextLost && !tradeRouteRules.isLegalLeg(owner,
+                        route.getKind(), stop, stops.get(stopIndex + 1))) {
+            return Optional.of(TradeRouteProblem.STOP_NOT_REACHABLE);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Replaces the identity of one stop after every check of
+     * {@link #getTradeRouteStopEditProblem} passes. The route keeps its ID,
+     * name, owner, kind, start and stop count; the stop keeps its cargo policy.
+     *
+     * @return the stored replacement route
+     * @throws IllegalArgumentException when a rule rejects the edit
+     */
+    public TradeRoute editTradeRouteStop(final Player owner,
+            final TradeRoute route, final int stopIndex,
+            final TradeRouteStop stop) {
+        final Optional<TradeRouteProblem> problem = getTradeRouteStopEditProblem(
+                owner, route, stopIndex, stop);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route stop cannot be edited: " + problem.get());
+        }
+        final TradeRouteStop current = route.getStops().get(stopIndex);
+        final TradeRouteStop replacement = (stop.isEurope()
+                ? TradeRouteStop.europe()
+                : TradeRouteStop.ofColony(stop.getColonyId()))
+                .withCargo(current.getUnloadGoods(), current.getLoadGoods());
+        final TradeRoute stored = tradeRoutes.replaceStop(route, stopIndex,
+                replacement);
+        // A carrier that no longer follows the route and stands where the old
+        // stop was keeps no receipt for a stop that is no longer there. A
+        // following carrier keeps its receipt, so it cannot repeat the stop.
+        for (final Unit unit : new ArrayList<>(owner.getAllUnits())) {
+            if (unit instanceof AbstractUnit && getTradeRouteAssignment(unit)
+                    .filter(assignment -> assignment.getRouteId() == route
+                            .getId())
+                    .isEmpty()) {
+                ((AbstractUnit) unit).forgetProcessedTradeRouteVisitOf(
+                        route.getId(), stopIndex);
+            }
+        }
+        return stored;
+    }
+
+    /** Whether a colony stop names a colony the owner no longer holds. */
+    private boolean isLostTradeRouteStop(final Player owner,
+            final TradeRouteStop stop) {
+        return !stop.isEurope() && !isOwnedColony(owner, stop.getColonyId());
+    }
+
+    /**
+     * Problem with removing one carrier's trade route assignment. The carrier
+     * keeps its place, cargo and any voyage; only its standing order goes.
+     *
+     * @param carrier required unit
+     * @return the first problem, or empty when the assignment may be canceled
+     */
+    public Optional<TradeRouteAssignmentProblem> getTradeRouteCancelProblem(
+            final Unit carrier) {
+        Preconditions.checkNotNull(carrier, "Carrier is null");
+        if (!isGameRunning() || endingTurn || !isTurnPreparationComplete()) {
+            return Optional.of(TradeRouteAssignmentProblem.TURN_BUSY);
+        }
+        if (getCurrentPlayer() != carrier.getOwner()) {
+            return Optional.of(TradeRouteAssignmentProblem.NOT_OWNER);
+        }
+        if (!(carrier instanceof AbstractUnit) || unitStorage
+                .tryGetUnitById(carrier.getId()).orElse(null) != carrier) {
+            return Optional.of(TradeRouteAssignmentProblem.NOT_CARRIER);
+        }
+        if (getTradeRouteAssignment(carrier).isEmpty()) {
+            return Optional.of(TradeRouteAssignmentProblem.NO_ASSIGNMENT);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns one carrier to manual orders immediately. Other carriers of the
+     * route continue; the carrier does not move and no stop is processed.
+     *
+     * @param carrier required carrier
+     * @throws IllegalArgumentException when a rule rejects the cancellation
+     */
+    public void cancelTradeRouteAssignment(final Unit carrier) {
+        final Optional<TradeRouteAssignmentProblem> problem = getTradeRouteCancelProblem(
+                carrier);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route assignment cannot be canceled: "
+                            + problem.get());
+        }
+        ((AbstractUnit) carrier).clearTradeRouteAssignment();
+        fireActionWasStarted(carrier);
+    }
+
+    /**
+     * Problem with deleting a saved route. Deleting touches no carrier
+     * position, cargo, treasury or voyage.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @return the first problem, or empty when the route may be deleted
+     */
+    public Optional<TradeRouteProblem> getTradeRouteDeleteProblem(
+            final Player owner, final TradeRoute route) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        if (!isGameRunning() || endingTurn || !isTurnPreparationComplete()) {
+            return Optional.of(TradeRouteProblem.TURN_BUSY);
+        }
+        if (owner != getCurrentPlayer() || route.getOwner() != owner) {
+            return Optional.of(TradeRouteProblem.NOT_OWNER);
+        }
+        if (tradeRoutes.find(route.getId()).filter(stored -> stored == route)
+                .isEmpty()) {
+            return Optional.of(TradeRouteProblem.ROUTE_UNAVAILABLE);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Deletes a saved route. Every carrier of the owner that follows it returns
+     * to manual orders where it stands, and a processed visit naming the route
+     * is forgotten, so no settled transfer can be repeated for it.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @throws IllegalArgumentException when a rule rejects the deletion
+     */
+    public void deleteTradeRoute(final Player owner, final TradeRoute route) {
+        final Optional<TradeRouteProblem> problem = getTradeRouteDeleteProblem(
+                owner, route);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route cannot be deleted: " + problem.get());
+        }
+        for (final Unit unit : new ArrayList<>(owner.getAllUnits())) {
+            if (!(unit instanceof AbstractUnit)) {
+                continue;
+            }
+            final AbstractUnit carrier = (AbstractUnit) unit;
+            carrier.forgetProcessedTradeRouteVisitOf(route.getId());
+            if (getTradeRouteAssignment(carrier).filter(
+                    assignment -> assignment.getRouteId() == route.getId())
+                    .isPresent()) {
+                carrier.clearTradeRouteAssignment();
+                fireActionWasStarted(carrier);
+            }
+        }
+        tradeRoutes.remove(route);
+    }
+
+    /** @return the stored route with this stable ID, if one exists */
+    Optional<TradeRoute> findTradeRoute(final int id) {
+        return tradeRoutes.find(id);
+    }
+
+    /**
+     * Advances the trade route assignments of the player whose owner turn has
+     * begun. Called only from the turn preparation boundary, after the go-to
+     * orders, so save, load and selection never move a carrier.
+     *
+     * @param player required player whose turn is being prepared
+     */
+    void advanceTradeRouteAssignments(final Player player) {
+        for (final Unit unit : new ArrayList<>(player.getAllUnits())) {
+            if (unit instanceof AbstractUnit) {
+                tradeRouteNavigator.advance((AbstractUnit) unit);
+            }
+        }
+    }
+
+    /** Cargo slots with room for this goods type, in hold order. */
+    static List<CargoSlot> roomForGoods(final UnitWithCargo carrier,
+            final GoodsType type) {
+        return carrier.getCargo().getSlots().stream()
+                .filter(slot -> slot.getAvailableCapacity() > 0)
+                .filter(slot -> slot.getGoods()
+                        .map(goods -> goods.getType().equals(type))
+                        .orElse(true))
+                .collect(Collectors.toList());
+    }
+
+    /** Cargo slots that hold this goods type, in hold order. */
+    static List<CargoSlot> holdingGoods(final UnitWithCargo carrier,
+            final GoodsType type) {
+        return carrier.getCargo().getSlots().stream()
+                .filter(slot -> slot.getGoods()
+                        .map(goods -> goods.getType().equals(type))
+                        .orElse(false))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isOwnedColony(final Player owner, final int colonyId) {
+        return getColonyById(colonyId)
+                .filter(colony -> colony.getOwner() == owner).isPresent();
     }
 
     public List<Colony> getColonies() {
@@ -599,6 +1501,10 @@ public class Model {
             return false;
         if (!founder.getType().canBuildColony())
             return false;
+        // A brave is never a European colony founder; its nation's
+        // settlements stay distinct from colonies.
+        if (founder.getOwner().isNative())
+            return false;
         if (!map.isValid(location))
             return false;
         final TerrainType terrain = map.getTerrainTypeAt(location);
@@ -607,6 +1513,9 @@ public class Model {
         if (getColonyAt(location).isPresent())
             return false;
         if (isColonyInNeighbourhood(location))
+            return false;
+        // A native settlement square is never a European colony site.
+        if (nativeSettlements.getAt(location).isPresent())
             return false;
         if (getUnitsAt(location).stream()
                 .anyMatch(u -> u.getOwner() != founder.getOwner()))
@@ -676,6 +1585,31 @@ public class Model {
 
     public int getKingsTaxForPlayer(final Player subduedPlayer) {
         return playerStore.getKingsTaxForPlayer(subduedPlayer);
+    }
+
+    /**
+     * Each saved brave's home must name a settlement of the brave's own nation.
+     * Unknown or cross-nation homes are rejected, never reassigned.
+     */
+    void validateSavedNativeBraveHomes() {
+        for (final Unit unit : getAllUnits()) {
+            if (!(unit instanceof UnitNativeBrave)) {
+                continue;
+            }
+            final UnitNativeBrave brave = (UnitNativeBrave) unit;
+            final NativeNation nation = ((PlayerNative) brave.getOwner())
+                    .getNativeNation();
+            if (brave.getHomeSettlementId().isEmpty()) {
+                continue;
+            }
+            final int homeId = brave.getHomeSettlementId().get();
+            final NativeSettlement home = nativeSettlements.getAll().stream()
+                    .filter(settlement -> settlement.getId() == homeId)
+                    .findAny().orElseThrow(() -> new IllegalArgumentException(
+                            "Unsupported save: native brave home is unknown"));
+            Preconditions.checkArgument(home.getNation() == nation,
+                    "Unsupported save: native brave home belongs to another nation");
+        }
     }
 
     Unit createUnit(final ModelPo modelPo, final UnitPo unitPo) {
@@ -1238,6 +2172,27 @@ public class Model {
     }
 
     /**
+     * Whether a ship in Europe could sail home to the given square. The return
+     * starts at the recorded sea-lane square, or at the default arrival square
+     * when the ship never left. The same known-square sea rules as trade routes
+     * decide the answer, so the check reads only and changes nothing.
+     *
+     * @param ship required ship of its owner, not on the map
+     * @param goal required map square to reach
+     * @return whether the owner's known map connects the return square to goal
+     */
+    public boolean isEuropeReturnReachable(
+            final org.microcol.model.unit.Ship ship, final Location goal) {
+        Preconditions.checkNotNull(ship);
+        Preconditions.checkNotNull(goal);
+        return ship.getDepartureLocation()
+                .or(() -> getHighSea().getDefaultArrivalLocation())
+                .filter(origin -> tradeRouteRules.isReachable(ship.getOwner(),
+                        TradeRouteKind.SEA, origin, goal))
+                .isPresent();
+    }
+
+    /**
      * A port uses eight-direction water adjacency, without an
      * ocean-connectivity rule.
      *
@@ -1270,6 +2225,11 @@ public class Model {
      */
     public boolean areHostile(final Player first, final Player second) {
         checkRegisteredPlayers(first, second);
+        // Native versus European attitudes belong to later requirements; until
+        // then a native pair is never a permitted hostility.
+        if (first.isNative() || second.isNative()) {
+            return false;
+        }
         return first != second
                 && (first.isKing() || second.isKing() || europeanRelations
                         .get(first, second) == EuropeanRelationState.WAR);
@@ -1285,8 +2245,8 @@ public class Model {
      */
     public boolean areAllied(final Player first, final Player second) {
         checkRegisteredPlayers(first, second);
-        return first != second && !first.isKing() && !second.isKing()
-                && europeanRelations.get(first,
+        return first != second && first.isColonialNation()
+                && second.isColonialNation() && europeanRelations.get(first,
                         second) == EuropeanRelationState.ALLIANCE;
     }
 
@@ -1300,7 +2260,8 @@ public class Model {
      */
     public boolean isAttackRestrained(final Player first, final Player second) {
         checkRegisteredPlayers(first, second);
-        return first != second && !first.isKing() && !second.isKing()
+        return first != second && first.isColonialNation()
+                && second.isColonialNation()
                 && (europeanRelations.get(first,
                         second) == EuropeanRelationState.ALLIANCE
                         || europeanRelations.warWaitRemaining(first, second,
@@ -1364,8 +2325,8 @@ public class Model {
                 && tryGetUnitById(defender.getId()).orElse(null) == defender
                 && attacker.isShip() && defender.isShip()
                 && attacker.getOwner() != defender.getOwner()
-                && !attacker.getOwner().isKing()
-                && !defender.getOwner().isKing()
+                && attacker.getOwner().isColonialNation()
+                && defender.getOwner().isColonialNation()
                 && !isAttackRestrained(attacker.getOwner(), defender.getOwner())
                 && attacker.canAttack()
                 && attacker.getType().getAttackableUnitType()
@@ -1418,8 +2379,8 @@ public class Model {
         if ((!duringPreparation && !isGameRunning())
                 || (duringPreparation && (!isGameStarted() || isGameFinished()))
                 || actor == null || rival == null || getCurrentPlayer() != actor
-                || actor.isKing() || rival.isKing() || !rival.isComputer()
-                || !getPlayers().contains(actor)
+                || !actor.isColonialNation() || !rival.isColonialNation()
+                || !rival.isComputer() || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival) || actor == rival
                 || europeanRelations.get(actor, rival) != required) {
             return List.of();
@@ -1443,7 +2404,8 @@ public class Model {
                 "Franklin peace prompt is unavailable");
         final List<PeaceOffer> newOffers = new ArrayList<>();
         for (final Player rival : getPlayers()) {
-            if (rival == actor || rival.isKing() || !rival.isComputer()
+            if (rival == actor || !rival.isColonialNation()
+                    || !rival.isComputer()
                     || europeanRelations.get(actor,
                             rival) != EuropeanRelationState.WAR
                     || europeanRelations.hasPendingPeace(actor, rival)) {
@@ -1489,8 +2451,8 @@ public class Model {
     public List<Unit> getTributeVisitors(final Player actor,
             final Player rival) {
         if (!isGameRunning() || actor == null || rival == null
-                || getCurrentPlayer() != actor || actor.isKing()
-                || rival.isKing() || !rival.isComputer()
+                || getCurrentPlayer() != actor || !actor.isColonialNation()
+                || !rival.isColonialNation() || !rival.isComputer()
                 || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival) || actor == rival
                 || getTributeTurnsRemaining(actor, rival) > 0
@@ -1514,7 +2476,8 @@ public class Model {
             final Player rival) {
         checkRegisteredPlayers(actor, rival);
         Preconditions.checkArgument(
-                actor != rival && !actor.isKing() && !rival.isKing(),
+                actor != rival && actor.isColonialNation()
+                        && rival.isColonialNation(),
                 "Invalid tribute participants");
         return europeanRelations.tributeTurnsRemaining(actor, rival,
                 calendar.getNumberOfPlayedTurns());
@@ -1558,8 +2521,9 @@ public class Model {
 
     public Optional<TributeDemand> getPendingTributeDemand(final Player actor,
             final Player rival) {
-        if (actor == null || rival == null || actor == rival || actor.isKing()
-                || rival.isKing() || !getPlayers().contains(actor)
+        if (actor == null || rival == null || actor == rival
+                || !actor.isColonialNation() || !rival.isColonialNation()
+                || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival)) {
             return Optional.empty();
         }
@@ -1664,8 +2628,9 @@ public class Model {
 
     public Optional<PeaceOffer> getPendingPeaceOffer(final Player actor,
             final Player rival) {
-        if (actor == null || rival == null || actor == rival || actor.isKing()
-                || rival.isKing() || !getPlayers().contains(actor)
+        if (actor == null || rival == null || actor == rival
+                || !actor.isColonialNation() || !rival.isColonialNation()
+                || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival)) {
             return Optional.empty();
         }
@@ -1734,7 +2699,8 @@ public class Model {
             final Player rival) {
         checkRegisteredPlayers(actor, rival);
         Preconditions.checkArgument(
-                actor != rival && !actor.isKing() && !rival.isKing(),
+                actor != rival && actor.isColonialNation()
+                        && rival.isColonialNation(),
                 "Invalid alliance participants");
         final int round = calendar.getNumberOfPlayedTurns();
         return Math.max(
@@ -1745,8 +2711,9 @@ public class Model {
     /** Eligible on-map colonists adjacent to a visible peaceful AI contact. */
     public List<Unit> getAllianceVisitors(final Player actor,
             final Player rival) {
-        if (actor == null || rival == null || actor == rival || actor.isKing()
-                || rival.isKing() || !getPlayers().contains(actor)
+        if (actor == null || rival == null || actor == rival
+                || !actor.isColonialNation() || !rival.isColonialNation()
+                || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival)
                 || getAllianceBlockedRounds(actor, rival) > 0) {
             return List.of();
@@ -1788,8 +2755,9 @@ public class Model {
 
     public Optional<AllianceOffer> getPendingAllianceOffer(final Player actor,
             final Player rival) {
-        if (actor == null || rival == null || actor == rival || actor.isKing()
-                || rival.isKing() || !getPlayers().contains(actor)
+        if (actor == null || rival == null || actor == rival
+                || !actor.isColonialNation() || !rival.isColonialNation()
+                || !getPlayers().contains(actor)
                 || !getPlayers().contains(rival)) {
             return Optional.empty();
         }
@@ -1869,7 +2837,7 @@ public class Model {
         checkRegisteredPlayers(attacker, attacker);
         checkCurrentPlayer(attacker);
         final AggressionPlan plan = new AggressionPlan();
-        if (attacker.isKing()) {
+        if (!attacker.isColonialNation()) {
             return plan;
         }
         final List<Player> ordered = victims.stream()
@@ -1877,7 +2845,7 @@ public class Model {
                 .collect(java.util.stream.Collectors.toList());
         for (final Player victim : ordered) {
             checkRegisteredPlayers(attacker, victim);
-            if (victim.isKing() || victim == attacker) {
+            if (!victim.isColonialNation() || victim == attacker) {
                 continue;
             }
             final EuropeanRelationState state = europeanRelations.get(attacker,
@@ -1894,8 +2862,9 @@ public class Model {
                 continue;
             }
             for (final Player ally : getPlayers()) {
-                if (ally == attacker || ally == victim || ally.isKing()
-                        || ordered.contains(ally) || europeanRelations.get(ally,
+                if (ally == attacker || ally == victim
+                        || !ally.isColonialNation() || ordered.contains(ally)
+                        || europeanRelations.get(ally,
                                 victim) != EuropeanRelationState.ALLIANCE) {
                     continue;
                 }
@@ -1944,8 +2913,8 @@ public class Model {
 
     private boolean isCrownWarEligible(final Player first,
             final Player second) {
-        return first != second && !first.isKing() && !second.isKing()
-                && !first.isDeclaredIndependence()
+        return first != second && first.isColonialNation()
+                && second.isColonialNation() && !first.isDeclaredIndependence()
                 && !second.isDeclaredIndependence()
                 && !first.getCongressMembers()
                         .contains(Founder.BENJAMIN_FRANKLIN)
@@ -1969,7 +2938,7 @@ public class Model {
         }
         lastCrownWarRound = round;
         final List<Player> colonists = getPlayers().stream()
-                .filter(player -> !player.isKing())
+                .filter(player -> !player.isKing() && !player.isNative())
                 .sorted(Comparator.comparing(Player::getName))
                 .collect(java.util.stream.Collectors.toList());
         final List<Player[]> eligible = new ArrayList<>();
@@ -2112,11 +3081,13 @@ public class Model {
     }
 
     /**
-     * Whether the unit has a go-to order. Orders that need an idle unit refuse
-     * such a unit, so the UI never offers an operation that then throws.
+     * Whether the unit has a standing order: a go-to order or a trade route
+     * assignment. Orders that need an idle unit refuse such a unit, so the UI
+     * never offers an operation that then throws.
      */
     boolean hasGoToOrder(final Unit unit) {
-        return goToOrderOf(unit).isPresent();
+        return goToOrderOf(unit).isPresent() || unit instanceof AbstractUnit
+                && ((AbstractUnit) unit).hasStandingOrder();
     }
 
     private boolean canChangeSentry(final Unit unit,
@@ -2322,7 +3293,7 @@ public class Model {
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
                 && unit.isAtPlaceLocation() && unit.getAction().isNoAction()
-                && goToOrderOf(unit).isEmpty();
+                && !hasGoToOrder(unit);
     }
 
     private static Optional<GoToOrder> goToOrderOf(final Unit unit) {
@@ -3040,6 +4011,7 @@ public class Model {
         out.setCombatRandomState(combatRandomState);
         out.setDifficulty(difficulty);
         out.setNextColonyId(nextColonyId);
+        tradeRoutes.save(out);
         map.save(out);
         unitStorage.save(out);
         out.setCalendar(calendar.save());
@@ -3050,9 +4022,554 @@ public class Model {
         // Zero means no Crown-war round has been processed yet.
         out.setCrownWarRound(lastCrownWarRound == 0 ? null : lastCrownWarRound);
         out.setColonies(getSaveColonies());
+        out.setNativeSettlements(nativeSettlements.toPo());
+        out.setNativeSettlementKnowledge(saveLearnedNativeSettlements());
+        out.setNativeTribalAnger(nativeRelations.saveTribalAnger());
+        out.setNativeLocalAlarm(nativeRelations.saveLocalAlarm());
+        out.setNativeLandRights(nativeLandRights.savePaid());
+        out.setNativeLandTakings(nativeLandRights.saveTaken());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
         out.setStatistics(statistics.save());
+        return out;
+    }
+
+    /**
+     * @return every native settlement; for the model's own checks and saving
+     *         only, not for player-facing views
+     */
+    List<NativeSettlement> getNativeSettlements() {
+        return nativeSettlements.getAll();
+    }
+
+    /**
+     * Remembered native settlement identity, not current sight: settlements
+     * whose nation, class and capital status the player has learned. Identity
+     * is learned only by present sight and stays known under fog, after leaving
+     * sight and across save and Continue. Explored terrain alone teaches
+     * nothing.
+     *
+     * @param player required player observing the map
+     * @return learned settlements in saved order
+     */
+    public List<NativeSettlement> getNativeSettlementsKnownTo(
+            final Player player) {
+        Preconditions.checkNotNull(player);
+        final Set<Integer> learned = learnedNativeSettlements
+                .getOrDefault(player.getName(), Set.of());
+        final List<NativeSettlement> out = new ArrayList<>();
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            if (learned.contains(settlement.getId())) {
+                out.add(settlement);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * @param player   required player observing the map
+     * @param location required square
+     * @return remembered identity of the settlement on the square, not current
+     *         sight: present only if the player has learned it by sight, even
+     *         when the square is now under fog
+     */
+    public Optional<NativeSettlement> getNativeSettlementKnownTo(
+            final Player player, final Location location) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(location);
+        final Set<Integer> learned = learnedNativeSettlements
+                .getOrDefault(player.getName(), Set.of());
+        return nativeSettlements.getAt(location)
+                .filter(settlement -> learned.contains(settlement.getId()));
+    }
+
+    /**
+     * Home of a native brave as far as the player has learned it. A brave's
+     * nation is public once the brave is seen, but its home settlement is only
+     * reported after the player has learned that settlement by sight, so a
+     * hidden home never leaks through a visible brave.
+     *
+     * @param player required player observing the map
+     * @param brave  required registered unit
+     * @return the learned home, empty for a homeless survivor, an unlearned
+     *         home or a unit that is not a native brave
+     */
+    public Optional<NativeSettlement> getNativeBraveHomeKnownTo(
+            final Player player, final Unit brave) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(brave);
+        if (!(brave instanceof UnitNativeBrave)) {
+            return Optional.empty();
+        }
+        final Set<Integer> learned = learnedNativeSettlements
+                .getOrDefault(player.getName(), Set.of());
+        return ((UnitNativeBrave) brave).getHomeSettlementId()
+                .filter(learned::contains)
+                .flatMap(id -> nativeSettlements.getAll().stream()
+                        .filter(settlement -> settlement.getId() == id)
+                        .findAny());
+    }
+
+    /**
+     * Hostility of a native settlement toward a colonial European, read from
+     * the larger of tribal anger and local alarm. Only the model computes it.
+     *
+     * @param player     required colonial player
+     * @param settlement required native settlement
+     * @return content, uneasy, angry or hostile
+     */
+    public NativeHostility getNativeHostility(final Player player,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(settlement);
+        return nativeRelations.getHostility(settlement, nativeEuropean(player));
+    }
+
+    /**
+     * Exact tribal anger of a native nation toward a colonial European. Only
+     * the model and tests read the number; player interfaces show hostility of
+     * a settlement the player has learned.
+     *
+     * @param player required colonial player
+     * @param nation required native nation
+     * @return anger in 0..100, fractions included
+     */
+    public double getNativeTribalAnger(final Player player,
+            final NativeNation nation) {
+        Preconditions.checkNotNull(nation);
+        return nativeRelations.getTribalAnger(nation, nativeEuropean(player));
+    }
+
+    /**
+     * Exact local alarm of a settlement toward a colonial European. Same
+     * reading rule as {@link #getNativeTribalAnger}.
+     *
+     * @param player     required colonial player
+     * @param settlement required native settlement
+     * @return alarm in 0..100, fractions included
+     */
+    public double getNativeLocalAlarm(final Player player,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(settlement);
+        return nativeRelations.getLocalAlarm(settlement,
+                nativeEuropean(player));
+    }
+
+    /**
+     * One peaceful update of a colonial European, run once from its own turn
+     * preparation. A Crown or a scripted actor without a nation has none.
+     *
+     * @param european required player whose turn has completed preparation
+     */
+    void updateNativeRelations(final Player european) {
+        Preconditions.checkNotNull(european);
+        final Optional<EuropeanNation> nation = nativeNationOf(european);
+        if (nation.isEmpty()) {
+            return;
+        }
+        final Map<Integer, Double> pressure = new HashMap<>();
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            pressure.put(settlement.getId(),
+                    nativeLocalPressure(settlement, european));
+        }
+        nativeRelations.applyEuropeanUpdate(nation.get(), pressure,
+                nativeLocalFactor(nation.get(), european));
+    }
+
+    /**
+     * Direct tribal anger from a later trigger; the national and founder
+     * factors never apply to it.
+     *
+     * @param nation required native nation
+     * @param owner  required colonial player
+     * @param amount finite nonnegative increase
+     */
+    void addNativeTribalAnger(final NativeNation nation, final Player owner,
+            final double amount) {
+        Preconditions.checkNotNull(nation);
+        nativeRelations.addTribalAnger(nation, nativeEuropean(owner), amount);
+    }
+
+    /**
+     * Local pressure of a settlement from a later trigger, reduced by the
+     * national and founder factors of its European.
+     *
+     * @param settlement required native settlement
+     * @param owner      required colonial player
+     * @param amount     finite nonnegative increase before the factors
+     */
+    void addNativeLocalAlarm(final NativeSettlement settlement,
+            final Player owner, final double amount) {
+        Preconditions.checkNotNull(settlement);
+        final EuropeanNation european = nativeEuropean(owner);
+        nativeRelations.addLocalAlarm(settlement, european, amount,
+                nativeLocalFactor(european, owner));
+    }
+
+    /**
+     * Clear a colonial European's positive native relations once, at the
+     * arrival of Pocahontas in its Congress.
+     *
+     * @param owner required colonial player that has just received her
+     */
+    void clearNativeRelationsAfterPocahontas(final Player owner) {
+        nativeRelations.clearEuropean(nativeEuropean(owner));
+    }
+
+    /**
+     * Quote one native-claimed square for a colonial European. The player must
+     * have explored the square, and must have learned the claim owner;
+     * otherwise nothing about the claim is revealed.
+     *
+     * @param player required colonial player
+     * @param at     required square
+     * @return quote, or empty when the square is not a known claimed land
+     *         square
+     */
+    public Optional<NativeLandQuote> quoteNativeLand(final Player player,
+            final Location at) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(at);
+        final Optional<EuropeanNation> nation = nativeNationOf(player);
+        if (nation.isEmpty() || !map.isValid(at)
+                || map.getTerrainTypeAt(at).isSea() || !player.isVisible(at)) {
+            return Optional.empty();
+        }
+        final Optional<NativeSettlement> claimant = nativeSettlements
+                .getClaimOwner(at);
+        if (claimant.isEmpty() || getNativeSettlementKnownTo(player,
+                claimant.get().getLocation()).isEmpty()) {
+            return Optional.empty();
+        }
+        final NativeLandStatus status;
+        if (nativeLandRights.isPaid(nation.get(), at)) {
+            status = NativeLandStatus.PAID;
+        } else if (nativeLandWaived(player)) {
+            status = NativeLandStatus.WAIVED;
+        } else {
+            status = NativeLandStatus.UNPAID;
+        }
+        final int price = status == NativeLandStatus.UNPAID
+                ? nativeLandPrice(claimant.get())
+                : 0;
+        return Optional.of(
+                new NativeLandQuote(player, at, claimant.get(), status, price));
+    }
+
+    /**
+     * Whether a quote can be paid now. Every live fact is read again: running
+     * game, current player, the same claim owner, the same unpaid status and
+     * price, and enough gold. A stale quote is refused, never repriced.
+     *
+     * @param quote quote from {@link #quoteNativeLand}, possibly stale
+     * @return whether {@link #buyNativeLand} would charge it
+     */
+    public boolean canBuyNativeLand(final NativeLandQuote quote) {
+        if (quote == null || !isGameRunning()
+                || getCurrentPlayer() != quote.getPlayer()
+                || quote.getStatus() != NativeLandStatus.UNPAID) {
+            return false;
+        }
+        final Player player = quote.getPlayer();
+        final Optional<NativeLandQuote> live = quoteNativeLand(player,
+                quote.getLocation());
+        return live.isPresent()
+                && live.get().getStatus() == NativeLandStatus.UNPAID
+                && live.get().getClaimant().getId() == quote.getClaimant()
+                        .getId()
+                && live.get().getPrice() == quote.getPrice()
+                && player.getGold() >= quote.getPrice() && quote.getClaimant()
+                        .getTreasury() <= Integer.MAX_VALUE - quote.getPrice();
+    }
+
+    /**
+     * Pay for one claimed square. The right is recorded and the claim owner's
+     * treasury grows before the European's gold changes, so every gold listener
+     * sees the finished result. A refused quote changes neither side.
+     *
+     * @param quote required quote that {@link #canBuyNativeLand} accepts
+     */
+    public void buyNativeLand(final NativeLandQuote quote) {
+        checkTurnPreparationComplete();
+        Preconditions.checkArgument(canBuyNativeLand(quote),
+                "Native land cannot be bought now");
+        final Player player = quote.getPlayer();
+        // Every arithmetic result is computed before the first mutation, so an
+        // overflow leaves the right, treasury and gold unchanged.
+        final int treasuryAfter = Math
+                .addExact(quote.getClaimant().getTreasury(), quote.getPrice());
+        final int goldAfter = Math.subtractExact(player.getGold(),
+                quote.getPrice());
+        nativeLandRights.addPaid(nativeEuropean(player), quote.getLocation());
+        quote.getClaimant().setTreasury(treasuryAfter);
+        player.setGold(goldAfter);
+    }
+
+    /**
+     * Record a successful use of a square by a colonial European: founding, a
+     * worker placed in a field, or a completed plow. The first unpaid use of a
+     * claimed square adds the one-time taking to its claim owner's local alarm,
+     * once per European and square. Paid squares, Minuit's waiver, unclaimed
+     * squares and repeated use change nothing.
+     *
+     * @param owner required player that used the square
+     * @param at    required square
+     */
+    public void recordNativeLandUse(final Player owner, final Location at) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(at);
+        final Optional<EuropeanNation> nation = nativeNationOf(owner);
+        if (nation.isEmpty() || nativeLandWaived(owner)) {
+            return;
+        }
+        final Optional<NativeSettlement> claimant = nativeSettlements
+                .getClaimOwner(at);
+        if (claimant.isEmpty() || nativeLandRights.isPaid(nation.get(), at)
+                || nativeLandRights.isTaken(nation.get(), at)) {
+            return;
+        }
+        nativeLandRights.addTaken(nation.get(), at);
+        addNativeLocalAlarm(claimant.get(), owner, NATIVE_UNPAID_TAKING_ALARM);
+    }
+
+    /**
+     * Gold for one claimed square: the accepted profile factor of the base
+     * price, doubled when the claim belongs to a capital. Factors are whole
+     * percents, so the rounded-up price is exact.
+     */
+    private int nativeLandPrice(final NativeSettlement claimant) {
+        final int percent;
+        switch (getDifficulty()) {
+        case DISCOVERER:
+            percent = 75;
+            break;
+        case EXPLORER:
+            percent = 90;
+            break;
+        case CONQUISTADOR:
+            percent = 100;
+            break;
+        case GOVERNOR:
+            percent = 115;
+            break;
+        case VICEROY:
+            percent = 130;
+            break;
+        default:
+            throw new IllegalStateException("Unknown difficulty");
+        }
+        return claimant.isCapital() ? 2 * percent : percent;
+    }
+
+    /**
+     * Peter Minuit's membership waives future land payments and unpaid-land
+     * alarm. Earlier payments are not refunded.
+     */
+    private static boolean nativeLandWaived(final Player player) {
+        return player.getCongressMembers().contains(Founder.PETER_MINUIT);
+    }
+
+    private static Optional<EuropeanNation> nativeNationOf(
+            final Player player) {
+        return player.isKing() ? Optional.empty()
+                : EuropeanNation.findByPlayerName(player.getName());
+    }
+
+    private static EuropeanNation nativeEuropean(final Player player) {
+        Preconditions.checkNotNull(player);
+        return nativeNationOf(player)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Native relations need a colonial European"));
+    }
+
+    /**
+     * Multiplier of positive local alarm: France halves it, and Pocahontas
+     * halves it again while she is a member. Direct tribal anger is not
+     * multiplied.
+     */
+    private static double nativeLocalFactor(final EuropeanNation european,
+            final Player owner) {
+        double factor = 1;
+        if (european == EuropeanNation.FRENCH) {
+            factor *= 0.5;
+        }
+        if (owner.getCongressMembers().contains(Founder.POCAHONTAS)) {
+            factor *= 0.5;
+        }
+        return factor;
+    }
+
+    /**
+     * Positive local inputs of one settlement from one European's own units and
+     * colonies. Each unit is placed once, by the square it stands on or the
+     * colony it works in; cargo and units outside the map count nothing. A
+     * resident within the home radius adds 0.25, and an armed unit within two
+     * squares adds 2 on top, so an armed colonist can count for both. Each
+     * colony within the home radius adds 3 with a fortress or 2 with a fort.
+     * Unpaid claimed land in use adds its own input, see
+     * {@link #nativeUnpaidUsePressure}.
+     */
+    private double nativeLocalPressure(final NativeSettlement settlement,
+            final Player owner) {
+        final Location home = settlement.getLocation();
+        final int radius = settlement.getSettlementClass().getHomeRadius();
+        double pressure = 0;
+        for (final Unit unit : owner.getAllUnits()) {
+            final Optional<Location> square = nativeResidentSquare(unit, owner);
+            if (square.isEmpty()) {
+                continue;
+            }
+            final int distance = home.getDistanceChebyshev(square.get());
+            if (isNativeResident(unit) && distance <= radius) {
+                pressure += NATIVE_RESIDENT_PRESSURE;
+            }
+            if (isNativeArmed(unit) && distance <= NATIVE_ARMED_RADIUS) {
+                pressure += NATIVE_ARMED_PRESSURE;
+            }
+        }
+        for (final Colony colony : colonies) {
+            if (colony.getOwner() == owner && home
+                    .getDistanceChebyshev(colony.getLocation()) <= radius) {
+                if (colony.wasConstructionBuilded(ConstructionType.FORTRESS)) {
+                    pressure += 3;
+                } else if (colony
+                        .wasConstructionBuilded(ConstructionType.FORT)) {
+                    pressure += 2;
+                }
+            }
+        }
+        pressure += nativeUnpaidUsePressure(settlement, owner);
+        return pressure;
+    }
+
+    /**
+     * Unpaid land in use by one European, counted once per square: each owned
+     * colony square and each field with a worker. Squares with a paid right and
+     * every square while Peter Minuit is a member add nothing. Only the claim
+     * owner of a square receives its pressure.
+     */
+    private double nativeUnpaidUsePressure(final NativeSettlement settlement,
+            final Player owner) {
+        if (nativeLandWaived(owner)) {
+            return 0;
+        }
+        final EuropeanNation european = nativeEuropean(owner);
+        // A square taken unpaid stays in use for pressure until it is paid or
+        // Minuit waives it, even when only a road or plow remains there. The
+        // set deduplicates it with colony squares and worked fields.
+        final Set<Location> used = new HashSet<>(
+                nativeLandRights.takenBy(european));
+        for (final Colony colony : colonies) {
+            if (colony.getOwner() == owner) {
+                used.add(colony.getLocation());
+                colony.getColonyFields().stream()
+                        .filter(ColonyField::isNotEmpty)
+                        .forEach(field -> used.add(field.getLocation()));
+            }
+        }
+        final long unpaid = used.stream()
+                .filter(at -> !nativeLandRights.isPaid(european, at))
+                .filter(at -> nativeSettlements.getClaimOwner(at)
+                        .orElse(null) == settlement)
+                .count();
+        return unpaid * NATIVE_UNPAID_USE_PRESSURE;
+    }
+
+    /**
+     * A resident is any land unit of the owner except a wagon; ships are not
+     * residents. Residency does not depend on armament, so an armed colonist
+     * within the home radius counts both as a resident and as armed.
+     */
+    private static boolean isNativeResident(final Unit unit) {
+        return !unit.isShip() && unit.getType() != UnitType.WAGON;
+    }
+
+    /**
+     * Armed land units are artillery and colonists holding guns, as in combat.
+     * An armed ship, one that can attack, also counts as an armed unit.
+     */
+    private static boolean isNativeArmed(final Unit unit) {
+        return CombatStrengths.isArmedLand(unit)
+                || unit.isShip() && unit.canAttack();
+    }
+
+    private Optional<Location> nativeResidentSquare(final Unit unit,
+            final Player owner) {
+        if (unit.isAtPlaceLocation()) {
+            return Optional.of(unit.getLocation());
+        }
+        return colonies.stream()
+                .filter(colony -> colony.getOwner() == owner
+                        && colony.getUnitsInsideColony().contains(unit))
+                .map(Colony::getLocation).findFirst();
+    }
+
+    /**
+     * Restore which native settlements each player has learned. The list is
+     * required in the current schema; an empty list explicitly means nothing
+     * has been learned yet and a missing one is rejected. Every entry must name
+     * a known player and known settlements, without duplicates.
+     */
+    private Map<String, Set<Integer>> restoreLearnedNativeSettlements(
+            final List<NativeSettlementKnowledgePo> saved) {
+        Preconditions.checkArgument(saved != null,
+                "Unsupported save: missing native settlement knowledge");
+        final Map<String, Set<Integer>> out = new HashMap<>();
+        for (final NativeSettlementKnowledgePo entry : saved) {
+            Preconditions.checkArgument(
+                    entry != null && entry.getPlayerName() != null
+                            && entry.getSettlementIds() != null,
+                    "Unsupported save: incomplete native settlement knowledge");
+            Preconditions.checkArgument(
+                    playerStore.getPlayers().stream()
+                            .anyMatch(player -> player.getName()
+                                    .equals(entry.getPlayerName())),
+                    "Unsupported save: unknown player in native settlement knowledge");
+            final Set<Integer> ids = new HashSet<>();
+            for (final Integer id : entry.getSettlementIds()) {
+                Preconditions.checkArgument(
+                        id != null && ids.add(id)
+                                && nativeSettlements.getAll().stream()
+                                        .anyMatch(s -> s.getId() == id),
+                        "Unsupported save: unknown or duplicate learned native settlement");
+            }
+            Preconditions.checkArgument(
+                    out.put(entry.getPlayerName(), ids) == null,
+                    "Unsupported save: duplicate native settlement knowledge");
+        }
+        return out;
+    }
+
+    /**
+     * Record native settlements inside each player's present sight. Only sight
+     * teaches identity; a square that was merely explored does not.
+     */
+    void learnNativeSettlements() {
+        for (final Player player : playerStore.getPlayers()) {
+            final Set<Integer> learned = learnedNativeSettlements
+                    .computeIfAbsent(player.getName(), name -> new HashSet<>());
+            for (final NativeSettlement settlement : nativeSettlements
+                    .getAll()) {
+                if (player.isCurrentlyVisible(settlement.getLocation())) {
+                    learned.add(settlement.getId());
+                }
+            }
+        }
+    }
+
+    private List<NativeSettlementKnowledgePo> saveLearnedNativeSettlements() {
+        final List<NativeSettlementKnowledgePo> out = new ArrayList<>();
+        for (final Player player : playerStore.getPlayers()) {
+            final Set<Integer> learned = learnedNativeSettlements
+                    .get(player.getName());
+            if (learned != null && !learned.isEmpty()) {
+                final List<Integer> ids = new ArrayList<>(learned);
+                ids.sort(null);
+                final NativeSettlementKnowledgePo po = new NativeSettlementKnowledgePo();
+                po.setPlayerName(player.getName());
+                po.setSettlementIds(ids);
+                out.add(po);
+            }
+        }
         return out;
     }
 
@@ -3143,6 +4660,7 @@ public class Model {
 
     void fireUnitMovedFinished(final Unit unit, final Path path) {
         listenerManager.fireUnitMovedFinished(this, unit, path);
+        learnNativeSettlements();
     }
 
     void fireNewUnitWasBorn(final Unit unit) {
@@ -3181,6 +4699,7 @@ public class Model {
                 unit.moveOneStep(loc);
             }
             listenerManager.fireUnitMovedFinished(this, unit, path);
+            learnNativeSettlements();
         }
     }
 
@@ -3216,6 +4735,16 @@ public class Model {
 
     void checkTurnPreparationComplete() {
         gameManager.checkTurnPreparationComplete();
+    }
+
+    /** @return whether the owner's turn preparation has finished for reads */
+    private boolean isTurnPreparationComplete() {
+        try {
+            checkTurnPreparationComplete();
+            return true;
+        } catch (final TurnPreparationException busy) {
+            return false;
+        }
     }
 
     void checkCurrentPlayer(final Player player) {

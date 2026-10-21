@@ -88,8 +88,7 @@ final class EuropeanRelationsPanel extends VBox {
         refreshSupport(model);
         final Player actor = model.getCurrentPlayer();
         final List<Player> players = model.getPlayers().stream()
-                .filter(player -> !player.isKing())
-                .collect(Collectors.toList());
+                .filter(Player::isColonialNation).collect(Collectors.toList());
         for (int i = 0; i < players.size(); i++) {
             for (int j = i + 1; j < players.size(); j++) {
                 final Player first = players.get(i);

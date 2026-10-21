@@ -201,3 +201,9 @@ for signing, Linux system libraries and platform validation, and
 The legacy [release guide](../microcol-site/src/site/apt/release.apt) describes
 Java 8 and historical outputs. Keep it as a development reference; use the
 current distribution page for the Maven packaging commands and outputs.
+
+Native actors remain within `microcol-game`: the shared model owns native player/unit identity and turn boundaries, AI handles actionless native turns, and GUI renders only known identities. `microcol-test` covers the player-visible turn and Continue paths. No new module or build output is introduced; see the [package responsibility map](architecture.md) and [R-0151 evidence](functional-tests.md#r-0151-native-actors-and-home-linked-braves-2026-10-20).
+
+Rival trade remains in `microcol-game`: AI selects the bounded objective, while the model owns persistent identity, voyage and trade transactions. `microcol-test` verifies the real rival cycle and Continue. No module or build output was added; see [R-0091 evidence](functional-tests.md#r-0091-rival-trade-and-supplies-2026-10-21).
+
+The production rival factory stays in `microcol-game`; the passive replacement exists only in `microcol-test` for TC101 human-expedition isolation. Default gameplay and AI-specific tests retain real rivals. See [regression evidence](functional-tests.md#second-batch-regression-repairs-2026-10-21).

@@ -83,7 +83,8 @@ public final class HighSea {
      * @param target the square the step enters
      * @return {@code true} if a ship making the step would depart
      */
-    boolean isDepartureStep(final Location source, final Location target) {
+    public boolean isDepartureStep(final Location source,
+            final Location target) {
         WorldMap map = model.getMap();
         if (!map.isValid(source) || !map.isValid(target)) {
             return false;

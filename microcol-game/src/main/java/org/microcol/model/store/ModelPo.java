@@ -62,11 +62,114 @@ public class ModelPo {
         this.nextColonyId = nextColonyId;
     }
 
+    /** Required: the next route ID never reused, even after a rejected save. */
+    private Integer nextTradeRouteId;
+
+    public Integer getNextTradeRouteId() {
+        return nextTradeRouteId;
+    }
+
+    public void setNextTradeRouteId(final Integer nextTradeRouteId) {
+        this.nextTradeRouteId = nextTradeRouteId;
+    }
+
+    /** Required, possibly empty; a missing list is rejected, not defaulted. */
+    private List<TradeRoutePo> tradeRoutes;
+
+    public List<TradeRoutePo> getTradeRoutes() {
+        return tradeRoutes;
+    }
+
+    public void setTradeRoutes(final List<TradeRoutePo> tradeRoutes) {
+        this.tradeRoutes = tradeRoutes;
+    }
+
     private CalendarPo calendar = new CalendarPo();
 
     private List<UnitPo> units = new ArrayList<>();
 
     private List<ColonyPo> colonies = new ArrayList<>();
+
+    /**
+     * Native settlements. No default: the current schema requires an explicit
+     * list, even an empty one.
+     */
+    private List<NativeSettlementPo> nativeSettlements;
+
+    /**
+     * Native settlements each player has learned. Absent means nothing is
+     * learned yet; no settlement identity is guessed from it.
+     */
+    private List<NativeSettlementKnowledgePo> nativeSettlementKnowledge;
+
+    public List<NativeSettlementKnowledgePo> getNativeSettlementKnowledge() {
+        return nativeSettlementKnowledge;
+    }
+
+    public void setNativeSettlementKnowledge(
+            final List<NativeSettlementKnowledgePo> nativeSettlementKnowledge) {
+        this.nativeSettlementKnowledge = nativeSettlementKnowledge;
+    }
+
+    /**
+     * Tribal anger for every native nation and European pair. No default: the
+     * current schema requires the complete explicit table, zeros included.
+     */
+    private List<NativeTribalAngerPo> nativeTribalAnger;
+
+    /**
+     * Local alarm for every native settlement and European pair. No default:
+     * the current schema requires the complete explicit table, zeros included.
+     */
+    private List<NativeLocalAlarmPo> nativeLocalAlarm;
+
+    /**
+     * Paid land rights of Europeans on native-claimed squares. No default: the
+     * current schema requires the list, empty when nothing has been paid.
+     */
+    private List<NativeLandRecordPo> nativeLandRights;
+
+    /**
+     * Unpaid land takings already charged once, per European and square. No
+     * default: the list is required, empty when nothing has been taken.
+     */
+    private List<NativeLandRecordPo> nativeLandTakings;
+
+    public List<NativeLandRecordPo> getNativeLandRights() {
+        return nativeLandRights;
+    }
+
+    public void setNativeLandRights(
+            final List<NativeLandRecordPo> nativeLandRights) {
+        this.nativeLandRights = nativeLandRights;
+    }
+
+    public List<NativeLandRecordPo> getNativeLandTakings() {
+        return nativeLandTakings;
+    }
+
+    public void setNativeLandTakings(
+            final List<NativeLandRecordPo> nativeLandTakings) {
+        this.nativeLandTakings = nativeLandTakings;
+    }
+
+    public List<NativeTribalAngerPo> getNativeTribalAnger() {
+        return nativeTribalAnger;
+    }
+
+    public void setNativeTribalAnger(
+            final List<NativeTribalAngerPo> nativeTribalAnger) {
+        this.nativeTribalAnger = nativeTribalAnger;
+    }
+
+    public List<NativeLocalAlarmPo> getNativeLocalAlarm() {
+        return nativeLocalAlarm;
+    }
+
+    public void setNativeLocalAlarm(
+            final List<NativeLocalAlarmPo> nativeLocalAlarm) {
+        this.nativeLocalAlarm = nativeLocalAlarm;
+    }
 
     private List<TurnEventPo> turnEvents = new ArrayList<>();
 
@@ -105,6 +208,15 @@ public class ModelPo {
 
     public void setColonies(List<ColonyPo> colonies) {
         this.colonies = colonies;
+    }
+
+    public List<NativeSettlementPo> getNativeSettlements() {
+        return nativeSettlements;
+    }
+
+    public void setNativeSettlements(
+            final List<NativeSettlementPo> nativeSettlements) {
+        this.nativeSettlements = nativeSettlements;
     }
 
     public void setUnits(List<UnitPo> units) {

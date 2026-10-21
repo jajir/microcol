@@ -21,6 +21,17 @@ public enum Loc implements MessageKeyResource {
     rightPanel_description, turnReport_title, turnReport_caption,
     turnReport_noEvents, no_2_7p, no_3_7p, no_4_7p, no_5_7p, and, withColony,
     colonyLastSeen, adjustAmountOfGoods, moveCost, difficulty,
+    nativeSettlementStatus, nativeCapitalStatus, nativeBraveHome,
+    nativeBraveHomeCapital, nativeBraveHomeUnknown, nativeBraveHomeless,
+    nativeNationArawak, nativeNationAztec, nativeNationInca, nativeNationTupi,
+    nativeNationCherokee, nativeNationIroquois, nativeNationSioux,
+    nativeNationApache, nativeClassCamp, nativeClassVillage, nativeClassCity,
+    nativeLandClaimant, nativeLandClaimantCapital, nativeLandHoverUnpaid,
+    nativeLandHoverPaid, nativeLandHoverWaived, nativeLandTitle,
+    nativeLandClaimedBy, nativeLandPrice, nativeLandConsequence, nativeLandPay,
+    nativeLandProceed, nativeLandCancel, nativeLandCannotPay, nativeLandChanged,
+    nativeLandColonySquare, nativeLandFirstField, nativeLandFoundingNote,
+    nativeLandFoundingPay, nativeLandFoundingUnpaid, nativeLandPaidKept,
     difficulty_discoverer, difficulty_explorer, difficulty_conquistador,
     difficulty_governor, difficulty_viceroy,;
 

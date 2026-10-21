@@ -8,9 +8,9 @@
 | --- | --- | --- | --- |
 | UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md), [R-0209](R-0209.md) |
 | UC-002 | Nastavení | Zvolit národ a obtížnost | [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0209](R-0209.md) |
-| UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](R-0153.md), [R-0174](R-0174.md), [R-0144](done/R-0144.md), [R-0208](R-0208.md) |
+| UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](done/R-0153.md), [R-0174](R-0174.md), [R-0144](done/R-0144.md), [R-0208](R-0208.md) |
 | UC-004 | Hra | Zachovat herní profil a postupovat kalendářem | [R-0051](done/R-0051.md), [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0208](R-0208.md) |
-| UC-005 | Hra | Dokončit tah ve správném pořadí | [R-0052](done/R-0052.md), [R-0151](R-0151.md) |
+| UC-005 | Hra | Dokončit tah ve správném pořadí | [R-0052](done/R-0052.md), [R-0151](done/R-0151.md) |
 | UC-006 | Hra | Odkrýt neznámý svět | [R-0070](done/R-0070.md), [R-0019](done/R-0019.md), [R-0069](done/R-0069.md) |
 | UC-007 | Hra | Použít všechny druhy terénu | [R-0123](done/R-0123.md), [R-0124](done/R-0124.md), [R-0125](done/R-0125.md), [R-0210](R-0210.md) |
 | UC-008 | Hra | Využít řeky a zvláštní zdroje | [R-0126](done/R-0126.md), [R-0127](done/R-0127.md) |
@@ -21,7 +21,7 @@
 | UC-013 | Hra | Dojít na vzdálené místo | [R-0130](done/R-0130.md) |
 | UC-014 | Hra | Počkat nebo vynechat pohyb | [R-0053](done/R-0053.md) |
 | UC-015 | Hra | Držet hlídku a opevnit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md) |
-| UC-016 | Hra | Zrušit práci nebo rozpustit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](done/R-0121.md), [R-0130](done/R-0130.md), [R-0131](done/R-0131.md), [R-0142](R-0142.md) |
+| UC-016 | Hra | Zrušit práci nebo rozpustit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](done/R-0121.md), [R-0130](done/R-0130.md), [R-0131](done/R-0131.md), [R-0142](done/R-0142.md) |
 | UC-017 | Hra | Vybavit kolonistu v kolonii | [R-0118](done/R-0118.md), [R-0211](R-0211.md) |
 | UC-018 | Hra | Změnit vybavení na evropském molu | [R-0020](done/R-0020.md) |
 | UC-019 | Hra | Dokončit orbu | [R-0119](done/R-0119.md) |
@@ -34,8 +34,8 @@
 | UC-026 | Hra | Rychle naložit, vyložit a odhodit náklad | [R-0137](done/R-0137.md), [R-0138](done/R-0138.md) |
 | UC-027 | Hra | Přeplout Atlantik a vrátit se | [R-0021](done/R-0021.md), [R-0071](done/R-0071.md) |
 | UC-028 | Hra | Obrátit loď během plavby | [R-0072](done/R-0072.md) |
-| UC-029 | Hra | Zadat a projet obchodní trasu | [R-0139](R-0139.md), [R-0140](R-0140.md), [R-0141](R-0141.md) |
-| UC-030 | Hra | Změnit a zrušit trasu | [R-0142](R-0142.md) |
+| UC-029 | Hra | Zadat a projet obchodní trasu | [R-0139](done/R-0139.md), [R-0140](done/R-0140.md), [R-0141](done/R-0141.md) |
+| UC-030 | Hra | Změnit a zrušit trasu | [R-0142](done/R-0142.md) |
 | UC-031 | Hra | Založit, otevřít a prohlédnout kolonii | [R-0146](done/R-0146.md), [R-0149](R-0149.md), [R-0205](R-0205.md); [Z02 founding](../functional-tests.md#z02-pojmenovani-a-identita-kolonie) |
 | UC-032 | Hra | Rozdělit pracovníky na pole a do dílen | [R-0055](done/R-0055.md) |
 | UC-033 | Hra | Vybrat práci podle výnosu | [R-0056](done/R-0056.md) |
@@ -65,15 +65,15 @@
 | UC-057 | Hra | Vidět správnou cenu a daň | [R-0020](done/R-0020.md), [R-0215](R-0215.md) |
 | UC-058 | Hra | Pohnout cenami a zkontrolovat účetnictví | [R-0143](done/R-0143.md), [R-0145](done/R-0145.md) |
 | UC-059 | Hra | Přijmout daň nebo protestovat | [R-0102](done/R-0102.md), [R-0103](done/R-0103.md) |
-| UC-060 | Hra | Rozpoznat národ a získat půdu | [R-0150](R-0150.md), [R-0151](R-0151.md), [R-0152](R-0152.md) |
-| UC-061 | Hra | Vyvolat a uklidnit napětí | [R-0153](R-0153.md), [R-0154](R-0154.md), [R-0155](R-0155.md), [R-0156](R-0156.md), [R-0160](R-0160.md), [R-0164](R-0164.md) |
+| UC-060 | Hra | Rozpoznat národ a získat půdu | [R-0150](done/R-0150.md), [R-0151](done/R-0151.md), [R-0152](done/R-0152.md) |
+| UC-061 | Hra | Vyvolat a uklidnit napětí | [R-0153](done/R-0153.md), [R-0154](R-0154.md), [R-0155](R-0155.md), [R-0156](R-0156.md), [R-0160](R-0160.md), [R-0164](R-0164.md) |
 | UC-062 | Hra | Navštívit náčelníka | [R-0157](R-0157.md), [R-0158](R-0158.md) |
 | UC-063 | Hra | Naučit se od domorodců | [R-0148](R-0148.md), [R-0157](R-0157.md) |
 | UC-064 | Hra | Obchodovat se sídlem | [R-0159](R-0159.md), [R-0160](R-0160.md), [R-0161](R-0161.md) |
 | UC-065 | Hra | Vyžádat tribut a dobýt sídlo | [R-0162](R-0162.md), [R-0174](R-0174.md), [R-0175](R-0175.md) |
 | UC-066 | Hra | Vyslat misionáře a založit misi | [R-0163](done/R-0163.md), [R-0164](R-0164.md), [R-0149](R-0149.md) |
 | UC-067 | Hra | Vypudit cizí misi nebo podnítit válku | [R-0165](R-0165.md), [R-0166](R-0166.md) |
-| UC-068 | Hra | Hrát proti fungujícímu soupeři | [R-0090](done/R-0090.md), [R-0091](R-0091.md), [R-0092](R-0092.md), [R-0170](R-0170.md), [R-0171](R-0171.md), [R-0172](R-0172.md), [R-0156](R-0156.md) |
+| UC-068 | Hra | Hrát proti fungujícímu soupeři | [R-0090](done/R-0090.md), [R-0091](done/R-0091.md), [R-0092](R-0092.md), [R-0170](R-0170.md), [R-0171](R-0171.md), [R-0172](R-0172.md), [R-0156](R-0156.md) |
 | UC-069 | Hra | Vyhlásit válku, vyjednat mír a alianci | [R-0028](done/R-0028.md), [R-0026](done/R-0026.md), [R-0099](done/R-0099.md), [R-0087](done/R-0087.md), [R-0089](done/R-0089.md) |
 | UC-070 | Hra | Přijmout žoldnéře | [R-0169](R-0169.md) |
 | UC-071 | Hra | Obchodovat s rivaly a porovnat mocnosti | [R-0167](R-0167.md), [R-0168](R-0168.md) |
@@ -100,10 +100,10 @@
 | UC-092 | Hra | Benjamin Franklin | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md), [R-0214](R-0214.md) |
 | UC-093 | Hra | Thomas Jefferson | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
 | UC-094 | Hra | Thomas Paine | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
-| UC-095 | Hra | Pocahontas | [R-0153](R-0153.md), [R-0214](R-0214.md) |
+| UC-095 | Hra | Pocahontas | [R-0153](done/R-0153.md), [R-0214](R-0214.md) |
 | UC-096 | Hra | Adam Smith | [R-0084](done/R-0084.md), [R-0214](R-0214.md) |
 | UC-097 | Hra | Jakob Fugger | [R-0181](done/R-0181.md), [R-0214](R-0214.md) |
-| UC-098 | Hra | Peter Minuit | [R-0152](R-0152.md), [R-0214](R-0214.md) |
+| UC-098 | Hra | Peter Minuit | [R-0152](done/R-0152.md), [R-0214](R-0214.md) |
 | UC-099 | Hra | Peter Stuyvesant | [R-0084](done/R-0084.md), [R-0214](R-0214.md) |
 | UC-100 | Hra | Jan de Witt | [R-0167](R-0167.md), [R-0168](R-0168.md), [R-0214](R-0214.md) |
 | UC-101 | Hra | Jean de Brebeuf | [R-0163](done/R-0163.md), [R-0214](R-0214.md) |
@@ -111,7 +111,7 @@
 | UC-103 | Hra | Bartolome de Las Casas | [R-0182](R-0182.md), [R-0214](R-0214.md) |
 | UC-104 | Hra | William Penn | [R-0110](done/R-0110.md), [R-0214](R-0214.md) |
 | UC-105 | Hra | Juan de Sepulveda | [R-0149](R-0149.md), [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
-| UC-106 | Hra | Francisco de Coronado | [R-0183](R-0183.md), [R-0214](R-0214.md) |
+| UC-106 | Hra | Francisco de Coronado | [R-0183](done/R-0183.md), [R-0214](R-0214.md) |
 | UC-107 | Hra | Henry Hudson | [R-0180](done/R-0180.md), [R-0214](R-0214.md) |
 | UC-108 | Hra | Sieur de La Salle | [R-0184](done/R-0184.md), [R-0214](R-0214.md) |
 | UC-109 | Hra | Ferdinand Magellan | [R-0104](done/R-0104.md), [R-0214](R-0214.md) |

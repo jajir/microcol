@@ -3,6 +3,8 @@ package org.microcol.gui.event;
 import java.util.Optional;
 
 import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.dialog.NativeLandDialog;
+import org.microcol.gui.dialog.NativeLandGuard;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -29,11 +31,14 @@ public final class PlowFieldEventListener {
     private final EventBus eventBus;
     private final GameModelController gameModelController;
     private final I18n i18n;
+    private final NativeLandGuard nativeLand;
 
     @Inject
     PlowFieldEventListener(final SelectedUnitManager selectedUnitManager,
             final EventBus eventBus,
-            final GameModelController gameModelController, final I18n i18n) {
+            final GameModelController gameModelController, final I18n i18n,
+            final NativeLandGuard nativeLand) {
+        this.nativeLand = Preconditions.checkNotNull(nativeLand);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.selectedUnitManager = Preconditions
@@ -102,11 +107,22 @@ public final class PlowFieldEventListener {
             reject(reasonText(problem.get()));
             return;
         }
+        // Claimed, unpaid land is explained only after the plow itself was
+        // found possible; cancel starts no work.
+        final NativeLandDialog.Result land = nativeLand.proceed(
+                gameModelController.getModel(),
+                gameModelController.getHumanPlayer(), unit.getLocation());
+        if (land == NativeLandDialog.Result.CANCELED) {
+            return;
+        }
         try {
             unit.setActionType(UnitActionType.plowField);
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             // State changed between the check and the command.
-            reject(Buttons.plowProblemUnavailable);
+            eventBus.post(new StatusBarMessageEvent(
+                    nativeLand.rejection(land,
+                            i18n.get(Buttons.plowProblemUnavailable)),
+                    StatusBarMessageEvent.Source.GAME));
             return;
         }
         eventBus.post(new RefreshRightPanelEvent());

@@ -88,11 +88,22 @@ final class GameManager {
 
     private List<Player> turnOrder() {
         final List<Player> players = new ArrayList<>(model.getPlayers());
-        players.sort(Comparator.comparing(Player::isKing)
+        players.sort(Comparator.comparingInt(GameManager::nativeRank)
+                .thenComparing(Player::isKing)
                 .thenComparingInt(player -> nationRank(nationKey(player)))
                 .thenComparing(GameManager::nationKey)
                 .thenComparing(Player::getName));
         return players;
+    }
+
+    /**
+     * Native nations take their turns first, in their stable enum order and
+     * independently of serialized order; every European actor follows them.
+     */
+    private static int nativeRank(final Player player) {
+        return player.isNative()
+                ? ((PlayerNative) player).getNativeNation().ordinal()
+                : NativeNation.values().length;
     }
 
     private static String nationKey(final Player player) {
@@ -307,14 +318,16 @@ final class GameManager {
     }
 
     /**
-     * Continue the go-to orders of the player whose owner turn has just begun.
-     * It runs once per turn after preparation is complete, so each step is an
-     * ordinary move; start, continue and load never reach this boundary.
+     * Continue the go-to orders and trade route assignments of the player whose
+     * owner turn has just begun. It runs once per turn after preparation is
+     * complete, so each step is an ordinary move; start, continue and load
+     * never reach this boundary. A unit has at most one of the two orders.
      */
     private void advanceGoToOrders(final Player player) {
         for (final Unit unit : new ArrayList<>(player.getAllUnits())) {
             ((AbstractUnit) unit).advanceGoTo();
         }
+        model.advanceTradeRouteAssignments(player);
     }
 
     void save(final ModelPo modelPo) {

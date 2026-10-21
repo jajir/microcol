@@ -8,6 +8,11 @@ import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.ai.PassiveRivalPlayer;
+import org.microcol.ai.RivalPlayerFactory;
+import org.microcol.gui.FileSelectingService;
+import org.microcol.gui.screen.game.gamepanel.CursorService;
+import org.microcol.mock.CursorServiceNoOpp;
 import org.microcol.model.ColonyJobChoice.Kind;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Difficulty;
@@ -28,6 +33,7 @@ import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.RecruitmentPage;
 import org.microcol.page.WelcomePage;
+import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -46,8 +52,14 @@ import javafx.stage.Stage;
  * (26,13) and (26,14). The four nations start on the eastern sea lane at Dutch
  * (48,2), French (50,11), English (50,20) and Spanish (50,29): the 82 eastern
  * lane squares sorted by row then column, picked at indices 0, 27, 54 and 81.
- * The three computer nations cannot leave their lane squares or (Dutch) settle
- * far in the north, so they never reach the route.
+ * The three computer nations keep their reference-map start, colonies and model
+ * turn preparation, but this test replaces their robots with passive ones (see
+ * {@link #start}). The real rival AI walks its ships at random, and the model
+ * refuses entry to a square held by a non-allied ship, so an unrelated computer
+ * ship could otherwise stop on a route square. Passive rivals never move,
+ * attack, found or trade, so the fixed legs stay free. The royal robots, the
+ * human player and the New Game, Save and Continue paths are unchanged. Rival
+ * AI behavior is covered by other scenarios.
  * </p>
  *
  * <p>
@@ -164,11 +176,26 @@ public class TC_101_F92_four_nation_expedition_loop_test
         }
     }
 
+    /**
+     * Starts the application with the usual test services and passive European
+     * computer rivals. The binding belongs to the application's injector, so
+     * Continue after Save keeps the same rivals.
+     */
     @Start
     private void start(final Stage stage) throws Exception {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
                 ".microcol", "autosave.microcol"));
-        initialize(stage, getClass(), FIXTURE);
+        initialize(stage, getClass(), binder -> {
+            binder.bind(CursorService.class)
+                    .toInstance(new CursorServiceNoOpp());
+            final FileSelectingService selecting = Mockito
+                    .mock(FileSelectingService.class);
+            Mockito.when(selecting.loadFile(Mockito.any(File.class)))
+                    .thenReturn(FIXTURE);
+            binder.bind(FileSelectingService.class).toInstance(selecting);
+            binder.bind(RivalPlayerFactory.class)
+                    .toInstance(PassiveRivalPlayer::new);
+        });
     }
 
     @Test

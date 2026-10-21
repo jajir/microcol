@@ -1,6 +1,8 @@
 package org.microcol.model.store;
 
 import java.util.ArrayList;
+
+import org.microcol.model.NativeNation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,20 @@ public final class PlayerPo {
     private boolean declaredIndependence;
 
     private String whosKingThisPlayerIs;
+
+    /**
+     * Native nation this participant stands for. Absent for European players
+     * and Crowns; a native participant is saved with its explicit nation.
+     */
+    private NativeNation nativeNation;
+
+    public NativeNation getNativeNation() {
+        return nativeNation;
+    }
+
+    public void setNativeNation(final NativeNation nativeNation) {
+        this.nativeNation = nativeNation;
+    }
 
     private Map<String, Object> extraData = new HashMap<>();
 
@@ -58,6 +74,18 @@ public final class PlayerPo {
     public void setUnitPurchaseCounts(
             final Map<String, Integer> unitPurchaseCounts) {
         this.unitPurchaseCounts = unitPurchaseCounts;
+    }
+
+    /** Active supply cycle of a rival colony; null when it has none. */
+    private RivalTradeObjectivePo rivalTradeObjective;
+
+    public RivalTradeObjectivePo getRivalTradeObjective() {
+        return rivalTradeObjective;
+    }
+
+    public void setRivalTradeObjective(
+            final RivalTradeObjectivePo rivalTradeObjective) {
+        this.rivalTradeObjective = rivalTradeObjective;
     }
 
     public RecruitmentPo getRecruitment() {

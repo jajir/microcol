@@ -97,6 +97,30 @@ final class PathFinder {
     }
 
     /**
+     * Find the cheapest route to the nearest square that satisfies a goal, with
+     * the same cost rules and turn preference as {@link #find}. The start
+     * square is never itself the goal, so the caller tests it first.
+     *
+     * @param start  required square of the unit's place snapshot
+     * @param isGoal required test of the squares to reach
+     * @return route without the start square, or {@code null} when none exists
+     */
+    List<Location> findNearest(final Location start,
+            final Predicate<Location> isGoal) {
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(isGoal);
+        final Predicate<Location> isTarget = location -> !location.equals(start)
+                && isGoal.test(location);
+        final Optional<Node> affordable = search(start,
+                unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
+                new HashSet<>());
+        final Optional<Node> found = affordable.isPresent() ? affordable
+                : search(start, Integer.MAX_VALUE, false, isTarget,
+                        new HashSet<>());
+        return found.map(this::createList).orElse(null);
+    }
+
+    /**
      * Find all squares the unit can end its move on in this turn, excluding its
      * own square.
      *

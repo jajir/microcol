@@ -1251,7 +1251,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    deterministic scenario the colony survives and produces real food and lumber.
    Save/Continue preserves actual workers and stocks. This is an agreed AI
    policy and acceptance target, not a verified result. Trade and second-colony
-   expansion retain their separate decisions in [R-0091](requirements/R-0091.md)
+   expansion retain their separate decisions in [R-0091](requirements/done/R-0091.md)
    and [R-0092](requirements/R-0092.md).
 
 ### Rival trade and supplies
@@ -1567,12 +1567,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0139 refinement
 
 1. Answer **10** — Unique route names: Route names must be unique within one player under normalized case-insensitive comparison after trimming surrounding Unicode whitespace; different players may reuse a name. Preserve internal spaces, accents and punctuation and the shared 64-Unicode-code-point limit. Stable route identity remains independent of the name.
-2. Owner: [R-0139](requirements/R-0139.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0139](requirements/done/R-0139.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0140 refinement
 
 1. Answer **11** — Route goods priority: Unload before loading, and process each configured goods list in the player-visible top-to-bottom order. Allow the player to reorder entries and label this order as priority when hold space, warehouse capacity or money is insufficient.
-2. Owner: [R-0140](requirements/R-0140.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0140](requirements/done/R-0140.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0145 refinement
 
@@ -1611,12 +1611,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0150 refinement
 
 1. Answer **15** — Settlement defense: Apply an additive settlement defense bonus to actual defenders: camp 0%, village 25%, city 50%, plus 25 percentage points for a capital. A capital city therefore gives 75%. This does not create nonexistent defenders; explain the settlement bonus separately in battle preview.
-2. Owner: [R-0150](requirements/R-0150.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0150](requirements/done/R-0150.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0152 refinement
 
 1. Answer **16** — Overlapping homeland claims: Give each claimed tile one owning settlement: nearest settlement, then stable settlement ID. That owner receives purchase money and local effects. One purchase permanently satisfies that European player’s unpaid-use obligation on the tile, even if a later claim-owner change occurs; do not charge a hidden second claim.
-2. Owner: [R-0152](requirements/R-0152.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0152](requirements/done/R-0152.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0155 refinement
 
@@ -1716,7 +1716,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0183 refinement
 
 1. Answer **36** — Coronado reveal radius: Reveal each currently existing colony tile and all eight immediate neighbors once when Coronado joins. Remember terrain under normal fog rules; this is not permanent surveillance of foreign units or later colonies.
-2. Owner: [R-0183](requirements/R-0183.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0183](requirements/done/R-0183.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0186 refinement
 

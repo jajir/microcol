@@ -78,7 +78,10 @@ public final class GameModelDao {
             source.getModel().setDifficulty(difficulty);
             source.getModel().setCombatRandomState(0L);
             source.getModel().getGameManager().getPlayers().stream()
-                    .filter(player -> player.getWhosKingThisPlayerIs() == null)
+                    // Only colonial nations get European state; Crowns read
+                    // their nation's and native nations have none.
+                    .filter(player -> player.getWhosKingThisPlayerIs() == null
+                            && player.getNativeNation() == null)
                     .forEach(player -> {
                         player.setRecruitment(RecruitmentPool.initial());
                         player.setCongress(Congress.initial());
@@ -101,6 +104,10 @@ public final class GameModelDao {
         Preconditions.checkArgument(saved.getCalendar() != null
                 && saved.getMap() != null && saved.getGameManager() != null
                 && saved.getUnits() != null && saved.getColonies() != null
+                && saved.getNativeSettlements() != null
+                && saved.getNativeSettlementKnowledge() != null
+                && saved.getNativeTribalAnger() != null
+                && saved.getNativeLocalAlarm() != null
                 && saved.getEuropeanRelations() != null,
                 "Incomplete saved game model");
         Preconditions

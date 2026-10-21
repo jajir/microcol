@@ -85,6 +85,41 @@
  * Colony shares post-growth horse breeding between preview and execution,
  * limited by food, storage and the stable present before the update.
  *
+ * PlayerNative is a native nation's turn participant: it owns braves through
+ * shared unit operations, takes the unit preparation before European actors,
+ * and has no European phases. Each UnitNativeBrave links to its home settlement
+ * by saved ID; loading rejects unknown or cross-nation homes.
+ *
+ * NativeSettlements owns distinct native identity and site validation. Model
+ * prevents overlapping European founding and persists player-specific native
+ * identity learned by actual sight; GUI reads only that remembered knowledge.
+ * NativeRelations owns tribal anger per nation and local alarm per settlement
+ * toward each European; Model runs its update once per completed European turn.
+ *
+ * NativeLandRights owns permanent European/tile payments and unpaid takings.
+ * Model validates land purchases and founding together before mutation, and
+ * supplies unpaid-use inputs to NativeRelations. GUI consumes model quotes.
+ *
+ * TradeRoutes owns saved route identities and per-owner names. TradeRouteRules
+ * validates successive known-map legs using the same MovementPolicy as units;
+ * Model creates a route only after all validation, without moving cargo.
+ * TradeRouteAssignment is a carrier's persisted route ID, current stop, pause
+ * reason and boundary copy of the route stops; Model validates it before
+ * storing. Route stop edits change the saved route only. A carrier already on
+ * its leg keeps the stops it accepted and takes the edit at the next stop it
+ * reaches; one that has not left its processed stop, or waits with a reason,
+ * takes it before its next step, so a repaired stop resumes. Deleting a route
+ * or canceling an assignment only clears standing orders, and never moves
+ * cargo, gold, a unit or a voyage. TradeRouteNavigator moves assigned carriers
+ * only during their owner's turn preparation, through the carrier's own steps,
+ * Atlantic departure and arrival, and TradeRouteStop processing once per visit.
+ *
+ * RivalTradeObjective is the saved single supply cycle of a computer colony:
+ * colony ID, carrier ID and leg, stored with the player. The AI decides and
+ * performs every step; Model only answers whether a ship in Europe can sail
+ * home to a square, by the same known-square sea rule as trade routes, and the
+ * owner retires an objective whose colony or carrier is gone or not its own.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>
  */

@@ -259,10 +259,10 @@ verified or authorize implementation.
 | [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | Done | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0137](done/R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
 | [R-0138](done/R-0138.md) | Jettison a selected quantity of ship goods | New capture | [CARGO-016](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
-| [R-0139](R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
-| [R-0140](R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
-| [R-0141](R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
-| [R-0142](R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
+| [R-0139](done/R-0139.md) | Create a named route with reachable stops | New capture | [ROUTE-001](../gap-analysis.md#automated-trade-routes), UC-029 |
+| [R-0140](done/R-0140.md) | Unload then load configured goods at a route stop | New capture | [ROUTE-002](../gap-analysis.md#automated-trade-routes), UC-029 |
+| [R-0141](done/R-0141.md) | Assign a carrier and repeat its trade route | New capture | [ROUTE-003](../gap-analysis.md#automated-trade-routes), UC-029/116 |
+| [R-0142](done/R-0142.md) | Edit or cancel a route without stranding carriers | New capture | [ROUTE-004](../gap-analysis.md#automated-trade-routes), UC-030/016 |
 | [R-0143](done/R-0143.md) | Apply national and cross-port market pressure | Done | [TRADE-006/007](../gap-analysis.md#trade-and-the-european-market), UC-058 |
 | [R-0144](done/R-0144.md) | Make Dutch market prices respond half as much | Done | [SETUP-007](../gap-analysis.md#setup-and-turn-sequence), UC-003/058 |
 | [R-0145](done/R-0145.md) | Account for European trade by nation and commodity | New capture | [TRADE-008](../gap-analysis.md#trade-and-the-european-market), [SUPPORT-003](../gap-analysis.md#supporting-persistence-and-information) economy, UC-058/114 |
@@ -334,12 +334,12 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0088](done/R-0088.md) | Ask a European rival for tribute during contact | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0089](done/R-0089.md) | Form and end a European alliance explicitly | Follow-up | [R-0026](done/R-0026.md) |
 | [R-0090](done/R-0090.md) | Keep the rival’s first colony fed and productive | Follow-up | [R-0027](done/R-0027.md) |
-| [R-0091](R-0091.md) | Let the rival transport supplies and sell its production | Follow-up | [R-0027](done/R-0027.md), [R-0024](done/R-0024.md) |
+| [R-0091](done/R-0091.md) | Let the rival transport supplies and sell its production | Follow-up | [R-0027](done/R-0027.md), [R-0024](done/R-0024.md) |
 | [R-0092](R-0092.md) | Let a rival expand from its first colony to a second | Follow-up | [R-0027](done/R-0027.md) |
-| [R-0150](R-0150.md) | Represent eight native nations and their settlement classes | New capture | [NAT-001/002](../gap-analysis.md#native-nations-settlements-and-relations), UC-060 |
-| [R-0151](R-0151.md) | Give native braves a home and a national turn | New capture | [NAT-001](../gap-analysis.md#native-nations-settlements-and-relations), TURN-001/002, UC-005/060 |
-| [R-0152](R-0152.md) | Claim and buy native homeland tiles | New capture | [NAT-003](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-013](../gap-analysis.md#founding-father-effects), UC-060/098 |
-| [R-0153](R-0153.md) | Maintain tribal anger and local alarm separately | New capture | [NAT-004/005](../gap-analysis.md#native-nations-settlements-and-relations)/[SETUP-005](../gap-analysis.md#setup-and-turn-sequence)/[FATHER-010](../gap-analysis.md#founding-father-effects), UC-003/061/095 |
+| [R-0150](done/R-0150.md) | Represent eight native nations and their settlement classes | New capture | [NAT-001/002](../gap-analysis.md#native-nations-settlements-and-relations), UC-060 |
+| [R-0151](done/R-0151.md) | Give native braves a home and a national turn | New capture | [NAT-001](../gap-analysis.md#native-nations-settlements-and-relations), TURN-001/002, UC-005/060 |
+| [R-0152](done/R-0152.md) | Claim and buy native homeland tiles | New capture | [NAT-003](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-013](../gap-analysis.md#founding-father-effects), UC-060/098 |
+| [R-0153](done/R-0153.md) | Maintain tribal anger and local alarm separately | New capture | [NAT-004/005](../gap-analysis.md#native-nations-settlements-and-relations)/[SETUP-005](../gap-analysis.md#setup-and-turn-sequence)/[FATHER-010](../gap-analysis.md#founding-father-effects), UC-003/061/095 |
 | [R-0154](R-0154.md) | Apply native provocation and reconciliation events | New capture | [NAT-007/008](../gap-analysis.md#native-nations-settlements-and-relations) event effects, UC-061/065 |
 | [R-0155](R-0155.md) | Explain native settlement alarm without color alone | New capture | [NAT-006](../gap-analysis.md#native-nations-settlements-and-relations), UC-061 |
 | [R-0156](R-0156.md) | Let hostile native braves raid and calmer braves stand down | New capture | [NAT-008](../gap-analysis.md#native-nations-settlements-and-relations) AI / DIP-001 native portion, UC-061/068 |
@@ -418,7 +418,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0180](done/R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
 | [R-0181](done/R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
 | [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
-| [R-0183](R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
+| [R-0183](done/R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
 | [R-0184](done/R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
 | [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
 | [R-0186](R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
@@ -540,3 +540,5 @@ preserving native input, values and persistence. Other screens remain outside th
 6. Do not wait for, diagnose or repair remote CI or verify publication in this task. Existing workflows remain configured. This instruction supersedes earlier batch-specific CI-waiting language. Use the [completion runner](../ai/completion-callbacks.md) for long jobs and waits without repeated model polling; inspect actual evidence after the callback.
 
 5. First batch accepted locally on 2026-10-20: R-0122, R-0128, R-0130, R-0131, R-0135, R-0137, R-0138, R-0145, R-0146, R-0181. All ten are now `done`; [full test evidence](../functional-tests.md#first-ten-requirements-full-regression-repair-2026-10-20) records 2,742 model/unit and 440 UI/support checks with zero failures/errors/skips. Remaining authorized requirements continue in dependency order; R-0207 remains excluded.
+
+2026-10-21: The second ten requirements (R-0183, R-0150, R-0153, R-0152, R-0151, R-0139, R-0140, R-0141, R-0142 and R-0091) are complete after [full local acceptance](../functional-tests.md#second-batch-full-acceptance-2026-10-21): 2,968 model/unit and 465 UI/support tests, zero failures/errors/skips. R-0207 remains excluded.

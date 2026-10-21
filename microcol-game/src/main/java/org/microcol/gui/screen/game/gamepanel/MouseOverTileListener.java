@@ -1,5 +1,8 @@
 package org.microcol.gui.screen.game.gamepanel;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageService;
@@ -8,6 +11,7 @@ import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
+import org.microcol.model.unit.UnitNativeBrave;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -64,7 +68,24 @@ public final class MouseOverTileListener {
         final String message = statusBarMessageService.getStatusMessage(where,
                 player, terrain, player.getObservedUnitsAt(where),
                 gameModelController.getModel().getColonyAt(where)
-                        .filter(colony -> player.isCurrentlyVisible(where)));
-        eventBus.post(new StatusBarMessageEvent(message, Source.GAME));
+                        .filter(colony -> player.isCurrentlyVisible(where)),
+                gameModelController.getModel()
+                        .getNativeSettlementKnownTo(player, where));
+        // The quote is empty unless the claimant is a learned settlement.
+        final String land = gameModelController.getModel()
+                .quoteNativeLand(player, where)
+                .map(statusBarMessageService::nativeLandText).orElse("");
+        // Braves are named only from present sight; their home only if learned.
+        final String braves = player.getObservedUnitsAt(where).stream()
+                .filter(unit -> unit instanceof UnitNativeBrave)
+                .map(unit -> statusBarMessageService.nativeBraveText(
+                        (UnitNativeBrave) unit,
+                        gameModelController.getModel()
+                                .getNativeBraveHomeKnownTo(player, unit)))
+                .collect(Collectors.joining(" "));
+        final String details = Stream.of(message, braves, land)
+                .filter(text -> !text.isEmpty())
+                .collect(Collectors.joining(" "));
+        eventBus.post(new StatusBarMessageEvent(details, Source.GAME));
     }
 }

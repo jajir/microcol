@@ -3,6 +3,7 @@ package org.microcol.gui.screen.colony;
 import java.util.List;
 
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
@@ -26,16 +27,22 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     private final Button buttonClose;
     private final Button exports = new Button();
     private final Button education = new Button();
+    private final Button tradeRoute = new Button();
+    private final Button tradeRouteCargo = new Button();
     private final I18n i18n;
+    private final GameModelController game;
     private org.microcol.model.Colony colony;
 
     @Inject
     ColonyButtonsPanel(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
-            final DialogCustomHouse customHouse, final DialogEducation school) {
+            final GameModelController game, final DialogCustomHouse customHouse,
+            final DialogEducation school, final DialogTradeRoute routes,
+            final DialogTradeRouteCargo routeCargo) {
         super(imageProvider, eventBus, Source.COLONY, i18n);
 
         this.i18n = i18n;
+        this.game = game;
         getButtonPanel().setId("colonyButtons");
         education.setId("educationOpen");
         education.setOnAction(event -> school.showFor(colony));
@@ -43,6 +50,12 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         exports.setId("customHouseOpen");
         exports.setOnAction(event -> customHouse.showFor(colony));
         exports.setDisable(true);
+        tradeRoute.setId("tradeRouteOpen");
+        tradeRoute.setOnAction(event -> routes.showFor(colony));
+        tradeRoute.setDisable(true);
+        tradeRouteCargo.setId("tradeRouteCargoOpen");
+        tradeRouteCargo.setOnAction(event -> routeCargo.showFor(colony));
+        tradeRouteCargo.setDisable(true);
         buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
                 ColonyMsg.buttonClose);
         buttonClose.setId(CLOSE_BUTTON_ID);
@@ -56,6 +69,11 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         this.colony = colony;
         education.setText(i18n.get(EducationText.open));
         education.setDisable(false);
+        tradeRoute.setText(i18n.get(TradeRouteText.open));
+        tradeRoute.setDisable(!game.isGameModelReady()
+                || colony.getOwner() != game.getHumanPlayer());
+        tradeRouteCargo.setText(i18n.get(TradeRouteText.cargoOpen));
+        tradeRouteCargo.setDisable(tradeRoute.isDisabled());
         exports.setText(i18n.get(CustomHouseText.open));
         exports.setDisable(!colony.isContainsConstructionByType(
                 org.microcol.model.ConstructionType.CUSTOM_HOUSE));
@@ -72,9 +90,12 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     }
 
     /**
-     * Show the quick cargo commands on a second row. The colony's own row keeps
-     * its positions, because the rename label sits above it and covers the left
-     * part of that row.
+     * Show the quick cargo commands and the trade route editor on a second row.
+     * The colony's own row keeps its positions, because the rename label sits
+     * above it and covers the left part of that row: a wider first row would
+     * move the close control under that label. The row is right-aligned, so the
+     * route cargo and route controls at its left end leave the quick cargo
+     * buttons where they are.
      *
      * @param buttons required quick load and unload buttons
      */
@@ -85,6 +106,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         row.setAlignment(Pos.TOP_RIGHT);
         // Empty space in this row must not hide the colony fields below it.
         row.setPickOnBounds(false);
+        row.getChildren().addAll(tradeRouteCargo, tradeRoute);
         row.getChildren().addAll(buttons);
         addButtonRow(row);
     }

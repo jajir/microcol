@@ -10,9 +10,12 @@ import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.NativeNation;
+import org.microcol.model.NativeSettlement;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
+import org.microcol.model.PlayerNative;
 import org.microcol.model.ResourceOverlay;
 import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
@@ -79,6 +82,12 @@ public final class PaintService {
 
     /** Share of a square's width used by a special-resource marker. */
     private static final double RESOURCE_MARKER_SHARE = 0.28;
+
+    /** Share of a square's width used by a native settlement silhouette. */
+    private static final double NATIVE_SETTLEMENT_SHARE = 0.56;
+
+    /** Gold frame that marks a nation's capital, drawn over the square. */
+    private static final Color CAPITAL_FRAME_COLOR = Color.web("#FFD60A");
 
     /**
      * Outline shape of a special-resource marker. Kinds differ by shape and by
@@ -330,6 +339,83 @@ public final class PaintService {
         }
     }
 
+    /**
+     * Draw a native settlement on its square. The silhouette carries the class,
+     * the fill carries the nation and a gold frame marks a capital, so no
+     * single colour decides what the settlement is.
+     *
+     * @param graphics   required canvas
+     * @param point      required top-left corner of the tile
+     * @param settlement required settlement already known to the player
+     */
+    public void paintNativeSettlement(final GraphicsContext graphics,
+            final Point point, final NativeSettlement settlement) {
+        final double size = Tile.TILE_WIDTH_IN_PX * NATIVE_SETTLEMENT_SHARE;
+        final double left = point.getX() + (Tile.TILE_WIDTH_IN_PX - size) / 2;
+        final double top = point.getY() + Tile.TILE_WIDTH_IN_PX * 0.3;
+        final Paint previousFill = graphics.getFill();
+        final Paint previousStroke = graphics.getStroke();
+        final double previousWidth = graphics.getLineWidth();
+        graphics.setFill(nativeNationColor(settlement.getNation()));
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(1.5);
+        switch (settlement.getSettlementClass()) {
+        case CAMP:
+            final double[] tentX = { left, left + size, left + size / 2 };
+            final double[] tentY = { top + size, top + size, top };
+            graphics.fillPolygon(tentX, tentY, 3);
+            graphics.strokePolygon(tentX, tentY, 3);
+            break;
+        case VILLAGE:
+            final double[] houseX = { left, left + size / 2, left + size,
+                    left + size, left };
+            final double[] houseY = { top + size * 0.4, top, top + size * 0.4,
+                    top + size, top + size };
+            graphics.fillPolygon(houseX, houseY, 5);
+            graphics.strokePolygon(houseX, houseY, 5);
+            break;
+        case CITY:
+            graphics.fillRect(left, top, size, size);
+            graphics.strokeRect(left, top, size, size);
+            break;
+        default:
+            break;
+        }
+        if (settlement.isCapital()) {
+            graphics.setStroke(CAPITAL_FRAME_COLOR);
+            graphics.setLineWidth(3);
+            graphics.strokeRect(point.getX() + 2, point.getY() + 2,
+                    Tile.TILE_WIDTH_IN_PX - 4, Tile.TILE_WIDTH_IN_PX - 4);
+        }
+        graphics.setFill(previousFill);
+        graphics.setStroke(previousStroke);
+        graphics.setLineWidth(previousWidth);
+    }
+
+    private static Color nativeNationColor(final NativeNation nation) {
+        switch (nation) {
+        case ARAWAK:
+            return Color.web("#B56576");
+        case AZTEC:
+            return Color.web("#2A9D8F");
+        case INCA:
+            return Color.web("#6D597A");
+        case TUPI:
+            return Color.web("#E76F51");
+        case CHEROKEE:
+            return Color.web("#588157");
+        case IROQUOIS:
+            return Color.web("#3D5A80");
+        case SIOUX:
+            return Color.web("#BC6C25");
+        case APACHE:
+            return Color.web("#8D99AE");
+        default:
+            throw new IllegalArgumentException(
+                    "No colour for nation " + nation);
+        }
+    }
+
     private void painFlagWithAction(final GraphicsContext graphics,
             final Point point, final Unit unit) {
         paintOwnersFlag(graphics, point, unit.getOwner());
@@ -357,7 +443,11 @@ public final class PaintService {
         graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH,
                 FLAG_HEIGHT);
         // TODO move colors to player's object
-        if (player.isHuman()) {
+        if (player.isNative()) {
+            // Same nation fill as the settlements of that nation.
+            graphics.setFill(nativeNationColor(
+                    ((PlayerNative) player).getNativeNation()));
+        } else if (player.isHuman()) {
             graphics.setFill(Color.YELLOW);
         } else {
             switch (player.getName().hashCode() % 4) {

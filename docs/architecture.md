@@ -994,3 +994,41 @@ prošlo; úplná přejímka dávky zůstává samostatným krokem.
 
 1. `TownCommons` vybírá druhou surovinu ze sdíleného terénního základu a určuje její uloženou identitu. `Terrain` poskytuje základ a oprávněný bonus, `Colony` připojuje výstup k existujícímu výpočtu jídla, výroby a skladů. Střed není další pracovní místo; UI čte `getTownCommonsProduction()`.
 2. Výběr suroviny se při načtení neopakuje. Náhled nečerpá ložisko; při skutečné aktualizaci se čerpá pouze konečný minerální bonus. Obnovitelné zdroje ani Prime Timber nevstupují do čerpání rezerv. [Pravidlo a tabulka](gap-analysis.md#r-0146-refinement) a [cílené ověření](functional-tests.md#r-0146-town-commons-2026-10-20) rozlišují přijaté chování od dosud čekající úplné regrese dávky.
+
+
+### Domorodá sídla a znalost mapy
+
+`NativeNation`, `NativeSettlementClass`, `NativeSettlement` a `NativeSettlements`
+v balíčku `model` vlastní veřejnou identitu sídel a validaci jejich umístění.
+Sídla nejsou evropské `Colony` ani evropský `Player`. `Model` brání překrytí
+založenou kolonií a ukládá znalost identit po jednotlivých hráčích; získává ji
+skutečným dohledem, nikoli pouhým odkrytím terénu. GUI čte pouze hráči známá
+sídla. `store.NativeSettlementPo` a `NativeSettlementKnowledgePo` nesou povinná
+data aktuálního formátu. Základní obranný bonus a počáteční bohatství jsou
+atributy pro navazující pravidla; tento základ ještě neprovádí nativní boj,
+obchod ani pravidelné doplňování pokladny. Viz [R-0150](requirements/done/R-0150.md)
+a [cílené ověření](functional-tests.md#r-0150-native-settlement-identity-2026-10-20).
+
+
+`NativeRelations` je společným vlastníkem kmenového hněvu a místního poplachu
+vůči jednotlivým evropským národům. `Model` sbírá skutečné jednotky, obyvatele
+a pevnosti; `Player` spouští aktualizaci ve své přípravě tahu a jednorázové
+vynulování při příchodu Pocahontas. Ukládání samo vztahy nemění. Transakce
+s půdou dodávají vstup za nezaplacené užívání podle [R-0152](requirements/done/R-0152.md);
+ostatní pravidla vlastní [R-0153](requirements/done/R-0153.md).
+
+`NativeLandRights` vlastní trvalé platby a jednorázové zabrání půdy podle evropského národa a souřadnice. `Model` poskytuje neměnnou nabídku, validuje platbu před změnou zlata, práv a pokladnice sídla a sdílí výběr prvního pole mezi náhledem a založením kolonie. Platby při zakládání se provedou až společně s potvrzením jména. Dokončené využití půdy dodává vstup do `NativeRelations`; Minuit ruší pouze budoucí nezaplacené pozemkové vlivy. GUI pouze zobrazuje známé nabídky a volá model; dialog po přesunu pracovníka čeká na konec tažení. Aktuální formát ukládá povinné `nativeLandRights`, `nativeLandTakings` a pokladnici sídla. Viz [R-0152](requirements/done/R-0152.md) a [ověření](functional-tests.md#r-0152-native-homeland-purchase-2026-10-20).
+
+`PlayerNative` je explicitní domorodý účastník společného pořadí tahů a `UnitNativeBrave` používá společnou identitu, umístění a pohyb jednotek. Domov je uložené ID sídla téhož národa, případně explicitní stav bez domova. Nativní příprava obnovuje jednotky, ne evropskou ekonomiku; `NativeRobotPlayer` přijme vlastní oznámení tahu a bezpečně ukončí tah bez akce. `GameManager` řadí domorodé národy před Evropany, zachovává společnou hranici kalendáře a uložení. Model vylučuje domorodé hráče z evropské diplomacie, obchodu a zakládání kolonií; vytvoření volné hry jim nepřidává evropské ekonomické záznamy. GUI používá znalost domovského sídla z modelu, nikoli skryté souřadnice. Viz [R-0151](requirements/done/R-0151.md) a [cílené ověření](functional-tests.md#r-0151-native-actors-and-home-linked-braves-2026-10-20).
+
+`TradeRoutes` vlastní jednu uloženou kolekci tras se stabilními ID a názvy jedinečnými pro vlastníka. `TradeRouteRules` ověřuje navazující dosažitelné úseky podle známé mapy; `MovementPolicy` sdílí pravidla vstupu na políčko se skutečnými jednotkami. Náhled nevytváří živého dopravce. `Model` validuje vytvoření před změnou kolekce nebo čítače ID. Editor drží pouze rozpracované volby, které při každém novém otevření vynuluje. Aktuální formát vyžaduje `tradeRoutes` a `nextTradeRouteId`; automatické přesuny a náklad vlastní navazující požadavky. Viz [R-0139](requirements/done/R-0139.md) a [ověření](functional-tests.md#r-0139-named-trade-route-creation-2026-10-20).
+
+`TradeRouteStopProcessor` provádí vykládku a nakládku v uloženém pořadí prostřednictvím existujících atomických skladových a evropských transakcí. `Model` ověřuje vlastníka, dopravce a zastávku před změnou; `TradeRouteVisit` uchovává zpracovanou návštěvu přes uložení a načtení. UI pouze konfiguruje seznamy a zobrazuje výsledky. [R-0140](requirements/done/R-0140.md), [ověření](functional-tests.md#r-0140-ordered-trade-route-cargo-2026-10-20).
+
+`TradeRouteNavigator` pokračuje v uloženém přiřazení dopravce na hranici přípravy vlastníkova tahu. Používá sdílený `PathFinder`, běžné kroky jednotky, skutečnou plavbu přes Atlantik a existující zpracování zastávky. `TradeRouteAssignment` ukládá cíl a důvod přerušení; načtení nepřesouvá jednotku. UI čte stav a zadává modelové operace. Viz [R-0141](requirements/done/R-0141.md) a [ověření](functional-tests.md#r-0141-assigned-repeating-routes-2026-10-20).
+
+Přiřazení trasy uchovává přijaté zastávky každého dopravce samostatně. Změna plánu nemění probíhající úsek ani odpočet plavby; navigátor přebírá nový plán na další hranici zastávky nebo při opravě přerušené trasy. Modelové zrušení a smazání odstraňuje příkazy a související odkazy bez přesunu nákladu nebo obnovení pohybu. Viz [R-0142](requirements/done/R-0142.md) a [ověření](functional-tests.md#r-0142-route-editing-and-cancellation-2026-10-21).
+
+`RivalTradeCycle` volí omezený zásobovací cíl soupeře a používá běžné modelové přesuny, plavbu, náklad a evropské nabídky. `Player` ukládá `RivalTradeObjective` s ID kolonie, dopravce a fází; AI před akcí ověřuje aktuální vlastnictví a podmínky. Neplatné cíle vyřadí, blokované ponechá pro příští tah. GUI neřídí obchodní rozhodování. Viz [R-0091](requirements/done/R-0091.md) a [ověření](functional-tests.md#r-0091-rival-trade-and-supplies-2026-10-21).
+
+`RivalPlayerFactory` ponechává produkční volbu `SimpleAiPlayer` a umožňuje testu lidské expedice TC101 izolovat nesouvisející náhodné pohyby evropských soupeřů. Královské a domorodé roboty tato volba nemění. `ListenerManager` doručuje události nad snímkem posluchačů, takže souběžná registrace či odebrání nenaruší probíhající oznámení. Odebraný posluchač může obdržet již zahájené oznámení. Viz [regresní ověření](functional-tests.md#second-batch-regression-repairs-2026-10-21).

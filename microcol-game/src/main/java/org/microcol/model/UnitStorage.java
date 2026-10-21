@@ -263,10 +263,13 @@ public final class UnitStorage {
                 .filter(unit -> !hasGoToOrder(unit)).findFirst();
     }
 
-    /** A unit that follows a go-to order is not offered for manual orders. */
+    /**
+     * A unit that follows a go-to order or a trade route assignment is not
+     * offered for manual orders.
+     */
     private static boolean hasGoToOrder(final Unit unit) {
         return unit instanceof AbstractUnit
-                && ((AbstractUnit) unit).getGoToOrder().isPresent();
+                && ((AbstractUnit) unit).hasStandingOrder();
     }
 
     /**

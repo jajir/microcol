@@ -422,7 +422,15 @@
     }
   ],
   "nextColonyId": 3,
-  "colonies": [
+  "nativeSettlementKnowledge": [],
+  "nativeTribalAnger": [{"nation": "ARAWAK", "european": "DUTCH", "value": 0.0}, {"nation": "ARAWAK", "european": "FRENCH", "value": 0.0}, {"nation": "ARAWAK", "european": "ENGLISH", "value": 0.0}, {"nation": "ARAWAK", "european": "SPANISH", "value": 0.0}, {"nation": "AZTEC", "european": "DUTCH", "value": 0.0}, {"nation": "AZTEC", "european": "FRENCH", "value": 0.0}, {"nation": "AZTEC", "european": "ENGLISH", "value": 0.0}, {"nation": "AZTEC", "european": "SPANISH", "value": 0.0}, {"nation": "INCA", "european": "DUTCH", "value": 0.0}, {"nation": "INCA", "european": "FRENCH", "value": 0.0}, {"nation": "INCA", "european": "ENGLISH", "value": 0.0}, {"nation": "INCA", "european": "SPANISH", "value": 0.0}, {"nation": "TUPI", "european": "DUTCH", "value": 0.0}, {"nation": "TUPI", "european": "FRENCH", "value": 0.0}, {"nation": "TUPI", "european": "ENGLISH", "value": 0.0}, {"nation": "TUPI", "european": "SPANISH", "value": 0.0}, {"nation": "CHEROKEE", "european": "DUTCH", "value": 0.0}, {"nation": "CHEROKEE", "european": "FRENCH", "value": 0.0}, {"nation": "CHEROKEE", "european": "ENGLISH", "value": 0.0}, {"nation": "CHEROKEE", "european": "SPANISH", "value": 0.0}, {"nation": "IROQUOIS", "european": "DUTCH", "value": 0.0}, {"nation": "IROQUOIS", "european": "FRENCH", "value": 0.0}, {"nation": "IROQUOIS", "european": "ENGLISH", "value": 0.0}, {"nation": "IROQUOIS", "european": "SPANISH", "value": 0.0}, {"nation": "SIOUX", "european": "DUTCH", "value": 0.0}, {"nation": "SIOUX", "european": "FRENCH", "value": 0.0}, {"nation": "SIOUX", "european": "ENGLISH", "value": 0.0}, {"nation": "SIOUX", "european": "SPANISH", "value": 0.0}, {"nation": "APACHE", "european": "DUTCH", "value": 0.0}, {"nation": "APACHE", "european": "FRENCH", "value": 0.0}, {"nation": "APACHE", "european": "ENGLISH", "value": 0.0}, {"nation": "APACHE", "european": "SPANISH", "value": 0.0}],
+  "nativeLocalAlarm": [],
+  "nativeLandRights": [],
+  "nativeLandTakings": [],
+  "nextTradeRouteId": 0,
+  "tradeRoutes": [],
+  "nativeSettlements": [],
+    "colonies": [
     {
       "educationCourses": [],
       "id": 0,

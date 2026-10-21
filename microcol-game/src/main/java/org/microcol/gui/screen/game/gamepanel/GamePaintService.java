@@ -21,6 +21,7 @@ import org.microcol.gui.util.PaintService;
 import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativeSettlement;
 import org.microcol.model.Player;
 import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
@@ -265,6 +266,21 @@ final class GamePaintService {
             paintService.paintColony(graphics, point, sighting.getOwner(),
                     sighting.getColonyName(), true);
             graphics.setGlobalAlpha(1.0);
+        }
+        // Native settlements appear only in present sight, like foreign units.
+        for (final NativeSettlement settlement : model
+                .getNativeSettlementsKnownTo(player)) {
+            final Location location = settlement.getLocation();
+            if (area.isLocationVisible(location)) {
+                // Learned identity outside present sight is drawn faded.
+                final boolean stale = !player.isCurrentlyVisible(location);
+                if (stale) {
+                    graphics.setGlobalAlpha(STALE_OPACITY);
+                }
+                paintService.paintNativeSettlement(graphics,
+                        area.convertToCanvasPoint(location), settlement);
+                graphics.setGlobalAlpha(1.0);
+            }
         }
     }
 

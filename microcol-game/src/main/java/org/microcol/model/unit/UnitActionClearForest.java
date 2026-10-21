@@ -113,6 +113,7 @@ public final class UnitActionClearForest implements UnitAction {
         final Location at = pioneer.getLocation();
         pioneer.consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().clearForest(at);
+        model.recordNativeLandUse(pioneer.getOwner(), at);
         // The recipient is resolved from the world as it is now; nothing the
         // player was shown before is a commitment.
         final Optional<Colony> recipient = model

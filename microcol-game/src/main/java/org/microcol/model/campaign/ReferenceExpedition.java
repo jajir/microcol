@@ -15,6 +15,7 @@ import org.microcol.model.EuropeanNation;
 import org.microcol.model.EuropeanRelationState;
 import org.microcol.model.Location;
 import org.microcol.model.MovementPoints;
+import org.microcol.model.NativeRelations;
 import org.microcol.model.RecruitmentPool;
 import org.microcol.model.Congress;
 import org.microcol.model.TaxState;
@@ -93,6 +94,15 @@ public final class ReferenceExpedition {
         model.setCombatRandomState(0L);
         model.setDifficulty(difficulty);
         model.setNextColonyId(0);
+        model.setNextTradeRouteId(0);
+        model.setTradeRoutes(new ArrayList<>());
+        model.setNativeSettlements(new ArrayList<>());
+        model.setNativeSettlementKnowledge(new ArrayList<>());
+        model.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        model.setNativeLocalAlarm(
+                NativeRelations.freshLocalAlarm(model.getNativeSettlements()));
+        model.setNativeLandRights(new ArrayList<>());
+        model.setNativeLandTakings(new ArrayList<>());
         model.getCalendar().setStartYear(1490);
         model.getCalendar().setEndYear(1800);
         final WorldMapPo map = new WorldMapPo();

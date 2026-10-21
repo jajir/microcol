@@ -36,8 +36,15 @@ final class ColonyNames {
                 || Character.isSpaceChar(codePoint);
     }
 
-    Optional<ColonyNameProblem> getProblem(final String value,
-            final Colony except) {
+    /**
+     * Text rules shared by colony and trade route names: normalized, non-empty,
+     * at most 64 code points and free of control or unpaired surrogate
+     * characters. Uniqueness is decided by each caller.
+     *
+     * @param value required player-entered name
+     * @return the first text problem, or empty when the text is acceptable
+     */
+    static Optional<ColonyNameProblem> getTextProblem(final String value) {
         final String normalized = normalize(value);
         if (normalized.isEmpty()) {
             return Optional.of(ColonyNameProblem.EMPTY);
@@ -50,6 +57,16 @@ final class ColonyNames {
                         || (point >= 0xD800 && point <= 0xDFFF))) {
             return Optional.of(ColonyNameProblem.INVALID);
         }
+        return Optional.empty();
+    }
+
+    Optional<ColonyNameProblem> getProblem(final String value,
+            final Colony except) {
+        final Optional<ColonyNameProblem> text = getTextProblem(value);
+        if (text.isPresent()) {
+            return text;
+        }
+        final String normalized = normalize(value);
         if (model.getColonies().stream().anyMatch(colony -> colony != except
                 && normalized.equalsIgnoreCase(normalize(colony.getName())))) {
             return Optional.of(ColonyNameProblem.DUPLICATE);

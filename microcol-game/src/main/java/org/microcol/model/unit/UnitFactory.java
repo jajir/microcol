@@ -5,10 +5,12 @@ import java.util.function.Function;
 import org.microcol.model.AbstractUnit;
 import org.microcol.model.Cargo;
 import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.MovementPoints;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceBuilderPo;
+import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.store.ModelPo;
@@ -74,6 +76,11 @@ public class UnitFactory {
                 if (request.getUnitType() == UnitType.INDENTURED_SERVANT
                         || request.getUnitType() == UnitType.PETTY_CRIMINAL) {
                     return makeLaborer(request);
+                }
+                return null;
+            }, request -> {
+                if (UnitType.BRAVE == request.getUnitType()) {
+                    return makeNativeBrave(request);
                 }
                 return null;
             }));
@@ -163,6 +170,46 @@ public class UnitFactory {
         return out;
     }
 
+    private Unit makeNativeBrave(final UnitCreateRequest request) {
+        return new UnitNativeBrave(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getMovementThirds(), request.getAction(),
+                request.getNativeHomeSettlementId(),
+                request.isNativeHomeless());
+    }
+
+    /**
+     * Validate saved native unit state before any unit is constructed, so a
+     * rejected save names the broken condition. A native nation owns only
+     * braves and a brave only a native nation; a brave's home is a settlement
+     * ID or the explicit homeless flag, never both or neither; a brave stands
+     * only on map land. The home's nation is checked once all units exist.
+     */
+    private static void checkSavedNativeUnit(final Model model,
+            final UnitPo unitPo, final Player owner) {
+        final boolean brave = unitPo.getType() == UnitType.BRAVE;
+        Preconditions.checkArgument(brave == owner.isNative(),
+                "Invalid saved native unit owner");
+        if (!brave) {
+            Preconditions.checkArgument(
+                    unitPo.getNativeHomeless() == null
+                            && unitPo.getNativeHomeSettlementId() == null,
+                    "Invalid saved native brave home");
+            return;
+        }
+        Preconditions.checkArgument(
+                unitPo.getNativeHomeless() != null
+                        && unitPo.getNativeHomeless() == (unitPo
+                                .getNativeHomeSettlementId() == null),
+                "Invalid saved native brave home");
+        final Location at = unitPo.getPlaceMap() == null ? null
+                : unitPo.getPlaceMap().getLocation();
+        Preconditions.checkArgument(
+                at != null && model.getMap().isValid(at)
+                        && model.getMap().getTerrainTypeAt(at).isLand(),
+                "Invalid saved native brave placement: map land only");
+    }
+
     public Unit createUnit(final Model model, final ModelPo modelPo,
             final UnitPo unitPo) {
 
@@ -213,6 +260,11 @@ public class UnitFactory {
                 Boolean.TRUE.equals(unitPo.getArtilleryDamaged()));
 
         unitCreateRequest.setVeteran(unitPo.isVeteran());
+        unitCreateRequest
+                .setNativeHomeSettlementId(unitPo.getNativeHomeSettlementId());
+        unitCreateRequest.setNativeHomeless(
+                Boolean.TRUE.equals(unitPo.getNativeHomeless()));
+        checkSavedNativeUnit(model, unitPo, unitCreateRequest.getOwner());
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
         Preconditions.checkArgument(
@@ -299,6 +351,40 @@ public class UnitFactory {
             ((AbstractUnit) unit).restoreGoTo(unitPo.getGoToDestination(),
                     unitPo.getGoToColonyId(), unitPo.getGoToDestinationName(),
                     unitPo.isGoToPaused());
+        }
+        // A saved assignment is restored only; loading moves the carrier and
+        // processes no stop, which waits for the owner's next turn.
+        if (unitPo.getTradeRouteAssignmentRouteId() == null) {
+            Preconditions.checkArgument(
+                    unitPo.getTradeRouteAssignmentStopIndex() == null
+                            && unitPo.getTradeRouteAssignmentPause() == null
+                            && unitPo.getTradeRouteAssignmentStops() == null,
+                    "Incomplete saved trade route assignment");
+        } else {
+            Preconditions.checkArgument(
+                    unitPo.getTradeRouteAssignmentStopIndex() != null
+                            && unitPo.getTradeRouteAssignmentStops() != null,
+                    "Incomplete saved trade route assignment");
+            ((AbstractUnit) unit).restoreTradeRouteAssignment(
+                    unitPo.getTradeRouteAssignmentRouteId(),
+                    unitPo.getTradeRouteAssignmentStopIndex(),
+                    unitPo.getTradeRouteAssignmentPause(),
+                    unitPo.getTradeRouteAssignmentStops());
+        }
+        // A saved processed stop is restored only; loading processes nothing.
+        if (unitPo.getTradeRouteVisitRouteId() == null) {
+            Preconditions.checkArgument(
+                    unitPo.getTradeRouteVisitStopIndex() == null
+                            && unitPo.getTradeRouteVisitLocation() == null,
+                    "Incomplete saved trade route visit");
+        } else {
+            Preconditions.checkArgument(
+                    unitPo.getTradeRouteVisitStopIndex() != null,
+                    "Incomplete saved trade route visit");
+            ((AbstractUnit) unit).restoreProcessedTradeRouteVisit(
+                    unitPo.getTradeRouteVisitRouteId(),
+                    unitPo.getTradeRouteVisitStopIndex(),
+                    unitPo.getTradeRouteVisitLocation());
         }
         return unit;
     }

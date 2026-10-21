@@ -229,15 +229,32 @@ public class GamePage extends AbstractScreen {
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
         final int previousRound = getModel().getCalendar()
                 .getNumberOfPlayedTurns();
-        final Button buttonNextTurn = getButtonById(
-                ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
-        getRobot().clickOn(buttonNextTurn);
-        // Movement can enable the toolbar before the national round finishes.
-        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
-                () -> getModel().isGameRunning()
-                        && getModel().getCurrentPlayer().isHuman()
-                        && getModel().getCalendar()
-                                .getNumberOfPlayedTurns() > previousRound);
+        final java.util.concurrent.CountDownLatch prepared = new java.util.concurrent.CountDownLatch(
+                1);
+        final org.microcol.model.ModelListenerAdapter listener = new org.microcol.model.ModelListenerAdapter() {
+            @Override
+            public void onTurnStarted(
+                    final org.microcol.model.event.TurnStartedEvent event) {
+                if (event.getPlayer().isHuman() && getModel().getCalendar()
+                        .getNumberOfPlayedTurns() > previousRound) {
+                    prepared.countDown();
+                }
+            }
+        };
+        getModel().addListener(listener);
+        try {
+            final Button buttonNextTurn = getButtonById(
+                    ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
+            getRobot().clickOn(buttonNextTurn);
+            // Running state and movement callbacks precede completion of all
+            // standing orders.
+            if (!prepared.await(60, TimeUnit.SECONDS)) {
+                throw new TimeoutException(
+                        "Human turn preparation did not finish");
+            }
+        } finally {
+            getModel().removeListener(listener);
+        }
         waitWhileMoving();
         if (!getModel()
                 .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {

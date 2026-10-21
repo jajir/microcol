@@ -239,6 +239,21 @@ public interface Unit {
 
     UnitPo save();
 
+    /**
+     * @return the route stop this carrier has processed and not yet left, if
+     *         any
+     */
+    Optional<TradeRouteVisit> getProcessedTradeRouteVisit();
+
+    /**
+     * Records that this carrier processed a route stop. The model calls this
+     * only after the stop's transfers are complete.
+     *
+     * @param visit required visit just processed
+     * @throws IllegalStateException when a processed visit is already recorded
+     */
+    void markProcessedTradeRouteVisit(TradeRouteVisit visit);
+
     double getMilitaryStrenght();
 
     List<Location> getVisibleLocations();

@@ -41,15 +41,15 @@
    cancellation, and [R-0131](done/R-0131.md) player disband. MOVE-008 is traced
    through each order owner rather than duplicated as a universal rewrite:
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
-   route edit/cancel [R-0142](R-0142.md).
+   route edit/cancel [R-0142](done/R-0142.md).
 4. Cargo residuals have seven owners: [R-0132](done/R-0132.md) shared hold cap,
    [R-0133](done/R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
    reservation, [R-0135](done/R-0135.md) immigrant boarding choice/priority,
    [R-0136](done/R-0136.md) arrival unloading, [R-0137](done/R-0137.md) cargo shortcuts
    and [R-0138](done/R-0138.md) jettison. Existing manual transfer, sentry boarding
    and artillery transport remain credited to their original requirements.
-5. Routes have separate owners for [creation](R-0139.md), [stop transfers](R-0140.md),
-   [recurring execution](R-0141.md) and [edit/cancel/delete](R-0142.md).
+5. Routes have separate owners for [creation](done/R-0139.md), [stop transfers](done/R-0140.md),
+   [recurring execution](done/R-0141.md) and [edit/cancel/delete](done/R-0142.md).
    [R-0143](done/R-0143.md) owns national market pressure, [R-0144](done/R-0144.md)
    the Dutch response and [R-0145](done/R-0145.md) trade accounts plus the economy
    report. TRADE-004/005 share the delivered R-0020 quote/affordability path
@@ -60,9 +60,9 @@
    [R-0149](R-0149.md). Delivered specialist production, building constants
    and mountain/sea founding guards are preserved; complete matrix acceptance
    remains separate.
-7. Native foundations are [R-0150](R-0150.md) nation/settlement identity,
-   [R-0151](R-0151.md) braves and turn participation, [R-0152](R-0152.md)
-   homeland purchase with Minuit, [R-0153](R-0153.md) anger/alarm with France
+7. Native foundations are [R-0150](done/R-0150.md) nation/settlement identity,
+   [R-0151](done/R-0151.md) braves and turn participation, [R-0152](done/R-0152.md)
+   homeland purchase with Minuit, [R-0153](done/R-0153.md) anger/alarm with France
    and Pocahontas, [R-0154](R-0154.md) provocation/reconciliation events,
    [R-0155](R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
    These do not stand in for native trade, missions or real native combat.
@@ -89,7 +89,7 @@
     artillery lifecycle and colony-capture owners remain authoritative.
 11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
     [R-0181](done/R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
-    [R-0183](R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
+    [R-0183](done/R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
 12. Revolution has separate owners for [REF growth](R-0185.md),
     [deployment](R-0186.md), [Europe closure](R-0187.md),

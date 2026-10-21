@@ -29,6 +29,8 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private final UnitMoveNavigator unitDirections;
 
+    private final RivalTradeCycle rivalTrade;
+
     private Unit founder;
 
     private Unit carrier;
@@ -37,6 +39,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             final AnimationLock animationManager) {
         super(model, player, animationManager);
         unitDirections = new UnitMoveNavigator();
+        rivalTrade = new RivalTradeCycle(this);
     }
 
     @Override
@@ -47,6 +50,10 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     @Override
     void moveUnit(final Unit unit) {
         if (!unit.getAction().isNoAction()) {
+            return;
+        }
+        if (rivalTrade.isCarrier(unit)) {
+            // The supply cycle moves its own carrier; see RivalTradeCycle.
             return;
         }
         if (unit == founder || unit == carrier) {
@@ -157,6 +164,9 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         if (getPlayer().isKing()) {
             return;
         }
+        // Runs before the colony check, so a cycle whose colony is gone
+        // retires.
+        rivalTrade.advance();
         if (!getPlayer().getColonies().isEmpty()) {
             getPlayer().getColonies().stream()
                     .sorted(Comparator.comparingInt(Colony::getId))

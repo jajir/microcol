@@ -43,6 +43,28 @@ public class UnitCreateRequest {
 
     private boolean veteran;
 
+    /** Native brave home settlement ID; {@code null} for a homeless brave. */
+    private Integer nativeHomeSettlementId;
+
+    private boolean nativeHomeless;
+
+    public Integer getNativeHomeSettlementId() {
+        return nativeHomeSettlementId;
+    }
+
+    public void setNativeHomeSettlementId(
+            final Integer nativeHomeSettlementId) {
+        this.nativeHomeSettlementId = nativeHomeSettlementId;
+    }
+
+    public boolean isNativeHomeless() {
+        return nativeHomeless;
+    }
+
+    public void setNativeHomeless(final boolean nativeHomeless) {
+        this.nativeHomeless = nativeHomeless;
+    }
+
     public boolean isVeteran() {
         return veteran;
     }

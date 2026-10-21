@@ -93,6 +93,7 @@ public final class UnitActionPlowField implements UnitAction {
         finished = true;
         ((UnitFreeColonist) unit).consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().plowFiled(unit.getLocation());
+        model.recordNativeLandUse(unit.getOwner(), unit.getLocation());
         return true;
     }
 

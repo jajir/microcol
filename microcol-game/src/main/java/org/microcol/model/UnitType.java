@@ -136,6 +136,16 @@ public final class UnitType {
             .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
             .build();
 
+    /**
+     * Native brave with its home link. Its strength (1) is the agreed value of
+     * R-0173; its walking speed is assumed equal to the colonist until a
+     * movement value is accepted. It cannot attack before native combat exists.
+     */
+    public static final UnitType BRAVE = UnitType.make().setName("BRAVE")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(0).setStorable(false).setEuropePrice(0).build();
+
     public static final UnitType INDENTURED_SERVANT = UnitType.make()
             .setName("INDENTURED_SERVANT")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
@@ -320,7 +330,7 @@ public final class UnitType {
             .<UnitType>builder()
             .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
                     FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
-                    MAN_OF_WAR, WAGON)
+                    MAN_OF_WAR, WAGON, BRAVE)
             .addAll(EUROPEAN_SPECIALISTS).addAll(SCHOOL_ONLY_SPECIALISTS)
             .build();
 

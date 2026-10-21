@@ -13,10 +13,15 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
+import org.microcol.model.NativeLandQuote;
+import org.microcol.model.NativeNation;
+import org.microcol.model.NativeSettlement;
+import org.microcol.model.NativeSettlementClass;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitNativeBrave;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -47,6 +52,18 @@ public class StatusBarMessageService {
     public String getStatusMessage(final Location where, final Player player,
             final TerrainType terrain, final List<Unit> units,
             final Optional<Colony> oColony) {
+        return getStatusMessage(where, player, terrain, units, oColony,
+                Optional.empty());
+    }
+
+    /**
+     * @param oNativeSettlement settlement the player may see on this square;
+     *                          the model passes it only in present sight
+     */
+    public String getStatusMessage(final Location where, final Player player,
+            final TerrainType terrain, final List<Unit> units,
+            final Optional<Colony> oColony,
+            final Optional<NativeSettlement> oNativeSettlement) {
         final StringBuilder buff = new StringBuilder();
         if (gamePreferences.isDevelopment()) {
             buff.append("[");
@@ -87,6 +104,10 @@ public class StatusBarMessageService {
                 }
             }
             buff.append(".");
+            // A learned settlement stays named under fog, as a remembered
+            // colony.
+            oNativeSettlement.ifPresent(settlement -> buff.append(" ")
+                    .append(nativeSettlementText(settlement)));
             if (!current) {
                 player.getKnownColonyAt(where)
                         .ifPresent(sighting -> buff.append(" ")
@@ -99,6 +120,134 @@ public class StatusBarMessageService {
             buff.append(i18n.get(Loc.statusBar_tile_notExplored));
         }
         return buff.toString();
+    }
+
+    /**
+     * Nation, class and capital status are stated in words, so the settlement
+     * never depends on its marker colour alone.
+     */
+    private String nativeSettlementText(final NativeSettlement settlement) {
+        return i18n.get(
+                settlement.isCapital() ? Loc.nativeCapitalStatus
+                        : Loc.nativeSettlementStatus,
+                i18n.get(nationLabel(settlement.getNation())),
+                i18n.get(classLabel(settlement.getSettlementClass())));
+    }
+
+    /**
+     * One sentence for a native brave the player currently sees. The nation is
+     * public once the brave is seen; the home is named only when the player has
+     * learned that settlement, so a hidden home is never disclosed.
+     *
+     * @param brave     required visible brave
+     * @param knownHome the brave's home if the player has learned it
+     * @return localized nation and home state
+     */
+    public String nativeBraveText(final UnitNativeBrave brave,
+            final Optional<NativeSettlement> knownHome) {
+        final String nation = i18n.get(nationLabel(brave.getNation()));
+        if (brave.getHomeSettlementId().isEmpty()) {
+            return i18n.get(Loc.nativeBraveHomeless, nation);
+        }
+        if (knownHome.isEmpty()) {
+            return i18n.get(Loc.nativeBraveHomeUnknown, nation);
+        }
+        final NativeSettlement home = knownHome.get();
+        return i18n.get(
+                home.isCapital() ? Loc.nativeBraveHomeCapital
+                        : Loc.nativeBraveHome,
+                nation, i18n.get(classLabel(home.getSettlementClass())));
+    }
+
+    /**
+     * Words for the settlement that owns a land claim: nation, class and
+     * capital status. The caller passes only a settlement the player has
+     * learned.
+     *
+     * @param settlement required learned settlement
+     * @return localized claimant description
+     */
+    public String nativeClaimantText(final NativeSettlement settlement) {
+        return i18n.get(
+                settlement.isCapital() ? Loc.nativeLandClaimantCapital
+                        : Loc.nativeLandClaimant,
+                i18n.get(nationLabel(settlement.getNation())),
+                i18n.get(classLabel(settlement.getSettlementClass())));
+    }
+
+    /**
+     * One status sentence for a claimed square, using the model's quote.
+     *
+     * @param quote required quote from {@code Model.quoteNativeLand}
+     * @return localized claimant, paid or waived state, and price when unpaid
+     */
+    public String nativeLandText(final NativeLandQuote quote) {
+        final String claimant = nativeClaimantText(quote.getClaimant());
+        switch (quote.getStatus()) {
+        case PAID:
+            return i18n.get(Loc.nativeLandHoverPaid, claimant);
+        case WAIVED:
+            return i18n.get(Loc.nativeLandHoverWaived, claimant);
+        default:
+            return i18n.get(Loc.nativeLandHoverUnpaid, claimant,
+                    quote.getPrice());
+        }
+    }
+
+    /**
+     * One line per known claimed square a founding would use, marked as the
+     * colony square or the first field, with its claimant and status.
+     *
+     * @param land  squares from {@code Model.getFoundingLand}, colony first
+     * @param known quotes for the known claimed squares among them
+     * @return localized lines, empty when no known claimed land is used
+     */
+    public String foundingLandText(final List<Location> land,
+            final List<NativeLandQuote> known) {
+        return known.stream()
+                .map(quote -> i18n.get(
+                        quote.getLocation().equals(land.get(0))
+                                ? Loc.nativeLandColonySquare
+                                : Loc.nativeLandFirstField,
+                        nativeLandText(quote)))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private static Loc nationLabel(final NativeNation nation) {
+        switch (nation) {
+        case ARAWAK:
+            return Loc.nativeNationArawak;
+        case AZTEC:
+            return Loc.nativeNationAztec;
+        case INCA:
+            return Loc.nativeNationInca;
+        case TUPI:
+            return Loc.nativeNationTupi;
+        case CHEROKEE:
+            return Loc.nativeNationCherokee;
+        case IROQUOIS:
+            return Loc.nativeNationIroquois;
+        case SIOUX:
+            return Loc.nativeNationSioux;
+        case APACHE:
+            return Loc.nativeNationApache;
+        default:
+            throw new IllegalArgumentException("No label for nation " + nation);
+        }
+    }
+
+    private static Loc classLabel(final NativeSettlementClass settlementClass) {
+        switch (settlementClass) {
+        case CAMP:
+            return Loc.nativeClassCamp;
+        case VILLAGE:
+            return Loc.nativeClassVillage;
+        case CITY:
+            return Loc.nativeClassCity;
+        default:
+            throw new IllegalArgumentException(
+                    "No label for class " + settlementClass);
+        }
     }
 
     private void addPartColony(final List<SbPart> parts,

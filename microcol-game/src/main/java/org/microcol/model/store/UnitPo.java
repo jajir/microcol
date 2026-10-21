@@ -1,7 +1,10 @@
 package org.microcol.model.store;
 
+import java.util.List;
+
 import org.microcol.model.MilitaryRole;
 import org.microcol.model.MovementPoints;
+import org.microcol.model.TradeRoutePause;
 import org.microcol.model.UnitType;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
@@ -119,6 +122,32 @@ public class UnitPo {
 
     private Boolean artilleryDamaged;
 
+    /**
+     * Home settlement of a native brave. Required only for {@code BRAVE}; it is
+     * absent when {@link #nativeHomeless} is true.
+     */
+    private Integer nativeHomeSettlementId;
+
+    /** Explicit homeless flag of a native brave; required only for braves. */
+    private Boolean nativeHomeless;
+
+    public Integer getNativeHomeSettlementId() {
+        return nativeHomeSettlementId;
+    }
+
+    public void setNativeHomeSettlementId(
+            final Integer nativeHomeSettlementId) {
+        this.nativeHomeSettlementId = nativeHomeSettlementId;
+    }
+
+    public Boolean getNativeHomeless() {
+        return nativeHomeless;
+    }
+
+    public void setNativeHomeless(final Boolean nativeHomeless) {
+        this.nativeHomeless = nativeHomeless;
+    }
+
     public Boolean getArtilleryDamaged() {
         return artilleryDamaged;
     }
@@ -222,6 +251,97 @@ public class UnitPo {
 
     public void setGoToPaused(final boolean goToPaused) {
         this.goToPaused = goToPaused;
+    }
+
+    /**
+     * Route and stop index of the stop this carrier already processed; both
+     * absent when no stop is processed.
+     */
+    private Integer tradeRouteVisitRouteId;
+
+    private Integer tradeRouteVisitStopIndex;
+
+    /** Map square of the processed stop; absent for a stop in Europe. */
+    private Location tradeRouteVisitLocation;
+
+    public Location getTradeRouteVisitLocation() {
+        return tradeRouteVisitLocation;
+    }
+
+    public void setTradeRouteVisitLocation(
+            final Location tradeRouteVisitLocation) {
+        this.tradeRouteVisitLocation = tradeRouteVisitLocation;
+    }
+
+    public Integer getTradeRouteVisitRouteId() {
+        return tradeRouteVisitRouteId;
+    }
+
+    public void setTradeRouteVisitRouteId(
+            final Integer tradeRouteVisitRouteId) {
+        this.tradeRouteVisitRouteId = tradeRouteVisitRouteId;
+    }
+
+    public Integer getTradeRouteVisitStopIndex() {
+        return tradeRouteVisitStopIndex;
+    }
+
+    public void setTradeRouteVisitStopIndex(
+            final Integer tradeRouteVisitStopIndex) {
+        this.tradeRouteVisitStopIndex = tradeRouteVisitStopIndex;
+    }
+
+    /**
+     * Stable route ID and current stop index of a trade route assignment; both
+     * absent when the carrier has no assignment.
+     */
+    private Integer tradeRouteAssignmentRouteId;
+
+    private Integer tradeRouteAssignmentStopIndex;
+
+    /** Reason the assigned carrier waits; absent while it may continue. */
+    private TradeRoutePause tradeRouteAssignmentPause;
+
+    /**
+     * Route stops as the assigned carrier accepted them at its last boundary;
+     * required whenever the route ID is present.
+     */
+    private List<TradeRouteStopPo> tradeRouteAssignmentStops;
+
+    public Integer getTradeRouteAssignmentRouteId() {
+        return tradeRouteAssignmentRouteId;
+    }
+
+    public void setTradeRouteAssignmentRouteId(
+            final Integer tradeRouteAssignmentRouteId) {
+        this.tradeRouteAssignmentRouteId = tradeRouteAssignmentRouteId;
+    }
+
+    public Integer getTradeRouteAssignmentStopIndex() {
+        return tradeRouteAssignmentStopIndex;
+    }
+
+    public void setTradeRouteAssignmentStopIndex(
+            final Integer tradeRouteAssignmentStopIndex) {
+        this.tradeRouteAssignmentStopIndex = tradeRouteAssignmentStopIndex;
+    }
+
+    public TradeRoutePause getTradeRouteAssignmentPause() {
+        return tradeRouteAssignmentPause;
+    }
+
+    public void setTradeRouteAssignmentPause(
+            final TradeRoutePause tradeRouteAssignmentPause) {
+        this.tradeRouteAssignmentPause = tradeRouteAssignmentPause;
+    }
+
+    public List<TradeRouteStopPo> getTradeRouteAssignmentStops() {
+        return tradeRouteAssignmentStops;
+    }
+
+    public void setTradeRouteAssignmentStops(
+            final List<TradeRouteStopPo> tradeRouteAssignmentStops) {
+        this.tradeRouteAssignmentStops = tradeRouteAssignmentStops;
     }
 
     @Override

@@ -25,20 +25,22 @@ public final class Statistics {
 
     void countNextTurn(final Model model) {
         final int turnNo = model.getCalendar().getNumberOfPlayedTurns();
-        model.getPlayers().forEach(player -> {
-            final TurnPlayerStatistics stats = new TurnPlayerStatistics(player,
-                    turnNo);
-            final PlayerStatistics playerStatistics = player
-                    .getPlayerStatistics();
-            stats.setEcononyScore(
-                    playerStatistics.getGoodsStatistics().getEconomyValue());
-            stats.setGold(playerStatistics.getGold());
-            stats.setMilitaryScore(playerStatistics.getMilitaryStrength()
-                    .getMilitaryStrength());
-            stats.setScore(stats.getEcononyScore() + stats.getMilitaryScore()
-                    + stats.getGold());
-            turnStatistics.add(stats);
-        });
+        // Native nations have no European economy to score.
+        model.getPlayers().stream().filter(player -> !player.isNative())
+                .forEach(player -> {
+                    final TurnPlayerStatistics stats = new TurnPlayerStatistics(
+                            player, turnNo);
+                    final PlayerStatistics playerStatistics = player
+                            .getPlayerStatistics();
+                    stats.setEcononyScore(playerStatistics.getGoodsStatistics()
+                            .getEconomyValue());
+                    stats.setGold(playerStatistics.getGold());
+                    stats.setMilitaryScore(playerStatistics
+                            .getMilitaryStrength().getMilitaryStrength());
+                    stats.setScore(stats.getEcononyScore()
+                            + stats.getMilitaryScore() + stats.getGold());
+                    turnStatistics.add(stats);
+                });
     }
 
     StatisticsPo save() {

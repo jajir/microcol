@@ -2,8 +2,11 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
@@ -15,20 +18,27 @@ import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport;
 import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
+import org.microcol.model.NativeNation;
+import org.microcol.model.NativeSettlement;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.geometry.Point2D;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 
 /** Inspect exploration through the actual map and its information controls. */
 public final class FogPage extends AbstractScreen {
+    /** Gold frame that marks a capital on the map. */
+    private static final Color CAPITAL_FRAME = Color.web("#FFD60A");
+
     private Integer rememberedActionPoints;
     private String rememberedObservation;
     private final org.microcol.gui.screen.game.gamepanel.FogFrameProbe probe = new org.microcol.gui.screen.game.gamepanel.FogFrameProbe();
@@ -326,6 +336,97 @@ public final class FogPage extends AbstractScreen {
         }
         assertTrue(different,
                 "Revealed terrain must replace fog at " + location);
+    }
+
+    /** Point the mouse at a square so the status bar describes it. */
+    public void hover(final Location location) {
+        getRobot().moveTo(screenPoint(location));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * The Dutch player has learned this settlement's nation and capital status
+     * by sight, and no other settlement is known there.
+     */
+    public void verifyNativeSettlementKnown(final Location location,
+            final NativeNation expectedNation, final boolean expectedCapital) {
+        final NativeSettlement known = getModel()
+                .getNativeSettlementKnownTo(getModel().getPlayerByName("Dutch"),
+                        location)
+                .orElseThrow(() -> new AssertionError(
+                        "No native settlement known at " + location));
+        assertEquals(expectedNation, known.getNation());
+        assertEquals(expectedCapital, known.isCapital());
+    }
+
+    public void verifyNoNativeSettlementKnown(final Location location) {
+        assertTrue(
+                getModel()
+                        .getNativeSettlementKnownTo(
+                                getModel().getPlayerByName("Dutch"), location)
+                        .isEmpty(),
+                () -> "Native settlement leaked at " + location);
+    }
+
+    public void verifyNativeSettlementCurrentlyVisible(final Location location,
+            final boolean expected) {
+        assertEquals(expected, getModel().getPlayerByName("Dutch")
+                .isCurrentlyVisible(location));
+    }
+
+    public void verifyStatusBarContains(final String expectedText) {
+        GamePage.of(getContext()).verifyThatStatusBarContains(expectedText);
+    }
+
+    /**
+     * The drawn settlement has its nation fill at the centre of its square, and
+     * a capital also has the gold frame on its left edge; an ordinary one does
+     * not.
+     */
+    public void verifyNativeSettlementPixels(final Location location,
+            final Color fill, final boolean capital) throws Exception {
+        final Image actual = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final Point point = getContext().getArea()
+                .convertToCanvasPoint(location);
+        final Point center = point.add(Tile.TILE_CENTER);
+        final Color body = actual.getPixelReader().getColor(center.getX(),
+                center.getY());
+        assertTrue(closeTo(fill, body), () -> "Settlement fill at " + location
+                + ": expected " + fill + " but was " + body);
+        final Color frame = actual.getPixelReader().getColor(point.getX() + 2,
+                center.getY());
+        if (capital) {
+            assertTrue(closeTo(CAPITAL_FRAME, frame),
+                    () -> "Capital frame at " + location + ": expected "
+                            + CAPITAL_FRAME + " but was " + frame);
+        } else {
+            assertFalse(closeTo(CAPITAL_FRAME, frame),
+                    "Ordinary settlement must not have the capital frame at "
+                            + location);
+        }
+    }
+
+    /**
+     * Keep the rendered map as review evidence under target/warehouse-qa. The
+     * file is written only; it makes no claim about the map.
+     */
+    public void saveMapEvidence(final String fileName) throws Exception {
+        final Image actual = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final File target = new File("target/warehouse-qa", fileName);
+        target.getParentFile().mkdirs();
+        ImageIO.write(SwingFXUtils.fromFXImage(actual, null), "png", target);
+    }
+
+    private static boolean closeTo(final Color expected, final Color actual) {
+        return Math.abs(expected.getRed() - actual.getRed()) < 0.06
+                && Math.abs(expected.getGreen() - actual.getGreen()) < 0.06
+                && Math.abs(expected.getBlue() - actual.getBlue()) < 0.06;
     }
 
     public void verifyUnitLocation(final int unitId, final Location expected) {

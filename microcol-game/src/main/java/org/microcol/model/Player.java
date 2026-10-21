@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.RivalTradeObjectivePo;
 import org.microcol.model.store.ColonySightingPo;
 import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.RecruitmentPo;
@@ -60,6 +61,9 @@ public abstract class Player {
 
     private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
 
+    /** Null unless a computer colony is running a supply cycle. */
+    private RivalTradeObjective rivalTradeObjective;
+
     /**
      * Colonies remembered from actual observation, by location. Concurrent
      * because the interface paints while the model thread observes.
@@ -108,6 +112,22 @@ public abstract class Player {
                 "Visible is null during creating '%s'", playerPo.getName());
         Preconditions.checkArgument(playerPo.getUnitPurchaseCounts() != null,
                 "Missing unit purchase counts");
+        if (playerPo.getNativeNation() != null) {
+            Preconditions.checkArgument(playerPo.isComputer(),
+                    "Native players are computer players");
+            Preconditions.checkArgument(
+                    playerPo.getWhosKingThisPlayerIs() == null
+                            && playerPo.getRecruitment() == null
+                            && playerPo.getCongress() == null
+                            && playerPo.getTax() == null
+                            && playerPo.getUnitPurchaseCounts().isEmpty()
+                            && playerPo.getRivalTradeObjective() == null,
+                    "Native players have no European state");
+            return new PlayerNative(playerPo.getName(),
+                    playerPo.getNativeNation(), playerPo.getGold(), model,
+                    playerPo.getExtraData(),
+                    playerPo.getVisible().getVisibilitySet());
+        }
         if (playerPo.getWhosKingThisPlayerIs() == null) {
             Preconditions.checkArgument(playerPo.getRecruitment() != null,
                     "Missing colonial recruitment pool");
@@ -122,6 +142,11 @@ public abstract class Player {
                     playerPo.getRecruitment(), playerPo.getCongress(),
                     playerPo.getTax());
             player.loadUnitPurchaseCounts(playerPo.getUnitPurchaseCounts());
+            Preconditions.checkArgument(
+                    playerPo.getRivalTradeObjective() == null
+                            || playerPo.isComputer(),
+                    "Only computer colonies keep a trade objective");
+            player.loadRivalTradeObjective(playerPo.getRivalTradeObjective());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
@@ -133,6 +158,9 @@ public abstract class Player {
             Preconditions.checkArgument(
                     playerPo.getUnitPurchaseCounts().isEmpty(),
                     "Kings cannot have purchase counts");
+            Preconditions.checkArgument(
+                    playerPo.getRivalTradeObjective() == null,
+                    "Kings cannot have trade objectives");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
             return new PlayerKing(playerPo.getName(), playerPo.isComputer(),
@@ -236,11 +264,7 @@ public abstract class Player {
                 colonySightings.remove(colony.getLocation());
                 // Colony sight is explored terrain too, and stays so after
                 // the colony is lost.
-                final List<Location> around = new java.util.ArrayList<>(
-                        colony.getLocation().getNeighbors());
-                around.add(colony.getLocation());
-                visibility.reveal(around.stream().filter(model::isValid)
-                        .collect(java.util.stream.Collectors.toList()));
+                visibility.reveal(colonyArea(colony));
             } else if (isCurrentlyVisible(colony.getLocation())) {
                 colonySightings.put(colony.getLocation(), sightingOf(colony));
             }
@@ -253,6 +277,15 @@ public abstract class Player {
     /** Remember a colony the player was directly told about. */
     void recordColony(final Colony colony) {
         colonySightings.put(colony.getLocation(), sightingOf(colony));
+    }
+
+    /** Colony tile and its eight neighbors, clipped to the map. */
+    private List<Location> colonyArea(final Colony colony) {
+        final List<Location> around = new java.util.ArrayList<>(
+                colony.getLocation().getNeighbors());
+        around.add(colony.getLocation());
+        return around.stream().filter(model::isValid)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     /** Forget a colony the player was directly told is gone. */
@@ -308,6 +341,9 @@ public abstract class Player {
         unitPurchaseCounts
                 .forEach((type, count) -> counts.put(type.name(), count));
         out.setUnitPurchaseCounts(counts);
+        if (rivalTradeObjective != null) {
+            out.setRivalTradeObjective(rivalTradeObjective.save());
+        }
         colonySightings.values().stream().sorted(java.util.Comparator
                 .comparingInt((ColonySighting sighting) -> sighting
                         .getLocation().getX())
@@ -361,6 +397,23 @@ public abstract class Player {
 
     public boolean isKing() {
         return this instanceof PlayerKing;
+    }
+
+    /**
+     * @return whether this is a native nation's participant rather than a
+     *         European colonial nation or Crown
+     */
+    public boolean isNative() {
+        return false;
+    }
+
+    /**
+     * @return whether this is a European colonial nation, the only kind of
+     *         participant in the European treaty table, Europe trade, Congress
+     *         and tax; neither a Crown nor a native nation
+     */
+    public boolean isColonialNation() {
+        return !isKing() && !isNative();
     }
 
     public List<Unit> getUnits() {
@@ -582,6 +635,8 @@ public abstract class Player {
         }
         settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
+        // Once per completed own update; load and Continue never reach here.
+        model.updateNativeRelations(this);
         if (hadFranklin) {
             model.prepareFranklinPeaceOffers(this);
         }
@@ -669,6 +724,20 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Coronado's one-time survey at his arrival. Every European colony existing
+     * now is explored with its neighbors, and foreign ones are remembered. No
+     * current sight is granted and later colonies are not included.
+     */
+    private void surveyEuropeanColonies() {
+        for (final Colony colony : model.getColonies()) {
+            visibility.reveal(colonyArea(colony));
+            if (!colony.getOwner().equals(this)) {
+                recordColony(colony);
+            }
+        }
+    }
+
     private void settleCongress() {
         if (congress == null) {
             return;
@@ -680,6 +749,9 @@ public abstract class Player {
                         "No unit IDs remain for Jones's frigate");
             }
             final Founder arrived = congress.join(model.getDifficulty());
+            if (arrived == Founder.FRANCISCO_DE_CORONADO) {
+                surveyEuropeanColonies();
+            }
             if (arrived == Founder.WILLIAM_BREWSTER) {
                 recruitment.applyBrewster();
             }
@@ -690,6 +762,9 @@ public abstract class Player {
                 // Only the arrears that exist at this arrival are removed;
                 // later protests are boycotted as usual.
                 tax.clearArrears();
+            }
+            if (arrived == Founder.POCAHONTAS) {
+                model.clearNativeRelationsAfterPocahontas(this);
             }
             if (arrived == Founder.HERNANDO_DE_SOTO) {
                 getAllUnits().stream().filter(Unit::isAtPlaceLocation)
@@ -1265,7 +1340,7 @@ public abstract class Player {
 
     /** @return whether this player still has access to the home market */
     public boolean canTradeInEurope() {
-        return !isDeclaredIndependence();
+        return !isNative() && !isDeclaredIndependence();
     }
 
     /**
@@ -1366,6 +1441,38 @@ public abstract class Player {
                         overflow);
             }
             unitPurchaseCounts.put(type, entry.getValue());
+        }
+    }
+
+    /**
+     * @return the supply cycle this computer colony is running, when one exists
+     */
+    public Optional<RivalTradeObjective> getRivalTradeObjective() {
+        return Optional.ofNullable(rivalTradeObjective);
+    }
+
+    /**
+     * Store the cycle that the computer colony continues on its owner turns.
+     * Its identities are checked against live state before every use.
+     *
+     * @param objective required cycle
+     * @throws IllegalStateException when this player is not a computer colony
+     */
+    public void setRivalTradeObjective(final RivalTradeObjective objective) {
+        Preconditions.checkNotNull(objective, "Trade objective is null");
+        Preconditions.checkState(computer && !isKing() && !isNative(),
+                "Only computer colonies keep a trade objective");
+        rivalTradeObjective = objective;
+    }
+
+    /** Forget the cycle, for example when its colony or carrier is gone. */
+    public void clearRivalTradeObjective() {
+        rivalTradeObjective = null;
+    }
+
+    private void loadRivalTradeObjective(final RivalTradeObjectivePo saved) {
+        if (saved != null) {
+            rivalTradeObjective = RivalTradeObjective.load(saved);
         }
     }
 

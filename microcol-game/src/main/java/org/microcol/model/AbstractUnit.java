@@ -9,8 +9,10 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.microcol.model.store.TradeRouteStopPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEventGoTo;
 import org.microcol.model.turnevent.TurnEventProvider;
@@ -60,6 +62,12 @@ public abstract class AbstractUnit implements Unit {
     private UnitAction unitAction;
     /** Persistent go-to order, or {@code null} when the unit has none. */
     private GoToOrder goTo;
+
+    /** Route stop processed by this carrier; cleared when it leaves. */
+    private TradeRouteVisit processedTradeRouteVisit;
+
+    /** Persistent route assignment; it excludes go-to and manual orders. */
+    private TradeRouteAssignment tradeRouteAssignment;
     /** Waiting immigrant on the European pier; cleared when it boards. */
     private boolean immigrant;
     /** Player withdrew this waiting immigrant from departure boarding. */
@@ -256,38 +264,8 @@ public abstract class AbstractUnit implements Unit {
         if (this instanceof Ship && ((Ship) this).isDamaged()) {
             return false;
         }
-        if (!model.getMap().isValid(location)) {
-            return false;
-        }
-        final Optional<Colony> optColony = model.getColonyAt(location);
-        boolean hostileColony = false;
-        if (optColony.isPresent()) {
-            final Colony colony = optColony.get();
-            hostileColony = !owner.equals(colony.getOwner())
-                    && model.areHostile(owner, colony.getOwner());
-            // An ally's colony grants passage only; it is never captured.
-            if (!owner.equals(colony.getOwner()) && !hostileColony
-                    && !model.areAllied(owner, colony.getOwner())) {
-                return false;
-            }
-        }
-
-        if (!getType()
-                .canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
-            if (isPossibleToGoToPort(location)) {
-                return ignoreEnemies
-                        || !model.isPassageBlockedAt(owner, location);
-            }
-            return false;
-        }
-
-        if (hostileColony) {
-            // Ordinary movement, even ignoring enemies and even from a square
-            // kept after a former alliance, never enters a hostile colony: its
-            // defense battle is the only way to take it.
-            return false;
-        }
-        return ignoreEnemies || !model.isPassageBlockedAt(owner, location);
+        return MovementPolicy.isPossibleToEnter(model, getType(), isShip(),
+                owner, location, ignoreEnemies);
     }
 
     /**
@@ -395,7 +373,7 @@ public abstract class AbstractUnit implements Unit {
             return false;
         }
         return model.isGameRunning() && model.getCurrentPlayer() == owner
-                && isLiveOwnedUnit(this) && isStorable() && goTo == null
+                && isLiveOwnedUnit(this) && isStorable() && !hasStandingOrder()
                 && (getAction().getType() == UnitActionType.noAction
                         || departureSentry && getAction()
                                 .getType() == UnitActionType.sentry);
@@ -621,7 +599,7 @@ public abstract class AbstractUnit implements Unit {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
                 || !canAttack() || getActionPoints() <= 0
-                || !getAction().isNoAction() || goTo != null
+                || !getAction().isNoAction() || hasStandingOrder()
                 || targetLocation == null
                 || !model.getMap().isValid(targetLocation)
                 || !getLocation().isNeighbor(targetLocation)
@@ -652,6 +630,9 @@ public abstract class AbstractUnit implements Unit {
                 .stream()
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
+                // Native roles, terrain and ambush strengths belong to R-0173;
+                // until then a native unit is not an attackable target.
+                .filter(unit -> !unit.getOwner().isNative())
                 // Allies, and former allies during the war wait, are never
                 // attacked, not even by declaration or privateer exception.
                 .filter(unit -> !model.isAttackRestrained(owner,
@@ -1326,6 +1307,8 @@ public abstract class AbstractUnit implements Unit {
                 "A ship must be on the map to become damaged");
         place.destroy();
         place = repair;
+        // A repair is not a departure: a processed stop stays processed if the
+        // ship returns to the same place, and is dropped if it does not.
         movementThirds = 0;
         setAction(UnitActionType.noAction.make());
         if (goTo != null) {
@@ -1341,12 +1324,14 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(place instanceof PlaceShipRepair);
         place.destroy();
         place = new PlaceLocation(this, location, getDefaultOrintation());
+        retainProcessedTradeRouteVisitAt(location);
     }
 
     void completeShipRepair(final EuropePort port) {
         Preconditions.checkState(place instanceof PlaceShipRepair);
         place.destroy();
         place = new PlaceEuropePort(this, port);
+        retainProcessedTradeRouteVisitAt(null);
     }
 
     @Override
@@ -1358,6 +1343,66 @@ public abstract class AbstractUnit implements Unit {
                 "Fortified colony needs three residents");
         place.destroy();
         place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
+        retainProcessedTradeRouteVisitAt(null);
+    }
+
+    @Override
+    public Optional<TradeRouteVisit> getProcessedTradeRouteVisit() {
+        return Optional.ofNullable(processedTradeRouteVisit);
+    }
+
+    /**
+     * Records a processed stop. A second mark before the carrier leaves is
+     * refused, which keeps one arrival to one processing.
+     */
+    @Override
+    public void markProcessedTradeRouteVisit(final TradeRouteVisit visit) {
+        Preconditions.checkNotNull(visit, "Visit is null");
+        Preconditions.checkState(processedTradeRouteVisit == null,
+                "Trade route stop already processed by %s", this);
+        processedTradeRouteVisit = visit;
+    }
+
+    /**
+     * Restores a saved processed-stop mark. Loading moves nothing and processes
+     * nothing; the mark only keeps the saved visit from repeating.
+     *
+     * @param routeId   saved route ID, validated against routes later
+     * @param stopIndex saved stop index
+     * @param at        saved map square of the visit, or {@code null} for
+     *                  Europe
+     */
+    public void restoreProcessedTradeRouteVisit(final int routeId,
+            final int stopIndex, final Location at) {
+        // A ship in repair has no place to compare; its return re-checks.
+        Preconditions.checkArgument(
+                place instanceof PlaceShipRepair
+                        || (at == null ? isAtEuropePort()
+                                : isAtPlaceLocation()
+                                        && getLocation().equals(at)),
+                "Processed trade route stop does not match the place of %s",
+                this);
+        processedTradeRouteVisit = new TradeRouteVisit(routeId, stopIndex, at);
+    }
+
+    /**
+     * Only a real change of place ends the processed stop. Placing the unit
+     * again where the visit happened, or repairing it in the same port, keeps
+     * the stop processed; leaving and arriving again allows a new visit.
+     *
+     * @param newPlace map square the unit is placed at, or {@code null} for the
+     *                 Europe port
+     */
+    private void retainProcessedTradeRouteVisitAt(final Location newPlace) {
+        if (processedTradeRouteVisit != null
+                && !processedTradeRouteVisit.isAt(newPlace)) {
+            processedTradeRouteVisit = null;
+        }
+    }
+
+    /** Departure on the high seas always ends the processed stop. */
+    private void forgetProcessedTradeRouteVisit() {
+        processedTradeRouteVisit = null;
     }
 
     /**
@@ -1385,6 +1430,7 @@ public abstract class AbstractUnit implements Unit {
                 "Cancel fortification before moving");
         Preconditions.checkState(canLeaveColony(),
                 "Fortified colony needs three residents");
+        retainProcessedTradeRouteVisitAt(target);
         if (place instanceof PlaceLocation) {
             place.destroy();
             place = new PlaceLocation(this, Preconditions.checkNotNull(target),
@@ -1443,6 +1489,7 @@ public abstract class AbstractUnit implements Unit {
         }
         place.destroy();
         place = voyage;
+        forgetProcessedTradeRouteVisit();
     }
 
     private void boardDepartureSentries(
@@ -1535,6 +1582,7 @@ public abstract class AbstractUnit implements Unit {
         place = new PlaceColonyField(this, colonyField, producedGoodsType);
         colonyField.setPlaceColonyField((PlaceColonyField) place);
         colonyField.getColony().grantLaSalleStockade();
+        model.recordNativeLandUse(getOwner(), colonyField.getLocation());
     }
 
     protected void validateColonyStructureSlot(
@@ -1542,7 +1590,7 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
-        Preconditions.checkState(goTo == null,
+        Preconditions.checkState(!hasStandingOrder(),
                 "Cancel go-to before assigning colony work");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
@@ -1568,7 +1616,7 @@ public abstract class AbstractUnit implements Unit {
         model.checkTurnPreparationComplete();
         Preconditions.checkState(unitAction.getType() != UnitActionType.sentry,
                 "Activate sentry before assigning colony work");
-        Preconditions.checkState(goTo == null,
+        Preconditions.checkState(!hasStandingOrder(),
                 "Cancel go-to before assigning colony work");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
@@ -1734,6 +1782,25 @@ public abstract class AbstractUnit implements Unit {
             unitPo.setGoToDestinationName(goTo.getDestinationName());
             unitPo.setGoToPaused(goTo.isPaused());
         }
+        if (tradeRouteAssignment != null) {
+            unitPo.setTradeRouteAssignmentRouteId(
+                    tradeRouteAssignment.getRouteId());
+            unitPo.setTradeRouteAssignmentStopIndex(
+                    tradeRouteAssignment.getStopIndex());
+            unitPo.setTradeRouteAssignmentPause(
+                    tradeRouteAssignment.getPause().orElse(null));
+            unitPo.setTradeRouteAssignmentStops(tradeRouteAssignment.getStops()
+                    .stream().map(TradeRoutes::savePoStop)
+                    .collect(Collectors.toList()));
+        }
+        if (processedTradeRouteVisit != null) {
+            unitPo.setTradeRouteVisitRouteId(
+                    processedTradeRouteVisit.getRouteId());
+            unitPo.setTradeRouteVisitStopIndex(
+                    processedTradeRouteVisit.getStopIndex());
+            unitPo.setTradeRouteVisitLocation(
+                    processedTradeRouteVisit.getLocation().orElse(null));
+        }
         place.save(unitPo);
         return unitPo;
     }
@@ -1797,7 +1864,7 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkArgument(actionType == UnitActionType.sentry
                 || actionType == UnitActionType.noAction);
         Preconditions.checkState(
-                goTo == null || actionType != UnitActionType.sentry,
+                !hasStandingOrder() || actionType != UnitActionType.sentry,
                 "Cancel go-to before sentry");
         setAction(actionType.make());
         model.fireActionWasStarted(this);
@@ -1884,7 +1951,7 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startFortifying() {
-        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+        Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before fortifying");
         setAction(new UnitActionFortify(false));
         movementThirds = 0;
@@ -1906,7 +1973,7 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startClearingForest() {
-        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+        Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before clearing forest");
         final UnitActionClearForest next = new UnitActionClearForest();
         if (getType() == UnitType.HARDY_PIONEER) {
@@ -1926,7 +1993,7 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startBuildingRoad() {
-        Preconditions.checkState(unitAction.isNoAction() && goTo == null,
+        Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before building road");
         final UnitActionBuildRoad next = new UnitActionBuildRoad();
         if (getType() == UnitType.HARDY_PIONEER) {
@@ -1960,9 +2027,101 @@ public abstract class AbstractUnit implements Unit {
      * @param order required order; the unit must not have another order
      */
     void startGoTo(final GoToOrder order) {
-        Preconditions.checkState(goTo == null, "Unit %s has a go-to order",
-                this);
+        Preconditions.checkState(!hasStandingOrder(),
+                "Unit %s has a standing order", this);
         goTo = Preconditions.checkNotNull(order);
+    }
+
+    /**
+     * @return whether a go-to order or a trade route assignment controls this
+     *         unit, so no manual order or other standing order may replace it
+     */
+    boolean hasStandingOrder() {
+        return goTo != null || tradeRouteAssignment != null;
+    }
+
+    /**
+     * @return the persistent trade route assignment, or empty when there is
+     *         none
+     */
+    Optional<TradeRouteAssignment> getTradeRouteAssignment() {
+        return Optional.ofNullable(tradeRouteAssignment);
+    }
+
+    /**
+     * Stores a new trade route assignment. The model has validated it and the
+     * unit has no other standing order; nothing moves here.
+     *
+     * @param assignment required assignment
+     */
+    void startTradeRouteAssignment(final TradeRouteAssignment assignment) {
+        Preconditions.checkState(!hasStandingOrder(),
+                "Unit %s has a standing order", this);
+        tradeRouteAssignment = Preconditions.checkNotNull(assignment);
+    }
+
+    /**
+     * Restores a saved trade route assignment. The unit must be idle and placed
+     * on the map, in Europe or at sea. Loading moves nothing and processes no
+     * stop; the route and stop are checked against the saved routes later.
+     *
+     * @param routeId   saved stable route ID
+     * @param stopIndex saved index of the current stop
+     * @param pause     saved reason the carrier waits, or {@code null}
+     * @param stops     required saved boundary copy of the route stops
+     */
+    public void restoreTradeRouteAssignment(final int routeId,
+            final int stopIndex, final TradeRoutePause pause,
+            final List<TradeRouteStopPo> stops) {
+        Preconditions.checkArgument(
+                routeId >= 0 && stopIndex >= 0 && stops != null
+                        && !hasStandingOrder() && unitAction.isNoAction()
+                        && (isAtPlaceLocation() || isAtEuropePort()
+                                || isAtHighSea()
+                                || place instanceof PlaceShipRepair),
+                "Invalid saved trade route assignment for unit %s", this);
+        tradeRouteAssignment = new TradeRouteAssignment(routeId, stopIndex,
+                pause, stops.stream().map(TradeRoutes::restoreStop)
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * Returns the unit to manual orders. Its place, cargo, movement and any
+     * voyage stay as they are.
+     */
+    void clearTradeRouteAssignment() {
+        Preconditions.checkState(tradeRouteAssignment != null,
+                "Unit %s has no trade route assignment", this);
+        tradeRouteAssignment = null;
+    }
+
+    /**
+     * Forgets a processed stop that names a deleted route. The route cannot be
+     * processed again, so no settled transfer can repeat.
+     *
+     * @param routeId ID of the route being deleted
+     */
+    void forgetProcessedTradeRouteVisitOf(final int routeId) {
+        if (processedTradeRouteVisit != null
+                && processedTradeRouteVisit.getRouteId() == routeId) {
+            processedTradeRouteVisit = null;
+        }
+    }
+
+    /**
+     * Forgets a processed stop receipt for one stop of a route whose identity
+     * was replaced, so a saved receipt never disagrees with its stop.
+     *
+     * @param routeId   ID of the edited route
+     * @param stopIndex index of the replaced stop
+     */
+    void forgetProcessedTradeRouteVisitOf(final int routeId,
+            final int stopIndex) {
+        if (processedTradeRouteVisit != null
+                && processedTradeRouteVisit.getRouteId() == routeId
+                && processedTradeRouteVisit.getStopIndex() == stopIndex) {
+            processedTradeRouteVisit = null;
+        }
     }
 
     /**
@@ -2090,6 +2249,27 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
+     * Route to the nearest square the owner can see that satisfies the goal, by
+     * the same shared finder and costs as a go-to order; no high-sea departure
+     * step is part of it.
+     *
+     * @param isGoal required test of the squares to reach
+     * @return the route without the start square, or empty when none exists
+     */
+    Optional<List<Location>> findNearestRoute(
+            final Predicate<Location> isGoal) {
+        Preconditions.checkNotNull(isGoal);
+        final Place current = getPlace();
+        if (!(current instanceof PlaceLocation)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(new PathFinder(this, true).findNearest(
+                ((PlaceLocation) current).getLocation(),
+                location -> owner.isVisible(location)
+                        && isGoal.test(location)));
+    }
+
+    /**
      * Verifies that the colony named by the order still exists at the saved
      * destination and still belongs to the owner. Otherwise the order is
      * canceled with its reason.
@@ -2128,7 +2308,7 @@ public abstract class AbstractUnit implements Unit {
     public void setActionType(final UnitActionType actionType) {
         model.checkTurnPreparationComplete();
         Preconditions.checkNotNull(actionType, "Unit action is null");
-        Preconditions.checkState(goTo == null,
+        Preconditions.checkState(!hasStandingOrder(),
                 "Cancel go-to before giving this unit an order");
         Preconditions
                 .checkState(

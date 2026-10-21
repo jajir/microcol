@@ -5,6 +5,8 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.dialog.NativeLandDialog;
+import org.microcol.gui.dialog.NativeLandGuard;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
@@ -20,6 +22,7 @@ import org.microcol.model.ColonyField;
 import org.microcol.model.Direction;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
+import org.microcol.model.NativeLandStatus;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.application.Platform;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,6 +76,8 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final EventBus eventBus;
 
+    private final NativeLandGuard nativeLand;
+
     private final VBox mainPanel = new VBox();
 
     private final I18n i18n;
@@ -80,7 +86,9 @@ public final class PanelColonyFields implements JavaFxComponent {
     PanelColonyFields(final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final PaintService paintService, final EventBus eventBus,
-            final I18n i18n, final FontService fontService) {
+            final I18n i18n, final FontService fontService,
+            final NativeLandGuard nativeLand) {
+        this.nativeLand = Preconditions.checkNotNull(nativeLand);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions
@@ -204,20 +212,69 @@ public final class PanelColonyFields implements JavaFxComponent {
                     if (unit.isEmpty()) {
                         return;
                     }
-                    try {
-                        unit.get().placeToColonyField(field, GoodsType.CORN);
+                    // The land question comes only for a field the worker may
+                    // take; any other drop is refused as before.
+                    if (field.canAccept(unit.get(), GoodsType.CORN)
+                            && isUnpaidClaim(field)) {
+                        // Ask after the drop gesture has finished; canceling
+                        // leaves the worker where it was.
                         event.setDropCompleted(true);
-                        eventBus.post(new RepaintColonyEvent());
-                    } catch (IllegalArgumentException
-                            | IllegalStateException rejected) {
-                        showFieldProblem(field.isMissingDock()
-                                ? ColonyMsg.fieldMissingDock
-                                : field.isWorkedByAnotherColony()
-                                        ? ColonyMsg.fieldWorked
-                                        : ColonyMsg.fieldChanged);
+                        final javafx.scene.Node source = (javafx.scene.Node) event
+                                .getGestureSource();
+                        source.addEventHandler(DragEvent.DRAG_DONE,
+                                new javafx.event.EventHandler<DragEvent>() {
+                                    @Override
+                                    public void handle(final DragEvent done) {
+                                        source.removeEventHandler(
+                                                DragEvent.DRAG_DONE, this);
+                                        Platform.runLater(
+                                                () -> placeAfterQuestion(
+                                                        unit.get(), field));
+                                    }
+                                });
+                        return;
+                    }
+                    if (place(unit.get(), field,
+                            NativeLandDialog.Result.NOT_ASKED)) {
+                        event.setDropCompleted(true);
                     }
                 });
         event.consume();
+    }
+
+    private boolean isUnpaidClaim(final ColonyField field) {
+        return gameModelController.getModel()
+                .quoteNativeLand(gameModelController.getHumanPlayer(),
+                        field.getLocation())
+                .filter(quote -> quote.getStatus() == NativeLandStatus.UNPAID)
+                .isPresent();
+    }
+
+    private void placeAfterQuestion(final Unit unit, final ColonyField field) {
+        final NativeLandDialog.Result land = nativeLand.proceed(
+                gameModelController.getModel(),
+                gameModelController.getHumanPlayer(), field.getLocation());
+        if (land != NativeLandDialog.Result.CANCELED) {
+            place(unit, field, land);
+        }
+    }
+
+    private boolean place(final Unit unit, final ColonyField field,
+            final NativeLandDialog.Result land) {
+        try {
+            unit.placeToColonyField(field, GoodsType.CORN);
+            eventBus.post(new RepaintColonyEvent());
+            return true;
+        } catch (IllegalArgumentException | IllegalStateException rejected) {
+            final ColonyMsg reason = field.isMissingDock()
+                    ? ColonyMsg.fieldMissingDock
+                    : field.isWorkedByAnotherColony() ? ColonyMsg.fieldWorked
+                            : ColonyMsg.fieldChanged;
+            eventBus.post(new StatusBarMessageEvent(
+                    nativeLand.rejection(land, i18n.get(reason)),
+                    Source.COLONY));
+            return false;
+        }
     }
 
     private void showFieldProblem(final ColonyMsg message) {

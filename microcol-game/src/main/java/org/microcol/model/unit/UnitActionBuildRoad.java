@@ -94,6 +94,7 @@ public final class UnitActionBuildRoad implements UnitAction {
         finished = true;
         ((UnitFreeColonist) unit).consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().buildRoad(unit.getLocation());
+        model.recordNativeLandUse(unit.getOwner(), unit.getLocation());
         return true;
     }
 

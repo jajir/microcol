@@ -1,14 +1,18 @@
 package org.microcol.gui.util;
 
+import java.util.List;
+
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -54,10 +58,22 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
                 getViewUtil().getPrimaryStageCenterYPosition() - height / 2);
     }
 
+    /**
+     * Places the dialog and keeps it inside the usable area of the screen that
+     * holds the main window, so a tall dialog is never centered half off it.
+     */
     private void placeStageAt(final Stage stage, final double x,
             final double y) {
-        stage.setX(x);
-        stage.setY(y);
+        final Stage owner = getViewUtil().getPrimaryStage();
+        final List<Screen> screens = Screen.getScreensForRectangle(owner.getX(),
+                owner.getY(), Math.max(1, owner.getWidth()),
+                Math.max(1, owner.getHeight()));
+        final Rectangle2D area = (screens.isEmpty() ? Screen.getPrimary()
+                : screens.get(0)).getVisualBounds();
+        stage.setX(Math.max(area.getMinX(),
+                Math.min(x, area.getMaxX() - stage.getWidth())));
+        stage.setY(Math.max(area.getMinY(),
+                Math.min(y, area.getMaxY() - stage.getHeight())));
     }
 
     public final void init(final Parent root) {

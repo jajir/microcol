@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +31,7 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public abstract class AbstractMicroColTest {
 
@@ -88,6 +90,17 @@ public abstract class AbstractMicroColTest {
     @org.junit.jupiter.api.AfterEach
     void stopApplication() {
         if (context != null) {
+            // A scenario that failed while a dialog was open leaves that modal
+            // window over the primary stage, which the next scenario reuses.
+            // It is closed first, so its waiting caller finishes before the
+            // game stops and the next scenario starts unobstructed.
+            context.getRobot()
+                    .interact(() -> new ArrayList<>(Window.getWindows())
+                            .stream()
+                            .filter(window -> window instanceof Stage
+                                    && window != getPrimaryStage()
+                                    && window.isShowing())
+                            .forEach(window -> ((Stage) window).close()));
             context.getRobot().interact(() -> getMicroCol().stop());
         }
     }

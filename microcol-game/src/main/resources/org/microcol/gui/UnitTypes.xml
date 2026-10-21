@@ -98,6 +98,9 @@
 	<entry key="ARTILLERY_name">Artillery</entry>
 	<entry key="ARTILLERY_name_7">artillery</entry>
 	<entry key="ARTILLERY_name_7pl">artillery</entry>
+	<entry key="BRAVE_name">Native brave</entry>
+	<entry key="BRAVE_name_7">native brave</entry>
+	<entry key="BRAVE_name_7pl">native braves</entry>
   <entry key="MASTER_SUGAR_PLANTER_name">Master sugar planter</entry>
   <entry key="MASTER_SUGAR_PLANTER_name_7">Master sugar planter</entry>
   <entry key="MASTER_SUGAR_PLANTER_name_7pl">Master sugar planters</entry>

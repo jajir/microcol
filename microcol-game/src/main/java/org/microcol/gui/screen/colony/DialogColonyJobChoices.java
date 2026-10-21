@@ -6,7 +6,10 @@ import java.util.Optional;
 
 import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.UnitTypes;
+import org.microcol.gui.dialog.NativeLandDialog;
+import org.microcol.gui.dialog.NativeLandGuard;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.ViewUtil;
@@ -16,7 +19,9 @@ import org.microcol.model.Colony;
 import org.microcol.model.ColonyJobChoice;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
+import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativeLandStatus;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -42,6 +47,7 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
     private final EventBus eventBus;
     private final GameModelController controller;
     private final ColonyDialogCallback callback;
+    private final NativeLandGuard nativeLand;
     private final Label caption = new Label();
     private final ListView<ColonyJobChoice> choices = new ListView<>();
     private final Label details = new Label();
@@ -57,12 +63,14 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
     @Inject
     public DialogColonyJobChoices(final ViewUtil viewUtil, final I18n i18n,
             final EventBus eventBus, final GameModelController controller,
-            final ColonyDialogCallback callback) {
+            final ColonyDialogCallback callback,
+            final NativeLandGuard nativeLand) {
         super(viewUtil, i18n);
         this.i18n = i18n;
         this.eventBus = eventBus;
         this.controller = controller;
         this.callback = callback;
+        this.nativeLand = nativeLand;
         final VBox root = new VBox(10, caption, choices, details, message,
                 new HBox(10, confirm, clear, cancel));
         root.setPadding(new Insets(16));
@@ -237,12 +245,45 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
                 throw new IllegalStateException(
                         "Displayed colony or game changed");
             }
+            final Optional<Location> target = selected.getTargetLocation();
+            if (target.isPresent() && model
+                    .quoteNativeLand(controller.getHumanPlayer(), target.get())
+                    .filter(quote -> quote
+                            .getStatus() == NativeLandStatus.UNPAID)
+                    .isPresent()) {
+                // Close first so the land question is not stacked on this
+                // modal dialog; canceling it changes nothing.
+                close();
+                Platform.runLater(
+                        () -> executeAfterQuestion(selected, target.get()));
+                return;
+            }
             selected.execute();
             close();
             eventBus.post(new RepaintColonyEvent());
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             refresh();
             message.setText(i18n.get(ColonyMsg.jobChanged));
+        }
+    }
+
+    private void executeAfterQuestion(final ColonyJobChoice selected,
+            final Location target) {
+        if (controller.getModel() != model) {
+            return;
+        }
+        final NativeLandDialog.Result land = nativeLand.proceed(model,
+                controller.getHumanPlayer(), target);
+        if (land == NativeLandDialog.Result.CANCELED) {
+            return;
+        }
+        try {
+            selected.execute();
+            eventBus.post(new RepaintColonyEvent());
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            eventBus.post(new StatusBarMessageEvent(
+                    nativeLand.rejection(land, i18n.get(ColonyMsg.jobChanged)),
+                    StatusBarMessageEvent.Source.COLONY));
         }
     }
 
