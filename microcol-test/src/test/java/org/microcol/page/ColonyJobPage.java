@@ -220,6 +220,18 @@ public final class ColonyJobPage extends AbstractScreen {
                 getLabeledById("jobMessage").getText().contains(expectedPart));
     }
 
+    /**
+     * The manufacturing choice that a convert was refused is offered now: the
+     * details carry no refusal text and the confirmation is enabled.
+     */
+    public void verifyManufacturingOffered(final String refusalPart) {
+        verifyOpen();
+        assertFalse(
+                getLabeledById("jobDetails").getText().contains(refusalPart),
+                () -> getLabeledById("jobDetails").getText());
+        assertFalse(getButtonById("jobConfirm").isDisabled());
+    }
+
     public void verifyClosed() {
         assertFalse(isCssIdVisible("jobDialog"));
     }

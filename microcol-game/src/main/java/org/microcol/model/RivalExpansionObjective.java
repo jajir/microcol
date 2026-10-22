@@ -118,6 +118,16 @@ public final class RivalExpansionObjective {
                 next);
     }
 
+    /**
+     * @param next required known legal site that replaces a blocked one, same
+     *             identities and stage
+     * @return the expansion heading for that site
+     */
+    public RivalExpansionObjective withSite(final Location next) {
+        return new RivalExpansionObjective(colonyId, founderId, carrierId, next,
+                stage);
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).add("colonyId", colonyId)

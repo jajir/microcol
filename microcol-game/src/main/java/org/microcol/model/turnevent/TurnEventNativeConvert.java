@@ -7,11 +7,13 @@ import com.google.common.base.Preconditions;
 /**
  * Saved notice of a native convert (R-0149): it joined an owned colony as an
  * unassigned resident, or it returned to its tribe after the unassigned expiry.
+ * Las Casas's join (R-0182) frees the converts already held; one notice covers
+ * the whole join.
  */
 public final class TurnEventNativeConvert extends AbstractTurnEvent {
     /** What happened to the convert. */
     public enum Kind {
-        ACQUIRED, RETURNED
+        ACQUIRED, RETURNED, FREED
     }
 
     private final Kind kind;

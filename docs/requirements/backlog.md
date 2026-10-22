@@ -148,7 +148,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | --- | --- | --- | --- |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
-| [R-0168](R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
+| [R-0168](done/R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
 | [R-0198](R-0198.md) | Show labor and available-colonist information | New capture | UC-114 labor report |
 | [R-0199](R-0199.md) | Show religious progress and immigrant choices | New capture | UC-114 religion report |
 | [R-0200](R-0200.md) | Show own-colony overview and production status | New capture | UC-114 colony report |
@@ -254,7 +254,7 @@ verified or authorize implementation.
 | [R-0108](done/R-0108.md) | Complete the six-ship roster and its movement/cargo rules | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0025](done/R-0025.md) |
 | [R-0132](done/R-0132.md) | Enforce the 100-goods hold cap on every transfer | Done | [CARGO-001](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-023 |
 | [R-0133](done/R-0133.md) | Reject ships and wagons as ordinary passengers | Done | [CARGO-003](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
-| [R-0134](R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
+| [R-0134](done/R-0134.md) | Reserve the correct ship holds for artillery and treasure | New capture | [CARGO-004](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-024 |
 | [R-0135](done/R-0135.md) | Let immigrants opt out and prioritize dock boarding | New capture | [CARGO-006](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0136](done/R-0136.md) | Unload passengers on arrival in an owned coastal colony | Done | [CARGO-007](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-025 |
 | [R-0137](done/R-0137.md) | Quick-load ranked goods and unload holds in order | New capture | [CARGO-010](../gap-analysis.md#transport-ships-and-atlantic-travel), UC-026 |
@@ -353,11 +353,11 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0164](done/R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
 | [R-0165](done/R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0166](done/R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
-| [R-0167](R-0167.md) | Trade real goods with a peaceful rival colony under de Witt | New capture | [DIP-006](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) trade effect, UC-071/081/100/117 |
+| [R-0167](done/R-0167.md) | Trade real goods with a peaceful rival colony under de Witt | New capture | [DIP-006](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) trade effect, UC-071/081/100/117 |
 | [R-0169](R-0169.md) | Offer and deliver a paid veteran mercenary group | New capture | [DIP-005](../gap-analysis.md#european-diplomacy-and-rivalry)/[GOV-018](../gap-analysis.md#government-taxation-and-independence), UC-070 |
-| [R-0170](R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
-| [R-0171](R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
-| [R-0172](R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
+| [R-0170](done/R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
+| [R-0171](done/R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
+| [R-0172](done/R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
 | [R-0219](R-0219.md) | Verify diplomacy changes trade, AI and ownership | Verification | UC-117 integrated Hra journey |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
@@ -375,7 +375,7 @@ conquest/treasure and European AI remain outside this batch.
 
 The European diplomacy/AI analyses R-0167–R-0172 were captured on
 **2026-10-17** as preparation only. R-0167 owns de Witt's real foreign trade,
-while A03 [R-0168](R-0168.md) owns his comparative report; R-0104 already
+while A03 [R-0168](done/R-0168.md) owns his comparative report; R-0104 already
 owns founder membership. R-0169 owns both peacetime and agreed rebel mercenary
 offers. R-0170/R-0171 split land/naval strategy and R-0172 coordinates
 established colonies without changing R-0090–R-0092's pending policies or
@@ -397,9 +397,9 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0111](done/R-0111.md) | Promote eligible soldiers to veterans | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0029](canceled/R-0029.md) |
 | [R-0173](done/R-0173.md) | Resolve native roles and terrain ambush in land combat | Remainder | COMBAT-003/004/006/007/011; R-0093/0094/0095 delivered/active slices |
 | [R-0174](done/R-0174.md) | Attack and conquer a defended native settlement | Remainder | NAT-016/SETUP-006; tribute R-0162 separate |
-| [R-0175](R-0175.md) | Create and redeem native-conquest treasure with Cortes | Remainder | NAT-016/FATHER-001; six-hold transport R-0134 separate |
-| [R-0176](R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
-| [R-0177](R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |
+| [R-0175](done/R-0175.md) | Create and redeem native-conquest treasure with Cortes | Remainder | NAT-016/FATHER-001; six-hold transport R-0134 separate |
+| [R-0176](done/R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
+| [R-0177](done/R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |
 | [R-0178](R-0178.md) | Apply royal bombardment and rebel countryside ambush | Remainder | COMBAT-007/009, GOV-015/017; A10 roster/deployment pending |
 | [R-0179](done/R-0179.md) | Increase privateer combat strength with Francis Drake | Remainder | FATHER-002; naval outcome R-0097 and diplomacy R-0099 complete |
 
@@ -417,7 +417,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0105](done/R-0105.md) | Declare independence using national support and mobilize eligible colonies | Follow-up | [R-0031](canceled/R-0031.md) |
 | [R-0180](done/R-0180.md) | Apply Jefferson, Paine and Hudson production effects | Remainder | FATHER-008/009/022; R-0104 membership, R-0110 Penn delivered |
 | [R-0181](done/R-0181.md) | Clear existing boycotts and arrears when Fugger joins | Remainder | FATHER-012; R-0102/0103 ordinary boycott/payment separate |
-| [R-0182](R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
+| [R-0182](done/R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
 | [R-0183](done/R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
 | [R-0184](done/R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
 | [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |

@@ -157,10 +157,52 @@ public class GamePage extends AbstractScreen {
             final GamePanelController controller = getContext()
                     .getClassFromGuice(GamePanelController.class);
             return String.format(
-                    "Text '%s' should appear in status bar. But status bar contains text '%s'. Map input enabled=%s, moving=%s.",
+                    "Text '%s' should appear in status bar. But status bar contains text '%s'. Map input enabled=%s, moving=%s. Pointer now %s; %s",
                     string, actual, controller.isMouseEnabled(),
-                    controller.isUnitMoving());
+                    controller.isUnitMoving(), pointerPosition(),
+                    mapDiagnostics());
         });
+    }
+
+    /**
+     * @return real screen position of the pointer, read on the FX thread, or
+     *         the reason it is unavailable; used only in diagnostics
+     */
+    private String pointerPosition() {
+        try {
+            return String.valueOf(WaitForAsyncUtils.asyncFx(
+                    () -> new javafx.scene.robot.Robot().getMousePosition())
+                    .get(5, TimeUnit.SECONDS));
+        } catch (final Exception e) {
+            return "unavailable (" + e + ")";
+        }
+    }
+
+    /**
+     * @return canvas screen bounds, canvas size, visible area, hovered tile and
+     *         selected tile at this moment; used only in diagnostics
+     */
+    private String mapDiagnostics() {
+        try {
+            final javafx.scene.canvas.Canvas canvas = getContext()
+                    .getClassFromGuice(
+                            org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            final javafx.geometry.Bounds bounds = WaitForAsyncUtils.asyncFx(
+                    () -> canvas.localToScreen(canvas.getBoundsInLocal()))
+                    .get(5, TimeUnit.SECONDS);
+            return String.format(
+                    "canvas screen bounds=%s, canvas size=%sx%s, area=%s, hover=%s, selected=%s",
+                    bounds, canvas.getWidth(), canvas.getHeight(),
+                    getContext().getArea(),
+                    getContext().getClassFromGuice(
+                            org.microcol.gui.screen.game.gamepanel.MouseOverTileManager.class)
+                            .getMouseOverTile(),
+                    getContext().getClassFromGuice(SelectedTileManager.class)
+                            .getSelectedTile());
+        } catch (final Exception e) {
+            return "map state unavailable (" + e + ")";
+        }
     }
 
     private void verifyThatStatusBarIsVisible() {

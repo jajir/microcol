@@ -160,6 +160,39 @@ public class UnitPo {
         nativeConvertUnassignedUpdates = value;
     }
 
+    /**
+     * Face value in gold of a treasure train; required only for
+     * {@code TREASURE_TRAIN} and must be positive.
+     */
+    private Integer treasurePickupColonyId;
+    private Integer treasurePickupNet;
+
+    public Integer getTreasurePickupColonyId() {
+        return treasurePickupColonyId;
+    }
+
+    public void setTreasurePickupColonyId(final Integer value) {
+        treasurePickupColonyId = value;
+    }
+
+    public Integer getTreasurePickupNet() {
+        return treasurePickupNet;
+    }
+
+    public void setTreasurePickupNet(final Integer value) {
+        treasurePickupNet = value;
+    }
+
+    private Integer treasureValue;
+
+    public Integer getTreasureValue() {
+        return treasureValue;
+    }
+
+    public void setTreasureValue(final Integer value) {
+        treasureValue = value;
+    }
+
     private Boolean artilleryDamaged;
 
     /**

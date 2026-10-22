@@ -21,9 +21,14 @@ public final class TeProcessorNativeConvert extends AbstractTeProcessor
         if (!(event instanceof TurnEventNativeConvert))
             return null;
         final TurnEventNativeConvert notice = (TurnEventNativeConvert) event;
-        return new TeItemSimple(getI18n()
-                .get(notice.getKind() == TurnEventNativeConvert.Kind.ACQUIRED
-                        ? Loc.nativeConvertJoined
-                        : Loc.nativeConvertReturned));
+        final Loc message;
+        if (notice.getKind() == TurnEventNativeConvert.Kind.ACQUIRED) {
+            message = Loc.nativeConvertJoined;
+        } else if (notice.getKind() == TurnEventNativeConvert.Kind.FREED) {
+            message = Loc.nativeConvertFreed;
+        } else {
+            message = Loc.nativeConvertReturned;
+        }
+        return new TeItemSimple(getI18n().get(message));
     }
 }

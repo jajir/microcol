@@ -45,6 +45,8 @@ public class TeService {
             final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
             final TeProcessorForestLumberLost forestLumberLost,
             final TeProcessorLostCityRumor lostCityRumor,
+            final TeProcessorPatrolInterception patrolInterception,
+            final TeProcessorCoastalBattery coastalBattery,
             final TeProcessorNativeConquest nativeConquest) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
@@ -78,6 +80,8 @@ public class TeService {
                         Preconditions
                                 .checkNotNull(teProcessorShipComeToHighSeas),
                         Preconditions.checkNotNull(lostCityRumor),
+                        Preconditions.checkNotNull(patrolInterception),
+                        Preconditions.checkNotNull(coastalBattery),
                         Preconditions.checkNotNull(nativeConquest)));
     }
 

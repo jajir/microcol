@@ -25,6 +25,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     public static final String CLOSE_BUTTON_ID = "closeButtonId";
 
     private final Button buttonClose;
+    private final Button treasure = new Button();
     private final Button exports = new Button();
     private final Button education = new Button();
     private final Button tradeRoute = new Button();
@@ -38,10 +39,13 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
             final EventBus eventBus, final I18n i18n,
             final GameModelController game, final DialogCustomHouse customHouse,
             final DialogEducation school, final DialogTradeRoute routes,
-            final DialogTradeRouteCargo routeCargo) {
+            final DialogTradeRouteCargo routeCargo,
+            final org.microcol.gui.dialog.TreasureDialog treasureDialog) {
         super(imageProvider, eventBus, Source.COLONY, i18n);
 
         this.i18n = i18n;
+        treasure.setId("treasureOpen");
+        treasure.setOnAction(event -> treasureDialog.showFor(colony));
         this.game = game;
         getButtonPanel().setId("colonyButtons");
         education.setId("educationOpen");
@@ -67,6 +71,8 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
 
     void setColony(org.microcol.model.Colony colony) {
         this.colony = colony;
+        treasure.setText(i18n.get(org.microcol.gui.dialog.TreasureText.open));
+        treasure.setDisable(colony.getOwner() != game.getHumanPlayer());
         education.setText(i18n.get(EducationText.open));
         education.setDisable(false);
         tradeRoute.setText(i18n.get(TradeRouteText.open));
@@ -106,7 +112,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         row.setAlignment(Pos.TOP_RIGHT);
         // Empty space in this row must not hide the colony fields below it.
         row.setPickOnBounds(false);
-        row.getChildren().addAll(tradeRouteCargo, tradeRoute);
+        row.getChildren().addAll(treasure, tradeRouteCargo, tradeRoute);
         row.getChildren().addAll(buttons);
         addButtonRow(row);
     }

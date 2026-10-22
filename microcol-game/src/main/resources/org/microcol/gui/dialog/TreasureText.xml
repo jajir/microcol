@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="open">Redeem treasure</entry>
+    <entry key="title">Treasure redemption</entry>
+    <entry key="ownRule">Deliver a treasure train aboard your galleon in Europe. Only the current tax is deducted. Confirm the exact proceeds below.</entry>
+    <entry key="royalRule">The King collects a train from this coastal colony on your next turn, if it is still here and the colony is still yours. Half the value pays transport; tax applies to the remainder. The confirmed net amount is reserved. Independence closes both redemption routes.</entry>
+    <entry key="terms">Train #%d: value %d, transport %d, tax %d. You receive %d gold.</entry>
+    <entry key="confirm">Confirm redemption</entry>
+    <entry key="cancel">Close / cancel</entry>
+    <entry key="empty">No eligible treasure is available here. Both routes require access to home Europe.</entry>
+    <entry key="changed">The terms changed. Nothing was paid or scheduled; close and reopen to review.</entry>
+    <entry key="paid">Paid %d gold. The train has been redeemed.</entry>
+    <entry key="scheduled">Collection scheduled for your next turn: %d gold.</entry>
+    <entry key="pending">Train #%d awaits collection: %d gold.</entry>
+</properties>

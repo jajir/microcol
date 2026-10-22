@@ -58,24 +58,34 @@ public class Europe {
     /** Settled cumulative accounts; a missing pair is an empty account. */
     private final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> accounts;
 
+    /**
+     * Net sale revenue of the last ten owner turns; a missing nation is empty.
+     */
+    private final Map<EuropeanNation, EuropeSaleWindow> saleWindows;
+
     /** New game: every national market starts at the catalogue state. */
     Europe(final Model model) {
         this(model, initialMarkets(),
                 new EnumMap<EuropeanNation, Map<GoodsType, EuropeTradeAccount>>(
+                        EuropeanNation.class),
+                new EnumMap<EuropeanNation, EuropeSaleWindow>(
                         EuropeanNation.class));
     }
 
     /** Saved game: the complete market state is validated before use. */
     Europe(final Model model, final EuropePo po) {
-        this(model, restoreMarkets(po), restoreAccounts(po));
+        this(model, restoreMarkets(po), restoreAccounts(po),
+                restoreSaleWindows(po));
     }
 
     private Europe(final Model model,
             final Map<EuropeanNation, List<GoodsTrade>> markets,
-            final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> accounts) {
+            final Map<EuropeanNation, Map<GoodsType, EuropeTradeAccount>> accounts,
+            final Map<EuropeanNation, EuropeSaleWindow> saleWindows) {
         this.model = Preconditions.checkNotNull(model);
         this.markets = markets;
         this.accounts = accounts;
+        this.saleWindows = saleWindows;
         port = new EuropePort(this.model);
         pier = new EuropePier(this.model);
     }
@@ -118,6 +128,46 @@ public class Europe {
         accounts.forEach((nation, goods) -> out.put(nation,
                 Collections.unmodifiableMap(new LinkedHashMap<>(goods))));
         return Collections.unmodifiableMap(out);
+    }
+
+    /**
+     * @param nation nation whose European sales are read
+     * @return net gold of its committed sales in the last ten owner turns;
+     *         purchases, previews and refused trades never count
+     */
+    public int getRecentSaleRevenue(final EuropeanNation nation) {
+        return getSaleWindow(nation).getRevenue();
+    }
+
+    EuropeSaleWindow getSaleWindow(final EuropeanNation nation) {
+        Preconditions.checkNotNull(nation);
+        return saleWindows.getOrDefault(nation, EuropeSaleWindow.EMPTY);
+    }
+
+    /**
+     * Stores a window after its sale has been computed. An empty window is
+     * removed, so it is never saved.
+     *
+     * @param nation nation whose sales the window counts
+     * @param window the complete window after the settlement
+     */
+    void saveSaleWindow(final EuropeanNation nation,
+            final EuropeSaleWindow window) {
+        if (window.getRevenue() == 0) {
+            saleWindows.remove(nation);
+        } else {
+            saleWindows.put(nation, window);
+        }
+    }
+
+    /**
+     * Starts the nation's own next owner turn. Called only from that owner's
+     * turn start, never from loads, Continue or reports.
+     *
+     * @param nation nation whose owner turn begins
+     */
+    void advanceSaleWindow(final EuropeanNation nation) {
+        saveSaleWindow(nation, getSaleWindow(nation).advanceOwnerTurn());
     }
 
     /**
@@ -197,7 +247,16 @@ public class Europe {
     EuropePo save() {
         final EuropePo po = save(markets);
         po.setAccounts(savedAccounts());
+        po.setSaleWindows(savedSaleWindows());
         return po;
+    }
+
+    /** Only nonempty windows are written; each holds a slot and ten buckets. */
+    private Map<String, int[]> savedSaleWindows() {
+        final Map<String, int[]> out = new LinkedHashMap<>();
+        saleWindows.forEach(
+                (nation, window) -> out.put(nation.name(), window.save()));
+        return out;
     }
 
     /** Only nonempty accounts are written; each pair is six counters. */
@@ -259,6 +318,24 @@ public class Europe {
                 goods.put(goodsType, account);
             }
             out.put(nation, goods);
+        }
+        return out;
+    }
+
+    /**
+     * Restores only canonical windows: names must identify a nation, and each
+     * window is validated before any sale is recorded against it.
+     */
+    private static Map<EuropeanNation, EuropeSaleWindow> restoreSaleWindows(
+            final EuropePo po) {
+        Preconditions.checkArgument(po.getSaleWindows() != null,
+                "Missing European sale windows");
+        final Map<EuropeanNation, EuropeSaleWindow> out = new EnumMap<>(
+                EuropeanNation.class);
+        for (final Map.Entry<String, int[]> entry : po.getSaleWindows()
+                .entrySet()) {
+            out.put(EuropeanNation.valueOf(entry.getKey()),
+                    EuropeSaleWindow.restore(entry.getValue()));
         }
         return out;
     }

@@ -244,6 +244,21 @@ public class ModelPo {
         this.nativeIncitements = nativeIncitements;
     }
 
+    /**
+     * Coastal battery shots already taken in the current owner's round
+     * (R-0177). Absent means no battery has fired this round.
+     */
+    private List<CoastalBatteryShotPo> coastalBatteryShots;
+
+    public List<CoastalBatteryShotPo> getCoastalBatteryShots() {
+        return coastalBatteryShots;
+    }
+
+    public void setCoastalBatteryShots(
+            final List<CoastalBatteryShotPo> coastalBatteryShots) {
+        this.coastalBatteryShots = coastalBatteryShots;
+    }
+
     private List<TurnEventPo> turnEvents = new ArrayList<>();
 
     private WorldMapPo map = new WorldMapPo();

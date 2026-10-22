@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Trade with colony %s</entry>
+    <entry key="giveLabel">Goods you give</entry>
+    <entry key="receiveLabel">Goods you receive</entry>
+    <entry key="barter">Barter goods</entry>
+    <entry key="give">You give: %s %s.</entry>
+    <entry key="receive">You receive: %s %s.</entry>
+    <entry key="nothing">You receive no goods back.</entry>
+    <entry key="prices">Colony bid %s gold per piece, colony ask %s gold per piece. No home tax applies.</entry>
+    <entry key="netHost">The colony pays you %s gold.</entry>
+    <entry key="netVisitor">You pay the colony %s gold.</entry>
+    <entry key="netNone">No gold changes hands.</entry>
+    <entry key="confirm">Confirm trade</entry>
+    <entry key="cancel">Cancel</entry>
+    <entry key="noGoods">You carry no goods this colony can take now.</entry>
+    <entry key="founderAbsent">Jan de Witt must be in your Congress to trade with a foreign colony.</entry>
+    <entry key="atWar">Trade needs peace or alliance with this colony's nation.</entry>
+    <entry key="hostGold">The colony's nation cannot pay this much gold.</entry>
+    <entry key="visitorGold">You do not have enough gold for this trade.</entry>
+    <entry key="hostCapacity">The colony warehouse cannot hold these goods.</entry>
+    <entry key="carrierCapacity">Your holds cannot take these goods.</entry>
+    <entry key="hostStock">The colony does not have that much of these goods.</entry>
+    <entry key="refused">This trade is not possible now. Nothing was traded.</entry>
+    <entry key="changed">The colony, goods, gold or relations changed. Nothing was traded; open the trade again.</entry>
+</properties>

@@ -3,9 +3,11 @@ package org.microcol.model;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitArtillery;
 import org.microcol.model.unit.UnitNativeBrave;
+import org.microcol.model.unit.UnitTreasure;
 
 /** Frozen attacker and defender ordinary-land strengths. */
 public final class CombatStrengths {
@@ -42,13 +44,56 @@ public final class CombatStrengths {
         if (isNativeFight(attacker, defender)) {
             return forNativeBattle(model, attacker, defender);
         }
-        if (!isArmedLand(attacker) || !isArmedLand(defender)
-                || !attacker.isAtPlaceLocation()
+        if (!attacker.isAtPlaceLocation()) {
+            return Optional.empty();
+        }
+        return landBattle(model, attacker, attacker.getLocation(), defender);
+    }
+
+    /**
+     * Prospective quote of an ordinary European land battle fought from the
+     * given square instead of the attacker's present one (R-0170). It uses the
+     * same rule as {@link #forBattle}, so it equals that quote on the present
+     * square. A naval battle has no square-dependent strength, so it quotes the
+     * same ship rule from any approach (R-0171). Native battles have no
+     * prospective quote.
+     *
+     * @param model          required model
+     * @param attacker       required attacker on the map
+     * @param attackerSquare required square the attack would be fought from
+     * @param defender       required defender
+     * @return strengths, or empty when no such battle exists
+     */
+    static Optional<CombatStrengths> forBattleFrom(final Model model,
+            final Unit attacker, final Location attackerSquare,
+            final Unit defender) {
+        if (!attacker.isAtPlaceLocation()) {
+            return Optional.empty();
+        }
+        if (attackerSquare.equals(attacker.getLocation())
+                || attacker.isShip() && defender.isShip()) {
+            return forBattle(model, attacker, defender);
+        }
+        if (attacker.isShip() || defender.isShip()
+                || isNativeFight(attacker, defender)) {
+            return Optional.empty();
+        }
+        return landBattle(model, attacker, attackerSquare, defender);
+    }
+
+    private static Optional<CombatStrengths> landBattle(final Model model,
+            final Unit attacker, final Location attackerSquare,
+            final Unit defender) {
+        // A treasure train defends with no strength, so an armed attacker
+        // always
+        // takes it; any other unarmed defender is still refused here.
+        final boolean treasure = defender instanceof UnitTreasure;
+        if (!isArmedLand(attacker) || !isArmedLand(defender) && !treasure
                 || !defender.isAtPlaceLocation()) {
             return Optional.empty();
         }
         final Terrain attackTerrain = model.getMap()
-                .getTerrainAt(attacker.getLocation());
+                .getTerrainAt(attackerSquare);
         final Terrain defendTerrain = model.getMap()
                 .getTerrainAt(defender.getLocation());
         if (!attackTerrain.getTerrainType().isLand()
@@ -60,7 +105,8 @@ public final class CombatStrengths {
                 .map(CombatStrengths::highestFortificationBonus).orElse(0);
         final int terrainBonus = terrainBonus(defendTerrain);
         final CombatStrength attack = new CombatStrength(base(attacker, true),
-                50, 0, 0, 0, artilleryPenalty(model, attacker));
+                50, 0, 0, 0,
+                artilleryPenalty(model, attacker, attackerSquare, false));
         final CombatStrength defense = new CombatStrength(base(defender, false),
                 0, terrainBonus, model.isFortified(defender) ? 50 : 0,
                 colonyBonus, artilleryPenalty(model, defender));
@@ -188,10 +234,14 @@ public final class CombatStrengths {
     /**
      * Base of a native-fight participant: a brave by its role, an armed
      * European by the ordinary base, and an unarmed European by the civilian 1.
+     * A treasure train has no strength at all.
      */
     private static double nativeBase(final Unit unit, final boolean attack) {
         if (unit instanceof UnitNativeBrave) {
             return ((UnitNativeBrave) unit).getRole().getBase();
+        }
+        if (unit instanceof UnitTreasure) {
+            return 0;
         }
         return isArmedLand(unit) ? base(unit, attack) : 1;
     }
@@ -210,12 +260,26 @@ public final class CombatStrengths {
      */
     static Optional<CombatStrengths> forColonyBattle(final Model model,
             final Unit attacker, final ColonyDefense defense) {
+        if (!attacker.isAtPlaceLocation()) {
+            return Optional.empty();
+        }
+        return forColonyBattleFrom(model, attacker, attacker.getLocation(),
+                defense);
+    }
+
+    /**
+     * Colony battle quote fought from the given square; on the attacker's
+     * present square it equals {@link #forColonyBattle} (R-0170).
+     */
+    static Optional<CombatStrengths> forColonyBattleFrom(final Model model,
+            final Unit attacker, final Location attackerSquare,
+            final ColonyDefense defense) {
         if (!isArmedLand(attacker) || !attacker.isAtPlaceLocation()) {
             return Optional.empty();
         }
         final Colony colony = defense.getColony();
         final Terrain attackTerrain = model.getMap()
-                .getTerrainAt(attacker.getLocation());
+                .getTerrainAt(attackerSquare);
         final Terrain defendTerrain = model.getMap()
                 .getTerrainAt(defense.getBattlefield());
         if (!attackTerrain.getTerrainType().isLand()
@@ -224,7 +288,8 @@ public final class CombatStrengths {
         }
         final Unit defender = defense.getDefender();
         final CombatStrength attack = new CombatStrength(base(attacker, true),
-                50, 0, 0, 0, artilleryPenalty(model, attacker));
+                50, 0, 0, 0,
+                artilleryPenalty(model, attacker, attackerSquare, false));
         final CombatStrength defend = colonyDefenderStrength(model, defender,
                 colony, defense.getBattlefield(), defense.getKind());
         final String inputs = "COLONY:" + defense.getKind() + ':'
@@ -236,6 +301,38 @@ public final class CombatStrengths {
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
                 + ':' + defend.getColonyBonus() + ':' + defense.getInputs();
         return Optional.of(new CombatStrengths(attack, defend, inputs));
+    }
+
+    /**
+     * Frozen strengths of one coastal battery shot (R-0177). The colony's fort
+     * counts 4 and its fortress 6; each full artillery of the colony owner on
+     * the colony tile adds 2 and each damaged one adds 1. The ship defends with
+     * its real naval defense, as in a naval battle. The shot is a single draw
+     * against the attacker's share, decided by {@link #attackerWins(double)}.
+     *
+     * @param model  required model
+     * @param colony required colony with a fort or fortress
+     * @param ship   required ship that has just stepped beside the colony
+     * @return strengths of the battery and of the ship
+     */
+    static CombatStrengths forCoastalBattery(final Model model,
+            final Colony colony, final Ship ship) {
+        double fort = colony.wasConstructionBuilded(ConstructionType.FORTRESS)
+                ? 6
+                : 4;
+        for (final Unit unit : model.getUnitsAt(colony.getLocation())) {
+            if (unit instanceof UnitArtillery
+                    && unit.getOwner() == colony.getOwner()) {
+                fort += ((UnitArtillery) unit).isDamaged() ? 1 : 2;
+            }
+        }
+        final CombatStrength attack = new CombatStrength(fort, 0, 0, 0, 0, 0);
+        final CombatStrength defense = new CombatStrength(
+                shipBase(ship.getType()), 0, 0, 0, 0, 0,
+                privateerFounderBonus(ship));
+        final String inputs = "COASTAL:" + fort + ':' + ship.getType().name()
+                + ':' + privateerFounderBonus(ship);
+        return new CombatStrengths(attack, defense, inputs);
     }
 
     /**
@@ -280,7 +377,15 @@ public final class CombatStrengths {
                 : 0;
     }
 
-    private static int shipBase(final UnitType type) {
+    /**
+     * Ordinary attack base of a ship type, used by naval battles and by the
+     * foreign report's naval strength (R-0168).
+     *
+     * @param type required ship type
+     * @return its base strength
+     * @throws IllegalArgumentException for a type that is not a naval combatant
+     */
+    static int shipBase(final UnitType type) {
         if (type == UnitType.CARAVEL)
             return 2;
         if (type == UnitType.MERCHANTMAN)
@@ -323,7 +428,22 @@ public final class CombatStrengths {
         return base(unit, true);
     }
 
+    /**
+     * Ordinary attack base of an armed land unit with no modifiers, as used by
+     * the foreign report's military strength (R-0168). The caller selects units
+     * with {@link #isArmedLand(Unit)}; tribute keeps its own rule.
+     *
+     * @param unit required armed land unit
+     * @return its base strength
+     */
+    static double armedLandBase(final Unit unit) {
+        return base(unit, true);
+    }
+
     private static double base(Unit unit, boolean attack) {
+        if (unit instanceof UnitTreasure) {
+            return 0;
+        }
         if (unit instanceof UnitArtillery) {
             return ((UnitArtillery) unit).isDamaged() ? attack ? 5 : 3
                     : attack ? 7 : 5;
@@ -367,7 +487,16 @@ public final class CombatStrengths {
         if (!(unit instanceof UnitArtillery)) {
             return 0;
         }
-        final boolean fortified = model.getColonyAt(unit.getLocation())
+        return artilleryPenalty(model, unit, unit.getLocation(), nativeRaid);
+    }
+
+    /** The same penalty, judged on the given square. */
+    private static int artilleryPenalty(Model model, Unit unit, Location square,
+            boolean nativeRaid) {
+        if (!(unit instanceof UnitArtillery)) {
+            return 0;
+        }
+        final boolean fortified = model.getColonyAt(square)
                 .filter(colony -> colony.getOwner() == unit.getOwner())
                 .filter(colony -> colony
                         .wasConstructionBuilded(ConstructionType.STOCKADE)

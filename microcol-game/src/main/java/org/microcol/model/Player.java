@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.PlayerPo;
@@ -68,11 +69,20 @@ public abstract class Player {
     /** Null unless a computer colony is expanding to a second colony. */
     private RivalExpansionObjective rivalExpansionObjective;
 
+    /** Null before a computer colony completes a supply round trip. */
+    private Integer rivalLastServedColonyId;
+
+    /** Carriers waiting in their colony ports between supply round trips. */
+    private final Set<Integer> rivalParkedCarrierIds = new TreeSet<>();
+
     /**
      * Colonies remembered from actual observation, by location. Concurrent
      * because the interface paints while the model thread observes.
      */
     private final Map<Location, ColonySighting> colonySightings = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** Colonial powers actually seen at some point; only ever grows. */
+    private final java.util.List<String> knownPowers = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     protected Player(final String name, final boolean computer,
             final int initialGold, final Model model,
@@ -116,6 +126,8 @@ public abstract class Player {
                 "Visible is null during creating '%s'", playerPo.getName());
         Preconditions.checkArgument(playerPo.getUnitPurchaseCounts() != null,
                 "Missing unit purchase counts");
+        Preconditions.checkArgument(playerPo.getRivalParkedCarrierIds() != null,
+                "Rival parked carriers are missing");
         if (playerPo.getNativeNation() != null) {
             Preconditions.checkArgument(playerPo.isComputer(),
                     "Native players are computer players");
@@ -126,7 +138,9 @@ public abstract class Player {
                             && playerPo.getTax() == null
                             && playerPo.getUnitPurchaseCounts().isEmpty()
                             && playerPo.getRivalTradeObjective() == null
-                            && playerPo.getRivalExpansionObjective() == null,
+                            && playerPo.getRivalExpansionObjective() == null
+                            && playerPo.getRivalLastServedColonyId() == null
+                            && playerPo.getRivalParkedCarrierIds().isEmpty(),
                     "Native players have no European state");
             return new PlayerNative(playerPo.getName(),
                     playerPo.getNativeNation(), playerPo.getGold(), model,
@@ -158,6 +172,13 @@ public abstract class Player {
             player.loadRivalTradeObjective(playerPo.getRivalTradeObjective());
             player.loadRivalExpansionObjective(
                     playerPo.getRivalExpansionObjective());
+            Preconditions.checkArgument(
+                    (playerPo.getRivalLastServedColonyId() == null
+                            && playerPo.getRivalParkedCarrierIds().isEmpty())
+                            || playerPo.isComputer(),
+                    "Only computer colonies keep a supply rotation");
+            player.loadRivalRotation(playerPo.getRivalLastServedColonyId(),
+                    playerPo.getRivalParkedCarrierIds());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
@@ -171,7 +192,9 @@ public abstract class Player {
                     "Kings cannot have purchase counts");
             Preconditions.checkArgument(
                     playerPo.getRivalTradeObjective() == null
-                            && playerPo.getRivalExpansionObjective() == null,
+                            && playerPo.getRivalExpansionObjective() == null
+                            && playerPo.getRivalLastServedColonyId() == null
+                            && playerPo.getRivalParkedCarrierIds().isEmpty(),
                     "Kings cannot have trade objectives");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
@@ -286,6 +309,68 @@ public abstract class Player {
                         && model.getColonyAt(location).isEmpty());
     }
 
+    /**
+     * Remember every other colonial power with a unit or colony inside present
+     * sight right now (R-0168). Ships and colonists count alike; units that are
+     * not seen, such as ships on the high seas, reveal nothing. Contact is only
+     * ever added, so it outlives the sighting, and reading the report never
+     * calls this.
+     */
+    void observeContacts() {
+        if (!isColonialNation()) {
+            return;
+        }
+        for (final Unit unit : model.getAllUnits()) {
+            final Player other = unit.getOwner();
+            if (other != this && other.isColonialNation()
+                    && !knownPowers.contains(other.getName())
+                    && unit.isAtPlaceLocation()
+                    && isCurrentlyVisible(unit.getLocation())) {
+                knownPowers.add(other.getName());
+            }
+        }
+        for (final Colony colony : model.getColonies()) {
+            final Player other = colony.getOwner();
+            if (other != this && other.isColonialNation()
+                    && !knownPowers.contains(other.getName())
+                    && isCurrentlyVisible(colony.getLocation())) {
+                knownPowers.add(other.getName());
+            }
+        }
+    }
+
+    /**
+     * @param power colonial power to ask about
+     * @return whether this player has earned contact with it: it was seen in
+     *         present sight at some point, or one of its colonies is known
+     */
+    public boolean hasContactWith(final Player power) {
+        Preconditions.checkNotNull(power);
+        return knownPowers.contains(power.getName()) || getKnownColonies()
+                .stream().anyMatch(sighting -> sighting.getOwner() == power);
+    }
+
+    /**
+     * Restores saved contacts verbatim. Every name must be a registered
+     * colonial nation other than this player, listed once; nothing is reset or
+     * guessed.
+     */
+    void restoreContacts(final List<String> saved) {
+        Preconditions.checkArgument(saved != null, "Missing known powers");
+        final Set<String> restored = new java.util.HashSet<>();
+        for (final String powerName : saved) {
+            Preconditions.checkArgument(
+                    powerName != null && !powerName.equals(name)
+                            && restored.add(powerName)
+                            && model.getPlayers().stream().anyMatch(
+                                    player -> player.getName().equals(powerName)
+                                            && player.isColonialNation()),
+                    "Invalid known power");
+        }
+        knownPowers.clear();
+        knownPowers.addAll(restored);
+    }
+
     /** Remember a colony the player was directly told about. */
     void recordColony(final Colony colony) {
         colonySightings.put(colony.getLocation(), sightingOf(colony));
@@ -353,6 +438,9 @@ public abstract class Player {
                 "Unit's owher '%s' is to same as '%s'", unit.getOwner(), this);
         visibility.makeVisibleMapForUnit(unit);
         observeColonies();
+        // The move may bring a rival into this player's sight, or this player
+        // into a rival's, so every player observes contact.
+        model.refreshContacts();
     }
 
     public PlayerPo save() {
@@ -382,6 +470,9 @@ public abstract class Player {
         if (rivalExpansionObjective != null) {
             out.setRivalExpansionObjective(rivalExpansionObjective.save());
         }
+        out.setRivalLastServedColonyId(rivalLastServedColonyId);
+        out.setRivalParkedCarrierIds(new ArrayList<>(rivalParkedCarrierIds));
+        knownPowers.stream().sorted().forEach(out.getKnownPowers()::add);
         colonySightings.values().stream().sorted(java.util.Comparator
                 .comparingInt((ColonySighting sighting) -> sighting
                         .getLocation().getX())
@@ -496,6 +587,12 @@ public abstract class Player {
     }
 
     boolean startTurn() {
+        // Once per owner turn, before any sale of this update. A Crown has no
+        // turn of its own for its ruled nation's market.
+        if (!isKing()) {
+            EuropeanNation.findByPlayerName(getName()).ifPresent(
+                    nation -> model.getEurope().advanceSaleWindow(nation));
+        }
         final boolean hadFranklin = getCongressMembers()
                 .contains(Founder.BENJAMIN_FRANKLIN);
         getAllUnits().stream().filter(Unit::isShip).map(Ship.class::cast)
@@ -675,6 +772,7 @@ public abstract class Player {
         // fall.
         model.observeNativeRelations(this);
         settleCongress();
+        model.collectRoyalTreasure(this);
         getAllUnits().forEach(unit -> unit.startTurn());
         // Before missions, so a convert delivered by this update starts at zero
         // unassigned updates.
@@ -822,6 +920,11 @@ public abstract class Player {
             }
             model.getTurnEventStore()
                     .add(TurnEventProvider.getFounderArrived(this, arrived));
+            if (arrived == Founder.BARTOLOME_DE_LAS_CASAS) {
+                // After the arrival notice, so the freed converts read as its
+                // effect (R-0182).
+                model.freeNativeConverts(this);
+            }
         }
         if (congress.isJonesDeliveryPending()) {
             if (!model.canAddUnitInEurope()) {
@@ -1363,11 +1466,14 @@ public abstract class Player {
         final EuropeTradeAccount account = model.getEurope()
                 .getTradeAccount(getEuropeanNation(), goods.getType())
                 .sold(goods.getAmount(), quote.getTotal(), false);
+        final EuropeSaleWindow window = model.getEurope()
+                .getSaleWindow(getEuropeanNation()).withSale(quote.getTotal());
         setGold(Math.addExact(getGold(), quote.getTotal()));
         model.getEurope().applyTrade(getEuropeanNation(), goods.getType(),
                 goods.getAmount());
         model.getEurope().saveTradeAccount(getEuropeanNation(), goods.getType(),
                 account);
+        model.getEurope().saveSaleWindow(getEuropeanNation(), window);
     }
 
     private static void checkConfirmedTerms(final EuropeTradeQuote offered,
@@ -1518,6 +1624,77 @@ public abstract class Player {
     /** Forget the cycle, for example when its colony or carrier is gone. */
     public void clearRivalTradeObjective() {
         rivalTradeObjective = null;
+    }
+
+    /**
+     * @return the colony whose supply round trip finished last, when one did
+     */
+    public Optional<Integer> getRivalLastServedColonyId() {
+        return Optional.ofNullable(rivalLastServedColonyId);
+    }
+
+    /**
+     * Record the colony whose supply round trip just finished, so the next
+     * choice serves the colony after it.
+     *
+     * @param colonyId required colony of the finished round trip
+     * @throws IllegalStateException when this player is not a computer colony
+     */
+    public void setRivalLastServedColonyId(final int colonyId) {
+        Preconditions.checkArgument(colonyId >= 0,
+                "Rival rotation colony identity is invalid");
+        Preconditions.checkState(computer && !isKing() && !isNative(),
+                "Only computer colonies keep a supply rotation");
+        rivalLastServedColonyId = colonyId;
+    }
+
+    /**
+     * @return IDs of the carriers parked in their colony ports, in ID order
+     */
+    public Set<Integer> getRivalParkedCarrierIds() {
+        return new TreeSet<>(rivalParkedCarrierIds);
+    }
+
+    /**
+     * Keep an idle carrier in its colony port until the supply rotation chooses
+     * it or another owner use takes it.
+     *
+     * @param shipId required identity of the idle carrier
+     * @throws IllegalStateException when this player is not a computer colony
+     */
+    public void parkRivalCarrier(final int shipId) {
+        Preconditions.checkArgument(shipId >= 0,
+                "Rival parked carrier identity is invalid");
+        Preconditions.checkState(computer && !isKing() && !isNative(),
+                "Only computer colonies keep a supply rotation");
+        rivalParkedCarrierIds.add(shipId);
+    }
+
+    /** Release a parked carrier to ordinary orders or to another objective. */
+    public void unparkRivalCarrier(final int shipId) {
+        rivalParkedCarrierIds.remove(shipId);
+    }
+
+    /**
+     * Restore the saved rotation. Malformed identities are rejected instead of
+     * guessed. A well-formed identity of a unit or colony that no longer
+     * exists, belongs to someone else or is not a ship is kept; the owner
+     * retires it against live state before use.
+     */
+    private void loadRivalRotation(final Integer lastServedColonyId,
+            final List<Integer> parkedCarrierIds) {
+        Preconditions.checkArgument(
+                lastServedColonyId == null || lastServedColonyId >= 0,
+                "Rival rotation colony identity is invalid");
+        Preconditions.checkArgument(parkedCarrierIds != null,
+                "Rival parked carriers are missing");
+        for (final Integer shipId : parkedCarrierIds) {
+            Preconditions.checkArgument(shipId != null && shipId >= 0,
+                    "Rival parked carrier identity is invalid");
+            Preconditions.checkArgument(rivalParkedCarrierIds.add(shipId),
+                    "Rival parked carrier identity is duplicated");
+        }
+        rivalLastServedColonyId = lastServedColonyId;
     }
 
     private void loadRivalTradeObjective(final RivalTradeObjectivePo saved) {

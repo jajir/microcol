@@ -231,6 +231,23 @@ public interface Unit {
     Optional<AttackOrder> prepareAttack(Location targetLocation,
             boolean allowDeclaration);
 
+    /**
+     * Read-only quote of the battle this unit would fight against a target in
+     * present sight from an approach square beside it. It applies the same
+     * defender selection, eligibility and strength rules as
+     * {@link #prepareAttack} without a declaration, judging the attacker's
+     * square-dependent strength on the approach square. It needs no action
+     * point, never changes state and does not check that the approach can be
+     * reached. The attack itself is still prepared from the actual square.
+     *
+     * @param approach       required land square next to the target
+     * @param targetLocation required battlefield
+     * @return the quote, or empty when no legal battle exists or the approach
+     *         is not a square this unit could fight from
+     */
+    Optional<AttackOrder> previewAttack(Location approach,
+            Location targetLocation);
+
     boolean isPossibleToEmbarkAt(Location targetLocation);
 
     boolean isPossibleToGoToPort(Location moveToLocation);

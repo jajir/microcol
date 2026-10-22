@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitCreateRequest;
 import org.microcol.model.unit.UnitFactory;
 
@@ -60,6 +61,23 @@ public final class UnitStorage {
                 movementThirds);
         unitCreateRequest.setCargoBuilder(cargoBuilder);
 
+        final Unit unit = unitFactory.createUnit(unitCreateRequest);
+        units.add(unit);
+        return unit;
+    }
+
+    /**
+     * Create the treasure train of a conquered native settlement (R-0175): a
+     * new unit of the owner on the given square, carrying the face value that
+     * the conquest decided. It has no movement until the owner's next turn.
+     */
+    Unit createTreasure(final Model model,
+            final Function<Unit, Place> placeBuilder, final Player owner,
+            final int value) {
+        final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model,
+                placeBuilder, idManager.nextId(), UnitType.TREASURE_TRAIN,
+                owner, new UnitActionNoAction(), 0);
+        unitCreateRequest.setTreasureValue(value);
         final Unit unit = unitFactory.createUnit(unitCreateRequest);
         units.add(unit);
         return unit;

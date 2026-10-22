@@ -199,6 +199,35 @@ public final class TurnEventProvider {
     }
 
     /**
+     * Notice that a hostile patrol slowed or stopped one of the player's ships.
+     *
+     * @param player   required owner of the intercepted ship
+     * @param patrolId ID of the patrol that was selected for the check
+     * @param stopped  whether the ship lost all remaining movement
+     * @return turn event object
+     */
+    public static TurnEvent getPatrolInterception(final Player player,
+            final int patrolId, final boolean stopped) {
+        return new TurnEventPatrolInterception(player.getName(), patrolId,
+                stopped);
+    }
+
+    /**
+     * Notice that a coastal battery fired at one of the player's ships.
+     *
+     * @param player   required owner of the ship that was fired at
+     * @param colonyId ID of the colony whose battery fired
+     * @param shipId   ID of the ship that was fired at
+     * @param hit      whether the shot damaged the ship
+     * @return turn event object
+     */
+    public static TurnEvent getCoastalBattery(final Player player,
+            final int colonyId, final int shipId, final boolean hit) {
+        return new TurnEventCoastalBattery(player.getName(), colonyId, shipId,
+                hit);
+    }
+
+    /**
      * Notice of one resolved lost-city rumor, with its actual result.
      *
      * @param player        required owner of the explorer

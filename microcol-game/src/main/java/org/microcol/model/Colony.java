@@ -1302,6 +1302,7 @@ public class Colony {
         final Europe europe = model.getEurope();
         final EuropeanNation nation = owner.getEuropeanNation();
         final boolean revolutionary = owner.isDeclaredIndependence();
+        EuropeSaleWindow window = europe.getSaleWindow(nation);
         int finalGold = owner.getGold();
         for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
             if (!exportGoods.contains(type)) {
@@ -1328,6 +1329,7 @@ public class Colony {
             // overflowing export refuses the whole batch.
             accounts.add(europe.getTradeAccount(nation, type).sold(amount,
                     income, revolutionary));
+            window = window.withSale(income);
         }
         if (sales.isEmpty()) {
             return;
@@ -1342,6 +1344,7 @@ public class Colony {
             model.addTurnEvent(TurnEventProvider.getCustomHouseExport(owner,
                     this, goods, incomes.get(index)));
         }
+        europe.saveSaleWindow(nation, window);
     }
 
     private Unit eatFoodAndOptionallyMakeNewColonist(

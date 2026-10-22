@@ -117,6 +117,9 @@ public class Model {
 
     /** Paid-incitement orders of native tribes (R-0166). */
     private final NativeIncitements nativeIncitements;
+
+    /** Coastal battery shots taken in the current owner's round (R-0177). */
+    private final CoastalBatteryShots coastalBatteryShots;
     private final NativeLandRights nativeLandRights;
     /** Player name to the settlement ids that player has learned by sight. */
     private final Map<String, Set<Integer>> learnedNativeSettlements;
@@ -326,6 +329,10 @@ public class Model {
                 modelPo.getNativeRelationOutcomeIds());
         nativeIncitements = NativeIncitements
                 .make(modelPo.getNativeIncitements());
+        coastalBatteryShots = CoastalBatteryShots.make(
+                modelPo.getCoastalBatteryShots(), nextColonyId,
+                playerStore.getPlayers().stream().map(Player::getName)
+                        .collect(Collectors.toSet()));
         nativeLandRights = NativeLandRights.make(
                 location -> map.isValid(location)
                         && !map.getTerrainTypeAt(location).isSea(),
@@ -442,8 +449,11 @@ public class Model {
         // present sight are then refreshed from permitted observation.
         for (final PlayerPo savedPlayer : modelPo.getGameManager()
                 .getPlayers()) {
-            model.getPlayerByName(savedPlayer.getName())
+            final Player restoredPlayer = model
+                    .getPlayerByName(savedPlayer.getName());
+            restoredPlayer
                     .restoreColonyKnowledge(savedPlayer.getColonySightings());
+            restoredPlayer.restoreContacts(savedPlayer.getKnownPowers());
         }
         model.assureDefaultVisibility();
         model.refreshObservations();
@@ -457,7 +467,16 @@ public class Model {
      */
     void refreshObservations() {
         playerStore.getPlayers().forEach(Player::observeColonies);
+        refreshContacts();
         learnNativeSettlements();
+    }
+
+    /**
+     * Let every colonial player remember the powers it sees right now. Called
+     * after observations and after every unit step; never by a report read.
+     */
+    void refreshContacts() {
+        playerStore.getPlayers().forEach(Player::observeContacts);
     }
 
     private static void validateSavedColonyFields(final ModelPo data,
@@ -2493,6 +2512,97 @@ public class Model {
                 .mapToDouble(Unit::getMilitaryStrenght).sum();
     }
 
+    /**
+     * Report military strength: ordinary base of every living armed land unit
+     * the owner has, whether or not it can still move this turn. Unarmed
+     * colonists and wagons contribute nothing. Tribute and peace prices keep
+     * their own rule in {@link #armedLandStrength(Player)}.
+     */
+    private double armedLandBaseStrength(final Player owner) {
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && CombatStrengths.isArmedLand(unit))
+                .mapToDouble(CombatStrengths::armedLandBase).sum();
+    }
+
+    /**
+     * Report naval strength: the canonical ship base of every living armed ship
+     * the owner has. Armed means the ship type carries guns, so a ship under
+     * repair still counts while it lives; galleons, caravels and merchantmen
+     * contribute nothing, and sunk ships are no longer units.
+     */
+    private double armedNavalBaseStrength(final Player owner) {
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == owner && unit.isShip()
+                        && unit.getType().canAttack())
+                .mapToDouble(unit -> CombatStrengths.shipBase(unit.getType()))
+                .sum();
+    }
+
+    /**
+     * Foreign colonial powers as the viewer may read them. The relation is
+     * always listed. Actual aggregates need Jan de Witt in the viewer's
+     * Congress and a current contact with the power. Reading changes no state,
+     * random draw, gold or knowledge.
+     *
+     * @param viewer registered colonial nation reading its report
+     * @return one row per other colonial power, in registry order
+     */
+    public List<ForeignPowerComparison> getForeignPowerComparisons(
+            final Player viewer) {
+        Preconditions.checkNotNull(viewer);
+        Preconditions.checkArgument(
+                getPlayers().contains(viewer) && viewer.isColonialNation(),
+                "Viewer is not a registered colonial nation");
+        final boolean deWitt = viewer.getCongressMembers()
+                .contains(Founder.JAN_DE_WITT);
+        return getPlayers().stream().filter(Player::isColonialNation)
+                .filter(power -> power != viewer)
+                .map(power -> foreignPowerComparison(viewer, power, deWitt))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    private ForeignPowerComparison foreignPowerComparison(final Player viewer,
+            final Player power, final boolean deWitt) {
+        final EuropeanRelationState relation = getEuropeanRelation(viewer,
+                power);
+        if (!deWitt) {
+            return ForeignPowerComparison.locked(power, relation);
+        }
+        if (!hasContact(viewer, power)) {
+            return ForeignPowerComparison.uncontacted(power, relation);
+        }
+        return ForeignPowerComparison.revealed(power, relation,
+                foreignFigures(power));
+    }
+
+    /**
+     * Earned contact: the viewer has seen a unit or colony of the power in its
+     * present sight (remembered by {@link Player#observeContacts()} when the
+     * discovery happened) or knows one of its colonies. Reading it writes no
+     * sighting or knowledge.
+     */
+    private boolean hasContact(final Player viewer, final Player power) {
+        return viewer.hasContactWith(power);
+    }
+
+    /**
+     * Actual aggregates of one power. Population sums its colonies; the average
+     * is zero without colonies. Strengths and sales reuse the owners of those
+     * rules.
+     */
+    private ForeignPowerComparison.Figures foreignFigures(final Player power) {
+        final List<Colony> colonies = getColonies(power);
+        final int population = colonies.stream().mapToInt(Colony::getPopulation)
+                .sum();
+        final double averageColonySize = colonies.isEmpty() ? 0
+                : (double) population / colonies.size();
+        return new ForeignPowerComparison.Figures(population, colonies.size(),
+                averageColonySize, armedLandBaseStrength(power),
+                armedNavalBaseStrength(power),
+                getEurope().getRecentSaleRevenue(power.getEuropeanNation()));
+    }
+
     /** Eligible armed or mounted visitors with visible adjacent contact. */
     public List<Unit> getTributeVisitors(final Player actor,
             final Player rival) {
@@ -4077,6 +4187,7 @@ public class Model {
         out.setNativeArmsSales(nativeRelations.saveArmsSales());
         out.setNativeRelationOutcomeIds(nativeRelations.saveAppliedOutcomes());
         out.setNativeIncitements(nativeIncitements.save());
+        out.setCoastalBatteryShots(coastalBatteryShots.save());
         out.setNativeLandRights(nativeLandRights.savePaid());
         out.setNativeLandTakings(nativeLandRights.saveTaken());
         out.setNativeContacts(nativeContacts.save());
@@ -5379,6 +5490,326 @@ public class Model {
         }
     }
 
+    /**
+     * Terms of a sale to an adjacent foreign colony (R-0167): the carrier gives
+     * the goods and the colony owner pays their Europe bid, with no visitor
+     * tax. Pure read.
+     *
+     * @param visitor required wagon or ship beside the colony
+     * @param host    required foreign colony
+     * @param goods   required goods the carrier gives
+     * @return the quote; its problem says why the sale is not legal now
+     */
+    public ForeignColonyTradeQuote quoteForeignColonySale(final Unit visitor,
+            final Colony host, final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        return quoteForeignColony(visitor, host, goods, null);
+    }
+
+    /**
+     * Terms of a barter with an adjacent foreign colony (R-0167): one incoming
+     * commodity for one outgoing commodity, valued at the colony owner's Europe
+     * bid and ask. The net gold is paid by the side that gains the difference.
+     * Pure read.
+     *
+     * @param visitor  required wagon or ship beside the colony
+     * @param host     required foreign colony
+     * @param incoming required goods the carrier gives
+     * @param outgoing required goods the carrier receives
+     * @return the quote; its problem says why the barter is not legal now
+     */
+    public ForeignColonyTradeQuote quoteForeignColonyBarter(final Unit visitor,
+            final Colony host, final Goods incoming, final Goods outgoing) {
+        Preconditions.checkNotNull(incoming);
+        Preconditions.checkNotNull(outgoing);
+        return quoteForeignColony(visitor, host, incoming, outgoing);
+    }
+
+    /**
+     * Access to trade with a foreign colony: the running game, the current
+     * colonial owner, an adjacent visible colony of another colonial nation,
+     * Jan de Witt in the visitor's Congress, peace or alliance, and a loaded
+     * undamaged carrier. Rebellion does not affect this; Europe closure is not
+     * part of it. Pure read.
+     *
+     * @param visitor required unit
+     * @param host    required colony
+     * @return the first reason access is refused, or NONE when it is open
+     */
+    public ForeignColonyTradeProblem getForeignColonyTradeAccess(
+            final Unit visitor, final Colony host) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(host);
+        return foreignColonyAccess(visitor, host);
+    }
+
+    /**
+     * Most pieces of one commodity that a foreign trade may give. The limit is
+     * the carried amount and the colony's free storage; the outgoing side uses
+     * {@link #getForeignColonyReceiveLimit}, because its room depends on the
+     * goods given in the same barter. Zero when access is refused. Pure read.
+     *
+     * @param visitor  required unit
+     * @param host     required colony
+     * @param goods    required commodity
+     * @param incoming whether the carrier gives the goods; the stock of the
+     *                 outgoing side is returned for {@code false}
+     * @return the largest legal quantity, zero when none is legal
+     */
+    public int getForeignColonyTradeLimit(final Unit visitor, final Colony host,
+            final GoodsType goods, final boolean incoming) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(host);
+        Preconditions.checkNotNull(goods);
+        if (foreignColonyAccess(visitor,
+                host) != ForeignColonyTradeProblem.NONE) {
+            return 0;
+        }
+        if (incoming) {
+            return Math.min(cargoAmount(visitor, goods),
+                    host.getWarehouse().getFreeStorage(goods));
+        }
+        return host.getWarehouse().getGoods(goods).getAmount();
+    }
+
+    /**
+     * Most pieces of an outgoing commodity that a barter may hand over, given
+     * the incoming goods of the same barter (R-0167). The carrier room counts
+     * the holds that the given goods free; the colony stock limits the rest.
+     * Zero when access is refused. Pure read.
+     *
+     * @param visitor  required unit
+     * @param host     required colony
+     * @param given    required incoming goods and their amount
+     * @param received required outgoing commodity
+     * @return the largest legal quantity, zero when none is legal
+     */
+    public int getForeignColonyReceiveLimit(final Unit visitor,
+            final Colony host, final Goods given, final GoodsType received) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(host);
+        Preconditions.checkNotNull(given);
+        Preconditions.checkNotNull(received);
+        if (foreignColonyAccess(visitor,
+                host) != ForeignColonyTradeProblem.NONE) {
+            return 0;
+        }
+        return Math.min(host.getWarehouse().getGoods(received).getAmount(),
+                roomAfterGiving(visitor, given.getType(), given.getAmount(),
+                        received));
+    }
+
+    /**
+     * Pieces of a commodity in the colony warehouse (R-0167). Pure read.
+     *
+     * @param host  required colony
+     * @param goods required commodity
+     * @return the stock, zero when the warehouse holds none
+     */
+    public int getForeignColonyStock(final Colony host, final GoodsType goods) {
+        Preconditions.checkNotNull(host);
+        Preconditions.checkNotNull(goods);
+        return host.getWarehouse().getGoods(goods).getAmount();
+    }
+
+    /**
+     * Trade with an adjacent foreign colony on the terms the player confirmed
+     * (R-0167). The live quote must equal the confirmed one and be legal; every
+     * check runs before the first change. Then the incoming goods leave the
+     * carrier for the colony warehouse, the outgoing goods enter the carrier,
+     * and the net gold moves once between the two treasuries. The colony is
+     * never entered or captured. A repeated confirmation fails, because the
+     * carrier and treasuries have already changed.
+     *
+     * @param visitor required wagon or ship beside the colony
+     * @param host    required foreign colony
+     * @param offered required terms the player confirmed
+     * @throws ForeignColonyTermsChangedException when the terms no longer hold;
+     *                                            nothing was traded
+     */
+    public void tradeWithForeignColony(final Unit visitor, final Colony host,
+            final ForeignColonyTradeQuote offered) {
+        Preconditions.checkNotNull(offered);
+        checkTurnPreparationComplete();
+        final ForeignColonyTradeQuote live = quoteForeignColony(visitor, host,
+                offered.getIncoming(), offered.getOutgoing());
+        if (!live.isLegal() || !live.equals(offered)) {
+            throw new ForeignColonyTermsChangedException(
+                    "Foreign colony terms changed; nothing was traded");
+        }
+        final Goods incoming = live.getIncoming();
+        final Goods outgoing = live.getOutgoing();
+        final Player owner = visitor.getOwner();
+        final Player hostOwner = host.getOwner();
+        removeCargo(visitor, incoming.getType(), incoming.getAmount());
+        host.getWarehouse().addGoods(incoming);
+        if (outgoing != null) {
+            host.getWarehouse().removeGoods(outgoing);
+            storeGoods(visitor, outgoing.getType(), outgoing.getAmount());
+        }
+        owner.setGold(owner.getGold() + live.getNetGold());
+        hostOwner.setGold(hostOwner.getGold() - live.getNetGold());
+    }
+
+    /**
+     * Free room for the received goods once the given goods have left the
+     * carrier (R-0167). The slots are walked in the order the removal empties
+     * them, so the count matches the placement that follows. Unit-held and
+     * reserved holds, such as a treasure train's six holds, never count. Partly
+     * emptied slots still hold the given goods and count nothing. Pure read:
+     * the carrier is not changed.
+     */
+    private static int roomAfterGiving(final Unit carrier,
+            final GoodsType given, final int amount, final GoodsType received) {
+        int left = amount;
+        int room = 0;
+        for (final CargoSlot slot : ((UnitWithCargo) carrier).getCargo()
+                .getSlots()) {
+            if (slot.isLoadedUnit() || slot.isReservedHold()) {
+                continue;
+            }
+            final Optional<Goods> held = slot.getGoods();
+            if (held.isEmpty()) {
+                room += CargoSlot.MAX_CARGO_SLOT_CAPACITY;
+            } else if (held.get().getType().equals(given)) {
+                final int taken = Math.min(left, held.get().getAmount());
+                left -= taken;
+                if (taken == held.get().getAmount()) {
+                    room += CargoSlot.MAX_CARGO_SLOT_CAPACITY;
+                }
+            } else if (held.get().getType().equals(received)) {
+                room += CargoSlot.MAX_CARGO_SLOT_CAPACITY
+                        - held.get().getAmount();
+            }
+        }
+        return room;
+    }
+
+    /**
+     * Quote one sale or barter. The access comes first; refused access returns
+     * the quote with that problem and zero values. Otherwise the goods, the
+     * warehouse, the carrier room and both treasuries are compared before the
+     * net gold is accepted.
+     */
+    private ForeignColonyTradeQuote quoteForeignColony(final Unit visitor,
+            final Colony host, final Goods incoming, final Goods outgoing) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(host);
+        Preconditions.checkNotNull(incoming);
+        final ForeignColonyTradeProblem access = foreignColonyAccess(visitor,
+                host);
+        if (access != ForeignColonyTradeProblem.NONE) {
+            return new ForeignColonyTradeQuote(visitor.getId(), host.getId(),
+                    incoming, outgoing, access, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+        final Player owner = visitor.getOwner();
+        final Player hostOwner = host.getOwner();
+        final EuropeanNation european = hostOwner.getEuropeanNation();
+        final int bid = getEurope()
+                .getGoodsTradeForType(incoming.getType(), european)
+                .getSellPrice();
+        final int ask = outgoing == null ? 0
+                : getEurope().getGoodsTradeForType(outgoing.getType(), european)
+                        .getBuyPrice();
+        final int carried = cargoAmount(visitor, incoming.getType());
+        final int hostFree = host.getWarehouse()
+                .getFreeStorage(incoming.getType());
+        final int hostStock = outgoing == null ? 0
+                : host.getWarehouse().getGoods(outgoing.getType()).getAmount();
+        final int room = outgoing == null ? 0
+                : roomAfterGiving(visitor, incoming.getType(),
+                        incoming.getAmount(), outgoing.getType());
+        // Positive when the colony owner pays the visitor; never includes tax.
+        final long net = (long) incoming.getAmount() * bid
+                - (outgoing == null ? 0L : (long) outgoing.getAmount() * ask);
+        final ForeignColonyTradeProblem problem = foreignColonyProblem(incoming,
+                outgoing, carried, hostFree, hostStock, room, owner.getGold(),
+                hostOwner.getGold(), net);
+        return new ForeignColonyTradeQuote(visitor.getId(), host.getId(),
+                incoming, outgoing, problem, bid, ask,
+                problem == ForeignColonyTradeProblem.NONE ? (int) net : 0,
+                owner.getGold(), hostOwner.getGold(), carried, hostFree,
+                hostStock, room);
+    }
+
+    private ForeignColonyTradeProblem foreignColonyAccess(final Unit visitor,
+            final Colony host) {
+        final Player owner = visitor.getOwner();
+        final Player hostOwner = host.getOwner();
+        if (!isGameRunning() || !(visitor instanceof UnitWithCargo)
+                || getCurrentPlayer() != owner || !owner.isColonialNation()
+                || !hostOwner.isColonialNation() || owner == hostOwner
+                || !getPlayers().contains(owner)
+                || !getPlayers().contains(hostOwner)
+                || tryGetUnitById(visitor.getId()).orElse(null) != visitor
+                || !visitor.isAtPlaceLocation()
+                || getColonyAt(host.getLocation()).orElse(null) != host
+                || !visitor.getLocation().isNeighbor(host.getLocation())
+                || !owner.isVisible(host.getLocation())) {
+            return ForeignColonyTradeProblem.NO_ACCESS;
+        }
+        if (!owner.getCongressMembers().contains(Founder.JAN_DE_WITT)) {
+            return ForeignColonyTradeProblem.FOUNDER_ABSENT;
+        }
+        final EuropeanRelationState relation = getEuropeanRelation(owner,
+                hostOwner);
+        if (relation != EuropeanRelationState.PEACE
+                && relation != EuropeanRelationState.ALLIANCE) {
+            return ForeignColonyTradeProblem.AT_WAR;
+        }
+        if (visitor instanceof Ship && ((Ship) visitor).isDamaged()) {
+            return ForeignColonyTradeProblem.DAMAGED_CARRIER;
+        }
+        if (!hasGoodsAboard((UnitWithCargo) visitor)) {
+            return ForeignColonyTradeProblem.EMPTY_CARGO;
+        }
+        return ForeignColonyTradeProblem.NONE;
+    }
+
+    private static ForeignColonyTradeProblem foreignColonyProblem(
+            final Goods incoming, final Goods outgoing, final int carried,
+            final int hostFree, final int hostStock, final int room,
+            final int visitorGold, final int hostGold, final long net) {
+        if (incoming.getAmount() <= 0
+                || outgoing != null && outgoing.getAmount() <= 0) {
+            return ForeignColonyTradeProblem.INVALID_QUANTITY;
+        }
+        if (outgoing != null && outgoing.getType().equals(incoming.getType())) {
+            return ForeignColonyTradeProblem.SAME_GOODS;
+        }
+        if (carried < incoming.getAmount()) {
+            return ForeignColonyTradeProblem.INVALID_QUANTITY;
+        }
+        if (hostFree < incoming.getAmount()) {
+            return ForeignColonyTradeProblem.HOST_CAPACITY;
+        }
+        if (outgoing != null && hostStock < outgoing.getAmount()) {
+            return ForeignColonyTradeProblem.HOST_STOCK;
+        }
+        // The room already counts the slots that the incoming goods free.
+        if (outgoing != null && room < outgoing.getAmount()) {
+            return ForeignColonyTradeProblem.CARRIER_CAPACITY;
+        }
+        if (net > hostGold) {
+            return ForeignColonyTradeProblem.HOST_GOLD;
+        }
+        if (-net > visitorGold) {
+            return ForeignColonyTradeProblem.VISITOR_GOLD;
+        }
+        if (hostGold - net > Integer.MAX_VALUE) {
+            return ForeignColonyTradeProblem.HOST_GOLD;
+        }
+        if (visitorGold + net > Integer.MAX_VALUE) {
+            return ForeignColonyTradeProblem.VISITOR_GOLD;
+        }
+        return ForeignColonyTradeProblem.NONE;
+    }
+
+    private static boolean hasGoodsAboard(final UnitWithCargo carrier) {
+        return carrier.getCargo().getSlots().stream()
+                .anyMatch(slot -> slot.getGoods().isPresent());
+    }
+
     private static boolean addsFit(final int gold, final int received) {
         try {
             Math.addExact(gold, received);
@@ -5773,6 +6204,9 @@ public class Model {
      * exactly once: the attacker enters its square, the relations take the
      * destruction raise, and the settlement with its claim, map interaction and
      * learned identity is retired. Attacks that fought at all raise relations.
+     * A conquest then makes its single treasure draw and, when a train is left,
+     * creates it on the square in this same call (R-0175); a loss draws
+     * nothing.
      *
      * @param attacker   required unit that confirmed the attack
      * @param settlement required native settlement
@@ -5793,6 +6227,10 @@ public class Model {
         Preconditions.checkState(
                 current.isPresent() && current.get().equals(shown),
                 "Native attack terms changed");
+        // A conquest may create its treasure train, so the unit ID is checked
+        // before the first draw; a refused attack then changes nothing.
+        Preconditions.checkState(unitStorage.canAllocateUnit(),
+                "No unit IDs remain");
         final Player owner = attacker.getOwner();
         final AbstractUnit unit = (AbstractUnit) attacker;
         // Everything the aftermath needs is resolved before the first draw, so
@@ -5824,7 +6262,7 @@ public class Model {
             // A promotion won earlier stays with a survivor, who keeps it
             // after losing its equipment; a destroyed unit has none to show.
             return new NativeConquestResult(false, defeated, true,
-                    isUnitInGame(attacker) ? promotion : null, List.of());
+                    isUnitInGame(attacker) ? promotion : null, List.of(), null);
         }
         // Every defender is overcome: the destruction raise applies once, with
         // the capital factor, while the settlement is still registered.
@@ -5834,11 +6272,26 @@ public class Model {
         unit.occupyNativeSquare(settlement.getLocation());
         final List<NativeConquestResult.Loss> losses = conquerNativeSettlement(
                 settlement, courseUnits);
-        // One durable record of the conquest, for the treasure step (R-0175).
+        // One durable record of the conquest, then the single treasure draw of
+        // this attack (R-0175). It follows every battle draw and is taken only
+        // here, so a lost or refused attack never takes it.
         getTurnEventStore().add(TurnEventProvider.getNativeConquest(owner,
                 settlement, defeated));
+        final Location at = settlement.getLocation();
+        final Optional<Integer> treasure = NativeTreasureRules.value(
+                settlement.isCapital(),
+                owner.getCongressMembers().contains(Founder.HERNAN_CORTES),
+                this::nextCombatRandom);
+        if (treasure.isPresent()) {
+            final Unit train = unitStorage.createTreasure(this,
+                    created -> new PlaceLocation(created, at,
+                            created.getDefaultOrintation()),
+                    owner, treasure.get());
+            // Announced like any unit placed on a square, so the map shows it.
+            fireUnitMovedToLocation(train);
+        }
         return new NativeConquestResult(true, defeated, false, promotion,
-                losses);
+                losses, treasure.orElse(null));
     }
 
     /**
@@ -6704,6 +7157,38 @@ public class Model {
     }
 
     /**
+     * Las Casas's one-time join (R-0182): every native convert the owner holds
+     * now becomes an ordinary free colonist. Each person keeps its identity,
+     * place, cargo, job, equipment and resources; only the affiliation and the
+     * lifetime count end, so its restrictions and expiry cease. Converts that
+     * other owners hold, free colonists and converts acquired later are not
+     * touched. Nothing is created, and the notice is stored once per join.
+     *
+     * @param owner required player whose founder joins
+     */
+    void freeNativeConverts(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        // Collect first: a list of owned converts is the whole preflight.
+        // Ending
+        // the affiliation only lifts restrictions, so no current job needs a
+        // new
+        // place before this change.
+        final List<UnitFreeColonist> converts = new ArrayList<>();
+        for (final Unit unit : unitStorage.getUnits()) {
+            if (unit.getOwner() == owner && unit instanceof UnitFreeColonist
+                    && ((UnitFreeColonist) unit).isNativeConvert()) {
+                converts.add((UnitFreeColonist) unit);
+            }
+        }
+        if (converts.isEmpty()) {
+            return;
+        }
+        converts.forEach(UnitFreeColonist::releaseNativeConvert);
+        addTurnEvent(TurnEventProvider.getNativeConvert(owner,
+                TurnEventNativeConvert.Kind.FREED));
+    }
+
+    /**
      * Remove an expired convert through the shared cleanup: settlement
      * references to the person are cleared first, then its place releases the
      * cargo slot, and the registry drops it once. No passenger slot or course
@@ -7018,6 +7503,144 @@ public class Model {
                 .orElse(null);
         return NativeRelationOutcome.unitAttack(nativeRelations.nextOutcomeId(),
                 nativeBrave.getNation(), home);
+    }
+
+    /**
+     * Resolve the coastal batteries beside one legal ship step (R-0177). Every
+     * eligible battery, in stable colony-ID order, fires at most once at this
+     * ship in its owner's round. Eligible means an owned coastal colony with a
+     * fort or fortress beside the new sea square, at war with the ship's owner.
+     * A hit sends the ship to repair through the ordinary damage path and ends
+     * the remaining shots; a miss leaves the ship on its course.
+     *
+     * @param ship required ship that has just completed a step
+     * @param at   required sea square of that step
+     */
+    void resolveCoastalBatteries(final Ship ship, final Location at) {
+        Preconditions.checkNotNull(ship);
+        Preconditions.checkNotNull(at);
+        final List<Colony> batteries = getColonies().stream()
+                .filter(colony -> isCoastalBatteryFor(colony, ship, at))
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(Collectors.toList());
+        for (final Colony colony : batteries) {
+            // A hit that sent the ship to repair ends every remaining shot.
+            if (!ship.isAtPlaceLocation() || !isUnitInGame(ship)) {
+                return;
+            }
+            fireCoastalBattery(colony, ship);
+        }
+    }
+
+    private boolean isCoastalBatteryFor(final Colony colony, final Ship ship,
+            final Location at) {
+        return colony.getLocation().isNeighbor(at)
+                && getMap().getTerrainTypeAt(at).isSea()
+                && (colony.wasConstructionBuilded(ConstructionType.FORT)
+                        || colony.wasConstructionBuilded(
+                                ConstructionType.FORTRESS))
+                && isOwnedCoastalPort(colony.getOwner(), colony.getLocation())
+                && areHostile(colony.getOwner(), ship.getOwner())
+                && !coastalBatteryShots.contains(colony, ship);
+    }
+
+    /**
+     * One battery shot: a single draw decides the hit against the ship's naval
+     * defense. The shot is recorded and noticed before a hit is applied through
+     * the ordinary ship damage path, which chooses the repair destination or
+     * sinks the ship when none exists.
+     */
+    private void fireCoastalBattery(final Colony colony, final Ship ship) {
+        final boolean hit = CombatStrengths
+                .forCoastalBattery(this, colony, ship)
+                .attackerWins(nextCombatRandom());
+        coastalBatteryShots.record(colony, ship);
+        getTurnEventStore().add(TurnEventProvider.getCoastalBattery(
+                ship.getOwner(), colony.getId(), ship.getId(), hit));
+        if (hit) {
+            damageShip(ship);
+        }
+    }
+
+    /**
+     * The colony owner has begun its own turn preparation, so its batteries may
+     * fire at ships again (R-0177). Other owners' records are unchanged.
+     *
+     * @param owner required player whose turn is starting
+     */
+    void renewCoastalBatteryShots(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        coastalBatteryShots.renew(owner.getName());
+    }
+
+    /**
+     * Check one legal ship step against the strongest eligible patrol beside
+     * the new square. The random stream is drawn once, and only when a patrol
+     * qualifies. The check lowers the ship's remaining movement and nothing
+     * else: it starts no battle and changes no cargo, gold or relation. A
+     * slowdown or stop is recorded for the ship's owner; an undetected passage
+     * leaves no trace of the patrol.
+     *
+     * @param mover required ship that has just completed a step
+     * @param at    required square of that step
+     */
+    void resolveShipPatrol(final Ship mover, final Location at) {
+        Preconditions.checkNotNull(mover);
+        Preconditions.checkNotNull(at);
+        final Optional<Ship> patrol = findPatrol(mover, at);
+        if (patrol.isEmpty()) {
+            return;
+        }
+        final int before = mover.getMovementThirds();
+        final int after = ShipPatrolRules.remainingAfter(
+                ShipPatrolRules.draw(nextCombatRandom()), before);
+        mover.setMovementThirds(after);
+        if (after < before) {
+            getTurnEventStore().add(TurnEventProvider.getPatrolInterception(
+                    mover.getOwner(), patrol.get().getId(), after == 0));
+        }
+    }
+
+    /**
+     * The patrol that checks a step onto this square, or empty. Any live armed
+     * ship of another owner beside the square qualifies when its owner is at
+     * war with the mover's owner. A privateer also qualifies at peace when it
+     * could legally attack the mover; other armed ships never do. The strongest
+     * attacker wins, and the lowest stable ID breaks a tie.
+     *
+     * @param mover required ship that has just stepped
+     * @param at    required square of that step
+     * @return the chosen patrol, or empty when no ship qualifies
+     */
+    Optional<Ship> findPatrol(final Ship mover, final Location at) {
+        return at.getNeighbors().stream()
+                .flatMap(neighbor -> getUnitsAt(neighbor).stream())
+                .filter(unit -> unit instanceof Ship && unit != mover)
+                .map(Ship.class::cast)
+                .filter(patrol -> isEligiblePatrol(patrol, mover))
+                .min(Comparator
+                        .<Ship>comparingDouble(
+                                patrol -> -attackStrength(patrol, mover))
+                        .thenComparingInt(Unit::getId));
+    }
+
+    private boolean isEligiblePatrol(final Ship patrol, final Ship mover) {
+        if (patrol.getOwner() == mover.getOwner() || !patrol.canAttack()
+                || !patrol.isAtPlaceLocation()
+                || !patrol.getType().getAttackableUnitType()
+                        .contains(mover.getType())
+                || CombatStrengths.forBattle(this, patrol, mover).isEmpty()) {
+            return false;
+        }
+        return areHostile(patrol.getOwner(), mover.getOwner())
+                || patrol.getType() == UnitType.PRIVATEER
+                        && isPrivateerNavalException(patrol, mover);
+    }
+
+    private double attackStrength(final Ship patrol, final Ship mover) {
+        return CombatStrengths.forBattle(this, patrol, mover)
+                .map(strengths -> strengths.getAttacker().getTotal())
+                .orElse(0.0);
     }
 
     /**
@@ -7625,6 +8248,7 @@ public class Model {
                         unit.canAffordPath(path.getLocations()),
                         "Unit %s cannot afford the path", unit);
             }
+            boolean intercepted = false;
             for (final Location loc : path.getLocations()) {
                 /*
                  * Unit could move to high seas, so could be out of map, or be
@@ -7633,7 +8257,18 @@ public class Model {
                 if (!unit.isAtPlaceLocation() || !isUnitInGame(unit)) {
                     break;
                 }
+                // Once any patrol on this route took more movement than its
+                // step cost, the walk ends at the first step it can no longer
+                // pay. Without one, an unaffordable step is not skipped;
+                // moveOneStep refuses it.
+                if (intercepted && !unit.canAffordStepTo(loc)) {
+                    break;
+                }
+                final int expected = Math.max(0, unit.getMovementThirds()
+                        - unit.getEntryCostThirds(unit.getLocation(), loc));
                 unit.moveOneStep(loc);
+                intercepted |= unit.isAtPlaceLocation()
+                        && unit.getMovementThirds() < expected;
             }
             fireUnitMovedFinished(unit, path);
         }
@@ -7738,8 +8373,122 @@ public class Model {
         gameManager.checkCurrentPlayer(player);
     }
 
+    /**
+     * Current legal terms: own galleon in Europe, or royal pickup at an owned
+     * coastal colony.
+     */
+    public Optional<TreasureRedemptionQuote> quoteTreasureRedemption(
+            final Unit unit, final Colony colony) {
+        if (!(unit instanceof org.microcol.model.unit.UnitTreasure)
+                || !isGameRunning() || getCurrentPlayer() != unit.getOwner()
+                || !treasureRegistered(unit)
+                || !unit.getOwner().canTradeInEurope()) {
+            return Optional.empty();
+        }
+        final org.microcol.model.unit.UnitTreasure train = (org.microcol.model.unit.UnitTreasure) unit;
+        if (train.getPickupColonyId() != null) {
+            return Optional.empty();
+        }
+        final boolean eligible;
+        if (colony == null) {
+            eligible = train.isAtCargoSlot()
+                    && train.getPlaceCargoSlot().getOwnerUnit()
+                            .getType() == UnitType.GALLEON
+                    && train.getPlaceCargoSlot().getOwnerUnit()
+                            .getOwner() == train.getOwner()
+                    && train.getPlaceCargoSlot().getOwnerUnit()
+                            .isAtEuropePort();
+        } else {
+            eligible = isTreasureAtPort(train, colony);
+        }
+        if (!eligible) {
+            return Optional.empty();
+        }
+        final TreasureRedemptionQuote quote = new TreasureRedemptionQuote(train,
+                colony);
+        return (long) quote.getNet()
+                + train.getOwner().getGold() <= Integer.MAX_VALUE
+                        ? Optional.of(quote)
+                        : Optional.empty();
+    }
+
+    private boolean treasureRegistered(final Unit unit) {
+        return tryGetUnitById(unit.getId()).orElse(null) == unit
+                && getPlayers().contains(unit.getOwner())
+                && unit.getOwner().isColonialNation();
+    }
+
+    private boolean isTreasureAtPort(final Unit train, final Colony colony) {
+        return getColonyAt(colony.getLocation()).orElse(null) == colony
+                && colony.getOwner() == train.getOwner()
+                && train.isAtPlaceLocation()
+                && train.getLocation().equals(colony.getLocation())
+                && isOwnedCoastalPort(train.getOwner(), colony.getLocation());
+    }
+
+    /**
+     * Revalidate all displayed terms before any removal, payment or
+     * reservation.
+     */
+    public void redeemTreasure(final TreasureRedemptionQuote offered) {
+        Preconditions.checkNotNull(offered);
+        checkTurnPreparationComplete();
+        final TreasureRedemptionQuote live = quoteTreasureRedemption(
+                offered.train, offered.colony)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Treasure redemption is no longer available"));
+        Preconditions.checkState(
+                live.owner == offered.owner && live.taxRate == offered.taxRate
+                        && live.gold == offered.gold
+                        && live.getNet() == offered.getNet(),
+                "Treasure proceeds changed");
+        if (live.isRoyalPickup()) {
+            live.train.setPickup(live.colony.getId(), live.getNet());
+        } else {
+            payTreasure(live.train, live.getNet());
+        }
+    }
+
+    private void payTreasure(final org.microcol.model.unit.UnitTreasure train,
+            final int net) {
+        final Player owner = train.getOwner();
+        final int gold = Math.addExact(owner.getGold(), net);
+        destroyUnit(train);
+        owner.setGold(gold);
+    }
+
+    /** Once per owner update; opening a save never collects a pending train. */
+    void collectRoyalTreasure(final Player owner) {
+        for (final Unit unit : ImmutableList.copyOf(owner.getAllUnits())) {
+            if (!(unit instanceof org.microcol.model.unit.UnitTreasure)) {
+                continue;
+            }
+            final org.microcol.model.unit.UnitTreasure train = (org.microcol.model.unit.UnitTreasure) unit;
+            if (train.getPickupColonyId() == null) {
+                continue;
+            }
+            final Colony colony = getColonyById(train.getPickupColonyId())
+                    .orElse(null);
+            final int net = train.getPickupNet();
+            final boolean eligible = treasureRegistered(train)
+                    && owner.canTradeInEurope() && colony != null
+                    && isTreasureAtPort(train, colony)
+                    && (long) owner.getGold() + net <= Integer.MAX_VALUE;
+            train.setPickup(null, null);
+            if (eligible) {
+                payTreasure(train, net);
+            }
+        }
+    }
+
     void destroyUnit(final Unit unit) {
         Preconditions.checkNotNull(unit, "Unit is null");
+        // A passenger still boarded releases its holds once, so no hold keeps
+        // naming a removed unit; a ship destroyed first has already done so.
+        if (unit.isAtCargoSlot() && unit.getPlaceCargoSlot().getCargoSlot()
+                .getUnit().orElse(null) == unit) {
+            unit.getPlace().destroy();
+        }
         if (unit.canHoldCargo()) {
             final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
             unitWithCargo.getCargo().getSlots().stream().forEach(cargoSlot -> {

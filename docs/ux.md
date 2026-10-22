@@ -686,3 +686,7 @@ kolonie se akce odstraní; odkaz ze staré hry neotevře kolonii v nové hře.
 a přesah tlačítka. Řádek s akcí nyní ponechává místo celému tlačítku a zalamuje
 text hlášení. [Testová evidence](functional-tests.md#r-0086-construction-waiting-notice-2026-10-17)
 rozlišuje ověření v aplikaci od dosud neprovedeného ověření s hráči.
+
+### Stabilita mapy při změně výšky — 2026-10-22
+
+Při zalomení stavového textu nebo svislé změně velikosti okna zůstává horní řádek mapy na místě, pokud to dovolují hranice mapy. Mapa menší než plátno zůstává vystředěná; vodorovné změny zachovávají dosavadní centrování. Tím se při změně výšky stavové zprávy neposune políčko pod ukazatelem. Stejný výpočet používá editor. Cílené ověření a jeho omezení uvádí [základ pokladu R-0175](functional-tests.md#r-0175-treasure-foundation-2026-10-22); úplná regrese ještě následuje.

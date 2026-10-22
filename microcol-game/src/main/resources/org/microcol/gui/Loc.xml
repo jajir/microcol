@@ -127,6 +127,8 @@
 	<entry key="nativeAttackBackButton">Back</entry>
 	<entry key="nativeAttackConquered">You overcame %d defender(s) and conquered the settlement.</entry>
 	<entry key="nativeAttackRepelled">The attack ended after %d defender(s) were overcome. The settlement stands.</entry>
+	<entry key="nativeAttackTreasure">A treasure train worth %d gold now stands on the conquered square.</entry>
+	<entry key="nativeAttackNoTreasure">No treasure train was left in the settlement.</entry>
 	<entry key="nativeAttackUnitLost">Your attacking unit lost its battle and was destroyed or left without its weapons.</entry>
 	<entry key="nativeAttackTrappedLost">A colonist or missionary of the settlement had no free square nearby and was lost with it.</entry>
 	<entry key="nativeAttackRejected">The attack cannot be carried out now: the settlement, its defenders or your unit changed. Nothing was changed.</entry>
@@ -260,6 +262,7 @@
 	<entry key="nativeTeachingHostility">The natives turned hostile, so the colonist left without learning %s.</entry>
 	<entry key="nativeConvertJoined">A native convert joined your colony as an unassigned colonist.</entry>
 	<entry key="nativeConvertReturned">A native convert returned to the tribe after eight turns without work.</entry>
+	<entry key="nativeConvertFreed">Las Casas freed your existing native converts; they now work as ordinary colonists.</entry>
 	<entry key="nativeTeachingProgress">Learning %s here: %d of %d owner updates.</entry>
 	<entry key="nativeTeachingStop">Stop learning</entry>
 	<entry key="nativeTeachingRejected">The offer or the situation changed, so nothing was started.</entry>
@@ -278,6 +281,7 @@
 	<entry key="difficulty_governor">Governor</entry>
 	<entry key="difficulty_viceroy">Viceroy</entry>
     <entry key="unitsPanel_veteran">Military status: Veteran</entry>
+    <entry key="unitsPanel_treasureValue">Treasure value: %d gold</entry>
     <entry key="unitsPanel_continental">Military role: Continental</entry>
     <entry key="unitsPanel_convert">Native convert of the %s. Unassigned turns: %s of 8.</entry>
     <entry key="unitsPanel_royal">Military role: Royal regular</entry>

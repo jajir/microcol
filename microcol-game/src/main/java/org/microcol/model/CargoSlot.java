@@ -26,6 +26,12 @@ public class CargoSlot {
     private PlaceCargoSlot cargoUnit;
 
     /**
+     * Place of a unit that occupies this hold as one of the holds it reserves,
+     * but not as its first hold (R-0134). Such a hold has no unit of its own.
+     */
+    private PlaceCargoSlot reservation;
+
+    /**
      * In this cargo slot could be stored this good.
      */
     private Goods cargoGoods;
@@ -51,6 +57,8 @@ public class CargoSlot {
         }
         if (isLoadedUnit()) {
             out.setUnitId(getUnit().get().getId());
+        } else if (isReservedHold()) {
+            out.setUnitId(reservation.getUnit().getId());
         }
         return out;
     }
@@ -60,20 +68,54 @@ public class CargoSlot {
     }
 
     public boolean isEmpty() {
-        return cargoUnit == null && cargoGoods == null;
+        return cargoUnit == null && cargoGoods == null && reservation == null;
     }
 
+    /**
+     * @return whether this hold is the first hold of a unit stored here; a
+     *         multi-hold unit is reachable only through this hold
+     */
     public boolean isLoadedUnit() {
         return cargoUnit != null;
+    }
+
+    /**
+     * @return whether this hold is held by a unit that occupies another hold
+     *         first; it is occupied, but offers no unit of its own
+     */
+    public boolean isReservedHold() {
+        return reservation != null;
+    }
+
+    /**
+     * @return the unit that reserves this hold without occupying it first, or
+     *         empty when this hold is not reserved
+     */
+    public Optional<Unit> getReservedUnit() {
+        return reservation == null ? Optional.empty()
+                : Optional.of(reservation.getUnit());
     }
 
     public boolean isLoadedGood() {
         return cargoGoods != null;
     }
 
+    /**
+     * Release the unit or goods of this hold. A first hold of a multi-hold unit
+     * releases every hold that the unit reserved, exactly once.
+     */
     public void empty() {
         Preconditions.checkState(!isEmpty(),
                 "Cargo slot (%s) is already empty.", this);
+        Preconditions.checkState(!isReservedHold(),
+                "Reserved cargo slot (%s) is released by its unit.", this);
+        if (cargoUnit != null) {
+            cargo.getSlots().forEach(slot -> {
+                if (slot.reservation == cargoUnit) {
+                    slot.reservation = null;
+                }
+            });
+        }
         cargoUnit = null;
         cargoGoods = null;
     }
@@ -175,6 +217,27 @@ public class CargoSlot {
                 unit.getOwner());
 
         cargoUnit = placeCargoSlot;
+    }
+
+    /**
+     * Reserve this empty hold for a unit whose first hold is another hold of
+     * the same ship (R-0134). The unit is still one object: this hold only
+     * points to its place, so it is released together with the first hold.
+     *
+     * @param placeCargoSlot required place of the unit, stored in another hold
+     */
+    void reserve(final PlaceCargoSlot placeCargoSlot) {
+        Preconditions.checkNotNull(placeCargoSlot);
+        Preconditions.checkState(isEmpty(),
+                "Cargo slot (%s) is already loaded.", this);
+        Preconditions.checkState(getOwnerUnit() instanceof Ship,
+                "Reserved hold (%s) must be a ship hold.", this);
+        Preconditions.checkArgument(
+                placeCargoSlot.getCargoSlot() != this && placeCargoSlot
+                        .getCargoSlot().getOwnerUnit() == getOwnerUnit(),
+                "Reserved hold (%s) must belong to the same ship as the unit's first hold.",
+                this);
+        reservation = placeCargoSlot;
     }
 
     /**
@@ -362,7 +425,7 @@ public class CargoSlot {
     private void verifyThatItCouldStored(final Goods transferredGoods) {
         requireOperationalCarrier();
         Preconditions.checkNotNull(transferredGoods);
-        if (isLoadedUnit()) {
+        if (isLoadedUnit() || isReservedHold()) {
             throw new IllegalArgumentException(
                     "Attempt to move cargo to slot occupied with unit.");
         }
@@ -388,7 +451,7 @@ public class CargoSlot {
      * @return return available space for goods
      */
     public int getAvailableCapacity() {
-        if (isLoadedUnit()) {
+        if (isLoadedUnit() || isReservedHold()) {
             return 0;
         } else {
             if (isLoadedGood()) {

@@ -194,7 +194,7 @@ final class GameManager {
         currentPlayer = players.get(0);
         model.fireGameStarted();
         model.fireRoundStarted();
-        final boolean completed = currentPlayer.startTurn();
+        final boolean completed = startTurnOf(currentPlayer);
         model.getStatistics().countNextTurn(model);
         preparing = false;
         announcePreparation(completed);
@@ -236,7 +236,7 @@ final class GameManager {
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
         if (index < players.size() - 1) {
             currentPlayer = players.get(index + 1);
-            final boolean completed = currentPlayer.startTurn();
+            final boolean completed = startTurnOf(currentPlayer);
             preparing = false;
             announcePreparation(completed);
         } else {
@@ -254,11 +254,21 @@ final class GameManager {
                 currentPlayer = players.get(0);
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
-                final boolean completed = currentPlayer.startTurn();
+                final boolean completed = startTurnOf(currentPlayer);
                 preparing = false;
                 announcePreparation(completed);
             }
         }
+    }
+
+    /**
+     * Begin the player's own turn preparation. The player's coastal battery
+     * shots from earlier rounds expire here, and no other owner's shots do
+     * (R-0177). Continue and load never begin a preparation.
+     */
+    private boolean startTurnOf(final Player player) {
+        model.renewCoastalBatteryShots(player);
+        return player.startTurn();
     }
 
     private void announcePreparation(final boolean completed) {

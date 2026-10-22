@@ -33,6 +33,10 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private final RivalExpansionCycle rivalExpansion;
 
+    private final RivalLandMilitaryCycle rivalLand;
+
+    private final RivalNavalMilitaryCycle rivalNaval;
+
     private Unit founder;
 
     private Unit carrier;
@@ -43,6 +47,9 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         unitDirections = new UnitMoveNavigator();
         rivalTrade = new RivalTradeCycle(this);
         rivalExpansion = new RivalExpansionCycle(this, rivalTrade);
+        rivalLand = new RivalLandMilitaryCycle(this);
+        rivalNaval = new RivalNavalMilitaryCycle(this, rivalTrade,
+                rivalExpansion);
     }
 
     @Override
@@ -55,14 +62,25 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         if (!unit.getAction().isNoAction()) {
             return;
         }
-        if (rivalTrade.isCarrier(unit)) {
-            // The supply cycle moves its own carrier; see RivalTradeCycle.
+        if (rivalTrade.isCarrier(unit) || rivalTrade.isParked(unit)) {
+            // The supply cycle moves its own carrier and keeps a parked one in
+            // port; see RivalTradeCycle.
             return;
         }
         if (rivalExpansion.isParticipant(unit)
                 || rivalExpansion.isHeldCarrier(unit)) {
             // The expansion moves its own founder and carrier, and keeps a
             // prepared transport in port until the reserves allow a release.
+            return;
+        }
+        if (rivalLand.isParticipant(unit)) {
+            // The land policy moves and fights its armed units; see
+            // RivalLandMilitaryCycle.
+            return;
+        }
+        if (rivalNaval.isParticipant(unit)) {
+            // The naval policy moves and fights its spare warships; see
+            // RivalNavalMilitaryCycle.
             return;
         }
         if (unit == founder || unit == carrier) {
@@ -160,8 +178,10 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     }
 
     private void tryToEmbark(final Unit unit) {
-        if (unit.isStorable() && unit.isAtPlaceLocation()
-                && unit.getActionPoints() > 0) {
+        // A treasure train reserves six holds and is never boarded by the
+        // computer, so only one-hold passengers board here (R-0134).
+        if (unit.isStorable() && unit.getType().getRequiredHolds() == 1
+                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
             unit.getNeighborUnitsWithFreeSlot().stream()
                     .flatMap(u -> u.getCargo().getSlots().stream())
                     .filter(unit::canEmbark).findFirst()
@@ -182,16 +202,42 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         if (getPlayer().isKing()) {
             return;
         }
-        // Runs before the colony check, so a cycle whose colony is gone
-        // retires.
+        // Priority: famine prevention, immediate defense, ongoing transport,
+        // supplies and export, then expansion. The famine pass only moves
+        // residents to food while a colony's balance is negative, so the
+        // expansion reads repaired balances. Spare lumber work and newcomers
+        // wait for the last workforce pass, so they cannot spend the surplus a
+        // release reads. Each step sees the claims of the earlier ones, and
+        // offence and naval patrols come after expansion, so they never take a
+        // reserved or parked carrier.
+        if (getPlayer().getColonies().isEmpty()) {
+            chooseFirstColonyFounder();
+        }
+        sortedColonies().forEach(colony -> assignColonyWorkforce(colony, true));
+        rivalLand.advanceDefense();
+        // A supply cycle whose colony is gone retires here, before expansion.
         rivalTrade.advance();
         rivalExpansion.advance();
-        if (!getPlayer().getColonies().isEmpty()) {
-            getPlayer().getColonies().stream()
-                    .sorted(Comparator.comparingInt(Colony::getId))
-                    .forEach(this::assignColonyWorkforce);
-            return;
-        }
+        rivalLand.advanceOffense();
+        // The first-colony transport is chosen first, so the naval policy
+        // leaves it alone even when it is armed or loaded.
+        rivalNaval.advance(Optional.ofNullable(carrier));
+        sortedColonies()
+                .forEach(colony -> assignColonyWorkforce(colony, false));
+    }
+
+    private List<Colony> sortedColonies() {
+        return getPlayer().getColonies().stream()
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Without a colony the lowest idle founder, on the map or aboard an idle
+     * own ship, is the first-colony objective; the ship that carries it is its
+     * transport.
+     */
+    private void chooseFirstColonyFounder() {
         founder = getPlayer().getAllUnits().stream()
                 .filter(unit -> unit.getType().canBuildColony()
                         && unit.getAction().isNoAction())
@@ -213,8 +259,12 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     /**
      * One bounded pass over the colony's available workers: food first, then
      * spare workers on lumber. Offers and execution stay model-validated.
+     *
+     * @param foodOnly when true, the famine pass: only residents move, and only
+     *                 to food while the colony's food balance is negative
      */
-    private void assignColonyWorkforce(final Colony colony) {
+    private void assignColonyWorkforce(final Colony colony,
+            final boolean foodOnly) {
         final Set<Integer> teaching = new HashSet<>();
         colony.getEducationCourses().forEach(course -> {
             teaching.add(course.getStudentId());
@@ -237,7 +287,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                 continue;
             }
             try {
-                assignWorker(colony, worker);
+                assignWorker(colony, worker, foodOnly);
             } catch (IllegalArgumentException | IllegalStateException stale) {
                 // The model rejected a stale offer; keep the worker as is.
                 org.slf4j.LoggerFactory.getLogger(SimpleAiPlayer.class)
@@ -255,8 +305,14 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                 && !((UnitFreeColonist) unit).isMounted();
     }
 
-    private void assignWorker(final Colony colony, final Unit worker) {
+    private void assignWorker(final Colony colony, final Unit worker,
+            final boolean foodOnly) {
         final boolean resident = colony.getUnitsInsideColony().contains(worker);
+        if (foodOnly && (!resident || colony.getGoodsStats()
+                .getStatsByType(GoodsType.CORN).getNetProduction() >= 0)) {
+            // Newcomers and colonies without a deficit wait for the last pass.
+            return;
+        }
         final GoodsType current = worker.isAtPlaceColonyField()
                 ? worker.getPlaceColonyField().getProducedGoodsType()
                 : null;
@@ -290,14 +346,14 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                         .getAmount() > produced) {
                     food.get().execute();
                 }
-            } else if (lumber.isPresent() && net - produced >= 0) {
+            } else if (!foodOnly && lumber.isPresent() && net - produced >= 0) {
                 // Clear surplus: this food worker is spare.
                 lumber.get().execute();
             }
         } else if (resident) {
             if (net < 0 && food.isPresent()) {
                 food.get().execute();
-            } else if (net >= 0 && current != GoodsType.LUMBER
+            } else if (!foodOnly && net >= 0 && current != GoodsType.LUMBER
                     && lumber.isPresent()) {
                 lumber.get().execute();
             }

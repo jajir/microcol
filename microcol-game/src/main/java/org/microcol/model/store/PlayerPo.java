@@ -57,6 +57,21 @@ public final class PlayerPo {
         this.colonySightings = colonySightings;
     }
 
+    /** Absent in a save without any European contact, which is empty too. */
+    private List<String> knownPowers = new ArrayList<>();
+
+    /**
+     * @return names of the colonial powers this player has actually seen, in
+     *         alphabetical order (R-0168)
+     */
+    public List<String> getKnownPowers() {
+        return knownPowers;
+    }
+
+    public void setKnownPowers(final List<String> knownPowers) {
+        this.knownPowers = knownPowers;
+    }
+
     public CongressPo getCongress() {
         return congress;
     }
@@ -86,6 +101,32 @@ public final class PlayerPo {
     public void setRivalTradeObjective(
             final RivalTradeObjectivePo rivalTradeObjective) {
         this.rivalTradeObjective = rivalTradeObjective;
+    }
+
+    /**
+     * Colony of the last completed supply round trip; null before the first.
+     */
+    private Integer rivalLastServedColonyId;
+
+    public Integer getRivalLastServedColonyId() {
+        return rivalLastServedColonyId;
+    }
+
+    public void setRivalLastServedColonyId(
+            final Integer rivalLastServedColonyId) {
+        this.rivalLastServedColonyId = rivalLastServedColonyId;
+    }
+
+    /** Carriers waiting in their colony ports between supply round trips. */
+    private List<Integer> rivalParkedCarrierIds = new ArrayList<>();
+
+    public List<Integer> getRivalParkedCarrierIds() {
+        return rivalParkedCarrierIds;
+    }
+
+    public void setRivalParkedCarrierIds(
+            final List<Integer> rivalParkedCarrierIds) {
+        this.rivalParkedCarrierIds = rivalParkedCarrierIds;
     }
 
     /** Active second-colony expansion of a rival; null when it has none. */

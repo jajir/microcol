@@ -8,7 +8,10 @@ import java.util.Map;
  * to {@code [bid, pressure in eighths, traded-since-update as 0 or 1]}.
  * Cumulative trade accounts map a nation and a traded goods name to
  * {@code [bought units, bought gold, sold units, sold gold, revolutionary
- * units, revolutionary gold]}; only nonempty accounts are written.
+ * units, revolutionary gold]}; only nonempty accounts are written. Each
+ * nation's sale window maps to
+ * {@code [current owner-turn slot, ten owner-turn buckets
+ * of net sale gold]}; only nonempty windows are written.
  */
 public final class EuropePo {
 
@@ -16,6 +19,9 @@ public final class EuropePo {
 
     /** Absent in a save without settled trades, which is an empty state. */
     private Map<String, Map<String, int[]>> accounts = new HashMap<>();
+
+    /** Absent in a save without recent European sales, which is empty too. */
+    private Map<String, int[]> saleWindows = new HashMap<>();
 
     public Map<String, Map<String, int[]>> getMarkets() {
         return markets;
@@ -31,6 +37,14 @@ public final class EuropePo {
 
     public void setAccounts(final Map<String, Map<String, int[]>> accounts) {
         this.accounts = accounts;
+    }
+
+    public Map<String, int[]> getSaleWindows() {
+        return saleWindows;
+    }
+
+    public void setSaleWindows(final Map<String, int[]> saleWindows) {
+        this.saleWindows = saleWindows;
     }
 
 }

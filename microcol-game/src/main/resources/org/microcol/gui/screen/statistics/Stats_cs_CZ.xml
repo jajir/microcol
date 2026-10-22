@@ -70,4 +70,15 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="tradeSold">Prodáno: %s ks</entry>
 	<entry key="tradeReceived">Přijato zlata: %s</entry>
 	<entry key="tradeRevolutionary">Revoluční celnice: %s ks, %s čistého zlata</entry>
+	<entry key="foreignTitle">Zahraniční mocnosti</entry>
+	<entry key="foreignPower">Mocnost</entry>
+	<entry key="foreignRelation">Vztah</entry>
+	<entry key="foreignPopulation">Obyvatelé</entry>
+	<entry key="foreignColonies">Kolonie</entry>
+	<entry key="foreignAverageSize">Průměrná velikost kolonie</entry>
+	<entry key="foreignMilitary">Vojenská síla</entry>
+	<entry key="foreignNaval">Námořní síla</entry>
+	<entry key="foreignTrade">Prodeje za 10 tahů</entry>
+	<entry key="foreignLocked">Zamčeno: získejte Jana de Witta pro srovnání mocností.</entry>
+	<entry key="foreignUncontacted">Neznámé: zatím žádný kontakt s touto mocností.</entry>
 </properties>

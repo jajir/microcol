@@ -16,11 +16,13 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.NativeNation;
 import org.microcol.model.NativeSettlement;
+import org.microcol.model.NativeTreasureRules;
 import org.microcol.model.NativeVisitAction;
 import org.microcol.model.turnevent.TurnEventNativeConquest;
 import org.microcol.model.turnevent.TurnEventNativeConquestLoss;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitNativeBrave;
+import org.microcol.model.unit.UnitTreasure;
 import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.gson.Gson;
@@ -112,6 +114,13 @@ public final class NativeConquestPage extends AbstractScreen {
     /** The ordinary promotion roll promotes when it is below this. */
     private static final double PROMOTION = 0.25;
 
+    /**
+     * The treasure roll of a two-brave conquest: after the first battle, the
+     * soldier's promotion roll, and the second battle. Without Cortes it leaves
+     * a train when it is below {@link NativeTreasureRules#CHANCE}.
+     */
+    private static final int TREASURE_DRAW = 4;
+
     private final Gson gson = new Gson();
 
     private JsonElement remembered;
@@ -127,14 +136,32 @@ public final class NativeConquestPage extends AbstractScreen {
     /**
      * Saved randomness whose draws win the first battle, promote the winner,
      * and win the second battle. The second battle uses the third draw, since
-     * the second is the promotion roll of the first victory.
+     * the second is the promotion roll of the first victory. Its treasure roll
+     * leaves no train, so the conquest outcome without Cortes is unchanged.
      *
      * @return the saved randomness state
      */
     public static long victoryState() {
         for (long state = 1;; state++) {
             if (draw(state, 1) < CERTAIN_WIN && draw(state, 2) < PROMOTION
-                    && draw(state, 3) < CERTAIN_WIN) {
+                    && draw(state, 3) < CERTAIN_WIN && draw(state,
+                            TREASURE_DRAW) >= NativeTreasureRules.CHANCE) {
+                return state;
+            }
+        }
+    }
+
+    /**
+     * Saved randomness whose draws win both battles, as {@link #victoryState},
+     * and whose treasure roll leaves a train without Cortes.
+     *
+     * @return the saved randomness state
+     */
+    public static long treasureState() {
+        for (long state = 1;; state++) {
+            if (draw(state, 1) < CERTAIN_WIN && draw(state, 2) < PROMOTION
+                    && draw(state, 3) < CERTAIN_WIN && draw(state,
+                            TREASURE_DRAW) < NativeTreasureRules.CHANCE) {
                 return state;
             }
         }
@@ -163,10 +190,27 @@ public final class NativeConquestPage extends AbstractScreen {
      */
     public void loadConquestFixture(final File source, final long combatState,
             final int defenders) throws Exception {
+        loadConquestFixture(source, combatState, defenders, false);
+    }
+
+    /**
+     * The same scenario, with Hernan Cortes recruited into the Dutch Congress
+     * when {@code cortes} is true, as a saved active Congress.
+     *
+     * @param source      the current-schema scenario to copy
+     * @param combatState saved randomness, see {@link #victoryState}
+     * @param defenders   braves that defend the settlement square
+     * @param cortes      whether the Dutch Congress has Hernan Cortes
+     */
+    public void loadConquestFixture(final File source, final long combatState,
+            final int defenders, final boolean cortes) throws Exception {
         final JsonObject game = gson.fromJson(Files.readString(source.toPath()),
                 JsonObject.class);
         final JsonObject model = game.getAsJsonObject("model");
         model.addProperty("combatRandomState", combatState);
+        if (cortes) {
+            recruitCortes(model);
+        }
         final JsonArray units = model.getAsJsonArray("units");
         units.add(colonist(SOLDIER_ID, SOLDIER_AT, true));
         units.add(colonist(COLONIST_ID, COLONIST_AT, false));
@@ -289,6 +333,37 @@ public final class NativeConquestPage extends AbstractScreen {
         unit.addProperty("nativeHomeless", false);
         unit.addProperty("nativeRole", "BRAVE");
         return unit;
+    }
+
+    /**
+     * Replace the Dutch Congress with an active one whose only member is Hernan
+     * Cortes, and whose candidates are one founder of each other category.
+     */
+    private static void recruitCortes(final JsonObject model) {
+        for (final JsonElement element : model.getAsJsonObject("gameManager")
+                .getAsJsonArray("players")) {
+            final JsonObject player = element.getAsJsonObject();
+            if (DUTCH.equals(player.get("name").getAsString())) {
+                final JsonObject congress = new JsonObject();
+                congress.addProperty("activated", true);
+                congress.addProperty("bells", 0);
+                congress.add("members", strings("HERNAN_CORTES"));
+                congress.add("candidates",
+                        strings("FRANCIS_DRAKE", "SIMON_BOLIVAR", "ADAM_SMITH",
+                                "JEAN_DE_BREBEUF", "HENRY_HUDSON"));
+                congress.addProperty("generation", 1);
+                congress.addProperty("jonesDeliveryPending", false);
+                player.add("congress", congress);
+            }
+        }
+    }
+
+    private static JsonArray strings(final String... values) {
+        final JsonArray array = new JsonArray();
+        for (final String value : values) {
+            array.add(value);
+        }
+        return array;
     }
 
     /** Keep the whole saved world, to compare it after a backed-out action. */
@@ -436,6 +511,44 @@ public final class NativeConquestPage extends AbstractScreen {
     }
 
     /**
+     * The open result message stays inside the given size and shows the whole
+     * line that contains the expected fragment, wrapped rather than cut short
+     * with an ellipsis; its OK button lies inside the window.
+     *
+     * @param expected  fragment of the reported result, such as the treasure
+     * @param maxWidth  widest allowed window
+     * @param maxHeight tallest allowed window
+     */
+    public void verifyResultFits(final String expected, final int maxWidth,
+            final int maxHeight) {
+        WaitForAsyncUtils.waitForFxEvents();
+        final Button ok = DialogMessagePage.of(getContext()).getButtonOk();
+        final javafx.stage.Window window = ok.getScene().getWindow();
+        assertTrue(window.getWidth() <= maxWidth,
+                "Result width " + window.getWidth());
+        assertTrue(window.getHeight() <= maxHeight,
+                "Result height " + window.getHeight());
+        final javafx.geometry.Bounds button = ok
+                .localToScene(ok.getBoundsInLocal());
+        assertTrue(
+                button.getMaxX() <= ok.getScene().getWidth()
+                        && button.getMaxY() <= ok.getScene().getHeight(),
+                "OK button outside the result window: " + button);
+        final javafx.scene.control.Label line = (javafx.scene.control.Label) getNodeFinder()
+                .lookup((
+                        javafx.scene.Node node) -> node instanceof javafx.scene.control.Label
+                                && ((javafx.scene.control.Label) node)
+                                        .getText() != null
+                                && ((javafx.scene.control.Label) node).getText()
+                                        .contains(expected))
+                .query();
+        final javafx.scene.text.Text shown = (javafx.scene.text.Text) line
+                .lookup(".text");
+        assertEquals(line.getText(), shown.getText(),
+                "Result line is cut short");
+    }
+
+    /**
      * The saved game state equals the remembered one: nothing was changed. Only
      * the interface's focused tile may differ, see {@link #gameState}.
      */
@@ -573,6 +686,55 @@ public final class NativeConquestPage extends AbstractScreen {
     /** Capture the open turn report. */
     public void captureReport(final String fileName) throws Exception {
         captureDialog("closeButtonId", fileName);
+    }
+
+    /**
+     * @param at the square of the conquered settlement
+     * @return the treasure trains standing on that square
+     */
+    private java.util.List<UnitTreasure> treasuresAt(final Location at) {
+        return getModel().getUnitsAt(at).stream()
+                .filter(UnitTreasure.class::isInstance)
+                .map(UnitTreasure.class::cast).collect(Collectors.toList());
+    }
+
+    /**
+     * @param at    the square of the conquered settlement
+     * @param value the face value in gold the one train must carry
+     */
+    public void verifyTreasureTrain(final Location at, final int value) {
+        final java.util.List<UnitTreasure> trains = treasuresAt(at);
+        assertEquals(1, trains.size(), "Treasure trains on the square");
+        assertEquals(value, trains.get(0).getValue());
+        assertEquals(dutch(), trains.get(0).getOwner());
+        assertEquals(at, trains.get(0).getLocation());
+    }
+
+    /** No treasure train of any owner stands in the saved world. */
+    public void verifyNoTreasureTrain() {
+        assertEquals(0, getModel().getAllUnits().stream()
+                .filter(UnitTreasure.class::isInstance).count());
+    }
+
+    /**
+     * The unit panel of the selected square names the train and its value.
+     *
+     * @param at       the square of the conquered settlement, selected
+     * @param expected the whole value line of the unit panel
+     */
+    public void verifyTreasurePanel(final Location at, final String expected) {
+        final int id = treasuresAt(at).get(0).getId();
+        assertEquals(expected, getLabeledById("unitTreasure-" + id).getText());
+    }
+
+    /**
+     * @param at       the square of the conquered settlement, selected
+     * @param fileName capture file name of the open unit panel
+     */
+    public void captureTreasurePanel(final Location at, final String fileName)
+            throws Exception {
+        captureDialog("unitTreasure-" + treasuresAt(at).get(0).getId(),
+                fileName);
     }
 
     private org.microcol.model.Player dutch() {

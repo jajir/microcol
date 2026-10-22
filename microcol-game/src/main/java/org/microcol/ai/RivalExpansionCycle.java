@@ -25,15 +25,17 @@ import org.microcol.model.unit.UnitFreeColonist;
 import org.slf4j.LoggerFactory;
 
 /**
- * A rival's single second-colony expansion. Only a rival with exactly one
- * colony may start it. A spare unarmed colonist is released onto the colony
- * square when the residents, food and transport allow it. When a known legal
- * site is reachable by land, the founder walks there. Otherwise a carrier in
- * the colony port takes the founder to a known legal site by sea. The founder
- * founds once it stands on the site with movement. The objective is saved in
- * the player. Every step revalidates live ownership, placement and legality
- * through the ordinary model operations. A refused step waits for the next
- * owner turn, and a stale participant retires the objective.
+ * A rival's single new-colony expansion at a time. A rival with one colony may
+ * start the second one; with more colonies a further one needs every colony to
+ * meet the reserves (see {@link #hasNewColonyReserves}). A spare unarmed
+ * colonist is released onto the colony square when the residents, food and
+ * transport allow it. When a known legal site is reachable by land, the founder
+ * walks there. Otherwise a carrier in the colony port takes the founder to a
+ * known legal site by sea. The founder founds once it stands on the site with
+ * movement. The objective is saved in the player. Every step revalidates live
+ * ownership, placement and legality through the ordinary model operations. A
+ * refused step waits for the next owner turn, and a stale participant retires
+ * the objective.
  */
 final class RivalExpansionCycle {
 
@@ -142,49 +144,92 @@ final class RivalExpansionCycle {
     }
 
     /**
-     * Release one spare founder from the only colony. A known legal site that
+     * Release one spare founder from a colony. The first colony in ID order
+     * with spare founders takes the turn. A second colony, or a later one,
+     * needs every colony to meet the reserves first, so the rival never founds
+     * beside a colony that is short of food or tools. A known legal site that
      * the founder can walk to comes first, because it needs no transport. Only
      * otherwise does an idle carrier in the colony port take the founder by
      * sea. Nothing is released when any part is missing, so the rival waits
-     * finitely without weakening its colony.
+     * finitely without weakening its colonies.
      */
     private void prepare() {
         if (!robot.isActiveTurn()) {
             return;
         }
-        final List<Colony> colonies = model().getColonies(player());
-        if (colonies.size() != 1 || !colonies.get(0).isValid()) {
+        final List<Colony> colonies = model().getColonies(player()).stream()
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(Collectors.toList());
+        if (colonies.isEmpty()
+                || !colonies.stream().allMatch(Colony::isValid)) {
             return;
         }
-        final Colony colony = colonies.get(0);
-        final List<Unit> founders = spareFounders(colony);
-        if (founders.isEmpty()) {
+        if (colonies.size() > 1
+                && !colonies.stream().allMatch(this::hasNewColonyReserves)) {
             return;
         }
+        for (final Colony colony : colonies) {
+            final List<Unit> founders = spareFounders(colony);
+            if (!founders.isEmpty() && prepareFrom(colony, founders)) {
+                // A transport held for a refused colony is not needed now.
+                heldCarrierId = null;
+                return;
+            }
+        }
+    }
+
+    /**
+     * Every existing colony keeps a nonnegative food balance, five turns of its
+     * residents' food in stock, and its tool target met with the tools aboard
+     * the active carrier counted once.
+     *
+     * @param colony required colony of this robot
+     * @return whether the colony supports one more colony
+     */
+    boolean hasNewColonyReserves(final Colony colony) {
+        final int consumption = colony.getUnitsInsideColony().stream()
+                .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+                .getNetProduction();
+        return net >= 0
+                && colony.getWarehouse().getGoods(GoodsType.CORN)
+                        .getAmount() >= FOOD_TURNS * consumption
+                && rivalTrade.isToolSupplyMet(colony);
+    }
+
+    /**
+     * Starts a release from one colony with spare founders.
+     *
+     * @return whether this colony took the turn, by walking or by a carrier in
+     *         its port; false when no site or transport exists
+     */
+    private boolean prepareFrom(final Colony colony,
+            final List<Unit> founders) {
         final Unit probe = founders.get(0);
         final Optional<Location> walkSite = FirstColonyPlanner
                 .chooseSite(model(), probe, probe, colony.getLocation());
         if (walkSite.isPresent()) {
-            release(colony, founders, Optional.empty(), walkSite.get());
-            return;
+            return release(colony, founders, Optional.empty(), walkSite.get());
         }
         final Optional<Ship> carrier = model().getUnitsAt(colony.getLocation())
                 .stream().filter(unit -> unit instanceof Ship)
                 .map(Ship.class::cast).filter(this::isEligibleCarrier)
                 .min(Comparator.comparingInt(Ship::getId));
         if (carrier.isEmpty()) {
-            return;
+            return false;
         }
         final Optional<Location> site = FirstColonyPlanner.chooseSite(model(),
                 probe, carrier.get(), carrier.get().getLocation());
         if (site.isEmpty()) {
-            return;
+            return false;
         }
-        release(colony, founders, carrier, site.get());
-        if (player().getRivalExpansionObjective().isEmpty()) {
-            // The reserves refused this turn; keep the transport ready.
-            heldCarrierId = carrier.get().getId();
+        if (release(colony, founders, carrier, site.get())) {
+            return true;
         }
+        // The reserves refused this colony; keep its transport ready, and let
+        // the next colony in ID order try its own founders and transport.
+        heldCarrierId = carrier.get().getId();
+        return false;
     }
 
     /**
@@ -200,7 +245,14 @@ final class RivalExpansionCycle {
      * Places the first founder whose release passes the reserves. A walking
      * journey starts travelling at once; a sea journey waits to board.
      */
-    private void release(final Colony colony, final List<Unit> founders,
+    /**
+     * Places the first founder whose release passes the reserves. A walking
+     * journey starts travelling at once; a sea journey waits to board. A
+     * carrier taken from the parked ones leaves the supply rotation.
+     *
+     * @return whether a founder was released
+     */
+    private boolean release(final Colony colony, final List<Unit> founders,
             final Optional<Ship> carrier, final Location site) {
         for (final Unit founder : founders) {
             if (!canRelease(colony, founder)) {
@@ -213,14 +265,17 @@ final class RivalExpansionCycle {
                 // The shared rules refused the release; nothing changed.
                 LoggerFactory.getLogger(RivalExpansionCycle.class)
                         .debug("Rival founder release was refused", refused);
-                return;
+                return false;
             }
             player().setRivalExpansionObjective(new RivalExpansionObjective(
                     colony.getId(), founder.getId(),
                     carrier.map(Ship::getId).orElse(null), site,
                     carrier.isPresent() ? Stage.BOARDING : Stage.TRAVEL));
-            return;
+            carrier.ifPresent(
+                    ship -> player().unparkRivalCarrier(ship.getId()));
+            return true;
         }
+        return false;
     }
 
     /**
@@ -265,12 +320,16 @@ final class RivalExpansionCycle {
                 || !founder.canLeaveColony()) {
             return false;
         }
-        final int produced = colony.getJobChoices(founder).stream().filter(
-                choice -> choice.getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
-                        && choice.getGoodsType() == GoodsType.CORN)
-                .mapToInt(choice -> choice.getPotential().map(Goods::getAmount)
-                        .orElse(0))
-                .sum();
+        // The offers list a current-field corn choice for any field that could
+        // grow corn, so only a founder that grows corn takes food away.
+        final int produced = !producesFood(founder) ? 0
+                : colony.getJobChoices(founder).stream()
+                        .filter(choice -> choice
+                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                                && choice.getGoodsType() == GoodsType.CORN)
+                        .mapToInt(choice -> choice.getPotential()
+                                .map(Goods::getAmount).orElse(0))
+                        .sum();
         final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
                 .getNetProduction();
         if (net - produced + founder.getType().getAteFoodPerTurn() < 0) {
@@ -354,7 +413,7 @@ final class RivalExpansionCycle {
     /**
      * One ordinary step toward the saved site. A founder aboard the carrier
      * steps ashore onto land; a founder on land walks, with or without a ship.
-     * A blocked route waits for the next owner turn.
+     * A blocked route is recovered by {@link #replan}.
      */
     private boolean travel(final Leg leg) {
         final Unit founder = leg.founder;
@@ -376,7 +435,7 @@ final class RivalExpansionCycle {
         final Optional<Location> step = FirstColonyPlanner
                 .nextStepToSite(model(), founder, mover, site);
         if (step.isEmpty()) {
-            return false;
+            return replan(leg, mover);
         }
         final Location target = step.get();
         if (founder.isAtCargoSlot()
@@ -399,6 +458,31 @@ final class RivalExpansionCycle {
             return false;
         }
         return move(mover, target);
+    }
+
+    /**
+     * No known route reaches the saved site. Another known legal site that the
+     * mover reaches now replaces it, with the same founder and carrier. A site
+     * that is no longer legal, with no replacement, retires the expansion.
+     * Otherwise the route is only blocked, for example by a foreign ship in a
+     * channel: the objective, founder and carrier wait unchanged and the next
+     * owner turn tries again.
+     *
+     * @return whether the site changed, so the next pass steps toward it
+     */
+    private boolean replan(final Leg leg, final Unit mover) {
+        final Location site = leg.objective.getSite();
+        final Optional<Location> other = FirstColonyPlanner.chooseSite(model(),
+                leg.founder, mover, mover.getLocation());
+        if (other.isPresent() && !other.get().equals(site)) {
+            player().setRivalExpansionObjective(
+                    leg.objective.withSite(other.get()));
+            return true;
+        }
+        if (!model().canFoundColonyAt(leg.founder, site)) {
+            player().clearRivalExpansionObjective();
+        }
+        return false;
     }
 
     private boolean move(final Unit mover, final Location step) {

@@ -72,6 +72,44 @@ public class CanvasAreaTest {
     }
 
     @Test
+    void test_setCanvasHeight_shrinking_keeps_top_row() throws Exception {
+        // A status bar that wraps onto more lines takes height from the map;
+        // the map keeps its top row, so the tile under the pointer stays.
+        canvasArea.setCanvasHeight(554, 45000);
+
+        assertEquals(Point.of(800, 554), canvasArea.getCanvasSize());
+        assertEquals(Point.of(100, 100), canvasArea.getTopLeft());
+    }
+
+    @Test
+    void test_setCanvasHeight_growing_keeps_top_row() throws Exception {
+        canvasArea.setCanvasHeight(646, 45000);
+
+        assertEquals(Point.of(800, 646), canvasArea.getCanvasSize());
+        assertEquals(Point.of(100, 100), canvasArea.getTopLeft());
+    }
+
+    @Test
+    void test_setCanvasHeight_growing_at_map_bottom_stays_in_map()
+            throws Exception {
+        canvasArea.setCanvasHeight(600, 720);
+        assertEquals(Point.of(100, 100), canvasArea.getTopLeft());
+
+        canvasArea.setCanvasHeight(650, 720);
+
+        assertEquals(Point.of(800, 650), canvasArea.getCanvasSize());
+        assertEquals(Point.of(100, 70), canvasArea.getTopLeft());
+    }
+
+    @Test
+    void test_setCanvasHeight_taller_than_map_is_centered() throws Exception {
+        canvasArea.setCanvasHeight(600, 450);
+
+        assertEquals(Point.of(800, 600), canvasArea.getCanvasSize());
+        assertEquals(Point.of(100, -75), canvasArea.getTopLeft());
+    }
+
+    @Test
     void test_computeNewTopLeftConnerOfCanvas_at_0_0() throws Exception {
         final Point ret = canvasArea.computeNewTopLeftConnerOfCanvas(Point.ZERO,
                 Point.of(1600, 1200));

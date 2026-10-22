@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="title">Obchod s kolonií %s</entry>
+    <entry key="giveLabel">Zboží, které dáte</entry>
+    <entry key="receiveLabel">Zboží, které dostanete</entry>
+    <entry key="barter">Vyměnit zboží</entry>
+    <entry key="give">Dáte: %s %s.</entry>
+    <entry key="receive">Dostanete: %s %s.</entry>
+    <entry key="nothing">Zpět nedostanete žádné zboží.</entry>
+    <entry key="prices">Výkupní cena kolonie %s zlata za kus, prodejní cena %s zlata za kus. Domácí daň se neúčtuje.</entry>
+    <entry key="netHost">Kolonie vám zaplatí %s zlata.</entry>
+    <entry key="netVisitor">Zaplatíte kolonii %s zlata.</entry>
+    <entry key="netNone">Žádné zlato nepřechází.</entry>
+    <entry key="confirm">Potvrdit obchod</entry>
+    <entry key="cancel">Zrušit</entry>
+    <entry key="noGoods">Nemáte zboží, které tato kolonie teď přijme.</entry>
+    <entry key="founderAbsent">K obchodu s cizí kolonií musí být Jan de Witt ve vašem Kongresu.</entry>
+    <entry key="atWar">Obchod vyžaduje mír nebo spojenectví s národem této kolonie.</entry>
+    <entry key="hostGold">Národ kolonie nemá dost zlata na tuto platbu.</entry>
+    <entry key="visitorGold">Nemáte dost zlata na tento obchod.</entry>
+    <entry key="hostCapacity">Sklad kolonie toto zboží nepojme.</entry>
+    <entry key="carrierCapacity">Vaše nákladní prostory toto zboží nepojmou.</entry>
+    <entry key="hostStock">Kolonie nemá tolik tohoto zboží.</entry>
+    <entry key="refused">Obchod teď není možný. Nic se nepřevedlo.</entry>
+    <entry key="changed">Kolonie, zboží, zlato nebo vztahy se změnily. Nic se nepřevedlo; otevřete obchod znovu.</entry>
+</properties>

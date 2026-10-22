@@ -623,6 +623,71 @@ class NativeLandCombatTest {
         assertEquals(1, nativeUnits(continued));
     }
 
+    /** A raid fixture whose defender is a treasure train of 500 gold. */
+    private static ModelPo treasureRaid() {
+        final ModelPo saved = Fight.raid().unarmed().build();
+        final UnitPo train = saved.getUnits().stream()
+                .filter(unit -> unit.getId() == COLONIST_ID).findFirst()
+                .orElseThrow();
+        train.setType(UnitType.TREASURE_TRAIN);
+        train.setWorkUpdates(null);
+        train.setMissionary(null);
+        train.setHoldingGuns(false);
+        train.setTreasureValue(500);
+        return saved;
+    }
+
+    @Test
+    void nativeBraveRaidingATreasureTrainFacesZeroDefenseAndPaysNothing() {
+        final Model model = decided(NativeLandCombatTest::treasureRaid,
+                NativeLandCombatTest::islandOrder, true);
+        // The native branch quotes the train with no strength at all, not the
+        // civilian base of 1, so the brave always wins on the saved draw.
+        final CombatStrengths quote = strengths(model);
+        assertEquals(0.0, quote.getDefender().getBase(), 1e-9);
+        assertEquals(0.0, quote.getDefender().getTotal(), 1e-9);
+        assertEquals(1.0, quote.getAttackerWinProbability(), 1e-9);
+        final long before = model.save().getCombatRandomState();
+        final int dutchGold = model.getPlayerByName("Dutch").getGold();
+        final int nativeGold = model.getPlayerByName(NATION.name()).getGold();
+
+        islandOrder(model).execute();
+
+        // Destroyed with its value: no capture, no owner change, no gold, and
+        // exactly the one saved battle draw (a brave is never promoted).
+        assertFalse(alive(model, COLONIST_ID));
+        assertTrue(alive(model, BRAVE_ID));
+        assertEquals(1, nativeUnits(model));
+        assertEquals(dutchGold, model.getPlayerByName("Dutch").getGold());
+        assertEquals(nativeGold,
+                model.getPlayerByName(NATION.name()).getGold());
+        assertEquals(before + 0x9E3779B97F4A7C15L,
+                model.save().getCombatRandomState());
+        final Model continued = NativeTurnScene.make(model.save());
+        assertFalse(alive(continued, COLONIST_ID));
+        assertEquals(1, nativeUnits(continued));
+    }
+
+    @Test
+    void unarmedEuropeanHasNoAttackOnATreasureTrainOfAnotherOwner() {
+        // The unarmed legacy path would decide by an unsaved coin flip, so the
+        // model refuses the target instead; the native role above is
+        // unaffected.
+        final ModelPo saved = Fight.human().unarmed().build();
+        final UnitPo target = saved.getUnits().stream()
+                .filter(unit -> unit.getType() == UnitType.BRAVE).findFirst()
+                .orElseThrow();
+        target.setType(UnitType.TREASURE_TRAIN);
+        target.setOwnerId("France");
+        target.setNativeHomeSettlementId(null);
+        target.setNativeHomeless(null);
+        target.setNativeRole(null);
+        target.setTreasureValue(500);
+        final Model model = model(saved);
+        assertTrue(((AbstractUnit) model.getUnitById(COLONIST_ID))
+                .prepareAttack(NativeTurnScene.at(1, 0), true).isEmpty());
+    }
+
     @Test
     void unarmedEuropeanBeatingARaidDestroysTheBraveAndSurvives() {
         final Model model = decided(() -> Fight.raid().unarmed().build(),

@@ -163,6 +163,19 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
+     * End the native affiliation of a convert after Las Casas joins (R-0182).
+     * The person, place, cargo, job, equipment and resources stay; the
+     * restrictions and the lifetime count go with the affiliation, so the saved
+     * unit carries no convert fields.
+     */
+    public void releaseNativeConvert() {
+        Preconditions.checkState(isNativeConvert(),
+                "Only a native convert is released");
+        convertNation = null;
+        convertUnassignedUpdates = 0;
+    }
+
+    /**
      * @return whether this colonist holds the missionary role, by ordination or
      *         as a Jesuit
      */

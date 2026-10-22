@@ -7,12 +7,14 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.EuropeanRelationState;
+import org.microcol.model.ForeignPowerComparison;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 /** Basic political facts; game rules and transitions remain in the model. */
@@ -22,6 +24,8 @@ final class EuropeanRelationsPanel extends VBox {
     private final I18n i18n;
     private final VBox rows = new VBox(12);
     private final VBox support = new VBox(4);
+    private final Label comparisonsTitle = new Label();
+    private final GridPane comparisons = new GridPane();
     private final Label feedback = new Label();
 
     EuropeanRelationsPanel(final GameModelController game,
@@ -39,7 +43,16 @@ final class EuropeanRelationsPanel extends VBox {
         feedback.setId("relationsFeedback");
         feedback.setWrapText(true);
         support.setId("rebelSupport");
-        getChildren().addAll(support, scroll, feedback);
+        comparisons.setId("foreignPowers");
+        comparisons.setHgap(12);
+        comparisons.setVgap(6);
+        final ScrollPane comparisonScroll = new ScrollPane(comparisons);
+        comparisonScroll.setId("foreignPowersScroll");
+        comparisonScroll.setPrefViewportHeight(150);
+        comparisonScroll.setPrefViewportWidth(520);
+        comparisonsTitle.setId("foreignPowersTitle");
+        getChildren().addAll(support, comparisonsTitle, comparisonScroll,
+                scroll, feedback);
     }
 
     /** Read-only own support values; no rival or hidden colony is listed. */
@@ -72,6 +85,85 @@ final class EuropeanRelationsPanel extends VBox {
         }
     }
 
+    /**
+     * Read-only foreign comparisons. Each row shows exactly what the model
+     * discloses; withheld powers say whether de Witt or contact is missing.
+     */
+    private void refreshComparisons(final Model model) {
+        comparisonsTitle.setText(i18n.get(Stats.foreignTitle));
+        comparisons.getChildren().clear();
+        final List<Stats> headers = List.of(Stats.foreignPower,
+                Stats.foreignRelation, Stats.foreignPopulation,
+                Stats.foreignColonies, Stats.foreignAverageSize,
+                Stats.foreignMilitary, Stats.foreignNaval, Stats.foreignTrade);
+        for (int column = 0; column < headers.size(); column++) {
+            final Label header = new Label(i18n.get(headers.get(column)));
+            header.getStyleClass().add("relation-names");
+            comparisons.add(header, column, 0);
+        }
+        int row = 1;
+        for (final ForeignPowerComparison power : model
+                .getForeignPowerComparisons(game.getHumanPlayer())) {
+            final String key = power.getName();
+            comparisons.add(cell(label(power.getDisplayName(), key),
+                    "foreignPower-" + key), 0, row);
+            comparisons.add(cell(relationText(power.getRelation()),
+                    "foreignRelation-" + key), 1, row);
+            if (power.getFigures().isPresent()) {
+                final ForeignPowerComparison.Figures figures = power
+                        .getFigures().get();
+                final List<String> values = List.of(
+                        String.valueOf(figures.getPopulation()),
+                        String.valueOf(figures.getColonyCount()),
+                        number(figures.getAverageColonySize()),
+                        number(figures.getMilitaryStrength()),
+                        number(figures.getNavalStrength()),
+                        String.valueOf(figures.getTradeRevenue()));
+                for (int column = 0; column < values.size(); column++) {
+                    comparisons.add(
+                            cell(values.get(column),
+                                    "foreign-" + key + "-" + column),
+                            column + 2, row);
+                }
+            } else {
+                final boolean locked = power
+                        .getDisclosure() == ForeignPowerComparison.Disclosure.LOCKED;
+                final Label withheld = cell(
+                        i18n.get(locked ? Stats.foreignLocked
+                                : Stats.foreignUncontacted),
+                        "foreignWithheld-" + key);
+                comparisons.add(withheld, 2, row);
+                GridPane.setColumnSpan(withheld, headers.size() - 2);
+            }
+            row++;
+        }
+    }
+
+    private String relationText(final EuropeanRelationState state) {
+        if (state == EuropeanRelationState.PEACE) {
+            return i18n.get(Stats.relationPeace);
+        }
+        return i18n.get(
+                state == EuropeanRelationState.ALLIANCE ? Stats.relationAlliance
+                        : Stats.relationWar);
+    }
+
+    private static Label cell(final String text, final String id) {
+        final Label label = new Label(text);
+        label.setId(id);
+        label.setWrapText(true);
+        return label;
+    }
+
+    /**
+     * Whole values stay whole; fractions show one decimal in the active UI
+     * language, such as 4.5 in English and 4,5 in Czech.
+     */
+    private String number(final double value) {
+        return value == Math.rint(value) ? String.valueOf((long) value)
+                : String.format(i18n.getCurrentLocale(), "%.1f", value);
+    }
+
     void showReport() {
         feedback.setText("");
         refresh();
@@ -80,12 +172,14 @@ final class EuropeanRelationsPanel extends VBox {
     private void refresh() {
         rows.getChildren().clear();
         support.getChildren().clear();
+        comparisons.getChildren().clear();
         if (!game.isGameModelReady()) {
             feedback.setText(i18n.get(Stats.relationsUnavailable));
             return;
         }
         final Model model = game.getModel();
         refreshSupport(model);
+        refreshComparisons(model);
         final Player actor = model.getCurrentPlayer();
         final List<Player> players = model.getPlayers().stream()
                 .filter(Player::isColonialNation).collect(Collectors.toList());
@@ -212,9 +306,11 @@ final class EuropeanRelationsPanel extends VBox {
     }
 
     private String label(final Player player) {
-        final String display = player.getDisplayName();
-        return display.equals(player.getName()) ? display
-                : display + " (" + player.getName() + ")";
+        return label(player.getDisplayName(), player.getName());
+    }
+
+    private static String label(final String display, final String key) {
+        return display.equals(key) ? display : display + " (" + key + ")";
     }
 
     private boolean isCurrent(final Model original, final Player actor,

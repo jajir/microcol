@@ -21,6 +21,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
 
     public static final String BUY_BUTTON_ID = "buyButtonId";
 
+    private final Button treasure = new Button();
+
     private final Button buttonRecruit = new Button();
     private final Button buttonRepairs = new Button();
     private final Button buttonTax = new Button();
@@ -32,7 +34,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     @Inject
     EuropeButtonsPanel(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
-            final ShipRepairDialog repairDialog) {
+            final ShipRepairDialog repairDialog,
+            final org.microcol.gui.dialog.TreasureDialog treasureDialog) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
         buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
@@ -45,6 +48,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
                 Europe.buttonBuyUnit);
         buttonBuyUnit.setId(BUY_BUTTON_ID);
 
+        treasure.setId("treasureOpen");
+        treasure.setOnAction(event -> treasureDialog.showFor(null));
         buttonRecruit.setId("recruitButtonId");
         buttonRepairs.setId("shipRepairsButton");
         buttonRepairs.setOnAction(event -> repairDialog.showRepairs());
@@ -60,11 +65,13 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonRecruit);
         getButtonPanel().getChildren().add(buttonBuyUnit);
         getButtonPanel().getChildren().add(buttonRepairs);
+        getButtonPanel().getChildren().add(treasure);
         getButtonPanel().getChildren().add(buttonClose);
     }
 
     /** Update the text of the recruitment action. */
     public void updateLanguage(final I18n i18n) {
+        treasure.setText(i18n.get(org.microcol.gui.dialog.TreasureText.open));
         buttonRecruit.setText(i18n.get(Europe.recruitOpen));
         buttonRepairs.setText(i18n.get(Europe.repairsOpen));
         buttonTax.setText(i18n.get(Europe.taxOpen));

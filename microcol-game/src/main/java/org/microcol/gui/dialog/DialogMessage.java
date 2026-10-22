@@ -20,7 +20,11 @@ public final class DialogMessage extends AbstractWarningDialog {
 
     public void setText(final String text) {
         getContext().getChildren().clear();
-        getContext().getChildren().add(new Label(text));
+        final Label message = new Label(text);
+        message.setWrapText(true);
+        message.setPrefWidth(500);
+        message.setMaxWidth(500);
+        getContext().getChildren().add(message);
     }
 
 }

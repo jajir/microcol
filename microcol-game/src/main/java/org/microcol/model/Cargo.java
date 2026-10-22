@@ -28,6 +28,11 @@ public class Cargo {
                                 || slot.getGoodsType() != null
                                 || slot.getAmount() != null),
                 "Cargo exceeds unit capacity");
+        Preconditions.checkArgument(
+                cargoPo.getSlots().stream()
+                        .noneMatch(slot -> slot.getUnitId() != null
+                                && slot.containsGood()),
+                "Cargo slot cannot hold both a unit and goods");
 
         final ImmutableList.Builder<CargoSlot> builder = ImmutableList
                 .builder();

@@ -76,6 +76,17 @@ public class UnitCreateRequest {
         this.nativeHomeless = nativeHomeless;
     }
 
+    /** Face value of a treasure train; {@code null} for other units. */
+    private Integer treasureValue;
+
+    public Integer getTreasureValue() {
+        return treasureValue;
+    }
+
+    public void setTreasureValue(final Integer treasureValue) {
+        this.treasureValue = treasureValue;
+    }
+
     public boolean isVeteran() {
         return veteran;
     }

@@ -6,7 +6,9 @@ import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.turnevent.TurnEventCoastalBattery;
 import org.microcol.model.turnevent.TurnEventLostCityRumor;
+import org.microcol.model.turnevent.TurnEventPatrolInterception;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -15,11 +17,12 @@ import com.google.inject.Inject;
 
 /**
  * Shows the turn report right after a human move that resolved a lost-city
- * rumor, so the actual result is visible at once. The result itself is already
- * saved in the model; this listener only presents it. Manual moves, landings
- * and go-to walks of the turn all end with a finished move. Notices that were
- * already there when the turn started or the game was continued are not shown
- * again; the turn report button still lists them.
+ * rumor, a patrol slowdown or a coastal battery shot, so the actual result is
+ * visible at once. The result itself is already saved in the model; this
+ * listener only presents it. Manual moves, landings and go-to walks of the turn
+ * all end with a finished move. Notices that were already there when the turn
+ * started or the game was continued are not shown again; the turn report button
+ * still lists them.
  */
 @Listener
 public final class ShowRumorReportAfterMove {
@@ -61,7 +64,10 @@ public final class ShowRumorReportAfterMove {
         return (int) gameModelController.getModel()
                 .getTurnEventsLocalizedMessages(
                         gameModelController.getHumanPlayer())
-                .stream().filter(TurnEventLostCityRumor.class::isInstance)
+                .stream()
+                .filter(event -> event instanceof TurnEventLostCityRumor
+                        || event instanceof TurnEventPatrolInterception
+                        || event instanceof TurnEventCoastalBattery)
                 .count();
     }
 }

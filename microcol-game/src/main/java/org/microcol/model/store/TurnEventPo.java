@@ -208,6 +208,60 @@ public final class TurnEventPo {
         diplomacyVictimName = value;
     }
 
+    /**
+     * Selected patrol and its slowdown or stop, for its own event type only.
+     */
+    private Integer patrolId;
+    private Boolean patrolStopped;
+
+    public Integer getPatrolId() {
+        return patrolId;
+    }
+
+    public void setPatrolId(final Integer value) {
+        patrolId = value;
+    }
+
+    public Boolean isPatrolStopped() {
+        return patrolStopped;
+    }
+
+    public void setPatrolStopped(final Boolean value) {
+        patrolStopped = value;
+    }
+
+    /**
+     * Coastal battery that fired, the ship it fired at and whether it hit, for
+     * its own event type only (R-0177).
+     */
+    private Integer coastalColonyId;
+    private Integer coastalShipId;
+    private Boolean coastalHit;
+
+    public Integer getCoastalColonyId() {
+        return coastalColonyId;
+    }
+
+    public void setCoastalColonyId(final Integer value) {
+        coastalColonyId = value;
+    }
+
+    public Integer getCoastalShipId() {
+        return coastalShipId;
+    }
+
+    public void setCoastalShipId(final Integer value) {
+        coastalShipId = value;
+    }
+
+    public Boolean isCoastalHit() {
+        return coastalHit;
+    }
+
+    public void setCoastalHit(final Boolean value) {
+        coastalHit = value;
+    }
+
     /** Lost-city rumor result, required for its own event type only. */
     private String rumorOutcome;
     private Integer rumorExplorerId;

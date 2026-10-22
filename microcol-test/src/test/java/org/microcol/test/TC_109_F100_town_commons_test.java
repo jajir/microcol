@@ -145,6 +145,9 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         final int oreBefore = delft.stockOf(GoodsType.ORE);
         game = delft.close();
 
+        // Pan the map until Haarlem is in view; this does nothing if it already
+        // is.
+        game.panToTile(HAARLEM);
         ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyTownCommons(EN_HAARLEM);
         game = haarlem.close();
@@ -216,6 +219,7 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
 
         // Haarlem has no worker on any surrounding field; its three residents
         // work indoors and eat 6 food, so the forecast holds only the commons.
+        game.panToTile(HAARLEM);
         ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyNumberOfUnitsOnFields(0);
         haarlem.verifyTownCommons(EN_HAARLEM);
@@ -229,6 +233,7 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         // One owner update settles exactly the forecast: 134 + 3 - 6 food and
         // 6 lumber, with no Prime Timber bonus.
         game.nextTurnAndCloseDialogs();
+        game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyWarehouseStock(GoodsType.CORN, 131);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
@@ -238,6 +243,7 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         // Save and Continue from disk do not settle the update again.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
+        game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyWarehouseStock(GoodsType.CORN, 131);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);

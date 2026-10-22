@@ -29,7 +29,7 @@
 | UC-021 | Hra | Postavit silnici a využít zkušeného pionýra | [R-0121](done/R-0121.md), [R-0122](done/R-0122.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md) |
 | UC-022 | Hra | Provozovat všech šest lodí | [R-0108](done/R-0108.md), [R-0211](R-0211.md) |
 | UC-023 | Hra | Přesunout celé i částečné zboží | [R-0022](done/R-0022.md), [R-0024](done/R-0024.md), [R-0132](done/R-0132.md) |
-| UC-024 | Hra | Naložit jednotky a poklad | [R-0022](done/R-0022.md), [R-0133](done/R-0133.md), [R-0134](R-0134.md), [R-0175](R-0175.md), [R-0211](R-0211.md) |
+| UC-024 | Hra | Naložit jednotky a poklad | [R-0022](done/R-0022.md), [R-0133](done/R-0133.md), [R-0134](done/R-0134.md), [R-0175](done/R-0175.md), [R-0211](R-0211.md) |
 | UC-025 | Hra | Automaticky nalodit a selektivně vylodit | [R-0135](done/R-0135.md), [R-0136](done/R-0136.md) |
 | UC-026 | Hra | Rychle naložit, vyložit a odhodit náklad | [R-0137](done/R-0137.md), [R-0138](done/R-0138.md) |
 | UC-027 | Hra | Přeplout Atlantik a vrátit se | [R-0021](done/R-0021.md), [R-0071](done/R-0071.md) |
@@ -70,28 +70,28 @@
 | UC-062 | Hra | Navštívit náčelníka | [R-0157](done/R-0157.md), [R-0158](done/R-0158.md) |
 | UC-063 | Hra | Naučit se od domorodců | [R-0148](done/R-0148.md), [R-0157](done/R-0157.md) |
 | UC-064 | Hra | Obchodovat se sídlem | [R-0159](done/R-0159.md), [R-0160](done/R-0160.md), [R-0161](done/R-0161.md) |
-| UC-065 | Hra | Vyžádat tribut a dobýt sídlo | [R-0162](done/R-0162.md), [R-0174](done/R-0174.md), [R-0175](R-0175.md) |
+| UC-065 | Hra | Vyžádat tribut a dobýt sídlo | [R-0162](done/R-0162.md), [R-0174](done/R-0174.md), [R-0175](done/R-0175.md) |
 | UC-066 | Hra | Vyslat misionáře a založit misi | [R-0163](done/R-0163.md), [R-0164](done/R-0164.md), [R-0149](done/R-0149.md) |
 | UC-067 | Hra | Vypudit cizí misi nebo podnítit válku | [R-0165](done/R-0165.md), [R-0166](done/R-0166.md) |
-| UC-068 | Hra | Hrát proti fungujícímu soupeři | [R-0090](done/R-0090.md), [R-0091](done/R-0091.md), [R-0092](done/R-0092.md), [R-0170](R-0170.md), [R-0171](R-0171.md), [R-0172](R-0172.md), [R-0156](done/R-0156.md) |
+| UC-068 | Hra | Hrát proti fungujícímu soupeři | [R-0090](done/R-0090.md), [R-0091](done/R-0091.md), [R-0092](done/R-0092.md), [R-0170](done/R-0170.md), [R-0171](done/R-0171.md), [R-0172](done/R-0172.md), [R-0156](done/R-0156.md) |
 | UC-069 | Hra | Vyhlásit válku, vyjednat mír a alianci | [R-0028](done/R-0028.md), [R-0026](done/R-0026.md), [R-0099](done/R-0099.md), [R-0087](done/R-0087.md), [R-0089](done/R-0089.md) |
 | UC-070 | Hra | Přijmout žoldnéře | [R-0169](R-0169.md) |
-| UC-071 | Hra | Obchodovat s rivaly a porovnat mocnosti | [R-0167](R-0167.md), [R-0168](R-0168.md) |
+| UC-071 | Hra | Obchodovat s rivaly a porovnat mocnosti | [R-0167](done/R-0167.md), [R-0168](done/R-0168.md) |
 | UC-072 | Hra | Zahájit povolený útok | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) |
 | UC-073 | Hra | Spočítat skutečnou bojovou sílu | [R-0093](done/R-0093.md), [R-0094](done/R-0094.md), [R-0095](done/R-0095.md), [R-0173](done/R-0173.md), [R-0178](R-0178.md), [R-0188](R-0188.md), [R-0211](R-0211.md) |
 | UC-074 | Hra | Povýšit vojáka a poškodit dělo | [R-0111](done/R-0111.md), [R-0095](done/R-0095.md) |
 | UC-075 | Hra | Dobýt celou kolonii | [R-0096](done/R-0096.md) |
-| UC-076 | Hra | Vybojovat námořní střet a blokádu | [R-0097](done/R-0097.md), [R-0176](R-0176.md) |
-| UC-077 | Hra | Bránit pobřeží pevností | [R-0177](R-0177.md) |
+| UC-076 | Hra | Vybojovat námořní střet a blokádu | [R-0097](done/R-0097.md), [R-0176](done/R-0176.md) |
+| UC-077 | Hra | Bránit pobřeží pevností | [R-0177](done/R-0177.md) |
 | UC-078 | Hra | Zvýšit podporu a změnit produktivitu | [R-0100](done/R-0100.md), [R-0101](done/R-0101.md) |
 | UC-079 | Hra | Získat otce zakladatele | [R-0104](done/R-0104.md), [R-0203](R-0203.md), [R-0214](R-0214.md) |
 | UC-080 | Hra | Vyhlásit nezávislost a mobilizovat | [R-0105](done/R-0105.md) |
-| UC-081 | Hra | Pokračovat v hospodářství bez domovského přístavu | [R-0187](R-0187.md), [R-0085](done/R-0085.md), [R-0167](R-0167.md) |
+| UC-081 | Hra | Pokračovat v hospodářství bez domovského přístavu | [R-0187](R-0187.md), [R-0085](done/R-0085.md), [R-0167](done/R-0167.md) |
 | UC-082 | Hra | Čelit královské armádě | [R-0178](R-0178.md), [R-0185](R-0185.md), [R-0186](R-0186.md), [R-0203](R-0203.md) |
 | UC-083 | Hra | Získat zahraniční intervenci | [R-0189](R-0189.md), [R-0190](R-0190.md) |
 | UC-084 | Hra | Změnit politiku okupované kolonie | [R-0100](done/R-0100.md), [R-0188](R-0188.md) |
 | UC-085 | Hra | Vyhodnotit vítězství a všechny porážky revoluce | [R-0191](R-0191.md), [R-0192](R-0192.md) |
-| UC-086 | Hra | Hernan Cortes | [R-0175](R-0175.md), [R-0214](R-0214.md) |
+| UC-086 | Hra | Hernan Cortes | [R-0175](done/R-0175.md), [R-0214](R-0214.md) |
 | UC-087 | Hra | Francis Drake | [R-0179](done/R-0179.md), [R-0214](R-0214.md) |
 | UC-088 | Hra | John Paul Jones | [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
 | UC-089 | Hra | Paul Revere | [R-0096](done/R-0096.md), [R-0214](R-0214.md) |
@@ -105,10 +105,10 @@
 | UC-097 | Hra | Jakob Fugger | [R-0181](done/R-0181.md), [R-0214](R-0214.md) |
 | UC-098 | Hra | Peter Minuit | [R-0152](done/R-0152.md), [R-0214](R-0214.md) |
 | UC-099 | Hra | Peter Stuyvesant | [R-0084](done/R-0084.md), [R-0214](R-0214.md) |
-| UC-100 | Hra | Jan de Witt | [R-0167](R-0167.md), [R-0168](R-0168.md), [R-0214](R-0214.md) |
+| UC-100 | Hra | Jan de Witt | [R-0167](done/R-0167.md), [R-0168](done/R-0168.md), [R-0214](R-0214.md) |
 | UC-101 | Hra | Jean de Brebeuf | [R-0163](done/R-0163.md), [R-0214](R-0214.md) |
 | UC-102 | Hra | William Brewster | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md), [R-0214](R-0214.md) |
-| UC-103 | Hra | Bartolome de Las Casas | [R-0182](R-0182.md), [R-0214](R-0214.md) |
+| UC-103 | Hra | Bartolome de Las Casas | [R-0182](done/R-0182.md), [R-0214](R-0214.md) |
 | UC-104 | Hra | William Penn | [R-0110](done/R-0110.md), [R-0214](R-0214.md) |
 | UC-105 | Hra | Juan de Sepulveda | [R-0149](done/R-0149.md), [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
 | UC-106 | Hra | Francisco de Coronado | [R-0183](done/R-0183.md), [R-0214](R-0214.md) |
@@ -119,7 +119,7 @@
 | UC-111 | Hra | Ukončit nebo opustit partii | [R-0193](R-0193.md), [R-0194](R-0194.md) |
 | UC-112 | Hra | Spočítat skóre a zapsat Hall of Fame | [R-0195](R-0195.md), [R-0196](R-0196.md), [R-0197](R-0197.md) |
 | UC-113 | Hra | Uložit a obnovit rozpracovanou partii | [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0068](done/R-0068.md) |
-| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](done/R-0145.md), [R-0201](R-0201.md), [R-0168](R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
+| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](done/R-0145.md), [R-0201](R-0201.md), [R-0168](done/R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
 | UC-115 | Hra | Expedice se uživí a začne obchodovat | [R-0217](done/R-0217.md) |
 | UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](R-0218.md) |
 | UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](R-0219.md) |

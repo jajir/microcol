@@ -1,6 +1,9 @@
 package org.microcol.model.unit;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.microcol.model.AbstractUnit;
 import org.microcol.model.Cargo;
@@ -83,6 +86,9 @@ public class UnitFactory {
             }, request -> {
                 if (UnitType.BRAVE == request.getUnitType()) {
                     return makeNativeBrave(request);
+                }
+                if (UnitType.TREASURE_TRAIN == request.getUnitType()) {
+                    return makeTreasure(request);
                 }
                 return null;
             }));
@@ -180,6 +186,13 @@ public class UnitFactory {
                 request.getNativeRole());
     }
 
+    private Unit makeTreasure(final UnitCreateRequest request) {
+        return new UnitTreasure(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(),
+                request.getMovementThirds(), request.getAction(),
+                request.getTreasureValue());
+    }
+
     /**
      * Validate saved native unit state before any unit is constructed, so a
      * rejected save names the broken condition. A native nation owns only
@@ -215,6 +228,96 @@ public class UnitFactory {
                 at != null && model.getMap().isValid(at)
                         && model.getMap().getTerrainTypeAt(at).isLand(),
                 "Invalid saved native brave placement: map land only");
+    }
+
+    /**
+     * Validate a saved treasure train before it is constructed. Only a train
+     * carries a face value, the value must be positive, and the train either
+     * stands on map land or is stored in a ship's holds, never both. Its owner
+     * is checked with the other units by {@link #checkSavedNativeUnit}.
+     */
+    private static void checkSavedTreasure(final Model model,
+            final UnitPo unitPo) {
+        final boolean treasure = unitPo.getType() == UnitType.TREASURE_TRAIN;
+        Preconditions.checkArgument(
+                treasure == (unitPo.getTreasureValue() != null),
+                "Invalid saved treasure value");
+        Preconditions.checkArgument(
+                treasure || unitPo.getTreasurePickupColonyId() == null
+                        && unitPo.getTreasurePickupNet() == null,
+                "Only treasure can await pickup");
+        Preconditions.checkArgument(
+                (unitPo.getTreasurePickupColonyId() == null) == (unitPo
+                        .getTreasurePickupNet() == null),
+                "Incomplete treasure pickup");
+        if (!treasure) {
+            return;
+        }
+        Preconditions.checkArgument(unitPo.getTreasureValue() > 0,
+                "Invalid saved treasure value");
+        if (unitPo.getPlaceCargoSlot() != null) {
+            Preconditions.checkArgument(unitPo.getPlaceMap() == null,
+                    "Invalid saved treasure placement: a stored train has no map square");
+            return;
+        }
+        final Location at = unitPo.getPlaceMap() == null ? null
+                : unitPo.getPlaceMap().getLocation();
+        Preconditions.checkArgument(
+                at != null && model.getMap().isValid(at)
+                        && model.getMap().getTerrainTypeAt(at).isLand(),
+                "Invalid saved treasure placement: map land only");
+    }
+
+    /**
+     * Validate the cargo reservations that the saved file names, before any
+     * unit is built. A stored unit must reserve exactly the holds its type
+     * requires, all in one ship; a unit placed elsewhere names no hold. Every
+     * hold that names a unit must name a stored unit of that same ship, so no
+     * hold is an orphan.
+     *
+     * @param modelPo required saved world
+     * @param unitPo  required saved unit being validated
+     */
+    private static void checkSavedCargoReservations(final ModelPo modelPo,
+            final UnitPo unitPo) {
+        // Every saved hold must be a real entry before any scan dereferences
+        // it.
+        modelPo.getUnits().forEach(carrier -> {
+            if (carrier.getCargo() != null) {
+                Preconditions.checkArgument(
+                        carrier.getCargo().getSlots() != null
+                                && carrier.getCargo().getSlots().stream()
+                                        .allMatch(Objects::nonNull),
+                        "Invalid cargo slots");
+            }
+        });
+        if (unitPo.getCargo() != null) {
+            unitPo.getCargo().getSlots().stream()
+                    .filter(slot -> slot.getUnitId() != null)
+                    .forEach(slot -> Preconditions.checkArgument(modelPo
+                            .getUnits().stream()
+                            .anyMatch(passenger -> slot.getUnitId()
+                                    .equals(passenger.getId())
+                                    && passenger.getPlaceCargoSlot() != null),
+                            "Orphan saved cargo hold"));
+        }
+        final List<UnitPo> carriers = modelPo.getUnits().stream()
+                .filter(carrier -> carrier.getCargo() != null && carrier
+                        .getCargo().containsUnitInCargo(unitPo.getId()))
+                .collect(Collectors.toList());
+        if (unitPo.getPlaceCargoSlot() == null) {
+            Preconditions.checkArgument(carriers.isEmpty(),
+                    "Orphan saved cargo reservation");
+            return;
+        }
+        Preconditions.checkArgument(carriers.size() == 1,
+                "Saved unit must reserve holds of exactly one ship");
+        final long holds = carriers.get(0).getCargo().getSlots().stream()
+                .filter(slot -> unitPo.getId().equals(slot.getUnitId()))
+                .count();
+        Preconditions.checkArgument(
+                holds == unitPo.getType().getRequiredHolds(),
+                "Incomplete saved cargo reservation");
     }
 
     public Unit createUnit(final Model model, final ModelPo modelPo,
@@ -273,9 +376,16 @@ public class UnitFactory {
                 Boolean.TRUE.equals(unitPo.getNativeHomeless()));
         unitCreateRequest.setNativeRole(unitPo.getNativeRole() == null ? null
                 : UnitNativeBrave.Role.valueOf(unitPo.getNativeRole()));
+        unitCreateRequest.setTreasureValue(unitPo.getTreasureValue());
         checkSavedNativeUnit(model, unitPo, unitCreateRequest.getOwner());
+        checkSavedTreasure(model, unitPo);
+        checkSavedCargoReservations(modelPo, unitPo);
 
         final Unit unit = unitResolver.apply(unitCreateRequest);
+        if (unit instanceof UnitTreasure) {
+            ((UnitTreasure) unit).setPickup(unitPo.getTreasurePickupColonyId(),
+                    unitPo.getTreasurePickupNet());
+        }
         Preconditions.checkArgument(
                 unit.getMovementThirds() >= 0
                         && unit.getMovementThirds() <= MovementPoints

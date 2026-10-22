@@ -43,7 +43,8 @@ public enum UnitTypes implements MessageKeyResource {
     JESUIT_MISSIONARY_name, JESUIT_MISSIONARY_name_7,
     JESUIT_MISSIONARY_name_7pl, INDENTURED_SERVANT_name,
     INDENTURED_SERVANT_name_7, INDENTURED_SERVANT_name_7pl, PETTY_CRIMINAL_name,
-    PETTY_CRIMINAL_name_7, PETTY_CRIMINAL_name_7pl;
+    PETTY_CRIMINAL_name_7, PETTY_CRIMINAL_name_7pl, TREASURE_TRAIN_name,
+    TREASURE_TRAIN_name_7, TREASURE_TRAIN_name_7pl;
 
     private static final String UNIT_SUFFIX_NAME = "_name";
 

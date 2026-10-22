@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.EuropeTradeQuote;
@@ -80,6 +81,13 @@ class RivalTradeCycleTest {
 
     /** Adds a second colony site, its French founder and a third empty ship. */
     private boolean twoColonies;
+
+    /**
+     * Ships that take their owner turn in {@link #rivalTurn}: their voyages
+     * count down and they regain movement. Only the carrier of the cycle is on
+     * duty by default, so idle extra ships do not wander.
+     */
+    private final Set<Integer> dutyShipIds = new HashSet<>(Set.of(SHIP_ID));
 
     @AfterEach
     void stopRobot() {
@@ -256,12 +264,14 @@ class RivalTradeCycleTest {
      * exists is simply not advanced.
      */
     private void rivalTurn() {
-        model.tryGetUnitById(SHIP_ID).filter(
-                unit -> unit instanceof Ship && unit.getOwner() == france())
-                .map(Ship.class::cast).ifPresent(carrier -> {
-                    carrier.advanceVoyage();
-                    carrier.startTurn();
-                });
+        for (final int shipId : List.copyOf(dutyShipIds)) {
+            model.tryGetUnitById(shipId).filter(
+                    unit -> unit instanceof Ship && unit.getOwner() == france())
+                    .map(Ship.class::cast).ifPresent(carrier -> {
+                        carrier.advanceVoyage();
+                        carrier.startTurn();
+                    });
+        }
         assertTimeoutPreemptively(Duration.ofSeconds(5),
                 () -> ai.turnStarted());
     }
@@ -317,6 +327,12 @@ class RivalTradeCycleTest {
 
     private int colonyId() {
         return colony().getId();
+    }
+
+    /** Colony of the saved cycle, or -1 while no cycle is saved. */
+    private int objectiveColony() {
+        return france().getRivalTradeObjective()
+                .map(RivalTradeObjective::getColonyId).orElse(-1);
     }
 
     private void objective(final Stage stage) {
@@ -562,6 +578,148 @@ class RivalTradeCycleTest {
                 .allMatch(slot -> slot.isEmpty()));
         assertTrue(thirdShip.getCargo().getSlots().stream()
                 .allMatch(slot -> slot.isEmpty()));
+    }
+
+    /**
+     * The lower colony's carrier finishes its round trip and parks in its port.
+     * The higher colony, which has its own idle carrier, is served next; the
+     * parked carrier is not moved and its colony gets no second shipment.
+     */
+    @Test
+    void completedRoundTripParksTheCarrierAndTheNextColonyIsServed() {
+        secondShipTools = 0;
+        secondShipAt = SECOND_SHIP_START;
+        twoColonies = true;
+        prepareRival();
+        final Unit secondFounder = model.getUnitById(SECOND_FOUNDER_ID);
+        secondFounder.startTurn();
+        final int higherId = model.buildColony(france(), secondFounder, "Lyon")
+                .getId();
+        final int lowestId = model.getColonyAt(COLONY).orElseThrow().getId();
+        assertTrue(lowestId < higherId);
+        model.getUnitById(SHIP_ID).placeToLocation(SECOND_COLONY);
+        model.getUnitById(SECOND_SHIP_ID).placeToLocation(COLONY);
+        model.getColonyById(lowestId).orElseThrow().getWarehouse()
+                .addGoods(Goods.of(GoodsType.LUMBER, 100));
+        model.getColonyById(higherId).orElseThrow().getWarehouse()
+                .addGoods(Goods.of(GoodsType.LUMBER, 100));
+
+        // The lower colony's carrier takes its owner turns from the start.
+        dutyShipIds.add(SECOND_SHIP_ID);
+        rivalTurn();
+        assertEquals(lowestId, objectiveColony());
+        // R-0172 reference horizon: forty owner turns for the handover.
+        final int horizon = 40;
+        for (int turn = 0; turn < horizon
+                && objectiveColony() != higherId; turn++) {
+            rivalTurn();
+        }
+        assertEquals(higherId, objectiveColony(),
+                "The higher colony must be served after the lower one");
+        assertEquals(50, holdAmount(GoodsType.LUMBER),
+                "The higher colony gets one full shipment");
+        assertEquals(50, model.getColonyById(higherId).orElseThrow()
+                .getWarehouse().getGoods(GoodsType.LUMBER).getAmount());
+        assertEquals(50,
+                model.getColonyById(lowestId).orElseThrow().getWarehouse()
+                        .getGoods(GoodsType.LUMBER).getAmount(),
+                "The lower colony received exactly one shipment");
+        assertEquals(COLONY, model.getUnitById(SECOND_SHIP_ID).getLocation(),
+                "The parked carrier stays in its colony port");
+        assertTrue(((Ship) model.getUnitById(SECOND_SHIP_ID)).getCargo()
+                .getSlots().stream().allMatch(CargoSlot::isEmpty));
+    }
+
+    /**
+     * Two French colonies, each with one idle carrier in its port and lumber in
+     * its warehouse. The lower colony's carrier is ship 6, the higher colony's
+     * carrier is ship 5.
+     *
+     * @return identity of the higher colony
+     */
+    private int twoColonyFleet() {
+        secondShipTools = 0;
+        secondShipAt = SECOND_SHIP_START;
+        twoColonies = true;
+        prepareRival();
+        final Unit secondFounder = model.getUnitById(SECOND_FOUNDER_ID);
+        secondFounder.startTurn();
+        final int higherId = model.buildColony(france(), secondFounder, "Lyon")
+                .getId();
+        model.getUnitById(SHIP_ID).placeToLocation(SECOND_COLONY);
+        model.getUnitById(SECOND_SHIP_ID).placeToLocation(COLONY);
+        model.getColonyAt(COLONY).orElseThrow().getWarehouse()
+                .addGoods(Goods.of(GoodsType.LUMBER, 100));
+        model.getColonyById(higherId).orElseThrow().getWarehouse()
+                .addGoods(Goods.of(GoodsType.LUMBER, 100));
+        return higherId;
+    }
+
+    /**
+     * Save and Continue after the lower colony's round trip keeps the parked
+     * carrier in its port and the rotation after that colony. The next owner
+     * turn serves the higher colony, and nothing is sailed away meanwhile.
+     */
+    @Test
+    void parkedCarrierAndRotationSurviveContinue() {
+        final int higherId = twoColonyFleet();
+        final int lowestId = model.getColonyAt(COLONY).orElseThrow().getId();
+        dutyShipIds.add(SECOND_SHIP_ID);
+        rivalTurn();
+        assertEquals(lowestId, objectiveColony());
+        // R-0172 reference horizon: forty owner turns for the handover.
+        final int horizon = 40;
+        for (int turn = 0; turn < horizon && !france()
+                .getRivalParkedCarrierIds().contains(SECOND_SHIP_ID); turn++) {
+            rivalTurn();
+        }
+        assertEquals(Set.of(SECOND_SHIP_ID, SHIP_ID),
+                france().getRivalParkedCarrierIds(),
+                "Both colonies keep one parked carrier at the handover");
+        assertEquals(Optional.of(lowestId),
+                france().getRivalLastServedColonyId());
+        assertEquals(-1, objectiveColony());
+
+        continueGame();
+        assertEquals(Set.of(SECOND_SHIP_ID, SHIP_ID),
+                france().getRivalParkedCarrierIds());
+        assertEquals(Optional.of(lowestId),
+                france().getRivalLastServedColonyId());
+        rivalTurn();
+        assertEquals(higherId, objectiveColony(),
+                "The rotation after Continue serves the higher colony");
+        assertEquals(COLONY, model.getUnitById(SECOND_SHIP_ID).getLocation());
+    }
+
+    /**
+     * The lower colony's carrier is destroyed on its way out. Its cargo is lost
+     * with it and nothing is refunded or invented. The rotation falls to the
+     * higher colony at once, and that colony's parked carrier is served.
+     */
+    @Test
+    void destroyedCarrierRotatesToTheHigherColonyAtOnce() {
+        final int higherId = twoColonyFleet();
+        final int lowestId = model.getColonyAt(COLONY).orElseThrow().getId();
+        dutyShipIds.add(SECOND_SHIP_ID);
+        rivalTurn();
+        assertEquals(lowestId, objectiveColony());
+        assertEquals(50, holdAmount((Ship) model.getUnitById(SECOND_SHIP_ID),
+                GoodsType.LUMBER));
+        RivalTradeFixtures.destroyUnit(model,
+                model.getUnitById(SECOND_SHIP_ID));
+        dutyShipIds.remove(SECOND_SHIP_ID);
+        rivalTurn();
+        assertEquals(higherId, objectiveColony(),
+                "The higher colony is served in the owner turn of the loss");
+        assertEquals(50, holdAmount(GoodsType.LUMBER),
+                "The higher colony ships one full shipment");
+        assertEquals(50,
+                model.getColonyById(lowestId).orElseThrow().getWarehouse()
+                        .getGoods(GoodsType.LUMBER).getAmount(),
+                "The lower colony keeps its stock and gets no refund");
+        assertFalse(
+                france().getRivalParkedCarrierIds().contains(SECOND_SHIP_ID),
+                "A destroyed carrier is not parked");
     }
 
     @Test
@@ -814,6 +972,70 @@ class RivalTradeCycleTest {
         assertEquals(Optional.of(Stage.TO_COLONY), stage());
         assertTrue(ship().isAtHighSea());
         assertEquals(50, holdAmount(GoodsType.TOOLS));
+    }
+
+    private PlayerPo savedFrance(final ModelPo saved) {
+        return saved.getGameManager().getPlayers().stream()
+                .filter(player -> player.getName().equals(RIVAL)).findFirst()
+                .orElseThrow();
+    }
+
+    /**
+     * Null, negative or duplicate saved identities are malformed, so the load
+     * is refused instead of guessing what the rotation meant.
+     */
+    @Test
+    void malformedSavedRotationIsRejectedOnLoad() {
+        prepareRival();
+        final List<List<Integer>> malformed = List.of(
+                new ArrayList<>(Collections.singletonList((Integer) null)),
+                new ArrayList<>(List.of(-1)),
+                new ArrayList<>(List.of(SHIP_ID, SHIP_ID)));
+        for (final List<Integer> parked : malformed) {
+            final ModelPo saved = model.save();
+            savedFrance(saved).setRivalParkedCarrierIds(parked);
+            assertThrows(RuntimeException.class,
+                    () -> Model.make(saved,
+                            MissionImpl.getPredefinedGameOverEvaluators()),
+                    "Malformed parked carriers " + parked);
+        }
+        final ModelPo saved = model.save();
+        savedFrance(saved).setRivalLastServedColonyId(-1);
+        assertThrows(RuntimeException.class,
+                () -> Model.make(saved,
+                        MissionImpl.getPredefinedGameOverEvaluators()),
+                "Negative served colony");
+        final ModelPo missing = model.save();
+        savedFrance(missing).setRivalParkedCarrierIds(null);
+        assertThrows(RuntimeException.class,
+                () -> Model.make(missing,
+                        MissionImpl.getPredefinedGameOverEvaluators()),
+                "A missing parked-carrier list");
+    }
+
+    /**
+     * Well-formed identities that no longer name an own ship in an own port are
+     * stale, not malformed: they load, and the owner's turn releases them while
+     * the real idle carriers are parked in their place.
+     */
+    @Test
+    void staleParkedIdentitiesLoadAndAreReleasedAtTheOwnersTurn() {
+        twoColonyFleet();
+        france().parkRivalCarrier(998);
+        france().parkRivalCarrier(DUTCH_SHIP_ID);
+        france().parkRivalCarrier(FOUNDER_ID);
+        france().setRivalLastServedColonyId(999);
+        continueGame();
+        assertEquals(Set.of(998, DUTCH_SHIP_ID, FOUNDER_ID),
+                france().getRivalParkedCarrierIds(),
+                "Stale identities load unchanged");
+        assertEquals(Optional.of(999), france().getRivalLastServedColonyId());
+        rivalTurn();
+        // The stale identities are gone. The higher colony's own carrier is
+        // parked, and the lower colony's carrier started the cycle.
+        assertEquals(Set.of(SHIP_ID), france().getRivalParkedCarrierIds());
+        assertEquals(SECOND_SHIP_ID,
+                france().getRivalTradeObjective().orElseThrow().getCarrierId());
     }
 
     @Test

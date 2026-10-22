@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.microcol.model.Founder;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -131,6 +133,52 @@ public final class NativeConvertPage extends AbstractScreen {
             }
         }
         replaceGame(gson, game);
+    }
+
+    /**
+     * Load the scenario with one Dutch convert standing on the map, the Dutch
+     * Congress offering Las Casas with enough bells for the next turn, and an
+     * ordinary missionary beside the Aztec capital for a later mission. The
+     * saved randomness is the given state.
+     */
+    public void loadLasCasasFixture(final File source, final long combatState,
+            final Location convertAt, final int convertId,
+            final Location missionaryAt, final int missionaryId)
+            throws Exception {
+        final Gson gson = new Gson();
+        final JsonObject game = readGame(source, gson);
+        final JsonObject model = game.getAsJsonObject("model");
+        model.addProperty("combatRandomState", combatState);
+        model.getAsJsonArray("units")
+                .add(unit(convertId, "COLONIST", convertAt, false, 0));
+        model.getAsJsonArray("units")
+                .add(unit(missionaryId, "COLONIST", missionaryAt, true, null));
+        zeroAnger(model);
+        offerLasCasas(model);
+        replaceGame(gson, game);
+    }
+
+    /**
+     * The Dutch Congress offers Las Casas beside four other founders, one of
+     * each category, with enough bells for one join at the next turn.
+     */
+    private static void offerLasCasas(final JsonObject model) {
+        final List<Founder> offer = List.of(Founder.JOHN_PAUL_JONES,
+                Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
+                Founder.BARTOLOME_DE_LAS_CASAS, Founder.FERDINAND_MAGELLAN);
+        for (final JsonElement element : model.getAsJsonObject("gameManager")
+                .getAsJsonArray("players")) {
+            final JsonObject player = element.getAsJsonObject();
+            if (DUTCH.equals(player.get("name").getAsString())) {
+                final JsonObject congress = player.getAsJsonObject("congress");
+                congress.addProperty("bells", 1000);
+                final JsonArray candidates = new JsonArray();
+                for (final Founder founder : offer) {
+                    candidates.add(founder.name());
+                }
+                congress.add("candidates", candidates);
+            }
+        }
     }
 
     private static JsonObject readGame(final File source, final Gson gson)
@@ -326,6 +374,56 @@ public final class NativeConvertPage extends AbstractScreen {
         assertEquals(expected, label.getText());
         assertTrue(label.getHeight() >= label.prefHeight(label.getWidth()),
                 "The convert label must fit in its panel");
+    }
+
+    /**
+     * The person is still the same colonist at the same square, and no longer a
+     * native convert after Las Casas joined.
+     */
+    public void verifyFreedColonist(final int unitId,
+            final Location expectedAt) {
+        final Unit unit = getModel().getUnitById(unitId);
+        assertTrue(
+                unit instanceof UnitFreeColonist
+                        && !((UnitFreeColonist) unit).isNativeConvert(),
+                "The person must be a free colonist");
+        assertTrue(unit.isAtPlaceLocation());
+        assertEquals(expectedAt, unit.getLocation());
+    }
+
+    /**
+     * The unit panel shows no convert label for the freed colonist; the square
+     * is inspected first, so the panel is the one of that person.
+     */
+    public void verifyNoConvertLabel(final int unitId) {
+        final Unit unit = getModel().getUnitById(unitId);
+        new FogPage(getContext()).inspect(unit.getLocation());
+        assertTrue(isCssIdVisible("unitPanel-" + unitId),
+                "The panel must show the freed colonist");
+        assertFalse(isCssIdVisible(CONVERT_LABEL_PREFIX + unitId),
+                "The freed colonist must show no convert label");
+    }
+
+    /**
+     * Load the colony scenario with one Dutch convert at the given colony
+     * square, unassigned, and the Dutch Congress offering Las Casas with bells
+     * for the next turn. The convert is then assigned through the job picker.
+     */
+    public void loadConvertFounderFixture(final File source, final Location at,
+            final int convertId) throws Exception {
+        final Gson gson = new Gson();
+        final JsonObject game = readGame(source, gson);
+        final JsonObject model = game.getAsJsonObject("model");
+        model.getAsJsonArray("units")
+                .add(unit(convertId, "COLONIST", at, false, 0));
+        zeroAnger(model);
+        offerLasCasas(model);
+        replaceGame(gson, game);
+    }
+
+    /** No native convert is held by the Dutch any more. */
+    public void verifyNoConvertHeld() {
+        assertTrue(converts().isEmpty(), "No convert may remain");
     }
 
 }

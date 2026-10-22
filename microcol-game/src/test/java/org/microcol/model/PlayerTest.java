@@ -181,6 +181,9 @@ public class PlayerTest {
         // is covered by the real-account tests in EuropeTradeAccountTest.
         when(europe.getTradeAccount(any(), any()))
                 .thenReturn(EuropeTradeAccount.EMPTY);
+        // No recent European sales either; the window arithmetic is covered by
+        // the real-window tests in EuropeSaleRevenueTest.
+        when(europe.getSaleWindow(any())).thenReturn(EuropeSaleWindow.EMPTY);
     }
 
     @AfterEach

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="slowed">Nepřátelská hlídka zpomalila vaši loď: v tomto tahu jí zbývá méně pohybu.</entry>
+  <entry key="stopped">Nepřátelská hlídka zastavila vaši loď na zbytek tohoto tahu.</entry>
+</properties>

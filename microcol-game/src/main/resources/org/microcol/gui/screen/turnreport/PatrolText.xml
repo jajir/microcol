@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="slowed">A hostile patrol slowed your ship: it has less movement left this turn.</entry>
+  <entry key="stopped">A hostile patrol stopped your ship for the rest of this turn.</entry>
+</properties>

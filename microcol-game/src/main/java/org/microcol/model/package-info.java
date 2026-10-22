@@ -147,6 +147,9 @@
  * owner retires an objective whose colony or carrier is gone or not its own.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
- *      responsibilities</a>
+ *      responsibilities</a> Foreign power comparisons are viewpoint-filtered
+ *      model snapshots. Player remembers European contact earned through
+ *      current sight; report reads are pure. Europe owns the persisted
+ *      ten-owner-turn net sale revenue window.
  */
 package org.microcol.model;

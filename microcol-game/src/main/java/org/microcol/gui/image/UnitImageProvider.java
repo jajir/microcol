@@ -54,6 +54,10 @@ public class UnitImageProvider {
                 .put(UnitType.COLONIST,
                         imageCache.getImage(IMG_UNIT_FREE_COLONIST))
                 .put(UnitType.WAGON,
+                        imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON))
+                // The treasure train reuses the wagon artwork; its name and
+                // value are shown in the unit panel.
+                .put(UnitType.TREASURE_TRAIN,
                         imageCache.getImage(ImageLoaderUnit.IMG_UNIT_WAGON));
         UnitType.EUROPEAN_SPECIALISTS.forEach(type -> images.put(type,
                 imageCache.getImage(IMG_UNIT_FREE_COLONIST)));
@@ -127,7 +131,9 @@ public class UnitImageProvider {
                                 artillery.isDamaged() ? "artillery-damaged.png"
                                         : "artillery.png");
                     }
-                    if (UnitType.WAGON == request.getUnitType()) {
+                    if (UnitType.WAGON == request.getUnitType()
+                            || UnitType.TREASURE_TRAIN == request
+                                    .getUnitType()) {
                         return imageCache
                                 .getImage(ImageLoaderUnit.IMG_UNIT_WAGON);
                     }

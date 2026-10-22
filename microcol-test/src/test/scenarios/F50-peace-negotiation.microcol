@@ -17,7 +17,6 @@
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
-        "placeCargoSlot": {},
         "cargo": {
           "slots": []
         },

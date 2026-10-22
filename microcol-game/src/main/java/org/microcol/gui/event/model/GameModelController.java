@@ -17,6 +17,8 @@ import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
+import org.microcol.model.ForeignColonyTermsChangedException;
+import org.microcol.model.ForeignColonyTradeQuote;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
@@ -549,6 +551,26 @@ public class GameModelController {
             return true;
         } catch (IllegalStateException rejected) {
             showNativePurchaseRejection();
+            return false;
+        }
+    }
+
+    /**
+     * Trade with an adjacent foreign colony at the terms the player confirmed
+     * (R-0167). Only the expected stale-terms rejection is caught: the model
+     * then moves nothing and the dialog shows the live state again.
+     *
+     * @param visitor wagon or ship beside the colony
+     * @param colony  foreign colony
+     * @param offered quote the confirmation displayed
+     * @return whether the trade was made
+     */
+    public boolean tradeWithForeignColony(final Unit visitor,
+            final Colony colony, final ForeignColonyTradeQuote offered) {
+        try {
+            getModel().tradeWithForeignColony(visitor, colony, offered);
+            return true;
+        } catch (ForeignColonyTermsChangedException changed) {
             return false;
         }
     }

@@ -6294,3 +6294,82 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Model: **3,384 tests in 281 reports**. UI-01: **250 tests in 69 reports**; UI-02: **296 tests in 69 reports**, totaling **546 UI/support tests**. All groups passed with zero failures, errors or skips. Main independently matched every expected class and method against the exported XML, checked duplicate reports and reconciled counts.
 3. All **2,264 source file hashes** match the checkout at acceptance, on base revision `3016f8f7a807eb519676c7e9ba632163da9a10c7`. Formatting, documentation/tool checks and strict MkDocs passed. Subsequent requirement closure changes documentation only; no game implementation changes are included after this acceptance run.
 4. This completes R-0158, R-0149, R-0164, R-0165, R-0166, R-0156, R-0174, R-0162, R-0154 and R-0157. Earlier failures and visually rejected runs retain their original results. R-0175 treasure remains separate; R-0207 remains excluded. Remote CI and publication were not verified.
+
+### R-0175 treasure foundation — 2026-10-22
+
+1. Successful conquest creates at most one persistent treasure unit, using saved randomness without Cortes or the guaranteed doubled value with Cortes. Creation credits no gold. The unit retains its face value, has zero combat strength and is destroyed without payment when defeated. Shared saved-strength combat admits armed Europeans and native braves, excluding the legacy unarmed random path.
+2. Docker/Xvfb `run-s3zCXH`, completion `20261022T070846Z-f4deb4ac8ad9`, passed **3,402 model/JUnit tests in 282 reports and 43 UI/support tests in nine reports**, zero failures/errors/skips, in 418.429 seconds. Selection: all JUnits plus TC139/137/138/136/26/62. All 29 hashes matched `R-0175-codex-source`; formatter checked 24 Java files with token equivalence and idempotence passing.
+3. TC139/F130 covers real conquest, controlled reward/no-reward, Cortes, Continue and EN/CS results. Native and European treasure-loss model checks verify zero defense, saved randomness and no payment. Main inspected localized result dialogs and the Czech map/panel: the value remains visible and the correct tile is selected.
+4. Four Claude attempts diagnosed Czech status-text wrapping that changed canvas height and shifted the map beneath the pointer. The viewport now preserves its top row when height changes, bounded by map limits; four model checks cover resizing. Codex then bounded and wrapped the shared message label after size assertions exposed oversized results. Failed runs retain their original status. R-0134 six-hold transport, both redemption routes and complete batch regression remain pending; this is foundation verification, not R-0175 completion.
+
+## R-0134 treasure cargo — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-hJTRvI` passed 3,416 model tests (283 reports) and 53 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC140/139/137/26/62/24/29. Completion `20261022T075209Z-373e683cb935` took 557.769 seconds. All 43 recorded source hashes matched.
+2. TC140 covers port boarding into six holds, five-free-hold refusal, reserved-slot drag, unloading, Continue, Czech display, map boarding, one-entry passenger chooser/cancel and rejected movement. Screenshots remain under `target/docker-ui/run-hJTRvI/microcol-test/warehouse-qa/`. Main inspected the Czech six-hold view. Earlier failed runs remain failed evidence; the third attempt repaired tests that incorrectly looked for dock crates on the map.
+3. Shared formatter checked 35 changed Java files with exact-token and idempotence checks. Full batch regression and R-0175 redemption are pending; this targeted result is not complete local acceptance.
+
+## R-0176 naval interception — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-gPXvE5` passed 3,440 model tests (284 reports) and 35 UI/support tests (8 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC141/64/140/29/26. Completion `20261022T084433Z-e16fc8a93fdc` took 365.980 seconds; all 58 recorded source hashes matched.
+2. Model checks cover draw bands, hostile/privateer/allied eligibility, strongest patrol and ID, approach and actual owned-port entry, passenger landing/cargo preservation, saved notices and random state, and longer routes slowed before safe middle steps. TC141 exercises real slowdown, stopping, undetected passage and Continue. Main inspected the readable Czech slowdown screenshot from preceding passing run `run-cg4SF1`; the final repair only changed the model route loop and its tests.
+3. Shared formatter checked 47 changed Java files with exact-token and idempotence checks. Earlier failed fixtures remain failed evidence. Full batch regression remains pending; this result is not complete local acceptance.
+
+## R-0177 coastal batteries — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-LAU90f` passed 3,453 model tests (285 reports) and 35 UI/support tests (9 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC142/141/64/65/29/26. Completion `20261022T091703Z-f0de71701899` took 388.221 seconds; all 70 recorded source hashes matched.
+2. Checks cover battery strength, hit/miss, stable colony order, early repair, battery-before-patrol, saved per-owner shot records, renewal through real turn transitions and existing repair fallback. TC142 exercises real coastal movement, continued passage/Continue and hit/repair. Main inspected the readable Czech hit notice in `target/docker-ui/run-LAU90f/microcol-test/warehouse-qa/coastal-battery-hit-cs.png`.
+3. Shared formatter checked 56 changed Java files with exact-token and idempotence checks. Earlier invalid-fixture and turn-notice-count failures remain failed evidence. Full batch regression remains pending; this targeted pass is not complete local acceptance.
+
+## R-0182 Las Casas converts — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-fmuH6P` passed 3,459 model tests (286 reports) and 47 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC143/134/133/30/56/72/29. Completion `20261022T094728Z-1e93a7b6f46f` took 653.150 seconds; all 79 recorded source hashes matched.
+2. Model checks cover earned/unearned join, existing map/field/building/cargo converts, stable identity, foreign-owner exclusion, removed expiry/restrictions, ordinary yields under the same political snapshot, later converts and reload. TC143 covers real Congress choice/cancel, arrival, field-job retention and output, manufacturing availability, Continue and later mission acquisition. Main inspected the readable Czech arrival/freedom report in `target/docker-ui/run-fmuH6P/microcol-test/warehouse-qa/las-casas-freed-cs.png`.
+3. Shared formatter checked 64 changed Java files with exact-token and idempotence checks. Earlier fixture and assertion failures remain failed evidence. Full batch regression remains pending; this targeted pass is not complete local acceptance.
+
+## R-0168 foreign power comparison — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-2sYEmn` passed 3,476 model tests (288 reports) and 42 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC144/33/56/120/30/26. Completion `20261022T105019Z-387f47b504f0` took 519.000 seconds; all 98 recorded source hashes matched.
+2. Model checks cover viewpoint/founder/contact disclosure, remembered unit and ship contact, pure reads, canonical military/naval bases including damaged armed ships, ownership refresh, empty-colony averages and net European-sale history. TC144 earns de Witt through Congress, checks unknown-power withholding, exact report values, reopening/Continue and mouse/keyboard access in English and Czech. Main inspected both revealed screenshots under `target/docker-ui/run-2sYEmn/microcol-test/warehouse-qa/`; the wide comparison table has a horizontal scrollbar.
+3. Shared formatter checked 79 changed Java files with exact-token and idempotence checks. After four Claude attempts, Codex removed the obsolete cargo-place marker from map unit 0 in F25; the strict loader and all assertions remain. Earlier failed runs remain failed evidence. Full batch regression remains pending.
+
+## R-0170 rival land military — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-QNzyAl` passed 3,501 model tests (289 reports) and 41 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC145/120/121/34/33/64/26. Completion `20261022T120358Z-c9235142009f` took 395.935 seconds; all 107 recorded source hashes matched.
+2. Model checks cover defense within three turns, multiple threatened colonies, offensive battle within ten, shared 60% threshold, approach-dependent artillery odds, deterministic target ties, civilian capture, vanished targets, peace/alliance, blocked paths and Continue. TC145 exercises real owner turns for defense/Continue, a seeded offensive battle with specific equipment outcomes and bounded no-target turns.
+3. Earlier failed runs remain failed evidence. Repairs corrected invalid fixtures and premature fortification expectations, shared prospective odds and target-ID ties. The formatter checked 86 changed Java files with exact-token and idempotence checks. Full batch acceptance remains pending; this targeted result is not complete local acceptance.
+
+## R-0171 rival naval military — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-Ci4y5M` passed 3,524 model tests (290 reports) and 43 UI/support tests (12 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC146/145/120/121/34/64/65/141/26. Completion `20261022T130119Z-5fe39ef0e017` took 437.871 seconds; all 113 recorded source hashes matched.
+2. Checks cover carrier priority, distance/ID, shared 60% threshold, privateer/peace/alliance, known-water patrol, multiple-turn pursuit, loaded ships, shared loot/damage, transport reservations, colony-less spare warships and Continue. TC146 verifies a two-turn encounter, the actual sinking notice and Continue, peaceful refusal and bounded patrol.
+3. Earlier failed runs remain failed evidence. Repairs corrected terrain overlays, fixtures and shared interception-draw expectations; the final UI fix reads and closes the real naval outcome notice before leaving the game. The formatter checked 91 changed Java files with exact-token and idempotence checks. Full batch acceptance remains pending.
+
+## R-0172 multi-colony coordination — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-huXYgv` passed 3,539 model tests (290 reports) and 36 UI/support tests (11 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC147/146/145/120/121/34/56/26. Completion `20261022T145335Z-d93fd0d5abf2` took 454.441 seconds; all 121 recorded source hashes matched.
+2. TC147 completed 40 real owner turns with two established colonies, a blocked transport channel, disk Continue during the block, reopening and legal third-colony founding. It checks stocks, original identities, recorded births and earned European arrivals. Periodic human tax demands are accepted through their real dialog. Model checks cover food/tool reserve boundaries, famine repair, rotation persistence, stale identities and one active expansion.
+3. Earlier failures remain failed evidence. Corrections include actual founder corn production, food-only workforce repair before other objectives, valid boundary fixtures, tax-decision handling, earned-immigrant accounting and waiting for queued report UI replacement. Formatter checked 98 changed Java files with exact-token and idempotence checks. Full batch acceptance remains pending; trade rotation is model-tested, while TC147's isolated basin exercises expansion transport.
+
+## R-0167 foreign-colony trade — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-k1IQYl` passed 3,564 model tests (291 reports) and 49 UI/support tests (11 reports), zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC148/144/33/56/26/140/29. Completion `20261022T154557Z-a99f77821d16` took 462.793 seconds; all 134 recorded source hashes matched.
+2. TC148 passed eight scenarios: wagon sale/cancel/Continue, barter, ship, missing founder, rebellion, Czech text, full-hold exchange and insufficient host gold. Model checks cover two-way goods/gold conservation, partial/full holds, treasure reservations, warehouse and treasury boundaries, overflow, stale state and participant binding, relation changes and reload.
+3. Earlier failed fixture runs remain failed evidence. Shared formatter checked 108 changed Java files with exact-token and idempotence checks. Full batch acceptance remains pending; this targeted run does not mark the requirement done.
+
+## R-0175 treasure redemption — 2026-10-22
+
+1. Targeted Docker/Xvfb run `run-yEN5st` passed 3,573 model tests (292 reports) and 41 UI/support tests (11 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC149/139/140/26/29/56/144. Completion `20261022T161614Z-51fe53548e2a` took 430.162 seconds; all 146 recorded source hashes matched.
+2. TC149 covers explicit own-galleon redemption, cancellation, exact proceeds, six released holds, Continue, royal collection after a real owner turn, pending-save persistence and Czech text. Model checks add stale treasury/tax, locked confirmed proceeds, overflow, moved/lost trains, invalid saved pickup, independence closing both routes and once-only payment. Main inspected `target/docker-ui/run-yEN5st/microcol-test/warehouse-qa/treasure-redemption-cs.png`: the deductions, rule and controls are readable.
+3. The preceding integration run `run-OcGFBT` passed 3,569 model and 40 UI/support tests. Earlier compilation and fixture failures remain failed evidence. Formatter checked 116 changed Java files with exact-token and idempotence checks. R-0175 and the ten-requirement fifth batch await complete local regression; neither targeted run is complete acceptance.
+
+## Fifth-batch regression repair — 2026-10-22
+
+1. Complete two-worker run `target/verification/run-qo7nk9un/summary.json` failed: model 3,573/292 reports passed; UI groups ran 271 and 316 tests with 5 and 21 failures respectively, zero errors/skips. Completion `20261022T162441Z-bb8b07d52c54` took 4,061.340 seconds. All 2,325 frozen source files matched. This remains failed evidence, not acceptance.
+2. F50 and F51 held an obsolete cargo-place marker on map unit 0 without a carrier reservation. Removing those two markers preserves legitimate passengers and the strict loader. TC109 now uses the existing keyboard pan before opening Haarlem, preserving its position and production assertions.
+3. Targeted repair run `run-MbLxV9` passed all 3,573 model tests (292 reports) and 53 UI/support tests (10 reports), zero failures/errors/skips. Selection: all JUnit conventions plus TC59/60/74/109/149/140/26. Completion `20261022T182539Z-dbab0b0b2b92` took 466.655 seconds; all 149 recorded source hashes matched. Formatter checked 117 changed Java files with exact-token/idempotence checks. A fresh complete run is required.
+
+## Fifth-batch complete local acceptance — 2026-10-22
+
+1. Complete runner `target/verification/run-weinqxg0/summary.json`, callback `20261022T183404Z-5e4d34c0ef10`, passed in 4,199.572 seconds (about 70 minutes). The model group passed 3,573 tests in 292 reports. The two isolated UI groups passed 271 and 316 tests in 75 reports each: 587 UI/support tests total. Every group has zero failures, errors and skipped tests.
+2. All expected report classes and named test methods, including parameterized cases, are present with no duplicate reports. All 2,325 files in the frozen source manifest matched the accepted working source before documentation closure. The preceding failed complete run remains failed evidence. Subsequent changes for closure are documentation-only.
+3. This accepts R-0134, R-0176, R-0177, R-0182, R-0168, R-0170, R-0171, R-0172, R-0167 and R-0175. Earlier targeted counts, repairs and visual observations remain above. Remote CI and publication were not checked and are not implied by local acceptance.

@@ -43,9 +43,16 @@ class CanvasArea {
         canvasSize = Point.of(newCanvasWidth, canvasSize.getY());
     }
 
+    /**
+     * The canvas top edge is fixed in the game screen; only its bottom edge
+     * moves, for example when the status bar below it wraps a longer hover text
+     * onto more lines. The map therefore keeps its top row, so the tile under
+     * the pointer does not move when the height changes. A canvas taller than
+     * the map is still centered on it.
+     */
     void setCanvasHeight(final int newCanvasHeight, final int maxMapHeight) {
-        final int y = getNewCanvasPositionWhenSizeChange(newCanvasHeight,
-                canvasSize.getY(), topLeft.getY(), maxMapHeight);
+        final int y = getNewCanvasPositionKeepingStart(newCanvasHeight,
+                topLeft.getY(), maxMapHeight);
         topLeft = Point.of(topLeft.getX(), y);
         canvasSize = Point.of(canvasSize.getX(), newCanvasHeight);
     }
@@ -131,6 +138,24 @@ class CanvasArea {
             }
             return center - halfOfNewCanvas;
         }
+    }
+
+    /**
+     * Canvas position when only the far edge of the canvas moves: the near edge
+     * keeps its map position, limited to the map bounds.
+     *
+     * @param newCanvasSize         new canvas size
+     * @param currentCanvasPosition current canvas position
+     * @param maxMapSize            maximal map size
+     * @return canvas position keeping its start within the map bounds
+     */
+    private int getNewCanvasPositionKeepingStart(final int newCanvasSize,
+            final int currentCanvasPosition, final int maxMapSize) {
+        if (newCanvasSize >= maxMapSize) {
+            return (maxMapSize - newCanvasSize) / 2;
+        }
+        return Math.max(0,
+                Math.min(currentCanvasPosition, maxMapSize - newCanvasSize));
     }
 
     /**

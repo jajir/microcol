@@ -127,6 +127,8 @@
 	<entry key="nativeAttackBackButton">Zpět</entry>
 	<entry key="nativeAttackConquered">Přemohli jste %d obránce(ů) a sídlo jste dobyli.</entry>
 	<entry key="nativeAttackRepelled">Útok skončil po přemožení %d obránce(ů). Sídlo stojí.</entry>
+	<entry key="nativeAttackTreasure">Na dobytém místě nyní stojí pokladní povoz v hodnotě %d zlatých.</entry>
+	<entry key="nativeAttackNoTreasure">V sídle nezůstal žádný poklad.</entry>
 	<entry key="nativeAttackUnitLost">Vaše útočná jednotka prohrála bitvu a byla zničena nebo přišla o zbraně.</entry>
 	<entry key="nativeAttackTrappedLost">Kolonista nebo misionář ze sídla neměl poblíž volné pole a při dobytí zahynul.</entry>
 	<entry key="nativeAttackRejected">Útok nyní nelze provést: sídlo, jeho obránci nebo vaše jednotka se změnili. Nic se nezměnilo.</entry>
@@ -260,6 +262,7 @@
 	<entry key="nativeTeachingHostility">Domorodci se obrátili proti kolonii, takže kolonista odešel, aniž by se naučil: %s.</entry>
 	<entry key="nativeConvertJoined">Domorodý konvertita se připojil ke kolonii jako nepřiřazený kolonista.</entry>
 	<entry key="nativeConvertReturned">Domorodý konvertita se po osmi tazích bez práce vrátil ke svému kmeni.</entry>
+	<entry key="nativeConvertFreed">Las Casas osvobodil vaše dosavadní domorodé konvertity; nyní pracují jako běžní kolonisté.</entry>
 	<entry key="nativeTeachingProgress">Učení: %s zde, %d z %d aktualizací vlastníka.</entry>
 	<entry key="nativeTeachingStop">Přestat se učit</entry>
 	<entry key="nativeTeachingRejected">Nabídka nebo situace se změnila, proto nic nezačalo.</entry>
@@ -278,6 +281,7 @@
 	<entry key="difficulty_governor">Guvernér</entry>
 	<entry key="difficulty_viceroy">Místokrál</entry>
     <entry key="unitsPanel_veteran">Vojenská hodnost: veterán</entry>
+    <entry key="unitsPanel_treasureValue">Hodnota pokladu: %d zlatých</entry>
     <entry key="unitsPanel_continental">Vojenská role: kontinentální</entry>
     <entry key="unitsPanel_convert">Domorodý konvertita: %s. Nepřiřazená kola: %s z 8.</entry>
     <entry key="unitsPanel_royal">Vojenská role: královský voják</entry>

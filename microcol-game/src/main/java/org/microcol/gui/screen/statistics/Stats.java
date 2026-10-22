@@ -18,6 +18,8 @@ public enum Stats implements MessageKeyResource {
     allianceEndStale, turnCrownWar, turnCrownWarAlliance, turnAllyDefense,
     supportNational, supportNone, supportColonyRow, titleTrade, tradeEmpty,
     tradeUnavailable, tradeBought, tradeSpent, tradeSold, tradeReceived,
-    tradeRevolutionary;
+    tradeRevolutionary, foreignTitle, foreignPower, foreignRelation,
+    foreignPopulation, foreignColonies, foreignAverageSize, foreignMilitary,
+    foreignNaval, foreignTrade, foreignLocked, foreignUncontacted;
 
 }

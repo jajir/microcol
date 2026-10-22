@@ -56,6 +56,8 @@ public final class NavalCombatPreview {
         for (final CargoSlot slot : ship.getCargo().getSlots()) {
             if (slot.isLoadedUnit()) {
                 out.append('U').append(slot.getUnit().orElseThrow().getId());
+            } else if (slot.isReservedHold()) {
+                out.append('R');
             } else if (slot.isLoadedGood()) {
                 final Goods goods = slot.getGoods().orElseThrow();
                 out.append('G').append(goods.getType().name()).append('=')
@@ -124,7 +126,8 @@ public final class NavalCombatPreview {
                     .map(Goods::getType).orElse(null);
             targetAmounts[index] = target.get(index).getGoods()
                     .map(Goods::getAmount).orElse(0);
-            if (target.get(index).isLoadedUnit()) {
+            if (target.get(index).isLoadedUnit()
+                    || target.get(index).isReservedHold()) {
                 targetAmounts[index] = CargoSlot.MAX_CARGO_SLOT_CAPACITY;
             }
         }

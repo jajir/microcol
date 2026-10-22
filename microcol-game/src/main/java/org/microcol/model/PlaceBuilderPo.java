@@ -1,6 +1,8 @@
 package org.microcol.model;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import org.microcol.model.store.CargoSlotPo;
@@ -201,17 +203,20 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
         final ModelPo modelPo = context.getModelPo();
         if (unitPo.getPlaceCargoSlot() != null) {
             // find unit in which cargo should be unit placed
-            // place it to correct slot
+            // place its first hold, then reserve the others it names
             final Integer idUnitInCargo = unitPo.getId();
-            final Integer slotIndex = getSlotId(idUnitInCargo);
+            final List<Integer> slotIndexes = getSlotIndexes(idUnitInCargo);
             final UnitPo holdingUnitPo = modelPo
                     .getUnitWithUnitInCargo(idUnitInCargo);
             final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
             final CargoSlot cargoSlot = holdingUnit.getCargo()
-                    .getSlotByIndex(slotIndex);
+                    .getSlotByIndex(slotIndexes.get(0));
             final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
                     cargoSlot);
             cargoSlot.store(placeCargoSlot);
+            slotIndexes.subList(1, slotIndexes.size())
+                    .forEach(index -> holdingUnit.getCargo()
+                            .getSlotByIndex(index).reserve(placeCargoSlot));
             return placeCargoSlot;
         }
         return null;
@@ -224,17 +229,25 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
         this.model = Preconditions.checkNotNull(model);
     }
 
-    private Integer getSlotId(final Integer idUnitInCargo) {
+    /**
+     * @param idUnitInCargo required identity of a stored unit
+     * @return indexes of all holds that name the unit, in ascending order; the
+     *         first is the unit's own hold
+     */
+    private List<Integer> getSlotIndexes(final Integer idUnitInCargo) {
         final UnitPo tmp = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
-        int index = 0;
-        for (final CargoSlotPo slot : tmp.getCargo().getSlots()) {
-            if (idUnitInCargo.equals(slot.getUnitId())) {
-                return index;
+        final List<Integer> out = new ArrayList<>();
+        final List<CargoSlotPo> slots = tmp.getCargo().getSlots();
+        for (int index = 0; index < slots.size(); index++) {
+            if (idUnitInCargo.equals(slots.get(index).getUnitId())) {
+                out.add(index);
             }
-            index++;
         }
-        throw new MicroColException(
-                String.format("unable to find slot for (%s)", idUnitInCargo));
+        if (out.isEmpty()) {
+            throw new MicroColException(String
+                    .format("unable to find slot for (%s)", idUnitInCargo));
+        }
+        return out;
     }
 
     private UnitWithCargo getHoldingUnit(final UnitPo holdingUnitPo) {

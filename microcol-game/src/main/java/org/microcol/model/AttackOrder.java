@@ -35,12 +35,23 @@ public final class AttackOrder {
 
     AttackOrder(final AbstractUnit attacker, final Unit defender,
             final Optional<ColonyDefense> colonyDefense) {
+        this(attacker, defender, colonyDefense, attacker.getLocation());
+    }
+
+    /**
+     * A quote of the same battle fought from another square (R-0170). Its
+     * strengths use that square; executing it from anywhere else is rejected by
+     * the ordinary participant check.
+     */
+    AttackOrder(final AbstractUnit attacker, final Unit defender,
+            final Optional<ColonyDefense> colonyDefense,
+            final Location origin) {
         this.attacker = attacker;
         this.defender = defender;
         this.colonyDefense = colonyDefense;
         attackingPlayer = attacker.getOwner();
         defendingPlayer = defender.getOwner();
-        origin = attacker.getLocation();
+        this.origin = origin;
         target = colonyDefense.map(ColonyDefense::getBattlefield)
                 .orElseGet(defender::getLocation);
         privateerException = attacker.model.isPrivateerNavalException(attacker,
@@ -52,9 +63,10 @@ public final class AttackOrder {
         declarationRequired = isDeclarationNeeded(attacker.model,
                 attackingPlayer, defendingPlayer, privateerException);
         combatStrengths = colonyDefense.isPresent()
-                ? CombatStrengths.forColonyBattle(attacker.model, attacker,
-                        colonyDefense.get())
-                : CombatStrengths.forBattle(attacker.model, attacker, defender);
+                ? CombatStrengths.forColonyBattleFrom(attacker.model, attacker,
+                        origin, colonyDefense.get())
+                : CombatStrengths.forBattleFrom(attacker.model, attacker,
+                        origin, defender);
         navalPreview = attacker.isShip() && defender.isShip()
                 ? Optional.of(new NavalCombatPreview(attacker.model,
                         (org.microcol.model.unit.Ship) attacker,

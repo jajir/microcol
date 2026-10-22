@@ -49,6 +49,12 @@ public final class UnitType {
     private static final int DEFAULT_GALLEON_CARGO_CAPACITY = 6;
 
     /**
+     * Holds one treasure train reserves in a ship (R-0134): it fills all six
+     * holds of a galleon, so no other cargo fits beside it.
+     */
+    private static final int TREASURE_REQUIRED_HOLDS = 6;
+
+    /**
      * Default galleon speed.
      */
     private static final int DEFAULT_GALLEON_SPEED = 6;
@@ -83,6 +89,11 @@ public final class UnitType {
     private final int speed;
     private final int cargoCapacity;
     private final boolean storable;
+    /**
+     * How many ship holds a stored unit of this type reserves; one for an
+     * ordinary passenger, six for a treasure train (R-0134).
+     */
+    private final int requiredHolds;
     private final int europePrice;
     private final BiFunction<Model, Colony, Boolean> canByBuildInColony;
 
@@ -241,6 +252,21 @@ public final class UnitType {
                         .wasConstructionBuilded(ConstructionType.LUMBER_MILL);
             }).build();
 
+    /**
+     * Treasure train of a conquered native settlement (R-0175). It is a land
+     * unit with no combat strength of its own, and its face value is carried by
+     * the unit, not by the owner's gold. Europe does not sell it, no colony
+     * builds it. A ship stores it only in six free holds, which it reserves as
+     * one unit (R-0134).
+     */
+    public static final UnitType TREASURE_TRAIN = UnitType.make()
+            .setName("TREASURE_TRAIN")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(0).setStorable(true)
+            .setRequiredHolds(TREASURE_REQUIRED_HOLDS).setEuropePrice(0)
+            .build();
+
     public static final UnitType ARTILLERY = UnitType.make()
             .setName("ARTILLERY")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
@@ -342,7 +368,7 @@ public final class UnitType {
             .<UnitType>builder()
             .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
                     FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
-                    MAN_OF_WAR, WAGON, BRAVE)
+                    MAN_OF_WAR, WAGON, BRAVE, TREASURE_TRAIN)
             .addAll(EUROPEAN_SPECIALISTS).addAll(SCHOOL_ONLY_SPECIALISTS)
             .build();
 
@@ -361,6 +387,7 @@ public final class UnitType {
         private int cargoCapacity;
         private Predicate<UnitType> attackableUnitTypeFilter;
         private boolean storable;
+        private int requiredHolds = 1;
         private int europePrice;
         private GoodsType expertInProducing;
         private float expertProductionModifier;
@@ -379,9 +406,10 @@ public final class UnitType {
         UnitType build() {
             return new UnitType(name, moveableTerrains, speed,
                     attackableUnitTypeFilter, cargoCapacity, storable,
-                    europePrice, expertInProducing, expertProductionModifier,
-                    canPlowField, canBuildRoad, canCutTrees, requiredTools,
-                    requiredHammers, canByBuildInColony);
+                    requiredHolds, europePrice, expertInProducing,
+                    expertProductionModifier, canPlowField, canBuildRoad,
+                    canCutTrees, requiredTools, requiredHammers,
+                    canByBuildInColony);
         }
 
         /**
@@ -450,6 +478,15 @@ public final class UnitType {
          */
         UnitTypeBuilder setStorable(final boolean defaultStorable) {
             this.storable = defaultStorable;
+            return this;
+        }
+
+        /**
+         * @param holds required number of ship holds one stored unit reserves
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setRequiredHolds(final int holds) {
+            this.requiredHolds = holds;
             return this;
         }
 
@@ -549,6 +586,8 @@ public final class UnitType {
      *                                 attackable unit type
      * @param cargoCapacity            required default cargo capacity
      * @param storable                 required if unit could be placed in cargo
+     * @param requiredHolds            required number of ship holds a stored
+     *                                 unit reserves, at least one
      * @param europePrice              required default price in Europe port
      * @param expertInProducing        required unit's expertise
      * @param expertProductionModifier required production modifiers
@@ -568,7 +607,8 @@ public final class UnitType {
     UnitType(final String name, final List<TerrainType> moveableTerrains,
             final int speed, final Predicate<UnitType> attackableUnitTypeFilter,
             final int cargoCapacity, final boolean storable,
-            final int europePrice, final GoodsType expertInProducing,
+            final int requiredHolds, final int europePrice,
+            final GoodsType expertInProducing,
             final float expertProductionModifier, final boolean canPlowField,
             final boolean canBuildRoad, final boolean canCutTrees,
             final Integer requiredTools, final Integer requiredHammers,
@@ -580,6 +620,9 @@ public final class UnitType {
                 .checkNotNull(attackableUnitTypeFilter);
         this.cargoCapacity = cargoCapacity;
         this.storable = storable;
+        Preconditions.checkArgument(requiredHolds >= 1,
+                "A stored unit reserves at least one hold");
+        this.requiredHolds = requiredHolds;
         this.europePrice = europePrice;
         this.expertInProducing = expertInProducing;
         this.expertProductionModifier = expertProductionModifier;
@@ -708,6 +751,16 @@ public final class UnitType {
     }
 
     /**
+     * How many ship holds a stored unit of this type reserves. A passenger
+     * occupies all of them as one unit, so it is never copied into each hold.
+     *
+     * @return number of holds, at least one
+     */
+    public int getRequiredHolds() {
+        return requiredHolds;
+    }
+
+    /**
      * Return information whether unit could move at given terrain.
      *
      * @param terrain required terrain
@@ -736,7 +789,7 @@ public final class UnitType {
      *         return <code>false</code> unit type can't build colony.
      */
     public boolean canBuildColony() {
-        return !isShip() && !canHoldCargo();
+        return !isShip() && !canHoldCargo() && this != TREASURE_TRAIN;
     }
 
     /**

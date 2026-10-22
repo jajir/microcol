@@ -1064,3 +1064,13 @@ Základ R-0164 ukládá misionáře v `PlaceNativeMission`, se stejnou identitou
 R-0149 spotřebovává pátou aktualizaci mise ve stejné přípravě tahu. Model vlastní los, legální pozemní cestu k nejbližší kolonii, původ konvertity a kumulativní nečinnost. Při návratu uvolní umístění i vazby mise/výuky; pravidla práce a výroby používají společné modelové operace. GUI čte označení a zobrazuje uložená hlášení. Viz [ověření integrace](functional-tests.md#r-0149-native-converts-2026-10-21).
 
 R-0165 drží výpočet soupeření misionářů v `NativeContestRules`; `Model` před losem ověřuje neměnnou nabídku včetně obou identit a revize mise. Přes společné umístění odstraní pouze poraženého a při vítězství převede stejného návštěvníka do mise. GUI pouze potvrzuje riziko a zobrazuje výsledek. Viz [cílené ověření](functional-tests.md#r-0165-rival-mission-contest-2026-10-22).
+
+### Zahraniční srovnání a znalost kontaktů (R-0168)
+
+`Player` uchovává evropské kontakty získané skutečným dohledem nad jednotkou nebo kolonií; `PlayerPo` je ukládá. Čtení přehledu kontakt nevytváří. `Model.getForeignPowerComparisons` omezuje souhrny podle hráče, kontaktu a de Wittova členství, používá základní síly ze společného `CombatStrengths` a aktuální kolonie. `Europe` vlastní desetitahové okno čistých příjmů z evropských prodejů, uložené v `EuropePo`; okno se posouvá podle tahů příslušného národa. GUI vykresluje modelový výsledek a lokalizuje čísla, nepočítá pravidla ani neuchovává druhý zdroj ekonomických hodnot. Cílené ověření z 22. října 2026 je v [evidenci](functional-tests.md#r-0168-foreign-power-comparison-2026-10-22); úplná regrese dávky ještě čeká.
+
+### Výkup pokladů (R-0175)
+
+Model vytváří nabídku čistého výnosu a provádí jednorázový výkup. `UnitTreasure` ukládá potvrzený královský odvoz (identitu kolonie a částku); vlastníkova aktualizace znovu ověří polohu, vlastnictví a přístup do Evropy. Sdílený dialog v `gui.dialog` pouze zobrazuje nabídku a předává potvrzení. Obrazovky kolonie a Evropy zpřístupňují odpovídající cestu. Implementace z 22. října 2026 prošla [cíleným ověřením](functional-tests.md#r-0175-treasure-redemption-2026-10-22); úplná regrese dávky zůstává otevřená.
+
+Obchod s cizí kolonií (R-0167) používá modelovou nabídku a atomický převod skutečného nákladu, skladu a zlata. Balíček `gui.screen.foreigncolony` zobrazuje modelové limity a potvrzení; pravidla cen a oprávnění zůstávají v modelu. [Cílené ověření](functional-tests.md#r-0167-foreign-colony-trade-2026-10-22) nenahrazuje úplnou regresi.

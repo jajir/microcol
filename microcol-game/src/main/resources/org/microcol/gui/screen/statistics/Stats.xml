@@ -70,4 +70,15 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="tradeSold">Sold: %s units</entry>
 	<entry key="tradeReceived">Gold received: %s</entry>
 	<entry key="tradeRevolutionary">Revolutionary custom house: %s units, %s net gold</entry>
+	<entry key="foreignTitle">Foreign powers</entry>
+	<entry key="foreignPower">Power</entry>
+	<entry key="foreignRelation">Relation</entry>
+	<entry key="foreignPopulation">Population</entry>
+	<entry key="foreignColonies">Colonies</entry>
+	<entry key="foreignAverageSize">Average colony size</entry>
+	<entry key="foreignMilitary">Military strength</entry>
+	<entry key="foreignNaval">Naval strength</entry>
+	<entry key="foreignTrade">Sales, last 10 turns</entry>
+	<entry key="foreignLocked">Locked: recruit Jan de Witt to compare powers.</entry>
+	<entry key="foreignUncontacted">Unknown: no contact with this power yet.</entry>
 </properties>

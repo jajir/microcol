@@ -33,7 +33,10 @@ import org.slf4j.LoggerFactory;
  * are saved in the player's {@link RivalTradeObjective}. Every step revalidates
  * live ownership, cargo, capacity and trade permission, then uses the ordinary
  * model moves, cargo transfers and quoted Europe trades. A refused step changes
- * nothing and waits for the next owner turn, so the pass count is bounded.
+ * nothing and waits for the next owner turn, so the pass count is bounded. With
+ * several colonies a round trip ends in its colony port, the carrier stays
+ * parked there, and the next owner turn serves the colony after it in ID order,
+ * so no colony waits behind a lower one that keeps a carrier.
  */
 final class RivalTradeCycle {
 
@@ -63,7 +66,7 @@ final class RivalTradeCycle {
     /**
      * @param unit required unit of this robot
      * @return whether the unit is the carrier of the active cycle, so the
-     *         ordinary unit loop leaves it to this class
+     *         ordinary unit loop and the naval policy leave it to this class
      */
     boolean isCarrier(final Unit unit) {
         return player().getRivalTradeObjective()
@@ -72,7 +75,16 @@ final class RivalTradeCycle {
     }
 
     /**
-     * One owner-turn pass: retire a stale cycle, choose the lowest eligible
+     * @param unit required unit of this robot
+     * @return whether the unit waits parked in its colony port between round
+     *         trips, so the ordinary unit loop keeps it there
+     */
+    boolean isParked(final Unit unit) {
+        return player().getRivalParkedCarrierIds().contains(unit.getId());
+    }
+
+    /**
+     * One owner-turn pass: retire a stale cycle, choose the next eligible
      * colony and carrier when none is active, then advance the cycle while each
      * pass makes progress.
      */
@@ -81,6 +93,8 @@ final class RivalTradeCycle {
                 && resolve().isEmpty()) {
             player().clearRivalTradeObjective();
         }
+        dropStaleParking();
+        parkIdleCarriers();
         if (player().getRivalTradeObjective().isEmpty()) {
             choose();
         }
@@ -125,13 +139,20 @@ final class RivalTradeCycle {
     }
 
     /**
-     * Lowest colony that has a lowest eligible ship in its port. Nothing is
-     * chosen when no colony has one, so the rival waits finitely.
+     * Colonies in ID order, starting after the colony of the last completed
+     * round trip and wrapping around. The first colony with a lowest eligible
+     * ship in its port starts the cycle. Nothing is chosen when no colony has
+     * one, so the rival waits finitely.
      */
     private void choose() {
-        for (final Colony colony : model().getColonies(player()).stream()
-                .sorted(Comparator.comparingInt(Colony::getId))
-                .collect(Collectors.toList())) {
+        final int served = player().getRivalLastServedColonyId()
+                .orElse(Integer.MIN_VALUE);
+        final List<Colony> colonies = model().getColonies(player()).stream()
+                .collect(Collectors.toList());
+        colonies.sort(Comparator
+                .comparing((Colony colony) -> colony.getId() <= served)
+                .thenComparingInt(Colony::getId));
+        for (final Colony colony : colonies) {
             if (!colony.isValid() || !model().isOwnedCoastalPort(player(),
                     colony.getLocation())) {
                 continue;
@@ -142,12 +163,84 @@ final class RivalTradeCycle {
                     .filter(this::isEligibleCarrier)
                     .min(Comparator.comparingInt(Ship::getId));
             if (carrier.isPresent()) {
+                player().unparkRivalCarrier(carrier.get().getId());
                 player().setRivalTradeObjective(
                         new RivalTradeObjective(colony.getId(),
                                 carrier.get().getId(), Stage.TO_EUROPE));
                 return;
             }
         }
+    }
+
+    /**
+     * Parked carriers are kept only while several colonies remain and the ship
+     * is still an own ship. Anything else is released to ordinary orders.
+     */
+    private void dropStaleParking() {
+        final boolean several = model().getColonies(player()).size() > 1;
+        for (final int shipId : player().getRivalParkedCarrierIds()) {
+            if (!several || !isParkedAtOwnPort(shipId)) {
+                player().unparkRivalCarrier(shipId);
+            }
+        }
+    }
+
+    /**
+     * With several colonies, the lowest idle unarmed carrier in each owned port
+     * waits there for the rotation, so ordinary orders never sail it away
+     * before its colony is served. Armed ships stay with the naval policy. A
+     * port that already keeps a parked carrier gets none.
+     */
+    private void parkIdleCarriers() {
+        final List<Colony> colonies = model().getColonies(player()).stream()
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(Collectors.toList());
+        if (colonies.size() < 2) {
+            return;
+        }
+        for (final Colony colony : colonies) {
+            if (!colony.isValid() || !model().isOwnedCoastalPort(player(),
+                    colony.getLocation()) || isParkedAt(colony)) {
+                continue;
+            }
+            model().getUnitsAt(colony.getLocation()).stream()
+                    .filter(unit -> unit instanceof Ship).map(Ship.class::cast)
+                    .filter(ship -> !isCarrier(ship) && !ship.canAttack())
+                    .filter(this::isEligibleCarrier)
+                    .min(Comparator.comparingInt(Ship::getId))
+                    .ifPresent(ship -> player().parkRivalCarrier(ship.getId()));
+        }
+    }
+
+    private boolean isParkedAt(final Colony colony) {
+        return player().getRivalParkedCarrierIds().stream()
+                .map(id -> model().tryGetUnitById(id))
+                .anyMatch(unit -> unit.isPresent()
+                        && unit.get().isAtPlaceLocation() && unit.get()
+                                .getLocation().equals(colony.getLocation()));
+    }
+
+    /** Own ship still standing in a port of one of this player's colonies. */
+    private boolean isParkedAtOwnPort(final int shipId) {
+        return model().tryGetUnitById(shipId)
+                .filter(unit -> unit instanceof Ship
+                        && unit.getOwner() == player())
+                .filter(Unit::isAtPlaceLocation)
+                .flatMap(unit -> model().getColonyAt(unit.getLocation()))
+                .filter(colony -> colony.getOwner() == player()).isPresent();
+    }
+
+    /**
+     * @param colony required colony of this robot
+     * @return whether the warehouse, plus the tools aboard the active carrier
+     *         when it serves this colony, meets the tool target
+     */
+    boolean isToolSupplyMet(final Colony colony) {
+        final int onTheWay = resolve()
+                .filter(leg -> leg.colony.getId() == colony.getId())
+                .map(leg -> holdAmount(leg.carrier, GoodsType.TOOLS)).orElse(0);
+        return warehouseAmount(colony, GoodsType.TOOLS)
+                + onTheWay >= TOOLS_TARGET;
     }
 
     /**
@@ -201,7 +294,8 @@ final class RivalTradeCycle {
 
     /**
      * Unload every tool the warehouse can take. Tools that stay aboard keep the
-     * leg, so the next owner turn retries them.
+     * leg, so the next owner turn retries them. With several colonies the empty
+     * carrier ends the round trip here and is parked in this port.
      *
      * @return whether the carrier is empty of tools and the leg moved on
      */
@@ -217,6 +311,12 @@ final class RivalTradeCycle {
         }
         if (holdAmount(leg.carrier, GoodsType.TOOLS) > 0) {
             return false;
+        }
+        if (model().getColonies(player()).size() > 1) {
+            player().setRivalLastServedColonyId(leg.colony.getId());
+            player().parkRivalCarrier(leg.carrier.getId());
+            player().clearRivalTradeObjective();
+            return true;
         }
         setStage(leg, Stage.TO_EUROPE);
         return true;

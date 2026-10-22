@@ -14,6 +14,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
+import org.microcol.gui.screen.foreigncolony.DialogForeignColonyTrade;
 import org.microcol.gui.screen.nativesettlements.DialogNativeAttack;
 import org.microcol.gui.screen.nativesettlements.DialogNativeChief;
 import org.microcol.gui.screen.nativesettlements.DialogNativeContest;
@@ -26,6 +27,7 @@ import org.microcol.gui.screen.nativesettlements.DialogNativeVisit;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.event.EndMoveEvent;
+import org.microcol.gui.event.RefreshRightPanelEvent;
 import org.microcol.gui.event.StartGoToEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.event.StartMoveEvent;
@@ -40,6 +42,7 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.AttackOrder;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
+import org.microcol.model.ForeignColonyTradeProblem;
 import org.microcol.model.Model;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
@@ -315,6 +318,17 @@ public final class GamePanelPresenter {
             return;
         }
 
+        // Beside a foreign colony the trade choice opens instead of a move or
+        // attack; war keeps the existing attack path and never trades (R-0167).
+        final Optional<Colony> foreignColony = gameModelController.getModel()
+                .getColonyAt(moveToLocation).filter(colony -> colony
+                        .getOwner() != gameModelController.getHumanPlayer());
+        if (foreignColony.isPresent() && isForeignTradeOffered(movingUnit,
+                foreignColony.get(), moveToLocation)) {
+            disableMoveMode(movingUnit);
+            showForeignColonyTrade(movingUnit, foreignColony.get());
+            return;
+        }
         // Entering a known adjacent native settlement opens its chooser first,
         // so no move, embark or attack reaches the settlement square (R-0157).
         final Optional<NativeSettlement> settlement = gameModelController
@@ -392,6 +406,40 @@ public final class GamePanelPresenter {
             new DialogUnitCantMoveHere(viewUtil, i18n);
         }
         disableMoveMode(movingUnit);
+    }
+
+    /**
+     * Whether the adjacent foreign colony offers its trade choice (R-0167).
+     * Open trade is always offered. A refusal the player can fix, such as the
+     * missing founder or empty holds, is explained in the same window, but
+     * never hides an attack the unit could make. Refused access and war keep
+     * the existing movement and attack path.
+     */
+    private boolean isForeignTradeOffered(final Unit unit, final Colony colony,
+            final Location target) {
+        final ForeignColonyTradeProblem access = gameModelController.getModel()
+                .getForeignColonyTradeAccess(unit, colony);
+        if (access == ForeignColonyTradeProblem.NONE) {
+            return true;
+        }
+        final boolean explainable = access == ForeignColonyTradeProblem.FOUNDER_ABSENT
+                || access == ForeignColonyTradeProblem.EMPTY_CARGO
+                || access == ForeignColonyTradeProblem.DAMAGED_CARRIER;
+        return explainable && unit.prepareAttack(target, true).isEmpty();
+    }
+
+    /**
+     * Show the trade window and refresh the right panel after a completed
+     * trade, because the carrier's cargo changed without any movement.
+     */
+    private void showForeignColonyTrade(final Unit carrier,
+            final Colony colony) {
+        final DialogForeignColonyTrade dialog = new DialogForeignColonyTrade(
+                viewUtil, i18n, gameModelController, carrier, colony);
+        dialog.showAndWait();
+        if (dialog.isTraded()) {
+            eventBus.post(new RefreshRightPanelEvent());
+        }
     }
 
     /**
@@ -831,6 +879,12 @@ public final class GamePanelPresenter {
                 result.isConquered() ? Loc.nativeAttackConquered
                         : Loc.nativeAttackRepelled,
                 result.getDefendersDefeated()));
+        if (result.isConquered()) {
+            // The one draw of the conquest, reported with the outcome (R-0175).
+            text.append(' ').append(result.getTreasureValue()
+                    .map(value -> i18n.get(Loc.nativeAttackTreasure, value))
+                    .orElseGet(() -> i18n.get(Loc.nativeAttackNoTreasure)));
+        }
         if (result.isAttackerLost()) {
             text.append(' ').append(i18n.get(Loc.nativeAttackUnitLost));
         }

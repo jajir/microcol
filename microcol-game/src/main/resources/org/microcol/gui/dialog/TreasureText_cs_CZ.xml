@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="open">Vyplatit poklad</entry>
+    <entry key="title">Výkup pokladu</entry>
+    <entry key="ownRule">Dopravte pokladní povoz vlastní galeonou do Evropy. Odečte se pouze současná daň. Níže potvrďte přesnou částku.</entry>
+    <entry key="royalRule">Král vyzvedne povoz v této pobřežní kolonii při vašem příštím tahu, pokud zde zůstane a kolonie bude stále vaše. Polovina hodnoty zaplatí přepravu; ze zbytku se odečte daň. Potvrzený čistý výnos je závazný. Nezávislost uzavře obě cesty výkupu.</entry>
+    <entry key="terms">Povoz č. %d: hodnota %d, přeprava %d, daň %d. Obdržíte %d zlatých.</entry>
+    <entry key="confirm">Potvrdit výkup</entry>
+    <entry key="cancel">Zavřít / zrušit</entry>
+    <entry key="empty">Zde není žádný poklad způsobilý k výkupu. Obě cesty vyžadují přístup do domovské Evropy.</entry>
+    <entry key="changed">Podmínky se změnily. Nic nebylo vyplaceno ani objednáno; zavřete a znovu ověřte nabídku.</entry>
+    <entry key="paid">Vyplaceno %d zlatých. Povoz byl vykoupen.</entry>
+    <entry key="scheduled">Odvoz objednán na váš příští tah: %d zlatých.</entry>
+    <entry key="pending">Povoz č. %d čeká na odvoz: %d zlatých.</entry>
+</properties>

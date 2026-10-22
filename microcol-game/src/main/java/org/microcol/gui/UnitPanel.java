@@ -8,6 +8,7 @@ import org.microcol.model.MovementPoints;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitActionBuildRoad;
+import org.microcol.model.unit.UnitTreasure;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
@@ -65,6 +66,8 @@ class UnitPanel {
     private Region makeUnitDescription(final Player humanPlayer,
             final Unit unit) {
         final VBox box = new VBox();
+        // Stable identity of the described unit, for the tests of the panel.
+        box.setId("unitPanel-" + unit.getId());
 
         final Label labelUnitType = new Label(
                 localizationHelper.getUnitName(unit.getType()));
@@ -127,6 +130,16 @@ class UnitPanel {
             box.getChildren().add(roadWork);
         }
 
+        // The face value belongs to the train itself, shown to every viewer.
+        if (unit instanceof UnitTreasure) {
+            final Label treasure = new Label(
+                    i18n.get(Loc.unitsPanel_treasureValue,
+                            ((UnitTreasure) unit).getValue()));
+            treasure.setId("unitTreasure-" + unit.getId());
+            treasure.setWrapText(true);
+            treasure.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(treasure);
+        }
         final Label labelOwner = new Label(i18n.get(Loc.unitsPanel_owner) + " "
                 + unit.getOwner().getName());
         labelOwner.getStyleClass().add("unitOwner");
@@ -170,8 +183,10 @@ class UnitPanel {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_with)));
+            // A multi-hold unit is listed once, on its own hold only.
             unit.getCargo().getSlots().stream()
-                    .filter(cargoSlot -> !cargoSlot.isEmpty())
+                    .filter(cargoSlot -> !cargoSlot.isEmpty()
+                            && !cargoSlot.isReservedHold())
                     .forEach(cargoSlot -> {
                         final ImageView imageView = getImageViewForCargoSlot(
                                 cargoSlot);

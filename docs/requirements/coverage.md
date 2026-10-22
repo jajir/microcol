@@ -43,7 +43,7 @@
    sentry R-0073, fortify R-0106, work R-0119–R-0121, go-to R-0130 and
    route edit/cancel [R-0142](done/R-0142.md).
 4. Cargo residuals have seven owners: [R-0132](done/R-0132.md) shared hold cap,
-   [R-0133](done/R-0133.md) nested-carrier rejection, [R-0134](R-0134.md) treasure
+   [R-0133](done/R-0133.md) nested-carrier rejection, [R-0134](done/R-0134.md) treasure
    reservation, [R-0135](done/R-0135.md) immigrant boarding choice/priority,
    [R-0136](done/R-0136.md) arrival unloading, [R-0137](done/R-0137.md) cargo shortcuts
    and [R-0138](done/R-0138.md) jettison. Existing manual transfer, sentry boarding
@@ -73,22 +73,22 @@
    Brebeuf; [R-0164](done/R-0164.md) mission updates; [R-0165](done/R-0165.md)
    denunciation; and [R-0166](done/R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.
-9. European residuals are [R-0167](R-0167.md) de Witt foreign trade,
-   [R-0168](R-0168.md) his comparative report, [R-0169](R-0169.md)
-   mercenary offers, [R-0170](R-0170.md) land military objectives,
-   [R-0171](R-0171.md) naval military objectives and [R-0172](R-0172.md)
+9. European residuals are [R-0167](done/R-0167.md) de Witt foreign trade,
+   [R-0168](done/R-0168.md) his comparative report, [R-0169](R-0169.md)
+   mercenary offers, [R-0170](done/R-0170.md) land military objectives,
+   [R-0171](done/R-0171.md) naval military objectives and [R-0172](done/R-0172.md)
    multi-colony scheduling. R-0090–R-0092 retain their existing policies and
    unresolved proposals; this capture does not approve new strategic thresholds.
 10. Combat residuals are [R-0173](done/R-0173.md) native roles/ambush,
     [R-0174](done/R-0174.md) settlement conquest and Spain,
-    [R-0175](R-0175.md) treasure identity/reward with Cortes,
-    [R-0176](R-0176.md) naval patrol interception,
-    [R-0177](R-0177.md) coastal batteries,
+    [R-0175](done/R-0175.md) treasure identity/reward with Cortes,
+    [R-0176](done/R-0176.md) naval patrol interception,
+    [R-0177](done/R-0177.md) coastal batteries,
     [R-0178](R-0178.md) royal/Continental combat roles and ambush,
     and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
 11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
-    [R-0181](done/R-0181.md) Fugger, [R-0182](R-0182.md) Las Casas,
+    [R-0181](done/R-0181.md) Fugger, [R-0182](done/R-0182.md) Las Casas,
     [R-0183](done/R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
 12. Revolution has separate owners for [REF growth](R-0185.md),

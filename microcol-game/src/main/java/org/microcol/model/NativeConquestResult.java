@@ -58,15 +58,17 @@ public final class NativeConquestResult {
     private final boolean attackerLost;
     private final MilitaryPromotion promotion;
     private final List<Loss> losses;
+    private final Integer treasureValue;
 
     NativeConquestResult(final boolean conquered, final int defendersDefeated,
             final boolean attackerLost, final MilitaryPromotion promotion,
-            final List<Loss> losses) {
+            final List<Loss> losses, final Integer treasureValue) {
         this.conquered = conquered;
         this.defendersDefeated = defendersDefeated;
         this.attackerLost = attackerLost;
         this.promotion = promotion;
         this.losses = List.copyOf(losses);
+        this.treasureValue = treasureValue;
     }
 
     /**
@@ -104,6 +106,14 @@ public final class NativeConquestResult {
      */
     public List<Loss> getLosses() {
         return losses;
+    }
+
+    /**
+     * @return face value of the treasure train that the conquest left (R-0175),
+     *         empty when no train was left or the attack failed
+     */
+    public Optional<Integer> getTreasureValue() {
+        return Optional.ofNullable(treasureValue);
     }
 
     /**

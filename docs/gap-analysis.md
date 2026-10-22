@@ -1661,12 +1661,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0167 refinement
 
 1. Answer **25** — Foreign-colony barter: One barter transaction exchanges one incoming commodity for one outgoing commodity at player-chosen quantities. Value incoming goods at the host’s Europe bid and outgoing goods at its Europe ask, settling the difference in actual gold paid by the appropriate side without the visitor’s home tax. Show both goods and the gold balance before confirmation; validate both stocks, capacities and treasuries before changing either side.
-2. Owner: [R-0167](requirements/R-0167.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0167](requirements/done/R-0167.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0168 refinement
 
 1. Answer **26** — Foreign comparison metrics: Military strength is the sum of base strengths of living armed land units; naval strength is the sum of base strengths of armed ships; trade strength is net European-sale revenue over the last ten turns of that nation. De Witt reveals these actual aggregates only for contacted powers, not unknown nations or unit locations. Preserve the already agreed basic neutral relations overview before contact.
-2. Owner: [R-0168](requirements/R-0168.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0168](requirements/done/R-0168.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0169 refinement
 
@@ -1676,17 +1676,17 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0170 refinement
 
 1. Answer **28** — European land strategy: A known wartime enemy within two tiles of a colony gives defense priority. Move available armed defenders without removing a worker necessary for food. Leave at least one defender in each threatened colony before sending an offensive force; attack only at a computed win probability of at least 60%. Rank reachable known targets by distance, then higher win probability, then stable ID. This policy does not initiate war against peaceful rivals. Prepared reference scenarios require defense response within three turns and an offensive battle within ten, without inventing resources or targets.
-2. Owner: [R-0170](requirements/R-0170.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0170](requirements/done/R-0170.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0171 refinement
 
 1. Answer **29** — European naval strategy: Prefer visible unarmed hostile carriers, then armed legal targets with at least 60% win probability; break equal priority by distance and then stable ID. Without a target patrol known sea within five tiles of an owned port without knowledge of hidden cargo or routes. A prepared scenario with reachable commerce must produce an encounter within ten turns. Retain the existing privateer attack exception and alliance restrictions.
-2. Owner: [R-0171](requirements/R-0171.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0171](requirements/done/R-0171.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0172 refinement
 
 1. Answer **30** — Multiple-colony scheduling: Priority is famine prevention, immediate defense, completion of ongoing transport, supplies, export, then expansion. Prepare at most one new colony concurrently, only when every existing colony has nonnegative food balance, five turns of food-consumption reserve and its agreed tool supply target met; retain R-0092 founder/population safeguards. Verify a 40-turn prepared multi-colony scenario with two colonies, one transport disruption/recovery and founding a third.
-2. Owner: [R-0172](requirements/R-0172.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0172](requirements/done/R-0172.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0173 refinement
 
@@ -1701,17 +1701,17 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0175 refinement
 
 1. Answer **33** — Treasure redemption: Own-galleon delivery to home Europe pays the normal current tax but no transport fee. Royal pickup first deducts half the face value as transport charge, then applies normal tax to the remainder. Show the exact net proceeds for explicit confirmation in an owned coastal colony; collect on the next owner turn only if the train remains eligible. Declaration closes both redemption routes; existing trains remain movable but cannot be redeemed through an invented new buyer, and declaration warns of this consequence. Preserve the ordinary whole-transaction rounding convention and exactly-once removal/payment.
-2. Owner: [R-0175](requirements/R-0175.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0175](requirements/done/R-0175.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0176 refinement
 
 1. Answer **34** — Privateer patrol eligibility: A privateer may passively intercept foreign nonallied shipping even at peace when it could legally attack that ship; interception itself does not declare war. Other armed vessels intercept only declared wartime enemies, retaining the single strongest-patrol/ID rule.
-2. Owner: [R-0176](requirements/R-0176.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0176](requirements/done/R-0176.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0177 refinement
 
 1. Answer **35** — Coastal-event order: After a legal ship step, eligible coastal forts fire in stable colony-ID order, each under its own once-per-ship/round limit. Stop remaining events as soon as a hit sends the ship to repairs. If the ship remains, resolve one patrol interception under the accepted strength/ID selection; do not duplicate either event on Continue.
-2. Owner: [R-0177](requirements/R-0177.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0177](requirements/done/R-0177.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0183 refinement
 

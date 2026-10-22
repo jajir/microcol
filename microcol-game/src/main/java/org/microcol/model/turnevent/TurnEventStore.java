@@ -41,6 +41,8 @@ public final class TurnEventStore {
                     TurnEventShipComeToEuropePort::tryLoad,
                     TurnEventShipComeToHighSeas::tryLoad,
                     TurnEventLostCityRumor::tryLoad,
+                    TurnEventPatrolInterception::tryLoad,
+                    TurnEventCoastalBattery::tryLoad,
                     TurnEventNativeConquest::tryLoad,
                     TurnEventNativeConquestLoss::tryLoad));
 

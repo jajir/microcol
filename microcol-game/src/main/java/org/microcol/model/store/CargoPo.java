@@ -2,6 +2,7 @@ package org.microcol.model.store;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -19,6 +20,10 @@ public final class CargoPo {
     public boolean containsUnitInCargo(final Integer idUnitInCargo) {
         Preconditions.checkState(idUnitInCargo != null,
                 "IdUnitInCargo is null");
+        // A malformed hold is a rejected save, never a null dereference.
+        Preconditions.checkArgument(
+                slots != null && slots.stream().allMatch(Objects::nonNull),
+                "Invalid cargo slots");
         return slots.stream()
                 .filter(slot -> idUnitInCargo.equals(slot.getUnitId()))
                 .findAny().isPresent();

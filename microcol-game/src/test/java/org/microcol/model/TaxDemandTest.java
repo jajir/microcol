@@ -581,6 +581,8 @@ class TaxDemandTest {
     @Test
     void aNationWithoutTradableStockCanOnlyAccept() {
         final Model model = mock(Model.class);
+        // The owner's turn start moves its European sale window, as in a game.
+        when(model.getEurope()).thenReturn(new Europe(model));
         when(model.getDifficulty()).thenReturn(Difficulty.CONQUISTADOR);
         final TaxPo po = TaxState.initial();
         po.setActivated(true);

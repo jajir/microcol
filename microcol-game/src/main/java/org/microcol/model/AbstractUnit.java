@@ -24,6 +24,7 @@ import org.microcol.model.unit.UnitActionClearForest;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitArtillery;
+import org.microcol.model.unit.UnitTreasure;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.model.unit.Ship;
 
@@ -450,8 +451,37 @@ public abstract class AbstractUnit implements Unit {
      * order; other units need the sentry order.
      */
     private boolean isDepartureBoardingCandidate() {
+        // A multi-hold train boards only by an explicit order, never by
+        // sailing.
+        if (getType().getRequiredHolds() > 1) {
+            return false;
+        }
         return immigrant ? isWillingToBoard()
                 : getAction().getType() == UnitActionType.sentry;
+    }
+
+    /**
+     * Holds that this unit reserves when it boards at the given hold: the hold
+     * itself first, then other free holds of the same ship in index order. The
+     * list is shorter than the unit's required holds when the ship has too few
+     * free holds.
+     *
+     * @param carrier required ship that would carry this unit
+     * @param slot    required hold the unit boards at
+     * @return reserved holds, the boarding hold first
+     */
+    private List<CargoSlot> holdsReservedBy(final Unit carrier,
+            final CargoSlot slot) {
+        final int required = getType().getRequiredHolds();
+        final List<CargoSlot> out = new ArrayList<>();
+        out.add(slot);
+        for (final CargoSlot hold : ((UnitWithCargo) carrier).getCargo()
+                .getSlots()) {
+            if (out.size() < required && hold != slot && hold.isEmpty()) {
+                out.add(hold);
+            }
+        }
+        return out;
     }
 
     boolean canEmbarkAsDeparture(final CargoSlot slot) {
@@ -470,6 +500,12 @@ public abstract class AbstractUnit implements Unit {
                 || !isLiveOwnedUnit(carrier)
                 || !((UnitWithCargo) carrier).getCargo().getSlots().stream()
                         .anyMatch(actual -> actual == slot)) {
+            return false;
+        }
+        // All required holds must be free, so a short ship refuses the unit
+        // without any change.
+        if (holdsReservedBy(carrier, slot).size() < getType()
+                .getRequiredHolds()) {
             return false;
         }
         if (isAtEuropePier()) {
@@ -575,6 +611,21 @@ public abstract class AbstractUnit implements Unit {
                         battle.defense));
     }
 
+    @Override
+    public Optional<AttackOrder> previewAttack(final Location approach,
+            final Location targetLocation) {
+        Preconditions.checkNotNull(approach);
+        if (targetLocation == null || !model.getMap().isValid(approach)
+                || !approach.isNeighbor(targetLocation)
+                || !getType().canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(approach))) {
+            return Optional.empty();
+        }
+        return findBattle(targetLocation, false, true)
+                .map(battle -> new AttackOrder(this, battle.defender,
+                        battle.defense, approach));
+    }
+
     /** The selected defender and, for a colony tile, its frozen defense. */
     private static final class Battle {
         private final Unit defender;
@@ -596,13 +647,24 @@ public abstract class AbstractUnit implements Unit {
 
     private Optional<Battle> findBattle(final Location targetLocation,
             final boolean allowDeclaration) {
+        return findBattle(targetLocation, allowDeclaration, false);
+    }
+
+    /**
+     * @param preview whether to quote a battle instead of an attack that is
+     *                about to happen; a quote needs neither adjacency, action
+     *                points nor an idle unit, and changes nothing
+     */
+    private Optional<Battle> findBattle(final Location targetLocation,
+            final boolean allowDeclaration, final boolean preview) {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
-                || !canAttack() || getActionPoints() <= 0
-                || !getAction().isNoAction() || hasStandingOrder()
+                || !canAttack() || (!preview && getActionPoints() <= 0)
+                || (!preview
+                        && (!getAction().isNoAction() || hasStandingOrder()))
                 || targetLocation == null
                 || !model.getMap().isValid(targetLocation)
-                || !getLocation().isNeighbor(targetLocation)
+                || (!preview && !getLocation().isNeighbor(targetLocation))
                 || !owner.isVisible(targetLocation)
                 || !owner.isCurrentlyVisible(targetLocation)
                 || !getType().canMoveAtTerrain(
@@ -633,6 +695,14 @@ public abstract class AbstractUnit implements Unit {
                 .stream()
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
+                // A treasure train has no strength of its own, so it is a
+                // target only where the shared battle rule quotes saved
+                // strengths for this attacker: an armed European or a native
+                // brave. An unarmed attacker would fall back to the unsaved
+                // legacy coin flip, which never decides its loss.
+                .filter(unit -> !(unit instanceof UnitTreasure)
+                        || CombatStrengths.forBattle(model, this, unit)
+                                .isPresent())
                 // Natives raid only colonial units. A colonial European attacks
                 // a native only as an explicit decision (allowDeclaration), so
                 // the passive hostility query and the European AI never start
@@ -875,6 +945,16 @@ public abstract class AbstractUnit implements Unit {
             // A committed scout step may consume a lost-city rumor; the unit
             // can be lost there, which stops the rest of its path.
             model.resolveLostCityRumor(this, moveTo);
+            // Every legal ship step, including one onto an owned port, may meet
+            // coastal batteries and then a patrol beside the new square. A hit
+            // sends the ship to repair, so only a surviving ship is checked by
+            // the patrol.
+            if (isShip()) {
+                model.resolveCoastalBatteries((Ship) this, moveTo);
+                if (isAtPlaceLocation() && model.isUnitInGame(this)) {
+                    model.resolveShipPatrol((Ship) this, moveTo);
+                }
+            }
         }
     }
 
@@ -1458,6 +1538,8 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(
                 placeCargoSlot.getUnit() == this && canEmbark(slot),
                 "Passenger cannot board this cargo slot");
+        final List<CargoSlot> holds = holdsReservedBy(slot.getOwnerUnit(),
+                slot);
         final int cost = isAtPlaceLocation()
                 && !getLocation().equals(slot.getOwnerUnit().getLocation())
                         ? MovementPoints.THIRDS_PER_POINT
@@ -1469,6 +1551,8 @@ public abstract class AbstractUnit implements Unit {
         clearBoardingState();
         movementThirds -= cost;
         slot.store(placeCargoSlot);
+        holds.subList(1, holds.size())
+                .forEach(hold -> hold.reserve(placeCargoSlot));
         model.fireUnitEmbarked(this, slot);
     }
 

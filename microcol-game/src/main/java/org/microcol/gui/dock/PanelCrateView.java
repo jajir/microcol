@@ -68,6 +68,12 @@ public class PanelCrateView implements JavaFxComponent {
             final Unit cargoUnit = cargoSlot.getUnit().get();
             labelAmount.setText("");
             cargoImage.setImage(imageProvider.getUnitImage(cargoUnit));
+        } else if (cargoSlot.isReservedHold()) {
+            // Occupied by a multi-hold unit; the unit's own hold carries the
+            // label and the drag source, so this hold shows the image only.
+            labelAmount.setText("");
+            cargoImage.setImage(imageProvider
+                    .getUnitImage(cargoSlot.getReservedUnit().get()));
         } else {
             throw new IllegalArgumentException(String.format(
                     "Given cargo slot %s doesn't contains anything",

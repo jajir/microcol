@@ -75,6 +75,35 @@ public final class RivalColonyPage extends AbstractScreen {
                 .isPresent());
     }
 
+    /** Play a long scenario through the Crown's periodic tax decision. */
+    public void nextTurnAcceptingTaxDemands() throws Exception {
+        final int next = readRound() + 1;
+        clickOnButtonWithId("nextTurn");
+        org.testfx.util.WaitForAsyncUtils.waitFor(60,
+                java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().getCalendar().getNumberOfPlayedTurns() == next
+                        && getModel().getCurrentPlayer().isHuman()
+                        && (getModel().isAwaitingTaxDecision()
+                                || getModel().isGameRunning()));
+        // Model preparation completes before the queued report replaces its
+        // nodes.
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        if (getModel().isAwaitingTaxDecision()) {
+            final TaxDemandPage tax = new TaxDemandPage(getContext());
+            tax.waitForDemand();
+            tax.accept();
+            tax.finishUpdate();
+        } else if (!getModel()
+                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
+            org.testfx.util.WaitForAsyncUtils.waitFor(30,
+                    java.util.concurrent.TimeUnit.SECONDS, () -> getNodeFinder()
+                            .lookup(".turn-event").tryQuery().isPresent());
+            org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+            ScreenTurnReport.of(getContext()).close();
+        }
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void waitForHumanRound(final int round) throws Exception {
         org.testfx.util.WaitForAsyncUtils.waitFor(60,
                 java.util.concurrent.TimeUnit.SECONDS,
@@ -566,9 +595,18 @@ public final class RivalColonyPage extends AbstractScreen {
      * a new model, so the scenario calls this again after every Continue; the
      * recorded births are kept. It only listens and changes nothing.
      */
+    private Integer initialEarnedImmigrants;
+    private Integer initialPaidPassages;
+
     public void observeRivalBirths() {
         final org.microcol.model.Model model = getModel();
         final Player rival = model.getPlayerByName("France");
+        if (initialEarnedImmigrants == null) {
+            initialEarnedImmigrants = rival.save().getRecruitment()
+                    .getEarnedImmigrants();
+            initialPaidPassages = rival.save().getRecruitment()
+                    .getPaidPassages();
+        }
         model.addListener(new org.microcol.model.ModelListenerAdapter() {
             @Override
             public void onNewUnitWasBorn(
@@ -590,14 +628,31 @@ public final class RivalColonyPage extends AbstractScreen {
 
     /**
      * Every original colonist survives under its stable ID, and the only other
-     * French colonists are the births recorded from the colony growth events.
+     * French colonists are recorded births or earned arrivals on the European
+     * pier.
      */
     private void verifyRivalColonistsAccounted(
             final java.util.Set<Integer> crew, final String situation) {
         final java.util.Set<Integer> expected = new java.util.HashSet<>(crew);
         expected.addAll(rivalBirths);
+        final Player rival = getModel().getPlayerByName("France");
+        final java.util.Set<Integer> immigrants = rival.getAllUnits().stream()
+                .filter(unit -> unit.isAtEuropePier()
+                        && unit.getType().canBuildColony())
+                .map(Unit::getId).filter(id -> !expected.contains(id))
+                .collect(java.util.stream.Collectors.toSet());
+        final org.microcol.model.store.RecruitmentPo recruitment = rival.save()
+                .getRecruitment();
+        assertEquals(initialPaidPassages, recruitment.getPaidPassages(),
+                situation);
+        assertEquals(
+                recruitment.getEarnedImmigrants() - initialEarnedImmigrants,
+                immigrants.size(),
+                "Each extra pier colonist needs an earned arrival; "
+                        + situation);
+        expected.addAll(immigrants);
         assertEquals(expected, readRivalColonistIds(),
-                "Colonists are the original crew plus recorded births; "
+                "Colonists are the original crew, recorded births and earned pier arrivals; "
                         + situation);
     }
 
@@ -752,6 +807,161 @@ public final class RivalColonyPage extends AbstractScreen {
     public void verifyRivalExpansionUnchanged(final String expected,
             final int founderId, final int shipId) {
         assertEquals(expected, describeRivalExpansion(founderId, shipId));
+    }
+
+    /** Tools stored in a colony warehouse, read from the live model. */
+    private int readColonyTools(final int colonyId) {
+        return getModel().getColonyById(colonyId).orElseThrow().getWarehouse()
+                .getGoods(org.microcol.model.GoodsType.TOOLS).getAmount();
+    }
+
+    /**
+     * Two established French colonies stand at the expected sites with the
+     * expected tool stock, no France objective exists yet, and the Dutch ship
+     * that will later block the channel waits at its place.
+     */
+    public void verifyMultiColonyReady(
+            final java.util.List<Integer> expectedColonyIds,
+            final java.util.List<Location> expectedSites,
+            final int expectedBlockerId, final Location expectedBlockerAt,
+            final int expectedTools) {
+        final Player rival = getModel().getPlayerByName("France");
+        assertEquals(expectedColonyIds.size(), readRivalColonies());
+        for (int index = 0; index < expectedColonyIds.size(); index++) {
+            final org.microcol.model.Colony colony = getModel()
+                    .getColonyById(expectedColonyIds.get(index)).orElseThrow();
+            assertSame(rival, colony.getOwner());
+            assertEquals(expectedSites.get(index), colony.getLocation());
+            assertEquals(expectedTools, readColonyTools(colony.getId()));
+        }
+        final Unit blocker = getModel().getUnitById(expectedBlockerId);
+        assertSame(getModel().getPlayerByName("Dutch"), blocker.getOwner());
+        assertEquals(expectedBlockerAt, blocker.getLocation());
+        assertTrue(rival.getRivalExpansionObjective().isEmpty());
+        assertSame(getModel().getPlayerByName("Dutch"),
+                getModel().getCurrentPlayer());
+    }
+
+    /**
+     * After each France turn of the multi-colony scenario: the game runs and
+     * control is back with the human; every established colony is still French
+     * and populated, has not starved, and keeps its tool stock; and every
+     * French colonist is an original one or a recorded birth.
+     */
+    public void verifyMultiColonyTurn(final String leg,
+            final java.util.List<Integer> expectedColonyIds,
+            final java.util.Set<Integer> crew, final int expectedTools) {
+        final org.microcol.model.Model model = getModel();
+        final Player rival = model.getPlayerByName("France");
+        final String situation = leg + ": colonies " + readRivalColonies()
+                + ", births " + rivalBirths;
+        assertFalse(model.isGameFinished(),
+                "The game ended during the scenario; " + situation);
+        assertSame(model.getPlayerByName("Dutch"), model.getCurrentPlayer());
+        assertTrue(getNodeFinder().lookup("#nextTurn").tryQuery().isPresent(),
+                "Control must return to the human after each rival turn");
+        verifyRivalColonistsAccounted(crew, situation);
+        for (final int colonyId : expectedColonyIds) {
+            final org.microcol.model.Colony colony = model
+                    .getColonyById(colonyId).orElseThrow();
+            assertTrue(colony.isValid(), "Colony lost; " + situation);
+            assertSame(rival, colony.getOwner(), situation);
+            assertFalse(colony.getUnitsInsideColony().isEmpty(),
+                    "Colony emptied; " + situation);
+            assertTrue(readRivalFood(colonyId) >= 0,
+                    "Colony " + colonyId + " starved; " + situation);
+            assertEquals(expectedTools, readColonyTools(colonyId), situation);
+        }
+    }
+
+    /**
+     * The founder sails aboard the carrier and has not yet passed the channel
+     * row, so the human can still close the channel in front of it.
+     */
+    public boolean isRivalFounderSailingBefore(final int founderId,
+            final int carrierId, final int channelY) {
+        final Unit founder = getModel().getUnitById(founderId);
+        final Unit carrier = getModel().getUnitById(carrierId);
+        return getModel().getPlayerByName("France").getRivalExpansionObjective()
+                .isPresent() && founder.isAtCargoSlot()
+                && founder.getPlaceCargoSlot().getOwnerUnit() == carrier
+                && carrier.isAtPlaceLocation()
+                && carrier.getLocation().getY() < channelY;
+    }
+
+    /**
+     * The closed channel holds the expansion: the same objective is kept, the
+     * founder is still aboard its carrier on the near side, the Dutch ship
+     * stands in the channel and no third colony exists.
+     */
+    public void verifyRivalTransportBlocked(final String leg,
+            final int founderId, final int carrierId, final int channelY,
+            final int blockerId, final Location blockerAt) {
+        final Player rival = getModel().getPlayerByName("France");
+        final Unit founder = getModel().getUnitById(founderId);
+        final Unit carrier = getModel().getUnitById(carrierId);
+        final String situation = leg + ": "
+                + describeRivalExpansion(founderId, carrierId);
+        assertEquals(blockerAt, getModel().getUnitById(blockerId).getLocation(),
+                situation);
+        assertTrue(rival.getRivalExpansionObjective().isPresent(),
+                "A blocked journey keeps its objective; " + situation);
+        assertEquals(founderId,
+                rival.getRivalExpansionObjective().orElseThrow().getFounderId(),
+                situation);
+        assertEquals(java.util.Optional.of(carrierId),
+                rival.getRivalExpansionObjective().orElseThrow().getCarrierId(),
+                situation);
+        assertTrue(founder.isAtCargoSlot()
+                && founder.getPlaceCargoSlot().getOwnerUnit() == carrier,
+                "The founder stays aboard; " + situation);
+        assertTrue(carrier.getLocation().getY() < channelY,
+                "The carrier waits before the channel; " + situation);
+        assertEquals(2, readRivalColonies(), situation);
+    }
+
+    /**
+     * Three French colonies after exactly the planned owner turns. The third
+     * stands at the site the objective chose, with the founder as a resident.
+     * The two established colonies survived with their crews and tools, the
+     * objective is retired, the channel was blocked and cleared, and the saved
+     * game was continued from disk during the block.
+     */
+    public void verifyRivalThirdColony(final int sourceColonyId,
+            final int otherColonyId, final Location expectedSite,
+            final int founderId, final java.util.Set<Integer> crew,
+            final int startRound, final int expectedRounds,
+            final int expectedTools, final boolean sawBlock,
+            final boolean sawRecovery, final boolean continued) {
+        final Player rival = getModel().getPlayerByName("France");
+        assertTrue(sawBlock, "The channel was never blocked");
+        assertTrue(continued, "The Continue during the block never happened");
+        assertTrue(sawRecovery, "The channel was never cleared");
+        assertNotNull(expectedSite, "The expansion never chose a site");
+        assertEquals(startRound + expectedRounds, readRound());
+        assertEquals(3, readRivalColonies(), "Exactly one third colony");
+        final org.microcol.model.Colony third = getModel()
+                .getColonyAt(expectedSite).orElseThrow();
+        assertSame(rival, third.getOwner());
+        assertNotEquals(sourceColonyId, third.getId());
+        assertNotEquals(otherColonyId, third.getId());
+        assertTrue(third.getUnitsInsideColony()
+                .contains(getModel().getUnitById(founderId)));
+        assertTrue(rival.getRivalExpansionObjective().isEmpty(),
+                "The expansion objective is retired after founding");
+        for (final int colonyId : java.util.List.of(sourceColonyId,
+                otherColonyId)) {
+            final org.microcol.model.Colony colony = getModel()
+                    .getColonyById(colonyId).orElseThrow();
+            assertTrue(colony.getUnitsInsideColony().size() >= 2,
+                    "Colony " + colonyId + " keeps two residents");
+            assertTrue(readRivalFood(colonyId) >= 0);
+            assertEquals(expectedTools, readColonyTools(colonyId));
+        }
+        verifyRivalColonistsAccounted(crew, "Third colony");
+        assertFalse(getModel().isGameFinished());
+        assertSame(getModel().getPlayerByName("Dutch"),
+                getModel().getCurrentPlayer());
     }
 
     /**

@@ -55,6 +55,10 @@ public interface PanelDockBehavior {
 
     default boolean canBeGoodsTransfered(final CargoSlot cargoSlot,
             final Goods goods) {
+        // A hold occupied by a unit, or reserved by one, takes no goods.
+        if (cargoSlot.isLoadedUnit() || cargoSlot.isReservedHold()) {
+            return false;
+        }
         if (cargoSlot.getGoods().isPresent()) {
             return cargoSlot.getGoods().get().getType().equals(goods.getType());
         } else {

@@ -80,10 +80,23 @@ class RivalExpansionCycleTest {
     /** Coastal grassland 3x3 blocks, reachable by sea or by the strip. */
     private static final Location SEA_BLOCK = Location.of(20, 10);
     private static final Location OVERLAND_BLOCK = Location.of(16, 10);
+    /** West edge of the island block that holds the established colony. */
+    private static final Location ISLAND = Location.of(30, 20);
+    /**
+     * Trees on three of the five land squares beside the island colony, so its
+     * three colonists can all cut lumber; (30,19) and (30,21) stay corn land.
+     */
+    private static final List<Location> ISLAND_FORESTS = List
+            .of(Location.of(31, 19), Location.of(31, 20), Location.of(31, 21));
+    private static final int ISLAND_FOUNDER_ID = 40;
+    /** The two island crew of a deficit scenario take these IDs. */
+    private static final List<Integer> ISLAND_CREW = List.of(41, 42);
     private static final int FIVE_TURNS = 5;
     /** Finite bound for any expansion, in owner turns of the rival. */
     private static final int MAX_TURNS = 20;
     private static final int DEFAULT_FOOD = 100;
+    /** Tools every colony keeps before a further colony may be prepared. */
+    private static final int TOOL_TARGET = 50;
 
     private Model model;
 
@@ -112,6 +125,21 @@ class RivalExpansionCycleTest {
         private boolean knowsSite = true;
         private boolean stockade;
         private int food = DEFAULT_FOOD;
+        /** An established island colony with one founder besides the crew. */
+        private boolean second;
+        /**
+         * The island has three trees and two extra crew, and its founder and
+         * crew all cut lumber: three residents eat more than the colony
+         * square's commons grow, so the island starts with a food deficit.
+         */
+        private boolean secondDeficit;
+        /**
+         * The three island residents of the deficit hold guns as well, so the
+         * workforce may not move them and the deficit cannot be repaired.
+         */
+        private boolean secondArmed;
+        private int secondFood = DEFAULT_FOOD;
+        private int secondTools = TOOL_TARGET;
         /** Job of each crew colonist, in crew order. */
         private final List<GoodsType> jobs = new ArrayList<>();
         /** Crew indices that hold guns. */
@@ -126,6 +154,32 @@ class RivalExpansionCycleTest {
 
         private Setup layout(final Layout value) {
             layout = value;
+            return this;
+        }
+
+        private Setup second() {
+            second = true;
+            return this;
+        }
+
+        private Setup secondDeficit() {
+            secondDeficit = true;
+            return this;
+        }
+
+        private Setup secondArmedDeficit() {
+            secondDeficit = true;
+            secondArmed = true;
+            return this;
+        }
+
+        private Setup secondFood(final int amount) {
+            secondFood = amount;
+            return this;
+        }
+
+        private Setup secondTools(final int amount) {
+            secondTools = amount;
             return this;
         }
 
@@ -187,10 +241,17 @@ class RivalExpansionCycleTest {
             STRIP.forEach(at -> terrain.put(at, TerrainType.GRASSLAND));
             coastalBlock(terrain, OVERLAND_BLOCK);
         }
+        if (s.second) {
+            coastalBlock(terrain, ISLAND);
+        }
         final WorldMapPo map = data.getModel().getMap();
         map.setTerrainType(terrain);
         clearFeatures(map);
-        map.setTrees(Set.copyOf(FORESTS));
+        final Set<Location> trees = new HashSet<>(FORESTS);
+        if (s.second && s.secondDeficit) {
+            trees.addAll(ISLAND_FORESTS);
+        }
+        map.setTrees(trees);
         final PlayerPo rival = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> player.getName().equals(RIVAL))
                 .findFirst().orElseThrow();
@@ -203,6 +264,12 @@ class RivalExpansionCycleTest {
         units.add(extraShip(ship, SECOND_SHIP_ID, PORT));
         for (int index = 0; index < s.jobs.size(); index++) {
             units.add(colonist(ship, CREW_FIRST_ID + index));
+        }
+        if (s.second) {
+            units.add(colonist(ship, ISLAND_FOUNDER_ID, ISLAND));
+        }
+        if (s.second && s.secondDeficit) {
+            ISLAND_CREW.forEach(id -> units.add(colonist(ship, id, ISLAND)));
         }
         data.getModel().setUnits(units);
         return Model.make(data.getModel(),
@@ -284,8 +351,69 @@ class RivalExpansionCycleTest {
                     MissionImpl.getPredefinedGameOverEvaluators());
         }
         setCorn(s.food);
+        if (s.second) {
+            foundIslandColony(s);
+        }
         ai = new SimpleAiPlayer(model, france(),
                 new AnimationManager(new EventBus()));
+    }
+
+    /**
+     * Founds the established island colony through the ordinary founding rule,
+     * puts its residents on the requested jobs and sets the stocks of both
+     * colonies. The first colony keeps its crew and the tool target. Guns of an
+     * armed deficit are saved after the jobs, as for the first colony's crew,
+     * because taking a job unequips a colonist.
+     */
+    private void foundIslandColony(final Setup s) {
+        final Unit islandFounder = model.getUnitById(ISLAND_FOUNDER_ID);
+        islandFounder.startTurn();
+        final Colony island = model.buildColony(france(), islandFounder,
+                "Lyon");
+        if (s.secondDeficit) {
+            employ(island, islandFounder, GoodsType.LUMBER);
+            for (final int id : ISLAND_CREW) {
+                employ(island, model.getUnitById(id), GoodsType.LUMBER);
+            }
+        } else if (!isWorkingCorn(islandFounder)) {
+            employ(island, islandFounder, GoodsType.CORN);
+        }
+        setStock(island, GoodsType.CORN, s.secondFood);
+        setStock(island, GoodsType.TOOLS, s.secondTools);
+        setStock(colony(), GoodsType.TOOLS, TOOL_TARGET);
+        if (s.secondArmed) {
+            final ModelPo saved = model.save();
+            final Set<Integer> armed = new HashSet<>(ISLAND_CREW);
+            armed.add(ISLAND_FOUNDER_ID);
+            saved.getUnits().stream()
+                    .filter(unit -> armed.contains(unit.getId()))
+                    .forEach(unit -> unit.setHoldingGuns(true));
+            model = Model.make(saved,
+                    MissionImpl.getPredefinedGameOverEvaluators());
+        }
+    }
+
+    private Colony islandColony() {
+        return model.getColonyAt(ISLAND).orElseThrow();
+    }
+
+    private int islandNetFood() {
+        return islandColony().getGoodsStats().getStatsByType(GoodsType.CORN)
+                .getNetProduction();
+    }
+
+    private static boolean isWorkingCorn(final Unit worker) {
+        return worker.isAtPlaceColonyField() && worker.getPlaceColonyField()
+                .getProducedGoodsType() == GoodsType.CORN;
+    }
+
+    /** Sets a stock through the public, validated warehouse operations. */
+    private static void setStock(final Colony colony, final GoodsType type,
+            final int amount) {
+        colony.getWarehouse().removeGoods(colony.getWarehouse().getGoods(type));
+        if (amount > 0) {
+            colony.getWarehouse().addGoods(Goods.of(type, amount));
+        }
     }
 
     /** Save, change the colony record, and load the game again. */
@@ -298,7 +426,12 @@ class RivalExpansionCycleTest {
 
     /** Puts a crewmember to work the way the robot's workforce does. */
     private void employ(final Unit worker, final GoodsType goods) {
-        final ColonyJobChoice choice = colony().getJobChoices(worker).stream()
+        employ(colony(), worker, goods);
+    }
+
+    private void employ(final Colony target, final Unit worker,
+            final GoodsType goods) {
+        final ColonyJobChoice choice = target.getJobChoices(worker).stream()
                 .filter(option -> option.getUnavailableReason().isEmpty()
                         && option.getGoodsType() == goods
                         && option.getPotential().isPresent())
@@ -373,12 +506,17 @@ class RivalExpansionCycleTest {
 
     /** No expansion was released: the four residents stay, founder included. */
     private void assertNoRelease(final int residents) {
+        assertNoRelease(residents, 1);
+    }
+
+    /** No expansion was released, and the rival keeps this many colonies. */
+    private void assertNoRelease(final int residents, final int colonies) {
         assertTrue(france().getRivalExpansionObjective().isEmpty(),
                 "No expansion may start from this state");
         assertEquals(residents, colony().getUnitsInsideColony().size());
         assertTrue(colony().getUnitsInsideColony()
                 .contains(model.getUnitById(FOUNDER_ID)));
-        assertEquals(1, colonyCount());
+        assertEquals(colonies, colonyCount());
     }
 
     /** The founder left the colony square toward its saved site. */
@@ -411,6 +549,12 @@ class RivalExpansionCycleTest {
 
     /** A French colonist standing on the colony square, not yet working. */
     private static UnitPo colonist(final UnitPo template, final int id) {
+        return colonist(template, id, COLONY);
+    }
+
+    /** A French colonist standing on the given square, not yet working. */
+    private static UnitPo colonist(final UnitPo template, final int id,
+            final Location at) {
         final UnitPo crew = new UnitPo();
         crew.setId(id);
         crew.setType(UnitType.COLONIST);
@@ -419,7 +563,7 @@ class RivalExpansionCycleTest {
         crew.setWorkUpdates(0);
         crew.setMissionary(false);
         final PlaceMapPo place = new PlaceMapPo();
-        place.setLocation(COLONY);
+        place.setLocation(at);
         place.setOrientation(Direction.west);
         crew.setPlaceMap(place);
         crew.setAvailableMoves(1);
@@ -477,11 +621,42 @@ class RivalExpansionCycleTest {
 
     @Test
     void negativeFoodBalanceAfterReleaseRefusesRelease() {
-        // Founder grows food; three lumber colonists eat more than it grows.
+        // The founder is the only food grower and the only spare colonist:
+        // the three lumber colonists hold guns. The colony eats all it grows,
+        // so taking the founder away would leave a deficit.
+        prepare(new Setup()
+                .crew(GoodsType.LUMBER, GoodsType.LUMBER, GoodsType.LUMBER)
+                .armed(0).armed(1).armed(2));
+        final Unit founder = model.getUnitById(FOUNDER_ID);
+        assertTrue(isWorkingCorn(founder), "The founder grows the food");
+        final int grown = colony().getJobChoices(founder).stream().filter(
+                choice -> choice.getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                        && choice.getGoodsType() == GoodsType.CORN)
+                .mapToInt(choice -> choice.getPotential().get().getAmount())
+                .sum();
+        assertTrue(
+                colony().getGoodsStats().getStatsByType(GoodsType.CORN)
+                        .getNetProduction() - grown
+                        + founder.getType().getAteFoodPerTurn() < 0,
+                "Without the founder the colony would be in deficit");
+        turnStarted();
+        assertNoRelease(4);
+    }
+
+    /**
+     * Same colony without guns: a lumber colonist grows no food, so it is the
+     * spare one, and its release improves the food balance instead of harming
+     * it. The founder, who grows the food, stays.
+     */
+    @Test
+    void nonFoodSpareIsReleasedAndTheFoodBalanceHolds() {
         prepare(new Setup().crew(GoodsType.LUMBER, GoodsType.LUMBER,
                 GoodsType.LUMBER));
         turnStarted();
-        assertNoRelease(4);
+        assertEquals(CREW_FIRST_ID, assertReleased().getFounderId());
+        assertTrue(colony().getUnitsInsideColony()
+                .contains(model.getUnitById(FOUNDER_ID)));
+        assertSourceKeepsItsReserves();
     }
 
     @Test
@@ -621,6 +796,250 @@ class RivalExpansionCycleTest {
         turnStarted();
         assertEquals(SECOND_SHIP_ID,
                 france().getRivalTradeObjective().orElseThrow().getCarrierId());
+    }
+
+    /**
+     * The established island colony holds 49 tools, one short of the target:
+     * the source colony, which meets every reserve itself, releases nobody. At
+     * exactly 50 tools the next owner turn releases the founder.
+     */
+    @Test
+    void otherColonyToolBoundaryAtFiftyDecidesTheRelease() {
+        prepare(new Setup().second().secondTools(TOOL_TARGET - 1)
+                .crew(GoodsType.CORN, GoodsType.CORN, GoodsType.CORN));
+        rivalTurn();
+        assertNoRelease(4, 2);
+        assertEquals(TOOL_TARGET - 1, toolsOf(secondColony()));
+        setStock(secondColony(), GoodsType.TOOLS, TOOL_TARGET);
+        rivalTurn();
+        assertEquals(COLONY_ID, assertReleased().getColonyId());
+        assertSourceKeepsItsReserves();
+    }
+
+    /**
+     * After a release the source keeps two residents, a nonnegative food
+     * balance and five turns of its remaining residents' food, measured from
+     * the live colony.
+     */
+    private void assertSourceKeepsItsReserves() {
+        final List<Unit> residents = colony().getUnitsInsideColony();
+        assertTrue(residents.size() >= 2, "Two residents stay");
+        assertTrue(
+                colony().getGoodsStats().getStatsByType(GoodsType.CORN)
+                        .getNetProduction() >= 0,
+                "The source food balance holds");
+        final int eaten = residents.stream()
+                .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
+        assertTrue(corn() >= FIVE_TURNS * eaten,
+                "Food covers five turns of the remaining residents");
+    }
+
+    /**
+     * The island colony has one resident, who eats two corn a turn. Nine corn
+     * is one short of five turns; ten is exactly five turns.
+     */
+    @Test
+    void otherColonyFoodBoundaryAtFiveTurnsDecidesTheRelease() {
+        final int fiveTurns = FIVE_TURNS
+                * UnitType.COLONIST.getAteFoodPerTurn();
+        prepare(new Setup().second().secondFood(fiveTurns - 1)
+                .crew(GoodsType.CORN, GoodsType.CORN, GoodsType.CORN));
+        rivalTurn();
+        assertNoRelease(4, 2);
+        assertEquals(fiveTurns - 1, cornOf(secondColony()));
+        setStock(secondColony(), GoodsType.CORN, fiveTurns);
+        rivalTurn();
+        assertEquals(COLONY_ID, assertReleased().getColonyId());
+        assertSourceKeepsItsReserves();
+    }
+
+    /**
+     * Famine prevention comes first in the owner turn. The island's three
+     * residents all cut lumber, so it starts in deficit. The same owner turn
+     * first moves an island resident to food, which ends the deficit, and only
+     * then lets the first colony release its founder.
+     */
+    @Test
+    void otherColonyFamineIsRepairedBeforeTheSameTurnsRelease() {
+        prepare(new Setup().second().secondDeficit().crew(GoodsType.CORN,
+                GoodsType.CORN, GoodsType.CORN));
+        assertTrue(islandNetFood() < 0, "The fixture starts in deficit");
+        rivalTurn();
+        assertTrue(islandNetFood() >= 0, "The deficit is repaired first");
+        assertTrue(
+                islandColony().getUnitsInsideColony().stream()
+                        .anyMatch(RivalExpansionCycleTest::isWorkingCorn),
+                "An island resident now grows food");
+        assertEquals(3, islandColony().getUnitsInsideColony().size(),
+                "The repair moves residents; nobody leaves the island");
+        assertEquals(COLONY_ID, assertReleased().getColonyId());
+        assertSourceKeepsItsReserves();
+    }
+
+    /**
+     * The island's deficit cannot be repaired: its three lumber residents hold
+     * guns, so the workforce may not move them. While it lasts, the first
+     * colony releases nobody in any owner turn, although it meets every reserve
+     * itself.
+     */
+    @Test
+    void unrepairedFamineInTheOtherColonyBlocksEveryRelease() {
+        prepare(new Setup().second().secondArmedDeficit().crew(GoodsType.CORN,
+                GoodsType.CORN, GoodsType.CORN));
+        assertTrue(islandNetFood() < 0, "The fixture starts in deficit");
+        rivalTurn();
+        rivalTurn();
+        assertTrue(islandNetFood() < 0, "Armed residents keep their jobs");
+        assertNoRelease(4, 2);
+    }
+
+    /**
+     * Two established colonies found a third one exactly once. Save and
+     * Continue while the founder travels keeps the same objective, and no stock
+     * of either colony changes: the rival neither pays for nor invents goods.
+     */
+    @Test
+    void thirdColonyIsFoundedOnceAndEstablishedStocksAreConserved() {
+        prepare(new Setup().second().crew(GoodsType.CORN, GoodsType.CORN,
+                GoodsType.CORN));
+        final int islandId = secondColony().getId();
+        turnStarted();
+        final RivalExpansionObjective journey = assertReleased();
+        assertEquals(COLONY_ID, journey.getColonyId());
+        final Location site = journey.getSite();
+        boolean continued = false;
+        for (int turn = 0; turn < MAX_TURNS && colonyCount() < 3; turn++) {
+            if (!continued && france().getRivalExpansionObjective().isPresent()
+                    && !model.getUnitById(FOUNDER_ID).isAtPlaceLocation()) {
+                continueGame();
+                continued = true;
+                assertEquals(journey.getFounderId(),
+                        france().getRivalExpansionObjective().orElseThrow()
+                                .getFounderId(),
+                        "Continue keeps the same founder");
+            }
+            rivalTurn();
+        }
+        assertTrue(continued, "The journey was never resumed from a save");
+        assertEquals(3, colonyCount(), "Exactly one third colony");
+        final Colony third = model.getColonyAt(site).orElseThrow();
+        assertSame(france(), third.getOwner());
+        assertEquals(List.of(model.getUnitById(FOUNDER_ID)),
+                third.getUnitsInsideColony());
+        assertTrue(france().getRivalExpansionObjective().isEmpty());
+        assertEquals(DEFAULT_FOOD, corn());
+        assertEquals(DEFAULT_FOOD,
+                cornOf(model.getColonyById(islandId).orElseThrow()));
+        assertEquals(TOOL_TARGET, toolsOf(colony()));
+        assertEquals(TOOL_TARGET,
+                toolsOf(model.getColonyById(islandId).orElseThrow()));
+        rivalTurn();
+        assertEquals(3, colonyCount(), "Later turns found nothing more");
+    }
+
+    /**
+     * An active expansion is the only one: the other established colony is not
+     * asked for a founder, and the saved objective stays exactly as it was.
+     */
+    @Test
+    void activeExpansionKeepsOneObjectiveAndReleasesNobodyElse() {
+        prepare(new Setup().second().crew(GoodsType.CORN, GoodsType.CORN,
+                GoodsType.CORN));
+        turnStarted();
+        final RivalExpansionObjective running = assertReleased();
+        final String before = running.toString();
+        final Set<Integer> islandResidents = secondColony()
+                .getUnitsInsideColony().stream().map(Unit::getId)
+                .collect(Collectors.toSet());
+        rivalTurn();
+        if (france().getRivalExpansionObjective().isPresent()) {
+            assertEquals(running.getFounderId(), france()
+                    .getRivalExpansionObjective().orElseThrow().getFounderId());
+        }
+        assertEquals(islandResidents,
+                model.getColonyById(secondColonyId()).orElseThrow()
+                        .getUnitsInsideColony().stream().map(Unit::getId)
+                        .collect(Collectors.toSet()),
+                "The island colony keeps every resident; " + before);
+        assertTrue(colonyCount() <= 3, "At most one new colony at a time");
+    }
+
+    @Test
+    void capturedSourceColonyRetiresTheExpansionAtTheOwnersTurn() {
+        prepare(new Setup().crew(GoodsType.CORN, GoodsType.CORN));
+        model.getUnitById(FOUNDER_ID).placeToMap(COLONY);
+        france().setRivalExpansionObjective(new RivalExpansionObjective(
+                COLONY_ID, FOUNDER_ID, SHIP_ID, COLONY, Stage.TRAVEL));
+        RivalTradeFixtures.captureColony(model, colony(), model.getUnitById(0));
+        assertNotSame(france(),
+                model.getColonyAt(COLONY).orElseThrow().getOwner());
+        turnStarted();
+        assertTrue(france().getRivalExpansionObjective().isEmpty(),
+                "A captured source colony retires the expansion");
+    }
+
+    @Test
+    void destroyedCarrierRetiresTheExpansionAndKeepsTheFounder() {
+        prepare(new Setup().crew(GoodsType.CORN, GoodsType.CORN));
+        model.getUnitById(FOUNDER_ID).placeToMap(COLONY);
+        france().setRivalExpansionObjective(new RivalExpansionObjective(
+                COLONY_ID, FOUNDER_ID, SECOND_SHIP_ID, COLONY, Stage.BOARDING));
+        RivalTradeFixtures.destroyUnit(model,
+                model.getUnitById(SECOND_SHIP_ID));
+        turnStarted();
+        assertTrue(france().getRivalExpansionObjective().isEmpty(),
+                "A destroyed carrier retires the expansion");
+        assertTrue(model.tryGetUnitById(FOUNDER_ID).isPresent(),
+                "The founder is not destroyed with the carrier");
+    }
+
+    private int secondColonyId() {
+        return secondColony().getId();
+    }
+
+    private static int toolsOf(final Colony target) {
+        return target.getWarehouse().getGoods(GoodsType.TOOLS).getAmount();
+    }
+
+    private static int cornOf(final Colony target) {
+        return target.getWarehouse().getGoods(GoodsType.CORN).getAmount();
+    }
+
+    /**
+     * A further colony needs the colony to keep five turns of food for its
+     * residents and fifty tools in stock. One corn or one tool short refuses
+     * it, and the exact amounts allow it.
+     */
+    @Test
+    void furtherColonyNeedsFiveTurnsOfFoodAndFiftyToolsAtTheBoundary() {
+        prepare(new Setup().crew(GoodsType.CORN, GoodsType.CORN,
+                GoodsType.CORN));
+        final RivalExpansionCycle gate = new RivalExpansionCycle(ai,
+                new RivalTradeCycle(ai));
+        final int consumption = colony().getUnitsInsideColony().stream()
+                .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
+        setTools(50);
+        setCorn(FIVE_TURNS * consumption - 1);
+        assertFalse(gate.hasNewColonyReserves(colony()),
+                "One corn short of five turns refuses the colony");
+        setCorn(FIVE_TURNS * consumption);
+        assertTrue(gate.hasNewColonyReserves(colony()),
+                "Exactly five turns of food allows the colony");
+        setTools(49);
+        assertFalse(gate.hasNewColonyReserves(colony()),
+                "Forty-nine tools refuse the colony");
+        setTools(50);
+        assertTrue(gate.hasNewColonyReserves(colony()),
+                "Fifty tools allow the colony");
+    }
+
+    /**
+     * Sets the tool stock through the public, validated warehouse operations.
+     */
+    private void setTools(final int amount) {
+        colony().getWarehouse()
+                .removeGoods(colony().getWarehouse().getGoods(GoodsType.TOOLS));
+        colony().getWarehouse().addGoods(Goods.of(GoodsType.TOOLS, amount));
     }
 
     @Test
