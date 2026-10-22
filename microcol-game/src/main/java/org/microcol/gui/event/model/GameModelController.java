@@ -1,6 +1,7 @@
 package org.microcol.gui.event.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.Loc;
@@ -21,9 +22,20 @@ import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativeChiefPreview;
+import org.microcol.model.NativeChiefResult;
+import org.microcol.model.NativeMissionContestOutcome;
+import org.microcol.model.NativeConquestQuote;
+import org.microcol.model.NativeConquestResult;
+import org.microcol.model.NativeIncitementOutcome;
+import org.microcol.model.NativeIncitementQuote;
+import org.microcol.model.NativeMissionContestView;
+import org.microcol.model.NativeMissionView;
 import org.microcol.model.NativePurchaseQuote;
 import org.microcol.model.NativeSaleQuote;
 import org.microcol.model.NativeSettlement;
+import org.microcol.model.NativeTributeQuote;
+import org.microcol.model.NativeTributeResult;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
@@ -248,6 +260,137 @@ public class GameModelController {
     }
 
     /**
+     * Visit the native chief with the terms the player confirmed (R-0158). The
+     * model checks the terms and the visitor again; a refused visit is
+     * explained and changes nothing. The model call is quick, so it runs here.
+     *
+     * @param visitor    scout beside the settlement
+     * @param settlement native settlement
+     * @param shown      terms the confirmation displayed
+     * @return the actual result, empty when the visit was refused
+     */
+    public Optional<NativeChiefResult> visitNativeChief(final Unit visitor,
+            final NativeSettlement settlement, final NativeChiefPreview shown) {
+        try {
+            return Optional.of(
+                    getModel().visitNativeChief(visitor, settlement, shown));
+        } catch (IllegalStateException rejected) {
+            showNativeChiefRejection();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Establish the mission the player confirmed (R-0164). The model checks the
+     * terms and the missionary again; a refused mission is explained and
+     * changes nothing. The model call is quick, so it runs here and the caller
+     * learns whether the missionary left the map.
+     *
+     * @param missionary required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param shown      terms the confirmation displayed
+     * @return whether the mission was established
+     */
+    public boolean establishNativeMission(final Unit missionary,
+            final NativeSettlement settlement, final NativeMissionView shown) {
+        try {
+            getModel().establishNativeMission(missionary, settlement, shown);
+            return true;
+        } catch (IllegalStateException rejected) {
+            showNativeMissionRejection();
+            return false;
+        }
+    }
+
+    /**
+     * Challenge the rival mission the player confirmed (R-0165). The model
+     * checks the terms and both missionaries again and draws once; a refused
+     * contest is explained and changes nothing. The model call is quick, so it
+     * runs here and the caller reports the actual outcome.
+     *
+     * @param visitor    required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param shown      terms the confirmation displayed
+     * @return the actual outcome, empty when the contest was refused
+     */
+    public Optional<NativeMissionContestOutcome> contestNativeMission(
+            final Unit visitor, final NativeSettlement settlement,
+            final NativeMissionContestView shown) {
+        try {
+            return Optional.of(getModel().contestNativeMission(visitor,
+                    settlement, shown));
+        } catch (IllegalStateException rejected) {
+            showNativeContestRejection();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Confirm the paid incitement the player chose (R-0166). The model checks
+     * the terms, the purse and the order revision, then pays and draws once; a
+     * refused incitement is explained and changes nothing.
+     *
+     * @param visitor    required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param shown      terms the confirmation displayed
+     * @return the actual outcome, empty when the incitement was refused
+     */
+    public Optional<NativeIncitementOutcome> incite(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeIncitementQuote shown) {
+        try {
+            return Optional.of(getModel().incite(visitor, settlement, shown));
+        } catch (IllegalStateException rejected) {
+            showNativeIncitementRejection();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Confirm the attack on a native settlement the player chose (R-0174). The
+     * model re-checks the frozen terms before its first draw; a refused attack
+     * is explained and changes nothing.
+     *
+     * @param visitor    required armed unit beside the settlement
+     * @param settlement required native settlement
+     * @param shown      terms the confirmation displayed
+     * @return the actual result, empty when the attack was refused
+     */
+    public Optional<NativeConquestResult> attack(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeConquestQuote shown) {
+        try {
+            return Optional.of(getModel().attackNativeSettlement(visitor,
+                    settlement, shown));
+        } catch (IllegalStateException rejected) {
+            showNativeAttackRejection();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Demand tribute with the terms the player confirmed (R-0162). The model
+     * re-checks the frozen terms, the wait and the treasury before any change;
+     * a refused demand is explained and changes nothing. The model call is
+     * quick, so it runs here.
+     *
+     * @param visitor    required armed unit beside the settlement
+     * @param settlement required native settlement
+     * @param shown      terms the confirmation displayed
+     * @return the actual result, empty when the demand was refused
+     */
+    public Optional<NativeTributeResult> demandNativeTribute(final Unit visitor,
+            final NativeSettlement settlement, final NativeTributeQuote shown) {
+        try {
+            return Optional.of(
+                    getModel().demandNativeTribute(visitor, settlement, shown));
+        } catch (IllegalStateException rejected) {
+            showNativeTributeRejection();
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Stop a native course by the player's choice, or let a finished or
      * canceled colonist leave (R-0148). The colonist returns beside the
      * settlement without a new grant. A blocked leave is explained and changes
@@ -435,6 +578,48 @@ public class GameModelController {
         final DialogMessage dialog = passengerMessage.get();
         dialog.setTitle(i18n.get(Loc.nativeTeachingTitle));
         dialog.setText(i18n.get(message));
+        dialog.showAndWait();
+    }
+
+    private void showNativeMissionRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeMissionTitle));
+        dialog.setText(i18n.get(Loc.nativeMissionRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeContestRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeContestTitle));
+        dialog.setText(i18n.get(Loc.nativeContestRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeTributeRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeTributeTitle));
+        dialog.setText(i18n.get(Loc.nativeTributeRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeAttackRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeAttackTitle));
+        dialog.setText(i18n.get(Loc.nativeAttackRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeIncitementRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeIncitementTitle));
+        dialog.setText(i18n.get(Loc.nativeIncitementRejected));
+        dialog.showAndWait();
+    }
+
+    private void showNativeChiefRejection() {
+        final DialogMessage dialog = passengerMessage.get();
+        dialog.setTitle(i18n.get(Loc.nativeChiefTitle));
+        dialog.setText(i18n.get(Loc.nativeChiefRejected));
         dialog.showAndWait();
     }
 

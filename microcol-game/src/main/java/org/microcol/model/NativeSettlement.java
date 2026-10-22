@@ -49,6 +49,29 @@ public final class NativeSettlement {
      * it never restocks, is never capped and is never confiscated by an update.
      */
     private final Map<GoodsType, Integer> receivedStock = new LinkedHashMap<>();
+    /**
+     * Outcome of the one chief encounter of each visiting European nation
+     * (R-0158), in European order; a nation absent here has not met the chief
+     * yet.
+     */
+    private final Map<EuropeanNation, NativeChiefOutcome> chiefEncounters = new EnumMap<>(
+            EuropeanNation.class);
+    /**
+     * Turn of the last tribute demand of each European here (R-0162), in
+     * European order; a European absent here has not demanded tribute yet.
+     */
+    private final Map<EuropeanNation, Integer> tributeTurns = new EnumMap<>(
+            EuropeanNation.class);
+    /** Missionary whose mission this settlement holds, or null for none. */
+    private Integer missionaryId;
+    /** Nonhostile owner updates of the current mission cycle, 0..4. */
+    private int missionUpdates;
+    /**
+     * Counts every change of the mission in this session (R-0165), so a contest
+     * quote taken before the change is stale even when its values match again.
+     * Not saved: a loaded game starts with new quotes.
+     */
+    private int missionRevision;
 
     NativeSettlement(final int id, final NativeNation nation,
             final boolean capital, final Location location, final int treasury,
@@ -360,6 +383,146 @@ public final class NativeSettlement {
         teachingPupilId = null;
         teachingUpdates = 0;
         teachingStage = null;
+    }
+
+    /**
+     * @param european required European nation
+     * @return outcome of that nation's chief encounter here, empty before it
+     */
+    public Optional<NativeChiefOutcome> findChiefEncounter(
+            final EuropeanNation european) {
+        return Optional.ofNullable(chiefEncounters.get(european));
+    }
+
+    /**
+     * Keep the one outcome of a nation's first chief encounter here. The model
+     * checks the nation has none yet; restoring a save checks it as well.
+     *
+     * @param european required European nation
+     * @param outcome  required drawn outcome
+     */
+    void recordChiefEncounter(final EuropeanNation european,
+            final NativeChiefOutcome outcome) {
+        Preconditions.checkNotNull(outcome);
+        Preconditions.checkState(findChiefEncounter(european).isEmpty(),
+                "Native chief encounter is already recorded");
+        chiefEncounters.put(european, outcome);
+    }
+
+    /**
+     * @return outcome of every recorded chief encounter, in European order,
+     *         unmodifiable
+     */
+    Map<EuropeanNation, NativeChiefOutcome> getChiefEncounters() {
+        return Collections.unmodifiableMap(chiefEncounters);
+    }
+
+    /**
+     * @param european required European nation
+     * @return turn of that nation's last tribute demand here, empty before it
+     */
+    public Optional<Integer> findTributeTurn(final EuropeanNation european) {
+        Preconditions.checkNotNull(european);
+        return Optional.ofNullable(tributeTurns.get(european));
+    }
+
+    /**
+     * Keep the turn of a European's tribute demand here (R-0162). The model
+     * checks that the wait has passed; restoring a save checks it as well.
+     *
+     * @param european required European nation
+     * @param turn     nonnegative game turn of the demand
+     */
+    void recordTribute(final EuropeanNation european, final int turn) {
+        Preconditions.checkNotNull(european);
+        Preconditions.checkArgument(turn >= 0,
+                "Native tribute turn cannot be negative");
+        tributeTurns.put(european, turn);
+    }
+
+    /**
+     * @return turn of every European's last tribute demand here, in European
+     *         order, unmodifiable
+     */
+    Map<EuropeanNation, Integer> getTributeTurns() {
+        return Collections.unmodifiableMap(tributeTurns);
+    }
+
+    /**
+     * @return identity of the missionary whose mission this settlement holds,
+     *         empty when none is established
+     */
+    public Optional<Integer> getMissionaryId() {
+        return Optional.ofNullable(missionaryId);
+    }
+
+    /**
+     * @return nonhostile owner updates counted in the current mission cycle,
+     *         from zero to one less than the required count
+     */
+    public int getMissionUpdates() {
+        return missionUpdates;
+    }
+
+    /**
+     * @return number of changes made to the mission in this session (R-0165)
+     */
+    int getMissionRevision() {
+        return missionRevision;
+    }
+
+    /**
+     * Hold a new mission for a missionary the caller has validated (R-0164).
+     * The settlement holds one mission at a time, so it must be free.
+     *
+     * @param missionary required identity of the missionary
+     */
+    void establishMission(final int missionary) {
+        Preconditions.checkState(missionaryId == null,
+                "Native mission is already established");
+        missionaryId = missionary;
+        missionUpdates = 0;
+        missionRevision++;
+    }
+
+    /**
+     * Drop the mission when its missionary leaves the game (R-0149), so no
+     * settlement keeps an identity that no longer exists.
+     */
+    void clearMission() {
+        missionaryId = null;
+        missionUpdates = 0;
+        missionRevision++;
+    }
+
+    /**
+     * Restore a saved mission. The caller has validated the count.
+     *
+     * @param missionary required identity of the missionary
+     * @param updates    counted nonhostile updates, below the required count
+     */
+    void restoreMission(final int missionary, final int updates) {
+        missionaryId = missionary;
+        missionUpdates = updates;
+    }
+
+    /**
+     * Count one nonhostile owner update of the mission. Progress is never
+     * banked: the fifth update ends the cycle and the count restarts at zero,
+     * so each cycle gives exactly one boundary.
+     *
+     * @return whether this update was the fifth of the cycle
+     */
+    boolean addMissionUpdate() {
+        Preconditions.checkState(missionaryId != null,
+                "No native mission update is due");
+        missionRevision++;
+        missionUpdates++;
+        if (missionUpdates < NativeMissionView.REQUIRED_UPDATES) {
+            return false;
+        }
+        missionUpdates = 0;
+        return true;
     }
 
     /**

@@ -11,10 +11,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.microcol.model.store.NativeChiefEncounterPo;
 import org.microcol.model.store.NativeExpeditionPo;
 import org.microcol.model.store.NativeGoodsStockPo;
 import org.microcol.model.store.NativeSettlementPo;
 import org.microcol.model.store.NativeTradePo;
+import org.microcol.model.store.NativeTributeRecordPo;
 
 import com.google.common.base.Preconditions;
 
@@ -29,7 +31,7 @@ public final class NativeSettlements {
     private final List<NativeSettlement> settlements;
 
     private NativeSettlements(final List<NativeSettlement> settlements) {
-        this.settlements = List.copyOf(settlements);
+        this.settlements = new ArrayList<>(settlements);
     }
 
     /**
@@ -54,6 +56,7 @@ public final class NativeSettlements {
         final EnumMap<NativeNation, Integer> capitals = new EnumMap<>(
                 NativeNation.class);
         final List<NativeSettlement> out = new ArrayList<>();
+        final Set<Integer> missionaries = new HashSet<>();
         for (final NativeSettlementPo entry : saved) {
             Preconditions.checkArgument(entry != null,
                     "Unsupported save: missing native settlement");
@@ -93,6 +96,9 @@ public final class NativeSettlements {
             restoreTeaching(entry, settlement);
             restoreTrade(entry, settlement);
             restoreReceived(entry.getReceivedGoods(), settlement);
+            restoreChiefEncounters(entry.getChiefEncounters(), settlement);
+            restoreTributes(entry.getTributes(), settlement);
+            restoreMission(entry, settlement, missionaries);
             out.add(settlement);
         }
         for (final NativeSettlement settlement : out) {
@@ -374,6 +380,92 @@ public final class NativeSettlements {
     }
 
     /**
+     * Restore the saved chief encounters of one settlement (R-0158). Absent
+     * means none has happened; each nation may meet the chief here only once.
+     *
+     * @param saved      saved encounters, possibly null
+     * @param settlement required settlement built from the same entry
+     */
+    private static void restoreChiefEncounters(
+            final List<NativeChiefEncounterPo> saved,
+            final NativeSettlement settlement) {
+        if (saved == null) {
+            return;
+        }
+        for (final NativeChiefEncounterPo entry : saved) {
+            Preconditions.checkArgument(
+                    entry != null && entry.getEuropean() != null
+                            && entry.getOutcome() != null,
+                    "Unsupported save: incomplete native chief encounter");
+            Preconditions.checkArgument(
+                    settlement.findChiefEncounter(entry.getEuropean())
+                            .isEmpty(),
+                    "Unsupported save: duplicate native chief encounter");
+            settlement.recordChiefEncounter(entry.getEuropean(),
+                    entry.getOutcome());
+        }
+    }
+
+    /**
+     * Restore the saved tribute demands of one settlement (R-0162). Absent
+     * means none has been made; each European has one saved turn, its last
+     * demand. The turn is checked against the game turn by the model that loads
+     * it.
+     *
+     * @param saved      saved demands, possibly null
+     * @param settlement required settlement built from the same entry
+     */
+    private static void restoreTributes(final List<NativeTributeRecordPo> saved,
+            final NativeSettlement settlement) {
+        if (saved == null) {
+            return;
+        }
+        for (final NativeTributeRecordPo entry : saved) {
+            Preconditions.checkArgument(
+                    entry != null && entry.getEuropean() != null
+                            && entry.getTurn() != null && entry.getTurn() >= 0,
+                    "Unsupported save: incomplete native tribute demand");
+            Preconditions.checkArgument(
+                    settlement.findTributeTurn(entry.getEuropean()).isEmpty(),
+                    "Unsupported save: duplicate native tribute demand");
+            settlement.recordTribute(entry.getEuropean(), entry.getTurn());
+        }
+    }
+
+    /**
+     * Restore the saved mission of one settlement (R-0164). A settlement
+     * without a missionary saves no clock, so absent progress is zero there. A
+     * held mission needs a missionary no other settlement holds and a count
+     * below the required updates. The missionary itself is checked against the
+     * units later.
+     *
+     * @param entry        required saved settlement
+     * @param settlement   required settlement built from the same entry
+     * @param missionaries identities of the missionaries already restored
+     */
+    private static void restoreMission(final NativeSettlementPo entry,
+            final NativeSettlement settlement,
+            final Set<Integer> missionaries) {
+        if (entry.getMissionaryId() == null) {
+            Preconditions.checkArgument(
+                    entry.getMissionUpdates() == null
+                            || entry.getMissionUpdates() == 0,
+                    "Unsupported save: native mission progress without a missionary");
+            return;
+        }
+        Preconditions.checkArgument(
+                entry.getMissionaryId() >= 0
+                        && missionaries.add(entry.getMissionaryId()),
+                "Unsupported save: missing or duplicate native mission missionary");
+        Preconditions.checkArgument(entry.getMissionUpdates() != null
+                && entry.getMissionUpdates() >= 0
+                && entry.getMissionUpdates() < NativeMissionView.REQUIRED_UPDATES,
+                "Unsupported save: missing or invalid native mission progress");
+        settlement.restoreMission(entry.getMissionaryId(),
+                entry.getMissionUpdates());
+    }
+
+    /**
      * @param name saved goods name, possibly missing
      * @return the tradable goods type with that name
      * @throws IllegalArgumentException when the name is missing or not tradable
@@ -418,7 +510,19 @@ public final class NativeSettlements {
      * @return every settlement in the saved order, unmodifiable
      */
     public List<NativeSettlement> getAll() {
-        return settlements;
+        return List.copyOf(settlements);
+    }
+
+    /**
+     * Retire a conquered settlement (R-0174). It leaves the registry at once,
+     * so its claim and its map interaction end with it; the caller has checked
+     * that the settlement belongs to this registry.
+     *
+     * @param settlement required settlement that was conquered
+     */
+    void remove(final NativeSettlement settlement) {
+        Preconditions.checkArgument(settlements.remove(settlement),
+                "Native settlement is not registered");
     }
 
     /**
@@ -505,6 +609,38 @@ public final class NativeSettlements {
     }
 
     /**
+     * @param settlement required settlement
+     * @return saved form of its tribute demands, in European order
+     */
+    private static List<NativeTributeRecordPo> saveTributes(
+            final NativeSettlement settlement) {
+        final List<NativeTributeRecordPo> out = new ArrayList<>();
+        settlement.getTributeTurns().forEach((european, turn) -> {
+            final NativeTributeRecordPo po = new NativeTributeRecordPo();
+            po.setEuropean(european);
+            po.setTurn(turn);
+            out.add(po);
+        });
+        return out;
+    }
+
+    /**
+     * @param settlement required settlement
+     * @return saved form of its chief encounters, in European order
+     */
+    private static List<NativeChiefEncounterPo> saveChiefEncounters(
+            final NativeSettlement settlement) {
+        final List<NativeChiefEncounterPo> out = new ArrayList<>();
+        settlement.getChiefEncounters().forEach((european, outcome) -> {
+            final NativeChiefEncounterPo po = new NativeChiefEncounterPo();
+            po.setEuropean(european);
+            po.setOutcome(outcome);
+            out.add(po);
+        });
+        return out;
+    }
+
+    /**
      * @return saved form of every settlement, in the same order
      */
     public List<NativeSettlementPo> toPo(
@@ -547,6 +683,10 @@ public final class NativeSettlements {
                     .forEach(goods -> wanted.add(goods.name()));
             po.setWantedGoods(wanted);
             po.setTrade(saveTrades(settlement, open));
+            po.setChiefEncounters(saveChiefEncounters(settlement));
+            po.setTributes(saveTributes(settlement));
+            po.setMissionaryId(settlement.getMissionaryId().orElse(null));
+            po.setMissionUpdates(settlement.getMissionUpdates());
             out.add(po);
         }
         return out;

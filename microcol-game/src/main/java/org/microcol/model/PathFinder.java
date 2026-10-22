@@ -29,6 +29,12 @@ final class PathFinder {
     /** Whether a ship route must not contain a high-sea departure step. */
     private final boolean avoidDeparture;
 
+    /**
+     * Squares a route may use at all. It is tested before the terrain or the
+     * cost of a square is read, so an excluded square never shapes a route.
+     */
+    private final Predicate<Location> usable;
+
     PathFinder(final AbstractUnit unit) {
         this(unit, false);
     }
@@ -39,8 +45,21 @@ final class PathFinder {
      *                       step that would depart to the high sea
      */
     PathFinder(final AbstractUnit unit, final boolean avoidDeparture) {
+        this(unit, avoidDeparture, location -> true);
+    }
+
+    /**
+     * @param unit           required moving unit
+     * @param avoidDeparture when {@code true}, a ship route never contains a
+     *                       step that would depart to the high sea
+     * @param usable         required test of the squares a route may use, such
+     *                       as the squares its owner has explored
+     */
+    PathFinder(final AbstractUnit unit, final boolean avoidDeparture,
+            final Predicate<Location> usable) {
         this.unit = Preconditions.checkNotNull(unit);
         this.avoidDeparture = avoidDeparture;
+        this.usable = Preconditions.checkNotNull(usable);
     }
 
     /**
@@ -77,7 +96,8 @@ final class PathFinder {
         Preconditions.checkArgument(!start.equals(destination),
                 "Start and destination must be different (%s).", start);
 
-        if (!excludeDestination && !unit.isPossibleToMoveAt(destination)) {
+        if (!excludeDestination && (!usable.test(destination)
+                || !unit.isPossibleToMoveAt(destination))) {
             logger.debug("Path finding finished in {} ms.",
                     System.currentTimeMillis() - startTime);
             return null;
@@ -168,7 +188,7 @@ final class PathFinder {
                 continue;
             }
             for (final Location neighbor : current.location.getNeighbors()) {
-                if (closed.contains(neighbor)
+                if (closed.contains(neighbor) || !usable.test(neighbor)
                         || !unit.isPossibleToMoveAt(neighbor)) {
                     continue;
                 }

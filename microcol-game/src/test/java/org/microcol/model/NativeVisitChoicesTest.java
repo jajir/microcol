@@ -40,7 +40,30 @@ class NativeVisitChoicesTest {
 
     private static final NativeVisitChoice.Limit TEACH = AVAILABLE;
 
+    /**
+     * A missionary may establish a mission at a settlement with none (R-0164).
+     */
+    private static final NativeVisitChoice.Limit MISSION = AVAILABLE;
+
+    /** The chief is available to every scout, whatever the mood (R-0158). */
+    private static final NativeVisitChoice.Limit CHIEF = AVAILABLE;
+
     private static final NativeVisitChoice.Limit NO = ROLE_REFUSED;
+
+    /** Missionary with no other European power to select (R-0166). */
+    private static final NativeVisitChoice.Limit NO_TARGET = NativeVisitChoice.Limit.NO_INCITEMENT_TARGET;
+
+    /**
+     * An armed role qualifies for the attack, but this island has no native
+     * defender on the settlement square, so no attack is offered (R-0174).
+     */
+    private static final NativeVisitChoice.Limit NO_ATTACK = NativeVisitChoice.Limit.NO_ATTACK_TARGET;
+
+    /**
+     * An eligible demander may demand tribute with no defender on the square:
+     * an empty square has zero defense, so the demand is open (R-0162).
+     */
+    private static final NativeVisitChoice.Limit TRIBUTE = AVAILABLE;
 
     /**
      * Specialists, servants and criminals are colonists too, so their saved
@@ -82,7 +105,7 @@ class NativeVisitChoicesTest {
 
     /**
      * Expected limits in the order chief, teaching, trade, tribute, mission,
-     * attack.
+     * incitement, attack.
      */
     private static void assertLimits(
             final Map<NativeVisitAction, NativeVisitChoice.Limit> actual,
@@ -98,62 +121,121 @@ class NativeVisitChoicesTest {
     @Test
     void ordinaryScoutMeetsChiefAndLearnsButCannotFight() {
         // A mounted colonist without guns is the ordinary scout.
-        assertLimits(limitsOf(UnitType.COLONIST, SCOUT), OK, TEACH, NO, OK, NO,
-                NO);
+        assertLimits(limitsOf(UnitType.COLONIST, SCOUT), CHIEF, TEACH, NO,
+                TRIBUTE, NO, NO, NO);
     }
 
     @Test
     void seasonedScoutMeetsChiefButIsNotAlreadyAPupil() {
-        assertLimits(limitsOf(UnitType.SEASONED_SCOUT, COLONIST_FIELDS), OK, NO,
-                NO, OK, NO, NO);
+        assertLimits(limitsOf(UnitType.SEASONED_SCOUT, COLONIST_FIELDS), CHIEF,
+                NO, NO, TRIBUTE, NO, NO, NO);
     }
 
     @Test
     void soldierAndDragoonDemandTributeAndAttackButAreNoScouts() {
-        assertLimits(limitsOf(UnitType.COLONIST, SOLDIER), NO, TEACH, NO, OK,
-                NO, OK);
-        assertLimits(limitsOf(UnitType.COLONIST, DRAGOON), NO, TEACH, NO, OK,
-                NO, OK);
+        assertLimits(limitsOf(UnitType.COLONIST, SOLDIER), NO, TEACH, NO,
+                TRIBUTE, NO, NO, NO_ATTACK);
+        assertLimits(limitsOf(UnitType.COLONIST, DRAGOON), NO, TEACH, NO,
+                TRIBUTE, NO, NO, NO_ATTACK);
     }
 
     @Test
     void unskilledFreeColonistAndServantMayLearnOnly() {
         assertLimits(limitsOf(UnitType.COLONIST, UNARMED), NO, TEACH, NO, NO,
-                NO, NO);
+                NO, NO, NO);
         assertLimits(limitsOf(UnitType.INDENTURED_SERVANT, COLONIST_FIELDS), NO,
-                TEACH, NO, NO, NO, NO);
+                TEACH, NO, NO, NO, NO, NO);
     }
 
     @Test
     void criminalAndExistingExpertCannotLearn() {
         assertLimits(limitsOf(UnitType.PETTY_CRIMINAL, COLONIST_FIELDS), NO, NO,
-                NO, NO, NO, NO);
+                NO, NO, NO, NO, NO);
         assertLimits(limitsOf(UnitType.EXPERT_FARMER, COLONIST_FIELDS), NO, NO,
-                NO, NO, NO, NO);
+                NO, NO, NO, NO, NO);
     }
 
     @Test
     void equippedPioneerIsJudgedAsTheUnskilledPersonUnderneath() {
         assertLimits(limitsOf(UnitType.COLONIST, NativeRelationsScene.PIONEER),
-                NO, TEACH, NO, NO, NO, NO);
+                NO, TEACH, NO, NO, NO, NO, NO);
     }
 
+    /**
+     * The missionary may found a mission, and the free-play world has other
+     * colonial powers than the Dutch, so the incitement is open as well
+     * (R-0166).
+     */
     @Test
-    void missionaryMayEstablishAMission() {
+    void missionaryMayEstablishAMissionAndIncite() {
         assertLimits(limitsOf(UnitType.COLONIST, MISSIONARY), NO, TEACH, NO, NO,
-                OK, NO);
+                MISSION, AVAILABLE, NO);
+    }
+
+    /**
+     * The shared rule gives a missionary the incitement only while the model
+     * reports a selectable target; without one the choice names that reason.
+     * Only a missionary is judged, so any other role stays role-refused.
+     */
+    @Test
+    void incitementWithoutASelectableTargetNamesThatReason() {
+        final Model model = island(NativeNation.AZTEC)
+                .unit(DUTCH, UnitType.COLONIST, at(1, 0), MISSIONARY)
+                .unit(DUTCH, UnitType.COLONIST, at(0, 1), UNARMED).toModel();
+        final Unit missionary = model.getUnitById(200);
+        final Unit ordinary = model.getUnitById(201);
+        assertEquals(NO_TARGET,
+                incitement(NativeVisitRules.choices(missionary,
+                        NativeHostility.CONTENT, false, false, false, false,
+                        false, false, false, false)));
+        assertEquals(AVAILABLE,
+                incitement(NativeVisitRules.choices(missionary,
+                        NativeHostility.CONTENT, false, false, false, false,
+                        true, false, false, false)));
+        assertEquals(NO,
+                incitement(NativeVisitRules.choices(ordinary,
+                        NativeHostility.CONTENT, false, false, false, false,
+                        true, false, false, false)));
+    }
+
+    /**
+     * The incitement does not depend on the missionary's own mission state: it
+     * is offered beside an occupied settlement and beside a rival's mission.
+     */
+    @Test
+    void incitementIsIndependentOfTheMissionState() {
+        final Model model = island(NativeNation.AZTEC)
+                .unit(DUTCH, UnitType.COLONIST, at(1, 0), MISSIONARY).toModel();
+        final Unit missionary = model.getUnitById(200);
+        assertEquals(AVAILABLE,
+                incitement(NativeVisitRules.choices(missionary,
+                        NativeHostility.HOSTILE, false, true, false, false,
+                        true, false, false, false)));
+        assertEquals(AVAILABLE,
+                incitement(NativeVisitRules.choices(missionary,
+                        NativeHostility.HOSTILE, false, true, true, false, true,
+                        false, false, false)));
+    }
+
+    private static NativeVisitChoice.Limit incitement(
+            final List<NativeVisitChoice> choices) {
+        return choices.stream().filter(
+                choice -> choice.getAction() == NativeVisitAction.INCITE)
+                .findFirst().orElseThrow().getLimit();
     }
 
     @Test
     void onlyALoadedWagonMayTrade() {
-        assertLimits(limitsOf(UnitType.WAGON, UNARMED), NO, NO, NO, NO, NO, NO);
-        assertLimits(limitsOf(UnitType.WAGON, LOADED), NO, NO, OK, NO, NO, NO);
+        assertLimits(limitsOf(UnitType.WAGON, UNARMED), NO, NO, NO, NO, NO, NO,
+                NO);
+        assertLimits(limitsOf(UnitType.WAGON, LOADED), NO, NO, OK, NO, NO, NO,
+                NO);
     }
 
     @Test
     void artilleryAttacksOnlyThroughTheSharedAttackRule() {
         assertLimits(limitsOf(UnitType.ARTILLERY, UNARMED), NO, NO, NO, NO, NO,
-                OK);
+                NO, NO_ATTACK);
     }
 
     @Test
@@ -162,10 +244,10 @@ class NativeVisitChoicesTest {
                 .unit(DUTCH, UnitType.COLONIST, at(1, 0), SCOUT)
                 .unit(DUTCH, UnitType.WAGON, at(0, 1), LOADED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 80).toModel();
-        assertLimits(limits(model, model.getUnitById(200)), OK,
-                RELATION_REFUSED, NO, OK, NO, NO);
+        assertLimits(limits(model, model.getUnitById(200)), CHIEF,
+                RELATION_REFUSED, NO, TRIBUTE, NO, NO, NO);
         assertLimits(limits(model, model.getUnitById(201)), NO, NO,
-                RELATION_REFUSED, NO, NO, NO);
+                RELATION_REFUSED, NO, NO, NO, NO);
     }
 
     @Test
@@ -174,7 +256,7 @@ class NativeVisitChoicesTest {
                 .unit(DUTCH, UnitType.COLONIST, at(1, 0), UNARMED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 30).toModel();
         assertLimits(limits(model, model.getUnitById(200)), NO, TEACH, NO, NO,
-                NO, NO);
+                NO, NO, NO);
     }
 
     @Test

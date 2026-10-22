@@ -90,11 +90,11 @@ public class TC_128_F119_native_teaching_test extends AbstractMicroColTest {
         // the confirmation with the skill and the four owner updates.
         visit.enterSettlement(SCOUT_AT, CAPITAL);
         visit.verifyChooser("Offers to teach: Expert Farmer.",
-                "Visit the chief: Not available yet.", TEACHING_AVAILABLE_EN,
+                "Visit the chief: Available now.", TEACHING_AVAILABLE_EN,
                 "Trade: Your unit's role cannot do this.",
-                "Demand tribute: Not available yet.",
+                "Demand tribute: Available now.",
                 "Establish a mission: Your unit's role cannot do this.",
-                "Attack the settlement: Your unit's role cannot do this.");
+                "Attack settlement: Your unit's role cannot do this.");
         visit.verifyTeachButtonShown();
         visit.startTeachingChoice();
         visit.verifyTeachingConfirmation(CONFIRMATION_EN);
@@ -178,9 +178,9 @@ public class TC_128_F119_native_teaching_test extends AbstractMicroColTest {
         visit.verifyChooser("Offers to teach: Expert Farmer.",
                 "Visit the chief: Your unit's role cannot do this.",
                 OCCUPIED_EN, "Trade: Your unit's role cannot do this.",
-                "Demand tribute: Not available yet.",
+                "Demand tribute: Available now.",
                 "Establish a mission: Your unit's role cannot do this.",
-                "Attack the settlement: Not available yet.");
+                "Attack settlement: No defender of this settlement can be attacked from here.");
         visit.verifyTeachButtonHidden();
         visit.escape();
         visit.verifyChooserClosed();

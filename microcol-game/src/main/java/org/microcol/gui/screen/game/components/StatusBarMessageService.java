@@ -342,7 +342,11 @@ public class StatusBarMessageService {
                 .collect(Collectors.joining("\n"));
     }
 
-    private static Loc nationLabel(final NativeNation nation) {
+    /**
+     * @param nation required native nation
+     * @return the localized key of the nation's name
+     */
+    public static Loc nationLabel(final NativeNation nation) {
         switch (nation) {
         case ARAWAK:
             return Loc.nativeNationArawak;

@@ -54,7 +54,18 @@ public final class PlayerNative extends Player {
     boolean startTurn() {
         getAllUnits().forEach(unit -> unit.startTurn());
         nationModel.updateNativeMarkets(nation);
+        nationModel.checkNativeIncitement(nation);
         return true;
+    }
+
+    /**
+     * The nation's own turn ends after its braves have acted, so its paid
+     * incitement order (R-0166) loses one of its twenty native turns here.
+     */
+    @Override
+    public void endTurn() {
+        nationModel.advanceNativeIncitement(nation);
+        super.endTurn();
     }
 
     @Override

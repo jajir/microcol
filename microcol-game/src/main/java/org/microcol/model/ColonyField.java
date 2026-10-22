@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -256,7 +257,15 @@ public final class ColonyField {
     private Goods getJobProduction(final Unit worker, final GoodsType goodsType,
             final int terrainOutput, final PoliticalProduction political) {
         final Goods base = Goods.of(goodsType, terrainOutput);
-        final Goods worked = base.multiply(worker.getType()
+        // A convert's outdoor bonus applies only to a positive base yield, so
+        // it never creates output from an empty square (R-0149).
+        final Goods ordinary = terrainOutput > 0
+                && worker instanceof UnitFreeColonist
+                && ((UnitFreeColonist) worker).isNativeConvert()
+                        ? base.setAmount(
+                                terrainOutput + NativeConversion.OUTDOOR_BONUS)
+                        : base;
+        final Goods worked = ordinary.multiply(worker.getType()
                 .getFieldProductionModifier(goodsType, getTerrainType()));
         final Goods production = political.apply(base, worked);
         if (goodsType == GoodsType.FUR && colony.getOwner().getCongressMembers()

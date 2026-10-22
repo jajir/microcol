@@ -47,6 +47,8 @@ public class UnitPo {
 
     private PlaceNativeCoursePo placeNativeCourse;
 
+    private PlaceNativeMissionPo placeNativeMission;
+
     private CargoPo cargo = new CargoPo();
 
     private UnitActionPo action;
@@ -120,6 +122,42 @@ public class UnitPo {
 
     public void setMissionary(final Boolean value) {
         missionary = value;
+    }
+
+    /**
+     * Native convert role of a free colonist. Absent for every other colonist;
+     * when true, the nation and unassigned count are required.
+     */
+    private Boolean nativeConvert;
+
+    public Boolean getNativeConvert() {
+        return nativeConvert;
+    }
+
+    public void setNativeConvert(final Boolean value) {
+        nativeConvert = value;
+    }
+
+    /** Native nation of a convert, a NativeNation name; absent otherwise. */
+    private String nativeConvertNation;
+
+    public String getNativeConvertNation() {
+        return nativeConvertNation;
+    }
+
+    public void setNativeConvertNation(final String value) {
+        nativeConvertNation = value;
+    }
+
+    /** Lifetime unassigned owner updates of a convert; absent otherwise. */
+    private Integer nativeConvertUnassignedUpdates;
+
+    public Integer getNativeConvertUnassignedUpdates() {
+        return nativeConvertUnassignedUpdates;
+    }
+
+    public void setNativeConvertUnassignedUpdates(final Integer value) {
+        nativeConvertUnassignedUpdates = value;
     }
 
     private Boolean artilleryDamaged;
@@ -481,6 +519,21 @@ public class UnitPo {
     public void setPlaceNativeCourse(
             final PlaceNativeCoursePo placeNativeCourse) {
         this.placeNativeCourse = placeNativeCourse;
+    }
+
+    /**
+     * @return the saved native mission place, or null when not stationed
+     */
+    public PlaceNativeMissionPo getPlaceNativeMission() {
+        return placeNativeMission;
+    }
+
+    /**
+     * @param placeNativeMission the native mission place to set, or null
+     */
+    public void setPlaceNativeMission(
+            final PlaceNativeMissionPo placeNativeMission) {
+        this.placeNativeMission = placeNativeMission;
     }
 
     /**

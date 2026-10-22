@@ -291,6 +291,29 @@ public abstract class Player {
         colonySightings.put(colony.getLocation(), sightingOf(colony));
     }
 
+    /**
+     * Explore the land within two squares of a native settlement, the chief's
+     * information (R-0158). Only the accumulated exploration grows: present
+     * sight, foreign units and colonies are not granted, and nothing beyond the
+     * two squares is marked.
+     *
+     * @param center required native settlement square
+     */
+    void revealLandAround(final Location center) {
+        Preconditions.checkNotNull(center);
+        final List<Location> area = new java.util.ArrayList<>();
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -2; dy <= 2; dy++) {
+                final Location at = Location.of(center.getX() + dx,
+                        center.getY() + dy);
+                if (model.isValid(at)) {
+                    area.add(at);
+                }
+            }
+        }
+        visibility.reveal(area);
+    }
+
     /** Colony tile and its eight neighbors, clipped to the map. */
     private List<Location> colonyArea(final Colony colony) {
         final List<Location> around = new java.util.ArrayList<>(
@@ -653,6 +676,12 @@ public abstract class Player {
         model.observeNativeRelations(this);
         settleCongress();
         getAllUnits().forEach(unit -> unit.startTurn());
+        // Before missions, so a convert delivered by this update starts at zero
+        // unassigned updates.
+        model.advanceNativeConverts(this);
+        // Before relations: the mission clock reads the attitude as it entered
+        // this update. Each fifth nonhostile update is one conversion event.
+        model.resolveNativeConversions(this, model.advanceNativeMissions(this));
         // Once per completed own update; load and Continue never reach here.
         model.updateNativeRelations(this);
         // After relations, so a tense settlement cancels on its current

@@ -312,7 +312,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0146](done/R-0146.md) | Produce food and a local commodity from the town commons | New capture | [COL-001](../gap-analysis.md#colony-workforce-food-and-storage), UC-031 |
 | [R-0147](done/R-0147.md) | Clear a colonist's civilian specialty | Done | [EDU-004](../gap-analysis.md#education-and-skill-acquisition), UC-052 |
 | [R-0148](done/R-0148.md) | Learn an offered skill at a native settlement | New capture | [EDU-006](../gap-analysis.md#education-and-skill-acquisition)/[NAT-015](../gap-analysis.md#native-nations-settlements-and-relations), UC-053/063 |
-| [R-0149](R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
+| [R-0149](done/R-0149.md) | Acquire and retain a native convert as a colony worker | New capture | [PROD-007](../gap-analysis.md#production-and-professions)/[NAT-021](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-020](../gap-analysis.md#founding-father-effects), UC-039/066/105 |
 | [R-0212](R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
 | [R-0213](R-0213.md) | Verify all building rows and upgrades | Verification | UC-119 building matrix |
 | [R-0215](R-0215.md) | Verify production, storage and trade reference rows | Verification | UC-119 production/trade matrix |
@@ -340,19 +340,19 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0151](done/R-0151.md) | Give native braves a home and a national turn | New capture | [NAT-001](../gap-analysis.md#native-nations-settlements-and-relations), TURN-001/002, UC-005/060 |
 | [R-0152](done/R-0152.md) | Claim and buy native homeland tiles | New capture | [NAT-003](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-013](../gap-analysis.md#founding-father-effects), UC-060/098 |
 | [R-0153](done/R-0153.md) | Maintain tribal anger and local alarm separately | New capture | [NAT-004/005](../gap-analysis.md#native-nations-settlements-and-relations)/[SETUP-005](../gap-analysis.md#setup-and-turn-sequence)/[FATHER-010](../gap-analysis.md#founding-father-effects), UC-003/061/095 |
-| [R-0154](R-0154.md) | Apply native provocation and reconciliation events | New capture | [NAT-007/008](../gap-analysis.md#native-nations-settlements-and-relations) event effects, UC-061/065 |
+| [R-0154](done/R-0154.md) | Apply native provocation and reconciliation events | New capture | [NAT-007/008](../gap-analysis.md#native-nations-settlements-and-relations) event effects, UC-061/065 |
 | [R-0155](done/R-0155.md) | Explain native settlement alarm without color alone | New capture | [NAT-006](../gap-analysis.md#native-nations-settlements-and-relations), UC-061 |
-| [R-0156](R-0156.md) | Let hostile native braves raid and calmer braves stand down | New capture | [NAT-008](../gap-analysis.md#native-nations-settlements-and-relations) AI / DIP-001 native portion, UC-061/068 |
-| [R-0157](R-0157.md) | Choose a legal action on entering a native settlement | New capture | [NAT-009](../gap-analysis.md#native-nations-settlements-and-relations), UC-062–067 |
-| [R-0158](R-0158.md) | Resolve one chief encounter for a scout | New capture | [NAT-010](../gap-analysis.md#native-nations-settlements-and-relations), UC-062 |
+| [R-0156](done/R-0156.md) | Let hostile native braves raid and calmer braves stand down | New capture | [NAT-008](../gap-analysis.md#native-nations-settlements-and-relations) AI / DIP-001 native portion, UC-061/068 |
+| [R-0157](done/R-0157.md) | Choose a legal action on entering a native settlement | New capture | [NAT-009](../gap-analysis.md#native-nations-settlements-and-relations), UC-062–067 |
+| [R-0158](done/R-0158.md) | Resolve one chief encounter for a scout | New capture | [NAT-010](../gap-analysis.md#native-nations-settlements-and-relations), UC-062 |
 | [R-0159](done/R-0159.md) | Maintain native settlement stock and admit legal traders | New capture | [NAT-011/014](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0160](done/R-0160.md) | Sell or gift cargo to a native settlement | New capture | [NAT-012](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
 | [R-0161](done/R-0161.md) | Buy one of three offered native goods | New capture | [NAT-013](../gap-analysis.md#native-nations-settlements-and-relations), UC-064 |
-| [R-0162](R-0162.md) | Demand native tribute without duplicating gold or anger | New capture | [NAT-016](../gap-analysis.md#native-nations-settlements-and-relations) tribute, UC-065 |
+| [R-0162](done/R-0162.md) | Demand native tribute without duplicating gold or anger | New capture | [NAT-016](../gap-analysis.md#native-nations-settlements-and-relations) tribute, UC-065 |
 | [R-0163](done/R-0163.md) | Ordain missionaries and apply Brebeuf's expert effect | Done | [NAT-017](../gap-analysis.md#native-nations-settlements-and-relations)/[FATHER-016](../gap-analysis.md#founding-father-effects), UC-066/101 |
-| [R-0164](R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
-| [R-0165](R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
-| [R-0166](R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
+| [R-0164](done/R-0164.md) | Establish a mission and change local alarm each update | New capture | [NAT-018](../gap-analysis.md#native-nations-settlements-and-relations), UC-066 |
+| [R-0165](done/R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
+| [R-0166](done/R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0167](R-0167.md) | Trade real goods with a peaceful rival colony under de Witt | New capture | [DIP-006](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) trade effect, UC-071/081/100/117 |
 | [R-0169](R-0169.md) | Offer and deliver a paid veteran mercenary group | New capture | [DIP-005](../gap-analysis.md#european-diplomacy-and-rivalry)/[GOV-018](../gap-analysis.md#government-taxation-and-independence), UC-070 |
 | [R-0170](R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
@@ -396,7 +396,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0099](done/R-0099.md) | Apply the privateer exception to European hostilities | Follow-up | [R-0026](done/R-0026.md), [R-0028](done/R-0028.md) |
 | [R-0111](done/R-0111.md) | Promote eligible soldiers to veterans | Follow-up | [R-0023](done/R-0023.md), [R-0028](done/R-0028.md), [R-0029](canceled/R-0029.md) |
 | [R-0173](done/R-0173.md) | Resolve native roles and terrain ambush in land combat | Remainder | COMBAT-003/004/006/007/011; R-0093/0094/0095 delivered/active slices |
-| [R-0174](R-0174.md) | Attack and conquer a defended native settlement | Remainder | NAT-016/SETUP-006; tribute R-0162 separate |
+| [R-0174](done/R-0174.md) | Attack and conquer a defended native settlement | Remainder | NAT-016/SETUP-006; tribute R-0162 separate |
 | [R-0175](R-0175.md) | Create and redeem native-conquest treasure with Cortes | Remainder | NAT-016/FATHER-001; six-hold transport R-0134 separate |
 | [R-0176](R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
 | [R-0177](R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |

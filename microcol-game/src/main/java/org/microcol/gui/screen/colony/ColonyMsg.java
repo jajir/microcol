@@ -17,12 +17,12 @@ public enum ColonyMsg implements MessageKeyResource {
     jobCurrentYield, jobBestYield, jobTarget, jobPotential, jobBellContribution,
     jobInput, jobShortage, jobStockNote, jobSpecialty, jobUnavailable,
     jobACTOR_UNAVAILABLE, jobEQUIPMENT_BLOCKED, jobCROP_UNSUPPORTED,
-    jobNO_ELIGIBLE_FIELD, jobBUILDING_FULL, jobChanged, jobNoChoices,
-    jobDropRejected, clearOpen, clearSummary, clearConfirm, clearChanged,
-    clearUNAVAILABLE, clearNO_CIVILIAN_SPECIALTY, clearTEACHER_COURSE,
-    clearSCHOOL_SLOT, fortifiedMinimum, quickLoad, quickUnload,
-    quickLoadQuestion, quickUnloadQuestion, quickConfirm, quickCancel,
-    quickUNAVAILABLE, quickNO_STOCK, quickNO_HOLD, quickNO_GOODS, quickChanged,
-    townCommonsFood, townCommonsGoods;
+    jobNO_ELIGIBLE_FIELD, jobBUILDING_FULL, jobWORK_FORBIDDEN, jobChanged,
+    jobNoChoices, jobDropRejected, clearOpen, clearSummary, clearConfirm,
+    clearChanged, clearUNAVAILABLE, clearNO_CIVILIAN_SPECIALTY,
+    clearTEACHER_COURSE, clearSCHOOL_SLOT, fortifiedMinimum, quickLoad,
+    quickUnload, quickLoadQuestion, quickUnloadQuestion, quickConfirm,
+    quickCancel, quickUNAVAILABLE, quickNO_STOCK, quickNO_HOLD, quickNO_GOODS,
+    quickChanged, townCommonsFood, townCommonsGoods;
 
 }

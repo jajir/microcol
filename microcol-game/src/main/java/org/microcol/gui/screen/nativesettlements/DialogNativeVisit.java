@@ -15,8 +15,11 @@ import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.GoodsType;
+import org.microcol.model.NativeChiefPreview;
 import org.microcol.model.NativeMarketRules;
 import org.microcol.model.NativeMarketView;
+import org.microcol.model.NativeMissionContestView;
+import org.microcol.model.NativeMissionView;
 import org.microcol.model.NativePurchaseQuote;
 import org.microcol.model.NativeSaleQuote;
 import org.microcol.model.NativeSettlement;
@@ -33,6 +36,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -42,13 +46,13 @@ import javafx.util.StringConverter;
  * every visit action with the limit the model reports, then the land contact
  * and the market admission the model gives this unit. Only an eligible teaching
  * choice offers its button; that button confirms the course first and then runs
- * the model operation. Introduction, opening the market, and the sale, gift or
- * haggle buttons only close the chooser and report the chosen command; the
- * caller runs it after this window has closed, with a confirmation for a sale
- * or gift, and then opens a new chooser with the new state. The purchase of the
- * second stage (R-0161) works the same way: buy, request a discount, or
- * decline. Closing the window changes nothing: the unit, relations, cargo and
- * treasury stay as they were.
+ * the model operation. Introduction, opening the market, the chief, and the
+ * sale, gift or haggle buttons only close the chooser and report the chosen
+ * command; the caller runs it after this window has closed, with a confirmation
+ * for the chief, a sale or a gift, and then opens a new chooser with the new
+ * state. The purchase of the second stage (R-0161) works the same way: buy,
+ * request a discount, or decline. Closing the window changes nothing: the unit,
+ * relations, cargo and treasury stay as they were.
  */
 public final class DialogNativeVisit extends AbstractMessageWindow {
 
@@ -59,6 +63,18 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
     public static final String CHOICE_ID_PREFIX = "nativeVisitChoice_";
 
     public static final String TEACH_BUTTON_ID = "nativeVisitTeach";
+
+    public static final String CHIEF_BUTTON_ID = "nativeVisitChief";
+
+    public static final String MISSION_BUTTON_ID = "nativeVisitMission";
+
+    public static final String CONTEST_BUTTON_ID = "nativeVisitContest";
+
+    public static final String INCITE_BUTTON_ID = "nativeVisitIncite";
+
+    public static final String ATTACK_BUTTON_ID = "nativeVisitAttack";
+
+    public static final String TRIBUTE_BUTTON_ID = "nativeVisitTribute";
 
     /** Explicit command chosen in the chooser, run after it has closed. */
     public enum FollowUp {
@@ -96,7 +112,47 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         PURCHASE_HAGGLE,
 
         /** Decline the pending purchase; nothing is bought. */
-        DECLINE_PURCHASE
+        DECLINE_PURCHASE,
+
+        /**
+         * Confirm and visit the chief; see {@link #getPendingChief()}. The
+         * terms are shown again in a confirmation before anything is drawn.
+         */
+        SCOUT_CHIEF,
+
+        /**
+         * Confirm and establish the shown mission; see
+         * {@link #getPendingMission()}. The terms are shown again in a
+         * confirmation before the missionary leaves the map.
+         */
+        ESTABLISH_MISSION,
+
+        /**
+         * Confirm and challenge the shown rival mission; see
+         * {@link #getPendingContest()}. The terms are shown again in a
+         * confirmation before any missionary leaves the map or dies (R-0165).
+         */
+        CONTEST_MISSION,
+
+        /**
+         * Choose a European target and confirm the paid incitement (R-0166).
+         * The picker shows the model's price and risk; the model re-checks the
+         * confirmed terms.
+         */
+        INCITE,
+
+        /**
+         * Confirm an attack on the settlement's actual defenders (R-0174). The
+         * confirmation shows the model's terms; the model re-checks them.
+         */
+        ATTACK,
+
+        /**
+         * Confirm a tribute demand on the settlement's actual defenders
+         * (R-0162). The confirmation shows the model's terms; the model
+         * re-checks them.
+         */
+        TRIBUTE
 
     }
 
@@ -196,6 +252,21 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
 
     private final Runnable onTeach;
 
+    /** Terms of the chief visit the model offers now, or null for none. */
+    private final NativeChiefPreview chief;
+
+    private NativeChiefPreview pendingChief;
+
+    /** Terms of the mission the model offers now, or null for none. */
+    private final NativeMissionView mission;
+
+    private NativeMissionView pendingMission;
+
+    /** Terms of the rival-mission contest the model offers now, or null. */
+    private final NativeMissionContestView contest;
+
+    private NativeMissionContestView pendingContest;
+
     private FollowUp followUp = FollowUp.NONE;
 
     private NativeSaleQuote pendingSale;
@@ -220,6 +291,18 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
     private final List<Label> choiceLabels;
 
     private final Button teach = new Button();
+
+    private final Button chiefButton = new Button();
+
+    private final Button missionButton = new Button();
+
+    private final Button contestButton = new Button();
+
+    private final Button incitementButton = new Button();
+
+    private final Button attackButton = new Button();
+
+    private final Button tributeButton = new Button();
 
     private final Label contact = new Label();
 
@@ -321,6 +404,13 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
      * @param onTeach   run once the player confirms learning in the
      *                  confirmation window; the model operation runs there, not
      *                  here
+     * @param chief     terms of the chief visit the model offers now, or null
+     *                  when it is not available; the button only chooses it
+     * @param mission   terms of the mission the model offers now, or null when
+     *                  it is not available; the button only chooses it
+     * @param contest   terms of the rival-mission contest the model offers now,
+     *                  or null when it is not available; the button only
+     *                  chooses it (R-0165)
      * @param kept      selection of the previous chooser after a backed-out
      *                  confirmation, or null to start from the model's offer
      */
@@ -328,7 +418,9 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
             final NativeSettlement settlement,
             final List<NativeVisitChoice> choices, final UnitType visitorType,
             final NativeMarketView market, final SaleTerms saleTerms,
-            final Runnable onTeach, final Selection kept) {
+            final Runnable onTeach, final NativeChiefPreview chief,
+            final NativeMissionView mission,
+            final NativeMissionContestView contest, final Selection kept) {
         super(viewUtil, i18n);
         this.settlement = settlement;
         this.choices = List.copyOf(choices);
@@ -336,6 +428,9 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         this.market = market;
         this.saleTerms = saleTerms;
         this.onTeach = onTeach;
+        this.chief = chief;
+        this.mission = mission;
+        this.contest = contest;
         this.kept = kept;
         buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
@@ -359,6 +454,69 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
                     close();
                     onTeach.run();
                 }).showAndWait());
+        chiefButton.setId(CHIEF_BUTTON_ID);
+        chiefButton.setVisible(chief != null);
+        chiefButton.setManaged(chief != null);
+        chiefButton.setOnAction(e -> {
+            pendingChief = chief;
+            followUp = FollowUp.SCOUT_CHIEF;
+            close();
+        });
+        missionButton.setId(MISSION_BUTTON_ID);
+        missionButton.setVisible(mission != null);
+        missionButton.setManaged(mission != null);
+        missionButton.setOnAction(e -> {
+            pendingMission = mission;
+            followUp = FollowUp.ESTABLISH_MISSION;
+            close();
+        });
+        contestButton.setId(CONTEST_BUTTON_ID);
+        contestButton.setVisible(contest != null);
+        contestButton.setManaged(contest != null);
+        contestButton.setOnAction(e -> {
+            pendingContest = contest;
+            followUp = FollowUp.CONTEST_MISSION;
+            close();
+        });
+        // A separate choice beside the mission and contest (R-0166): it is
+        // offered only when the model reports the incitement available.
+        incitementButton.setId(INCITE_BUTTON_ID);
+        final boolean incitable = this.choices.stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.INCITE
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+        incitementButton.setVisible(incitable);
+        incitementButton.setManaged(incitable);
+        incitementButton.setOnAction(e -> {
+            followUp = FollowUp.INCITE;
+            close();
+        });
+        // The attack is offered only when the model reports real defenders and
+        // attack terms; the confirmation then shows the exact terms (R-0174).
+        attackButton.setId(ATTACK_BUTTON_ID);
+        final boolean attackable = this.choices.stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.ATTACK
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+        attackButton.setVisible(attackable);
+        attackButton.setManaged(attackable);
+        attackButton.setOnAction(e -> {
+            followUp = FollowUp.ATTACK;
+            close();
+        });
+        // The demand is offered only when the model reports real defenders and
+        // no wait; the confirmation then shows the exact terms (R-0162).
+        tributeButton.setId(TRIBUTE_BUTTON_ID);
+        final boolean tributable = this.choices.stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.TRIBUTE
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+        tributeButton.setVisible(tributable);
+        tributeButton.setManaged(tributable);
+        tributeButton.setOnAction(e -> {
+            followUp = FollowUp.TRIBUTE;
+            close();
+        });
         final boolean admitted = isAdmitted();
         // The second stage shows the same offered goods, even with no goods
         // held.
@@ -411,7 +569,22 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         // sale and a purchase are shown together.
         final VBox statusBox = new VBox(6, contact, admission, introduce,
                 openMarket, expedition, wanted, treasury);
-        final VBox visitBox = new VBox(10, skill, list, teach, statusBox);
+        // Teaching and the chief share one row, so the column keeps its height.
+        final HBox visitCommands = new HBox(8, teach, chiefButton);
+        // Tribute and the attack share one row as well, wrapping inside the
+        // column for longer labels, so an armed visitor's chooser stays within
+        // 900x750. The row takes no space when neither action is offered.
+        final FlowPane armedCommands = new FlowPane(8, 6, tributeButton,
+                attackButton);
+        armedCommands.setPrefWrapLength(360);
+        final boolean armedShown = tributeButton.isManaged()
+                || attackButton.isManaged();
+        armedCommands.setVisible(armedShown);
+        armedCommands.setManaged(armedShown);
+        final VBox visitBox = new VBox(10, skill, list, visitCommands,
+                missionButton, contestButton, incitementButton, armedCommands,
+                statusBox);
+        visitBox.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         visitBox.setMinWidth(360);
         visitBox.setPrefWidth(360);
         final VBox marketBox = new VBox(6);
@@ -898,6 +1071,30 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
     }
 
     /**
+     * @return the chief terms the player chose to visit, shown when the
+     *         follow-up is {@link FollowUp#SCOUT_CHIEF}
+     */
+    public NativeChiefPreview getPendingChief() {
+        return pendingChief;
+    }
+
+    /**
+     * @return the mission the player chose to establish, shown when the
+     *         follow-up is {@link FollowUp#ESTABLISH_MISSION}
+     */
+    public NativeMissionView getPendingMission() {
+        return pendingMission;
+    }
+
+    /**
+     * @return the rival-mission contest the player chose to challenge, shown
+     *         when the follow-up is {@link FollowUp#CONTEST_MISSION}
+     */
+    public NativeMissionContestView getPendingContest() {
+        return pendingContest;
+    }
+
+    /**
      * @return the sale or gift the player chose to confirm, shown when the
      *         follow-up is {@link FollowUp#SELL} or {@link FollowUp#GIFT}
      */
@@ -924,6 +1121,12 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
                 .get(UnitTypes.getUnitName(settlement.getTeachableSkill()));
         skill.setText(i18n.get(Loc.nativeVisitSkillLine, offered));
         teach.setText(i18n.get(Loc.nativeVisitTeachButton));
+        chiefButton.setText(i18n.get(Loc.nativeVisitChiefButton));
+        missionButton.setText(i18n.get(Loc.nativeVisitMissionButton));
+        contestButton.setText(i18n.get(Loc.nativeVisitContestButton));
+        incitementButton.setText(i18n.get(Loc.nativeVisitIncitementButton));
+        attackButton.setText(i18n.get(Loc.nativeVisitActionAttack));
+        tributeButton.setText(i18n.get(Loc.nativeVisitActionTribute));
         buttonBar.setButtonText(i18n.get(Loc.ok));
         for (int i = 0; i < choices.size(); i++) {
             final NativeVisitChoice choice = choices.get(i);
@@ -1021,6 +1224,8 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
             return Loc.nativeVisitActionTribute;
         case MISSION:
             return Loc.nativeVisitActionMission;
+        case INCITE:
+            return Loc.nativeVisitActionIncite;
         case ATTACK:
             return Loc.nativeVisitActionAttack;
         default:
@@ -1038,6 +1243,18 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
             return Loc.nativeVisitLimitNotYetAvailable;
         case SETTLEMENT_OCCUPIED:
             return Loc.nativeVisitLimitSettlementOccupied;
+        case MISSION_OCCUPIED:
+            return Loc.nativeVisitLimitMissionOccupied;
+        case CONTEST_AVAILABLE:
+            return Loc.nativeVisitLimitContestAvailable;
+        case NO_INCITEMENT_TARGET:
+            return Loc.nativeVisitLimitNoIncitementTarget;
+        case NO_ATTACK_TARGET:
+            return Loc.nativeVisitLimitNoAttackTarget;
+        case TRIBUTE_COOLDOWN:
+            return Loc.nativeVisitLimitTributeCooldown;
+        case NO_TRIBUTE_TARGET:
+            return Loc.nativeVisitLimitNoTributeTarget;
         case AVAILABLE:
             return Loc.nativeVisitLimitAvailable;
         default:

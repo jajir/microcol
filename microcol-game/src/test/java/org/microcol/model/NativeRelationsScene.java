@@ -354,6 +354,23 @@ final class NativeRelationsScene {
         return this;
     }
 
+    /**
+     * Give a colonial player a Congress whose only member is Jean de Brebeuf.
+     */
+    NativeRelationsScene brebeufMember(final String owner) {
+        final CongressPo congress = player(owner).getCongress();
+        congress.setActivated(true);
+        congress.setBells(0);
+        congress.setMembers(List.of(Founder.JEAN_DE_BREBEUF));
+        congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
+                Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
+                Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
+        congress.setSelected(null);
+        congress.setGeneration(2);
+        congress.setJonesDeliveryPending(false);
+        return this;
+    }
+
     /** Give a colonial player a Congress whose only member is Pocahontas. */
     NativeRelationsScene pocahontasMember(final String owner) {
         final CongressPo congress = player(owner).getCongress();

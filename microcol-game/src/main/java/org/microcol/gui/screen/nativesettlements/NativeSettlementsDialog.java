@@ -10,6 +10,7 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.NativeMissionView;
 import org.microcol.model.NativeRelationView;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.NativeTeachingCourse;
@@ -50,6 +51,8 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
 
     public static final String NONE_ID = "nativeSettlementsNone";
 
+    public static final String MISSION_ID = "nativeSettlementMission";
+
     public static final String TEACHING_ID = "nativeSettlementTeaching";
 
     public static final String STOP_TEACHING_ID = "nativeSettlementStopTeaching";
@@ -75,6 +78,8 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
     private final Label alarmChange = new Label();
 
     private final Label rival = new Label();
+
+    private final Label mission = new Label();
 
     private final Label teaching = new Label();
 
@@ -122,6 +127,8 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
         alarmChange.setWrapText(true);
         rival.setId(RIVAL_ID);
         rival.setWrapText(true);
+        mission.setId(MISSION_ID);
+        mission.setWrapText(true);
         teaching.setId(TEACHING_ID);
         teaching.setWrapText(true);
         stopTeaching.setId(STOP_TEACHING_ID);
@@ -130,7 +137,7 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
             close();
         });
         final VBox details = new VBox(8, none, attitude, alarmChange, rival,
-                teaching, stopTeaching);
+                mission, teaching, stopTeaching);
         details.setPrefWidth(300);
         final HBox main = new HBox(20, settlementList, details);
         final VBox root = new VBox(10, main, buttonBar.getContent());
@@ -199,9 +206,30 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
                     statusBarMessageService.nativeAlarmChangeText(relation));
             rival.setText(statusBarMessageService.nativeRivalText(relation));
         });
+        showMission(empty ? Optional.empty()
+                : gameModelController.getModel().getNativeMissionView(
+                        gameModelController.getHumanPlayer(), settlement));
         showTeaching(empty ? Optional.empty()
                 : gameModelController.getModel()
                         .getNativeTeachingCourse(settlement));
+    }
+
+    /**
+     * Owner, expertise, the owner's attitude and the progress of the mission,
+     * read from the model. The line stays while the missionary is stationed,
+     * even when it is not on the map.
+     */
+    private void showMission(final Optional<NativeMissionView> view) {
+        final boolean shown = view.isPresent();
+        mission.setVisible(shown);
+        mission.setManaged(shown);
+        view.ifPresent(terms -> mission.setText(i18n.get(
+                Loc.nativeMissionSummary, terms.getOwnerName(),
+                i18n.get(DialogNativeMission
+                        .expertName(terms.isEffectiveExpert())),
+                i18n.get(DialogNativeChief.moodName(terms.getHostility())),
+                terms.getCompletedUpdates(),
+                NativeMissionView.REQUIRED_UPDATES)));
     }
 
     /**

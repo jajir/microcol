@@ -48,6 +48,15 @@ public final class NativeRelations {
     /** Raise of both measures for a tribute demand, paid or refused. */
     private static final double TRIBUTE_RAISE = 10;
 
+    /** Owner-local alarm reduction of a mission with an ordinary missionary. */
+    static final double MISSION_ORDINARY_REDUCTION = 2;
+
+    /** Owner-local alarm reduction of a mission with an expert missionary. */
+    static final double MISSION_EXPERT_REDUCTION = 4;
+
+    /** Rival-local alarm raise of each mission update, per contacted rival. */
+    static final double MISSION_RIVAL_RAISE = 1;
+
     /** Local alarm reduction of a completed trade. */
     private static final double TRADE_REDUCTION = 2;
 
@@ -91,7 +100,7 @@ public final class NativeRelations {
             final Map<Integer, Map<EuropeanNation, Double>> previousLocalAlarm,
             final Map<EuropeanNation, Map<NativeNation, Integer>> armsRemainders,
             final Set<Long> appliedOutcomes) {
-        this.settlements = settlements;
+        this.settlements = new ArrayList<>(settlements);
         this.tribalAnger = tribalAnger;
         this.localAlarm = localAlarm;
         this.previousLocalAlarm = previousLocalAlarm;
@@ -324,9 +333,19 @@ public final class NativeRelations {
      */
     NativeHostility getHostility(final NativeSettlement settlement,
             final EuropeanNation european) {
-        return NativeHostility
-                .of(Math.max(getTribalAnger(settlement.getNation(), european),
-                        getLocalAlarm(settlement, european)));
+        return NativeHostility.of(getHostilityValue(settlement, european));
+    }
+
+    /**
+     * @param settlement required settlement
+     * @param european   required European
+     * @return the exact number behind {@link #getHostility}: the larger of the
+     *         nation's tribal anger and this settlement's local alarm, 0 to 100
+     */
+    double getHostilityValue(final NativeSettlement settlement,
+            final EuropeanNation european) {
+        return Math.max(getTribalAnger(settlement.getNation(), european),
+                getLocalAlarm(settlement, european));
     }
 
     /**
@@ -343,6 +362,21 @@ public final class NativeRelations {
             final EuropeanNation european) {
         return getLocalAlarm(settlement, european)
                 - previousLocalAlarm.get(settlement.getId()).get(european);
+    }
+
+    /**
+     * Drop the rows of a conquered settlement (R-0174). Its local alarm no
+     * longer feeds any tribe, and tribal anger of its nation is kept as it
+     * stands.
+     *
+     * @param settlement required settlement that was conquered
+     */
+    void removeSettlement(final NativeSettlement settlement) {
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkArgument(settlements.remove(settlement),
+                "Native settlement is not registered");
+        localAlarm.remove(settlement.getId());
+        previousLocalAlarm.remove(settlement.getId());
     }
 
     /**
@@ -409,6 +443,23 @@ public final class NativeRelations {
     }
 
     /**
+     * Raise tribal anger to at least a floor, for a successful incitement
+     * (R-0166). A higher anger is kept; the national and founder factors never
+     * apply to it.
+     *
+     * @param nation   required native nation
+     * @param european required European
+     * @param floor    finite value from 0 to 100
+     */
+    void raiseTribalAngerTo(final NativeNation nation,
+            final EuropeanNation european, final double floor) {
+        Preconditions.checkArgument(isValid(floor),
+                "Native tribal anger floor is out of range");
+        final Map<EuropeanNation, Double> row = tribalAnger.get(nation);
+        row.put(european, Math.max(row.get(european), floor));
+    }
+
+    /**
      * Local positive pressure of one settlement, such as a later trigger from
      * R-0154. The national and founder factor applies here.
      *
@@ -424,6 +475,24 @@ public final class NativeRelations {
         final Map<EuropeanNation, Double> row = localAlarm
                 .get(settlement.getId());
         row.put(european, clamp(row.get(european) + amount * localFactor));
+    }
+
+    /**
+     * Owner-local reduction of a mission (R-0164). Only the owner's local alarm
+     * of that settlement moves: no tribal anger is reduced, the national factor
+     * never applies to a reduction, and the clamp keeps the alarm in 0..100.
+     * Tribal anger follows at the owner's next peaceful update.
+     *
+     * @param settlement required settlement of the mission
+     * @param european   required owner of the mission
+     * @param reduction  finite nonnegative amount to remove
+     */
+    void lowerLocalAlarm(final NativeSettlement settlement,
+            final EuropeanNation european, final double reduction) {
+        checkAmount(reduction);
+        final Map<EuropeanNation, Double> row = localAlarm
+                .get(settlement.getId());
+        row.put(european, clamp(row.get(european) - reduction));
     }
 
     /**

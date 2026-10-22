@@ -66,10 +66,10 @@ public class TC_127_F118_native_visit_choices_test
     private static final int FOREST_BRAVE_ID = 201;
     private static final Location FOREST_BRAVE = Location.of(24, 15);
 
-    private static final String PENDING_EN = "Not available yet.";
+    /** Armed role, but the settlement has no defender to attack (R-0174). */
+    private static final String NO_DEFENDER_EN = "No defender of this settlement can be attacked from here.";
     private static final String AVAILABLE_EN = "Available now.";
     private static final String ROLE_EN = "Your unit's role cannot do this.";
-    private static final String PENDING_CS = "Zatím není k dispozici.";
     private static final String AVAILABLE_CS = "Nyní k dispozici.";
     private static final String ROLE_CS = "Role jednotky to neumožňuje.";
 
@@ -103,11 +103,11 @@ public class TC_127_F118_native_visit_choices_test
         // move; the scout may meet the chief and learn, but cannot fight.
         visit.enterSettlement(SCOUT_AT, CAPITAL);
         visit.verifyChooser("Offers to teach: Expert Farmer.",
-                "Visit the chief: " + PENDING_EN,
+                "Visit the chief: " + AVAILABLE_EN,
                 "Learn the offered skill: " + AVAILABLE_EN, "Trade: " + ROLE_EN,
-                "Demand tribute: " + PENDING_EN,
+                "Demand tribute: " + AVAILABLE_EN,
                 "Establish a mission: " + ROLE_EN,
-                "Attack the settlement: " + ROLE_EN);
+                "Attack settlement: " + ROLE_EN);
         visit.verifyTeachButtonShown();
         visit.verifyCloseButtonFocused();
         visit.verifyChooserFits(900, 750);
@@ -149,7 +149,7 @@ public class TC_127_F118_native_visit_choices_test
                 "Visit the chief: " + ROLE_EN,
                 "Learn the offered skill: " + ROLE_EN, "Trade: " + ROLE_EN,
                 "Demand tribute: " + ROLE_EN, "Establish a mission: " + ROLE_EN,
-                "Attack the settlement: " + ROLE_EN);
+                "Attack settlement: " + ROLE_EN);
         // A criminal has no teaching button, so only the refusal is shown.
         visit.verifyTeachButtonHidden();
 
@@ -176,16 +176,16 @@ public class TC_127_F118_native_visit_choices_test
         fog.centerFrontier();
         visit.rememberMovement(SOLDIER_ID);
 
-        // The armed soldier drags onto the capital. The attack and the tribute
-        // demand are listed but not yet available, the soldier is no scout, and
-        // no battle is fought.
+        // The armed soldier drags onto the capital. The tribute demand is open
+        // with no defender on the square, the attack has no defender to strike,
+        // the soldier is no scout, and no battle or payment is made.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
         visit.verifyChooser("Offers to teach: Expert Farmer.",
                 "Visit the chief: " + ROLE_EN,
                 "Learn the offered skill: " + AVAILABLE_EN, "Trade: " + ROLE_EN,
-                "Demand tribute: " + PENDING_EN,
+                "Demand tribute: " + AVAILABLE_EN,
                 "Establish a mission: " + ROLE_EN,
-                "Attack the settlement: " + PENDING_EN);
+                "Attack settlement: " + NO_DEFENDER_EN);
         visit.verifyTeachButtonShown();
         visit.escape();
         visit.verifyChooserClosed();
@@ -227,9 +227,9 @@ public class TC_127_F118_native_visit_choices_test
         // The Czech chooser names the skill and the same role limits.
         visit.enterSettlement(SCOUT_AT, CAPITAL);
         visit.verifyChooser("Nabízí výuku: zkušený farmář.",
-                "Navštívit náčelníka: " + PENDING_CS,
+                "Navštívit náčelníka: " + AVAILABLE_CS,
                 "Naučit se nabízenou dovednost: " + AVAILABLE_CS,
-                "Obchodovat: " + ROLE_CS, "Požadovat tribut: " + PENDING_CS,
+                "Obchodovat: " + ROLE_CS, "Požadovat tribut: " + AVAILABLE_CS,
                 "Založit misi: " + ROLE_CS, "Zaútočit na sídlo: " + ROLE_CS);
         visit.verifyChooserFits(900, 750);
         visit.captureChooser("native-visit-scout-cs.png");

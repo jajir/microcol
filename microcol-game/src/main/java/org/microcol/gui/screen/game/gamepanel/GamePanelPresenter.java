@@ -8,12 +8,20 @@ import java.util.stream.Collectors;
 import org.microcol.gui.dialog.ChoosePassengerDialog;
 
 import org.microcol.gui.Loc;
+import org.microcol.gui.screen.game.components.StatusBarMessageService;
 import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
+import org.microcol.gui.screen.nativesettlements.DialogNativeAttack;
+import org.microcol.gui.screen.nativesettlements.DialogNativeChief;
+import org.microcol.gui.screen.nativesettlements.DialogNativeContest;
+import org.microcol.gui.screen.nativesettlements.DialogNativeIncitement;
+import org.microcol.gui.screen.nativesettlements.DialogNativeMission;
 import org.microcol.gui.screen.nativesettlements.DialogNativePurchase;
 import org.microcol.gui.screen.nativesettlements.DialogNativeSale;
+import org.microcol.gui.screen.nativesettlements.DialogNativeTribute;
 import org.microcol.gui.screen.nativesettlements.DialogNativeVisit;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.buttonpanel.Buttons;
@@ -35,10 +43,23 @@ import org.microcol.model.Colony;
 import org.microcol.model.Model;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.NativeChiefOutcome;
+import org.microcol.model.NativeConquestQuote;
+import org.microcol.model.NativeConquestResult;
+import org.microcol.model.NativeChiefPreview;
+import org.microcol.model.NativeChiefResult;
 import org.microcol.model.NativeMarketView;
+import org.microcol.model.EuropeanNation;
+import org.microcol.model.NativeIncitementOutcome;
+import org.microcol.model.NativeIncitementQuote;
+import org.microcol.model.NativeMissionContestOutcome;
+import org.microcol.model.NativeMissionContestView;
+import org.microcol.model.NativeMissionView;
 import org.microcol.model.NativePurchaseQuote;
 import org.microcol.model.NativeSaleQuote;
 import org.microcol.model.NativeSettlement;
+import org.microcol.model.NativeTributeQuote;
+import org.microcol.model.NativeTributeResult;
 import org.microcol.model.NativeVisitChoice;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -404,7 +425,17 @@ public final class GamePanelPresenter {
                             // The colonist left the map for the course.
                             selectedUnitManager.forgetRemovedUnit(visitor);
                         }
-                    }, kept);
+                    },
+                    gameModelController.getModel()
+                            .getNativeChiefPreview(visitor, settlement)
+                            .orElse(null),
+                    gameModelController.getModel()
+                            .getNativeMissionPreview(visitor, settlement)
+                            .orElse(null),
+                    gameModelController.getModel()
+                            .getNativeMissionContestPreview(visitor, settlement)
+                            .orElse(null),
+                    kept);
             dialog.showAndWait();
             followUp = dialog.getFollowUp();
             kept = null;
@@ -436,6 +467,33 @@ public final class GamePanelPresenter {
                         settlement)) {
                     showNativeMessage(Loc.nativePurchaseDeclined);
                 }
+            } else if (followUp == DialogNativeVisit.FollowUp.SCOUT_CHIEF) {
+                if (confirmNativeChief(visitor, settlement,
+                        dialog.getPendingChief())) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.ESTABLISH_MISSION) {
+                if (confirmNativeMission(visitor, settlement,
+                        dialog.getPendingMission())) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.CONTEST_MISSION) {
+                if (confirmNativeContest(visitor, settlement,
+                        dialog.getPendingContest())) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.INCITE) {
+                if (confirmNativeIncitement(visitor, settlement)) {
+                    kept = dialog.getSelection();
+                }
+            } else if (followUp == DialogNativeVisit.FollowUp.ATTACK) {
+                // A confirmed attack is not carried back to the chooser: the
+                // chooser reopens on the actual state after the battle.
+                confirmNativeAttack(visitor, settlement);
+            } else if (followUp == DialogNativeVisit.FollowUp.TRIBUTE) {
+                // A confirmed demand is not carried back either: the chooser
+                // reopens on the actual state after the payment or refusal.
+                confirmNativeTribute(visitor, settlement);
             }
         } while (followUp != DialogNativeVisit.FollowUp.NONE);
     }
@@ -536,6 +594,329 @@ public final class GamePanelPresenter {
                     offered.getGold());
         }
         return false;
+    }
+
+    /**
+     * Ask for an explicit confirmation of the chief visit after the chooser has
+     * closed (R-0158). The mood and the exact risk are shown there, before the
+     * one draw. Only a confirmed visit reaches the model, which re-checks the
+     * terms; a closed or cancelled confirmation changes nothing. The actual
+     * result is then reported, and a killed scout leaves the selection.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativeChief(final Unit visitor,
+            final NativeSettlement settlement, final NativeChiefPreview shown) {
+        if (shown == null) {
+            return false;
+        }
+        final DialogNativeChief confirmation = new DialogNativeChief(viewUtil,
+                i18n, shown);
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        gameModelController.visitNativeChief(visitor, settlement, shown)
+                .ifPresent(result -> {
+                    if (result.getOutcome() == NativeChiefOutcome.DEATH) {
+                        selectedUnitManager.forgetRemovedUnit(visitor);
+                    }
+                    showNativeChiefResult(result);
+                });
+        return false;
+    }
+
+    /**
+     * Ask for an explicit confirmation of the mission after the chooser has
+     * closed (R-0164). Only a confirmed mission reaches the model, which
+     * re-checks the terms; a closed or cancelled confirmation changes nothing.
+     * An established mission takes the missionary off the map, so it leaves the
+     * selection.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativeMission(final Unit visitor,
+            final NativeSettlement settlement, final NativeMissionView shown) {
+        if (shown == null) {
+            return false;
+        }
+        final DialogNativeMission confirmation = new DialogNativeMission(
+                viewUtil, i18n, shown);
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        if (gameModelController.establishNativeMission(visitor, settlement,
+                shown)) {
+            selectedUnitManager.forgetRemovedUnit(visitor);
+        }
+        return false;
+    }
+
+    /**
+     * Ask for an explicit confirmation of the rival-mission contest after the
+     * chooser has closed (R-0165). Only a confirmed contest reaches the model,
+     * which re-checks the terms and draws once; a closed or cancelled
+     * confirmation changes nothing. Either outcome takes the visitor off the
+     * map, so it leaves the selection.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativeContest(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeMissionContestView shown) {
+        if (shown == null) {
+            return false;
+        }
+        final DialogNativeContest confirmation = new DialogNativeContest(
+                viewUtil, i18n, shown);
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        gameModelController.contestNativeMission(visitor, settlement, shown)
+                .ifPresent(outcome -> {
+                    selectedUnitManager.forgetRemovedUnit(visitor);
+                    showNativeContestResult(outcome);
+                });
+        return false;
+    }
+
+    /**
+     * Ask for the target and an explicit confirmation of the paid incitement
+     * (R-0166), after the chooser has closed. The picker only reads the model's
+     * terms and names; only a confirmed choice reaches the model, which
+     * re-checks the terms, the purse and the order, then pays and draws once.
+     * The actual result is then reported with the exact debit and the order.
+     *
+     * @return whether the player backed out of the confirmation, so the next
+     *         chooser returns to the same offer
+     */
+    private boolean confirmNativeIncitement(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Model model = gameModelController.getModel();
+        final List<EuropeanNation> targets = model
+                .getNativeIncitementTargets(visitor, settlement);
+        if (targets.isEmpty()) {
+            return false;
+        }
+        final DialogNativeIncitement confirmation = new DialogNativeIncitement(
+                viewUtil, i18n, settlement.getNation(), targets,
+                target -> model.getNativeIncitementQuote(visitor, settlement,
+                        target),
+                target -> model.getPlayerByName(target.getPlayerName())
+                        .getDisplayName());
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return true;
+        }
+        final NativeIncitementQuote shown = confirmation.getShownQuote();
+        gameModelController.incite(visitor, settlement, shown)
+                .ifPresent(outcome -> showNativeIncitementResult(outcome,
+                        visitor, settlement, shown));
+        return false;
+    }
+
+    /**
+     * Report the actual result of the incitement: the exact gold now held after
+     * the payment, and on success the tribe's order read from the model.
+     */
+    private void showNativeIncitementResult(
+            final NativeIncitementOutcome outcome, final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeIncitementQuote shown) {
+        final Model model = gameModelController.getModel();
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeIncitementTitle));
+        final String target = model
+                .getPlayerByName(shown.getTarget().getPlayerName())
+                .getDisplayName();
+        if (outcome == NativeIncitementOutcome.SUCCESS) {
+            final int turns = model
+                    .getNativeIncitementOrder(settlement.getNation())
+                    .orElseThrow().getRemainingTurns();
+            dialog.setText(
+                    i18n.get(Loc.nativeIncitementSucceeded, shown.getPrice(),
+                            visitor.getOwner().getGold(), target, turns));
+        } else {
+            dialog.setText(i18n.get(Loc.nativeIncitementFailed,
+                    shown.getPrice(), visitor.getOwner().getGold()));
+        }
+        dialog.showAndWait();
+    }
+
+    /**
+     * Show the attack terms read from the model and ask for an explicit
+     * confirmation (R-0174). Back changes nothing. A confirmed attack reaches
+     * the model, which re-checks the frozen terms before its first draw; its
+     * actual result is then reported.
+     */
+    private void confirmNativeAttack(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Model model = gameModelController.getModel();
+        final Optional<NativeConquestQuote> terms = model
+                .getNativeConquestQuote(visitor, settlement);
+        if (terms.isEmpty()) {
+            return;
+        }
+        final DialogNativeAttack confirmation = new DialogNativeAttack(viewUtil,
+                i18n, terms.get());
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return;
+        }
+        gameModelController
+                .attack(visitor, settlement, confirmation.getShownQuote())
+                .ifPresent(result -> showNativeAttackResult(result, visitor,
+                        settlement));
+    }
+
+    /**
+     * Show the tribute terms read from the model and ask for an explicit
+     * confirmation (R-0162). Back changes nothing. A confirmed demand reaches
+     * the model, which re-checks the frozen terms before any change; its actual
+     * result is then reported.
+     */
+    private void confirmNativeTribute(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Optional<NativeTributeQuote> terms = gameModelController
+                .getModel().getNativeTributeQuote(visitor, settlement);
+        if (terms.isEmpty()) {
+            return;
+        }
+        final DialogNativeTribute confirmation = new DialogNativeTribute(
+                viewUtil, i18n, terms.get());
+        confirmation.showAndWait();
+        if (!confirmation.isConfirmed()) {
+            return;
+        }
+        gameModelController
+                .demandNativeTribute(visitor, settlement,
+                        confirmation.getShownQuote())
+                .ifPresent(this::showNativeTributeResult);
+    }
+
+    /**
+     * Report the actual result of the demand: the gold moved, an empty treasury
+     * that paid nothing, or the refusal, whose anger the relations already
+     * show.
+     */
+    private void showNativeTributeResult(final NativeTributeResult result) {
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeTributeTitle));
+        if (!result.isAccepted()) {
+            dialog.setText(i18n.get(Loc.nativeTributeResultRefused));
+        } else if (result.getGold() == 0) {
+            dialog.setText(i18n.get(Loc.nativeTributeResultEmpty));
+        } else {
+            dialog.setText(
+                    i18n.get(Loc.nativeTributeResultPaid, result.getGold()));
+        }
+        dialog.showAndWait();
+    }
+
+    /**
+     * Report the actual outcome of the attack: the defenders overcome, whether
+     * the settlement was conquered, a lost attacking unit and a trapped
+     * colonist or missionary that died with the settlement.
+     */
+    private void showNativeAttackResult(final NativeConquestResult result,
+            final Unit visitor, final NativeSettlement settlement) {
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeAttackTitle));
+        final StringBuilder text = new StringBuilder(i18n.get(
+                result.isConquered() ? Loc.nativeAttackConquered
+                        : Loc.nativeAttackRepelled,
+                result.getDefendersDefeated()));
+        if (result.isAttackerLost()) {
+            text.append(' ').append(i18n.get(Loc.nativeAttackUnitLost));
+        }
+        result.getPromotion().ifPresent(promotion -> {
+            final String status = promotion.isVeteran()
+                    ? i18n.get(
+                            org.microcol.gui.dialog.Dialog.fight_veteranStatus)
+                    : i18n.get(org.microcol.gui.UnitTypes
+                            .getUnitName(promotion.getToType()));
+            text.append(' ')
+                    .append(i18n.get(
+                            org.microcol.gui.dialog.Dialog.fight_promoted,
+                            visitor.getOwner().getDisplayName(),
+                            promotion.getUnitId(), status));
+        });
+        // Only the player's own pupil and missionary are named here; a rival's
+        // loss reaches its owner through the saved turn report.
+        for (final NativeConquestResult.Loss loss : result.getLosses()) {
+            if (loss.getOwnerName().equals(visitor.getOwner().getName())) {
+                text.append(' ')
+                        .append(i18n.get(
+                                loss.isPupil() ? Loc.nativeConquestLossPupil
+                                        : Loc.nativeConquestLossMissionary,
+                                i18n.get(org.microcol.gui.UnitTypes
+                                        .getUnitName(loss.getType())),
+                                i18n.get(StatusBarMessageService
+                                        .nationLabel(settlement.getNation()))));
+            }
+        }
+        dialog.setText(text.toString());
+        dialog.showAndWait();
+    }
+
+    /**
+     * Report the actual result of the contest: the rival missionary died and
+     * the visitor holds the mission, or the visitor died and the rival mission
+     * stays.
+     */
+    private void showNativeContestResult(
+            final NativeMissionContestOutcome outcome) {
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeContestTitle));
+        dialog.setText(i18n.get(outcome == NativeMissionContestOutcome.SUCCESS
+                ? Loc.nativeContestWon
+                : Loc.nativeContestLost));
+        dialog.showAndWait();
+    }
+
+    /**
+     * Report the actual result of the chief visit: the gold given, the death of
+     * the scout, or the information, which a repeat visit gives again.
+     */
+    private void showNativeChiefResult(final NativeChiefResult result) {
+        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
+        dialog.setTitle(i18n.get(Loc.nativeChiefTitle));
+        dialog.setText(chiefResultText(result));
+        dialog.showAndWait();
+    }
+
+    private String chiefResultText(final NativeChiefResult result) {
+        if (result.getOutcome() == NativeChiefOutcome.GOLD) {
+            return i18n.get(Loc.nativeChiefGold, result.getGold());
+        }
+        if (result.getOutcome() == NativeChiefOutcome.DEATH) {
+            return i18n.get(Loc.nativeChiefDeath);
+        }
+        final NativeChiefResult.Information information = result
+                .getInformation().orElseThrow();
+        final LocalizationHelper names = new LocalizationHelper(i18n);
+        return i18n.get(
+                result.isRepeat() ? Loc.nativeChiefRepeatInformation
+                        : Loc.nativeChiefInformation,
+                chiefList(information.getOfferedGoods().stream()
+                        .map(goods -> i18n
+                                .get(GoodsTypeName.getNameForGoodsType(goods)))
+                        .collect(Collectors.toList())),
+                chiefList(information.getWantedGoods().stream()
+                        .map(goods -> i18n
+                                .get(GoodsTypeName.getNameForGoodsType(goods)))
+                        .collect(Collectors.toList())),
+                names.getUnitName(information.getTeachableSkill()));
+    }
+
+    private String chiefList(final List<String> items) {
+        return items.isEmpty() ? i18n.get(Loc.nativeChiefNone)
+                : String.join(", ", items);
     }
 
     /**

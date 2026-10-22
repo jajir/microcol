@@ -73,6 +73,7 @@
     <entry key="jobCROP_UNSUPPORTED">This crop cannot be produced on the current field. Choose another crop or use a different field.</entry>
     <entry key="jobNO_ELIGIBLE_FIELD">No eligible field is available for this crop.</entry>
     <entry key="jobBUILDING_FULL">All jobs in this building are occupied.</entry>
+    <entry key="jobWORK_FORBIDDEN">A native convert cannot work in a manufacturing building.</entry>
     <entry key="jobChanged">The worker or job changed. Nothing was assigned. Review the refreshed choices and confirm again or cancel.</entry>
     <entry key="jobNoChoices">No jobs are available for this colonist here.</entry>
     <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>

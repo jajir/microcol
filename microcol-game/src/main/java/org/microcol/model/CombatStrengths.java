@@ -91,11 +91,44 @@ public final class CombatStrengths {
      */
     private static Optional<CombatStrengths> forNativeBattle(final Model model,
             final Unit attacker, final Unit defender) {
+        return forNativeBattle(model, attacker, defender, 0, 0, false);
+    }
+
+    /**
+     * Frozen strengths of one battle of a native settlement attack (R-0174).
+     * The defender is an actual native brave on the settlement square, so the
+     * settlement's defense bonus is added to its colony slot, and a Spanish
+     * attacker's founder slot carries its +50%. Ambush and the rest follow the
+     * ordinary native battle.
+     *
+     * @param model               required model
+     * @param attacker            required attacking unit
+     * @param defender            required native brave on the settlement
+     * @param defenseBonusPercent defense bonus of the settlement, 0 to 75
+     * @param spanishBonusPercent attack bonus of a Spanish attacker, or 0
+     * @return strengths, or empty when the attacker cannot fight this battle
+     */
+    static Optional<CombatStrengths> forSettlementBattle(final Model model,
+            final Unit attacker, final Unit defender,
+            final int defenseBonusPercent, final int spanishBonusPercent) {
+        return forNativeBattle(model, attacker, defender, defenseBonusPercent,
+                spanishBonusPercent, true);
+    }
+
+    private static Optional<CombatStrengths> forNativeBattle(final Model model,
+            final Unit attacker, final Unit defender,
+            final int settlementDefense, final int founderBonus,
+            final boolean settlementAttack) {
         // Only a brave or an armed European initiates; an unarmed European may
-        // defend with the civilian base but never attacks.
+        // defend with the civilian base but never attacks. A settlement attack
+        // also admits a scout, whose mounted base is its ordinary base
+        // (R-0174).
+        final boolean settlementScout = settlementAttack
+                && attacker instanceof UnitFreeColonist
+                && ((UnitFreeColonist) attacker).isScout();
         if (!attacker.isAtPlaceLocation() || !defender.isAtPlaceLocation()
                 || !(attacker instanceof UnitNativeBrave)
-                        && !isArmedLand(attacker)) {
+                        && !isArmedLand(attacker) && !settlementScout) {
             return Optional.empty();
         }
         final Terrain attackTerrain = model.getMap()
@@ -110,14 +143,22 @@ public final class CombatStrengths {
         final int ambush = ambushBonus(defendTerrain);
         final int colonyBonus = model.getColonyAt(defender.getLocation())
                 .filter(c -> c.getOwner() == defender.getOwner())
-                .map(CombatStrengths::highestFortificationBonus).orElse(0);
+                .map(CombatStrengths::highestFortificationBonus).orElse(0)
+                + settlementDefense;
         final CombatStrength attack = new CombatStrength(
-                nativeBase(attacker, true), 50, nativeAttacker ? ambush : 0, 0,
-                0, artilleryPenalty(model, attacker));
+                settlementScout ? base(attacker, true)
+                        : nativeBase(attacker, true),
+                50, nativeAttacker ? ambush : 0, 0, 0,
+                artilleryPenalty(model, attacker), founderBonus);
         final CombatStrength defense = new CombatStrength(
                 nativeBase(defender, false), 0, nativeAttacker ? 0 : ambush,
                 model.isFortified(defender) ? 50 : 0, colonyBonus,
                 artilleryPenalty(model, defender, nativeAttacker));
+        // The settlement and founder terms are named only when they apply, so
+        // an ordinary native battle keeps its existing identity.
+        final String settlementInputs = settlementAttack
+                ? ":" + settlementDefense + ':' + founderBonus
+                : "";
         final String inputs = "NATIVE:" + attacker.getType().name() + ':'
                 + state(attacker) + ':' + attackTerrain.getTerrainType().name()
                 + ':' + attackTerrain.isHasTrees() + ':'
@@ -125,7 +166,7 @@ public final class CombatStrengths {
                 + ':' + state(defender) + ':'
                 + defendTerrain.getTerrainType().name() + ':'
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
-                + ':' + colonyBonus;
+                + ':' + colonyBonus + settlementInputs;
         return Optional.of(new CombatStrengths(attack, defense, inputs));
     }
 
@@ -268,6 +309,18 @@ public final class CombatStrengths {
     static boolean isArmedLand(Unit unit) {
         return unit instanceof UnitArtillery || unit instanceof UnitFreeColonist
                 && ((UnitFreeColonist) unit).isHoldingGuns();
+    }
+
+    /**
+     * Base strength of one unit in a tribute demand (R-0162): only the ordinary
+     * base of the colonist, with no offensive, terrain, fortification or colony
+     * modifier. Used for force units only, which are colonists.
+     *
+     * @param unit required colonist
+     * @return its ordinary base strength
+     */
+    static double tributeBase(final Unit unit) {
+        return base(unit, true);
     }
 
     private static double base(Unit unit, boolean attack) {

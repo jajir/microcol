@@ -101,7 +101,26 @@
  * NativeSettlement holds the one native course of a settlement (R-0148): its
  * pupil, owner updates and offered skill. PlaceNativeCourse keeps the pupil off
  * the map, so the colonist cannot move, work or fight meanwhile. Model starts,
- * cancels and advances the course at the owner's update.
+ * cancels and advances the course at the owner's update. NativeSettlement also
+ * holds at most one mission (R-0164): its missionary and the nonhostile update
+ * clock. PlaceNativeMission keeps that missionary off the map. Model
+ * establishes it, lowers the owner's local alarm and raises contacted rivals'
+ * once per owner update, and returns the fifth-update boundary, which Player
+ * hands to Model for the native convert (R-0149). Model draws the saved
+ * randomness once per boundary, with NativeConversion holding the chances, and
+ * delivers at most one convert to the nearest owned colony by legal land route
+ * (MovementPolicy), then colony identity. A missionary may also pay to incite a
+ * tribe against a selected European (R-0166): NativeIncitementRules holds the
+ * price, chance and draw, NativeIncitementQuote the confirmed terms, and
+ * NativeIncitements the one order per tribe with its twenty native turns, saved
+ * with the model. Model confirms the attempt once, PlayerNative counts the
+ * turns and clears a stale order, and the AI reads the order through this
+ * package. UnitFreeColonist keeps the convert's native nation and lifetime
+ * unassigned count; only a field or building job pauses the count, and the
+ * eighth update removes the person through the shared place cleanup.
+ * ConstructionSlot refuses a convert manufacturing work, ColonyField and
+ * ConstructionSlot apply its +1 outdoor and -1 indoor output, and Model refuses
+ * it as a colony founder.
  *
  * NativeLandRights owns permanent European/tile payments and unpaid takings.
  * Model validates land purchases and founding together before mutation, and

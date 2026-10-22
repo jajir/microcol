@@ -748,6 +748,15 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
+    public Optional<List<Location>> getKnownPath(final Location destination,
+            final boolean excludeDestination) {
+        verifyThatUnitIsAtMap();
+
+        return Optional.ofNullable(new PathFinder(this, false, owner::isVisible)
+                .find(destination, excludeDestination));
+    }
+
+    @Override
     public int getEntryCostThirds(final Location from, final Location to) {
         Preconditions.checkNotNull(from);
         Preconditions.checkNotNull(to);
@@ -1055,6 +1064,74 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
+     * One battle of a native settlement attack (R-0174). The caller validated
+     * the terms and the strengths before this call; the only draw happens here,
+     * once. A defeated native brave is destroyed, and a loser of the attacker's
+     * side keeps the ordinary native loss rule. Both sides spend their
+     * movement, which is the one attack budget of the whole settlement attack.
+     * The winning colonist gets the ordinary promotion roll of one victory, and
+     * the promotion travels with the battle event so the player sees it. The
+     * strengths are the ones the player confirmed, so a promotion won here does
+     * not change the terms of the next battle of the same attack.
+     *
+     * @param defender  required native brave on the settlement square
+     * @param strengths required confirmed strengths of this battle
+     * @return the outcome of this battle
+     */
+    NativeBattle fightNativeDefender(final Unit defender,
+            final CombatStrengths strengths) {
+        final boolean winnerAttacker = strengths
+                .attackerWins(model.nextCombatRandom());
+        movementThirds = 0;
+        ((AbstractUnit) defender).movementThirds = 0;
+        final AbstractUnit loser = winnerAttacker ? (AbstractUnit) defender
+                : this;
+        final MilitaryPromotion promotion = promoteWinningColonist(
+                winnerAttacker ? this : defender);
+        if (isDestroyedByDefeat(loser, true)) {
+            model.fireUnitAttacked(this, defender, loser, true, promotion);
+            model.destroyUnit(loser);
+        } else {
+            loser.loseCombatEquipment();
+            model.fireUnitAttacked(this, defender, loser, false, promotion);
+        }
+        return new NativeBattle(winnerAttacker, promotion);
+    }
+
+    /** Outcome of one battle of a native settlement attack. */
+    static final class NativeBattle {
+        private final boolean won;
+        private final MilitaryPromotion promotion;
+
+        private NativeBattle(final boolean won,
+                final MilitaryPromotion promotion) {
+            this.won = won;
+            this.promotion = promotion;
+        }
+
+        /** @return whether the attacker won this battle */
+        boolean isWon() {
+            return won;
+        }
+
+        /** @return the attacker's promotion earned here, or null for none */
+        MilitaryPromotion getPromotion() {
+            return won ? promotion : null;
+        }
+    }
+
+    /**
+     * Enter the square of a conquered native settlement once its last defender
+     * was overcome (R-0174). The settlement has been left empty of defenders.
+     *
+     * @param square required square of the conquered settlement
+     */
+    void occupyNativeSquare(final Location square) {
+        placeToLocation(square);
+        model.wakeSentriesForMovement(this, square);
+    }
+
+    /**
      * Resolves a battle for a colony tile after every precondition, the ship
      * escape plan included, was validated against the frozen quote. Nothing
      * before the first draw changes the model.
@@ -1324,6 +1401,11 @@ public abstract class AbstractUnit implements Unit {
         return place instanceof PlaceNativeCourse;
     }
 
+    @Override
+    public boolean isAtPlaceNativeMission() {
+        return place instanceof PlaceNativeMission;
+    }
+
     /**
      * Move a unit from the map into the native course of a settlement (R-0148).
      * Movement and any order are spent, so the learner cannot move, work or
@@ -1336,6 +1418,23 @@ public abstract class AbstractUnit implements Unit {
                 "Only a unit on the map can begin a native course");
         place.destroy();
         place = new PlaceNativeCourse(this, settlementId);
+        movementThirds = 0;
+        goTo = null;
+        setAction(UnitActionType.noAction.make());
+    }
+
+    /**
+     * Move a missionary from the map into the mission of a settlement (R-0164).
+     * Movement and any order are spent, so the missionary cannot move or act
+     * while it is stationed. Its identity, owner and role stay unchanged.
+     *
+     * @param settlementId identity of the settlement that holds the mission
+     */
+    void beginNativeMission(final int settlementId) {
+        Preconditions.checkState(isAtPlaceLocation(),
+                "Only a unit on the map can begin a native mission");
+        place.destroy();
+        place = new PlaceNativeMission(this, settlementId);
         movementThirds = 0;
         goTo = null;
         setAction(UnitActionType.noAction.make());

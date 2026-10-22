@@ -21,6 +21,9 @@ public enum NativeVisitAction {
     /** Establish a missionary mission. */
     MISSION,
 
+    /** Pay to incite the tribe against a selected European power (R-0166). */
+    INCITE,
+
     /** Attack the settlement with armed force. */
     ATTACK
 

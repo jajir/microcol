@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
+import org.microcol.model.turnevent.TurnEventNativeConvert;
 import org.microcol.model.turnevent.TurnEventNativeTeaching;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
@@ -55,6 +57,8 @@ public class Model {
     /** Last complete round already processed by the Crown-war event. */
     private int lastCrownWarRound;
     private static final int CROWN_WAR_PERIOD = 20;
+    /** Settlement attacks by a Spanish attacker gain +50% (R-0174). */
+    private static final int SPANISH_SETTLEMENT_ATTACK_BONUS = 50;
 
     /** Squares around a native settlement in which armed units add alarm. */
     private static final int NATIVE_ARMED_RADIUS = 2;
@@ -77,13 +81,26 @@ public class Model {
     private static final List<GoodsType> DISBANDABLE_EQUIPMENT = List
             .of(GoodsType.MUSKET, GoodsType.HORSE, GoodsType.TOOLS);
 
-    double nextCombatRandom() {
-        combatRandomState += 0x9E3779B97F4A7C15L;
-        long z = combatRandomState;
+    /**
+     * The value of the saved random stream that follows a saved state. Pure: it
+     * advances nothing, so controlled fixtures and tests can choose a state
+     * whose coming draws are known.
+     *
+     * @param savedState saved combat random state
+     * @return the next draw in [0, 1) the stream would produce
+     */
+    public static double combatRandomAfter(final long savedState) {
+        long z = savedState + 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
         z ^= z >>> 31;
         return (z >>> 11) * 0x1.0p-53;
+    }
+
+    double nextCombatRandom() {
+        final double draw = combatRandomAfter(combatRandomState);
+        combatRandomState += 0x9E3779B97F4A7C15L;
+        return draw;
     }
 
     private final ListenerManager listenerManager;
@@ -97,6 +114,9 @@ public class Model {
     /** Land contacts of colonial Europeans with whole native tribes. */
     private final NativeContacts nativeContacts;
     private final NativeRelations nativeRelations;
+
+    /** Paid-incitement orders of native tribes (R-0166). */
+    private final NativeIncitements nativeIncitements;
     private final NativeLandRights nativeLandRights;
     /** Player name to the settlement ids that player has learned by sight. */
     private final Map<String, Set<Integer>> learnedNativeSettlements;
@@ -304,6 +324,8 @@ public class Model {
                 modelPo.getNativeTribalAnger(), modelPo.getNativeLocalAlarm(),
                 modelPo.getNativeArmsSales(),
                 modelPo.getNativeRelationOutcomeIds());
+        nativeIncitements = NativeIncitements
+                .make(modelPo.getNativeIncitements());
         nativeLandRights = NativeLandRights.make(
                 location -> map.isValid(location)
                         && !map.getTerrainTypeAt(location).isSea(),
@@ -392,7 +414,9 @@ public class Model {
 
         model.validateSavedNativeBraveHomes();
         model.validateSavedNativeTeaching();
+        model.validateSavedNativeMissions();
         model.validateSavedNativeMarkets();
+        model.validateSavedNativeTributes();
         if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
             throw new MicroColException(String.format(
                     "In source data in %s units by in model is %s units.",
@@ -1549,6 +1573,10 @@ public class Model {
      */
     public boolean canUnitBuildColony(final Unit unit) {
         if (unit == null)
+            return false;
+        // A native convert never founds a colony (R-0149).
+        if (unit instanceof UnitFreeColonist
+                && ((UnitFreeColonist) unit).isNativeConvert())
             return false;
         if (!isGameRunning())
             return false;
@@ -4048,6 +4076,7 @@ public class Model {
         out.setNativeLocalAlarm(nativeRelations.saveLocalAlarm());
         out.setNativeArmsSales(nativeRelations.saveArmsSales());
         out.setNativeRelationOutcomeIds(nativeRelations.saveAppliedOutcomes());
+        out.setNativeIncitements(nativeIncitements.save());
         out.setNativeLandRights(nativeLandRights.savePaid());
         out.setNativeLandTakings(nativeLandRights.saveTaken());
         out.setNativeContacts(nativeContacts.save());
@@ -4206,7 +4235,277 @@ public class Model {
         return NativeVisitRules.choices(visitor,
                 getNativeHostility(visitor.getOwner(), settlement),
                 settlement.getTeachingPupilId().isPresent(),
-                isTradeOpen(visitor, settlement));
+                settlement.getMissionaryId().isPresent(),
+                isRivalMission(visitor, settlement),
+                isTradeOpen(visitor, settlement),
+                !getNativeIncitementTargets(visitor, settlement).isEmpty(),
+                getNativeConquestQuote(visitor, settlement).isPresent(),
+                NativeTributeRules.isCooling(
+                        settlement.findTributeTurn(
+                                nativeEuropean(visitor.getOwner())),
+                        calendar.getNumberOfPlayedTurns()),
+                getNativeTributeQuote(visitor, settlement).isPresent());
+    }
+
+    /**
+     * Terms of the chief visit a scout may confirm now (R-0158). Pure read: it
+     * draws nothing, pays nothing and records nothing, so cancelling changes
+     * nothing. A nation that has met the chief here before gets the information
+     * again, so its terms are a repeat with no risk.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the terms, empty when the chief is not available to the visitor
+     */
+    public Optional<NativeChiefPreview> getNativeChiefPreview(
+            final Unit visitor, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isChiefAvailable(visitor, settlement)) {
+            return Optional.empty();
+        }
+        final Player owner = visitor.getOwner();
+        final boolean repeat = settlement
+                .findChiefEncounter(nativeEuropean(owner)).isPresent();
+        return Optional
+                .of(NativeChiefPreview.of(getNativeHostility(owner, settlement),
+                        visitor.getType() == UnitType.SEASONED_SCOUT, repeat));
+    }
+
+    /**
+     * Visit the native chief with the terms the player confirmed (R-0158). The
+     * first visit of a nation draws once from the persisted random state, then
+     * applies the outcome: information discloses this settlement, gold moves up
+     * to its cap from its treasury to the player, and death removes the scout.
+     * The outcome is recorded for the nation, so later visits repeat only the
+     * information. Every check and the overflow test run before the draw.
+     *
+     * @param visitor    required scout adjacent to the settlement
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @return the actual result of the visit
+     * @throws IllegalStateException when the chief is not available now or the
+     *                               shown terms went stale
+     */
+    public NativeChiefResult visitNativeChief(final Unit visitor,
+            final NativeSettlement settlement, final NativeChiefPreview shown) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeChiefPreview> current = getNativeChiefPreview(
+                visitor, settlement);
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native chief terms changed");
+        final Player owner = visitor.getOwner();
+        final EuropeanNation european = nativeEuropean(owner);
+        if (settlement.findChiefEncounter(european).isPresent()) {
+            // Repeating the information reveals the same land again, no draw.
+            owner.revealLandAround(settlement.getLocation());
+            return NativeChiefResult.repeated(chiefInformation(settlement));
+        }
+        // The most gold this settlement can pay must fit the purse before the
+        // draw, so no refused result has to restore the random state.
+        final int maxGold = NativeChiefRules
+                .goldAmount(settlement.getTreasury(), settlement.isCapital());
+        Preconditions.checkState(owner.getGold() <= Integer.MAX_VALUE - maxGold,
+                "Native chief gold would overflow");
+        final NativeChiefOutcome outcome = NativeChiefRules.draw(
+                shown.getHostility(), shown.isSeasoned(), nextCombatRandom());
+        final int gold = outcome == NativeChiefOutcome.GOLD ? maxGold : 0;
+        switch (outcome) {
+        case GOLD:
+            settlement.setTreasury(settlement.getTreasury() - gold);
+            owner.setGold(owner.getGold() + gold);
+            break;
+        case DEATH:
+            // A dead scout keeps no go-to order and no square.
+            ((AbstractUnit) visitor).discardGoToOrder();
+            visitor.getPlace().destroy();
+            destroyUnit(visitor);
+            break;
+        default:
+            break;
+        }
+        settlement.recordChiefEncounter(european, outcome);
+        final Optional<NativeChiefResult.Information> informed = outcome == NativeChiefOutcome.INFORMATION
+                ? Optional.of(chiefInformation(settlement))
+                : Optional.empty();
+        if (outcome == NativeChiefOutcome.INFORMATION) {
+            owner.revealLandAround(settlement.getLocation());
+        }
+        return NativeChiefResult.first(outcome, gold, informed);
+    }
+
+    /**
+     * Terms of the tribute demand a visitor may confirm now (R-0162). Pure
+     * read: nothing is drawn, moved, paid or recorded, so cancelling changes
+     * nothing. The visitor must have a demanding role, stand beside the learned
+     * settlement on turn, and its European must have passed the ten-turn wait
+     * here. Any unit on the square must be an actual native brave of the
+     * settlement; with none, the defense is zero and the demand is accepted.
+     * The force is the base strength of the visitor and of its own soldiers,
+     * dragoons and scouts on the eight squares around the settlement, each
+     * counted once; the defense is the strength of the defenders with the
+     * settlement's defense bonus, from the same battle strength rules as an
+     * attack.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the terms, empty when no demand is legal now
+     */
+    public Optional<NativeTributeQuote> getNativeTributeQuote(
+            final Unit visitor, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isEntryAllowed(visitor, settlement)
+                || !NativeVisitRules.canDemandTribute(visitor)) {
+            return Optional.empty();
+        }
+        final Player owner = visitor.getOwner();
+        final EuropeanNation european = nativeEuropean(owner);
+        final int turn = calendar.getNumberOfPlayedTurns();
+        if (NativeTributeRules.isCooling(settlement.findTributeTurn(european),
+                turn)) {
+            return Optional.empty();
+        }
+        // A square holding anything but the settlement's own braves is refused.
+        // An empty square is not refused: a demand is not an attack, so with no
+        // defenders the defense is zero and the demand is accepted.
+        final List<Unit> onSquare = getUnitsAt(settlement.getLocation());
+        if (onSquare.stream()
+                .anyMatch(unit -> !isNativeDefender(unit, settlement))) {
+            return Optional.empty();
+        }
+        double defense = 0;
+        final List<Integer> defenders = new ArrayList<>();
+        for (final Unit defender : onSquare.stream()
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .collect(Collectors.toList())) {
+            final Optional<CombatStrengths> strengths = CombatStrengths
+                    .forSettlementBattle(this, visitor, defender,
+                            settlement.getDefenseBonusPercent(), 0);
+            if (strengths.isEmpty()) {
+                return Optional.empty();
+            }
+            defense += strengths.get().getDefender().getTotal();
+            defenders.add(defender.getId());
+        }
+        final List<Unit> forceUnits = tributeForceUnits(visitor, settlement);
+        final double force = forceUnits.stream()
+                .mapToDouble(CombatStrengths::tributeBase).sum();
+        return Optional.of(new NativeTributeQuote(settlement, visitor.getId(),
+                forceUnits.stream().map(Unit::getId)
+                        .collect(Collectors.toList()),
+                force, defenders, defense, settlement.getTreasury(),
+                nativeRelations.getTribalAnger(settlement.getNation(),
+                        european),
+                nativeRelations.getLocalAlarm(settlement, european), turn));
+    }
+
+    /**
+     * Units that add force to a tribute demand (R-0162): the visitor and the
+     * soldiers, dragoons and scouts of its own owner on the eight squares
+     * around the settlement. Each unit is listed once, by identity. Units
+     * inside a carrier, allied or foreign units, artillery and distant units
+     * are not among them.
+     */
+    private List<Unit> tributeForceUnits(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Set<Unit> units = new LinkedHashSet<>();
+        units.add(visitor);
+        for (final Location next : settlement.getLocation().getNeighbors()) {
+            if (!isValid(next)) {
+                continue;
+            }
+            getUnitsAt(next).stream()
+                    .filter(unit -> unit.getOwner() == visitor.getOwner())
+                    .filter(NativeVisitRules::canDemandTribute)
+                    .forEach(units::add);
+        }
+        return units.stream().sorted(Comparator.comparingInt(Unit::getId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Demand tribute with the terms the player confirmed (R-0162). The shown
+     * terms must equal the live ones before the first change, which includes
+     * the treasury, the wait and the relation values. Nothing is drawn. A paid
+     * demand moves the gold from the treasury to the player; a refused one
+     * moves none. Both record this European's demand here and raise the tribe's
+     * anger and the settlement's alarm once, through the shared relation
+     * outcome.
+     *
+     * @param visitor    required unit that confirmed the demand
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @return the actual result of the demand
+     * @throws IllegalStateException when the demand is not legal now or the
+     *                               shown terms went stale
+     */
+    public NativeTributeResult demandNativeTribute(final Unit visitor,
+            final NativeSettlement settlement, final NativeTributeQuote shown) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeTributeQuote> current = getNativeTributeQuote(
+                visitor, settlement);
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native tribute terms changed");
+        final Player owner = visitor.getOwner();
+        final EuropeanNation european = nativeEuropean(owner);
+        final int payment = shown.getPayment();
+        Preconditions.checkState(owner.getGold() <= Integer.MAX_VALUE - payment,
+                "Native tribute gold would overflow");
+        // Every check has passed; only the changes below remain.
+        if (payment > 0) {
+            settlement.setTreasury(settlement.getTreasury() - payment);
+            owner.setGold(owner.getGold() + payment);
+        }
+        settlement.recordTribute(european, calendar.getNumberOfPlayedTurns());
+        applyNativeRelationOutcome(owner, NativeRelationOutcome
+                .tribute(nativeRelations.nextOutcomeId(), settlement));
+        return NativeTributeResult.of(shown.isAccepted(), payment);
+    }
+
+    /**
+     * Saved tribute demands cannot be from a later turn than the saved calendar
+     * (R-0162); a loaded game never advances the turn or repeats a demand.
+     */
+    void validateSavedNativeTributes() {
+        final int turn = calendar.getNumberOfPlayedTurns();
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            for (final int demand : settlement.getTributeTurns().values()) {
+                Preconditions.checkArgument(demand <= turn,
+                        "Unsupported save: native tribute turn is in the future");
+            }
+        }
+    }
+
+    /**
+     * Whether the visitor may confirm the chief now: the chooser must offer it,
+     * which needs a scout that passes the shared entry gate. Pure read.
+     */
+    private boolean isChiefAvailable(final Unit visitor,
+            final NativeSettlement settlement) {
+        return getNativeVisitChoices(visitor, settlement).stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.SCOUT_CHIEF
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+    }
+
+    /**
+     * What a chief tells about a settlement: its own offered and wanted goods
+     * and its teachable skill. The land within two squares is revealed on the
+     * player's map separately, so it is not listed here.
+     */
+    private NativeChiefResult.Information chiefInformation(
+            final NativeSettlement settlement) {
+        return new NativeChiefResult.Information(settlement.getOfferedGoods(),
+                settlement.getWantedGoods(), settlement.getTeachableSkill());
     }
 
     /**
@@ -5408,6 +5707,351 @@ public class Model {
     }
 
     /**
+     * Terms of an attack on a native settlement that the visitor may confirm
+     * now (R-0174). Pure read: nothing is drawn, moved, paid or recorded, so
+     * cancelling the confirmation changes nothing. The attacker must be an
+     * armed soldier, dragoon, scout or artillery on turn with its movement
+     * unspent; the settlement must be known and adjacent; and every unit on its
+     * square must be an actual native brave of its nation. Spain's bonus is
+     * named here and applies to this settlement attack only.
+     *
+     * @param attacker   required unit that would attack
+     * @param settlement required native settlement
+     * @return the terms, empty when no attack is legal now
+     */
+    public Optional<NativeConquestQuote> getNativeConquestQuote(
+            final Unit attacker, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(attacker);
+        Preconditions.checkNotNull(settlement);
+        if (!isEntryAllowed(attacker, settlement) || !isConquestRole(attacker)
+                || !isReadyForAttack(attacker)) {
+            return Optional.empty();
+        }
+        final Player owner = attacker.getOwner();
+        final Location at = settlement.getLocation();
+        if (!owner.isVisible(at) || !owner.isCurrentlyVisible(at) || !attacker
+                .getType().canMoveAtTerrain(map.getTerrainTypeAt(at))) {
+            return Optional.empty();
+        }
+        final List<Unit> onSquare = getUnitsAt(at);
+        if (onSquare.isEmpty() || onSquare.stream()
+                .anyMatch(unit -> !isNativeDefender(unit, settlement))) {
+            return Optional.empty();
+        }
+        final int defenseBonus = settlement.getDefenseBonusPercent();
+        final int spanishBonus = settlementAttackBonus(owner);
+        final Map<Integer, CombatStrengths> battles = new HashMap<>();
+        for (final Unit defender : onSquare) {
+            final Optional<CombatStrengths> strengths = CombatStrengths
+                    .forSettlementBattle(this, attacker, defender, defenseBonus,
+                            spanishBonus);
+            if (strengths.isEmpty()) {
+                return Optional.empty();
+            }
+            battles.put(defender.getId(), strengths.get());
+        }
+        // Strongest defender first, as the battle selection of the attacker.
+        final List<Unit> ordered = onSquare.stream()
+                .sorted(Comparator
+                        .comparingDouble((Unit defender) -> battles
+                                .get(defender.getId()).getDefender().getTotal())
+                        .reversed().thenComparingInt(Unit::getId))
+                .collect(Collectors.toList());
+        final List<CombatStrengths> frozen = ordered.stream()
+                .map(defender -> battles.get(defender.getId()))
+                .collect(Collectors.toList());
+        return Optional.of(new NativeConquestQuote(settlement, attacker,
+                ordered, frozen, defenseBonus, spanishBonus,
+                getNativeHostility(owner, settlement)));
+    }
+
+    /**
+     * Attack a native settlement with the terms the player confirmed (R-0174).
+     * The live terms must equal the shown ones before the first draw. Each
+     * actual defender then fights once, strongest first; a lost battle ends the
+     * attack and the settlement stays. Overcoming every defender conquers it
+     * exactly once: the attacker enters its square, the relations take the
+     * destruction raise, and the settlement with its claim, map interaction and
+     * learned identity is retired. Attacks that fought at all raise relations.
+     *
+     * @param attacker   required unit that confirmed the attack
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @return the actual result of the attack
+     * @throws IllegalStateException when the attack is not legal now or the
+     *                               shown terms went stale
+     */
+    public NativeConquestResult attackNativeSettlement(final Unit attacker,
+            final NativeSettlement settlement,
+            final NativeConquestQuote shown) {
+        Preconditions.checkNotNull(attacker);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeConquestQuote> current = getNativeConquestQuote(
+                attacker, settlement);
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native attack terms changed");
+        final Player owner = attacker.getOwner();
+        final AbstractUnit unit = (AbstractUnit) attacker;
+        // Everything the aftermath needs is resolved before the first draw, so
+        // a broken course reference refuses the attack with nothing changed.
+        final List<Unit> courseUnits = nativeCourseUnits(settlement);
+        // The battles use the strengths the player confirmed. A promotion won
+        // in an earlier battle is the ordinary per-battle rule and does not
+        // change the terms of the later battles of this one attack.
+        int defeated = 0;
+        boolean attackerLost = false;
+        MilitaryPromotion promotion = null;
+        for (int i = 0; i < shown.getDefenders().size() && !attackerLost; i++) {
+            final AbstractUnit.NativeBattle battle = unit.fightNativeDefender(
+                    shown.getDefenders().get(i), shown.getBattles().get(i));
+            if (battle.isWon()) {
+                defeated++;
+            } else {
+                attackerLost = true;
+            }
+            if (promotion == null) {
+                promotion = battle.getPromotion();
+            }
+        }
+        if (attackerLost) {
+            applyNativeRelationOutcome(owner,
+                    NativeRelationOutcome.settlementAttack(
+                            nativeRelations.nextOutcomeId(), settlement,
+                            false));
+            // A promotion won earlier stays with a survivor, who keeps it
+            // after losing its equipment; a destroyed unit has none to show.
+            return new NativeConquestResult(false, defeated, true,
+                    isUnitInGame(attacker) ? promotion : null, List.of());
+        }
+        // Every defender is overcome: the destruction raise applies once, with
+        // the capital factor, while the settlement is still registered.
+        applyNativeRelationOutcome(owner,
+                NativeRelationOutcome.settlementAttack(
+                        nativeRelations.nextOutcomeId(), settlement, true));
+        unit.occupyNativeSquare(settlement.getLocation());
+        final List<NativeConquestResult.Loss> losses = conquerNativeSettlement(
+                settlement, courseUnits);
+        // One durable record of the conquest, for the treasure step (R-0175).
+        getTurnEventStore().add(TurnEventProvider.getNativeConquest(owner,
+                settlement, defeated));
+        return new NativeConquestResult(true, defeated, false, promotion,
+                losses);
+    }
+
+    /**
+     * The pupil and the missionary of a settlement, resolved and checked
+     * against their places. A missing or misplaced unit means the saved state
+     * is inconsistent and the conquest is refused before it changes anything.
+     */
+    private List<Unit> nativeCourseUnits(final NativeSettlement settlement) {
+        final List<Unit> out = new ArrayList<>();
+        if (settlement.getTeachingPupilId().isPresent()) {
+            final Unit pupil = tryGetUnitById(
+                    settlement.getTeachingPupilId().get())
+                    .filter(unit -> isLearningAt(unit, settlement))
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Native course unit is missing"));
+            out.add(pupil);
+        }
+        if (settlement.getMissionaryId().isPresent()) {
+            final Unit missionary = tryGetUnitById(
+                    settlement.getMissionaryId().get())
+                    .filter(unit -> isStationedAt(unit, settlement))
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Native course unit is missing"));
+            out.add(missionary);
+        }
+        return out;
+    }
+
+    /**
+     * Retire a conquered settlement once (R-0174). The settlement leaves the
+     * registry, so its claim, map interaction and learned identity end with it,
+     * and no later load can recreate it. Its braves are rehomed, and its pupil
+     * and missionary are released to the nearest legal square, or lost when
+     * none exists.
+     *
+     * @param settlement  required settlement whose last defender was overcome
+     * @param courseUnits required pupil and missionary resolved beforehand,
+     *                    each held by this settlement
+     * @return the pupil and missionary that found no legal square and died,
+     *         each also recorded as a saved turn event of its owner
+     */
+    private List<NativeConquestResult.Loss> conquerNativeSettlement(
+            final NativeSettlement settlement, final List<Unit> courseUnits) {
+        final Location at = settlement.getLocation();
+        // Dependents are settled while the settlement is still registered and
+        // none of these steps can fail, so the removal below is the last
+        // change and never leaves a half-conquered settlement.
+        final List<NativeConquestResult.Loss> losses = new ArrayList<>();
+        for (final Unit unit : courseUnits) {
+            final boolean pupil = unit.isAtPlaceNativeCourse();
+            final UnitType type = unit.getType();
+            final Player unitOwner = unit.getOwner();
+            final int unitId = unit.getId();
+            if (!releaseCourseUnit(unit, at)) {
+                final NativeConquestResult.Loss loss = new NativeConquestResult.Loss(
+                        unitId, type, unitOwner.getName(), pupil);
+                losses.add(loss);
+                getTurnEventStore().add(TurnEventProvider.getNativeConquestLoss(
+                        unitOwner, settlement, unitId, type, pupil));
+            }
+        }
+        rehomeNativeBraves(settlement);
+        nativeSettlements.remove(settlement);
+        nativeRelations.removeSettlement(settlement);
+        learnedNativeSettlements.values()
+                .forEach(ids -> ids.remove(settlement.getId()));
+        return losses;
+    }
+
+    /**
+     * Braves that were homed here are rehomed to the nearest surviving
+     * settlement of their nation, ties by stable ID; without one they stay
+     * living as homeless braves.
+     */
+    private void rehomeNativeBraves(final NativeSettlement settlement) {
+        for (final Unit unit : getAllUnits()) {
+            if (!(unit instanceof UnitNativeBrave)) {
+                continue;
+            }
+            final UnitNativeBrave brave = (UnitNativeBrave) unit;
+            if (brave.getHomeSettlementId()
+                    .filter(id -> id == settlement.getId()).isEmpty()) {
+                continue;
+            }
+            final Location from = brave.isAtPlaceLocation()
+                    ? brave.getLocation()
+                    : settlement.getLocation();
+            brave.rehome(nearestNativeSettlementOf(brave.getNation(), from,
+                    settlement).map(NativeSettlement::getId).orElse(null));
+        }
+    }
+
+    /**
+     * Nearest settlement of the nation to a square other than the conquered
+     * one, which is still registered while its dependents are settled.
+     */
+    private Optional<NativeSettlement> nearestNativeSettlementOf(
+            final NativeNation nation, final Location from,
+            final NativeSettlement conquered) {
+        return nativeSettlements.getAll().stream()
+                .filter(settlement -> settlement != conquered
+                        && settlement.getNation() == nation)
+                .min(Comparator.comparingInt(
+                        (NativeSettlement settlement) -> settlement
+                                .getLocation().getDistanceChebyshev(from))
+                        .thenComparingInt(NativeSettlement::getId));
+    }
+
+    /**
+     * Put a pupil or missionary of a conquered settlement on its nearest legal
+     * square, or destroy it when no square is legal.
+     *
+     * @return whether the unit survived
+     */
+    private boolean releaseCourseUnit(final Unit unit,
+            final Location settlementAt) {
+        final Optional<Location> square = findNearestLegalSquare(unit,
+                settlementAt);
+        if (square.isPresent()) {
+            releaseNativePupil(unit, square.get());
+            return true;
+        }
+        unit.getPlace().destroy();
+        destroyUnit(unit);
+        return false;
+    }
+
+    /**
+     * Nearest legal square for the unit anywhere on the map, by Chebyshev
+     * distance from the settlement; inside one distance the lower X and then
+     * the lower Y wins, so the choice is fixed. Release is an evacuation, not a
+     * walk, so no path is needed. A square is legal when the shared movement
+     * policy lets the unit's owner enter it: land for its type, no foreign unit
+     * or foreign colony that is not an ally, and no native settlement, so the
+     * conquered square itself, still registered and held by the attacker, is
+     * never chosen.
+     *
+     * @param unit   required unit to release
+     * @param center required square of the settlement
+     * @return the square, empty when no square of the map is legal
+     */
+    private Optional<Location> findNearestLegalSquare(final Unit unit,
+            final Location center) {
+        final int farthest = Math.max(map.getMaxLocationX(),
+                map.getMaxLocationY());
+        for (int distance = 1; distance <= farthest; distance++) {
+            final List<Location> ring = new ArrayList<>();
+            for (int dx = -distance; dx <= distance; dx++) {
+                for (int dy = -distance; dy <= distance; dy++) {
+                    final Location square = Location.of(center.getX() + dx,
+                            center.getY() + dy);
+                    if (Math.max(Math.abs(dx), Math.abs(dy)) == distance
+                            && map.isValid(square)) {
+                        ring.add(square);
+                    }
+                }
+            }
+            ring.sort(Comparator.comparingInt(Location::getX)
+                    .thenComparingInt(Location::getY));
+            for (final Location square : ring) {
+                if (MovementPolicy.isPossibleToEnter(this, unit.getType(),
+                        false, unit.getOwner(), square, false)) {
+                    return Optional.of(square);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Attack bonus of Spain against a native settlement, in percent. It is
+     * asked only by the settlement quote, never for a brave on open ground or a
+     * European colony, and no other nation or the Crown has it.
+     *
+     * @param attacker required owner of the attacking unit
+     * @return 50 for Spain, otherwise 0
+     */
+    static int settlementAttackBonus(final Player attacker) {
+        return nativeNationOf(attacker)
+                .filter(nation -> nation == EuropeanNation.SPANISH).isPresent()
+                        ? SPANISH_SETTLEMENT_ATTACK_BONUS
+                        : 0;
+    }
+
+    /**
+     * Roles that may fight a settlement: artillery, and colonists that are
+     * scouts or hold guns (soldiers and dragoons). A colonist that cannot
+     * produce a battle strength is refused by the shared resolver instead.
+     */
+    private static boolean isConquestRole(final Unit attacker) {
+        if (attacker instanceof UnitArtillery) {
+            return true;
+        }
+        return attacker instanceof UnitFreeColonist
+                && (((UnitFreeColonist) attacker).isScout()
+                        || ((UnitFreeColonist) attacker).isHoldingGuns());
+    }
+
+    /** Same turn-state gate as an ordinary attack: points, action and order. */
+    private static boolean isReadyForAttack(final Unit attacker) {
+        return attacker.getActionPoints() > 0
+                && attacker.getAction().isNoAction()
+                && !((AbstractUnit) attacker).hasStandingOrder();
+    }
+
+    private static boolean isNativeDefender(final Unit unit,
+            final NativeSettlement settlement) {
+        return unit instanceof UnitNativeBrave && ((UnitNativeBrave) unit)
+                .getNation() == settlement.getNation()
+                && unit.isAtPlaceLocation();
+    }
+
+    /**
      * Owner update of a colonial player (R-0148), called once per completed
      * update after its relations. A tense settlement cancels the course with
      * feedback; otherwise each update counts and the fourth grants the skill to
@@ -5511,6 +6155,693 @@ public class Model {
                             || pupils.contains(unit.getId()),
                     "Unsupported save: native course without a settlement");
         }
+    }
+
+    /**
+     * Terms of the mission a missionary may establish now (R-0164). Pure read:
+     * it changes no unit, relation, mission, treasury or random state, so
+     * cancelling the confirmation has nothing to undo. Expertise is read live,
+     * so Jean de Brebeuf's membership counts at once.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the terms, empty when no mission may be established now
+     */
+    public Optional<NativeMissionView> getNativeMissionPreview(
+            final Unit visitor, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isMissionAvailable(visitor, settlement)) {
+            return Optional.empty();
+        }
+        return Optional.of(missionView(visitor, settlement, 0));
+    }
+
+    /**
+     * Establish the mission of a missionary beside a native settlement
+     * (R-0164). The missionary leaves the map for the settlement's mission at
+     * once, with its identity, owner and role; the settlement then holds that
+     * mission. The shown terms and every gate run before the first change, so a
+     * refused or stale confirmation leaves the missionary and the settlement
+     * unchanged.
+     *
+     * @param missionary required missionary adjacent to the settlement
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @throws IllegalStateException when the mission is not available now or
+     *                               the shown terms went stale
+     */
+    public void establishNativeMission(final Unit missionary,
+            final NativeSettlement settlement, final NativeMissionView shown) {
+        Preconditions.checkNotNull(missionary);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeMissionView> current = getNativeMissionPreview(
+                missionary, settlement);
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native mission terms changed");
+        ((AbstractUnit) missionary).beginNativeMission(settlement.getId());
+        settlement.establishMission(missionary.getId());
+    }
+
+    /**
+     * Terms of the contest a visiting missionary may confirm against the rival
+     * mission of a settlement (R-0165). Pure read: it changes no unit,
+     * relation, mission, treasury or random state, so cancelling the
+     * confirmation has nothing to undo. Expertise and hostility are read live,
+     * so Jean de Brebeuf's membership and the current attitudes count at once.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the terms, empty when no rival mission may be contested now
+     */
+    public Optional<NativeMissionContestView> getNativeMissionContestPreview(
+            final Unit visitor, final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        if (!isMissionContestAvailable(visitor, settlement)) {
+            return Optional.empty();
+        }
+        return Optional.of(contestView(visitor, settlement));
+    }
+
+    /**
+     * Challenge the rival mission of a settlement (R-0165). Every check and the
+     * terms comparison run before the one draw from the persisted random state,
+     * so a refused contest changes neither missionary, the mission, its clock
+     * nor the random state. A success removes only the resident, then moves the
+     * visitor into the mission with its clock at zero. A failure removes only
+     * the visitor, and the resident keeps the mission and its clock. The
+     * confirmed contest changes the units at once, so Save and Continue cannot
+     * replay it.
+     *
+     * @param visitor    required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @return the actual outcome of the contest
+     * @throws IllegalStateException when the contest is not available now or
+     *                               the shown terms went stale
+     */
+    public NativeMissionContestOutcome contestNativeMission(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeMissionContestView shown) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeMissionContestView> current = getNativeMissionContestPreview(
+                visitor, settlement);
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native mission contest terms changed");
+        final Unit resident = residentOf(settlement);
+        final NativeMissionContestOutcome outcome = NativeContestRules
+                .outcome(shown.getChallengerChance(), nextCombatRandom());
+        if (outcome == NativeMissionContestOutcome.SUCCESS) {
+            // The resident's place is released by its cleanup, not by combat.
+            settlement.clearMission();
+            resident.getPlace().destroy();
+            destroyUnit(resident);
+            ((AbstractUnit) visitor).beginNativeMission(settlement.getId());
+            settlement.establishMission(visitor.getId());
+        } else {
+            // A dead missionary keeps no go-to order and no square.
+            ((AbstractUnit) visitor).discardGoToOrder();
+            visitor.getPlace().destroy();
+            destroyUnit(visitor);
+        }
+        return outcome;
+    }
+
+    /**
+     * European powers a paid incitement may select now (R-0166): every other
+     * colonial player of this game, never the visitor's own nation, the Crown
+     * or a nation absent from the game. Pure read.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @return the selectable targets in European order, empty when the visitor
+     *         cannot incite now
+     */
+    public List<EuropeanNation> getNativeIncitementTargets(final Unit visitor,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        final List<EuropeanNation> targets = new ArrayList<>();
+        if (!isIncitementEntry(visitor, settlement)) {
+            return targets;
+        }
+        for (final EuropeanNation target : EuropeanNation.values()) {
+            if (isIncitementTarget(visitor, target)) {
+                targets.add(target);
+            }
+        }
+        return targets;
+    }
+
+    /**
+     * Terms of the paid incitement a visiting missionary may confirm against a
+     * selected European power (R-0166). Pure read: it changes no unit,
+     * relation, order, gold or random state, so cancelling the confirmation has
+     * nothing to undo. The price, expertise and mission count are read live.
+     *
+     * @param visitor    required unit that would enter the settlement
+     * @param settlement required native settlement
+     * @param target     required selected European power
+     * @return the terms, empty when the incitement is not available now
+     */
+    public Optional<NativeIncitementQuote> getNativeIncitementQuote(
+            final Unit visitor, final NativeSettlement settlement,
+            final EuropeanNation target) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(target);
+        if (!isIncitementEntry(visitor, settlement)
+                || !isIncitementTarget(visitor, target)) {
+            return Optional.empty();
+        }
+        return Optional.of(incitementQuote(visitor, settlement, target));
+    }
+
+    /**
+     * Confirm a paid incitement (R-0166). Every check runs before the first
+     * change. Then the price is paid and the one saved draw decides the result,
+     * whether it succeeds or fails. A success raises the tribe's anger toward
+     * the target to at least 75 and replaces its order with a fresh twenty-turn
+     * one; a failure leaves the previous order and anger unchanged.
+     *
+     * @param visitor    required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param shown      required terms the player was shown and confirmed
+     * @return the actual outcome of the incitement
+     * @throws IllegalStateException when the incitement is not available now,
+     *                               the shown terms went stale or the visitor's
+     *                               owner cannot pay the price
+     */
+    public NativeIncitementOutcome incite(final Unit visitor,
+            final NativeSettlement settlement,
+            final NativeIncitementQuote shown) {
+        Preconditions.checkNotNull(visitor);
+        Preconditions.checkNotNull(settlement);
+        Preconditions.checkNotNull(shown);
+        checkTurnPreparationComplete();
+        final Optional<NativeIncitementQuote> current = getNativeIncitementQuote(
+                visitor, settlement, shown.getTarget());
+        Preconditions.checkState(
+                current.isPresent() && current.get().equals(shown),
+                "Native incitement terms changed");
+        final Player owner = visitor.getOwner();
+        Preconditions.checkState(owner.getGold() >= shown.getPrice(),
+                "Not enough gold for native incitement");
+        final NativeIncitementOutcome outcome = NativeIncitementRules
+                .outcome(shown.getChance(), nextCombatRandom());
+        owner.setGold(owner.getGold() - shown.getPrice());
+        if (outcome == NativeIncitementOutcome.SUCCESS) {
+            nativeRelations.raiseTribalAngerTo(settlement.getNation(),
+                    shown.getTarget(), NativeIncitementRules.TARGET_ANGER);
+            nativeIncitements.install(settlement.getNation(),
+                    shown.getTarget());
+        }
+        return outcome;
+    }
+
+    /**
+     * The order of a native tribe that pursues a European power (R-0166). Pure
+     * read: opening it advances no clock.
+     *
+     * @param nation required native tribe
+     * @return the active order, empty when the tribe has none
+     */
+    public Optional<NativeIncitementOrder> getNativeIncitementOrder(
+            final NativeNation nation) {
+        Preconditions.checkNotNull(nation);
+        return nativeIncitements.find(nation);
+    }
+
+    /**
+     * Drop a tribe's order when its target no longer exists in the game, or
+     * when the tribe's anger toward the target is below 75 (R-0166). Run once
+     * at the start of the native turn, before the native AI acts.
+     *
+     * @param nation required native tribe whose turn has started
+     */
+    void checkNativeIncitement(final NativeNation nation) {
+        Preconditions.checkNotNull(nation);
+        nativeIncitements.find(nation).ifPresent(order -> {
+            final EuropeanNation target = order.getTarget();
+            if (!isLiveIncitedTarget(target)
+                    || nativeRelations.getTribalAnger(nation,
+                            target) < NativeIncitementRules.TARGET_ANGER) {
+                nativeIncitements.clear(nation);
+            }
+        });
+    }
+
+    /**
+     * One native action turn of a tribe is over, so its order loses one turn
+     * (R-0166). Called once per native turn, never by a load or a Continue.
+     *
+     * @param nation required native tribe whose turn has ended
+     */
+    void advanceNativeIncitement(final NativeNation nation) {
+        Preconditions.checkNotNull(nation);
+        nativeIncitements.endTurn(nation);
+    }
+
+    /**
+     * Whether the visitor may incite now: the shared entry gate and a
+     * missionary role. The chooser needs no separate limit, because the price
+     * and target are the only conditions. Pure read.
+     */
+    private boolean isIncitementEntry(final Unit visitor,
+            final NativeSettlement settlement) {
+        return isEntryAllowed(visitor, settlement)
+                && visitor instanceof UnitFreeColonist
+                && ((UnitFreeColonist) visitor).isMissionary();
+    }
+
+    /**
+     * Whether a European power may be selected as target from this visitor
+     * (R-0166): another colonial player that exists in this game. Pure read.
+     */
+    private boolean isIncitementTarget(final Unit visitor,
+            final EuropeanNation target) {
+        return target != nativeEuropean(visitor.getOwner())
+                && isLiveIncitedTarget(target);
+    }
+
+    /**
+     * @param target required European power
+     * @return whether a colonial player of that power is in the game now
+     */
+    private boolean isLiveIncitedTarget(final EuropeanNation target) {
+        return getPlayers().stream()
+                .anyMatch(player -> player.isColonialNation()
+                        && nativeNationOf(player).equals(Optional.of(target)));
+    }
+
+    /**
+     * @param visitor    required missionary beside the settlement
+     * @param settlement required native settlement
+     * @param target     required selected European power
+     * @return the terms read live from the visitor, the attitude, the purse and
+     *         the current order revision; pure
+     */
+    private NativeIncitementQuote incitementQuote(final Unit visitor,
+            final NativeSettlement settlement, final EuropeanNation target) {
+        final Player owner = visitor.getOwner();
+        final double hostility = nativeRelations.getHostilityValue(settlement,
+                nativeEuropean(owner));
+        final int missions = ownMissionsInTribe(owner, settlement.getNation());
+        final boolean expert = missionaryExpert(visitor);
+        return new NativeIncitementQuote(visitor.getId(), settlement.getId(),
+                settlement.getNation(), target, hostility, missions, expert,
+                NativeIncitementRules.price(hostility, missions),
+                owner.getGold(), NativeIncitementRules.chance(expert),
+                nativeIncitements.revision());
+    }
+
+    /**
+     * @param owner  required colonial player
+     * @param nation required native tribe
+     * @return how many settlements of the tribe hold a mission of this owner
+     */
+    private int ownMissionsInTribe(final Player owner,
+            final NativeNation nation) {
+        return (int) nativeSettlements.getAll().stream()
+                .filter(settlement -> settlement.getNation() == nation)
+                .filter(settlement -> settlement.getMissionaryId()
+                        .flatMap(missionaryId -> tryGetUnitById(missionaryId))
+                        .map(missionary -> missionary.getOwner() == owner)
+                        .orElse(false))
+                .count();
+    }
+
+    /**
+     * Whether the settlement's mission belongs to a nation other than the
+     * visitor's (R-0165). Pure read.
+     */
+    private boolean isRivalMission(final Unit visitor,
+            final NativeSettlement settlement) {
+        return settlement.getMissionaryId()
+                .flatMap(missionaryId -> tryGetUnitById(missionaryId))
+                .map(resident -> resident.getOwner() != visitor.getOwner())
+                .orElse(false);
+    }
+
+    /**
+     * Whether the visitor may challenge the settlement's rival mission now: the
+     * chooser must offer the contest, which needs a missionary that passes the
+     * shared entry gate. Pure read.
+     */
+    private boolean isMissionContestAvailable(final Unit visitor,
+            final NativeSettlement settlement) {
+        return getNativeVisitChoices(visitor, settlement).stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.MISSION
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.CONTEST_AVAILABLE);
+    }
+
+    /**
+     * @param visitor    required visitor beside a rival mission
+     * @param settlement required native settlement holding that mission
+     * @return the contest terms read live from both missionaries and the
+     *         attitudes; pure
+     */
+    private NativeMissionContestView contestView(final Unit visitor,
+            final NativeSettlement settlement) {
+        final Unit resident = residentOf(settlement);
+        final Player residentOwner = resident.getOwner();
+        final EuropeanNation holder = nativeEuropean(residentOwner);
+        final double visitorHostility = nativeRelations.getHostilityValue(
+                settlement, nativeEuropean(visitor.getOwner()));
+        final double residentHostility = nativeRelations
+                .getHostilityValue(settlement, holder);
+        final boolean visitorExpert = missionaryExpert(visitor);
+        final boolean residentExpert = missionaryExpert(resident);
+        final double challengerChance = NativeContestRules.challengerChance(
+                NativeContestRules.strength(visitorExpert, visitorHostility),
+                NativeContestRules.strength(residentExpert, residentHostility));
+        return new NativeMissionContestView(visitor.getId(), settlement.getId(),
+                resident.getId(), holder, residentOwner.getDisplayName(),
+                visitorExpert, residentExpert, visitorHostility,
+                residentHostility, challengerChance,
+                settlement.getMissionRevision());
+    }
+
+    /**
+     * @param settlement required settlement that holds a mission
+     * @return the resident missionary of that mission
+     */
+    private Unit residentOf(final NativeSettlement settlement) {
+        return tryGetUnitById(settlement.getMissionaryId().orElseThrow())
+                .orElseThrow(() -> new IllegalStateException(
+                        "Native mission missionary is missing"));
+    }
+
+    /**
+     * What a player reads about the mission of a learned native settlement
+     * (R-0164): its owner, the expertise of its missionary, the owner's current
+     * attitude and the counted progress. The missionary stays stationed here,
+     * so the mission is shown even when it is not on the map. Pure read.
+     *
+     * @param player     required player
+     * @param settlement required native settlement
+     * @return the view, empty without a mission or when the player has not
+     *         learned the settlement
+     */
+    public Optional<NativeMissionView> getNativeMissionView(final Player player,
+            final NativeSettlement settlement) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(settlement);
+        final Set<Integer> learned = learnedNativeSettlements
+                .getOrDefault(player.getName(), Set.of());
+        if (!learned.contains(settlement.getId())) {
+            return Optional.empty();
+        }
+        return settlement.getMissionaryId()
+                .flatMap(missionaryId -> tryGetUnitById(missionaryId))
+                .filter(Unit::isAtPlaceNativeMission)
+                .map(missionary -> missionView(missionary, settlement,
+                        settlement.getMissionUpdates()));
+    }
+
+    /**
+     * Whether the missionary may establish a mission now: the chooser must
+     * offer it, which needs a missionary that passes the shared entry gate.
+     * Pure read.
+     */
+    private boolean isMissionAvailable(final Unit visitor,
+            final NativeSettlement settlement) {
+        return getNativeVisitChoices(visitor, settlement).stream().anyMatch(
+                choice -> choice.getAction() == NativeVisitAction.MISSION
+                        && choice
+                                .getLimit() == NativeVisitChoice.Limit.AVAILABLE);
+    }
+
+    private NativeMissionView missionView(final Unit missionary,
+            final NativeSettlement settlement, final int completedUpdates) {
+        final Player owner = missionary.getOwner();
+        final EuropeanNation european = nativeEuropean(owner);
+        return new NativeMissionView(european, owner.getDisplayName(),
+                missionaryExpert(missionary),
+                nativeRelations.getHostility(settlement, european),
+                completedUpdates);
+    }
+
+    /**
+     * @param missionary required registered missionary
+     * @return whether it acts as an expert now: a Jesuit, or any missionary
+     *         while its owner holds Jean de Brebeuf
+     */
+    private static boolean missionaryExpert(final Unit missionary) {
+        return ((UnitFreeColonist) missionary)
+                .hasEffectiveMissionaryExpertise();
+    }
+
+    /**
+     * One update of a colonial European's missions, run once from its own turn
+     * preparation before its relations (R-0164). Each mission the owner holds
+     * lowers the owner's local alarm by 2, or by 4 with an expert missionary,
+     * and adds 1 to the local alarm of each rival nation that the tribe knows
+     * by land introduction. The clock reads the attitude at the entry of this
+     * update, before its own reduction: only a hostile update (alarm or anger
+     * of 75 or more, the larger of both) pauses it, while an angry one (50 up
+     * to 75) still counts. The fifth nonhostile update of a cycle ends the
+     * cycle and is returned for the conversion of R-0149; nothing is banked and
+     * nothing is converted here.
+     *
+     * @param owner required player whose update is starting
+     * @return settlements whose mission reached its fifth nonhostile update now
+     */
+    List<NativeSettlement> advanceNativeMissions(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        final List<NativeSettlement> fifth = new ArrayList<>();
+        final Optional<EuropeanNation> nation = nativeNationOf(owner);
+        if (nation.isEmpty()) {
+            return fifth;
+        }
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            final Optional<Integer> missionaryId = settlement.getMissionaryId();
+            if (missionaryId.isEmpty()) {
+                continue;
+            }
+            final Unit missionary = tryGetUnitById(missionaryId.get())
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Native mission missionary is missing"));
+            if (missionary.getOwner() != owner) {
+                continue;
+            }
+            final NativeHostility entry = nativeRelations
+                    .getHostility(settlement, nation.get());
+            // Only the hostile band pauses the clock (accepted R-0164 rule).
+            final boolean nonhostile = entry != NativeHostility.HOSTILE;
+            nativeRelations.lowerLocalAlarm(settlement, nation.get(),
+                    missionaryExpert(missionary)
+                            ? NativeRelations.MISSION_EXPERT_REDUCTION
+                            : NativeRelations.MISSION_ORDINARY_REDUCTION);
+            raiseContactedRivals(settlement, owner);
+            if (nonhostile && settlement.addMissionUpdate()) {
+                fifth.add(settlement);
+            }
+        }
+        return fifth;
+    }
+
+    /**
+     * Local alarm of each rival colonial nation that the tribe knows through a
+     * land introduction (R-0164): one raise each, with that rival's own
+     * national and founder factor. The owner, uncontacted nations and nations
+     * that are not players of this game get nothing.
+     *
+     * @param settlement required settlement of the mission
+     * @param owner      required owner of the mission
+     */
+    private void raiseContactedRivals(final NativeSettlement settlement,
+            final Player owner) {
+        for (final Player rival : playerStore.getPlayers()) {
+            final Optional<EuropeanNation> rivalNation = nativeNationOf(rival);
+            if (rival == owner || rivalNation.isEmpty() || !nativeContacts
+                    .isContacted(rivalNation.get(), settlement.getNation())) {
+                continue;
+            }
+            nativeRelations.addLocalAlarm(settlement, rivalNation.get(),
+                    NativeRelations.MISSION_RIVAL_RAISE,
+                    nativeLocalFactor(rivalNation.get(), rival));
+        }
+    }
+
+    /**
+     * Count the owner updates a native convert of this owner spends unassigned
+     * (R-0149). A convert working a colony field or a building pauses the count
+     * without resetting it. The eighth unassigned update returns the convert to
+     * its tribe once. Only assignment to a field or building pauses the count;
+     * a convert on the map, in cargo, in transit, in Europe, in a native course
+     * or stationed at a mission is unassigned and counts. Called after the
+     * unit-update phase, so a convert delivered in this preparation starts at
+     * zero.
+     *
+     * @param owner required colonial player whose update is starting
+     */
+    void advanceNativeConverts(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        for (final Unit unit : List.copyOf(unitStorage.getUnits())) {
+            if (unit.getOwner() != owner || !(unit instanceof UnitFreeColonist)
+                    || unit.isAtPlaceColonyField()
+                    || unit.isAtPlaceConstructionSlot()) {
+                continue;
+            }
+            final UnitFreeColonist convert = (UnitFreeColonist) unit;
+            if (convert.isNativeConvert()
+                    && convert.addConvertUnassignedUpdate()) {
+                returnConvertToTribe(convert);
+                addTurnEvent(TurnEventProvider.getNativeConvert(owner,
+                        TurnEventNativeConvert.Kind.RETURNED));
+            }
+        }
+    }
+
+    /**
+     * Remove an expired convert through the shared cleanup: settlement
+     * references to the person are cleared first, then its place releases the
+     * cargo slot, and the registry drops it once. No passenger slot or course
+     * keeps a reference to the removed identity.
+     */
+    private void returnConvertToTribe(final UnitFreeColonist convert) {
+        getNativeTeachingSettlement(convert)
+                .ifPresent(NativeSettlement::clearTeaching);
+        if (convert.isAtPlaceNativeMission()) {
+            nativeSettlements.getAll().stream()
+                    .filter(settlement -> settlement.getMissionaryId()
+                            .equals(Optional.of(convert.getId())))
+                    .forEach(NativeSettlement::clearMission);
+        }
+        convert.getPlace().destroy();
+        destroyUnit(convert);
+    }
+
+    /**
+     * Resolve the fifth-update boundaries of the owner's missions (R-0149).
+     * Each boundary draws the saved combat randomness exactly once. A success
+     * creates at most one convert at the nearest owned colony reachable by
+     * land, then the stable colony identity. With no reachable colony or no
+     * free unit identity, the success is skipped without banking it. Combat
+     * never converts.
+     *
+     * @param owner required colonial player whose update is starting
+     * @param fifth required settlements whose missions reached the fifth update
+     */
+    void resolveNativeConversions(final Player owner,
+            final List<NativeSettlement> fifth) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(fifth);
+        for (final NativeSettlement settlement : fifth) {
+            final Unit missionary = tryGetUnitById(
+                    settlement.getMissionaryId().orElseThrow())
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Native mission missionary is missing"));
+            final double chance = NativeConversion.chance(
+                    missionaryExpert(missionary), owner.getCongressMembers()
+                            .contains(Founder.JUAN_DE_SEPULVEDA));
+            if (nextCombatRandom() >= chance) {
+                continue;
+            }
+            final Optional<Colony> destination = nearestReachableOwnedColony(
+                    settlement.getLocation(), owner);
+            if (destination.isEmpty() || !unitStorage.canAllocateUnit()) {
+                continue;
+            }
+            final Unit convert = addUnitOutSideColony(destination.get());
+            ((UnitFreeColonist) convert)
+                    .becomeNativeConvert(settlement.getNation());
+            addTurnEvent(TurnEventProvider.getNativeConvert(owner,
+                    TurnEventNativeConvert.Kind.ACQUIRED));
+        }
+    }
+
+    /**
+     * Owned colony nearest to a square by legal land route (R-0149): each step
+     * must be one the owner's colonist may enter by the shared movement rule,
+     * so sea, foreign settlements and colonies, hostile colonies and squares
+     * kept by foreign units are never crossed. The distance counts steps of
+     * that route, not straight-line geometry. Ties go to the lower colony
+     * identity.
+     *
+     * @param from  required land square the search starts from
+     * @param owner required owner of the colonies
+     * @return the colony, empty when no owned colony is reachable by land
+     */
+    private Optional<Colony> nearestReachableOwnedColony(final Location from,
+            final Player owner) {
+        final Map<Location, Integer> distance = new HashMap<>();
+        final ArrayDeque<Location> frontier = new ArrayDeque<>();
+        distance.put(from, 0);
+        frontier.add(from);
+        while (!frontier.isEmpty()) {
+            final Location at = frontier.removeFirst();
+            for (final Location next : at.getNeighbors()) {
+                if (!distance.containsKey(next)
+                        && MovementPolicy.isPossibleToEnter(this,
+                                UnitType.COLONIST, false, owner, next, false)) {
+                    distance.put(next, distance.get(at) + 1);
+                    frontier.add(next);
+                }
+            }
+        }
+        return colonies.stream()
+                .filter(colony -> colony.getOwner() == owner && colony.isValid()
+                        && distance.containsKey(colony.getLocation()))
+                .min(Comparator.comparingInt(
+                        (Colony colony) -> distance.get(colony.getLocation()))
+                        .thenComparingInt(Colony::getId));
+    }
+
+    /**
+     * Check saved native missions against the units after loading (R-0164):
+     * each held missionary is a registered missionary of a colonial owner that
+     * is stationed at this settlement, and each stationed missionary belongs to
+     * the mission of one settlement.
+     */
+    void validateSavedNativeMissions() {
+        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
+            settlement.getMissionaryId().ifPresent(missionaryId -> {
+                final Unit missionary = tryGetUnitById(missionaryId)
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Unsupported save: missing native missionary"));
+                Preconditions.checkArgument(
+                        missionary instanceof UnitFreeColonist
+                                && ((UnitFreeColonist) missionary)
+                                        .isMissionary()
+                                && missionary.getOwner().isColonialNation()
+                                && isStationedAt(missionary, settlement),
+                        "Unsupported save: native mission does not match its missionary");
+            });
+        }
+        for (final Unit unit : unitStorage.getUnits()) {
+            Preconditions.checkArgument(
+                    !unit.isAtPlaceNativeMission() || nativeSettlements.getAll()
+                            .stream()
+                            .anyMatch(settlement -> settlement.getMissionaryId()
+                                    .equals(Optional.of(unit.getId()))),
+                    "Unsupported save: native mission without a settlement");
+        }
+    }
+
+    /** Whether the pupil is in the course of exactly this settlement. */
+    private static boolean isLearningAt(final Unit pupil,
+            final NativeSettlement settlement) {
+        return pupil.isAtPlaceNativeCourse()
+                && ((PlaceNativeCourse) pupil.getPlace())
+                        .getSettlementId() == settlement.getId();
+    }
+
+    private static boolean isStationedAt(final Unit missionary,
+            final NativeSettlement settlement) {
+        return missionary.isAtPlaceNativeMission()
+                && ((PlaceNativeMission) missionary.getPlace())
+                        .getSettlementId() == settlement.getId();
     }
 
     /**

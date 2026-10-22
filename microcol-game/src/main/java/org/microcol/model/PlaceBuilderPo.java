@@ -172,6 +172,20 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                         "Missing saved native course settlement");
                 return new PlaceNativeCourse(context.getUnit(),
                         course.getSettlementId());
+            }, (context) -> {
+                /**
+                 * Native mission (R-0164)
+                 */
+                final var mission = context.getUnitPo().getPlaceNativeMission();
+                if (mission == null) {
+                    return null;
+                }
+                Preconditions.checkArgument(
+                        mission.getSettlementId() != null
+                                && mission.getSettlementId() >= 0,
+                        "Missing saved native mission settlement");
+                return new PlaceNativeMission(context.getUnit(),
+                        mission.getSettlementId());
             }, this::tryToBuildPlaceCargoSlot));
 
     private final UnitPo unitPo;

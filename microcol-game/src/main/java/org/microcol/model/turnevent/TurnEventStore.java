@@ -33,13 +33,16 @@ public final class TurnEventStore {
                     TurnEventFounderArrived::tryLoad,
                     TurnEventEducationCompleted::tryLoad,
                     TurnEventNativeTeaching::tryLoad,
+                    TurnEventNativeConvert::tryLoad,
                     TurnEventPeaceOffer::tryLoad, TurnEventDiplomacy::tryLoad,
                     TurnEventShipRepair::tryLoad, TurnEventGoTo::tryLoad,
                     TurnEventCustomHouseExport::tryLoad,
                     TurnEventConstructionWaitingForTools::tryLoad,
                     TurnEventShipComeToEuropePort::tryLoad,
                     TurnEventShipComeToHighSeas::tryLoad,
-                    TurnEventLostCityRumor::tryLoad));
+                    TurnEventLostCityRumor::tryLoad,
+                    TurnEventNativeConquest::tryLoad,
+                    TurnEventNativeConquestLoss::tryLoad));
 
     /**
      * Constructor that create event from persistent model.

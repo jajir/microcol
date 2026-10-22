@@ -13,6 +13,7 @@ import org.microcol.model.GoodsType;
 import org.microcol.model.Founder;
 import org.microcol.model.LostCityRumorRules;
 import org.microcol.model.NativeNation;
+import org.microcol.model.NativeSettlement;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.QueueItemType;
@@ -170,6 +171,14 @@ public final class TurnEventProvider {
         return new TurnEventNativeTeaching(player.getName(), kind, skill);
     }
 
+    /**
+     * Report a native convert that joined a colony or returned to its tribe.
+     */
+    public static TurnEvent getNativeConvert(final Player player,
+            final TurnEventNativeConvert.Kind kind) {
+        return new TurnEventNativeConvert(player.getName(), kind);
+    }
+
     /** Report one actual school or productive-work graduation. */
     public static TurnEvent getEducationCompleted(final Player player,
             final Colony colony, final Unit student,
@@ -206,6 +215,40 @@ public final class TurnEventProvider {
             final boolean deSotoAverted) {
         return new TurnEventLostCityRumor(player.getName(), outcome, explorerId,
                 gold, nation, deSotoAverted);
+    }
+
+    /**
+     * Durable record of one conquered native settlement (R-0174).
+     *
+     * @param player            required owner of the attacker
+     * @param settlement        required conquered settlement, still registered
+     * @param defendersDefeated defenders overcome, at least one
+     * @return turn event object
+     */
+    public static TurnEvent getNativeConquest(final Player player,
+            final NativeSettlement settlement, final int defendersDefeated) {
+        return new TurnEventNativeConquest(player.getName(), settlement.getId(),
+                settlement.getNation(), settlement.getLocation(),
+                settlement.isCapital(), defendersDefeated);
+    }
+
+    /**
+     * Notice for the owner of a pupil or missionary that died with a conquered
+     * native settlement (R-0174).
+     *
+     * @param owner      required owner of the lost unit
+     * @param settlement required conquered settlement, still registered
+     * @param unitId     stable ID of the lost unit
+     * @param type       type the unit had
+     * @param pupil      true for a pupil, false for a missionary
+     * @return turn event object
+     */
+    public static TurnEvent getNativeConquestLoss(final Player owner,
+            final NativeSettlement settlement, final int unitId,
+            final UnitType type, final boolean pupil) {
+        return new TurnEventNativeConquestLoss(owner.getName(), unitId, type,
+                pupil, settlement.getNation(), settlement.getId(),
+                settlement.getLocation());
     }
 
     /** Notice that the Crown forced a war, possibly ending an alliance. */

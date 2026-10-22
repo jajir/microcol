@@ -57,21 +57,21 @@
 6. Economy captures assign commons to [R-0146](done/R-0146.md), clearing a
    civilian specialty to [R-0147](done/R-0147.md), native teaching to
    [R-0148](done/R-0148.md) and the convert lifecycle, including Sepulveda, to
-   [R-0149](R-0149.md). Delivered specialist production, building constants
+   [R-0149](done/R-0149.md). Delivered specialist production, building constants
    and mountain/sea founding guards are preserved; complete matrix acceptance
    remains separate.
 7. Native foundations are [R-0150](done/R-0150.md) nation/settlement identity,
    [R-0151](done/R-0151.md) braves and turn participation, [R-0152](done/R-0152.md)
    homeland purchase with Minuit, [R-0153](done/R-0153.md) anger/alarm with France
-   and Pocahontas, [R-0154](R-0154.md) provocation/reconciliation events,
-   [R-0155](done/R-0155.md) visible alarm, and [R-0156](R-0156.md) bounded raid AI.
+   and Pocahontas, [R-0154](done/R-0154.md) provocation/reconciliation events,
+   [R-0155](done/R-0155.md) visible alarm, and [R-0156](done/R-0156.md) bounded raid AI.
    These do not stand in for native trade, missions or real native combat.
-8. Native interactions are [R-0157](R-0157.md) action selection,
-   [R-0158](R-0158.md) chief encounters, [R-0159](done/R-0159.md) market/admission,
+8. Native interactions are [R-0157](done/R-0157.md) action selection,
+   [R-0158](done/R-0158.md) chief encounters, [R-0159](done/R-0159.md) market/admission,
    [R-0160](done/R-0160.md) sale/gift and [R-0161](done/R-0161.md) reverse purchase.
-   [R-0162](R-0162.md) owns tribute; [R-0163](done/R-0163.md) ordination and
-   Brebeuf; [R-0164](R-0164.md) mission updates; [R-0165](R-0165.md)
-   denunciation; and [R-0166](R-0166.md) paid incitement. Native conquest
+   [R-0162](done/R-0162.md) owns tribute; [R-0163](done/R-0163.md) ordination and
+   Brebeuf; [R-0164](done/R-0164.md) mission updates; [R-0165](done/R-0165.md)
+   denunciation; and [R-0166](done/R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.
 9. European residuals are [R-0167](R-0167.md) de Witt foreign trade,
    [R-0168](R-0168.md) his comparative report, [R-0169](R-0169.md)
@@ -80,7 +80,7 @@
    multi-colony scheduling. R-0090–R-0092 retain their existing policies and
    unresolved proposals; this capture does not approve new strategic thresholds.
 10. Combat residuals are [R-0173](done/R-0173.md) native roles/ambush,
-    [R-0174](R-0174.md) settlement conquest and Spain,
+    [R-0174](done/R-0174.md) settlement conquest and Spain,
     [R-0175](R-0175.md) treasure identity/reward with Cortes,
     [R-0176](R-0176.md) naval patrol interception,
     [R-0177](R-0177.md) coastal batteries,

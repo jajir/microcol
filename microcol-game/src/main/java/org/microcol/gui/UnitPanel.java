@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageService;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.MovementPoints;
@@ -90,6 +91,22 @@ class UnitPanel {
             role.setWrapText(true);
             role.setMinHeight(Region.USE_PREF_SIZE);
             box.getChildren().add(role);
+        }
+        // The convert's native affiliation and unassigned count (R-0149); the
+        // unit keeps the colonist image and the colonist type name.
+        if (unit instanceof org.microcol.model.unit.UnitFreeColonist
+                && ((org.microcol.model.unit.UnitFreeColonist) unit)
+                        .isNativeConvert()) {
+            final org.microcol.model.unit.UnitFreeColonist convert = (org.microcol.model.unit.UnitFreeColonist) unit;
+            final Label convertLabel = new Label(i18n.get(
+                    Loc.unitsPanel_convert,
+                    i18n.get(StatusBarMessageService.nationLabel(
+                            convert.getConvertNation().orElseThrow())),
+                    String.valueOf(convert.getConvertUnassignedUpdates())));
+            convertLabel.setId("unitConvert-" + unit.getId());
+            convertLabel.setWrapText(true);
+            convertLabel.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(convertLabel);
         }
 
         if (isUnitOwnedBy(unit, humanPlayer)) {

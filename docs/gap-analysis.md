@@ -1606,7 +1606,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0149 refinement
 
 1. Answer **14** — Convert inactivity: Accumulate the convert’s unassigned turns across its lifetime up to the accepted eight-turn expiry. Assignment pauses the count but never resets it; a brief job cannot renew the deadline. Persist accumulated inactivity across Continue.
-2. Owner: [R-0149](requirements/R-0149.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0149](requirements/done/R-0149.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0150 refinement
 
@@ -1626,12 +1626,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0156 refinement
 
 1. Answer **18** — Native ties and patrol: Among equally near reachable legal enemies, choose stable target ID. Without a target, return toward home and patrol reachable neighboring tiles in a fixed documented coordinate order, no farther than two tiles from home; without a legal step end the turn. Retain current hostility and knowledge restrictions. Paid targeting follows R-0166: for 20 native turns pursue the nearest known reachable target of the paid nation beyond the ordinary two-tile raid/home-patrol radius, using only known legal paths; without a reachable known paid target, use ordinary behavior.
-2. Owner: [R-0156](requirements/R-0156.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0156](requirements/done/R-0156.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0157 refinement
 
 1. Answer **19** — Initial native teaching skill: At map creation prefer native-teachable skills matching locally productive resources and select uniformly among those candidates with the map seed. If no such candidate exists, choose uniformly from the complete accepted native-teachable list. Persist the selected skill; visits and reload never change it.
-2. Owner: [R-0157](requirements/R-0157.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0157](requirements/done/R-0157.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0159 refinement
 
@@ -1646,17 +1646,17 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0162 refinement
 
 1. Answer **22** — Tribute force scope: Count the demander plus its own soldiers, dragoons and scouts on the eight adjacent settlement tiles, excluding passengers and allied or distant troops. Sum base combat strengths without offensive terrain bonuses. Compare with actual defenders inside the settlement including the agreed settlement defense bonus; retain cooldown, payment caps and provocation on either confirmed result.
-2. Owner: [R-0162](requirements/R-0162.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0162](requirements/done/R-0162.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0164 refinement
 
 1. Answer **23** — Mission conversion interruptions: Pause the conversion clock during hostile updates and resume it when nonhostile. Three eligible updates, a hostile interruption and two eligible updates produce one fifth-update attempt. Do not reset progress or bank missed attempts; preserve the existing conversion probability and no-colony behavior.
-2. Owner: [R-0164](requirements/R-0164.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0164](requirements/done/R-0164.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0166 refinement
 
 1. Answer **24** — Paid native target lifetime: A successful incitement target persists for 20 turns of that native nation, replacing the proposed ten-turn lifetime. Prefer legal known targets of the paid European power; if no eligible paid target exists, use ordinary hostile-target/patrol behavior. End the order when the target nation ceases to exist or relations fall below hostile; a new successful incitement replaces the old target. During those 20 native turns, pursue the nearest known reachable target of the paid nation beyond the ordinary two-tile raid/home-patrol radius, using only known legal paths. This grants no hidden-map knowledge; with no reachable known paid target, use ordinary behavior.
-2. Owner: [R-0166](requirements/R-0166.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0166](requirements/done/R-0166.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0167 refinement
 
@@ -1696,7 +1696,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0174 refinement
 
 1. Answer **32** — Native conquest dependents: Rehome surviving external braves to the nearest surviving settlement of the same nation, ties by stable ID; without one they remain living homeless braves and do not use a home patrol. End the mission and teaching; release the missionary and pupil without a completed skill to their nearest legal tile, using fixed coordinate ties, and report their death if no legal tile exists. Remove the destroyed settlement’s claim; another existing settlement may inherit an overlap, preserving previously purchased use rights.
-2. Owner: [R-0174](requirements/R-0174.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0174](requirements/done/R-0174.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0175 refinement
 

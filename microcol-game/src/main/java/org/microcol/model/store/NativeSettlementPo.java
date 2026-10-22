@@ -60,6 +60,27 @@ public class NativeSettlementPo {
     private List<NativeGoodsStockPo> receivedGoods;
 
     /**
+     * Chief encounters of visiting nations (R-0158); null or absent means none
+     * has happened yet.
+     */
+    private List<NativeChiefEncounterPo> chiefEncounters;
+
+    /**
+     * Last tribute demand of each visiting nation (R-0162); null or absent
+     * means none has been made yet.
+     */
+    private List<NativeTributeRecordPo> tributes;
+
+    /** Missionary whose mission the settlement holds, or null for none. */
+    private Integer missionaryId;
+
+    /**
+     * Nonhostile owner updates counted in the current mission cycle; zero
+     * without a mission.
+     */
+    private Integer missionUpdates;
+
+    /**
      * @return saved stage of the course, or null without a pupil
      */
     public String getTeachingStage() {
@@ -213,6 +234,51 @@ public class NativeSettlementPo {
 
     public void setReceivedGoods(final List<NativeGoodsStockPo> receivedGoods) {
         this.receivedGoods = receivedGoods;
+    }
+
+    /**
+     * @return saved chief encounters, or null when none was saved
+     */
+    public List<NativeChiefEncounterPo> getChiefEncounters() {
+        return chiefEncounters;
+    }
+
+    public void setChiefEncounters(
+            final List<NativeChiefEncounterPo> chiefEncounters) {
+        this.chiefEncounters = chiefEncounters;
+    }
+
+    /**
+     * @return saved tribute demands, or null when none was saved
+     */
+    public List<NativeTributeRecordPo> getTributes() {
+        return tributes;
+    }
+
+    public void setTributes(final List<NativeTributeRecordPo> tributes) {
+        this.tributes = tributes;
+    }
+
+    /**
+     * @return saved missionary of the mission, or null when none is held
+     */
+    public Integer getMissionaryId() {
+        return missionaryId;
+    }
+
+    public void setMissionaryId(final Integer missionaryId) {
+        this.missionaryId = missionaryId;
+    }
+
+    /**
+     * @return saved count of the current mission cycle, or null when absent
+     */
+    public Integer getMissionUpdates() {
+        return missionUpdates;
+    }
+
+    public void setMissionUpdates(final Integer missionUpdates) {
+        this.missionUpdates = missionUpdates;
     }
 
 }

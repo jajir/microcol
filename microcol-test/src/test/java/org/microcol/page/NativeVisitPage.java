@@ -7,9 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.microcol.model.EuropeanNation;
 import org.microcol.model.Location;
+import org.microcol.model.NativeChiefOutcome;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.NativeVisitAction;
 import org.microcol.model.UnitType;
@@ -17,6 +20,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javafx.scene.input.KeyCode;
@@ -46,6 +50,16 @@ public final class NativeVisitPage extends AbstractScreen {
 
     private static final String TEACHING_BACK_ID = "nativeTeachingBack";
 
+    private static final String CHIEF_BUTTON_ID = "nativeVisitChief";
+
+    private static final String CHIEF_CONTENT_ID = "nativeChiefContent";
+
+    private static final String CHIEF_LINE_ID = "nativeChiefLine";
+
+    private static final String CHIEF_CONFIRM_ID = "nativeChiefConfirm";
+
+    private static final String CHIEF_BACK_ID = "nativeChiefBack";
+
     private final FogPage map;
 
     private int rememberedMovement;
@@ -74,6 +88,43 @@ public final class NativeVisitPage extends AbstractScreen {
         units.add(colonist(soldierId, soldierAt, true, false));
         units.add(criminal(criminalId, criminalAt));
         final Path fixture = Files.createTempFile("native-visit-", ".microcol");
+        try {
+            Files.writeString(fixture, gson.toJson(game));
+            new AttackPage(getContext()).replaceGame(fixture.toFile());
+        } finally {
+            Files.deleteIfExists(fixture);
+        }
+    }
+
+    /**
+     * Load the scenario with one ordinary scout and one seasoned scout beside
+     * the Aztec capital. The natives' anger toward the Dutch starts at zero, so
+     * the tribe is content and the chief's risk is the content one. The saved
+     * random state is set so that the first draw of the first confirmed visit
+     * gives the named outcome. Both scouts are plain saved units; nothing in
+     * the running model is changed.
+     */
+    public void loadChiefFixture(final File source, final int scoutId,
+            final Location scoutAt, final int seasonedId,
+            final Location seasonedAt, final NativeChiefOutcome firstDraw)
+            throws Exception {
+        final Gson gson = new Gson();
+        final JsonObject game = gson.fromJson(Files.readString(source.toPath()),
+                JsonObject.class);
+        final JsonObject model = game.getAsJsonObject("model");
+        model.addProperty("combatRandomState", chiefSeed(firstDraw));
+        model.getAsJsonArray("units")
+                .add(colonist(scoutId, scoutAt, false, true));
+        model.getAsJsonArray("units").add(seasoned(seasonedId, seasonedAt));
+        for (final JsonElement entry : model
+                .getAsJsonArray("nativeTribalAnger")) {
+            final JsonObject anger = entry.getAsJsonObject();
+            if ("AZTEC".equals(anger.get("nation").getAsString())
+                    && "DUTCH".equals(anger.get("european").getAsString())) {
+                anger.addProperty("value", 0.0);
+            }
+        }
+        final Path fixture = Files.createTempFile("native-chief-", ".microcol");
         try {
             Files.writeString(fixture, gson.toJson(game));
             new AttackPage(getContext()).replaceGame(fixture.toFile());
@@ -115,6 +166,51 @@ public final class NativeVisitPage extends AbstractScreen {
         unit.addProperty("missionary", false);
         unit.addProperty("holdingGuns", guns);
         unit.addProperty("mounted", mounted);
+        return unit;
+    }
+
+    /**
+     * Seed of the saved random state whose first draw gives the outcome for the
+     * content natives and an ordinary scout (R-0158). It runs only while the
+     * fixture is prepared. The thresholds are the accepted percentages of the
+     * requirement, written here independently of the production rules: a roll
+     * below 0.70 is information, below 0.95 gold (25%), and from 0.95 death
+     * (5%). The roll follows the documented SplitMix64 stream of the saved
+     * random state, whose first draw advances the state by the golden gamma.
+     */
+    static long chiefSeed(final NativeChiefOutcome outcome) {
+        for (long seed = 0; seed < 5_000_000L; seed++) {
+            if (contentOrdinaryOutcome(firstRoll(seed)) == outcome) {
+                return seed;
+            }
+        }
+        throw new IllegalStateException("No seed gives " + outcome);
+    }
+
+    private static NativeChiefOutcome contentOrdinaryOutcome(
+            final double roll) {
+        if (roll < 0.70) {
+            return NativeChiefOutcome.INFORMATION;
+        }
+        return roll < 0.95 ? NativeChiefOutcome.GOLD : NativeChiefOutcome.DEATH;
+    }
+
+    private static double firstRoll(final long seed) {
+        long z = seed + 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= z >>> 31;
+        return (z >>> 11) * 0x1.0p-53;
+    }
+
+    /**
+     * A seasoned scout is a free colonist of its own type, so it carries the
+     * colonist work history and missionary fields of the saved schema.
+     */
+    private static JsonObject seasoned(final int id, final Location at) {
+        final JsonObject unit = unit(id, "SEASONED_SCOUT", at);
+        unit.addProperty("workUpdates", 0);
+        unit.addProperty("missionary", false);
         return unit;
     }
 
@@ -229,6 +325,144 @@ public final class NativeVisitPage extends AbstractScreen {
                         settlement)
                 .orElseThrow(() -> new AssertionError(
                         "No native settlement known at " + settlement));
+    }
+
+    /** Open the chief's confirmation from the chooser; nothing is drawn yet. */
+    public void startChiefChoice() {
+        getRobot().clickOn(chiefButton());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Confirm the visit: the model draws at most once and the result follows.
+     */
+    public void confirmChief() {
+        getRobot().clickOn(chiefDialogButton(CHIEF_CONFIRM_ID));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Back out of the confirmation; nothing changes. */
+    public void backFromChief() {
+        getRobot().clickOn(chiefDialogButton(CHIEF_BACK_ID));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Dismiss the reported result of the chief visit. */
+    public void closeChiefResult() {
+        DialogMessagePage.of(getContext()).close();
+    }
+
+    private javafx.scene.control.Button chiefButton() {
+        return getNodeFinder().lookup("#" + CONTENT_ID + " #" + CHIEF_BUTTON_ID)
+                .queryButton();
+    }
+
+    private javafx.scene.control.Button chiefDialogButton(final String id) {
+        return getNodeFinder().lookup("#" + CHIEF_CONTENT_ID + " #" + id)
+                .queryButton();
+    }
+
+    /** The chooser offers the chief to this visitor now. */
+    public void verifyChiefButtonShown() {
+        assertTrue(isCssIdShown(CHIEF_BUTTON_ID));
+    }
+
+    /**
+     * The confirmation names the settlement's mood and the exact chances before
+     * anything is drawn; a repeat visit names the mood and no risk.
+     */
+    public void verifyChiefConfirmation(final String expected) {
+        assertTrue(isCssIdVisible(CHIEF_CONTENT_ID),
+                "Chief confirmation is not open");
+        assertEquals(expected, getLabeledById(CHIEF_LINE_ID).getText());
+    }
+
+    public void verifyChiefClosed() {
+        assertFalse(isCssIdVisible(CHIEF_CONTENT_ID));
+    }
+
+    public void captureChief(final String fileName) throws Exception {
+        captureDialog(CHIEF_CONTENT_ID, fileName);
+    }
+
+    /**
+     * The reported result names the actual outcome: the gold given, the death
+     * of the scout, or the information, which a repeat visit repeats.
+     */
+    public void verifyChiefResultMessage(final NativeChiefOutcome outcome,
+            final int gold, final boolean repeat) throws Exception {
+        DialogMessagePage.of(getContext()).verifyDialogTextContains(
+                chiefResultEnglish(outcome, gold, repeat));
+    }
+
+    private static String chiefResultEnglish(final NativeChiefOutcome outcome,
+            final int gold, final boolean repeat) {
+        if (outcome == NativeChiefOutcome.GOLD) {
+            return String.format(
+                    "The chief gives you %d gold from the treasury of this settlement.",
+                    gold);
+        }
+        if (outcome == NativeChiefOutcome.DEATH) {
+            return "The natives kill your scout. It is lost.";
+        }
+        return repeat ? "The chief repeats the same information."
+                : "The chief tells you about this settlement.";
+    }
+
+    /** The outcome drawn for the Dutch here, empty before their first visit. */
+    public Optional<NativeChiefOutcome> recordedChiefOutcome(
+            final Location settlement) {
+        return knownSettlement(settlement)
+                .findChiefEncounter(EuropeanNation.DUTCH);
+    }
+
+    public int treasury(final Location settlement) {
+        return knownSettlement(settlement).getTreasury();
+    }
+
+    public int gold() {
+        return getModel().getPlayerByName("Dutch").getGold();
+    }
+
+    /** No visit has been recorded: the nation has not met the chief here. */
+    public void verifyChiefNotRecorded(final Location settlement) {
+        assertTrue(recordedChiefOutcome(settlement).isEmpty());
+    }
+
+    /** The one recorded outcome is kept; later visits never change it. */
+    public void verifyChiefRecorded(final Location settlement,
+            final NativeChiefOutcome expected) {
+        assertEquals(Optional.of(expected), recordedChiefOutcome(settlement));
+    }
+
+    /**
+     * Gold moved once: the settlement lost exactly what the player gained, and
+     * the amount is the cap of the settlement or its whole treasury.
+     */
+    public void verifyChiefGold(final Location settlement, final int treasury,
+            final int gold, final int paid) {
+        assertEquals(treasury - paid, treasury(settlement));
+        assertEquals(gold + paid, gold());
+    }
+
+    /** The scout that died has left the game. */
+    public void verifyChiefScoutLost(final int unitId) {
+        assertTrue(getModel().tryGetUnitById(unitId).isEmpty());
+    }
+
+    /**
+     * The land of a square is explored, or still unknown, for the Dutch. Only
+     * the explored state is read: present sight is not part of this check.
+     */
+    public void verifyLandExplored(final Location at, final boolean expected) {
+        assertEquals(expected,
+                getModel().getPlayerByName("Dutch").isVisible(at),
+                "Explored state of " + at);
+    }
+
+    /** A scout that survived the visit still stands where it was. */
+    public void verifyChiefScoutAlive(final int unitId, final Location at) {
+        assertEquals(at, getModel().getUnitById(unitId).getLocation());
     }
 
     /** The chooser's own close button; other windows reuse the same ID. */

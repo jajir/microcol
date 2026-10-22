@@ -73,6 +73,7 @@
     <entry key="jobCROP_UNSUPPORTED">Tuto surovinu nelze na současném poli vyrábět. Vyberte jinou surovinu nebo jiné pole.</entry>
     <entry key="jobNO_ELIGIBLE_FIELD">Pro tuto surovinu není k dispozici žádné vhodné volné pole.</entry>
     <entry key="jobBUILDING_FULL">Všechna pracovní místa v této budově jsou obsazena.</entry>
+    <entry key="jobWORK_FORBIDDEN">Domorodý konvertita nemůže pracovat ve výrobní budově.</entry>
     <entry key="jobChanged">Pracovník nebo pracovní místo se změnili. Práce nebyla přidělena. Zkontrolujte obnovené možnosti a znovu potvrďte nebo zrušte výběr.</entry>
     <entry key="jobNoChoices">Pro tohoto kolonistu zde není dostupná žádná práce.</entry>
     <entry key="jobDropRejected">Tento pracovník nyní nemůže přijmout danou práci. Zkontrolujte tah, dostupnost místa a prostor pro vybavení ve skladu.</entry>

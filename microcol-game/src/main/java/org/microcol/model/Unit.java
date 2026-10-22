@@ -142,6 +142,12 @@ public interface Unit {
      */
     boolean isAtPlaceNativeCourse();
 
+    /**
+     * @return whether this unit is stationed at a native settlement's mission
+     *         (R-0164)
+     */
+    boolean isAtPlaceNativeMission();
+
     boolean isAtPlaceColonyField();
 
     /**
@@ -271,6 +277,21 @@ public interface Unit {
     Optional<List<Location>> getPath(Location destination);
 
     Optional<List<Location>> getPath(Location destination,
+            boolean excludeDestination);
+
+    /**
+     * Cheapest legal route over squares the owner has explored, by the same
+     * cost and turn rules as {@link #getPath(Location, boolean)}. An unexplored
+     * square is never entered or inspected, so the route uses no hidden map
+     * knowledge; a square explored earlier counts even when it is out of sight
+     * now. Used where a decision may rely only on known terrain (R-0166).
+     *
+     * @param destination        required destination
+     * @param excludeDestination when {@code true}, a route to a square next to
+     *                           the destination is enough
+     * @return route without the start square, empty when no known route exists
+     */
+    Optional<List<Location>> getKnownPath(Location destination,
             boolean excludeDestination);
 
     void attack(Location attackAt);

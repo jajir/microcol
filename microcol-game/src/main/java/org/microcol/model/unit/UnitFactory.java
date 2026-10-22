@@ -7,6 +7,8 @@ import org.microcol.model.Cargo;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativeConversion;
+import org.microcol.model.NativeNation;
 import org.microcol.model.MovementPoints;
 import org.microcol.model.Place;
 import org.microcol.model.PlaceBuilderPo;
@@ -293,6 +295,19 @@ public class UnitFactory {
                         ? unitPo.getMissionary() != null
                         : unitPo.getMissionary() == null,
                 "Invalid saved missionary role owner");
+        // A convert keeps its nation and lifetime count; nothing else carries
+        // the role, so an ordinary colonist must not carry either field.
+        final boolean convert = Boolean.TRUE.equals(unitPo.getNativeConvert());
+        Preconditions.checkArgument(convert ? unit instanceof UnitFreeColonist
+                && unitPo.getNativeConvertNation() != null
+                && unitPo.getNativeConvertUnassignedUpdates() != null
+                && unitPo.getNativeConvertUnassignedUpdates() >= 0
+                && unitPo
+                        .getNativeConvertUnassignedUpdates() < NativeConversion.RETURN_AFTER_UNASSIGNED_UPDATES
+                : unitPo.getNativeConvert() == null
+                        && unitPo.getNativeConvertNation() == null
+                        && unitPo.getNativeConvertUnassignedUpdates() == null,
+                "Invalid saved native convert");
         Preconditions.checkArgument(unitPo.getMilitaryRole() != null,
                 "Missing saved military role");
         Preconditions.checkArgument(
@@ -309,6 +324,11 @@ public class UnitFactory {
                     .restoreVeteran(unitCreateRequest.isVeteran());
             ((UnitFreeColonist) unit).restoreWorkExperience(
                     unitPo.getWorkSkill(), unitPo.getWorkUpdates());
+            if (convert) {
+                ((UnitFreeColonist) unit).restoreNativeConvert(
+                        NativeNation.valueOf(unitPo.getNativeConvertNation()),
+                        unitPo.getNativeConvertUnassignedUpdates());
+            }
         }
         if (unit.getAction().getType() == UnitActionType.fortify) {
             Preconditions.checkArgument((unit instanceof UnitFreeColonist

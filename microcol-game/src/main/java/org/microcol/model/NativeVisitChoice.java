@@ -25,6 +25,43 @@ public final class NativeVisitChoice {
         /** The settlement already teaches one pupil in its single course. */
         SETTLEMENT_OCCUPIED,
 
+        /**
+         * The settlement already holds a mission of the visitor's own nation; a
+         * second one is refused, so none replaces it.
+         */
+        MISSION_OCCUPIED,
+
+        /**
+         * The settlement holds a rival nation's mission; the visitor may
+         * challenge it in the explicit contest of R-0165, which is not an
+         * establishment.
+         */
+        CONTEST_AVAILABLE,
+
+        /**
+         * The visitor qualifies, but no other European power may be selected as
+         * the target of an incitement now (R-0166).
+         */
+        NO_INCITEMENT_TARGET,
+
+        /**
+         * The visitor qualifies, but the settlement has no actual defender or
+         * attack terms the visitor can meet now (R-0174).
+         */
+        NO_ATTACK_TARGET,
+
+        /**
+         * The visitor qualifies, but this European already demanded tribute
+         * here within the last ten turns (R-0162).
+         */
+        TRIBUTE_COOLDOWN,
+
+        /**
+         * The visitor qualifies, but a unit other than the settlement's own
+         * braves holds its square, so no tribute demand can be made (R-0162).
+         */
+        NO_TRIBUTE_TARGET,
+
         /** The visitor qualifies and the action can be chosen now. */
         AVAILABLE
 

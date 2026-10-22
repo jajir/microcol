@@ -229,6 +229,21 @@ public class ModelPo {
         this.nativeRelationOutcomeIds = nativeRelationOutcomeIds;
     }
 
+    /**
+     * Native tribes with an active paid-incitement order (R-0166), saved with
+     * their remaining native turns. Absent means no tribe has an order.
+     */
+    private List<NativeIncitementPo> nativeIncitements;
+
+    public List<NativeIncitementPo> getNativeIncitements() {
+        return nativeIncitements;
+    }
+
+    public void setNativeIncitements(
+            final List<NativeIncitementPo> nativeIncitements) {
+        this.nativeIncitements = nativeIncitements;
+    }
+
     private List<TurnEventPo> turnEvents = new ArrayList<>();
 
     private WorldMapPo map = new WorldMapPo();

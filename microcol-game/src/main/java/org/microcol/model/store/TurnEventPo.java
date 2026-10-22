@@ -279,6 +279,106 @@ public final class TurnEventPo {
         nativeTeachingSkill = value;
     }
 
+    /** Kind of a native convert notice, a TurnEventNativeConvert.Kind name. */
+    private String nativeConvertKind;
+
+    public String getNativeConvertKind() {
+        return nativeConvertKind;
+    }
+
+    public void setNativeConvertKind(final String value) {
+        nativeConvertKind = value;
+    }
+
+    /** Settlement ID of a native conquest notice (R-0174). */
+    private Integer nativeConquestSettlementId;
+    /** Nation name of a native conquest notice, a NativeNation name. */
+    private String nativeConquestNation;
+    private Integer nativeConquestX;
+    private Integer nativeConquestY;
+    private Boolean nativeConquestCapital;
+    /** Defenders overcome in the conquest, at least one. */
+    private Integer nativeConquestDefeated;
+
+    public Integer getNativeConquestSettlementId() {
+        return nativeConquestSettlementId;
+    }
+
+    public void setNativeConquestSettlementId(final Integer value) {
+        nativeConquestSettlementId = value;
+    }
+
+    public String getNativeConquestNation() {
+        return nativeConquestNation;
+    }
+
+    public void setNativeConquestNation(final String value) {
+        nativeConquestNation = value;
+    }
+
+    public Integer getNativeConquestX() {
+        return nativeConquestX;
+    }
+
+    public void setNativeConquestX(final Integer value) {
+        nativeConquestX = value;
+    }
+
+    public Integer getNativeConquestY() {
+        return nativeConquestY;
+    }
+
+    public void setNativeConquestY(final Integer value) {
+        nativeConquestY = value;
+    }
+
+    public Boolean getNativeConquestCapital() {
+        return nativeConquestCapital;
+    }
+
+    public void setNativeConquestCapital(final Boolean value) {
+        nativeConquestCapital = value;
+    }
+
+    /** Lost pupil or missionary of a conquered settlement (R-0174). */
+    private Integer nativeConquestLossUnitId;
+    /** Type the lost unit had, a UnitType name. */
+    private String nativeConquestLossUnitType;
+    /** Whether the lost unit was a pupil, otherwise a missionary. */
+    private Boolean nativeConquestLossPupil;
+
+    public Integer getNativeConquestLossUnitId() {
+        return nativeConquestLossUnitId;
+    }
+
+    public void setNativeConquestLossUnitId(final Integer value) {
+        nativeConquestLossUnitId = value;
+    }
+
+    public String getNativeConquestLossUnitType() {
+        return nativeConquestLossUnitType;
+    }
+
+    public void setNativeConquestLossUnitType(final String value) {
+        nativeConquestLossUnitType = value;
+    }
+
+    public Boolean getNativeConquestLossPupil() {
+        return nativeConquestLossPupil;
+    }
+
+    public void setNativeConquestLossPupil(final Boolean value) {
+        nativeConquestLossPupil = value;
+    }
+
+    public Integer getNativeConquestDefeated() {
+        return nativeConquestDefeated;
+    }
+
+    public void setNativeConquestDefeated(final Integer value) {
+        nativeConquestDefeated = value;
+    }
+
     private Integer educationStudentId;
     private UnitType educationBeforeType;
     private UnitType educationAfterType;

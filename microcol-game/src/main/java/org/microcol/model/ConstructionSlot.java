@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import org.microcol.model.store.ConstructionSlotPo;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.Preconditions;
 
@@ -210,7 +211,10 @@ public class ConstructionSlot {
             final Unit worker, final PoliticalProduction political) {
         final UnitType type = worker.getType();
         final int penalty = type == UnitType.INDENTURED_SERVANT ? 1
-                : type == UnitType.PETTY_CRIMINAL ? 2 : 0;
+                : type == UnitType.PETTY_CRIMINAL ? 2
+                        : isNativeConvert(worker)
+                                ? NativeConversion.INDOOR_PENALTY
+                                : 0;
         final Goods ordinary = base
                 .setAmount(Math.max(0, base.getAmount() - penalty));
         final Goods worked = ordinary
@@ -235,7 +239,27 @@ public class ConstructionSlot {
                 && getColony().getConstructions().contains(construction)
                 && construction.getConstructionSlots().contains(this)
                 && isEmpty() && getColony().canAcceptWorker(unit)
-                && getColony().canAcceptSchoolTeacher(this, unit);
+                && getColony().canAcceptSchoolTeacher(this, unit)
+                && isWorkAllowed(unit, getConstructionType());
+    }
+
+    /**
+     * A native convert may not staff a manufacturing building, one with an
+     * input consumed per turn (R-0149). Every other worker is unaffected.
+     *
+     * @param worker required prospective worker
+     * @param type   required building type of the slot
+     * @return whether the worker may take a slot of this building
+     */
+    static boolean isWorkAllowed(final Unit worker,
+            final ConstructionType type) {
+        return type.getConsumptionPerTurn().isEmpty()
+                || !isNativeConvert(worker);
+    }
+
+    private static boolean isNativeConvert(final Unit worker) {
+        return worker instanceof UnitFreeColonist
+                && ((UnitFreeColonist) worker).isNativeConvert();
     }
 
 }

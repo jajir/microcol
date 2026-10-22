@@ -47,7 +47,7 @@ public final class UnitNativeBrave extends AbstractUnit {
     }
 
     /** Home settlement ID; {@code null} exactly when the brave is homeless. */
-    private final Integer homeSettlementId;
+    private Integer homeSettlementId;
 
     private final Role role;
 
@@ -91,6 +91,17 @@ public final class UnitNativeBrave extends AbstractUnit {
      */
     public Optional<Integer> getHomeSettlementId() {
         return Optional.ofNullable(homeSettlementId);
+    }
+
+    /**
+     * Give this brave a new home after its settlement was conquered (R-0174).
+     * The caller has checked that the home is a settlement of this brave's own
+     * nation; {@code null} makes the brave homeless.
+     *
+     * @param settlementId ID of the new home, or {@code null} for none
+     */
+    public void rehome(final Integer settlementId) {
+        homeSettlementId = settlementId;
     }
 
     /**

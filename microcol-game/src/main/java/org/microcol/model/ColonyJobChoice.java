@@ -14,7 +14,9 @@ public final class ColonyJobChoice {
 
     public enum UnavailableReason {
         ACTOR_UNAVAILABLE, EQUIPMENT_BLOCKED, CROP_UNSUPPORTED,
-        NO_ELIGIBLE_FIELD, BUILDING_FULL
+        NO_ELIGIBLE_FIELD, BUILDING_FULL,
+        /** A native convert may not take manufacturing work (R-0149). */
+        WORK_FORBIDDEN
     }
 
     private final Model model;
@@ -141,8 +143,12 @@ public final class ColonyJobChoice {
             final UnavailableReason reason = !actorAvailable
                     ? UnavailableReason.ACTOR_UNAVAILABLE
                     : target != null ? null
-                            : !canMove ? UnavailableReason.EQUIPMENT_BLOCKED
-                                    : UnavailableReason.BUILDING_FULL;
+                            : !ConstructionSlot.isWorkAllowed(worker,
+                                    building.getType())
+                                            ? UnavailableReason.WORK_FORBIDDEN
+                                            : !canMove
+                                                    ? UnavailableReason.EQUIPMENT_BLOCKED
+                                                    : UnavailableReason.BUILDING_FULL;
             choices.add(new ColonyJobChoice(model, colony, worker, Kind.INDOOR,
                     building.getProducedGoodsType().orElseThrow(), null, null,
                     null, building, target, reason));

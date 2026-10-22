@@ -16,6 +16,8 @@ import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.MilitaryPromotion;
 import org.microcol.model.MilitaryRole;
+import org.microcol.model.NativeConversion;
+import org.microcol.model.NativeNation;
 import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
@@ -56,6 +58,12 @@ public class UnitFreeColonist extends CanMount {
 
     private int workUpdates;
 
+    /** Native affiliation of a convert; null for every other colonist. */
+    private NativeNation convertNation;
+
+    /** Owner updates spent unassigned over the whole life of this convert. */
+    private int convertUnassignedUpdates;
+
     public UnitFreeColonist(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction unitAction,
@@ -77,12 +85,81 @@ public class UnitFreeColonist extends CanMount {
         out.setMissionary(missionary);
         out.setWorkSkill(workSkill);
         out.setWorkUpdates(workUpdates);
+        if (convertNation != null) {
+            out.setNativeConvert(true);
+            out.setNativeConvertNation(convertNation.name());
+            out.setNativeConvertUnassignedUpdates(convertUnassignedUpdates);
+        }
         return out;
     }
 
     /** Restore a saved missionary role; the loader validates its presence. */
     void restoreMissionary(final boolean value) {
         missionary = value;
+    }
+
+    /**
+     * @return whether this person is a native convert, a colonist with a native
+     *         affiliation who keeps it through Save and Continue (R-0149)
+     */
+    public boolean isNativeConvert() {
+        return convertNation != null;
+    }
+
+    /**
+     * @return the native nation the convert belongs to, empty for any other
+     *         colonist
+     */
+    public Optional<NativeNation> getConvertNation() {
+        return Optional.ofNullable(convertNation);
+    }
+
+    /**
+     * @return owner updates this convert has spent unassigned, lifetime total
+     */
+    public int getConvertUnassignedUpdates() {
+        return convertUnassignedUpdates;
+    }
+
+    /**
+     * Turn a delivered ordinary colonist into a convert of a native nation. The
+     * caller validates the mission and the placement before the unit exists;
+     * the count starts at zero, after the current unit-update phase.
+     *
+     * @param nation required native nation of the settlement
+     */
+    public void becomeNativeConvert(final NativeNation nation) {
+        Preconditions.checkNotNull(nation, "Native nation is required");
+        Preconditions.checkState(
+                !isNativeConvert() && !isMissionary()
+                        && getType() == UnitType.COLONIST,
+                "Only an ordinary colonist becomes a convert");
+        convertNation = nation;
+        convertUnassignedUpdates = 0;
+    }
+
+    /**
+     * Restore a saved convert. The loader validates the nation and the count.
+     *
+     * @param nation  required saved native nation
+     * @param updates saved lifetime unassigned updates, below the expiry
+     */
+    void restoreNativeConvert(final NativeNation nation, final int updates) {
+        convertNation = nation;
+        convertUnassignedUpdates = updates;
+    }
+
+    /**
+     * Count one owner update spent unassigned. Assigned work never calls this,
+     * so it pauses the count without resetting it.
+     *
+     * @return whether this update reached the expiry of the convert
+     */
+    public boolean addConvertUnassignedUpdate() {
+        Preconditions.checkState(isNativeConvert(),
+                "Only a native convert counts unassigned updates");
+        convertUnassignedUpdates++;
+        return convertUnassignedUpdates >= NativeConversion.RETURN_AFTER_UNASSIGNED_UPDATES;
     }
 
     /**
