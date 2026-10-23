@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.microcol.gui.FileSelectingService;
+import org.microcol.model.Calendar;
 import org.microcol.model.Direction;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.Founder;
@@ -155,6 +156,10 @@ public final class ForeignColonyTradePage extends AbstractScreen {
             if (player.getName().equals(DUTCH)) {
                 player.setCongress(congress(deWitt));
                 player.setDeclaredIndependence(rebellion);
+                // A declaration is dated by the saved calendar (R-0196).
+                player.setDeclarationYear(rebellion
+                        ? Calendar.make(model.getCalendar()).getCurrentYear()
+                        : null);
                 // A declaration fixes the colonies the nation owns now
                 // (R-0192).
                 player.setRebellionColonyIds(

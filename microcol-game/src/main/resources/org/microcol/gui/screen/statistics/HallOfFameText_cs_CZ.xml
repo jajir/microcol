@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="tab">Síň slávy</entry>
+  <entry key="title">Síň slávy: deset nejlepších hodnocených výsledků</entry>
+  <entry key="finishedTitle">Konec hry: váš výsledek a Síň slávy</entry>
+  <entry key="close">Zavřít</entry>
+  <entry key="empty">Zatím není zapsán žádný hodnocený výsledek.</entry>
+  <entry key="row">%d. %s - %d bodů - %s</entry>
+  <entry key="currentRank">Váš výsledek je na %d. místě mezi deseti nejlepšími.</entry>
+  <entry key="notRanked">Váš výsledek se mezi deset nejlepších nevešel. Jeho rozpis je uveden níže.</entry>
+  <entry key="currentIdentity">Identita výsledku: %s</entry>
+  <entry key="currentUnsaved">Tento výsledek se zobrazuje z hry. Uložený žebříček zatím nebylo možné aktualizovat.</entry>
+  <entry key="storageFailed">Soubor Síně slávy nebylo možné načíst nebo uložit, takže žebříček nemusí být aktuální. Váš výsledek zůstává v této hře. Otevřete tuto obrazovku znovu a zkuste to znovu; uložený soubor se nezměnil.</entry>
+</properties>

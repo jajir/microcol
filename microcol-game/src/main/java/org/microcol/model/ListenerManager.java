@@ -24,6 +24,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.ScoreBoundaryRequiredEvent;
 import org.microcol.model.event.MercenaryOfferRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
@@ -125,6 +126,13 @@ final class ListenerManager {
                 model, player);
         executeInSeparateThread(
                 listener -> listener.onImmigrationChoiceRequired(event));
+    }
+
+    void fireScoreBoundaryRequired(final Model model, final Player player) {
+        final ScoreBoundaryRequiredEvent event = new ScoreBoundaryRequiredEvent(
+                model, player);
+        executeInSeparateThread(
+                listener -> listener.onScoreBoundaryRequired(event));
     }
 
     void fireTaxDemandRequired(final Model model, final Player player) {

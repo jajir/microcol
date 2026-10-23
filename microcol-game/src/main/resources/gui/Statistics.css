@@ -40,3 +40,8 @@
 .relation-row .label { -fx-text-fill: #211a10; }
 .relations-report .scroll-pane { -fx-background-color: transparent; }
 #relationsFeedback { -fx-max-width: 430; -fx-text-fill: #211a10; -fx-background-color: #f6eddb; }
+#statsSidebar, #statsSidebar > .viewport { -fx-background-color: transparent; }
+/* Same width as the other reports: the right panel is shifted by .right. */
+.colony-advisor { -fx-max-width: 430; }
+.colony-advisor .scroll-pane { -fx-background-color: transparent; }
+#colonyAdvisorFeedback { -fx-max-width: 430; -fx-text-fill: #211a10; -fx-background-color: #f6eddb; }

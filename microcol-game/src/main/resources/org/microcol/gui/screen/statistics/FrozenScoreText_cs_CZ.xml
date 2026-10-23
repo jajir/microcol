@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="frozenTitle">Zmrazený výsledek: tento výsledek je zapsán a pozdější hra jej nemění.</entry>
+  <entry key="frozenIdentity">Identita výsledku: %s</entry>
+  <entry key="frozenBaseTitle">Zmrazené základní skóre, zapsáno</entry>
+  <entry key="frozenBaseNote">Tyto složky byly zapsány při zmrazení výsledku. Pozdější zlato, obyvatelé, zvony ani ztráty je nemění.</entry>
+  <entry key="frozenResultTitle">Zmrazený vypočtený výsledek, zapsáno</entry>
+  <entry key="frozenResultNote">Válečné a obtížnostní složky byly použity jednou při zmrazení výsledku. Nic zde zobrazeného se nepřepočítává.</entry>
+  <entry key="statusAwaiting">Čeká se na tvou volbu: pokračovat bez bodování, nebo rozhodnout později. Hra zůstane pozastavena, dokud nevybereš.</entry>
+  <entry key="statusContinued">Pokračoval jsi bez bodování. Tento zmrazený výsledek zůstává tvým skóre.</entry>
+  <entry key="statusFinal">Hra skončila. Tento zmrazený výsledek je tvůj konečný výsledek.</entry>
+  <entry key="liveTitle">Živý náhled, nezmrazený: tyto hodnoty se mění s hrou, dokud se výsledek nezmrazí na jaře 1800.</entry>
+  <entry key="decideFrozen">Rozhodnout o volbě zmrazeného výsledku…</entry>
+</properties>

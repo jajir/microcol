@@ -199,6 +199,40 @@ class LostCityRumorTest {
         }
     }
 
+    /**
+     * A Seasoned Scout bought in Europe takes the seasoned draw once placed on
+     * the square before the marker; the seed draws gold only for that scout.
+     */
+    @Test
+    void purchasedSeasonedScoutDrawsTheSpecialistRumorAndKeepsItsIdentity() {
+        final long seed = seedFor(true, Outcome.GOLD);
+        final Model model = scene(seed, RUMOR)
+                .gold(DUTCH, UnitType.SEASONED_SCOUT.getEuropePrice())
+                .toModel();
+        final Player dutch = dutch(model);
+        dutch.buy(UnitType.SEASONED_SCOUT);
+        final UnitFreeColonist scout = (UnitFreeColonist) dutch.getAllUnits()
+                .stream()
+                .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT)
+                .findFirst().orElseThrow();
+        scout.placeToLocation(START);
+        scout.setActionPoints(scout.getSpeed());
+        final int gold = dutch.getGold();
+
+        step(model, scout, RUMOR);
+
+        assertFalse(model.getMap().hasLostCityRumorAt(RUMOR));
+        final List<TurnEventLostCityRumor> notices = notices(model);
+        assertEquals(1, notices.size());
+        final TurnEventLostCityRumor notice = notices.get(0);
+        assertEquals(Outcome.GOLD, notice.getOutcome());
+        assertEquals(scout.getId(), notice.getExplorerId());
+        final int amount = 200 + (int) (roll(seed, 2) * 301);
+        assertEquals(amount, notice.getGold());
+        assertEquals(gold + amount, dutch.getGold());
+        assertSame(UnitType.SEASONED_SCOUT, scout.getType());
+    }
+
     private void verifyRealStep(final boolean seasoned,
             final Outcome expected) {
         final long seed = seedFor(seasoned, expected);

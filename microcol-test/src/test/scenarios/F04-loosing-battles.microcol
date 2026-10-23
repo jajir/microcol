@@ -5065,6 +5065,7 @@
         "computer": false,
         "gold": 484,
         "declaredIndependence": true,
+        "declarationYear": 1627,
         "rebellionColonyIds": [1, 2],
         "extraData": {},
         "visible": {

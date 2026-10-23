@@ -95,6 +95,7 @@ class MercenaryOfferTest {
             copy.setName(issuer);
             copy.setComputer(true);
             copy.setDeclaredIndependence(false);
+            copy.setDeclarationYear(null);
             copy.setRebellionColonyIds(null);
             copy.setIntervention(null);
             copy.setKnownPowers(new ArrayList<>());

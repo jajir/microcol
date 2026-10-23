@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Spring 1800: your result is frozen</entry>
+  <entry key="summary">Your nation's frozen result is %s points. It is recorded now, and later play cannot change it.</entry>
+  <entry key="parts">Population %s, founding fathers %s, gold %s, national support %s: base %s points.</entry>
+  <entry key="adjustments">Destroyed native settlements -%s, bells beyond the intervention target %s, independence bonus %s%%, early declaration %s, difficulty factor %s%%.</entry>
+  <entry key="unscored">You may continue without scoring until spring 1850. Continuing never changes this frozen result, and independence can no longer be declared.</entry>
+  <entry key="continueUnscored">Continue without scoring</entry>
+  <entry key="decideLater">Decide later</entry>
+  <entry key="changed">The game changed. Close this window and check it again.</entry>
+</properties>

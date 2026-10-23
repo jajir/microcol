@@ -10,6 +10,7 @@ import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Player;
+import org.microcol.model.ResultScore;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Node;
@@ -98,6 +99,34 @@ public final class RebellionVictoryPage extends AbstractScreen {
                         && ((Label) node).getText().contains(unexpectedText))
                 .tryQuery().orElse(null);
         assertNull(found, "Unexpected dialog text: " + unexpectedText);
+    }
+
+    /**
+     * The calculated result of the won rebellion (R-0196) has the expected
+     * independence, destruction and difficulty terms, and its total follows
+     * from the clamped base with a single floor after the difficulty factor.
+     *
+     * @param bonusPercent      expected order bonus in percent
+     * @param earlyPoints       expected early declaration points
+     * @param destroyed         expected destroyed native settlements
+     * @param difficultyPercent expected difficulty factor in percent
+     */
+    public void verifySuccessfulResult(final long bonusPercent,
+            final long earlyPoints, final long destroyed,
+            final long difficultyPercent) {
+        final ResultScore result = getModel().getPlayerByName(DUTCH)
+                .getResultScore();
+        assertEquals(bonusPercent, result.getOrderBonusPercent(),
+                "Order bonus percent");
+        assertEquals(earlyPoints, result.getEarlyPoints(), "Early points");
+        assertEquals(destroyed, result.getDestroyedSettlements(),
+                "Destroyed settlements");
+        assertEquals(difficultyPercent, result.getDifficultyPercent(),
+                "Difficulty percent");
+        assertEquals(
+                (result.getClampedBase() * (100 + bonusPercent)
+                        + 100 * earlyPoints) * difficultyPercent / 10000,
+                result.getTotal(), "Calculated result");
     }
 
     /**

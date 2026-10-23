@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Pouze pro čtení. Další tah ukazuje, co každá kolonie bude mít, spotřebuje a vyrobí, až skončí tah. Otevření ani zavření nic nestojí.</entry>
+  <entry key="empty">Tento národ zatím nemá žádnou kolonii.</entry>
+  <entry key="unavailable">Přehled kolonií se zobrazí, když běží hra.</entry>
+  <entry key="colonyRow">Kolonie %s: %s kolonistů</entry>
+  <entry key="growthNone">Při dalším tahu se počet kolonistů nezmění.</entry>
+  <entry key="growthBirths">Při dalším tahu se mimo kolonii objeví %s nových kolonistů.</entry>
+  <entry key="growthFamine">Při dalším tahu dojde k nedostatku jídla a jeden kolonista přijde o život.</entry>
+  <entry key="tableGood">Zboží</entry>
+  <entry key="tableStock">Zásoba</entry>
+  <entry key="tableOutput">Výroba</entry>
+  <entry key="tableUsed">Spotřeba</entry>
+  <entry key="tableOther">Utraceno nebo prodáno</entry>
+  <entry key="tableChange">Změna</entry>
+  <entry key="tableNext">Příští stav</entry>
+  <entry key="outputBlocked">%s (%s blokováno)</entry>
+  <entry key="nextLost">%s (%s zahozeno)</entry>
+  <entry key="projectNone">Ve frontě není žádný projekt.</entry>
+  <entry key="projectWaitingHammers">Projekt %s čeká na kladiva.</entry>
+  <entry key="projectWaitingTools">Projekt %s čeká na %s nástrojů navíc; hlášení tahu připomene totéž.</entry>
+  <entry key="projectCompletes">Projekt %s se při dalším tahu dokončí.</entry>
+  <entry key="projectBlocked">Projekt %s teď nelze dokončit; jeho pokrok zůstává v kolonii.</entry>
+  <entry key="projectStock">Kladiva %s z %s, nástroje %s z %s.</entry>
+  <entry key="open">Otevřít kolonii</entry>
+  <entry key="colonyUnavailable">Tato kolonie už není vaše. Přehled byl obnoven.</entry>
+  <entry key="unknownValue">?</entry>
+  <entry key="uncertainLost">Při nedostatku jídla přijde náhodný kolonista o život, takže výroba, spotřeba, projekt a příští stav záleží na tom, kdo to bude. Nezobrazují se jako přesné.</entry>
+  <entry key="uncertainColonyLost">Při nedostatku jídla přijde o život poslední kolonista, takže kolonie sama při dalším tahu zanikne.</entry>
+  <entry key="uncertainStorage">Projekt se při dalším tahu dokončí a změní sklad nebo celnici, takže změna a příští stav se nezobrazují jako přesné.</entry>
+  <entry key="projectUncertain">Projekt %s záleží na tom, který kolonista při dalším tahu přijde o život.</entry>
+  <entry key="projectColonyLost">Projekt %s zanikne, pokud kolonie při dalším tahu zanikne.</entry>
+</properties>

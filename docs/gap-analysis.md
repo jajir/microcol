@@ -406,7 +406,7 @@ Each triple is **hammers / tools / minimum population**. Source: Building aid ca
 
 #### Skills matrix
 
-Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum schoolhouse/college/university tiers; “native” means marked teachable by natives on the card, not an exclusive acquisition route. The accepted European exclusions and tier prices are recorded in [economy, production and education](#economy-production-and-education). Blacksmith is already delivered by R-0023; [R-0074](requirements/R-0074.md) implements the remaining European roster and tracks actual skill acceptance separately. The matrix specifies eligibility; agreed productivity modifiers are in the shared economy rules.
+Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum schoolhouse/college/university tiers; “native” means marked teachable by natives on the card, not an exclusive acquisition route. The accepted European exclusions and tier prices are recorded in [economy, production and education](#economy-production-and-education). Blacksmith is already delivered by R-0023; [R-0074](requirements/done/R-0074.md) implements the remaining European roster and tracks actual skill acceptance separately. The matrix specifies eligibility; agreed productivity modifiers are in the shared economy rules.
 
 | Specialty | Production / role | Minimum school | Native teaching |
 | --- | --- | --- | --- |
@@ -442,7 +442,7 @@ Automatic dock boarding is CARGO-006; European equipment is UNIT-002 and mission
 | IMM-001 | 35, 64 / 41, 70 | Crosses from all colonies accumulate toward the next immigrant from the recruitment pool; religious activity affects immigration rate. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java) now settles stored national crosses in the Europe phase; each colony credits its new production for the next phase. The old fixed-turn grant is removed. | Partial | R-0076 implements threshold growth, surplus, England and shared human/computer accounting; actual acceptance and remaining founder integration are tracked in [R-0076](requirements/done/R-0076.md). |
 | IMM-002 | 35, 65 / 41, 71 | The recruitment pool always holds three colonists; choosing/recruiting or an immigration event replaces the removed candidate immediately. | [RecruitmentPool](../microcol-game/src/main/java/org/microcol/model/RecruitmentPool.java) now persists three candidate tokens/types and counters; paid and earned recruitment replace their selected slot. Brewster now filters actual candidate draws and exposes frozen earned choices before colony production. | Partial | R-0075 model checks and TC46 cover base paid-passage replacement and disk continuation; see [execution evidence](functional-tests.md#r-0075-persistent-recruitment-2026-10-16). Brewster integration and remaining acceptance are recorded in [2026-10-17 evidence](functional-tests.md#r-0075r-0076-brewster-integration-2026-10-17). |
 | IMM-003 | 35, 65 / 41, 71 | Pay passage to select a candidate immediately; debit treasury and move the chosen candidate to the docks. | [Player.recruit](../microcol-game/src/main/java/org/microcol/model/Player.java) validates candidate/price snapshots, charges once and creates one pier arrival. Europe exposes a separate three-entry recruitment dialog. | Partial | TC46 covers cancellation, duplicate confirmation, insufficient funds, stale price, Czech keyboard recruitment and saved cargo. Complete CI/publication and cross/founder integration remain tracked in [R-0075](requirements/done/R-0075.md). |
-| IMM-004 | 36, 66 / 42, 72 | Royal University training purchases a selected eligible expert independently of the recruitment pool. | The 19 eligible European experts are registered, factory-created, persistable and shown in a scrollable [BuyUnitsDialog](../microcol-game/src/main/java/org/microcol/gui/screen/europe/BuyUnitsDialog.java). Planters remain excluded; purchase is independent of the candidate pool. | Partial | TC30 verifies the full EN/CZ offer and shared purchase/transport flow; TC46 checks pool independence. Real non-production skill integrations and full acceptance remain in [R-0074](requirements/R-0074.md). |
+| IMM-004 | 36, 66 / 42, 72 | Royal University training purchases a selected eligible expert independently of the recruitment pool. | The 19 eligible European experts are registered, factory-created, persistable and shown in a scrollable [BuyUnitsDialog](../microcol-game/src/main/java/org/microcol/gui/screen/europe/BuyUnitsDialog.java). Planters remain excluded; purchase is independent of the candidate pool. | Partial | TC30 verifies the full EN/CZ offer and shared purchase/transport flow; TC46 checks pool independence. Real non-production skill integrations and full acceptance remain in [R-0074](requirements/done/R-0074.md). |
 | IMM-007 | 66 / 72 | Repeated purchases of ships/artillery increase their European price according to demand. | [Player](../microcol-game/src/main/java/org/microcol/model/Player.java) persists per-type purchase counts and validates confirmed quotes for ships and artillery. Both use the agreed tenth-of-base increment; rejected purchases do not advance demand. | Matches | [R-0077 evidence](functional-tests.md#r-0077-repeated-ship-purchase-prices-2026-10-16) covers the purchase contract; [R-0095](requirements/done/R-0095.md) adds artillery and its verification. Remaining native artillery combat is separate from pricing. |
 
 ### Trade and the European market
@@ -1015,6 +1015,21 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    one entry per game-result identity. Show the result breakdown even if it
    misses the list. Retire records a result, Exit does not; canceled choices do
    neither. Later unscored play cannot replace the stored result.
+5. Configured implementation note (2026-10-23, [R-0193](requirements/done/R-0193.md)
+   in development; not verified by an accepted run). The rules run only for a
+   game saved with the explicit `scoredPlay` calendar field, which also requires
+   the end year 1850; the bundled free-play maps, the reference expedition,
+   generated worlds and the free-play test scenarios carry it. A mission keeps
+   its own deadline and no frozen result, even if that deadline is 1850, and a
+   missing field means an unscored game. Spring 1800 freezes the undeclared
+   human nation's result once, shows it and pauses play until an explicit
+   continuation; closing the window postpones the choice and the statistics
+   reopen it. Any ordinary end of scored play, such as losing the last colony
+   from spring 1600 on, freezes a final result as its end. A declared rebellion
+   freezes at its victory, loss or unresolved spring-1850 end. A result frozen
+   at spring 1800 is kept by a later unscored loss or by the 1850 end. Each
+   frozen result keeps one identity and its components; only its status changes
+   on continuation. Loading rejects a missing or impossible result history.
 
 ### Recovery and presentation
 
@@ -1726,7 +1741,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0196 refinement
 
 1. Answer **38** — Post-intervention scoring start: Begin eligible post-intervention score bells when the help target is earned, not when delayed allied forces physically arrive. Do not count the bells consumed to reach that target again; a blocked port does not delay subsequent score accumulation.
-2. Owner: [R-0196](requirements/R-0196.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0196](requirements/done/R-0196.md); acceptance and unresolved follow-ups remain there.
 
 ### Review after playtesting
 
@@ -1879,7 +1894,7 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 
 ## Colony job choices and yield previews
 
-1. Agreed for [R-0056](requirements/done/R-0056.md) on 2026-10-16 under the user’s authorization to choose reasonable defaults: a worker’s job choice includes outdoor commodities supported by the colony’s surrounding terrain and producing indoor jobs in buildings already present. Show unavailable destinations with a reason; warehouses, fortifications, building projects and teaching are not commodity jobs. This flow includes ordinary colonists and the currently supported master blacksmith; additional specialist types remain [R-0074](requirements/R-0074.md).
+1. Agreed for [R-0056](requirements/done/R-0056.md) on 2026-10-16 under the user’s authorization to choose reasonable defaults: a worker’s job choice includes outdoor commodities supported by the colony’s surrounding terrain and producing indoor jobs in buildings already present. Show unavailable destinations with a reason; warehouses, fortifications, building projects and teaching are not commodity jobs. This flow includes ordinary colonists and the currently supported master blacksmith; additional specialist types remain [R-0074](requirements/done/R-0074.md).
 2. Outdoor previews use the selected worker’s production rule. A worker already on a field sees the yield there and the best eligible yield in that colony. An indoor worker or a colonist at the colony center sees the best eligible yield. Exclude other workers’ fields, globally occupied shared squares and otherwise invalid destinations; the selected worker’s own field remains a candidate. Ties use the existing stable field order. An unavailable job shows no invented numeric yield.
 3. Choosing a crop for an outdoor worker keeps that worker’s current field. Moving to the best field requires a separate explicit reassignment action; show the destination and yield before confirmation. Choosing outdoor work from an indoor job or the colony center selects the best eligible field. If a chosen destination, the worker’s original job or the shown potential output changes before confirmation, reject without moving anyone or changing stocks, then refresh the choices. Do not silently choose a different field after confirmation.
 4. Indoor previews label the selected worker’s unconstrained output as **potential per turn**, show the required input per turn and current warehouse stock, and flag a shortage. Potential output excludes the building’s automatic base output. It is not a promise of next-turn warehouse growth: inputs are shared, earlier production can change them, and storage limits still apply. For example, a normal blacksmith with potential 3 tools requiring 3 ore and only 1 ore in stock must show that shortage rather than promise 3 tools. The existing production algorithm, expert multiplier and input consumption remain authoritative. Input stock is advisory: a stock change alone does not invalidate an otherwise legal assignment, which does not consume the production inputs immediately.

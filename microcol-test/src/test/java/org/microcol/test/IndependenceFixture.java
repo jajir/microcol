@@ -11,6 +11,7 @@ import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
 import org.microcol.model.MovementPoints;
 import org.microcol.model.UnitType;
+import org.microcol.page.RebellionJson;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -406,6 +407,9 @@ final class IndependenceFixture {
                 if ("Dutch".equals(player.get("name").getAsString())
                         && !player.has("whosKingThisPlayerIs")) {
                     player.addProperty("declaredIndependence", true);
+                    // The declaration is dated by the saved calendar (R-0196).
+                    player.addProperty("declarationYear",
+                            RebellionJson.currentYear(model));
                     // The declaration fixes the colonies the Dutch own now.
                     player.add("rebellionColonyIds",
                             ownedColonyIds(colonies, "Dutch"));

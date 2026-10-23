@@ -100,6 +100,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private final Button buttonCongress = new Button();
 
+    private final Button buttonRetire = new Button();
+    private final Tooltip retireTooltip = new Tooltip();
+
     private final Button buttonWait = new Button();
     private final Button buttonSkipUnitTurn = new Button();
     private final Tooltip waitTooltip = new Tooltip();
@@ -253,6 +256,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonDeclareIndependence.setOnAction(
                 event -> eventBus.post(new DeclareIndependenceEvent()));
         buttonDeclareIndependence.setId(BUTTON_DECLARE_INDEPENDENCE_ID);
+        buttonRetire.setId("retire");
+        buttonRetire.setTooltip(retireTooltip);
+        buttonRetire.setVisible(false);
+        buttonRetire.setManaged(false);
+        buttonRetire.setDisable(true);
 
         getButtonPanel().getChildren().add(buttonBuildColony);
         getButtonPanel().getChildren().add(buttonPlowField);
@@ -276,6 +284,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonHelp);
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonNextTurn);
+        getButtonPanel().getChildren().add(buttonRetire);
         getButtonPanel().getChildren().add(buttonExit);
     }
 
@@ -293,6 +302,15 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     void allowPendingImmigrationNavigation() {
         disableTurnCommands();
         buttonEurope.setDisable(false);
+    }
+
+    /**
+     * While spring 1800 waits for the player's choice, the statistics screen
+     * stays reachable: its base score tab reopens the choice (R-0193).
+     */
+    void allowScoreBoundaryNavigation() {
+        disableTurnCommands();
+        buttonStatistics.setDisable(false);
     }
 
     void enableAllButtons() {
@@ -316,6 +334,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonJettison.setText(i18n.get(Buttons.buttonJettison));
         jettisonTooltip.setText(i18n.get(Buttons.jettisonExplanation));
         buildRoadTooltip.setText(i18n.get(Buttons.buildRoadExplanation));
+        buttonRetire.setText(i18n.get(Buttons.buttonRetire));
+        retireTooltip.setText(i18n.get(Buttons.retireExplanation));
+    }
+
+    void setRetireAction(final Runnable action) {
+        buttonRetire.setOnAction(event -> action.run());
+    }
+
+    /**
+     * The control is shown only where the model offers a retirement. It stays
+     * clickable while the human may act, so a refusal can explain itself.
+     *
+     * @param visible whether the model offers the retirement now
+     * @param enabled whether the human may use the control now
+     */
+    void setRetireOrder(final boolean visible, final boolean enabled) {
+        buttonRetire.setVisible(visible);
+        buttonRetire.setManaged(visible);
+        buttonRetire.setDisable(!enabled);
     }
 
     void setUnitOrdersEnabled(final boolean wait, final boolean skip) {
@@ -469,6 +506,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCenter.setDisable(disable);
         buttonHelp.setDisable(disable);
         buttonStatistics.setDisable(disable);
+        buttonRetire.setDisable(disable);
         buttonExit.setDisable(disable);
 
         buttonGoals.setDisable(disable);

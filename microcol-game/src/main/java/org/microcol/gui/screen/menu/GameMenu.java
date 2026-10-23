@@ -17,11 +17,12 @@ public enum GameMenu implements MessageKeyResource {
     setupStart, mainMenu, buttonContinue, buttonRecovery, recoveryTitle,
     recoveryLatestPosition, recoveryLatestTurn, recoveryPreviousDecade,
     recoveryMissing, recoveryCorrupt, buttonLoadSave, buttonPlayCampaign,
-    buttonFreeGame, buttonExitMicroCol, buttonSetting, settingTitle, buttonBack,
-    campaignTitle, settingLanguage, settingLanguageCz, settingLanguageEn,
-    settingShowGrid, settingShowFightAdvisor, settingAutosave, settingVersion,
-    campaignPanelButtonBack, campaignPanel_default_findNewWorld,
-    campaignPanel_default_buildArmy, campaignPanel_default_thrive;
+    buttonFreeGame, buttonHallOfFame, buttonExitMicroCol, buttonSetting,
+    settingTitle, buttonBack, campaignTitle, settingLanguage, settingLanguageCz,
+    settingLanguageEn, settingShowGrid, settingShowFightAdvisor,
+    settingAutosave, settingVersion, campaignPanelButtonBack,
+    campaignPanel_default_findNewWorld, campaignPanel_default_buildArmy,
+    campaignPanel_default_thrive;
 
     public static GameMenu get(final CampaignName campaignName,
             final String missionName) {

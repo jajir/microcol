@@ -11,9 +11,29 @@ public final class Calendar {
 
     private final static int YEAR_WHEN_START_COUNT_SEASONS = 1600;
 
+    /** From spring of this year, losing the last colony ends ordinary play. */
+    public final static int YEAR_WHEN_LAST_COLONY_ENDS_GAME = 1600;
+
+    /** Spring of this year is the scoring boundary of free play (R-0193). */
+    public final static int YEAR_OF_SCORING_BOUNDARY = 1800;
+
+    /**
+     * Spring of this year ends all scored free play (R-0193). It is the end
+     * year a scored calendar must carry; an unscored calendar, such as a
+     * mission, may use any deadline including this one.
+     */
+    public final static int YEAR_OF_FREE_PLAY_END = 1850;
+
     private final int startYear;
 
     private final int endYear;
+
+    /**
+     * Explicit free-play score policy (R-0193), saved with the calendar. It is
+     * not derived from the end year: a mission may end in any year, and only a
+     * calendar saved as scored runs the frozen-result rules.
+     */
+    private final boolean scoredPlay;
 
     /**
      * Enum define seasons.
@@ -49,19 +69,29 @@ public final class Calendar {
 
     Calendar(final int startYear, final int endYear,
             final int numberOfPlayedTurns) {
+        this(startYear, endYear, numberOfPlayedTurns, false);
+    }
+
+    Calendar(final int startYear, final int endYear,
+            final int numberOfPlayedTurns, final boolean scoredPlay) {
         Preconditions.checkArgument(startYear < endYear,
                 "Start year (%s) must be less than end year (%s).", startYear,
                 endYear);
         Preconditions.checkArgument(numberOfPlayedTurns >= 0,
                 "Number of played turns must not be negative.");
+        Preconditions.checkArgument(
+                !scoredPlay || endYear == YEAR_OF_FREE_PLAY_END,
+                "Scored play ends in %s, not in %s.", YEAR_OF_FREE_PLAY_END,
+                endYear);
         this.startYear = startYear;
         this.endYear = endYear;
         this.numberOfPlayedTurns = numberOfPlayedTurns;
+        this.scoredPlay = scoredPlay;
     }
 
     public static Calendar make(final CalendarPo cal) {
         return new Calendar(cal.getStartYear(), cal.getEndYear(),
-                cal.getNumberOfPlayedTurns());
+                cal.getNumberOfPlayedTurns(), cal.isScoredPlay());
     }
 
     private int getTurnWhenStartCountsSeasons() {
@@ -95,6 +125,24 @@ public final class Calendar {
         return getCurrentYear() >= endYear;
     }
 
+    /**
+     * @return whether this game was saved with the free-play score policy
+     *         (R-0193): the frozen result at spring 1800 and the end at spring
+     *         1850. Missions, even with an 1850 deadline, return false.
+     */
+    public boolean isScoredPlay() {
+        return scoredPlay;
+    }
+
+    /**
+     * @param year calendar year
+     * @return whether the current year has reached the given one; the year
+     *         changes in spring, so this is true from that spring on
+     */
+    public boolean hasReachedYear(final int year) {
+        return getCurrentYear() >= year;
+    }
+
     void endRound() {
         Preconditions.checkState(!isFinished(),
                 "End year (%s) already reached.", endYear);
@@ -117,6 +165,7 @@ public final class Calendar {
         final CalendarPo out = new CalendarPo();
         out.setStartYear(startYear);
         out.setEndYear(endYear);
+        out.setScoredPlay(scoredPlay);
         out.setNumberOfPlayedTurns(numberOfPlayedTurns);
         return out;
     }

@@ -1294,6 +1294,30 @@ public class Colony {
         }
     }
 
+    /**
+     * Amount that the custom house sends to Europe at the next update from a
+     * stock left after the update's own production and project spending. The
+     * update and the colony advisor report (R-0200) share this selection,
+     * boycott and reserve rule.
+     *
+     * @param type  goods type
+     * @param stock stock of the goods at the export step
+     * @return goods above the reserve of 100 that are sent; zero when none
+     */
+    int getCustomHouseExport(final GoodsType type, final int stock) {
+        if (!wasConstructionBuilded(ConstructionType.CUSTOM_HOUSE)
+                || !exportGoods.contains(type)
+                || !GoodsType.BUYABLE_GOOD_TYPES.contains(type)) {
+            return 0;
+        }
+        // A boycott closes ordinary exports; the revolutionary custom house
+        // bypasses it.
+        if (owner.isBoycotted(type) && !owner.isDeclaredIndependence()) {
+            return 0;
+        }
+        return Math.max(0, stock - 100);
+    }
+
     private void exportSelectedSurplus() {
         if (!wasConstructionBuilded(ConstructionType.CUSTOM_HOUSE)
                 || exportGoods.isEmpty()) {
@@ -1308,15 +1332,8 @@ public class Colony {
         EuropeSaleWindow window = europe.getSaleWindow(nation);
         int finalGold = owner.getGold();
         for (final GoodsType type : GoodsType.BUYABLE_GOOD_TYPES) {
-            if (!exportGoods.contains(type)) {
-                continue;
-            }
-            // A boycott closes ordinary exports; the revolutionary custom
-            // house bypasses it.
-            if (owner.isBoycotted(type) && !owner.isDeclaredIndependence()) {
-                continue;
-            }
-            final int amount = warehouse.getGoods(type).getAmount() - 100;
+            final int amount = getCustomHouseExport(type,
+                    warehouse.getGoods(type).getAmount());
             if (amount <= 0) {
                 continue;
             }
@@ -1362,8 +1379,7 @@ public class Colony {
         } else {
             final int foodAfterConsumption = cornStats.getInWarehouseAfter();
             if (foodAfterConsumption >= FOOD_LEVEL_TO_FREE_COLONIST) {
-                final int births = foodAfterConsumption
-                        / FOOD_LEVEL_TO_FREE_COLONIST;
+                final int births = newColonistsFor(foodAfterConsumption);
                 warehouse.setGoods(Goods.of(GoodsType.CORN,
                         foodAfterConsumption % FOOD_LEVEL_TO_FREE_COLONIST));
                 for (int index = 0; index < births; index++) {
@@ -1694,6 +1710,19 @@ public class Colony {
             preview.getStatsByType(GoodsType.HORSE).addRowProduction(breeding);
         }
         return preview;
+    }
+
+    /**
+     * New colonists that one update creates from the food left after the
+     * residents ate. Shared with the colony advisor report (R-0200).
+     *
+     * @param foodAfterResidents food stored after the residents ate
+     * @return number of new colonists, zero below the food level
+     */
+    static int newColonistsFor(final int foodAfterResidents) {
+        return foodAfterResidents >= FOOD_LEVEL_TO_FREE_COLONIST
+                ? foodAfterResidents / FOOD_LEVEL_TO_FREE_COLONIST
+                : 0;
     }
 
     private int getBreedingCount(final ColonyProductionStats raw) {

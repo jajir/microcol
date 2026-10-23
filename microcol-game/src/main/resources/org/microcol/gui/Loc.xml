@@ -96,6 +96,11 @@
 	<entry key="nativeDetailsHint">Press N for native settlement details.</entry>
 	<entry key="nativeSettlementsTitle">Native settlements</entry>
 	<entry key="nativeSettlementsNone">No native settlement is known yet.</entry>
+	<entry key="nativeAdvisorNations">Known nations: %s.</entry>
+	<entry key="nativeAdvisorChiefFacts">Chief information: goods for sale: %s. Goods wanted: %s. Teachable skill: %s.</entry>
+	<entry key="nativeAdvisorChiefNotLearned">The chief has not told you about this settlement yet.</entry>
+	<entry key="nativeAdvisorShowOnMap">Show on map</entry>
+	<entry key="nativeAdvisorUnavailable">This settlement is no longer available on the map.</entry>
 	<entry key="nativeVisitTitle">Native settlement</entry>
 	<entry key="nativeVisitIntro">Choose an action below. Closing this window changes nothing, and the unit stays where it is.</entry>
 	<entry key="nativeVisitSkillLine">Offers to teach: %s.</entry>

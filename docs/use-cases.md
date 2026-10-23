@@ -426,6 +426,22 @@ UC-114 navíc kontroluje tyto údaje, jejich soulad s modelem a oprávnění k z
 | Kongres | Národní podpora, přítomní otcové, postup dalšího získání a skutečná REF včetně rezerv. |
 | Zprávy a konec | Hlad/narození, chybějící vstupy a nástroje, dokončení projektu, připlutí, diplomacie a revoluční události; konečný výsledek a skóre. Přesné přepínače automatických oken řeší [obnova a prezentace](gap-analysis.md#recovery-and-presentation). |
 
+Kolonie (R-0200, zapsáno 23. října 2026, nespuštěno): mapování řádku „Kolonie“
+pokrývají `ColonyAdvisorReportTest` (dvě nerovnocenné kolonie, plná a krátká
+vstupní zásoba, hranice jídla 199/200 a hladomor, projekt čekající na kladiva
+a nástroje a jeho dokončení, čistota čtení, shoda s `startTurn`, vlastník
+a cizí národ; hladomor poslední osadníka a dokončení celnice se skutečným
+tahem) a `TC_168_F200` (přehled, přiřazení práce, Uložit/Pokračovat,
+otevření kolonie, další tah, hladomor s otazníky a přesnou zásobou a česká
+verze). Úplné ověření je nutné před přijetím.
+
+Domorodci (R-0201, zapsáno 23. října 2026, nespuštěno): mapování řádku „Domorodci“
+pokrývají `NativeAdvisorReportTest` (neznámý národ a sídlo, kontakt bez sídla,
+stav před a po výsledku informace náčelníka, cizí evropský hráč, změna postoje,
+opakované čtení bez změny a načtení uložené hry) a `TC_169_F106` (EN průběh před
+a po návštěvě náčelníka, tlačítko mapy s ověřeným vybraným políčkem, Uložit/Pokračovat
+a zrušení; CS přehled se vejde do 900×750). Úplné ověření je nutné před přijetím.
+
 ## Vazba na současné testy
 
 Při založení katalogu nebyly přepsány ani přečíslovány testy. Existující
@@ -597,7 +613,10 @@ seznamu v češtině i angličtině a klávesový nákup poslední položky.
 Všech 12 TC30 scénářů prošlo v Dockeru; tři kontroly page objectů také prošly.
 Podrobné ověření a nehotové neprodukční schopnosti sleduje
 [evidence R-0074](functional-tests.md#r-0074-specialist-roster-2026-10-16);
-celý UC-055 zůstává nepřijatý.
+celý UC-055 zůstává nepřijatý. Integrační uzávěrka z 23. října 2026
+přidává napsaný, dosud nespuštěný scénář TC165, který jezuitu koupeného v
+Evropě přepraví a vyloží a jehož misi u aztéckého hlavního města potvrdí;
+viz [evidence uzávěrky](functional-tests.md#r-0074-integration-closure-2026-10-23).
 
 R-0071 rozšiřuje UC-027/113 o jednorázově vylosované počasí a uloženou původní
 délku plavby. Modelová sada (1386) a vybrané UI scénáře TC23/27/28/30

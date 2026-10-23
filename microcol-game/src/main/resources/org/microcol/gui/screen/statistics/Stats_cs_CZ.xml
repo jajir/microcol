@@ -81,4 +81,24 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="foreignTrade">Prodeje za 10 tahů</entry>
 	<entry key="foreignLocked">Zamčeno: získejte Jana de Witta pro srovnání mocností.</entry>
 	<entry key="foreignUncontacted">Neznámé: zatím žádný kontakt s touto mocností.</entry>
+	<entry key="titleBaseScore">Základní skóre</entry>
+	<entry key="baseScoreTitle">Náhled základního skóre, ne konečné pořadí</entry>
+	<entry key="baseScoreNote">Pouze pro čtení. Základní mezisoučet válečné a obtížnostní složky neobsahuje; výsledek vypočtený níže je použije. Nic se nezapisuje.</entry>
+	<entry key="baseScoreUnavailable">Základní skóre se zobrazí, když běží hra.</entry>
+	<entry key="baseScorePopulation">Obyvatelstvo: %s bodů (služebníci %s, kolonisté %s, odborníci %s)</entry>
+	<entry key="baseScoreFathers">Zakladatelé: %s bodů (%s naverbováno)</entry>
+	<entry key="baseScoreGold">Pokladna: %s bodů (%s zlata)</entry>
+	<entry key="baseScoreSupport">Celostátní podpora: %s bodů (%s %%)</entry>
+	<entry key="baseScoreSubtotal">Základní mezisoučet: %s bodů</entry>
+	<entry key="resultTitle">Náhled vypočteného výsledku, nezapsáno</entry>
+	<entry key="resultNote">Pouze pro čtení. Na základní mezisoučet se použijí válečné a obtížnostní složky. Nic se nezapisuje a žádné pořadí se nezobrazuje.</entry>
+	<entry key="resultDeduction">Zničená domorodá sídla: %s po %s bodech, odpočet -%s bodů</entry>
+	<entry key="resultBells">Zvony po cíli intervence: +%s bodů</entry>
+	<entry key="resultClampedBase">Základ nejníže nula: %s bodů</entry>
+	<entry key="resultBonus">Úspěšná nezávislost: bonus za pořadí +%s %%, body za včasné vyhlášení: %s</entry>
+	<entry key="resultDifficulty">Koeficient obtížnosti: %s %%</entry>
+	<entry key="resultTotal">Vypočtený výsledek: %s bodů</entry>
+	<entry key="titleLabor">Práce</entry>
+	<entry key="titleReligion">Náboženství</entry>
+	<entry key="titleColonies">Kolonie</entry>
 </properties>

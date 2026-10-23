@@ -23,6 +23,8 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.InterventionPo;
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.UnitActionNoActionPo;
@@ -535,6 +537,76 @@ class IndependenceDeclarationTest {
     }
 
     /** Simulate a pending choice that a callback could not legally create. */
+    /** The saved Dutch player inside a saved game (R-0196 fixtures). */
+    private static PlayerPo savedDutch(final ModelPo saved) {
+        return saved.getGameManager().getPlayers().stream()
+                .filter(player -> player.getName().equals("Dutch")).findFirst()
+                .orElseThrow();
+    }
+
+    @Test
+    void declarationYearIsTheCalendarYearAndSurvivesSaveAndContinue() {
+        final Model model = load(musterData(120L));
+        final Player dutch = model.getPlayerByName("Dutch");
+        dutch.declareIndependence();
+        final int year = model.getCalendar().getCurrentYear();
+        assertEquals(Optional.of(year), dutch.getDeclarationYear());
+
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Player restoredDutch = restored.getPlayerByName("Dutch");
+        assertEquals(Optional.of(year), restoredDutch.getDeclarationYear());
+        assertEquals(dutch.getResultScore().getTotal(),
+                restoredDutch.getResultScore().getTotal());
+    }
+
+    @Test
+    void aDeclarationYearAfterTheSavedCalendarIsRejectedOnLoad() {
+        final Model model = load(musterData(120L));
+        model.getPlayerByName("Dutch").declareIndependence();
+        final ModelPo saved = model.save();
+        savedDutch(saved)
+                .setDeclarationYear(model.getCalendar().getCurrentYear() + 1);
+        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @Test
+    void aDeclaredSaveWithoutItsYearIsRejectedOnLoad() {
+        final Model model = load(musterData(120L));
+        model.getPlayerByName("Dutch").declareIndependence();
+        final ModelPo saved = model.save();
+        savedDutch(saved).setDeclarationYear(null);
+        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @Test
+    void pendingDeliveryDoesNotPostponeTheExcessBellsOfTheEarnedTarget() {
+        // The declaration is real, so the Crown seizure and the rebellion
+        // members are valid; only the earned, undelivered target is authored.
+        final Model declared = load(musterData(120L));
+        declared.getPlayerByName("Dutch").declareIndependence();
+        final ModelPo saved = declared.save();
+        final InterventionPo intervention = new InterventionPo();
+        intervention.setTarget(500);
+        intervention.setBells(525L);
+        intervention.setEarned(true);
+        intervention.setDelivered(false);
+        savedDutch(saved).setIntervention(intervention);
+        final Model model = Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Player dutch = model.getPlayerByName("Dutch");
+        assertTrue(dutch.getIntervention().orElseThrow().isEarned());
+        assertFalse(dutch.getIntervention().orElseThrow().isDelivered());
+
+        final String before = snapshot(model);
+        final ResultScore result = dutch.getResultScore();
+        assertEquals(25, result.getBellsAfterTarget());
+        assertEquals(before, snapshot(model));
+        assertFalse(dutch.getIntervention().orElseThrow().isDelivered());
+    }
+
     private static void awaitImmigrationChoice(final Model model) {
         try {
             final java.lang.reflect.Field manager = Model.class

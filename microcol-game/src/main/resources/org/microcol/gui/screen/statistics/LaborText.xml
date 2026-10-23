@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Read-only. Select a type to list its people. Show opens the colony, map tile or Europe where the person stands; opening and leaving spend no move.</entry>
+  <entry key="total">Colonists in total: %s</entry>
+  <entry key="typeRow">%s: %s</entry>
+  <entry key="empty">No colonists of this nation are in the report.</entry>
+  <entry key="unavailable">The labor report appears when a game is running.</entry>
+  <entry key="personLine">Person %s</entry>
+  <entry key="veteran">veteran</entry>
+  <entry key="nativeConvert">native convert</entry>
+  <entry key="equipment">equipment: %s</entry>
+  <entry key="colony">Colony %s</entry>
+  <entry key="colonyField">Colony %s, field producing %s</entry>
+  <entry key="colonyBuilding">Colony %s, working in %s</entry>
+  <entry key="map">Map tile %s, %s</entry>
+  <entry key="europe">European port or pier</entry>
+  <entry key="atSea">On the high seas, no accessible destination</entry>
+  <entry key="nativeCourse">Learning a skill at a settlement of %s, tile %s, %s</entry>
+  <entry key="nativeMission">Mission at a settlement of %s, tile %s, %s</entry>
+  <entry key="nativeCourseUnknown">Learning a skill at a native settlement not yet identified</entry>
+  <entry key="nativeMissionUnknown">Mission at a native settlement not yet identified</entry>
+  <entry key="repair">Ship under repair, no accessible destination</entry>
+  <entry key="other">Place without an accessible destination</entry>
+  <entry key="aboard">Aboard %s (ID %s): %s</entry>
+  <entry key="show">Show</entry>
+  <entry key="personUnavailable">This person is no longer one of your people or no longer exists. The list was refreshed.</entry>
+  <entry key="noDestination">No accessible destination for this person; only its place is shown.</entry>
+</properties>

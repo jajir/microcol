@@ -1,5 +1,340 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0201 native advisor — written, not verified — 2026-10-23
+
+1. Model: `Model.getNativeAdvisorReport(player)` builds an immutable
+   `NativeAdvisorReport` for one colonial player; a king or scripted actor gets
+   an empty report. Known nations are those with a land contact
+   (`isNativeContacted`, R-0159) or a learned settlement, in enum order. Each
+   learned settlement (`getNativeSettlementsKnownTo`) carries its
+   `NativeRelationView` and, once the nation has been told
+   (`NativeSettlement.isChiefInformed`), the goods for sale, goods wanted and
+   teachable skill of `NativeChiefResult.Information`. The nation is told by its
+   first `INFORMATION` outcome, or by a confirmed repeat visit after a gold or
+   death outcome; that visit records the disclosure in the saved encounter flag
+   `informed`, and never overwrites the first outcome, redraws, pays or changes
+   the death odds. Explored land alone never tells anything. Those fields are fixed settlement data; the
+   current stock is not shown. Pure read: no draw, relation change, sighting or
+   visit spend.
+2. GUI: the N dialog `NativeSettlementsDialog` keeps its shortcut and list, now
+   built from the report. It adds `nativeSettlementsNations` (known nations),
+   `nativeSettlementChief` (the chief facts or that the chief has told nothing)
+   and `nativeSettlementShowOnMap`, which centers the selected settlement only
+   while `Model` still returns that settlement as learned and the game is the one
+   the dialog read. Otherwise `nativeSettlementUnavailable` explains it and the
+   map stays put. Escape and OK close the dialog without change.
+3. Tests written, not run: `NativeAdvisorReportTest` (unknown nation and
+   settlement hidden; learned row before a chief visit; contact-only nation;
+   facts only after `INFORMATION`, none after gold; another European sees neither
+   the discovery nor the facts; attitude refresh through
+   `addNativeTribalAnger`; repeated reads keep the random state and the chief
+   record and survive `Model.make(save)`). `TC_169_F106_native_advisor_test`:
+   TC_01 (English journey: before the visit, after the visit, cancel, map control
+   with `verifyThatSelectedTileIs`, Save and Continue; captures
+   `native-advisor-en.png`); TC_02 (Czech: fits 900×750, pre-visit line; captures
+   `native-advisor-cs.png`). `NativeConquestPage.verifySettlementListed` now reads
+   the report rows. Added after the review: `NativeChiefTest` GOLD-then-repeat
+   and DEATH-then-repeat-by-another-scout cases (original outcome, random state,
+   treasury, gold, reload, and a French colonist who learned the settlement but
+   heard nothing); `TC_03` in `TC_169_F106_native_advisor_test` (gold visit, the
+   advisor still silent, repeat visit, advisor shows the goods and skill, Save and
+   Continue). The UI journey reuses `NativeVisitPage` for the chief steps, since
+   there is no separate chief page.
+4. Not verified: no build, JUnit, formatter run, or Docker UI run has been done
+   for this change. Status stays `ready for development` until the main full
+   acceptance passes.
+5. Remaining risks and open points: the save format has no migration, so a save
+   with a chief record that lacks `informed` is rejected as incomplete; this
+   follows the current schema policy, and no shipped fixture carries chief
+   records. The stale branch of the map control is defensive and not reached by
+   TC169.
+   The stale branch of the map control is defensive; a modal dialog cannot reach
+   it through the UI, so TC169 does not exercise it. The Czech nation names and
+   the Czech chief line are not compared text-for-text. The chief-facts sentence
+   in `StatusBarMessageService` repeats the goods formatting of
+   `GamePanelPresenter.chiefResultText`; sharing it is left for a later change.
+
+## R-0200 colony advisor — written, not verified — 2026-10-23
+
+1. Model: `Model.getColonyAdvisorReport(owner)` builds an immutable
+   `ColonyAdvisorReport` for one colonial nation (owner identity checked). Each
+   valid owned colony gives its residents (`getPopulation`, visitors excluded),
+   the new colonists or famine from the raw food left after the residents
+   (`getRawGoodsStats`, before the update's own births and breeding), and goods
+   lines from `getGoodsStats()`. Each line also takes the project cost, the
+   customs export and the warehouse limit into account. Food has no warehouse
+   limit (`Integer.MAX_VALUE`), so nothing caps it before exports.
+   `ColonyAdvisorReport.Uncertainty` states how exactly the goods and project
+   can be read: `LOST_COLONIST` when food runs short (the update first loses a
+   random resident and only then recomputes output and project), `COLONY_LOST`
+   when that resident is the last one, `STORAGE_CHANGE` when a completing
+   warehouse or custom house changes storage in the same update, and `NONE`
+   otherwise. Under the first two the model's figures are as if nothing is lost;
+   the GUI shows `?` for output, use, spending, change and next, and keeps the
+   current stock and the food-shortage warning. Under `STORAGE_CHANGE` only
+   spending, change and next are hidden. The project comes from
+   `getActuallyBuildingStat()` and `getCompletionUnavailableReason()` and uses
+   `ColonyBuildingQueue.stageAt`, the same rule as the update and the R-0086
+   notice, so a waiting-tools project shows the notice's missing quantity.
+   Extracted shared helpers, with unchanged update behaviour:
+   `ColonyBuildingQueue.stageAt`, `Colony.newColonistsFor` and
+   `Colony.getCustomHouseExport`, which `exportSelectedSurplus` now calls. Nothing
+   is spent, moved, exported or reminded.
+2. GUI: the statistics tab **Colonies** (`coloniesTab`) rebuilds on each showing.
+   Labels are `colonyName-<id>`, `colonyGrowth-<id>`, a table `colonyGoods-<id>`
+   with cells `colonyStock`, `colonyOutput`, `colonyUsed`, `colonyOther`,
+   `colonyChange` and `colonyNext` named `<id>-<TYPE>`, `colonyProject-<id>`,
+   `colonyProjectStock-<id>` and the Open button `colonyOpen-<id>` beside the
+   name in `colonyHeading-<id>`. Layout after the 2026-10-23 screenshot review
+   (900×750: report clipped at the right edge, note cut, headings broken inside
+   words): the advisor is 430 wide like the other reports, because `.right`
+   shifts the right panel; sentences and the heading row are bound to the scroll
+   viewport width and wrap there; table cells keep their natural width on one
+   line, and a wider table scrolls horizontally in the same scroll pane. Columns
+   are good, stock, change, next, output, used, spent or sold, so the stored and
+   projected values stay in view first. The sidebar is
+   a `ScrollPane` (`statsSidebar`) that scrolls a focused tab into view.
+   `ColonyAdvisorNavigator` opens `COLONY` only for an owned, valid colony of the
+   running game (identity check); otherwise the feedback label explains it.
+3. Model tests: `ColonyAdvisorReportTest` covers two unequal colonies in ID
+   order, the food boundaries (−1, 0, 199, 200, 201) for famine and births, a
+   fresh-game comparison of each boundary and of two births (400) with the actual
+   `startTurn()` (new colonists, residents and food), uncertainty for famine,
+   a famine report that changes nothing when read, a completing warehouse and a
+   completing custom house (eligible fixture: Stuyvesant as Congress member, 160
+   hammers and 50 tools; the report names `STORAGE_CHANGE`, reading changes
+   nothing, and the real update completes the house and leaves the hammers and
+   tools the report named), the last resident lost to famine (see item 5), the
+   project waiting for hammers, then tools, then completing, a blacksmith's house
+   with full and short ore, the custom-house reserve of 100, agreement of every
+   next stock and population with `Colony.startTurn()`, read-only purity, owner
+   identity (same-named and crown owners rejected) and save/reload.
+   `ColonyAdvisorNavigatorTest` covers a replaced game, a stopped game and an owned
+   colony opening once. Written, not run.
+4. UI scenario: `TC_168_F200_colony_advisor_test` (`TC_01`–`TC_04`) loads the F58
+   fixture derived in `ColonyAdvisorPage.loadProjectFixture`: New Amsterdam gets
+   70 hammers, 25 tools and a queued blacksmith's shop (64 hammers and 20 tools).
+   The expected values are the eight residents in the building slots, the
+   project spending −64 and −20, the chapel's cross output 1 before and 2 after
+   the town-hall worker takes the cross job (the same path as TC167), the
+   next stocks remembered before the update and equal after it, and no project
+   after the update. Save/Continue keeps the figures, Open reaches the colony
+   screen and Escape returns, keyboard focus reaches the tab, and TC_02 checks
+   the Czech labels. `TC_03` and `TC_04` (English and Czech) use
+   `loadFamineFixture`, the same fixture with no stored corn: eight indoor
+   residents eat 16 a turn and no field feeds them, so the shortage is real
+   without changing any rule. They verify the famine warning, the uncertainty
+   sentence, `?` in output, use, spending, change and next of corn and hammers,
+   the exact current stock (0, 70, 25) and the uncertain project line; `TC_03`
+   then ends the turn and verifies seven residents, a repeated warning, no
+   queued project and exact stock. All checks are named `ColonyAdvisorPage`
+   `verify…` methods. Captures: `colony-advisor-english.png`,
+   `colony-advisor-czech.png`, `colony-advisor-famine-english.png`,
+   `colony-advisor-famine-czech.png` under `target/warehouse-qa/`. Written, not
+   run.
+5. Last-resident famine: it is reachable only when the centre commons give less
+   food than the resident eats. A lone resident eats 2 and Delft's normal centre
+   evidently gives at least 2 (inferred from the failure: the first attempt asked
+   for a negative stock, which the model rightly refuses). The legitimate setup is `ColonyFamineTest`'s: the centre
+   terrain is `ARCTIC` in the saved map before the model is built, so the commons
+   give no food, the resident works in a building, and one stored food is one
+   short. The model test checks `COLONY_LOST`, purity, the exact stock, and that
+   the real `startTurn()` makes the colony invalid and removes it from the next
+   report. No UI scenario reaches it. Remaining limits, not verified: under food
+   shortage the report does not forecast output, use, spending or next stock
+   (by design); a blocked project is produced but has no own test; the
+   scrolled-sidebar visibility and keyboard focus scrolling are unchecked on
+   screen. The existing page objects click their tabs directly; if the eleventh
+   tab is clipped in the test window, those openings need the same reveal before
+   the click. `TC_01`–`TC_04` have never run, so the queue entry written into
+   the F58 JSON and the turn-report dialog after a famine are unverified.
+   Failed evidence kept: completion `20261023T141318Z-b5cb413e93da` (3,950
+   model tests, 1 failure: births read from the already adjusted corn) and
+   `20261023T142054Z-a8260f3b0b79`, reports `target/docker-ui/run-mz9qTR` (3,954
+   model tests, 1 error: the lone-resident setup asked for a negative stock); the
+   UI module did not run in either. Completion `20261023T142944Z-1ffd80e944a9`,
+   reports `target/docker-ui/run-cJhNBc`: all model tests passed; 25 UI tests had
+   1 error, 0 failures and 0 skips — `TC_168` `TC_01` `openColony` found
+   `#colonyOpen-0` below the viewport, not visible. Repair written, not run:
+   Open moved beside the colony name, and `openColony` scrolls the report with
+   the mouse wheel until the button is in view (the `LaborReportPage` pattern)
+   before the real click. New page checks `verifyReportInsideWindow`,
+   `verifySentencesInsideViewport`, `verifyTableHeadingsNotSqueezed` and
+   `verifyOpenVisible` read scene bounds and widths in `TC_01`–`TC_04`. This is
+   not an acceptance.
+6. UC-114 colony row ([use cases](use-cases.md#povinne-matice-a-obsah-prehledu)):
+   `ColonyAdvisorReportTest` for the placement and projection rules and
+   `TC_168_F200` for the statistics path, assignment, Save/Continue, Open and the
+   next turn. Not verified yet: compile, JUnit, Docker/Xvfb, the Czech screen and
+   the screenshot review. Status of [R-0200](requirements/done/R-0200.md) stays
+   `ready for development`.
+
+## R-0199 religion report — written, not verified — 2026-10-23
+
+1. Model: `Model.getReligionReport(owner)` builds an immutable `ReligionReport`
+   for one colonial nation. The owner must be this game's own `Player` instance
+   (identity, not `Player.equals`, which compares names). Each valid colony
+   reports the cross row its next update credits, clamped at zero; Penn's 3/2
+   bonus is already inside that row, so the national total is the plain sum.
+   The accumulated crosses, target and remainder come from
+   `Player.getImmigrationCrosses`, `getImmigrationTarget` and the same threshold
+   test as settlement. The state is `CHOICE_WAITING` while a frozen choice is
+   open, `ARRIVES_NEXT_TURN` once the threshold is reached, `BLOCKED_EUROPE` for
+   a declared nation (the existing settlement skips it, the crosses stay saved),
+   and `NONE` otherwise. Nothing is settled, spent or saved.
+2. GUI: the statistics tab **Religion** (`religionTab`) rebuilds the report on
+   each showing. Labels are `religionColony-<id>`, `religionNational`,
+   `religionAccumulated`, `religionTarget` and `religionImmigration`; the
+   panel keeps no figure and offers no action.
+3. Model tests: `ReligionReportTest` covers a nation without colonies, three
+   colonies summed once, unattended and staffed output that matches the next
+   credit, Penn read once per building, before/at/after threshold, a pending
+   Brewster choice, a declared nation, purity, same-named or Crown owners and
+   reload. Expected values come from the chapel, church and Penn figures already
+   established in `ReligiousProductionTest` and `ImmigrationTest`.
+4. UI scenario: `TC_167_F200_religion_report_test` (`TC_01`) loads the F58
+   fixture with 74 crosses in memory, moves the existing town-hall worker to the
+   cross job (which staffs the chapel), passes the threshold, reopens the report
+   with the keyboard and checks Save/Continue and the next settlement
+   (76 − 75 + 2 = 3, threshold 94). `ReligionReportPage` replaces the Dutch
+   crosses the same way `ReligiousProductionPage` does.
+5. UC-114 religion row ([use cases](use-cases.md#povinne-matice-a-obsah-prehledu)):
+   the written mapping is `ReligionReportTest` for the placement, threshold and
+   purity rules and `TC_167_F200` for the statistics path, production change,
+   pending arrival and Save/Continue. Not verified yet: the compile, the JUnit and
+   Docker/Xvfb runs, the English and Czech screens and the screenshot review. The
+   full local acceptance is still required before R-0199 can become done.
+6. Failed run kept as evidence (2026-10-23, completion
+   `20261023T133651Z-5e7777f5a2cb`, reports `target/docker-ui/run-D5YvUR`): all
+   3,935 JUnit tests in 316 reports passed; the UI selection of 19 tests in 8
+   reports had 1 error, 0 failures and 0 skips. The error is TC167 line 79:
+   `ColonyJobPage.openFromIndoor("id_chapel", 0)` found no node. The colony screen
+   gives the chapel, cathedral and church the one slot id `id_church`
+   (`PanelColonyStructures`); no `id_chapel` exists. This is not an acceptance.
+   Repair written after that run, not yet run: TC_01 uses the TC67 path, moving
+   the existing `id_town_hall` slot 0 worker to the cross job. Expected values
+   follow the turn order shown by TC47: the threshold is reached in the colony
+   phase (74 + 2 = 76), the arrival is settled at the start of the next turn
+   before production (76 − 75 + 2 = 3), and the threshold becomes 94. TC_02 runs
+   the same path in Czech and asserts the Czech labels through
+   `verifyCzechLabels`. Both tests capture the whole statistics scene through
+   `captureDialog("religionTab", …)`, which includes the sidebar with its 10 tabs,
+   under `target/warehouse-qa/`: `religion-report-english.png`,
+   `religion-report-english-pending.png`, `religion-report-czech.png` and
+   `religion-report-czech-pending.png`. Status stays `ready for development`; the
+   repair, the Czech assertions and the captures are not verified.
+
+Targeted verification passed on 2026-10-23: completion `20261023T134700Z-3e5fe36a48bc`, reports `target/docker-ui/run-jjHKD7`, duration 340.282 seconds. All 3,935 model/JUnit tests in 316 reports and 20 UI/support tests in 8 reports passed, with zero failures/errors/skips. Selection: TC167, TC166, TC67, TC47, TC70 and all JUnit. All 207 source hashes matched. Shared formatting and diff checks passed. EN/CS pending-report screenshots in the run’s `microcol-test/warehouse-qa/` were visually reviewed: ten sidebar tabs fit and the report text is readable in its scrollable panel. Full seventh-batch acceptance remains pending; previous failed evidence remains failed.
+
+## R-0198 labor advisor — written, not verified — 2026-10-23
+
+1. Model: `Model.getLaborReport(owner)` builds an immutable `LaborReport` from
+   `Player.getAllUnits()` for one colonial nation. Each living `UnitFreeColonist`
+   is counted once by unit ID and grouped by its `UnitType`; Crown-seized people,
+   ships, braves, treasure and other nations' people are not labor. A
+   `LaborMember` exposes the veteran flag, native-convert flag, carried equipment
+   and a `LaborLocation` (colony field or building, map tile, European port or
+   pier, high seas, native settlement, or other), with the carrier type when the
+   person is aboard. Nothing is persisted and no ledger is kept.
+2. GUI: the statistics tab **Labor** (`laborTab`) rebuilds the report on each
+   showing. Type rows are `laborType-<TYPE>`, person rows `laborRow-<id>` and
+   their Show buttons `laborShow-<id>`. `LaborNavigator` reads the person again
+   from a fresh report; a colony opens through `ShowScreenEvent(COLONY)` only
+   when it is still an owned valid colony, a map tile through
+   `SelectedTileManager.setSelectedTile` and then `ShowScreenEvent(GAME)`, and
+   Europe through `ShowScreenEvent(EUROPE)`. Transit, native and other places keep
+   Show disabled. A person that has left the report reports unavailable and the
+   list is rebuilt. The tile selection updates the model's focused field as a
+   click does; no move or unit order changes.
+3. Model tests: `LaborReportTest` covers colony field, map tile, aboard a ship
+   in Europe, European pier, a construction slot, a passenger on the high seas, a
+   native course and mission (named only after the owner learned the settlement),
+   a passenger of a ship under repair, a person taken by another nation, a shared
+   placement counted once, veteran and equipment coexistence with a civilian
+   expert, native converts and equipment changing flags without changing counts,
+   Crown-seized exclusion, viewpoint isolation, a foreign-model owner rejected, live
+   placement change and save/reload. Written, not run.
+4. UI scenario: `TC_166_F199_labor_report_test` (`TC_01`) uses the existing
+   [F22 fixture](../microcol-test/src/test/scenarios/F22-expert-purchase.microcol)
+   and `LaborReportPage`. It checks five free colonists in one type row, each
+   placement text, Show for a colony, the galleon tile and Europe, keyboard
+   arrival with Escape close, and movement unchanged by opening and closing. A
+   master blacksmith is hired in Europe; a pier colonist then boards the galleon
+   in port through the existing passenger drag, so the type total stays the same
+   while the place names the galleon by ID. A colonist taken by the Crown while the
+   report is open is refused by Show with the localized message and disappears
+   from the list. Save and Continue keep all three changes. Written, not run.
+   Failed run kept as evidence (2026-10-23, completion
+   `20261023T125644Z-7bb9c5e99c70`, reports `target/docker-ui/run-nir7cS`): the
+   compile passed and 3 of 3,922 JUnit tests failed, UI not run. Two native
+   course/mission tests assumed an unlearned settlement, but the pupil stood
+   beside it and the model had really learned it by sight; the foreign-model test
+   passed a same-named player because `Player.equals` compares names. This is not
+   an acceptance.
+   Repair written after that run, not yet run: the native tests now assert the
+   real learned settlement and build the unlearned case from a saved off-map
+   course with its saved knowledge removed (production never forgets knowledge);
+   `Model.getLaborReport` accepts only the model's own `Player` instances by
+   identity; the panel remembers the model its rows were built from, and
+   `LaborNavigator.open(model, member)` refuses rows of another or stopped game
+   even when a person has the same unit ID, while a person of the running game is
+   followed by ID to its current place and type. `LaborNavigatorTest` covers the
+   replaced-game, stopped-game and running-game paths.
+   Second failed run kept as evidence (2026-10-23, completion
+   `20261023T130351Z-80f93847221c`, reports `target/docker-ui/run-YL6jzd`): all
+   3,925 JUnit tests passed (315 reports, including `LaborNavigatorTest`); the UI
+   selection of 34 tests in 9 reports had 1 error, 0 failures and 0 skips. The
+   error is TC166 line 84: `LaborReportPage.verifyTypeAbsent` looked the correctly
+   absent row up with `query()`, which throws instead of answering. This is not an
+   acceptance.
+   Repair written after that run, not yet run: `verifyTypeAbsent`,
+   `verifyPersonRowAbsent` and the row-scroll check use `tryQuery()`, the existing
+   page pattern; the absence assertions stay. TC166 no longer reopens statistics
+   while the report is already shown before the first Show, and boards into
+   hold 0 of galleon 102, because its hold 1 carries ore in F22.
+5. UC-114 labor row ([use cases](use-cases.md#povinne-matice-a-obsah-prehledu)):
+   the written mapping is `TC_166_F199` for the report, boarding, refusal and
+   Continue path, and `LaborReportTest` for the placement and count rules. Not
+   verified yet: the Czech screen and the screenshot review. Full model and
+   Docker/Xvfb acceptance are still required before R-0198 can become done.
+
+Targeted verification passed on 2026-10-23: completion `20261023T131557Z-f32cadd09071`, reports `target/docker-ui/run-NoAxID`, duration 492.172 seconds. All 3,925 model/JUnit tests in 315 reports and 34 UI/support tests in 9 reports passed, with zero failures/errors/skips. Selection: TC166, TC160, TC163, TC144 (including locked variant), TC30 and all JUnit. All 198 source hashes matched; shared Java formatting and diff checks passed. Full seventh-batch acceptance remains pending; earlier failed runs remain failed evidence.
+
+## R-0197 Síň slávy — cílené ověření — 2026-10-23
+
+1. [R-0197](requirements/done/R-0197.md) přidává trvalých deset nejlepších
+   hodnocených výsledků do `~/.microcol/hall-of-fame.json`. Soubor leží vedle
+   uložených her, čte jej `HallOfFameDao` přes `PersistingTool` a zapisuje
+   atomicky. Neplatný nebo nečitelný soubor se nepřepíše; neúspěšný zápis
+   ponechá předchozí soubor.
+2. Záznam kopíruje neměnný `GameResult` (identita, složky, skóre) spolu se
+   zobrazovaným jménem a obtížností. Při spring 1800, konci hry a dalším
+   potvrzeném výsledku jde o stejnou cestu `HallOfFameDao.recordFrozenResult`.
+   Opakovaný záznam téže identity nic nemění a shodné skóre zachovává pořadí.
+3. Výsledek se zobrazuje v nové záložce statistik **Síň slávy** a v dialogu
+   z hlavního menu. Zobrazený výsledek má úplný rozpis i tehdy, když se do
+   desítky nevejde.
+4. Opravná úprava 2026-10-23 doplňuje zobrazení konce hry: vítězství či
+   prohra svobodné hry po zprávách ukáže výsledek s rozpisem a místem (nebo
+   důvodem nezařazení); spring 1800 ukáže místo ve výběrovém okně. Chyba
+   uložení se zobrazí u výsledku a uložený soubor zůstává beze změny.
+   Opraveno po neúspěšném běhu 2026-10-23 (8 vypršení čekání na okno výsledku):
+   sdílené F03/F04 jsou misní scénáře kampaně `default` s nebodovaným kalendářem
+   do 1800, takže nemají zmrazený výsledek a okno výsledku se správně
+   nezobrazí. TC157, TC158 a TC161 proto zůstávají beze změny původních
+   misních kontrol; krok výsledku zůstává jen v TC162 (bodovaný konec 1850).
+   TC163 TC_04–TC_06 používají `RoyalVictoryFixture.prepareScoredFreePlay`:
+   kopie F03 s kampaní i misí `freePlay`, prázdnými cíli a kalendářem
+   `scoredPlay` do 1850; vyhlášení, zabavení, královský rozpis a bitva jsou
+   tytéž. Okno výsledku se zavírá před oznámením o dobytí, protože je modální.
+   TC163 dále obsahuje TC_03 (odchod bez zmrazeného výsledku), TC_04/TC_05
+   (skutečné vítězství povstání, nezařazený a první záznam), TC_06 (neplatný
+   soubor po konci hry) a TC_07 (neplatný soubor při 1800).
+   Jednotkové testy: `HallOfFameTest` (18 případů) a `HallOfFameDaoTest`
+   (9 případů). Nic z toho zatím nebylo spuštěno; není to přejímka ani
+   uzavřená položka. Zápis do poškozeného souboru je krytý jen jednotkovým
+   testem; UI test neumí bezpečně vyvolat selhání zápisu.
+
 ## R-0257 — Izolované úplné ověření — 2026-10-21
 
 1. [R-0257](requirements/done/R-0257.md) zavádí spouštěč podle
@@ -3775,6 +4110,147 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    substitute for those outcomes. Full CI/publication is also pending.
 
 
+<a id="r-0074-integration-closure-2026-10-23"></a>
+## R-0074 integration closure — 2026-10-23
+
+1. Status: **model tests passed; two UI runs failed; TC165 repair written, not
+   run; acceptance open**. Three model tests were added in the working tree on
+   2026-10-23 and passed in both full JUnit runs (items 7 and 14). Each UI
+   selection had one error, so no UI acceptance is claimed. The TC165 repair
+   (item 15) has not been compiled or run. [R-0074](requirements/done/R-0074.md) stays
+   `ready for development`.
+2. Audited wiring: `Player.buy` → `Model.addUnitInEurope` → `UnitFactory` builds
+   `UnitSpecialist` (or `UnitMasterBlacksmith`). `UnitSpecialist.getType()`
+   returns the bought type. `completeEducation(VETERAN_SOLDIER)` sets only the
+   veteran flag; `hasCivilianSpecialty` excludes veteran-only status. A Jesuit
+   reaches `hasEffectiveMissionaryExpertise`. `resolveLostCityRumor` and
+   `getNativeChiefPreview` test `SEASONED_SCOUT`. Hardy plow and clearing use
+   `HARDY_PIONEER`. No purchase-to-role path was missing from the code.
+3. Existing model evidence (from earlier runs, not repeated here):
+   - Every roster entry: `EuropeanSpecialistTest.everyEligibleSpecialistCanBeBoughtEmbarkedAndReloaded`
+     and `oneGoldShortCannotCreateOrChargeSpecialist`.
+   - Purchased scout sight radius 2: `EuropeanSpecialistTest.seasonedScoutHasTwoTileSightWithoutChangingItsIdentity`.
+   - Purchased hardy plow timing across reload: `EuropeanSpecialistTest.hardyPioneerFinishesPlowAfterTwoOwnerUpdatesAcrossDiskReload`.
+   - Purchased hardy clearing: `ClearForestTest` and `BuildRoadTest` buy paths.
+   - Purchased farmer job choice and reload: `EuropeanSpecialistTest.purchasedFarmerCanUseRealColonyJobChoiceAndRestoreAssignment`.
+   - Jesuit ordination, missionary role and Brébeuf: `MissionaryOrdinationTest`;
+     these place the Jesuit by type rather than by purchase.
+   - Roster UI: TC30 `TC_11`/`TC_12` buy and reload a Jesuit; that is the
+     purchase only, not a mission effect.
+4. Written model tests (not run):
+   - `EuropeanSpecialistTest.purchasedFarmerTakesVeteranRankWithoutLosingItsSpecialtyAcrossReload`:
+     a bought farmer gains veteran rank through `completeEducation`, keeps
+     `EXPERT_FARMER` and civilian specialty, has higher armed base strength, and
+     keeps all three after a disk reload.
+   - `NativeMissionTest.purchasedJesuitActsAsExpertMissionaryAfterPlacementAndReload`:
+     a bought Jesuit placed beside the settlement and reloaded is an effective
+     expert, and its mission leaves the owner's alarm at 46 after one update
+     from 50 (as the scene-based Jesuit does).
+   - `LostCityRumorTest.purchasedSeasonedScoutDrawsTheSpecialistRumorAndKeepsItsIdentity`:
+     a bought Seasoned Scout stepping onto the marker draws the seasoned gold
+     result for the fixed seed and keeps its identity.
+5. Remaining gaps after item 9: a purchased Seasoned Scout's chief visit (TC132)
+   and rumor step (TC123), a purchased unit in the mission contest (TC135), and
+   a Colony-school veteran course (`Colony.assignEducation`) are not exercised
+   from a purchase in a UI scenario; the scout rumor and veteran rank have the
+   model tests of item 4 only. Full CI and the fullbatch remain pending.
+6. Suggested UI classes for the main agent's pass, around five: the new
+   `TC_165_F198_purchased_jesuit_mission_test`, TC30 (unchanged, rerun to
+   classify the item 8 error), TC133, TC96 and
+   [TC123](../microcol-test/src/test/java/org/microcol/test/TC_123_F114_lost_city_rumor_test.java).
+   TC96, TC123, TC132 and TC135 are unchanged and still start from fixture
+   units; they are listed for regression only.
+7. Main run on 2026-10-23 (completion `20261023T113236Z-93044f45eec7`, revision
+   `d60e80e2`, 178 source hashes matched): the full JUnit suite passed **3907
+   tests** with zero failures, including the three model tests in item 4. The
+   Docker/Xvfb UI selection ran **45 tests** with **one error, zero failures and
+   zero skips**; its reports are in `run-s7BvSz`. The error is TC30 `TC_08`,
+   line 379. The failed run stays recorded here; the rest of the UI selection
+   passed.
+8. Root evidence for the TC30 `TC_08` error. The exception is a delayed JavaFX
+   pulse failure, `NullPointerException` in `FlowPane.computeContentHeight`
+   (`FlowPane.java:759`, parameter null), reached through `VBox`/`StackPane`
+   minimum-height layout during the pulse. The test surfaced it in
+   `GamePage.waitWhileMoving` after `nextTurnAndCloseDialogs`. The log contains
+   it once, just after the AI turn thread (`pool-105-thread-1`) started the human
+   turn. Source review of the game button `FlowPane`: all visibility, managed and
+   child-list changes (`ButtonsGamePanel.setVisibleNode`, `setRetireOrder`,
+   `setDisbandOrder`, `setJettisonOrder`) run in `Platform.runLater`, directly or
+   through `ButtonsGamePanelController.updateUnitOrders`. Off-FX subscribers
+   (`enableAllButtons`, `disableAllButtons`) change only `disable`. The R0194
+   retire control takes the same path. No supported off-FX child-list mutation
+   was found, so no source change is made. The classification is unresolved and
+   intermittent: TC30 passed all 12 scenarios in earlier runs. Main may rerun the
+   bounded TC30 selection unchanged to tell a transient from a repeat.
+9. **Written, not run:** `TC_165_F198_purchased_jesuit_mission_test`
+   (`TC_01_bought_jesuit_sails_home_and_establishes_an_expert_mission`) joins the
+   purchase to the native effect. It hires the Jesuit from the real offer, boards
+   the galleon, saves during the voyage, sails the TC30 route to the colony,
+   lands on the colony square, continues after a turn, picks the Jesuit among
+   the units on that square, walks it into the adjacent Aztec capital, reads the
+   expert confirmation, cancels with Back, confirms, and checks the mission,
+   its one-update progress and the identity after Continue. The bought unit is
+   never placed or replaced by a helper.
+10. Fixture choice for item 9. Neither saved game supplies the whole route:
+   `F22-expert-purchase` has the pier, galleon, route and colony but no natives,
+   while `F106-native-turns` has the capital but a French galleon on the sea lane
+   at (28,16). `NativeSpecialistJourneyPage.prepareLoadableFixture` therefore
+   writes a temporary game before Load: F22 plus the F106 capital (id 0), its four
+   local alarms, the `AZTEC` native player and the resident brave, which is
+   renumbered to 50 so the first purchase still receives unit id 103. The map
+   terrain of both games is identical around (23,15). No other change is made to
+   the running model, and the file is not committed.
+11. Assumptions of item 9. The run of item 14 confirmed that the merged game
+   loads, the purchase charges once, and the Jesuit boards, survives Save and
+   Continue, sails and stands on the colony square with the galleon. Its
+   `selectTile(COLONY)` step was wrong (item 14). Still unverified: a drag from
+   the colony square to the capital opens the native chooser for the chosen
+   Jesuit. The alarm is not asserted in the UI: owner updates add decay and
+   settlement pressure, so the exact 2 versus 4 reduction stays with
+   `NativeMissionTest` (item 4).
+12. Reuse check: no existing UI scenario started a non-production specialty from
+   a purchase. TC30 `TC_11`/`TC_12` buy and reload a Jesuit for the roster only;
+   TC133 and TC96 inject their units into the save. Item 9 reuses the TC30 steps
+   and the TC133 page methods rather than copying their checks. The veteran,
+   scout and hardy effects stay model-tested in items 4 and 3.
+13. Page contract: the new page `NativeSpecialistJourneyPage` and the added
+   `ExpertPurchasePage.buySpecialist` action contain assertions only in
+   `verify...` methods, and TC165 contains no assertion, as
+   `PageVerificationContractTest` requires. This is a reading of the source, not
+   a run.
+14. Second main run on 2026-10-23 (completion `20261023T115512Z-4b8fb088cd1b`,
+   reports `run-kldtWo`): the full JUnit suite passed **3907 tests**. The UI
+   selection ran **46 tests** with **one error, zero failures and zero skips**.
+   The TC30 `TC_08` error of item 8 did not recur; it stays recorded as failed
+   evidence and unexplained. The error is TC165 `TC_01` at line 163,
+   `game.selectTile(COLONY)`, after the real purchase, boarding, voyage, landing
+   and Continue had passed. `GamePage.selectTile` clicks the square and then
+   reads the map canvas position; the canvas had no scene
+   (`NullPointerException` in `GamePage.screenPoint`). Cause, from the source:
+   a press on a square with a movable own unit starts move mode, and a release
+   on the same square ends it in `GamePanelPresenter.switchToNormalMode`, which
+   calls `tryToOpenColonyDetail`. A click on an own colony square therefore
+   opens the colony screen and detaches the map. This is intended game
+   behaviour, so it is a test-step error, not a game bug. A plain press would
+   also select the galleon, because `UnitStorage.getFirstSelectableUnitAt`
+   returns the first movable unit in storage order (galleon 102 before Jesuit
+   103).
+15. Proposed repair, **written, not run**. `NativeSpecialistJourneyPage`
+   replaces `selectUnitInRightPanel` with `chooseUnitOnColonySquare`. It drags
+   from the colony square toward the capital (`FogPage.preview`) and cancels
+   with Escape before the release (`FogPage.cancelPreview`): Escape ends move
+   mode in `ScreenGamePresenter`, so the release opens nothing and moves
+   nothing, while the colony square stays selected. It then clicks the Jesuit
+   in the right panel (`#unitPanel-103`) and waits until `SelectedUnitManager`
+   holds it. `verifySelectedUnit` checks the choice. TC165 pans the capital into
+   view by keyboard and makes this choice before both mission gestures (before
+   Back and before Confirm). `NativeVisitPage.enterSettlement` then drags the
+   selected Jesuit, because selecting the same square keeps a unit already
+   selected there (`SelectedUnitManager.evaluateLocation`), and the release on
+   the known neighbouring settlement opens the native chooser. No shared helper,
+   game rule or other scenario changed; `GamePage.selectTile` and
+   `screenPoint` are unchanged.
+
 ### R-0073 full CI finding — 2026-10-16
 
 1. Run [38935767290](https://github.com/jajir/microcol/actions/runs/38935767290)
@@ -3788,6 +4264,10 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    TC22 rerun passed five scenarios; see the baseline repair evidence below.
 
 <a id="r-0075-persistent-recruitment-2026-10-16"></a>
+16. Third targeted run `20261023T121050Z-dffbe7ba7679` (`target/docker-ui/run-jUGjWu`, 639.570 seconds) remains failed: 3,907 model/JUnit tests passed; 46 UI/support tests had one assertion failure in TC165, zero errors/skips. The repaired unit selection reached the mission confirmation; its fixed `content` expectation failed after the voyage. Codex took over after four Claude attempts and retained explicit expert/progress checks while comparing the displayed attitude with current model mission terms; existing fixed-attitude TC133 checks remain unchanged. This repair is not yet verified.
+
+17. Targeted integration verification passed on 2026-10-23: completion `20261023T122320Z-24413dacc711`, reports `target/docker-ui/run-p6RheZ`, duration 651.290 seconds. All 3,907 model/JUnit tests in 313 reports and 46 UI/support tests in 10 reports passed, with zero failures/errors/skips. Selection: TC165, TC30, TC96, TC123, TC132, TC133, TC135 and all JUnit. All 183 recorded source hashes matched. The shared Java formatter passed; the purchased Jesuit journey now verifies expertise, initial progress and the displayed live attitude after the voyage, then the real mission and Save/Continue. Earlier failures remain failed evidence. Full seventh-batch acceptance is still pending.
+
 ## R-0075 persistent paid recruitment — 2026-10-16
 
 1. A single Sol low model/test assignment in an isolated worktree based on
@@ -6468,3 +6948,68 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Evidence: `target/verification/run-mltnh1r6/summary.json`, its `manifest.json`, all three group results and XML exports; completion logs at `/Users/jan/Library/Logs/Microcol/completions/20261023T061737Z-0861e79ba81d/`. Total elapsed time 4,371.927 seconds.
 3. Model: 3,793 tests / 306 reports. UI group 1: 282 tests / 80 reports. UI group 2: 328 tests / 80 reports. Every group passed, with zero failures, errors and skips. All expected suite reports were present with no duplicate or extra report; runner method-inventory validation passed.
 4. All 2,390 source hashes matched the frozen manifest before documentation closure. Shared Java formatter, diff review and scoped repair checks passed. Subsequent changes close requirement status and repair documentation links only; no implementation changed after acceptance. Commit/push follows documentation validation. Remote CI and publication were not checked.
+
+
+## R-0195 targeted base-score verification (2026-10-23)
+
+1. The shared model computes civilian population weights, distinct fathers, treasury floor and displayed national support without mutation. The statistics preview labels these as base components, not a final ranked result. TC160 hires an expert through Europe, reopens the preview and checks Continue. Model tests cover placements, seized passengers, veteran/civilian identity and save/load.
+2. Completion `20261023T075518Z-0dd50e1b46b4` (PID 30380) passed 3,827 model/JUnit tests in 308 reports and 33 UI/support tests in 9 reports, zero failures, errors or skips, in 534.801 seconds. Reports: `target/docker-ui/run-vnVTFa`; all 12 recorded source hashes matched. Selection: all JUnit plus TC160, TC159, TC158, TC157, TC30 and TC81.
+3. Two Haiku attempts and one Sonnet repair corrected primitive-ID comparison, invalid ship fixture fields and the separate support effect of Bolivar. Earlier failed runs remain failed evidence. Shared Java formatting and diff checks passed. Complete seventh-batch acceptance remains pending; no publication is claimed.
+
+
+## R-0196 targeted result-score verification (2026-10-23)
+
+1. ResultScore applies the native destruction deduction, earned-target excess bells, zero clamp, successful independence order and early-year points, then the independent score difficulty factor and one final floor. Declaration year and destruction count persist; conquest checks count capacity before mutation. The statistics report scrolls through named base and calculated components without recording a ranking.
+2. Completion `20261023T083537Z-efefa4cb4074` (PID 35257) passed 3,845 model/JUnit tests in 309 reports and 36 UI/support tests in 11 reports, zero failures, errors or skips, in 461.719 seconds. Reports: `target/docker-ui/run-LVMT1R`; all 33 recorded source hashes matched. Selection: all JUnit plus TC161, TC160, TC158, TC155, TC156, TC159, TC27 and TC81.
+3. TC161 checks legal expert purchase, report reopening, saved destruction history through Continue and a real battle ending in independence. Successful score terms are verified in the model after that UI action; no separate final-score screen or Hall-of-Fame record is claimed. Model checks cover exact arithmetic, all difficulties/orders, declaration persistence, future-year rejection, pending intervention, conquest history and overflow rejection without mutation.
+4. Four Claude attempts corrected authored declaration histories, an unnecessary calendar dependency and shared Gson fixture authors; earlier failures remain failed evidence. Main formatting and diff review passed. Complete seventh-batch acceptance remains pending.
+
+
+## R-0193 targeted date-boundary verification (2026-10-23)
+
+1. Targeted-verified, complete batch acceptance pending: the 1600, 1800 and 1850 free-play boundaries apply only to a game saved with the explicit calendar field `scoredPlay`, which requires the end year 1850. The reference expedition, generated worlds, the three bundled free-play maps and the 63 free-play test scenarios carry it; the 13 default-campaign scenarios and every mission keep their own deadline and no frozen result. The policy rules are in [end dates and scoring](gap-analysis.md#end-dates-and-scoring).
+2. Model tests: `ScoreBoundaryTest` covers 1599/1600 with zero colonies, winter 1799 against spring 1800, the single frozen result and its pause, rejected and stale mutations, the unscored continuation, a later unscored colony loss, an authored valid state one round before 1850, reload with the same identity and components, ordinary-loss roundtrip, a mission with the same 1850 deadline, and the rejection of impossible result histories. `ReferenceExpeditionTest`, `EuropeanRelationModelTest` and `RebelWarCombatTest` were adjusted to the explicit field; the test-defined `TEST_GAME_OVER` end of `EuropeanRelationModelTest` is a mission-style external end and runs unscored, because scored free play accepts only its own end reasons. The unscored colony loss empties every colony through its residents' exit, the only production path that destroys a colony, so the reloaded save has no orphaned worker.
+3. UI scenarios: TC162 (`TC_162_F193_score_boundary_test`) drives the real end of turn at spring 1800, the postponed choice and its reopening from the base score tab, the unscored continuation, Save and Continue with the same identity and components, a saved pending choice asked again, and the end of all play from an authored saved state in winter 1849. No 200-round UI play is used. The three TC162 scenarios passed in the targeted run below.
+4. Known limits: the model tests do not run the Docker UI suite; after the unscored continuation TC162 waits for the human turn and, only when the model holds turn events, for the turn report that replaces the current screen, instead of a fixed delay; the colonies menu is not disabled during the pause, so its actions are refused by the model. No Hall of Fame, ranking or Retire action exists; those belong to later requirements.
+
+5. Completion `20261023T094522Z-ff26545cc6a8` (PID 44787) passed 3,865 model/JUnit tests in 310 reports and 37 UI/support tests in 10 reports, zero failures, errors or skips, in 476.863 seconds. Reports: `target/docker-ui/run-LkHvUs`; all 137 recorded source hashes matched. Selection: all JUnit plus TC162, TC37, TC158, TC157, TC161, TC160 and TC24.
+6. After four Claude attempts, Codex corrected the report action placement and a page-parser assertion that violated the functional source contract. The decision action now appears before the long score breakdown. All earlier failures remain failed evidence. Shared formatting and diff checks passed; complete seventh-batch acceptance remains pending.
+
+
+## R-0197 targeted Hall-of-Fame verification (2026-10-23)
+
+1. Completion `20261023T104156Z-b72eed715a39` (PID 53513) passed 3,892 model/JUnit tests in 312 reports and 37 UI/support tests in 10 reports, zero failures, errors or skips, in 503.991 seconds. Reports: `target/docker-ui/run-rjg99t`; all 161 recorded source hashes matched. Selection: all JUnit plus TC163, TC162, TC161, TC160, TC158, TC157 and TC24.
+2. TC163 covers top-ten admission/nonadmission, reopening without duplicates, Exit without a frozen result, actual scored rebellion completion with its automatic result window, and invalid stored bytes preserved while showing failure and the result. DAO tests cover failed atomic writes; no separate UI write-failure simulation is claimed. Mission scenarios remain unscored.
+3. Three Claude attempts completed the automatic end-result path and corrected scored fixture routing and modal ordering. The earlier eight UI timeouts remain failed evidence. Shared Java formatting and diff review passed. Complete seventh-batch local acceptance remains pending; no publication is claimed.
+
+
+## R-0194 retirement implementation (2026-10-23) — not verified
+
+1. Written, not run: the writing agent had no shell, so no JUnit or UI result is claimed. [R-0194](requirements/done/R-0194.md) keeps `ready for development` until main acceptance passes.
+2. Configured behavior: `Model.getRetirementQuote` offers a retirement only in running scored free play, for the undeclared human colonial nation on its own turn, with no pending choice. The spring 1800 choice, missions, declared rebellions and finished games offer none. A live confirmation freezes one `FINAL` result with the reason `RETIRED`; an unscored continuation keeps its frozen identity and components. `Model.retire` rejects a stale preview or a repeated confirmation before any change. Exit and cancellation are unchanged and record nothing.
+3. Model tests, written: `RetirementTest` covers the live preview and its purity, the confirmed live retirement with reload, a stale preview with a fresh one, a repeated confirmation, the unscored retirement with reload, the refused spring 1800 choice, a mission, an open declared rebellion retired without independence bonus (strict reload), a rejected loss reason on an open rebellion, no offer after the rebellion ended, and a rejected load of a retirement reason without a scored result.
+4. UI scenarios, written: `TC_164_F194_retirement_test` TC_01 runs the real Exit, cancel and confirm sequence in winter 1799; TC_02 retires after the authored unscored continuation in winter 1849; TC_03 cancels and then confirms a retirement of the open declared rebellion of the scored independence scenario. Each confirmed path closes the end notice before the result window, and checks that the stored ranking holds exactly that one result, first and with its frozen total. `RetirePage` holds every assertion in its `verify…` methods.
+5. First local run, completion `20261023T110417Z-68d621725061` (reports `target/docker-ui/run-fjCIjB`): all 3,902 model/JUnit tests in 313 reports passed. The UI selection had 35 tests in 9 reports, with 1 failure and 1 error. TC_02 timed out waiting for the result window, because the retirement notice (`gameOver_retired`) was still open and was never acknowledged. TC_01 then failed at its load, most likely from the state the failed TC_02 left behind; this is inferred from the sequence, not yet confirmed by a rerun.
+6. Repair (2026-10-23, not run): TC_02 and TC_03 close the notice before waiting for the result; TC_01 and TC_02 start from an empty ranking. Open declared rebellions may now be retired, as R-0194 requires; this is a model rule change that main has not verified.
+7. Targeted verification passed on 2026-10-23: completion `20261023T111845Z-7d3424320d3d`, reports `target/docker-ui/run-HOdyzH`, duration 456.270 seconds. All 3,904 model/JUnit tests in 313 reports and 36 UI/support tests in 9 reports passed, with zero failures, errors or skips. Selection: TC164, TC163, TC162, TC161, TC160 and TC24 plus all JUnit. All 174 recorded source hashes matched; the shared Java formatter and `git diff --check` passed. The successful rerun covers all three retirement journeys, including declared rebellion and the result notice. Complete seventh-batch acceptance remains pending; the earlier failed run remains failed evidence.
+
+
+## R-0200 targeted colony advisor verification (2026-10-23)
+
+1. Completion `20261023T144225Z-860265e58836` (PID 65007) passed 3,955 model/JUnit tests in 318 reports and 25 UI/support tests in eight reports, with zero failures, errors or skips, in 374.287 seconds. Reports: `target/docker-ui/run-pmfEHZ`. Selection: all JUnit plus TC168, TC167, TC166, TC67 and TC163. All 221 recorded source hashes matched; shared Java formatting and diff checks passed.
+2. TC168 verifies projection versus actual update, assignment changes, Save/Continue, colony navigation, keyboard access, English/Czech labels and famine uncertainty. Visual inspection of the English normal and Czech famine screenshots confirms wrapped sentences, accessible Open and readable headings; the table exposes further columns by horizontal scrolling.
+3. Earlier three failed runs remain failed evidence. This is targeted acceptance only; complete seventh-batch acceptance, documentation checks and commit remain pending.
+
+
+## R-0201 targeted native advisor verification (2026-10-23)
+
+1. Completion `20261023T151017Z-13c000279c6d` (PID 66972) passed 3,964 model/JUnit tests in 319 reports and 30 UI/support tests in eight reports, zero failures, errors or skips, in 336.875 seconds. Reports: `target/docker-ui/run-B2oEhM`. Selection: all JUnit plus TC169, TC124, TC128, TC132 and TC137. All 239 source hashes matched; shared formatting and diff checks passed.
+2. Repeated confirmed chief visits now persist disclosure independently of the original encounter outcome. Tests cover gold/death then information, viewer isolation and reload; TC169 exercises gold then repeat, advisor display and Save/Continue. English repeat and Czech initial screenshots were reviewed for readable content. The earlier successful targeted run did not cover this subsequently repaired gap.
+3. Complete seventh-batch acceptance remains pending; no commit or publication is claimed by this targeted result.
+
+
+## Seventh-batch full acceptance (2026-10-23)
+
+1. Requirements R-0195, R-0196, R-0193, R-0197, R-0194, R-0074, R-0198, R-0199, R-0200 and R-0201 passed complete local acceptance. Completion `20261023T151728Z-7b16beb661c3` (PID 68138) used two isolated Docker/Xvfb UI workers and one model phase.
+2. `target/verification/run-xf14w1iv/summary.json` and `manifest.json`: model 3,964 tests in 319 reports; UI group 1 297 tests in 85 reports; UI group 2 340 tests in 85 reports. Total UI/support: 637. Every expected report is present, with zero failures, errors or skips in every group. Duration: 4,527.108 seconds (supervisor: 4,527.188 seconds).
+3. All 2,476 source hashes matched the accepted snapshot before documentation-only status/link updates. Shared Java formatting, completion-runner/local-worker/documentation checks and strict MkDocs passed before the run. Earlier failed runs remain failed evidence. This establishes local acceptance, not remote CI or publication.

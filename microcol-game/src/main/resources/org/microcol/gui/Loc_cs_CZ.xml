@@ -96,6 +96,11 @@
 	<entry key="nativeDetailsHint">Stiskněte N pro podrobnosti o domorodých sídlech.</entry>
 	<entry key="nativeSettlementsTitle">Domorodá sídla</entry>
 	<entry key="nativeSettlementsNone">Zatím není známé žádné domorodé sídlo.</entry>
+	<entry key="nativeAdvisorNations">Známé národy: %s.</entry>
+	<entry key="nativeAdvisorChiefFacts">Informace náčelníka: zboží k prodeji: %s. Zboží, o které mají zájem: %s. Učitelná dovednost: %s.</entry>
+	<entry key="nativeAdvisorChiefNotLearned">Náčelník vám o této osadě zatím nic neřekl.</entry>
+	<entry key="nativeAdvisorShowOnMap">Zobrazit na mapě</entry>
+	<entry key="nativeAdvisorUnavailable">Tato osada už na mapě není k dispozici.</entry>
 	<entry key="nativeVisitTitle">Domorodé sídlo</entry>
 	<entry key="nativeVisitIntro">Vyberte níže akci. Zavření okna nic nemění a jednotka zůstane na místě.</entry>
 	<entry key="nativeVisitSkillLine">Nabízí výuku: %s.</entry>

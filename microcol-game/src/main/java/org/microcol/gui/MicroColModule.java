@@ -42,6 +42,8 @@ import org.microcol.gui.screen.europe.BuyUnitsDialog;
 import org.microcol.gui.screen.europe.EuropeButtonsPanelController;
 import org.microcol.gui.screen.europe.EuropeCallback;
 import org.microcol.gui.screen.europe.MercenaryOfferController;
+import org.microcol.gui.screen.statistics.HallOfFameListener;
+import org.microcol.gui.screen.statistics.ScoreBoundaryController;
 import org.microcol.gui.screen.europe.PanelEuropeDockBehavior;
 import org.microcol.gui.screen.europe.PanelEuropeGoods;
 import org.microcol.gui.screen.europe.PanelHighSeas;
@@ -179,6 +181,7 @@ public final class MicroColModule extends AbstractModule {
 
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
+        bind(HallOfFameListener.class).asEagerSingleton();
 
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
         bind(ShowRumorReportAfterMove.class).asEagerSingleton();
@@ -237,6 +240,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ScreenEuropePresenter.class).asEagerSingleton();
         bind(EuropeButtonsPanelController.class).asEagerSingleton();
         bind(MercenaryOfferController.class).asEagerSingleton();
+        bind(ScoreBoundaryController.class).asEagerSingleton();
         bind(PanelHighSeas.class);
         bind(PanelPortPier.class).in(Singleton.class);
         bind(PanelEuropeGoods.class).in(Singleton.class);

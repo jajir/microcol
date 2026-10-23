@@ -15,6 +15,7 @@ import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.NewUnitWasBornEvent;
+import org.microcol.model.event.ScoreBoundaryRequiredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.MercenaryOfferRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
@@ -40,6 +41,14 @@ public interface ModelListener {
     /** A free immigrant needs a choice before this owner's turn can begin. */
     default void onImmigrationChoiceRequired(
             final ImmigrationChoiceRequiredEvent event) {
+    }
+
+    /**
+     * Spring 1800 froze the score of the human nation; the game waits for the
+     * unscored continuation (R-0193).
+     */
+    default void onScoreBoundaryRequired(
+            final ScoreBoundaryRequiredEvent event) {
     }
 
     /** A Crown tax demand needs an answer before this owner's turn begins. */

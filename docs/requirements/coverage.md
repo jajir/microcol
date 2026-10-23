@@ -95,11 +95,11 @@
     [deployment](done/R-0186.md), [Europe closure](done/R-0187.md),
     [attack support](done/R-0188.md), [intervention target](done/R-0189.md),
     [delivery](done/R-0190.md), [victory](done/R-0191.md) and [loss](done/R-0192.md).
-    [R-0193](R-0193.md) owns date boundaries, [R-0194](R-0194.md)
-    Exit/Retire/Continue, [R-0195](R-0195.md) and [R-0196](R-0196.md)
-    score components, and [R-0197](R-0197.md) the Hall of Fame.
-13. Remaining report families are [labor](R-0198.md), [religion](R-0199.md),
-    [colonies](R-0200.md), [natives](R-0201.md), [navy](R-0202.md),
+    [R-0193](done/R-0193.md) owns date boundaries, [R-0194](done/R-0194.md)
+    Exit/Retire/Continue, [R-0195](done/R-0195.md) and [R-0196](done/R-0196.md)
+    score components, and [R-0197](done/R-0197.md) the Hall of Fame.
+13. Remaining report families are [labor](done/R-0198.md), [religion](done/R-0199.md),
+    [colonies](done/R-0200.md), [natives](done/R-0201.md), [navy](R-0202.md),
     [Congress/REF](R-0203.md) and [notices/results](R-0204.md).
     [R-0205](R-0205.md) owns local inspection, [R-0206](done/R-0206.md)
     the rules encyclopedia and [R-0207](deferred/R-0207.md) existing tutorial updates.

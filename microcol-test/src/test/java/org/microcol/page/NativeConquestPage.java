@@ -14,8 +14,8 @@ import org.microcol.gui.screen.nativesettlements.NativeSettlementsDialog;
 import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.NativeAdvisorReport;
 import org.microcol.model.NativeNation;
-import org.microcol.model.NativeSettlement;
 import org.microcol.model.NativeTreasureRules;
 import org.microcol.model.NativeVisitAction;
 import org.microcol.model.turnevent.TurnEventNativeConquest;
@@ -653,10 +653,10 @@ public final class NativeConquestPage extends AbstractScreen {
     @SuppressWarnings("unchecked")
     public void verifySettlementListed(final Location at,
             final boolean expected) {
-        final ListView<NativeSettlement> list = (ListView<NativeSettlement>) getNodeFinder()
+        final ListView<NativeAdvisorReport.Settlement> list = (ListView<NativeAdvisorReport.Settlement>) getNodeFinder()
                 .lookup("#" + NativeSettlementsDialog.LIST_ID).query();
-        assertEquals(expected, list.getItems().stream()
-                .anyMatch(site -> site.getLocation().equals(at)));
+        assertEquals(expected, list.getItems().stream().anyMatch(
+                site -> site.getSettlement().getLocation().equals(at)));
     }
 
     /**

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Retire from scored free play</entry>
+  <entry key="liveSummary">Retiring now ends the game with a calculated result of %s points.</entry>
+  <entry key="continuedSummary">Retiring ends the game. Your recorded result of %s points stays as it was.</entry>
+  <entry key="parts">Base score %s points; destroyed native settlements -%s, bells beyond the intervention target %s, difficulty factor %s%%.</entry>
+  <entry key="liveConsequence">The result is recorded in the Hall of Fame. The game cannot be continued afterwards.</entry>
+  <entry key="continuedConsequence">No new score is recorded, and the Hall of Fame keeps the result you already have. The game cannot be continued afterwards.</entry>
+  <entry key="retireConfirm">Retire and end the game</entry>
+  <entry key="keepPlaying">Keep playing</entry>
+</properties>

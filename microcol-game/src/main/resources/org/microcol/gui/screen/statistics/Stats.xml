@@ -81,4 +81,24 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="foreignTrade">Sales, last 10 turns</entry>
 	<entry key="foreignLocked">Locked: recruit Jan de Witt to compare powers.</entry>
 	<entry key="foreignUncontacted">Unknown: no contact with this power yet.</entry>
+	<entry key="titleBaseScore">Base score</entry>
+	<entry key="baseScoreTitle">Base score preview, not the final ranked score</entry>
+	<entry key="baseScoreNote">Read-only. The base subtotal excludes the war and difficulty terms; the calculated result below applies them. Nothing is recorded.</entry>
+	<entry key="baseScoreUnavailable">The base score appears when a game is running.</entry>
+	<entry key="baseScorePopulation">Population: %s points (servants %s, colonists %s, experts %s)</entry>
+	<entry key="baseScoreFathers">Founding fathers: %s points (%s recruited)</entry>
+	<entry key="baseScoreGold">Treasury: %s points (%s gold)</entry>
+	<entry key="baseScoreSupport">National support: %s points (%s%%)</entry>
+	<entry key="baseScoreSubtotal">Base subtotal: %s points</entry>
+	<entry key="resultTitle">Calculated result preview, not recorded</entry>
+	<entry key="resultNote">Read-only. It applies the war and difficulty terms to the base subtotal. Nothing is recorded and no ranking is shown.</entry>
+	<entry key="resultDeduction">Destroyed native settlements: %s at %s each, deduction -%s points</entry>
+	<entry key="resultBells">Bells after the intervention target: +%s points</entry>
+	<entry key="resultClampedBase">Base not below zero: %s points</entry>
+	<entry key="resultBonus">Successful independence: order bonus +%s%%, early declaration points: %s</entry>
+	<entry key="resultDifficulty">Difficulty factor: %s%%</entry>
+	<entry key="resultTotal">Calculated result: %s points</entry>
+	<entry key="titleLabor">Labor</entry>
+	<entry key="titleReligion">Religion</entry>
+	<entry key="titleColonies">Colonies</entry>
 </properties>

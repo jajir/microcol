@@ -37,6 +37,7 @@ public enum Buttons implements MessageKeyResource {
     disbandQuestion, disbandToColony, disbandNoColony, disbandToolsLine,
     disbandHorsesLine, disbandMusketsLine, disbandOverflowAcknowledge,
     disbandConfirm, disbandCancel, disbandChanged, buttonJettison,
-    jettisonExplanation, moveEuropeClosed, moveChanged;
+    jettisonExplanation, moveEuropeClosed, moveChanged, buttonRetire,
+    retireExplanation, retireUnavailable, retireChanged;
 
 }

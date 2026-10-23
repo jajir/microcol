@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Ukončit bodovanou volnou hru</entry>
+  <entry key="liveSummary">Ukončení hru hned skončí s vypočteným výsledkem %s bodů.</entry>
+  <entry key="continuedSummary">Ukončení hru skončí. Tvůj zapsaný výsledek %s bodů zůstane beze změny.</entry>
+  <entry key="parts">Základ %s bodů; zničená domorodá sídla -%s, zvony nad cíl intervence %s, koeficient obtížnosti %s%%.</entry>
+  <entry key="liveConsequence">Výsledek se zapíše do síně slávy. Hru po ukončení nelze pokračovat.</entry>
+  <entry key="continuedConsequence">Nový výsledek se nezapisuje a síň slávy si ponechá výsledek, který již má. Hru po ukončení nelze pokračovat.</entry>
+  <entry key="retireConfirm">Ukončit a skončit hru</entry>
+  <entry key="keepPlaying">Hrát dál</entry>
+</properties>

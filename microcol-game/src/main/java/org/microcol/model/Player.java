@@ -107,6 +107,18 @@ public abstract class Player {
      */
     private Integer rebellionVictoryOrder;
 
+    /**
+     * Calendar year of this nation's declaration (R-0196), fixed at the
+     * declaration. Null until a colonial nation declares.
+     */
+    private Integer declarationYear;
+
+    /**
+     * Native settlements this nation destroyed by conquest (R-0196). Each one
+     * is counted once, in the committed attack that removes the settlement.
+     */
+    private int nativeSettlementsDestroyed;
+
     /** Null unless a computer colony is running a supply cycle. */
     private RivalTradeObjective rivalTradeObjective;
 
@@ -189,6 +201,9 @@ public abstract class Player {
                             && playerPo.getIntervention() == null
                             && isNoRebellion(playerPo),
                     "Native players have no European state");
+            Preconditions.checkArgument(
+                    playerPo.getNativeSettlementsDestroyed() == 0,
+                    "Native players destroy no settlements");
             return new PlayerNative(playerPo.getName(),
                     playerPo.getNativeNation(), playerPo.getGold(), model,
                     playerPo.getExtraData(),
@@ -234,6 +249,9 @@ public abstract class Player {
             player.loadRebellionLossReason(playerPo.getRebellionLossReason());
             player.loadRebellionVictoryOrder(
                     playerPo.getRebellionVictoryOrder());
+            player.loadDeclarationYear(playerPo.getDeclarationYear());
+            player.loadNativeSettlementsDestroyed(
+                    playerPo.getNativeSettlementsDestroyed());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
@@ -259,12 +277,17 @@ public abstract class Player {
                     "Kings cannot have rebellion colonies");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
-            return new PlayerKing(playerPo.getName(), playerPo.isComputer(),
-                    playerPo.getGold(), model,
+            // The Crown can destroy settlements too; its count is kept, while
+            // only colonial nations are scored (R-0196).
+            final Player king = new PlayerKing(playerPo.getName(),
+                    playerPo.isComputer(), playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), subdued,
                     playerPo.getExtraData(),
                     playerPo.getVisible().getVisibilitySet(), new RoyalRoster(
                             playerPo.getRoyalRoster(), model.getDifficulty()));
+            king.loadNativeSettlementsDestroyed(
+                    playerPo.getNativeSettlementsDestroyed());
+            return king;
         }
     }
 
@@ -558,6 +581,8 @@ public abstract class Player {
         out.setRebellionColonyIds(new ArrayList<>(rebellionColonyIds));
         out.setRebellionLossReason(rebellionLossReason);
         out.setRebellionVictoryOrder(rebellionVictoryOrder);
+        out.setDeclarationYear(declarationYear);
+        out.setNativeSettlementsDestroyed(nativeSettlementsDestroyed);
         out.setRivalLastServedColonyId(rivalLastServedColonyId);
         out.setRivalParkedCarrierIds(new ArrayList<>(rivalParkedCarrierIds));
         knownPowers.stream().sorted().forEach(out.getKnownPowers()::add);
@@ -927,6 +952,32 @@ public abstract class Player {
         return out;
     }
 
+    /**
+     * Base score of this colonial nation before the war and difficulty terms
+     * (R-0195). Read-only: it neither changes the nation nor records a result.
+     *
+     * @return immutable base score of the current state
+     */
+    public BaseScore getBaseScore() {
+        return BaseScore.calculate(this);
+    }
+
+    /**
+     * Calculated result of this colonial nation (R-0196): the base score with
+     * the destroyed native settlements, the bells beyond the earned
+     * intervention target, the independence bonus and the difficulty factor.
+     * Read-only; it neither changes the nation nor records a finished result.
+     *
+     * @return immutable calculated result of the current state
+     */
+    public ResultScore getResultScore() {
+        final long bells = intervention == null ? 0L
+                : intervention.getBellsBeyondTarget();
+        return ResultScore.of(BaseScore.calculate(this),
+                nativeSettlementsDestroyed, model.getDifficulty(), bells,
+                rebellionVictoryOrder, declarationYear);
+    }
+
     public int getCongressBells() {
         return congress == null ? 0 : congress.bells();
     }
@@ -1024,7 +1075,76 @@ public abstract class Player {
         return (playerPo.getRebellionColonyIds() == null
                 || playerPo.getRebellionColonyIds().isEmpty())
                 && playerPo.getRebellionLossReason() == null
-                && playerPo.getRebellionVictoryOrder() == null;
+                && playerPo.getRebellionVictoryOrder() == null
+                && playerPo.getDeclarationYear() == null;
+    }
+
+    /**
+     * Load the saved declaration year (R-0196). A declared colonial nation must
+     * name the year it declared, and no other nation has one; the year is never
+     * guessed from the calendar on load. A declaration cannot lie after the
+     * saved current year, nor at or after the independence deadline. The
+     * calendar is read only to judge an actual declared year.
+     *
+     * @param saved declaration year of the save, or null
+     */
+    private void loadDeclarationYear(final Integer saved) {
+        if (!declaredIndependence) {
+            Preconditions.checkArgument(saved == null,
+                    "Only a declared nation has a declaration year");
+            return;
+        }
+        Preconditions
+                .checkArgument(
+                        saved != null && saved >= 1
+                                && saved < INDEPENDENCE_DEADLINE_YEAR
+                                && saved <= model.getCalendar()
+                                        .getCurrentYear(),
+                        "Declared nation needs a valid declaration year");
+        declarationYear = saved;
+    }
+
+    /**
+     * Load the saved count of destroyed native settlements (R-0196).
+     *
+     * @param saved nonnegative count
+     */
+    private void loadNativeSettlementsDestroyed(final int saved) {
+        Preconditions.checkArgument(saved >= 0,
+                "Invalid native settlement count");
+        nativeSettlementsDestroyed = saved;
+    }
+
+    /**
+     * @return the calendar year of this nation's declaration, or empty before
+     *         the declaration
+     */
+    public Optional<Integer> getDeclarationYear() {
+        return Optional.ofNullable(declarationYear);
+    }
+
+    /** @return native settlements this nation destroyed by conquest */
+    public int getNativeSettlementsDestroyed() {
+        return nativeSettlementsDestroyed;
+    }
+
+    /**
+     * Check that one more destroyed settlement can be counted (R-0196). A
+     * conquest calls this before its first change, so an exhausted count
+     * refuses the attack instead of failing after the battles.
+     */
+    void checkNativeSettlementDestroyedCount() {
+        Preconditions.checkState(nativeSettlementsDestroyed < Integer.MAX_VALUE,
+                "Native settlement count is exhausted");
+    }
+
+    /**
+     * Count one native settlement destroyed by this nation's committed conquest
+     * (R-0196). Called once, in the same change that removes the settlement.
+     */
+    void markNativeSettlementDestroyed() {
+        checkNativeSettlementDestroyedCount();
+        nativeSettlementsDestroyed++;
     }
 
     /**
@@ -2358,6 +2478,8 @@ public abstract class Player {
             final List<VoyageReversalOffer> reversals = planInboundReversals();
             reversals.forEach(model::checkCurrentVoyageReversal);
             declaredIndependence = true;
+            // The year of the declaration fixes the early points (R-0196).
+            declarationYear = model.getCalendar().getCurrentYear();
             // The declaration fixes the rebellion's first colonies (R-0192).
             model.getColonies(this)
                     .forEach(colony -> rebellionColonyIds.add(colony.getId()));

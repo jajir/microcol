@@ -399,6 +399,7 @@ class NativeChiefTest {
         final NativeChiefEncounterPo dutch = new NativeChiefEncounterPo();
         dutch.setEuropean(EuropeanNation.DUTCH);
         dutch.setOutcome(INFORMATION);
+        dutch.setInformed(true);
         scene.toPo().getNativeSettlements().get(0)
                 .setChiefEncounters(List.of(dutch));
         final Model model = scene.toModel();
@@ -550,6 +551,105 @@ class NativeChiefTest {
         scene.toPo().getNativeSettlements().get(0)
                 .setChiefEncounters(List.of(broken));
         assertThrows(IllegalArgumentException.class, scene::toModel);
+    }
+
+    /**
+     * Whether the advisor shows chief information for the owner's settlement.
+     */
+    private static boolean factsShown(final Model model, final String owner) {
+        return model.getNativeAdvisorReport(model.getPlayerByName(owner))
+                .getSettlements().get(0).getChiefFacts().isPresent();
+    }
+
+    /** Scout added second, standing on the other side of the settlement. */
+    private static Unit secondScout(final Model model) {
+        return model.getUnitById(201);
+    }
+
+    @Test
+    void goldThenRepeatDisclosesTheInformationAndKeepsTheFirstOutcome() {
+        final long seed = seedFor(NativeHostility.CONTENT, false, GOLD);
+        final NativeRelationsScene scene = island(NativeNation.AZTEC)
+                .unit(DUTCH, UnitType.COLONIST, at(1, 0), SCOUT)
+                .unit(DUTCH, UnitType.COLONIST, at(-1, 0), SCOUT)
+                .unit(FRANCE, UnitType.COLONIST, at(0, 1),
+                        NativeRelationsScene.UNARMED)
+                .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10);
+        scene.toPo().setCombatRandomState(seed);
+        final Model model = scene.toModel();
+        final Player dutch = model.getPlayerByName(DUTCH);
+        model.visitNativeChief(scout(model), settlement(model),
+                previewOf(model));
+        assertEquals(GOLD, settlement(model)
+                .findChiefEncounter(EuropeanNation.DUTCH).orElseThrow());
+        assertFalse(factsShown(model, DUTCH));
+
+        // Previewing a repeat reads only; the information is not yet told.
+        previewOf(model);
+        assertFalse(factsShown(model, DUTCH));
+
+        final long afterFirst = randomState(model);
+        final int treasury = settlement(model).getTreasury();
+        final int gold = dutch.getGold();
+        final NativeChiefResult again = model.visitNativeChief(scout(model),
+                settlement(model), previewOf(model));
+        assertTrue(again.isRepeat());
+        assertTrue(again.getInformation().isPresent());
+        assertEquals(afterFirst, randomState(model));
+        assertEquals(treasury, settlement(model).getTreasury());
+        assertEquals(gold, dutch.getGold());
+        assertEquals(GOLD, settlement(model)
+                .findChiefEncounter(EuropeanNation.DUTCH).orElseThrow());
+        assertTrue(factsShown(model, DUTCH));
+
+        // The French colonist sees the same settlement, but the chief spoke
+        // to the Dutch only.
+        assertFalse(factsShown(model, FRANCE));
+
+        final Model reloaded = reload(model);
+        assertTrue(factsShown(reloaded, DUTCH));
+        assertFalse(factsShown(reloaded, FRANCE));
+        assertEquals(GOLD, settlement(reloaded)
+                .findChiefEncounter(EuropeanNation.DUTCH).orElseThrow());
+    }
+
+    @Test
+    void deathThenRepeatByAnotherScoutDisclosesTheInformation() {
+        final long seed = seedFor(NativeHostility.CONTENT, false, DEATH);
+        final NativeRelationsScene scene = island(NativeNation.AZTEC)
+                .unit(DUTCH, UnitType.COLONIST, at(1, 0), SCOUT)
+                .unit(DUTCH, UnitType.COLONIST, at(-1, 0), SCOUT)
+                .unit(FRANCE, UnitType.COLONIST, at(0, 1),
+                        NativeRelationsScene.UNARMED)
+                .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10);
+        scene.toPo().setCombatRandomState(seed);
+        final Model model = scene.toModel();
+        final Unit victim = scout(model);
+        model.visitNativeChief(victim, settlement(model), previewOf(model));
+        assertFalse(model.isUnitInGame(victim));
+        assertFalse(factsShown(model, DUTCH));
+
+        final long afterFirst = randomState(model);
+        final int treasury = settlement(model).getTreasury();
+        final NativeChiefResult again = model.visitNativeChief(
+                secondScout(model), settlement(model),
+                model.getNativeChiefPreview(secondScout(model),
+                        settlement(model)).orElseThrow());
+        assertTrue(again.isRepeat());
+        assertTrue(again.getInformation().isPresent());
+        assertEquals(afterFirst, randomState(model));
+        assertEquals(treasury, settlement(model).getTreasury());
+        assertTrue(model.isUnitInGame(secondScout(model)));
+        assertEquals(DEATH, settlement(model)
+                .findChiefEncounter(EuropeanNation.DUTCH).orElseThrow());
+        assertTrue(factsShown(model, DUTCH));
+        assertFalse(factsShown(model, FRANCE));
+
+        final Model reloaded = reload(model);
+        assertTrue(factsShown(reloaded, DUTCH));
+        assertFalse(factsShown(reloaded, FRANCE));
+        assertEquals(DEATH, settlement(reloaded)
+                .findChiefEncounter(EuropeanNation.DUTCH).orElseThrow());
     }
 
     /**

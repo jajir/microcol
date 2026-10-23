@@ -156,6 +156,35 @@ class NativeMissionTest {
                 .brebeufMember(DUTCH).toModel()).isEffectiveExpert());
     }
 
+    /**
+     * A Jesuit bought in Europe is placed beside the settlement and reloaded,
+     * so the mission uses the purchased identity rather than a scene unit.
+     */
+    @Test
+    void purchasedJesuitActsAsExpertMissionaryAfterPlacementAndReload() {
+        final Model bought = island(NativeNation.AZTEC)
+                .gold(DUTCH, UnitType.JESUIT_MISSIONARY.getEuropePrice())
+                .alarm(EuropeanNation.DUTCH, 50).toModel();
+        final Player buyer = bought.getPlayerByName(DUTCH);
+        buyer.buy(UnitType.JESUIT_MISSIONARY);
+        final int id = buyer.getAllUnits().stream()
+                .filter(unit -> unit.getType() == UnitType.JESUIT_MISSIONARY)
+                .findFirst().orElseThrow().getId();
+        bought.getUnitById(id).placeToLocation(at(1, 0));
+        final Model model = reload(bought);
+        final Player dutch = model.getPlayerByName(DUTCH);
+        final Unit jesuit = model.getUnitById(id);
+        assertSame(UnitType.JESUIT_MISSIONARY, jesuit.getType());
+        final NativeSettlement site = settlement(model);
+        final NativeMissionView terms = model
+                .getNativeMissionPreview(jesuit, site).orElseThrow();
+        assertTrue(terms.isEffectiveExpert());
+        model.establishNativeMission(jesuit, site, terms);
+        model.advanceNativeMissions(dutch);
+        assertEquals(46, model.getNativeLocalAlarm(dutch, site), 1e-9);
+        assertEquals(id, site.getMissionaryId().orElseThrow().intValue());
+    }
+
     @Test
     void theOwnerLosesTwoForOrdinaryAndFourForExpertWithoutDirectTribalChange() {
         assertEquals(48, alarmAfterOneUpdate(

@@ -88,6 +88,57 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 | Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
 | Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
 
+### Přehled práce — R-0198
+
+1. Cíl hráče: zjistit, kolik kolonistů jednotlivých typů má národ a kde každý
+   stojí, bez hledání na mapě. Přehled je v **Statistiky → Práce**; vybraný typ
+   vypíše své osoby s číslem a místem.
+2. Tlačítko **Zobrazit** otevře kolonii, dlaždici mapy nebo evropský přístav.
+   Pokud místo nemá dostupný cíl (plavba, domorodé sídlo, ostatní místa),
+   tlačítko je vypnuté a text místa to vysvětlí. Zavření přehledu klávesou
+   Escape nic nezmění a nespotřebuje tah.
+3. Osoba, která mezitím zanikla, byla zajata nebo už není v národě, nic
+   neotevře; přehled se obnoví a zobrazí se srozumitelné hlášení.
+4. Stav je zatím ověřen jen modelovými testy; cílený UI scénář TC166 je napsán,
+   ale dosud nebyl spuštěn.
+
+### Náboženský přehled — R-0199
+
+1. Cíl hráče: zjistit, kolik křížů dává každá kolonie v příštím tahu, kolik
+   jich národ už nasbíral a kolik chybí do dalšího přistěhovalce. Přehled je
+   v **Statistiky → Náboženství**.
+2. Aktuální výstup, nasbíraný postup a stav získaného přistěhovalce mají vlastní
+   nadpisy. Kolonisté v kapli nebo kostele se projeví okamžitě, bez posunu tahu;
+   nasbírané kříže se tím nemění.
+3. Přistěhovalec, který dorazí na začátku příštího tahu, čeká na výběr v Evropě,
+   nebo se u národa, který vyhlásil nezávislost, nepřipíše. Kříže v posledním
+   případě zůstávají uložené a přehled to říká textem. Otevření, zavření ani
+   opětovné otevření přehledu nic nestojí.
+4. Záložka přibyla do postranní lišty statistik, která má nyní deset položek.
+   Výška lišty, klávesová navigace a čitelnost na snímcích zatím nejsou ověřeny.
+   Stav ověření a známé mezery vede [testová evidence](functional-tests.md#r-0199-religion-report-written-not-verified-2026-10-23).
+
+### Přehled kolonií — R-0200
+
+1. Cíl hráče: zjistit, kolik kolonistů má každá kolonie, co zůstane v zásobě,
+   co se vyrobí a spotřebuje a co se při dalším tahu změní, bez otevírání každé
+   kolonie. Přehled je v **Statistiky → Kolonie**.
+2. U každé kolonie je název s počtem kolonistů, věta o růstu nebo hladu, tabulka
+   zboží (zásoba, výroba, spotřeba, utraceno nebo prodáno, změna a příští stav)
+   a věta o projektu. Význam nesou slova a čísla; barva nestačí. Tabulka začíná
+   zásobou, změnou a příštím stavem; nadpisy se nelámou uvnitř slov a širší
+   tabulka se posouvá vodorovně, zatímco věty se zalamují ve viditelné šířce.
+   Tlačítko **Otevřít kolonii** stojí vedle názvu kolonie a otevře ji, pokud je
+   ještě vlastní a platná. Jinak
+   přehled obnoví a vysvětlí, že kolonie už není vaše.
+3. Projekt, který při dalším tahu nemá dost kladiv nebo nástrojů, ukazuje stejný
+   chybějící počet nástrojů jako hlášení tahu; přehled žádné nové upozornění
+   nevytváří. Při nedostatku jídla přijde náhodný kolonista o život dřív, než se
+   přepočte výroba a projekt. Přehled proto u takové kolonie ukazuje zásobu
+   a upozornění, ale místo výroby, spotřeby, změny a příštího stavu jen `?`. Otevření, zavření ani Pokračovat nic nestojí a nic nespotřebuje.
+4. Stav: model a scénář TC_168 jsou napsány, ještě nebyly spuštěny. Záznam
+   ověření vede [evidence](functional-tests.md#r-0200-colony-advisor-written-not-verified-2026-10-23).
+
 ### Evropské vztahy — R-0026
 
 1. Rozpracované [R-0026](requirements/done/R-0026.md) přidává přehled **Statistiky →
@@ -690,3 +741,20 @@ rozlišuje ověření v aplikaci od dosud neprovedeného ověření s hráči.
 ### Stabilita mapy při změně výšky — 2026-10-22
 
 Při zalomení stavového textu nebo svislé změně velikosti okna zůstává horní řádek mapy na místě, pokud to dovolují hranice mapy. Mapa menší než plátno zůstává vystředěná; vodorovné změny zachovávají dosavadní centrování. Tím se při změně výšky stavové zprávy neposune políčko pod ukazatelem. Stejný výpočet používá editor. Cílené ověření a jeho omezení uvádí [základ pokladu R-0175](functional-tests.md#r-0175-treasure-foundation-2026-10-22); úplná regrese ještě následuje.
+
+## Odchod a ukončení bodované hry — R-0194 (2026-10-23)
+
+1. Tlačítko **Odejít** (Exit) zůstává beze změny: uloží rozehranou hru a vrátí do
+   menu. Nic nepřepočítává a nic nezapisuje do síně slávy.
+2. **Ukončit s výsledkem** (Retire) se nabídne jen v běžící bodované volné hře na
+   vlastním tahu. Mimo tento případ tlačítko není vidět. Při čekání na volbu jara
+   1800, v misi a po konci hry se nenabízí.
+3. Potvrzení ukáže přesný výsledek, který model právě spočítal, a složky základu,
+   odečtení, zvony a obtížnost. Vysvětlí důsledek: živé ukončení zapíše nový
+   výsledek do síně slávy; pokračování bez bodování zachová dosavadní zapsaný
+   výsledek a nic nepřidá. **Ponechat hru** nebo Escape nic nezmění.
+4. Po potvrzení hra skončí, zobrazí se výsledek se složkami a místem v síni slávy
+   a poté hlavní obrazovka kampaně. Zastaralý náhled model odmítne a hráč dostane
+   vysvětlení; nic se nepotvrdí tiše.
+5. Stav ověření je v [evidenci R-0194](functional-tests.md#r-0194-retirement-implementation-2026-10-23-not-verified):
+   napsáno, nespuštěno. Nejde o uživatelské ověření.

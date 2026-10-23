@@ -83,7 +83,8 @@ class ReferenceExpeditionTest {
                         .allMatch(player -> player.getVisible()
                                 .getVisibilitySet().isEmpty()));
                 assertEquals(1490, po.getCalendar().getStartYear());
-                assertEquals(1800, po.getCalendar().getEndYear());
+                assertEquals(1850, po.getCalendar().getEndYear());
+                assertTrue(po.getCalendar().isScoredPlay());
                 assertFalse(po.getGameManager().isGameStarted());
                 assertEquals(selected.getPlayerName(),
                         po.getGameManager().getCurrentPlayer());

@@ -11,6 +11,7 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.NativeChiefEncounterPo;
 import org.microcol.model.store.NativeContactPo;
 import org.microcol.model.store.NativeGoodsStockPo;
 import org.microcol.model.store.NativeLandRecordPo;
@@ -305,6 +306,17 @@ final class NativeRelationsScene {
     /** Set the treasury of the first settlement, as saved. */
     NativeRelationsScene treasuryOfFirst(final int amount) {
         natives.get(0).setTreasury(amount);
+        return this;
+    }
+
+    /** Save one chief encounter of a European at the first settlement. */
+    NativeRelationsScene chiefOfFirst(final EuropeanNation european,
+            final NativeChiefOutcome outcome) {
+        final NativeChiefEncounterPo encounter = new NativeChiefEncounterPo();
+        encounter.setEuropean(european);
+        encounter.setOutcome(outcome);
+        encounter.setInformed(outcome == NativeChiefOutcome.INFORMATION);
+        natives.get(0).setChiefEncounters(List.of(encounter));
         return this;
     }
 

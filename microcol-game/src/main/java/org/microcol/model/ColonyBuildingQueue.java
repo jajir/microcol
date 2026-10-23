@@ -492,10 +492,12 @@ public class ColonyBuildingQueue {
                     .getGoods(GoodsType.HAMMERS).getAmount();
             final int tools = colony.getWarehouse().getGoods(GoodsType.TOOLS)
                     .getAmount();
-            if (hammers < item.getRequiredHammers()) {
+            final UpdateStage stage = stageAt(item.getRequiredHammers(),
+                    item.getRequiredTools(), hammers, tools);
+            if (stage == UpdateStage.WAITING_HAMMERS) {
                 return;
             }
-            if (tools < item.getRequiredTools()) {
+            if (stage == UpdateStage.WAITING_TOOLS) {
                 // Remind the owner of the current shortage every update.
                 model.addTurnEvent(TurnEventProvider
                         .getConstructionWaitingForTools(colony.getOwner(),
@@ -527,6 +529,39 @@ public class ColonyBuildingQueue {
             buildingQueue.remove(0);
             revision++;
         }
+    }
+
+    /** Where the head project stands when an update finds its stock. */
+    enum UpdateStage {
+        /** Hammers are short; nothing is spent and tools are not checked. */
+        WAITING_HAMMERS,
+        /** Hammers are enough and tools are short; the owner is reminded. */
+        WAITING_TOOLS,
+        /** Hammers and tools are enough; the project completes and is paid. */
+        COMPLETE
+    }
+
+    /**
+     * Stage of the head project for the stock that an update finds. Hammers are
+     * checked before tools. The update and the colony advisor report (R-0200)
+     * share this rule, so the report names the same waiting project as the
+     * notice.
+     *
+     * @param requiredHammers hammers the project needs
+     * @param requiredTools   tools the project needs
+     * @param hammers         hammers in the warehouse at the update
+     * @param tools           tools in the warehouse at the update
+     * @return the stage of the project
+     */
+    static UpdateStage stageAt(final int requiredHammers,
+            final int requiredTools, final int hammers, final int tools) {
+        if (hammers < requiredHammers) {
+            return UpdateStage.WAITING_HAMMERS;
+        }
+        if (tools < requiredTools) {
+            return UpdateStage.WAITING_TOOLS;
+        }
+        return UpdateStage.COMPLETE;
     }
 
     private void createUnit(final UnitType unitType) {

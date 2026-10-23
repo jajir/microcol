@@ -51,4 +51,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="gameOver_rebellionCoastalCrown">Vzpoura selhala: nezůstala žádná svobodná pobřežní kolonie.</entry>
 	<entry key="gameOver_rebellionResidentsCrown">Vzpoura selhala: koruna ovládá alespoň 90 procent obyvatel zbývajících kolonií.</entry>
 	<entry key="gameOver_rebellionVictory">Vzpoura uspěla: všechny zbývající kolonie povstalců jsou tvé a koruna má nejvýše dvě pozemní jednotky.</entry>
+	<entry key="gameOver_rebellionUnresolved">Vzpoura do jara 1850 nebyla rozhodnuta, a proto je prohraná.</entry>
+	<entry key="gameOver_freePlayEnded">Jaro 1850 přišlo a volná hra skončila. Tvůj zmrazený výsledek platí jako konečný.</entry>
+	<entry key="gameOver_retired">Odešel jsi ze hry a hra skončila. Zobrazený výsledek je tvůj konečný výsledek.</entry>
 </properties>

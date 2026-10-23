@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.microcol.model.store.GameResultPo;
 import org.microcol.model.store.ModelPo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,11 @@ final class GameManager {
      * The single terminal result; null while open or when none was recorded.
      */
     private volatile GameOverResult gameOverResult;
+    /**
+     * The frozen free-play score (R-0193); null while none is frozen. It is
+     * separate from the terminal result above.
+     */
+    private volatile GameResult frozenResult;
     private volatile Player currentPlayer;
 
     private volatile boolean awaitingImmigrationChoice;
@@ -40,7 +46,8 @@ final class GameManager {
     GameManager(final Model model,
             final List<Function<Model, GameOverResult>> gameOverEvaluators,
             final boolean alreadyStarted, final boolean alreadyFinished,
-            final String savedGameOverReason, final Player currentPlayer) {
+            final String savedGameOverReason, final Player currentPlayer,
+            final GameResult savedFrozenResult) {
         gameOverEvaluator = new GameOverEvaluator(gameOverEvaluators);
         this.started = alreadyStarted;
         this.finished = alreadyFinished;
@@ -74,6 +81,131 @@ final class GameManager {
                 "Invalid saved tax decision boundary");
         taxPending.forEach(Player::validateFrozenTaxDemand);
         awaitingTaxDecision = !taxPending.isEmpty();
+        frozenResult = savedFrozenResult;
+        final boolean awaitingScore = awaitsScoreChoice();
+        Preconditions.checkArgument(
+                !awaitingScore || alreadyStarted && !alreadyFinished
+                        && !awaitingImmigrationChoice && !awaitingTaxDecision
+                        && currentPlayer == turnOrder().get(0),
+                "Invalid saved score boundary");
+        validateScoreHistory(alreadyStarted, alreadyFinished,
+                savedGameOverReason);
+    }
+
+    /**
+     * Check that the saved score history is one the rules can produce (R-0193).
+     * A saved game is never repaired or guessed: an impossible combination of
+     * calendar, frozen result, rebellion and terminal reason is rejected.
+     */
+    private void validateScoreHistory(final boolean alreadyStarted,
+            final boolean alreadyFinished, final String reason) {
+        final Calendar calendar = model.getCalendar();
+        final boolean scoredReason = GameOverEvaluator.REASON_FREE_PLAY_ENDED
+                .equals(reason)
+                || GameOverEvaluator.REASON_REBELLION_UNRESOLVED.equals(reason)
+                || GameOverEvaluator.REASON_RETIRED.equals(reason);
+        if (!calendar.isScoredPlay()) {
+            // A mission keeps its own deadline and keeps no frozen result.
+            Preconditions.checkArgument(frozenResult == null && !scoredReason,
+                    "Only scored free play keeps a frozen result");
+            return;
+        }
+        Preconditions.checkArgument(reason == null || alreadyFinished,
+                "A game over reason needs a finished game");
+        final Optional<Player> human = model.getPlayers().stream()
+                .filter(player -> player.isHuman() && player.isColonialNation())
+                .findFirst();
+        final boolean declared = human.isPresent()
+                && human.get().isDeclaredIndependence();
+        final boolean pastBoundary = calendar
+                .hasReachedYear(Calendar.YEAR_OF_SCORING_BOUNDARY);
+        if (frozenResult == null) {
+            // Every end of a scored game with a human nation leaves exactly one
+            // frozen result, and an undeclared nation past spring 1800 always
+            // has one; a saved game never guesses it.
+            Preconditions.checkArgument(human.isEmpty() || !alreadyFinished,
+                    "A finished free-play game needs its frozen result");
+            Preconditions.checkArgument(
+                    human.isEmpty() || declared || !alreadyStarted
+                            || !pastBoundary,
+                    "Saved free play past spring 1800 needs its frozen result");
+            checkReason(reason, null, human.isPresent());
+            return;
+        }
+        Preconditions.checkArgument(human.isPresent(),
+                "A frozen result needs the human colonial nation");
+        final GameResult.Status status = frozenResult.getStatus();
+        switch (status) {
+        case AWAITING_CONTINUATION:
+            Preconditions.checkArgument(
+                    alreadyStarted && !alreadyFinished && pastBoundary
+                            && !declared,
+                    "An awaited score choice needs a running undeclared game"
+                            + " past spring 1800");
+            break;
+        case CONTINUED_UNSCORED:
+            Preconditions.checkArgument(
+                    alreadyStarted && pastBoundary && !declared,
+                    "An unscored continuation needs an undeclared game past"
+                            + " spring 1800");
+            break;
+        case FINAL:
+            // A final result is the end itself: a rebellion's victory or loss,
+            // the ordinary colony loss of an undeclared nation, or a confirmed
+            // retirement (R-0194), which a declared nation may also take while
+            // its rebellion is still open.
+            Preconditions.checkArgument(alreadyStarted && alreadyFinished,
+                    "A final result needs a finished game");
+            Preconditions.checkArgument(declared
+                    ? GameOverEvaluator.isRebellionLoss(reason)
+                            || GameOverEvaluator.isRebellionVictory(reason)
+                            || GameOverEvaluator.REASON_RETIRED.equals(reason)
+                    : GameOverEvaluator.REASON_NO_COLONIES.equals(reason)
+                            || GameOverEvaluator.REASON_RETIRED.equals(reason),
+                    "A final result needs the end that produced it");
+            // A declared rebellion is decided by its own end; a retirement is
+            // the only end that leaves it open.
+            Preconditions.checkArgument(
+                    !declared || GameOverEvaluator.REASON_RETIRED
+                            .equals(reason) != human.get().isRebellionDecided(),
+                    "A declared final result is decided by its rebellion or"
+                            + " retired while it is open");
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown result status");
+        }
+        checkReason(reason, status, true);
+    }
+
+    /**
+     * The calendar and the frozen result a scored-play terminal reason needs.
+     */
+    private void checkReason(final String reason,
+            final GameResult.Status status, final boolean humanPresent) {
+        final Calendar calendar = model.getCalendar();
+        Preconditions.checkArgument(!GameOverEvaluator.REASON_FREE_PLAY_ENDED
+                .equals(reason)
+                || calendar.hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END)
+                        && (status == GameResult.Status.CONTINUED_UNSCORED
+                                || status == null && !humanPresent),
+                "Free play end needs the unscored continuation");
+        Preconditions.checkArgument(
+                !GameOverEvaluator.REASON_REBELLION_UNRESOLVED.equals(reason)
+                        || calendar
+                                .hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END),
+                "An unresolved rebellion is lost only at spring 1850");
+        // A retirement keeps a scored result: it is taken at once or kept from
+        // the unscored continuation, never from the pending spring 1800 choice.
+        Preconditions.checkArgument(
+                !GameOverEvaluator.REASON_RETIRED.equals(reason)
+                        || status == GameResult.Status.FINAL
+                        || status == GameResult.Status.CONTINUED_UNSCORED,
+                "A retirement needs its scored result");
+        Preconditions.checkArgument(
+                !GameOverEvaluator.REASON_NO_COLONIES.equals(reason)
+                        || calendar.hasReachedYear(
+                                Calendar.YEAR_WHEN_LAST_COLONY_ENDS_GAME),
+                "A colony loss ends play only from spring 1600");
     }
 
     public static GameManager make(final Model model, final ModelPo modelPo,
@@ -83,7 +215,26 @@ final class GameManager {
                 modelPo.getGameManager().isGameStarted(),
                 modelPo.getGameManager().isGameFinished(),
                 modelPo.getGameManager().getGameOverReason(),
-                findPlayer(modelPo, playerStore));
+                findPlayer(modelPo, playerStore),
+                loadFrozenResult(model, modelPo));
+    }
+
+    /**
+     * Load the frozen result, if one was saved, for the nation it names.
+     *
+     * @return the saved result, or null when none was saved
+     */
+    private static GameResult loadFrozenResult(final Model model,
+            final ModelPo modelPo) {
+        final GameResultPo saved = modelPo.getGameManager().getGameResult();
+        if (saved == null) {
+            return null;
+        }
+        final Player owner = model.getPlayers().stream().filter(
+                player -> player.getName().equals(saved.getPlayerName()))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException(
+                        "Frozen result names an unknown nation"));
+        return GameResult.load(saved, owner, model.getDifficulty());
     }
 
     private static Player findPlayer(final ModelPo modelPo,
@@ -138,7 +289,8 @@ final class GameManager {
 
     boolean isRunning() {
         return started && !stopped && !isFinished() && !preparing
-                && !awaitingImmigrationChoice && !awaitingTaxDecision;
+                && !awaitingImmigrationChoice && !awaitingTaxDecision
+                && !awaitsScoreChoice();
     }
 
     boolean isAwaitingImmigrationChoice() {
@@ -151,8 +303,29 @@ final class GameManager {
                 && !preparing;
     }
 
+    /**
+     * @return whether spring 1800 froze the score and the game waits for the
+     *         unscored continuation (R-0193)
+     */
+    boolean isAwaitingScoreChoice() {
+        return started && !stopped && !isFinished() && awaitsScoreChoice()
+                && !preparing;
+    }
+
+    private boolean awaitsScoreChoice() {
+        return frozenResult != null && frozenResult.isAwaitingContinuation();
+    }
+
+    /**
+     * @return the frozen free-play score, empty while none has been frozen
+     */
+    Optional<GameResult> getFrozenResult() {
+        return Optional.ofNullable(frozenResult);
+    }
+
     void checkTurnPreparationComplete() {
-        if (preparing || awaitingImmigrationChoice || awaitingTaxDecision) {
+        if (preparing || awaitingImmigrationChoice || awaitingTaxDecision
+                || awaitsScoreChoice()) {
             throw new TurnPreparationException();
         }
     }
@@ -187,10 +360,16 @@ final class GameManager {
      * R-0191). The result is recorded once and announced once; the caller has
      * already confirmed that the game is open.
      *
-     * @param result required rebellion result
+     * @param result      required rebellion result
+     * @param finalResult frozen score of the rebel taken with the same end in
+     *                    free play (R-0193); null in a mission
      */
-    void finishByRebellion(final GameOverResult result) {
+    void finishByRebellion(final GameOverResult result,
+            final GameResult finalResult) {
         Preconditions.checkState(isOpen(), "Only an open game can end");
+        Preconditions.checkState(frozenResult == null,
+                "A result is already frozen");
+        frozenResult = finalResult;
         finish(result);
     }
 
@@ -249,7 +428,7 @@ final class GameManager {
     void continueGame() {
         Preconditions.checkState(
                 isRunning() || isAwaitingImmigrationChoice()
-                        || isAwaitingTaxDecision(),
+                        || isAwaitingTaxDecision() || isAwaitingScoreChoice(),
                 "Only an active game can continue.");
         Preconditions.checkNotNull(currentPlayer, "Current player is null.");
         checkCurrentPlayer(currentPlayer);
@@ -261,6 +440,8 @@ final class GameManager {
             model.fireImmigrationChoiceRequired(currentPlayer);
         } else if (awaitingTaxDecision) {
             model.fireTaxDemandRequired(currentPlayer);
+        } else if (awaitsScoreChoice()) {
+            model.fireScoreBoundaryRequired(scoredPlayer());
         } else {
             model.fireTurnStarted(currentPlayer, false);
             announceMercenaryOffer();
@@ -313,17 +494,160 @@ final class GameManager {
             if (finished) {
                 return;
             } else if (oGameOverResult.isPresent()) {
+                freezeScoreAtOrdinaryEnd();
                 finish(oGameOverResult.get());
-            } else {
-                preparing = true;
-                currentPlayer = players.get(0);
-                model.getStatistics().countNextTurn(model);
-                model.fireRoundStarted();
-                final boolean completed = startTurnOf(currentPlayer);
-                preparing = false;
-                announcePreparation(completed);
+            } else if (!freezeScoreAtBoundary()) {
+                startRound();
             }
         }
+    }
+
+    /**
+     * An ordinary game end of scored free play (R-0193), such as losing the
+     * last colony from spring 1600 on, takes the undeclared nation's result as
+     * final once, in the same atomic step as the end. A result frozen at spring
+     * 1800 is kept unchanged, so a later unscored loss or the 1850 end never
+     * replaces it.
+     */
+    private void freezeScoreAtOrdinaryEnd() {
+        if (frozenResult != null || !model.getCalendar().isScoredPlay()) {
+            return;
+        }
+        model.getPlayers().stream()
+                .filter(player -> player.isHuman() && player.isColonialNation()
+                        && !player.isDeclaredIndependence())
+                .findFirst().ifPresent(player -> frozenResult = GameResult
+                        .freeze(player, GameResult.Status.FINAL));
+    }
+
+    /**
+     * Start the next round with its first actor. Continuing after the score
+     * boundary runs the same steps.
+     */
+    private void startRound() {
+        preparing = true;
+        currentPlayer = turnOrder().get(0);
+        model.getStatistics().countNextTurn(model);
+        model.fireRoundStarted();
+        final boolean completed = startTurnOf(currentPlayer);
+        preparing = false;
+        announcePreparation(completed);
+    }
+
+    /**
+     * Spring 1800 entry (R-0193): an undeclared human colonial nation records
+     * its score once and the game waits for the unscored continuation, so no
+     * round starts until the player chooses. A declared rebellion stays scored
+     * past 1800 and is not frozen here; a finished game never reaches this.
+     *
+     * @return whether the score was frozen and the game now waits
+     */
+    private boolean freezeScoreAtBoundary() {
+        if (frozenResult != null || !model.getCalendar().isScoredPlay()
+                || !model.getCalendar()
+                        .hasReachedYear(Calendar.YEAR_OF_SCORING_BOUNDARY)) {
+            return false;
+        }
+        final Optional<Player> scored = model.getPlayers().stream()
+                .filter(player -> player.isHuman() && player.isColonialNation()
+                        && !player.isDeclaredIndependence())
+                .findFirst();
+        if (scored.isEmpty()) {
+            return false;
+        }
+        frozenResult = GameResult.freeze(scored.get(),
+                GameResult.Status.AWAITING_CONTINUATION);
+        currentPlayer = turnOrder().get(0);
+        model.fireScoreBoundaryRequired(scored.get());
+        return true;
+    }
+
+    /**
+     * Continue past spring 1800 without scoring (R-0193). The frozen score is
+     * kept as it is and the round starts exactly once.
+     *
+     * @param player required human colonial nation that owns the frozen score
+     */
+    void continueWithoutScoring(final Player player) {
+        Preconditions.checkState(
+                isAwaitingScoreChoice() && scoredPlayer() == player,
+                "Score boundary is not awaiting this nation");
+        frozenResult.continueUnscored();
+        startRound();
+    }
+
+    /**
+     * The human colonial nation whose score free play records, declared or not.
+     *
+     * @return the nation, empty when there is none
+     */
+    private Optional<Player> retiringNation() {
+        return model.getPlayers().stream()
+                .filter(player -> player.isHuman() && player.isColonialNation())
+                .findFirst();
+    }
+
+    /**
+     * The retirement the human nation may confirm now (R-0194). Only running
+     * scored free play offers it, on the nation's own turn and with no choice
+     * or preparation pending. A live retirement previews the current score; an
+     * unscored continuation previews the frozen result. The pending spring 1800
+     * choice, a finished game and a mission offer nothing.
+     *
+     * @return the preview, empty when no retirement is offered
+     */
+    Optional<RetirementQuote> retirementQuote() {
+        if (!isRunning() || !model.getCalendar().isScoredPlay()) {
+            return Optional.empty();
+        }
+        final Optional<Player> nation = retiringNation();
+        if (nation.isEmpty() || nation.get() != currentPlayer
+                || nation.get().isRebellionDecided()) {
+            return Optional.empty();
+        }
+        if (frozenResult == null) {
+            return Optional.of(RetirementQuote.live(nation.get()));
+        }
+        return frozenResult.getStatus() == GameResult.Status.CONTINUED_UNSCORED
+                ? Optional.of(RetirementQuote.continued(frozenResult))
+                : Optional.empty();
+    }
+
+    /**
+     * Confirm a retirement that was previewed (R-0194). The live state must
+     * still offer exactly the previewed result; otherwise nothing changes and
+     * the player previews again. A live retirement freezes one final result,
+     * and an unscored continuation keeps its frozen result unchanged. Either
+     * way the game ends with the retirement reason and no second result is
+     * recorded.
+     *
+     * @param quote required preview that the player confirmed
+     * @throws IllegalStateException when no retirement is offered or the
+     *                               preview no longer matches the live state
+     */
+    void retire(final RetirementQuote quote) {
+        final RetirementQuote live = retirementQuote().orElseThrow(
+                () -> new IllegalStateException("Retirement is not offered"));
+        Preconditions.checkState(live.matches(quote),
+                "Retirement preview is stale");
+        if (frozenResult == null) {
+            frozenResult = GameResult.freeze(retiringNation().orElseThrow(),
+                    GameResult.Status.FINAL);
+        }
+        finish(new GameOverResult(GameOverEvaluator.REASON_RETIRED));
+    }
+
+    /**
+     * @return the human colonial nation that owns the frozen score
+     * @throws IllegalStateException when no score is frozen
+     */
+    private Player scoredPlayer() {
+        Preconditions.checkState(frozenResult != null, "No score is frozen");
+        final String name = frozenResult.getPlayerName();
+        return model.getPlayers().stream()
+                .filter(player -> player.getName().equals(name)).findFirst()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Frozen result names an unknown nation"));
     }
 
     /**
@@ -440,6 +764,8 @@ final class GameManager {
         modelPo.getGameManager().setGameFinished(isFinished());
         modelPo.getGameManager().setGameOverReason(gameOverResult == null ? null
                 : gameOverResult.getGameOverReason());
+        modelPo.getGameManager().setGameResult(
+                frozenResult == null ? null : frozenResult.save());
         modelPo.getGameManager().setCurrentPlayer(getCurrentPlayer().getName());
     }
 

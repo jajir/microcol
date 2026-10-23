@@ -30,6 +30,8 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_EXIT_ID = "buttonExit";
 
+    public static final String BUTTON_HALL_OF_FAME_ID = "buttonHallOfFame";
+
     private final Button buttonContinue = new Button();
 
     private final Button buttonRecovery = new Button();
@@ -39,6 +41,8 @@ public final class ButtonsPanelView
     private final Button buttonPlayCampaign = new Button();
 
     private final Button buttonStartFreeGame = new Button();
+
+    private final Button buttonHallOfFame = new Button();
 
     private final Button buttonSetting = new Button();
 
@@ -53,6 +57,7 @@ public final class ButtonsPanelView
         buttonLoad.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
+        buttonHallOfFame.setId(BUTTON_HALL_OF_FAME_ID);
         buttonSetting.setId(BUTTON_SETTING_ID);
         buttonExitMicroCol.setId(BUTTON_EXIT_ID);
         buttonsBox.getStyleClass().add("game-menu-inner");
@@ -61,6 +66,7 @@ public final class ButtonsPanelView
         buttonsBox.getChildren().add(buttonLoad);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
+        buttonsBox.getChildren().add(buttonHallOfFame);
         buttonsBox.getChildren().add(buttonSetting);
         buttonsBox.getChildren().add(buttonExitMicroCol);
     }
@@ -80,12 +86,20 @@ public final class ButtonsPanelView
         buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
+        buttonHallOfFame.setText(i18n.get(GameMenu.buttonHallOfFame));
         buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
         buttonExitMicroCol.setText(i18n.get(GameMenu.buttonExitMicroCol));
     }
 
     public Button getButtonStartFreeGame() {
         return buttonStartFreeGame;
+    }
+
+    /**
+     * @return the button that opens the Hall of Fame (R-0197)
+     */
+    public Button getButtonHallOfFame() {
+        return buttonHallOfFame;
     }
 
     @Override

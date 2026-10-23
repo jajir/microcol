@@ -225,4 +225,37 @@ class EuropeanSpecialistTest {
                 .findFirst().orElseThrow().getProduction().orElseThrow()
                 .getAmount());
     }
+
+    @Test
+    void purchasedFarmerTakesVeteranRankWithoutLosingItsSpecialtyAcrossReload() {
+        final GameModelPo data = scenario();
+        final Model model = load(data);
+        final Player buyer = model.getPlayerByName("Dutch");
+        buyer.setGold(UnitType.EXPERT_FARMER.getEuropePrice());
+        buyer.buy(UnitType.EXPERT_FARMER);
+        final UnitFreeColonist farmer = (UnitFreeColonist) buyer.getAllUnits()
+                .stream()
+                .filter(unit -> unit.getType() == UnitType.EXPERT_FARMER)
+                .findFirst().orElseThrow();
+        final int id = farmer.getId();
+        farmer.setHoldingGuns(true);
+        final double civilianStrength = CombatStrengths.armedLandBase(farmer);
+        assertFalse(farmer.isVeteran());
+        farmer.completeEducation(UnitType.VETERAN_SOLDIER);
+        assertTrue(farmer.isVeteran());
+        assertTrue(farmer.hasCivilianSpecialty());
+        assertSame(UnitType.EXPERT_FARMER, farmer.getType());
+        assertTrue(CombatStrengths.armedLandBase(farmer) > civilianStrength);
+        data.setModel(model.save());
+        final Path file = directory.resolve("veteran-farmer.microcol");
+        final GameModelPoDao dao = new GameModelPoDao();
+        dao.saveToFile(file.toString(), data);
+        final Model restored = load(dao.loadFromFile(file.toFile()));
+        final UnitFreeColonist reloaded = (UnitFreeColonist) restored
+                .getUnitById(id);
+        assertTrue(reloaded.isVeteran());
+        assertTrue(reloaded.hasCivilianSpecialty());
+        assertSame(UnitType.EXPERT_FARMER, reloaded.getType());
+        assertTrue(CombatStrengths.armedLandBase(reloaded) > civilianStrength);
+    }
 }

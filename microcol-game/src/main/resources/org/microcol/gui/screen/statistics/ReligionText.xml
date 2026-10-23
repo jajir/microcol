@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Read-only. Current output is what each colony gives to the national pool at the next update. Accumulated crosses are progress toward the next immigrant, not output. Opening and closing spend nothing.</entry>
+  <entry key="outputTitle">Current output</entry>
+  <entry key="colonyRow">Colony %s: %s crosses per turn</entry>
+  <entry key="nationalRow">National output: %s crosses per turn</entry>
+  <entry key="noColonies">This nation has no colony, so no crosses are produced.</entry>
+  <entry key="unavailable">The religion report appears when a game is running.</entry>
+  <entry key="progressTitle">Accumulated progress</entry>
+  <entry key="accumulatedRow">Accumulated crosses: %s</entry>
+  <entry key="targetRow">Next immigrant at %s crosses; %s more needed</entry>
+  <entry key="stateNone">No earned immigrant is waiting.</entry>
+  <entry key="stateArrives">An earned immigrant arrives at the start of your next turn.</entry>
+  <entry key="stateChoice">An earned immigrant waits for your choice in Europe (%s candidates). Closing the window only postpones it.</entry>
+  <entry key="stateBlocked">The threshold is reached, but a nation that declared independence receives no immigrants from Europe. The crosses stay saved.</entry>
+</properties>

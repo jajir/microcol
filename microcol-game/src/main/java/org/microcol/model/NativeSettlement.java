@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,13 @@ public final class NativeSettlement {
      */
     private final Map<EuropeanNation, NativeChiefOutcome> chiefEncounters = new EnumMap<>(
             EuropeanNation.class);
+    /**
+     * Nations that the chief has told this settlement's goods and skill to
+     * (R-0201): the first information outcome, or any later repeat visit. The
+     * outcome of the first encounter never changes through this set.
+     */
+    private final EnumSet<EuropeanNation> chiefInformed = EnumSet
+            .noneOf(EuropeanNation.class);
     /**
      * Turn of the last tribute demand of each European here (R-0162), in
      * European order; a European absent here has not demanded tribute yet.
@@ -407,6 +415,35 @@ public final class NativeSettlement {
         Preconditions.checkState(findChiefEncounter(european).isEmpty(),
                 "Native chief encounter is already recorded");
         chiefEncounters.put(european, outcome);
+        if (outcome == NativeChiefOutcome.INFORMATION) {
+            chiefInformed.add(european);
+        }
+    }
+
+    /**
+     * @param european required European nation
+     * @return whether the nation's chief has told this settlement's goods and
+     *         skill to it; false for a gold or death outcome until a repeat
+     *         visit
+     */
+    public boolean isChiefInformed(final EuropeanNation european) {
+        Preconditions.checkNotNull(european);
+        return chiefInformed.contains(european);
+    }
+
+    /**
+     * Keep that the nation has now been told the information here. The model
+     * calls it only for a confirmed repeat visit, after the encounter exists;
+     * restoring a save calls it for a saved disclosure. Repeating it changes
+     * nothing.
+     *
+     * @param european required European nation
+     */
+    void recordChiefInformation(final EuropeanNation european) {
+        Preconditions.checkNotNull(european);
+        Preconditions.checkState(findChiefEncounter(european).isPresent(),
+                "Native chief information needs an encounter");
+        chiefInformed.add(european);
     }
 
     /**

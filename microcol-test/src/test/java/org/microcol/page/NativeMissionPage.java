@@ -171,8 +171,23 @@ public final class NativeMissionPage extends AbstractScreen {
      * @param expected fragment that the confirmation must contain
      */
     public void verifyMissionConfirmation(final String expected) {
-        assertTrue(
-                getLabeledById(MISSION_LINE_ID).getText().contains(expected));
+        final String actual = getLabeledById(MISSION_LINE_ID).getText();
+        assertTrue(actual.contains(expected),
+                "Expected mission text: " + expected + "; actual: " + actual);
+    }
+
+    /**
+     * Verify the displayed attitude after the voyage against the live terms.
+     */
+    public void verifyMissionAttitude(final int unitId,
+            final Location settlement) {
+        final org.microcol.model.NativeMissionView terms = getModel()
+                .getNativeMissionPreview(getModel().getUnitById(unitId),
+                        knownSettlement(settlement))
+                .orElseThrow();
+        final String attitude = terms.getHostility().name()
+                .toLowerCase(java.util.Locale.ROOT);
+        verifyMissionConfirmation("The natives are " + attitude + ".");
     }
 
     /**

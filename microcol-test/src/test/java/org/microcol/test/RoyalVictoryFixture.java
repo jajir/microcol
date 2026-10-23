@@ -10,8 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.microcol.gui.FileSelectingService;
+import org.microcol.model.Calendar;
 import org.microcol.model.Location;
 import org.microcol.model.MovementPoints;
+import org.microcol.model.store.CalendarPo;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -58,17 +60,43 @@ final class RoyalVictoryFixture {
     static void prepare(final TestContext context, final File source,
             final String name, final int crownColonyId,
             final Location attackFrom) throws IOException {
+        prepare(context, source, name, crownColonyId, attackFrom, false);
+    }
+
+    /**
+     * Write the prepared copy as scored free play (R-0193, R-0197) and make the
+     * next Load game use it. The shared scenario is a campaign mission with an
+     * unscored calendar, so the copy takes the free-play campaign, mission and
+     * goal data and the scored calendar that ends in 1850. The declaration, the
+     * seizure, the royal roster and the battle are those of the mission copy,
+     * so the won rebellion ends scored play with a frozen final result.
+     */
+    static void prepareScoredFreePlay(final TestContext context,
+            final File source, final String name, final int crownColonyId,
+            final Location attackFrom) throws IOException {
+        prepare(context, source, name, crownColonyId, attackFrom, true);
+    }
+
+    private static void prepare(final TestContext context, final File source,
+            final String name, final int crownColonyId,
+            final Location attackFrom, final boolean scoredFreePlay)
+            throws IOException {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
         final JsonArray colonies = model.getAsJsonArray("colonies");
         final JsonArray units = model.getAsJsonArray("units");
         // The declaration fixes the rebellion's colonies before any changes.
+        // It is dated by the saved calendar, as the game does (R-0196).
+        final int currentYear = Calendar.make(new Gson()
+                .fromJson(model.getAsJsonObject("calendar"), CalendarPo.class))
+                .getCurrentYear();
         for (final JsonElement element : model.getAsJsonObject("gameManager")
                 .getAsJsonArray("players")) {
             final JsonObject player = element.getAsJsonObject();
             if (DUTCH.equals(player.get("name").getAsString())) {
                 player.addProperty("declaredIndependence", true);
+                player.addProperty("declarationYear", currentYear);
                 player.add("rebellionColonyIds",
                         ownedColonyIds(colonies, DUTCH));
             }
@@ -91,10 +119,28 @@ final class RoyalVictoryFixture {
             }
         }
         units.add(colonist(ATTACKER, DUTCH, attackFrom));
+        if (scoredFreePlay) {
+            toScoredFreePlay(saved);
+        }
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)
                 .loadFile(any(File.class))).thenReturn(prepared);
+    }
+
+    /**
+     * Route the saved game to the free-play mission, which scores, and give it
+     * the scored calendar that scored play requires. The turn count stays, so
+     * the game is still before spring 1800 and the declaration year is valid.
+     */
+    private static void toScoredFreePlay(final JsonObject saved) {
+        saved.addProperty("campaignName", "freePlay");
+        saved.addProperty("missionName", "freePlay");
+        saved.add("goalData", new JsonObject());
+        final JsonObject calendar = saved.getAsJsonObject("model")
+                .getAsJsonObject("calendar");
+        calendar.addProperty("endYear", Calendar.YEAR_OF_FREE_PLAY_END);
+        calendar.addProperty("scoredPlay", true);
     }
 
     /**
@@ -146,7 +192,7 @@ final class RoyalVictoryFixture {
     }
 
     /** @return identities of the colonies the nation owns in the saved file */
-    private static JsonArray ownedColonyIds(final JsonArray colonies,
+    static JsonArray ownedColonyIds(final JsonArray colonies,
             final String owner) {
         final JsonArray out = new JsonArray();
         for (final JsonElement element : colonies) {

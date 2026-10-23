@@ -51,4 +51,7 @@ Your next task is to produce 30 cigars.</entry>
 	<entry key="gameOver_rebellionCoastalCrown">Your rebellion has failed: no free coastal colony remains.</entry>
 	<entry key="gameOver_rebellionResidentsCrown">Your rebellion has failed: the Crown controls at least 90 percent of the residents of your surviving colonies.</entry>
 	<entry key="gameOver_rebellionVictory">Your rebellion has succeeded: every surviving rebel colony is yours and the Crown has at most two ground units left.</entry>
+	<entry key="gameOver_rebellionUnresolved">Your rebellion is still unresolved in spring 1850, so it is lost.</entry>
+	<entry key="gameOver_freePlayEnded">Spring 1850 has come and free play is over. Your frozen score stands as your result.</entry>
+	<entry key="gameOver_retired">You retired and the game is over. The score shown is your final result.</entry>
 </properties>

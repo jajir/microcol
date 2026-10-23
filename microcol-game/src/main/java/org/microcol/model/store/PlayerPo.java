@@ -244,6 +244,35 @@ public final class PlayerPo {
         this.rebellionVictoryOrder = rebellionVictoryOrder;
     }
 
+    /**
+     * Calendar year of the declaration (R-0196); required for a declared
+     * colonial nation and null for every other player.
+     */
+    private Integer declarationYear;
+
+    public Integer getDeclarationYear() {
+        return declarationYear;
+    }
+
+    public void setDeclarationYear(final Integer declarationYear) {
+        this.declarationYear = declarationYear;
+    }
+
+    /**
+     * Native settlements this nation destroyed by conquest (R-0196); zero for a
+     * nation that destroyed none.
+     */
+    private int nativeSettlementsDestroyed;
+
+    public int getNativeSettlementsDestroyed() {
+        return nativeSettlementsDestroyed;
+    }
+
+    public void setNativeSettlementsDestroyed(
+            final int nativeSettlementsDestroyed) {
+        this.nativeSettlementsDestroyed = nativeSettlementsDestroyed;
+    }
+
     /** Active second-colony expansion of a rival; null when it has none. */
     private RivalExpansionObjectivePo rivalExpansionObjective;
 

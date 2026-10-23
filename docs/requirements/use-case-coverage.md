@@ -43,7 +43,7 @@
 | UC-035 | Hra | Přežít nedostatek jídla | [R-0059](done/R-0059.md), [R-0060](done/R-0060.md) |
 | UC-036 | Hra | Uložit zásoby a řešit přetečení | [R-0024](done/R-0024.md), [R-0025](done/R-0025.md), [R-0058](done/R-0058.md), [R-0120](done/R-0120.md), [R-0204](R-0204.md), [R-0215](R-0215.md) |
 | UC-037 | Hra | Vyrobit zboží ze surovin | [R-0061](done/R-0061.md) |
-| UC-038 | Hra | Zaměstnat všechny druhy pracovníků | [R-0074](R-0074.md), [R-0148](done/R-0148.md), [R-0212](R-0212.md) |
+| UC-038 | Hra | Zaměstnat všechny druhy pracovníků | [R-0074](done/R-0074.md), [R-0148](done/R-0148.md), [R-0212](R-0212.md) |
 | UC-039 | Hra | Zaměstnat domorodého konvertitu | [R-0149](done/R-0149.md) |
 | UC-040 | Hra | Produkovat kříže | [R-0062](done/R-0062.md), [R-0110](done/R-0110.md) |
 | UC-041 | Hra | Chovat koně | [R-0078](done/R-0078.md) |
@@ -58,9 +58,9 @@
 | UC-050 | Hra | Vyučovat odpovídající odbornost | [R-0107](done/R-0107.md) |
 | UC-051 | Hra | Postoupit od zločince k odborníkovi | [R-0107](done/R-0107.md) |
 | UC-052 | Hra | Zrušit odbornost a naučit jinou | [R-0147](done/R-0147.md), [R-0107](done/R-0107.md) |
-| UC-053 | Hra | Rozlišit evropské a domorodé dovednosti | [R-0148](done/R-0148.md), [R-0074](R-0074.md) |
+| UC-053 | Hra | Rozlišit evropské a domorodé dovednosti | [R-0148](done/R-0148.md), [R-0074](done/R-0074.md) |
 | UC-054 | Hra | Přilákat přistěhovalce kříži | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md) |
-| UC-055 | Hra | Zaplatit nábor, výcvik a nákup jednotky | [R-0075](done/R-0075.md), [R-0074](R-0074.md), [R-0023](done/R-0023.md), [R-0077](done/R-0077.md) |
+| UC-055 | Hra | Zaplatit nábor, výcvik a nákup jednotky | [R-0075](done/R-0075.md), [R-0074](done/R-0074.md), [R-0023](done/R-0023.md), [R-0077](done/R-0077.md) |
 | UC-056 | Hra | Koupit a prodat přesné množství | [R-0020](done/R-0020.md), [R-0215](R-0215.md) |
 | UC-057 | Hra | Vidět správnou cenu a daň | [R-0020](done/R-0020.md), [R-0215](R-0215.md) |
 | UC-058 | Hra | Pohnout cenami a zkontrolovat účetnictví | [R-0143](done/R-0143.md), [R-0145](done/R-0145.md) |
@@ -116,10 +116,10 @@
 | UC-108 | Hra | Sieur de La Salle | [R-0184](done/R-0184.md), [R-0214](R-0214.md) |
 | UC-109 | Hra | Ferdinand Magellan | [R-0104](done/R-0104.md), [R-0214](R-0214.md) |
 | UC-110 | Hra | Hernando de Soto | [R-0069](done/R-0069.md), [R-0214](R-0214.md) |
-| UC-111 | Hra | Ukončit nebo opustit partii | [R-0193](R-0193.md), [R-0194](R-0194.md) |
-| UC-112 | Hra | Spočítat skóre a zapsat Hall of Fame | [R-0195](R-0195.md), [R-0196](R-0196.md), [R-0197](R-0197.md) |
+| UC-111 | Hra | Ukončit nebo opustit partii | [R-0193](done/R-0193.md), [R-0194](done/R-0194.md) |
+| UC-112 | Hra | Spočítat skóre a zapsat Hall of Fame | [R-0195](done/R-0195.md), [R-0196](done/R-0196.md), [R-0197](done/R-0197.md) |
 | UC-113 | Hra | Uložit a obnovit rozpracovanou partii | [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0068](done/R-0068.md) |
-| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](R-0198.md), [R-0199](R-0199.md), [R-0200](R-0200.md), [R-0145](done/R-0145.md), [R-0201](R-0201.md), [R-0168](done/R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
+| UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](R-0203.md), [R-0198](done/R-0198.md), [R-0199](done/R-0199.md), [R-0200](done/R-0200.md), [R-0145](done/R-0145.md), [R-0201](done/R-0201.md), [R-0168](done/R-0168.md), [R-0202](R-0202.md), [R-0204](R-0204.md), [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
 | UC-115 | Hra | Expedice se uživí a začne obchodovat | [R-0217](done/R-0217.md) |
 | UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](R-0218.md) |
 | UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](R-0219.md) |

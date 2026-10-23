@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Read-only. The next update shows what each colony will hold, use and produce when the turn ends. Opening and closing spend nothing.</entry>
+  <entry key="empty">This nation has no colony yet.</entry>
+  <entry key="unavailable">The colony advisor appears when a game is running.</entry>
+  <entry key="colonyRow">Colony %s: %s colonists</entry>
+  <entry key="growthNone">Next update: no change in the number of colonists.</entry>
+  <entry key="growthBirths">Next update: %s new colonists appear outside the colony.</entry>
+  <entry key="growthFamine">Next update: food runs short and one colonist is lost.</entry>
+  <entry key="tableGood">Good</entry>
+  <entry key="tableStock">Stock</entry>
+  <entry key="tableOutput">Output</entry>
+  <entry key="tableUsed">Used</entry>
+  <entry key="tableOther">Spent or sold</entry>
+  <entry key="tableChange">Change</entry>
+  <entry key="tableNext">Next</entry>
+  <entry key="outputBlocked">%s (%s blocked)</entry>
+  <entry key="nextLost">%s (%s thrown away)</entry>
+  <entry key="projectNone">No project is queued.</entry>
+  <entry key="projectWaitingHammers">Project %s waits for hammers.</entry>
+  <entry key="projectWaitingTools">Project %s waits for %s more tools; the turn report repeats this reminder.</entry>
+  <entry key="projectCompletes">Project %s completes at the next update.</entry>
+  <entry key="projectBlocked">Project %s cannot be finished now; its progress stays in the colony.</entry>
+  <entry key="projectStock">Hammers %s of %s, tools %s of %s.</entry>
+  <entry key="open">Open colony</entry>
+  <entry key="colonyUnavailable">This colony is no longer one of yours. The report was refreshed.</entry>
+  <entry key="unknownValue">?</entry>
+  <entry key="uncertainLost">A random colonist is lost to the food shortage, so output, use, project and next stock depend on who is lost. They are not shown as exact.</entry>
+  <entry key="uncertainColonyLost">The last colonist is lost to the food shortage, so the colony itself is lost at the next update.</entry>
+  <entry key="uncertainStorage">The project completes at the next update and changes the warehouse or custom house, so the change and the next stock are not shown as exact.</entry>
+  <entry key="projectUncertain">Project %s depends on which colonist is lost at the next update.</entry>
+  <entry key="projectColonyLost">Project %s is lost if the colony is lost at the next update.</entry>
+</properties>

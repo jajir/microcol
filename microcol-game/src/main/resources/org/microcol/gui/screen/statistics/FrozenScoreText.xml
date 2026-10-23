@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="frozenTitle">Frozen result: this score is recorded and no later play changes it.</entry>
+  <entry key="frozenIdentity">Result identity: %s</entry>
+  <entry key="frozenBaseTitle">Frozen base score, recorded</entry>
+  <entry key="frozenBaseNote">These components were recorded when the result was frozen. Later gold, population, bells or losses do not change them.</entry>
+  <entry key="frozenResultTitle">Frozen calculated result, recorded</entry>
+  <entry key="frozenResultNote">The war and difficulty terms were applied once when the result was frozen. Nothing shown here is recalculated.</entry>
+  <entry key="statusAwaiting">Waiting for your choice: continue without scoring, or decide later. The game stays paused until you choose.</entry>
+  <entry key="statusContinued">You continued without scoring. This frozen result stays your score.</entry>
+  <entry key="statusFinal">The game has ended. This frozen result is your final result.</entry>
+  <entry key="liveTitle">Live preview, not frozen: these values change with play until the result is frozen at spring 1800.</entry>
+  <entry key="decideFrozen">Decide the frozen result choice…</entry>
+</properties>

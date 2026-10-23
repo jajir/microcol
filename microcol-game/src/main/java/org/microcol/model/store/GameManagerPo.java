@@ -15,6 +15,17 @@ public final class GameManagerPo {
     /** Reason of the terminal result; null when none was recorded. */
     private String gameOverReason;
 
+    /** Frozen free-play result (R-0193); null while no result is frozen. */
+    private GameResultPo gameResult;
+
+    public GameResultPo getGameResult() {
+        return gameResult;
+    }
+
+    public void setGameResult(final GameResultPo gameResult) {
+        this.gameResult = gameResult;
+    }
+
     public boolean isGameFinished() {
         return gameFinished;
     }

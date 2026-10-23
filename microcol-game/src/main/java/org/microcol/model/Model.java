@@ -413,6 +413,9 @@ public class Model {
                                     && recordsEnd(rebel, rebellionEnd.get())),
                     "A rebellion game over needs its human rebel's saved end");
         }
+        // The agreement of the frozen result with the calendar, the rebellion
+        // and the terminal reason is validated once, by the game manager
+        // (R-0193).
 
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
@@ -3945,18 +3948,26 @@ public class Model {
         if (!gameManager.isOpen()) {
             return;
         }
+        // Spring 1850 ends free play; a rebellion still open then is lost
+        // (R-0193), after its own conditions were judged.
+        final boolean freePlayEnded = calendar.isScoredPlay()
+                && calendar.hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END);
         for (final Player rebel : getPlayers()) {
             if (rebel.isKing() || rebel.isNative()
                     || !rebel.isDeclaredIndependence()
                     || rebel.isRebellionDecided()) {
                 continue;
             }
-            final Optional<GameOverResult> loss = RebellionLoss.evaluate(this,
-                    rebel);
+            Optional<GameOverResult> loss = RebellionLoss.evaluate(this, rebel);
+            if (loss.isEmpty() && freePlayEnded) {
+                loss = Optional.of(new GameOverResult(
+                        GameOverEvaluator.REASON_REBELLION_UNRESOLVED));
+            }
             if (loss.isPresent()) {
                 rebel.markRebellionLost(loss.get().getGameOverReason());
                 if (rebel.isHuman() && gameManager.isOpen()) {
-                    gameManager.finishByRebellion(loss.get());
+                    gameManager.finishByRebellion(loss.get(),
+                            finalScoreOf(rebel));
                 }
                 continue;
             }
@@ -3965,10 +3976,25 @@ public class Model {
             if (victory.isPresent()) {
                 rebel.markRebellionWon(countRebellionVictories() + 1);
                 if (rebel.isHuman() && gameManager.isOpen()) {
-                    gameManager.finishByRebellion(victory.get());
+                    gameManager.finishByRebellion(victory.get(),
+                            finalScoreOf(rebel));
                 }
             }
         }
+    }
+
+    /**
+     * The final frozen score of a human rebel's end. Only free play keeps
+     * scores (R-0193); a mission's rebellion end freezes nothing.
+     *
+     * @param rebel required human declared colonial nation whose rebellion has
+     *              just ended
+     * @return the final result in free play, null otherwise
+     */
+    private GameResult finalScoreOf(final Player rebel) {
+        return calendar.isScoredPlay()
+                ? GameResult.freeze(rebel, GameResult.Status.FINAL)
+                : null;
     }
 
     /**
@@ -3999,6 +4025,139 @@ public class Model {
      */
     public Optional<GameOverResult> getGameOverResult() {
         return gameManager.getGameOverResult();
+    }
+
+    /**
+     * @return the frozen free-play score of the human nation (R-0193), empty
+     *         while no score is frozen; it never changes once taken
+     */
+    public Optional<GameResult> getFrozenResult() {
+        return gameManager.getFrozenResult();
+    }
+
+    /**
+     * @return the frozen free-play score as a Hall of Fame entry with the
+     *         difficulty and the displayed name of the nation (R-0197), empty
+     *         while no score is frozen
+     */
+    public Optional<HallOfFameEntry> getHallOfFameEntry() {
+        return getFrozenResult().map(result -> HallOfFameEntry.of(result,
+                getPlayerByName(result.getPlayerName()), getDifficulty()));
+    }
+
+    /**
+     * @return whether spring 1800 froze the score and the game waits for the
+     *         player's unscored continuation (R-0193)
+     */
+    public boolean isAwaitingScoreChoice() {
+        return gameManager.isAwaitingScoreChoice();
+    }
+
+    /**
+     * Labor report of a colonial nation (R-0198): its living people by type,
+     * each counted once, with their current places. It is rebuilt from the live
+     * state on every call and changes no unit, place or resource.
+     *
+     * @param owner required colonial nation of this model; the report shows
+     *              only its people and rejects a player of another model
+     * @return immutable labor report of the current state
+     */
+    public LaborReport getLaborReport(final Player owner) {
+        Preconditions.checkNotNull(owner, "Owner is required");
+        // Player equality is by name, so only identity proves the owner is
+        // this game's own player and not a same-named one of another game.
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == owner),
+                "Owner belongs to another model");
+        return LaborReport.calculate(this, owner);
+    }
+
+    /**
+     * Religion report of a colonial nation (R-0199): the cross output of each
+     * colony at the next update, the national total, the accumulated crosses
+     * and the next immigrant threshold. It is rebuilt from the live state on
+     * every call and changes no colony, cross, recruitment or unit.
+     *
+     * @param owner required colonial nation of this model; the report reads
+     *              only its own colonies and rejects a player of another model
+     * @return immutable religion report of the current state
+     */
+    public ReligionReport getReligionReport(final Player owner) {
+        Preconditions.checkNotNull(owner, "Owner is required");
+        // Same-named players of other games compare equal, so only identity
+        // proves the owner belongs to this game.
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == owner),
+                "Owner belongs to another model");
+        return ReligionReport.calculate(owner);
+    }
+
+    /**
+     * Colony advisor report of a colonial nation (R-0200): each owned colony
+     * with its residents, goods of the next update, expected new colonists or
+     * famine and active project. It is rebuilt from the live state on every
+     * call and changes no colony, good, project or unit.
+     *
+     * @param owner required colonial nation of this model; the report reads
+     *              only its own colonies and rejects a player of another model
+     * @return immutable colony advisor report of the current state
+     */
+    public ColonyAdvisorReport getColonyAdvisorReport(final Player owner) {
+        Preconditions.checkNotNull(owner, "Owner is required");
+        // Same-named players of other games compare equal, so only identity
+        // proves the owner belongs to this game.
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == owner),
+                "Owner belongs to another model");
+        return ColonyAdvisorReport.calculate(owner);
+    }
+
+    /**
+     * Continue past spring 1800 without scoring (R-0193). The frozen score
+     * stays as it was taken, and the next round starts once.
+     *
+     * @param player required human nation that owns the frozen score
+     * @throws IllegalStateException when the score is not awaiting continuation
+     *                               or the nation is not the scored one
+     */
+    public synchronized void continueWithoutScoring(final Player player) {
+        Preconditions.checkState(!endingTurn,
+                "Cannot continue while ending a turn.");
+        endingTurn = true;
+        try {
+            gameManager.continueWithoutScoring(player);
+        } finally {
+            endingTurn = false;
+        }
+    }
+
+    /**
+     * Read the retirement that the human nation may confirm now (R-0194). The
+     * read changes nothing; canceling the preview needs no model call.
+     *
+     * @return the preview of the score that a confirmation would record, empty
+     *         when no retirement is offered
+     */
+    public Optional<RetirementQuote> getRetirementQuote() {
+        return gameManager.retirementQuote();
+    }
+
+    /**
+     * Confirm a previewed retirement (R-0194). A preview that no longer matches
+     * the live state, or a repeated confirmation after the game ended, is
+     * rejected before any change.
+     *
+     * @param quote required preview that the player confirmed
+     * @throws IllegalStateException when no retirement is offered or the
+     *                               preview is stale
+     */
+    public synchronized void retire(final RetirementQuote quote) {
+        Preconditions.checkNotNull(quote, "Retirement preview is required");
+        gameManager.retire(quote);
+    }
+
+    void fireScoreBoundaryRequired(final Player player) {
+        listenerManager.fireScoreBoundaryRequired(this, player);
     }
 
     private void changeEuropeanRelation(final Player actor, final Player target,
@@ -5295,7 +5454,10 @@ public class Model {
         final EuropeanNation european = nativeEuropean(owner);
         if (settlement.findChiefEncounter(european).isPresent()) {
             // Repeating the information reveals the same land again, no draw.
+            // The nation keeps the information it has now been given, while
+            // its first outcome stays as drawn.
             owner.revealLandAround(settlement.getLocation());
+            settlement.recordChiefInformation(european);
             return NativeChiefResult.repeated(chiefInformation(settlement));
         }
         // The most gold this settlement can pay must fit the purse before the
@@ -7114,6 +7276,9 @@ public class Model {
         Preconditions.checkState(unitStorage.canAllocateUnit(),
                 "No unit IDs remain");
         final Player owner = attacker.getOwner();
+        // The destruction count is checked here too, before any battle, so a
+        // full count refuses the attack with nothing changed (R-0196).
+        owner.checkNativeSettlementDestroyedCount();
         final AbstractUnit unit = (AbstractUnit) attacker;
         // Everything the aftermath needs is resolved before the first draw, so
         // a broken course reference refuses the attack with nothing changed.
@@ -7159,6 +7324,9 @@ public class Model {
         // here, so a lost or refused attack never takes it.
         getTurnEventStore().add(TurnEventProvider.getNativeConquest(owner,
                 settlement, defeated));
+        // The conqueror's own count is durable too; turn events are cleared at
+        // the end of the turn, so the score cannot read them later (R-0196).
+        owner.markNativeSettlementDestroyed();
         final Location at = settlement.getLocation();
         final Optional<Integer> treasure = NativeTreasureRules.value(
                 settlement.isCapital(),
@@ -8272,6 +8440,54 @@ public class Model {
     }
 
     /**
+     * Consolidated native advisor of one player (R-0201). A nation is known by
+     * a land contact (R-0159) or by a learned settlement; each learned
+     * settlement carries its relation view and, once the chief has told it, the
+     * goods and skill of that visit. Pure read: it draws nothing, changes no
+     * relation and records no sighting, so reopening it repeats the same facts.
+     *
+     * @param player required player
+     * @return the report, empty for a king or a scripted actor
+     */
+    public NativeAdvisorReport getNativeAdvisorReport(final Player player) {
+        Preconditions.checkNotNull(player);
+        if (nativeNationOf(player).isEmpty()) {
+            return NativeAdvisorReport.of(List.of(), List.of());
+        }
+        final EuropeanNation european = nativeEuropean(player);
+        final List<NativeSettlement> learned = getNativeSettlementsKnownTo(
+                player);
+        final List<NativeAdvisorReport.Settlement> rows = new ArrayList<>();
+        for (final NativeSettlement settlement : learned) {
+            rows.add(NativeAdvisorReport.Settlement.of(settlement,
+                    getNativeRelationView(player, settlement).orElseThrow(),
+                    learnedChiefFacts(settlement, european)));
+        }
+        final List<NativeNation> nations = new ArrayList<>();
+        for (final NativeNation nation : NativeNation.values()) {
+            final boolean learnedHere = learned.stream()
+                    .anyMatch(settlement -> settlement.getNation() == nation);
+            if (learnedHere || isNativeContacted(european, nation)) {
+                nations.add(nation);
+            }
+        }
+        return NativeAdvisorReport.of(nations, rows);
+    }
+
+    /**
+     * Chief information the nation has learned here (R-0158, R-0201). It is
+     * known from the first information outcome, or from a confirmed repeat
+     * visit after a gold or death outcome, which records the disclosure. It is
+     * never derived from the map: explored land alone teaches nothing.
+     */
+    private Optional<NativeChiefResult.Information> learnedChiefFacts(
+            final NativeSettlement settlement, final EuropeanNation european) {
+        return settlement.isChiefInformed(european)
+                ? Optional.of(chiefInformation(settlement))
+                : Optional.empty();
+    }
+
+    /**
      * Start the alarm observation of a colonial European at the start of its
      * own turn, before congress settles. A Crown or a scripted actor has none.
      *
@@ -9219,7 +9435,8 @@ public class Model {
         Preconditions.checkState(!endingTurn,
                 "Cannot start or end game while ending a turn.");
         if (gameManager.isRunning() || gameManager.isAwaitingImmigrationChoice()
-                || gameManager.isAwaitingTaxDecision()) {
+                || gameManager.isAwaitingTaxDecision()
+                || gameManager.isAwaitingScoreChoice()) {
             gameManager.continueGame();
         } else {
             gameManager.startGame();

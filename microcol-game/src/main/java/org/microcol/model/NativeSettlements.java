@@ -393,16 +393,22 @@ public final class NativeSettlements {
             return;
         }
         for (final NativeChiefEncounterPo entry : saved) {
-            Preconditions.checkArgument(
-                    entry != null && entry.getEuropean() != null
-                            && entry.getOutcome() != null,
+            Preconditions.checkArgument(entry != null
+                    && entry.getEuropean() != null && entry.getOutcome() != null
+                    && entry.getInformed() != null,
                     "Unsupported save: incomplete native chief encounter");
+            Preconditions.checkArgument(entry.getInformed()
+                    || entry.getOutcome() != NativeChiefOutcome.INFORMATION,
+                    "Unsupported save: native chief information is not recorded");
             Preconditions.checkArgument(
                     settlement.findChiefEncounter(entry.getEuropean())
                             .isEmpty(),
                     "Unsupported save: duplicate native chief encounter");
             settlement.recordChiefEncounter(entry.getEuropean(),
                     entry.getOutcome());
+            if (entry.getInformed()) {
+                settlement.recordChiefInformation(entry.getEuropean());
+            }
         }
     }
 
@@ -635,6 +641,7 @@ public final class NativeSettlements {
             final NativeChiefEncounterPo po = new NativeChiefEncounterPo();
             po.setEuropean(european);
             po.setOutcome(outcome);
+            po.setInformed(settlement.isChiefInformed(european));
             out.add(po);
         });
         return out;

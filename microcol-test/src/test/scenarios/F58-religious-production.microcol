@@ -7,7 +7,7 @@
     "difficulty": "DISCOVERER",
     "calendar": {
       "startYear": 1490,
-      "endYear": 1800,
+      "endYear": 1850, "scoredPlay": true,
       "numberOfPlayedTurns": 18
     },
     "units": [

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="tab">Hall of Fame</entry>
+  <entry key="title">Hall of Fame: top ten scored results</entry>
+  <entry key="finishedTitle">Game finished: your result and the Hall of Fame</entry>
+  <entry key="close">Close</entry>
+  <entry key="empty">No scored result is recorded yet.</entry>
+  <entry key="row">%d. %s - %d points - %s</entry>
+  <entry key="currentRank">Your result is ranked %d in the top ten.</entry>
+  <entry key="notRanked">Your result is not in the top ten. Its breakdown is shown below.</entry>
+  <entry key="currentIdentity">Result identity: %s</entry>
+  <entry key="currentUnsaved">This result is shown from the game. The saved ranking could not be updated yet.</entry>
+  <entry key="storageFailed">The Hall of Fame file could not be read or saved, so the ranking may not be current. Your result stays in this game. Open this screen again to retry; the saved file was not changed.</entry>
+</properties>

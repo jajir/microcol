@@ -52,6 +52,10 @@ public final class RebellionFixtures {
      */
     public static void declare(final ModelPo model, final PlayerPo player) {
         player.setDeclaredIndependence(true);
+        // A declaration is dated by the saved calendar, as the game does
+        // (R-0196).
+        player.setDeclarationYear(
+                Calendar.make(model.getCalendar()).getCurrentYear());
         player.setRebellionColonyIds(ownedColonyIds(model, player.getName()));
     }
 
@@ -79,6 +83,7 @@ public final class RebellionFixtures {
      */
     public static void undeclare(final PlayerPo player) {
         player.setDeclaredIndependence(false);
+        player.setDeclarationYear(null);
         player.setRebellionColonyIds(null);
     }
 

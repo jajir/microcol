@@ -158,6 +158,21 @@ Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výc
 hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
 [R-0064](requirements/done/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
 
+### Ukončení a odchod ze volné hry (R-0194)
+
+`Model.getRetirementQuote` nabízí ukončení (Retire) jen v běžící bodované volné
+hře, pro lidskou koloniální velmoc na jejím tahu a bez čekající volby, i když
+svou vzpouru už vyhlásila. Čekání na rozhodnutí jara 1800, mise a dokončená hra
+ji nenabízejí; vzpoura, kterou už rozhodl konec, ji také nenabízí. Ukončení
+rozhlášené vzpoury zmrazí aktuální skóre bez bonusu za nezávislost.
+`RetirementQuote` je neměnný náhled: u živé hry je to aktuální `ResultScore`,
+u nepřerušeného pokračování zmrazený výsledek s původní identitou. `Model.retire`
+před změnou porovná náhled s živým stavem; zastaralé nebo opakované potvrzení
+vyvolá výjimku bez zápisu. Živé ukončení zmrazí jediný `GameResult` se stavem
+`FINAL` a důvodem `REASON_RETIRED`; pokračování zachová zmrazený výsledek. Odchod
+(Exit) zůstává beze změny a nezapisuje žádné skóre. Ověření je vedené v
+[R-0194](requirements/done/R-0194.md) a [evidenci](functional-tests.md#r-0194-retirement-implementation-2026-10-23-not-verified).
+
 ### Bezpečné odmítnutí načítané hry (R-0067)
 
 `GameModelPoDao` čte soubor bez oprav a zápisu. `GameModelDao` kontroluje
@@ -226,7 +241,7 @@ pro nabídku práce. Budovy dál používají společnou produkci a vstupní zá
 GUI pouze překládá typy a zobrazuje posuvnou nabídku; pravidla nákupu
 zůstávají v `Player`. Starý nábor zůstává oddělený do R-0075.
 Samotný registr neprokazuje dokončení vojenských, misionářských a dalších
-neprodukčních schopností; jejich přejímku sleduje [R-0074](requirements/R-0074.md).
+neprodukčních schopností; jejich přejímku sleduje [R-0074](requirements/done/R-0074.md).
 
 ### Délka plavby přes Atlantik (R-0071)
 
@@ -377,7 +392,7 @@ V následujících tabulkách jsou názvy relativní k `org.microcol` v
 | [model.turnevent](../microcol-game/src/main/java/org/microcol/model/turnevent/) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. |
 | [model.store](../microcol-game/src/main/java/org/microcol/model/store/) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
 | [model.campaign](../microcol-game/src/main/java/org/microcol/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
-| [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; `PersistingTool` vlastní adresář a názvy save souborů i příponu. `RecoverySlot` rozlišuje tři body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. Nespouštět zde herní akce ani dialogy. |
+| [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; `PersistingTool` vlastní adresář a názvy save souborů i příponu; `HallOfFameDao` ukládá trvalý žebříček R-0197 do vlastního souboru vedle nich. `RecoverySlot` rozlišuje tři body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. Nespouštět zde herní akce ani dialogy. |
 | [model.campaign.store](../microcol-game/src/main/java/org/microcol/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
 | [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
 | [i18n](../microcol-game/src/main/java/org/microcol/i18n/) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
@@ -450,7 +465,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.market](../microcol-game/src/main/java/org/microcol/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
 | [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
 | [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
-| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů a základních evropských vztahů; potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
+| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění kříže ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
 | [gui.screen.congress](../microcol-game/src/main/java/org/microcol/gui/screen/congress/) | Zobrazení neměnné nabídky otců, národních zvonů, cíle a členství. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. |
 | [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
@@ -1043,6 +1058,8 @@ R-0129 ukládá značky ztracených měst v mapě a vyhodnocuje je ve společné
 
 Rozpracované R-0155 přidává `gui.screen.nativesettlements` pro klávesnicově přístupný přehled známých osad. Dialog a stavový řádek čtou `NativeRelationView` poskytovaný modelem; pravidla postoje, změny alarmu a oprávnění k údajům zůstávají v modelu. Oznámení změny obnovuje prezentaci bez zápisu do vztahů. Cílené ověření prošlo; úplná regrese třetí dávky čeká. Viz [evidence R-0155](functional-tests.md#r-0155-native-alarm-display-2026-10-21).
 
+R-0201 přidává `NativeAdvisorReport`, který `Model.getNativeAdvisorReport` sestavuje pro jednoho hráče: známé národy podle kontaktu nebo naučeného sídla a u každého naučeného sídla `NativeRelationView` a informace náčelníka až po výsledku INFORMATION nebo potvrzené opakované návštěvě (uložený příznak `informed`, původní výsledek se nemění). `gui.screen.nativesettlements` report jen čte; tlačítko mapy vycentruje sídlo až po ověření v živém modelu. Zápis je napsaný, nespuštěný; viz [evidence R-0201](functional-tests.md).
+
 R-0173 rozšiřuje společné `CombatStrengths`, `AttackOrder` a vyhodnocení boje o domorodé role, terénní léčku a obranu dělostřelectva proti skutečnému domorodému útočníkovi. Model vlastní síly, validaci před mutací, náhodu, následky porážky a jednorázový vztahový účinek. GUI pouze překládá společný rozpis. Uložená role bojovníka je povinná; AI volba nájezdu zůstává R-0156. Viz [cílené ověření](functional-tests.md#r-0173-native-land-combat-2026-10-21).
 
 R-0156 ponechává volbu cíle a hlídky v `ai.NativeRobotPlayer`; `Model` poskytuje domov a postoj bojovníka, pravidla znalosti, pohybu a boje. Běžný nájezd respektuje dva čtverce a znalost vlastního národa. Placené cílení R-0166 ještě není zapojené. Viz [ověřený rozsah](functional-tests.md#r-0156-ordinary-native-raids-and-patrol-2026-10-21).
@@ -1126,6 +1143,10 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
 
 
 `Model.deliverInterventionForces` nyní ověřuje získaný a dosud nevyužitý nárok, příslušnost hráče, přístupnost zvoleného přístavu a kapacitu ID před vytvořením osmi jednotek. Výběr nejnižšího ID používá geografickou dostupnost; blokace zachovává čekající stav místo přesunu do dalšího přístavu. Úspěch ukládá příznak doručení spolu s hlášením, načtení samo dodávku neprovádí. [Ověření R-0190](functional-tests.md#r-0190-targeted-intervention-delivery-verification-2026-10-23) zatím nezahrnuje následnou integraci přednosti porážky R-0192.
+
+### Hranice 1600, 1800 a 1850 volné hry (R-0193, 2026-10-23)
+
+`Calendar` nese výslovné uložené pole `scoredPlay`; pravidla neodvozuje z koncového roku, takže mise může mít libovolný termín včetně 1850 a nedostane zmrazený výsledek. Bodovaný kalendář musí končit rokem 1850, chybějící pole znamená nebodovanou hru. Ztráta poslední kolonie ukončuje hru od jara 1600 (`GameOverEvaluator`). `GameManager` na konci dokončeného kola po úsudku o vzpouře a běžných podmínkách buď zmrazí výsledek nevyhlášeného lidského národa na jaře 1800 a pozastaví hru, nebo zapíše konečný výsledek při běžném konci; vzpoura zmrazuje při svém vítězství, porážce či nerozhodnutém konci 1850. `GameResult` je neměnný (jediná změna je stav po pokračování bez bodování) a ukládá se přes `store.GameResultPo`; `GameManager` při načtení odmítne nemožnou historii a nic nedomýšlí. GUI (`gui.screen.statistics`) pouze zobrazuje modelový výsledek, nabízí volbu a vrací se k ní ze záložky základního skóre. Bez Síně slávy, žebříčku a odchodu do důchodu; ty patří do R-0197 a R-0194. [Evidence](functional-tests.md#r-0193-targeted-date-boundary-verification-2026-10-23) není akceptace.
 
 ### Placené skupiny veteránů (R-0169, 2026-10-23)
 

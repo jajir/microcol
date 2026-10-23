@@ -112,4 +112,8 @@
     <entry key="buildRoadProblemAlreadyRoad">Toto pole už má silnici.</entry>
     <entry key="moveEuropeClosed">Po vyhlášení nezávislosti je domovská Evropa uzavřená. Loď zůstává na mapě.</entry>
     <entry key="moveChanged">Přesun již není dostupný. Zvolte jej znovu.</entry>
+    <entry key="buttonRetire">Ukončit s výsledkem</entry>
+    <entry key="retireExplanation">Ukončení skončí hru s tvým výsledkem. Jen bodovaná volná hra, na tvém tahu.</entry>
+    <entry key="retireUnavailable">Ukončení teď není dostupné. Nabízí se na tvém tahu v bodované volné hře.</entry>
+    <entry key="retireChanged">Situace se změnila, hra proto nebyla ukončena. Otevři ukončení znovu a uvidíš aktuální výsledek.</entry>
 </properties>

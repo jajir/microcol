@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Pouze pro čtení. Vyberte typ a zobrazí se jeho lidé. Tlačítko Zobrazit otevře kolonii, dlaždici mapy nebo Evropu, kde osoba stojí; otevření ani zavření nestojí tah.</entry>
+  <entry key="total">Kolonistů celkem: %s</entry>
+  <entry key="typeRow">%s: %s</entry>
+  <entry key="empty">V přehledu nejsou žádní kolonisté tohoto národa.</entry>
+  <entry key="unavailable">Přehled práce se zobrazí, když běží hra.</entry>
+  <entry key="personLine">Osoba %s</entry>
+  <entry key="veteran">veterán</entry>
+  <entry key="nativeConvert">domorodý konvertita</entry>
+  <entry key="equipment">výbava: %s</entry>
+  <entry key="colony">Kolonie %s</entry>
+  <entry key="colonyField">Kolonie %s, pole s produkcí: %s</entry>
+  <entry key="colonyBuilding">Kolonie %s, pracuje v budově: %s</entry>
+  <entry key="map">Dlaždice mapy %s, %s</entry>
+  <entry key="europe">evropský přístav nebo molo</entry>
+  <entry key="atSea">Na volném moři, bez dostupného cíle</entry>
+  <entry key="nativeCourse">Učení dovednosti v osadě národa %s, dlaždice %s, %s</entry>
+  <entry key="nativeMission">Misie v osadě národa %s, dlaždice %s, %s</entry>
+  <entry key="nativeCourseUnknown">Učení dovednosti v domorodé osadě, která ještě není určena</entry>
+  <entry key="nativeMissionUnknown">Misie v domorodé osadě, která ještě není určena</entry>
+  <entry key="repair">Loď v opravě, bez dostupného cíle</entry>
+  <entry key="other">Místo bez dostupného cíle</entry>
+  <entry key="aboard">Na lodi %s (ID %s): %s</entry>
+  <entry key="show">Zobrazit</entry>
+  <entry key="personUnavailable">Tato osoba již není z vašich lidí nebo neexistuje. Seznam byl obnoven.</entry>
+  <entry key="noDestination">Pro tuto osobu není dostupný cíl; zobrazuje se pouze její místo.</entry>
+</properties>

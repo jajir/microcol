@@ -149,10 +149,10 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |
 | [R-0168](done/R-0168.md) | Show known foreign power comparisons under de Witt | New capture | [DIP-007](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) report effect, UC-071/100/114 |
-| [R-0198](R-0198.md) | Show labor and available-colonist information | New capture | UC-114 labor report |
-| [R-0199](R-0199.md) | Show religious progress and immigrant choices | New capture | UC-114 religion report |
-| [R-0200](R-0200.md) | Show own-colony overview and production status | New capture | UC-114 colony report |
-| [R-0201](R-0201.md) | Show known native nations and relations | New capture | UC-114 native report |
+| [R-0198](done/R-0198.md) | Show labor and available-colonist information | New capture | UC-114 labor report |
+| [R-0199](done/R-0199.md) | Show religious progress and immigrant choices | New capture | UC-114 religion report |
+| [R-0200](done/R-0200.md) | Show own-colony overview and production status | New capture | UC-114 colony report |
+| [R-0201](done/R-0201.md) | Show known native nations and relations | New capture | UC-114 native report |
 | [R-0202](R-0202.md) | Show own navy and transport state | New capture | UC-114 navy report |
 | [R-0203](R-0203.md) | Show Congress, support and known REF state | New capture | UC-114 Congress/REF report; SUPPORT-002 |
 | [R-0204](R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
@@ -217,7 +217,7 @@ not select or authorize these new requirements. Their source is the
 currently differ from the intended behavior, while PION-003/004/005 are
 missing. [R-0020](done/R-0020.md) already owns European pier equipment;
 [R-0052](done/R-0052.md) owns turn order, not pioneer completion rules; and
-[R-0074](R-0074.md) owns the purchasable specialist roster. PION-006 remains
+[R-0074](done/R-0074.md) owns the purchasable specialist roster. PION-006 remains
 cross-operation acceptance under R-0119–R-0121 using the already accepted
 hardy-pioneer durations: the existing plow action has its two-update countdown,
 while clearing and road work still need the accepted two- and one-update cases.
@@ -247,7 +247,7 @@ verified or authorize implementation.
 | [R-0071](done/R-0071.md) | Vary Atlantic crossing time by the agreed voyage factors | Follow-up | [R-0021](done/R-0021.md) |
 | [R-0072](done/R-0072.md) | Reverse a ship during an Atlantic crossing | Follow-up | [R-0021](done/R-0021.md) |
 | [R-0073](done/R-0073.md) | Board waiting passengers automatically under a sentry order | Follow-up | [R-0022](done/R-0022.md), [R-0003](canceled/R-0003.md) |
-| [R-0074](R-0074.md) | Purchase the remaining eligible European specialists | Follow-up | [R-0023](done/R-0023.md), [R-0006](canceled/R-0006.md) |
+| [R-0074](done/R-0074.md) | Purchase the remaining eligible European specialists | Follow-up | [R-0023](done/R-0023.md), [R-0006](canceled/R-0006.md) |
 | [R-0075](done/R-0075.md) | Recruit from three persistent European candidates | Follow-up | [R-0023](done/R-0023.md) |
 | [R-0076](done/R-0076.md) | Earn immigrants from crosses produced by all colonies | Follow-up | [R-0010](canceled/R-0010.md), [R-0023](done/R-0023.md) |
 | [R-0077](done/R-0077.md) | Increase ship and artillery purchase prices after purchases | Follow-up | [R-0023](done/R-0023.md) |
@@ -428,11 +428,11 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0190](done/R-0190.md) | Deliver earned intervention forces once | Remainder | GOV-017; target R-0189 separate |
 | [R-0191](done/R-0191.md) | Recognize a complete revolution victory | Remainder | GOV-019; loss R-0192 evaluated first |
 | [R-0192](done/R-0192.md) | Apply every revolution loss condition before victory | Remainder | GOV-020/021/022; victory R-0191 separate |
-| [R-0193](R-0193.md) | Apply the 1600, 1800 and 1850 game boundaries | Remainder | END-001/002/003; calendar R-0051 credited |
-| [R-0194](R-0194.md) | Distinguish Exit, Retire and unscored Continue | Remainder | END-004; safe Exit R-0013 credited |
-| [R-0195](R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
-| [R-0196](R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
-| [R-0197](R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
+| [R-0193](done/R-0193.md) | Apply the 1600, 1800 and 1850 game boundaries | Remainder | END-001/002/003; calendar R-0051 credited |
+| [R-0194](done/R-0194.md) | Distinguish Exit, Retire and unscored Continue | Remainder | END-004; safe Exit R-0013 credited |
+| [R-0195](done/R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
+| [R-0196](done/R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
+| [R-0197](done/R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
 | [R-0214](R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
 | [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
 | [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |

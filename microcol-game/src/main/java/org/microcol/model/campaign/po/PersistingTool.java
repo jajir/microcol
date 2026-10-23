@@ -26,6 +26,8 @@ public class PersistingTool {
 
     private final static String EXTENSION = "." + SAVE_FILE_EXTENSION;
 
+    private final static String HALL_OF_FAME_FILE_NAME = "hall-of-fame.json";
+
     @Inject
     public PersistingTool() {
     }
@@ -75,6 +77,15 @@ public class PersistingTool {
     public File getRecoveryFile(final RecoverySlot slot) {
         return getRootSaveDirectory().toPath()
                 .resolve(Preconditions.checkNotNull(slot).getFileName())
+                .toFile();
+    }
+
+    /**
+     * @return the file of the persistent top ten of scored results (R-0197),
+     *         kept beside the saves and not among them
+     */
+    public File getHallOfFameFile() {
+        return getRootSaveDirectory().toPath().resolve(HALL_OF_FAME_FILE_NAME)
                 .toFile();
     }
 

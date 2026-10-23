@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.microcol.model.Calendar;
 import org.microcol.model.Difficulty;
 import org.microcol.model.Direction;
 import org.microcol.model.Europe;
@@ -105,7 +106,8 @@ public final class ReferenceExpedition {
         model.setNativeLandRights(new ArrayList<>());
         model.setNativeLandTakings(new ArrayList<>());
         model.getCalendar().setStartYear(1490);
-        model.getCalendar().setEndYear(1800);
+        model.getCalendar().setEndYear(Calendar.YEAR_OF_FREE_PLAY_END);
+        model.getCalendar().setScoredPlay(true);
         final WorldMapPo map = new WorldMapPo();
         map.setMaxX(maxX);
         map.setMaxY(maxY);

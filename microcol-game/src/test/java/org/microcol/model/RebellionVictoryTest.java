@@ -350,6 +350,19 @@ class RebellionVictoryTest {
         assertEquals(Optional.of(VICTORY), endReason(restored));
         assertEquals(Optional.of(1),
                 restored.getPlayerByName(DUTCH).getRebellionVictoryOrder());
+        // The first victory takes the full order bonus and the early points of
+        // the saved declaration year; reading the result changes nothing and
+        // the reloaded result is the same (R-0196).
+        final String beforeRead = new com.google.gson.Gson()
+                .toJson(rebel(model).save());
+        final ResultScore won = rebel(model).getResultScore();
+        assertEquals(100, won.getOrderBonusPercent());
+        assertEquals(1780 - rebel(model).getDeclarationYear().orElseThrow(),
+                won.getEarlyPoints());
+        assertEquals(won.getTotal(),
+                restored.getPlayerByName(DUTCH).getResultScore().getTotal());
+        assertEquals(beforeRead,
+                new com.google.gson.Gson().toJson(rebel(model).save()));
         assertThrows(IllegalStateException.class, restored::startGame);
         restored.checkRebellionLoss();
         assertTrue(again.isEmpty(), "The victory is not repeated");

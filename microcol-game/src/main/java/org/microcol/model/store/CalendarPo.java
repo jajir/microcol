@@ -7,6 +7,26 @@ public final class CalendarPo {
     private int numberOfPlayedTurns;
 
     /**
+     * Explicit free-play score policy (R-0193). A missing value means an
+     * unscored game such as a mission; it is never inferred from the end year.
+     */
+    private boolean scoredPlay;
+
+    /**
+     * @return whether the free-play score policy applies
+     */
+    public boolean isScoredPlay() {
+        return scoredPlay;
+    }
+
+    /**
+     * @param scoredPlay whether the free-play score policy applies
+     */
+    public void setScoredPlay(final boolean scoredPlay) {
+        this.scoredPlay = scoredPlay;
+    }
+
+    /**
      * @return the startYear
      */
     public int getStartYear() {

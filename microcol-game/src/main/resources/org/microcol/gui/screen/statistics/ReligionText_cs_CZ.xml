@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="note">Pouze pro čtení. Aktuální výstup je počet křížů, které každá kolonie přidá do národního fondu při dalším tahu. Nasbírané kříže jsou postup k dalšímu přistěhovalci, nikoli výstup. Otevření ani zavření nic nestojí.</entry>
+  <entry key="outputTitle">Aktuální výstup</entry>
+  <entry key="colonyRow">Kolonie %s — počet křížů za tah: %s</entry>
+  <entry key="nationalRow">Počet křížů za tah celkem: %s</entry>
+  <entry key="noColonies">Tento národ nemá žádnou kolonii, a proto nevyrábí kříže.</entry>
+  <entry key="unavailable">Přehled náboženství se zobrazí, když běží hra.</entry>
+  <entry key="progressTitle">Nasbíraný postup</entry>
+  <entry key="accumulatedRow">Nasbírané kříže: %s</entry>
+  <entry key="targetRow">Další přistěhovalec při %s křížích; zbývá %s</entry>
+  <entry key="stateNone">Žádný získaný přistěhovalec nečeká.</entry>
+  <entry key="stateArrives">Získaný přistěhovalec dorazí na začátku vašeho příštího tahu.</entry>
+  <entry key="stateChoice">Získaný přistěhovalec čeká na váš výběr v Evropě (%s kandidátů). Zavření okna výběr pouze odloží.</entry>
+  <entry key="stateBlocked">Práh je dosažen, ale národ, který vyhlásil nezávislost, nedostává přistěhovalce z Evropy. Kříže zůstávají uložené.</entry>
+</properties>

@@ -9,12 +9,16 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.UnitTypes;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.model.NativeChiefResult;
 import org.microcol.model.NativeHostility;
 import org.microcol.model.NativeLandQuote;
 import org.microcol.model.NativeNation;
@@ -200,6 +204,39 @@ public class StatusBarMessageService {
                         : Loc.nativeLandClaimant,
                 i18n.get(nationLabel(settlement.getNation())),
                 i18n.get(classLabel(settlement.getSettlementClass())));
+    }
+
+    /**
+     * @param nation required native nation
+     * @return localized nation name
+     */
+    public String nativeNationName(final NativeNation nation) {
+        return i18n.get(nationLabel(nation));
+    }
+
+    /**
+     * Goods for sale, goods wanted and the teachable skill that the chief has
+     * told about a learned settlement, each named in words. An empty list reads
+     * as none.
+     *
+     * @param facts required chief information from the model's advisor report
+     * @return localized sentence
+     */
+    public String nativeChiefFactsText(
+            final NativeChiefResult.Information facts) {
+        return i18n.get(Loc.nativeAdvisorChiefFacts,
+                nativeGoodsList(facts.getOfferedGoods()),
+                nativeGoodsList(facts.getWantedGoods()),
+                i18n.get(UnitTypes.getUnitName(facts.getTeachableSkill())));
+    }
+
+    private String nativeGoodsList(final List<GoodsType> goods) {
+        if (goods.isEmpty()) {
+            return i18n.get(Loc.nativeChiefNone);
+        }
+        return goods.stream()
+                .map(item -> i18n.get(GoodsTypeName.getNameForGoodsType(item)))
+                .collect(Collectors.joining(", "));
     }
 
     /**

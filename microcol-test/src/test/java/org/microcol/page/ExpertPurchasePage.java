@@ -24,6 +24,17 @@ public final class ExpertPurchasePage extends AbstractScreen {
         clickOnButtonWithId("buy-unit-MASTER_BLACKSMITH");
     }
 
+    /**
+     * Hire the named specialist with the mouse after scrolling its entry into
+     * view.
+     *
+     * @param type unit type name of an entry in the offer
+     */
+    public void buySpecialist(final String type) {
+        revealSpecialist(type);
+        clickOnButtonWithId("buy-unit-" + type);
+    }
+
     public void confirmAndDeliverDuplicateAction() {
         revealSpecialist("MASTER_BLACKSMITH");
         Button purchase = getButtonById("buy-unit-MASTER_BLACKSMITH");

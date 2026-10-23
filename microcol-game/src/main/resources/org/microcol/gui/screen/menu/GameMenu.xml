@@ -9,6 +9,7 @@
 	<entry key="buttonLoadSave">Load saved game</entry>
 	<entry key="buttonPlayCampaign">Play campaign</entry>
 	<entry key="buttonFreeGame">New free play game</entry>
+	<entry key="buttonHallOfFame">Hall of Fame</entry>
 	<entry key="buttonExitMicroCol">Quit MicroCol</entry>
 	<entry key="settingTitle">MicroCol -> Setting</entry>
 	<entry key="buttonSetting">Setting</entry>

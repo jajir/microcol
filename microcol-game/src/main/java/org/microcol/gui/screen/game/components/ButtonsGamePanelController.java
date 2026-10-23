@@ -10,6 +10,7 @@ import com.google.common.eventbus.EventBus;
 import org.microcol.gui.dialog.DisbandDialog;
 import org.microcol.gui.dialog.GoToColonyDialog;
 import org.microcol.gui.dialog.JettisonFlow;
+import org.microcol.gui.dialog.RetireDialog;
 import org.microcol.gui.event.DeclareIndependenceResolvedEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
@@ -19,6 +20,7 @@ import javafx.application.Platform;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
+import org.microcol.model.RetirementQuote;
 import org.microcol.gui.event.BuildRoadEventListener;
 import org.microcol.gui.event.ClearForestEventListener;
 import org.microcol.gui.event.PlowFieldEventListener;
@@ -41,6 +43,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.ScoreBoundaryRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
@@ -72,6 +75,7 @@ public class ButtonsGamePanelController {
     private final Provider<GoToColonyDialog> goToColonyDialog;
     private final Provider<DisbandDialog> disbandDialog;
     private final JettisonFlow jettisonFlow;
+    private final Provider<RetireDialog> retireDialog;
 
     @Inject
     ButtonsGamePanelController(final ButtonsGamePanel buttonGamePanel,
@@ -81,10 +85,12 @@ public class ButtonsGamePanelController {
             final EventBus eventBus, final I18n i18n,
             final Provider<GoToColonyDialog> goToColonyDialog,
             final Provider<DisbandDialog> disbandDialog,
-            final JettisonFlow jettisonFlow) {
+            final JettisonFlow jettisonFlow,
+            final Provider<RetireDialog> retireDialog) {
         this.goToColonyDialog = Preconditions.checkNotNull(goToColonyDialog);
         this.disbandDialog = Preconditions.checkNotNull(disbandDialog);
         this.jettisonFlow = Preconditions.checkNotNull(jettisonFlow);
+        this.retireDialog = Preconditions.checkNotNull(retireDialog);
         this.eventBus = eventBus;
         this.i18n = i18n;
         this.gamePanelController = Preconditions
@@ -103,6 +109,7 @@ public class ButtonsGamePanelController {
         view.setCancelBuildRoadAction(this::cancelBuildRoad);
         view.setDisbandAction(this::disbandSelectedUnit);
         view.setJettisonAction(this::jettisonSelectedShip);
+        view.setRetireAction(this::retireGame);
     }
 
     @SuppressWarnings("unused")
@@ -120,6 +127,19 @@ public class ButtonsGamePanelController {
                 if (gameModelController.getModel() == event.getModel()
                         && event.getModel().isAwaitingImmigrationChoice()) {
                     view.allowPendingImmigrationNavigation();
+                }
+            });
+        }
+    }
+
+    @Subscribe
+    private void onScoreBoundaryRequired(
+            final ScoreBoundaryRequiredEvent event) {
+        if (event.getPlayer().isHuman()) {
+            Platform.runLater(() -> {
+                if (gameModelController.getModel() == event.getModel()
+                        && event.getModel().isAwaitingScoreChoice()) {
+                    view.allowScoreBoundaryNavigation();
                 }
             });
         }
@@ -424,6 +444,40 @@ public class ButtonsGamePanelController {
     }
 
     /**
+     * Shows the retirement that the model offers now and ends the game only
+     * after the player confirmed exactly those terms. Canceling changes
+     * nothing. A preview that the model no longer accepts is explained, and the
+     * game stays as it was.
+     */
+    private void retireGame() {
+        if (!gameModelController.isHumanTurnReady()) {
+            return;
+        }
+        final Optional<RetirementQuote> offer = getModel().getRetirementQuote();
+        if (offer.isEmpty()) {
+            postRetireStatus(Buttons.retireUnavailable);
+            updateUnitOrders();
+            return;
+        }
+        if (!retireDialog.get().confirm(offer.get())) {
+            updateUnitOrders();
+            return;
+        }
+        try {
+            getModel().retire(offer.get());
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            // The situation changed between the preview and the confirmation.
+            postRetireStatus(Buttons.retireChanged);
+        }
+        updateUnitOrders();
+    }
+
+    private void postRetireStatus(final Buttons reason) {
+        eventBus.post(new StatusBarMessageEvent(i18n.get(reason),
+                StatusBarMessageEvent.Source.GAME));
+    }
+
+    /**
      * A ship at sea keeps the control also when the phase refuses it, because
      * the click explains the reason. Ships elsewhere, or foreign ones, hide it.
      */
@@ -509,6 +563,8 @@ public class ButtonsGamePanelController {
                     ready && selected != null);
             view.setJettisonOrder(selected != null && isJettisonShown(selected),
                     ready && selected != null);
+            view.setRetireOrder(getModel().getRetirementQuote().isPresent(),
+                    ready);
             view.setUnitOrdersEnabled(
                     ready && getModel().getFirstSelectableUnit().isPresent(),
                     ready && selectedUnitManager.getSelectedUnit()

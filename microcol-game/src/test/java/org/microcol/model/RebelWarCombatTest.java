@@ -100,6 +100,8 @@ class RebelWarCombatTest {
 
     private static GameModelPo load() {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(MAP);
+        // An unscored mission-style deadline: scored play must end in 1850.
+        data.getModel().getCalendar().setScoredPlay(false);
         data.getModel().getCalendar().setEndYear(1900);
         data.getModel().setCombatRandomState(0L);
         return data;

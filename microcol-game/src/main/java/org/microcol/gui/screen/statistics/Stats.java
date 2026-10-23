@@ -20,6 +20,11 @@ public enum Stats implements MessageKeyResource {
     tradeUnavailable, tradeBought, tradeSpent, tradeSold, tradeReceived,
     tradeRevolutionary, foreignTitle, foreignPower, foreignRelation,
     foreignPopulation, foreignColonies, foreignAverageSize, foreignMilitary,
-    foreignNaval, foreignTrade, foreignLocked, foreignUncontacted;
+    foreignNaval, foreignTrade, foreignLocked, foreignUncontacted,
+    titleBaseScore, baseScoreTitle, baseScoreNote, baseScoreUnavailable,
+    baseScorePopulation, baseScoreFathers, baseScoreGold, baseScoreSupport,
+    baseScoreSubtotal, resultTitle, resultNote, resultDeduction, resultBells,
+    resultClampedBase, resultBonus, resultDifficulty, resultTotal, titleLabor,
+    titleReligion, titleColonies;
 
 }

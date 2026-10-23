@@ -1,5 +1,8 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.gui.LocalizationHelper;
+import java.util.Optional;
+
 import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.dialog.RecoveryDialog;
 import org.microcol.gui.event.QuitGameEvent;
@@ -7,7 +10,11 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.statistics.HallOfFameDialog;
 import org.microcol.gui.util.Listener;
+import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
+import org.microcol.model.campaign.po.HallOfFameDao;
 import org.microcol.model.campaign.po.PersistingTool;
 
 import com.google.common.base.Preconditions;
@@ -39,6 +46,14 @@ public final class ButtonsPanelPresenter {
 
     private final RecoveryDialog recoveryDialog;
 
+    private final ViewUtil viewUtil;
+
+    private final I18n i18n;
+
+    private final HallOfFameDao hallOfFameDao;
+
+    private final LocalizationHelper localization;
+
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final PersistingService persistingService,
@@ -46,7 +61,13 @@ public final class ButtonsPanelPresenter {
             final PersistingTool persistingTool,
             final GameController gameController,
             final SecretOption secretOption, final EventBus eventBus,
-            final RecoveryDialog recoveryDialog) {
+            final RecoveryDialog recoveryDialog, final ViewUtil viewUtil,
+            final I18n i18n, final HallOfFameDao hallOfFameDao,
+            final LocalizationHelper localization) {
+        this.viewUtil = Preconditions.checkNotNull(viewUtil);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        this.hallOfFameDao = Preconditions.checkNotNull(hallOfFameDao);
+        this.localization = Preconditions.checkNotNull(localization);
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingService = Preconditions.checkNotNull(persistingService);
@@ -65,7 +86,14 @@ public final class ButtonsPanelPresenter {
         view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> eventBus
                 .post(new ShowScreenEvent(Screen.FREE_PLAY_SETUP)));
+        view.getButtonHallOfFame().setOnAction(this::onHallOfFame);
         refresh();
+    }
+
+    @SuppressWarnings("unused")
+    private void onHallOfFame(final ActionEvent event) {
+        new HallOfFameDialog(viewUtil, i18n, hallOfFameDao, localization,
+                Optional.empty()).showAndWait();
     }
 
     @SuppressWarnings("unused")

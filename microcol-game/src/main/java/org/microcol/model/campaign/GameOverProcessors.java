@@ -28,6 +28,37 @@ final class GameOverProcessors {
         return null;
     };
 
+    /**
+     * React on the end of free play at spring 1850 (R-0193). The frozen score
+     * is the result, so the message names no outcome of its own.
+     */
+    public final static Function<GameOverProcessingContext, String> FREE_PLAY_ENDED_PROCESSOR = context -> {
+        if (GameOverEvaluator.REASON_FREE_PLAY_ENDED.equals(
+                context.getEvent().getGameOverResult().getGameOverReason())) {
+            LOGGER.info("Game over, free play ended in spring 1850.");
+            context.fireEvent(
+                    new EventFinishMission(Missions.gameOver_freePlayEnded));
+            return "ok";
+        }
+        return null;
+    };
+
+    /**
+     * React on the confirmed retirement of free play (R-0194). The result
+     * window shows the frozen score, so the message names no outcome of its
+     * own.
+     */
+    public final static Function<GameOverProcessingContext, String> RETIRED_PROCESSOR = context -> {
+        if (GameOverEvaluator.REASON_RETIRED.equals(
+                context.getEvent().getGameOverResult().getGameOverReason())) {
+            LOGGER.info("Game over, the nation retired.");
+            context.fireEvent(
+                    new EventFinishMission(Missions.gameOver_retired));
+            return "ok";
+        }
+        return null;
+    };
+
     public final static Function<GameOverProcessingContext, String> NO_COLONIES_PROCESSOR = context -> {
         if (GameOverEvaluator.REASON_NO_COLONIES.equals(
                 context.getEvent().getGameOverResult().getGameOverReason())) {
@@ -58,6 +89,9 @@ final class GameOverProcessors {
         } else if (GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN
                 .equals(reason)) {
             message = Missions.gameOver_rebellionResidentsCrown;
+        } else if (GameOverEvaluator.REASON_REBELLION_UNRESOLVED
+                .equals(reason)) {
+            message = Missions.gameOver_rebellionUnresolved;
         } else {
             return null;
         }

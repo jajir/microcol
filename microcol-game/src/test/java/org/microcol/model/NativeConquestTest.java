@@ -606,6 +606,48 @@ class NativeConquestTest {
     }
 
     @Test
+    void aConqueredSettlementIsCountedOnceAndTheCountSurvivesSaveAndReload() {
+        final double chance = chance(new World());
+        final long seed = seedWhere(s -> roll(s, 1) < chance / 2);
+        final Model model = new World().seed(seed).model();
+        assertEquals(0, dutch(model).getNativeSettlementsDestroyed());
+
+        attack(model);
+
+        assertEquals(1, dutch(model).getNativeSettlementsDestroyed());
+        assertEquals(1,
+                dutch(model).getResultScore().getDestroyedSettlements());
+        final Model restored = NativeTurnScene.make(model.save());
+        assertEquals(1, restored.getPlayerByName("Dutch")
+                .getNativeSettlementsDestroyed());
+        assertEquals(1, restored.getPlayerByName("Dutch").getResultScore()
+                .getDestroyedSettlements());
+    }
+
+    @Test
+    void anExhaustedDestructionCountRefusesTheConquestBeforeAnyChange() {
+        final double chance = chance(new World());
+        final long seed = seedWhere(s -> roll(s, 1) < chance / 2);
+        final Model model = new World().seed(seed)
+                .tweak(po -> po.getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow()
+                        .setNativeSettlementsDestroyed(Integer.MAX_VALUE))
+                .model();
+        final long random = random(model);
+
+        assertThrows(IllegalStateException.class, () -> attack(model));
+
+        assertNotNull(site(model));
+        assertEquals(1, bravesOnTarget(model));
+        assertEquals(0, conquests(model).size());
+        assertEquals(0.0, anger(model, NATION), 1e-9);
+        assertEquals(random, random(model));
+        assertEquals(Integer.MAX_VALUE,
+                dutch(model).getNativeSettlementsDestroyed());
+    }
+
+    @Test
     void capitalConquestUsesTheCapitalFactorExactlyOnce() {
         final double chance = chance(new World().capital(true));
         final long seed = seedWhere(s -> roll(s, 1) < chance / 2);

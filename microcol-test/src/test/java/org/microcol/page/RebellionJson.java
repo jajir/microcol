@@ -2,6 +2,10 @@ package org.microcol.page;
 
 import java.util.TreeSet;
 
+import org.microcol.model.Calendar;
+import org.microcol.model.store.CalendarPo;
+
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,8 +47,22 @@ public final class RebellionJson {
         final JsonArray ids = new JsonArray();
         members.forEach(ids::add);
         player.addProperty("declaredIndependence", true);
+        player.addProperty("declarationYear", currentYear(model));
         player.add("rebellionColonyIds", ids);
         seizeHomePort(model, owner);
+    }
+
+    /**
+     * The year of the saved calendar, which dates an authored declaration as
+     * the game dates a real one (R-0196); loading rejects a missing year.
+     *
+     * @param model required saved model object
+     * @return current year of its calendar
+     */
+    public static int currentYear(final JsonObject model) {
+        return Calendar.make(new Gson()
+                .fromJson(model.getAsJsonObject("calendar"), CalendarPo.class))
+                .getCurrentYear();
     }
 
     /**
@@ -92,6 +110,7 @@ public final class RebellionJson {
             declare(model, player);
         } else {
             player.addProperty("declaredIndependence", false);
+            player.remove("declarationYear");
             player.remove("rebellionColonyIds");
         }
     }

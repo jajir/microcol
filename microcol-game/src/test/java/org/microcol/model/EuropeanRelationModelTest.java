@@ -247,6 +247,9 @@ class EuropeanRelationModelTest {
         data.getModel().getGameManager().getPlayers()
                 .removeIf(p -> p.getWhosKingThisPlayerIs() != null);
         data.getModel().getGameManager().setCurrentPlayer("Dutch");
+        // The test's own end is a mission-style external one; scored free play
+        // ends only by its own rules (R-0193), so this game is unscored.
+        data.getModel().getCalendar().setScoredPlay(false);
         model = Model.make(data.getModel(),
                 List.of(m -> new GameOverResult("TEST_GAME_OVER")));
         final int[] notified = { 0 };
@@ -294,6 +297,9 @@ class EuropeanRelationModelTest {
     void calendarFinishedGameRejectsBothTransitions() {
         model.declareHostilities(player("Dutch"), player("France"));
         data.setModel(model.save());
+        // A mission-style deadline: free play would need its frozen score.
+        data.getModel().getCalendar().setScoredPlay(false);
+        data.getModel().getCalendar().setEndYear(1900);
         data.getModel().getCalendar().setNumberOfPlayedTurns(2000);
         model = make(data);
         assertTrue(model.isGameFinished());

@@ -25,6 +25,7 @@ import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.ScoreBoundaryRequiredEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -66,6 +67,12 @@ final class ModelListenerImpl implements ModelListener {
     @Override
     public void onImmigrationChoiceRequired(
             final ImmigrationChoiceRequiredEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
+    public void onScoreBoundaryRequired(
+            final ScoreBoundaryRequiredEvent event) {
         eventBus.post(event);
     }
 
