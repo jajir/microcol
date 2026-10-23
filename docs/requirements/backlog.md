@@ -354,7 +354,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0165](done/R-0165.md) | Resolve a rival-mission denunciation | New capture | [NAT-019](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0166](done/R-0166.md) | Incite a native attack on a selected European power | New capture | [NAT-020](../gap-analysis.md#native-nations-settlements-and-relations), UC-067 |
 | [R-0167](done/R-0167.md) | Trade real goods with a peaceful rival colony under de Witt | New capture | [DIP-006](../gap-analysis.md#european-diplomacy-and-rivalry)/[FATHER-015](../gap-analysis.md#founding-father-effects) trade effect, UC-071/081/100/117 |
-| [R-0169](R-0169.md) | Offer and deliver a paid veteran mercenary group | New capture | [DIP-005](../gap-analysis.md#european-diplomacy-and-rivalry)/[GOV-018](../gap-analysis.md#government-taxation-and-independence), UC-070 |
+| [R-0169](done/R-0169.md) | Offer and deliver a paid veteran mercenary group | New capture | [DIP-005](../gap-analysis.md#european-diplomacy-and-rivalry)/[GOV-018](../gap-analysis.md#government-taxation-and-independence), UC-070 |
 | [R-0170](done/R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
 | [R-0171](done/R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
 | [R-0172](done/R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
@@ -400,7 +400,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0175](done/R-0175.md) | Create and redeem native-conquest treasure with Cortes | Remainder | NAT-016/FATHER-001; six-hold transport R-0134 separate |
 | [R-0176](done/R-0176.md) | Intercept a ship passing a hostile armed patrol | Remainder | COMBAT-015; deliberate battle R-0097 complete |
 | [R-0177](done/R-0177.md) | Fire a coastal fort at passing hostile ships | Remainder | COMBAT-016; repair R-0098 complete |
-| [R-0178](R-0178.md) | Apply royal bombardment and rebel countryside ambush | Remainder | COMBAT-007/009, GOV-015/017; A10 roster/deployment pending |
+| [R-0178](done/R-0178.md) | Apply royal bombardment and rebel countryside ambush | Remainder | COMBAT-007/009, GOV-015/017; A10 roster/deployment pending |
 | [R-0179](done/R-0179.md) | Increase privateer combat strength with Francis Drake | Remainder | FATHER-002; naval outcome R-0097 and diplomacy R-0099 complete |
 
 ## A10
@@ -420,14 +420,14 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0182](done/R-0182.md) | Free existing native converts when Las Casas joins | Remainder | FATHER-018; R-0149 future converts separate |
 | [R-0183](done/R-0183.md) | Reveal current colonies when Coronado joins | Remainder | FATHER-021; R-0069/0070 fog owners |
 | [R-0184](done/R-0184.md) | Grant La Salle stockades to eligible colonies | Remainder | FATHER-023; R-0025/0082 building boundaries |
-| [R-0185](R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
-| [R-0186](R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
-| [R-0187](R-0187.md) | Close home Europe and secure its assets on declaration | Remainder | GOV-011; current trade guards and R-0072 reversal credited |
-| [R-0188](R-0188.md) | Apply cause support to revolutionary colony attacks | Remainder | GOV-010; R-0100 affiliation/occupied bell direction credited |
-| [R-0189](R-0189.md) | Announce and earn the foreign-intervention bell target | Remainder | GOV-016 target; unit delivery R-0190 separate |
-| [R-0190](R-0190.md) | Deliver earned intervention forces once | Remainder | GOV-017; target R-0189 separate |
-| [R-0191](R-0191.md) | Recognize a complete revolution victory | Remainder | GOV-019; loss R-0192 evaluated first |
-| [R-0192](R-0192.md) | Apply every revolution loss condition before victory | Remainder | GOV-020/021/022; victory R-0191 separate |
+| [R-0185](done/R-0185.md) | Grow and disclose the prewar royal expedition roster | Remainder | GOV-014 roster; R-0178 role, deployment R-0186 separate |
+| [R-0186](done/R-0186.md) | Deploy and land actual REF forces | Remainder | GOV-014 deployment; R-0185 roster separate |
+| [R-0187](done/R-0187.md) | Close home Europe and secure its assets on declaration | Remainder | GOV-011; current trade guards and R-0072 reversal credited |
+| [R-0188](done/R-0188.md) | Apply cause support to revolutionary colony attacks | Remainder | GOV-010; R-0100 affiliation/occupied bell direction credited |
+| [R-0189](done/R-0189.md) | Announce and earn the foreign-intervention bell target | Remainder | GOV-016 target; unit delivery R-0190 separate |
+| [R-0190](done/R-0190.md) | Deliver earned intervention forces once | Remainder | GOV-017; target R-0189 separate |
+| [R-0191](done/R-0191.md) | Recognize a complete revolution victory | Remainder | GOV-019; loss R-0192 evaluated first |
+| [R-0192](done/R-0192.md) | Apply every revolution loss condition before victory | Remainder | GOV-020/021/022; victory R-0191 separate |
 | [R-0193](R-0193.md) | Apply the 1600, 1800 and 1850 game boundaries | Remainder | END-001/002/003; calendar R-0051 credited |
 | [R-0194](R-0194.md) | Distinguish Exit, Retire and unscored Continue | Remainder | END-004; safe Exit R-0013 credited |
 | [R-0195](R-0195.md) | Calculate base population, Congress, gold and support score | Remainder | SCORE-001/002/003/004 |
@@ -542,3 +542,5 @@ preserving native input, values and persistence. Other screens remain outside th
 5. First batch accepted locally on 2026-10-20: R-0122, R-0128, R-0130, R-0131, R-0135, R-0137, R-0138, R-0145, R-0146, R-0181. All ten are now `done`; [full test evidence](../functional-tests.md#first-ten-requirements-full-regression-repair-2026-10-20) records 2,742 model/unit and 440 UI/support checks with zero failures/errors/skips. Remaining authorized requirements continue in dependency order; R-0207 remains excluded.
 
 2026-10-21: The second ten requirements (R-0183, R-0150, R-0153, R-0152, R-0151, R-0139, R-0140, R-0141, R-0142 and R-0091) are complete after [full local acceptance](../functional-tests.md#second-batch-full-acceptance-2026-10-21): 2,968 model/unit and 465 UI/support tests, zero failures/errors/skips. R-0207 remains excluded.
+
+2026-10-23: The sixth ten requirements (R-0185, R-0178, R-0186, R-0188, R-0187, R-0189, R-0190, R-0192, R-0191 and R-0169) are complete after [full local acceptance](../functional-tests.md#sixth-batch-full-local-acceptance-2026-10-23): 3,793 model/unit and 610 UI/support tests, zero failures, errors or skips. This brings the authorized scope to 60 of 85 complete; R-0207 remains excluded.

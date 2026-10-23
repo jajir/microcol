@@ -363,6 +363,14 @@ public final class DialogFight extends AbstractMessageWindow {
                         : Dialog.fight_artilleryBonus,
                 strength.getArtilleryBonus());
         appendBonus(out, Dialog.fight_drakeBonus, strength.getFounderBonus());
+        appendBonus(out, Dialog.fight_bombardmentBonus,
+                strength.getBombardmentBonus());
+        appendBonus(out, Dialog.fight_rebelAmbushBonus,
+                strength.getRebelAmbushBonus());
+        if (strength.getCauseSupportBonus() != 0) {
+            out.append("\n").append(i18n.get(Dialog.fight_causeSupportBonus,
+                    number(strength.getCauseSupportBonus())));
+        }
         return out.append("\n").append(
                 i18n.get(Dialog.fight_total, number(strength.getTotal())))
                 .toString();

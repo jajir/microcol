@@ -135,6 +135,13 @@ public interface Unit {
      */
     boolean isBoardingPriority();
 
+    /**
+     * @return whether the Crown seized this unit from home Europe at the
+     *         owner's declaration (R-0187); it is then inaccessible to its
+     *         owner
+     */
+    boolean isCrownSeized();
+
     boolean isAtPlaceConstructionSlot();
 
     /**

@@ -41,6 +41,7 @@ import org.microcol.gui.screen.editor.ScreenEditorPresenter;
 import org.microcol.gui.screen.europe.BuyUnitsDialog;
 import org.microcol.gui.screen.europe.EuropeButtonsPanelController;
 import org.microcol.gui.screen.europe.EuropeCallback;
+import org.microcol.gui.screen.europe.MercenaryOfferController;
 import org.microcol.gui.screen.europe.PanelEuropeDockBehavior;
 import org.microcol.gui.screen.europe.PanelEuropeGoods;
 import org.microcol.gui.screen.europe.PanelHighSeas;
@@ -235,6 +236,7 @@ public final class MicroColModule extends AbstractModule {
                 .in(Singleton.class);
         bind(ScreenEuropePresenter.class).asEagerSingleton();
         bind(EuropeButtonsPanelController.class).asEagerSingleton();
+        bind(MercenaryOfferController.class).asEagerSingleton();
         bind(PanelHighSeas.class);
         bind(PanelPortPier.class).in(Singleton.class);
         bind(PanelEuropeGoods.class).in(Singleton.class);

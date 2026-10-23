@@ -49,6 +49,12 @@ public class UnitFreeColonist extends CanMount {
 
     private MilitaryRole militaryRole = MilitaryRole.COLONIAL;
 
+    /**
+     * Origin of a Continental soldier delivered by allied intervention
+     * (R-0178). It is never inferred from the Continental role alone.
+     */
+    private boolean interventionDelivered;
+
     /** Missionary role, separate from military role and civilian specialty. */
     private boolean missionary;
 
@@ -82,6 +88,7 @@ public class UnitFreeColonist extends CanMount {
         out.setHoldingGuns(holdingGuns);
         out.setVeteran(isVeteran());
         out.setMilitaryRole(militaryRole);
+        out.setInterventionDelivered(interventionDelivered);
         out.setMissionary(missionary);
         out.setWorkSkill(workSkill);
         out.setWorkUpdates(workUpdates);
@@ -263,6 +270,68 @@ public class UnitFreeColonist extends CanMount {
         militaryRole = role;
     }
 
+    /**
+     * Enlist an armed colonist of a Crown as its royal regular (R-0186). Unlike
+     * {@link #assignMilitaryRole(MilitaryRole)} it accepts a passenger aboard a
+     * ship, because the regular is created in the hold. Identity and equipment
+     * stay unchanged.
+     */
+    public void assignRoyalRole() {
+        Preconditions.checkState(
+                getOwner().isKing() && militaryRole == MilitaryRole.COLONIAL
+                        && isHoldingGuns(),
+                "Only an armed colonist of a Crown becomes a royal regular");
+        militaryRole = MilitaryRole.ROYAL;
+    }
+
+    /**
+     * @return whether this soldier is a Continental delivered by allied
+     *         intervention (R-0178). The origin is only ever set on a rebel
+     *         Continental, and a job or capture clears it with the role.
+     */
+    public boolean isInterventionDelivered() {
+        return interventionDelivered;
+    }
+
+    /**
+     * Record that this Continental soldier of a rebel nation is one of the
+     * troops delivered by allied intervention; R-0190 owns the delivery itself.
+     * The check runs before any change, and once is enough.
+     */
+    public void markInterventionDelivered() {
+        Preconditions.checkState(
+                !interventionDelivered
+                        && militaryRole == MilitaryRole.CONTINENTAL
+                        && isRebelNation(getOwner()),
+                "Only a rebel Continental is delivered by intervention");
+        interventionDelivered = true;
+    }
+
+    /**
+     * A saved intervention origin is valid only on a rebel Continental soldier.
+     *
+     * @param delivered saved origin flag
+     * @param role      saved military role, never null
+     * @param owner     required owner of the unit
+     */
+    static void validateInterventionOrigin(final boolean delivered,
+            final MilitaryRole role, final Player owner) {
+        Preconditions.checkArgument(
+                !delivered || role == MilitaryRole.CONTINENTAL
+                        && isRebelNation(owner),
+                "Intervention origin needs a rebel Continental soldier");
+    }
+
+    private static boolean isRebelNation(final Player owner) {
+        return !owner.isKing() && owner.isDeclaredIndependence();
+    }
+
+    /** Restore a saved origin; the loader validates role and owner first. */
+    void restoreInterventionDelivered(final boolean value) {
+        validateInterventionOrigin(value, militaryRole, getOwner());
+        interventionDelivered = value;
+    }
+
     @Override
     public void takeOver(final Player player) {
         // A captured person no longer serves the former force.
@@ -271,6 +340,7 @@ public class UnitFreeColonist extends CanMount {
         super.takeOver(player);
         if (changesOwner) {
             militaryRole = MilitaryRole.COLONIAL;
+            interventionDelivered = false;
         }
     }
 
@@ -420,12 +490,15 @@ public class UnitFreeColonist extends CanMount {
     private void becomeCivilianWhile(final Runnable placement,
             final BooleanSupplier placed) {
         final MilitaryRole previous = militaryRole;
+        final boolean previousDelivered = interventionDelivered;
         militaryRole = MilitaryRole.COLONIAL;
+        interventionDelivered = false;
         try {
             placement.run();
         } catch (final RuntimeException | Error failure) {
             if (!placed.getAsBoolean()) {
                 militaryRole = previous;
+                interventionDelivered = previousDelivered;
             }
             throw failure;
         }
@@ -491,8 +564,8 @@ public class UnitFreeColonist extends CanMount {
         if (!getModel().isGameRunning()
                 || getAction().getType() == UnitActionType.fortify
                 || getModel().getCurrentPlayer() != getOwner()
-                || !isAtEuropePier() || getOwner().getAllUnits().stream()
-                        .noneMatch(u -> u == this)) {
+                || isCrownSeized() || !isAtEuropePier() || getOwner()
+                        .getAllUnits().stream().noneMatch(u -> u == this)) {
             return Optional.of(EquipmentProblem.UNIT_UNAVAILABLE);
         }
 

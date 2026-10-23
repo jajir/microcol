@@ -1054,6 +1054,7 @@
           "gold": 1108,
           "declaredIndependence": false,
           "whosKingThisPlayerIs": "Dutch",
+        "royalRoster": {"growthCount": 0, "remainder": 0, "members": [{"id": 1, "family": "INFANTRY", "state": "RESERVE"}, {"id": 2, "family": "INFANTRY", "state": "RESERVE"}, {"id": 3, "family": "INFANTRY", "state": "RESERVE"}, {"id": 4, "family": "INFANTRY", "state": "RESERVE"}, {"id": 5, "family": "INFANTRY", "state": "RESERVE"}, {"id": 6, "family": "INFANTRY", "state": "RESERVE"}, {"id": 7, "family": "CAVALRY", "state": "RESERVE"}, {"id": 8, "family": "CAVALRY", "state": "RESERVE"}, {"id": 9, "family": "CAVALRY", "state": "RESERVE"}, {"id": 10, "family": "CAVALRY", "state": "RESERVE"}, {"id": 11, "family": "ARTILLERY", "state": "RESERVE"}, {"id": 12, "family": "ARTILLERY", "state": "RESERVE"}, {"id": 13, "family": "MAN_OF_WAR", "state": "RESERVE"}, {"id": 14, "family": "MAN_OF_WAR", "state": "RESERVE"}]},
           "extraData": {},
           "visible": {
             "visible": [
@@ -1132,7 +1133,8 @@
           "visible": {
             "visible": []
           },
-          "whosKingThisPlayerIs": "France"
+          "whosKingThisPlayerIs": "France",
+        "royalRoster": {"growthCount": 0, "remainder": 0, "members": [{"id": 1, "family": "INFANTRY", "state": "RESERVE"}, {"id": 2, "family": "INFANTRY", "state": "RESERVE"}, {"id": 3, "family": "INFANTRY", "state": "RESERVE"}, {"id": 4, "family": "INFANTRY", "state": "RESERVE"}, {"id": 5, "family": "INFANTRY", "state": "RESERVE"}, {"id": 6, "family": "INFANTRY", "state": "RESERVE"}, {"id": 7, "family": "CAVALRY", "state": "RESERVE"}, {"id": 8, "family": "CAVALRY", "state": "RESERVE"}, {"id": 9, "family": "CAVALRY", "state": "RESERVE"}, {"id": 10, "family": "CAVALRY", "state": "RESERVE"}, {"id": 11, "family": "ARTILLERY", "state": "RESERVE"}, {"id": 12, "family": "ARTILLERY", "state": "RESERVE"}, {"id": 13, "family": "MAN_OF_WAR", "state": "RESERVE"}, {"id": 14, "family": "MAN_OF_WAR", "state": "RESERVE"}]}
         }
       ],
       "gameStarted": true,

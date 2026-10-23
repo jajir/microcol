@@ -177,6 +177,7 @@ class PoliticalProductionTest {
     private GameModelPo data(final Difficulty difficulty) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(MAP);
         data.getModel().setDifficulty(difficulty);
+        CrownRosterFixtures.freshCrownRosters(data.getModel());
         data.getModel().getColonies().forEach(colony -> {
             colony.setLiberty(0L);
             colony.setLastColonialAffiliation(colony.getOwnerName());

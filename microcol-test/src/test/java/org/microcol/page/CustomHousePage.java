@@ -28,9 +28,10 @@ public final class CustomHousePage extends AbstractScreen {
                         .toPath()),
                 JsonObject.class);
         JsonObject model = saved.getAsJsonObject("model");
-        model.getAsJsonObject("gameManager").getAsJsonArray("players").get(0)
-                .getAsJsonObject()
-                .addProperty("declaredIndependence", revolution);
+        RebellionJson.set(
+                model, model.getAsJsonObject("gameManager")
+                        .getAsJsonArray("players").get(0).getAsJsonObject(),
+                revolution);
         if (!customHouse) {
             JsonArray buildings = model.getAsJsonArray("colonies").get(0)
                     .getAsJsonObject().getAsJsonArray("constructions");

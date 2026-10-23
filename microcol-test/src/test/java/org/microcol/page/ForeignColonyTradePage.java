@@ -155,6 +155,10 @@ public final class ForeignColonyTradePage extends AbstractScreen {
             if (player.getName().equals(DUTCH)) {
                 player.setCongress(congress(deWitt));
                 player.setDeclaredIndependence(rebellion);
+                // A declaration fixes the colonies the nation owns now
+                // (R-0192).
+                player.setRebellionColonyIds(
+                        rebellion ? ownedColonyIds(model, DUTCH) : null);
                 player.setGold(START_GOLD);
             } else if (player.getName().equals(FRANCE)) {
                 player.setGold(frenchGold);
@@ -171,6 +175,13 @@ public final class ForeignColonyTradePage extends AbstractScreen {
      * Land squares beside the colony that a wagon may stand on and that may
      * become sea: no unit, colony, worked field or land-only overlay on them.
      */
+    private static List<Integer> ownedColonyIds(final ModelPo model,
+            final String owner) {
+        return model.getColonies().stream()
+                .filter(colony -> owner.equals(colony.getOwnerName()))
+                .map(colony -> colony.getId()).collect(Collectors.toList());
+    }
+
     private static List<Location> freeSites(final ModelPo model,
             final ColonyPo colony) {
         final WorldMapPo world = model.getMap();

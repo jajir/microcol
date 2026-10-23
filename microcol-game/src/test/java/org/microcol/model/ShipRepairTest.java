@@ -261,9 +261,10 @@ class ShipRepairTest {
     @Test
     void noRepairEndpointSinksPayloadWithSavedNotice() {
         final GameModelPo data = scenario();
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> "Dutch".equals(player.getName())).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(player -> "Dutch".equals(player.getName()))
+                        .findFirst().orElseThrow());
         final Model model = load(data);
         model.startGame();
         final Ship ship = ship(model);

@@ -381,7 +381,9 @@ class NativeConquestTest {
         final Player france = new PlayerHuman("France", false, 0, mock, false,
                 Map.of(), Set.of());
         final Player crown = new PlayerKing("Crown", true, 0, mock, false,
-                dutch, Map.of(), Set.of());
+                dutch, Map.of(), Set.of(),
+                new RoyalRoster(RoyalRoster.initial(Difficulty.CONQUISTADOR),
+                        Difficulty.CONQUISTADOR));
         assertEquals(50, Model.settlementAttackBonus(spain));
         assertEquals(0, Model.settlementAttackBonus(dutch));
         assertEquals(0, Model.settlementAttackBonus(france));
@@ -529,8 +531,25 @@ class NativeConquestTest {
         assertTrue(spanishColony.getColonyDefense().isPresent());
         assertEquals(0, spanishColony.getCombatStrengths().orElseThrow()
                 .getAttacker().getFounderBonus());
-        assertEquals(dutchColony.getCombatStrengths(),
-                spanishColony.getCombatStrengths());
+        // The frozen identity also names each owner, so the whole quote differs
+        // by nationality; the battle itself is compared by its numbers.
+        final CombatStrengths dutchValues = dutchColony.getCombatStrengths()
+                .orElseThrow();
+        final CombatStrengths spanishValues = spanishColony.getCombatStrengths()
+                .orElseThrow();
+        final CombatStrength attack = spanishValues.getAttacker();
+        assertEquals(2.0, attack.getBase(), 1e-9);
+        assertEquals(50, attack.getAttackBonus());
+        assertEquals(0, attack.getFounderBonus());
+        assertEquals(0, attack.getBombardmentBonus());
+        assertEquals(0, attack.getRebelAmbushBonus());
+        assertEquals(0.0, attack.getCauseSupportBonus(), 1e-9);
+        // Base 2 x (1 + 0.5 attack) = 3, exactly, for Spain as for the Dutch.
+        assertEquals(3.0, attack.getTotal(), 1e-9);
+        assertEquals(dutchValues.getAttacker(), attack);
+        assertEquals(dutchValues.getDefender(), spanishValues.getDefender());
+        assertEquals(dutchValues.getAttackerWinProbability(),
+                spanishValues.getAttackerWinProbability(), 1e-9);
     }
 
     @Test

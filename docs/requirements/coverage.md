@@ -74,7 +74,7 @@
    denunciation; and [R-0166](done/R-0166.md) paid incitement. Native conquest
    and treasure remain separate combat/reward outcomes.
 9. European residuals are [R-0167](done/R-0167.md) de Witt foreign trade,
-   [R-0168](done/R-0168.md) his comparative report, [R-0169](R-0169.md)
+   [R-0168](done/R-0168.md) his comparative report, [R-0169](done/R-0169.md)
    mercenary offers, [R-0170](done/R-0170.md) land military objectives,
    [R-0171](done/R-0171.md) naval military objectives and [R-0172](done/R-0172.md)
    multi-colony scheduling. R-0090–R-0092 retain their existing policies and
@@ -84,17 +84,17 @@
     [R-0175](done/R-0175.md) treasure identity/reward with Cortes,
     [R-0176](done/R-0176.md) naval patrol interception,
     [R-0177](done/R-0177.md) coastal batteries,
-    [R-0178](R-0178.md) royal/Continental combat roles and ambush,
+    [R-0178](done/R-0178.md) royal/Continental combat roles and ambush,
     and [R-0179](done/R-0179.md) Drake. Existing ordinary/naval resolution,
     artillery lifecycle and colony-capture owners remain authoritative.
 11. Remaining founder effects are [R-0180](done/R-0180.md) production modifiers,
     [R-0181](done/R-0181.md) Fugger, [R-0182](done/R-0182.md) Las Casas,
     [R-0183](done/R-0183.md) Coronado and [R-0184](done/R-0184.md) La Salle.
     Effects already owned by other requirements are not captured again.
-12. Revolution has separate owners for [REF growth](R-0185.md),
-    [deployment](R-0186.md), [Europe closure](R-0187.md),
-    [attack support](R-0188.md), [intervention target](R-0189.md),
-    [delivery](R-0190.md), [victory](R-0191.md) and [loss](R-0192.md).
+12. Revolution has separate owners for [REF growth](done/R-0185.md),
+    [deployment](done/R-0186.md), [Europe closure](done/R-0187.md),
+    [attack support](done/R-0188.md), [intervention target](done/R-0189.md),
+    [delivery](done/R-0190.md), [victory](done/R-0191.md) and [loss](done/R-0192.md).
     [R-0193](R-0193.md) owns date boundaries, [R-0194](R-0194.md)
     Exit/Retire/Continue, [R-0195](R-0195.md) and [R-0196](R-0196.md)
     score components, and [R-0197](R-0197.md) the Hall of Fame.

@@ -291,7 +291,7 @@ class CongressTest {
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> player.getName().equals("Dutch"))
                 .findFirst().orElseThrow();
-        dutch.setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(), dutch);
         isolateSavedVoyageOrigin(data);
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -370,7 +370,7 @@ class CongressTest {
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> player.getName().equals("Dutch"))
                 .findFirst().orElseThrow();
-        dutch.setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(), dutch);
         final Map<Location, TerrainType> original = isolateSavedVoyageOrigin(
                 data);
         final Model blocked = Model.make(data.getModel(),

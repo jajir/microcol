@@ -180,5 +180,7 @@ public final class AttackOrder {
      */
     public void execute() {
         attacker.executeAttack(this);
+        // The battle, its capture and its losses are complete (R-0192).
+        attacker.checkRebellionLoss();
     }
 }

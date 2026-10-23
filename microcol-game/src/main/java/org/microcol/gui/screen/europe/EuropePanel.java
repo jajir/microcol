@@ -133,8 +133,12 @@ public final class EuropePanel
         shipsTravelingToNewWorld.getContent().setDisable(pendingChoice);
         panelPortPier.getContent().setDisable(pendingChoice);
         panelGoods.getContent().setDisable(pendingChoice);
-        europeButtonsPanel.getButtonBuyUnit().setDisable(pendingChoice);
-        europeButtonsPanel.getButtonRecruit().setDisable(taxChoice);
+        // A declared nation's home port is closed to hiring and purchases
+        // (R-0187); the model refuses them too.
+        final boolean closed = !player.canTradeInEurope();
+        europeButtonsPanel.getButtonBuyUnit()
+                .setDisable(pendingChoice || closed);
+        europeButtonsPanel.getButtonRecruit().setDisable(taxChoice || closed);
         europeButtonsPanel.getButtonTax().setVisible(taxChoice);
         europeButtonsPanel.getButtonTax().setManaged(taxChoice);
         final boolean backTaxes = !player.getTaxArrears().isEmpty();

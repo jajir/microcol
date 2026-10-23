@@ -994,7 +994,7 @@ class ColonyDefenseTest {
     private void declareIndependence(final ModelPo data, final String nation) {
         data.getGameManager().getPlayers().stream()
                 .filter(player -> nation.equals(player.getName()))
-                .forEach(player -> player.setDeclaredIndependence(true));
+                .forEach(player -> RebellionFixtures.declare(data, player));
     }
 
     @Test

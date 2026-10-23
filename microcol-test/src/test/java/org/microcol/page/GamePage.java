@@ -74,6 +74,11 @@ public class GamePage extends AbstractScreen {
         verifyThatTileIsVisible(location);
         dragToLocation(location);
         waitWhileMoving();
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(
+                        () -> getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID)
+                                .getText().contains(expectedFeedback))
+                        .get());
         verifyThatStatusBarContains(expectedFeedback);
     }
 

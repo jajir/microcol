@@ -130,9 +130,11 @@ class TreasureRedemptionTest {
                         .orElseThrow());
         int gold = owner.getGold();
         ModelPo saved = model.save();
-        saved.getGameManager().getPlayers().stream()
-                .filter(p -> p.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(saved,
+                saved.getGameManager().getPlayers().stream()
+                        .filter(p -> p.getName().equals("Dutch")).findFirst()
+                        .orElseThrow());
+        ClosedEuropeFixtures.seizeHomeEurope(saved);
         Model loaded = NativeTurnScene.make(saved);
         Player rebel = loaded.getPlayerByName("Dutch");
         loaded.collectRoyalTreasure(rebel);
@@ -143,9 +145,11 @@ class TreasureRedemptionTest {
                 .isEmpty());
         Model overseas = world(true);
         ModelPo overseasPo = overseas.save();
-        overseasPo.getGameManager().getPlayers().stream()
-                .filter(p -> p.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(overseasPo,
+                overseasPo.getGameManager().getPlayers().stream()
+                        .filter(p -> p.getName().equals("Dutch")).findFirst()
+                        .orElseThrow());
+        ClosedEuropeFixtures.seizeHomeEurope(overseasPo);
         Model closed = NativeTurnScene.make(overseasPo);
         assertTrue(
                 closed.quoteTreasureRedemption(train(closed), null).isEmpty());

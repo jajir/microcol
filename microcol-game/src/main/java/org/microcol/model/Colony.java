@@ -997,6 +997,9 @@ public class Colony {
             lastColonialAffiliation = player;
         }
         grantLaSalleStockade();
+        // A declared rebellion acquires the colony; a later loss of it to the
+        // Crown or anyone else keeps the membership (R-0192).
+        player.recordRebellionColony(this);
         // The former owner is told about the loss, so it remembers the new
         // owner even though it no longer sees the colony.
         previousOwner.recordColony(this);

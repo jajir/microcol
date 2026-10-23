@@ -19,6 +19,15 @@ public final class CongressDialog extends AbstractMessageWindow {
     private final Label objective = label("congressObjective");
     private final Label members = label("congressMembers");
     private final Label reward = label("congressReward");
+    private final Label royalInfantry = label("congressRoyalInfantry");
+    private final Label royalCavalry = label("congressRoyalCavalry");
+    private final Label royalArtillery = label("congressRoyalArtillery");
+    private final Label royalMenOfWar = label("congressRoyalMenOfWar");
+    private final Label royalBells = label("congressRoyalBells");
+    private final Label royalStopped = label("congressRoyalStopped");
+    private final Label intervention = label("congressIntervention");
+    private final Label interventionForces = label(
+            "congressInterventionForces");
     private final Label feedback = label("congressFeedback");
     private final Label detail = label("congressDetail");
     private final ListView<FounderOffer> candidates = new ListView<>();
@@ -62,7 +71,9 @@ public final class CongressDialog extends AbstractMessageWindow {
         close.setOnAction(event -> close());
         close.setCancelButton(true);
         VBox root = new VBox(12, progress, objective, candidates, detail,
-                choose, members, reward, feedback, close);
+                choose, members, reward, royalInfantry, royalCavalry,
+                royalArtillery, royalMenOfWar, royalBells, royalStopped,
+                intervention, interventionForces, feedback, close);
         root.setId("congressDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(580);
@@ -98,6 +109,9 @@ public final class CongressDialog extends AbstractMessageWindow {
     }
 
     private void refresh() {
+        refreshRoyal();
+        refreshIntervention();
+        refreshInterventionForces();
         progress.setText(i18n.get(CongressText.progress,
                 player.getCongressBells(), player.getCongressTarget()));
         objective.setText(player.getSelectedFounder()
@@ -124,6 +138,68 @@ public final class CongressDialog extends AbstractMessageWindow {
                 && player.getSelectedFounder().isEmpty()
                 && player.getCongressMembers().isEmpty())
             feedback.setText(i18n.get(CongressText.firstColony));
+    }
+
+    /** Shows the Crown's real roster; blank when no Crown rules this nation. */
+    private void refreshRoyal() {
+        RoyalRoster crown = player.getCrownRoster().orElse(null);
+        royalInfantry.setText(crown == null ? ""
+                : familyLine(CongressText.royalInfantry, crown,
+                        RoyalRoster.Family.INFANTRY));
+        royalCavalry.setText(crown == null ? ""
+                : familyLine(CongressText.royalCavalry, crown,
+                        RoyalRoster.Family.CAVALRY));
+        royalArtillery.setText(crown == null ? ""
+                : familyLine(CongressText.royalArtillery, crown,
+                        RoyalRoster.Family.ARTILLERY));
+        royalMenOfWar.setText(crown == null ? ""
+                : familyLine(CongressText.royalMenOfWar, crown,
+                        RoyalRoster.Family.MAN_OF_WAR));
+        royalBells.setText(crown == null ? ""
+                : i18n.get(CongressText.royalBells, crown.getBellRemainder(),
+                        crown.getBellThreshold()));
+        royalStopped.setText(player.isDeclaredIndependence()
+                ? i18n.get(CongressText.royalStopped)
+                : "");
+    }
+
+    /**
+     * Shows the stored intervention target and its progress or earning. Only
+     * reads the model; the target is set by the rebel's own update.
+     */
+    private void refreshIntervention() {
+        intervention.setText(player.getIntervention()
+                .map(state -> state.isEarned()
+                        ? i18n.get(CongressText.interventionEarned,
+                                state.getTarget())
+                        : i18n.get(CongressText.interventionProgress,
+                                state.getBells(), state.getTarget()))
+                .orElseGet(() -> player.isDeclaredIndependence()
+                        ? i18n.get(CongressText.interventionAwaiting)
+                        : ""));
+    }
+
+    /**
+     * Shows whether the earned forces have arrived or still wait (R-0190). Only
+     * reads the model.
+     */
+    private void refreshInterventionForces() {
+        interventionForces.setText(
+                player.getIntervention().filter(state -> state.isEarned())
+                        .map(state -> i18n.get(state.isDelivered()
+                                ? CongressText.interventionDelivered
+                                : CongressText.interventionPending))
+                        .orElse(""));
+    }
+
+    private String familyLine(CongressText label, RoyalRoster crown,
+            RoyalRoster.Family family) {
+        return i18n.get(CongressText.royalFamily, i18n.get(label),
+                crown.getTotal(family),
+                crown.getCount(family, RoyalRoster.State.RESERVE),
+                crown.getCount(family, RoyalRoster.State.SHIPPED),
+                crown.getCount(family, RoyalRoster.State.DESTROYED),
+                crown.getCount(family, RoyalRoster.State.CAPTURED));
     }
 
     private void choose() {

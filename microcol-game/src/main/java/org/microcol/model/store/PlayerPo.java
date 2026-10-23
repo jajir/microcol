@@ -80,6 +80,79 @@ public final class PlayerPo {
         this.congress = congress;
     }
 
+    /**
+     * Foreign-intervention target of a declared colonial nation; absent before
+     * declaration and before its first owner update after it (R-0189).
+     */
+    private InterventionPo intervention;
+
+    public InterventionPo getIntervention() {
+        return intervention;
+    }
+
+    public void setIntervention(final InterventionPo intervention) {
+        this.intervention = intervention;
+    }
+
+    /**
+     * Own updates counted before declaration for the peacetime mercenary
+     * interval (R-0169); absent in a save without any counted update.
+     */
+    private Integer mercenaryTurns;
+
+    public Integer getMercenaryTurns() {
+        return mercenaryTurns;
+    }
+
+    public void setMercenaryTurns(final Integer mercenaryTurns) {
+        this.mercenaryTurns = mercenaryTurns;
+    }
+
+    /** Rebel updates counted after declaration (R-0169); absent when none. */
+    private Integer mercenaryRebelUpdates;
+
+    public Integer getMercenaryRebelUpdates() {
+        return mercenaryRebelUpdates;
+    }
+
+    public void setMercenaryRebelUpdates(final Integer mercenaryRebelUpdates) {
+        this.mercenaryRebelUpdates = mercenaryRebelUpdates;
+    }
+
+    /** Pending offer that the owner has not yet answered; absent when none. */
+    private MercenaryOfferPo mercenaryOffer;
+
+    public MercenaryOfferPo getMercenaryOffer() {
+        return mercenaryOffer;
+    }
+
+    public void setMercenaryOffer(final MercenaryOfferPo mercenaryOffer) {
+        this.mercenaryOffer = mercenaryOffer;
+    }
+
+    /** Paid mercenary groups, pending or delivered (R-0169). */
+    private List<MercenaryDeliveryPo> mercenaryDeliveries = new ArrayList<>();
+
+    public List<MercenaryDeliveryPo> getMercenaryDeliveries() {
+        return mercenaryDeliveries;
+    }
+
+    public void setMercenaryDeliveries(
+            final List<MercenaryDeliveryPo> mercenaryDeliveries) {
+        this.mercenaryDeliveries = mercenaryDeliveries;
+    }
+
+    /** Prewar Crown roster; required for a Crown and absent for colonies. */
+    private RoyalRosterPo royalRoster;
+
+    public RoyalRosterPo getRoyalRoster() {
+        return royalRoster;
+    }
+
+    public void setRoyalRoster(final RoyalRosterPo royalRoster) {
+        this.royalRoster = royalRoster;
+    }
+
     private Map<String, Integer> unitPurchaseCounts = new HashMap<>();
 
     public Map<String, Integer> getUnitPurchaseCounts() {
@@ -127,6 +200,48 @@ public final class PlayerPo {
     public void setRivalParkedCarrierIds(
             final List<Integer> rivalParkedCarrierIds) {
         this.rivalParkedCarrierIds = rivalParkedCarrierIds;
+    }
+
+    /**
+     * Colony IDs of a declared rebellion (R-0192); required for a declared
+     * colonial nation, empty or absent for every other player.
+     */
+    private List<Integer> rebellionColonyIds;
+
+    public List<Integer> getRebellionColonyIds() {
+        return rebellionColonyIds;
+    }
+
+    public void setRebellionColonyIds(final List<Integer> rebellionColonyIds) {
+        this.rebellionColonyIds = rebellionColonyIds;
+    }
+
+    /**
+     * Reason code under which this declared rebellion was lost (R-0192); null
+     * while the rebellion holds and for every non-rebel.
+     */
+    private String rebellionLossReason;
+
+    public String getRebellionLossReason() {
+        return rebellionLossReason;
+    }
+
+    public void setRebellionLossReason(final String rebellionLossReason) {
+        this.rebellionLossReason = rebellionLossReason;
+    }
+
+    /**
+     * Completion order of this declared rebellion's victory (R-0191); null
+     * while the rebellion is not won and for every non-rebel.
+     */
+    private Integer rebellionVictoryOrder;
+
+    public Integer getRebellionVictoryOrder() {
+        return rebellionVictoryOrder;
+    }
+
+    public void setRebellionVictoryOrder(final Integer rebellionVictoryOrder) {
+        this.rebellionVictoryOrder = rebellionVictoryOrder;
     }
 
     /** Active second-colony expansion of a rival; null when it has none. */

@@ -162,6 +162,10 @@ final class TradeRouteNavigator {
             }
             return travelToEurope(carrier, assignment.get(), walked);
         }
+        // A Crown-seized ship in the closed home port cannot leave it (R-0187).
+        if (carrier.isCrownSeized()) {
+            return pause(assignment.get(), TradeRoutePause.EUROPE_CLOSED);
+        }
         final Optional<Colony> colony = model.getColonyById(stop.getColonyId())
                 .filter(Colony::isValid)
                 .filter(candidate -> candidate.getOwner() == owner);

@@ -193,7 +193,7 @@ public class TC_58_F49_custom_house_test extends AbstractMicroColTest {
                 200, 1231);
 
         // Save the actual post-protest game. The revolution copy changes only
-        // the independence flag of that snapshot.
+        // the declaration of that snapshot and the Crown seizure it brings.
         final File snapshot = taxes.saveSnapshot("tax-protest-snapshot");
         taxes.verifySnapshotSaved(snapshot);
         GamePage.of(getContext()).exitToMenu();

@@ -87,6 +87,10 @@ public final class UnitStorage {
         return idManager.canAllocate();
     }
 
+    boolean canAllocateUnits(final int count) {
+        return idManager.canAllocate(count);
+    }
+
     /** Decides whether two owners may lawfully share a square. */
     @FunctionalInterface
     interface SharedSquarePolicy {

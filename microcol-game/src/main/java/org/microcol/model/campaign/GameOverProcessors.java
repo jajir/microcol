@@ -39,4 +39,46 @@ final class GameOverProcessors {
         return null;
     };
 
+    /**
+     * React on a declared rebellion lost to the Crown (R-0192); each reason has
+     * its own explicit message.
+     */
+    public final static Function<GameOverProcessingContext, String> REBELLION_LOST_PROCESSOR = context -> {
+        final String reason = context.getEvent().getGameOverResult()
+                .getGameOverReason();
+        final Missions message;
+        if (GameOverEvaluator.REASON_REBELLION_NO_COLONIES.equals(reason)) {
+            message = Missions.gameOver_rebellionNoColonies;
+        } else if (GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN
+                .equals(reason)) {
+            message = Missions.gameOver_rebellionAllColoniesCrown;
+        } else if (GameOverEvaluator.REASON_REBELLION_COASTAL_CROWN
+                .equals(reason)) {
+            message = Missions.gameOver_rebellionCoastalCrown;
+        } else if (GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN
+                .equals(reason)) {
+            message = Missions.gameOver_rebellionResidentsCrown;
+        } else {
+            return null;
+        }
+        LOGGER.info("Game over, rebellion lost: {}.", reason);
+        context.fireEvent(new EventFinishMission(message));
+        return "ok";
+    };
+
+    /**
+     * React on a declared rebellion won by the rebels (R-0191) with its own
+     * explicit message.
+     */
+    public final static Function<GameOverProcessingContext, String> REBELLION_WON_PROCESSOR = context -> {
+        if (GameOverEvaluator.REASON_REBELLION_VICTORY.equals(
+                context.getEvent().getGameOverResult().getGameOverReason())) {
+            LOGGER.info("Game over, rebellion won.");
+            context.fireEvent(
+                    new EventFinishMission(Missions.gameOver_rebellionVictory));
+            return "ok";
+        }
+        return null;
+    };
+
 }

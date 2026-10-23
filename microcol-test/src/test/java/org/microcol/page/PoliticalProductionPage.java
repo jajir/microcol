@@ -8,9 +8,11 @@ import java.nio.file.Path;
 
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Colony;
+import org.microcol.model.Difficulty;
 import org.microcol.model.GoodsType;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -84,6 +86,7 @@ public final class PoliticalProductionPage extends AbstractScreen {
                 .fromJson(Files.readString(SOURCE.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
         model.addProperty("difficulty", "VICEROY");
+        authorCrownForce(model, Difficulty.VICEROY);
         final JsonObject colony = model.getAsJsonArray("colonies").get(0)
                 .getAsJsonObject();
         colony.addProperty("liberty", 0);
@@ -125,6 +128,42 @@ public final class PoliticalProductionPage extends AbstractScreen {
                 .when(getContext().getClassFromGuice(FileSelectingService.class)
                         .loadFile(org.mockito.ArgumentMatchers.any(File.class)))
                 .thenReturn(file);
+    }
+
+    /**
+     * Author the Crown's starting force for the difficulty, all in reserve: 4
+     * plus ordinal infantry, 2 plus ordinal cavalry, 2 artillery and 2 ships. A
+     * saved roster must match its difficulty, so a changed difficulty needs a
+     * matching roster.
+     */
+    private static void authorCrownForce(final JsonObject model,
+            final Difficulty difficulty) {
+        final int index = difficulty.ordinal();
+        final String[] families = { "INFANTRY", "CAVALRY", "ARTILLERY",
+                "MAN_OF_WAR" };
+        final int[] counts = { 4 + index, 2 + index, 2, 2 };
+        final JsonArray members = new JsonArray();
+        int id = 1;
+        for (int family = 0; family < families.length; family++) {
+            for (int i = 0; i < counts[family]; i++) {
+                final JsonObject member = new JsonObject();
+                member.addProperty("id", id++);
+                member.addProperty("family", families[family]);
+                member.addProperty("state", "RESERVE");
+                members.add(member);
+            }
+        }
+        final JsonObject roster = new JsonObject();
+        roster.addProperty("growthCount", 0);
+        roster.addProperty("remainder", 0);
+        roster.add("members", members);
+        for (final JsonElement element : model.getAsJsonObject("gameManager")
+                .getAsJsonArray("players")) {
+            final JsonObject player = element.getAsJsonObject();
+            if (player.has("royalRoster")) {
+                player.add("royalRoster", roster.deepCopy());
+            }
+        }
     }
 
     /** The colonist waiting on the colony square is the one to be employed. */

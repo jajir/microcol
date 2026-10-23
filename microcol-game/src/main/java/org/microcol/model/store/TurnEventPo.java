@@ -189,6 +189,8 @@ public final class TurnEventPo {
 
     private String rivalName;
     private Integer peacePrice;
+    private Integer interventionTarget;
+    private Boolean interventionEarned;
     private String diplomacyKind;
     private String diplomacyVictimName;
 
@@ -502,6 +504,22 @@ public final class TurnEventPo {
 
     public void setPeacePrice(final Integer value) {
         peacePrice = value;
+    }
+
+    public Integer getInterventionTarget() {
+        return interventionTarget;
+    }
+
+    public void setInterventionTarget(final Integer value) {
+        interventionTarget = value;
+    }
+
+    public Boolean getInterventionEarned() {
+        return interventionEarned;
+    }
+
+    public void setInterventionEarned(final Boolean value) {
+        interventionEarned = value;
     }
 
     public Integer getIncome() {

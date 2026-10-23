@@ -41,7 +41,7 @@ public final class MilitaryRolePage extends AbstractScreen {
                 .getAsJsonArray("players")) {
             final JsonObject player = entry.getAsJsonObject();
             if (player.get("name").getAsString().equals("France")) {
-                player.addProperty("declaredIndependence", true);
+                RebellionJson.declare(model, player);
             }
         }
         for (final JsonElement entry : model.getAsJsonArray("units")) {

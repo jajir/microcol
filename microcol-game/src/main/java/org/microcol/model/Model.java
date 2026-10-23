@@ -195,6 +195,16 @@ public class Model {
                             && colonyIds.add(colonyPo.getId()),
                     "Invalid or duplicate colony id");
         }
+        // Saved rebellion members must name colonies that exist; a member is
+        // never rebuilt from ownership (R-0192).
+        for (final PlayerPo playerPo : modelPo.getGameManager().getPlayers()) {
+            if (playerPo.getRebellionColonyIds() != null) {
+                playerPo.getRebellionColonyIds()
+                        .forEach(id -> Preconditions.checkArgument(
+                                colonyIds.contains(id),
+                                "Rebellion refers to an unknown colony id"));
+            }
+        }
         modelPo.getTurnEvents().forEach(event -> {
             if (event.getColonyId() != null) {
                 Preconditions.checkArgument(
@@ -360,6 +370,49 @@ public class Model {
 
         gameManager = GameManager.make(this, modelPo, gameOverEvaluators,
                 playerStore);
+        // A human rebel that lost or won ended the game with that same reason;
+        // the two saved facts must agree (R-0192, R-0191). Nothing is repaired
+        // or guessed.
+        for (final Player rebel : playerStore.getPlayers()) {
+            if (rebel.isHuman() && rebel.getRebellionLossReason().isPresent()) {
+                Preconditions.checkArgument(
+                        gameManager.getGameOverResult()
+                                .map(GameOverResult::getGameOverReason)
+                                .equals(rebel.getRebellionLossReason()),
+                        "A lost human rebellion needs its saved game over reason");
+            }
+            if (rebel.isHuman()
+                    && rebel.getRebellionVictoryOrder().isPresent()) {
+                Preconditions.checkArgument(
+                        gameManager.getGameOverResult()
+                                .map(GameOverResult::getGameOverReason)
+                                .filter(GameOverEvaluator::isRebellionVictory)
+                                .isPresent(),
+                        "A won human rebellion needs its saved victory reason");
+            }
+        }
+        // Victory orders are the completion order 1 to n, each taken once, so
+        // the next victory always takes the next free order (R-0191).
+        final List<Integer> orders = playerStore.getPlayers().stream()
+                .map(Player::getRebellionVictoryOrder).flatMap(Optional::stream)
+                .sorted().collect(Collectors.toList());
+        for (int index = 0; index < orders.size(); index++) {
+            Preconditions.checkArgument(orders.get(index) == index + 1,
+                    "Rebellion victory orders must be 1 to n");
+        }
+        // The other direction: a finished game ended by a rebellion names the
+        // end that one human rebel recorded itself.
+        final Optional<String> rebellionEnd = gameManager.getGameOverResult()
+                .map(GameOverResult::getGameOverReason)
+                .filter(reason -> GameOverEvaluator.isRebellionLoss(reason)
+                        || GameOverEvaluator.isRebellionVictory(reason));
+        if (rebellionEnd.isPresent()) {
+            Preconditions.checkArgument(
+                    playerStore.getPlayers().stream()
+                            .anyMatch(rebel -> rebel.isHuman()
+                                    && recordsEnd(rebel, rebellionEnd.get())),
+                    "A rebellion game over needs its human rebel's saved end");
+        }
 
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
@@ -424,6 +477,8 @@ public class Model {
         model.validateSavedNativeMissions();
         model.validateSavedNativeMarkets();
         model.validateSavedNativeTributes();
+        model.validateSavedRoyalBindings();
+        model.validateSavedCrownSeizure();
         if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
             throw new MicroColException(String.format(
                     "In source data in %s units by in model is %s units.",
@@ -454,6 +509,8 @@ public class Model {
             restoredPlayer
                     .restoreColonyKnowledge(savedPlayer.getColonySightings());
             restoredPlayer.restoreContacts(savedPlayer.getKnownPowers());
+            restoredPlayer
+                    .restoreMercenaryOffer(savedPlayer.getMercenaryOffer());
         }
         model.assureDefaultVisibility();
         model.refreshObservations();
@@ -683,6 +740,7 @@ public class Model {
         }
         nextColonyId++;
         colonies.add(col);
+        player.recordRebellionColony(col);
         player.activateCongressAfterFirstColony();
         if (fields.isEmpty()) {
             unit.placeToColonyStructureSlot(indoorWork);
@@ -692,6 +750,8 @@ public class Model {
         recordNativeLandUse(player, location);
         refreshObservations();
         listenerManager.fireColonyWasFounded(this, col);
+        // The founding is complete, so it may now end a rebellion (R-0192).
+        checkRebellionLoss();
         return col;
     }
 
@@ -1653,6 +1713,14 @@ public class Model {
     }
 
     /**
+     * @param colonialNation a colonial player
+     * @return the Crown ruling that nation, empty for any other player
+     */
+    public Optional<PlayerKing> getKingOf(final Player colonialNation) {
+        return playerStore.getKingForPlayer(colonialNation);
+    }
+
+    /**
      * Each saved brave's home must name a settlement of the brave's own nation.
      * Unknown or cross-nation homes are rejected, never reassigned.
      */
@@ -1712,11 +1780,31 @@ public class Model {
     public VoyageReversalOffer offerVoyageReversal(
             final org.microcol.model.unit.Ship ship) {
         checkVoyageReversalShip(ship);
+        checkReversalDestinationOpen(ship, (PlaceHighSea) ship.getPlace());
         return new VoyageReversalOffer(this, ship,
                 (PlaceHighSea) ship.getPlace());
     }
 
+    /** A ship cannot be turned toward a home Europe that is closed (R-0187). */
+    private void checkReversalDestinationOpen(
+            final org.microcol.model.unit.Ship ship,
+            final PlaceHighSea voyage) {
+        Preconditions.checkState(
+                voyage.isTravelToEurope() || ship.getOwner().canTradeInEurope(),
+                "Home Europe is closed to %s", ship.getOwner());
+    }
+
     public void reverseVoyage(final VoyageReversalOffer offer) {
+        checkCurrentVoyageReversal(offer);
+        applyVoyageReversals(List.of(offer));
+    }
+
+    /**
+     * Validate a reversal offer against the live game without any change.
+     *
+     * @param offer required offer the player confirmed
+     */
+    void checkCurrentVoyageReversal(final VoyageReversalOffer offer) {
         Preconditions.checkNotNull(offer);
         Preconditions.checkArgument(offer.model == this,
                 "Voyage offer belongs to another game");
@@ -1728,9 +1816,24 @@ public class Model {
                         && offer.position == voyage.getPosition()
                         && offer.toEurope == voyage.isTravelToEurope(),
                 "Voyage offer is no longer current");
-        voyage.reverse();
-        if (voyage.getRemainigTurns() == 0) {
-            offer.ship.tryArriveFromHighSea();
+        checkReversalDestinationOpen(offer.ship, voyage);
+    }
+
+    /**
+     * Reverse already validated voyages by the ordinary rule. Every route turns
+     * before any immediate arrival, so an arrival's listeners cannot leave a
+     * later route of the same batch unreversed (R-0187 declaration).
+     *
+     * @param offers offers validated by checkCurrentVoyageReversal with no
+     *               change in between
+     */
+    void applyVoyageReversals(final List<VoyageReversalOffer> offers) {
+        offers.forEach(offer -> offer.voyage.reverse());
+        for (final VoyageReversalOffer offer : offers) {
+            if (offer.ship.getPlace() == offer.voyage
+                    && offer.voyage.getRemainigTurns() == 0) {
+                offer.ship.tryArriveFromHighSea();
+            }
         }
     }
 
@@ -1861,32 +1964,341 @@ public class Model {
     }
 
     /**
-     * Create new royal expedition force unit and place it to cargo ship.
+     * Whether the Crown may send this reserve man-of-war now (R-0186). It asks
+     * the same rules as {@link #dispatchRoyalShip(Player, int)} and changes
+     * nothing.
      *
-     * @param king           required king
-     * @param loadUnitToShip required ship that will hold cargo
-     * @return created unit
+     * @param king         required Crown
+     * @param shipMemberId identity of the roster member
+     * @return whether a dispatch would succeed at this moment
      */
-    public Unit createRoyalExpeditionForceUnit(final Player king,
-            final UnitWithCargo loadUnitToShip) {
-        Preconditions.checkNotNull(king);
-        Preconditions.checkNotNull(king.isComputer(),
-                "king have to be computer player");
+    public boolean canDispatchRoyalShip(final Player king,
+            final int shipMemberId) {
+        Preconditions.checkNotNull(king, "Crown is null");
+        if (!hasPreparedTurn() || !isGameRunning() || getCurrentPlayer() != king
+                || !isRoyalDispatchAllowed(king)) {
+            return false;
+        }
+        final RoyalRoster roster = getRoyalRosterOf(king);
+        final boolean reserveShip = roster.findMember(shipMemberId).filter(
+                member -> member.getFamily() == RoyalRoster.Family.MAN_OF_WAR
+                        && member.getState() == RoyalRoster.State.RESERVE)
+                .isPresent();
+        if (!reserveShip) {
+            return false;
+        }
+        final int passengers = planRoyalPassengers(king, shipMemberId).size();
+        return passengers > 0 && unitStorage.canAllocateUnits(passengers + 1)
+                && getHighSea().getDefaultArrivalLocation().isPresent();
+    }
+
+    /**
+     * Send a reserve man-of-war from Europe with every reserve ground unit it
+     * can hold, cycling infantry, cavalry and artillery. Each passenger is a
+     * real unit bound to its roster member; the roster is the only source.
+     * Every rule is checked before anything is created.
+     *
+     * @param king         required Crown, the current player
+     * @param shipMemberId identity of the reserve man-of-war
+     * @return the new man-of-war, already on its voyage
+     * @throws IllegalStateException    when the Crown or the member may not
+     *                                  sail or no ground unit is reserved
+     * @throws IllegalArgumentException when the member is unknown
+     */
+    public UnitWithCargo dispatchRoyalShip(final Player king,
+            final int shipMemberId) {
+        final RoyalRoster roster = getRoyalRosterOf(king);
+        checkRoyalDispatch(king);
+        final List<RoyalRoster.Member> passengers = roster.planPassengers(
+                UnitType.MAN_OF_WAR.getCargoCapacity(), shipMemberId);
+        Preconditions.checkState(!passengers.isEmpty(),
+                "No reserve ground unit can sail");
+        Preconditions.checkState(
+                unitStorage.canAllocateUnits(passengers.size() + 1),
+                "No unit IDs remain");
+        final UnitWithCargo ship = (UnitWithCargo) createCargoShipForKing(king);
+        roster.ship(shipMemberId, ship.getId());
+        for (final RoyalRoster.Member passenger : passengers) {
+            final Unit soldier = createRoyalPassenger(king,
+                    passenger.getFamily(), ship);
+            roster.ship(passenger.getId(), soldier.getId());
+        }
+        return ship;
+    }
+
+    /**
+     * Whether a surviving carrier waiting in the European port may take the
+     * remaining reserve now. It asks the same rules as
+     * {@link #reloadRoyalShip(Player, UnitWithCargo)} and changes nothing.
+     *
+     * @param king required Crown
+     * @param ship required man-of-war of this Crown
+     * @return whether a reload would succeed at this moment
+     */
+    public boolean canReloadRoyalShip(final Player king,
+            final UnitWithCargo ship) {
+        Preconditions.checkNotNull(king, "Crown is null");
+        Preconditions.checkNotNull(ship, "Ship is null");
+        return getRoyalReloadProblem(king, ship).isEmpty();
+    }
+
+    /**
+     * Load the next reserve ground units into a carrier that came back to the
+     * European port and send it on the ordinary Atlantic crossing. No ship is
+     * created and no member is copied: the carrier and every passenger are
+     * bound to their roster members. Every rule is checked before anything
+     * changes.
+     *
+     * @param king required Crown, the current player
+     * @param ship required man-of-war of this Crown in the European port
+     * @throws IllegalStateException when the Crown or the carrier may not act,
+     *                               or no ground unit is reserved
+     */
+    public void reloadRoyalShip(final Player king, final UnitWithCargo ship) {
+        Preconditions.checkNotNull(ship, "Ship is null");
+        final RoyalRoster roster = getRoyalRosterOf(king);
+        checkRoyalDispatch(king);
+        final Optional<String> problem = getRoyalReloadProblem(king, ship);
+        Preconditions.checkState(problem.isEmpty(),
+                "The Crown cannot reload this ship: %s", problem.orElse(null));
+        final List<RoyalRoster.Member> passengers = roster
+                .planPassengers(ship.getCargo().getSlots().size());
+        for (final RoyalRoster.Member passenger : passengers) {
+            final Unit soldier = createRoyalPassenger(king,
+                    passenger.getFamily(), ship);
+            roster.ship(passenger.getId(), soldier.getId());
+        }
+        roster.setTransportPlan(ship.getId(), Optional.empty(), 0);
+        ship.placeToHighSeas(false);
+    }
+
+    /**
+     * @return why the carrier cannot be reloaded now, or empty when it can
+     */
+    private Optional<String> getRoyalReloadProblem(final Player king,
+            final UnitWithCargo ship) {
+        if (!hasPreparedTurn() || !isGameRunning() || getCurrentPlayer() != king
+                || !isRoyalDispatchAllowed(king)) {
+            return Optional.of("The Crown may not act now");
+        }
+        final RoyalRoster roster = getRoyalRosterOf(king);
+        if (unitStorage.tryGetUnitById(ship.getId()).orElse(null) != ship
+                || ship.getOwner() != king
+                || ship.getType() != UnitType.MAN_OF_WAR
+                || !(ship instanceof Ship)) {
+            return Optional.of("Not a live man-of-war of this Crown");
+        }
+        final Optional<RoyalRoster.Member> member = roster
+                .findByUnitId(ship.getId());
+        if (member.isEmpty()
+                || member.get().getFamily() != RoyalRoster.Family.MAN_OF_WAR) {
+            return Optional.of("The ship is not bound to a roster member");
+        }
+        if (!ship.isAtEuropePort() || ((Ship) ship).isDamaged()
+                || !ship.getAction().isNoAction()
+                || !ship.getCargo().isEmpty()) {
+            return Optional.of("The ship is not an empty carrier in Europe");
+        }
+        final boolean lane = ((Ship) ship).getDepartureLocation()
+                .filter(origin -> map.isValid(origin)
+                        && map.getTerrainTypeAt(origin) == TerrainType.HIGH_SEA)
+                .isPresent();
+        if (!lane) {
+            return Optional.of("The ship has no sea lane to return to");
+        }
+        final int passengers = roster
+                .planPassengers(ship.getCargo().getSlots().size()).size();
+        if (passengers == 0) {
+            return Optional.of("No reserve ground unit remains");
+        }
+        if (!unitStorage.canAllocateUnits(passengers)) {
+            return Optional.of("No unit IDs remain");
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Save the landing target and retry count the Crown chose for its
+     * man-of-war on the map (R-0186). The target must be a coastal colony, or
+     * none.
+     *
+     * @param king         required Crown
+     * @param ship         required man-of-war of this Crown on the map
+     * @param colonyTarget coastal colony the Crown believes rebel, or empty
+     * @param blockedTurns unsuccessful turns of the current route
+     */
+    public void setRoyalTransportPlan(final Player king,
+            final UnitWithCargo ship, final Optional<Colony> colonyTarget,
+            final int blockedTurns) {
+        Preconditions.checkNotNull(ship, "Ship is null");
+        final RoyalRoster roster = getRoyalRosterOf(king);
+        checkGameRunning();
+        checkTurnPreparationComplete();
+        checkCurrentPlayer(king);
+        Preconditions.checkArgument(ship.getOwner() == king,
+                "Ship belongs to another Crown");
+        Preconditions.checkState(ship.isAtPlaceLocation(),
+                "Only a ship on the map has a transport plan");
+        // The Crown chooses from what it knows, which may be out of date, so
+        // the owner is not checked; the colony must exist and touch the sea.
         Preconditions.checkArgument(
-                loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
-                "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
-                loadUnitToShip);
-        final CargoSlot cargoSlot = loadUnitToShip.getCargo()
-                .getEmptyCargoSlot().get();
+                colonyTarget.isEmpty()
+                        || getColonyById(colonyTarget.get().getId())
+                                .orElse(null) == colonyTarget.get()
+                                && hasSeaNeighbour(
+                                        colonyTarget.get().getLocation()),
+                "Transport target must be a coastal colony on the map");
+        roster.setTransportPlan(ship.getId(), colonyTarget.map(Colony::getId),
+                blockedTurns);
+    }
+
+    /**
+     * @param king required Crown
+     * @return roster of the Crown
+     */
+    public RoyalRoster getRoyalRosterOf(final Player king) {
+        Preconditions.checkNotNull(king, "Crown is null");
+        Preconditions.checkArgument(king instanceof PlayerKing,
+                "Only a Crown has a royal roster");
+        return ((PlayerKing) king).getRoyalRoster();
+    }
+
+    private boolean isRoyalDispatchAllowed(final Player king) {
+        return king.isKing() && king.isComputer() && ((PlayerKing) king)
+                .getWhosKingThisPlayerIs().isDeclaredIndependence();
+    }
+
+    private void checkRoyalDispatch(final Player king) {
+        checkGameRunning();
+        checkTurnPreparationComplete();
+        checkCurrentPlayer(king);
+        Preconditions.checkState(isRoyalDispatchAllowed(king),
+                "Only a computer Crown of a declared nation dispatches");
+    }
+
+    private List<RoyalRoster.Member> planRoyalPassengers(final Player king,
+            final int shipMemberId) {
+        return getRoyalRosterOf(king).planPassengers(
+                UnitType.MAN_OF_WAR.getCargoCapacity(), shipMemberId);
+    }
+
+    /** Create one royal passenger in the next free hold of the ship. */
+    private Unit createRoyalPassenger(final Player king,
+            final RoyalRoster.Family family, final UnitWithCargo ship) {
+        final CargoSlot cargoSlot = ship.getCargo().getEmptyCargoSlot()
+                .orElseThrow(() -> new IllegalStateException(
+                        "No free hold for a royal passenger"));
+        final UnitType type = family == RoyalRoster.Family.ARTILLERY
+                ? UnitType.ARTILLERY
+                : UnitType.COLONIST;
         final Unit out = unitStorage.createUnit(
-                unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
-                this, unit -> new PlaceCargoSlot(unit, cargoSlot),
-                UnitType.COLONIST, king,
-                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
+                unit -> new Cargo(unit, type.getCargoCapacity()), this,
+                unit -> new PlaceCargoSlot(unit, cargoSlot), type, king,
+                MovementPoints.ofPoints(type.getSpeed()),
                 new UnitActionNoAction());
-        ((UnitFreeColonist) out).setHoldingGuns(true);
+        if (out instanceof UnitFreeColonist) {
+            final UnitFreeColonist soldier = (UnitFreeColonist) out;
+            soldier.setHoldingGuns(true);
+            soldier.setMounted(family == RoyalRoster.Family.CAVALRY);
+            soldier.assignRoyalRole();
+        }
         cargoSlot.store(out.getPlaceCargoSlot());
         return out;
+    }
+
+    /**
+     * Royal units of a Crown that are destroyed leave the roster as lost
+     * (R-0186). Any bound unit is recorded once, and a passenger lost with its
+     * ship is recorded by the same recursive removal.
+     */
+    private void recordRoyalLoss(final Unit unit) {
+        if (unit.getOwner().isKing()) {
+            ((PlayerKing) unit.getOwner()).getRoyalRoster()
+                    .destroyBoundUnit(unit.getId());
+        }
+    }
+
+    /**
+     * A royal unit that another owner takes leaves the roster as captured, not
+     * destroyed (R-0186); the unit itself lives on. It is called before the
+     * owner changes.
+     */
+    void recordRoyalCapture(final Unit unit) {
+        if (unit.getOwner().isKing()) {
+            ((PlayerKing) unit.getOwner()).getRoyalRoster()
+                    .captureBoundUnit(unit.getId());
+        }
+    }
+
+    /**
+     * Crown seizure (R-0187) is checked after every carrier binding is
+     * restored. A seized unit must belong to a declared nation and stand in its
+     * closed home port; a unit of a declared nation in that port must be
+     * seized. A seized map unit is refused rather than repaired.
+     */
+    void validateSavedCrownSeizure() {
+        for (final Unit unit : getAllUnits()) {
+            final boolean inHomePort = ((AbstractUnit) unit).isInHomeEurope();
+            final boolean declared = unit.getOwner().isDeclaredIndependence();
+            Preconditions.checkArgument(
+                    unit.isCrownSeized() ? inHomePort && declared
+                            : !(inHomePort && declared),
+                    "Saved Crown seizure of unit %s disagrees with its place",
+                    unit.getId());
+        }
+    }
+
+    /**
+     * Saved royal bindings must name a live unit of the Crown with the family
+     * of its member. Unbound Crown units, such as authored scenario troops,
+     * stay outside the roster.
+     */
+    private void validateSavedRoyalBindings() {
+        for (final Player player : getPlayers()) {
+            if (!player.isKing()) {
+                continue;
+            }
+            for (final RoyalRoster.Member member : ((PlayerKing) player)
+                    .getRoyalRoster().getMembers()) {
+                if (member.getUnitId().isEmpty()) {
+                    continue;
+                }
+                final Unit unit = unitStorage
+                        .tryGetUnitById(member.getUnitId().get())
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Crown member names a missing unit"));
+                Preconditions.checkArgument(unit.getOwner() == player,
+                        "Crown member names a unit of another owner");
+                Preconditions.checkArgument(
+                        matchesRoyalFamily(member.getFamily(), unit),
+                        "Crown member names a unit of another family");
+            }
+        }
+    }
+
+    private static boolean matchesRoyalFamily(final RoyalRoster.Family family,
+            final Unit unit) {
+        switch (family) {
+        case MAN_OF_WAR:
+            return unit.getType() == UnitType.MAN_OF_WAR;
+        case ARTILLERY:
+            return unit instanceof UnitArtillery;
+        case INFANTRY:
+        case CAVALRY:
+            return unit instanceof UnitFreeColonist
+                    && ((UnitFreeColonist) unit)
+                            .getMilitaryRole() == MilitaryRole.ROYAL
+                    && ((UnitFreeColonist) unit)
+                            .isMounted() == (family == RoyalRoster.Family.CAVALRY);
+        default:
+            return false;
+        }
+    }
+
+    private boolean hasSeaNeighbour(final Location location) {
+        return location.getNeighbors().stream()
+                .anyMatch(neighbour -> map.isValid(neighbour)
+                        && map.getTerrainTypeAt(neighbour).isSea());
     }
 
     /**
@@ -1902,6 +2314,10 @@ public class Model {
     Unit addUnitInEurope(final UnitType unitType, final Player owner) {
         Preconditions.checkState(unitStorage.canAllocateUnit(),
                 "No unit IDs remain");
+        // No delivery, recruitment or purchase may put a new unit into a
+        // closed home port (R-0187).
+        Preconditions.checkState(owner.canTradeInEurope(),
+                "Home Europe is closed to %s", owner);
         return unitStorage.createUnit(
                 unit -> new Cargo(unit, unitType.getCargoCapacity()), this,
                 unit -> {
@@ -1921,31 +2337,8 @@ public class Model {
         if (!unitStorage.canAllocateUnit()) {
             return Optional.empty();
         }
-        final Set<Location> reachableWater = new HashSet<>();
-        final ArrayDeque<Location> frontier = new ArrayDeque<>();
-        for (int x = 0; x <= map.getMaxLocationX(); x++) {
-            for (int y = 0; y <= map.getMaxLocationY(); y++) {
-                final Location location = Location.of(x, y);
-                if (map.isValid(location)
-                        && map.getTerrainTypeAt(
-                                location) == TerrainType.HIGH_SEA
-                        && getEnemyUnitsAt(owner, location).isEmpty()
-                        && reachableWater.add(location)) {
-                    frontier.add(location);
-                }
-            }
-        }
-        while (!frontier.isEmpty()) {
-            for (final Location neighbor : frontier.removeFirst()
-                    .getNeighbors()) {
-                if (map.isValid(neighbor)
-                        && map.getTerrainTypeAt(neighbor).isSea()
-                        && getEnemyUnitsAt(owner, neighbor).isEmpty()
-                        && reachableWater.add(neighbor)) {
-                    frontier.add(neighbor);
-                }
-            }
-        }
+        final Set<Location> reachableWater = reachableSea(
+                location -> getEnemyUnitsAt(owner, location).isEmpty());
         final Optional<Colony> destination = colonies.stream()
                 .filter(colony -> colony.getOwner() == owner)
                 .filter(colony -> getEnemyUnitsAt(owner, colony.getLocation())
@@ -1970,6 +2363,398 @@ public class Model {
                         new UnitActionNoAction());
         owner.revealMapForUnit(unit);
         return Optional.of(unit);
+    }
+
+    /**
+     * Sea squares that a ship reaches from the high seas through sea squares
+     * that pass the test. A square that fails the test is never entered.
+     *
+     * @param passable required test of a square, such as "no enemy stands here"
+     * @return reachable sea squares, possibly none
+     */
+    private Set<Location> reachableSea(final Predicate<Location> passable) {
+        final Set<Location> reachableWater = new HashSet<>();
+        final ArrayDeque<Location> frontier = new ArrayDeque<>();
+        for (int x = 0; x <= map.getMaxLocationX(); x++) {
+            for (int y = 0; y <= map.getMaxLocationY(); y++) {
+                final Location location = Location.of(x, y);
+                if (map.isValid(location)
+                        && map.getTerrainTypeAt(
+                                location) == TerrainType.HIGH_SEA
+                        && passable.test(location)
+                        && reachableWater.add(location)) {
+                    frontier.add(location);
+                }
+            }
+        }
+        while (!frontier.isEmpty()) {
+            for (final Location neighbor : frontier.removeFirst()
+                    .getNeighbors()) {
+                if (map.isValid(neighbor)
+                        && map.getTerrainTypeAt(neighbor).isSea()
+                        && passable.test(neighbor)
+                        && reachableWater.add(neighbor)) {
+                    frontier.add(neighbor);
+                }
+            }
+        }
+        return reachableWater;
+    }
+
+    /** Men-of-war of one intervention delivery (R-0190). */
+    private static final int INTERVENTION_SHIPS = 2;
+
+    /** Continental infantry of one intervention delivery (R-0190). */
+    private static final int INTERVENTION_INFANTRY = 4;
+
+    /** Continental cavalry of one intervention delivery (R-0190). */
+    private static final int INTERVENTION_CAVALRY = 2;
+
+    /**
+     * Deliver the earned foreign intervention of a rebel nation (R-0190): two
+     * men-of-war, four Continental infantry and two Continental cavalry, all
+     * under rebel control, at the lowest-ID owned coastal colony that the high
+     * seas reach. The port, its obstruction and every unit ID are checked
+     * before the first unit exists. When any of them prevents the delivery,
+     * nothing changes and the caller keeps the delivery pending.
+     *
+     * The delivered flag and the arrival notice are committed with the units,
+     * in the same call, so no caller can mark the delivery separately. The call
+     * does not require a completed turn preparation: it is the owner update
+     * itself that delivers.
+     *
+     * @param owner required rebel nation of this game
+     * @return the colony that received the forces, or empty while they wait
+     * @throws IllegalArgumentException when the owner is not a player of this
+     *                                  game or not a declared nation
+     * @throws IllegalStateException    when the target is missing, not earned
+     *                                  or already delivered
+     */
+    Optional<Colony> deliverInterventionForces(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == owner),
+                "Intervention owner belongs to another game");
+        Preconditions.checkArgument(
+                !owner.isKing() && owner.isDeclaredIndependence(),
+                "Only a declared nation receives the intervention");
+        final InterventionTarget target = owner.getIntervention()
+                .orElseThrow(() -> new IllegalStateException(
+                        "No intervention target to deliver"));
+        Preconditions.checkState(target.isEarned(),
+                "The intervention is not earned");
+        Preconditions.checkState(!target.isDelivered(),
+                "The intervention is already delivered");
+        final Optional<Colony> port = getInterventionPort(owner);
+        if (port.isEmpty() || isInterventionBlocked(owner, port.get())
+                || !unitStorage.canAllocateUnits(INTERVENTION_SHIPS
+                        + INTERVENTION_INFANTRY + INTERVENTION_CAVALRY)) {
+            return Optional.empty();
+        }
+        // Every rule the creation below relies on was checked above: eight free
+        // IDs, a rebel owner for the Continental role and origin, and a port
+        // square without enemies. New units start without an order, so arming
+        // and the role cannot refuse, and the eight units are complete before
+        // the flag and the notice record the delivery.
+        createInterventionForces(owner, port.get().getLocation());
+        target.markDelivered();
+        addTurnEvent(
+                TurnEventProvider.getInterventionArrival(owner, port.get()));
+        return port;
+    }
+
+    /**
+     * Two men-of-war, four infantry and two cavalry on the square of the port.
+     * The caller checks every precondition first; this only creates.
+     */
+    private void createInterventionForces(final Player owner,
+            final Location at) {
+        for (int ship = 0; ship < INTERVENTION_SHIPS; ship++) {
+            final Unit man = unitStorage
+                    .createUnit(
+                            unit -> new Cargo(unit,
+                                    UnitType.MAN_OF_WAR.getCargoCapacity()),
+                            this,
+                            unit -> new PlaceLocation(unit, at,
+                                    unit.getDefaultOrintation()),
+                            UnitType.MAN_OF_WAR, owner,
+                            MovementPoints.ofPoints(owner
+                                    .getEffectiveSpeed(UnitType.MAN_OF_WAR)),
+                            new UnitActionNoAction());
+            owner.revealMapForUnit(man);
+        }
+        for (int soldier = 0; soldier < INTERVENTION_INFANTRY; soldier++) {
+            createInterventionSoldier(owner, at, false);
+        }
+        for (int soldier = 0; soldier < INTERVENTION_CAVALRY; soldier++) {
+            createInterventionSoldier(owner, at, true);
+        }
+    }
+
+    /**
+     * A rebel Continental, armed and placed on the square of the port; the
+     * mounted ones are the cavalry. Role and origin are set after the unit
+     * exists, so a Continental is always a rebel soldier.
+     */
+    private void createInterventionSoldier(final Player owner,
+            final Location at, final boolean cavalry) {
+        final Unit created = unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
+                this,
+                unit -> new PlaceLocation(unit, at,
+                        unit.getDefaultOrintation()),
+                UnitType.COLONIST, owner,
+                MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
+                new UnitActionNoAction());
+        final UnitFreeColonist soldier = (UnitFreeColonist) created;
+        soldier.setHoldingGuns(true);
+        soldier.setMounted(cavalry);
+        soldier.assignMilitaryRole(MilitaryRole.CONTINENTAL);
+        soldier.markInterventionDelivered();
+        owner.revealMapForUnit(created);
+    }
+
+    /**
+     * The lowest-ID owned coastal colony that the high seas reach through sea
+     * squares. Units standing on the water do not change this choice, so a
+     * blockade never moves the forces to a higher ID (R-0190).
+     */
+    private Optional<Colony> getInterventionPort(final Player owner) {
+        return getDeliveryPorts(owner).stream().findFirst();
+    }
+
+    /**
+     * Owned coastal colonies that the high seas reach through sea squares,
+     * lowest identity first. Obstruction is not part of this list; the caller
+     * checks it with {@link #isInterventionBlocked(Player, Colony)} (R-0190,
+     * R-0169).
+     */
+    private List<Colony> getDeliveryPorts(final Player owner) {
+        final Set<Location> seaFromHighSeas = reachableSea(location -> true);
+        return colonies.stream().filter(colony -> colony.getOwner() == owner)
+                .filter(colony -> isOwnedCoastalPort(owner,
+                        colony.getLocation()))
+                .filter(colony -> colony.getLocation().getNeighbors().stream()
+                        .anyMatch(seaFromHighSeas::contains))
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /**
+     * A chosen port is obstructed when an enemy stands on it, or when no sea
+     * square beside it can be reached from the high seas without passing an
+     * enemy. An enemy far out on a chokepoint therefore blocks the port too,
+     * while enemies that leave a route open do not.
+     */
+    private boolean isInterventionBlocked(final Player owner,
+            final Colony port) {
+        final Location at = port.getLocation();
+        final Set<Location> openSea = reachableSea(
+                location -> getEnemyUnitsAt(owner, location).isEmpty());
+        return !getEnemyUnitsAt(owner, at).isEmpty()
+                || at.getNeighbors().stream().noneMatch(openSea::contains);
+    }
+
+    /**
+     * Quote the offer of the lowest-identity colonial nation that the owner has
+     * contacted and that is at peace with it (R-0169). Nothing is changed. A
+     * rebellion that has ended quotes nothing, and so does an empty list.
+     *
+     * @param owner required colonial nation that would receive the bundle
+     * @return the quoted offer, or empty when no issuer is eligible
+     */
+    Optional<MercenaryOffer> quoteMercenaryOffer(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        if (owner.isRebellionEnded()) {
+            return Optional.empty();
+        }
+        return getPlayers().stream()
+                .filter(issuer -> issuer != owner && issuer.isColonialNation())
+                .filter(issuer -> owner.hasContactWith(issuer))
+                .filter(issuer -> getEuropeanRelation(owner,
+                        issuer) == EuropeanRelationState.PEACE)
+                // The stable nation identity is the lowest ID: the order of
+                // the saved players must not choose the issuer.
+                .min(Comparator
+                        .comparingInt((Player issuer) -> EuropeanNation
+                                .findByPlayerName(issuer.getName())
+                                .map(Enum::ordinal).orElse(Integer.MAX_VALUE))
+                        .thenComparing(Player::getName))
+                .map(issuer -> new MercenaryOffer(owner, issuer,
+                        MercenaryRules.price(getDifficulty())));
+    }
+
+    /**
+     * The offer the owner may answer now: the game runs, the owner is the
+     * current player and the offer has not yet been answered or ended with its
+     * turn. Reading it changes nothing.
+     *
+     * @param owner colonial nation, or null
+     * @return the pending offer, or empty
+     */
+    public Optional<MercenaryOffer> getPendingMercenaryOffer(
+            final Player owner) {
+        if (owner == null || !getPlayers().contains(owner) || !isGameRunning()
+                || getCurrentPlayer() != owner) {
+            return Optional.empty();
+        }
+        return owner.getMercenaryOffer();
+    }
+
+    /**
+     * Whether a port that the owner may choose is obstructed now (R-0190): an
+     * enemy stands on it, or no sea square beside it is open from the high
+     * seas. A blocked port still accepts a paid group, which then waits there.
+     *
+     * @param owner required colonial nation
+     * @param port  required owned delivery port of that owner
+     * @return whether the group would wait instead of landing now
+     */
+    public boolean isMercenaryPortBlocked(final Player owner,
+            final Colony port) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(port);
+        Preconditions.checkArgument(getDeliveryPorts(owner).contains(port),
+                "Port is not an owned delivery port");
+        return isInterventionBlocked(owner, port);
+    }
+
+    /**
+     * Owned coastal ports that a paid mercenary group may be sent to, lowest
+     * identity first. A port that is only obstructed for the moment stays
+     * listed, because its paid group waits there until the route opens (R-0190,
+     * R-0169).
+     *
+     * @param owner required colonial nation
+     * @return delivery ports, possibly none
+     */
+    public List<Colony> getMercenaryDeliveryPorts(final Player owner) {
+        Preconditions.checkNotNull(owner);
+        return getDeliveryPorts(owner);
+    }
+
+    /**
+     * Pay for the offered bundle and place it at the chosen port (R-0169). The
+     * offer must still be the current one, the issuer and price unchanged, the
+     * funds sufficient, the port an owned delivery port, and unit identities
+     * available. All of this is checked before any change. An obstructed port
+     * keeps the paid group pending rather than charging again later.
+     *
+     * @param offer required pending offer of the current player
+     * @param port  required owned delivery port the owner chose
+     * @return whether the soldiers were placed now; false when the route is
+     *         obstructed and the paid group waits at the port
+     * @throws IllegalStateException when the offer is obsolete, the issuer or
+     *                               price changed, funds, port or unit IDs fail
+     */
+    public boolean acceptMercenaryOffer(final MercenaryOffer offer,
+            final Colony port) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        Preconditions.checkNotNull(port);
+        final Player owner = offer.getOwner();
+        Preconditions.checkState(
+                getPendingMercenaryOffer(owner).orElse(null) == offer,
+                "Mercenary offer is obsolete");
+        final MercenaryOffer now = quoteMercenaryOffer(owner).orElseThrow(
+                () -> new IllegalStateException("Mercenary offer is obsolete"));
+        Preconditions.checkState(
+                now.getIssuer() == offer.getIssuer()
+                        && now.getPrice() == offer.getPrice(),
+                "Mercenary issuer or price changed");
+        Preconditions.checkState(owner.getGold() >= offer.getPrice(),
+                "Not enough gold for mercenaries");
+        Preconditions.checkState(getDeliveryPorts(owner).contains(port),
+                "Port is not an owned delivery port");
+        Preconditions.checkState(
+                unitStorage.canAllocateUnits(MercenaryRules.SOLDIERS),
+                "No unit IDs remain");
+        final MercenaryDelivery group = new MercenaryDelivery(port.getId(),
+                offer.getPrice(), false);
+        owner.setGold(owner.getGold() - offer.getPrice());
+        owner.addMercenaryDelivery(group);
+        owner.clearMercenaryOffer();
+        return deliverMercenaryGroup(owner, group);
+    }
+
+    /**
+     * Decline the offer. Nothing is charged, and the owner may receive future
+     * offers (R-0169).
+     *
+     * @param offer required pending offer of the current player
+     */
+    public void declineMercenaryOffer(final MercenaryOffer offer) {
+        checkTurnPreparationComplete();
+        Preconditions.checkNotNull(offer);
+        Preconditions
+                .checkState(
+                        getPendingMercenaryOffer(offer.getOwner())
+                                .orElse(null) == offer,
+                        "Mercenary offer is obsolete");
+        offer.getOwner().clearMercenaryOffer();
+    }
+
+    /**
+     * Place a paid group once (R-0169). The chosen port is used while it is
+     * still an owned delivery port. A captured choice falls back to the shared
+     * lowest-identity port of the intervention rule (R-0190), never to a later
+     * unobstructed one. An obstructed destination or unavailable unit
+     * identities leave the group pending and change nothing, so nothing is lost
+     * or paid twice.
+     *
+     * @param owner required owner of the group
+     * @param group required paid group of that owner
+     * @return whether this call placed the group
+     */
+    boolean deliverMercenaryGroup(final Player owner,
+            final MercenaryDelivery group) {
+        Preconditions.checkNotNull(owner);
+        Preconditions.checkNotNull(group);
+        Preconditions.checkState(!group.isDelivered(),
+                "The mercenary group is already delivered");
+        final List<Colony> ports = getDeliveryPorts(owner);
+        final Optional<Colony> port = ports.stream()
+                .filter(colony -> colony.getId() == group.getPortColonyId())
+                .findFirst().or(() -> getInterventionPort(owner));
+        if (port.isEmpty() || isInterventionBlocked(owner, port.get())
+                || !unitStorage.canAllocateUnits(MercenaryRules.SOLDIERS)) {
+            return false;
+        }
+        createMercenarySoldiers(owner, port.get().getLocation());
+        group.markDelivered();
+        addTurnEvent(TurnEventProvider.getMercenaryArrival(owner, port.get()));
+        return true;
+    }
+
+    /**
+     * The veteran soldiers of one bundle, armed and placed on the port square.
+     * The caller checks the port and the unit identities first.
+     */
+    private void createMercenarySoldiers(final Player owner,
+            final Location at) {
+        for (int soldier = 0; soldier < MercenaryRules.SOLDIERS; soldier++) {
+            final Unit created = unitStorage
+                    .createUnit(
+                            unit -> new Cargo(unit,
+                                    UnitType.VETERAN_SOLDIER
+                                            .getCargoCapacity()),
+                            this,
+                            unit -> new PlaceLocation(unit, at,
+                                    unit.getDefaultOrintation()),
+                            UnitType.VETERAN_SOLDIER, owner,
+                            MovementPoints.ofPoints(owner.getEffectiveSpeed(
+                                    UnitType.VETERAN_SOLDIER)),
+                            new UnitActionNoAction());
+            ((UnitFreeColonist) created).setHoldingGuns(true);
+            owner.revealMapForUnit(created);
+        }
+    }
+
+    /**
+     * Tell the interface that the human owner has an offer to answer (R-0169).
+     */
+    void fireMercenaryOfferRequired(final Player player) {
+        listenerManager.fireMercenaryOfferRequired(this, player);
     }
 
     Unit addUnitOutSideColony(final Colony colony) {
@@ -2115,7 +2900,9 @@ public class Model {
     private boolean isRepairDestinationValid(final Player owner,
             final PlaceShipRepair repair) {
         if (repair.isEuropeDestination()) {
-            return owner.canTradeInEurope();
+            // A declared nation's repair still arrives; the closed port seizes
+            // the ship there, so cargo is kept rather than sunk (R-0187).
+            return owner.canTradeInEurope() || owner.isDeclaredIndependence();
         }
         return getColonyById(repair.getDestinationColonyId())
                 .filter(colony -> colony.getOwner() == owner
@@ -3132,6 +3919,88 @@ public class Model {
         }
     }
 
+    /**
+     * Completed player or AI action boundary (R-0192): after an attack, a
+     * founding, a completed walk, a resident's exit or a disband. During a turn
+     * preparation the same placements are steps of the update, so nothing is
+     * judged then; the update's own end in {@link GameManager} judges once.
+     */
+    void checkRebellionLoss() {
+        if (gameManager.isPreparing()) {
+            return;
+        }
+        judgeRebellions();
+    }
+
+    /**
+     * Judge the declared rebellion of every colonial nation (R-0192, R-0191).
+     * Loss is judged first; victory only for a rebel without a loss at this
+     * boundary. The first end of a rebel is recorded on that rebel once and is
+     * never judged again. A human rebel's loss or victory also ends the game
+     * once through the shared game-over result and event; a computer rebel's
+     * outcome only stops or completes that nation and never ends the human's
+     * game.
+     */
+    void judgeRebellions() {
+        if (!gameManager.isOpen()) {
+            return;
+        }
+        for (final Player rebel : getPlayers()) {
+            if (rebel.isKing() || rebel.isNative()
+                    || !rebel.isDeclaredIndependence()
+                    || rebel.isRebellionDecided()) {
+                continue;
+            }
+            final Optional<GameOverResult> loss = RebellionLoss.evaluate(this,
+                    rebel);
+            if (loss.isPresent()) {
+                rebel.markRebellionLost(loss.get().getGameOverReason());
+                if (rebel.isHuman() && gameManager.isOpen()) {
+                    gameManager.finishByRebellion(loss.get());
+                }
+                continue;
+            }
+            final Optional<GameOverResult> victory = RebellionVictory
+                    .evaluate(this, rebel);
+            if (victory.isPresent()) {
+                rebel.markRebellionWon(countRebellionVictories() + 1);
+                if (rebel.isHuman() && gameManager.isOpen()) {
+                    gameManager.finishByRebellion(victory.get());
+                }
+            }
+        }
+    }
+
+    /**
+     * @param rebel  required declared colonial nation
+     * @param reason required rebellion end reason, a loss or the victory
+     * @return whether the nation itself recorded this end
+     */
+    private static boolean recordsEnd(final Player rebel, final String reason) {
+        return GameOverEvaluator.isRebellionVictory(reason)
+                ? rebel.getRebellionVictoryOrder().isPresent()
+                : rebel.getRebellionLossReason().equals(Optional.of(reason));
+    }
+
+    /**
+     * @return how many declared rebellions have already been won in this game,
+     *         so the next victory takes the next completion order
+     */
+    private int countRebellionVictories() {
+        return Math.toIntExact(getPlayers().stream()
+                .filter(player -> player.getRebellionVictoryOrder().isPresent())
+                .count());
+    }
+
+    /**
+     * @return the single terminal result of a finished game, empty while the
+     *         game is open; a reloaded finished game keeps the same result and
+     *         never announces it again
+     */
+    public Optional<GameOverResult> getGameOverResult() {
+        return gameManager.getGameOverResult();
+    }
+
     private void changeEuropeanRelation(final Player actor, final Player target,
             final EuropeanRelationState expected,
             final EuropeanRelationState next) {
@@ -3251,6 +4120,7 @@ public class Model {
         return unit != null && isGameRunning() && !endingTurn
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
+                && !unit.isCrownSeized()
                 && (unit.isAtPlaceLocation()
                         || unit.isAtEuropePier() && unit.isStorable())
                 && unit.getAction().getType() == from && !hasGoToOrder(unit);
@@ -3286,7 +4156,8 @@ public class Model {
         return unit != null && isGameRunning() && !endingTurn
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtEuropePier() && unit.isImmigrant();
+                && !unit.isCrownSeized() && unit.isAtEuropePier()
+                && unit.isImmigrant();
     }
 
     public boolean canOptOutOfBoarding(final Unit unit) {
@@ -3365,6 +4236,9 @@ public class Model {
         if (colonist.getAction().getType() != UnitActionType.noAction
                 || hasGoToOrder(colonist)) {
             return Optional.of(OrdinationProblem.ACTIVE_ORDER);
+        }
+        if (colonist.isCrownSeized()) {
+            return Optional.of(OrdinationProblem.UNAVAILABLE);
         }
         if (colonist.isAtEuropePier()) {
             return Optional.empty();
@@ -3996,6 +4870,11 @@ public class Model {
         if (getCurrentPlayer() != unit.getOwner()) {
             return Optional.of(DisbandProblem.NOT_OWNER);
         }
+        // A Crown-seized unit is inaccessible to its owner, so it cannot be
+        // disbanded either (R-0187).
+        if (unit.isCrownSeized()) {
+            return Optional.of(DisbandProblem.UNAVAILABLE);
+        }
         final Place place = unit.getPlace();
         if (place instanceof PlaceHighSea) {
             return Optional.of(DisbandProblem.VOYAGE);
@@ -4093,6 +4972,9 @@ public class Model {
             }
         }));
         destroyUnit(unit);
+        // The unit, its place and its equipment are settled, so a colony that
+        // lost its last resident may now end the rebellion (R-0192).
+        checkRebellionLoss();
     }
 
     /**
@@ -8238,41 +9120,47 @@ public class Model {
         Preconditions.checkState(!hasGoToOrder(unit),
                 "Cancel the go-to order before moving manually");
         listenerManager.fireActionStarted(this);
-        if (fireUnitMoveStarted(unit, path)) {
-            // The whole route is validated before the first step: an illegal
-            // step is an invalid argument, an unaffordable route a rejected
-            // state, and neither moves the unit part way.
+        try {
+            // Reject the route before movement listeners disable UI controls.
             if (unit.isAtPlaceLocation()) {
                 unit.verifyPathIsLegal(path.getLocations());
                 Preconditions.checkState(
                         unit.canAffordPath(path.getLocations()),
                         "Unit %s cannot afford the path", unit);
             }
-            boolean intercepted = false;
-            for (final Location loc : path.getLocations()) {
-                /*
-                 * Unit could move to high seas, so could be out of map, or be
-                 * lost on a step to a lost-city rumor. Neither moves again.
-                 */
-                if (!unit.isAtPlaceLocation() || !isUnitInGame(unit)) {
-                    break;
+            if (fireUnitMoveStarted(unit, path)) {
+                boolean intercepted = false;
+                for (final Location loc : path.getLocations()) {
+                    /*
+                     * Unit could move to high seas, so could be out of map, or
+                     * be lost on a step to a lost-city rumor. Neither moves
+                     * again.
+                     */
+                    if (!unit.isAtPlaceLocation() || !isUnitInGame(unit)) {
+                        break;
+                    }
+                    // Once any patrol on this route took more movement than its
+                    // step cost, the walk ends at the first step it can no
+                    // longer
+                    // pay. Without one, an unaffordable step is not skipped;
+                    // moveOneStep refuses it.
+                    if (intercepted && !unit.canAffordStepTo(loc)) {
+                        break;
+                    }
+                    final int expected = Math.max(0, unit.getMovementThirds()
+                            - unit.getEntryCostThirds(unit.getLocation(), loc));
+                    unit.moveOneStep(loc);
+                    intercepted |= unit.isAtPlaceLocation()
+                            && unit.getMovementThirds() < expected;
                 }
-                // Once any patrol on this route took more movement than its
-                // step cost, the walk ends at the first step it can no longer
-                // pay. Without one, an unaffordable step is not skipped;
-                // moveOneStep refuses it.
-                if (intercepted && !unit.canAffordStepTo(loc)) {
-                    break;
-                }
-                final int expected = Math.max(0, unit.getMovementThirds()
-                        - unit.getEntryCostThirds(unit.getLocation(), loc));
-                unit.moveOneStep(loc);
-                intercepted |= unit.isAtPlaceLocation()
-                        && unit.getMovementThirds() < expected;
+                fireUnitMovedFinished(unit, path);
+                // The walk is complete, so a resident who left a colony may now
+                // end it; no step of the walk is judged (R-0192).
+                checkRebellionLoss();
             }
-            fireUnitMovedFinished(unit, path);
+        } finally {
+            listenerManager.fireActionEnded(this);
         }
-        listenerManager.fireActionEnded(this);
     }
 
     boolean fireUnitMoveStarted(final Unit unit, final Path path) {
@@ -8322,6 +9210,8 @@ public class Model {
             }
             listenerManager.fireUnitMovedFinished(this, unit, path);
             learnNativeSettlements();
+            // The walk is complete; judged once, never between its steps.
+            checkRebellionLoss();
         }
     }
 
@@ -8498,6 +9388,7 @@ public class Model {
                 }
             });
         }
+        recordRoyalLoss(unit);
         unitStorage.remove(unit);
     }
 
@@ -8830,6 +9721,9 @@ public class Model {
         getTurnEventStore().add(TurnEventProvider
                 .getColonyWasDestroyed(colony.getOwner(), colony, lostShips));
         colonies.remove(colony);
+        // Destruction ends membership; a capture never does (R-0192).
+        getPlayers().forEach(
+                player -> player.forgetRebellionColony(colony.getId()));
         colony.getOwner().forgetColony(colony.getLocation());
         refreshObservations();
     }

@@ -12,6 +12,9 @@
  * actions until the model completes turn preparation. TaxDemandDialog likewise
  * displays model-owned acceptance/protest consequences, preserves deferred
  * decisions and exposes reopening through Europe; trade controls read the model
- * boycott restrictions.
+ * boycott restrictions. MercenaryOfferDialog presents a model-owned paid
+ * veteran offer (issuer, price, owned port choice, blockade hint) on the screen
+ * the player is on, never forcing Europe, which a rebel nation cannot use; the
+ * model validates and pays every confirmed answer, and closing keeps the offer.
  */
 package org.microcol.gui.screen.europe;

@@ -16,7 +16,8 @@ public enum TurnEvents implements MessageKeyResource {
     shipsLostWithColony, newUnitIsInEurope, newUnitIsInColony, colonyWasLost,
     goodsWasThrowsAway1, goodsWasThrowsAway2, goodsWasThrowsAway3,
     goodsWasThrowsAway4, constructionWaitingForTools, openColony,
-    forestLumberLostFull, forestLumberLostNoColony,
+    forestLumberLostFull, forestLumberLostNoColony, interventionArrived,
+    mercenaryArrived,
 
     /*
      * Rest of resources.

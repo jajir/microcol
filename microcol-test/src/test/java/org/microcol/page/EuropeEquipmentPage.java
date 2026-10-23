@@ -12,10 +12,13 @@ import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.Parent;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
+import javafx.stage.Window;
 
 /** Player gestures and observations for the European equipment offer. */
 public final class EuropeEquipmentPage extends AbstractScreen {
@@ -67,6 +70,41 @@ public final class EuropeEquipmentPage extends AbstractScreen {
         assertTrue(isCssIdVisible("europeMarketRestriction"));
         assertEquals(message,
                 getLabeledById("europeMarketRestriction").getText());
+    }
+
+    /**
+     * A Crown-seized pier colonist (R-0187) offers no equipment or ordination:
+     * the pier menu shows those entries disabled, and no equipment offer is
+     * open. The model records the seizure; the caller checks the state.
+     */
+    public void verifySeizedPierMenu(int unitId) {
+        getRobot().clickOn("#europe-pier-unit-" + unitId);
+        WaitForAsyncUtils.waitForFxEvents();
+        List<MenuItem> items = showingMenuItems();
+        for (String id : List.of("europe-equipment-MUSKET",
+                "europe-equipment-HORSE", "europe-equipment-TOOLS",
+                "europe-ordain-" + unitId)) {
+            assertTrue(item(items, id).isDisable(), "Disabled entry " + id);
+        }
+        assertFalse(isCssIdVisible("europeEquipmentDialog"));
+        assertTrue(getModel().getUnitById(unitId).isCrownSeized(),
+                "Crown seizure of " + unitId);
+        escape();
+    }
+
+    private List<MenuItem> showingMenuItems() {
+        return Window.getWindows().stream()
+                .filter(window -> window instanceof ContextMenu
+                        && window.isShowing())
+                .<List<MenuItem>>map(
+                        window -> ((ContextMenu) window).getItems())
+                .findFirst().orElse(List.of());
+    }
+
+    private static MenuItem item(List<MenuItem> items, String id) {
+        return items.stream().filter(item -> id.equals(item.getId()))
+                .findFirst().orElseThrow(() -> new IllegalStateException(
+                        "No pier menu item " + id));
     }
 
     public void verifyMenu(String... choices) {

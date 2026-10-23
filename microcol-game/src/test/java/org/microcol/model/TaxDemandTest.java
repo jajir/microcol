@@ -49,6 +49,7 @@ class TaxDemandTest {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.getModel().setDifficulty(difficulty);
+        CrownRosterFixtures.freshCrownRosters(data.getModel());
         final PlayerPo dutch = player(data.getModel(), "Dutch");
         dutch.getRecruitment().setCrosses(0);
         final TaxPo tax = TaxState.initial();
@@ -677,7 +678,8 @@ class TaxDemandTest {
         assertEquals(0, activated.getIssued());
 
         final GameModelPo revolt = data(Difficulty.CONQUISTADOR, 0, 1);
-        player(revolt.getModel(), "Dutch").setDeclaredIndependence(true);
+        RebellionFixtures.declare(revolt.getModel(),
+                player(revolt.getModel(), "Dutch"));
         final Model independent = load(revolt.getModel());
         nextDutchTurn(independent);
         assertTrue(independent.isGameRunning());
@@ -996,7 +998,7 @@ class TaxDemandTest {
         assertRejected(saved);
 
         saved = savedPending();
-        player(saved, "Dutch").setDeclaredIndependence(true);
+        RebellionFixtures.declare(saved, player(saved, "Dutch"));
         assertRejected(saved);
 
         saved = savedPending();

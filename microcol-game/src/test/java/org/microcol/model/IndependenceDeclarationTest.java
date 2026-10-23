@@ -692,7 +692,7 @@ class IndependenceDeclarationTest {
         // Continental service needs a nation that declared independence.
         soldier.setMilitaryRole(MilitaryRole.CONTINENTAL);
         assertThrows(RuntimeException.class, () -> load(data));
-        savedPlayer(data, "Dutch").setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(), savedPlayer(data, "Dutch"));
         final Model model = load(data);
         assertEquals(MilitaryRole.CONTINENTAL,
                 colonist(model, 9001).getMilitaryRole());

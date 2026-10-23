@@ -516,7 +516,7 @@ class TradeRouteStopProcessingTest {
     void europeIsClosedAfterIndependenceAndNothingMoves() throws Exception {
         final World w = new World(po -> po.getGameManager().getPlayers()
                 .stream().filter(player -> player.getName().equals("Dutch"))
-                .forEach(player -> player.setDeclaredIndependence(true)));
+                .forEach(player -> RebellionFixtures.declare(po, player)));
         w.putShipInEurope();
         final TradeRoute route = w.route(0, List.of(GoodsType.RUM),
                 List.of(GoodsType.MUSKET));

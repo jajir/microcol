@@ -674,11 +674,14 @@ class ForeignColonyTradeTest {
                 row.setState(relation);
             }
         }
+        if (rebellion) {
+            RebellionFixtures.holdFreePlayMontreal(data);
+        }
         for (final PlayerPo player : data.getGameManager().getPlayers()) {
             if (!player.getName().equals("Dutch")) {
                 continue;
             }
-            player.setDeclaredIndependence(rebellion);
+            RebellionFixtures.set(data, player, rebellion);
             if (deWitt) {
                 final CongressPo congress = new CongressPo();
                 congress.setActivated(true);

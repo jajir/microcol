@@ -826,6 +826,9 @@ public class CargoSlotTest {
     @BeforeEach
     private void beforeEach() {
         slot = new CargoSlot(cargo);
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
+        when(sourceCargoSlot.getOwnerUnit()).thenReturn(ownerUnit);
         // Passengers are storable units; the slot owner is a ship hold.
         when(unit.isStorable()).thenReturn(true);
         // The real passenger now installs both sides before publishing its

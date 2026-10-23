@@ -1074,3 +1074,59 @@ R-0165 drží výpočet soupeření misionářů v `NativeContestRules`; `Model`
 Model vytváří nabídku čistého výnosu a provádí jednorázový výkup. `UnitTreasure` ukládá potvrzený královský odvoz (identitu kolonie a částku); vlastníkova aktualizace znovu ověří polohu, vlastnictví a přístup do Evropy. Sdílený dialog v `gui.dialog` pouze zobrazuje nabídku a předává potvrzení. Obrazovky kolonie a Evropy zpřístupňují odpovídající cestu. Implementace z 22. října 2026 prošla [cíleným ověřením](functional-tests.md#r-0175-treasure-redemption-2026-10-22); úplná regrese dávky zůstává otevřená.
 
 Obchod s cizí kolonií (R-0167) používá modelovou nabídku a atomický převod skutečného nákladu, skladu a zlata. Balíček `gui.screen.foreigncolony` zobrazuje modelové limity a potvrzení; pravidla cen a oprávnění zůstávají v modelu. [Cílené ověření](functional-tests.md#r-0167-foreign-colony-trade-2026-10-22) nenahrazuje úplnou regresi.
+
+
+### Evidence královské armády (R-0185)
+
+`model.RoyalRoster` vlastní trvalé identity a složení královské armády, stav rezervy,
+odeslaných a zničených členů a zbytek vyprodukovaných zvonů. `PlayerKing` ji ukládá
+přes `model.store`; produkce koloniálního hráče ji rozšiřuje pouze před vyhlášením
+nezávislosti. Načtení ověřuje složení podle obtížnosti a cyklu růstu, nepřidává
+náhrady za zničené členy. Kongres pouze čte a zobrazuje stav. Skutečnou přepravu
+a propojení členů s bojovými jednotkami vlastní R-0186. Dílčí ověření je uvedeno
+v [testové evidenci](functional-tests.md#r-0185-targeted-roster-verification-2026-10-22).
+
+
+### Revoluční bojové bonusy (R-0178)
+
+`model.CombatStrengths` určuje bombardování kolonie a přepadení v terénu podle
+role, příslušné Koruny, vyhlášení nezávislosti a místa boje. Sdílený výpočet
+používá náhled i rozhodnutí boje; GUI pouze zobrazuje jeho pojmenované bonusy.
+`UnitFreeColonist` a `UnitPo` uchovávají původ doručeného intervenčního vojáka;
+načtení odmítá příznak na nesprávné roli nebo vlastníkovi. Převzetí jednotky
+a přechod do civilní práce původ ruší. Samotné doručení zůstává v R-0190.
+[Dílčí ověření](functional-tests.md#r-0178-targeted-revolutionary-combat-verification-2026-10-22)
+nenahrazuje úplnou akceptaci dávky.
+
+
+### Nasazení REF (R-0186)
+
+`model` validuje odeslání a opětovné naložení skutečných královských transportů;
+`RoyalRoster` váže jednotky na trvalé členy a odděluje zajetí od zničení.
+`ai.KingRobotPlayer` vybírá pobřežní cíl, trasu a návrat pro zbývající rezervy,
+používá sdílenou plavbu, pohyb, náklad a boj. Převzatí obyvatelé kolonie nejsou
+novými členy REF. Kongres zobrazuje i zajaté členy. Uložená hra zachovává vazby,
+cíl a počet neúspěšných tahů; přehled výsledků je v
+[testové evidenci](functional-tests.md#r-0186-targeted-ref-deployment-verification-2026-10-23).
+
+
+### Podpora příčiny při útoku na kolonii (R-0188)
+
+`CombatStrengths` čte přesný zlomek podpory z `Colony.getRebelSupport()` a politickou
+příslušnost kolonie. Přidává jediný útočný bonus pro příslušného povstalce nebo
+Korunu; náhled i výsledek používají stejný výpočet. Snapshot uchovává identitu
+vlastníků, příslušnost i zlomek, takže změna zaokrouhleně stejné podpory také
+zneplatní potvrzení. GUI pouze formátuje samostatný bonus; pravidla politické
+produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause-support-verification-2026-10-23).
+
+
+### Cíl zahraniční pomoci po vyhlášení nezávislosti
+
+`model.InterventionTarget` vlastní pevný cíl, skutečně vyrobené zvony a jednorázově získaný nárok. `Player` jej zahajuje před produkcí prvního povstaleckého tahu a ukládá přes `store.InterventionPo`; načtení ani zobrazení nepřičítá produkci. Kongres a hlášení tahu pouze zobrazují modelový stav. Fyzická dodávka patří do R-0190, následné skórování do R-0196. [Cílené ověření R-0189](functional-tests.md#r-0189-targeted-intervention-target-verification-2026-10-23) nenahrazuje úplnou přejímku dávky.
+
+
+`Model.deliverInterventionForces` nyní ověřuje získaný a dosud nevyužitý nárok, příslušnost hráče, přístupnost zvoleného přístavu a kapacitu ID před vytvořením osmi jednotek. Výběr nejnižšího ID používá geografickou dostupnost; blokace zachovává čekající stav místo přesunu do dalšího přístavu. Úspěch ukládá příznak doručení spolu s hlášením, načtení samo dodávku neprovádí. [Ověření R-0190](functional-tests.md#r-0190-targeted-intervention-delivery-verification-2026-10-23) zatím nezahrnuje následnou integraci přednosti porážky R-0192.
+
+### Placené skupiny veteránů (R-0169, 2026-10-23)
+
+`Player` uchovává intervaly, nabídku a zaplacené skupiny. `Model` vybírá kontaktovaného mírového vydavatele, ověřuje potvrzení před platbou a doručuje veterány pomocí společných pravidel přístavu a blokády používaných intervencí. `MercenaryOfferDialog` zobrazuje modelovou nabídku na aktuální obrazovce; přehled evropských vztahů umožňuje návrat k nevyřízené nabídce. Modelová událost oznamuje skutečné doručení v přehledu tahu. Počítačové národy sdílejí stav nabídky, nová nákupní strategie AI není součástí změny. [Cílené ověření](functional-tests.md#r-0169-targeted-mercenary-verification-2026-10-23); úplná akceptace dávky čeká.

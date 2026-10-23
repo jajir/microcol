@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.microcol.gui.dialog.DeclareIndependenceDialog;
+import org.microcol.gui.screen.europe.EuropeButtonsPanel;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.model.ConcurrentModelEvents;
 import org.microcol.model.Location;
@@ -88,6 +89,36 @@ public final class IndependencePage extends AbstractScreen {
                 "The confirmation must be closed");
     }
 
+    /**
+     * The confirmation warns that home Europe closes before it is confirmed.
+     */
+    public void verifyEuropeWarning(final String expectedWarning) {
+        assertTrue(isCssIdVisible(DeclareIndependenceDialog.DIALOG_ID),
+                "The confirmation must be open");
+        assertEquals(expectedWarning,
+                getLabeledById("declareIndependenceEurope").getText());
+    }
+
+    /**
+     * The open Europe screen offers neither hiring nor purchases of a closed
+     * home port (R-0187).
+     */
+    public void verifyHomeEuropeClosed() {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(getButtonById(EuropeButtonsPanel.BUY_BUTTON_ID).isDisabled(),
+                "Buying units must be unavailable in a closed home port");
+        assertTrue(getButtonById("recruitButtonId").isDisabled(),
+                "Recruitment must be unavailable in a closed home port");
+    }
+
+    /** The open Europe screen still offers hiring before a declaration. */
+    public void verifyHomeEuropeOpen() {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(
+                getButtonById(EuropeButtonsPanel.BUY_BUTTON_ID).isDisabled(),
+                "Buying units must be available in an open home port");
+    }
+
     /** The open confirmation explains a changed state and cannot confirm. */
     public void verifyConfirmationRefused(final String expectedExplanation) {
         assertTrue(isCssIdVisible(DeclareIndependenceDialog.DIALOG_ID));
@@ -108,7 +139,9 @@ public final class IndependencePage extends AbstractScreen {
         getModel().getAllUnits().stream()
                 .filter(UnitFreeColonist.class::isInstance)
                 .map(UnitFreeColonist.class::cast)
-                .filter(unit -> unit.getMilitaryRole().isSpecial())
+                .filter(unit -> unit.getOwner().isHuman())
+                .filter(unit -> unit
+                        .getMilitaryRole() == MilitaryRole.CONTINENTAL)
                 .forEach(unit -> actual.add(unit.getId()));
         actual.sort(Integer::compare);
         assertEquals(Arrays.asList(expectedIds), actual);

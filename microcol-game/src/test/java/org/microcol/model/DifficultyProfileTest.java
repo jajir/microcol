@@ -44,6 +44,7 @@ class DifficultyProfileTest {
             final GameModelPo game = dao
                     .loadFromClassPath(FreePlayMap.ORIGINAL.getResource());
             game.getModel().setDifficulty(difficulty);
+            CrownRosterFixtures.freshCrownRosters(game.getModel());
             final Model model = make(game);
             assertEquals(difficulty, model.getDifficulty());
             model.startGame();

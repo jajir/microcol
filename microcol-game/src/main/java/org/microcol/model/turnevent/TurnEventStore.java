@@ -44,7 +44,10 @@ public final class TurnEventStore {
                     TurnEventPatrolInterception::tryLoad,
                     TurnEventCoastalBattery::tryLoad,
                     TurnEventNativeConquest::tryLoad,
-                    TurnEventNativeConquestLoss::tryLoad));
+                    TurnEventNativeConquestLoss::tryLoad,
+                    TurnEventIntervention::tryLoad,
+                    TurnEventInterventionArrival::tryLoad,
+                    TurnEventMercenaryArrival::tryLoad));
 
     /**
      * Constructor that create event from persistent model.

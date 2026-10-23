@@ -110,4 +110,6 @@
     <entry key="buildRoadProblemNoMoves">Tato jednotka nemá pohyb na zahájení stavby silnice.</entry>
     <entry key="buildRoadProblemSea">Silnici nelze postavit na vodě.</entry>
     <entry key="buildRoadProblemAlreadyRoad">Toto pole už má silnici.</entry>
+    <entry key="moveEuropeClosed">Po vyhlášení nezávislosti je domovská Evropa uzavřená. Loď zůstává na mapě.</entry>
+    <entry key="moveChanged">Přesun již není dostupný. Zvolte jej znovu.</entry>
 </properties>

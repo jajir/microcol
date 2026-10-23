@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Veteran mercenaries</entry>
+  <entry key="offer">%s offers 2 veteran soldiers for %s gold.
+Your treasury: %s gold.
+After payment: %s gold.</entry>
+  <entry key="port">Port that receives the soldiers</entry>
+  <entry key="noPort">No owned coastal port can be reached from the sea.</entry>
+  <entry key="accept">Pay and send the soldiers</entry>
+  <entry key="decline">Decline, pay nothing</entry>
+  <entry key="later">Decide later</entry>
+  <entry key="insufficient">You do not have enough gold for these soldiers.</entry>
+  <entry key="changed">The offer or the port has changed. Close this window and check again.</entry>
+  <entry key="blocked">This port is blocked: the paid soldiers will wait there until the sea route opens.</entry>
+  <entry key="delivered">Payment made. The veteran soldiers have landed at the port.</entry>
+  <entry key="pending">Payment made. The veteran soldiers wait at the port until the sea route opens.</entry>
+  <entry key="close">Close</entry>
+  <entry key="resume">Review the mercenary offer…</entry>
+</properties>

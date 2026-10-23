@@ -1,8 +1,10 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +17,8 @@ import org.microcol.model.store.RivalExpansionObjectivePo;
 import org.microcol.model.store.RivalTradeObjectivePo;
 import org.microcol.model.store.ColonySightingPo;
 import org.microcol.model.store.CongressPo;
+import org.microcol.model.store.InterventionPo;
+import org.microcol.model.store.MercenaryOfferPo;
 import org.microcol.model.store.RecruitmentPo;
 import org.microcol.model.store.TaxPo;
 import org.microcol.model.store.VisibilityPo;
@@ -62,6 +66,46 @@ public abstract class Player {
     private final TaxState tax;
 
     private final Map<UnitType, Integer> unitPurchaseCounts = new HashMap<>();
+
+    /**
+     * Foreign-intervention target of a declared colonial nation (R-0189). Null
+     * until the first owner update after declaration starts it.
+     */
+    private InterventionTarget intervention;
+
+    /** Own updates counted before declaration for mercenary offers (R-0169). */
+    private int mercenaryTurns;
+
+    /**
+     * Rebel updates counted after declaration for mercenary offers (R-0169).
+     */
+    private int mercenaryRebelUpdates;
+
+    /** Offer waiting for the owner's answer; it lasts through this turn. */
+    private MercenaryOffer mercenaryOffer;
+
+    /** Paid mercenary groups of this owner, pending or delivered (R-0169). */
+    private final List<MercenaryDelivery> mercenaryDeliveries = new ArrayList<>();
+
+    /**
+     * Colonies of a declared rebellion (R-0192): the declaration snapshot plus
+     * later foundings and captures, minus destroyed colonies. A capture by the
+     * Crown keeps the member. Empty for a nation that has not declared.
+     */
+    private final Set<Integer> rebellionColonyIds = new TreeSet<>();
+
+    /**
+     * Reason code under which this declared rebellion was lost (R-0192), kept
+     * per rebel so a computer rebel's loss is durable without ending the human
+     * game. Null while the rebellion holds.
+     */
+    private String rebellionLossReason;
+
+    /**
+     * Completion order of this declared rebellion's victory (R-0191), counted
+     * from the first rebel to win. Null while the rebellion is not won.
+     */
+    private Integer rebellionVictoryOrder;
 
     /** Null unless a computer colony is running a supply cycle. */
     private RivalTradeObjective rivalTradeObjective;
@@ -140,7 +184,10 @@ public abstract class Player {
                             && playerPo.getRivalTradeObjective() == null
                             && playerPo.getRivalExpansionObjective() == null
                             && playerPo.getRivalLastServedColonyId() == null
-                            && playerPo.getRivalParkedCarrierIds().isEmpty(),
+                            && playerPo.getRivalParkedCarrierIds().isEmpty()
+                            && playerPo.getRoyalRoster() == null
+                            && playerPo.getIntervention() == null
+                            && isNoRebellion(playerPo),
                     "Native players have no European state");
             return new PlayerNative(playerPo.getName(),
                     playerPo.getNativeNation(), playerPo.getGold(), model,
@@ -154,6 +201,8 @@ public abstract class Player {
                     "Missing colonial Congress");
             Preconditions.checkArgument(playerPo.getTax() != null,
                     "Missing colonial tax state");
+            Preconditions.checkArgument(playerPo.getRoyalRoster() == null,
+                    "Colonial nations have no Crown roster");
             final Player player = new PlayerHuman(playerPo.getName(),
                     playerPo.isComputer(), playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
@@ -179,6 +228,12 @@ public abstract class Player {
                     "Only computer colonies keep a supply rotation");
             player.loadRivalRotation(playerPo.getRivalLastServedColonyId(),
                     playerPo.getRivalParkedCarrierIds());
+            player.loadIntervention(playerPo.getIntervention());
+            player.loadMercenaries(playerPo);
+            player.loadRebellionColonyIds(playerPo.getRebellionColonyIds());
+            player.loadRebellionLossReason(playerPo.getRebellionLossReason());
+            player.loadRebellionVictoryOrder(
+                    playerPo.getRebellionVictoryOrder());
             return player;
         } else {
             Preconditions.checkArgument(playerPo.getRecruitment() == null,
@@ -190,19 +245,26 @@ public abstract class Player {
             Preconditions.checkArgument(
                     playerPo.getUnitPurchaseCounts().isEmpty(),
                     "Kings cannot have purchase counts");
+            Preconditions.checkArgument(playerPo.getRoyalRoster() != null,
+                    "Missing Crown roster");
             Preconditions.checkArgument(
                     playerPo.getRivalTradeObjective() == null
                             && playerPo.getRivalExpansionObjective() == null
                             && playerPo.getRivalLastServedColonyId() == null
                             && playerPo.getRivalParkedCarrierIds().isEmpty(),
                     "Kings cannot have trade objectives");
+            Preconditions.checkArgument(playerPo.getIntervention() == null,
+                    "Kings cannot have an intervention target");
+            Preconditions.checkArgument(isNoRebellion(playerPo),
+                    "Kings cannot have rebellion colonies");
             final Player subdued = playerStore
                     .getPlayerByName(playerPo.getWhosKingThisPlayerIs());
             return new PlayerKing(playerPo.getName(), playerPo.isComputer(),
                     playerPo.getGold(), model,
                     playerPo.isDeclaredIndependence(), subdued,
                     playerPo.getExtraData(),
-                    playerPo.getVisible().getVisibilitySet());
+                    playerPo.getVisible().getVisibilitySet(), new RoyalRoster(
+                            playerPo.getRoyalRoster(), model.getDifficulty()));
         }
     }
 
@@ -408,6 +470,14 @@ public abstract class Player {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    /**
+     * Remember a colony as it is now without having it in sight, for a Crown
+     * that ruled it until the nation declared independence.
+     */
+    void rememberColony(final Colony colony) {
+        colonySightings.put(colony.getLocation(), sightingOf(colony));
+    }
+
     /** Forget a colony the player was directly told is gone. */
     void forgetColony(final Location location) {
         colonySightings.remove(location);
@@ -470,6 +540,24 @@ public abstract class Player {
         if (rivalExpansionObjective != null) {
             out.setRivalExpansionObjective(rivalExpansionObjective.save());
         }
+        if (intervention != null) {
+            out.setIntervention(intervention.save());
+        }
+        if (isColonialNation()) {
+            out.setMercenaryTurns(mercenaryTurns);
+            out.setMercenaryRebelUpdates(mercenaryRebelUpdates);
+        }
+        if (mercenaryOffer != null) {
+            final MercenaryOfferPo offerPo = new MercenaryOfferPo();
+            offerPo.setIssuer(mercenaryOffer.getIssuer().getName());
+            offerPo.setPrice(mercenaryOffer.getPrice());
+            out.setMercenaryOffer(offerPo);
+        }
+        mercenaryDeliveries.forEach(
+                group -> out.getMercenaryDeliveries().add(group.save()));
+        out.setRebellionColonyIds(new ArrayList<>(rebellionColonyIds));
+        out.setRebellionLossReason(rebellionLossReason);
+        out.setRebellionVictoryOrder(rebellionVictoryOrder);
         out.setRivalLastServedColonyId(rivalLastServedColonyId);
         out.setRivalParkedCarrierIds(new ArrayList<>(rivalParkedCarrierIds));
         knownPowers.stream().sorted().forEach(out.getKnownPowers()::add);
@@ -554,7 +642,9 @@ public abstract class Player {
     }
 
     public int getNumberOfMilitaryUnits() {
+        // Crown-seized units are not active resources of the nation (R-0187).
         return (int) getAllUnits().stream()
+                .filter(unit -> !unit.isCrownSeized())
                 .filter(unit -> unit.getType().canAttack()).count();
     }
 
@@ -735,6 +825,8 @@ public abstract class Player {
     }
 
     private void finishTurnPreparation(final boolean hadFranklin) {
+        // Before colony production, so the bells of this update count.
+        startIntervention();
         if (congress != null && !getColonies().isEmpty()) {
             congress.activate();
         }
@@ -761,6 +853,13 @@ public abstract class Player {
             }
         }
         getColonies().forEach(colony -> colony.startTurn());
+        // After colony production, so an earning of this update can deliver. A
+        // rebellion lost by now sends nothing; its end is published only once
+        // the whole update is complete (R-0192).
+        deliverIntervention();
+        // Paid groups retry first, so an offer never waits behind a placed one.
+        deliverMercenaryGroups();
+        advanceMercenaryOffers();
         if (!isKing()) {
             // After colony production, so this update's custom-house sales
             // count as trades affecting the national markets. A scripted
@@ -860,15 +959,364 @@ public abstract class Player {
         return congress != null && congress.isJonesDeliveryPending();
     }
 
+    /**
+     * @return the prewar roster of the Crown ruling this colonial nation; empty
+     *         for a Crown or a player without a Crown
+     */
+    public Optional<RoyalRoster> getCrownRoster() {
+        return model.getKingOf(this).map(PlayerKing::getRoyalRoster);
+    }
+
+    /**
+     * Add a colony that this nation has founded or captured since its
+     * declaration (R-0192). A nation that has not declared, and a Crown, keep
+     * no membership.
+     *
+     * @param colony required colony that this nation now owns
+     */
+    void recordRebellionColony(final Colony colony) {
+        Preconditions.checkNotNull(colony);
+        if (declaredIndependence && !isKing()) {
+            rebellionColonyIds.add(colony.getId());
+        }
+    }
+
+    /**
+     * Remove a destroyed colony from this rebellion (R-0192). Captures never
+     * remove membership, so only destruction calls this.
+     *
+     * @param colonyId identity of the destroyed colony
+     */
+    void forgetRebellionColony(final int colonyId) {
+        rebellionColonyIds.remove(colonyId);
+    }
+
+    /**
+     * @return the colony IDs of this declared rebellion, stable and sorted;
+     *         empty for a nation that has not declared
+     */
+    public Set<Integer> getRebellionColonyIds() {
+        return Collections.unmodifiableSet(rebellionColonyIds);
+    }
+
+    /**
+     * @return the foreign-intervention target of this declared nation; empty
+     *         before declaration and before its first owner update after it
+     */
+    public Optional<InterventionTarget> getIntervention() {
+        return Optional.ofNullable(intervention);
+    }
+
+    /**
+     * Load a saved target. Only a declared colonial nation can have one; a
+     * declared nation without one is still waiting for its first update.
+     */
+    private void loadIntervention(final InterventionPo po) {
+        if (po == null) {
+            return;
+        }
+        Preconditions.checkArgument(declaredIndependence,
+                "Only a declared nation has an intervention target");
+        intervention = new InterventionTarget(po);
+    }
+
+    private static boolean isNoRebellion(final PlayerPo playerPo) {
+        return (playerPo.getRebellionColonyIds() == null
+                || playerPo.getRebellionColonyIds().isEmpty())
+                && playerPo.getRebellionLossReason() == null
+                && playerPo.getRebellionVictoryOrder() == null;
+    }
+
+    /**
+     * Load the saved loss of this rebellion (R-0192). Only a declared colonial
+     * nation can have lost, and only under one of the four loss reasons.
+     */
+    private void loadRebellionLossReason(final String saved) {
+        if (saved == null) {
+            return;
+        }
+        Preconditions.checkArgument(declaredIndependence,
+                "Only a declared nation can have lost its rebellion");
+        Preconditions.checkArgument(GameOverEvaluator.isRebellionLoss(saved),
+                "Unknown rebellion loss reason '%s'", saved);
+        rebellionLossReason = saved;
+    }
+
+    /**
+     * @return the reason code under which this rebellion was lost, or empty
+     *         while it holds; R-0191 victory never applies once this is present
+     */
+    public Optional<String> getRebellionLossReason() {
+        return Optional.ofNullable(rebellionLossReason);
+    }
+
+    /**
+     * Whether this declared rebellion has ended: recorded as lost or won, or
+     * lost by the live state although the end is not yet published because an
+     * update is still in progress (R-0192). Read-only; it records and announces
+     * nothing. Every help of the nation stops at this one gate (R-0191).
+     */
+    boolean isRebellionEnded() {
+        return isRebellionDecided() || declaredIndependence && !isKing()
+                && RebellionLoss.evaluate(model, this).isPresent();
+    }
+
+    /**
+     * Record the loss of this rebellion once (R-0192). The record is durable
+     * and stops every later intervention; it does not itself end any game.
+     *
+     * @param reason required rebellion loss reason code
+     */
+    void markRebellionLost(final String reason) {
+        Preconditions.checkState(declaredIndependence && !isKing(),
+                "Only a declared nation can lose its rebellion");
+        Preconditions.checkState(rebellionLossReason == null,
+                "The rebellion was already lost");
+        Preconditions.checkArgument(GameOverEvaluator.isRebellionLoss(reason),
+                "Unknown rebellion loss reason '%s'", reason);
+        rebellionLossReason = reason;
+    }
+
+    /**
+     * @return the completion order of this rebellion's victory, one for the
+     *         first rebel to win, or empty while it is not won
+     */
+    public Optional<Integer> getRebellionVictoryOrder() {
+        return Optional.ofNullable(rebellionVictoryOrder);
+    }
+
+    /**
+     * Load the saved victory of this rebellion (R-0191). Only a declared
+     * colonial nation can have won, and never after a loss.
+     */
+    private void loadRebellionVictoryOrder(final Integer saved) {
+        if (saved == null) {
+            return;
+        }
+        Preconditions.checkArgument(declaredIndependence,
+                "Only a declared nation can have won its rebellion");
+        Preconditions.checkArgument(saved >= 1,
+                "Invalid rebellion victory order");
+        Preconditions.checkArgument(rebellionLossReason == null,
+                "A lost rebellion cannot also be won");
+        rebellionVictoryOrder = saved;
+    }
+
+    /**
+     * @return whether this declared rebellion already has its end recorded,
+     *         either as a loss or as a victory, so it is never judged again
+     */
+    boolean isRebellionDecided() {
+        return rebellionLossReason != null || rebellionVictoryOrder != null;
+    }
+
+    /**
+     * Record the victory of this rebellion once (R-0191). The record is durable
+     * and never changes; it does not itself end any game.
+     *
+     * @param order required completion order, starting at one
+     */
+    void markRebellionWon(final int order) {
+        Preconditions.checkState(declaredIndependence && !isKing(),
+                "Only a declared nation can win its rebellion");
+        Preconditions.checkState(!isRebellionDecided(),
+                "The rebellion was already decided");
+        Preconditions.checkArgument(order >= 1,
+                "Invalid rebellion victory order");
+        rebellionVictoryOrder = order;
+    }
+
+    /**
+     * Load the saved rebellion membership (R-0192). A declared colonial nation
+     * must name its members, because they cannot be rebuilt from today's
+     * ownership; a player that never declared keeps none.
+     */
+    private void loadRebellionColonyIds(final List<Integer> saved) {
+        if (saved == null) {
+            Preconditions.checkArgument(!declaredIndependence,
+                    "Declared nation '%s' has no rebellion colonies", name);
+            return;
+        }
+        Preconditions.checkArgument(declaredIndependence || saved.isEmpty(),
+                "Only a declared nation keeps rebellion colonies");
+        Preconditions.checkArgument(
+                saved.stream().allMatch(id -> id != null && id >= 0)
+                        && new HashSet<>(saved).size() == saved.size(),
+                "Invalid rebellion colony identity");
+        rebellionColonyIds.addAll(saved);
+    }
+
+    /**
+     * Fix the intervention target at the first owner update after declaration
+     * and announce it once. A preparation that finds the target set changes
+     * nothing, so an interrupted turn cannot start it twice.
+     */
+    private void startIntervention() {
+        if (!declaredIndependence || isKing() || intervention != null
+                || isRebellionEnded()) {
+            return;
+        }
+        intervention = InterventionTarget.start(model.getDifficulty());
+        model.addTurnEvent(TurnEventProvider.getIntervention(this,
+                intervention.getTarget(), false));
+    }
+
+    /**
+     * Deliver the earned intervention once (R-0190). Every owner update retries
+     * a pending delivery; the model commits the units, the delivered flag and
+     * the arrival notice together, or leaves all of them unchanged. Loading
+     * never reaches here.
+     */
+    private void deliverIntervention() {
+        if (intervention == null || !intervention.isEarned()
+                || intervention.isDelivered() || isRebellionEnded()
+                || model.isGameFinished()) {
+            return;
+        }
+        model.deliverInterventionForces(this);
+    }
+
+    /**
+     * Retry every paid group that is still pending (R-0169). Each attempt
+     * either places the whole group or changes nothing; a rebellion that has
+     * ended sends no more help, and a finished game places nothing.
+     */
+    private void deliverMercenaryGroups() {
+        if (isRebellionEnded() || model.isGameFinished()) {
+            return;
+        }
+        mercenaryDeliveries.stream().filter(group -> !group.isDelivered())
+                .forEach(group -> model.deliverMercenaryGroup(this, group));
+    }
+
+    /**
+     * Count one owner update and open an offer on every tenth one (R-0169).
+     * Every colonial nation shares this state; only the interface raises it for
+     * a human, and an offer a computer nation does not answer expires with its
+     * turn. Before declaration the update needs the treasury threshold and one
+     * chance draw; after it no draw is made. An interval without an eligible
+     * issuer opens nothing.
+     */
+    private void advanceMercenaryOffers() {
+        if (!isColonialNation() || isRebellionEnded()) {
+            return;
+        }
+        if (declaredIndependence) {
+            mercenaryRebelUpdates++;
+            if (!MercenaryRules.isIntervalUpdate(mercenaryRebelUpdates)) {
+                return;
+            }
+            mercenaryOffer = model.quoteMercenaryOffer(this).orElse(null);
+            return;
+        }
+        mercenaryTurns++;
+        if (!MercenaryRules.isIntervalUpdate(mercenaryTurns)
+                || gold < MercenaryRules.TREASURY_THRESHOLD) {
+            return;
+        }
+        // The one saved draw is spent only when an offer could be made, so a
+        // skipped interval never moves the shared random state.
+        final Optional<MercenaryOffer> quote = model.quoteMercenaryOffer(this);
+        if (quote.isPresent()
+                && model.nextCombatRandom() < MercenaryRules.PEACETIME_CHANCE) {
+            mercenaryOffer = quote.get();
+        }
+    }
+
+    /** @return the offer waiting for this owner's answer, if any (R-0169) */
+    public Optional<MercenaryOffer> getMercenaryOffer() {
+        return Optional.ofNullable(mercenaryOffer);
+    }
+
+    /** Forget the offer after an answer or at turn end; never charges gold. */
+    void clearMercenaryOffer() {
+        mercenaryOffer = null;
+    }
+
+    /** @return paid mercenary groups of this owner, pending and delivered */
+    public List<MercenaryDelivery> getMercenaryDeliveries() {
+        return Collections.unmodifiableList(mercenaryDeliveries);
+    }
+
+    void addMercenaryDelivery(final MercenaryDelivery delivery) {
+        mercenaryDeliveries.add(Preconditions.checkNotNull(delivery));
+    }
+
+    /**
+     * Restore the pending offer of a colonial nation (R-0169). The issuer must
+     * be a registered colonial nation other than this owner; the price must
+     * match the saved difficulty, so a loaded offer cannot be cheaper than a
+     * new one.
+     *
+     * @param saved saved offer, or null when none waits
+     */
+    void restoreMercenaryOffer(final MercenaryOfferPo saved) {
+        if (saved == null) {
+            return;
+        }
+        Preconditions.checkArgument(isColonialNation(),
+                "Only a colonial nation keeps a mercenary offer");
+        Preconditions.checkArgument(
+                saved.getIssuer() != null && saved.getPrice() != null,
+                "Incomplete mercenary offer");
+        final Player issuer = model.getPlayers().stream()
+                .filter(player -> player.getName().equals(saved.getIssuer()))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException(
+                        "Unknown mercenary issuer"));
+        Preconditions.checkArgument(
+                issuer != this && issuer.isColonialNation()
+                        && saved.getPrice() == MercenaryRules
+                                .price(model.getDifficulty()),
+                "Invalid mercenary offer");
+        mercenaryOffer = new MercenaryOffer(this, issuer, saved.getPrice());
+    }
+
+    /**
+     * Load the saved mercenary counters and paid groups of a colonial nation
+     * (R-0169). An absent counter is zero; present values are validated.
+     */
+    private void loadMercenaries(final PlayerPo playerPo) {
+        final Integer turns = playerPo.getMercenaryTurns();
+        final Integer rebelUpdates = playerPo.getMercenaryRebelUpdates();
+        // The own-turn count is historical: it stays after declaration too.
+        Preconditions.checkArgument(turns == null || turns >= 0,
+                "Invalid mercenary interval count");
+        // A rebel count starts at declaration; zero before it is the ordinary
+        // saved state of a colony that has not yet declared.
+        Preconditions.checkArgument(
+                rebelUpdates == null || rebelUpdates >= 0
+                        && (declaredIndependence || rebelUpdates == 0),
+                "Invalid rebel mercenary interval count");
+        mercenaryTurns = turns == null ? 0 : turns;
+        mercenaryRebelUpdates = rebelUpdates == null ? 0 : rebelUpdates;
+        playerPo.getMercenaryDeliveries().forEach(
+                po -> mercenaryDeliveries.add(new MercenaryDelivery(po)));
+    }
+
     void checkCanCreditProducedBells(final int produced) {
         if (congress != null) {
             congress.checkCredit(produced);
+        }
+        if (intervention != null) {
+            intervention.checkCredit(produced);
+        }
+        if (!declaredIndependence) {
+            getCrownRoster().ifPresent(roster -> roster.checkCredit(produced));
         }
     }
 
     void creditProducedBells(final int produced) {
         if (congress != null) {
             congress.credit(produced);
+        }
+        if (intervention != null && !isRebellionEnded()
+                && intervention.credit(produced)) {
+            model.addTurnEvent(TurnEventProvider.getIntervention(this,
+                    intervention.getTarget(), true));
+        }
+        // Bell growth stops for good at the declaration.
+        if (!declaredIndependence) {
+            getCrownRoster().ifPresent(roster -> roster.credit(produced));
         }
     }
 
@@ -1904,13 +2352,53 @@ public abstract class Player {
             model.checkCurrentPlayer(this);
             checkIndependenceEligible();
             final List<UnitFreeColonist> muster = planIndependenceMuster();
+            // Every change is planned first; a refused reversal leaves the
+            // world as it was before the declaration.
+            final List<Unit> seized = planHomeEuropeSeizure();
+            final List<VoyageReversalOffer> reversals = planInboundReversals();
+            reversals.forEach(model::checkCurrentVoyageReversal);
             declaredIndependence = true;
+            // The declaration fixes the rebellion's first colonies (R-0192).
+            model.getColonies(this)
+                    .forEach(colony -> rebellionColonyIds.add(colony.getId()));
             muster.forEach(
                     unit -> unit.assignMilitaryRole(MilitaryRole.CONTINENTAL));
+            seized.forEach(unit -> ((AbstractUnit) unit).seizeByCrown());
+            // Validated above; the ordinary reversal cannot refuse them now.
+            model.applyVoyageReversals(reversals);
+            // The Crown ruled these colonies until now, so it knows them; it
+            // learns of later ones only by sight (R-0186).
+            model.getKingOf(this).ifPresent(king -> model.getColonies(this)
+                    .forEach(king::rememberColony));
         } finally {
             declaringIndependence = false;
         }
         model.fireIndependenceWasDeclared(this);
+    }
+
+    /**
+     * Plan the Crown seizure of home Europe (R-0187): units in the port, on its
+     * pier or aboard a ship there. Nothing changes here; the list is applied
+     * only after the declaration is accepted.
+     */
+    private List<Unit> planHomeEuropeSeizure() {
+        return model.getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == this)
+                .filter(unit -> ((AbstractUnit) unit).isInHomeEurope())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Plan the reversal of every owned ship sailing to Europe (R-0187).
+     * Outbound voyages are never offered. Each offer validates the live ship
+     * now, so a refusal happens before any change.
+     */
+    private List<VoyageReversalOffer> planInboundReversals() {
+        return model.getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == this && unit.isShip())
+                .filter(unit -> ((AbstractUnit) unit).isInboundToHomeEurope())
+                .map(unit -> model.offerVoyageReversal((Ship) unit))
+                .collect(Collectors.toList());
     }
 
     private void checkIndependenceEligible() {

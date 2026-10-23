@@ -43,9 +43,19 @@
  * individual rule owners retain their own accounting. AtlanticVoyageDuration
  * owns the ordinary crossing formula; Congress keeps frozen founder offers, a
  * separate national bell account and durable membership; colony production
- * credits it once per update. Founder effects remain in their respective rule
- * owners, with Jones's one-time frigate delivered at the existing Europe or
- * reachable coastal-port boundary. Magellan membership raises effective ship
+ * credits it once per update. Each Crown's RoyalRoster holds its prewar force
+ * (identities, reserve/shipped/destroyed state, bell remainder) and grows from
+ * the same produced bells until the colonial nation declares independence.
+ * Model dispatches a reserve man-of-war with its ground passengers as real
+ * units bound to their roster members; a surviving empty carrier that returned
+ * to the European port is reloaded with the remaining reserve through the same
+ * Atlantic voyage, without a new ship. A bound unit's loss is recorded once as
+ * destroyed and its change of owner once as captured, and the Crown's landing
+ * target and retry count are saved with its ship. The Crown learns its
+ * subjects' colonies when they declare independence and later only by sight,
+ * through its own colony sightings. Founder effects remain in their respective
+ * rule owners, with Jones's one-time frigate delivered at the existing Europe
+ * or reachable coastal-port boundary. Magellan membership raises effective ship
  * movement through the shared unit allowance; new western departures halve
  * their sampled ordinary duration, while saved voyages retain their original
  * timing. PlaceHighSea retains sampled weather, original route and position

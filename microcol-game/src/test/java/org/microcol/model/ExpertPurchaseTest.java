@@ -117,9 +117,10 @@ class ExpertPurchaseTest {
 
     @Test
     void independenceClosesSpecialistHiringWithoutMutatingState() {
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(p -> p.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(p -> p.getName().equals("Dutch")).findFirst()
+                        .orElseThrow());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         buyer().setGold(2200);

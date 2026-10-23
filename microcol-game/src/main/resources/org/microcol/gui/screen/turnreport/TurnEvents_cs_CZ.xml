@@ -13,6 +13,8 @@
 	<entry key="shipsLostWithColony">Se zničenou kolonií bylo ztraceno lodí: %s, včetně nákladu.</entry>
 	<entry key="newUnitIsInEurope">Náboženská produkce přilákala přistěhovalce, který nyní čeká na evropském molu.</entry>
 	<entry key="newUnitIsInColony">V kolonii %s se objevila nová jednotka.</entry>
+	<entry key="interventionArrived">Zahraniční intervence dorazila do kolonie %s: dvě válečné lodě, čtyři kontinentální pěšáci a dva kontinentální jezdci.</entry>
+	<entry key="mercenaryArrived">Zaplacení veteránští vojáci přistáli v kolonii %s.</entry>
 	<entry key="colonyWasLost">Přišel jsi o kolonii %s.</entry>
 	<entry key="goodsWasThrowsAway1">V kolonii %s došlo místo, proto se muselo %s kusů %s vyhodit.</entry>
 	<entry key="goodsWasThrowsAway2">V kolonii %s došlo místo, proto se musel jeden %s vyhodit.</entry>

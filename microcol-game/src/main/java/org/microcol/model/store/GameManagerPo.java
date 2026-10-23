@@ -12,12 +12,23 @@ public final class GameManagerPo {
 
     private boolean gameFinished;
 
+    /** Reason of the terminal result; null when none was recorded. */
+    private String gameOverReason;
+
     public boolean isGameFinished() {
         return gameFinished;
     }
 
     public void setGameFinished(final boolean gameFinished) {
         this.gameFinished = gameFinished;
+    }
+
+    public String getGameOverReason() {
+        return gameOverReason;
+    }
+
+    public void setGameOverReason(final String gameOverReason) {
+        this.gameOverReason = gameOverReason;
     }
 
     private String currentPlayer;

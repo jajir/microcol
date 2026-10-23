@@ -22,6 +22,21 @@ public final class NavalBattlePage extends AbstractScreen {
         field.setLong(getModel(), seed);
     }
 
+    /**
+     * Save the combat draws that let the ship win the battle it would be quoted
+     * now against the ship on the target square and sink it, so the loser
+     * leaves the map instead of sailing away for repair.
+     */
+    public void chooseSinkingDraw(final int attackerId,
+            final org.microcol.model.Location target) throws Exception {
+        final double chance = WaitForAsyncUtils.asyncFx(() -> getModel()
+                .getUnitById(attackerId).prepareAttack(target, true)
+                .orElseThrow().getCombatStrengths().orElseThrow()
+                .getAttackerWinProbability()).get(10, TimeUnit.SECONDS);
+        org.microcol.model.CombatDrawProbe.chooseNaval(getModel(), chance, true,
+                true);
+    }
+
     public void changeReviewedCargo() {
         getRobot().interact(() -> ((Ship) getModel().getUnitById(0)).getCargo()
                 .getSlotByIndex(0).removeCargo(Goods.of(GoodsType.ORE, 1)));

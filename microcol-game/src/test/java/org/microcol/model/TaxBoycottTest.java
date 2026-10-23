@@ -211,9 +211,10 @@ class TaxBoycottTest {
     @Test
     void revolutionaryCustomHouseBypassesTheBoycottWithHalfTheNetProceeds() {
         final GameModelPo data = data(GoodsType.ORE);
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> "Dutch".equals(player.getName())).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(player -> "Dutch".equals(player.getName()))
+                        .findFirst().orElseThrow());
         final Model model = load(data);
         final Colony colony = equipped(model);
         colony.configureExportGoods(Set.of(),

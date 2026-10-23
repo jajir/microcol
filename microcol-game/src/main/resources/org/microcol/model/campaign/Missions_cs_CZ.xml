@@ -46,4 +46,9 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="independenceWasDeclared_caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
 	<entry key="gameOver_allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
 	<entry key="gameOver_timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
+	<entry key="gameOver_rebellionNoColonies">Vzpoura selhala: nepřežila žádná kolonie povstalců.</entry>
+	<entry key="gameOver_rebellionAllColoniesCrown">Vzpoura selhala: všechny zbývající kolonie povstalců jsou zpět pod korunou.</entry>
+	<entry key="gameOver_rebellionCoastalCrown">Vzpoura selhala: nezůstala žádná svobodná pobřežní kolonie.</entry>
+	<entry key="gameOver_rebellionResidentsCrown">Vzpoura selhala: koruna ovládá alespoň 90 procent obyvatel zbývajících kolonií.</entry>
+	<entry key="gameOver_rebellionVictory">Vzpoura uspěla: všechny zbývající kolonie povstalců jsou tvé a koruna má nejvýše dvě pozemní jednotky.</entry>
 </properties>

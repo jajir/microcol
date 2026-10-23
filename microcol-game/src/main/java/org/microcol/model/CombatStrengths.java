@@ -11,6 +11,9 @@ import org.microcol.model.unit.UnitTreasure;
 
 /** Frozen attacker and defender ordinary-land strengths. */
 public final class CombatStrengths {
+    /** Additive colony bombardment of a qualifying soldier (R-0178). */
+    private static final int BOMBARDMENT_BONUS = 50;
+
     private final CombatStrength attacker;
     private final CombatStrength defender;
     private final String inputs;
@@ -100,13 +103,27 @@ public final class CombatStrengths {
                 || !defendTerrain.getTerrainType().isLand()) {
             return Optional.empty();
         }
-        final int colonyBonus = model.getColonyAt(defender.getLocation())
+        final Optional<Colony> targetColony = model
+                .getColonyAt(defender.getLocation());
+        final int colonyBonus = targetColony
                 .filter(c -> c.getOwner() == defender.getOwner())
                 .map(CombatStrengths::highestFortificationBonus).orElse(0);
         final int terrainBonus = terrainBonus(defendTerrain);
+        final int bombardment = targetColony
+                .map(colony -> bombardmentBonus(model, attacker, colony))
+                .orElse(0);
+        final int rebelAmbush = rebelAmbushBonus(model, attacker, defender,
+                defendTerrain);
+        final double causeSupport = targetColony
+                .map(colony -> causeSupportBonus(model, attacker, colony))
+                .orElse(0.0);
+        final String causeInputs = targetColony
+                .map(colony -> causeSupportInputs(model, attacker, colony))
+                .orElse("");
         final CombatStrength attack = new CombatStrength(base(attacker, true),
                 50, 0, 0, 0,
-                artilleryPenalty(model, attacker, attackerSquare, false));
+                artilleryPenalty(model, attacker, attackerSquare, false), 0,
+                bombardment, rebelAmbush, causeSupport);
         final CombatStrength defense = new CombatStrength(base(defender, false),
                 0, terrainBonus, model.isFortified(defender) ? 50 : 0,
                 colonyBonus, artilleryPenalty(model, defender));
@@ -117,8 +134,113 @@ public final class CombatStrengths {
                 + ':' + defender.getType().name() + ':' + state(defender) + ':'
                 + defendTerrain.getTerrainType().name() + ':'
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
-                + ':' + colonyBonus;
+                + ':' + colonyBonus + ':' + bombardment + ':' + rebelAmbush
+                + ':' + causeInputs;
         return Optional.of(new CombatStrengths(attack, defense, inputs));
+    }
+
+    /**
+     * Bombardment of a colony attacked (R-0178). A royal regular bombards a
+     * rebel colony only when its Crown is the King ruling that colony's nation.
+     * A delivered intervention soldier bombards a colony held by the Crown of
+     * its own nation. Other Crowns, rival nations and rebel-owned targets
+     * receive nothing.
+     */
+    private static int bombardmentBonus(final Model model, final Unit attacker,
+            final Colony colony) {
+        final Player owner = colony.getOwner();
+        final boolean royalAgainstRebels = isRole(attacker, MilitaryRole.ROYAL)
+                && owner.isDeclaredIndependence()
+                && isCrownOf(model, owner, attacker.getOwner());
+        final boolean interventionAgainstCrown = isInterventionTroop(attacker)
+                && isCrownOf(model, attacker.getOwner(), owner);
+        return royalAgainstRebels || interventionAgainstCrown
+                ? BOMBARDMENT_BONUS
+                : 0;
+    }
+
+    /**
+     * Cause support of a revolutionary colony attack (R-0188). Only the two
+     * sides of the colony's own colonial affiliation qualify: a rebel of that
+     * affiliation attacking a colony its Crown holds adds the exact rebel
+     * share, and that Crown attacking a colony still held by the affiliation
+     * adds the complementary Tory share. A rival holding the colony, or any
+     * other Crown, is an unrelated conflict and gets nothing. The affiliation
+     * keeps the cause during a Crown occupation. Before the declaration, and
+     * for a colony without residents, which has no measured share, nothing is
+     * added.
+     */
+    private static double causeSupportBonus(final Model model,
+            final Unit attacker, final Colony colony) {
+        final Player affiliation = colony.getLastColonialAffiliation();
+        final Player holder = colony.getOwner();
+        final RebelSupport support = colony.getRebelSupport();
+        if (!affiliation.isDeclaredIndependence()
+                || support.getDenominator() == 0) {
+            return 0;
+        }
+        if (attacker.getOwner() == affiliation
+                && isCrownOf(model, affiliation, holder)) {
+            return support.getNumerator() * 100.0 / support.getDenominator();
+        }
+        if (holder == affiliation
+                && isCrownOf(model, affiliation, attacker.getOwner())) {
+            return (support.getDenominator() - support.getNumerator()) * 100.0
+                    / support.getDenominator();
+        }
+        return 0;
+    }
+
+    /**
+     * Frozen identity of the cause support (R-0188): both owners, the
+     * affiliation and the exact fraction with the bonus it gives. A stale quote
+     * is rejected even when its rounded display percent is unchanged.
+     */
+    private static String causeSupportInputs(final Model model,
+            final Unit attacker, final Colony colony) {
+        final RebelSupport support = colony.getRebelSupport();
+        return attacker.getOwner().getName() + ':' + colony.getOwner().getName()
+                + ':' + colony.getLastColonialAffiliation().getName() + ':'
+                + support.getNumerator() + '/' + support.getDenominator() + ':'
+                + causeSupportBonus(model, attacker, colony);
+    }
+
+    /**
+     * Rebel ambush of the open battlefield (R-0178): an armed rebel attacking
+     * the regular army of its own Crown outside any colony gets the card's
+     * defense value of the defender's tile. Defending needs no extra term,
+     * because the defender's ordinary terrain already gives the same value.
+     */
+    private static int rebelAmbushBonus(final Model model, final Unit attacker,
+            final Unit defender, final Terrain defendTerrain) {
+        final boolean rebelAttacker = attacker.getOwner()
+                .isDeclaredIndependence();
+        final boolean royalDefender = isRole(defender, MilitaryRole.ROYAL)
+                && isCrownOf(model, attacker.getOwner(), defender.getOwner());
+        return rebelAttacker && royalDefender
+                && model.getColonyAt(defender.getLocation()).isEmpty()
+                        ? ambushBonus(defendTerrain)
+                        : 0;
+    }
+
+    /**
+     * @return whether the candidate is the Crown that rules the given colonial
+     *         nation; any other player is never such a Crown
+     */
+    private static boolean isCrownOf(final Model model, final Player nation,
+            final Player candidate) {
+        return model.getKingOf(nation).map(king -> king == candidate)
+                .orElse(false);
+    }
+
+    private static boolean isRole(final Unit unit, final MilitaryRole role) {
+        return unit instanceof UnitFreeColonist
+                && ((UnitFreeColonist) unit).getMilitaryRole() == role;
+    }
+
+    private static boolean isInterventionTroop(final Unit unit) {
+        return isRole(unit, MilitaryRole.CONTINENTAL)
+                && ((UnitFreeColonist) unit).isInterventionDelivered();
     }
 
     private static boolean isNativeFight(final Unit attacker,
@@ -217,9 +339,9 @@ public final class CombatStrengths {
     }
 
     /**
-     * Native ambush of the defender's tile (R-0173): the card's tree values
-     * (forest 50%, swamp forest 75%) and the open hill and mountain values.
-     * Bare marsh, swamp and other open ground give none.
+     * Native ambush (R-0173) and rebel ambush (R-0178) of the defender's tile:
+     * the card's tree values (forest 50%, swamp forest 75%) and the open hill
+     * and mountain values. Bare marsh, swamp and other open ground give none.
      */
     private static int ambushBonus(final Terrain terrain) {
         if (terrain.isHasTrees()) {
@@ -289,7 +411,9 @@ public final class CombatStrengths {
         final Unit defender = defense.getDefender();
         final CombatStrength attack = new CombatStrength(base(attacker, true),
                 50, 0, 0, 0,
-                artilleryPenalty(model, attacker, attackerSquare, false));
+                artilleryPenalty(model, attacker, attackerSquare, false), 0,
+                bombardmentBonus(model, attacker, colony), 0,
+                causeSupportBonus(model, attacker, colony));
         final CombatStrength defend = colonyDefenderStrength(model, defender,
                 colony, defense.getBattlefield(), defense.getKind());
         final String inputs = "COLONY:" + defense.getKind() + ':'
@@ -299,7 +423,10 @@ public final class CombatStrengths {
                 + ':' + defender.getType().name() + ':' + state(defender) + ':'
                 + defendTerrain.getTerrainType().name() + ':'
                 + defendTerrain.isHasTrees() + ':' + model.isFortified(defender)
-                + ':' + defend.getColonyBonus() + ':' + defense.getInputs();
+                + ':' + defend.getColonyBonus() + ':'
+                + attack.getBombardmentBonus() + ':'
+                + causeSupportInputs(model, attacker, colony) + ':'
+                + defense.getInputs();
         return Optional.of(new CombatStrengths(attack, defend, inputs));
     }
 
@@ -470,7 +597,8 @@ public final class CombatStrengths {
         }
         UnitFreeColonist colonist = (UnitFreeColonist) unit;
         return colonist.isMounted() + ":" + colonist.isHoldingGuns() + ':'
-                + colonist.isVeteran() + ':' + colonist.getMilitaryRole();
+                + colonist.isVeteran() + ':' + colonist.getMilitaryRole() + ':'
+                + colonist.isInterventionDelivered();
     }
 
     private static int artilleryPenalty(Model model, Unit unit) {

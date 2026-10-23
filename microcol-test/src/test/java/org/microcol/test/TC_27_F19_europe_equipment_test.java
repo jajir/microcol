@@ -300,9 +300,9 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         com.google.gson.JsonObject saved = new com.google.gson.Gson().fromJson(
                 java.nio.file.Files.readString(FIXTURE.toPath()),
                 com.google.gson.JsonObject.class);
-        saved.getAsJsonObject("model").getAsJsonObject("gameManager")
-                .getAsJsonArray("players").get(0).getAsJsonObject()
-                .addProperty("declaredIndependence", true);
+        org.microcol.page.RebellionJson.declare(saved.getAsJsonObject("model"),
+                saved.getAsJsonObject("model").getAsJsonObject("gameManager")
+                        .getAsJsonArray("players").get(0).getAsJsonObject());
         File restricted = new File(System.getProperty("user.home"),
                 "europe-restricted.microcol");
         java.nio.file.Files.writeString(restricted.toPath(), saved.toString());
@@ -327,14 +327,12 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         europe.verifyGold(1000);
         equipment.captureDialog("europeMarketRestriction",
                 "europe-market-restricted.png");
-        equipment.open(100, "Buy 50 muskets");
-        equipment.verifyChoice("Buy 50 muskets", false, RESTRICTED);
-        equipment.cancel();
+        // The declaration Crown-seized both pier colonists: their equipment
+        // entries are disabled, so no offer opens and both keep their gear.
+        equipment.verifySeizedPierMenu(100);
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
-        equipment.open(101, "Sell remaining tools");
-        equipment.verifyChoice("Sell remaining tools", false, RESTRICTED);
-        equipment.cancel();
+        equipment.verifySeizedPierMenu(101);
         equipment.verifyState(101, 1000, false, false, 37,
                 PlaceEuropePier.class);
     }

@@ -13,6 +13,8 @@
 	<entry key="shipsLostWithColony">%s ship(s) and their cargo were lost with the colony.</entry>
 	<entry key="newUnitIsInEurope">Religious production attracted an immigrant, now waiting on the European pier.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
+	<entry key="interventionArrived">Foreign intervention arrived at %s: two men-of-war, four Continental infantry and two Continental cavalry.</entry>
+	<entry key="mercenaryArrived">The paid veteran soldiers have landed at %s.</entry>
 	<entry key="colonyWasLost">Colony %s was lost.</entry>
 	<entry key="goodsWasThrowsAway1">In colony is not enough space in warehouse, because of that %s goods %s was throws away.</entry>
 	<entry key="goodsWasThrowsAway2">In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>

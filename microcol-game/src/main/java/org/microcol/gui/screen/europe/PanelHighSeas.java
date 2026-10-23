@@ -188,10 +188,14 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     final Button reverse = new Button(
                             i18n.get(Europe.voyageReverse));
                     reverse.setId("voyage-reverse-" + unit.getId());
+                    // Turning an outbound ship toward a closed home Europe is
+                    // refused by the model, so the control is unavailable.
                     reverse.setDisable(!gameModelController.getModel()
                             .isGameRunning()
                             || gameModelController.getModel()
-                                    .getCurrentPlayer() != unit.getOwner());
+                                    .getCurrentPlayer() != unit.getOwner()
+                            || !voyage.isTravelToEurope()
+                                    && !unit.getOwner().canTradeInEurope());
                     reverse.setOnAction(event -> reverseCourse((Ship) unit));
                     final Button jettison = new Button(
                             i18n.get(Europe.voyageJettison));

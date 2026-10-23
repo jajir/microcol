@@ -76,7 +76,7 @@ public final class ShipRepairPage extends AbstractScreen {
                 .getAsJsonArray("players")) {
             JsonObject player = element.getAsJsonObject();
             if ("Dutch".equals(player.get("name").getAsString())) {
-                player.addProperty("declaredIndependence", !europeOpen);
+                RebellionJson.set(model, player, !europeOpen);
             }
         }
         Path fixture = Files.createTempFile("ship-repair-lost-destination-",

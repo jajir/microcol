@@ -426,9 +426,15 @@ public class UnitFactory {
                                 && unitPo.getPlaceColonyField() == null
                                 && unitPo.getPlaceConstructionSlot() == null,
                 "Only a colonist outside a colony job can have a special role");
+        Preconditions.checkArgument(
+                !unitPo.isInterventionDelivered()
+                        || unit instanceof UnitFreeColonist,
+                "Only a colonist can have an intervention origin");
         if (unit instanceof UnitFreeColonist) {
             ((UnitFreeColonist) unit)
                     .restoreMilitaryRole(unitPo.getMilitaryRole());
+            ((UnitFreeColonist) unit).restoreInterventionDelivered(
+                    unitPo.isInterventionDelivered());
             ((UnitFreeColonist) unit).restoreMissionary(unitPo.getMissionary());
             ((UnitFreeColonist) unit)
                     .restoreVeteran(unitCreateRequest.isVeteran());
@@ -476,6 +482,7 @@ public class UnitFactory {
             ((AbstractUnit) unit).restoreImmigrant(unitPo.isBoardingOptOut(),
                     unitPo.isBoardingPriority());
         }
+        ((AbstractUnit) unit).restoreCrownSeized(unitPo.isCrownSeized());
         // A saved order is restored only, never advanced: loading moves
         // nothing.
         if (unitPo.getGoToDestination() == null) {

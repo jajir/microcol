@@ -47,7 +47,10 @@ public class TeService {
             final TeProcessorLostCityRumor lostCityRumor,
             final TeProcessorPatrolInterception patrolInterception,
             final TeProcessorCoastalBattery coastalBattery,
-            final TeProcessorNativeConquest nativeConquest) {
+            final TeProcessorNativeConquest nativeConquest,
+            final TeProcessorIntervention intervention,
+            final TeProcessorInterventionArrival interventionArrival,
+            final TeProcessorMercenaryArrival mercenaryArrival) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
 
@@ -82,7 +85,10 @@ public class TeService {
                         Preconditions.checkNotNull(lostCityRumor),
                         Preconditions.checkNotNull(patrolInterception),
                         Preconditions.checkNotNull(coastalBattery),
-                        Preconditions.checkNotNull(nativeConquest)));
+                        Preconditions.checkNotNull(nativeConquest),
+                        Preconditions.checkNotNull(intervention),
+                        Preconditions.checkNotNull(interventionArrival),
+                        Preconditions.checkNotNull(mercenaryArrival)));
     }
 
     private Model getModel() {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="title">Veteránští žoldnéři</entry>
+  <entry key="offer">%s nabízí 2 veterány za %s zlatých.
+Vaše pokladna: %s zlatých.
+Po zaplacení: %s zlatých.</entry>
+  <entry key="port">Přístav, který vojáky přijme</entry>
+  <entry key="noPort">Žádný vlastní pobřežní přístav nelze dosáhnout z moře.</entry>
+  <entry key="accept">Zaplatit a poslat vojáky</entry>
+  <entry key="decline">Odmítnout, nic neplatit</entry>
+  <entry key="later">Rozhodnout později</entry>
+  <entry key="insufficient">Na tyto vojáky nemáte dost zlata.</entry>
+  <entry key="changed">Nabídka nebo přístav se změnily. Zavřete okno a zkontrolujte to znovu.</entry>
+  <entry key="blocked">Tento přístav je blokován: zaplacení vojáci počkají tam, dokud se neotevře mořská cesta.</entry>
+  <entry key="delivered">Platba proběhla. Veteránští vojáci přistáli v přístavu.</entry>
+  <entry key="pending">Platba proběhla. Veteráni čekají v přístavu, dokud se neotevře mořská cesta.</entry>
+  <entry key="close">Zavřít</entry>
+  <entry key="resume">Prohlédnout nabídku žoldnéřů…</entry>
+</properties>

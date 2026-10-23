@@ -505,10 +505,12 @@ class CoastalBatteryTest {
         final ModelPo data = harbourData();
         colonyAt(data, PORT).getConstructions()
                 .add(facility(ConstructionType.FORT));
+        RebellionFixtures.holdFreePlayMontreal(data);
         // A declared-independence owner has no home market to repair in.
-        data.getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data,
+                data.getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow());
         final Model model = build(data, stateFor(true), true);
         final Ship ship = ship(model);
         ship.moveOneStep(APPROACH);

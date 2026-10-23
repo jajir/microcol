@@ -198,6 +198,7 @@ public final class PanelPortPierUnit extends HBox {
         final MenuItem ordain = new MenuItem(
                 i18n.get(OrdinationMsg.ordainMenu));
         ordain.setId("europe-ordain-" + unit.getId());
+        ordain.setDisable(unit.isCrownSeized());
         ordain.setOnAction(event -> {
             ordinationDialog.show(unit);
             callback.repaintAfterGoodMoving();
@@ -210,6 +211,9 @@ public final class PanelPortPierUnit extends HBox {
         final MenuItem item = new MenuItem(
                 i18n.get(DialogEuropeEquipment.actionKey(type, buy)));
         item.setId("europe-equipment-" + type.name());
+        // A Crown-seized pier unit is inaccessible to its former owner
+        // (R-0187).
+        item.setDisable(colonist.isCrownSeized());
         item.setOnAction(event -> {
             equipmentDialog.show(colonist, type, buy);
             callback.repaintAfterGoodMoving();

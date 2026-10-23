@@ -211,7 +211,8 @@ class TaxArrearsPaymentTest {
     @Test
     void independentNationCannotPayBackTaxes() {
         final GameModelPo data = data(200, Map.of(GoodsType.RUM, 200), 5);
-        player(data.getModel(), "Dutch").setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                player(data.getModel(), "Dutch"));
         final Model model = runningDutchTurn(data);
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxArrearsQuote rum = dutch.quoteTaxArrears(GoodsType.RUM)

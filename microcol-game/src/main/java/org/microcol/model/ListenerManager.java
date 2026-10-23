@@ -24,6 +24,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
+import org.microcol.model.event.MercenaryOfferRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -131,6 +132,13 @@ final class ListenerManager {
                 player);
         executeInSeparateThread(
                 listener -> listener.onTaxDemandRequired(event));
+    }
+
+    void fireMercenaryOfferRequired(final Model model, final Player player) {
+        final MercenaryOfferRequiredEvent event = new MercenaryOfferRequiredEvent(
+                model, player);
+        executeInSeparateThread(
+                listener -> listener.onMercenaryOfferRequired(event));
     }
 
     void fireTurnFinished(final Model model, final Player player) {

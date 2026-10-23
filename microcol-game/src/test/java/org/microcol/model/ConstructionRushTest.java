@@ -298,9 +298,11 @@ class ConstructionRushTest {
         final GameModelPo independentData = new GameModelPoDao()
                 .loadFromClassPath(
                         "/maps/default-campaign-mission-2-thrive.microcol");
-        independentData.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(independentData.getModel(),
+                independentData.getModel().getGameManager().getPlayers()
+                        .stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow());
         final Model independent = Model.make(independentData.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final ColonyBuildingQueue blocked = independent.getColonyByName("Delft")

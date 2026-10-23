@@ -171,7 +171,22 @@ public class GameModelController {
 
     public void performMove(final Unit ship, final List<Location> path) {
         logger.debug("Start move ship: " + ship);
-        new Thread(() -> getModel().moveUnit(ship, Path.of(path))).start();
+        new Thread(() -> {
+            try {
+                getModel().moveUnit(ship, Path.of(path));
+            } catch (IllegalStateException
+                    | IllegalArgumentException rejected) {
+                Platform.runLater(() -> eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(ship.isShip() && ship.isAtPlaceLocation()
+                                && !ship.getOwner().canTradeInEurope()
+                                && path.stream().anyMatch(step -> getModel()
+                                        .getHighSea()
+                                        .isDepartureStep(ship.getLocation(),
+                                                step)) ? Buttons.moveEuropeClosed
+                                                        : Buttons.moveChanged),
+                        StatusBarMessageEvent.Source.GAME)));
+            }
+        }).start();
     }
 
     /**

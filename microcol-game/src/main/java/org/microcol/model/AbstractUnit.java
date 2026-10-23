@@ -77,6 +77,11 @@ public abstract class AbstractUnit implements Unit {
      * Player's single current front-of-queue choice among willing immigrants.
      */
     private boolean boardingPriority;
+    /**
+     * Seized by the Crown from home Europe at the owner's declaration (R-0187).
+     * The unit keeps its owner and identity but cannot be used by that owner.
+     */
+    private boolean crownSeized;
 
     public AbstractUnit(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
@@ -368,6 +373,9 @@ public abstract class AbstractUnit implements Unit {
     }
 
     private boolean canTransferPassenger(final boolean departureSentry) {
+        if (crownSeized) {
+            return false;
+        }
         if (isAtCargoSlot()
                 && getPlaceCargoSlot().getOwnerUnit() instanceof Ship
                 && ((Ship) getPlaceCargoSlot().getOwnerUnit()).isDamaged()) {
@@ -867,6 +875,14 @@ public abstract class AbstractUnit implements Unit {
                     "Location (%s) must be valid.", step);
             Preconditions.checkArgument(isPossibleToMoveAt(step),
                     "It's not possible to move at (%s).", step);
+            // A departure step sails to Europe, closed to a declared nation
+            // (R-0187); the route is refused before its first step.
+            Preconditions
+                    .checkState(
+                            !isShip() || owner.canTradeInEurope()
+                                    || !model.getHighSea().isDepartureStep(at,
+                                            step),
+                            "Home Europe is closed to %s", owner);
             at = step;
         }
     }
@@ -972,6 +988,12 @@ public abstract class AbstractUnit implements Unit {
                 "Location (%s) must be valid.", moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
+        // Stepping onto the high sea sends a ship to Europe, which is closed to
+        // a declared nation (R-0187).
+        Preconditions.checkState(
+                !isShip() || !model.getHighSea().isDepartureMove(this, moveTo)
+                        || owner.canTradeInEurope(),
+                "Home Europe is closed to %s", owner);
         Preconditions.checkState(
                 canPayEntryCost(getEntryCostThirds(getLocation(), moveTo)),
                 "There is not enough movement (%s) to enter (%s)", this,
@@ -1011,6 +1033,32 @@ public abstract class AbstractUnit implements Unit {
                 .orElseThrow(() -> new IllegalStateException(
                         "There is no legal hostile attack at " + attackAt))
                 .execute();
+    }
+
+    /** Judges a rebellion loss after a completed attack (R-0192). */
+    void checkRebellionLoss() {
+        model.checkRebellionLoss();
+    }
+
+    /**
+     * Whether the unit works in a colony job, so leaving it can end a colony.
+     */
+    private boolean isColonyResident() {
+        return isAtPlaceColonyField() || isAtPlaceConstructionSlot();
+    }
+
+    /**
+     * Judges a rebellion loss once a resident's whole exit from its colony is
+     * complete, with the unit already in its new place (R-0192). A unit that
+     * was no resident, and a move between jobs of one colony, change no colony.
+     *
+     * @param leftColony whether the unit was a resident of another colony
+     *                   before the completed placement
+     */
+    private void completeResidentExit(final boolean leftColony) {
+        if (leftColony) {
+            model.checkRebellionLoss();
+        }
     }
 
     void executeAttack(final AttackOrder order) {
@@ -1433,7 +1481,13 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void takeOver(final Player player) {
-        this.owner = Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(player);
+        if (player != owner) {
+            // A unit that leaves its Crown no longer serves the roster member
+            // it was bound to; the capture is recorded once, before the change.
+            model.recordRoyalCapture(this);
+        }
+        this.owner = player;
     }
 
     @Override
@@ -1544,6 +1598,7 @@ public abstract class AbstractUnit implements Unit {
                 && !getLocation().equals(slot.getOwnerUnit().getLocation())
                         ? MovementPoints.THIRDS_PER_POINT
                         : 0;
+        final boolean resident = isColonyResident();
         place.destroy();
         place = placeCargoSlot;
         // Boarding ends the waiting state, so a later return to the pier does
@@ -1554,6 +1609,7 @@ public abstract class AbstractUnit implements Unit {
         holds.subList(1, holds.size())
                 .forEach(hold -> hold.reserve(placeCargoSlot));
         model.fireUnitEmbarked(this, slot);
+        completeResidentExit(resident);
     }
 
     void beginShipRepair(final PlaceShipRepair repair) {
@@ -1586,6 +1642,19 @@ public abstract class AbstractUnit implements Unit {
         place.destroy();
         place = new PlaceEuropePort(this, port);
         retainProcessedTradeRouteVisitAt(null);
+        // A repair that ends in a closed home port seizes the ship and everyone
+        // aboard in place; the cargo stays on board (R-0187).
+        if (owner.isDeclaredIndependence()) {
+            seizeByCrown();
+            if (this instanceof UnitWithCargo) {
+                for (final CargoSlot slot : ((UnitWithCargo) this).getCargo()
+                        .getSlots()) {
+                    slot.getUnit().map(AbstractUnit.class::cast)
+                            .filter(passenger -> !passenger.crownSeized)
+                            .ifPresent(AbstractUnit::seizeByCrown);
+                }
+            }
+        }
     }
 
     @Override
@@ -1685,6 +1754,7 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(canLeaveColony(),
                 "Fortified colony needs three residents");
         retainProcessedTradeRouteVisitAt(target);
+        final boolean resident = isColonyResident();
         if (place instanceof PlaceLocation) {
             place.destroy();
             place = new PlaceLocation(this, Preconditions.checkNotNull(target),
@@ -1695,6 +1765,9 @@ public abstract class AbstractUnit implements Unit {
                     orientation);
             model.fireUnitMovedToLocation(this);
         }
+        // Only a resident's exit can change a colony; walking units never reach
+        // this judgment.
+        completeResidentExit(resident);
     }
 
     @Override
@@ -1708,6 +1781,10 @@ public abstract class AbstractUnit implements Unit {
                 "Ship is no longer in this game");
         final Ship ship = (Ship) this;
         Preconditions.checkState(!ship.isDamaged(), "Ship is damaged");
+        Preconditions.checkState(!crownSeized,
+                "Crown-seized ship cannot leave home Europe");
+        Preconditions.checkState(!isTravelToEurope || owner.canTradeInEurope(),
+                "Home Europe is closed to %s", owner);
         final Location origin;
         final Direction direction;
         if (isTravelToEurope) {
@@ -1814,6 +1891,8 @@ public abstract class AbstractUnit implements Unit {
     public void placeToColonyStructureSlot(
             final ConstructionSlot structureSlot) {
         validateColonyStructureSlot(structureSlot);
+        final boolean leavesColony = isColonyResident()
+                && !isAlreadyInSameColony(structureSlot.getColony());
         if (isAlreadyInSameColony(structureSlot.getColony())) {
             place.destroySimple();
         } else {
@@ -1822,12 +1901,15 @@ public abstract class AbstractUnit implements Unit {
         place = new PlaceConstructionSlot(this, structureSlot);
         structureSlot.set((PlaceConstructionSlot) place);
         structureSlot.getColony().grantLaSalleStockade();
+        completeResidentExit(leavesColony);
     }
 
     @Override
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         validateColonyField(colonyField, producedGoodsType);
+        final boolean leavesColony = isColonyResident()
+                && !isAlreadyInSameColony(colonyField.getColony());
         if (isAlreadyInSameColony(colonyField.getColony())) {
             place.destroySimple();
         } else {
@@ -1837,6 +1919,7 @@ public abstract class AbstractUnit implements Unit {
         colonyField.setPlaceColonyField((PlaceColonyField) place);
         colonyField.getColony().grantLaSalleStockade();
         model.recordNativeLandUse(getOwner(), colonyField.getLocation());
+        completeResidentExit(leavesColony);
     }
 
     protected void validateColonyStructureSlot(
@@ -2031,6 +2114,7 @@ public abstract class AbstractUnit implements Unit {
         unitPo.setImmigrant(immigrant);
         unitPo.setBoardingOptOut(boardingOptOut);
         unitPo.setBoardingPriority(boardingPriority);
+        unitPo.setCrownSeized(crownSeized);
         if (goTo != null) {
             unitPo.setGoToDestination(goTo.getDestination());
             unitPo.setGoToColonyId(goTo.getColonyId());
@@ -2176,6 +2260,51 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public boolean isBoardingPriority() {
         return boardingPriority;
+    }
+
+    @Override
+    public boolean isCrownSeized() {
+        return crownSeized;
+    }
+
+    /**
+     * Seize a unit of home Europe (R-0187): at the owner's declaration, or when
+     * a repair ends in the closed port. The owner's independence must already
+     * be recorded.
+     */
+    void seizeByCrown() {
+        Preconditions.checkState(
+                owner.isDeclaredIndependence() && !crownSeized
+                        && isInHomeEurope(),
+                "Unit cannot be Crown-seized: %s", this);
+        crownSeized = true;
+    }
+
+    /**
+     * Restore a saved Crown seizure. Only a unit of a declared nation can be
+     * seized; loading never reopens the port.
+     *
+     * @param seized saved seizure state
+     */
+    public void restoreCrownSeized(final boolean seized) {
+        Preconditions.checkArgument(!seized || owner.isDeclaredIndependence(),
+                "Invalid saved Crown-seized state");
+        crownSeized = seized;
+    }
+
+    /**
+     * @return whether this unit is in the home port, on its pier or aboard a
+     *         ship in the port
+     */
+    boolean isInHomeEurope() {
+        return isAtEuropePort() || isAtEuropePier() || isAtCargoSlot()
+                && getPlaceCargoSlot().getOwnerUnit().isAtEuropePort();
+    }
+
+    /** @return whether this ship is at sea sailing to home Europe (R-0187) */
+    boolean isInboundToHomeEurope() {
+        return place instanceof PlaceHighSea
+                && ((PlaceHighSea) place).isTravelToEurope();
     }
 
     /**

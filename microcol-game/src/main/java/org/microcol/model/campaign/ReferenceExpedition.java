@@ -17,6 +17,7 @@ import org.microcol.model.Location;
 import org.microcol.model.MovementPoints;
 import org.microcol.model.NativeRelations;
 import org.microcol.model.RecruitmentPool;
+import org.microcol.model.RoyalRoster;
 import org.microcol.model.Congress;
 import org.microcol.model.TaxState;
 import org.microcol.model.TerrainType;
@@ -131,8 +132,10 @@ public final class ReferenceExpedition {
                     .add(player(owner, nation != humanNation,
                             1000 - 250 * difficulty.ordinal(), null, maxX,
                             maxY));
-            model.getGameManager().getPlayers()
-                    .add(player(owner + "'s King", true, 0, owner, maxX, maxY));
+            final PlayerPo crown = player(owner + "'s King", true, 0, owner,
+                    maxX, maxY);
+            crown.setRoyalRoster(RoyalRoster.initial(difficulty));
+            model.getGameManager().getPlayers().add(crown);
             final UnitType shipType = nation == EuropeanNation.DUTCH
                     ? UnitType.MERCHANTMAN
                     : UnitType.CARAVEL;

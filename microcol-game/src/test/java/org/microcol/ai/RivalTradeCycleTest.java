@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +26,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
+import org.microcol.model.RebellionFixtures;
 import org.microcol.model.RivalTradeFixtures;
 import org.microcol.model.RivalTradeObjective;
 import org.microcol.model.RivalTradeObjective.Stage;
@@ -103,7 +104,7 @@ class RivalTradeCycleTest {
      * the French saved player can be changed before the model is built.
      */
     private Model world(final boolean lanes, final boolean wall,
-            final Consumer<PlayerPo> france) {
+            final BiConsumer<ModelPo, PlayerPo> france) {
         final GameModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play-rival-expedition.microcol");
         data.getModel().getGameManager().setGameStarted(true);
@@ -138,7 +139,7 @@ class RivalTradeCycleTest {
                 .stream().filter(player -> player.getName().equals(RIVAL))
                 .findFirst().orElseThrow();
         rival.getVisible().setVisibility(known, 50, 30);
-        france.accept(rival);
+        france.accept(data.getModel(), rival);
         final UnitPo ship = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == SHIP_ID).findFirst()
                 .orElseThrow();
@@ -221,12 +222,12 @@ class RivalTradeCycleTest {
 
     /** The rival founds its colony from its own founder on the coast. */
     private void prepareRival() {
-        prepareRival(true, false, rival -> {
+        prepareRival(true, false, (po, rival) -> {
         });
     }
 
     private void prepareRival(final boolean lanes, final boolean wall,
-            final Consumer<PlayerPo> france) {
+            final BiConsumer<ModelPo, PlayerPo> france) {
         model = world(lanes, wall, france);
         final Unit founder = model.getUnitById(FOUNDER_ID);
         founder.placeToLocation(COLONY);
@@ -438,7 +439,7 @@ class RivalTradeCycleTest {
 
     @Test
     void topologyWithoutASeaLaneKeepsTheShipmentAndTheObjective() {
-        prepareRival(false, false, rival -> {
+        prepareRival(false, false, (po, rival) -> {
         });
         moveShipToColony();
         setLumber(100);
@@ -493,7 +494,8 @@ class RivalTradeCycleTest {
 
     @Test
     void taxedLumberSaleCreditsTheNetQuoteOnceAcrossRestoreAndVoyage() {
-        prepareRival(true, false, rival -> rival.getTax().setRate(TAX_RATE));
+        prepareRival(true, false,
+                (po, rival) -> rival.getTax().setRate(TAX_RATE));
         // The colony already has its 50 tools, so only the sale moves gold.
         setTools(50);
         model.getEurope().getPort().placeShipToPort(ship());
@@ -782,7 +784,7 @@ class RivalTradeCycleTest {
     @Test
     void boycottedLumberKeepsTheCargoTheLegAndTheTreasuryInEurope() {
         prepareRival(true, false,
-                rival -> rival.getTax().getArrears().put("LUMBER", 100));
+                (po, rival) -> rival.getTax().getArrears().put("LUMBER", 100));
         // A lumber boycott also closes buying it, so the cargo comes from the
         // colony warehouse before the ship goes to Europe.
         moveShipToColony();
@@ -807,7 +809,7 @@ class RivalTradeCycleTest {
     @Test
     void boycottedToolsAreSkippedButTheLumberIsStillSoldOnce() {
         prepareRival(true, false,
-                rival -> rival.getTax().getArrears().put("TOOLS", 100));
+                (po, rival) -> rival.getTax().getArrears().put("TOOLS", 100));
         model.getEurope().getPort().placeShipToPort(ship());
         france().setGold(1000);
         ship().getCargo().getSlots().get(0)
@@ -826,7 +828,8 @@ class RivalTradeCycleTest {
 
     @Test
     void declaredIndependenceKeepsTheShipAtEuropeWithoutAnyPurchase() {
-        prepareRival(true, false, rival -> rival.setDeclaredIndependence(true));
+        prepareRival(true, false,
+                (po, rival) -> RebellionFixtures.declare(po, rival));
         model.getEurope().getPort().placeShipToPort(ship());
         setTools(50);
         france().setGold(1000);
@@ -841,7 +844,7 @@ class RivalTradeCycleTest {
 
     @Test
     void blockedReturnRouteKeepsTheShipInEuropeAndRetriesEachTurn() {
-        prepareRival(true, true, rival -> {
+        prepareRival(true, true, (po, rival) -> {
         });
         model.getEurope().getPort().placeShipToPort(ship());
         ship().rememberDeparture(Location.of(2, 10), Direction.west);

@@ -38,7 +38,15 @@ public class IdManager {
     }
 
     boolean canAllocate() {
-        return nextId >= 0 && nextId < Integer.MAX_VALUE;
+        return canAllocate(1);
+    }
+
+    /**
+     * @param count number of identities that will be needed
+     * @return whether that many more identities remain
+     */
+    boolean canAllocate(final int count) {
+        return nextId >= 0 && (long) nextId + count <= Integer.MAX_VALUE;
     }
 
 }

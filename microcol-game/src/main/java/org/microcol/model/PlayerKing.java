@@ -18,14 +18,26 @@ public class PlayerKing extends Player {
      */
     private final Player whosKingThisPlayerIs;
 
+    /** The Crown's prewar regular force; the only saved copy of it. */
+    private final RoyalRoster royalRoster;
+
     PlayerKing(final String name, final boolean computer, final int initialGold,
             final Model model, final boolean declaredIndependence,
             final Player whosKingThisPlayerIs,
-            final Map<String, Object> extraData, Set<Location> visible) {
+            final Map<String, Object> extraData, Set<Location> visible,
+            final RoyalRoster royalRoster) {
         super(name, computer, initialGold, model, declaredIndependence,
                 extraData, visible, null, null, null);
         this.whosKingThisPlayerIs = Preconditions
                 .checkNotNull(whosKingThisPlayerIs);
+        this.royalRoster = Preconditions.checkNotNull(royalRoster);
+    }
+
+    /**
+     * @return the Crown's prewar roster, read-only through its accessors
+     */
+    public RoyalRoster getRoyalRoster() {
+        return royalRoster;
     }
 
     /** @return the colonial nation's tax percentage */
@@ -58,6 +70,7 @@ public class PlayerKing extends Player {
     public PlayerPo save() {
         final PlayerPo out = super.save();
         out.setWhosKingThisPlayerIs(whosKingThisPlayerIs.getName());
+        out.setRoyalRoster(royalRoster.save());
         return out;
     }
 

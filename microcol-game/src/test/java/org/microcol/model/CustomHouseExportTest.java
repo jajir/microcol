@@ -191,9 +191,10 @@ class CustomHouseExportTest {
     @Test
     void halfPriceRevolutionExportStillPressesTheFullQuantity() {
         final GameModelPo data = data();
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);
@@ -222,9 +223,10 @@ class CustomHouseExportTest {
     @Test
     void independenceUsesHalfTaxedNetWithoutOpeningEurope() {
         final GameModelPo data = data();
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);
@@ -443,9 +445,10 @@ class CustomHouseExportTest {
     @Test
     void revolutionaryExportIsASubsetOfTheSalesWithHalfNetRevenue() {
         final GameModelPo data = data();
-        data.getModel().getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Dutch")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data.getModel(),
+                data.getModel().getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Dutch"))
+                        .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);

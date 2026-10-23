@@ -75,9 +75,11 @@ class NavalCombatTest {
                 .loadFromClassPath("/maps/free-play.microcol");
         final ModelPo data = wrapper.getModel();
         data.setCombatRandomState(state);
-        data.getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("France")).findFirst()
-                .orElseThrow().setDeclaredIndependence(franceIndependent);
+        RebellionFixtures.set(data,
+                data.getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("France"))
+                        .findFirst().orElseThrow(),
+                franceIndependent);
         setCongressMembers(data, "Dutch", dutchMembers);
         setCongressMembers(data, "France", franceMembers);
         final UnitPo original = data.getUnits().stream()

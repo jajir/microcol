@@ -310,10 +310,11 @@ class ImmigrationTest {
             source.getModel().getGameManager().getPlayers().stream()
                     .filter(player -> "Dutch".equals(player.getName()))
                     .findFirst().orElseThrow().getRecruitment().setCrosses(100);
-            source.getModel().getGameManager().getPlayers().stream()
-                    .filter(player -> "Dutch".equals(player.getName()))
-                    .findFirst().orElseThrow()
-                    .setDeclaredIndependence(independent);
+            RebellionFixtures.set(source.getModel(),
+                    source.getModel().getGameManager().getPlayers().stream()
+                            .filter(player -> "Dutch".equals(player.getName()))
+                            .findFirst().orElseThrow(),
+                    independent);
             final Model model = load(source);
             final Player computer = model.getPlayerByName("Dutch");
             assertTrue(computer.isComputer());

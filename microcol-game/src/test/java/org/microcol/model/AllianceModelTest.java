@@ -1002,9 +1002,10 @@ class AllianceModelTest {
     @ValueSource(strings = { "Dutch", "France" })
     void independenceOfEitherParticipantExcludesThePair(final String who) {
         final ModelPo data = scripted(List.of("Dutch", "France"));
-        data.getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals(who)).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data,
+                data.getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals(who))
+                        .findFirst().orElseThrow());
         final Long random = data.getCombatRandomState();
         final Model model = scriptedModel(inProgress(data, 20));
         model.processCrownWar();
@@ -1037,9 +1038,10 @@ class AllianceModelTest {
     @Test
     void anotherEligiblePairStillQualifiesWhenOneMemberIsExcluded() {
         final ModelPo data = scripted(List.of("Dutch", "France", "Spain"));
-        data.getGameManager().getPlayers().stream()
-                .filter(player -> player.getName().equals("Spain")).findFirst()
-                .orElseThrow().setDeclaredIndependence(true);
+        RebellionFixtures.declare(data,
+                data.getGameManager().getPlayers().stream()
+                        .filter(player -> player.getName().equals("Spain"))
+                        .findFirst().orElseThrow());
         final Model model = scriptedModel(inProgress(data, 20));
         model.processCrownWar();
         assertEquals(List.of("Dutch-France"), wars(model));

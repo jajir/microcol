@@ -140,7 +140,7 @@ public final class TaxDemandPage extends AbstractScreen {
                 (type, amount) -> owed.addProperty(type.name(), amount));
         tax.add("arrears", owed);
         if (fixture.independence) {
-            player.addProperty("declaredIndependence", true);
+            RebellionJson.declare(model, player);
         }
         if (fixture.gold != null) {
             player.addProperty("gold", fixture.gold);
@@ -180,16 +180,17 @@ public final class TaxDemandPage extends AbstractScreen {
     }
 
     /**
-     * Write a saved game made by the game itself, changing only its
-     * independence flag, and make it the next game to load.
+     * Write a saved game made by the game itself, changing only its declaration
+     * of independence and the Crown seizure it brings, and make it the next
+     * game to load.
      */
     public void prepareRevolutionFrom(final File snapshot, final String name)
             throws Exception {
         final JsonObject saved = new Gson().fromJson(
                 Files.readString(snapshot.toPath()), JsonObject.class);
-        saved.getAsJsonObject("model").getAsJsonObject("gameManager")
-                .getAsJsonArray("players").get(0).getAsJsonObject()
-                .addProperty("declaredIndependence", true);
+        RebellionJson.declare(saved.getAsJsonObject("model"),
+                saved.getAsJsonObject("model").getAsJsonObject("gameManager")
+                        .getAsJsonArray("players").get(0).getAsJsonObject());
         makeNextLoad(saved, name);
     }
 

@@ -86,7 +86,8 @@ class MilitaryRoleCombatTest {
         data.getModel().getMap().setTrees(trees);
         data.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> "Dutch".equals(player.getName()))
-                .forEach(player -> player.setDeclaredIndependence(true));
+                .forEach(player -> RebellionFixtures.declare(data.getModel(),
+                        player));
         data.getModel().getUnits().add(attacker);
         data.getModel().getUnits().add(defender);
         final Model model = Model.make(data.getModel(),

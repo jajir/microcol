@@ -6373,3 +6373,98 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. Complete runner `target/verification/run-weinqxg0/summary.json`, callback `20261022T183404Z-5e4d34c0ef10`, passed in 4,199.572 seconds (about 70 minutes). The model group passed 3,573 tests in 292 reports. The two isolated UI groups passed 271 and 316 tests in 75 reports each: 587 UI/support tests total. Every group has zero failures, errors and skipped tests.
 2. All expected report classes and named test methods, including parameterized cases, are present with no duplicate reports. All 2,325 files in the frozen source manifest matched the accepted working source before documentation closure. The preceding failed complete run remains failed evidence. Subsequent changes for closure are documentation-only.
 3. This accepts R-0134, R-0176, R-0177, R-0182, R-0168, R-0170, R-0171, R-0172, R-0167 and R-0175. Earlier targeted counts, repairs and visual observations remain above. Remote CI and publication were not checked and are not implied by local acceptance.
+
+
+## R-0185 targeted roster verification — 2026-10-22
+
+1. Crown-owned persisted roster now records family, stable identity, reserve/shipped/destroyed state and produced-bell remainder. Congress displays it in English/Czech; deployment remains R-0186. TC150 checks exact threshold growth, Continue and real post-declaration bell production without roster growth.
+2. Run `target/docker-ui/run-BL6ePC`, completion `20261022T202144Z-1ff7de3f34d8`, passed 3,594 model tests (293 reports) and 30 UI/support tests (11 reports), with zero failures, errors or skips in 372.398 seconds. Selection: all JUnit conventions and TC150/56/72/29/144/149/28. All 99 recorded source hashes matched; formatter checked 24 Java files with exact-token and idempotence checks.
+3. Earlier runs remain failed evidence: `run-0a452q` had four model fixture errors after changing difficulty without resetting the authored Crown roster; `run-CqcLYe` passed model checks but TC150 left declaration mission dialogs open, timing out a turn and failing the following scenario. The repair uses existing message-page controls without changing timeouts or weakening assertions. Loader composition and identity overflow rejection are covered by model tests.
+4. This is targeted verification only. Sixth-batch complete local acceptance, final review and commit/push remain pending.
+
+
+## R-0178 targeted revolutionary combat verification — 2026-10-22
+
+1. Shared combat strengths now apply own-Crown colony bombardment and rebel countryside ambush, with explicit saved provenance for delivered Continental intervention soldiers. Ordinary defensive terrain is counted once; preview and resolution consume the same snapshot. R-0186 and R-0190 still own actual delivery.
+2. Run `target/docker-ui/run-R218Gh`, completion `20261022T210101Z-79b7e8965e52`, passed 3,623 model tests (294 reports) and 29 UI/support tests (9 reports), zero failures/errors/skips, in 362.111 seconds. All 114 recorded source hashes matched. Selection: all JUnit conventions plus TC151/150/72/29/81/56. Formatter checked 34 Java files with exact-token and idempotence checks.
+3. TC151 verifies intervention bombardment, an ordinary Continental comparison, forest ambush, cancellation, controlled combat and Continue. Royal computer-initiated bombardment is model-tested because it has no human attack-confirmation dialog. Model tests also cover other-Crown exclusion, invalid saved provenance and clearing provenance on civilian job entry.
+4. Failed evidence remains: `run-qZ8AH4` stopped at a missing test import; `run-axIFe2` ran 3,620 model tests with three fixture ownership errors and no UI tests. Repair makes the occupied colony and its workers share the correct owner, preserving loader validation. Complete sixth-batch acceptance remains pending.
+
+
+## R-0186 targeted REF deployment verification — 2026-10-23
+
+1. Actual roster-bound men-of-war carry royal infantry, cavalry and artillery through the shared voyage, landing and combat paths. Surviving carriers return for remaining reserves; identities, targets and retry counts persist. Captured roster members are distinct from destroyed members, and captured colonial residents are not counted as newly created REF.
+2. Run `target/docker-ui/run-ToWvPd`, completion `20261022T221947Z-f8b8ea03089a`, passed 3,652 model tests (297 reports) and 23 UI/support tests (9 reports), zero failures/errors/skips, in 397.202 seconds. All 128 recorded source hashes matched. Selection: all JUnit conventions plus TC152/151/150/72/03/81. Formatter checked 47 Java files with exact-token and idempotence checks.
+3. TC152 checks real deployment, three passenger families, Continue during crossing, landing and an attack within ten royal turns. TC03 preserves the existing seven-turn campaign landing assertion. Model/AI checks cover blocked routes, retargeting, Governor second-wave transport, return-voyage reload, loss and capture. Blocked landing and captured royal units do not yet have dedicated UI scenarios.
+4. Earlier failures remain evidence: `run-b7P3bg` and `run-DLmEhz` exposed AI-test turn synchronization and route setup issues; `run-Mjxlt4` incorrectly counted captured residents as REF; `run-HIwwp9` passed model tests but failed UI compilation; the subsequent failed run exposed old reserve/muster UI expectations. Repairs retain exact member bindings and distinguish the human Continental muster from royal roles.
+5. This is targeted verification, not complete batch acceptance. Legacy terrain/path finding and ground-target knowledge remain broad; the Crown initially learns its former subjects' colonies at declaration. R-0191 still owns the final revolution victory rule. Final review and complete sixth-batch acceptance remain pending.
+
+
+## R-0188 targeted cause-support verification — 2026-10-23
+
+1. Revolutionary colony attack snapshots now add the exact rebel or complementary Tory share for the relevant affiliation and Crown, separately from bombardment. Other nations, unrelated holders, countryside and prewar attacks receive no cause-support bonus. UI shows the named modifier in English/Czech; stale ownership, affiliation or support invalidates confirmation without mutation.
+2. Run `target/docker-ui/run-w2zkKX`, completion `20261022T225302Z-97d5892de091`, passed 3,667 model tests (297 reports) and 27 UI/support tests (9 reports), zero failures/errors/skips, in 335.632 seconds. All 130 source hashes matched. Selection: all JUnit conventions plus TC153/152/151/150/81/29. Formatter checked 48 Java files with exact-token and idempotence checks.
+3. TC153 checks the 60% preview, exact odds, cancel, confirmed loss and Continue. Model checks include both causes, boundaries, fractional support, holder eligibility and same-rounded-percent staleness. The capture-staleness test uses a real winning attack and verifies coherent ownership and save/reload, replacing an earlier reflection-based setup. The preceding `run-kX4FYL` passed but did not establish that stronger capture evidence. `run-BxPQ8O` remains failed evidence of an outdated whole-snapshot equality assertion; numerical Spanish/Dutch strength equality remains explicitly checked.
+4. Complete sixth-batch local acceptance and final review remain pending.
+
+
+## R-0187 closure verification in progress (2026-10-23)
+
+1. Targeted run `20261022T234211Z-e153ab5a3604` (supervisor PID 1580, 363.063 seconds) passed 3,679 model tests in 298 reports and 31 UI/support tests in 10 reports, with zero failures, errors or skips. Reports: `target/docker-ui/run-kxMB4p`. All 145 recorded source hashes matched. Selection: all JUnit plus TC154, TC153, TC152, TC150, TC81, TC148 and TC149.
+2. Earlier failed attempts remain failed evidence. The final fixture repairs supplied both cargo-carrier mocks and zero movement for the saved ship under repair; production validation was retained.
+3. A subsequent change balances movement start/end notifications on rejection and displays localized rejection feedback. TC154/03 now attempts to sail back to closed Europe after arrival, verifying the ship and cargo stay on the map. A model test checks unchanged movement and balanced action notifications. These additions require a fresh run; the preceding pass does not accept them or the full batch.
+
+4. Follow-up run `20261022T235107Z-e4586413b043` (PID 2070, 405.959 seconds) passed all 3,680 model tests; UI had 31 tests, zero failures, one timeout and zero skips. TC154/03 incorrectly attempted departure from an ocean square into a sea-lane square, a legal map move. Its authored map now includes two adjacent lane squares, so the unchanged expected rejection exercises an actual Europe departure. The failed run is not acceptance.
+
+5. Run `20261022T235859Z-eb85e4375790` (PID 2691, 449.919 seconds) failed TC154/03 while waiting for enabled controls: the departure was rejected, but movement-start listeners had already disabled the UI. Route validation now precedes movement-start notification; the model regression also checks that rejection emits no movement-start event. This correction awaits a fresh targeted run.
+
+6. Corrected run `20261023T000725Z-fcbe609ef188` (PID 2936, 366.915 seconds) passed 3,680 model tests in 298 reports and 31 UI/support tests in 10 reports, all with zero failures, errors and skips. Reports: `target/docker-ui/run-r5xTT2`; all 150 recorded source hashes matched. TC154/03 now verifies rejected westward departure, usable controls, unchanged location and preserved cargo. Java formatting, nine documentation checks and strict MkDocs also passed. Full sixth-batch acceptance remains pending.
+
+
+## R-0189 targeted intervention-target verification (2026-10-23)
+
+1. Haiku attempt 1 implemented the fixed first-owner-update target, actual bell credit, durable earned state and report/Congress feedback. The model exposes `Player.getIntervention()` and exact bells beyond the target for the later delivery/scoring requirements; no physical intervention units are created here.
+2. Completion `20261023T002418Z-b735c21283dc`, supervisor PID 3974, took 267.068 seconds. All 3,694 model tests (299 reports) and 23 UI/support tests (8 reports) passed with zero failures, errors and skips. Selection: all JUnit plus TC155, TC154, TC150, TC81 and TC83. Reports: `target/docker-ui/run-CaeR4I`. All 162 recorded source hashes matched.
+3. TC155 covers first-update announcement/progress, earning through real production from authored saved progress, no repeated earned notice, and Continue. Model checks cover difficulty targets, exact threshold/overflow, multiple colonies, strict saved-state validation and reload. Java formatting passed. The full sixth-batch acceptance is still pending; Czech layout has not had a separate visual inspection.
+
+
+## R-0190 targeted intervention-delivery verification (2026-10-23)
+
+1. Four Claude attempts implemented the earned delivery, geographic port choice, blockade/pending retry, saved delivered flag and actual arrival feedback. The shared model operation checks owner, earned/undelivered state, placement and all eight available IDs before creating forces; no partial-removal rollback is used.
+2. Completion `20261023T011417Z-ebd1fa2f8b19` (PID 5759) passed 3,709 model tests in 301 reports and 22 UI/support tests in 8 reports, zero failures, errors and skips, in 359.832 seconds. Reports: `target/docker-ui/run-dvTSVp`; all 173 recorded source hashes matched. Selection: all JUnit plus TC156, TC155, TC154, TC151 and TC152. Prior failed compilation and ID-boundary runs remain failed evidence.
+3. TC156 covers earning/delivery, exactly eight controlled forces with retained identities, movement of delivered cavalry, pending delivery through Continue, and opening a blocked port by sinking a ship followed by one arrival. Model tests additionally cover distant chokepoints, inland lakes, port capture, rejected owners/claims and seven/eight available-ID boundaries. Shared Java formatting passed.
+4. R-0192 subsequently verified loss-before-delivery integration in the targeted run below. Full batch acceptance remains pending.
+
+## R-0192 targeted rebellion-loss verification (2026-10-23)
+
+1. Shared model membership persists colonies held at declaration and subsequently acquired/founded, retains occupied members and removes destroyed ones. Four loss conditions use current ownership/residents and persist one reason. Judging occurs after completed actions/updates; loss prevents intervention delivery. R-0191 victory remains pending.
+2. Completion `20261023T024827Z-2b4884637c59` (PID 9886) passed 3,738 model tests in 302 reports and 27 UI/support tests in 9 reports, zero failures, errors or skips, in 393.922 seconds. Reports: `target/docker-ui/run-fi2sF6`; all 219 recorded source hashes matched. Selection: all JUnit plus TC157, TC156, TC155, TC154, TC151 and TC81.
+3. TC157 performs the actual Crown capture, checks the explicit loss reason and campaign exit, and verifies both absent Continue and preserved open-position Continue. Its isolated autosave is cleared under `.microcol` before startup. Model checks cover independent loss conditions, current residents, the 90 percent boundary, zero denominator, membership changes, help precedence, AI loss and terminal reload.
+4. Four Claude attempts were followed by Codex fixture/import/test-isolation repairs. Earlier failed runs remain failed evidence. Shared Java formatting passed; complete sixth-batch acceptance and combined victory precedence remain pending.
+
+## R-0191 targeted revolution-victory verification (2026-10-23)
+
+1. Victory reuses rebellion membership and runs after loss at completed action/update boundaries. Every surviving member must be rebel-controlled and the Crown may have at most two surviving REF ground members across reserve, cargo and land. Ships and captured civilians do not substitute for this roster. Per-nation victory order and the human terminal result survive reload; decided nations receive no later intervention.
+2. Completion `20261023T033744Z-7856013b12af` (PID 11815) passed 3,753 model tests in 303 reports and 25 UI/support tests in 9 reports, zero failures, errors or skips, in 423.610 seconds. Reports: `target/docker-ui/run-GIrNVd`; all 224 source hashes matched. Selection: all JUnit plus TC158, TC157, TC156, TC152, TC151 and TC81.
+3. TC158 recaptures Crown-held Delft through an actual attack, checks victory and ownership, acknowledges both capture and victory notices by their own window, and verifies absent Continue or reopening the saved pre-battle state without a repeated result. Model tests cover reserve/carried/landed forces, exact three/two threshold, colony membership, loss precedence, AI outcomes and saved terminal consistency.
+4. Four Claude attempts repaired fixture ownership/count expectations and the ambiguous shared OK-button lookup. Earlier failed runs remain failed evidence. Shared Java formatting passed. Complete sixth-batch acceptance remains pending.
+
+## R-0169 targeted mercenary verification (2026-10-23)
+
+1. The model counts own and rebel updates, selects the lowest stable contacted peaceful nation, persists a single offer and paid deliveries, and validates the entire bundle before charging. Two armed veterans use the selected owned port and shared high-seas/blockade policy; pending groups retry without a second charge and announce actual arrival once. Closing leaves the offer available from the relations report; declining or expiry spends nothing.
+2. Completion `20261023T043317Z-f49df48b7c05` (PID 16262) passed 3,793 model tests in 306 reports and 31 UI/support tests in 9 reports, zero failures, errors or skips, in 442.060 seconds. Reports: `target/docker-ui/run-ez9CbO`; all 250 recorded source hashes matched. Selection: all JUnit plus TC159, TC158, TC157, TC156, TC148 and TC81.
+3. TC159 covers chosen-port acceptance, close/reopen/decline, pending offer through Continue, and paid blocked delivery followed by a real naval attack, later arrival and Continue without duplicates. Model checks cover interval/chance/treasury boundaries, issuer selection, stale and unaffordable choices, capacity, blockades and captured-port fallback, persistence and ended rebellions. Computer nations share offer state; no new AI purchasing strategy is claimed.
+4. Four Claude attempts corrected save/load counter consistency and tests that mistook Continue for a fresh owner update. Earlier failures remain failed evidence. Shared Java formatting passed. This is the tenth requirement of the sixth batch; complete two-worker local acceptance remains pending.
+
+## Sixth-batch complete-regression repair (2026-10-23)
+
+1. Full run `20261023T044142Z-61c2a16bb107`, `target/verification/run-ui5221bg/summary.json`, remains failed evidence: 3,793 model tests passed; 4 of 610 UI tests failed, zero errors or skips. Duration 4,353.782 seconds. TC27 and two TC58 cases authored declared nations with unseized European units; TC77 changed difficulty without a matching REF roster.
+2. The shared authored-rebellion helper now marks home-port units and passengers seized, preserving identities and cargo. The Viceroy political-production fixture uses a matching reserve roster. TC27 verifies disabled equipment/ordination entries for seized colonists, together with unchanged gold, cargo and equipment; market restrictions and stale-dialog checks remain covered. Production validation was not relaxed.
+3. Repair completion `20261023T061001Z-f20835fe7189` (PID 22213) passed 3,793 model tests in 306 reports and 33 UI/support tests in 8 reports, zero failures, errors or skips, in 417.279 seconds. Reports: `target/docker-ui/run-YsJiiy`; all 253 source hashes matched. Selection: all JUnit plus TC27, TC58, TC77, TC154 and TC159. Shared Java formatting passed. A fresh complete two-worker acceptance is still required.
+
+## Sixth-batch full local acceptance (2026-10-23)
+
+1. Accepted R-0185, R-0178, R-0186, R-0188, R-0187, R-0189, R-0190, R-0192, R-0191 and R-0169 after full run `20261023T061737Z-0861e79ba81d` (supervisor PID 23670). The prior failed full run remains failed evidence.
+2. Evidence: `target/verification/run-mltnh1r6/summary.json`, its `manifest.json`, all three group results and XML exports; completion logs at `/Users/jan/Library/Logs/Microcol/completions/20261023T061737Z-0861e79ba81d/`. Total elapsed time 4,371.927 seconds.
+3. Model: 3,793 tests / 306 reports. UI group 1: 282 tests / 80 reports. UI group 2: 328 tests / 80 reports. Every group passed, with zero failures, errors and skips. All expected suite reports were present with no duplicate or extra report; runner method-inventory validation passed.
+4. All 2,390 source hashes matched the frozen manifest before documentation closure. Shared Java formatter, diff review and scoped repair checks passed. Subsequent changes close requirement status and repair documentation links only; no implementation changed after acceptance. Commit/push follows documentation validation. Remote CI and publication were not checked.

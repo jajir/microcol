@@ -11,6 +11,7 @@ import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.RecruitmentPool;
+import org.microcol.model.RoyalRoster;
 import org.microcol.model.Congress;
 import org.microcol.model.TaxState;
 import org.microcol.model.campaign.po.GameModelPo;
@@ -89,6 +90,11 @@ public final class GameModelDao {
                         player.setCongress(Congress.initial());
                         player.setTax(TaxState.initial());
                     });
+            // A new authored game starts every Crown at its fresh force.
+            source.getModel().getGameManager().getPlayers().stream()
+                    .filter(player -> player.getWhosKingThisPlayerIs() != null)
+                    .forEach(player -> player
+                            .setRoyalRoster(RoyalRoster.initial(difficulty)));
         }
         return finishFreePlay(source, name, eventBus);
     }

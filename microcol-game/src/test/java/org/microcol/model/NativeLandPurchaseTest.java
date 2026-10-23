@@ -42,6 +42,7 @@ class NativeLandPurchaseTest {
         for (int i = 0; i < levels.length; i++) {
             final NativeRelationsScene scene = dutchOnTile();
             scene.toPo().setDifficulty(levels[i]);
+            CrownRosterFixtures.freshCrownRosters(scene.toPo());
             assertEquals(prices[i],
                     quote(scene.toModel(), DUTCH, TILE).getPrice());
         }

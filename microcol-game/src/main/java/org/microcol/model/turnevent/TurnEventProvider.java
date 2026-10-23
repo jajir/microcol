@@ -192,6 +192,41 @@ public final class TurnEventProvider {
                 workExperience);
     }
 
+    /**
+     * Notice of the intervention target set at the first rebel update, or of
+     * the earning once the target is reached.
+     */
+    public static TurnEvent getIntervention(final Player player,
+            final int target, final boolean earned) {
+        return new TurnEventIntervention(player.getName(), target, earned);
+    }
+
+    /**
+     * Notice that the earned foreign intervention arrived at a coastal colony.
+     *
+     * @param player required rebel nation that received the forces
+     * @param colony required colony that received them
+     * @return turn event object
+     */
+    public static TurnEvent getInterventionArrival(final Player player,
+            final Colony colony) {
+        return new TurnEventInterventionArrival(player.getName(),
+                colony.getId(), colony.getName());
+    }
+
+    /**
+     * Notice that a paid mercenary group was placed at a colony port.
+     *
+     * @param player required owner that paid for the group
+     * @param colony required port colony that received the soldiers
+     * @return turn event object
+     */
+    public static TurnEvent getMercenaryArrival(final Player player,
+            final Colony colony) {
+        return new TurnEventMercenaryArrival(player.getName(), colony.getId(),
+                colony.getName());
+    }
+
     /** Notice of a newly frozen Franklin proposal for the turn report. */
     public static TurnEvent getPeaceOffer(final Player player,
             final String rivalName, final int price) {

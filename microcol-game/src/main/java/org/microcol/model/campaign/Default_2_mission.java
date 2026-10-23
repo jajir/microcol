@@ -19,7 +19,9 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
     @Override
     protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
         return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
-                GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
+                GameOverProcessors.NO_COLONIES_PROCESSOR,
+                GameOverProcessors.REBELLION_LOST_PROCESSOR,
+                GameOverProcessors.REBELLION_WON_PROCESSOR, context -> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult()
                                     .getGameOverReason())) {
@@ -41,7 +43,12 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
         String s = (String) p.getExtraData().get("kingWasConquered");
         // TODO this is ugly. Redesign relation between AI - king and mission
         if (!Strings.isNullOrEmpty(s)) {
-            if (Boolean.parseBoolean(s)) {
+            // While a rebellion is declared, the legacy military-score flag
+            // must
+            // not end it early; only its own loss or victory rules apply
+            // (R-0192).
+            if (Boolean.parseBoolean(s) && !getHumanPlayer(event.getModel())
+                    .isDeclaredIndependence()) {
                 getGoals().getGoalConquerRaf().setFinished(true);
             }
         }

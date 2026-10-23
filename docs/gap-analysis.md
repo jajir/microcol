@@ -1671,7 +1671,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0169 refinement
 
 1. Answer **27** — Peacetime mercenary offers: Every tenth own turn before rebellion, if treasury is at least 5000 gold, make one offer draw with probability 25%. Offer two veteran soldiers for ceil(1000 × difficulty coefficient), from the lowest-ID contacted European at peace. The offer expires at turn end; the player chooses an owned delivery port, and blocked delivery follows the accepted pending intervention-delivery policy. Keep the already accepted rebel offers unchanged.
-2. Owner: [R-0169](requirements/R-0169.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0169](requirements/done/R-0169.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0170 refinement
 
@@ -1721,7 +1721,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 #### R-0186 refinement
 
 1. Answer **37** — Crown dispatch policy: On each royal turn fill all available transport-capable men-of-war from actual reserves, cycling infantry, cavalry, artillery within actual hold capacity. Target the nearest known rebel coastal colony with a legal landing, ties by stable ID and then coordinates. Recompute a blocked route at most once per turn; after three unsuccessful turns try another target, otherwise wait safely. A prepared clear-route scenario must demonstrate landing and attack within ten royal turns, without teleporting or duplicating reserves.
-2. Owner: [R-0186](requirements/R-0186.md); acceptance and unresolved follow-ups remain there.
+2. Owner: [R-0186](requirements/done/R-0186.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0196 refinement
 

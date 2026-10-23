@@ -91,6 +91,9 @@
     <entry key="fight_colonyRevere">Nezbývá žádný ozbrojený obránce, proto Paul Revere vyzbrojí jednoho pracovníka kolonie %s ze skladovaných mušket (spotřebuje se jich %s). Vítězství stále dobude celou kolonii. Pokud pracovník zvítězí, ponechá si muškety a připojí se k posádce venku, ledaže je posledním obyvatelem.</entry>
     <entry key="fight_ambushBonus">Léčka domorodců: +%s%%</entry>
     <entry key="fight_artilleryRaidBonus">Dělostřelectvo brání opevněnou kolonii proti domorodcům: +%s%%</entry>
+    <entry key="fight_bombardmentBonus">Bombardování kolonie: +%s%%</entry>
+    <entry key="fight_rebelAmbushBonus">Léčka povstalců: +%s%%</entry>
+    <entry key="fight_causeSupportBonus">Podpora věci: +%s%%</entry>
     <entry key="fight_nativeLoss">Poražený domorodý bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený Evropan ztratí koně nebo muškety; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.</entry>
     <entry key="fight_nativeAnger">Útok na domorodého bojovníka zvýší hněv jeho kmene vůči vám, ať zvítězí kdokoli.</entry>
     <entry key="fight_nativeArmedBrave">Ozbrojený domorodý bojovník</entry>

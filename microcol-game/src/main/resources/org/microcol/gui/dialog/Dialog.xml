@@ -91,6 +91,9 @@
     <entry key="fight_colonyRevere">No armed defender is left, so Paul Revere arms one worker of %s from the stored muskets (%s muskets are used up). Winning still captures the whole colony. If the worker wins, it keeps the muskets and joins the garrison outside, unless it is the last resident.</entry>
     <entry key="fight_ambushBonus">Native ambush: +%s%%</entry>
     <entry key="fight_artilleryRaidBonus">Artillery defending its fortified colony against natives: +%s%%</entry>
+    <entry key="fight_bombardmentBonus">Colony bombardment: +%s%%</entry>
+    <entry key="fight_rebelAmbushBonus">Rebel ambush: +%s%%</entry>
+    <entry key="fight_causeSupportBonus">Cause support: +%s%%</entry>
     <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed European loses horses or muskets; artillery is damaged first. Both participants spend their remaining movement.</entry>
     <entry key="fight_nativeAnger">Attacking a native brave raises the anger of its nation toward you, whoever wins.</entry>
     <entry key="fight_nativeArmedBrave">Armed native brave</entry>

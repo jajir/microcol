@@ -16,6 +16,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.ImmigrationChoiceRequiredEvent;
 import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.MercenaryOfferRequiredEvent;
 import org.microcol.model.event.TaxDemandRequiredEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -43,6 +44,11 @@ public interface ModelListener {
 
     /** A Crown tax demand needs an answer before this owner's turn begins. */
     default void onTaxDemandRequired(final TaxDemandRequiredEvent event) {
+    }
+
+    /** The human owner has a mercenary offer to answer (R-0169). */
+    default void onMercenaryOfferRequired(
+            final MercenaryOfferRequiredEvent event) {
     }
 
     void onGameStarted(GameStartedEvent event);

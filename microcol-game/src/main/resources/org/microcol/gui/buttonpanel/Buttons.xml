@@ -110,4 +110,6 @@
     <entry key="buildRoadProblemNoMoves">This unit has no movement left to start building a road.</entry>
     <entry key="buildRoadProblemSea">A road cannot be built on water.</entry>
     <entry key="buildRoadProblemAlreadyRoad">This square already has a road.</entry>
+    <entry key="moveEuropeClosed">Home Europe is closed after independence. Your ship remains on the map.</entry>
+    <entry key="moveChanged">The move is no longer available. Choose it again.</entry>
 </properties>

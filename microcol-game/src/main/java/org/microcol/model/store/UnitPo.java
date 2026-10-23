@@ -110,6 +110,20 @@ public class UnitPo {
     }
 
     /**
+     * Allied intervention origin of a Continental soldier (R-0178). An absent
+     * value means an ordinary unit.
+     */
+    private boolean interventionDelivered;
+
+    public boolean isInterventionDelivered() {
+        return interventionDelivered;
+    }
+
+    public void setInterventionDelivered(final boolean interventionDelivered) {
+        this.interventionDelivered = interventionDelivered;
+    }
+
+    /**
      * Missionary role of a free colonist. It is boxed and required for every
      * colonist, so a missing value is rejected on load instead of becoming
      * ordinary.
@@ -272,6 +286,9 @@ public class UnitPo {
     /** Front-of-queue choice; only meaningful for a willing immigrant. */
     private boolean boardingPriority;
 
+    /** Crown seizure of home-Europe assets at declaration (R-0187). */
+    private boolean crownSeized;
+
     public boolean isImmigrant() {
         return immigrant;
     }
@@ -294,6 +311,14 @@ public class UnitPo {
 
     public void setBoardingPriority(final boolean boardingPriority) {
         this.boardingPriority = boardingPriority;
+    }
+
+    public boolean isCrownSeized() {
+        return crownSeized;
+    }
+
+    public void setCrownSeized(final boolean crownSeized) {
+        this.crownSeized = crownSeized;
     }
 
     /** Destination of a go-to order; absent means the unit has no order. */

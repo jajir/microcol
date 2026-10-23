@@ -443,6 +443,8 @@ public class CargoSlot {
         Preconditions.checkState(
                 !(carrier instanceof Ship) || !((Ship) carrier).isDamaged(),
                 "Damaged ship cargo is inaccessible");
+        Preconditions.checkState(!carrier.isCrownSeized(),
+                "Crown-seized ship cargo is inaccessible");
     }
 
     /**

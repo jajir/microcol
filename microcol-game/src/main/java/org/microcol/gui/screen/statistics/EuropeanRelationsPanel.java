@@ -83,6 +83,41 @@ final class EuropeanRelationsPanel extends VBox {
             row.setMaxWidth(380);
             support.getChildren().add(row);
         }
+        refreshMercenary(model, own);
+    }
+
+    /**
+     * An unanswered mercenary offer stays reachable for the rest of its turn,
+     * also after the first dialog was closed with "decide later" (R-0169).
+     */
+    private void refreshMercenary(final Model model, final Player own) {
+        if (model.getPendingMercenaryOffer(own).isEmpty()) {
+            return;
+        }
+        final Button resume = new Button(
+                i18n.get(org.microcol.gui.screen.europe.MercenaryText.resume));
+        resume.setId("mercenaryResume");
+        resume.setOnAction(event -> resumeMercenary(model, own));
+        support.getChildren().add(resume);
+    }
+
+    private void resumeMercenary(final Model original, final Player own) {
+        try {
+            if (!game.isGameModelReady() || game.getModel() != original) {
+                throw new IllegalStateException("Relations view changed");
+            }
+            final org.microcol.model.MercenaryOffer offer = original
+                    .getPendingMercenaryOffer(own)
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Mercenary offer is obsolete"));
+            new org.microcol.gui.screen.europe.MercenaryOfferDialog(viewUtil,
+                    i18n, game, original, offer).showAndWait();
+            refresh();
+        } catch (IllegalArgumentException | IllegalStateException rejected) {
+            refresh();
+            feedback.setText(i18n
+                    .get(org.microcol.gui.screen.europe.MercenaryText.changed));
+        }
     }
 
     /**

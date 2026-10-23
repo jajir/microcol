@@ -35,7 +35,9 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
     @Override
     protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
         return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
-                GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
+                GameOverProcessors.NO_COLONIES_PROCESSOR,
+                GameOverProcessors.REBELLION_LOST_PROCESSOR,
+                GameOverProcessors.REBELLION_WON_PROCESSOR, context -> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult()
                                     .getGameOverReason())) {

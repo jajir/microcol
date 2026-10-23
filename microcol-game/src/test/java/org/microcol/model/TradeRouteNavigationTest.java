@@ -384,6 +384,35 @@ class TradeRouteNavigationTest {
     }
 
     @Test
+    void seizedShipInClosedPortPausesInsteadOfLeavingForAColony() {
+        final World w = new World();
+        final TradeRoute route = w.model.createTradeRoute(w.dutch, "Closed",
+                TradeRouteKind.SEA, DELFT,
+                List.of(TradeRouteStop.europe(), TradeRouteStop.ofColony(DELFT),
+                        TradeRouteStop.europe()));
+        w.model.getEurope().getPort().placeShipToPort(w.ship);
+        w.model.assignTradeRoute(w.ship, route, 1);
+        // Saved after a declaration made while the ship waited in the port: the
+        // Crown holds the ship there (R-0187).
+        w.data.setModel(w.model.save());
+        w.data.getModel().getGameManager().getPlayers().stream()
+                .filter(player -> "Dutch".equals(player.getName()))
+                .forEach(player -> RebellionFixtures.declare(w.data.getModel(),
+                        player));
+        ClosedEuropeFixtures.seizeHomeEurope(w.data.getModel());
+        final World closed = new World(w.data);
+        assertTrue(closed.ship.isCrownSeized());
+
+        closed.ownerUpdate();
+
+        assertEquals(Optional.of(TradeRoutePause.EUROPE_CLOSED),
+                closed.pause());
+        assertTrue(closed.ship.isAtEuropePort());
+        assertTrue(closed.ship.isCrownSeized());
+        assertEquals(0, closed.departures);
+    }
+
+    @Test
     void emptyStopAndFullHoldAreNoOpsThatDoNotStopTheTurn() {
         final World w = new World();
         // Nothing is configured, so the visit moves nothing and the ship goes
