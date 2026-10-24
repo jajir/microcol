@@ -260,9 +260,12 @@ renderování 2× od dosud neprovedené kontroly na fyzickém HiDPI displeji.
 
 ### Hlavní herní obrazovka a spodní panel
 
-**Dohoda 24. října 2026, [R-0262](requirements/R-0262.md):** hlavní obrazovka
+**Dohoda 24. října 2026, [R-0262](requirements/done/R-0262.md):** hlavní obrazovka
 s mapou má působit jako skutečně jednotná ručně kreslená a vybarvená obrazovka
-podle obou dodaných návrhů. Jde o cílové zadání, nikoli ověřený stav současné hry.
+podle obou dodaných návrhů. Implementace hlavní obrazovky nyní sjednocuje
+papírové pozadí, oddělení panelů a Regular 14 na jejích tlačítkách; původní
+mapové a příkazové ilustrace zůstávají. [Cílená kontrola](functional-tests.md#r-0262-main-screen-paper-layout-2026-10-24)
+ověřila anglické 1280×850 a české 1000×700 okno; předcommitový gate i dokumentační kontroly prošly.
 
 1. Horní ovládání, mapa, pravý informační panel a spodní stavový panel tvoří
    jeden celek. Použít Playpen Sans Regular 14, společný tah propisky a plné
@@ -278,8 +281,9 @@ podle obou dodaných návrhů. Jde o cílové zadání, nikoli ověřený stav s
    Delší české či anglické popisy se nesmějí překrývat s ostatními údaji.
 4. Vyšší panel zapojit do rozložení; nesmí zakrývat mapu nebo její klikací
    oblasti. Ověřit menší podporované okno, změnu velikosti a měřítko UI.
-   Přesnou výšku a odsazení stanovit při přípravě implementace porovnáním
-   starého a nového rozložení ve stejné velikosti.
+   Použít minimálně 72 logických px, svislé odsazení 12 px a vodorovné
+   16 px. Dlouhý popis může panel přirozeně zvýšit; zlato a datum mají
+   vyhrazenou preferovanou šířku.
 5. Zachovat existující herní akce, klávesnici, návraty a pravidla zobrazení
    informací. Podobu mřížky a šedého neprozkoumaného území vlastní
    [R-0261](#mrizka-a-neprozkoumana-cast-mapy). Obrázky jsou vzorem vzhledu;

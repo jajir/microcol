@@ -203,4 +203,31 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.verifyCalendarAndGold(18, 10000);
     }
 
+    @Test
+    @Tag("local")
+    void TC_10_main_screen_panels_remain_readable_when_resized()
+            throws Exception {
+        // The wider English screen retains all three status fields.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        MainScreenLayoutPage layout = new MainScreenLayoutPage(getContext());
+        String english = "New Amsterdam: a fortified coastal colony with workers, stored goods and a ship waiting for its next voyage.";
+        layout.resize(1280, 850);
+        layout.showContextMessage(english);
+        layout.verifyLayout(english);
+        layout.saveEvidence("R-0262-main-English.png");
+        new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
+
+        // Change the actual language setting and return to the same saved game.
+        game.exitToMenu();
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack();
+        new FreePlayAuditPage(getContext()).continueGame();
+        String czech = "Nový Amsterdam: opevněná pobřežní kolonie s pracovníky, uloženým zbožím a lodí čekající na další plavbu.";
+        layout.resize(1000, 700);
+        layout.showContextMessage(czech);
+        layout.verifyLayout(czech);
+        layout.saveEvidence("R-0262-main-Czech-small.png");
+        new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
+    }
 }

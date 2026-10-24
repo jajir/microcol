@@ -18,3 +18,82 @@
 	-fx-border-color: lightblue ;
 	-fx-border-width: 2;
 }
+
+/* Main map only: flat paper groups, existing controls and readable status. */
+.game-screen {
+    -fx-background-color: #FFF9EC;
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+.game-screen .wooden-button {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+.game-screen .buttonPanel {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 8 12 8 12;
+    -fx-hgap: 6;
+    -fx-vgap: 6;
+    -fx-border-color: #292824;
+    -fx-border-width: 0 0 1 0;
+}
+.game-screen .image-button {
+    -fx-border-color: #746E60;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+}
+.game-screen .image-button:hover {
+    -fx-border-color: #292824;
+}
+.game-screen .image-button:focused {
+    -fx-border-color: #292824;
+    -fx-border-style: segments(3, 3);
+    -fx-border-width: 2;
+}
+.game-screen .image-button:armed {
+    -fx-translate-y: 1;
+    -fx-border-width: 2;
+}
+.game-screen #rightPanel {
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #292824;
+    -fx-border-width: 0 0 0 1;
+    -fx-padding: 12 8 12 12;
+    -fx-vgap: 12;
+}
+.game-screen #rightPanel .scroll-pane,
+.game-screen #rightPanel .viewport {
+    -fx-background-color: #FFF9EC;
+}
+.game-screen #statusBar {
+    -fx-background-color: #FFF9EC;
+    -fx-min-height: 72;
+    -fx-padding: 12 16 12 16;
+    -fx-alignment: center-left;
+    -fx-border-color: #292824;
+    -fx-border-width: 1 0 0 0;
+}
+.game-screen #statusBar #description {
+    -fx-alignment: center-left;
+    -fx-border-color: #746E60;
+}
+.game-screen #statusBar #description .label {
+    -fx-padding: 0 16 0 0;
+}
+.game-screen #statusBar #labelGold,
+.game-screen #statusBar #labelEra {
+    -fx-padding: 0 16 0 16;
+    -fx-border-color: #746E60;
+}
+.game-screen #rightPanel .unitPanel {
+    -fx-min-width: 0;
+    -fx-max-width: infinity;
+    -fx-padding: 8 6 8 6;
+}
+.game-screen #rightPanel .selected {
+    -fx-background-color: #E8DDC5;
+    -fx-border-color: #746E60;
+    -fx-border-width: 1;
+}

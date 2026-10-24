@@ -35,9 +35,11 @@ public final class StatusBarView implements JavaFxComponent {
 
         labelEra = new Label();
         labelEra.setId("labelEra");
+        labelEra.setMinWidth(Region.USE_PREF_SIZE);
 
         labelGold = new Label();
         labelGold.setId("labelGold");
+        labelGold.setMinWidth(Region.USE_PREF_SIZE);
 
         statusBar = new HBox();
         statusBar.setMinHeight(Region.USE_PREF_SIZE);

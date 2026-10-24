@@ -53,6 +53,8 @@ public class ScreenGame implements GameScreen {
 
         final HBox hBox = new HBox();
         hBox.setId("mainBox");
+        VBox.setVgrow(hBox, javafx.scene.layout.Priority.ALWAYS);
+        hBox.setMinHeight(0);
         hBox.getChildren().add(gamePanelComponents.getContent());
         hBox.getChildren().add(rightPanel.getContent());
 
@@ -72,6 +74,7 @@ public class ScreenGame implements GameScreen {
         mainBox.getChildren().add(statusBar.getContent());
 
         mainPanel = new StackPane();
+        mainPanel.getStyleClass().add("game-screen");
         mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
         mainPanel.getChildren().add(mainBox);
         mainPanel.getChildren().add(buttonGamePanel.getContent());
