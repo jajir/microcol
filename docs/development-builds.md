@@ -69,9 +69,10 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 
 ## What happens after a change
 
-1. The completed, checked change is pushed to `main`. If every changed path is
-   under `docs/`, only documentation is published and this game delivery sequence
-   is skipped. Otherwise continue with the full checks below.
+1. The locally checked change is pushed to `main`; the full functional regression
+   starts asynchronously on every push. If every changed path is under `docs/`,
+   game packaging/publication is skipped, but regression still runs. Ordinary
+   development does not wait for or inspect CI results.
 2. GitHub Actions checks the launcher and publication logic and runs the
    [functional player scenarios](functional-tests.md), then uses JDK 17 and
    Maven to build the macOS ARM64, macOS Intel and Linux x86-64 packages from the
@@ -119,45 +120,32 @@ stability campaign keep their own existing budgets.
 
 ## CI filtering
 
-[R-0113](requirements/done/R-0113.md) defines this contract, selected on 2026-10-15.
-Implementation and live acceptance are recorded in that requirement and the
-[publication evidence](publishing.md#documentation-only-ci-2026-10-15).
-
-1. The development and Java-compatibility workflows still start on their existing
-   events. Each runs a lightweight `changes` job: checkout with full history,
-   classifier tests, then the shared [change classifier](../scripts/ci/game_changes.py).
-   No game compilation, Maven, Docker or native packaging occurs in this job.
-2. For automatic events, skip game work only when the entire change set is
-   nonempty and every path is under `docs/`. Nested files and additions/deletions
-   qualify. A move within `docs/` qualifies; a move across its boundary does not,
-   because both the old and new paths are checked. Changes to `AGENTS.md`,
-   `mkdocs.yml`, documentation tools or workflow files require full game checks.
-3. Push comparisons cover `before` through `after`, not only the latest commit.
-   Pull-request comparisons use the merge base of the event's base/head commits,
-   excluding unrelated target-branch changes. Missing/invalid event data,
-   unavailable history or an empty comparison conservatively require full work.
-   Manual dispatch always requests full work. A failed classifier test prevents
-   dependent jobs and publication rather than reporting a verified skip.
-4. `game_required=false` explicitly skips the development workflow's functional,
-   launcher-check, native and publish jobs and the compatibility game matrix.
-   `true` retains all their existing checks, platform variants and publication
-   dependencies. Pull requests still do not publish game releases. Pages keeps
-   its independent validation/deployment path; failed docs validation prevents
-   its deployment.
-5. For a docs-only push, verify the successful `changes` jobs, skipped game jobs
-   and successful Pages deployment. Report the documentation commit separately
-   from the unchanged game build in the `dev` manifest. No new game release is
-   expected. For other changes or manual dispatch, verify all normal delivery
-   gates and the published manifest before claiming a new game build.
-6. Branch settings inspected on 2026-10-15: main is unprotected and the effective
-   branch-rules API returns no rules. This is a dated observation. Workflows stay
-   visible and existing game job names are retained; any later required-check
-   changes must be checked against this contract.
-
-The classifier's local acceptance command is
-`python3 -m unittest discover -s scripts/ci -p 'test_*.py'`. Its temporary Git
-histories test complete pushes, pull requests, path boundaries and conservative
-fallbacks; live CI evidence remains necessary to prove actual skips/publication.
+1. **Updated on 2026-10-24:** every push to `main` runs the complete `functional`
+   regression job, including documentation-only pushes. Ordinary development
+   does not wait for or inspect its outcome; investigation and repair require
+   an explicit user request under the [acceptance policy](publishing.md#local-acceptance-policy).
+2. The existing `changes` job and [change classifier](../scripts/ci/game_changes.py)
+   still decide whether launcher checks, native packages, publication and the
+   separate Java-compatibility matrix are needed. Automatic game packaging is
+   skipped only for a known nonempty change set entirely under `docs/`.
+   Changes to AGENTS.md, workflows, configuration or tooling require those jobs.
+3. Push comparisons cover `before` through `after`; pull requests use the merge
+   base. Unknown/invalid event data, unavailable history, empty comparisons and
+   manual dispatch conservatively require game packaging checks. A failed
+   classifier prevents dependent jobs rather than producing a verified skip.
+4. `game_required=false` now skips `checks`, `native` and `publish` in the
+   development workflow and the compatibility matrix, **not `functional`**.
+   `true` retains every existing platform check and publication dependency.
+   Publishing a game build still requires the full functional regression on
+   that exact commit. Pages retains its independent documentation gates.
+5. When the user requests publication verification, inspect actual job results
+   and artifacts for that commit. A docs-only push does not create a game
+   release; report documentation separately from the unchanged game manifest.
+   Never claim publication from a push or a local smoke pass.
+6. The former docs-only filtering contract and dated acceptance remain in
+   [R-0113](requirements/done/R-0113.md) and the
+   [historical evidence](publishing.md#documentation-only-ci-2026-10-15).
+   Classifier checks: `python3 -m unittest discover -s scripts/ci -p 'test_*.py'`.
 
 ## Build identity and saved games
 

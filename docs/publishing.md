@@ -40,28 +40,43 @@ Never force-push to publish. Task completion follows the local acceptance policy
 
 ## Local acceptance policy
 
-1. **Agreed on 2026-10-20:** ordinary development tasks finish after complete
-   successful local acceptance, review, commit and push. Waiting for GitHub CI,
-   Pages deployment or game publication is not part of ordinary completion.
-2. Game changes require the full local model and Docker/Xvfb UI suites on the
-   final source state, with complete reports and zero failures, errors or skips,
-   plus applicable formatting and other local checks. Targeted runs help during
-   development but do not replace complete acceptance. Missing reports, killed
-   JVMs and timeouts remain local blockers. The failed four-container experiment
-   does not establish an accepted local parallel runner.
-3. Documentation-only work requires the local documentation checks below and
-   strict MkDocs; it does not require an unrelated full game regression. Workflow
-   guidance in AGENTS.md follows the same rule when no executable behavior changes.
-4. Report the checked source revision and actual local results. Do not automatically
-   watch, rerun, investigate or repair remote CI. The user will explicitly request
-   CI work or verified publication when needed; a request to verify publication
-   includes the applicable remote checks and artifact verification.
-5. Existing workflows and their release gates remain unchanged. They can continue
-   automatically after push. Local acceptance is not proof that a downloadable
-   build or live website was published. If publication was not verified, say so;
-   do not claim a new build/download. Remote failures alone do not reopen a locally
-   accepted task. Historical evidence and known local failures remain unchanged.
-
+1. **Agreed on 2026-10-24, superseding the 2026-10-20 completion policy:**
+   before every commit, including documentation-only commits, run
+   `bash scripts/ui-tests/verify.sh --smoke`. This mandatory local gate runs
+   **all model/JUnit tests**, the existing non-`TC_` support tests and the ten
+   [selected UI scenarios](functional-tests.md#pre-commit-smoke). It uses
+   Docker/Xvfb, checks complete fresh reports and must finish within 300 seconds
+   with zero failures, errors or skips. Failure, missing reports or timeout
+   blocks the commit; a targeted run does not replace this gate.
+2. Also run checks appropriate to the task: shared formatting for changed Java,
+   tests for changed tooling, and the documented documentation checks plus
+   strict MkDocs for changed documentation. Preserve unrelated working changes
+   and test the executable source being committed. Evidence/status/link-only
+   documentation closure after a passing gate needs fresh documentation checks,
+   not an identical game run; any executable or test-selection change invalidates
+   that gate. During development, use targeted tests
+   as needed; do not automatically run the full local UI suite before committing.
+3. Ordinary work finishes after this local gate, review, commit and push to
+   `main`. Report the checked source revision, selected checks, counts, duration
+   and report location. A requirement may become `done` after its agreed outcome
+   and these required local checks pass. This is **local acceptance**, not a
+   claim that the full regression passed or that publication was verified.
+4. Every push to `main` starts the complete regression in GitHub Actions,
+   including documentation-only pushes. Do not wait for, watch, inspect, rerun,
+   diagnose or repair CI automatically, even at the start of the next task.
+   Pending or failed remote tests do not block new development or reopen the
+   locally accepted task. Only an explicit user request starts regression
+   investigation/repair or publication verification, including overnight work.
+   Do not create recurring monitors or impose an automatic repair deadline.
+5. Publication still requires the existing successful checks for the **exact
+   published commit**. A failing regression prevents promotion of that game
+   build; the previous published build remains available. Pages has its own
+   documentation gates. A local pass or push proves neither publication.
+6. Full local verification remains available for a requested regression-repair
+   session. Never reclassify historical failures, timeouts or partial runs as
+   successful; keep local smoke, full regression and publication evidence
+   separate. The smoke time budget is a requirement, not a guarantee about
+   an unmeasured machine or a cold dependency download.
 
 ## Local preview and validation
 

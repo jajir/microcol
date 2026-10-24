@@ -44,11 +44,14 @@ elif 'run' in a:
     if mode != 'missing-export':
         (out / 'exit-code.txt').write_text('0')
     names = next(x for x in a if x.startswith('-Dtest=')).split('=', 1)[1].split(',')
-    for name in names:
+    for selection in names:
+        name, separator, selected = selection.partition('#')
+        methods = selected.split('+') if separator else ['test_run']
         if mode == 'missing-suite':
             continue
-        suite = E.Element('testsuite', name=name, tests='1', errors='0', failures='0', skipped='0', time='0.2')
-        E.SubElement(suite, 'testcase', classname=name, name='test_run')
+        suite = E.Element('testsuite', name=name, tests=str(len(methods)), errors='0', failures='0', skipped='0', time='0.2')
+        for method in methods:
+            E.SubElement(suite, 'testcase', classname=name, name=method)
         E.ElementTree(suite).write(out / ('TEST-' + name + '.xml'))
     with open(os.environ['DOCKER_EVENTS'], 'a') as f:
         f.write(json.dumps({'done': a[a.index('--name') + 1], 'time': time.monotonic()}) + '\n')
@@ -198,6 +201,65 @@ class VerificationTest(unittest.TestCase):
         ui_starts = [e["time"] for e in events if "MICROCOL_TEST_MODULE=microcol-test" in e.get("args", [])]
         ui_ends = [e["time"] for e in events if "-ui-" in e.get("done", "")]
         self.assertLess(max(ui_starts[:2]), min(ui_ends[:2]))
+
+    def setup_smoke(self):
+        self.setup_project()
+        selections = []
+        for index in range(10):
+            name = "TC_%02d_Test" % index
+            self.source("microcol-test", name, "class " + name
+                        + " { @Test void test_run() {} @Test void slower_test() {} }")
+            selections.append("sample." + name + "#test_run")
+        path = self.root / "scripts/ui-tests/smoke.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps(selections))
+        return path
+
+    def test_smoke_keeps_all_model_and_support_tests_and_only_selected_ui_methods(self):
+        self.setup_smoke()
+        with patch.object(verify, "ROOT", self.root):
+            self.assertEqual(verify.main(["--smoke"]), 0)
+        directory = next((self.root / "target/verification").glob("run-*"))
+        summary = json.loads((directory / "summary.json").read_text())
+        self.assertEqual(summary["scope"], "precommit")
+        self.assertEqual(summary["workers"], 1)
+        self.assertEqual(len(summary["groups"]), 1)
+        group = summary["groups"][0]
+        self.assertEqual(group["counts"]["tests"], 13)
+        self.assertIn("sample.ModelTest", group["expected"])
+        self.assertIn("sample.FirstTest", group["expected"])
+        self.assertEqual(group["expected"]["sample.TC_00_Test"], ["test_run"])
+
+    def test_smoke_rejects_duplicate_or_unknown_scenarios(self):
+        path = self.setup_smoke()
+        selections = json.loads(path.read_text())
+        expected = verify.inventory(self.root, "microcol-test")
+        path.write_text(json.dumps([selections[0]] * 10))
+        with self.assertRaisesRegex(ValueError, "distinct"):
+            verify.smoke_inventory(self.root, expected)
+        selections[0] = "sample.TC_00_Test#missing"
+        path.write_text(json.dumps(selections))
+        with self.assertRaisesRegex(ValueError, "Unknown"):
+            verify.smoke_inventory(self.root, expected)
+
+    def test_smoke_cannot_pass_after_five_minutes(self):
+        self.setup_smoke()
+        with patch.object(verify, "ROOT", self.root), patch.object(verify, "time") as clock:
+            clock.monotonic.return_value = 0
+            def completed(*args):
+                clock.monotonic.return_value = 301
+                return {"status": "passed"}
+            with patch.object(verify.Runner, "group", side_effect=completed):
+                self.assertEqual(verify.main(["--smoke"]), 1)
+        summary = json.loads(next((self.root / "target/verification").glob("run-*/summary.json")).read_text())
+        self.assertIn("exceeded 300 seconds", summary["error"])
+
+    def test_expired_total_budget_does_not_start_another_command(self):
+        runner = verify.Runner([], 5400, threading.Event(), deadline=-1)
+        with patch.object(verify.subprocess, "Popen") as process:
+            with self.assertRaises(TimeoutError):
+                runner.command(["docker", "info"], self.reports / "preflight.log", 120)
+            process.assert_not_called()
 
     def test_failed_process_missing_export_and_missing_suite_are_not_success(self):
         self.setup_project()

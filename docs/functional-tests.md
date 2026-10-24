@@ -1,5 +1,84 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## Pre-commit smoke
+
+1. Dohoda z **24. října 2026** mění četnost ověřování podle
+   [pravidel přejímky](publishing.md#local-acceptance-policy): před každým
+   commitem jsou povinné všechny rychlé modelové/JUnit testy a tato smoke sada.
+   Úplná regrese běží po pushi na `main` v GitHub Actions; na výsledek nečekáme
+   a náprava začíná pouze na výslovný pokyn uživatele. Starší záznamy úplné
+   lokální přejímky níže jsou historické důkazy, nikoli současná commitovací brána.
+2. Spuštění z kořene repozitáře: `bash scripts/ui-tests/verify.sh --smoke`.
+   Pro práci agenta použít [completion runner](ai/completion-callbacks.md#pre-commit-gate).
+   Jeden izolovaný Docker/Xvfb kontejner provede všechny testy `microcol-game`,
+   všechny stávající podpůrné třídy bez prefixu `TC_` v `microcol-test`
+   a deset metod uvedených níže. Podpůrné třídy zahrnují i základní TestFX kontroly
+   `SimpleOperationsTest`; nejde jen o čisté jednotkové testy.
+3. Autoritativní spustitelný výběr je
+   [smoke.json](../scripts/ui-tests/smoke.json). Počty všech modelových a podpůrných
+   testů se odvozují ze zdrojů; nejde o pevný historický počet. Explicitní výběr
+   zahrnuje i `ConnectorTest`. Chybějící nebo duplicitní smoke metoda je chyba.
+
+| Scénář a metoda | Ověřená hráčská cesta |
+| --- | --- |
+| TC12 / `TC_01_start_free_game` | Start nové volné hry |
+| TC83 / `TC_03_modal_buttons_keep_widths_states_and_keyboard_behavior` | Modální tlačítka, stavy a klávesnice |
+| TC84 / `TC_02_rulers_keep_dragging_keyboard_endpoints_and_preferences` | Nastavení myší a klávesnicí, krajní hodnoty a uložení voleb |
+| TC02 / `TC_02_embark_disembark` | Založení pojmenované kolonie a její počáteční stav |
+| TC21 / `TC_01_europe_click_and_keyboard_return` | Otevření Evropy a návrat klávesnicí |
+| TC21 / `TC_04_colony_click_and_escape_return` | Otevření kolonie a návrat Escape |
+| TC21 / `TC_05_menu_saves_latest_position_for_fresh_profile` | Uložení aktuální pozice přes menu a Continue |
+| TC07 / `TC_07_producing_goods` | Konec tahu a skutečná produkce kolonie |
+| TC06 / `TC_06_moving_goods` | Nákup a prodej zboží v Evropě |
+| TC23 / `TC_01_atlantic_round_trip_preserves_cargo` | Plavba přes Atlantik tam a zpět se zachováním nákladu |
+
+1. Celá lokální brána má limit **300 sekund** od vytvoření běhu, včetně snímku
+   zdrojů, kontroly Dockeru, sestavení, modelových testů, smoke a vyhodnocení
+   reportů. Překročení limitu je neúspěch, nikoli důvod vynechat modelové testy
+   nebo označit neúplné výsledky za přijaté. První příprava Dockeru či stažení
+   závislostí může potřebovat samostatnou přípravu a nový celý běh.
+2. Výsledek a manifest jsou pod `target/verification/run-*/` s `scope: precommit`;
+   úplná regrese má `scope: full`. Reporty musí obsahovat přesně očekávané třídy
+   a metody, nula selhání, chyb i přeskočení. Změna smoke nesmí oslabit existující
+   aserce ani vyřadit scénáře z úplné regrese.
+3. Nové či změněné chování nadále vyžaduje modelové a pojmenované UI testy
+   ve stejném commitu. Cílené běhy pomáhají během vývoje; úplná UI sada se kvůli
+   změně sdíleného ovládání nespouští automaticky jako další lokální brána.
+   Smoke není tvrzení o úplném pokrytí všech hráčských cest.
+4. Měřený výsledek a implementaci sleduje [R-0258](requirements/done/R-0258.md).
+
+
+
+### R-0258 — Lokální měření — 2026-10-24
+
+1. Zdroj: `fa3aeda23716fee2d6099343ea2792a55818153f` plus změny R-0258
+   v izolovaném checkoutu; souběžná rozpracovaná R-0220 v hlavním checkoutu není
+   součástí této přejímky. Herní Java ani původní aserce se nemění.
+2. První skutečný běh `run-_fh4xgpt`, completion
+   `20261024T152746Z-fe87fe6bdc46`, supervisor PID 8609, prošel za **282,530 s**.
+   Všech **4 720 modelových testů + 10 smoke scénářů + 9 podpůrných kontrol**
+   prošlo bez selhání, chyb a přeskočení. Výsledek zahrnuje sestavení i testy,
+   nikoli pouze součet časů metod. Následná úprava sjednotila deadline přípravy
+   a testů; finální opakování je zaznamenané v bodu 5.
+3. Docker 29.8.2: 10 CPU, 8 319 504 384 B RAM, host aarch64; testovací prostředí
+   linux/amd64, Xvfb/Openbox, software rendering. Existující Maven/Docker cache
+   byla dostupná; první stažení závislostí ani libovolný jiný stroj tím nejsou
+   změřeny. Limit není důvod omezit modelové testy nebo oslabit UI očekávání.
+4. Lokální kontroly nástrojů: 15 testů UI runneru, 19 completion, 21 local-worker,
+   9 dokumentačních a 13 klasifikačních testů; všechny prošly. Striktní MkDocs
+   prošel a vygenerovaná stránka obsahuje tabulku deseti scénářů a časový limit.
+   Remote CI a publikace se nesledovaly.
+5. Finální běh `run-qsnyxn6q`, completion `20261024T153446Z-b6b345bfcb53`,
+   supervisor PID 10883, prošel za **280,289 s (4 min 40 s)**. Nezávislé sečtení
+   XML potvrdilo **4 720 modelových testů ve 333 reportech** a **19 UI/podpůrných
+   kontrol v 11 reportech** (deset vybraných scénářů plus devět podpůrných
+   kontrol), všude nula selhání, chyb a přeskočení. Hash kontrola potvrdila
+   nezměněné spustitelné zdroje a konfiguraci; následovaly pouze dokumentační
+   záznamy, status a odkazy s novou dokumentační kontrolou. Oba callbacky byly
+   úspěšně zařazené do původního chatu. Jde o lokální přejímku R-0258, nikoli
+   o výsledek celé vzdálené regrese či publikace.
+
+
 ## R-0219 diplomacy journey ledger 2026-10-24
 
 **Passed (attempt 1, 2026-10-24, run-ZEnkEm).** The model suite and
@@ -2812,7 +2891,7 @@ ovládání a bezpečného výsledku v UI.
 | Nová funkce nebo změna pravidla | Doplnit nebo upravit pojmenovaný scénář `TC_...`, který provede akci přes UI a ověří herní výsledek. Výpočty a hraniční případy doplnit do modelových testů v `microcol-game`. |
 | Oprava chyby | Přidat reprodukční kroky a očekávaný správný výsledek; ověřit, že test zachytí původní chybu a po opravě projde. |
 | Obrázky, CSS, rozměry, rozmístění nebo popisky | Zachovat očekávané herní výsledky a provést dotčené funkční scénáře. Ověřit také skutečný obraz, klikatelnost, výběr a klávesové ovládání podle [UX pravidel](ux.md). |
-| Sdílené tlačítko, dialog, ovládání mapy nebo page object | Najít všechna použití a ověřit související scénáře; před dokončením spustit celou funkční sadu. |
+| Sdílené tlačítko, dialog, ovládání mapy nebo page object | Najít všechna použití a pokrýt související scénáře; před commitem projít [smoke bránou](#pre-commit-smoke), úplnou regresi provede GitHub Actions. |
 
 Před úpravou uvést dotčená pravidla a konkrétní ID scénářů. Pokud stávající
 scénář už přesně ověřuje zachovávané chování, stačí doložit jeho úspěšný běh;
@@ -2926,7 +3005,7 @@ platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odem�
 #### Úplné ověření v izolovaných skupinách
 
 [R-0257](requirements/done/R-0257.md) poskytuje jeden příkaz pro úplnou lokální
-přejímku; [úplný průchod byl ověřen 21. října 2026](#r-0257-izolovane-uplne-overeni-2026-10-21).
+přejímku na výslovný pokyn uživatele, nikoli před každým commitem; [úplný průchod byl ověřen 21. října 2026](#r-0257-izolovane-uplne-overeni-2026-10-21).
 Z kořene repozitáře:
 
 ```sh
@@ -3032,7 +3111,8 @@ docker compose -f compose.ui-tests.yml run --build --rm ui-tests \
   -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
-Název konkrétní třídy ověřit ve zdrojích; cílený běh nenahrazuje celou sadu.
+Název konkrétní třídy ověřit ve zdrojích; cílený běh nenahrazuje povinnou
+[smoke bránu](#pre-commit-smoke) ani neprokazuje úplnou regresi.
 `failIfNoSpecifiedTests=false` zde dovoluje závislý herní modul bez zvoleného
 TC, nikoli přijetí nulového počtu testů. Výchozí plný příkaz tento přepínač
 nepoužívá. Všechny běhy používají skutečný Linux Glass a
@@ -3179,7 +3259,7 @@ pokusy, opravu workerem a aplikaci/formátování hlavním agentem.
 
 ### Kontrolní seznam
 
-Před přijetím změny reviewer ověří:
+Před lokálním přijetím změny reviewer ověří povinnou [smoke bránu](#pre-commit-smoke) a následující body; úplná regrese je samostatný asynchronní výsledek:
 
 - Každé změněné chování má dohledatelné ID scénáře a konkrétní očekávání;
   relevantní zamítnutí, zrušení, hraniční stav a save/load nejsou opomenuty.

@@ -20,7 +20,7 @@ not install a daemon, change a model, or put Codex credentials inside a containe
    reconcile it with that work rather than starting duplicate verification.
 4. On the callback, inspect that run's `result.json`, `command.log` and referenced
    worker/test/CI evidence. Completion is **not acceptance**. Preserve actual test
-   names/counts/skips, required full suites, formatting, independent review,
+   names/counts/skips, required selected suites, formatting, independent review,
    bounded worker repair and publication checks. Reuse evidence only for the
    same checked source, environment and selection.
 
@@ -73,9 +73,24 @@ The original foreground command remains available to human operators and CI.
 The [functional contract](../functional-tests.md#docker-ui-tests), named scenarios
 and container runner checks are unchanged.
 
+## Pre-commit gate
+
+Before every commit, dispatch the [mandatory local gate](../functional-tests.md#pre-commit-smoke):
+
+```sh
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 420 verify -- --smoke
+```
+
+The verifier enforces a **300-second total acceptance budget**, including all
+model tests and the selected UI/support tests. The outer 420-second watchdog
+allows startup, bounded cleanup and notification; it does not extend acceptance.
+Record the returned directory and PID, continue independent work, then inspect
+the callback's `result.json`, `command.log`, manifest and test reports. A failed
+or incomplete gate blocks the commit. It never starts a remote CI watcher.
+
 ## Complete local verification
 
-Dispatch the [full-suite runner](../functional-tests.md#uplne-overeni-v-izolovanych-skupinach)
+Only when the user explicitly requests full regression or its repair, dispatch the [full-suite runner](../functional-tests.md#uplne-overeni-v-izolovanych-skupinach)
 once; it owns both UI containers and aggregates their results:
 
 ```sh

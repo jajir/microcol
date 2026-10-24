@@ -26,7 +26,6 @@ jobs:
 
   functional:
     needs: changes
-    if: needs.changes.outputs.game_required == 'true'
     name: Functional player scenarios
     runs-on: ubuntu-24.04
     timeout-minutes: 90

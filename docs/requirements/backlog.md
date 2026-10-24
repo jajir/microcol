@@ -1,5 +1,17 @@
 # Current requirement backlog
 
+## Verification cadence — 2026-10-24
+
+1. [R-0258](done/R-0258.md) and the [current local acceptance policy](../publishing.md#local-acceptance-policy)
+   supersede the full-local-regression completion instructions in earlier batch
+   plans below: before every commit, all model/JUnit tests plus the fixed smoke
+   gate must pass. Full regression runs asynchronously on every main push.
+2. Only an explicit user request starts remote-regression investigation or
+   repair; ordinary work neither waits for CI nor checks it at the next task.
+   Preserve the historical batch results and any unmet behavior-specific
+   acceptance criteria; a local smoke pass is not full-regression evidence.
+
+
 Follow-up closure: [R-0256](done/R-0256.md) records the final three accepted answers; no recorded open questions remain through R-0219.
 
 Decision reconciliation: [R-0255](done/R-0255.md); [remaining questions](open-points.md).

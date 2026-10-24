@@ -10,22 +10,31 @@ request each time. Preserve unrelated working-tree changes. Follow an explicit
 request to leave changes uncommitted or unpublished. Never force-push to complete
 this workflow.
 
-As agreed on 2026-10-20, a complete successful local acceptance run is sufficient
-to finish ordinary development work. For game changes this includes the full
-model and Docker/Xvfb UI suites, with complete reports and zero failures, errors
-or skips, on the final source state. Targeted or incomplete runs do not suffice.
-Documentation-only changes require the documented local documentation checks and
-strict MkDocs build, not a game regression. See the authoritative
-[local acceptance policy](docs/publishing.md#local-acceptance-policy).
+As agreed on 2026-10-24, before **every commit**, including documentation-only
+commits, run all fast model/JUnit tests and the fixed Docker/Xvfb smoke gate
+with `bash scripts/ui-tests/verify.sh --smoke`. Complete fresh reports with zero
+failures, errors or skips are mandatory; do not commit when the gate fails,
+times out or is incomplete. Its total local budget is five minutes. Also run
+checks relevant to changed tooling, Java formatting when applicable, and the
+documented documentation checks and strict MkDocs build for documentation.
+See the authoritative [local acceptance policy](docs/publishing.md#local-acceptance-policy)
+and [smoke selection](docs/functional-tests.md#pre-commit-smoke).
 
-After local acceptance, commit and push, then report the checked revision and
-actual results. Do not wait for, watch, rerun, diagnose or repair remote CI or
-Pages by default; do that only when the user explicitly requests CI work or
-verified publication. Remote failure does not reopen an accepted local task.
-CI workflows and their publication gates remain configured and may run in the
-background. A push or local pass does not prove publication: do not claim a new
-published build or download without verification. Existing failed local runs,
-including the four-container experiment, remain failed evidence.
+After local acceptance and review, commit and push `main`, then report the
+checked revision, selection and actual results. Every push to `main` starts the
+full regression in GitHub Actions. Do not wait for, watch, inspect, rerun,
+diagnose or repair remote CI or Pages by default, including at the start of the
+next task. Only the user's explicit instruction starts a regression-repair or
+publication-verification session; an overnight session is started only when
+requested. A pending or failed remote regression does not block subsequent
+work or reopen an accepted local task. Preserve failed evidence and distinguish
+local acceptance from full-regression success.
+
+Publication gates remain required for the exact published revision. A local
+pass or push does not prove that a new game distribution or website was
+published; do not claim a new build/download without verification. Full local
+regression remains available for explicitly requested diagnosis or acceptance,
+but is not the ordinary pre-commit gate. Historical failed runs remain failed.
 
 Pushes to `main` publish documentation and verified development distributions.
 See [development delivery](docs/development-builds.md) for the release channel,

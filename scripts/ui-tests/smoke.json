@@ -1,0 +1,12 @@
+[
+  "org.microcol.test.TC_12_F11_start_free_game#TC_01_start_free_game",
+  "org.microcol.test.TC_83_F74_wooden_buttons_test#TC_03_modal_buttons_keep_widths_states_and_keyboard_behavior",
+  "org.microcol.test.TC_84_F75_framed_settings_test#TC_02_rulers_keep_dragging_keyboard_endpoints_and_preferences",
+  "org.microcol.test.TC_02_F02_founding_colony_test#TC_02_embark_disembark",
+  "org.microcol.test.TC_21_F15_free_play_screen_navigation_test#TC_01_europe_click_and_keyboard_return",
+  "org.microcol.test.TC_21_F15_free_play_screen_navigation_test#TC_04_colony_click_and_escape_return",
+  "org.microcol.test.TC_21_F15_free_play_screen_navigation_test#TC_05_menu_saves_latest_position_for_fresh_profile",
+  "org.microcol.test.TC_07_F07_producing_gooods_test#TC_07_producing_goods",
+  "org.microcol.test.TC_06_F06_buy_and_sell_goods_test#TC_06_moving_goods",
+  "org.microcol.test.TC_23_F16_atlantic_voyage_audit_test#TC_01_atlantic_round_trip_preserves_cargo"
+]

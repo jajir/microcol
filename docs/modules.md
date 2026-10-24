@@ -190,12 +190,15 @@ does not create or validate game distributions.
 
 ## Distribution boundaries
 
-The full local verification command `scripts/ui-tests/verify.sh` orchestrates
-the existing `microcol-game` and `microcol-test` modules; it adds no Maven module
-or game package. Its frozen source snapshot, per-group logs/XML/screenshots and
-aggregate manifest/result are under `target/verification/run-*/`, separate from
-distributable artifacts. See the
-[verification contract](functional-tests.md#uplne-overeni-v-izolovanych-skupinach).
+The verification command `scripts/ui-tests/verify.sh --smoke` provides the
+mandatory pre-commit gate over the existing `microcol-game` and `microcol-test`
+modules: all model tests, support tests and the ten methods in
+`scripts/ui-tests/smoke.json`. Without `--smoke`, the same runner performs the
+complete local regression on request. It adds no Maven module or game package.
+Frozen source, manifests, logs/XML/screenshots and aggregate results remain in
+`target/verification/run-*/`; `scope` distinguishes `precommit` from `full`.
+These are verification outputs, not distributable artifacts. See the
+[smoke contract](functional-tests.md#pre-commit-smoke).
 
 Application sources and the module descriptor target Java 11, while native
 packaging uses JDK 17 and JavaFX 17.0.20. Packages are specific to the build OS and
