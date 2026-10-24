@@ -10,8 +10,15 @@ request each time. Preserve unrelated working-tree changes. Follow an explicit
 request to leave changes uncommitted or unpublished. Never force-push to complete
 this workflow.
 
-As agreed on 2026-10-24, before **every commit**, including documentation-only
-commits, run all fast model/JUnit tests and the fixed Docker/Xvfb smoke gate
+As amended on 2026-10-24, **documentation-only commits do not require model/JUnit
+or smoke tests**. This includes requirement analyses, documentation and textual
+project instructions, provided no executable code, tests, runtime assets/data or
+build/runtime/CI configuration changes. Review the actual commit scope, preserve
+unrelated working-tree changes, and run the documentation consistency checks and
+strict MkDocs build. Tooling tests are required when the relevant tooling changes,
+not merely because its documentation changes.
+
+Before every other commit, run all fast model/JUnit tests and the fixed Docker/Xvfb smoke gate
 with `bash scripts/ui-tests/verify.sh --smoke`. Complete fresh reports with zero
 failures, errors or skips are mandatory; do not commit when the gate fails,
 times out or is incomplete. Its total local budget is five minutes. Also run

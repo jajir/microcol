@@ -75,7 +75,9 @@ and container runner checks are unchanged.
 
 ## Pre-commit gate
 
-Before every commit, dispatch the [mandatory local gate](../functional-tests.md#pre-commit-smoke):
+Before a commit requiring game tests, dispatch the [mandatory local gate](../functional-tests.md#pre-commit-smoke).
+Documentation-only commits are exempt under the [local acceptance policy](../publishing.md#local-acceptance-policy);
+run documentation consistency checks and strict MkDocs instead, without starting this runner:
 
 ```sh
 python3 scripts/codex/run.py --thread TASK_UUID --timeout 420 verify -- --smoke

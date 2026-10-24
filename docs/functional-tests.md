@@ -4,7 +4,13 @@
 
 1. Dohoda z **24. října 2026** mění četnost ověřování podle
    [pravidel přejímky](publishing.md#local-acceptance-policy): před každým
-   commitem jsou povinné všechny rychlé modelové/JUnit testy a tato smoke sada.
+   commitem, který není pouze dokumentační, jsou povinné všechny rychlé
+   modelové/JUnit testy a tato smoke sada. Pozdější upřesnění téhož dne vyjímá
+   změny pouze dokumentace, požadavků a textových projektových instrukcí:
+   stačí kontroly konzistence dokumentace a striktní MkDocs. Výjimka se nevztahuje
+   na změny kódu, testů, herních dat či assetů ani sestavovací, běhové nebo CI
+   konfigurace, a to ani ve smíšeném commitu s dokumentací. Rozhoduje skutečný
+   obsah připravovaného commitu; nesouvisející rozpracované změny se nepřibírají.
    Úplná regrese běží po pushi na `main` v GitHub Actions; na výsledek nečekáme
    a náprava začíná pouze na výslovný pokyn uživatele. Starší záznamy úplné
    lokální přejímky níže jsou historické důkazy, nikoli současná commitovací brána.

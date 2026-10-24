@@ -99,6 +99,22 @@ navazuje zejména na P02/P28 pro vstup do hry, P26 pro obnovu a P31 pro ověřen
 celé cesty; úplnost partie vyžaduje i ostatní příslušné balíky. Zapsání cíle
 ani samotné odemčení tlačítka neznamená dokončení celé hry.
 
+### Pestrý Original World
+
+1. **Dohodnuto s uživatelem 24. října 2026:** volba Free Play Game → Original
+   World má nabídnout jednu stálou, pestře rozmístěnou mapu. Rozložení krajiny
+   a přírodních prvků se při každé nové hře nemění; nejde o generovaný svět.
+2. Velká severní pevnina má na severu tundru. Na jihu je ledová Antarktida
+   bez tundry, tvořená existujícím ledovým terénem. Ostatní krajina je rozmanitá,
+   ale tvoří smysluplné oblasti a přechody.
+3. Mapa obsahuje všech 14 současných typů terénu, lesy, malé i velké řeky a všechny
+   druhy zvláštních přírodních zdrojů v povolených kombinacích. Řeka má být
+   objevitelná při běžném příjezdu k pevnině, při zachování pravidel odkrývání mapy.
+4. Rozsah a přejímku vede [R-0263](requirements/R-0263.md), včetně zbývající otázky
+   na případné nepřírodní doplňky. Jde o zadání, nikoli doloženou změnu mapy.
+   Samostatná geografická Amerika [R-0221](requirements/R-0221.md) a generovaný svět
+   [R-0065](requirements/done/R-0065.md) si zachovávají vlastní rozsah.
+
 ## Z čeho vycházíme
 
 | Podklad | K čemu slouží |

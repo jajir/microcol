@@ -40,23 +40,28 @@ Never force-push to publish. Task completion follows the local acceptance policy
 
 ## Local acceptance policy
 
-1. **Agreed on 2026-10-24, superseding the 2026-10-20 completion policy:**
-   before every commit, including documentation-only commits, run
-   `bash scripts/ui-tests/verify.sh --smoke`. This mandatory local gate runs
-   **all model/JUnit tests**, the existing non-`TC_` support tests and the ten
-   [selected UI scenarios](functional-tests.md#pre-commit-smoke). It uses
-   Docker/Xvfb, checks complete fresh reports and must finish within 300 seconds
-   with zero failures, errors or skips. Failure, missing reports or timeout
-   blocks the commit; a targeted run does not replace this gate.
-2. Also run checks appropriate to the task: shared formatting for changed Java,
-   tests for changed tooling, and the documented documentation checks plus
-   strict MkDocs for changed documentation. Preserve unrelated working changes
-   and test the executable source being committed. Evidence/status/link-only
-   documentation closure after a passing gate needs fresh documentation checks,
-   not an identical game run; any executable or test-selection change invalidates
-   that gate. During development, use targeted tests
-   as needed; do not automatically run the full local UI suite before committing.
-3. Ordinary work finishes after this local gate, review, commit and push to
+1. **Amended on 2026-10-24 by explicit user instruction:** documentation-only
+   commits do **not** require model/JUnit or Docker/Xvfb smoke tests. The exception
+   includes requirement analyses, documentation, documentation-only illustrations
+   and textual project instructions such as `AGENTS.md`. Review the actual proposed
+   commit: executable code, tests, runtime assets/data, build/runtime configuration
+   or CI configuration changes require the game gate, even when mixed with docs.
+   File extension alone does not establish the exception. Preserve unrelated
+   working-tree changes; do not include them in a documentation commit.
+2. For a documentation-only commit, run the documentation consistency tests and
+   strict MkDocs build below, then review the diff. Run tooling tests when the
+   relevant tooling changes, not merely its documentation. For every other commit,
+   run `bash scripts/ui-tests/verify.sh --smoke`: **all model/JUnit tests**, existing
+   non-`TC_` support tests and the ten [selected UI scenarios](functional-tests.md#pre-commit-smoke)
+   in Docker/Xvfb. Complete fresh reports must show zero failures, errors or skips
+   within 300 seconds; failure, missing reports or timeout blocks that commit.
+   Targeted checks do not replace the gate. Also apply shared formatting to changed
+   Java, tests for changed tooling and documentation checks for changed docs.
+   Evidence/status/link-only closure after an accepted game gate needs fresh
+   documentation checks, not another identical game run. Test the executable source
+   being committed; executable or test-selection changes invalidate prior game
+   evidence. Full local UI regression is not the ordinary pre-commit gate.
+3. Ordinary work finishes after the applicable local checks, review, commit and push to
    `main`. Report the checked source revision, selected checks, counts, duration
    and report location. A requirement may become `done` after its agreed outcome
    and these required local checks pass. This is **local acceptance**, not a
@@ -85,11 +90,18 @@ From the repository root, with Python 3.9 or newer:
 ```sh
 python3 -m venv target/docs-venv
 target/docs-venv/bin/python -m pip install -r requirements-docs.txt
-target/docs-venv/bin/python -m unittest discover -s scripts/codex -p 'test_*.py'
-target/docs-venv/bin/python -m unittest discover -s scripts/local-worker -p 'test_*.py'
 target/docs-venv/bin/python -m unittest discover -s scripts/docs -p 'test_*.py'
 target/docs-venv/bin/python -m mkdocs build --strict
 target/docs-venv/bin/python -m mkdocs serve
+```
+
+The documentation-only acceptance checks are `scripts/docs` discovery and
+`mkdocs build --strict`; `serve` is an optional local preview. When completion-runner
+or local-worker tooling changes, also run its corresponding test suite:
+
+```sh
+target/docs-venv/bin/python -m unittest discover -s scripts/codex -p 'test_*.py'
+target/docs-venv/bin/python -m unittest discover -s scripts/local-worker -p 'test_*.py'
 ```
 
 Open the address printed by `serve` (normally
@@ -686,3 +698,18 @@ documentation in APT just to make it visible on the web.
 4. This is acceptance of the written agreement and its reference asset, not
    evidence of a completed runtime redesign or full regression. Remote CI and
    publication were not inspected.
+
+
+## Documentation-only acceptance — 2026-10-24
+
+1. [R-0264](requirements/done/R-0264.md) records the user's explicit exception
+   for documentation-only commits. Instructions, the policy, runner guidance and
+   active capture requirements now agree. Runtime code, test runners, CI and
+   publication gates are unchanged.
+2. This documentation change also captures the fixed Original World target in
+   [R-0263](requirements/R-0263.md); its map implementation remains unselected.
+   All nine documentation consistency tests and strict MkDocs passed under the
+   amended policy. The earlier game-test run dispatched for R-0263 predates this
+   exception and is separate evidence, not a game-test requirement for this commit.
+3. Remote CI and publication are not inspected. A successful local check or push
+   does not establish that Pages or a game distribution was published.

@@ -151,6 +151,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
 | [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
 | [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
+| [R-0263](R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
 
 ## A03
 
@@ -174,6 +175,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0260](done/R-0260.md) | Record the shared ballpoint, Playpen Sans 14 and flat-color contract | Done; documentation agreement only | User decisions and palette reference, 2026-10-24 |
 | [R-0261](R-0261.md) | Show a subtle dashed grid only on explored map squares | New capture | User request and Tabletop Map reference, 2026-10-24; solid gray unknown territory has no grid |
 | [R-0262](R-0262.md) | Make the main game screen hand-drawn with clear controls and a taller bottom panel | New capture | User request, 2026-10-24; integrated main-map screen, not the separate main menu |
+| [R-0264](done/R-0264.md) | Exempt documentation-only commits from local game tests | Done; workflow agreement only | User instruction, 2026-10-24; documentation checks and strict MkDocs remain required |
 | [R-0207](deferred/R-0207.md) | Keep the opening tutorial accurate for free play | Deferred by user, 2026-10-19 | SUPPORT-004; existing guided instructions credited |
 | [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |
 | [R-0223](R-0223.md) | Observe real players completing core game tasks | New capture | P28/P31 real-player evidence, not automation |
