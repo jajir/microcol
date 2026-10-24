@@ -70,7 +70,7 @@ public final class PaintService {
     private static final Color ROAD_EDGE_COLOR = Color.web("#4a3118");
 
     /** River water; a blue that stands out on grass, sand and snow. */
-    public static final Color RIVER_COLOR = Color.web("#2f6fd0");
+    public static final Color RIVER_COLOR = Color.web("#426F70");
 
     /** Width of a small river course, a share of one square. */
     private static final double SMALL_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX

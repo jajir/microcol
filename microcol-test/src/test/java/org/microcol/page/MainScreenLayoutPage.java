@@ -44,6 +44,28 @@ public final class MainScreenLayoutPage extends AbstractScreen {
         return n.localToScene(n.getBoundsInLocal());
     }
 
+    /** Verify the agreed pigments in the actual rendered map, not a mockup. */
+    public void verifyMapPalette() {
+        getRobot().interact(() -> {
+            final javafx.scene.image.WritableImage image = org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                    .captureCanvas(getContext());
+            final int[] expected = { 0x649B97, 0xC5C18A, 0x9B9486 };
+            for (int pigment : expected) {
+                int pixels = 0;
+                for (int y = 0; y < image.getHeight(); y++) {
+                    for (int x = 0; x < image.getWidth(); x++) {
+                        if ((image.getPixelReader().getArgb(x, y)
+                                & 0xFFFFFF) == pigment) {
+                            pixels++;
+                        }
+                    }
+                }
+                assertTrue(pixels > 100, "Map displays agreed pigment "
+                        + Integer.toHexString(pigment));
+            }
+        });
+    }
+
     public void verifyLayout(final String expectedMessage) {
         getRobot().interact(() -> {
             final Bounds bar = bounds("statusBar");

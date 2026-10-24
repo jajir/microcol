@@ -9533,3 +9533,34 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. `OriginalWorldTest` checks inventory, terrain/resource legality, north/south polar placement, the open approach and river mouth, fresh-load determinism, saved-map roundtrip and reference separation. First callback `20261024T173953Z-26627dff70dc` failed map validation: fishery was on coastal land. Corrected the fishery to (26,13), mouth to (25,13), sea approach to (26,14), landing to (25,14), and the silver reserve to 100. Callback `20261024T174109Z-bd06c857bdce` passed 26 model + 14 UI/support tests, zero failures/errors/skips, in 180.951 s (`target/docker-ui/run-JDxONl`).
 3. New `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` starts through setup, sails from (45,15), discovers and pixel-checks the river, lands a passenger, founds River Haven and continues. Callback `20261024T174511Z-ea6689dc4ebc` failed because the new journey dragged without first selecting the ship; explicit normal selection was added. Callback `20261024T174917Z-14c8e7ce926e` reached and verified the river and landing, but attempted founding with zero movement after disembarkation. The journey now ends the turn before founding. Failed reports remain under `target/docker-ui/run-xmhQDm` and `target/docker-ui/run-qITDy6`.
 4. Callback `20261024T175328Z-be773bd3512b` (PID 38534) passed **41 tests (26 model + 12 UI + 3 source-contract), five XML reports, zero failures/errors/skips**, in 225.070 s. Reports: `target/docker-ui/run-UtRynp`; image `microcol-test/warehouse-qa/R-0263-river-approach.png` confirms the visible river on the coastal approach. Colony founding and Continue passed. Required smoke gate `20261024T175727Z-402805c6e782` (PID 38830) passed: **4,742 tests (4,723 model + 10 fixed UI smoke + 9 support)**, 345 XML reports, no missing suites and zero failures/errors/skips. Group 272.371 s, verifier 274.803 s, supervisor 274.892 s. Evidence: `target/verification/run-clnklppu/summary.json`. Executable/test source matches the snapshot; later differences are documentation only. Nine documentation tests and strict MkDocs passed. R-0263 is locally accepted; publication is not verified. The user's subsequent main-map palette/ballpoint-outline request remains a separate visual follow-up, including a new screenshot after verification.
+
+### R-0265 — map palette and ballpoint contours (2026-10-24)
+
+The shared terrain SVG/runtime atlas now uses the Explorer Manuscript palette,
+with thin stable coast, fog-boundary, tree and hill contours and a muted river
+pigment. TC_21 TC_10 verifies the actual canvas pigments at English 1280×850 and
+Czech 1000×700 window sizes and captures both screens. Existing fog/grid,
+Original World river approach, landing, founding and Continue assertions remain.
+
+Targeted Docker/Xvfb selection: TC_21_F15_free_play_screen_navigation_test.TC_10,
+all TC_24_F15_free_play_setup_test and TC_26_F18_fog_of_war_test scenarios, and
+PageVerificationContractTest. Run `20261024T181354Z-9fb46f42c168` completed in
+299.675 seconds: **24 tests (21 UI + 3 support), four XML reports, zero failures,
+errors or skips**. Evidence: `target/docker-ui/run-hAtI9H/`; screenshots
+`microcol-test/warehouse-qa/R-0265-main-English.png` and
+`microcol-test/warehouse-qa/R-0265-main-Czech-small.png` were reviewed.
+The earlier run `20261024T180823Z-5d5e135ec9f9` remains failed: the new direct
+Canvas.snapshot call raised a JavaFX rendering exception. Reusing the existing
+scene snapshot/canvas crop helper fixed that test; the complete selection above
+was rerun. This is local visual and functional evidence, not a remote regression
+or distribution-publication claim. The mandatory precommit smoke gate passed in run
+`20261024T181925Z-86487006c3d1`: **4,742 tests = 4,723 model/JUnit + 10 fixed UI
+smoke + 9 support**, 345 suites/reports, zero failures, errors or skips, all
+expected selections present. Group time was 272.562 seconds (within the 300-second
+budget), verifier 275.009 seconds and callback supervisor 275.088 seconds.
+Evidence: `target/verification/run-z6w1q4k0/summary.json`, frozen `source/`, and
+`/Users/jan/Library/Logs/Microcol/completions/20261024T181925Z-86487006c3d1/`.
+The changed executable sources and assets were compared byte-for-byte with that
+snapshot before commit; only documentation was completed afterward. Java
+formatting, diff review, nine documentation tests and strict MkDocs passed.
+Physical HiDPI hardware and remote CI/publication were not checked.

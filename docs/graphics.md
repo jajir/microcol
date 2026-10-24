@@ -957,3 +957,26 @@ součástí této funkční opravy. Zdrojový atlas se nemění.
 Vizuální kontrola zachytila chybějící pozici `id_fort`, která panel
 překrývala s tabákovou dílnou. CSS i zdroj SCSS nyní umísťují opevnění
 do volného místa vedle prostřední řady; TC53 kontroluje nepřekrytí sousedů.
+
+
+### Paleta a kontury hlavní mapy — R-0265
+
+Dne 24. října 2026 byla pro [R-0265](requirements/done/R-0265.md) použita paleta
+referenčního Explorer Manuscript: voda `#649B97`, otevřená země `#C5C18A`,
+vegetace `#76865C`, sníh/papír `#FFF9EC`, neprozkoumané území `#9B9486`
+a obrysový inkoust `#292824`. Řeky používají tmavší tyrkysovou `#426F70`;
+jejich dvě šířky zůstávají významově beze změny.
+
+Zdroj `microcol-game/src/graphics/background.svg` zachovává rozložení atlasu.
+Pobřežní a průzkumné kontury mají stabilní křivky s tahem 0,28 SVG jednotky
+(přibližně 0,95 pixelu v exportu), stromy 0,22 jednotky. Obrys se kreslí jen
+na vnitřní křivce pobřežního dílu, nikoli po vnějším obvodu políčka. Kopce
+jsou otevřené inkoustové křivky. Šedá výplň nahrazuje staré široké černé pásy.
+Sdílený atlas používají také náhledy terénu; jejich barvy se proto mění shodně.
+
+Reprodukce exportu: zkopírovat SVG do dočasného souboru, nastavit kořenový
+`viewBox="0 0 190.5 127"`, `width="648"` a `height="432"` (stávající výřez
+720 × 480 zdrojových pixelů), potom použít
+`python3 scripts/graphics/with-fonts.py rsvg-convert -o microcol-game/src/main/resources/images/background.png <dočasné.svg>`.
+Nespouštět celý historický `images.groovy` kvůli jedinému atlasu. Stav ověření
+patří do [funkční evidence](functional-tests.md), nikoli do tohoto popisu barev.
