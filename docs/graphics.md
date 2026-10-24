@@ -3,7 +3,7 @@
 MicroCol používá SVG jako editovatelné výtvarné podklady. Za běhu načítá rastrové soubory z `microcol-game/src/main/resources/images`, z některých vyřezává malé obrázky a další skládá do pozadí obrazovek. Změna SVG se ve hře projeví až po exportu a zařazení odpovídajícího rastrového souboru mezi resources.
 
 Stránka vlastní [minimalistický grafický manuál](#minimalisticky-graficky-manual)
-dohodnutý 18. října 2026 a technické vazby obrázků. Historický inventář níže
+z 18. října 2026 s upřesněním z 24. října 2026 a technické vazby obrázků. Historický inventář níže
 zachycuje **24 SVG** v `microcol-game/src/graphics`, **47 rastrových souborů**
 v `resources/images` a tehdejší spotřebitele; nejde o aktuální úplný počet.
 
@@ -15,32 +15,36 @@ Každá změna vzhledu musí zachovat herní výsledky podle
 [pravidel funkčních testů](functional-tests.md). Kontrola obrázku nenahrazuje
 provedení dotčených hráčských scénářů.
 
-Platná dohoda z **18. října 2026** rozšiřuje obecné zadání z 11. října
-o minimalistický manuál. Pro novou i upravovanou grafiku platí:
+**Dohoda z 24. října 2026, [R-0260](requirements/done/R-0260.md),** stanoví
+společný cíl pro všechny obrazovky: kresba kuličkovou propiskou na papíře,
+Playpen Sans 14 bez úpravy tloušťky písma, opticky sjednocené čáry a jednolité
+vybarvené plochy z [přiložené palety](#vychozi-paleta). Nahrazuje starší
+výchozí velikosti a řezy písma, návrh různých tlouštěk čar a předběžnou paletu.
+Odchylku od výchozí typografie je potřeba výslovně dohodnout; dosavadní
+odlišný vzhled sám o sobě není výjimkou z nového cíle.
 
-- Přibližně navazovat na současný vzhled hry, aby nové prvky působily jako její přirozená součást.
-- Držet vysoký kontrast a dobrou čitelnost objektů vůči pozadí i v malých zobrazovaných velikostech.
-- Usilovat o co nejhezčí a líbivý výsledek; konkrétní výtvarné řešení volí asistent podle vlastního estetického úsudku v rámci těchto pravidel.
-
-Rutinní výtvarné volby v rámci manuálu nevyžadují nové schválení. Zbývající
-optické doladění ani dosud nevytvořený vzorník neblokují funkční změny.
-Technické požadavky na výřezy, průhlednost a zapojení obrázků platí dál.
-Zápis dohody vede [R-0242](requirements/done/R-0242.md); nejde o provedený redesign hry.
+1. Zachovat vysoký kontrast a čitelnost i v malých výsledných rozměrech.
+2. Ruční charakter vytváří tvar kresby a barevné plochy; konkrétní estetické
+   volby v tomto rámci nevyžadují další schválení.
+3. Tento zápis sjednocuje zadání. Neprokazuje, že současné obrazovky už byly
+   převedeny nebo vizuálně ověřeny. Starší realizace a evidence níže zůstávají
+   označené datem; implementaci převzít po vybraných změnách a jejich kontrolách.
 
 ## Minimalistický grafický manuál
 
-**MicroCol vypadá jako svět nakreslený inkoustem na papíře, místy vybarvený
-plnou barvou. Kresba je živá, ovládání přehledné a přesné.**
+**Každá obrazovka MicroCol působí jako kresba stejnou kuličkovou propiskou
+na papíře, vybarvená jednolitými barevnými plochami. Ovládání zůstává čitelné
+a přesné.**
 
 ### Kresba a společné prvky
 
 | Prvek | Dohodnuté pravidlo |
 | --- | --- |
-| Čáry | Tmavý inkoust, mírně nepravidelná cesta, měkká zakončení a spoje. Nepravidelnost není roztřesení ani náhodně různá tloušťka mezi obrázky. Rozlišovat detail, běžný obrys a zvýraznění. |
-| Výplně | Jednobarevné plochy; část kresby zůstává nevybarvená. Výchozí vzhled bez přechodů, lesku a plastických efektů. |
-| Tlačítka | Běžná tlačítka používají vybranou [dřevěnou tabulku bez bočních zářezů](#drevena-tlacitka-bez-bocnich-zarezu). Dosavadní individuálně upravené prvky zachovávají vlastní vzhled. |
+| Čáry | Přibližně jednotná optická tloušťka odvozená od výchozího písma, tmavý inkoust, mírně nepravidelná cesta a měkká zakončení. Ruční charakter nevzniká náhodnou změnou tloušťky mezi obrázky; viz [kalibrace tahu](#stejna-tloustka-car-na-obrazovce). |
+| Výplně | Jednolité barevné plochy podle [reference palety](#vychozi-paleta); část kresby může zůstat nevybarvená. Bez přechodů, stínování, lesku, texturových efektů a simulované plastičnosti uvnitř ilustrací. |
+| Tlačítka | Použít stávající ovládací prvky a [dřevěnou tabulku](#drevena-tlacitka-bez-bocnich-zarezu); při převodu musí jejich písmo, linka a barvy odpovídat společnému cíli. Vlastní skin není automatickou výjimkou ze stylu. |
 | Stavy | Rozlišit běžný stav, najetí, stisk, klávesnicový fokus, výběr a nedostupnost. Fokus a výběr označit také tvarem či další linkou; nedostupnost má dohledatelný důvod. |
-| Typografie | Čitelné rukopisné písmo pro názvy a krátké popisky. Delší texty, tabulky a čísla upřednostňují čitelnost v malé velikosti. Dne 19. října 2026 vybrán Playpen Sans Light pro všechny živé texty; viz [typografie](#typografie-playpen-sans). |
+| Typografie | [Playpen Sans Regular 14](#typografie-playpen-sans) pro všechny texty, bez dodatečné změny tloušťky. Jiné velikosti či řezy jen jako výslovně dohodnutá výjimka. |
 | Oddělení obsahu | Přednostně volným místem; kde nestačí, jemnou kreslenou linkou. Silný rám jen pro hlavní skupiny. |
 | Ikony a ilustrace | Jednoduchá silueta, společný charakter obrysu, málo vnitřních detailů. Kontrolovat skutečnou zobrazovanou velikost. |
 | Rozložení | Pravidelné mezery a zarovnání. Kreslený okraj nesmí zasahovat do textu ani zmenšovat klikací plochu. |
@@ -50,6 +54,30 @@ a klávesnici. SVG slouží ilustracím, ikonám, obrysům a dekoracím.
 Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-zmeny).
 
 ### Typografie Playpen Sans
+
+1. **Aktuální dohoda 24. října 2026:** výchozí písmo je **Playpen Sans Regular
+   (400), velikost 14 logických px**. Platí pro názvy, nadpisy, popisky, dialogy,
+   tabulky, vstupy, tooltipy i texty kreslené na mapě. Jiná velikost nebo řez
+   vyžadují výslovnou dohodu; starší hodnoty nejsou automaticky převzaté výjimky.
+2. Písmo dále neztučňovat ani neztenčovat: žádné obtahování znaků, překrývání
+   barvou pozadí nebo syntetický tučný řez. CSS rodina `Playpen Sans` označuje
+   přibalený Regular; `normal` pouze zachová jeho přirozenou tloušťku.
+3. Text i kresba se mohou společně zvětšovat s měřítkem UI či dostupnosti.
+   Základ 14 není požadavek na pevný počet fyzických pixelů na každém monitoru.
+
+```css
+-fx-font-family: "Playpen Sans";
+-fx-font-size: 14;
+-fx-font-weight: normal;
+```
+
+**Stav provedení:** tato dohoda sama nemění CSS, Canvas ani text v SVG.
+Následující záznam popisuje dřívější realizaci Light 18 / nadpisy 36; nové
+výchozí nastavení ještě neprokazuje. Rozsah a přejímka převodu patří do vybrané
+implementace podle [funkčního kontraktu](functional-tests.md).
+
+#### Historie implementace 19.–20. října 2026
+
 
 1. **Dohoda 19. října 2026, [R-0250](requirements/done/R-0250.md):** uživatel vybral
    `02-Playpen-Sans-tenci.png`. Všechny živé texty hry používají vzpřímený
@@ -74,6 +102,10 @@ Pravidla interakce vlastní [UX dokumentace](ux.md#spolecna-pravidla-pro-dalsi-z
    Skutečné výsledky a omezení vede [funkční evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
 
 ### Volba silnějšího řezu v CSS
+
+Technický přehled dostupných řezů. Od dohody z 24. října 2026 je změna
+výchozího Regular na jiný řez pouze výslovně dohodnutou výjimkou.
+
 
 Od 20. října 2026 [R-0252](requirements/done/R-0252.md) přidává skutečné statické
 řezy Regular 400, Medium 500 a SemiBold 600 ze stejného zdroje jako Light. Registrují se
@@ -117,8 +149,8 @@ Stupnice má vlastní vlastnost fontu:
 
 `normal` zde ponechá skutečný vybraný řez bez požadavku na další tučné písmo.
 Pro společný výchozí font změňte rodinu v `Typography.css`; výslovné rodiny
-ve stupnici nebo jiných pravidlech je nutné změnit také. Uvedených 14 px je
-příklad CSS, nikoli změna dosavadní výchozí velikosti hry. Canvas a vložené SVG
+ve stupnici nebo jiných pravidlech je nutné změnit také. Uvedených 14 px odpovídá
+nově dohodnutému základu; jeho zavedení do hry tento dokument neprovádí. Canvas a vložené SVG
 se změnou CSS nepřepnou. Dostupnost v JavaFX ověřuje TC85/02; výsledky vede
 [funkční evidence](functional-tests.md#r-0252-additional-font-weights-2026-10-20).
 
@@ -165,23 +197,41 @@ Před publikací zkontrolovat obraz i [funkční přejímku](functional-tests.md
 
 ### Výchozí paleta
 
-Paleta je výchozí návrh k vizuálnímu ověření. Barvy světa pocházejí ze
-stávajícího `colors.properties`; zápis nemění konfiguraci ani pixely PNG.
+**Dohoda 24. října 2026:** barevnou referencí je uživatelem přiložený obrázek
+`18-objevitelsky-rukopis-1 (dragged).tiff`, zde uložený jako věrný PNG převod
+pro zobrazení v dokumentaci.
 
-| Role | Barva | Stav |
-| --- | --- | --- |
-| Inkoust | `#292824` | Návrh neutrálního základu |
-| Papír | `#F5F1E7` | Návrh neutrálního základu |
-| Moře | `#0084C9` | Současná `sea-1` |
-| Vegetace | `#489B4B` | Současná `grass-1` |
-| Zemina a základ dřeva | `#AD7141` | Současná `dirt-1`; použití pro dřevo je návrh |
-| Slunce a drobný akcent | `#D0D627` | Současná `sun-1`; použití pro akcent je návrh |
+![Reference palety: krémový papír, písková zem, tlumené tyrkysové moře a zelené porosty](graphics-assets/explorer-manuscript-reference.png)
 
-Barva světa automaticky není vhodné pozadí tlačítka. Každou kombinaci
-textu, výplně a stavu ověřit samostatně; důležitý význam nesmí záviset
-jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a-prebarvovani).
+| Role | Barva podle reference |
+| --- | --- |
+| Papír a podklad textu | Světlá teplá krémová |
+| Inkoust a obrysy | Velmi tmavá, téměř černá s teplým tónem |
+| Zem a písek | Světlá písková až okrová |
+| Voda | Tlumená tyrkysová se zeleným tónem |
+| Vegetace | Tlumené zelené a olivové tóny |
+| Drobné teplé akcenty | Cihlová červená, medová žlutá a okrová |
+| Neutrální plochy | Tlumená šedohnědá |
+
+1. Každá vybarvená oblast má jednu plnou barvu. Nepřebírat z reference její
+   texturu, barevné přechody, stíny ani světelné efekty; uživatel je pro vlastní
+   ilustrace výslovně vyloučil. Rozdílné části objektu mohou mít různé plné výplně.
+2. Obrázek určuje paletu a barevné vztahy; neukládá převzít jeho rozložení
+   obrazovky, texty ani velikosti ovládacích prvků. Typografii a tah určuje
+   společný kontrakt výše.
+3. Přesné hodnoty barev při převodu do konkrétního assetu zvolit z této reference
+   a ověřit kontrast ve výsledné velikosti. Tabulka není nově změřený seznam HEX.
+   Starší návrh vycházející z `colors.properties` už není cílovou paletou;
+   dosavadní konfiguraci dokumentuje [technická paleta](#barvy-a-prebarvovani).
+4. Význam ovládání nesmí záviset pouze na barvě. Jednolitá výplň je závazné
+   výtvarné pravidlo; aktuální PNG a CSS tímto zápisem nebyly přebarveny.
 
 ### Rámečky a pravítko v Nastavení
+
+Následuje záznam dosavadní implementace. Při převodu na dohodu z 24. října
+2026 mají přednost aktuální [typografie](#typografie-playpen-sans),
+[paleta](#vychozi-paleta) a [tloušťka tahu](#stejna-tloustka-car-na-obrazovce).
+
 
 1. **Dohoda 19. října 2026, [R-0248](requirements/done/R-0248.md):** checkboxy,
    radio buttons a oba slidery v Nastavení používají vybraný třetí návrh.
@@ -197,6 +247,11 @@ jen na barvě. Další existující barvy zachycuje [technická paleta](#barvy-a
    touto dohodou. Výsledky ověření patří do [funkční evidence](functional-tests.md).
 
 ### Dřevěná tlačítka bez bočních zářezů
+
+Následuje záznam dosavadní implementace. Při převodu na dohodu z 24. října
+2026 mají přednost aktuální [typografie](#typografie-playpen-sans),
+[paleta](#vychozi-paleta) a [tloušťka tahu](#stejna-tloustka-car-na-obrazovce).
+
 
 **Dohoda 19. října 2026 — [R-0251](requirements/done/R-0251.md):** varianta „Mírné zvětšení“ používá text 18 px a odsazení nahoře 12, dole 14 a po stranách 24 logických px. Platí pro všechna standardní dřevěná tlačítka; dosavadní výjimky vlastních skinů zůstávají. Mezi tlačítky se rozestupy nemění. Implementaci a skutečné ověření rozlišuje [evidence](functional-tests.md#r-0251-button-spacing-2026-10-19).
 
@@ -247,18 +302,18 @@ i informačně hustém dialogu; tento zápis samotný vzorník ani jeho přejím
 
 ### Stejná tloušťka čar na obrazovce
 
-1. **Dohodnutý cíl:** čáry stejné role mají stejnou jmenovitou tloušťku
-   při stejném měřítku UI, bez ohledu na velikost obrázku. Ruční charakter
-   vzniká hlavně tvarem cesty. Detail, běžný obrys a zvýraznění zůstávají
-   úmyslně odlišné role.
-2. Tloušťku definovat v **logických pixelech výsledného UI**, nikoli pouze
-   v jednotkách kreslicí plochy SVG. HiDPI/Retina a uživatelské zvětšení
-   škálují celé UI; nechceme jim bránit. Nejde o záruku stejného počtu
+1. **Dohoda 24. října 2026:** obrysy, rámečky, oddělovací čáry a ikony mají
+   působit jako kresba stejnou propiskou, s přibližně jednotnou tloušťkou
+   opticky odvozenou od Playpen Sans Regular 14. Tvar může být ruční, ale
+   jiná obrazovka nebo velikost obrázku nemá sama měnit sílu linky.
+2. Tah posuzovat v **logických pixelech výsledného UI** při stejném měřítku.
+   HiDPI/Retina a uživatelské zvětšení škálují celé UI. Nejde o stejný počet
    fyzických pixelů ani milimetrů na všech monitorech.
-3. **Pracovní návrh pro vzorník:** detail 1,5, běžný obrys 2 a zvýraznění
-   3 logické px při základním měřítku. Hodnoty ještě nejsou implementované
-   ani opticky ověřené. Drobné ikoně raději ubrat detail než automaticky
-   ztenčit všechny její čáry; pod 1 logický px nenavrhovat podstatný detail.
+3. Konkrétní běžný tah opticky kalibrovat vedle referenčního textu při prvním
+   převodu a použít ho konzistentně. Starší pracovní stupnice detail 1,5 / obrys
+   2 / zvýraznění 3 px už není výchozím zadáním. Malé ikoně raději ubrat detail
+   než ji bezdůvodně kreslit jiným perem. Následující číselné příklady vysvětlují
+   technické škálování; nepředepisují schválenou tloušťku nové kresby.
 4. Běžný tah se škáluje spolu s obrázkem: zmenšení 100 → 50 při tahu 2
    vytvoří tah 1. Další zmenšení může čáru zesvětlit, rozmazat nebo potlačit;
    naopak ponechaný silný tah může ve velmi malé ikoně slít sousední detaily.

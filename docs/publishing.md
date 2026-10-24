@@ -662,3 +662,27 @@ documentation in APT just to make it visible on the web.
 1. [R-0256](requirements/done/R-0256.md) records acceptance of all three remaining follow-ups: actual tools return on disbanding, explicitly confirmed warehouse excess loss, and paid native pursuit beyond the ordinary radius for 20 native turns. Shared rules and affected active behavior/design consume these decisions; gameplay statuses and archived history remain unchanged.
 2. Local verification passed 19 completion-runner tests, 21 worker-tool tests without inference, nine documentation checks and strict MkDocs. Review checked the affected rules, links, four-chapter structure and absence of remaining chapter-4 questions in active requirements through R-0219.
 3. Documentation only: no gameplay implementation or local UI regression ran. Remote CI/publication was not watched or verified under the local-acceptance policy.
+
+## Visual contract 2026-10-24
+
+1. [R-0260](requirements/done/R-0260.md) records the shared Playpen Sans Regular 14,
+   ballpoint-stroke and flat-fill palette agreement in the [graphics manual](graphics.md).
+   The user-supplied TIFF is preserved visually as a PNG reference; the game and
+   runtime assets are unchanged. Active graphics, controls, export, help and
+   store-art requirements consume the same contract without changing readiness.
+2. Local acceptance on 2026-10-24 used base revision `148a77af` plus this
+   documentation change in an isolated checkout. The mandatory Docker/Xvfb
+   `--smoke` gate passed all 4,720 model/JUnit tests, ten selected UI scenarios
+   and nine support checks: 4,739 tests, zero failures, errors or skips, in
+   286.426 seconds against the 300-second budget. Complete reports and the
+   source manifest are preserved locally under
+   `target/verification/run-l2fjomct/`; completion record:
+   `~/Library/Logs/Microcol/completions/20261024T161047Z-0a97e661a446/`.
+3. All 19 completion-runner, 21 local-worker and nine documentation checks
+   passed, as did strict MkDocs. The generated graphics page embeds an
+   existing PNG reference at the correct relative path. Closing the status,
+   moving this record and repairing links required fresh documentation checks;
+   executable sources and test selection did not change after the gate.
+4. This is acceptance of the written agreement and its reference asset, not
+   evidence of a completed runtime redesign or full regression. Remote CI and
+   publication were not inspected.
