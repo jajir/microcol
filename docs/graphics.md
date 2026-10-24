@@ -226,6 +226,62 @@ pro zobrazení v dokumentaci.
 4. Význam ovládání nesmí záviset pouze na barvě. Jednolitá výplň je závazné
    výtvarné pravidlo; aktuální PNG a CSS tímto zápisem nebyly přebarveny.
 
+### Mřížka a neprozkoumaná část mapy
+
+**Dohoda 24. října 2026, [R-0261](requirements/R-0261.md):** hlavní herní
+mapa má mít méně výraznou přerušovanou čtvercovou síť pouze na prozkoumaných
+políčkách. Tento cílový vzhled zatím není implementovaný ani vizuálně ověřený.
+
+![Reference jemné přerušované mřížky na mapě; síť v šedé oblasti se podle zadání nepřebírá](graphics-assets/tabletop-map-grid-reference.png)
+
+1. Uživatel dodal `20-rucne-kreslena-deskovka-1 (dragged).tiff`; PNG zde
+   zachovává referenci pro podobu mřížky. Společnou barevnou paletou zůstává
+   [Explorer Manuscript](#vychozi-paleta), nikoli nové barevné nastavení celého
+   přiloženého návrhu.
+2. Mřížka je tlumená, přerušovaná a lehce ručně kreslená. Sedí na skutečných
+   hranicích políček na souši i na vodě. Méně výrazného vzhledu dosáhnout barvou
+   a přerušováním při zachování [společného charakteru tahu](#stejna-tloustka-car-na-obrazovce).
+3. Neprozkoumané území tvoří souvislá plná teplá šedá **`#9B9486`**, zvolená
+   podle dohodnuté palety. **Uvnitř neprozkoumané oblasti se mřížka nekreslí**,
+   ani při posunu mapy nebo u rozhraní s prozkoumaným územím. Síť, kterou
+   reference zobrazuje přes šedou oblast, se výslovně nepřebírá. Bez přechodů,
+   stínování a texturových efektů.
+4. „Prozkoumané“ znamená dříve odkryté území, nikoli pouze současný dohled.
+   Po odchodu jednotek zůstává jeho síť viditelná; pravidla skrytých cizích
+   jednotek a zapamatovaných kolonií se nemění. Použít stávající
+   [rozlišení průzkumu a dohledu](architecture.md#prozkoumany-teren-a-soucasny-dohled-r-0070).
+5. Zachovat možnost vypnout mřížku v existujícím nastavení. Při odkrytí nového
+   území, posunu, změně velikosti okna a načtení hry síť sedí na stejných
+   políčkách, nezdvojuje společné hrany a nepřeblikává. Výběr, cesty a objekty
+   zůstávají čitelné; změna vzhledu neodhaluje skryté informace.
+
+### Hlavní herní obrazovka a spodní panel
+
+**Dohoda 24. října 2026, [R-0262](requirements/R-0262.md):** hlavní obrazovka
+s mapou má působit jako skutečně jednotná ručně kreslená a vybarvená obrazovka
+podle obou dodaných návrhů. Jde o cílové zadání, nikoli ověřený stav současné hry.
+
+1. Horní ovládání, mapa, pravý informační panel a spodní stavový panel tvoří
+   jeden celek. Použít Playpen Sans Regular 14, společný tah propisky a plné
+   barvy z [dohodnuté palety](#vychozi-paleta). Samotný podklad s kresbou nestačí,
+   pokud ovládání a panely působí jiným stylem.
+2. Aktivní části jsou rozpoznatelné už v klidovém stavu: z rámu, tvaru, ikony
+   nebo popisku je patrné, kde lze provést akci. Viditelný ovládací prvek
+   odpovídá klikací ploše. Najetí, stisk, fokus, výběr a nedostupnost mají
+   čitelné stavy; běžný informační text nemusí vypadat jako tlačítko.
+3. **Spodní panel zvětšit na výšku** oproti dosavadní obrazovce při stejné
+   velikosti okna. Získat prostor a svislé odsazení pro kontextový popis,
+   zlato a datum s jasným členěním. Základní písmo zůstává 14 bez změny řezu.
+   Delší české či anglické popisy se nesmějí překrývat s ostatními údaji.
+4. Vyšší panel zapojit do rozložení; nesmí zakrývat mapu nebo její klikací
+   oblasti. Ověřit menší podporované okno, změnu velikosti a měřítko UI.
+   Přesnou výšku a odsazení stanovit při přípravě implementace porovnáním
+   starého a nového rozložení ve stejné velikosti.
+5. Zachovat existující herní akce, klávesnici, návraty a pravidla zobrazení
+   informací. Podobu mřížky a šedého neprozkoumaného území vlastní
+   [R-0261](#mrizka-a-neprozkoumana-cast-mapy). Obrázky jsou vzorem vzhledu;
+   nezavádějí nové herní funkce jen tím, že mají v návrhu další ikonu.
+
 ### Rámečky a pravítko v Nastavení
 
 Následuje záznam dosavadní implementace. Při převodu na dohodu z 24. října
