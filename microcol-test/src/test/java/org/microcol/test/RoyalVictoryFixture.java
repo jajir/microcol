@@ -133,7 +133,7 @@ final class RoyalVictoryFixture {
      * the scored calendar that scored play requires. The turn count stays, so
      * the game is still before spring 1800 and the declaration year is valid.
      */
-    private static void toScoredFreePlay(final JsonObject saved) {
+    static void toScoredFreePlay(final JsonObject saved) {
         saved.addProperty("campaignName", "freePlay");
         saved.addProperty("missionName", "freePlay");
         saved.add("goalData", new JsonObject());

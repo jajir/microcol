@@ -453,7 +453,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0197](done/R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
 | [R-0214](done/R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
 | [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
-| [R-0220](R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
+| [R-0220](done/R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
 | [R-0230](R-0230.md) | Evaluate balance and pace across full campaigns | New capture | P31 observed whole-game balancing |
 
 ## Completion callbacks — 2026-10-18
@@ -562,3 +562,12 @@ preserving native input, values and persistence. Other screens remain outside th
 2026-10-21: The second ten requirements (R-0183, R-0150, R-0153, R-0152, R-0151, R-0139, R-0140, R-0141, R-0142 and R-0091) are complete after [full local acceptance](../functional-tests.md#second-batch-full-acceptance-2026-10-21): 2,968 model/unit and 465 UI/support tests, zero failures/errors/skips. R-0207 remains excluded.
 
 2026-10-23: The sixth ten requirements (R-0185, R-0178, R-0186, R-0188, R-0187, R-0189, R-0190, R-0192, R-0191 and R-0169) are complete after [full local acceptance](../functional-tests.md#sixth-batch-full-local-acceptance-2026-10-23): 3,793 model/unit and 610 UI/support tests, zero failures, errors or skips. This brings the authorized scope to 60 of 85 complete; R-0207 remains excluded.
+
+
+## Authorized remaining dependencies — 2026-10-24
+
+1. The user extended the active implementation scope to R-0220 and R-0221 so R-0216 and R-0209 can be completed. R-0207 remains excluded.
+2. The user confirmed destruction of an unarmed colonist and wagon defeated by a European outside a colony; R-0211's question is resolved in the authoritative combat rules.
+3. R-0220 is selected first. The geographic extent of R-0221 is being clarified while independent work continues. All existing per-change tests, two-worker complete local acceptance, formatting, review, documentation checks and authorized commit/push requirements remain in force.
+
+4. Update 2026-10-24: R-0220 is locally accepted with its paired checkpoint journey and current precommit smoke gate. The user's subsequent instruction selects R-0261, R-0262 and R-0263 next under the amended testing/development policy. Unfinished earlier requirements remain tracked; R-0207 remains excluded.

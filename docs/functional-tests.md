@@ -85,6 +85,73 @@
    o výsledek celé vzdálené regrese či publikace.
 
 
+## R-0220 independence journey ledger 2026-10-24
+
+[R-0220](requirements/done/R-0220.md) stays `ready for development`. No journey
+pass, acceptance, commit or publication is claimed. Production code is
+unchanged.
+
+**Attempt 3 run failed (2026-10-24).** Callback `20261024T141613Z-58e9386f1f38`,
+`target/docker-ui/run-Y9fZ9c`: 4,720 model tests (333 reports) passed; 26 UI
+tests (8 reports) had two failures, both TC187. The prepared world did not load
+(`LOAD_FAILED`, `IllegalArgumentException` at `ColonyWarehouse` line 53): New
+Amsterdam stored 160 ore under the basic warehouse, whose capacity is 100.
+Nothing after the load ran. All 11 snapshot hashes matched; formatter checked
+4 files and changed 3, exact tokens and idempotent. Review also rejected the
+attempt-3 ledger: the victory turn, population and bell rate were estimates.
+
+**Attempt 4 is written, not run.** Changes:
+
+1. Fixture `IndependenceJourneyFixture`: New Amsterdam's one warehouse becomes
+   the warehouse that stores 200 (a colony has exactly one warehouse type;
+   validation is unchanged); every colony stores 100 corn, so neither a famine
+   (at most 16 eaten per update) nor a birth at 200 can occur in the derived
+   updates; the garrison is four armed, mounted veterans in each of colonies
+   0–2.
+2. Page `IndependenceJourneyPage`: the acting unit is chosen in the right
+   panel of its square before any attack or move, so a stacked garrison never
+   acts with another unit (a press on the same square keeps it selected, see
+   `SelectedUnitManager`). A turn end waits for the next human turn or the end
+   of the game, so a Crown battle may end the war. The single arrival is
+   tracked by the identities of the delivered units. The pages read the model
+   and do not change it.
+3. Ledger: the guessed cells (victory at update 14, population 104, 52 bells in
+   every update, 535 points) are removed. The derived prefix is literal; the
+   war and the final score are checked by the rules that fix them.
+
+**Derived ledger (rules, not runtime).**
+
+| Moment | Expected | Owner |
+| --- | --- | --- |
+| Turn 698, spring 1747 | 1,500 gold; 4 × 790 = 3,160 of 6,400 liberty (residents only); 40 + 12 = 52 Dutch colonists; 160 ore; roster 4/2/2/2 in reserve, 10 members; no declare button | `Calendar`, `RebelSupport`, `RoyalRoster.initial` |
+| Turn 699 | 4 × (1 + 3 × 3) = 40 bells; 3,200 of 6,400, exactly 50 %; five Tories under the Discoverer threshold 10; button offered | `ConstructionType.TOWN_HALL`, `PoliticalProduction`, `Player.getIndependenceProblem` |
+| Declaration, 1747 | floor(4 × ½) = 2 lowest veterans per garrisoned colony: 500, 501, 504, 505, 508, 509; members 0–3; Europe closed; ore export selected, nothing sold | `Player.planIndependenceMuster`, R-0187, R-0085 |
+| Turn 700 | 4 × (1 + 3 × 4) = 52 intervention bells, target 375; liberty 3,252; 60 ore × 4 = 240 halved to 120: 1,620 gold, 100 ore; roster shipped 6 + 2 on the two men-of-war; same values after Checkpoint A | `InterventionTarget`, `Colony.exportSelectedSurplus`, `Model.dispatchRoyalShip` |
+| Victory | order +100 %; 1780 − 1747 = 33 early points; Discoverer 50 %; 0 destroyed settlements; 0 fathers; bells after the target = counted bells − 375; total floored once; Hall place 1, one stored entry, no duplicate after reopen or Continue | `ResultScore`, R-0191, R-0197 |
+
+**Blocker for a literal war and final score.** The Crown's crossing has no
+deterministic length. `Model.createCargoShipForKing` (line 1776) gives every
+dispatched man-of-war `AbstractUnit.createVoyage(false, east)`, which draws the
+weather from the unseeded `java.util.Random` field of `AbstractUnit` (line 47,
+draw at line 1874). `AtlanticVoyageDuration` then sets the crossing to
+2 + weather = 1, 2 or 3 turns. The landing turn moves with it, and so do the
+turn of the occupation, the bells that the occupied colony no longer adds, the
+update that earns the intervention, the liberty under occupation (which falls,
+`Colony.applyProducedBells`), the Dutch losses, the victory turn and so the
+population, support, treasury and bell components of the score. A famine
+victim is drawn from the same kind of source (`Colony.killOneRandomUnit`). No
+legal pre-load fixture can fix these values, and two runs of the same save,
+and so TC_01 and TC_02, need not reach the same turn. A literal final ledger
+needs a rule-owner decision for R-0071/R-0186, for example drawing the voyage
+weather from the saved model stream. Until then TC187 asserts these cells by
+their rules. Whether the Crown's nearest-target choice (`KingRobotPlayer`,
+from the default arrival square) and the war actually lead to an occupation
+and an earned victory within 40 turns is open until a run.
+
+**Pending runtime.** Main formats the changed Java files and runs all model
+tests and the selected UI classes TC187, TC158, TC156, TC163 and TC154 in
+Docker/Xvfb, then the complete two-worker acceptance.
+
 ## R-0219 diplomacy journey ledger 2026-10-24
 
 **Passed (attempt 1, 2026-10-24, run-ZEnkEm).** The model suite and
@@ -354,7 +421,7 @@ failures until main reruns them; the repair below is not verified.
 compiled or run here. No matrix pass, batch acceptance, commit or publication is
 claimed. [R-0216](requirements/R-0216.md) stays `ready for development`; main
 formats the changed Java files and runs all model tests and the five UI
-classes. Production code is unchanged. [R-0220](requirements/R-0220.md)
+classes. Production code is unchanged. [R-0220](requirements/done/R-0220.md)
 (integrated earned victory) is `new`, has no evidence, and is outside this
 matrix; it is unverified and not claimed.
 
@@ -9360,3 +9427,81 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. All model tests: **4,720 tests in 333 reports**. UI worker 1: **327 tests in 95 reports**; UI worker 2: **364 tests in 95 reports**. Total **691 UI/support tests**, **523 reports**, **zero failures, errors and skips**. Expected suite and method lists matched the XML; UI partitions are disjoint and cover the complete expected suite. Runner duration **4,825.238 s** (80 min 25 s), supervisor **4,825.334 s**.
 3. This accepts R-0218 and R-0219, including both resumed/reference journeys and the corrected deterministic pursuit fixture. R-0216's independent ending/score matrix additions also passed, but its R-0220 integrated earned-victory dependency remains unverified, so R-0216 remains open. R-0209 and R-0211 retain their unresolved decisions; R-0207 remains explicitly deferred.
 4. Main-agent formatter checked 19 changed Java files with token preservation and idempotence passing. Review and per-change evidence are stored under `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`, particularly `final-remainder-full-2-review.json`. Previous failed runs remain failed evidence. No remote CI or publication verification is claimed.
+
+
+### R-0220 — declaration-message repair (2026-10-24)
+
+1. `run-tzFq5E`, callback `20261024T143719Z-997b059847a6`, remains failed: 4,720 model tests passed; 26 UI/support tests included two errors in TC187. The fixture loaded and both variants reached declaration, but attempted to close two messages. `FreePlay_0_mission` emits one declaration message; the two-message pattern belongs to the campaign fixture.
+2. Both variants now close the one free-play message. No gameplay code changed. Four Claude attempts are exhausted; Codex continues the authorized repair. Full journey and independent terminal score verification remain pending.
+
+
+### R-0220 — garrison selection repair (2026-10-24)
+
+1. `run-ajXCgt`, callback `20261024T144354Z-5ecc2c47ee9f`, failed in both TC187 variants after declaration and the initial economy checks: selecting a garrison by an ordinary map click opened the colony screen, detaching the map canvas before the next gesture.
+2. The journey now uses the existing Ctrl+click tile-selection path in `GamePanelMouseListener`, then selects the intended unit in the right panel. It changes no game state directly. All model tests and five UI classes must be rerun; final journey/score acceptance remains pending.
+
+### R-0220 — next-unit selection repair (2026-10-24)
+
+1. `run-hqYHDZ`, callback `20261024T145132Z-44ed6c5f53b1`, remains failed (354.764 s): both TC187 variants still opened the colony during garrison selection. Ctrl changes scrolling but does not bypass the same-square mouse-release action in `GamePanelPresenter.switchToNormalMode`.
+2. The journey now selects its soldier through the ordinary Tab cycle, following the existing intervention test helper. It stops with an explicit error if the soldier cannot be selected. No runtime model state is patched. All required verification remains pending.
+
+### R-0220 — occupation path repair (2026-10-24)
+
+1. `run-ccDTIC`, callback `20261024T150121Z-2863ca312d0f`, remains failed (412.631 s): all 4,720 model/JUnit tests passed. The 26 UI/support tests had two failures, zero errors/skips. TC187_02 reached recorded victory but the Crown had never held a colony; TC187_01 then failed its initial visible-map check after the preceding failure left terminal UI open.
+2. Tab selection fixed the map-detachment problem. The journey now withdraws armed garrisons by legal player moves after intervention and waits for real Crown occupation before its counterattack. The occupation assertion stays mandatory; no ownership or army state is patched. Final independent score and complete acceptance remain pending.
+
+### R-0220 — hold-port strategy repair (2026-10-24)
+
+1. `run-8EgXvg`, callback `20261024T151043Z-6e113de8b57a`, remains failed (437.377 s): all 4,720 model/JUnit tests passed; 26 UI/support tests included two failures, zero errors/skips. The reference path expected map coordinates in the status bar while a combat notice had priority. The resumed path left the intervention loop without an arrival report.
+2. The player strategy now holds New Amsterdam, withdraws other garrisons before intervention and delays reclaiming territory until aid arrives. Movement uses the existing preview/release gesture instead of requiring coordinates to replace combat feedback. Ownership, aid delivery and victory assertions are retained. No runtime game state is patched; final score review and full acceptance remain pending.
+
+### R-0220 — release port after aid (2026-10-24)
+
+1. `run-TJT89K`, callback `20261024T151951Z-a54350e48000`, remains failed (453.227 s). All 4,720 model/JUnit tests passed; 26 UI/support tests had two failures and zero errors/skips. The reference journey received intervention and won without occupation; the resumed scenario then failed its initial map visibility check.
+2. The retreat helper incorrectly exempted the receiving port even after aid arrived. That exemption now ends at delivery, allowing the Crown to attack its undefended colony before the player reclaims it. The required occupation assertion remains unchanged. Final score review and full acceptance remain pending.
+
+### R-0220 — initial production preparation (2026-10-24)
+
+1. `run-xRCfiz`, callback `20261024T152815Z-77d13e903fc6`, remains failed (466.543 s). The game finished during the reference journey's pre-intervention turn wait; the resumed variant subsequently failed its initial map check. Retreat alone did not guarantee aid before the war ended.
+2. The initial legal fixture now staffs each town hall with three elder statesmen and a newspaper. Expected pre-declaration output is 2 × (1 + 3 × 6) = 38 per colony; starting liberty 762 therefore reaches exactly 800/1600 after one update. At 50% support, expected output is 2 × (1 + 3 × 7) = 44 each, 176 nationally. The first post-declaration liberty expectation is 3376/6400. These derived expectations require verification. No roster member is removed; no runtime flags or resources are patched.
+3. Final independent score review and complete acceptance remain pending.
+
+### R-0220 — retreat beyond the royal approach (2026-10-24)
+
+1. `run-0S4bZD`, callback `20261024T153827Z-12dee4ffe721`, remains failed (516.570 s). The revised fixed bell/liberty milestones and intervention passed in the reference variant, but occupation did not. Logs place retreating port troops at (25,13), Delft troops at (23,12), and royal troops at (24,13): adjacent defenders intercepted the army before it could capture the colony.
+2. Legal player retreat destinations are now port → (24,16), Delft → (21,12), Haarlem → (22,16), away from the royal approach. No ownership/army state is patched and the occupation assertion remains. Full acceptance and independent final score are still pending.
+
+### R-0220 — infantry retreat distance (2026-10-24)
+
+1. `run-BPUewY`, callback `20261024T154829Z-132b2aa77bef`, remains failed (459.792 s). Both variants reached intervention and then could not select soldier 525. Movement logs show the mounted veterans reached (24,16), but the preceding delivered infantry did not: its retreat target required two steps.
+2. The port retreat now targets the single adjacent southern square (25,15), outside adjacency to the observed royal approach at (24,13). The existing `FogPage.move` waits for actual arrival before selecting another soldier. Required occupation, score review and full acceptance remain pending.
+
+### R-0220 — counterattack camera synchronization (2026-10-24)
+
+1. `run-SUaxUW`, callback `20261024T155732Z-c47248db1cee`, remains failed (671.610 s): TC187_01 Save/Continue passed; TC187_02 recorded Crown capture of New Amsterdam, then timed out waiting for the counterattack map preview. Overall acceptance is not established.
+2. Selecting with Tab starts smooth scrolling. The journey now waits until the selected tile's canvas position remains stable for 300 ms, bounded by 10 seconds, before further map input. Target panning follows unit selection rather than preceding its camera re-centering. This is a synchronization repair to verify, not a claimed pass.
+3. The independent final-score ledger and full local acceptance remain pending even if both journeys pass their current assertions.
+
+### R-0220 — both journeys pass; strengthen score oracle (2026-10-24)
+
+1. `run-bLn8Pf`, callback `20261024T161033Z-fb74a4f4a4a1`, passed in 752.420 s: 4,720 model/JUnit tests and 26 UI/support tests, 341 reports, zero failures/errors/skips. Both TC187 variants passed. All recorded journey source hashes matched before the next edit. This targeted result is not complete acceptance.
+2. Review found that the final-score assertion consumed `ResultScore.getClampedBase()` as its expected input. The strengthened oracle derives population points from the fixture's living civilian identities, gold from the fixed single-export treasury, and support from raw colony liberty/population. It checks each base component, subtotal, adjusted base and final arithmetic independently of the score's computed inputs. Bell accumulation remains a separately observed intervention counter. Both variants use this oracle and emit their actual ledgers for comparison.
+3. The stronger oracle, terminal-ledger comparison across the two routes, documentation checks and complete local acceptance remain pending.
+
+### R-0220 — paired checkpoint comparison (2026-10-24)
+
+1. `run-0RsepM`, callback `20261024T162500Z-1497383ef1d8`, passed in 720.197 s: 4,720 model/JUnit plus 26 UI/support tests, 341 reports, zero failures/errors/skips, recorded source hashes matched. Independent score arithmetic passed. Separately started routes yielded population/support/excess bells/total 136/70/945/1168 and 132/76/989/1214, both with treasury 1620. These distinct random voyage histories do not establish identical resumed outcomes.
+2. TC187_02 now saves checkpoint A through the ordinary player command without interrupting the reference route, then reloads that same saved world and exercises Continue after intervention. It compares frozen base/result components, terminal turn, survivor identities and royal roster against the remembered reference. No saved or live game data is patched.
+3. The new paired comparison and complete local acceptance remain pending.
+
+### R-0220 — paired journey verified (2026-10-24)
+
+1. Callback `20261024T163906Z-b95086d4b25f` passed in 957.390 s: all 4,720 model/JUnit and 26 UI/support tests, 341 reports, zero failures/errors/skips. Recorded source hashes matched. Evidence and exact report directory: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0220-targeted-14-review.json`.
+2. The uninterrupted reference and its replay from the same saved voyage state agree on base/result components, terminal turn, survivor identities and royal roster. All three printed score ledgers in this run were population points 132, treasury 1620, support 76, excess bells 989, total 1214. Both independent and paired assertions passed; this is observed evidence, not a fixed result for arbitrary separately randomized games.
+3. The user requested the updated development/testing policy before R-0261–0263. Under the 2026-10-24 policy, closure now requires the fixed precommit smoke gate and documentation checks rather than another automatic full local regression. Historical failures remain failed; no remote regression or publication is claimed.
+
+### R-0220 — local acceptance 2026-10-24
+
+1. Precommit gate `target/verification/run-iq8u4epr/summary.json`, manifest alongside it; callback `20261024T165603Z-b97b2b07d09b`. All 4,720 model/JUnit tests, ten fixed smoke scenarios and nine support checks passed: **4,739 tests, 344 XML reports, zero failures/errors/skips**. Group duration 270.535 s, runner 273.947 s, supervisor 274.008 s: within the 300-second budget. Every recorded source hash matched the checkout before status/evidence-only closure.
+2. The affected TC187 journeys also passed in `run-piUN59` with their paired checkpoint comparison and independent score oracle (957.390 s). Java formatting preserved tokens and passed idempotence; nine documentation consistency checks and strict MkDocs passed before closure and are rerun after the links/status update.
+3. R-0220 is locally accepted under the current policy. This does not claim a full local/remote regression or verified publication. Prior failed evidence is retained.

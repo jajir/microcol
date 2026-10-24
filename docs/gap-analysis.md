@@ -572,7 +572,7 @@ Source: visually checked aid card 1 / PDF 132. A single strength applies to both
 
 The card also specifies the veteran +50% rule, artillery damage transition, and +75% artillery defense against native raids inside a fortified colony. Those are separately assessed in COMBAT-008/011. The matrix does not invent movement allowances or construction prices absent from this card.
 
-R-0211 ledger (written, not verified, 2026-10-23): [cell evidence](functional-tests.md#r-0211-unit-role-ledger-2026-10-23). The open item is in [R-0211](requirements/R-0211.md#4-open-questions): the fate of a standalone civilian or wagon defeated in the open (unanswered). Open-field civilian defense uses the card's base 1. The card's unarmed scout strength 1 has no open-field cell by accepted [R-0028](requirements/done/R-0028.md); the settlement exception is [R-0174](requirements/done/R-0174.md).
+R-0211 ledger (written, not verified, 2026-10-23): [cell evidence](functional-tests.md#r-0211-unit-role-ledger-2026-10-23). Accepted on 2026-10-24 for [R-0211](requirements/R-0211.md): an unarmed standalone colonist or wagon defeated by a European in the open field is destroyed. This retains existing behavior; colony field-worker capture remains separate. Open-field civilian defense uses the card's base 1. The card's unarmed scout strength 1 has no open-field cell by accepted [R-0028](requirements/done/R-0028.md); the settlement exception is [R-0174](requirements/done/R-0174.md).
 
 ### Findings and accepted policy for missing manual details
 

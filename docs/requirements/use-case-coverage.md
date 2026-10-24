@@ -123,5 +123,5 @@
 | UC-115 | Hra | Expedice se uživí a začne obchodovat | [R-0217](done/R-0217.md) |
 | UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](done/R-0218.md) |
 | UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](done/R-0219.md) |
-| UC-118 | Hra | Získat nezávislost a konečné skóre | [R-0220](R-0220.md) |
+| UC-118 | Hra | Získat nezávislost a konečné skóre | [R-0220](done/R-0220.md) |
 | UC-119 | Regrese | Zachovat pravidla při změně vzhledu | [Functional regression contract](../functional-tests.md), [graphics acceptance](R-0224.md) |
