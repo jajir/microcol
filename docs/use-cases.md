@@ -891,3 +891,14 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    a Continue; TC77_02 Tory postih a jeho zánik pod prahem. Modelové kontroly
    pokrývají přesné prahy, snímek před hladomorem a pořadí procentních účinků.
 2. Plná regrese a publikace druhé dávky zůstávají samostatně čekající.
+
+
+### UC-006: explored-only grid — 2026-10-24
+
+The rendering follow-up [R-0261](requirements/done/R-0261.md) adds
+`TC_26_F18_fog_of_war_test.TC_09_explored_grid_stops_at_unknown_boundary`:
+real grid toggle, explored land/water dashes, solid unknown squares, discovery,
+continued exploration, resize and render scale 1×/2×. This changes presentation,
+not sight rules. Actual targeted results and precommit status are recorded in
+[the execution evidence](functional-tests.md#r-0261-explored-grid-2026-10-24);
+this entry does not claim remote regression or physical HiDPI verification.

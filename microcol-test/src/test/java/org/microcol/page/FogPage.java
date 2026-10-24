@@ -454,24 +454,76 @@ public final class FogPage extends AbstractScreen {
                         hiddenPoint.getY()));
     }
 
+    public void resizeMapWindow(final double width, final double height) {
+        getRobot().interact(() -> {
+            getContext().getPrimaryStage().setWidth(width);
+            getContext().getPrimaryStage().setHeight(height);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyGrid(final Location explored, final Location unknown,
+            final boolean enabled) throws Exception {
+        for (int scale : new int[] { 1, 2 }) {
+            verifyGridAtScale(explored, unknown, enabled, scale);
+        }
+    }
+
+    private void verifyGridAtScale(final Location explored,
+            final Location unknown, final boolean enabled, final int scale)
+            throws Exception {
+        final Image image = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureGrid(getContext(), scale))
+                .get(10, TimeUnit.SECONDS);
+        final Point edge = getContext().getArea()
+                .convertToCanvasPoint(explored);
+        int ink = 0;
+        int gaps = 0;
+        for (int x = 5; x < Tile.TILE_WIDTH_IN_PX - 5; x++) {
+            boolean marked = false;
+            for (int y = -1; y <= 1; y++) {
+                marked |= image.getPixelReader().getArgb(
+                        (edge.getX() + x) * scale,
+                        (edge.getY() + y) * scale) != 0xFFFFFFFF;
+            }
+            if (marked)
+                ink++;
+            else
+                gaps++;
+        }
+        if (enabled) {
+            assertTrue(ink > 0, "Explored edge has visible dashes");
+            assertTrue(gaps > 0, "Explored edge has gaps between dashes");
+        } else {
+            assertEquals(0, ink, "Disabled grid leaves no lines");
+        }
+        final Point hidden = getContext().getArea()
+                .convertToCanvasPoint(unknown);
+        for (int y = 0; y < Tile.TILE_WIDTH_IN_PX; y++) {
+            for (int x = 0; x < Tile.TILE_WIDTH_IN_PX; x++) {
+                assertEquals(0xFF9B9486,
+                        image.getPixelReader().getArgb(
+                                (hidden.getX() + x) * scale,
+                                (hidden.getY() + y) * scale),
+                        "Unknown square is uniformly gray, including its edges");
+            }
+        }
+    }
+
     public void verifyFogPixels(final Location location) throws Exception {
-        final Canvas canvas = getContext()
-                .getClassFromGuice(GamePanelComponent.class).getCanvas();
         final Image actual = WaitForAsyncUtils.asyncFx(
                 () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
                         .captureCanvas(getContext()))
                 .get(10, TimeUnit.SECONDS);
-        final Image hidden = getContext().getClassFromGuice(ImageProvider.class)
-                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
         final Point point = getContext().getArea()
                 .convertToCanvasPoint(location);
-        // Interior pixels avoid the independently drawn grid and selection
-        // border.
+        // Interior pixels avoid the selection border.
         for (int y = 12; y < Tile.TILE_WIDTH_IN_PX - 12; y += 8) {
             for (int x = 12; x < Tile.TILE_WIDTH_IN_PX - 12; x += 8) {
-                assertEquals(hidden.getPixelReader().getArgb(x, y),
-                        actual.getPixelReader().getArgb(point.getX() + x,
-                                point.getY() + y),
+                assertEquals(
+                        0xFF9B9486, actual.getPixelReader()
+                                .getArgb(point.getX() + x, point.getY() + y),
                         "Hidden tile " + location);
             }
         }

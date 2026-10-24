@@ -164,11 +164,11 @@ final class GamePaintService {
 
     private void paintHiddenTile(final GraphicsContext graphics,
             final Point point) {
-        final Image imageHidden = imageProvider
-                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
-        graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX,
-                TILE_WIDTH_IN_PX, point.getX(), point.getY(), TILE_WIDTH_IN_PX,
+        graphics.save();
+        graphics.setFill(Color.web("#9B9486"));
+        graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX,
                 TILE_WIDTH_IN_PX);
+        graphics.restore();
     }
 
     /**
@@ -294,31 +294,53 @@ final class GamePaintService {
 
     public void paintGrid(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord) {
-        if (gamePreferences.isGridShown()) {
-            graphics.setStroke(Color.LIGHTGREY);
+        if (!gamePreferences.isGridShown()) {
+            return;
+        }
+        final Player player = gameModelController.getHumanPlayer();
+        graphics.save();
+        try {
+            graphics.setStroke(Color.web("#746E60", 0.55));
             graphics.setLineWidth(1);
-            for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
-                    .getX(); i++) {
-                final Location l_1 = Location.of(i, coord.getTopLeft().getY());
-                final Location l_2 = Location.of(i,
-                        coord.getBottomRight().getY() + 1);
-                drawNetLine(graphics, area, l_1, l_2);
+            graphics.setLineDashes(4, 5);
+            graphics.setLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
+            for (int x = coord.getTopLeft().getX(); x <= coord.getBottomRight()
+                    .getX(); x++) {
+                for (int y = coord.getTopLeft().getY(); y <= coord
+                        .getBottomRight().getY(); y++) {
+                    final Location at = Location.of(x, y);
+                    if (!player.isVisible(at)) {
+                        continue;
+                    }
+                    drawNetLine(graphics, area, at, Location.of(x + 1, y));
+                    drawNetLine(graphics, area, at, Location.of(x, y + 1));
+                    if (!player.isVisible(Location.of(x + 1, y))) {
+                        drawNetLine(graphics, area, Location.of(x + 1, y),
+                                Location.of(x + 1, y + 1));
+                    }
+                    if (!player.isVisible(Location.of(x, y + 1))) {
+                        drawNetLine(graphics, area, Location.of(x, y + 1),
+                                Location.of(x + 1, y + 1));
+                    }
+                }
             }
-            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
-                    .getY(); j++) {
-                final Location l_1 = Location.of(coord.getTopLeft().getX(), j);
-                final Location l_2 = Location
-                        .of(coord.getBottomRight().getX() + 1, j);
-                drawNetLine(graphics, area, l_1, l_2);
-            }
+        } finally {
+            graphics.restore();
         }
     }
 
     private void drawNetLine(final GraphicsContext graphics, final Area area,
-            final Location l_1, final Location l_2) {
-        final Point p_1 = area.convertToCanvasPoint(l_1).add(-1, -1);
-        final Point p_2 = area.convertToCanvasPoint(l_2).add(-1, -1);
-        graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
+            final Location from, final Location to) {
+        final Point a = area.convertToCanvasPoint(from);
+        final Point b = area.convertToCanvasPoint(to);
+        // A fixed slight bend keeps the pen character stable through scrolling
+        // and repainting.
+        graphics.strokePolyline(
+                new double[] { a.getX(), (a.getX() + b.getX()) / 2.0 + 0.2,
+                        b.getX() },
+                new double[] { a.getY(), (a.getY() + b.getY()) / 2.0 + 0.2,
+                        b.getY() },
+                3);
     }
 
     public void paintSelectedTile(final GraphicsContext graphics,

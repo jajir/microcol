@@ -56,6 +56,32 @@ public final class FogFrameProbe {
         frame = captureCanvas(context);
     }
 
+    public static WritableImage captureGrid(final TestContext context,
+            final int scale) {
+        final javafx.scene.canvas.Canvas source = context
+                .getClassFromGuice(GamePanelComponent.class).getCanvas();
+        final javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(
+                source.getWidth() * scale, source.getHeight() * scale);
+        final GraphicsContext graphics = canvas.getGraphicsContext2D();
+        graphics.setFill(Color.WHITE);
+        graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        final CanvasInMapCoordinates coordinates = CanvasInMapCoordinates.make(
+                context.getMicroCol().getInjector()
+                        .getInstance(com.google.inject.Key.get(
+                                VisibleAreaService.class,
+                                com.google.inject.name.Names.named("game"))),
+                context.getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                        .getMapSize());
+        final GamePaintService painter = context
+                .getClassFromGuice(GamePaintService.class);
+        // Render at device scale instead of interpolating a completed bitmap.
+        graphics.scale(scale, scale);
+        painter.paintGrid(graphics, context.getArea(), coordinates);
+        painter.paintFog(graphics, context.getArea(), coordinates);
+        return canvas.snapshot(null, null);
+    }
+
     public static WritableImage captureCanvas(final TestContext context) {
         final javafx.scene.canvas.Canvas canvas = context
                 .getClassFromGuice(GamePanelComponent.class).getCanvas();

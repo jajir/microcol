@@ -153,8 +153,8 @@ public final class GamePanelPainter {
                 excludePainting, selectedUnitManager.getSelectedUnit());
         paintSteps(g, area);
         paintAnimation(g, area);
-        gamePaintService.paintFog(g, area, canvasInMapCoordinates);
         gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
+        gamePaintService.paintFog(g, area, canvasInMapCoordinates);
         gamePaintService.paintSelectedTile(g, area,
                 selectedTileManager.getSelectedTile());
         animationClouds.paint(g);

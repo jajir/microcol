@@ -283,4 +283,46 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.announceForeignFight(106, 4);
         fog.verifyForeignFights(1);
     }
+
+    @Test
+    @Tag("local")
+    void TC_09_explored_grid_stops_at_unknown_boundary() throws Exception {
+        // Enable the existing display preference through its checkbox.
+        org.microcol.page.SettingPage settings = WelcomePage.of(getContext())
+                .openSetting();
+        new org.microcol.page.FramedSettingsPage(getContext())
+                .click("settingGrid");
+        GamePage game = settings.goBack().loadGame();
+        FogPage fog = new FogPage(getContext());
+        fog.centerFrontier();
+        fog.verifyGrid(OWN_COLONY, ENEMY, true);
+        fog.verifyGrid(STEP, ENEMY, true);
+        fog.verifyFogPixels(ENEMY);
+        fog.saveMapEvidence("R-0261-explored-grid.png");
+
+        // Exploration and its grid survive departure from sight and Continue.
+        fog.move(START, STEP, 3);
+        fog.move(STEP, START, 3);
+        fog.verifyExplored(ENEMY, true);
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.centerFrontier();
+        fog.verifyGrid(ENEMY, Location.of(30, 16), true);
+        // The viewport can resize without moving the grid away from its tiles.
+        fog.resizeMapWindow(1100, 800);
+        fog.centerFrontier();
+        fog.verifyGrid(ENEMY, Location.of(30, 16), true);
+        fog.saveMapEvidence("R-0261-resized-grid.png");
+
+        // Disabling the same preference removes lines without moving the ship.
+        game.exitToMenu();
+        settings = WelcomePage.of(getContext()).openSetting();
+        new org.microcol.page.FramedSettingsPage(getContext())
+                .click("settingGrid");
+        settings.goBack();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.centerFrontier();
+        fog.verifyGrid(STEP, Location.of(30, 16), false);
+        fog.verifyUnitLocation(3, START);
+    }
 }

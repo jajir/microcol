@@ -228,9 +228,12 @@ pro zobrazení v dokumentaci.
 
 ### Mřížka a neprozkoumaná část mapy
 
-**Dohoda 24. října 2026, [R-0261](requirements/R-0261.md):** hlavní herní
+**Dohoda 24. října 2026, [R-0261](requirements/done/R-0261.md):** hlavní herní
 mapa má mít méně výraznou přerušovanou čtvercovou síť pouze na prozkoumaných
-políčkách. Tento cílový vzhled zatím není implementovaný ani vizuálně ověřený.
+políčkách. Implementace používá tlumenou přerušovanou čáru a plnou šedou mlhu.
+Cílené testy a kontrola snímků v Linux/Xvfb prošly 24. října 2026;
+[průběh ověření](functional-tests.md#r-0261-explored-grid-2026-10-24) rozlišuje
+renderování 2× od dosud neprovedené kontroly na fyzickém HiDPI displeji.
 
 ![Reference jemné přerušované mřížky na mapě; síť v šedé oblasti se podle zadání nepřebírá](graphics-assets/tabletop-map-grid-reference.png)
 
