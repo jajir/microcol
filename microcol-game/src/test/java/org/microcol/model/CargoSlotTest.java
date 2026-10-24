@@ -512,6 +512,8 @@ public class CargoSlotTest {
     public void test_sellAndEmpty_selling_more_goods_than_is_stored()
             throws Exception {
         slot = new CargoSlot(cargo, new Goods(GoodsType.CIGARS, 10));
+        when(cargo.getOwner()).thenReturn(ownerUnit);
+        when(ownerUnit.getOwner()).thenReturn(player);
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> slot.sellAndEmpty(Goods.of(GoodsType.CIGARS, 20)));
@@ -519,6 +521,12 @@ public class CargoSlotTest {
         assertEquals(
                 "Attempt to sell more goods Goods{GoodsType=CIGARS, amount=20} than is stored in CargoSlot{cargoUnit=null, cargoGoods=Goods{GoodsType=CIGARS, amount=10}}",
                 exception.getMessage());
+        // The refused sale keeps the cargo and never reaches the player's gold
+        // or Europe accounts.
+        assertEquals(10, slot.getGoods().get().getAmount());
+        verify(player, never()).sellGoods(any(Goods.class));
+        verify(player, never()).sellGoods(any(Goods.class),
+                any(EuropeTradeQuote.class));
     }
 
     @Test

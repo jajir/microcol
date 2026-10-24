@@ -40,6 +40,18 @@ public class GamePreferences {
      */
     public static final boolean DEFAULT_SHOW_FIGHT_ADVISOR = true;
 
+    /**
+     * When there are no value in preferences than this value is used. Critical
+     * turn notices are shown even when this is off.
+     */
+    public static final boolean DEFAULT_SHOW_TURN_SUMMARY = true;
+
+    /**
+     * When there are no value in preferences than this value is used. A Europe
+     * arrival then only offers Open Europe in the report.
+     */
+    public static final boolean DEFAULT_OPEN_EUROPE_ON_ARRIVAL = false;
+
     public static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
     /**
@@ -163,6 +175,24 @@ public class GamePreferences {
 
     public boolean isAutosaveEnabled() {
         return settingService.load().isAutosaveEnabled();
+    }
+
+    public void setShowTurnSummary(final boolean showTurnSummary) {
+        settingService.update(
+                setting -> setting.setTurnSummaryEnabled(showTurnSummary));
+    }
+
+    public boolean isShowTurnSummary() {
+        return settingService.load().isTurnSummaryEnabled();
+    }
+
+    public void setOpenEuropeOnArrival(final boolean openEuropeOnArrival) {
+        settingService.update(
+                setting -> setting.setOpenEuropeOnArrival(openEuropeOnArrival));
+    }
+
+    public boolean isOpenEuropeOnArrival() {
+        return settingService.load().isOpenEuropeOnArrival();
     }
 
     public void setGameInProgressSaveFile(final String gameInProgressSaveFile) {

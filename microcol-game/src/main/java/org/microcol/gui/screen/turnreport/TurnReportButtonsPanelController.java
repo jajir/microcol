@@ -1,6 +1,5 @@
 package org.microcol.gui.screen.turnreport;
 
-import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 
 import com.google.common.eventbus.EventBus;
@@ -13,9 +12,11 @@ public class TurnReportButtonsPanelController {
     @Inject
     public TurnReportButtonsPanelController(
             final TurnReportButtonsPanel statisticsButtonsPanel,
-            final EventBus eventBus) {
-        statisticsButtonsPanel.getButtonClose().setOnAction(
-                event -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
+            final EventBus eventBus,
+            final EuropeOpeningRequest europeOpeningRequest) {
+        statisticsButtonsPanel.getButtonClose()
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(
+                        europeOpeningRequest.takeScreenAfterReport())));
     }
 
 }

@@ -51,8 +51,9 @@ public class TeProcessorGoodsWasThrownAway extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventGoodsWasThrownAway) {
             final TurnEventGoodsWasThrownAway te = (TurnEventGoodsWasThrownAway) turnEvent;
-            return new TeItemSimple(
-                    getMessage(te.getGoods(), te.getColonyName()));
+            return new TeItemColony(
+                    getMessage(te.getGoods(), te.getColonyName()),
+                    te.getColonyId());
         }
         return null;
     }

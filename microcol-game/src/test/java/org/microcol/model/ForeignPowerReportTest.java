@@ -232,6 +232,38 @@ class ForeignPowerReportTest {
     }
 
     @Test
+    void test_deWittJoiningThroughOwnerUpdateUnlocksOnlyTheContactedReport() {
+        // A new game starts with the first nation of the turn order, so reach
+        // a prepared Dutch turn first, as ForeignColonyTradeTest does, and only
+        // then ready the saved Congress for the ordinary Dutch update.
+        final GameModelPo data = data(false);
+        start(data);
+        for (int i = 0; i < 8 && model.getCurrentPlayer() != dutch; i++) {
+            model.endTurn();
+        }
+        assertEquals("Dutch", model.getCurrentPlayer().getName());
+        final ModelPo saved = model.save();
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(saved, "Dutch"),
+                Founder.JAN_DE_WITT);
+        data.setModel(saved);
+        start(data);
+        assertEquals("Dutch", model.getCurrentPlayer().getName());
+        moveScout(SCOUT_AT_QUEBEC);
+        assertWithheld(model, "Dutch", "France", Disclosure.LOCKED);
+
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.JAN_DE_WITT);
+        assertEquals(Disclosure.REVEALED,
+                report(model, "Dutch", "France").getDisclosure());
+        assertTrue(report(model, "Dutch", "France").getFigures().isPresent());
+        // Spain was never contacted, so the founder cannot reveal it.
+        assertWithheld(model, "Dutch", "Spain", Disclosure.UNCONTACTED);
+        // The founder belongs to the Dutch viewer only.
+        assertWithheld(model, "France", "Dutch", Disclosure.LOCKED);
+        assertEquals(Disclosure.REVEALED,
+                report(reload(), "Dutch", "France").getDisclosure());
+    }
+
+    @Test
     void test_viewerMustBeARegisteredColonialNation() {
         start(data(false));
         assertThrows(IllegalArgumentException.class,

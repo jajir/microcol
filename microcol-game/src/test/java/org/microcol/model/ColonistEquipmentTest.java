@@ -133,6 +133,33 @@ class ColonistEquipmentTest {
     }
 
     @Test
+    void scoutBecomesDragoonByMusketsWithOneStockDebitEach() {
+        unit.equipWithHorses();
+        assertTrue(unit.isScout());
+        assertEquals(50, stock(GoodsType.HORSE));
+        unit.equipWithMuskets();
+        assertFalse(unit.isScout());
+        assertTrue(unit.isMounted());
+        assertTrue(unit.isHoldingGuns());
+        assertEquals(50, stock(GoodsType.MUSKET));
+        assertEquals(50, stock(GoodsType.HORSE));
+        assertEquals(UnitType.COLONIST, unit.getType());
+    }
+
+    @Test
+    void soldierBecomesDragoonByHorsesWithOneStockDebitEach() {
+        unit.equipWithMuskets();
+        assertFalse(unit.isScout());
+        unit.equipWithHorses();
+        assertFalse(unit.isScout());
+        assertTrue(unit.isMounted());
+        assertTrue(unit.isHoldingGuns());
+        assertEquals(50, stock(GoodsType.MUSKET));
+        assertEquals(50, stock(GoodsType.HORSE));
+        assertEquals(UnitType.COLONIST, unit.getType());
+    }
+
+    @Test
     void changedTurnRemovedUnitAndForeignOrDestroyedColonyRejectActions() {
         when(model.getCurrentPlayer()).thenReturn(mock(Player.class));
         assertUnavailable();

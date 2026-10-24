@@ -287,6 +287,7 @@
 	<entry key="difficulty_viceroy">Viceroy</entry>
     <entry key="unitsPanel_veteran">Military status: Veteran</entry>
     <entry key="unitsPanel_treasureValue">Treasure value: %d gold</entry>
+    <entry key="unitsPanel_occupiedHolds">Occupied holds: %d</entry>
     <entry key="unitsPanel_continental">Military role: Continental</entry>
     <entry key="unitsPanel_convert">Native convert of the %s. Unassigned turns: %s of 8.</entry>
     <entry key="unitsPanel_royal">Military role: Royal regular</entry>

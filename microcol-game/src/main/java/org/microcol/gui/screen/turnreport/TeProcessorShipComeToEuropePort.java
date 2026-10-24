@@ -22,7 +22,7 @@ public class TeProcessorShipComeToEuropePort extends AbstractTeProcessor
     @Override
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventShipComeToEuropePort) {
-            return new TeItemSimple(getMessage());
+            return new TeItemEurope(getMessage());
         }
         return null;
     }

@@ -140,6 +140,18 @@ class UnitPanel {
             treasure.setMinHeight(Region.USE_PREF_SIZE);
             box.getChildren().add(treasure);
         }
+        // A foreign ship discloses only how many of its holds are occupied; its
+        // passengers and goods stay hidden (R-0205).
+        if (!isUnitOwnedBy(unit, humanPlayer)) {
+            humanPlayer.getObservedOccupiedHolds(unit).ifPresent(holds -> {
+                final Label occupiedHolds = new Label(
+                        i18n.get(Loc.unitsPanel_occupiedHolds, holds));
+                occupiedHolds.setId("unitHolds-" + unit.getId());
+                occupiedHolds.setWrapText(true);
+                occupiedHolds.setMinHeight(Region.USE_PREF_SIZE);
+                box.getChildren().add(occupiedHolds);
+            });
+        }
         final Label labelOwner = new Label(i18n.get(Loc.unitsPanel_owner) + " "
                 + unit.getOwner().getName());
         labelOwner.getStyleClass().add("unitOwner");

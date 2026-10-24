@@ -20,6 +20,8 @@
 	<entry key="settingLanguageEn">English</entry>
 	<entry key="settingShowGrid">Show Grid</entry>
 	<entry key="settingAutosave">Save turn recovery points automatically</entry>
+	<entry key="settingTurnSummary">Show routine turn summary at turn start</entry>
+	<entry key="settingOpenEuropeOnArrival">Open Europe automatically when a ship arrives</entry>
 	<entry key="buttonRecovery">Recovery points</entry>
 	<entry key="recoveryTitle">Choose a recovery point</entry>
 	<entry key="recoveryLatestPosition">Latest position</entry>

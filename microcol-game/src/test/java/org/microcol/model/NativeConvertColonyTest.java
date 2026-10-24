@@ -366,6 +366,41 @@ class NativeConvertColonyTest {
         assertEquals(1, convertsOf(withSepulveda).size());
     }
 
+    /**
+     * The owner update settles Congress before the mission clock reads the
+     * chance (Player.finishTurnPreparation), so a draw of 15 % fails the
+     * ordinary 10 % but passes Sepulveda's 20 % in the same fifth event. The
+     * fifth update closes the cycle, so the count restarts at zero either way.
+     */
+    @Test
+    void sepulvedaJoiningThroughOwnerUpdateDoublesTheSameFifthEvent() {
+        final long seed = seedDrawing(0.15, 0.16);
+        final Model unchanged = establishedAfterFourUpdates(seed);
+        assertTrue(dutch(unchanged).startTurn());
+        assertFalse(dutch(unchanged).getCongressMembers()
+                .contains(Founder.JUAN_DE_SEPULVEDA));
+        assertEquals(0,
+                unchanged.getNativeSettlements().get(0).getMissionUpdates());
+        assertTrue(convertsOf(unchanged).isEmpty());
+
+        final ModelPo saved = establishedAfterFourUpdates(seed).save();
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(saved, DUTCH_NAME),
+                Founder.JUAN_DE_SEPULVEDA);
+        final Model model = Model.make(saved, EVALUATORS);
+        RealFounderJoin.joinThroughOwnerUpdate(model,
+                Founder.JUAN_DE_SEPULVEDA);
+        assertEquals(0,
+                model.getNativeSettlements().get(0).getMissionUpdates());
+        assertEquals(1, convertsOf(model).size());
+
+        final Model resumed = reload(model);
+        assertEquals(1, convertsOf(resumed).size());
+        assertEquals(0,
+                resumed.getNativeSettlements().get(0).getMissionUpdates());
+        assertTrue(dutch(resumed).getCongressMembers()
+                .contains(Founder.JUAN_DE_SEPULVEDA));
+    }
+
     private static Model establishedAfterFourUpdates(final long seed) {
         final Model model = build(seed, TIE, NO_FOUNDERS, false, TIE_MISSIONARY,
                 NO_EDIT);

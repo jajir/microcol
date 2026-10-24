@@ -50,7 +50,8 @@ public class TeService {
             final TeProcessorNativeConquest nativeConquest,
             final TeProcessorIntervention intervention,
             final TeProcessorInterventionArrival interventionArrival,
-            final TeProcessorMercenaryArrival mercenaryArrival) {
+            final TeProcessorMercenaryArrival mercenaryArrival,
+            final TeProcessorProjectCompleted projectCompleted) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
 
@@ -88,7 +89,8 @@ public class TeService {
                         Preconditions.checkNotNull(nativeConquest),
                         Preconditions.checkNotNull(intervention),
                         Preconditions.checkNotNull(interventionArrival),
-                        Preconditions.checkNotNull(mercenaryArrival)));
+                        Preconditions.checkNotNull(mercenaryArrival),
+                        Preconditions.checkNotNull(projectCompleted)));
     }
 
     private Model getModel() {

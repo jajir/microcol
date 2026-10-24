@@ -531,6 +531,38 @@ class ColonyDefenseTest {
     }
 
     @Test
+    void revereJoiningThroughFranceUpdateArmsAWorkerForTheNextAttack() {
+        // Control without Revere: civilianGroupDefendsOnceFromTheColonyCenter.
+        final ModelPo data = data(civilians(1, 0));
+        data.getGameManager().setCurrentPlayer("France");
+        data.getEuropeanRelations().get(0).setState(EuropeanRelationState.WAR);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "France"),
+                Founder.PAUL_REVERE);
+        // The saved war already stands, so no declaration is made in build.
+        peace = true;
+        build(data);
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.PAUL_REVERE);
+        for (int i = 0; i < model.getPlayers().size()
+                && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
+            model.endTurn();
+        }
+        assertSame(dutch, model.getCurrentPlayer());
+
+        final ColonyDefense defense = quote().getColonyDefense().orElseThrow();
+        assertEquals(ColonyDefense.Kind.REVERE, defense.getKind());
+        assertEquals(50, defense.getRevereMuskets());
+
+        final Model resumed = reloaded();
+        assertTrue(resumed.getPlayerByName("France").getCongressMembers()
+                .contains(Founder.PAUL_REVERE));
+        final ColonyDefense restored = ((UnitFreeColonist) resumed
+                .getUnitById(0)).prepareAttack(COLONY, false).orElseThrow()
+                .getColonyDefense().orElseThrow();
+        assertEquals(ColonyDefense.Kind.REVERE, restored.getKind());
+        assertEquals(50, restored.getRevereMuskets());
+    }
+
+    @Test
     void revereNeedsFiftyMusketsAndNoExistingArmedDefender() {
         build(civilians(1, 0).withRevere());
         quebec.getWarehouse().removeGoods(Goods.of(GoodsType.MUSKET, 1));

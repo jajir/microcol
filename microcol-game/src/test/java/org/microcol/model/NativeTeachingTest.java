@@ -10,6 +10,7 @@ import static org.microcol.model.NativeRelationsScene.at;
 import static org.microcol.model.NativeRelationsScene.island;
 import static org.microcol.model.NativeRelationsScene.settlement;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
@@ -369,7 +370,15 @@ class NativeTeachingTest {
 
     @Test
     void allEightNativeSkillsAreGrantedToTheSamePerson() {
-        for (final UnitType skill : UnitType.NATIVE_TEACHABLE_SKILLS) {
+        // The accepted card list, written out so the test does not read the
+        // implementation's own list back.
+        final List<UnitType> cardSkills = List.of(UnitType.EXPERT_FARMER,
+                UnitType.EXPERT_FISHERMAN, UnitType.EXPERT_FUR_TRAPPER,
+                UnitType.EXPERT_SILVER_MINER, UnitType.MASTER_SUGAR_PLANTER,
+                UnitType.MASTER_COTTON_PLANTER, UnitType.MASTER_TOBACCO_PLANTER,
+                UnitType.SEASONED_SCOUT);
+        assertEquals(8, cardSkills.size());
+        for (final UnitType skill : cardSkills) {
             final Model built = teachingScene(UnitType.COLONIST, UNARMED);
             final ModelPo saved = built.save();
             saved.getNativeSettlements().get(0).setTeachableSkill(skill.name());
@@ -383,11 +392,18 @@ class NativeTeachingTest {
             ownerRound(model, model.getPlayerByName(DUTCH));
             ownerRound(model, model.getPlayerByName(DUTCH));
             ownerRound(model, model.getPlayerByName(DUTCH));
-            assertTrue(
-                    colonist.getType() == skill
-                            || ((UnitFreeColonist) colonist).isVeteran(),
-                    skill.name());
+            assertEquals(skill, colonist.getType(), skill.name());
+            assertFalse(((UnitFreeColonist) colonist).isVeteran());
             assertEquals(PUPIL_ID, colonist.getId());
+            assertSame(model.getPlayerByName(DUTCH), colonist.getOwner());
+            final Model restored = Model.make(model.save(),
+                    MissionImpl.getPredefinedGameOverEvaluators());
+            final Unit reloaded = restored.getUnitById(PUPIL_ID);
+            assertEquals(skill, reloaded.getType(), skill.name());
+            assertEquals(PUPIL_ID, reloaded.getId());
+            assertEquals(DUTCH, reloaded.getOwner().getName());
+            assertTrue(restored.getNativeTeachingCourse(settlement(restored))
+                    .isEmpty());
         }
     }
 

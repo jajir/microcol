@@ -48,7 +48,13 @@ class SpecialistProductionTest {
                 Arguments.of(UnitType.EXPERT_LUMBERJACK, GoodsType.LUMBER,
                         TerrainType.GRASSLAND),
                 Arguments.of(UnitType.EXPERT_ORE_MINER, GoodsType.ORE,
-                        TerrainType.HILL));
+                        TerrainType.HILL),
+                Arguments.of(UnitType.MASTER_SUGAR_PLANTER, GoodsType.SUGAR,
+                        TerrainType.SAVANNAH),
+                Arguments.of(UnitType.MASTER_COTTON_PLANTER, GoodsType.COTTON,
+                        TerrainType.PRAIRIE),
+                Arguments.of(UnitType.MASTER_TOBACCO_PLANTER, GoodsType.TOBACCO,
+                        TerrainType.GRASSLAND));
     }
 
     private int fieldYield(final UnitType type, final GoodsType goods,

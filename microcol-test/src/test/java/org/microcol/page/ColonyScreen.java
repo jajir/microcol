@@ -406,6 +406,22 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     /**
+     * Net production the colony screen promises for the next update, to be
+     * compared with what a later report states.
+     */
+    public int getNetProduction(final GoodsType goodsType) {
+        return colony.getGoodsStats().getStatsByType(goodsType)
+                .getNetProduction();
+    }
+
+    public void verifyNetProductionAtLeast(final GoodsType goodsType,
+            final int expectedMinimum) {
+        assertTrue(getNetProduction(goodsType) >= expectedMinimum,
+                String.format("Net production of %s is below %s", goodsType,
+                        expectedMinimum));
+    }
+
+    /**
      * Drag unit from pier to random empty field.
      *
      * @param indexOfUnitAtPier which unit will be dragged

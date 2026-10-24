@@ -99,6 +99,11 @@ class RecruitmentPoolTest {
                     RecruitmentPool.target(difficulty, "Dutch", 0));
             assertEquals((2 * targets[i] + 2) / 3,
                     RecruitmentPool.target(difficulty, "England", 0));
+            // Only England has the two-thirds advantage (R-0208 matrix).
+            assertEquals(targets[i],
+                    RecruitmentPool.target(difficulty, "France", 0));
+            assertEquals(targets[i],
+                    RecruitmentPool.target(difficulty, "Spain", 0));
             assertEquals(factors[i], targets[i]);
         }
         final RecruitmentPo progressed = state(UnitType.COLONIST);

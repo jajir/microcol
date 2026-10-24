@@ -4113,6 +4113,49 @@ public class Model {
     }
 
     /**
+     * Fleet report of a colonial nation (R-0202): its own ships with places,
+     * voyages, repairs and cargo, and the foreign ships it sees now with their
+     * occupied-hold counts. It is rebuilt from the live state on every call and
+     * changes no ship, cargo, place or resource.
+     *
+     * @param owner required colonial nation of this model; the report reads
+     *              only its own ships and the visible foreign ones, and rejects
+     *              a player of another model
+     * @return immutable fleet report of the current state
+     */
+    public FleetReport getFleetReport(final Player owner) {
+        Preconditions.checkNotNull(owner, "Owner is required");
+        // Same-named players of other games compare equal, so only identity
+        // proves the owner belongs to this game.
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == owner),
+                "Owner belongs to another model");
+        return FleetReport.calculate(this, owner);
+    }
+
+    /**
+     * Congress report (R-0203) of a colonial nation. It reads only that
+     * nation's support, founders and Crown roster, and rejects a player of
+     * another model.
+     *
+     * @param viewer required colonial nation whose Congress is reported; a
+     *               Crown or a player of another model is rejected
+     * @return Congress report of the state at this call; its Crown roster is
+     *         the owner's live roster (see {@link CongressReport})
+     */
+    public CongressReport getCongressReport(final Player viewer) {
+        Preconditions.checkNotNull(viewer, "Viewer is required");
+        // Same-named players of other games compare equal, so only identity
+        // proves the viewer belongs to this game.
+        Preconditions.checkArgument(
+                getPlayers().stream().anyMatch(player -> player == viewer),
+                "Viewer belongs to another model");
+        Preconditions.checkArgument(viewer.isColonialNation(),
+                "Congress report belongs to a colonial nation");
+        return CongressReport.calculate(viewer);
+    }
+
+    /**
      * Continue past spring 1800 without scoring (R-0193). The frozen score
      * stays as it was taken, and the next round starts once.
      *

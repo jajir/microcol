@@ -104,7 +104,8 @@ public final class FramedSettingsPage extends AbstractScreen {
     public void verifyAppearance() {
         getRobot().interact(() -> {
             for (final String id : new String[] { "settingGrid",
-                    "settingFightAdvisor", "autosaveEnabled", "rbCzech",
+                    "settingFightAdvisor", "settingTurnSummary",
+                    "settingOpenEuropeOnArrival", "autosaveEnabled", "rbCzech",
                     "rbEnglish", "settingVolume", "settingAnimationSpeed" }) {
                 final Control c = control(id);
                 assertTrue(c.getSkin() instanceof FramedCheckBoxSkin
@@ -148,6 +149,35 @@ public final class FramedSettingsPage extends AbstractScreen {
         assertEquals(autosave,
                 ((CheckBox) control("autosaveEnabled")).isSelected());
         assertEquals(autosave, prefs.isAutosaveEnabled());
+    }
+
+    /**
+     * Checks the routine turn summary checkbox against the stored preference.
+     */
+    public void verifyTurnSummary(final boolean enabled) {
+        final GamePreferences prefs = getContext()
+                .getClassFromGuice(GamePreferences.class);
+        assertEquals(enabled,
+                ((CheckBox) control("settingTurnSummary")).isSelected());
+        assertEquals(enabled, prefs.isShowTurnSummary());
+    }
+
+    /** Checks the Europe arrival checkbox against the stored preference. */
+    public void verifyOpenEuropeOnArrival(final boolean enabled) {
+        final GamePreferences prefs = getContext()
+                .getClassFromGuice(GamePreferences.class);
+        assertEquals(enabled, ((CheckBox) control("settingOpenEuropeOnArrival"))
+                .isSelected());
+        assertEquals(enabled, prefs.isOpenEuropeOnArrival());
+    }
+
+    /** Make the real Settings window small to check its readable layout. */
+    public void resizeWindow(final int width, final int height) {
+        getRobot().interact(() -> {
+            getPrimaryStage().setWidth(width);
+            getPrimaryStage().setHeight(height);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyLanguage(final boolean czech) {

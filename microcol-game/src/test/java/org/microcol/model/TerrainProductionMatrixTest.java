@@ -18,6 +18,11 @@ import org.microcol.model.campaign.po.GameModelPoDao;
  * Baseline terrain output of the aid card for every legal bare and forested
  * square. The literal cells are transcribed from the aid card and must not be
  * derived from the production tables.
+ *
+ * Source: aid card 4, "Terrain Chart", PDF page 135 of
+ * {@code docs/Sid_Meiers_Colonization_manual.pdf}, rechecked on 2026-10-23.
+ * Fish is the water output {@code CORN}; no land square has a separate fish
+ * cell, so the fish column is asserted only through water squares.
  */
 class TerrainProductionMatrixTest {
 
@@ -80,6 +85,31 @@ class TerrainProductionMatrixTest {
             variants += type.isCanHaveTree() ? 2 : 1;
         }
         assertEquals(22, variants);
+    }
+
+    /**
+     * The chart lists no other output, so every goods type outside the eight
+     * charted columns is zero on every legal bare and forested variant.
+     */
+    @Test
+    void everyGoodsTypeOutsideTheChartIsZeroOnEveryLegalVariant() {
+        final List<GoodsType> charted = List.of(GoodsType.CORN, GoodsType.SUGAR,
+                GoodsType.TOBACCO, GoodsType.COTTON, GoodsType.FUR,
+                GoodsType.LUMBER, GoodsType.ORE, GoodsType.SILVER);
+        for (final TerrainType type : TerrainType.TERRAINS) {
+            final List<Boolean> variants = type.isCanHaveTree()
+                    ? List.of(false, true)
+                    : List.of(false);
+            for (final boolean forest : variants) {
+                final Terrain terrain = terrain(type, forest);
+                for (final GoodsType goodsType : GoodsType.GOOD_TYPES) {
+                    if (!charted.contains(goodsType)) {
+                        assertEquals(0, terrain.canProduceAmmount(goodsType),
+                                type + " forest=" + forest + " " + goodsType);
+                    }
+                }
+            }
+        }
     }
 
     @ParameterizedTest

@@ -1,5 +1,1620 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0215 verification matrix ledger 2026-10-24
+
+**Targeted verification passed (2026-10-24).**
+Callback `20261024T001456Z-6ef7c792a381`, `target/docker-ui/run-aJYBql`:
+4,707 model/JUnit tests (333 reports) and 39 UI/support tests (8 reports),
+zero failures, errors or skips, 398.808 s. All five selected TC classes and
+144 matching source hashes were checked. Actual industrial reports contain
+398 manufacturing cases, 20 stock-resume cases and 9 warehouse cases.
+Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0215-targeted-2-review.json`.
+Complete batch acceptance remains pending.
+
+**Implementation history.** No matrix pass, batch acceptance,
+commit or publication is claimed. This is the tenth requirement of batch eight
+if it completes; main runs the model suite and the five UI scenarios below after
+review. Production code is unchanged.
+
+**Attempt 1 evidence (failed staging, not a pass).** Run `run-GYp2ws`, callback
+`20261024T000504Z-9ff1028a250a`, review `R-0215-targeted-1-review.json` beside
+its prompt: 4,412 model tests in 333 reports, 0 failures, 133 errors, 0 skips,
+UI not run, 151.592 s, 143 source hashes matching. All 133 new industrial rows
+failed in staging with `Unsupported save: missing town commons commodity`,
+because the attempt set the town commons to `null`. The two new funds and
+disband tests passed. Attempt 2 repairs the staging and completes the scope.
+
+**Attempt 2 staging (what the matrix relies on, for main to confirm).**
+- Town commons are set to `NONE`, the legal code for no second commodity.
+  Corn is not a legal second commodity, so it cannot be used.
+- Colony 0 keeps zero liberty and five residents, so the political snapshot is
+  the one the ore test already relies on.
+- Residents who do not staff the tested building wait in the chapel's three
+  slots, then on fixture fields 4 and 5, set to corn. Fields 0-3 and 6-7 are not
+  used, since their terrain was not read.
+- Every other goods-consuming building is removed, so the tested chain is its
+  only producer and consumer. The output and input stocks are set explicitly.
+- Upgrades are in-place type changes (`Colony.createConstruction`) and the model
+  does not check predecessors or founder gates on load, so shop, factory and
+  warehouse tiers are written by type. The fixture has no building-queue entry
+  (grep found none), so no hammer spending is queued.
+- The one-gold-short and exact-fund amounts use the ask 4 and 10 per cent tax of
+  the existing account test.
+
+### Ledger
+
+| Cell group | Owner test (exact name) | Written here or prior | Gap or note |
+| --- | --- | --- | --- |
+| All 20 manufacturing buildings (seven chains, each house, shop, factory, carpenter and arsenal tier), 0/1/2/3 ordinary workers, 1-3 expert workers, mixed crews on the 6:9 and 3:6 shapes, input short/exact/excess | `IndustrialProductionTest.manufacturingBuildingsUseTheStaffedBudgetOnceInTheRealUpdate`: 398 cases from 82 literal rows in `SHAPE_ROWS` (3:3 and 6:6 with 19 rows each, 6:9 and 3:6 with 22 each) | **Passed in the targeted run above.** Preview consumed, output and blocked output, then the real warehouse after `Colony.startTurn()` | Shapes give the rounding of inputs for shop and factory tiers (6:9 and 3:6), written cell by cell. The mixed crew is written only where the budget differs from the 1:1 shapes. |
+| Save and Continue of actual stocks for each chain, no replay | `IndustrialProductionTest.actualStocksSurviveSaveAndContinueWithoutReplay` (20 rows) | **Passed in the targeted run above.** Stocks after the update, after `Model.make(save)`, and after `startGame()` | Checks stocks and the saved JSON, not membership alone. |
+| Warehouse 100/200/300 with exact and excess arrival in a real update | `IndustrialProductionTest.warehouseLimitKeepsOnlyWhatFitsAfterTheRealUpdate` (9 rows: basic, warehouse, expansion; 94, 96, 100 and their equivalents) | **Passed in the targeted run above.** Tools stored after `startTurn()`; the excess is thrown away by the update | Capacity metadata is still in `ColonyWarehouseTest.test_getStorageCapacity`; the real cell is here. |
+| Tier metadata and scarce budget | `IndustrialProductionTest.everyIndustryUsesExactBudgetsAndConservesScarceInput` | Prior, kept | Its scarce expected value is computed from the production formula; the matrix uses literal rows instead. |
+| Ore to tools to muskets, one update, no double spend | `IndustrialProductionTest.oreBecomesToolsAndThenMusketsInOneUpdateWithoutDoubleSpend` | Prior, kept | Update order of a secondary input (smith before armory) is covered here, not by the matrix. |
+| Food and growth at 199/200/201, births, resume | `NationalTurnPreparationTest.foodBoundaryCreatesOutsideColonistsAndSurvivesResume` (199, 200, 201, 399, 400, 401) | Prior, not re-read for this attempt beyond its body | None added. |
+| Hunger at zero does not kill; famine one victim | `ColonyFamineTest.exactlyZeroFoodDoesNotKill`, `survivorFoodIsCommittedAfterOneRandomFamineDeath` | Prior | None added. |
+| Warehouse capacity 100/200/300, exact transfer and overflow | `ColonyWarehouseTest.test_getStorageCapacity`, `ColonyWarehouseUnloadTest.onlyTheExactAmountThatFitsCanBeTransferred`, `ColonyWarehouseTest.test_addGoodsWithThrowingAway_add_*` | Prior | None added. |
+| Bid, ask and tax quote: exact totals, zero and 100 per cent tax, overflow, equal offers | `EuropeTradeQuoteTest.purchaseAndSaleUseExactIntegerTotals`, `zeroAndTaxBoundaries`, `invalidAndOverflowPrices`, `equalOffersRetainEveryPricingInput` | Prior | None added. |
+| Partial quantity, confirmed money and goods, four counters | `EuropeTradeAccountTest.test_mixedPartialTradesKeepFourCountersPerNationAndCommodity` | Prior | None added. |
+| Cancel and stale price | `EuropeTradeAccountTest.test_rejectedPreviewAndStaleTradesAddNothing` (preview adds nothing, `EuropePriceChangedException` leaves gold) | Prior | None added. |
+| Funds exactly at the total, one gold short | `EuropeTradeAccountTest.test_exactFundsBuysAndOneGoldShortIsRefusedWithoutChange` (44 exact buys; 43 refused, no account) | **Written** | The `Player.buyGoods` funds check was not covered at its equality boundary. |
+| Save and Continue of accounts without replay | `EuropeTradeAccountTest.test_savedAccountsRestoreOnceAndDoNotReplay` | Prior | Prices and stocks are not separately saved in this matrix. |
+| Disband tools and muskets: excess, exact, cancel, stale | `DisbandTest.toolsAndMusketsSplitAtTheWarehouseLimitAndCancelChangesNothing` (passed in attempt 1: tools 30 retained and 10 lost; muskets 50 exact; preview and refused confirmation change nothing); `DisbandTest.staleToolsAndMusketsSpaceRejectsConfirmationWithoutMutation` (**written, attempt 2**); horses prior: `excessAboveWarehouseLimitNeedsAcknowledgementAndExactFitDoesNot`, `staleWarehouseSpaceRejectsConfirmationWithoutMutation` | Tools and muskets are new; horses were already covered. Cancel in UI: `TC_104` TC_01 and TC_04 (existing, credited). |
+| Sale quantity above stored cargo (CargoSlot, before any player change) | `CargoSlotTest.test_sellAndEmpty_selling_more_goods_than_is_stored` (strengthened in attempt 2: stored 10 CIGARS still 10, `Player.sellGoods` never called); prior: `test_sellAndEmpty_sell_all_goods`, `test_sellAndEmpty_sell_part_of_goods` | **Strengthened** | The stock check lives in `CargoSlot.sellAndEmpty` (cargo, not `Player`); the player is never reached, so gold and accounts cannot move. |
+
+### Coverage boundaries and reused checks
+
+1. **Mixed crews** are written only in the 6:9 and 3:6 shapes, where the budget
+   differs from a single shape. On the 1:1 shapes a mixed crew would give the
+   same budget as the ordinary rows, so it is not repeated.
+2. **Stock of the upstream chain** is isolated: the matrix removes other
+   consumers, so no multi-chain update (for example smith to armory) appears
+   here. That order is still owned by `oreBecomesToolsAndThenMusketsInOneUpdate...`.
+3. **Negative output** is not a reachable path in these rows; the only negative
+   value is the food balance, owned by `ColonyFamineTest`.
+4. **Prices saved per commodity** are not restated here; the account save test
+   (`EuropeTradeAccountTest.test_savedAccountsRestoreOnceAndDoNotReplay`) and the
+   repricing test (`test_repricingDoesNotRewriteSettledHistory`) cover them.
+5. **Sale stock on the Player** remains outside: `Player.sellGoods` has no stock
+   check by design; the cargo owner holds it (see the row above).
+
+### Selected UI (main runs, no new scenario added)
+
+| Scenario | Reason |
+| --- | --- |
+| TC_50 (`TC_50_F41_industrial_production_test`) | Lumber, tobacco and ore chains through the real UI. |
+| TC_41 (`TC_41_F33_food_import_growth_test`) | Food growth journey. |
+| TC_19 (`TC_19_F14_warehouse_unloading_test`) | Warehouse unloading at the limit. |
+| TC_104 (`TC_104_F95_disband_test`) | Disband journey. |
+| TC_108 (`TC_108_F99_trade_accounts_test`) | Trade accounts, cancel, reopen and continue. |
+
+The new cells are model boundaries and reuse the same model limits the UI already
+reads. TC_104 already covers cancel in the UI (TC_01: cancel changes nothing;
+TC_04: excess cancel keeps the unit and horses), so no UI cancel is added. No new
+UI scenario is written; the five scenarios are pending review, and no UI result
+is claimed.
+
+### Verification to run (main)
+
+1. Apply the shared formatter to the changed Java files:
+   `IndustrialProductionTest.java`, `CargoSlotTest.java`,
+   `EuropeTradeAccountTest.java` and `DisbandTest.java`. Review the diff.
+2. All model JUnit tests in `microcol-game` on the final source state. Attempt 1
+   failed only in the new staging (see above); rerun the whole model suite.
+3. Docker/Xvfb selected UI: TC_50, TC_41, TC_19, TC_104 and TC_108, using the
+   [container command](#docker-ui-tests).
+4. Documentation: the documented checks and strict MkDocs build for this change.
+
+Results, counts and evidence paths are added after the run.
+
+## R-0214 founder effects ledger 2026-10-24
+
+**Targeted verification passed (2026-10-24):** callback
+`20261023T234813Z-fe17df223dd8`, `target/docker-ui/run-wnkhOK`:
+4,277 model/JUnit tests (333 reports) and 24 UI/support tests (8 reports),
+zero failures, errors or skips, 323.729 s. All five selected TC classes were
+present and all 139 recorded source hashes matched. Evidence:
+`/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0214-targeted-4-review.json`.
+This is the ninth targeted requirement of batch eight; complete batch acceptance
+is still pending. The model joins cover the effects while the shared UI join
+path and representative visible effects are covered by the selected scenarios;
+duplicating that shared interaction for every founder is not required here.
+
+**Repair history.** Codex repaired the fixture lifecycle before the successful run above.
+Attempt 4 (`target/docker-ui/run-9aGeMt`, callback
+`20261023T234525Z-e0e7bd714f47`) ran 4,277 model tests in 333 reports:
+0 failures, 1 error, 0 skips; UI not run, 121.687 s. The new Penn
+foreign-owner assertions passed, but saving its unstarted fixture was rejected
+with `Game must be started`. After four Claude attempts, Codex starts this
+fixture through the normal game lifecycle before checking and saving it.
+Evidence: `R-0214-targeted-3-review.json`. Production code remains unchanged.
+
+**Attempt 3 and 4 history.** Attempt-3 run
+`target/docker-ui/run-yr6u4w` (callback `20261023T233527Z-a93462bfc3bc`): 4,276
+model tests in 333 reports, 1 failure, 1 error, 0 skips, UI not run, 152.301 s,
+139 source hashes matching; review `R-0214-targeted-2-review.json`. Causes:
+(1) `NativeConvertColonyTest.sepulvedaJoiningThroughOwnerUpdateDoublesTheSameFifthEvent`
+expected mission count 5 after the fifth update, but
+`NativeSettlement.addMissionUpdate` closes the cycle and restarts at 0, a test
+error; (2) `ForeignPowerReportTest.test_deWittJoiningThroughOwnerUpdateUnlocksOnlyTheContactedReport`
+threw `NoSuchElementException` in `RealFounderJoin` because a new game's
+`startGame` begins with the first nation of the turn order, so the current
+owner was not the Dutch and had no de Witt offer. Attempt 4 expects 0 in both
+Sepulveda branches (the outcome and membership checks are unchanged), reaches a
+prepared Dutch turn before readying the saved Congress, and adds the
+foreign-owner Penn control. All other attempt-3 tests passed in that run.
+Production code is unchanged.
+
+**Attempt 3 (history).** Attempt 1 was this ledger
+only. Attempt 2 added four model joins; its run
+(`target/docker-ui/run-J1yb1B`, 4,264 model tests in 333 reports, 1 failure,
+0 errors, 0 skips, UI not run, 123.065 s, 131 source hashes matching) failed
+only `ColonyLibertyTest.bolivarJoiningThroughOwnerUpdateAddsTwentyPointsToAnExistingColony`
+(expected liberty 0, actual 1): the real owner update credits one ordinary
+unattended bell, which the test confused with Bolivar minting liberty. Cortes,
+Penn and Brebeuf passed. Attempt 3 repairs that test with a no-founder control
+update and adds the other joins listed below. The attempt-3 results and later repairs are recorded above. No whole-matrix pass, batch acceptance, commit or
+publication is claimed. Main runs the model suite and the selected UI scenarios
+listed below. Evidence of the failed run:
+`/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0214-targeted-1-review.json`.
+
+Legend. `R` = actual join or arrival (Congress choice and the owner's own
+`startTurn`, or the UI `congress.select`). `F` = fixture membership only
+(`setMembers`, JSON, or a page patch). Variants: `B/A` before/after joining,
+`own/for` own vs foreign owner, `ex/fut` existing vs later subjects, `1x`
+once-only, `S` Save/Continue or reload, `C` one combination. Attempt 3 re-read
+the bodies of the new and the named owner tests; rows say "not re-read" where
+only a name was checked. Tests marked *new* are attempt-2/3 additions that are
+not yet run; unmarked tests are older checks cited from their sources.
+
+Catalogue corrections. Ten rows said "Missing" although an owner exists in the
+source and named tests: FATHER-001, 004, 007, 010, 013, 015, 016, 018, 020 and
+021. They now read Partial in [gap analysis](gap-analysis.md#founding-father-effects).
+
+### Ledger
+
+| Row | Owner checks (test names) | Join | Variants named | Gap or N/A |
+| --- | --- | --- | --- | --- |
+| FATHER-001 Cortes | NativeTreasureTest: `cortesGuaranteesADoubleOrdinaryTrainWithoutAnyRewardDraw`, `cortesGuaranteesADoubleCapitalTrainEvenWhenTheDrawWouldFail`, `capitalWithoutCortesLeaves1000OnADrawBelowHalf`, `savedTrainIsRestoredOnceAndNeverRolledAgain` | F + R (*new, passed in run-J1yb1B*: `cortesJoiningThroughOwnerUpdateDoublesTheSameSeedsOrdinaryTrain`) | B/A (same seed 500 → 1000), C, S | own/for N/A: the reward goes to the conquering owner and the scene has one colonial attacker. ex/fut N/A: per-settlement event. TC139 seeds Cortes by fixture (`treasureState`), so it verifies the UI result only. |
+| FATHER-002 Drake | NavalCombatTest: `drakeAddsPrivateerBonusToOwnerAttackAndDefense`, `privateerWithoutDrakeKeepsOrdinaryStrengths`, `opponentDrakeDoesNotStrengthenAttackingPrivateer`, `drakeBonusSurvivesDiskRoundtripWithoutStacking`, `allSixBaseStrengthsUseOnlyAttackerBonus` | R and F: `staleDrakeMembershipRejectsFrozenOrderBeforeRandomDraw` joins Drake through `creditProducedBells` plus the owner's `startTurn` (strength 12 before, 16 after, frozen order rejected with unchanged save and RNG); the others use fixtures; TC64 fixture | B/A, own/for, S, C | None. Earlier catalogue gap was wrong. ex/fut N/A: live per combat. |
+| FATHER-003 Jones | CongressTest: `ordinaryBellProductionJoinsJonesOnceAndPreservesLocalBells`, `surplusIsCarriedToNextObjectiveAndOnlyOneJoins`, `pendingJonesDeliversOnceWhenSeaRouteReturns`; TC56 select | R | B/A, 1x, S, pending delivery | Foreign join not named (minor). |
+| FATHER-004 Revere | ColonyDefenseTest: `revereArmsOneWorkerOnlyWithoutAnArmedDefenderAndCostsFiftyMuskets` (defeated militia keeps no muskets, colony still captured), `revereNeedsFiftyMusketsAndNoExistingArmedDefender`, `existingArmedDefenderNeverConsumesTheStoredMuskets`, `victoriousMilitiaKeepsMusketsAndJoinsTheGarrisonWhenAnotherResidentRemains`, `victoriousMilitiaStaysInsideAsTheLastResident` | F (`founders.add`) + R (*new*: `revereJoiningThroughFranceUpdateArmsAWorkerForTheNextAttack` joins France on its own update with the war saved, then expects kind REVERE, 50 muskets, and the same after reload; control is `civilianGroupDefendsOnceFromTheColonyCenterAtBaseOne`, kind CIVILIANS); TC76 `prepareFixture` seeds Revere by fixture | B/A, own/for (attacker), 1x per attack, C with Washington (`washingtonPromotesTheMilitiaWinnerWithoutAnotherDraw`), S | Exit placement after reload is covered by TC76 TC_04/05, fixture only. |
+| FATHER-005 Washington | MilitaryPromotionTest: `washingtonPromotesDefenderWithoutExtraDraw`, `criminalServantFreeVeteranStepsKeepIdentityAndEquipment`, `defenderExpertKeepsSpecialtyWhenPromoted`; ColonyDefenseTest: `previewCancelAndLossGiveNoPromotion` | F + R (*new*: `washingtonJoiningThroughOwnerUpdatePromotesTheNextWinnerWithoutADraw` — control seed 3 does not promote and draws twice; after the Dutch join the same seed promotes with one draw, kept after reload) | B/A (loss, cancel, seed-3 control), C (expert kept), 1x per victory, S | Max veteran: *new* `washingtonLeavesAnAlreadyVeteranWinnerAtItsSingleStage` (no promotion event, type unchanged, one draw). TC66 TC_03 seeds Washington with `loadWashingtonFixture`, UI only. |
+| FATHER-006 Bolivar | ColonyLibertyTest: `bolivarAddsTwentyPointsPerColonyAndCapsAtFull`, `conquerorWithBolivarGainsTheBonusAndTheCrownKeepsIt`, `conquerorWithoutBolivarLosesTheFormerOwnersBonusAndTheCrownKeepsNone`, `productionLosesTheFormerOwnersBolivarBonusAndCrownKeepsNone`; IndependenceCapturedColonyTest: `aCapturedColonyCountsForTheConquerorWithItsOwnBolivarOnly` | F + R (*new, repaired*: `bolivarJoiningThroughOwnerUpdateAddsTwentyPointsToAnExistingColony` now compares liberty with a no-founder control update, 1 and 1, and expects 0 → 20 percent, kept after reload; *new*: `bolivarJoiningThroughOwnerUpdateAlsoSupportsAColonyFoundedLater` founds "Late Fort" after the join: 1 resident, 20 percent, liberty 0, kept after reload; control without Bolivar 0 percent) | B/A, ex/fut, S, own/for and cap by fixtures | TC75 does not involve Bolivar (liberty and report only). |
+| FATHER-007 Franklin | FranklinPeaceOfferTest: `freshOwnerTurnCreatesDiscountedOfferAndReportWithoutPayment`, `joiningFranklinDuringUpdateWaitsUntilFollowingOwnerUpdate`, `existingPendingOfferIsRetainedWithoutNewNotice`, `reverseDirectionPendingOfferSurvivesAiFranklinUpdate`, `malformedPeaceOfferNoticeIsRejectedOnRestore`; PeaceNegotiationTest: `strengthQuoteAndFranklinDiscountAreFixedBeforeAcceptance`; AllianceModelTest: `franklinMembershipOfEitherParticipantExcludesThePair`, `anotherEligiblePairStillQualifiesWhenOneMemberIsExcluded` | R (offer timing, *new* forced-war join); F (price) | own/for (either participant), B/A, 1x (no repeat notice), S, C (discount) | *New* `franklinJoiningThroughOwnerUpdateExcludesThePairFromTheCrownWar`: control pair is forced into "Dutch-France", after the real join no war, RNG unchanged, round 20 recorded. *New* `everyContactedWarRivalGetsItsOwnDiscountedOffer`: France 150 (300 halved) and Spain 100 (200 halved, unarmed neighbour), two notices, no gold change, both kept after reload. |
+| FATHER-008 Jefferson | FounderBellAndFurProductionTest: `jeffersonAddsHalfOnlyToStaffedStatesmen`, `jeffersonDoesNotChangeUnattendedTownHallBell`, `jeffersonWithOrdinaryColonistAndLaborers`, `combinedFoundersWithPressGiveSeventeenAndNewspaperTwentyOne`, `combinedFoundersActualTurnMatchesPreviewAndContinue` | F; TC97 fixture; R *new*: `jeffersonJoiningThroughOwnerUpdateRaisesTheStaffedHallOnly` (hall preview 7 → 10 after the join, 10 after reload) | ordinary vs expert, unattended, C, S | ex/fut N/A: live modifier. |
+| FATHER-009 Paine | FounderBellAndFurProductionTest: `paineAddsCurrentTaxToUnattendedAndStaffedBells`, `paineUnattendedBellIsFlooredWithoutCreatingExtraBells`, `currentTaxChangeAffectsOnlyTheNextCreditedOutput`, `combinedFoundersActualTurnMatchesPreviewAndContinue` | F; TC97 fixture; R *new*: `paineJoiningThroughOwnerUpdateAddsTheCurrentTaxToTheHall` (tax 20: 7 → 8 after the join; tax 50: 10) | unattended vs staffed, tax change after join, C, S | None. |
+| FATHER-010 Pocahontas | NativeRelationsLifecycleTest: `choosingIsNotArrivalAndArrivalClearsOnceThenLaterChangesAreKept`; NativeRelationsTest: `frenchAndPocahontasStackToOneQuarterOfPositiveAlarm`, `directTribalAngerIsNeverHalvedButLocalTypedAlarmIs`; NativeRelationsPressureTest: `directLocalEffectIsReducedByFranceAndPocahontasButTribalIsNeverHalved`; NativeLandPressureTest: `pocahontasStacksWithFranceOnUnpaidPressure`; TC113 select, TC124 | R | B/A (choose vs arrival), 1x, later changes kept, C, S, own/for by `pocahontasMember(owner)` scenes for the Dutch and France (not re-read line by line) | None. |
+| FATHER-011 Smith | FounderConstructionTest: `earnedSmithMembershipUnlocksAdmissionWithoutRebuildingColony`, `allSevenRequireTheirOwnFounderAfterOtherPrerequisites`, `founderMembershipDoesNotWaivePredecessorOrPopulation`, `savedUnfinishedHeadWaitsWithoutFounderAndThenCompletesOnce`, `realCapturePausesCompletionAndStalesRushUntilOwnerRegainsColony`; ConstructionAdmissionTest: `everyProjectUsesItsPopulationBoundaryAndSharedAdmission`; TC57 select | R | B/A, own/for (capture), ex (no rebuild), 1x, S, C | None. |
+| FATHER-012 Fugger | TaxDemandTest: `fuggerArrivalClearsExistingArrearsOnceAndLaterProtestsStillBoycott`, `canceledOrUnearnedFuggerChoiceKeepsEveryArrearBoycotted`, `fuggerArrivalLeavesAForeignNationsArrearsUntouched`; TC110 select | R | B/A (cancel), own/for, 1x, later protests, S (per R-0181 evidence) | None named. No-payment and all-stock checks rest on the R-0181 section below, not re-read here. |
+| FATHER-013 Minuit | NativeLandPressureTest: `realMinuitArrivalWaivesLandPressureButKeepsPaymentsAndOtherPressure`, `minuitRemovesOnlyUnpaidPressureNotResidents`, `paidOrMinuitUseTakesNothing`, `takingSurvivesSaveAndLoadWithoutAnotherCharge`, `firstUnpaidUseTakesFivePerEuropeanOnceAndDoesNotRepeat` (before); TC114 select | R | B/A, 1x, S, no refund | Foreign owner N/A: the land scene has one Dutch payer, and the rule is read from the paying owner. |
+| FATHER-014 Stuyvesant | FounderConstructionTest (as FATHER-011); CustomHouseExportTest: `capturedColonialPortPaysItsNewOwnerWithoutRequiringTheFounderAgain`; TC57 select | R | B/A, own/for, S | Export rules belong to UC-048 and are not repeated here. |
+| FATHER-015 De Witt | ForeignColonyTradeTest: `founder_absent_refuses_the_trade_without_effects`, `war_refuses_the_trade_and_alliance_permits_it`, `completed_trade_is_saved_once_and_survives_reload`; ForeignPowerReportTest: `test_withoutDeWittEveryRivalIsLockedAndOnlyTheRelationIsShown`, `test_founderMembershipBelongsToTheViewerOnly`, `test_aggregatesSumCanonicalBaseOfLivingArmedUnitsOnly`, `test_unitOnlyContactSurvivesMovingAwayAndReload` | F in the older model tests; report via TC144 select (R); TC148 trade fixture; R *new*: `joining_de_witt_through_the_owner_update_permits_the_refused_trade` (access FOUNDER_ABSENT → NONE, then a 3-corn sale pays 3 × bid and empties the wagon) and `test_deWittJoiningThroughOwnerUpdateUnlocksOnlyTheContactedReport` (*repaired in attempt 4*: ends turns until the Dutch turn is prepared, then readies the saved Congress; LOCKED → REVEALED for France, Spain stays UNCONTACTED, France as viewer stays LOCKED, REVEALED after reload) | absent (B/A), own/for, war vs alliance, S, C (aggregates) | Trade and report stay two separate effects. TC98 does not exist; trade is TC148. |
+| FATHER-016 Brebeuf | MissionaryOrdinationTest: `ordinaryMissionaryIsExpertOnlyWhileOwnerHoldsBrebeuf`, `existingMissionaryBecomesExpertWhenBrebeufIsPresent`, `brebeufDoesNotMakeAnOrdinaryColonistAMissionary`, `jesuitIsExpertWithoutBrebeufAndStaysExpertWithIt`, `anotherOwnersBrebeufDoesNotMakeThisMissionaryExpert`, `saveAndContinuePreservesRoleAndBrebeufMembership` | F + R (*new, passed in run-J1yb1B*: `brebeufJoiningThroughOwnerUpdateMakesAnExistingMissionaryExpert`) | B/A (existing missionary false → true), S (reload), own/for (`anotherOwnersBrebeufDoesNotMakeThisMissionaryExpert`), ex/fut, C (Jesuit) | TC96 patches `members.add`; its UI journey verifies the visible result only. |
+| FATHER-017 Brewster | BrewsterImmigrationTest: `actualCongressJoinFiltersOnlyCurrentPoolSlots`, `twoSequentialChoicesPauseBeforeProductionAndContinueDoesNotReplay`, `staleAndForeignChoicesDoNotMaterializeAUnit`, `malformedPendingMarkerAndExcludedMemberCandidateRejectOnLoad`; TC70 select | R | B/A (pause before colonies), own/for (foreign choice), S | Future-draw exclusion is named only through the join filter. |
+| FATHER-018 Las Casas | LasCasasConvertTest: `joinFreesEveryOwnedConvertOnceAndKeepsEachPlacementAndIdentity`, `anUnearnedOrUnderfundedJoinFreesNobodyAndAddsNoNotice`, `aConvertAcquiredAfterTheJoinStaysAConvertAndCountsOnItsOwn`, `saveAndContinueKeepTheFreedPersonWithoutReplayingTheJoin`; TC143 select | R | B/A (unearned), ex/fut, 1x, S | Foreign owner N/A: the scene has one colonial owner of converts; the free step reads that owner's membership. |
+| FATHER-019 Penn | ReligiousProductionTest: `pennBonusRoundsOnceAcrossSeveralWorkersAndCanBeRemoved`, `pennMembershipAppliesToEveryOwnedColonyWithoutReplayingOnLoad`; PoliticalProductionIntegrationTest: `pennMultipliesTheBoostedPreacherAndUnattendedBase` | F + R (*new, passed in run-J1yb1B*: `pennJoiningThroughOwnerUpdateRaisesTheChurchPreviewAfterTheJoin`) | B/A (church preview 2 → 3), S (reload keeps 3), every owned colony by fixture, own/for (*new in attempt 4*: `pennRaisesOnlyTheMembersOwnColoniesAndNeverAForeignOne` — free-play French Quebec and Montreal as unattended churches: 2 and 2 without Penn, 2 and 2 when the Dutch hold Penn, 3 and 3 when France holds it, 3 after reload; fixture membership) | None. TC67 loads `loadPennFixture`, UI only. |
+| FATHER-020 Sepulveda | NativeConvertTest: `theConversionChanceIsTenOrTwentyPercentDoubledBySepulveda`; NativeConvertColonyTest: `theConversionChanceHasTheExactTenTwentyTwentyAndFortyPercentEdges`, `founderMembershipIsReadAtTheEventAndSurvivesContinue` | F (`reloadWith`) + R (*new, repaired in attempt 4*: `sepulvedaJoiningThroughOwnerUpdateDoublesTheSameFifthEvent` — draw 15 percent; the owner update without the founder closes the fifth update (count back to 0) with no convert; with the join settled earlier in the same update (`settleCongress` precedes `resolveNativeConversions`) there is one convert, count 0, and both convert and membership remain after reload) | B/A, exact edges, S | 100% cap N/A: 10% and 20% doubled reach only 20% and 40%. Foreign owner N/A: the scene has one colonial mission owner. |
+| FATHER-021 Coronado | CoronadoRevealTest: `arrivalRemembersForeignColoniesWithTheirClippedNeighborsOnly`, `arrivalGrantsNoCurrentSightAndLeavesOtherPlayersUntouched`, `selectingWithoutEarningTheFounderRevealsNothing`, `savedArrivalIsRestoredWithoutReplay`, `colonyFoundedAfterArrivalStaysUndiscoveredThroughUpdatesAndReload`; TC111 select | R | B/A, own/for, ex/fut, 1x, S | None. |
+| FATHER-022 Hudson | FounderBellAndFurProductionTest: `hudsonDoublesOrdinaryAndExpertFurAndKeepsZeroYield`, `hudsonDoesNotCreateCoatsAndRemovedMembershipRestoresFur`, `hudsonDoublesFieldFurButNotFurTraderCoatsOrTheirFurInput`, `captureByAnOwnerWithFoundersAddsOnlyTheNewOwnersFoundersAndTax` | F; TC97 fixture; R *new*: `hudsonJoiningThroughOwnerUpdateDoublesEveryPositiveFurField` (every field's fur is exactly twice its pre-join value, at least one positive) | ordinary vs expert, zero yield, removed membership, own/for (capture), C | None. |
+| FATHER-023 La Salle | LaSalleStockadeTest: `joiningGrantsEveryEligibleExistingColonyAndKeepsHigherDefense`, `joiningWithFewerThanThreeResidentsGrantsNothing`, `otherMembershipsNeverGrantAStockade`, `canceledOrUnfinishedFounderChoiceChangesNoBuilding`, `secondToThirdResidentThroughBuildingGrantsOnceWithoutSpending`, `captureGrantsOnlyForNewOwnerWithLaSalleAndNeverDuplicates`, `savedGrantSurvivesRestoreWithoutDuplicateOrMutation`; TC72 select | R | B/A, ex/fut, 1x, own/for (capture), S, C | None. |
+| FATHER-024 Magellan | MagellanEffectTest: `actualCongressJoinRaisesAllowanceOnTheSameFreshOwnerTurn`, `onlyWestEdgeToEuropeHalvesOrdinarySampledDuration`, `membershipDoesNotRewriteAnOrdinaryWestVoyageAlreadyUnderway`, `actualWestDeparturePersistsSampledHalfWithoutReroll`, `savedMovementMustFitTheEffectiveOwnerAllowance`; TC71 select | R | B/A, ex (underway voyage), S, C (west edge and allowance), own/for (`memberShipsOfEveryFamilyUseEffectiveAllowanceAndSaveSpentMoves` asserts the King's ships keep the base speed beside the member's +1) | None. |
+| FATHER-025 De Soto | UnitSightTest: `actualDeSotoArrivalRevealsOnlyOwnedOnMapUnitsAndPersists`, `deSotoGivesEveryOnMapFamilyMinimumTwoClippedTiles`, `deSotoKeepsRoleTransitionsAtTwo`; LostCityRumorTest: `deSotoTurnsBothBadResultsIntoEmptyOnly`, `deSotoAlsoGuardsTheSeasonedScout`; TC69 select | R | B/A, own/for (owned units only), S, negative lost-city outcome | None. |
+
+### Real joins (attempts 2 and 3, written, not run in attempt 3)
+
+Shared helper `RealFounderJoin` (test package `org.microcol.model`): `readyFor`
+sets 1,000 bells (above any difficulty's first target; run-J1yb1B passed with
+100), no member and one offer per category including the founder;
+`joinThroughOwnerUpdate` has the current owner choose the offer, runs that
+owner's own `startTurn` (which joins the founder once)
+and asserts the membership. Joins use the production hook. The saved final
+membership is never injected for join coverage. Each test below reads the
+effect after the join and, where stated, after a reload, with literal expected
+values and a control run from the same scene:
+
+1. Cortes `NativeTreasureTest.cortesJoiningThroughOwnerUpdateDoublesTheSameSeedsOrdinaryTrain` (500 → 1000).
+2. Revere `ColonyDefenseTest.revereJoiningThroughFranceUpdateArmsAWorkerForTheNextAttack` (CIVILIANS control → REVERE, 50 muskets).
+3. Washington `MilitaryPromotionTest.washingtonJoiningThroughOwnerUpdatePromotesTheNextWinnerWithoutADraw` and `washingtonLeavesAnAlreadyVeteranWinnerAtItsSingleStage`.
+4. Bolivar `ColonyLibertyTest.bolivarJoiningThroughOwnerUpdateAddsTwentyPointsToAnExistingColony` (repaired) and `bolivarJoiningThroughOwnerUpdateAlsoSupportsAColonyFoundedLater`.
+5. Franklin `AllianceModelTest.franklinJoiningThroughOwnerUpdateExcludesThePairFromTheCrownWar` and `FranklinPeaceOfferTest.everyContactedWarRivalGetsItsOwnDiscountedOffer`.
+6. Jefferson, Paine, Hudson in `FounderBellAndFurProductionTest`: `jeffersonJoiningThroughOwnerUpdateRaisesTheStaffedHallOnly`, `paineJoiningThroughOwnerUpdateAddsTheCurrentTaxToTheHall`, `hudsonJoiningThroughOwnerUpdateDoublesEveryPositiveFurField`.
+7. De Witt `ForeignColonyTradeTest.joining_de_witt_through_the_owner_update_permits_the_refused_trade` and `ForeignPowerReportTest.test_deWittJoiningThroughOwnerUpdateUnlocksOnlyTheContactedReport`.
+8. Sepulveda `NativeConvertColonyTest.sepulvedaJoiningThroughOwnerUpdateDoublesTheSameFifthEvent`.
+9. Penn `ReligiousProductionTest.pennJoiningThroughOwnerUpdateRaisesTheChurchPreviewAfterTheJoin` and Brebeuf `MissionaryOrdinationTest.brebeufJoiningThroughOwnerUpdateMakesAnExistingMissionaryExpert` (both passed in run-J1yb1B).
+
+Production code is unchanged: no mismatch with an agreed rule was found while
+reading the owners. The false gaps of attempts 1 and 2 are removed: Drake already
+had a production join, Magellan's foreign-owner case is the King's ship speed,
+and Brebeuf's foreign-owner case is `anotherOwnersBrebeufDoesNotMakeThisMissionaryExpert`.
+
+Assumptions in the new tests that main must confirm on the run: the owner's
+`startTurn` draws no combat random numbers before the battle or the mission
+event (Cortes, Washington, Sepulveda use fixed seeds); a second `startTurn` on
+an owner already prepared is accepted (Washington, Revere); and the Spanish
+neighbour in the Franklin test is created on a legal free land square.
+
+### Remaining concrete gaps
+
+1. **Penn, foreign owner:** closed in attempt 4 (see the row), pending the run.
+2. **UI journeys that join and then show the effect** exist for Jones, Smith,
+   Stuyvesant, Pocahontas, Minuit and others (TC56, TC57, TC113, TC114, TC69, TC70,
+   TC71, TC72, TC110, TC111, TC143). For Cortes, Revere, Washington, Jefferson,
+   Paine, Hudson, Penn, De Witt (trade) and Brebeuf the UI scenarios (TC139, TC76,
+   TC66, TC97, TC67, TC148, TC96) seed membership by fixture and verify the visible
+   effect. The join is founder-independent and is the same `congress.select`/choose
+   path proven by TC56/TC57/TC113, and each real model join is now covered, so no
+   TC185 is added. This is a reasoned judgement for review, not a measurement.
+3. The TC67, TC76 and TC139 membership paths were read: all three load a fixture.
+
+### Representative UI (main runs)
+
+| Scenario | Founders | Reason |
+| --- | --- | --- |
+| TC56 | Jones | Real `congress.select` and bell join (FATHER-003). |
+| TC57 | Smith, Stuyvesant | Real founder choice and construction gate (FATHER-011, 014). |
+| TC97 | Jefferson, Paine, Hudson | Production rules; fixture membership, so it verifies output only. |
+| TC113 | Pocahontas | Real select, alarm and Continue (FATHER-010). |
+| TC148 | De Witt | Trade permission; fixture membership. Replaces "TC98", which does not exist. |
+
+TC185 is not added (reason in the remaining gaps above). The other real-join UI
+scenarios (TC70, TC71, TC72, TC69, TC110, TC111, TC114, TC143, TC144) remain
+available as named evidence. The UI check is not waived: main runs the five
+scenarios above after the model run.
+
+### Verification to run (main)
+
+1. Apply the shared formatter to the changed Java files (the new
+   `RealFounderJoin` and the edited model tests listed above), then all model JUnit
+   tests in `microcol-game` on the final source state.
+2. Docker/Xvfb selected UI: TC56, TC57, TC97, TC113 and TC148, using the
+   [container command](#docker-ui-tests).
+3. The documented documentation checks and strict MkDocs build for these doc changes.
+
+No result is recorded yet. Counts, failures and evidence paths are added after
+the run.
+
+## R-0213 building ledger 2026-10-24
+
+**Targeted verification passed (2026-10-24).** Completion
+`20261023T225856Z-6c98db98e461`, evidence `target/docker-ui/run-NZEM56`:
+4,260 model/JUnit tests in 333 reports and 34 UI/support tests in 10 reports,
+zero failures, errors or skips; 542.519 seconds. All 125 recorded source hashes
+matched. TC32/49/50/51/52/57/67 and the three support suites have reports.
+Shared formatting checked 99 changed Java files, formatted one, and passed
+token preservation and idempotence; `git diff --check` passed. The 93 new
+parameterized cases cover the 31 buildable chart rows. Existing metadata,
+admission and effect-owner tests cover the linked remaining attributes.
+Representative UI coverage does not claim a separate UI journey for each row.
+The attempt notes below retain historical failed and pre-verification evidence.
+Full batch acceptance, documentation checks and commit/push remain pending.
+
+
+**Status: attempt 2 written, not yet verified (2026-10-24).** The R-0213 row stays
+`ready for development`; no whole-table pass, batch acceptance, commit or
+publication is claimed.
+
+**Attempt 1, failed model run (2026-10-24).** `target/docker-ui/run-UVPp7O`:
+4198 model/JUnit tests in 333 reports, 24 failures, 0 errors, 0 skipped; 122.673 s;
+125 source hashes matching; UI not run. All 24 failures were
+`BuildingChartCompletionTest` at the predecessor `assertFalse` (attempt-1 line 154).
+Cause: `Colony.isContainsConstructionByType` is true for a predecessor once its
+upgrade is built, because it matches any building whose upgrade-from chain contains
+the requested type. The test used that semantic predicate for physical absence.
+Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0213-targeted-1-review.json`.
+Production behaviour is unchanged.
+
+**Attempt 2, written, not run.** The predecessor and completion checks count
+exact building types (`countOf`), so the completed type appears exactly once and
+its physical predecessor is absent. The test also adds independent boundaries per
+row (see BCCM). The new model class is not compiled or run.
+
+Sources, read on 2026-10-24: the Building aid card 3 values as printed in the
+[building data matrix](gap-analysis.md#building-data-matrix) (PDF 134); the
+accepted R-0025 corrections (carpenter 0/0/1, church 52/0/3 with tools 0, fort
+population 4, newspaper population 4); the Smith and Stuyvesant gates as declared
+in `ConstructionType.getRequiredFounder`; the accepted R-0146 and R-0177 rules,
+which do not change any chart gate (R-0177 only adds coastal-battery fire to
+forts and fortresses, covered in the battery row). Expected numbers are literals
+from the chart in the test sources, not read back from `ConstructionType`.
+
+Legend. H/T/P = hammers / tools / minimum population, literal chart values.
+`MET` `ConstructionMetadataTest.projectMetadataMatchesItsAgreedRow` (literal H/T/P
+and predecessor for all 38 chart rows plus three non-chart scaffolding rows).
+`ADM` `ConstructionAdmissionTest.everyProjectUsesItsPopulationBoundaryAndSharedAdmission`
+(one-below population rejected with unchanged state, exact population admitted,
+queue duplicate rejected) and `everyUpgradeRequiresItsImmediatePredecessor`.
+`FND` `FounderConstructionTest.allSevenRequireTheirOwnFounderAfterOtherPrerequisites`
+(six factories, Iron Works through Arsenal, plus the Custom House). `BCCM`
+`BuildingChartCompletionTest`, one case per buildable row (31 rows, `chartRows`),
+three methods, each boundary with the other inputs sufficient:
+`hammerShortageWaitsAndExactAndSurplusHammersCompleteOnce` (hammers one short
+waits; exact and +3 each complete once); `toolShortageWaitsAndExactAndSurplusToolsCompleteOnce`
+(tools one short waits, rows with tools only; exact and +1 each complete once);
+`populationAboveRequirementIsAdmittedAndCompletesOnce` (population one above is
+admitted and completes). Each completion checks one building of the exact type,
+absence of the exact physical predecessor, the leftover stock and that a further
+update changes nothing. The warehouse tier is chosen per scenario: basic (100
+tools) when the tools needed are at most 100, ordinary (200) up to 200, expanded
+(300) above; a warehouse project keeps its own predecessor (basic for the
+warehouse, ordinary for the expansion) and exactly one warehouse is present. The
+population below and exact boundaries are `ADM`. `IND`
+`IndustrialProductionTest.everyIndustryUsesExactBudgetsAndConservesScarceInput`
+(19 industry rows, each tier, exact budgets). Effects not in `IND` are named in
+their row.
+
+### Chart rows (38 manual rows, PDF 134)
+
+| Building (chart) | H / T / P | Gates: population / predecessor / founder | Completion and spend | Actual effect (owner) | Status |
+| --- | --- | --- | --- | --- | --- |
+| Town Hall | 0 / 0 / 1 | initial; `MET` | initial, not a project | bell output: `FounderBellAndFurProductionTest` (Jefferson, Paine); `ColonyConstructorTest` default buildings | written; initial |
+| Carpenter's Shop (`CARPENTERS_STAND`) | 0 / 0 / 1 | initial; `MET` | initial | `IND` CARPENTERS_STAND 3/3 | written; initial |
+| Lumber Mill | 52 / 0 / 3 | `MET`, `ADM` (predecessor CARPENTERS_STAND) / — | `BCCM` | `IND` 6/6; TC50 TC_01 doubling and Continue | written |
+| Blacksmith's House | 0 / 0 / 1 | initial; `MET` | initial | `IND` 3/3; TC30 TC_04 smithy tools | written; initial |
+| Blacksmith's Shop | 64 / 20 / 4 | `MET`, `ADM` / predecessor house | `BCCM`; `ConstructionQueueIntegrityTest.admittedProjectWaitsForItsLastToolButSurvivesPopulationLoss` (last tool completes once, house replaced) | `IND` 6/6 | written |
+| Iron Works | 240 / 100 / 8 | `MET`, `ADM` / shop; `FND` Smith | `BCCM` | `IND` 6/9; TC50 TC_03 feeds arsenal once; TC57 TC_01 completes | written |
+| Stockade | 64 / 0 / 3 | `MET`, `ADM` / — | `BCCM` | LaSalle grant `LaSalleStockadeTest`; population restriction `FortifiedPopulationTest.stockadeAtThreeRejectsEveryVoluntaryExitBeforeEquipmentChanges`; TC53 TC_01 | written |
+| Fort | 120 / 100 / 4 | `MET` (population 4, R-0025), `ADM` / stockade | `BCCM` | `CoastalBatteryTest.fortAndFortressStrengthAddsArtilleryOfTheColonyOwnerOnly`; `CoastalBatteryTest.twoFortsFireInStableIdOrderAndAHitStopsTheSecond`; `FortifiedPopulationTest.allFortificationTiersProtectTwoAndThreeResidents` | written |
+| Fortress | 320 / 200 / 8 | `MET`, `ADM` / fort | `BCCM`: the ordinary warehouse (200) holds the exact 200 tools; the expanded warehouse (300) is used only for the +1 tool surplus | `CoastalBatteryTest.fortAndFortressStrengthAddsArtilleryOfTheColonyOwnerOnly`; `FortifiedPopulationTest.allFortificationTiersProtectTwoAndThreeResidents` | written; storage rule linked (gap 1) |
+| Tobacconist's House | 0 / 0 / 1 | initial; `MET` | initial | `IND` 3/3 | written; initial |
+| Tobacconist's Shop | 64 / 20 / 4 | `MET`, `ADM` / house | `BCCM` | `IND` 6/6 | written |
+| Cigar Factory | 160 / 100 / 8 | `MET`, `ADM` / shop; `FND` Smith | `BCCM` | `IND` 6/9 | written |
+| Weaver's House | 0 / 0 / 1 | initial; `MET` | initial | `IND` 3/3 | written; initial |
+| Weaver's Shop | 64 / 20 / 4 | `MET`, `ADM` / house | `BCCM` | `IND` 6/6 | written |
+| Textile Mill | 160 / 100 / 8 | `MET`, `ADM` / shop; `FND` Smith | `BCCM` | `IND` 6/9 | written |
+| Rum Distiller's House | 0 / 0 / 1 | initial; `MET` | initial | `IND` 3/3 | written; initial |
+| Rum Distillery | 64 / 20 / 4 | `MET`, `ADM` / house | `BCCM` | `IND` 6/6 | written |
+| Rum Factory | 160 / 100 / 8 | `MET`, `ADM` / distillery; `FND` Smith | `BCCM` | `IND` 6/9 | written |
+| Fur Trader's House | 0 / 0 / 1 | initial; `MET` | initial | `IND` 3/3; `FounderBellAndFurProductionTest.hudsonDoublesOrdinaryAndExpertFurAndKeepsZeroYield` | written; initial |
+| Fur Trading Post | 56 / 20 / 3 | `MET`, `ADM` / house (chain fixed R-0025) | `BCCM` | `IND` 6/6 | written |
+| Fur Factory | 160 / 100 / 6 | `MET`, `ADM` / post; `FND` Smith | `BCCM` | `IND` 6/9 | written |
+| Armory | 52 / 0 / 1 | `MET`, `ADM` / — | `BCCM` | `IND` 3/3; `ArtilleryTest.armoryTierIsRequiredAtAdmissionAndCompletion` | written |
+| Magazine | 120 / 50 / 8 | `MET`, `ADM` / armory | `BCCM` | `IND` 6/6 | written |
+| Arsenal | 240 / 100 / 8 | `MET`, `ADM` / magazine; `FND` Smith | `BCCM` | `IND` 3/6; TC50 TC_03 | written |
+| Dock | 52 / 0 / 1 | `MET`, `ADM` / — | `BCCM` | `CoastalFacilityTest.waterWorkRequiresDockButLandWorkRemainsAvailable`; TC51 TC_01 | written |
+| Drydock | 80 / 50 / 6 | `MET`, `ADM` / dock | `BCCM` | `ShipRepairTest.drydockTransferAndThreeRepairsPreserveCargoAcrossSave` | written |
+| Shipyard | 240 / 100 / 8 | `MET`, `ADM` / drydock | `BCCM` | `ShipRepairTest.shipyardCompletesAfterTransferAndTwoRepairUpdates`; `CoastalFacilityTest.coastalShipyardCompletesGalleonAtExistingCost`; TC51 TC_02 | written |
+| Schoolhouse | 64 / 0 / 4 | `MET`, `ADM` / — | `BCCM` | `EducationTest` school-tier rows; TC68 TC_01 (course, graduation, reload) | written |
+| College | 160 / 50 / 8 | `MET`, `ADM` / schoolhouse | `BCCM` | `EducationTest` college-tier rows (model only) | written; no UI |
+| University | 200 / 100 / 10 | `MET`, `ADM` / college | `BCCM` | `EducationTest` university-tier rows (model only) | written; no UI |
+| Warehouse | 80 / 0 / 1 | `MET`, `ADM` / basic warehouse | `BCCM` | capacity 200 `ColonyWarehouseTest.test_getStorageCapacity` | written |
+| Warehouse Expansion | 80 / 20 / 1 | `MET`, `ADM` / warehouse | `BCCM` | capacity 300 `ColonyWarehouseTest.test_getStorageCapacity` | written |
+| Stables | 64 / 0 / 1 | `MET`, `ADM` / — | `BCCM` | `ColonyBreedingTest.completedStableDoublesRateSubjectToFood`; `ColonyBreedingTest.newlyCompletedStableFirstAffectsFollowingTurn`; TC49 TC_01 | written |
+| Church | 52 / 0 / 3 | `MET` (tools 0, R-0025), `ADM` / chapel | `BCCM` | `ReligiousProductionTest.churchCompletesAfterChapelProductionAndChangesNextPreview`; `Construction_CHURCH_Test`; TC67 TC_01 | written |
+| Cathedral | 176 / 100 / 8 | `MET`, `ADM` / church | `BCCM` | `ReligiousProductionTest.previewAndCommittedProductionShareTierSkillAndPennRule`; `MissionaryOrdinationTest`; TC67 TC_01 | written |
+| Printing Press | 80 / 0 / 1 | `MET`, `ADM` / — | `BCCM` | `PrintingProductionTest.bonusAppliesOnceToWholeTownHallAndMatchesTurnAndReload`; `PrintingProductionTest.pressUpgradeCompletesAfterProductionAndRetainsHallWorkers`; TC52 TC_01 | written |
+| Newspaper | 120 / 50 / 4 | `MET` (population 4, R-0025), `ADM` / press | `BCCM` | `PrintingProductionTest.pressAndNewspaperCannotCoexistAsCompletedBuildings`; `FounderBellAndFurProductionTest.combinedFoundersWithPressGiveSeventeenAndNewspaperTwentyOne`; TC52 TC_01 | written |
+| Custom House | 160 / 50 / 0 | `MET`, `ADM`; `FND` Stuyvesant | `BCCM` | `CustomHouseExportTest.cornSurplusUsesTaxedMarketPriceAndPersistsOneEvent`; TC58 TC_01–TC_06; TC57 TC_02 (Stuyvesant unlocks only the custom house) | written |
+
+Non-chart rows, kept for reference: `CHAPEL` (predecessor of Church, `MET`),
+`BASIC_WAREHOUSE` (initial warehouse), `LARGE_STABLES` (`MET` scaffolding).
+Only the 38 chart rows are the matrix.
+
+### Cancel, rush, upgrade, saved progress and invalid admission
+
+- Cancel and removal: `ConstructionQueueIntegrityTest.reorderAndRemovalPreserveSharedHammers`,
+  `emptyQueueAndRemovalLeaveProducedHammersInWarehouse`; TC55 TC_01 (cancel, then
+  pay the taxed quote once).
+- Rush: `ConstructionRushTest.exactTaxedQuoteCompletesOnlyHeadAndPersistsOneCharge`,
+  `fullStockZeroPricePreservesSurplusAndFinishesOneHead`,
+  `insufficientGoldAndChangedStocksRejectWithoutPartialEffects`; TC55 TC_02.
+- Upgrade and predecessor: `ConstructionAdmissionTest.everyUpgradeRequiresItsImmediatePredecessor`;
+  `ConstructionQueueIntegrityTest.missingLivePredecessorCannotConsumeToolsOrLoseTheQueueEntry`;
+  TC32 TC_07 (restored project waits for its missing predecessor).
+- Saved partial progress: `ConstructionQueueSaveTest.priorProjectWithMissingPredecessorAndLowerPopulationRestoresWithoutCompletion`,
+  `loadingAFullySuppliedProjectDoesNotRunConstruction`;
+  `FounderConstructionTest.savedUnfinishedHeadWaitsWithoutFounderAndThenCompletesOnce`;
+  `ConstructionQueueIntegrityTest.mixedQueueRetainsOrderIdentityAndSharedStockOnReload`;
+  TC54 TC_01 (shared work survives changes, surplus and Continue).
+- Invalid admission leaves state unchanged: `ConstructionAdmissionTest` snapshot
+  assertions for population, predecessor, duplicate and colony-unavailable cases;
+  `ConstructionQueueIntegrityTest.invalidUnitAdmissionAndInsertionDoNotChangeTheQueue`;
+  `duplicateProjectIsAnExplicitRejectionWithoutMutation`.
+- Founder gate at completion: `FounderConstructionTest.realCapturePausesCompletionAndStalesRushUntilOwnerRegainsColony`
+  (named for the rule; not a chart row).
+- Shortage notice: `ConstructionWaitingReportTest.oneToolShortReportsColonyProjectAndShortageWithoutCompletion`
+  and `missingHammersOrEnoughToolsDoNotReport` (notice only, no completion).
+- Not chart evidence: `ConstructionTypeConstantTest` checks upgrade chains and
+  source levels, not the chart numbers; `BuildingStatusTest` checks status
+  objects. Both are read; neither is counted as a row check.
+
+### Gaps and what the matrix does not prove
+
+1. Storage rule linkage (no open question). Tool stock is ordinary stock; a
+   project draws its tools from the colony warehouse. Capacity is the implemented
+   rule of `ColonyWarehouse.getStorageCapacity`: buyable goods such as tools hold
+   100 in a basic warehouse, 200 in a warehouse and 300 in an expanded warehouse;
+   corn is unlimited and hammers are not buyable, so unlimited. `setGoods` rejects
+   an amount above capacity, and the throw-away path keeps only capacity and
+   reports the excess. Owner tests: `ColonyWarehouseTest.test_getStorageCapacity`
+   and the throwing-away cases. The chart rows give warehouse costs only
+   (80/0/1 and 80/20/1). Fortress exact 200 fits the warehouse; the +1 surplus needs
+   the expansion. No contradiction was found in the model or its tests.
+2. Resolved for attempt 2, not yet run: population above the requirement, the tool
+   surplus for the nine 100-tool rows, and the Fortress storage case. The
+   population-below boundary for population 1 rows (Armory, Dock, Printing Press,
+   Stables, Warehouse, Warehouse Expansion) is not reachable: the fixture colony
+   always has one resident, and `ADM` skips the below case for them too. Custom
+   House (population 0) has no below case.
+3. College and University effects are model-only (`EducationTest`); no UI scenario
+   builds them. The school UI path is TC68 TC_01 (Master Carpenter) only.
+4. Effects not owned by `IND` (Stables, Dock, Drydock, Shipyard, Church, Cathedral,
+   Press, Newspaper, Custom House, forts) rely on the named owners above; their
+   counts and boundaries are not re-derived here.
+5. No effect-level per-row UI check exists for Armory, Magazine, Fur Trading Post
+   or Stockade beyond the owners named in the table.
+
+### Representative player paths (to run, not yet run)
+
+Only existing `TC...` scenarios are selected; no new scenario is written in this
+pass. Selected for the batch boundary, with the reason each is needed:
+
+- TC32 `TC_01`–`TC_03`: population, predecessor, last-tool completion, mixed queue
+  (admission and completion path for all queued rows).
+- TC50 `TC_01`–`TC_03`: Lumber Mill, factory rounding, Iron Works to Arsenal.
+- TC52 `TC_01`–`TC_02`: Press and Newspaper (the only UI path for the press).
+- TC57 `TC_01`–`TC_03`: Smith unlocks factories, Stuyvesant unlocks customs, retained
+  project waits without Smith.
+- TC49 `TC_01`–`TC_03`: Stables (no other UI path for breeding).
+- TC51 `TC_01`–`TC_02`: Dock and Shipyard (no other UI path for docks).
+- TC67 `TC_01`–`TC_02`: Church and Cathedral religious output.
+Custom-house export stays with `CustomHouseExportTest` and is not a representative
+UI path in this batch.
+
+TC185 is not added: the UI gaps above are covered by the existing representatives,
+and the matrix is model-exhaustive.
+
+### Verification to run (main)
+
+- Shared formatter on `BuildingChartCompletionTest.java` (and any other changed
+  Java file), then `BuildingChartCompletionTest` and `allJUnit`.
+- Docker/Xvfb UI: TC32, TC49, TC50, TC51, TC52, TC57 and TC67. Record counts, the
+  completion id and the report paths with the full batch at the boundary.
+- The ledger status moves only after these results and the full local acceptance
+  of the final source state.
+
+## R-0212 skills ledger 2026-10-23
+
+**Status: targeted matrix verification passed; full batch acceptance pending (2026-10-24).**
+
+The reviewed third run `target/docker-ui/run-F6td7k`, completion
+`20261023T223108Z-2b2b8109cc8f`, passed 4,167 model/JUnit tests in 332
+reports and 42 UI/support tests in 9 reports with zero failures, errors or skips.
+Duration: 744.965 seconds. All 123 recorded source hashes matched. TC184, TC30,
+TC68, TC128, TC96 and TC67 plus the three support suites have complete reports.
+The shared formatter checked 98 changed Java files, formatted one, and passed
+token preservation and idempotence. TC184 passed exact-square corn 8 versus 4,
+off-specialty tobacco 3 versus 3, and both Continue checks. The following earlier
+run and repair notes remain historical evidence; the current model matrix and
+representative player paths are verified. Full batch acceptance, documentation
+checks and commit/push are still pending.
+
+**First targeted run, historical.** The first
+targeted run, `target/docker-ui/run-QfXoEi`, reported by the main agent: 4158
+model/JUnit tests in 332 XML reports and 41 UI/support tests in 8 reports, with
+zero failures, errors or skips; 621.342 s; 120 source hashes matching. The shared
+formatter ran on 95 files, 2 changed, with an idempotence pass. That run covers
+the state before the attempt-2 checks. R-0212 stays `ready for development`. No
+22-skill matrix pass, publication or requirement acceptance is claimed.
+
+**Second targeted run, failed (reported 2026-10-24).** `target/docker-ui/run-uZiQHg`
+(review record `R-0212-targeted-2-review.json`, completion
+`20261023T221427Z-d2fbbb185121`): 4167 model/JUnit tests in 332 reports, all
+passing, including the attempt-2 `EducationTest` no-school test and the exact
+`NativeTeachingTest` eight-skill test; 42 UI/support tests in 9 reports with 1
+failure, 0 errors, 0 skipped; 687.137 s; 124 source hashes matching. The only
+failure was `TC_184_F212_expert_farmer_field_test` at the first output check
+(expected corn 8, actual 6). It had already passed the hire at 1000, the voyage,
+the landing and the real job-menu assignment, and the farmer stood on an allowed
+square.
+
+**Diagnosis (by reading the fixture, written 2026-10-24; the saved run state was
+not opened).** F22 stores tiles, trees and fields as 1-based rows and columns
+(the colony at `(24,16)` is the 24th entry of row 16, grassland; a 0-based reading
+would put it on sea). The trees of row 15 are `(16,15)`, `(17,15)`, `(24,15)`,
+`(25,15)` and `(26,15)`, so both squares the test allowed were forested
+grassland. The accepted grassland corn is 4 bare and 3 in forest
+([terrain table](gap-analysis.md#economy-production-and-education)); the expert
+doubles it, so 3×2 = 6 was the correct value for the square chosen and the
+expected 8 was a fixture misreading. The ordinary corn reference on `(23,17)` is
+bare grassland (4), so it was not equivalent terrain to the forest. The scenario
+holds no field, road, river, resource or cleared overlay near the colony. The
+`allowedLocations` check had hidden the actual square. The rule was not wrong and
+no production code changes.
+
+**Attempt-3 repair, written and not yet run.** TC184 now derives its own fixture
+under `target/functional-fixtures` from F22 by removing only the tree on
+`(24,15)`; the shared F22 file is unchanged. That square is then the unique best
+corn square (bare 4×2 = 8; the other free square `(25,15)` keeps its tree and
+would give 3×2 = 6; hills give 2×2 = 4), so the choice needs no tie rule. The
+helper `verifyFieldJobAmong` is removed and the exact square is asserted.
+
+Sources, read on 2026-10-23: the skills card rows as printed in the
+[skills matrix](gap-analysis.md#skills-matrix) (PDF 133); accepted
+[economy rules](gap-analysis.md#economy-production-and-education) items 2, 8 and
+13 (expert doubling, tier prices, the planter exclusion, school tiers and course
+lengths); the accepted R-0149 and R-0157 refinements; and the done owners
+R-0056, R-0074, R-0107, R-0147 and R-0148. Expected values are literals from
+those sources, not read back from `UnitType`, `EducationSkills` or the job
+tables.
+
+Evidence classes. *Card text* (the source, not a claim about the game): the 22
+rows, their minimum school and the native-teaching marks. *Accepted MicroCol
+rules* that go beyond or deviate from the card: the expert ×2 output, the
+1000/2000/3000 prices with the retained 2200 blacksmith, the exclusion of the
+three planters from Europe, school course lengths, and hardy-pioneer durations
+2/2/1 against 4/4/2; these are agreed choices, not original-game parity.
+*Implemented behavior*: what the named model checks assert, run green in the
+first targeted run unless a line says otherwise. *Written, not yet verified*:
+only what a line marks as pending. Full 22-skill UI coverage is not claimed;
+TC184 is the single representative acquisition-to-work journey.
+
+Legend. Model tests are in `microcol-game/src/test/java/org/microcol/model`.
+`SCMT` SkillsCardMatrixTest (new); `EST` EuropeanSpecialistTest; `SPT`
+SpecialistProductionTest (three planter rows new); `EDT` EducationTest (card
+school-row test new); `NTST` NativeTeachableSkillsTest; `NTT` NativeTeachingTest;
+`CST` ClearSpecialtyTest; `CFT` ClearForestTest; `BRT` BuildRoadTest. `TCnn` are
+scenarios in `microcol-test`. Tier is the minimum school; "one lower" is the
+school that must refuse the same skill.
+
+### Per-skill ledger
+
+| Skill | Work and output | Tier: minimum / one lower | Native teaching | Europe: price, hire, immigration | Role, reset, teaching, save | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Expert Farmer | SPT `outdoorExpertDoublesOnlyMatchingPositiveFieldYield` (corn ×2 on grassland; off-terrain ordinary); EST `purchasedFarmerCanUseRealColonyJobChoiceAndRestoreAssignment` (field output equals the quote) | EDT `cardSchoolRowAdmitsTheSkillAndRefusesOneTierLower` (school, no lower) | SCMT yes; NTST `acceptedListIsTheSkillsCardTeachableSet`; TC128 TC_01 (scout teaches it) | SCMT price 1000 and one-gold-short; EST `everyEligibleSpecialistCanBeBoughtEmbarkedAndReloaded`; TC30 TC_11 offer 1000 | EST `purchasedFarmerTakesVeteranRankWithoutLosingItsSpecialtyAcrossReload`; CST `bornExpertBecomesFreeColonistInPlace`; EDT `teacherAssignmentAndFourUpdatesPreserveStudentIdentityAndVeteran` | covered (model); UI offer and native path; TC184 journey (third run passed) |
+| Expert Fisherman | SPT outdoor row (corn ×2 on ocean with dock); NTST `waterFoodMatchesFishermanNotFarmer` | EDT school; no lower | SCMT yes; NTST list; NTT `allEightNativeSkillsAreGrantedToTheSamePerson` (literal list, exact type and owner, reload; third run passed) | SCMT price 1000 and one-gold-short; EST roster; TC30 TC_11 offer 1000 | CST `bornExpertBecomesFreeColonistInPlace` | covered (model); UI offer |
+| Expert Fur Trapper | SPT outdoor row (fur ×2 on forested grassland) | EDT school; no lower | SCMT yes; NTST list | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | CST reset list | covered (model); UI offer |
+| Expert Silver Miner | SPT outdoor row (silver ×2 on mountain) | EDT school; no lower | SCMT yes; NTST list | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | CST reset list | covered (model); UI offer |
+| Expert Lumber Jack | SPT outdoor row (lumber ×2 on forested grassland) | EDT school; no lower | SCMT no; NTST excludes it (unsupported) | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | CST reset list | covered (model); UI offer |
+| Expert Ore Miner | SPT outdoor row (ore ×2 on hill); EST `armedOreMinerRetainsSpecialtyAndCanAttackLikeAnEquippedColonist` (ore modifier 2.0) | EDT school; no lower | SCMT no | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | CST reset list | covered (model); UI offer |
+| Master Sugar Planter | SPT added row (sugar ×2 on savannah) | EDT college; lower school | SCMT yes; NTST list | SCMT price 0 and `plantersAreRefusedInEuropeEvenWithAmpleGold`; SCMT `recruitmentDrawsNeverProduceAPlanter`; TC30 TC_11 `verifyExcludedPlanters` | CST `savedAndLoadedSchoolOnlyPlanterAtFieldSurvivesContinue` | covered (model, third run); native UI not individually exercised |
+| Master Cotton Planter | SPT added row (cotton ×2 on prairie) | EDT college; lower school | SCMT yes; NTST list | as Sugar Planter | CST reset list | covered (model, third run); native UI not individually exercised |
+| Master Tobacco Planter | SPT added row (tobacco ×2 on grassland) | EDT college; lower school | SCMT yes; NTST list | as Sugar Planter | CST reset list | covered (model, third run); native UI not individually exercised |
+| Firebrand Preacher | SPT indoor chapel row (×2; unrelated town hall unchanged) | EDT university; lower college | SCMT no; NTST excludes it | SCMT price 3000; EST roster; TC30 TC_11 offer 3000 | TC67 TC_01 crosses readouts with fixture unit 300 (gap 2); TC68 TC_08 stale clear rejected; CST reset list | covered (model); TC67 readout |
+| Elder Statesman | SPT indoor town-hall row (×2; unrelated chapel unchanged) | EDT university; lower college | SCMT no | SCMT price 3000; EST roster; TC30 TC_11 offer 3000 | CST reset list | covered (model); UI offer |
+| Master Carpenter | SPT indoor lumber-mill row (×2; consumes the actual input) | EDT school; no lower | SCMT no | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | TC68 TC_01 (school course, graduation, reload); TC68 TC_05 clear and relearn; CST reset list | covered (model and UI school) |
+| Master Distiller | SPT indoor distiller row (×2) | EDT college; lower school | SCMT no | SCMT price 2000; EST roster; TC30 TC_11 offer 2000 | CST reset list | covered (model); UI offer |
+| Master Weaver | SPT indoor weaver row (×2) | EDT college; lower school | SCMT no | SCMT price 2000; EST roster; TC30 TC_11 offer 2000 | CST reset list | covered (model); UI offer |
+| Master Tobacconist | SPT indoor tobacconist row (×2) | EDT college; lower school | SCMT no | SCMT price 2000; EST roster; TC30 TC_11 offer 2000 | CST reset list | covered (model); UI offer |
+| Master Fur Trader | SPT indoor fur-trader row (×2); TC68 TC_02 (twentieth productive update gives the skill) | EDT college; lower school | SCMT no | SCMT price 2000; EST roster; TC30 TC_11 offer 2000 | CST reset list; TC68 TC_02 save and Continue | covered (model and UI work experience) |
+| Master Blacksmith | SPT blacksmith-house row (×2); TC30 TC_04 smithy 3 → 6 tools | EDT college; lower school | SCMT no | SCMT price 2200 and one-gold-short; EST roster; TC30 TC_01 (2200 charge), TC_02 (2199 refused), TC_11 offer 2200 | CST reset list; TC30 TC_04 reload of the same person | covered (model and UI purchase) |
+| Master Gunsmith | SPT armory row (×2) | EDT college; lower school | SCMT no | SCMT price 2000; EST roster; TC30 TC_11 offer 2000 | CST reset list | covered (model); UI offer |
+| Seasoned Scout | EST `seasonedScoutHasTwoTileSightWithoutChangingItsIdentity`; AttackRoleTest `seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon`; NativeVisitChoicesTest `seasonedScoutMeetsChiefButIsNotAlreadyAPupil`; NativeChiefTest `seasonedScoutHalvesTheDeathChanceExactlyAndGivesTheDifferenceToInformation` | EDT school; no lower | SCMT yes; NTST list; NTT `scoutOfAnotherPlayerCannotStartAtTheSettlement`; TC128 TC_01 (learns Expert Farmer) | SCMT price 1000; EST roster; TC30 TC_11 offer 1000 | CST reset list | covered (model); TC128 UI |
+| Hardy Pioneer | EST `hardyPioneerFinishesPlowAfterTwoOwnerUpdatesAcrossDiskReload` (plow 2, save); CFT `hardyOfferPromisesTwoUpdates` and `hardyWorkCompletesAfterTwoOwnerUpdates` (clear 2; ordinary clear 4 in `ordinaryWorkCompletesAfterFourOwnerUpdates`); BRT `hardyWorkCompletesAfterOneOwnerUpdate` (road 1; ordinary road 2 in `ordinaryWorkCompletesAfterTwoOwnerUpdates`) | EDT school; no lower | SCMT no | SCMT price 1000; EST roster | CST reset list | covered (model); ordinary plow 4 in PlowFieldTest |
+| Veteran Soldier | MilitaryPromotionTest `purchasedVeteranHasOneBaseBonusEvenAfterDisarming`; MilitaryRoleCombatTest `ordinaryVeteransKeepTheirOwnStrength` | EDT college; lower school | SCMT no | SCMT price 2000; EST roster | CST `ordinaryAndMilitaryOnlyColonistsAreRejectedUnchanged` (military-only, no civilian reset) | covered (model); UI not inspected |
+| Jesuit Missionary | MissionaryOrdinationTest `jesuitIsExpertWithoutBrebeufAndStaysExpertWithIt` and `ordinaryMissionaryIsExpertOnlyWhileOwnerHoldsBrebeuf`; TC96 TC_04 (cathedral, Jesuit expert) | EDT university; lower college | SCMT no | SCMT price 3000; EST roster; TC30 TC_11 and TC_12 offer 3000 and keyboard purchase with reload | CST reset list; MissionaryOrdinationTest `saveAndContinuePreservesRoleAndBrebeufMembership`; TC96 TC_01 (pier) | covered (model and UI) |
+
+### Unsupported combinations named
+
+- Planter purchase in Europe: `SCMT.plantersAreRefusedInEuropeEvenWithAmpleGold`
+  refuses 10000 gold; `SCMT.recruitmentDrawsNeverProduceAPlanter` covers the
+  candidate draws; TC30 TC_11 `verifyExcludedPlanters` shows the offer list.
+- Petty criminal or an existing specialist starting a native course:
+  `NativeTeachingTest.criminalAndExistingSpecialistCannotStart`.
+- Native course for Expert Lumber Jack or Expert Ore Miner: not offered by the
+  card; `NativeTeachableSkillsTest.acceptedListIsTheSkillsCardTeachableSet`.
+- Military-only Veteran Soldier clear: `ClearSpecialtyTest.ordinaryAndMilitaryOnlyColonistsAreRejectedUnchanged`.
+- Lower-tier school: each row with a lower school in `EducationTest`, plus
+  `EducationTest.eachMatrixTeacherNeedsItsOwnTier`.
+
+### Coverage by attribute
+
+- Ordinary vs expert and off-specialty: SPT parameter rows (`outdoorExpert…`,
+  the indoor test with its unrelated building) and EDT productive-work rows.
+- Teaching completion: NTT `fourthOwnerUpdateGrantsTheSkillToTheSamePersonOnce`
+  and `blockedCompletionGrantsOnceAndWaitsSafelyAcrossContinue`; EDT
+  `teacherAssignmentAndFourUpdatesPreserveStudentIdentityAndVeteran` and
+  `criminalAndServantEachNeedFourStepsBeforeExpertTraining`.
+- Teaching cancel: NTT `cancelingReleasesTheColonistWithoutTheSkillAndDiscardsProgress`
+  and `hostilityCancelsAtOnceEvenWhenTheExitIsBlockedAndNeverResumes`; EDT
+  `rejectedAndCancelledCoursesDoNotMutateOtherResidents`.
+- Reset: CST `bornExpertBecomesFreeColonistInPlace` and
+  `learnedExpertBecomesFreeColonistInPlace` run over the 21 civilian skills.
+- Save/Continue: EST reload tests, EDT `teacherAssignment…`, NTT
+  `courseSurvivesSaveAndContinueWithoutAdvancing`, CST
+  `veteranExpertKeepsRankAcrossClearAndDiskRoundTrip`.
+
+### Player paths inventory (existing, read for coverage)
+
+- TC30 (expert purchase; the default offer is the Master Blacksmith): TC_01 buy
+  at 2200 with duplicate-confirmation guard and reload; TC_02 2199 refused; TC_04
+  hire, embark, reload, smithy 3 → 6 tools; TC_11 and TC_12 literal offer prices
+  for all 19 specialists in English and Czech, planters excluded, Jesuit keyboard
+  purchase and reload.
+- TC68 (education): TC_01 Master Carpenter school course, progress, graduation,
+  reload; TC_02 twentieth productive update gives Master Fur Trader; TC_03 teacher
+  departure pauses; TC_04 stale student; TC_05 and TC_06 clear; TC_07 course and
+  school slot block clear; TC_08 stale Firebrand clear rejected.
+- TC128 (native teaching): TC_01 scout learns Expert Farmer over four turns,
+  granted once; TC_02 cancel; TC_03 occupied; TC_04 Continue mid-course and stop;
+  TC_05 Czech.
+- TC96 (missionary): TC_01 pier ordination; TC_02 chapel alone refused; TC_03
+  church colony with a stale job; TC_04 cathedral with the Brebeuf expert; the
+  Jesuit is an expert.
+- TC67 (religion): TC_01 crosses readouts include the fixture's Firebrand Preacher
+  (unit 300, in the blacksmith house at load). Readout arithmetic is not
+  re-derived here.
+- TC184 (`TC_184_F212_expert_farmer_field_test`, one start; attempt 2 failed
+  once, attempt-3 repair pending run; see the status above). Fixture: F22 with
+  the tree on `(24,15)` removed in `@Start`. Steps: the Expert Farmer is hired at
+  1000 (gold 4400 to 3400), saved and continued on the pier, embarks, sails with
+  the TC30 voyage and sea-route steps, lands at the colony centre, and is
+  assigned by the colony job menu (best corn field) to `(24,15)`. Expected:
+  corn 8 (bare grassland 4, doubled) against the ordinary corn worker 1 on
+  `(23,17)` at 4; Continue keeps the same square. Then the real job switch to
+  tobacco on the same square: 3 (bare grassland tobacco, not doubled) against the
+  ordinary tobacco worker 0 on `(23,15)` at 3; Continue keeps the same square.
+  Identity (unit 103), owner, the single charge and the place class are checked at
+  each stage by `verifySpecialistState`. All expected numbers are literals from
+  the accepted terrain table and the ×2 rule.
+- TC50, TC52, TC77, TC86, TC97 (production families): their fixtures contain no
+  specialist skill (name search of the test sources and scenario files,
+  2026-10-23). They cover building, terrain, founder and political output of
+  ordinary workers, so they are regression for shared production, not 22-skill
+  evidence.
+
+### Gaps after the first verified run
+
+1. Passed in the second run: the tier-1 no-school test in `EducationTest`, the
+   exact-owner `allEightNativeSkillsAreGrantedToTheSamePerson`, and every UI
+   scenario except TC184. Written, not run: the TC184 repair (derived fixture,
+   exact square, tobacco switch) and the `verifySpecialistState` page verifier
+   as used by it.
+2. Outputs are relative in the model: `SpecialistProductionTest` compares an
+   expert with the same engine's ordinary output under the accepted ×2 rule. The
+   card gives no further literal yields. Literal numbers appear in TC30 (tools 6),
+   the TC67 and TC50 readouts, and TC184 (corn 8 against 4, tobacco 3 against 3;
+   pending run).
+3. Ordinary plow is verified, not missing: `PlowFieldTest` starts an ordinary
+   colonist with four remaining turns and shows the field only after the fourth
+   owner update, with tools down by 20. Hardy pioneer plow takes two updates in
+   `EuropeanSpecialistTest`. Ordinary clear and road durations are in CFT and BRT.
+4. UI coverage remains narrow beyond TC184: one Europe purchase per scenario
+   family (Master Blacksmith in TC30, Expert Farmer in TC184); school teaching
+   only for Master Carpenter (TC68); college and university teaching are
+   model-only; native teaching only for Expert Farmer (TC128). Veteran Soldier,
+   Seasoned Scout and Hardy Pioneer purchases in the UI were not inspected. Planters
+   in a native course have no UI path.
+5. TC184 is one representative expert (Expert Farmer) on bare grassland, with
+   one off-specialty job (tobacco). It does not repeat the 22 rows in the UI:
+   role-only specialties (scout, pioneer, missionary, veteran) and the other
+   outdoor and indoor skills are covered by the model tests named in the
+   per-skill table, and the TC30, TC68, TC128, TC96 and TC67 journeys. A forest
+   square is not compared in the UI; the model checks the forest rows.
+
+### Verification to run (main)
+
+- Shared formatter on the changed Java files, then JUnit: `SkillsCardMatrixTest`,
+  `SpecialistProductionTest`, `EducationTest`, `NativeTeachingTest`, then
+  `allJUnit`.
+- Docker/Xvfb UI: TC184, TC30, TC68, TC128, TC96 and TC67. Production families
+  TC50, TC52, TC77, TC86 and TC97 are regression of shared production. Record counts
+  and results with the full batch at the boundary.
+- Status moves only after these results, the closure of gap 1 and the full
+  local acceptance of the final source state.
+
+## R-0211 unit role ledger 2026-10-23
+
+**Status: attempt 3 written, not verified (2026-10-23).** The authoring sessions
+had no shell tool: nothing here was compiled, run under JUnit or Docker/Xvfb, or
+formatted with the shared Eclipse profile by the author. R-0211 is not complete
+and no matrix acceptance or publication is claimed. Sources: the aid card PDF
+132, re-read visually on 2026-10-23;
+[combat and naval outcomes](gap-analysis.md#combat-and-naval-outcomes); and the
+accepted R-0173, R-0178 and R-0186 refinements.
+
+Run history reported by the main agent, not reproduced by the author:
+
+1. Attempt 1 targeted run: 4071 model/JUnit and 44 UI/support tests passed with
+   zero failures, errors or skips (`R-0211-targeted-1-review.json`).
+2. Attempt 2 targeted run `target/docker-ui/run-Y08GD9`: 4076 tests, 1 failure,
+   3 errors, 0 skipped, 331 XML reports, all 113 source hashes matching; the UI
+   module did not run (`R-0211-targeted-2-review.json`).
+3. Diagnosed causes, both repaired in attempt 3. The three errors were the
+   `OpenFieldCivilianBattleTest` fixture: `UnitFactory` requires a saved colonist
+   to keep non-null work updates and a missionary flag, and only a non-colonist
+   to have both cleared, but the fixture cleared them for the colonist defender
+   too ("Invalid saved work history owner"). The one failure was
+   `ArtilleryTest.fullArtillerySurvivesLegacyCivilianFightLoss`, which seeded the
+   unused legacy `AbstractUnit.random` and asserted that no quote exists; the
+   civilian fight now uses the saved combat random state.
+
+### Added in this pass
+
+1. `UnitRoleLedgerTest` (new, `microcol-game` model package, 4 tests): land
+   walk/sail domains; type-level attack flags; target domains (land attackers
+   never target ships, armed ships target only ships); one hold per passenger
+   with the six-hold treasure train; wagon not storable; artillery storable.
+2. `ColonistEquipmentTest`: `scoutBecomesDragoonByMusketsWithOneStockDebitEach`
+   and `soldierBecomesDragoonByHorsesWithOneStockDebitEach`. Each debits exactly
+   50 of the other good (muskets 100→50, horses 100→50).
+3. Attempt 2 (2026-10-23, unverified): `CombatStrengths.landBattle` now quotes
+   an unarmed civilian or wagon defending in the open at the civilian base 1,
+   through the existing `nativeBase` rule. Ships are refused as land defenders.
+   `AbstractUnit` no longer uses the legacy 0.6 coin for these fights. Field
+   battles destroy an unarmed loser as native battles already do, and an armed
+   loser keeps the ordinary musket loss. This is the only production change.
+4. Attempt 2 test: `UnitTypeTest`: `test_forValue` and `test_equals` now carry
+   `@Test`, and `test_forValue` uses the real name `COLONIST` instead of the
+   stale display name `Colonist`.
+5. Attempt 3 (2026-10-23, unverified) model tests. `OpenFieldCivilianBattleTest`
+   is rewritten with a legal fixture: the colonist defender keeps work updates 0
+   and missionary false, only the wagon clears its work history, and both squares
+   are pinned so every expected value is a literal (soldier 2 x 1.5 = 3 against
+   a civilian 1 x (1 + terrain): bare grassland 0.75, forested grassland +50%
+   gives 2/3, hills +100% gives 0.6; six parameterized rows for colonist and
+   wagon). It also checks that preview and cancel leave the saved random state,
+   locations, movement and equipment unchanged; that a stale order after
+   disarming throws `IllegalStateException` before any draw; that a lost battle
+   keeps the attacker (same instance, type, owner, no muskets, not a veteran) and
+   draws once; that a won battle destroys the civilian, keeps the muskets and
+   draws twice (battle plus the ordinary promotion roll); that a promoted
+   winner is a veteran; and that every outcome survives `Model.make(save())`.
+   Forced outcomes use `CombatDraws.stateFor` with the literal 0.75.
+6. `ArtilleryTest.fullArtillerySurvivesCivilianFightLossAsDamagedGun` (renamed
+   from the legacy description) pins both squares, asserts the literal quote
+   (outdoor gun 7 x 0.75 = 5.25 against 1, probability 0.84), forces the defeat
+   with `CombatDraws.stateFor(0.84, false)`, and keeps every survival, damage,
+   location and movement assertion. It adds one exact draw of the saved state.
+7. `AttackRoleTest.seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon`:
+   a purchased Seasoned Scout cannot attack unarmed, and armed and mounted has
+   attack base 3 and total 4.5 with its specialist type unchanged.
+8. Attempt 3 player path: `TC_183_F211_scout_to_dragoon_test` (new, two starts,
+   scenario `F17-colony-equipment.microcol`), written with the colony controls
+   and the page verification methods of TC25 only. `TC_01` mounts horses (muskets
+   49, horses 50, scout sight 2), is refused muskets at 49 and cancels with every
+   stock unchanged, then leaves the game and Continues with the same scout.
+   `TC_02` mounts horses, brings the muskets with the existing ship-to-warehouse
+   drag (muskets 100), equips muskets once (muskets 50, horses 50, armed and
+   mounted, sight 1), then Continues with the same dragoon of unit 4.
+
+### Ledger
+
+Status values: **covered** = an existing assertion in the named owner matches the
+card or an accepted rule; **added** = a check written for R-0211, unverified until
+the main run; **accepted absence** = an accepted requirement decided that the
+card row has no such cell in MicroCol; **open Qn** = the rule is not decided, see
+[R-0211](requirements/R-0211.md#4-open-questions). A player path is named only
+where the row cites a TC scenario.
+
+**Land**
+
+| Role | Attribute | Card / accepted value | Owner check | Status |
+| --- | --- | --- | --- | --- |
+| Treasure train | strength | 0 | `NativeTreasureTest.trainHasNoStrengthNoOrdersAndNoHoldOfItsOwnButReservesSixInAShip` | covered |
+| Treasure train | may attack | No | same test (`canAttack` false); `UnitRoleLedgerTest.typeLevelAttackPermissionFollowsTheAidCardRows` | covered |
+| Treasure train | domain / legal terrain | Land only | `NativeTreasureTest.trainIsAMovableLandUnit`; `UnitRoleLedgerTest.landTypesWalkOnLandOnlyAndShipsSailOnSeaOnly` | covered |
+| Treasure train | holds | 6, one reservation | `UnitRoleLedgerTest.everyPassengerTakesOneHold…`; `TreasureHoldReservationTest.sixFreeHoldsTakeOneTrain…` | covered |
+| Treasure train | reload identity | One unit, full reservation | `TreasureHoldReservationTest.savedTrainKeepsOneUnit…`; `NativeTreasureTest.savedTrainIsRestoredOnceAndNeverRolledAgain` | covered |
+| Wagon train | strength as defender | 1 | `CombatStrengths.landDefenseBase` (civilian base); `OpenFieldCivilianBattleTest.quoteUsesCivilianBaseOneAndLiteralTerrainTotals` (WAGON rows) | added |
+| Wagon train | may attack | No | `ArtilleryTest.artilleryCanTargetWagonButNotShipsAndWagonCannotAttack` | covered |
+| Wagon train | holds / storage | Not a passenger | `UnitRoleLedgerTest.everyPassengerTakesOneHold…` (`isStorable` false); use-case TC31_07 | covered (model) |
+| Wagon train | defeat by raid | Destroyed, no loot or capture | `NativeLandCombatTest.defeatedWagonFacingARaidIsDestroyedWithoutEquipmentLossOrCapture` | covered |
+| Wagon train | defeat by European | Retained behavior only: destroyed. Capture or destruction is not decided | `OpenFieldCivilianBattleTest.soldierWinningDestroysTheCivilianKeepsItsMusketsAndConsumesTwoDraws` pins the retained behavior, not a rule | open Q2 |
+| Unarmed colonist | strength in colony | 1 | `ColonyDefenseTest.civilianGroupDefendsOnceFromTheColonyCenterAtBaseOne` | covered |
+| Unarmed colonist | strength in open field | 1, with literal terrain 0 / +50 / +100 | `OpenFieldCivilianBattleTest.quoteUsesCivilianBaseOneAndLiteralTerrainTotals` (COLONIST rows) | added |
+| Unarmed colonist | armed attacker loses to it | Attacker loses muskets, lives, one draw | `OpenFieldCivilianBattleTest.soldierLosingKeepsItsLifeLosesOnlyItsMusketsAndConsumesOneDraw`; `ArtilleryTest.fullArtillerySurvivesCivilianFightLossAsDamagedGun` | added |
+| Unarmed colonist / wagon | preview, cancel, stale order, reload | No draw, no move; stale rejected; saved state survives | `OpenFieldCivilianBattleTest.previewAndCancelChangeNothing`, `staleOrderAfterDisarmingIsRejectedBeforeAnyDraw`, and the `Model.make(save())` steps | added |
+| Unarmed colonist / wagon | winner promotion | Ordinary 25% roll, winner stays the same unit | `OpenFieldCivilianBattleTest.winnerOverACivilianStillFollowsTheOrdinaryPromotionRoll` | added |
+| Unarmed colonist | may attack | No | `AttackRoleTest.musketsPermitLandAttack…`, `removingMusketsClosesAnEarlierLegalAttack…` | covered |
+| Unarmed colonist | defeat by raid | European dies, never captured | `NativeLandCombatTest.defeatedUnarmedEuropeanFacingARaidDiesAndIsNeverCaptured` | covered |
+| Scout (unarmed, mounted or Seasoned Scout) | native settlement attack | [R-0174](requirements/done/R-0174.md) explicit exception: an unarmed scout may attack a settlement at the ordinary mounted base 3 | `CombatStrengths.forSettlementBattle` (`settlementScout`); `NativeConquestTest.scoutUsesTheOrdinaryMountedBaseOnlyForTheSettlement` | covered |
+| Scout (unarmed) | open-field attack; card strength 1, may attack | [R-0028](requirements/done/R-0028.md) chapter 4 item 1: no unarmed open-field scout attack, horses alone are not an exception, no new unit type | `AttackRoleTest.seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon` (unarmed refused); `musketsPermitLandAttackForColonistsAndSpecialists` | accepted absence |
+| Seasoned Scout (purchased), armed and mounted | open-field strength | Muskets give the soldier role and horses then the dragoon: base 3, total 4.5 with the attacker bonus. It is not a separate specialty | `AttackRoleTest.seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon` | added |
+| Seasoned scout | domain / holds | Land; one hold | `UnitRoleLedgerTest` | covered |
+| Seasoned scout | identity / sight | Specialist, two-tile sight | `EuropeanSpecialistTest.seasonedScoutHasTwoTileSightWithoutChangingItsIdentity` | covered |
+| Ordinary scout | identity | Mounted without muskets | `UnitSightTest.mountedScoutRevealsImmediatelyAndKnowledgeSurvivesRoleLossAndSave` | covered |
+| Ordinary scout | to dragoon by muskets | Refused at 49, accepted at 50, muskets 50, horses 50, same unit | `ColonistEquipmentTest.scoutBecomesDragoonByMusketsWithOneStockDebitEach`; player path `TC_183_F211_scout_to_dragoon_test` `TC_01` (49 refused, Continue) and `TC_02` (50 accepted, Continue) | added |
+| Brave | role base | 1 / armed 2 / mounted 2 / warrior 3 | `NativeLandCombatTest.roleBasesFollowAidCard` and `everyRole…` tests | covered |
+| Brave | may attack | Yes | `NativePlayerTurnTest` (`brave.canAttack`); `UnitType.BRAVE` | covered |
+| Brave | ambush terrain | Card forest/hill/mountain values | `NativeLandCombatTest.humanAttackAmbushUsesDefenderTileValues`, `raidAmbushUsesDefenderTileValues…` | covered |
+| Brave | defeat | Destroyed with equipment | `NativeLandCombatTest.defeatedBraveOfEveryRoleIsDestroyedWithItsEquipment…` | covered |
+| Soldier | strength | 2 | `CombatStrengthTest` (attacker base 2) | covered |
+| Soldier | may attack | Yes with muskets | `AttackRoleTest` | covered |
+| Soldier | defeat | Loses muskets, becomes unarmed | `CombatOutcomeTest.soldierLoserDropsMusketsAndContinueNeverDrawsAgain` | covered |
+| Soldier | equipment at 49 / 50 | Reject 49; debit 50 | `ColonistEquipmentTest.missingGoodsAreRejectedBeforeAnyEquipmentOrInventoryChange` (muskets, horses, tools); `previewDoesNotMutateAndSwitchReturnsIncompatibleEquipment`; player path `TC_25_F17_colony_equipment_test` `TC_01` (49 refused, 50 debited) | covered |
+| Dragoon | strength | 3 | `CombatStrengthTest` (mounted base 3) | covered |
+| Dragoon | defeat | Loses 50 horses, becomes soldier | `CombatOutcomeTest.mountedLoserDropsHorsesAndTheEventReportsSurvivalAfterMutation` | covered |
+| Dragoon | soldier to dragoon by horses | Horses 50, muskets 50 | `ColonistEquipmentTest.soldierBecomesDragoonByHorsesWithOneStockDebitEach`; player path `TC_25_F17_colony_equipment_test` `TC_01` (muskets 50, horses 50, same unit) | added |
+| Veteran soldier | strength | 3 | `MilitaryRoleCombatTest.ordinaryVeteransKeepTheirOwnStrength`; `MilitaryPromotionTest.purchasedVeteranHasOneBaseBonusEvenAfterDisarming` | covered |
+| Veteran dragoon | strength | 4.5 | `MilitaryRoleCombatTest` (defender base 4.5); `MilitaryPromotionTest` (attacker base 4.5) | covered |
+| Continental regular / cavalry | strength | 4 / 5 | `MilitaryRoleCombatTest.continentalInfantryAndCavalryUseTheChartBases` | covered |
+| Continental regular / cavalry | defeat | Destroyed with equipment | `MilitaryRoleCombatTest.aDefeatedContinentalIsDestroyedWithItsEquipment` | covered |
+| Royal regular / cavalry | strength | 5 / 6 | `MilitaryRoleCombatTest.royalInfantryAndCavalryUseTheChartBases` | covered |
+| Royal regular / cavalry | defeat | Destroyed, winner keeps equipment | `MilitaryRoleCombatTest.aDefeatedRoyalIsDestroyedAndTheWinnerKeepsItsEquipment` | covered |
+| Artillery, full | attack / defense | 7 / 5 | `ArtilleryTest.artilleryAttacksAtFullAndDamagedBasesWithOutdoorPenalty`; `fullDamageSurvivesAndSecondLossDestroys` | covered |
+| Artillery, full | one hold, storable | 1 hold | `TreasureHoldReservationTest` (artillery one hold); `UnitRoleLedgerTest` | covered |
+| Artillery, full | outdoor / raid bonus | −75% outside; +75% in a fortified colony against a raid | `NativeLandCombatTest.outdoorGunDefenderAgainstRaidLosesSeventyFivePercent…`; `fortifiedColonyGunDefendsAgainstRaidWithTheNativeBonus` | covered |
+| Artillery, full | defeat | Becomes damaged | `ArtilleryTest.fullDamageSurvivesAndSecondLossDestroys` | covered |
+| Artillery, damaged | attack / defense | 5 / 3 | `ArtilleryTest` (base 5 full, 3 damaged); `NativeLandCombatTest` (5 vs 3) | covered |
+| Artillery, damaged | defeat | Destroyed | `ArtilleryTest.fullDamageSurvivesAndSecondLossDestroys` | covered |
+| Artillery | may attack ships | No | `ArtilleryTest.artilleryCanTargetWagonButNotShipsAndWagonCannotAttack`; `UnitRoleLedgerTest` | covered |
+
+**Naval (six ships)**
+
+| Attribute | Card value (caravel, merchantman, galleon, privateer, frigate, man-o-war) | Owner check | Status |
+| --- | --- | --- | --- |
+| Strength | 2, 6, 10, 8, 16, 24 (attacker +50%) | `NavalCombatTest.allSixBaseStrengthsUseOnlyAttackerBonus` | covered |
+| May attack | No, No, No, Yes, Yes, Yes | `ShipRosterTest.registeredShipsHaveSpecifiedMovementCargoAndPurchaseRules`; damaged ship `ShipRepairTest.damagedCargoAndDirectMovementRejectWithoutMutation` | covered |
+| Target domain | Ships only | `UnitRoleLedgerTest.landAttackersNeverTargetShipsAndArmedShipsTargetOnlyShips` | added |
+| Moves | 4, 5, 6, 8, 6, 6 | `ShipRosterTest` (speeds) | covered |
+| Cargo holds | 2, 4, 6, 2, 4, 6 | `ShipRosterTest` (capacity); `ShipRosterTest.eachFullHoldRejectsAnotherPassengerWithoutMutation` | covered |
+| Legal terrain | Sea only (ocean, lake, high sea) | `UnitRoleLedgerTest` (type level); `ShipRosterTest.shipCannotMoveOntoLandOrBoardItself` | added / covered |
+| Battle loss | Sink 50% or damage; sinking destroys cargo and passengers | `NavalCombatTest.sinkingLosesUncapturedGoodsAndKeepsNoRemainingCargo`; `damagedLoserPreservesPassengerAndRoundTripDoesNotReplayBattle` | covered |
+| Damage / repair | Transfer 1, then drydock 3 or shipyard/Europe 2 | `ShipRepairTest.drydockTransferAndThreeRepairsPreserveCargoAcrossSave`; `shipyardCompletesAfterTransferAndTwoRepairUpdates`; `EuropeRepairTakesTransferPlusTwoOwnerUpdates` | covered |
+| Treasure train on galleon | Six holds, one reservation | `TreasureHoldReservationTest.sinkingTheGalleonDestroysItsTrainOnceWithoutAPayout` | covered |
+
+### Open questions and gaps
+
+- **Seasoned Scout and unarmed scouts: accepted, not open.** An earlier version of
+  this ledger raised a question that was already decided. The three contexts are
+  separate. [R-0028](requirements/done/R-0028.md) chapter 4 item 1 decided that
+  ordinary horses are not a seasoned-scout exception, that muskets confer the
+  soldier role and horses then the dragoon, and that no new unit type is added;
+  an armed mounted ordinary colonist is a dragoon with base 3, not a Seasoned
+  Scout. [R-0174](requirements/done/R-0174.md) adds the one explicit exception: an
+  unarmed scout may attack a native settlement at the mounted base 3. The card's
+  strength 1 for an unarmed scout therefore has no open-field cell. This is an
+  accepted absence, no specialty is implemented here, and no question is put to
+  the user. If the project later wants an unarmed Seasoned Scout attack in the
+  open, no active requirement covers it (the only roster owner,
+  [R-0074](requirements/done/R-0074.md), is done and excludes it); it would need a
+  new requirement captured through the backlog. None is created in this pass.
+- **Q2 — defeated standalone civilian or wagon in the open: pending the user.**
+  The question is put to the user and no answer has arrived. Accepted
+  [combat and naval outcomes](gap-analysis.md#combat-and-naval-outcomes) rule 3
+  covers only a colony "unarmed field worker" captured by a European, and gives
+  no rule for a standalone civilian or a wagon. Destruction is the existing
+  behavior and is retained only as that. This pass chose no capture or
+  destruction policy; it fixed only the odds (civilian base 1) and the armed
+  attacker's loss, which accepted rules 3 and 4 already specify. Owner:
+  [R-0093](requirements/done/R-0093.md)/[R-0094](requirements/done/R-0094.md).
+- **Player paths.** Soldier-to-dragoon: TC25 `TC_01`. Scout-to-dragoon with the
+  49 refusal, the 50 success and Continue: TC183 `TC_01` and `TC_02`, written
+  and not yet run. Open-field civilian fights have no player path, because the
+  expected fate of a defeated civilian is open (Q2).
+- **Land movement.** The aid card prints no land movement values, so none are
+  invented or asserted here. Ship moves are covered by `ShipRosterTest`.
+- **`UnitTypeTest`** had two dormant methods without `@Test`; they are enabled
+  and corrected (Added item 4).
+
+### Verification
+
+- Run results are in the status paragraph above and were not reproduced by the
+  author. Attempt 3 changes are not compiled, not run and not formatted by the
+  author.
+- Overlap review by reading, attempt 3: the production change reaches only the
+  ordinary land quote, so the ship, native-settlement, colony and tribute callers
+  of `CombatStrengths` are unaffected. In the attempt 2 run every AI and model
+  test other than `ArtilleryTest` passed with the new quote, including
+  `RivalLandMilitaryCycleTest`, `CombatOutcomeTest` and `ColonyDefenseTest`.
+  `ArtilleryTest` was the only test that asserted the legacy empty quote or
+  seeded the legacy random field. One behavior consequence by reading: the
+  rival land AI chooses attacks through the same shared quote, so in wartime it
+  may now attack an unarmed enemy at a computed win probability of 60% or more,
+  as the accepted land-strategy decision (attack at 60% or better, rank by
+  distance then probability) already allows; no AI test changed. No Docker scenario attacks a civilian in the
+  open: `TC_35` `TC_03` only checks that an unarmed unit and a wagon cannot
+  initiate.
+- Formatter: the shared profile must be applied by the main agent to
+  `CombatStrengths.java`, `AbstractUnit.java`, `OpenFieldCivilianBattleTest.java`,
+  `ArtilleryTest.java`, `AttackRoleTest.java`, `UnitTypeTest.java`,
+  `UnitRoleLedgerTest.java`, `ColonistEquipmentTest.java` and
+  `TC_183_F211_scout_to_dragoon_test.java`.
+- Pending local checks: all JUnit; then Docker/Xvfb `TC_183_F211_scout_to_dragoon_test`
+  (2 starts) with `TC_25_F17_colony_equipment_test` (8 starts),
+  `PageVerificationContractTest`, and the candidate families TC27, TC62, TC63,
+  TC64, TC66, TC140, TC149, TC150, TC151 and TC152; then the full batch. R-0211
+  stays `ready for development` until that run and the Q2 answer.
+
+## R-0208 profile matrix — 2026-10-23
+
+**Status: attempt 4 written, not verified (2026-10-23).** Attempts 1 and 2 failed
+their model runs; attempt 3 passed the model run but its UI run is incomplete
+(below). The authoring sessions had no shell: nothing was compiled, run or
+formatted there. The main agent owns the JUnit run, the Docker/Xvfb selection,
+the shared formatter and the strict MkDocs build. No twenty-cell UI pass is
+claimed.
+
+**Attempt 3 — model pass, UI incomplete (Docker completion
+`20261023T195727Z-79b33fedfb56`, reports `target/docker-ui/run-BaBz9E`).** All
+4064 model tests in 329 reports passed with 0 failures, errors and skips,
+including the twenty `ReferenceExpeditionTest` cells `[1]`–`[20]`. The UI module
+wrote 29 tests in 7 reports with 0 failures, errors and skips (TC24, TC22, TC36,
+TC94, SimpleOperationsTest, EnvironmentTest, PageVerificationContractTest), but
+the TC181 fork exited with status 1 and wrote no XML. That run is failed
+evidence, not acceptance. Facts from `maven.log` and the dumpstream:
+
+1. In one JVM, `@Start` ran 20 times between 20:02:39 and 20:03:56. Starts 1–19
+   each loaded their generated reference save, played a full round and
+   Continued; the 19th was England at Conquistador, Continued at 1491.
+2. The 20th `@Start` (20:03:56.898) logged `Loading image provider` and 1.3 s
+   later `event=STARTUP_FAILED cause=com.google.inject.CreationException` at
+   `MicroColApplication.initializeMicrocol(71)`, the `Guice.createInjector`
+   call; then `System.exit(1)`. A normal start takes about 0.45 s from image
+   loading to `STARTED`. The failure is in injector creation, before the
+   cell's own code (Spanish Viceroy fixture, Load), so no cell-specific content
+   is involved.
+3. The console record already carries the whole cause chain, which ends at
+   `CreationException`: Guice leaves its cause empty when several distinct
+   errors occur, and their messages are intentionally not logged. The
+   unexported container diagnostic log has the same record, so it would not
+   reveal the root cause. No `hs_err`, `OutOfMemoryError` or thread error text
+   is in the saved output. **The root cause is therefore not proven.**
+4. Supporting evidence of per-JVM accumulation: `ListenerManager` runs every
+   `TurnStarted` (and immigration, tax, score and mercenary) event on a new
+   `Executors.newSingleThreadExecutor()` per listener and never shuts it down
+   (`executeInSeparateThread`). Thread names show the count: TC181's JVM
+   reached `pool-2080` within 75 s (about 105 executors per cell: about ten
+   listeners times one start and eight actors), while TC24's 11 methods
+   reached about `pool-340`. Each start also builds a new Guice injector and
+   reloads all images. TC181 had the most starts (20; the largest passing
+   classes have 18, 15 and 14) and the most turn events per start.
+5. Decision for attempt 4: split the twenty cells by nation into four classes
+   of five, each in its own surefire JVM (`forkCount=1`, `reuseForks=false`),
+   keeping every cell ID and assertion. This bounds the per-JVM accumulation
+   to about a quarter of the failing run, below TC24's existing load. Heap,
+   timeouts and the test framework are unchanged. The executor leak is a
+   production finding reported to its owner, not repaired here, because the
+   change would alter game threading without a running reproduction.
+
+**Attempt 2 — failed model run (Docker completion
+`20261023T194928Z-406dace0c875`, reports `target/docker-ui/run-Mp5hMS`).** 4064
+model tests in 116.135 s: 0 failures, **20 errors**, 0 skips. All twenty cells
+failed in `assertIdentityAndRules` with `NoSuchElementException`. Cause: the
+test called `getCrownRoster()` on the Crown. `Player.getCrownRoster()` is the
+colonial nation's accessor (`model.getKingOf(this).map(PlayerKing::getRoyalRoster)`)
+and is empty on a Crown. Attempt 3 reads the roster from the colonial player,
+asserts that the Crown's own `getCrownRoster()` is empty and that the roster is
+the Crown's `getRoyalRoster()`. This was a test defect; no production code or
+rule value changed.
+
+**Attempt 1 — failed model run (Docker completion `20261023T194328Z-c1bc5207a89f`,
+reports `target/docker-ui/run-YvDIN8`).** Model tests: 0 failures, **20 errors**,
+0 skips. Every new parameterized cell failed at the pre-start read of
+`fresh.getCurrentPlayer()` with `IllegalStateException: Game must be started.`
+The cause was the test lifecycle, not the rules: `GameManager.getCurrentPlayer`
+guards on a started game. The UI module was not run. Attempt 2 (below) fixes the
+lifecycle only; the rule table, the cells and the owner-test mapping are
+unchanged. The UI verify method also lacked `throws Exception` for the checked
+`TimeoutException` of `WaitForAsyncUtils.waitFor`; attempt 2 adds it.
+
+1. Twenty model cells: `ReferenceExpeditionTest`
+   `referenceProfileKeepsIdentityExpeditionRulesAndSaveAfterTurn`, a JUnit
+   `@ParameterizedTest`. Surefire XML records them only as `[1]` to `[20]`; the
+   source display name `{index} {nation} at {difficulty}` is not a reliable XML
+   name, so do not read a nation from the XML. The stable mapping is the enum
+   order: outer loop `EuropeanNation.values()` (Dutch, French, English, Spanish),
+   inner loop `Difficulty.values()` (Discoverer, Explorer, Conquistador,
+   Governor, Viceroy). So `[1]`–`[5]` are Dutch, `[6]`–`[10]` French,
+   `[11]`–`[15]` English and `[16]`–`[20]` Spanish, each in difficulty order.
+2. Each cell builds the bundled reference map with `ReferenceExpedition.create`
+   (the free-play builder), then checks against the accepted rule table, not the
+   code under test: start year 1490; human only for the chosen nation and
+   computers for the other three; each Crown `Nation's King` with its nation as
+   owner; Crown roster `4+d` infantry, `2+d` cavalry, 2 artillery, 2 men-of-war;
+   bells `ceil(500/k)` and intervention target `ceil(500×k)`; Tory threshold
+   10/9/8/7/6; tax interval `max(5, 20−3d)`; gold 1000/750/500/250/0 for all
+   four colonial nations; 12 units; caravel or Dutch merchantman on the
+   reference start square (Dutch 48,2; French 50,11; English 50,20; Spanish
+   50,29); two passengers with one musket and one 100-tool pioneer, both in
+   cargo.
+3. Lifecycle (attempts 2–3): the current player is read only after `startGame()`,
+   which is the owner's guard. The game starts with England, then the actors
+   are ended in order until the human (`endActorsUntil`). Each `Model.endTurn()`
+   finishes one actor synchronously; a full round is eight actors (four
+   nations, then four Crowns). The human's own `endTurn` does not complete the
+   round, so played turns stay 0 until the Crowns act and the human is current
+   again (played turns 1). Then `save()`, disk write and read through
+   `GameModelPoDao`; the restored model calls `startGame()` (continue) and checks
+   the human current, one played turn, identity, Crown roster and gold. Only the
+   human's gold is asserted after the round, because rival state may change.
+   Nothing in the model is asynchronous; the ordering is the synchronous turn
+   order of `GameManager` (non-king actors by England, France, Spain, Dutch,
+   then Crowns by the same nation order; the reference world has no native
+   actors). Before the first turn the cell also writes the unstarted position
+   to disk and loads it back, which is exactly the file the UI cells load.
+4. Owner tests mapped, read in attempt 3 against the actual assertions (not
+   enum equality). Nation effects do not depend on difficulty in the accepted
+   table, so they are verified once at their owner:
+   - England two-thirds immigration target: `RecruitmentPoolTest`
+     `pricesUseEveryDifficultyAndEnglishTargetRounding` asserts the Dutch
+     target and the England `ceil(2×normal/3)` target at all five difficulties.
+     Attempt 3 adds the unaffected France and Spain targets at all five. The
+     earned-immigrant path is in `ImmigrationTest`.
+   - France half local alarm: `NativeRelationsPressureTest`
+     `sameSourcesGiveFranceHalfAndPocahontasStacksToAQuarterOfDutchPressure`
+     compares identical sources for Dutch and France; neighbouring tests keep
+     direct tribal anger unchanged and other owners untouched.
+   - Netherlands market pressure: `NationalMarketTest`
+     `test_dutchOwnSalesStepOncePerTwoHundredUnits` against
+     `test_ownSalesLowerBidOneStepPerHundredUnits` (England, 100 units per
+     step), with exact remainders; `NationalMarketUpdateTest` covers recovery.
+   - Spain +50 % against settlements only: `NativeConquestTest`
+     `spanishBonusBelongsToSpainAndTheSettlementAttackOnly` (Spain 50; Dutch,
+     France and a Crown 0) and `spanishBonusEntersOnlyTheFounderSlotOfASettlementBattle`
+     (settlement battle 3.0 → 4.0; no bonus against an open brave).
+   - Difficulty-driven support at all five difficulties: Tory threshold
+     (`PoliticalProductionTest`), tax interval (`TaxStateTest` 20/17/14/11/8),
+     intervention target (`InterventionTargetTest`), mercenary price
+     (`MercenaryRulesTest`); the matrix cell asserts these and the Crown roster
+     from its own literal table for every cell.
+   - Score by difficulty: `ResultScoreTest`
+     `allFiveDifficultiesMultiplyTheBaseWithoutAVictory` and
+     `destroyedSettlementsDeductDifficultyPlusOneEach`
+     (`difficultyPercent` is package-private, so it is not read from here).
+   - Difficulty field round trip and rejection: `DifficultyProfileTest`
+     (unchanged).
+5. Native behavior is not difficulty-dependent in the accepted table; the
+   matrix therefore records it as not applicable rather than inventing a check.
+6. Twenty UI cells (attempt 4: four classes, same `TC_181` ID and same method
+   IDs, tag `local`):
+   - `TC_181_F208_reference_profile_matrix_test`: `TC_01`–`TC_05` Dutch;
+   - `TC_181_F208_reference_profile_matrix_french_test`: `TC_06`–`TC_10`;
+   - `TC_181_F208_reference_profile_matrix_english_test`: `TC_11`–`TC_15`;
+   - `TC_181_F208_reference_profile_matrix_spanish_test`: `TC_16`–`TC_20`;
+   each in difficulty order Discoverer→Viceroy. Each cell loads a
+   generated reference position through the Load button, which uses the same
+   ReferenceExpedition builder and bundled map as the free-play start, and so
+   does not repeat the R-0209 New Game setup UI or the R-0063 nation/difficulty
+   selection (TC24 and TC101 cover those). The loaded save is a started game:
+   `setAndStartModel` calls `startGame()` and the passive rivals and Crown
+   robots act until the human is current. Each cell then verifies the profile
+   and the date `Year 1490 AD` at 0 played turns, ends the human turn through
+   the Next Turn button (which waits for the human's next `TurnStarted`, so the
+   whole round has run), verifies the profile and `Year 1491 AD` at 1 played
+   turn, leaves to the menu (autosave), Continues, and verifies the same again.
+   `verifyProfile` waits up to 60 s for the human to be the current player
+   before reading anything, so a cell cannot pass before the first human turn.
+   The TC101 four-nation trade loop is not repeated.
+7. Page objects: new `ReferenceProfilePage` with the action
+   `chooseReferencePosition` (writes the reference save and makes it the Load
+   file) and the verifications `verifyProfile` (`throws Exception` for the
+   checked `TimeoutException`) and `verifyPlayedTurns`; existing
+   `FreePlayAuditPage.continueGame` and `verifyDisplayedDate`,
+   `WelcomePage.loadGame` and `GamePage` turn and menu actions. UI classes
+   involved: the four matrix classes, the new page and three existing pages. The `gameDifficulty` label
+   is set on the FX thread at turn start, so the page flushes FX events first.
+8. Not covered by the matrix (specific, not hidden): the player display name is
+   the default of the loaded save, so name independence stays with TC24 and
+   TC101; the national effects and the score value are verified at their
+   owners (item 4), not inside each cell; no CZ labels are touched. The
+   matrix assumes the raw unstarted position survives the JSON file, which the
+   model cell checks first. No discrepancy with the accepted rules was found
+   while reading the owners, so no production code was changed.
+9. Planned selection, not run on attempt 4: every JUnit test, then Docker
+   `-Dtest='TC_181_F208_reference_profile_matrix*,TC_24_F15_free_play_setup_test,TC_36_F28_national_turn_order_test,TC_94_F85_national_market_pressure_test,TC_22_F15_free_play_capability_audit_test,PageVerificationContractTest' -Dsurefire.failIfNoSpecifiedTests=false`
+   with the [Docker command](#docker-ui-tests). Pass requires all 20 model
+   invocations and all 20 UI methods, as four TC181 XML reports with five
+   cases each, on one build with zero failures, errors or skips; a fork exit
+   without XML is a failure.
+
+## R-0204 turn notices attempt 3 — written, not verified (2026-10-23)
+
+Partial verified evidence, for the source state each run started from and not for the
+edits below: run `20261023T183941Z-8d99bf8d7fb0` (`target/docker-ui/run-nEZ17Q`) with 4022
+model tests in 325 reports and 23 UI tests in 9 reports; and run
+`20261023T185505Z-7183b0fc9896` (`target/docker-ui/run-UKXgiN`) with 4033 model tests in
+327 reports and 35 UI tests in 11 reports, zero failures, errors or skips, 461.210 s and 83
+matching source hashes. The second run ran TC_177, TC_178, TC_179, TC_28, TC_84, TC_09,
+TC_32 and TC_73, after main restored the constructor `@Inject` of `TurnReportPanel` that
+attempt 2 had left on a field. The Czech Settings screenshot at 900x750 was readable. The
+requirement is not done: the formatter, every JUnit test, the selected UI classes and the
+complete batch have not run on the attempt-3 edits.
+
+Attempt 3 written, not compiled or run (no shell):
+
+1. Timing of the negative checks. `ListenerManager.executeInSeparateThread` starts one
+   executor per listener, so the latch of `GamePage.nextTurn` (a model listener) runs on a
+   different thread than `ModelListenerImpl`, which posts `TurnStartedEvent` and then
+   `NativeRelationsChangedEvent` from one thread. The event bus is synchronous and queues
+   nested posts per thread, so the `ShowScreenEvent` of
+   `ShowTurnEvensOnTurnStartedEvent` is dispatched before the second post. The new
+   `GamePage.nextTurnWithoutOpeningReport` and `nextTurnIntoEurope` register a probe that
+   records the thread of the human `TurnStartedEvent` and wait for the next
+   `NativeRelationsChangedEvent` on that thread, then drain the FX queue. `nextTurn` is not
+   changed; its positive wait is the visible report. No sleep was added.
+2. Terminal precedence, by source. No fresh `TurnStartedEvent` is fired when a rebellion
+   result or `finished` ends the update (`GameManager.announcePreparation`,
+   `finishTaxChoice`); the 1800 boundary fires `ScoreBoundaryRequired` instead of starting
+   the round (`freezeScoreAtBoundary`) and is shown as a modal `showAndWait` dialog by
+   `ScoreBoundaryController`. So a routine report or automatic Europe cannot cover a
+   terminal outcome. `EuropeOpeningRequest` is cleared at every human turn start and by
+   `TurnReportPanel.beforeHide` (also run by `MainPanelPresenter.stop`).
+3. Texts. English goods-thrown-away texts had the colony name in the goods place and no
+   goods name; the English birth text had no colony. Both now follow the Czech structure.
+   Goods thrown away and births now offer Open colony.
+4. New scenarios: `TC_180_F204_project_and_overflow_notices_test` (TC_01 finished smithy:
+   exact notice once, no tools reminder in the finishing update, Open colony leaves smithy
+   and tools unchanged, reopen and Continue keep one notice; TC_02 retained action refuses a
+   colony captured after the report; TC_03 full tobacco stock on a derived copy of the F24
+   fixture: notice with colony, goods and the quantity the colony screen promised, Open
+   colony, reopen and Continue once, retained action refused after capture), `TC_178` TC_04
+   (summary off, automatic Europe on, Europe opens directly, arrival in the manual report
+   once, Continue opens nothing), and the birth assertion in `TC_08` (fourth update:
+   "There is a new unit in colony Delft." once, Open colony offered).
+5. New or extended model and presenter tests: `TeProcessorNoticeTextTest` (finished
+   construction and unit, EN and CS; thrown-away plural and singular; birth; all built from
+   saved events), `EuropeOpeningRequestTest`, `ProjectCompletedNoticeTest` (save and load
+   keeps one event), `TurnEventProjectCompletedTest` (unit round trip).
+
+Families against actual assertions (scenarios other than the new ones were not rerun for
+attempt 3):
+
+| Family | Where it is asserted | Note |
+| --- | --- | --- |
+| Food shortage, famine | TC_09 (`Famine in colony Delft killed one`, final stocks), TC_10 (famine coming), TC_177 (critical with summary off) | critical |
+| Birth | TC_08 (new assertion) and `TeProcessorNoticeTextTest` | TC_17 does not read the report |
+| Missing tools (R-0086) | TC_32: one reminder per update, reopen, Continue | unchanged |
+| Overflow, cleared lumber (R-0058, R-0120) | TC_180 TC_03; TC_73 (lumber lost once, absent next turn) | |
+| Project completion | TC_180 TC_01 and TC_02; `ProjectCompletedNoticeTest` | unit kind only in unit tests |
+| Europe arrival | TC_178 TC_01 to TC_04, TC_28 voyage | |
+| Diplomacy | TC_59 (peace offer notice), TC_74 (report message); TC_60 tribute rejection is a dialog, independent of the summary | no tribute notice producer, none invented |
+| Revolution | TC_156, TC_159 (arrival notices, Continue without repeat), TC_158 (capture notice) | |
+| End result | TC_163, TC_161, TC_179 (summary off) | unchanged |
+
+Concrete remaining gaps: a simultaneous arrival and critical notice with automatic Europe
+and the summary off is covered by `ShowTurnEvensOnTurnStartedEventTest` with the real bus,
+not by a UI scenario, because a notice cannot be added between the owner update and the
+turn-start routing; terminal plus arrival is excluded by source, not by a test; the
+completed-unit notice has no UI scenario; the singular Czech overflow wording keeps its
+existing plural-case goods name; the quantity of `TC_180` TC_03 is read from the colony
+screen, and its hammer and tool stocks follow `TC_32`. `GamePage` and `ScreenTurnReport`
+are shared page objects, so the contract requires the complete UI suite.
+
+## R-0204 turn notices — attempt 2, written, not verified; partial run evidence (2026-10-23)
+
+Verified partial evidence, not acceptance: run `20261023T183941Z-8d99bf8d7fb0`
+(`target/docker-ui/run-nEZ17Q`), its `result.json` and `command.log`, recorded zero
+failures, errors or skips in 312.933 seconds, 67 matching source hashes, and ran TC_177,
+TC_09, TC_10, TC_28, TC_84 and TC_163. Those counts are the run's own; the source state
+it started from is recorded there by hash. Attempt-2 changes below are not covered by it.
+
+Attempt 2 written (not compiled, formatted or run here):
+
+1. Preference: `openEuropeOnArrival`, default off (`GamePreferences.DEFAULT_OPEN_EUROPE_ON_ARRIVAL`),
+   Settings checkbox `settingOpenEuropeOnArrival` (EN/CS in `GameMenu`), included in
+   `FramedSettingsPage.verifyAppearance`.
+2. Precedence: `ShowTurnEvensOnTurnStartedEvent` posts one screen per fresh human turn.
+   Report due: the report opens, and an arrival with the option on sets
+   `EuropeOpeningRequest`; Close and Escape (`TurnReportButtonsPanelController`,
+   `ScreenTurnReportPresenter`) then show Europe once, and `TurnReportPanel.beforeHide`
+   clears the request on any exit. No report due: an arrival with the option on opens
+   Europe directly. Other turns clear the request; Continue does not start a fresh turn.
+3. Project completion: `TurnEventProjectCompleted`, produced once by
+   `ColonyBuildingQueue.startTurn` when the head project finishes, routine, shown by
+   `TeProcessorProjectCompleted` with the Open colony action (`TeItemColony`).
+4. Unit tests written: `ShowTurnEvensOnTurnStartedEventTest` (summary on/off, critical
+   bypass, arrival behind the report, direct Europe, continuing turn clears),
+   `TurnEventCriticalityTest`, `TurnEventProjectCompletedTest`, `ProjectCompletedNoticeTest`
+   (one notice per completion, none on the next empty update), and `GamePreferencesTest`
+   (defaults and stored values for both preferences).
+5. UI scenarios written: `TC_177_F204_turn_summary_test` (famine, summary off, Czech and
+   a 900x750 window, restored in `finally`); `TC_178_F204_europe_arrival_test` with TC_01
+   (default, Open Europe spends nothing, no auto-open), TC_02 (summary off, routine arrival
+   only, manual report, reopen, Continue without a duplicate), TC_03 (auto Europe after
+   the report once, Continue without replay); `TC_179_F204_summary_off_final_result_test`
+   (TC_163 TC_01 score-boundary and Hall of Fame steps with the summary off).
+6. Existing coverage cited for families (scenarios not rerun for attempt 2): food/famine
+   TC_09, TC_10; birth/new colonist TC_08, TC_17; missing tools TC_32; cleared lumber TC_73;
+   arrival TC_28 (voyage) and TC_178; diplomacy TC_59, TC_60, TC_74; revolution TC_157,
+   TC_158; end result TC_160, TC_161, TC_163, TC_179. Goods thrown away has a producer
+   (`TurnEventProvider.getGoodsWasThrowsAway`) but no scenario asserting its notice.
+
+Open, not claimed: no tribute-rejection notice producer; no UI journey for project
+completion; no unit test for `TeProcessorProjectCompleted`. The required formatter, JUnit
+suite, selected UI scenarios and full batch have not been run for attempt 2.
+
+## R-0204 attempt 1 — written, not verified (2026-10-23)
+
+Status: implementation and tests are written; nothing was compiled, formatted or run in
+this session because no shell was available. No pass is claimed. The requirement stays
+`ready for development` until the local acceptance run is complete. Record:
+[R-0204](requirements/done/R-0204.md).
+
+Written, not run:
+
+1. Unit: `ShowTurnEvensOnTurnStartedEventTest` (routine on/off, critical with summary off,
+   empty, continuing turn, other player), `TurnEventCriticalityTest` (famine, colony lost and
+   destroyed are critical; arrivals and new units are routine; null rejected) and two
+   `GamePreferencesTest` cases (missing value is on; stored value is followed).
+2. UI: `TC_177_F204_turn_summary_test` (F09 famine fixture). Settings default is checked on,
+   the keyboard toggles `settingTurnSummary` off, Settings goes back, the first turn still opens
+   the famine report, and the default is restored at the end.
+
+Event families, with the existing scenarios that cover them. None of these was rerun for R-0204:
+
+| Family | Producer | Existing scenario IDs | State |
+| --- | --- | --- | --- |
+| Food shortage and famine | `TurnEventFaminePlagueColony`, `TurnEventFamineWillPlagueColony` | TC_09, TC_10 | critical; TC_09 is the fixture of TC_177 |
+| Birth and new colonist | `TurnEventNewUnitInColony` | TC_08, TC_17 | not verified for birth itself |
+| Missing input and tools (R-0086) | `TurnEventConstructionWaitingForTools` | TC_32 | not rerun |
+| Overflow and cleared lumber (R-0058, R-0120) | `TurnEventGoodsWasThrownAway`, `TurnEventForestLumberLost` | TC_73 (lumber lost, next-turn count) | goods-thrown-away: no scenario found |
+| Project completion | no turn-event producer found | none | gap |
+| Europe arrival | `TurnEventShipComeToEuropePort` (action `turnEventOpenEurope`) | none asserts the notice; TC_156 covers intervention arrival | UI journey not written |
+| Diplomacy (R-0087, R-0088) | `TurnEventPeaceOffer`, `TurnEventDiplomacy` | TC_59, TC_60, TC_74 | not rerun |
+| Revolution (R-0191, R-0192) | revolution outcomes | TC_157, TC_158 | not rerun |
+| End result (R-0195–R-0197) | not a turn event; separate result and hall-of-fame flow | TC_160, TC_161, TC_163 | not rerun; unchanged |
+
+Not implemented or not written: the automatic Europe opening preference, a summary-off
+scenario with routine events only (planned TC_178), a tribute-rejection producer, and
+the Europe-arrival journey. Formatter and `mvn` runs are still required before acceptance.
+
+## R-0203 attempt 3 — failed UI run, repair written, not verified — 2026-10-23
+
+1. Failed evidence: completion `20261023T181620Z-a3238ee64a8c` (run directory
+   `target/docker-ui/run-fdeklI`, source hashes matched). The model phase passed:
+   4011 tests in 323 reports, no failures, errors or skips, so the attempt-2
+   repair of `CongressReportTest` held. The UI/support phase ran 21 tests in 8
+   reports with 4 errors and 0 skipped: `TC_56` line 41, `TC_150` lines 43 and
+   77, and `TC_176` line 59. Every error was
+   `FxRobotException: the query "#congressClose" returned 1 nodes, but no nodes
+   were visible`.
+2. Cause: the `ScrollPane` introduced in attempt 2 contained the whole report,
+   including `congressChoose` and `congressClose`. With a 640-pixel viewport the
+   Close button lay below the visible area, and `CongressPage.close()` clicks it
+   like a player. This was a regression of the shared dialog journey, not a
+   test fault; every other test that closes Congress (TC_57, 69, 70, 71, 72, 83,
+   85, 110, 111, 113, 114, 124, 143, 144, 155, 156) uses the same click.
+3. Repair in `CongressDialog`: the report (support line to intervention state and
+   feedback) stays in `congressScroll`, now with a 560-pixel viewport, while
+   `congressChoose` and `congressClose` sit in a fixed `congressActions` bar
+   under the scroll pane. Both actions are visible at any scroll position, and
+   founder selection still lists the candidates inside the report. Ids, the
+   Escape/cancel behavior, the guarded `Player.chooseFounder` call and the model
+   are unchanged.
+4. Repair in the tests (not weakened): `CongressPage.verifyCloseReachable` is
+   replaced by `verifyActionsAlwaysVisible` (Choose and Close are inside the
+   window and outside the scroll area at the top and bottom positions) and
+   `verifyReportReachableByScrolling` (scrolled to the end, the last non-empty
+   report line lies inside the viewport). `verifySupportVisible` now checks the
+   viewport, and `verifyDialogFits` and `verifyTextNotClipped` are kept. Two
+   plain actions, `scrollReportToStart` and `scrollReportToEnd`, let `TC_176`
+   capture both the support end and the Crown roster end:
+   `r203-congress-below-en.png`, `r203-congress-roster-en.png`,
+   `r203-congress-below-cs.png`, `r203-congress-roster-cs.png`. All assertions
+   remain in named `verify…` methods and every player action is still a click.
+5. Not run: this session has no shell. The formatter, compilation and the UI
+   rerun belong to the main agent. Selection for the rerun: all `microcol-game`
+   JUnit tests, then `TC_176`, `TC_56`, `TC_150`, `TC_81` and `TC_03`.
+   Remaining risks: the 560-pixel viewport and the resulting window height
+   (about 650 pixels) are computed, not measured; Czech wrapping at 580 pixels is
+   unmeasured; `TC_83` and `TC_85` (wooden button and typography of
+   `congressClose`) and the screenshot of the scene root were not re-inspected
+   against the new layout.
+
+## R-0203 attempt 2 — failed model run, repair written, not verified — 2026-10-23
+
+1. Failed evidence: completion `20261023T180528Z-08a5e8c2762e` (revision
+   `1b86642b`, exit 1, 150.9 s, run directory `target/docker-ui/run-LQVbtM`).
+   The model phase ran 4008 tests with 1 failure, 0 errors and 0 skipped; the UI
+   phase was not reached. The failure was
+   `CongressReportTest.crownCountsSeparateReserveShippedAndDestroyedWithoutDoubleCounting`
+   at line 154: `expected: <4> but was: <6>`.
+2. Cause: the test assumed four starting infantry. `RoyalScenarioFixtures.crown`
+   uses `RoyalRoster.initial(CONQUISTADOR)`, and Conquistador is difficulty index
+   2, so the start is 4+2 infantry, 2+2 cavalry, 2 artillery and 2 men-of-war, as
+   `RoyalRosterTest.startingForceAndThresholdFollowDifficultyIndex` already pins.
+   The test's growth numbers were built on the same wrong base. Production
+   balance and the roster rules were not changed.
+3. Repair in `CongressReportTest`: start counts 6 infantry (6 reserve) and 4
+   cavalry; after one ship and one loss, reserve 4, shipped 1, destroyed 1, total
+   6, cavalry unchanged; growth at the threshold 500 with 7 bells beyond it adds
+   one infantry (total 7, reserve 5) and one man-of-war (3 in all), because 13
+   ground members exceed six per ship. The sum check remains.
+4. Other model tests added or changed: a free-play first colony not yet founded
+   (Dutch, no colony, `RebelSupport.NONE`, Crown present); two colonial viewers
+   on the bundled free-play map (Dutch with no colony, French with two colonies,
+   each with its own King: each report shows its own support and roster, and
+   growing the French Crown leaves the Dutch figures unchanged); a built report
+   keeps its bells after a later credit while a new report sees them. The
+   same-named-player check is retained. The earlier wording "immutable" is
+   corrected: the Crown roster is the owner's live roster, read only through its
+   public getters, and the report documents this.
+5. UI, written not verified: `CongressDialog` puts the whole content in
+   `ScrollPane` `congressScroll` with a 640-pixel viewport, so the window is
+   bounded and a taller report scrolls; the content, the choice button and the
+   close button keep their order and ids. New checks on `CongressPage` (named
+   `verify…` methods) cover window size at most 900x750, that each text line has
+   its laid-out height (no clipped wrapped text), that the support line is inside
+   the window at the top, and that the close button is inside the window after
+   scrolling to the bottom. Choice-button reachability is not separately checked.
+6. Fixture facts checked in the scenario files, not in a run: F03 has four
+   Dutch colonies, 6400 points at eight residents each (TC_81's comment already
+   relies on this); the Dutch Congress is active with zero bells, no members and no
+   selected founder, so the UI scenarios start with no pending founder; the
+   Conquistador factor is 100, so the first objective costs 100 bells. Expected
+   Crown labels are the same as in TC_150.
+7. Selection for the main run: all JUnit tests of `microcol-game`, and TC_176,
+   TC_56, TC_150, TC_81 and TC_03. The main run has not started; nothing above
+   has passed.
+
+## R-0203 Congress support and REF implementation 2026-10-23 (not verified)
+
+1. Scope: the Congress dialog shows the viewer's national rebel support rounded
+   down with the Statistics wording, the recruited founders, the selected founder
+   with its bells and target, the Jones delivery state and the viewer's own Crown
+   roster (R-0185). `model.CongressReport` composes these from the owners through
+   `Model.getCongressReport(Player)`, which checks identity and colonial status.
+   The dialog reads one report per refresh; nothing is cached, and the candidate
+   list and the choose action remain `Player.chooseFounder`.
+2. Reused unchanged: `RebelSupport.getDisplayPercent` and `getPopulation`;
+   `Player.getCongressBells`, `getCongressTarget`, `getSelectedFounder`,
+   `getCongressMembers`, `getCrownRoster`; `RoyalRoster` getters. Test helpers:
+   `IndependenceFixture.prepareWithCrownRemainder`, `CongressPage.verifyRoyalForce`,
+   `verifyProgress`, `verifyWorldUnchanged`, `rememberBells`,
+   `verifyBellsProducedSinceRemembered`, `IndependencePage.verifyDeclareButtonVisible`,
+   `SettingPage.setCzechLanguage`.
+3. Existing coverage inspected and not duplicated: `RoyalRosterTest` (threshold,
+   remainder, ship/destroy/capture identity, save and reload), `CongressTest`
+   (offers, frozen selection, bell carry, Jones delivery), TC_56 (cancel, choose,
+   Continue of progress and members), TC_150 (Crown lines through growth, the
+   declaration freeze and Continue), TC_81 (49 and 50 percent thresholds for the
+   declaration).
+4. New model test, `CongressReportTest`: zero liberty; 49 against exact half with
+   liberty taken from live residents; founder bells, target and pending founder;
+   Crown counts after ship, destroy and growth, with the remainder; identity (the
+   king, null, and a same-named Dutch of another model); pure read as equal save
+   JSON; disk save and load.
+5. New UI test, `TC_176_F203_congress_support_test` (F03): TC_01 zero support, entry,
+   cancel with `verifyWorldUnchanged`, a turn that banks bells and refreshes the
+   Crown against the model, Continue. TC_02 49 and then exactly 50 percent with the
+   declaration button hidden and then shown. TC_03 Czech label `49 % (32 obyvatel)`
+   and the Crown against the model. Captures: `r203-congress-zero-en.png`,
+   `r203-congress-below-en.png`, `r203-congress-below-cs.png`.
+6. Labels: the Crown lines keep `total, reserve, shipped, destroyed, captured`.
+   Reserve counts only reserve members; a shipped member is bound to its unit; a
+   destroyed or captured member leaves reserve and shipped, so the states sum to
+   the total without double counting.
+7. Not run: this session had no shell, so no Maven, formatter, Docker or UI run
+   happened. Recorded selection for the main run: `CongressReportTest`, the full
+   `microcol-game` JUnit suite, and the UI classes TC_176, TC_56, TC_150, TC_81 and
+   TC_03. The 900×750 layout check is not measured; the dialog gained one label and
+   no scroll pane.
+8. Status: written, not verified. The requirement stays `ready for development`
+   until the complete local acceptance passes.
+
+## R-0202 fleet report, written not verified (2026-10-23)
+
+1. Scope: the statistics tab `fleetTab` lists the own ships of the human nation
+   with their place (map tile, Europe, high seas, repair), voyage (destination,
+   turns left, turned around, waiting), repair (updates left, destination),
+   passengers by type, goods and occupied/free holds. A visible foreign ship shows
+   only its tile and its occupied-hold count, read through
+   `Player.getObservedOccupiedHolds`. Show revalidates the live report by ID in
+   `FleetNavigator` before it opens a tile or Europe; a stale row reports
+   unavailable.
+2. Compile failure, 2026-10-23, completion `20261023T172613Z-667b89985518`
+   (revision `1b86642b`): `FleetReport` used `EnumMap` for goods, but
+   `GoodsType` is a final class, not an enum; Maven stopped before any test ran.
+   The map now uses a `LinkedHashMap` in `GoodsType.GOOD_TYPES` order. No test of
+   that run passed or failed.
+3. Failed model run, 2026-10-23, completion `20261023T173605Z-92b88af14529`
+   (revision `1b86642b`, `target/docker-ui/run-GM3ecw`): compilation passed and
+   the model phase ran 4001 tests with 2 failures, 9 errors and 0 skipped; the UI
+   phase was not reached. Causes, read from the saved reports, and fixes:
+   - `FleetNavigatorTest`, all 8 tests, `There is no such player (France)`: the
+     mission map `default-campaign-mission-2-thrive` has no French player, yet the
+     test added a French ship. The world is now the saved free-play map, which has
+     the real Dutch and France players and open ocean around (36, 8); no player
+     was invented and no validation was relaxed.
+   - `FleetReportTest.damagedShipReportsItsRemainingUpdatesAndNoDestination`,
+     `Invalid saved ship repair placement`: `UnitFactory` accepts a repairing ship
+     only with zero movement and no other place, as in the F54 fixture. The
+     fixture helpers of `FleetReportTest` and `FleetNavigatorTest` now save
+     `movementThirds` 0; the transfer phase, one update, duration two and the
+     expected three owner updates are unchanged and match F54.
+   - `FleetReportTest.visibleForeignShipDisclosesOnlyItsOccupiedHolds` and
+     `ownerSwitchMovesTheShipBetweenOwnAndForeignLists`: the free-play map already
+     saves a Dutch galleon (ID 3, three free colonists aboard), so the Dutch nation
+     has one own ship before the test adds any. The assertions now compare exact
+     ID sets (own ships `{3}`, foreign ships `{9004}`, and after the owner switch
+     `{3, 9004}`) with `findOwnShip` and `findForeignShip`, keeping the ownership
+     and privacy checks; a new test reports the saved galleon's real passengers.
+   - The hidden-ship test used a far square that is island land in that fixture,
+     which put a galleon on grassland. It now uses ocean outside the island.
+4. Model, rerun needed: `FleetReportTest` covers the six ship families, empty,
+   partial, full, passenger and reserved holds, a passenger named by type, a
+   treasure train as one passenger, a map ship, a Europe ship, an outbound,
+   reversed and waiting voyage, a repair to Europe, visible and hidden foreign
+   ships, the owner switch, pure reads with reload, foreign or null identity, and
+   a reflection check that the foreign row holds no live unit, player, cargo or
+   goods handle. Its 16 other tests passed in the failed run above.
+5. Navigation, rerun needed: `FleetNavigatorTest` (microcol-game) uses the saved
+   free-play map, a real `SelectedTileManager` on a mocked bus, and the real
+   `FleetNavigator`. It covers an own Europe ship, an own map ship, a visible
+   foreign ship, a repair ship that opens nothing, a replaced game with the same
+   IDs, a stopped game, a lost owner, and a foreign ship that moves out of sight.
+   A destroyed target is not covered: `Model.destroyUnit` is package-private.
+   None of its tests has passed yet.
+6. UI, not run, on existing fixtures and helpers:
+   - `TC_171_F202_fleet_report_test`: F22 expert purchase. English and Czech labels,
+     window resized to 900x750 with `FleetReportPage.resizeWindow`, the labels checked
+     inside the window and the viewport, a real boarding by `PassengerTransferPage`,
+     Show to the map tile and to Europe, keyboard reach with Escape, and Save and
+     Continue. Screenshots `fleet-report-english.png` and `fleet-report-czech.png`
+     are written to `target/warehouse-qa` only if the scenario runs.
+   - `TC_172_F202_fleet_voyage_test`: F20 western voyage. The departure uses the
+     drag sequence of `TC_28`; the line matches the Europe screen's turns each turn,
+     then arrival.
+   - `TC_173_F202_fleet_reversal_test`: F35 voyage reversal. The confirmation text
+     and transit checks are those of `TC_44`; the line shows the turned voyage and
+     Continue keeps it.
+   - `TC_174_F202_fleet_repair_test`: F54 ship repair. The Europe repair counts the
+     owner updates of `TC_63`, the cargo stays visible, and Show is disabled.
+   - `TC_175_F202_fleet_foreign_test`: F55 naval combat. The French galleon in sight
+     shows tile 21, 10 and five occupied holds with no cargo words; Show opens its
+     tile, and after `ConcurrentModelEvents.destroyUnit` its row is absent.
+7. UI fixture assumptions, checked on 2026-10-23 against the saved JSON and the
+   reused tests, not by a run: F22 has exactly two Dutch ships (galleon 3 on tile
+   25, 16 with one colonist; galleon 102 in the port with 7 ore), each with a
+   six-hold capacity although five hold entries are saved; F54 galleon 3 carries
+   ore in hold 0 and unit 4 in hold 1, in the Europe transfer with one update and
+   duration two (three owner updates, as `TC_63` shows); F55 French galleon 6 on
+   tile 21, 10 holds four goods and one passenger (five occupied holds); F35 and
+   F20 are the fixtures of `TC_44` and `TC_28`, whose drag, confirmation and turn
+   steps `TC_172` and `TC_173` repeat. The default window is 1000x925, so the
+   900x750 check really shrinks it; the main stage sets no minimum size.
+8. Existing rule tests cited for delivered paths, not re-run for this entry:
+   `VoyageReversalTest`, `ShipRepairTest`, `AtlanticVoyageTest`, `LaborReportTest`,
+   `ForeignOccupiedHoldsTest` (R-0205), `TC_28`, `TC_44`, `TC_63`, `TC_170`.
+9. Not verified: no formatter run, no passing model run of the fleet tests, no
+   Docker/Xvfb UI run and no full local acceptance. The Czech goods and unit names
+   in the expectations were read from the resource files. A crown-seized ship, a
+   colony repair yard and a destroyed navigation target are not covered.
+   Requirement [R-0202](requirements/done/R-0202.md) stays `ready for development`.
+
+## R-0205 inspection without moving — attempt 3, written, not verified — 2026-10-23
+
+1. Attempt 2 failed in the UI phase and remains the record: completion
+   `20261023T165401Z-b7c0017d8470`, `target/docker-ui/run-cRIrO4`. The model
+   phase passed. The UI selection ran 30 tests with 2 failures, 0 errors and
+   0 skipped: `TC_170` `TC_03` (entry-cost check, line 135) and `TC_05` (line
+   195). The panel then read `Ocean`, `Move cost: 1`, `Not reachable this turn`
+   (Czech equivalent). All other selected scenarios (`TC_15`, `TC_26`, `TC_65`,
+   `TC_104` and the other `TC_170` cases) passed.
+2. Diagnosis (read from the sources, not from a new run). Tab runs
+   `SelectedUnitManager.onSelectNextUnit` -> `selectAndFocus`, which calls
+   `SelectedTileManager.setSelectedTile(selectedUnit.getLocation())`; the right
+   panel (`RightPanelPresenter.onFocusedTile`) therefore shows the frigate's
+   own square, not the neighbour that the test had inspected. A mouse click on a
+   neighbour does not keep the unit either: `evaluateLocation` selects the first
+   selectable unit on the clicked tile, or none. The state "own unit selected
+   while another square is inspected" is thus not reachable by a player, and the
+   attempt 2 panel lines could never show an entry cost to a real neighbour. On
+   the own square they said `Not reachable this turn`, because
+   `getAvailableLocations` excludes the unit's own square, which wrongly implies
+   that the unit cannot stay. For an adjacent illegal square they would still
+   have printed an entry cost, because `getEntryCostThirds` prices a ship step
+   as one point without testing legality. Selection following the tile is
+   existing behaviour (R-0053) and is unchanged.
+3. Fix: the panel lines (`RightPanelView.appendSelectedUnitReach`) and the keys
+   `tileEntryCost`, `tileReachable`, `tileUnreachable` in `Loc` and both bundles
+   are removed; `RightPanelView` is back to its delivered form. Range is
+   shown by the affordance that already exists and is already model-derived: on
+   a press on an own unit, `GamePanelPresenter` fills
+   `OneTurnMoveHighlighter` from `Unit.getAvailableLocations()`, and
+   `GamePaintService` paints every highlighted explored square. The preview path
+   (`MoveModeSupport`, turn-end step images) and the Escape cancel are the
+   existing cost/turn affordance. The only production change is that
+   `OneTurnMoveHighlighter.isItHighlighted` is now public (read only) so a page
+   can verify the overlay.
+4. Movement reuse map for R-0205 requirement 2.1, with what each test really
+   asserts:
+   - Terrain name, base `Move cost: N` of the terrain, resource, unexplored text:
+     `RightPanelView`; the base cost is a terrain price, not a claim that any
+     unit may enter. TC_26 (fog) and TC_15 (move display).
+   - Legal entry cost, full, partly spent and zero allowance, beyond-range
+     preview empty, rejection: `TC_87_F78_terrain_movement_test` through
+     `TerrainMovementPage.verifyReach`/`verifyNoReach` (model reach),
+     `FogPage.verifyPreviewIncludes`/`verifyPreviewEmpty` (preview) and
+     `verifyMovementUnavailable`/`verifyCannotMoveHere` (rejection).
+   - Land refused to a ship, with cancel and no spent point:
+     `TC_38_F30_coastal_port_movement_test` `TC_02` and `TC_03`.
+   - Preview and Escape cancel: `FogPage.preview`, `CoastalPortPage`
+     `verifyPreview`/`cancelPreview`/`verifyPreviewCanceled`/
+     `verifyWorldUnchanged` (TC_38 `TC_01`).
+   - New in TC_170 `TC_03`: the overlay itself. The page compares the highlighter
+     with `getAvailableLocations()` in both directions over a radius of 8 squares
+     (every reachable square highlighted; the own square, land the frigate cannot
+     enter and squares beyond its movement not highlighted), then cancels with
+     Escape and checks that the overlay is cleared and `rememberWorld`/
+     `verifyWorldUnchanged` and `worldFacts` (year, gold, every unit's square,
+     order, movement and occupied holds) are unchanged.
+5. Other TC_170 cases: `TC_01` mouse and Tab inspection with unchanged facts
+   (Tab selects an own unit and still moves nothing); `TC_02` Save and Continue;
+   `TC_04` live removal of the selected frigate through
+   `ConcurrentModelEvents.destroyUnit`, re-inspection, Save and Continue without a
+   stale panel or selection; `TC_05` Czech occupied holds, the right panel fits
+   the window for the foreign galleon and the own frigate, screenshots
+   `inspection-foreign-holds-cs.png`, `inspection-own-unit-cs.png`.
+   The model-level occupancy tests keep the repaired fixtures of attempt 2 (saved
+   PO form and `embarkFromLocation`).
+6. Not verified and not claimed: attempt 3 has no build, JUnit, formatter or
+   Docker run. Unconfirmed assumptions: the frigate has a plain move neighbour
+   (`plainMoveStepOf` fails loudly otherwise) and the 8-square window holds its
+   whole reach. Remaining limits: there is no panel text for the cost of a
+   specific neighbouring step (the preview shows turn-end markers, TC_87 checks
+   the cost through reach); the overlay is verified for a ship only; stale
+   selection is covered by removal, not by replacement. Rerun selection: all
+   JUnit, plus `TC_170`, `TC_15`, `TC_26`, `TC_65`, `TC_104`.
+
+## R-0205 inspection without moving — attempt 2, failed UI run — 2026-10-23
+
+1. Failed attempt 1 remains the record: local model run
+   `target/docker-ui/run-RzTOz8` / completion `20261023T164418Z-84d43c668489`
+   (revision `1b86642b`, exit 1) reported 3973 model tests, 0 failures, 1 error,
+   0 skipped; UI was not reached. The error was
+   `ForeignOccupiedHoldsTest.staleRemovedOrForeignModelIdentityDisclosesNothing`
+   at line 135: `Model.make(model.save())` rejected the save with `Saved unit
+   must reserve holds of exactly one ship`. Cause: the fixture emptied galleon
+   holds directly while a passenger's place still pointed at a hold. The
+   loader's place/hold invariant then refused the saved form. Nothing in the
+   loader was weakened.
+2. Attempt 2 rebuilt every fixture through the saved PO form and the model's
+   embark operation (`NativeTurnScene`, as `TreasureHoldReservationTest` does).
+   Passengers board through `embarkFromLocation`; a treasure train reserves six
+   holds through the same path; goods are set in the PO. Carrier destruction
+   is tested with a reload of the saved form (`destroyingTheCarrier…`). No test
+   uses a direct hold clear or a direct `store` of a unit that is still placed
+   on the map.
+3. Superseded by attempt 3: attempt 2 added panel lines `Entry cost from
+   selected unit` and `Reachable this turn`/`Not reachable this turn`
+   (`RightPanelView.appendSelectedUnitReach`). Their UI run failed as recorded
+   above and they were removed; this item describes what was tried, not the
+   current code.
+4. Reuse map as written in attempt 2 (kept for the record; the movement items are
+   corrected in attempt 3):
+   - Terrain, move cost, resource, unexplored text, last-seen colony, observed
+     units: `RightPanelView` with TC_26 (fog) and TC_15 (move display).
+   - Path preview and its Escape cancel: `FogPage.preview`, `CoastalPortPage`
+     `verifyPreview`, `cancelPreview`, `verifyPreviewCanceled`, `verifyWorldUnchanged`
+     (used by TC_38 TC_01, TC_02 and TC_03); R-0054 owns the Escape cancel.
+   - Date and gold: status bar (`StatusBarView`); asserted in TC_170 through
+     `worldFacts()`.
+   - Own cargo: `UnitPanel` (own units only); TC_170 compares occupied holds
+     through `worldFacts()`.
+   - Order limits and rejection: R-0016/R-0017; TC_170 compares each unit's order.
+   - Colony detail and buildings: colony screen; accepted disband quantities,
+     overflow and cancel: `TC_104_F95_disband_test` (its assertions are reused,
+     not rewritten).
+5. TC_170 as written in attempt 2 had `TC_03` (entry cost and reach lines of a
+   neighbour after Tab) and `TC_05` (Czech reach lines); those two failed.
+   `TC_01`, `TC_02` and `TC_04` passed in the UI run.
+6. Result: model phase passed; UI 30 tests, 2 failures (above), 0 errors, 0
+   skipped. This is a failed run, not an acceptance.
+
+## R-0205 inspection without moving — attempt 1, failed model run — 2026-10-23
+
+1. Model: `Player.getObservedOccupiedHolds(Unit)` returns an `OptionalInt`
+   with the number of occupied holds of a foreign ship that the player sees
+   now. A hold counts once whether it holds goods, a passenger, or the reserved
+   part of a multi-hold passenger. The query first checks that the viewer and
+   the ship are live in the current model, that the ship is not the viewer's
+   own, that it is at a place and currently visible. Otherwise it returns
+   nothing. It never mutates cargo, exploration, movement or goods.
+2. GUI: `UnitPanel` adds `unitHolds-<id>` only for a visible foreign ship, with
+   `Occupied holds: N` (English) or `Obsazené nákladní prostory: N` (Czech).
+   The existing cargo panel stays limited to own units, so the passengers and
+   goods of a foreign ship are never listed.
+3. Tests written, not run: `ForeignOccupiedHoldsTest` (empty, partial and full
+   holds; goods and passengers counted once; a reserved hold; explored but
+   not visible; owner switch; stale and foreign-model identity; purity; a null
+   argument). `TC_170_F205_inspection_without_moving_test` uses the naval
+   fixture `F55-naval-combat`: TC_01 mouse inspection of the French galleon
+   (`Occupied holds: 5`, no `With:`, `No goods` or goods names), the own frigate,
+   Tab selection and an unchanged state of every unit; TC_02 the same count after
+   Save and Continue. It captures `inspection-foreign-holds-en.png` at the
+   right panel.
+4. Existing paths reused and not rewritten: tile details in `RightPanelView`,
+   own cargo in `UnitPanel`, date and gold in the status bar, order limits and
+   rejection under R-0016/R-0017, colony detail in the colony screen, and
+   disband quantities, overflow and cancel in `TC_104_F95_disband_test`.
+5. Not verified and not claimed: no build, JUnit, formatter or Docker UI run has
+   been done for this change. The UI stale-selection path has no dedicated
+   scenario; a removed selected unit is covered by the rebuild of the panel and by
+   TC_104. Chosen test selection for the batch boundary: `TC_170`, `TC_15`,
+   `TC_26`, `TC_65`, `TC_104`.
+
 ## R-0201 native advisor — written, not verified — 2026-10-23
 
 1. Model: `Model.getNativeAdvisorReport(player)` builds an immutable
@@ -6357,6 +7972,149 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 5. Two Haiku medium attempts, a quota-interrupted Sonnet medium attempt and one user-authorized Haiku continuation produced the change. Initial schema-fixture and test-lifecycle failures were repaired and rerun. Main inspected and applied the worker's one-time conversion of 72 tracked files / 834 allowances; one deliberately malformed load-rejection fixture was preserved. Shared formatting checks all 53 changed Java files with exact code-token and idempotence checks passing. No full UI suite or publication is claimed here; ten-requirement batch integration remains pending.
 
 
+## R-0210 terrain matrix ledger, 2026-10-23 (written, not verified)
+
+1. Source: aid card 4, "Terrain Chart", PDF page 135 of
+   `docs/Sid_Meiers_Colonization_manual.pdf` (present locally; read on
+   2026-10-23). It agrees cell for cell with the [terrain audit](gap-analysis.md#terrain-reference-data-audit);
+   that audit's "current" columns predate R-0123–R-0125 and are historical.
+   Expected values are typed from the page, never read from `TerrainType` or
+   `Terrain`. Use cases UC-007–009/012/021/073 stay partial; see
+   [the required matrices](use-cases.md#povinne-matice-a-obsah-prehledu).
+2. Cell ledger, forested/bare (`f/b`). Every unlisted cell is zero; the fish
+   column is water only, represented by `CORN`:
+
+   | Variant | Move thirds f/b | Defense % f/b | Food | Sugar | Tobacco | Cotton | Fur | Lumber | Ore | Silver |
+   | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+   | Grassland | 6/3 | 50/0 | 3/4 | 0/1 | 1/3 | 1/2 | 2/0 | 6/0 | 0/0 | 0/0 |
+   | Prairie | 6/3 | 50/0 | 3/4 | 0/0 | 1/2 | 1/3 | 2/0 | 4/0 | 0/0 | 0/0 |
+   | Savannah | 6/3 | 50/0 | 3/4 | 1/3 | 1/2 | 1/3 | 2/0 | 4/0 | 0/0 | 0/0 |
+   | Plains | 6/3 | 50/0 | 3/4 | 0/0 | 1/1 | 1/2 | 3/0 | 6/0 | 0/0 | 0/0 |
+   | Marsh | 9/6 | 50/25 | 2/3 | 1/1 | 2/3 | 0/0 | 2/0 | 4/0 | 2/3 | 0/0 |
+   | Swamp | 9/6 | 75/25 | 2/3 | 2/3 | 0/1 | 0/0 | 0/0 | 4/0 | 0/0 | 0/0 |
+   | Desert | 3/3 | 50/0 | 2/2 | 0/0 | 0/1 | 1/1 | 2/0 | 2/0 | 1/2 | 0/0 |
+   | Tundra | 6/3 | 50/0 | 2/3 | 0/0 | 0/0 | 0/0 | 3/0 | 4/0 | 1/2 | 0/0 |
+   | Arctic (bare only) | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+   | Hills (bare only) | 6 | 100 | 2 | 0 | 0 | 0 | 0 | 0 | 4 | 0 |
+   | Mountains (bare only) | 9 | 150 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 |
+   | Ocean, sea lane, lake (bare only) | 3 | 0 | 3 fish | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+   The table lists 22 legal variants (16 forest/bare pairs, 6 single states).
+   Lake is the accepted project rule of 2026-10-18, not a chart row.
+3. Named model owners:
+   - `TerrainProductionMatrixTest.baselineCellsMatchTheAidCardLiterally`: all
+     22 variants for the eight charted goods, zeros explicit.
+     `everyGoodsTypeOutsideTheChartIsZeroOnEveryLegalVariant` checks the other
+     11 goods. `thereAreTwentyTwoLegalBareAndForestedVariants`,
+     `forestOnTreelessTerrainIsRejectedAndYieldsStayBare`,
+     `clearedSwampFallsBackToBareRowWithoutDuplicatingOutput` and
+     `colonyUpdateMatchesThePreviewOfAForestedField` cover legality, clearing
+     and the colony preview.
+   - `TerrainMovementTest.test_terrainEntryCosts_matchAidCard4`: every legal
+     variant in thirds.
+   - `TerrainTypeTest.every_terrain_has_documented_forest_and_defense_cells`:
+     bare and forested defense for all 14 terrains.
+   - `CombatStrengthTest.everyCurrentLegalTerrainUsesSharedMetadata` (19 land
+     preview cells), `clearingForestChangesSharedDefenseOnce` and
+     `actualResolverUsesForestedThenClearedDefense`.
+4. Overlay owners, one pair per boundary: rivers small +1 and large +2
+   (`RiverProductionTest`, `RiverMovementTest`, `WorldMapRiverTest`); resources
+   +2 with independent silver/ore reserves and depletion (`ResourceOverlayProductionTest`,
+   `ResourceOverlayTest`, `WorldMapResourceTest`, `MineralReserveTest`,
+   `MineralDepositProductionTest`); roads (`RoadProductionTest`,
+   `RoadMovementTest`, `BuildRoadTest`); plow (`TerrainTest`, `PlowFieldTest`);
+   forest clearing and reload (`ClearForestTest`).
+5. Player paths. Existing: TC86 (forested grassland preview, next turn and
+   Continue), TC87 (full and partial allowance), TC88/TC89 (road construction
+   and travel), TC90 (small and large river output, travel, Continue), TC91
+   (resource preview against next turn), TC102 (mineral depletion), TC15/TC18
+   (plow), TC73 (clearing, Continue), TC80 (terrain identity) and TC35 TC12
+   (forested defender in the attack preview). TC76 covers colony defense, not
+   a terrain cell.
+6. New, written and not yet passed: `TC_182_F210_forest_clearing_defense_test`
+   (one `@Start`, one scenario) on `F27-attack-eligibility`. Linear steps: a
+   cancelled attack preview leaves the game unchanged; the attack review of the
+   forested grassland defender (unit 6) shows `Terrain: +50%`, final 3 against
+   the attacker's 3 and 50%; Escape closes it unchanged. The defender is then
+   placed on the empty grassland (16,11) with the existing
+   `AttackPage.simulateMovedDefender`, and the unarmed Dutch colonist (unit 1,
+   100 tools) moves in with a real drag. Declining the clearing question
+   changes nothing; confirming starts four owner updates. Two updates, Save and
+   Continue, one more update, and the fourth update removes the forest and
+   reports `Forest cleared at (17, 11): lumber lost: 20. No colony of yours is
+   within two squares.` The cleared square yields no lumber or fur and
+   survives a second Continue. The pioneer steps out, the defender is placed on
+   the cleared square, and the attack review now shows no terrain line, final 2
+   and 60% (3 against 2). The clearing is never a model call.
+7. Expected values come from the rules and the existing `TC_12` and `TC_02`
+   strings: grassland defense is 50 forested and 0 bare, colonist base is 2,
+   attack adds 50%, win chance is attacker over the sum, and the dialog
+   strips trailing zeros. Fixture and ordering facts verified from the data
+   on 2026-10-23: (17,11) and (16,11) are grassland; units 0 and 6 hold
+   muskets; units 1 and 4/5 do not; Dutch is the current player; every land
+   unit has 3 thirds, a full allowance, so the forested entry ends at zero;
+   plain colonists may clear forest (`isCanCutTrees`) and the clearing rules
+   have no claimant restriction; Quebec and Montreal are French, so no Dutch
+   colony is within two squares. `ClearForestFixture` now skips armed colonists
+   (tools and muskets are separate equipment) and tolerates a map without a
+   plowed-field block; F01 has no armed unit, so TC73 is unchanged. France is a
+   computer rival, so TC182 binds the existing `PassiveRivalPlayer` (as TC101
+   and TC181) to keep its units where the scenario puts them across five owner
+   turns; no AI behavior changed.
+8. Reload boundaries (model): `TerrainIdentityTest.everyTerrainIdentityAndLegalForestSurvivesSaveAndReload`
+   and `illegalForestRejectsLoadWithoutChangingTheSource`; `ClearForestTest`
+   `countdownAndClearedStateSurviveDiskRoundtripWithoutAdvancing` and
+   `clearedSquareKeepsBareYieldsButNeverProducesLumberOrFurAgain`;
+   `WorldMapResourceTest.savedRemainingUnitsSurviveSaveIncludingZeroAndPartialReserves`.
+7. Reload boundaries (model): `TerrainIdentityTest.everyTerrainIdentityAndLegalForestSurvivesSaveAndReload`
+   and `illegalForestRejectsLoadWithoutChangingTheSource`; `ClearForestTest`
+   `countdownAndClearedStateSurviveDiskRoundtripWithoutAdvancing` and
+   `clearedSquareKeepsBareYieldsButNeverProducesLumberOrFurAgain`;
+   `WorldMapResourceTest.savedRemainingUnitsSurviveSaveIncludingZeroAndPartialReserves`.
+9. Coverage: the model covers every legal variant for production, movement and
+   defense constants. Battle cells cover every land variant; water defense is 0
+   by constant only. Combat reads terrain type and forest only:
+   `CombatStrengths.java` has no river, road, resource or plow reference
+   (checked 2026-10-23). Overlay battle cases therefore apply to clearing alone.
+10. Remaining gaps: TC182 has not passed, so its clearing-then-preview journey
+   is not established; a land fish cell is not representable, so the fish column
+   is asserted only through water; `TerrainTypeTest.test_production_matrix`
+   checks only the terrain count despite its name. The arctic forested movement
+   assertion was removed on 2026-10-23 because arctic cannot hold trees.
+11. Partial local evidence, passed: Docker/Xvfb completion
+    `20261023T202548Z-21a830a59db9` (`result.json`, `command.log`, reports
+    `target/docker-ui/run-peOwbt`; 443.867 s) reports 4,065 model tests in 329
+    reports and 40 UI tests in 10 reports, zero failures, errors or skips, and
+    all 102 hashes match. Selection: TC86, TC87, TC90, TC91, TC102, TC73 and
+    TC35, plus all JUnit. That is a partial pass for those checks only; it
+    predates TC182.
+12. Failed evidence, kept: completion `20261023T203941Z-3c3dca405eb8`
+    (`result.json`, `command.log`, reports `target/docker-ui/run-JHnkXe`;
+    417.423 s). The 4,065 model tests in 329 reports passed. The UI part ran 41
+    tests in 11 reports with **1 error**, 0 failures and 0 skips. The error was
+    TC182: `ClearForestFixture.prepare` (call at TC182 line 75, `set` at line
+    71 of the helper, `rows.get` at line 80) threw `NullPointerException` because
+    the F27 map has `tiles`, `trees`, `maxX`, `maxY` and `seed` but no `fields`
+    block. `WorldMapPo.getFieldSet` accepts a missing block (no plowed field),
+    so this was a helper defect, not a model or map defect. It is a fixture
+    error that occurred before the scenario's first gameplay step, so it says
+    nothing about the TC182 journey. TC35, TC73, TC86, TC87, TC90, TC91 and
+    TC102 passed in that run.
+13. Attempt 3 repairs (not yet run): the helper skips the field removal when the
+    block is absent and no longer gives tools to armed colonists. Review of the
+    scenario then found and fixed three more defects before any run: the
+    strengths are shown in the attack review dialog (`chooseAttack`), not in a
+    drag preview; the French computer rival needed the passive rival; and
+    completion without a Dutch colony raises a turn report that the scenario now
+    verifies. Remaining risk, to be settled by the next run: the first real
+    drag selecting unit 1 on a tile with a single unit (as in TC35), the report
+    timing at the completing turn (as in TC73 `TC_06`), and the exact
+    50%/60% chances. If any step fails, record it as failed evidence; do not
+    change accepted rules to pass.
+14. Not established: formatter, TC182, the full JUnit and selected UI rerun on
+    the current source, and the full batch. R-0210 stays
+    `ready for development`.
+
 ## R-0121 road construction and travel — 2026-10-19
 
 1. [R-0121](requirements/done/R-0121.md) is accepted on the isolated batch branch. Roads persist on non-sea squares; ordinary/hardy pioneers finish after two/one owner updates and spend 20 tools once. Cancel and stale work have no road/tool effect. UI offers build/cancel, localized remaining work and visible roads. Connected land-road endpoints cost one third in execution, path, range and preview; fractional movement remains selectable. Road production bonuses remain R-0122.
@@ -7013,3 +8771,59 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. Requirements R-0195, R-0196, R-0193, R-0197, R-0194, R-0074, R-0198, R-0199, R-0200 and R-0201 passed complete local acceptance. Completion `20261023T151728Z-7b16beb661c3` (PID 68138) used two isolated Docker/Xvfb UI workers and one model phase.
 2. `target/verification/run-xf14w1iv/summary.json` and `manifest.json`: model 3,964 tests in 319 reports; UI group 1 297 tests in 85 reports; UI group 2 340 tests in 85 reports. Total UI/support: 637. Every expected report is present, with zero failures, errors or skips in every group. Duration: 4,527.108 seconds (supervisor: 4,527.188 seconds).
 3. All 2,476 source hashes matched the accepted snapshot before documentation-only status/link updates. Shared Java formatting, completion-runner/local-worker/documentation checks and strict MkDocs passed before the run. Earlier failed runs remain failed evidence. This establishes local acceptance, not remote CI or publication.
+
+
+## R-0205 targeted inspection verification (2026-10-23)
+
+1. Completion `20261023T170610Z-bb118f5a074a` (PID 71637) passed 3,974 model/JUnit tests in 320 reports and 38 UI/support tests in ten reports, zero failures, errors or skips, in 412.396 seconds. Reports: `target/docker-ui/run-vrlteo`. Selection: all JUnit plus TC170, TC15, TC26, TC65, TC104, TC87 and TC38. All 13 source hashes matched; shared formatting and diff checks passed.
+2. The existing map range overlay is compared with model reachability in both directions and cleared on cancelled preview without world changes. The unnecessary per-unit tile text from attempt 2 was removed. The existing entry-cost/preview/rejection tests TC87 and TC38 passed alongside inspection, cargo privacy, stale removal and Continue. Czech foreign-hold and own-unit screenshots were reviewed for readable labels; foreign cargo identities remain hidden.
+3. Earlier failed runs remain failed evidence. Complete eighth-batch acceptance remains pending. No publication is claimed.
+
+
+## R-0202 targeted fleet verification (2026-10-23)
+
+1. Completion `20261023T174516Z-7b06357d5a1d` (PID 73012) passed 4,002 model/JUnit tests in 322 reports and 37 UI/support tests in twelve reports, zero failures, errors or skips, in 559.578 seconds. Reports: `target/docker-ui/run-OGKu4w`. Selection: all JUnit plus TC171–175, TC166, TC168, TC170 and TC30. All 34 source hashes matched; shared formatting and diff checks passed.
+2. The fleet scenarios cover cargo changes, map/Europe navigation, voyage and reversal, repair progress, foreign count-only disclosure, English/Czech display and Continue. Navigator tests cover replaced-model identities and changed ownership/visibility. Czech fleet and English repair screenshots were reviewed for readability and state-appropriate controls.
+3. Earlier failed runs remain failed evidence. This is targeted acceptance only; complete eighth-batch acceptance remains pending.
+
+
+## R-0203 targeted Congress verification (2026-10-23)
+
+1. Completion `20261023T182441Z-1065971b14ef` (PID 74446) passed 4,011 model/JUnit tests in 323 reports and 26 UI/support tests in ten reports, zero failures, errors or skips, in 351.449 seconds. Reports: `target/docker-ui/run-iLMeuR`. Selection: all JUnit plus TC176, TC56, TC150, TC81, TC03, TC83 and TC85. All 44 source hashes matched; shared formatting and diff checks passed.
+2. English support and Czech roster screenshots were reviewed: text wraps, the report scrolls and Choose/Close remain outside the scroll area. Tests cover support boundaries, actual Crown counts, view purity, separate viewers, Continue, founder actions and typography.
+3. Earlier failed runs remain failed evidence. The rejected Sonnet model identifier was a caller setup error before worker execution; corrected invocation used the configured Sonnet and the same repair budget. Complete eighth-batch acceptance remains pending.
+
+
+## R-0204 targeted turn-notice verification (2026-10-23)
+
+1. Completion `20261023T191619Z-ba5c658af244` (PID 75783) passed 4,044 model/JUnit tests in 329 reports and 78 UI/support tests in 22 reports, zero failures, errors or skips, in 876.907 seconds. Reports: `target/docker-ui/run-AkLImK`. Selection: all JUnit plus TC177, TC178, TC179, TC180, TC08, TC09, TC10, TC32, TC73, TC28, TC84, TC163, TC156, TC158, TC159, TC74, TC59, TC47 and TC17. All 92 source hashes matched; shared formatter and diff checks passed.
+2. This run verifies the new project and overflow journeys, birth text/action, defaults, routine-summary suppression, critical famine, manual report, automatic Europe ordering, final result and Continue without replay. Terminal precedence was additionally reviewed in `GameManager.announcePreparation` and `finishTaxChoice`: finished outcomes return before a fresh turn-start event. Simultaneous arrival/critical routing and completed-unit notice localization are covered at model/presenter level, not by separate UI scenarios.
+3. Czech Settings at 900×750 was visually reviewed in the preceding run with the same layout. Complete eighth-batch acceptance, documentation checks and commit remain pending. Earlier partial evidence is not a full-suite pass.
+
+
+## R-0208 targeted profile matrix verification (2026-10-23)
+
+1. Completion `20261023T201110Z-a48a8e6d583f` (PID 77383), reports `target/docker-ui/run-HuVkRA`, passed 4,064 model/JUnit tests in 329 reports and 49 UI/support tests in eleven reports, zero failures, errors or skips, in 450.997 seconds. All 100 recorded source hashes matched; shared formatting and diff checks passed.
+2. All twenty model matrix invocations passed. The four TC181 XML reports each contain five passing named cases: Dutch TC01–05, French TC06–10, English TC11–15 and Spanish TC16–20, in Discoverer through Viceroy order. Each UI cell loads its reference profile, completes a turn and Continues its save. TC24, TC36, TC94 and TC22 also passed. These loaded reference positions do not establish the R-0209 New Game selector matrix.
+3. Earlier failed runs remain failed evidence. Splitting the UI matrix preserves every cell in separate per-class JVMs. Existing ListenerManager executor accumulation is a recorded risk; the exact earlier startup failure cause remains unconfirmed. Complete eighth-batch acceptance remains pending.
+
+
+## R-0210 targeted terrain matrix verification (2026-10-23)
+
+1. Completion `20261023T205244Z-000dc8c9b2ac` (PID 78650), reports `target/docker-ui/run-DV76Xe`, passed 4,065 model/JUnit tests in 329 reports and 41 UI/support tests in eleven reports, zero failures, errors or skips, in 437.504 seconds. All 105 recorded source hashes matched; shared formatting and diff checks passed. Selection: all JUnit plus TC182, TC35, TC73, TC86, TC87, TC90, TC91 and TC102.
+2. TC182 passed the real clearing action and countdown, lost-lumber notice, Save/Continue and exact forest/bare attack-preview comparison with cancellation purity. Controlled defender positioning and passive rivals isolate terrain behavior; the clearing itself uses player actions. Existing table/overlay owner tests and selected player paths passed on the same source.
+3. The initial partial pass and later failed fixture run remain distinct evidence. Complete eighth-batch acceptance and documentation checks remain pending.
+
+### R-0211 targeted verification, 2026-10-23
+
+1. The third worker attempt was reviewed and the shared Java formatter checked 92 changed Java files, formatting one; token preservation and idempotence passed.
+2. Completion `20261023T213640Z-252e4b5c4fa7`, Docker evidence `target/docker-ui/run-VNoE55`: 4,085 model/JUnit tests in 331 reports and 49 UI/support tests in 11 reports, zero failures, errors or skips; duration 568.503 seconds. Selected TC25/27/62/64/66/140/145/183 and the three support suites all have reports. All 116 recorded source hashes matched.
+3. TC183 verifies both the 49-musket refusal and the successful scout-to-dragoon transition through colony controls and Continue. Earlier run `run-Y08GD9` remains failed evidence (one assertion failure and three invalid-fixture errors; UI did not run). Its repairs preserve the artillery survival expectations and use the persisted combat RNG.
+4. This is targeted evidence, not complete acceptance. R-0211 remains open pending the user's decision on the fate of standalone civilians/wagons and the corresponding player-path verification. Full batch acceptance, documentation checks and commit/push remain pending. Detailed local review records: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0211-targeted-3-review.json`.
+
+## Eighth-batch full acceptance (2026-10-24)
+
+1. R-0205, R-0202, R-0203, R-0204, R-0208, R-0210, R-0212, R-0213, R-0214 and R-0215 passed complete local acceptance. Completion `20261024T002237Z-5977b6168df9` (PID 84578) used one model phase and two isolated Docker/Xvfb UI workers.
+2. Evidence: `target/verification/run-u2fg1l20/summary.json` and `manifest.json`; callback `result.json` and `command.log` under `/Users/jan/Library/Logs/Microcol/completions/20261024T002237Z-5977b6168df9/`. Model: 4,707 tests in 333 reports. UI group 1: 323 tests in 94 reports; UI group 2: 361 tests in 94 reports. Total UI/support: 684. All 521 expected reports are present; every group has zero failures, errors and skips. Runner duration 4,725.877 seconds; supervisor 4,725.927 seconds.
+3. All 2,525 recorded source hashes matched before documentation-only status and link updates. Main-agent evidence review is `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/eighth-batch-full-review.json`. Earlier failed runs remain failed evidence. Local acceptance does not establish remote CI or publication.
+4. The implemented R-0211 role/combat checks were included in this regression, but R-0211 remains open pending the civilian/wagon defeat decision. R-0209 remains open pending America/R-0221 scope. R-0207 remains deferred by explicit user instruction.

@@ -526,6 +526,9 @@ public class ColonyBuildingQueue {
                 throw new IllegalArgumentException(
                         String.format("Unknown class '%s'.", item.getItem()));
             }
+            // The owner learns of the finished head project once per update.
+            model.addTurnEvent(TurnEventProvider
+                    .getProjectCompleted(colony.getOwner(), colony, item));
             buildingQueue.remove(0);
             revision++;
         }

@@ -273,6 +273,25 @@ public final class ExpertPurchasePage extends AbstractScreen {
                 .getProductionModifier(org.microcol.model.GoodsType.TOOLS));
     }
 
+    /**
+     * Any hired specialist keeps its identity, type, owner and single charge.
+     *
+     * @param id        unit identifier of the hired specialist
+     * @param type      expected specialist type
+     * @param gold      treasury of the buyer after the purchase
+     * @param placeType expected place class of the specialist
+     */
+    public void verifySpecialistState(final int id, final UnitType type,
+            final int gold, final Class<?> placeType) {
+        Unit unit = getModel().getUnitById(id);
+        assertSame(type, unit.getType());
+        assertSame(getModel().getPlayerByName("Dutch"), unit.getOwner());
+        assertEquals(gold, unit.getOwner().getGold());
+        assertTrue(placeType.isInstance(unit.getPlace()));
+        assertEquals(1, getModel().getAllUnits().stream()
+                .filter(candidate -> candidate.getId() == id).count());
+    }
+
     public void verifySmithyWorker(int id, int tools, int ore) {
         org.microcol.model.PlaceConstructionSlot place = (org.microcol.model.PlaceConstructionSlot) getModel()
                 .getUnitById(id).getPlace();

@@ -24,8 +24,22 @@ class MilitaryPromotionTest {
 
     private Model game(final long state, final UnitType attackerType,
             final UnitType defenderType, final boolean washington) {
+        return game(state, attackerType, defenderType, washington, false);
+    }
+
+    /**
+     * With {@code joinWashington} the Dutch attacker's nation recruits George
+     * Washington through its own update on its turn, before the battle.
+     */
+    private Model game(final long state, final UnitType attackerType,
+            final UnitType defenderType, final boolean washington,
+            final boolean joinWashington) {
         final ModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol").getModel();
+        if (joinWashington) {
+            RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "Dutch"),
+                    Founder.GEORGE_WASHINGTON);
+        }
         data.setCombatRandomState(state);
         data.getUnits().stream().filter(unit -> unit.getId() == 0).findFirst()
                 .orElseThrow().setType(attackerType);
@@ -43,6 +57,10 @@ class MilitaryPromotionTest {
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
             model.endTurn();
+        }
+        if (joinWashington) {
+            RealFounderJoin.joinThroughOwnerUpdate(model,
+                    Founder.GEORGE_WASHINGTON);
         }
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
@@ -161,6 +179,47 @@ class MilitaryPromotionTest {
         assertEquals(4.5, defender.getMilitaryStrenght());
         assertTrue(events.get(0).getPromotion().isPresent());
         assertEquals(0L + STEP, model.save().getCombatRandomState());
+    }
+
+    @Test
+    void washingtonJoiningThroughOwnerUpdatePromotesTheNextWinnerWithoutADraw() {
+        // Control: seed 3 wins but the quarter roll does not promote.
+        final Model plain = game(3L, UnitType.COLONIST, UnitType.COLONIST,
+                false);
+        final UnitFreeColonist unpromoted = (UnitFreeColonist) plain
+                .getUnitById(0);
+        unpromoted.prepareAttack(TARGET, true).orElseThrow().execute();
+        assertFalse(unpromoted.isVeteran());
+        assertEquals(3L + 2 * STEP, plain.save().getCombatRandomState());
+
+        final Model model = game(3L, UnitType.COLONIST, UnitType.COLONIST,
+                false, true);
+        final UnitFreeColonist soldier = (UnitFreeColonist) model
+                .getUnitById(0);
+        final List<UnitAttackedEvent> events = listen(model);
+        soldier.prepareAttack(TARGET, true).orElseThrow().execute();
+        assertTrue(soldier.isVeteran());
+        assertTrue(events.get(0).getPromotion().isPresent());
+        // Only the battle drew: Washington promotes without the quarter roll.
+        assertEquals(3L + STEP, model.save().getCombatRandomState());
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertTrue(((UnitFreeColonist) restored.getUnitById(0)).isVeteran());
+    }
+
+    @Test
+    void washingtonLeavesAnAlreadyVeteranWinnerAtItsSingleStage() {
+        final Model model = game(7L, UnitType.VETERAN_SOLDIER,
+                UnitType.COLONIST, false, true);
+        final UnitFreeColonist veteran = (UnitFreeColonist) model
+                .getUnitById(0);
+        assertTrue(veteran.isVeteran());
+        final List<UnitAttackedEvent> events = listen(model);
+        veteran.prepareAttack(TARGET, true).orElseThrow().execute();
+        assertTrue(events.get(0).getPromotion().isEmpty());
+        assertEquals(UnitType.VETERAN_SOLDIER, veteran.getType());
+        assertTrue(veteran.isVeteran());
+        assertEquals(7L + STEP, model.save().getCombatRandomState());
     }
 
     @Test

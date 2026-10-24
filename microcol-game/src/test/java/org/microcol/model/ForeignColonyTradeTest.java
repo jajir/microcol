@@ -180,6 +180,35 @@ class ForeignColonyTradeTest {
     }
 
     @Test
+    void joining_de_witt_through_the_owner_update_permits_the_refused_trade() {
+        final ModelPo saved = setup(false, EuropeanRelationState.PEACE, false)
+                .save();
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(saved, "Dutch"),
+                Founder.JAN_DE_WITT);
+        final Model model = Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        model.startGame();
+        final Unit wagon = model.getUnitById(WAGON_ID);
+        load(wagon, GoodsType.CORN, 3);
+        final Colony quebec = quebec(model);
+        assertEquals(ForeignColonyTradeProblem.FOUNDER_ABSENT,
+                model.getForeignColonyTradeAccess(wagon, quebec));
+
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.JAN_DE_WITT);
+        assertEquals(ForeignColonyTradeProblem.NONE,
+                model.getForeignColonyTradeAccess(wagon, quebec));
+        final int bid = bid(model, GoodsType.CORN);
+        final Player dutch = model.getPlayerByName("Dutch");
+        final int dutchGold = dutch.getGold();
+        final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
+                wagon, quebec, Goods.of(GoodsType.CORN, 3));
+        assertTrue(quote.isLegal());
+        model.tradeWithForeignColony(wagon, quebec, quote);
+        assertEquals(dutchGold + 3 * bid, dutch.getGold());
+        assertEquals(0, carried(wagon, GoodsType.CORN));
+    }
+
+    @Test
     void war_refuses_the_trade_and_alliance_permits_it() {
         final Model war = setup(true, EuropeanRelationState.WAR, false);
         final Unit warWagon = war.getUnitById(WAGON_ID);

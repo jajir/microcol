@@ -3,7 +3,8 @@
  * and famine. Founder arrivals retain the founder identity, independently of
  * the ongoing Congress offer. Persist them with the model: the current world
  * cannot reliably recreate these messages. They are cleared when the player's
- * turn ends; gui.screen.turnreport owns their presentation.
+ * turn ends; gui.screen.turnreport owns their presentation. Which records stay
+ * visible when the routine summary is off is decided by TurnEventCriticality.
  *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a>

@@ -4,6 +4,7 @@
   <entry key="title">Congress</entry>
   <entry key="choose">Choose this founder</entry>
   <entry key="close">Close</entry>
+  <entry key="support">National rebel support: %s%% (%s residents)</entry>
   <entry key="progress">Congress bells: %s / %s</entry>
   <entry key="objective">Working toward: %s</entry>
   <entry key="chooseObjective">Choose the next founder. Bells wait until a choice is made.</entry>

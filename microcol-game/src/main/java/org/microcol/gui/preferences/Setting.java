@@ -32,6 +32,10 @@ public class Setting {
 
     private Boolean autosaveEnabled;
 
+    private Boolean turnSummaryEnabled;
+
+    private Boolean openEuropeOnArrival;
+
     private String version;
 
     private String gameInProgressSaveFile;
@@ -52,6 +56,8 @@ public class Setting {
         out.showGrid = showGrid;
         out.showFightAdvisor = showFightAdvisor;
         out.autosaveEnabled = autosaveEnabled;
+        out.turnSummaryEnabled = turnSummaryEnabled;
+        out.openEuropeOnArrival = openEuropeOnArrival;
         out.version = version;
         out.gameInProgressSaveFile = gameInProgressSaveFile;
         return out;
@@ -61,7 +67,8 @@ public class Setting {
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
                 volume, animationSpeed, showGrid, showFightAdvisor, version,
-                gameInProgressSaveFile, autosaveEnabled);
+                gameInProgressSaveFile, autosaveEnabled, turnSummaryEnabled,
+                openEuropeOnArrival);
     }
 
     @Override
@@ -81,6 +88,10 @@ public class Setting {
                 && Objects.equal(this.showGrid, other.showGrid)
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
                 && Objects.equal(this.autosaveEnabled, other.autosaveEnabled)
+                && Objects.equal(this.turnSummaryEnabled,
+                        other.turnSummaryEnabled)
+                && Objects.equal(this.openEuropeOnArrival,
+                        other.openEuropeOnArrival)
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.gameInProgressSaveFile,
                         other.gameInProgressSaveFile);
@@ -95,7 +106,10 @@ public class Setting {
                 .add("volume", volume).add("animationSpeed", animationSpeed)
                 .add("showGrid", showGrid)
                 .add("showFightAdvisor", showFightAdvisor)
-                .add("autosaveEnabled", autosaveEnabled).add("version", version)
+                .add("autosaveEnabled", autosaveEnabled)
+                .add("turnSummaryEnabled", turnSummaryEnabled)
+                .add("openEuropeOnArrival", openEuropeOnArrival)
+                .add("version", version)
                 .add("gameInProgressSaveFile", gameInProgressSaveFile)
                 .toString();
     }
@@ -162,6 +176,33 @@ public class Setting {
 
     public void setAutosaveEnabled(final boolean enabled) {
         autosaveEnabled = enabled;
+    }
+
+    /**
+     * Missing value means the routine summary is shown, as in a new game.
+     *
+     * @return <code>true</code> when the routine turn summary is shown
+     */
+    public boolean isTurnSummaryEnabled() {
+        return turnSummaryEnabled == null || turnSummaryEnabled;
+    }
+
+    public void setTurnSummaryEnabled(final boolean enabled) {
+        turnSummaryEnabled = enabled;
+    }
+
+    /**
+     * Missing value means the report does not open Europe by itself.
+     *
+     * @return <code>true</code> when a Europe arrival opens Europe
+     *         automatically
+     */
+    public boolean isOpenEuropeOnArrival() {
+        return openEuropeOnArrival != null && openEuropeOnArrival;
+    }
+
+    public void setOpenEuropeOnArrival(final boolean enabled) {
+        openEuropeOnArrival = enabled;
     }
 
     public String getGameInProgressSaveFile() {

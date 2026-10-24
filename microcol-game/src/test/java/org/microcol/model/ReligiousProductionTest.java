@@ -180,6 +180,90 @@ class ReligiousProductionTest {
     }
 
     @Test
+    void pennJoiningThroughOwnerUpdateRaisesTheChurchPreviewAfterTheJoin() {
+        final GameModelPo data = scenario();
+        setup(data, ConstructionType.CHURCH, null, false);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "Dutch"),
+                Founder.WILLIAM_PENN);
+        final Model model = load(data);
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        assertEquals(2, crosses(colony));
+
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.WILLIAM_PENN);
+        assertEquals(3, crosses(colony));
+
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(3, crosses(restored.getColonyById(0).orElseThrow()));
+    }
+
+    /**
+     * Free play: France owns Quebec and Montreal, the Dutch own no colony. Both
+     * French chapels become unattended churches, whose base is 2 crosses
+     * (unattended output takes no political change), and Penn floors 150 % of
+     * it to 3. Membership comes from a valid saved Congress of the named
+     * nation, or none.
+     */
+    private Model freePlayChurches(final String pennNation) {
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.microcol");
+        data.getModel().getColonies().forEach(colony -> colony
+                .getConstructions().stream()
+                .filter(value -> value.getType() == ConstructionType.CHAPEL)
+                .findFirst().orElseThrow().setType(ConstructionType.CHURCH));
+        if (pennNation != null) {
+            final var congress = data.getModel().getGameManager().getPlayers()
+                    .stream()
+                    .filter(player -> player.getName().equals(pennNation))
+                    .findFirst().orElseThrow().getCongress();
+            congress.setActivated(true);
+            congress.setGeneration(2);
+            congress.setBells(0);
+            congress.setSelected(null);
+            congress.setJonesDeliveryPending(false);
+            congress.setMembers(List.of(Founder.WILLIAM_PENN));
+            final List<Founder> candidates = new ArrayList<>();
+            for (final Founder.Category category : Founder.Category.values()) {
+                for (final Founder other : Founder.values()) {
+                    if (other.getCategory() == category
+                            && other != Founder.WILLIAM_PENN) {
+                        candidates.add(other);
+                        break;
+                    }
+                }
+            }
+            congress.setCandidates(candidates);
+        }
+        final Model model = load(data);
+        model.startGame();
+        return model;
+    }
+
+    @Test
+    void pennRaisesOnlyTheMembersOwnColoniesAndNeverAForeignOne() {
+        final Model none = freePlayChurches(null);
+        assertEquals(2, crosses(none.getColonyByName("Quebec").orElseThrow()));
+        assertEquals(2,
+                crosses(none.getColonyByName("Montreal").orElseThrow()));
+
+        // The Dutch hold Penn: the French colonies stay at the ordinary 2.
+        final Model foreign = freePlayChurches("Dutch");
+        assertEquals(2,
+                crosses(foreign.getColonyByName("Quebec").orElseThrow()));
+        assertEquals(2,
+                crosses(foreign.getColonyByName("Montreal").orElseThrow()));
+
+        // The owner holds Penn: every French colony gains 2 * 150 % = 3.
+        final Model own = freePlayChurches("France");
+        assertEquals(3, crosses(own.getColonyByName("Quebec").orElseThrow()));
+        assertEquals(3, crosses(own.getColonyByName("Montreal").orElseThrow()));
+        final Model resumed = Model.make(own.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(3,
+                crosses(resumed.getColonyByName("Quebec").orElseThrow()));
+    }
+
+    @Test
     void churchCompletesAfterChapelProductionAndChangesNextPreview() {
         final GameModelPo data = scenario();
         final ColonyPo saved = data.getModel().getColonies().stream()

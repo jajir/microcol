@@ -287,6 +287,7 @@
 	<entry key="difficulty_viceroy">Místokrál</entry>
     <entry key="unitsPanel_veteran">Vojenská hodnost: veterán</entry>
     <entry key="unitsPanel_treasureValue">Hodnota pokladu: %d zlatých</entry>
+    <entry key="unitsPanel_occupiedHolds">Obsazené nákladní prostory: %d</entry>
     <entry key="unitsPanel_continental">Vojenská role: kontinentální</entry>
     <entry key="unitsPanel_convert">Domorodý konvertita: %s. Nepřiřazená kola: %s z 8.</entry>
     <entry key="unitsPanel_royal">Vojenská role: královský voják</entry>

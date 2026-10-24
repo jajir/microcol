@@ -1036,6 +1036,28 @@ class AllianceModelTest {
     }
 
     @Test
+    void franklinJoiningThroughOwnerUpdateExcludesThePairFromTheCrownWar() {
+        // Control: without the father the same pair is forced into war.
+        final Model control = scriptedModel(
+                inProgress(scripted(List.of("Dutch", "France")), 20));
+        control.processCrownWar();
+        assertEquals(List.of("Dutch-France"), wars(control));
+
+        final ModelPo data = inProgress(scripted(List.of("Dutch", "France")),
+                20);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "Dutch"),
+                Founder.BENJAMIN_FRANKLIN);
+        final Long random = data.getCombatRandomState();
+        final Model model = scriptedModel(data);
+        RealFounderJoin.joinThroughOwnerUpdate(model,
+                Founder.BENJAMIN_FRANKLIN);
+        model.processCrownWar();
+        assertTrue(wars(model).isEmpty());
+        assertEquals(random, model.save().getCombatRandomState());
+        assertEquals(20, model.save().getCrownWarRound());
+    }
+
+    @Test
     void anotherEligiblePairStillQualifiesWhenOneMemberIsExcluded() {
         final ModelPo data = scripted(List.of("Dutch", "France", "Spain"));
         RebellionFixtures.declare(data,

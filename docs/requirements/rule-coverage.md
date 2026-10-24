@@ -7,12 +7,12 @@
 | Rule | Owners | Boundary |
 | --- | --- | --- |
 | SETUP-001 | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md) | Generated/customized geography and authored America are distinct outcomes; existing selector retained. |
-| SETUP-002 | [R-0064](done/R-0064.md), [R-0208](R-0208.md), [R-0209](R-0209.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SETUP-002 | [R-0064](done/R-0064.md), [R-0208](done/R-0208.md), [R-0209](R-0209.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-003 | [R-0066](done/R-0066.md), [R-0063](done/R-0063.md), [R-0015](done/R-0015.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-008 | [R-0066](done/R-0066.md), [R-0051](done/R-0051.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| SUPPORT-002 | [R-0203](R-0203.md) | One Congress/REF report owner, not duplicate SUPPORT002 and report candidate. |
-| SUPPORT-003 | [R-0198](done/R-0198.md), [R-0199](done/R-0199.md), [R-0200](done/R-0200.md), [R-0145](done/R-0145.md), [R-0201](done/R-0201.md), [R-0168](done/R-0168.md), [R-0202](R-0202.md), [R-0203](R-0203.md), [R-0204](R-0204.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| SUPPORT-004 | [R-0205](R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SUPPORT-002 | [R-0203](done/R-0203.md) | One Congress/REF report owner, not duplicate SUPPORT002 and report candidate. |
+| SUPPORT-003 | [R-0198](done/R-0198.md), [R-0199](done/R-0199.md), [R-0200](done/R-0200.md), [R-0145](done/R-0145.md), [R-0201](done/R-0201.md), [R-0168](done/R-0168.md), [R-0202](done/R-0202.md), [R-0203](done/R-0203.md), [R-0204](done/R-0204.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SUPPORT-004 | [R-0205](done/R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-009 | [R-0051](done/R-0051.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TURN-001 | [R-0052](done/R-0052.md), [R-0151](done/R-0151.md) | Shared turn order plus actual native actors. |
 | TURN-002 | [R-0052](done/R-0052.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -72,11 +72,11 @@
 | IMM-003 | [R-0075](done/R-0075.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | IMM-004 | [R-0074](done/R-0074.md), [R-0023](done/R-0023.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | IMM-007 | [R-0077](done/R-0077.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-001 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-002 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-003 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| TRADE-004 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Main source and dated evidence review confirms delivered shared sale quote; full trade matrix is verification-only. |
-| TRADE-005 | [R-0020](done/R-0020.md), [R-0215](R-0215.md) | Shared tax quote/max affordability delivered; unused legacy method is not a missing feature. |
+| TRADE-001 | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-002 | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-003 | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| TRADE-004 | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) | Main source and dated evidence review confirms delivered shared sale quote; full trade matrix is verification-only. |
+| TRADE-005 | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) | Shared tax quote/max affordability delivered; unused legacy method is not a missing feature. |
 | TRADE-006 | [R-0143](done/R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-007 | [R-0143](done/R-0143.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | TRADE-008 | [R-0145](done/R-0145.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -88,16 +88,16 @@
 | COL-005 | [R-0057](done/R-0057.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-006 | [R-0058](done/R-0058.md), [R-0057](done/R-0057.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-007 | [R-0059](done/R-0059.md), [R-0060](done/R-0060.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| COL-008 | [R-0024](done/R-0024.md), [R-0025](done/R-0025.md), [R-0058](done/R-0058.md), [R-0215](R-0215.md) | Existing 100/200/300 capacity and building/transfer owners; exhaustive acceptance remains R-0215. R-0058 covers food only. |
+| COL-008 | [R-0024](done/R-0024.md), [R-0025](done/R-0025.md), [R-0058](done/R-0058.md), [R-0215](done/R-0215.md) | Existing 100/200/300 capacity and building/transfer owners; exhaustive acceptance remains R-0215. R-0058 covers food only. |
 | COL-009 | [R-0058](done/R-0058.md), [R-0057](done/R-0057.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-010 | [R-0024](done/R-0024.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COL-011 | [R-0027](done/R-0027.md), [R-0149](done/R-0149.md) | Founding terrain/role validation already owned; convert prohibition belongs convert role. |
 | COL-012 | [Z02 naming/founding contract](../functional-tests.md#z02-pojmenovani-a-identita-kolonie) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| PROD-001 | [R-0061](done/R-0061.md), [R-0079](done/R-0079.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| PROD-002 | [R-0061](done/R-0061.md), [R-0215](R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| PROD-001 | [R-0061](done/R-0061.md), [R-0079](done/R-0079.md), [R-0215](done/R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| PROD-002 | [R-0061](done/R-0061.md), [R-0215](done/R-0215.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PROD-003 | [R-0061](done/R-0061.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PROD-004 | [R-0061](done/R-0061.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| PROD-005 | [R-0074](done/R-0074.md), [R-0148](done/R-0148.md), [R-0212](R-0212.md) | Delivered production-specialist slice retained; native-teachable acquisition and whole 22-skill matrix separate. |
+| PROD-005 | [R-0074](done/R-0074.md), [R-0148](done/R-0148.md), [R-0212](done/R-0212.md) | Delivered production-specialist slice retained; native-teachable acquisition and whole 22-skill matrix separate. |
 | PROD-006 | [R-0061](done/R-0061.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PROD-007 | [R-0149](done/R-0149.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PROD-008 | [R-0062](done/R-0062.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -119,7 +119,7 @@
 | BUILD-013 | [R-0081](done/R-0081.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-014 | [R-0085](done/R-0085.md), [R-0084](done/R-0084.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-015 | [R-0082](done/R-0082.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| BUILD-016 | [R-0025](done/R-0025.md), [R-0213](R-0213.md) | Accepted building chart constants corrected by R0025; complete chart matrix not newly implemented. |
+| BUILD-016 | [R-0025](done/R-0025.md), [R-0213](done/R-0213.md) | Accepted building chart constants corrected by R0025; complete chart matrix not newly implemented. |
 | BUILD-017 | [R-0079](done/R-0079.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-018 | [R-0079](done/R-0079.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | BUILD-019 | [R-0086](done/R-0086.md), [R-0025](done/R-0025.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -157,7 +157,7 @@
 | DIP-004 | [R-0089](done/R-0089.md), [R-0087](done/R-0087.md), [R-0088](done/R-0088.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-005 | [R-0169](done/R-0169.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | DIP-006 | [R-0167](done/R-0167.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| DIP-007 | [R-0168](done/R-0168.md), [R-0201](done/R-0201.md), [R-0202](R-0202.md) | Foreign, native and fleet reports have distinct disclosure owners. |
+| DIP-007 | [R-0168](done/R-0168.md), [R-0201](done/R-0201.md), [R-0202](done/R-0202.md) | Foreign, native and fleet reports have distinct disclosure owners. |
 | DIP-008 | [R-0089](done/R-0089.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-006 | [R-0174](done/R-0174.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-001 | [R-0028](done/R-0028.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

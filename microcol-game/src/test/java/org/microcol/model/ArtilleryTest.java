@@ -316,8 +316,21 @@ class ArtilleryTest {
     }
 
     @Test
-    void fullArtillerySurvivesLegacyCivilianFightLoss() throws Exception {
+    void fullArtillerySurvivesCivilianFightLossAsDamagedGun() {
         ModelPo data = scenario(false);
+        // Pin both squares: an outdoor gun is 7 x (1 + 0.5 - 0.75) = 5.25
+        // against a civilian 1 x 1 on bare grassland, so 5.25 / 6.25 = 0.84.
+        java.util.Map<Location, TerrainType> terrain = data.getMap()
+                .getTerrainMap();
+        terrain.put(ORIGIN, TerrainType.GRASSLAND);
+        terrain.put(TARGET, TerrainType.GRASSLAND);
+        data.getMap().setTerrainType(terrain);
+        java.util.Set<Location> forest = data.getMap().getTreeSet();
+        forest.remove(ORIGIN);
+        forest.remove(TARGET);
+        data.getMap().setTrees(forest);
+        final long lossState = CombatDraws.stateFor(0.84, false);
+        data.setCombatRandomState(lossState);
         UnitPo attacking = data.getUnits().stream()
                 .filter(unit -> unit.getId() == 0).findFirst().orElseThrow();
         UnitPo defending = data.getUnits().stream()
@@ -338,17 +351,20 @@ class ArtilleryTest {
         UnitArtillery gun = (UnitArtillery) battle.getUnitById(0);
         gun.placeToLocation(ORIGIN);
         gun.getOwner().revealMapForUnit(gun);
-        java.lang.reflect.Field random = AbstractUnit.class
-                .getDeclaredField("random");
-        random.setAccessible(true);
-        ((java.util.Random) random.get(gun)).setSeed(0L);
-        assertTrue(gun.prepareAttack(TARGET, true).orElseThrow()
-                .getCombatStrengths().isEmpty());
+        CombatStrengths quote = gun.prepareAttack(TARGET, true).orElseThrow()
+                .getCombatStrengths().orElseThrow();
+        assertEquals(7, quote.getAttacker().getBase());
+        assertEquals(5.25, quote.getAttacker().getTotal(), 1e-9);
+        assertEquals(1, quote.getDefender().getBase());
+        assertEquals(0.84, quote.getAttackerWinProbability(), 1e-9);
         gun.prepareAttack(TARGET, true).orElseThrow().execute();
         assertSame(gun, battle.getUnitById(0));
         assertTrue(gun.isDamaged());
         assertEquals(ORIGIN, gun.getLocation());
         assertEquals(0, gun.getActionPoints());
+        // A civilian winner never promotes, so the saved state drew once.
+        assertEquals(lossState + 0x9E3779B97F4A7C15L,
+                battle.save().getCombatRandomState());
     }
 
     @Test

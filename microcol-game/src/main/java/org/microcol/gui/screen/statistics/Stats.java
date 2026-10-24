@@ -25,6 +25,6 @@ public enum Stats implements MessageKeyResource {
     baseScorePopulation, baseScoreFathers, baseScoreGold, baseScoreSupport,
     baseScoreSubtotal, resultTitle, resultNote, resultDeduction, resultBells,
     resultClampedBase, resultBonus, resultDifficulty, resultTotal, titleLabor,
-    titleReligion, titleColonies;
+    titleReligion, titleColonies, titleFleet;
 
 }

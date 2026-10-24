@@ -22,6 +22,8 @@
 	<entry key="goodsWasThrowsAway4">V kolonii %s došlo místo, proto se muselo jedno %s vyhodit.</entry>
 	<entry key="constructionWaitingForTools">Kolonie %s: %s má dost kladiv, ale čeká na nástroje (chybí %s).</entry>
 	<entry key="openColony">Otevřít kolonii</entry>
+	<entry key="projectCompleted">Kolonie %s dokončila %s.</entry>
+	<entry key="openEurope">Otevřít Evropu</entry>
 	<entry key="forestLumberLostFull">Les vykácen na (%s, %s): ztraceno dřeva: %s. Sklad kolonie %s je plný.</entry>
 	<entry key="forestLumberLostNoColony">Les vykácen na (%s, %s): ztraceno dřeva: %s. Do dvou polí není žádná vaše kolonie.</entry>
 

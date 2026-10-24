@@ -639,6 +639,27 @@ Jde o implementovaný návrh s probíhající přejímkou v
 [evidenci R-0095](functional-tests.md#r-0095-artillery-lifecycle-2026-10-17),
 nikoli o poznatek z uživatelské studie.
 
+### Přehled tahu a Evropa — R-0204
+
+1. Cílem hráče je vědět, co se během tahu stalo, a vybrat další krok. Rutinní
+   přehled se otevírá na začátku tahu; v Nastavení jej lze vypnout. Hlad, ztráta
+   nebo zánik kolonie se otevřou vždy.
+2. U přistání lodi v Evropě nabízí přehled tlačítko „Otevřít Evropu“. Otevření
+   a zavření přehledu nic nespotřebují; zastaralý přehled po změně hry vrátí na
+   mapu, nikoli do cizí hry.
+3. Nastavení nabízí dvě volby: rutinní přehled tahu (výchozí zapnuto) a automatické
+   otevření Evropy po příjezdu lodi (výchozí vypnuto). Když se přehled otevře, je
+   první; automatická Evropa čeká za ním a otevře se až po jeho zavření nebo Escape.
+   Bez přehledu se Evropa otevře přímo. Kritické zprávy přehled otevřou i při
+   vypnutém rutinním přehledu. Nové tlačítko Otevřít Evropu nic nespotřebuje.
+   Oznámení o dokončeném projektu, o zahozeném zboží (kolonie, zboží a množství)
+   a o narození jmenují kolonii a nabízejí Otevřít kolonii; zaniklou nebo cizí
+   kolonii akce odmítne a nic nezmění. Anglické texty zahozeného zboží a narození
+   byly nesprávné (kolonie na místě zboží, chybějící kolonie) a byly opraveny.
+4. Stav je napsán a částečně doložen jen v proběhlém běhu bez druhého pokusu:
+   [evidence R-0204](functional-tests.md#r-0204-turn-notices-attempt-3-written-not-verified-2026-10-23).
+   Nejde o pozorování hráčů; čitelnost bez zvuku a barvy zatím není ověřena.
+
 ### Přehled oprav lodí — R-0098
 
 Hráč najde tlačítko **Opravy lodí** v Evropě i pro opravy v koloniích.

@@ -480,6 +480,26 @@ class MissionaryOrdinationTest {
     }
 
     @Test
+    void brebeufJoiningThroughOwnerUpdateMakesAnExistingMissionaryExpert() {
+        final GameModelPo data = scenario(List.of());
+        setReligiousBuilding(data, ConstructionType.CHURCH);
+        unitPo(data, 0).setMissionary(true);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "Dutch"),
+                Founder.JEAN_DE_BREBEUF);
+        final Model model = start(data);
+        assertFalse(colonist(model, 0).hasEffectiveMissionaryExpertise());
+
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.JEAN_DE_BREBEUF);
+        assertTrue(colonist(model, 0).hasEffectiveMissionaryExpertise());
+
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        restored.startGame();
+        assertTrue(colonist(restored, 0).isMissionary());
+        assertTrue(colonist(restored, 0).hasEffectiveMissionaryExpertise());
+    }
+
+    @Test
     void brebeufDoesNotMakeAnOrdinaryColonistAMissionary() {
         final GameModelPo data = scenario(List.of(Founder.JEAN_DE_BREBEUF));
         final UnitFreeColonist unit = colonist(start(data), 0);

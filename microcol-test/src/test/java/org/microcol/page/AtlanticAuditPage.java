@@ -128,6 +128,11 @@ public final class AtlanticAuditPage extends AbstractScreen {
         assertEquals(expected, getModel().getUnitById(3).getActionPoints());
     }
 
+    /** Current movement of the voyage ship, read before a no-spend check. */
+    public int getMovement() {
+        return getModel().getUnitById(3).getActionPoints();
+    }
+
     public void verifyVoyageText(final String expected) {
         assertTrue(isCssIdVisible("voyage-remaining-3"));
         assertEquals(expected, getLabeledById("voyage-remaining-3").getText());

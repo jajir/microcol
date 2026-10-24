@@ -199,6 +199,9 @@ public class SettingService {
         out.setShowGrid(GamePreferences.DEFAULT_SHOW_GRID);
         out.setShowFightAdvisor(GamePreferences.DEFAULT_SHOW_FIGHT_ADVISOR);
         out.setAutosaveEnabled(true);
+        out.setTurnSummaryEnabled(GamePreferences.DEFAULT_SHOW_TURN_SUMMARY);
+        out.setOpenEuropeOnArrival(
+                GamePreferences.DEFAULT_OPEN_EUROPE_ON_ARRIVAL);
         out.setVersion(Setting.CURRENT_VERSION);
         out.setLocale(Locale.getDefault());
         return out;

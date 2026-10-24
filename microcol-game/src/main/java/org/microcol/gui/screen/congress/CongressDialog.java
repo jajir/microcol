@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public final class CongressDialog extends AbstractMessageWindow {
     private final GameModelController game;
     private final I18n i18n;
+    private final Label support = label("congressSupport");
     private final Label progress = label("congressProgress");
     private final Label objective = label("congressObjective");
     private final Label members = label("congressMembers");
@@ -70,14 +71,24 @@ public final class CongressDialog extends AbstractMessageWindow {
         choose.setOnAction(event -> choose());
         close.setOnAction(event -> close());
         close.setCancelButton(true);
-        VBox root = new VBox(12, progress, objective, candidates, detail,
-                choose, members, reward, royalInfantry, royalCavalry,
+        VBox root = new VBox(12, support, progress, objective, candidates,
+                detail, members, reward, royalInfantry, royalCavalry,
                 royalArtillery, royalMenOfWar, royalBells, royalStopped,
-                intervention, interventionForces, feedback, close);
+                intervention, interventionForces, feedback);
         root.setId("congressDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(580);
-        init(root);
+        // The window keeps a bounded height: the report scrolls, while the
+        // Choose and Close actions stay in a bar below it, always visible at
+        // 900x750.
+        final ScrollPane scroll = new ScrollPane(root);
+        scroll.setId("congressScroll");
+        scroll.setFitToWidth(true);
+        scroll.setPrefViewportHeight(560);
+        final HBox actions = new HBox(12, choose, close);
+        actions.setId("congressActions");
+        actions.setPadding(new Insets(12, 20, 20, 20));
+        init(new VBox(scroll, actions));
     }
 
     private static Label label(String id) {
@@ -108,41 +119,53 @@ public final class CongressDialog extends AbstractMessageWindow {
                 && boundModel.getCurrentPlayer() == player;
     }
 
+    /** Reads one Congress report of the saved state; nothing is cached. */
     private void refresh() {
-        refreshRoyal();
+        final CongressReport report = boundModel.getCongressReport(player);
+        refreshSupport(report);
+        refreshRoyal(report);
         refreshIntervention();
         refreshInterventionForces();
-        progress.setText(i18n.get(CongressText.progress,
-                player.getCongressBells(), player.getCongressTarget()));
-        objective.setText(player.getSelectedFounder()
+        progress.setText(i18n.get(CongressText.progress, report.getBells(),
+                report.getTarget()));
+        objective.setText(report.getSelectedFounder()
                 .map(founder -> i18n.get(CongressText.objective,
                         CongressText.name(i18n, founder)))
-                .orElseGet(() -> i18n.get(player.getCongressMembers()
-                        .size() == Founder.values().length
+                .orElseGet(() -> i18n.get(
+                        report.getMembers().size() == Founder.values().length
                                 ? CongressText.allMembers
                                 : CongressText.chooseObjective)));
         candidates.getItems().setAll(player.getFounderOffers());
         choose.setDisable(true);
         members.setText(i18n.get(CongressText.members,
-                player.getCongressMembers().isEmpty()
-                        ? i18n.get(CongressText.none)
-                        : player.getCongressMembers().stream().map(
+                report.getMembers().isEmpty() ? i18n.get(CongressText.none)
+                        : report.getMembers().stream().map(
                                 founder -> CongressText.name(i18n, founder))
                                 .collect(Collectors.joining(", "))));
-        reward.setText(player.isJonesDeliveryPending()
+        reward.setText(report.isJonesDeliveryPending()
                 ? i18n.get(CongressText.jonesPending)
-                : player.getCongressMembers().contains(Founder.JOHN_PAUL_JONES)
+                : report.getMembers().contains(Founder.JOHN_PAUL_JONES)
                         ? i18n.get(CongressText.jonesDelivered)
                         : "");
         if (player.getFounderOffers().isEmpty()
-                && player.getSelectedFounder().isEmpty()
-                && player.getCongressMembers().isEmpty())
+                && report.getSelectedFounder().isEmpty()
+                && report.getMembers().isEmpty())
             feedback.setText(i18n.get(CongressText.firstColony));
     }
 
+    /**
+     * Shows the exact national support rounded down, with the Statistics label
+     * (R-0100); zero residents read as zero percent.
+     */
+    private void refreshSupport(final CongressReport report) {
+        support.setText(i18n.get(CongressText.support,
+                report.getNationalSupport().getDisplayPercent(),
+                report.getNationalSupport().getPopulation()));
+    }
+
     /** Shows the Crown's real roster; blank when no Crown rules this nation. */
-    private void refreshRoyal() {
-        RoyalRoster crown = player.getCrownRoster().orElse(null);
+    private void refreshRoyal(final CongressReport report) {
+        RoyalRoster crown = report.getCrownRoster().orElse(null);
         royalInfantry.setText(crown == null ? ""
                 : familyLine(CongressText.royalInfantry, crown,
                         RoyalRoster.Family.INFANTRY));

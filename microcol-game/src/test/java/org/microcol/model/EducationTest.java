@@ -7,13 +7,17 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.EducationCoursePo;
 import org.microcol.model.turnevent.TurnEventEducationCompleted;
+
+import com.google.gson.Gson;
 
 class EducationTest {
     private static Stream<UnitType> schoolSkills() {
@@ -89,6 +93,88 @@ class EducationTest {
                     .canAssignEducation(smaller.getUnitById(4),
                             smaller.getUnitById(0), skill));
         }
+    }
+
+    /**
+     * Card row (R-0212): the minimum school of each skill admits its teacher,
+     * and the school one tier lower refuses the same skill. Schoolhouse skills
+     * have no lower school to test.
+     */
+    @ParameterizedTest
+    @CsvSource({ "EXPERT_FARMER,SCHOOLHOUSE,", "EXPERT_FISHERMAN,SCHOOLHOUSE,",
+            "EXPERT_FUR_TRAPPER,SCHOOLHOUSE,",
+            "EXPERT_SILVER_MINER,SCHOOLHOUSE,",
+            "EXPERT_LUMBERJACK,SCHOOLHOUSE,", "EXPERT_ORE_MINER,SCHOOLHOUSE,",
+            "MASTER_CARPENTER,SCHOOLHOUSE,", "SEASONED_SCOUT,SCHOOLHOUSE,",
+            "HARDY_PIONEER,SCHOOLHOUSE,",
+            "MASTER_SUGAR_PLANTER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_COTTON_PLANTER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_TOBACCO_PLANTER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_DISTILLER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_WEAVER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_TOBACCONIST,COLLEGE,SCHOOLHOUSE",
+            "MASTER_FUR_TRADER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_BLACKSMITH,COLLEGE,SCHOOLHOUSE",
+            "MASTER_GUNSMITH,COLLEGE,SCHOOLHOUSE",
+            "VETERAN_SOLDIER,COLLEGE,SCHOOLHOUSE",
+            "FIREBRAND_PREACHER,UNIVERSITY,COLLEGE",
+            "ELDER_STATESMAN,UNIVERSITY,COLLEGE",
+            "JESUIT_MISSIONARY,UNIVERSITY,COLLEGE" })
+    void cardSchoolRowAdmitsTheSkillAndRefusesOneTierLower(final String name,
+            final String minimum, final String lower) {
+        final UnitType skill = UnitType.valueOf(name);
+        final Model model = load(
+                scenario(skill, ConstructionType.valueOf(minimum)));
+        model.startGame();
+        assertTrue(model.getColonyById(0).orElseThrow().canAssignEducation(
+                model.getUnitById(4), model.getUnitById(0), skill));
+        if (lower != null) {
+            final Model smaller = load(
+                    scenario(skill, ConstructionType.valueOf(lower)));
+            smaller.startGame();
+            assertFalse(smaller.getColonyById(0).orElseThrow()
+                    .canAssignEducation(smaller.getUnitById(4),
+                            smaller.getUnitById(0), skill));
+        }
+    }
+
+    /**
+     * The valid scenario of {@link #scenario} with every school building
+     * removed, so the colony has no schoolhouse, college or university.
+     */
+    private GameModelPo scenarioWithoutSchool(final UnitType teacherType) {
+        final GameModelPo data = scenario(teacherType,
+                ConstructionType.SCHOOLHOUSE);
+        data.getModel().getColonies().get(0).getConstructions().removeIf(
+                building -> building.getType() == ConstructionType.SCHOOLHOUSE
+                        || building.getType() == ConstructionType.COLLEGE
+                        || building.getType() == ConstructionType.UNIVERSITY);
+        return data;
+    }
+
+    /**
+     * Tier 1 (R-0212): without any school the teacher cannot be assigned, the
+     * command is refused and the saved state does not change.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = { "EXPERT_FARMER", "EXPERT_FISHERMAN",
+            "EXPERT_FUR_TRAPPER", "EXPERT_SILVER_MINER", "EXPERT_LUMBERJACK",
+            "EXPERT_ORE_MINER", "MASTER_CARPENTER", "SEASONED_SCOUT",
+            "HARDY_PIONEER" })
+    void schoolhouseSkillsAreRefusedWithoutAnySchool(final String name) {
+        final UnitType skill = UnitType.valueOf(name);
+        final Model model = load(scenarioWithoutSchool(skill));
+        model.startGame();
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final Unit teacher = model.getUnitById(4);
+        final Unit student = model.getUnitById(0);
+        final String before = new Gson().toJson(model.save());
+        assertFalse(colony.canAssignEducation(teacher, student, skill));
+        assertThrows(IllegalArgumentException.class,
+                () -> colony.assignEducation(teacher, student, skill));
+        assertEquals(before, new Gson().toJson(model.save()));
+        assertTrue(colony.getEducationCourses().isEmpty());
+        assertEquals(UnitType.COLONIST, student.getType());
     }
 
     @Test

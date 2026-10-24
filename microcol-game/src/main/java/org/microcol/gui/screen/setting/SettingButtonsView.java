@@ -36,6 +36,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final SettingAnimationSpeedView settingAnimationSpeedView;
     private final SettingVersionView settingVersionView;
     private final CheckBox autosaveCheckBox;
+    private final CheckBox turnSummaryCheckBox;
+    private final CheckBox openEuropeCheckBox;
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
@@ -61,6 +63,16 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         autosaveCheckBox.setSelected(gamePreferences.isAutosaveEnabled());
         autosaveCheckBox.setOnAction(event -> gamePreferences
                 .setAutosaveEnabled(autosaveCheckBox.isSelected()));
+        turnSummaryCheckBox = new CheckBox();
+        turnSummaryCheckBox.setId("settingTurnSummary");
+        turnSummaryCheckBox.setSelected(gamePreferences.isShowTurnSummary());
+        turnSummaryCheckBox.setOnAction(event -> gamePreferences
+                .setShowTurnSummary(turnSummaryCheckBox.isSelected()));
+        openEuropeCheckBox = new CheckBox();
+        openEuropeCheckBox.setId("settingOpenEuropeOnArrival");
+        openEuropeCheckBox.setSelected(gamePreferences.isOpenEuropeOnArrival());
+        openEuropeCheckBox.setOnAction(event -> gamePreferences
+                .setOpenEuropeOnArrival(openEuropeCheckBox.isSelected()));
 
         buttonBack = new Button();
         buttonBack.setId(BUTTON_BACK_ID);
@@ -72,6 +84,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingShowGridView.getContent());
         buttonsBox.getChildren().add(settingShowFightAdvisorView.getContent());
         buttonsBox.getChildren().add(autosaveCheckBox);
+        buttonsBox.getChildren().add(turnSummaryCheckBox);
+        buttonsBox.getChildren().add(openEuropeCheckBox);
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
         buttonsBox.getChildren().add(settingVersionView.getContent());
@@ -93,6 +107,9 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingShowGridView.updateLanguage(i18n);
         this.settingShowFightAdvisorView.updateLanguage(i18n);
         autosaveCheckBox.setText(i18n.get(GameMenu.settingAutosave));
+        turnSummaryCheckBox.setText(i18n.get(GameMenu.settingTurnSummary));
+        openEuropeCheckBox
+                .setText(i18n.get(GameMenu.settingOpenEuropeOnArrival));
         this.settingVolumeView.updateLanguage(i18n);
         this.settingAnimationSpeedView.updateLanguage(i18n);
         this.settingVersionView.updateLanguage(i18n);

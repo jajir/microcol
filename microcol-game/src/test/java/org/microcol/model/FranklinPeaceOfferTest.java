@@ -9,7 +9,10 @@ import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.CongressPo;
+import org.microcol.model.store.EuropeanRelationPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEventPeaceOffer;
 
 import com.google.gson.Gson;
@@ -120,6 +123,91 @@ class FranklinPeaceOfferTest {
         assertTrue(
                 resumed.getPendingPeaceOffer(resumed.getPlayerByName("Dutch"),
                         resumed.getPlayerByName("France")).isPresent());
+    }
+
+    /** Spain is a second computer nation at war with the Dutch. */
+    private GameModelPo withSpainAtWar() {
+        final GameModelPo data = fixture(true, false, true);
+        final List<PlayerPo> players = data.getModel().getGameManager()
+                .getPlayers();
+        final Gson gson = new Gson();
+        final PlayerPo spain = gson.fromJson(gson.toJson(players.stream()
+                .filter(player -> player.getName().equals("France")).findFirst()
+                .orElseThrow()), PlayerPo.class);
+        spain.setName("Spain");
+        players.add(spain);
+        for (final String first : List.of("Dutch", "France")) {
+            final EuropeanRelationPo pair = new EuropeanRelationPo();
+            pair.setFirstPlayer(first);
+            pair.setSecondPlayer("Spain");
+            pair.setState(first.equals("Dutch") ? EuropeanRelationState.WAR
+                    : EuropeanRelationState.PEACE);
+            data.getModel().getEuropeanRelations().add(pair);
+        }
+        return data;
+    }
+
+    /** An unarmed Spanish colonist on open land beside the Dutch visitor. */
+    private void placeSpanishNeighbor(final Model model) {
+        final Location visitorAt = Location.of(18, 10);
+        final Location at = visitorAt.getNeighbors().stream()
+                .filter(model.getMap()::isValid)
+                .filter(square -> UnitType.COLONIST.canMoveAtTerrain(
+                        model.getMap().getTerrainTypeAt(square)))
+                .filter(square -> model.getUnitsAt(square).isEmpty())
+                .filter(square -> !square.equals(Location.of(17, 10)))
+                .findFirst().orElseThrow();
+        final UnitPo po = model.getUnitById(6).save();
+        po.setId(900);
+        po.setOwnerId("Spain");
+        po.getPlaceMap().setLocation(at);
+        po.setHoldingGuns(false);
+        po.setMounted(false);
+        model.createUnit(model.save(), po);
+    }
+
+    @Test
+    void everyContactedWarRivalGetsItsOwnDiscountedOffer() {
+        final Model model = Model.make(withSpainAtWar().getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Unit visitor = model.getUnitById(0);
+        visitor.placeToLocation(Location.of(18, 10));
+        placeSpanishNeighbor(model);
+        visitor.getOwner().revealMapForUnit(visitor);
+        final Player dutch = model.getPlayerByName("Dutch");
+        final Player france = model.getPlayerByName("France");
+        final Player spain = model.getPlayerByName("Spain");
+        final int gold = dutch.getGold();
+
+        nextFreshDutchTurn(model);
+        // France: ceil(200 * 1.5) = 300 halved to 150, as in the single-rival
+        // case. Spain has no armed unit: ceil(200 * 1) = 200 halved to 100.
+        final PeaceOffer withFrance = model.getPendingPeaceOffer(dutch, france)
+                .orElseThrow();
+        final PeaceOffer withSpain = model.getPendingPeaceOffer(dutch, spain)
+                .orElseThrow();
+        assertEquals(150, withFrance.getPrice());
+        assertEquals(100, withSpain.getPrice());
+        assertTrue(withFrance.hasFranklin());
+        assertTrue(withSpain.hasFranklin());
+        assertEquals(2, notices(model));
+        // Nothing is paid or agreed: only the offers exist.
+        assertEquals(gold, dutch.getGold());
+        assertEquals(EuropeanRelationState.WAR,
+                model.getEuropeanRelation(dutch, france));
+        assertEquals(EuropeanRelationState.WAR,
+                model.getEuropeanRelation(dutch, spain));
+
+        final Model resumed = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(150,
+                resumed.getPendingPeaceOffer(resumed.getPlayerByName("Dutch"),
+                        resumed.getPlayerByName("France")).orElseThrow()
+                        .getPrice());
+        assertEquals(100,
+                resumed.getPendingPeaceOffer(resumed.getPlayerByName("Dutch"),
+                        resumed.getPlayerByName("Spain")).orElseThrow()
+                        .getPrice());
     }
 
     @Test

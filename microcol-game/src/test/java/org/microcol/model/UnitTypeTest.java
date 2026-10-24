@@ -13,13 +13,15 @@ public class UnitTypeTest {
         });
     }
 
+    @Test
     public void test_forValue() throws Exception {
-        UnitType unitType = UnitType.valueOf("Colonist");
+        UnitType unitType = UnitType.valueOf("COLONIST");
 
         assertNotNull(unitType);
-        assertEquals("Colonist", unitType);
+        assertSame(UnitType.COLONIST, unitType);
     }
 
+    @Test
     public void test_equals() throws Exception {
         assertTrue(UnitType.COLONIST.equals(UnitType.COLONIST));
         assertFalse(UnitType.COLONIST.equals(UnitType.FRIGATE));

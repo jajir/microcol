@@ -6,7 +6,7 @@ import org.microcol.model.Founder;
 
 /** Localized Congress labels and founder names. */
 public enum CongressText implements MessageKeyResource {
-    title, choose, close, allMembers, jonesEffect, progress, objective,
+    title, choose, close, support, allMembers, jonesEffect, progress, objective,
     chooseObjective, members, none, jonesPending, jonesDelivered, firstColony,
     chosen, changed, founderJoined, royalInfantry, royalCavalry, royalArtillery,
     royalMenOfWar, royalFamily, royalBells, royalStopped, interventionAnnounced,

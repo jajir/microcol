@@ -67,6 +67,25 @@ public final class TurnEventProvider {
                 missingTools);
     }
 
+    /** Report one head project finished during the owner's colony update. */
+    public static TurnEvent getProjectCompleted(final Player owner,
+            final Colony colony, final ColonyBuildingItemProgress<?> project) {
+        if (project instanceof ColonyBuildingItemProgressConstruction) {
+            return new TurnEventProjectCompleted(owner.getName(),
+                    colony.getId(), colony.getName(),
+                    QueueItemType.CONSTRUCTION,
+                    ((ColonyBuildingItemProgressConstruction) project)
+                            .getConstructionType(),
+                    null);
+        }
+        Preconditions.checkArgument(
+                project instanceof ColonyBuildingItemProgressUnit,
+                "Unknown queue item kind");
+        return new TurnEventProjectCompleted(owner.getName(), colony.getId(),
+                colony.getName(), QueueItemType.UNIT, null,
+                ((ColonyBuildingItemProgressUnit) project).getUnitType());
+    }
+
     /**
      * Get new turn event when ship come to Europe port.
      *

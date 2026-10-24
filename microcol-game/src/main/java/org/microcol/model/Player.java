@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -334,6 +336,31 @@ public abstract class Player {
     public List<Unit> getObservedUnitsAt(final Location location) {
         return isCurrentlyVisible(location) ? model.getUnitsAt(location)
                 : List.of();
+    }
+
+    /**
+     * Occupied holds of a foreign ship that this player sees right now
+     * (R-0205). Only the number is disclosed: a passenger, goods or the
+     * reserved part of a multi-hold passenger each occupy one hold, counted
+     * once, so no unit or goods identity leaves the model. Own ships keep their
+     * full cargo behind the owner API. A viewer or ship that is not live in
+     * this model, an own ship, a ship off the map (Europe or the high sea) or
+     * an unseen ship discloses nothing.
+     *
+     * @param ship required unit to ask about
+     * @return number of occupied holds, or empty when it is not disclosed
+     */
+    public OptionalInt getObservedOccupiedHolds(final Unit ship) {
+        Preconditions.checkNotNull(ship);
+        if (model.getPlayers().stream().noneMatch(player -> player == this)
+                || model.getAllUnits().stream().noneMatch(unit -> unit == ship)
+                || ship.getOwner() == this || !ship.isShip()
+                || !(ship instanceof UnitWithCargo) || !ship.isAtPlaceLocation()
+                || !isCurrentlyVisible(ship.getLocation())) {
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of((int) ((UnitWithCargo) ship).getCargo().getSlots()
+                .stream().filter(slot -> !slot.isEmpty()).count());
     }
 
     /**

@@ -142,6 +142,27 @@ public class EuropeTradeAccountTest {
     }
 
     @Test
+    public void test_exactFundsBuysAndOneGoldShortIsRefusedWithoutChange() {
+        // Ask 4 for 10 corn with 10 per cent tax costs exactly 44 gold.
+        when(model.getKingsTaxForPlayer(any(Player.class))).thenReturn(10);
+        final Player shortPurse = new PlayerHuman("Dutch", false, 43, model,
+                false, Map.of(), Set.of());
+        assertThrows(NotEnoughtGoldException.class,
+                () -> shortPurse.buyGoods(Goods.of(GoodsType.CORN, 10)));
+        assertEquals(43, shortPurse.getGold());
+        assertTrue(europe.getTradeAccounts().isEmpty());
+
+        final Player exactPurse = new PlayerHuman("Dutch", false, 44, model,
+                false, Map.of(), Set.of());
+        exactPurse.buyGoods(Goods.of(GoodsType.CORN, 10));
+        assertEquals(0, exactPurse.getGold());
+        final EuropeTradeAccount corn = account(EuropeanNation.DUTCH,
+                GoodsType.CORN);
+        assertEquals(10, corn.getBoughtQuantity());
+        assertEquals(44, corn.getBoughtGold());
+    }
+
+    @Test
     public void test_revolutionarySalesAreCountedInsideTheSalesTotal() {
         final EuropeTradeAccount account = EuropeTradeAccount.EMPTY
                 .sold(4, 8, false).sold(2, 3, true);

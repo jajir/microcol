@@ -294,6 +294,117 @@ public class GamePage extends AbstractScreen {
     }
 
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
+        endTurnAndAwaitPreparation();
+        if (!getModel()
+                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
+            WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils.asyncFx(this::isButtonBackVisible)
+                            .get(60, TimeUnit.SECONDS));
+            WaitForAsyncUtils.waitForFxEvents();
+            return Optional.of(ScreenTurnReport.of(getContext()));
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+        return Optional.empty();
+    }
+
+    /**
+     * End the turn when the report is not expected to open by itself, such as a
+     * routine-only notice with the summary off. The game stays in front.
+     *
+     * @return this game screen
+     */
+    public GamePage nextTurnWithoutOpeningReport() throws Exception {
+        endTurnAndAwaitRouting();
+        return this;
+    }
+
+    /**
+     * End the turn when a ship arrival is expected to open Europe directly,
+     * without a report in front of it.
+     *
+     * @return the European port that opened by itself
+     */
+    public EuropePortScreen nextTurnIntoEurope() throws Exception {
+        endTurnAndAwaitRouting();
+        return EuropePortScreen.of(getContext());
+    }
+
+    /**
+     * End the turn and wait until the player interface has routed this human
+     * turn start, so a screen that did not open is not a screen that is late.
+     * The preparation latch alone is released on another thread than the GUI
+     * bridge. ModelListenerImpl posts the turn start and then the native
+     * relations change from one thread, and the synchronous event bus finishes
+     * every screen change queued by the first post before the second one, so
+     * the second post marks the end of the routing.
+     */
+    private void endTurnAndAwaitRouting() throws Exception {
+        final TurnStartRouting routing = new TurnStartRouting(getModel(),
+                getModel().getCalendar().getNumberOfPlayedTurns());
+        final com.google.common.eventbus.EventBus eventBus = getContext()
+                .getClassFromGuice(com.google.common.eventbus.EventBus.class);
+        eventBus.register(routing);
+        try {
+            endTurnAndAwaitPreparation();
+            routing.await();
+        } finally {
+            eventBus.unregister(routing);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Marks the end of the interface routing of one human turn start. */
+    private static final class TurnStartRouting {
+        private final org.microcol.model.Model model;
+        private final int previousRound;
+        private final java.util.concurrent.CountDownLatch routed = new java.util.concurrent.CountDownLatch(
+                1);
+        private volatile Thread humanTurnThread;
+
+        TurnStartRouting(final org.microcol.model.Model model,
+                final int previousRound) {
+            this.model = model;
+            this.previousRound = previousRound;
+        }
+
+        @com.google.common.eventbus.Subscribe
+        public void onTurnStarted(
+                final org.microcol.model.event.TurnStartedEvent event) {
+            if (event.getPlayer().isHuman() && model.getCalendar()
+                    .getNumberOfPlayedTurns() > previousRound) {
+                humanTurnThread = Thread.currentThread();
+            }
+        }
+
+        @com.google.common.eventbus.Subscribe
+        public void onRelationsChanged(
+                final org.microcol.gui.event.NativeRelationsChangedEvent event) {
+            if (humanTurnThread == Thread.currentThread()) {
+                routed.countDown();
+            }
+        }
+
+        void await() throws InterruptedException, TimeoutException {
+            if (!routed.await(60, TimeUnit.SECONDS)) {
+                throw new TimeoutException(
+                        "Human turn start was not routed to the interface");
+            }
+        }
+    }
+
+    /** The report must not be on screen; the game stays in front. */
+    public void verifyTurnReportNotShown() {
+        assertFalse(isCssIdVisible("closeButtonId"),
+                "The turn report must not open by itself");
+    }
+
+    /** The game screen is in front: its Next turn button is visible. */
+    public void verifyGameInFront() {
+        assertTrue(isCssIdVisible(ButtonsGamePanel.BUTTON_NEXT_TURN_ID),
+                "The game screen must be in front");
+    }
+
+    private void endTurnAndAwaitPreparation() throws Exception {
         final int previousRound = getModel().getCalendar()
                 .getNumberOfPlayedTurns();
         final java.util.concurrent.CountDownLatch prepared = new java.util.concurrent.CountDownLatch(
@@ -323,16 +434,6 @@ public class GamePage extends AbstractScreen {
             getModel().removeListener(listener);
         }
         waitWhileMoving();
-        if (!getModel()
-                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
-            WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
-                    () -> WaitForAsyncUtils.asyncFx(this::isButtonBackVisible)
-                            .get(60, TimeUnit.SECONDS));
-            WaitForAsyncUtils.waitForFxEvents();
-            return Optional.of(ScreenTurnReport.of(getContext()));
-        }
-        WaitForAsyncUtils.waitForFxEvents();
-        return Optional.empty();
     }
 
     public void nextTurnAndCloseDialogs() throws Exception {

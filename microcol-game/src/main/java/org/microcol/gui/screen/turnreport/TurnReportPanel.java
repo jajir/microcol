@@ -36,11 +36,16 @@ public final class TurnReportPanel implements GameScreen {
 
     private final EventBus eventBus;
 
+    private final EuropeOpeningRequest europeOpeningRequest;
+
     @Inject
     TurnReportPanel(final I18n i18n,
             final GameModelController gameModelController,
             final TurnReportView turnReportView, final TeService teService,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final EuropeOpeningRequest europeOpeningRequest) {
+        this.europeOpeningRequest = Preconditions
+                .checkNotNull(europeOpeningRequest);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -77,7 +82,29 @@ public final class TurnReportPanel implements GameScreen {
                 return new TurnEventPanel(turnEvent, open);
             }
         }
+        if (turnEvent instanceof TeItemEurope) {
+            final Button open = new Button(i18n.get(TurnEvents.openEurope));
+            open.setId("turnEventOpenEurope");
+            open.setOnAction(event -> openEurope(shownModel));
+            return new TurnEventPanel(turnEvent, open);
+        }
         return new TurnEventPanel(turnEvent);
+    }
+
+    /**
+     * Open Europe only while the report still belongs to the current game. A
+     * stale report of a replaced game returns to that game's map instead.
+     * Navigation itself spends nothing.
+     */
+    private void openEurope(final Model shownModel) {
+        if (!gameModelController.isGameModelReady()) {
+            return;
+        }
+        if (gameModelController.getModel() != shownModel) {
+            eventBus.post(new ShowScreenEvent(Screen.GAME));
+        } else {
+            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        }
     }
 
     private Optional<Colony> findOwnedColony(final Model shownModel,
@@ -110,9 +137,13 @@ public final class TurnReportPanel implements GameScreen {
         }
     }
 
+    /**
+     * Leaving the report by any route (Close, Escape, Open actions) ends the
+     * pending Europe request of this turn, so reopening it cannot replay it.
+     */
     @Override
     public void beforeHide() {
-        // intentionally do nothing
+        europeOpeningRequest.clear();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.microcol.test;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.ColonyJobPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -63,8 +65,14 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         // Verify that in colony is 199 food.
         verifyCornInColony(gamePage, 199);
 
-        // Perform next turn and ignore turn events dialog.
-        gamePage.nextTurnAndCloseDialogs();
+        // The fourth update crosses 200 food: the report names the colony of
+        // the birth once and offers to open it.
+        final Optional<ScreenTurnReport> birth = gamePage.nextTurn();
+        gamePage.verifyTurnReportPresent(birth);
+        birth.get().verifyEventMessageCount(
+                "There is a new unit in colony Delft.", 1);
+        birth.get().verifyOpenColonyActionFor("Delft", "Open colony");
+        birth.get().close();
 
         // Four +3 updates cross 200 food; the birth leaves exactly 2.
         verifyCornInColony(gamePage, 2);

@@ -176,6 +176,63 @@ class DisbandTest {
     }
 
     @Test
+    void toolsAndMusketsSplitAtTheWarehouseLimitAndCancelChangesNothing() {
+        final Model model = fixture();
+        final int toolsCapacity = capacity(model, GoodsType.TOOLS);
+        final int musketCapacity = capacity(model, GoodsType.MUSKET);
+        model.getColonyById(0).orElseThrow().getWarehouse()
+                .setGoods(Goods.of(GoodsType.TOOLS, toolsCapacity - 30));
+        model.getColonyById(0).orElseThrow().getWarehouse()
+                .setGoods(Goods.of(GoodsType.MUSKET, musketCapacity - 50));
+        final UnitFreeColonist colonist = onColonySquare(model);
+        colonist.setTools(40);
+        colonist.setHoldingGuns(true);
+        final String before = snapshot(model);
+        final DisbandOffer offer = model.getDisbandOffer(colonist)
+                .orElseThrow();
+        // Tools: 30 fit, 10 are excess loss. Muskets: exactly 50 fit.
+        assertEquals(40, offer.getCarried(GoodsType.TOOLS));
+        assertEquals(30, offer.getRetained(GoodsType.TOOLS));
+        assertEquals(10, offer.getLost(GoodsType.TOOLS));
+        assertEquals(50, offer.getCarried(GoodsType.MUSKET));
+        assertEquals(50, offer.getRetained(GoodsType.MUSKET));
+        assertEquals(0, offer.getLost(GoodsType.MUSKET));
+        assertTrue(offer.hasExcessLoss());
+        assertEquals(before, snapshot(model));
+        assertThrows(IllegalStateException.class,
+                () -> model.disband(colonist, offer, false));
+        assertEquals(before, snapshot(model));
+        model.disband(colonist, offer, true);
+        assertEquals(toolsCapacity, stock(model, GoodsType.TOOLS));
+        assertEquals(musketCapacity, stock(model, GoodsType.MUSKET));
+        assertFalse(model.getAllUnits().contains(colonist));
+    }
+
+    @Test
+    void staleToolsAndMusketsSpaceRejectsConfirmationWithoutMutation() {
+        final Model model = fixture();
+        final int toolsCapacity = capacity(model, GoodsType.TOOLS);
+        final int musketCapacity = capacity(model, GoodsType.MUSKET);
+        model.getColonyById(0).orElseThrow().getWarehouse()
+                .setGoods(Goods.of(GoodsType.TOOLS, toolsCapacity - 30));
+        model.getColonyById(0).orElseThrow().getWarehouse()
+                .setGoods(Goods.of(GoodsType.MUSKET, musketCapacity - 50));
+        final UnitFreeColonist colonist = onColonySquare(model);
+        colonist.setTools(40);
+        colonist.setHoldingGuns(true);
+        final DisbandOffer offer = model.getDisbandOffer(colonist)
+                .orElseThrow();
+        // Another action fills the tools space after the offer was made.
+        model.getColonyById(0).orElseThrow().getWarehouse()
+                .setGoods(Goods.of(GoodsType.TOOLS, toolsCapacity - 10));
+        final String before = snapshot(model);
+        assertThrows(IllegalStateException.class,
+                () -> model.disband(colonist, offer, true));
+        assertEquals(before, snapshot(model));
+        assertTrue(model.getAllUnits().contains(colonist));
+    }
+
+    @Test
     void emptyShipAndWagonCanBeDisbanded() {
         final Model model = fixture();
         final Player dutch = model.getPlayerByName("Dutch");

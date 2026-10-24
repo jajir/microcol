@@ -23,7 +23,8 @@ public class TeProcessorNewUnitInColony extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventNewUnitInColony) {
             final TurnEventNewUnitInColony te = (TurnEventNewUnitInColony) turnEvent;
-            return new TeItemSimple(getMessage(te.getColonyName()));
+            return new TeItemColony(getMessage(te.getColonyName()),
+                    te.getColonyId());
         }
         return null;
     }

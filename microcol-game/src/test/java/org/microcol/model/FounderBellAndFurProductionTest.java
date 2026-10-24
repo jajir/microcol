@@ -243,6 +243,64 @@ class FounderBellAndFurProductionTest {
         assertEquals(21, planned(newspaperColony, GoodsType.BELL));
     }
 
+    /** An ELDER_STATESMAN hall whose owner joins the founder on one update. */
+    private Model hallReadyFor(final Founder founder) {
+        final GameModelPo data = data(0);
+        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data.getModel(),
+                saved(data).getOwnerName()), founder);
+        return load(data);
+    }
+
+    @Test
+    void jeffersonJoiningThroughOwnerUpdateRaisesTheStaffedHallOnly() {
+        final Model model = hallReadyFor(Founder.THOMAS_JEFFERSON);
+        // Unattended 1 plus expert 6, as in the control without the father.
+        assertEquals(7, planned(colony(model), GoodsType.BELL));
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.THOMAS_JEFFERSON);
+        // (1 * 100 + 6 * 150) / 100 = 10.
+        assertEquals(10, planned(colony(model), GoodsType.BELL));
+        final Model resumed = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(10, planned(colony(resumed), GoodsType.BELL));
+    }
+
+    @Test
+    void paineJoiningThroughOwnerUpdateAddsTheCurrentTaxToTheHall() {
+        final Model model = hallReadyFor(Founder.THOMAS_PAINE);
+        colony(model).getOwner().setTaxRate(20);
+        assertEquals(7, planned(colony(model), GoodsType.BELL));
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.THOMAS_PAINE);
+        // (1 * 120 + 6 * 120) / 100 = 8.4, floored once to 8.
+        assertEquals(8, planned(colony(model), GoodsType.BELL));
+        // A later tax change moves the bonus: (1 * 150 + 6 * 150) / 100 = 10.
+        colony(model).getOwner().setTaxRate(50);
+        assertEquals(10, planned(colony(model), GoodsType.BELL));
+    }
+
+    @Test
+    void hudsonJoiningThroughOwnerUpdateDoublesEveryPositiveFurField() {
+        final Model model = hallReadyFor(Founder.HENRY_HUDSON);
+        final Colony colony = colony(model);
+        final Unit worker = colony.getUnitsInsideColony().get(0);
+        final List<Integer> before = new ArrayList<>();
+        for (final ColonyField field : colony.getColonyFields()) {
+            before.add(field.getPotentialProduction(worker, GoodsType.FUR)
+                    .getAmount());
+        }
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.HENRY_HUDSON);
+        int doubled = 0;
+        for (int index = 0; index < before.size(); index++) {
+            final int after = colony.getColonyFields().get(index)
+                    .getPotentialProduction(worker, GoodsType.FUR).getAmount();
+            assertEquals(before.get(index) * 2, after);
+            if (before.get(index) > 0) {
+                doubled++;
+            }
+        }
+        assertTrue(doubled > 0, "The fixture needs a fur-producing field");
+    }
+
     @Test
     void combinedFoundersActualTurnMatchesPreviewAndContinue() {
         final GameModelPo data = data(500);

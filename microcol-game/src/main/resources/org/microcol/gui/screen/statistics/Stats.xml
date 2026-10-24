@@ -101,4 +101,5 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="titleLabor">Labor</entry>
 	<entry key="titleReligion">Religion</entry>
 	<entry key="titleColonies">Colonies</entry>
+	<entry key="titleFleet">Fleet</entry>
 </properties>

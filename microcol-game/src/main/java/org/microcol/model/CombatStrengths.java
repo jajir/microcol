@@ -87,11 +87,10 @@ public final class CombatStrengths {
     private static Optional<CombatStrengths> landBattle(final Model model,
             final Unit attacker, final Location attackerSquare,
             final Unit defender) {
-        // A treasure train defends with no strength, so an armed attacker
-        // always
-        // takes it; any other unarmed defender is still refused here.
-        final boolean treasure = defender instanceof UnitTreasure;
-        if (!isArmedLand(attacker) || !isArmedLand(defender) && !treasure
+        // An armed attacker fights any land defender: an armed one by its
+        // ordinary base, an unarmed civilian or wagon by the civilian base 1,
+        // and a treasure train by 0 (R-0211). A ship is never a land defender.
+        if (!isArmedLand(attacker) || defender.isShip()
                 || !defender.isAtPlaceLocation()) {
             return Optional.empty();
         }
@@ -124,9 +123,10 @@ public final class CombatStrengths {
                 50, 0, 0, 0,
                 artilleryPenalty(model, attacker, attackerSquare, false), 0,
                 bombardment, rebelAmbush, causeSupport);
-        final CombatStrength defense = new CombatStrength(base(defender, false),
-                0, terrainBonus, model.isFortified(defender) ? 50 : 0,
-                colonyBonus, artilleryPenalty(model, defender));
+        final CombatStrength defense = new CombatStrength(
+                landDefenseBase(defender), 0, terrainBonus,
+                model.isFortified(defender) ? 50 : 0, colonyBonus,
+                artilleryPenalty(model, defender));
         // Identity matters even when two changed inputs yield the same sum.
         final String inputs = attacker.getType().name() + ':' + state(attacker)
                 + ':' + attackTerrain.getTerrainType().name() + ':'
@@ -366,6 +366,17 @@ public final class CombatStrengths {
             return 0;
         }
         return isArmedLand(unit) ? base(unit, attack) : 1;
+    }
+
+    /**
+     * Base of an ordinary land defender in the open (R-0211). An armed unit
+     * defends with its ordinary base. An unarmed civilian or wagon defends with
+     * the civilian base 1 of the aid card, and a treasure train with 0, through
+     * the same rule as the native battles of {@link #nativeBase}.
+     */
+    private static double landDefenseBase(final Unit defender) {
+        return isArmedLand(defender) ? base(defender, false)
+                : nativeBase(defender, false);
     }
 
     /**

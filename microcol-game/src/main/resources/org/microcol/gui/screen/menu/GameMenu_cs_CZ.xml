@@ -20,6 +20,8 @@
 	<entry key="settingLanguageEn">Anglicky</entry>
 	<entry key="settingShowGrid">Zobrazit síť</entry>
 	<entry key="settingAutosave">Automaticky ukládat body obnovy tahů</entry>
+	<entry key="settingTurnSummary">Zobrazovat běžný přehled tahu na jeho začátku</entry>
+	<entry key="settingOpenEuropeOnArrival">Po příjezdu lodi automaticky otevřít Evropu</entry>
 	<entry key="buttonRecovery">Body obnovy</entry>
 	<entry key="recoveryTitle">Vyberte bod obnovy</entry>
 	<entry key="recoveryLatestPosition">Poslední pozice</entry>

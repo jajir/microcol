@@ -89,6 +89,14 @@ public class ScreenTurnReport extends AbstractScreen {
                         row.getWidth(), report.getMaxWidth()));
     }
 
+    /** The notice of the named colony offers Open colony. */
+    public void verifyOpenColonyActionFor(final String colonyName,
+            final String expectedText) {
+        verifyOpenColonyAction(
+                getModel().getColonyByName(colonyName).orElseThrow().getId(),
+                expectedText);
+    }
+
     /**
      * Reach the report's Open colony action with Tab and activate it with
      * Space.
@@ -146,6 +154,44 @@ public class ScreenTurnReport extends AbstractScreen {
     public void verifyColonyScreenNotShown() {
         assertFalse(isCssIdVisible(PanelColonyName.COLONY_NAME_ID),
                 "The inaccessible colony must not be opened");
+    }
+
+    /**
+     * The arrival notice offers Open Europe as a visible, untruncated action.
+     */
+    public void verifyOpenEuropeAction(final String expectedText) {
+        final Button button = getOpenEuropeButton();
+        assertEquals(expectedText, button.getText());
+        assertTrue(button.isVisible() && !button.isDisabled(),
+                "Open Europe action must be available");
+        assertTrue(button.getWidth() >= button.prefWidth(-1),
+                "Open Europe label must not be truncated");
+    }
+
+    public void verifyOpenEuropeActionAbsent() {
+        assertTrue(getNodeFinder().lookup("#turnEventOpenEurope").tryQuery()
+                .isEmpty(), "Open Europe action must not be offered");
+    }
+
+    /** Activate the report's Open Europe action with the mouse. */
+    public EuropePortScreen openEuropeWithMouse() {
+        getRobot().clickOn(getOpenEuropeButton(), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return EuropePortScreen.of(getContext());
+    }
+
+    /**
+     * Close the report with its Close button. With the Europe opening
+     * preference on, the arrival then shows Europe.
+     */
+    public EuropePortScreen closeIntoEurope() {
+        close();
+        return EuropePortScreen.of(getContext());
+    }
+
+    private Button getOpenEuropeButton() {
+        return getNodeFinder().lookup("#turnEventOpenEurope")
+                .queryAs(Button.class);
     }
 
     private Button getOpenColonyButton(final int colonyId) {

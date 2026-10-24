@@ -68,6 +68,10 @@ final class StatisticsPanel implements GameScreen {
     private final ColonyAdvisorPanel colonies;
     private final ToggleButton coloniesButton = new ToggleButton();
 
+    private final static String KEY_FLEET = "fleet";
+    private final FleetPanel fleet;
+    private final ToggleButton fleetButton = new ToggleButton();
+
     private final static String KEY_GOLD = "gold";
     private final static String KEY_MILITARY = "military";
     private final static String KEY_WEALTH = "wealth";
@@ -105,7 +109,8 @@ final class StatisticsPanel implements GameScreen {
             final HallOfFameDao hallOfFameDao,
             final LocalizationHelper localization,
             final LaborNavigator laborNavigator,
-            final ColonyAdvisorNavigator colonyAdvisorNavigator) {
+            final ColonyAdvisorNavigator colonyAdvisorNavigator,
+            final FleetNavigator fleetNavigator) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -157,6 +162,12 @@ final class StatisticsPanel implements GameScreen {
         coloniesButton.setToggleGroup(toggleGroup);
         coloniesButton.setUserData(KEY_COLONIES);
 
+        fleet = new FleetPanel(gameModelController, i18n, fleetNavigator);
+        fleetButton.setId("fleetTab");
+        fleetButton.getStyleClass().add("relations-tab");
+        fleetButton.setToggleGroup(toggleGroup);
+        fleetButton.setUserData(KEY_FLEET);
+
         toggleGroup.selectedToggleProperty()
                 .addListener(this::onToggleGroupWasChanged);
 
@@ -190,6 +201,7 @@ final class StatisticsPanel implements GameScreen {
         leftPanel.getChildren().add(laborButton);
         leftPanel.getChildren().add(religionButton);
         leftPanel.getChildren().add(coloniesButton);
+        leftPanel.getChildren().add(fleetButton);
         // The position moves the whole sidebar, so the scroll bar stays at its
         // edge instead of being moved out of the viewport with the tabs.
         sidebar.getStyleClass().add("left");
@@ -198,7 +210,7 @@ final class StatisticsPanel implements GameScreen {
         sidebar.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         for (final ToggleButton tab : List.of(tb1, tb2, tb3, tb4,
                 relationsButton, tradeButton, baseScoreButton, hallOfFameButton,
-                laborButton, religionButton, coloniesButton)) {
+                laborButton, religionButton, coloniesButton, fleetButton)) {
             tab.focusedProperty()
                     .addListener((observable, wasFocused, isFocused) -> {
                         if (isFocused) {
@@ -266,6 +278,12 @@ final class StatisticsPanel implements GameScreen {
             setTitle(Stats.titleColonies);
             colonies.showReport();
             chartPanel.getChildren().setAll(colonies);
+            return;
+        }
+        if (KEY_FLEET.equals(newValue.getUserData())) {
+            setTitle(Stats.titleFleet);
+            fleet.showReport();
+            chartPanel.getChildren().setAll(fleet);
             return;
         }
         final List<TurnPlayerStatistics> stats = gameModelController.getModel()
@@ -407,6 +425,7 @@ final class StatisticsPanel implements GameScreen {
         laborButton.setText(i18n.get(Stats.titleLabor));
         religionButton.setText(i18n.get(Stats.titleReligion));
         coloniesButton.setText(i18n.get(Stats.titleColonies));
+        fleetButton.setText(i18n.get(Stats.titleFleet));
     }
 
     @Override

@@ -38,6 +38,7 @@ public final class TurnEventStore {
                     TurnEventShipRepair::tryLoad, TurnEventGoTo::tryLoad,
                     TurnEventCustomHouseExport::tryLoad,
                     TurnEventConstructionWaitingForTools::tryLoad,
+                    TurnEventProjectCompleted::tryLoad,
                     TurnEventShipComeToEuropePort::tryLoad,
                     TurnEventShipComeToHighSeas::tryLoad,
                     TurnEventLostCityRumor::tryLoad,

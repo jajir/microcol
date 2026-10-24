@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -19,7 +21,9 @@ import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.CongressPo;
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitPo;
 import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
@@ -214,6 +218,92 @@ class ColonyLibertyTest {
         assertEquals(20, bonusOnly.getRebelSupport().getDisplayPercent());
         // The bonus is not stored as liberty.
         assertEquals(0L, bonusOnly.getLiberty());
+    }
+
+    @Test
+    void bolivarJoiningThroughOwnerUpdateAddsTwentyPointsToAnExistingColony() {
+        final GameModelPo data = data();
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(data, "Dutch"),
+                Founder.SIMON_BOLIVAR);
+        final Model model = load(data);
+        final Colony bonusOnly = model.getColonyById(1).orElseThrow();
+        assertEquals(0, bonusOnly.getRebelSupport().getDisplayPercent());
+
+        // Control: the same owner update without Bolivar. The ordinary
+        // unattended bell of that update is the only liberty it credits.
+        final Model control = load(data());
+        assertTrue(control.getCurrentPlayer().startTurn());
+        final Colony controlColony = control.getColonyById(1).orElseThrow();
+        final long ordinaryLiberty = controlColony.getLiberty();
+        assertEquals(1L, ordinaryLiberty);
+        assertEquals(0, controlColony.getRebelSupport().getDisplayPercent());
+
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.SIMON_BOLIVAR);
+        // The founder adds 20 points to the displayed support but mints no
+        // liberty: the stored value equals the ordinary baseline.
+        assertEquals(20, bonusOnly.getRebelSupport().getDisplayPercent());
+        assertEquals(ordinaryLiberty, bonusOnly.getLiberty());
+
+        final Model restored = load(wrap(model.save()));
+        final Colony resumed = restored.getColonyById(1).orElseThrow();
+        assertEquals(20, resumed.getRebelSupport().getDisplayPercent());
+        assertEquals(ordinaryLiberty, resumed.getLiberty());
+    }
+
+    /**
+     * Free play where the Dutch colonist 0 stands on a grassland site, ready to
+     * found; with Bolivar the owner joins him through its own update first.
+     */
+    private Model dutchFounderAt(final Location site, final boolean bolivar) {
+        final ModelPo po = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.microcol").getModel();
+        po.getGameManager().setGameStarted(true);
+        po.getGameManager().setCurrentPlayer("Dutch");
+        final Map<Location, TerrainType> terrain = po.getMap().getTerrainMap();
+        site.getNeighbors().stream()
+                .filter(at -> at.getX() >= 1
+                        && at.getX() <= po.getMap().getMaxX() && at.getY() >= 1
+                        && at.getY() <= po.getMap().getMaxY())
+                .forEach(at -> terrain.put(at, TerrainType.GRASSLAND));
+        terrain.put(site, TerrainType.GRASSLAND);
+        po.getMap().setTerrainType(terrain);
+        po.getMap().setTrees(Collections.emptySet());
+        final UnitPo founder = po.getUnits().stream()
+                .filter(unit -> unit.getId() == 0).findFirst().orElseThrow();
+        founder.setAvailableMoves(1);
+        if (bolivar) {
+            RealFounderJoin.readyFor(RealFounderJoin.congressOf(po, "Dutch"),
+                    Founder.SIMON_BOLIVAR);
+        }
+        final Model model = load(wrap(po));
+        model.getUnitById(0).placeToLocation(site);
+        if (bolivar) {
+            RealFounderJoin.joinThroughOwnerUpdate(model,
+                    Founder.SIMON_BOLIVAR);
+        }
+        return model;
+    }
+
+    @Test
+    void bolivarJoiningThroughOwnerUpdateAlsoSupportsAColonyFoundedLater() {
+        final Location site = Location.of(44, 26);
+        // Control: the same founding without Bolivar starts at zero support.
+        final Model plain = dutchFounderAt(site, false);
+        final Colony plainColony = plain.buildColony(
+                plain.getPlayerByName("Dutch"), plain.getUnitById(0), "Plain");
+        assertEquals(0, plainColony.getRebelSupport().getDisplayPercent());
+
+        final Model model = dutchFounderAt(site, true);
+        final Colony late = model.buildColony(model.getPlayerByName("Dutch"),
+                model.getUnitById(0), "Late Fort");
+        // One resident, 40 of 200 points, and no liberty was minted.
+        assertEquals(1, late.getPopulation());
+        assertEquals(20, late.getRebelSupport().getDisplayPercent());
+        assertEquals(0L, late.getLiberty());
+
+        final Colony restored = load(wrap(model.save())).getColonyAt(site)
+                .orElseThrow();
+        assertEquals(20, restored.getRebelSupport().getDisplayPercent());
     }
 
     @Test

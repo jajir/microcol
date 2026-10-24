@@ -131,6 +131,23 @@ class NativeTreasureTest {
         assertEquals(seed + BATTLE_AND_PROMOTION * GOLDEN, random(model));
     }
 
+    @Test
+    void cortesJoiningThroughOwnerUpdateDoublesTheSameSeedsOrdinaryTrain() {
+        final double chance = chance(false, false);
+        final long seed = seedWhere(s -> roll(s, 1) < chance / 2
+                && roll(s, TREASURE_DRAW) < NativeTreasureRules.CHANCE);
+        assertEquals(Optional.of(500),
+                attack(model(world(false, false, seed))).getTreasureValue());
+
+        final ModelPo po = world(false, false, seed);
+        RealFounderJoin.readyFor(RealFounderJoin.congressOf(po, DUTCH),
+                Founder.HERNAN_CORTES);
+        final Model model = model(po);
+        RealFounderJoin.joinThroughOwnerUpdate(model, Founder.HERNAN_CORTES);
+        assertEquals(Optional.of(1000), attack(model).getTreasureValue());
+        assertEquals(1000, treasures(model).get(0).getValue());
+    }
+
     // ----- failed attacks -----
 
     @Test

@@ -47,7 +47,8 @@ public class TerrainMovementTest extends AbstractUnitFreeColonistTest {
         assertEquals(3, TerrainType.DESERT.getMoveCostThirds(false, false));
         assertEquals(6, TerrainType.TUNDRA.getMoveCostThirds(true, false));
         assertEquals(3, TerrainType.TUNDRA.getMoveCostThirds(false, false));
-        assertEquals(6, TerrainType.ARCTIC.getMoveCostThirds(true, false));
+        // Arctic cannot hold trees (TerrainTypeTest), so its only legal state
+        // is bare; no forested arctic cost exists to assert.
         assertEquals(6, TerrainType.ARCTIC.getMoveCostThirds(false, false));
         assertEquals(6, TerrainType.HILL.getMoveCostThirds(false, false));
         assertEquals(9, TerrainType.MOUNTAIN.getMoveCostThirds(false, false));

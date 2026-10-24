@@ -1140,8 +1140,6 @@ public abstract class AbstractUnit implements Unit {
                         ? Optional
                                 .of(model.planNativeUnitAttack(owner, selected))
                         : Optional.empty();
-        final boolean nativeFight = owner.isNative()
-                || selected.getOwner().isNative();
         final boolean winnerAttacker = strengths.isPresent()
                 ? strengths.get().attackerWins(model.nextCombatRandom())
                 : isWinnerAttacker();
@@ -1152,7 +1150,7 @@ public abstract class AbstractUnit implements Unit {
                 outcome -> model.applyNativeRelationOutcome(owner, outcome));
         if (strengths.isPresent()) {
             final AbstractUnit loser = winnerAttacker ? defender : this;
-            if (isDestroyedByDefeat(loser, nativeFight)) {
+            if (isDestroyedInFieldBattle(loser)) {
                 final Unit winner = winnerAttacker ? this : defender;
                 model.fireUnitAttacked(this, defender, loser, true,
                         promoteWinningColonist(winner));
@@ -1216,7 +1214,7 @@ public abstract class AbstractUnit implements Unit {
                 : this;
         final MilitaryPromotion promotion = promoteWinningColonist(
                 winnerAttacker ? this : defender);
-        if (isDestroyedByDefeat(loser, true)) {
+        if (isDestroyedInFieldBattle(loser)) {
             model.fireUnitAttacked(this, defender, loser, true, promotion);
             model.destroyUnit(loser);
         } else {
@@ -1457,14 +1455,15 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
-     * A native battle destroys an unarmed European loser, such as a colonist or
-     * a wagon, instead of capturing it; armed soldiers and artillery keep their
-     * ordinary equipment loss.
+     * A field or native battle destroys an unarmed loser, such as a colonist, a
+     * wagon or a treasure train, instead of taking equipment from it (R-0173).
+     * Armed soldiers and artillery keep their ordinary equipment loss. Capture
+     * of a standalone civilian is not yet specified (R-0211 open question 2);
+     * the colony capture path is separate.
      */
-    private static boolean isDestroyedByDefeat(final AbstractUnit loser,
-            final boolean nativeFight) {
+    private static boolean isDestroyedInFieldBattle(final AbstractUnit loser) {
         return isDestroyedByDefeat(loser)
-                || nativeFight && !CombatStrengths.isArmedLand(loser);
+                || !CombatStrengths.isArmedLand(loser);
     }
 
     protected void clearFortificationAfterDefeat() {

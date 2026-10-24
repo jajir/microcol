@@ -4,6 +4,7 @@
   <entry key="title">Kongres</entry>
   <entry key="choose">Zvolit tohoto otce</entry>
   <entry key="close">Zavřít</entry>
+  <entry key="support">Celostátní podpora povstání: %s %% (%s obyvatel)</entry>
   <entry key="progress">Zvony pro Kongres: %s / %s</entry>
   <entry key="objective">Cíl: %s</entry>
   <entry key="chooseObjective">Zvolte dalšího otce. Zvony čekají na vaši volbu.</entry>

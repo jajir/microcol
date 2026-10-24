@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.microcol.model.campaign.MissionImpl;
@@ -56,6 +57,29 @@ class AttackRoleTest {
                     () -> attacker.attack(target));
             assertEquals(before, gson.toJson(model.save()));
         }
+    }
+
+    /**
+     * R-0028 chapter 4: a purchased Seasoned Scout is a supported specialist.
+     * Muskets confer the soldier role and horses then the dragoon base 3, so
+     * there is no unarmed open-field scout attack and no separate specialty.
+     */
+    @Test
+    void seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon() {
+        final Model model = border(UnitType.SEASONED_SCOUT);
+        final UnitFreeColonist scout = (UnitFreeColonist) model.getUnitById(0);
+        final Location target = model.getUnitById(6).getLocation();
+        scout.setTools(0);
+        scout.setMounted(true);
+        scout.setHoldingGuns(false);
+        assertFalse(scout.isPossibleToAttackAt(target));
+        scout.setHoldingGuns(true);
+        assertTrue(scout.isPossibleToAttackAt(target));
+        final CombatStrengths strengths = scout.prepareAttack(target, true)
+                .orElseThrow().getCombatStrengths().orElseThrow();
+        assertEquals(3.0, strengths.getAttacker().getBase(), 1e-9);
+        assertEquals(4.5, strengths.getAttacker().getTotal(), 1e-9);
+        assertSame(UnitType.SEASONED_SCOUT, scout.getType());
     }
 
     @ParameterizedTest

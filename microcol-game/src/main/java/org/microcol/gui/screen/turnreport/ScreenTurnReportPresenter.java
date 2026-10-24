@@ -16,19 +16,25 @@ public class ScreenTurnReportPresenter {
 
     private final EventBus eventBus;
 
+    private final EuropeOpeningRequest europeOpeningRequest;
+
     @Inject
     ScreenTurnReportPresenter(final ScreenTurnReport screenTurnReport,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final EuropeOpeningRequest europeOpeningRequest) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.europeOpeningRequest = Preconditions
+                .checkNotNull(europeOpeningRequest);
         screenTurnReport.getContent().setOnKeyPressed(this::onKeyPressed);
     }
 
     private void onKeyPressed(final KeyEvent event) {
         /**
-         * Escape
+         * Escape closes the report like its Close button does.
          */
         if (KeyCode.ESCAPE == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.GAME));
+            eventBus.post(new ShowScreenEvent(
+                    europeOpeningRequest.takeScreenAfterReport()));
         }
     }
 

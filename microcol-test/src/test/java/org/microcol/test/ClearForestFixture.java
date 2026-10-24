@@ -27,8 +27,9 @@ final class ClearForestFixture {
     }
 
     /**
-     * Equip every free colonist, plant a forest on one square, set the lumber
-     * stock of one colony and make the next Load game use the prepared copy.
+     * Equip every unarmed free colonist, plant a forest on one square, set the
+     * lumber stock of one colony and make the next Load game use the prepared
+     * copy.
      *
      * @param context    running application context
      * @param source     shared scenario
@@ -48,7 +49,11 @@ final class ClearForestFixture {
         final JsonObject model = saved.getAsJsonObject("model");
         model.getAsJsonArray("units").forEach(value -> {
             final JsonObject unit = value.getAsJsonObject();
-            if ("COLONIST".equals(unit.get("type").getAsString())) {
+            // An armed colonist keeps its muskets only: tools and muskets are
+            // separate equipment and the game never combines them.
+            final JsonElement armed = unit.get("holdingGuns");
+            if ("COLONIST".equals(unit.get("type").getAsString())
+                    && (armed == null || !armed.getAsBoolean())) {
                 unit.addProperty("tools", tools);
                 if (unitType != null) {
                     unit.addProperty("type", unitType);
@@ -68,7 +73,11 @@ final class ClearForestFixture {
         }
         final JsonObject map = model.getAsJsonObject("map");
         set(map.getAsJsonArray("trees"), forestAt, "t");
-        set(map.getAsJsonArray("fields"), forestAt, "-");
+        // A scenario without a plowed-field block has no field to remove.
+        final JsonArray fields = map.getAsJsonArray("fields");
+        if (fields != null) {
+            set(fields, forestAt, "-");
+        }
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)

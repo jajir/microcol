@@ -99,16 +99,16 @@
     Exit/Retire/Continue, [R-0195](done/R-0195.md) and [R-0196](done/R-0196.md)
     score components, and [R-0197](done/R-0197.md) the Hall of Fame.
 13. Remaining report families are [labor](done/R-0198.md), [religion](done/R-0199.md),
-    [colonies](done/R-0200.md), [natives](done/R-0201.md), [navy](R-0202.md),
-    [Congress/REF](R-0203.md) and [notices/results](R-0204.md).
-    [R-0205](R-0205.md) owns local inspection, [R-0206](done/R-0206.md)
+    [colonies](done/R-0200.md), [natives](done/R-0201.md), [navy](done/R-0202.md),
+    [Congress/REF](done/R-0203.md) and [notices/results](done/R-0204.md).
+    [R-0205](done/R-0205.md) owns local inspection, [R-0206](done/R-0206.md)
     the rules encyclopedia and [R-0207](deferred/R-0207.md) existing tutorial updates.
     Together with R-0145 and R-0168, all nine report families have owners.
 14. Nine verification-only captures own the mandatory matrices:
-    [profiles](R-0208.md), [New Game controls](R-0209.md),
-    [terrain](R-0210.md), [units](R-0211.md), [skills](R-0212.md),
-    [buildings](R-0213.md), [founders](R-0214.md),
-    [production/trade](R-0215.md) and [endings](R-0216.md).
+    [profiles](done/R-0208.md), [New Game controls](R-0209.md),
+    [terrain](done/R-0210.md), [units](R-0211.md), [skills](done/R-0212.md),
+    [buildings](done/R-0213.md), [founders](done/R-0214.md),
+    [production/trade](done/R-0215.md) and [endings](R-0216.md).
     Four separate integrated acceptance captures [R-0217](done/R-0217.md)–[R-0220](R-0220.md)
     own UC-115–118. These are pending verification, not new implementations
     of already delivered behavior or claims that the full matrices have passed.

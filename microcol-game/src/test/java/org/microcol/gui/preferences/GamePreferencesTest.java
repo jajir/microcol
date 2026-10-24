@@ -37,6 +37,37 @@ public class GamePreferencesTest extends AbstractPreferencesTest {
     }
 
     @Test
+    public void verify_turn_summary_is_on_when_setting_is_missing()
+            throws Exception {
+        assertTrue(gamePreferences.isShowTurnSummary());
+    }
+
+    @Test
+    public void verify_turn_summary_follows_stored_setting() throws Exception {
+        setting.setTurnSummaryEnabled(false);
+        assertFalse(gamePreferences.isShowTurnSummary());
+
+        setting.setTurnSummaryEnabled(true);
+        assertTrue(gamePreferences.isShowTurnSummary());
+    }
+
+    @Test
+    public void verify_open_europe_on_arrival_is_off_when_setting_is_missing()
+            throws Exception {
+        assertFalse(gamePreferences.isOpenEuropeOnArrival());
+    }
+
+    @Test
+    public void verify_open_europe_on_arrival_follows_stored_setting()
+            throws Exception {
+        setting.setOpenEuropeOnArrival(true);
+        assertTrue(gamePreferences.isOpenEuropeOnArrival());
+
+        setting.setOpenEuropeOnArrival(false);
+        assertFalse(gamePreferences.isOpenEuropeOnArrival());
+    }
+
+    @Test
     public void test_setLocale_locale_is_required() throws Exception {
         assertThrows(NullPointerException.class, () -> {
             gamePreferences.setLanguage(null);
