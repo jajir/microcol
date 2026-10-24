@@ -151,7 +151,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
 | [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
 | [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
-| [R-0263](R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
+| [R-0263](done/R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
 
 ## A03
 

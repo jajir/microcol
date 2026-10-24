@@ -110,7 +110,7 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 3. Mapa obsahuje všech 14 současných typů terénu, lesy, malé i velké řeky a všechny
    druhy zvláštních přírodních zdrojů v povolených kombinacích. Řeka má být
    objevitelná při běžném příjezdu k pevnině, při zachování pravidel odkrývání mapy.
-4. Rozsah a přejímku vede [R-0263](requirements/R-0263.md), včetně zbývající otázky
+4. Rozsah a přejímku vede [R-0263](requirements/done/R-0263.md), včetně zbývající otázky
    na případné nepřírodní doplňky. Jde o zadání, nikoli doloženou změnu mapy.
    Samostatná geografická Amerika [R-0221](requirements/R-0221.md) a generovaný svět
    [R-0065](requirements/done/R-0065.md) si zachovávají vlastní rozsah.
@@ -641,3 +641,10 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 ## Local acceptance without CI waiting — 2026-10-20
 
 1. [R-0254](requirements/done/R-0254.md) applies the user-selected local completion policy; CI remains configured but remote verification is requested separately.
+
+
+### Original World: authored content verification, 2026-10-24
+
+1. [R-0263](requirements/done/R-0263.md) now uses the separate `original-world.microcol` resource. The reference expedition continues to use `free-play.microcol`; Original World retains its existing Dutch-only start, French colonies and seed 134.
+2. The fixed natural landscape contains every base terrain and resource kind, northern tundra attached to the continent, a southern ice shelf without tundra, and a small-to-large river reaching (25,13). The ordinary Dutch approach from (45,15) reaches sea square (26,14), reveals the mouth, and allows landing/founding at (25,14). Initial mineral reserves follow the shared rules: silver 100, ore 200, mixed 200 of each.
+3. The actual setup, sea journey, river rendering, landing, founding and Continue passed targeted tests. [Execution evidence](functional-tests.md#r-0263-fixed-original-world-2026-10-24) records counts and the passed smoke gate. The subsequent map palette/pen-outline change is not part of these content results.

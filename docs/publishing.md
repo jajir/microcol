@@ -707,7 +707,7 @@ documentation in APT just to make it visible on the web.
    active capture requirements now agree. Runtime code, test runners, CI and
    publication gates are unchanged.
 2. This documentation change also captures the fixed Original World target in
-   [R-0263](requirements/R-0263.md); its map implementation remains unselected.
+   [R-0263](requirements/done/R-0263.md); its map implementation remains unselected.
    All nine documentation consistency tests and strict MkDocs passed under the
    amended policy. The earlier game-test run dispatched for R-0263 predates this
    exception and is separate evidence, not a game-test requirement for this commit.

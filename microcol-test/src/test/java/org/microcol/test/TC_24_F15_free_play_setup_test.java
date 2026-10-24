@@ -293,4 +293,81 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
                 1000);
         setup.verifyGameDifficulty(Difficulty.DISCOVERER, "Objevitel");
     }
+
+    @Test
+    @Tag("local")
+    void TC_12_original_world_river_landing_and_colony_survive_continue()
+            throws Exception {
+        // Start the actual authored world; inland features are initially
+        // hidden.
+        FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(0);
+        GamePage game = setup.start();
+        org.microcol.page.FogPage fog = new org.microcol.page.FogPage(
+                getContext());
+        org.microcol.page.FreePlayAuditPage audit = new org.microcol.page.FreePlayAuditPage(
+                getContext());
+        org.microcol.model.Location mouth = org.microcol.model.Location.of(25,
+                13);
+        fog.verifyExplored(mouth, false);
+
+        // Sail west along the ordinary sea approach, paying movement each turn.
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(org.microcol.model.Location.of(45, 15));
+        game.getRightPanelUnit(0).selectUnit();
+        fog.move(org.microcol.model.Location.of(45, 15),
+                org.microcol.model.Location.of(40, 15), 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(org.microcol.model.Location.of(40, 15));
+        game.getRightPanelUnit(0).selectUnit();
+        fog.move(org.microcol.model.Location.of(40, 15),
+                org.microcol.model.Location.of(35, 15), 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(org.microcol.model.Location.of(35, 15));
+        game.getRightPanelUnit(0).selectUnit();
+        fog.move(org.microcol.model.Location.of(35, 15),
+                org.microcol.model.Location.of(30, 15), 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        game.nextTurnAndCloseDialogs();
+        org.microcol.model.Location sea = org.microcol.model.Location.of(26,
+                14);
+        org.microcol.model.Location land = org.microcol.model.Location.of(25,
+                14);
+        game.selectTile(org.microcol.model.Location.of(30, 15));
+        game.getRightPanelUnit(0).selectUnit();
+        fog.move(org.microcol.model.Location.of(30, 15), sea, 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        fog.verifyExplored(mouth, true);
+        new org.microcol.page.RiverPage(getContext()).verifyRiverWidth(mouth,
+                org.microcol.model.RiverSize.LARGE,
+                org.microcol.model.Location.of(24, 13));
+        fog.saveMapEvidence("R-0263-river-approach.png");
+
+        // Choose a passenger, land and found a colony using the normal dialog.
+        game.nextTurnAndCloseDialogs();
+        game.moveMouseAtLocation(sea);
+        game.dragMouseAtLocation(land);
+        org.microcol.page.PassengerTransferPage passengers = new org.microcol.page.PassengerTransferPage(
+                getContext());
+        passengers.choose(0);
+        passengers.confirm();
+        game.waitForNumberOfUnitsAt(land, 1);
+        // Landing spends the colonist's movement; found on the next turn.
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(land);
+        game.getRightPanelUnit(0).selectUnit();
+        org.microcol.page.ColonyNameDialog naming = game.foundColony();
+        naming.enterName("River Haven");
+        naming.save();
+        org.microcol.page.ColonyScreen.of(getContext(), "River Haven").close();
+
+        // Continue restores both authored features and the player's new colony.
+        game.exitToMenu();
+        audit.continueGame();
+        fog.verifyExplored(mouth, true);
+        game.openColonyAt(land, "River Haven").verifyColonyName("River Haven");
+    }
 }
