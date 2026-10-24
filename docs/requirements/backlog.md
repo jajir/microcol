@@ -316,7 +316,7 @@ Full UC-057 verification remains part of the trade acceptance matrix.
 | [R-0212](done/R-0212.md) | Verify all 22 professions and their output roles | Verification | UC-119 profession matrix |
 | [R-0213](done/R-0213.md) | Verify all building rows and upgrades | Verification | UC-119 building matrix |
 | [R-0215](done/R-0215.md) | Verify production, storage and trade reference rows | Verification | UC-119 production/trade matrix |
-| [R-0218](R-0218.md) | Verify two colonies sustain a production network | Verification | UC-116 integrated Hra journey |
+| [R-0218](done/R-0218.md) | Verify two colonies sustain a production network | Verification | UC-116 integrated Hra journey |
 
 The four A07 analyses R-0146–R-0149 were captured on **2026-10-17** as
 preparation only; they do not select or authorize gameplay implementation.
@@ -358,7 +358,7 @@ specific pending A08 prerequisites for R-0148/R-0149.
 | [R-0170](done/R-0170.md) | Make European rival land attacks purposeful and legal | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) land strategy, UC-068 |
 | [R-0171](done/R-0171.md) | Make European rival naval attacks contest commerce | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) naval strategy, UC-068 |
 | [R-0172](done/R-0172.md) | Schedule rival colony objectives without starving existing colonies | New capture | [DIP-001](../gap-analysis.md#european-diplomacy-and-rivalry) multi-colony scheduler, UC-068 |
-| [R-0219](R-0219.md) | Verify diplomacy changes trade, AI and ownership | Verification | UC-117 integrated Hra journey |
+| [R-0219](done/R-0219.md) | Verify diplomacy changes trade, AI and ownership | Verification | UC-117 integrated Hra journey |
 
 The A08 foundation analyses R-0150–R-0156 were captured on **2026-10-17**
 as preparation only; no native gameplay implementation is selected. R-0052

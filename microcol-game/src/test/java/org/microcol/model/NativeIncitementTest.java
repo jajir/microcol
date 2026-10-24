@@ -302,6 +302,38 @@ class NativeIncitementTest {
     }
 
     /**
+     * Save and Continue after nineteen native turns keep the single remaining
+     * turn: it still acts, the order then expires, and a further reload keeps
+     * it expired without a second life or a replayed turn.
+     */
+    @Test
+    void expiryAfterReloadKeepsTheLastTurnAndThenStaysExpired() {
+        final Model model = withSeed(
+                scene().tribal(NativeNation.AZTEC, EuropeanNation.FRENCH, 100),
+                seedFor(NativeIncitementOutcome.SUCCESS, 0.25));
+        model.incite(visitor(model), settlement(model), quote(model));
+        for (int turn = 1; turn < ORDER_TURNS; turn++) {
+            model.checkNativeIncitement(NativeNation.AZTEC);
+            model.advanceNativeIncitement(NativeNation.AZTEC);
+        }
+        final Model loaded = reload(model.save());
+        assertEquals(1, loaded.getNativeIncitementOrder(NativeNation.AZTEC)
+                .orElseThrow().getRemainingTurns());
+        loaded.checkNativeIncitement(NativeNation.AZTEC);
+        assertTrue(
+                loaded.getNativeIncitementOrder(NativeNation.AZTEC).isPresent(),
+                "The last native turn still has its order");
+        loaded.advanceNativeIncitement(NativeNation.AZTEC);
+        loaded.checkNativeIncitement(NativeNation.AZTEC);
+        assertTrue(
+                loaded.getNativeIncitementOrder(NativeNation.AZTEC).isEmpty());
+        final Model again = reload(loaded.save());
+        again.checkNativeIncitement(NativeNation.AZTEC);
+        assertTrue(
+                again.getNativeIncitementOrder(NativeNation.AZTEC).isEmpty());
+    }
+
+    /**
      * A replacement success resets the clock to twenty turns, even when the old
      * order had only a few left.
      */

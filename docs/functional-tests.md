@@ -1,5 +1,428 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0219 diplomacy journey ledger 2026-10-24
+
+**Passed (attempt 1, 2026-10-24, run-ZEnkEm).** The model suite and
+`NativeIncitedPursuitTest.savedDistantPursuitContinuesTheWalkWithoutReplayingAnAttack`
+passed with 4,718 model tests; evidence `R-0219-targeted-1-review.json`.
+
+**Attempt 2 (run-IAtYrc): both `TC_186` tests errored** at `#plowField` (no
+nodes): the pioneer's square was not selected before the plow control. Fixed in
+attempt 3 with `selectTile`, as `TC_114` does.
+
+**Attempt 3 failed (run-ZumkmZ, callback `20261024T092915Z-9a5420d4a8f6`,
+2026-10-24).** 4,719 model tests passed, including
+`NativeIncitementTest.expiryAfterReloadKeepsTheLastTurnAndThenStaysExpired`; 34
+UI/support tests had three failures and no errors or skips. TC186_03, TC136,
+TC148, TC59 and TC65 passed. Diagnoses, from the owners and the run log:
+
+1. `TC_01`, empty attack preview expected in peace: wrong oracle. In peace an
+   attack between European nations is still offered, but its review carries a
+   mandatory declaration of war (`AttackOrder.isDeclarationNeeded`,
+   `DialogFight`). At war the same attack is ordinary, with no declaration.
+2. `TC_02`, 1204 expected and 1224 actual after the incitement: wrong ledger. A
+   completed native trade at a capital lowers local alarm and tribal anger by
+   2 × 2 (`NativeRelations.lower`), so the anger is 26 and the incitement costs
+   ceil(50 × 126 / 10) = 630, not 650.
+3. `TC_04`, status bar invisible right after loading: a cascade, not a fixture
+   fault. The log shows no `GameModelPoDao` load for the last test. The previous
+   test, `TC_01`, failed inside `attack.preview`, which presses the primary
+   button, before `cancelPreview` released it. The next Load click therefore
+   loaded nothing. The repaired `TC_01` no longer leaves a held button.
+
+**Attempt 4 (written, not run, 2026-10-24).** In `TC_186_F219_connected_diplomacy_journey_test`,
+`TC_01` and `TC_02` now assert a literal ledger derived from the initial data and
+rules, not from live quotes or balances. The French trades use sugar, which
+Hidden Quebec neither produces nor consumes, instead of corn, which it produces
+(20 to 26 in one turn in run-ZumkmZ).
+
+The world is built before loading by `DiplomacyJourneyFixture` from
+`F106-native-turns` (its native players take turns):
+
+- the calendar stands at turn 4, so the Crown war of round 20 stays out;
+- the saved combat state's first eight draws are below 0.2;
+- the Dutch hold 2,000 gold and Jan de Witt; France holds 1,000;
+- the Dutch hold the F105 paid rights;
+- Aztec anger is 30 toward the Dutch and 100 toward France;
+- a second French colony, Fort Orleans (22, 21), has one worker and 50 muskets
+  and 50 tools, with a French sea route between Hidden Quebec and Fort Orleans;
+- Hidden Quebec holds no sugar;
+- the Dutch units are pioneer 301, scout 300, wagon 310 with 50 corn, missionary
+  320, soldier 330, observer 340 and frigate 901 with 4 sugar.
+
+Nothing about relations, owners, squares or the seed changes after loading.
+
+The ledger rests on these rules:
+
+- The saved Europe bids are corn 2 and sugar 3.
+- The Aztecs pay max(1, bid × 3/4) for unwanted goods, from their treasury.
+- Peace costs ceil(200 × max(1, French armed strength / Dutch)) = 200.
+- A capture moves no gold (`Colony.captureAfterWonBattle`).
+- In run-ZumkmZ an owner round moved no gold, and France spends gold only in
+  `RivalTradeCycle`, which needs an idle, empty ship in its port.
+
+| Turn | Player action or owner turn | Expected, literal |
+| --- | --- | --- |
+| 0 | Start | Peace; Dutch 2,000, France 1,000; treasury 2,000; paid 8; route Fort Orleans, Hidden Quebec; Quebec sugar 0; frigate sugar 4 |
+| 0 | Frigate attacks the galleon, then cancels | Review "declares war"; world unchanged; peace |
+| 0 | Pioneer pays for the plow square | Dutch 1,800; treasury 2,200; paid 9 |
+| 0 | Scout introduces, then learns Expert Farmer | Contact made; course 0 of 4 |
+| 0 | Wagon sells 50 corn | Dutch 1,850; treasury 2,150; anger toward the Dutch 26 |
+| 0 | Frigate sells 2 sugar to Hidden Quebec | "The colony pays you 6 gold."; Dutch 1,856, France 994; Quebec sugar 2; frigate sugar 2 |
+| 0 | Missionary incites against France | "Price: 630 gold"; Dutch 1,226; order 20; anger toward France 100, toward the Dutch 26 |
+| 0 | Checkpoint A, Save and Continue | All of the above; brave 3 squares from the French colonist |
+| 1 | Owner turn | Brave 2 squares away; order 19; course 1; purses unchanged |
+| 2 | Owner turn; soldier's attack on Fort Orleans cancelled | Brave beside it; order 18; course 2; review "declares war"; world unchanged |
+| 3 | Owner turn; war declared; frigate review cancelled; soldier attacks | French colonist destroyed; order 17; course 3; war; ordinary review without a declaration; Fort Orleans Dutch, 1 Dutch resident, muskets 50, tools 50, soldier on its square; France's route still names it; purses unchanged |
+| 3 | Checkpoint B, Save and Continue | War, ownership, residents, stock, lost stop and purses unchanged; order 17 |
+| 4 | Owner turn with report | Skill announced once; scout back on the map; order 16 |
+| 4 | Peace via the observer | Quote 200 from 1,226 to 1,026; France 1,194; peace both ways; no pending offer |
+| 4 | Frigate attacks the galleon, then cancels | Review "declares war" again; world unchanged |
+| 4 | Frigate sells its last 2 sugar | Dutch 1,032, France 1,188; Quebec sugar 4; frigate sugar 0 |
+| 4 | Checkpoint C, Save and Continue | Peace, purses, ownership, stocks, lost stop and order 16 unchanged |
+
+`TC_02` plays the same commands in one session and asserts the same literal end
+state. `TC_03` and `TC_04` are initial variants:
+
+- `TC_03` (attempt 3: passed): Aztec anger 80; the brave raids the armed soldier
+  beside it, and Continue keeps the result.
+- `TC_04` (not yet loaded in any run): a Dutch privateer's attack "does not
+  declare war" and keeps the peace across Continue.
+
+**Route invalidation, model coverage added (written, not run).**
+`TradeRouteNavigationTest.capturedStopIsLostForTheFormerOwnerRouteWithoutMovingTheWagon`
+takes a stop colony by a real defense battle (`ColonyBattles.capture`). The
+former owner's stored route still names the stop, but:
+
+- the stop options exclude it;
+- a new route to it is refused with `STOP_UNAVAILABLE`;
+- a visit is refused;
+- the owner update pauses the assigned wagon with `STOP_LOST` without moving it;
+- Save and Continue keep the pause.
+
+The captor is the Crown, the only rival in that scenario. The rule is the
+owner check in `TradeRouteNavigator`, which does not depend on who captured the
+colony. `TC_186` covers the French capture through the UI.
+
+**Model coverage of the paid pursuit (cited, unchanged).** These tests already
+cover:
+
+- the 20-turn lifetime and expiry: `NativeIncitementTest.orderActsOnTwentyNativeTurnsThenExpires`;
+- expiry after reload: `expiryAfterReloadKeepsTheLastTurnAndThenStaysExpired`
+  (attempt 3: passed);
+- the distant known target: `NativeIncitedPursuitTest.knownDistantTargetOfThePaidPowerIsWalkedToOverTurnsAndAttacked`;
+- the hidden and unreachable fallbacks: `hiddenPaidTargetIsIgnoredAndTheOrdinaryRaidFollows`
+  and `unreachablePaidTargetFallsBackToTheOrdinaryRaid`;
+- the saved walk without a replayed attack:
+  `savedDistantPursuitContinuesTheWalkWithoutReplayingAnAttack` (attempt 1:
+  passed).
+
+**Pages and helpers changed.** New `DiplomacyJourneyPage` (verify methods and
+getters only), `DiplomacyJourneyFixture`, `ForeignColonyTradePage.adopt` and
+`AttackPage.verifyOrdinaryAttackReview`. Existing callers are unchanged, and
+production code is unchanged.
+
+**Targeted verification passed (2026-10-24).** Callback
+`20261024T095744Z-a1bd9ee18dc4`, `target/docker-ui/run-P99XTS`:
+4,720 model/JUnit tests in 333 reports and 26 UI/support tests in eight reports,
+zero failures, errors or skips, 412.397 s. All four TC186 scenarios passed,
+including the resumed and uninterrupted journey, hostile native raid and
+privateer branch. Selection: all model tests plus TC186/64/65/146/156 and
+three support classes. The changed-source hashes match `R0219-codex1-source`;
+review: `R-0219-targeted-5-review.json` in the task evidence directory.
+Shared formatter: 19 files checked, exact code tokens and idempotence passed.
+
+R-0219 is `done` after the complete local acceptance recorded below.
+The earlier failed runs remain failed evidence. Documentation checks and the
+final full two-container run are still required.
+
+## R-0218 connected production network ledger 2026-10-24
+
+**Expanded targeted verification passed (2026-10-24).** Callback
+`20261024T083505Z-8ba79d66cdc3`, `target/docker-ui/run-Zqg4MI`:
+4,717 model/JUnit tests in 333 reports and 36 UI/support tests in eight reports,
+zero failures, errors or skips, 658.398 s. Both TC185 variants passed, including
+Save/Continue after the first complete circuit and before the second;
+all five selected TC classes and all 14 recorded source hashes were checked.
+Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0218-targeted-2-review.json`.
+Complete final regression remains pending.
+
+**First targeted run passed (attempt 3, 2026-10-24).** Callback
+`20261024T082059Z-a310943e1725`, `target/docker-ui/run-bMvvzd`: 4,717
+model/JUnit tests (333 reports) and 36 UI/support tests (8 reports), both
+`TC_185` tests included, zero failures, errors or skips, 654.976 s, 14 source
+hashes matching.
+
+**Attempt 4: Save and Continue moved between the complete cycles (written, not
+run).** Main's review found that the run's only reload, after turn 2, falls
+halfway through cycle 1. The wagon starts at the Delft stop, so a complete cycle
+runs from Delft through New Amsterdam back to Delft: cycle 1 runs from turn 0 to
+turn 4, cycle 2 from turn 4 to turn 8. `TC_01` keeps the mid-leg reload after turn 2
+and adds a reload after turn 4, before turn 5. Its checks are listed in the
+table. `TC_02` now also checks the wagon phase, Delft ore and the queue at turn
+8. Comments and the scenario Javadoc no longer call turns 2 and 6 whole
+cycles. Timing and expected counts are unchanged. The added checkpoint needs a
+rerun. [R-0218](requirements/done/R-0218.md) stays `ready for development`; UC-116 in
+[use-cases](use-cases.md) links here. Production code is unchanged.
+
+**Scenario.** `TC_185_F218_connected_production_network_test`: `TC_01` (Save and
+Continue mid-leg after turn 2 and between the complete cycles after turn 4) and
+`TC_02` (uninterrupted reference, same balances). The network supplies ore from
+Delft to New Amsterdam. One initial world, built before loading by
+`ProductionNetworkFixture` from `F109-trade-route-assignment.microcol`: two Dutch
+colonies, New Amsterdam (id 0, 26,16) and Delft (id 1, 28,16), started game,
+Dutch current. Removed: the idle wagon 6 and its route, horses (no breeding).
+Added: a school, teacher 200 (Master Carpenter), student 201 on a corn field,
+blacksmiths 11 and 13, New Amsterdam hammers 64, tools 0, ore 0, corn 60 in both
+colonies, Delft ore 0, wagon 4 in Delft, the galleon keeps its ore 60, rum, sugar,
+tobacco and cotton 100. After loading, every change is a player command (course,
+shop queue, route, cargo, wagon assignment, unloading the galleon) or an owner
+turn; the test patches no state.
+
+| Turn | Event (wagon stop) | Expected, literal (independent of the code) |
+| --- | --- | --- |
+| 0 | Course 200 to 201 (4 updates), shop queued, route Ore Line (New Amsterdam unload ore, Delft load ore), wagon assigned at Delft | Queue `BLACKSMITHS_SHOP`; hammers 64, tools 0; residents 5 and 1 |
+| 1 | Delft stop (loads nothing: Delft ore 0) | Wagon between, hold empty, next stop New Amsterdam; ore 0, tools 0; course 1/4 |
+| 2 | New Amsterdam stop (nothing aboard); half of cycle 1 | Wagon in New Amsterdam, next stop Delft; ore 0, tools 0, hammers 64; course 2/4; status "Waiting for tools: 20."; `TC_01` mid-leg Save and Continue changes nothing |
+| 2+ | Player drags the galleon's ore to the Delft warehouse | Delft ore 60; galleon hold 0 empty |
+| 3 | Wagon sets out | Delft ore 60; New Amsterdam ore 0; course 3/4 |
+| 4 | Delft stop loads all ore; cycle 1 complete | Wagon in Delft, hold ore 60, next stop New Amsterdam, Delft ore 0; course gone, unit 201 is a Master Carpenter, still resident; residents 5 |
+| 4+ | `TC_01` Save and Continue between the complete cycles (**written, not run**) | Same as turn 4, plus New Amsterdam ore 0, tools 0, hammers 64, queue `BLACKSMITHS_SHOP`, teacher 200 a resident Master Carpenter; nothing moves, loads or graduates again |
+| 6 | New Amsterdam stop unloads once; half of cycle 2 | Hold empty; New Amsterdam ore 60, tools 0 |
+| 7 | Blacksmiths resume (2 x 3 ore to 3 tools) | Ore 54, tools 6, hammers 64; "Waiting for tools: 14." |
+| 8 | Delft stop (blocked); cycle 2 complete | Wagon in Delft, hold empty, next stop New Amsterdam; ore 48, tools 12, Delft ore 0, queue unchanged, muskets 50 in both colonies |
+| 9 | | Ore 42, tools 18; "Waiting for tools: 2." |
+| 10 | Shop completes once | Ore 36, tools 24 less 20 = 4, hammers 64 less 64 = 0; shop 1, house 0, queue empty; residents 5 and 1; corn above 0 |
+
+Unrelated goods never change: muskets 50, horses 0, galleon rum, sugar, tobacco,
+cotton 100.
+
+**Derivation (read from the owners, 2026-10-24).** `TradeRouteStopProcessor`:
+unload before load, atomic moves, one marked visit, an empty source is reported
+and spins nothing. `Player.finishTurnPreparation`: colony production runs before
+unit and route steps, so ore that arrives in a turn is first used in the next.
+`Colony.startTurn`: food, then production, education, then the building queue in
+the same update. `ConstructionType`: house consumes 3 ore for 3 tools a worker;
+`BLACKSMITHS_SHOP` costs 64 hammers, 20 tools, 4 residents. `EducationSkills`:
+tier 1 needs 4 updates. Wagon pace (one square a turn, two squares apart) and the
+four-turn circuit are those of `TC_118`.
+
+**Assumptions after the first run.** Proven by passing assertions: the status
+texts "Waiting for tools: 20/14/2.", residents 5 and 1 after the upgrade, the
+wagon as carrier 0 and its stop order, and the galleon's slot order. Only
+`verifyColonyFed` (corn above 0) covers food. The corn net (-2 a turn in New
+Amsterdam, from the grassland yield of 4) is a derivation, not an exact
+checked value.
+
+**Selected UI.** `TC_185` (new, both tests), plus `TC_116` route creation,
+`TC_118` assignment and circuit (route cycles), `TC_68` education and `TC_32`
+construction: the pages and rules `TC_185` reuses. `TC_117` is not selected: its
+cargo editor is used here only through the same page. All model tests run.
+
+**Pages added.** `ProductionNetworkPage` (verify methods only, colony by ID); the
+existing education and construction pages read one fixed colony, so they are used
+for actions only. No production change, no new dependency.
+
+**Pending verification (main).** 1. Apply the shared formatter to
+`ProductionNetworkFixture`, `ProductionNetworkPage` and `TC_185`. 2. All model
+JUnit tests. 3. Docker/Xvfb UI: `TC_185`, `TC_116`, `TC_118`, `TC_68`, `TC_32`
+([container command](#docker-ui-tests)). 4. Documentation checks and the strict
+MkDocs build. 5. The two final workers after R-0219. Attempt 4 needs this
+rerun for the turn-4 checkpoint; results are added after the run.
+
+## R-0216 verification matrix ledger 2026-10-24
+
+**Expanded targeted verification passed (2026-10-24).** Callback
+`20261024T080105Z-7fe9770f06dd`, `target/docker-ui/run-Lh4ZaL`:
+4,717 model/JUnit tests (333 reports) and 27 UI/support tests (8 reports),
+zero failures, errors or skips, 382.487 s. All five selected TC classes,
+including TC162_04, were present; all nine source hashes matched.
+Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0216-targeted-3-review.json`.
+This verifies the independent ending matrix and representative player paths;
+complete final regression is pending, and R-0220's integrated earned-victory
+journey remains outside this run's claim.
+
+**First targeted run passed (attempt 1, 2026-10-24).** Callback
+`20261024T073405Z-a0fd363a2e92`, `run-j6H8oZ`: 4,713 model/JUnit tests (333
+reports) and 26 UI tests (8 reports), zero failures, errors or skips, 380.642 s,
+4 source hashes matching. Evidence: `R-0216-targeted-1-review.json`. Main
+formatter run 2 changed 0 tokens and is idempotent. Attempt-1 passed tests are
+kept unchanged.
+
+**Attempt 2 run failed (2026-10-24).** Callback
+`20261024T074711Z-22743b1756c3`, `run-Abuixe`: 4,715 model/JUnit tests (333
+reports), 1 failure, 1 error, 0 skips; UI not run; 154.914 s; 8 source hashes
+matching. Both failures are in `RebellionVictoryTest` and have one cause, the
+scene's lifecycle, not the rules:
+- `theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo` (line 385):
+  expected order `Optional[1]`, actual empty. `Model.judgeRebellions` judges
+  only an open game (`GameManager.isOpen`: started, not stopped, not finished),
+  and the shipped `free-play.microcol` has `gameStarted: false`, so nothing was
+  judged.
+- `savedOrdersAreKeptAndNeverAssignedAgainOnContinue` (line 422): "Game must be
+  started." `Model.save` reads the current player, which exists only in a
+  started game.
+All other tests passed, including the attempt-1 cells. These two are open
+failures until main reruns them; the repair below is not verified.
+
+**Attempt 3 is written, not run.** This attempt had no shell, so nothing was
+compiled or run here. No matrix pass, batch acceptance, commit or publication is
+claimed. [R-0216](requirements/R-0216.md) stays `ready for development`; main
+formats the changed Java files and runs all model tests and the five UI
+classes. Production code is unchanged. [R-0220](requirements/R-0220.md)
+(integrated earned victory) is `new`, has no evidence, and is outside this
+matrix; it is unverified and not claimed.
+
+**Attempt 1 cells (passed).**
+- `ResultScoreTest.eachDifficultyDeductsItsSettlementPointsAndFloorsItsFactorOnce`:
+  five literal rows for base 40, 10 bells, two settlements, order 1 and
+  declaration 1770. Expected clamped base and total: Discoverer 48 and 53,
+  Explorer 46 and 76, Conquistador 44 and 98, Governor 42 and 117, Viceroy 40
+  and 135.
+- `RetirementTest.exitLeavesTheLiveGameOpenAndRecordsNoResult`: Exit
+  (`Model.stop()`) on a live scored game records no frozen result. The saved
+  position reopens running and still offers retirement.
+
+**Attempt 3 repairs and cells (written, not run).**
+- Model scene lifecycle (`RebellionVictoryTest.twoDeclaredNations`): the saved
+  game is now started, with the computer France current. France is first in the
+  turn order (`GameManager.turnOrder`: nations, then Crowns; France before the
+  Dutch), so this is the state a started game has on its first turn; it is the
+  same saved shape `BaseScoreTest` and `BaseScorePlacementTest` already load for
+  France. Nothing is prepared or judged by loading it: judging happens only when
+  a test completes an action with `checkRebellionLoss`. `twoNationsScene` first
+  asserts the scene: members `{0}` (Quebec, French) and `{1}` (Montreal, Dutch),
+  each colony's owner, each nation's own Crown, France computer and the Dutch
+  human, France current, and no order or end before any action.
+- `theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo`: with both
+  Crowns at full force nothing is judged. With the French Crown at two ground
+  units and the Dutch Crown at three, France takes order 1 and the game goes on.
+  With the Dutch Crown at two, the Dutch take order 2 and their game ends once.
+  Literal facts of the scene: declaration year 1490 (calendar turn 0), early
+  points 290, four colonists (eight points), 2,108 gold (two points), no father,
+  bonus 50 percent, factor 100. The total is checked as
+  `floor((clamped base x 150 + 290 x 100) / 100)`. That restates the formula
+  over the model's own displayed support (`BaseScoreTest` owns it), so it is
+  algebra, not an independent oracle for the base; `ResultScoreTest` holds the
+  literal arithmetic.
+- `savedOrdersAreKeptAndNeverAssignedAgainOnContinue`: the saved file names
+  orders 1 and 2 and the one victory reason; the reloaded game keeps both orders,
+  the total and one frozen `FINAL` result of order 2 with the same identity,
+  rejects `startGame`, and a later judgment neither reassigns nor announces.
+- `TC_162` TC_04 (`TC_04_losing_every_colony_at_spring_1600...`): the fixture
+  `ScoreBoundaryFixture.prepareNoColonyBeforeBoundary(context, name)` now loads
+  the shipped map from the classpath (`GameModelPoDao.loadFromClassPath`, as
+  `LostCityRumorFixture` does), sets the scored calendar at winter 1599 (turn
+  109), `gameStarted` true and the Dutch current, and writes a save. The Dutch
+  own a galleon and no colony; France plays before them in a real round, which
+  the save already represents. The ending turn reaches spring 1600 (turn 110) at
+  the real round boundary after the two Crowns' turns. Checks: the whole message
+  "You lost all colonies.", the `NO_COLONIES` reason, one `FINAL` result, first
+  place and one stored entry while the result window is open, and one entry
+  after closing and reopening the ranking from the main menu twice. The earlier
+  relative path to `microcol-game` is gone.
+- Source of the end text: `FreePlay_0_mission` registers `NO_COLONIES_PROCESSOR`
+  and `MissionEventListener.onFinishMission` shows the message and then the
+  result window for any ended game that has a result, which is the path TC_03
+  already follows for spring 1850.
+
+### Ledger
+
+| Matrix cell | Owner test (exact name) | Written here or prior | Gap or note |
+| --- | --- | --- | --- |
+| Revolution victory: 3 vs 2 living Crown ground units, ships alone, carried and captured units, member held by the Crown, destroyed member, computer rebel | `RebellionVictoryTest.threeLivingGroundUnitsDoNotWinAndTwoDo`, `shipsAloneDoNotPreventTheVictory`, `aCarriedGroundUnitCountsUntilItIsDestroyed`, `aCapturedCarriedUnitLeavesTheCrownsForce`, `aMemberHeldByTheCrownPreventsVictoryUntilTheRebelsRecoverIt`, `aDestroyedMemberLeavesTheSetSoTheSurvivorsWin`, `aComputerRebelWinsWithoutEndingTheGame` | Prior | None added. |
+| Each distinct rebellion loss | `RebellionLossTest.noSavedMembersIsALossAndOwnershipDoesNotAddMembers` (`NO_COLONIES`), `everySurvivingMemberHeldByTheCrownLosesFirst` (`ALL_COLONIES_CROWN`), `anInlandMemberAloneLosesBecauseNoCoastalMemberSurvives` (`COASTAL_CROWN`), `ninetyPercentOfTheResidentsAloneLosesWhileACoastalMemberHolds` (`RESIDENTS_CROWN`), `theNinetyPercentThresholdIsAnExactIntegerComparison` (89/90 exact); `ScoreBoundaryTest.unresolvedRebellionIsLostAndFrozenAtSpring1850` (`UNRESOLVED`) | Prior; message mapping **written, not run** | Visible text per reason: `MissionEventsTest.eachRebellionLossReasonEmitsItsOwnMessage` (five distinct `Missions` keys, one per loss, and the victory processor never answers a loss) and `victoryAndTheOtherFreePlayEndsEmitTheirOwnMessage`. UI journey: `TC_157` TC_01 (`ALL_COLONIES_CROWN`) only (see gaps). |
+| Loss before victory | `RebellionVictoryTest.aLossWinsOverAVictoryJudgedAtTheSameBoundary` (coastal) | Prior | Only the coastal loss can co-occur with the victory condition: victory needs every surviving member rebel-held, and the residents and all-colonies losses count only surviving members. A member-less rebellion never wins (`RebellionVictory.evaluate` needs a survivor), so it needs no cell. |
+| Human loss at spring 1600 (zero colonies): winter 1599 (turn 109) open, spring 1600 (turn 110) ends | `ScoreBoundaryTest.zeroColoniesDoNotEndPlayBeforeSpring1600`, `zeroColoniesEndPlayAtSpring1600WithOneFinalResult`; UI `TC_162` TC_04 | Model prior; UI **written, not run** | One final result and one Hall entry are checked in the UI. See gaps for the scene source. |
+| Spring 1800: winter 1799 open, spring 1800 freezes, after it the continuation | `ScoreBoundaryTest.winter1799HasNoScoreBoundary`, `springOf1800FreezesTheScoreOnceAndWaitsForTheChoice`, `continuingWithoutScoringKeepsTheFrozenResultAndStartsOneRound` | Prior | UI in `TC_163` TC_02. |
+| Spring 1850: winter 1849 open, spring 1850 ends all play | `ScoreBoundaryTest.winter1849IsStillOpenAndSpring1850EndsAllFreePlay`, `missionDeadlineEndsWithItsOwnReasonAndNoResult` (mission deadline, not free play) | Prior | UI in `TC_162` TC_03. |
+| Early-declaration boundary 1779/1780/1781 | `ResultScoreTest.earlyPointsStopAtTheBoundaryYear` | Prior | None added. |
+| Retire: preview, cancel, stale, repeated, confirmed, declared without bonus, after rebellion ended | `RetirementTest.livePreviewShowsTheCurrentScoreAndChangesNothing`, `staleLivePreviewIsRejectedWithoutChangeAndAFreshPreviewRetires`, `repeatedConfirmationIsRejectedBeforeAnyChange`, `confirmedLiveRetirementFreezesOneFinalResultAndEndsThePlay`, `openDeclaredRebellionRetiresWithoutIndependenceBonus`, `declaredRetirementIsNotOfferedAfterTheRebellionEnded` | Prior | UI cancel: `TC_164` TC_01 and TC_03 (`RetirePage.verifyCanceled`). |
+| Exit records nothing | `RetirementTest.exitLeavesTheLiveGameOpenAndRecordsNoResult` | **Written** | UI: `TC_164` TC_01 (`verifyExitRecordedNothing`), `TC_163` TC_03. |
+| Unscored continuation and freeze | `RetirementTest.unscoredRetirementKeepsTheFrozenResultAndAddsNoSecondOne`, `ScoreBoundaryTest.laterUnscoredChangesNeverReplaceTheFrozenComponents`, `colonyLossAfterTheContinuationKeepsTheEarlierResult` | Prior | None added. |
+| Base score components: each person identity, each father, treasury floor per 1000, whole support percent, placements | `BaseScoreTest.eachCivilianIdentityWeighsOneTwoOrFourPoints`, `eachDistinctFatherAddsFivePoints`, `treasuryIsTheFloorOfGoldPerThousand`, `supportAddsItsWholePercentage`, `subtotalIsTheExactSumOfTheNamedComponents`; `BaseScorePlacementTest.aPersonInColonyOnMapInHoldOrOnEuropeCountsOnceAndOthersAreExcluded`, `crownSeizedPeopleInPortAndAboardAreNotCounted` | Prior | None added. |
+| War components: destroyed settlements, bells beyond target | `ResultScoreTest.destroyedSettlementsDeductDifficultyPlusOneEach`, `postTargetBellsAddToTheBaseAndAreNotCountedTwice` | Prior | Bells are checked at one difficulty here; all five difficulties with both terms are in the new row test. |
+| Independence order 1 to 5 | `ResultScoreTest.eachOrderGetsItsBonusAndLaterOrdersGetNone`, `secondIndependenceDeclaredIn1770AtConquistadorGives160` | Prior | Two nations in one game: `RebellionVictoryTest.theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo` and `savedOrdersAreKeptAndNeverAssignedAgainOnContinue` (**failed in the attempt-2 run** on the unstarted scene; repaired in attempt 3, **not run**). |
+| Five difficulties | `ResultScoreTest.allFiveDifficultiesMultiplyTheBaseWithoutAVictory`; `ResultScoreTest.eachDifficultyDeductsItsSettlementPointsAndFloorsItsFactorOnce` | Prior and **written** | The written row adds the deduction, bells, bonus and early points. |
+| Floor and negative clamp | `ResultScoreTest.floorHappensOnceAfterTheDifficultyFactor`, `negativeBaseIsClampedBeforeTheBonus` | Prior | None added. |
+| Hall top ten: ties, tenth place, displacement, duplicates, restart | `HallOfFameTest.equalScoreKeepsTheEarlierRecordFirst`, `resultEqualToTheTenthPlaceIsNotAdmitted`, `resultAboveTheTenthPlaceDisplacesTheTenthEntry`, `fifteenResultsKeepOnlyTheTenHighestTotalsInOrder`, `duplicateIdentityKeepsItsPlaceAndTieOrder`, `restartKeepsOrderAndTieOrder` | Prior | None added. |
+| Save and Continue never re-evaluate a terminal result or duplicate its Hall entry | `RebellionVictoryTest.aWonRebellionIsAnnouncedOnceAndReloadsFinishedWithoutAnotherEvent`, `RebellionLossTest.theSavedReasonSurvivesReloadWithoutANewEvent`, `RetirementTest.confirmedLiveRetirementFreezesOneFinalResultAndEndsThePlay`, `HallOfFameDaoTest.recordedResultIsSavedOnceAndReadBackUnchanged` | Prior | UI: `TC_163` TC_02 (one entry after leaving the game). |
+
+### Gaps and blockers
+
+1. **Zero-colony UI scene (written, not run).** No file in
+   `microcol-test/src/test/scenarios` has a human nation without colonies, so
+   `TC_162` TC_04 derives its save from the shipped `free-play.microcol`. The
+   shipped map is unstarted and its first nation is the computer France, so the
+   fixture writes the started state with the Dutch current, the same fields
+   `LostCityRumorFixture` sets for this map. Not yet confirmed by a run: that
+   the save loads to the Dutch turn with the next-turn button enabled, that both
+   Crowns' turns complete without a dialog, and that the end message and result
+   window follow the path TC_162 TC_03 uses for spring 1850.
+2. **Visible rebellion losses beyond `ALL_COLONIES_CROWN` have no UI journey.**
+   `COASTAL_CROWN`, `RESIDENTS_CROWN` and `UNRESOLVED` (and `NO_COLONIES` of a
+   rebellion) are reached by the model tests of the ledger and shown through the
+   same renderer as the journeyed reasons: `FreePlay_0_mission` registers
+   `REBELLION_LOST_PROCESSOR`, `MissionEventListener.onFinishMission` shows its
+   message, then the result window. The mapping from each reason to its own
+   message is pinned by `MissionEventsTest`, and the English texts are the
+   distinct `gameOver_rebellion*` entries of `Missions.xml`. That is shared
+   rendering plus named model-reason assertions; it is **not** a tested journey
+   for these reasons. A journey needs a prepared scene whose one round ends in
+   exactly that reason with no earlier loss; the Crown's turns are AI-driven, so
+   such a scene cannot be asserted deterministic without running it. It was
+   not built.
+3. **Two-nation model scene.** The French member Quebec becomes a port through
+   the sea square (18,10), the square of `PatrolInterceptionTest`'s harbour,
+   whose comment places Quebec's worked field west of the port; the attempt-2
+   run loaded the scene, so the conversion was accepted. The scene's literals (four Dutch colonists, 2,108 gold, declaration year
+   1490) are read from `free-play.microcol` and are confirmed only by a passing
+   run.
+4. **R-0220 integrated earned victory** is `new` and unverified. No evidence is
+   reused and this matrix does not claim that path.
+
+### Boundaries (turn numbers count from 1490: spring 1600 is turn 110, spring 1800 turn 910, spring 1850 turn 1110)
+
+| Year | Just before | At | After | Tests |
+| --- | --- | --- | --- | --- |
+| 1600, last colony | turn 109 (winter 1599): no end for an empty human | turn 110: `NO_COLONIES` ends play with one `FINAL` result | game no longer running; the saved result reloads unchanged (`endTurn` refusal is asserted only at 1850) | `ScoreBoundaryTest.zeroColoniesDoNotEndPlayBeforeSpring1600` (108 to 109), `zeroColoniesEndPlayAtSpring1600WithOneFinalResult` (109 to 110); UI `TC_162` TC_04 (**not run**) |
+| 1780, early points | declared 1779: 201 | declared 1780: 200 | declared 1781: 200 | `ResultScoreTest.earlyPointsStopAtTheBoundaryYear` |
+| 1800, score freeze | turn 909: no freeze | turn 910: freeze, choice pending | turn 911: one unscored round, same result | `ScoreBoundaryTest.winter1799HasNoScoreBoundary`, `springOf1800FreezesTheScoreOnceAndWaitsForTheChoice`, `continuingWithoutScoringKeepsTheFrozenResultAndStartsOneRound`; UI `TC_162` TC_01 |
+| 1850, free-play end | turn 1109: open | turn 1110: `FREE_PLAY_ENDED` (a declared open rebellion: `REBELLION_UNRESOLVED`) | game over, `endTurn` refused | `ScoreBoundaryTest.winter1849IsStillOpenAndSpring1850EndsAllFreePlay`, `unresolvedRebellionIsLostAndFrozenAtSpring1850`; UI `TC_162` TC_03 |
+
+### Selected UI (main runs; one scenario added, TC_162 TC_04)
+
+| Scenario | Checks credited after reading their bodies |
+| --- | --- |
+| TC_158 (`TC_158_F191_revolution_victory_test`) | TC_01: real battle wins, `verifyVictoryRecorded`. TC_02: saved open position continues, `verifyNoVictoryDialogShown` after Continue. |
+| TC_157 (`TC_157_F192_rebellion_loss_test`) | TC_01: `ALL_COLONIES_CROWN` loss, `verifyLossDialog`, `verifyGameOverReason`. TC_02: saved open position continues, `verifyNoLossDialogShown`. |
+| TC_162 (`TC_162_F193_score_boundary_test`) | TC_01: spring 1800 freeze and choice. TC_03: spring 1850 end, earlier frozen result kept. TC_04 (**written, not run**): spring 1600 zero-colony end, one final result, one Hall entry after the result dialog. |
+| TC_163 (`TC_163_F197_hall_of_fame_test`) | TC_02: one Hall entry after spring 1800, kept after leaving; TC_03: leaving before a freeze records nothing. |
+| TC_164 (`TC_164_F194_retirement_test`) | TC_01: exit and cancel record nothing, confirmed retire freezes one result; TC_02: unscored retire keeps the original; TC_03: declared retire, no bonus. |
+
+`TC_160` and `TC_161` are not selected: their rules are model-covered, and a UI
+run would repeat them. The five files above are proposed; the only UI change is
+the new `TC_162` TC_04. Coastal, residents and unresolved reasons have no UI
+journey (see gaps).
+
+### Verification to run (main)
+
+1. Apply the shared formatter to the changed Java files: `RebellionVictoryTest`,
+   `ResultScoreTest`, `RetirementTest`, `MissionEventsTest`,
+   `ScoreBoundaryFixture` (test module), `ScoreBoundaryPage` and
+   `TC_162_F193_score_boundary_test`. Review the diff. Attempt 3 has not been
+   formatted.
+2. All model JUnit tests in `microcol-game` on the final source state. The cells
+   to watch are the two `RebellionVictoryTest` tests that failed in attempt 2
+   and the two new `MissionEventsTest` tests; the rest of the attempt-1 pass
+   and the other attempt-2 tests passed as run.
+3. Docker/Xvfb UI: TC_157, TC_158, TC_162 (including TC_04), TC_163 and TC_164,
+   using the [container command](#docker-ui-tests). The UI has not run since
+   attempt 1, which passed before TC_04 existed.
+4. Documentation: the documented checks and strict MkDocs build for this change.
+
+Results, counts and evidence paths for attempt 3 are added after the run.
+
 ## R-0215 verification matrix ledger 2026-10-24
 
 **Targeted verification passed (2026-10-24).**
@@ -8827,3 +9250,27 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Evidence: `target/verification/run-u2fg1l20/summary.json` and `manifest.json`; callback `result.json` and `command.log` under `/Users/jan/Library/Logs/Microcol/completions/20261024T002237Z-5977b6168df9/`. Model: 4,707 tests in 333 reports. UI group 1: 323 tests in 94 reports; UI group 2: 361 tests in 94 reports. Total UI/support: 684. All 521 expected reports are present; every group has zero failures, errors and skips. Runner duration 4,725.877 seconds; supervisor 4,725.927 seconds.
 3. All 2,525 recorded source hashes matched before documentation-only status and link updates. Main-agent evidence review is `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/eighth-batch-full-review.json`. Earlier failed runs remain failed evidence. Local acceptance does not establish remote CI or publication.
 4. The implemented R-0211 role/combat checks were included in this regression, but R-0211 remains open pending the civilian/wagon defeat decision. R-0209 remains open pending America/R-0221 scope. R-0207 remains deferred by explicit user instruction.
+
+
+### R-0219 — Codex repair after attempt 4 (2026-10-24)
+
+1. Docker `run-4Ii91s`, callback `20261024T094924Z-7ffe84311f11`, remains failed: TC186's uninterrupted journey and hostile branch passed, but the resumed journey expected the French colonist to stay at its initial square despite an actual AI move from (22,19) to (22,20). The privateer branch queried the asynchronous naval outcome before its dialog appeared.
+2. The resumed journey now checks that observed AI move explicitly. `NavalBattlePage.closeOutcome` waits for the outcome node before accessing its window, as its existing outcome verification already does. Gameplay assertions are retained.
+3. The four agreed Claude attempts are exhausted; Codex owns this bounded repair. The repair and final complete acceptance remain unverified until their reports are reviewed.
+
+
+### R-0219 — full regression repair (2026-10-24)
+
+1. Full run `target/verification/run-lbru2qt9`, callback `20261024T100540Z-3631280b1fe0`, failed in TC186_01. The French sentry woke as the brave approached, then its AI chose a random movement direction. The earlier fixed-coordinate adjustment was insufficient; the failed run is not acceptance.
+2. The initial fixture now gives that unarmed French pioneer 80 tools and a legal four-update plow order on its existing open, unplowed grassland (22,19). It remains a real AI-owned pursuit target and is attacked through ordinary native turns. No state is patched after load. The resumed journey explicitly checks its original location before the attack.
+3. Targeted tests and a fresh complete two-worker run are required for this source.
+
+4. The corrected fixture passed targeted verification: `run-exuOgi`, callback `20261024T112806Z-65196eb0ca05`, 432.190 s. All 4,720 model/JUnit tests (333 reports) and 34 UI/support tests (eight reports) passed with zero failures, errors or skips. Selection: TC186/136/128/148/65 and all model/support tests. All 24 recorded source hashes match `R0219-codex2-source`. All four TC186 scenarios passed; a fresh complete acceptance run is still required.
+
+
+## Final remainder — complete local acceptance 2026-10-24
+
+1. Accepted source: `af18b251608590194e0d17d22e5e1840f48be781` plus the frozen final-remainder changes in `target/verification/run-ti0bri0g/source`. Callback `20261024T113551Z-64ffabcf6cac`; summary `target/verification/run-ti0bri0g/summary.json`, source manifest `target/verification/run-ti0bri0g/manifest.json`. All 2,531 source hashes matched the checkout before documentation-only status/link updates.
+2. All model tests: **4,720 tests in 333 reports**. UI worker 1: **327 tests in 95 reports**; UI worker 2: **364 tests in 95 reports**. Total **691 UI/support tests**, **523 reports**, **zero failures, errors and skips**. Expected suite and method lists matched the XML; UI partitions are disjoint and cover the complete expected suite. Runner duration **4,825.238 s** (80 min 25 s), supervisor **4,825.334 s**.
+3. This accepts R-0218 and R-0219, including both resumed/reference journeys and the corrected deterministic pursuit fixture. R-0216's independent ending/score matrix additions also passed, but its R-0220 integrated earned-victory dependency remains unverified, so R-0216 remains open. R-0209 and R-0211 retain their unresolved decisions; R-0207 remains explicitly deferred.
+4. Main-agent formatter checked 19 changed Java files with token preservation and idempotence passing. Review and per-change evidence are stored under `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`, particularly `final-remainder-full-2-review.json`. Previous failed runs remain failed evidence. No remote CI or publication verification is claimed.

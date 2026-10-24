@@ -597,6 +597,74 @@ class TradeRouteNavigationTest {
         assertEquals(0, w.stopIndex(wagon));
     }
 
+    /**
+     * Delft is taken by a real defense battle (R-0219). The colony still exists
+     * with the same identity, but it no longer belongs to the route owner, so
+     * the former owner's stored route keeps naming it while every route
+     * operation treats it as lost: the assigned wagon waits with the reason, a
+     * visit is refused, a new route and the stop choice exclude it, and Save
+     * and Continue keep the pause. The owner check does not depend on who
+     * captured the colony; the Crown is the only rival in this scenario.
+     */
+    @Test
+    void capturedStopIsLostForTheFormerOwnerRouteWithoutMovingTheWagon() {
+        final World w = new World(TradeRouteNavigationTest::colonistToWagon);
+        final UnitWithCargo wagon = (UnitWithCargo) unitOf(w.model, WAGON_ID);
+        final TradeRoute route = w.model.createTradeRoute(w.dutch,
+                "Captured cart", TradeRouteKind.LAND, NEW_AMSTERDAM,
+                List.of(TradeRouteStop.ofColony(DELFT),
+                        TradeRouteStop.ofColony(NEW_AMSTERDAM)));
+        w.model.assignTradeRoute(wagon, route, 0);
+        final int movement = wagon.getMovementThirds();
+
+        final Player king = w.model.getPlayerByName("Dutch's King");
+        final Unit force = w.model.addUnitOutSideColony(w.delft);
+        force.takeOver(king);
+        ColonyBattles.capture(w.model, w.delft, force);
+        assertSame(king, w.delft.getOwner());
+        assertEquals(DELFT, w.delft.getId());
+
+        // The stored route still names Delft, but nothing may use it.
+        assertEquals(List.of(DELFT, NEW_AMSTERDAM),
+                w.model.getTradeRoutes(w.dutch).get(0).getStops().stream()
+                        .map(TradeRouteStop::getColonyId)
+                        .collect(java.util.stream.Collectors.toList()));
+        assertFalse(w.model
+                .getTradeRouteStopOptions(w.dutch, TradeRouteKind.LAND,
+                        NEW_AMSTERDAM, List.of())
+                .contains(TradeRouteStop.ofColony(DELFT)));
+        assertEquals(Optional.of(TradeRouteProblem.STOP_UNAVAILABLE),
+                w.model.getTradeRouteProblem(w.dutch, "Again",
+                        TradeRouteKind.LAND, NEW_AMSTERDAM,
+                        List.of(TradeRouteStop.ofColony(DELFT))));
+        assertEquals(Optional.of(TradeRouteStopProblem.STOP_UNAVAILABLE),
+                w.model.processTradeRouteStop(wagon, route, 0).getProblem());
+
+        // The owner update pauses the wagon with the reason and moves nothing.
+        w.ownerUpdate();
+        final TradeRouteAssignment assignment = w.model
+                .getTradeRouteAssignment(wagon).orElseThrow();
+        assertEquals(Optional.of(TradeRoutePause.STOP_LOST),
+                assignment.getPause());
+        assertEquals(0, assignment.getStopIndex());
+        assertEquals(NEW_AMSTERDAM_AT, wagon.getLocation());
+        assertEquals(movement, wagon.getMovementThirds());
+
+        // Save and Continue keep the lost stop and the pause. The restored
+        // world's own handle names Delft's current owner, so the Dutch update
+        // is driven for the Dutch by name.
+        final World restored = w.saveAndContinue();
+        final Unit restoredWagon = unitOf(restored.model, WAGON_ID);
+        assertSame(restored.model.getPlayerByName("Dutch's King"),
+                restored.delft.getOwner());
+        restored.model.advanceTradeRouteAssignments(
+                restored.model.getPlayerByName("Dutch"));
+        assertEquals(Optional.of(TradeRoutePause.STOP_LOST),
+                restored.model.getTradeRouteAssignment(restoredWagon)
+                        .orElseThrow().getPause());
+        assertEquals(NEW_AMSTERDAM_AT, restoredWagon.getLocation());
+    }
+
     @Test
     void damagedShipShowsItsReasonAndKeepsItsAssignmentThroughSaveAndContinue() {
         final World w = new World();

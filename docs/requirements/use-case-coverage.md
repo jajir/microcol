@@ -121,7 +121,7 @@
 | UC-113 | Hra | Uložit a obnovit rozpracovanou partii | [R-0018](done/R-0018.md), [R-0067](done/R-0067.md), [R-0068](done/R-0068.md) |
 | UC-114 | Hra | Zjistit stav a dostupné příkazy | [R-0203](done/R-0203.md), [R-0198](done/R-0198.md), [R-0199](done/R-0199.md), [R-0200](done/R-0200.md), [R-0145](done/R-0145.md), [R-0201](done/R-0201.md), [R-0168](done/R-0168.md), [R-0202](done/R-0202.md), [R-0204](done/R-0204.md), [R-0205](done/R-0205.md), [R-0206](done/R-0206.md), [R-0207](deferred/R-0207.md) |
 | UC-115 | Hra | Expedice se uživí a začne obchodovat | [R-0217](done/R-0217.md) |
-| UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](R-0218.md) |
-| UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](R-0219.md) |
+| UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](done/R-0218.md) |
+| UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](done/R-0219.md) |
 | UC-118 | Hra | Získat nezávislost a konečné skóre | [R-0220](R-0220.md) |
 | UC-119 | Regrese | Zachovat pravidla při změně vzhledu | [Functional regression contract](../functional-tests.md), [graphics acceptance](R-0224.md) |

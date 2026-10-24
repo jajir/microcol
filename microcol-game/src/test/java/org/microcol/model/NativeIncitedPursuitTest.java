@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.microcol.ai.NativeRobotPlayer;
+import org.microcol.model.campaign.MissionImpl;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.store.NativeIncitementPo;
 import org.microcol.model.store.PlayerPo;
@@ -248,6 +249,51 @@ class NativeIncitedPursuitTest {
             assertEquals(0, attacks.attacksOn(dutch));
         } finally {
             robots.forEach(NativeRobotPlayer::stop);
+        }
+    }
+
+    /**
+     * Save and Continue halfway along the walk keep the order's remaining turns
+     * and the brave's square. Loading ticks nothing and replays no attack; the
+     * loaded game then finishes the same walk and attacks the distant target
+     * once, in the round the uninterrupted run attacks in.
+     */
+    @Test
+    void savedDistantPursuitContinuesTheWalkWithoutReplayingAnAttack()
+            throws Exception {
+        final NativeTurnScene scene = incitedScene().brave(NativeNation.AZTEC,
+                AZTEC_HOME, 0, 0);
+        lookout(scene, 3, -1);
+        final int french = frenchColonist(scene, FRENCH_LOW, 3, 0);
+        final int dutch = dutchColonist(scene, 0, 1);
+        attackerWins(scene);
+        final Model model = scene.model();
+        final List<NativeRobotPlayer> robots = robots(model);
+        startRound(model);
+        completeRound(model);
+        assertEquals(1, distance(model, 3, 0));
+        final int remaining = model.getNativeIncitementOrder(NativeNation.AZTEC)
+                .orElseThrow().getRemainingTurns();
+        robots.forEach(NativeRobotPlayer::stop);
+
+        final Model loaded = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Attacks attacks = watch(loaded);
+        final List<NativeRobotPlayer> reloaded = robots(loaded);
+        try {
+            assertEquals(remaining,
+                    loaded.getNativeIncitementOrder(NativeNation.AZTEC)
+                            .orElseThrow().getRemainingTurns(),
+                    "Continue ticks the order nothing");
+            assertEquals(1, distance(loaded, 3, 0),
+                    "Continue keeps the brave beside the target's last square");
+            assertEquals(0, attacks.count(), "Continue replays no attack");
+
+            completeRound(loaded);
+            assertEquals(1, attacks.attacksOn(french));
+            assertEquals(0, attacks.attacksOn(dutch));
+        } finally {
+            reloaded.forEach(NativeRobotPlayer::stop);
         }
     }
 

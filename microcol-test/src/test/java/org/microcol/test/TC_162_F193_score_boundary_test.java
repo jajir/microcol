@@ -29,7 +29,9 @@ import javafx.stage.Stage;
  * unchanged through a further round and through Save and Continue, and a saved
  * pending choice is asked again with the same identity and components. A second
  * prepared position, an authored unscored continuation one round before spring
- * 1850, ends all play with the earlier result kept.
+ * 1850, ends all play with the earlier result kept. On the shipped free-play
+ * map the human nation owns no colony, so the round that ends winter 1599 ends
+ * play at spring 1600 with one final result and one Hall entry.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_162_F193_score_boundary_test extends AbstractMicroColTest {
@@ -42,6 +44,9 @@ public class TC_162_F193_score_boundary_test extends AbstractMicroColTest {
     private final static String CONTINUED_TEXT = "You continued without scoring";
 
     private final static String END_TEXT = "free play is over";
+
+    /** The whole message of the loss of every colony, as the game words it. */
+    private final static String NO_COLONY_TEXT = "You lost all colonies.";
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -189,5 +194,57 @@ public class TC_162_F193_score_boundary_test extends AbstractMicroColTest {
         result.verifyCurrentResultShown();
         result.closeResultDialog();
         new CampaignScreenPage(getContext()).verifyCampaignScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_losing_every_colony_at_spring_1600_ends_play_once_and_keeps_one_hall_entry()
+            throws Exception {
+        // The shipped free-play map has no Dutch colony, and the prepared game
+        // has the Dutch on turn in winter 1599. The round that ends it leaves
+        // the human with none when spring 1600 comes. No ranking is saved yet.
+        HallOfFameFixture.removeRanking();
+        ScoreBoundaryFixture.prepareNoColonyBeforeBoundary(getContext(),
+                "score-boundary-f193-no-colony.microcol");
+        WelcomePage.of(getContext()).loadGame();
+        final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
+        boundary.verifyNoFrozenResult();
+        boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1599);
+        boundary.verifyHumanHasNoColony();
+
+        // Ending the turn enters spring 1600: play ends with its message, and
+        // the one final result is kept.
+        boundary.endTurnToFreePlayEnd(NO_COLONY_TEXT);
+        boundary.verifyEndMessage(NO_COLONY_TEXT);
+        boundary.verifyZeroColonyEnd();
+        boundary.verifyTurn(ScoreBoundaryFixture.SPRING_1600);
+
+        // The result follows the message, and then the campaign screen opens.
+        boundary.closeEndMessage();
+        final HallOfFamePage result = new HallOfFamePage(getContext());
+        result.awaitResultDialog();
+        result.verifyResultDialogShown();
+        result.verifyCurrentResultShown();
+        // It is the first place of an empty ranking, and the file holds exactly
+        // that one entry.
+        result.verifyRankedAt(1);
+        result.verifyStoredEntries(1);
+        result.closeResultDialog();
+        final CampaignScreenPage campaign = new CampaignScreenPage(
+                getContext());
+        campaign.verifyCampaignScreen();
+
+        // The main menu shows that one entry, and closing and reopening the
+        // ranking writes nothing new.
+        campaign.back();
+        final HallOfFamePage hall = new HallOfFamePage(getContext());
+        hall.openFromMenu();
+        hall.verifyRankingRows(1);
+        hall.verifyStoredEntries(1);
+        hall.closeMenuDialog();
+        hall.openFromMenu();
+        hall.verifyRankingRows(1);
+        hall.verifyStoredEntries(1);
+        hall.closeMenuDialog();
     }
 }

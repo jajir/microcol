@@ -124,6 +124,20 @@ public final class ForeignColonyTradePage extends AbstractScreen {
         build(name, true, false, List.of(Goods.of(GoodsType.CORN, 4)), 0);
     }
 
+    /**
+     * Use a colony and the sea square of the frigate that a scenario already
+     * holds, instead of the Quebec squares that {@link #prepare} derives. The
+     * frigate has the identity {@link #SHIP_ID}. Nothing is changed in the
+     * game.
+     *
+     * @param colony square of the foreign colony
+     * @param sea    sea square of the Dutch frigate beside it
+     */
+    public void adopt(final Location colony, final Location sea) {
+        quebecAt = colony;
+        seaAt = sea;
+    }
+
     private void build(final String name, final boolean deWitt,
             final boolean rebellion, final List<Goods> wagonHolds,
             final int frenchGold) throws Exception {

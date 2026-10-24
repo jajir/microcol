@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -59,6 +62,60 @@ class MissionEventsTest {
         assertNull(GameOverProcessors.NO_COLONIES_PROCESSOR
                 .apply(gameOver("other")));
         verifyZeroInteractions(eventBus);
+    }
+
+    @Test
+    void eachRebellionLossReasonEmitsItsOwnMessage() {
+        // The five losses of R-0192 and R-0193, each with its own message that
+        // names why the rebellion failed.
+        final Map<String, Missions> expected = new LinkedHashMap<>();
+        expected.put(GameOverEvaluator.REASON_REBELLION_NO_COLONIES,
+                Missions.gameOver_rebellionNoColonies);
+        expected.put(GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN,
+                Missions.gameOver_rebellionAllColoniesCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_COASTAL_CROWN,
+                Missions.gameOver_rebellionCoastalCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN,
+                Missions.gameOver_rebellionResidentsCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_UNRESOLVED,
+                Missions.gameOver_rebellionUnresolved);
+        assertEquals(5, expected.values().stream().distinct().count());
+        for (final Map.Entry<String, Missions> loss : expected.entrySet()) {
+            reset(eventBus);
+            assertEquals("ok", GameOverProcessors.REBELLION_LOST_PROCESSOR
+                    .apply(gameOver(loss.getKey())));
+            final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                    .forClass(EventFinishMission.class);
+            verify(eventBus).post(event.capture());
+            assertEquals(List.of(loss.getValue()),
+                    event.getValue().getMessages(), loss.getKey());
+            // The victory processor never answers a loss.
+            assertNull(GameOverProcessors.REBELLION_WON_PROCESSOR
+                    .apply(gameOver(loss.getKey())));
+        }
+    }
+
+    @Test
+    void victoryAndTheOtherFreePlayEndsEmitTheirOwnMessage() {
+        final String victory = GameOverEvaluator.REASON_REBELLION_VICTORY;
+        assertEquals("ok", GameOverProcessors.REBELLION_WON_PROCESSOR
+                .apply(gameOver(victory)));
+        // The loss processor never answers a victory.
+        assertNull(GameOverProcessors.REBELLION_LOST_PROCESSOR
+                .apply(gameOver(victory)));
+        assertEquals("ok", GameOverProcessors.FREE_PLAY_ENDED_PROCESSOR
+                .apply(gameOver(GameOverEvaluator.REASON_FREE_PLAY_ENDED)));
+        assertEquals("ok", GameOverProcessors.RETIRED_PROCESSOR
+                .apply(gameOver(GameOverEvaluator.REASON_RETIRED)));
+        final ArgumentCaptor<EventFinishMission> ends = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus, times(3)).post(ends.capture());
+        assertEquals(List.of(Missions.gameOver_rebellionVictory),
+                ends.getAllValues().get(0).getMessages());
+        assertEquals(List.of(Missions.gameOver_freePlayEnded),
+                ends.getAllValues().get(1).getMessages());
+        assertEquals(List.of(Missions.gameOver_retired),
+                ends.getAllValues().get(2).getMessages());
     }
 
     @Test

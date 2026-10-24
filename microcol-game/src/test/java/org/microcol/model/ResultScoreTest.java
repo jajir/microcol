@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Arithmetic of the calculated result (R-0196). The base is kept at or below
@@ -30,6 +32,21 @@ class ResultScoreTest {
                 score(100, 0, Difficulty.GOVERNOR, 0, null, null).getTotal());
         assertEquals(150,
                 score(100, 0, Difficulty.VICEROY, 0, null, null).getTotal());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "DISCOVERER,1,48,53", "EXPLORER,2,46,76",
+            "CONQUISTADOR,3,44,98", "GOVERNOR,4,42,117", "VICEROY,5,40,135" })
+    void eachDifficultyDeductsItsSettlementPointsAndFloorsItsFactorOnce(
+            final Difficulty difficulty, final long pointsPerSettlement,
+            final long clampedBase, final long total) {
+        // Base 40 with 10 bells, two destroyed settlements, the first order
+        // and the declaration in 1770: 40 + 10 - 2 x points, then the bonus
+        // and early points, then the factor, floored once.
+        final ResultScore result = score(40, 2, difficulty, 10, 1, 1770);
+        assertEquals(pointsPerSettlement, result.getPointsPerSettlement());
+        assertEquals(clampedBase, result.getClampedBase());
+        assertEquals(total, result.getTotal());
     }
 
     @Test

@@ -240,6 +240,18 @@ public final class AttackPage extends AbstractScreen {
         assertFalse(getLabeledById("fightHideAdvisor").isVisible());
     }
 
+    /**
+     * The open review is an ordinary attack between hostile players: it names
+     * the participants and carries no declaration of war.
+     */
+    public void verifyOrdinaryAttackReview(final String attacker,
+            final String defender) {
+        assertTrue(review.isShowing());
+        assertEquals(attacker, getLabeledById("fightAttacker").getText());
+        assertEquals(defender, getLabeledById("fightDefender").getText());
+        assertFalse(getLabeledById("fightDeclaration").isVisible());
+    }
+
     public void verifyReviewClosed() {
         assertFalse(review.isShowing());
     }

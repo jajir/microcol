@@ -14,7 +14,9 @@ import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.ResultScore;
 import org.microcol.model.campaign.MissionImpl;
+import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.ModelPo;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -32,6 +34,12 @@ import com.google.gson.JsonObject;
  */
 final class ScoreBoundaryFixture {
 
+    /** Winter 1599: the next round ends at spring 1600. */
+    static final int WINTER_1599 = 109;
+
+    /** Spring 1600: the round after winter 1599 (R-0193). */
+    static final int SPRING_1600 = 110;
+
     /** Winter 1799: the next round ends at spring 1800. */
     static final int WINTER_1799 = 909;
 
@@ -43,6 +51,8 @@ final class ScoreBoundaryFixture {
 
     private static final String DUTCH = "Dutch";
 
+    private static final String FREE_PLAY = "/maps/free-play.microcol";
+
     private ScoreBoundaryFixture() {
     }
 
@@ -51,6 +61,30 @@ final class ScoreBoundaryFixture {
             final File source, final String name) throws IOException {
         final JsonObject saved = scored(source, WINTER_1799);
         final File prepared = write(saved, name);
+        select(context, prepared);
+    }
+
+    /**
+     * Write a started copy of the shipped free-play map, one round before
+     * spring 1600, with the Dutch on turn. The shipped map is not started and
+     * its first nation is the computer France, so a plain load would not reach
+     * the human; the saved state is the one a game has after France has played
+     * and the Dutch are current. The Dutch own a galleon and no colony, so the
+     * round that ends winter 1599 leaves the human with none at spring 1600.
+     * The shipped map itself is not changed.
+     */
+    static void prepareNoColonyBeforeBoundary(final TestContext context,
+            final String name) throws IOException {
+        final GameModelPoDao dao = new GameModelPoDao();
+        final GameModelPo data = dao.loadFromClassPath(FREE_PLAY);
+        final ModelPo model = data.getModel();
+        model.getCalendar().setEndYear(Calendar.YEAR_OF_FREE_PLAY_END);
+        model.getCalendar().setScoredPlay(true);
+        model.getCalendar().setNumberOfPlayedTurns(WINTER_1599);
+        model.getGameManager().setGameStarted(true);
+        model.getGameManager().setCurrentPlayer(DUTCH);
+        final File prepared = new File(System.getProperty("user.home"), name);
+        dao.saveToFile(prepared.getPath(), data);
         select(context, prepared);
     }
 

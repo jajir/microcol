@@ -34,6 +34,8 @@ public final class ScoreBoundaryPage extends AbstractScreen {
 
     private static final String DIALOG = "scoreBoundaryDialog";
 
+    private static final String DUTCH = "Dutch";
+
     private static final Pattern POINTS = Pattern.compile("(\\d+) points");
 
     /** The frozen result as it was when it was last remembered. */
@@ -87,7 +89,10 @@ public final class ScoreBoundaryPage extends AbstractScreen {
         waitForDialog();
     }
 
-    /** End the turn and wait for the end-of-game message of spring 1850. */
+    /**
+     * End the turn and wait for the end-of-game message that the round brings,
+     * such as spring 1850 or the loss of every colony at spring 1600.
+     */
     public void endTurnToFreePlayEnd(final String shownText) throws Exception {
         clickOnButtonWithId("nextTurn");
         WaitForAsyncUtils
@@ -327,6 +332,26 @@ public final class ScoreBoundaryPage extends AbstractScreen {
                         .map(GameOverResult::getGameOverReason));
         assertEquals(GameResult.Status.CONTINUED_UNSCORED,
                 frozen().getStatus());
+    }
+
+    /** The human nation owns no colony before the round that ends at 1600. */
+    public void verifyHumanHasNoColony() {
+        assertTrue(getModel().getColonies(getModel().getPlayerByName(DUTCH))
+                .isEmpty());
+    }
+
+    /**
+     * Losing every colony at spring 1600 ended play with the zero-colony reason
+     * and one final result, which is not an unscored continuation.
+     */
+    public void verifyZeroColonyEnd() {
+        assertTrue(getModel().isGameFinished());
+        assertFalse(getModel().isGameRunning());
+        assertEquals(Optional.of(GameOverEvaluator.REASON_NO_COLONIES),
+                getModel().getGameOverResult()
+                        .map(GameOverResult::getGameOverReason));
+        assertEquals(GameResult.Status.FINAL, frozen().getStatus());
+        assertEquals(DUTCH, frozen().getPlayerName());
     }
 
     /** The end-of-game message is on screen. */

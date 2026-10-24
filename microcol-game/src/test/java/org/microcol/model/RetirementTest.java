@@ -224,6 +224,25 @@ class RetirementTest {
         assertTrue(model.getRetirementQuote().isEmpty());
     }
 
+    // --- exit without retiring ----------------------------------------------
+
+    @Test
+    void exitLeavesTheLiveGameOpenAndRecordsNoResult() {
+        final Model model = liveOnHumanTurn();
+        final ModelPo saved = model.save();
+        model.stop();
+        assertTrue(model.getFrozenResult().isEmpty());
+        assertTrue(model.getGameOverResult().isEmpty());
+        assertFalse(model.isGameFinished());
+        // The saved position reopens as the same running game, still offering
+        // its retirement and without any frozen result.
+        final Model reopened = make(saved);
+        reopened.startGame();
+        assertTrue(reopened.isGameRunning());
+        assertTrue(reopened.getFrozenResult().isEmpty());
+        assertTrue(reopened.getRetirementQuote().isPresent());
+    }
+
     // --- unscored continuation --------------------------------------------
 
     @Test

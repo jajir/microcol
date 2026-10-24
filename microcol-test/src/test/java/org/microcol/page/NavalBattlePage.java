@@ -54,6 +54,8 @@ public final class NavalBattlePage extends AbstractScreen {
     }
 
     public void closeOutcome() throws Exception {
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> !getListOfNodes("#navalBattleOutcome").isEmpty());
         var window = WaitForAsyncUtils.waitForAsyncFx(5000,
                 () -> getLabeledById("navalBattleOutcome").getScene()
                         .getWindow());
