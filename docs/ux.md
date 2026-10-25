@@ -845,3 +845,14 @@ ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
 1. [R-0277](requirements/done/R-0277.md) umožňuje rozpoznat terén podle stálé barvy, s řidší kresbou podle [grafických pravidel](graphics.md#ridsi-znacky-terenu-a-ziva-voda-25-rijna-2026). Hráč změnu vidí při otevření mapy bez dalšího nastavení; posun a Continue zachovávají rozmístění na pevnině.
 2. Les a ostatní herně významné atributy mají přednost před dekorací. Kopce a hory si ponechávají reliéf; pohybující se vlny nemění stav ani dostupnost políčka. Terén lze nadále pojmenovat ukázáním na políčko a porovnat v nápovědě, kde je kresba vždy přítomná.
 3. Předpoklad klidnější a přehlednější mapy je návrhová hypotéza. Automatické vykreslovací kontroly a prohlídka snímků jsou evidované v [testech](functional-tests.md#r-0277-sparse-terrain-2026-10-25); nejsou studií hráčů ani ověřením všech poruch barvocitu.
+
+
+## Přehled jednotek v nápovědě — 2026-10-25
+
+[Units / Jednotky](requirements/done/R-0284.md) používá stejné téma a dvousloupcový
+přehled jako terény. Hráč otevře nápovědu tlačítkem nebo H, vybere téma či
+vyhledá název jednotky, porovná obrázek a vlastnosti a vrátí se přes OK nebo
+Escape. Základní parametry typu jsou oddělené od účinků výstroje a bojové role;
+nedostupný nákup není označen cenou nula. Dlouhý seznam se zalamuje a roluje.
+Automatizované kontroly a vizuální přejímku eviduje
+[funkční záznam](functional-tests.md#r-0284-unit-help-2026-10-25); nejde o studii hráčů.

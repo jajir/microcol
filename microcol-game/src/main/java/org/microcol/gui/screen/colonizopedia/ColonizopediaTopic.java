@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.Arrays;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.model.TerrainType;
+import org.microcol.model.UnitType;
 import org.microcol.model.ResourceOverlay;
 import java.util.Locale;
 
@@ -33,7 +34,8 @@ public enum ColonizopediaTopic {
     TERRAIN(Colonizopedia.topic_terrain_title,
             Colonizopedia.topic_terrain_body),
     RESOURCES(Colonizopedia.topic_resources_title,
-            Colonizopedia.topic_resources_body);
+            Colonizopedia.topic_resources_body),
+    UNITS(Colonizopedia.topic_units_title, Colonizopedia.topic_units_body);
 
     private final Colonizopedia title;
 
@@ -69,6 +71,10 @@ public enum ColonizopediaTopic {
 
     private boolean referenceMatches(final I18n i18n, final String needle) {
         final LocalizationHelper names = new LocalizationHelper(i18n);
+        if (this == UNITS) {
+            return UnitType.UNIT_TYPES.stream().anyMatch(
+                    type -> fold(names.getUnitName(type)).contains(needle));
+        }
         if (this == TERRAIN) {
             return TerrainType.TERRAINS.stream()
                     .anyMatch(terrain -> fold(names.getTerrainName(terrain))

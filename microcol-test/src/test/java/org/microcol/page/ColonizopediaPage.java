@@ -30,6 +30,8 @@ import org.microcol.model.Colony;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import javafx.scene.image.ImageView;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -214,8 +216,9 @@ public final class ColonizopediaPage extends AbstractScreen {
         return WaitForAsyncUtils.asyncFx(() -> {
             final Node list = getNodeFinder()
                     .lookup("#" + ColonizopediaDialog.TOPICS_ID).query();
-            final Bounds listBounds = list
-                    .localToScreen(list.getBoundsInLocal());
+            final Node viewport = list.lookup(".clipped-container");
+            final Bounds listBounds = viewport
+                    .localToScreen(viewport.getLayoutBounds());
             final Set<Node> cells = getNodeFinder()
                     .lookup((Node node) -> node instanceof ListCell
                             && node.isVisible()
@@ -224,8 +227,11 @@ public final class ColonizopediaPage extends AbstractScreen {
             return cells.stream().filter(cell -> {
                 final Bounds bounds = cell
                         .localToScreen(cell.getBoundsInLocal());
-                return bounds != null && listBounds
-                        .contains(bounds.getCenterX(), bounds.getCenterY());
+                return bounds != null
+                        && bounds.getMinY() >= listBounds.getMinY()
+                        && bounds.getMaxY() <= listBounds.getMaxY()
+                        && listBounds.contains(bounds.getCenterX(),
+                                bounds.getCenterY());
             }).findFirst();
         }).get(5, TimeUnit.SECONDS);
     }
@@ -255,6 +261,29 @@ public final class ColonizopediaPage extends AbstractScreen {
                 assertTrue(label.isWrapText(),
                         "Reference text must wrap within its column");
             });
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
+    public void verifyUnitIllustrations() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final LocalizationHelper names = new LocalizationHelper(getI18n());
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            for (final UnitType type : UnitType.UNIT_TYPES) {
+                final VBox cell = getNodeFinder()
+                        .lookup("#colonizopediaUnit_" + type.name())
+                        .queryAs(VBox.class);
+                assertEquals(names.getUnitName(type),
+                        ((Labeled) cell.lookup(".label")).getText());
+                final ImageView picture = (ImageView) cell.lookup("ImageView");
+                assertEquals(images.getUnitImage(type), picture.getImage(),
+                        type.name());
+                assertFalse(picture.getImage().isError(), type.name());
+                assertEquals(names.getUnitName(type),
+                        picture.getAccessibleText());
+                assertTrue(picture.isPreserveRatio(), type.name());
+            }
             return null;
         }).get(5, TimeUnit.SECONDS);
     }

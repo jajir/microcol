@@ -604,3 +604,8 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Colony markers at actual map scale — 2026-10-25
 
 1. [R-0280](R-0280.md) captures ten compact colony-marker families under A03, with A05 visibility and A07/A09 population/fortification dependencies. The [comparison](../graphics-colony-proposals.md) uses the supplied screenshot and 45 px tiles. Artwork selection and population thresholds remain open; gameplay implementation is not selected.
+
+
+## Unit help reference — 2026-10-25
+
+1. [R-0284](done/R-0284.md) adds Units / Jednotky to the existing illustrated help under A03. All 35 current unit types share localized names, existing artwork, model-derived movement, transport, purchase and expertise properties, plus equipment and role explanations. Local acceptance is complete; [evidence](../functional-tests.md#r-0284-unit-help-2026-10-25) records targeted, visual and mandatory checks. Publication is unverified.

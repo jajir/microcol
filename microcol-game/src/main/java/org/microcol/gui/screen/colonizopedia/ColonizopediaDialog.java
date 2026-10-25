@@ -154,7 +154,8 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
         body.setText(topic == null ? "" : topic.getBody(i18n));
         bodyContent.getChildren().setAll(body);
         if (topic == ColonizopediaTopic.TERRAIN
-                || topic == ColonizopediaTopic.RESOURCES) {
+                || topic == ColonizopediaTopic.RESOURCES
+                || topic == ColonizopediaTopic.UNITS) {
             bodyContent.getChildren().add(tables.create(topic));
         }
         bodyScroll.setVvalue(0);

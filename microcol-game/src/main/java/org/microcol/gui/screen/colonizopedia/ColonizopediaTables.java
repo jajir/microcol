@@ -14,6 +14,8 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.GoodsType;
 import org.microcol.model.ResourceOverlay;
 import org.microcol.model.TerrainType;
+import org.microcol.model.UnitType;
+import javafx.scene.image.ImageView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -45,12 +47,26 @@ final class ColonizopediaTables {
         final ColumnConstraints detailColumn = new ColumnConstraints();
         detailColumn.setPercentWidth(66);
         table.getColumnConstraints().addAll(nameColumn, detailColumn);
-        table.add(cell(i18n.get(topic == ColonizopediaTopic.TERRAIN
-                ? Colonizopedia.topic_terrain_title
-                : Colonizopedia.topic_resources_title)), 0, 0);
+        table.add(cell(topic.getTitle(i18n)), 0, 0);
         table.add(cell(i18n.get(Colonizopedia.properties)), 1, 0);
         int row = 1;
-        if (topic == ColonizopediaTopic.TERRAIN) {
+        if (topic == ColonizopediaTopic.UNITS) {
+            for (final UnitType type : UnitType.UNIT_TYPES) {
+                final String name = names.getUnitName(type);
+                final ImageView picture = new ImageView(
+                        images.getUnitImage(type));
+                picture.setFitWidth(Tile.TILE_WIDTH_IN_PX);
+                picture.setFitHeight(Tile.TILE_WIDTH_IN_PX);
+                picture.setPreserveRatio(true);
+                picture.setAccessibleText(name);
+                final VBox identity = cell(name, picture);
+                identity.setId("colonizopediaUnit_" + type.name());
+                table.add(identity, 0, row);
+                final VBox properties = cell(unitProperties(type));
+                properties.setId("colonizopediaUnitProperties_" + type.name());
+                table.add(properties, 1, row++);
+            }
+        } else if (topic == ColonizopediaTopic.TERRAIN) {
             for (final TerrainType terrain : TerrainType.TERRAINS) {
                 final String name = names.getTerrainName(terrain);
                 final HBox previews = new HBox(6,
@@ -114,6 +130,75 @@ final class ColonizopediaTables {
             }
         }
         return table;
+    }
+
+    private String unitProperties(final UnitType type) {
+        final boolean colonist = type != UnitType.ARTILLERY
+                && type != UnitType.BRAVE && type != UnitType.TREASURE_TRAIN
+                && !type.isShip() && !type.canHoldCargo();
+        String details = i18n.get(Colonizopedia.unitMovement,
+                i18n.get(type.isShip() ? Colonizopedia.water
+                        : Colonizopedia.land),
+                type.getSpeed()) + "\n"
+                + i18n.get(Colonizopedia.unitCargo, type.getCargoCapacity())
+                + "\n"
+                + (type.isStorable()
+                        ? i18n.get(Colonizopedia.unitPassenger,
+                                type.getRequiredHolds())
+                        : i18n.get(Colonizopedia.unitNotPassenger))
+                + "\n"
+                + (type.getEuropePrice() > 0
+                        ? i18n.get(Colonizopedia.unitPrice,
+                                type.getEuropePrice())
+                        : i18n.get(Colonizopedia.unitNotForSale))
+                + "\n"
+                + i18n.get(Colonizopedia.unitCombat,
+                        i18n.get(colonist ? Colonizopedia.unitArmedRoles
+                                : type.canAttack() ? Colonizopedia.yes
+                                        : Colonizopedia.no));
+        final GoodsType expertise = type.getExpertInProducing();
+        if (expertise != null) {
+            details += "\n" + i18n.get(Colonizopedia.unitExpertise,
+                    goodsName(expertise),
+                    type.getProductionModifier(expertise));
+            if (type == UnitType.EXPERT_FARMER) {
+                details += "\n" + i18n.get(Colonizopedia.unitFarmer);
+            } else if (type == UnitType.EXPERT_FISHERMAN) {
+                details += "\n" + i18n.get(Colonizopedia.unitFisherman);
+            }
+        }
+        if (colonist) {
+            details += "\n" + i18n.get(Colonizopedia.unitPioneer,
+                    yesNo(type.isCanPlowField()), yesNo(type.isCanBuildRoad()),
+                    yesNo(type.isCanCutTrees()));
+        }
+        final Colonizopedia note;
+        if (type == UnitType.SEASONED_SCOUT) {
+            note = Colonizopedia.unitScout;
+        } else if (type == UnitType.HARDY_PIONEER) {
+            note = Colonizopedia.unitHardyPioneer;
+        } else if (type == UnitType.VETERAN_SOLDIER) {
+            note = Colonizopedia.unitVeteran;
+        } else if (type == UnitType.JESUIT_MISSIONARY) {
+            note = Colonizopedia.unitMissionary;
+        } else if (type == UnitType.INDENTURED_SERVANT) {
+            note = Colonizopedia.unitServant;
+        } else if (type == UnitType.PETTY_CRIMINAL) {
+            note = Colonizopedia.unitCriminal;
+        } else if (type == UnitType.TREASURE_TRAIN) {
+            note = Colonizopedia.unitTreasure;
+        } else if (type == UnitType.BRAVE) {
+            note = Colonizopedia.unitBrave;
+        } else if (type == UnitType.ARTILLERY) {
+            note = Colonizopedia.unitArtillery;
+        } else {
+            note = null;
+        }
+        return note == null ? details : details + "\n" + i18n.get(note);
+    }
+
+    private String yesNo(final boolean value) {
+        return i18n.get(value ? Colonizopedia.yes : Colonizopedia.no);
     }
 
     private String terrainProperties(final TerrainType terrain,

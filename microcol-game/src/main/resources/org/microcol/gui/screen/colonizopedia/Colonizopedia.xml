@@ -55,4 +55,27 @@
 	<entry key="reserves">Initial bonus reserves: %s</entry>
 	<entry key="renewable">Does not deplete.</entry>
 
+<entry key="topic_units_title">Units</entry>
+<entry key="topic_units_body">Compare every unit type below. Values are base properties. Equipment can change movement and combat: horses increase movement, muskets allow colonists to attack. Soldiers, pioneers and other roles modify these types. Final combat strength also depends on role, damage and bonuses; see Combat. A goods hold carries up to 100 goods. Europe prices are starting prices; ships and artillery can become more expensive. Pioneer work needs tools.</entry>
+<entry key="unitMovement">Movement: %s; base points per turn: %d</entry>
+<entry key="unitCargo">Cargo holds: %d</entry>
+<entry key="unitPassenger">Transport by ship: %d hold(s)</entry>
+<entry key="unitNotPassenger">Transport by ship: unavailable</entry>
+<entry key="unitPrice">Starting Europe price: %d gold</entry>
+<entry key="unitNotForSale">Europe purchase: unavailable</entry>
+<entry key="unitExpertise">Production expertise: %s ×%s</entry>
+<entry key="unitFarmer">The food bonus applies to land fields only.</entry>
+<entry key="unitFisherman">The food bonus applies to water fields only.</entry>
+<entry key="unitPioneer">With tools — plow: %s; roads: %s; clear forest: %s</entry>
+<entry key="unitCombat">Can initiate combat: %s</entry>
+<entry key="unitArmedRoles">with muskets</entry>
+<entry key="unitScout">Scouting specialist: explores rumors and visits native settlements; wider sight even without a horse.</entry>
+<entry key="unitHardyPioneer">Expert pioneer: completes improvements faster and gains more lumber from clearing forest.</entry>
+<entry key="unitVeteran">Veteran: stronger than an ordinary soldier when armed; horses give the mounted combat role.</entry>
+<entry key="unitMissionary">Expert missionary: can establish and contest native missions.</entry>
+<entry key="unitServant">Indoor production penalty; can advance through education and learn skills from natives.</entry>
+<entry key="unitCriminal">Larger indoor production penalty; education first advances this worker to indentured servant. Cannot learn directly from natives.</entry>
+<entry key="unitTreasure">Carries its own treasure value. It needs six free ship holds together and cannot work or found a colony.</entry>
+<entry key="unitBrave">Native combatant. Muskets and horses distinguish armed braves, mounted braves and mounted warriors.</entry>
+<entry key="unitArtillery">Artillery has different attack and defense strength. Damage weakens it; fighting outside a fortified friendly colony carries a penalty.</entry>
 </properties>

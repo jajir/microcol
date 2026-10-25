@@ -39,7 +39,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String SCORING = "Statistics and score";
     private static final String[] TOPICS = { MOVEMENT, CARGO, COLONIES,
             PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE, SCORING,
-            "Terrain", "Terrain bonuses" };
+            "Terrain", "Terrain bonuses", "Units" };
     private static final String MOVEMENT_PART = "movement points";
     private static final String COLONIES_PART = "Colony names must be unique";
     private static final String DIPLOMACY_PART = "tribute";
@@ -62,7 +62,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String[] TOPICS_CZ = { MOVEMENT_CZ, CARGO_CZ,
             "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
             DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre", "Terén",
-            "Bonusy terénu" };
+            "Bonusy terénu", "Jednotky" };
     private static final String NO_RESULTS_CZ = "Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.";
 
     @Start
@@ -329,6 +329,97 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "Povolený terén: Oceán, Jezero", "Jídlo +2", "Nevyčerpává se.");
         help.captureDialog("colonizopediaReference", "r0274-bonuses-cs.png");
         help.closeWithEscape();
+        help.verifyGameStateUnchanged(before);
+        help.verifyNextTurnEnabled();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_units_reference_lists_types_and_base_properties()
+            throws Exception {
+        // Open the same help from the running reference game.
+        WelcomePage.of(getContext()).loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openWithHKey();
+        help.selectTopicWithMouse("Units");
+        help.verifySelectedTopic("Units",
+                "Equipment can change movement and combat");
+        help.verifyReferenceRows(35);
+        help.verifyUnitIllustrations();
+        // Check ships, civilians, native fighters, treasure and specialists.
+        help.verifyReferenceProperties("colonizopediaUnitProperties_FRIGATE",
+                "base points per turn: 6", "Cargo holds: 4", "4000 gold",
+                "combat: yes");
+        help.verifyReferenceProperties("colonizopediaUnitProperties_CARAVEL",
+                "base points per turn: 4", "Cargo holds: 2", "combat: no");
+        help.verifyReferenceProperties("colonizopediaUnitProperties_MAN_OF_WAR",
+                "Cargo holds: 6", "Europe purchase: unavailable");
+        help.verifyReferenceProperties("colonizopediaUnitProperties_COLONIST",
+                "Transport by ship: 1 hold(s)", "with muskets",
+                "plow: yes; roads: yes; clear forest: yes");
+        help.verifyReferenceProperties("colonizopediaUnitProperties_BRAVE",
+                "Native combatant", "Transport by ship: unavailable");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_TREASURE_TRAIN",
+                "Transport by ship: 6 hold(s)",
+                "cannot work or found a colony");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_EXPERT_ORE_MINER", "Ore ×2.0");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_EXPERT_FARMER",
+                "land fields only");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_EXPERT_FISHERMAN",
+                "water fields only");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_HARDY_PIONEER",
+                "completes improvements faster");
+        help.captureDialog("colonizopediaReference", "r0284-units-en.png");
+        // Unit names are searchable; the full reference remains accessible.
+        help.typeSearch("ore miner");
+        help.verifyTopicTitles("Units");
+        help.verifyReferenceRows(35);
+        help.scrollReferenceToEnd();
+        help.scrollReferenceToEnd();
+        help.scrollReferenceToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_MASTER_TOBACCO_PLANTER",
+                "Europe purchase: unavailable", "Tobacco ×2.0");
+        help.captureDialog("colonizopediaReference", "r0284-units-end-en.png");
+        help.closeWithOk();
+        help.verifyDialogClosed();
+        help.verifyGameStateUnchanged(before);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_czech_units_search_and_escape() throws Exception {
+        // Select Czech before opening the game, then search without accents.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openFromButton();
+        help.typeSearch("karavela");
+        help.verifyTopicTitles("Jednotky");
+        help.verifySelectedTopic("Jednotky", "Výstroj může měnit pohyb a boj");
+        help.verifyReferenceRows(35);
+        help.verifyUnitIllustrations();
+        help.verifyReferenceProperties("colonizopediaUnitProperties_CARAVEL",
+                "základní body za tah: 4", "Nákladové oddíly: 2", "1000 zlata",
+                "Může zahájit boj: ne");
+        help.verifyReferenceProperties(
+                "colonizopediaUnitProperties_MASTER_BLACKSMITH", "Nářadí ×2.0");
+        help.captureDialog("colonizopediaReference", "r0284-units-cs.png");
+        help.typeSearch("delostrelectvo");
+        help.verifyTopicTitles("Jednotky");
+        help.verifyReferenceProperties("colonizopediaUnitProperties_ARTILLERY",
+                "Poškození je oslabuje");
+        help.closeWithEscape();
+        help.verifyDialogClosed();
         help.verifyGameStateUnchanged(before);
         help.verifyNextTurnEnabled();
     }

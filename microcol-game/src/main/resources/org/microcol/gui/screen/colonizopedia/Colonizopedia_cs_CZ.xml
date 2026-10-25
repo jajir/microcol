@@ -55,4 +55,27 @@
 	<entry key="reserves">Počáteční zásoba bonusu: %s</entry>
 	<entry key="renewable">Nevyčerpává se.</entry>
 
+<entry key="topic_units_title">Jednotky</entry>
+<entry key="topic_units_body">Porovnejte všechny typy jednotek níže. Údaje jsou základní vlastnosti. Výstroj může měnit pohyb a boj: koně zrychlí pohyb, muškety umožní kolonistům útočit. Vojáci, pionýři a další role upravují tyto typy. Konečnou bojovou sílu ovlivňuje i role, poškození a bonusy; viz Boj. Oddíl pojme až 100 kusů zboží. Ceny v Evropě jsou počáteční; lodě a děla mohou zdražovat. Pionýrské práce vyžadují nástroje.</entry>
+<entry key="unitMovement">Pohyb: %s; základní body za tah: %d</entry>
+<entry key="unitCargo">Nákladové oddíly: %d</entry>
+<entry key="unitPassenger">Přeprava lodí — počet oddílů: %d</entry>
+<entry key="unitNotPassenger">Přeprava lodí: nelze</entry>
+<entry key="unitPrice">Počáteční cena v Evropě: %d zlata</entry>
+<entry key="unitNotForSale">Nákup v Evropě: nelze</entry>
+<entry key="unitExpertise">Výrobní odbornost: %s ×%s</entry>
+<entry key="unitFarmer">Bonus k jídlu platí pouze na souši.</entry>
+<entry key="unitFisherman">Bonus k jídlu platí pouze na vodě.</entry>
+<entry key="unitPioneer">S nástroji — orba: %s; cesty: %s; kácení: %s</entry>
+<entry key="unitCombat">Může zahájit boj: %s</entry>
+<entry key="unitArmedRoles">s mušketami</entry>
+<entry key="unitScout">Odborník na průzkum: zkoumá zvěsti a navštěvuje domorodé osady; širší rozhled i bez koně.</entry>
+<entry key="unitHardyPioneer">Odborný pionýr: dokončuje úpravy rychleji a získává více dřeva při kácení.</entry>
+<entry key="unitVeteran">Veterán: s výzbrojí je silnější než běžný voják; koně umožní jízdní bojovou roli.</entry>
+<entry key="unitMissionary">Odborný misionář: může zakládat a přebírat domorodé misie.</entry>
+<entry key="unitServant">Postih výroby v budovách; může postoupit vzděláním a učit se od domorodců.</entry>
+<entry key="unitCriminal">Větší postih výroby v budovách; vzděláním nejprve postoupí na smluvního služebníka. Nemůže se přímo učit od domorodců.</entry>
+<entry key="unitTreasure">Převáží vlastní hodnotu pokladu. Potřebuje šest volných lodních oddílů současně a nemůže pracovat ani zakládat kolonii.</entry>
+<entry key="unitBrave">Domorodý bojovník. Muškety a koně rozlišují ozbrojené bojovníky, jízdní bojovníky a ozbrojené jezdce.</entry>
+<entry key="unitArtillery">Dělostřelectvo má odlišnou sílu útoku a obrany. Poškození je oslabuje; boj mimo vlastní opevněnou kolonii je znevýhodněn.</entry>
 </properties>
