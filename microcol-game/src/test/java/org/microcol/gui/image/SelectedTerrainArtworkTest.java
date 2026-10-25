@@ -19,12 +19,28 @@ class SelectedTerrainArtworkTest {
         final TerrainImageProvider terrainImages = new TerrainImageProvider(
                 cache);
         final Set<Long> fingerprints = new HashSet<>();
+        final Set<Integer> colours = new HashSet<>();
         for (final TerrainType terrain : TerrainType.TERRAINS) {
             final Image image = terrainImages.getTerrainImage(terrain);
             assertEquals(45, image.getWidth());
             assertEquals(45, image.getHeight());
             assertEquals(1, image.getPixelReader().getColor(0, 0).getOpacity());
             assertTrue(fingerprints.add(fingerprint(image)), terrain.name());
+            assertTrue(colours.add(image.getPixelReader().getArgb(0, 0)),
+                    terrain.name());
+            final Image decoration = cache
+                    .getImage(ImageLoaderTerrainSymbols.decorationKey(terrain));
+            assertEquals(0,
+                    decoration.getPixelReader().getColor(0, 0).getOpacity());
+            int ink = 0;
+            for (int y = 0; y < 45; y++) {
+                for (int x = 0; x < 45; x++) {
+                    if (decoration.getPixelReader().getColor(x, y)
+                            .getOpacity() >= 0.5)
+                        ink++;
+                }
+            }
+            assertTrue(ink > 20 && ink < 1400, terrain.name());
         }
         for (final ResourceOverlay resource : ResourceOverlay.values()) {
             if (resource == ResourceOverlay.NONE) {

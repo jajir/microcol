@@ -835,3 +835,9 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
 2. Kolonie jsou přímá navigační nabídka s vlastním symbolem, rámečkem a oddělenou šipkou. Klávesa O ji otevře, kurzorové klávesy vyberou položku, Enter otevře kolonii; Escape nebo kliknutí mimo nabídku ji zruší. Prázdný seznam vysvětlí, že zatím není dostupná kolonie. Položky se při otevření znovu načtou a při výběru ověří vlastník i platnost.
 3. Další tah, odchod do menu, ukončení se skóre a podmíněná nezávislost zachovávají dosavadní pravidla a potvrzení. Lišta se v užším okně zalomí nad mapou a nezkracuje názvy. Zimní modrá a ostatní zelená slouží atmosféře; neomezují objevitelnost akcí.
 4. Automatizovaná přejímka a technická vizuální kontrola jsou v [evidenci](functional-tests.md#r-0273-toolbar-07b-2026-10-25). Nejde o uživatelskou studii.
+
+## Čitelnost řídké krajiny — 25. října 2026
+
+1. [R-0277](requirements/done/R-0277.md) umožňuje rozpoznat terén podle stálé barvy, s řidší kresbou podle [grafických pravidel](graphics.md#ridsi-znacky-terenu-a-ziva-voda-25-rijna-2026). Hráč změnu vidí při otevření mapy bez dalšího nastavení; posun a Continue zachovávají rozmístění na pevnině.
+2. Les a ostatní herně významné atributy mají přednost před dekorací. Kopce a hory si ponechávají reliéf; pohybující se vlny nemění stav ani dostupnost políčka. Terén lze nadále pojmenovat ukázáním na políčko a porovnat v nápovědě, kde je kresba vždy přítomná.
+3. Předpoklad klidnější a přehlednější mapy je návrhová hypotéza. Automatické vykreslovací kontroly a prohlídka snímků jsou evidované v [testech](functional-tests.md#r-0277-sparse-terrain-2026-10-25); nejsou studií hráčů ani ověřením všech poruch barvocitu.

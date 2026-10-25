@@ -1,74 +1,74 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="630" height="90" viewBox="0 0 630 90">
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="135" viewBox="0 0 630 135">
 <title>Selected MicroCol terrain and resource symbols, 2026-10-25</title>
-<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Background colours match the existing coast atlas.</desc>
+<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Row three: transparent terrain drawings. Flat terrain colours also tint the coast masks.</desc>
 <g id="terrain-GRASSLAND" transform="translate(0 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#a9b77a"/>
+<g id="drawing-GRASSLAND" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M57 164 Q51 131 36 111 M62 166 Q70 111 94 75 M66 166 Q85 128 102 117" fill="none"/>
 </g></g>
 <g id="terrain-PRAIRIE" transform="translate(45 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#c8bc79"/>
+<g id="drawing-PRAIRIE" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M39 169 Q33 143 25 128 M44 170 Q44 116 37 89 M48 169 Q57 130 68 112 M50 169 Q68 150 79 141 M112 133 Q105 107 95 83 M120 133 Q122 86 136 47 M125 133 Q142 94 148 81 M127 137 Q149 121 160 108" fill="none"/>
 </g></g>
 <g id="terrain-SAVANNAH" transform="translate(90 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#c9a66c"/>
+<g id="drawing-SAVANNAH" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M80 120 L99 150 L98 164 L115 164 L106 155 L109 116 M105 148 L134 120 M100 144 L72 120" fill="#72583e"/><path d="M22 110 Q31 98 48 99 Q49 86 66 86 Q73 72 91 76 Q100 66 121 77 Q135 70 146 84 Q164 81 173 93 Q189 97 180 107 Q158 118 141 113 Q126 126 106 116 Q88 124 72 115 Q51 123 37 115 Q24 119 22 110Z" fill="#7c8b4c"/>
 </g></g>
 <g id="terrain-PLAINS" transform="translate(135 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#b5c698"/>
+<g id="drawing-PLAINS" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M19 164 Q71 130 121 151 L177 160 M140 153 L131 130 M145 153 L147 116 M149 156 L167 136" fill="none"/>
 </g></g>
 <g id="terrain-MARSH" transform="translate(180 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#8fae9a"/>
+<g id="drawing-MARSH" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M24 165 Q35 153 46 162 T74 161 T105 158" fill="none" stroke="#285f62"/><path d="M129 166 L133 78 M127 165 Q112 131 100 116 M137 165 Q150 128 162 118" fill="none"/><path d="M128 75 Q125 63 133 54 Q145 50 144 65 L139 95 Q137 103 128 100 Q122 96 128 75Z" fill="#a7744e"/>
 </g></g>
 <g id="terrain-SWAMP" transform="translate(225 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#7c9580"/>
+<g id="drawing-SWAMP" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M105 113 L101 161 M98 126 Q66 121 61 157 M103 124 Q133 118 143 158 M101 133 Q78 138 79 163 M112 133 Q122 140 123 164" fill="#66583d"/><path d="M39 94 Q28 79 47 70 Q40 56 63 53 Q66 37 84 43 Q94 26 115 40 Q132 31 143 47 Q160 44 161 63 Q179 74 166 87 Q178 106 158 109 Q146 123 130 115 Q112 127 95 115 Q74 124 62 111 Q39 112 39 94Z" fill="#6f824b"/><path d="M27 173 H52 M72 180 H109 M128 175 H158 M158 165 H180" fill="none" stroke="#285f62"/>
 </g></g>
 <g id="terrain-DESERT" transform="translate(270 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#e0c28c"/>
+<g id="drawing-DESERT" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M17 141 Q39 122 58 112 Q73 107 88 117 L119 136 M103 103 Q124 81 138 82 Q153 83 172 108" fill="none"/>
 </g></g>
 <g id="terrain-TUNDRA" transform="translate(315 0)">
-<rect width="45" height="45" fill="#fff9ec"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#b3afa0"/>
+<g id="drawing-TUNDRA" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M20 146 Q12 131 29 126 Q28 111 46 114 Q57 100 69 111 Q86 102 91 118 Q108 121 103 135 Q112 150 89 154 L39 157 Q23 159 20 146Z" fill="#87974e" stroke="none"/><path d="M108 92 Q94 78 110 68 Q109 54 124 56 Q133 41 147 52 Q163 47 166 61 Q187 65 178 83 Q180 99 161 100 L127 102 Q112 105 108 92Z" fill="#87974e" stroke="none"/>
 </g></g>
 <g id="terrain-ARCTIC" transform="translate(360 0)">
-<rect width="45" height="45" fill="#fff9ec"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#f0ede1"/>
+<g id="drawing-ARCTIC" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M21 111 L41 100 L67 114 L62 130 L86 143 L78 160 L115 175 M130 102 L151 87 L148 74 L172 58 L185 64" fill="none" stroke="#28566a"/>
 </g></g>
 <g id="terrain-HILL" transform="translate(405 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#b5a37c"/>
+<g id="drawing-HILL" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M21 115 Q54 91 79 73 Q93 63 107 70 Q127 81 140 93 M70 149 Q96 125 125 112 Q141 109 159 123 L181 141" fill="none"/>
 </g></g>
 <g id="terrain-MOUNTAIN" transform="translate(450 0)">
-<rect width="45" height="45" fill="#c5c18a"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#a29a8d"/>
+<g id="drawing-MOUNTAIN" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M18 157 L56 113 L83 135 M58 115 L103 55 Q108 48 111 57 L149 116 L158 104 L181 141 M138 98 L150 132" fill="none"/>
 </g></g>
 <g id="terrain-OCEAN" transform="translate(495 0)">
 <rect width="45" height="45" fill="#649b97"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<g id="drawing-OCEAN" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M23 136 Q49 140 80 108 Q96 130 123 126 M101 164 Q126 167 149 141 Q163 160 181 154" fill="none" stroke="#152f31"/>
 </g></g>
 <g id="terrain-LAKE" transform="translate(540 0)">
-<rect width="45" height="45" fill="#649b97"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#80aeb5"/>
+<g id="drawing-LAKE" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M29 147 Q13 121 38 104 Q64 91 74 82 Q95 64 114 63 Q143 51 165 68 Q177 80 167 97 Q155 108 169 121 Q190 151 165 163 Q128 183 87 174 Q42 174 29 147Z" fill="#69a2b5"/>
 </g></g>
 <g id="terrain-HIGH_SEA" transform="translate(585 0)">
-<rect width="45" height="45" fill="#649b97"/>
-<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<rect width="45" height="45" fill="#4c858b"/>
+<g id="drawing-HIGH_SEA" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
 <path d="M23 133 Q45 142 76 110 Q96 132 120 129 M99 165 Q123 172 151 147 Q167 162 183 154" fill="none" stroke="#6ec9cf"/><path d="M166 88 L180 102 L166 115" fill="none" stroke="#fff9ec"/>
 </g></g>
 <g id="resource-SILVER" transform="translate(17 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
@@ -107,4 +107,18 @@
 <g id="resource-FISHERY" transform="translate(512 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
 <path d="M64 128 Q85 61 171 50 Q178 100 129 140 L125 165 L109 151 Q88 162 69 155 L42 176 L42 147 L22 131 L53 130 L51 109Z" fill="#6ba3b4"/><ellipse cx="143" cy="81" rx="5" ry="5" fill="#292824" stroke="none"/>
 </g>
+<use href="#drawing-GRASSLAND" transform="translate(0 90)"/>
+<use href="#drawing-PRAIRIE" transform="translate(45 90)"/>
+<use href="#drawing-SAVANNAH" transform="translate(90 90)"/>
+<use href="#drawing-PLAINS" transform="translate(135 90)"/>
+<use href="#drawing-MARSH" transform="translate(180 90)"/>
+<use href="#drawing-SWAMP" transform="translate(225 90)"/>
+<use href="#drawing-DESERT" transform="translate(270 90)"/>
+<use href="#drawing-TUNDRA" transform="translate(315 90)"/>
+<use href="#drawing-ARCTIC" transform="translate(360 90)"/>
+<use href="#drawing-HILL" transform="translate(405 90)"/>
+<use href="#drawing-MOUNTAIN" transform="translate(450 90)"/>
+<use href="#drawing-OCEAN" transform="translate(495 90)"/>
+<use href="#drawing-LAKE" transform="translate(540 90)"/>
+<use href="#drawing-HIGH_SEA" transform="translate(585 90)"/>
 </svg>

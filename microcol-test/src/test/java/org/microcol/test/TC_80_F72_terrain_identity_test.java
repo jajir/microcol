@@ -17,6 +17,7 @@ import org.microcol.page.ConstructionPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.TerrainIdentityPage;
+import org.microcol.page.TerrainAppearancePage;
 import org.microcol.page.WelcomePage;
 import org.microcol.page.PassengerTransferPage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -173,6 +174,29 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         building.verifyBuilding(ConstructionType.DOCK, 1);
         jobs.verifyFieldJob(0, LAKE_NEXT_TO_COLONY,
                 Goods.of(GoodsType.CORN, 3));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_sparse_terrain_and_living_water_survive_pan_and_continue()
+            throws Exception {
+        // Load the terrain scenario and inspect the shared map renderer.
+        GamePage game = prepareAndLoad("terrain-r0277.microcol");
+        final TerrainAppearancePage terrain = new TerrainAppearancePage(
+                getContext());
+        terrain.verifySparseTerrainAndMovingWater();
+        terrain.rememberLandDecoration();
+        // Panning away and back leaves the land decoration in place.
+        game.panToTile(PLAINS_FOREST);
+        game.panToTile(SHIP_START);
+        terrain.verifyLandDecorationUnchanged();
+        terrain.captureDialog("tileName", "r0277-sparse-terrain-map.png");
+        // Saving and continuing preserves the layout and the forest identity.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        terrain.verifyLandDecorationUnchanged();
+        new TerrainIdentityPage(getContext()).verifyTerrain(PLAINS_FOREST,
+                TerrainType.PLAINS, true);
     }
 
 }

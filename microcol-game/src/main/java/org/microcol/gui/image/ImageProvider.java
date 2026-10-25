@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Provide image instances.
@@ -157,6 +158,15 @@ public final class ImageProvider {
     public void registerImage(final String newImageName,
             final String imageName) {
         imageCache.registerImage(newImageName, imageName);
+    }
+
+    public Color getTerrainColor(final TerrainType terrain) {
+        return getTerrainImage(terrain).getPixelReader().getColor(0, 0);
+    }
+
+    public Image getTerrainDecoration(final TerrainType terrain) {
+        return imageCache
+                .getImage(ImageLoaderTerrainSymbols.decorationKey(terrain));
     }
 
     /**

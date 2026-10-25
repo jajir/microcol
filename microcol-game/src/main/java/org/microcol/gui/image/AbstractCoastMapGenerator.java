@@ -180,11 +180,16 @@ public abstract class AbstractCoastMapGenerator {
                 final String code = getTileCode(loc);
                 if (code != null && !NO_IMAGE.equals(code)) {
                     final Image img = imageProvider.getImage(code);
-                    mapTiles.put(loc, img);
+                    mapTiles.put(loc, prepareImage(img, map, loc));
                 }
             }
         }
 
+    }
+
+    protected Image prepareImage(final Image image, final WorldMap world,
+            final Location location) {
+        return image;
     }
 
     public Image getImageAt(final Location location) {

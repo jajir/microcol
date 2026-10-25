@@ -38,11 +38,12 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
    [sada 09](../microcol-game/src/graphics/terrain-selection-09.png)
    a [sada 08](../microcol-game/src/graphics/terrain-selection-08.png).
 2. Editovatelný přepis vybraných siluet je [terrain-symbols.svg](../microcol-game/src/graphics/terrain-symbols.svg).
-   Atlas má 630 × 90 px: první řada obsahuje 14 terénů v pořadí
+   Atlas po rozšíření R-0277 má 630 × 135 px: první řada obsahuje 14 náhledů terénů v pořadí
    `TerrainType.TERRAINS`, druhá 12 bonusů v pořadí neprázdných `ResourceOverlay`
-   a dvě prázdné buňky. Každá buňka má 45 × 45 px bez mezery.
-3. Podkladové barvy terénů zůstávají shodné se stávajícím pobřežním atlasem;
-   přepis přebírá vybrané motivy s jednolitými výplněmi. Tah terénu má 1,69 px,
+   a dvě prázdné buňky. Třetí řada obsahuje průhledné kresby stejných 14 terénů. Každá buňka má 45 × 45 px bez mezery.
+3. Původní integrace R-0274 zachovala barvy pobřežního atlasu; R-0277 je
+   nahrazuje rozlišenými barvami a přebarvením pobřeží podle pravidel níže.
+   Vybrané motivy zachovávají jednolité výplně. Tah terénu má 1,69 px,
    bonusu 1,49 px. Bonus je průhledná vrstva s přibližně 27px motivem vpravo nahoře,
    aby nechal místo ostatním prvkům. Výběrové rámečky ani označení T/B se neexportují.
 4. `ImageLoaderTerrainSymbols`, `TerrainImageProvider` a `ImageProvider` vlastní
@@ -52,6 +53,52 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 5. Reprodukce exportu: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`.
    Zdroj neobsahuje text ani externí obrázky. Aktuální přejímku a vizuální kontrolu
    eviduje [funkční ověření](functional-tests.md#r-0274-selected-terrain-artwork-2026-10-25).
+
+
+## Řidší značky terénu a živá voda — 25. října 2026
+
+1. Dohoda [R-0277](requirements/done/R-0277.md) odděluje plnou podkladovou barvu
+   od jedné průhledné doprovodné kresby každého terénu. Význam lesa, bonusů,
+   sídel, pohybu a produkce zůstává v modelu. Barvy vycházejí ze společné
+   [palety](#vychozi-paleta), bez textur, gradientů a náhodného odstínu políček.
+2. Počáteční četnosti a barvy jsou následující. Četnost platí pro vhodná
+   políčka; není to pravidelná mřížka ani záruka přesného počtu na malé mapě.
+
+| Terén | Barva podkladu | Četnost kresby |
+| --- | --- | --- |
+| Zelená země | `#a9b77a` | 10 % |
+| Prérie | `#c8bc79` | 10 % |
+| Savana | `#c9a66c` | 20 % |
+| Planiny | `#b5c698` | 10 % |
+| Močál | `#8fae9a` | 25 % |
+| Bažina | `#7c9580` | 25 % |
+| Poušť | `#e0c28c` | 15 % |
+| Tundra | `#b3afa0` | 20 % |
+| Arktika | `#f0ede1` | 15 % |
+| Kopce | `#b5a37c` | 100 % |
+| Hory | `#a29a8d` | 100 % |
+| Oceán | `#649b97` | 5 % |
+| Jezero | `#80aeb5` | 5 % |
+| Daleké moře | `#4c858b` | 5 % |
+
+3. Les, pole, cesta, řeka, kolonie, známé domorodé sídlo, právě viditelná
+   pověst a bonus potlačí běžnou dekoraci. Kopce a hory si ponechají reliéf
+   i s atributem. Samotné atributy se nadále kreslí, jednotky rozmístění
+   nemění a neprozkoumané území zůstává skryté.
+4. Pevnina používá uložený seed mapy a souřadnice; posun ani Save/Continue
+   nepřehází kresby. Voda přehodnocuje výskyt jednou za čtyři sekundy na
+   každém políčku, s rozdílnou fází podle souřadnic. Vlny tak postupně mizí
+   a objevují se jinde, bez synchronního přepnutí celé mapy.
+5. Pobřeží používá dosavadní masky a jejich průhlednost. Pevninská část
+   přebírá barvu nejbližšího sousedního terénu, včetně smíšených a arktických
+   břehů; voda pod maskou má barvu vlastního terénu. Maska se připraví při
+   otevření mapy, nikoli při každém snímku.
+6. Nápověda a výběrové náhledy ukazují identifikační kresbu vždy. Dvojice
+   bez lesa / s lesem nadále představuje dva herní stavy, ne náhodné varianty.
+   Název terénu ve stavovém panelu zůstává dostupný i bez dekorace.
+7. Jde o schválené výchozí nastavení; případné ladění četností patří sem.
+   Aktuální stav ověření uvádí [funkční evidence](functional-tests.md#r-0277-sparse-terrain-2026-10-25),
+   nikoli samotný zápis této dohody.
 
 ## Minimalistický grafický manuál
 

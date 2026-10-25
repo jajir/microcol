@@ -950,3 +950,7 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 ### UC-114/115/119: toolbar 07B — 2026-10-25
 
 [R-0273](requirements/done/R-0273.md) zachovává globální herní akce a navigaci kolonií. TC188 ověřuje trvalé EN/CZ názvy a ikony, nápovědu při najetí a klávesnicovém fokusu, zalomení v úzkém okně, prázdnou nabídku, zrušení i klávesnicové otevření kolonie a změnu sezónního akcentu přes skutečný konec tahu a Continue. TC38 ověřuje původní návrat Escape, TC81 deklaraci nezávislosti a TC164 rozdíl mezi odchodem a ukončením. Skutečné výsledky jsou v [evidenci R-0273](functional-tests.md#r-0273-toolbar-07b-2026-10-25); zápis sám neuzavírá celé UC.
+
+### Řidší kresba terénu — R-0277
+
+UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a řídké kresby krajiny, postupně se měnící voda a zachování herních atributů. `TC_80_F72/TC_04` ověřuje skutečné vykreslení, posun a Continue; `TC_100_F91/TC_06–TC_07` náhledy a hledání, `TC_91_F82` bonusy, produkci a mlhu. Výsledky uvádí [funkční evidence](functional-tests.md#r-0277-sparse-terrain-2026-10-25).

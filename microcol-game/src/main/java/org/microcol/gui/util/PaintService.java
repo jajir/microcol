@@ -503,19 +503,20 @@ public final class PaintService {
     public void paintTerrainOnTile(final GraphicsContext graphics,
             final Point point, final Location location, final Terrain terrain,
             final boolean isHighlighted, final long gameTick) {
-        // terrain tile
-        final Image imageBackground = mapManager
-                .getTerrainImage(terrain.getTerrainType());
-        graphics.drawImage(imageBackground, 0, 0, Tile.TILE_WIDTH_IN_PX,
-                Tile.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
-
-        // prechody
+        graphics.setFill(
+                imageProvider.getTerrainColor(terrain.getTerrainType()));
+        graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                Tile.TILE_WIDTH_IN_PX);
+        if (mapManager.isTerrainDecorated(location, terrain, gameTick)) {
+            graphics.drawImage(
+                    imageProvider
+                            .getTerrainDecoration(terrain.getTerrainType()),
+                    point.getX(), point.getY());
+        }
         final Image imageCoast = mapManager.getCoatsImageAt(location);
-        graphics.drawImage(imageCoast, 0, 0, Tile.TILE_WIDTH_IN_PX,
-                Tile.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
-
+        if (imageCoast != null) {
+            graphics.drawImage(imageCoast, point.getX(), point.getY());
+        }
         if (terrain.isHasTrees()) {
             graphics.drawImage(mapManager.getTreeImage(location), point.getX(),
                     point.getY());
