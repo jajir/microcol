@@ -188,4 +188,85 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         orders.verifyOrdersAvailable(true, true);
     }
 
+    @Test
+    @Tag("local")
+    void TC_05_unit_context_keeps_global_controls_and_keyboard_orders()
+            throws Exception {
+        // Inspect the game-wide toolbar with a ship selected.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        orders.verifyGlobalToolbar();
+        orders.verifyMovement(3, 1, 1, 197);
+
+        // Open the same unit menu from the keyboard and cancel without an
+        // order.
+        orders.openActionsWithKeyboard();
+        orders.verifyMenuVisible(true);
+        orders.verifyContextCommands(false);
+        orders.captureDialog("waitUnit", "r0270-ship-context.png");
+        orders.dismissActions();
+        orders.verifyMenuVisible(false);
+        orders.verifyMovement(3, 1, 1, 197);
+
+        // Arrow and Enter activate Move; Escape cancels the destination
+        // preview.
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        final com.google.gson.JsonElement ship = turns.readUnitState(3);
+        orders.openActionsWithKeyboard();
+        orders.moveWithMenuKeyboard();
+        turns.verifyUnitAndMoveMode(3, ship, true);
+        orders.dismissActions();
+        turns.verifyUnitAndMoveMode(3, ship, false);
+
+        // A contextual Wait activated with Space runs once, without skipping
+        // movement.
+        orders.openActionsWithRightClick();
+        orders.verifyMenuVisible(true);
+        orders.waitWithMenuKeyboard();
+        orders.verifySelectedUnit(24);
+        orders.verifyMenuVisible(false);
+        orders.verifyMovement(3, 1, 1, 197);
+
+        // A colonist inside Delft cannot found another colony; selection closes
+        // its menu.
+        orders.openActionsWithRightClick();
+        orders.verifyContextCommands(false);
+        orders.captureDialog("waitUnit", "r0270-colonist-context.png");
+        game.getRightPanelUnit(2).selectUnit();
+        orders.verifySelectedUnit(25);
+        orders.verifyMenuVisible(false);
+        orders.verifyMovement(3, 1, 1, 197);
+        orders.verifyGlobalToolbar();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_czech_context_at_small_window_and_empty_selection()
+            throws Exception {
+        // Open the same game in Czech at the supported small window size.
+        final org.microcol.page.SettingPage settings = WelcomePage
+                .of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        orders.resizeWindow(1000, 700);
+        orders.openActionsWithKeyboard();
+        orders.verifyLocalizedMenu("Akce", "Čekat (Tab)",
+                "Vynechat tah jednotky (Mezerník)");
+        orders.captureDialog("waitUnit", "r0270-context-cs-1000.png");
+        orders.dismissActions();
+        orders.verifyMovement(3, 1, 1, 197);
+
+        // The larger layout keeps the same commands, and an empty square has
+        // none.
+        orders.resizeWindow(1280, 850);
+        orders.openActionsWithRightClick();
+        orders.verifyLocalizedMenu("Akce", "Čekat (Tab)",
+                "Vynechat tah jednotky (Mezerník)");
+        orders.dismissActions();
+        game.selectTile(Location.of(21, 12));
+        orders.verifyNoUnitActions();
+        orders.verifyMovement(3, 1, 1, 197);
+    }
+
 }

@@ -13,6 +13,8 @@ import org.microcol.model.Unit;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -33,12 +35,15 @@ public final class UnitsPanel {
     private final SelectedUnitManager selectedUnitManager;
 
     private final VBox box;
+    private final Provider<ButtonsGamePanel> gameButtons;
 
     @Inject
     public UnitsPanel(final ImageProvider imageProvider,
             final EventBus eventBus,
             final LocalizationHelper localizationHelper, final I18n i18n,
-            final SelectedUnitManager selectedUnitManager) {
+            final SelectedUnitManager selectedUnitManager,
+            final Provider<ButtonsGamePanel> gameButtons) {
+        this.gameButtons = gameButtons;
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.localizationHelper = Preconditions
                 .checkNotNull(localizationHelper);
@@ -54,6 +59,7 @@ public final class UnitsPanel {
     }
 
     public void clear() {
+        gameButtons.get().hideUnitActions();
         box.getChildren().clear();
     }
 
@@ -64,6 +70,10 @@ public final class UnitsPanel {
                     && selectedUnitManager.getSelectedUnit().get().equals(unit);
             final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n,
                     localizationHelper, humanPlayer, unit, selected);
+            if (selected && unit.getOwner().isHuman()) {
+                gameButtons.get().addUnitActions(unitPanel.getBox(),
+                        localizationHelper.getUnitName(unit.getType()));
+            }
             box.getChildren().add(unitPanel.getBox());
             unitPanel.setOnMouseClicked(event -> {
                 selectedUnitManager.setSelectedUnit(unit);

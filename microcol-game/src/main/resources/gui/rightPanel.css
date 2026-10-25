@@ -39,3 +39,34 @@
 	-fx-max-width: 220;
 }
 
+
+.unit-actions-menu .button {
+    -fx-skin: "javafx.scene.control.skin.ButtonSkin";
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-effect: null;
+    -fx-min-height: 30;
+    -fx-padding: 4 12;
+    -fx-alignment: center-left;
+}
+.unit-action-explanation {
+    -fx-font-size: 14;
+    -fx-text-fill: #514b40;
+    -fx-padding: 0 6 4 6;
+}
+
+.unit-actions-menu .menu-item:disabled {
+    -fx-opacity: 1;
+}
+.unit-actions-menu .button:disabled {
+    -fx-opacity: 0.65;
+}
+
+.unit-actions-menu .button:focused {
+    -fx-border-color: #292824;
+    -fx-border-style: dashed;
+}
+.unit-actions-menu .button:hover {
+    -fx-background-color: #dfbd91;
+}

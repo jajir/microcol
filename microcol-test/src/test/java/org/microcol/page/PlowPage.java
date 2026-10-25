@@ -69,9 +69,8 @@ public final class PlowPage extends AbstractScreen {
     }
 
     public void verifyCancelControlVisible(final boolean expectedVisible) {
-        assertEquals(expectedVisible,
-                getNodeFinder().lookup("#" + CANCEL_CONTROL_ID).tryQuery()
-                        .isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(CANCEL_CONTROL_ID),
                 "Unexpected cancel plow control visibility");
+        closeUnitActions();
     }
 }

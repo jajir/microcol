@@ -136,16 +136,15 @@ public final class ClearForestPage extends AbstractScreen {
     }
 
     public void verifyCancelControlVisible(final boolean expectedVisible) {
-        assertEquals(expectedVisible,
-                getNodeFinder().lookup("#" + CANCEL_CONTROL_ID).tryQuery()
-                        .isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(CANCEL_CONTROL_ID),
                 "Unexpected cancel clearing control visibility");
+        closeUnitActions();
     }
 
     public void verifyControlVisible(final boolean expectedVisible) {
-        assertEquals(expectedVisible,
-                getNodeFinder().lookup("#clearForest").tryQuery().isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible("clearForest"),
                 "Unexpected clear forest control visibility");
+        closeUnitActions();
     }
 
     public void verifyTurnReportShown(final Optional<ScreenTurnReport> report) {

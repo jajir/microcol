@@ -9773,3 +9773,117 @@ remote CI and publication were not checked.
 8. This is local acceptance of menu presentation. The full remote regression
    and publication were not inspected; the separate unit-action relocation
    remains owned by R-0270.
+
+
+## R-0270 unit action context — 2026-10-25
+
+1. Source base: `fb6ee004765c15253691fb26ba456dc447b2784e` plus the R-0270
+   working changes. Existing unit buttons and handlers move into the selected
+   own unit's contextual menu; global controls remain in the toolbar. Page
+   objects now open the menu while retaining the original gameplay assertions.
+2. TC11 adds `TC_05_unit_context_keeps_global_controls_and_keyboard_orders`: the
+   toolbar inventory, keyboard/right-click opening, dismissal, ship/colonist
+   context, selection changes and one Space activation of contextual Wait.
+   Existing TC11 retains move preview, no-selection, turn preparation and
+   Save/Continue coverage. Model rules and saved fixtures are unchanged.
+3. First targeted Docker/Xvfb run: completion directory
+   `/Users/jan/Library/Logs/Microcol/completions/20261025T091324Z-bdc00741d84a`,
+   supervisor PID 68253, timeout 600 s; selection TC11 and
+   `PageVerificationContractTest`. Results pending. Shared formatter checked
+   all 16 task-owned Java files with token preservation and idempotence.
+4. Broader affected player paths, the fixed precommit smoke gate and final
+   documentation checks remain pending. No remote CI or publication is claimed.
+
+5. First targeted run `run-xHpiQL` failed: eight checks, one failure, one error,
+   no skips, 65.995 s. TC11_02 tried to capture its old toolbar selector before
+   opening the menu; the capture helper now follows the same player path. The new
+   TC11_05 incorrectly expected founding on Delft's existing colony square; the
+   fixture's established rules require that command to remain absent. The
+   assertion was corrected, not the model rule. The saved ship-menu screenshot
+   exposed overly shallow wooden buttons; command rows now use the existing
+   standard button skin within the game's contextual menu. Native menu keyboard
+   handling replaces custom traversal so scrolling and focus stay together.
+   Notification was successfully queued (`notification.json`); no delivery retry.
+
+6. Second targeted attempt `20261025T092121Z-a0bcc4f9d508` (PID 72279,
+   timeout 600 s) failed during startup in 40.919 s with a recorded `CreationException`
+   (`run-KP2l6Z`). Source review found that new unavailable-order text accessed
+   `currentI18n` before constructor initialization. Initialize
+   it immediately after the superclass before setting initial order states.
+   The incomplete suite is not acceptance.
+
+7. Third targeted attempt `20261025T092302Z-79234ff15d02` (PID 73258,
+   timeout 600 s, `run-LGKMK1`) ran eight checks: two failures, one error,
+   no skips, 87.653 s. Native menu-item keyboard forwarding re-fired the
+   embedded button's bubbling ActionEvent, recursively executing Wait.
+   Consume that event at the button after its existing handler; the menu
+   item still forwards native keyboard selection once. The original movement
+   and selection assertions remain unchanged. TC11_06 additionally covers
+   Czech labels at 1000×700 and 1280×850 plus empty selection.
+
+8. Fourth targeted attempt `20261025T092548Z-be3d6f47f532` (PID 74398,
+   timeout 600 s, `run-1OON3p`) passed all nine checks: six TC11 journeys plus
+   three source-contract checks, zero failures/errors/skips, 90.265 s. XML
+   reports were inspected. English and Czech menu screenshots show readable
+   flat command rows, separators, visible disabled-order prerequisites and
+   no clipping at the small window. Native arrow/Enter activation, contextual
+   Space executing Wait once, outside selection and Escape passed. Broader
+   command regression and the required fixed smoke gate still follow.
+
+9. Broader selected regression started through completion
+   `20261025T092955Z-5531be85dd82`, PID 76382, timeout 1200 s: complete
+   TC02, TC11, TC15, TC18, TC20, TC45, TC61, TC73, TC88, TC103, TC104,
+   TC107 and `PageVerificationContractTest`. All 17 task-owned Java files
+   passed the shared formatter; documentation consistency passed nine tests
+   and strict MkDocs passed before this run-record update. Results pending.
+
+10. The broader run exposed TC103_05 timing out while waiting for the manual
+    movement rejection. Its page helper dragged from the current mouse position;
+    checking the new context menu had left that position on the unit card.
+    `GamePage.dragToLocation` now starts on the selected map tile explicitly.
+    Gameplay, route and rejection assertions remain intact. TC11_05 also now
+    explicitly exercises Arrow/Enter to start Move and Escape to cancel its
+    preview, checking that the ship state remains unchanged. Shared formatting
+    passed for all 17 task-owned Java files. Repair verification started with
+    `20261025T093917Z-ebdccf92d2d4` (PID 79736, 600-second timeout), selecting
+    complete TC11, TC103 and `PageVerificationContractTest`; results pending.
+
+11. The broad run finished after 638.898 seconds with exit 1. Complete XML in
+    `target/docker-ui/run-pf5C6v` contains 51 tests: 48 UI scenarios and three
+    page-contract tests, zero failures, one error and zero skips. The sole error
+    is the TC103_05 drag-helper timeout described above; all other selected
+    scenarios passed. This historical failed run remains failed. The targeted
+    rerun is required before acceptance.
+
+12. Repair run `20261025T093917Z-ebdccf92d2d4` completed successfully in
+    164.543 seconds. XML in `target/docker-ui/run-JpddAQ` records 14 tests
+    (six TC11, five TC103 and three page-contract tests), zero failures, errors
+    or skips. This verifies the explicit map-drag start, unchanged rejection
+    and route assertions, and the added Arrow/Enter/Escape menu path. Together
+    with the other completed broad scenarios, all 48 selected UI scenarios
+    now have passing evidence.
+13. Mandatory pre-commit verification started through completion run
+    `20261025T094207Z-f9640b3b911e` (PID 81004, supervisor timeout 420 seconds):
+    `verify -- --smoke`, with its internal 300-second total deadline. It checks
+    all fast model/JUnit tests and the fixed ten-scenario Docker/Xvfb smoke
+    selection plus support tests. Local acceptance remains pending its
+    complete reports; no remote CI or publication verification is requested.
+
+14. Mandatory local acceptance passed on 2026-10-25. Completion run
+    `20261025T094207Z-f9640b3b911e` succeeded; verifier evidence is in
+    `target/verification/run-wopp2iy6`. Its manifest pins base revision
+    `6d5ca297ad2521f898b2c217d963b1cb7ffa2bfd` plus the R-0270 working changes.
+    All 346 expected suites are present: 4,723 fast model/JUnit tests, ten fixed
+    UI smoke scenarios and 11 UI support tests, totaling **4,744 tests, zero
+    failures, errors or skips**. Verification took **290.198 seconds**, within
+    the 300-second deadline (completion supervisor: 290.293 seconds). A file-hash
+    comparison confirmed that all executable sources, tests and runtime assets
+    match this tested snapshot; only documentation is finalized afterward.
+    The 17 changed Java files passed the shared formatter and diff review.
+    This closes the selected UI change locally; historical failed runs remain
+    failed. Remote regression and distribution publication were not inspected.
+
+15. After moving R-0270 to `done/` and repairing incoming links, documentation
+    consistency passed all nine tests and strict MkDocs built successfully.
+    Final diff review found no whitespace errors or unrelated staged changes.
+    No executable source or runtime asset changed after the accepted snapshot.

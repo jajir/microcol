@@ -102,6 +102,9 @@ public final class JettisonPage extends AbstractScreen {
      * selected, so presence alone does not mean it is shown.
      */
     private boolean isShown(final String cssId) {
+        if (!cssId.equals("goToStatus")) {
+            openUnitActions();
+        }
         return getNodeFinder().lookup("#" + cssId).<Node>tryQuery()
                 .map(node -> node.isVisible() && node.isManaged())
                 .orElse(false);
@@ -115,12 +118,14 @@ public final class JettisonPage extends AbstractScreen {
     public void verifyMapControlVisible(final boolean expectedVisible) {
         assertEquals(expectedVisible, isShown(MAP_CONTROL_ID),
                 "Unexpected Jettison goods control visibility");
+        closeUnitActions();
     }
 
     public void verifyMapControlEnabled(final boolean expectedEnabled) {
         assertEquals(expectedEnabled,
                 !getButtonById(MAP_CONTROL_ID).isDisabled(),
                 "Unexpected Jettison goods control state");
+        closeUnitActions();
     }
 
     public void verifyEuropeControl(final int shipId,

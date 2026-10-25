@@ -107,6 +107,7 @@ public final class GoToPage extends AbstractScreen {
         assertEquals(text, button.getText());
         assertEquals(enabled, !button.isDisabled());
         assertTrue(button.getWidth() + 0.5 >= button.prefWidth(-1));
+        closeUnitActions();
     }
 
     /**
@@ -114,6 +115,9 @@ public final class GoToPage extends AbstractScreen {
      * the panel removes, so presence alone does not mean they are shown.
      */
     private boolean isShown(final String cssId) {
+        if (!cssId.equals("goToStatus")) {
+            openUnitActions();
+        }
         return getNodeFinder().lookup("#" + cssId).<javafx.scene.Node>tryQuery()
                 .map(node -> node.isVisible() && node.isManaged())
                 .orElse(false);
@@ -126,20 +130,24 @@ public final class GoToPage extends AbstractScreen {
             assertEquals("Go to colony", button.getText());
             assertEquals(enabled, !button.isDisabled());
         }
+        closeUnitActions();
     }
 
     public void verifyMoveButtonShown(final boolean shown) {
         assertEquals(shown, isCssIdVisible("move"));
+        closeUnitActions();
     }
 
     public void verifyStatus(final String text) {
         assertTrue(isShown("goToStatus"), "The go-to status is shown");
         final Labeled status = getLabeledById("goToStatus");
         assertEquals(text, status.getText());
+        closeUnitActions();
     }
 
     public void verifyNoStatus() {
         assertFalse(isShown("goToStatus"), "No go-to status is shown");
+        closeUnitActions();
     }
 
     public void verifyLocation(final int id, final Location location) {

@@ -20,7 +20,7 @@
     <entry key="buttonColonies">Kolonie (O)</entry>
     <entry key="noColonies">Zatím nemáte žádnou kolonii</entry>
     <entry key="buttonWait">Čekat&#10;(Tab)</entry>
-    <entry key="buttonSkipUnitTurn">Vynechat tah&#10;(Mezerník)</entry>
+    <entry key="buttonSkipUnitTurn">Vynechat tah jednotky (Mezerník)</entry>
     <entry key="waitExplanation">Vybrat další dostupnou jednotku bez spotřeby pohybu.</entry>
     <entry key="skipUnitTurnExplanation">Vyčerpat zbývající pohyb této jednotky do jejího příštího tahu.</entry>
     <entry key="unitOrderUnavailable">Tato jednotka nyní nemůže vynechat tah. Vyberte dostupnou jednotku.</entry>
@@ -116,4 +116,13 @@
     <entry key="retireExplanation">Ukončení skončí hru s tvým výsledkem. Jen bodovaná volná hra, na tvém tahu.</entry>
     <entry key="retireUnavailable">Ukončení teď není dostupné. Nabízí se na tvém tahu v bodované volné hře.</entry>
     <entry key="retireChanged">Situace se změnila, hra proto nebyla ukončena. Otevři ukončení znovu a uvidíš aktuální výsledek.</entry>
+    <entry key="unitActions">Akce</entry>
+    <entry key="cancelPlowingLabel">Zrušit orání</entry>
+    <entry key="cancelClearingLabel">Zrušit kácení lesa</entry>
+    <entry key="cancelRoadLabel">Zrušit stavbu silnice</entry>
+    <entry key="waitUnavailable">V tomto tahu není dostupná žádná jednotka k výběru.</entry>
+    <entry key="skipUnavailable">Vyžaduje váš tah a jednotku na mapě se zbývajícím pohybem a bez aktivního rozkazu.</entry>
+    <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném evropském molu.</entry>
+    <entry key="fortifyUnavailable">Vyžaduje váš tah a ozbrojenou pozemní jednotku na pevnině, se zbývajícím pohybem a bez jiného rozkazu.</entry>
+    <entry key="goToColonyUnavailable">Pro tuto jednotku v současném stavu není dostupná vlastní kolonie jako cíl cesty.</entry>
 </properties>

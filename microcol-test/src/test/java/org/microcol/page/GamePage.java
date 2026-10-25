@@ -103,6 +103,13 @@ public class GamePage extends AbstractScreen {
     }
 
     private void dragToLocation(final Location location) {
+        closeUnitActions();
+        // Menu checks leave the pointer on the unit card, not the map.
+        final Location selected = getContext()
+                .getClassFromGuice(SelectedTileManager.class).getSelectedTile()
+                .orElseThrow();
+        final javafx.geometry.Point2D start = screenPoint(selected);
+        getRobot().moveTo(start.getX(), start.getY(), Motion.DEFAULT);
         getRobot().drag(MouseButton.PRIMARY);
         final javafx.geometry.Point2D point = screenPoint(location);
         getRobot().drag(point.getX(), point.getY())
@@ -285,6 +292,11 @@ public class GamePage extends AbstractScreen {
     public ColonyNameDialog foundColony() {
         getRobot().push(KeyCode.B);
         WaitForAsyncUtils.waitForFxEvents();
+        return new ColonyNameDialog(getContext());
+    }
+
+    public ColonyNameDialog foundColonyFromActions() {
+        clickOnButtonWithId("buildColony");
         return new ColonyNameDialog(getContext());
     }
 
@@ -620,17 +632,18 @@ public class GamePage extends AbstractScreen {
     }
 
     public void verifyThatBuildColonyButtonIsHidden() {
-        assertFalse(
-                getNodeFinder().lookup("#buildColony").tryQuery().isPresent());
+        assertFalse(isCssIdVisible("buildColony"));
+        closeUnitActions();
     }
 
     public void verifyThatPlowFieldButtonIsHidden() {
-        assertFalse(
-                getNodeFinder().lookup("#plowField").tryQuery().isPresent());
+        assertFalse(isCssIdVisible("plowField"));
+        closeUnitActions();
     }
 
     public void verifyThatPlowFieldButtonIsVisible() {
-        assertFalse(getNodeFinder().lookup("#plowField").tryQuery().isEmpty());
+        assertTrue(isCssIdVisible("plowField"));
+        closeUnitActions();
     }
 
     public void verifyShipPresentAt(final Location location) {

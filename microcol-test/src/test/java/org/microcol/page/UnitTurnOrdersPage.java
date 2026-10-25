@@ -32,8 +32,13 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
 
     public void verifyOrdersAvailable(final boolean wait, final boolean skip) {
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(wait, !getButtonById("waitUnit").isDisabled());
-        assertEquals(skip, !getButtonById("skipUnitTurn").isDisabled());
+        openUnitActions();
+        final boolean hasSelection = isCssIdShown("unitActions");
+        assertEquals(wait,
+                hasSelection && !getButtonById("waitUnit").isDisabled());
+        assertEquals(skip,
+                hasSelection && !getButtonById("skipUnitTurn").isDisabled());
+        closeUnitActions();
     }
 
     public void verifyLabelsAndLayout() {
@@ -53,8 +58,8 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
                         + controlsBounds + "; map=" + mapBounds);
         final Button wait = getButtonById("waitUnit");
         final Button skip = getButtonById("skipUnitTurn");
-        assertEquals("Wait\n(Tab)", wait.getText());
-        assertEquals("Skip turn\n(Space)", skip.getText());
+        assertEquals("Wait (Tab)", wait.getText());
+        assertEquals("Skip unit turn (Space)", skip.getText());
         assertEquals(
                 "Select the next available unit without spending movement.",
                 wait.getTooltip().getText());
@@ -75,6 +80,7 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
                             && bounds.getMaxX() <= button.getScene().getWidth(),
                     "Control must fit the window");
         }
+        closeUnitActions();
     }
 
     public void verifyRejectionMessage(final String expected) {
@@ -98,4 +104,109 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
                     getModel().getUnitById(id).getLocation());
         }
     }
+
+    public void openActionsWithKeyboard() {
+        getRobot().interact(() -> getButtonById("unitActions").requestFocus());
+        getRobot().push(javafx.scene.input.KeyCode.SHIFT,
+                javafx.scene.input.KeyCode.F10);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void openActionsWithRightClick() {
+        getRobot().clickOn(".unitPanel.selected",
+                javafx.scene.input.MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void dismissActions() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveWithMenuKeyboard() {
+        getRobot().push(javafx.scene.input.KeyCode.DOWN,
+                javafx.scene.input.KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void waitWithMenuKeyboard() {
+        final Button wait = getButtonById("waitUnit");
+        getRobot().interact(wait::requestFocus);
+        getRobot().push(javafx.scene.input.KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyMenuVisible(final boolean expected) {
+        assertEquals(expected,
+                getNodeFinder().lookup("#waitUnit").tryQuery().isPresent());
+    }
+
+    public void verifyGlobalToolbar() {
+        final javafx.scene.Parent bar = getNodeFinder().lookup(".buttonPanel")
+                .queryAs(javafx.scene.Parent.class);
+        for (final String id : java.util.List.of("move", "buildColony",
+                "waitUnit", "skipUnitTurn", "sentryUnit", "fortifyUnit",
+                "goToUnit", "goToColonyUnit", "disbandUnit", "plowField",
+                "clearForest", "buildRoad", "jettisonUnit", "goToStatus")) {
+            assertNull(bar.lookup("#" + id),
+                    "Unit command must leave toolbar: " + id);
+        }
+        for (final String id : java.util.List.of("coloniesMenu", "congress",
+                "retire", "center", "statistics", "turnReport", "goals", "help",
+                "europe", "nextTurn", "exit")) {
+            assertNotNull(bar.lookup("#" + id),
+                    "Global control must remain: " + id);
+        }
+        assertTrue(isCssIdShown("unitActions"));
+    }
+
+    public void verifyContextCommands(final boolean canFoundColony) {
+        assertTrue(isCssIdShown("waitUnit"));
+        assertTrue(isCssIdShown("move"));
+        assertEquals(canFoundColony, isCssIdShown("buildColony"));
+        assertTrue(isCssIdShown("disbandUnit"));
+        assertTrue(
+                getNodeFinder().lookup(".unit-action-explanation")
+                        .queryAllAs(javafx.scene.control.Label.class).stream()
+                        .anyMatch(label -> label.isVisible()
+                                && !label.getText().isEmpty()),
+                "Unavailable commands have a visible explanation");
+    }
+
+    public void resizeWindow(final double width, final double height) {
+        getRobot().interact(() -> {
+            getPrimaryStage().setWidth(width);
+            getPrimaryStage().setHeight(height);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyLocalizedMenu(final String actions, final String wait,
+            final String skip) {
+        assertEquals(actions, getButtonById("unitActions").getText());
+        assertEquals(wait, getButtonById("waitUnit").getText());
+        assertEquals(skip, getButtonById("skipUnitTurn").getText());
+        for (final String id : java.util.List.of("waitUnit", "skipUnitTurn",
+                "disbandUnit")) {
+            final Button button = getButtonById(id);
+            assertTrue(button.getWidth() + 0.5 >= button.prefWidth(-1),
+                    "Label fits: " + id);
+            final javafx.geometry.Bounds bounds = button
+                    .localToScreen(button.getBoundsInLocal());
+            final javafx.geometry.Rectangle2D screen = javafx.stage.Screen
+                    .getScreensForRectangle(bounds.getMinX(), bounds.getMinY(),
+                            bounds.getWidth(), bounds.getHeight())
+                    .get(0).getVisualBounds();
+            assertTrue(
+                    screen.contains(bounds.getMinX(), bounds.getMinY(),
+                            bounds.getWidth(), bounds.getHeight()),
+                    "Menu command stays on screen: " + id);
+        }
+    }
+
+    public void verifyNoUnitActions() {
+        assertFalse(isCssIdShown("unitActions"));
+        assertFalse(isCssIdShown("waitUnit"));
+    }
+
 }

@@ -32,23 +32,22 @@ public final class SentryPage extends AbstractScreen {
     }
 
     public void changeMapOrder() {
-        getRobot().clickOn("#sentryUnit");
+        clickOnButtonWithId("sentryUnit");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void changeMapOrderWithKeyboard() {
-        final Button button = getNodeFinder().lookup("#sentryUnit")
-                .queryAs(Button.class);
+        final Button button = getButtonById("sentryUnit");
         getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyMapAction(final String text) {
-        final Button button = getNodeFinder().lookup("#sentryUnit")
-                .queryAs(Button.class);
+        final Button button = getButtonById("sentryUnit");
         assertEquals(text, button.getText());
         assertFalse(button.isDisabled());
+        closeUnitActions();
     }
 
     public void verifyOrder(final int id, final boolean sentry,

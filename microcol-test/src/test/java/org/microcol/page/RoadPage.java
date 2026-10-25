@@ -78,24 +78,21 @@ public final class RoadPage extends AbstractScreen {
     }
 
     public void verifyControlVisible(final boolean expectedVisible) {
-        assertEquals(expectedVisible,
-                getNodeFinder().lookup("#" + BUILD_CONTROL_ID).tryQuery()
-                        .isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(BUILD_CONTROL_ID),
                 "Unexpected build road control visibility");
+        closeUnitActions();
     }
 
     public void verifyCancelControlVisible(final boolean expectedVisible) {
-        assertEquals(expectedVisible,
-                getNodeFinder().lookup("#" + CANCEL_CONTROL_ID).tryQuery()
-                        .isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(CANCEL_CONTROL_ID),
                 "Unexpected cancel road control visibility");
+        closeUnitActions();
     }
 
     public void verifyMoveControlVisible(final boolean expectedVisible) {
-        assertEquals(
-                expectedVisible, getNodeFinder().lookup("#" + MOVE_CONTROL_ID)
-                        .tryQuery().isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(MOVE_CONTROL_ID),
                 "Unexpected move control visibility");
+        closeUnitActions();
     }
 
     public void verifyUnitWork(final Location location,

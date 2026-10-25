@@ -205,6 +205,7 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onSelectedUnitWasChanged(
             final SelectedUnitWasChangedEvent event) {
+        view.hideUnitActions();
         LOGGER.debug("Selected unit was changed " + event.getSelectedUnit());
         if (event.getSelectedUnit().isPresent()) {
             final Unit unit = event.getSelectedUnit().get();

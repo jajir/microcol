@@ -794,3 +794,24 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    samostatný požadavek R-0270.
 3. Jde o implementační pravidlo [R-0271](requirements/done/R-0271.md), nikoli
    pozorování hráčů. Ověření uvádí [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).
+
+
+### Příkazy jednotky a horní lišta — R-0270
+
+1. Uživatel 25. října 2026 vybral k implementaci rozdělení podle
+   [R-0270](requirements/done/R-0270.md): horní lišta obsahuje přehledy, navigaci,
+   ukončení tahu a politické či celopartijní akce. Příkazy konkrétní jednotky
+   se otevírají tlačítkem Akce u její vybrané karty, pravým kliknutím na kartu
+   nebo Shift+F10 / klávesou kontextové nabídky. Cizí jednotka ani prázdný
+   výběr vlastní příkazy nenabízí.
+2. V nabídce slouží šipky k pohybu mezi dostupnými příkazy, Enter nebo
+   mezerník k aktivaci a Escape k zavření. Mimo nabídku zůstávají původní
+   zkratky jednotek: zejména Tab pro další jednotku a mezerník pro vyčerpání
+   pohybu vybrané jednotky. Šipka Další tah nahoře ukončuje tah celého hráče.
+3. Změna výběru nebo začátek zpracování tahu nabídku zavře. Nedostupný příkaz
+   zůstává neaktivní s viditelným vysvětlujícím textem, pokud je pro daný
+   kontext relevantní. Stav probíhající či pozastavené cesty je viditelný
+   v kartě jednotky i při zavřené nabídce. Pravé tažení po mapě ji dál posouvá.
+4. Implementace a skutečné výsledky kontrol se evidují v
+   [funkční evidenci](functional-tests.md#r-0270-unit-action-context-2026-10-25);
+   tento popis není pozorováním skutečných hráčů.

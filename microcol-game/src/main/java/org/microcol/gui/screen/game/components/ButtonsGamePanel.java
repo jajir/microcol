@@ -29,6 +29,22 @@ import com.google.inject.Singleton;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.AccessibleAction;
+import javafx.geometry.Side;
+import javafx.event.ActionEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Background;
+import java.util.ArrayList;
+import java.util.List;
+import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.SkipUnitTurnEvent;
@@ -77,6 +93,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
+    private final ContextMenu unitActions = new ContextMenu();
+    private final List<Button> unitCommands = new ArrayList<>();
+
     private final Button buttonSentry = new Button();
     private final Tooltip sentryTooltip = new Tooltip();
     private boolean sentryActive;
@@ -118,6 +137,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonTurnReport;
     private final Button buttonNextTurn;
     private final Button buttonEurope;
+    private final Button buttonDeclareIndependence;
 
     /**
      * Unit related buttons
@@ -130,13 +150,13 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonBuildRoad;
     private final Button buttonCancelBuildRoad;
     private final Button buttonBuildColony;
-    private final Button buttonDeclareIndependence;
 
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu,
             final CongressDialog congressDialog) {
         super(imageProvider, eventBus, Source.GAME, i18n);
+        currentI18n = i18n;
 
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
@@ -262,18 +282,45 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonRetire.setManaged(false);
         buttonRetire.setDisable(true);
 
-        getButtonPanel().getChildren().add(buttonBuildColony);
-        getButtonPanel().getChildren().add(buttonPlowField);
-        getButtonPanel().getChildren().add(buttonMove);
-        getButtonPanel().getChildren().add(buttonWait);
-        getButtonPanel().getChildren().add(buttonSkipUnitTurn);
-        getButtonPanel().getChildren().add(buttonSentry);
-        getButtonPanel().getChildren().add(buttonFortify);
-        getButtonPanel().getChildren().add(buttonGoTo);
-        getButtonPanel().getChildren().add(buttonGoToColony);
-        getButtonPanel().getChildren().add(buttonDisband);
-        getButtonPanel().getChildren().add(buttonJettison);
-        getButtonPanel().getChildren().add(goToStatus);
+        unitActions.setId("unitActionsMenu");
+        unitActions.setConsumeAutoHidingEvents(false);
+        // Act on release so Space cannot also reach the map's skip-turn
+        // handler.
+        unitActions.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.SPACE) {
+                event.consume();
+            }
+        });
+        unitActions.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            if (event.getCode() == KeyCode.SPACE) {
+                final Node focused = unitActions.getScene().getFocusOwner();
+                if (focused != null) {
+                    focused.executeAccessibleAction(AccessibleAction.FIRE);
+                }
+                event.consume();
+            }
+        });
+        unitActions.getStyleClass().add("unit-actions-menu");
+        addUnitCommand(buttonMove, Buttons.buttonMove);
+        addUnitCommand(buttonGoTo, null);
+        addUnitCommand(buttonGoToColony, null);
+        addUnitCommand(buttonWait, null);
+        addUnitCommand(buttonSkipUnitTurn, null);
+        unitActions.getItems().add(new SeparatorMenuItem());
+        addUnitCommand(buttonSentry, null);
+        addUnitCommand(buttonFortify, null);
+        unitActions.getItems().add(new SeparatorMenuItem());
+        addUnitCommand(buttonBuildColony, Buttons.buttonBuildColony);
+        addUnitCommand(buttonPlowField, Buttons.buttonPlowField);
+        addUnitCommand(buttonCancelPlowField, Buttons.cancelPlowingLabel);
+        addUnitCommand(buttonClearForest, Buttons.buttonClearForest);
+        addUnitCommand(buttonCancelClearForest, Buttons.cancelClearingLabel);
+        addUnitCommand(buttonBuildRoad, Buttons.buttonBuildRoad);
+        addUnitCommand(buttonCancelBuildRoad, Buttons.cancelRoadLabel);
+        unitActions.getItems().add(new SeparatorMenuItem());
+        addUnitCommand(buttonJettison, null);
+        addUnitCommand(buttonDisband, null);
+
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCongress);
@@ -288,8 +335,104 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonExit);
     }
 
+    private void addUnitCommand(final Button button, final Buttons labelKey) {
+        unitCommands.add(button);
+        button.getStyleClass().remove("image-button");
+        button.setBackground(Background.EMPTY);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setMinHeight(Region.USE_PREF_SIZE);
+        if (labelKey != null) {
+            button.setText(currentI18n.get(labelKey));
+            button.getProperties().put("unitLabel", labelKey);
+        }
+        button.setText(button.getText().replace('\n', ' '));
+        button.addEventFilter(ActionEvent.ACTION, event -> unitActions.hide());
+        // Stop the menu skin forwarding the button's action back into its menu
+        // item.
+        button.addEventHandler(ActionEvent.ACTION, event -> event.consume());
+        final Label explanation = new Label();
+        explanation.getStyleClass().add("unit-action-explanation");
+        explanation.setWrapText(true);
+        explanation.setMaxWidth(290);
+        if (button.getTooltip() != null) {
+            explanation.textProperty().bind(button.getTooltip().textProperty());
+        }
+        explanation.visibleProperty().bind(button.disabledProperty()
+                .and(explanation.textProperty().isNotEmpty()));
+        explanation.managedProperty().bind(explanation.visibleProperty());
+        final VBox row = new VBox(2, button, explanation);
+        row.setPrefWidth(290);
+        final CustomMenuItem item = new CustomMenuItem(row, true);
+        // The embedded button handles its click; the menu item handles keyboard
+        // selection.
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> event.consume());
+        item.setOnAction(event -> button.fire());
+        item.disableProperty().bind(button.disableProperty());
+        item.visibleProperty().bind(button.visibleProperty());
+        unitActions.getItems().add(item);
+    }
+
+    /** Attach the same orders to the selected own unit's card. */
+    public void addUnitActions(final VBox card, final String unitName) {
+        final Button actions = new Button(currentI18n.get(Buttons.unitActions));
+        actions.setId("unitActions");
+        actions.setAccessibleText(unitName + ": " + actions.getText());
+        actions.setOnAction(event -> showUnitActions(actions));
+        card.getChildren().add(actions);
+        card.setFocusTraversable(true);
+        card.setOnContextMenuRequested(event -> {
+            showUnitActions(actions);
+            event.consume();
+        });
+        card.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.CONTEXT_MENU
+                    || event.getCode() == KeyCode.F10 && event.isShiftDown()) {
+                showUnitActions(actions);
+                event.consume();
+            }
+        });
+        final Label route = new Label();
+        route.setId("goToStatus");
+        route.setWrapText(true);
+        route.textProperty().bind(goToStatus.textProperty());
+        route.visibleProperty().bind(goToStatus.visibleProperty());
+        route.managedProperty().bind(route.visibleProperty());
+        card.getChildren().add(route);
+    }
+
+    private void showUnitActions(final Button owner) {
+        boolean hasAction = false;
+        SeparatorMenuItem separator = null;
+        for (final MenuItem item : unitActions.getItems()) {
+            if (item instanceof SeparatorMenuItem) {
+                separator = (SeparatorMenuItem) item;
+                separator.setVisible(false);
+            } else if (item.isVisible()) {
+                if (separator != null) {
+                    separator.setVisible(hasAction);
+                    separator = null;
+                }
+                hasAction = true;
+            }
+        }
+        unitActions.show(owner, Side.LEFT, 0, 0);
+        unitActions.getScene().getStylesheets().setAll(
+                MainStageBuilder.STYLE_SHEET_MICROCOL,
+                MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
+    }
+
+    public void hideUnitActions() {
+        if (Platform.isFxApplicationThread()) {
+            unitActions.hide();
+        } else {
+            Platform.runLater(unitActions::hide);
+        }
+    }
+
     void disableAllButtons() {
         LOGGER.debug("Disabling buttons bar");
+        hideUnitActions();
         setDisable(true);
     }
 
@@ -321,12 +464,20 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     @Override
     public void updateLanguage(final I18n i18n) {
         currentI18n = i18n;
+        for (final Button command : unitCommands) {
+            final Buttons key = (Buttons) command.getProperties()
+                    .get("unitLabel");
+            if (key != null) {
+                command.setText(i18n.get(key));
+            }
+        }
         buttonCongress.setText(i18n.get(CongressText.title));
         updateSentryText();
         updateFortifyText();
         updateGoToText();
-        buttonWait.setText(i18n.get(Buttons.buttonWait));
-        buttonSkipUnitTurn.setText(i18n.get(Buttons.buttonSkipUnitTurn));
+        buttonWait.setText(i18n.get(Buttons.buttonWait).replace('\n', ' '));
+        buttonSkipUnitTurn.setText(
+                i18n.get(Buttons.buttonSkipUnitTurn).replace('\n', ' '));
         waitTooltip.setText(i18n.get(Buttons.waitExplanation));
         skipTooltip.setText(i18n.get(Buttons.skipUnitTurnExplanation));
         buttonDisband.setText(i18n.get(Buttons.buttonDisband));
@@ -358,6 +509,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     void setUnitOrdersEnabled(final boolean wait, final boolean skip) {
         buttonWait.setDisable(!wait);
         buttonSkipUnitTurn.setDisable(!skip);
+        waitTooltip.setText(currentI18n
+                .get(wait ? Buttons.waitExplanation : Buttons.waitUnavailable));
+        skipTooltip
+                .setText(currentI18n.get(skip ? Buttons.skipUnitTurnExplanation
+                        : Buttons.skipUnavailable));
     }
 
     void setSentryAction(final Runnable action) {
@@ -374,9 +530,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonSentry.setText(
                 currentI18n.get(sentryActive ? Buttons.buttonActivateSentry
                         : Buttons.buttonSentry));
-        sentryTooltip.setText(
-                currentI18n.get(sentryActive ? Buttons.activateSentryExplanation
-                        : Buttons.sentryExplanation));
+        sentryTooltip.setText(currentI18n
+                .get(buttonSentry.isDisabled() ? Buttons.sentryUnavailable
+                        : sentryActive ? Buttons.activateSentryExplanation
+                                : Buttons.sentryExplanation));
     }
 
     /**
@@ -436,8 +593,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         goToTooltip.setText(
                 currentI18n.get(goToOrdered ? Buttons.goToCancelExplanation
                         : Buttons.goToExplanation));
-        goToColonyTooltip
-                .setText(currentI18n.get(Buttons.goToColonyExplanation));
+        goToColonyTooltip.setText(currentI18n.get(
+                buttonGoToColony.isDisabled() ? Buttons.goToColonyUnavailable
+                        : Buttons.goToColonyExplanation));
     }
 
     void setDisbandAction(final Runnable action) {
@@ -487,10 +645,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 ? (fortified ? Buttons.buttonCancelFortified
                         : Buttons.buttonCancelFortifying)
                 : Buttons.buttonFortify));
-        fortifyTooltip.setText(currentI18n.get(fortifying
-                ? (fortified ? Buttons.fortifiedExplanation
-                        : Buttons.fortifyingExplanation)
-                : Buttons.fortifyExplanation));
+        fortifyTooltip.setText(currentI18n
+                .get(buttonFortify.isDisabled() ? Buttons.fortifyUnavailable
+                        : fortifying
+                                ? (fortified ? Buttons.fortifiedExplanation
+                                        : Buttons.fortifyingExplanation)
+                                : Buttons.fortifyExplanation));
     }
 
     private void setDisable(final boolean disable) {
@@ -575,6 +735,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private void setVisibleNode(final Node node, final boolean isVisible) {
         Platform.runLater(() -> {
+            if (unitCommands.contains(node)) {
+                node.setVisible(isVisible);
+                node.setManaged(isVisible);
+                return;
+            }
             if (isContaining(node)) {
                 if (!isVisible) {
                     remove(node);

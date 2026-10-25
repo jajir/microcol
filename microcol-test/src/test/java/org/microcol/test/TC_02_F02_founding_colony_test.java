@@ -47,7 +47,7 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         gamePage.getRightPanelUnit(1).verifyFreeActionPoints(1);
 
         // found colony by pressing key 'b'
-        final ColonyNameDialog naming = gamePage.foundColony();
+        final ColonyNameDialog naming = gamePage.foundColonyFromActions();
         naming.verifyDraft("Leiden");
         naming.save();
         final ColonyScreen opened = ColonyScreen.of(getContext(), "Leiden");

@@ -30,6 +30,7 @@ public final class FortifyPage extends AbstractScreen {
         assertEquals(text, button.getText());
         assertEquals(enabled, !button.isDisabled());
         assertTrue(button.getWidth() + 0.5 >= button.prefWidth(-1));
+        closeUnitActions();
     }
 
     public void verifyLocation(final int id,

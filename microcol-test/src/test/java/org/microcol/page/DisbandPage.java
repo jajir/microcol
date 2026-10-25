@@ -2,6 +2,7 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Optional;
 
@@ -49,6 +50,9 @@ public final class DisbandPage extends AbstractScreen {
      * selected, so presence alone does not mean it is shown.
      */
     private boolean isShown(final String cssId) {
+        if (!cssId.equals("goToStatus")) {
+            openUnitActions();
+        }
         return getNodeFinder().lookup("#" + cssId).<Node>tryQuery()
                 .map(node -> node.isVisible() && node.isManaged())
                 .orElse(false);
@@ -65,12 +69,18 @@ public final class DisbandPage extends AbstractScreen {
     public void verifyControlVisible(final boolean expectedVisible) {
         assertEquals(expectedVisible, isShown(CONTROL_ID),
                 "Unexpected Disband control visibility");
+        if (!expectedVisible) {
+            assertFalse(isCssIdShown("unitActions"),
+                    "No own unit has an action menu");
+        }
+        closeUnitActions();
     }
 
     public void verifyControlEnabled(final boolean expectedEnabled) {
         final Button button = getButtonById(CONTROL_ID);
         assertEquals(expectedEnabled, !button.isDisabled(),
                 "Unexpected Disband control state");
+        closeUnitActions();
     }
 
     public void verifyConfirmation(final String expectedTitle,
@@ -96,6 +106,7 @@ public final class DisbandPage extends AbstractScreen {
     public void verifyOverflowAcknowledgement(final boolean expectedShown) {
         assertEquals(expectedShown, isShown("disbandOverflowAcknowledge"),
                 "Unexpected overflow acknowledgement visibility");
+        closeUnitActions();
     }
 
     public void verifyConfirmEnabled(final boolean expectedEnabled) {

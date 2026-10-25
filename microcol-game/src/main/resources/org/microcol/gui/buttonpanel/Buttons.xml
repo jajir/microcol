@@ -20,7 +20,7 @@
     <entry key="buttonColonies">Colonies (O)</entry>
     <entry key="noColonies">No colonies yet</entry>
     <entry key="buttonWait">Wait&#10;(Tab)</entry>
-    <entry key="buttonSkipUnitTurn">Skip turn&#10;(Space)</entry>
+    <entry key="buttonSkipUnitTurn">Skip unit turn (Space)</entry>
     <entry key="waitExplanation">Select the next available unit without spending movement.</entry>
     <entry key="skipUnitTurnExplanation">Spend all remaining movement for this unit until its next turn.</entry>
     <entry key="unitOrderUnavailable">This unit cannot skip now. Select an available unit.</entry>
@@ -116,4 +116,13 @@
     <entry key="retireExplanation">Retire ends the game with your score. Scored play only, on your turn.</entry>
     <entry key="retireUnavailable">Retiring is not available now. Retire is offered on your own turn in scored free play.</entry>
     <entry key="retireChanged">The situation changed, so the game was not ended. Open Retire again to see the current result.</entry>
+    <entry key="unitActions">Actions</entry>
+    <entry key="cancelPlowingLabel">Cancel plowing</entry>
+    <entry key="cancelClearingLabel">Cancel forest clearing</entry>
+    <entry key="cancelRoadLabel">Cancel road building</entry>
+    <entry key="waitUnavailable">No unit is available for selection during the current turn.</entry>
+    <entry key="skipUnavailable">Requires your turn and a unit on the map with movement remaining and no active order.</entry>
+    <entry key="sentryUnavailable">Requires your turn and a unit without another order, on the map or an eligible European pier.</entry>
+    <entry key="fortifyUnavailable">Requires your turn and an armed land unit on land, with movement remaining and no other order.</entry>
+    <entry key="goToColonyUnavailable">No own colony is available as a destination for this unit in its current state.</entry>
 </properties>

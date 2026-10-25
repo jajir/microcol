@@ -913,3 +913,17 @@ UC-038 (práce) a UC-066 (vysvěcení) používá společný styl. Zachované he
 scénáře a samostatná kontrola klávesových akcelerátorů jsou uvedené ve
 [funkční evidenci R-0271](functional-tests.md#r-0271-context-menus-2026-10-25).
 Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
+
+
+### UC-011/114/119: unit commands and global controls — 2026-10-25
+
+1. [R-0270](requirements/done/R-0270.md) moves existing unit orders into the selected
+   own unit's menu and keeps game-wide navigation in the toolbar. This changes
+   discovery and input paths, not the rules or the status of whole UC categories.
+2. TC11 retains Wait/Skip, preview cancellation, turn preparation and Save/Continue
+   assertions; TC11_05 adds context-menu input/selection/inventory and TC11_06
+   Czech text, supported window sizes and empty selection. TC02 exercises colony
+   founding through the menu while the other naming tests retain keyboard B.
+   Existing order scenarios keep their model assertions and use updated page
+   objects. Actual counts, failures and acceptance belong to
+   [functional evidence](functional-tests.md#r-0270-unit-action-context-2026-10-25).

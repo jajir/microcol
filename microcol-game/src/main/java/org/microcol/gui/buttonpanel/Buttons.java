@@ -3,6 +3,9 @@ package org.microcol.gui.buttonpanel;
 import org.microcol.i18n.MessageKeyResource;
 
 public enum Buttons implements MessageKeyResource {
+    waitUnavailable, skipUnavailable, sentryUnavailable, fortifyUnavailable,
+    goToColonyUnavailable, unitActions, cancelPlowingLabel, cancelClearingLabel,
+    cancelRoadLabel,
 
     buttonColonies, noColonies, buttonStatistics, buttonCenter,
     buttonTurnReport, buttonGoals, buttonHelp, buttonExit, buttonNextTurn,

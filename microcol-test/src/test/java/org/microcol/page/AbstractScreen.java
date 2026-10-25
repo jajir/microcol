@@ -24,6 +24,12 @@ import javafx.stage.Stage;
 
 public abstract class AbstractScreen {
 
+    private static final Set<String> UNIT_COMMANDS = Set.of("move",
+            "buildColony", "plowField", "cancelPlowField", "clearForest",
+            "cancelClearForest", "buildRoad", "cancelBuildRoad", "waitUnit",
+            "skipUnitTurn", "sentryUnit", "fortifyUnit", "goToUnit",
+            "goToColonyUnit", "disbandUnit", "jettisonUnit");
+
     private final TestContext context;
 
     AbstractScreen(final TestContext context) {
@@ -62,6 +68,11 @@ public abstract class AbstractScreen {
     }
 
     protected void clickOnButtonWithId(final String buttonId) {
+        if (UNIT_COMMANDS.contains(buttonId)) {
+            openUnitActions();
+        } else {
+            closeUnitActions();
+        }
         final String id = "#" + buttonId;
         getRobot().clickOn(id);
         WaitForAsyncUtils.waitForFxEvents();
@@ -75,10 +86,30 @@ public abstract class AbstractScreen {
     }
 
     protected Button getButtonById(final String cssId) {
+        if (UNIT_COMMANDS.contains(cssId)) {
+            openUnitActions();
+        }
         final String id = "#" + cssId;
         final Button label = getNodeFinder().lookup(id).queryButton();
         return Preconditions.checkNotNull(label,
                 String.format("unable to find button by id '%s'", cssId));
+    }
+
+    protected void openUnitActions() {
+        WaitForAsyncUtils.waitForFxEvents();
+        if (getNodeFinder().lookup("#waitUnit").tryQuery().isEmpty()
+                && getNodeFinder().lookup("#unitActions").tryQuery()
+                        .isPresent()) {
+            getRobot().clickOn("#unitActions");
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    protected void closeUnitActions() {
+        if (getNodeFinder().lookup("#waitUnit").tryQuery().isPresent()) {
+            getRobot().push(KeyCode.ESCAPE);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
     }
 
     protected boolean isButtonBackVisible() {
@@ -87,6 +118,9 @@ public abstract class AbstractScreen {
 
     public void captureDialog(final String contentId, final String fileName)
             throws IOException {
+        if (UNIT_COMMANDS.contains(contentId)) {
+            openUnitActions();
+        }
         final Node root = getNodeFinder().lookup("#" + contentId).query()
                 .getScene().getRoot();
         final Path output = Path.of("target", "warehouse-qa", fileName);
@@ -118,6 +152,10 @@ public abstract class AbstractScreen {
     }
 
     protected boolean isCssIdVisible(final String cssId) {
+        if (UNIT_COMMANDS.contains(cssId)) {
+            openUnitActions();
+            return isCssIdShown(cssId);
+        }
         final String id = "#" + cssId;
         return getNodeFinder().lookup(id).tryQuery().isPresent();
     }

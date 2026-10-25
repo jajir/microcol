@@ -713,3 +713,23 @@ documentation in APT just to make it visible on the web.
    exception and is separate evidence, not a game-test requirement for this commit.
 3. Remote CI and publication are not inspected. A successful local check or push
    does not establish that Pages or a game distribution was published.
+
+
+## R-0270 control classification — 2026-10-25
+
+1. [R-0270](requirements/done/R-0270.md) captures the requested separation of game-wide
+   controls and selected-unit commands, including conditional/cancellation variants.
+   The inventory was inspected at `fb6ee004765c15253691fb26ba456dc447b2784e`;
+   no runtime implementation or player verification is claimed.
+2. All nine documentation consistency tests passed (0.014 s). The strict MkDocs
+   build failed because the concurrently authored, unrelated `R-0269.md` links to
+   a not-yet-present `r-0269-illustrated-terrain-help-2026-10-25` anchor in
+   `functional-tests.md`; see local log `target/r0270-mkdocs.log`. No commit or
+   push was made for this capture. Unrelated working-tree edits are preserved.
+   Model/JUnit and Docker smoke are not required for this documentation-only scope.
+3. Remote CI and publication are not inspected or verified.
+4. The user subsequently selected implementation. R-0270 is now done after
+   the affected UI checks and mandatory local acceptance; exact selections,
+   failed attempts, repairs and passing counts are recorded in the
+   [functional evidence](functional-tests.md#r-0270-unit-action-context-2026-10-25).
+   This local acceptance does not verify remote regression or publication.
