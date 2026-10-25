@@ -1,0 +1,356 @@
+[
+  {
+    "id": "U01",
+    "key": "COLONIST",
+    "name": "svobodný kolonista",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U02",
+    "key": "BRAVE",
+    "name": "Domorodý bojovník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U03",
+    "key": "INDENTURED_SERVANT",
+    "name": "smluvní služebník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U04",
+    "key": "PETTY_CRIMINAL",
+    "name": "drobný trestanec",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U05",
+    "key": "EXPERT_ORE_MINER",
+    "name": "zkušený těžař rudy",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U06",
+    "key": "EXPERT_FARMER",
+    "name": "zkušený farmář",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U07",
+    "key": "EXPERT_FISHERMAN",
+    "name": "zkušený rybář",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U08",
+    "key": "EXPERT_FUR_TRAPPER",
+    "name": "zkušený lovec kožešin",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U09",
+    "key": "EXPERT_SILVER_MINER",
+    "name": "zkušený těžař stříbra",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U10",
+    "key": "EXPERT_LUMBERJACK",
+    "name": "zkušený dřevorubec",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U11",
+    "key": "MASTER_SUGAR_PLANTER",
+    "name": "Mistr pěstitel cukrové třtiny",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U12",
+    "key": "MASTER_COTTON_PLANTER",
+    "name": "Mistr pěstitel bavlny",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U13",
+    "key": "MASTER_TOBACCO_PLANTER",
+    "name": "Mistr pěstitel tabáku",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U14",
+    "key": "MASTER_CARPENTER",
+    "name": "mistr tesař",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U15",
+    "key": "MASTER_DISTILLER",
+    "name": "mistr palírník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U16",
+    "key": "MASTER_WEAVER",
+    "name": "mistr tkadlec",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U17",
+    "key": "MASTER_TOBACCONIST",
+    "name": "mistr výrobce doutníků",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U18",
+    "key": "MASTER_FUR_TRADER",
+    "name": "mistr kožešník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U19",
+    "key": "MASTER_GUNSMITH",
+    "name": "mistr puškař",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U20",
+    "key": "FIREBRAND_PREACHER",
+    "name": "horlivý kazatel",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U21",
+    "key": "ELDER_STATESMAN",
+    "name": "zkušený státník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U22",
+    "key": "SEASONED_SCOUT",
+    "name": "zkušený průzkumník",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U23",
+    "key": "HARDY_PIONEER",
+    "name": "zdatný pionýr",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U24",
+    "key": "VETERAN_SOLDIER",
+    "name": "vojenský veterán",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U25",
+    "key": "JESUIT_MISSIONARY",
+    "name": "jezuitský misionář",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U26",
+    "key": "WAGON",
+    "name": "Povoz",
+    "sprite": [
+      1,
+      6
+    ]
+  },
+  {
+    "id": "U27",
+    "key": "TREASURE_TRAIN",
+    "name": "Pokladní povoz",
+    "sprite": [
+      1,
+      6
+    ]
+  },
+  {
+    "id": "U28",
+    "key": "ARTILLERY",
+    "name": "Dělostřelectvo",
+    "sprite": "artillery.png"
+  },
+  {
+    "id": "U29",
+    "key": "MASTER_BLACKSMITH",
+    "name": "mistr kovář",
+    "sprite": [
+      2,
+      4
+    ]
+  },
+  {
+    "id": "U30",
+    "key": "FRIGATE",
+    "name": "frigata",
+    "sprite": [
+      5,
+      5
+    ]
+  },
+  {
+    "id": "U31",
+    "key": "GALLEON",
+    "name": "galeona",
+    "sprite": [
+      4,
+      5
+    ]
+  },
+  {
+    "id": "U32",
+    "key": "CARAVEL",
+    "name": "karavela",
+    "sprite": [
+      4,
+      5
+    ]
+  },
+  {
+    "id": "U33",
+    "key": "MERCHANTMAN",
+    "name": "obchodní loď",
+    "sprite": [
+      4,
+      5
+    ]
+  },
+  {
+    "id": "U34",
+    "key": "PRIVATEER",
+    "name": "korzárská loď",
+    "sprite": [
+      5,
+      5
+    ]
+  },
+  {
+    "id": "U35",
+    "key": "MAN_OF_WAR",
+    "name": "řadová loď",
+    "sprite": [
+      5,
+      5
+    ]
+  },
+  {
+    "id": "E01",
+    "key": "",
+    "name": "Kolonista na koni",
+    "sprite": [
+      0,
+      6
+    ]
+  },
+  {
+    "id": "E02",
+    "key": "",
+    "name": "Kolonista s nástroji",
+    "sprite": [
+      2,
+      6
+    ]
+  },
+  {
+    "id": "E03",
+    "key": "",
+    "name": "Kolonista s mušketou",
+    "sprite": [
+      6,
+      6
+    ]
+  },
+  {
+    "id": "E04",
+    "key": "",
+    "name": "Kolonista na koni s mušketou",
+    "sprite": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "E05",
+    "key": "",
+    "name": "Poškozené dělostřelectvo",
+    "sprite": "artillery-damaged.png"
+  }
+]
