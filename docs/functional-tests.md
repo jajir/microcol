@@ -10133,7 +10133,7 @@ remote CI and publication were not checked.
 
 ## R-0278 horizontal toolbar - 2026-10-25
 
-1. [R-0278](requirements/R-0278.md) applies the selected icon/name row and freehand frames over base `20b15460`. TC188/F221 retains all existing journeys and adds actual graphic/text alignment and compact-height checks. Targeted selection: all TC188, TC38/TC01, TC81/TC04, TC164/TC01 and `PageVerificationContractTest`. Acceptance is pending.
+1. [R-0278](requirements/done/R-0278.md) applies the selected icon/name row and freehand frames over base `20b15460`. TC188/F221 retains all existing journeys and adds actual graphic/text alignment and compact-height checks. Targeted selection: all TC188, TC38/TC01, TC81/TC04, TC164/TC01 and `PageVerificationContractTest`. Acceptance is pending.
 
 2. First targeted dispatch `20261025T134727Z-f6eb02ffeee9`, supervisor PID 21515, timeout 600 s: caller supplied three incorrect scenario class names. Only TC188 and the page source contract ran: six checks in two fresh XML reports, zero failures/errors/skips, 62.075 s. Evidence remains in `target/docker-ui/run-LaIfpz`; this incomplete selection was not accepted. Corrected the caller selection using source filenames and method prefixes, then dispatched the complete nine-check selection as `20261025T134903Z-21433ed9a876`, PID 21634, timeout 600 s.
 3. Initial actual-size screenshot review confirms names to the right of icons, a single English row at 1440 x 900 and two readable Czech rows at 900 x 700. Focus remains visible. Three changed Java files passed the shared Eclipse formatter with identical code tokens and idempotent output; nine documentation checks and strict MkDocs passed. Final targeted results and the mandatory gate remain pending.
@@ -10159,6 +10159,10 @@ remote CI and publication were not checked.
 13. Fresh mandatory gate dispatched after confirming no running Docker containers: `20261025T141252Z-525c771fadab`, supervisor PID 29253, outer timeout 420 s. The full fixed smoke/model/support selection and 300-second verifier budget are unchanged. Snapshot also includes the concurrently integrated R-0279 menu changes; toolbar sources remain frozen. Result pending.
 
 14. The user explicitly requested pushing the refinement while the final gate was still running. The nine targeted checks, actual screenshot review, source/export review, shared formatting and documentation checks have passed. Commit preparation verifies all eight changed runtime/test/asset files against `run-4atiqgz3/source`; the concurrent R-0279 integration is retained. This request permits immediate commit/push, not a claim that the pending gate or remote publication passed.
+
+15. Final refined mandatory gate **passed**: `target/verification/run-4atiqgz3/summary.json`, group **294.506 s**, verifier **297.129 s**, wrapper **297.215 s**, within the 300-second acceptance limit. Independent fresh XML totals: **4,727 model/JUnit checks in 337 reports**, **21 UI/support checks in 12 reports**, **4,748 total**, zero failures/errors/skips. The verifier confirms the complete fixed selection. Callback delivery was queued and cleanup succeeded. All **2,275 tracked non-documentation files** match the saved snapshot, including pushed implementation `1f976b82` and concurrent menu integration. The preceding failed gates remain failed; this fresh run accepts the refined implementation.
+
+16. Final review confirms stronger icon/frame ink, 2x raster exports, compact spacing, visible focus without losing the drawn contour, unchanged action handlers and readable EN/CZ player paths. Shared formatting, nine documentation checks and strict MkDocs passed. R-0278 is complete locally. Physical Retina hardware, remote full regression and publication remain unverified.
 
 ## R-0279 compact unit menu — 2026-10-25
 

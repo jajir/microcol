@@ -951,7 +951,7 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 
 [R-0273](requirements/done/R-0273.md) zachovává globální herní akce a navigaci kolonií. TC188 ověřuje trvalé EN/CZ názvy a ikony, nápovědu při najetí a klávesnicovém fokusu, zalomení v úzkém okně, prázdnou nabídku, zrušení i klávesnicové otevření kolonie a změnu sezónního akcentu přes skutečný konec tahu a Continue. TC38 ověřuje původní návrat Escape, TC81 deklaraci nezávislosti a TC164 rozdíl mezi odchodem a ukončením. Skutečné výsledky jsou v [evidenci R-0273](functional-tests.md#r-0273-toolbar-07b-2026-10-25); zápis sám neuzavírá celé UC.
 
-[R-0278](requirements/R-0278.md) navazuje vodorovným uspořádáním názvů napravo od ikon a zřetelně ručními rámečky. TC188 navíc kontroluje skutečnou polohu ikony a textu a kompaktní výšku tlačítek; zachovává všechny původní herní kontroly. TC38/01, TC81/04 a TC164/01 ověřují dotčené cesty. Aktuální výsledky a snímky vede [evidence R-0278](functional-tests.md#r-0278-horizontal-toolbar-2026-10-25).
+[R-0278](requirements/done/R-0278.md) navazuje vodorovným uspořádáním názvů napravo od ikon a zřetelně ručními rámečky. TC188 navíc kontroluje skutečnou polohu ikony a textu a kompaktní výšku tlačítek; zachovává všechny původní herní kontroly. TC38/01, TC81/04 a TC164/01 ověřují dotčené cesty. Aktuální výsledky a snímky vede [evidence R-0278](functional-tests.md#r-0278-horizontal-toolbar-2026-10-25).
 
 ### Řidší kresba terénu — R-0277
 

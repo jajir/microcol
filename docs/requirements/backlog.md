@@ -595,7 +595,7 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Horizontal toolbar refinement - 2026-10-25
 
-1. [R-0278](R-0278.md) implements the user-selected icon/name horizontal variant and visibly freehand frames under A03. Existing R-0273 actions and R-0276 dropdown behavior remain authoritative. Acceptance is in progress.
+1. [R-0278](done/R-0278.md) implements the user-selected icon/name horizontal variant and visibly freehand frames under A03. Existing R-0273 actions and R-0276 dropdown behavior remain authoritative. The refined heavier strokes and compact spacing are complete locally after nine targeted checks, screenshot review and the 4,748-check mandatory gate; see the [acceptance evidence](../functional-tests.md#r-0278-horizontal-toolbar-2026-10-25).
 
 ## Compact unit context menu — 2026-10-25
 
