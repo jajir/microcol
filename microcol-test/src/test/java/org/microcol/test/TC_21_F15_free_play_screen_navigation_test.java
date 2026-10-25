@@ -223,6 +223,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.showContextMessage(english);
         layout.verifyLayout(english);
         layout.verifyStatusBar();
+        layout.verifyMainScreenSeparators();
         layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
         layout.saveEvidence("R-0267-main-English.png");
@@ -239,6 +240,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.showContextMessage(czech);
         layout.verifyLayout(czech);
         layout.verifyStatusBar();
+        layout.verifyMainScreenSeparators();
         layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
         layout.saveEvidence("R-0267-main-Czech-small.png");

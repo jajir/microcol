@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -105,6 +106,41 @@ public final class MainScreenLayoutPage extends AbstractScreen {
         });
     }
 
+    public void verifyMainScreenSeparators() {
+        getRobot().interact(() -> {
+            final Region button = getNodeFinder()
+                    .lookup(".game-toolbar-control").queryAs(Region.class);
+            final BorderImage frame = button.getBorder().getImages().get(0);
+            final double width = frame.getWidths().getTop();
+            final String[] selectors = { ".buttonPanel", "#rightPanel",
+                    "#statusBar", "#statusBar #description",
+                    "#statusBar #labelGold" };
+            final BorderWidths[] edges = { new BorderWidths(0, 0, width, 0),
+                    new BorderWidths(0, 0, 0, width),
+                    new BorderWidths(width, 0, 0, 0),
+                    new BorderWidths(0, width, 0, 0),
+                    new BorderWidths(0, width, 0, 0) };
+            for (int i = 0; i < selectors.length; i++) {
+                final Region panel = getNodeFinder().lookup(selectors[i])
+                        .queryAs(Region.class);
+                assertEquals(1, panel.getBorder().getImages().size(),
+                        selectors[i]);
+                final BorderImage edge = panel.getBorder().getImages().get(0);
+                assertEquals(frame.getImage(), edge.getImage(), selectors[i]);
+                assertEquals(frame.getSlices(), edge.getSlices(), selectors[i]);
+                assertEquals(edges[i], edge.getWidths(), selectors[i]);
+                assertEquals(frame.getRepeatX(), edge.getRepeatX());
+                assertEquals(frame.getRepeatY(), edge.getRepeatY());
+                panel.getBorder().getStrokes().forEach(stroke -> {
+                    assertEquals(Color.TRANSPARENT, stroke.getTopStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getRightStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getBottomStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getLeftStroke());
+                });
+            }
+        });
+    }
+
     public void verifyMainScreenTypography() {
         getRobot().interact(() -> {
             final Parent screen = getNodeFinder().lookup(".game-screen")
@@ -136,7 +172,7 @@ public final class MainScreenLayoutPage extends AbstractScreen {
         getRobot().interact(() -> {
             final javafx.scene.image.WritableImage image = org.microcol.gui.screen.game.gamepanel.FogFrameProbe
                     .captureCanvas(getContext());
-            final int[] expected = { 0x649B97, 0xC5C18A, 0x9B9486 };
+            final int[] expected = { 0x649B97, 0xA9B77A, 0x9B9486 };
             for (int pigment : expected) {
                 int pixels = 0;
                 for (int y = 0; y < image.getHeight(); y++) {

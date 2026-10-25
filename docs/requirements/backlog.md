@@ -624,3 +624,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Unit map artwork proposals — 2026-10-25
 
 1. [R-0285](done/R-0285.md) completed A03 unit artwork with A05 identity/visibility, A07 profession and A09 equipment/damage dependencies. The user selected **09 — Lehký pohyb** from the [ten-family gallery](../graphics-unit-proposals.md). All 35 types and five equipment/damage variants now use its strong outlines; implementation and required [local acceptance](../functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) are complete. Status: `done`. Remote regression and publication remain independently unverified.
+
+## Main-screen panel separators — 2026-10-25
+
+1. [R-0286](done/R-0286.md) applies the user-selected thin freehand separators under A03, reusing the toolbar frame at the same stroke scale. Implementation and local acceptance are complete: seven targeted checks, visual review and the 4,757-check mandatory gate passed. Status: `done`. [Evidence](../functional-tests.md#r-0286-main-screen-separators-2026-10-25) records results separately from publication.

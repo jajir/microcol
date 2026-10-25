@@ -867,3 +867,8 @@ Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna d�
 1. Uživatel vybral 25. října 2026 sadu 09 — Lehký pohyb a požadoval čitelný tah. Hráč má na mapě poznat typ jednotky a aktuální výbavu; profesní rekvizita sama nepřidává žádnou herní schopnost. Obrázky sdílí mapa a existující panely i nápověda; pojmenování a modelové podmínky akcí zůstávají autoritativní.
 2. Cesta zůstává stejná: hráč jednotku vybere na mapě nebo v panelu, použije stávající příkaz či gesto a uvidí výsledek v mapě a stavových údajích. Změna obrázku nepřidává potvrzení ani nový způsob rušení. Skutečné koně, muškety, nástroje a poškození mají při výběru obrázku přednost před profesí.
 3. Zřetelný tmavý obrys, průhledný okraj a vlastní siluety jsou návrhová volba. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) zaznamenává technické kontroly a skutečný snímek hry; nejde o uživatelskou studii ani měření úspěšnosti rozpoznávání profesí.
+
+## Oddělení hlavních panelů — R-0286
+
+1. Schválená tenká ruční linka pomáhá rozlišit mapu, nabídku akcí, informace o výběru a stav hry. Má stejný tah jako tlačítka a nepřidává ovládací prvek ani potvrzení. Hráč dál vybírá jednotku, používá stávající akce a čte jejich odezvu v panelech.
+2. Návrh zachovává čitelnost textu, fokus, hover vysvětlení a obsluhu při změně velikosti okna i po Continue. Vizuální volba uživatele je doložená tímto zadáním; automatické kontroly a skutečné snímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25). Nejde o uživatelskou studii.

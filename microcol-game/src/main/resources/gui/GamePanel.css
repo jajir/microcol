@@ -107,3 +107,28 @@
     -fx-border-color: #746E60;
     -fx-border-width: 1;
 }
+
+/* Reuse the button's ink and slice scale for each single freehand edge. */
+.game-screen .buttonPanel,
+.game-screen #rightPanel,
+.game-screen #statusBar,
+.game-screen #statusBar #description,
+.game-screen #statusBar #labelGold {
+    -fx-border-color: transparent;
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-repeat: stretch;
+}
+.game-screen .buttonPanel {
+    -fx-border-image-width: 0 0 6 0;
+}
+.game-screen #rightPanel {
+    -fx-border-image-width: 0 0 0 6;
+}
+.game-screen #statusBar {
+    -fx-border-image-width: 6 0 0 0;
+}
+.game-screen #statusBar #description,
+.game-screen #statusBar #labelGold {
+    -fx-border-image-width: 0 6 0 0;
+}

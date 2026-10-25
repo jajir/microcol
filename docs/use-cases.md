@@ -983,3 +983,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### Sdílené obrázky jednotek — R-0285
 
 [Vybraná sada 09](graphics.md#vybrane-jednotky-25-rijna-2026) mění společný vzhled typů a stavů, nikoli pravidla. TC_190/F223 kontroluje mapové obrázky, pohyb a Continue; TC_100/08–09 nápovědu, TC_25/TC_27 výbavu, TC_01 přepravu a TC_62 dělostřelectvo. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) uvádí skutečné výsledky vybraných cest; nejde o nové přijetí celých UC.
+
+### UC-114/115/119: ruční oddělovací linky — 2026-10-25
+
+1. [R-0286](requirements/done/R-0286.md) sjednocuje tah oddělovačů hlavní obrazovky s obrysy tlačítek. TC21/F15, metoda `TC_10_main_screen_panels_remain_readable_when_resized`, ověřuje společný obrázek a měřítko, jedinou viditelnou hranu, EN/CZ rozměry, stavový text, kalendář a zlato. TC188/F221 zachovává ověření navigace, klávesnice, zrušení nabídky a Continue. [Výsledky](functional-tests.md#r-0286-main-screen-separators-2026-10-25) neznamenají nové přijetí všech variant těchto UC.

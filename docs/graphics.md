@@ -1199,3 +1199,9 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 3. Zdroj [units-walking-source.png](../microcol-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../microcol-game/src/graphics/units-walking-prompts.json) je zachované. [units.svg](../microcol-game/src/graphics/units.svg) skládá jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
 4. Každá 45px buňka má průhledný okraj a obrázek se vejde do 41px prostoru. Výraznější tmavý tah se posuzuje v konečné mapové velikosti, s cílem přibližně 2 px. Obrázek už nepotřebuje starý posun o 2/4 px; mapa jej kotví přímo na začátek políčka. Sdílený poskytovatel vybírá obrázky také pro Evropu, kolonii, boj a nápovědu.
 5. Export: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.
+
+## Oddělovací linky hlavní obrazovky — 2026-10-25
+
+1. Uživatel schválil druhý návrh: tenké, mírně nepravidelné linky se stejným optickým tahem a barvou jako obrysy tlačítek. Silnější první návrh se nepoužije. Oddělují horní menu, pravý panel a spodní stavový řádek včetně jeho tří polí.
+2. [R-0286](requirements/done/R-0286.md) používá existující `game-toolbar-frame.png`: stejný výřez 12 px a cílovou šířku okraje 6 logických px jako tlačítka. Tento pás obsahuje přibližně 2px inkoustovou linku; šířka pásu není tloušťka tahu. Zobrazuje se pouze potřebná hrana, původní rovná čára je průhledná. Obrázek ani tlačítka se nemění.
+3. Styl je omezen na hlavní obrazovku. Skutečné snímky, vybrané scénáře a stav přejímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25).
