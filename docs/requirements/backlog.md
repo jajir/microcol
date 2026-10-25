@@ -623,4 +623,4 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Unit map artwork proposals — 2026-10-25
 
-1. [R-0285](R-0285.md) captures A03 unit artwork exploration with A05 identity/visibility, A07 profession and A09 equipment/damage dependencies. The [gallery](../graphics-unit-proposals.md) shows the 35 current types, five equipment/state variants and ten proposed families at map scale. Status remains `new`; choosing and implementing a family is separate from delivering this study.
+1. [R-0285](done/R-0285.md) completed A03 unit artwork with A05 identity/visibility, A07 profession and A09 equipment/damage dependencies. The user selected **09 — Lehký pohyb** from the [ten-family gallery](../graphics-unit-proposals.md). All 35 types and five equipment/damage variants now use its strong outlines; implementation and required [local acceptance](../functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) are complete. Status: `done`. Remote regression and publication remain independently unverified.

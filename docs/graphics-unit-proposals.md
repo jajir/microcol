@@ -1,8 +1,14 @@
 # Jednotky — současný stav a deset návrhů pro mapu
 
-**Návrhová studie z 25. října 2026.** [R-0285](requirements/R-0285.md) zachycuje výběr budoucí podoby. Žádná sada zatím není vybraná ani zařazená do hry. Všechny celé listy obsahují 35 současných typů a pět dalších podob výbavy či poškození.
+**Návrhová studie z 25. října 2026.** [R-0285](requirements/done/R-0285.md) zachycuje výběr budoucí podoby. Uživatel následně vybral **09 — Lehký pohyb** pro implementaci se silnějším tahem; aktuální stav patří do [zadání jednotek](graphics.md#vybrane-jednotky-25-rijna-2026) a [funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25). Níže zůstává původní porovnání. Všechny celé listy obsahují 35 současných typů a pět dalších podob výbavy či poškození.
 
-## Současný stav
+## Vybraná varianta ve hře
+
+Varianta **09 — Lehký pohyb** je zapojená se zesílenými tmavými obrysy. Snímek z Docker/Xvfb z 25. října 2026 ukazuje všech 35 typů a pět stavů v běžné velikosti 45 × 45 px. Domorodý bojovník stojí blíže další řadě, aby byl v aktuálním dohledu hráče. Test ověřil také pohyb a načtení uložené hry; podrobnosti a stav závěrečné přejímky jsou v [evidenci](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25).
+
+![Všech 40 podob jednotek na skutečné mapě](graphics-assets/units-2026-10-25/implemented-game.png)
+
+## Stav před úpravou (revize cbbe0abb)
 
 Soupis vychází ze zdrojů revize `cbbe0abb`: [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java), [výběr obrázků](../microcol-game/src/main/java/org/microcol/gui/image/UnitImageProvider.java), [výřezy atlasu](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderUnit.java) a [české názvy](../microcol-game/src/main/resources/org/microcol/gui/UnitTypes_cs_CZ.xml). Jde o přehled skutečně načítaných resources, nikoli o nové překreslení nebo snímek spuštěné hry.
 

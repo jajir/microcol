@@ -1190,3 +1190,12 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden hnědý otazník Playpen Sans 14. Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
 2. Otazníky se nehýbou ani nepřelosují při posunu, změně velikosti okna nebo Save/Continue. S objevením políčka zmizí a po opuštění dohledu se nevracejí. Mřížka zůstává pod neprůhlednou mlhou; jde pouze o dekoraci.
 3. Implementaci a přejímku sleduje [R-0282](requirements/done/R-0282.md); tato změna nepřidává uložená data ani nové herní pravidlo.
+
+
+## Vybrané jednotky — 25. října 2026
+
+1. Uživatel vybral **09 — Lehký pohyb** z [deseti návrhů](graphics-unit-proposals.md) a požádal o implementaci se zřetelnou, nepříliš tenkou linkou; [R-0285](requirements/done/R-0285.md). Implementace prošla lokální přejímkou; [výsledky a snímek ze hry](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) rozlišují přijatou změnu od samostatně ověřovaného vydání.
+2. Sada rozlišuje 35 typů, čtyři stavy výbavy kolonisty a poškozené dělo. Výbava podle modelu přebíjí profesní obrázek; po odebrání výbavy se vrací profese. Rekvizita profese nedává jednotce výbavu ani novou schopnost. Národní/action značka se kreslí samostatně a výběr ani pravidla se nemění.
+3. Zdroj [units-walking-source.png](../microcol-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../microcol-game/src/graphics/units-walking-prompts.json) je zachované. [units.svg](../microcol-game/src/graphics/units.svg) skládá jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
+4. Každá 45px buňka má průhledný okraj a obrázek se vejde do 41px prostoru. Výraznější tmavý tah se posuzuje v konečné mapové velikosti, s cílem přibližně 2 px. Obrázek už nepotřebuje starý posun o 2/4 px; mapa jej kotví přímo na začátek políčka. Sdílený poskytovatel vybírá obrázky také pro Evropu, kolonii, boj a nápovědu.
+5. Export: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.

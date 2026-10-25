@@ -978,3 +978,8 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-006/119: stationary unknown-map marks — 2026-10-25
 
 [R-0282](requirements/done/R-0282.md) extends TC26 with `TC_10_unknown_question_marks_remain_fixed_until_explored`: fixed unknown-map decoration through panning, resize and Continue, removed by exploration and absent after leaving sight. Existing fog disclosure and grid scenarios remain mandatory; results are recorded in the [functional evidence](functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
+
+
+### Sdílené obrázky jednotek — R-0285
+
+[Vybraná sada 09](graphics.md#vybrane-jednotky-25-rijna-2026) mění společný vzhled typů a stavů, nikoli pravidla. TC_190/F223 kontroluje mapové obrázky, pohyb a Continue; TC_100/08–09 nápovědu, TC_25/TC_27 výbavu, TC_01 přepravu a TC_62 dělostřelectvo. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) uvádí skutečné výsledky vybraných cest; nejde o nové přijetí celých UC.

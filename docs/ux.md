@@ -860,3 +860,10 @@ Automatizované kontroly a vizuální přejímku eviduje
 ## Šířka herního menu — 2026-10-25
 
 Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna dál vidět celý horní řádek akcí a co největší část mapy. Názvy se automaticky skryjí všechny současně před zalomením a po rozšíření se vrátí; není potřeba nic přepínat ani potvrzovat. Význam ikon dál vysvětluje stávající nápověda při najetí a zaměření klávesnicí, názvy pro asistivní technologie zůstávají. Výběr kolonie, zrušení menu a výsledky příkazů fungují stejně. Minimum šířky okna chrání dostupnost všech ikon. Jde o dohodnuté chování a místně ověřenou implementaci, nikoli pozorování hráčů; [ověření](functional-tests.md#r-0283-one-row-toolbar-2026-10-25) je samostatné.
+
+
+## Jednotky v pohybu — návrh a ověření R-0285
+
+1. Uživatel vybral 25. října 2026 sadu 09 — Lehký pohyb a požadoval čitelný tah. Hráč má na mapě poznat typ jednotky a aktuální výbavu; profesní rekvizita sama nepřidává žádnou herní schopnost. Obrázky sdílí mapa a existující panely i nápověda; pojmenování a modelové podmínky akcí zůstávají autoritativní.
+2. Cesta zůstává stejná: hráč jednotku vybere na mapě nebo v panelu, použije stávající příkaz či gesto a uvidí výsledek v mapě a stavových údajích. Změna obrázku nepřidává potvrzení ani nový způsob rušení. Skutečné koně, muškety, nástroje a poškození mají při výběru obrázku přednost před profesí.
+3. Zřetelný tmavý obrys, průhledný okraj a vlastní siluety jsou návrhová volba. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) zaznamenává technické kontroly a skutečný snímek hry; nejde o uživatelskou studii ani měření úspěšnosti rozpoznávání profesí.

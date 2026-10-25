@@ -62,7 +62,7 @@ public final class PaintService {
     /**
      * Position of unit image from top left tile corner.
      */
-    private final Point UNIT_IMAGE_POSITION = Point.of(2, 4);
+    private final Point UNIT_IMAGE_POSITION = Point.of(0, 0);
 
     /**
      * Road surface and its darker edge; both contrast with grass and sand.
