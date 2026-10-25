@@ -1032,3 +1032,17 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 ## Obrazová nápověda terénů a bonusů
 
 [R-0269](requirements/done/R-0269.md) přidává do Colonizopedie tabulky terénů a zvláštních zdrojů. Používají existující herní dlaždice, les a stejné barevné značky jako mapa; názvy rozlišují terény se sdílenou grafikou. Text zachovává Playpen Sans Regular, zalamuje se v tabulce a obsah lze rolovat. Číselné vlastnosti a přípustné terény čte nápověda přímo z modelu. Výsledky ověření vede [funkční evidence](functional-tests.md#r-0269-illustrated-terrain-help-2026-10-25).
+
+
+## Kontextové nabídky — R-0271
+
+1. Společný vzhled v [ContextMenus.css](../microcol-game/src/main/resources/gui/ContextMenus.css)
+   používá papírovou plochu, lehce nepravidelný černý obrys a Playpen Sans Regular 14.
+   Zaměřený řádek má ploché zvýraznění v barvě společných dřevěných ovladačů.
+   Styl načítá hlavní scéna i dialogy; platí také pro rozbalovací nabídku kolonií.
+2. Název akce je vlevo, skutečný JavaFX akcelerátor v samostatném sloupci vpravo
+   s rámečkem klávesy. Zvýraznění nezvyšuje tloušťku písma. Položka bez
+   akcelerátoru nemá zástupnou klávesu; tato změna nezavádí nové zkratky.
+3. JavaFX nadále vlastní rozvržení, polohu u okraje obrazovky, klávesovou navigaci,
+   potvrzení a zavření. Požadavek a rozsah vlastní [R-0271](requirements/done/R-0271.md);
+   skutečné výsledky patří do [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).

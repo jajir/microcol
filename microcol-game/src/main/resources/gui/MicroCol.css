@@ -1,5 +1,6 @@
 @import "Typography.css";
 @import "WoodenButtons.css";
+@import "ContextMenus.css";
 
 /*
  * JavaFx setting for whole MicroCol.
@@ -77,13 +78,6 @@
   -fx-background-color: rgba(0, 0, 0, 0);
 }
 
-.popup .menu-item {
-  -fx-background-color: white;	
-}
-
-.popup .menu-item:focused {
-  -fx-background-color: blue;	
-}
 
 .cratePanel{
 	-fx-min-width: 50;

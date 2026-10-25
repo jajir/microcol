@@ -1,0 +1,64 @@
+/* Native menu layout and input, drawn with the game's paper and ink palette. */
+.context-menu {
+    -fx-background-color: #fff9ec;
+    -fx-background-insets: 0;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-insets: 0;
+    -fx-shape: "M 2 3 Q 240 0 500 2 Q 760 4 998 1 L 997 498 L 999 997 Q 740 1000 500 998 L 1 999 L 3 500 Z";
+    -fx-padding: 10 9 10 9;
+    -fx-effect: null;
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
+.context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-padding: 7 12 7 12;
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: #dfbd91;
+    -fx-border-color: black;
+}
+
+.context-menu .menu-item > .label {
+    -fx-text-fill: black;
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
+.context-menu .menu-item:disabled {
+    -fx-opacity: 0.65;
+}
+
+/* JavaFX lays out the actual accelerator in a separate, aligned right column. */
+.context-menu .menu-item > .accelerator-text {
+    -fx-background-color: #fff9ec;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-padding: 2 7 2 7;
+}
+
+.context-menu .separator:horizontal .line {
+    -fx-border-color: #746e60 transparent transparent transparent;
+    -fx-border-insets: 3 10 3 10;
+}
+
+.context-menu .menu:focused > .right-container > .arrow,
+.context-menu .menu > .right-container > .arrow,
+.context-menu .menu-item:focused .check,
+.context-menu .menu-item:focused .radio {
+    -fx-background-color: black;
+}
+
+.context-menu > .scroll-arrow:hover {
+    -fx-background-color: #dfbd91;
+}

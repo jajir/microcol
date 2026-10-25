@@ -9717,3 +9717,59 @@ remote CI and publication were not checked.
 
 8. Isolated acceptance copies only this task’s 9 Java/resource files onto `fb6ee004765c15253691fb26ba456dc447b2784e` in `target/r0269-acceptance`. Smoke callback: `/Users/jan/Library/Logs/Microcol/completions/20261025T091648Z-9a3802a48961`, supervisor PID 70812, timeout 420 s, fixed gate budget 300 s. Passed all 4,742 checks: 4,723 model/JUnit and 19 UI/support (ten fixed smoke scenarios), zero failures/errors/skips in 282.224 s (285.382 s including orchestration). All 345 XML reports in `target/verification/run-1bw1lg42` were parsed. The 9 Java/resource files match both the frozen source and the main checkout byte for byte. Other working-tree changes are preserved and excluded from this task’s commit.
 9. The same 10 targeted checks are rerunning in the isolated checkout: `/Users/jan/Library/Logs/Microcol/completions/20261025T092212Z-df53b1030ea3`, supervisor PID 72472, timeout 600 s. Passed all 10 checks (7 TC_100 and 3 page-contract), zero failures/errors/skips in 115.061 s. XML reports and reviewed screenshots were preserved in `target/docker-ui/run-po9pXP`; the isolated Czech screenshot confirms the same readable layout. This final targeted run excludes concurrent changes. An isolated strict documentation build first exposed three pre-existing links to moved R-0261 in R-0224, R-0225 and the backlog. The already-present working-tree link corrections are included, without other concurrent edits. R-0259 is credited for the delivered terrain/forest/resource subset while its additional feature illustrations remain open. Nine documentation consistency tests and strict MkDocs passed for the isolated commit scope; no remote CI or publication verification is claimed.
+
+
+## R-0271 context menus — 2026-10-25
+
+1. [R-0271](requirements/done/R-0271.md) changes shared menu presentation only.
+   Targeted selection: `ContextMenuStyleTest`, TC25, TC27, TC40, TC45, TC96
+   and `PageVerificationContractTest`; existing gameplay assertions remain.
+2. Source: `fb6ee004765c15253691fb26ba456dc447b2784e` plus this task's CSS and tests,
+   isolated from unrelated working-tree edits. First targeted run:
+   `20261025T091411Z-886ec8fed412`, reports `target/docker-ui/run-GotTqo/`
+   in the `context-menu-check` checkout, 409.928 s. All 41 existing gameplay
+   scenarios and three source-contract tests passed. Both new component tests
+   failed when their standalone Button fixture did not open its context menu
+   with Shift+F10. Layout, fonts, shortcut labels and screen-edge checks had
+   passed before that failure. Existing game keyboard paths remained green.
+3. The component fixture now opens through the standard secondary mouse gesture,
+   then checks keyboard menu activation, actual accelerator dispatch, Escape
+   and outside-click dismissal. TC27 also explicitly exercises 1280×850 English
+   and 1000×700 Czech layouts. Repair run `20261025T092257Z-388284c04ef2`
+   selects the two changed TC27 methods, both component tests and all three
+   source-contract tests. Its reports `run-ovO6HF` contain five passes and two
+   component errors, no skips, in 77.616 s. The TC27 layouts and source contract
+   passed; the standalone fixture still failed at native reopen/close gestures.
+4. The fixture now requests window focus like the existing game harness and
+   waits up to five seconds for the actual popup visibility after native input.
+   Only the two component tests are repeated in `20261025T092651Z-68a9553e027d`
+   (supervisor PID 74757, timeout 300 s). Assertions and keyboard/gameplay
+   expectations are preserved. This run failed in 48.103 s, reports `run-iyuxp3`:
+   both tests opened the menu successfully, then timed out on the supposed
+   outside click. The owner button's centre was inside the menu opened there.
+   The test now clicks a free corner of the owner scene and explicitly verifies
+   that this coordinate is outside the popup.
+5. Final component repair `20261025T092908Z-9f1ff3684c41`, reports `run-dECqXo`,
+   passed both tests with zero failures, errors or skips in 39.546 s. Both shared
+   stylesheets preserve readable separate accelerator labels, disabled rows,
+   screen-edge positioning, keyboard activation and accelerator dispatch exactly
+   once, Escape and actual outside-click dismissal. Czech and English TC27
+   screenshots were reviewed; captions are unclipped and the disabled/key states
+   are legible. No new gameplay shortcut was assigned.
+6. Main advanced to `6f5b236376e10ff4711abb6f0477208438f4b64b` during acceptance.
+   The old-base smoke `20261025T093002Z-c1714ac3e87a` was deliberately cancelled
+   after 80.770 s and is not acceptance evidence. The isolated checkout now
+   includes the completed terrain help. Fresh smoke run
+   `20261025T093202Z-6c6ddcb051b9` (PID 76721, outer timeout 420 s) passed in
+   **290.500 s** inside the 300-second local budget: **4,723 model/JUnit tests
+   and 21 UI/support checks**, zero failures, errors or skips. This includes
+   the fixed ten smoke scenarios and both component tests. Reports and the frozen
+   source manifest are preserved in `target/r0271/verification/run-6d03fkb3/`.
+7. The shared Java formatter checked all three task-owned Java files with exact
+   code-token preservation and idempotence. Documentation consistency and strict
+   MkDocs passed on the isolated combined source and are repeated for closure.
+   Targeted reports, including every failed attempt, are preserved under
+   `target/r0271/docker-ui/`; reviewed images are in `target/r0271/review/`.
+8. This is local acceptance of menu presentation. The full remote regression
+   and publication were not inspected; the separate unit-action relocation
+   remains owned by R-0270.

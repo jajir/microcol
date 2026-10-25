@@ -779,3 +779,18 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    vysvětlení; nic se nepotvrdí tiše.
 5. Stav ověření je v [evidenci R-0194](functional-tests.md#r-0194-retirement-implementation-2026-10-23-not-verified):
    napsáno, nespuštěno. Nejde o uživatelské ověření.
+
+
+## Čitelné kontextové nabídky — R-0271
+
+1. Nabídka pojmenuje každou akci a případnou skutečnou zkratku oddělí do
+   rámečku vpravo. Zkratku nevkládáme do závorky v názvu ani ji nevymýšlíme
+   pro akci, která ji nemá. Samotná existence zkratky na mapě neopravňuje
+   ukazovat ji jako dostupnou v kolonii či Evropě.
+2. Společné [grafické provedení](graphics.md#kontextove-nabidky-r-0271)
+   zachovává rozpoznatelné zaměření a nedostupnost. Myš i klávesnice vedou
+   ke stejné stávající akci; Escape a kliknutí mimo nabídku ji zavírají bez
+   změny herního stavu. Přesun příkazů jednotky do nové nabídky vlastní
+   samostatný požadavek R-0270.
+3. Jde o implementační pravidlo [R-0271](requirements/done/R-0271.md), nikoli
+   pozorování hráčů. Ověření uvádí [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).

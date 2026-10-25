@@ -904,3 +904,12 @@ not sight rules. Actual targeted results and precommit status are recorded in
 this entry does not claim remote regression or physical HiDPI verification.
 
 Rozšíření UC-114/119 [R-0269](requirements/done/R-0269.md) přidává do Colonizopedie obrazové tabulky terénů a bonusů. TC_100/TC_06–TC_07 ověřují obsah, obrázky, EN/CZ hledání a zachování stavu hry; výsledky vede [funkční evidence](functional-tests.md#r-0269-illustrated-terrain-help-2026-10-25).
+
+
+### Sdílené kontextové nabídky — R-0271
+
+Vzhled nabídek pro UC-017/018 (vybavení), UC-015/025 (hlídka a nalodění),
+UC-038 (práce) a UC-066 (vysvěcení) používá společný styl. Zachované herní
+scénáře a samostatná kontrola klávesových akcelerátorů jsou uvedené ve
+[funkční evidenci R-0271](functional-tests.md#r-0271-context-menus-2026-10-25).
+Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.

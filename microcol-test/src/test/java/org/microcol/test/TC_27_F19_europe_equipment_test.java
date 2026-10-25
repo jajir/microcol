@@ -45,6 +45,18 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
                 .openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
+        // Opening and dismissing the paper menu does not purchase equipment.
+        new org.microcol.page.MainScreenLayoutPage(getContext()).resize(1280,
+                850);
+        equipment.openContextMenu(100);
+        org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.verifyPaperMenuWithoutShortcuts("Buy 50 muskets");
+        menu.captureMenu("context-menu-europe-english.png");
+        menu.escape();
+        menu.verifyClosed();
+        equipment.verifyState(100, 1000, false, false, 0,
+                PlaceEuropePier.class);
         equipment.open(100, "Buy 50 muskets");
         equipment.verifyChoice("Buy 50 muskets", true, "");
         equipment.verifyQuote(
@@ -390,6 +402,16 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         settings.goBack().loadGame();
         new FreePlayAuditPage(getContext()).press(javafx.scene.input.KeyCode.E);
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
+        // The same menu keeps Czech labels readable at the smaller window size.
+        new org.microcol.page.MainScreenLayoutPage(getContext()).resize(1000,
+                700);
+        equipment.openContextMenu(100);
+        org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.verifyPaperMenuWithoutShortcuts("Koupit 50 mušket");
+        menu.captureMenu("context-menu-europe-czech.png");
+        menu.escape();
+        menu.verifyClosed();
         equipment.open(100, "Koupit 50 mušket");
         equipment.verifyChoice("Koupit 50 mušket", true, "");
         equipment.captureDialog("europeEquipmentDialog",
