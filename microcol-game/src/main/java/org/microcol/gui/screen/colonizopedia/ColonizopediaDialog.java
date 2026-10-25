@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.colonizopedia;
 
 import org.microcol.gui.Loc;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
@@ -23,8 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- * Rules help with a searchable topic list. Showing it only reads static text,
- * so it never touches the game model.
+ * Rules help with a searchable topic list. Showing it reads reference
+ * definitions and never mutates the game.
  */
 public final class ColonizopediaDialog extends AbstractMessageWindow {
 
@@ -53,14 +54,18 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
 
     private final Label body = new Label();
 
-    private final ScrollPane bodyScroll = new ScrollPane(body);
+    private final VBox bodyContent = new VBox(12, body);
+    private final ScrollPane bodyScroll = new ScrollPane(bodyContent);
+    private final ColonizopediaTables tables;
 
     private final Label noResults = new Label();
 
     @Inject
-    public ColonizopediaDialog(final I18n i18n, final ViewUtil viewUtil) {
+    public ColonizopediaDialog(final I18n i18n, final ViewUtil viewUtil,
+            final ImageProvider images) {
         super(viewUtil, i18n);
         this.i18n = i18n;
+        tables = new ColonizopediaTables(i18n, images);
         buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
@@ -71,7 +76,7 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
                 .addListener((observable, oldText, newText) -> applyFilter());
 
         topicList.setId(TOPICS_ID);
-        topicList.setPrefSize(240, 170);
+        topicList.setPrefSize(220, 340);
         topicList.setCellFactory(list -> new ListCell<ColonizopediaTopic>() {
 
             @Override
@@ -89,12 +94,12 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
         body.setWrapText(true);
         bodyScroll.setId(BODY_SCROLL_ID);
         bodyScroll.setFitToWidth(true);
-        bodyScroll.setPrefViewportWidth(420);
-        bodyScroll.setPrefViewportHeight(170);
+        bodyScroll.setPrefViewportWidth(540);
+        bodyScroll.setPrefViewportHeight(340);
 
         noResults.setId(NO_RESULTS_ID);
         noResults.setWrapText(true);
-        noResults.setPrefWidth(420);
+        noResults.setPrefWidth(540);
 
         final VBox rightColumn = new VBox(10, noResults, bodyScroll);
         final HBox main = new HBox(20, topicList, rightColumn);
@@ -147,6 +152,11 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
 
     private void showBody(final ColonizopediaTopic topic) {
         body.setText(topic == null ? "" : topic.getBody(i18n));
+        bodyContent.getChildren().setAll(body);
+        if (topic == ColonizopediaTopic.TERRAIN
+                || topic == ColonizopediaTopic.RESOURCES) {
+            bodyContent.getChildren().add(tables.create(topic));
+        }
         bodyScroll.setVvalue(0);
     }
 

@@ -171,9 +171,9 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0204](done/R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
 | [R-0205](done/R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
 | [R-0206](done/R-0206.md) | Navigate the game-rule encyclopedia | Done; targeted checks passed | SUPPORT-004; existing help shell credited |
-| [R-0259](R-0259.md) | Recognize all 14 terrain types and terrain features in illustrated help | New capture | User request, 2026-10-24; existing encyclopedia and artwork reused |
+| [R-0259](R-0259.md) | Recognize all 14 terrain types and terrain features in illustrated help | Remaining feature illustrations; terrain/forest/resource reference delivered by [R-0269](done/R-0269.md) | User request, 2026-10-24; existing encyclopedia and artwork reused |
 | [R-0260](done/R-0260.md) | Record the shared ballpoint, Playpen Sans 14 and flat-color contract | Done; documentation agreement only | User decisions and palette reference, 2026-10-24 |
-| [R-0261](R-0261.md) | Show a subtle dashed grid only on explored map squares | New capture | User request and Tabletop Map reference, 2026-10-24; solid gray unknown territory has no grid |
+| [R-0261](done/R-0261.md) | Show a subtle dashed grid only on explored map squares | New capture | User request and Tabletop Map reference, 2026-10-24; solid gray unknown territory has no grid |
 | [R-0262](done/R-0262.md) | Make the main game screen hand-drawn with clear controls and a taller bottom panel | New capture | User request, 2026-10-24; integrated main-map screen, not the separate main menu |
 | [R-0264](done/R-0264.md) | Exempt documentation-only commits from local game tests | Done; workflow agreement only | User instruction, 2026-10-24; documentation checks and strict MkDocs remain required |
 | [R-0207](deferred/R-0207.md) | Keep the opening tutorial accurate for free play | Deferred by user, 2026-10-19 | SUPPORT-004; existing guided instructions credited |

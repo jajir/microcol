@@ -146,7 +146,7 @@ public final class PaintService {
      * @param point    required top-left corner of the tile
      * @param overlay  required resource other than {@link ResourceOverlay#NONE}
      */
-    private void paintResource(final GraphicsContext graphics,
+    public static void paintResource(final GraphicsContext graphics,
             final Point point, final ResourceOverlay overlay) {
         final double size = Tile.TILE_WIDTH_IN_PX * RESOURCE_MARKER_SHARE;
         final double left = point.getX() + Tile.TILE_WIDTH_IN_PX * 0.66;

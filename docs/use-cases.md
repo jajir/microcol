@@ -902,3 +902,5 @@ continued exploration, resize and render scale 1×/2×. This changes presentatio
 not sight rules. Actual targeted results and precommit status are recorded in
 [the execution evidence](functional-tests.md#r-0261-explored-grid-2026-10-24);
 this entry does not claim remote regression or physical HiDPI verification.
+
+Rozšíření UC-114/119 [R-0269](requirements/done/R-0269.md) přidává do Colonizopedie obrazové tabulky terénů a bonusů. TC_100/TC_06–TC_07 ověřují obsah, obrázky, EN/CZ hledání a zachování stavu hry; výsledky vede [funkční evidence](functional-tests.md#r-0269-illustrated-terrain-help-2026-10-25).

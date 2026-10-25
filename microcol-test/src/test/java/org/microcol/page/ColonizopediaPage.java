@@ -11,6 +11,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.util.PaintService;
+import org.microcol.model.TerrainType;
+import org.microcol.model.ResourceOverlay;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import org.microcol.gui.screen.colonizopedia.ColonizopediaTopic;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.util.ButtonBarOk;
@@ -226,6 +234,100 @@ public final class ColonizopediaPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void scrollReferenceToEnd() {
+        getRobot().moveTo("#" + ColonizopediaDialog.BODY_SCROLL_ID);
+        getRobot().scroll(150, VerticalDirection.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyReferenceRows(final int expectedRows) throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final GridPane table = getNodeFinder()
+                    .lookup("#colonizopediaReference").queryAs(GridPane.class);
+            assertEquals((expectedRows + 1) * 2, table.getChildren().size(),
+                    "Every reference row has an image/name and properties cell");
+            table.lookupAll(".label").forEach(node -> {
+                final Labeled label = (Labeled) node;
+                assertEquals("Playpen Sans Regular", label.getFont().getName(),
+                        "Reference uses the shared font");
+                assertTrue(label.isWrapText(),
+                        "Reference text must wrap within its column");
+            });
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
+    public void verifyTerrainIllustrations() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final LocalizationHelper names = new LocalizationHelper(getI18n());
+            for (final TerrainType terrain : TerrainType.TERRAINS) {
+                final VBox cell = getNodeFinder()
+                        .lookup("#colonizopediaTerrain_" + terrain.name())
+                        .queryAs(VBox.class);
+                assertEquals(names.getTerrainName(terrain),
+                        ((Labeled) cell.lookup(".label")).getText());
+                final Set<Node> canvases = cell.lookupAll("Canvas");
+                assertEquals(terrain.isCanHaveTree() ? 2 : 1, canvases.size(),
+                        "Open and supported forest pictures: "
+                                + terrain.name());
+                for (final Node node : canvases) {
+                    final WritableImage image = node.snapshot(null, null);
+                    final Set<Integer> colors = new java.util.HashSet<>();
+                    for (int y = 0; y < image.getHeight(); y++) {
+                        for (int x = 0; x < image.getWidth(); x++) {
+                            colors.add(image.getPixelReader().getArgb(x, y));
+                        }
+                    }
+                    assertTrue(
+                            colors.stream().anyMatch(
+                                    color -> color != 0 && color != -1),
+                            "Terrain image contains painted pixels: "
+                                    + terrain.name());
+                    assertFalse(node.getAccessibleText().isBlank(),
+                            "Terrain picture has a readable name");
+                }
+            }
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
+    public void verifyResourceIllustrations() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final LocalizationHelper names = new LocalizationHelper(getI18n());
+            for (final ResourceOverlay resource : ResourceOverlay.values()) {
+                if (resource == ResourceOverlay.NONE) {
+                    continue;
+                }
+                final VBox cell = getNodeFinder()
+                        .lookup("#colonizopediaResource_" + resource.name())
+                        .queryAs(VBox.class);
+                assertEquals(names.getResourceOverlayName(resource),
+                        ((Labeled) cell.lookup(".label")).getText());
+                final Canvas canvas = (Canvas) cell.lookup("Canvas");
+                assertEquals(PaintService.resourceMarkerColor(resource),
+                        canvas.snapshot(null, null).getPixelReader()
+                                .getColor(36, 9),
+                        "The reference uses the actual map marker: "
+                                + resource.name());
+            }
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
+    public void verifyReferenceProperties(final String id,
+            final String... expectedParts) throws Exception {
+        final String text = WaitForAsyncUtils.asyncFx(() -> {
+            final VBox cell = getNodeFinder().lookup("#" + id)
+                    .queryAs(VBox.class);
+            return ((Labeled) cell.lookup(".label")).getText();
+        }).get(5, TimeUnit.SECONDS);
+        for (final String expected : expectedParts) {
+            assertTrue(text.contains(expected),
+                    () -> "Reference should contain '" + expected
+                            + "' but was: " + text);
+        }
+    }
+
     public void verifyDialogOpen() {
         assertTrue(isCssIdVisible(ColonizopediaDialog.SEARCH_ID),
                 "Colonizopedia search field is not shown");
@@ -275,9 +377,28 @@ public final class ColonizopediaPage extends AbstractScreen {
     }
 
     /**
-     * The text is taller than its window and the mouse wheel has moved it to
-     * its end.
+     * The final sentence is visible whether the prose fits or needs scrolling.
      */
+    public void verifyBodyEndVisible() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final ScrollPane scroll = getNodeFinder()
+                    .lookup("#" + ColonizopediaDialog.BODY_SCROLL_ID)
+                    .queryAs(ScrollPane.class);
+            final Node body = getNodeFinder()
+                    .lookup("#" + ColonizopediaDialog.BODY_ID).query();
+            final Node viewport = scroll.lookup(".viewport");
+            final Bounds textBounds = body
+                    .localToScreen(body.getBoundsInLocal());
+            final Bounds viewportBounds = viewport
+                    .localToScreen(viewport.getBoundsInLocal());
+            assertTrue(textBounds.getMaxY() <= viewportBounds.getMaxY() + 1,
+                    "The end of the scoring text must be visible");
+            assertTrue(textBounds.getMaxY() > viewportBounds.getMinY(),
+                    "The text end must not be scrolled past the window");
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
     public void verifyBodyScrolledToEnd() throws Exception {
         final ScrollPane scroll = getNodeFinder()
                 .lookup("#" + ColonizopediaDialog.BODY_SCROLL_ID)

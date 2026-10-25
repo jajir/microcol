@@ -4,7 +4,10 @@ import org.microcol.i18n.MessageKeyResource;
 
 enum Colonizopedia implements MessageKeyResource {
 
-    title, searchPrompt, noResults,
+    title, searchPrompt, noResults, properties, land, water, forest, fields,
+    yes, no, none, movementDefense, production, occurrence, bonus, reserves,
+    renewable, topic_terrain_title, topic_terrain_body, topic_resources_title,
+    topic_resources_body,
 
     topic_movement_title, topic_movement_body,
 

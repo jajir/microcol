@@ -1028,3 +1028,7 @@ odpovídajícím výřezům `(0,65,65,90)` a `(0,555,48,75)` v těchto výsledn�
 pixelech. U zdrojů se nemění souřadnice kresby. TC_83 TC_01 kontroluje shodu
 barev uvnitř i vně ilustrace při dvou velikostech skutečného okna a zachovává
 ověření tlačítek a návratu z nastavení. Výsledky patří do funkční evidence.
+
+## Obrazová nápověda terénů a bonusů
+
+[R-0269](requirements/done/R-0269.md) přidává do Colonizopedie tabulky terénů a zvláštních zdrojů. Používají existující herní dlaždice, les a stejné barevné značky jako mapa; názvy rozlišují terény se sdílenou grafikou. Text zachovává Playpen Sans Regular, zalamuje se v tabulce a obsah lze rolovat. Číselné vlastnosti a přípustné terény čte nápověda přímo z modelu. Výsledky ověření vede [funkční evidence](functional-tests.md#r-0269-illustrated-terrain-help-2026-10-25).

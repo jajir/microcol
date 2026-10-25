@@ -1,6 +1,10 @@
 package org.microcol.gui.screen.colonizopedia;
 
 import java.text.Normalizer;
+import java.util.Arrays;
+import org.microcol.gui.LocalizationHelper;
+import org.microcol.model.TerrainType;
+import org.microcol.model.ResourceOverlay;
 import java.util.Locale;
 
 import org.microcol.i18n.I18n;
@@ -25,7 +29,11 @@ public enum ColonizopediaTopic {
     INDEPENDENCE(Colonizopedia.topic_independence_title,
             Colonizopedia.topic_independence_body),
     SCORING(Colonizopedia.topic_scoring_title,
-            Colonizopedia.topic_scoring_body);
+            Colonizopedia.topic_scoring_body),
+    TERRAIN(Colonizopedia.topic_terrain_title,
+            Colonizopedia.topic_terrain_body),
+    RESOURCES(Colonizopedia.topic_resources_title,
+            Colonizopedia.topic_resources_body);
 
     private final Colonizopedia title;
 
@@ -55,7 +63,21 @@ public enum ColonizopediaTopic {
     public boolean matches(final I18n i18n, final String query) {
         final String needle = fold(query);
         return needle.isEmpty() || fold(getTitle(i18n)).contains(needle)
-                || fold(getBody(i18n)).contains(needle);
+                || fold(getBody(i18n)).contains(needle)
+                || referenceMatches(i18n, needle);
+    }
+
+    private boolean referenceMatches(final I18n i18n, final String needle) {
+        final LocalizationHelper names = new LocalizationHelper(i18n);
+        if (this == TERRAIN) {
+            return TerrainType.TERRAINS.stream()
+                    .anyMatch(terrain -> fold(names.getTerrainName(terrain))
+                            .contains(needle));
+        }
+        return this == RESOURCES && Arrays.stream(ResourceOverlay.values())
+                .filter(resource -> resource != ResourceOverlay.NONE).anyMatch(
+                        resource -> fold(names.getResourceOverlayName(resource))
+                                .contains(needle));
     }
 
     private static String fold(final String text) {

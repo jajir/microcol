@@ -38,7 +38,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String INDEPENDENCE = "Independence";
     private static final String SCORING = "Statistics and score";
     private static final String[] TOPICS = { MOVEMENT, CARGO, COLONIES,
-            PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE, SCORING };
+            PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE, SCORING,
+            "Terrain", "Terrain bonuses" };
     private static final String MOVEMENT_PART = "movement points";
     private static final String COLONIES_PART = "Colony names must be unique";
     private static final String DIPLOMACY_PART = "tribute";
@@ -60,7 +61,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String SCORING_NOT_AVAILABLE_CZ = "Zatím není dostupné";
     private static final String[] TOPICS_CZ = { MOVEMENT_CZ, CARGO_CZ,
             "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
-            DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre" };
+            DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre", "Terén",
+            "Bonusy terénu" };
     private static final String NO_RESULTS_CZ = "Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.";
 
     @Start
@@ -158,9 +160,10 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyBodyContains(SCORING_NOT_AVAILABLE);
         help.verifyBodyContains(SCORING_HALL_OF_FAME);
 
-        // The long text scrolls with the mouse wheel to its last sentence.
+        // The final sentence remains visible after scrolling, even when the
+        // prose fits.
         help.scrollBodyDown();
-        help.verifyBodyScrolledToEnd();
+        help.verifyBodyEndVisible();
         help.verifyBodyContains(SCORING_END);
         help.closeWithOk();
         help.verifyDialogClosed();
@@ -231,5 +234,99 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyBodyContains(SCORING_NOT_AVAILABLE_CZ);
         help.closeWithEscape();
         help.verifyDialogClosed();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_illustrated_terrain_and_bonus_reference() throws Exception {
+        // Open help without changing the running game's state.
+        WelcomePage.of(getContext()).loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openWithHKey();
+
+        // Find terrain by a table entry and inspect all open/forest
+        // illustrations.
+        help.typeSearch("tundra");
+        help.verifyTopicTitles("Terrain");
+        help.verifySelectedTopic("Terrain", "base output per worker");
+        help.verifyReferenceRows(14);
+        help.verifyTerrainIllustrations();
+        help.verifyReferenceProperties(
+                "colonizopediaTerrainProperties_GRASSLAND",
+                "Move cost: 1; defense: +0%", "Corn 4", "With forest",
+                "Move cost: 2; defense: +50%", "Lumber 6", "Fields: yes");
+        help.verifyReferenceProperties(
+                "colonizopediaTerrainProperties_MOUNTAIN",
+                "Move cost: 3; defense: +150%", "Silver 1", "Fields: no");
+        help.verifyReferenceProperties("colonizopediaTerrainProperties_ARCTIC",
+                "Base production: none");
+        help.captureDialog("colonizopediaReference", "r0269-terrain-en.png");
+        help.scrollReferenceToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.captureDialog("colonizopediaReference",
+                "r0269-terrain-end-en.png");
+
+        // Resource names are searchable; the legend uses map markers and actual
+        // reserves.
+        help.typeSearch("silver deposit");
+        help.verifyTopicTitles("Terrain bonuses");
+        help.verifyReferenceRows(12);
+        help.verifyResourceIllustrations();
+        help.verifyReferenceProperties("colonizopediaResourceProperties_SILVER",
+                "Silver +2", "Silver 100", "Grass land", "Mountains");
+        help.verifyReferenceProperties(
+                "colonizopediaResourceProperties_MIXED_MINERALS",
+                "Ore +2, Silver +2", "Ore 200, Silver 200");
+        help.verifyReferenceProperties(
+                "colonizopediaResourceProperties_FISHERY",
+                "Allowed terrain: Ocean, Lake", "Corn +2", "Does not deplete.");
+        help.captureDialog("colonizopediaReference", "r0269-bonuses-en.png");
+        help.scrollReferenceToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.captureDialog("colonizopediaReference",
+                "r0269-bonuses-end-en.png");
+        help.closeWithOk();
+        help.verifyGameStateUnchanged(before);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_czech_terrain_and_bonus_reference() throws Exception {
+        // Use the same player path in Czech, including accent-insensitive
+        // search.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openFromButton();
+        help.typeSearch("teren");
+        help.verifyTopicTitles(MOVEMENT_CZ, PRODUCTION_CZ, "Terén",
+                "Bonusy terénu");
+        help.selectTopicWithMouse("Terén");
+        help.verifyReferenceRows(14);
+        help.verifyTerrainIllustrations();
+        help.verifyReferenceProperties(
+                "colonizopediaTerrainProperties_GRASSLAND",
+                "Cena pohybu: 1; obrana: +0%", "Jídlo 4", "S lesem", "Dříví 6",
+                "Pole: ano");
+        help.captureDialog("colonizopediaReference", "r0269-terrain-cs.png");
+
+        // Search a localized bonus name without accents and inspect the
+        // translated legend.
+        help.typeSearch("stribrne");
+        help.verifyTopicTitles("Bonusy terénu");
+        help.verifyReferenceRows(12);
+        help.verifyResourceIllustrations();
+        help.verifyReferenceProperties("colonizopediaResourceProperties_SILVER",
+                "Stříbro +2", "Počáteční zásoba bonusu: Stříbro 100");
+        help.verifyReferenceProperties(
+                "colonizopediaResourceProperties_FISHERY",
+                "Povolený terén: Oceán, Jezero", "Jídlo +2", "Nevyčerpává se.");
+        help.captureDialog("colonizopediaReference", "r0269-bonuses-cs.png");
+        help.closeWithEscape();
+        help.verifyGameStateUnchanged(before);
+        help.verifyNextTurnEnabled();
     }
 }

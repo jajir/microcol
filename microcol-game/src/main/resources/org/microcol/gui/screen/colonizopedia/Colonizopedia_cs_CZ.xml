@@ -35,4 +35,24 @@
 	<entry key="topic_scoring_title">Statistiky a skóre</entry>
 	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a evropské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Kongres, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
 
+
+	<entry key="topic_terrain_title">Terén</entry>
+	<entry key="topic_terrain_body">Tabulka porovnává všechny druhy terénu. Vlevo je nezalesněné pole, vpravo les, pokud jej terén podporuje. Některé terény sdílejí obrázek; rozlišíte je podle názvu. Produkce je základní výnos jednoho pracovníka za tah před zdroji, úpravami, odborností a dalšími vlivy. Cena pohybu platí pro vstup na pole před započtením propojených cest či řek. Námořní trasy spojují mapu s Evropou; jezera jsou běžná voda pro plavbu a rybolov.</entry>
+	<entry key="topic_resources_title">Bonusy terénu</entry>
+	<entry key="topic_resources_body">Zvláštní zdroje poznáte podle stejných malých barevných značek jako na mapě. Tabulka uvádí každý zdroj a terény, na kterých jej hra dovoluje. Bonus zvyšuje základ příslušného výnosu před vlivy pracovníka a může zavést i výnos, který pole běžně nemá. Ložiska omezují dodatečnou těžbu zásobou: po vyčerpání zůstává běžná produkce. Obě zásoby smíšeného ložiska jsou nezávislé. Ostatní zdroje se nevyčerpávají. Obecní pozemky kolonie mají odlišné pravidlo: zdroj pomáhá pouze již existujícímu základnímu výnosu a výborný lesní porost jim nepomáhá.</entry>
+	<entry key="properties">Vlastnosti</entry>
+	<entry key="land">Pevnina</entry>
+	<entry key="water">Voda</entry>
+	<entry key="forest">S lesem (pravý obrázek):</entry>
+	<entry key="fields">Pole: %s</entry>
+	<entry key="yes">ano</entry>
+	<entry key="no">ne</entry>
+	<entry key="none">žádná</entry>
+	<entry key="movementDefense">Cena pohybu: %d; obrana: +%d%%</entry>
+	<entry key="production">Základní produkce: %s</entry>
+	<entry key="occurrence">Povolený terén: %s</entry>
+	<entry key="bonus">Bonus k základu: %s</entry>
+	<entry key="reserves">Počáteční zásoba bonusu: %s</entry>
+	<entry key="renewable">Nevyčerpává se.</entry>
+
 </properties>

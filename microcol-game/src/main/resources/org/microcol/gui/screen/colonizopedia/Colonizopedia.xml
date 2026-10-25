@@ -35,4 +35,24 @@
 	<entry key="topic_scoring_title">Statistics and score</entry>
 	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and European relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Congress parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
 
+
+	<entry key="topic_terrain_title">Terrain</entry>
+	<entry key="topic_terrain_body">Compare all terrain types below. Pictures show the open square on the left and its forest on the right, where supported. Some terrain types share artwork; use their names to distinguish them. Production is the base output per worker and turn, before resources, improvements, expertise and other modifiers. Movement is the cost to enter a square, before connected roads or rivers. Sea lanes connect to Europe; lakes are ordinary water for sailing and fishing.</entry>
+	<entry key="topic_resources_title">Terrain bonuses</entry>
+	<entry key="topic_resources_body">Special resources use the same small colored markers shown on the map. The table lists every resource and the terrain where the game permits it. The bonus increases the matching base output before worker modifiers and can introduce output on a square with no ordinary yield. Mineral reserves limit extra production: when exhausted, ordinary production remains. The two reserves in a mixed deposit are independent. Other resources do not deplete. Colony commons are different: a resource helps only an existing base output, and Prime timber does not help commons.</entry>
+	<entry key="properties">Properties</entry>
+	<entry key="land">Land</entry>
+	<entry key="water">Water</entry>
+	<entry key="forest">With forest (right picture):</entry>
+	<entry key="fields">Fields: %s</entry>
+	<entry key="yes">yes</entry>
+	<entry key="no">no</entry>
+	<entry key="none">none</entry>
+	<entry key="movementDefense">Move cost: %d; defense: +%d%%</entry>
+	<entry key="production">Base production: %s</entry>
+	<entry key="occurrence">Allowed terrain: %s</entry>
+	<entry key="bonus">Base output bonus: %s</entry>
+	<entry key="reserves">Initial bonus reserves: %s</entry>
+	<entry key="renewable">Does not deplete.</entry>
+
 </properties>
