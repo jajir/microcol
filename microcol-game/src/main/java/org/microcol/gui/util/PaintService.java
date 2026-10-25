@@ -117,7 +117,7 @@ public final class PaintService {
             final MapManager mapManager, final FontService fontService) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.mapManager = Preconditions.checkNotNull(mapManager);
-        this.colonyFont = fontService.getDefault(16);
+        this.colonyFont = fontService.getDefault(14);
     }
 
     /**
@@ -452,7 +452,7 @@ public final class PaintService {
      * name the band (circle content, triangle uneasy, square angry, diamond
      * hostile). Exclamation marks above it show the rate of alarm change.
      */
-    private static void paintAttitude(final GraphicsContext graphics,
+    private void paintAttitude(final GraphicsContext graphics,
             final Point point, final NativeRelationView view) {
         final double size = ATTITUDE_BADGE_SIZE;
         final double left = point.getX() + Tile.TILE_WIDTH_IN_PX - size - 2;
@@ -488,6 +488,7 @@ public final class PaintService {
         }
         final int marks = view.getExclamationMarks();
         if (marks > 0) {
+            graphics.setFont(colonyFont);
             graphics.setFill(MARKER_INK);
             graphics.fillText("!".repeat(marks), left, top - 2);
         }

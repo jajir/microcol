@@ -36,7 +36,11 @@ public class TC_21_F15_free_play_screen_navigation_test
         GamePage game = WelcomePage.of(getContext()).loadGame();
         EuropePortScreen europe = game.openEuroperPort();
         europe.verifyGold(10000);
+        MainScreenLayoutPage layout = new MainScreenLayoutPage(getContext());
+        layout.verifyStatusBar();
+        layout.saveEvidence("R-0267-status-Europe.png");
         game = europe.close();
+        layout.verifyStatusBar();
         // Repeat using E and Escape; the treasury must not change.
         europe = game.openEuroperPortByPressingKey();
         europe.verifyGold(10000);
@@ -84,7 +88,11 @@ public class TC_21_F15_free_play_screen_navigation_test
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
+        MainScreenLayoutPage layout = new MainScreenLayoutPage(getContext());
+        layout.verifyStatusBar();
+        layout.saveEvidence("R-0267-status-colony.png");
         game = colony.close();
+        layout.verifyStatusBar();
         // Reopen it and use Escape.
         game.openColonyAt(COLONY, "New Amsterdam")
                 .verifyColonyName("New Amsterdam");
@@ -214,8 +222,10 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.resize(1280, 850);
         layout.showContextMessage(english);
         layout.verifyLayout(english);
+        layout.verifyStatusBar();
+        layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
-        layout.saveEvidence("R-0265-main-English.png");
+        layout.saveEvidence("R-0267-main-English.png");
         new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
 
         // Change the actual language setting and return to the same saved game.
@@ -228,8 +238,10 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.resize(1000, 700);
         layout.showContextMessage(czech);
         layout.verifyLayout(czech);
+        layout.verifyStatusBar();
+        layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
-        layout.saveEvidence("R-0265-main-Czech-small.png");
+        layout.saveEvidence("R-0267-main-Czech-small.png");
         new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
     }
 }

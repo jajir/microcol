@@ -83,16 +83,19 @@ public final class TypographyPage extends AbstractScreen {
     }
 
     private static String expectedFace(final Node node) {
-        // Wooden buttons select Medium in WoodenButtons.css; other text uses
-        // the Regular face from the root in Typography.css.
+        // Main-screen buttons override the shared Medium face with Regular.
+        boolean woodenButton = false;
         Node current = node;
         while (current != null) {
+            if (current.getStyleClass().contains("game-screen")) {
+                return "Playpen Sans Regular";
+            }
             if (current.getStyleClass().contains("wooden-button")) {
-                return "Playpen Sans Medium";
+                woodenButton = true;
             }
             current = current.getParent();
         }
-        return "Playpen Sans Regular";
+        return woodenButton ? "Playpen Sans Medium" : "Playpen Sans Regular";
     }
 
     public void verifyTextSize(final String selector, final double expected) {
@@ -144,7 +147,7 @@ public final class TypographyPage extends AbstractScreen {
             assertEquals(14, label.getFont().getSize());
             assertEquals(expectedName, axis.getTickLabelFont().getName());
             assertEquals(14, axis.getTickLabelFont().getSize());
-            assertEquals("Playpen Sans Light",
+            assertEquals("Playpen Sans Regular",
                     getContext().getClassFromGuice(FontService.class)
                             .getDefault(14).getName());
         });
@@ -154,13 +157,13 @@ public final class TypographyPage extends AbstractScreen {
         getRobot().interact(() -> {
             final Font font = getContext().getClassFromGuice(FontService.class)
                     .getDefault(16);
-            assertEquals("Playpen Sans Light", font.getName());
+            assertEquals("Playpen Sans Regular", font.getName());
             assertEquals(16, font.getSize());
             final Canvas canvas = getNodeFinder().lookup(".colony-fields")
                     .queryAs(Parent.class).getChildrenUnmodifiable().stream()
                     .filter(Canvas.class::isInstance).map(Canvas.class::cast)
                     .findFirst().orElseThrow();
-            assertEquals("Playpen Sans Light",
+            assertEquals("Playpen Sans Regular",
                     canvas.getGraphicsContext2D().getFont().getName());
         });
     }

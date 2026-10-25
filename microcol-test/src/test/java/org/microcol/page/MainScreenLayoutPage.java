@@ -6,13 +6,21 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
 import org.testfx.util.WaitForAsyncUtils;
 import com.google.common.eventbus.EventBus;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /** Readability checks for the real map screen and its status fields. */
 public final class MainScreenLayoutPage extends AbstractScreen {
@@ -42,6 +50,72 @@ public final class MainScreenLayoutPage extends AbstractScreen {
     private Bounds bounds(final String id) {
         final Node n = node(id);
         return n.localToScene(n.getBoundsInLocal());
+    }
+
+    public void verifyStatusBar() {
+        getRobot().interact(() -> {
+            final Region bar = (Region) node("statusBar");
+            assertTrue(bar.getHeight() >= 72);
+            assertEquals(new Insets(12, 16, 12, 16), bar.getPadding());
+            assertEquals(Color.web("#FFF9EC"),
+                    bar.getBackground().getFills().get(0).getFill());
+            assertEquals(new BorderWidths(1, 0, 0, 0),
+                    bar.getBorder().getStrokes().get(0).getWidths());
+            assertTrue(bounds("statusBar")
+                    .getMaxY() <= bar.getScene().getHeight() + 1,
+                    "Status panel remains inside the scene");
+            for (String id : new String[] { "description", "labelGold" }) {
+                final Region field = (Region) node(id);
+                assertEquals(new BorderWidths(0, 1, 0, 0),
+                        field.getBorder().getStrokes().get(0).getWidths(), id);
+            }
+            final Region year = (Region) node("labelEra");
+            assertTrue(
+                    year.getBorder() == null
+                            || year.getBorder().getStrokes().stream()
+                                    .allMatch(stroke -> BorderWidths.EMPTY
+                                            .equals(stroke.getWidths())),
+                    "Year has no frame");
+            for (String id : new String[] { "statusBarLabel", "labelGold",
+                    "labelEra" }) {
+                final Label label = (Label) node(id);
+                assertEquals("Playpen Sans Regular", label.getFont().getName(),
+                        id);
+                assertEquals(14, label.getFont().getSize(), 0.01, id);
+                assertTrue(
+                        bounds(id).getMaxX() <= bounds("statusBar").getMaxX());
+                assertTrue(
+                        bounds(id).getMaxY() <= bounds("statusBar").getMaxY());
+            }
+            assertTrue(bounds("labelGold")
+                    .getMaxX() <= bounds("labelEra").getMinX() + 1);
+        });
+    }
+
+    public void verifyMainScreenTypography() {
+        getRobot().interact(() -> {
+            final Parent screen = getNodeFinder().lookup(".game-screen")
+                    .queryAs(Parent.class);
+            int checked = 0;
+            for (Node child : screen.lookupAll("*")) {
+                final Font font = child instanceof Labeled
+                        ? ((Labeled) child).getFont()
+                        : child instanceof Text ? ((Text) child).getFont()
+                                : null;
+                if (font != null && child.isVisible()) {
+                    assertEquals("Playpen Sans Regular", font.getName(),
+                            child.toString());
+                    assertEquals(14, font.getSize(), 0.01, child.toString());
+                    checked++;
+                }
+            }
+            assertTrue(checked > 0, "Inspect visible main-screen text");
+            final Font mapFont = getContext()
+                    .getClassFromGuice(GamePanelComponent.class).getCanvas()
+                    .getGraphicsContext2D().getFont();
+            assertEquals("Playpen Sans Regular", mapFont.getName());
+            assertEquals(14, mapFont.getSize(), 0.01);
+        });
     }
 
     /** Verify the agreed pigments in the actual rendered map, not a mockup. */

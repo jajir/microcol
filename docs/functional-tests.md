@@ -9588,3 +9588,53 @@ the supervisor. Evidence: `target/verification/run-ef7lmgv5/summary.json` and
 The changed executable sources/assets match the frozen source byte-for-byte;
 only documentation was completed afterward. Physical macOS/HiDPI display,
 remote CI and publication were not checked.
+
+
+## R-0267 shared status panel — 2026-10-25
+
+1. Scope: [R-0267](requirements/done/R-0267.md), UC-114/119. The shared footer uses
+   the same paper style on map, colony and Europe, a vertical separator between
+   gold and year, and no year frame. Main-screen live text and map captions use
+   Playpen Sans Regular 14. Shared canvas defaults now select Regular.
+2. Targeted selection: TC21 `TC_01_europe_click_and_keyboard_return`,
+   `TC_04_colony_click_and_escape_return`,
+   `TC_10_main_screen_panels_remain_readable_when_resized`, both TC85 typography
+   methods, and `PageVerificationContractTest`. Existing gold, turn, navigation,
+   palette and long English/Czech layout assertions remain intact. Screenshots
+   capture all three screens; the map is checked at 1280×850 and 1000×700.
+3. Source: `374737b1b69b5a37a5d9b83f8f801ab6d60f3fa0` plus the R-0267 working
+   changes. Targeted Docker/Xvfb run dispatched with a 600-second timeout;
+   completion directory `20261025T073552Z-36770b21e275`, supervisor PID 53684.
+   This first run finished in 97.176 s with eight checks: six passed and two
+   errored, no skips (`target/docker-ui/run-5xx9PM`). TC21's new font check cast
+   the canvas container to Canvas; it now uses the existing `GamePanelComponent`
+   accessor. TC85's older expectation still required Medium on main-screen
+   wooden buttons; it now honors the existing Regular override. Neither failure
+   changes a gameplay expectation. Original reports remain preserved.
+4. Visual inspection of the first run's Europe/colony screenshots confirms the
+   shared footer and the single separator without a year frame. Review also
+   made native-settlement exclamation marks explicitly use the same map font.
+   Repeat targeted run: `20261025T073810Z-b534173ec88f`, PID 54427, 600-second
+   timeout. It stopped after 18.236 s at compilation: the static attitude
+   painter could not access the selected instance font. Its sole caller is the
+   same paint-service instance; the private helper now belongs to that instance.
+   No tests ran in this attempt (`target/docker-ui/run-5Umm5J`).
+5. Third targeted run: `20261025T073932Z-796122c5284d`, PID 54847, 600-second
+   timeout. Passed in 82.796 s: three TC21 scenarios, two TC85 scenarios and
+   three source-contract checks, **8 tests, zero failures/errors/skips**, verified
+   from all three XML reports in `target/docker-ui/run-EMumsf`.
+6. Visual review of `R-0267-main-English.png` and
+   `R-0267-main-Czech-small.png` confirms readable Regular 14 captions and
+   controls, wrapped Czech description, unchanged separated gold/year and no
+   year frame. The Europe and colony screenshots show the same footer.
+7. The five changed Java files passed the shared Eclipse formatter with code
+   tokens preserved and idempotent output. Mandatory five-minute smoke gate:
+   completion `20261025T074120Z-9097dbcf52f7`, PID 55553, outer watchdog 420 s;
+   **passed in 270.774 s**, within the 300-second budget. Reports in
+   `target/verification/run-rz95gb50` contain **4,723 model/JUnit checks and 19
+   UI/support checks (including all ten fixed smoke methods), 4,742 total,
+   zero failures/errors/skips**. All 345 XML reports were parsed; the seven
+   changed runtime/test sources match the checked snapshot byte for byte.
+8. Nine documentation consistency tests and the strict MkDocs build passed.
+   Final review preserves unrelated R-0224/R-0225/backlog edits. This is local
+   acceptance only; remote regression/publication is not being inspected.

@@ -260,6 +260,17 @@ renderování 2× od dosud neprovedené kontroly na fyzickém HiDPI displeji.
 
 ### Hlavní herní obrazovka a spodní panel
 
+**Upřesnění 25. října 2026, [R-0267](requirements/done/R-0267.md):** spodní panel
+má stejný vzhled na mapě, v kolonii i v Evropě. Sdílený styl v `MicroCol.css`
+určuje krémové pozadí, minimální výšku 72 px, odsazení 12/16 px a Playpen Sans
+Regular 14. Rok nemá vlastní rámeček; od zlata jej odděluje jediná svislá
+čára. Oddělovač popisu zůstává. Pravidlo Regular 14 platí také pro názvy
+kolonií a značky činností vykreslované přímo do mapy. Sdílený výchozí font
+pláten je Regular; velikost produkčních údajů v kolonii se touto změnou nemění.
+Přechody mezi obrazovkami, jejich zavření a herní hodnoty zůstávají stejné.
+Skutečné výsledky jsou vedené v [evidenci ověření](functional-tests.md#r-0267-shared-status-panel-2026-10-25).
+
+
 **Dohoda 24. října 2026, [R-0262](requirements/done/R-0262.md):** hlavní obrazovka
 s mapou má působit jako skutečně jednotná ručně kreslená a vybarvená obrazovka
 podle obou dodaných návrhů. Implementace hlavní obrazovky nyní sjednocuje

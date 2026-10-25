@@ -18,25 +18,42 @@
 }
 
 
-#statusBar #description{
- 	-fx-border-style: solid inside;
- 	-fx-border-color: lightgrey ;
- 	-fx-border-width: 0.0px 1.0px 0.0px 0.0px;
+#statusBar {
+    -fx-background-color: #FFF9EC;
+    -fx-min-height: 72;
+    -fx-padding: 12 16 12 16;
+    -fx-alignment: center-left;
+    -fx-border-color: #292824;
+    -fx-border-width: 1 0 0 0;
 }
 
-#statusBar #description .label{
-	-fx-padding: 0 5px 0 5px;
+#statusBar .label {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
 }
 
-#statusBar #labelGold{
-	-fx-padding: 0 5px 0 5px;
- 	-fx-border-style: solid inside;
- 	-fx-border-color: lightgrey ;
- 	-fx-border-width: 0.0px 1.0px 0.0px 0.0px;
+#statusBar #description {
+    -fx-alignment: center-left;
+    -fx-border-style: solid inside;
+    -fx-border-color: #746E60;
+    -fx-border-width: 0 1 0 0;
 }
 
-#statusBar #labelEra{
-	-fx-padding: 0 5px 0 5px;
+#statusBar #description .label {
+    -fx-padding: 0 16 0 0;
+}
+
+#statusBar #labelGold {
+    -fx-padding: 0 16 0 16;
+    -fx-border-style: solid inside;
+    -fx-border-color: #746E60;
+    -fx-border-width: 0 1 0 0;
+}
+
+#statusBar #labelEra {
+    -fx-padding: 0 16 0 16;
+    -fx-border-width: 0;
 }
 
 .label {
