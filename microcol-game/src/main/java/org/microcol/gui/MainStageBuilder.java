@@ -14,10 +14,14 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.geometry.Rectangle2D;
+import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public final class MainStageBuilder {
 
@@ -54,6 +58,10 @@ public final class MainStageBuilder {
      * @param primaryStage required primary stage
      */
     public void buildPrimaryStage(final Stage primaryStage) {
+        if (Platform.isSupported(ConditionalFeature.UNIFIED_WINDOW)
+                && primaryStage.getStyle() != StageStyle.UNIFIED) {
+            primaryStage.initStyle(StageStyle.UNIFIED);
+        }
         primaryStage.setTitle(i18n.get(Loc.gameTitle));
         primaryStage.setOnCloseRequest(event -> {
             eventBus.post(new QuitGameEvent());
@@ -95,6 +103,7 @@ public final class MainStageBuilder {
         }
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
+        scene.setFill(Color.web("#FFF9EC"));
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainPanelView.getContent());
 

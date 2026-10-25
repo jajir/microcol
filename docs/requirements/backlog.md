@@ -609,3 +609,12 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Unit help reference — 2026-10-25
 
 1. [R-0284](done/R-0284.md) adds Units / Jednotky to the existing illustrated help under A03. All 35 current unit types share localized names, existing artwork, model-derived movement, transport, purchase and expertise properties, plus equipment and role explanations. Local acceptance is complete; [evidence](../functional-tests.md#r-0284-unit-help-2026-10-25) records targeted, visual and mandatory checks. Publication is unverified.
+
+## macOS title bar — 2026-10-25
+
+1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. Implementation and local checks are in progress; native visual acceptance is pending.
+
+
+## One-row game toolbar — 2026-10-25
+
+1. [R-0283](done/R-0283.md) keeps the map toolbar in one row under A03: all names disappear together when the localized actions no longer fit, and return when space becomes available. The icon row sets the minimum usable window width. Local acceptance passed 14 targeted checks, screenshot review and the 4,748-check mandatory gate; see the [evidence](../functional-tests.md#r-0283-one-row-toolbar-2026-10-25).

@@ -856,3 +856,7 @@ Escape. Základní parametry typu jsou oddělené od účinků výstroje a bojov
 nedostupný nákup není označen cenou nula. Dlouhý seznam se zalamuje a roluje.
 Automatizované kontroly a vizuální přejímku eviduje
 [funkční záznam](functional-tests.md#r-0284-unit-help-2026-10-25); nejde o studii hráčů.
+
+## Šířka herního menu — 2026-10-25
+
+Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna dál vidět celý horní řádek akcí a co největší část mapy. Názvy se automaticky skryjí všechny současně před zalomením a po rozšíření se vrátí; není potřeba nic přepínat ani potvrzovat. Význam ikon dál vysvětluje stávající nápověda při najetí a zaměření klávesnicí, názvy pro asistivní technologie zůstávají. Výběr kolonie, zrušení menu a výsledky příkazů fungují stejně. Minimum šířky okna chrání dostupnost všech ikon. Jde o dohodnuté chování a místně ověřenou implementaci, nikoli pozorování hráčů; [ověření](functional-tests.md#r-0283-one-row-toolbar-2026-10-25) je samostatné.

@@ -2,8 +2,10 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.AccessibleAttribute;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.MenuButton;
@@ -71,7 +73,21 @@ public final class GameToolbarPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyControls(final boolean czech, final boolean wrapped) {
+    public double getCurrentRowWindowWidth() throws Exception {
+        return WaitForAsyncUtils.asyncFx(() -> {
+            final FlowPane bar = getNodeFinder().lookup(".buttonPanel")
+                    .queryAs(FlowPane.class);
+            final List<Node> controls = bar.getChildren().stream()
+                    .filter(Node::isManaged).collect(Collectors.toList());
+            return controls.stream()
+                    .mapToDouble(node -> node.getBoundsInParent().getWidth())
+                    .sum() + (controls.size() - 1) * bar.getHgap()
+                    + bar.getInsets().getLeft() + bar.getInsets().getRight()
+                    + getPrimaryStage().getWidth() - bar.getScene().getWidth();
+        }).get();
+    }
+
+    public void verifyControls(final boolean czech, final boolean iconsOnly) {
         getRobot().interact(() -> {
             final String[] labels = czech
                     ? new String[] { "Kolonie", "Kongres", "Vycentrovat",
@@ -82,8 +98,6 @@ public final class GameToolbarPage extends AbstractScreen {
                             "Next turn", "Retire", "Leave" };
             final FlowPane bar = getNodeFinder().lookup(".buttonPanel")
                     .queryAs(FlowPane.class);
-            final double firstY = getLabeledById("coloniesMenu").getLayoutY();
-            boolean anotherRow = false;
             for (int i = 0; i < IDS.size(); i++) {
                 final Labeled control = getLabeledById(IDS.get(i));
                 assertEquals(labels[i], control.getText(), control.getId());
@@ -93,23 +107,40 @@ public final class GameToolbarPage extends AbstractScreen {
                 assertTrue(control.getGraphic() instanceof ImageView);
                 assertTrue(control.getStyleClass()
                         .contains("game-toolbar-control"));
-                if (!control.isManaged()) {
+            }
+            final double rowY = getLabeledById("coloniesMenu")
+                    .getBoundsInParent().getCenterY();
+            for (final Node node : bar.getChildren()) {
+                if (!node.isManaged()) {
                     continue;
                 }
-                assertEquals(ContentDisplay.LEFT, control.getContentDisplay(),
-                        control.getId());
-                final Bounds iconBounds = control.getGraphic()
-                        .localToScene(control.getGraphic().getBoundsInLocal());
+                final Labeled control = (Labeled) node;
+                assertEquals(
+                        iconsOnly ? ContentDisplay.GRAPHIC_ONLY
+                                : ContentDisplay.LEFT,
+                        control.getContentDisplay(), control.getId());
+                assertEquals(control.getText(),
+                        control.queryAccessibleAttribute(
+                                AccessibleAttribute.TEXT),
+                        control.getId() + " keeps its accessible name");
                 final Node text = control.lookup(".text");
-                final Bounds textBounds = text
-                        .localToScene(text.getBoundsInLocal());
-                assertTrue(iconBounds.getMaxX() < textBounds.getMinX(),
-                        control.getId() + " name must follow its icon");
-                assertEquals(iconBounds.getCenterY(), textBounds.getCenterY(),
-                        2,
-                        control.getId() + " icon and name must share one row");
-                assertTrue(control.getHeight() <= 64,
-                        control.getId() + " must keep the toolbar compact");
+                if (iconsOnly) {
+                    assertTrue(text == null || !text.isVisible(),
+                            control.getId() + " hides its name");
+                } else {
+                    final Bounds iconBounds = control.getGraphic().localToScene(
+                            control.getGraphic().getBoundsInLocal());
+                    final Bounds textBounds = text
+                            .localToScene(text.getBoundsInLocal());
+                    assertTrue(iconBounds.getMaxX() < textBounds.getMinX(),
+                            control.getId() + " name must follow its icon");
+                    assertEquals(iconBounds.getCenterY(),
+                            textBounds.getCenterY(), 2, control.getId()
+                                    + " icon and name must share one row");
+                }
+                assertEquals(rowY, control.getBoundsInParent().getCenterY(), 1,
+                        control.getId() + " remains in the only row");
+                assertTrue(control.getHeight() <= 64, control.getId());
                 assertTrue(control.getWidth() + 1 >= control.prefWidth(-1),
                         control.getId());
                 final Bounds bounds = control
@@ -119,9 +150,7 @@ public final class GameToolbarPage extends AbstractScreen {
                         control.getId());
                 assertTrue(bounds.getMaxY() <= bar
                         .localToScene(bar.getBoundsInLocal()).getMaxY() + 1);
-                anotherRow |= Math.abs(control.getLayoutY() - firstY) > 20;
             }
-            assertEquals(wrapped, anotherRow);
             final Node map = getNodeFinder().lookup("#canvas").query();
             assertTrue(map.localToScene(map.getBoundsInLocal()).getMinY() >= bar
                     .localToScene(bar.getBoundsInLocal()).getMaxY());

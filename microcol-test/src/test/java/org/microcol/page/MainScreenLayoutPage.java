@@ -21,11 +21,24 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /** Readability checks for the real map screen and its status fields. */
 public final class MainScreenLayoutPage extends AbstractScreen {
     public MainScreenLayoutPage(final TestContext context) {
         super(context);
+    }
+
+    public void verifyPaperWindowConfiguration(final StageStyle expectedStyle) {
+        getRobot().interact(() -> {
+            final Stage stage = getContext().getPrimaryStage();
+            assertEquals(Color.web("#FFF9EC"), stage.getScene().getFill());
+            assertEquals(expectedStyle, stage.getStyle());
+            assertEquals("MicroCol", stage.getTitle());
+            assertTrue(stage.isResizable());
+            assertTrue(stage.isShowing());
+        });
     }
 
     public void resize(final double width, final double height) {

@@ -10,6 +10,8 @@ import org.microcol.model.UnitType;
 import org.microcol.page.DialogMessagePage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.GameToolbarPage;
+import org.microcol.page.MainScreenLayoutPage;
 import org.microcol.page.IndependencePage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -178,6 +180,14 @@ public class TC_81_F73_declare_independence_support_test
         // nationally.
         GamePage gamePage = prepareUnequalColonies(
                 "independence-f73-muster.microcol");
+        // The conditional action participates in the same one-row layout.
+        final MainScreenLayoutPage layout = new MainScreenLayoutPage(
+                getContext());
+        final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        layout.resize(1600, 900);
+        toolbar.verifyControls(false, false);
+        layout.resize(900, 900);
+        toolbar.verifyControls(false, true);
         final IndependencePage independence = new IndependencePage(
                 getContext());
         independence.verifyDeclareButtonVisible(true);

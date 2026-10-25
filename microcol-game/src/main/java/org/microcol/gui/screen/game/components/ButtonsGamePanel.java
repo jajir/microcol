@@ -28,6 +28,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import java.util.stream.Collectors;
 import javafx.scene.Node;
 import javafx.scene.AccessibleAction;
 import java.util.function.Consumer;
@@ -133,6 +137,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final EventBus toolbarEvents;
     private final Map<Labeled, Buttons> toolbarLabels = new LinkedHashMap<>();
     private final Map<Labeled, Buttons> toolbarExplanations = new LinkedHashMap<>();
+    private boolean updatingToolbarLayout;
 
     private final Button buttonCongress = new Button();
 
@@ -377,6 +382,70 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         addToolbarControl(buttonDeclareIndependence,
                 Buttons.toolbarIndependence, Buttons.buttonDeclareIndependence);
         updateToolbarSeason(false);
+        getButtonPanel().widthProperty()
+                .addListener(observable -> updateToolbarLayout());
+        getButtonPanel().sceneProperty()
+                .addListener(observable -> updateToolbarLayout());
+        getButtonPanel().getChildren().addListener(
+                (ListChangeListener<Node>) change -> updateToolbarLayout());
+        toolbarLabels.keySet().forEach(control -> {
+            control.textProperty()
+                    .addListener(observable -> updateToolbarLayout());
+            control.fontProperty()
+                    .addListener(observable -> updateToolbarLayout());
+            control.managedProperty()
+                    .addListener(observable -> updateToolbarLayout());
+        });
+    }
+
+    private void updateToolbarLayout() {
+        if (updatingToolbarLayout || getButtonPanel().getScene() == null
+                || getButtonPanel().getWidth() <= 0) {
+            return;
+        }
+        updatingToolbarLayout = true;
+        try {
+            getButtonPanel().applyCss();
+            toolbarLabels.keySet().forEach(
+                    control -> control.setContentDisplay(ContentDisplay.LEFT));
+            final double namedWidth = toolbarPreferredWidth();
+            toolbarLabels.keySet().forEach(control -> control
+                    .setContentDisplay(ContentDisplay.GRAPHIC_ONLY));
+            final double iconWidth = toolbarPreferredWidth();
+            if (getButtonPanel().getWidth() >= namedWidth) {
+                toolbarLabels.keySet().forEach(control -> control
+                        .setContentDisplay(ContentDisplay.LEFT));
+            }
+            final Window window = getButtonPanel().getScene().getWindow();
+            if (window instanceof Stage) {
+                final Stage stage = (Stage) window;
+                final double borders = Math.max(0,
+                        stage.getWidth() - stage.getScene().getWidth());
+                stage.setMinWidth(Math.max(stage.getMinWidth(),
+                        Math.ceil(iconWidth + borders)));
+                if (stage.getWidth() < stage.getMinWidth()) {
+                    stage.setWidth(stage.getMinWidth());
+                }
+            }
+        } finally {
+            updatingToolbarLayout = false;
+        }
+    }
+
+    private double toolbarPreferredWidth() {
+        final List<Node> controls = getButtonPanel().getChildren().stream()
+                .filter(Node::isManaged).collect(Collectors.toList());
+        return getButtonPanel().getInsets().getLeft()
+                + getButtonPanel().getInsets().getRight()
+                + Math.max(0, controls.size() - 1)
+                        * getButtonPanel().getHgap()
+                + controls.stream()
+                        .mapToDouble(
+                                control -> Math
+                                        .ceil(Math.max(control.minWidth(-1),
+                                                Math.min(control.prefWidth(-1),
+                                                        control.maxWidth(-1)))))
+                        .sum();
     }
 
     private void addToolbarControl(final Labeled control, final Buttons label,
@@ -389,6 +458,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         control.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         control.setContentDisplay(ContentDisplay.LEFT);
         control.setText(currentI18n.get(label));
+        control.accessibleTextProperty().bind(control.textProperty());
         final ImageView icon = new ImageView();
         icon.setFitWidth(32);
         icon.setFitHeight(32);

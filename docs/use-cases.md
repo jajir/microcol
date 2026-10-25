@@ -961,3 +961,11 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 ### Řidší kresba terénu — R-0277
 
 UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a řídké kresby krajiny, postupně se měnící voda a zachování herních atributů. `TC_80_F72/TC_04` ověřuje skutečné vykreslení, posun a Continue; `TC_100_F91/TC_06–TC_07` náhledy a hledání, `TC_91_F82` bonusy, produkci a mlhu. Výsledky uvádí [funkční evidence](functional-tests.md#r-0277-sparse-terrain-2026-10-25).
+
+### UC-114/115/119: titulek okna macOS — 2026-10-25
+
+[R-0281](requirements/R-0281.md) sjednocuje barvu nativního titulku s herním pozadím. TC188/F221 ověřuje konfiguraci okna při přechodu mezi úvodním menu, nastavením, hrou a Continue. Vzhled a systémové ovládání vyžadují samostatnou kontrolu na macOS; [evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25) zatím nepotvrzuje přejímku.
+
+### UC-114/115/119: menu vždy v jednom řádku — 2026-10-25
+
+[R-0283](requirements/done/R-0283.md) nahrazuje zalamování herního menu automatickým skrytím všech názvů při úzkém okně. TC188 zachovává původní herní kontroly a přidává změny šířky, EN/CZ, přístupné názvy a ovládání bez viditelných textů; TC81/04 pokrývá podmíněnou nezávislost. Aktuální stav přejímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).

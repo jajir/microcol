@@ -15,12 +15,20 @@ import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
 
 /** Horizontal labels, freehand frames, seasonal art and colony navigation. */
 @ExtendWith(ApplicationExtension.class)
 public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
+    private StageStyle expectedWindowStyle;
+
     @Start
     private void start(final Stage stage) throws Exception {
+        expectedWindowStyle = Platform.isSupported(
+                ConditionalFeature.UNIFIED_WINDOW) ? StageStyle.UNIFIED
+                        : stage.getStyle();
         initialize(stage, getClass(),
                 new File("src/test/scenarios/F221-game-toolbar.microcol"));
     }
@@ -28,23 +36,43 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_labels_focus_seasons_and_continue() throws Exception {
+        // The native window keeps its paper fill through screen changes.
+        final MainScreenLayoutPage layout = new MainScreenLayoutPage(
+                getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         // Read all names and discover actions by hover and keyboard focus.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
-        final MainScreenLayoutPage layout = new MainScreenLayoutPage(
-                getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         layout.resize(1200, 900);
         toolbar.verifyControls(false, false);
+        final double namedWidth = toolbar.getCurrentRowWindowWidth();
+        // Crossing the measured boundary hides all names together and restores
+        // them, with no second row or oscillation on another layout pulse.
+        layout.resize(namedWidth - 2, 900);
+        toolbar.verifyControls(false, true);
+        layout.showContextMessage("Resize boundary");
+        toolbar.verifyControls(false, true);
+        layout.resize(namedWidth + 2, 900);
+        toolbar.verifyControls(false, false);
+        layout.resize(900, 900);
+        toolbar.verifyControls(false, true);
         toolbar.verifySeason(Season.autumn, 0xff71864b);
         toolbar.hover("europe");
         toolbar.verifyExplanation("Europe port. (E)", null);
         toolbar.focusCenterWithTab();
         toolbar.verifyExplanation("Find focused place. (C)", "center");
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-compact-keyboard-focus.png");
+        layout.saveEvidence("toolbar-one-row-keyboard-focus.png");
         toolbar.activateFocusedButton();
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-compact-summer.png");
+        layout.saveEvidence("toolbar-one-row-icons.png");
+        // Even an extreme resize leaves every icon accessible in one row.
+        layout.resize(300, 900);
+        toolbar.verifyControls(false, true);
+        layout.resize(1200, 900);
+        toolbar.verifyControls(false, false);
+        layout.saveEvidence("toolbar-one-row-labels.png");
 
         // A real turn changes only the accent to winter blue; Continue keeps
         // it.
@@ -52,7 +80,9 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.verifySeason(Season.winter, 0xff568b9b);
         layout.saveEvidence("toolbar-compact-winter.png");
         game.exitToMenu();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         game = new FreePlayAuditPage(getContext()).continueGame();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         toolbar.verifySeason(Season.winter, 0xff568b9b);
         game.nextTurnAndCloseDialogs();
         toolbar.verifySeason(Season.spring, 0xff71864b);
@@ -64,10 +94,12 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         // Start an ordinary annual game in Czech; all names fit a narrow
         // window.
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
-        settings.setCzechLanguage();
-        settings.goBack().startFreeGame();
         final MainScreenLayoutPage layout = new MainScreenLayoutPage(
                 getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        settings.setCzechLanguage();
+        settings.goBack().startFreeGame();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         layout.resize(900, 700);
         toolbar.verifyControls(true, true);
@@ -75,7 +107,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.hover("coloniesMenu");
         toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
                 null);
-        layout.saveEvidence("toolbar-compact-czech-narrow.png");
+        layout.saveEvidence("toolbar-one-row-czech.png");
 
         // Empty navigation explains itself and Escape leaves the game
         // untouched.
@@ -84,6 +116,10 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.dismissColonies(false);
         toolbar.verifyColonies(false, true, "Zatím nemáte žádnou kolonii");
         toolbar.verifySeason(null, 0xff71864b);
+        layout.resize(1500, 700);
+        toolbar.verifyControls(true, false);
+        layout.resize(900, 700);
+        toolbar.verifyControls(true, true);
     }
 
     @Test
@@ -92,6 +128,8 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         // The styled dropdown lists real owned colonies; outside click cancels.
         WelcomePage.of(getContext()).loadGame();
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        new MainScreenLayoutPage(getContext()).resize(900, 700);
+        toolbar.verifyControls(false, true);
         toolbar.openColoniesWithKeyboard();
         toolbar.verifyColonies(true, false, "New Amsterdam");
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(

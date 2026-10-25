@@ -1170,3 +1170,11 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 
 1. Dne 25. října 2026 uživatel schválil kompaktní výtvarný směr kolonií a požádal o další srovnání jednoho, dvou a tří domků. Výslovně dovolil mírný přesah přes 45px políčko; původní požadavek úplného vměstnání tedy již není závazný. Zůstává jméno bez rámečku, národní vlajka, čitelná perová linka a nezávislé rozlišení palisády, fortu a fortress.
 2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Konkrétní sestava, číselný limit přesahu ani populační hranice nejsou vybrané pro implementaci. Podklady vlastní [R-0280](requirements/R-0280.md); jde o dokumentační návrhy, nikoli současné vykreslení hry.
+
+## Titulkový pruh macOS — 2026-10-25
+
+[R-0281](requirements/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Skutečný vzhled na Macu zatím není ověřen; stav kontrol vede [funkční evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25).
+
+## Jednořádkové horní menu — 2026-10-25
+
+[R-0283](requirements/done/R-0283.md) mění dohodu o zalamování herního menu: při nedostatku místa se všechny názvy současně skryjí a po rozšíření zase zobrazí. Ikony, rámečky, mezery i šipka kolonií zůstávají. Rozhoduje skutečná šířka přeložených názvů a dostupných akcí. Nejmenší šířka okna pojme celý řádek ikon. Implementace je místně ověřená; výsledky a snímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
