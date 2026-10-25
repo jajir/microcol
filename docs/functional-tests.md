@@ -9993,3 +9993,57 @@ remote CI and publication were not checked.
     shared formatter without further edits; executable source and resource
     hashes still match the accepted gate manifest. Final diff review excludes
     unrelated graphics proposals and the new R-0274 analysis from this commit.
+
+## R-0275 Control-click unit context — 2026-10-25
+
+1. Base revision `98c8880555d030518cbc0bcc8e5112f50ab64606`. The user reported
+   that macOS Control + left click did not open the map unit menu. R-0272's
+   mouse tests sent only `SECONDARY`; its Linux acceptance did not cover this
+   gesture. The listener now recognizes Control-primary and platform popup
+   triggers before ordinary primary actions, and retains the context gesture
+   through modifier release and dragging. No model, save or command rule changes.
+2. New TC11_10 checks a ship in port without colony entry, unchanged movement,
+   dismissal and subsequent normal left-click entry. TC11_11 checks a ship at
+   sea, preview cancellation, Control released before primary release and an
+   empty square without movement loss. Complete TC11 retains right click,
+   right dragging, keyboard, localization and turn-state coverage. Verification
+   uses real TestFX Control/primary input under Docker/Xvfb; native macOS
+   delivery is a separate check and is not claimed by this evidence.
+3. Targeted Docker verification dispatched as `20261025T105421Z-6e41151fda9d`
+   (supervisor PID 97149, 600-second timeout), selecting complete
+   `TC_11_F11_skip_to_next_unit_test` and `PageVerificationContractTest`.
+   The three changed Java files passed the shared formatter with exact
+   token preservation and idempotence. Results remain pending.
+4. Targeted verification passed in 116.452 seconds. Fresh XML in
+   `target/docker-ui/run-bIJ5FB` contains **11 TC11 UI scenarios and 3 page
+   source-contract tests**, zero failures, errors or skips; names match the
+   complete requested selection. Both new Control-primary scenarios passed,
+   as did existing right-click, panning, keyboard, Czech layout and turn-state
+   checks. The three executable source hashes are unchanged since dispatch.
+5. Mandatory pre-commit `verify --smoke` dispatched as
+   `20261025T105644Z-5ae3a33b0d58` (PID 97562). The total local acceptance
+   budget remains 300 seconds; the outer 420-second watchdog allows cleanup
+   and notification. Selection is all fast model/JUnit tests, the fixed 10 UI
+   smoke cases and all non-`TC_` support tests. Results remain pending.
+6. Review of the [JavaFX 17 macOS event adapter](https://github.com/openjdk/jfx17u/blob/master/modules/javafx.graphics/src/main/native-glass/mac/GlassViewDelegate.m)
+   confirms that Control-left remains the primary button and marks the press
+   as a popup trigger; `GlassView3D` forwards both press and release. The new
+   listener covers both signals before primary actions and retains its press
+   state if Control is released first. This is source inspection, not a native
+   macOS UI run. Review also checked right dragging, cancellation before model
+   mutation, empty/foreign squares and unchanged turn-state guards.
+7. Mandatory local acceptance passed in `target/verification/run-o6o_cl4a`:
+   **4,744 tests across 346 suites — 4,723 model/JUnit, 10 fixed UI smoke and
+   11 support tests; zero failures, errors or skips**. The gate took
+   **294.102 seconds**, within the 300-second budget (completion runner:
+   296.958 seconds). Its manifest records base
+   `98c8880555d030518cbc0bcc8e5112f50ab64606` plus these changes; all three
+   changed executable files still match the manifest and targeted-run hashes.
+   This closes R-0275 locally. Remote regression and distribution publication
+   were not inspected, and native macOS UI execution remains unverified.
+8. Final review retained existing primary input, Alt-focus, keyboard access,
+   right-button panning and command/model ownership. After moving the analysis
+   to `requirements/done/R-0275.md` and repairing its links, nine documentation
+   consistency tests and strict MkDocs passed. The shared formatter checked
+   all three Java files without further edits. The unrelated R-0274 analysis
+   remains outside this change.

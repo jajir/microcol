@@ -938,3 +938,10 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
    and empty squares; TC11_09 covers a ship at sea. Existing command assertions
    remain in their scenarios, with page objects using the map menu. Actual
    execution and acceptance belong to the [functional evidence](functional-tests.md#r-0272-map-unit-context-2026-10-25).
+3. [R-0275](requirements/done/R-0275.md) adds Control-primary input to the same
+   map context: `TC_11_F11_skip_to_next_unit_test` methods
+   `TC_10_control_click_in_port_opens_orders_instead_of_the_colony` and
+   `TC_11_control_click_cancels_preview_and_survives_modifier_release` cover
+   the port/left-click distinction, sea preview cancellation, early Control
+   release and empty-square rejection. State and movement assertions remain
+   explicit. Results belong to the [Control-click evidence](functional-tests.md#r-0275-control-click-unit-context-2026-10-25).

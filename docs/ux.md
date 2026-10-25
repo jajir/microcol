@@ -803,9 +803,9 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    přehledy, navigaci, ukončení tahu a celopartijní akce. Pravý panel je pouze
    informační: ukazuje jednotky, pohyb, náklad a stav cesty; neobsahuje tlačítko
    Akce ani výběr jednotky kliknutím na kartu.
-2. Pravé kliknutí na vlastní jednotku v mapě otevře její příkazy u místa
-   kliknutí. Pokud je na políčku více vlastních jednotek, jejich výběr je
-   součástí této nabídky. Prázdné políčko ani cizí jednotka vlastní příkazy
+2. Pravé kliknutí nebo Ctrl + levé kliknutí na vlastní jednotku v mapě
+   otevře její příkazy u místa kliknutí. Pokud je na políčku více vlastních
+   jednotek, jejich výběr je součástí této nabídky. Prázdné políčko ani cizí jednotka vlastní příkazy
    nenabízejí. Při zaměřené mapě vyvolá nabídku vybrané jednotky také Shift+F10
    nebo klávesa kontextové nabídky.
 3. Na políčku kolonie levé kliknutí nadále otevře město; pravé kliknutí otevře
@@ -815,6 +815,9 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    a Escape k zavření. Mimo ni zůstávají původní zkratky: Tab vybere další
    jednotku, mezerník vyčerpá její pohyb, šipka Další tah nahoře ukončí tah hráče.
    Nedostupné relevantní příkazy mají vysvětlení a původní potvrzovací dialogy.
-5. Skutečné kontroly zaznamenává [funkční evidence R-0272](functional-tests.md#r-0272-map-unit-context-2026-10-25).
+5. Podporu Ctrl + levého kliknutí doplňuje [R-0275](requirements/done/R-0275.md).
+   Rozpoznává se před běžnou akcí levého tlačítka, také při uvolnění Ctrl
+   před tlačítkem myši. Alt + kliknutí zachovává plynulé zaměření políčka.
+6. Skutečné kontroly zaznamenává [funkční evidence R-0272](functional-tests.md#r-0272-map-unit-context-2026-10-25).
    Jde o implementační pravidlo, nikoli pozorování hráčů; historické výsledky
    R-0270 zůstávají zachované.

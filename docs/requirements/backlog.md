@@ -178,6 +178,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0264](done/R-0264.md) | Exempt documentation-only commits from local game tests | Done; workflow agreement only | User instruction, 2026-10-24; documentation checks and strict MkDocs remain required |
 | [R-0270](done/R-0270.md) | Separate game-wide top-bar controls from unit commands | Done; local acceptance | User selected implementation, 2026-10-25; global controls retained; original card access superseded by [R-0272](done/R-0272.md) |
 | [R-0272](done/R-0272.md) | Open unit commands directly on the map; keep the side panel informational | Done; local acceptance | User correction and implementation request, 2026-10-25; right-click unit/port versus left-click colony |
+| [R-0275](done/R-0275.md) | Open map unit commands with Control-click | Done; local acceptance | User requested macOS Control-primary support and regression coverage, 2026-10-25 |
 | [R-0271](done/R-0271.md) | Draw consistent context menus with distinct shortcut keys | Done; local acceptance | User request, 2026-10-25; separate action labels and actual shortcuts, preserving current actions |
 | [R-0207](deferred/R-0207.md) | Keep the opening tutorial accurate for free play | Deferred by user, 2026-10-19 | SUPPORT-004; existing guided instructions credited |
 | [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |

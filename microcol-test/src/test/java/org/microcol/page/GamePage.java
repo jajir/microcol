@@ -123,6 +123,23 @@ public class GamePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void controlClickUnitAt(final Location location,
+            final boolean releaseControlFirst) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().moveTo(point.getX(), point.getY()).press(KeyCode.CONTROL);
+        try {
+            getRobot().press(MouseButton.PRIMARY);
+            if (releaseControlFirst) {
+                getRobot().release(KeyCode.CONTROL);
+            }
+            getRobot().release(MouseButton.PRIMARY);
+        } finally {
+            getRobot().release(KeyCode.CONTROL);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void panFromTile(final Location location) {
         closeUnitActions();
         final javafx.geometry.Point2D start = screenPoint(location);

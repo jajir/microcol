@@ -359,4 +359,55 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         turns.verifyUnitAndMoveMode(3, ship, false);
     }
 
+    @Test
+    @Tag("local")
+    void TC_10_control_click_in_port_opens_orders_instead_of_the_colony()
+            throws Exception {
+        // Control-primary uses the same ship menu without entering Delft.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        game.controlClickUnitAt(COLONY_LOCATION, false);
+        orders.verifyMenuVisible(true);
+        orders.verifyInformationOnly();
+        orders.verifySelectedUnit(3);
+        orders.verifyMovement(3, 1, 1, 197);
+        orders.dismissActions();
+
+        // The next ordinary primary click still opens the colony.
+        game.openColonyAt(COLONY_LOCATION, "Delft").verifyColonyName("Delft");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_11_control_click_cancels_preview_and_survives_modifier_release()
+            throws Exception {
+        // Sail out, then start an unconfirmed movement preview.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        final org.microcol.page.GoToPage movement = new org.microcol.page.GoToPage(
+                getContext());
+        final Location sea = Location.of(22, 11);
+        game.dragMouseAtLocation(sea);
+        movement.verifyLocation(3, sea);
+        movement.verifyMovement(3, 6);
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        final com.google.gson.JsonElement ship = turns.readUnitState(3);
+        new FreePlayAuditPage(getContext()).press(KeyCode.M);
+        turns.verifyUnitAndMoveMode(3, ship, true);
+
+        // Releasing Control first must not turn the release into a move.
+        game.controlClickUnitAt(sea, true);
+        orders.verifySingleUnitContext("Galleon");
+        orders.verifyInformationOnly();
+        turns.verifyUnitAndMoveMode(3, ship, false);
+        orders.dismissActions();
+        turns.verifyUnitAndMoveMode(3, ship, false);
+
+        // An empty square offers no commands and cannot consume movement.
+        game.controlClickUnitAt(Location.of(21, 12), false);
+        orders.verifyNoUnitActions();
+        movement.verifyLocation(3, sea);
+        movement.verifyMovement(3, 6);
+    }
+
 }

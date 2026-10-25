@@ -56,8 +56,8 @@ public final class GamePanelMouseListener {
     private final SelectedUnitManager selectedUnitManager;
     private final Provider<ButtonsGamePanel> gameButtons;
     private final Canvas canvas;
-    private Point secondaryPress;
-    private boolean secondaryDragged;
+    private Point contextPress;
+    private boolean contextDragged;
 
     private Optional<Point> lastMousePosition = Optional.empty();
 
@@ -91,6 +91,7 @@ public final class GamePanelMouseListener {
         canvas = gamePanelComponent.getCanvas();
         canvas.setFocusTraversable(true);
         canvas.setOnContextMenuRequested(event -> {
+            // Mouse gestures finish on release so dragging cannot open a menu.
             if (event.isKeyboardTrigger()) {
                 showSelectedUnitContext();
             }
@@ -161,9 +162,10 @@ public final class GamePanelMouseListener {
         lastMousePosition = Optional.of(pressedAt);
         canvas.requestFocus();
         gameButtons.get().hideUnitActions();
-        if (e.getButton() == MouseButton.SECONDARY) {
-            secondaryPress = pressedAt;
-            secondaryDragged = false;
+        contextPress = null;
+        if (isContextClick(e)) {
+            contextPress = pressedAt;
+            contextDragged = false;
             if (modeController.isMoveMode()) {
                 selectedUnitManager.getSelectedUnit()
                         .ifPresent(gamePanelPresenter::disableMoveMode);
@@ -178,7 +180,7 @@ public final class GamePanelMouseListener {
                 gamePanelPresenter.switchToNormalMode(location);
             } else {
                 if (e.isPrimaryButtonDown()) {
-                    if (e.isControlDown() || e.isAltDown()) {
+                    if (e.isAltDown()) {
                         selectedTileManager.setSelectedTile(location,
                                 ScrollToFocusedTile.smoothScroll);
                     } else {
@@ -195,15 +197,21 @@ public final class GamePanelMouseListener {
         }
     }
 
+    private boolean isContextClick(final MouseEvent event) {
+        return event.getButton() == MouseButton.SECONDARY
+                || event.getButton() == MouseButton.PRIMARY
+                        && event.isControlDown()
+                || event.isPopupTrigger();
+    }
+
     private void onMouseReleased(final MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY) {
-            if (secondaryPress != null && !secondaryDragged) {
+        if (contextPress != null || isContextClick(event)) {
+            if (contextPress != null && !contextDragged) {
                 showUnitContext(
-                        gamePanelView.getArea()
-                                .convertToLocation(secondaryPress),
+                        gamePanelView.getArea().convertToLocation(contextPress),
                         event.getScreenX(), event.getScreenY());
             }
-            secondaryPress = null;
+            contextPress = null;
             return;
         }
         if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
@@ -216,13 +224,12 @@ public final class GamePanelMouseListener {
 
     private void onMouseDragged(final MouseEvent e) {
         if (lastMousePosition.isPresent()) {
-            if (e.isSecondaryButtonDown()) {
+            if (contextPress != null) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
-                if (secondaryPress != null && secondaryPress
-                        .distanceSimplified(currentPosition) > 5) {
-                    secondaryDragged = true;
+                if (contextPress.distanceSimplified(currentPosition) > 5) {
+                    contextDragged = true;
                 }
-                if (secondaryDragged) {
+                if (contextDragged) {
                     final Point delta = lastMousePosition.get()
                             .substract(currentPosition);
                     visibleArea.addDeltaToTopLeftPoint(delta);
