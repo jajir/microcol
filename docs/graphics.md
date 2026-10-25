@@ -980,3 +980,21 @@ Reprodukce exportu: zkopírovat SVG do dočasného souboru, nastavit kořenový
 `python3 scripts/graphics/with-fonts.py rsvg-convert -o microcol-game/src/main/resources/images/background.png <dočasné.svg>`.
 Nespouštět celý historický `images.groovy` kvůli jedinému atlasu. Stav ověření
 patří do [funkční evidence](functional-tests.md), nikoli do tohoto popisu barev.
+
+### Úvodní menu — sjednocení palety R-0266
+
+[R-0266](requirements/done/R-0266.md) sjednocuje `sunset2.svg`, jeho středový export
+`sunset.png` a výřezy `sunset-top-line.png`/`sunset-bottom-line.png` se sdílenými
+barvami `colors.properties`: obloha `#FFF9EC`, moře `#649B97`, země `#C5C18A`,
+slunce `#D5BA76` a inkoust `#292824`. Rozměry, rozložení a animace zůstávají.
+Pouhá změna barev kreslených kódem nestačí: všechny tři PNG musí být exportovány
+společně, jinak při roztažení okna vznikají obdélníkové barevné bloky.
+
+Export z 25. října 2026 používá librsvg přes `scripts/graphics/with-fonts.py`.
+Historická oblast `-446:-113:1422:1450` je v souřadnicích SVG násobena `25.4/96`;
+kořen dočasné kopie má tento `viewBox`, `preserveAspectRatio="none"` a rozměry
+781 × 651. Kraje se exportují ze stejného zdroje s posunem a rozsahem viewBoxu
+odpovídajícím výřezům `(0,65,65,90)` a `(0,555,48,75)` v těchto výsledných
+pixelech. U zdrojů se nemění souřadnice kresby. TC_83 TC_01 kontroluje shodu
+barev uvnitř i vně ilustrace při dvou velikostech skutečného okna a zachovává
+ověření tlačítek a návratu z nastavení. Výsledky patří do funkční evidence.

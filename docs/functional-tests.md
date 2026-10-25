@@ -9564,3 +9564,27 @@ The changed executable sources and assets were compared byte-for-byte with that
 snapshot before commit; only documentation was completed afterward. Java
 formatting, diff review, nine documentation tests and strict MkDocs passed.
 Physical HiDPI hardware and remote CI/publication were not checked.
+
+### R-0266 — startup menu palette (2026-10-25)
+
+Regenerated the center sunset illustration and both repeated edge strips from
+sunset2.svg with the same cream/turquoise/olive pigments as the canvas fills.
+TC_83 TC_01 checks actual scene pixels inside the illustration, at its right
+boundary and outside it at 1000×800 and 1400×1000 window sizes, retaining wooden
+button and Settings/Back checks. Both screenshots were visually reviewed: the
+old rectangular color blocks are absent.
+
+Targeted Docker/Xvfb run `20261025T072152Z-18d2c5e04f28` passed in 55.835 seconds:
+**6 tests (3 TC_83 UI + 3 PageVerificationContractTest), two XML reports, zero
+failures/errors/skips**. Evidence: `target/docker-ui/run-ghPiti/`, screenshots
+`microcol-test/warehouse-qa/R-0266-menu-normal.png` and `R-0266-menu-wide.png`.
+Java formatting passed with unchanged code tokens and idempotence; nine docs
+tests and strict MkDocs passed. The final precommit smoke gate passed: **4,742 tests (4,723 model/JUnit,
+10 fixed UI smoke, 9 support)** in 345 XML reports, all expected suites present
+and zero failures/errors/skips. Run `20261025T072314Z-9a9913e465d4` took 270.301
+seconds for the group, 272.576 seconds for verification and 272.631 seconds for
+the supervisor. Evidence: `target/verification/run-ef7lmgv5/summary.json` and
+`/Users/jan/Library/Logs/Microcol/completions/20261025T072314Z-9a9913e465d4/`.
+The changed executable sources/assets match the frozen source byte-for-byte;
+only documentation was completed afterward. Physical macOS/HiDPI display,
+remote CI and publication were not checked.

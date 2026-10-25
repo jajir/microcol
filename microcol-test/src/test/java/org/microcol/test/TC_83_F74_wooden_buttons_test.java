@@ -32,7 +32,14 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
         page.verifyWoodenButton("buttonSetting");
         page.verifyWoodenButton("buttonStartFreeGame");
-        page.captureDialog("buttonSetting", "wooden-menu.png");
+        // Check center/side pigment continuity after real window resizing.
+        final WelcomePage welcome = WelcomePage.of(getContext());
+        welcome.resizeWindow(1000, 800);
+        welcome.verifyMenuPalette();
+        page.captureDialog("buttonSetting", "R-0266-menu-normal.png");
+        welcome.resizeWindow(1400, 1000);
+        welcome.verifyMenuPalette();
+        page.captureDialog("buttonSetting", "R-0266-menu-wide.png");
         WelcomePage.of(getContext()).openSetting().goBack().verifyMainScreen();
         page.verifyWoodenButton("buttonSetting");
     }
