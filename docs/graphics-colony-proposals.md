@@ -1,14 +1,33 @@
 # Kolonie v měřítku herní mapy
 
-**Výtvarné návrhy z 25. října 2026; [R-0280](requirements/R-0280.md).** Obrázky jsou kompozice nad uživatelovým screenshotem, nikoli snímky implementované změny. Žádná varianta zatím není vybraná.
+**Výtvarné návrhy z 25. října 2026; [R-0280](requirements/R-0280.md).** Obrázky jsou kompozice nad uživatelovým screenshotem, nikoli snímky implementované změny. Uživatel schválil kompaktní směr a následně povolil mírný přesah přes políčko. Konkrétní sestava zatím není vybraná.
 
 ## Rozměr a společná pravidla
 
-1. [Herní políčko](../microcol-game/src/main/java/org/microcol/gui/Tile.java) má **45 × 45 logických px**. Na dodaném screenshotu má 90 × 90 obrazových px. Celé nové značky včetně vlajky a obrany jsou navrženy přímo v souřadnicích 45 × 45; náhled celé obrazovky je exportovaný v měřítku 1×.
-2. Návrhy používají jednu, dvě nebo tři střechy a čtyři nezávislé stavy obrany. Populační hranice nejsou dohodnuté. Domky nemají okna, tašky, jednotlivé kameny ani dekorativní okolí. Základní tah všech deseti rodin má 1,35 px; jde o konkrétní návrh k posouzení, nikoli novou závaznou hodnotu grafického manuálu.
+1. [Herní políčko](../microcol-game/src/main/java/org/microcol/gui/Tile.java) má **45 × 45 logických px**. Na dodaném screenshotu má 90 × 90 obrazových px. První desetice se celá vešla do tohoto rozměru. V navazujících zkouškách A–C zůstává políčko stejným bodem ukotvení, ale podle dalšího přání uživatele mohou domky a opevnění mírně přesáhnout. Aktuální návrh zkouší až 4 px do stran; tento číselný limit není zatím závazné herní pravidlo. Náhledy jsou exportované v měřítku 1×.
+2. Návrhy používají jeden, dva nebo tři domky a čtyři nezávislé stavy obrany. Populační hranice nejsou dohodnuté. Domky nemají okna, tašky, jednotlivé kameny ani dekorativní okolí. Základní tah původních i navazujících rodin má 1,35 px; kresba se rozšiřuje změnou rozložení a geometrie, nikoli zvětšením celé ikony včetně čáry.
 3. Jméno zůstává bez rámečku. Nizozemská vlajka slouží jako společný příklad; Quebec má francouzskou. Národní vlajky nejsou samostatné varianty velikosti či obrany. Při implementaci je nutné sladit konkrétní národní motivy se společným značením hráčů.
 4. Všechny mapové ukázky používají původní screenshot jako nezměněný podklad. Překryté jsou původní značky a jejich výběrový obrys; místní podklad/řeka je pod novou značkou doplněn. **Haarlem je přidaný ukázkový bod**, aby bylo možné současně porovnat všechny obrany. Pravý informační panel zůstává původní.
 5. První generované ilustrace byly po uživatelově připomínce vyřazeny: nabízely příliš mnoho detailů pro skutečné políčko. Následující podklady jsou jednoduché editovatelné SVG kresby. Nejde o zmenšení předchozích ilustračních listů.
+
+## Další zkouška — jeden, dva a tři domky
+
+1. Po schválení kompaktního směru vznikly tři sestavy: **A — Kompaktní shluk**, **B — Do hloubky** a **C — Vedle sebe**. Každý sloupec porovnává tentýž počet domků ve stejném místě mapy bez opevnění. Domky jsou o něco větší než v první sadě; tři siluety se mohou mírně rozprostřít do sousedních políček. Nejde o přidání populace do skutečné rozehrané hry.
+
+![Tři sestavy kolonie s jedním, dvěma a třemi domky při skutečné velikosti políčka](graphics-assets/colony-2026-10-25/growth-comparison.png)
+
+2. Sestava B ukazuje také všechny obrany při každém počtu domků. Zadní domek zůstává rozeznatelný střechou nad předními dvěma; opevnění nepřidává další obydlí. Název, vlajka a tloušťka čáry zůstávají čitelné a stejné.
+
+![Sestava B: jeden až tři domky bez opevnění, s palisádou, fortem a fortress](graphics-assets/colony-2026-10-25/growth-fortifications.png)
+
+| Sestava | Celý screenshot | Všechny velikosti a obrany |
+| --- | --- | --- |
+| A — Kompaktní shluk | [PNG](graphics-assets/colony-2026-10-25/growth-a-map.png) | [SVG](graphics-assets/colony-2026-10-25/growth-a-icons.svg) |
+| B — Do hloubky | [PNG](graphics-assets/colony-2026-10-25/growth-b-map.png) | [SVG](graphics-assets/colony-2026-10-25/growth-b-icons.svg) |
+| C — Vedle sebe | [PNG](graphics-assets/colony-2026-10-25/growth-c-map.png) | [SVG](graphics-assets/colony-2026-10-25/growth-c-icons.svg) |
+
+3. Listy SVG mají rezervu kolem 45px ukotvení: buňky po 64 px slouží pouze pro dokumentační srovnání, nejde o změnu rozměru herního políčka ani hotový runtime atlas. Sloupce jsou bez opevnění / palisáda / fort / fortress, řádky jeden / dva / tři domky. Výtvarně doporučuji k dalšímu posouzení **B**, protože růst je vidět do šířky i do výšky a tři střechy netvoří dlouhou řadu.
+4. Rozhodnutí dovoluje drobný přesah, ale nemění jméno bez rámečku, národní vlajku ani rozlišení všech obran. Při případné implementaci ověřit, že sousední jednotky, důležité značky a popisky nejsou zakryté. [Dokumentační evidence](publishing.md#colony-house-count-follow-up-2026-10-25) zachycuje skutečné kontroly těchto podkladů.
 
 ## Jaká opevnění hra má
 

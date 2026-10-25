@@ -1165,3 +1165,8 @@ Aktuální export (nahrazuje jednonásobný export R-0273):
 rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar.png microcol-game/src/graphics/game-toolbar.svg
 rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
 ```
+
+## Kompaktní kolonie a počet domků — R-0280
+
+1. Dne 25. října 2026 uživatel schválil kompaktní výtvarný směr kolonií a požádal o další srovnání jednoho, dvou a tří domků. Výslovně dovolil mírný přesah přes 45px políčko; původní požadavek úplného vměstnání tedy již není závazný. Zůstává jméno bez rámečku, národní vlajka, čitelná perová linka a nezávislé rozlišení palisády, fortu a fortress.
+2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Konkrétní sestava, číselný limit přesahu ani populační hranice nejsou vybrané pro implementaci. Podklady vlastní [R-0280](requirements/R-0280.md); jde o dokumentační návrhy, nikoli současné vykreslení hry.
