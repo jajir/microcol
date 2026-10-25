@@ -105,17 +105,12 @@ public final class WoodenButtonsPage extends AbstractScreen {
     }
 
     public void verifyWoodenButton(final String id) {
-        verifyWoodenButton(id, "Playpen Sans Medium");
-    }
-
-    public void verifyWoodenButton(final String id,
-            final String expectedFamily) {
         getRobot().interact(() -> {
             final ButtonBase button = (ButtonBase) getNodeFinder()
                     .lookup("#" + id).query();
             assertTrue(button.getSkin() instanceof WoodenButtonSkin
                     || button.getSkin() instanceof WoodenToggleButtonSkin);
-            assertEquals(expectedFamily, button.getFont().getFamily());
+            assertEquals("Playpen Sans Regular", button.getFont().getName());
             assertEquals(14, button.getFont().getSize());
             assertEquals(new javafx.geometry.Insets(12, 24, 14, 24),
                     button.getPadding());

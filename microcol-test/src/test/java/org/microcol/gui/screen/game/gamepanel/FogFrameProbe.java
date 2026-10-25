@@ -57,7 +57,7 @@ public final class FogFrameProbe {
     }
 
     public static WritableImage captureGrid(final TestContext context,
-            final int scale) {
+            final int scale, final boolean includeGrid) {
         final javafx.scene.canvas.Canvas source = context
                 .getClassFromGuice(GamePanelComponent.class).getCanvas();
         final javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(
@@ -77,7 +77,9 @@ public final class FogFrameProbe {
                 .getClassFromGuice(GamePaintService.class);
         // Render at device scale instead of interpolating a completed bitmap.
         graphics.scale(scale, scale);
-        painter.paintGrid(graphics, context.getArea(), coordinates);
+        if (includeGrid) {
+            painter.paintGrid(graphics, context.getArea(), coordinates);
+        }
         painter.paintFog(graphics, context.getArea(), coordinates);
         return canvas.snapshot(null, null);
     }

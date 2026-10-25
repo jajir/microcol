@@ -9638,3 +9638,69 @@ remote CI and publication were not checked.
 8. Nine documentation consistency tests and the strict MkDocs build passed.
    Final review preserves unrelated R-0224/R-0225/backlog edits. This is local
    acceptance only; remote regression/publication is not being inspected.
+
+
+## R-0268 grid frontier and button font — 2026-10-25
+
+1. Scope: [R-0268](requirements/done/R-0268.md), UC-006/114/119. The final fog layer
+   must cover dashed grid even inside rounded borders of explored squares;
+   shared wooden buttons use Regular instead of Medium, matching the map.
+2. Regression expectations: TC26/TC09 inspects the opaque gray portions of
+   existing fog artwork inside explored squares at 1×/2×, alongside preserved
+   dashed-line, hidden-square, exploration, Save/Continue, resize and grid-off
+   checks. TC83/TC85 require Regular on actual controls and retain navigation,
+   keyboard, focus, pressed, disabled and layout checks.
+3. Baseline reproduction against runtime revision
+   `53efdc5edcf1532cc3eacfa3a2a38449d04906f5` plus the new tests: TC26/TC09 and
+   TC83/TC01; completion `20261025T075611Z-64a76a50e14e`, supervisor PID 58827,
+   timeout 600 s. Both checks failed for the intended reasons in 75.481 s:
+   TC26 saw an uncovered gray-mask pixel inside explored tile (23,14), and
+   TC83 found Playpen Sans Medium instead of Regular. XML reports retain two
+   errors and zero skips in `target/docker-ui/run-sNGlKz`; this is reproduction,
+   not acceptance.
+4. The production correction moves the existing rounded fog artwork to the
+   final map pass, while standalone previews still paint it once. Grid tests
+   inspect every revealed side against a fog-only reference so the fog contour
+   cannot count as a dash. Gameplay and grid-off assertions remain intact.
+5. Targeted correction run: all TC26 fog scenarios, all TC83 button scenarios,
+   both TC85 typography scenarios, TC21/TC10 and `PageVerificationContractTest`;
+   completion `20261025T075903Z-cf9fc0464f0a`, PID 59283, timeout 900 s.
+   Passed in 160.276 s: eight TC26, three TC83, two TC85, one TC21 and three
+   source-contract checks, **17 tests, zero failures/errors/skips**, parsed from
+   all five XML reports in `target/docker-ui/run-AE9Z9x`. Eight changed Java
+   files passed the shared Eclipse formatter with code tokens preserved and
+   idempotence. Menu screenshots show the intended lighter Regular face.
+6. Visual review still found short dark join marks. Pixel inspection traced
+   them to two vertical contour strokes in the original fog sprites, present
+   even with the grid disabled (old join pixel `#656057`). The fog row's two
+   SVG paths now omit those strokes. Re-export with the existing viewBox and
+   bundled-font wrapper changed exactly 24 pixels: 20 in fog cells (8,3)/(9,3)
+   and four in the unused adjacent gutter. All other pixels and dimensions
+   remain identical. TC26/TC09 now checks those runtime join pixels as well.
+7. Final targeted rerun after the asset correction: same 17-check selection,
+   completion `20261025T080551Z-51265ea30899`, supervisor PID 60058, timeout
+   900 s. It completed in 150.064 s with 16 passes and one error, no skips
+   (`target/docker-ui/run-qHJgry`): the new TC26/TC09 join check requested a
+   nonexistent alias `hidden-i-shapeNorth-44`. The registered row-nine alias is
+   `hidden-i-shapeNorth-b4`; correcting only that test lookup leaves runtime
+   sources unchanged. Preserve this failed run rather than relabeling it.
+8. Rerun the corrected TC26/TC09 and all three source-contract checks:
+   completion `20261025T080905Z-f96521d08d39`, PID 60523, timeout 600 s.
+   Passed in 54.742 s: **four checks, zero failures/errors/skips**, verified
+   from both XML reports in `target/docker-ui/run-cxR7Ed`. Combined with the
+   16 unchanged passing checks of the preceding run, every selected scenario
+   now has passing evidence; the failed run remains recorded as failed.
+9. Reviewed the final `R-0268-explored-grid.png` and
+   `R-0268-resized-grid.png`: no dashed overshoots or ink join ticks remain
+   outside the revealed artwork. The existing pointer rectangle remains a
+   separate interaction cue. Menu normal/wide screenshots retain the shared
+   Regular font and functional button layout. Fixed smoke gate completion:
+   `20261025T081026Z-0bee675efa6c`, supervisor PID 60626, outer timeout 420 s;
+   **passed in 270.969 s**, within 300 s. All 345 XML reports in
+   `target/verification/run-b48fcvqv` confirm **4,723 model/JUnit plus 19
+   UI/support checks (including ten fixed smoke scenarios), 4,742 total,
+   zero failures/errors/skips**. The 12 changed runtime, asset and test files
+   match the checked source snapshot byte for byte.
+10. Nine documentation consistency checks and strict MkDocs passed. Review
+    preserves unrelated R-0224/R-0225/backlog edits. This is local acceptance;
+    remote regression and publication were not inspected.

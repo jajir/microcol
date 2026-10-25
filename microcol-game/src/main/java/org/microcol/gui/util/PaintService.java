@@ -639,6 +639,11 @@ public final class PaintService {
             graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
                     Tile.TILE_WIDTH_IN_PX);
         }
+    }
+
+    /** Draw the existing rounded fog edge after map overlays. */
+    public void paintHiddenCoast(final GraphicsContext graphics,
+            final Point point, final Location location) {
         final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
         if (hiddenCoast != null) {
             graphics.drawImage(hiddenCoast, 0, 0, Tile.TILE_WIDTH_IN_PX,
@@ -652,6 +657,7 @@ public final class PaintService {
             final boolean isHighlighted) {
         paintTerrainOnTile(graphics, point, location, terrain, isHighlighted,
                 0);
+        paintHiddenCoast(graphics, point, location);
     }
 
 }

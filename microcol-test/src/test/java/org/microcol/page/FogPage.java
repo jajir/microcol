@@ -474,23 +474,36 @@ public final class FogPage extends AbstractScreen {
             throws Exception {
         final Image image = WaitForAsyncUtils.asyncFx(
                 () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
-                        .captureGrid(getContext(), scale))
+                        .captureGrid(getContext(), scale, true))
                 .get(10, TimeUnit.SECONDS);
         final Point edge = getContext().getArea()
                 .convertToCanvasPoint(explored);
+        final Image withoutGrid = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureGrid(getContext(), scale, false))
+                .get(10, TimeUnit.SECONDS);
         int ink = 0;
         int gaps = 0;
-        for (int x = 5; x < Tile.TILE_WIDTH_IN_PX - 5; x++) {
-            boolean marked = false;
-            for (int y = -1; y <= 1; y++) {
-                marked |= image.getPixelReader().getArgb(
-                        (edge.getX() + x) * scale,
-                        (edge.getY() + y) * scale) != 0xFFFFFFFF;
+        // A frontier side can be fog; inspect all revealed sides of the tile.
+        for (int along = 5; along < Tile.TILE_WIDTH_IN_PX - 5; along++) {
+            for (int across = -1; across <= 1; across++) {
+                for (Point offset : new Point[] { Point.of(along, across),
+                        Point.of(across, along),
+                        Point.of(along, Tile.TILE_WIDTH_IN_PX + across),
+                        Point.of(Tile.TILE_WIDTH_IN_PX + across, along) }) {
+                    final int x = (edge.getX() + offset.getX()) * scale;
+                    final int y = (edge.getY() + offset.getY()) * scale;
+                    if (withoutGrid.getPixelReader().getArgb(x,
+                            y) != 0xFFFFFFFF) {
+                        continue;
+                    }
+                    if (image.getPixelReader().getArgb(x, y) != 0xFFFFFFFF) {
+                        ink++;
+                    } else {
+                        gaps++;
+                    }
+                }
             }
-            if (marked)
-                ink++;
-            else
-                gaps++;
         }
         if (enabled) {
             assertTrue(ink > 0, "Explored edge has visible dashes");
@@ -509,6 +522,85 @@ public final class FogPage extends AbstractScreen {
                         "Unknown square is uniformly gray, including its edges");
             }
         }
+    }
+
+    public void verifyGridUnderRoundedFog() throws Exception {
+        for (int scale : new int[] { 1, 2 }) {
+            final Image image = WaitForAsyncUtils.asyncFx(
+                    () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                            .captureGrid(getContext(), scale, true))
+                    .get(10, TimeUnit.SECONDS);
+            getRobot().interact(() -> {
+                final org.microcol.gui.screen.game.gamepanel.MapManager manager = getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.screen.game.gamepanel.MapManager.class);
+                final org.microcol.model.Model model = getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.event.model.GameModelController.class)
+                        .getModel();
+                final Player player = model.getPlayerByName("Dutch");
+                int checked = 0;
+                for (int y = 1; y <= model.getMap().getMaxLocationY(); y++) {
+                    for (int x = 1; x <= model.getMap()
+                            .getMaxLocationX(); x++) {
+                        final Location at = Location.of(x, y);
+                        final Image mask = manager.getHiddenImageCoast(at);
+                        if (!player.isVisible(at) || mask == null) {
+                            continue;
+                        }
+                        final Point point = getContext().getArea()
+                                .convertToCanvasPoint(at);
+                        for (int py = 1; py < Tile.TILE_WIDTH_IN_PX - 1; py++) {
+                            for (int px = 1; px < Tile.TILE_WIDTH_IN_PX
+                                    - 1; px++) {
+                                final int ix = (point.getX() + px) * scale;
+                                final int iy = (point.getY() + py) * scale;
+                                if (ix < 0 || iy < 0 || ix >= image.getWidth()
+                                        || iy >= image.getHeight()) {
+                                    continue;
+                                }
+                                boolean opaqueFog = true;
+                                for (int dy = -1; dy <= 1; dy++) {
+                                    for (int dx = -1; dx <= 1; dx++) {
+                                        opaqueFog &= mask.getPixelReader()
+                                                .getArgb(px + dx,
+                                                        py + dy) == 0xFF9B9486;
+                                    }
+                                }
+                                if (opaqueFog) {
+                                    assertEquals(0xFF9B9486,
+                                            image.getPixelReader().getArgb(ix,
+                                                    iy),
+                                            "Rounded fog covers grid inside explored tile "
+                                                    + at + " at " + px + ","
+                                                    + py + " scale " + scale);
+                                    checked++;
+                                }
+                            }
+                        }
+                    }
+                }
+                assertTrue(checked > 0,
+                        "Inspect rounded fog inside explored squares");
+            });
+        }
+    }
+
+    public void verifyFogTileJoins() {
+        getRobot().interact(() -> {
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            for (String name : new String[] { "hidden-i-shapeNorth-04",
+                    "hidden-i-shapeNorth-b4" }) {
+                final Image tile = images.getImage(name);
+                for (int y = 0; y < 3; y++) {
+                    assertEquals(0xFF9B9486,
+                            tile.getPixelReader()
+                                    .getArgb(Tile.TILE_WIDTH_IN_PX - 1, y),
+                            "No ink protrudes along the tile join: " + name);
+                }
+            }
+        });
     }
 
     public void verifyFogPixels(final Location location) throws Exception {

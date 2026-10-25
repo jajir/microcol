@@ -72,7 +72,7 @@ public final class TypographyPage extends AbstractScreen {
                     font = ((Text) node).getFont();
                 }
                 if (font != null && node.isVisible()) {
-                    assertEquals(expectedFace(node), font.getName(),
+                    assertEquals("Playpen Sans Regular", font.getName(),
                             node.getClass().getSimpleName() + " #"
                                     + node.getId());
                     checked++;
@@ -80,22 +80,6 @@ public final class TypographyPage extends AbstractScreen {
             }
             assertTrue(checked > 0, "Inspect actual scene text");
         });
-    }
-
-    private static String expectedFace(final Node node) {
-        // Main-screen buttons override the shared Medium face with Regular.
-        boolean woodenButton = false;
-        Node current = node;
-        while (current != null) {
-            if (current.getStyleClass().contains("game-screen")) {
-                return "Playpen Sans Regular";
-            }
-            if (current.getStyleClass().contains("wooden-button")) {
-                woodenButton = true;
-            }
-            current = current.getParent();
-        }
-        return woodenButton ? "Playpen Sans Medium" : "Playpen Sans Regular";
     }
 
     public void verifyTextSize(final String selector, final double expected) {

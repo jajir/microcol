@@ -19,6 +19,7 @@
     -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-effect: null;
-    -fx-font-family: "Playpen Sans medium";
+    -fx-font-family: "Playpen Sans";
+    -fx-font-weight: normal;
 }
 .wooden-button:disabled { -fx-opacity: 0.65; }

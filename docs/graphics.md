@@ -76,6 +76,13 @@ Následující záznam popisuje dřívější realizaci Light 18 / nadpisy 36; n
 výchozí nastavení ještě neprokazuje. Rozsah a přejímka převodu patří do vybrané
 implementace podle [funkčního kontraktu](functional-tests.md).
 
+**Upřesnění 25. října 2026, [R-0268](requirements/done/R-0268.md):** herní obrazovka
+s mapou je vzorem tloušťky písma. Společná dřevěná tlačítka v menu, Nastavení,
+dialozích i ostatních obrazovkách používají Playpen Sans Regular 14 bez
+zesilování; místní výjimka Medium se ruší. Tato oprava nemění rozvržení ani
+velikost nadpisů. Dostupnost jiných přibalených řezů není souhlas s jejich
+použitím v běžném UI.
+
 #### Historie implementace 19.–20. října 2026
 
 
@@ -227,6 +234,18 @@ pro zobrazení v dokumentaci.
    výtvarné pravidlo; aktuální PNG a CSS tímto zápisem nebyly přebarveny.
 
 ### Mřížka a neprozkoumaná část mapy
+
+**Upřesnění 25. října 2026, [R-0268](requirements/done/R-0268.md):** zákaz přesahů
+mřížky platí i pro šedou část zaobleného okraje uvnitř již objeveného políčka.
+Finální překrytí mapy používá stávající kresbu hranice až po mřížce a animacích;
+nevytváří nový tvar hranice ani neodhaluje terén. Dva chybné svislé tahy na
+spoji dílů hranice jsou odstraněné ze zdrojového `background.svg`; export
+podle [stávajícího postupu](#paleta-a-kontury-hlavni-mapy-r-0265) mění pouze
+příslušné díly mlhy a nevyužité mezery atlasu. Samostatné náhledy políček
+zachovávají totéž překrytí. Výsledek se kontroluje v měřítku 1×/2× a po změně
+velikosti okna; [evidence](functional-tests.md#r-0268-grid-frontier-and-button-font-2026-10-25)
+rozlišuje reprodukci chyby a dokončené ověření.
+
 
 **Dohoda 24. října 2026, [R-0261](requirements/done/R-0261.md):** hlavní herní
 mapa má mít méně výraznou přerušovanou čtvercovou síť pouze na prozkoumaných

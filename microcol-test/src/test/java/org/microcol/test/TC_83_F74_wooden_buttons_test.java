@@ -36,10 +36,10 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         final WelcomePage welcome = WelcomePage.of(getContext());
         welcome.resizeWindow(1000, 800);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0266-menu-normal.png");
+        page.captureDialog("buttonSetting", "R-0268-menu-normal.png");
         welcome.resizeWindow(1400, 1000);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0266-menu-wide.png");
+        page.captureDialog("buttonSetting", "R-0268-menu-wide.png");
         WelcomePage.of(getContext()).openSetting().goBack().verifyMainScreen();
         page.verifyWoodenButton("buttonSetting");
     }
@@ -55,7 +55,7 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
         page.verifyOriginalImageButton("nextTurn");
         page.verifyOriginalImageButton("europe");
-        page.verifyWoodenButton("congress", "Playpen Sans");
+        page.verifyWoodenButton("congress");
         page.captureDialog("europe", "wooden-game.png");
         page.click("congress");
         page.verifyWoodenButton("congressClose");

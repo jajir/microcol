@@ -298,7 +298,9 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.verifyGrid(OWN_COLONY, ENEMY, true);
         fog.verifyGrid(STEP, ENEMY, true);
         fog.verifyFogPixels(ENEMY);
-        fog.saveMapEvidence("R-0261-explored-grid.png");
+        fog.verifyGridUnderRoundedFog();
+        fog.verifyFogTileJoins();
+        fog.saveMapEvidence("R-0268-explored-grid.png");
 
         // Exploration and its grid survive departure from sight and Continue.
         fog.move(START, STEP, 3);
@@ -312,7 +314,8 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.resizeMapWindow(1100, 800);
         fog.centerFrontier();
         fog.verifyGrid(ENEMY, Location.of(30, 16), true);
-        fog.saveMapEvidence("R-0261-resized-grid.png");
+        fog.verifyGridUnderRoundedFog();
+        fog.saveMapEvidence("R-0268-resized-grid.png");
 
         // Disabling the same preference removes lines without moving the ship.
         game.exitToMenu();

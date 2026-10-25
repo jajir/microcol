@@ -26,11 +26,6 @@
     -fx-font-size: 14;
     -fx-font-weight: normal;
 }
-.game-screen .wooden-button {
-    -fx-font-family: "Playpen Sans";
-    -fx-font-size: 14;
-    -fx-font-weight: normal;
-}
 .game-screen .buttonPanel {
     -fx-background-color: #FFF9EC;
     -fx-padding: 8 12 8 12;
