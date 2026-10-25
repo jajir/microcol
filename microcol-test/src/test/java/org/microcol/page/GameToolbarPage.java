@@ -149,11 +149,13 @@ public final class GameToolbarPage extends AbstractScreen {
                         && bounds.getMaxX() <= bar.getScene().getWidth(),
                         control.getId());
                 assertTrue(bounds.getMaxY() <= bar
-                        .localToScene(bar.getBoundsInLocal()).getMaxY() + 1);
+                        .localToScene(bar.getLayoutBounds()).getMaxY() + 1);
             }
             final Node map = getNodeFinder().lookup("#canvas").query();
-            assertTrue(map.localToScene(map.getBoundsInLocal()).getMinY() >= bar
-                    .localToScene(bar.getBoundsInLocal()).getMaxY());
+            assertTrue(
+                    map.localToScene(map.getBoundsInLocal()).getMinY() >= bar
+                            .localToScene(bar.getLayoutBounds()).getMaxY(),
+                    "Toolbar controls stay above the map; only ink may overlap");
         });
     }
 

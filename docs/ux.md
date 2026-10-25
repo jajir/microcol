@@ -872,3 +872,8 @@ Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna d�
 
 1. Schválená tenká ruční linka pomáhá rozlišit mapu, nabídku akcí, informace o výběru a stav hry. Má stejný tah jako tlačítka a nepřidává ovládací prvek ani potvrzení. Hráč dál vybírá jednotku, používá stávající akce a čte jejich odezvu v panelech.
 2. Návrh zachovává čitelnost textu, fokus, hover vysvětlení a obsluhu při změně velikosti okna i po Continue. Vizuální volba uživatele je doložená tímto zadáním; automatické kontroly a skutečné snímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25). Nejde o uživatelskou studii.
+
+## Návaznost mapy na linky — R-0288
+
+1. Podle upřesnění uživatele z 25. října 2026 nemá být mezi mapou a oddělovací linkou světlá mezera. Oprava zachovává stávající hráčskou cestu, fokus, stavové zprávy i ovládání; nevytváří novou akci ani potvrzení.
+2. [Funkční evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25) ověřuje technické provedení v širokém anglickém a úzkém českém okně. Nejde o novou hráčskou studii.

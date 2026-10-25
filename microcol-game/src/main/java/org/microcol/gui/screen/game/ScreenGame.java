@@ -61,16 +61,14 @@ public class ScreenGame implements GameScreen {
 
         mainBox = new VBox();
         mainBox.setId("mainPanel");
-        // Include painted toolbar bounds so northern map tiles remain
-        // reachable.
-        mainBox.paddingProperty()
-                .bind(javafx.beans.binding.Bindings.createObjectBinding(
-                        () -> new javafx.geometry.Insets(
-                                buttonGamePanel.getButtonPanel()
-                                        .getBoundsInParent().getMaxY(),
-                                0, 0, 0),
-                        buttonGamePanel.getButtonPanel()
-                                .boundsInParentProperty()));
+        // Reserve the toolbar layout; its ink may overlap the map edge.
+        mainBox.paddingProperty().bind(javafx.beans.binding.Bindings
+                .createObjectBinding(() -> new javafx.geometry.Insets(
+                        buttonGamePanel.getButtonPanel().getLayoutY()
+                                + buttonGamePanel.getButtonPanel().getHeight(),
+                        0, 0, 0),
+                        buttonGamePanel.getButtonPanel().layoutYProperty(),
+                        buttonGamePanel.getButtonPanel().heightProperty()));
         mainBox.getChildren().add(hBox);
         mainBox.getChildren().add(statusBar.getContent());
 

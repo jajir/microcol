@@ -1205,3 +1205,8 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 1. Uživatel schválil druhý návrh: tenké, mírně nepravidelné linky se stejným optickým tahem a barvou jako obrysy tlačítek. Silnější první návrh se nepoužije. Oddělují horní menu, pravý panel a spodní stavový řádek včetně jeho tří polí.
 2. [R-0286](requirements/done/R-0286.md) používá existující `game-toolbar-frame.png`: stejný výřez 12 px a cílovou šířku okraje 6 logických px jako tlačítka. Tento pás obsahuje přibližně 2px inkoustovou linku; šířka pásu není tloušťka tahu. Zobrazuje se pouze potřebná hrana, původní rovná čára je průhledná. Obrázek ani tlačítka se nemění.
 3. Styl je omezen na hlavní obrazovku. Skutečné snímky, vybrané scénáře a stav přejímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25).
+
+## Mapa bez mezery u linek — 2026-10-25
+
+1. [R-0288](requirements/done/R-0288.md) navazuje na schválené linky R-0286: mapa má dosahovat přímo k jejich inkoustu, bez světlého pásku pod menu, vedle pravého panelu a nad stavovým řádkem. Zachovává se stejný obrázek, měřítko, barva i ruční tvar.
+2. Pouze tyto tři hrany překrývají průhledný vnější okraj rámečku pomocí záporného odsazení obrázku. Vnitřní oddělovače stavových údajů ani tlačítka se nemění. Skutečné výsledky a snímky vede [funkční evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25).

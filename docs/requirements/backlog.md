@@ -630,3 +630,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Main-screen panel separators — 2026-10-25
 
 1. [R-0286](done/R-0286.md) applies the user-selected thin freehand separators under A03, reusing the toolbar frame at the same stroke scale. Implementation and local acceptance are complete: seven targeted checks, visual review and the 4,757-check mandatory gate passed. Status: `done`. [Evidence](../functional-tests.md#r-0286-main-screen-separators-2026-10-25) records results separately from publication.
+
+## Map meets panel separators — 2026-10-25
+
+1. [R-0288](done/R-0288.md) removes the light strip between the map and its three surrounding freehand separators under A03. Implementation and local acceptance are complete: seven targeted checks, actual EN/CZ screenshot review and the 4,759-check mandatory gate passed. Status: `done`. [Evidence](../functional-tests.md#r-0288-map-separator-seams-2026-10-25) records acceptance independently from publication.

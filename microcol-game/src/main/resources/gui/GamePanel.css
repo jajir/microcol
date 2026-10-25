@@ -121,12 +121,16 @@
 }
 .game-screen .buttonPanel {
     -fx-border-image-width: 0 0 6 0;
+    /* Overlap the frame's transparent outer margin with the map. */
+    -fx-border-image-insets: 0 0 -3 0;
 }
 .game-screen #rightPanel {
     -fx-border-image-width: 0 0 0 6;
+    -fx-border-image-insets: 0 0 0 -3;
 }
 .game-screen #statusBar {
     -fx-border-image-width: 6 0 0 0;
+    -fx-border-image-insets: -3 0 0 0;
 }
 .game-screen #statusBar #description,
 .game-screen #statusBar #labelGold {

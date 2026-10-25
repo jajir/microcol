@@ -63,7 +63,8 @@ public final class MainScreenLayoutPage extends AbstractScreen {
 
     private Bounds bounds(final String id) {
         final Node n = node(id);
-        return n.localToScene(n.getBoundsInLocal());
+        // Decorative border overhang does not change the content layout.
+        return n.localToScene(n.getLayoutBounds());
     }
 
     public void verifyStatusBar() {
@@ -137,6 +138,38 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                     assertEquals(Color.TRANSPARENT, stroke.getBottomStroke());
                     assertEquals(Color.TRANSPARENT, stroke.getLeftStroke());
                 });
+            }
+        });
+    }
+
+    public void verifyMapTouchesSeparators() {
+        getRobot().interact(() -> {
+            final Bounds map = bounds("canvas");
+            final javafx.scene.image.PixelReader pixels = snapshotScene(
+                    getContext().getPrimaryStage().getScene()).getPixelReader();
+            for (double fraction : new double[] { 0.25, 0.5, 0.75 }) {
+                final int x = (int) (map.getMinX() + map.getWidth() * fraction);
+                final int y = (int) (map.getMinY()
+                        + map.getHeight() * fraction);
+                // Freehand ink can straddle either side of the exact seam.
+                assertTrue(
+                        pixels.getColor(x, (int) map.getMinY() - 1)
+                                .getBrightness() < 0.45
+                                || pixels.getColor(x, (int) map.getMinY())
+                                        .getBrightness() < 0.45,
+                        "Ink touches map above at " + fraction);
+                assertTrue(
+                        pixels.getColor((int) map.getMaxX(), y)
+                                .getBrightness() < 0.45
+                                || pixels.getColor((int) map.getMaxX() - 1, y)
+                                        .getBrightness() < 0.45,
+                        "Ink touches map beside at " + fraction);
+                assertTrue(
+                        pixels.getColor(x, (int) map.getMaxY())
+                                .getBrightness() < 0.45
+                                || pixels.getColor(x, (int) map.getMaxY() - 1)
+                                        .getBrightness() < 0.45,
+                        "Ink touches map below at " + fraction);
             }
         });
     }

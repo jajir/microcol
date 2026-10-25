@@ -224,9 +224,10 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.verifyLayout(english);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
+        layout.saveEvidence("R-0267-main-English.png");
+        layout.verifyMapTouchesSeparators();
         layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
-        layout.saveEvidence("R-0267-main-English.png");
         new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
 
         // Change the actual language setting and return to the same saved game.
@@ -241,9 +242,10 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.verifyLayout(czech);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
+        layout.saveEvidence("R-0267-main-Czech-small.png");
+        layout.verifyMapTouchesSeparators();
         layout.verifyMainScreenTypography();
         layout.verifyMapPalette();
-        layout.saveEvidence("R-0267-main-Czech-small.png");
         new FreePlayAuditPage(getContext()).verifyCalendarAndGold(18, 10000);
     }
 }

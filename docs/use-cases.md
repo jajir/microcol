@@ -993,3 +993,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 
 1. UC-001/002 (Nastavení) and UC-007/008 (Hra): [R-0287](requirements/done/R-0287.md) extends `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` with nearby forest/bonus checks, a normal ship voyage from ocean to freshwater lake and Save/Continue there. The existing hidden-mouth, river rendering, landing and founding assertions remain.
 2. `OriginalWorldTest` checks regional coverage, legal features, connected river outlets, lake identity and saved landscape. `TC_80_F72_terrain_identity_test` retains the movement, fishing and terrain presentation boundaries. Actual results belong to the [functional record](functional-tests.md#r-0287-original-world-enrichment-2026-10-25); this bounded change does not close whole use cases.
+
+### UC-114/115/119: mapa přímo u linek — 2026-10-25
+
+1. [R-0288](requirements/done/R-0288.md) doplňuje TC21/F15 `TC_10_main_screen_panels_remain_readable_when_resized` o kontrolu vykreslených hran mapy po změně velikosti a Continue v EN/CZ. Dosavadní očekávání kalendáře, zlata, čitelnosti a měřítka tahu zůstávají; TC188/F221 pokrývá související ovládání. [Evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25) rozlišuje skutečné výsledky od návrhu.
