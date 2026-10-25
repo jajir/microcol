@@ -812,8 +812,10 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    příkazy jednotky bez vstupu do města, včetně lodi v přístavu. Pravé tažení
    mapu posouvá a nabídku neotevírá. Pravé kliknutí nepotvrdí rozpracovaný pohyb.
 4. V nabídce slouží šipky k pohybu mezi příkazy, Enter nebo mezerník k aktivaci
-   a Escape k zavření. Mimo ni zůstávají původní zkratky: Tab vybere další
+   a Escape k zavření. Na mapě zůstávají původní zkratky: Tab vybere další
    jednotku, mezerník vyčerpá její pohyb, šipka Další tah nahoře ukončí tah hráče.
+   Při fokusu v horní liště slouží Tab k přechodu mezi ovládacími prvky a mezerník
+   k aktivaci zaměřeného tlačítka (doplnění R-0273).
    Nedostupné relevantní příkazy mají vysvětlení a původní potvrzovací dialogy.
 5. Podporu Ctrl + levého kliknutí doplňuje [R-0275](requirements/done/R-0275.md).
    Rozpoznává se před běžnou akcí levého tlačítka, také při uvolnění Ctrl
@@ -821,3 +823,11 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
 6. Skutečné kontroly zaznamenává [funkční evidence R-0272](functional-tests.md#r-0272-map-unit-context-2026-10-25).
    Jde o implementační pravidlo, nikoli pozorování hráčů; historické výsledky
    R-0270 zůstávají zachované.
+
+
+## Horní lišta 07B — 2026-10-25
+
+1. [R-0273](requirements/done/R-0273.md) používá ikonku a trvalý lokalizovaný název u každé globální akce. Najetí nebo klávesnicové zaměření zobrazí vysvětlení dole. Po O/Escape je fokus na výběru kolonií; Tab postupuje mezi prvky lišty, Shift+Tab se vrací a mezerník aktivuje zaměřené tlačítko bez vyčerpání pohybu jednotky. Fokus je navíc označen přerušovaným rámečkem; barva sama nenese stav akce. Playpen Sans Regular 14 se nemění.
+2. Kolonie jsou přímá navigační nabídka s vlastním symbolem, rámečkem a oddělenou šipkou. Klávesa O ji otevře, kurzorové klávesy vyberou položku, Enter otevře kolonii; Escape nebo kliknutí mimo nabídku ji zruší. Prázdný seznam vysvětlí, že zatím není dostupná kolonie. Položky se při otevření znovu načtou a při výběru ověří vlastník i platnost.
+3. Další tah, odchod do menu, ukončení se skóre a podmíněná nezávislost zachovávají dosavadní pravidla a potvrzení. Lišta se v užším okně zalomí nad mapou a nezkracuje názvy. Zimní modrá a ostatní zelená slouží atmosféře; neomezují objevitelnost akcí.
+4. Automatizovaná přejímka a technická vizuální kontrola jsou v [evidenci](functional-tests.md#r-0273-toolbar-07b-2026-10-25). Nejde o uživatelskou studii.

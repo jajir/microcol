@@ -34,22 +34,60 @@
     -fx-border-color: #292824;
     -fx-border-width: 0 0 1 0;
 }
-.game-screen .image-button {
-    -fx-border-color: #746E60;
+.game-screen .button.game-toolbar-control {
+    -fx-skin: "javafx.scene.control.skin.ButtonSkin";
+}
+.game-screen .game-toolbar-control {
+    -fx-background-color: #FFF9EC;
+    -fx-background-radius: 3;
+    -fx-background-insets: 2;
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-slice: 4;
+    -fx-border-image-width: 4;
+    -fx-border-image-repeat: stretch;
+    -fx-padding: 6 9 7 9;
+    -fx-graphic-text-gap: 3;
+    -fx-text-fill: #302D27;
+    -fx-effect: null;
+}
+.game-screen .game-toolbar-control:hover,
+.game-screen .game-toolbar-control:showing {
+    -fx-background-color: #E7E7D0;
+}
+.game-screen .game-toolbar-control:focused {
+    -fx-border-image-source: null;
+    -fx-border-color: #302D27;
+    -fx-border-insets: 4;
+    -fx-border-style: segments(2, 3);
     -fx-border-width: 1;
-    -fx-border-radius: 3;
 }
-.game-screen .image-button:hover {
-    -fx-border-color: #292824;
-}
-.game-screen .image-button:focused {
-    -fx-border-color: #292824;
-    -fx-border-style: segments(3, 3);
-    -fx-border-width: 2;
-}
-.game-screen .image-button:armed {
+.game-screen .game-toolbar-control:armed {
+    -fx-background-color: #DCDCC5;
     -fx-translate-y: 1;
-    -fx-border-width: 2;
+}
+.game-screen .game-toolbar-control:disabled {
+    -fx-opacity: 0.45;
+}
+.game-screen #coloniesMenu {
+    -fx-min-height: 82;
+    -fx-padding: 6 5 6 9;
+}
+.game-screen #coloniesMenu > .label {
+    -fx-padding: 0 10 0 0;
+}
+.game-screen #coloniesMenu > .arrow-button {
+    -fx-padding: 0 9 0 12;
+    -fx-border-color: #746E60;
+    -fx-border-width: 0 0 0 1;
+    -fx-background-color: transparent;
+}
+.game-screen #coloniesMenu > .arrow-button > .arrow {
+    -fx-background-color: #302D27;
+    -fx-shape: "M0 0 L5 5 L10 0 L11 1 L5 8 L-1 1 Z";
+    -fx-padding: 4 6 4 6;
+}
+.game-screen #coloniesMenu:showing > .arrow-button > .arrow {
+    -fx-rotate: 180;
 }
 .game-screen #rightPanel {
     -fx-background-color: #FFF9EC;

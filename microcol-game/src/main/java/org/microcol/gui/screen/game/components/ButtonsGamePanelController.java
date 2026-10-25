@@ -162,6 +162,7 @@ public class ButtonsGamePanelController {
         LOGGER.debug("Turn started event {}", event);
         if (event.getPlayer().isHuman()) {
             view.enableAllButtons();
+            refreshToolbarSeason();
             // Production changes support at the start of the national round.
             refreshDeclareIndependenceButton();
             if (selectedUnitManager.getSelectedUnit().isPresent()) {
@@ -251,7 +252,19 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onGameStarted(
             @SuppressWarnings("unused") final GameStartedEvent event) {
+        refreshToolbarSeason();
         refreshDeclareIndependenceButton();
+    }
+
+    private void refreshToolbarSeason() {
+        Platform.runLater(() -> {
+            if (gameModelController.isGameModelReady()) {
+                view.updateToolbarSeason(getModel().getCalendar()
+                        .getCurrentSeason()
+                        .filter(season -> season == org.microcol.model.Calendar.Season.winter)
+                        .isPresent());
+            }
+        });
     }
 
     @Subscribe

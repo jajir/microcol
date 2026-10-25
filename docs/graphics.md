@@ -1073,6 +1073,19 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 
 ## Návrhy horní lišty — R-0273
 
-Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výběru kolonie](graphics-top-menu-proposals.md). Jde o návrhy k výběru, nikoli o změnu běžící hry nebo schválené finální SVG. Rozsah a zbývající rozhodnutí vlastní [R-0273](requirements/R-0273.md).
+Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výběru kolonie](graphics-top-menu-proposals.md). Listy zachycují výtvarný průzkum; nejde o snímky běžící hry. Rozsah implementace vlastní [R-0273](requirements/done/R-0273.md).
 
-Uživatel následně vybral **07 — Čistý skicář** pro další rozpracování a požádal o dvě až tři podvarianty s drobnou nepravidelností samotných ikon. [Tři podvarianty 07A–07C](graphics-top-menu-proposals.md) zachovávají čisté ovládací prvky, pevnou tloušťku linky, plné výplně a domluvené **Playpen Sans 14 Regular**. Ruční charakter má vznikat lehce asymetrickými obrysy a jednotlivě kreslenými detaily. Výběr této rodiny není souhlasem s implementací ani s konkrétní podvariantou.
+Uživatel následně vybral **07 — Čistý skicář** pro další rozpracování a požádal o dvě až tři podvarianty s drobnou nepravidelností samotných ikon. [Tři podvarianty 07A–07C](graphics-top-menu-proposals.md) zachovávají čisté ovládací prvky, pevnou tloušťku linky, plné výplně a domluvené **Playpen Sans 14 Regular**. Ruční charakter má vznikat lehce asymetrickými obrysy a jednotlivě kreslenými detaily. Následně téhož dne výslovně vybral **07B — Přirozený rukopis** k implementaci.
+
+
+1. Produkční [atlas SVG](../microcol-game/src/graphics/game-toolbar.svg) a [rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) obsahují ručně navržené lehce asymetrické křivky, jednolité plochy a žádný text. Atlas má 12 sloupců po 48 px a dvě řady; oba odstíny používají totožné sdílené tvary. Ikona se zobrazuje ve 40 × 40 logických px, tah 1,5 px v SVG tedy odpovídá 1,25 px v UI. Rámeček má tah 1,2 px a čtyřpixelové rohy při devítidílném roztažení.
+2. Pevný inkoust je `#302D27`, roční tahy a jaro/léto/podzim mají `#71864B`, zima `#568B9B`. Pozadí zůstává `#FFF9EC`. Motivy jsou kolonie, Kongres, vystředění, statistiky, hlášení, cíle, kniha nápovědy, koruna Evropy, šipka dalšího tahu, vlajka s vavřínem pro ukončení, dveře pro odchod a zvon nezávislosti. Dostupnost akcí určuje dosavadní model.
+3. `ImageLoaderGameToolbar` načítá [atlas PNG](../microcol-game/src/main/resources/images/game-toolbar.png); předchozí `buttons.png` zůstává pro ostatní obrazovky. `GamePanel.css` používá [rámeček PNG](../microcol-game/src/main/resources/images/game-toolbar-frame.png). Názvy a spodní vysvětlení jsou lokalizované UI texty, nikoli kresba z návrhového listu. Užší okno zalomí lištu. Menu kolonií je navigace, proto zobrazuje „Kolonie“ a nevymýšlí trvale vybranou kolonii.
+4. Regenerace nevyžaduje fonty, protože SVG neobsahuje text:
+
+```sh
+rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar.png microcol-game/src/graphics/game-toolbar.svg
+rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
+```
+
+5. Přejímka 07B a snímky skutečného UI patří do [funkční evidence](functional-tests.md#r-0273-toolbar-07b-2026-10-25); samotný export není důkazem přijetí ani publikace.

@@ -16,6 +16,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -89,7 +90,7 @@ public class ScreenGame implements GameScreen {
     void setOnUnitOrder(final Consumer<KeyEvent> handler) {
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown() || event.isAltDown() || event.isMetaDown()
-                    || event.isShiftDown())
+                    || event.isShiftDown() || isToolbarFocused())
                 return;
             if (KeyCode.TAB == event.getCode()) {
                 handler.accept(event);
@@ -101,11 +102,21 @@ public class ScreenGame implements GameScreen {
         mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (KeyCode.SPACE == event.getCode() && !event.isControlDown()
                     && !event.isAltDown() && !event.isMetaDown()
-                    && !event.isShiftDown()) {
+                    && !event.isShiftDown() && !isToolbarFocused()) {
                 handler.accept(event);
                 event.consume();
             }
         });
+    }
+
+    private boolean isToolbarFocused() {
+        for (Node node = mainPanel.getScene()
+                .getFocusOwner(); node != null; node = node.getParent()) {
+            if (node == buttonGamePanel.getButtonPanel()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

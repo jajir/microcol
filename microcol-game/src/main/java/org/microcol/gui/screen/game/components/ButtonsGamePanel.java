@@ -55,6 +55,11 @@ import org.microcol.gui.event.SkipUnitTurnEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.image.ImageView;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Singleton
 public class ButtonsGamePanel extends AbstractButtonsPanel
@@ -122,6 +127,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private boolean goToPaused;
     private String goToDestination;
     private I18n currentI18n;
+    private final ImageProvider toolbarImages;
+    private final EventBus toolbarEvents;
+    private final Map<Labeled, Buttons> toolbarLabels = new LinkedHashMap<>();
+    private final Map<Labeled, Buttons> toolbarExplanations = new LinkedHashMap<>();
 
     private final Button buttonCongress = new Button();
 
@@ -163,6 +172,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             final CongressDialog congressDialog) {
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
+        toolbarImages = imageProvider;
+        toolbarEvents = eventBus;
 
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
@@ -344,6 +355,72 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         getButtonPanel().getChildren().add(buttonNextTurn);
         getButtonPanel().getChildren().add(buttonRetire);
         getButtonPanel().getChildren().add(buttonExit);
+        addToolbarControl(coloniesMenu.getContent(), Buttons.toolbarColonies,
+                Buttons.coloniesExplanation);
+        addToolbarControl(buttonCongress, Buttons.toolbarCongress,
+                Buttons.congressExplanation);
+        addToolbarControl(buttonCenter, Buttons.toolbarCenter,
+                Buttons.buttonCenter);
+        addToolbarControl(buttonStatistics, Buttons.toolbarStatistics,
+                Buttons.buttonStatistics);
+        addToolbarControl(buttonTurnReport, Buttons.toolbarTurnReport,
+                Buttons.buttonTurnReport);
+        addToolbarControl(buttonGoals, Buttons.toolbarGoals,
+                Buttons.buttonGoals);
+        addToolbarControl(buttonHelp, Buttons.toolbarHelp, Buttons.buttonHelp);
+        addToolbarControl(buttonEurope, Buttons.toolbarEurope,
+                Buttons.buttonEurope);
+        addToolbarControl(buttonNextTurn, Buttons.toolbarNextTurn,
+                Buttons.nextTurnExplanation);
+        addToolbarControl(buttonRetire, Buttons.toolbarRetire,
+                Buttons.retireExplanation);
+        addToolbarControl(buttonExit, Buttons.toolbarExit, Buttons.buttonExit);
+        addToolbarControl(buttonDeclareIndependence,
+                Buttons.toolbarIndependence, Buttons.buttonDeclareIndependence);
+        updateToolbarSeason(false);
+    }
+
+    private void addToolbarControl(final Labeled control, final Buttons label,
+            final Buttons explanation) {
+        toolbarLabels.put(control, label);
+        toolbarExplanations.put(control, explanation);
+        control.getStyleClass().remove("image-button");
+        control.getStyleClass().add("game-toolbar-control");
+        control.setBackground(null);
+        control.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        control.setContentDisplay(control instanceof Button ? ContentDisplay.TOP
+                : ContentDisplay.LEFT);
+        control.setText(currentI18n.get(label));
+        final ImageView icon = new ImageView();
+        icon.setFitWidth(40);
+        icon.setFitHeight(40);
+        icon.setMouseTransparent(true);
+        control.setGraphic(icon);
+        control.setOnMouseEntered(event -> refreshToolbarExplanation(control));
+        control.setOnMouseExited(event -> refreshToolbarExplanation(null));
+        control.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> refreshToolbarExplanation(
+                        newValue ? control : null));
+    }
+
+    void updateToolbarSeason(final boolean winter) {
+        for (final Labeled control : toolbarLabels.keySet()) {
+            ((ImageView) control.getGraphic()).setImage(
+                    toolbarImages.getImage("gameToolbar_" + control.getId()
+                            + (winter ? "_winter" : "_summer")));
+        }
+    }
+
+    private void refreshToolbarExplanation(final Labeled preferred) {
+        final Labeled active = preferred != null ? preferred
+                : toolbarLabels.keySet().stream().filter(
+                        control -> control.isFocused() && !control.isDisabled())
+                        .findFirst().orElse(null);
+        toolbarEvents.post(active == null
+                ? new StatusBarMessageEvent(Source.GAME)
+                : new StatusBarMessageEvent(
+                        currentI18n.get(toolbarExplanations.get(active)),
+                        Source.GAME));
     }
 
     private void addUnitCommand(final Button button, final Buttons labelKey) {
@@ -498,6 +575,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buildRoadTooltip.setText(i18n.get(Buttons.buildRoadExplanation));
         buttonRetire.setText(i18n.get(Buttons.buttonRetire));
         retireTooltip.setText(i18n.get(Buttons.retireExplanation));
+        toolbarLabels.forEach((control, key) -> control.setText(i18n.get(key)));
     }
 
     void setRetireAction(final Runnable action) {

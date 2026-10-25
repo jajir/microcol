@@ -125,4 +125,19 @@
     <entry key="sentryUnavailable">Requires your turn and a unit without another order, on the map or an eligible European pier.</entry>
     <entry key="fortifyUnavailable">Requires your turn and an armed land unit on land, with movement remaining and no other order.</entry>
     <entry key="goToColonyUnavailable">No own colony is available as a destination for this unit in its current state.</entry>
+    <entry key="toolbarColonies">Colonies</entry>
+    <entry key="toolbarCongress">Congress</entry>
+    <entry key="toolbarCenter">Center</entry>
+    <entry key="toolbarStatistics">Statistics</entry>
+    <entry key="toolbarTurnReport">Report</entry>
+    <entry key="toolbarGoals">Goals</entry>
+    <entry key="toolbarHelp">Help</entry>
+    <entry key="toolbarEurope">Europe</entry>
+    <entry key="toolbarNextTurn">Next turn</entry>
+    <entry key="toolbarRetire">Retire</entry>
+    <entry key="toolbarExit">Leave</entry>
+    <entry key="toolbarIndependence">Independence</entry>
+    <entry key="coloniesExplanation">Choose a colony to open. (O)</entry>
+    <entry key="congressExplanation">Open Congress and choose a Founding Father.</entry>
+    <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
 </properties>

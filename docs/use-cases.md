@@ -945,3 +945,8 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
    the port/left-click distinction, sea preview cancellation, early Control
    release and empty-square rejection. State and movement assertions remain
    explicit. Results belong to the [Control-click evidence](functional-tests.md#r-0275-control-click-unit-context-2026-10-25).
+
+
+### UC-114/115/119: toolbar 07B — 2026-10-25
+
+[R-0273](requirements/done/R-0273.md) zachovává globální herní akce a navigaci kolonií. TC188 ověřuje trvalé EN/CZ názvy a ikony, nápovědu při najetí a klávesnicovém fokusu, zalomení v úzkém okně, prázdnou nabídku, zrušení i klávesnicové otevření kolonie a změnu sezónního akcentu přes skutečný konec tahu a Continue. TC38 ověřuje původní návrat Escape, TC81 deklaraci nezávislosti a TC164 rozdíl mezi odchodem a ukončením. Skutečné výsledky jsou v [evidenci R-0273](functional-tests.md#r-0273-toolbar-07b-2026-10-25); zápis sám neuzavírá celé UC.

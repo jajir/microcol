@@ -44,7 +44,7 @@ public final class ColoniesMenu implements JavaFxComponent {
 
     private void initButton() {
         button.setId("coloniesMenu");
-        button.setText(i18n.get(Buttons.buttonColonies));
+        button.setText(i18n.get(Buttons.toolbarColonies));
         button.setOnShowing(e -> rebuildMenu());
     }
 
@@ -102,6 +102,6 @@ public final class ColoniesMenu implements JavaFxComponent {
 
     @Subscribe
     public void onChangeLanguage(ChangeLanguageEvent event) {
-        button.setText(i18n.get(Buttons.buttonColonies));
+        button.setText(i18n.get(Buttons.toolbarColonies));
     }
 }

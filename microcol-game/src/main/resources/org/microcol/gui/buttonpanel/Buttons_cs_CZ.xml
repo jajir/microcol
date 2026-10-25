@@ -125,4 +125,19 @@
     <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném evropském molu.</entry>
     <entry key="fortifyUnavailable">Vyžaduje váš tah a ozbrojenou pozemní jednotku na pevnině, se zbývajícím pohybem a bez jiného rozkazu.</entry>
     <entry key="goToColonyUnavailable">Pro tuto jednotku v současném stavu není dostupná vlastní kolonie jako cíl cesty.</entry>
+    <entry key="toolbarColonies">Kolonie</entry>
+    <entry key="toolbarCongress">Kongres</entry>
+    <entry key="toolbarCenter">Vycentrovat</entry>
+    <entry key="toolbarStatistics">Statistiky</entry>
+    <entry key="toolbarTurnReport">Hlášení</entry>
+    <entry key="toolbarGoals">Cíle</entry>
+    <entry key="toolbarHelp">Nápověda</entry>
+    <entry key="toolbarEurope">Evropa</entry>
+    <entry key="toolbarNextTurn">Další tah</entry>
+    <entry key="toolbarRetire">Ukončit</entry>
+    <entry key="toolbarExit">Odejít</entry>
+    <entry key="toolbarIndependence">Nezávislost</entry>
+    <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (O)</entry>
+    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele.</entry>
+    <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
 </properties>

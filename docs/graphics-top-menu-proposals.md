@@ -1,6 +1,6 @@
 # Horní lišta — výtvarné návrhy
 
-**Dne 25. října 2026 uživatel vybral pro další rozpracování variantu 07 — Čistý skicář.** Tři podvarianty níže porovnávají jemnou nepravidelnost ikon; zatím nejsou zapojené do hry. Požadavek a jeho další rozhodnutí vlastní [R-0273](requirements/R-0273.md). Společná pravidla vzhledu zůstávají v [grafickém manuálu](graphics.md#soucasne-zadani-vzhledu).
+**Dne 25. října 2026 uživatel vybral k implementaci 07B — Přirozený rukopis.** Tři podvarianty níže dokumentují porovnání jemné nepravidelnosti ikon. Produkční podklady a stav ověření popisuje [grafický manuál](graphics.md#navrhy-horni-listy-r-0273). Požadavek a jeho další rozhodnutí vlastní [R-0273](requirements/done/R-0273.md). Společná pravidla vzhledu zůstávají v [grafickém manuálu](graphics.md#soucasne-zadani-vzhledu).
 
 Každý list porovnává letní a zimní lištu, trvalé názvy akcí, otevřený výběr kolonie a příklad vysvětlení ve spodní stavové liště. Nezávislost je uvedena zvlášť jako podmíněně dostupná akce. Nejde o snímky běžící hry.
 
@@ -21,7 +21,7 @@ Výběr rodiny je uzavřený: pokračujeme se sedmičkou. Uživatel požaduje dr
 | [07B / Přirozený rukopis](graphics-assets/top-menu-2026-10-25/07b-prirozeny-rukopis.png) | Vyvážená varianta: drobná asymetrie i živější linie, bez ztráty čistoty. |
 | [07C / Volnější skica](graphics-assets/top-menu-2026-10-25/07c-volnejsi-skica.png) | Nejvýraznější rukopis: volnější proporce a křivky; stále čisté plné výplně. |
 
-**Doporučení: 07B** jako kompromis mezi čistotou a ručním charakterem. 07A mění původní vzhled nejméně; 07C slouží jako výraznější mez pro porovnání. Konečný výběr podvarianty zatím nebyl potvrzen. Větší detaily jsou výtvarné ukázky, ne důkaz stejné geometrie a přesného fontu ve výsledném SVG.
+**Vybráno: 07B.** Uživatel potvrdil přirozený rukopis pro herní ikony. 07A mění původní vzhled nejméně; 07C zůstává výraznější mezí pro porovnání. Větší detaily jsou výtvarné ukázky, ne důkaz stejné geometrie a přesného fontu ve výsledném SVG.
 
 [Zadání podvariant pro imagegen](graphics-assets/top-menu-2026-10-25/prompts-07.txt). Původní návrh 07 i ostatní rodiny zůstávají níže pro srovnání.
 
@@ -117,3 +117,19 @@ Lístky se zaobleným horním výstupkem.
 Nízká lišta: ikona vlevo, text vedle ní.
 
 ![10 / Kompaktní rukopis — letní a zimní návrh](graphics-assets/top-menu-2026-10-25/10-kompaktni-rukopis.png)
+
+
+## 07B ve skutečné hře
+
+Výtvarná podoba převedená do SVG, skutečných lokalizovaných textů a nativních ovládacích prvků. Následující snímky vznikly v Docker/Xvfb; stav lokální přejímky uvádí [funkční evidence](functional-tests.md#r-0273-toolbar-07b-2026-10-25).
+
+![07B ve hře — zelená sada](graphics-assets/top-menu-2026-10-25/toolbar-07b-summer.png)
+
+![07B ve hře — zimní sada](graphics-assets/top-menu-2026-10-25/toolbar-07b-winter.png)
+
+![07B ve hře — české menší okno](graphics-assets/top-menu-2026-10-25/toolbar-07b-czech-narrow.png)
+
+Editovatelné [ikony SVG](../microcol-game/src/graphics/game-toolbar.svg), [atlas PNG](../microcol-game/src/main/resources/images/game-toolbar.png), [rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) a [rámeček PNG](../microcol-game/src/main/resources/images/game-toolbar-frame.png) obsahují produkční kresbu bez textů.
+
+
+![07B — viditelný fokus klávesnice na Vycentrovat](graphics-assets/top-menu-2026-10-25/toolbar-07b-keyboard-focus.png)

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="576" height="96" viewBox="0 0 576 96">
+  <title>07B — Přirozený rukopis: game toolbar, summer and winter</title>
+  <desc>12 transparent 48 px tiles per row. Fixed ink #302D27; accent is currentColor. Shared paths guarantee identical seasonal geometry. Export with rsvg-convert.</desc>
+  <defs>
+    <g id="coloniesMenu">
+      <path d="M4 27 L15 13 25 27 Z M22 20 L33 7 44 21 Z" fill="currentColor"/>
+      <path d="M7 27 L7.5 41 23 41 23 27 M26 21 L26 41 41 40.5 41 21 M4 41 Q25 40 44 41"/>
+      <path d="M13 41 L13 33 18 33 18 41 M31 41 L31 33 36 33 36 41 M31 24 L36 24.5 36 28 31 28 Z" fill="currentColor"/>
+    </g>
+    <g id="congress">
+      <path d="M24 13 L24 4 Q28 6 34 4 L33 10 Q28 12 24 9 M8 23 Q10 15 24 13 Q36 15 40 23 Z M6 23 L42 22.5 42 27 6 27.5 Z M7 41 L41 40.5 41 44 7 44 Z" fill="currentColor"/>
+      <path d="M10 28 L10.5 40 M14 28 L14 40 M22 28 L21.5 40 M26 28 L26 40 M34 28 L34.5 40 M38 28 L38 40"/>
+    </g>
+    <g id="center">
+      <path d="M24 9 C45 8 46 38 25 39 C4 40 3 10 24 9 Z M24 3 L24.5 15 M24 33 L24 45 M3 24 L15 24.5 M33 24 L45 24"/>
+      <path d="M24 20 C30 19 30 28 24 28 C18 28 18 20 24 20 Z" fill="currentColor"/>
+    </g>
+    <g id="statistics">
+      <path d="M6 26 L14 25.5 14.5 41 6 41 Z M20 17 L28 17.5 28 41 20 41 Z M34 6 L42 5.5 41.5 41 34 41 Z" fill="currentColor"/>
+    </g>
+    <g id="turnReport">
+      <path d="M12 6 L32 5 42 15 35 43 5 41 Z M32 5 L30 15 42 15"/>
+      <path d="M32 5 L30 15 42 15 Z" fill="currentColor"/>
+      <path d="M16 14 L25 14.5 M14 21 L32 22 M12 27 L31 28 M11 33 L29 34 M10 38 L27 39"/>
+    </g>
+    <g id="goals">
+      <path d="M32 10 C16 0 1 16 6 32 C10 45 33 46 39 30 Q42 23 38 17 M30 15 C19 8 8 20 12 30 C17 40 31 37 34 27"/>
+      <path d="M29 15 C19 9 10 18 11 27 C12 39 29 40 34 28 L31 26 C28 36 15 35 15 26 C14 19 21 15 27 18 Z" fill="currentColor" stroke="none"/>
+      <path d="M23 22 C29 22 29 30 23 31 C17 31 17 22 23 22 Z M23 26 L39 11 M35 14 L35 7 42 3 41 9 46 9 39 15 Z" fill="currentColor"/>
+    </g>
+    <g id="help">
+      <path d="M5 12 L10 11 10 36 Q17 34 24 38 Q31 34 39 36 L39 11 43 12 43 41 Q32 39 24 42 Q15 39 5 41 Z" fill="currentColor"/>
+      <path d="M10 11 Q18 6 24 12 Q32 6 39 11 L39 36 Q31 34 24 38 Q17 34 10 36 Z M20 20 C19 13 30 14 28 21 C28 24 23 24 24 28 M24 32 L24.1 32.2"/>
+    </g>
+    <g id="europe">
+      <path d="M7 18 L16 24 24 11 32 24 42 17 37 36 11 36.5 Z M12 40 L37 40 36.5 43 12 43 Z M24 4 L28 9 24 14 20 9 Z M7 14 C12 13 12 20 7 20 C2 20 3 14 7 14 Z M42 13 C47 13 47 20 42 20 C38 20 38 13 42 13 Z" fill="currentColor"/>
+    </g>
+    <g id="nextTurn">
+      <path d="M5 17 Q13 16 25 17 L25 7 44 24 25 42 25 31 Q14 32 5 31 Z" fill="currentColor"/>
+    </g>
+    <g id="retire">
+      <path d="M24 7 L24.5 42 M20 43 Q24 41 29 43 M24 9 C31 5 36 15 43 9 L42 25 C35 29 31 21 24 25 Z M24 3 C29 3 29 9 24 9 C20 9 20 3 24 3 Z" fill="currentColor"/>
+      <path d="M19 43 Q9 39 7 27 M31 43 Q40 39 42 30 M12 38 Q3 36 4 30 Q11 31 12 38 Z M9 31 Q3 27 6 22 Q11 25 9 31 Z M15 41 Q11 34 15 31 Q20 35 15 41 Z M35 39 Q39 32 45 34 Q44 40 35 39 Z M40 33 Q38 27 43 24 Q47 28 40 33 Z" fill="currentColor"/>
+    </g>
+    <g id="exit">
+      <path d="M9 10 L30 5 30 40 22 38 M9 10 L22 14 22 44 9 39 Z" fill="currentColor"/>
+      <path d="M18 27 L18.1 27.3 M34 24 L42 24 M38 18 L44 24 38 31"/>
+    </g>
+    <g id="declareIndependence">
+      <path d="M7 19 L8 11 18 11 M31 11 L40 12 41 19 M11 11 L12 7 15 7 15 11 M34 11 L34 7 37 7 37 11 M21 12 L20 4 28 4 27 12 M21 40 Q21 47 27 43 L28 40" fill="currentColor"/>
+      <path d="M23 12 Q34 11 35 26 Q35 33 41 38 Q43 42 24 41 Q6 42 7 39 Q14 31 14 24 Q15 13 23 12 Z" fill="currentColor"/>
+      <path d="M11 37 Q25 39 38 36"/>
+    </g>
+    <g id="row" stroke="#302D27" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <use xlink:href="#coloniesMenu"/>
+      <use xlink:href="#congress" x="48"/>
+      <use xlink:href="#center" x="96"/>
+      <use xlink:href="#statistics" x="144"/>
+      <use xlink:href="#turnReport" x="192"/>
+      <use xlink:href="#goals" x="240"/>
+      <use xlink:href="#help" x="288"/>
+      <use xlink:href="#europe" x="336"/>
+      <use xlink:href="#nextTurn" x="384"/>
+      <use xlink:href="#retire" x="432"/>
+      <use xlink:href="#exit" x="480"/>
+      <use xlink:href="#declareIndependence" x="528"/>
+    </g>
+  </defs>
+  <use xlink:href="#row" color="#71864B"/>
+  <use xlink:href="#row" y="48" color="#568B9B"/>
+</svg>
