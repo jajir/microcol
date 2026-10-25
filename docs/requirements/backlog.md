@@ -600,3 +600,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Compact unit context menu — 2026-10-25
 
 1. [R-0279](done/R-0279.md) follows R-0276 under A03: the selected compact preview has a plain nonselectable unit heading, one divider immediately below it, and tighter command spacing. Local implementation and acceptance are complete; results and screenshots are in the [functional evidence](../functional-tests.md#r-0279-compact-unit-menu-2026-10-25).
+
+## Colony markers at actual map scale — 2026-10-25
+
+1. [R-0280](R-0280.md) captures ten compact colony-marker families under A03, with A05 visibility and A07/A09 population/fortification dependencies. The [comparison](../graphics-colony-proposals.md) uses the supplied screenshot and 45 px tiles. Artwork selection and population thresholds remain open; gameplay implementation is not selected.

@@ -733,3 +733,10 @@ documentation in APT just to make it visible on the web.
    failed attempts, repairs and passing counts are recorded in the
    [functional evidence](functional-tests.md#r-0270-unit-action-context-2026-10-25).
    This local acceptance does not verify remote regression or publication.
+
+### Colony marker proposals — 2026-10-25
+
+1. [R-0280](requirements/R-0280.md) and the [colony gallery](graphics-colony-proposals.md) record ten compact visual proposals after the user rejected oversized illustrations. Source inspection used `33d56b1e`; only documentation and its illustrations belong to this change.
+2. The original screenshot copy is byte-identical. Geometry checks passed for all 120 size/defense markers, including transparent margins within every 45 × 45 px cell. Ten full-screen compositions export at 1195 × 967 px; ten comparison crops retain the same 1× scale. Pixel comparison passed for all ten compositions: no pixels outside the four intended marker/name regions changed against the same rendered source. Visual review checked the full map and all ten crops, including label clipping. Rendered HTML contains both illustrations; the requirement retains `new` and its four chapters.
+3. Nine documentation consistency tests passed with zero failures, errors or skips. The first strict MkDocs run rejected an unsupported custom-anchor suffix on this evidence heading; removing it restored the normal heading anchor. The corrected strict build passed; its log is `target/colony-proposals/mkdocs.log`. No runtime assets, Java, tests or configuration are changed by this task; model/JUnit and Docker/Xvfb smoke are exempt for this documentation-only commit.
+4. Selection, gameplay implementation and verification of remote CI or publication are not part of this visual exploration. Unrelated working-tree changes are preserved.
