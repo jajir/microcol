@@ -390,12 +390,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         control.getStyleClass().add("game-toolbar-control");
         control.setBackground(null);
         control.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        control.setContentDisplay(control instanceof Button ? ContentDisplay.TOP
-                : ContentDisplay.LEFT);
+        control.setContentDisplay(ContentDisplay.LEFT);
         control.setText(currentI18n.get(label));
         final ImageView icon = new ImageView();
-        icon.setFitWidth(40);
-        icon.setFitHeight(40);
+        icon.setFitWidth(32);
+        icon.setFitHeight(32);
         icon.setMouseTransparent(true);
         control.setGraphic(icon);
         control.setOnMouseEntered(event -> refreshToolbarExplanation(control));

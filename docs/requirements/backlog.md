@@ -592,3 +592,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Sparse terrain and living water — 2026-10-25
 
 1. [R-0277](done/R-0277.md) completed the selected A03 terrain colour/decorative-density proposal locally using A05 identities and the existing animation clock. The refined frequencies and attribute priority are agreed; acceptance is recorded in the [functional evidence](../functional-tests.md#r-0277-sparse-terrain-2026-10-25).
+
+## Horizontal toolbar refinement - 2026-10-25
+
+1. [R-0278](R-0278.md) implements the user-selected icon/name horizontal variant and visibly freehand frames under A03. Existing R-0273 actions and R-0276 dropdown behavior remain authoritative. Acceptance is in progress.

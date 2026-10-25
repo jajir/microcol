@@ -16,7 +16,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
-/** 07B labels, seasonal art and native colony navigation. */
+/** Horizontal labels, freehand frames, seasonal art and colony navigation. */
 @ExtendWith(ApplicationExtension.class)
 public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
     @Start
@@ -41,16 +41,16 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.focusCenterWithTab();
         toolbar.verifyExplanation("Find focused place. (C)", "center");
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-07b-keyboard-focus.png");
+        layout.saveEvidence("toolbar-horizontal-keyboard-focus.png");
         toolbar.activateFocusedButton();
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-07b-summer.png");
+        layout.saveEvidence("toolbar-horizontal-summer.png");
 
         // A real turn changes only the accent to winter blue; Continue keeps
         // it.
         game.nextTurnAndCloseDialogs();
         toolbar.verifySeason(Season.winter, 0xff568b9b);
-        layout.saveEvidence("toolbar-07b-winter.png");
+        layout.saveEvidence("toolbar-horizontal-winter.png");
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         toolbar.verifySeason(Season.winter, 0xff568b9b);
@@ -75,7 +75,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.hover("coloniesMenu");
         toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
                 null);
-        layout.saveEvidence("toolbar-07b-czech-narrow.png");
+        layout.saveEvidence("toolbar-horizontal-czech-narrow.png");
 
         // Empty navigation explains itself and Escape leaves the game
         // untouched.

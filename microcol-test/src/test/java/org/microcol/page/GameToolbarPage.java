@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -95,6 +96,20 @@ public final class GameToolbarPage extends AbstractScreen {
                 if (!control.isManaged()) {
                     continue;
                 }
+                assertEquals(ContentDisplay.LEFT, control.getContentDisplay(),
+                        control.getId());
+                final Bounds iconBounds = control.getGraphic()
+                        .localToScene(control.getGraphic().getBoundsInLocal());
+                final Node text = control.lookup(".text");
+                final Bounds textBounds = text
+                        .localToScene(text.getBoundsInLocal());
+                assertTrue(iconBounds.getMaxX() < textBounds.getMinX(),
+                        control.getId() + " name must follow its icon");
+                assertEquals(iconBounds.getCenterY(), textBounds.getCenterY(),
+                        2,
+                        control.getId() + " icon and name must share one row");
+                assertTrue(control.getHeight() <= 64,
+                        control.getId() + " must keep the toolbar compact");
                 assertTrue(control.getWidth() + 1 >= control.prefWidth(-1),
                         control.getId());
                 final Bounds bounds = control

@@ -42,11 +42,11 @@
     -fx-background-radius: 3;
     -fx-background-insets: 2;
     -fx-border-image-source: url("../images/game-toolbar-frame.png");
-    -fx-border-image-slice: 4;
-    -fx-border-image-width: 4;
+    -fx-border-image-slice: 6;
+    -fx-border-image-width: 6;
     -fx-border-image-repeat: stretch;
-    -fx-padding: 6 9 7 9;
-    -fx-graphic-text-gap: 3;
+    -fx-padding: 6 8 7 8;
+    -fx-graphic-text-gap: 6;
     -fx-text-fill: #302D27;
     -fx-effect: null;
 }
@@ -69,7 +69,7 @@
     -fx-opacity: 0.45;
 }
 .game-screen #coloniesMenu {
-    -fx-min-height: 82;
+    -fx-min-height: 57;
     -fx-padding: 6 5 6 9;
 }
 .game-screen #coloniesMenu > .label {

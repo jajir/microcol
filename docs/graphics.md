@@ -1142,3 +1142,10 @@ rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar-frame.png m
 ```
 
 5. Přejímka 07B a snímky skutečného UI patří do [funkční evidence](functional-tests.md#r-0273-toolbar-07b-2026-10-25); samotný export není důkazem přijetí ani publikace.
+
+## Vodorovná horní lišta — R-0278
+
+1. Dne 25. října 2026 uživatel vybral [první zobrazený návrh](graphics-assets/top-menu-2026-10-25/toolbar-horizontal-proposal.png): ikona vlevo a název vedle ní. Jde o výtvarný návrh, nikoli snímek běžící hry. [R-0278](requirements/R-0278.md) navazuje na 07B z R-0273; motivy ikon, jejich pořadí, sezónní barvy a Playpen Sans 14 Regular zůstávají.
+2. Aktuální provedení zobrazuje původní atlas ve 32 × 32 logických px. Názvy jsou v jedné řadě s ikonou; při nedostatku místa se zalamují celá tlačítka. Výběr kolonií ponechává oddělenou šipku a dosavadní nabídku.
+3. [Rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) má 96 × 48 px, tah 1,2 px, nestejné rohy a lehce zvlněné hrany. Šestipixelové rohy při devítidílném roztažení zachovávají čitelnou nepravidelnost. Export do stávajícího PNG používá stejný příkaz jako R-0273 níže. Zaměření klávesnicí ponechává výrazný přerušovaný obrys.
+4. Ověření EN/CZ rozložení, klávesnice, nabídky kolonií a skutečné snímky vede [funkční evidence](functional-tests.md#r-0278-horizontal-toolbar-2026-10-25). Úprava provedení sama není důkazem přijetí ani publikace.
