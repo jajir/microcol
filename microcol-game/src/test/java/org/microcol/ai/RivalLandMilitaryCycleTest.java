@@ -178,6 +178,8 @@ class RivalLandMilitaryCycleTest {
         sighting.setLocation(at);
         sighting.setColonyName(name);
         sighting.setOwnerName(owner);
+        sighting.setPopulation(1);
+        sighting.setFortificationLevel(0);
         sighting.setObservedTurn(0);
         playerPo(data, "France").getColonySightings().add(sighting);
     }

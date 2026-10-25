@@ -20,8 +20,8 @@ public class ImageLoaderImpl {
             new GrassCoastImageLoader(), new IceCoastImageLoader(),
             new HiddenCoastImageLoader(), new ImageLoaderGoods(),
             new ImageLoaderBuilding(), new ImageLoaderButtons(),
-            new ImageLoaderGameToolbar(), new ImageLoaderExtra(),
-            new ImageLoaderUnit());
+            new ImageLoaderGameToolbar(), new ImageLoaderColonies(),
+            new ImageLoaderExtra(), new ImageLoaderUnit());
 
     @Inject
     ImageLoaderImpl(final ImageCache imageCache) {

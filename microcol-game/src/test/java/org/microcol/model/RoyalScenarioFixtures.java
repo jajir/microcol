@@ -88,6 +88,8 @@ public final class RoyalScenarioFixtures {
             known.setLocation(colony.getLocation());
             known.setColonyName(colony.getName());
             known.setOwnerName(colony.getOwnerName());
+            known.setPopulation(1);
+            known.setFortificationLevel(0);
             known.setObservedTurn(0);
             crown.getColonySightings().add(known);
         }

@@ -603,7 +603,7 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Colony markers at actual map scale — 2026-10-25
 
-1. [R-0280](R-0280.md) captures ten compact colony-marker families under A03, with A05 visibility and A07/A09 population/fortification dependencies. The [comparison](../graphics-colony-proposals.md) uses the supplied screenshot and 45 px tiles. Artwork selection and population thresholds remain open; gameplay implementation is not selected.
+1. [R-0280](done/R-0280.md) captures ten compact colony-marker families under A03, with A05 visibility and A07/A09 population/fortification dependencies. The [comparison](../graphics-colony-proposals.md) uses the supplied screenshot and 45 px tiles. The user selected B — Do hloubky for implementation, with 1–3 / 4–7 / 8+ residents and defense independent of population. Implementation and local acceptance are complete; [verification evidence](../functional-tests.md#r-0280-colony-markers-2026-10-25) records the tested selection and results.
 
 
 ## Unit help reference — 2026-10-25
@@ -613,7 +613,6 @@ preserving native input, values and persistence. Other screens remain outside th
 ## macOS title bar — 2026-10-25
 
 1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. Implementation and local checks are in progress; native visual acceptance is pending.
-
 
 ## One-row game toolbar — 2026-10-25
 

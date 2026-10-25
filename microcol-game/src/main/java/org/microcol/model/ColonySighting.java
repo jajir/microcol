@@ -17,24 +17,34 @@ public final class ColonySighting {
 
     private final Player owner;
 
+    private final int population;
+    private final int fortificationLevel;
     private final int observedTurn;
 
     private final int observedYear;
 
     ColonySighting(final Location location, final String colonyName,
-            final Player owner, final int observedTurn,
+            final Player owner, final int population,
+            final int fortificationLevel, final int observedTurn,
             final int observedYear) {
         this.location = Preconditions.checkNotNull(location);
         this.colonyName = Preconditions.checkNotNull(colonyName);
         this.owner = Preconditions.checkNotNull(owner);
+        Preconditions.checkArgument(
+                population >= 0 && fortificationLevel >= 0
+                        && fortificationLevel <= 3,
+                "Invalid colony appearance");
+        this.population = population;
+        this.fortificationLevel = fortificationLevel;
         this.observedTurn = observedTurn;
         this.observedYear = observedYear;
     }
 
     static ColonySighting of(final Colony colony, final Calendar calendar) {
         return new ColonySighting(colony.getLocation(), colony.getName(),
-                colony.getOwner(), calendar.getNumberOfPlayedTurns(),
-                calendar.getCurrentYear());
+                colony.getOwner(), colony.getPopulation(),
+                colony.getFortificationLevel(),
+                calendar.getNumberOfPlayedTurns(), calendar.getCurrentYear());
     }
 
     static ColonySighting restore(final ColonySightingPo po,
@@ -43,6 +53,8 @@ public final class ColonySighting {
                 po != null && po.getLocation() != null
                         && po.getColonyName() != null
                         && po.getOwnerName() != null
+                        && po.getPopulation() != null
+                        && po.getFortificationLevel() != null
                         && po.getObservedTurn() != null
                         && po.getObservedTurn() >= 0
                         && po.getObservedTurn() <= model.getCalendar()
@@ -51,7 +63,8 @@ public final class ColonySighting {
         Preconditions.checkArgument(model.isValid(po.getLocation()),
                 "Remembered colony is outside the map");
         return new ColonySighting(po.getLocation(), po.getColonyName(),
-                model.getPlayerByName(po.getOwnerName()), po.getObservedTurn(),
+                model.getPlayerByName(po.getOwnerName()), po.getPopulation(),
+                po.getFortificationLevel(), po.getObservedTurn(),
                 model.getCalendar().getYearForTurnNo(po.getObservedTurn()));
     }
 
@@ -60,8 +73,18 @@ public final class ColonySighting {
         out.setLocation(location);
         out.setColonyName(colonyName);
         out.setOwnerName(owner.getName());
+        out.setPopulation(population);
+        out.setFortificationLevel(fortificationLevel);
         out.setObservedTurn(observedTurn);
         return out;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public int getFortificationLevel() {
+        return fortificationLevel;
     }
 
     public Location getLocation() {

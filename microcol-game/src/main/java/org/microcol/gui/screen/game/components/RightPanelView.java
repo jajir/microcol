@@ -153,8 +153,7 @@ public final class RightPanelView implements JavaFxComponent {
                 final Optional<ColonySighting> oColony = player
                         .getKnownColonyAt(location);
                 if (oColony.isPresent()) {
-                    tilePainter.paintColony(oColony.get().getOwner(),
-                            oColony.get().getColonyName());
+                    tilePainter.paintColony(oColony.get());
                     if (!player.isCurrentlyVisible(location)) {
                         sb.append("\n");
                         sb.append(i18n.get(Loc.colonyLastSeen,

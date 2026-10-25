@@ -613,10 +613,13 @@ public abstract class Player {
         out.setRivalLastServedColonyId(rivalLastServedColonyId);
         out.setRivalParkedCarrierIds(new ArrayList<>(rivalParkedCarrierIds));
         knownPowers.stream().sorted().forEach(out.getKnownPowers()::add);
-        colonySightings.values().stream().sorted(java.util.Comparator
-                .comparingInt((ColonySighting sighting) -> sighting
-                        .getLocation().getX())
-                .thenComparingInt(sighting -> sighting.getLocation().getY()))
+        getKnownColonies().stream()
+                .filter(sighting -> sighting.getOwner() != this)
+                .sorted(java.util.Comparator
+                        .comparingInt((ColonySighting sighting) -> sighting
+                                .getLocation().getX())
+                        .thenComparingInt(
+                                sighting -> sighting.getLocation().getY()))
                 .forEach(sighting -> out.getColonySightings()
                         .add(sighting.save()));
         visibility.store(out.getVisible(), model.getMap().getMaxLocationX(),

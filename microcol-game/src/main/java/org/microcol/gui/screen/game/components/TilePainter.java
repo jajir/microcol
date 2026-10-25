@@ -7,7 +7,7 @@ import java.util.List;
 import org.microcol.gui.Point;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Location;
-import org.microcol.model.Player;
+import org.microcol.model.ColonySighting;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -32,32 +32,35 @@ class TilePainter {
     @Inject
     public TilePainter(final PaintService paintService) {
         this.paintService = Preconditions.checkNotNull(paintService);
-        canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+        canvas = new Canvas(TILE_WIDTH_IN_PX + 8, TILE_WIDTH_IN_PX);
     }
 
     void setTerrain(final Terrain terrain, final Location location) {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(),
+                canvas.getHeight());
         paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(),
-                Point.ZERO, location, terrain, false);
+                Point.of(4, 0), location, terrain, false);
     }
 
     void paintUnit(final List<Unit> units) {
         final Unit unit = units.stream().findFirst().get();
-        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.ZERO, unit);
+        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.of(4, 0),
+                unit);
     }
 
-    void paintColony(final Player owner, final String colonyName) {
-        paintService.paintColony(canvas.getGraphicsContext2D(), Point.ZERO,
-                owner, colonyName, true);
+    void paintColony(final ColonySighting sighting) {
+        paintService.paintColony(canvas.getGraphicsContext2D(), Point.of(4, 0),
+                sighting, false);
     }
 
     void setImage(final Image image) {
-        canvas.getGraphicsContext2D().drawImage(image, 0, 0);
+        canvas.getGraphicsContext2D().drawImage(image, 4, 0);
     }
 
     void clear() {
         final GraphicsContext g = canvas.getGraphicsContext2D();
         g.setFill(new Color(0, 0, 0, 0.34));
-        g.fillRect(0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+        g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     /**

@@ -306,12 +306,103 @@ class CurrentSightTest {
     }
 
     @Test
+    void saveKeepsCurrentVisiblePopulationAndFortification() {
+        final Colony colony = model.getColonyAt(MONTREAL).orElseThrow();
+        moveScout(NEAR_MONTREAL);
+        final int previousPopulation = colony.getPopulation();
+        model.getUnitById(6).placeToLocation(MONTREAL);
+        model.getUnitById(6).placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.TOWN_HALL)
+                        .getSlotAt(0));
+        colony.createConstruction(ConstructionType.STOCKADE);
+        colony.createConstruction(ConstructionType.FORT);
+        colony.createConstruction(ConstructionType.FORTRESS);
+
+        final ModelPo saved = model.save();
+        final ColonySightingPo sighting = saved.getGameManager().getPlayers()
+                .stream().filter(player -> player.getName().equals("Dutch"))
+                .findFirst().orElseThrow().getColonySightings().stream()
+                .filter(known -> known.getLocation().equals(MONTREAL))
+                .findFirst().orElseThrow();
+        assertEquals(previousPopulation + 1, sighting.getPopulation());
+        assertEquals(3, sighting.getFortificationLevel());
+        final Model restored = Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(gson.toJson(saved), gson.toJson(restored.save()));
+    }
+
+    @Test
+    void hiddenPopulationAndFortificationSurviveReloadUntilReobserved() {
+        final Colony colony = model.getColonyAt(MONTREAL).orElseThrow();
+        model.getUnitById(6).placeToLocation(MONTREAL);
+        model.getUnitById(6).placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.TOWN_HALL)
+                        .getSlotAt(0));
+        moveScout(NEAR_MONTREAL);
+        final ColonySighting first = dutch.getKnownColonyAt(MONTREAL)
+                .orElseThrow();
+        assertEquals(colony.getPopulation(), first.getPopulation());
+        assertEquals(0, first.getFortificationLevel());
+        moveScout(FAR_FROM_MONTREAL);
+        colony.createConstruction(ConstructionType.STOCKADE);
+        assertEquals(1, colony.getFortificationLevel());
+        colony.createConstruction(ConstructionType.FORT);
+        assertEquals(2, colony.getFortificationLevel());
+        colony.createConstruction(ConstructionType.FORTRESS);
+        // A forced casualty bypasses the rule against voluntary departure.
+        final Unit lost = colony.getUnitsInsideColony().get(0);
+        lost.getPlace().destroy();
+        model.destroyUnit(lost);
+        assertEquals(first.getPopulation() - 1, colony.getPopulation());
+        assertEquals(3, colony.getFortificationLevel());
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final ColonySighting remembered = restored.getPlayerByName("Dutch")
+                .getKnownColonyAt(MONTREAL).orElseThrow();
+        assertEquals(first.getPopulation(), remembered.getPopulation());
+        assertEquals(0, remembered.getFortificationLevel());
+        moveScout(NEAR_MONTREAL);
+        final ColonySighting current = dutch.getKnownColonyAt(MONTREAL)
+                .orElseThrow();
+        assertEquals(colony.getPopulation(), current.getPopulation());
+        assertEquals(3, current.getFortificationLevel());
+    }
+
+    @Test
+    void savedAppearanceRequiresValidPopulationAndDefense() {
+        final ColonySightingPo saved = ColonySighting
+                .of(model.getColonyAt(MONTREAL).orElseThrow(),
+                        model.getCalendar())
+                .save();
+        saved.setPopulation(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> ColonySighting.restore(saved, model));
+        saved.setPopulation(-1);
+        assertThrows(IllegalArgumentException.class,
+                () -> ColonySighting.restore(saved, model));
+        saved.setPopulation(1);
+        saved.setFortificationLevel(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> ColonySighting.restore(saved, model));
+        saved.setFortificationLevel(-1);
+        assertThrows(IllegalArgumentException.class,
+                () -> ColonySighting.restore(saved, model));
+        saved.setFortificationLevel(4);
+        assertThrows(IllegalArgumentException.class,
+                () -> ColonySighting.restore(saved, model));
+        saved.setFortificationLevel(0);
+        assertEquals(1, ColonySighting.restore(saved, model).getPopulation());
+    }
+
+    @Test
     void invalidSavedMemoryIsRejected() {
         final ModelPo saved = model.save();
         final PlayerPo savedDutch = saved.getGameManager().getPlayers().stream()
                 .filter(player -> "Dutch".equals(player.getName())).findFirst()
                 .orElseThrow();
         final ColonySightingPo broken = new ColonySightingPo();
+        broken.setPopulation(1);
+        broken.setFortificationLevel(0);
         broken.setLocation(MONTREAL);
         broken.setColonyName("Montreal");
         broken.setOwnerName("France");

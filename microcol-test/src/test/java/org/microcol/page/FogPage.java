@@ -57,15 +57,27 @@ public final class FogPage extends AbstractScreen {
     }
 
     public void centerFrontier() throws Exception {
-        final Location center = Location.of(29, 16);
-        getRobot().press(KeyCode.CONTROL).clickOn(screenPoint(center))
-                .release(KeyCode.CONTROL);
+        centerOn(Location.of(29, 16));
+    }
+
+    public void centerOn(final Location center) throws Exception {
+        final Canvas mapCanvas = getContext()
+                .getClassFromGuice(GamePanelComponent.class).getCanvas();
+        final Point2D destination = mapCanvas.localToScreen(
+                mapCanvas.getWidth() / 2 + Tile.TILE_CENTER.getX(),
+                mapCanvas.getHeight() / 2 + Tile.TILE_CENTER.getY());
+        // Openbox reserves Alt-drag; use the game's ordinary map-pan gesture.
+        getRobot().moveTo(screenPoint(center)).press(MouseButton.SECONDARY)
+                .moveTo(destination).release(MouseButton.SECONDARY);
         WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, () -> {
             final Canvas canvas = getContext()
                     .getClassFromGuice(GamePanelComponent.class).getCanvas();
-            return Math.abs(
-                    getContext().getArea().convertToCanvasPoint(center).getX()
-                            - canvas.getWidth() / 2) < 3;
+            final Point point = getContext().getArea()
+                    .convertToCanvasPoint(center);
+            // A pan ignores up to five pixels before crossing its drag
+            // threshold.
+            return Math.abs(point.getX() - canvas.getWidth() / 2) <= 5
+                    && Math.abs(point.getY() - canvas.getHeight() / 2) <= 5;
         });
         WaitForAsyncUtils.waitForFxEvents();
     }

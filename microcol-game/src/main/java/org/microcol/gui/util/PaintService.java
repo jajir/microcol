@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
 import org.microcol.gui.image.ImageLoaderTerrain;
+import org.microcol.gui.image.ImageLoaderColonies;
+import org.microcol.model.ColonySighting;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
@@ -254,27 +256,35 @@ public final class PaintService {
     public void paintColony(final GraphicsContext graphics, final Point point,
             final Colony colony, final boolean drawColonyName) {
         paintColony(graphics, point, colony.getOwner(), colony.getName(),
+                colony.getPopulation(), colony.getFortificationLevel(),
                 drawColonyName);
     }
 
-    /**
-     * Paint a colony from an observed owner and name, so remembered colonies do
-     * not need the live colony object.
-     */
     public void paintColony(final GraphicsContext graphics, final Point point,
-            final Player owner, final String colonyName,
-            final boolean drawColonyName) {
-        final Point p = point.add(UNIT_IMAGE_POSITION);
+            final ColonySighting sighting, final boolean drawColonyName) {
+        paintColony(graphics, point, sighting.getOwner(),
+                sighting.getColonyName(), sighting.getPopulation(),
+                sighting.getFortificationLevel(), drawColonyName);
+    }
+
+    private void paintColony(final GraphicsContext graphics, final Point point,
+            final Player owner, final String colonyName, final int population,
+            final int fortificationLevel, final boolean drawColonyName) {
         graphics.drawImage(
-                imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN),
-                p.getX(), p.getY());
+                imageProvider.getImage(ImageLoaderColonies.colonyKey(population,
+                        fortificationLevel)),
+                point.getX() - 10, point.getY() - 10, 64, 64);
+        graphics.drawImage(
+                imageProvider.getImage(
+                        ImageLoaderColonies.flagKey(owner.getEuropeanNation())),
+                point.getX() - 10, point.getY() - 10, 64, 64);
         if (drawColonyName) {
-            paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), owner);
             graphics.setFont(colonyFont);
             graphics.setTextAlign(TextAlignment.CENTER);
             graphics.setTextBaseline(VPos.CENTER);
             graphics.setFill(Color.BLACK);
-            graphics.fillText(colonyName, p.getX() + 20, p.getY() + 55);
+            graphics.fillText(colonyName, point.getX() + 22.5,
+                    point.getY() + 57);
         }
     }
 

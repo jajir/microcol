@@ -1169,7 +1169,13 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 ## Kompaktní kolonie a počet domků — R-0280
 
 1. Dne 25. října 2026 uživatel schválil kompaktní výtvarný směr kolonií a požádal o další srovnání jednoho, dvou a tří domků. Výslovně dovolil mírný přesah přes 45px políčko; původní požadavek úplného vměstnání tedy již není závazný. Zůstává jméno bez rámečku, národní vlajka, čitelná perová linka a nezávislé rozlišení palisády, fortu a fortress.
-2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Konkrétní sestava, číselný limit přesahu ani populační hranice nejsou vybrané pro implementaci. Podklady vlastní [R-0280](requirements/R-0280.md); jde o dokumentační návrhy, nikoli současné vykreslení hry.
+2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Z porovnání byla následně vybrána sestava B; dohodnuté hranice a chování pro hru uvádí [aktuální zadání](#vybrana-podoba-kolonie-2026-10-25). Původní návrhy zůstávají historickým podkladem [R-0280](requirements/done/R-0280.md).
+
+### Vybraná podoba kolonie — 2026-10-25
+
+Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a tah 1,35 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
+
+Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o microcol-game/src/main/resources/images/colonies.png microcol-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
 
 ## Titulkový pruh macOS — 2026-10-25
 

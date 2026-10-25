@@ -1,13 +1,13 @@
 # Kolonie v měřítku herní mapy
 
-**Výtvarné návrhy z 25. října 2026; [R-0280](requirements/R-0280.md).** Obrázky jsou kompozice nad uživatelovým screenshotem, nikoli snímky implementované změny. Uživatel schválil kompaktní směr a následně povolil mírný přesah přes políčko. Konkrétní sestava zatím není vybraná.
+**Návrhy a implementace z 25. října 2026; [R-0280](requirements/done/R-0280.md).** Uživatel vybral sestavu B — Do hloubky s mírným přesahem přes políčko. Návrhové kompozice nad původním screenshotem zůstávají níže; závěrečná část ukazuje samostatně označený snímek skutečné hry.
 
 ## Rozměr a společná pravidla
 
 1. [Herní políčko](../microcol-game/src/main/java/org/microcol/gui/Tile.java) má **45 × 45 logických px**. Na dodaném screenshotu má 90 × 90 obrazových px. První desetice se celá vešla do tohoto rozměru. V navazujících zkouškách A–C zůstává políčko stejným bodem ukotvení, ale podle dalšího přání uživatele mohou domky a opevnění mírně přesáhnout. Aktuální návrh zkouší až 4 px do stran; tento číselný limit není zatím závazné herní pravidlo. Náhledy jsou exportované v měřítku 1×.
-2. Návrhy používají jeden, dva nebo tři domky a čtyři nezávislé stavy obrany. Populační hranice nejsou dohodnuté. Domky nemají okna, tašky, jednotlivé kameny ani dekorativní okolí. Základní tah původních i navazujících rodin má 1,35 px; kresba se rozšiřuje změnou rozložení a geometrie, nikoli zvětšením celé ikony včetně čáry.
+2. Návrhy používají jeden, dva nebo tři domky a čtyři nezávislé stavy obrany. Při prvních návrzích nebyly populační hranice dohodnuté; nynější dohodu uvádí [zadání pro hru](graphics.md#vybrana-podoba-kolonie-2026-10-25). Domky nemají okna, tašky, jednotlivé kameny ani dekorativní okolí. Základní tah původních i navazujících rodin má 1,35 px; kresba se rozšiřuje změnou rozložení a geometrie, nikoli zvětšením celé ikony včetně čáry.
 3. Jméno zůstává bez rámečku. Nizozemská vlajka slouží jako společný příklad; Quebec má francouzskou. Národní vlajky nejsou samostatné varianty velikosti či obrany. Při implementaci je nutné sladit konkrétní národní motivy se společným značením hráčů.
-4. Všechny mapové ukázky používají původní screenshot jako nezměněný podklad. Překryté jsou původní značky a jejich výběrový obrys; místní podklad/řeka je pod novou značkou doplněn. **Haarlem je přidaný ukázkový bod**, aby bylo možné současně porovnat všechny obrany. Pravý informační panel zůstává původní.
+4. Všechny návrhové kompozice používají původní screenshot jako nezměněný podklad. Překryté jsou původní značky a jejich výběrový obrys; místní podklad/řeka je pod novou značkou doplněn. **Haarlem je přidaný ukázkový bod**, aby bylo možné současně porovnat všechny obrany. Pravý informační panel zůstává původní.
 5. První generované ilustrace byly po uživatelově připomínce vyřazeny: nabízely příliš mnoho detailů pro skutečné políčko. Následující podklady jsou jednoduché editovatelné SVG kresby. Nejde o zmenšení předchozích ilustračních listů.
 
 ## Další zkouška — jeden, dva a tři domky
@@ -74,4 +74,14 @@
 ## Podklady a ověření
 
 1. [Původní screenshot](graphics-assets/colony-2026-10-25/reference-game.png) je společný podklad; `NN-map.svg` a `comparison.svg` jej odkazují relativně. SVG kompozice jsou dokumentační podklady. Export lze zopakovat například `python3 scripts/graphics/with-fonts.py rsvg-convert -o docs/graphics-assets/colony-2026-10-25/01-map.png docs/graphics-assets/colony-2026-10-25/01-map.svg`.
-2. Dokončená dokumentační kontrola se zaznamenává do [publikační evidence](publishing.md#colony-marker-proposals-2026-10-25). Tyto náhledy neověřují herní interakce ani publikaci nové distribuce. Implementace bude vyžadovat kontrolu skutečného vykreslení, vlajek, popisků, viditelnosti a hráčských scénářů.
+2. Dokončená dokumentační kontrola se zaznamenává do [publikační evidence](publishing.md#colony-marker-proposals-2026-10-25). Tyto náhledy neověřují herní interakce ani publikaci nové distribuce. Skutečné vykreslení, vlajky, viditelnost a hráčské scénáře sleduje samostatná [funkční evidence](functional-tests.md#r-0280-colony-markers-2026-10-25).
+
+## Výběr pro hru — 2026-10-25
+
+Pro implementaci byla vybrána **B — Do hloubky**, tedy motiv na tabulce `growth-fortifications.png`. Hranice počtu domků i chování opevnění jsou nyní dohodnuté v [autoritativním zadání](graphics.md#vybrana-podoba-kolonie-2026-10-25); dřívější porovnání výše zůstávají historií návrhů.
+
+## Implementace v herní mapě — 2026-10-25
+
+Následující snímek pochází ze spuštěné hry v Docker/Xvfb, scénář TC189/F222. Sloupce mají 1, 4 a 8 obyvatel; řádky A–D ukazují žádné opevnění, palisádu, fort a fortress. Krátká jména patří jen testovací mapě. Národní vlajky, počet domků, výběr a otevírání kolonií používají skutečný herní stav. [Výsledky kontrol](functional-tests.md#r-0280-colony-markers-2026-10-25).
+
+![Varianta B ve skutečné herní mapě](graphics-assets/colony-2026-10-25/implemented-game.png)

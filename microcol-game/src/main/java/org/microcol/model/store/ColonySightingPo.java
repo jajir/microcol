@@ -14,7 +14,25 @@ public final class ColonySightingPo {
 
     private String ownerName;
 
+    private Integer population;
+    private Integer fortificationLevel;
     private Integer observedTurn;
+
+    public Integer getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(final Integer population) {
+        this.population = population;
+    }
+
+    public Integer getFortificationLevel() {
+        return fortificationLevel;
+    }
+
+    public void setFortificationLevel(final Integer fortificationLevel) {
+        this.fortificationLevel = fortificationLevel;
+    }
 
     public Location getLocation() {
         return location;

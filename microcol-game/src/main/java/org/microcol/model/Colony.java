@@ -208,6 +208,17 @@ public class Colony {
     }
 
     /**
+     * @return completed defensive construction, from none (0) to fortress (3)
+     */
+    public int getFortificationLevel() {
+        if (wasConstructionBuilded(ConstructionType.FORTRESS))
+            return 3;
+        if (wasConstructionBuilded(ConstructionType.FORT))
+            return 2;
+        return wasConstructionBuilded(ConstructionType.STOCKADE) ? 1 : 0;
+    }
+
+    /**
      * @return number of residents working in fields or buildings; outside
      *         garrisons, passengers and Europe are excluded
      */

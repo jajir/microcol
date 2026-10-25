@@ -272,8 +272,7 @@ final class GamePaintService {
             if (stale) {
                 graphics.setGlobalAlpha(STALE_OPACITY);
             }
-            paintService.paintColony(graphics, point, sighting.getOwner(),
-                    sighting.getColonyName(), true);
+            paintService.paintColony(graphics, point, sighting, true);
             graphics.setGlobalAlpha(1.0);
         }
         // Native settlements appear only in present sight, like foreign units.
