@@ -23,6 +23,30 @@ class TerrainDecorationTest {
     }
 
     @Test
+    void unknown_marks_are_sparse_and_fixed_by_the_saved_map_seed() {
+        final ImageRandomProvider first = new ImageRandomProvider(ASSETS,
+                world(134));
+        final ImageRandomProvider reloaded = new ImageRandomProvider(ASSETS,
+                world(134));
+        final ImageRandomProvider otherMap = new ImageRandomProvider(ASSETS,
+                world(135));
+        int marks = 0;
+        int changed = 0;
+        for (int x = 1; x <= 100; x++) {
+            for (int y = 1; y <= 100; y++) {
+                final Location at = Location.of(x, y);
+                final boolean marked = first.hasUnknownMark(at);
+                assertEquals(marked, reloaded.hasUnknownMark(at));
+                marks += marked ? 1 : 0;
+                changed += marked != otherMap.hasUnknownMark(at) ? 1 : 0;
+            }
+        }
+        assertTrue(marks >= 300 && marks <= 500,
+                "About 4% of 10,000 squares should carry a mark: " + marks);
+        assertTrue(changed > 500, "Different seeds should change placement");
+    }
+
+    @Test
     void agreed_frequencies_and_attribute_priority_cover_every_terrain() {
         final int[] percentages = { 10, 10, 20, 10, 25, 25, 15, 20, 15, 100,
                 100, 5, 5, 5 };

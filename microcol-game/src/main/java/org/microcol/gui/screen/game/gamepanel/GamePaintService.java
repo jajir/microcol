@@ -157,6 +157,7 @@ final class GamePaintService {
                 final Point point = area.convertToCanvasPoint(location);
                 if (!player.isVisible(location)) {
                     paintHiddenTile(graphics, point);
+                    paintService.paintUnknownMark(graphics, point, location);
                 } else {
                     paintService.paintHiddenCoast(graphics, point, location);
                 }

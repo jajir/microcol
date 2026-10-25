@@ -122,6 +122,10 @@ public final class MapManager {
         return imageRandomProvider.getTreeImage(location);
     }
 
+    public boolean hasUnknownMark(final Location location) {
+        return imageRandomProvider.hasUnknownMark(location);
+    }
+
     public Image getHiddenImageCoast(final Location location) {
         return hiddenCoastMapGenerator.getImageAt(location);
     }

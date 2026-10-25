@@ -63,6 +63,10 @@ public final class ImageRandomProvider {
         return 10;
     }
 
+    public boolean hasUnknownMark(final Location location) {
+        return Math.floorMod(mapRandoms.getRandomAt(location), 100) < 4;
+    }
+
     public Image getTreeImage(final Location location) {
         final Integer rnd = mapRandoms.getRandomAt(location);
         return rnd % 3 == 0

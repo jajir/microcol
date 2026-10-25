@@ -114,6 +114,20 @@ public final class PaintService {
         this.colonyFont = fontService.getDefault(14);
     }
 
+    public void paintUnknownMark(final GraphicsContext graphics,
+            final Point point, final Location location) {
+        if (mapManager.hasUnknownMark(location)) {
+            graphics.save();
+            graphics.setFill(Color.web("#665747"));
+            graphics.setFont(colonyFont);
+            graphics.setTextAlign(TextAlignment.CENTER);
+            graphics.setTextBaseline(VPos.CENTER);
+            graphics.fillText("?", point.getX() + Tile.TILE_WIDTH_IN_PX / 2.0,
+                    point.getY() + Tile.TILE_WIDTH_IN_PX / 2.0);
+            graphics.restore();
+        }
+    }
+
     /**
      * Draw a road as a dark-edged tan band across the square. It is code
      * drawing, so the overlay needs no image asset.

@@ -974,3 +974,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-114/115/119: menu vždy v jednom řádku — 2026-10-25
 
 [R-0283](requirements/done/R-0283.md) nahrazuje zalamování herního menu automatickým skrytím všech názvů při úzkém okně. TC188 zachovává původní herní kontroly a přidává změny šířky, EN/CZ, přístupné názvy a ovládání bez viditelných textů; TC81/04 pokrývá podmíněnou nezávislost. Aktuální stav přejímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+
+### UC-006/119: stationary unknown-map marks — 2026-10-25
+
+[R-0282](requirements/done/R-0282.md) extends TC26 with `TC_10_unknown_question_marks_remain_fixed_until_explored`: fixed unknown-map decoration through panning, resize and Continue, removed by exploration and absent after leaving sight. Existing fog disclosure and grid scenarios remain mandatory; results are recorded in the [functional evidence](functional-tests.md#r-0282-unknown-question-marks-2026-10-25).

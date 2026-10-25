@@ -617,3 +617,5 @@ preserving native input, values and persistence. Other screens remain outside th
 ## One-row game toolbar — 2026-10-25
 
 1. [R-0283](done/R-0283.md) keeps the map toolbar in one row under A03: all names disappear together when the localized actions no longer fit, and return when space becomes available. The icon row sets the minimum usable window width. Local acceptance passed 14 targeted checks, screenshot review and the 4,748-check mandatory gate; see the [evidence](../functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+
+[R-0282](done/R-0282.md) — stationary question marks on unexplored map; implemented and locally accepted on 2026-10-25. See the [verification evidence](../functional-tests.md#r-0282-unknown-question-marks-2026-10-25).

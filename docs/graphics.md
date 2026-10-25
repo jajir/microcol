@@ -1184,3 +1184,9 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 ## Jednořádkové horní menu — 2026-10-25
 
 [R-0283](requirements/done/R-0283.md) mění dohodu o zalamování herního menu: při nedostatku místa se všechny názvy současně skryjí a po rozšíření zase zobrazí. Ikony, rámečky, mezery i šipka kolonií zůstávají. Rozhoduje skutečná šířka přeložených názvů a dostupných akcí. Nejmenší šířka okna pojme celý řádek ikon. Implementace je místně ověřená; výsledky a snímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+
+## Otazníky na neobjevené mapě — R-0282
+
+1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden hnědý otazník Playpen Sans 14. Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
+2. Otazníky se nehýbou ani nepřelosují při posunu, změně velikosti okna nebo Save/Continue. S objevením políčka zmizí a po opuštění dohledu se nevracejí. Mřížka zůstává pod neprůhlednou mlhou; jde pouze o dekoraci.
+3. Implementaci a přejímku sleduje [R-0282](requirements/done/R-0282.md); tato změna nepřidává uložená data ani nové herní pravidlo.

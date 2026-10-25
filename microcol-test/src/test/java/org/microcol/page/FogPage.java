@@ -615,6 +615,58 @@ public final class FogPage extends AbstractScreen {
         });
     }
 
+    public void verifyUnknownMark(final Location location,
+            final boolean expected) throws Exception {
+        verifyExplored(location, !expected);
+        final Image actual = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final Image fog = WaitForAsyncUtils.asyncFx(
+                () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
+                        .captureGrid(getContext(), 1, false))
+                .get(10, TimeUnit.SECONDS);
+        final Image reference = WaitForAsyncUtils.asyncFx(() -> {
+            final Canvas canvas = new Canvas(Tile.TILE_WIDTH_IN_PX,
+                    Tile.TILE_WIDTH_IN_PX);
+            final javafx.scene.canvas.GraphicsContext graphics = canvas
+                    .getGraphicsContext2D();
+            graphics.setFill(Color.web("#9B9486"));
+            graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            graphics.setFill(Color.web("#665747"));
+            graphics.setFont(getContext()
+                    .getClassFromGuice(org.microcol.gui.util.FontService.class)
+                    .getDefault(14));
+            graphics.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
+            graphics.setTextBaseline(javafx.geometry.VPos.CENTER);
+            graphics.fillText("?", Tile.TILE_WIDTH_IN_PX / 2.0,
+                    Tile.TILE_WIDTH_IN_PX / 2.0);
+            return canvas.snapshot(null, null);
+        }).get(10, TimeUnit.SECONDS);
+        final Point point = getContext().getArea()
+                .convertToCanvasPoint(location);
+        int ink = 0;
+        for (int y = 4; y < Tile.TILE_WIDTH_IN_PX - 4; y++) {
+            for (int x = 4; x < Tile.TILE_WIDTH_IN_PX - 4; x++) {
+                final int pixel = reference.getPixelReader().getArgb(x, y);
+                if (expected) {
+                    assertEquals(pixel,
+                            actual.getPixelReader().getArgb(point.getX() + x,
+                                    point.getY() + y),
+                            "Unknown square contains only gray and its question mark");
+                }
+                if (pixel != 0xFF9B9486) {
+                    ink++;
+                    assertEquals(expected ? pixel : 0xFFFFFFFF,
+                            fog.getPixelReader().getArgb(point.getX() + x,
+                                    point.getY() + y),
+                            "Exploration removes the question mark from the fog layer");
+                }
+            }
+        }
+        assertTrue(ink > 10, "The reference question mark must be visible");
+    }
+
     public void verifyFogPixels(final Location location) throws Exception {
         final Image actual = WaitForAsyncUtils.asyncFx(
                 () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe

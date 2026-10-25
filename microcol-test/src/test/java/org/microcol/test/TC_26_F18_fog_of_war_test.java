@@ -328,4 +328,42 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.verifyGrid(STEP, Location.of(30, 16), false);
         fog.verifyUnitLocation(3, START);
     }
+
+    @Test
+    @Tag("local")
+    void TC_10_unknown_question_marks_remain_fixed_until_explored()
+            throws Exception {
+        // The saved map seed places a question mark on this unknown sea square.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        FogPage fog = new FogPage(getContext());
+        Location marked = Location.of(27, 20);
+        Location south = Location.of(25, 18);
+        fog.centerFrontier();
+        fog.verifyUnknownMark(marked, true);
+        fog.saveMapEvidence("R-0282-unknown-question-marks.png");
+
+        // Panning, repainting, resizing and Continue keep the same drawing.
+        fog.centerOn(Location.of(28, 18));
+        fog.verifyUnknownMark(marked, true);
+        fog.resizeMapWindow(1100, 800);
+        fog.centerFrontier();
+        fog.verifyUnknownMark(marked, true);
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.centerFrontier();
+        fog.verifyUnknownMark(marked, true);
+
+        // Exploration removes the mark, even after leaving sight and reloading.
+        fog.move(START, south, 3);
+        fog.verifyUnknownMark(marked, false);
+        fog.verifyRevealedPixels(marked);
+        fog.move(south, START, 3);
+        fog.verifyCurrentSight(marked, false);
+        fog.verifyUnknownMark(marked, false);
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.centerFrontier();
+        fog.verifyUnknownMark(marked, false);
+        fog.verifyUnitLocation(3, START);
+    }
 }
