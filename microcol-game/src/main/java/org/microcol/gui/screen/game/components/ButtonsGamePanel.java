@@ -323,17 +323,15 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         unitContextTitle.setId("unitContextTitle");
         unitContextTitle.setDisable(true);
         unitChoices.setId("unitChoices");
-        unitActions.getItems().addAll(unitContextTitle, unitChoices,
-                new SeparatorMenuItem());
+        unitActions.getItems().addAll(unitContextTitle, new SeparatorMenuItem(),
+                unitChoices);
         addUnitCommand(buttonMove, Buttons.buttonMove);
         addUnitCommand(buttonGoTo, null);
         addUnitCommand(buttonGoToColony, null);
         addUnitCommand(buttonWait, null);
         addUnitCommand(buttonSkipUnitTurn, null);
-        unitActions.getItems().add(new SeparatorMenuItem());
         addUnitCommand(buttonSentry, null);
         addUnitCommand(buttonFortify, null);
-        unitActions.getItems().add(new SeparatorMenuItem());
         addUnitCommand(buttonBuildColony, Buttons.buttonBuildColony);
         addUnitCommand(buttonPlowField, Buttons.buttonPlowField);
         addUnitCommand(buttonCancelPlowField, Buttons.cancelPlowingLabel);
@@ -341,7 +339,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         addUnitCommand(buttonCancelClearForest, Buttons.cancelClearingLabel);
         addUnitCommand(buttonBuildRoad, Buttons.buttonBuildRoad);
         addUnitCommand(buttonCancelBuildRoad, Buttons.cancelRoadLabel);
-        unitActions.getItems().add(new SeparatorMenuItem());
         addUnitCommand(buttonJettison, null);
         addUnitCommand(buttonDisband, null);
 
@@ -527,20 +524,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             choice.setSelected(unit.equals(selected));
             choice.setOnAction(event -> selectUnit.accept(unit));
             unitChoices.getItems().add(choice);
-        }
-        boolean hasAction = false;
-        SeparatorMenuItem separator = null;
-        for (final MenuItem item : unitActions.getItems()) {
-            if (item instanceof SeparatorMenuItem) {
-                separator = (SeparatorMenuItem) item;
-                separator.setVisible(false);
-            } else if (item.isVisible()) {
-                if (separator != null) {
-                    separator.setVisible(hasAction);
-                    separator = null;
-                }
-                hasAction = true;
-            }
         }
         unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(

@@ -596,3 +596,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Horizontal toolbar refinement - 2026-10-25
 
 1. [R-0278](R-0278.md) implements the user-selected icon/name horizontal variant and visibly freehand frames under A03. Existing R-0273 actions and R-0276 dropdown behavior remain authoritative. Acceptance is in progress.
+
+## Compact unit context menu — 2026-10-25
+
+1. [R-0279](done/R-0279.md) follows R-0276 under A03: the selected compact preview has a plain nonselectable unit heading, one divider immediately below it, and tighter command spacing. Local implementation and acceptance are complete; results and screenshots are in the [functional evidence](../functional-tests.md#r-0279-compact-unit-menu-2026-10-25).

@@ -206,6 +206,8 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         // Moving from the unit submenu to an action closes the sibling popup.
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
+        menu.hoverItem("#unitContextTitle");
+        menu.verifyCompactUnitMenu("Galleon", 44);
         menu.verifyShortcut("#move", "M");
         menu.verifyShortcut("#waitUnit", "Tab");
         menu.verifyShortcut("#skipUnitTurn", "Space");
@@ -267,6 +269,8 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         // Localized keycaps remain separate and readable in a narrow window.
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
+        menu.hoverItem("#unitContextTitle");
+        menu.verifyCompactUnitMenu("galeona", 44);
         menu.verifyShortcut("#move", "M");
         menu.verifyShortcut("#skipUnitTurn", "Mezerník");
         menu.hoverItem("#waitUnit");

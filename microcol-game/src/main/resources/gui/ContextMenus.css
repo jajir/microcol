@@ -37,6 +37,18 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
+
+.context-menu.unit-actions-menu .unit-command-item {
+    -fx-padding: 1 12;
+}
+
+/* The disabled heading is a label, even when the menu skin gives it focus. */
+.context-menu.unit-actions-menu #unitContextTitle {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-opacity: 1;
+}
+
 .context-menu .menu-item > .label,
 .context-menu .unit-action-caption,
 .context-menu .unit-action-shortcut {

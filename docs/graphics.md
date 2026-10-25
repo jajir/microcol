@@ -1124,6 +1124,15 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
    vybraný kreslený obrys [R-0276](requirements/done/R-0276.md). Skutečné výsledky
    patří do [funkční evidence](functional-tests.md#r-0276-single-stroke-menu-selection-2026-10-25).
 
+4. [R-0279](requirements/done/R-0279.md) zpřesňuje nabídku jednotky podle
+   [vybraného kompaktního náhledu](graphics-assets/context-menus-2026-10-25/compact-menu-proposal.png):
+   název jednotky je prostý nevybíratelný text bez zvýraznění, jediná dělicí
+   čára je hned pod ním. Akce mají menší svislé mezery; původní písmo,
+   vysvětlení nedostupnosti, rámečky kláves a kreslený fokus zůstávají.
+   Podnabídka výběru jednotky patří pod dělicí čáru mezi ovladatelné položky.
+   Náhled je návrhová předloha; ověřené snímky patří do
+   [funkční evidence](functional-tests.md#r-0279-compact-unit-menu-2026-10-25).
+
 ## Návrhy horní lišty — R-0273
 
 Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výběru kolonie](graphics-top-menu-proposals.md). Listy zachycují výtvarný průzkum; nejde o snímky běžící hry. Rozsah implementace vlastní [R-0273](requirements/done/R-0273.md).

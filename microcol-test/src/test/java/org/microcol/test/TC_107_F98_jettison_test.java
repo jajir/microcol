@@ -71,9 +71,15 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         game.openUnitContextAt(SEA);
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
+        // The plain unit heading never becomes a selectable action.
+        menu.hoverItem("#unitContextTitle");
+        menu.verifyCompactUnitMenu("Galleon", 44);
+        menu.clickUnitHeading();
+        menu.verifyCompactUnitMenu("Galleon", 44);
+        jettison.verifySelectedUnit(Optional.of(SHIP));
         menu.hoverItem("#jettisonUnit");
         menu.verifyDrawnSelection("#jettisonUnit");
-        menu.captureMenu("r0276-jettison-focus.png");
+        menu.captureMenu("r0279-jettison-focus.png");
 
         // Cancelling the hold list changes nothing.
         jettison.useMapControl();

@@ -783,6 +783,10 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
 
 ## Čitelné kontextové nabídky — R-0271
 
+Název jednotky je nevybíratelný nadpis bez barevného fokusu. Jediná čára
+pod ním odděluje identifikaci od příkazů; menší mezery nemění velikost písma
+ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
+
 1. Nabídka pojmenuje každou akci a případnou skutečnou zkratku oddělí do
    rámečku vpravo. Zkratku nevkládáme do závorky v názvu ani ji nevymýšlíme
    pro akci, která ji nemá. [R-0276](requirements/done/R-0276.md) sjednocuje

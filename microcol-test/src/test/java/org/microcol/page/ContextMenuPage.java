@@ -50,6 +50,46 @@ public final class ContextMenuPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void clickUnitHeading() {
+        getRobot().clickOn("#unitContextTitle");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCompactUnitMenu(final String expectedTitle,
+            final double maximumActionSpacing) throws Exception {
+        WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
+            final ContextMenu popup = menu();
+            assertEquals(expectedTitle, popup.getItems().get(0).getText());
+            assertTrue(popup.getItems().get(0).isDisable(),
+                    "The unit heading cannot activate a command");
+            assertTrue(popup.getItems()
+                    .get(1) instanceof javafx.scene.control.SeparatorMenuItem);
+            assertEquals(1, popup.getItems().stream().filter(
+                    item -> item instanceof javafx.scene.control.SeparatorMenuItem)
+                    .count());
+            final Region panel = (Region) popup.getSkin().getNode();
+            final Region heading = (Region) panel.lookup("#unitContextTitle");
+            assertEquals(Color.TRANSPARENT,
+                    heading.getBackground().getFills().get(0).getFill(),
+                    "The heading must not acquire a selection fill");
+            assertEquals(Color.TRANSPARENT,
+                    heading.getBorder().getStrokes().get(0).getTopStroke());
+            assertEquals(Color.BLACK,
+                    ((Label) heading.lookup(".label")).getTextFill());
+            final javafx.scene.Node move = panel.lookup("#move");
+            final javafx.scene.Node goTo = panel.lookup("#goToUnit");
+            final javafx.geometry.Bounds first = move
+                    .localToScreen(move.getBoundsInLocal());
+            final javafx.geometry.Bounds next = goTo
+                    .localToScreen(goTo.getBoundsInLocal());
+            assertTrue(next.getMinY() >= first.getMaxY(),
+                    "Command rows must not overlap");
+            assertTrue(next.getMinY() - first.getMinY() <= maximumActionSpacing,
+                    "Ordinary commands use the selected compact spacing");
+            return null;
+        });
+    }
+
     public void verifyOpenMenuCount(final int expected) throws Exception {
         WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
             assertEquals(expected,
