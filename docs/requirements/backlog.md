@@ -577,4 +577,4 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Top-toolbar visual exploration — 2026-10-25
 
-1. [R-0273](R-0273.md) captures ten hand-drawn icon/label families and a styled colony dropdown under [A03](areas.md#a03). Status remains `new`: concepts are available for selection, runtime implementation has not started. Seasonal accent selection depends on A04; existing political action rules remain with A10.
+1. [R-0273](R-0273.md) captures ten hand-drawn icon/label families and a styled colony dropdown under [A03](areas.md#a03). Status remains `new`: family 07 — Čistý skicář is selected and three subvariants refine its hand-drawn irregularity; runtime implementation has not started. Seasonal accent selection depends on A04; existing political action rules remain with A10.

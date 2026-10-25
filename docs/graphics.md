@@ -1051,3 +1051,5 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 ## Návrhy horní lišty — R-0273
 
 Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výběru kolonie](graphics-top-menu-proposals.md). Jde o návrhy k výběru, nikoli o změnu běžící hry nebo schválené finální SVG. Rozsah a zbývající rozhodnutí vlastní [R-0273](requirements/R-0273.md).
+
+Uživatel následně vybral **07 — Čistý skicář** pro další rozpracování a požádal o dvě až tři podvarianty s drobnou nepravidelností samotných ikon. [Tři podvarianty 07A–07C](graphics-top-menu-proposals.md) zachovávají čisté ovládací prvky, pevnou tloušťku linky, plné výplně a domluvené **Playpen Sans 14 Regular**. Ruční charakter má vznikat lehce asymetrickými obrysy a jednotlivě kreslenými detaily. Výběr této rodiny není souhlasem s implementací ani s konkrétní podvariantou.

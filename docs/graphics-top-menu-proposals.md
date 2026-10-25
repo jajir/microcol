@@ -1,6 +1,6 @@
-# Horní lišta — deset výtvarných návrhů
+# Horní lišta — výtvarné návrhy
 
-**Návrhy z 25. října 2026, zatím nevybrané a nezapojené do hry.** Požadavek a jeho další rozhodnutí vlastní [R-0273](requirements/R-0273.md). Společná pravidla vzhledu zůstávají v [grafickém manuálu](graphics.md#soucasne-zadani-vzhledu).
+**Dne 25. října 2026 uživatel vybral pro další rozpracování variantu 07 — Čistý skicář.** Tři podvarianty níže porovnávají jemnou nepravidelnost ikon; zatím nejsou zapojené do hry. Požadavek a jeho další rozhodnutí vlastní [R-0273](requirements/R-0273.md). Společná pravidla vzhledu zůstávají v [grafickém manuálu](graphics.md#soucasne-zadani-vzhledu).
 
 Každý list porovnává letní a zimní lištu, trvalé názvy akcí, otevřený výběr kolonie a příklad vysvětlení ve spodní stavové liště. Nezávislost je uvedena zvlášť jako podmíněně dostupná akce. Nejde o snímky běžící hry.
 
@@ -11,7 +11,33 @@ Každý list porovnává letní a zimní lištu, trvalé názvy akcí, otevřen�
 3. Dropdown má rámeček kolem celého ovladače a oddělenou šipku. Seznam má jasný výběr se značkou, čitelné názvy a možnost zavření bez změny.
 4. Generované PNG slouží k volbě směru. Při převodu vybrané sady do SVG je nutné sjednotit geometrii mezi sezonami, přesné dvě barevné role a typografii; drobné rastrové odchylky a zvětšené příklady nejsou výrobní specifikace.
 
-## Porovnání
+## Podvarianty 07 — Čistý skicář
+
+Výběr rodiny je uzavřený: pokračujeme se sedmičkou. Uživatel požaduje drobnou přirozenou nepravidelnost samotné kresby, aby ikony nepůsobily geometricky pravidelně. Domluvené písmo **Playpen Sans 14 Regular** se nemění. Nadále platí stejná tloušťka perové linky, plné výplně a dvě barevné role; ruční dojem vytváří tvar obrysu, nikoli šrafování, textura nebo střídání tloušťky čar.
+
+| Podvarianta / PNG | Rozdíl |
+| --- | --- |
+| [07A / Jemná ruční linka](graphics-assets/top-menu-2026-10-25/07a-jemna-rucni-linka.png) | Nejmenší zásah: lehce zvlněné obrysy, stále téměř pravidelné tvary. |
+| [07B / Přirozený rukopis](graphics-assets/top-menu-2026-10-25/07b-prirozeny-rukopis.png) | Vyvážená varianta: drobná asymetrie i živější linie, bez ztráty čistoty. |
+| [07C / Volnější skica](graphics-assets/top-menu-2026-10-25/07c-volnejsi-skica.png) | Nejvýraznější rukopis: volnější proporce a křivky; stále čisté plné výplně. |
+
+**Doporučení: 07B** jako kompromis mezi čistotou a ručním charakterem. 07A mění původní vzhled nejméně; 07C slouží jako výraznější mez pro porovnání. Konečný výběr podvarianty zatím nebyl potvrzen. Větší detaily jsou výtvarné ukázky, ne důkaz stejné geometrie a přesného fontu ve výsledném SVG.
+
+[Zadání podvariant pro imagegen](graphics-assets/top-menu-2026-10-25/prompts-07.txt). Původní návrh 07 i ostatní rodiny zůstávají níže pro srovnání.
+
+### 07A / Jemná ruční linka
+
+![07A / Jemná ruční linka — podvarianta ruční kresby](graphics-assets/top-menu-2026-10-25/07a-jemna-rucni-linka.png)
+
+### 07B / Přirozený rukopis
+
+![07B / Přirozený rukopis — podvarianta ruční kresby](graphics-assets/top-menu-2026-10-25/07b-prirozeny-rukopis.png)
+
+### 07C / Volnější skica
+
+![07C / Volnější skica — podvarianta ruční kresby](graphics-assets/top-menu-2026-10-25/07c-volnejsi-skica.png)
+
+## Původní porovnání deseti rodin
 
 Nejblíže současnému vzhledu je **01**, nejstřídmější je **07**. Pro nízkou lištu stojí za porovnání **10**, která však potřebuje více šířky pro názvy. Toto doporučení je výtvarný úsudek, nikoli výsledek uživatelského testování.
 
