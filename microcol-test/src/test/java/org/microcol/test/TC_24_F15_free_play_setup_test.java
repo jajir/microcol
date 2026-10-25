@@ -344,6 +344,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         new org.microcol.page.RiverPage(getContext()).verifyRiverWidth(mouth,
                 org.microcol.model.RiverSize.LARGE,
                 org.microcol.model.Location.of(24, 13));
+        setup.verifyOriginalWorldLandscape();
         fog.saveMapEvidence("R-0263-river-approach.png");
 
         // Choose a passenger, land and found a colony using the normal dialog.
@@ -368,6 +369,41 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         game.exitToMenu();
         audit.continueGame();
         fog.verifyExplored(mouth, true);
-        game.openColonyAt(land, "River Haven").verifyColonyName("River Haven");
+        final org.microcol.page.ColonyScreen colony = game.openColonyAt(land,
+                "River Haven");
+        colony.verifyColonyName("River Haven");
+        colony.close();
+        setup.verifyOriginalWorldLandscape();
+
+        // Sail north along the coast, then enter the connected freshwater lake.
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(sea);
+        game.getRightPanelUnit(0).selectUnit();
+        final org.microcol.model.Location northernSea = org.microcol.model.Location
+                .of(26, 10);
+        fog.move(sea, northernSea, 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(northernSea);
+        game.getRightPanelUnit(0).selectUnit();
+        final org.microcol.model.Location lakeApproach = org.microcol.model.Location
+                .of(21, 8);
+        fog.move(northernSea, lakeApproach, 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(lakeApproach);
+        game.getRightPanelUnit(0).selectUnit();
+        final org.microcol.model.Location lake = org.microcol.model.Location
+                .of(19, 8);
+        fog.move(lakeApproach, lake, 3);
+        audit.press(javafx.scene.input.KeyCode.C);
+        setup.verifyShipOnFreshwaterLake(3, lake);
+        fog.saveMapEvidence("R-0287-connected-lake.png");
+
+        // Continue preserves lake identity, the ship and the richer landscape.
+        game.exitToMenu();
+        audit.continueGame();
+        setup.verifyShipOnFreshwaterLake(3, lake);
+        setup.verifyOriginalWorldLandscape();
     }
 }

@@ -110,8 +110,13 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 3. Mapa obsahuje všech 14 současných typů terénu, lesy, malé i velké řeky a všechny
    druhy zvláštních přírodních zdrojů v povolených kombinacích. Řeka má být
    objevitelná při běžném příjezdu k pevnině, při zachování pravidel odkrývání mapy.
-4. Rozsah a přejímku vede [R-0263](requirements/done/R-0263.md), včetně zbývající otázky
-   na případné nepřírodní doplňky. Jde o zadání, nikoli doloženou změnu mapy.
+4. Základní inventář a příjezd byly ověřeny v [R-0263](requirements/done/R-0263.md).
+   [R-0287](requirements/done/R-0287.md) na žádost z 25. října 2026 doplňuje hustší lesy,
+   opakované bonusy, další říční toky, místa k průzkumu a sladkovodní jezero
+   s odtokem do moře. Jezero si zachovává svou identitu i při přímém sousedství
+   oceánu podle [pravidla jezer](gap-analysis.md#terrain-reference-data-audit).
+   Nová krajina se použije při založení nové hry; rozehrané uložené mapy se nepřepisují.
+   Aktuální výsledky vede [funkční evidence](functional-tests.md#r-0287-original-world-enrichment-2026-10-25).
    Samostatná geografická Amerika [R-0221](requirements/R-0221.md) a generovaný svět
    [R-0065](requirements/done/R-0065.md) si zachovávají vlastní rozsah.
 

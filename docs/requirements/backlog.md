@@ -153,6 +153,8 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
 | [R-0263](done/R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
 
+| [R-0287](done/R-0287.md) | Enrich Original World and preserve connected freshwater lakes | Selected implementation | User request, 2026-10-25; follows R-0263 |
+
 ## A03
 
 [Shared UI interaction and feedback](areas.md#a03).

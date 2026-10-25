@@ -214,6 +214,11 @@ need the same transport as on ocean. Colonial fishing uses the ocean baseline
 of three food (the existing `CORN` representation), with the same dock or
 higher-tier prerequisite and subsequent modifiers. A lake is not a sea-lane
 exit to Europe. Water restrictions, including no forests or roads, apply.
+Connected-lake clarification (2026-10-25): a freshwater lake may connect to the
+sea through a river and may directly touch ocean water. Connectivity does not
+reclassify its explicitly authored freshwater identity. River squares remain
+land overlays; this does not permit ships to sail along a river through land.
+See [R-0287](requirements/done/R-0287.md) for the enriched Original World example.
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 

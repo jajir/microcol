@@ -7,7 +7,10 @@ import org.microcol.model.Difficulty;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
+import org.microcol.model.ResourceOverlay;
+import org.microcol.model.RiverSize;
 import org.microcol.model.TerrainType;
+import org.microcol.model.WorldMap;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.po.PersistingTool;
@@ -28,6 +31,37 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     public void selectMap(final int index) {
         select("freePlayMap", index);
+    }
+
+    public void verifyOriginalWorldLandscape() {
+        final WorldMap map = getModel().getMap();
+        assertTrue(map.getTerrainAt(Location.of(24, 14)).isHasTrees());
+        assertEquals(ResourceOverlay.GAME,
+                map.getResourceOverlayAt(Location.of(24, 14)));
+        assertEquals(ResourceOverlay.PRIME_FOOD,
+                map.getResourceOverlayAt(Location.of(25, 14)));
+        assertEquals(ResourceOverlay.FISHERY,
+                map.getResourceOverlayAt(Location.of(19, 8)));
+        assertEquals(TerrainType.LAKE,
+                map.getTerrainTypeAt(Location.of(19, 8)));
+        assertEquals(TerrainType.OCEAN,
+                map.getTerrainTypeAt(Location.of(20, 8)));
+        assertEquals(RiverSize.SMALL, map.getRiverSizeAt(Location.of(19, 10)));
+        assertTrue(
+                map.hasRiverSegment(Location.of(19, 10), Location.of(19, 11)));
+        assertTrue(
+                map.hasRiverSegment(Location.of(19, 11), Location.of(20, 12)));
+        assertTrue(map.hasLostCityRumorAt(Location.of(18, 25)));
+    }
+
+    public void verifyShipOnFreshwaterLake(final int shipId,
+            final Location expectedLocation) {
+        assertEquals(expectedLocation,
+                getModel().getUnitById(shipId).getLocation());
+        assertEquals(TerrainType.LAKE,
+                getModel().getMap().getTerrainTypeAt(expectedLocation));
+        assertTrue(getModel().getPlayerByName("Dutch")
+                .isCurrentlyVisible(expectedLocation));
     }
 
     public void selectNation(final EuropeanNation nation) {

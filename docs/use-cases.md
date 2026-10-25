@@ -987,3 +987,9 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-114/115/119: ruční oddělovací linky — 2026-10-25
 
 1. [R-0286](requirements/done/R-0286.md) sjednocuje tah oddělovačů hlavní obrazovky s obrysy tlačítek. TC21/F15, metoda `TC_10_main_screen_panels_remain_readable_when_resized`, ověřuje společný obrázek a měřítko, jedinou viditelnou hranu, EN/CZ rozměry, stavový text, kalendář a zlato. TC188/F221 zachovává ověření navigace, klávesnice, zrušení nabídky a Continue. [Výsledky](functional-tests.md#r-0286-main-screen-separators-2026-10-25) neznamenají nové přijetí všech variant těchto UC.
+
+
+### R-0287 — Original World landscape and connected lake
+
+1. UC-001/002 (Nastavení) and UC-007/008 (Hra): [R-0287](requirements/done/R-0287.md) extends `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` with nearby forest/bonus checks, a normal ship voyage from ocean to freshwater lake and Save/Continue there. The existing hidden-mouth, river rendering, landing and founding assertions remain.
+2. `OriginalWorldTest` checks regional coverage, legal features, connected river outlets, lake identity and saved landscape. `TC_80_F72_terrain_identity_test` retains the movement, fishing and terrain presentation boundaries. Actual results belong to the [functional record](functional-tests.md#r-0287-original-world-enrichment-2026-10-25); this bounded change does not close whole use cases.

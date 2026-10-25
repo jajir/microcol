@@ -62,7 +62,63 @@ class OriginalWorldTest {
         assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(25, 13)));
         assertTrue(
                 map.hasRiverSegment(Location.of(24, 13), Location.of(25, 13)));
-        assertEquals(9, source().getMap().getRiverSegments().size());
+        assertEquals(24, source().getMap().getRiverSegments().size());
+    }
+
+    @Test
+    void forestsAndBonusesAreDistributedAcrossTheContinent() {
+        final ModelPo saved = source();
+        final WorldMap map = new WorldMap(saved);
+        assertTrue(saved.getMap().getTreeSet().size() >= 70);
+        assertTrue(saved.getMap().getResourceMap().size() >= 35);
+        for (final ResourceOverlay resource : ResourceOverlay.values()) {
+            if (resource != ResourceOverlay.NONE) {
+                assertTrue(saved.getMap().getResourceMap().values().stream()
+                        .filter(value -> value == resource).count() >= 2,
+                        resource.name());
+            }
+        }
+        for (final int startY : new int[] { 3, 12, 22 }) {
+            assertTrue(saved.getMap().getTreeSet().stream()
+                    .filter(at -> at.getY() >= startY && at.getY() < startY + 4)
+                    .count() >= 10);
+        }
+        assertEquals(5, saved.getMap().getRumorSet().size());
+        for (final Location reserved : new Location[] { Location.of(17, 10),
+                Location.of(16, 10), Location.of(17, 21), Location.of(16, 21),
+                Location.of(25, 14) }) {
+            assertFalse(map.getTerrainAt(reserved).isHasTrees());
+            assertFalse(map.hasLostCityRumorAt(reserved));
+        }
+        assertEquals(ResourceOverlay.PRIME_FOOD,
+                map.getResourceOverlayAt(Location.of(25, 14)));
+    }
+
+    @Test
+    void freshwaterLakeKeepsItsIdentityBesideOceanAndHasRiverOutlet() {
+        final WorldMap map = new WorldMap(source());
+        final Location lake = Location.of(19, 9);
+        assertEquals(TerrainType.LAKE, map.getTerrainTypeAt(lake));
+        assertEquals(TerrainType.OCEAN,
+                map.getTerrainTypeAt(Location.of(20, 9)));
+        assertTrue(map.getTerrainTypeAt(lake).isSea());
+        final Location[] outlet = { Location.of(19, 10), Location.of(19, 11),
+                Location.of(20, 12), Location.of(20, 13), Location.of(21, 13),
+                Location.of(22, 13), Location.of(23, 13), Location.of(24, 13),
+                Location.of(25, 13) };
+        assertTrue(lake.isNeighbor(outlet[0]));
+        for (int i = 1; i < outlet.length; i++) {
+            assertTrue(map.hasRiverSegment(outlet[i - 1], outlet[i]));
+        }
+        assertEquals(TerrainType.OCEAN,
+                map.getTerrainTypeAt(Location.of(26, 13)));
+        for (final Location mouth : new Location[] { Location.of(17, 7),
+                Location.of(20, 25), Location.of(23, 17) }) {
+            assertNotEquals(RiverSize.NONE, map.getRiverSizeAt(mouth));
+            assertFalse(map.getRiverLinksAt(mouth).isEmpty());
+            assertTrue(mouth.getNeighbors().stream()
+                    .anyMatch(at -> map.getTerrainTypeAt(at).isSea()));
+        }
     }
 
     @Test
@@ -83,6 +139,15 @@ class OriginalWorldTest {
                         restored.getRiverSizeAt(at));
                 assertEquals(fresh.getRiverLinksAt(at),
                         restored.getRiverLinksAt(at));
+                assertEquals(fresh.getTerrainAt(at).isHasTrees(),
+                        restored.getTerrainAt(at).isHasTrees());
+                assertEquals(fresh.hasLostCityRumorAt(at),
+                        restored.hasLostCityRumorAt(at));
+                for (final GoodsType mineral : new GoodsType[] {
+                        GoodsType.SILVER, GoodsType.ORE }) {
+                    assertEquals(fresh.getMineralRemainingAt(at, mineral),
+                            restored.getMineralRemainingAt(at, mineral));
+                }
             }
         }
         assertNotEquals(FreePlayMap.REFERENCE.getResource(),
