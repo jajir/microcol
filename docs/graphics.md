@@ -1046,3 +1046,8 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 3. JavaFX nadále vlastní rozvržení, polohu u okraje obrazovky, klávesovou navigaci,
    potvrzení a zavření. Požadavek a rozsah vlastní [R-0271](requirements/done/R-0271.md);
    skutečné výsledky patří do [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).
+
+
+## Návrhy horní lišty — R-0273
+
+Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výběru kolonie](graphics-top-menu-proposals.md). Jde o návrhy k výběru, nikoli o změnu běžící hry nebo schválené finální SVG. Rozsah a zbývající rozhodnutí vlastní [R-0273](requirements/R-0273.md).

@@ -573,3 +573,8 @@ preserving native input, values and persistence. Other screens remain outside th
 3. R-0220 is selected first. The geographic extent of R-0221 is being clarified while independent work continues. All existing per-change tests, two-worker complete local acceptance, formatting, review, documentation checks and authorized commit/push requirements remain in force.
 
 4. Update 2026-10-24: R-0220 is locally accepted with its paired checkpoint journey and current precommit smoke gate. The user's subsequent instruction selects R-0261, R-0262 and R-0263 next under the amended testing/development policy. Unfinished earlier requirements remain tracked; R-0207 remains excluded.
+
+
+## Top-toolbar visual exploration — 2026-10-25
+
+1. [R-0273](R-0273.md) captures ten hand-drawn icon/label families and a styled colony dropdown under [A03](areas.md#a03). Status remains `new`: concepts are available for selection, runtime implementation has not started. Seasonal accent selection depends on A04; existing political action rules remain with A10.
