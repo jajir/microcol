@@ -33,7 +33,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         final MainScreenLayoutPage layout = new MainScreenLayoutPage(
                 getContext());
-        layout.resize(1440, 900);
+        layout.resize(1200, 900);
         toolbar.verifyControls(false, false);
         toolbar.verifySeason(Season.autumn, 0xff71864b);
         toolbar.hover("europe");
@@ -41,16 +41,16 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.focusCenterWithTab();
         toolbar.verifyExplanation("Find focused place. (C)", "center");
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-horizontal-keyboard-focus.png");
+        layout.saveEvidence("toolbar-compact-keyboard-focus.png");
         toolbar.activateFocusedButton();
         toolbar.verifyUnitUnchanged(3, 3, 2);
-        layout.saveEvidence("toolbar-horizontal-summer.png");
+        layout.saveEvidence("toolbar-compact-summer.png");
 
         // A real turn changes only the accent to winter blue; Continue keeps
         // it.
         game.nextTurnAndCloseDialogs();
         toolbar.verifySeason(Season.winter, 0xff568b9b);
-        layout.saveEvidence("toolbar-horizontal-winter.png");
+        layout.saveEvidence("toolbar-compact-winter.png");
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         toolbar.verifySeason(Season.winter, 0xff568b9b);
@@ -75,7 +75,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.hover("coloniesMenu");
         toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
                 null);
-        layout.saveEvidence("toolbar-horizontal-czech-narrow.png");
+        layout.saveEvidence("toolbar-compact-czech-narrow.png");
 
         // Empty navigation explains itself and Escape leaves the game
         // untouched.

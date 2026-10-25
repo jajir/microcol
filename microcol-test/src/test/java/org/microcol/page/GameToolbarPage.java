@@ -135,12 +135,12 @@ public final class GameToolbarPage extends AbstractScreen {
             for (final String id : IDS) {
                 final Image icon = ((ImageView) getLabeledById(id).getGraphic())
                         .getImage();
-                assertEquals(48, icon.getWidth());
-                assertEquals(48, icon.getHeight());
+                assertEquals(96, icon.getWidth());
+                assertEquals(96, icon.getHeight());
                 int inkPixels = 0;
                 int accentPixels = 0;
-                for (int y = 0; y < 48; y++) {
-                    for (int x = 0; x < 48; x++) {
+                for (int y = 0; y < 96; y++) {
+                    for (int x = 0; x < 96; x++) {
                         final int pixel = icon.getPixelReader().getArgb(x, y);
                         inkPixels += pixel == 0xff302d27 ? 1 : 0;
                         accentPixels += pixel == accent ? 1 : 0;
@@ -160,10 +160,10 @@ public final class GameToolbarPage extends AbstractScreen {
             assertEquals(focusedId,
                     getPrimaryStage().getScene().getFocusOwner().getId());
             final Labeled focused = getLabeledById(focusedId);
-            assertTrue(focused.getBorder().getImages().isEmpty(),
-                    "A border image would suppress the visible focus stroke");
-            assertFalse(focused.getBorder().getStrokes().get(0).getTopStyle()
-                    .getDashArray().isEmpty());
+            assertFalse(focused.getBorder().getImages().isEmpty(),
+                    "Keyboard focus must preserve the freehand frame");
+            assertTrue(focused.isUnderline(),
+                    "Keyboard focus also uses an underline, not color alone");
         }
     }
 

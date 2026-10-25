@@ -51,7 +51,7 @@
       <path d="M23 12 Q34 11 35 26 Q35 33 41 38 Q43 42 24 41 Q6 42 7 39 Q14 31 14 24 Q15 13 23 12 Z" fill="currentColor"/>
       <path d="M11 37 Q25 39 38 36"/>
     </g>
-    <g id="row" stroke="#302D27" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g id="row" stroke="#302D27" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <use xlink:href="#coloniesMenu"/>
       <use xlink:href="#congress" x="48"/>
       <use xlink:href="#center" x="96"/>

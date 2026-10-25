@@ -1155,6 +1155,13 @@ rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar-frame.png m
 ## Vodorovná horní lišta — R-0278
 
 1. Dne 25. října 2026 uživatel vybral [první zobrazený návrh](graphics-assets/top-menu-2026-10-25/toolbar-horizontal-proposal.png): ikona vlevo a název vedle ní. Jde o výtvarný návrh, nikoli snímek běžící hry. [R-0278](requirements/R-0278.md) navazuje na 07B z R-0273; motivy ikon, jejich pořadí, sezónní barvy a Playpen Sans 14 Regular zůstávají.
-2. Aktuální provedení zobrazuje původní atlas ve 32 × 32 logických px. Názvy jsou v jedné řadě s ikonou; při nedostatku místa se zalamují celá tlačítka. Výběr kolonií ponechává oddělenou šipku a dosavadní nabídku.
-3. [Rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) má 96 × 48 px, tah 1,2 px, nestejné rohy a lehce zvlněné hrany. Šestipixelové rohy při devítidílném roztažení zachovávají čitelnou nepravidelnost. Export do stávajícího PNG používá stejný příkaz jako R-0273 níže. Zaměření klávesnicí ponechává výrazný přerušovaný obrys.
+2. Podle uživatelova porovnání skutečné hry s návrhem z 25. října 2026 jsou linky zesílené a rozestupy menší. Ikony mají 32 × 32 logických px, zdrojový tah 2,4 jednotky (1,6 logického px). Názvy zůstávají vedle ikon; mezera mezi ikonou a textem i mezi tlačítky je 3 px. Užší okno zalamuje celá tlačítka. Výběr kolonií zachovává oddělenou šipku s menším odsazením.
+3. [Rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) má souřadnice 96 × 48, tah 2 px, nestejné rohy a lehce zvlněné hrany. Oba rastry se exportují ve dvojnásobném rozlišení: atlas 1152 × 192 px s buňkami 96 px a rámeček 192 × 96 px. Dvanáctipixelový řez rámečku se zobrazuje v šířce šesti logických px. Zaměření klávesnicí zachovává kreslený rámeček a označuje název podtržením i výplní.
 4. Ověření EN/CZ rozložení, klávesnice, nabídky kolonií a skutečné snímky vede [funkční evidence](functional-tests.md#r-0278-horizontal-toolbar-2026-10-25). Úprava provedení sama není důkazem přijetí ani publikace.
+
+Aktuální export (nahrazuje jednonásobný export R-0273):
+
+```sh
+rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar.png microcol-game/src/graphics/game-toolbar.svg
+rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
+```

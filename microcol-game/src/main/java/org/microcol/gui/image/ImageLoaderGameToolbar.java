@@ -4,7 +4,7 @@ package org.microcol.gui.image;
 final class ImageLoaderGameToolbar extends AbstractTiledImageLoader {
     ImageLoaderGameToolbar() {
         super(TileImageParams.makeBuilder().setTileWidthCount(12)
-                .setTileHeightCount(2).setTileWidth(48).build(),
+                .setTileHeightCount(2).setTileWidth(96).build(),
                 "game-toolbar.png", "gameToolbar_");
     }
 

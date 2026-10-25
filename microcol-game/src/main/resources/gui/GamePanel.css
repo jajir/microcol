@@ -28,9 +28,9 @@
 }
 .game-screen .buttonPanel {
     -fx-background-color: #FFF9EC;
-    -fx-padding: 8 12 8 12;
-    -fx-hgap: 6;
-    -fx-vgap: 6;
+    -fx-padding: 6 6 6 6;
+    -fx-hgap: 3;
+    -fx-vgap: 4;
     -fx-border-color: #292824;
     -fx-border-width: 0 0 1 0;
 }
@@ -42,11 +42,11 @@
     -fx-background-radius: 3;
     -fx-background-insets: 2;
     -fx-border-image-source: url("../images/game-toolbar-frame.png");
-    -fx-border-image-slice: 6;
+    -fx-border-image-slice: 12;
     -fx-border-image-width: 6;
     -fx-border-image-repeat: stretch;
-    -fx-padding: 6 8 7 8;
-    -fx-graphic-text-gap: 6;
+    -fx-padding: 6 3 7 3;
+    -fx-graphic-text-gap: 3;
     -fx-text-fill: #302D27;
     -fx-effect: null;
 }
@@ -55,11 +55,8 @@
     -fx-background-color: #E7E7D0;
 }
 .game-screen .game-toolbar-control:focused {
-    -fx-border-image-source: null;
-    -fx-border-color: #302D27;
-    -fx-border-insets: 4;
-    -fx-border-style: segments(2, 3);
-    -fx-border-width: 1;
+    -fx-background-color: #E7E7D0;
+    -fx-underline: true;
 }
 .game-screen .game-toolbar-control:armed {
     -fx-background-color: #DCDCC5;
@@ -70,13 +67,13 @@
 }
 .game-screen #coloniesMenu {
     -fx-min-height: 57;
-    -fx-padding: 6 5 6 9;
+    -fx-padding: 6 3 6 3;
 }
 .game-screen #coloniesMenu > .label {
-    -fx-padding: 0 10 0 0;
+    -fx-padding: 0 4 0 0;
 }
 .game-screen #coloniesMenu > .arrow-button {
-    -fx-padding: 0 9 0 12;
+    -fx-padding: 0 5 0 6;
     -fx-border-color: #746E60;
     -fx-border-width: 0 0 0 1;
     -fx-background-color: transparent;
