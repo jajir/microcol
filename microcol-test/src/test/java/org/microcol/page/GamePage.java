@@ -103,12 +103,16 @@ public class GamePage extends AbstractScreen {
     }
 
     private void dragToLocation(final Location location) {
+        // An explicit map hover is the drag source; menu checks have no hover
+        // and fall back to the selected tile when returning to the map.
+        final Location source = getContext().getClassFromGuice(
+                org.microcol.gui.screen.game.gamepanel.MouseOverTileManager.class)
+                .getMouseOverTile()
+                .orElseGet(() -> getContext()
+                        .getClassFromGuice(SelectedTileManager.class)
+                        .getSelectedTile().orElseThrow());
         closeUnitActions();
-        // Menu checks leave the pointer on the unit card, not the map.
-        final Location selected = getContext()
-                .getClassFromGuice(SelectedTileManager.class).getSelectedTile()
-                .orElseThrow();
-        final javafx.geometry.Point2D start = screenPoint(selected);
+        final javafx.geometry.Point2D start = screenPoint(source);
         getRobot().moveTo(start.getX(), start.getY(), Motion.DEFAULT);
         getRobot().drag(MouseButton.PRIMARY);
         final javafx.geometry.Point2D point = screenPoint(location);
@@ -154,7 +158,9 @@ public class GamePage extends AbstractScreen {
         openUnitContextAt(unit.getLocation());
         if (isCssIdShown("unitChoices")) {
             getRobot().moveTo("#unitChoices");
-            getRobot().clickOn("#selectUnit-" + unitId);
+            // Enter the submenu before moving down across other action rows.
+            getRobot().clickOn("#selectUnit-" + unitId,
+                    Motion.HORIZONTAL_FIRST);
             WaitForAsyncUtils.waitForFxEvents();
         }
         closeUnitActions();

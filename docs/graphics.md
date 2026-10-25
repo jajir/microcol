@@ -1060,16 +1060,22 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 ## Kontextové nabídky — R-0271
 
 1. Společný vzhled v [ContextMenus.css](../microcol-game/src/main/resources/gui/ContextMenus.css)
-   používá papírovou plochu, lehce nepravidelný černý obrys a Playpen Sans Regular 14.
-   Zaměřený řádek má ploché zvýraznění v barvě společných dřevěných ovladačů.
-   Styl načítá hlavní scéna i dialogy; platí také pro rozbalovací nabídku kolonií.
+   používá papírovou plochu a Playpen Sans Regular 14. Uživatelem vybraná varianta 1
+   z 25. října 2026 v [R-0276](requirements/done/R-0276.md) požaduje viditelně ruční
+   jediný tah pera: nepravidelný obrys, mírně prohnuté hrany a měkké spoje.
+   Zaměřený řádek má teplou plochou výplň a vlastní uzavřený ručně kreslený
+   rámeček. Stejný obrys používá příkaz Jettison goods i položka výběru kolonie;
+   systémový rovný či přerušovaný rámeček uvnitř této volby se nezobrazuje.
+   Styl načítá hlavní scéna i dialogy.
 2. Název akce je vlevo, skutečný JavaFX akcelerátor v samostatném sloupci vpravo
-   s rámečkem klávesy. Zvýraznění nezvyšuje tloušťku písma. Položka bez
-   akcelerátoru nemá zástupnou klávesu; tato změna nezavádí nové zkratky.
+   s ručně kresleným rámečkem klávesy. Také vlastní příkazy jednotky oddělují
+   existující lokalizovanou zkratku od viditelného názvu; klávesa zůstává vpravo.
+   Zvýraznění nezvyšuje tloušťku písma. Položka bez zkratky nemá zástupnou
+   klávesu; tato změna nezavádí nové zkratky ani jejich obsluhu.
 3. JavaFX nadále vlastní rozvržení, polohu u okraje obrazovky, klávesovou navigaci,
-   potvrzení a zavření. Požadavek a rozsah vlastní [R-0271](requirements/done/R-0271.md);
-   skutečné výsledky patří do [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).
-
+   potvrzení a zavření. Původní rozsah vlastní [R-0271](requirements/done/R-0271.md),
+   vybraný kreslený obrys [R-0276](requirements/done/R-0276.md). Skutečné výsledky
+   patří do [funkční evidence](functional-tests.md#r-0276-single-stroke-menu-selection-2026-10-25).
 
 ## Návrhy horní lišty — R-0273
 

@@ -62,11 +62,3 @@
 .unit-actions-menu .button:disabled {
     -fx-opacity: 0.65;
 }
-
-.unit-actions-menu .button:focused {
-    -fx-border-color: #292824;
-    -fx-border-style: dashed;
-}
-.unit-actions-menu .button:hover {
-    -fx-background-color: #dfbd91;
-}

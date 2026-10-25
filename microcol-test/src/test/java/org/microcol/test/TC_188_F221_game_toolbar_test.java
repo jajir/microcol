@@ -94,6 +94,11 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         toolbar.openColoniesWithKeyboard();
         toolbar.verifyColonies(true, false, "New Amsterdam");
+        final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.hoverItem(".menu-item");
+        menu.verifyDrawnSelection(".menu-item:focused");
+        menu.captureMenu("r0276-colony-focus.png");
         toolbar.dismissColonies(true);
         toolbar.verifyColonies(false, false, "New Amsterdam");
 

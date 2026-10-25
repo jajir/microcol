@@ -203,7 +203,18 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         orders.openActionsWithKeyboard();
         orders.verifyMenuVisible(true);
         orders.verifyContextCommands(false);
-        orders.captureDialog("waitUnit", "r0270-ship-context.png");
+        // Moving from the unit submenu to an action closes the sibling popup.
+        final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.verifyShortcut("#move", "M");
+        menu.verifyShortcut("#waitUnit", "Tab");
+        menu.verifyShortcut("#skipUnitTurn", "Space");
+        menu.hoverItem("#unitChoices");
+        menu.verifyOpenMenuCount(2);
+        menu.hoverItem("#waitUnit");
+        menu.verifyOpenMenuCount(1);
+        menu.verifyDrawnSelection("#waitUnit");
+        menu.captureMenu("r0276-unit-focus.png");
         orders.dismissActions();
         orders.verifyMenuVisible(false);
         orders.verifyMovement(3, 1, 1, 197);
@@ -253,6 +264,13 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         orders.openActionsWithKeyboard();
         orders.verifyLocalizedMenu("galeona", "Čekat (Tab)",
                 "Vynechat tah jednotky (Mezerník)");
+        // Localized keycaps remain separate and readable in a narrow window.
+        final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.verifyShortcut("#move", "M");
+        menu.verifyShortcut("#skipUnitTurn", "Mezerník");
+        menu.hoverItem("#waitUnit");
+        menu.verifyDrawnSelection("#waitUnit");
         orders.captureDialog("waitUnit", "r0270-context-cs-1000.png");
         orders.dismissActions();
         orders.verifyMovement(3, 1, 1, 197);

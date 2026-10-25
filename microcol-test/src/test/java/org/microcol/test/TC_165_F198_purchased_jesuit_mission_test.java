@@ -166,7 +166,7 @@ public class TC_165_F198_purchased_jesuit_mission_test
         // expert.
         final NativeVisitPage visit = new NativeVisitPage(getContext());
         final NativeMissionPage mission = new NativeMissionPage(getContext());
-        journey.chooseUnitOnColonySquare(COLONY, CAPITAL, JESUIT);
+        journey.chooseUnitOnColonySquare(JESUIT);
         journey.verifySelectedUnit(JESUIT);
         visit.enterSettlement(COLONY, CAPITAL);
         mission.verifyMissionButtonShown();
@@ -185,7 +185,7 @@ public class TC_165_F198_purchased_jesuit_mission_test
 
         // Choose the Jesuit again; Confirm stations the same Jesuit at the
         // settlement.
-        journey.chooseUnitOnColonySquare(COLONY, CAPITAL, JESUIT);
+        journey.chooseUnitOnColonySquare(JESUIT);
         journey.verifySelectedUnit(JESUIT);
         visit.enterSettlement(COLONY, CAPITAL);
         mission.startMissionChoice();

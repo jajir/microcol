@@ -44,6 +44,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Background;
 import java.util.ArrayList;
@@ -434,6 +436,27 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             button.getProperties().put("unitLabel", labelKey);
         }
         button.setText(button.getText().replace('\n', ' '));
+        final Label caption = new Label();
+        caption.getStyleClass().add("unit-action-caption");
+        caption.setWrapText(true);
+        final Label shortcut = new Label();
+        shortcut.getStyleClass().add("unit-action-shortcut");
+        shortcut.setMinWidth(Region.USE_PREF_SIZE);
+        shortcut.managedProperty().bind(shortcut.visibleProperty());
+        final Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        final HBox face = new HBox(8, caption, spacer, shortcut);
+        face.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        // Fixed menu column, independent of the button's first layout pass.
+        face.setPrefWidth(266);
+        face.setMouseTransparent(true);
+        button.setGraphic(face);
+        button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        // Advertise the graphic's horizontal content bias to the menu layout.
+        button.setWrapText(true);
+        button.textProperty().addListener((observable, oldText,
+                newText) -> updateUnitCaption(newText, caption, shortcut));
+        updateUnitCaption(button.getText(), caption, shortcut);
         button.addEventFilter(ActionEvent.ACTION, event -> unitActions.hide());
         // Stop the menu skin forwarding the button's action back into its menu
         // item.
@@ -450,15 +473,31 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         explanation.managedProperty().bind(explanation.visibleProperty());
         final VBox row = new VBox(2, button, explanation);
         row.setPrefWidth(290);
+        // JavaFX custom rows focus themselves but leave sibling submenus open.
+        row.setOnMouseEntered(event -> unitChoices.hide());
         final CustomMenuItem item = new CustomMenuItem(row, true);
         // The embedded button handles its click; the menu item handles keyboard
         // selection.
         button.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 event -> event.consume());
+        item.getStyleClass().add("unit-command-item");
         item.setOnAction(event -> button.fire());
         item.disableProperty().bind(button.disableProperty());
         item.visibleProperty().bind(button.visibleProperty());
         unitActions.getItems().add(item);
+    }
+
+    private void updateUnitCaption(final String text, final Label caption,
+            final Label shortcut) {
+        // Existing translations own both the action and its displayed shortcut.
+        final String label = text.replace('\n', ' ');
+        final int keyStart = label.lastIndexOf(" (");
+        final boolean hasKey = keyStart >= 0 && label.endsWith(")");
+        caption.setText(hasKey ? label.substring(0, keyStart) : label);
+        shortcut.setText(
+                hasKey ? label.substring(keyStart + 2, label.length() - 1)
+                        : "");
+        shortcut.setVisible(hasKey);
     }
 
     /** Keep the selected unit's route visible independently of its menu. */

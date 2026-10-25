@@ -149,7 +149,12 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
 
     public void verifyMenuVisible(final boolean expected) {
         assertEquals(expected,
-                getNodeFinder().lookup("#waitUnit").tryQuery().isPresent());
+                javafx.stage.Window.getWindows().stream().anyMatch(
+                        window -> window instanceof javafx.scene.control.ContextMenu
+                                && "unitActionsMenu".equals(
+                                        ((javafx.scene.control.ContextMenu) window)
+                                                .getId())
+                                && window.isShowing()));
     }
 
     public void verifyGlobalToolbar() {

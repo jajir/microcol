@@ -45,6 +45,71 @@ public final class ContextMenuPage extends AbstractScreen {
         });
     }
 
+    public void hoverItem(final String selector) {
+        getRobot().moveTo(menu().getSkin().getNode().lookup(selector));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyOpenMenuCount(final int expected) throws Exception {
+        WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
+            assertEquals(expected,
+                    Window.getWindows().stream()
+                            .filter(window -> window instanceof ContextMenu
+                                    && window.isShowing())
+                            .count());
+            return null;
+        });
+    }
+
+    public void verifyDrawnSelection(final String selector) throws Exception {
+        WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
+            final Region row = (Region) menu().getSkin().getNode()
+                    .lookup(selector);
+            assertEquals(Color.web("#dfbd91"),
+                    row.getBackground().getFills().get(0).getFill());
+            assertEquals(Color.BLACK,
+                    row.getBorder().getStrokes().get(0).getTopStroke());
+            for (final javafx.scene.Node node : row.lookupAll(".label")) {
+                assertEquals(Color.BLACK, ((Label) node).getTextFill(),
+                        "Focused action stays readable in black ink");
+            }
+            assertTrue(row.getShape() instanceof javafx.scene.shape.SVGPath);
+            assertTrue(
+                    ((javafx.scene.shape.SVGPath) row.getShape()).getContent()
+                            .contains("Q"),
+                    "Selection has curved freehand edges");
+            assertTrue(row.getBorder().getStrokes().get(0).getTopStyle()
+                    .getDashArray().isEmpty());
+            return null;
+        });
+    }
+
+    public void verifyShortcut(final String selector, final String expectedKey)
+            throws Exception {
+        WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
+            final javafx.scene.control.Button button = (javafx.scene.control.Button) menu()
+                    .getSkin().getNode().lookup(selector);
+            final Label key = (Label) button.lookup(".unit-action-shortcut");
+            assertEquals(expectedKey, key.getText());
+            assertTrue(key.isVisible());
+            assertNotNull(key.getShape());
+            final Label caption = (Label) ((javafx.scene.layout.HBox) button
+                    .getGraphic()).getChildren().get(0);
+            assertFalse(caption.getText().contains("("));
+            assertTrue(caption.localToScreen(caption.getBoundsInLocal())
+                    .getMaxX() < key.localToScreen(key.getBoundsInLocal())
+                            .getMinX());
+            assertTrue(caption
+                    .getHeight() >= caption.prefHeight(caption.getWidth()) - 1);
+            assertTrue(key.getWidth() >= key.prefWidth(-1) - 1);
+            assertTrue(
+                    button.getHeight() <= button.prefHeight(button.getWidth())
+                            + 1,
+                    "Command height is measured at the available menu width");
+            return null;
+        });
+    }
+
     public void captureMenu(final String fileName) throws Exception {
         final Path output = Path.of("target", "warehouse-qa", fileName);
         Files.createDirectories(output.getParent());

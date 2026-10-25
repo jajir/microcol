@@ -67,6 +67,13 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifySelectedUnit(Optional.of(SHIP));
         jettison.verifyMapControlVisible(true);
         jettison.verifyMapControlEnabled(true);
+        // The actual cargo command shares the drawn selection used by colonies.
+        game.openUnitContextAt(SEA);
+        final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
+                getContext());
+        menu.hoverItem("#jettisonUnit");
+        menu.verifyDrawnSelection("#jettisonUnit");
+        menu.captureMenu("r0276-jettison-focus.png");
 
         // Cancelling the hold list changes nothing.
         jettison.useMapControl();

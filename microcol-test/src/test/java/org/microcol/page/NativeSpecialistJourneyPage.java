@@ -9,7 +9,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -117,29 +116,9 @@ public final class NativeSpecialistJourneyPage extends AbstractScreen {
                 "The native scenario has no entry " + key + "=" + value);
     }
 
-    /**
-     * Choose one of several own units on a colony square, as a player does. A
-     * plain click there opens the colony, so the square is selected with a drag
-     * toward the pointed square that Escape cancels before the release; nothing
-     * moves. The right panel then lists the units of that square and the wanted
-     * one is clicked.
-     *
-     * @param colony    required colony square with the units
-     * @param pointedAt required other visible square the drag points to
-     * @param unitId    ID of the unit to choose in the right panel
-     */
-    public void chooseUnitOnColonySquare(final Location colony,
-            final Location pointedAt, final int unitId) throws Exception {
-        final FogPage map = new FogPage(getContext());
-        map.preview(colony, pointedAt);
-        map.cancelPreview();
-        final String panel = "#unitPanel-" + unitId;
-        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                () -> getNodeFinder().lookup(panel).tryQuery().isPresent());
-        getRobot().clickOn(panel);
-        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                () -> selectedUnitId().filter(id -> id == unitId).isPresent());
-        WaitForAsyncUtils.waitForFxEvents();
+    /** Choose the unit through the map submenu, including colony squares. */
+    public void chooseUnitOnColonySquare(final int unitId) {
+        GamePage.of(getContext()).selectMapUnit(unitId);
     }
 
     private Optional<Integer> selectedUnitId() {

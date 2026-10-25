@@ -99,6 +99,8 @@ public class ContextMenuStyleTest {
             assertEquals(14, key.getFont().getSize());
             assertFalse(key.getBorder().isEmpty());
             final Region row = (Region) key.getParent();
+            assertNotNull(row.getShape());
+            assertNotNull(key.getShape());
             final Label caption = (Label) row.getChildrenUnmodifiable().stream()
                     .filter(node -> node instanceof Label && node != key)
                     .findFirst().orElseThrow();

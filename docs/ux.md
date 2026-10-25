@@ -785,7 +785,11 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
 
 1. Nabídka pojmenuje každou akci a případnou skutečnou zkratku oddělí do
    rámečku vpravo. Zkratku nevkládáme do závorky v názvu ani ji nevymýšlíme
-   pro akci, která ji nemá. Samotná existence zkratky na mapě neopravňuje
+   pro akci, která ji nemá. [R-0276](requirements/done/R-0276.md) sjednocuje
+   jediný ruční obrys fokusu v kontextové nabídce a seznamu kolonií; myš
+   i klávesnice zvýrazní celou volbu stejnou teplou výplní a inkoustovým
+   rámečkem. Nedostupné položky zachovají vysvětlení.
+   Samotná existence zkratky na mapě neopravňuje
    ukazovat ji jako dostupnou v kolonii či Evropě.
 2. Společné [grafické provedení](graphics.md#kontextove-nabidky-r-0271)
    zachovává rozpoznatelné zaměření a nedostupnost. Myš i klávesnice vedou

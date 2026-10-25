@@ -584,3 +584,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Selected terrain artwork — 2026-10-25
 
 1. [R-0274](done/R-0274.md) is complete locally: A03 owns the user-selected 14 terrain and 12 resource symbols, shared by the map and reference. A05 supplies existing identities and rules. Acceptance is recorded in the [functional evidence](../functional-tests.md#r-0274-selected-terrain-artwork-2026-10-25).
+
+## Single-stroke menus — 2026-10-25
+
+1. [R-0276](done/R-0276.md) implements user-selected visual proposal 1 for context menus and the same selected-row frame in the main-screen colony dropdown. It follows R-0271/R-0272/R-0273 under A03 and is complete locally; the [functional evidence](../functional-tests.md#r-0276-single-stroke-menu-selection-2026-10-25) records acceptance and screenshots.

@@ -1,11 +1,11 @@
-/* Native menu layout and input, drawn with the game's paper and ink palette. */
+/* Single-stroke pen contours; JavaFX retains menu layout and input. */
 .context-menu {
     -fx-background-color: #fff9ec;
     -fx-background-insets: 0;
     -fx-border-color: black;
-    -fx-border-width: 1;
+    -fx-border-width: 1.25;
     -fx-border-insets: 0;
-    -fx-shape: "M 2 3 Q 240 0 500 2 Q 760 4 998 1 L 997 498 L 999 997 Q 740 1000 500 998 L 1 999 L 3 500 Z";
+    -fx-shape: "M 3 3 Q 32 5 70 3 Q 140 1 200 3 Q 280 5 340 2 L 397 2 Q 396 65 398 125 Q 396 220 398 300 Q 396 390 399 470 L 398 598 Q 330 596 270 599 Q 200 597 135 599 Q 65 597 2 599 Q 4 530 2 455 Q 4 375 2 300 Q 4 220 2 145 Q 4 65 3 3 Z";
     -fx-padding: 10 9 10 9;
     -fx-effect: null;
     -fx-font-family: "Playpen Sans";
@@ -13,24 +13,41 @@
     -fx-font-weight: normal;
 }
 
+.context-menu .menu-item,
+.context-menu.unit-actions-menu .button {
+    -fx-border-width: 1.25;
+    -fx-shape: "M 5 1.5 Q 45 0 85 1.5 Q 130 0.5 175 1.5 Q 225 0 270 1.5 L 294 1 Q 299 1 299 6 L 298.5 22 L 299 37 Q 299 42 294 42 Q 250 43 210 41.5 Q 165 43 120 42 Q 70 43 30 41.5 L 6 42 Q 1 42 1 37 L 1.5 21 L 1 7 Q 1 2 5 1.5 Z";
+}
 .context-menu .menu-item {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-border-width: 1;
+    -fx-border-width: 1.25;
     -fx-padding: 7 12 7 12;
 }
 
-.context-menu .menu-item:focused {
+.context-menu .menu-item:focused,
+.context-menu.unit-actions-menu .unit-command-item:focused .button,
+.context-menu.unit-actions-menu .button:focused {
     -fx-background-color: #dfbd91;
     -fx-border-color: black;
 }
 
-.context-menu .menu-item > .label {
+.context-menu.unit-actions-menu .unit-command-item:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.context-menu .menu-item > .label,
+.context-menu .unit-action-caption,
+.context-menu .unit-action-shortcut {
     -fx-text-fill: black;
     -fx-font-family: "Playpen Sans";
     -fx-font-size: 14;
     -fx-font-weight: normal;
+}
+
+.context-menu.unit-actions-menu .button .label:disabled {
+    -fx-opacity: 1;
 }
 
 .context-menu .menu-item:disabled {
@@ -38,18 +55,27 @@
 }
 
 /* JavaFX lays out the actual accelerator in a separate, aligned right column. */
-.context-menu .menu-item > .accelerator-text {
+.context-menu .menu-item > .accelerator-text,
+.context-menu .unit-action-shortcut {
+    -fx-shape: "M 9 2 Q 29 0 50 2 Q 72 0 91 2 Q 98 2 98 9 L 99 29 Q 98 37 91 38 Q 68 37 50 39 Q 28 37 9 38 Q 2 38 2 30 L 1 10 Q 2 2 9 2 Z";
     -fx-background-color: #fff9ec;
     -fx-border-color: black;
-    -fx-border-width: 1;
+    -fx-border-width: 1.25;
     -fx-background-radius: 3;
     -fx-border-radius: 3;
     -fx-padding: 2 7 2 7;
 }
 
 .context-menu .separator:horizontal .line {
-    -fx-border-color: #746e60 transparent transparent transparent;
-    -fx-border-insets: 3 10 3 10;
+    -fx-background-color: #292824;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-min-height: 1.25;
+    -fx-pref-height: 1.25;
+    -fx-max-height: 1.25;
+    -fx-shape: "M 0 0.5 Q 55 0 100 0.5 Q 150 1 200 0.5 Q 250 0 300 0.5 L 300 1.5 Q 250 1 200 1.5 Q 150 2 100 1.5 Q 55 1 0 1.5 Z";
 }
 
 .context-menu .menu:focused > .right-container > .arrow,
