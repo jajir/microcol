@@ -22,51 +22,13 @@ public class TerrainImageProvider {
     TerrainImageProvider(final ImageCache imageCache) {
         Preconditions.checkNotNull(imageCache);
 
-        terrainMap = ImmutableMap.<TerrainType, Image>builder()
-                .put(TerrainType.GRASSLAND,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_GRASSLAND))
-                .put(TerrainType.OCEAN,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1))
-                .put(TerrainType.TUNDRA,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_1))
-                .put(TerrainType.ARCTIC,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_1))
-                .put(TerrainType.MOUNTAIN,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_MOUNTAIN_2))
-                .put(TerrainType.HILL,
-                        imageCache.getImage(ImageLoaderTerrain.IMG_TILE_HILL_1))
-                .put(TerrainType.PRAIRIE,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_PRAIRIE_1))
-                .put(TerrainType.HIGH_SEA,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_HIGH_SEA))
-                // Types without dedicated artwork reuse the closest existing
-                // tile; their identity is shown by the localized name.
-                .put(TerrainType.SAVANNAH,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_PRAIRIE_2))
-                .put(TerrainType.PLAINS,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_PRAIRIE_1))
-                .put(TerrainType.SWAMP,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_GRASSLAND))
-                .put(TerrainType.MARSH,
-                        imageCache.getImage(
-                                ImageLoaderTerrain.IMG_TILE_GRASSLAND))
-                .put(TerrainType.DESERT,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_2))
-                .put(TerrainType.LAKE,
-                        imageCache
-                                .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1))
-                .build();
+        final ImmutableMap.Builder<TerrainType, Image> builder = ImmutableMap
+                .builder();
+        for (final TerrainType terrain : TerrainType.TERRAINS) {
+            builder.put(terrain, imageCache
+                    .getImage(ImageLoaderTerrainSymbols.terrainKey(terrain)));
+        }
+        terrainMap = builder.build();
     }
 
     /**

@@ -10,6 +10,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.MicroColException;
 import org.microcol.model.TerrainType;
+import org.microcol.model.ResourceOverlay;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -91,6 +92,14 @@ public final class ImageProvider {
      */
     public Image getImage(final String name) {
         return imageCache.getImage(name);
+    }
+
+    /**
+     * Return the selected resource picture in its transparent 45-pixel tile.
+     */
+    public Image getResourceImage(final ResourceOverlay resource) {
+        return imageCache
+                .getImage(ImageLoaderTerrainSymbols.resourceKey(resource));
     }
 
     /**

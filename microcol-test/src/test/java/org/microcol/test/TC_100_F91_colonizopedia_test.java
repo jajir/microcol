@@ -252,6 +252,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifySelectedTopic("Terrain", "base output per worker");
         help.verifyReferenceRows(14);
         help.verifyTerrainIllustrations();
+        help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
                 "Move cost: 1; defense: +0%", "Corn 4", "With forest",
@@ -261,13 +262,14 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "Move cost: 3; defense: +150%", "Silver 1", "Fields: no");
         help.verifyReferenceProperties("colonizopediaTerrainProperties_ARCTIC",
                 "Base production: none");
-        help.captureDialog("colonizopediaReference", "r0269-terrain-en.png");
+        help.captureDialog("colonizopediaReference", "r0274-terrain-en.png");
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
         help.captureDialog("colonizopediaReference",
-                "r0269-terrain-end-en.png");
+                "r0274-terrain-end-en.png");
 
-        // Resource names are searchable; the legend uses map markers and actual
+        // Resource names are searchable; the legend uses selected map pictures
+        // and actual
         // reserves.
         help.typeSearch("silver deposit");
         help.verifyTopicTitles("Terrain bonuses");
@@ -281,11 +283,11 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
                 "Allowed terrain: Ocean, Lake", "Corn +2", "Does not deplete.");
-        help.captureDialog("colonizopediaReference", "r0269-bonuses-en.png");
+        help.captureDialog("colonizopediaReference", "r0274-bonuses-en.png");
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
         help.captureDialog("colonizopediaReference",
-                "r0269-bonuses-end-en.png");
+                "r0274-bonuses-end-en.png");
         help.closeWithOk();
         help.verifyGameStateUnchanged(before);
     }
@@ -307,11 +309,12 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.selectTopicWithMouse("Terén");
         help.verifyReferenceRows(14);
         help.verifyTerrainIllustrations();
+        help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
                 "Cena pohybu: 1; obrana: +0%", "Jídlo 4", "S lesem", "Dříví 6",
                 "Pole: ano");
-        help.captureDialog("colonizopediaReference", "r0269-terrain-cs.png");
+        help.captureDialog("colonizopediaReference", "r0274-terrain-cs.png");
 
         // Search a localized bonus name without accents and inspect the
         // translated legend.
@@ -324,7 +327,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
                 "Povolený terén: Oceán, Jezero", "Jídlo +2", "Nevyčerpává se.");
-        help.captureDialog("colonizopediaReference", "r0269-bonuses-cs.png");
+        help.captureDialog("colonizopediaReference", "r0274-bonuses-cs.png");
         help.closeWithEscape();
         help.verifyGameStateUnchanged(before);
         help.verifyNextTurnEnabled();

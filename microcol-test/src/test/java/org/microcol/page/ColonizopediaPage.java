@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.util.PaintService;
+import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.gamepanel.MapManager;
+import javafx.scene.image.Image;
 import org.microcol.model.TerrainType;
 import org.microcol.model.ResourceOverlay;
 import javafx.scene.canvas.Canvas;
@@ -291,6 +293,39 @@ public final class ColonizopediaPage extends AbstractScreen {
         }).get(5, TimeUnit.SECONDS);
     }
 
+    public void verifySelectedTerrainArtwork() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            final MapManager map = getContext()
+                    .getClassFromGuice(MapManager.class);
+            final LocalizationHelper names = new LocalizationHelper(getI18n());
+            for (final TerrainType terrain : TerrainType.TERRAINS) {
+                final Image selected = images.getTerrainImage(terrain);
+                assertEquals(selected, map.getTerrainImage(terrain),
+                        "Map and reference share the selected terrain: "
+                                + terrain.name());
+                final VBox cell = getNodeFinder()
+                        .lookup("#colonizopediaTerrain_" + terrain.name())
+                        .queryAs(VBox.class);
+                final Canvas open = cell.lookupAll("Canvas").stream()
+                        .map(node -> (Canvas) node)
+                        .filter(node -> names.getTerrainName(terrain)
+                                .equals(node.getAccessibleText()))
+                        .findFirst().orElseThrow();
+                final Image painted = open.snapshot(null, null);
+                for (int y = 0; y < 45; y++) {
+                    for (int x = 0; x < 45; x++) {
+                        assertEquals(selected.getPixelReader().getArgb(x, y),
+                                painted.getPixelReader().getArgb(x, y),
+                                "Selected terrain picture: " + terrain.name());
+                    }
+                }
+            }
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
     public void verifyResourceIllustrations() throws Exception {
         WaitForAsyncUtils.asyncFx(() -> {
             final LocalizationHelper names = new LocalizationHelper(getI18n());
@@ -304,11 +339,25 @@ public final class ColonizopediaPage extends AbstractScreen {
                 assertEquals(names.getResourceOverlayName(resource),
                         ((Labeled) cell.lookup(".label")).getText());
                 final Canvas canvas = (Canvas) cell.lookup("Canvas");
-                assertEquals(PaintService.resourceMarkerColor(resource),
-                        canvas.snapshot(null, null).getPixelReader()
-                                .getColor(36, 9),
-                        "The reference uses the actual map marker: "
-                                + resource.name());
+                final Image icon = getContext()
+                        .getClassFromGuice(ImageProvider.class)
+                        .getResourceImage(resource);
+                final Image painted = canvas.snapshot(null, null);
+                int checked = 0;
+                for (int y = 0; y < 45; y++) {
+                    for (int x = 0; x < 45; x++) {
+                        if (icon.getPixelReader().getColor(x, y)
+                                .getOpacity() == 1) {
+                            assertEquals(icon.getPixelReader().getArgb(x, y),
+                                    painted.getPixelReader().getArgb(x, y),
+                                    "Selected resource picture: "
+                                            + resource.name());
+                            checked++;
+                        }
+                    }
+                }
+                assertTrue(checked > 50,
+                        "Reference includes a readable resource silhouette");
             }
             return null;
         }).get(5, TimeUnit.SECONDS);

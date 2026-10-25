@@ -65,6 +65,7 @@ public class TC_91_F82_resource_overlays_test extends AbstractMicroColTest {
         // Inspecting the square names the resource in the right panel.
         gamePage.selectTile(ResourceFixture.SUGAR_LOCATION);
         resource.verifyInspectedName("Prime sugar cane land");
+        gamePage.captureDialog("tileName", "r0274-resource-map.png");
 
         // Only the matching output gains the bonus: grassland sugar 1 becomes
         // 3, while corn 4, tobacco 3 and fur 0 are unchanged.

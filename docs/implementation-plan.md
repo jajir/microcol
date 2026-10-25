@@ -648,3 +648,7 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 1. [R-0263](requirements/done/R-0263.md) now uses the separate `original-world.microcol` resource. The reference expedition continues to use `free-play.microcol`; Original World retains its existing Dutch-only start, French colonies and seed 134.
 2. The fixed natural landscape contains every base terrain and resource kind, northern tundra attached to the continent, a southern ice shelf without tundra, and a small-to-large river reaching (25,13). The ordinary Dutch approach from (45,15) reaches sea square (26,14), reveals the mouth, and allows landing/founding at (25,14). Initial mineral reserves follow the shared rules: silver 100, ore 200, mixed 200 of each.
 3. The actual setup, sea journey, river rendering, landing, founding and Continue passed targeted tests. [Execution evidence](functional-tests.md#r-0263-fixed-original-world-2026-10-24) records counts and the passed smoke gate. The subsequent map palette/pen-outline change is not part of these content results.
+
+## Vybraná grafika terénů — 25. října 2026
+
+1. [R-0274](requirements/done/R-0274.md) dodává v A03 vybrané ikony pro P05 a sdílenou nápovědu. Herní pravidla terénů a zdrojů zůstávají v A05; přejímka P31 ověřuje jejich dosavadní hráčské cesty.

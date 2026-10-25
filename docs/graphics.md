@@ -30,6 +30,29 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
    převedeny nebo vizuálně ověřeny. Starší realizace a evidence níže zůstávají
    označené datem; implementaci převzít po vybraných změnách a jejich kontrolách.
 
+## Vybrané terény a bonusy — 25. října 2026
+
+1. Uživatel vybral **T01–T14 ze sady 10**, **B01–B03 ze sady 09**
+   a **B04–B12 ze sady 08**; implementaci vlastní [R-0274](requirements/done/R-0274.md).
+   Zdrojové listy jsou zachované jako [sada 10](../microcol-game/src/graphics/terrain-selection-10.png),
+   [sada 09](../microcol-game/src/graphics/terrain-selection-09.png)
+   a [sada 08](../microcol-game/src/graphics/terrain-selection-08.png).
+2. Editovatelný přepis vybraných siluet je [terrain-symbols.svg](../microcol-game/src/graphics/terrain-symbols.svg).
+   Atlas má 630 × 90 px: první řada obsahuje 14 terénů v pořadí
+   `TerrainType.TERRAINS`, druhá 12 bonusů v pořadí neprázdných `ResourceOverlay`
+   a dvě prázdné buňky. Každá buňka má 45 × 45 px bez mezery.
+3. Podkladové barvy terénů zůstávají shodné se stávajícím pobřežním atlasem;
+   přepis přebírá vybrané motivy s jednolitými výplněmi. Tah terénu má 1,69 px,
+   bonusu 1,49 px. Bonus je průhledná vrstva s přibližně 27px motivem vpravo nahoře,
+   aby nechal místo ostatním prvkům. Výběrové rámečky ani označení T/B se neexportují.
+4. `ImageLoaderTerrainSymbols`, `TerrainImageProvider` a `ImageProvider` vlastní
+   společné obrázky pro mapu, náhledy a nápovědu. `PaintService` kreslí bonus
+   stejnou cestou jako Colonizopedia. Náhodné staré terény a velryby již vybrané
+   motivy nestřídají; existující variace lesa zůstává samostatnou vrstvou.
+5. Reprodukce exportu: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`.
+   Zdroj neobsahuje text ani externí obrázky. Aktuální přejímku a vizuální kontrolu
+   eviduje [funkční ověření](functional-tests.md#r-0274-selected-terrain-artwork-2026-10-25).
+
 ## Minimalistický grafický manuál
 
 **Každá obrazovka MicroCol působí jako kresba stejnou kuličkovou propiskou

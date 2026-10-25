@@ -9,10 +9,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
-import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.FogFrameProbe;
-import org.microcol.gui.util.PaintService;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.ResourceOverlay;
@@ -30,14 +28,6 @@ public final class ResourcePage extends AbstractScreen {
 
     private static final String TILE_NAME_ID = "tileName";
 
-    /** Marker centre across a square: 80% of its width. */
-    private static final int MARKER_CENTRE_X = (int) (Tile.TILE_WIDTH_IN_PX
-            * 0.80);
-
-    /** Marker centre down a square: 20% of its height. */
-    private static final int MARKER_CENTRE_Y = (int) (Tile.TILE_WIDTH_IN_PX
-            * 0.20);
-
     public ResourcePage(final TestContext context) {
         super(context);
     }
@@ -52,16 +42,27 @@ public final class ResourcePage extends AbstractScreen {
      */
     public void verifyMarkerPainted(final Location location,
             final ResourceOverlay expected) throws Exception {
-        final int expectedRgb = toRgb(
-                PaintService.resourceMarkerColor(expected));
+        final Image icon = getContext().getClassFromGuice(ImageProvider.class)
+                .getResourceImage(expected);
+        int opaquePixels = 0;
+        for (int y = 0; y < 45; y++) {
+            for (int x = 0; x < 45; x++) {
+                if (icon.getPixelReader().getColor(x, y).getOpacity() == 1) {
+                    opaquePixels++;
+                }
+            }
+        }
+        final int minimumMatching = (int) (opaquePixels * .95);
         try {
             WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                    () -> markerRgb(location) == expectedRgb);
+                    () -> matchingResourcePixels(location,
+                            icon) >= minimumMatching);
         } catch (final TimeoutException timeout) {
-            // The assertion below reports the colour that remained.
+            // The verification below reports the missing selected picture.
         }
-        assertEquals(expectedRgb, markerRgb(location),
-                "Unexpected " + expected + " marker at " + location);
+        assertTrue(opaquePixels > 50, "Resource has a readable silhouette");
+        assertTrue(matchingResourcePixels(location, icon) >= minimumMatching,
+                "Selected " + expected + " picture is painted at " + location);
     }
 
     /**
@@ -73,14 +74,16 @@ public final class ResourcePage extends AbstractScreen {
     public void verifyNoMarkerOnHiddenSquare(final Location hidden)
             throws Exception {
         final Image canvas = captureCanvas();
-        final Image fog = getContext().getClassFromGuice(ImageProvider.class)
-                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
         final Point tile = getContext().getArea().convertToCanvasPoint(hidden);
-        assertEquals(
-                fog.getPixelReader().getArgb(MARKER_CENTRE_X, MARKER_CENTRE_Y),
-                canvas.getPixelReader().getArgb(tile.getX() + MARKER_CENTRE_X,
-                        tile.getY() + MARKER_CENTRE_Y),
-                "Unexplored square shows a resource marker at " + hidden);
+        final int fogRgb = toRgb(Color.web("#9B9486"));
+        for (int y = 1; y < Tile.TILE_WIDTH_IN_PX - 1; y++) {
+            for (int x = 1; x < Tile.TILE_WIDTH_IN_PX - 1; x++) {
+                assertEquals(fogRgb,
+                        toRgb(canvas.getPixelReader().getColor(tile.getX() + x,
+                                tile.getY() + y)),
+                        "Unexplored square reveals no picture at " + hidden);
+            }
+        }
     }
 
     /**
@@ -152,12 +155,23 @@ public final class ResourcePage extends AbstractScreen {
                 "Unexpected remaining " + goods + " units at " + location);
     }
 
-    private int markerRgb(final Location location) throws Exception {
+    private int matchingResourcePixels(final Location location,
+            final Image icon) throws Exception {
         final Image canvas = captureCanvas();
         final Point tile = getContext().getArea()
                 .convertToCanvasPoint(location);
-        return toRgb(canvas.getPixelReader().getColor(
-                tile.getX() + MARKER_CENTRE_X, tile.getY() + MARKER_CENTRE_Y));
+        int matching = 0;
+        for (int y = 0; y < 45; y++) {
+            for (int x = 0; x < 45; x++) {
+                final Color expected = icon.getPixelReader().getColor(x, y);
+                if (expected.getOpacity() == 1
+                        && toRgb(expected) == toRgb(canvas.getPixelReader()
+                                .getColor(tile.getX() + x, tile.getY() + y))) {
+                    matching++;
+                }
+            }
+        }
+        return matching;
     }
 
     private Image captureCanvas() throws Exception {

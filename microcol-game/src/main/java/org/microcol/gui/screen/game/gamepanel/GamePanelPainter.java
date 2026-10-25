@@ -158,7 +158,6 @@ public final class GamePanelPainter {
         gamePaintService.paintSelectedTile(g, area,
                 selectedTileManager.getSelectedTile());
         animationClouds.paint(g);
-        mapManager.gameTickUpdate(currentGameTick);
         if (gameModelController.getRealCurrentPlayer().isComputer()) {
             /**
              * If move computer that make game field darker.

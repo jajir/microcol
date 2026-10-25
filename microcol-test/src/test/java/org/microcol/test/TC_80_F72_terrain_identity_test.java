@@ -88,6 +88,7 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         gamePage.moveMouseAtLocation(TUNDRA_FOREST);
         gamePage.verifyThatStatusBarContains("Tundra");
         terrain.verifyTerrain(TUNDRA_FOREST, TerrainType.TUNDRA, true);
+        terrain.captureDialog("tileName", "r0274-terrain-map.png");
 
         // Continue keeps every identity and forest state.
         gamePage.exitToMenu();

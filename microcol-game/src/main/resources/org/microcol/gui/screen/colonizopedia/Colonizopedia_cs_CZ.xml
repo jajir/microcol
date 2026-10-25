@@ -37,9 +37,9 @@
 
 
 	<entry key="topic_terrain_title">Terén</entry>
-	<entry key="topic_terrain_body">Tabulka porovnává všechny druhy terénu. Vlevo je nezalesněné pole, vpravo les, pokud jej terén podporuje. Některé terény sdílejí obrázek; rozlišíte je podle názvu. Produkce je základní výnos jednoho pracovníka za tah před zdroji, úpravami, odborností a dalšími vlivy. Cena pohybu platí pro vstup na pole před započtením propojených cest či řek. Námořní trasy spojují mapu s Evropou; jezera jsou běžná voda pro plavbu a rybolov.</entry>
+	<entry key="topic_terrain_body">Tabulka porovnává všechny druhy terénu. Vlevo je nezalesněné pole, vpravo les, pokud jej terén podporuje. Každý druh terénu má vlastní ručně kreslený symbol. Produkce je základní výnos jednoho pracovníka za tah před zdroji, úpravami, odborností a dalšími vlivy. Cena pohybu platí pro vstup na pole před započtením propojených cest či řek. Námořní trasy spojují mapu s Evropou; jezera jsou běžná voda pro plavbu a rybolov.</entry>
 	<entry key="topic_resources_title">Bonusy terénu</entry>
-	<entry key="topic_resources_body">Zvláštní zdroje poznáte podle stejných malých barevných značek jako na mapě. Tabulka uvádí každý zdroj a terény, na kterých jej hra dovoluje. Bonus zvyšuje základ příslušného výnosu před vlivy pracovníka a může zavést i výnos, který pole běžně nemá. Ložiska omezují dodatečnou těžbu zásobou: po vyčerpání zůstává běžná produkce. Obě zásoby smíšeného ložiska jsou nezávislé. Ostatní zdroje se nevyčerpávají. Obecní pozemky kolonie mají odlišné pravidlo: zdroj pomáhá pouze již existujícímu základnímu výnosu a výborný lesní porost jim nepomáhá.</entry>
+	<entry key="topic_resources_body">Zvláštní zdroje poznáte podle stejných ručně kreslených obrázků jako na mapě. Tabulka uvádí každý zdroj a terény, na kterých jej hra dovoluje. Bonus zvyšuje základ příslušného výnosu před vlivy pracovníka a může zavést i výnos, který pole běžně nemá. Ložiska omezují dodatečnou těžbu zásobou: po vyčerpání zůstává běžná produkce. Obě zásoby smíšeného ložiska jsou nezávislé. Ostatní zdroje se nevyčerpávají. Obecní pozemky kolonie mají odlišné pravidlo: zdroj pomáhá pouze již existujícímu základnímu výnosu a výborný lesní porost jim nepomáhá.</entry>
 	<entry key="properties">Vlastnosti</entry>
 	<entry key="land">Pevnina</entry>
 	<entry key="water">Voda</entry>

@@ -151,7 +151,7 @@ final class ColonizopediaTables {
         }
         if (resource != ResourceOverlay.NONE) {
             PaintService.paintResource(canvas.getGraphicsContext2D(),
-                    Point.of(0, 0), resource);
+                    Point.of(0, 0), resource, images);
         }
         canvas.setAccessibleText(names.getTerrainName(terrain)
                 + (forest ? " — " + i18n.get(Colonizopedia.forest) : "")

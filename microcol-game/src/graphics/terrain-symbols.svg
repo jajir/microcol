@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="90" viewBox="0 0 630 90">
+<title>Selected MicroCol terrain and resource symbols, 2026-10-25</title>
+<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Background colours match the existing coast atlas.</desc>
+<g id="terrain-GRASSLAND" transform="translate(0 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M57 164 Q51 131 36 111 M62 166 Q70 111 94 75 M66 166 Q85 128 102 117" fill="none"/>
+</g></g>
+<g id="terrain-PRAIRIE" transform="translate(45 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M39 169 Q33 143 25 128 M44 170 Q44 116 37 89 M48 169 Q57 130 68 112 M50 169 Q68 150 79 141 M112 133 Q105 107 95 83 M120 133 Q122 86 136 47 M125 133 Q142 94 148 81 M127 137 Q149 121 160 108" fill="none"/>
+</g></g>
+<g id="terrain-SAVANNAH" transform="translate(90 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M80 120 L99 150 L98 164 L115 164 L106 155 L109 116 M105 148 L134 120 M100 144 L72 120" fill="#72583e"/><path d="M22 110 Q31 98 48 99 Q49 86 66 86 Q73 72 91 76 Q100 66 121 77 Q135 70 146 84 Q164 81 173 93 Q189 97 180 107 Q158 118 141 113 Q126 126 106 116 Q88 124 72 115 Q51 123 37 115 Q24 119 22 110Z" fill="#7c8b4c"/>
+</g></g>
+<g id="terrain-PLAINS" transform="translate(135 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M19 164 Q71 130 121 151 L177 160 M140 153 L131 130 M145 153 L147 116 M149 156 L167 136" fill="none"/>
+</g></g>
+<g id="terrain-MARSH" transform="translate(180 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 165 Q35 153 46 162 T74 161 T105 158" fill="none" stroke="#285f62"/><path d="M129 166 L133 78 M127 165 Q112 131 100 116 M137 165 Q150 128 162 118" fill="none"/><path d="M128 75 Q125 63 133 54 Q145 50 144 65 L139 95 Q137 103 128 100 Q122 96 128 75Z" fill="#a7744e"/>
+</g></g>
+<g id="terrain-SWAMP" transform="translate(225 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M105 113 L101 161 M98 126 Q66 121 61 157 M103 124 Q133 118 143 158 M101 133 Q78 138 79 163 M112 133 Q122 140 123 164" fill="#66583d"/><path d="M39 94 Q28 79 47 70 Q40 56 63 53 Q66 37 84 43 Q94 26 115 40 Q132 31 143 47 Q160 44 161 63 Q179 74 166 87 Q178 106 158 109 Q146 123 130 115 Q112 127 95 115 Q74 124 62 111 Q39 112 39 94Z" fill="#6f824b"/><path d="M27 173 H52 M72 180 H109 M128 175 H158 M158 165 H180" fill="none" stroke="#285f62"/>
+</g></g>
+<g id="terrain-DESERT" transform="translate(270 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M17 141 Q39 122 58 112 Q73 107 88 117 L119 136 M103 103 Q124 81 138 82 Q153 83 172 108" fill="none"/>
+</g></g>
+<g id="terrain-TUNDRA" transform="translate(315 0)">
+<rect width="45" height="45" fill="#fff9ec"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 146 Q12 131 29 126 Q28 111 46 114 Q57 100 69 111 Q86 102 91 118 Q108 121 103 135 Q112 150 89 154 L39 157 Q23 159 20 146Z" fill="#87974e" stroke="none"/><path d="M108 92 Q94 78 110 68 Q109 54 124 56 Q133 41 147 52 Q163 47 166 61 Q187 65 178 83 Q180 99 161 100 L127 102 Q112 105 108 92Z" fill="#87974e" stroke="none"/>
+</g></g>
+<g id="terrain-ARCTIC" transform="translate(360 0)">
+<rect width="45" height="45" fill="#fff9ec"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 111 L41 100 L67 114 L62 130 L86 143 L78 160 L115 175 M130 102 L151 87 L148 74 L172 58 L185 64" fill="none" stroke="#28566a"/>
+</g></g>
+<g id="terrain-HILL" transform="translate(405 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 115 Q54 91 79 73 Q93 63 107 70 Q127 81 140 93 M70 149 Q96 125 125 112 Q141 109 159 123 L181 141" fill="none"/>
+</g></g>
+<g id="terrain-MOUNTAIN" transform="translate(450 0)">
+<rect width="45" height="45" fill="#c5c18a"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 157 L56 113 L83 135 M58 115 L103 55 Q108 48 111 57 L149 116 L158 104 L181 141 M138 98 L150 132" fill="none"/>
+</g></g>
+<g id="terrain-OCEAN" transform="translate(495 0)">
+<rect width="45" height="45" fill="#649b97"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M23 136 Q49 140 80 108 Q96 130 123 126 M101 164 Q126 167 149 141 Q163 160 181 154" fill="none" stroke="#152f31"/>
+</g></g>
+<g id="terrain-LAKE" transform="translate(540 0)">
+<rect width="45" height="45" fill="#649b97"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M29 147 Q13 121 38 104 Q64 91 74 82 Q95 64 114 63 Q143 51 165 68 Q177 80 167 97 Q155 108 169 121 Q190 151 165 163 Q128 183 87 174 Q42 174 29 147Z" fill="#69a2b5"/>
+</g></g>
+<g id="terrain-HIGH_SEA" transform="translate(585 0)">
+<rect width="45" height="45" fill="#649b97"/>
+<g transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M23 133 Q45 142 76 110 Q96 132 120 129 M99 165 Q123 172 151 147 Q167 162 183 154" fill="none" stroke="#6ec9cf"/><path d="M166 88 L180 102 L166 115" fill="none" stroke="#fff9ec"/>
+</g></g>
+<g id="resource-SILVER" transform="translate(17 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M22 149 L37 110 L124 64 L165 89 L172 133 L74 178Z" fill="#aeb2b1"/><path d="M37 113 L75 136 L153 94 L124 78Z" fill="#dddeda" stroke="none"/><path d="M75 136 L75 167" fill="none" stroke="#dddeda"/><path d="M151 52 L161 75 L181 81 L164 95 L161 118 L147 102 L125 104 L133 85 L127 68 L145 70Z" fill="#fff9ec"/>
+</g>
+<g id="resource-ORE" transform="translate(62 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 155 L36 106 L88 52 L124 42 L166 67 L184 137 L167 170 L93 180Z" fill="#ae673d"/><path d="M37 106 L66 112 M93 131 L110 105 L131 128 M149 150 L157 165" fill="none"/><ellipse cx="64" cy="151" rx="4" ry="4" fill="#292824" stroke="none"/>
+</g>
+<g id="resource-MIXED_MINERALS" transform="translate(107 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M9 135 L26 83 L67 48 L101 59 L122 109 L98 151 L54 164Z" fill="#b0b4b4"/><path d="M27 88 L60 109 L101 65 L68 58Z" fill="#dedfdd" stroke="none"/><path d="M95 161 L110 117 L154 87 L180 104 L192 149 L172 176 L129 181Z" fill="#ae673d"/><path d="M142 141 L151 124 L168 137" fill="none"/>
+</g>
+<g id="resource-TRAPPING" transform="translate(152 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M86 30 Q89 19 108 24 L116 41 Q125 52 146 45 Q169 44 158 62 L139 85 Q133 103 147 119 L162 136 Q168 153 146 148 Q125 143 117 162 L110 180 Q99 190 87 177 L82 162 Q73 147 51 154 Q31 155 42 135 L58 115 Q65 101 53 85 L39 68 Q28 49 50 50 Q72 56 80 42Z" fill="#d1b07a"/>
+</g>
+<g id="resource-GAME" transform="translate(197 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M80 91 Q52 78 49 43 M63 78 Q39 70 31 51 M54 59 Q68 55 71 38 M125 90 Q151 72 153 42 M141 72 Q166 62 170 44 M151 57 Q138 50 136 31" fill="none"/><path d="M76 98 Q55 80 38 88 Q46 113 76 115 L87 164 Q102 184 117 162 L131 113 Q156 111 166 90 Q145 81 125 99 Q101 90 76 98Z" fill="#b88355"/><ellipse cx="88" cy="125" rx="3" ry="4" fill="#292824" stroke="none"/><ellipse cx="116" cy="125" rx="3" ry="4" fill="#292824" stroke="none"/><ellipse cx="102" cy="155" rx="6" ry="5" fill="#292824" stroke="none"/>
+</g>
+<g id="resource-OASIS" transform="translate(242 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M62 160 Q77 105 99 61 L110 65 Q91 114 88 163Z" fill="#b18050"/><path d="M96 64 Q72 51 44 76 Q42 52 67 43 Q50 36 28 39 Q42 15 73 32 Q74 13 96 18 L111 36 Q124 9 147 20 L128 43 Q158 28 174 61 Q141 48 121 65 Q145 70 145 98 Q119 86 108 66 Q98 87 82 103 Q79 83 96 64Z" fill="#738b43"/><path d="M115 159 Q147 143 180 157 Q194 168 178 178 Q140 190 112 176 Q103 167 115 159Z" fill="#3d9fa5"/>
+</g>
+<g id="resource-PRIME_COTTON" transform="translate(287 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M74 123 Q46 124 40 105 Q31 85 48 72 Q47 48 69 44 Q88 23 106 40 Q129 32 142 53 Q168 57 162 84 Q180 109 151 126 L113 143 L87 139Z" fill="#fff9ec"/><path d="M102 162 L99 135 M99 139 Q71 141 61 112 Q85 116 96 132 Q92 106 103 94 Q116 113 110 136 Q126 119 143 116 Q137 138 110 144Z" fill="#718644"/>
+</g>
+<g id="resource-PRIME_TOBACCO" transform="translate(332 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M50 173 Q41 140 58 105 Q80 67 143 34 Q158 90 139 131 Q116 167 62 177 L43 186Z" fill="#91a35a"/><path d="M59 167 L126 69 M76 142 L75 117 M94 118 L119 112 M96 117 L98 91" fill="none"/>
+</g>
+<g id="resource-PRIME_SUGAR" transform="translate(377 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M44 175 L68 31 Q77 21 94 28 L69 177Z" fill="#9faf63"/><path d="M106 174 L125 62 Q138 51 152 60 L132 179Z" fill="#9faf63"/><path d="M64 61 L88 64 M57 101 L80 105 M50 141 L73 145 M121 90 L145 94 M114 130 L138 134" fill="none"/><path d="M52 126 Q27 103 26 80 Q49 91 58 111 M135 135 Q157 111 177 109 Q168 134 132 151Z" fill="#8ea65c"/>
+</g>
+<g id="resource-PRIME_TIMBER" transform="translate(422 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M79 166 L81 187 L98 187 L97 161Z" fill="#ac8050"/><path d="M86 20 L45 75 L62 76 L31 117 L51 119 L22 164 Q58 181 88 164 Q119 177 143 161 L117 123 L134 122 L106 80 L121 80Z" fill="#3d765c"/><path d="M101 159 L166 124 Q180 122 185 142 L183 164 L117 190 Q101 186 101 159Z" fill="#b48452"/><ellipse cx="111" cy="175" rx="15" ry="20" fill="#d3ae70"/><ellipse cx="111" cy="175" rx="4" ry="8" fill="#292824" stroke="none"/><path d="M139 149 L169 138 M146 169 L169 160" fill="none"/>
+</g>
+<g id="resource-PRIME_FOOD" transform="translate(467 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M103 183 L103 41 M101 72 Q76 59 89 29 Q108 39 101 72Z" fill="#efc163"/><path d="M100 106 Q72 100 73 71 Q99 77 100 106Z M106 105 Q132 95 130 69 Q107 80 106 105Z M101 140 Q73 135 76 109 Q100 113 101 140Z M107 139 Q136 129 134 102 Q109 114 107 139Z" fill="#efc163"/><path d="M99 178 Q64 166 59 135 Q85 148 99 178Z M110 178 Q138 159 145 137 Q120 145 110 178Z" fill="#7b914b"/>
+</g>
+<g id="resource-FISHERY" transform="translate(512 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M64 128 Q85 61 171 50 Q178 100 129 140 L125 165 L109 151 Q88 162 69 155 L42 176 L42 147 L22 131 L53 130 L51 109Z" fill="#6ba3b4"/><ellipse cx="143" cy="81" rx="5" ry="5" fill="#292824" stroke="none"/>
+</g>
+</svg>
