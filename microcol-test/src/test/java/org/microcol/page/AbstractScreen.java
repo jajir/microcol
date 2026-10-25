@@ -97,10 +97,13 @@ public abstract class AbstractScreen {
 
     protected void openUnitActions() {
         WaitForAsyncUtils.waitForFxEvents();
-        if (getNodeFinder().lookup("#waitUnit").tryQuery().isEmpty()
-                && getNodeFinder().lookup("#unitActions").tryQuery()
-                        .isPresent()) {
-            getRobot().clickOn("#unitActions");
+        if (getNodeFinder().lookup("#waitUnit").tryQuery().isEmpty()) {
+            final javafx.scene.canvas.Canvas canvas = getContext()
+                    .getClassFromGuice(
+                            org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            getRobot().interact(canvas::requestFocus);
+            getRobot().push(KeyCode.SHIFT, KeyCode.F10);
             WaitForAsyncUtils.waitForFxEvents();
         }
     }

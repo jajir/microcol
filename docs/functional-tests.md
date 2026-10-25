@@ -9887,3 +9887,109 @@ remote CI and publication were not checked.
     consistency passed all nine tests and strict MkDocs built successfully.
     Final diff review found no whitespace errors or unrelated staged changes.
     No executable source or runtime asset changed after the accepted snapshot.
+
+## R-0272 map unit context — 2026-10-25
+
+1. User correction supersedes the side-panel interaction of R-0270. Source base
+   is `983b01ae20b14e275567337a3d16b0028f5d39c7`. Implementation and verification
+   are pending; historical R-0270 evidence remains unchanged.
+
+2. First targeted verification uses completion directory
+   `/Users/jan/Library/Logs/Microcol/completions/20261025T100310Z-e3317f8d8a39`,
+   supervisor PID 85218 and a 600-second timeout. Selection: complete
+   `TC_11_F11_skip_to_next_unit_test` and `PageVerificationContractTest`.
+   Eleven changed Java files passed the shared formatter with exact code-token
+   preservation and idempotence. Test results are pending.
+
+3. First attempt failed during test compilation (62.124 seconds,
+   `target/docker-ui/run-PPp4gZ`); no UI scenario ran. TestFX's two `lookup`
+   overloads made the card-identity lambda ambiguous. The page helper now
+   declares its `Predicate<Node>` type explicitly. Before retry, review also
+   guarded delayed menu opening against a changed selection, closed map or
+   disabled/moving game state. Documentation consistency passed nine checks
+   and strict MkDocs passed; this is not gameplay acceptance.
+
+4. Retry `20261025T100539Z-c9bb5364e97a` (PID 86236, 600-second timeout)
+   repeats complete TC11 and the page source contract after the compile repair
+   and delayed-popup guard. Results pending.
+
+5. Retry `run-AZZegU` completed in 102.206 seconds: 12 tests (nine TC11
+   and three source-contract checks), one failure, one error, zero skips.
+   The keyboard test assumed a fixed row index before the new unit chooser;
+   it now navigates with Down until the actual Move row receives focus, then
+   presses Enter and retains the original movement-state assertion. The port
+   test used a tile-selection helper that accessed the map after its successful
+   left-click entry into Delft; it now uses the existing `openColonyAt` path.
+   The new sea-ship, panning, preview-cancellation and informational-card checks
+   passed; these historical partial results are not acceptance.
+
+6. Third targeted run `20261025T100923Z-d92127a19f57` (PID 86375,
+   600-second timeout) repeats the same 12 checks after the two page-flow
+   corrections. Shared formatting passed for all 11 changed Java files.
+   Results pending.
+7. Third targeted run `20261025T100923Z-d92127a19f57` succeeded in
+   107.703 seconds. Fresh XML in `target/docker-ui/run-l6fesh` contains
+   **9 TC11 scenarios and 3 page source-contract tests**, all with zero
+   failures, errors or skips. This covers port left/right click separation,
+   informational cards, stacked-unit selection, sea-ship context, preview
+   cancellation, panning, keyboard activation, turn gating and Czech menu
+   layout. Review of `warehouse-qa/r0272-map-information.png` and
+   `warehouse-qa/r0272-port-menu.png` confirmed the informational sidebar and
+   readable unit menu. These are automated Docker/Xvfb observations, not a
+   new player study or native macOS acceptance.
+8. Broader affected-player-path verification started as
+   `20261025T101405Z-4ae56d6f6396` (PID 87049, 1,800-second timeout).
+   Selection: complete TC02/14/15/18/20/21/36/45/61/73/87/88/89/90/103/104/107,
+   plus TC123/141/142 and the page source contract. The remaining shared
+   map-selection callers are covered by TC24_12, TC34_03/04/05 and TC134_06.
+   This checks colony founding, work orders, movement and navigation,
+   persistent routes, disband/jettison, sentry/fortification, rumor exploration,
+   naval interception and coastal batteries after the shared input change.
+   Results and the mandatory pre-commit smoke gate remain pending.
+9. Broader run `run-68YdsQ` completed in 1,027.455 seconds with **83
+   tests: 2 failures, 0 errors and 0 skips**. All requested suites/methods
+   reported. TC45_02 retained the sentry colonist after Continue when it
+   attempted to drag the neighbouring ship; the scenario now explicitly
+   selects that ship through the map menu before departure. TC90_01 still
+   searched for the former always-present Move control; `RiverPage` now
+   uses the same contextual visibility helper as `RoadPage`, then dismisses
+   the menu. Expected movement, boarding, river and persistence assertions
+   are unchanged. Production code is unchanged from the targeted pass.
+10. Focused repair verification started as `20261025T103256Z-88473ee89a7d`
+    (PID 91147, 600-second timeout), selecting complete TC45, TC90 and the
+    page source contract. All 13 changed Java files pass the shared formatter
+    with exact token preservation and idempotence. Other passing scenarios
+    retain their evidence because neither production code nor their page
+    helpers changed in this repair. The failed broad run remains failed.
+11. Focused repair run `run-tGlfc5` passed in 111.945 seconds:
+    **6 UI scenarios (complete TC45 and TC90) plus 3 page source-contract
+    tests**, zero failures, errors or skips. XML method names match all
+    requested methods. Together with the unchanged passing cases from the
+    broader run and the 9 direct-context TC11 scenarios, the affected
+    selection now has passing evidence for **89 distinct UI scenarios and
+    3 source-contract tests**. This is targeted acceptance evidence; the
+    historical failed runs remain failed. Mandatory smoke acceptance is next.
+12. Mandatory pre-commit gate dispatched with `verify --smoke` as
+    `20261025T103510Z-57a98d01bc5f` (PID 91819). Its internal total acceptance
+    budget is 300 seconds; the completion runner's 420-second watchdog only
+    allows cleanup/notification overhead. Selection is all fast model/JUnit
+    tests, the fixed 10 UI smoke cases and all non-`TC_` support tests. Results
+    remain pending; no commit or push precedes acceptance.
+13. Mandatory smoke acceptance passed in `target/verification/run-axx0t8ji`:
+    **4,744 tests across 346 suites — 4,723 model/JUnit, 10 fixed UI smoke
+    and 11 support checks; zero failures, errors or skips**. The measured
+    gate took **295.775 seconds**, within its 300-second total budget
+    (completion runner: 298.697 seconds). The manifest records base revision
+    `efb1510b6694e8f329b2236bb92d1d80e9f96481` plus the task changes; all task
+    executable hashes match that snapshot. Intervening commits only add
+    unrelated toolbar-design documentation, preserved in place. Final review
+    covered mouse press/release separation, preview cancellation, stacked-unit
+    selection, turn eligibility, keyboard commands, route information and
+    unchanged model ownership. R-0272 is complete locally; remote regression
+    and publication have not been inspected.
+14. After moving the completed analysis to `requirements/done/R-0272.md`
+    and updating incoming links, documentation consistency passed nine tests
+    and strict MkDocs built successfully. All 13 changed Java files pass the
+    shared formatter without further edits; executable source and resource
+    hashes still match the accepted gate manifest. Final diff review excludes
+    unrelated graphics proposals and the new R-0274 analysis from this commit.

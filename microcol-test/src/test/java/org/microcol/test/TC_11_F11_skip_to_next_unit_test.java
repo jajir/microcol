@@ -173,8 +173,8 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
             orders.verifyOrdersAvailable(false, false);
             audit.press(KeyCode.TAB);
             audit.press(KeyCode.SPACE);
-            orders.waitForAnotherUnit();
-            orders.skipUnitTurn();
+            orders.openActionsWithRightClick();
+            orders.verifyMenuVisible(false);
             orders.verifySelectedUnit(3);
             turns.verifyUnitAndMoveMode(3, ship, false);
         } finally {
@@ -227,8 +227,8 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         orders.verifyMenuVisible(false);
         orders.verifyMovement(3, 1, 1, 197);
 
-        // A colonist inside Delft cannot found another colony; selection closes
-        // its menu.
+        // A colonist inside Delft cannot found another colony; map selection
+        // refreshes the menu.
         orders.openActionsWithRightClick();
         orders.verifyContextCommands(false);
         orders.captureDialog("waitUnit", "r0270-colonist-context.png");
@@ -251,7 +251,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
         orders.resizeWindow(1000, 700);
         orders.openActionsWithKeyboard();
-        orders.verifyLocalizedMenu("Akce", "Čekat (Tab)",
+        orders.verifyLocalizedMenu("galeona", "Čekat (Tab)",
                 "Vynechat tah jednotky (Mezerník)");
         orders.captureDialog("waitUnit", "r0270-context-cs-1000.png");
         orders.dismissActions();
@@ -261,12 +261,102 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         // none.
         orders.resizeWindow(1280, 850);
         orders.openActionsWithRightClick();
-        orders.verifyLocalizedMenu("Akce", "Čekat (Tab)",
+        orders.verifyLocalizedMenu("galeona", "Čekat (Tab)",
                 "Vynechat tah jednotky (Mezerník)");
         orders.dismissActions();
         game.selectTile(Location.of(21, 12));
         orders.verifyNoUnitActions();
         orders.verifyMovement(3, 1, 1, 197);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_port_context_and_information_panel_do_not_enter_colony()
+            throws Exception {
+        // Right-click a ship in port; orders stay on the map without spending a
+        // turn.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        game.openUnitContextAt(COLONY_LOCATION);
+        orders.verifyMenuVisible(true);
+        orders.verifyInformationOnly();
+        orders.verifySelectedUnit(3);
+        orders.verifyMovement(3, 1, 1, 197);
+        orders.captureDialog("unitPanel-3", "r0272-map-information.png");
+        orders.captureDialog("waitUnit", "r0272-port-menu.png");
+        orders.dismissActions();
+
+        // Neither mouse button turns information cards into unit selectors.
+        orders.clickInformationCard(24, javafx.scene.input.MouseButton.PRIMARY);
+        orders.verifySelectedUnit(3);
+        orders.clickInformationCard(24,
+                javafx.scene.input.MouseButton.SECONDARY);
+        orders.verifySelectedUnit(3);
+        orders.verifyMenuVisible(false);
+
+        // The map menu selects another unit on the same square, then the ship
+        // again.
+        game.selectMapUnit(24);
+        orders.verifySelectedUnit(24);
+        game.selectMapUnit(3);
+        orders.verifySelectedUnit(3);
+        orders.verifyMovement(3, 1, 1, 197);
+
+        // A normal left click on the same port still enters Delft.
+        game.openColonyAt(COLONY_LOCATION, "Delft").verifyColonyName("Delft");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_secondary_click_cancels_preview_and_drag_only_pans()
+            throws Exception {
+        // Secondary input must never confirm a pending move or enter the port.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        final com.google.gson.JsonElement ship = turns.readUnitState(3);
+        new FreePlayAuditPage(getContext()).press(KeyCode.M);
+        turns.verifyUnitAndMoveMode(3, ship, true);
+        game.openUnitContextAt(COLONY_LOCATION);
+        turns.verifyUnitAndMoveMode(3, ship, false);
+        orders.verifyMenuVisible(true);
+        orders.verifyInformationOnly();
+        orders.dismissActions();
+
+        // Right-drag from that port pans without opening either menu or colony.
+        final org.microcol.gui.Point before = orders
+                .readTilePosition(COLONY_LOCATION);
+        game.panFromTile(COLONY_LOCATION);
+        orders.verifyMapPanned(COLONY_LOCATION, before);
+        orders.verifyMovement(3, 1, 1, 197);
+        game.openUnitContextAt(Location.of(21, 12));
+        orders.verifyNoUnitActions();
+        orders.verifyMovement(3, 1, 1, 197);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_ship_at_sea_opens_its_own_context_without_moving()
+            throws Exception {
+        // Sail out of Delft using the existing movement gesture.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        final org.microcol.page.GoToPage movement = new org.microcol.page.GoToPage(
+                getContext());
+        final Location sea = Location.of(22, 11);
+        game.dragMouseAtLocation(sea);
+        movement.verifyLocation(3, sea);
+        movement.verifyMovement(3, 6);
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        final com.google.gson.JsonElement ship = turns.readUnitState(3);
+
+        // Right-click the lone ship; opening and dismissal preserve its state.
+        game.openUnitContextAt(sea);
+        orders.verifySingleUnitContext("Galleon");
+        orders.verifyInformationOnly();
+        orders.verifySelectedUnit(3);
+        orders.dismissActions();
+        turns.verifyUnitAndMoveMode(3, ship, false);
     }
 
 }

@@ -796,22 +796,25 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    pozorování hráčů. Ověření uvádí [funkční evidence](functional-tests.md#r-0271-context-menus-2026-10-25).
 
 
-### Příkazy jednotky a horní lišta — R-0270
+### Příkazy jednotky přímo na mapě — R-0272
 
-1. Uživatel 25. října 2026 vybral k implementaci rozdělení podle
-   [R-0270](requirements/done/R-0270.md): horní lišta obsahuje přehledy, navigaci,
-   ukončení tahu a politické či celopartijní akce. Příkazy konkrétní jednotky
-   se otevírají tlačítkem Akce u její vybrané karty, pravým kliknutím na kartu
-   nebo Shift+F10 / klávesou kontextové nabídky. Cizí jednotka ani prázdný
-   výběr vlastní příkazy nenabízí.
-2. V nabídce slouží šipky k pohybu mezi dostupnými příkazy, Enter nebo
-   mezerník k aktivaci a Escape k zavření. Mimo nabídku zůstávají původní
-   zkratky jednotek: zejména Tab pro další jednotku a mezerník pro vyčerpání
-   pohybu vybrané jednotky. Šipka Další tah nahoře ukončuje tah celého hráče.
-3. Změna výběru nebo začátek zpracování tahu nabídku zavře. Nedostupný příkaz
-   zůstává neaktivní s viditelným vysvětlujícím textem, pokud je pro daný
-   kontext relevantní. Stav probíhající či pozastavené cesty je viditelný
-   v kartě jednotky i při zavřené nabídce. Pravé tažení po mapě ji dál posouvá.
-4. Implementace a skutečné výsledky kontrol se evidují v
-   [funkční evidenci](functional-tests.md#r-0270-unit-action-context-2026-10-25);
-   tento popis není pozorováním skutečných hráčů.
+1. Upřesnění uživatele z 25. října 2026 v [R-0272](requirements/done/R-0272.md)
+   nahrazuje ovládání přes kartu jednotky z R-0270. Horní lišta obsahuje
+   přehledy, navigaci, ukončení tahu a celopartijní akce. Pravý panel je pouze
+   informační: ukazuje jednotky, pohyb, náklad a stav cesty; neobsahuje tlačítko
+   Akce ani výběr jednotky kliknutím na kartu.
+2. Pravé kliknutí na vlastní jednotku v mapě otevře její příkazy u místa
+   kliknutí. Pokud je na políčku více vlastních jednotek, jejich výběr je
+   součástí této nabídky. Prázdné políčko ani cizí jednotka vlastní příkazy
+   nenabízejí. Při zaměřené mapě vyvolá nabídku vybrané jednotky také Shift+F10
+   nebo klávesa kontextové nabídky.
+3. Na políčku kolonie levé kliknutí nadále otevře město; pravé kliknutí otevře
+   příkazy jednotky bez vstupu do města, včetně lodi v přístavu. Pravé tažení
+   mapu posouvá a nabídku neotevírá. Pravé kliknutí nepotvrdí rozpracovaný pohyb.
+4. V nabídce slouží šipky k pohybu mezi příkazy, Enter nebo mezerník k aktivaci
+   a Escape k zavření. Mimo ni zůstávají původní zkratky: Tab vybere další
+   jednotku, mezerník vyčerpá její pohyb, šipka Další tah nahoře ukončí tah hráče.
+   Nedostupné relevantní příkazy mají vysvětlení a původní potvrzovací dialogy.
+5. Skutečné kontroly zaznamenává [funkční evidence R-0272](functional-tests.md#r-0272-map-unit-context-2026-10-25).
+   Jde o implementační pravidlo, nikoli pozorování hráčů; historické výsledky
+   R-0270 zůstávají zachované.

@@ -116,6 +116,33 @@ public class GamePage extends AbstractScreen {
                 .release(MouseButton.PRIMARY);
     }
 
+    public void openUnitContextAt(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().clickOn(point.getX(), point.getY(), MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void panFromTile(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D start = screenPoint(location);
+        getRobot().moveTo(start.getX(), start.getY())
+                .press(MouseButton.SECONDARY).moveBy(80, 50)
+                .release(MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void selectMapUnit(final int unitId) {
+        final Unit unit = getModel().getUnitById(unitId);
+        openUnitContextAt(unit.getLocation());
+        if (isCssIdShown("unitChoices")) {
+            getRobot().moveTo("#unitChoices");
+            getRobot().clickOn("#selectUnit-" + unitId);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        closeUnitActions();
+    }
+
     private javafx.geometry.Point2D screenPoint(final Location location) {
         WaitForAsyncUtils.waitForFxEvents();
         // Selecting a unit can wrap its toolbar and resize the map viewport.

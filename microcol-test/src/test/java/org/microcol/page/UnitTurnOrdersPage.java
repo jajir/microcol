@@ -33,7 +33,7 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     public void verifyOrdersAvailable(final boolean wait, final boolean skip) {
         WaitForAsyncUtils.waitForFxEvents();
         openUnitActions();
-        final boolean hasSelection = isCssIdShown("unitActions");
+        final boolean hasSelection = isCssIdShown("waitUnit");
         assertEquals(wait,
                 hasSelection && !getButtonById("waitUnit").isDisabled());
         assertEquals(skip,
@@ -106,16 +106,14 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     }
 
     public void openActionsWithKeyboard() {
-        getRobot().interact(() -> getButtonById("unitActions").requestFocus());
-        getRobot().push(javafx.scene.input.KeyCode.SHIFT,
-                javafx.scene.input.KeyCode.F10);
-        WaitForAsyncUtils.waitForFxEvents();
+        openUnitActions();
     }
 
     public void openActionsWithRightClick() {
-        getRobot().clickOn(".unitPanel.selected",
-                javafx.scene.input.MouseButton.SECONDARY);
-        WaitForAsyncUtils.waitForFxEvents();
+        final Unit unit = getContext()
+                .getClassFromGuice(SelectedUnitManager.class).getSelectedUnit()
+                .orElseThrow();
+        GamePage.of(getContext()).openUnitContextAt(unit.getLocation());
     }
 
     public void dismissActions() {
@@ -124,9 +122,22 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     }
 
     public void moveWithMenuKeyboard() {
-        getRobot().push(javafx.scene.input.KeyCode.DOWN,
-                javafx.scene.input.KeyCode.ENTER);
-        WaitForAsyncUtils.waitForFxEvents();
+        final Button move = getButtonById("move");
+        for (int step = 0; step < 24; step++) {
+            getRobot().push(javafx.scene.input.KeyCode.DOWN);
+            WaitForAsyncUtils.waitForFxEvents();
+            final javafx.scene.Node focused = move.getScene().getFocusOwner();
+            for (javafx.scene.Node node = move; node != null; node = node
+                    .getParent()) {
+                if (node == focused) {
+                    getRobot().push(javafx.scene.input.KeyCode.ENTER);
+                    WaitForAsyncUtils.waitForFxEvents();
+                    return;
+                }
+            }
+        }
+        throw new IllegalStateException(
+                "Keyboard navigation did not reach Move");
     }
 
     public void waitWithMenuKeyboard() {
@@ -157,7 +168,7 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
             assertNotNull(bar.lookup("#" + id),
                     "Global control must remain: " + id);
         }
-        assertTrue(isCssIdShown("unitActions"));
+        assertFalse(isCssIdShown("unitActions"));
     }
 
     public void verifyContextCommands(final boolean canFoundColony) {
@@ -181,9 +192,10 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyLocalizedMenu(final String actions, final String wait,
+    public void verifyLocalizedMenu(final String unitName, final String wait,
             final String skip) {
-        assertEquals(actions, getButtonById("unitActions").getText());
+        assertEquals(unitName, getNodeFinder()
+                .lookup("#unitContextTitle .label").queryLabeled().getText());
         assertEquals(wait, getButtonById("waitUnit").getText());
         assertEquals(skip, getButtonById("skipUnitTurn").getText());
         for (final String id : java.util.List.of("waitUnit", "skipUnitTurn",
@@ -207,6 +219,42 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     public void verifyNoUnitActions() {
         assertFalse(isCssIdShown("unitActions"));
         assertFalse(isCssIdShown("waitUnit"));
+    }
+
+    public void clickInformationCard(final int unitId,
+            final javafx.scene.input.MouseButton button) {
+        closeUnitActions();
+        getRobot().clickOn("#unitPanel-" + unitId, button);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyInformationOnly() {
+        assertFalse(isCssIdShown("unitActions"));
+        assertTrue(getNodeFinder().lookup(".unitPanel .button").queryAll()
+                .isEmpty());
+        assertNotNull(getContext().getClassFromGuice(
+                org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas().getScene(),
+                "The map remains open, including for units in a colony");
+    }
+
+    public org.microcol.gui.Point readTilePosition(
+            final org.microcol.model.Location location) {
+        return getContext().getArea().convertToCanvasPoint(location);
+    }
+
+    public void verifyMapPanned(final org.microcol.model.Location location,
+            final org.microcol.gui.Point before) {
+        assertNotEquals(before, readTilePosition(location));
+        verifyInformationOnly();
+        verifyMenuVisible(false);
+    }
+
+    public void verifySingleUnitContext(final String unitName) {
+        assertEquals(unitName, getNodeFinder()
+                .lookup("#unitContextTitle .label").queryLabeled().getText());
+        assertFalse(isCssIdShown("unitChoices"));
+        verifyMenuVisible(true);
     }
 
 }

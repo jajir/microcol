@@ -30,7 +30,11 @@ import com.google.inject.Singleton;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.AccessibleAction;
-import javafx.geometry.Side;
+import java.util.function.Consumer;
+import org.microcol.model.Unit;
+import org.microcol.gui.UnitTypes;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
@@ -94,6 +98,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
     private final ContextMenu unitActions = new ContextMenu();
+    private final MenuItem unitContextTitle = new MenuItem();
+    private final Menu unitChoices = new Menu();
     private final List<Button> unitCommands = new ArrayList<>();
 
     private final Button buttonSentry = new Button();
@@ -301,6 +307,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             }
         });
         unitActions.getStyleClass().add("unit-actions-menu");
+        unitContextTitle.setId("unitContextTitle");
+        unitContextTitle.setDisable(true);
+        unitChoices.setId("unitChoices");
+        unitActions.getItems().addAll(unitContextTitle, unitChoices,
+                new SeparatorMenuItem());
         addUnitCommand(buttonMove, Buttons.buttonMove);
         addUnitCommand(buttonGoTo, null);
         addUnitCommand(buttonGoToColony, null);
@@ -373,25 +384,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         unitActions.getItems().add(item);
     }
 
-    /** Attach the same orders to the selected own unit's card. */
-    public void addUnitActions(final VBox card, final String unitName) {
-        final Button actions = new Button(currentI18n.get(Buttons.unitActions));
-        actions.setId("unitActions");
-        actions.setAccessibleText(unitName + ": " + actions.getText());
-        actions.setOnAction(event -> showUnitActions(actions));
-        card.getChildren().add(actions);
-        card.setFocusTraversable(true);
-        card.setOnContextMenuRequested(event -> {
-            showUnitActions(actions);
-            event.consume();
-        });
-        card.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.CONTEXT_MENU
-                    || event.getCode() == KeyCode.F10 && event.isShiftDown()) {
-                showUnitActions(actions);
-                event.consume();
-            }
-        });
+    /** Keep the selected unit's route visible independently of its menu. */
+    public void addUnitStatus(final VBox card) {
         final Label route = new Label();
         route.setId("goToStatus");
         route.setWrapText(true);
@@ -401,7 +395,24 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         card.getChildren().add(route);
     }
 
-    private void showUnitActions(final Button owner) {
+    public void showUnitActions(final Node owner, final double screenX,
+            final double screenY, final List<Unit> units, final Unit selected,
+            final Consumer<Unit> selectUnit) {
+        unitContextTitle.setText(
+                currentI18n.get(UnitTypes.getUnitName(selected.getType())));
+        unitChoices.setText(currentI18n.get(Buttons.chooseUnit));
+        unitChoices.getItems().clear();
+        unitChoices.setVisible(units.size() > 1);
+        for (int i = 0; i < units.size(); i++) {
+            final Unit unit = units.get(i);
+            final RadioMenuItem choice = new RadioMenuItem(
+                    currentI18n.get(UnitTypes.getUnitName(unit.getType()))
+                            + " (" + (i + 1) + ")");
+            choice.setId("selectUnit-" + unit.getId());
+            choice.setSelected(unit.equals(selected));
+            choice.setOnAction(event -> selectUnit.accept(unit));
+            unitChoices.getItems().add(choice);
+        }
         boolean hasAction = false;
         SeparatorMenuItem separator = null;
         for (final MenuItem item : unitActions.getItems()) {
@@ -416,7 +427,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 hasAction = true;
             }
         }
-        unitActions.show(owner, Side.LEFT, 0, 0);
+        unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(
                 MainStageBuilder.STYLE_SHEET_MICROCOL,
                 MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);

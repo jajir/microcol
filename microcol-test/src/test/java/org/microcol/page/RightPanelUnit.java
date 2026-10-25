@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.google.common.base.Preconditions;
 
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
 /**
@@ -26,7 +25,14 @@ public class RightPanelUnit extends AbstractPageComponent {
     }
 
     public void selectUnit() {
-        getRobot().clickOn(unitBox, MouseButton.PRIMARY);
+        // The card identifies the unit; selection now belongs to the map menu.
+        final String id = getNodeFinder().from(unitBox).lookup(
+                (java.util.function.Predicate<javafx.scene.Node>) node -> node
+                        .getId() != null
+                        && node.getId().startsWith("unitPanel-"))
+                .query().getId();
+        GamePage.of(getContext()).selectMapUnit(
+                Integer.parseInt(id.substring("unitPanel-".length())));
     }
 
     public RightPanelUnit verifyFreeActionPoints(

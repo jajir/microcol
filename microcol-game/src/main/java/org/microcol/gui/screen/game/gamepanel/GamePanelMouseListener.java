@@ -19,6 +19,11 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
+import javafx.application.Platform;
+import javafx.scene.canvas.Canvas;
+import com.google.inject.Provider;
+import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import javafx.scene.input.ScrollEvent;
 
 @Singleton
@@ -48,6 +53,12 @@ public final class GamePanelMouseListener {
 
     private final GamePanelPresenter gamePanelPresenter;
 
+    private final SelectedUnitManager selectedUnitManager;
+    private final Provider<ButtonsGamePanel> gameButtons;
+    private final Canvas canvas;
+    private Point secondaryPress;
+    private boolean secondaryDragged;
+
     private Optional<Point> lastMousePosition = Optional.empty();
 
     @Inject
@@ -60,7 +71,9 @@ public final class GamePanelMouseListener {
             final GamePanelController gamePanelController,
             final @Named("game") VisibleAreaService visibleArea,
             final GamePanelComponent gamePanelComponent,
-            final GamePanelPresenter gamePanelPresenter) {
+            final GamePanelPresenter gamePanelPresenter,
+            final SelectedUnitManager selectedUnitManager,
+            final Provider<ButtonsGamePanel> gameButtons) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
@@ -73,6 +86,24 @@ public final class GamePanelMouseListener {
         this.gamePanelController = Preconditions
                 .checkNotNull(gamePanelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
+        this.selectedUnitManager = selectedUnitManager;
+        this.gameButtons = gameButtons;
+        canvas = gamePanelComponent.getCanvas();
+        canvas.setFocusTraversable(true);
+        canvas.setOnContextMenuRequested(event -> {
+            if (event.isKeyboardTrigger()) {
+                showSelectedUnitContext();
+            }
+            event.consume();
+        });
+        canvas.setOnKeyPressed(event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.CONTEXT_MENU
+                    || event.getCode() == javafx.scene.input.KeyCode.F10
+                            && event.isShiftDown()) {
+                showSelectedUnitContext();
+                event.consume();
+            }
+        });
         this.gamePanelPresenter = Preconditions
                 .checkNotNull(gamePanelPresenter);
 
@@ -85,7 +116,7 @@ public final class GamePanelMouseListener {
         gamePanelComponent.getCanvas().setOnMouseReleased(e -> {
             if (gamePanelController.isMouseEnabled()
                     && !gamePanelController.isUnitMoving()) {
-                onMouseReleased();
+                onMouseReleased(e);
             }
         });
         gamePanelComponent.getCanvas().setOnMouseEntered(
@@ -127,6 +158,18 @@ public final class GamePanelMouseListener {
 
     private void onMousePressed(final MouseEvent e) {
         final Point pressedAt = Point.of(e.getX(), e.getY());
+        lastMousePosition = Optional.of(pressedAt);
+        canvas.requestFocus();
+        gameButtons.get().hideUnitActions();
+        if (e.getButton() == MouseButton.SECONDARY) {
+            secondaryPress = pressedAt;
+            secondaryDragged = false;
+            if (modeController.isMoveMode()) {
+                selectedUnitManager.getSelectedUnit()
+                        .ifPresent(gamePanelPresenter::disableMoveMode);
+            }
+            return;
+        }
         final Location location = gamePanelView.getArea()
                 .convertToLocation(pressedAt);
         if (gameModelController.getModel().getMap().isValid(location)) {
@@ -152,7 +195,17 @@ public final class GamePanelMouseListener {
         }
     }
 
-    private void onMouseReleased() {
+    private void onMouseReleased(final MouseEvent event) {
+        if (event.getButton() == MouseButton.SECONDARY) {
+            if (secondaryPress != null && !secondaryDragged) {
+                showUnitContext(
+                        gamePanelView.getArea()
+                                .convertToLocation(secondaryPress),
+                        event.getScreenX(), event.getScreenY());
+            }
+            secondaryPress = null;
+            return;
+        }
         if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
             final Location loc = gamePanelView.getArea()
                     .convertToLocation(lastMousePosition.get());
@@ -165,9 +218,15 @@ public final class GamePanelMouseListener {
         if (lastMousePosition.isPresent()) {
             if (e.isSecondaryButtonDown()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Point delta = lastMousePosition.get()
-                        .substract(currentPosition);
-                visibleArea.addDeltaToTopLeftPoint(delta);
+                if (secondaryPress != null && secondaryPress
+                        .distanceSimplified(currentPosition) > 5) {
+                    secondaryDragged = true;
+                }
+                if (secondaryDragged) {
+                    final Point delta = lastMousePosition.get()
+                            .substract(currentPosition);
+                    visibleArea.addDeltaToTopLeftPoint(delta);
+                }
             }
             if (modeController.isMoveMode()
                     && !gamePanelController.isUnitMoving()) {
@@ -177,6 +236,59 @@ public final class GamePanelMouseListener {
                 mouseOverTileManager.setMouseOverTile(loc);
             }
         }
+    }
+
+    private void showSelectedUnitContext() {
+        if (!gamePanelController.isMouseEnabled()
+                || gamePanelController.isUnitMoving()) {
+            return;
+        }
+        selectedUnitManager.getSelectedUnit()
+                .filter(unit -> unit.getOwner().isHuman()).ifPresent(unit -> {
+                    if (modeController.isMoveMode()) {
+                        gamePanelPresenter.disableMoveMode(unit);
+                    }
+                    final Point tile = gamePanelView.getArea()
+                            .convertToCanvasPoint(unit.getLocation());
+                    final javafx.geometry.Point2D point = canvas.localToScreen(
+                            tile.getX()
+                                    + org.microcol.gui.Tile.TILE_CENTER.getX(),
+                            tile.getY()
+                                    + org.microcol.gui.Tile.TILE_CENTER.getY());
+                    showUnitContext(unit.getLocation(), point.getX(),
+                            point.getY());
+                });
+    }
+
+    private void showUnitContext(final Location location, final double screenX,
+            final double screenY) {
+        if (!gameModelController.getModel().getMap().isValid(location)) {
+            return;
+        }
+        selectedTileManager.setSelectedTile(location, ScrollToFocusedTile.no);
+        final List<Unit> units = gameModelController.getHumanPlayer()
+                .getUnitsAt(location);
+        if (units.isEmpty()) {
+            return;
+        }
+        final Unit selected = selectedUnitManager.getSelectedUnit()
+                .filter(units::contains).orElse(units.get(0));
+        selectedUnitManager.setSelectedUnit(selected);
+        // Selection refreshes button availability and the information panel
+        // first.
+        Platform.runLater(() -> {
+            if (canvas.getScene() != null
+                    && gamePanelController.isMouseEnabled()
+                    && !gamePanelController.isUnitMoving()
+                    && selectedUnitManager.getSelectedUnit()
+                            .filter(selected::equals).isPresent()) {
+                gameButtons.get().showUnitActions(canvas, screenX, screenY,
+                        units, selected, unit -> {
+                            selectedUnitManager.setSelectedUnit(unit);
+                            showUnitContext(location, screenX, screenY);
+                        });
+            }
+        });
     }
 
     private void onMouseMoved(final MouseEvent e) {

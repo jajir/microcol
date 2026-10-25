@@ -87,6 +87,7 @@ public class TC_45_F36_sentry_boarding_test extends AbstractMicroColTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         sentry.verifyOrder(104, true, 1);
         // A real departure loads the adjacent pioneer for one passenger move.
+        game.selectMapUnit(3);
         game.moveMouseAtLocation(Location.of(25, 15));
         game.dragMouseAtLocation(Location.of(25, 16));
         game.waitForNumberOfUnitsAt(Location.of(25, 16), 1);

@@ -70,7 +70,7 @@ public final class DisbandPage extends AbstractScreen {
         assertEquals(expectedVisible, isShown(CONTROL_ID),
                 "Unexpected Disband control visibility");
         if (!expectedVisible) {
-            assertFalse(isCssIdShown("unitActions"),
+            assertFalse(isCssIdShown("waitUnit"),
                     "No own unit has an action menu");
         }
         closeUnitActions();

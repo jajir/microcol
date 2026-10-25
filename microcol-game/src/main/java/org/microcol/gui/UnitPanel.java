@@ -13,10 +13,8 @@ import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -50,10 +48,6 @@ class UnitPanel {
         if (selected) {
             box.getStyleClass().add("selected");
         }
-    }
-
-    void setOnMouseClicked(final EventHandler<? super MouseEvent> value) {
-        box.setOnMouseClicked(value);
     }
 
     private HBox makeUnitImage(final Player humanPlayer, final Unit unit) {

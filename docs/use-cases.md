@@ -927,3 +927,14 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
    Existing order scenarios keep their model assertions and use updated page
    objects. Actual counts, failures and acceptance belong to
    [functional evidence](functional-tests.md#r-0270-unit-action-context-2026-10-25).
+
+### UC-011/114/119: unit context on the map — 2026-10-25
+
+1. [R-0272](requirements/done/R-0272.md) supersedes the card-based input path from
+   R-0270: right-click a unit in the map, including one inside a colony; left
+   click still enters the colony. The side panel is informational only.
+2. TC11_07 covers a ship in port, read-only cards, stacked-unit selection and
+   left-click colony entry; TC11_08 covers preview cancellation, right dragging
+   and empty squares; TC11_09 covers a ship at sea. Existing command assertions
+   remain in their scenarios, with page objects using the map menu. Actual
+   execution and acceptance belong to the [functional evidence](functional-tests.md#r-0272-map-unit-context-2026-10-25).

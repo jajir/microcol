@@ -76,10 +76,9 @@ public final class RiverPage extends AbstractScreen {
     }
 
     public void verifyMoveControlVisible(final boolean expectedVisible) {
-        assertEquals(
-                expectedVisible, getNodeFinder().lookup("#" + MOVE_CONTROL_ID)
-                        .tryQuery().isPresent(),
+        assertEquals(expectedVisible, isCssIdVisible(MOVE_CONTROL_ID),
                 "Unexpected move control visibility");
+        closeUnitActions();
     }
 
     /**

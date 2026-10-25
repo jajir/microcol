@@ -116,7 +116,7 @@
     <entry key="retireExplanation">Ukončení skončí hru s tvým výsledkem. Jen bodovaná volná hra, na tvém tahu.</entry>
     <entry key="retireUnavailable">Ukončení teď není dostupné. Nabízí se na tvém tahu v bodované volné hře.</entry>
     <entry key="retireChanged">Situace se změnila, hra proto nebyla ukončena. Otevři ukončení znovu a uvidíš aktuální výsledek.</entry>
-    <entry key="unitActions">Akce</entry>
+    <entry key="chooseUnit">Vybrat jednotku</entry>
     <entry key="cancelPlowingLabel">Zrušit orání</entry>
     <entry key="cancelClearingLabel">Zrušit kácení lesa</entry>
     <entry key="cancelRoadLabel">Zrušit stavbu silnice</entry>

@@ -4,7 +4,7 @@ import org.microcol.i18n.MessageKeyResource;
 
 public enum Buttons implements MessageKeyResource {
     waitUnavailable, skipUnavailable, sentryUnavailable, fortifyUnavailable,
-    goToColonyUnavailable, unitActions, cancelPlowingLabel, cancelClearingLabel,
+    goToColonyUnavailable, chooseUnit, cancelPlowingLabel, cancelClearingLabel,
     cancelRoadLabel,
 
     buttonColonies, noColonies, buttonStatistics, buttonCenter,

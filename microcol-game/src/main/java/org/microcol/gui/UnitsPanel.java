@@ -71,13 +71,9 @@ public final class UnitsPanel {
             final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n,
                     localizationHelper, humanPlayer, unit, selected);
             if (selected && unit.getOwner().isHuman()) {
-                gameButtons.get().addUnitActions(unitPanel.getBox(),
-                        localizationHelper.getUnitName(unit.getType()));
+                gameButtons.get().addUnitStatus(unitPanel.getBox());
             }
             box.getChildren().add(unitPanel.getBox());
-            unitPanel.setOnMouseClicked(event -> {
-                selectedUnitManager.setSelectedUnit(unit);
-            });
         }
         box.getChildren().add(new Label(""));
         box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
