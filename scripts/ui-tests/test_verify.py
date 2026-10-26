@@ -222,6 +222,8 @@ class VerificationTest(unittest.TestCase):
         directory = next((self.root / "target/verification").glob("run-*"))
         summary = json.loads((directory / "summary.json").read_text())
         self.assertEqual(summary["scope"], "precommit")
+        manifest = json.loads((directory / "manifest.json").read_text())
+        self.assertEqual(manifest["timeout_seconds"], 360)
         self.assertEqual(summary["workers"], 1)
         self.assertEqual(len(summary["groups"]), 1)
         group = summary["groups"][0]
@@ -242,17 +244,23 @@ class VerificationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unknown"):
             verify.smoke_inventory(self.root, expected)
 
-    def test_smoke_cannot_pass_after_five_minutes(self):
+    def test_smoke_accepts_six_minutes_but_rejects_an_overrun(self):
         self.setup_smoke()
-        with patch.object(verify, "ROOT", self.root), patch.object(verify, "time") as clock:
-            clock.monotonic.return_value = 0
-            def completed(*args):
-                clock.monotonic.return_value = 301
-                return {"status": "passed"}
-            with patch.object(verify.Runner, "group", side_effect=completed):
-                self.assertEqual(verify.main(["--smoke"]), 1)
-        summary = json.loads(next((self.root / "target/verification").glob("run-*/summary.json")).read_text())
-        self.assertIn("exceeded 300 seconds", summary["error"])
+        for elapsed, expected_exit in ((301, 0), (360, 0), (361, 1)):
+            with self.subTest(seconds=elapsed), patch.object(verify, "ROOT", self.root), \
+                    patch.object(verify, "time") as clock:
+                clock.monotonic.return_value = 0
+                def completed(runner, *args):
+                    self.assertEqual(runner.deadline, 360)
+                    clock.monotonic.return_value = elapsed
+                    return {"status": "passed"}
+                with patch.object(verify.Runner, "group", new=completed):
+                    self.assertEqual(verify.main(["--smoke"]), expected_exit)
+        summaries = [json.loads(p.read_text()) for p in
+                     (self.root / "target/verification").glob("run-*/summary.json")]
+        failed = [s for s in summaries if s["status"] == "failed"]
+        self.assertEqual(len(failed), 1)
+        self.assertIn("exceeded 360 seconds", failed[0]["error"])
 
     def test_expired_total_budget_does_not_start_another_command(self):
         runner = verify.Runner([], 5400, threading.Event(), deadline=-1)

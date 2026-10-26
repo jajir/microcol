@@ -54,7 +54,8 @@ Never force-push to publish. Task completion follows the local acceptance policy
    run `bash scripts/ui-tests/verify.sh --smoke`: **all model/JUnit tests**, existing
    non-`TC_` support tests and the ten [selected UI scenarios](functional-tests.md#pre-commit-smoke)
    in Docker/Xvfb. Complete fresh reports must show zero failures, errors or skips
-   within 300 seconds; failure, missing reports or timeout blocks that commit.
+   within 360 seconds (amended on 2026-10-26 in [R-0295](requirements/done/R-0295.md));
+   failure, missing reports or timeout blocks that commit.
    Targeted checks do not replace the gate. Also apply shared formatting to changed
    Java, tests for changed tooling and documentation checks for changed docs.
    Evidence/status/link-only closure after an accepted game gate needs fresh

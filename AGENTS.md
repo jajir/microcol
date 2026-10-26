@@ -21,8 +21,8 @@ not merely because its documentation changes.
 Before every other commit, run all fast model/JUnit tests and the fixed Docker/Xvfb smoke gate
 with `bash scripts/ui-tests/verify.sh --smoke`. Complete fresh reports with zero
 failures, errors or skips are mandatory; do not commit when the gate fails,
-times out or is incomplete. Its total local budget is five minutes. Also run
-checks relevant to changed tooling, Java formatting when applicable, and the
+times out or is incomplete. Its total local budget is six minutes (360 seconds),
+as amended on 2026-10-26. Also run checks relevant to changed tooling, Java formatting when applicable, and the
 documented documentation checks and strict MkDocs build for documentation.
 See the authoritative [local acceptance policy](docs/publishing.md#local-acceptance-policy)
 and [smoke selection](docs/functional-tests.md#pre-commit-smoke).

@@ -18,7 +18,7 @@ not install a daemon, change a model, or put Codex credentials inside a containe
    records `wait_seconds` separately from `elapsed_seconds`. Only waiting is
    excluded: both execution and acceptance budgets start when the lock is acquired,
    including recovery and final cleanup. The smoke wrapper also rejects a command
-   that passed internally but exceeded 300 seconds during cleanup. Recovery
+   that passed internally but exceeded 360 seconds during cleanup. Recovery
    failure blocks the new command. Cancellation while waiting leaves the holder
    untouched. Worker and remote-CI modes do not take this lock.
 3. `flock` releases when its holder exits, including SIGKILL. The lock descriptor
@@ -46,8 +46,9 @@ not install a daemon, change a model, or put Codex credentials inside a containe
    ```
 
 6. Serialization removes competition between cooperating local test jobs; it
-   does not guarantee that an individual run fits five minutes. No test selection
-   or acceptance budget was relaxed, and no remote regression is watched.
+   does not guarantee that an individual run fits six minutes. Serialization itself
+   does not change test selection or the acceptance budget; the current limit is
+   documented below. No remote regression is watched.
 
 ## Dispatch and resume
 
@@ -127,8 +128,10 @@ run documentation consistency checks and strict MkDocs instead, without starting
 python3 scripts/codex/run.py --thread TASK_UUID --timeout 420 verify -- --smoke
 ```
 
-The verifier enforces a **300-second total acceptance budget**, including all
-model tests and the selected UI/support tests. The outer 420-second watchdog
+The verifier enforces a **360-second total acceptance budget**, including all
+model tests and the selected UI/support tests. The user raised the limit on
+2026-10-26 in [R-0295](../requirements/done/R-0295.md); historical results keep their
+original limits. The outer 420-second watchdog
 allows startup, bounded cleanup and notification; it does not extend acceptance.
 Record the returned directory and PID, continue independent work, then inspect
 the callback's `result.json`, `command.log`, manifest and test reports. A failed

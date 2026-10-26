@@ -1,5 +1,13 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0295 six-minute gate — 2026-10-26
+
+1. [R-0295](requirements/done/R-0295.md) changes the total smoke budget from 300 to 360 seconds at the shell, verifier and completion-runner entry points. The fixed selection, lock/recovery/cleanup rules and success criteria remain unchanged. There is no gameplay UC or Java change.
+2. `test_smoke_accepts_six_minutes_but_rejects_an_overrun` exercises 301/360/361-second outcomes with a simulated clock. The manifest check and `test_smoke_entry_points_share_six_minute_acceptance_budget` check the configured 360-second limit across entry points. Existing lock-wait and cleanup-overrun tests remain required. The final tooling run passed 25 verifier/local-slot tests in 13.031 seconds (`target/r0295/ui-tooling-final.log`) and 20 callback tests in 7.504 seconds (`callback-tooling.log`), zero failures/errors/skips. Simulated failure messages in these logs are expected negative cases, not failed checks. The shell syntax check, nine documentation consistency tests and strict MkDocs also passed. The complete Docker acceptance result is recorded below.
+
+3. The mandatory gate passed in `20261026T101541Z-14e73023e476` (PID 48327, outer timeout 420 seconds, acceptance cap 360 seconds, no lock wait). Verifier time was **302.462 seconds**; complete execution and cleanup took **303.747 seconds**. All **4,775 checks (4,754 model/JUnit and 21 fixed smoke/support)** passed in 353 complete XML reports, with zero failures, errors or skips. `target/verification/run-6oy3wavy` retains the manifest, reports and logs; the manifest records 360 seconds. Cleanup completed and notification was queued.
+4. All 2,296 hashes in `target/r0295/checked-source.json` match the captured and final runtime/test/build sources, based on `fbdaf3732dde9a35bbf438d58dcc466c9af5583e` plus this change. Review confirms the same `smoke.json`, all game sources and existing success criteria; no Java formatting is needed. The tooling tests also retain lock waiting, crash recovery and cleanup-overrun checks. All nine documentation consistency tests and strict MkDocs passed after evidence closure. Reports and tooling logs are preserved under the main checkout before worktree cleanup. No remote CI or publication result is claimed.
+
 ## R-0294 terrain boundaries — 2026-10-26
 
 1. [R-0294](requirements/done/R-0294.md), UC-006/114/119: shared bounded land-colour curves preserve logical tile centres, existing coast silhouettes, explored terrain and saved map state. `TerrainBoundaryImagesTest` covers exact shared edges, complete tiling without gaps/overlaps across strips, islands, checkerboards and three-way joins, cache/reload/seed behaviour and hidden terrain. `TerrainCoastColourTest` retains mask alpha and mixed-coast colour checks.
@@ -85,7 +93,7 @@
 | TC06 / `TC_06_moving_goods` | Nákup a prodej zboží v Evropě |
 | TC23 / `TC_01_atlantic_round_trip_preserves_cargo` | Plavba přes Atlantik tam a zpět se zachováním nákladu |
 
-1. Celá lokální brána má limit **300 sekund** od vytvoření běhu, včetně snímku
+1. Celá lokální brána má limit **360 sekund** od vytvoření běhu, včetně snímku
    zdrojů, kontroly Dockeru, sestavení, modelových testů, smoke a vyhodnocení
    reportů. Překročení limitu je neúspěch, nikoli důvod vynechat modelové testy
    nebo označit neúplné výsledky za přijaté. První příprava Dockeru či stažení
@@ -98,7 +106,7 @@
    ve stejném commitu. Cílené běhy pomáhají během vývoje; úplná UI sada se kvůli
    změně sdíleného ovládání nespouští automaticky jako další lokální brána.
    Smoke není tvrzení o úplném pokrytí všech hráčských cest.
-4. Měřený výsledek a implementaci sleduje [R-0258](requirements/done/R-0258.md).
+4. Původní měření a implementaci sleduje [R-0258](requirements/done/R-0258.md). Dohoda z **26. října 2026**, [R-0295](requirements/done/R-0295.md), zvyšuje celkový limit z 300 na 360 sekund; výběr testů a podmínky úspěchu zůstávají stejné. Starší neúspěšné běhy se neposuzují znovu podle nového limitu.
 
 
 
