@@ -11,6 +11,23 @@ module microcol.game {
     requires jdk.unsupported;
     requires java.management;
 
+    // Shading replaces Log4j's descriptors, so retain its runtime services here.
+    uses org.apache.logging.log4j.spi.Provider;
+    uses org.apache.logging.log4j.util.PropertySource;
+    uses org.apache.logging.log4j.message.ThreadDumpMessage.ThreadInfoFactory;
+    uses org.apache.logging.log4j.core.util.ContextDataProvider;
+    uses org.apache.logging.log4j.core.util.WatchEventService;
+
+    provides org.apache.logging.log4j.spi.Provider
+            with org.apache.logging.log4j.core.impl.Log4jProvider;
+    provides org.apache.logging.log4j.util.PropertySource
+            with org.apache.logging.log4j.util.EnvironmentPropertySource,
+            org.apache.logging.log4j.util.SystemPropertiesPropertySource;
+    provides org.apache.logging.log4j.message.ThreadDumpMessage.ThreadInfoFactory
+            with org.apache.logging.log4j.core.message.ExtendedThreadInfoFactory;
+    provides org.apache.logging.log4j.core.util.ContextDataProvider
+            with org.apache.logging.log4j.core.impl.ThreadContextDataProvider;
+
 //    requires gson;
 //    requires jsr305; // javax.annotation;
 //    requires javax.inject;

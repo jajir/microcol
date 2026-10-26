@@ -127,6 +127,11 @@
 				<version>3.4.2</version>
 				<configuration>
 					<forceCreation>true</forceCreation>
+					<archive>
+						<manifestEntries>
+							<Multi-Release>true</Multi-Release>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 			<!-- Replace dependency descriptors with the game module descriptor. -->

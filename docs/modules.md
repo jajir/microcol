@@ -116,6 +116,13 @@ The script passes arguments without shell splitting and stops on compiler errors
 The Shade Plugin inserts the compiled descriptor into the final JAR during
 `package`, replacing dependency descriptors.
 
+The combined descriptor retains Log4j's runtime service consumers and providers
+(logging provider, property sources, thread information, context data and watch
+services). Their original descriptors are removed by shading; omitting these
+declarations prevents the upgraded logger from starting as a named module.
+Both the assembled game JAR and the module JAR declare `Multi-Release: true`
+to retain the bundled libraries' versioned classes and support JDK 17 linking.
+
 The JAR plugin recreates the input before each shading run, so repeated packaging
 does not reuse the previous shaded output. The
 `original-microcol-module-<version>.jar` backup is an intermediate product, not
