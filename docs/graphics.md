@@ -1239,7 +1239,7 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 
 ## Otazníky na neobjevené mapě — R-0282
 
-1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden hnědý otazník Playpen Sans 14. Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
+1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden otazník. Původní R-0282 používala hnědý znak Playpen Sans 14; aktuálně vybraný kreslený tvar A stanoví [R-0296](requirements/done/R-0296.md). Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
 2. Otazníky se nehýbou ani nepřelosují při posunu, změně velikosti okna nebo Save/Continue. S objevením políčka zmizí a po opuštění dohledu se nevracejí. Mřížka zůstává pod neprůhlednou mlhou; jde pouze o dekoraci.
 3. Implementaci a přejímku sleduje [R-0282](requirements/done/R-0282.md); tato změna nepřidává uložená data ani nové herní pravidlo.
 
@@ -1279,11 +1279,13 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 
 ## Ručně kreslené otazníky — návrhy 26. října 2026
 
-1. Podnět: na uživatelském screenshotu má současný textový otazník slabší a světlejší stopu než kresby mapy. [R-0296](requirements/R-0296.md) zachycuje pouze návrh změny vzhledu; [R-0282](requirements/done/R-0282.md) nadále určuje rozmístění a mizení.
-2. Návrhy používají vlastní křivku, kulaté konce, krátkou nepravidelnou tečku a barvu terénních kontur `#292824`. Čára **1,6 px** odpovídá [sjednocené síle kontur](#sjednocena-sila-kontur-mapy-26-rijna-2026). Výška kresby kolem **20–22 px** nahrazuje přibližně 11 px inkoustové výšky současného znaku; nejde o změnu typografického pravidla Playpen Sans 14.
-3. **A — Oblý tah:** kompaktní oblouk, doporučený klidný tvar. **B — Lehký náklon:** širší otevřený oblouk a výraznější rukopis. **C — Rychlá skica:** mírně lomený, nepravidelnější tah. Žádný návrh dosud není vybraný nebo zapojený do hry.
+1. Podnět: na uživatelském screenshotu má současný textový otazník slabší a světlejší stopu než kresby mapy. [R-0296](requirements/done/R-0296.md) zachycuje návrhy a následně vybranou implementaci A; [R-0282](requirements/done/R-0282.md) nadále určuje rozmístění a mizení.
+2. Návrhy používají vlastní křivku, kulaté konce, krátkou nepravidelnou tečku a barvu terénních kontur `#292824`. Čára **1,6 px** odpovídá [sjednocené síle kontur](#sjednocena-sila-kontur-mapy-26-rijna-2026). Výška kresby kolem **20–22 px** nahrazuje přibližně 11 px inkoustové výšky původního textového znaku; nejde o změnu typografického pravidla Playpen Sans 14.
+3. **Vybráno A — Oblý tah:** uživatel 26. října 2026 zvolil kompaktní oblouk a zadal jeho implementaci. **B — Lehký náklon** a **C — Rychlá skica** zůstávají nevybranými alternativami. A nahrazuje textový otazník původní R-0282; stav skutečné přejímky vede [funkční evidence](functional-tests.md#r-0296-hand-drawn-question-marks-2026-10-26).
 
 ![Současný otazník a tři kreslené návrhy: detail čtyřikrát zvětšený a schematický výřez mapy](graphics-assets/question-marks-2026-10-26/comparison.png)
 
 4. Horní řada porovnává kresbu při 4× zvětšení. Spodní řada používá 45 px na políčko a stejné pozice otazníků; skutečné kresby kopců a trávy jsou převzaté z herního atlasu. Jde o schéma pro porovnání, nikoli screenshot implementace. Při zmenšení celé stránky se zmenší i náhled; nativní měřítko je v otevřeném PNG při 100 %.
-5. Editovatelné zdroje: [porovnání SVG](graphics-assets/question-marks-2026-10-26/comparison.svg), [A](graphics-assets/question-marks-2026-10-26/variant-a.svg), [B](graphics-assets/question-marks-2026-10-26/variant-b.svg), [C](graphics-assets/question-marks-2026-10-26/variant-c.svg). PNG vzniklo pomocí `rsvg-convert`. Při případné implementaci zůstane četnost přibližně 4 %, poloha i vybraný tvar stálé a objevené políčko ztratí otazník natrvalo.
+5. Editovatelné zdroje: [porovnání SVG](graphics-assets/question-marks-2026-10-26/comparison.svg), [A](graphics-assets/question-marks-2026-10-26/variant-a.svg), [B](graphics-assets/question-marks-2026-10-26/variant-b.svg), [C](graphics-assets/question-marks-2026-10-26/variant-c.svg). PNG vzniklo pomocí `rsvg-convert`. Implementace zachovává četnost přibližně 4 %, stálou polohu i vybraný tvar a trvalé zmizení otazníku po objevení políčka.
+
+6. [Skutečný snímek ze hry](graphics-assets/question-marks-2026-10-26/implemented-map.png) zachycuje variantu A po zapojení do vykreslování. Varianta A prošla cílenými testy i povinnou lokální přejímkou; přesné výsledky a její rozsah vede [funkční evidence](functional-tests.md#r-0296-hand-drawn-question-marks-2026-10-26).

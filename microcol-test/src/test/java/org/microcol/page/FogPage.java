@@ -633,14 +633,19 @@ public final class FogPage extends AbstractScreen {
                     .getGraphicsContext2D();
             graphics.setFill(Color.web("#9B9486"));
             graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            graphics.setFill(Color.web("#665747"));
-            graphics.setFont(getContext()
-                    .getClassFromGuice(org.microcol.gui.util.FontService.class)
-                    .getDefault(14));
-            graphics.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
-            graphics.setTextBaseline(javafx.geometry.VPos.CENTER);
-            graphics.fillText("?", Tile.TILE_WIDTH_IN_PX / 2.0,
-                    Tile.TILE_WIDTH_IN_PX / 2.0);
+            graphics.setStroke(Color.web("#292824"));
+            graphics.setLineWidth(1.6);
+            graphics.setLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
+            graphics.setLineJoin(javafx.scene.shape.StrokeLineJoin.ROUND);
+            graphics.beginPath();
+            graphics.moveTo(17, 17);
+            graphics.bezierCurveTo(16.7, 13.5, 20.3, 11.9, 23.6, 12.4);
+            graphics.bezierCurveTo(27.6, 12.7, 29, 16.4, 27.1, 19);
+            graphics.bezierCurveTo(25.6, 21, 22.8, 21.8, 22.5, 24.2);
+            graphics.lineTo(22.4, 26);
+            graphics.moveTo(22.2, 31);
+            graphics.lineTo(22.3, 31.5);
+            graphics.stroke();
             return canvas.snapshot(null, null);
         }).get(10, TimeUnit.SECONDS);
         final Point point = getContext().getArea()

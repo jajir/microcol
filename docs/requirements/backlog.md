@@ -654,4 +654,4 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Hand-drawn question marks — 2026-10-26
 
-1. [R-0296](R-0296.md) captures three visual alternatives under A03 for question marks matching the map contours. Status is `new`: the user requested proposals, and no runtime implementation has been selected. Existing R-0282 placement and exploration behavior remain unchanged.
+1. [R-0296](done/R-0296.md) implements selected variant A under A03, requested on 2026-10-26. Status is `done`; variant A passed local acceptance, including 20 targeted checks and the 4,775-check mandatory gate. Existing R-0282 placement and exploration behavior remain unchanged.

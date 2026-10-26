@@ -1022,3 +1022,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-114/119: map outline weight — 2026-10-26
 
 [R-0291](requirements/done/R-0291.md) applies the selected second proposal to thin forest, coast, colony and resource outlines. TC80/01 preserves terrain names, forest identity and Continue, and records a map screenshot for optical review. TC80/04, TC100/06–07, TC188/01 and TC190/01 cover shared previews, map navigation and existing unit identity. [Local acceptance](functional-tests.md#r-0291-map-outline-weight-2026-10-26) passed; this does not close all of UC-114.
+
+### UC-006/119: selected hand-drawn question mark — 2026-10-26
+
+[R-0296](requirements/done/R-0296.md) replaces the font glyph with user-selected drawing A. TC26/10 retains its stable ID and complete exploration/Continue journey while checking the selected rendered curve. TC26 fog/privacy/grid and TC91 hidden-resource checks remain required; see [functional evidence](functional-tests.md#r-0296-hand-drawn-question-marks-2026-10-26).

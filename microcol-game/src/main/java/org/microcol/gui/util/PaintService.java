@@ -36,6 +36,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -118,12 +119,17 @@ public final class PaintService {
             final Point point, final Location location) {
         if (mapManager.hasUnknownMark(location)) {
             graphics.save();
-            graphics.setFill(Color.web("#665747"));
-            graphics.setFont(colonyFont);
-            graphics.setTextAlign(TextAlignment.CENTER);
-            graphics.setTextBaseline(VPos.CENTER);
-            graphics.fillText("?", point.getX() + Tile.TILE_WIDTH_IN_PX / 2.0,
-                    point.getY() + Tile.TILE_WIDTH_IN_PX / 2.0);
+            graphics.translate(point.getX(), point.getY());
+            graphics.setStroke(MARKER_INK);
+            graphics.setLineWidth(1.6);
+            graphics.setLineCap(StrokeLineCap.ROUND);
+            graphics.setLineJoin(StrokeLineJoin.ROUND);
+            graphics.beginPath();
+            graphics.appendSVGPath("M17 17 C16.7 13.5 20.3 11.9 23.6 12.4 "
+                    + "C27.6 12.7 29 16.4 27.1 19 "
+                    + "C25.6 21 22.8 21.8 22.5 24.2 L22.4 26 "
+                    + "M22.2 31 L22.3 31.5");
+            graphics.stroke();
             graphics.restore();
         }
     }
