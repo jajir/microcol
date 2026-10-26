@@ -1,3 +1,5 @@
+@import "ToolbarControls.css";
+
 
 #canvas{
 	-fx-pref-width: 100000;
@@ -33,37 +35,6 @@
     -fx-vgap: 4;
     -fx-border-color: #292824;
     -fx-border-width: 0 0 1 0;
-}
-.game-screen .button.game-toolbar-control {
-    -fx-skin: "javafx.scene.control.skin.ButtonSkin";
-}
-.game-screen .game-toolbar-control {
-    -fx-background-color: #FFF9EC;
-    -fx-background-radius: 3;
-    -fx-background-insets: 2;
-    -fx-border-image-source: url("../images/game-toolbar-frame.png");
-    -fx-border-image-slice: 12;
-    -fx-border-image-width: 6;
-    -fx-border-image-repeat: stretch;
-    -fx-padding: 6 3 7 3;
-    -fx-graphic-text-gap: 3;
-    -fx-text-fill: #302D27;
-    -fx-effect: null;
-}
-.game-screen .game-toolbar-control:hover,
-.game-screen .game-toolbar-control:showing {
-    -fx-background-color: #E7E7D0;
-}
-.game-screen .game-toolbar-control:focused {
-    -fx-background-color: #E7E7D0;
-    -fx-underline: true;
-}
-.game-screen .game-toolbar-control:armed {
-    -fx-background-color: #DCDCC5;
-    -fx-translate-y: 1;
-}
-.game-screen .game-toolbar-control:disabled {
-    -fx-opacity: 0.45;
 }
 .game-screen #coloniesMenu {
     -fx-min-height: 57;

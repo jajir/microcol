@@ -5,7 +5,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="mainMenu">MicroCol</entry>
-	<entry key="buttonContinue">Continue in last played game</entry>
+	<entry key="buttonContinue">Continue</entry>
 	<entry key="buttonLoadSave">Load saved game</entry>
 	<entry key="buttonPlayCampaign">Play campaign</entry>
 	<entry key="buttonFreeGame">New free play game</entry>

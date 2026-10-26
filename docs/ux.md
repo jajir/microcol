@@ -906,3 +906,10 @@ Automatizované kontroly a vizuální přejímku eviduje
 ### Síla kresby mapy — 26. října 2026
 
 [R-0291](requirements/done/R-0291.md) přebírá druhý vybraný návrh: lesy, pobřeží, bonusy a kolonie mají být stejně snadno rozpoznatelné jako ikony horní lišty. Cílem je optické sjednocení kontur při zachování velikosti objektů, čitelné výplně a podružné mřížky. Nezavádí nový ovladač ani potvrzování; otevření hry, pohyb pohledu a Continue používají stávající cestu. Lepší čitelnost je návrhový předpoklad, nikoli výsledek hráčské studie; aktuální kontrola patří do funkční evidence.
+
+
+## Úvodní menu — R-0297
+
+1. Dohoda 26. října 2026: hráč hledá pokračování, obnovu, načtení, kampaň, novou hru, síň slávy, nastavení nebo ukončení v jednom sloupci vlevo. [R-0297](requirements/done/R-0297.md) sjednocuje tlačítka s herní lištou; dostupnost akcí a jejich následné obrazovky nemění.
+2. Krátká ikona a úplný jednořádkový název sdělují akci. Když se název nevejde, zůstává ikona a tooltip se stejným názvem; přístupný název se neskrývá. Při zvětšení se popisek vrací. Zaměření klávesnicí a stavy tlačítka přebírají společný styl lišty.
+3. Návrat z Nastavení vede do stejného menu i po změně jazyka. Continue bez dostupné poslední hry zůstává nepřístupné podle stávajících pravidel. Nejde o změnu výsledků hry ani o výsledek hráčské studie; ověřené scénáře a omezení uvádí [evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).

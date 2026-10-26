@@ -203,7 +203,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
 | [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
-| [R-0297](R-0297.md) | Apply the selected compact opening-menu composition | Ready for development; acceptance pending | User-selected single-column proposal, 2026-10-26 |
+| [R-0297](done/R-0297.md) | Apply the selected compact opening-menu composition | Done; local acceptance passed | User-selected single-column proposal, 2026-10-26 |
 
 ## A04
 
@@ -662,3 +662,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Hand-drawn question marks — 2026-10-26
 
 1. [R-0296](done/R-0296.md) implements selected variant A under A03, requested on 2026-10-26. Status is `done`; variant A passed local acceptance, including 20 targeted checks and the 4,775-check mandatory gate. Existing R-0282 placement and exploration behavior remain unchanged.
+
+## Compact opening menu — 2026-10-26
+
+1. [R-0297](done/R-0297.md) implements the selected single-column proposal under A03. Status: `done`. The menu reuses the actual toolbar frame and control dimensions, adds two title waves and preserves existing actions. Ten targeted checks and all 4,775 required model/JUnit/smoke checks passed; [evidence](../functional-tests.md#r-0297-opening-menu-2026-10-26) remains separate from publication.

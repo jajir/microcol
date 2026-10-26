@@ -1,12 +1,19 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
 import com.google.inject.Inject;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -51,7 +58,7 @@ public final class ButtonsPanelView
     private final VBox buttonsBox = new VBox();
 
     @Inject
-    ButtonsPanelView() {
+    ButtonsPanelView(final ImageProvider images) {
         buttonContinue.setId(BUTTON_CONTINUE_ID);
         buttonRecovery.setId(BUTTON_RECOVERY_ID);
         buttonLoad.setId(BUTTON_LOAD_ID);
@@ -69,6 +76,42 @@ public final class ButtonsPanelView
         buttonsBox.getChildren().add(buttonHallOfFame);
         buttonsBox.getChildren().add(buttonSetting);
         buttonsBox.getChildren().add(buttonExitMicroCol);
+        final Image icons = images.getImage("menu-icons.png");
+        for (int index = 0; index < buttonsBox.getChildren().size(); index++) {
+            final Button button = (Button) buttonsBox.getChildren().get(index);
+            button.getStyleClass().add("game-toolbar-control");
+            button.setMinWidth(0);
+            button.setMaxWidth(Double.MAX_VALUE);
+            final ImageView icon = new ImageView(icons);
+            icon.setViewport(new Rectangle2D(index * 96, 0, 96, 96));
+            icon.setFitWidth(32);
+            icon.setFitHeight(32);
+            icon.setMouseTransparent(true);
+            button.setGraphic(icon);
+            final Tooltip tooltip = new Tooltip();
+            tooltip.textProperty().bind(button.textProperty());
+            button.setTooltip(tooltip);
+            button.accessibleTextProperty().bind(button.textProperty());
+            button.widthProperty()
+                    .addListener(observable -> updateLabel(button));
+            button.fontProperty()
+                    .addListener(observable -> updateLabel(button));
+            button.insetsProperty()
+                    .addListener(observable -> updateLabel(button));
+            button.textProperty()
+                    .addListener(observable -> updateLabel(button));
+        }
+    }
+
+    private void updateLabel(final Button button) {
+        final Text label = new Text(button.getText());
+        label.setFont(button.getFont());
+        final double requiredWidth = label.getLayoutBounds().getWidth() + 32
+                + button.getGraphicTextGap() + button.getInsets().getLeft()
+                + button.getInsets().getRight();
+        button.setContentDisplay(
+                requiredWidth <= button.getWidth() ? ContentDisplay.LEFT
+                        : ContentDisplay.GRAPHIC_ONLY);
     }
 
     void setContinueEnabled(final boolean isEnabled) {

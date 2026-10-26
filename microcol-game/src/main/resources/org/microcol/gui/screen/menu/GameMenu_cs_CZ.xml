@@ -5,7 +5,7 @@
 	<comment>Define keys for main game menu</comment>
 
 	<entry key="mainMenu">MicroCol</entry>
-	<entry key="buttonContinue">Pokračovat v naposledy hrané hře</entry>
+	<entry key="buttonContinue">Pokračovat</entry>
 	<entry key="buttonLoadSave">Nahrát hru</entry>
 	<entry key="buttonPlayCampaign">Spustit kampaň</entry>
 	<entry key="buttonFreeGame">Nová neomezená hra</entry>

@@ -1027,3 +1027,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-006/119: selected hand-drawn question mark — 2026-10-26
 
 [R-0296](requirements/done/R-0296.md) replaces the font glyph with user-selected drawing A. TC26/10 retains its stable ID and complete exploration/Continue journey while checking the selected rendered curve. TC26 fog/privacy/grid and TC91 hidden-resource checks remain required; see [functional evidence](functional-tests.md#r-0296-hand-drawn-question-marks-2026-10-26).
+
+## Opening menu controls — 2026-10-26
+
+1. UC-119 (Regrese), with the existing UC-115 start-game journey: [R-0297](requirements/done/R-0297.md) applies the selected single-column opening menu. Existing TC83/01 checks the shared frame, height, icons, Czech/English labels, compact names and keyboard/mouse Settings navigation; TC188 covers the shared map toolbar and TC12 the new-game action. The historical TC83 method ID is retained. Acceptance is recorded in [functional evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).

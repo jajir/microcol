@@ -27,35 +27,60 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_menu_navigation_uses_wooden_buttons() throws Exception {
-        // The normal menu uses the new font and face without losing its
-        // actions.
+        // Keep the existing menu actions while adopting compact toolbar
+        // controls.
         final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
-        page.verifyWoodenButton("buttonSetting");
-        page.verifyWoodenButton("buttonStartFreeGame");
-        // Check center/side pigment continuity after real window resizing.
         final WelcomePage welcome = WelcomePage.of(getContext());
         welcome.resizeWindow(1000, 800);
+        welcome.verifyOpeningControls(false, false);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0268-menu-normal.png");
+        page.captureDialog("buttonSetting", "R-0297-menu-english.png");
+
+        // Changing window size preserves the column and continuous background.
         welcome.resizeWindow(1400, 1000);
+        welcome.verifyOpeningControls(false, false);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0268-menu-wide.png");
-        WelcomePage.of(getContext()).openSetting().goBack().verifyMainScreen();
-        page.verifyWoodenButton("buttonSetting");
+        page.captureDialog("buttonSetting", "R-0297-menu-wide.png");
+
+        // Keyboard activation still opens Settings; Czech labels fit on return.
+        page.focus("buttonSetting");
+        page.verifyFocused("buttonSetting");
+        page.press(KeyCode.SPACE);
+        final org.microcol.page.SettingPage settings = org.microcol.page.SettingPage
+                .of(getContext());
+        settings.verifyLanguageOptionsShown();
+        settings.setCzechLanguage();
+        settings.goBack().verifyMainScreen();
+        welcome.resizeWindow(1000, 700);
+        welcome.verifyOpeningControls(true, false);
+        page.captureDialog("buttonSetting", "R-0297-menu-czech-small.png");
+
+        // A narrow column hides whole labels but keeps names, icons and height.
+        welcome.setMenuColumnWidth(58);
+        welcome.verifyOpeningControls(true, true);
+        page.captureDialog("buttonSetting", "R-0297-menu-icons.png");
+        welcome.setMenuColumnWidth(300);
+        welcome.verifyOpeningControls(true, false);
+
+        // Mouse navigation and switching back to English remain available.
+        final org.microcol.page.SettingPage english = welcome.openSetting();
+        english.verifyLanguageOptionsShown();
+        english.setEnglishLanguage();
+        english.goBack().verifyMainScreen();
+        welcome.verifyOpeningControls(false, false);
     }
 
     @Test
     @Tag("local")
     void TC_02_custom_game_and_ship_buttons_keep_their_appearance()
             throws Exception {
-        // Existing image controls retain the image, native skin and player
-        // journey.
+        // Map controls keep the shared frame, icon geometry and player journey.
         final org.microcol.page.GamePage game = WelcomePage.of(getContext())
                 .loadGame();
         final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
-        page.verifyOriginalImageButton("nextTurn");
-        page.verifyOriginalImageButton("europe");
-        page.verifyWoodenButton("congress");
+        page.verifyToolbarButton("nextTurn");
+        page.verifyToolbarButton("europe");
+        page.verifyToolbarButton("congress");
         page.captureDialog("europe", "wooden-game.png");
         page.click("congress");
         page.verifyWoodenButton("congressClose");

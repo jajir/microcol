@@ -132,11 +132,18 @@ public final class WoodenButtonsPage extends AbstractScreen {
         });
     }
 
-    public void verifyOriginalImageButton(final String id) {
+    public void verifyToolbarButton(final String id) {
         getRobot().interact(() -> {
             final Button button = getButtonById(id);
             assertEquals(ButtonSkin.class, button.getSkin().getClass());
-            assertFalse(button.getBackground().getImages().isEmpty());
+            assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
+                    .endsWith("game-toolbar-frame.png"));
+            final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) button
+                    .getGraphic();
+            assertEquals(32, icon.getFitHeight(), 0.01);
+            assertEquals(32, icon.getFitWidth(), 0.01);
+            assertEquals(57, button.getHeight(), 0.01);
+            assertEquals(14, button.getFont().getSize(), 0.01);
             assertNull(button.lookup(".wooden-button-drawing"));
         });
     }

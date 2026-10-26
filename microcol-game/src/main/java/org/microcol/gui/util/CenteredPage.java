@@ -47,6 +47,7 @@ public class CenteredPage implements JavaFxComponent, UpdatableLanguage {
         centeredContent = new HBox();
 
         final HBox inner = new HBox();
+        inner.getStyleClass().add("centered-page-row");
         inner.setAlignment(Pos.CENTER);
         inner.getChildren().add(centeredContent);
 

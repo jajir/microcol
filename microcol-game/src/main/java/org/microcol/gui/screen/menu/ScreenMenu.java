@@ -31,6 +31,7 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         menuHolderPanel.getContent().getStylesheets()
                 .add(STYLE_SHEET_GAME_MENU);
+        menuHolderPanel.getContent().getStyleClass().add("welcome-screen");
         menuHolderPanel.setMenuPanel(buttonsPanelView);
     }
 

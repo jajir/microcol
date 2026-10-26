@@ -1,3 +1,4 @@
+@import "ToolbarControls.css";
 @import "SettingsControls.css";
 
 /*
@@ -26,4 +27,37 @@
 
 .game-menu-inner {
 	-fx-spacing: 10;
+}
+
+/* Only the opening menu adopts the map toolbar's controls and title waves. */
+.welcome-screen .main-title {
+    -fx-graphic: url("../images/menu-title-waves.png");
+    -fx-content-display: bottom;
+    -fx-graphic-text-gap: 6;
+    -fx-min-height: 100;
+}
+.welcome-screen .game-menu-inner {
+    -fx-padding: 0;
+    -fx-spacing: 8;
+    -fx-min-width: 0;
+    -fx-pref-width: 300;
+    -fx-max-width: 300;
+}
+.welcome-screen .game-menu-inner > .button {
+    -fx-alignment: center-left;
+}
+
+.welcome-screen .titled-content {
+    -fx-translate-y: 50;
+}
+
+.welcome-screen .centered-page-row {
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 80;
+}
+.welcome-screen .main-title, .welcome-screen .titled-content {
+    -fx-translate-x: 0;
+}
+.welcome-screen .main-title {
+    -fx-translate-y: -270;
 }
