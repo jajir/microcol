@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Čitelné hranice krajiny — R-0294
+
+1. Hráč při otevření nové i rozehrané mapy uvidí souvislé barevné oblasti s mírně nepravidelným okrajem podle [grafického pravidla](graphics.md#nepravidelne-hranice-terenu-26-rijna-2026). Střed políčka, název pod kurzorem a stávající výběr zachovávají přesnou informaci o terénu; klikání a pohyb stále patří čtvercové herní mřížce.
+2. Změna je automatická a nepřidává nastavení, potvrzení ani akci ke zrušení. Posun, průzkum, návrat do menu a Continue zachovávají současnou obsluhu. Nově objevená souš může doplnit společnou hranici; skrytý typ nesmí ovlivnit známé barevné plochy.
+3. Přirozenější vzhled je výtvarný záměr. [Automatická a vizuální evidence](functional-tests.md#r-0294-terrain-boundaries-2026-10-26) se nepovažuje za pozorování skutečných hráčů.
+
 ## Vlna s dopadem a rozplynutím — 26. října 2026
 
 1. [R-0293](requirements/done/R-0293.md) přebírá schválené „Široké rozlití“: převis padá dopředu, dopadne a rozpustí se do hladiny. Statická ukázka vždy obsahuje čitelný převis; název terénu, bonusy a směrová značka dalekého moře zůstávají dostupné.

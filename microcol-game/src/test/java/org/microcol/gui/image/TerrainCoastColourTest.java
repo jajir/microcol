@@ -25,9 +25,10 @@ class TerrainCoastColourTest {
             return at.getY() == 1 ? TerrainType.ARCTIC
                     : at.getY() == 3 ? TerrainType.DESERT : TerrainType.OCEAN;
         });
+        when(world.getSeed()).thenReturn(123);
         final Image mask = cache.getImage("grass-well");
-        final Image coast = new GrassCoastMapGenerator(images)
-                .prepareImage(mask, world, Location.of(2, 2));
+        final Image coast = new TerrainBoundaryImages(world, images, at -> true)
+                .getCoast(Location.of(2, 2), mask);
         assertEquals(0xf0ede1,
                 coast.getPixelReader().getArgb(22, 0) & 0xffffff);
         assertEquals(0xe0c28c,

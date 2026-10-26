@@ -92,4 +92,22 @@ final class TerrainIdentityFixture {
         rows.set(location.getY(), new JsonPrimitive(
                 row.substring(0, colon + 1) + String.join(",", cells)));
     }
+
+    static void prepareBoundaries(final TestContext context, final File source,
+            final String name, final int shipId, final Location shipAt)
+            throws IOException {
+        final String[] rows = { "GGGPPPDD", "GGPPPPDD", "GGGPPDDD", "GGPPPPDD",
+                "GGGPPDDD", "GGGGPPDD" };
+        final java.util.List<Object> tiles = new java.util.ArrayList<>();
+        for (int y = 0; y < rows.length; y++) {
+            for (int x = 0; x < rows[y].length(); x++) {
+                tiles.add(Location.of(14 + x, 12 + y));
+                tiles.add(rows[y].charAt(x) == 'G' ? TerrainType.GRASSLAND
+                        : rows[y].charAt(x) == 'P' ? TerrainType.PLAINS
+                                : TerrainType.DESERT);
+            }
+        }
+        prepare(context, source, name, shipId, shipAt, tiles.toArray());
+    }
+
 }

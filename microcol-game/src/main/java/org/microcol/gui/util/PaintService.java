@@ -565,6 +565,11 @@ public final class PaintService {
                 imageProvider.getTerrainColor(terrain.getTerrainType()));
         graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
                 Tile.TILE_WIDTH_IN_PX);
+        final Image background = mapManager.getTerrainBackground(location,
+                terrain.getTerrainType());
+        if (background != null) {
+            graphics.drawImage(background, point.getX(), point.getY());
+        }
         if (mapManager.isTerrainDecorated(location, terrain, gameTick)) {
             graphics.drawImage(
                     animated ? mapManager.getTerrainDecoration(

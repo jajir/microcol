@@ -1,5 +1,15 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Nepravidelné hranice terénů — 26. října 2026
+
+1. Uživatel schválil [R-0294](requirements/done/R-0294.md): jednolité plochy souše se oddělují sdílenými, jemně nepravidelnými křivkami bez nové obrysové čáry. Barvy a současné pobřežní siluety zůstávají zachované; ruční charakter vytváří geometrie, nikoli textura nebo gradient.
+2. Nové vykreslení se automaticky vztahuje i na rozehrané hry. Středy políček, pravidla pohybu, výnosy a uložená mapa se nemění. Seed mapy a světové souřadnice určují stabilní tvary přes posun i Save/Continue; otevření uložený soubor nepřepisuje.
+3. Společná hrana používá stejnou kubickou křivku z obou stran. Posun uzlu je nejvýše 8 % šířky políčka v každé ose a řídicí body zůstávají v pásu do 18 % kolem původní hrany; střední část políčka zůstává původnímu terénu. Stejné barvy splývají, také u úzkých pásů a vícečetných spojů. Čísla jsou počáteční výtvarné nastavení této implementace, nikoli nové herní pravidlo.
+4. Okraj mapy, voda a neprozkoumané sousedství omezují deformaci. Barvy pobřeží vybírá stejná geometrie pouze ze známé souše; alfa a inkoust původní pobřežní masky zůstávají zachované. Geometrie nesmí prozradit skrytý typ terénu. Mřížka, dekorace, lesy, řeky, bonusy, kolonie a jednotky používají dosavadní pořadí a pravidla.
+5. `TerrainBoundaryImages` v `gui.image` vlastní geometrii a obrázky, `MapManager` dodává aktuální prozkoumané okolí a `PaintService` kreslí podklad před dekoracemi. Pomocná geometrie se po vytvoření obrázku uvolní. Mezipaměť se obnoví při změně známého okolí; nevzniká nové schéma uložených her ani nová knihovna. [Evidence](functional-tests.md#r-0294-terrain-boundaries-2026-10-26) odděluje ověření od publikace.
+
+![Skutečná mapa s nepravidelnými hranicemi](graphics-assets/terrain-boundaries-2026-10-26/implemented-map.png)
+
 ## Široké rozlití vlny — 26. října 2026
 
 1. Uživatel schválil [animovaný návrh 05](graphics-assets/wide-wash-2026-10-26/selected-05.png), „Široké rozlití“; [zdroj SVG](graphics-assets/wide-wash-2026-10-26/selected-05.svg). [R-0293](requirements/done/R-0293.md) nahrazuje pohyb starší varianty 04: malá vlna vytvoří krátký převis, špička padne dopředu, dopadne a rozlije se do postupně mizející stopy.

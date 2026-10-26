@@ -86,12 +86,13 @@ public final class TerrainAppearancePage extends AbstractScreen {
                 expected.getGraphicsContext2D()
                         .setFill(images.getTerrainColor(TerrainType.GRASSLAND));
                 expected.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+                paintBoundaryBackground(expected, at, TerrainType.GRASSLAND);
                 if (visible) {
                     decorated++;
                     decoratedAt = at;
                     expected.getGraphicsContext2D().drawImage(
-                            images.getTerrainImage(TerrainType.GRASSLAND), 0,
-                            0);
+                            images.getTerrainDecoration(TerrainType.GRASSLAND),
+                            0, 0);
                 } else {
                     bare++;
                 }
@@ -131,6 +132,7 @@ public final class TerrainAppearancePage extends AbstractScreen {
             bonus.getGraphicsContext2D()
                     .setFill(images.getTerrainColor(TerrainType.GRASSLAND));
             bonus.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+            paintBoundaryBackground(bonus, decoratedAt, TerrainType.GRASSLAND);
             bonus.getGraphicsContext2D().drawImage(
                     images.getResourceImage(ResourceOverlay.PRIME_TOBACCO), 0,
                     0);
@@ -150,7 +152,11 @@ public final class TerrainAppearancePage extends AbstractScreen {
                         "Relief remains with a bonus");
                 final Canvas expected = new Canvas(45, 45);
                 expected.getGraphicsContext2D()
-                        .drawImage(images.getTerrainImage(relief), 0, 0);
+                        .setFill(images.getTerrainColor(relief));
+                expected.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+                paintBoundaryBackground(expected, decoratedAt, relief);
+                expected.getGraphicsContext2D()
+                        .drawImage(images.getTerrainDecoration(relief), 0, 0);
                 expected.getGraphicsContext2D().drawImage(
                         images.getResourceImage(ResourceOverlay.ORE), 0, 0);
                 verifyPixels(expected.snapshot(null, null),
@@ -243,4 +249,15 @@ public final class TerrainAppearancePage extends AbstractScreen {
         }
         return true;
     }
+
+    private void paintBoundaryBackground(final Canvas canvas, final Location at,
+            final TerrainType type) {
+        final Image background = getContext()
+                .getClassFromGuice(MapManager.class)
+                .getTerrainBackground(at, type);
+        if (background != null) {
+            canvas.getGraphicsContext2D().drawImage(background, 0, 0);
+        }
+    }
+
 }

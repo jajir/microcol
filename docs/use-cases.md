@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+### UC-006/114/119: nepravidelné hranice terénů — 2026-10-26
+
+1. [R-0294](requirements/done/R-0294.md) mění kresbu barevných ploch známé souše a jejich návaznost na pobřeží. Nový TC80/F72/05 ověřuje skutečný obraz, posun a Continue; původní TC80 zachovává názvy, pohyb a rybolov na jezeře. TC26/01,02,03,09,10 zachovávají průzkum, mlhu a mřížku a TC91 bonusy a produkci.
+2. [Evidence](functional-tests.md#r-0294-terrain-boundaries-2026-10-26) uvádí skutečný výběr a výsledky. Změna nepřejímá nové herní pravidlo ani neprokazuje vzdálenou publikaci.
+
 [R-0293 — široké rozlití vlny](requirements/done/R-0293.md), 26. října 2026: UC-114/119 používají `TC_80_F72_terrain_identity_test.TC_04_sparse_terrain_and_living_water_survive_pan_and_continue` pro dopad, rozplynutí, šestisekundovou smyčku, 100% účast dalekého moře a viditelnou statickou ukázku před i po Continue. Stav výsledků: [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
 
 

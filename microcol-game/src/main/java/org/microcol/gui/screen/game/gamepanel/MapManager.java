@@ -5,6 +5,7 @@ import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.HiddenCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.image.ImageRandomProvider;
+import org.microcol.gui.image.TerrainBoundaryImages;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
@@ -39,6 +40,8 @@ public final class MapManager {
     private final ImageProvider imageProvider;
 
     private ImageRandomProvider imageRandomProvider;
+
+    private TerrainBoundaryImages terrainBoundaryImages;
 
     private final GameModelController gameModelController;
 
@@ -86,6 +89,10 @@ public final class MapManager {
     @SuppressWarnings("unused")
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
+        terrainBoundaryImages = new TerrainBoundaryImages(
+                gameModelController.getModel().getMap(), imageProvider,
+                location -> gameModelController.getHumanPlayer()
+                        .isVisible(location));
         grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
         hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
         imageRandomProvider = new ImageRandomProvider(imageProvider,
@@ -93,7 +100,13 @@ public final class MapManager {
     }
 
     public Image getCoatsImageAt(final Location location) {
-        return grassCoastMapGenerator.getImageAt(location);
+        return terrainBoundaryImages.getCoast(location,
+                grassCoastMapGenerator.getImageAt(location));
+    }
+
+    public Image getTerrainBackground(final Location location,
+            final TerrainType terrain) {
+        return terrainBoundaryImages.getBackground(location, terrain);
     }
 
     public boolean isTerrainDecorated(final Location location,

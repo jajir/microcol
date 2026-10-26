@@ -17,6 +17,7 @@ import org.microcol.page.ConstructionPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.TerrainIdentityPage;
+import org.microcol.page.TerrainBoundaryPage;
 import org.microcol.page.TerrainAppearancePage;
 import org.microcol.page.WelcomePage;
 import org.microcol.page.PassengerTransferPage;
@@ -206,6 +207,37 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         // Continue retains full High Seas participation and the same wave
         // loop.
         terrain.verifyHighSeasWavesAndStaticPreview();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_hand_drawn_boundaries_survive_pan_and_continue()
+            throws Exception {
+        // Load an explored patch with three land colours and irregular joins.
+        TerrainIdentityFixture.prepareBoundaries(getContext(), testFileName,
+                "terrain-r0293.microcol", SHIP_ID, SHIP_START);
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final TerrainBoundaryPage terrain = new TerrainBoundaryPage(
+                getContext());
+        game.panToTile(Location.of(17, 14));
+        game.moveMouseAtLocation(Location.of(16, 14));
+        game.verifyThatStatusBarContains("Grass land");
+        terrain.verifyIrregularBoundariesOnMap();
+        terrain.rememberBoundaryAppearance();
+        terrain.captureDialog("tileName", "r0293-terrain-boundaries.png");
+
+        // Pan away and return to the same stable map drawing.
+        game.panToTile(SHIP_START);
+        game.panToTile(Location.of(17, 14));
+        terrain.verifyBoundaryAppearanceUnchanged();
+        terrain.verifyIrregularBoundariesOnMap();
+
+        // Save and Continue preserve the terrain data and the new boundaries.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        game.panToTile(Location.of(17, 14));
+        terrain.verifyBoundaryAppearanceUnchanged();
+        terrain.verifyIrregularBoundariesOnMap();
     }
 
 }

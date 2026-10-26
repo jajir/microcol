@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Selected for implementation on 2026-10-26: [R-0294 — shared hand-drawn terrain boundaries](done/R-0294.md), A03 with A04/A05 dependencies; acceptance pending.
+
 Completed locally on 2026-10-26: [R-0293 — breaking waves dissolve into a wide wash](done/R-0293.md), approved proposal 5; 32 targeted checks and 4,771 model/JUnit plus fixed smoke checks passed.
 
 
