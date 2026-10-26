@@ -1,5 +1,16 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Návrhy zakřivených řek — 26. října 2026
+
+1. [R-0300](requirements/R-0300.md) zachycuje pět návrhů přirozenějšího průběhu
+   řek: jemné oblouky, ručně kreslené koryto, výrazné meandry, tenkou inkoustovou
+   konturu a světlé břehy. Výběr vzhledu a implementace zůstávají otevřené.
+2. Uživatel požaduje ikony bonusů **nad řekou**; voda nesmí překreslit stříbro ani
+   rudu. Platí to pro všechny varianty. Zobrazení zachovává identitu a polohu
+   bonusu, rozlišení velikosti řeky a pravidla viditelnosti.
+3. Náhledy jsou návrhy vzhledu. Zachycení požadavku ani kontrola zdrojového pořadí
+   kreslení nedokládají opravu nebo přejímku běžící hry.
+
 ## Nepravidelné hranice terénů — 26. října 2026
 
 1. Uživatel schválil [R-0294](requirements/done/R-0294.md): jednolité plochy souše se oddělují sdílenými, jemně nepravidelnými křivkami bez nové obrysové čáry. Barvy a současné pobřežní siluety zůstávají zachované; ruční charakter vytváří geometrie, nikoli textura nebo gradient.

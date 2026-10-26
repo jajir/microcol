@@ -667,3 +667,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Compact opening menu — 2026-10-26
 
 1. [R-0297](done/R-0297.md) implements the selected single-column proposal under A03. Status: `done`. The menu reuses the actual toolbar frame and control dimensions, adds two title waves and preserves existing actions. Ten targeted checks and all 4,775 required model/JUnit/smoke checks passed; [evidence](../functional-tests.md#r-0297-opening-menu-2026-10-26) remains separate from publication.
+
+## Curved river proposals — 2026-10-26
+
+1. [R-0300](R-0300.md) captures five river appearance proposals and the required placement of bonus icons above rivers. Primary area A03; A05 river/resource identity and visibility, A07 unchanged yields. Status: `new`; style selection and implementation remain open.
