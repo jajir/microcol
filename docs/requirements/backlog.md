@@ -651,3 +651,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Low rolling waves — 2026-10-26
 
 1. [R-0289](done/R-0289.md) applies selected proposal 04 as four thin rolling-wave frames and keeps eligible High Seas marked at 100%, including static views. A03 owns appearance; A05 identity/visibility and A04 timing/Continue are reused. Status: `done`. All 31 targeted checks and the 4,761-check mandatory model/JUnit and smoke gate passed; [evidence](../functional-tests.md#r-0289-rolling-waves-2026-10-26) records local acceptance separately from remote publication.
+
+## Hand-drawn question marks — 2026-10-26
+
+1. [R-0296](R-0296.md) captures three visual alternatives under A03 for question marks matching the map contours. Status is `new`: the user requested proposals, and no runtime implementation has been selected. Existing R-0282 placement and exploration behavior remain unchanged.

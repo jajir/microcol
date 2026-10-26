@@ -1276,3 +1276,14 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
    [skutečný snímek z Dockeru](graphics-assets/rivers-2026-10-26/implemented-map.png)
    ukazuje příčný mostek a oddělenou značku stříbra. Výsledky eviduje
    [funkční přejímka](functional-tests.md#r-0290-river-corridors-2026-10-26).
+
+## Ručně kreslené otazníky — návrhy 26. října 2026
+
+1. Podnět: na uživatelském screenshotu má současný textový otazník slabší a světlejší stopu než kresby mapy. [R-0296](requirements/R-0296.md) zachycuje pouze návrh změny vzhledu; [R-0282](requirements/done/R-0282.md) nadále určuje rozmístění a mizení.
+2. Návrhy používají vlastní křivku, kulaté konce, krátkou nepravidelnou tečku a barvu terénních kontur `#292824`. Čára **1,6 px** odpovídá [sjednocené síle kontur](#sjednocena-sila-kontur-mapy-26-rijna-2026). Výška kresby kolem **20–22 px** nahrazuje přibližně 11 px inkoustové výšky současného znaku; nejde o změnu typografického pravidla Playpen Sans 14.
+3. **A — Oblý tah:** kompaktní oblouk, doporučený klidný tvar. **B — Lehký náklon:** širší otevřený oblouk a výraznější rukopis. **C — Rychlá skica:** mírně lomený, nepravidelnější tah. Žádný návrh dosud není vybraný nebo zapojený do hry.
+
+![Současný otazník a tři kreslené návrhy: detail čtyřikrát zvětšený a schematický výřez mapy](graphics-assets/question-marks-2026-10-26/comparison.png)
+
+4. Horní řada porovnává kresbu při 4× zvětšení. Spodní řada používá 45 px na políčko a stejné pozice otazníků; skutečné kresby kopců a trávy jsou převzaté z herního atlasu. Jde o schéma pro porovnání, nikoli screenshot implementace. Při zmenšení celé stránky se zmenší i náhled; nativní měřítko je v otevřeném PNG při 100 %.
+5. Editovatelné zdroje: [porovnání SVG](graphics-assets/question-marks-2026-10-26/comparison.svg), [A](graphics-assets/question-marks-2026-10-26/variant-a.svg), [B](graphics-assets/question-marks-2026-10-26/variant-b.svg), [C](graphics-assets/question-marks-2026-10-26/variant-c.svg). PNG vzniklo pomocí `rsvg-convert`. Při případné implementaci zůstane četnost přibližně 4 %, poloha i vybraný tvar stálé a objevené políčko ztratí otazník natrvalo.
