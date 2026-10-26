@@ -1,5 +1,8 @@
 # Use cases a přejímka pravidel hry
 
+[R-0293 — široké rozlití vlny](requirements/done/R-0293.md), 26. října 2026: UC-114/119 používají `TC_80_F72_terrain_identity_test.TC_04_sparse_terrain_and_living_water_survive_pan_and_continue` pro dopad, rozplynutí, šestisekundovou smyčku, 100% účast dalekého moře a viditelnou statickou ukázku před i po Continue. Stav výsledků: [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
+
+
 ## UC-008/009/012/019/021/031/032/033/034/038/119: říční koridory — 2026-10-26
 
 1. [R-0290](requirements/done/R-0290.md) mění TC90/F81/02 na říční rybolov bez doku, zachovává TC90/F81/01 pro pohyb a doplňuje odmítnutí orby a založení kolonie. TC90/F81/03 nadále chrání mlhu; nové TC90/F81/04 a /05 ověřují těžbu stříbra/rudy, mostek, spotřebu zásob a Continue. Před potvrzením se ukazuje skutečný výnos, zrušení náhledu nic nemění a odmítnutí stavby vysvětlí omezení bez spotřeby nástrojů či pohybu.

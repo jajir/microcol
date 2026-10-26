@@ -79,7 +79,7 @@ class TerrainDecorationTest {
     }
 
     @Test
-    void sea_frames_loop_without_blank_frames_and_keep_seeded_offsets() {
+    void sea_frames_loop_over_six_seconds_and_keep_seeded_offsets() {
         final ImageRandomProvider images = new ImageRandomProvider(ASSETS,
                 world(134));
         final ImageRandomProvider reloaded = new ImageRandomProvider(ASSETS,
@@ -92,18 +92,18 @@ class TerrainDecorationTest {
             for (final TerrainType type : new TerrainType[] { TerrainType.OCEAN,
                     TerrainType.HIGH_SEA }) {
                 final Set<Image> frames = new HashSet<>();
-                for (int tick = 0; tick < 60; tick++) {
+                for (int tick = 0; tick < 180; tick++) {
                     final Image frame = images.getTerrainDecoration(type, at,
                             tick);
                     frames.add(frame);
                     assertSame(frame,
-                            images.getTerrainDecoration(type, at, tick + 60));
+                            images.getTerrainDecoration(type, at, tick + 180));
                     assertSame(frame,
                             reloaded.getTerrainDecoration(type, at, tick));
                     assertTrue(images.isTerrainDecorated(TerrainType.HIGH_SEA,
                             at, false, tick));
                 }
-                assertEquals(4, frames.size(),
+                assertEquals(120, frames.size(),
                         "One complete wave cycle: " + type);
             }
             assertTrue(images.isTerrainDecorated(TerrainType.HIGH_SEA, at,
@@ -113,8 +113,32 @@ class TerrainDecorationTest {
             assertSame(ASSETS.getTerrainDecoration(TerrainType.LAKE),
                     images.getTerrainDecoration(TerrainType.LAKE, at, 15));
         }
-        assertEquals(4, startingFrames.size(),
+        assertTrue(startingFrames.size() > 10,
                 "Neighbouring water must not animate in lockstep");
+    }
+
+    @Test
+    void ocean_placement_never_cuts_a_wave_cycle_short() {
+        final ImageRandomProvider images = new ImageRandomProvider(ASSETS,
+                world(134));
+        final WorldMapRandoms randoms = new WorldMapRandoms(world(134));
+        int decorated = 0;
+        for (int x = 1; x <= 100; x++) {
+            final Location at = Location.of(x, 20);
+            final long start = Math.floorMod(-(long) randoms.getRandomAt(at),
+                    180);
+            final boolean visible = images.isTerrainDecorated(TerrainType.OCEAN,
+                    at, false, start);
+            decorated += visible ? 1 : 0;
+            for (int tick = 0; tick < 180; tick++) {
+                assertEquals(visible,
+                        images.isTerrainDecorated(TerrainType.OCEAN, at, false,
+                                start + tick),
+                        "Selection remains fixed through the entire fall and dissolve");
+            }
+        }
+        assertTrue(decorated > 0 && decorated < 20,
+                "Exercise both selected and absent waves");
     }
 
     @Test
@@ -143,12 +167,12 @@ class TerrainDecorationTest {
                 final boolean water = first
                         .isTerrainDecorated(TerrainType.OCEAN, at, false, 0);
                 if (water != first.isTerrainDecorated(TerrainType.OCEAN, at,
-                        false, 120))
+                        false, 180))
                     changedWater++;
                 if (water != first.isTerrainDecorated(TerrainType.OCEAN, at,
                         false, 1))
                     nextFrameChanges++;
-                if (first.isTerrainDecorated(TerrainType.OCEAN, at, false, 120))
+                if (first.isTerrainDecorated(TerrainType.OCEAN, at, false, 180))
                     waterCount++;
             }
         }

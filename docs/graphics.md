@@ -1,5 +1,14 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Široké rozlití vlny — 26. října 2026
+
+1. Uživatel schválil [animovaný návrh 05](graphics-assets/wide-wash-2026-10-26/selected-05.png), „Široké rozlití“; [zdroj SVG](graphics-assets/wide-wash-2026-10-26/selected-05.svg). [R-0293](requirements/done/R-0293.md) nahrazuje pohyb starší varianty 04: malá vlna vytvoří krátký převis, špička padne dopředu, dopadne a rozlije se do postupně mizející stopy.
+2. Smyčka trvá šest sekund a obsahuje 120 průhledných snímků 45 × 45 px. Používá stávající 30Hz hodiny a rozdílné fáze podle seedu a souřadnic. Časování odpovídá schválenému návrhu; pohyb se za běhu nepočítá ze SVG.
+3. Vhodné daleké moře má 100% účast v animaci. Úplné rozplynutí vlny je záměrná fáze, nikoli náhodné vynechání políčka. Bílá směrová značka zůstává přítomná. Statické náhledy a nápověda zobrazují převis (snímek 53), takže se nezastaví na prázdné hladině.
+4. Zachované jsou barvy terénů, tmavá kresba oceánu `#152f31`, světlá kresba dalekého moře `#6ec9cf`, 5% četnost oceánu, jezera, priorita atributů a skrytí neprozkoumaných políček. Tah hlavní vlny má podle schváleného náhledu 0,6 logického px, doznívající stopa přibližně 0,47 px; ostatní kontury se nemění. Výběr oceánských políček se mění pouze na hranici jejich šestisekundové smyčky, aby se nepřerušil dopad; jezera zachovávají čtyřsekundový interval.
+5. [SVG atlas](../microcol-game/src/graphics/terrain-symbols.svg) má 14 sloupců a 21 řádků: první tři řádky zachovávají původní význam, následuje 120 oceánských a 120 dalekomořských snímků. Export: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`. [Skutečný snímek hry v Dockeru](graphics-assets/wide-wash-2026-10-26/implemented-map.png); stav ověření vede [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
+
+
 MicroCol používá SVG jako editovatelné výtvarné podklady. Za běhu načítá rastrové soubory z `microcol-game/src/main/resources/images`, z některých vyřezává malé obrázky a další skládá do pozadí obrazovek. Změna SVG se ve hře projeví až po exportu a zařazení odpovídajícího rastrového souboru mezi resources.
 
 Stránka vlastní [minimalistický grafický manuál](#minimalisticky-graficky-manual)

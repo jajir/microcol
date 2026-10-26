@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Vlna s dopadem a rozplynutím — 26. října 2026
+
+1. [R-0293](requirements/done/R-0293.md) přebírá schválené „Široké rozlití“: převis padá dopředu, dopadne a rozpustí se do hladiny. Statická ukázka vždy obsahuje čitelný převis; název terénu, bonusy a směrová značka dalekého moře zůstávají dostupné.
+2. Pohyb je automatický a používá běžné otevření mapy, posun a Continue. Nepřidává ovládání, potvrzení ani zvuk. Výběr návrhu uživatelem je podkladem vzhledu; technické ověření a dosud neprovedené pozorování při hraní rozlišuje [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26). Nahrazuje pohyb předchozí varianty 04 popsané níže.
+
+
 ## Rozpoznatelné vlny — 2026-10-26
 
 1. Podle [R-0289](requirements/done/R-0289.md) hráč pozná moře podle tenké nízké

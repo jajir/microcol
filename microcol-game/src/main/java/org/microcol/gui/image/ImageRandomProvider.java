@@ -36,7 +36,8 @@ public final class ImageRandomProvider {
         final int seed = mapRandoms.getRandomAt(location);
         long sample = seed;
         if (terrain.isSea()) {
-            final int interval = 4 * AnimationScheduler.FPS;
+            final int interval = (terrain == TerrainType.OCEAN ? 6 : 4)
+                    * AnimationScheduler.FPS;
             final long phase = (tick + Math.floorMod(seed, interval))
                     / interval;
             sample += phase * 0x9e3779b97f4a7c15L;
@@ -70,12 +71,11 @@ public final class ImageRandomProvider {
     public Image getTerrainDecoration(final TerrainType terrain,
             final Location location, final long tick) {
         if (terrain == TerrainType.OCEAN || terrain == TerrainType.HIGH_SEA) {
-            final int frameTicks = AnimationScheduler.FPS / 2;
-            final int cycle = frameTicks
-                    * ImageLoaderTerrainSymbols.WAVE_FRAMES;
+            final int cycle = AnimationScheduler.FPS * 6;
             final long phase = Math.floorMod(tick, cycle)
                     + Math.floorMod(mapRandoms.getRandomAt(location), cycle);
-            final int frame = (int) (phase % cycle) / frameTicks;
+            final int frame = (int) (phase % cycle)
+                    * ImageLoaderTerrainSymbols.WAVE_FRAMES / cycle;
             return imageProvider.getImage(
                     ImageLoaderTerrainSymbols.waveKey(terrain, frame));
         }

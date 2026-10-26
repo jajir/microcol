@@ -553,14 +553,24 @@ public final class PaintService {
     public void paintTerrainOnTile(final GraphicsContext graphics,
             final Point point, final Location location, final Terrain terrain,
             final boolean isHighlighted, final long gameTick) {
+        paintTerrainOnTile(graphics, point, location, terrain, isHighlighted,
+                gameTick, true);
+    }
+
+    private void paintTerrainOnTile(final GraphicsContext graphics,
+            final Point point, final Location location, final Terrain terrain,
+            final boolean isHighlighted, final long gameTick,
+            final boolean animated) {
         graphics.setFill(
                 imageProvider.getTerrainColor(terrain.getTerrainType()));
         graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
                 Tile.TILE_WIDTH_IN_PX);
         if (mapManager.isTerrainDecorated(location, terrain, gameTick)) {
             graphics.drawImage(
-                    mapManager.getTerrainDecoration(terrain.getTerrainType(),
-                            location, gameTick),
+                    animated ? mapManager.getTerrainDecoration(
+                            terrain.getTerrainType(), location, gameTick)
+                            : imageProvider.getTerrainDecoration(
+                                    terrain.getTerrainType()),
                     point.getX(), point.getY());
         }
         final Image imageCoast = mapManager.getCoatsImageAt(location);
@@ -605,8 +615,8 @@ public final class PaintService {
     public void paintTerrainOnTile(final GraphicsContext graphics,
             final Point point, final Location location, final Terrain terrain,
             final boolean isHighlighted) {
-        paintTerrainOnTile(graphics, point, location, terrain, isHighlighted,
-                0);
+        paintTerrainOnTile(graphics, point, location, terrain, isHighlighted, 0,
+                false);
         paintHiddenCoast(graphics, point, location);
     }
 

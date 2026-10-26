@@ -11,13 +11,13 @@ import com.google.common.base.Preconditions;
  */
 final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
 
-    static final int WAVE_FRAMES = 4;
+    static final int WAVE_FRAMES = 120;
 
     ImageLoaderTerrainSymbols() {
         super(TileImageParams.makeBuilder().setTileWidthCount(14)
-                .setTileHeightCount(4).setTileBorderWidth(0)
-                .setTileWidth(Tile.TILE_WIDTH_IN_PX).build(),
-                "terrain-symbols.png", "symbol_");
+                .setTileHeightCount(3 + (WAVE_FRAMES * 2 + 13) / 14)
+                .setTileBorderWidth(0).setTileWidth(Tile.TILE_WIDTH_IN_PX)
+                .build(), "terrain-symbols.png", "symbol_");
     }
 
     static String terrainKey(final TerrainType terrain) {
@@ -33,6 +33,10 @@ final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
                 || terrain == TerrainType.HIGH_SEA);
         Preconditions.checkArgument(frame >= 0 && frame < WAVE_FRAMES);
         return "wave-" + terrain.name() + "-" + frame;
+    }
+
+    private static String waveTile(final int frame) {
+        return "symbol_" + frame % 14 + "_" + (3 + frame / 14);
     }
 
     static String resourceKey(final ResourceOverlay resource) {
@@ -52,9 +56,9 @@ final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
         }
         for (int frame = 0; frame < WAVE_FRAMES; frame++) {
             cache.registerImage(waveKey(TerrainType.OCEAN, frame),
-                    "symbol_" + frame + "_3");
+                    waveTile(frame));
             cache.registerImage(waveKey(TerrainType.HIGH_SEA, frame),
-                    "symbol_" + (WAVE_FRAMES + frame) + "_3");
+                    waveTile(WAVE_FRAMES + frame));
         }
         int column = 0;
         for (final ResourceOverlay resource : ResourceOverlay.values()) {

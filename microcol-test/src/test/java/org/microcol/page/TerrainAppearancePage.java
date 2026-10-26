@@ -166,38 +166,56 @@ public final class TerrainAppearancePage extends AbstractScreen {
             final ImageProvider images = getContext()
                     .getClassFromGuice(ImageProvider.class);
             int checked = 0;
-            for (int x = 1; x <= getModel().getMap().getMaxLocationX(); x++) {
+            for (int x = 1; x <= getModel().getMap().getMaxLocationX()
+                    && checked < 3; x++) {
                 final Location at = Location.of(x, 20);
                 if (map.getCoatsImageAt(at) != null
                         || map.getHiddenImageCoast(at) != null)
                     continue;
                 final Terrain sea = new Terrain(at, TerrainType.HIGH_SEA);
-                final Canvas plain = new Canvas(45, 45);
-                plain.getGraphicsContext2D()
-                        .setFill(images.getTerrainColor(TerrainType.HIGH_SEA));
-                plain.getGraphicsContext2D().fillRect(0, 0, 45, 45);
-                final Image blank = plain.snapshot(null, null);
-                final Image first = render(at, sea, 0);
-                for (int tick = 0; tick < 60; tick += 15) {
+                final Image crest = images.getImage("wave-HIGH_SEA-53");
+                int crestTick = -1;
+                for (int tick = 0; tick < 180; tick++) {
                     assertTrue(map.isTerrainDecorated(at, sea, tick),
-                            "Every eligible High Seas tile has a wave");
-                    final Image phase = render(at, sea, tick);
-                    assertFalse(samePixels(blank, phase),
-                            "A wave never disappears between frames");
-                    if (tick != 0)
-                        assertFalse(samePixels(first, phase),
-                                "Rolling wave changes shape");
+                            "Every eligible High Seas tile participates in the complete cycle");
+                    if (map.getTerrainDecoration(TerrainType.HIGH_SEA, at,
+                            tick) == crest)
+                        crestTick = tick;
                 }
-                verifyPixels(first, render(at, sea, 60));
+                assertTrue(crestTick >= 0,
+                        "The six-second cycle contains the approved crest");
+                final int[] frames = { 53, 59, 98 };
+                final int[] offsets = { 0, 9, 67 };
+                for (int phase = 0; phase < frames.length; phase++) {
+                    final Canvas expected = new Canvas(45, 45);
+                    expected.getGraphicsContext2D().setFill(
+                            images.getTerrainColor(TerrainType.HIGH_SEA));
+                    expected.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+                    expected.getGraphicsContext2D().drawImage(
+                            images.getImage("wave-HIGH_SEA-" + frames[phase]),
+                            0, 0);
+                    verifyPixels(expected.snapshot(null, null),
+                            render(at, sea, crestTick + offsets[phase]));
+                }
+                assertFalse(
+                        samePixels(render(at, sea, crestTick),
+                                render(at, sea, crestTick + 9)),
+                        "The overhang falls forward into the surface");
+                assertFalse(
+                        samePixels(render(at, sea, crestTick + 9),
+                                render(at, sea, crestTick + 67)),
+                        "The impact dissolves into the surface");
+                verifyPixels(render(at, sea, 0), render(at, sea, 180));
                 final Canvas stationary = new Canvas(45, 45);
                 getContext().getClassFromGuice(PaintService.class)
                         .paintTerrainOnTile(stationary.getGraphicsContext2D(),
                                 Point.of(0, 0), at, sea, false);
-                verifyPixels(first, stationary.snapshot(null, null));
+                verifyPixels(render(at, sea, crestTick),
+                        stationary.snapshot(null, null));
                 checked++;
             }
             assertTrue(checked > 0,
-                    "The scenario must exercise stationary and animated High Seas");
+                    "The scenario exercises stationary and animated High Seas");
         }).get(15, TimeUnit.SECONDS);
     }
 
