@@ -308,7 +308,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
                 getContext());
         org.microcol.page.FreePlayAuditPage audit = new org.microcol.page.FreePlayAuditPage(
                 getContext());
-        org.microcol.model.Location mouth = org.microcol.model.Location.of(25,
+        org.microcol.model.Location mouth = org.microcol.model.Location.of(24,
                 13);
         fog.verifyExplored(mouth, false);
 
@@ -341,11 +341,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         fog.move(org.microcol.model.Location.of(30, 15), sea, 3);
         audit.press(javafx.scene.input.KeyCode.C);
         fog.verifyExplored(mouth, true);
-        new org.microcol.page.RiverPage(getContext()).verifyRiverWidth(mouth,
-                org.microcol.model.RiverSize.LARGE,
-                org.microcol.model.Location.of(24, 13));
         setup.verifyOriginalWorldLandscape();
-        fog.saveMapEvidence("R-0263-river-approach.png");
 
         // Choose a passenger, land and found a colony using the normal dialog.
         game.nextTurnAndCloseDialogs();
@@ -355,6 +351,30 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
                 getContext());
         passengers.choose(0);
         passengers.confirm();
+        game.waitForNumberOfUnitsAt(land, 1);
+
+        // Walk inland to reveal both river squares through ordinary
+        // exploration.
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(land);
+        game.getRightPanelUnit(0).selectUnit();
+        final org.microcol.model.Location inland = org.microcol.model.Location
+                .of(24, 14);
+        game.moveMouseAtLocation(land);
+        game.dragMouseAtLocation(inland);
+        game.waitForNumberOfUnitsAt(inland, 1);
+        fog.verifyExplored(org.microcol.model.Location.of(23, 13), true);
+        new org.microcol.page.RiverPage(getContext()).verifyRiverWidth(mouth,
+                org.microcol.model.RiverSize.LARGE,
+                org.microcol.model.Location.of(23, 13));
+        fog.saveMapEvidence("R-0263-river-approach.png");
+
+        // Return to the coastal founding site after inspecting the river.
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(inland);
+        game.getRightPanelUnit(0).selectUnit();
+        game.moveMouseAtLocation(inland);
+        game.dragMouseAtLocation(land);
         game.waitForNumberOfUnitsAt(land, 1);
         // Landing spends the colonist's movement; found on the next turn.
         game.nextTurnAndCloseDialogs();
@@ -375,7 +395,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         colony.close();
         setup.verifyOriginalWorldLandscape();
 
-        // Sail north along the coast, then enter the connected freshwater lake.
+        // Sail north and inspect the freshwater lake behind its land shore.
         game.nextTurnAndCloseDialogs();
         game.selectTile(sea);
         game.getRightPanelUnit(0).selectUnit();
@@ -395,15 +415,25 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         game.getRightPanelUnit(0).selectUnit();
         final org.microcol.model.Location lake = org.microcol.model.Location
                 .of(19, 8);
-        fog.move(lakeApproach, lake, 3);
+        game.moveMouseAtLocation(lakeApproach);
+        game.dragMouseAtLocation(lake);
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        org.microcol.page.DialogMessagePage rejection = org.microcol.page.DialogMessagePage
+                .of(getContext());
+        rejection.verifyDialogTextContains("not possible to move unit here");
+        rejection.close();
         audit.press(javafx.scene.input.KeyCode.C);
-        setup.verifyShipOnFreshwaterLake(3, lake);
-        fog.saveMapEvidence("R-0287-connected-lake.png");
+        setup.verifyShipOnWater(3, lakeApproach,
+                org.microcol.model.TerrainType.OCEAN);
+        setup.verifyLakeSeparatedFromSea(lake);
+        fog.saveMapEvidence("R-0302-enclosed-lake.png");
 
-        // Continue preserves lake identity, the ship and the richer landscape.
+        // The blocked lake entry and Continue preserve the ship and landscape.
         game.exitToMenu();
         audit.continueGame();
-        setup.verifyShipOnFreshwaterLake(3, lake);
+        setup.verifyShipOnWater(3, lakeApproach,
+                org.microcol.model.TerrainType.OCEAN);
+        setup.verifyLakeSeparatedFromSea(lake);
         setup.verifyOriginalWorldLandscape();
     }
 }

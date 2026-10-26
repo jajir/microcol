@@ -214,11 +214,16 @@ need the same transport as on ocean. Colonial fishing uses the ocean baseline
 of three food (the existing `CORN` representation), with the same dock or
 higher-tier prerequisite and subsequent modifiers. A lake is not a sea-lane
 exit to Europe. Water restrictions, including no forests or roads, apply.
-Connected-lake clarification (2026-10-25): a freshwater lake may connect to the
-sea through a river and may directly touch ocean water. Connectivity does not
-reclassify its explicitly authored freshwater identity. River squares remain
-land overlays; this does not permit ships to sail along a river through land.
-See [R-0287](requirements/done/R-0287.md) for the enriched Original World example.
+Bundled-map correction (2026-10-26): lakes in the New free game templates are
+surrounded by land or other lake squares; none of their eight neighbours may
+be ocean or high sea. Enclosed water disconnected from the ocean is classified
+as lake in these templates. [R-0302](requirements/done/R-0302.md) supersedes Original
+World's connected-lake layout from [R-0287](requirements/done/R-0287.md).
+The same correction applies the [inland river restriction](#r-0065-refinement)
+to bundled map templates: no hills/mountains or water neighbours, including
+endpoints and diagonals. Existing saves are not rewritten, and movement on
+existing water/river terrain is unchanged. See the [map catalogue](free-play-maps.md).
+
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
 not runtime acceptance.
 
@@ -1892,7 +1897,7 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 4. Generated river squares have independent 15% silver, 5% ore and 80% no-deposit
    probabilities. Non-river resources keep their existing roughly 10% allocation
    and family distribution. Fixed maps approximate those shares deliberately;
-   Original World's 28 river squares receive four silver and one ore deposit.
+   Original World's 22 river squares receive four silver and one ore deposit.
    Relocate incompatible forests/resources while preserving a viable starting
    location, timber access and the complete landscape inventory.
 5. Connected river movement stays one third of a point in either direction;

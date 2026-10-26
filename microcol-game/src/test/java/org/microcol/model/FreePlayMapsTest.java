@@ -18,6 +18,45 @@ class FreePlayMapsTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     @Test
+    void everyBundledWorldKeepsRiversInlandAndLakesSeparateFromTheSea() {
+        for (final FreePlayMap choice : FreePlayMap.values()) {
+            final GameModelPo data = dao
+                    .loadFromClassPath(choice.getResource());
+            final WorldMap map = new WorldMap(data.getModel());
+            if (choice != FreePlayMap.TWO_ISLANDS) {
+                assertEquals(TerrainType.LAKE,
+                        map.getTerrainTypeAt(Location.of(15, 12)),
+                        choice.name());
+            }
+            for (int x = 1; x <= map.getMaxLocationX(); x++) {
+                for (int y = 1; y <= map.getMaxLocationY(); y++) {
+                    final Location at = Location.of(x, y);
+                    final TerrainType terrain = map.getTerrainTypeAt(at);
+                    if (map.getRiverSizeAt(at) != RiverSize.NONE) {
+                        assertFalse(
+                                terrain.isSea() || terrain == TerrainType.HILL
+                                        || terrain == TerrainType.MOUNTAIN,
+                                choice + " " + at);
+                        assertTrue(at.getNeighbors().stream()
+                                .filter(map::isValid).noneMatch(next -> map
+                                        .getTerrainTypeAt(next).isSea()),
+                                choice + " " + at);
+                    }
+                    if (terrain == TerrainType.LAKE) {
+                        assertTrue(at.getNeighbors().stream()
+                                .filter(map::isValid)
+                                .allMatch(next -> !map.getTerrainTypeAt(next)
+                                        .isSea()
+                                        || map.getTerrainTypeAt(
+                                                next) == TerrainType.LAKE),
+                                choice + " " + at);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
     void bothWorldsHaveLegalOwnedFrenchContentAndPreserveItOnDisk() {
         for (FreePlayMap map : List.of(FreePlayMap.ORIGINAL,
                 FreePlayMap.TWO_ISLANDS)) {

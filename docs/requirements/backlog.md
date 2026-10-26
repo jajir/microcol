@@ -675,3 +675,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Generated river placement (2026-10-26)
 
 1. [R-0301](done/R-0301.md) corrects generated-world rivers under A05, with A02 setup and A03 visible-map dependencies. The selected rule excludes hills, mountains and every square touching water, including diagonally; sources and ends obey the same rule. Implementation and local acceptance are complete; see the [verification evidence](../functional-tests.md#r-0301-generated-river-placement-2026-10-26).
+
+## Bundled free-play geography (2026-10-26)
+
+1. [R-0302](done/R-0302.md) applies inland-river placement and enclosed-lake geography to all fixed new-game templates under A05, with A02/A03/A07 dependencies, preserving expedition/colony locations and resource stock. The [map catalogue](../free-play-maps.md) exposes the four templates. Local acceptance is complete; see the [functional evidence](../functional-tests.md#r-0302-bundled-map-geography-2026-10-26).

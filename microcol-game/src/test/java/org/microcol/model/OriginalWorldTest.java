@@ -59,10 +59,10 @@ class OriginalWorldTest {
         }
         assertTrue(map.getTerrainTypeAt(Location.of(26, 14)).isSea());
         assertTrue(map.getTerrainTypeAt(Location.of(25, 14)).isCanHaveField());
-        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(25, 13)));
+        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(24, 13)));
         assertTrue(
-                map.hasRiverSegment(Location.of(24, 13), Location.of(25, 13)));
-        assertEquals(24, source().getMap().getRiverSegments().size());
+                map.hasRiverSegment(Location.of(23, 13), Location.of(24, 13)));
+        assertEquals(19, source().getMap().getRiverSegments().size());
     }
 
     @Test
@@ -95,29 +95,22 @@ class OriginalWorldTest {
     }
 
     @Test
-    void freshwaterLakeKeepsItsIdentityBesideOceanAndHasRiverOutlet() {
+    void freshwaterLakeIsEnclosedAndRiversStayInland() {
         final WorldMap map = new WorldMap(source());
-        final Location lake = Location.of(19, 9);
-        assertEquals(TerrainType.LAKE, map.getTerrainTypeAt(lake));
-        assertEquals(TerrainType.OCEAN,
+        assertEquals(TerrainType.LAKE,
+                map.getTerrainTypeAt(Location.of(19, 9)));
+        assertEquals(TerrainType.GRASSLAND,
                 map.getTerrainTypeAt(Location.of(20, 9)));
-        assertTrue(map.getTerrainTypeAt(lake).isSea());
-        final Location[] outlet = { Location.of(19, 10), Location.of(19, 11),
-                Location.of(20, 12), Location.of(20, 13), Location.of(21, 13),
-                Location.of(22, 13), Location.of(23, 13), Location.of(24, 13),
-                Location.of(25, 13) };
-        assertTrue(lake.isNeighbor(outlet[0]));
-        for (int i = 1; i < outlet.length; i++) {
-            assertTrue(map.hasRiverSegment(outlet[i - 1], outlet[i]));
-        }
         assertEquals(TerrainType.OCEAN,
-                map.getTerrainTypeAt(Location.of(26, 13)));
-        for (final Location mouth : new Location[] { Location.of(17, 7),
-                Location.of(20, 25), Location.of(23, 17) }) {
-            assertNotEquals(RiverSize.NONE, map.getRiverSizeAt(mouth));
-            assertFalse(map.getRiverLinksAt(mouth).isEmpty());
-            assertTrue(mouth.getNeighbors().stream()
-                    .anyMatch(at -> map.getTerrainTypeAt(at).isSea()));
+                map.getTerrainTypeAt(Location.of(21, 9)));
+        assertEquals(ResourceOverlay.FISHERY,
+                map.getResourceOverlayAt(Location.of(19, 8)));
+        for (final Location end : new Location[] { Location.of(16, 6),
+                Location.of(24, 13), Location.of(19, 24) }) {
+            assertNotEquals(RiverSize.NONE, map.getRiverSizeAt(end));
+            assertFalse(map.getRiverLinksAt(end).isEmpty());
+            assertTrue(end.getNeighbors().stream()
+                    .noneMatch(at -> map.getTerrainTypeAt(at).isSea()));
         }
     }
 

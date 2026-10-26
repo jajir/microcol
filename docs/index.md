@@ -17,6 +17,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Sound and player feedback](audio.md) | Current music playback, file formats, event feedback, and guidelines and a catalog for future sounds. |
 | [UX and interaction guidelines](ux.md) | Shared interaction rules, current controls, feature briefs, player journeys, and usability findings. |
+| [Free-play map catalogue](free-play-maps.md) | Complete maps, terrain/resource legends and corrected bundled river/lake geography. |
 | [Saved games and session menu](save-load-navigation.md) | Implemented dropdown menu, manual/quick/recovery saves, protected exits, screenshots and PlantUML navigation maps. |
 | [Functional tests](functional-tests.md) | Stable, readable scenarios and regression checks for gameplay and visual changes. |
 | [Java code formatting](code-formatting.md) | Shared HestiaStore formatter profile and Java format-on-save settings for VS Code. |

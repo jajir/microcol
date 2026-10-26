@@ -44,24 +44,35 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 map.getResourceOverlayAt(Location.of(19, 8)));
         assertEquals(TerrainType.LAKE,
                 map.getTerrainTypeAt(Location.of(19, 8)));
-        assertEquals(TerrainType.OCEAN,
+        assertEquals(TerrainType.LAKE,
+                map.getTerrainTypeAt(Location.of(15, 12)));
+        assertEquals(TerrainType.GRASSLAND,
                 map.getTerrainTypeAt(Location.of(20, 8)));
-        assertEquals(RiverSize.SMALL, map.getRiverSizeAt(Location.of(19, 10)));
+        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(22, 13)));
         assertTrue(
-                map.hasRiverSegment(Location.of(19, 10), Location.of(19, 11)));
+                map.hasRiverSegment(Location.of(22, 13), Location.of(23, 13)));
         assertTrue(
-                map.hasRiverSegment(Location.of(19, 11), Location.of(20, 12)));
+                map.hasRiverSegment(Location.of(23, 13), Location.of(24, 13)));
         assertTrue(map.hasLostCityRumorAt(Location.of(18, 25)));
     }
 
-    public void verifyShipOnFreshwaterLake(final int shipId,
-            final Location expectedLocation) {
+    public void verifyShipOnWater(final int shipId,
+            final Location expectedLocation,
+            final TerrainType expectedTerrain) {
         assertEquals(expectedLocation,
                 getModel().getUnitById(shipId).getLocation());
-        assertEquals(TerrainType.LAKE,
+        assertEquals(expectedTerrain,
                 getModel().getMap().getTerrainTypeAt(expectedLocation));
         assertTrue(getModel().getPlayerByName("Dutch")
                 .isCurrentlyVisible(expectedLocation));
+    }
+
+    public void verifyLakeSeparatedFromSea(final Location lake) {
+        final WorldMap map = getModel().getMap();
+        assertEquals(TerrainType.LAKE, map.getTerrainTypeAt(lake));
+        assertTrue(lake.getNeighbors().stream().filter(map::isValid)
+                .allMatch(at -> !map.getTerrainTypeAt(at).isSea()
+                        || map.getTerrainTypeAt(at) == TerrainType.LAKE));
     }
 
     public void selectNation(final EuropeanNation nation) {
