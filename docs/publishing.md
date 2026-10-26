@@ -51,13 +51,19 @@ Never force-push to publish. Task completion follows the local acceptance policy
 2. For a documentation-only commit, run the documentation consistency tests and
    strict MkDocs build below, then review the diff. Run tooling tests when the
    relevant tooling changes, not merely its documentation. For every other commit,
-   run `bash scripts/ui-tests/verify.sh --smoke`: **all model/JUnit tests**, existing
-   non-`TC_` support tests and the ten [selected UI scenarios](functional-tests.md#pre-commit-smoke)
-   in Docker/Xvfb. Complete fresh reports must show zero failures, errors or skips
-   within 360 seconds (amended on 2026-10-26 in [R-0295](requirements/done/R-0295.md));
-   failure, missing reports or timeout blocks that commit.
-   Targeted checks do not replace the gate. Also apply shared formatting to changed
-   Java, tests for changed tooling and documentation checks for changed docs.
+   use this order, agreed on 2026-10-26 in [R-0303](requirements/done/R-0303.md): first
+   run and debug **all model/JUnit tests** with `bash scripts/ui-tests/verify.sh --model`,
+   then run targeted Docker/Xvfb UI scenarios for the changed behavior, then run
+   `bash scripts/ui-tests/verify.sh --smoke`, and only then review and integrate
+   into `main`. Smoke runs existing non-`TC_` support tests and the ten
+   [selected UI scenarios](functional-tests.md#pre-commit-smoke), without repeating
+   model tests. Complete fresh reports from every required phase must show zero
+   failures, errors or skips; smoke must finish within **420 seconds** including
+   preparation and cleanup. Failure, missing reports or timeout blocks the commit.
+   Tooling-only changes also run the affected tooling tests; no unrelated targeted
+   player scenario is required. Apply shared formatting to changed Java and run
+   documentation checks for changed docs. Reuse passing model/targeted results for
+   unchanged tested source and selection; smoke alone does not establish acceptance.
    Evidence/status/link-only closure after an accepted game gate needs fresh
    documentation checks, not another identical game run. Test the executable source
    being committed; executable or test-selection changes invalidate prior game

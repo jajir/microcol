@@ -96,7 +96,7 @@ def request(args, run_id):
     elif args.kind == "verify":
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         if "--smoke" in arguments:
-            record["acceptance_seconds"] = 360
+            record["acceptance_seconds"] = 420
         command = [sys.executable, str(ROOT / "scripts/ui-tests/verify.py")] + arguments
         record["reports"] = str(ROOT / "target/verification")
     else:

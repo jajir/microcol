@@ -1,5 +1,18 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0303 — Separate model and smoke phases — 2026-10-26
+
+1. [R-0303](requirements/done/R-0303.md) separates the existing verifier into all-model `--model` and UI/support `--smoke` phases. Model tests include `ConnectorTest`; smoke retains all existing support checks and the same ten UI scenarios. Default full verification is unchanged. Smoke has a 420-second acceptance budget at both entry points, with a separate 480-second callback watchdog.
+2. Tooling validation passed: 27 verifier/local-slot tests in 15.833 seconds (`target/r0303/ui-tooling-separated.log`) and 20 unchanged callback-tooling tests in 7.459 seconds (`callback-tooling.log`), zero failures/errors/skips. Tests cover model-only selection, exclusion of model tests from the smoke Maven command and manifest, mutually exclusive mode flags, full verification and the 361/420/421-second boundary. Shell syntax, nine documentation checks and strict MkDocs passed.
+3. The earlier combined gate `20261026T202042Z-4a3007b49a37` (PID 34350, `run-zsiu17q4`) passed all 4,784 checks with zero failures/errors/skips in 306.773 verifier seconds, 306.884 seconds including cleanup. That result precedes the requested separation and does not verify the new modes. Its original reports are retained.
+4. Model-only acceptance passed on base `ce978ad0e97186ed6982403f63e49870ab4d5525` plus this task's isolated changes: `20261026T202906Z-3db34454fb9b`, PID 37177, `target/verification/run-iah9bq0c`. All **4,763 model/JUnit tests in 344 suites passed**, zero failures/errors/skips, **137.116 verifier seconds**, 137.273 seconds including cleanup and a separate 120.895-second lock wait. The manifest contains only `microcol-game`, includes `ConnectorTest`, and the complete XML reports match the source inventory. All non-documentation source hashes still match the tested snapshot.
+5. Separate smoke passed: `20261026T203401Z-9f985645181e`, PID 38254, `target/verification/run-xkgxaqbt`. All **21 UI/support checks in 12 suites passed**, zero failures/errors/skips and **zero model tests**, in **201.879 verifier seconds**, 202.046 seconds including cleanup, within 420 seconds. The separate lock wait was 270.927 seconds. The manifest and complete XML reports contain exactly the support tests and ten selected UI methods, with no model-suite overlap.
+6. During verification, `main` advanced to `384f0acf9f47f671c9398b3f98ee69271f20c452` with the independently accepted R-0302 map and test changes. They are now included unchanged in the isolated checkout. Both phases are repeated on this final combination before commit; the earlier separate-mode results remain valid evidence for their original source. This task changes no gameplay or Java and needs no additional targeted player scenario. Remote regression and publication are not inspected.
+7. Final model phase on `384f0acf9f47f671c9398b3f98ee69271f20c452` plus R-0303 passed: `20261026T204339Z-083acf9c0caf`, PID 40551, `target/verification/run-091gaoko`. All **4,764 model/JUnit tests in 344 suites passed**, zero failures/errors/skips, **143.941 verifier seconds**, 144.110 seconds including cleanup, no lock wait. Complete reports match the model-only inventory including `ConnectorTest`; all non-documentation source hashes match.
+8. Final smoke passed on the same integrated source: `20261026T204617Z-83a6f3da20a7`, PID 41784, `target/verification/run-asjxiog5`. All **21 UI/support checks in 12 suites passed**, zero failures/errors/skips and **zero model tests**, in **200.974 verifier seconds**, 201.098 seconds including cleanup, no lock wait, within the 420-second cap. The complete XML reports match the fixed selection; every non-documentation source hash matches both final phase manifests. Final local acceptance is **4,764 model/JUnit + 21 UI/support checks**, each phase run separately.
+9. Review, shell syntax, the 47 relevant tooling tests, nine documentation consistency checks and strict MkDocs are complete. R-0303 is locally accepted; remote full regression and publication remain unverified.
+
+
 ## R-0300 hand-drawn rivers — 2026-10-26
 
 1. The user selected proposal 2, **Ručně kreslené koryto**, in
@@ -129,16 +142,18 @@
    Úplná regrese běží po pushi na `main` v GitHub Actions; na výsledek nečekáme
    a náprava začíná pouze na výslovný pokyn uživatele. Starší záznamy úplné
    lokální přejímky níže jsou historické důkazy, nikoli současná commitovací brána.
-2. Spuštění z kořene repozitáře: `bash scripts/ui-tests/verify.sh --smoke`.
+2. Spuštění z kořene repozitáře: nejprve `bash scripts/ui-tests/verify.sh --model`,
+   potom cílené UI scénáře změněného okolí a nakonec `bash scripts/ui-tests/verify.sh --smoke`.
    Pro práci agenta použít [completion runner](ai/completion-callbacks.md#pre-commit-gate).
-   Jeden izolovaný Docker/Xvfb kontejner provede všechny testy `microcol-game`,
-   všechny stávající podpůrné třídy bez prefixu `TC_` v `microcol-test`
-   a deset metod uvedených níže. Podpůrné třídy zahrnují i základní TestFX kontroly
+   Režim `--model` ověří všechny testy `microcol-game` včetně `ConnectorTest`
+   a žádné UI. Samostatný smoke kontejner provede všechny stávající podpůrné
+   třídy bez prefixu `TC_` v `microcol-test` a deset metod uvedených níže.
+   Modelové testy se ve smoke znovu nespouštějí. Podpůrné třídy zahrnují i základní TestFX kontroly
    `SimpleOperationsTest`; nejde jen o čisté jednotkové testy.
 3. Autoritativní spustitelný výběr je
    [smoke.json](../scripts/ui-tests/smoke.json). Počty všech modelových a podpůrných
-   testů se odvozují ze zdrojů; nejde o pevný historický počet. Explicitní výběr
-   zahrnuje i `ConnectorTest`. Chybějící nebo duplicitní smoke metoda je chyba.
+   testů se v příslušném režimu odvozují ze zdrojů; nejde o pevný historický počet.
+   Chybějící nebo duplicitní smoke metoda je chyba.
 
 | Scénář a metoda | Ověřená hráčská cesta |
 | --- | --- |
@@ -153,20 +168,26 @@
 | TC06 / `TC_06_moving_goods` | Nákup a prodej zboží v Evropě |
 | TC23 / `TC_01_atlantic_round_trip_preserves_cargo` | Plavba přes Atlantik tam a zpět se zachováním nákladu |
 
-1. Celá lokální brána má limit **360 sekund** od vytvoření běhu, včetně snímku
-   zdrojů, kontroly Dockeru, sestavení, modelových testů, smoke a vyhodnocení
-   reportů. Překročení limitu je neúspěch, nikoli důvod vynechat modelové testy
-   nebo označit neúplné výsledky za přijaté. První příprava Dockeru či stažení
+1. Samostatná smoke fáze má limit **420 sekund** od získání lokálního zámku,
+   včetně obnovy po předchozím běhu, snímku zdrojů, kontroly Dockeru, sestavení,
+   smoke/support testů, vyhodnocení reportů a úklidu. Čekání na zámek je mimo limit.
+   Modelová a cílená UI fáze proběhnou předtím. Překročení limitu je neúspěch;
+   neúplné výsledky nelze označit za přijaté. První příprava Dockeru či stažení
    závislostí může potřebovat samostatnou přípravu a nový celý běh.
 2. Výsledek a manifest jsou pod `target/verification/run-*/` s `scope: precommit`;
-   úplná regrese má `scope: full`. Reporty musí obsahovat přesně očekávané třídy
+   modelový běh má `scope: model`, úplná regrese `scope: full`. Reporty musí obsahovat přesně očekávané třídy
    a metody, nula selhání, chyb i přeskočení. Změna smoke nesmí oslabit existující
    aserce ani vyřadit scénáře z úplné regrese.
 3. Nové či změněné chování nadále vyžaduje modelové a pojmenované UI testy
-   ve stejném commitu. Cílené běhy pomáhají během vývoje; úplná UI sada se kvůli
+   ve stejném commitu. Dohodnuté pořadí je odladit všechny modelové/JUnit testy, ověřit cílené UI scénáře
+   změněného okolí, spustit pevnou smoke bránu a až potom začlenit změnu do `main`.
+   Úspěšné výsledky modelové a cílené UI fáze se pro nezměněné ověřené zdroje
+   a výběr použijí znovu; samotný smoke nestačí k přijetí změny.
+   U změny pouze nástrojů se před bránou spustí jejich testy, bez umělého výběru
+   nesouvisejícího hráčského scénáře. Cílené běhy jsou součást přejímky změněného chování; úplná UI sada se kvůli
    změně sdíleného ovládání nespouští automaticky jako další lokální brána.
    Smoke není tvrzení o úplném pokrytí všech hráčských cest.
-4. Původní měření a implementaci sleduje [R-0258](requirements/done/R-0258.md). Dohoda z **26. října 2026**, [R-0295](requirements/done/R-0295.md), zvyšuje celkový limit z 300 na 360 sekund; výběr testů a podmínky úspěchu zůstávají stejné. Starší neúspěšné běhy se neposuzují znovu podle nového limitu.
+4. Původní měření a implementaci sleduje [R-0258](requirements/done/R-0258.md). Dohoda z **26. října 2026**, [R-0303](requirements/done/R-0303.md), odděluje modelové testy od smoke a zvyšuje limit smoke z 360 na 420 sekund; celkové povinné pokrytí a podmínky úspěchu zůstávají stejné. Starší neúspěšné běhy se neposuzují znovu podle nového limitu.
 
 
 

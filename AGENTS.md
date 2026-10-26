@@ -18,12 +18,18 @@ unrelated working-tree changes, and run the documentation consistency checks and
 strict MkDocs build. Tooling tests are required when the relevant tooling changes,
 not merely because its documentation changes.
 
-Before every other commit, run all fast model/JUnit tests and the fixed Docker/Xvfb smoke gate
-with `bash scripts/ui-tests/verify.sh --smoke`. Complete fresh reports with zero
-failures, errors or skips are mandatory; do not commit when the gate fails,
-times out or is incomplete. Its total local budget is six minutes (360 seconds),
-as amended on 2026-10-26. Also run checks relevant to changed tooling, Java formatting when applicable, and the
-documented documentation checks and strict MkDocs build for documentation.
+For every other change, first run and debug all fast model/JUnit tests with
+`bash scripts/ui-tests/verify.sh --model`, then run targeted Docker/Xvfb UI tests
+for the changed behavior, then the fixed smoke/support selection with
+`bash scripts/ui-tests/verify.sh --smoke` before integration into `main`.
+Smoke does not repeat model tests. All phases must cover the executable source
+being committed; reuse passing results while that source and selection stay unchanged.
+Tooling-only changes also run the affected tooling tests; targeted UI scenarios
+are required for changed player behavior. Complete fresh reports with zero
+failures, errors or skips are mandatory; do not commit when a required phase fails,
+times out or is incomplete. The smoke phase has a total local budget of seven
+minutes (420 seconds), as amended on 2026-10-26. Apply Java formatting when
+applicable and run documentation consistency checks and strict MkDocs for docs.
 See the authoritative [local acceptance policy](docs/publishing.md#local-acceptance-policy)
 and [smoke selection](docs/functional-tests.md#pre-commit-smoke).
 

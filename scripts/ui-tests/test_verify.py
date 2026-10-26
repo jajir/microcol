@@ -215,7 +215,30 @@ class VerificationTest(unittest.TestCase):
         path.write_text(json.dumps(selections))
         return path
 
-    def test_smoke_keeps_all_model_and_support_tests_and_only_selected_ui_methods(self):
+    def test_model_only_runs_all_model_tests_without_ui(self):
+        self.setup_smoke()
+        self.source("microcol-game", "ConnectorTest", "class ConnectorTest { @Test void test_run() {} }")
+        with patch.object(verify, "ROOT", self.root):
+            self.assertEqual(verify.main(["--model"]), 0)
+        directory = next((self.root / "target/verification").glob("run-*"))
+        summary = json.loads((directory / "summary.json").read_text())
+        manifest = json.loads((directory / "manifest.json").read_text())
+        self.assertEqual(summary["scope"], "model")
+        self.assertEqual(summary["workers"], 1)
+        self.assertEqual(len(summary["groups"]), 1)
+        self.assertEqual(set(manifest["expected"]), {"microcol-game"})
+        self.assertEqual(manifest["ui_groups"], [])
+        group = summary["groups"][0]
+        self.assertEqual(group["counts"]["tests"], 2)
+        self.assertEqual(set(group["expected"]), {"sample.ModelTest", "sample.ConnectorTest"})
+        self.assertIn("MICROCOL_TEST_MODULE=microcol-game", group["command"])
+
+    def test_model_and_smoke_are_separate_selections(self):
+        with self.assertRaises(SystemExit) as error:
+            verify.main(["--model", "--smoke"])
+        self.assertEqual(error.exception.code, 2)
+
+    def test_smoke_keeps_support_and_selected_ui_methods_without_model_tests(self):
         self.setup_smoke()
         with patch.object(verify, "ROOT", self.root):
             self.assertEqual(verify.main(["--smoke"]), 0)
@@ -223,12 +246,15 @@ class VerificationTest(unittest.TestCase):
         summary = json.loads((directory / "summary.json").read_text())
         self.assertEqual(summary["scope"], "precommit")
         manifest = json.loads((directory / "manifest.json").read_text())
-        self.assertEqual(manifest["timeout_seconds"], 360)
+        self.assertEqual(manifest["timeout_seconds"], 420)
         self.assertEqual(summary["workers"], 1)
         self.assertEqual(len(summary["groups"]), 1)
         group = summary["groups"][0]
-        self.assertEqual(group["counts"]["tests"], 13)
-        self.assertIn("sample.ModelTest", group["expected"])
+        self.assertEqual(set(manifest["expected"]), {"microcol-test"})
+        self.assertEqual(group["counts"]["tests"], 12)
+        self.assertNotIn("sample.ModelTest", group["expected"])
+        selection = next(arg for arg in group["command"] if arg.startswith("-Dtest="))
+        self.assertNotIn("sample.ModelTest", selection)
         self.assertIn("sample.FirstTest", group["expected"])
         self.assertEqual(group["expected"]["sample.TC_00_Test"], ["test_run"])
 
@@ -244,14 +270,14 @@ class VerificationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unknown"):
             verify.smoke_inventory(self.root, expected)
 
-    def test_smoke_accepts_six_minutes_but_rejects_an_overrun(self):
+    def test_smoke_accepts_seven_minutes_but_rejects_an_overrun(self):
         self.setup_smoke()
-        for elapsed, expected_exit in ((301, 0), (360, 0), (361, 1)):
+        for elapsed, expected_exit in ((361, 0), (420, 0), (421, 1)):
             with self.subTest(seconds=elapsed), patch.object(verify, "ROOT", self.root), \
                     patch.object(verify, "time") as clock:
                 clock.monotonic.return_value = 0
                 def completed(runner, *args):
-                    self.assertEqual(runner.deadline, 360)
+                    self.assertEqual(runner.deadline, 420)
                     clock.monotonic.return_value = elapsed
                     return {"status": "passed"}
                 with patch.object(verify.Runner, "group", new=completed):
@@ -260,7 +286,7 @@ class VerificationTest(unittest.TestCase):
                      (self.root / "target/verification").glob("run-*/summary.json")]
         failed = [s for s in summaries if s["status"] == "failed"]
         self.assertEqual(len(failed), 1)
-        self.assertIn("exceeded 360 seconds", failed[0]["error"])
+        self.assertIn("exceeded 420 seconds", failed[0]["error"])
 
     def test_expired_total_budget_does_not_start_another_command(self):
         runner = verify.Runner([], 5400, threading.Event(), deadline=-1)

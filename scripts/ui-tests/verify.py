@@ -278,8 +278,10 @@ def main(argv=None):
     parser.add_argument("--workers", type=int, choices=(1, 2), default=2)
     parser.add_argument("--timeout", type=int, default=5400, help="Seconds per build/test group")
     parser.add_argument("--timings", type=Path, help="Previous Surefire XML directory for balancing")
-    parser.add_argument("--smoke", action="store_true",
-                        help="All model tests, support tests and ten UI scenarios; 360 seconds total")
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--model", action="store_true", help="All model/JUnit tests only")
+    scope.add_argument("--smoke", action="store_true",
+                       help="Support tests and ten UI scenarios; 420 seconds total; no model tests")
     args = parser.parse_args(argv)
     if args.timeout <= 0 or (args.timings and not args.timings.is_dir()):
         parser.error("Positive timeout and an existing timings directory are required")
@@ -288,20 +290,22 @@ def main(argv=None):
     directory = Path(tempfile.mkdtemp(prefix="run-", dir=output))
     print("Verification directory: " + str(directory), flush=True)
     started = time.monotonic()
-    summary = {"status": "failed", "groups": [], "workers": 1 if args.smoke else args.workers,
-               "scope": "precommit" if args.smoke else "full"}
+    summary = {"status": "failed", "groups": [],
+               "workers": 1 if args.smoke or args.model else args.workers,
+               "scope": "precommit" if args.smoke else "model" if args.model else "full"}
     cancelled = threading.Event()
     old_handlers = {sig: signal.signal(sig, lambda *_: cancelled.set())
                     for sig in (signal.SIGTERM, signal.SIGINT)}
     try:
         source = directory / "source"
         identity = snapshot(ROOT, source)
-        expected = {module: inventory(source, module) for module in MODULES}
+        modules = ("microcol-test",) if args.smoke else ("microcol-game",) if args.model else MODULES
+        expected = {module: inventory(source, module) for module in modules}
         if args.smoke:
             expected["microcol-test"] = smoke_inventory(source, expected["microcol-test"])
-        allocations = partition(expected["microcol-test"], summary["workers"], read_timings(args.timings))
+        allocations = partition(expected.get("microcol-test", {}), summary["workers"], read_timings(args.timings))
         manifest = {"source": identity, "expected": expected, "ui_groups": allocations,
-                    "workers": summary["workers"], "timeout_seconds": 360 if args.smoke else args.timeout,
+                    "workers": summary["workers"], "timeout_seconds": 420 if args.smoke else args.timeout,
                     "timings": str(args.timings.resolve()) if args.timings else None}
         manifest["scope"] = summary["scope"]
         write_json(directory / "manifest.json", manifest)
@@ -310,7 +314,7 @@ def main(argv=None):
         override = directory / "compose.json"
         write_json(override, {"services": {"ui-tests": {"image": "microcol-ui-verify:" + directory.name}}})
         compose = ["docker", "compose", "-f", str(source / "compose.ui-tests.yml"), "-f", str(override)]
-        runner = Runner(compose, args.timeout, cancelled, started + 360 if args.smoke else None)
+        runner = Runner(compose, args.timeout, cancelled, started + 420 if args.smoke else None)
         if runner.command(["docker", "info", "--format", "{{json .}}"], directory / "docker-info.json", 120):
             raise ValueError("Docker unavailable; inspect docker-info.json")
         if runner.command(compose + ["build", "ui-tests"], directory / "build.log"):
@@ -322,11 +326,11 @@ def main(argv=None):
         write_json(directory / "manifest.json", manifest)
         write_json(override, {"services": {"ui-tests": {"image": manifest["image_id"]}}})
         if args.smoke:
-            combined = {**expected["microcol-game"], **expected["microcol-test"]}
+            selected = expected["microcol-test"]
             selection = [name + "#" + "+".join(methods)
                          if name.rsplit(".", 1)[-1].startswith("TC_") else name
-                         for name, methods in combined.items()]
-            summary["groups"].append(runner.group(directory / "precommit", "microcol-test", combined,
+                         for name, methods in selected.items()]
+            summary["groups"].append(runner.group(directory / "precommit", "microcol-test", selected,
                                                 "microcol-verify-" + directory.name + "-precommit", selection))
         else:
             model = runner.group(directory / "model", "microcol-game", expected["microcol-game"],
@@ -334,20 +338,21 @@ def main(argv=None):
             summary["groups"].append(model)
             if model["status"] != "passed":
                 raise ValueError("Model verification failed; UI groups were not started")
-            with ThreadPoolExecutor(max_workers=args.workers) as executor:
-                futures = [executor.submit(runner.group, directory / ("ui-%02d" % (i + 1)),
-                                           "microcol-test", {name: expected["microcol-test"][name] for name in names},
-                                           "microcol-verify-" + directory.name + "-ui-%02d" % (i + 1))
-                           for i, names in enumerate(allocations)]
-                summary["groups"].extend(future.result() for future in futures)
+            if not args.model:
+                with ThreadPoolExecutor(max_workers=args.workers) as executor:
+                    futures = [executor.submit(runner.group, directory / ("ui-%02d" % (i + 1)),
+                                               "microcol-test", {name: expected["microcol-test"][name] for name in names},
+                                               "microcol-verify-" + directory.name + "-ui-%02d" % (i + 1))
+                               for i, names in enumerate(allocations)]
+                    summary["groups"].extend(future.result() for future in futures)
         if hashes(source, list(identity["files"])) != identity["files"]:
             raise ValueError("Frozen source changed during verification")
         if any(group["status"] != "passed" for group in summary["groups"]):
             raise ValueError("Incomplete/failed verification; inspect group result.json files")
         if cancelled.is_set():
             raise InterruptedError("Verification cancelled")
-        if args.smoke and time.monotonic() - started > 360:
-            raise ValueError("Pre-commit verification exceeded 360 seconds")
+        if args.smoke and time.monotonic() - started > 420:
+            raise ValueError("Pre-commit verification exceeded 420 seconds")
         summary["status"] = "passed"
     except (OSError, ValueError, KeyError, ET.ParseError, subprocess.SubprocessError) as error:
         summary["error"] = str(error)

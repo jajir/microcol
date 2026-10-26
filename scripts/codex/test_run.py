@@ -292,20 +292,20 @@ if sys.argv[1] == 'rm':
         self.assertEqual(Path(record["command"][1]).name, "verify.py")
         self.assertNotIn("container", record)
 
-    def test_smoke_entry_points_share_six_minute_acceptance_budget(self):
-        args = run.parse_args(["--thread", THREAD, "--timeout", "420",
+    def test_smoke_entry_points_share_seven_minute_acceptance_budget(self):
+        args = run.parse_args(["--thread", THREAD, "--timeout", "480",
                                "verify", "--", "--smoke"])
         with patch.object(run.subprocess, "check_output", return_value=SHA):
             record = run.request(args, "smoke-id")
-        self.assertEqual(record["acceptance_seconds"], 360)
-        self.assertEqual(record["timeout_seconds"], 420)
+        self.assertEqual(record["acceptance_seconds"], 420)
+        self.assertEqual(record["timeout_seconds"], 480)
         self.assertEqual(record["command"][-1], "--smoke")
         self.stub("python3", "emit()\n")
         wrapper = SCRIPT.parents[1] / "ui-tests/verify.sh"
         subprocess.run(["bash", str(wrapper), "--smoke"], check=True)
         arguments = self.observed()[0]["args"]
         self.assertEqual(Path(arguments[0]).name, "local_slot.py")
-        self.assertEqual(arguments[1:4], ["--budget", "360", "--"])
+        self.assertEqual(arguments[1:4], ["--budget", "420", "--"])
         self.assertEqual(Path(arguments[-2]).name, "verify.py")
         self.assertEqual(arguments[-1], "--smoke")
 
