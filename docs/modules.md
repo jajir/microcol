@@ -35,6 +35,12 @@ AI decisions, UI, persistence and the existing cross-layer exceptions.
 
 ## From game code to a distribution
 
+The shared [local Docker test lock](../scripts/ui-tests/local_slot.py) serializes
+host-side test jobs across worktrees and recovers their process groups and owned
+containers. Completion supervision and the direct UI-test shell entry points use
+it; it is development tooling, not game runtime or a background service. See the
+[operating contract](ai/completion-callbacks.md#local-docker-test-lock).
+
 The [completion runner](../scripts/codex/run.py) is host-side development tooling,
 outside Maven and game packages. It supervises existing worker/Docker/CI commands
 and queues a result to the originating Codex task. Per-run request, logs, result

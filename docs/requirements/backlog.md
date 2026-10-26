@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-26: [R-0292 — serialize local Docker test runs](done/R-0292.md), shared OS lock and crash recovery.
+
 Completed locally on 2026-10-26: [R-0291 — map outlines matching the toolbar](done/R-0291.md), second visual proposal.
 
 

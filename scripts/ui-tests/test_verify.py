@@ -281,6 +281,10 @@ class VerificationTest(unittest.TestCase):
         self.assertEqual(summary["status"], "failed")
         self.assertIn("startup timed out", summary["error"])
 
+    def test_managed_group_timeout_cleans_up_both_owned_ui_containers(self):
+        with patch.dict(os.environ, {"MICROCOL_TEST_PROCESS_GROUP": "1"}):
+            self.test_timeout_cleans_up_both_owned_ui_containers()
+
     def test_timeout_cleans_up_both_owned_ui_containers(self):
         self.setup_project()
         with patch.object(verify, "ROOT", self.root), patch.dict(os.environ, {"DOCKER_MODE": "hang"}):

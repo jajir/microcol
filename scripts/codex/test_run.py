@@ -12,6 +12,7 @@ import unittest
 from unittest.mock import patch
 
 import run
+import local_slot
 
 
 THREAD = "01a15004-8364-7c93-baff-c384e0e07ebf"
@@ -68,7 +69,9 @@ def emit():
     def execute(self, **changes):
         self.record.update(changes)
         run.write_json(self.directory / "request.json", self.record)
-        result = run.supervise(self.directory)
+        with patch("local_slot.cleanup_containers"), patch.object(
+                run, "LocalSlot", side_effect=lambda log: local_slot.LocalSlot(log, self.root / "slot.lock")):
+            result = run.supervise(self.directory)
         calls = [e for e in self.observed() if e["tool"] == "codex"]
         self.assertEqual(len(calls), 1)
         self.assertEqual(calls[0]["thread"], THREAD)

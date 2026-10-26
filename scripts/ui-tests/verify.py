@@ -187,7 +187,8 @@ class Runner:
             raise TimeoutError("Command deadline exceeded: " + str(log))
         with log.open("w") as output:
             process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT,
-                                       stdin=subprocess.DEVNULL, start_new_session=True)
+                                       stdin=subprocess.DEVNULL,
+                                       start_new_session=not os.getenv("MICROCOL_TEST_PROCESS_GROUP"))
             try:
                 while True:
                     if self.cancelled.is_set():
@@ -200,11 +201,17 @@ class Runner:
                         pass
             finally:
                 if process.poll() is None:
-                    os.killpg(process.pid, signal.SIGTERM)
+                    if os.getenv("MICROCOL_TEST_PROCESS_GROUP"):
+                        process.terminate()
+                    else:
+                        os.killpg(process.pid, signal.SIGTERM)
                     try:
                         process.wait(timeout=5)
                     except subprocess.TimeoutExpired:
-                        os.killpg(process.pid, signal.SIGKILL)
+                        if os.getenv("MICROCOL_TEST_PROCESS_GROUP"):
+                            process.kill()
+                        else:
+                            os.killpg(process.pid, signal.SIGKILL)
                         process.wait()
 
     def group(self, directory, module, expected, container, selection=None):

@@ -3166,7 +3166,8 @@ přejímku. Níže uvedený foreground příkaz, výběr testů a CI zůstávaj�
 Z kořene repozitáře spustit:
 
 ```sh
-docker compose -f compose.ui-tests.yml run --build --rm ui-tests
+python3 scripts/ui-tests/local_slot.py -- \
+  docker compose -f compose.ui-tests.yml run --build --rm ui-tests
 ```
 
 [Compose](../compose.ui-tests.yml) sestaví [testovací obraz](../scripts/ui-tests/Dockerfile)
@@ -3198,7 +3199,8 @@ kontejneru; obsah je čitelný pro nahrání CI artifactu.
 Cílenou diagnostiku lze vybrat běžnými Maven argumenty, například:
 
 ```sh
-docker compose -f compose.ui-tests.yml run --build --rm ui-tests \
+python3 scripts/ui-tests/local_slot.py -- \
+  docker compose -f compose.ui-tests.yml run --build --rm ui-tests \
   -Dtest=TC_06_F06_buy_and_sell_goods_test,TC_23_F16_atlantic_voyage_audit_test \
   -Dsurefire.failIfNoSpecifiedTests=false
 ```
@@ -3322,6 +3324,8 @@ Místní nativní běh na macOS v této relaci nedokázal načíst hru kliknutí
 nepovažuje se za úspěšný výsledek. Pro úplnou sadu slouží Linux/Xvfb a jeho
 uložené reporty. [Záznam delegace](ai/local-qwen.md#functional-plowing-regression-2026-10-11)
 rozlišuje práci Qwenu, opravy hlavního agenta a místní důkazy.
+
+Lokální příkazy používají [společný zámek a obnovu po pádu](ai/completion-callbacks.md#local-docker-test-lock). Čekání se nezapočítává do rozpočtu běhu; samotný `docker compose` zámek obchází.
 
 ## Dokončení a záznam výsledku
 

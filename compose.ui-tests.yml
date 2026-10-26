@@ -5,6 +5,8 @@ services:
     platform: linux/amd64
     build: ./scripts/ui-tests
     init: true
+    labels:
+      org.microcol.local-test: "${MICROCOL_LOCAL_TEST_OWNER:-unmanaged}"
     mem_limit: 4g
     shm_size: 256mb
     environment:

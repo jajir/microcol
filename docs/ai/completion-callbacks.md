@@ -5,6 +5,50 @@
 It uses the already installed Python, Codex CLI, Docker and GitHub CLI. It does
 not install a daemon, change a model, or put Codex credentials inside a container.
 
+## Local Docker test lock
+
+1. [R-0292](../requirements/done/R-0292.md), agreed on 2026-10-26, serializes local
+   test **jobs** for the current user across worktrees. `docker` and `verify`
+   completion commands acquire `~/.cache/microcol/docker-tests.lock` before
+   starting their execution watchdog. Direct `verify.sh` and `test-runner.sh`
+   use the same [OS-lock helper](../../scripts/ui-tests/local_slot.py).
+   Full verification may still run its two configured UI groups inside one job.
+   This is a cooperative lock, not a FIFO scheduler or a Docker-wide limit.
+2. A waiting run logs `Waiting for the local Docker test lock`; `result.json`
+   records `wait_seconds` separately from `elapsed_seconds`. Only waiting is
+   excluded: both execution and acceptance budgets start when the lock is acquired,
+   including recovery and final cleanup. The smoke wrapper also rejects a command
+   that passed internally but exceeded 300 seconds during cleanup. Recovery
+   failure blocks the new command. Cancellation while waiting leaves the holder
+   untouched. Worker and remote-CI modes do not take this lock.
+3. `flock` releases when its holder exits, including SIGKILL. The lock descriptor
+   is not inherited. Before allowing a child to execute, the helper durably
+   records its separate process group and start identity. After a crash, the next
+   holder terminates that recorded group before checking Docker. A reused PID,
+   corrupt recovery record or unsuccessful cleanup fails closed. Never remove
+   the lock file to bypass a live lock; file existence is not lock ownership.
+4. Managed containers carry `org.microcol.local-test` with the local user's UID.
+   Recovery retains their Docker logs in the next command log and removes only
+   those containers, then confirms none remain. Unlabelled/foreign containers
+   are untouched. If Docker is unavailable, no new test command starts. Existing
+   per-run reports and failed evidence remain in place.
+5. Keep the selected checkout stable while waiting. Request revision/status are
+   dispatch-time metadata; the verifier's manifest identifies the source captured
+   after admission and is authoritative for acceptance. Targeted Docker tests
+   retain their existing container-time source copy. Raw Docker commands or
+   direct internal `verify.py` calls bypass the lock and are not supported local
+   entry points. For a foreground targeted run, use:
+
+   ```sh
+   python3 scripts/ui-tests/local_slot.py -- \
+     docker compose -f compose.ui-tests.yml run --build --rm ui-tests \
+     -Dtest=PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false
+   ```
+
+6. Serialization removes competition between cooperating local test jobs; it
+   does not guarantee that an individual run fits five minutes. No test selection
+   or acceptance budget was relaxed, and no remote regression is watched.
+
 ## Dispatch and resume
 
 1. Use the **exact originating desktop task UUID**, not its title, the worker's
@@ -210,3 +254,53 @@ separately; this probe does not prove the later integration.
    `target/r247/`, including `verified-test-counts.json` and
    `publication-verified.json`. This closes the R-0245 publication blocker and
    accepts R-0247; neither failed attempt of #178 is reclassified as passing.
+
+
+## R-0292 local lock evidence — 2026-10-26
+
+1. Accepted design is the [local Docker test lock](#local-docker-test-lock), with
+   no FIFO service or acceptance-budget change. Implementation was integrated
+   with main `93840745` before the final gate; Java/game behavior is unchanged by
+   R-0292. Existing work in the primary checkout remains separate.
+2. Tooling checks passed: 25 UI-verifier/lock process tests and 19 completion-runner
+   tests. These cover mutual exclusion across directories, waiting cancellation,
+   SIGKILL with a surviving child, PID reuse refusal, failed container recovery,
+   startup-registration failure, managed verifier timeout cleanup and execution
+   watchdog accounting after a longer wait, recovery time and final cleanup. Earlier fixture-only failures
+   (nested Python quoting and a test wait shorter than the cleanup deadline) were
+   repaired and their logs retained under `target/r0292-ui-tooling-attempt-*.log`.
+3. Actual Docker runner attempts `20261026T074919Z-0e75f2651006` (PID 13775) and
+   `20261026T075511Z-d30be23d96f2` (PID 14790) failed during admission: Docker's
+   labelled-container query exceeded its 20-second timeout. No test command
+   started. Foreground probes found Docker Desktop running and no containers;
+   neither the engine nor acceptance deadlines were reset. Admission/recovery
+   Docker commands now use their own process sessions. These attempts remain
+   failed and their completion evidence is retained.
+4. Retry `20261026T080131Z-320fc90be5b2` (PID 15604, 180-second outer limit)
+   passed in 4.639 seconds, exit 0. The real Docker/Xvfb runner contract passed
+   report export, failure-code, source isolation, quoting and Linux permissions
+   checks. `target/docker-ui-runner-checks/lock-recovery-tcz6b8hn/` additionally
+   proves SIGKILL recovery of the surviving process group and detached Docker
+   container, retained orphan logs, and preservation of an unlabelled fixture
+   container. All three completion deliveries above are confirmed queued.
+5. The earlier candidate passed fixed smoke gate `20261026T080428Z-bf5da9efa3de`
+   (PID 16321): 4,770 tests in 352 suites, zero failures/errors/skips, 291.325
+   seconds including supervision. This predates the final whole-job budget
+   checks and is not acceptance of the final source. Its hashes remain in
+   `target/r0292-acceptance.json`.
+6. Final Docker runner/recovery check `20261026T082635Z-325a2abc7d5d`
+   (PID 20981) passed in 5.968 seconds, exit 0. Final fixed smoke gate
+   `20261026T082657Z-5a142d60ca41` (PID 21077) passed in **290.459 seconds**
+   including recovery and cleanup (verifier 290.312, container group 287.906).
+   The 420-second outer setting was capped at 300 seconds for smoke. All 352
+   fresh XML reports contain **4,770 tests, zero failures/errors/skips**, including
+   all model/JUnit and support checks and the unchanged ten smoke scenarios in
+   eight TC classes. Reports are in `target/verification/run-en70yanx/`.
+7. The final manifest and pre-dispatch hashes match every executable/config
+   source in the accepted checkout, based on `93840745`; only documentation
+   status/evidence was closed afterward. Source hashes, dispatch and independently
+   counted report results are in `target/r0292-final-acceptance.json`. Review
+   checked all local entry points, child/lock descriptor ownership, failure cleanup
+   and preservation of foreign containers. Nine documentation consistency tests
+   and strict MkDocs passed after closure. R-0292 is accepted locally. No remote
+   CI or publication verification was requested.

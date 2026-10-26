@@ -17,6 +17,8 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts/ui-tests"))
+from local_slot import LocalSlot
 LOG_ROOT = Path.home() / "Library/Logs/Microcol/completions"
 GRACE_SECONDS = 45
 QUEUE_SECONDS = 30
@@ -93,6 +95,8 @@ def request(args, run_id):
                    "run", "--build", "--rm", "--name", record["container"], "ui-tests"] + arguments
     elif args.kind == "verify":
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
+        if "--smoke" in arguments:
+            record["acceptance_seconds"] = 300
         command = [sys.executable, str(ROOT / "scripts/ui-tests/verify.py")] + arguments
         record["reports"] = str(ROOT / "target/verification")
     else:
@@ -218,6 +222,8 @@ def supervise(directory):
     started = time.monotonic()
     deadline = started + record["timeout_seconds"]
     process = None
+    slot = None
+    admitted = record["kind"] not in ("docker", "verify")
     result = {"status": "failed", "exit_code": None, "cleanup_errors": [],
               "request": str(directory / "request.json"), "revision": record["revision"],
               "timeout_seconds": record["timeout_seconds"]}
@@ -225,11 +231,24 @@ def supervise(directory):
     try:
         with (directory / "command.log").open("w") as log:
             try:
-                if record["kind"] == "ci":
-                    ci_metadata(record, directory, "before", deadline, log)
-                process = subprocess.Popen(record["command"], cwd=record["cwd"],
-                                           stdin=subprocess.DEVNULL, stdout=log, stderr=log,
-                                           start_new_session=True)
+                if record["kind"] in ("docker", "verify"):
+                    slot = LocalSlot(log)
+                    slot.acquire()
+                    admitted = True
+                    started = slot.acquired_at
+                    deadline = started + record["timeout_seconds"]
+                    if record.get("acceptance_seconds"):
+                        deadline = min(deadline, started + record["acceptance_seconds"])
+                    result["wait_seconds"] = slot.wait_seconds
+                    remaining(deadline)
+                    process = slot.start(record["command"], cwd=record["cwd"],
+                                         stdin=subprocess.DEVNULL, stdout=log, stderr=log)
+                else:
+                    if record["kind"] == "ci":
+                        ci_metadata(record, directory, "before", deadline, log)
+                    process = subprocess.Popen(record["command"], cwd=record["cwd"],
+                                               stdin=subprocess.DEVNULL, stdout=log, stderr=log,
+                                               start_new_session=True)
                 process.wait(timeout=remaining(deadline))
                 result["status"] = "success" if process.returncode == 0 else "failed"
                 if record["kind"] == "ci":
@@ -247,14 +266,30 @@ def supervise(directory):
                               error=str(error))
                 for sig in previous:
                     signal.signal(sig, signal.SIG_IGN)
-                result["cleanup_errors"] = cleanup(record, process, log)
-            except (OSError, ValueError, KeyError, TypeError) as error:
+                if admitted:
+                    result["cleanup_errors"] = cleanup(record, process, log)
+            except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.SubprocessError) as error:
                 result.update(status="failed", error=str(error))
             finally:
                 for sig in previous:
                     signal.signal(sig, signal.SIG_IGN)
+                if slot is not None:
+                    try:
+                        slot.close()
+                    except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
+                        result["status"] = "failed"
+                        result["cleanup_errors"].append(str(error))
                 result["exit_code"] = process.returncode if process else None
-                result["elapsed_seconds"] = round(time.monotonic() - started, 3)
+                if slot is not None and slot.acquired_at is not None:
+                    started, admitted = slot.acquired_at, True
+                    result["wait_seconds"] = slot.wait_seconds
+                elapsed = round(time.monotonic() - started, 3)
+                if (result["status"] == "success" and record.get("acceptance_seconds")
+                        and time.monotonic() - started > record["acceptance_seconds"]):
+                    result.update(status="failed", error="Acceptance budget exceeded including cleanup")
+                result["elapsed_seconds"] = elapsed if admitted else 0
+                if not admitted:
+                    result["wait_seconds"] = elapsed
                 write_json(directory / "result.json", result)
         notify(directory, record)
     finally:

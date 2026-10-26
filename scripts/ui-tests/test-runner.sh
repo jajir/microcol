@@ -1,5 +1,9 @@
 #!/bin/bash
 set -euo pipefail
+if [[ "${1:-}" != --locked ]]; then
+  exec python3 "$(dirname "$0")/local_slot.py" -- bash "$0" --locked
+fi
+shift
 cd "$(dirname "$0")/../.."
 docker compose -f compose.ui-tests.yml build
 image=$(docker compose -f compose.ui-tests.yml config --images)
@@ -37,7 +41,7 @@ for scenario in success test-failure export-failure; do
     if [[ "$scenario" == test-failure ]]; then expected=7; maven_exit=7; fi
     if [[ "$scenario" == export-failure ]]; then expected=1; fi
     actual=0
-    docker run --rm --platform linux/amd64 \
+    docker run --label "org.microcol.local-test=${MICROCOL_LOCAL_TEST_OWNER:?}" --rm --platform linux/amd64 \
         -v "$check_dir/source:/source:ro" \
         -v "$check_dir/mvn:/test-bin/mvn:ro" \
         -v "$check_dir/$scenario:/results" \
@@ -58,7 +62,7 @@ test ! -d "$check_dir/source/microcol-game"
 echo "PASS: read-only source, clean snapshot and quoted argument forwarding"
 
 # Docker Desktop bind mounts do not reproduce Linux result permissions.
-docker run --rm --platform linux/amd64 --entrypoint /bin/bash \
+docker run --label "org.microcol.local-test=${MICROCOL_LOCAL_TEST_OWNER:?}" --rm --platform linux/amd64 --entrypoint /bin/bash \
     -v "$check_dir/source:/source:ro" -v "$check_dir/mvn:/test-bin/mvn:ro" \
     -e PATH=/test-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     -e CASE=success -e MAVEN_EXIT=0 "$image" -ec '
@@ -68,3 +72,4 @@ docker run --rm --platform linux/amd64 --entrypoint /bin/bash \
         /results/run-*/microcol-test/surefire-reports/ui.txt > /dev/null"
 ' > "$check_dir/linux-permissions.log" 2>&1
 echo "PASS: reports readable by an unprivileged Linux user"
+python3 scripts/ui-tests/check-local-slot.py "$image"
