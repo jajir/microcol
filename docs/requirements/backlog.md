@@ -208,6 +208,10 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 [Turns and saved-game continuity](areas.md#a04).
 
+New capture: [R-0298 — saved-game navigation](R-0298.md). The
+[PlantUML proposal](../save-load-navigation.md) maps screens, saving, loading,
+recovery and safe exits; gameplay implementation has not been selected.
+
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
 | [R-0051](done/R-0051.md) | Use one agreed calendar for the reference game | Remainder | [R-0002](canceled/R-0002.md), [R-0014](done/R-0014.md), [R-0015](done/R-0015.md) |

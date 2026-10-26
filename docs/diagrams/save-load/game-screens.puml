@@ -1,0 +1,44 @@
+@startuml
+title Herní obrazovky — detail celkové navigace
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam state {
+  BackgroundColor #F0F1F3
+  BorderColor #475569
+}
+  state "Mapa\nGAME" as Map
+  state "Kolonie\nCOLONY" as Colony
+  state "Evropa\nEUROPE" as Europe
+  state "Nákup\nMARKET_BUY" as Buy
+  state "Prodej\nMARKET_SELL" as Sell
+  state "Statistiky\nSTATISTICS" as Stats
+  state "Přehled tahu\nTURN_REPORT" as Report
+  state "Cíle mise\nGOALS" as Goals
+  Map --> Colony : otevřít kolonii
+  Colony --> Map : zpět
+  Map --> Europe : Evropa / příjezd
+  Europe --> Map : zpět
+  Europe --> Buy : nákup
+  Buy --> Europe : zpět
+  Europe --> Sell : prodej
+  Sell --> Europe : zpět
+  Map --> Stats : přehled
+  Stats --> Map : zpět
+  Map --> Report : hlášení / začátek tahu
+  Report --> Map : zavřít
+  Report --> Colony : otevřít kolonii
+  Report --> Europe : otevřít Evropu
+  Map --> Goals : cíle
+  Goals --> Map : zpět
+state "Potvrzení ukončení se skóre\na výsledek (R-0194)" as Retire
+state "Kampaň\nCAMPAIGN" as Campaign
+Map --> Retire : ukončit s výsledkem
+Retire --> Map : zrušit
+Retire --> Campaign : potvrzeno, výsledek zavřen
+note bottom of Map
+  Menu / Escape: navržené herní menu v celkovém přehledu.
+  Nápověda a herní dialogy se vracejí do volající obrazovky.
+  Escape nejprve zavře otevřený dialog nebo podnabídku.
+end note
+@enduml

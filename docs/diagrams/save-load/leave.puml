@@ -1,0 +1,39 @@
+@startuml
+title O — Ochrana postupu při výměně hry a odchodu (návrh)
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam state {
+  BackgroundColor #DDF2E3
+  BorderColor #475569
+  BackgroundColor<<potvrzeni>> #FFF0C2
+}
+state "Požadovaný přechod\ndo menu / ukončit / aktivovat načtenou pozici\npamatuje si cíl a původní obrazovku" as Request
+state "Je rozehraná hra\ns neuloženým postupem?" as Dirty
+state "Uložit před pokračováním?\ntext pojmenuje cíl a ztrátu postupu" as Confirm <<potvrzeni>>
+state "S: Uložit hru\nvčetně chyb a opakování" as Save
+state "Původní obrazovka\npůvodní partie zachována" as Return
+state "Provést čekající přechod" as Target <<choice>>
+state "Hlavní menu" as Main
+state "L: Aktivace ověřené pozice\nchyba vrací do L, zachová starou hru" as Load
+[*] --> Request
+Request --> Dirty : bezpečný stav tahu
+Request --> Return : tah se zpracovává / vysvětlit\nnedostupnost
+Request --> Confirm : příprava tahu selhala / Uložit\nnedostupné
+Dirty --> Target : ne
+Dirty --> Confirm : ano
+Confirm --> Return : Zrušit / Escape
+Confirm --> Save : Uložit a pokračovat
+Save --> Confirm : zrušené uložení
+Save --> Target : úspěšně uloženo
+Confirm --> Target : Pokračovat bez uložení
+Target --> Main : cíl = hlavní menu
+Target --> Load : cíl = jiná hra
+Target --> [*] : cíl = ukončit aplikaci
+note bottom of Confirm
+  Zavření okna používá tutéž ochranu ze všech obrazovek.
+  Výchozí fokus nesmí být na volbě Bez uložení.
+  Chyba zápisu zůstává v S; odchod se neprovede.
+  Bez uložení zachová předchozí soubory i body obnovy.
+end note
+@enduml

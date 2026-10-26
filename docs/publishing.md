@@ -760,3 +760,22 @@ documentation in APT just to make it visible on the web.
 1. Scope: [R-0296](requirements/done/R-0296.md), three documentation-only vector alternatives and a [comparison](graphics-assets/question-marks-2026-10-26/comparison.png). Source inspection used `0a85fe547218dd4e23107ef91acbe30e3486fdf7`; current map contours supply the 1.6-pixel line and terrain ink color. The current Playpen Sans glyph and the terrain comparison motifs come from the repository sources.
 2. Visual review checked all three enlarged symbols, rounded caps and dots, readable labels, and the 45-pixel schematic map samples. The preview clearly distinguishes proposed artwork from a game screenshot. Runtime code, runtime assets, gameplay and tests are unchanged.
 3. The exact staged proposal scope passed all nine documentation consistency checks and strict MkDocs. XML checks confirmed all three standalone alternatives have a 45-pixel view box, 1.6-pixel rounded strokes and the shared terrain ink color. Logs are retained under `target/r0296/`. Model/JUnit and Docker/Xvfb smoke were not run under the documentation-only exemption; these assets are not runtime artwork. Remote CI and publication were not inspected.
+
+## R-0298 save-load navigation — 2026-10-26
+
+1. The [navigation proposal](save-load-navigation.md) and [R-0298](requirements/R-0298.md)
+   capture the requested screen map without implementing gameplay. Five local
+   PlantUML sources and SVG illustrations cover menu/game screens, manual saving,
+   loading/recovery/deletion and protection of unsaved progress. Existing
+   checkpoint frequency and retirement remain separate authoritative contracts.
+2. PlantUML 1.2026.1 rendered all five sources successfully. Visual review of
+   the raster previews checked Czech text, branches, error routes and returns;
+   clickable SVGs provide full-size diagrams in the rendered page. This is
+   documentation design review, not a player study or game execution.
+3. All nine documentation consistency tests passed with zero failures, errors
+   or skips, and the strict MkDocs build passed on an export of exactly the
+   proposed documentation commit (base `f55ce30216b2aa253a4502ac7c922470d5024619`).
+   The task's acceptance export and logs are under `target/r0298/`. Only this
+   task's documentation belongs in the commit; unrelated working changes remain
+   outside it. Model/JUnit and Docker/Xvfb smoke are exempt for this documentation
+   scope. Remote CI and publication are not inspected or claimed.

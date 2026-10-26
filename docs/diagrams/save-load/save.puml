@@ -1,0 +1,44 @@
+@startuml
+title S — Uložit hru (návrh)
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam state {
+  BackgroundColor #DDF2E3
+  BorderColor #475569
+  BackgroundColor<<potvrzeni>> #FFF0C2
+  BackgroundColor<<chyba>> #FFE0DF
+}
+state "Volající\nherní menu / ochrana O" as Caller
+state "Seznam ručních pozic\n+ Nová pozice" as List
+state "Název nové pozice\npředvyplněný, upravitelný" as Name
+state "Přepsat vybranou pozici?\nnázev + datum" as Overwrite <<potvrzeni>>
+state "Ukládání…\natomický zápis, bez dalších akcí" as Writing
+state "Uložení selhalo\npůvodní pozice zachována" as Error <<chyba>>
+state "Nelze načíst seznam\nvysvětlení příčiny" as ListError <<chyba>>
+state "Uloženo\nviditelné potvrzení" as Done
+Caller --> List : Uložit
+List --> Caller : zpět / Escape
+List --> ListError : chyba čtení složky
+ListError --> List : opakovat čtení
+ListError --> Caller : zrušit
+List --> Name : Nová pozice (i v prázdném\nseznamu)
+Name --> Name : neplatný název / vysvětlit u\npole
+Name --> List : zrušit / Escape
+Name --> Writing : platný název / Uložit
+List --> Overwrite : vybraná ruční pozice / Přepsat
+Overwrite --> List : zrušit / Escape
+Overwrite --> Writing : potvrdit přepsání
+Writing --> Error : zápis selhal
+Error --> Writing : opakovat stejný zápis
+Error --> List : vybrat jiný cíl
+Error --> Caller : zrušit (čekající odchod se\nneprovede)
+Writing --> Done : celý zápis i navázání\nPokračovat uspěly
+Done --> Caller : běžné uložení hotovo
+Done --> [*] : z O: provést čekající přechod
+note bottom of Writing
+  Bez přepsání automatických bodů obnovy.
+  Při čekajícím načtení nelze přepsat jeho zdrojový soubor.
+  Nedokončený tah: uložení nedostupné s vysvětlením.
+end note
+@enduml
