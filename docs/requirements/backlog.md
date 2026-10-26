@@ -671,3 +671,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Curved river proposals — 2026-10-26
 
 1. [R-0300](done/R-0300.md) captures five river appearance proposals and the required placement of bonus icons above rivers. Primary area A03; A05 river/resource identity and visibility, A07 unchanged yields. The user selected variant 2, **Ručně kreslené koryto**, for implementation. Status: `done`; targeted and mandatory local acceptance passed, with [actual evidence](../functional-tests.md#r-0300-hand-drawn-rivers-2026-10-26).
+
+## Generated river placement (2026-10-26)
+
+1. [R-0301](done/R-0301.md) corrects generated-world rivers under A05, with A02 setup and A03 visible-map dependencies. The selected rule excludes hills, mountains and every square touching water, including diagonally; sources and ends obey the same rule. Implementation and local acceptance are complete; see the [verification evidence](../functional-tests.md#r-0301-generated-river-placement-2026-10-26).

@@ -184,6 +184,24 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(saved.getNativeSettlements().size() >= 3);
     }
 
+    public void verifyGeneratedRiversAvoidCoastAndUplands() {
+        final WorldMap map = getModel().getMap();
+        final java.util.Set<Location> rivers = getModel().save().getMap()
+                .getRiverMap().keySet();
+        assertFalse(rivers.isEmpty());
+        for (final Location at : rivers) {
+            final TerrainType type = map.getTerrainTypeAt(at);
+            assertFalse(type.isSea() || type == TerrainType.HILL
+                    || type == TerrainType.MOUNTAIN, at.toString());
+            for (final Location neighbour : at.getNeighbors()) {
+                if (map.isValid(neighbour)) {
+                    assertFalse(map.getTerrainTypeAt(neighbour).isSea(),
+                            at.toString());
+                }
+            }
+        }
+    }
+
     public void verifySavedGeneratedWorld(final int expectedSeed)
             throws Exception {
         final java.io.File file = getContext()

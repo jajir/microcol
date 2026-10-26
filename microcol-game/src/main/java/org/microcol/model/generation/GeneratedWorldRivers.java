@@ -12,7 +12,8 @@ import org.microcol.model.TerrainType;
 
 /**
  * River courses of a generated world. Each course is a simple path of land
- * squares from an upland source downhill to a square that touches water. A
+ * squares from flat land beside uplands towards water, leaving a dry coastal
+ * buffer. Hills, mountains and squares touching water cannot carry rivers. A
  * course never touches another course except at its own end, so the rivers
  * cannot form loops or merge. The first course is the main river and has at
  * least {@link #MAIN_MIN_LENGTH} squares; the others are shorter.
@@ -53,7 +54,7 @@ final class GeneratedWorldRivers {
      * @return courses, main river first; each lists its squares from source to
      *         outlet
      * @throws IllegalStateException when no main river of the minimum length
-     *                               reaches the water
+     *                               reaches the coastal buffer
      */
     static List<List<Location>> trace(final GeneratedGrid grid,
             final LatticeNoise elevation, final Random random) {
@@ -61,15 +62,22 @@ final class GeneratedWorldRivers {
     }
 
     private List<List<Location>> run() {
-        final List<Location> sources = new ArrayList<>(
-                grid.squaresWith(TerrainType.HILL::equals));
-        sources.addAll(grid.squaresWith(TerrainType.MOUNTAIN::equals));
+        final List<Location> sources = new ArrayList<>(grid
+                .squaresWith(type -> !type.isSea() && type != TerrainType.HILL
+                        && type != TerrainType.MOUNTAIN));
+        sources.removeIf(at -> touchesWater(at)
+                || grid.neighbours(at).stream().noneMatch(neighbour -> {
+                    final TerrainType type = grid.terrainAt(neighbour);
+                    return type == TerrainType.HILL
+                            || type == TerrainType.MOUNTAIN;
+                }));
         Collections.shuffle(sources, random);
         final List<List<Location>> rivers = new ArrayList<>();
         final List<Location> main = firstCourse(sources, MAIN_MIN_LENGTH,
                 MAIN_MAX_LENGTH);
         if (main == null) {
-            throw new IllegalStateException("No main river reaches the water");
+            throw new IllegalStateException(
+                    "No main river reaches the coastal buffer");
         }
         rivers.add(main);
         for (int i = 0; i < SMALL_COUNT; i++) {
@@ -103,8 +111,9 @@ final class GeneratedWorldRivers {
     }
 
     /**
-     * @return a course from the source to a square beside water, within the
-     *         length bounds, or null when the walk gets stuck or too long
+     * @return a course from the source to a square beside the coastal buffer,
+     *         within the length bounds, or null when the walk gets stuck or too
+     *         long
      */
     private List<Location> walk(final Location source, final int minLength,
             final int maxLength) {
@@ -113,7 +122,8 @@ final class GeneratedWorldRivers {
         final Set<Location> own = new HashSet<>(course);
         while (true) {
             final Location current = course.get(course.size() - 1);
-            if (course.size() >= minLength && touchesWater(current)) {
+            if (course.size() >= minLength && grid.neighbours(current).stream()
+                    .anyMatch(at -> grid.isLand(at) && touchesWater(at))) {
                 return course;
             }
             if (course.size() >= maxLength) {
@@ -139,7 +149,10 @@ final class GeneratedWorldRivers {
         Collections.shuffle(options, random);
         Location best = null;
         for (final Location option : options) {
-            if (grid.isLand(option) && !occupied.contains(option)
+            if (grid.isLand(option)
+                    && grid.terrainAt(option) != TerrainType.HILL
+                    && grid.terrainAt(option) != TerrainType.MOUNTAIN
+                    && !touchesWater(option) && !occupied.contains(option)
                     && !own.contains(option)
                     && !touchesCourse(option, current, own) && (best == null
                             || elevation.at(option) < elevation.at(best))) {
@@ -169,7 +182,7 @@ final class GeneratedWorldRivers {
     }
 
     private boolean touchesWater(final Location at) {
-        return grid.neighbours(at).stream()
+        return at.getNeighbors().stream()
                 .anyMatch(neighbour -> grid.isWater(neighbour));
     }
 

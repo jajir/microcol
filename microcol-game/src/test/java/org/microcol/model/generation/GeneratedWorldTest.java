@@ -205,53 +205,76 @@ class GeneratedWorldTest {
     }
 
     @Test
-    void riversRunFromUplandsToWaterWithoutLoops() {
+    void riversStayOnInlandLowlandsWithoutLoops() {
         for (final GeneratedClimate climate : GeneratedClimate.values()) {
-            for (final int seed : SEEDS) {
-                final WorldMapPo map = generate(climate,
-                        GeneratedLandShare.HIGH, seed).getMap();
-                final Map<Location, RiverSize> rivers = map.getRiverMap();
-                final Map<Location, List<Location>> links = new HashMap<>();
-                for (final RiverSegmentPo segment : map.getRiverSegments()) {
-                    links.computeIfAbsent(segment.getFrom(),
-                            key -> new ArrayList<>()).add(segment.getTo());
-                    links.computeIfAbsent(segment.getTo(),
-                            key -> new ArrayList<>()).add(segment.getFrom());
-                }
-                assertEquals(rivers.keySet(), links.keySet());
-                final Set<Location> land = landOf(map);
-                assertTrue(land.containsAll(rivers.keySet()));
-                for (final Set<Location> course : groups(rivers.keySet(),
-                        links)) {
-                    final int edges = course.stream()
-                            .mapToInt(at -> links.get(at).size()).sum() / 2;
-                    // A simple path: one fewer link than squares, none above
-                    // two.
-                    assertEquals(course.size() - 1, edges);
-                    assertTrue(course.stream()
-                            .allMatch(at -> links.get(at).size() <= 2));
-                    final List<Location> ends = course.stream()
-                            .filter(at -> links.get(at).size() == 1)
-                            .collect(Collectors.toList());
-                    assertEquals(2, ends.size());
-                    assertTrue(ends.stream().anyMatch(at -> {
-                        final TerrainType type = terrainAt(map, at);
-                        return type == TerrainType.HILL
-                                || type == TerrainType.MOUNTAIN;
-                    }));
-                    assertTrue(ends.stream()
-                            .anyMatch(at -> neighbours(at).stream().anyMatch(
-                                    next -> terrainAt(map, next).isSea())));
-                    final boolean main = course.stream()
-                            .anyMatch(at -> rivers.get(at) == RiverSize.LARGE);
-                    if (main) {
-                        assertTrue(course.size() >= 8);
-                        assertTrue(course.stream().allMatch(
-                                at -> rivers.get(at) == RiverSize.LARGE));
-                    } else {
-                        assertTrue(course.size() >= 3 && course.size() <= 7);
-                        assertTrue(course.stream().allMatch(
-                                at -> rivers.get(at) == RiverSize.SMALL));
+            for (final GeneratedLandShare share : GeneratedLandShare.values()) {
+                for (final int seed : SEEDS) {
+                    final WorldMapPo map = generate(climate, share, seed)
+                            .getMap();
+                    final Map<Location, RiverSize> rivers = map.getRiverMap();
+                    final Map<Location, List<Location>> links = new HashMap<>();
+                    for (final RiverSegmentPo segment : map
+                            .getRiverSegments()) {
+                        links.computeIfAbsent(segment.getFrom(),
+                                key -> new ArrayList<>()).add(segment.getTo());
+                        links.computeIfAbsent(segment.getTo(),
+                                key -> new ArrayList<>())
+                                .add(segment.getFrom());
+                    }
+                    assertFalse(rivers.isEmpty());
+                    for (final Location at : rivers.keySet()) {
+                        assertFalse(terrainAt(map, at) == TerrainType.HILL
+                                || terrainAt(map, at) == TerrainType.MOUNTAIN,
+                                at.toString());
+                        assertTrue(at.getNeighbors().stream()
+                                .filter(GeneratedGrid::isOnMap).noneMatch(
+                                        next -> terrainAt(map, next).isSea()),
+                                at.toString());
+                    }
+                    assertEquals(rivers.keySet(), links.keySet());
+                    final Set<Location> land = landOf(map);
+                    assertTrue(land.containsAll(rivers.keySet()));
+                    for (final Set<Location> course : groups(rivers.keySet(),
+                            links)) {
+                        final int edges = course.stream()
+                                .mapToInt(at -> links.get(at).size()).sum() / 2;
+                        // A simple path: one fewer link than squares, none
+                        // above
+                        // two.
+                        assertEquals(course.size() - 1, edges);
+                        assertTrue(course.stream()
+                                .allMatch(at -> links.get(at).size() <= 2));
+                        final List<Location> ends = course.stream()
+                                .filter(at -> links.get(at).size() == 1)
+                                .collect(Collectors.toList());
+                        assertEquals(2, ends.size());
+                        assertTrue(ends.stream().anyMatch(
+                                at -> neighbours(at).stream().anyMatch(next -> {
+                                    final TerrainType type = terrainAt(map,
+                                            next);
+                                    return type == TerrainType.HILL
+                                            || type == TerrainType.MOUNTAIN;
+                                })));
+                        assertTrue(ends.stream().anyMatch(at -> neighbours(at)
+                                .stream()
+                                .anyMatch(next -> !terrainAt(map, next).isSea()
+                                        && next.getNeighbors().stream()
+                                                .filter(GeneratedGrid::isOnMap)
+                                                .anyMatch(water -> terrainAt(
+                                                        map, water).isSea()))));
+                        final boolean main = course.stream().anyMatch(
+                                at -> rivers.get(at) == RiverSize.LARGE);
+                        if (main) {
+                            assertTrue(
+                                    course.size() >= 8 && course.size() <= 16);
+                            assertTrue(course.stream().allMatch(
+                                    at -> rivers.get(at) == RiverSize.LARGE));
+                        } else {
+                            assertTrue(
+                                    course.size() >= 3 && course.size() <= 7);
+                            assertTrue(course.stream().allMatch(
+                                    at -> rivers.get(at) == RiverSize.SMALL));
+                        }
                     }
                 }
             }

@@ -57,12 +57,14 @@ public class TC_122_F113_generated_world_test extends AbstractMicroColTest {
         final GamePage game = setup.startWithEnter();
         setup.verifyGeneratedWorld(2024, GeneratedClimate.COLD,
                 GeneratedLandShare.HIGH, "Anna");
+        setup.verifyGeneratedRiversAvoidCoastAndUplands();
 
         // Continue loads the saved world; it is not generated again.
         game.exitToMenu().verifyMainScreen();
         new FreePlayAuditPage(getContext()).continueGame();
         setup.verifyGeneratedWorld(2024, GeneratedClimate.COLD,
                 GeneratedLandShare.HIGH, "Anna");
+        setup.verifyGeneratedRiversAvoidCoastAndUplands();
         setup.verifySavedGeneratedWorld(2024);
     }
 
@@ -101,6 +103,7 @@ public class TC_122_F113_generated_world_test extends AbstractMicroColTest {
         final GamePage game = setup.startWithEnter();
         setup.verifyGeneratedWorld(7, GeneratedClimate.WARM,
                 GeneratedLandShare.LOW, "Eva");
+        setup.verifyGeneratedRiversAvoidCoastAndUplands();
         game.exitToMenu().verifyMainScreen();
 
         // A rejected seed and Back start nothing and replace nothing.
@@ -114,6 +117,7 @@ public class TC_122_F113_generated_world_test extends AbstractMicroColTest {
         new FreePlayAuditPage(getContext()).continueGame();
         setup.verifyGeneratedWorld(7, GeneratedClimate.WARM,
                 GeneratedLandShare.LOW, "Eva");
+        setup.verifyGeneratedRiversAvoidCoastAndUplands();
         setup.verifySavedGeneratedWorld(7);
     }
 
