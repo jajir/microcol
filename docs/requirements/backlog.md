@@ -203,6 +203,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
 | [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
+| [R-0297](R-0297.md) | Apply the selected compact opening-menu composition | Ready for development; acceptance pending | User-selected single-column proposal, 2026-10-26 |
 
 ## A04
 
@@ -624,29 +625,31 @@ preserving native input, values and persistence. Other screens remain outside th
 
 1. [R-0280](done/R-0280.md) captures ten compact colony-marker families under A03, with A05 visibility and A07/A09 population/fortification dependencies. The [comparison](../graphics-colony-proposals.md) uses the supplied screenshot and 45 px tiles. The user selected B — Do hloubky for implementation, with 1–3 / 4–7 / 8+ residents and defense independent of population. Implementation and local acceptance are complete; [verification evidence](../functional-tests.md#r-0280-colony-markers-2026-10-25) records the tested selection and results.
 
-
-## Unit help reference — 2026-10-25
-
-1. [R-0284](done/R-0284.md) adds Units / Jednotky to the existing illustrated help under A03. All 35 current unit types share localized names, existing artwork, model-derived movement, transport, purchase and expertise properties, plus equipment and role explanations. Local acceptance is complete; [evidence](../functional-tests.md#r-0284-unit-help-2026-10-25) records targeted, visual and mandatory checks. Publication is unverified.
-
 ## macOS title bar — 2026-10-25
 
 1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. Implementation and local checks are in progress; native visual acceptance is pending.
+
+[R-0282](done/R-0282.md) — stationary question marks on unexplored map; implemented and locally accepted on 2026-10-25. See the [verification evidence](../functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
 
 ## One-row game toolbar — 2026-10-25
 
 1. [R-0283](done/R-0283.md) keeps the map toolbar in one row under A03: all names disappear together when the localized actions no longer fit, and return when space becomes available. The icon row sets the minimum usable window width. Local acceptance passed 14 targeted checks, screenshot review and the 4,748-check mandatory gate; see the [evidence](../functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
 
-[R-0282](done/R-0282.md) — stationary question marks on unexplored map; implemented and locally accepted on 2026-10-25. See the [verification evidence](../functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
+
+## Unit help reference — 2026-10-25
+
+1. [R-0284](done/R-0284.md) adds Units / Jednotky to the existing illustrated help under A03. All 35 current unit types share localized names, existing artwork, model-derived movement, transport, purchase and expertise properties, plus equipment and role explanations. Local acceptance is complete; [evidence](../functional-tests.md#r-0284-unit-help-2026-10-25) records targeted, visual and mandatory checks. Publication is unverified.
 
 
 ## Unit map artwork proposals — 2026-10-25
 
 1. [R-0285](done/R-0285.md) completed A03 unit artwork with A05 identity/visibility, A07 profession and A09 equipment/damage dependencies. The user selected **09 — Lehký pohyb** from the [ten-family gallery](../graphics-unit-proposals.md). All 35 types and five equipment/damage variants now use its strong outlines; implementation and required [local acceptance](../functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) are complete. Status: `done`. Remote regression and publication remain independently unverified.
 
+
 ## Main-screen panel separators — 2026-10-25
 
 1. [R-0286](done/R-0286.md) applies the user-selected thin freehand separators under A03, reusing the toolbar frame at the same stroke scale. Implementation and local acceptance are complete: seven targeted checks, visual review and the 4,757-check mandatory gate passed. Status: `done`. [Evidence](../functional-tests.md#r-0286-main-screen-separators-2026-10-25) records results separately from publication.
+
 
 ## Map meets panel separators — 2026-10-25
 

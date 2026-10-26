@@ -869,6 +869,10 @@ ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
 2. Les a ostatní herně významné atributy mají přednost před dekorací. Kopce a hory si ponechávají reliéf; pohybující se vlny nemění stav ani dostupnost políčka. Terén lze nadále pojmenovat ukázáním na políčko a porovnat v nápovědě, kde je kresba vždy přítomná.
 3. Předpoklad klidnější a přehlednější mapy je návrhová hypotéza. Automatické vykreslovací kontroly a prohlídka snímků jsou evidované v [testech](functional-tests.md#r-0277-sparse-terrain-2026-10-25); nejsou studií hráčů ani ověřením všech poruch barvocitu.
 
+## Šířka herního menu — 2026-10-25
+
+Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna dál vidět celý horní řádek akcí a co největší část mapy. Názvy se automaticky skryjí všechny současně před zalomením a po rozšíření se vrátí; není potřeba nic přepínat ani potvrzovat. Význam ikon dál vysvětluje stávající nápověda při najetí a zaměření klávesnicí, názvy pro asistivní technologie zůstávají. Výběr kolonie, zrušení menu a výsledky příkazů fungují stejně. Minimum šířky okna chrání dostupnost všech ikon. Jde o dohodnuté chování a místně ověřenou implementaci, nikoli pozorování hráčů; [ověření](functional-tests.md#r-0283-one-row-toolbar-2026-10-25) je samostatné.
+
 
 ## Přehled jednotek v nápovědě — 2026-10-25
 
@@ -880,10 +884,6 @@ nedostupný nákup není označen cenou nula. Dlouhý seznam se zalamuje a roluj
 Automatizované kontroly a vizuální přejímku eviduje
 [funkční záznam](functional-tests.md#r-0284-unit-help-2026-10-25); nejde o studii hráčů.
 
-## Šířka herního menu — 2026-10-25
-
-Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna dál vidět celý horní řádek akcí a co největší část mapy. Názvy se automaticky skryjí všechny současně před zalomením a po rozšíření se vrátí; není potřeba nic přepínat ani potvrzovat. Význam ikon dál vysvětluje stávající nápověda při najetí a zaměření klávesnicí, názvy pro asistivní technologie zůstávají. Výběr kolonie, zrušení menu a výsledky příkazů fungují stejně. Minimum šířky okna chrání dostupnost všech ikon. Jde o dohodnuté chování a místně ověřenou implementaci, nikoli pozorování hráčů; [ověření](functional-tests.md#r-0283-one-row-toolbar-2026-10-25) je samostatné.
-
 
 ## Jednotky v pohybu — návrh a ověření R-0285
 
@@ -891,10 +891,12 @@ Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna d�
 2. Cesta zůstává stejná: hráč jednotku vybere na mapě nebo v panelu, použije stávající příkaz či gesto a uvidí výsledek v mapě a stavových údajích. Změna obrázku nepřidává potvrzení ani nový způsob rušení. Skutečné koně, muškety, nástroje a poškození mají při výběru obrázku přednost před profesí.
 3. Zřetelný tmavý obrys, průhledný okraj a vlastní siluety jsou návrhová volba. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) zaznamenává technické kontroly a skutečný snímek hry; nejde o uživatelskou studii ani měření úspěšnosti rozpoznávání profesí.
 
+
 ## Oddělení hlavních panelů — R-0286
 
 1. Schválená tenká ruční linka pomáhá rozlišit mapu, nabídku akcí, informace o výběru a stav hry. Má stejný tah jako tlačítka a nepřidává ovládací prvek ani potvrzení. Hráč dál vybírá jednotku, používá stávající akce a čte jejich odezvu v panelech.
 2. Návrh zachovává čitelnost textu, fokus, hover vysvětlení a obsluhu při změně velikosti okna i po Continue. Vizuální volba uživatele je doložená tímto zadáním; automatické kontroly a skutečné snímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25). Nejde o uživatelskou studii.
+
 
 ## Návaznost mapy na linky — R-0288
 

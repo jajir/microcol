@@ -983,27 +983,27 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 
 UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a řídké kresby krajiny, postupně se měnící voda a zachování herních atributů. `TC_80_F72/TC_04` ověřuje skutečné vykreslení, posun a Continue; `TC_100_F91/TC_06–TC_07` náhledy a hledání, `TC_91_F82` bonusy, produkci a mlhu. Výsledky uvádí [funkční evidence](functional-tests.md#r-0277-sparse-terrain-2026-10-25).
 
+### UC-114/115/119: titulek okna macOS — 2026-10-25
+
+[R-0281](requirements/R-0281.md) sjednocuje barvu nativního titulku s herním pozadím. TC188/F221 ověřuje konfiguraci okna při přechodu mezi úvodním menu, nastavením, hrou a Continue. Vzhled a systémové ovládání vyžadují samostatnou kontrolu na macOS; [evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25) zatím nepotvrzuje přejímku.
+
+### UC-006/119: stationary unknown-map marks — 2026-10-25
+
+[R-0282](requirements/done/R-0282.md) extends TC26 with `TC_10_unknown_question_marks_remain_fixed_until_explored`: fixed unknown-map decoration through panning, resize and Continue, removed by exploration and absent after leaving sight. Existing fog disclosure and grid scenarios remain mandatory; results are recorded in the [functional evidence](functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
+### UC-114/115/119: menu vždy v jednom řádku — 2026-10-25
+
+[R-0283](requirements/done/R-0283.md) nahrazuje zalamování herního menu automatickým skrytím všech názvů při úzkém okně. TC188 zachovává původní herní kontroly a přidává změny šířky, EN/CZ, přístupné názvy a ovládání bez viditelných textů; TC81/04 pokrývá podmíněnou nezávislost. Aktuální stav přejímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+
 ### UC-006/031/047/077: kompaktní značky kolonií — 2026-10-25
 
 1. [R-0280](requirements/done/R-0280.md) zobrazuje počet domků podle vnitřní populace (1–3 / 4–7 / 8+) a opevnění podle dokončené stavby. Mapová značka, národní vlajka, název bez rámečku a boční náhled používají stejný pozorovaný stav. Skryté změny se projeví až po obnovení dohledu.
 2. TC189/F222 ověřuje 12 kombinací, vlajky, boční náhled, otevření kolonie, Escape a Continue. TC26 zachovává pozorování a mlhu války; `CurrentSightTest` doplňuje uloženou populaci a obranu. [Výběr a skutečné výsledky](functional-tests.md#r-0280-colony-markers-2026-10-25) pokrývají tuto vizuální část; neuzavírají zbývající herní pravidla celých UC.
 
-### UC-114/115/119: titulek okna macOS — 2026-10-25
-
-[R-0281](requirements/R-0281.md) sjednocuje barvu nativního titulku s herním pozadím. TC188/F221 ověřuje konfiguraci okna při přechodu mezi úvodním menu, nastavením, hrou a Continue. Vzhled a systémové ovládání vyžadují samostatnou kontrolu na macOS; [evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25) zatím nepotvrzuje přejímku.
-
-### UC-114/115/119: menu vždy v jednom řádku — 2026-10-25
-
-[R-0283](requirements/done/R-0283.md) nahrazuje zalamování herního menu automatickým skrytím všech názvů při úzkém okně. TC188 zachovává původní herní kontroly a přidává změny šířky, EN/CZ, přístupné názvy a ovládání bez viditelných textů; TC81/04 pokrývá podmíněnou nezávislost. Aktuální stav přejímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
-
-### UC-006/119: stationary unknown-map marks — 2026-10-25
-
-[R-0282](requirements/done/R-0282.md) extends TC26 with `TC_10_unknown_question_marks_remain_fixed_until_explored`: fixed unknown-map decoration through panning, resize and Continue, removed by exploration and absent after leaving sight. Existing fog disclosure and grid scenarios remain mandatory; results are recorded in the [functional evidence](functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
-
 
 ### Sdílené obrázky jednotek — R-0285
 
 [Vybraná sada 09](graphics.md#vybrane-jednotky-25-rijna-2026) mění společný vzhled typů a stavů, nikoli pravidla. TC_190/F223 kontroluje mapové obrázky, pohyb a Continue; TC_100/08–09 nápovědu, TC_25/TC_27 výbavu, TC_01 přepravu a TC_62 dělostřelectvo. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) uvádí skutečné výsledky vybraných cest; nejde o nové přijetí celých UC.
+
 
 ### UC-114/115/119: ruční oddělovací linky — 2026-10-25
 
@@ -1014,6 +1014,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 
 1. UC-001/002 (Nastavení) and UC-007/008 (Hra): [R-0287](requirements/done/R-0287.md) extends `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` with nearby forest/bonus checks, a normal ship voyage from ocean to freshwater lake and Save/Continue there. The existing hidden-mouth, river rendering, landing and founding assertions remain.
 2. `OriginalWorldTest` checks regional coverage, legal features, connected river outlets, lake identity and saved landscape. `TC_80_F72_terrain_identity_test` retains the movement, fishing and terrain presentation boundaries. Actual results belong to the [functional record](functional-tests.md#r-0287-original-world-enrichment-2026-10-25); this bounded change does not close whole use cases.
+
 
 ### UC-114/115/119: mapa přímo u linek — 2026-10-25
 

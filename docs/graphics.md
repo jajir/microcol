@@ -1218,30 +1218,29 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar.pn
 rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
 ```
 
-## Kompaktní kolonie a počet domků — R-0280
-
-1. Dne 25. října 2026 uživatel schválil kompaktní výtvarný směr kolonií a požádal o další srovnání jednoho, dvou a tří domků. Výslovně dovolil mírný přesah přes 45px políčko; původní požadavek úplného vměstnání tedy již není závazný. Zůstává jméno bez rámečku, národní vlajka, čitelná perová linka a nezávislé rozlišení palisády, fortu a fortress.
-2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Z porovnání byla následně vybrána sestava B; dohodnuté hranice a chování pro hru uvádí [aktuální zadání](#vybrana-podoba-kolonie-2026-10-25). Původní návrhy zůstávají historickým podkladem [R-0280](requirements/done/R-0280.md).
-
-### Vybraná podoba kolonie — 2026-10-25
-
-Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a podle [R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026) tah 1,6 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
-
-Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o microcol-game/src/main/resources/images/colonies.png microcol-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
-
 ## Titulkový pruh macOS — 2026-10-25
 
 [R-0281](requirements/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Skutečný vzhled na Macu zatím není ověřen; stav kontrol vede [funkční evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25).
 
-## Jednořádkové horní menu — 2026-10-25
+## Kompaktní kolonie a počet domků — R-0280
 
-[R-0283](requirements/done/R-0283.md) mění dohodu o zalamování herního menu: při nedostatku místa se všechny názvy současně skryjí a po rozšíření zase zobrazí. Ikony, rámečky, mezery i šipka kolonií zůstávají. Rozhoduje skutečná šířka přeložených názvů a dostupných akcí. Nejmenší šířka okna pojme celý řádek ikon. Implementace je místně ověřená; výsledky a snímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+1. Dne 25. října 2026 uživatel schválil kompaktní výtvarný směr kolonií a požádal o další srovnání jednoho, dvou a tří domků. Výslovně dovolil mírný přesah přes 45px políčko; původní požadavek úplného vměstnání tedy již není závazný. Zůstává jméno bez rámečku, národní vlajka, čitelná perová linka a nezávislé rozlišení palisády, fortu a fortress.
+2. [Sestavy A–C v původní mapě](graphics-colony-proposals.md#dalsi-zkouska-jeden-dva-a-tri-domky) zkoušejí o něco větší domky a přesah až 4 px do stran při zachování tahu 1,35 px. Z porovnání byla následně vybrána sestava B; dohodnuté hranice a chování pro hru uvádí [aktuální zadání](#vybrana-podoba-kolonie-2026-10-25). Původní návrhy zůstávají historickým podkladem [R-0280](requirements/done/R-0280.md).
 
 ## Otazníky na neobjevené mapě — R-0282
 
 1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden otazník. Původní R-0282 používala hnědý znak Playpen Sans 14; aktuálně vybraný kreslený tvar A stanoví [R-0296](requirements/done/R-0296.md). Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
 2. Otazníky se nehýbou ani nepřelosují při posunu, změně velikosti okna nebo Save/Continue. S objevením políčka zmizí a po opuštění dohledu se nevracejí. Mřížka zůstává pod neprůhlednou mlhou; jde pouze o dekoraci.
 3. Implementaci a přejímku sleduje [R-0282](requirements/done/R-0282.md); tato změna nepřidává uložená data ani nové herní pravidlo.
+## Jednořádkové horní menu — 2026-10-25
+
+[R-0283](requirements/done/R-0283.md) mění dohodu o zalamování herního menu: při nedostatku místa se všechny názvy současně skryjí a po rozšíření zase zobrazí. Ikony, rámečky, mezery i šipka kolonií zůstávají. Rozhoduje skutečná šířka přeložených názvů a dostupných akcí. Nejmenší šířka okna pojme celý řádek ikon. Implementace je místně ověřená; výsledky a snímky vede [funkční evidence](functional-tests.md#r-0283-one-row-toolbar-2026-10-25).
+
+## Vybraná podoba kolonie — 2026-10-25
+
+Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a podle [R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026) tah 1,6 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
+
+Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o microcol-game/src/main/resources/images/colonies.png microcol-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
 
 
 ## Vybrané jednotky — 25. října 2026
@@ -1252,11 +1251,13 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 4. Každá 45px buňka má průhledný okraj a obrázek se vejde do 41px prostoru. Výraznější tmavý tah se posuzuje v konečné mapové velikosti, s cílem přibližně 2 px. Obrázek už nepotřebuje starý posun o 2/4 px; mapa jej kotví přímo na začátek políčka. Sdílený poskytovatel vybírá obrázky také pro Evropu, kolonii, boj a nápovědu.
 5. Export: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.
 
+
 ## Oddělovací linky hlavní obrazovky — 2026-10-25
 
 1. Uživatel schválil druhý návrh: tenké, mírně nepravidelné linky se stejným optickým tahem a barvou jako obrysy tlačítek. Silnější první návrh se nepoužije. Oddělují horní menu, pravý panel a spodní stavový řádek včetně jeho tří polí.
 2. [R-0286](requirements/done/R-0286.md) používá existující `game-toolbar-frame.png`: stejný výřez 12 px a cílovou šířku okraje 6 logických px jako tlačítka. Tento pás obsahuje přibližně 2px inkoustovou linku; šířka pásu není tloušťka tahu. Zobrazuje se pouze potřebná hrana, původní rovná čára je průhledná. Obrázek ani tlačítka se nemění.
 3. Styl je omezen na hlavní obrazovku. Skutečné snímky, vybrané scénáře a stav přejímky vede [funkční evidence](functional-tests.md#r-0286-main-screen-separators-2026-10-25).
+
 
 ## Mapa bez mezery u linek — 2026-10-25
 
