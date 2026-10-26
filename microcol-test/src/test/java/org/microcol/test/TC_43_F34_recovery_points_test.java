@@ -111,7 +111,7 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         audit.corruptRecovery(RecoverySlot.LATEST_TURN);
         audit.openRecoveryChooser();
         audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
-                "Date unavailable");
+                "Unavailable or invalid saved-game details");
         audit.chooseRecovery(RecoverySlot.LATEST_TURN);
         DialogMessagePage.of(getContext()).close();
         WelcomePage.of(getContext()).verifyMainScreen();
@@ -156,9 +156,8 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyRecoveryMenuLabel("Body obnovy");
         audit.openRecoveryChooser();
-        audit.verifyRecoveryChooserLabels("Vyberte bod obnovy", "Nahrát hru",
-                "Zrušit");
-        audit.captureDialog("recoveryCancel", "recovery-chooser-czech.png");
+        audit.verifyRecoveryChooserLabels("Uložené hry", "Načíst hru", "Zpět");
+        audit.captureDialog("savedGamesCancel", "recovery-chooser-czech.png");
         audit.cancelRecovery();
         WelcomePage.of(getContext()).verifyMainScreen();
     }

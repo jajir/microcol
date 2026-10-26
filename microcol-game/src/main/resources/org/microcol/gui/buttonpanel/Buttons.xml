@@ -9,7 +9,7 @@
 	<entry key="buttonTurnReport">Turn report. Some important events from previous turn. (T)</entry>
 	<entry key="buttonGoals">Game goals. (G)</entry>
 	<entry key="buttonHelp">Colonizopedia - guide. (H)</entry>
-	<entry key="buttonExit">Leave game and go to game menu.</entry>
+	<entry key="buttonExit">Open game menu (Esc)</entry>
 	<entry key="buttonNextTurn">Next turn</entry>
 	<entry key="buttonEurope">Europe port. (E)</entry>
 	<entry key="buttonMove">Move unit. (M)</entry>
@@ -135,7 +135,7 @@
     <entry key="toolbarEurope">Europe</entry>
     <entry key="toolbarNextTurn">Next turn</entry>
     <entry key="toolbarRetire">Retire</entry>
-    <entry key="toolbarExit">Leave</entry>
+    <entry key="toolbarExit">Menu</entry>
     <entry key="toolbarIndependence">Independence</entry>
     <entry key="coloniesExplanation">Choose a colony to open. (O)</entry>
     <entry key="congressExplanation">Open Congress and choose a Founding Father.</entry>

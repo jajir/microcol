@@ -336,6 +336,7 @@ public class GamePage extends AbstractScreen {
 
     public void saveGame() {
         getRobot().push(KeyCode.CONTROL, KeyCode.S);
+        clickOnButtonWithId("exportSave");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -352,6 +353,8 @@ public class GamePage extends AbstractScreen {
 
     public WelcomePage exitToMenu() {
         clickOnButtonWithId("exit");
+        getRobot().clickOn("#menuMain");
+        clickOnButtonWithId("saveConfirm");
         return WelcomePage.of(getContext());
     }
 

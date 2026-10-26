@@ -37,7 +37,7 @@ Map --> Retire : ukončit s výsledkem
 Retire --> Map : zrušit
 Retire --> Campaign : potvrzeno, výsledek zavřen
 note bottom of Map
-  Menu / Escape: navržené herní menu v celkovém přehledu.
+  Menu / Escape: herní menu v celkovém přehledu.
   Nápověda a herní dialogy se vracejí do volající obrazovky.
   Escape nejprve zavře otevřený dialog nebo podnabídku.
 end note

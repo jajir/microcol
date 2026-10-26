@@ -9,7 +9,6 @@ import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
-import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.BuildRoadEvent;
 import org.microcol.gui.event.ClearForestEvent;
 import org.microcol.gui.event.PlowFieldEvent;
@@ -176,7 +175,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu,
-            final CongressDialog congressDialog) {
+            final CongressDialog congressDialog, final InGameMenu gameMenu) {
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
         toolbarImages = imageProvider;
@@ -236,7 +235,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
         buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT,
                 Buttons.buttonExit);
-        buttonExit.setOnAction(event -> eventBus.post(new ExitGameEvent()));
+        gameMenu.setAnchor(buttonExit);
+        buttonExit.setOnAction(event -> gameMenu.show());
         buttonExit.setId(BUTTON_EXIT_ID);
         buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS,
                 Buttons.buttonGoals);

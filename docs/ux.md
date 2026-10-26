@@ -913,3 +913,15 @@ Automatizované kontroly a vizuální přejímku eviduje
 1. Dohoda 26. října 2026: hráč hledá pokračování, obnovu, načtení, kampaň, novou hru, síň slávy, nastavení nebo ukončení v jednom sloupci vlevo. [R-0297](requirements/done/R-0297.md) sjednocuje tlačítka s herní lištou; dostupnost akcí a jejich následné obrazovky nemění.
 2. Krátká ikona a úplný jednořádkový název sdělují akci. Když se název nevejde, zůstává ikona a tooltip se stejným názvem; přístupný název se neskrývá. Při zvětšení se popisek vrací. Zaměření klávesnicí a stavy tlačítka přebírají společný styl lišty.
 3. Návrat z Nastavení vede do stejného menu i po změně jazyka. Continue bez dostupné poslední hry zůstává nepřístupné podle stávajících pravidel. Nejde o změnu výsledků hry ani o výsledek hráčské studie; ověřené scénáře a omezení uvádí [evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).
+
+## Ukládání a nabídka rozehrané hry
+
+Vybrané chování z 26. října 2026 popisuje jediná autoritativní
+[stránka ukládání a navigace](save-load-navigation.md). Nabídka hry využívá
+stejné rozbalovací prvky jako výběr kolonií. Ruční soubory, rychlé pozice a body
+obnovy mají jeden přehled a filtr; import/export jsou doplňkové akce.
+Zrušení načítání, přepsání, smazání i odchodu zachová původní stav. Nastavení
+vrací do obrazovky, ze které bylo otevřeno. Ochrana se v první implementaci
+ptá při každé aktivní hře; sledování nezměněného stavu zůstává budoucím
+zlepšením. Implementační kontrola ani automatický test nejsou pozorováním
+skutečného hráče; výsledky patří do [funkční evidence](functional-tests.md).

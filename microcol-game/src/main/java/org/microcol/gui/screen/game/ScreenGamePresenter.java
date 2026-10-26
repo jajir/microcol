@@ -54,6 +54,7 @@ public class ScreenGamePresenter {
     private final WasdController wasdController;
 
     private final ColoniesMenu coloniesMenu;
+    private final org.microcol.gui.screen.game.components.InGameMenu gameMenu;
 
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
@@ -64,7 +65,9 @@ public class ScreenGamePresenter {
             final GamePanelPresenter gamePanelPresenter,
             final GameModelController gameModelController,
             final WasdController wasdController,
-            final ColoniesMenu coloniesMenu) {
+            final ColoniesMenu coloniesMenu,
+            final org.microcol.gui.screen.game.components.InGameMenu gameMenu) {
+        this.gameMenu = gameMenu;
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.mouseOverTileManager = Preconditions
                 .checkNotNull(mouseOverTileManager);
@@ -98,6 +101,16 @@ public class ScreenGamePresenter {
             return;
         }
         if (!gameModelController.isHumanTurnReady()) {
+            return;
+        }
+        if (event.getCode() == KeyCode.F5) {
+            persistingService.quickSave();
+            event.consume();
+            return;
+        }
+        if (event.getCode() == KeyCode.F9) {
+            persistingService.quickLoad();
+            event.consume();
             return;
         }
         /**
@@ -150,7 +163,9 @@ public class ScreenGamePresenter {
             eventBus.post(new BuildColonyEvent());
         }
         if (KeyCode.S == event.getCode() & event.isControlDown()) {
-            persistingService.saveModel(gameModelController.getModel());
+            persistingService.browse(true, false);
+            event.consume();
+            return;
         }
 
         wasdController.onKeyPressed(event);
@@ -195,6 +210,9 @@ public class ScreenGamePresenter {
                     "switch to move mode was called from move mode");
             final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
             gamePanelPresenter.disableMoveMode(movingUnit);
+            event.consume();
+        } else if (gameModelController.isHumanTurnReady()) {
+            gameMenu.show();
             event.consume();
         }
     }

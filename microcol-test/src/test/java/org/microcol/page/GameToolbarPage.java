@@ -92,10 +92,10 @@ public final class GameToolbarPage extends AbstractScreen {
             final String[] labels = czech
                     ? new String[] { "Kolonie", "Kongres", "Vycentrovat",
                             "Statistiky", "Hlášení", "Cíle", "Nápověda",
-                            "Evropa", "Další tah", "Ukončit", "Odejít" }
+                            "Evropa", "Další tah", "Ukončit", "Nabídka" }
                     : new String[] { "Colonies", "Congress", "Center",
                             "Statistics", "Report", "Goals", "Help", "Europe",
-                            "Next turn", "Retire", "Leave" };
+                            "Next turn", "Retire", "Menu" };
             final FlowPane bar = getNodeFinder().lookup(".buttonPanel")
                     .queryAs(FlowPane.class);
             for (int i = 0; i < IDS.size(); i++) {

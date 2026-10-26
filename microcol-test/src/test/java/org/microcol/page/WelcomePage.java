@@ -156,6 +156,11 @@ public class WelcomePage extends AbstractMenuScreen {
 
     public GamePage loadGame() {
         clickOnButtonWithId(ButtonsPanelView.BUTTON_LOAD_ID);
+        clickOnButtonWithId("importSave");
+        WaitForAsyncUtils.waitForFxEvents();
+        if (!getNodeFinder().lookup("#saveDiscard").queryAll().isEmpty()) {
+            clickOnButtonWithId("saveDiscard");
+        }
         return GamePage.of(getContext());
     }
 

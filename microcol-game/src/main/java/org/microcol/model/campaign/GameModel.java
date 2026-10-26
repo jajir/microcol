@@ -23,6 +23,28 @@ import com.google.common.base.Preconditions;
  */
 public final class GameModel {
 
+    // Library identity is optional in authored scenarios, independent of game
+    // identities.
+    private String playthroughId = java.util.UUID.randomUUID().toString();
+
+    public String getPlaythroughId() {
+        return playthroughId;
+    }
+
+    void restorePlaythroughId(final String value) {
+        if (value != null) {
+            playthroughId = java.util.UUID.fromString(value).toString();
+        }
+    }
+
+    public boolean isCampaignMission() {
+        return campaign.getName().equals(CampaignNames.defaultCampaign);
+    }
+
+    public String getScenarioResource() {
+        return campaignMission.getClassPathFile();
+    }
+
     private final Campaign campaign;
 
     private final CampaignMission campaignMission;
@@ -55,6 +77,7 @@ public final class GameModel {
     GameModelPo getModelPo() {
         final GameModelPo out = new GameModelPo();
         out.setModel(model.save());
+        out.setPlaythroughId(playthroughId);
         out.setCampaignName(campaign.getName().toString());
         out.setMissionName(campaignMission.getName());
         out.setData(mission.saveGoals());

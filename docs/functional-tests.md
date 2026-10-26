@@ -10476,3 +10476,80 @@ remote CI and publication were not checked.
 6. Earlier run `20261026T140000Z-e744967050e2` passed 4,775 checks, zero failures/errors/skips, in 304.985 seconds of supervisor execution/cleanup (`target/verification/run-mkj44osr/`), but predates the packaging fixes. Superseded run `20261026T140342Z-16ae7fe0a448` was explicitly canceled, with successful cleanup; it waited 82.819 seconds for the lock and executed for 91.069 seconds. Neither substitutes for the final gate.
 7. Scoped source review, Java formatting, nine documentation consistency tests and strict MkDocs passed. Remote full regression, Dependabot alert closure and distribution/website publication remain independently unverified; no remote CI watcher was started.
 8. The first push was rejected because remote main advanced to `f9f26fde`. Rebase preserved its editor-only null-analysis setting, ignored JVM crash-log pattern and documented launch command. Runtime, test, build and test-selection hashes still match the accepted gate; only `.gitignore`, `.vscode/settings.json` and documentation differ from its manifest. Fresh documentation checks and strict MkDocs passed after integration. No force push or remote CI inspection was used.
+
+## R-0298 saved-game menu and navigation (2026-10-26)
+
+1. [R-0298](requirements/done/R-0298.md), UC-113 / SUPPORT-001 and UC-119 add the
+   session dropdown, one manual/quick/recovery browser, protected transitions,
+   settings return and campaign restart. [Navigation](save-load-navigation.md)
+   is the behavior contract; automated checks are not player observations.
+2. `TC_191_F224_session_menu_test` reuses the F15 free-play fixture and the
+   authored thrive mission. Its first scenario covers menu discovery, settings
+   return, invalid/Unicode names, overwrite and load cancellation, quick restore,
+   menu/window-close cancellation and confirmed/cancelled deletion. Its second
+   scenario covers cancelled and confirmed mission restart. Existing TC42/F34,
+   TC43/F34, TC188/F221 and TC84/F75 retain their gameplay/layout assertions;
+   file-based fixtures now use explicit Import/Export. Page assertions remain
+   in dedicated verification methods.
+3. Preliminary local JUnit selection `SavedGamesTest,GameLoadRejectionTest,
+   PageVerificationContractTest` passed 21 tests without failures/errors/skips.
+   The first Docker dispatch `20261026T181300Z-1d27d0194ef9` (PID 14910,
+   timeout 900 s) failed compilation of an unfinished method boundary;
+   the corrected source passed that local selection. The failed evidence remains.
+4. Docker dispatch `20261026T182147Z-f3a90ff6425c` (PID 15912, timeout 1200 s,
+   `target/docker-ui/run-M760Di`) completed 33 tests with one failure and one
+   error, no skips. The old Continue fixture supplied a filename instead of the
+   new absolute continuation path; the new window-close test queried its modal
+   before asynchronous delivery. Correcting the fixture and waiting for FX
+   delivery preserved all expected game-state assertions.
+5. Repair dispatch `20261026T182658Z-41c12980ef63` (PID 16525, timeout 900 s,
+   `target/docker-ui/run-m2CyVa`) passed TC191, TC42, TC43 and the page contract:
+   ten tests in four complete reports, zero failures/errors/skips, 128.338 s.
+   Inspection of the saved menu/browser images then prompted reuse of the shared
+   paper frame for the filter and matching list/background colors. The authored
+   mission-restart scenario was added before final acceptance.
+6. Mission/CSS dispatch `20261026T183141Z-eca904d29cd2` (PID 17835, timeout
+   600 s) completed nine tests with two errors and no skips: the restart scenario
+   had not acknowledged the authored mission's two introductory messages, so its
+   turn wait timed out and the remaining modal affected the next scenario.
+   The repair acknowledges both messages on initial load and restart, retaining
+   the turn advance, cancellation and full-state comparison assertions.
+7. Integrated-base dispatch `20261026T183738Z-2ddcf92a232e` (PID 18132,
+   timeout 600 s, base `c603f75359aedcf0d97641f37034e0375e8da696`,
+   `target/docker-ui/run-COTD72`) passed nine tests in three complete reports,
+   zero failures/errors/skips, 117.289 s. Visual inspection found the catalogue
+   displaying the text `null` when an authored player had no custom display
+   name. The corrected renderer follows the existing player's name fallback,
+   and TC191 explicitly checks the player/year/difficulty details.
+8. Smoke dispatch `20261026T183959Z-6801c27d01b4` (PID 18304, supervisor
+   timeout 420 s; `target/verification/run-qcndx4dk`) refused the source snapshot
+   because a diagram was being regenerated during its copy. No test acceptance
+   is claimed for this attempt. Final source edits must finish before redispatch.
+9. Final catalogue/metadata checks `20261026T184214Z-26c480d93fca`
+   (PID 18444, timeout 600 s, `target/docker-ui/run-vY3VIW`) passed five
+   tests with zero failures/errors/skips in 77.110 s. The subsequent
+   `20261026T184510Z-b8cfa1ce4be8` (PID 18797, timeout 600 s) passed the
+   same five tests, including the explicit metadata assertions, in 76.716 s.
+   Both selected `TC_191_F224_session_menu_test,PageVerificationContractTest`.
+   The saved menu and catalogue screenshots were visually inspected.
+10. Final mandatory gate `20261026T184718Z-e9f553d9d665` (PID 18862,
+    supervisor timeout 420 s, fixed inner budget 360 s) ran
+    `bash scripts/ui-tests/verify.sh --smoke` against base
+    `c603f75359aedcf0d97641f37034e0375e8da696` plus the complete R-0298 change.
+    It passed in 302.126 s: **4,782 tests, 355 complete expected reports,
+    zero failures, errors or skips**. Selection was all 343 fast model/JUnit
+    suites and the fixed 12-suite Docker/Xvfb smoke selection; the manifest
+    records the exact scenarios. Evidence is in
+    `target/verification/run-u0sqibzo/{manifest,summary}.json` and the
+    completion directory under `~/Library/Logs/Microcol/completions/`.
+    Every tracked source hash matched the tested snapshot before finalizing
+    requirement status and this evidence. The shared Java formatter checked
+    29 changed Java files with exact code-token preservation and idempotence.
+    All nine documentation consistency checks and the strict MkDocs build passed
+    again after the requirement was moved to `done` and this evidence updated.
+11. Local acceptance does not establish remote full-regression or publication
+    success. Native operating-system file dialogs were not manually inspected;
+    import/export integration uses the existing mocked file chooser in UI tests.
+    The leave/load guard deliberately asks whenever a game is active; dirty-state
+    tracking remains outside this change.
+   No remote regression or publication is being inspected.

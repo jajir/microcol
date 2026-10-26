@@ -6,6 +6,24 @@ import java.util.Map;
 import org.microcol.model.store.ModelPo;
 
 public class GameModelPo {
+    private String playthroughId;
+    private String saveName;
+
+    public String getPlaythroughId() {
+        return playthroughId;
+    }
+
+    public void setPlaythroughId(final String value) {
+        playthroughId = value;
+    }
+
+    public String getSaveName() {
+        return saveName;
+    }
+
+    public void setSaveName(final String value) {
+        saveName = value;
+    }
 
     private String campaignName;
 

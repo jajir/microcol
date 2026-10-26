@@ -247,4 +247,43 @@ class GameLoadRejectionTest {
 
         verifyZeroInteractions(current);
     }
+
+    @Test
+    void cancelledReplacementKeepsCurrentGameAndCorruptLoadNeverAsksToLeave()
+            throws Exception {
+        final java.util.function.BooleanSupplier leave = mock(
+                java.util.function.BooleanSupplier.class);
+        when(leave.getAsBoolean()).thenReturn(false);
+        assertFalse(controller.loadModelFromFile(source, leave));
+        verify(leave).getAsBoolean();
+        verify(current, never()).setAndStartModel(any());
+        clearInvocations(leave);
+        Files.writeString(source.toPath(), "invalid");
+        assertFalse(controller.loadModelFromFile(source, leave));
+        verify(leave, never()).getAsBoolean();
+    }
+
+    @Test
+    void namedSavePreservesPlaythroughAndNormalizesUnicodeName()
+            throws Exception {
+        assertTrue(controller.loadModelFromFile(source));
+        final var loaded = org.mockito.ArgumentCaptor
+                .forClass(org.microcol.model.campaign.GameModel.class);
+        verify(current).setAndStartModel(loaded.capture());
+        when(current.getGameModel()).thenReturn(loaded.getValue());
+        controller.writeNamedGame(source, "\u2003Přístav / první\u00a0");
+        final var saved = files.loadFromFile(source);
+        assertEquals("Přístav / první", saved.getSaveName());
+        assertEquals(loaded.getValue().getPlaythroughId(),
+                saved.getPlaythroughId());
+        final byte[] bytes = Files.readAllBytes(source.toPath());
+        assertThrows(IllegalArgumentException.class,
+                () -> controller.writeNamedGame(source, "a".repeat(65)));
+        assertArrayEquals(bytes, Files.readAllBytes(source.toPath()));
+        clearInvocations(current);
+        assertTrue(controller.loadModelFromFile(source));
+        verify(current).setAndStartModel(loaded.capture());
+        assertEquals(saved.getPlaythroughId(),
+                loaded.getValue().getPlaythroughId());
+    }
 }

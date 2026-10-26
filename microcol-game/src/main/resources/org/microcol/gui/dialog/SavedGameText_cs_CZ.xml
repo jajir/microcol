@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="resume">Zpět do hry</entry>
+    <entry key="save">Uložit hru (Ctrl+S)</entry>
+    <entry key="load">Načíst hru</entry>
+    <entry key="quickSave">Rychle uložit (F5)</entry>
+    <entry key="quickLoad">Rychle načíst (F9)</entry>
+    <entry key="restart">Začít misi znovu</entry>
+    <entry key="settings">Nastavení</entry>
+    <entry key="mainMenu">Hlavní nabídka</entry>
+    <entry key="quit">Ukončit hru</entry>
+    <entry key="title">Uložené hry</entry>
+    <entry key="all">Všechna uložení</entry>
+    <entry key="manual">Ruční</entry>
+    <entry key="quick">Rychlé uložení</entry>
+    <entry key="automatic">Body obnovy</entry>
+    <entry key="empty">V tomto přehledu nejsou žádné uložené hry.</entry>
+    <entry key="name">Název nového uložení</entry>
+    <entry key="invalidName">Zadejte název o délce 1–64 znaků bez řídicích znaků.</entry>
+    <entry key="overwrite">Přepsat vybrané uložení</entry>
+    <entry key="delete">Smazat vybrané uložení</entry>
+    <entry key="importFile">Importovat soubor…</entry>
+    <entry key="exportFile">Exportovat soubor…</entry>
+    <entry key="folder">Otevřít složku uložení</entry>
+    <entry key="cancel">Zpět</entry>
+    <entry key="confirm">Potvrdit</entry>
+    <entry key="leave">Uložit rozehranou hru před jejím opuštěním? Volba Zpět vás vrátí do hry. Uložení přepíše bod obnovy poslední pozice.</entry>
+    <entry key="saveContinue">Uložit a pokračovat</entry>
+    <entry key="discard">Odejít bez uložení</entry>
+    <entry key="saved">Hra byla uložena.</entry>
+    <entry key="failed">Operace se souborem se nezdařila. Přechod nebyl dokončen. Zkontrolujte složku uložení a zkuste to znovu.</entry>
+    <entry key="corrupt">Údaje uložené hry nejsou dostupné nebo jsou neplatné</entry>
+    <entry key="noQuick">Tato rozehraná hra zatím nemá rychlé uložení.</entry>
+    <entry key="freePlay">Neomezená hra</entry>
+</properties>

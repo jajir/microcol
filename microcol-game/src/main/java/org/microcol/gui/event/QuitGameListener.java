@@ -20,15 +20,21 @@ public final class QuitGameListener {
             .getLogger(QuitGameListener.class);
 
     private final MusicController musicController;
+    private final org.microcol.gui.dialog.PersistingService saves;
 
     @Inject
-    public QuitGameListener(final MusicController musicController) {
+    public QuitGameListener(final MusicController musicController,
+            final org.microcol.gui.dialog.PersistingService saves) {
+        this.saves = saves;
         this.musicController = Preconditions.checkNotNull(musicController);
     }
 
     @Subscribe
     private void onQuitGame(
             @SuppressWarnings("unused") final QuitGameEvent event) {
+        if (!saves.confirmLeave()) {
+            return;
+        }
         logger.info("Shutting down MicroCol");
         musicController.stop();
         System.exit(0);

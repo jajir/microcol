@@ -763,7 +763,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0298 save-load navigation — 2026-10-26
 
-1. The [navigation proposal](save-load-navigation.md) and [R-0298](requirements/R-0298.md)
+1. The [navigation proposal](save-load-navigation.md) and [R-0298](requirements/done/R-0298.md)
    capture the requested screen map without implementing gameplay. Five local
    PlantUML sources and SVG illustrations cover menu/game screens, manual saving,
    loading/recovery/deletion and protection of unsaved progress. Existing

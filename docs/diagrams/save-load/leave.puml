@@ -1,39 +1,29 @@
 @startuml
-title O — Ochrana postupu při výměně hry a odchodu (návrh)
+title O — společná ochrana rozehrané hry
 skinparam shadowing false
 skinparam defaultFontName SansSerif
-skinparam defaultFontSize 14
-skinparam state {
-  BackgroundColor #DDF2E3
-  BorderColor #475569
-  BackgroundColor<<potvrzeni>> #FFF0C2
-}
-state "Požadovaný přechod\ndo menu / ukončit / aktivovat načtenou pozici\npamatuje si cíl a původní obrazovku" as Request
-state "Je rozehraná hra\ns neuloženým postupem?" as Dirty
-state "Uložit před pokračováním?\ntext pojmenuje cíl a ztrátu postupu" as Confirm <<potvrzeni>>
-state "S: Uložit hru\nvčetně chyb a opakování" as Save
-state "Původní obrazovka\npůvodní partie zachována" as Return
-state "Provést čekající přechod" as Target <<choice>>
-state "Hlavní menu" as Main
-state "L: Aktivace ověřené pozice\nchyba vrací do L, zachová starou hru" as Load
+state "Požadavek\nnačíst / restart mise / hlavní menu / ukončit / zavřít okno" as Request
+state "Existuje aktivní hra?" as Active <<choice>>
+state "Uložit a pokračovat / Odejít bez uložení / Zpět" as Confirm
+state "Atomicky zapsat poslední pozici" as Save
+state "Provést původní přechod" as Proceed
+state "Ponechat původní hru a obrazovku" as Stay
+state "Vysvětlit chybu zápisu / neúplnou přípravu tahu" as Error
 [*] --> Request
-Request --> Dirty : bezpečný stav tahu
-Request --> Return : tah se zpracovává / vysvětlit\nnedostupnost
-Request --> Confirm : příprava tahu selhala / Uložit\nnedostupné
-Dirty --> Target : ne
-Dirty --> Confirm : ano
-Confirm --> Return : Zrušit / Escape
+Request --> Active : Existuje aktivní hra?
+Active --> Proceed : ne
+Active --> Confirm : ano
+Confirm --> Stay : Zpět / Esc
+Confirm --> Proceed : Odejít bez uložení
 Confirm --> Save : Uložit a pokračovat
-Save --> Confirm : zrušené uložení
-Save --> Target : úspěšně uloženo
-Confirm --> Target : Pokračovat bez uložení
-Target --> Main : cíl = hlavní menu
-Target --> Load : cíl = jiná hra
-Target --> [*] : cíl = ukončit aplikaci
+Save --> Proceed : úspěch
+Save --> Error : odmítnutí / chyba
+Error --> Stay : přechod zrušen
+Stay --> [*]
+Proceed --> [*]
 note bottom of Confirm
-  Zavření okna používá tutéž ochranu ze všech obrazovek.
-  Výchozí fokus nesmí být na volbě Bez uložení.
-  Chyba zápisu zůstává v S; odchod se neprovede.
-  Bez uložení zachová předchozí soubory i body obnovy.
+První verze se ptá při každé aktivní hře.
+Rozpoznávání nezměněného stavu není implementované.
+Načítaný kandidát se ověřuje ještě před touto ochranou.
 end note
 @enduml

@@ -1,62 +1,52 @@
 @startuml
-title MicroCol — navržená mapa obrazovek (26. 10. 2026)
-top to bottom direction
+title MicroCol — nabídky a obrazovky (26. 10. 2026)
 skinparam shadowing false
 skinparam defaultFontName SansSerif
-skinparam defaultFontSize 14
 skinparam state {
-  BackgroundColor #F0F1F3
-  BorderColor #475569
-  BackgroundColor<<navrh>> #DDF2E3
+ BackgroundColor #F0F1F3
+ BorderColor #475569
 }
-state "Hlavní menu\nMENU" as Main
+state "Hlavní nabídka\nMENU" as Main
 state "Nová hra\nFREE_PLAY_SETUP" as Setup
-state "Kampaň\nCAMPAIGN" as Campaign
+state "Výběr mise\nCAMPAIGN" as Campaign
 state "Nastavení\nSETTING" as Settings
 state "Síň slávy\n(dialog)" as Scores
-state "L: Načíst / Pokračovat\ndetail v diagramu načítání" as Load <<navrh>>
-state "Editor\nEDITOR" as Editor
-state "Mapa / rozehraná hra\nGAME — detail v mapě herních obrazovek" as Map
-state "Herní menu" as Pause <<navrh>>
-state "S: Uložit hru\ndetail v diagramu ukládání" as Save <<navrh>>
-state "O: Ochrana postupu\ndetail v diagramu odchodu" as Guard <<navrh>>
-[*] --> Main : spuštění
+state "Přehled uložených her\nL: načítání / S: ukládání" as Files
+state "Vývojový editor\nEDITOR" as Editor
+state "Mapa / rozehraná hra\nGAME" as Map
+state "Herní nabídka\nrozbalovací menu" as Menu
+state "O: Ochrana postupu" as Guard
+[*] --> Main
 Main --> Setup : nová hra
-Setup --> Main : zrušit
-Setup --> Map : vytvořit úspěšně
+Setup --> Main : zpět
+Setup --> Map : vytvořit
 Main --> Campaign : kampaň
 Campaign --> Main : zpět
 Campaign --> Map : zahájit misi
-Main --> Settings : nastavení
-Settings --> Main : zpět, původ z menu
 Main --> Scores : síň slávy
 Scores --> Main : zavřít
-Main --> Load : načíst / pokračovat / obnovit
-Load --> Main : zrušit, původ z menu
-Load --> Map : úspěšně aktivovat pozici
+Main --> Settings : nastavení
+Settings --> Main : zpět bez rozehrané hry
+Settings --> Map : zpět do rozehrané hry
+Main --> Files : načíst / body obnovy
+Files --> Main : zrušit bez rozehrané hry
+Files --> Map : načíst / zrušit během hry
+Main --> Map : pokračovat po úspěšném načtení
 Main --> Editor : vývojový vstup a výběr souboru
-Editor --> Main : opustit editor
-Map --> Pause : Menu / Escape
-Pause --> Map : zpět do hry
-Pause --> Settings : nastavení
-Settings --> Pause : zpět, původ z herního menu
-Pause --> Save : uložit
-Save --> Pause : hotovo / zrušit běžné uložení
-Pause --> Load : načíst jinou hru
-Load --> Pause : zrušit, původ z herního menu
-Pause --> Guard : do menu / ukončit aplikaci
-Guard --> Main : dokončený odchod do menu
-Guard --> Pause : zrušený odchod z herního menu
-Guard --> [*] : dokončené ukončení aplikace
-Main --> [*] : ukončit, žádná rozehraná hra
+Editor --> Main : zpět
+Map --> Menu : Nabídka / Esc
+Menu --> Map : zpět do hry
+Menu --> Settings : nastavení
+Menu --> Files : uložit / načíst
+Menu --> Guard : hlavní nabídka / ukončit / restart mise
+Guard --> Main : potvrzený odchod do menu
+Guard --> Map : zrušit / restartovat misi
+Guard --> [*] : potvrzené ukončení
+Main --> [*] : ukončit bez rozehrané hry
 note bottom of Map
-  Nápověda a herní dialogy: zavření vrací do volající obrazovky.
-  Zavření okna odkudkoli vede přes O; zrušení vrátí přesně tam.
-  Chyba vytvoření nové hry/mise ponechá vstupní obrazovku.
-  Neplatný výběr editoru neotevře editor.
+F5: rychle uložit pro tuto rozehranou hru.
+F9: načíst její rychlý bod přes ochranu O.
+Zavření okna odkudkoli prochází O.
+Esc nejprve ruší rozpracovaný příkaz na mapě.
 end note
-legend bottom
-  Šedá = existující okolní obrazovka; zelená = navržená navigace.
-  Jde o cílový návrh, nikoli důkaz nynějších přechodů.
-endlegend
 @enduml

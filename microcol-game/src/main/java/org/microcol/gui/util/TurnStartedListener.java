@@ -57,6 +57,10 @@ public final class TurnStartedListener {
                 gameModelDao.saveRecoverySlots(
                         gameModelController.getGameModel(), persistingTool,
                         slots);
+                gamePreferences.setGameInProgressSaveFile(persistingTool
+                        .getRecoveryFile(
+                                org.microcol.model.campaign.po.RecoverySlot.LATEST_TURN)
+                        .getAbsolutePath());
             } catch (TurnPreparationException rejected) {
                 diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
                         rejected);

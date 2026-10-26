@@ -9,7 +9,7 @@
 	<entry key="buttonTurnReport">Upozornění na důležité události. (T)</entry>
 	<entry key="buttonGoals">Cíle ve hře. (G)</entry>
 	<entry key="buttonHelp">Nápověda - Colonizopedie. (H)</entry>
-	<entry key="buttonExit">Opustit hru a jít do hlavní nabídky</entry>
+	<entry key="buttonExit">Otevřít herní nabídku (Esc)</entry>
 	<entry key="buttonNextTurn">Další tah</entry>
 	<entry key="buttonEurope">Evropský přístav. (E)</entry>
 	<entry key="buttonMove">Hýbnout jednotkou. (M)</entry>
@@ -135,7 +135,7 @@
     <entry key="toolbarEurope">Evropa</entry>
     <entry key="toolbarNextTurn">Další tah</entry>
     <entry key="toolbarRetire">Ukončit</entry>
-    <entry key="toolbarExit">Odejít</entry>
+    <entry key="toolbarExit">Nabídka</entry>
     <entry key="toolbarIndependence">Nezávislost</entry>
     <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (O)</entry>
     <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele.</entry>

@@ -15,10 +15,13 @@ import javafx.scene.input.KeyEvent;
 public class ScreenSettingPresenter {
 
     private final EventBus eventBus;
+    private final org.microcol.gui.event.model.GameModelController game;
 
     @Inject
     ScreenSettingPresenter(final ScreenSetting screenSetting,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final org.microcol.gui.event.model.GameModelController game) {
+        this.game = game;
         this.eventBus = Preconditions.checkNotNull(eventBus);
         screenSetting.getContent().setOnKeyPressed(this::onKeyPressed);
     }
@@ -28,7 +31,10 @@ public class ScreenSettingPresenter {
          * Escape
          */
         if (KeyCode.ESCAPE == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.MENU));
+            eventBus.post(new org.microcol.gui.screen.ShowScreenEvent(
+                    game.isGameModelReady()
+                            ? org.microcol.gui.screen.Screen.GAME
+                            : org.microcol.gui.screen.Screen.MENU));
         }
     }
 

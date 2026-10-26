@@ -1,44 +1,32 @@
 @startuml
-title S — Uložit hru (návrh)
+title S — ukládání a správa souborů
 skinparam shadowing false
 skinparam defaultFontName SansSerif
-skinparam defaultFontSize 14
-skinparam state {
-  BackgroundColor #DDF2E3
-  BorderColor #475569
-  BackgroundColor<<potvrzeni>> #FFF0C2
-  BackgroundColor<<chyba>> #FFE0DF
-}
-state "Volající\nherní menu / ochrana O" as Caller
-state "Seznam ručních pozic\n+ Nová pozice" as List
-state "Název nové pozice\npředvyplněný, upravitelný" as Name
-state "Přepsat vybranou pozici?\nnázev + datum" as Overwrite <<potvrzeni>>
-state "Ukládání…\natomický zápis, bez dalších akcí" as Writing
-state "Uložení selhalo\npůvodní pozice zachována" as Error <<chyba>>
-state "Nelze načíst seznam\nvysvětlení příčiny" as ListError <<chyba>>
-state "Uloženo\nviditelné potvrzení" as Done
-Caller --> List : Uložit
-List --> Caller : zpět / Escape
-List --> ListError : chyba čtení složky
-ListError --> List : opakovat čtení
-ListError --> Caller : zrušit
-List --> Name : Nová pozice (i v prázdném\nseznamu)
-Name --> Name : neplatný název / vysvětlit u\npole
-Name --> List : zrušit / Escape
-Name --> Writing : platný název / Uložit
-List --> Overwrite : vybraná ruční pozice / Přepsat
-Overwrite --> List : zrušit / Escape
-Overwrite --> Writing : potvrdit přepsání
-Writing --> Error : zápis selhal
-Error --> Writing : opakovat stejný zápis
-Error --> List : vybrat jiný cíl
-Error --> Caller : zrušit (čekající odchod se\nneprovede)
-Writing --> Done : celý zápis i navázání\nPokračovat uspěly
-Done --> Caller : běžné uložení hotovo
-Done --> [*] : z O: provést čekající přechod
-note bottom of Writing
-  Bez přepsání automatických bodů obnovy.
-  Při čekajícím načtení nelze přepsat jeho zdrojový soubor.
-  Nedokončený tah: uložení nedostupné s vysvětlením.
+state "Rozehraná hra" as Game
+state "Přehled uložení\nfiltr + název nové pozice" as List
+state "Potvrdit přepsání / smazání\nkonkrétní ruční pozice" as Confirm
+state "Atomický zápis" as Write
+state "Chyba / neplatný název" as Error
+state "Systémový export" as Export
+Game --> List : Uložit / Ctrl+S
+List --> Game : Zpět / Esc
+List --> Write : nový název, 1–64 Unicode znaků
+List --> Error : prázdný / příliš dlouhý název
+Error --> List : opravit / zkusit znovu
+List --> Confirm : přepsat / smazat vybrané ruční uložení
+Confirm --> List : Zpět / Esc
+Confirm --> List : potvrdit smazání a obnovit seznam
+Confirm --> Write : potvrdit přepsání
+Write --> Error : zápis selhal; původní soubor zůstává
+Write --> Game : úspěch + zpráva ve stavovém řádku
+List --> Export : Exportovat soubor
+Export --> Game : zrušit
+Export --> Write : potvrdit cílový soubor
+Game --> Write : F5: rychlý bod této rozehrané hry
+note bottom of List
+Prohlížení nic nepřepisuje.
+Ruční název není cesta; soubor má generované jméno.
+Automatické a rychlé pozice nelze ručně přepsat/smazat.
+Otevřít složku: systémový správce souborů, poté stejný přehled.
 end note
 @enduml

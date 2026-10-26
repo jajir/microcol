@@ -64,6 +64,7 @@ public final class MainStageBuilder {
         }
         primaryStage.setTitle(i18n.get(Loc.gameTitle));
         primaryStage.setOnCloseRequest(event -> {
+            event.consume();
             eventBus.post(new QuitGameEvent());
         });
         primaryStage.xProperty().addListener((object, oldValue, newValue) -> {

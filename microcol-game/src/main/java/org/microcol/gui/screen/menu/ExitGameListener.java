@@ -1,77 +1,37 @@
 package org.microcol.gui.screen.menu;
 
-import org.microcol.diagnostics.DiagnosticEvent;
-import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.ExitGameEvent;
-import org.microcol.model.TurnPreparationException;
-import org.microcol.model.MicroColException;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.event.model.GameModelController;
-import org.microcol.model.campaign.po.PersistingTool;
-import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
-
-import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
- * When user choose to exit game than it show correct show main game menu.
+ * The common leave guard owns save/discard/cancel, including write failures.
  */
 @Listener
 public final class ExitGameListener {
-
-    private final EventBus eventBus;
-
-    private final GameController gameController;
-    private final GameModelController gameModelController;
-    private final PersistingTool persistingTool;
-    private final GamePreferences gamePreferences;
-    private final DiagnosticLog diagnosticLog;
+    private final PersistingService saves;
+    private final GameController game;
+    private final EventBus events;
 
     @Inject
-    ExitGameListener(final EventBus eventBus,
-            final GameController gameController,
-            final GameModelController gameModelController,
-            final PersistingTool persistingTool,
-            final GamePreferences gamePreferences,
-            final DiagnosticLog diagnosticLog) {
-        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
-        this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.gameController = Preconditions.checkNotNull(gameController);
-        this.gameModelController = Preconditions
-                .checkNotNull(gameModelController);
-        this.persistingTool = Preconditions.checkNotNull(persistingTool);
-        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+    ExitGameListener(final PersistingService saves, final GameController game,
+            final EventBus events) {
+        this.saves = saves;
+        this.game = game;
+        this.events = events;
     }
 
-    @SuppressWarnings("unused")
     @Subscribe
     private void onExitGame(final ExitGameEvent event) {
-        boolean incompleteTurn = false;
-        if (gameModelController.isGameModelReady()) {
-            try {
-                gameController
-                        .writeModelToFile(persistingTool.getAutoSaveFile());
-                gamePreferences.setGameInProgressSaveFile("true");
-            } catch (TurnPreparationException rejected) {
-                diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
-                        rejected);
-                incompleteTurn = true;
-            } catch (MicroColException failed) {
-                diagnosticLog.record(DiagnosticEvent.EXIT_SAVE_FAILED, failed);
-                gameModelController.showRecoverySaveFailure();
-                return;
-            }
-        }
-        eventBus.post(new ShowScreenEvent(Screen.MENU));
-        gameController.stopGame();
-        if (incompleteTurn) {
-            gameModelController.showTurnPreparationUnavailable();
+        if (saves.confirmLeave()) {
+            game.stopGame();
+            events.post(new ShowScreenEvent(Screen.MENU));
         }
     }
-
 }

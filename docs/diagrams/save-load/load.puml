@@ -1,56 +1,32 @@
 @startuml
-title L — Načíst hru a spravovat pozice (návrh)
+title L — načíst, pokračovat a obnovit
 skinparam shadowing false
 skinparam defaultFontName SansSerif
-skinparam defaultFontSize 14
-skinparam state {
-  BackgroundColor #DDF2E3
-  BorderColor #475569
-  BackgroundColor<<potvrzeni>> #FFF0C2
-  BackgroundColor<<chyba>> #FFE0DF
-}
-state "Volající\nhlavní / herní menu" as Caller
-state "Načíst hru\nRuční pozice | Automatická obnova\nseznam + detail výběru" as List
-state "Systémový výběr souboru\nOtevřít soubor…" as Picker
-state "Načítání kandidáta…\nčtení a validace mimo aktivní hru" as Reading
-state "Načtení selhalo\naktivní hra i zdroj zachovány" as LoadError <<chyba>>
-state "O: Ochrana postupu\npokud je třeba, jinak rovnou dál" as Guard <<potvrzeni>>
-state "Aktivace ověřené pozice" as Activate
-state "Mapa načtené hry\n+ její čekající volby/hlášení" as Game
-state "Smazat ruční pozici?\nnázev, datum, nelze vrátit" as Delete <<potvrzeni>>
-state "Mazání…" as Deleting
-state "Mazání selhalo\nvysvětlení příčiny" as DeleteError <<chyba>>
-state "Seznam nelze přečíst\nnení totéž jako prázdný seznam" as ListError <<chyba>>
-Caller --> List : Načíst / Obnovit
-List --> Caller : zpět / Escape
-Caller --> Reading : Pokračovat / poslední pozice
-List --> Reading : vybraná dostupná pozice /\nNačíst
-List --> Picker : Otevřít soubor…
-Picker --> List : zrušit
-Picker --> Reading : vybrat soubor
-List --> ListError : složka není dostupná
-ListError --> List : opakovat čtení
-ListError --> Caller : zrušit
-Reading --> LoadError : neplatná / chybějící /\nnečitelná pozice
-LoadError --> Reading : opakovat načtení
-LoadError --> List : jiná pozice / automatická\nobnova
-LoadError --> Caller : zrušit
-Reading --> Guard : kandidát je platný
-Guard --> List : zrušit načtení ze seznamu
-Guard --> Caller : zrušit přímé Pokračovat
-Guard --> Activate : lze pokračovat / O dokončeno
-Activate --> Game : úspěch
-Activate --> LoadError : aktivace odmítnuta, stará hra\nzachována
-List --> Delete : vybraná ruční pozice / Smazat
-Delete --> List : zrušit / Escape
-Delete --> Deleting : potvrdit smazání
-Deleting --> List : hotovo / obnovit seznam
-Deleting --> DeleteError : chyba
-DeleteError --> List : zavřít / obnovit skutečný\nseznam
+state "Volající obrazovka\nhlavní nabídka / mapa" as Caller
+state "Přehled uložených her\nruční / rychlé / body obnovy" as List
+state "Systémový import" as Import
+state "Rekonstruovat a ověřit\nkandidátní hru" as Validate
+state "Chyba načtení\npůvodní hra i soubor zůstávají" as Error
+state "O: Ochrana postupu\npouze pokud je aktivní hra" as Guard
+state "Aktivovat ověřenou hru" as Activate
+state "Mapa\nGAME" as Game
+Caller --> List : Načíst / Body obnovy
+List --> Caller : Zpět / Esc
+List --> Import : Importovat soubor
+Import --> Caller : zrušit
+Import --> Validate : vybrat soubor
+List --> Validate : vybrat řádek + Načíst
+Caller --> Validate : Pokračovat / F9
+Validate --> Error : chybějící / poškozený / neplatný soubor
+Error --> Caller : zavřít vysvětlení
+Validate --> Guard : kandidát je platný; existuje aktivní hra
+Validate --> Activate : kandidát je platný; žádná aktivní hra
+Guard --> Caller : Zpět / chyba uložení
+Guard --> Activate : uložit úspěšně / výslovně neukládat
+Activate --> Game : spustit obnovenou hru
 note bottom of List
-  Prázdno: jasný text, Načíst i Smazat nedostupné.
-  Detail je součást seznamu, není další obrazovkou.
-  Čtení metadat nic nespouští ani nezapisuje.
-  Automatické body nemají ruční Smazat.
+Prázdný seznam má vysvětlení, nedostupná složka chybu.
+Chybějící rychlý bod F9 pouze oznámí; hra zůstává.
+Pokračovat používá poslední úspěšnou uloženou/načtenou cestu.
 end note
 @enduml

@@ -1,0 +1,25 @@
+@import "ToolbarControls.css";
+
+.saved-games, .save-confirmation {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 16;
+}
+.saved-games .list-view {
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #302D27;
+    -fx-border-width: 1.25;
+    -fx-padding: 1;
+}
+.saved-games .list-cell {
+    -fx-background-color: #FFF9EC;
+    -fx-text-fill: #302D27;
+    -fx-padding: 10;
+}
+.saved-games .list-cell:filled:selected {
+    -fx-background-color: #DFBD91;
+    -fx-text-fill: black;
+}
+.saved-games .menu-button .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 7 0 7;
+}

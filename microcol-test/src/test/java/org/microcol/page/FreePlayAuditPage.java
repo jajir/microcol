@@ -177,8 +177,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
             final String load, final String cancel) {
         assertEquals(title,
                 getNodeFinder().lookup(title).queryAs(Label.class).getText());
-        assertEquals(load, getLabeledById("recoveryLoad").getText());
-        assertEquals(cancel, getLabeledById("recoveryCancel").getText());
+        assertEquals(load, getLabeledById("loadSelected").getText());
+        assertEquals(cancel, getLabeledById("savedGamesCancel").getText());
     }
 
     private java.util.Map<RecoverySlot, byte[]> recoveryBytes;
@@ -207,37 +207,48 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void verifyRecoveryOption(final RecoverySlot slot,
             final boolean available, final String date) {
-        final javafx.scene.control.RadioButton option = getNodeFinder()
-                .lookup("#recovery" + slot.name())
-                .queryAs(javafx.scene.control.RadioButton.class);
-        assertEquals(available, !option.isDisabled());
-        assertTrue(option.getText().contains(date), option.getText());
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final javafx.scene.control.ListView<org.microcol.model.campaign.po.SavedGames.Entry> list = savedList();
+        final var entry = list.getItems().stream()
+                .filter(value -> value.file.equals(file)).findFirst();
+        assertEquals(available, entry.isPresent());
         if (available) {
-            final java.io.File file = getContext()
-                    .getClassFromGuice(PersistingTool.class)
-                    .getRecoveryFile(slot);
+            final var cell = getNodeFinder().lookup(".list-cell")
+                    .queryAllAs(javafx.scene.control.ListCell.class).stream()
+                    .filter(value -> value.getItem() == entry.get()).findFirst()
+                    .orElseThrow();
+            assertTrue(cell.getText().contains(date), cell.getText());
             final String modified = java.time.format.DateTimeFormatter
                     .ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
                     .withLocale(getContext()
                             .getClassFromGuice(org.microcol.i18n.I18n.class)
                             .getCurrentLocale())
-                    .format(file.toPath().toFile().lastModified() > 0
-                            ? java.time.Instant
-                                    .ofEpochMilli(file.lastModified())
-                                    .atZone(java.time.ZoneId.systemDefault())
-                            : java.time.Instant.EPOCH
-                                    .atZone(java.time.ZoneId.systemDefault()));
-            assertTrue(option.getText().contains(modified), option.getText());
+                    .format(java.time.Instant.ofEpochMilli(file.lastModified())
+                            .atZone(java.time.ZoneId.systemDefault()));
+            assertTrue(cell.getText().contains(modified), cell.getText());
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private javafx.scene.control.ListView<org.microcol.model.campaign.po.SavedGames.Entry> savedList() {
+        return getNodeFinder().lookup("#savedGamesList")
+                .queryAs(javafx.scene.control.ListView.class);
+    }
+
     public void chooseRecovery(final RecoverySlot slot) {
-        getRobot().clickOn("#recovery" + slot.name());
-        clickOnButtonWithId("recoveryLoad");
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final var list = savedList();
+        final var entry = list.getItems().stream()
+                .filter(value -> value.file.equals(file)).findFirst()
+                .orElseThrow();
+        getRobot().interact(() -> list.getSelectionModel().select(entry));
+        clickOnButtonWithId("loadSelected");
     }
 
     public void cancelRecovery() {
-        clickOnButtonWithId("recoveryCancel");
+        clickOnButtonWithId("savedGamesCancel");
     }
 
     public void verifyRecoveryTurn(final RecoverySlot slot,
@@ -305,6 +316,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void attemptExitToMenu() {
         clickOnButtonWithId("exit");
+        getRobot().clickOn("#menuMain");
+        clickOnButtonWithId("saveConfirm");
     }
 
     private org.microcol.model.campaign.GameModel activeGameBeforeSaveFailure;
@@ -444,6 +457,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void attemptInvalidSavedGame(final boolean autosave) {
         clickOnButtonWithId(autosave ? "buttonContinue" : "buttonLoad");
+        if (!autosave) {
+            clickOnButtonWithId("importSave");
+        }
     }
 
     public void prepareInvalidDifficultySave(final String difficulty)
@@ -499,7 +515,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         getContext()
                 .getClassFromGuice(
                         org.microcol.gui.preferences.GamePreferences.class)
-                .setGameInProgressSaveFile(save.getName());
+                .setGameInProgressSaveFile(save.getAbsolutePath());
     }
 
     public void attemptInvalidSavedGameWhilePlaying() {
@@ -563,6 +579,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                         .loadFile(org.mockito.Mockito.any(java.io.File.class)))
                 .thenReturn(null);
         clickOnButtonWithId("buttonLoad");
+        clickOnButtonWithId("importSave");
     }
 
     public byte[] readAutosave() throws Exception {

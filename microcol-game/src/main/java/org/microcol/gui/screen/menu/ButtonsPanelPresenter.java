@@ -4,9 +4,7 @@ import org.microcol.gui.LocalizationHelper;
 import java.util.Optional;
 
 import org.microcol.gui.dialog.PersistingService;
-import org.microcol.gui.dialog.RecoveryDialog;
 import org.microcol.gui.event.QuitGameEvent;
-import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -15,7 +13,6 @@ import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.po.HallOfFameDao;
-import org.microcol.model.campaign.po.PersistingTool;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -38,13 +35,7 @@ public final class ButtonsPanelPresenter {
 
     private final PersistingService persistingService;
 
-    private final PersistingTool persistingTool;
-
-    private final GameController gameController;
-
     private final EventBus eventBus;
-
-    private final RecoveryDialog recoveryDialog;
 
     private final ViewUtil viewUtil;
 
@@ -58,11 +49,9 @@ public final class ButtonsPanelPresenter {
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final PersistingService persistingService,
             final GamePreferences gamePreferences,
-            final PersistingTool persistingTool,
-            final GameController gameController,
             final SecretOption secretOption, final EventBus eventBus,
-            final RecoveryDialog recoveryDialog, final ViewUtil viewUtil,
-            final I18n i18n, final HallOfFameDao hallOfFameDao,
+            final ViewUtil viewUtil, final I18n i18n,
+            final HallOfFameDao hallOfFameDao,
             final LocalizationHelper localization) {
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -71,11 +60,8 @@ public final class ButtonsPanelPresenter {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingService = Preconditions.checkNotNull(persistingService);
-        this.persistingTool = Preconditions.checkNotNull(persistingTool);
-        this.gameController = Preconditions.checkNotNull(gameController);
         this.secretOption = Preconditions.checkNotNull(secretOption);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.recoveryDialog = Preconditions.checkNotNull(recoveryDialog);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonRecovery().setOnAction(this::onRecovery);
         view.getButtonLoad().setOnAction(this::onLoadWasPressed);
@@ -108,25 +94,17 @@ public final class ButtonsPanelPresenter {
 
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
-        if (gameController
-                .loadModelFromFile(persistingTool.getAutoSaveFile())) {
-            eventBus.post(new ShowScreenEvent(Screen.GAME));
-        }
+        persistingService.continueGame();
     }
 
     private void onRecovery(final ActionEvent actionEvent) {
-        recoveryDialog.choose().ifPresent(slot -> {
-            if (gameController
-                    .loadModelFromFile(persistingTool.getRecoveryFile(slot))) {
-                eventBus.post(new ShowScreenEvent(Screen.GAME));
-            }
-        });
+        persistingService.browse(false, true);
     }
 
     public void refresh() {
         view.setContinueEnabled(
                 gamePreferences.getGameInProgressSaveFile().isPresent()
-                        && persistingTool.getAutoSaveFile().exists());
+                        && persistingService.continueFile().isFile());
         view.setFreeGameEnabled(true);
     }
 

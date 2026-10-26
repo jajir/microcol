@@ -57,7 +57,30 @@ public final class GameController {
                 gameModelController.getGameModel());
     }
 
+    public void writeNamedGame(final File file, final String name) {
+        gameModelDao.saveNamedGame(file, gameModelController.getGameModel(),
+                name);
+    }
+
+    public boolean restartMission(
+            final java.util.function.BooleanSupplier beforeReplace) {
+        final GameModel current = gameModelController.getGameModel();
+        Preconditions.checkState(current.isCampaignMission());
+        final GameModel fresh = gameModelDao
+                .loadFromClassPath(current.getScenarioResource(), eventBus);
+        if (!beforeReplace.getAsBoolean()) {
+            return false;
+        }
+        startMission(fresh);
+        return true;
+    }
+
     public boolean loadModelFromFile(final File sourceFile) {
+        return loadModelFromFile(sourceFile, () -> true);
+    }
+
+    public boolean loadModelFromFile(final File sourceFile,
+            final java.util.function.BooleanSupplier beforeReplace) {
         Preconditions.checkNotNull(sourceFile, "Save file is null");
         final GameModel loaded;
         try {
@@ -66,6 +89,9 @@ public final class GameController {
                 | MicroColException | JsonParseException rejected) {
             diagnosticLog.record(DiagnosticEvent.LOAD_FAILED, rejected);
             gameModelController.showInvalidSavedGame();
+            return false;
+        }
+        if (!beforeReplace.getAsBoolean()) {
             return false;
         }
         startMission(loaded);

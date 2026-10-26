@@ -194,7 +194,10 @@ public final class GameModelDao {
                 makeGameOver);
         final Mission<?> mission = missionFactoryManager
                 .make(campaignMission.getMissionName(), context);
-        return new GameModel(campaign, campaignMission, mission, model);
+        final GameModel game = new GameModel(campaign, campaignMission, mission,
+                model);
+        game.restorePlaythroughId(gameModelPo.getPlaythroughId());
+        return game;
     }
 
     private CampaignName resolve(final String name) {
@@ -209,6 +212,13 @@ public final class GameModelDao {
 
     public void saveToFile(final String fileName, final GameModel gameMode) {
         gameModelPoDao.saveToFile(fileName, gameMode.getModelPo());
+    }
+
+    public void saveNamedGame(final File file, final GameModel game,
+            final String name) {
+        final GameModelPo snapshot = game.getModelPo();
+        snapshot.setSaveName(Player.normalizeDisplayName(name));
+        gameModelPoDao.saveToFile(file.getAbsolutePath(), snapshot);
     }
 
     public void saveRecoverySlots(final GameModel game,

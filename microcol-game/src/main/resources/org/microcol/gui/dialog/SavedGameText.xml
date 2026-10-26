@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="resume">Back to game</entry>
+    <entry key="save">Save game (Ctrl+S)</entry>
+    <entry key="load">Load game</entry>
+    <entry key="quickSave">Quick save (F5)</entry>
+    <entry key="quickLoad">Quick load (F9)</entry>
+    <entry key="restart">Restart mission</entry>
+    <entry key="settings">Settings</entry>
+    <entry key="mainMenu">Main menu</entry>
+    <entry key="quit">Quit game</entry>
+    <entry key="title">Saved games</entry>
+    <entry key="all">All saves</entry>
+    <entry key="manual">Manual</entry>
+    <entry key="quick">Quick save</entry>
+    <entry key="automatic">Recovery points</entry>
+    <entry key="empty">No saved games in this view.</entry>
+    <entry key="name">Name of the new save</entry>
+    <entry key="invalidName">Enter a name of 1–64 characters without control characters.</entry>
+    <entry key="overwrite">Overwrite selected save</entry>
+    <entry key="delete">Delete selected save</entry>
+    <entry key="importFile">Import file…</entry>
+    <entry key="exportFile">Export file…</entry>
+    <entry key="folder">Open save folder</entry>
+    <entry key="cancel">Cancel</entry>
+    <entry key="confirm">Confirm</entry>
+    <entry key="leave">Save the current game before leaving it? Choose Cancel to stay. Saving replaces the latest-position recovery point.</entry>
+    <entry key="saveContinue">Save and continue</entry>
+    <entry key="discard">Leave without saving</entry>
+    <entry key="saved">Game saved.</entry>
+    <entry key="failed">The file operation failed. No transition was completed. Please check the save folder and try again.</entry>
+    <entry key="corrupt">Unavailable or invalid saved-game details</entry>
+    <entry key="noQuick">This playthrough has no quick save yet.</entry>
+    <entry key="freePlay">Free play</entry>
+</properties>
