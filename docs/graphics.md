@@ -1,5 +1,24 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Delší oblouky a ústí řek — návrhy 26. října 2026
+
+1. [R-0304](requirements/R-0304.md) zachycuje uživatelovu žádost přiblížit řeky
+   původní variantě „Ručně kreslené koryto“ a ukázat rozšíření ústí do oceánu.
+   Současná implementace R-0300 ohýbá jednotlivá políčka; návrhy používají delší
+   oblouky přes několik polí a zachovávají bonusy nad vodou.
+2. Výtvarné příklady: [plynulé ústí](graphics-assets/river-mouths-2026-10-26/smooth-mouth.png),
+   [členitá delta](graphics-assets/river-mouths-2026-10-26/branching-delta.png),
+   [širší oblouky a ústí](graphics-assets/river-mouths-2026-10-26/wide-estuary.png)
+   a [malá řeka](graphics-assets/river-mouths-2026-10-26/small-mouth.png).
+   Jde o návrhy, nikoli snímky běžící hry. Doporučené plynulé ústí nejlépe
+   navazuje na přiloženou předlohu.
+3. Ústí otevírá obrys pobřeží a rozšiřuje vodní plochu mezi břehy. Krátký
+   barevný přechod k moři a dekorativní ostrůvek delty jsou zde zobrazené návrhy;
+   nejsou dosud součástí přijatého plochého výtvarného stylu ani modelu terénu.
+4. R-0301/R-0302 dnes drží řeky ve vnitrozemí bez sousedství s vodou. R-0304
+   proto eviduje otázku výjimky pro koncový úsek. Výtvarné ukázky nemění
+   pravidla generování, pevné mapy ani uložené hry.
+
 ## Ručně kreslené řeky — 26. října 2026
 
 1. Uživatel vybral variantu 2, **Ručně kreslené koryto**, z pěti návrhů
