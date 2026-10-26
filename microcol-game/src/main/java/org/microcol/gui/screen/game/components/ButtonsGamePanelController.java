@@ -536,10 +536,12 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateBuildColony(final Unit unit) {
-        view.setVisibleButtonBuildColony(
-                unit.getAction().getType() != UnitActionType.sentry
-                        && gameModelController.getModel()
-                                .canUnitBuildColony(unit));
+        view.setVisibleButtonBuildColony(unit.getAction()
+                .getType() != UnitActionType.sentry
+                && (getModel().canUnitBuildColony(unit) || (unit
+                        .isAtPlaceLocation() && unit.getType().canBuildColony()
+                        && getModel().getMap().getRiverSizeAt(unit
+                                .getLocation()) != org.microcol.model.RiverSize.NONE)));
     }
 
     private void updateUnitOrders() {

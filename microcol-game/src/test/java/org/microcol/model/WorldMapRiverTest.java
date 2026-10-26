@@ -153,4 +153,27 @@ class WorldMapRiverTest {
         assertEquals(Set.of(run.get(0), run.get(2)),
                 reloaded.getRiverLinksAt(run.get(1)));
     }
+
+    @Test
+    void savedRiverForestFieldAndUnrelatedBonusAreRejected() {
+        final GameModelPo forest = dao.loadFromClassPath(MAP);
+        final Location at = landRun(forest).get(0);
+        forest.getModel().getMap().setTrees(Set.of(at));
+        forest.getModel().getMap().setRivers(Map.of(at, RiverSize.SMALL));
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorldMap(forest.getModel()));
+        final GameModelPo field = dao.loadFromClassPath(MAP);
+        field.getModel().getMap().setTrees(Set.of());
+        field.getModel().getMap().setFields(Set.of(at));
+        field.getModel().getMap().setRivers(Map.of(at, RiverSize.SMALL));
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorldMap(field.getModel()));
+        final GameModelPo resource = dao.loadFromClassPath(MAP);
+        resource.getModel().getMap().setTrees(Set.of());
+        resource.getModel().getMap().setRivers(Map.of(at, RiverSize.SMALL));
+        resource.getModel().getMap()
+                .setResources(Map.of(at, ResourceOverlay.PRIME_FOOD));
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorldMap(resource.getModel()));
+    }
 }

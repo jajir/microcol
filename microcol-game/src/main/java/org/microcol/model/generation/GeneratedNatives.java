@@ -18,6 +18,7 @@ import org.microcol.model.NativeNation;
 import org.microcol.model.NativeRelations;
 import org.microcol.model.NativeTeachableSkills;
 import org.microcol.model.ResourceOverlay;
+import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
@@ -75,6 +76,7 @@ final class GeneratedNatives {
         final List<Location> sites = grid.squaresWith(
                 terrain -> !terrain.isSea() && terrain != TerrainType.MOUNTAIN
                         && terrain != TerrainType.ARCTIC);
+        sites.removeAll(model.getMap().getRiverMap().keySet());
         Collections.shuffle(sites, random);
         final List<NativeNation> nations = new ArrayList<>(
                 List.of(NativeNation.values()));
@@ -164,6 +166,7 @@ final class GeneratedNatives {
             final GeneratedGrid grid, final Location centre) {
         final Set<Location> trees = map.getTreeSet();
         final Map<Location, ResourceOverlay> resources = map.getResourceMap();
+        final Map<Location, RiverSize> rivers = map.getRiverMap();
         final List<Terrain> out = new ArrayList<>();
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
@@ -176,6 +179,7 @@ final class GeneratedNatives {
                 if (trees.contains(at)) {
                     terrain.setHasTrees(true);
                 }
+                terrain.setRiverSize(rivers.getOrDefault(at, RiverSize.NONE));
                 terrain.setResourceOverlay(
                         resources.getOrDefault(at, ResourceOverlay.NONE));
                 out.add(terrain);

@@ -84,6 +84,10 @@ public class WorldMap {
         for (final Location at : rivers.keySet()) {
             Preconditions.checkArgument(getTerrainTypeAt(at).isLand(),
                     "River square (%s) must be land.", at);
+            Preconditions.checkArgument(
+                    !trees.contains(at) && !fields.contains(at),
+                    "River square (%s) cannot have forest or a plowed field.",
+                    at);
         }
         for (final Location at : lostCityRumors) {
             Preconditions.checkArgument(
@@ -97,7 +101,8 @@ public class WorldMap {
         for (final Map.Entry<Location, ResourceOverlay> entry : resources
                 .entrySet()) {
             Preconditions.checkArgument(
-                    entry.getValue().canBeOn(getTerrainTypeAt(entry.getKey())),
+                    entry.getValue().canBeOn(getTerrainTypeAt(entry.getKey()),
+                            getRiverSizeAt(entry.getKey())),
                     "Resource square (%s) can't carry %s.", entry.getKey(),
                     entry.getValue());
         }
@@ -391,7 +396,9 @@ public class WorldMap {
     }
 
     public void plowFiled(final Location at) {
-        Preconditions.checkArgument(getTerrainTypeAt(at).isCanHaveField(),
+        Preconditions.checkArgument(
+                getTerrainTypeAt(at).isCanHaveField()
+                        && getRiverSizeAt(at) == RiverSize.NONE,
                 "Terrain '%s' at '%s' can have field.", getTerrainTypeAt(at),
                 at);
         fields.add(at);

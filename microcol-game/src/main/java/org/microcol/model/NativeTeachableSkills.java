@@ -45,7 +45,7 @@ public final class NativeTeachableSkills {
             final UnitType skill) {
         final GoodsType goodsType = skill.getExpertInProducing();
         return goodsType != null && surroundings.stream()
-                .anyMatch(terrain -> isSource(skill, terrain.getTerrainType())
+                .anyMatch(terrain -> isSource(skill, terrain)
                         && terrain.getNaturalOutput(goodsType) > 0);
     }
 
@@ -54,12 +54,14 @@ public final class NativeTeachableSkills {
      * corn without matching each other's source. Other skills take any square.
      */
     private static boolean isSource(final UnitType skill,
-            final TerrainType terrainType) {
+            final Terrain terrain) {
         if (skill == UnitType.EXPERT_FISHERMAN) {
-            return terrainType.isSea();
+            return skill.getFieldProductionModifier(GoodsType.CORN,
+                    terrain) > 1;
         }
         if (skill == UnitType.EXPERT_FARMER) {
-            return terrainType.isLand();
+            return skill.getFieldProductionModifier(GoodsType.CORN,
+                    terrain) > 1;
         }
         return true;
     }

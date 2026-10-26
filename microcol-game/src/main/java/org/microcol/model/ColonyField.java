@@ -266,7 +266,7 @@ public final class ColonyField {
                                 terrainOutput + NativeConversion.OUTDOOR_BONUS)
                         : base;
         final Goods worked = ordinary.multiply(worker.getType()
-                .getFieldProductionModifier(goodsType, getTerrainType()));
+                .getFieldProductionModifier(goodsType, getTerrain()));
         final Goods production = political.apply(base, worked);
         if (goodsType == GoodsType.FUR && colony.getOwner().getCongressMembers()
                 .contains(Founder.HENRY_HUDSON)) {

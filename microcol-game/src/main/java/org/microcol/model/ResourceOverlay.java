@@ -142,6 +142,14 @@ public enum ResourceOverlay {
         return terrainType.isLand();
     }
 
+    /** Whether the terrain and river together allow this resource. */
+    public boolean canBeOn(final TerrainType terrainType,
+            final RiverSize riverSize) {
+        Preconditions.checkNotNull(riverSize);
+        return canBeOn(terrainType) && (riverSize == RiverSize.NONE
+                || this == NONE || this == SILVER || this == ORE);
+    }
+
     /**
      * @param code saved resource code of one square
      * @return resource with that code

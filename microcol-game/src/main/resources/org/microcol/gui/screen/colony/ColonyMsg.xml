@@ -99,4 +99,5 @@
     <entry key="quickNO_HOLD">The available goods do not fit a free or partly filled hold. Nothing was changed.</entry>
     <entry key="quickNO_GOODS">The selected carrier has no goods to unload. Passengers stay aboard. Nothing was changed.</entry>
     <entry key="quickChanged">The cargo, warehouse or price changed. Nothing was transferred. Check the holds and try again.</entry>
+    <entry key="nameCannotFoundOnRiver">Found the colony beside the river, not on its square.</entry>
 </properties>

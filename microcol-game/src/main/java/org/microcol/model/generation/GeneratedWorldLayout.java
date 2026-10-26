@@ -115,8 +115,11 @@ final class GeneratedWorldLayout {
         final Set<Location> trees = assignTrees(land);
         final List<List<Location>> rivers = GeneratedWorldRivers.trace(grid,
                 elevation, random);
+        final Set<Location> riverSquares = new HashSet<>();
+        rivers.forEach(riverSquares::addAll);
+        trees.removeAll(riverSquares);
         final Map<Location, ResourceOverlay> resources = GeneratedWorldResources
-                .assign(grid, trees, random);
+                .assign(grid, trees, riverSquares, random);
         return toMap(trees, rivers, resources);
     }
 

@@ -1243,3 +1243,17 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 
 1. [R-0288](requirements/done/R-0288.md) navazuje na schválené linky R-0286: mapa má dosahovat přímo k jejich inkoustu, bez světlého pásku pod menu, vedle pravého panelu a nad stavovým řádkem. Zachovává se stejný obrázek, měřítko, barva i ruční tvar.
 2. Pouze tyto tři hrany překrývají průhledný vnější okraj rámečku pomocí záporného odsazení obrázku. Vnitřní oddělovače stavových údajů ani tlačítka se nemění. Skutečné výsledky a snímky vede [funkční evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25).
+
+## Říční koridory — 2026-10-26
+
+1. [R-0290](requirements/done/R-0290.md) používá stávající šířky a barvu řek.
+   [Pravidla koridoru](gap-analysis.md#river-corridors) odstraňují souběh s
+   lesem, orbou a sídlem; běžný rybolov nepotřebuje další značku ryby.
+2. Cesta na řece se vykresluje jako krátký mostek v dosavadních barvách cesty,
+   s tenkým okrajem a příčkami, natočený napříč viditelným ramenem toku. Stříbro a ruda používají dosavadní drobnou
+   značku v horní pravé části políčka. Žádný nový atlas ani asset nevzniká.
+   Vykreslení zachovává mlhu, jednotky, výběr a napojení známých úseků toku.
+3. Pixelové a hráčské ověření mostku, toku a pokračování hry patří do TC-90;
+   [skutečný snímek z Dockeru](graphics-assets/rivers-2026-10-26/implemented-map.png)
+   ukazuje příčný mostek a oddělenou značku stříbra. Výsledky eviduje
+   [funkční přejímka](functional-tests.md#r-0290-river-corridors-2026-10-26).

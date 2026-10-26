@@ -106,7 +106,8 @@ public final class UnitActionPlowField implements UnitAction {
         }
         final Terrain terrain = model.getMap().getTerrainAt(unit.getLocation());
         return terrain.getTerrainType().isCanHaveField()
-                && !terrain.isHasTrees() && !terrain.isHasField();
+                && !terrain.isHasTrees() && !terrain.isHasField()
+                && terrain.getRiverSize() == org.microcol.model.RiverSize.NONE;
     }
 
     @Override

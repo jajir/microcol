@@ -112,14 +112,11 @@ class RoadProductionTest {
     }
 
     @Test
-    void roadAppliesBeforeRiverAndKeepsRiverAndPlowAdditions() {
-        // Trapping fur 2, road +1 and large river +2 on one positive output.
-        final Terrain trapping = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.TRAPPING, true);
-        trapping.setRiverSize(RiverSize.LARGE);
-        assertEquals(2 + ROAD_BONUS + RiverSize.LARGE.getProductionBonus(),
-                output(trapping, GoodsType.FUR));
-        // Hill ore 4 on a road without a river stays 5, road only once.
+    void roadLeavesRiverDepositsUnchangedAndStillImprovesOrdinaryLand() {
+        final Terrain ore = terrain(TerrainType.HILL, ResourceOverlay.ORE,
+                true);
+        ore.setRiverSize(RiverSize.LARGE);
+        assertEquals(1, output(ore, GoodsType.ORE));
         assertEquals(5,
                 output(terrain(TerrainType.HILL, ResourceOverlay.NONE, true),
                         GoodsType.ORE));

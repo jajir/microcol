@@ -188,6 +188,32 @@ public final class PaintService {
         graphics.setLineWidth(previousWidth);
     }
 
+    /** Draw the existing road as a compact bridge across a river. */
+    public void paintRiverBridge(final GraphicsContext graphics,
+            final Point point, final List<Point> joined) {
+        graphics.save();
+        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
+        graphics.translate(point.getX() + half, point.getY() + half);
+        if (!joined.isEmpty()) {
+            final Point neighbour = joined.get(0);
+            graphics.rotate(
+                    Math.toDegrees(Math.atan2(neighbour.getY() - point.getY(),
+                            neighbour.getX() - point.getX())) + 90);
+        }
+        final double x = -13.5;
+        final double y = 0;
+        graphics.setFill(ROAD_COLOR);
+        graphics.fillRect(x, y - 5, 27, 10);
+        graphics.setStroke(ROAD_EDGE_COLOR);
+        graphics.setLineWidth(1.5);
+        graphics.strokeLine(x, y - 5, x + 27, y - 5);
+        graphics.strokeLine(x, y + 5, x + 27, y + 5);
+        for (int plank = 3; plank < 27; plank += 5) {
+            graphics.strokeLine(x + plank, y - 4, x + plank, y + 4);
+        }
+        graphics.restore();
+    }
+
     /**
      * Draw the half of each river course that leaves a square. Every course
      * reaches the midpoint between its two squares, and its width shows the

@@ -266,4 +266,17 @@ class FoundingPreconditionsTest {
         assertFalse(model.canFoundColonyAt(founder, Location.of(15, 11)));
     }
 
+    @Test
+    void riverFoundingIsRejectedWithoutChangingTheGame() {
+        final Model initial = prepare(SITE, TerrainType.GRASSLAND,
+                TerrainType.GRASSLAND);
+        final org.microcol.model.store.ModelPo saved = initial.save();
+        saved.getMap().setRivers(Map.of(SITE, RiverSize.SMALL));
+        final Model model = Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final String before = snapshot(model);
+        assertFalse(model.canUnitBuildColony(model.getUnitById(4)));
+        assertThrows(IllegalArgumentException.class, () -> found(model));
+        assertEquals(before, snapshot(model));
+    }
 }

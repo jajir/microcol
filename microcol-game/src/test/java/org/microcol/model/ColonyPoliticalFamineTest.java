@@ -62,7 +62,7 @@ class ColonyPoliticalFamineTest {
                 .getProducedGoodsType();
         final int base = field.getGoodsTypeProduction(goods);
         final int worked = (int) (base * worker.getType()
-                .getFieldProductionModifier(goods, field.getTerrainType()));
+                .getFieldProductionModifier(goods, field.getTerrain()));
         return base > 0 ? Math.max(0, worked + change) : worked;
     }
 

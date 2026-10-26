@@ -63,7 +63,7 @@ public final class PlowFieldEventListener {
         }
         return problem == PlowProblem.NO_MOVES || problem == PlowProblem.COLONY
                 || problem == PlowProblem.UNSUITABLE_TERRAIN
-                || problem == PlowProblem.FOREST
+                || problem == PlowProblem.FOREST || problem == PlowProblem.RIVER
                 || problem == PlowProblem.ALREADY_PLOWED;
     }
 
@@ -81,6 +81,8 @@ public final class PlowFieldEventListener {
             return Buttons.plowProblemColony;
         case UNSUITABLE_TERRAIN:
             return Buttons.plowProblemUnsuitableTerrain;
+        case RIVER:
+            return Buttons.plowProblemRiver;
         case FOREST:
             return Buttons.plowProblemForest;
         case ALREADY_PLOWED:

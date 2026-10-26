@@ -131,25 +131,23 @@ class ResourceOverlayProductionTest {
     }
 
     @Test
-    void plowAndRiverApplyAfterTheResourceBonus() {
-        // Prime sugar 1 + 2 = 3, plow +1 on the field, small river +1 = 5.
-        final Terrain sugarField = terrain(TerrainType.GRASSLAND,
+    void plowAppliesAfterResourceBonusButRiverRejectsTheseCombinations() {
+        final Terrain sugar = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.PRIME_SUGAR);
-        sugarField.setHasField(true);
-        sugarField.setRiverSize(RiverSize.SMALL);
-        assertEquals(5, output(sugarField, GoodsType.SUGAR));
-        // Prime food corn 4 + 2 = 6, plow +1 = 7, large river +2 = 9.
-        final Terrain foodField = terrain(TerrainType.GRASSLAND,
+        sugar.setHasField(true);
+        assertEquals(4, output(sugar, GoodsType.SUGAR));
+        assertThrows(IllegalArgumentException.class,
+                () -> sugar.setRiverSize(RiverSize.SMALL));
+        final Terrain food = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.PRIME_FOOD);
-        foodField.setHasField(true);
-        foodField.setRiverSize(RiverSize.LARGE);
-        assertEquals(9, output(foodField, GoodsType.CORN));
-        // Trapping introduces fur 0 + 2 on bare land, then the large river
-        // adds 2 to that already positive output: 4.
+        food.setHasField(true);
+        assertEquals(7, output(food, GoodsType.CORN));
+        assertThrows(IllegalArgumentException.class,
+                () -> food.setRiverSize(RiverSize.LARGE));
         final Terrain trapping = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.TRAPPING);
-        trapping.setRiverSize(RiverSize.LARGE);
-        assertEquals(4, output(trapping, GoodsType.FUR));
+        assertThrows(IllegalArgumentException.class,
+                () -> trapping.setRiverSize(RiverSize.LARGE));
     }
 
     @Test

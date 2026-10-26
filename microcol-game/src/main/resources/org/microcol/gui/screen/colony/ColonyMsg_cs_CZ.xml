@@ -99,4 +99,5 @@
     <entry key="quickNO_HOLD">Dostupné zboží se nevejde do volného ani částečně naplněného prostoru. Nic se nezměnilo.</entry>
     <entry key="quickNO_GOODS">Vybraný dopravce nemá zboží k vyložení. Pasažéři zůstanou na palubě. Nic se nezměnilo.</entry>
     <entry key="quickChanged">Náklad, sklad nebo cena se změnily. Nic se nepřevedlo. Zkontrolujte prostory a zkuste to znovu.</entry>
+    <entry key="nameCannotFoundOnRiver">Kolonii založte vedle řeky. Na říčním políčku ji založit nelze.</entry>
 </properties>

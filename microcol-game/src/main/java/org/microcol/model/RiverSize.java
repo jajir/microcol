@@ -5,27 +5,27 @@ import java.util.Arrays;
 import com.google.common.base.Preconditions;
 
 /**
- * Size of the river crossing a land square. A river adds its production bonus
- * only to an output that is already positive.
+ * Size of the river crossing a land square. Fishing replaces ordinary
+ * production on a river square.
  */
 public enum RiverSize {
 
     /** No river; the saved code is a blank entry. */
     NONE("-", 0),
 
-    /** Small river: +1 to an already positive output. */
-    SMALL("s", 1),
+    /** Small river: three food before worker modifiers. */
+    SMALL("s", 3),
 
-    /** Large river: +2 to an already positive output. */
-    LARGE("l", 2);
+    /** Large river: four food before worker modifiers. */
+    LARGE("l", 4);
 
     private final String code;
 
-    private final int productionBonus;
+    private final int foodProduction;
 
-    RiverSize(final String code, final int productionBonus) {
+    RiverSize(final String code, final int foodProduction) {
         this.code = code;
-        this.productionBonus = productionBonus;
+        this.foodProduction = foodProduction;
     }
 
     public String getCode() {
@@ -33,10 +33,10 @@ public enum RiverSize {
     }
 
     /**
-     * @return flat addition to an already positive output of the square
+     * @return fishing output where the bare terrain supports food
      */
-    public int getProductionBonus() {
-        return productionBonus;
+    public int getFoodProduction() {
+        return foodProduction;
     }
 
     /**

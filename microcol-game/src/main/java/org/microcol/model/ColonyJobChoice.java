@@ -80,7 +80,7 @@ public final class ColonyJobChoice {
         specialty = field == null
                 ? worker.getType().getProductionModifier(goodsType) > 1
                 : worker.getType().getFieldProductionModifier(goodsType,
-                        field.getTerrainType()) > 1;
+                        field.getTerrain()) > 1;
     }
 
     static List<ColonyJobChoice> forWorker(final Model model,

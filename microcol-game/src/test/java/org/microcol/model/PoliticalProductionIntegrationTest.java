@@ -283,7 +283,7 @@ class PoliticalProductionIntegrationTest {
             assertTrue(base > 0);
             final int expected = (int) (base
                     * worker.getType().getFieldProductionModifier(
-                            GoodsType.TOBACCO, field.getTerrainType()))
+                            GoodsType.TOBACCO, field.getTerrain()))
                     + 2;
             assertEquals(expected,
                     field.getProduction().orElseThrow().getAmount());

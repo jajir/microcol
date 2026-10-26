@@ -67,13 +67,6 @@ public class Terrain {
                     return prod.modify(prod.getProduction() + ROAD_BONUS);
                 }
                 return prod;
-            }, prod -> {
-                // A river adds to output only when the square already yields.
-                if (prod.getProduction() > 0) {
-                    return prod.modify(prod.getProduction() + prod.getTerrain()
-                            .getRiverSize().getProductionBonus());
-                }
-                return prod;
             });
 
     /**
@@ -141,7 +134,9 @@ public class Terrain {
      * @param hasTrees parameter if there are trees or not
      */
     public void setHasTrees(final boolean hasTrees) {
-        Preconditions.checkArgument(terrainType.isCanHaveTree() || !hasTrees,
+        Preconditions.checkArgument(
+                (terrainType.isCanHaveTree() && riverSize == RiverSize.NONE)
+                        || !hasTrees,
                 "this terrain type (%s) at (%s) can't have trees.", terrainType,
                 location);
         this.hasTrees = hasTrees;
@@ -200,6 +195,21 @@ public class Terrain {
      */
     TerrainProduction getUnlimitedTerrainProduction(
             final GoodsType producedGoodsType, final boolean withDeposit) {
+        if (riverSize != RiverSize.NONE) {
+            final int output;
+            if (producedGoodsType == GoodsType.CORN) {
+                output = terrainType.getBaseProduction(GoodsType.CORN)
+                        .filter(production -> production.getBase() > 0)
+                        .map(production -> riverSize.getFoodProduction())
+                        .orElse(0);
+            } else {
+                output = withDeposit && resourceOverlay.getOutputs()
+                        .contains(producedGoodsType)
+                                ? (producedGoodsType == GoodsType.ORE ? 1 : 2)
+                                : 0;
+            }
+            return new TerrainProduction(this, producedGoodsType, output);
+        }
         final Optional<TerrainType.Production> baseline = hasTrees
                 ? terrainType.getForestProduction(producedGoodsType)
                 : terrainType.getBaseProduction(producedGoodsType);
@@ -266,14 +276,17 @@ public class Terrain {
 
     /**
      * Natural output of a goods type: the terrain baseline with the matching
-     * deposit bonus. Plow, road, river, worker and building modifiers are not
-     * included, so the result is what the land yields without improvement.
+     * deposit bonus, or the river fishing/deposit output. Plow, road, worker
+     * and building modifiers are not included, so the result is what the land
+     * yields without improvement.
      *
      * @param goodsType required goods type
      * @return units the square yields naturally, zero when it yields none
      */
     public int getNaturalOutput(final GoodsType goodsType) {
-        return getCommonsOutput(Preconditions.checkNotNull(goodsType), true);
+        Preconditions.checkNotNull(goodsType);
+        return riverSize == RiverSize.NONE ? getCommonsOutput(goodsType, true)
+                : getTerrainProduction(goodsType).getProduction();
     }
 
     /**
@@ -332,7 +345,9 @@ public class Terrain {
      * @param hasField if there is field
      */
     public void setHasField(final boolean hasField) {
-        Preconditions.checkArgument(terrainType.isCanHaveField() || !hasField,
+        Preconditions.checkArgument(
+                (terrainType.isCanHaveField() && riverSize == RiverSize.NONE)
+                        || !hasField,
                 "this terrain type (%s) at (%s) can't have field.", terrainType,
                 location);
         this.hasField = hasField;
@@ -379,6 +394,13 @@ public class Terrain {
                 terrainType.isLand() || riverSize == RiverSize.NONE,
                 "this terrain type (%s) at (%s) can't have river.", terrainType,
                 location);
+        Preconditions
+                .checkArgument(
+                        riverSize == RiverSize.NONE || (!hasTrees
+                                && !hasField
+                                && resourceOverlay.canBeOn(terrainType,
+                                        riverSize)),
+                        "River square cannot contain forest, a plowed field or this resource.");
         this.riverSize = riverSize;
     }
 
@@ -399,7 +421,8 @@ public class Terrain {
      */
     public void setResourceOverlay(final ResourceOverlay resourceOverlay) {
         Preconditions.checkNotNull(resourceOverlay);
-        Preconditions.checkArgument(resourceOverlay.canBeOn(terrainType),
+        Preconditions.checkArgument(
+                resourceOverlay.canBeOn(terrainType, riverSize),
                 "this terrain type (%s) at (%s) can't have resource (%s).",
                 terrainType, location, resourceOverlay);
         this.resourceOverlay = resourceOverlay;

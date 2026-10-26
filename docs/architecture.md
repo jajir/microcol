@@ -1156,3 +1156,17 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
 ### Placené skupiny veteránů (R-0169, 2026-10-23)
 
 `Player` uchovává intervaly, nabídku a zaplacené skupiny. `Model` vybírá kontaktovaného mírového vydavatele, ověřuje potvrzení před platbou a doručuje veterány pomocí společných pravidel přístavu a blokády používaných intervencí. `MercenaryOfferDialog` zobrazuje modelovou nabídku na aktuální obrazovce; přehled evropských vztahů umožňuje návrat k nevyřízené nabídce. Modelová událost oznamuje skutečné doručení v přehledu tahu. Počítačové národy sdílejí stav nabídky, nová nákupní strategie AI není součástí změny. [Cílené ověření](functional-tests.md#r-0169-targeted-mercenary-verification-2026-10-23); úplná akceptace dávky čeká.
+
+## Říční koridory a produkce (R-0290)
+
+1. [Pravidlo řek](gap-analysis.md#river-corridors) vlastní dosavadní model:
+   `Terrain` vybírá říční výnos, `ResourceOverlay` povolené kombinace a
+   `WorldMap` ověřuje mapový stav. `UnitType` posuzuje odbornost podle celého
+   terénu včetně řeky; náhled práce, `ColonyField` i výběr domorodých profesí
+   používají stejný dotaz. Přirozené říční výnosy pro domorodé hospodářství
+   nepřebírají původní zemědělské výnosy podkladového terénu.
+2. Model zakládání, orby a načítání odmítá nepovolené říční kombinace před
+   mutací. Generátor odstraňuje říční lesy před rozdělením zdrojů a neumisťuje
+   sídla na řeku. AI používá společné dotazy pro založení i výnos. GUI pouze
+   zobrazuje důvody odmítnutí, průběh toku, mostek a stávající značku naleziště.
+   Odpovědnosti balíčků ani závislosti mezi vrstvami se nemění.

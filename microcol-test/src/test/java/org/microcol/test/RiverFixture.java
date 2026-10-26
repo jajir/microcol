@@ -9,6 +9,7 @@ import java.nio.file.Files;
 
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
+import org.microcol.model.ResourceOverlay;
 import org.microcol.page.TestContext;
 
 import com.google.gson.Gson;
@@ -28,10 +29,10 @@ final class RiverFixture {
     private static final Location COLONY_LOCATION = Location.of(22, 12);
 
     /** Small river east of the colony; also the field of Delft's worker. */
-    private static final Location SMALL_LOCATION = Location.of(23, 12);
+    private static final Location SMALL_LOCATION = Location.of(23, 11);
 
     /** Large river east of the small one; empty land without units. */
-    private static final Location LARGE_LOCATION = Location.of(24, 12);
+    private static final Location LARGE_LOCATION = Location.of(24, 11);
 
     private RiverFixture() {
     }
@@ -46,7 +47,7 @@ final class RiverFixture {
      */
     static void prepareCourse(final TestContext context, final File source,
             final String name) throws IOException {
-        write(context, source, name, null);
+        write(context, source, name, null, null);
     }
 
     /**
@@ -61,28 +62,81 @@ final class RiverFixture {
      */
     static void prepareFieldWorker(final TestContext context, final File source,
             final String name, final int workerId) throws IOException {
-        write(context, source, name, workerId);
+        write(context, source, name, workerId, null);
+    }
+
+    static void prepareDeposit(final TestContext context, final File source,
+            final String name, final ResourceOverlay deposit)
+            throws IOException {
+        write(context, source, name, 22, deposit);
     }
 
     private static void write(final TestContext context, final File source,
-            final String name, final Integer workerId) throws IOException {
+            final String name, final Integer workerId,
+            final ResourceOverlay deposit) throws IOException {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
-        if (workerId != null) {
-            freeFieldAndStandInColony(model, workerId);
+        freeFieldAndStandInColony(model, 22);
+        final Location sourceLocation = Location.of(22, 11);
+        for (final JsonElement entry : model.getAsJsonArray("units")) {
+            final JsonObject unit = entry.getAsJsonObject();
+            if (unit.get("id").getAsInt() == 24) {
+                unit.getAsJsonObject("placeMap").add("location",
+                        location(sourceLocation));
+                unit.addProperty("tools", 100);
+            }
+            if (workerId != null && unit.get("id").getAsInt() == workerId) {
+                unit.addProperty("type",
+                        deposit == null ? "EXPERT_FISHERMAN"
+                                : deposit == ResourceOverlay.SILVER
+                                        ? "EXPERT_SILVER_MINER"
+                                        : "EXPERT_ORE_MINER");
+            }
+        }
+        for (final JsonElement entry : model.getAsJsonArray("colonies")) {
+            final JsonObject colony = entry.getAsJsonObject();
+            if (colony.get("id").getAsInt() == 1) {
+                colony.getAsJsonObject("colonyWarehouse").addProperty("CORN",
+                        50);
+            }
         }
         final JsonObject map = model.getAsJsonObject("map");
         final JsonArray rivers = RoadFixture
                 .emptyRows(map.getAsJsonArray("trees"));
-        RoadFixture.set(rivers, COLONY_LOCATION, "l");
+        RoadFixture.set(rivers, sourceLocation, "l");
         RoadFixture.set(rivers, SMALL_LOCATION, "s");
         RoadFixture.set(rivers, LARGE_LOCATION, "l");
         map.add("rivers", rivers);
         final JsonArray segments = new JsonArray();
-        segments.add(segment(COLONY_LOCATION, SMALL_LOCATION));
+        segments.add(segment(sourceLocation, SMALL_LOCATION));
         segments.add(segment(SMALL_LOCATION, LARGE_LOCATION));
         map.add("riverSegments", segments);
+        for (final Location at : new Location[] { sourceLocation,
+                SMALL_LOCATION, LARGE_LOCATION }) {
+            RoadFixture.set(map.getAsJsonArray("trees"), at, "_");
+            RoadFixture.set(map.getAsJsonArray("tiles"), at,
+                    at.equals(sourceLocation) ? "m" : "g");
+        }
+        if (deposit != null) {
+            final JsonArray resources = RoadFixture
+                    .emptyRows(map.getAsJsonArray("trees"));
+            RoadFixture.set(resources, SMALL_LOCATION, deposit.getCode());
+            map.add("resources", resources);
+            final JsonObject reserve = new JsonObject();
+            reserve.add("location", location(SMALL_LOCATION));
+            reserve.addProperty("silver",
+                    deposit == ResourceOverlay.SILVER ? 100 : 0);
+            reserve.addProperty("ore",
+                    deposit == ResourceOverlay.ORE ? 200 : 0);
+            final JsonArray reserves = new JsonArray();
+            reserves.add(reserve);
+            map.add("mineralReserves", reserves);
+            final JsonArray roads = RoadFixture
+                    .emptyRows(map.getAsJsonArray("trees"));
+            RoadFixture.set(roads, SMALL_LOCATION, "r");
+            map.add("roads", roads);
+        }
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)
@@ -103,13 +157,8 @@ final class RiverFixture {
             for (final JsonElement field : colonyObject
                     .getAsJsonArray("colonyFields")) {
                 final JsonObject fieldObject = field.getAsJsonObject();
-                final JsonObject direction = fieldObject
-                        .getAsJsonObject("direction");
-                final int x = COLONY_LOCATION.getX()
-                        + direction.get("x").getAsInt();
-                final int y = COLONY_LOCATION.getY()
-                        + direction.get("y").getAsInt();
-                if (x == SMALL_LOCATION.getX() && y == SMALL_LOCATION.getY()) {
+                if (fieldObject.has("workerId")
+                        && fieldObject.get("workerId").getAsInt() == workerId) {
                     fieldObject.remove("workerId");
                     fieldObject.remove("producedGoodsType");
                 }

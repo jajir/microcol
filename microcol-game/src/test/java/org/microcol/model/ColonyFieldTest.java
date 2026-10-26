@@ -178,6 +178,8 @@ public class ColonyFieldTest {
     void setup() {
         final Unit worker = mock(Unit.class);
         when(worker.getType()).thenReturn(UnitType.COLONIST);
+        when(terrain.getTerrainType()).thenReturn(TerrainType.GRASSLAND);
+        when(terrain.getRiverSize()).thenReturn(RiverSize.NONE);
         when(placeColonyField.getUnit()).thenReturn(worker);
         when(map.isValid(any(Location.class))).thenReturn(true);
         when(map.getTerrainTypeAt(any(Location.class)))

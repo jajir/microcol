@@ -140,6 +140,10 @@ final class GamePaintService {
                             .collect(Collectors.toList());
                     paintService.paintRiver(graphics,
                             area.convertToCanvasPoint(location), size, joined);
+                    if (map.getTerrainAt(location).isHasRoad()) {
+                        paintService.paintRiverBridge(graphics,
+                                area.convertToCanvasPoint(location), joined);
+                    }
                 }
             }
         }

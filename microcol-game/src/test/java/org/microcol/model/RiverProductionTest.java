@@ -1,79 +1,122 @@
 package org.microcol.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-/**
- * River output on land: a small river adds 1 and a large river adds 2 to an
- * already positive output, zero output stays zero, and the plow addition
- * composes with the river on the same square.
- */
 class RiverProductionTest {
-
-    private static final Location AT = Location.of(1, 1);
-
-    private static Terrain terrain(final TerrainType type,
-            final RiverSize size) {
-        final Terrain terrain = new Terrain(AT, type);
+    private Terrain river(final TerrainType type, final RiverSize size) {
+        final Terrain terrain = new Terrain(Location.of(1, 1), type);
         terrain.setRiverSize(size);
         return terrain;
     }
 
     @Test
-    void smallRiverAddsOneAndLargeRiverAddsTwoToPositiveOutput() {
-        // Grassland sugar is 1 and tobacco is 3 on the baseline table.
-        assertEquals(1, terrain(TerrainType.GRASSLAND, RiverSize.NONE)
-                .canProduceAmmount(GoodsType.SUGAR));
-        assertEquals(2, terrain(TerrainType.GRASSLAND, RiverSize.SMALL)
-                .canProduceAmmount(GoodsType.SUGAR));
-        assertEquals(3, terrain(TerrainType.GRASSLAND, RiverSize.LARGE)
-                .canProduceAmmount(GoodsType.SUGAR));
-        assertEquals(4, terrain(TerrainType.GRASSLAND, RiverSize.SMALL)
-                .canProduceAmmount(GoodsType.TOBACCO));
-        assertEquals(5, terrain(TerrainType.GRASSLAND, RiverSize.LARGE)
-                .canProduceAmmount(GoodsType.TOBACCO));
+    void fishingReplacesOrdinaryOutputsAndRoadsDoNotIncreaseIt() {
+        for (final RiverSize size : new RiverSize[] { RiverSize.SMALL,
+                RiverSize.LARGE }) {
+            for (final TerrainType type : TerrainType.TERRAINS) {
+                if (!type.isLand())
+                    continue;
+                final Terrain terrain = river(type, size);
+                terrain.setHasRoad(true);
+                for (final GoodsType goods : GoodsType.GOOD_TYPES) {
+                    final int expected = goods == GoodsType.CORN
+                            && type.getBaseProduction(goods)
+                                    .map(p -> p.getBase() > 0).orElse(false)
+                                            ? (size == RiverSize.SMALL ? 3 : 4)
+                                            : 0;
+                    assertEquals(expected, terrain.canProduceAmmount(goods),
+                            type + "/" + size + "/" + goods);
+                }
+            }
+        }
     }
 
     @Test
-    void zeroOutputStaysZeroAtEverySize() {
-        // Grassland has no fur without a forest, so a river cannot make any.
-        assertEquals(0, terrain(TerrainType.GRASSLAND, RiverSize.SMALL)
-                .canProduceAmmount(GoodsType.FUR));
-        assertEquals(0, terrain(TerrainType.GRASSLAND, RiverSize.LARGE)
-                .canProduceAmmount(GoodsType.FUR));
-        assertEquals(0, terrain(TerrainType.GRASSLAND, RiverSize.LARGE)
-                .getTerrainProduction(GoodsType.FUR).getProduction());
+    void depositsAreSmallFiniteAndIndependentOfFishingAndRoads() {
+        for (final ResourceOverlay overlay : new ResourceOverlay[] {
+                ResourceOverlay.SILVER, ResourceOverlay.ORE }) {
+            final Terrain terrain = river(TerrainType.GRASSLAND,
+                    RiverSize.LARGE);
+            terrain.setResourceOverlay(overlay);
+            terrain.setHasRoad(true);
+            final GoodsType goods = overlay == ResourceOverlay.SILVER
+                    ? GoodsType.SILVER
+                    : GoodsType.ORE;
+            assertEquals(overlay == ResourceOverlay.SILVER ? 2 : 1,
+                    terrain.canProduceAmmount(goods));
+            terrain.setMineralReserve(MineralReserve.EMPTY);
+            assertEquals(0, terrain.canProduceAmmount(goods));
+            assertEquals(4, terrain.canProduceAmmount(GoodsType.CORN));
+        }
     }
 
     @Test
-    void plowAndRiverBothCountOnAPositiveCrop() {
-        // Corn 4 plus plow 1 plus large river 2 is 7; tobacco 3 plus plow 1
-        // plus small river 1 is 5.
-        final Terrain corn = terrain(TerrainType.GRASSLAND, RiverSize.LARGE);
-        corn.setHasField(true);
-        assertEquals(7, corn.canProduceAmmount(GoodsType.CORN));
-        final Terrain tobacco = terrain(TerrainType.GRASSLAND, RiverSize.SMALL);
-        tobacco.setHasField(true);
-        assertEquals(5, tobacco.canProduceAmmount(GoodsType.TOBACCO));
-    }
-
-    @Test
-    void riverOnSeaOrLakeIsRejected() {
+    void forestsPlowingAndOtherResourcesAreRejectedInEitherOrder() {
+        final Terrain terrain = river(TerrainType.GRASSLAND, RiverSize.SMALL);
         assertThrows(IllegalArgumentException.class,
-                () -> terrain(TerrainType.OCEAN, RiverSize.SMALL));
+                () -> terrain.setHasTrees(true));
         assertThrows(IllegalArgumentException.class,
-                () -> terrain(TerrainType.LAKE, RiverSize.LARGE));
-        assertEquals(RiverSize.NONE,
-                terrain(TerrainType.OCEAN, RiverSize.NONE).getRiverSize());
+                () -> terrain.setHasField(true));
+        for (final ResourceOverlay overlay : ResourceOverlay.values()) {
+            if (overlay == ResourceOverlay.NONE
+                    || overlay == ResourceOverlay.ORE
+                    || overlay == ResourceOverlay.SILVER)
+                continue;
+            assertThrows(IllegalArgumentException.class,
+                    () -> terrain.setResourceOverlay(overlay));
+            if (!overlay.canBeOn(TerrainType.GRASSLAND))
+                continue;
+            final Terrain plain = river(TerrainType.GRASSLAND, RiverSize.NONE);
+            plain.setResourceOverlay(overlay);
+            assertThrows(IllegalArgumentException.class,
+                    () -> plain.setRiverSize(RiverSize.SMALL));
+        }
+        final Terrain forest = river(TerrainType.GRASSLAND, RiverSize.NONE);
+        forest.setHasTrees(true);
+        assertThrows(IllegalArgumentException.class,
+                () -> forest.setRiverSize(RiverSize.LARGE));
+        final Terrain field = river(TerrainType.GRASSLAND, RiverSize.NONE);
+        field.setHasField(true);
+        assertThrows(IllegalArgumentException.class,
+                () -> field.setRiverSize(RiverSize.SMALL));
+        assertTrue(forest.isHasTrees());
+        assertTrue(field.isHasField());
+        assertEquals(RiverSize.NONE, field.getRiverSize());
     }
 
     @Test
-    void unknownRiverCodeIsRejected() {
+    void fishermanRatherThanFarmerReceivesRiverFoodExpertise() {
+        final Terrain river = river(TerrainType.GRASSLAND, RiverSize.SMALL);
+        assertEquals(2, UnitType.EXPERT_FISHERMAN
+                .getFieldProductionModifier(GoodsType.CORN, river));
+        assertEquals(1, UnitType.EXPERT_FARMER
+                .getFieldProductionModifier(GoodsType.CORN, river));
+        final Terrain land = river(TerrainType.GRASSLAND, RiverSize.NONE);
+        assertEquals(2, UnitType.EXPERT_FARMER
+                .getFieldProductionModifier(GoodsType.CORN, land));
+        assertEquals(1, UnitType.EXPERT_FISHERMAN
+                .getFieldProductionModifier(GoodsType.CORN, land));
+    }
+
+    @Test
+    void riverOnWaterAndUnknownCodeAreRejected() {
+        assertThrows(IllegalArgumentException.class,
+                () -> river(TerrainType.OCEAN, RiverSize.SMALL));
+        assertThrows(IllegalArgumentException.class,
+                () -> river(TerrainType.LAKE, RiverSize.LARGE));
         assertEquals(RiverSize.SMALL, RiverSize.valueOfCode("s"));
         assertEquals(RiverSize.LARGE, RiverSize.valueOfCode("l"));
         assertThrows(IllegalArgumentException.class,
                 () -> RiverSize.valueOfCode("x"));
+    }
+
+    @Test
+    void nativeNaturalOutputAndTeachingUseRiverFishing() {
+        final Terrain terrain = river(TerrainType.GRASSLAND, RiverSize.SMALL);
+        assertEquals(3, terrain.getNaturalOutput(GoodsType.CORN));
+        assertEquals(0, terrain.getNaturalOutput(GoodsType.TOBACCO));
+        assertEquals(UnitType.EXPERT_FISHERMAN, NativeTeachableSkills
+                .choose(java.util.List.of(terrain), new java.util.Random(290)));
     }
 }

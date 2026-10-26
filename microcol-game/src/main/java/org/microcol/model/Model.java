@@ -328,7 +328,8 @@ public class Model {
         nativeSettlements = NativeSettlements.make(
                 modelPo.getNativeSettlements(),
                 location -> map.isValid(location)
-                        && !map.getTerrainTypeAt(location).isSea(),
+                        && !map.getTerrainTypeAt(location).isSea()
+                        && map.getRiverSizeAt(location) == RiverSize.NONE,
                 colonySites);
         learnedNativeSettlements = restoreLearnedNativeSettlements(
                 modelPo.getNativeSettlementKnowledge());
@@ -563,6 +564,9 @@ public class Model {
                             && colony.getColonyFields() != null
                             && colony.getConstructions() != null,
                     "Incomplete saved colony assignments");
+            Preconditions.checkArgument(
+                    map.getRiverSizeAt(colony.getLocation()) == RiverSize.NONE,
+                    "Saved colony cannot stand on a river.");
             final Set<Location> directions = new HashSet<>();
             for (final ColonyFieldPo field : colony.getColonyFields()) {
                 Preconditions.checkArgument(
@@ -1632,7 +1636,8 @@ public class Model {
         if (!map.isValid(location))
             return false;
         final TerrainType terrain = map.getTerrainTypeAt(location);
-        if (terrain.isSea() || terrain == TerrainType.MOUNTAIN)
+        if (terrain.isSea() || terrain == TerrainType.MOUNTAIN
+                || map.getRiverSizeAt(location) != RiverSize.NONE)
             return false;
         if (getColonyAt(location).isPresent())
             return false;
@@ -4735,6 +4740,9 @@ public class Model {
         final Terrain terrain = map.getTerrainAt(at);
         if (!terrain.getTerrainType().isCanHaveField()) {
             return Optional.of(PlowProblem.UNSUITABLE_TERRAIN);
+        }
+        if (terrain.getRiverSize() != RiverSize.NONE) {
+            return Optional.of(PlowProblem.RIVER);
         }
         if (terrain.isHasTrees()) {
             return Optional.of(PlowProblem.FOREST);

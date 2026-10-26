@@ -228,7 +228,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0124](done/R-0124.md) | Match the baseline terrain production matrix | Done | [MAP-003](../gap-analysis.md#terrain-reference-data-audit), UC-007 |
 | [R-0125](done/R-0125.md) | Charge exact terrain movement in action, path and range | Done | [MAP-002/MOVE-003](../gap-analysis.md#terrain-reference-data-audit), UC-012 |
 | [R-0126](done/R-0126.md) | Persist rivers and apply their travel and production effects | Done | [MAP-004](../gap-analysis.md#map-terrain-and-exploration), UC-008/012 |
-| [R-0290](R-0290.md) | Readable river squares with fishing and limited overlays | Proposal; not selected | Screenshot and river-rule discussion, 2026-10-26; revisits R-0126/0127 without changing adopted rules |
+| [R-0290](done/R-0290.md) | Readable rivers with fishing and finite silver or ore | Done | User approval, 2026-10-26; 15% silver, 5% ore and shared river rules |
 | [R-0127](done/R-0127.md) | Show and apply special-resource overlays | Done | [MAP-005](../gap-analysis.md#map-terrain-and-exploration), UC-008 |
 | [R-0128](done/R-0128.md) | Deplete finite mineral deposits through mining | New capture | [MAP-006](../gap-analysis.md#map-terrain-and-exploration), UC-009 |
 | [R-0129](done/R-0129.md) | Resolve a lost-city rumor once | New capture | [MAP-009](../gap-analysis.md#map-terrain-and-exploration), UC-010 |

@@ -278,13 +278,24 @@ class GeneratedWorldTest {
                 }
                 final Map<Location, ResourceOverlay> resources = map
                         .getResourceMap();
-                final double ratio = (double) resources.size()
-                        / suitable.size();
+                suitable.removeAll(map.getRiverMap().keySet());
+                final double ratio = (double) resources.keySet().stream()
+                        .filter(at -> !map.getRiverMap().containsKey(at))
+                        .count() / suitable.size();
                 assertTrue(ratio >= 0.095 && ratio <= 0.105, () -> "" + ratio);
                 final Set<Location> trees = map.getTreeSet();
+                assertTrue(map.getRiverMap().keySet().stream()
+                        .noneMatch(trees::contains));
                 resources.forEach((at, overlay) -> {
                     final TerrainType type = terrainAt(map, at);
-                    assertTrue(overlay.canBeOn(type));
+                    assertTrue(overlay.canBeOn(type, map.getRiverMap()
+                            .getOrDefault(at, RiverSize.NONE)));
+                    if (map.getRiverMap().containsKey(at)) {
+                        assertFalse(trees.contains(at));
+                        assertTrue(overlay == ResourceOverlay.SILVER
+                                || overlay == ResourceOverlay.ORE);
+                        return;
+                    }
                     switch (overlay) {
                     case SILVER:
                     case ORE:
@@ -600,4 +611,23 @@ class GeneratedWorldTest {
         assertFalse(incomplete.getGeneratedWorld().isComplete());
     }
 
+    @Test
+    void riverResourceSharesMatchTheAgreedDistribution() {
+        final Map<Location, TerrainType> terrain = new java.util.HashMap<>();
+        for (int x = 1; x <= GeneratedWorld.WIDTH; x++) {
+            for (int y = 1; y <= GeneratedWorld.HEIGHT; y++) {
+                terrain.put(Location.of(x, y), TerrainType.GRASSLAND);
+            }
+        }
+        final Map<Location, ResourceOverlay> resources = GeneratedWorldResources
+                .assign(new GeneratedGrid(terrain), Set.of(), terrain.keySet(),
+                        new java.util.Random(290));
+        final long silver = resources.values().stream()
+                .filter(r -> r == ResourceOverlay.SILVER).count();
+        final long ore = resources.values().stream()
+                .filter(r -> r == ResourceOverlay.ORE).count();
+        assertEquals(resources.size(), silver + ore);
+        assertEquals(0.15, (double) silver / terrain.size(), 0.015);
+        assertEquals(0.05, (double) ore / terrain.size(), 0.01);
+    }
 }

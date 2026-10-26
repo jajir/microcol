@@ -158,4 +158,25 @@ class OriginalWorldTest {
         assertTrue(reference.getMap().getRiverMap().isEmpty());
         assertTrue(reference.getMap().getResourceMap().isEmpty());
     }
+
+    @Test
+    void riverCorridorsStayOpenWithMoreSilverThanOre() {
+        final ModelPo saved = source();
+        final WorldMap map = new WorldMap(saved);
+        final Set<Location> rivers = saved.getMap().getRiverMap().keySet();
+        for (final Location at : rivers) {
+            assertFalse(map.getTerrainAt(at).isHasTrees());
+            assertFalse(map.getTerrainAt(at).isHasField());
+            assertTrue(map.getResourceOverlayAt(at)
+                    .canBeOn(map.getTerrainTypeAt(at), map.getRiverSizeAt(at)));
+            assertTrue(saved.getColonies().stream()
+                    .noneMatch(colony -> colony.getLocation().equals(at)));
+        }
+        assertEquals(4, rivers.stream().filter(
+                at -> map.getResourceOverlayAt(at) == ResourceOverlay.SILVER)
+                .count());
+        assertEquals(1, rivers.stream().filter(
+                at -> map.getResourceOverlayAt(at) == ResourceOverlay.ORE)
+                .count());
+    }
 }

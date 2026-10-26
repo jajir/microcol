@@ -404,4 +404,36 @@ class PlowFieldTest {
         assertEquals(before.canProduceAmmount(GoodsType.LUMBER),
                 after.canProduceAmmount(GoodsType.LUMBER));
     }
+
+    @Test
+    void riverPlowingIsRejectedBeforeSpendingToolsOrMovement() {
+        final GameModelPo data = data(false, false);
+        data.getModel().getMap()
+                .setRivers(java.util.Map.of(TARGET, RiverSize.SMALL));
+        final Model model = make(data);
+        final UnitFreeColonist unit = pioneer(model, 100, TARGET);
+        final String before = gson.toJson(model.save());
+        assertEquals(PlowProblem.RIVER,
+                model.getPlowProblem(unit).orElseThrow());
+        assertThrows(IllegalArgumentException.class,
+                () -> model.getMap().plowFiled(TARGET));
+        assertEquals(before, gson.toJson(model.save()));
+    }
+
+    @Test
+    void pendingPlowOnARiverEndsWithoutChargingTools() {
+        final Model original = fixture();
+        final UnitFreeColonist pioneer = pioneer(original, 100, TARGET);
+        pioneer.setActionType(UnitActionType.plowField);
+        final org.microcol.model.store.ModelPo saved = original.save();
+        saved.getMap().setRivers(java.util.Map.of(TARGET, RiverSize.SMALL));
+        final Model model = Model.make(saved,
+                List.of(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR));
+        nextOwnerTurn(model);
+        final UnitFreeColonist restored = (UnitFreeColonist) model
+                .getUnitById(pioneer.getId());
+        assertEquals(UnitActionType.noAction, restored.getAction().getType());
+        assertEquals(100, restored.getTools());
+        assertFalse(model.getMap().getTerrainAt(TARGET).isHasField());
+    }
 }

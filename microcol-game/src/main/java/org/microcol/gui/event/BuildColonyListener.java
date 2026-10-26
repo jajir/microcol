@@ -73,8 +73,12 @@ public final class BuildColonyListener {
                     .ifPresent(colony -> eventBus
                             .post(new ShowScreenEvent(Screen.COLONY, colony)));
         } else {
-            eventBus.post(new StatusBarMessageEvent(
-                    i18n.get(ColonyMsg.nameCannotFound),
+            eventBus.post(new StatusBarMessageEvent(i18n.get(unit != null
+                    && unit.isAtPlaceLocation()
+                    && model.getMap().getRiverSizeAt(unit
+                            .getLocation()) != org.microcol.model.RiverSize.NONE
+                                    ? ColonyMsg.nameCannotFoundOnRiver
+                                    : ColonyMsg.nameCannotFound),
                     StatusBarMessageEvent.Source.GAME));
         }
     }

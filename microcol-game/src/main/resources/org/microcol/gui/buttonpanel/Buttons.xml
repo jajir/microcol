@@ -140,4 +140,5 @@
     <entry key="coloniesExplanation">Choose a colony to open. (O)</entry>
     <entry key="congressExplanation">Open Congress and choose a Founding Father.</entry>
     <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
+    <entry key="plowProblemRiver">River squares cannot be plowed.</entry>
 </properties>

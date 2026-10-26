@@ -29,6 +29,9 @@ public enum PlowProblem {
     /** The square is forest and must be cleared first. */
     FOREST,
 
+    /** River squares cannot be plowed. */
+    RIVER,
+
     /** The square already has a field. */
     ALREADY_PLOWED
 }

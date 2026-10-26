@@ -815,15 +815,17 @@ public final class UnitType {
     }
 
     public float getFieldProductionModifier(final GoodsType goodsType,
-            final TerrainType terrainType) {
+            final Terrain terrain) {
         Preconditions.checkNotNull(goodsType);
-        Preconditions.checkNotNull(terrainType);
+        Preconditions.checkNotNull(terrain);
+        final boolean fishing = terrain.getTerrainType().isSea()
+                || terrain.getRiverSize() != RiverSize.NONE;
         if (goodsType == GoodsType.CORN) {
             if (this == EXPERT_FARMER) {
-                return terrainType.isLand() ? 2.0F : 1.0F;
+                return fishing ? 1.0F : 2.0F;
             }
             if (this == EXPERT_FISHERMAN) {
-                return terrainType.isLand() ? 1.0F : 2.0F;
+                return fishing ? 2.0F : 1.0F;
             }
         }
         return getProductionModifier(goodsType);

@@ -58,9 +58,11 @@ final class GeneratedWorldResources {
      * @throws IllegalStateException when too few suitable squares exist
      */
     static Map<Location, ResourceOverlay> assign(final GeneratedGrid grid,
-            final Set<Location> trees, final Random random) {
+            final Set<Location> trees, final Set<Location> rivers,
+            final Random random) {
         final List<Location> land = grid
                 .squaresWith(terrain -> !terrain.isSea());
+        land.removeAll(rivers);
         final List<Location> coast = new ArrayList<>();
         for (int y = 1; y <= GeneratedWorld.HEIGHT; y++) {
             for (int x = 1; x <= GeneratedWorld.WIDTH; x++) {
@@ -98,6 +100,14 @@ final class GeneratedWorldResources {
         if (out.size() != target) {
             throw new IllegalStateException(
                     "Not enough suitable squares for resources");
+        }
+        for (final Location at : GeneratedGrid.sorted(rivers)) {
+            final double roll = random.nextDouble();
+            if (roll < 0.15) {
+                out.put(at, ResourceOverlay.SILVER);
+            } else if (roll < 0.20) {
+                out.put(at, ResourceOverlay.ORE);
+            }
         }
         return out;
     }

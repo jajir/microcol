@@ -220,4 +220,59 @@ public final class RiverPage extends AbstractScreen {
                         .canProduceAmmount(goods),
                 "Unexpected " + goods + " output at " + location);
     }
+
+    public void useControl(final String id) {
+        clickOnButtonWithId(id);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyRejectedWork(final Location at, final int expectedTools,
+            final int expectedThirds) {
+        final UnitFreeColonist worker = (UnitFreeColonist) unit();
+        assertEquals(expectedTools, worker.getTools());
+        assertEquals(expectedThirds, worker.getMovementThirds());
+        assertEquals(org.microcol.model.unit.UnitActionType.noAction,
+                worker.getAction().getType());
+        assertEquals(false, getModel().getColonyAt(at).isPresent());
+        assertEquals(false, getModel().getMap().getTerrainAt(at).isHasField());
+        closeUnitActions();
+    }
+
+    public void verifyDockRequired(final int colonyId, final Location at,
+            final boolean expected) {
+        final org.microcol.model.ColonyField field = getModel()
+                .getColonyById(colonyId).orElseThrow().getColonyFields()
+                .stream().filter(f -> f.getLocation().equals(at)).findFirst()
+                .orElseThrow();
+        assertEquals(expected, field.isMissingDock());
+        assertEquals(false,
+                getModel().getColonyById(colonyId).orElseThrow()
+                        .wasConstructionBuilded(
+                                org.microcol.model.ConstructionType.DOCK));
+    }
+
+    public void verifyRemainingDeposit(final Location at, final GoodsType goods,
+            final int expected) {
+        assertEquals(expected,
+                getModel().getMap().getMineralRemainingAt(at, goods));
+    }
+
+    public void verifyBridge(final Location at) throws Exception {
+        assertEquals(true, getModel().getMap().getTerrainAt(at).isHasRoad());
+        assertEquals(false, getModel().getMap().getTerrainAt(at).isHasTrees());
+        final Point tile = getContext().getArea().convertToCanvasPoint(at);
+        final Image canvas = WaitForAsyncUtils
+                .asyncFx(() -> FogFrameProbe.captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        assertEquals(
+                toRgb(PaintService.ROAD_COLOR), toRgb(canvas.getPixelReader()
+                        .getColor(tile.getX() + 22, tile.getY() + 14)),
+                "Bridge deck must cross the river");
+        javax.imageio.ImageIO.write(
+                javafx.embed.swing.SwingFXUtils.fromFXImage(canvas, null),
+                "png",
+                new java.io.File("target/surefire-reports/river-bridge-"
+                        + getModel().getMap().getResourceOverlayAt(at)
+                        + ".png"));
+    }
 }

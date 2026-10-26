@@ -34,6 +34,22 @@ class NativeLandPurchaseTest {
     }
 
     @Test
+    void paidRiverRightsSurviveSaveAndLoad() {
+        final ModelPo data = dutchOnTile().toModel().save();
+        data.getMap().setRivers(java.util.Map.of(TILE, RiverSize.SMALL));
+        final Model model = Model.make(data,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        model.buyNativeLand(quote(model, DUTCH, TILE));
+        final Model loaded = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(NativeLandStatus.PAID,
+                quote(loaded, DUTCH, TILE).getStatus());
+        assertEquals(TILE,
+                loaded.save().getNativeLandRights().get(0).getLocation());
+        assertEquals(300, loaded.getPlayerByName(DUTCH).getGold());
+    }
+
+    @Test
     void capitalPriceFollowsDifficultyAndDoublesForTheCapital() {
         final Difficulty[] levels = { Difficulty.DISCOVERER,
                 Difficulty.EXPLORER, Difficulty.CONQUISTADOR,

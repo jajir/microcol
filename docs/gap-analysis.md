@@ -1309,8 +1309,8 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    use 100 bonus units for pure silver and 200 for pure ore; mixed deposits have
    independent reserves of 200 silver and 200 ore under the [2026-10-20 decision](#r-0128-refinement). Only the matching bonus
    extracted consumes its own reserve, and the last extraction is capped by it. Resource
-   discovery/loading never replenishes it. Small/large rivers add +1/+2 to a
-   tile's already positive output; roads add +1 to positive ore/furs/lumber and
+   discovery/loading never replenishes it. River squares instead use the [2026-10-26 river rule](#river-corridors);
+   on non-river land, roads add +1 to positive ore/furs/lumber and
    mountain silver only with a silver deposit. Plow adds +1 to positive food/
    sugar/cotton/tobacco on suitable cleared land. These are chosen additions,
    not replacements for explicit aid-card bonuses. Where no resource bonus is
@@ -1869,6 +1869,42 @@ Observed on OpenJDK 11.0.30: **458 tests across 52 model test classes, 0 failure
 5. **Integrated scenarios:** found and grow a colony, run a complete trade/education loop, conduct native diplomacy, fight and repair ships, then declare independence and exercise each victory/loss branch. Repeat the relevant nation/difficulty variants.
 
 A rule becomes behaviorally verified only when its cited acceptance scenario has run against the recorded implementation commit. Completion of this document does not mean those future implementation and acceptance tasks are complete.
+
+## River corridors
+
+1. **Adopted on 2026-10-26**, [R-0290](requirements/done/R-0290.md), MAP-004/005/006:
+   rivers remain land overlays, but cannot share their square with forest,
+   plowing, a colony or a native settlement. Neighboring colonies may work a
+   river under normal ownership and single-worker rules. Roads are allowed;
+   crossing artwork uses a compact bridge without a new construction project.
+2. Fishing replaces all ordinary production on a river: 3 food on a small river,
+   4 on a large river, only where the bare terrain has positive food production.
+   Mountain/arctic sources therefore yield no food. No dock is required.
+   Expert fishermen double fishing; farmers do not. Existing other worker and
+   political modifiers apply. Fish use the existing food stock. No passive
+   adjacency/irrigation bonus, plow bonus, road production bonus or former
+   +1/+2 river bonus is added to these outputs.
+3. Silver and ore are the only river resources: respectively 2 and 1 units
+   before expertise/politics. Reserves start at 100 silver or 200 ore and use
+   the existing final-output cap/depletion rules. No deposit means no mineral
+   production, including mountains/hills; exhaustion leaves zero mineral output.
+   A worker chooses fishing or mining, not both. Fish need no resource overlay.
+4. Generated river squares have independent 15% silver, 5% ore and 80% no-deposit
+   probabilities. Non-river resources keep their existing roughly 10% allocation
+   and family distribution. Fixed maps approximate those shares deliberately;
+   Original World's 28 river squares receive four silver and one ore deposit.
+   Relocate incompatible forests/resources while preserving a viable starting
+   location, timber access and the complete landscape inventory.
+5. Connected river movement stays one third of a point in either direction;
+   road discounts do not stack and unconnected crossing gives no river discount.
+   Ships cannot sail through river land. Underlying terrain movement/defense
+   remains, without a removed forest's costs or defense bonus.
+6. Reject incompatible authored/saved combinations rather than modifying a
+   player's save on opening it. Save/Continue preserves jobs and remaining
+   deposits without another production update. UI previews and AI use the same
+   model rules. These values are adopted starting balance; review their effect
+   on inland/coastal settlement and early food after playtesting. Adoption alone
+   is not runtime acceptance or publication evidence.
 
 ## Coastal port movement
 
