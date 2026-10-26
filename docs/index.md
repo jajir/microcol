@@ -39,3 +39,7 @@ The [`microcol-site` source module](../microcol-site/) remains in the repository
 as a useful foundation and source of design ideas, including where its pages and
 reports are outdated. It is excluded from publication. The project website at
 [/microcol/](https://jajir.github.io/microcol/) publishes only `docs/`.
+
+```bash
+mvn -pl microcol-game compile javafx:run
+```

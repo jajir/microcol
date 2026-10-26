@@ -18,3 +18,4 @@ microcol-test/src/test/scenarios/.microcol/autosave.microcol
 *.iml
 *.css.map
 __pycache__/
+hs_err_pid*.log
