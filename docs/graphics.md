@@ -30,6 +30,14 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
    převedeny nebo vizuálně ověřeny. Starší realizace a evidence níže zůstávají
    označené datem; implementaci převzít po vybraných změnách a jejich kontrolách.
 
+
+## Sjednocená síla kontur mapy — 26. října 2026
+
+1. Uživatel vybral [druhou variantu](graphics-assets/map-outline-2026-10-26/selected-02.png); realizaci vlastní [R-0291](requirements/done/R-0291.md). Obrázek je orientační návrh vytvořený ImageGenem, nikoli snímek implementované hry. Zadání sjednocuje sílu mapových kontur s horními ikonami při zachování původních tvarů a barev.
+2. Referenční ikony mají tah 2,4 v buňce 48 a zobrazují se ve 32 logických px: výsledný tah je 1,6 px. Lesy a vnitřní pobřežní/průzkumné křivky v `background.svg` přecházejí na 0,47 SVG jednotky, tedy přibližně 1,6 px při stávajícím exportu. Domky a vlajky v `colonies.svg` používají 1,6; bonusy v `terrain-symbols.svg` 12 při měřítku 0,135, tedy 1,62 px.
+3. Stávající terénní kresby mají přibližně 1,69 px a vybrané rastrové jednotky již výrazné tmavé kontury. Jejich kresba zůstává zachována. Mřížka a běžné otazníky zůstávají podružné; šířky řek si zachovávají význam. Samostatná volba tvaru a animace vln není touto úpravou nahrazena.
+4. Exporty zachovávají rozměry a průhlednost atlasů. Pro `background.png` platí [stávající výřez](#paleta-a-kontury-hlavni-mapy-r-0265); ostatní atlasové SVG se exportují přímo pomocí `rsvg-convert -o <výstup.png> <zdroj.svg>`. Změna sdílených atlasů se projeví také v existujících náhledech a nápovědě. [Snímek implementace](graphics-assets/map-outline-2026-10-26/implemented-map.png) byl prohlédnut po úspěšných cílených testech; závěrečná smoke brána prošla. Podrobnosti vede [funkční evidence](functional-tests.md#r-0291-map-outline-weight-2026-10-26).
+
 ## Vybrané terény a bonusy — 25. října 2026
 
 1. Uživatel vybral **T01–T14 ze sady 10**, **B01–B03 ze sady 09**
@@ -1092,8 +1100,9 @@ a obrysový inkoust `#292824`. Řeky používají tmavší tyrkysovou `#426F70`;
 jejich dvě šířky zůstávají významově beze změny.
 
 Zdroj `microcol-game/src/graphics/background.svg` zachovává rozložení atlasu.
-Pobřežní a průzkumné kontury mají stabilní křivky s tahem 0,28 SVG jednotky
-(přibližně 0,95 pixelu v exportu), stromy 0,22 jednotky. Obrys se kreslí jen
+Původní přijetí R-0265 používalo u pobřežních a průzkumných kontur tah 0,28 SVG jednotky
+(přibližně 0,95 pixelu v exportu), u stromů 0,22 jednotky. Aktuální sílu sjednocuje
+[R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026). Obrys se kreslí jen
 na vnitřní křivce pobřežního dílu, nikoli po vnějším obvodu políčka. Kopce
 jsou otevřené inkoustové křivky. Šedá výplň nahrazuje staré široké černé pásy.
 Sdílený atlas používají také náhledy terénu; jejich barvy se proto mění shodně.
@@ -1197,7 +1206,7 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 
 ### Vybraná podoba kolonie — 2026-10-25
 
-Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a tah 1,35 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
+Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a podle [R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026) tah 1,6 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
 
 Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o microcol-game/src/main/resources/images/colonies.png microcol-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
 

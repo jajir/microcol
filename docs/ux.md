@@ -888,3 +888,7 @@ Dohoda [R-0283](requirements/done/R-0283.md): hráč má při zmenšení okna d�
 
 1. Podle upřesnění uživatele z 25. října 2026 nemá být mezi mapou a oddělovací linkou světlá mezera. Oprava zachovává stávající hráčskou cestu, fokus, stavové zprávy i ovládání; nevytváří novou akci ani potvrzení.
 2. [Funkční evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25) ověřuje technické provedení v širokém anglickém a úzkém českém okně. Nejde o novou hráčskou studii.
+
+### Síla kresby mapy — 26. října 2026
+
+[R-0291](requirements/done/R-0291.md) přebírá druhý vybraný návrh: lesy, pobřeží, bonusy a kolonie mají být stejně snadno rozpoznatelné jako ikony horní lišty. Cílem je optické sjednocení kontur při zachování velikosti objektů, čitelné výplně a podružné mřížky. Nezavádí nový ovladač ani potvrzování; otevření hry, pohyb pohledu a Continue používají stávající cestu. Lepší čitelnost je návrhový předpoklad, nikoli výsledek hráčské studie; aktuální kontrola patří do funkční evidence.

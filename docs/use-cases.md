@@ -1005,3 +1005,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-114/115/119: mapa přímo u linek — 2026-10-25
 
 1. [R-0288](requirements/done/R-0288.md) doplňuje TC21/F15 `TC_10_main_screen_panels_remain_readable_when_resized` o kontrolu vykreslených hran mapy po změně velikosti a Continue v EN/CZ. Dosavadní očekávání kalendáře, zlata, čitelnosti a měřítka tahu zůstávají; TC188/F221 pokrývá související ovládání. [Evidence](functional-tests.md#r-0288-map-separator-seams-2026-10-25) rozlišuje skutečné výsledky od návrhu.
+
+### UC-114/119: map outline weight — 2026-10-26
+
+[R-0291](requirements/done/R-0291.md) applies the selected second proposal to thin forest, coast, colony and resource outlines. TC80/01 preserves terrain names, forest identity and Continue, and records a map screenshot for optical review. TC80/04, TC100/06–07, TC188/01 and TC190/01 cover shared previews, map navigation and existing unit identity. [Local acceptance](functional-tests.md#r-0291-map-outline-weight-2026-10-26) passed; this does not close all of UC-114.

@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-26: [R-0291 — map outlines matching the toolbar](done/R-0291.md), second visual proposal.
+
+
 ## Verification cadence — 2026-10-24
 
 1. [R-0258](done/R-0258.md) and the [current local acceptance policy](../publishing.md#local-acceptance-policy)

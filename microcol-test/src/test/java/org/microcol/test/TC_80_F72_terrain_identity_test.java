@@ -90,6 +90,9 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         gamePage.verifyThatStatusBarContains("Tundra");
         terrain.verifyTerrain(TUNDRA_FOREST, TerrainType.TUNDRA, true);
         terrain.captureDialog("tileName", "r0274-terrain-map.png");
+        // Inspect the stronger forest/coast ink with unchanged terrain
+        // identity.
+        terrain.captureDialog("tileName", "r0291-map-outlines.png");
 
         // Continue keeps every identity and forest state.
         gamePage.exitToMenu();
