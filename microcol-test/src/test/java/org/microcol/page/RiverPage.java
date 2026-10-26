@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -32,12 +33,6 @@ public final class RiverPage extends AbstractScreen {
 
     /** Canvas column inside the east half of a square, away from its edges. */
     private static final int[] EAST_HALF_COLUMNS = { 31, 39 };
-
-    /** Centre row of a square; every river size paints it. */
-    private static final int CENTRE_ROW = 22;
-
-    /** Rows four pixels above and below the centre row. */
-    private static final int[] OFF_CENTRE_ROWS = { 18, 26 };
 
     /** The pioneer under test, captured right after it reached the square. */
     private int capturedUnitId = -1;
@@ -82,10 +77,8 @@ public final class RiverPage extends AbstractScreen {
     }
 
     /**
-     * Read the real map canvas and check the river band of a square toward each
-     * given neighbour. The centre row must show river in every size; the rows
-     * four pixels away must show it only for a large river. Sampled pixels lie
-     * inside the band, away from the square edges.
+     * Measure water across each connected half, allowing curvature and the
+     * shared width transition at tile edges while distinguishing both sizes.
      *
      * @param location square whose painted river is checked
      * @param expected size the square must show
@@ -116,21 +109,52 @@ public final class RiverPage extends AbstractScreen {
         final Point tile = getContext().getArea()
                 .convertToCanvasPoint(location);
         final int riverRgb = toRgb(PaintService.RIVER_COLOR);
-        final boolean wide = expected == RiverSize.LARGE;
         int missing = 0;
         for (final Location neighbour : joined) {
             for (final int x : sideColumns(location, neighbour)) {
-                if (!isRiverPixel(canvas, tile, x, CENTRE_ROW, riverRgb)) {
-                    missing++;
-                }
-                for (final int y : OFF_CENTRE_ROWS) {
-                    if (isRiverPixel(canvas, tile, x, y, riverRgb) != wide) {
-                        missing++;
+                int water = 0;
+                for (int y = 8; y <= 36; y++) {
+                    if (isRiverPixel(canvas, tile, x, y, riverRgb)) {
+                        water++;
                     }
+                }
+                final int minimum = expected == RiverSize.LARGE ? 8 : 3;
+                final int maximum = expected == RiverSize.LARGE ? 16 : 8;
+                if (water < minimum || water > maximum) {
+                    missing++;
                 }
             }
         }
         return missing;
+    }
+
+    /** The actual empty river square bends and retains readable water. */
+    public void verifyCurvedCourse(final Location at) throws Exception {
+        final Image canvas = WaitForAsyncUtils
+                .asyncFx(() -> FogFrameProbe.captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final Point tile = getContext().getArea().convertToCanvasPoint(at);
+        final int riverRgb = toRgb(PaintService.RIVER_COLOR);
+        double minimum = 45, maximum = 0;
+        for (int x = 6; x <= 38; x += 4) {
+            int top = 45, bottom = -1;
+            for (int y = 8; y <= 36; y++) {
+                if (isRiverPixel(canvas, tile, x, y, riverRgb)) {
+                    top = Math.min(top, y);
+                    bottom = Math.max(bottom, y);
+                }
+            }
+            assertTrue(bottom >= top,
+                    "Connected river has a gap at column " + x);
+            minimum = Math.min(minimum, (top + bottom) / 2.0);
+            maximum = Math.max(maximum, (top + bottom) / 2.0);
+        }
+        assertTrue(maximum - minimum >= 1,
+                "The course is still a straight line");
+        javax.imageio.ImageIO.write(
+                javafx.embed.swing.SwingFXUtils.fromFXImage(canvas, null),
+                "png", new java.io.File(
+                        "target/surefire-reports/river-hand-drawn.png"));
     }
 
     /**
@@ -165,10 +189,7 @@ public final class RiverPage extends AbstractScreen {
         final int riverRgb = toRgb(PaintService.RIVER_COLOR);
         int painted = 0;
         for (final int x : sideColumns(location, hidden)) {
-            if (isRiverPixel(canvas, tile, x, CENTRE_ROW, riverRgb)) {
-                painted++;
-            }
-            for (final int y : OFF_CENTRE_ROWS) {
+            for (int y = 1; y < 44; y++) {
                 if (isRiverPixel(canvas, tile, x, y, riverRgb)) {
                     painted++;
                 }
@@ -264,15 +285,25 @@ public final class RiverPage extends AbstractScreen {
         final Image canvas = WaitForAsyncUtils
                 .asyncFx(() -> FogFrameProbe.captureCanvas(getContext()))
                 .get(10, TimeUnit.SECONDS);
-        assertEquals(
-                toRgb(PaintService.ROAD_COLOR), toRgb(canvas.getPixelReader()
-                        .getColor(tile.getX() + 22, tile.getY() + 14)),
-                "Bridge deck must cross the river");
+        int deckOutsideWater = 0;
+        // A resource may cover the upper deck; the lower deck must cross the
+        // bank.
+        for (int y = 29; y < 37; y++) {
+            for (int x = 8; x < 37; x++) {
+                if (toRgb(canvas.getPixelReader().getColor(tile.getX() + x,
+                        tile.getY() + y)) == toRgb(PaintService.ROAD_COLOR)) {
+                    deckOutsideWater++;
+                }
+            }
+        }
         javax.imageio.ImageIO.write(
                 javafx.embed.swing.SwingFXUtils.fromFXImage(canvas, null),
                 "png",
                 new java.io.File("target/surefire-reports/river-bridge-"
                         + getModel().getMap().getResourceOverlayAt(at)
                         + ".png"));
+        assertTrue(deckOutsideWater >= 12,
+                "Bridge lower deck must cross the river bank: "
+                        + deckOutsideWater);
     }
 }

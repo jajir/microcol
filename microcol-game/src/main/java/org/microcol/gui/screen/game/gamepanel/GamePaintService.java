@@ -4,6 +4,7 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,13 +19,13 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.PaintService;
+import org.microcol.gui.util.RiverShape;
 import org.microcol.model.ColonySighting;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.Player;
 import org.microcol.model.RiverSize;
-import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.microcol.model.WorldMap;
 
@@ -73,18 +74,14 @@ final class GamePaintService {
     /**
      * Draw main game tiles.
      *
-     * @param graphics               required {@link GraphicsContext}
-     * @param area                   required visible area description
-     * @param oneTurnMoveHighlighter required service that helps highlight
-     *                               possible move for current turn
-     * @param coord                  required object holding information about
-     *                               canvas in world map coordinates (Location)
-     * @param gameTick               required long representing how many game
-     *                               ticks was already done. It allows to time
-     *                               animations.
+     * @param graphics required {@link GraphicsContext}
+     * @param area     required visible area description
+     * @param coord    required object holding information about canvas in world
+     *                 map coordinates (Location)
+     * @param gameTick required long representing how many game ticks was
+     *                 already done. It allows to time animations.
      */
     public void paintTerrain(final GraphicsContext graphics, final Area area,
-            final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final CanvasInMapCoordinates coord, final long gameTick) {
         final Player player = gameModelController.getHumanPlayer();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
@@ -94,21 +91,38 @@ final class GamePaintService {
                 final Location location = Location.of(i, j);
                 final Point point = area.convertToCanvasPoint(location);
                 if (player.isVisible(location)) {
-                    final Terrain terrain = gameModelController.getModel()
-                            .getMap().getTerrainAt(location);
-                    paintService.paintTerrainOnTile(graphics, point, location,
-                            terrain,
-                            oneTurnMoveHighlighter.isItHighlighted(location),
+                    paintService.paintTerrainBaseOnTile(
+                            graphics, point, location, gameModelController
+                                    .getModel().getMap().getTerrainAt(location),
                             gameTick);
-                    // Only present sight shows a rumor: remembered or hidden
-                    // squares never reveal whether one still waits there.
-                    if (player.isCurrentlyVisible(location)
-                            && gameModelController.getModel().getMap()
-                                    .hasLostCityRumorAt(location)) {
-                        paintService.paintLostCityRumor(graphics, point);
-                    }
                 } else {
                     paintHiddenTile(graphics, point);
+                }
+            }
+        }
+    }
+
+    /** Draw resource markers and current-sight rumors after every river. */
+    public void paintTerrainOverlays(final GraphicsContext graphics,
+            final Area area,
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final CanvasInMapCoordinates coord) {
+        final Player player = gameModelController.getHumanPlayer();
+        final WorldMap map = gameModelController.getModel().getMap();
+        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
+                .getX(); i++) {
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
+                    .getY(); j++) {
+                final Location location = Location.of(i, j);
+                if (player.isVisible(location)) {
+                    final Point point = area.convertToCanvasPoint(location);
+                    paintService.paintTerrainOverlayOnTile(graphics, point,
+                            map.getTerrainAt(location),
+                            oneTurnMoveHighlighter.isItHighlighted(location));
+                    if (player.isCurrentlyVisible(location)
+                            && map.hasLostCityRumorAt(location)) {
+                        paintService.paintLostCityRumor(graphics, point);
+                    }
                 }
             }
         }
@@ -127,6 +141,7 @@ final class GamePaintService {
             final CanvasInMapCoordinates coord) {
         final Player player = gameModelController.getHumanPlayer();
         final WorldMap map = gameModelController.getModel().getMap();
+        final Map<Location, RiverShape> courses = new LinkedHashMap<>();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {
             for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
@@ -134,19 +149,25 @@ final class GamePaintService {
                 final Location location = Location.of(i, j);
                 final RiverSize size = map.getRiverSizeAt(location);
                 if (size != RiverSize.NONE && player.isVisible(location)) {
-                    final List<Point> joined = map.getRiverLinksAt(location)
-                            .stream().filter(player::isVisible)
-                            .map(area::convertToCanvasPoint)
-                            .collect(Collectors.toList());
+                    final Map<Location, RiverSize> joined = map
+                            .getRiverLinksAt(location).stream()
+                            .filter(player::isVisible)
+                            .collect(Collectors.toMap(neighbour -> neighbour,
+                                    map::getRiverSizeAt));
+                    final RiverShape river = new RiverShape(location, size,
+                            joined);
+                    courses.put(location, river);
                     paintService.paintRiver(graphics,
-                            area.convertToCanvasPoint(location), size, joined);
-                    if (map.getTerrainAt(location).isHasRoad()) {
-                        paintService.paintRiverBridge(graphics,
-                                area.convertToCanvasPoint(location), joined);
-                    }
+                            area.convertToCanvasPoint(location), river);
                 }
             }
         }
+        courses.forEach((location, river) -> {
+            if (map.getTerrainAt(location).isHasRoad()) {
+                paintService.paintRiverBridge(graphics,
+                        area.convertToCanvasPoint(location), river);
+            }
+        });
     }
 
     /** Cover overlays which can cross from explored into unknown tiles. */

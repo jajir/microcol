@@ -145,9 +145,11 @@ public final class GamePanelPainter {
         final Area area = getArea();
         final CanvasInMapCoordinates canvasInMapCoordinates = CanvasInMapCoordinates
                 .make(visibleAreaService, gameModelController.getMapSize());
-        gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter,
-                canvasInMapCoordinates, currentGameTick);
+        gamePaintService.paintTerrain(g, area, canvasInMapCoordinates,
+                currentGameTick);
         gamePaintService.paintRivers(g, area, canvasInMapCoordinates);
+        gamePaintService.paintTerrainOverlays(g, area, oneTurnMoveHighlighter,
+                canvasInMapCoordinates);
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
         gamePaintService.paintUnits(g, gameModelController.getModel(), area,
                 excludePainting, selectedUnitManager.getSelectedUnit());

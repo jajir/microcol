@@ -670,4 +670,4 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Curved river proposals — 2026-10-26
 
-1. [R-0300](R-0300.md) captures five river appearance proposals and the required placement of bonus icons above rivers. Primary area A03; A05 river/resource identity and visibility, A07 unchanged yields. Status: `new`; style selection and implementation remain open.
+1. [R-0300](done/R-0300.md) captures five river appearance proposals and the required placement of bonus icons above rivers. Primary area A03; A05 river/resource identity and visibility, A07 unchanged yields. The user selected variant 2, **Ručně kreslené koryto**, for implementation. Status: `done`; targeted and mandatory local acceptance passed, with [actual evidence](../functional-tests.md#r-0300-hand-drawn-rivers-2026-10-26).

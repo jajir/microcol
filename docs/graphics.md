@@ -1,15 +1,19 @@
 # Grafické podklady a jejich použití v MicroCol
 
-## Návrhy zakřivených řek — 26. října 2026
+## Ručně kreslené řeky — 26. října 2026
 
-1. [R-0300](requirements/R-0300.md) zachycuje pět návrhů přirozenějšího průběhu
-   řek: jemné oblouky, ručně kreslené koryto, výrazné meandry, tenkou inkoustovou
-   konturu a světlé břehy. Výběr vzhledu a implementace zůstávají otevřené.
-2. Uživatel požaduje ikony bonusů **nad řekou**; voda nesmí překreslit stříbro ani
-   rudu. Platí to pro všechny varianty. Zobrazení zachovává identitu a polohu
-   bonusu, rozlišení velikosti řeky a pravidla viditelnosti.
-3. Náhledy jsou návrhy vzhledu. Zachycení požadavku ani kontrola zdrojového pořadí
-   kreslení nedokládají opravu nebo přejímku běžící hry.
+1. Uživatel vybral variantu 2, **Ručně kreslené koryto**, z pěti návrhů
+   [R-0300](requirements/done/R-0300.md): plynulé zatáčky s jemně proměnlivou šířkou,
+   současná jednolitá barva vody a bez přidané kontury či textury.
+2. Ikony bonusů musí zůstat **nad řekou i mostem**; voda nesmí překreslit stříbro
+   ani rudu. Zobrazení zachovává identitu a polohu bonusu, rozlišení velikosti
+   řeky a pravidla viditelnosti. Malé a velké úseky navazují plynule.
+3. Tvar se při posunu mapy, překreslení ani Continue nemění. Most se orientuje
+   podle koryta. Přijatý vzhled nemění říční spojení, pohyb ani produkci.
+4. [Skutečný snímek hry](graphics-assets/rivers-2026-10-26/hand-drawn-map.png)
+   z cíleného Docker/Xvfb běhu ukazuje zakřivené koryto a rudu nad mostem.
+   [Evidence](functional-tests.md#r-0300-hand-drawn-rivers-2026-10-26) rozlišuje
+   cílené testy, povinnou lokální přejímku a historické neúspěšné pokusy.
 
 ## Nepravidelné hranice terénů — 26. října 2026
 

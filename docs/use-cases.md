@@ -1,5 +1,15 @@
 # Use cases a přejímka pravidel hry
 
+## UC-008/012: ručně kreslené řeky — 2026-10-26
+
+1. [R-0300](requirements/done/R-0300.md) upravuje zobrazení známých řek a pořadí
+   vrstev bonusů. Hráč rozpozná koryto i naleziště bez dalšího ovládání; změna
+   nemá nový potvrzovací ani rušicí krok a nezpřístupňuje skryté informace.
+2. TC90/F81/01 ověřuje skutečné zakřivení a zachovává pohyb; TC90/F81/04–05
+   ověřují ikony stříbra/rudy nad vodou a mostem před i po Continue. Původní
+   produkční, zásobové a mlhové kontroly zůstávají. TC91 zachovává ostatní
+   bonusy. Skutečný výběr a výsledky uvádí [evidence](functional-tests.md#r-0300-hand-drawn-rivers-2026-10-26).
+
 ### UC-006/114/119: nepravidelné hranice terénů — 2026-10-26
 
 1. [R-0294](requirements/done/R-0294.md) mění kresbu barevných ploch známé souše a jejich návaznost na pobřeží. Nový TC80/F72/05 ověřuje skutečný obraz, posun a Continue; původní TC80 zachovává názvy, pohyb a rybolov na jezeře. TC26/01,02,03,09,10 zachovávají průzkum, mlhu a mřížku a TC91 bonusy a produkci.

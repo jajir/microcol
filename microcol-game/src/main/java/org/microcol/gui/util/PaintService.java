@@ -22,7 +22,6 @@ import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
 import org.microcol.model.PlayerNative;
 import org.microcol.model.ResourceOverlay;
-import org.microcol.model.RiverSize;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -74,14 +73,6 @@ public final class PaintService {
 
     /** River water; a blue that stands out on grass, sand and snow. */
     public static final Color RIVER_COLOR = Color.web("#426F70");
-
-    /** Width of a small river course, a share of one square. */
-    private static final double SMALL_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
-            * 0.12;
-
-    /** Width of a large river course, a share of one square. */
-    private static final double LARGE_RIVER_WIDTH = Tile.TILE_WIDTH_IN_PX
-            * 0.28;
 
     /** Ink outline of a special-resource marker, the same as the grid ink. */
     private static final Color MARKER_INK = Color.web("#292824");
@@ -194,18 +185,13 @@ public final class PaintService {
         graphics.setLineWidth(previousWidth);
     }
 
-    /** Draw the existing road as a compact bridge across a river. */
+    /** Draw the existing road across the local river's tangent. */
     public void paintRiverBridge(final GraphicsContext graphics,
-            final Point point, final List<Point> joined) {
+            final Point point, final RiverShape river) {
         graphics.save();
-        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
-        graphics.translate(point.getX() + half, point.getY() + half);
-        if (!joined.isEmpty()) {
-            final Point neighbour = joined.get(0);
-            graphics.rotate(
-                    Math.toDegrees(Math.atan2(neighbour.getY() - point.getY(),
-                            neighbour.getX() - point.getX())) + 90);
-        }
+        graphics.translate(point.getX() + river.bridgeX,
+                point.getY() + river.bridgeY);
+        graphics.rotate(river.bridgeAngle);
         final double x = -13.5;
         final double y = 0;
         graphics.setFill(ROAD_COLOR);
@@ -220,46 +206,20 @@ public final class PaintService {
         graphics.restore();
     }
 
-    /**
-     * Draw the half of each river course that leaves a square. Every course
-     * reaches the midpoint between its two squares, and its width shows the
-     * size of this square. A square without a joined neighbour gets a round
-     * dot.
-     *
-     * @param graphics required canvas
-     * @param point    required top-left corner of the tile
-     * @param size     required river size of the square
-     * @param joined   required top-left corners of the joined neighbours
-     */
+    /** Draw a stable hand-drawn course in tile-local coordinates. */
     public void paintRiver(final GraphicsContext graphics, final Point point,
-            final RiverSize size, final List<Point> joined) {
-        final double width = size == RiverSize.LARGE ? LARGE_RIVER_WIDTH
-                : SMALL_RIVER_WIDTH;
-        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
-        final double centerX = point.getX() + half;
-        final double centerY = point.getY() + half;
-        // The grid is stroked later with the same canvas state, so restore it.
-        final Paint previousStroke = graphics.getStroke();
-        final Paint previousFill = graphics.getFill();
-        final double previousWidth = graphics.getLineWidth();
-        final StrokeLineCap previousCap = graphics.getLineCap();
-        graphics.setStroke(RIVER_COLOR);
+            final RiverShape river) {
+        graphics.save();
+        graphics.translate(point.getX(), point.getY());
         graphics.setFill(RIVER_COLOR);
-        graphics.setLineWidth(width);
-        // A butt cap ends each half at its midpoint; the default square cap
-        // would reach half a width into the neighbour square.
-        graphics.setLineCap(StrokeLineCap.BUTT);
-        for (final Point neighbour : joined) {
-            graphics.strokeLine(centerX, centerY,
-                    (centerX + neighbour.getX() + half) / 2,
-                    (centerY + neighbour.getY() + half) / 2);
+        for (final RiverShape.Band band : river.bands) {
+            graphics.fillPolygon(band.x, band.y, band.x.length);
         }
-        graphics.fillOval(centerX - width / 2, centerY - width / 2, width,
-                width);
-        graphics.setStroke(previousStroke);
-        graphics.setFill(previousFill);
-        graphics.setLineWidth(previousWidth);
-        graphics.setLineCap(previousCap);
+        if (river.roundCenter) {
+            final double edge = (Tile.TILE_WIDTH_IN_PX - river.width) / 2;
+            graphics.fillOval(edge, edge, river.width, river.width);
+        }
+        graphics.restore();
     }
 
     /**
@@ -567,6 +527,22 @@ public final class PaintService {
             final Point point, final Location location, final Terrain terrain,
             final boolean isHighlighted, final long gameTick,
             final boolean animated) {
+        paintTerrainBaseOnTile(graphics, point, location, terrain, gameTick,
+                animated);
+        paintTerrainOverlayOnTile(graphics, point, terrain, isHighlighted);
+    }
+
+    /** Paint the map background before rivers and meaningful overlays. */
+    public void paintTerrainBaseOnTile(final GraphicsContext graphics,
+            final Point point, final Location location, final Terrain terrain,
+            final long gameTick) {
+        paintTerrainBaseOnTile(graphics, point, location, terrain, gameTick,
+                true);
+    }
+
+    private void paintTerrainBaseOnTile(final GraphicsContext graphics,
+            final Point point, final Location location, final Terrain terrain,
+            final long gameTick, final boolean animated) {
         graphics.setFill(
                 imageProvider.getTerrainColor(terrain.getTerrainType()));
         graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
@@ -601,6 +577,14 @@ public final class PaintService {
         if (terrain.isHasRoad()) {
             paintRoad(graphics, point);
         }
+    }
+
+    /**
+     * Resources stay above rivers; movement tint keeps its existing priority.
+     */
+    public void paintTerrainOverlayOnTile(final GraphicsContext graphics,
+            final Point point, final Terrain terrain,
+            final boolean isHighlighted) {
         if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
             paintResource(graphics, point, terrain.getResourceOverlay(),
                     imageProvider);

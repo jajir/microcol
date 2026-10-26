@@ -16,6 +16,7 @@ import org.microcol.page.FogPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.RiverPage;
+import org.microcol.page.ResourcePage;
 import org.microcol.page.TerrainProductionPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -66,6 +67,7 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         river.verifyRiverWidth(SMALL_LOCATION, RiverSize.SMALL, SOURCE_LOCATION,
                 LARGE_LOCATION);
         river.verifyRiverWidth(LARGE_LOCATION, RiverSize.LARGE, SMALL_LOCATION);
+        river.verifyCurvedCourse(SMALL_LOCATION);
 
         // The third colonist steps from the colony onto the small river: one
         // third is spent, so two remain.
@@ -215,6 +217,8 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         // The deposit and bridge coexist; no forest or plowed field covers the
         // river.
         river.verifyBridge(SMALL_LOCATION);
+        new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
+                deposit);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve);
         final ColonyScreen colony = game.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
@@ -234,6 +238,8 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
+        new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
+                deposit);
     }
 
     @Test
@@ -261,6 +267,8 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         // The deposit and bridge coexist; no forest or plowed field covers the
         // river.
         river.verifyBridge(SMALL_LOCATION);
+        new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
+                deposit);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve);
         final ColonyScreen colony = game.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
@@ -280,5 +288,8 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
+        new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
+                deposit);
     }
+
 }

@@ -1,5 +1,65 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0300 hand-drawn rivers — 2026-10-26
+
+1. The user selected proposal 2, **Ručně kreslené koryto**, in
+   [R-0300](requirements/done/R-0300.md): curved, slightly variable-width rivers,
+   matching banks at tile boundaries, bridges following the local course and
+   resource icons above water/bridges. Model rules and saved data are unchanged.
+2. Docker admission failed before tests started in
+   `20261026T175616Z-114391069286` (PID 11318, 20.009 seconds) and
+   `20261026T180306Z-f20e73c2ffe2` (PID 13187, 20.008 seconds). Both recorded
+   `timed_out`, no command exit code and no tests: the labelled-container
+   `docker ps` query exceeded its 20-second limit. Docker Desktop was in
+   transitional `stopping` state. It subsequently reported `running`; direct,
+   newly detached and standalone detached queries passed in 0.070/0.018/0.019
+   seconds. The probe is retained in `target/r0300-docker-detached-probe.log`.
+3. Actual targeted run `20261026T180627Z-872076efc2a1` (PID 13958, 900-second
+   watchdog) failed in 111.171 seconds, exit 1: 15 tests, 13 passed, two failures,
+   zero errors/skips. Reports: `target/docker-ui/run-5Ir9q7`. Geometry, resource
+   suite and page source contract passed. Both failures were bridge pixel
+   assertions on ore: the correctly foregrounded resource covers part of the
+   upper deck. The check now measures the lower deck outside the river, while
+   both original silver/ore scenarios retain production/reserve/Continue checks
+   and additionally verify actual resource pixels before and after Continue.
+   The redundant added ore scenario was removed. Attempt
+   `20261026T181128Z-810ee90c22e2` (PID 14740) was deliberately canceled when
+   review found a stale upper-deck assertion: exit 130, 40.814 seconds, no cleanup
+   errors. It is not acceptance; the assertion was removed and formatting rerun.
+4. Corrected targeted run `20261026T181228Z-8fd2b1166a58` (PID 14845,
+   900-second watchdog) passed in 116.205 seconds, exit 0, no cleanup errors.
+   Four fresh XML reports in `target/docker-ui/run-evFaCK` contain **14 passing
+   checks**, zero failures/errors/skips: `RiverShapeTest` (3), all
+   `TC_90_F81_river_effects_test` scenarios (5), all
+   `TC_91_F82_resource_overlays_test` scenarios (3), and
+   `PageVerificationContractTest` (3). Tests cover bank continuity in all eight
+   directions, both river sizes, turns/junctions, stable geometry, actual curved
+   pixels, foreground silver/ore, bridge visibility, fog, movement, production
+   and Continue. Actual map screenshots were visually reviewed; the ore icon is
+   above the river and bridge. Seven Java files passed shared formatting, exact
+   token preservation and idempotence checks.
+5. Mandatory all-model/JUnit and fixed smoke/support gate
+   `20261026T181612Z-36d59d5c06fc` (PID 15120, outer watchdog 420 seconds)
+   passed: **4,778 checks** in 354 complete XML reports, zero
+   failures/errors/skips. This includes **4,757 model/JUnit** checks and
+   **21 fixed smoke/support** checks (the unchanged ten UI smoke scenarios).
+   Verifier time was **296.365 seconds**, execution including cleanup
+   **296.531 seconds**, within the 360-second acceptance budget. Exit 0, no
+   cleanup errors; notification queued. Manifest, summary and reports are in
+   `target/verification/run-8gq5a514`.
+6. Review found no remaining issue. All **2,297 non-document source hashes**
+   match the accepted snapshot and final runtime/test/build files, based on
+   `c79eb418f2c2b252fef04aff50f4c04557d83baf` plus this change. The manifest's
+   source identity is also retained in `target/r0300-checked-source.json`.
+   Final changes after the game gate only close documentation/evidence and
+   add its actual screenshot. Completion records remain under
+   `~/Library/Logs/Microcol/completions/`; historical failed attempts remain
+   failed. Remote regression and distribution/website publication are not
+   inspected and are not claimed by this local acceptance.
+7. Documentation closure passed all nine consistency tests and the strict
+   MkDocs build. Source review and `git diff --check` are clean.
+
+
 ## R-0295 six-minute gate — 2026-10-26
 
 1. [R-0295](requirements/done/R-0295.md) changes the total smoke budget from 300 to 360 seconds at the shell, verifier and completion-runner entry points. The fixed selection, lock/recovery/cleanup rules and success criteria remain unchanged. There is no gameplay UC or Java change.
