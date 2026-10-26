@@ -1,5 +1,13 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: nízké vlny a trvalé daleké moře — 2026-10-26
+
+1. [R-0289](requirements/done/R-0289.md) doplňuje TC80/F72/04 o čtyři fáze vlny,
+   nepřerušené zobrazení dalekého moře a statický náhled před/po Continue.
+   Zachovává scénář terénu, posunu mapy a uložení; nápovědu a neodhalování
+   neznámé mapy pokrývají související TC100 a TC26. Skutečné výsledky jsou
+   v [evidenci](functional-tests.md#r-0289-rolling-waves-2026-10-26).
+
 Ověřené rozměry UI (2026-10-19): [R-0251](requirements/done/R-0251.md), UC-119, TC83/TC84/TC85; přejímka v [evidenci](functional-tests.md#r-0251-button-spacing-2026-10-19).
 
 

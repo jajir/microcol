@@ -3,11 +3,16 @@ package org.microcol.gui.image;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.microcol.model.Location;
 import org.microcol.gui.util.StreamReader;
 import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
+
+import javafx.scene.image.Image;
 
 class TerrainDecorationTest {
     private static final ImageCache CACHE = new ImageCache(new StreamReader());
@@ -49,7 +54,7 @@ class TerrainDecorationTest {
     @Test
     void agreed_frequencies_and_attribute_priority_cover_every_terrain() {
         final int[] percentages = { 10, 10, 20, 10, 25, 25, 15, 20, 15, 100,
-                100, 5, 5, 5 };
+                100, 5, 5, 100 };
         final ImageRandomProvider images = new ImageRandomProvider(ASSETS,
                 world(134));
         for (int i = 0; i < TerrainType.TERRAINS.size(); i++) {
@@ -62,13 +67,54 @@ class TerrainDecorationTest {
                     final Location at = Location.of(x, y);
                     if (images.isTerrainDecorated(type, at, false, 0))
                         decorated++;
-                    assertEquals(percentages[i] == 100,
+                    assertEquals(
+                            type == TerrainType.HILL
+                                    || type == TerrainType.MOUNTAIN,
                             images.isTerrainDecorated(type, at, true, 0),
                             type.name());
                 }
             }
             assertEquals(percentages[i], decorated / 100.0, 1.0, type.name());
         }
+    }
+
+    @Test
+    void sea_frames_loop_without_blank_frames_and_keep_seeded_offsets() {
+        final ImageRandomProvider images = new ImageRandomProvider(ASSETS,
+                world(134));
+        final ImageRandomProvider reloaded = new ImageRandomProvider(ASSETS,
+                world(134));
+        final Set<Image> startingFrames = new HashSet<>();
+        for (int x = 1; x <= 30; x++) {
+            final Location at = Location.of(x, 20);
+            startingFrames
+                    .add(images.getTerrainDecoration(TerrainType.OCEAN, at, 0));
+            for (final TerrainType type : new TerrainType[] { TerrainType.OCEAN,
+                    TerrainType.HIGH_SEA }) {
+                final Set<Image> frames = new HashSet<>();
+                for (int tick = 0; tick < 60; tick++) {
+                    final Image frame = images.getTerrainDecoration(type, at,
+                            tick);
+                    frames.add(frame);
+                    assertSame(frame,
+                            images.getTerrainDecoration(type, at, tick + 60));
+                    assertSame(frame,
+                            reloaded.getTerrainDecoration(type, at, tick));
+                    assertTrue(images.isTerrainDecorated(TerrainType.HIGH_SEA,
+                            at, false, tick));
+                }
+                assertEquals(4, frames.size(),
+                        "One complete wave cycle: " + type);
+            }
+            assertTrue(images.isTerrainDecorated(TerrainType.HIGH_SEA, at,
+                    false, Long.MAX_VALUE));
+            assertFalse(images.isTerrainDecorated(TerrainType.HIGH_SEA, at,
+                    true, 0), "Meaningful overlays retain priority");
+            assertSame(ASSETS.getTerrainDecoration(TerrainType.LAKE),
+                    images.getTerrainDecoration(TerrainType.LAKE, at, 15));
+        }
+        assertEquals(4, startingFrames.size(),
+                "Neighbouring water must not animate in lockstep");
     }
 
     @Test

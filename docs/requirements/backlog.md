@@ -635,3 +635,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Map meets panel separators — 2026-10-25
 
 1. [R-0288](done/R-0288.md) removes the light strip between the map and its three surrounding freehand separators under A03. Implementation and local acceptance are complete: seven targeted checks, actual EN/CZ screenshot review and the 4,759-check mandatory gate passed. Status: `done`. [Evidence](../functional-tests.md#r-0288-map-separator-seams-2026-10-25) records acceptance independently from publication.
+
+## Low rolling waves — 2026-10-26
+
+1. [R-0289](done/R-0289.md) applies selected proposal 04 as four thin rolling-wave frames and keeps eligible High Seas marked at 100%, including static views. A03 owns appearance; A05 identity/visibility and A04 timing/Continue are reused. Status: `done`. All 31 targeted checks and the 4,761-check mandatory model/JUnit and smoke gate passed; [evidence](../functional-tests.md#r-0289-rolling-waves-2026-10-26) records local acceptance separately from remote publication.

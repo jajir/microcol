@@ -79,16 +79,17 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 | Hory | `#a29a8d` | 100 % |
 | Oceán | `#649b97` | 5 % |
 | Jezero | `#80aeb5` | 5 % |
-| Daleké moře | `#4c858b` | 5 % |
+| Daleké moře | `#4c858b` | 100 % (upřesnění R-0289, 26. října 2026) |
 
 3. Les, pole, cesta, řeka, kolonie, známé domorodé sídlo, právě viditelná
    pověst a bonus potlačí běžnou dekoraci. Kopce a hory si ponechají reliéf
    i s atributem. Samotné atributy se nadále kreslí, jednotky rozmístění
    nemění a neprozkoumané území zůstává skryté.
 4. Pevnina používá uložený seed mapy a souřadnice; posun ani Save/Continue
-   nepřehází kresby. Voda přehodnocuje výskyt jednou za čtyři sekundy na
-   každém políčku, s rozdílnou fází podle souřadnic. Vlny tak postupně mizí
-   a objevují se jinde, bez synchronního přepnutí celé mapy.
+   nepřehází kresby. Oceán a jezera přehodnocují výskyt jednou za čtyři sekundy
+   na každém políčku, s rozdílnou fází podle souřadnic. Daleké moře si kresbu
+   ponechává i ve statickém náhledu. Tvar vln oceánu a dalekého moře nově
+   animuje [varianta 04](#nizka-prelevajici-se-vlna-26-rijna-2026).
 5. Pobřeží používá dosavadní masky a jejich průhlednost. Pevninská část
    přebírá barvu nejbližšího sousedního terénu, včetně smíšených a arktických
    břehů; voda pod maskou má barvu vlastního terénu. Maska se připraví při
@@ -99,6 +100,29 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 7. Jde o schválené výchozí nastavení; případné ladění četností patří sem.
    Aktuální stav ověření uvádí [funkční evidence](functional-tests.md#r-0277-sparse-terrain-2026-10-25),
    nikoli samotný zápis této dohody.
+
+## Nízká přelévající se vlna — 26. října 2026
+
+1. Uživatel vybral [návrh 04](graphics-assets/waves-2026-10-26/selected-04.png).
+   [R-0289](requirements/done/R-0289.md) nahrazuje ostré dvojité oblouky oceánu
+   a dalekého moře nízkou vlnou s drobným zaobleným přelivem a krátkým
+   doprovodným tahem. Schválené ztenčení na 0,85 logického px platí pro tuto
+   vodní kresbu; nemění výchozí tloušťku ostatních ilustrací.
+2. Čtyři průhledné snímky mají stejné ukotvení a prostor 45 × 45 px. Každý
+   trvá půl sekundy, celá smyčka dvě sekundy. Počátek fáze se liší podle
+   uloženého seedu mapy a souřadnic. Četnost výskytu a fáze kresby jsou
+   oddělené: vhodné daleké moře má vlnu vždy, včetně zastaveného vykreslování.
+   Významové atributy nadále mají přednost. Jezera si ponechávají svoji kresbu.
+3. Oceán zachovává tmavý tah `#152f31`, daleké moře světlý `#6ec9cf` a dosavadní
+   bílou směrovou značku. Nápověda používá první snímek; mapové a statické
+   výběrové náhledy používají stejnou sadu. Nevzniká nové nastavení animace.
+4. Zdroj [terrain-symbols.svg](../microcol-game/src/graphics/terrain-symbols.svg)
+   má nově čtvrtý řádek: čtyři fáze oceánu a čtyři fáze dalekého moře.
+   Export: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`.
+   Dřívější řádky zůstávají na původních souřadnicích.
+5. [Skutečný snímek hry z Dockeru](graphics-assets/waves-2026-10-26/implemented-map.png)
+   ukazuje převod návrhu do mapy. Samotný obrázek nepotvrzuje celou přejímku; výsledky vede
+   [funkční evidence](functional-tests.md#r-0289-rolling-waves-2026-10-26).
 
 ## Minimalistický grafický manuál
 

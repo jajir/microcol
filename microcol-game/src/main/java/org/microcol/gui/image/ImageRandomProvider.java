@@ -23,12 +23,15 @@ public final class ImageRandomProvider {
     public boolean isTerrainDecorated(final TerrainType terrain,
             final Location location, final boolean hasAttribute,
             final long tick) {
-        final int percent = decorationPercent(terrain);
-        if (percent == 100) {
+        if (terrain == TerrainType.HILL || terrain == TerrainType.MOUNTAIN) {
             return true;
         }
         if (hasAttribute) {
             return false;
+        }
+        final int percent = decorationPercent(terrain);
+        if (percent == 100) {
+            return true;
         }
         final int seed = mapRandoms.getRandomAt(location);
         long sample = seed;
@@ -45,7 +48,8 @@ public final class ImageRandomProvider {
     }
 
     static int decorationPercent(final TerrainType terrain) {
-        if (terrain == TerrainType.HILL || terrain == TerrainType.MOUNTAIN) {
+        if (terrain == TerrainType.HILL || terrain == TerrainType.MOUNTAIN
+                || terrain == TerrainType.HIGH_SEA) {
             return 100;
         }
         if (terrain.isSea()) {
@@ -61,6 +65,21 @@ public final class ImageRandomProvider {
             return 15;
         }
         return 10;
+    }
+
+    public Image getTerrainDecoration(final TerrainType terrain,
+            final Location location, final long tick) {
+        if (terrain == TerrainType.OCEAN || terrain == TerrainType.HIGH_SEA) {
+            final int frameTicks = AnimationScheduler.FPS / 2;
+            final int cycle = frameTicks
+                    * ImageLoaderTerrainSymbols.WAVE_FRAMES;
+            final long phase = Math.floorMod(tick, cycle)
+                    + Math.floorMod(mapRandoms.getRandomAt(location), cycle);
+            final int frame = (int) (phase % cycle) / frameTicks;
+            return imageProvider.getImage(
+                    ImageLoaderTerrainSymbols.waveKey(terrain, frame));
+        }
+        return imageProvider.getTerrainDecoration(terrain);
     }
 
     public boolean hasUnknownMark(final Location location) {

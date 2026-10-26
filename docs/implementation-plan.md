@@ -101,6 +101,10 @@ ani samotné odemčení tlačítka neznamená dokončení celé hry.
 
 ### Pestrý Original World
 
+Výtvarnou podobu vody samostatně upřesňuje [R-0289](requirements/done/R-0289.md):
+nízká čtyřsnímková vlna a 100% četnost na vhodných políčkách dalekého moře.
+Nemění geografii, pravidla ani uložená data světa.
+
 1. **Dohodnuto s uživatelem 24. října 2026:** volba Free Play Game → Original
    World má nabídnout jednu stálou, pestře rozmístěnou mapu. Rozložení krajiny
    a přírodních prvků se při každé nové hře nemění; nejde o generovaný svět.

@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="630" height="135" viewBox="0 0 630 135">
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="180" viewBox="0 0 630 180">
 <title>Selected MicroCol terrain and resource symbols, 2026-10-25</title>
-<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Row three: transparent terrain drawings. Flat terrain colours also tint the coast masks.</desc>
+<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Row three: transparent terrain drawings. Flat terrain colours also tint the coast masks. Row four: four ocean and four High Seas wave frames (variant 04, 2026-10-26).</desc>
+<defs>
+<path id="rolling-wave-0" d="M7 29 C12 29 18 25.8 23 25.7 C26 25.5 27 26.1 24.8 27.1 C23.2 28.1 26.5 28.8 29.5 28.5 M33 30.1 Q36 29.9 39 29.8"/>
+<path id="rolling-wave-1" d="M7 29 C13 29 20 25.1 25 25.4 C28 25.5 28.2 26.4 26 27.2 C24.5 28.1 27.5 28.9 30 28.5 M33 30 Q36 29.8 39 29.8"/>
+<path id="rolling-wave-2" d="M7 29 C14 29.2 22 25.8 27 26 C29.4 26.1 29.5 26.8 27.4 27.6 C26 28.4 28.7 29 30.4 28.7 M33 29.9 Q36 29.7 39 29.8"/>
+<path id="rolling-wave-3" d="M7 29 C13 29.1 19 26.6 24 26.3 C27 26.1 27.8 26.7 26 27.5 C24.8 28.2 27 28.8 30 28.6 M33 30 Q36 29.8 39 29.8"/>
+</defs>
 <g id="terrain-GRASSLAND" transform="translate(0 0)">
 <rect width="45" height="45" fill="#a9b77a"/>
 <g id="drawing-GRASSLAND" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
@@ -58,8 +64,8 @@
 </g></g>
 <g id="terrain-OCEAN" transform="translate(495 0)">
 <rect width="45" height="45" fill="#649b97"/>
-<g id="drawing-OCEAN" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
-<path d="M23 136 Q49 140 80 108 Q96 130 123 126 M101 164 Q126 167 149 141 Q163 160 181 154" fill="none" stroke="#152f31"/>
+<g id="drawing-OCEAN" fill="none" stroke="#152f31" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round">
+<use href="#rolling-wave-0"/>
 </g></g>
 <g id="terrain-LAKE" transform="translate(540 0)">
 <rect width="45" height="45" fill="#80aeb5"/>
@@ -68,8 +74,8 @@
 </g></g>
 <g id="terrain-HIGH_SEA" transform="translate(585 0)">
 <rect width="45" height="45" fill="#4c858b"/>
-<g id="drawing-HIGH_SEA" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
-<path d="M23 133 Q45 142 76 110 Q96 132 120 129 M99 165 Q123 172 151 147 Q167 162 183 154" fill="none" stroke="#6ec9cf"/><path d="M166 88 L180 102 L166 115" fill="none" stroke="#fff9ec"/>
+<g id="drawing-HIGH_SEA" fill="none" stroke="#6ec9cf" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round">
+<use href="#rolling-wave-0"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec"/>
 </g></g>
 <g id="resource-SILVER" transform="translate(17 46) scale(.135)" stroke="#292824" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
 <path d="M22 149 L37 110 L124 64 L165 89 L172 133 L74 178Z" fill="#aeb2b1"/><path d="M37 113 L75 136 L153 94 L124 78Z" fill="#dddeda" stroke="none"/><path d="M75 136 L75 167" fill="none" stroke="#dddeda"/><path d="M151 52 L161 75 L181 81 L164 95 L161 118 L147 102 L125 104 L133 85 L127 68 L145 70Z" fill="#fff9ec"/>
@@ -121,4 +127,12 @@
 <use href="#drawing-OCEAN" transform="translate(495 90)"/>
 <use href="#drawing-LAKE" transform="translate(540 90)"/>
 <use href="#drawing-HIGH_SEA" transform="translate(585 90)"/>
+<g transform="translate(0 135)" fill="none" stroke="#152f31" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-0"/></g>
+<g transform="translate(45 135)" fill="none" stroke="#152f31" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-1"/></g>
+<g transform="translate(90 135)" fill="none" stroke="#152f31" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-2"/></g>
+<g transform="translate(135 135)" fill="none" stroke="#152f31" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-3"/></g>
+<g transform="translate(180 135)" fill="none" stroke="#6ec9cf" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-0"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec"/></g>
+<g transform="translate(225 135)" fill="none" stroke="#6ec9cf" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-1"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec"/></g>
+<g transform="translate(270 135)" fill="none" stroke="#6ec9cf" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-2"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec"/></g>
+<g transform="translate(315 135)" fill="none" stroke="#6ec9cf" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"><use href="#rolling-wave-3"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec"/></g>
 </svg>

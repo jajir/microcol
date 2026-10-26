@@ -1,5 +1,16 @@
 # UX a pravidla ovládání MicroCol
 
+## Rozpoznatelné vlny — 2026-10-26
+
+1. Podle [R-0289](requirements/done/R-0289.md) hráč pozná moře podle tenké nízké
+   přelévající se vlny; vhodná políčka dalekého moře mají značku vždy, také
+   ve statickém náhledu. Název terénu a významové bonusy zůstávají dostupné.
+   Změna je automatická, nevyžaduje nastavení ani potvrzení a nepřidává akci
+   k rušení. Posun mapy, návrat a Continue používají dosavadní ovládání.
+2. Lepší rozlišení vody od kopců je výtvarný záměr podle uživatelovy volby 04.
+   [Automatické a vizuální ověření](functional-tests.md#r-0289-rolling-waves-2026-10-26)
+   je oddělené od dosud neprovedeného pozorování hráčů.
+
 Nastavení podle [R-0248](requirements/done/R-0248.md) zachovává okamžité účinky
 voleb a návrat tlačítkem Zpět. Dřevěné rámečky rozlišují nezávislý výběr
 fajfkou a jedinou volbu tečkou; pravítko ukazuje hodnotu polohou jezdce.

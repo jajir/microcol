@@ -185,6 +185,9 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         final TerrainAppearancePage terrain = new TerrainAppearancePage(
                 getContext());
         terrain.verifySparseTerrainAndMovingWater();
+        // High Seas keeps four rolling phases and a wave in stationary
+        // previews.
+        terrain.verifyHighSeasWavesAndStaticPreview();
         terrain.rememberLandDecoration();
         // Panning away and back leaves the land decoration in place.
         game.panToTile(PLAINS_FOREST);
@@ -197,6 +200,9 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         terrain.verifyLandDecorationUnchanged();
         new TerrainIdentityPage(getContext()).verifyTerrain(PLAINS_FOREST,
                 TerrainType.PLAINS, true);
+        // Continue retains continuous High Seas coverage and the same wave
+        // loop.
+        terrain.verifyHighSeasWavesAndStaticPreview();
     }
 
 }

@@ -159,6 +159,48 @@ public final class TerrainAppearancePage extends AbstractScreen {
         }).get(15, TimeUnit.SECONDS);
     }
 
+    public void verifyHighSeasWavesAndStaticPreview() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final MapManager map = getContext()
+                    .getClassFromGuice(MapManager.class);
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            int checked = 0;
+            for (int x = 1; x <= getModel().getMap().getMaxLocationX(); x++) {
+                final Location at = Location.of(x, 20);
+                if (map.getCoatsImageAt(at) != null
+                        || map.getHiddenImageCoast(at) != null)
+                    continue;
+                final Terrain sea = new Terrain(at, TerrainType.HIGH_SEA);
+                final Canvas plain = new Canvas(45, 45);
+                plain.getGraphicsContext2D()
+                        .setFill(images.getTerrainColor(TerrainType.HIGH_SEA));
+                plain.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+                final Image blank = plain.snapshot(null, null);
+                final Image first = render(at, sea, 0);
+                for (int tick = 0; tick < 60; tick += 15) {
+                    assertTrue(map.isTerrainDecorated(at, sea, tick),
+                            "Every eligible High Seas tile has a wave");
+                    final Image phase = render(at, sea, tick);
+                    assertFalse(samePixels(blank, phase),
+                            "A wave never disappears between frames");
+                    if (tick != 0)
+                        assertFalse(samePixels(first, phase),
+                                "Rolling wave changes shape");
+                }
+                verifyPixels(first, render(at, sea, 60));
+                final Canvas stationary = new Canvas(45, 45);
+                getContext().getClassFromGuice(PaintService.class)
+                        .paintTerrainOnTile(stationary.getGraphicsContext2D(),
+                                Point.of(0, 0), at, sea, false);
+                verifyPixels(first, stationary.snapshot(null, null));
+                checked++;
+            }
+            assertTrue(checked > 0,
+                    "The scenario must exercise stationary and animated High Seas");
+        }).get(15, TimeUnit.SECONDS);
+    }
+
     private void verifyPixels(final Image expected, final Image actual) {
         for (int y = 0; y < 45; y++) {
             for (int x = 0; x < 45; x++) {

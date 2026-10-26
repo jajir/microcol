@@ -533,8 +533,8 @@ public final class PaintService {
                 Tile.TILE_WIDTH_IN_PX);
         if (mapManager.isTerrainDecorated(location, terrain, gameTick)) {
             graphics.drawImage(
-                    imageProvider
-                            .getTerrainDecoration(terrain.getTerrainType()),
+                    mapManager.getTerrainDecoration(terrain.getTerrainType(),
+                            location, gameTick),
                     point.getX(), point.getY());
         }
         final Image imageCoast = mapManager.getCoatsImageAt(location);

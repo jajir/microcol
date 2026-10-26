@@ -118,6 +118,12 @@ public final class MapManager {
         return imageProvider.getTerrainImage(terrainType);
     }
 
+    public Image getTerrainDecoration(final TerrainType terrain,
+            final Location location, final long tick) {
+        return imageRandomProvider.getTerrainDecoration(terrain, location,
+                tick);
+    }
+
     public Image getTreeImage(final Location location) {
         return imageRandomProvider.getTreeImage(location);
     }
