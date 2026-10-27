@@ -892,3 +892,32 @@ documentation in APT just to make it visible on the web.
 4. No JavaFX gameplay implementation or player observation is claimed.
    Model/JUnit and Docker/Xvfb phases are exempt for this documentation-only
    scope. Remote regression and publication were not inspected.
+
+## R-0325 help refinement proposals — 2026-10-27
+
+1. [R-0325](requirements/R-0325.md) captures the user's annotated follow-up to
+   full-window Help at `d45d059b`: title in the header, no common outer frame,
+   search limited to the left index, a higher article, and hand-drawn search
+   and vertical-scroll controls. Status remains `waiting for refinement` until
+   a variant is selected. This task implements no JavaFX change.
+2. Three conversational mockups compare Přímá úprava, Otevřený atlas and
+   Dvojstrana. All retain Playpen Sans Regular 14, the current unit artwork,
+   the top OK action and bottom status. The Czech reference prose is abbreviated
+   sample content for layout comparison, not new or independently verified rules.
+3. Final browser checks passed 12 layout groups (three designs at 1024, 736, 360
+   and 320 pixels), three interaction groups (search including body text, no
+   results, topic selection, scrollbar and preview return) and four native
+   carousel-navigation checks. There were no JavaScript errors in the layout/
+   interaction run. Visual review covered all three desktop designs and the
+   narrow Otevřený atlas. The narrow layout is a conversational preview, not a
+   change to the game's minimum supported window size.
+4. Prototype/check files are under `target/help-designs-2026-10-27/`; they are
+   conversation material, not runtime assets or published documentation. The
+   same reviewed fragment is retained in this task's visualization directory.
+5. This commit contains documentation only. Nine documentation consistency tests
+   and strict MkDocs passed; logs are `target/help-designs-2026-10-27/docs-tests.log`
+   and `target/help-designs-2026-10-27/mkdocs.log`. Review checked the four-chapter
+   requirement, status, links, the five shared requested adjustments and three
+   alternatives. Model/JUnit and Docker/Xvfb tests are exempt for this scope.
+   No gameplay implementation, player study, remote CI inspection or publication
+   verification is claimed.

@@ -1,5 +1,17 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Návrhy odlehčení nápovědy — 27. října 2026
+
+1. Podle uživatelova anotovaného snímku bude název vlevo v horní liště, bez
+   samostatného řádku pod ní. Odstraní se vnější společný rámeček; hledání zůstane
+   pouze nad levým rejstříkem a článek začne ve stejné výšce jako hledání.
+2. Ručně kreslené obrysy hledání a svislého posuvníku navazují na současná tlačítka.
+   Zachovávají Playpen Sans Regular 14, současné ilustrace a čitelný fokus.
+3. [R-0325](requirements/R-0325.md) porovnává tři návrhy vnitřního členění.
+   Jde o upřesnění před výběrem; aktuální implementace zůstává podle R-0324.
+   [Evidence](publishing.md#r-0325-help-refinement-proposals-2026-10-27) rozlišuje
+   kontroly návrhu od budoucí přejímky JavaFX.
+
 ## Nápověda přes celou herní plochu — 27. října 2026
 
 1. [R-0324](requirements/done/R-0324.md) používá pro Help celý hlavní herní rám jako

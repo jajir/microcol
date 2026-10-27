@@ -806,3 +806,11 @@ remain owned by their current requirements; acceptance is recorded in the
    Help content into the main game window like Goals. Status: `done`.
    Local acceptance passed for search, keyboard access, reference tables,
    resizing and unchanged game state. [Evidence](../functional-tests.md#r-0324-full-window-help-2026-10-27).
+
+## Help refinement proposals (2026-10-27)
+
+1. [R-0325](R-0325.md), primary area A03 with A01 frame/navigation, captures the
+   annotated request to move the title into the header, remove the outer frame,
+   narrow search to the index and raise the article. Three proposals compare
+   hand-drawn controls and inner structure. Status: `waiting for refinement`;
+   a variant choice precedes gameplay implementation.
