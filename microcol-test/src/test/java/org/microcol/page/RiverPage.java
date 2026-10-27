@@ -120,10 +120,12 @@ public final class RiverPage extends AbstractScreen {
                     } else {
                         final ImageProvider images = getContext()
                                 .getClassFromGuice(ImageProvider.class);
-                        assertEquals(toRgb(PaintService.RIVER_COLOR),
+                        assertEquals(
+                                toRgb(images
+                                        .getTerrainColor(TerrainType.OCEAN)),
                                 toRgb(previewImage.getPixelReader()
                                         .getColor(7 * scale, 23 * scale)),
-                                "The river must extend through the coastal opening");
+                                "Sea water must extend upstream through the coastal opening");
                         assertEquals(
                                 toRgb(images
                                         .getTerrainColor(TerrainType.OCEAN)),
@@ -156,15 +158,19 @@ public final class RiverPage extends AbstractScreen {
         final int sea = toRgb(images.getTerrainColor(TerrainType.OCEAN));
         final int ink = toRgb(Color.web("#292824"));
         final int river = toRgb(PaintService.RIVER_COLOR);
-        final int[] expected = { river, river, river, sea, sea, ink, ink };
+        final int mixed = toRgb(PaintService.RIVER_COLOR
+                .interpolate(images.getTerrainColor(TerrainType.OCEAN), 0.5));
+        final int[] expected = { river, mixed, sea, sea, sea, ink, ink, mixed,
+                river, sea, mixed };
         try {
             WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
                     () -> Arrays.equals(expected, mouthPixels(at, towardSea)));
         } catch (final TimeoutException timeout) {
-            // The assertion reports a closed outlet or missing bank ink.
+            // The assertion reports missing tones, curved interfaces or bank
+            // ink.
         }
         assertArrayEquals(expected, mouthPixels(at, towardSea),
-                "Expected outlined narrow banks and open water through the coast");
+                "Expected three flat water tones with wavy interfaces inside outlined banks");
     }
 
     private int[] mouthPixels(final Location at, final Direction towardSea)
@@ -175,7 +181,8 @@ public final class RiverPage extends AbstractScreen {
         final Point tile = getContext().getArea().convertToCanvasPoint(at);
         final Location direction = towardSea.getVector();
         final int[][] samples = { { -8, 0 }, { 12, 0 }, { 25, 0 }, { 28, 0 },
-                { 32, 0 }, { 12, -8 }, { 12, 6 } };
+                { 32, 0 }, { 12, -8 }, { 12, 6 }, { 5, -3 }, { 5, 2 },
+                { 14, -3 }, { 14, 2 } };
         final int[] pixels = new int[samples.length];
         for (int i = 0; i < samples.length; i++) {
             final int x = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0

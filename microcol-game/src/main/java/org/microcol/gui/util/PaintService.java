@@ -306,6 +306,26 @@ public final class PaintService {
         graphics.lineTo(0, radius);
         graphics.closePath();
         graphics.fill();
+        graphics.save();
+        graphics.clip();
+        final Color sea = imageProvider.getTerrainColor(water);
+        // Flat, wavy bands bring sea water inland without an ink barrier.
+        for (int band = 0; band < 2; band++) {
+            final double edge = 7 + 9 * band;
+            graphics.setFill(
+                    band == 0 ? RIVER_COLOR.interpolate(sea, 0.5) : sea);
+            graphics.beginPath();
+            graphics.moveTo(edge + 2, -radius);
+            graphics.bezierCurveTo(edge + 2, -radius * 0.55, edge - 9,
+                    -radius * 0.4, edge - 2, 0);
+            graphics.bezierCurveTo(edge + 9, radius * 0.35, edge - 2,
+                    radius * 0.55, edge + 2, radius);
+            graphics.lineTo(shore + 1, radius + corner);
+            graphics.lineTo(shore + 1, -radius - corner);
+            graphics.closePath();
+            graphics.fill();
+        }
+        graphics.restore();
         graphics.setStroke(MARKER_INK);
         graphics.setLineWidth(RIVER_BANK_WIDTH);
         graphics.setLineCap(StrokeLineCap.ROUND);

@@ -65,6 +65,27 @@ Tento krok neupravuje další obrazovky z galerie.
    [funkční evidence](functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).
    Tento popis sám nepotvrzuje dokončení testů ani publikaci.
 
+## Prolínání vody v ústí — 27. října 2026
+
+1. Uživatel vybral tři ploché odstíny: říční vodu, prostřední tón a mořskou
+   vodu. Dvě zvlněná barevná rozhraní leží uvnitř ústí před pobřežím;
+   mořská barva tak zasahuje proti proudu. Nejde o plynulý gradient.
+2. Černý obrys zůstává pouze na březích a navazuje na pobřeží. Barevné
+   plochy zůstávají uvnitř vodního tvaru, bez příčné inkoustové čáry.
+   Šířka toku, suroviny, mosty a dohled se nemění. Mapa i pravý náhled
+   používají stejné vykreslování.
+3. [R-0326](requirements/done/R-0326.md) realizuje tento navazující krok k R-0320.
+   [Vybraný obrázek](graphics-assets/river-mixing-2026-10-27/selected.png)
+   je výtvarná reference; skutečné výsledky ověření patří do
+   [funkční evidence](functional-tests.md#r-0326-river-mouth-mixing-2026-10-27).
+
+4. [Mapa](graphics-assets/river-mixing-2026-10-27/implemented-map.png),
+   [náhled pevniny](graphics-assets/river-mixing-2026-10-27/preview-land.png)
+   a [náhled moře](graphics-assets/river-mixing-2026-10-27/preview-sea.png)
+   pocházejí z úspěšného cíleného testu v Dockeru/Xvfb dne 27. října 2026.
+
+![Tři odstíny vody ve skutečném rendereru, zvětšeno 4×](graphics-assets/river-mixing-2026-10-27/implemented-mouth.png)
+
 ## Úzké ústí a obrys řeky — 27. října 2026
 
 1. Uživatel vybral **variantu 1: úzký tok obtažený po obou březích** a zadal

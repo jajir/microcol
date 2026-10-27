@@ -12132,3 +12132,59 @@ or website publication.
     closure follows acceptance. All nine documentation consistency tests and
     the strict MkDocs build passed after closing R-0320. Remote CI and
     publication were not inspected and are not claimed.
+
+## R-0326 river mouth mixing — 2026-10-27
+
+1. [R-0326](requirements/done/R-0326.md) follows the selected three-tone reference.
+   Source: `a9b25595` plus this change. The shared `PaintService` clips two
+   flat wavy bands inside the existing mouth, using the adjacent sea palette.
+   Existing bank ink, mouth direction, visibility and model data are unchanged.
+2. TC24/F15/12 verifies river, mixed and sea water, both curved interfaces and
+   bank ink before/after pan and Continue; landing and colony founding remain.
+   Its map/preview comparison retains 1×/2× and clear-margin assertions.
+   Targeted selection: TC24/F15/12, all five TC90/F81 scenarios, all three
+   TC91/F82 scenarios, TC80/F72/05 and `PageVerificationContractTest`.
+3. Shared Java formatting passed for the three touched Java files. The actual
+   Original World renderer was visually inspected at 1×/4×. The
+   [enlarged image](graphics-assets/river-mixing-2026-10-27/implemented-mouth.png)
+   shows the three flat tones upstream of the coast and uninterrupted bank ink.
+   This standalone headless render is visual evidence, not Docker/Xvfb acceptance.
+4. Model dispatch: `20261027T185201Z-9eaeefde625f`, supervisor PID `16085`,
+   timeout 600 s. Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T185201Z-9eaeefde625f`.
+   Passed 4,777 tests in 348 complete XML reports, zero failures/errors/skips,
+   in 138.891 s including local admission/cleanup. Reports:
+   `target/verification/run-iu6527qr/model/run-L2R53p/microcol-game/surefire-reports`.
+5. Targeted Docker/Xvfb dispatch: `20261027T185445Z-7a38b30ffd5a`, supervisor
+   PID `16877`, timeout 600 s, using the selection in item 2. Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T185445Z-7a38b30ffd5a`.
+   Passed all 13 checks in five complete XML reports, zero failures/errors/skips,
+   in 228.541 s including local admission/cleanup. Reports:
+   `target/docker-ui/run-m8pHnx/microcol-test/surefire-reports`.
+6. Visually inspected the actual
+   [map](graphics-assets/river-mixing-2026-10-27/implemented-map.png),
+   [land preview](graphics-assets/river-mixing-2026-10-27/preview-land.png) and
+   [sea preview](graphics-assets/river-mixing-2026-10-27/preview-sea.png)
+   from the passing targeted run. The colour transitions are inside the mouth,
+   banks remain continuous and sea water passes through the coastal opening.
+7. Smoke dispatch: `20261027T185858Z-e86342829075`, supervisor PID `18059`,
+   outer timeout 480 s; local smoke acceptance budget remains 420 s.
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T185858Z-e86342829075`.
+   Passed all 21 checks in 12 complete XML reports, zero failures/errors/skips,
+   in 203.365 s including local admission/cleanup. Reports:
+   `target/verification/run-67eq89d_/precommit/run-mLxOzX/microcol-test/surefire-reports`.
+8. Final source review found no actionable issue: the shared clipping stays
+   inside the existing water silhouette, restores the preview clip and leaves
+   bank/overlay order, visibility, model rules and save data intact. Runtime,
+   tests and configuration match the passing model/smoke source manifests;
+   the three Java files also match the recorded targeted-run hashes.
+   Local acceptance does not establish remote CI or publication; neither was
+   inspected.
+
+9. Documentation consistency passed all nine checks and strict MkDocs completed
+   after moving the requirement to `done/` and updating its links. No failed
+   acceptance attempt occurred for this follow-up; prior R-0320 failures remain
+   documented in their original evidence. Logs: `target/r0326/docs-final.log`,
+   `target/r0326/mkdocs-final.log`; formatting/review: `target/r0326/format.log`,
+   `target/r0326/review.txt`.
