@@ -828,7 +828,7 @@ documentation in APT just to make it visible on the web.
 
 ## Lake animation proposals — 2026-10-27
 
-1. [R-0314](requirements/R-0314.md) captures seven expanding-ring and seven
+1. [R-0314](requirements/done/R-0314.md) captures seven expanding-ring and seven
    small-wave proposals in the supplied map screenshot. Source inspection used
    `121b08aa`; the [graphics catalogue](graphics.md#animace-jezera-navrhy-27-rijna-2026)
    preserves the original crop and fourteen animated GIFs. These are composited

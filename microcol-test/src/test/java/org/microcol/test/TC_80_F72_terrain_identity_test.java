@@ -192,6 +192,8 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         // High Seas keeps the full breaking/dissolving cycle and a visible
         // crest in stationary previews.
         terrain.verifyHighSeasWavesAndStaticPreview();
+        // Lake K3 ripples expand and fade below coasts; fish keep priority.
+        terrain.verifyLakeRipplesAndStaticPreview();
         terrain.rememberLandDecoration();
         // Panning away and back leaves the land decoration in place.
         game.panToTile(PLAINS_FOREST);
@@ -207,6 +209,7 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         // Continue retains full High Seas participation and the same wave
         // loop.
         terrain.verifyHighSeasWavesAndStaticPreview();
+        terrain.verifyLakeRipplesAndStaticPreview();
     }
 
     @Test
@@ -219,7 +222,7 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final TerrainBoundaryPage terrain = new TerrainBoundaryPage(
                 getContext());
-        game.panToTile(Location.of(17, 14));
+        game.panToTile(Location.of(16, 14));
         game.moveMouseAtLocation(Location.of(16, 14));
         game.verifyThatStatusBarContains("Grass land");
         terrain.verifyIrregularBoundariesOnMap();

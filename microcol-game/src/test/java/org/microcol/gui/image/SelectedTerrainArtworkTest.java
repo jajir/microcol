@@ -11,6 +11,55 @@ import org.microcol.model.TerrainType;
 import javafx.scene.image.Image;
 
 class SelectedTerrainArtworkTest {
+    @Test
+    void lake_frames_expand_three_transparent_rings_then_rest() {
+        final ImageCache cache = new ImageCache(new StreamReader());
+        new ImageLoaderTerrainSymbols().preload(cache);
+        final Set<Long> frames = new HashSet<>();
+        for (int frame = 0; frame < 120; frame++) {
+            final Image image = cache.getImage(
+                    ImageLoaderTerrainSymbols.waveKey(TerrainType.LAKE, frame));
+            assertEquals(45, image.getWidth());
+            assertEquals(45, image.getHeight());
+            frames.add(fingerprint(image));
+            for (int y = 0; y < 45; y++) {
+                for (int x = 0; x < 45; x++) {
+                    final int pixel = image.getPixelReader().getArgb(x, y);
+                    if ((pixel >>> 24) > 0) {
+                        assertEquals(0, pixel & 0x00ffffff,
+                                "Lake motion is transparent black ink, never a filled lake");
+                        assertTrue(x >= 8 && x <= 42 && y >= 9 && y <= 29,
+                                "Ripples remain inside their tile");
+                    }
+                }
+            }
+            if (frame == 0 || frame >= 112) {
+                assertEquals(0, ink(image),
+                        "The cycle starts and ends at rest");
+            }
+        }
+        assertTrue(frames.size() > 100, "Ripples expand and fade smoothly");
+        final Image threeRings = cache.getImage(
+                ImageLoaderTerrainSymbols.waveKey(TerrainType.LAKE, 50));
+        int crossings = 0;
+        boolean previousInk = false;
+        for (int x = 0; x < 45; x++) {
+            final boolean hasInk = threeRings.getPixelReader().getColor(x, 19)
+                    .getOpacity() > 0.1;
+            if (hasInk && !previousInk) {
+                crossings++;
+            }
+            previousInk = hasInk;
+        }
+        assertEquals(6, crossings, "A diameter crosses three open rings twice");
+        assertEquals(0,
+                threeRings.getPixelReader().getColor(25, 19).getOpacity(),
+                "The ring centres remain transparent");
+        assertEquals(fingerprint(threeRings),
+                fingerprint(cache.getImage(ImageLoaderTerrainSymbols
+                        .decorationKey(TerrainType.LAKE))),
+                "Static previews show the selected three-ring phase");
+    }
 
     @Test
     void wide_wash_frames_fall_spread_and_dissolve_with_a_visible_static_crest() {

@@ -90,7 +90,7 @@ class TerrainDecorationTest {
             startingFrames
                     .add(images.getTerrainDecoration(TerrainType.OCEAN, at, 0));
             for (final TerrainType type : new TerrainType[] { TerrainType.OCEAN,
-                    TerrainType.HIGH_SEA }) {
+                    TerrainType.HIGH_SEA, TerrainType.LAKE }) {
                 final Set<Image> frames = new HashSet<>();
                 for (int tick = 0; tick < 180; tick++) {
                     final Image frame = images.getTerrainDecoration(type, at,
@@ -110,35 +110,39 @@ class TerrainDecorationTest {
                     false, Long.MAX_VALUE));
             assertFalse(images.isTerrainDecorated(TerrainType.HIGH_SEA, at,
                     true, 0), "Meaningful overlays retain priority");
-            assertSame(ASSETS.getTerrainDecoration(TerrainType.LAKE),
-                    images.getTerrainDecoration(TerrainType.LAKE, at, 15));
+            assertFalse(
+                    images.isTerrainDecorated(TerrainType.LAKE, at, true, 0),
+                    "Fish and other meaningful overlays retain priority");
         }
         assertTrue(startingFrames.size() > 10,
                 "Neighbouring water must not animate in lockstep");
     }
 
     @Test
-    void ocean_placement_never_cuts_a_wave_cycle_short() {
+    void water_placement_never_cuts_an_animation_cycle_short() {
         final ImageRandomProvider images = new ImageRandomProvider(ASSETS,
                 world(134));
         final WorldMapRandoms randoms = new WorldMapRandoms(world(134));
-        int decorated = 0;
-        for (int x = 1; x <= 100; x++) {
-            final Location at = Location.of(x, 20);
-            final long start = Math.floorMod(-(long) randoms.getRandomAt(at),
-                    180);
-            final boolean visible = images.isTerrainDecorated(TerrainType.OCEAN,
-                    at, false, start);
-            decorated += visible ? 1 : 0;
-            for (int tick = 0; tick < 180; tick++) {
-                assertEquals(visible,
-                        images.isTerrainDecorated(TerrainType.OCEAN, at, false,
-                                start + tick),
-                        "Selection remains fixed through the entire fall and dissolve");
+        for (final TerrainType type : new TerrainType[] { TerrainType.OCEAN,
+                TerrainType.LAKE }) {
+            int decorated = 0;
+            for (int x = 1; x <= 100; x++) {
+                final Location at = Location.of(x, 20);
+                final long start = Math
+                        .floorMod(-(long) randoms.getRandomAt(at), 180);
+                final boolean visible = images.isTerrainDecorated(type, at,
+                        false, start);
+                decorated += visible ? 1 : 0;
+                for (int tick = 0; tick < 180; tick++) {
+                    assertEquals(visible,
+                            images.isTerrainDecorated(type, at, false,
+                                    start + tick),
+                            "Selection remains fixed through the entire fall and dissolve");
+                }
             }
+            assertTrue(decorated > 0 && decorated < 20,
+                    "Exercise both selected and absent waves");
         }
-        assertTrue(decorated > 0 && decorated < 20,
-                "Exercise both selected and absent waves");
     }
 
     @Test

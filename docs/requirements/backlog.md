@@ -5,10 +5,11 @@ The selected appearance applies to existing known coastal river endpoints,
 including loaded games. Compilation and a static renderer preview are checked;
 tests remain unrun at the user's request, so normal local acceptance is not claimed.
 
-Captured on 2026-10-27: [R-0314 — lake animation proposals](R-0314.md), A03 with
-A05/A04 dependencies. Seven expanding-ring and seven small-wave alternatives
-are shown in the user's map screenshot. Selection is open; runtime implementation
-is not authorized by the proposal request.
+Completed locally on 2026-10-27: [R-0314 — K3 lake ripples](done/R-0314.md),
+A03 with A05/A04 dependencies. The selected three expanding rings replace the
+miniature-lake decoration. Model/JUnit, targeted Docker/Xvfb and fixed smoke
+acceptance passed; [evidence](../functional-tests.md#r-0314-k3-lake-ripples-2026-10-27)
+records results and preserved failed attempts. Publication remains unverified.
 
 Implemented on 2026-10-27: [R-0313 — Original World river at (25, 13)](R-0313.md).
 The user explicitly requested a push without test runs. Data and existing test

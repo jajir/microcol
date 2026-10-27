@@ -1084,3 +1084,13 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    absence while ordinary game information remains covered. Actual results
    belong to the [dated evidence](functional-tests.md#r-0312-global-developer-shortcut-2026-10-27);
    this does not close these whole UCs.
+
+### UC-114/119: tři kruhy na jezeře — 27. října 2026
+
+1. [R-0314](requirements/done/R-0314.md) nasazuje vybranou K3 do existujícího
+   vykreslování mapy a statických terénních náhledů. TC80/04 kontroluje pohyb,
+   doznění, překrytí břehem, prioritu ryb a Continue; TC80/01–03 zachovávají
+   názvy terénů, plavbu a rybolov. TC91/02 chrání neprozkoumanou mapu,
+   TC100/06–07 českou a anglickou obrazovou nápovědu.
+2. Stav místního přijetí a skutečné výsledky vede [funkční evidence](functional-tests.md#r-0314-k3-lake-ripples-2026-10-27).
+   Tato dílčí vizuální změna neuzavírá celé UC-114 ani UC-119.

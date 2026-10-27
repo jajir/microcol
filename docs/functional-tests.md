@@ -11530,3 +11530,63 @@ or website publication.
     The reviewed executable source is the accepted snapshot based on
     `4b175170ac4acbdb1fea97c124ca2c68f6b6c23f`; subsequent closure edits affect
     documentation only. Remote CI and publication are outside this task.
+
+## R-0314 K3 lake ripples — 2026-10-27
+
+1. [R-0314](requirements/done/R-0314.md), UC-114/119: the user selected K3, three
+   expanding lake rings. Runtime code reuses the sea frame loader and clock,
+   appends 120 lake frames and preserves the 5% selection, resource priority and
+   coast ordering. Lake selection now lasts a complete six-second cycle. The
+   original 240 sea frames are pixel-identical; no gameplay rule changes.
+2. `SelectedTerrainArtworkTest` checks transparent black ink, tile bounds, rest,
+   three visible rings and the static preview. `TerrainDecorationTest` checks
+   all 120 frames, seeded offsets, full-cycle selection and attribute priority.
+   `TC_80_F72_terrain_identity_test.TC_04_sparse_terrain_and_living_water_survive_pan_and_continue`
+   now verifies expansion, fading, static preview, coasts and fish priority before
+   and after Continue through `TerrainAppearancePage`; existing player steps and
+   gameplay assertions remain intact. Shared Java formatting was applied to all
+   six changed Java files.
+3. Initial model attempt `20261027T111006Z-09fad3388887`, supervisor PID 53967,
+   timeout 600 s, stopped during Docker admission after 20.008 s: the labelled
+   container query timed out before any tests started. No cleanup errors were
+   reported, and callback delivery was queued. Foreground diagnosis then confirmed
+   Docker Desktop running and an empty container list. The VM process had started
+   around dispatch; the attempt remains failed and its evidence is preserved.
+4. Model retry `20261027T111441Z-0468f20236d3`, supervisor PID 54526, timeout
+   600 s, passed in 133.647 s. All **4,776 model/JUnit tests** in 347 fresh XML
+   reports passed with zero failures, errors or skips. Reports:
+   `target/verification/run-5h9qqq26/model/run-891ND4/microcol-game/surefire-reports`.
+   All eight changed runtime/test sources match the immutable verification copy.
+5. Initial targeted Docker/Xvfb attempt `20261027T111753Z-91c6aece8994`,
+   supervisor PID 55579, timeout 600 s, failed in 158.093 s: 13 tests,
+   one failure, zero errors/skips. The new K3 checks in TC80/04 passed.
+   TC80/05 hovered tile (16, 14) after panning to neighbouring tile (17, 14);
+   the target lay outside the visible canvas, leaving the status bar empty.
+   Its initial pan now targets the same tile as the hover. All assertions and
+   subsequent boundary/Continue steps remain intact; failed evidence is retained
+   in `target/docker-ui/run-Dh4OQE/microcol-test/surefire-reports`.
+6. Targeted retry `20261027T112245Z-edf5d2592296`, supervisor PID 56767,
+   timeout 600 s, selects all five TC80 scenarios, all three TC91 scenarios,
+   TC100/06–07 and `PageVerificationContractTest`. This covers lake navigation,
+   fishing/Continue, K3 rendering, resources, hidden terrain and Czech/English
+   previews. The interaction repair changed only the UI test; all checked game
+   sources/assets/model tests still match the passing model copy, whose result
+   is reused. Source hashes and dispatch records are under `target/r0314/`.
+   The retry passed all **13 tests** with zero failures/errors/skips in 156.602 s.
+   Reports: `target/docker-ui/run-iKlusy/microcol-test/surefire-reports`.
+7. Fixed smoke `20261027T112646Z-434180d62a75`, supervisor PID 57318,
+   outer timeout 480 s, passed in **203.026 s including recovery and cleanup**,
+   within the unchanged 420-second acceptance budget (verifier 202.894 s;
+   container group 199.496 s). All **21 tests in 12 fresh XML reports** passed
+   with zero failures/errors/skips: the unchanged ten scenarios from
+   `scripts/ui-tests/smoke.json` plus eleven support checks. Reports:
+   `target/verification/run-0gg_h2zr/precommit/run-bQO7Bl/microcol-test/surefire-reports`.
+8. Review confirmed atlas/frame indexing, the K3 geometry and transparent fade,
+   synchronized six-second selection/frame boundaries, coast/resource priority,
+   unchanged sea frames and preserved gameplay assertions. All eight changed
+   executable/test/asset files match the final smoke snapshot and recorded
+   hashes. The checked source is based on `715842f148897400ff5a15815455cb63fbe48c72`;
+   only documentation closure follows acceptance. All nine documentation
+   consistency checks and strict MkDocs passed after moving the requirement and
+   repairing its links. R-0314 is complete locally. Remote regression and
+   publication were not inspected or claimed.

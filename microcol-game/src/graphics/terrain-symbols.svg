@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="630" height="945" viewBox="0 0 630 945">
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="1305" viewBox="0 0 630 1305">
 <title>Selected MicroCol terrain and resource symbols, 2026-10-25</title>
-<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Row three: transparent terrain drawings. Flat terrain colours also tint the coast masks. Rows four to twenty-one: 120 ocean and 120 High Seas frames of the approved six-second wide wash (R-0293, 2026-10-26), with black 1.6px wave contours (R-0305, 2026-10-27).</desc>
+<desc>Editable tracing of user selection: terrains from 10, deposits from 09, other bonuses from 08. Row one: TerrainType.TERRAINS. Row two: nonempty ResourceOverlay values. 45px cells; resource motifs occupy the upper-right 27px. Row three: transparent terrain drawings. Flat terrain colours also tint the coast masks. Rows four to twenty-one: 120 ocean and 120 High Seas frames of the approved six-second wide wash (R-0293, 2026-10-26), with black 1.6px wave contours (R-0305, 2026-10-27). Lake frames append the approved K3 three expanding rings (R-0314, 2026-10-27); lake previews use frame 50.</desc>
 <defs>
 <clipPath id="wave-cell"><rect width="45" height="45"/></clipPath>
 <g id="breaking-wave-0" transform="translate(0 11.625) scale(.1875)"><path d="M24 82 C49 82 62.6 78.938 88 77.248 106.2 76.509 122.2 76.931 136 78.515 139 78.885 145.8 79.888 151.2 79.73 156 81.472 163 82.8 181 82.25 190 82.3 199 81.8 208 81.75" opacity="1.00000" stroke-width="8.5333333333"/><path d="M146 86 C152 84 158 84 164 86" opacity="0.00000" stroke-width="8.5333333333"/></g>
@@ -124,6 +124,126 @@
 <g id="breaking-wave-118" transform="translate(0 11.625) scale(.1875)"><path d="M24 82 C49 82 62.6 78.938 88 77.248 106.2 76.509 122.2 76.931 136 78.515 139 78.885 145.8 79.888 151.2 79.73 156 81.472 163 82.8 181 82.25 190 82.3 199 81.8 208 81.75" opacity="0.95259" stroke-width="8.5333333333"/><path d="M142.5185 86 C151.6296 84.1481 160.7407 84.1481 169.8519 86" opacity="0.00000" stroke-width="8.5333333333"/></g>
 <g id="breaking-wave-119" transform="translate(0 11.625) scale(.1875)"><path d="M24 82 C49 82 62.6 78.938 88 77.248 106.2 76.509 122.2 76.931 136 78.515 139 78.885 145.8 79.888 151.2 79.73 156 81.472 163 82.8 181 82.25 190 82.3 199 81.8 208 81.75" opacity="0.98741" stroke-width="8.5333333333"/><path d="M145.0752 86 C151.9016 84.0394 158.728 84.0394 165.5544 86" opacity="0.00000" stroke-width="8.5333333333"/></g>
 <g id="rolling-wave-0" clip-path="url(#wave-cell)"><use href="#breaking-wave-53"/></g>
+<g id="lake-ripples-0" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-1" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="1.684211" ry="0.926316" opacity="0.082237"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-2" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="1.868421" ry="1.027632" opacity="0.164474"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-3" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.052632" ry="1.128947" opacity="0.246711"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-4" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.236842" ry="1.230263" opacity="0.328947"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-5" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.421053" ry="1.331579" opacity="0.411184"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-6" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.605263" ry="1.432895" opacity="0.493421"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-7" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.789474" ry="1.534211" opacity="0.575658"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-8" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="2.973684" ry="1.635526" opacity="0.657895"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-9" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="3.157895" ry="1.736842" opacity="0.740132"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-10" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="3.342105" ry="1.838158" opacity="0.822368"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-11" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="3.526316" ry="1.939474" opacity="0.904605"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-12" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="3.710526" ry="2.040789" opacity="0.986842"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-13" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="3.894737" ry="2.142105" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-14" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="4.078947" ry="2.243421" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-15" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="4.263158" ry="2.344737" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-16" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="4.447368" ry="2.446053" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-17" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="4.631579" ry="2.547368" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-18" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="4.815789" ry="2.648684" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-19" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.000000" ry="2.750000" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.674342" ry="0.920888" opacity="0.071546"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-20" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.184211" ry="2.851316" opacity="1.000000"/><ellipse cx="25" cy="19" rx="1.848684" ry="1.016776" opacity="0.143092"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-21" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.368421" ry="2.952632" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.023026" ry="1.112664" opacity="0.214638"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-22" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.552632" ry="3.053947" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.197368" ry="1.208553" opacity="0.286184"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-23" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.736842" ry="3.155263" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.371711" ry="1.304441" opacity="0.357730"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-24" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="5.921053" ry="3.256579" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.546053" ry="1.400329" opacity="0.429276"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-25" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="6.105263" ry="3.357895" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.720395" ry="1.496217" opacity="0.500822"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-26" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="6.289474" ry="3.459211" opacity="1.000000"/><ellipse cx="25" cy="19" rx="2.894737" ry="1.592105" opacity="0.572368"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-27" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="6.473684" ry="3.560526" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.069079" ry="1.687993" opacity="0.643914"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-28" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="6.657895" ry="3.661842" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.243421" ry="1.783882" opacity="0.715461"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-29" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="6.842105" ry="3.763158" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.417763" ry="1.879770" opacity="0.787007"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-30" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.026316" ry="3.864474" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.592105" ry="1.975658" opacity="0.858553"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-31" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.210526" ry="3.965789" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.766447" ry="2.071546" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-32" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.394737" ry="4.067105" opacity="1.000000"/><ellipse cx="25" cy="19" rx="3.940789" ry="2.167434" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-33" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.578947" ry="4.168421" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.115132" ry="2.263322" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-34" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.763158" ry="4.269737" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.289474" ry="2.359211" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-35" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="7.947368" ry="4.371053" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.463816" ry="2.455099" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-36" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="8.131579" ry="4.472368" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.638158" ry="2.550987" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.500000" ry="0.825000" opacity="0.000000"/></g>
+<g id="lake-ripples-37" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="8.315789" ry="4.573684" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.812500" ry="2.646875" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.664474" ry="0.915461" opacity="0.060855"/></g>
+<g id="lake-ripples-38" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="8.500000" ry="4.675000" opacity="1.000000"/><ellipse cx="25" cy="19" rx="4.986842" ry="2.742763" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.828947" ry="1.005921" opacity="0.121711"/></g>
+<g id="lake-ripples-39" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="8.684211" ry="4.776316" opacity="1.000000"/><ellipse cx="25" cy="19" rx="5.161184" ry="2.838651" opacity="0.870000"/><ellipse cx="25" cy="19" rx="1.993421" ry="1.096382" opacity="0.182566"/></g>
+<g id="lake-ripples-40" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="8.868421" ry="4.877632" opacity="1.000000"/><ellipse cx="25" cy="19" rx="5.335526" ry="2.934539" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.157895" ry="1.186842" opacity="0.243421"/></g>
+<g id="lake-ripples-41" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.052632" ry="4.978947" opacity="1.000000"/><ellipse cx="25" cy="19" rx="5.509868" ry="3.030428" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.322368" ry="1.277303" opacity="0.304276"/></g>
+<g id="lake-ripples-42" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.236842" ry="5.080263" opacity="1.000000"/><ellipse cx="25" cy="19" rx="5.684211" ry="3.126316" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.486842" ry="1.367763" opacity="0.365132"/></g>
+<g id="lake-ripples-43" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.421053" ry="5.181579" opacity="1.000000"/><ellipse cx="25" cy="19" rx="5.858553" ry="3.222204" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.651316" ry="1.458224" opacity="0.425987"/></g>
+<g id="lake-ripples-44" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.605263" ry="5.282895" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.032895" ry="3.318092" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.815789" ry="1.548684" opacity="0.486842"/></g>
+<g id="lake-ripples-45" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.789474" ry="5.384211" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.207237" ry="3.413980" opacity="0.870000"/><ellipse cx="25" cy="19" rx="2.980263" ry="1.639145" opacity="0.547697"/></g>
+<g id="lake-ripples-46" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="9.973684" ry="5.485526" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.381579" ry="3.509868" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.144737" ry="1.729605" opacity="0.608553"/></g>
+<g id="lake-ripples-47" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="10.157895" ry="5.586842" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.555921" ry="3.605757" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.309211" ry="1.820066" opacity="0.669408"/></g>
+<g id="lake-ripples-48" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="10.342105" ry="5.688158" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.730263" ry="3.701645" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.473684" ry="1.910526" opacity="0.730263"/></g>
+<g id="lake-ripples-49" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="10.526316" ry="5.789474" opacity="1.000000"/><ellipse cx="25" cy="19" rx="6.904605" ry="3.797533" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.638158" ry="2.000987" opacity="0.740000"/></g>
+<g id="lake-ripples-50" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="10.710526" ry="5.890789" opacity="1.000000"/><ellipse cx="25" cy="19" rx="7.078947" ry="3.893421" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.802632" ry="2.091447" opacity="0.740000"/></g>
+<g id="lake-ripples-51" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="10.894737" ry="5.992105" opacity="0.967492"/><ellipse cx="25" cy="19" rx="7.253289" ry="3.989309" opacity="0.870000"/><ellipse cx="25" cy="19" rx="3.967105" ry="2.181908" opacity="0.740000"/></g>
+<g id="lake-ripples-52" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="11.078947" ry="6.093421" opacity="0.928793"/><ellipse cx="25" cy="19" rx="7.427632" ry="4.085197" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.131579" ry="2.272368" opacity="0.740000"/></g>
+<g id="lake-ripples-53" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="11.263158" ry="6.194737" opacity="0.890093"/><ellipse cx="25" cy="19" rx="7.601974" ry="4.181086" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.296053" ry="2.362829" opacity="0.740000"/></g>
+<g id="lake-ripples-54" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="11.447368" ry="6.296053" opacity="0.851393"/><ellipse cx="25" cy="19" rx="7.776316" ry="4.276974" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.460526" ry="2.453289" opacity="0.740000"/></g>
+<g id="lake-ripples-55" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="11.631579" ry="6.397368" opacity="0.812693"/><ellipse cx="25" cy="19" rx="7.950658" ry="4.372862" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.625000" ry="2.543750" opacity="0.740000"/></g>
+<g id="lake-ripples-56" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="11.815789" ry="6.498684" opacity="0.773994"/><ellipse cx="25" cy="19" rx="8.125000" ry="4.468750" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.789474" ry="2.634211" opacity="0.740000"/></g>
+<g id="lake-ripples-57" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.000000" ry="6.600000" opacity="0.735294"/><ellipse cx="25" cy="19" rx="8.299342" ry="4.564638" opacity="0.870000"/><ellipse cx="25" cy="19" rx="4.953947" ry="2.724671" opacity="0.740000"/></g>
+<g id="lake-ripples-58" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.184211" ry="6.701316" opacity="0.696594"/><ellipse cx="25" cy="19" rx="8.473684" ry="4.660526" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.118421" ry="2.815132" opacity="0.740000"/></g>
+<g id="lake-ripples-59" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.368421" ry="6.802632" opacity="0.657895"/><ellipse cx="25" cy="19" rx="8.648026" ry="4.756414" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.282895" ry="2.905592" opacity="0.740000"/></g>
+<g id="lake-ripples-60" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.552632" ry="6.903947" opacity="0.619195"/><ellipse cx="25" cy="19" rx="8.822368" ry="4.852303" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.447368" ry="2.996053" opacity="0.740000"/></g>
+<g id="lake-ripples-61" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.736842" ry="7.005263" opacity="0.580495"/><ellipse cx="25" cy="19" rx="8.996711" ry="4.948191" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.611842" ry="3.086513" opacity="0.740000"/></g>
+<g id="lake-ripples-62" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="12.921053" ry="7.106579" opacity="0.541796"/><ellipse cx="25" cy="19" rx="9.171053" ry="5.044079" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.776316" ry="3.176974" opacity="0.740000"/></g>
+<g id="lake-ripples-63" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="13.105263" ry="7.207895" opacity="0.503096"/><ellipse cx="25" cy="19" rx="9.345395" ry="5.139967" opacity="0.870000"/><ellipse cx="25" cy="19" rx="5.940789" ry="3.267434" opacity="0.740000"/></g>
+<g id="lake-ripples-64" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="13.289474" ry="7.309211" opacity="0.464396"/><ellipse cx="25" cy="19" rx="9.519737" ry="5.235855" opacity="0.870000"/><ellipse cx="25" cy="19" rx="6.105263" ry="3.357895" opacity="0.740000"/></g>
+<g id="lake-ripples-65" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="13.473684" ry="7.410526" opacity="0.425697"/><ellipse cx="25" cy="19" rx="9.694079" ry="5.331743" opacity="0.870000"/><ellipse cx="25" cy="19" rx="6.269737" ry="3.448355" opacity="0.740000"/></g>
+<g id="lake-ripples-66" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="13.657895" ry="7.511842" opacity="0.386997"/><ellipse cx="25" cy="19" rx="9.868421" ry="5.427632" opacity="0.870000"/><ellipse cx="25" cy="19" rx="6.434211" ry="3.538816" opacity="0.740000"/></g>
+<g id="lake-ripples-67" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="13.842105" ry="7.613158" opacity="0.348297"/><ellipse cx="25" cy="19" rx="10.042763" ry="5.523520" opacity="0.870000"/><ellipse cx="25" cy="19" rx="6.598684" ry="3.629276" opacity="0.740000"/></g>
+<g id="lake-ripples-68" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.026316" ry="7.714474" opacity="0.309598"/><ellipse cx="25" cy="19" rx="10.217105" ry="5.619408" opacity="0.870000"/><ellipse cx="25" cy="19" rx="6.763158" ry="3.719737" opacity="0.740000"/></g>
+<g id="lake-ripples-69" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.210526" ry="7.815789" opacity="0.270898"/><ellipse cx="25" cy="19" rx="10.391447" ry="5.715296" opacity="0.841718"/><ellipse cx="25" cy="19" rx="6.927632" ry="3.810197" opacity="0.740000"/></g>
+<g id="lake-ripples-70" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.394737" ry="7.917105" opacity="0.232198"/><ellipse cx="25" cy="19" rx="10.565789" ry="5.811184" opacity="0.808050"/><ellipse cx="25" cy="19" rx="7.092105" ry="3.900658" opacity="0.740000"/></g>
+<g id="lake-ripples-71" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.578947" ry="8.018421" opacity="0.193498"/><ellipse cx="25" cy="19" rx="10.740132" ry="5.907072" opacity="0.774381"/><ellipse cx="25" cy="19" rx="7.256579" ry="3.991118" opacity="0.740000"/></g>
+<g id="lake-ripples-72" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.763158" ry="8.119737" opacity="0.154799"/><ellipse cx="25" cy="19" rx="10.914474" ry="6.002961" opacity="0.740712"/><ellipse cx="25" cy="19" rx="7.421053" ry="4.081579" opacity="0.740000"/></g>
+<g id="lake-ripples-73" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="14.947368" ry="8.221053" opacity="0.116099"/><ellipse cx="25" cy="19" rx="11.088816" ry="6.098849" opacity="0.707043"/><ellipse cx="25" cy="19" rx="7.585526" ry="4.172039" opacity="0.740000"/></g>
+<g id="lake-ripples-74" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.131579" ry="8.322368" opacity="0.077399"/><ellipse cx="25" cy="19" rx="11.263158" ry="6.194737" opacity="0.673375"/><ellipse cx="25" cy="19" rx="7.750000" ry="4.262500" opacity="0.740000"/></g>
+<g id="lake-ripples-75" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.315789" ry="8.423684" opacity="0.038700"/><ellipse cx="25" cy="19" rx="11.437500" ry="6.290625" opacity="0.639706"/><ellipse cx="25" cy="19" rx="7.914474" ry="4.352961" opacity="0.740000"/></g>
+<g id="lake-ripples-76" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.611842" ry="6.386513" opacity="0.606037"/><ellipse cx="25" cy="19" rx="8.078947" ry="4.443421" opacity="0.740000"/></g>
+<g id="lake-ripples-77" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.786184" ry="6.482401" opacity="0.572368"/><ellipse cx="25" cy="19" rx="8.243421" ry="4.533882" opacity="0.740000"/></g>
+<g id="lake-ripples-78" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.960526" ry="6.578289" opacity="0.538700"/><ellipse cx="25" cy="19" rx="8.407895" ry="4.624342" opacity="0.740000"/></g>
+<g id="lake-ripples-79" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.134868" ry="6.674178" opacity="0.505031"/><ellipse cx="25" cy="19" rx="8.572368" ry="4.714803" opacity="0.740000"/></g>
+<g id="lake-ripples-80" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.309211" ry="6.770066" opacity="0.471362"/><ellipse cx="25" cy="19" rx="8.736842" ry="4.805263" opacity="0.740000"/></g>
+<g id="lake-ripples-81" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.483553" ry="6.865954" opacity="0.437693"/><ellipse cx="25" cy="19" rx="8.901316" ry="4.895724" opacity="0.740000"/></g>
+<g id="lake-ripples-82" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.657895" ry="6.961842" opacity="0.404025"/><ellipse cx="25" cy="19" rx="9.065789" ry="4.986184" opacity="0.740000"/></g>
+<g id="lake-ripples-83" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.832237" ry="7.057730" opacity="0.370356"/><ellipse cx="25" cy="19" rx="9.230263" ry="5.076645" opacity="0.740000"/></g>
+<g id="lake-ripples-84" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.006579" ry="7.153618" opacity="0.336687"/><ellipse cx="25" cy="19" rx="9.394737" ry="5.167105" opacity="0.740000"/></g>
+<g id="lake-ripples-85" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.180921" ry="7.249507" opacity="0.303019"/><ellipse cx="25" cy="19" rx="9.559211" ry="5.257566" opacity="0.740000"/></g>
+<g id="lake-ripples-86" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.355263" ry="7.345395" opacity="0.269350"/><ellipse cx="25" cy="19" rx="9.723684" ry="5.348026" opacity="0.740000"/></g>
+<g id="lake-ripples-87" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.529605" ry="7.441283" opacity="0.235681"/><ellipse cx="25" cy="19" rx="9.888158" ry="5.438487" opacity="0.715944"/></g>
+<g id="lake-ripples-88" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.703947" ry="7.537171" opacity="0.202012"/><ellipse cx="25" cy="19" rx="10.052632" ry="5.528947" opacity="0.687307"/></g>
+<g id="lake-ripples-89" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.878289" ry="7.633059" opacity="0.168344"/><ellipse cx="25" cy="19" rx="10.217105" ry="5.619408" opacity="0.658669"/></g>
+<g id="lake-ripples-90" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.052632" ry="7.728947" opacity="0.134675"/><ellipse cx="25" cy="19" rx="10.381579" ry="5.709868" opacity="0.630031"/></g>
+<g id="lake-ripples-91" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.226974" ry="7.824836" opacity="0.101006"/><ellipse cx="25" cy="19" rx="10.546053" ry="5.800329" opacity="0.601393"/></g>
+<g id="lake-ripples-92" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.401316" ry="7.920724" opacity="0.067337"/><ellipse cx="25" cy="19" rx="10.710526" ry="5.890789" opacity="0.572755"/></g>
+<g id="lake-ripples-93" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.575658" ry="8.016612" opacity="0.033669"/><ellipse cx="25" cy="19" rx="10.875000" ry="5.981250" opacity="0.544118"/></g>
+<g id="lake-ripples-94" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.039474" ry="6.071711" opacity="0.515480"/></g>
+<g id="lake-ripples-95" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.203947" ry="6.162171" opacity="0.486842"/></g>
+<g id="lake-ripples-96" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.368421" ry="6.252632" opacity="0.458204"/></g>
+<g id="lake-ripples-97" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.532895" ry="6.343092" opacity="0.429567"/></g>
+<g id="lake-ripples-98" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.697368" ry="6.433553" opacity="0.400929"/></g>
+<g id="lake-ripples-99" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="11.861842" ry="6.524013" opacity="0.372291"/></g>
+<g id="lake-ripples-100" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.026316" ry="6.614474" opacity="0.343653"/></g>
+<g id="lake-ripples-101" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.190789" ry="6.704934" opacity="0.315015"/></g>
+<g id="lake-ripples-102" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.355263" ry="6.795395" opacity="0.286378"/></g>
+<g id="lake-ripples-103" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.519737" ry="6.885855" opacity="0.257740"/></g>
+<g id="lake-ripples-104" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.684211" ry="6.976316" opacity="0.229102"/></g>
+<g id="lake-ripples-105" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="12.848684" ry="7.066776" opacity="0.200464"/></g>
+<g id="lake-ripples-106" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.013158" ry="7.157237" opacity="0.171827"/></g>
+<g id="lake-ripples-107" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.177632" ry="7.247697" opacity="0.143189"/></g>
+<g id="lake-ripples-108" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.342105" ry="7.338158" opacity="0.114551"/></g>
+<g id="lake-ripples-109" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.506579" ry="7.428618" opacity="0.085913"/></g>
+<g id="lake-ripples-110" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.671053" ry="7.519079" opacity="0.057276"/></g>
+<g id="lake-ripples-111" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="13.835526" ry="7.609539" opacity="0.028638"/></g>
+<g id="lake-ripples-112" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-113" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-114" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-115" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-116" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-117" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-118" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
+<g id="lake-ripples-119" fill="none" stroke="#000000" stroke-width="1.6"><ellipse cx="25" cy="19" rx="15.500000" ry="8.525000" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.750000" ry="8.112500" opacity="0.000000"/><ellipse cx="25" cy="19" rx="14.000000" ry="7.700000" opacity="0.000000"/></g>
 </defs>
 <g id="terrain-GRASSLAND" transform="translate(0 0)">
 <rect width="45" height="45" fill="#a9b77a"/>
@@ -187,9 +307,7 @@
 </g></g>
 <g id="terrain-LAKE" transform="translate(540 0)">
 <rect width="45" height="45" fill="#80aeb5"/>
-<g id="drawing-LAKE" transform="scale(.225)" stroke="#292824" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
-<path d="M29 147 Q13 121 38 104 Q64 91 74 82 Q95 64 114 63 Q143 51 165 68 Q177 80 167 97 Q155 108 169 121 Q190 151 165 163 Q128 183 87 174 Q42 174 29 147Z" fill="#69a2b5"/>
-</g></g>
+<g id="drawing-LAKE"><use href="#lake-ripples-50"/></g></g>
 <g id="terrain-HIGH_SEA" transform="translate(585 0)">
 <rect width="45" height="45" fill="#4c858b"/>
 <g id="drawing-HIGH_SEA" fill="none" stroke="#000000" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round">
@@ -485,4 +603,124 @@
 <g transform="translate(585 855)" clip-path="url(#wave-cell)" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"><use href="#breaking-wave-117"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec" stroke-width=".85"/></g>
 <g transform="translate(0 900)" clip-path="url(#wave-cell)" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"><use href="#breaking-wave-118"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec" stroke-width=".85"/></g>
 <g transform="translate(45 900)" clip-path="url(#wave-cell)" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"><use href="#breaking-wave-119"/><path d="M37.35 19.8 L40.5 22.95 L37.35 25.875" stroke="#fff9ec" stroke-width=".85"/></g>
+<g transform="translate(90 900)"><use href="#lake-ripples-0"/></g>
+<g transform="translate(135 900)"><use href="#lake-ripples-1"/></g>
+<g transform="translate(180 900)"><use href="#lake-ripples-2"/></g>
+<g transform="translate(225 900)"><use href="#lake-ripples-3"/></g>
+<g transform="translate(270 900)"><use href="#lake-ripples-4"/></g>
+<g transform="translate(315 900)"><use href="#lake-ripples-5"/></g>
+<g transform="translate(360 900)"><use href="#lake-ripples-6"/></g>
+<g transform="translate(405 900)"><use href="#lake-ripples-7"/></g>
+<g transform="translate(450 900)"><use href="#lake-ripples-8"/></g>
+<g transform="translate(495 900)"><use href="#lake-ripples-9"/></g>
+<g transform="translate(540 900)"><use href="#lake-ripples-10"/></g>
+<g transform="translate(585 900)"><use href="#lake-ripples-11"/></g>
+<g transform="translate(0 945)"><use href="#lake-ripples-12"/></g>
+<g transform="translate(45 945)"><use href="#lake-ripples-13"/></g>
+<g transform="translate(90 945)"><use href="#lake-ripples-14"/></g>
+<g transform="translate(135 945)"><use href="#lake-ripples-15"/></g>
+<g transform="translate(180 945)"><use href="#lake-ripples-16"/></g>
+<g transform="translate(225 945)"><use href="#lake-ripples-17"/></g>
+<g transform="translate(270 945)"><use href="#lake-ripples-18"/></g>
+<g transform="translate(315 945)"><use href="#lake-ripples-19"/></g>
+<g transform="translate(360 945)"><use href="#lake-ripples-20"/></g>
+<g transform="translate(405 945)"><use href="#lake-ripples-21"/></g>
+<g transform="translate(450 945)"><use href="#lake-ripples-22"/></g>
+<g transform="translate(495 945)"><use href="#lake-ripples-23"/></g>
+<g transform="translate(540 945)"><use href="#lake-ripples-24"/></g>
+<g transform="translate(585 945)"><use href="#lake-ripples-25"/></g>
+<g transform="translate(0 990)"><use href="#lake-ripples-26"/></g>
+<g transform="translate(45 990)"><use href="#lake-ripples-27"/></g>
+<g transform="translate(90 990)"><use href="#lake-ripples-28"/></g>
+<g transform="translate(135 990)"><use href="#lake-ripples-29"/></g>
+<g transform="translate(180 990)"><use href="#lake-ripples-30"/></g>
+<g transform="translate(225 990)"><use href="#lake-ripples-31"/></g>
+<g transform="translate(270 990)"><use href="#lake-ripples-32"/></g>
+<g transform="translate(315 990)"><use href="#lake-ripples-33"/></g>
+<g transform="translate(360 990)"><use href="#lake-ripples-34"/></g>
+<g transform="translate(405 990)"><use href="#lake-ripples-35"/></g>
+<g transform="translate(450 990)"><use href="#lake-ripples-36"/></g>
+<g transform="translate(495 990)"><use href="#lake-ripples-37"/></g>
+<g transform="translate(540 990)"><use href="#lake-ripples-38"/></g>
+<g transform="translate(585 990)"><use href="#lake-ripples-39"/></g>
+<g transform="translate(0 1035)"><use href="#lake-ripples-40"/></g>
+<g transform="translate(45 1035)"><use href="#lake-ripples-41"/></g>
+<g transform="translate(90 1035)"><use href="#lake-ripples-42"/></g>
+<g transform="translate(135 1035)"><use href="#lake-ripples-43"/></g>
+<g transform="translate(180 1035)"><use href="#lake-ripples-44"/></g>
+<g transform="translate(225 1035)"><use href="#lake-ripples-45"/></g>
+<g transform="translate(270 1035)"><use href="#lake-ripples-46"/></g>
+<g transform="translate(315 1035)"><use href="#lake-ripples-47"/></g>
+<g transform="translate(360 1035)"><use href="#lake-ripples-48"/></g>
+<g transform="translate(405 1035)"><use href="#lake-ripples-49"/></g>
+<g transform="translate(450 1035)"><use href="#lake-ripples-50"/></g>
+<g transform="translate(495 1035)"><use href="#lake-ripples-51"/></g>
+<g transform="translate(540 1035)"><use href="#lake-ripples-52"/></g>
+<g transform="translate(585 1035)"><use href="#lake-ripples-53"/></g>
+<g transform="translate(0 1080)"><use href="#lake-ripples-54"/></g>
+<g transform="translate(45 1080)"><use href="#lake-ripples-55"/></g>
+<g transform="translate(90 1080)"><use href="#lake-ripples-56"/></g>
+<g transform="translate(135 1080)"><use href="#lake-ripples-57"/></g>
+<g transform="translate(180 1080)"><use href="#lake-ripples-58"/></g>
+<g transform="translate(225 1080)"><use href="#lake-ripples-59"/></g>
+<g transform="translate(270 1080)"><use href="#lake-ripples-60"/></g>
+<g transform="translate(315 1080)"><use href="#lake-ripples-61"/></g>
+<g transform="translate(360 1080)"><use href="#lake-ripples-62"/></g>
+<g transform="translate(405 1080)"><use href="#lake-ripples-63"/></g>
+<g transform="translate(450 1080)"><use href="#lake-ripples-64"/></g>
+<g transform="translate(495 1080)"><use href="#lake-ripples-65"/></g>
+<g transform="translate(540 1080)"><use href="#lake-ripples-66"/></g>
+<g transform="translate(585 1080)"><use href="#lake-ripples-67"/></g>
+<g transform="translate(0 1125)"><use href="#lake-ripples-68"/></g>
+<g transform="translate(45 1125)"><use href="#lake-ripples-69"/></g>
+<g transform="translate(90 1125)"><use href="#lake-ripples-70"/></g>
+<g transform="translate(135 1125)"><use href="#lake-ripples-71"/></g>
+<g transform="translate(180 1125)"><use href="#lake-ripples-72"/></g>
+<g transform="translate(225 1125)"><use href="#lake-ripples-73"/></g>
+<g transform="translate(270 1125)"><use href="#lake-ripples-74"/></g>
+<g transform="translate(315 1125)"><use href="#lake-ripples-75"/></g>
+<g transform="translate(360 1125)"><use href="#lake-ripples-76"/></g>
+<g transform="translate(405 1125)"><use href="#lake-ripples-77"/></g>
+<g transform="translate(450 1125)"><use href="#lake-ripples-78"/></g>
+<g transform="translate(495 1125)"><use href="#lake-ripples-79"/></g>
+<g transform="translate(540 1125)"><use href="#lake-ripples-80"/></g>
+<g transform="translate(585 1125)"><use href="#lake-ripples-81"/></g>
+<g transform="translate(0 1170)"><use href="#lake-ripples-82"/></g>
+<g transform="translate(45 1170)"><use href="#lake-ripples-83"/></g>
+<g transform="translate(90 1170)"><use href="#lake-ripples-84"/></g>
+<g transform="translate(135 1170)"><use href="#lake-ripples-85"/></g>
+<g transform="translate(180 1170)"><use href="#lake-ripples-86"/></g>
+<g transform="translate(225 1170)"><use href="#lake-ripples-87"/></g>
+<g transform="translate(270 1170)"><use href="#lake-ripples-88"/></g>
+<g transform="translate(315 1170)"><use href="#lake-ripples-89"/></g>
+<g transform="translate(360 1170)"><use href="#lake-ripples-90"/></g>
+<g transform="translate(405 1170)"><use href="#lake-ripples-91"/></g>
+<g transform="translate(450 1170)"><use href="#lake-ripples-92"/></g>
+<g transform="translate(495 1170)"><use href="#lake-ripples-93"/></g>
+<g transform="translate(540 1170)"><use href="#lake-ripples-94"/></g>
+<g transform="translate(585 1170)"><use href="#lake-ripples-95"/></g>
+<g transform="translate(0 1215)"><use href="#lake-ripples-96"/></g>
+<g transform="translate(45 1215)"><use href="#lake-ripples-97"/></g>
+<g transform="translate(90 1215)"><use href="#lake-ripples-98"/></g>
+<g transform="translate(135 1215)"><use href="#lake-ripples-99"/></g>
+<g transform="translate(180 1215)"><use href="#lake-ripples-100"/></g>
+<g transform="translate(225 1215)"><use href="#lake-ripples-101"/></g>
+<g transform="translate(270 1215)"><use href="#lake-ripples-102"/></g>
+<g transform="translate(315 1215)"><use href="#lake-ripples-103"/></g>
+<g transform="translate(360 1215)"><use href="#lake-ripples-104"/></g>
+<g transform="translate(405 1215)"><use href="#lake-ripples-105"/></g>
+<g transform="translate(450 1215)"><use href="#lake-ripples-106"/></g>
+<g transform="translate(495 1215)"><use href="#lake-ripples-107"/></g>
+<g transform="translate(540 1215)"><use href="#lake-ripples-108"/></g>
+<g transform="translate(585 1215)"><use href="#lake-ripples-109"/></g>
+<g transform="translate(0 1260)"><use href="#lake-ripples-110"/></g>
+<g transform="translate(45 1260)"><use href="#lake-ripples-111"/></g>
+<g transform="translate(90 1260)"><use href="#lake-ripples-112"/></g>
+<g transform="translate(135 1260)"><use href="#lake-ripples-113"/></g>
+<g transform="translate(180 1260)"><use href="#lake-ripples-114"/></g>
+<g transform="translate(225 1260)"><use href="#lake-ripples-115"/></g>
+<g transform="translate(270 1260)"><use href="#lake-ripples-116"/></g>
+<g transform="translate(315 1260)"><use href="#lake-ripples-117"/></g>
+<g transform="translate(360 1260)"><use href="#lake-ripples-118"/></g>
+<g transform="translate(405 1260)"><use href="#lake-ripples-119"/></g>
 </svg>

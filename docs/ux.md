@@ -21,6 +21,19 @@
    [Přejímka R-0312](functional-tests.md#r-0312-global-developer-shortcut-2026-10-27)
    prošla dne 27. října 2026. Automatické testy a kontrola snímků nejsou novým pozorováním hráčů.
 
+## Klidná hladina jezera — K3, 27. října 2026
+
+1. Hráč při otevření nebo obnovení mapy rozpozná souvislé jezero; jeho dekorace
+   nevytváří další malá jezírka. Vybraná [animace K3](graphics.md#jezero-se-tremi-kruhy-k3-27-rijna-2026)
+   přidává pouze tři jemně se rozbíhající kruhy. Není potřeba nová akce,
+   potvrzení ani cesta ke zrušení; ovládání mapy a rychlosti animace zůstává stejné.
+2. Břeh a ryby mají přednost před pohybem hladiny. Voda nesmí vyzrazovat skrytou
+   mapu ani měnit dostupnost plavby a rybolovu. Kruhy přirozeně doznějí před
+   další volbou dekorace a nevydávají zvuk.
+3. Volba K3 je rozhodnutí uživatele. Automatické kontroly a stav přijetí jsou
+   v [evidenci R-0314](functional-tests.md#r-0314-k3-lake-ripples-2026-10-27);
+   nejde o nové pozorování hráčů ani změnu pravidel.
+
 ## Čitelné hranice krajiny — R-0294
 
 1. Hráč při otevření nové i rozehrané mapy uvidí souvislé barevné oblasti s mírně nepravidelným okrajem podle [grafického pravidla](graphics.md#nepravidelne-hranice-terenu-26-rijna-2026). Střed políčka, název pod kurzorem a stávající výběr zachovávají přesnou informaci o terénu; klikání a pohyb stále patří čtvercové herní mřížce.

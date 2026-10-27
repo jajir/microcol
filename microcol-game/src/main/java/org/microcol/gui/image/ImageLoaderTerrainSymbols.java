@@ -7,7 +7,7 @@ import org.microcol.model.TerrainType;
 import com.google.common.base.Preconditions;
 
 /**
- * Preview, resource and transparent terrain rows, followed by sea wave frames.
+ * Preview, resource and transparent terrain rows, followed by water frames.
  */
 final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
 
@@ -15,7 +15,7 @@ final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
 
     ImageLoaderTerrainSymbols() {
         super(TileImageParams.makeBuilder().setTileWidthCount(14)
-                .setTileHeightCount(3 + (WAVE_FRAMES * 2 + 13) / 14)
+                .setTileHeightCount(3 + (WAVE_FRAMES * 3 + 13) / 14)
                 .setTileBorderWidth(0).setTileWidth(Tile.TILE_WIDTH_IN_PX)
                 .build(), "terrain-symbols.png", "symbol_");
     }
@@ -29,8 +29,7 @@ final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
     }
 
     static String waveKey(final TerrainType terrain, final int frame) {
-        Preconditions.checkArgument(terrain == TerrainType.OCEAN
-                || terrain == TerrainType.HIGH_SEA);
+        Preconditions.checkArgument(terrain.isSea());
         Preconditions.checkArgument(frame >= 0 && frame < WAVE_FRAMES);
         return "wave-" + terrain.name() + "-" + frame;
     }
@@ -59,6 +58,8 @@ final class ImageLoaderTerrainSymbols extends AbstractTiledImageLoader {
                     waveTile(frame));
             cache.registerImage(waveKey(TerrainType.HIGH_SEA, frame),
                     waveTile(WAVE_FRAMES + frame));
+            cache.registerImage(waveKey(TerrainType.LAKE, frame),
+                    waveTile(WAVE_FRAMES * 2 + frame));
         }
         int column = 0;
         for (final ResourceOverlay resource : ResourceOverlay.values()) {

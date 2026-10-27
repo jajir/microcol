@@ -1,11 +1,29 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Jezero se třemi kruhy K3 — 27. října 2026
+
+1. Uživatel vybral [K3 — Tři drobné kruhy](graphics-assets/lake-animations-2026-10-27/k3.gif)
+   a požádal o nasazení na jezera. [R-0314](requirements/done/R-0314.md) nahrazuje
+   vyplněnou siluetu jezírka třemi postupně se rozšiřujícími a mizejícími kruhy.
+2. Černá linka má 1,6 logického px, cyklus šest sekund a 120 průhledných snímků
+   o velikosti 45 × 45 px. Zachovaná je 5% účast a posun podle seedu/polohy;
+   výběr jezerních polí se mění až na šestisekundové hranici cyklu, aby kruhy
+   přirozeně dozněly. Ryby a jiné významové atributy mají nadále přednost.
+3. Herní atlas nyní obsahuje 14 sloupců a 29 řádků (630 × 1305 px). Nových
+   120 jezerních snímků navazuje za obě mořské sady. Jejich původních 240 snímků
+   zůstává pixelově shodných. Statický terén a průhledná dekorace jezera používají
+   snímek 50 se třemi viditelnými kruhy. Export používá stávající `rsvg-convert`
+   a soubor `terrain-symbols.png`; za běhu se SVG nepočítá.
+4. Břehy, barva jezera, lodní pohyb, rybolov a mořské animace se nemění.
+   Stav místního přijetí vede [funkční evidence](functional-tests.md#r-0314-k3-lake-ripples-2026-10-27);
+   návrhový GIF sám neprokazuje běh hry ani publikaci.
+
 ## Animace jezera — návrhy 27. října 2026
 
-1. [R-0314](requirements/R-0314.md) zachycuje hlášenou chybu: náhodná dekorace
+1. [R-0314](requirements/done/R-0314.md) zachycuje hlášenou chybu: náhodná dekorace
    jezera kreslí vyplněnou siluetu dalšího jezírka dovnitř skutečné vodní plochy.
-   Návrhy nahrazují tento motiv pohybem čáry. Jde o návrhy k výběru, nikoli
-   o změnu hry nebo schválenou četnost animace.
+   Návrhy nahrazují tento motiv pohybem čáry. Následný výběr a implementaci K3
+   zachycuje [aktuální dohoda](#jezero-se-tremi-kruhy-k3-27-rijna-2026).
 2. Všechny náhledy vycházejí z [uživatelova výřezu](graphics-assets/lake-animations-2026-10-27/source.png).
    Spodní vodní plocha je v kompozici obnovena, aby odstranila chybný motiv;
    ryba, jednotky a okolí poskytují původní kontext. Výřez má 290 × 222 px,
@@ -15,7 +33,7 @@
 3. K1–K7 porovnávají rozšiřující se kruhy; V1–V7 malé vlnky. V4 přebírá
    skutečných 120 snímků současné mořské vlny zmenšených na 70 %, včetně tahu.
    Ostatní návrhy používají černou čáru o síle 1,6 logického px s postupným
-   mizením. Výběr dosud neproběhl.
+   mizením. Uživatel následně vybral K3.
 
 | Návrh kruhů | Animace v kontextu |
 | --- | --- |
@@ -37,9 +55,8 @@
 | V6 — Dvě vlnky za sebou | ![V6: postupná dvojice vlnek](graphics-assets/lake-animations-2026-10-27/v6.gif) |
 | V7 — Lehké čeření | ![V7: tři krátké postupně se objevující tahy](graphics-assets/lake-animations-2026-10-27/v7.gif) |
 
-4. Výtvarné doporučení k porovnání je K4 nebo V1: obě varianty ponechávají
-   hladinu přehlednou a nevytvářejí vyplněnou skvrnu. Je to návrh autora,
-   nikoli rozhodnutí uživatele nebo výsledek hráčského testu. Ověření náhledů
+4. Původní doporučení autora bylo K4 nebo V1; rozhodnutí uživatele je K3.
+   Ostatní varianty zůstávají archivovanými návrhy. Ověření náhledů
    vede [evidence dokumentace](publishing.md#lake-animation-proposals-2026-10-27).
 
 ## Černé kontury vln — 27. října 2026

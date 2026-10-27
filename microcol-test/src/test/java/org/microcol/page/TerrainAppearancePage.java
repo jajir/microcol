@@ -225,6 +225,78 @@ public final class TerrainAppearancePage extends AbstractScreen {
         }).get(15, TimeUnit.SECONDS);
     }
 
+    public void verifyLakeRipplesAndStaticPreview() throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final MapManager map = getContext()
+                    .getClassFromGuice(MapManager.class);
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            final Canvas preview = new Canvas(45, 45);
+            preview.getGraphicsContext2D()
+                    .setFill(images.getTerrainColor(TerrainType.LAKE));
+            preview.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+            preview.getGraphicsContext2D()
+                    .drawImage(images.getImage("wave-LAKE-50"), 0, 0);
+            verifyPixels(preview.snapshot(null, null),
+                    images.getTerrainImage(TerrainType.LAKE));
+            final boolean[] checked = { false, false };
+            for (int x = 1; x <= getModel().getMap().getMaxLocationX(); x++) {
+                final Location at = Location.of(x, 20);
+                final Image coast = map.getCoatsImageAt(at);
+                final int kind = coast == null ? 0 : 1;
+                if (checked[kind] || map.getHiddenImageCoast(at) != null) {
+                    continue;
+                }
+                final Terrain lake = new Terrain(at, TerrainType.LAKE);
+                int start = -1;
+                for (int tick = 0; tick < 18000 && start < 0; tick++) {
+                    if (map.getTerrainDecoration(TerrainType.LAKE, at,
+                            tick) == images.getImage("wave-LAKE-0")
+                            && map.isTerrainDecorated(at, lake, tick)) {
+                        start = tick;
+                    }
+                }
+                if (start < 0) {
+                    continue;
+                }
+                final int[] frames = { 50, 70, 112 };
+                final int[] offsets = { 75, 105, 168 };
+                for (int i = 0; i < frames.length; i++) {
+                    final Canvas expected = new Canvas(45, 45);
+                    expected.getGraphicsContext2D()
+                            .setFill(images.getTerrainColor(TerrainType.LAKE));
+                    expected.getGraphicsContext2D().fillRect(0, 0, 45, 45);
+                    paintBoundaryBackground(expected, at, TerrainType.LAKE);
+                    expected.getGraphicsContext2D().drawImage(
+                            images.getImage("wave-LAKE-" + frames[i]), 0, 0);
+                    if (coast != null) {
+                        expected.getGraphicsContext2D().drawImage(coast, 0, 0);
+                    }
+                    assertTrue(
+                            map.isTerrainDecorated(at, lake,
+                                    start + offsets[i]),
+                            "Lake selection lasts through expansion and rest");
+                    verifyPixels(expected.snapshot(null, null),
+                            render(at, lake, start + offsets[i]));
+                }
+                if (coast == null) {
+                    assertFalse(
+                            samePixels(render(at, lake, start + 75),
+                                    render(at, lake, start + 105)),
+                            "Three lake rings expand and fade on the shared painter");
+                }
+                lake.setResourceOverlay(ResourceOverlay.FISHERY);
+                assertFalse(map.isTerrainDecorated(at, lake, start + 75),
+                        "Fish retain priority over lake ripples");
+                verifyPixels(render(at, lake, start + 75),
+                        render(at, lake, start + 105));
+                checked[kind] = true;
+            }
+            assertTrue(checked[0], "Exercise open lake water");
+            assertTrue(checked[1], "Exercise coast drawn above lake ripples");
+        }).get(15, TimeUnit.SECONDS);
+    }
+
     private void verifyPixels(final Image expected, final Image actual) {
         for (int y = 0; y < 45; y++) {
             for (int x = 0; x < 45; x++) {
