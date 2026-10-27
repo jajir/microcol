@@ -18,6 +18,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
@@ -194,6 +195,7 @@ public class EuropePortScreen extends AbstractScreen {
     }
 
     public EuropePortScreen selectUnitFromPort(final int unitIndex) {
+        showCargoAndGoods();
         pageComponentPanelDock.selectUnitFromPort(unitIndex);
         return this;
     }
@@ -213,9 +215,8 @@ public class EuropePortScreen extends AbstractScreen {
 
     public void buyGoodsAndMoveItToCargoSlot(final int indexOfGoods,
             final int indexOfCargoSlot) {
-        getRobot()
-                .drag(getListOfGoodsToBuy().get(indexOfGoods),
-                        MouseButton.PRIMARY)
+        showCargoAndGoods();
+        getRobot().drag(getGoodsImage(indexOfGoods), MouseButton.PRIMARY)
                 .dropTo(pageComponentPanelDock.getListOfCrates()
                         .get(indexOfCargoSlot))
                 .release(MouseButton.PRIMARY);
@@ -231,15 +232,17 @@ public class EuropePortScreen extends AbstractScreen {
     }
 
     public void sellGoods(final int indexOfCargoSlot, final int indexOfGoods) {
+        showCargoAndGoods();
         getRobot()
                 .drag(pageComponentPanelDock.getListOfCrates()
                         .get(indexOfCargoSlot), MouseButton.PRIMARY)
-                .dropTo(getListOfGoodsToBuy().get(indexOfGoods))
+                .dropTo(getGoodsImage(indexOfGoods))
                 .release(MouseButton.PRIMARY);
     }
 
     public DialogChooseGoodsAmount moveCargoWithPressedControl(final int source,
             final int target) {
+        showCargoAndGoods();
         getRobot().press(getGoodsAmountModifiers());
         getRobot()
                 .drag(pageComponentPanelDock.getListOfCrates().get(source),
@@ -248,6 +251,19 @@ public class EuropePortScreen extends AbstractScreen {
                 .release(MouseButton.PRIMARY);
         getRobot().release(getGoodsAmountModifiers());
         return DialogChooseGoodsAmount.of(getContext());
+    }
+
+    private void showCargoAndGoods() {
+        final ScrollPane scroll = getNodeFinder().lookup(".screen-scroll")
+                .queryAs(ScrollPane.class);
+        getRobot().interact(() -> scroll.setVvalue(scroll.getVmax()));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    private javafx.scene.Node getGoodsImage(final int index) {
+        final javafx.scene.layout.Pane image = (javafx.scene.layout.Pane) getListOfGoodsToBuy()
+                .get(index).getChildren().get(0);
+        return image.getChildren().get(0);
     }
 
     public List<VBox> getListOfGoodsToBuy() {

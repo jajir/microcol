@@ -10695,3 +10695,160 @@ remote CI and publication were not checked.
 9. Source comparison confirms all non-map state, 47 resource markers and 12 finite reserve records remain intact in Original World. All five SVGs were compared with source coordinates: 1,500 cells per complete map and 400 in the mainland detail; terrain, river and resource identities match. PNG previews were visually inspected. Nine documentation consistency tests and the strict MkDocs build passed before final acceptance. Remote regression and publication have not been inspected.
 10. Final mandatory dispatch `20261026T203142Z-dc2eba611552` (PID 38014, supervisor timeout 420 s, fixed inner budget 360 s) ran `bash scripts/ui-tests/verify.sh --smoke` on base `ce978ad0e97186ed6982403f63e49870ab4d5525` plus the final R-0302 implementation and scenario repairs. It passed **4,785 tests in 356 complete expected reports, zero failures, errors or skips**, in 304.239 s (307.043 s including verification bookkeeping). The 102.870 s shared-lock wait is recorded separately. Selection: all 344 fast model/JUnit suites and the fixed 12-suite Docker/Xvfb smoke gate. Exact selections, source hashes and results are in `target/verification/run-_1cid6ya/{manifest,summary}.json`.
 11. Every source hash matched that accepted snapshot before the final documentation/status update. Review covered the three runtime templates, all four changed Java files, caller updates, resource/actor preservation and all map previews; successful UI screenshots also show the inland river and the lake's separating shore. Final documentation consistency checks (nine tests) and the strict MkDocs build passed after moving R-0302 to `done`. Local acceptance does not establish remote full-regression or publication success; neither was inspected.
+
+## R-0307 in-game screen frame (2026-10-27)
+
+1. [R-0307](requirements/done/R-0307.md), UC-114/115/119: the shared GUI frame separates
+   the toolbar, scrolling content and live gold/date status. Goals, turn report,
+   statistics, colony, Europe, trade, in-game settings, Congress and help retain
+   their existing actions. TC192 adds actual-window geometry, balance/date,
+   scrolling, EN/CZ and return-path checks; existing interaction scenarios retain
+   their gameplay assertions. Automated checks are not player observations.
+2. Model/JUnit dispatch `20261027T040200Z-e1dd475714bf`, supervisor PID 63538,
+   timeout 600 s, runs `verify.sh --model` on the working implementation. Results
+   and targeted UI/smoke acceptance are pending. Completion alone is not acceptance.
+3. Initial dispatch failed before executing tests: the managed-container cleanup
+   query `docker ps -aq --filter label=org.microcol.local-test=501` timed out after
+   20.008 s. Cleanup reported no errors and notification was queued successfully.
+   Both the direct query and a detached-session repeat then returned normally
+   (detached repeat 0.021 s); the transient cause is unconfirmed. Failed evidence
+   remains in the original completion directory. Retry
+   `20261027T040353Z-bc0f5c6502e3`, PID 63811, timeout 600 s, repeats the model phase.
+4. Model retry passed **4,764 checks**, zero failures/errors/skips, in 130.648 s
+   (134.235 s including supervisor cleanup), base `afc916327ea4e7f6a4b5d02bce4c1c66044e6ece`
+   plus this implementation. Complete selection, hashes and reports are in
+   `target/verification/run-6ak5lu26/{manifest,summary}.json`.
+5. Initial layout/contract check dispatch `20261027T040648Z-785ae1d0a955`, PID
+   65181, timeout 600 s, selects TC192 and PageVerificationContractTest. This
+   first UI pass precedes the wider interaction selection and visual review;
+   it does not replace those gates or smoke.
+6. Initial UI run `target/docker-ui/run-Ienhae` completed five checks in 59.476 s:
+   four passed, TC192/01 failed, zero errors/skips. Its fixture expectation
+   incorrectly called the first colony Delft; the existing selector uses the
+   fixture order, whose first colony is New Amsterdam. The test now checks that
+   actual fixture name. Screenshot capture now reuses `snapshotScene`, avoiding
+   JavaFX preferred-size resizing during capture. No runtime/gameplay source was
+   changed by these test repairs. The failed run remains failed evidence.
+7. Expanded targeted dispatch `20261027T041004Z-0af65f23d141`, PID 66691,
+   timeout 1,500 s, selects all TC192/01/06/83/84/100/168/176/177/178/188/191
+   scenarios plus PageVerificationContractTest. TC06 also checks the buy/sell
+   screen frame against its existing balance expectations. Results pending.
+8. Expanded run `target/docker-ui/run-cfHR9A` completed **41 checks** in 532.529 s
+   after 0.371 s waiting for the lock: 37 passed, one failure and three errors,
+   zero skips. All four TC06 trade scenarios failed after dragging the whole
+   goods column; the focused repair targets its actual image, where the existing
+   drag handler is attached. No cargo, quantity, balance or rejection assertion
+   was removed. The passing checks included all TC192 navigation/geometry cases.
+9. Log review found repeated `StatusBarPresenter.onStatusBarMessageChange`
+   null-source errors from the now-unused eagerly created Europe/Colony bars.
+   Their obsolete named bindings are removed; each shared frame still configures
+   its own status source. Screenshot review also found a clipped colony name;
+   its existing title offset is corrected and TC192 checks its visible bounds.
+   Statistics now gives the report the available width instead of its old
+   430-pixel cap. These runtime corrections require fresh acceptance.
+10. New model dispatch `20261027T042145Z-158219d3d315`, supervisor PID 71382,
+    timeout 600 s, checks the repaired runtime. The shared formatter checked all
+    24 changed Java files, preserving code tokens and idempotence. Results pending.
+11. Repaired-runtime model gate passed **4,764 tests in 344 complete suites**,
+    zero failures/errors/skips, in 136.178 s; supervisor execution/cleanup
+    138.844 s and lock wait 26.970 s. Evidence:
+    `target/verification/run-nq2uejh7/{manifest,summary}.json`. Every recorded
+    executable input matches the current tree. Focused UI repair dispatch
+    `20261027T042453Z-429e26cca395`, PID 73295, timeout 600 s, selects TC06,
+    TC192 and PageVerificationContractTest before the remaining UI selection.
+
+12. Focused dispatch `20261027T042453Z-429e26cca395` was canceled before
+execution (138.053 s waiting for the shared Docker lock, supervisor signal 15,
+no cleanup errors). Screenshot review found that the supposed help image
+still showed Congress: its focused candidate list consumed Escape. The
+Congress root now handles Escape during capture. TC192 verifies both the
+active title and that the modal stage closes before opening help. No
+completed test result from the canceled run is reused.
+13. Final-runtime model dispatch `20261027T042745Z-931e784cea61`, supervisor
+PID 73446, timeout 600 s, checks this additional navigation repair.
+
+14. Model dispatch `20261027T042745Z-931e784cea61` passed **4,764 tests in
+344 complete suites**, zero failures/errors/skips, in 136.849 s (139.423 s
+including cleanup, 72.292 s lock wait). Evidence:
+`target/verification/run-brn9wu4a/{manifest,summary}.json`. Concurrent accepted
+opening-menu work advanced `main` to `ad8ab420b038b7ed73b1fe7b56bf788341d89fa5`;
+its executable inputs differ from this model snapshot, so final combined
+acceptance requires a fresh model gate.
+15. Focused UI dispatch `20261027T043132Z-c60ac668964b`, supervisor PID
+74226, timeout 600 s, selects TC06, TC192 and PageVerificationContractTest
+on the combined working tree. Results pending.
+
+16. Combined-tree model dispatch `20261027T043258Z-9a1951e3499f`, supervisor
+PID 74360, timeout 600 s, checks `ad8ab420b038b7ed73b1fe7b56bf788341d89fa5`
+plus R-0307. It queues behind the focused diagnostic UI run under the shared
+Docker lock; remaining targeted scenarios and smoke follow this gate.
+
+17. Focused UI `target/docker-ui/run-TAUllP` completed **9 checks: 5 passed,
+1 failure, 3 errors, zero skips** (96.595 s execution, 50.932 s lock wait).
+TC192 and the source contract passed; all four TC06 trade scenarios still
+failed because the drag did not open or complete the expected purchase.
+Changing only the goods selector was insufficient. Congress/help, colony
+name and status screenshots now show the intended screens; no
+`EVENT_HANDLER_FAILED` appears in this run's Maven log.
+18. Diagnostic dispatch `20261027T043523Z-473f7c75862a`, PID 74678, timeout
+600 s, selects only `TC_06_F06_buy_and_sell_goods_test#TC_06_moving_goods`
+and captures the actual Europe scene after buying the ship, before dragging.
+It retains every original interaction and assertion.
+
+19. Combined-tree model gate passed **4,764 tests in 344 complete suites**,
+zero failures/errors/skips, in 133.034 s (135.589 s including cleanup,
+61.145 s lock wait). Evidence:
+`target/verification/run-7wm7a0xk/{manifest,summary}.json`. Runtime sources
+match the snapshot; only the diagnostic screenshot call in TC06 was added
+after dispatch. The focused diagnostic result is still pending.
+
+20. Diagnostic UI `target/docker-ui/run-NWycp7` reproduced the trade error
+(1 test, 1 error, zero skips; 43.812 s execution and 51.891 s lock wait).
+The captured scene is 900 × 750: fixed bars leave the goods/cargo below
+the current scroll viewport. The page object now scrolls the content to
+the cargo area before selecting a ship or dragging goods; game rules and
+assertions are unchanged. All runtime/model inputs still match the passing
+combined-tree model gate.
+21. Focused repeat `20261027T043828Z-6c6be9249791`, supervisor PID 75490,
+timeout 600 s, selects TC06, TC192 and PageVerificationContractTest with
+the repaired scroll interaction. Results pending.
+
+22. Remaining targeted selection dispatch `20261027T043846Z-fa84493c44e7`,
+supervisor PID 75551, timeout 1,500 s: TC01/83/84/100/168/176/177/178/188/191
+(32 scenarios). It queues behind the focused repeat on the same runtime.
+
+23. Focused repeat passed **9 checks**, zero failures/errors/skips, in
+129.465 s with no lock wait. Complete reports and screenshots:
+`target/docker-ui/run-KgHve7/microcol-test/{surefire-reports,warehouse-qa}`.
+TC06 (4), TC192 (2) and PageVerificationContractTest (3) all completed.
+Visual review confirms buy/sell controls, prices, totals and gold/date
+remain visible at 900 × 750. No `EVENT_HANDLER_FAILED` occurs in the log.
+The original cancellation, quantity, cargo, gold and stale-state rejection
+assertions remain intact. The earlier failed runs remain failed.
+
+24. Fixed smoke/support dispatch `20261027T044152Z-0d7d12f32404`, supervisor
+PID 75975, runner timeout 480 s, executes `verify.sh --smoke` with its
+420-second local budget after the remaining targeted run releases the
+shared lock. No model tests are repeated by smoke. Results pending.
+
+25. Remaining selection passed **32 scenarios in 10 complete suites**,
+zero failures/errors/skips, in 469.003 s (111.939 s lock wait). Reports:
+`target/docker-ui/run-PIWfdq/microcol-test/surefire-reports`. Together with
+the focused repeat, all **41 targeted UI/support checks** passed. No
+`EVENT_HANDLER_FAILED` occurs in either passing targeted log. All
+`microcol-game` inputs still match the passing model gate; subsequent
+changes only adapted the TC06 page-object scrolling and diagnostic image.
+
+26. Fixed smoke/support passed **21 tests in 12 complete suites**, zero
+failures/errors/skips, in 200.873 s, within the 420-second budget. Supervisor
+execution/cleanup took 204.428 s; shared-lock wait was 394.590 s and did
+not consume the execution budget. Complete selection, input hashes and
+reports: `target/verification/run-2hebh5mf/{manifest,summary}.json`. Every
+recorded executable input matches the final working tree.
+27. Final review checked shared-frame ownership, screen lifecycle and
+language updates, top controls, modal Escape, scroll access, live status,
+unchanged gameplay assertions and actual-window screenshots. Local
+acceptance covers base `ad8ab420b038b7ed73b1fe7b56bf788341d89fa5` plus R-0307.
+The requirement is archived as done. No remote CI or publication verification
+was requested or performed; local acceptance does not prove distribution
+or website publication.

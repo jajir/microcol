@@ -1367,3 +1367,22 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 2. [R-0297](requirements/done/R-0297.md) přebírá přímo `game-toolbar-frame.png` a společný `ToolbarControls.css`. Menu a herní lišta mají stejné odsazení, ikony 32 × 32 a Playpen Sans Regular 14; tlačítka menu nejsou vyšší. Sloupec má výchozí šířku 300 px, mezery 8 px a levý okraj 80 px i v širším okně. Pozadí, animace a dostupnost původních akcí zůstávají.
 3. Nové ikony vlastní [menu-icons.svg](../microcol-game/src/graphics/menu-icons.svg), osm buněk 48 × 48, tah 2,4 jednotky a stejný inkoust/olivový akcent jako herní lišta. Export `rsvg-convert -w 768 -h 96 -o microcol-game/src/main/resources/images/menu-icons.png microcol-game/src/graphics/menu-icons.svg` se přes existující obrazovou cache řeže po 96 px a zobrazuje po 32 px. [menu-title-waves.svg](../microcol-game/src/graphics/menu-title-waves.svg) se exportuje přímo na 120 × 18 příkazem `rsvg-convert -o microcol-game/src/main/resources/images/menu-title-waves.png microcol-game/src/graphics/menu-title-waves.svg`.
 4. Text tlačítka se zobrazí jen při dostatku místa vedle ikony. Jinak se skryje celý; nezalamuje se ani nezkracuje výpustkou. Přístupný název a tooltip zůstávají. Skutečné testy a snímky vlastní [funkční evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).
+
+## Rám herních obrazovek — 2026-10-27
+
+1. [R-0307](requirements/done/R-0307.md) přebírá z uživatelova obrázku pevnou horní
+   lištu, obsah uprostřed a spodní stavový řádek. Pozadí obsahu je `#EAE2CC`,
+   lišty a reportové karty `#FFF9EC`, oddělení `#292824` a `#A49B86`.
+   Používá společné písmo Playpen Sans 14 a existující ovládací prvky.
+2. Přehledy používají běžné rozložení a posouvání bez absolutních posunů.
+   Kolonie a Evropa zachovávají své ilustrace uvnitř prostřední plochy.
+   [UX pravidla](ux.md#jednotny-ram-hernich-obrazovek-2026-10-27) popisují
+   navigaci; [evidence](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27)
+   odlišuje implementaci od ověřených výsledků.
+
+3. Snímky skutečné hry z cíleného Docker/Xvfb ověření, 27. října 2026:
+   [statistiky](graphics-assets/in-game-frame-2026-10-27/statistics.png),
+   [kolonie](graphics-assets/in-game-frame-2026-10-27/colony.png),
+   [nákup](graphics-assets/in-game-frame-2026-10-27/market-buy.png) a
+   [nápověda](graphics-assets/in-game-frame-2026-10-27/help-czech.png).
+   Nejde o studii s hráči; úplný stav přijetí uvádí výše odkazovaná evidence.

@@ -11,6 +11,7 @@ import org.microcol.page.BuyUnitScreen;
 import org.microcol.page.EuropePortScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.ScreenMarketBuy;
 import org.microcol.page.ScreenMarketSell;
 import org.microcol.page.WelcomePage;
@@ -59,6 +60,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Verify that ship is empty.
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
 
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0307-europe-before-trade.png");
+
         // Cancel a purchase choice; hold and treasury stay unchanged.
         europePort.buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0)
                 .clickOnCancel();
@@ -71,6 +75,10 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
          */
         ScreenMarketBuy screenMarketBuy = europePort
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
+        final InGameLayoutPage frame = new InGameLayoutPage(getContext());
+        frame.verifyFrame(95000,
+                getContext().getModel().getCalendar().getCurrentYear());
+        frame.saveEvidence("r0307-market-buy.png");
         screenMarketBuy.verifyNumberOfSliders(1);
         screenMarketBuy.selectValueAtSlider(63);
         screenMarketBuy.verifySelectedMarketQuantity(63);
@@ -89,6 +97,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
          */
         ScreenMarketSell screenMarketSell = europePort
                 .sellGoodsWithPressedControl(0, 0);
+        frame.verifyFrame(94748,
+                getContext().getModel().getCalendar().getCurrentYear());
+        frame.saveEvidence("r0307-market-sell.png");
         screenMarketSell.verifyNumberOfSliders(1);
         screenMarketSell.selectValueAtSlider(27);
         screenMarketSell.verifySelectedMarketQuantity(27);

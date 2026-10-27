@@ -3,6 +3,7 @@ package org.microcol.gui.screen.congress;
 import com.google.inject.Inject;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.*;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public final class CongressDialog extends AbstractMessageWindow {
     private final GameModelController game;
     private final I18n i18n;
+    private final InGamePage page;
     private final Label support = label("congressSupport");
     private final Label progress = label("congressProgress");
     private final Label objective = label("congressObjective");
@@ -39,10 +41,11 @@ public final class CongressDialog extends AbstractMessageWindow {
 
     @Inject
     public CongressDialog(ViewUtil viewUtil, I18n i18n,
-            GameModelController game) {
+            GameModelController game, InGamePage page) {
         super(viewUtil, i18n);
         this.i18n = i18n;
         this.game = game;
+        this.page = page;
         candidates.setId("congressCandidates");
         candidates.setPrefHeight(190);
         candidates.setCellFactory(view -> new ListCell<>() {
@@ -78,17 +81,21 @@ public final class CongressDialog extends AbstractMessageWindow {
         root.setId("congressDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(580);
-        // The window keeps a bounded height: the report scrolls, while the
-        // Choose and Close actions stay in a bar below it, always visible at
-        // 900x750.
-        final ScrollPane scroll = new ScrollPane(root);
-        scroll.setId("congressScroll");
-        scroll.setFitToWidth(true);
-        scroll.setPrefViewportHeight(560);
         final HBox actions = new HBox(12, choose, close);
         actions.setId("congressActions");
         actions.setPadding(new Insets(12, 20, 20, 20));
-        init(new VBox(scroll, actions));
+        // A focused candidate list consumes Escape before scene bubbling.
+        page.getContent().addEventFilter(
+                javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                        close();
+                        event.consume();
+                    }
+                });
+        page.setToolbar(actions);
+        page.setContent(root);
+        page.getContent().lookup(".screen-scroll").setId("congressScroll");
+        init(page.getContent());
     }
 
     private static Label label(String id) {
@@ -105,6 +112,11 @@ public final class CongressDialog extends AbstractMessageWindow {
         boundModel = game.getModel();
         player = game.getHumanPlayer();
         setTitle(i18n.get(CongressText.title));
+        page.setTitle(i18n.get(CongressText.title));
+        page.getContent().setPrefSize(
+                getViewUtil().getPrimaryStage().getScene().getWidth(),
+                getViewUtil().getPrimaryStage().getScene().getHeight());
+        page.beforeShow();
         choose.setText(i18n.get(CongressText.choose));
         close.setText(i18n.get(CongressText.close));
         feedback.setText("");

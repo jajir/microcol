@@ -107,7 +107,6 @@ public final class EuropePanel
         mainPanel.getChildren().add(panelPortPier.getContent());
         mainPanel.getChildren().add(europeDock.getContent());
         mainPanel.getChildren().add(panelGoods.getContent());
-        mainPanel.getChildren().add(europeButtonsPanel.getContent());
     }
 
     @Override

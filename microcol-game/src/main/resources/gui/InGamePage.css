@@ -1,0 +1,45 @@
+@import "MicroCol.css";
+.in-game-page {
+    -fx-background-color: #EAE2CC;
+    -fx-padding: 0;
+}
+.in-game-page .screen-toolbar {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 12 24;
+    -fx-pref-width: -1;
+    -fx-pref-height: -1;
+    -fx-max-height: -1;
+    -fx-border-color: #292824;
+    -fx-border-width: 0 0 2 0;
+}
+.in-game-page .screen-toolbar .buttonPanel {
+    -fx-padding: 0;
+    -fx-hgap: 10;
+    -fx-vgap: 8;
+    -fx-alignment: center-right;
+}
+.in-game-page .screen-scroll,
+.in-game-page .screen-scroll > .viewport {
+    -fx-background-color: #EAE2CC;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.in-game-page .screen-body {
+    -fx-padding: 24;
+    -fx-spacing: 20;
+}
+.in-game-page .screen-title {
+    -fx-font-size: 14;
+    -fx-text-fill: #292824;
+}
+.in-game-page .report-content {
+    -fx-padding: 24;
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #A49B86;
+    -fx-border-width: 1;
+}
+
+.illustrated-page .screen-body { -fx-padding: 0; -fx-spacing: 0; }
+.in-game-page .screen-toolbar #buttonPane { -fx-padding: 0; }
+
+.illustrated-page .label-title { -fx-font-size: 14; }

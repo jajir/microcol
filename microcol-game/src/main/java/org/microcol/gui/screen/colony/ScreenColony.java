@@ -1,17 +1,15 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.screen.GameScreen;
-import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
-import org.microcol.gui.util.ContentWithStatusBar;
+import org.microcol.gui.util.InGamePage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 
 import javafx.scene.layout.Region;
 
@@ -21,26 +19,27 @@ public class ScreenColony implements GameScreen {
     private static final String STYLE_SHEET_COLONY = ScreenColony.class
             .getResource("/gui/Colony.css").toExternalForm();
 
-    private final ContentWithStatusBar contentWithStatusBar;
+    private final InGamePage page;
 
     private final ColonyPanel colonyPanel;
 
     @Inject
-    ScreenColony(final ColonyPanel colonyPanel,
-            final @Named("Colony") StatusBar statusBar,
-            final CenteredPage centeredPage,
-            final ContentWithStatusBar contentWithStatusBar,
-            final ColonyBackground colonyBackground) {
-        this.contentWithStatusBar = Preconditions
-                .checkNotNull(contentWithStatusBar);
+    ScreenColony(final ColonyPanel colonyPanel, final CenteredPage centeredPage,
+            final InGamePage page, final ColonyBackground colonyBackground,
+            final ColonyButtonsPanel buttons) {
+        this.page = Preconditions.checkNotNull(page);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
-        statusBar.setShowEventsFromSource(Source.COLONY);
+        page.setStatusSource(Source.COLONY);
 
         centeredPage.getContent().getStylesheets().add(STYLE_SHEET_COLONY);
         centeredPage.setBackground(colonyBackground);
         centeredPage.setMainPanel(colonyPanel);
-        contentWithStatusBar.setContent(centeredPage);
-        contentWithStatusBar.setStatusBar(statusBar);
+        centeredPage.getContent().setStyle("");
+        centeredPage.getContent().setMinSize(950, 740);
+        centeredPage.getContent().setPrefSize(950, 740);
+        page.getContent().getStyleClass().add("illustrated-page");
+        page.setToolbar(buttons.getContent());
+        page.setContent(centeredPage.getContent());
     }
 
     /**
@@ -55,17 +54,18 @@ public class ScreenColony implements GameScreen {
 
     @Override
     public void updateLanguage(I18n i18n) {
-        contentWithStatusBar.updateLanguage(i18n);
+        colonyPanel.updateLanguage(i18n);
+        page.updateLanguage(i18n);
     }
 
     @Override
     public Region getContent() {
-        return contentWithStatusBar.getContent();
+        return page.getContent();
     }
 
     @Override
     public void beforeShow() {
-        // Intentionally do nothing.
+        page.beforeShow();
     }
 
     @Override

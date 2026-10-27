@@ -54,6 +54,8 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
             final ScreenGoals screenGoals, final ScreenEditor screenEditor,
             final I18n i18n) {
         mainBox = new VBox();
+        mainBox.setMinHeight(0);
+        VBox.setVgrow(mainBox, javafx.scene.layout.Priority.ALWAYS);
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));
         screens.add(Preconditions.checkNotNull(screenFreePlay));
@@ -78,6 +80,8 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         Platform.runLater(() -> {
             mainBox.getChildren().clear();
             mainBox.getChildren().add(box);
+            VBox.setVgrow(box, javafx.scene.layout.Priority.ALWAYS);
+            box.setMinHeight(0);
         });
     }
 

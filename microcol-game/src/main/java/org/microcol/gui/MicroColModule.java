@@ -204,10 +204,6 @@ public final class MicroColModule extends AbstractModule {
 
         bind(StatusBar.class).annotatedWith(Names.named("GamePanel"))
                 .to(StatusBar.class).asEagerSingleton();
-        bind(StatusBar.class).annotatedWith(Names.named("Europe"))
-                .to(StatusBar.class).asEagerSingleton();
-        bind(StatusBar.class).annotatedWith(Names.named("Colony"))
-                .to(StatusBar.class).asEagerSingleton();
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();

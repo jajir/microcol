@@ -221,6 +221,8 @@ final class StatisticsPanel implements GameScreen {
 
         final VBox rightPanel = new VBox();
         rightPanel.getStyleClass().add("right");
+        rightPanel.setMinWidth(0);
+        HBox.setHgrow(rightPanel, javafx.scene.layout.Priority.ALWAYS);
         rightPanel.getChildren().addAll(chartPanel);
 
         final HBox statsPanel = new HBox(sidebar, rightPanel);

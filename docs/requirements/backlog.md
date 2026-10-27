@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+Proposed on 2026-10-27: [R-0309 — Settings controls and layout](R-0309.md).
+Three visual alternatives cover all existing Settings elements; the final
+design and implementation remain unselected. Primary area A03, with A01/A04
+dependencies and the existing R-0307 in-game frame.
+
 Completed locally on 2026-10-27:
 [R-0308 — opening-menu buttons fit their contents](done/R-0308.md).
 Content widths, EN/CZ labels and compact fallback passed local acceptance; see the
@@ -695,3 +700,10 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Bundled free-play geography (2026-10-26)
 
 1. [R-0302](done/R-0302.md) applies inland-river placement and enclosed-lake geography to all fixed new-game templates under A05, with A02/A03/A07 dependencies, preserving expedition/colony locations and resource stock. The [map catalogue](../free-play-maps.md) exposes the four templates. Local acceptance is complete; see the [functional evidence](../functional-tests.md#r-0302-bundled-map-geography-2026-10-26).
+
+## Shared in-game screen frame (2026-10-27)
+
+[R-0307](done/R-0307.md) applies the user's toolbar/content/status layout to the
+in-game screens, Congress and help. The existing game actions and navigation
+remain owned by their current requirements; acceptance is recorded in the
+[functional evidence](../functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).

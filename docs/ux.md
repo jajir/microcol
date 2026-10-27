@@ -925,3 +925,17 @@ vrací do obrazovky, ze které bylo otevřeno. Ochrana se v první implementaci
 ptá při každé aktivní hře; sledování nezměněného stavu zůstává budoucím
 zlepšením. Implementační kontrola ani automatický test nejsou pozorováním
 skutečného hráče; výsledky patří do [funkční evidence](functional-tests.md).
+
+## Jednotný rám herních obrazovek — 2026-10-27
+
+1. [R-0307](requirements/done/R-0307.md) sjednocuje cíle, přehled tahu, statistiky
+   a jejich záložky, kolonii, Evropu, obchod, nastavení během hry, Kongres
+   a nápovědu. Hráč otevře obsah dosavadním tlačítkem nebo klávesou; horní
+   lišta drží dostupné akce a návrat, spodní ukazuje aktuální zlato a datum.
+2. Obsah se posouvá mezi lištami. Menší okno nezakrývá návrat ani stavový
+   řádek; rozsáhlé plochy lze posouvat také vodorovně. Kolonie a Evropa
+   zachovávají své pracovní plochy, reporty používají čitelnou papírovou kartu.
+3. Zrušení, potvrzení, klávesové zkratky a pravidla akcí se nemění. Kongres
+   a nápověda zůstávají modální; úvodní menu má svůj dosavadní vzhled.
+   Jde o implementaci uživatelského zadání, nikoli o výsledek studie hráčů.
+   Skutečnou přejímku vede [funkční evidence](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).

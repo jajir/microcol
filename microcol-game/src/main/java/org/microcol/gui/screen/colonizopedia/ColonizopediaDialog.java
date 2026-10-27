@@ -3,6 +3,7 @@ package org.microcol.gui.screen.colonizopedia;
 import org.microcol.gui.Loc;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
@@ -40,6 +41,7 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
     public static final String NO_RESULTS_ID = "colonizopediaNoResults";
 
     private final I18n i18n;
+    private final InGamePage page;
 
     private final ButtonBarOk buttonBar;
 
@@ -62,9 +64,10 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
 
     @Inject
     public ColonizopediaDialog(final I18n i18n, final ViewUtil viewUtil,
-            final ImageProvider images) {
+            final ImageProvider images, final InGamePage page) {
         super(viewUtil, i18n);
         this.i18n = i18n;
+        this.page = page;
         tables = new ColonizopediaTables(i18n, images);
         buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
@@ -103,7 +106,7 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
 
         final VBox rightColumn = new VBox(10, noResults, bodyScroll);
         final HBox main = new HBox(20, topicList, rightColumn);
-        final VBox root = new VBox(10, search, main, buttonBar.getContent());
+        final VBox root = new VBox(10, search, main);
         root.setPadding(new Insets(10));
         // Handle Escape before the focused list consumes it.
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -112,7 +115,9 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
                 event.consume();
             }
         });
-        init(root);
+        page.setToolbar(buttonBar.getContent());
+        page.setContent(root);
+        init(page.getContent());
 
         topicList.getSelectionModel().selectFirst();
         applyFilter();
@@ -124,6 +129,10 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
      */
     @Override
     public void showAndWait() {
+        page.getContent().setPrefSize(
+                getViewUtil().getPrimaryStage().getScene().getWidth(),
+                getViewUtil().getPrimaryStage().getScene().getHeight());
+        page.beforeShow();
         search.clear();
         Platform.runLater(topicList::requestFocus);
         super.showAndWait();
@@ -132,6 +141,7 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
     @Override
     public void updateLanguage(final I18n i18n) {
         setTitle(i18n.get(Colonizopedia.title));
+        page.setTitle(i18n.get(Colonizopedia.title));
         search.setPromptText(i18n.get(Colonizopedia.searchPrompt));
         noResults.setText(i18n.get(Colonizopedia.noResults));
         buttonBar.setButtonText(i18n.get(Loc.ok));

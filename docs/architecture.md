@@ -1170,3 +1170,11 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
    sídla na řeku. AI používá společné dotazy pro založení i výnos. GUI pouze
    zobrazuje důvody odmítnutí, průběh toku, mostek a stávající značku naleziště.
    Odpovědnosti balíčků ani závislosti mezi vrstvami se nemění.
+
+### Společný rám herních obrazovek (R-0307)
+
+`gui.util.InGamePage` skládá existující ovládací prvky, posuvný obsah a
+`gui.screen.game.components.StatusBar`. Jednotlivé obrazovky a dialogy dál
+vlastní svůj obsah, životní cyklus, navigaci a modelové příkazy. Rám čte stav
+přes stávající presenter; nevytváří herní pravidla ani závislost modelu na GUI.
+Viz [R-0307](requirements/done/R-0307.md) a [evidence](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).

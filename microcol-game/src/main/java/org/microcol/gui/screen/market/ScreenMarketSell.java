@@ -22,6 +22,7 @@ public class ScreenMarketSell extends AbstractScreenMarket {
         super(i18n, marketView);
         this.marketSellPanel = Preconditions.checkNotNull(marketSellPanel);
         marketView.setMenuPanel(marketSellPanel);
+        marketView.setToolbar(marketSellPanel.getToolbar());
     }
 
     public void init(final ScreenMarketSellContext screenMarketContext) {

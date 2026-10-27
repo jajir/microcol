@@ -117,8 +117,7 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
         final Row row4 = new Row(labelTotal, labelTotalValue);
 
         mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(),
-                row2.getContent(), row3.getContent(), row4.getContent(),
-                buttonsBar.getContent());
+                row2.getContent(), row3.getContent(), row4.getContent());
     }
 
     private int getKingsTaxPercentage() {
@@ -206,6 +205,10 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     private int getTotal() {
         return gameModelController.getHumanPlayer()
                 .quoteEuropeTrade(getActualValue(), false).getTotal();
+    }
+
+    Region getToolbar() {
+        return buttonsBar.getContent();
     }
 
     @Override

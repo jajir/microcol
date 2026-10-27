@@ -1041,3 +1041,12 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ## Opening menu controls — 2026-10-26
 
 1. UC-119 (Regrese), with the existing UC-115 start-game journey: [R-0297](requirements/done/R-0297.md) applies the selected single-column opening menu. Existing TC83/01 checks the shared frame, height, icons, Czech/English labels, compact names and keyboard/mouse Settings navigation; TC188 covers the shared map toolbar and TC12 the new-game action. The historical TC83 method ID is retained. Acceptance is recorded in [functional evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).
+
+## Shared screen frame — R-0307
+
+1. UC-114/115/119: [R-0307](requirements/done/R-0307.md) covers the fixed toolbar,
+   scrollable body and live status across in-game screens, Congress and help.
+   TC192 verifies geometry and unchanged navigation state; existing colony,
+   trade, Congress and help scenarios retain the behavioral checks. See
+   [dated acceptance](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27);
+   this change does not claim completion of the whole use cases.
